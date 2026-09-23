@@ -1,143 +1,199 @@
 # Nowhere King — Current Story State
 
 **Status:** Active temporal continuity ledger  
-**Last completed unit:** Season One, Episode 07 — *The Family Wing*  
-**Updated:** after Episode 07
+**Last completed unit:** Season One, Episode 08 — *The First Court*  
+**Updated:** after Episode 08
 
 ## Current timeline state
 
-Luceran has now entered selected safe rooms of the family wing through ordinary locksmith and carpentry work. Edselsto remains a functioning construction site: forge, lower-well repair, worker camp, timber handling, storage, Falbrecht charcoal shed, food supply, and court logistics continue independently while the royal family-history investigation proceeds.
+Edselsto has now held its first limited formal royal audience. Movement II is complete: Luceran has not escaped politics by moving north; he has begun creating a new political center around people, houses, workers, guilds, villagers, and officers who arrived early and proved useful.
 
-The political court is now sufficiently established for a first formal Edselsto audience. Temporary arrangements are already becoming precedent.
+The court remains physically unfinished. Roof work, forge work, lower-well repair, worker camp, timber handling, storage, charcoal infrastructure, food supply, horse placement, village lodging, and road capacity all constrain royal ceremony.
+
+At least ninety-six additional named arrivals are expected while only thirty-one additional beds are presently available. Water, washing, food, horse space, camp ground, and private village property are now immediate limits.
 
 ## King Luceran
 
 - Adult lawful king, bereaved, educated, and learning lived patronage politics.
 - Parents' deaths remain suspicious but unproven.
-- Has entered his father's former north-suite room and experienced it as lived family space rather than supernatural chamber.
-- Revises his model of his father: Luceran now has evidence that his father deliberately restricted and transferred private Edselsto family records, but does not know why.
-- Revises his model of his mother: she participated in at least one private Edselsto dispute during a quiet parental visit nine years earlier; Orven remembers her saying "Not while he is a child," but subject/context remain unknown.
-- Recognizes that being loved by his parents did not mean being told everything.
-- Explicitly resists forcing the evidence into one theory.
-- Does not breach the infilled family-passage doorway.
-- Has no supernatural conclusion about Edselsto.
+- Has completed his first formal Edselsto court and enjoyed it.
+- Now understands more clearly that access is visible even without spying: people observe who waits, interrupts, uses which door, receives jokes, receives written answers, or can change the king's mind.
+- Accepts Lady Ardel Kaelmont's core observation that Edselsto is not politically blank; early useful actors have become early winners.
+- Does not yet regard this as proof that those actors are corrupt or coordinated.
+- No longer wants to flee the court he is building. His developing task is to build a better court rather than escape politics.
+- Family investigation remains active but unresolved and did not dominate Episode 08.
 
-## Family-history / archive state
+## First formal court / access map
 
-### Ysabet Marris
-- Assistant keeper of royal household records; came from the capital by her own request because Edselsto provenance questions matter professionally.
-- Receives a dry room, two copyists, and practical authority to stop unrecorded movement of archival material subject to royal authority.
-- Insists that preserving paper without preserving provenance can destroy evidence.
-- Refuses dramatic inference where catalog evidence is incomplete.
-- Luceran values her specifically because she corrects him rather than feeding his preferred theory.
+Visible early advantages now include:
+- Lord Montegrain's personal proximity without a petitionable office;
+- Lady Miren Edevane's personal familiarity and Edevane clerical/archive proximity;
+- Bellisar east-route/stable access under Rhyse security control;
+- Pell chamber proximity and broad family presence;
+- Morcant ordinary-iron quotation rights;
+- Falbrecht conditional winter charcoal first refusal;
+- Nella Veyr / Guild of Keys professional presence;
+- Ysabet Marris's archival authority independent of house convenience;
+- Village Council access based on indispensable local knowledge;
+- Crown workers' practical ability to override ceremonial convenience where structures are unsafe.
 
-### Halven Sare
-- Former Edselsto secretary to Luceran's father for a period before the latter became king.
-- Appears beside the younger royal father in a family-wing portrait; Sare's face was deliberately cut out at an unknown date.
-- Orven reports Sare left service and was said to have gone south; this is reported history, not verified fact.
+Later arrivals can now name this pattern even though it is not a secret coordinated bloc.
 
-### N.F. 44–51 documentary obligation
-- Family-paper catalog has a gap around entries 44–51.
-- An inventory contains a marginal instruction in Luceran's father's recognizable hand: remove private North Family material from general register, keep under household seal, no copies. Ysabet still requires formal handwriting comparison for archival confirmation.
-- A later household-seal register cross-reference states: `Edselsto private packet — N.F. 44–51 — transferred under royal instruction.`
-- Associated receipt is not present with current material.
-- Transfer is dated nine years earlier, approximately the period of Luceran's parents' quiet two-night Edselsto visit.
-- N.F. expansion, packet contents, destination, recipient, and reason remain unknown.
+## New / promoted political actors
 
-## Orven Dast / parental visit memory
+### Lady Ardel Kaelmont
+- House Kaelmont road/quarry representative; competent in mountain road, bridge, toll, and quarry realities.
+- Arrives with working survey material rather than ornamental gift.
+- Correctly identifies the early-access network as politics produced through usefulness and familiarity.
+- Offers survey crews, reduced Crown quarry rate for two years, White Step bridge crews before snow, and toll waiver on Crown construction stone moving uphill.
+- Wants recognition that qualifying improvements built under existing Kaelmont charter remain Kaelmont-maintained toll works after emergency period, except final royal mile.
+- Luceran does not grant this bargain yet.
+- Mutual political respect begins; attraction is possible but not established fact.
 
-- Orven remembers Luceran's parents visiting quietly for two nights roughly nine years earlier with four guards, the then-current secretary, and the queen's maid rather than a court.
-- Luceran's father asked about old keys, lower family stores, the old north stair, and whether the wall beside the family passage had been opened.
-- Orven remembers Luceran's mother angry during a private argument and one sentence: "Not while he is a child."
-- Orven assumed "he" meant Luceran but cannot confirm this.
-- Luceran accepts that Orven was steward rather than spy and that privacy itself created legitimate information gaps.
+### Master Gerant Vale
+- Factor for Lord Edmund Moncler.
+- Presents Moncler's compensation claim seriously and accepts account verification rather than demanding automatic payment.
+- Establishes Moncler as creditor/claimant with a legitimate category of loss, not comic residue.
+
+### Sir Caldus Pell
+- Friendly Pell relation known personally to Luceran.
+- Publicly distinguishes immediate removal from close duty from formal termination of sealed Royal Companion commissions.
+- Does not demand restoration; asks for status, arrears, and review.
+- Demonstrates that friendly procedural opposition can strengthen rather than undermine legitimacy.
+
+## Moncler / labor state
+
+- Crown accepts documented direct loss caused by abrupt labor requisition as a legitimate compensation category.
+- Amount remains unverified pending accounts.
+- No invented dignity charge is accepted merely because a noble was embarrassed.
+- Olan Crewe confirms Moncler suffered real interruption costs.
+- Luceran explicitly states compensation to Moncler does not purchase or restore ownership/control of the recruited workers.
+- Workers remain Crown-employed for their present terms and retain later choice.
+- Guild/Crown labor competition remains active.
+
+## Royal Companion state
+
+- Rhyse's immediate removal of failed Companions from close duty remains valid.
+- Formal sealed commissions require Crown disposition beyond immediate post removal.
+- Ten-day review ordered.
+- Review should include a guard officer not directly responsible for the original removal, household legal authority, and Crown representation.
+- Arrears continue pending formal status determination.
+- No dismissed Companion returns to close escort during review.
+- At least one former Companion seeks formal discharge; another seeks review of whether his duty assignment actually included the failed close-escort obligation.
+- Rhyse supports independent review of his decision.
+
+## Village / lower settlement state
+
+- Worker tents, runoff ditching, latrines, cookfires, rough camp organization, forge, timber/stone handling, and storage remain active.
+- Half old common remains temporary Crown storage, not permanent alienation.
+- Falbrecht charcoal shed continues.
+- Lower well repair continues; water capacity remains constrained.
+- Sera's crude smithy remains active.
+- Private-looking ruins/houses may not be occupied merely because courtiers assume abandonment.
+- Henn-family property question remains unresolved and now informs broader village resistance to casual Crown occupation.
+- Visiting remount pressure is pushing more horse infrastructure below the upper gate.
+- Village Council proposes and receives an operational role in arrival/lodging/property/food coordination because the Crown physically needs local knowledge.
+
+### New arrival / lodging rules
+- Lower-road receiving line ordered for arriving people, horses, carts, and tents.
+- Village-offered private lodging is to be recorded before Crown assignment.
+- No private building occupation without agreement or separate lawful order.
+- Camp ground is to be marked before new tents are erected.
+- Crown staple purchasing is consolidated through one buyer rather than competing noble buyers stripping the morning market.
+- Staple rates are to be reviewed weekly with village/supplier conditions rather than fixed permanently.
+
+## Existing friendly network / bargain ledger
+
+- **Morcant:** first right to quote on next two ordinary iron deliveries remains; no exclusivity; attempt to automatically include nails is refused; future structural-iron tender notice allowed; Sera retains independent quality judgment.
+- **Falbrecht:** charcoal shed built by Falbrecht; Crown owns after eighteen months; conditional winter first refusal; dry-weight payment reaffirmed.
+- **Bellisar:** scheduled east-stair access for stable operations under Rhyse authority; horse pressure now creates lower-settlement consequences.
+- **Guild of Keys / Nella Veyr:** paid professional lock/door work without monopoly.
+- **Edevane:** archive-adjacent clerical presence and useful credit/information channels; archive equipment is explicitly institutional rather than House property.
+- **Pell:** favorable chamber/proximity ambitions remain visible; Caldus also establishes friendly procedural opposition.
+- **Nerezza:** formally records objection that room distance communicates access/status even when original placement was caused by roof safety; no immediate relocation.
+- **Village Council:** operational consultation now expands into receiving, lodging, property, food, and land-use coordination.
+- **Kaelmont:** road/quarry offer active but ungranted; must be compared against Crown, carter, Damaris, Bellisar, and other road interests before winter.
+- **Moncler:** direct-loss compensation category accepted; amount remains subject to accounts.
 
 ## Relationships
 
 ### Lord Montegrain
-- Remains near Luceran as genuine friend and confidant.
-- Witnesses family grief without demanding explanation or manufacturing conclusions.
-- Friendship deepens through quiet presence; political usefulness of his access still exists even when neither man is using it.
+- Remains genuine friend and confidant with visible informal access.
+- His ability to stand near Luceran without a petitionable office is now legible to outsiders as political advantage even where neither man intends a transaction.
 
 ### Lady Miren Edevane
-- Continues affectionate, politically sophisticated correction.
-- Supplies one bounded memory: Luceran's father once dismissed Edselsto as expensive/inconvenient and changed the subject; Luceran's mother later asked whether he had written to Orven.
-- Does not pretend to know what the correspondence concerned.
+- Affectionate, politically sophisticated familiarity continues.
+- Casual shared-cup familiarity is noticed by Ardel and becomes another example of private behavior around a sovereign generating public inference.
+- Miren continues correcting Luceran without treating correction as disloyalty.
 
-## Emerging friendly network / bargain ledger
+### Captain Tovan Rhyse
+- Luceran's trust deepens because Rhyse accepts independent review of his own use of authority.
+- Rhyse continues controlling security geometry rather than allowing noble access claims to dictate guard routes.
 
-Existing Episode 05–06 arrangements remain active:
-- **Morcant:** first right to quote on next two ordinary iron deliveries; no exclusivity; price/quality exit; Sera independently inspects forge iron.
-- **Falbrecht:** charcoal shed built by Falbrecht; Crown owns after eighteen months; conditional winter first refusal; dry-weight payment.
-- **Bellisar:** scheduled east-stair access for stable operations under Rhyse security authority.
-- **Guild of Keys / Nella Veyr:** paid professional lock/door work without monopoly.
-- **Edevane:** archive-adjacent clerical presence and useful credit/information channels.
-- **Pell:** favorable chamber/proximity ambitions remain visible.
-- **Village Council:** food/property/boundary consultation constrains Crown convenience.
+### Lady Ardel Kaelmont
+- Luceran respects her because she names both Kaelmont's interest and the political reality she observes.
+- Ardel sees Luceran as a young king who rewards usefulness and is learning quickly, but still underestimates how visible familiarity becomes.
 
-These actors remain overlapping and independently motivated, not a coordinated secret bloc.
+### Village Council
+- Luceran increasingly accepts local legitimacy/material competence as a constraint on Crown convenience rather than evidence of disloyalty.
 
-## Lower settlement / works state
+## Family-history / archive state
 
-- Worker tents, runoff ditching, latrines, cookfires, and rough camp organization continue.
-- Half old common remains temporary Crown storage, not permanent alienation.
-- Falbrecht charcoal shed now visibly has walls under construction.
-- Lower well repair continues with salvage stone moving downhill.
-- Sera's crude smithy remains active; Nella coordinates lock-plate work with her.
-- Black-pine deliveries require real inspection and drying/selection.
-- Tool racks, material piles, runners, carts, goats, workers, and supply movement make the settlement increasingly dense.
-- Henn-family property question remains unresolved.
-- Worker family correspondence remains active.
+### Ysabet Marris
+- Continues independent archival work with dry room, two copyists, and provenance authority.
+- During Episode 08 she remains background institutional motion rather than court spectacle.
+- Archive equipment is assigned to the archive rather than treated as an Edevane possession.
+
+### Halven Sare
+- Former Edselsto secretary to Luceran's father; damaged portrait and later history remain unresolved.
+
+### N.F. 44–51
+- Missing/private packet, destination, contents, and receipt remain unresolved.
+- Father's restriction/transfer evidence and nine-year timing remain as previously established.
 
 ## Family passage / mystery state
 
 - Widow's key remains with Orven; Nella has recorded its pattern; Rhyse records custody.
 - Deliberately infilled former doorway remains intact and unbreached.
-- Traditional association with service route/lower family stores remains unconfirmed geography.
-- Luceran's father asked whether the wall beside the family passage had been opened during the visit nine years earlier; this links his attention to the location but does not explain it.
-- Separate lower-west service door remains barred from the opposite side and unresolved.
+- Separate lower-west service door remains barred from opposite side and unresolved.
 - First-night voice-like acoustics remain unresolved and plausibly mundane.
 - No confirmed supernatural behavior.
 
-## Royal Guard / escort
-
-- Rhyse continues treating routes/doors as security geometry and retains Bellisar stair closure authority.
-- Bram continues close escort and explicitly reminds Luceran of the no-breach/shoring condition at the family-passage wall.
-- Edrik's prior professional trust remains active.
-- Remaining Royal Companion reviews/patron fallout remain unresolved.
-
 ## Seven candles
 
-- Seven remain in the family nave under inherited maintenance practice.
-- Luceran sees and deliberately counts all seven at episode end.
+- Brother Calven checks the nave after the first court.
+- One flame gutters in an ordinary draft and steadies when Orven closes the outer passage door.
+- No candle extinguishes.
 - Seven of seven remain lit.
 
 ## Active political consequences
 
-- The first formal court will arrive into a system where rooms, contracts, supply privileges, archive access, guard routes, village agreements, and friendships already create recognizable advantage.
-- Ysabet's provenance rules create a new institutional constraint on convenient handling of royal records.
-- Luceran's family investigation now depends on archivists, stewards, locksmiths, workers, old registers, and missing receipts rather than royal authority alone.
-- Moncler's compensation claim remains active.
-- Guild/Crown labor competition remains active.
-- Royal Companion patron fallout/reviews remain active.
-- Twenty-two-year Crown repair neglect remains politically relevant.
-- Henn-family property remains unresolved.
+- Edselsto is now a real court with observable customs even where nobody formally declared them.
+- Later houses can identify early winners and will bargain accordingly.
+- Formal audience success directly increases demand for lodging, food, horses, water, storage, servants, and land.
+- Moncler compensation and Royal Companion commission review now have formal procedural tracks.
+- Kaelmont road/quarry proposal becomes active bargain debt before winter.
+- Nerezza has preserved a formal objection to access symbolism rather than allowing silence to become consent.
+- Village Council has gained operational leverage because court expansion cannot function without local water, food, land, and lodging knowledge.
+- Friendly politics remain friendly; usefulness and affection are producing real advantage without requiring conspiracy.
 
 ## Open obligations
 
-1. Episode 08 stages the first formal Edselsto court and lets later arrivals identify who gained early advantage.
-2. Preserve N.F. 44–51 packet/receipt as documentary payoff debt; do not solve it immediately.
-3. Research Halven Sare through provenance rather than convenient confession.
-4. Preserve the infilled family-passage doorway and lower-west barred door unless later dependency-valid investigation reaches them.
-5. Continue Ysabet as independent archivist with professional objectives.
-6. Continue friendly-house competition without converting it into a secret bloc.
-7. Continue construction, water, food, storage, worker housing, Henn property, and village consequences.
-8. Continue Jory/Ellyn and worker family obligations.
-9. Continue Moncler's compensation and guild/Crown labor issues.
-10. Preserve Royal Companion reviews/fallout.
-11. Keep seven candles lit and unexplained.
-12. Preserve uncertainty around royal deaths.
-13. No confirmed supernatural behavior.
+1. Episode 09 returns attention to the village under the immediate pressure of at least ninety-six expected arrivals and only thirty-one available beds.
+2. Show opportunity and harm together: rents, wages, repairs, sales, displacement, food inflation, water pressure, horse pressure, land use, and old neglect.
+3. Resolve or materially advance Henn-family property through local evidence rather than Crown assumption.
+4. Promote at least one villager through demonstrated route/custom/property knowledge.
+5. Preserve lower-road receiving, lodging registry, Crown staple buyer, and weekly price review as real operating systems with friction.
+6. Continue lower-well repair and water limits.
+7. Continue Moncler's compensation accounts.
+8. Conduct Royal Companion review within ten days; do not silently erase it.
+9. Evaluate Kaelmont road bargain before winter; do not grant by convenience.
+10. Preserve Morcant, Falbrecht, Bellisar, Edevane, Pell, Nerezza, Guild of Keys, and village bargains as distinct interests.
+11. Continue Jory/Ellyn and worker family obligations.
+12. Preserve N.F. 44–51, Halven Sare, parental visit, Widow's key, infilled doorway, and lower-west barred door as unresolved.
+13. Keep seven candles lit and unexplained.
+14. Preserve uncertainty around royal deaths.
+15. No confirmed supernatural behavior.
 
 ## Candle state
 
