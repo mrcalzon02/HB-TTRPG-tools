@@ -4,7 +4,7 @@ description: Model how one actor understands another actor over time using evide
 compatibility: System-neutral reasoning and continuity skill. For current real-world political or public figures, the host must retrieve current reliable public sources before making substantive factual claims.
 metadata:
   author: mrcalzon02
-  version: "1.3.0"
+  version: "1.4.0"
   foundry-capability: foundry.site-index
   personality-engram: blacklight.charles
 ---
@@ -923,6 +923,209 @@ When sufficient longitudinal material exists, prefer representing change as a se
 **Prior State → Stimulus → Immediate Interpretation → Action → Feedback → State Update → Observer Update(s) → Confidence Change → Later Validation/Revision**
 
 This sequence should be recoverable for every major turning point.
+
+## Self-theory-of-mind and self-model fallibility
+
+Theory of mind applies **inward as well as outward**.
+
+Represent an actor's theory of their own mind as a distinct model:
+
+**M(A→A, t)**
+
+This is not identical to the actor's underlying state trajectory **S(A, t)**.
+
+A person may be highly intelligent, coherent, confident, introspective, and psychologically stable while still misunderstanding their own motives, priorities, memories, limits, emotional drivers, or reasons for a decision.
+
+### Core self-model rule
+
+Never assume:
+
+**actor says why they acted → therefore that explanation is complete or objectively correct.**
+
+Self-report is important evidence, but it is evidence about the actor's current self-model as well as about the event being explained.
+
+Preserve separately:
+
+- underlying state as best supported by the total evidence;
+- actor's current self-explanation;
+- actor's confidence in that explanation;
+- alternative explanations;
+- later reinterpretation;
+- disagreement between behavior, consequence, and self-narrative.
+
+### Self-model dimensions
+
+Where evidence permits, track:
+
+- **self-identity** — who the actor believes they are;
+- **self-attributed motives** — why they believe they act;
+- **self-attributed values** — what principles they believe govern them;
+- **self-perceived competence** — what they believe they can and cannot do;
+- **self-perceived thresholds** — what costs or acts they believe they would never accept;
+- **self-perceived emotional state** — what they think they feel;
+- **self-perceived obligations** — what they believe they owe others or institutions;
+- **self-narrative history** — the story they tell themselves about how they became who they are;
+- **self-prediction** — what they expect themselves to do under future conditions;
+- **introspective confidence** — how certain they are that they understand themselves.
+
+### Sources of self-model error
+
+A self-model may drift or become incomplete through ordinary human processes such as:
+
+- incomplete introspection;
+- memory reconstruction;
+- post-hoc rationalization;
+- motivated reasoning;
+- cognitive dissonance reduction;
+- shame avoidance;
+- pride;
+- identity protection;
+- social role performance;
+- habit;
+- emotional state;
+- exhaustion;
+- grief;
+- fear;
+- trauma;
+- changed incentives;
+- changed relationships;
+- changed institutional role;
+- learning that has not yet been integrated into explicit self-concept.
+
+Do not require pathology to explain self-model error.
+
+### Self-model drift
+
+Track when the actor's self-theory changes over time even if their behavior changes more slowly or more quickly.
+
+Possible patterns include:
+
+- **behavior changes before self-model** — the actor is already acting differently but still describes themselves using an obsolete identity;
+- **self-model changes before behavior** — the actor recognizes a problem but has not yet changed conduct;
+- **retrospective identity repair** — the actor rewrites the meaning of earlier choices to preserve a coherent self-story;
+- **self-model fragmentation** — different roles or contexts produce incompatible self-explanations;
+- **self-model convergence** — behavior, values, and self-description become more mutually consistent;
+- **self-model collapse** — an event invalidates a large portion of how the actor understood themselves;
+- **self-model reconstruction** — the actor builds a new explanation of who they are after collapse or contradiction.
+
+### Self-prediction is testable
+
+Treat statements such as:
+
+- "I would never do that."
+- "I always protect my people."
+- "Power does not matter to me."
+- "I know exactly why I made that choice."
+
+as self-model claims, not automatic facts.
+
+Later behavior may:
+
+- support;
+- partially support;
+- contradict;
+- contextualize;
+- invalidate;
+- or leave the claim untested.
+
+A person can sincerely make an inaccurate prediction about their own future conduct.
+
+### Other people as mirrors
+
+Other actors may provide evidence that alters self-theory.
+
+Use the loop:
+
+**other person's reaction → actor interprets reaction → actor revises or resists self-model → future behavior changes or remains stable**
+
+An observer may understand a person's recurring behavior more accurately than the person currently understands it themselves, but that possibility must still be treated as an evidence-bounded hypothesis rather than privileged access.
+
+### Self-deception and rationalization
+
+Do not use "self-deception" merely because an actor is wrong about themselves.
+
+Prefer narrower classifications where possible:
+
+- incomplete self-knowledge;
+- mistaken causal attribution;
+- rationalization;
+- motivated reinterpretation;
+- identity-preserving reinterpretation;
+- unresolved contradiction;
+- deliberate self-concealment where evidence supports it.
+
+Self-deception should require evidence that the actor is actively maintaining a belief against information they themselves possess or repeatedly encounter.
+
+### Memory and personal history
+
+Autobiographical memory is part of the self-model, not a perfect archive.
+
+Distinguish:
+
+- event as independently established;
+- actor's remembered event;
+- meaning the actor assigned at the time;
+- meaning assigned later;
+- confidence in the memory;
+- known gaps or contradictions.
+
+A later reinterpretation may alter the actor's identity without changing what actually occurred.
+
+### Disorders, neurological conditions, altered states, and impairment
+
+The framework must remain usable when cognition is affected by documented conditions, injury, intoxication, medication, sleep deprivation, trauma, neurodegeneration, psychosis, dissociation, or other altered states, but these must not be inferred casually.
+
+For real people:
+
+- do not diagnose from text or public behavior;
+- use only documented diagnoses or directly attributable evidence when clinically relevant;
+- distinguish a documented condition from claims about how much it affected a particular decision;
+- preserve ordinary explanations when they remain sufficient.
+
+For fictional characters:
+
+- use authorially established or canonically evidenced conditions where available;
+- do not invent pathology to explain behavior that ordinary incentives, emotion, incomplete information, or character history already explain.
+
+### Self-model accuracy and confidence
+
+Track separately:
+
+- **self-model confidence** — how sure the actor is;
+- **self-model accuracy** — how well the self-model fits independent longitudinal evidence;
+- **self-model completeness** — how much relevant state the explanation appears to cover;
+- **self-model stability** — how much the self-theory changes across contexts or time.
+
+High confidence does not imply high accuracy.
+
+High accuracy in one domain does not imply complete self-knowledge.
+
+### Recursive self-modeling
+
+Self-theory can itself become recursive:
+
+- **L1 self:** A believes "I want X."
+- **L2 self:** A believes "I believe I want X because I am the kind of person who values Y."
+- **L3 self:** A believes "Other people think I want X, and I want them to understand that my real reason is Y."
+
+Use only the depth supported by evidence.
+
+### Continuous self-model update
+
+For meaningful longitudinal analysis, represent:
+
+**Prior Self-Model → Stimulus → Self-Interpretation → Action → Consequence → External Feedback → Self-Reappraisal → Updated Self-Model**
+
+Then compare this against:
+
+- actual later behavior;
+- other observers' models;
+- independently established facts;
+- subsequent self-reports.
+
+### Governing principle
+
+A person's self-understanding is **another model in the system**: uniquely important because it directly shapes choices and identity, but still partial, revisable, and fallible.
 
 ## Political and public-figure mode
 
