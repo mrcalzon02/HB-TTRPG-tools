@@ -1,0 +1,439 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/interpersonal-theory-of-mind-modeling/record-schema.json",
+  "title": "Interpersonal Theory of Mind Record",
+  "description": "Portable directional projection of theory-of-mind state derived from the authoritative Character Information System. This record does not replace the durable character ledger.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "recordId",
+    "modelHolder",
+    "targetActor",
+    "context",
+    "informationBoundary",
+    "beliefClaims",
+    "trustModel",
+    "hypotheses",
+    "evidenceLedger",
+    "lastUpdated"
+  ],
+  "properties": {
+    "recordId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "modelHolder": {
+      "$ref": "#/$defs/actorRef"
+    },
+    "targetActor": {
+      "$ref": "#/$defs/actorRef"
+    },
+    "context": {
+      "type": "string",
+      "minLength": 1
+    },
+    "asOf": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "informationBoundary": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/informationItem"
+      }
+    },
+    "beliefClaims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    },
+    "perceivedGoals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    },
+    "perceivedConstraints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    },
+    "trustModel": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/trustClaim"
+      }
+    },
+    "socialPosture": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    },
+    "expectedBehavior": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/conditionalExpectation"
+      }
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/hypothesis"
+      }
+    },
+    "evidenceLedger": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "contradictions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contradiction"
+      }
+    },
+    "updateHistory": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/update"
+      }
+    },
+    "politicalPublicFigureMode": {
+      "type": "boolean",
+      "default": false
+    },
+    "lastUpdated": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "actorRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "informationItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "accessClass"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "accessClass": {
+          "enum": [
+            "directly-observed",
+            "directly-told",
+            "institutionally-available",
+            "trusted-report",
+            "rumor",
+            "analyst-only",
+            "unknown"
+          ]
+        },
+        "sourceRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "date": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim",
+        "epistemicClass",
+        "confidence"
+      ],
+      "properties": {
+        "claim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "epistemicClass": {
+          "enum": [
+            "known-by-model-holder",
+            "believed-by-model-holder",
+            "suspected-by-model-holder",
+            "analyst-inference",
+            "documented-public-fact"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "supportingEvidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disconfirmingEvidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "trustClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "expectation",
+        "confidence"
+      ],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expectation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "conditionalExpectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "condition",
+        "expectedResponse",
+        "confidence"
+      ],
+      "properties": {
+        "condition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expectedResponse": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "basis": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "hypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "statement",
+        "confidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "supportingEvidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disconfirmingEvidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "enum": [
+            "live",
+            "weakened",
+            "strengthened",
+            "rejected",
+            "unresolved"
+          ]
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "description",
+        "evidenceClass"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceClass": {
+          "enum": [
+            "direct-observation",
+            "statement",
+            "action",
+            "institutional-record",
+            "trusted-report",
+            "rumor",
+            "canon-event",
+            "public-source"
+          ]
+        },
+        "sourceRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "date": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reliabilityNote": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "contradiction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "affectedClaimIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resolutionStatus": {
+          "enum": [
+            "unresolved",
+            "context-dependent",
+            "model-revised",
+            "evidence-error"
+          ]
+        }
+      }
+    },
+    "update": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trigger",
+        "change"
+      ],
+      "properties": {
+        "date": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "trigger": {
+          "type": "string",
+          "minLength": 1
+        },
+        "change": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
