@@ -351,8 +351,62 @@
     "generatedResult": {
       "type": "object",
       "additionalProperties": true
+    },
+    "mapKey": {
+      "type": "array",
+      "description": "Semantic map legend. Color or symbol may aid presentation, but readable meaning is the authoritative data.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "description"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "targetId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "rules": {
+            "type": "string"
+          },
+          "gmNotes": {
+            "type": "string"
+          },
+          "sourceText": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
     }
   },
   "additionalProperties": false,
-  "description": "Backward-compatible module record supporting single-map adventure modules plus generated multi-deck spatial, vessel-condition, provenance, and editor-state payloads."
+  "description": "Backward-compatible module record supporting single-map adventure modules plus semantic map keys, generated multi-deck spatial data, vessel-condition, provenance, and editor-state payloads."
 }
