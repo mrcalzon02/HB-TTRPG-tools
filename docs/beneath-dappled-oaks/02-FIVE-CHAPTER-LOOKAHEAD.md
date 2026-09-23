@@ -4,134 +4,115 @@ document_role: "ROLLING FIVE-CHAPTER FORWARD PLAN"
 status: "ACTIVE PLANNING CONTROL"
 planning_horizon: 5
 last_reconciled: "2026-09-23"
-active_after_chapter: 8
+active_after_chapter: 9
 ---
 
 # Beneath Dappled Oaks — Active Five-Chapter Lookahead
 
-This is the operational N+1 through N+5 plan for the first-principles rewrite. Older planning material has been retired from this file rather than allowed to obscure the current drafting position. Unwritten plans are not historical fact; committed prose wins when characters or evidence develop differently.
+This is the operational N+1 through N+5 plan for the first-principles rewrite. Unwritten plans are directional rather than historical fact; committed prose wins.
 
 ## Current committed rewrite state
 
-Canonical numbered prose now runs through:
+Canonical numbered prose now runs through **Chapter Nine — The Rider**.
 
-1. **The Last Seven**
-2. **The Cost of Silk**
-3. **Seven Doors**
-4. **Necessary Truth**
-5. **Something Buried Near the House**
-6. **The Price of Being Seen**
-7. **Leaf Seventy-Three**
-8. **The Edges Left Behind**
+Chapter Nine pays the restricted-record dependency. Teren's appointment oath permitted a later bounded mnemonic compartment only by separate countersignature; the appointment rider explicitly says it was **not activated at appointment**. The dual-override sheet establishes that Pel Ardis had pre-authorized Contingency's emergency sealing concurrence before Silver Night and that Teren supplied the Joint Order side three days after the attack. The sealed material is classed as bearer authentication, independent receiving authority, transfer instructions, and associated credential discrepancy. This preserves the discrepancy rather than administratively closing it.
 
-Chapter Eight establishes the current handoff. Teren Valeric's general autobiographical memory tests as coherent, but the emergency-chair interval is unusually bounded. The examination does **not** prove hostile alteration. Live explanations include acute stress, a reinforced secrecy oath, consensual compartment, later-memory contamination, mnemonic treatment, deliberate interference, or combinations. Teren preserves sensory and somatic fragments around the missing category and independently retrieves three brass keys on a return table without the black selector.
+The rider continuation transferred to medical-security custody on day +2. Independent River Ledger and Warden aggregate records both describe a compatible one-passenger medical-security movement to the Eiravel Memorial Infirmary district without exposing a protected witness identity or destination. The infirmary record establishes that a temporary Joint Order chair underwent a **lawful protective mnemonic compartment under patient consent** covering protected witness-routing identity and continuity access. Its release condition was authorized post-emergency review. Release was deferred when the patient transferred before examination, and the compartment appears never to have been properly unwound. This is not proof of sabotage. The immediate live problem is responsibility for the failed release and the transfer that carried Teren away from the scheduled review.
 
-The black object is now established as a **routing selector** for a dual-control witness-continuity cabinet, not an ordinary door key. The receiving side held the cabinet key. After Silver Night that receiving key was unavailable, and the cabinet was sealed through a dual override. Corren Valeric later returned the selector. This proves custody facts and mechanism, not how Corren acquired the selector, whether his possession was lawful, who held the receiving key at the critical moment, or who authorized the override.
-
-Ilyan and Thessa's adult relationship has deepened into ordinary private intimacy. Her practical care, willingness to correct him, insistence on evidence boundaries, and refusal to expose Mara's protected location chain have become part of Ilyan's person-specific attraction grammar. Do not turn this into generic romantic softness or make Thessa abandon her Warden work to become an investigation accessory.
-
-The Seven end Chapter Eight with concrete independent work rather than passive availability: Damaris can examine whether protected River Ledger traffic touched the west-tower response; Mireth can research general oath/compartment doctrine; Caelen can establish normal dual-control override practice; Lyrion can test whether Silver Bough institutional memory preserved the emergency chair as a person or merely an office; Thessa must first complete the failed retaining-wall work and may then seek aggregate Warden movement records without opening Mara's identity or destination chain; Rhyl remains on ordinary boundary-survey duty and should encounter evidence only if his actual work puts it there.
+The Seven's lawful inquiries are becoming institutionally visible through ordinary reporting chains. Thessa's Warden captain has already asked about her historical aggregate-record request. Preserve this as normal organizational memory, not omniscient conspiracy surveillance.
 
 ## Governing debts
 
-**Evidence debt:** pay the protected-routing rider, dual-override signatures, acceptance-oath language, and any lawful medical/magical treatment record before escalating Teren's memory anomaly into a diagnosis.
+**Teren memory debt:** distinguish the lawful original compartment from any later failure, extension, manipulation, negligence, or simple jurisdictional loss. Do not retroactively turn lawful consent into proof of hostile alteration.
 
-**Mara privacy debt:** the story has repeatedly chosen not to expose Mara's protected destination merely because Ilyan wants answers. Preserve that ethical/institutional boundary unless a later necessity genuinely changes it.
+**Mara privacy debt:** Teren explicitly asks Ilyan not to make Mara pay for his missing memory. Preserve the protected destination boundary while seeking office-level and process-level answers.
 
-**Corren complexity debt:** Corren's established responsibility for Silver Night remains. New evidence may show that some actions inside the disaster protected a witness, preserved independent authority, or frustrated another faction. Complexity must not become retroactive innocence.
+**Corren complexity debt:** Corren's established responsibility for Silver Night remains. His later possession/return of the selector still requires a custody explanation. Do not convert complexity into innocence.
 
-**Relationship debt:** the Seven's romances are now socially legible and physically familiar. Continue ordinary intimacy, jealousy, teasing, desire, work conflicts, family interpretation, and political consequence rather than resetting couples to coy first-attraction behavior.
+**Institutional failure debt:** the emergency machinery was temporary, multi-office, and dependent on people who died, transferred, recused, or lost access. Determine whether the failed release arose from structured bureaucratic failure, deliberate intervention, or both.
 
-**Adult-life debt:** investigations must coexist with actual jobs, hearings, surveys, guard duty, diplomacy, household obligations, meals, sleep, money, family instructions and institutional consequences.
+**Relationship/adult-life debt:** relationships are physically familiar and socially legible; jobs, reporting chains, family obligations, food, sleep, hearings and ordinary work continue to consume time and create consequences.
 
-**Demographic motive debt:** Silver Night's student-shield violation and unresolved heir-demographic pressure remain active architecture. Do not prematurely name the unusually expanding family, rival faction, or exact numbers until earned by committed evidence.
+**Demographic motive debt:** student-shield violation and unresolved heir-demographic pressure remain active architecture. Do not prematurely fix the expanding family, rival faction, or exact numbers.
 
 ---
 
-## N+1 — Chapter Nine: The Rider
+## N+1 — Chapter Ten: What the Oath Keeps
 
 **Certainty:** LOCKED INTENT
 
-**Primary purpose:** pay Chapter Seven and Eight's restricted-record dependency without using memory magic as a shortcut.
+**Primary purpose:** follow the failed release rather than re-litigating whether the original compartment was lawful.
 
-**Likely focus:** Ilyan, Teren, Judge Vaun, Examiner Sael; parallel short movements through the other Seven's ordinary work where they naturally produce bounded comparison evidence.
+**Required movement:** trace Teren's day +2 transfer and determine which office inherited responsibility for the post-emergency release review. Establish whether the transfer was ordinary emergency redistribution, family intervention, medical necessity, security necessity, or something more troubling. Keep destination/witness identity segregated where possible.
 
-**Required movement:** Crown review releases either the protected-routing rider itself or a legally segregated extract sufficient to establish what Teren accepted, what secrecy/compartment conditions attached to the office, and who possessed override authority after Ardis's recusal. The acceptance oath should clarify whether memory compartment was an authorized possibility without automatically proving it was used. The dual-override signatures or their custody trail must become independently followable.
+**Character movement:** Teren must confront the fact that he consented to a protection whose consequences outlived his consent context. Ilyan must honor his promise not to expose Mara to repair Teren. Mireth/Silae can clarify release doctrine; another Seven member should produce evidence through their actual job rather than reporting as Ilyan's subordinate.
 
-**Character movement:** Teren must live with not forcing recall. Ilyan must continue separating love, belief and proof. Thessa remains supportive but occupied by Warden duty. Give at least one other member of the Seven a discovery produced by their own institution rather than having everyone report to Ilyan as subordinates.
+**Political movement:** at least one institutional supervisor notices convergent historical requests and asks a reasonable question about scope, authorization, or House implications.
 
-**Seed debt to pay:** establish what ordinary protected movements look like in Warden/Ledger/custody systems so later anomalous movement has a baseline.
-
-**Exit handoff:** identify a person, office, treatment event or transfer action that can be investigated without opening Mara's destination chain.
+**Exit handoff:** identify the office/person that should have initiated release review, or establish the exact jurisdictional break that prevented it.
 
 ---
 
-## N+2 — Chapter Ten: What the Oath Keeps
+## N+2 — Chapter Eleven: The Second Signature
 
 **Certainty:** PLANNED
 
-**Primary purpose:** distinguish lawful secrecy architecture from abuse of that architecture.
+**Primary purpose:** return to accountable human choice once the failed-release chain is mapped.
 
-**Likely focus:** Teren's acceptance oath and treatment history; Mireth/Silae doctrine; Ilyan/Thessa relationship under growing time pressure; one political consequence from the Seven's increasingly visible coordination.
+**Required movement:** determine how Corren obtained and later returned the black selector after Teren's override. Separate possession, lawful transfer, emergency custody, action and motive. If a second signature or custody handoff exists, establish its provenance rather than treating initials as confession.
 
-**Required movement:** establish whether emergency-chair oaths could suppress category, access, or disclosure while leaving sensory edges. If a lawful mechanism exists, determine whether Teren's current pattern is consistent with it, inconsistent with it, or impossible to distinguish without a missing record. Do not let a physician or mage pronounce certainty beyond evidence.
+**Silver Night movement:** connect the preserved cabinet material to a bounded class of credential/witness discrepancy without opening Mara's destination. Determine what someone was preserving or preventing from being destroyed, not where the witness went.
 
-**Political movement:** somebody outside the Seven should notice that multiple young graduates are making lawful but oddly convergent inquiries. The reaction should arise through normal institutional reporting, not omniscient conspiracy surveillance.
+**Character movement:** one of the Seven should disagree intelligently with Ilyan's interpretation. Teren's theory of himself changes even if memory recovery remains incomplete.
 
-**Relationship movement:** intimacy should create scheduling, privacy and reputational consequences. Older adults may recognize the relationships without treating them as scandal by default.
-
-**Exit handoff:** a discrepancy between authorized secrecy procedure and what actually happened creates the next actionable question.
+**Exit handoff:** a living institutional stakeholder has reason to resist, cooperate, bargain, or demand formal process.
 
 ---
 
-## N+3 — Chapter Eleven: The Second Signature
-
-**Certainty:** PLANNED
-
-**Primary purpose:** move from mechanism to accountable human choice.
-
-**Required movement:** pay the dual-override signature/custody chain. Determine who exercised the Joint Order side and who exercised the Contingency receiving side after Silver Night, or establish why one identity is missing. If Corren appears, preserve the difference between possession, authority, action and motive.
-
-**Silver Night movement:** connect the cabinet action to a bounded class of witness material rather than immediately revealing Mara's location or the full contents. Let the evidence establish what kind of thing someone was trying to preserve, move, seal or prevent others from reaching.
-
-**Character movement:** Teren's theory of himself may change even if his memory does not. Ilyan must confront the possibility that a person can be both implicated and acted upon. One of the Seven should disagree with Ilyan's preferred interpretation for intelligent reasons.
-
-**Exit handoff:** the investigation acquires a living institutional stakeholder who has reason to resist, cooperate, bargain, or demand formal process.
-
----
-
-## N+4 — Chapter Twelve: Four Houses Listening
+## N+3 — Chapter Twelve: Four Houses Listening
 
 **Certainty:** DIRECTIONAL
 
-**Primary purpose:** let the investigation's existence become political without turning the Seven into master conspirators.
+**Primary purpose:** let ordinary institutional visibility become political.
 
-**Political movement:** lawful queries, relationship visibility and family networks cause at least four Great Houses or their cadet branches to form partial, conflicting understandings of what the Seven are doing. No house should possess the whole truth. Their responses should follow interests: succession, reputation, institutional protection, trade, military access, family loyalty and romantic leverage.
+At least four Great Houses or cadet networks should acquire partial, conflicting pictures through legitimate reporting, family ties, requests, invitations and professional gossip. Nobody gets the whole truth. Responses follow concrete interests: succession, reputation, trade, military access, institutional protection, family loyalty and romantic leverage.
 
-**Relationship movement:** one relationship becomes useful to a family or institution in a way the lovers notice. The pressure should be specific—an invitation, posting, introduction, escort, contract, marriage hint, information request or access opportunity—not a generic speech about duty.
+One relationship becomes specifically useful to a family or institution through an invitation, posting, escort, introduction, contract, marriage hint, information request or access opportunity. The lovers notice the utility rather than receiving a generic duty lecture.
 
-**Mystery movement:** demographic succession pressure should cast a clearer shadow without fixing the exact expanding family/rival faction prematurely unless evidence earns it here.
+Demographic succession pressure should cast a clearer evidentiary shadow without prematurely naming the expanding family/rival faction unless earned.
 
-**Exit handoff:** the Seven must choose whether to keep sharing everything among themselves once their institutions begin asking what they know.
+**Exit handoff:** the Seven must decide what they can ethically continue sharing once their professional oaths diverge.
 
 ---
 
-## N+5 — Chapter Thirteen: The Cost of Keeping Seven
+## N+4 — Chapter Thirteen: The Cost of Keeping Seven
+
+**Certainty:** PLANNED
+
+**Primary purpose:** force the first mature structural choice about the Seven as an information-sharing network.
+
+Their friendship is refuge and investigative advantage, but complete transparency now risks protected sources, oaths, lovers, family obligations and discoverable information flow. Do not manufacture betrayal. Make boundaries necessary because they are adults holding genuinely incompatible duties.
+
+Potential payoff targets include Mara's privacy, Teren's compartmented office, Damaris's Ledger obligations, Thessa's Warden confidentiality, Caelen's Crown custody duties, Mireth's living-memory ethics, Lyrion's diplomatic compartmentation and Rhyl's field-source protection.
+
+**Exit handoff:** the Seven remain friends but establish explicit rules, negotiated boundaries, or a first durable fracture over what cannot be shared.
+
+---
+
+## N+5 — Chapter Fourteen: The Invitation That Knows Too Much
 
 **Certainty:** HORIZON / EXPLORATORY
 
-**Primary purpose:** force the first mature structural choice about the Seven as a network.
+**Primary purpose:** pay the political visibility seeded in Chapters Nine through Twelve through a socially ordinary event that contains an unnervingly precise understanding of one member's interests.
 
-Their friendship has been an emotional refuge and an investigative advantage. By this point it should also carry costs: conflicting oaths, discoverable information flow, lovers with divided obligations, family leverage, and the possibility that protecting one member requires withholding something from another.
+A House, salon, council office, order patron or cadet household issues an invitation or professional opportunity whose wording reveals that somebody has reconstructed more of the Seven's inquiry than they should possess from any single source. This need not mean a master conspiracy: the information may have been assembled from several lawful institutional traces, gossip, kinship and commercial observation.
 
-Do **not** manufacture betrayal merely to create drama. The chapter should ask whether complete mutual transparency remains ethical or even possible once each adult holds protected institutional information.
+Use the event to test the Seven's new information-sharing boundaries. Let romance, family interpretation and professional ambition complicate whether accepting the invitation is reckless, useful, unavoidable, or all three.
 
-Potential payoff targets: Mara's privacy boundary; Teren's compartmented office; Damaris's River Ledger obligations; Thessa's Warden confidentiality; Caelen's Crown custody duties; Mireth's living-memory ethics; Lyrion's diplomatic compartmentation; Rhyl's field-source protection.
-
-**Horizon exit:** the Seven remain friends, but their adult alliance gains explicit rules, fractures, or negotiated boundaries. That decision becomes durable Book One architecture.
+**Horizon exit:** the investigation is no longer merely historical. A present-day political actor has chosen to engage the Seven because of what they are doing now.
 
 ---
 
 ## Rolling-plan discipline
 
-After each newly committed numbered chapter, remove the completed N+1, shift the remaining cards forward, add one new N+5 horizon, and reconcile actual prose rather than preserving a superseded plan for sentiment. Keep the detailed horizon at five unwritten chapters. Book One may not exceed **40 numbered chapters**.
+After each newly committed numbered chapter, remove the completed N+1, shift the remaining cards forward, add one new N+5 horizon, and reconcile actual prose rather than preserving a superseded plan. Keep exactly five unwritten chapter horizons. Book One may not exceed **40 numbered chapters**.
