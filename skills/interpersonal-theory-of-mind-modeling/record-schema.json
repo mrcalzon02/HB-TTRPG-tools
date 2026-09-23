@@ -111,6 +111,46 @@
     "lastUpdated": {
       "type": "string",
       "minLength": 1
+    },
+    "analysisMode": {
+      "enum": [
+        "relationship-state",
+        "deterministic-text-pipeline"
+      ]
+    },
+    "coreDynamicSummary": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Exactly two concise sentences when deterministic-text-pipeline mode is used."
+    },
+    "frameworkAssessments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/frameworkAssessment"
+      }
+    },
+    "congruenceAssessments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/congruenceAssessment"
+      }
+    },
+    "epistemicChain": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/epistemicNode"
+      }
+    },
+    "reasoningFlags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reasoningFlag"
+      }
     }
   },
   "$defs": {
@@ -428,6 +468,194 @@
           "minLength": 1
         },
         "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "frameworkAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frameworkId",
+        "finding",
+        "confidence"
+      ],
+      "properties": {
+        "frameworkId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "finding": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "congruenceAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dimension",
+        "observedExternalData",
+        "hypothesizedInternalReality",
+        "congruence",
+        "confidence"
+      ],
+      "properties": {
+        "dimension": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observedExternalData": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hypothesizedInternalReality": {
+          "type": "string",
+          "minLength": 1
+        },
+        "congruence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "frameworkAnchor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "epistemicNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nodeId",
+        "level",
+        "subjectActorId",
+        "statement",
+        "confidence"
+      ],
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "subjectActorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetActorId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "parentNodeId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "uncertaintyNote": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "reasoningFlag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flag",
+        "finding",
+        "confidence"
+      ],
+      "properties": {
+        "flag": {
+          "type": "string",
+          "minLength": 1
+        },
+        "finding": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "alternativeExplanations": {
           "type": "array",
           "items": {
             "type": "string"
