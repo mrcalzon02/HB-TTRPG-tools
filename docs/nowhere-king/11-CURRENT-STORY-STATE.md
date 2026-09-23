@@ -1,118 +1,131 @@
 # Nowhere King — Current Story State
 
 **Status:** Active temporal continuity ledger  
-**Last completed unit:** Season One, Episode 02 — *Packing the Monarchy*  
-**Updated:** after revised Episode 02
+**Last completed unit:** Season One, Episode 03 — *The Road North*  
+**Updated:** after Episode 03
 
 ## Current timeline state
 
-Luceran remains in the old capital at the end of Episode 02.
+Luceran and the first royal convoy have left the old capital and reached the valley below Castle Edselsto near evening. The mountain, castle, and nearly abandoned village are now physically visible.
 
-He has decreed departure for Edselsto in the early morning. The move is now materially committed, but the royal convoy has **not yet left**.
-
-The hours between Episode 02's ending and dawn must contain frantic marshaling of wagons, tools, animals, food, archives, guards, household personnel, and newly recruited tradespeople.
+The convoy has **not yet entered the castle**. Bram Tolland and Edrik Saye persuade Luceran not to attempt the wet upper road at dusk. Episode 04 begins with the village/upper approach and the first occupation of Edselsto.
 
 ## King Luceran
 
 - Adult lawful king, newly bereaved and inexperienced in lived court politics.
 - Parents' deaths remain suspicious to him but unproven as assassination.
-- Still believes physical relocation can strip away a substantial part of the old court's invasive political machinery.
-- Reacts badly to institutional "impossibility" when he can see contrary evidence with his own eyes.
-- Over lunch, Master Clavard Clifford tells him skilled labor cannot be assembled by the royal deadline while Moncler's construction is audibly underway across the lane.
-- Luceran responds by leaving lunch without a planned speech, procession, horse, carriage, or formed escort and personally recruiting the worksite.
-- Early-ruler flaw: treats royal command as a practical shortcut and only partially grasps how difficult it is for ordinary subjects to distinguish a king's request from compulsion.
-- Has decreed departure at dawn despite incomplete preparation.
+- Still hopes physical relocation will strip away much of the inherited capital's political machinery, but Episode 03 gives him direct evidence that politics, contracts, family obligations, money and access travel with the court.
+- His dawn deadline was met, at significant institutional cost.
+- Learns materially that a convoy moves at the speed of necessary logistics: cracked wheels, horseshoes, archive loads, food, culverts and weather ignore royal impatience.
+- Accepts Bram and Edrik telling him not to push up an unknown wet mountain road at dusk. This establishes loyal practical refusal as useful rather than insulting.
+- Receives Edran's first direct report and now knows Edselsto is damaged but partly habitable.
+- Has no supernatural knowledge.
 
 ## Master Clavard Clifford
 
-- Financial/household aide beneath the senior treasury authority.
-- Intelligent, competent and personally respected by Luceran.
-- His precise explanation that sufficient uncommitted labor is unavailable accidentally triggers Luceran's street-level solution.
-- Must now translate royal impatience into actual wages, settlements, wagons and accounts.
+- Converts Luceran's abrupt orders into wages, wagon contracts, compensation records and priority decisions.
+- Refuses to pretend the move is costless.
+- Establishes an accounting process for Lord Edmund Moncler's losses rather than dismissing his grievance.
+- Demonstrates that necessary records, food and medicine cannot simply be abandoned because the king wants speed.
 
 ## Construction workforce
 
 ### Master Olan Crewe
-- Foreman of Lord Edmund Moncler's capital mansion project.
-- Ordered by Luceran to assemble the active carpenters and masons.
-- Now responsible for converting shock into an organized royal work party.
+- Leads the recruited work party north with tools.
+- Immediately treats Edselsto's visible condition as a professional construction problem.
 
 ### Jory Fell
-- Journeyman carpenter; wife Ellyn and children.
-- Was fitting Moncler's windows before the king appeared.
-- Household sees royal service as both life-changing money and serious risk.
+- Journeyman carpenter; wife Ellyn and children remain in the capital.
+- Ellyn explicitly demands that he write, come home, and ensure royal service pays in money rather than promises.
+- Their affectionate marriage and economic reasoning are now baseline continuity, not merely background biography.
 
 ### Derrin Voss
-- Mason supporting mother, sister and nephews.
-- Practical, sardonic, wary of royal proximity.
+- Travels with the work party.
+- Mother, sister and nephews remain a continuing family/economic obligation.
+- His mother remains skeptical of proximity to royal power and warns him against foolishness around important people.
 
 ### Labor consequence
-- Luceran's direct seizure/recruitment of an active private workforce immediately destabilizes guild contracts, private construction schedules, wage expectations and noble building plans.
-- Hardship exceptions and family allowance mitigate but do not erase the coercive character of the order.
-- Lord Edmund Moncler's grievance remains legitimate.
+- Royal recruitment remains both opportunity and coercive disruption.
+- Moncler's private project is materially damaged; his compensation claim is now formalized.
+- Guild and Crown labor competition remains open.
 
 ## Royal Guard / escort state
 
 ### Captain Tovan Rhyse
-- Head of the Royal Guard and longstanding friend of Luceran.
-- Knows Luceran has a lifelong habit of physically leaving places when frustrated.
-- The Episode 02 incident gives him unimpeachable professional grounds to purge negligent patronage appointments from immediate royal security.
-- Dismisses nine Royal Companions for gross negligence after they fail to notice Luceran has left the palace and royal grounds.
-- Reviews the remaining five individually rather than using the incident as indiscriminate factional cleansing.
+- Escort purge survives its first political challenge.
+- Lord Cassian Pell concedes his nephew's negligence while warning Rhyse not to confuse foolishness with treason.
+- Rhyse explicitly preserves the distinction.
+- Of the five Royal Companions not summarily dismissed: two were on authorized message duty, one was posted at the north gate by Rhyse, one had properly reported sick, and one was collecting departure equipment. Their commissions remain pending individual review.
 
 ### Sergeant Bram Tolland
-- 36; married to Nessa; two daughters.
-- Ordinary front-gate guard before Episode 02.
-- Follows Luceran immediately when Rhyse orders him to.
-- Demonstrates practical close-protection instincts on the street.
-- Elevated to King's Close Escort by happenstance plus competence.
+- 36; wife Nessa; two daughters.
+- Nessa accepts the promotion's economic value while warning him not to become ornamental court jewelry.
+- Bram and Edrik begin a practical close-escort rhythm on the road.
+- Bram successfully advises against the unsafe dusk climb to Edselsto.
 
 ### Guardsman Edrik Saye
-- 24; supports widowed mother and younger brother.
-- Ordinary front-gate guard before Episode 02.
-- Falls in beside Luceran and watches windows/scaffolds without needing ceremonial instruction.
-- Elevated with Bram to King's Close Escort.
+- 24; widowed mother and younger brother Len.
+- Family continuity established on-page; his mother values duty but expects judgment rather than blind stupidity.
+- Edrik shares the practical refusal of the dusk climb and remains physically close when Bram ranges ahead.
 
-### Close-escort operating lesson
-- If Luceran is in a room, one of Bram/Edrik knows every exit.
-- The other remains close enough to see him.
-- If Luceran moves, they move.
-- They have learned that Luceran may simply leave.
+### Close-escort operating baseline
+- If Luceran moves, Bram and Edrik move.
+- One can range ahead while the other stays close.
+- They treat protection as work rather than social access.
+- Luceran is beginning to find their non-intimate professionalism easier to trust than flattering noble proximity.
 
-### Royal Companions
-- Noble/patronage aligned ceremonial personal guards.
-- Nine dismissed immediately for gross negligence.
-- Their houses now possess legitimate reasons for anger, embarrassment, lobbying and reputation management.
-- Several were political clients rather than malicious actors; consequences should differ by individual.
-- Remaining five are under case-by-case review.
+## Royal Companions / House Pell
 
-## Court / faction state
+- Nine dismissals remain in force.
+- Lord Cassian Pell is established as a reasonable but angry patron/uncle: he does not deny his nephew failed, but he will defend procedural dignity and distinguish incompetence from disloyalty.
+- One dismissed nephew has begun acknowledging his failure rather than denying it.
+- Future opposition should target procedure, status, replacement appointments, reputation and lost access rather than implausibly denying what happened.
 
-- The escort dismissals create immediate factional fallout on top of the relocation crisis.
-- Noble patrons cannot easily contest the factual basis: the appointed escorts failed to notice the king had left the building and grounds.
-- Houses may instead dispute procedure, replacement appointments, insult, precedent or loss of access.
-- Bram and Edrik's promotion elevates two ordinary professional guards over noble clients and will be socially noticed.
-- Guilds and Crown works will scramble overnight to avoid being bypassed again.
-- Merchants and wagon owners now have a few hours to respond to a royal departure deadline.
+## Material / institutional state
 
-## Advance party
+- Carters' Union supplied emergency wagons at high cost.
+- House Damaris supplied grain carts under paid emergency carriage terms rather than uncompensated seizure.
+- House Bellisar loaned remount horses with handling conditions.
+- House Nerezza supplied revenue oversight that prevented opportunistic theft while irritating nearly everyone.
+- Royal Kitchens packed durable road food and equipment.
+- Physicians successfully defended necessary transport capacity.
+- House Kaelmont's lower-road infrastructure is damaged; a toll reeve and laborers marked a washed-out culvert and managed a safe one-wagon-at-a-time crossing.
+- The convoy loses time to a cracked wheel, thrown shoe, culvert crossing and cold rain but remains intact.
 
-Sir Edran Vey remains ahead of the royal movement with Mara Kest, mason Corren Bale, carpenter Iven Marr and twelve guards.
+## Advance party / Edselsto report
 
-Direct confirmation from Edran has not yet reached Luceran at Episode 02's end.
+Sir Edran Vey remains at Edselsto with Mara Kest, mason Corren Bale, carpenter Iven Marr and twelve guards.
+
+His first direct report has reached Luceran:
+- lower stable roof holds; upper stable does not;
+- two kitchens can be made usable; one chimney requires clearing;
+- main well produces water after debris removal, with boiling advised until Mara is satisfied;
+- great hall is mostly dry except along the eastern wall;
+- several inhabited-wing chambers are sound enough for bedding;
+- west roof leaks badly;
+- south gallery is closed because the floor failed in two places;
+- rats are abundant;
+- firewood is available;
+- village can provide limited food, labor and local knowledge;
+- several interior doors are swollen or long locked;
+- elderly steward **Orven Dast** is alive, has received the royal seal, and insists dynastic family rooms should not be forced before Luceran arrives.
+
+No supernatural conclusion follows from any of this.
 
 ## Open obligations
 
-1. Episode 03 opens with fallout from the Royal Companion dismissals.
-2. Marshal wagons before midnight for the king's early-morning departure deadline.
-3. Process newly recruited tradespeople, tools, family allowances and private-contract settlements.
-4. Show noble houses reacting to loss of escort appointments and direct access.
-5. Preserve Bram and Edrik as recurring close guards with families and independent judgments.
-6. Receive Edran's first direct report.
-7. Put the moving court through actual road conditions only after the dawn departure occurs.
-8. Track Moncler's grievance and guild/Crown labor competition.
-9. Preserve uncertainty around the royal deaths.
-10. Preserve seven lit candles and supernatural reveal ceiling.
+1. Episode 04 must bring the convoy through the village/upper approach and into Edselsto.
+2. Introduce Orven Dast in person and preserve his decades of independent life and opinions.
+3. Pay off Edran/Mara/Corren/Iven's advance work rather than resetting their inspection.
+4. Establish temporary sleeping, kitchens, water, stables, guard posts and unsafe zones.
+5. Introduce the seven candles as an existing family/architectural feature with all seven lit.
+6. Allow voices, odd acoustics or unsettling architecture only within a deniable Season One ceiling.
+7. Preserve sealed family rooms for later investigation rather than forcing them immediately.
+8. Continue Moncler's compensation claim and guild/Crown labor competition off-page where appropriate.
+9. Preserve Royal Companion factional fallout and Rhyse's case-by-case review.
+10. Keep Bram, Edrik, Jory, Derrin, Olan and their families as recurring people rather than solved setup.
+11. Preserve uncertainty around the royal deaths.
+12. Begin the practical room/access conditions that Episode 05 will turn into patronage politics.
 
 ## Candle state
 
@@ -122,6 +135,6 @@ Seven of seven remain lit. No failure has occurred in prose.
 
 - No Magenheim Nowhere King material.
 - No modern corporate/project-management bureaucracy.
-- No confirmed supernatural Edselsto behavior yet.
-- No undercroft truth.
+- No confirmed sentient-castle behavior yet.
+- No containment truth, prison truth or undercroft explanation.
 - No character may know buried series-bible facts.
