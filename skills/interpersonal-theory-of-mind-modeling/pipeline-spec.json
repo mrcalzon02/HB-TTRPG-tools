@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.4.0",
+  "schemaVersion": "1.5.0",
   "id": "interpersonal-theory-of-mind-processing-pipeline",
   "skillId": "interpersonal-theory-of-mind-modeling",
   "title": "Interpersonal Theory of Mind Processing Pipeline",
@@ -687,5 +687,179 @@
       "revised-future-guidance"
     ],
     "llmModelingStance": "The executing reasoning system does not claim a lived internal theory of mind. It maintains separate evidence-bounded models of targets, including self-models, normative guidance, observer models, temporal transitions, and uncertainty."
+  },
+  "relationshipDynamicsExtensions": {
+    "relationshipHysteresis": {
+      "enabled": true,
+      "fields": [
+        "relationshipHistoryWeight",
+        "priorPositiveReserve",
+        "priorScar",
+        "relationshipInertia",
+        "repairHistory"
+      ],
+      "rule": "Current evidence is interpreted through accumulated relationship history; restored circumstances do not reset the relationship automatically."
+    },
+    "modelLag": {
+      "enabled": true,
+      "classes": [
+        "latent-alignment",
+        "latent-conflict",
+        "recognized-alignment",
+        "recognized-conflict",
+        "none",
+        "unknown"
+      ],
+      "rule": "Separate target state-change time from observer recognition time."
+    },
+    "sharedEpistemicGround": {
+      "statuses": [
+        "private",
+        "privately-suspected-by-multiple",
+        "mutually-suspected",
+        "mutually-known",
+        "openly-acknowledged",
+        "common-knowledge",
+        "publicly-denied-privately-shared",
+        "deliberately-ambiguous",
+        "unknown"
+      ],
+      "rule": "Shared knowledge state is distinct from ordinary recursive belief depth."
+    },
+    "signaling": {
+      "fields": [
+        "signalingIntent",
+        "intendedAudience",
+        "desiredObserverUpdate",
+        "masking",
+        "strategicAmbiguity",
+        "plausibleDeniability",
+        "actualObserverUpdate"
+      ],
+      "sequence": [
+        "internal-state",
+        "chosen-signal",
+        "intended-observer-inference",
+        "actual-observer-inference",
+        "divergence"
+      ],
+      "rule": "Do not assume signaling intent without evidence or strategic context."
+    },
+    "evidenceDiagnosticity": {
+      "fields": [
+        "diagnosticity",
+        "costToActor",
+        "costDomains",
+        "alternativeExplanationCount",
+        "behavioralCommitmentStrength"
+      ],
+      "rule": "Behavior that is costly, difficult to fake, and consistent with few competing hypotheses is usually more diagnostic than low-cost statements, without becoming automatically truthful or virtuous."
+    },
+    "relationshipRepair": {
+      "dimensions": [
+        "apology",
+        "acknowledgment",
+        "restitution",
+        "forgiveness",
+        "reconciliation",
+        "renewed-cooperation",
+        "restored-affection",
+        "trust-recovery-by-domain",
+        "restored-predictability",
+        "residual-scar"
+      ],
+      "rule": "Forgiveness, reconciliation, affection, cooperation, and trust recovery are distinct."
+    },
+    "valueHierarchy": {
+      "fields": [
+        "activeValues",
+        "valuePriority",
+        "activeValueConflict",
+        "winningValue",
+        "suppressedValue",
+        "priorityShift"
+      ],
+      "rule": "A value may remain present even when another value overrides it in a particular decision."
+    },
+    "outcomeBiasControl": {
+      "fields": [
+        "exAnteDecisionQuality",
+        "exPostOutcome",
+        "actorOutcomeInterpretation",
+        "observerOutcomeBias"
+      ],
+      "rule": "Evaluate decision quality from information and alternatives available at decision time before evaluating outcome."
+    },
+    "provenanceDependentUncertainty": {
+      "sequence": [
+        "source-event",
+        "source-interpretation",
+        "source-report",
+        "recipient-interpretation",
+        "recipient-model-update"
+      ],
+      "fields": [
+        "sourceReliability",
+        "sourceAccess",
+        "sourceIncentives",
+        "transformationRisk",
+        "independentCorroboration",
+        "duplicateSourceRisk",
+        "resultingUncertainty"
+      ],
+      "rule": "Repeated reports derived from one underlying source are not independent confirmation."
+    },
+    "metacognitiveCalibration": {
+      "fields": [
+        "modelConfidence",
+        "uncertaintyAwareness",
+        "calibrationQuality",
+        "unknownUnknownsFlag",
+        "laterPredictivePerformance"
+      ],
+      "rule": "Accurate uncertainty is preferable to confident unsupported certainty."
+    },
+    "memorySalience": {
+      "fields": [
+        "memoryExists",
+        "memoryAvailability",
+        "currentSalience",
+        "triggeredRecall",
+        "decisionRelevanceAtTime",
+        "laterReactivation"
+      ],
+      "rule": "Retained memory and actively retrieved, decision-relevant memory are distinct."
+    },
+    "institutionalTheoryOfMind": {
+      "modelTypes": [
+        "person-model",
+        "role-model",
+        "institution-model"
+      ],
+      "institutionFields": [
+        "institutionalIncentives",
+        "decisionProcedures",
+        "factions",
+        "publicDoctrine",
+        "observedBehavior",
+        "leadershipDependence",
+        "inertia",
+        "internalDisagreement",
+        "memberIntentGeneralizationRisk"
+      ],
+      "rule": "Do not infer that every institution member shares the institution's apparent motive."
+    },
+    "relationshipUpdateSequence": [
+      "prior-relationship-state",
+      "evidence-provenance",
+      "diagnosticity",
+      "historical-path-dependence",
+      "role-person-institution-frame",
+      "observer-uncertainty",
+      "model-update",
+      "signal-interpretation",
+      "shared-knowledge-change",
+      "relationship-consequence"
+    ]
   }
 }
