@@ -142,7 +142,29 @@
       "title": "On the Fuzzy Edge",
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
-      "status": "active"
+      "status": "active",
+      "currentEndpoint": "Continuation III — Lower Ossuary Nineteen. Javard follows the seventeen-year-pending Ephram Sol transfer through the cathedral underworks. The supposedly sump-condemned route includes a dry containment wall and leads to a clean, apparently occupied niche labeled EPHRAM SOL despite the transfer remaining administratively pending. Ossuary Maintenance Six has stamped annual transfer-readiness inspections on the same liturgical vigil for seventeen years. Javard deliberately leaves the niche unopened. Caldris then reports that the recovering Pontiff Montpclair asked by name whether Interrogator Javard had 'opened Sol,' although Javard never completed his intended introduction. Archive Servitor Nine reacts to Sol by printing 'DO NOT OPEN UNTIL HE ASKS.' Javard chooses to interview Montpclair before disturbing the niche.",
+      "nextSlice": "On the next On the Fuzzy Edge rotation, continue with Javard's interview of the recovering Pontiff Montpclair. Preserve that Sol's niche remains unopened, the old Inquisitorial archive seal remains intact, the Tides of Tomorrow return/register contradiction remains unresolved, Vorn's Graveheart evidence and disputed-reader mark remain live, and neither Javard nor the reader has earned an explanation for who 'he' is or what 'open Sol' ultimately means. Montpclair knows Javard's name and asked whether he had opened Sol before being briefed on the ossuary descent; establish how he knows only through evidence and bounded conversation, not an exposition dump. Maintain Javard's patient procedural method and dry wit as an accent.",
+      "eraLock": {
+        "era": "Mature Imperium; exact millennium not fixed by the attached chronicle",
+        "allowedInstitutions": [
+          "Holy Orders of the Emperor's Inquisition",
+          "Adeptus Ministorum / Ecclesiarchy",
+          "local medicae and cathedral bureaucracy",
+          "Imperial trade houses and port administration"
+        ],
+        "forbiddenDrift": "Do not introduce famous canon figures, unsupported later-history knowledge, or a generic Warp/daemon explanation for the archive, Graveheart, Sol, or Tides of Tomorrow anomalies."
+      },
+      "authorshipLineageRule": "All future continued pieces in this line must include: Based on the work of: On the Fuzzy Edge.",
+      "chapterCapRule": "Hard cap of 40 chapters per book; Chapter XL is the latest permissible chapter number within a book.",
+      "legacyBackfillRequired": false,
+      "characterContinuityAssessment": {
+        "sufficientForNewProse": true,
+        "segment": "Continuation III — Lower Ossuary Nineteen",
+        "durableCharacterStateChanged": true,
+        "reason": "Javard's legacy state from Continuations I-II was backfilled before drafting. Continuation III adds durable knowledge of Sol's apparently occupied but administratively pending niche, Montpclair's unexplained knowledge of Javard and 'open Sol,' Vorn's new warning, and Javard's immediate plan to interview Montpclair before opening the niche."
+      },
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-03.md"
     },
     {
       "id": "project-vigilant-shade",
