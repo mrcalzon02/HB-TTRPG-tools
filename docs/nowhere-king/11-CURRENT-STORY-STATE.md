@@ -2,111 +2,115 @@
 
 **Status:** Active temporal continuity ledger  
 **Last completed unit:** Season One, Episode 02 — *Packing the Monarchy*  
-**Updated:** after Episode 02
+**Updated:** after revised Episode 02
 
 ## Current timeline state
 
-Luceran is on the northern road with the first royal convoy. He has left the inherited capital before receiving final word from Sir Edran Vey's advance party.
+Luceran remains in the old capital at the end of Episode 02.
 
-The move is no longer a proposal, threat, or administrative possibility. It is physically underway.
+He has decreed departure for Edselsto in the early morning. The move is now materially committed, but the royal convoy has **not yet left**.
 
-Luceran still believes distance from the old capital and control over a new household can allow him to escape much of the court's invasive politics. Episode 02 has begun disproving that belief materially: guilds, nobles, merchants, servants, workers, guards, family networks, and ambitions are already rearranging themselves around his movement.
+The hours between Episode 02's ending and dawn must contain frantic marshaling of wagons, tools, animals, food, archives, guards, household personnel, and newly recruited tradespeople.
 
 ## King Luceran
 
 - Adult lawful king, newly bereaved and inexperienced in lived court politics.
 - Parents' deaths remain suspicious to him but unproven as assassination.
-- Active strategy: leave first, solve problems in motion rather than wait for institutional readiness.
-- New behavioral evidence: when told skilled labor could not be found on his timetable, he personally entered the city and recruited workers from an active private construction site.
-- Blind spot exposed: initially underestimated how coercive a royal "offer" feels when delivered personally by a king with armed guards.
-- Correction made in episode: after Avarren challenged him, Luceran explicitly converted the act from ambiguous conscription into highly paid royal employment with family support and a stated right to refuse.
-- Still naïve enough to believe decisive personal intervention can simplify the political system rather than merely change its shape.
-- Has now learned one useful lesson: institutions that claim impossibility may discover capacity quickly when bypassed.
+- Still believes physical relocation can strip away a substantial part of the old court's invasive political machinery.
+- Reacts badly to institutional "impossibility" when he can see contrary evidence with his own eyes.
+- Over lunch, Master Clavard Clifford tells him skilled labor cannot be assembled by the royal deadline while Moncler's construction is audibly underway across the lane.
+- Luceran responds by leaving lunch without a planned speech, procession, horse, carriage, or formed escort and personally recruiting the worksite.
+- Early-ruler flaw: treats royal command as a practical shortcut and only partially grasps how difficult it is for ordinary subjects to distinguish a king's request from compulsion.
+- Has decreed departure at dawn despite incomplete preparation.
 
-## New recurring tradespeople
+## Master Clavard Clifford
+
+- Financial/household aide beneath the senior treasury authority.
+- Intelligent, competent and personally respected by Luceran.
+- His precise explanation that sufficient uncommitted labor is unavailable accidentally triggers Luceran's street-level solution.
+- Must now translate royal impatience into actual wages, settlements, wagons and accounts.
+
+## Construction workforce
+
+### Master Olan Crewe
+- Foreman of Lord Edmund Moncler's capital mansion project.
+- Ordered by Luceran to assemble the active carpenters and masons.
+- Now responsible for converting shock into an organized royal work party.
 
 ### Jory Fell
-- Journeyman carpenter.
-- Previously fitting window casements at Lord Edmund Moncler's residence.
-- Family: wife Ellyn and children.
-- Accepted royal service after being offered unusually strong wages and family support.
-- Emotional state: astonished, excited, afraid; recognizes his life changed in a single morning.
-- Knowledge: no supernatural information; knows only that he is traveling north to rebuild a neglected royal castle.
-
-### Ellyn Fell
-- Jory's wife.
-- Immediately translates royal opportunity into household arithmetic: rent, coal, shoes, apprenticeship costs, debt.
-- Understands the danger/separation side of the offer as clearly as the money.
-- Did not treat refusal as economically realistic even after Luceran made it legally permissible.
+- Journeyman carpenter; wife Ellyn and children.
+- Was fitting Moncler's windows before the king appeared.
+- Household sees royal service as both life-changing money and serious risk.
 
 ### Derrin Voss
-- Working mason.
-- Supports mother, sister, and nephews.
-- Accepted royal service alongside Jory.
-- Practical, sardonic, already functioning as a grounded trades perspective.
-- Carries extensive stone tools because Edselsto's material condition is unknown.
+- Mason supporting mother, sister and nephews.
+- Practical, sardonic, wary of royal proximity.
 
-### Derrin's mother
-- Suspicious of royal generosity and proximity to kings.
-- Recognizes the offered money as both life-changing and dangerous.
-- Her maxim after the fact: never take money set by an angry king.
+### Labor consequence
+- Luceran's direct seizure/recruitment of an active private workforce immediately destabilizes guild contracts, private construction schedules, wage expectations and noble building plans.
+- Hardship exceptions and family allowance mitigate but do not erase the coercive character of the order.
+- Lord Edmund Moncler's grievance remains legitimate.
 
-## Lord Edmund Moncler
+## Royal Guard / escort state
 
-- Noble whose active city residence construction lost workers to Luceran's recruitment.
-- Angry but not irrational.
-- Correctly tells Luceran: a king does not possess an ordinary voice.
-- Forces Luceran to confront the coercive ambiguity of personal royal requests.
-- Seeks compensation and possible future contract priority rather than immediate personal revenge.
-- His unfinished west gallery is now a visible downstream consequence of the king's decision.
+### Captain Tovan Rhyse
+- Head of the Royal Guard and longstanding friend of Luceran.
+- Knows Luceran has a lifelong habit of physically leaving places when frustrated.
+- The Episode 02 incident gives him unimpeachable professional grounds to purge negligent patronage appointments from immediate royal security.
+- Dismisses nine Royal Companions for gross negligence after they fail to notice Luceran has left the palace and royal grounds.
+- Reviews the remaining five individually rather than using the incident as indiscriminate factional cleansing.
 
-## Institutional / labor state
+### Sergeant Bram Tolland
+- 36; married to Nessa; two daughters.
+- Ordinary front-gate guard before Episode 02.
+- Follows Luceran immediately when Rhyse orders him to.
+- Demonstrates practical close-protection instincts on the street.
+- Elevated to King's Close Escort by happenstance plus competence.
 
-- Guild of Stone and Beam initially claimed sufficient skilled crews could not be released on the king's notice.
-- After Luceran personally recruited from a private work site, guild officers rapidly produced additional available crews.
-- Crown/public works craftsmen who were supposedly unavailable are now assembling wagons and joining the movement to preserve royal privilege and relevance.
-- Luceran's improvised wage offer has altered expectations around royal field pay.
-- Avarren intends to establish rules for future royal recruitment.
-- Nerezza is tracking an expanding cost problem and remains opposed to pretending royal will creates money.
-- Private works in the capital will be delayed or repriced as labor is pulled north.
+### Guardsman Edrik Saye
+- 24; supports widowed mother and younger brother.
+- Ordinary front-gate guard before Episode 02.
+- Falls in beside Luceran and watches windows/scaffolds without needing ceremonial instruction.
+- Elevated with Bram to King's Close Escort.
+
+### Close-escort operating lesson
+- If Luceran is in a room, one of Bram/Edrik knows every exit.
+- The other remains close enough to see him.
+- If Luceran moves, they move.
+- They have learned that Luceran may simply leave.
+
+### Royal Companions
+- Noble/patronage aligned ceremonial personal guards.
+- Nine dismissed immediately for gross negligence.
+- Their houses now possess legitimate reasons for anger, embarrassment, lobbying and reputation management.
+- Several were political clients rather than malicious actors; consequences should differ by individual.
+- Remaining five are under case-by-case review.
 
 ## Court / faction state
 
-- Nobles are already deciding whether to follow the Crown immediately, delay, or divide households between the old capital and Edselsto.
-- House Edevane explicitly understands that selection for the new court will itself become a new form of power.
-- Merchants are beginning to position around the northern road and predicted supply shortages.
-- Montegrain is traveling with Luceran.
-- His letter home characterizes Luceran as grieving and angry, not mad, and asks Elbren contacts not to mock his belief that Edselsto offers escape.
-
-## Low-status information state
-
-### Frederick Doss
-- Has been placed on a provisional transfer list.
-- Learns that Luceran intends to depart before Edselsto's condition is fully confirmed.
-- Continues to see relocation as possible advancement.
-- Financial vulnerability remains active but no betrayal has occurred.
+- The escort dismissals create immediate factional fallout on top of the relocation crisis.
+- Noble patrons cannot easily contest the factual basis: the appointed escorts failed to notice the king had left the building and grounds.
+- Houses may instead dispute procedure, replacement appointments, insult, precedent or loss of access.
+- Bram and Edrik's promotion elevates two ordinary professional guards over noble clients and will be socially noticed.
+- Guilds and Crown works will scramble overnight to avoid being bypassed again.
+- Merchants and wagon owners now have a few hours to respond to a royal departure deadline.
 
 ## Advance party
 
-Sir Edran Vey remains ahead of the royal convoy with:
-- Mara Kest;
-- mason Corren Bale;
-- carpenter Iven Marr;
-- twelve guards;
-- royal authority to inspect and begin preparing Edselsto.
+Sir Edran Vey remains ahead of the royal movement with Mara Kest, mason Corren Bale, carpenter Iven Marr and twelve guards.
 
-Direct confirmation from Edran has not yet reached Luceran.
+Direct confirmation from Edran has not yet reached Luceran at Episode 02's end.
 
 ## Open obligations
 
-1. Receive Edran's first direct report on Edselsto.
-2. Establish whether the castle can physically receive Luceran and the first household.
-3. Put the moving court through actual road conditions.
-4. Resolve convoy food, horse, wagon, and lodging constraints.
-5. Track consequences of Luceran's labor recruitment on guilds, wages, private construction, and noble resentment.
-6. Preserve Moncler's legitimate grievance without flattening him into villainy.
-7. Keep Jory, Derrin, Ellyn, and worker families alive as independent continuity rather than disposable texture.
-8. Continue eroding Luceran's belief that geography can remove politics.
+1. Episode 03 opens with fallout from the Royal Companion dismissals.
+2. Marshal wagons before midnight for the king's early-morning departure deadline.
+3. Process newly recruited tradespeople, tools, family allowances and private-contract settlements.
+4. Show noble houses reacting to loss of escort appointments and direct access.
+5. Preserve Bram and Edrik as recurring close guards with families and independent judgments.
+6. Receive Edran's first direct report.
+7. Put the moving court through actual road conditions only after the dawn departure occurs.
+8. Track Moncler's grievance and guild/Crown labor competition.
 9. Preserve uncertainty around the royal deaths.
 10. Preserve seven lit candles and supernatural reveal ceiling.
 

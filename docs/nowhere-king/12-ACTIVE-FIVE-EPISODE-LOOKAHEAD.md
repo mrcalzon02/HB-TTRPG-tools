@@ -6,79 +6,84 @@
 Planning is directional unless marked LOCKED. Finished prose supersedes planning.
 
 ## N+1 — Episode 03: The Road North
-**Certainty:** LOCKED in function, directional in incident choice.
+**Certainty:** LOCKED in opening structure, directional in later road incidents.
 
-**Dramatic purpose:** Put Luceran's improvised moving court into the physical kingdom. He has solved "we cannot leave" by leaving; now roads, weather, horses, food, provincial authority, workers, family separation, and simple distance become real.
+**Opening function:** Begin with consequences before movement. Episode 02 ended on Rhyse dismissing the negligent Royal Companions. Episode 03 opens with the palace, noble houses, guilds, workers and families reacting while the king's early-morning departure deadline approaches.
 
-**Entry state:** The first royal convoy has departed before direct confirmation from Edran. Montegrain, guards, workers, clerks, servants, guild crews, Crown craftsmen, and necessary household functions are moving north in uneven order.
+**Before-midnight marshaling:**
+- wagons are requisitioned, rented, borrowed and fought over;
+- Crown works suddenly finds labor it previously said was unavailable;
+- Moncler's interrupted construction becomes a real compensation problem;
+- Jory, Derrin and other workers prepare tools and say goodbye to families;
+- Bram Tolland and Edrik Saye receive close-escort kit/orders and their families react;
+- noble patrons of dismissed Royal Companions send letters, envoys and objections;
+- Rhyse sorts legitimate guard duty from patronage deadweight;
+- food, oats, bedding, archives, Crown seals, treasury coin and medicine compete for wagon space;
+- the deadline remains dawn because Luceran refuses to let preparation expand into another delay.
 
-**Required lanes:**
-- receive Edran's first report while already committed to the road;
-- show actual terrain and provincial administration rather than capital assumptions;
-- let Jory Fell and Derrin Voss matter as skilled workers with their own conversations and judgments;
-- expose at least one failure caused by haste: wagon, horse, food, road, weather, bridge, lodging, or command confusion;
-- let Luceran observe competence in someone socially beneath the old court's notice;
-- continue assassination suspicion only as bounded character belief.
+**Dawn function:** The convoy actually leaves during Episode 03, not Episode 02.
 
-**Theory-of-mind movement:** Luceran begins discovering that people outside the old palace can contradict, help, resent, admire, or exploit him too. He should experience this as refreshing before understanding it is the beginning of another political ecology.
+**Road function:** After departure, expose the physical kingdom: roads, weather, horses, food, provincial administration and the cost of haste.
 
-**Protected:** no confirmed supernatural event; no candle failure; Edselsto itself remains just ahead until the proper arrival sequence.
+**Required character lanes:**
+- Bram and Edrik begin learning Luceran's movements and each other's habits;
+- Jory and Derrin remain workers with families, not scenery;
+- Clavard Clifford and Nerezza turn royal whim into money/accounting;
+- Rhyse must defend the escort dismissals professionally;
+- Luceran sees that every action creates more politics even while he still believes distance will improve matters.
 
-**Exit target:** Edselsto village/castle becomes physically visible and incontrovertibly real. Edran confirms enough structure survives for occupation, but the place is in far worse condition than Luceran's fantasy.
+**Edran:** Receive the first direct report from Edselsto while departure is already underway or immediately imminent.
+
+**Protected:** no confirmed supernatural event; no candle failure.
+
+**Exit target:** Edselsto or its mountain/village becomes physically visible. Enough of the castle stands to attempt occupation, but reality is rougher than Luceran's imagined refuge.
 
 ## N+2 — Episode 04: First Night
 **Certainty:** LOCKED in destination/reveal ceiling.
 
-**Purpose:** Luceran enters Edselsto for the first time as king and discovers that "home" is a leaking worksite occupied by memory, labor, an elderly steward, and spaces his family abandoned.
+**Purpose:** Luceran enters Edselsto as king and discovers that "home" is a leaking worksite occupied by memory, labor, an elderly steward and spaces his family abandoned.
 
-**Needs seeded:** Edran's inspection, Jory/Derrin and other crews, temporary sleeping space, kitchen/water/stable limitations, village labor.
+**Needs seeded:** Edran's inspection, worker crews, temporary sleeping space, kitchens/water/stables, village labor, close escort.
 
-**Supernatural ceiling:** seven candles, voices/odd acoustics, sealed rooms, discomfort and strange architecture may appear, but nothing proves a sentient castle or buried prisoner.
-
-**Exit target:** Luceran chooses to remain and hold court from the ruin rather than retreat to comfort.
+**Supernatural ceiling:** seven candles, voices/odd acoustics, sealed rooms and unsettling architecture may appear but nothing proves a sentient castle or buried prisoner.
 
 ## N+3 — Episode 05: Rooms Are Power
 **Certainty:** DIRECTIONAL.
 
-**Purpose:** Luceran thinks room assignment is housekeeping. Everyone else correctly understands it as patronage, intimacy, access, military positioning, status, and future precedent.
+**Purpose:** Luceran thinks room assignment is housekeeping. Everyone else correctly understands it as patronage, intimacy, access, military position and future precedent.
 
-**Required consequence from Episode 02:** construction workers and guild/Crown crews now control which spaces become habitable first, making low-status labor unexpectedly political.
+**Carryover:** the dismissal of noble Royal Companions makes replacement guard rooms/posts especially political.
 
 ## N+4 — Episode 06: The Price of a Door
 **Certainty:** DIRECTIONAL.
 
-**Purpose:** Repair labor, keys, doorways, blocked routes, contracts, timber, stone, and access become a political/security system.
+**Purpose:** Repair labor, keys, blocked routes, contracts, timber, stone and access become a political/security system.
 
-**Worker continuity:** Jory, Derrin, Crown trades, guild officers, or another promoted worker should possess critical physical knowledge unavailable to nobles.
-
-**Exit target:** a deliberately sealed route/archive/stair becomes a durable future obligation.
+**Worker continuity:** Jory, Derrin, Olan Crewe, Crown trades or another promoted worker should possess critical physical knowledge unavailable to nobles.
 
 ## N+5 — Episode 07: The Family Wing
 **Certainty:** DIRECTIONAL with locked reveal ceiling.
 
-**Purpose:** Begin transforming Edselsto from political escape into family wound. Luceran encounters genealogies, letters, missing catalog references, and signs that his father knew more about the ancestral seat than he told him.
-
-**Needs seeded:** archive handling, access rules, family rooms, at least one recurring archivist/worker, earlier mention of father's Edselsto interest.
-
-**Protected:** no buried-prison explanation; evidence may deepen mystery without solving it.
+**Purpose:** Transform Edselsto from political escape into family wound through records, rooms, letters and signs Luceran's father knew more than he said.
 
 ## Active payoff debt
 
-- Edran's direct report on castle condition.
-- Consequences of Luceran recruiting workers off Moncler's site.
-- Guild/Crown labor competition.
-- Jory's promise to Ellyn and worker-family separation.
-- Derrin's household obligations.
+- Royal Companion patrons reacting to the dismissals.
+- Bram Tolland and Edrik Saye's sudden elevation.
+- Rhyse's case-by-case review of the five not summarily dismissed.
 - Moncler's compensation claim.
-- Luceran's altered wage precedent.
-- Avarren's need to constrain future improvised recruitment.
-- Frederick's transfer and money/status ambition.
-- Luceran's belief that leaving the old palace equals leaving much of politics.
+- Olan Crewe organizing the seized/recruited work crew.
+- Jory and Derrin family separation.
+- overnight wagon shortage.
+- altered royal wage expectations.
+- Edran's direct report.
+- Luceran's continuing belief that physical departure will simplify politics.
 
 ## Protected long-future seeds
 
-- Workers recruited in Episode 02 must remain people with careers/families, not vanish after providing repairs.
-- The confidant relationship remains earned.
-- Coup vulnerabilities arise from accumulated access, resentments, choices, and mistakes.
+- Do not reverse the escort purge merely because noble patrons object.
+- Dismissed Royal Companions may become rivals, embarrassed reformers, enemies, informants or background casualties according to individual character, not one shared villain role.
+- Bram and Edrik remain important because competence earned continuity.
+- Workers remain people with careers and families.
 - No candle failure before established season timing.
 - Royal deaths remain unresolved unless later prose earns evidence.
