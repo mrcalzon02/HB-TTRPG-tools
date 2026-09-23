@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Interpersonal Theory of Mind Modeling Agent Skill | Calzon’s TTRPG Foundry</title>
-<meta name="description" content="Dynamic interpersonal and self theory-of-mind modeling with continuous state transitions, observer updates, self-model fallibility, longitudinal calibration, pressure context, adversarial modeling, and recursive epistemic tracking.">
+<meta name="description" content="Dynamic interpersonal, self, normative, relational, and institutional theory-of-mind modeling with longitudinal calibration and epistemic tracking.">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/interpersonal-theory-of-mind-modeling.html">
 <link rel="alternate" type="text/markdown" href="../skills/interpersonal-theory-of-mind-modeling/SKILL.md" title="Authoritative SKILL.md">
@@ -14,7 +14,7 @@
 <style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style>
 </head>
 <body>
-<header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Interpersonal Theory of Mind Modeling</h1><p class="subtitle">Continuous actor-state, observer-model, and self-model tracking integrated with the Character Information System.</p></div>
+<header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Interpersonal Theory of Mind Modeling</h1><p class="subtitle">Continuous actor-state, observer-model, self-model, normative-guidance, signaling, shared-knowledge, and institutional-model tracking.</p></div>
 <nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../ai-access.html">AI Access</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header>
 <main>
 <section class="hero-card">
@@ -22,9 +22,7 @@
 <p><a class="link-button primary-action" href="../skills/interpersonal-theory-of-mind-modeling/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="../skills/interpersonal-theory-of-mind-modeling/record-schema.json">Record schema</a> <a class="link-button" href="../skills/interpersonal-theory-of-mind-modeling/pipeline-spec.json">Pipeline spec</a></p>
 </section>
 <section class="registry-section"><h2>Registered integration metadata</h2>
-<p><strong>Name:</strong> <code>interpersonal-theory-of-mind-modeling</code> · <strong>Status:</strong> <code>onboardable</code> · <strong>Version:</strong> <code>1.4.0</code></p>
-<p><strong>Capability IDs:</strong> <code>foundry.site-index</code></p>
-<p><strong>Resource IDs:</strong> <code>foundry.campaign-lore-index</code></p>
+<p><strong>Name:</strong> <code>interpersonal-theory-of-mind-modeling</code> · <strong>Status:</strong> <code>onboardable</code> · <strong>Version:</strong> <code>1.6.0</code></p>
 <p><strong>Machine contracts:</strong> <code>record-schema.json</code>, <code>pipeline-spec.json</code></p>
 </section>
 <section class="registry-section"><h2>Complete SKILL.md projection</h2>
@@ -34,7 +32,7 @@ description: Model how one actor understands another actor over time using evide
 compatibility: System-neutral reasoning and continuity skill. For current real-world political or public figures, the host must retrieve current reliable public sources before making substantive factual claims.
 metadata:
   author: mrcalzon02
-  version: &quot;1.4.0&quot;
+  version: &quot;1.6.0&quot;
   foundry-capability: foundry.site-index
   personality-engram: blacklight.charles
 ---
@@ -1156,6 +1154,443 @@ Then compare this against:
 ### Governing principle
 
 A person's self-understanding is **another model in the system**: uniquely important because it directly shapes choices and identity, but still partial, revisable, and fallible.
+
+## Normative self-guidance and action-selection model
+
+A person's theory of their own mind does not merely describe who they think they are. It also contributes to decisions about what they believe they **ought**, **should**, **could**, **must**, or **must not** do next.
+
+Represent this as a distinct normative self-guidance layer:
+
+**G(A,t) = actor A's current model of what actions are right, required, permitted, possible, forbidden, prudent, loyal, consistent with identity, or otherwise appropriate**
+
+Do not collapse **G(A,t)** into either the actor's underlying state **S(A,t)** or their descriptive self-model **M(A→A,t)**.
+
+A person may accurately know what they believe they should do and still fail to do it.
+
+### Normative self-guidance dimensions
+
+Where evidence permits, track:
+
+- **ought** — what the actor believes would be morally or ethically right;
+- **should** — what the actor believes would be prudent, responsible, or appropriate;
+- **must** — what the actor believes duty, law, survival, loyalty, or role requires;
+- **must-not** — what the actor believes crosses a prohibited boundary;
+- **could** — what the actor believes is actually possible;
+- **cannot** — what the actor believes is unavailable, impossible, intolerable, or forbidden;
+- **want** — what the actor desires;
+- **intend** — what the actor currently plans to do;
+- **expect-self** — what the actor predicts they will actually do;
+- **identity-consistent action** — what action they believe a person like them ought to choose.
+
+These may conflict.
+
+### Action-selection gap
+
+Represent explicitly when:
+
+**normative guidance ≠ intention ≠ actual action**
+
+Examples include:
+
+- &quot;I know I should apologize, but I am not going to.&quot;
+- &quot;I believe I must protect them, but I freeze.&quot;
+- &quot;I think revenge is wrong, but I still choose it.&quot;
+- &quot;I believe I cannot abandon my post, even though leaving may be safer.&quot;
+- &quot;I expected myself to refuse, but I accepted.&quot;
+
+This gap is itself meaningful state information.
+
+### Why normative guidance may fail to control behavior
+
+Possible contributing factors include:
+
+- competing values;
+- acute emotion;
+- fear;
+- anger;
+- grief;
+- shame;
+- loyalty conflict;
+- habit;
+- exhaustion;
+- time pressure;
+- coercion;
+- institutional obligation;
+- perceived lack of alternatives;
+- addiction or compulsion where documented;
+- impaired judgment where documented;
+- immediate reward;
+- avoidance;
+- social pressure;
+- identity threat;
+- uncertainty;
+- inaccurate situation model;
+- inaccurate capability model;
+- inaccurate threshold model.
+
+Do not infer pathology merely because behavior diverges from self-guidance.
+
+### Pre-action self-deliberation
+
+Where evidence exists, distinguish:
+
+1. **self-description** — &quot;Who am I?&quot;
+2. **situation appraisal** — &quot;What is happening?&quot;
+3. **normative appraisal** — &quot;What ought/should/must I do?&quot;
+4. **option appraisal** — &quot;What can I actually do?&quot;
+5. **forecast** — &quot;What will happen if I do each thing?&quot;
+6. **self-prediction** — &quot;What will I probably do?&quot;
+7. **intention** — &quot;What am I choosing now?&quot;
+8. **execution** — what the actor actually does.
+
+These stages may be compressed, unconscious, poorly evidenced, or internally contradictory. Do not fabricate missing stages.
+
+### Post-action self-appraisal
+
+After action and consequence, represent the actor's retrospective self-theory separately from the original decision state.
+
+Possible post-action judgments include:
+
+- I did what I should have done.
+- I did what I had to do.
+- I did the wrong thing for reasons I still understand.
+- I knew better and failed anyway.
+- I could not see another option then.
+- I can now see an option I missed.
+- I should have known.
+- I could not reasonably have known.
+- I became someone I did not think I could become.
+- I crossed a line I previously believed I would never cross.
+- I was right about the choice but wrong about the cost.
+- I was wrong about both the choice and the reason.
+
+Treat these as self-model claims that can themselves be accurate, incomplete, defensive, compassionate, harsh, or distorted.
+
+### Counterfactual self-model
+
+Track what the actor believes they **could have done**, **should have done**, or **would have done if conditions differed**.
+
+Separate:
+
+- contemporaneous perceived alternatives;
+- objectively documented alternatives;
+- later imagined alternatives;
+- realistic counterfactuals;
+- impossible or hindsight-only alternatives.
+
+A later belief that &quot;I should have done X&quot; does not prove X was actually available or foreseeable at the time.
+
+### Self-model injury and destabilization
+
+Actions and consequences can damage the actor's theory of who they are.
+
+Possible effects include:
+
+- shame;
+- guilt;
+- loss of self-trust;
+- threshold-model rupture;
+- identity contradiction;
+- collapse of moral self-image;
+- loss of confidence in judgment;
+- obsessive counterfactual review;
+- defensive rationalization;
+- renewed commitment to prior values;
+- altered future thresholds;
+- self-forgiveness;
+- refusal of self-forgiveness;
+- reconstruction of identity.
+
+Use these descriptively. Do not diagnose a psychiatric disorder from such effects.
+
+### Emotionally incoherent or incomplete decisions
+
+A decision can be internally incoherent without being random.
+
+An actor may simultaneously:
+
+- love and resent;
+- fear and approach;
+- condemn and desire;
+- know and avoid;
+- forgive and distrust;
+- believe an act is wrong and perform it anyway.
+
+Do not &quot;repair&quot; such contradiction into a cleaner motive unless evidence supports resolution.
+
+### Normative feedback loop
+
+For meaningful decisions, use:
+
+**Self-Model → Normative Guidance → Intended Action → Actual Action → Consequence → Emotional Response → Self-Judgment → Revised Self-Model → Revised Future Guidance**
+
+This loop can become:
+
+- stabilizing;
+- corrective;
+- self-punishing;
+- rationalizing;
+- avoidant;
+- escalating;
+- restorative;
+- fragmented.
+
+### Divergence between self-model and observer model
+
+Another person may believe:
+
+&gt; &quot;You knew this was wrong.&quot;
+
+while the actor believes:
+
+&gt; &quot;I thought it was the only defensible choice.&quot;
+
+Both models must be stored separately.
+
+The skill should compare:
+
+- **A's model of A**
+- **A's normative guidance for A**
+- **B's model of A**
+- **B's model of what A knew or should have known**
+- **independent evidence**
+
+Do not resolve disagreement merely by choosing the more confident participant.
+
+### Agent/LLM modeling stance
+
+The reasoning system executing this skill does not need or claim a lived internal theory of mind of its own.
+
+Its function is to maintain **separate evidence-bounded models for each target**, including each target's self-model, normative guidance, observer models, uncertainty, and temporal transitions.
+
+Never use the agent's own apparent wording preferences, simulated persona, or generated reasoning style as evidence about a target's psychology.
+
+The purpose of the skill is precisely to preserve divergence among:
+
+**target state ≠ target self-model ≠ target normative guidance ≠ observer's target-model ≠ analyst/model hypothesis**
+
+## Relationship path dependence, signaling, and shared epistemic ground
+
+### Relationship hysteresis and path dependence
+
+The same present-day evidence may produce different model updates depending on the relationship history that precedes it.
+
+Track:
+
+- **relationshipHistoryWeight** — how strongly accumulated history influences interpretation;
+- **priorPositiveReserve** — accumulated evidence that supports charitable or trusting interpretation;
+- **priorScar** — durable negative evidence that makes later ambiguity more threatening;
+- **relationshipInertia** — resistance to major update from isolated contradictory evidence;
+- **repairHistory** — whether previous ruptures were repaired and how completely.
+
+Returning external circumstances to an earlier state does not restore the earlier relationship state automatically.
+
+A repaired relationship may still contain durable knowledge such as:
+
+&gt; I trust you again, but I now know that under condition X you are capable of Y.
+
+### Model lag, latent alignment, and latent conflict
+
+Distinguish actual state change from observer recognition.
+
+Track:
+
+- **stateChangeTime** — when goals, values, strategy, or role actually changed;
+- **observerRecognitionTime** — when another actor updated their model;
+- **modelLag** — the period during which observer model and target state materially diverge.
+
+Flag:
+
+- **latent alignment** — actors' actual goals, assessments, or interests become compatible before their interpersonal models recognize it;
+- **latent conflict** — actors continue believing themselves aligned after their actual goals or value priorities have diverged.
+
+### Shared epistemic ground and common knowledge
+
+Recursive belief is not the same thing as shared epistemic ground.
+
+Track the status of important propositions as applicable:
+
+- private;
+- privately suspected by multiple actors;
+- mutually suspected;
+- mutually known;
+- openly acknowledged;
+- common knowledge;
+- publicly denied despite privately shared knowledge;
+- deliberately ambiguous.
+
+A negotiation may change when a fact moves from &quot;both privately know&quot; to &quot;both openly know that the knowledge is shared.&quot;
+
+### Signaling and impression management
+
+Observed behavior may be partly intended to alter another person's model.
+
+Track:
+
+- **signalingIntent** — whether the actor appears to want an observer to update;
+- **intendedAudience** — who the signal is for;
+- **desiredObserverUpdate** — what model change the actor appears to want;
+- **masking** — behavior intended to hide relevant state;
+- **strategicAmbiguity** — behavior intended to support multiple interpretations;
+- **plausibleDeniability** — preserving an interpretation that can later be denied;
+- **actualObserverUpdate** — what the observer actually inferred.
+
+Use:
+
+**internal state → chosen signal → intended observer inference → actual observer inference → divergence**
+
+Do not assume every public behavior is signaling. Require evidence or a clear strategic context.
+
+### Evidence diagnosticity and costly signals
+
+Evidence should not update every model equally.
+
+For important observations, track:
+
+- **diagnosticity** — how strongly the evidence discriminates between competing hypotheses;
+- **costToActor** — material, reputational, relational, moral, physical, or strategic cost accepted by the actor;
+- **alternativeExplanationCount** — how many plausible states could have produced the same behavior;
+- **behavioralCommitmentStrength** — how difficult the action is to reverse, fake, or explain away.
+
+A low-cost statement such as &quot;trust me&quot; is usually weaker evidence than an action that exposes the speaker to substantial loss if the claim is false.
+
+Costly behavior is not automatically virtuous or truthful, but it may be more diagnostically informative.
+
+### Relationship repair and residual scars
+
+Keep separate:
+
+- apology;
+- acknowledgment;
+- restitution;
+- forgiveness;
+- reconciliation;
+- renewed cooperation;
+- restored affection;
+- trust recovery by domain;
+- restored predictability;
+- residual scar.
+
+Do not use &quot;forgiven&quot; as shorthand for &quot;trust fully restored.&quot;
+
+A relationship can recover while retaining altered thresholds, caution, boundaries, or durable memory of prior harm.
+
+### Value hierarchy and active value conflict
+
+Actors often retain the same values while changing which value wins under pressure.
+
+Track:
+
+- **activeValues**;
+- **valuePriority**;
+- **activeValueConflict**;
+- **winningValue** for a specific decision;
+- **suppressedValue**;
+- **priorityShift** over time.
+
+Do not infer that a value disappeared merely because another value overrode it in one decision.
+
+### Ex ante decision quality versus ex post outcome
+
+Prevent outcome bias.
+
+Before considering outcome, reconstruct the decision using:
+
+- information available at decision time;
+- perceived alternatives;
+- actual alternatives supported by evidence;
+- known risks;
+- foreseeable harms;
+- actor's goals and values;
+- time pressure and constraints.
+
+Track separately:
+
+- **exAnteDecisionQuality** — evidence-bounded assessment of reasoning at decision time;
+- **exPostOutcome** — what actually happened;
+- **actorOutcomeInterpretation** — how the actor interprets success or failure;
+- **observerOutcomeBias** — whether observers retrospectively equate outcome with decision quality.
+
+A good-faith well-reasoned decision may end badly. A reckless decision may succeed.
+
+### Provenance-dependent uncertainty
+
+When information travels through other people's models, preserve the dependency chain.
+
+Represent:
+
+**source event → source interpretation → source report → recipient interpretation → recipient model update**
+
+Track:
+
+- source reliability;
+- source access;
+- source incentives;
+- transformation at each step;
+- uncertainty introduced or removed;
+- whether multiple reports are genuinely independent.
+
+Do not count repeated reports from the same underlying source as independent confirmation.
+
+### Metacognitive calibration and uncertainty awareness
+
+Track not only what an actor believes, but whether they understand the limits of their own model.
+
+Use:
+
+- **modelConfidence** — confidence in the specific model;
+- **uncertaintyAwareness** — recognition that important uncertainty exists;
+- **calibrationQuality** — whether confidence matches later predictive performance;
+- **unknownUnknownsFlag** — whether the actor recognizes that missing categories of information may exist.
+
+Accurate uncertainty can be a better model than confident error.
+
+### Memory availability and salience
+
+A memory can exist without being behaviorally active in the current decision.
+
+Track:
+
+- **memoryExists**;
+- **memoryAvailability**;
+- **currentSalience**;
+- **triggeredRecall**;
+- **decisionRelevanceAtTime**;
+- **laterReactivation**.
+
+Do not assume that because an actor once learned something, that information was equally salient during every later decision.
+
+This does not erase long-memory continuity; it distinguishes retained memory from active retrieval.
+
+### Institutional theory of mind
+
+People model institutions as if they have intentions, constraints, habits, and likely responses.
+
+Keep separate:
+
+- **person model** — beliefs about an individual;
+- **role model** — beliefs about the individual acting in an office or social role;
+- **institution model** — beliefs about what an organization, government, military, family, court, movement, or other collective will do.
+
+Track:
+
+- institutional incentives;
+- decision procedures;
+- factions;
+- public doctrine;
+- observed behavior;
+- leadership dependence;
+- inertia;
+- internal disagreement;
+- uncertainty over whether institutional behavior reflects individual intent.
+
+Do not infer that every member of an institution shares the institution's apparent motive.
+
+### Relationship-update rule
+
+For significant new evidence, prefer the following sequence:
+
+**prior relationship state → evidence provenance → diagnosticity → historical path dependence → role/person/institution frame → observer uncertainty → model update → signal interpretation → shared-knowledge change → relationship consequence**
 
 ## Political and public-figure mode
 
