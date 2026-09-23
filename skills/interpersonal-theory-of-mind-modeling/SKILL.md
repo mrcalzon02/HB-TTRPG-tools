@@ -204,9 +204,9 @@ High means the observed external presentation is substantially consistent with t
 
 Do not call the result a mathematical measurement unless a separately defined quantitative scoring model and sufficient data actually exist.
 
-### Systemic manipulation and cognitive-flaw heuristics
+### Systemic manipulation and cognitive-flaw heuristics — TheraminTrees-inspired modalities
 
-These are text-analysis heuristics, not psychiatric diagnoses and not automatic moral verdicts.
+These user-selected TheraminTrees-inspired categories are operationalized here as text-analysis heuristics. They are not treated as validated psychiatric constructs, psychiatric diagnoses, or automatic moral verdicts.
 
 #### Concrete vs. abstract rumination
 
