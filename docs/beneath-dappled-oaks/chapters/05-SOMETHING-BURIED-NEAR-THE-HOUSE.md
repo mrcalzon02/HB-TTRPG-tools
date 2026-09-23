@@ -468,9 +468,9 @@ Not seduce him.
 
 Not deceive him into confidence.
 
-Not the uglier instruction that had existed in earlier drafts of a life she was no longer living.
+Nothing hidden beneath the words. No command to seduce him. No instruction to manufacture a confidence he had not freely given.
 
-The truth was already uncomfortable enough without improving it for drama.
+Meris's actual request was uncomfortable enough without Damaris inventing a worse one for herself.
 
 "No," she said. "Not today."
 
