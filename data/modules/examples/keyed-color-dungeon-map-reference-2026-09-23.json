@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "0.2.0",
+  "id": "keyed-color-dungeon-map-reference-2026-09-23",
+  "title": "Keyed Color Dungeon Map Reference — user screenshot example",
+  "subtitle": "Map-key semantics reference",
+  "system": "Module example / structured map-key reference",
+  "source": {
+    "title": "User-supplied keyed dungeon screenshots",
+    "fileName": "conversation screenshots supplied 2026-09-23",
+    "notes": "Reference added from user-supplied screenshots. The repository record captures the map-key interaction model and semantic legend. The original conversation screenshot bitmap is not falsely represented as a repository-backed source file."
+  },
+  "general": {
+    "status": "structured-reference",
+    "purpose": "Preserve a map style where colored or symbolic cells have meaningful legend entries that resolve to useful viewer information."
+  },
+  "map": {
+    "image": "",
+    "width": 1,
+    "height": 1,
+    "grid": "Screenshot reference; semantic key captured"
+  },
+  "mapKey": [
+    {
+      "id": "key-location",
+      "label": "Keyed location",
+      "category": "location",
+      "symbol": "#",
+      "description": "A numbered or named map location. Selecting the marker should open the associated room or area record rather than only identifying its color.",
+      "tags": [
+        "room",
+        "location",
+        "record"
+      ]
+    },
+    {
+      "id": "key-door",
+      "label": "Door / passage control",
+      "category": "access",
+      "symbol": "D",
+      "description": "An access point whose useful data includes what it connects, whether it is locked or secret, and any opening or break information.",
+      "tags": [
+        "door",
+        "route",
+        "access"
+      ]
+    },
+    {
+      "id": "key-stairs",
+      "label": "Stairs / level transition",
+      "category": "vertical-route",
+      "symbol": "↕",
+      "description": "A transition between levels or elevations. The viewer should identify the destination deck or level when known.",
+      "tags": [
+        "stairs",
+        "verticality",
+        "route"
+      ]
+    },
+    {
+      "id": "key-trap",
+      "label": "Trap / hazard",
+      "category": "hazard",
+      "symbol": "T",
+      "description": "A hazardous keyed cell. The detail view should expose trigger, detection, disable, consequence, and source notes when available.",
+      "tags": [
+        "trap",
+        "hazard",
+        "mechanics"
+      ]
+    },
+    {
+      "id": "key-encounter",
+      "label": "Encounter / creature",
+      "category": "encounter",
+      "symbol": "E",
+      "description": "A keyed encounter marker. The detail view should expose creatures, disposition, difficulty or level context, and encounter notes instead of a bare colored square.",
+      "tags": [
+        "monster",
+        "encounter",
+        "population"
+      ]
+    },
+    {
+      "id": "key-treasure",
+      "label": "Treasure / reward",
+      "category": "treasure",
+      "symbol": "$",
+      "description": "A keyed reward or loot marker. The detail view should expose the actual treasure record, container or concealment details, and any access conditions.",
+      "tags": [
+        "treasure",
+        "loot",
+        "reward"
+      ]
+    },
+    {
+      "id": "key-feature",
+      "label": "Special feature / point of interest",
+      "category": "feature",
+      "symbol": "★",
+      "description": "A map-specific feature whose legend meaning must be preserved as text and linked to its descriptive or rules-facing record.",
+      "tags": [
+        "feature",
+        "poi",
+        "semantic-key"
+      ]
+    }
+  ],
+  "hotspots": [],
+  "rooms": [],
+  "doors": [],
+  "referenceRole": [
+    "example",
+    "template",
+    "use-case",
+    "map-key-semantics",
+    "generator-comparison"
+  ]
+}
