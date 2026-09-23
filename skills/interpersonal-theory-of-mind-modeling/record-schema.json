@@ -138,7 +138,8 @@
       "type": "array",
       "items": {
         "$ref": "#/$defs/congruenceAssessment"
-      }
+      },
+      "description": "Legacy-compatible generic congruence field. Prefer presentationCongruence plus modelAccuracy and predictiveCalibration for v1.2+ records."
     },
     "epistemicChain": {
       "type": "array",
@@ -151,6 +152,110 @@
       "items": {
         "$ref": "#/$defs/reasoningFlag"
       }
+    },
+    "presentationCongruence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/calibrationAssessment"
+      }
+    },
+    "modelAccuracy": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/calibrationAssessment"
+      }
+    },
+    "predictiveCalibration": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/predictionRecord"
+      }
+    },
+    "mentalizationAssessments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/mentalizationAssessment"
+      }
+    },
+    "roleFrames": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/roleFrame"
+      }
+    },
+    "trustVector": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/trustVectorItem"
+      }
+    },
+    "choiceContexts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/choiceContext"
+      }
+    },
+    "thirdPartyModels": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/thirdPartyModel"
+      }
+    },
+    "influenceTraces": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/influenceTrace"
+      }
+    },
+    "temporalSnapshots": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/temporalSnapshot"
+      }
+    },
+    "modelRepairEvents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/modelRepairEvent"
+      }
+    },
+    "decisionPressureContexts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/decisionPressureContext"
+      }
+    },
+    "adversarialDynamics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/adversarialDynamic"
+      }
+    },
+    "dependencyDynamics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dependencyDynamic"
+      }
+    },
+    "modelDecomposition": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/modelDecomposition"
+      }
+    },
+    "modelLastMaterialUpdate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "staleModelRisk": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "unknown"
+      ]
     }
   },
   "$defs": {
@@ -395,7 +500,18 @@
             "trusted-report",
             "rumor",
             "canon-event",
-            "public-source"
+            "public-source",
+            "self-report",
+            "recorded-statement",
+            "trusted-third-party-report",
+            "memory",
+            "privileged-memory-access",
+            "telepathic-access",
+            "dream-vision",
+            "internalized-other",
+            "narrator-established",
+            "manipulated-evidence-environment",
+            "unknown"
           ]
         },
         "sourceRef": {
@@ -656,6 +772,747 @@
           }
         },
         "alternativeExplanations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "calibrationAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dimension",
+        "rating",
+        "confidence"
+      ],
+      "properties": {
+        "dimension": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rating": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "predictionRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "snapshotRef",
+        "condition",
+        "expectedResponse",
+        "status",
+        "confidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "snapshotRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "condition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expectedResponse": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "status": {
+          "enum": [
+            "supported",
+            "partially-supported",
+            "contradicted",
+            "untested",
+            "invalidated-by-context-change"
+          ]
+        },
+        "outcomeEvidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "mentalizationAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "quality",
+        "use",
+        "confidence"
+      ],
+      "properties": {
+        "quality": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "use": {
+          "enum": [
+            "supportive",
+            "protective",
+            "collaborative",
+            "negotiated",
+            "instrumental",
+            "coercive",
+            "exploitative",
+            "adversarial",
+            "mixed",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "roleFrame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "model",
+        "confidence"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "trustVectorItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "rating",
+        "confidence"
+      ],
+      "properties": {
+        "domain": {
+          "enum": [
+            "truthfulness",
+            "bargain-keeping",
+            "competence",
+            "confidentiality",
+            "loyalty",
+            "affection-care",
+            "predictability-under-pressure",
+            "institutional-duty",
+            "moral-alignment",
+            "retaliation-predictability",
+            "protectiveness",
+            "self-interest-reliability",
+            "other"
+          ]
+        },
+        "otherDomain": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rating": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "choiceContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "context",
+        "classification",
+        "confidence"
+      ],
+      "properties": {
+        "context": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classification": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "free",
+              "pressured",
+              "coerced",
+              "structurally-constrained",
+              "role-obligated",
+              "materially-dependent",
+              "threatened",
+              "no-meaningful-alternative-perceived",
+              "unknown"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "perceivedConstraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "analystVisibleConstraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "thirdPartyModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "holderActorId",
+        "aboutActorId",
+        "representedByActorId",
+        "modelStatement",
+        "confidence"
+      ],
+      "properties": {
+        "holderActorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aboutActorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "representedByActorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "modelStatement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "discrepancyAssessment": {
+          "enum": [
+            "none",
+            "small",
+            "material",
+            "large",
+            "unknown"
+          ]
+        },
+        "strategicUse": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "influenceTrace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "modelUpdate",
+        "decisionOrBehavior",
+        "consequence"
+      ],
+      "properties": {
+        "event": {
+          "type": "string",
+          "minLength": 1
+        },
+        "modelUpdate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decisionOrBehavior": {
+          "type": "string",
+          "minLength": 1
+        },
+        "consequence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reciprocalUpdate": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "selfModelOrValueChange": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "temporalSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "asOf",
+        "summary"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asOf": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "personModel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "situationModel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "capabilityModel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "thresholdModel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "modelRepairEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trigger",
+        "revisionType",
+        "change",
+        "confidence"
+      ],
+      "properties": {
+        "trigger": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revisionType": {
+          "enum": [
+            "falsification-replacement",
+            "partial-revision",
+            "assimilation",
+            "attribution-repair",
+            "compartmentalization",
+            "rupture",
+            "reconciliation",
+            "differentiation",
+            "rationalization",
+            "denial",
+            "internalization",
+            "unresolved-contradiction"
+          ]
+        },
+        "change": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "decisionPressureContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision",
+        "perceivedObjective",
+        "chosenAction",
+        "confidence"
+      ],
+      "properties": {
+        "decision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "perceivedObjective": {
+          "type": "string",
+          "minLength": 1
+        },
+        "availableInformation": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidenceQuality": {
+          "enum": [
+            "reliable",
+            "incomplete",
+            "ambiguous",
+            "false",
+            "manipulated",
+            "mixed",
+            "unknown"
+          ]
+        },
+        "perceivedAlternatives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "analystVisibleAlternatives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pressures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "valueConflicts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "chosenAction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "foreseeableHarms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "actualOutcome": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "retrospectiveResponse": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "counterfactualUncertainty": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tragicDecisionStructure": {
+          "type": "boolean"
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "adversarialDynamic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "description",
+        "confidence"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "adversarial-mentalization",
+            "epistemic-attack",
+            "evidence-environment-manipulation",
+            "desire-elicitation",
+            "self-concept-exploitation",
+            "third-party-model-exploitation",
+            "other"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceChain": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "dependencyDynamic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "description",
+        "confidence"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "manufactured-social-obligation",
+            "dependency-cultivation",
+            "dependency-exit-cost",
+            "material-dependence",
+            "institutional-entanglement",
+            "other"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "exitCosts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "modelDecomposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asOf",
+        "personModel",
+        "situationModel",
+        "capabilityModel",
+        "thresholdModel"
+      ],
+      "properties": {
+        "asOf": {
+          "type": "string",
+          "minLength": 1
+        },
+        "personModel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "situationModel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "capabilityModel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "thresholdModel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
           "type": "array",
           "items": {
             "type": "string"
