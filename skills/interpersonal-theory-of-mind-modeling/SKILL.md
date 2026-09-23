@@ -4,7 +4,7 @@ description: Model how one actor understands another actor over time using evide
 compatibility: System-neutral reasoning and continuity skill. For current real-world political or public figures, the host must retrieve current reliable public sources before making substantive factual claims.
 metadata:
   author: mrcalzon02
-  version: "1.1.0"
+  version: "1.2.0"
   foundry-capability: foundry.site-index
   personality-engram: blacklight.charles
 ---
@@ -397,6 +397,322 @@ Each item must name the evidence basis or say that the evidence is insufficient.
 - No invented context.
 - No unsupported attribution of malicious intent.
 - For political/public figures, the Political and public-figure mode below remains mandatory and overrides any looser interpretation of this pipeline.
+
+## Longitudinal calibration, pressure, and adversarial extensions
+
+These rules were added after comparative holdout testing across rivalry, friendship/subordination, and adversarial-manipulation relationships. They are mandatory whenever enough longitudinal evidence exists.
+
+### Separate presentation congruence, model accuracy, and predictive calibration
+
+Do not collapse these into one score.
+
+- **Presentation congruence** asks whether an actor's observable behavior is consistent with the best-supported hypothesis about their own current internal state.
+- **Model accuracy** asks whether Actor A's beliefs about Actor B are supported by later or independently available evidence.
+- **Predictive calibration** asks whether a model generated conditional expectations that later held up.
+
+A sincere person can have high presentation congruence and a badly inaccurate model of someone else. A poor model can also accidentally predict one event correctly. Track these independently.
+
+### Mentalization competence is not moral quality
+
+Represent:
+
+- **mentalizationQuality** — how accurately and richly A models B;
+- **mentalizationUse** — how A uses that understanding.
+
+Allowed use labels include:
+
+- supportive;
+- protective;
+- collaborative;
+- negotiated;
+- instrumental;
+- coercive;
+- exploitative;
+- adversarial;
+- mixed;
+- unknown.
+
+High-quality theory of mind may support compassion or manipulation. Do not infer healthy relationship quality from mentalization accuracy alone.
+
+### Influence traces
+
+Interpersonal modeling is not complete until the system can represent how another person changes the model-holder.
+
+Track:
+
+**evidence/event → model update → decision → consequence → reciprocal update → self-model/value change**
+
+Examples include:
+
+- a rival forcing reassessment of what "enemy" means;
+- a subordinate changing a superior's concept of courage or competence;
+- a friend becoming an internal moral reference point;
+- a manipulator changing which options the target believes exist.
+
+### Role frames and person models
+
+People may simultaneously model another actor as:
+
+- individual person;
+- subordinate;
+- superior;
+- rival;
+- enemy;
+- friend;
+- lover;
+- family member;
+- political representative;
+- institutional actor;
+- symbol;
+- operational asset;
+- threat.
+
+Store **roleFrame** separately from the broader **personModel**. A model may be accurate in one role frame and wrong in another.
+
+### Trust is a vector, not a scalar
+
+Track trust by domain where evidence permits:
+
+- truthfulness;
+- bargain-keeping;
+- competence;
+- confidentiality;
+- loyalty;
+- affection/care;
+- predictability under pressure;
+- institutional duty;
+- moral alignment;
+- willingness to retaliate;
+- willingness to protect;
+- reliability of self-interest.
+
+Do not store "A trusts B = high" when the evidence actually means "A trusts B to keep this bargain but not to tell the whole truth."
+
+### Choice context and power constraints
+
+Behavior does not prove agreement when meaningful alternatives are constrained.
+
+Classify choice context as applicable:
+
+- free;
+- pressured;
+- coerced;
+- structurally constrained;
+- role-obligated;
+- materially dependent;
+- threatened;
+- no meaningful alternative perceived;
+- unknown.
+
+Record both **objective constraints visible to the analyst** and **constraints perceived by the actor**.
+
+### Third-party models and social-model discrepancy
+
+Support explicit structures in which:
+
+**A models C's model of B.**
+
+Track when A believes another person or group holds an obsolete, false, partial, or strategically useful model of B.
+
+A may deliberately preserve another person's mistaken model because the discrepancy itself creates leverage.
+
+### Evidence-mode provenance
+
+Evidence types do not carry equal epistemic meaning. Tag evidence where applicable as:
+
+- direct observation;
+- self-report;
+- recorded statement;
+- action;
+- institutional record;
+- trusted third-party report;
+- rumor;
+- memory;
+- privileged memory access;
+- telepathic access;
+- dream/vision;
+- internalized representation of another person;
+- narrator-established fact;
+- manipulated evidence environment;
+- unknown.
+
+A dream of B is evidence about A's internal representation of B unless canon explicitly establishes otherwise. It is not automatically evidence that B actually said, knew, or believed the dream content.
+
+### Temporal snapshots and holdout validation
+
+Create immutable or versioned **as-of snapshots** at meaningful relationship transitions.
+
+Before consuming later evidence, the system should be able to record conditional expectations such as:
+
+> Given A's current model of B, if condition C occurs, A expects B to respond with D.
+
+Later events become holdout evidence.
+
+Update:
+
+- prediction supported;
+- partially supported;
+- contradicted;
+- untested;
+- invalidated by major contextual change.
+
+Do not rewrite an earlier snapshot to make it look wiser after later episodes/events.
+
+### Model-repair strategy
+
+When evidence contradicts the current model, classify how the actor responds:
+
+- falsification and replacement;
+- partial revision;
+- assimilation into old model;
+- attribution repair;
+- compartmentalization;
+- rupture;
+- reconciliation;
+- differentiation;
+- rationalization;
+- denial;
+- internalization;
+- unresolved contradiction.
+
+This is itself character evidence.
+
+### Minimal recursion rule
+
+Use the lowest recursive depth sufficient to explain the interaction.
+
+- L1 requires evidence for A's state.
+- L2 requires separate evidence for A's model of B's state.
+- L3 requires separate evidence for A's model of B's model, or A's attempt to shape that model.
+
+Do not generate L2/L3 simply because the framework supports them.
+
+### No-finding is a valid finding
+
+Every heuristic may return:
+
+**not supported by available evidence**
+
+Do not force manufactured obligation, totalitarian guardrails, projection, manipulation, pathology-like self-image, or another category into every dataset.
+
+### Decision Pressure & Moral Context
+
+Never infer moral character directly from a single decision.
+
+For consequential decisions, separately reconstruct:
+
+1. **Perceived objective** — what the actor appears to be trying to accomplish.
+2. **Available information** — what the actor reasonably knew at that time.
+3. **Evidence quality** — reliable, incomplete, ambiguous, false, manipulated, or unknown.
+4. **Perceived alternatives** — what the actor believed they could choose.
+5. **Actual alternatives visible to the analyst** — when independently supportable.
+6. **Pressure state** — urgency, threat, exhaustion, grief, fear, institutional demand, loyalty conflict, resource scarcity, reputational pressure, coercion, or time scarcity.
+7. **Value conflict** — which goals or duties collide.
+8. **Chosen action** — kept separate from motive.
+9. **Foreseeability** — which harms or outcomes were reasonably predictable to the actor.
+10. **Proportionality question** — whether the response appears proportionate to the perceived problem; state whose evaluative frame is being used.
+11. **Actual outcome** — what happened.
+12. **Retrospective response** — denial, regret, apology, learning, rationalization, doubling down, policy change, or unresolved response.
+13. **Counterfactual uncertainty** — whether a better alternative can actually be established rather than imagined after the fact.
+
+### Explanation is not exoneration; condemnation is not mind-reading
+
+A sympathetic or comprehensible motive does not establish that an action was justified.
+
+A harmful, illegal, cruel, or morally dubious action does not establish that the actor intended harm for its own sake.
+
+Keep separate:
+
+- motive sincerity;
+- epistemic quality;
+- decision quality;
+- moral/legal evaluation where relevant;
+- foreseeable harm;
+- actual consequence;
+- subsequent learning.
+
+### Tragic decision structure
+
+Flag a **tragic decision structure** when every option the actor reasonably perceived carried serious cost.
+
+This does not mean all options were equally good. It means analysis should not compare the chosen action against an imaginary cost-free alternative the actor did not believe existed.
+
+### Adversarial mentalization
+
+Use **adversarial mentalization** when one actor deliberately models another person's beliefs, desires, fears, identity, information access, or likely reactions in order to shape their behavior against their interests or without informed agreement.
+
+This may coexist with high mentalization quality.
+
+### Epistemic attacks and evidence-environment manipulation
+
+Distinguish:
+
+- unsupported mind-reading;
+- reasonable inference from incomplete evidence;
+- reasonable inference from misleading evidence;
+- reasonable inference from deliberately manipulated evidence.
+
+An **epistemic attack** occurs when an actor deliberately changes, fabricates, selects, suppresses, or frames evidence so another actor will build a false or strategically useful model.
+
+Track:
+
+**manipulator action → evidence environment → target inference → target decision**
+
+### Desire elicitation and self-concept exploitation
+
+Do not assume all manipulation invents desires.
+
+Track **desire elicitation** when an actor induces another person to articulate their own wants, fears, identity, obligations, or ambitions and then uses that information strategically.
+
+Track **self-concept exploitation** when leverage operates through who the target believes they must be: patriot, protector, parent, professional, loyal subordinate, moral person, survivor, ruler, or another identity.
+
+### Manufactured obligation and dependency cultivation
+
+Separate:
+
+- **manufactured social obligation** — help or favor is reframed into unearned debt, guilt, gratitude, or compliance;
+- **dependency cultivation** — repeated assistance, access, resources, protection, or problem-solving changes what options the target believes remain realistically available.
+
+### Dependency exit cost
+
+Ending a relationship does not necessarily undo the consequences created by it.
+
+Track perceived and actual exit costs such as:
+
+- retaliation;
+- replacement by a worse actor;
+- sunk commitments;
+- institutional entanglement;
+- reputational collapse;
+- harm to dependents;
+- loss of critical capability;
+- fear that leaving will increase harm;
+- responsibility for systems already activated.
+
+Do not infer that continued participation proves continuing approval.
+
+### Model age and stale-model detection
+
+Every durable interpersonal model should record when it was last materially updated.
+
+Flag **stale-model risk** when:
+
+- the target has undergone major experience or role change;
+- incentives or institutions changed;
+- new capabilities emerged;
+- the actor's old predictions are being reused without fresh evidence;
+- repeated historical success is treated as proof of permanent predictability.
+
+### Decompose prediction into four models
+
+When forecasting expected behavior inside an actor's theory of mind, separate:
+
+- **Person model** — what A thinks B is like.
+- **Situation model** — what A thinks B believes is happening and what options exist.
+- **Capability model** — what A thinks B can actually do.
+- **Threshold model** — what costs, risks, harms, or sacrifices A thinks B will accept.
+
+Failure in any one model may produce prediction failure even when the others are accurate.
 
 ## Political and public-figure mode
 
