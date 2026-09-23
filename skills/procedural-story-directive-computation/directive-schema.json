@@ -1,0 +1,740 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/procedural-story-directive-computation/directive-schema.json",
+  "title": "Procedural Story Directive Computation Exchange",
+  "description": "Structured input and output contracts for the Procedural Assembly Story Directive Computation skill.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/CompilerInput"
+    },
+    {
+      "$ref": "#/$defs/DirectivePacket"
+    },
+    {
+      "$ref": "#/$defs/PostWriteReconciliation"
+    }
+  ],
+  "$defs": {
+    "Authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "priority"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "current-directive",
+            "canon",
+            "continuity",
+            "character-record",
+            "setting-rule",
+            "style-rule",
+            "outline",
+            "established-prose",
+            "draft",
+            "proposal",
+            "external-reference"
+          ]
+        },
+        "priority": {
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "effective_from": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "effective_until": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "supersedes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "Directive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "strength",
+        "text"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "strength": {
+          "enum": [
+            "MUST",
+            "MUST_NOT",
+            "SHOULD",
+            "MAY",
+            "DEFER"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_authority_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expires_when": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "ActorState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "present": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "location": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "physical_state": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "knows": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "believes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "suspects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "does_not_know": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "wants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fears": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hides": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "intends": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "incorrect_assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "NarrativeState": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "time",
+        "location"
+      ],
+      "properties": {
+        "time": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "world_facts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "public_information": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "secrets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ongoing_actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "irreversible_changes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "actors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ActorState"
+          }
+        }
+      }
+    },
+    "Obligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "text",
+        "status",
+        "urgency"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "open",
+            "resolved",
+            "protected",
+            "stale"
+          ]
+        },
+        "urgency": {
+          "enum": [
+            "mandatory-now",
+            "available-now",
+            "not-yet-valid",
+            "deliberately-deferred",
+            "unknown"
+          ]
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowed_resolution_window": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "created_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "Scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit",
+        "mode",
+        "start_boundary"
+      ],
+      "properties": {
+        "unit": {
+          "enum": [
+            "beat",
+            "scene",
+            "sequence",
+            "chapter",
+            "interlude",
+            "episode",
+            "revision-slice",
+            "custom"
+          ]
+        },
+        "mode": {
+          "enum": [
+            "planning-only",
+            "directive-only",
+            "prose-generation",
+            "revision",
+            "continuation",
+            "post-write-validation"
+          ]
+        },
+        "start_boundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stop_boundary": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "viewpoint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "narrative_function": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "approximate_size": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "CompilerInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "setting_id",
+        "scope",
+        "authorities",
+        "state",
+        "directives"
+      ],
+      "properties": {
+        "type": {
+          "const": "story-compiler-input"
+        },
+        "setting_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "authorities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Authority"
+          }
+        },
+        "state": {
+          "$ref": "#/$defs/NarrativeState"
+        },
+        "directives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Directive"
+          }
+        },
+        "obligations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Obligation"
+          }
+        },
+        "tone_constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "protected_future_material": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scoring_overrides": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "Beat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "function",
+        "directive",
+        "cause",
+        "required_state_change",
+        "exit_condition"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "function": {
+          "type": "string",
+          "minLength": 1
+        },
+        "directive": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cause": {
+          "type": "string",
+          "minLength": 1
+        },
+        "viewpoint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "actors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "knowledge_boundary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "required_state_change": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "forbidden_shortcuts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exit_condition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "score": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "Contradiction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "severity",
+        "claims"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "BLOCKING",
+            "LOCAL",
+            "DEFERRED"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string"
+          }
+        },
+        "avoidance": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "DirectivePacket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "scope",
+        "authority_lock",
+        "mandatory_continuity",
+        "due_obligations",
+        "ordered_beats",
+        "end_state_target",
+        "validation_assertions"
+      ],
+      "properties": {
+        "type": {
+          "const": "story-assembly-directive"
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "authority_lock": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "contradictions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Contradiction"
+          }
+        },
+        "start_state_summary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mandatory_continuity": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "knowledge_partitions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ActorState"
+          }
+        },
+        "due_obligations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ordered_beats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Beat"
+          }
+        },
+        "tone_constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "protected_future_material": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "end_state_target": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validation_assertions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "PostWriteReconciliation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "satisfied_directives",
+        "violated_directives",
+        "state_diff"
+      ],
+      "properties": {
+        "type": {
+          "const": "story-post-write-reconciliation"
+        },
+        "satisfied_directives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "violated_directives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "new_canon": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "knowledge_changes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "relationship_changes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resource_changes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "location_time_changes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "obligations_resolved": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "obligations_created": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "contradictions_introduced": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "state_diff": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}
