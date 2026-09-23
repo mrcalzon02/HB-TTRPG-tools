@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "id": "interpersonal-theory-of-mind-processing-pipeline",
   "skillId": "interpersonal-theory-of-mind-modeling",
   "title": "Interpersonal Theory of Mind Processing Pipeline",
@@ -477,5 +477,109 @@
       "confidence-change",
       "later-validation-or-revision"
     ]
+  },
+  "selfTheoryOfMind": {
+    "modelNotation": "M(A→A,t)",
+    "distinction": "The actor's self-model is separate from the actor's underlying state trajectory S(A,t).",
+    "updateFormula": "M(A→A,t+1) = ReviseSelf[M(A→A,t), introspection, memory, action, consequence, external feedback, observer reactions, new information, role change, self-reflection]",
+    "principles": [
+      "Self-report is important evidence but not infallible proof of complete causal understanding.",
+      "Direct reports of subjective experience may be stronger evidence of felt experience than of the full causal explanation for behavior.",
+      "High introspective confidence does not imply high self-model accuracy.",
+      "Ordinary self-model error does not require pathology.",
+      "Autobiographical memory is part of the self-model and may be reconstructed or reinterpreted.",
+      "Other people can provide feedback that changes or challenges an actor's self-model.",
+      "Self-predictions should be preserved and tested against later behavior rather than rewritten retrospectively.",
+      "Later reinterpretation does not overwrite the actor's earlier self-understanding."
+    ],
+    "dimensions": [
+      "self-identity",
+      "self-attributed-motives",
+      "self-attributed-values",
+      "self-perceived-competence",
+      "self-perceived-thresholds",
+      "self-perceived-emotions",
+      "self-perceived-obligations",
+      "self-narrative-history",
+      "self-prediction",
+      "introspective-confidence"
+    ],
+    "ordinaryErrorSources": [
+      "incomplete-introspection",
+      "memory-reconstruction",
+      "post-hoc-rationalization",
+      "motivated-reasoning",
+      "cognitive-dissonance-reduction",
+      "shame-avoidance",
+      "pride",
+      "identity-protection",
+      "social-role-performance",
+      "habit",
+      "emotional-state",
+      "exhaustion",
+      "grief",
+      "fear",
+      "trauma",
+      "changed-incentives",
+      "changed-relationships",
+      "changed-institutional-role",
+      "learning-not-yet-integrated-into-self-concept"
+    ],
+    "transitionPatterns": [
+      "behavior-before-self-model",
+      "self-model-before-behavior",
+      "retrospective-identity-repair",
+      "self-model-fragmentation",
+      "self-model-convergence",
+      "self-model-collapse",
+      "self-model-reconstruction",
+      "minor-adjustment",
+      "reinforcement"
+    ],
+    "selfModelDiscrepancyClasses": [
+      "consistent",
+      "incomplete-self-knowledge",
+      "mistaken-causal-attribution",
+      "rationalization",
+      "motivated-reinterpretation",
+      "identity-preserving-reinterpretation",
+      "unresolved-contradiction",
+      "possible-self-deception",
+      "memory-discrepancy",
+      "unknown"
+    ],
+    "selfDeceptionGuardrail": "Do not label self-deception merely because the actor is wrong about themselves. Prefer narrower explanations unless evidence shows active maintenance of a belief against information the actor possesses or repeatedly encounters.",
+    "clinicalGuardrails": {
+      "realPeople": [
+        "Do not diagnose from text or public behavior.",
+        "Use documented diagnoses or directly attributable evidence only when clinically relevant.",
+        "A documented condition does not by itself prove causal responsibility for a specific decision.",
+        "Preserve ordinary non-clinical explanations when sufficient."
+      ],
+      "fictionalCharacters": [
+        "Use authorially established or canonically evidenced conditions where available.",
+        "Do not invent pathology when ordinary incentives, emotion, incomplete information, or character history explain the behavior."
+      ]
+    },
+    "longitudinalSequence": [
+      "prior-self-model",
+      "stimulus",
+      "self-interpretation",
+      "action",
+      "consequence",
+      "external-feedback",
+      "self-reappraisal",
+      "updated-self-model",
+      "later-validation"
+    ],
+    "recursiveSelfModeling": {
+      "maxDepth": 3,
+      "examples": [
+        "L1: A believes I want X.",
+        "L2: A believes I believe I want X because I am the kind of person who values Y.",
+        "L3: A believes others think I want X, and I want them to understand my real reason is Y."
+      ],
+      "rule": "Use only supported depth."
+    }
   }
 }
