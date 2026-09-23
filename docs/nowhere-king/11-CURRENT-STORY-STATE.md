@@ -114,6 +114,16 @@ These were made for survival, not status. Episode 05 must show people treating t
 - Plausible mundane explanations remain.
 - No words, apparition, impossible movement, or sentient response is confirmed.
 
+## Phase transition after Episode 04
+
+Episodes 01–04 now form the complete lead-in: Luceran experiences the intolerable inherited court, breaks with the capital, physically relocates the first royal train, and occupies Edselsto.
+
+From Episode 05 onward the central Season One education changes from **escaping a court** to **building one**.
+
+The first political environment at Edselsto should be deceptively pleasant. Friendly houses, friends' relatives, factors, guild contacts, officers, merchants, and other useful associates will arrive early because they support Luceran and see opportunity in the new court. Luceran will naturally favor people he trusts and people who have already solved problems for him. Individual choices may be reasonable while collectively producing a recognizable pro-Luceran patronage bloc.
+
+The village below is now an active royal-works problem, not scenery. The court's arrival creates immediate need for worker housing, tents, repaired ruins, usable wells/drains, a working smithy, open storage, timber and stone yards, cart space, animal lines, food, latrines, workshops, and road improvement.
+
 ## Active political consequences
 
 - Emergency room assignments will become the first map of status/access.
@@ -122,21 +132,28 @@ These were made for survival, not status. Episode 05 must show people treating t
 - Royal Companion patron fallout remains active.
 - Edselsto's twenty-two-year failed repair promise establishes dynastic neglect.
 - Village dependence and resentment toward royal neglect are legitimate future lanes.
+- Friendly early houses and associates will gain disproportionate early access because they arrive, help, lend resources, and solve problems before hostile or distant factions establish themselves.
+- Luceran's friendship network is therefore beginning to overlap with his governing network.
+- Every construction decision around Edselsto can create a beneficiary: repair contract, supply right, storage ground, workshop site, lodging, road work, timber access, smithing work, estate plot, or office space.
+- The lower settlement should visibly transform from neglected village into crude royal works camp before it becomes anything resembling a proper capital town.
 
 ## Open obligations
 
 1. Episode 05 converts emergency room assignments into court politics.
-2. Establish who tries to preserve, upgrade, trade, or contest first-night rooms.
-3. Preserve workers' practical repair priorities even when nobles want prestige rooms first.
-4. Continue Bram/Edrik/Rhyse security geometry around access to Luceran.
-5. Continue Orven as practical institutional memory, not exposition machine.
-6. Keep seven candles lit and unexplained.
-7. Preserve family wing for Episode 07-level investigation.
-8. Continue Moncler's compensation and guild/Crown labor issues through letters/agents.
-9. Preserve Royal Companion fallout and individual reviews.
-10. Keep village residents as people with independent grievances and services.
-11. Preserve uncertainty around royal deaths.
-12. No confirmed supernatural behavior.
+2. Establish the first wave of friendly houses/associates as charming, useful, and sincerely supportive before later rivalry hardens.
+3. Let Luceran naturally favor close friends, their houses, factors, craftsmen, and associates because they are already present and useful; do not frame every favor as cynical corruption.
+4. Begin rapid lower-settlement works: tents/rough worker housing, reuse of ruined stone buildings, damaged-well/drain repair, crude smithy, cleared open storage, tool/material yards, and supply organization.
+5. Establish who tries to preserve, upgrade, trade, or contest first-night rooms.
+6. Preserve workers' practical repair priorities even when nobles want prestige rooms first.
+7. Continue Bram/Edrik/Rhyse security geometry around access to Luceran.
+8. Continue Orven as practical institutional memory, not exposition machine.
+9. Keep seven candles lit and unexplained.
+10. Preserve family wing for Episode 07-level investigation.
+11. Continue Moncler's compensation and guild/Crown labor issues through letters/agents.
+12. Preserve Royal Companion fallout and individual reviews.
+13. Keep village residents as people with independent grievances and services; expansion must affect them materially.
+14. Preserve uncertainty around royal deaths.
+15. No confirmed supernatural behavior.
 
 ## Candle state
 

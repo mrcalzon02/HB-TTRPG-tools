@@ -36,34 +36,41 @@ Each entry is a directional schematic. Role labels remain placeholders until pro
 **Handoff:** He commits to making the ruin a functioning capital.
 
 ## Movement II — Episodes 5–8
+**Movement function:** The four-episode lead-in is complete. Luceran now begins his real education in court politics by **building a court from scratch**. The first houses and associates to establish themselves around him are mostly friendly, glib, helpful, and eager to please. They bring materials, craftsmen, clerks, money, food, horses, contacts, and solutions. Luceran naturally favors close friends, their houses, their factors, and people who actually help him. The political lesson is that favoritism can emerge from reasonable gratitude long before anyone thinks of themselves as corrupt.
+
+At the same time Edselsto becomes a royal works settlement. The castle is repaired to Luceran's specifications while the dilapidated village below is rapidly pressed into service: tents and rough shelters for labor, surviving buildings crowded with workers, ruined stone structures cleared for reuse, damaged wells repaired, a crude smithy established, open ground cleared for timber/stone/cart storage, and supply tracks organized. Construction itself becomes patronage because every useful improvement requires someone to receive work, land, access, pay, or privilege.
 
 ### 05 — Rooms Are Power
-**Plot engine:** Assign chambers, offices, kitchens, guard posts, archives, and audience routes. Architecture becomes patronage.
+**Plot engine:** Emergency first-night chambers become the first favors of the new court. Friendly early arrivals and existing companions ask for rooms, offices, access routes, storage, guard proximity, and repair priority. Luceran gives preference to people he knows, likes, and trusts because they are the people already solving problems for him.
 
-**Ensemble / theory-of-mind:** People misread practical room assignments as affection, insult, or factional alignment. Servants discover that proximity is information.
+**Ensemble / theory-of-mind:** Nobody needs to be sinister. Friends sincerely help; factors sincerely solve supply problems; servants sincerely prefer familiar patrons. Outsiders nevertheless see a bloc forming. People begin mapping affection, usefulness, and access onto walls.
 
-**Handoff:** Court factions begin mapping power onto walls.
+**Settlement lane:** Luceran orders the village and lower works marshaled for sustained construction: tents, worker quarters, repaired wells, a rough smithy, cleared open storage, tool yards, timber/stone piles, cookfires, and reuse of abandoned stone structures.
+
+**Handoff:** Court factions begin mapping power onto walls while work crews begin mapping Luceran's preferences onto the physical settlement.
 
 ### 06 — The Price of a Door
-**Plot engine:** Repairs require contracts, locksmiths, masons, timber, and security; one disputed sealed route reveals intentional closure.
+**Plot engine:** Repairs require locksmiths, masons, timber, iron, smithing, hinges, carts, contracts, and security; one disputed sealed route reveals intentional closure.
 
-**Ensemble / theory-of-mind:** A low-status worker or key-keeper becomes recurring because they know what was physically altered.
+**Ensemble / theory-of-mind:** A low-status worker or key-keeper becomes recurring because they know what was physically altered. Friendly houses compete to provide resources, creating obligations through usefulness rather than hostility.
 
-**Handoff:** A sealed archive/stair becomes a future obligation.
+**Settlement lane:** The first smithy, storage yards, temporary worker housing, saw/stone work areas, and village repairs become visible systems rather than background scenery.
+
+**Handoff:** A sealed archive/stair becomes a future obligation; several practical contracts become political relationships.
 
 ### 07 — The Family Wing
 **Plot engine:** The king finds genealogies, letters, missing catalog entries, and signs his father knew more than he admitted.
 
-**Ensemble / theory-of-mind:** The confidant witnesses private grief; an archivist develops a separate professional obsession with the records.
+**Ensemble / theory-of-mind:** The confidant witnesses private grief; an archivist develops a separate professional obsession with the records. Outside the family wing, construction and court growth continue so private grief occurs inside an increasingly busy new capital.
 
-**Handoff:** A specific missing document is seeded.
+**Handoff:** A specific missing document is seeded while the king's friendly patronage network continues hardening around him.
 
 ### 08 — The First Court
-**Plot engine:** Great houses, orders, guilds, temples, officers, provinces, and envoys test the unfinished court in a formal audience.
+**Plot engine:** The first formal Edselsto court is initially populated disproportionately by friendly houses, associates, factors, guilds, officers, and relatives who came early and helped make the place work. They are charming, cooperative, and already possess rooms, contracts, introductions, and informal access before later rivals arrive in force.
 
-**Ensemble / theory-of-mind:** Seating, clothing, flirtation, grudges, staff errors, and public attention establish a dense relationship web.
+**Ensemble / theory-of-mind:** Seating, clothing, flirtation, grudges, staff errors, gifts, jokes, favors, and public attention establish a dense relationship web. Luceran experiences the new court as a success because the people closest to him are people he likes.
 
-**Handoff:** Court functions, but customs remain unsettled.
+**Handoff:** Court functions, but the audience can now see that Luceran has not escaped factional politics; he has begun creating his own factional center.
 
 ## Movement III — Episodes 9–12
 

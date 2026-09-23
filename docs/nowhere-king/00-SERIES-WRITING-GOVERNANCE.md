@@ -84,6 +84,46 @@ Do not rush directly to the premise because the premise is exciting. The opening
 
 For Luceran specifically, Episode One must establish that he is an adult sovereign but an inexperienced court ruler. He can know protocol, noble houses, diplomacy, law, and formal politics while still being naïve about how thoroughly affection, service, family, gossip, patronage, ambition, and surveillance overlap around a monarch. His desire to flee to Edselsto should be understandable precisely because he overestimates how much geography can solve.
 
+## Political education after the four-episode lead-in
+
+Season One Episodes 1–4 are the lead-in: intolerable inherited court, break with the capital, road consequences, and first occupation of Edselsto. After Episode 04, the series begins Luceran's practical education in building a court.
+
+His earliest political lessons should come from **friendly people**, not obvious enemies. The first houses, relatives, factors, officers, merchants, guild contacts, and associates to establish themselves around Edselsto may be charming, helpful, funny, loyal, and genuinely pleased to support the young king. They also want rooms, contracts, access, offices, favors, precedence, marriages, monopolies, repair priorities, and influence.
+
+Luceran should naturally favor people he already knows and likes: friends, their houses, their factors, their craftsmen, their associates, and institutions that solved real problems for him. Do not frame this immediately as conscious corruption. It is the ordinary birth of a political bloc through trust, gratitude, convenience, and repeated access.
+
+His education is experiential:
+- a friend gets the better chamber because Luceran trusts them;
+- the friend's house then receives easier access;
+- their factor receives a supply contract because they are already present;
+- their recommended smith or mason receives work because the king needs work done now;
+- their clerks become familiar to the household;
+- proximity becomes information;
+- usefulness becomes precedent;
+- precedent becomes entitlement;
+- outsiders correctly perceive favoritism even when every individual choice had a reasonable explanation.
+
+The series should let Luceran enjoy this period. The new court initially feels easier precisely because the first people around him are mostly friendly and cooperative. The later realization that he has rebuilt factional politics around himself is stronger if the process was pleasant, useful, and partly deserved.
+
+## Edselsto is a construction site and settlement, not a finished capital
+
+From Episode 05 onward, restoration expands beyond the castle walls.
+
+The neglected village below Edselsto must change visibly and materially as the court arrives:
+- surviving houses are repaired and crowded;
+- ruined stone buildings are cleared, roofed, scavenged, or reused;
+- tents and rough timber shelters become worker housing;
+- damaged village wells and drains are repaired before ornamental work;
+- a crude working smithy is established for shoes, nails, hinges, tools, brackets, and emergency ironwork;
+- open ground is cleared for timber, stone, carts, lime, firewood, barrels, fodder, and other outdoor storage;
+- roads and tracks are widened or stabilized;
+- saw pits, workshops, cookfires, latrines, animal lines, and supply yards appear;
+- merchants, laborers, craftsmen, families, guards, clerks, and opportunists begin creating a settlement around the royal project.
+
+Construction must remain labor-intensive and visible. Buildings require timber, quarried stone, lime, iron, carts, draft animals, tools, food, wages, contracts, weather, and time. Royal authority can redirect resources; it cannot make materials appear.
+
+The king may specify what he wants built, rebuilt, cleared, expanded, or beautified. His specifications create political winners because somebody receives each contract, room, workshop, road improvement, estate plot, and supply privilege.
+
 ## Episode = chapter-equivalent unit
 
 Each episode is roughly one hour of screen time and may contain 5–8 substantial sequences.
