@@ -406,6 +406,36 @@
       "items": {
         "$ref": "#/$defs/mediatedSource"
       }
+    },
+    "creatorIntentModels": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/creatorIntentModel"
+      }
+    },
+    "authorialThesisStates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/authorialThesisState"
+      }
+    },
+    "intendedAudienceUpdates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/intendedAudienceUpdate"
+      }
+    },
+    "narrativeCharacterizationPressure": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/narrativeCharacterizationPressure"
+      }
+    },
+    "authorshipLayers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/authorshipLayer"
+      }
     }
   },
   "$defs": {
@@ -3894,6 +3924,452 @@
           "type": "boolean"
         },
         "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "creatorIntentModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creatorId",
+        "characterActorId",
+        "creationContext",
+        "intendedCharacterModel",
+        "confidence"
+      ],
+      "properties": {
+        "creatorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "characterActorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "creationContext": {
+          "type": "string",
+          "minLength": 1
+        },
+        "creatorAsOf": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "intendedCharacterModel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intendedKnowledge": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "intendedBeliefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "intendedGoals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "intendedValueConflicts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "intendedBlindSpots": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "intendedChangeArc": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "intendedAudienceLead": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidenceClass": {
+          "enum": [
+            "contemporaneous-notes",
+            "contemporaneous-draft",
+            "contemporaneous-correspondence",
+            "contemporaneous-interview",
+            "release-era-commentary",
+            "realized-text-pattern",
+            "later-retrospective-commentary",
+            "collaborator-testimony",
+            "scholarly-reconstruction",
+            "secondary-interpretation",
+            "unknown"
+          ]
+        },
+        "realizedAlignment": {
+          "enum": [
+            "strong",
+            "partial",
+            "ambiguous",
+            "weak",
+            "contradicted",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "authorialThesisState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creatorId",
+        "workContext",
+        "confidence"
+      ],
+      "properties": {
+        "creatorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "workContext": {
+          "type": "string",
+          "minLength": 1
+        },
+        "creatorAsOf": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "thematicTheses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "moralTheses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "politicalTheses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "philosophicalTheses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "personalConcerns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "didacticFunctions": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "demonstration",
+              "cautionary-example",
+              "aspirational-example",
+              "foil",
+              "counterexample",
+              "dialectical-opponent",
+              "ideological-advocate",
+              "ideological-critic",
+              "satire",
+              "tragic-demonstration",
+              "reductio-through-consequences",
+              "epistemic-proof-by-consequence",
+              "moral-complication",
+              "ambiguity-carrier",
+              "audience-surrogate",
+              "deliberate-provocation",
+              "mixed",
+              "unknown"
+            ]
+          }
+        },
+        "evidenceClass": {
+          "enum": [
+            "contemporaneous-notes",
+            "contemporaneous-draft",
+            "contemporaneous-correspondence",
+            "contemporaneous-interview",
+            "release-era-commentary",
+            "realized-text-pattern",
+            "later-retrospective-commentary",
+            "collaborator-testimony",
+            "scholarly-reconstruction",
+            "secondary-interpretation",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "intendedAudienceUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creatorId",
+        "workContext",
+        "intendedUpdate",
+        "confidence"
+      ],
+      "properties": {
+        "creatorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "workContext": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intendedUpdate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "updateType": {
+          "enum": [
+            "believe",
+            "doubt",
+            "notice-tradeoff",
+            "increase-sympathy",
+            "decrease-sympathy",
+            "recognize-coexisting-values",
+            "observe-consequence",
+            "remain-uncertain",
+            "question-assumption",
+            "other"
+          ]
+        },
+        "intendedAudience": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "realizedAudienceResponse": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "divergence": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "narrativeCharacterizationPressure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "characterActorId",
+        "workContext",
+        "confidence"
+      ],
+      "properties": {
+        "characterActorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "workContext": {
+          "type": "string",
+          "minLength": 1
+        },
+        "narrativePressure": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "didacticPressure": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "characterizationPressure": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "characterStateContinuity": {
+          "enum": [
+            "strong",
+            "partial",
+            "strained",
+            "broken",
+            "unknown"
+          ]
+        },
+        "characterizationStrain": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "competingInWorldExplanation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "authorshipLayer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creatorId",
+        "role",
+        "workContext",
+        "confidence"
+      ],
+      "properties": {
+        "creatorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": [
+            "original-creator",
+            "showrunner",
+            "episode-writer",
+            "screenwriter",
+            "novelist",
+            "director",
+            "actor-performance",
+            "editor",
+            "producer",
+            "network-studio",
+            "adaptation-writer",
+            "franchise-steward",
+            "continuation-author",
+            "other"
+          ]
+        },
+        "workContext": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asOf": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "contributionSummary": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "characterModelContribution": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "thematicContribution": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "productionConstraint": {
           "type": [
             "string",
             "null"
