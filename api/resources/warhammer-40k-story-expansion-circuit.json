@@ -50,30 +50,12 @@
       ],
       "eraLock": {
         "era": "Mature Imperium / late-era Astra Militarum setting; exact millennium not yet explicitly fixed in recovered prose",
-        "allowedInstitutions": [
-          "Astra Militarum / Imperial Guard",
-          "Officio Prefectus / Commissariat",
-          "Adeptus Mechanicus",
-          "Ecclesiarchy",
-          "Administratum",
-          "Arbites",
-          "Schola Progenium"
-        ],
+        "allowedInstitutions": ["Astra Militarum / Imperial Guard","Officio Prefectus / Commissariat","Adeptus Mechanicus","Ecclesiarchy","Administratum","Arbites","Schola Progenium"],
         "forbiddenDrift": "Do not introduce post-source famous canon figures or future-history knowledge not established by the Broussard source."
       },
       "authorshipLineageRule": "All future recovered/continued pieces in this line must include: Based on the work of: The Long Patrol of Broussard.",
-      "recoveryAudit": {
-        "sourceDocumentComplete": true,
-        "conversationHistoryChecked": true,
-        "postChapterXVerbatimProseFound": false,
-        "overlappingEarlierVariants": "Earlier conversation prose exists for the missing-team report and grain-silo-sized loose produce bins, but those beats are already fully represented by the higher-authority Google Chapter X and should not be duplicated as a second published chapter.",
-        "remainingMaterialType": "authorial continuity / planning constraints, not recoverable verbatim prose"
-      },
-      "characterContinuityAssessment": {
-        "segment": "XII. THE WORK AFTER",
-        "durableCharacterStateChanged": false,
-        "reason": "Chapter XII intentionally advances ship repair and perimeter pressure without changing established character knowledge, relationships, injuries, obligations, skills, or plans. Broussard's telemetry suspicion, Sella's grief/technical competence, Kelm's captaincy, and Jalesthesian's restraint remain continuations of already cataloged state rather than new durable states. No catalog entries were manufactured merely to restate them."
-      },
+      "recoveryAudit": {"sourceDocumentComplete":true,"conversationHistoryChecked":true,"postChapterXVerbatimProseFound":false,"overlappingEarlierVariants":"Earlier conversation prose exists for the missing-team report and grain-silo-sized loose produce bins, but those beats are already fully represented by the higher-authority Google Chapter X and should not be duplicated as a second published chapter.","remainingMaterialType":"authorial continuity / planning constraints, not recoverable verbatim prose"},
+      "characterContinuityAssessment": {"segment":"XII. THE WORK AFTER","durableCharacterStateChanged":false,"reason":"Chapter XII intentionally advances ship repair and perimeter pressure without changing established character knowledge, relationships, injuries, obligations, skills, or plans. Broussard's telemetry suspicion, Sella's grief/technical competence, Kelm's captaincy, and Jalesthesian's restraint remain continuations of already cataloged state rather than new durable states. No catalog entries were manufactured merely to restate them."},
       "lastAdvancedSegment": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-02.md"
     },
     {
@@ -82,23 +64,13 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
       "status": "active",
-      "currentEndpoint": "Continuation II — The Practical Examination. The Three Admirals conduct a seventy-two-hour system-defense exercise that forces cadets—and themselves—to distinguish tactical victory from acceptable consequence. Prite adds Lesson Two to the replacement syllabus; Darcelle demonstrates confident maintenance-realism instruction; Renault explicitly recognizes that their old sacrificial simulation victories were play. Noble duel pressure remains active.",
-      "nextSlice": "On the next House Vallimere rotation, continue from the developing replacement syllabus and the political consequences of the professors' practical doctrine. Preserve Prite's Lesson One and Lesson Two, Darcelle's growing confidence when anchored in technical instruction, Renault's calm humor under pressure, the Headmaster's protective institutional strategy, and Vane's Priority Omega protection. Do not reduce the arc to repeated duel jokes; political, doctrinal, and teaching consequences should advance.",
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
-      "eraLock": {
-        "era": "Mature Imperium / late-era Imperial Navy Academy setting; exact millennium not fixed by the attached chronicle",
-        "allowedInstitutions": [
-          "Imperial Navy",
-          "Imperial Navy Academy",
-          "Adeptus Mechanicus",
-          "Administratum",
-          "Inquisition",
-          "Imperial noble Houses"
-        ],
-        "forbiddenDrift": "Do not introduce famous canon figures, later-history knowledge, or institutions unsupported by this mature-Imperium story line."
-      },
+      "currentEndpoint": "Continuation III — The Review Board. Curriculum authorities try to convert the Three Admirals' practical doctrine into a point-scored examination, inadvertently proving the professors' concern that a metric becomes the lesson. Prite argues that command judgment must be assessed against information available when an order was made; Darcelle proposes preserving decision records and requiring instructors to justify assessments; Renault reinforces the danger of optimizing to the rubric. The Headmaster brokers a one-term pilot in which marks follow reviewed reasoning rather than preassigned casualty, fleet, infrastructure or territory values.",
+      "nextSlice": "On the next House Vallimere rotation, advance the consequences of the one-term doctrine pilot rather than repeating the review-board argument. Preserve Lesson One and Lesson Two, the decision-record assessment model, Darcelle's established confidence when anchored in technical expertise, Renault's restrained humor, the Headmaster's institutional protection, Vane's Priority Omega role, and the natural-conversation rule. Do not make the characters re-explain the rubric dispute to each other; let it shape procedure and behavior.",
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-03.md",
+      "eraLock": {"era":"Mature Imperium / late-era Imperial Navy Academy setting; exact millennium not fixed by the attached chronicle","allowedInstitutions":["Imperial Navy","Imperial Navy Academy","Adeptus Mechanicus","Administratum","Inquisition","Imperial noble Houses"],"forbiddenDrift":"Do not introduce famous canon figures, later-history knowledge, or institutions unsupported by this mature-Imperium story line."},
       "authorshipLineageRule": "All future continued pieces in this line must include: Based on the work of: House Vallimere's Sons.",
-      "chapterCapRule": "Hard cap of 40 chapters per book; Chapter XL is the latest permissible chapter number within a book."
+      "chapterCapRule": "Hard cap of 40 chapters per book; Chapter XL is the latest permissible chapter number within a book.",
+      "characterContinuityAssessment": {"segment":"Continuation III — The Review Board","durableCharacterStateChanged":false,"reason":"The segment advances institutional implementation of already-established doctrine without changing the recurring cast's durable knowledge, relationships, injuries, obligations, skills, or personal plans. Prite applies his existing Lesson One/Lesson Two framework, Darcelle demonstrates already-cataloged technical confidence, Renault uses already-established restrained humor, the Headmaster continues his existing protective strategy, and Vane continues Priority Omega protection. The new one-term pilot is an Academy procedure rather than a changed personal character state; no catalog entry was manufactured merely to duplicate established traits."}
     },
     {
       "id": "matron-lagas-atrovald",
@@ -109,53 +81,15 @@
       "currentEndpoint": "Continuation II — The Third Witness. Atrovald has opened an S-Rank provenance fracture after the pre-Unification witness proves to be only a sixth surviving witness; a remembered fifty-third custody guard vanishes from the official record; Witness Four appears inside Null-Seven under Atrovald's own authorization dated tomorrow; Predulum claims to remember seven attempts to manufacture one original and is sealed inside Null-Seven with Witness Four after the duplicated warning pages go blank.",
       "nextSlice": "LEGACY BACKFILL GATE: before any Continuation III prose, persist temporal state for Atrovald and Predulum from the original story plus Continuations I-II. At minimum preserve Atrovald's knowledge of the multi-witness provenance fracture, the fifty-three-versus-fifty-two custody discrepancy, her active S-Rank provenance search, her present distrust of reconciliation/correction, the tomorrow-dated accession under her identity, and her decision to seal Predulum with Witness Four; preserve Predulum's repeated sanitization history, his claimed memory of tomorrow, his claim that seven witnesses are seven attempts to manufacture one original, and his current confinement. After backfill, continue the provenance investigation without prematurely explaining the ontological/chronometric mechanism. Apply human-conversation governance: these shared facts constrain behavior and shorthand rather than being restated in dialogue.",
       "legacyBackfillRequired": true,
-      "characterContinuityAssessment": {
-        "sufficientForNewProse": false,
-        "reason": "The temporal catalog records for Atrovald and Predulum still have empty evolving-state ledgers despite Continuation II materially changing their knowledge, obligations, location, and active investigation. Governance requires legacy backfill before new prose."
-      },
-      "eraLock": {
-        "era": "Mature Imperium; exact millennium not fixed by the attached chronicle",
-        "allowedInstitutions": [
-          "Interlocutum",
-          "Imperial Inquisition",
-          "Ordo Signora Temportum",
-          "Logos Historica Verita",
-          "Senatorum Imperialis archival chain",
-          "Adeptus Mechanicus / Cognito-Mechanics where source-established"
-        ],
-        "forbiddenDrift": "Do not explain the provenance fracture with later or unsupported canon mechanisms, do not introduce famous canon figures, and do not collapse the unresolved archival/chronometric anomaly into a generic Warp or daemon explanation."
-      },
+      "characterContinuityAssessment": {"sufficientForNewProse":false,"reason":"The temporal catalog records for Atrovald and Predulum still have empty evolving-state ledgers despite Continuation II materially changing their knowledge, obligations, location, and active investigation. Governance requires legacy backfill before new prose."},
+      "eraLock": {"era":"Mature Imperium; exact millennium not fixed by the attached chronicle","allowedInstitutions":["Interlocutum","Imperial Inquisition","Ordo Signora Temportum","Logos Historica Verita","Senatorum Imperialis archival chain","Adeptus Mechanicus / Cognito-Mechanics where source-established"],"forbiddenDrift":"Do not explain the provenance fracture with later or unsupported canon mechanisms, do not introduce famous canon figures, and do not collapse the unresolved archival/chronometric anomaly into a generic Warp or daemon explanation."},
       "authorshipLineageRule": "All future recovered/continued pieces in this line must include: Based on the work of: Matron Lagas Atrovald.",
       "chapterCapRule": "Hard cap of 40 chapters per book; Chapter XL is the latest permissible chapter number within a book."
     },
-    {
-      "id": "on-the-fuzzy-edge",
-      "title": "On the Fuzzy Edge",
-      "source": "migrated-long-form",
-      "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
-      "status": "active"
-    },
-    {
-      "id": "project-vigilant-shade",
-      "title": "Project VIGILANT SHADE",
-      "source": "migrated-long-form",
-      "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
-      "status": "eligible-next"
-    },
-    {
-      "id": "tenelja-station",
-      "title": "Of Blood and Wires: The Litanies of Tenelja Station",
-      "source": "migrated-long-form",
-      "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
-      "status": "eligible-next"
-    },
-    {
-      "id": "house-drenal",
-      "title": "Scion of the Warp-Born Blood",
-      "source": "migrated-long-form",
-      "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
-      "status": "eligible-next"
-    }
+    {"id":"on-the-fuzzy-edge","title":"On the Fuzzy Edge","source":"migrated-long-form","path":"assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md","status":"active"},
+    {"id":"project-vigilant-shade","title":"Project VIGILANT SHADE","source":"migrated-long-form","path":"assets/warhammer-40k/lore/reddit-story-archive.json","status":"eligible-next"},
+    {"id":"tenelja-station","title":"Of Blood and Wires: The Litanies of Tenelja Station","source":"migrated-long-form","path":"assets/warhammer-40k/lore/reddit-story-archive.json","status":"eligible-next"},
+    {"id":"house-drenal","title":"Scion of the Warp-Born Blood","source":"migrated-long-form","path":"assets/warhammer-40k/lore/reddit-story-archive.json","status":"eligible-next"}
   ],
   "governanceDocument": "api/resources/warhammer-40k-fiction-governance.md",
   "characterContinuityControl": "api/resources/warhammer-40k-character-continuity-control.md",
