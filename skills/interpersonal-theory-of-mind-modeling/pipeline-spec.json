@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.3.0",
+  "schemaVersion": "1.4.0",
   "id": "interpersonal-theory-of-mind-processing-pipeline",
   "skillId": "interpersonal-theory-of-mind-modeling",
   "title": "Interpersonal Theory of Mind Processing Pipeline",
@@ -581,5 +581,111 @@
       ],
       "rule": "Use only supported depth."
     }
+  },
+  "normativeSelfGuidance": {
+    "notation": "G(A,t)",
+    "distinction": "Normative self-guidance is separate from the actor's underlying state S(A,t) and descriptive self-model M(A→A,t).",
+    "dimensions": [
+      "ought",
+      "should",
+      "must",
+      "must-not",
+      "could",
+      "cannot",
+      "want",
+      "intend",
+      "expect-self",
+      "identity-consistent-action"
+    ],
+    "actionSelectionSequence": [
+      "self-description",
+      "situation-appraisal",
+      "normative-appraisal",
+      "option-appraisal",
+      "forecast",
+      "self-prediction",
+      "intention",
+      "execution"
+    ],
+    "actionSelectionGapPrinciple": "normative guidance, intention, self-prediction, and actual action may diverge and must be represented separately.",
+    "contributingFactors": [
+      "competing-values",
+      "acute-emotion",
+      "fear",
+      "anger",
+      "grief",
+      "shame",
+      "loyalty-conflict",
+      "habit",
+      "exhaustion",
+      "time-pressure",
+      "coercion",
+      "institutional-obligation",
+      "perceived-lack-of-alternatives",
+      "documented-addiction-or-compulsion",
+      "documented-impaired-judgment",
+      "immediate-reward",
+      "avoidance",
+      "social-pressure",
+      "identity-threat",
+      "uncertainty",
+      "inaccurate-situation-model",
+      "inaccurate-capability-model",
+      "inaccurate-threshold-model"
+    ],
+    "postActionSequence": [
+      "actual-action",
+      "consequence",
+      "emotional-response",
+      "self-judgment",
+      "counterfactual-review",
+      "self-model-effect",
+      "revised-self-model",
+      "revised-future-guidance"
+    ],
+    "counterfactualClasses": [
+      "contemporaneously-perceived-alternative",
+      "documented-available-alternative",
+      "later-imagined-alternative",
+      "realistic-counterfactual",
+      "hindsight-only-alternative",
+      "impossible-alternative",
+      "unknown"
+    ],
+    "selfModelEffects": [
+      "none",
+      "reinforcement",
+      "loss-of-self-trust",
+      "threshold-model-rupture",
+      "identity-contradiction",
+      "moral-self-image-collapse",
+      "judgment-confidence-loss",
+      "defensive-rationalization",
+      "renewed-value-commitment",
+      "self-forgiveness",
+      "refusal-of-self-forgiveness",
+      "identity-reconstruction",
+      "mixed",
+      "unknown"
+    ],
+    "governingRules": [
+      "A person may accurately know what they believe they should do and still fail to do it.",
+      "Internal contradiction is not automatically irrational or pathological.",
+      "Later belief that I should have done X does not prove X was available or foreseeable at decision time.",
+      "Post-action self-judgment is another model state and may itself be accurate, incomplete, defensive, overly harsh, or distorted.",
+      "Target state, target self-model, target normative guidance, observer model, and analyst hypothesis must remain distinct."
+    ],
+    "feedbackLoop": [
+      "self-model",
+      "normative-guidance",
+      "intended-action",
+      "actual-action",
+      "consequence",
+      "emotional-response",
+      "self-judgment",
+      "revised-self-model",
+      "revised-future-guidance"
+    ],
+    "llmModelingStance": "The executing reasoning system does not claim a lived internal theory of mind. It maintains separate evidence-bounded models of targets, including self-models, normative guidance, observer models, temporal transitions, and uncertainty."
   }
 }
