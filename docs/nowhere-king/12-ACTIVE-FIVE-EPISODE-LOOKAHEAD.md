@@ -1,142 +1,125 @@
 # Nowhere King — Active Five-Episode Lookahead
 
-**Current historical endpoint:** Season One, Episode 06 — *The Price of a Door*  
-**Forward window:** Episodes 07–11
+**Current historical endpoint:** Season One, Episode 07 — *The Family Wing*  
+**Forward window:** Episodes 08–12
 
 Planning is directional unless marked LOCKED. Finished prose supersedes planning.
 
-## N+1 — Episode 07: The Family Wing
-**Certainty:** LOCKED in function, directional in exact discoveries.
+## N+1 — Episode 08: The First Court
+**Certainty:** LOCKED in function, directional in exact petitions.
 
-**Entry state:** Lock/door work has produced an earned route into family-history investigation. Widow's key is associated by inherited steward tradition with a former service door now deliberately infilled beside the family passage. The infill predates Orven's tenure; exact date/reason are unknown. A separate lower-west door is barred from the opposite side. Family wing itself remains mostly closed. Seven candles remain lit.
+**Entry state:** Edselsto can now receive a limited formal audience. The first friendly network already holds practical advantages created through useful service: Montegrain proximity; Edevane clerical/archive access; Bellisar stable routes; Pell chamber proximity; Morcant iron quotation rights; Falbrecht winter charcoal first refusal; Nella/Guild of Keys professional presence; village council consultation; Crown workers' repair authority. Family investigation has created Ysabet's archival office but N.F. 44–51 remains unresolved.
 
-**Primary purpose:** Turn Edselsto from political refuge into family wound. Luceran should encounter rooms, portraits, records, provenance gaps, and evidence that his father knew more about Edselsto than he told him, without learning the buried truth.
+**Primary purpose:** Let later arrivals see that the supposedly blank Edselsto court already has winners. Luceran experiences the first formal court as a success because most early actors are friendly, glib, useful, and pleased to be there.
 
 **Required lanes:**
-- Orven identifies what he personally remembers versus what prior stewards told him;
-- Nella/lock work provides plausible access to selected doors without solving every closure;
-- an archivist/records specialist becomes recurring through actual provenance/catalog work;
-- missing catalog entries or displaced records create a specific documentary obligation;
-- Luceran's parents become people with private choices, not merely mystery victims;
-- Montegrain or Miren witnesses grief without making Luceran narrate shared biography;
-- court/village construction continues outside the family investigation;
-- Widow's key/infilled route may motivate records search but must not be breached merely for spectacle.
+- formal audience in an unfinished great hall or equivalent usable space;
+- seating, waiting order, introductions, clothing, gifts, food, access routes, and lodging all communicate rank before Luceran intends them to;
+- at least one later-arriving house correctly identifies early favoritism without being villainous;
+- friendly houses defend their advantages as earned practical arrangements;
+- Moncler's compensation claim or agent reaches formal court and must be treated as legitimate debt rather than comic residue;
+- Royal Companion dismissal fallout receives a public/procedural consequence;
+- village/work logistics visibly constrain ceremony;
+- Luceran enjoys a court filled with people he likes while beginning to see that temporary arrangements have hardened into custom;
+- Ysabet/archive work remains independent background motion rather than hijacking the formal court.
 
-**Theory-of-mind:** Luceran may revise his model of his father from "withheld nothing important" toward "knew or managed something here that he chose not to explain," but confidence must remain bounded by evidence.
+**Mystery ceiling:** N.F. 44–51, Halven Sare, infilled doorway, lower-west barred door, and parental visit remain unresolved. Seven candles remain lit. No confirmed supernatural behavior.
 
-**Mystery ceiling:** no prison truth, castle-interface truth, Nowhere King archaeology, candle failure, sentient-castle proof, or authoritative explanation of sealed routes.
+**Exit target:** Edselsto functions as a real court. Later arrivals can name the early-access bloc even though it is not secretly coordinated. At least one concession or procedural ruling creates future retaliation or bargaining pressure.
 
-**Exit target:** one specific missing document/catalog gap or family instruction becomes future payoff debt; Luceran has a stronger reason to investigate Edselsto but less certainty about his parents.
-
-## N+2 — Episode 08: The First Court
-**Certainty:** DIRECTIONAL.
-
-**Purpose:** Great houses, orders, guilds, temples, officers, provinces, and envoys formally test the unfinished Edselsto court.
-
-**Required setup now established:**
-- room/access precedents;
-- Bellisar scheduled stair access;
-- Edevane archive-adjacent clerks/credit;
-- Morcant conditional iron supply;
-- Falbrecht conditional charcoal first refusal and Crown-owned future shed;
-- Guild of Keys professional presence without monopoly;
-- village council property/food/boundary legitimacy;
-- visible worker settlement and supply infrastructure;
-- guard access procedures and weak-door compensating measures;
-- Royal Companion dismissal fallout still active;
-- Moncler's claim still proves the new capital has creditors.
-
-**Exit target:** court functions formally, but temporary arrangements harden into custom and later arrivals can identify who "got there first."
-
-## N+3 — Episode 09: The Village Below
+## N+2 — Episode 09: The Village Below
 **Certainty:** DIRECTIONAL.
 
 **Purpose:** Return attention to villagers after rapid royal expansion. Show old families living beside tents, forge work, storage yards, charcoal sheds, repaired ruins, animals, merchants, clerks, noble factors, and Crown demand.
 
-**Carryover:**
-- Tessa Rane, Marrec Voss, Lysa Dorn, Perren Holt, and Tavin Rane are established local actors;
-- half-common storage remains explicitly temporary;
-- Henn-family property remains unresolved;
-- lower well repair continues;
-- Marrec's goat-path knowledge already forced a Crown supplier to move construction;
-- food purchasing and water capacity give villagers practical leverage;
-- loyalty, resentment, opportunity, and displacement coexist.
+**Carryover:** Tessa Rane, Marrec Voss, Lysa Dorn, Perren Holt, and Tavin Rane are established; half-common storage remains temporary; Henn-family property remains unresolved; lower-well repair continues; food purchasing and water capacity give villagers leverage; loyalty, resentment, opportunity, and displacement coexist.
+
+**Required consequence from Episode 08:** Formal court increases demand for lodging, food, horses, storage, servants, and land, making the village pay the material price of court success.
 
 **Protected:** villagers may know old routes/customs/stories, not authorial prison truth.
 
-## N+4 — Episode 10: Guests With Patrons
+## N+3 — Episode 10: Guests With Patrons
 **Certainty:** DIRECTIONAL.
 
-**Purpose:** New staff, petitioners, specialists, and guests arrive carrying patronage chains official rosters do not fully show. Luceran now recognizes some chains but cannot eliminate divided obligation from human government.
+**Purpose:** New staff, petitioners, specialists, and guests arrive carrying patronage chains official rosters do not fully show. Luceran recognizes some chains but cannot eliminate divided obligation from human government.
 
-**Required setup:**
-- Sera's Morcant training/Bellisar contract is an early benign divided-loyalty model;
-- Nella arrived for commercial opportunity rather than personal loyalty;
-- Edevane clerks, village runners, suppliers, guards, and workers create information channels outside audiences;
-- room/access customs determine who can introduce newcomers;
-- Luceran has learned that fast-moving information is not automatically treason.
+**Setup:** Sera's Morcant training/Bellisar contract; Nella's commercial motive; Edevane clerks; village runners; suppliers; guards; workers; room/access customs; Ysabet's professional loyalty to archival method rather than personal royal preference.
 
 **Relationship lane:** A sincere warm/flirtatious/intimate interaction may also carry patronage. Affection and institutional service can coexist.
 
 **Exit target:** Luceran forms a more deliberate inner circle while accepting that trusted people possess families, houses, creditors, lovers, guilds, orders, and plans beyond him.
 
-## N+5 — Episode 11: The Hunt
+## N+4 — Episode 11: The Hunt
 **Certainty:** DIRECTIONAL.
 
 **Purpose:** Move the court outside formal rooms and test landscape competence, informal hierarchy, personal courage, security, and who understands the country around Edselsto.
 
-**Seed requirements from Episodes 07–10:**
-- establish enough local guides/Black Pine or village landscape knowledge that the hunt does not invent expertise at payoff;
-- Rhyse/Bram/Edrik security procedures should have a visible baseline before being tested;
-- friendly-house competition should affect invitations, horses, routes, and informal proximity;
-- Bellisar horse infrastructure provides material continuity;
-- village/court expansion gives the hunt economic and social consequences rather than making it pure recreation.
+**Seed requirements:** establish local guides/Black Pine or village landscape competence before payoff; Rhyse/Bram/Edrik procedures remain visible; friendly-house competition affects invitations, horses, routes, and proximity; Bellisar horse infrastructure supplies continuity; village/court expansion gives the hunt economic consequences.
 
-**Relationship lane:** respect, attraction, irritation, or distrust may change because characters observe one another away from ceremony.
-
-**Action lane:** terrain, objective, escort, horses, communications, civilian/local presence, and retreat routes must be established before any security test.
+**Action lane:** terrain, objective, escort, horses, communications, civilian/local presence, and retreat routes must exist before any security test.
 
 **Exit target:** evidence indicates a living political actor is testing royal security; no supernatural shortcut.
 
-## Reconciled Episode 06 outcomes
+## N+5 — Episode 12: The King's Table
+**Certainty:** DIRECTIONAL.
 
-- Nella Veyr, Guild of Keys master doorwright, arrives independently because Edselsto demand is visible; she sells only four of eleven locks after real inspection.
-- Treasury retains its existing lock because door/frame weakness matters more; Rhyse uses compensating guard procedure.
-- Sera Morcant rejects four defective Morcant iron bars and retains independent inspection authority.
-- Morcant receives first right to quote on the next two ordinary iron deliveries, not exclusivity; Crown retains price/quality exit.
-- Maelin Falbrecht establishes a charcoal bargain: temporary shed built by Falbrecht, Crown ownership after eighteen months, conditional winter first refusal, dry-weight payment.
-- Falbrecht shed is moved to preserve Marrec Voss's remembered goat path, costing half a day.
-- Lower-well repair continues; old rubble patch identified; Luceran gives safety repair priority subject to real structural objection.
-- Tavin Rane is named as Tessa's twelve-year-old grandson/runner and demonstrates work-derived information advantage.
-- Widow's key is associated with a former service door beside family passage.
-- Derrin, Corren, and Nella identify a deliberately infilled former doorway predating Orven's tenure; date, authority, destination, and reason remain unknown.
-- Luceran refuses immediate breach and orders shoring, records research, and lower-end identification first.
-- Orven retains Widow's key; Nella records its pattern; Rhyse records custody.
-- A separate lower-west service door is found barred from the opposite side and remains unopened.
-- Bellisar east-stair access becomes operational under agreed hours/security authority.
-- Miren reinforces that information moving socially is not itself disloyalty.
-- Seven candles remain lit; no confirmed supernatural evidence.
+**Purpose:** Establish ordinary court companionship before later betrayal. A long royal dinner makes food, seating, jokes, flirtation, gossip, provincial news, supply complaints, and private familiarity into governance.
+
+**Seed requirements from Episodes 08–11:**
+- recognizable formal seating/status customs from the First Court;
+- village food pressure and supplier consequences;
+- at least several relationships with enough ordinary history to joke, irritate, flirt, disagree, and recover naturally;
+- hunt consequences or security concern present but not allowed to consume all ordinary life;
+- early friendly bloc comfortable enough to behave like people rather than petition machines.
+
+**Political lane:** one faction wins a real concession at table or because of access around it; another begins a legible response.
+
+**Relationship lane:** ordinary warmth matters. Establish future grief debt without announcing it.
+
+**Mystery ceiling:** family records may remain active background investigation; no major supernatural escalation.
+
+**Exit target:** the court has a social baseline worth losing.
+
+## Reconciled Episode 07 outcomes
+
+- Selected north-family rooms open through ordinary lock/carpentry work.
+- Luceran experiences his father's former room as lived family space and remembers ordinary childhood affection.
+- Former secretary Halven Sare is identified in a portrait with his face deliberately cut out; timing/reason unknown.
+- Ysabet Marris arrives as an assistant keeper of royal household records with independent professional motive.
+- Ysabet receives dry archival space, two copyists, and practical provenance authority.
+- Family-paper catalog shows a gap around entries 44–51.
+- Luceran's father left a written instruction removing private North Family material from general register, keeping it under household seal, and forbidding copies; formal handwriting comparison remains due.
+- Later register cross-reference says `Edselsto private packet — N.F. 44–51 — transferred under royal instruction`; associated receipt is not present.
+- Transfer dates to nine years earlier, near a quiet two-night visit by Luceran's parents.
+- Orven remembers Luceran's father asking about old keys, lower family stores, north stair, and whether the family-passage wall had been opened.
+- Orven remembers Luceran's mother saying during a private argument: `Not while he is a child.` He assumed Luceran was meant but cannot confirm.
+- Luceran explicitly resists collapsing the evidence into one theory.
+- Infilled doorway remains unbreached; lower-west barred door remains unresolved.
+- Construction continues independently during royal family investigation.
+- Seven candles remain lit.
 
 ## Active payoff debt
 
+- N.F. 44–51 packet, destination, contents, and missing receipt;
+- Halven Sare provenance and damaged portrait;
+- parental visit nine years earlier and mother's bounded overheard sentence;
+- Widow's key and infilled family-passage doorway;
+- lower-west door barred from opposite side;
 - Moncler's compensation claim;
 - guild/Crown labor competition;
 - Royal Companion review/patron fallout;
 - twenty-two-year failed Crown repair funding;
 - Jory/Ellyn and worker family displacement;
-- lower well repair and water capacity;
+- lower well and water capacity;
 - half-common temporary land use;
-- Henn-family property question;
-- Morcant conditional iron quotation rights;
-- Falbrecht eighteen-month shed/Crown ownership and winter first-refusal bargain;
-- Bellisar east-stair access under Rhyse security limits;
-- Nella/Guild of Keys professional presence;
-- Edevane clerks/credit and archive proximity;
-- Pell's proximity ambitions;
-- village food limits and Lysa Dorn's flour warning;
-- Widow's key and infilled family-passage doorway;
-- lower-west door barred from opposite side;
-- family-wing voices/acoustics without premature certainty;
+- Henn-family property;
+- Morcant quotation rights;
+- Falbrecht shed/Crown ownership/winter first refusal;
+- Bellisar east-stair access under Rhyse limits;
+- Nella/Guild of Keys presence;
+- Edevane archive proximity;
+- Pell proximity ambitions;
+- village food limits;
 - friendly early network becoming recognizable to later arrivals;
 - seven candles maintained and unexplained;
 - Luceran's enjoyment of the useful friendly court he is building.
@@ -145,9 +128,10 @@ Planning is directional unless marked LOCKED. Finished prose supersedes planning
 
 - Do not make the early friendly bloc secretly coordinated.
 - Do not turn every favor into corruption; many choices are genuinely sensible.
-- Do not make Orven omniscient.
+- Do not make Orven or Ysabet omniscient.
+- Do not turn N.F. 44–51 into authorial truth in Season One.
 - Do not make the first-night sound proof of a ghost/castle/entity.
-- Do not explain the infilled route through authorial truth in Season One.
+- Do not explain the infilled route through buried truth in Season One.
 - Do not extinguish a candle ahead of schedule.
 - Do not let village growth erase ownership, memory, or local legitimacy.
 - Workers/suppliers/staff remain recurring because the court physically depends on them.
