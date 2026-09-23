@@ -22,6 +22,16 @@ Before planning, drafting, revising, or continuing:
 
 Planning is directional. Finished prose controls what actually happened.
 
+## Premodern court and institutional texture
+
+Embar-Zara can sustain sophisticated administration, but its institutions must behave like a royal court rather than a modern corporation or contemporary civil service.
+
+Translate planning into period-appropriate mechanisms: royal commands, emissaries, household officers, stewards, clerks, scribes, guild masters, master carpenters, masons, quartermasters, reeves, captains, priests, messengers, warrants, letters, inventories, tallies, ledgers, sealed orders, personal inspection, sworn testimony, and patronage.
+
+Do **not** casually introduce modern management procedures or language such as feasibility studies, project teams, stakeholder processes, implementation committees, HR-style staffing logic, or corporate reporting frameworks unless the setting has independently established an equivalent.
+
+When the Crown needs to know whether an ancestral fortress can receive the court, the king sends trusted people to look at it, speak to the caretaker, inspect roofs, water, kitchens, stables, roads and defenses, hire or command labor, and report what physically remains. Complex governance is welcome; anachronistic bureaucratic texture is not.
+
 ## The series is an ensemble epic
 
 The young king is the axial character, not the only protagonist-scale character.

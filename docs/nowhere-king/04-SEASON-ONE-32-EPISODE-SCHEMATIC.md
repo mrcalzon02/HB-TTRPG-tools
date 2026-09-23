@@ -8,18 +8,18 @@ Each entry is a directional schematic. Role labels remain placeholders until pro
 ## Movement I — Episodes 1–4
 
 ### 01 — Crown Without Court
-**Plot engine:** A legally secure but practically weak young king inherits a capital saturated with other people's networks and revives the old proposal to move the imperial seat to Edselsto.
+**Plot engine:** Luceran has only recently become king because his father abdicated. Both parents then die in suspiciously close succession. Luceran becomes convinced they may have been assassinated while rival houses, merchants, guild interests, temples, and court factions carefully imply that everyone else is responsible. At the same time, every private detail of his grief, meals, sleep, visitors, painting, health, bodily routine, and exhaustion travels through the capital's ordinary service and patronage networks and is turned into political leverage. He finally decides the old argument is over: the imperial court is moving to Edselsto.
 
-**Ensemble / theory-of-mind:** Establish grief, public mask, and several independent side-character goals. The future confidant earns attention through competence, not destiny.
+**Ensemble / theory-of-mind:** Establish grief, suspicion without proof, Montegrain's genuine friendship, the Court Wizard's refusal to manufacture certainty, and the low-status information ecology that makes private life impossible. Luceran understands Edselsto will not abolish politics; it will force entrenched networks to rebuild their access on ground he chooses.
 
-**Handoff:** Relocation becomes a live political contest.
+**Handoff:** The move is ordered. Sir Edran Vey rides ahead under royal seal with Mara Kest, a mason, carpenter, soldiers, and practical authority to find the elderly steward, inspect what actually still stands, tell him the king is returning, and begin immediate preparation if enough of the castle can receive an initial household. The capital starts packing before any committee can turn the decision back into a debate.
 
 ### 02 — Packing the Monarchy
-**Plot engine:** Moving government means archives, treasury, kitchens, guards, horses, furniture, seals, beds, clerks, and precedence; every crate creates winners and losers.
+**Plot engine:** Crosscut Edran's advance party traveling toward and entering Edselsto with the old capital converting one sovereign order into household rolls, sealed chests, archives, carts, kitchens, guards, horses, bedding, guild labor, precedence, and furious fights over who travels with the Crown. Every crate creates winners and losers.
 
-**Ensemble / theory-of-mind:** Let clerks, servants, guards, merchants, and lovers have their own stakes in who moves, who stays, and who gets rooms or jobs.
+**Ensemble / theory-of-mind:** Let clerks, servants, guards, merchants, lovers, craftsmen, families, and factional agents have their own stakes in selection or exclusion. At Edselsto, the steward, villagers, soldiers, Mara, and craftsmen become active characters because they know what can actually be repaired and supplied.
 
-**Handoff:** The convoy leaves with unresolved patronage fights attached to it.
+**Handoff:** The advance party confirms that enough of Edselsto remains usable for the king to arrive if urgent repairs continue. The first royal convoy leaves with unresolved patronage fights attached to it.
 
 ### 03 — The Road North
 **Plot engine:** The royal journey exposes provincial roads, security, taxes, hospitality, and the gap between capital rumor and lived kingdom.
