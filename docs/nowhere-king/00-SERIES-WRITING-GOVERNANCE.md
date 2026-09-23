@@ -76,6 +76,14 @@ The king must make bargains he hates: pardons, offices, restored titles, territo
 
 The ending therefore carries political debt. Victory does not wipe the ledger clean.
 
+## Establish the unbearable normal before disruption
+
+When a major character abandons, destroys, replaces, or radically transforms an existing way of life, first let the audience live inside that status quo long enough to understand why the character can no longer tolerate it.
+
+Do not rush directly to the premise because the premise is exciting. The opening episode of a season may spend substantial time on ordinary routines, repeated irritations, social expectations, contradictory obligations, private coping, and small humiliations if those experiences make the later break emotionally inevitable.
+
+For Luceran specifically, Episode One must establish that he is an adult sovereign but an inexperienced court ruler. He can know protocol, noble houses, diplomacy, law, and formal politics while still being naïve about how thoroughly affection, service, family, gossip, patronage, ambition, and surveillance overlap around a monarch. His desire to flee to Edselsto should be understandable precisely because he overestimates how much geography can solve.
+
 ## Episode = chapter-equivalent unit
 
 Each episode is roughly one hour of screen time and may contain 5–8 substantial sequences.

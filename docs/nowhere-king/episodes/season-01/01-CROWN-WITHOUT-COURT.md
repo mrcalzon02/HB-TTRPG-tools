@@ -5,7 +5,7 @@
 **Season:** One — The Return to Edselsto  
 **Episode:** 01 of 32  
 **Reveal ceiling:** Political fantasy first. No confirmed supernatural event, no candle failure, no undercroft truth.  
-**Primary dramatic purpose:** Establish the king's grief, exhaustion, suspicion, and total loss of privacy inside a court saturated by rival information networks; establish that his father abdicated shortly before both parents died; make the decision to return the imperial court to Castle Edselsto an angry but rational sovereign act; dispatch living people to inspect and prepare the ancestral seat rather than importing modern bureaucratic planning logic.
+**Primary dramatic purpose:** Establish the unbearable status quo before changing it: Luceran is an adult king but a profoundly inexperienced court politician, newly pushed onto the throne, newly bereaved, watched in every ordinary human act, and exhausted by courtiers turning grief into leverage. He must still perform kingship while wanting everyone to leave him alone. His decision to return to Edselsto is therefore emotionally understandable and politically consequential—but also naïve. He believes distance, ownership, and the ability to choose a new household can let him escape the court game more completely than they actually can.
 
 ---
 
@@ -529,6 +529,30 @@ Oren's expression tightened.
 
 Luceran walked away before fairness could become another negotiation.
 
+He hated himself for that one before he reached the end of the corridor.
+
+Oren might actually have meant the first part.
+
+That was another thing nobody had warned him about when kingship was still theoretical: manipulation did not require false affection. People could love him and still want offices. They could mourn his parents and still calculate what their deaths changed. They could sincerely worry that he was exhausted and sincerely believe their own faction ought to be the one trusted to relieve the burden.
+
+As prince, Luceran had thought politics meant knowing which house hated which other house, remembering who controlled which province, and learning not to insult foreign ambassadors.
+
+He had been good at that sort of politics.
+
+It turned out to be the children's version.
+
+Nobody had explained that kingship meant waking to discover that the person asking whether he had slept might be worried about him, gathering information, seeking intimacy, testing weakness, performing duty, or doing all five at once.
+
+He did not know how to tell the difference.
+
+He was twenty-three years old, unquestionably an adult, legally sovereign, crowned before witnesses from half the continent—and privately aware that men twice his age could make him feel like a boy who had wandered into the wrong room.
+
+That awareness did not make him wiser.
+
+Mostly it made him tired.
+
+Mostly it made him want the room to empty.
+
 ---
 
 The decision came two nights later.
@@ -637,7 +661,25 @@ Nobody spoke.
 
 Luceran put his finger on Edselsto.
 
-"We have talked about returning the imperial household here for years. My father talked about it. His father talked about it. Every time the court becomes impossible, someone says Edselsto would give the Crown room to breathe, and every time somebody else explains that the road is poor, the roofs are old, diplomats will complain, merchants will complain, half the court will complain, and it will cost too much."
+"I am done with this place."
+
+"Your Majesty—"
+
+"No. I mean it. I am done waking up inside other people's arrangements. I am done having to ask which cousin appointed the man who lights my fire. I am done with condolences that turn into petitions and concern that turns into appointments and people telling me to rest while sliding papers under my hand."
+
+Avarren said carefully, "You are describing a court."
+
+"I am describing this court."
+
+"There is a distinction?"
+
+"There will be."
+
+Luceran heard how childish that sounded.
+
+He said it anyway.
+
+"We have talked about returning the imperial household here for years. My father talked about it. His father talked about it. Every time someone says Edselsto would give the Crown room to breathe, everyone else explains that the road is poor, the roofs are old, diplomats will complain, merchants will complain, half the court will complain, and it will cost too much."
 
 Nerezza said, "All of those things remain true."
 
@@ -743,7 +785,49 @@ Avarren opened his mouth.
 
 Luceran cut him off.
 
-"I know Edselsto will not stay clean. I know the houses will send people. The guilds will send people. Merchants will build inns before we finish the roofs. Every bastard in this room will bring his own network with him. Fine. But they will have to build it again. They will have to show themselves doing it. They will have to travel to my court instead of living in its walls before I was born."
+"Edselsto has one old steward and half a village."
+
+Avarren stared at him.
+
+"That is not the argument you think it is."
+
+"It means they are not already there."
+
+"Who?"
+
+"All of them."
+
+Luceran swept a hand toward the invisible capital beyond the chamber walls.
+
+"The houses. The guild men. The cousins. The secretaries who know when I sneeze. The widows who arrive with condolences and leave with signatures. At Edselsto I decide who has rooms. I decide who comes through the gate. If an ambassador wants to see me, he can ride there when I summon him. If a lord wants something, he can ask instead of appearing outside my breakfast room."
+
+Avarren's expression softened in the worst possible way.
+
+Pity.
+
+Luceran hated it immediately.
+
+"Majesty," the chancellor said, "a court is not the palace walls."
+
+"I know that."
+
+"I do not think you do."
+
+Luceran's jaw tightened.
+
+Avarren went on.
+
+"You will take guards because you require guards. They have families and patrons. You will take clerks because you require clerks. They have cousins. You will take cooks, grooms, masons, priests, physicians, scribes and merchants. Ambassadors will follow because you are the king. Petitioners will follow because you are the king. Houses will rent rooms in the village because you are the king. Guilds will build roads because you are the king. Wherever you put the Crown, people will build a court around it."
+
+"Then at least it will be mine."
+
+"Courts are never entirely anyone's."
+
+Luceran knew, dimly, that this was probably important.
+
+He was too tired to care.
+
+"Then I will settle for one that does not already know how long I spend on the privy."
 
 Harrowmere looked down at the map.
 
@@ -891,9 +975,19 @@ For once, he let them.
 
 Soon, if Edselsto still stood, they could come report on him there.
 
-They could complain about the road while they did it.
+Or perhaps they would not.
 
-That thought gave him more pleasure than it should have.
+Perhaps the road really would be too inconvenient. Perhaps half the useless people who spent their days discovering what he ate would decide the mountain was not worth the trouble. Perhaps he could choose a smaller household, close a gate, refuse a visitor, and spend one entire afternoon painting without learning at supper which house had counted the minutes.
+
+He knew this was not a plan anyone on his council considered sophisticated.
+
+At that moment, sophistication could go fuck itself.
+
+He wanted a door he could close.
+
+He wanted a room that belonged to him before somebody else's grandfather had learned how to listen outside it.
+
+He wanted, with all the stubborn certainty of an exhausted young man who had been king just long enough to believe geography might solve politics, to go home.
 
 He picked up the brush and painted another black pine.
 
@@ -907,7 +1001,7 @@ The capital court is established as a dense information market. Ordinary service
 
 Montegrain of the Elbren court is established as Luceran's longstanding best friend and one of the few people willing to contradict him privately. Court Wizard Magister Vael Teren is established as another trusted but independent voice who refuses to manufacture certainty about the royal deaths.
 
-Luceran has made the sovereign decision to return the imperial court to Castle Edselsto if the ancestral seat remains physically capable of receiving an initial royal household. He does not request a modern feasibility study. Sir Edran Vey has been dispatched with a mason, carpenter, twelve soldiers, and assistant housekeeper Mara Kest to inspect the castle directly, speak with its steward, determine what still stands, and begin immediate preparation if enough of it is habitable.
+Luceran has made the sovereign decision to return the imperial court to Castle Edselsto if the ancestral seat remains physically capable of receiving an initial royal household. His decision is emotionally coherent but politically naïve: he believes distance, a smaller chosen household, and control over rooms and gates can let him escape much of the court game. Avarren explicitly warns that the court will reform around the Crown wherever it goes; Luceran is not yet experienced enough to understand how completely true that is. He does not request a modern feasibility study. Sir Edran Vey has been dispatched with a mason, carpenter, twelve soldiers, and assistant housekeeper Mara Kest to inspect the castle directly, speak with its steward, determine what still stands, and begin immediate preparation if enough of it is habitable.
 
 Frederick Doss remains a young footman with financial ambition and a demonstrated awareness that private information can be sold. He has not betrayed the king. Mara has noticed that his price-based joke contains a real vulnerability.
 

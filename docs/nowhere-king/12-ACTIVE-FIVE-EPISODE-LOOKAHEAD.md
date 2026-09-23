@@ -8,7 +8,7 @@ Planning is directional unless marked LOCKED. Finished prose supersedes planning
 ## N+1 — Episode 02: Packing the Monarchy
 **Certainty:** LOCKED in function, directional in scene choice.
 
-**Dramatic purpose:** The king has already decided to leave. Episode 02 is not a feasibility debate. It follows the material and political shockwave of an imperial household being ordered to pack while Edran Vey's advance party rides toward Edselsto.
+**Dramatic purpose:** The king has already decided to leave because he believes relocation can give him something close to political and personal escape. Episode 02 is not a feasibility debate. It follows the material and political shockwave of an imperial household being ordered to pack while reality immediately demonstrates that people, loyalties, families, patronage, commerce, and ambition travel with the Crown.
 
 **Entry state:** Luceran intends to return to Edselsto if the castle still has enough safe structure to receive an initial royal household. The advance party is already on the road. The capital has inferred enough to panic, maneuver, volunteer, obstruct, flatter, demand places, and protect interests.
 
@@ -42,7 +42,7 @@ Planning is directional unless marked LOCKED. Finished prose supersedes planning
 - at least one family/staff conflict over who goes;
 - one practical supply constraint.
 
-**Character opportunity:** promote a guard, driver, quartermaster, servant, or provincial official through demonstrated competence.
+**Character opportunity:** promote a guard, driver, quartermaster, servant, or provincial official through demonstrated competence. Let Luceran experience competent people outside the old capital without yet realizing that these relationships are already the beginnings of a new court network.
 
 **Protected:** Edselsto remains destination, not yet an explained mystery.
 
@@ -84,7 +84,7 @@ Planning is directional unless marked LOCKED. Finished prose supersedes planning
 - The court's ability to learn intimate details through ordinary service networks.
 - Frederick's undefined price and desire for money/status.
 - Oren Edevane's genuine affection entangled with appetite for office.
-- Luceran's promise that rival networks will have to rebuild themselves visibly at Edselsto.
+- Luceran's naïve expectation that distance, selected household membership, and control of rooms/gates will let him leave much of court politics behind.
 
 ## Protected long-future seeds
 

@@ -22,8 +22,9 @@ Luceran has decided that, if Castle Edselsto remains physically capable of recei
 - Privately suspects their deaths may have been hastened or arranged; possesses no proof.
 - Refuses to let factions weaponize his suspicion into evidence-free purges.
 - Exhausted by the fact that ordinary service and factional intelligence have erased meaningful privacy.
+- Court experience: educated in titles, houses, protocol, diplomacy, and formal politics, but deeply inexperienced in the lived ambiguity of rule—especially the fact that affection, concern, duty, ambition, surveillance, and patronage can coexist in the same person.
 - Active intention: leave the inherited capital and re-establish his imperial household at Edselsto.
-- Political logic: Edselsto will not remain network-free, but rival networks will have to rebuild themselves visibly instead of inheriting generations of embedded access.
+- Political belief: Edselsto feels like escape. Luceran believes distance, a smaller hand-picked household, and control over rooms/gates will strip away much of the court's invasive political machinery. He understands in the abstract that politics will continue, but materially underestimates how quickly patronage, family, guild, diplomatic, romantic, and service networks will reform around the Crown. This naivety is active character state, not authorial error.
 - Theory of Montegrain: trusted old friend because he contradicts rather than flatters; not assumed infallible.
 - Theory of Vael Teren: trusted elder/court wizard who refuses false certainty.
 - Knowledge of Edselsto: ancestral seat, neglected, still served by an elderly steward, condition uncertain.
@@ -111,6 +112,10 @@ Luceran has decided that, if Castle Edselsto remains physically capable of recei
 - Luceran ↔ Avarren: legitimate institutional friction; Avarren is not reduced to obstructionist antagonist.
 - Luceran ↔ Oren Edevane: real familial affection contaminated by Oren's simultaneous desire for office/influence.
 - Frederick ↔ Mara: working familiarity; Mara becomes more alert to Frederick's relationship with money and information.
+
+## Status-quo lesson established by Episode 01
+
+Luceran's central Episode 01 experience is **not** that he has solved court politics. It is that he cannot tell where ordinary human care ends and political use begins, and he wants to escape the entire ambiguity. Edselsto is currently his imagined answer: fewer people, controllable gates, chosen rooms, physical distance. Future episodes must let reality erode that belief through experience rather than instantly lecturing it away.
 
 ## Open obligations
 
