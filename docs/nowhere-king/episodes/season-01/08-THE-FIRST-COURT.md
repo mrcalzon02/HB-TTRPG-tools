@@ -133,7 +133,7 @@ Jory had refused to make it higher.
 
 Luceran had considered ordering the dry oak.
 
-Then he had remembered Episode Five, though nobody in the world called it that, and asked what the oak was for.
+Then he remembered how quickly practical decisions had become favors and asked what the oak was for.
 
 "East sleeping roof."
 
