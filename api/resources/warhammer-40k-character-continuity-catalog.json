@@ -358,19 +358,127 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "javard-tides-return-backfill",
+          "knowledge": "Tides of Tomorrow returned unregistered to Jhasyi’apan six months after its registered visit; a cathedral lighter went out with three men and the register claimed four returned.",
+          "certainty": "Caldris testimony and cathedral records",
+          "status": "unresolved",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation I — The Saint of Administrative Delay",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-01.md",
+            "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "id": "javard-prior-seal-backfill",
+          "knowledge": "The relevant archive cabinet is sealed by valid unresolved prior Inquisitorial authority dating to the seventeen-year-old incident; Javard deliberately left it intact.",
+          "certainty": "direct rosette authentication and observation",
+          "status": "confirmed",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation II — The Unbroken Seal",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
+            "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "id": "javard-vorn-backfill",
+          "knowledge": "Former lighter pilot Demas Vorn, now Archive Servitor Nine, contradicts the register: four went out, three came back; he links the mission to the Graveheart trigger, says the letter came first, bears an Eckhart disputed-reader mark acquired after the mission, and warns 'Do not let him finish reading.'",
+          "certainty": "direct testimony from damaged servitor; interpretation unresolved",
+          "status": "unresolved",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation II — The Unbroken Seal",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
+            "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "id": "javard-sol-transfer-backfill",
+          "knowledge": "Canon Ephram Sol died after three days of questioning by an unnamed Inquisitorial delegation; a fresh printout records his seventeen-year-pending burial transfer to Lower Ossuary Nineteen, which had already been condemned five years before his death.",
+          "certainty": "records plus Caldris/Vorn evidence",
+          "status": "unresolved",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation II — The Unbroken Seal",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
-      "plansGoals": [],
-      "skillsCompetence": [],
+      "plansGoals": [
+        {
+          "id": "javard-ossuary-goal-backfill",
+          "goal": "Reach condemned Lower Ossuary Nineteen through maintenance galleries and investigate the pending Sol transfer while preserving the old archive seal.",
+          "horizon": "immediate",
+          "status": "active",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation II — The Unbroken Seal",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "skillsCompetence": [
+        {
+          "id": "javard-procedural-investigation-backfill",
+          "skill": "Procedural infiltration, archival inference, and restrained use of Inquisitorial authority",
+          "demonstratedLevel": "uses commercial cover, administrative inconvenience, authentication systems, witness reaction and institutional seams to advance investigation without prematurely breaking seals",
+          "status": "demonstrated",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation II — The Unbroken Seal",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "relationshipsTrust": [],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
-      "equipmentResources": [],
-      "chapterTouchLog": []
+      "equipmentResources": [
+        {
+          "id": "javard-sol-transfer-strip-backfill",
+          "resource": "Fresh burial-transfer strip naming Ephram Sol and Lower Ossuary Nineteen",
+          "status": "in possession",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation II — The Unbroken Seal",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "chapterTouchLog": [
+        {
+          "segment": "Continuation I — The Saint of Administrative Delay",
+          "changeSummary": "Legacy backfill: learned of Tides of Tomorrow's unregistered second visit and the anomalous fourth returnee; exposed true Inquisitorial authority to Caldris after the cover inquiry produced a live lead.",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation I — The Saint of Administrative Delay",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-01.md",
+            "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "segment": "Continuation II — The Unbroken Seal",
+          "changeSummary": "Legacy backfill: authenticated and preserved the prior Inquisitorial seal, recovered Vorn's contradictory testimony and Graveheart connection, obtained Sol's pending Lower Ossuary Nineteen transfer, and chose the ossuary as the next investigative route.",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation II — The Unbroken Seal",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ]
     },
     "pontiff-montpclair": {
       "personaId": "pontiff-montpclair",
@@ -429,9 +537,32 @@
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
-      "physicalMedicalState": [],
+      "physicalMedicalState": [
+        {
+          "id": "montpclair-augmetic-failure-backfill",
+          "condition": "Catastrophic failure of bookmetic eye followed by left augmetic ear during sermon; removed alive under medicae care.",
+          "status": "acute; later outcome unknown",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation I — The Saint of Administrative Delay",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-01.md",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Continuation I — The Saint of Administrative Delay",
+          "changeSummary": "Legacy backfill: suffered catastrophic cranial augmetic failures during sermon and was removed alive for urgent medicae care; later condition remains unknown.",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation I — The Saint of Administrative Delay",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-01.md",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ]
     },
     "chancellor-ardenal": {
       "personaId": "chancellor-ardenal",
