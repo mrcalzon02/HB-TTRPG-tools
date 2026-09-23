@@ -304,6 +304,30 @@
       "items": {
         "$ref": "#/$defs/selfModelDiscrepancy"
       }
+    },
+    "normativeSelfGuidance": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/normativeGuidanceSnapshot"
+      }
+    },
+    "actionSelectionGaps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/actionSelectionGap"
+      }
+    },
+    "postActionSelfAppraisals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/postActionSelfAppraisal"
+      }
+    },
+    "counterfactualSelfModels": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/counterfactualSelfModel"
+      }
     }
   },
   "$defs": {
@@ -2375,6 +2399,357 @@
             "memory-discrepancy",
             "unknown"
           ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "normativeGuidanceSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "actorId",
+        "asOf",
+        "guidanceClaims",
+        "confidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asOf": {
+          "type": "string",
+          "minLength": 1
+        },
+        "guidanceClaims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/normativeGuidanceClaim"
+          }
+        },
+        "situationAppraisal": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "optionAppraisal": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "forecast": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "selfPrediction": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "intention": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "actualAction": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "normativeGuidanceClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modality",
+        "claim",
+        "confidence"
+      ],
+      "properties": {
+        "modality": {
+          "enum": [
+            "ought",
+            "should",
+            "must",
+            "must-not",
+            "could",
+            "cannot",
+            "want",
+            "intend",
+            "expect-self",
+            "identity-consistent-action"
+          ]
+        },
+        "claim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "conflictsWithClaimIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "actionSelectionGap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actorId",
+        "normativeGuidance",
+        "actualAction",
+        "gapClassification",
+        "confidence"
+      ],
+      "properties": {
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "normativeGuidance": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statedIntention": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "predictedSelfAction": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "actualAction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "gapClassification": {
+          "enum": [
+            "none",
+            "guidance-intention-gap",
+            "intention-action-gap",
+            "self-prediction-action-gap",
+            "guidance-action-gap",
+            "multiple-conflicting-guidances",
+            "unknown"
+          ]
+        },
+        "contributingFactors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "postActionSelfAppraisal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actorId",
+        "actionRef",
+        "selfJudgment",
+        "confidence"
+      ],
+      "properties": {
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actionRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selfJudgment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "emotionalResponse": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "perceivedWrongness": {
+          "enum": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "perceivedNecessity": {
+          "enum": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "perceivedForeseeability": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "perceivedAlternativeAvailability": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "selfModelEffect": {
+          "enum": [
+            "none",
+            "reinforcement",
+            "loss-of-self-trust",
+            "threshold-model-rupture",
+            "identity-contradiction",
+            "moral-self-image-collapse",
+            "judgment-confidence-loss",
+            "defensive-rationalization",
+            "renewed-value-commitment",
+            "self-forgiveness",
+            "refusal-of-self-forgiveness",
+            "identity-reconstruction",
+            "mixed",
+            "unknown"
+          ]
+        },
+        "retrospectiveInterpretation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "counterfactualSelfModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actorId",
+        "referenceAction",
+        "counterfactualClaim",
+        "counterfactualClass",
+        "confidence"
+      ],
+      "properties": {
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "referenceAction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "counterfactualClaim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "counterfactualClass": {
+          "enum": [
+            "contemporaneously-perceived-alternative",
+            "documented-available-alternative",
+            "later-imagined-alternative",
+            "realistic-counterfactual",
+            "hindsight-only-alternative",
+            "impossible-alternative",
+            "unknown"
+          ]
+        },
+        "evidenceForAvailability": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "confidence": {
           "enum": [
