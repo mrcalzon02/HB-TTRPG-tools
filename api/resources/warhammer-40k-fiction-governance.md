@@ -13,6 +13,7 @@ This is not a second story archive and not a replacement for the Dramatis Person
 Every run must reconcile `main` and load, in this order:
 
 1. `api/resources/warhammer-40k-fiction-governance.md` — this governing document.
+1A. `api/resources/foundational-fiction-ordering-commands.md` — mandatory shared prose governance for causal reality, character flaws and development, bounded knowledge, institutional logic, earned escalation, consequence propagation, dialogue discipline, and scene construction. It governs how canon becomes prose and never overrides higher-authority archive continuity or recovered source material.
 2. `api/resources/warhammer-40k-lore-index.json` — what the archive currently exposes.
 3. `api/resources/warhammer-40k-story-expansion-circuit.json` — recovery state, active rotation, next dependency-valid slice.
 4. `assets/warhammer-40k/imperial-dramatis-personae-v1.js` — authoritative character/personage identity and biography registry.
@@ -43,6 +44,18 @@ When sources disagree, use this priority:
 Never silently choose a lower-priority source over a higher-priority one.
 
 If two high-authority sources genuinely conflict, preserve the contradiction, mark it for reconciliation, and avoid building additional dependent lore until the conflict is resolved. Do not "fix" historical prose merely because a later summary differs.
+
+### 2A. Writing authority chain
+
+After source authority, era, recovery boundaries, and continuity are resolved, new or revised prose follows this order:
+
+1. **Newest explicit user instruction and established archive canon.**
+2. **Recovered source prose, committed story facts, temporal character state, and story-specific narrative authority.**
+3. **`api/resources/foundational-fiction-ordering-commands.md`** for causal reality, character flaws and development, bounded knowledge, institutional logic, earned escalation, consequence propagation, dialogue, and scene construction.
+4. **This governance document's 40K-specific tone, era, language, and archive rules.**
+5. **New stylistic embellishment.**
+
+The shared foundational file applies to generated and revised prose; it does not authorize alteration of verbatim recovery material. If a new scene only works because competent people become arbitrarily stupid, an institution acquires a convenient capability without prior existence, consequences vanish between scenes, or characters know what they could not know, repair the scene rather than weakening continuity.
 
 ---
 
