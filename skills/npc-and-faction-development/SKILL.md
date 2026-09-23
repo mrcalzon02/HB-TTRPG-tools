@@ -23,7 +23,7 @@ metadata:
 
 ## Pair with
 
-Use `campaign-lore-retrieval` for canon, `quest-and-adventure-development` for hooks, `encounter-design` for immediate opposition, and setting-specific NPC/character skills when available.
+Use `campaign-lore-retrieval` for canon, `interpersonal-theory-of-mind-modeling` for directional beliefs, trust, misunderstandings, and relationship-state models, `quest-and-adventure-development` for hooks, `encounter-design` for immediate opposition, and setting-specific NPC/character skills when available.
 
 ## Shared rules
 
