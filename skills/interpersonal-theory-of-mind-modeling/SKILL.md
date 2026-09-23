@@ -4,7 +4,7 @@ description: Model how one actor understands another actor over time using evide
 compatibility: System-neutral reasoning and continuity skill. For current real-world political or public figures, the host must retrieve current reliable public sources before making substantive factual claims.
 metadata:
   author: mrcalzon02
-  version: "1.2.0"
+  version: "1.3.0"
   foundry-capability: foundry.site-index
   personality-engram: blacklight.charles
 ---
@@ -713,6 +713,216 @@ When forecasting expected behavior inside an actor's theory of mind, separate:
 - **Threshold model** — what costs, risks, harms, or sacrifices A thinks B will accept.
 
 Failure in any one model may produce prediction failure even when the others are accurate.
+
+## Continuous state-transition and observer-update model
+
+Interpersonal theory of mind is a **dynamic process**, not a set of static labels.
+
+At minimum, preserve two different evolving systems:
+
+1. **Actor state trajectory** — the target person's own changing knowledge, beliefs, goals, emotions, values, pressures, role commitments, expectations, and self-model.
+2. **Observer model trajectory** — another person's uncertain and partial model of that actor, updated from observations, reports, prior beliefs, and environmental context.
+
+These systems influence one another through behavior and feedback but are never identical.
+
+### State-transition abstraction
+
+Represent an actor's state at time t as a bounded internal-state record:
+
+**S(t) = knowledge + beliefs + goals + emotions + values + role obligations + pressures + self-model + relationship models + active uncertainties**
+
+The next state is produced by relevant inputs, not merely by the passage of time:
+
+**S(t+1) = Update[S(t), stimuli, interaction, environmental change, memory activation, reinforcement, punishment, new information, role change, consequences, and self-reflection]**
+
+This notation is conceptual. Do not invent mathematical precision where the evidence supports only qualitative state updates.
+
+### Stimulus classes
+
+A meaningful state transition may be triggered by:
+
+- direct interaction;
+- new factual information;
+- betrayal or confirmation;
+- success or failure;
+- reward or punishment;
+- grief, fear, humiliation, relief, hope, or loss;
+- institutional pressure;
+- change in rank, office, status, or responsibility;
+- third-party action;
+- environmental crisis;
+- public reaction;
+- private reflection;
+- memory reactivation;
+- repeated reinforcement;
+- contradiction;
+- coercion;
+- changed material capability;
+- changed perceived alternatives.
+
+Not every stimulus produces a durable change. Record whether the effect is transient, reinforcing, destabilizing, or structurally revising.
+
+### Action is an emission, not direct access to state
+
+Observed behavior should be treated as an **emission from internal state under context and constraint**, not a transparent readout of the mind.
+
+Conceptually:
+
+**Action(t) = Expression[S(t), situation, role, incentives, audience, capability, coercion, habit, and masking]**
+
+Therefore:
+
+- identical internal states may produce different actions under different contexts;
+- different internal states may produce superficially similar actions;
+- silence may be strategic, constrained, uncertain, or meaningless;
+- compliance may reflect agreement, coercion, exhaustion, role duty, or tactical delay;
+- public performance may diverge from private belief.
+
+### Observer-model update
+
+For Observer O modeling Target T:
+
+**M(O→T, t+1) = Revise[M(O→T, t), observed action, known context, prior relationship, source quality, environmental evidence, and uncertainty]**
+
+The observer's new model is shaped by both new evidence and the model they already carried.
+
+This means prior beliefs matter:
+
+- strong prior confidence may resist weak contradictory evidence;
+- weak prior confidence may update rapidly;
+- highly diagnostic behavior may cause abrupt revision;
+- ambiguous behavior may be assimilated into the prior model;
+- repeated consistent evidence may reinforce an existing model without changing its structure;
+- surprising behavior may trigger role-frame rupture, threshold-model rupture, or broader person-model revision.
+
+### Separate target change from observer change
+
+A target may change while an observer does not notice.
+
+An observer may change their model even when the target did not change.
+
+Track these separately.
+
+Examples:
+
+- **Target changed / observer did not update:** the target has privately revised a belief but has not acted on it.
+- **Target unchanged / observer updated incorrectly:** rumor or manipulated evidence changes the observer's model.
+- **Both changed:** interaction affects the target and the observer sees enough evidence to revise.
+- **Neither changed:** new interaction reinforces existing expectations.
+
+### Observation confidence and model inertia
+
+Every observer update should record:
+
+- prior confidence;
+- new evidence strength;
+- source reliability;
+- contextual ambiguity;
+- consistency with prior evidence;
+- alternative explanations;
+- resulting confidence;
+- degree of revision.
+
+Use qualitative confidence unless the dataset supports formal quantitative estimation.
+
+Possible revision magnitude:
+
+- none;
+- reinforcement;
+- minor adjustment;
+- domain-specific revision;
+- threshold-model rupture;
+- role-frame rupture;
+- broad person-model revision;
+- near-total model collapse.
+
+### Reinforcement and recurrence
+
+Repeated outcomes can strengthen a model without adding new conceptual structure.
+
+Track:
+
+- positive reinforcement;
+- negative reinforcement;
+- contradiction;
+- non-event reinforcement ("they did what I expected");
+- intermittent reinforcement;
+- expectation violation.
+
+Do not treat repetition as independent proof if all repeated observations come from the same underlying event or information source.
+
+### Feedback loops
+
+Actions alter environments and other people, which then create new stimuli for the original actor.
+
+Use the loop:
+
+**internal state → action → other-person/environment response → consequence → interpreted feedback → updated internal state**
+
+Then, for every observer:
+
+**observed action/consequence → observer interpretation → observer-model update → observer response → new stimulus to target**
+
+This permits relationships to become self-reinforcing, self-correcting, escalating, stabilizing, or mutually distorted.
+
+### Exogenous interpersonal updates
+
+A dyadic model must update when relevant events occur outside direct interaction.
+
+Before every new A↔B encounter, ingest changes to A and B caused by:
+
+- other relationships;
+- institutional events;
+- losses or victories;
+- discoveries;
+- role changes;
+- moral injury;
+- public consequences;
+- prior decisions;
+- changed capabilities;
+- changed self-concept.
+
+A character does not freeze when the other character leaves the room.
+
+### Event time, knowledge time, and reinterpretation time
+
+Always distinguish:
+
+- **event time** — when something happened;
+- **knowledge time** — when the actor learned it;
+- **reinterpretation time** — when later evidence caused the actor to understand the earlier event differently.
+
+A later reinterpretation must not overwrite the historical earlier belief state.
+
+### Interaction history as prior
+
+Every new interpersonal inference begins from the prior relationship model.
+
+Do not analyze a scene as though the actors are strangers unless they are.
+
+Previous trust, betrayal, affection, humiliation, successful predictions, failed predictions, role history, and unresolved uncertainty all shape how new evidence is interpreted.
+
+### Observer disagreement is expected
+
+Multiple people may observe the same action and update differently because they possess:
+
+- different prior models;
+- different information;
+- different trust histories;
+- different role expectations;
+- different incentives;
+- different cultural assumptions;
+- different access to context.
+
+Do not force observer convergence merely because one interpretation later proves more accurate.
+
+### Continuous-model output rule
+
+When sufficient longitudinal material exists, prefer representing change as a sequence:
+
+**Prior State → Stimulus → Immediate Interpretation → Action → Feedback → State Update → Observer Update(s) → Confidence Change → Later Validation/Revision**
+
+This sequence should be recoverable for every major turning point.
 
 ## Political and public-figure mode
 
