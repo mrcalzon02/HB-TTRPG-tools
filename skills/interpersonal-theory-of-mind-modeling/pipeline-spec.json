@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.5.0",
+  "schemaVersion": "1.6.0",
   "id": "interpersonal-theory-of-mind-processing-pipeline",
   "skillId": "interpersonal-theory-of-mind-modeling",
   "title": "Interpersonal Theory of Mind Processing Pipeline",
@@ -861,5 +861,66 @@
       "shared-knowledge-change",
       "relationship-consequence"
     ]
+  },
+  "mediatedSourceControls": {
+    "principle": "Secondary portrayals of real people are mediated representations and may contain creator theory-of-mind rather than direct evidence of subject internal state.",
+    "mediationChain": [
+      "historical-event-or-person",
+      "source-material-available-to-creator",
+      "creator-interpretation",
+      "selection-framing-editing",
+      "published-portrayal",
+      "analyst-interpretation"
+    ],
+    "sourceClasses": [
+      "contemporaneous-primary-record",
+      "contemporaneous-self-report",
+      "contemporaneous-third-party-observation",
+      "later-self-report",
+      "later-third-party-recollection",
+      "institutional-record",
+      "biography",
+      "memoir",
+      "documentary",
+      "edited-archival-compilation",
+      "dramatized-biography-biopic",
+      "historical-fiction-based-on-real-people",
+      "journalistic-reconstruction",
+      "scholarly-historical-analysis",
+      "unsourced-popular-retelling"
+    ],
+    "creatorModelContaminationIndicators": [
+      "reconstructed-private-conversation",
+      "composite-character",
+      "compressed-timeline",
+      "invented-dialogue",
+      "inferred-internal-monologue",
+      "thematic-scene-ordering",
+      "omitted-contradictory-evidence",
+      "survivor-account-privileging",
+      "personalization-of-institutional-causes"
+    ],
+    "memoirRule": "Memoir primarily evidences the author's later self-model, later model of others, remembered past, and current narrative priorities. Do not silently project it backward into the earlier snapshot.",
+    "documentaryRule": "Separate raw footage/audio from editing, narration, chronology, music, captions, omissions, and interview selection.",
+    "dramatizationRule": "Do not use invented dialogue, actor performance, blocking, or reconstructed private scenes as evidence of historical internal states without independent corroboration.",
+    "sourceIndependenceRule": "Repeated secondary interpretations are not independent confirmation when they share the same upstream source.",
+    "claimLayers": [
+      "historical-fact",
+      "source-interpretation",
+      "creator-inferred-internal-state",
+      "analyst-inference"
+    ],
+    "defaultPriority": [
+      "contemporaneous-direct-records-and-behavior",
+      "contemporaneous-self-report",
+      "contemporaneous-third-party-records-with-clear-provenance",
+      "institutional-records",
+      "later-self-report-and-recollection",
+      "scholarly-historical-synthesis",
+      "biography-or-documentary-interpretation",
+      "dramatized-portrayal",
+      "unsourced-popular-retelling"
+    ],
+    "note": "Priority is defeasible by reliability, access, incentives, corroboration, and context."
   }
 }
