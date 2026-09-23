@@ -5,35 +5,37 @@ status: "ACTIVE DELTA PENDING MERGE INTO 02-FIVE-CHAPTER-LOOKAHEAD.md"
 date: "2026-09-23"
 ---
 
-# Current rewrite lookahead delta — after Chapter Five segment 05H
+# Current rewrite lookahead delta — after Chapter Five segment 05I
 
-This delta records the actual first-principles rewrite endpoint through commit `3fc90d00997d77e8addb83da1b722a27f5ddc2d4`. It supplements `02-FIVE-CHAPTER-LOOKAHEAD.md`; older rewrite execution notes remain history, not permission to import unearned scaffold facts.
+This delta records the actual first-principles rewrite endpoint through commit `e22a2f43dc63719333095ded5b74617ac3860d71`. It supplements `02-FIVE-CHAPTER-LOOKAHEAD.md`; older rewrite execution notes remain history, not permission to import unearned scaffold facts.
 
 ## Actual current endpoint
 
-Chapter Five remains in progress through `05H-SEVEN-LAMPS.md`.
+Chapter Five remains in progress through `05I-THE-OLD-EXAMINER.md`.
 
-Earned rewrite facts now include the full 05A–05G chain plus: Mara Venn is Talia's mother; Mara borrowed Joren Tal's mechanically cancelled sponsor die for a legitimate counterfeit-credential comparison and retained proof that she returned it to Mera Holt; the old duplicate-damage credential case crossed River Ledger, customs and bridge authorities before transfer to the **Joint Office for Order and Credential Integrity**, whose transfer register carries a separate **Dmitrigical Review liaison acknowledged** notation; senior examiner **Selwyn Arven** is identified and a current Old Orchard residence has been located.
+Earned rewrite facts now include the full 05A–05H chain plus: Selwyn Arven is alive and was interviewed in Old Orchard; he independently remembers the duplicate-damage credential investigation, the missing comparison sheet, and the eleven-ounce North Quay discrepancy. His retained personal notes establish that he asked Mera Holt whether returned comparison dies could leave scrap custody; Holt said they should not. Selwyn remembers Holt as frightened when he later questioned the discrepancy, and remembers her asking whether Mara retained copies. Talia separately brings Mara's newly anchored memory that Holt visited Mara after closure, asked about her comparison copies, and told her to show Tal's return receipt before saying anything else if anyone asked about the die. Mara remembers Holt saying she put the die where it belonged but that this had stopped being the same as knowing where it was.
 
-The Hall of Seven Lamps reception has now occurred. Damaris/Rhyl's relationship is publicly legible enough to draw ordinary social notice, but their intimacy remains personal rather than a formal betrothal. Ilyan saw and spoke with Teren at the reception but deliberately did not confront him about the Revision Seventeen renewal. Teren embraced him after a private conversation; the content is not known to Damaris and must not be invented from her observation. The Seven remained socially functional and did not turn the reception into a conspiracy briefing.
+The unrestricted Revision Seventeen renewal record now adds that the **Joint Office for Order and Credential Integrity** was the requesting office behind the post–Silver Night restriction renewal that Teren Valeric executed as delegated seal officer. This independently places the same now-defunct Joint Office in both the eighteen-year-old counterfeit-case transfer chain and the later Revision Seventeen restriction chain. It still does **not** prove that the Joint Office authored Revision Seventeen, created Eren Vale, caused Silver Night, or that Teren knew the older counterfeit case.
 
-Still not earned: Eren Vale's true identity; the ultimate post-Holt custody of Tal's die; proof that the old Joint Office or Dmitrigical Review created the present fraudulent credential; the original signatory of Revision Seventeen; Teren's motive for renewing its restriction; Academy parcel contents, internal recipient or WT-3 routing; proof that the buried construction caused Aereth's memory disturbance; proof that the Academy delivery participated in Silver Night; or proof that one actor is responsible for all seven deliveries.
+Damaris/Rhyl's Seven Lamps visibility has produced an ordinary adult social consequence: Lady Maeryn Caladren-Voss has invited both of them to luncheon, explicitly naming Rhyl. Talia has not decided whether to remain at Reedglass after Aereth's apology; the apology makes repair possible but does not erase the accusation.
+
+Still not earned: Eren Vale's true identity; ultimate post-Holt custody of Tal's die; the fate/content of the missing comparison sheet; proof that the old Joint Office or Dmitrigical Review created the present fraudulent credential; the original signatory of Revision Seventeen; Teren's motive or knowledge; Academy parcel contents, internal recipient or WT-3 routing; proof that the buried construction caused Aereth's memory disturbance; proof that the Academy delivery participated in Silver Night; or proof that one actor is responsible for all seven deliveries.
 
 ## N+1 — finish Chapter Five
 
-Interview Selwyn Arven and trace the old duplicate-damage case's transfer/closure path. Establish what he remembers and what surviving records can independently support. Continue tracing Tal's die after Mera Holt without treating the Joint Office notation as proof of conspiracy. Give Talia/Mara consequences from the family-sensitive disclosure. Keep Aereth's recovery and Talia's unresolved forgiveness state alive.
+Trace Mera Holt's post-return custody through surviving stores records, retained-exemplar rules, disposal corrections, household papers, or witnesses without turning her fear into proof of guilt. Take Mara's formal statement and compare its independently anchored details to Selwyn's memory. Identify what became of the missing comparison sheet if the records can earn it. Keep the other Eren Vale deliveries preserved rather than collapsing immediately onto the Academy delivery.
 
 ## N+2 — Chapter Six opening
 
-Let the Seven process the reception and their now-public adult visibility. Ilyan must decide whether, when and how to approach Teren after obtaining the unrestricted renewal record. Damaris/Rhyl should encounter social or family consequence from their visible intimacy rather than simply repeating attraction beats.
+Pay the social consequence of Seven Lamps through Maeryn's luncheon with Damaris and Rhyl, while Ilyan decides whether, when and how to approach Teren with the now-expanded renewal record. Let the Seven process becoming publicly legible adults rather than resetting them to private students.
 
 ## N+3
 
-Follow the strongest independently verified branch from Selwyn, Holt custody, Revision Seventeen renewal or delivery custody. The Academy delivery can become a focus only when the route/custody evidence earns the next question.
+Follow the strongest independently verified branch from Holt custody, the missing comparison sheet, Joint Office records, Revision Seventeen renewal, council-packet custody or delivery custody. The Academy delivery becomes a focus only when route/custody evidence earns the next question.
 
 ## N+4
 
-Force a meaningful conflict between friendship, family usefulness and institutional duty. Preserve separate knowledge states: the Seven do not automatically know everything Vaun, Meris, River Ledger, Hall of Veils or individual families know.
+Force a meaningful conflict between friendship, family usefulness and institutional duty. Preserve separate knowledge states: the Seven do not automatically know everything Vaun, Meris, River Ledger, Hall of Veils, the Joint Office archives or individual families know.
 
 ## N+5
 
@@ -41,10 +43,10 @@ Escalate the Silver Night inquiry from administrative overlap to a consequence c
 
 ## Seed and payoff debt
 
-Paid: Sera Pell interview; physical-seal destruction gap; North Quay weight discrepancy; Mara Venn identity/kinship; legitimate comparison-loan purpose; documented return to Mera Holt; old case transfer-office identity; Hall of Seven Lamps reception arrival.
+Paid: Selwyn Arven interview; independent historical recognition of the eleven-ounce discrepancy; independent Holt fear/copy inquiry; Joint Office identification in the unrestricted Revision Seventeen renewal request; first concrete social consequence of Damaris/Rhyl's public visibility.
 
-Active payoff debt: Selwyn Arven interview; Mera Holt post-return custody; old comparison sheet; old case closure authority and reason; Teren's renewal motive; council-packet custody; recovered transit token; preservation/tracing of the other six Eren Vale deliveries; Academy delivery contents/recipient only when earned.
+Active payoff debt: Mera Holt post-return custody; missing comparison sheet; old case closure authority/reason beyond the Joint Office transfer; Teren's renewal motive and knowledge; council-packet custody; recovered transit token; preservation/tracing of the other six Eren Vale deliveries; Academy delivery contents/recipient only when earned.
 
-Relationship debt: Damaris/Rhyl public visibility now needs consequences, not another reset; Ilyan/Teren requires an intentional confrontation or strategic delay; Talia/Mara must retain agency and emotional residue; Aereth/Talia apology does not erase the earlier accusation.
+Relationship debt: Maeryn's luncheon must alter or clarify the political meaning of Damaris/Rhyl's visible intimacy; Ilyan/Teren requires an intentional confrontation or strategic delay; Talia/Mara retain agency and emotional residue; Aereth/Talia apology does not erase the earlier accusation.
 
 Hard cap remains 40 chapters for Book One.
