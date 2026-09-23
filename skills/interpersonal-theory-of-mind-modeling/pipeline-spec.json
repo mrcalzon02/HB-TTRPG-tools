@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "interpersonal-theory-of-mind-processing-pipeline",
   "skillId": "interpersonal-theory-of-mind-modeling",
   "title": "Interpersonal Theory of Mind Processing Pipeline",
@@ -242,5 +242,150 @@
     "label": "TheraminTrees-inspired modalities",
     "status": "user-selected text-analysis heuristics",
     "guardrail": "Do not treat these labels as validated psychiatric constructs, diagnoses, or automatic moral verdicts."
-  }
+  },
+  "longitudinalExtensions": {
+    "calibrationDimensions": [
+      "presentation-congruence",
+      "model-accuracy",
+      "predictive-calibration"
+    ],
+    "mentalizationUse": [
+      "supportive",
+      "protective",
+      "collaborative",
+      "negotiated",
+      "instrumental",
+      "coercive",
+      "exploitative",
+      "adversarial",
+      "mixed",
+      "unknown"
+    ],
+    "trustDomains": [
+      "truthfulness",
+      "bargain-keeping",
+      "competence",
+      "confidentiality",
+      "loyalty",
+      "affection-care",
+      "predictability-under-pressure",
+      "institutional-duty",
+      "moral-alignment",
+      "retaliation-predictability",
+      "protectiveness",
+      "self-interest-reliability"
+    ],
+    "choiceContexts": [
+      "free",
+      "pressured",
+      "coerced",
+      "structurally-constrained",
+      "role-obligated",
+      "materially-dependent",
+      "threatened",
+      "no-meaningful-alternative-perceived",
+      "unknown"
+    ],
+    "modelRepairTypes": [
+      "falsification-replacement",
+      "partial-revision",
+      "assimilation",
+      "attribution-repair",
+      "compartmentalization",
+      "rupture",
+      "reconciliation",
+      "differentiation",
+      "rationalization",
+      "denial",
+      "internalization",
+      "unresolved-contradiction"
+    ],
+    "evidenceModes": [
+      "direct-observation",
+      "self-report",
+      "recorded-statement",
+      "action",
+      "institutional-record",
+      "trusted-third-party-report",
+      "rumor",
+      "memory",
+      "privileged-memory-access",
+      "telepathic-access",
+      "dream-vision",
+      "internalized-other",
+      "narrator-established",
+      "manipulated-evidence-environment",
+      "unknown"
+    ],
+    "predictionModels": [
+      "person-model",
+      "situation-model",
+      "capability-model",
+      "threshold-model"
+    ],
+    "staleModelDetection": true,
+    "temporalSnapshots": true,
+    "holdoutValidation": true,
+    "noFindingAllowed": true
+  },
+  "decisionPressureAndMoralContext": {
+    "requiredSeparations": [
+      "motive-sincerity",
+      "epistemic-quality",
+      "decision-quality",
+      "moral-or-legal-evaluation-when-relevant",
+      "foreseeable-harm",
+      "actual-consequence",
+      "subsequent-learning"
+    ],
+    "fields": [
+      "perceived-objective",
+      "available-information",
+      "evidence-quality",
+      "perceived-alternatives",
+      "analyst-visible-alternatives",
+      "pressure-state",
+      "value-conflict",
+      "chosen-action",
+      "foreseeability",
+      "proportionality-question",
+      "actual-outcome",
+      "retrospective-response",
+      "counterfactual-uncertainty"
+    ],
+    "tragicDecisionStructure": "Flag when every option reasonably perceived by the actor carried serious cost. This does not imply equal moral quality across options.",
+    "governingRules": [
+      "Explanation is not exoneration.",
+      "Condemnation is not mind-reading.",
+      "Behavior under coercion or severe constraint is not equivalent to agreement."
+    ]
+  },
+  "adversarialExtensions": {
+    "adversarialMentalization": true,
+    "epistemicAttack": true,
+    "evidenceEnvironmentManipulation": true,
+    "desireElicitation": true,
+    "selfConceptExploitation": true,
+    "thirdPartyModelExploitation": true,
+    "manufacturedObligationSubtypes": [
+      "manufactured-social-obligation",
+      "dependency-cultivation"
+    ],
+    "dependencyExitCost": true,
+    "evidenceInferenceClasses": [
+      "unsupported-mind-reading",
+      "reasonable-inference-from-incomplete-evidence",
+      "reasonable-inference-from-misleading-evidence",
+      "reasonable-inference-from-deliberately-manipulated-evidence"
+    ]
+  },
+  "influenceTraceOrder": [
+    "evidence-or-event",
+    "model-update",
+    "decision-or-behavior",
+    "consequence",
+    "reciprocal-update",
+    "self-model-or-value-change"
+  ],
+  "minimalRecursionRule": "Use the lowest recursive depth sufficient to explain the interaction. L2 and L3 each require independent evidence."
 }
