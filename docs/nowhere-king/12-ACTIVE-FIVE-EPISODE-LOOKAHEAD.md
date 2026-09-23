@@ -1,124 +1,123 @@
 # Nowhere King — Active Five-Episode Lookahead
 
-**Current historical endpoint:** Season One, Episode 03 — *The Road North*  
-**Forward window:** Episodes 04–08
+**Current historical endpoint:** Season One, Episode 04 — *First Night*  
+**Forward window:** Episodes 05–09
 
 Planning is directional unless marked LOCKED. Finished prose supersedes planning.
 
-## N+1 — Episode 04: First Night
-**Certainty:** LOCKED in destination and reveal ceiling.
+## N+1 — Episode 05: Rooms Are Power
+**Certainty:** LOCKED in function, directional in exact disputes.
 
-**Entry state:** The first royal convoy is descending toward Edselsto village near evening after cold rain. Castle Edselsto is visible above them. Luceran has accepted Bram and Edrik's advice not to attempt the wet upper road blindly at dusk.
+**Entry state:** Emergency first-night placements exist for treasury, archives, physicians, guards, workers, senior household, and Luceran. These were assigned for dry roofs, locks, access, and survival rather than rank.
 
-**Primary purpose:** Turn Edselsto from distant objective into lived physical environment without prematurely making it a supernatural actor. The first occupation should feel like moving a government into a neglected ancestral ruin: wet stone, bad roofs, uncertain keys, exhausted people, animals needing shelter, kitchens needing fire, beds needing placement, and an elderly steward who has been living with the consequences of royal neglect for decades.
+**Primary purpose:** Show everyone except Luceran understanding that "temporary" room allocation is already political precedent.
 
-**Required material payoffs:**
-- meet steward Orven Dast in person;
-- reunite with Edran Vey, Mara Kest, Corren Bale, Iven Marr and the advance guards;
-- use Edran's established inspection rather than repeating it;
-- move horses, food, tools, archives and people into the safest available zones;
-- establish usable and unsafe rooms;
-- establish water and kitchen procedure;
-- give Olan/Jory/Derrin immediate professional observations and disagreements;
-- establish guard posts and close-escort sleeping/access problems;
-- introduce the seven candles with all seven lit;
-- permit voices, echoes or odd acoustics only if mundane explanations remain plausible;
-- do not force sealed family rooms merely because they are mysterious.
+**Required lanes:**
+- at least one noble/household figure argues that proximity to Luceran signals favor;
+- workers insist repair priority must follow structure rather than status;
+- treasury/archives/physicians defend practical placements;
+- Bram/Edrik/Rhyse need close-escort posts that reduce convenient noble access;
+- Orven knows old access routes and former room functions;
+- Mara refuses to let ceremonial rank override obvious safety;
+- arriving letters/agents lobby before the full court arrives;
+- Luceran realizes a door, corridor, and staircase can function like an appointment.
 
-**Relationship lane:** Luceran is tired enough to be a person rather than a symbol. Bram/Edrik's practical friction should continue. Montegrain may enjoy the ruin while still seeing Luceran's emotional investment. Orven's relationship to the dynasty should not equal automatic affection for Luceran personally.
+**Mystery ceiling:** family wing remains mostly closed. Seven candles remain lit. No confirmed supernatural event.
 
-**Institutional lane:** Room allocation begins as emergency necessity and accidentally creates the first precedents Episode 05 will politicize.
+**Exit target:** room/access map becomes explicit enough that Episode 06 can make doors, keys, and repairs into political/security conflict.
 
-**Protected:** no sentient-castle proof, no containment truth, no candle failure, no buried entity terminology.
-
-**Exit target:** Luceran spends his first night inside Edselsto, aware that the castle is far less ready than his political fantasy required but committed to staying.
-
-## N+2 — Episode 05: Rooms Are Power
-**Certainty:** DIRECTIONAL, strongly seeded by Episode 04 emergency allocations.
-
-**Purpose:** Convert practical room assignments into patronage, access, intimacy, guard geometry and insult. Luceran sees housekeeping; everyone else sees the first map of the new court.
-
-**Required carryover:**
-- emergency sleeping placements from Episode 04 become precedents people try to preserve or overturn;
-- Bram/Edrik and Rhyse need defensible close-escort quarters/posts;
-- workers need access routes that collide with noble expectations;
-- archives, kitchens, physicians and treasury require rooms for practical reasons that also confer status;
-- noble houses begin lobbying from outside Edselsto as the next arrivals approach.
-
-**Theory-of-mind:** Several people should reasonably misread room placement as affection, distrust or factional alignment. Luceran must begin learning that physical access is political power.
-
-## N+3 — Episode 06: The Price of a Door
+## N+2 — Episode 06: The Price of a Door
 **Certainty:** DIRECTIONAL.
 
-**Purpose:** Repairs require contracts, locksmiths, masons, timber, keys and security. One disputed sealed route reveals intentional closure without explaining why.
+**Purpose:** Repairs require locksmiths, keys, hinges, timber, stone, labor, contracts, and guard decisions. One disputed sealed route reveals intentional closure without explaining why.
 
-**Worker continuity:** Olan Crewe, Jory Fell, Derrin Voss, Corren Bale, Iven Marr, Orven Dast or a newly promoted key/door specialist should possess physical knowledge unavailable to nobles.
+**Carryover:**
+- Olan/Jory/Derrin/Corren/Iven have competing professional views;
+- Orven has inherited key knowledge but not universal answers;
+- Moncler/guild compensation can return through correspondence or an agent;
+- room politics from Episode 05 determines who cares about which doors.
 
-**Political carryover:** Moncler's compensation claim and guild/Crown labor competition can return through letters, agents, wage demands or supply contracts rather than vanishing in the capital.
+**Protected:** suspicious architecture is allowed; containment explanation is not.
 
-**Protected:** a sealed route can be suspicious; it cannot yet prove containment architecture.
-
-## N+4 — Episode 07: The Family Wing
+## N+3 — Episode 07: The Family Wing
 **Certainty:** DIRECTIONAL with locked reveal ceiling.
 
-**Purpose:** Transform Edselsto from political escape into family wound through genealogies, letters, missing catalog entries, rooms and signs Luceran's father knew more than he admitted.
+**Purpose:** Turn Edselsto from political refuge into family wound through rooms, portraits, records, missing references, and signs Luceran's father knew more than he said.
 
-**Relationship lane:** A confidant/close companion must witness private grief without turning the scene into exposition. Luceran's suspicion about his parents remains suspicion; Edselsto records may complicate his father without solving the deaths.
+**Carryover:**
+- Luceran's first-night voice-like sound can motivate curiosity but not certainty;
+- Orven can identify maintenance history and what was physically closed, not buried truth;
+- an archivist/records specialist develops independent interest in provenance/missing material.
 
-**Professional lane:** An archivist or records specialist develops an independent obsession with provenance/missing material.
+**Relationship lane:** Montegrain or another earned confidant witnesses grief without converting it into exposition.
 
-**Protected:** no prison truth, no castle-interface truth, no candle failure.
+**Protected:** no prison truth, castle-interface truth, candle failure, or explanation of the original Nowhere King.
 
-## N+5 — Episode 08: The First Court
+## N+4 — Episode 08: The First Court
 **Certainty:** DIRECTIONAL.
 
-**Purpose:** Great houses, orders, guilds, temples, officers, provinces and envoys test the unfinished court in a formal audience. The ruin becomes a functioning political center before its customs harden.
+**Purpose:** Great houses, orders, guilds, temples, officers, provinces, and envoys formally test the unfinished court.
 
-**Seed debt from Episodes 04–07:**
-- establish enough rooms, routes and household procedure for formal audience to be possible;
-- preserve visible scarcity so seating, lodging and access carry real cost;
-- allow Royal Companion dismissals and replacement-security questions to reach arriving noble delegations;
-- preserve Moncler's claim as evidence that the new capital has creditors before it has polish;
-- begin identifying which institutions want permanent footholds at Edselsto.
+**Required setup from Episodes 05–07:**
+- room/access precedents;
+- guard procedures;
+- visible repair scarcity;
+- enough kitchens/guest spaces for limited formal reception;
+- Royal Companion dismissal fallout reaches arriving houses;
+- Moncler's claim proves the new capital already has creditors;
+- institutions begin seeking permanent footholds.
 
-**Exit target:** Court functions, but every temporary arrangement has begun becoming precedent.
+**Exit target:** court functions, but temporary arrangements begin hardening into custom.
 
-## Reconciled Episode 03 outcomes
+## N+5 — Episode 09: The Village Below
+**Certainty:** DIRECTIONAL.
 
-- Dawn departure occurred in Episode 03, not Episode 02.
-- Edran's first direct report arrived before departure and established partial habitability.
-- Moncler's grievance became a formal accounting/compensation claim.
-- Lord Cassian Pell challenged Rhyse without denying his nephew's negligence; escort fallout is now procedural/status politics rather than factual denial.
-- The five non-dismissed Royal Companions have differentiated circumstances and remain under review.
-- Bram/Nessa and Edrik/mother/Len family baselines are established.
-- Jory/Ellyn's marriage baseline is established; Derrin's family dependence persists.
-- Carters, Damaris, Bellisar, Nerezza, Royal Kitchens, physicians and Kaelmont road administration all materially enabled the move.
-- The road imposed cracked-wheel, horse, culvert, weather and speed constraints on royal will.
-- Edselsto is visible, but the convoy has not entered it.
-- Luceran accepted practical refusal from Bram and Edrik.
+**Purpose:** Move attention below the castle. Explore village families, abandonment, graves, local supply, resentment, old royal service, and practical routes the court does not know.
+
+**Seed debt:**
+- Episode 04 established village scale and Orven's maintenance memory;
+- Episodes 05–08 should create demand for food, labor, transport, lodging, and local knowledge;
+- at least one village character should be promoted because they possess useful knowledge or legitimate grievance.
+
+**Protected:** villagers may know stories, customs, and old routes; they do not possess authorial truth about the prison.
+
+## Reconciled Episode 04 outcomes
+
+- Edselsto entered and occupied for the first time in prose.
+- Orven Dast introduced as 47-year steward and practical institutional memory.
+- Crown neglect established through a failed repair promise twenty-two years earlier.
+- Advance-party work paid off materially.
+- Emergency rooms assigned by Mara on need rather than rank.
+- Workers immediately become essential political-material actors.
+- Seven candles introduced, all lit, with inherited stewardship practice but no known true explanation.
+- Family wing remains closed/partly unsafe.
+- Voice-like murmuring heard behind family corridor by Luceran/Bram/Orven but remains mundanely explainable.
+- Montegrain distinguishes necessary escape from guaranteed solution.
+- Luceran spends first night inside Edselsto.
 
 ## Active payoff debt
 
-- Orven Dast's decades of stewardship and opinion of the returning dynasty.
-- Edran/Mara/Corren/Iven advance-party work.
-- first-night beds, food, water, animals, guards and unsafe architecture.
-- seven candles introduced with all seven lit.
-- Royal Companion patrons and replacement-access politics.
-- Rhyse's remaining five case reviews.
-- Moncler's compensation claim.
-- Olan Crewe organizing the royal work crew.
-- Jory and Derrin family separation and correspondence/pay.
-- emergency wagon/carriage costs and altered wage expectations.
-- Kaelmont road repair as a minor but real infrastructure obligation.
-- Luceran's belief that Edselsto can simplify politics, now weakened but not abandoned.
+- emergency room allocations becoming political;
+- Orven's view of dynasty after decades of neglect;
+- twenty-two-year failed repair funding;
+- Royal Companion patron/review fallout;
+- Moncler's compensation claim;
+- guild/Crown labor competition;
+- Jory/Ellyn correspondence and pay;
+- Derrin family obligations;
+- Bram/Edrik family and close-escort continuity;
+- village supply limitations;
+- seven candles maintained and unexplained;
+- family-wing voices/acoustics without premature certainty;
+- Luceran's hope that Edselsto simplifies politics.
 
 ## Protected long-future seeds
 
-- Do not reverse the escort purge merely because noble patrons object.
-- Dismissed Royal Companions may diverge individually: rivals, embarrassed reformers, enemies, informants or background casualties.
-- Bram and Edrik remain important because competence earned continuity, not because they become instant intimate friends of the king.
-- Workers remain people with careers and families.
-- Orven Dast is not an exposition machine; he knows what decades of stewardship could plausibly teach him, not buried series truth by authorial convenience.
-- No candle failure before established season timing.
-- Royal deaths remain unresolved unless later prose earns evidence.
+- Do not make Orven secretly omniscient.
+- Do not make the voice-like sound proof of a ghost/castle/entity.
+- Do not extinguish a candle ahead of schedule.
+- Do not let emergency room politics vanish once formal court arrives.
+- Workers remain recurring people because the court physically depends on them.
+- Village resentment and loyalty can coexist.
+- Royal deaths remain unresolved.
 - No Magenheim Nowhere King material.
