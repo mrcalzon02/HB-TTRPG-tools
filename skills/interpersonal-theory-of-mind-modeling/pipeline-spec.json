@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "id": "interpersonal-theory-of-mind-processing-pipeline",
   "skillId": "interpersonal-theory-of-mind-modeling",
   "title": "Interpersonal Theory of Mind Processing Pipeline",
@@ -387,5 +387,95 @@
     "reciprocal-update",
     "self-model-or-value-change"
   ],
-  "minimalRecursionRule": "Use the lowest recursive depth sufficient to explain the interaction. L2 and L3 each require independent evidence."
+  "minimalRecursionRule": "Use the lowest recursive depth sufficient to explain the interaction. L2 and L3 each require independent evidence.",
+  "continuousStateModel": {
+    "actorStateFormula": "S(t+1) = Update[S(t), stimuli, interaction, environmental change, memory activation, reinforcement, punishment, new information, role change, consequences, self-reflection]",
+    "actionEmissionFormula": "Action(t) = Expression[S(t), situation, role, incentives, audience, capability, coercion, habit, masking]",
+    "observerModelFormula": "M(O→T,t+1) = Revise[M(O→T,t), observed action, known context, prior relationship, source quality, environmental evidence, uncertainty]",
+    "qualitativeOnlyUnlessDataSupportsQuantification": true,
+    "principles": [
+      "Actor state trajectory and observer model trajectory are separate evolving systems.",
+      "Action is an emission from internal state under context and constraint, not direct access to private state.",
+      "The target may change without the observer updating; the observer may update when the target has not changed.",
+      "Previous interpersonal models act as priors on interpretation of new evidence.",
+      "Dyadic models must ingest relevant exogenous changes before each new direct interaction.",
+      "Event time, knowledge time, and reinterpretation time are distinct.",
+      "Multiple observers may rationally update differently from the same action because their priors and context differ."
+    ],
+    "stimulusClasses": [
+      "direct-interaction",
+      "new-information",
+      "betrayal",
+      "confirmation",
+      "success",
+      "failure",
+      "reward",
+      "punishment",
+      "grief",
+      "fear",
+      "humiliation",
+      "relief",
+      "hope",
+      "loss",
+      "institutional-pressure",
+      "role-change",
+      "third-party-action",
+      "environmental-crisis",
+      "public-reaction",
+      "private-reflection",
+      "memory-reactivation",
+      "repeated-reinforcement",
+      "contradiction",
+      "coercion",
+      "capability-change",
+      "alternative-set-change"
+    ],
+    "transitionEffects": [
+      "transient",
+      "reinforcing",
+      "destabilizing",
+      "structurally-revising",
+      "mixed",
+      "unknown"
+    ],
+    "revisionMagnitudes": [
+      "none",
+      "reinforcement",
+      "minor-adjustment",
+      "domain-specific-revision",
+      "threshold-model-rupture",
+      "role-frame-rupture",
+      "broad-person-model-revision",
+      "near-total-model-collapse"
+    ],
+    "observerUpdateClasses": [
+      "target-changed-observer-updated",
+      "target-changed-observer-not-updated",
+      "target-unchanged-observer-updated",
+      "neither-changed",
+      "unknown"
+    ],
+    "feedbackLoopOrder": [
+      "internal-state",
+      "action",
+      "other-person-or-environment-response",
+      "consequence",
+      "interpreted-feedback",
+      "updated-internal-state",
+      "observer-model-update",
+      "observer-response",
+      "new-stimulus"
+    ],
+    "longitudinalOutputSequence": [
+      "prior-state",
+      "stimulus",
+      "immediate-interpretation",
+      "action",
+      "feedback",
+      "state-update",
+      "observer-updates",
+      "confidence-change",
+      "later-validation-or-revision"
+    ]
+  }
 }
