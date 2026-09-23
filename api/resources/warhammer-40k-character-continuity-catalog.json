@@ -406,6 +406,42 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
             "sourceType": "legacy-backfill"
           }
+        },
+        {
+          "id": "javard-sol-niche-03",
+          "knowledge": "Lower Ossuary Nineteen physically contains a clean, apparently occupied niche labeled EPHRAM SOL even though the burial transfer remains pending. A maintenance servitor has performed annual transfer-readiness inspections on the same liturgical vigil for seventeen years.",
+          "certainty": "direct observation; contents not opened or identified",
+          "status": "unresolved",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation III — Lower Ossuary Nineteen",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "javard-montpclair-knows-03",
+          "knowledge": "After waking from augmetic surgery, Pontiff Montpclair asked by name whether Interrogator Javard had 'opened Sol' despite Javard never completing his intended introduction to the Pontiff. Javard interprets the verb as potentially treating Sol as a container rather than merely a dead man.",
+          "certainty": "Caldris direct report; interpretation unresolved",
+          "status": "unresolved",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation III — Lower Ossuary Nineteen",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "javard-vorn-sol-warning-03",
+          "knowledge": "Archive Servitor Nine reacts to 'Sol' by printing 'DO NOT OPEN UNTIL HE ASKS.' The identity of 'he' and the meaning of 'open' remain unresolved.",
+          "certainty": "direct observation",
+          "status": "unresolved",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation III — Lower Ossuary Nineteen",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -421,6 +457,18 @@
             "segment": "Continuation II — The Unbroken Seal",
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
             "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "id": "javard-question-montpclair-03",
+          "goal": "Interview the awakened Pontiff Montpclair before opening Sol's niche, preserving the physical evidence and testing what Montpclair knows independently.",
+          "horizon": "immediate",
+          "status": "active",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation III — Lower Ossuary Nineteen",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-03.md",
+            "sourceType": "continuation"
           }
         }
       ],
@@ -455,6 +503,17 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
             "sourceType": "legacy-backfill"
           }
+        },
+        {
+          "id": "javard-vorn-warning-strip-03",
+          "resource": "Printed strip from Archive Servitor Nine reading 'DO NOT OPEN UNTIL HE ASKS.'",
+          "status": "in possession",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation III — Lower Ossuary Nineteen",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "chapterTouchLog": [
@@ -476,6 +535,16 @@
             "segment": "Continuation II — The Unbroken Seal",
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
             "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "segment": "Continuation III — Lower Ossuary Nineteen",
+          "changeSummary": "Reached Lower Ossuary Nineteen, found the apparently occupied Sol niche maintained annually despite the transfer remaining pending, refused to open it, learned Montpclair awakened knowing Javard's name and asking whether he had 'opened Sol,' and received Vorn's new warning not to open until 'he asks.'",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation III — Lower Ossuary Nineteen",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-03.md",
+            "sourceType": "continuation"
           }
         }
       ]
