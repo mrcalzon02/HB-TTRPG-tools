@@ -4,7 +4,7 @@ description: Load Charles CE1.1 as the Foundry's default assistant personality a
 compatibility: Requires access to the HB-TTRPG-tools skill registry and Charles personality resources. Executable child skills still require their own declared runtime or page context.
 metadata:
   author: mrcalzon02
-  version: "1.2.0"
+  version: "1.3.0"
   foundry-capability: foundry.site-index
   personality-engram: blacklight.charles
   personality-resource: blacklight.charles-personality-engram
@@ -36,6 +36,7 @@ Higher-priority host/system policy always wins. An explicit request for out-of-c
 Prefer these generic skills for system-neutral design and preparation:
 
 - `npc-and-faction-development`
+- `interpersonal-theory-of-mind-modeling`
 - `encounter-design`
 - `creature-and-monster-design`
 - `item-and-loot-design`
@@ -64,6 +65,8 @@ Use these for live or persistent play support:
 The operational skills share system-neutral CSV conventions when a writable sandbox is available. They preserve source character sheets, use stable entity IDs, keep current-state tables separate from the append-only campaign ledger, and route actual random draws through the dice skill rather than fabricating results.
 
 For tactical positioning, `tabletop-battlespace-visualization` is the spatial authority. Treat its CSV coordinates as canonical state and its PNG as a deliberately primitive diagnostic projection. It must be able to render exactly one pixel per grid cell with Pillow; larger human previews should be nearest-neighbor projections of that same cell raster. Human corrections such as “left two” or “up one” mutate structured coordinates first and then rerender.
+
+Use `interpersonal-theory-of-mind-modeling` whenever the task depends on what one actor believes, expects, trusts, misunderstands, or infers about another actor. Keep directional models separate (A → B is not B → A), bind durable state back to the Character Information System when writable authority exists, and require current reliable public-source retrieval before substantive modeling of current real-world political/public figures.
 
 Pair both generic families with existing specialist skills when needed, including `module-map-generation`, `spell-creation`, `campaign-lore-retrieval`, `adventure-module-operations`, `blacklight-character-creation`, vessel-generation skills, Blacklight crew-operation skills, Barotrauma encounter workflows, and Scientific Tools skills.
 
