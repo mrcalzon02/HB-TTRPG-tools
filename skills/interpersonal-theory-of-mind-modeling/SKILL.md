@@ -4,7 +4,7 @@ description: Model how one actor understands another actor over time using evide
 compatibility: System-neutral reasoning and continuity skill. For current real-world political or public figures, the host must retrieve current reliable public sources before making substantive factual claims.
 metadata:
   author: mrcalzon02
-  version: "1.4.0"
+  version: "1.5.0"
   foundry-capability: foundry.site-index
   personality-engram: blacklight.charles
 ---
@@ -1126,6 +1126,220 @@ Then compare this against:
 ### Governing principle
 
 A person's self-understanding is **another model in the system**: uniquely important because it directly shapes choices and identity, but still partial, revisable, and fallible.
+
+## Normative self-guidance and action-selection model
+
+A person's theory of their own mind does not merely describe who they think they are. It also contributes to decisions about what they believe they **ought**, **should**, **could**, **must**, or **must not** do next.
+
+Represent this as a distinct normative self-guidance layer:
+
+**G(A,t) = actor A's current model of what actions are right, required, permitted, possible, forbidden, prudent, loyal, consistent with identity, or otherwise appropriate**
+
+Do not collapse **G(A,t)** into either the actor's underlying state **S(A,t)** or their descriptive self-model **M(A→A,t)**.
+
+A person may accurately know what they believe they should do and still fail to do it.
+
+### Normative self-guidance dimensions
+
+Where evidence permits, track:
+
+- **ought** — what the actor believes would be morally or ethically right;
+- **should** — what the actor believes would be prudent, responsible, or appropriate;
+- **must** — what the actor believes duty, law, survival, loyalty, or role requires;
+- **must-not** — what the actor believes crosses a prohibited boundary;
+- **could** — what the actor believes is actually possible;
+- **cannot** — what the actor believes is unavailable, impossible, intolerable, or forbidden;
+- **want** — what the actor desires;
+- **intend** — what the actor currently plans to do;
+- **expect-self** — what the actor predicts they will actually do;
+- **identity-consistent action** — what action they believe a person like them ought to choose.
+
+These may conflict.
+
+### Action-selection gap
+
+Represent explicitly when:
+
+**normative guidance ≠ intention ≠ actual action**
+
+Examples include:
+
+- "I know I should apologize, but I am not going to."
+- "I believe I must protect them, but I freeze."
+- "I think revenge is wrong, but I still choose it."
+- "I believe I cannot abandon my post, even though leaving may be safer."
+- "I expected myself to refuse, but I accepted."
+
+This gap is itself meaningful state information.
+
+### Why normative guidance may fail to control behavior
+
+Possible contributing factors include:
+
+- competing values;
+- acute emotion;
+- fear;
+- anger;
+- grief;
+- shame;
+- loyalty conflict;
+- habit;
+- exhaustion;
+- time pressure;
+- coercion;
+- institutional obligation;
+- perceived lack of alternatives;
+- addiction or compulsion where documented;
+- impaired judgment where documented;
+- immediate reward;
+- avoidance;
+- social pressure;
+- identity threat;
+- uncertainty;
+- inaccurate situation model;
+- inaccurate capability model;
+- inaccurate threshold model.
+
+Do not infer pathology merely because behavior diverges from self-guidance.
+
+### Pre-action self-deliberation
+
+Where evidence exists, distinguish:
+
+1. **self-description** — "Who am I?"
+2. **situation appraisal** — "What is happening?"
+3. **normative appraisal** — "What ought/should/must I do?"
+4. **option appraisal** — "What can I actually do?"
+5. **forecast** — "What will happen if I do each thing?"
+6. **self-prediction** — "What will I probably do?"
+7. **intention** — "What am I choosing now?"
+8. **execution** — what the actor actually does.
+
+These stages may be compressed, unconscious, poorly evidenced, or internally contradictory. Do not fabricate missing stages.
+
+### Post-action self-appraisal
+
+After action and consequence, represent the actor's retrospective self-theory separately from the original decision state.
+
+Possible post-action judgments include:
+
+- I did what I should have done.
+- I did what I had to do.
+- I did the wrong thing for reasons I still understand.
+- I knew better and failed anyway.
+- I could not see another option then.
+- I can now see an option I missed.
+- I should have known.
+- I could not reasonably have known.
+- I became someone I did not think I could become.
+- I crossed a line I previously believed I would never cross.
+- I was right about the choice but wrong about the cost.
+- I was wrong about both the choice and the reason.
+
+Treat these as self-model claims that can themselves be accurate, incomplete, defensive, compassionate, harsh, or distorted.
+
+### Counterfactual self-model
+
+Track what the actor believes they **could have done**, **should have done**, or **would have done if conditions differed**.
+
+Separate:
+
+- contemporaneous perceived alternatives;
+- objectively documented alternatives;
+- later imagined alternatives;
+- realistic counterfactuals;
+- impossible or hindsight-only alternatives.
+
+A later belief that "I should have done X" does not prove X was actually available or foreseeable at the time.
+
+### Self-model injury and destabilization
+
+Actions and consequences can damage the actor's theory of who they are.
+
+Possible effects include:
+
+- shame;
+- guilt;
+- loss of self-trust;
+- threshold-model rupture;
+- identity contradiction;
+- collapse of moral self-image;
+- loss of confidence in judgment;
+- obsessive counterfactual review;
+- defensive rationalization;
+- renewed commitment to prior values;
+- altered future thresholds;
+- self-forgiveness;
+- refusal of self-forgiveness;
+- reconstruction of identity.
+
+Use these descriptively. Do not diagnose a psychiatric disorder from such effects.
+
+### Emotionally incoherent or incomplete decisions
+
+A decision can be internally incoherent without being random.
+
+An actor may simultaneously:
+
+- love and resent;
+- fear and approach;
+- condemn and desire;
+- know and avoid;
+- forgive and distrust;
+- believe an act is wrong and perform it anyway.
+
+Do not "repair" such contradiction into a cleaner motive unless evidence supports resolution.
+
+### Normative feedback loop
+
+For meaningful decisions, use:
+
+**Self-Model → Normative Guidance → Intended Action → Actual Action → Consequence → Emotional Response → Self-Judgment → Revised Self-Model → Revised Future Guidance**
+
+This loop can become:
+
+- stabilizing;
+- corrective;
+- self-punishing;
+- rationalizing;
+- avoidant;
+- escalating;
+- restorative;
+- fragmented.
+
+### Divergence between self-model and observer model
+
+Another person may believe:
+
+> "You knew this was wrong."
+
+while the actor believes:
+
+> "I thought it was the only defensible choice."
+
+Both models must be stored separately.
+
+The skill should compare:
+
+- **A's model of A**
+- **A's normative guidance for A**
+- **B's model of A**
+- **B's model of what A knew or should have known**
+- **independent evidence**
+
+Do not resolve disagreement merely by choosing the more confident participant.
+
+### Agent/LLM modeling stance
+
+The reasoning system executing this skill does not need or claim a lived internal theory of mind of its own.
+
+Its function is to maintain **separate evidence-bounded models for each target**, including each target's self-model, normative guidance, observer models, uncertainty, and temporal transitions.
+
+Never use the agent's own apparent wording preferences, simulated persona, or generated reasoning style as evidence about a target's psychology.
+
+The purpose of the skill is precisely to preserve divergence among:
+
+**target state ≠ target self-model ≠ target normative guidance ≠ observer's target-model ≠ analyst/model hypothesis**
 
 ## Political and public-figure mode
 
