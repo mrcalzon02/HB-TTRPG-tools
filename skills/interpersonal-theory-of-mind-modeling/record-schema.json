@@ -286,6 +286,24 @@
       "items": {
         "$ref": "#/$defs/temporalMarker"
       }
+    },
+    "selfTheoryOfMind": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/selfModelSnapshot"
+      }
+    },
+    "selfModelTransitions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/selfModelTransition"
+      }
+    },
+    "selfModelDiscrepancies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/selfModelDiscrepancy"
+      }
     }
   },
   "$defs": {
@@ -2010,6 +2028,359 @@
           "type": [
             "string",
             "null"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "selfModelSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "actorId",
+        "asOf",
+        "selfIdentity",
+        "introspectiveConfidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asOf": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selfIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selfAttributedMotives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selfModelClaim"
+          }
+        },
+        "selfAttributedValues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selfModelClaim"
+          }
+        },
+        "selfPerceivedCompetence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selfModelClaim"
+          }
+        },
+        "selfPerceivedThresholds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selfModelClaim"
+          }
+        },
+        "selfPerceivedEmotions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selfModelClaim"
+          }
+        },
+        "selfPerceivedObligations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selfModelClaim"
+          }
+        },
+        "selfNarrativeHistory": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "selfPredictions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selfPrediction"
+          }
+        },
+        "introspectiveConfidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "selfModelAccuracy": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "selfModelCompleteness": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "selfModelStability": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "selfModelClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim",
+        "confidence"
+      ],
+      "properties": {
+        "claim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceClass": {
+          "enum": [
+            "direct-self-report",
+            "retrospective-self-report",
+            "observed-behavior",
+            "memory",
+            "external-feedback",
+            "analyst-inference",
+            "other"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "alternativeExplanations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "selfPrediction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "condition",
+        "predictedSelfResponse",
+        "confidence",
+        "status"
+      ],
+      "properties": {
+        "condition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "predictedSelfResponse": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "status": {
+          "enum": [
+            "supported",
+            "partially-supported",
+            "contradicted",
+            "contextualized",
+            "untested",
+            "invalidated-by-context-change"
+          ]
+        },
+        "laterEvidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "selfModelTransition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "actorId",
+        "priorSelfModelRef",
+        "stimulus",
+        "selfInterpretation",
+        "updatedSelfModel",
+        "confidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priorSelfModelRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stimulus": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selfInterpretation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "consequence": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "externalFeedback": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "selfReappraisal": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "updatedSelfModel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pattern": {
+          "enum": [
+            "behavior-before-self-model",
+            "self-model-before-behavior",
+            "retrospective-identity-repair",
+            "self-model-fragmentation",
+            "self-model-convergence",
+            "self-model-collapse",
+            "self-model-reconstruction",
+            "minor-adjustment",
+            "reinforcement",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "selfModelDiscrepancy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "selfModelClaim",
+        "comparisonEvidence",
+        "classification",
+        "confidence"
+      ],
+      "properties": {
+        "domain": {
+          "enum": [
+            "motive",
+            "value",
+            "competence",
+            "threshold",
+            "emotion",
+            "obligation",
+            "memory",
+            "identity",
+            "self-prediction",
+            "other"
+          ]
+        },
+        "selfModelClaim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparisonEvidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classification": {
+          "enum": [
+            "consistent",
+            "incomplete-self-knowledge",
+            "mistaken-causal-attribution",
+            "rationalization",
+            "motivated-reinterpretation",
+            "identity-preserving-reinterpretation",
+            "unresolved-contradiction",
+            "possible-self-deception",
+            "memory-discrepancy",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
           ]
         },
         "evidenceRefs": {
