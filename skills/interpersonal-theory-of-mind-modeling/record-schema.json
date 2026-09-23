@@ -400,6 +400,12 @@
       "items": {
         "$ref": "#/$defs/institutionModel"
       }
+    },
+    "mediatedSources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/mediatedSource"
+      }
     }
   },
   "$defs": {
@@ -3767,6 +3773,130 @@
             "medium",
             "high",
             "unknown"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "mediatedSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "sourceClass",
+        "claimType",
+        "confidence"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceClass": {
+          "enum": [
+            "contemporaneous-primary-record",
+            "contemporaneous-self-report",
+            "contemporaneous-third-party-observation",
+            "later-self-report",
+            "later-third-party-recollection",
+            "institutional-record",
+            "biography",
+            "memoir",
+            "documentary",
+            "edited-archival-compilation",
+            "dramatized-biography-biopic",
+            "historical-fiction-based-on-real-people",
+            "journalistic-reconstruction",
+            "scholarly-historical-analysis",
+            "unsourced-popular-retelling",
+            "other"
+          ]
+        },
+        "claimType": {
+          "enum": [
+            "historical-fact",
+            "source-interpretation",
+            "creator-inferred-internal-state",
+            "analyst-inference",
+            "mixed"
+          ]
+        },
+        "subjectActorIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "creatorActorIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mediationChain": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "creatorModelContamination": {
+          "enum": [
+            "none",
+            "possible",
+            "probable",
+            "explicit",
+            "unknown"
+          ]
+        },
+        "reconstructedDialogue": {
+          "type": "boolean"
+        },
+        "compressedTimeline": {
+          "type": "boolean"
+        },
+        "compositeCharacters": {
+          "type": "boolean"
+        },
+        "inferredPrivateState": {
+          "type": "boolean"
+        },
+        "framingRisks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "upstreamSourceIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "independentCorroboration": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "canUpdateHistoricalInternalStateDirectly": {
+          "type": "boolean"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
           ]
         },
         "confidence": {
