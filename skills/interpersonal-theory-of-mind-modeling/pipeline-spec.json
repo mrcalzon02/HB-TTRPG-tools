@@ -237,5 +237,10 @@
     "no-invented-context",
     "no-unsupported-malicious-intent",
     "political-public-figure-mode-remains-mandatory-for-political-public-figure-analysis"
-  ]
+  ],
+  "heuristicFamily": {
+    "label": "TheraminTrees-inspired modalities",
+    "status": "user-selected text-analysis heuristics",
+    "guardrail": "Do not treat these labels as validated psychiatric constructs, diagnoses, or automatic moral verdicts."
+  }
 }
