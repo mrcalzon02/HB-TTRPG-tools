@@ -328,6 +328,78 @@
       "items": {
         "$ref": "#/$defs/counterfactualSelfModel"
       }
+    },
+    "relationshipPathDependence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relationshipPathDependence"
+      }
+    },
+    "modelLagStates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/modelLagState"
+      }
+    },
+    "sharedEpistemicGround": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sharedEpistemicGround"
+      }
+    },
+    "signals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/signalRecord"
+      }
+    },
+    "evidenceDiagnosticity": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidenceDiagnosticity"
+      }
+    },
+    "relationshipRepairs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relationshipRepair"
+      }
+    },
+    "valueHierarchyStates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/valueHierarchyState"
+      }
+    },
+    "decisionOutcomeSeparation": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/decisionOutcomeSeparation"
+      }
+    },
+    "provenanceChains": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/provenanceChain"
+      }
+    },
+    "metacognitiveCalibration": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/metacognitiveCalibration"
+      }
+    },
+    "memorySalience": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/memorySalience"
+      }
+    },
+    "institutionModels": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/institutionModel"
+      }
     }
   },
   "$defs": {
@@ -2750,6 +2822,952 @@
           "items": {
             "type": "string"
           }
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "relationshipPathDependence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relationshipRef",
+        "relationshipHistoryWeight",
+        "confidence"
+      ],
+      "properties": {
+        "relationshipRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relationshipHistoryWeight": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "priorPositiveReserve": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "priorScars": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "relationshipInertia": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "repairHistory": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "modelLagState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observerActorId",
+        "targetActorId",
+        "stateChangeTime",
+        "alignmentClass",
+        "confidence"
+      ],
+      "properties": {
+        "observerActorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetActorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stateChangeTime": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observerRecognitionTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "modelLag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "alignmentClass": {
+          "enum": [
+            "latent-alignment",
+            "latent-conflict",
+            "recognized-alignment",
+            "recognized-conflict",
+            "none",
+            "unknown"
+          ]
+        },
+        "targetStateChange": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observerModelSummary": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "sharedEpistemicGround": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proposition",
+        "status",
+        "actorIds",
+        "confidence"
+      ],
+      "properties": {
+        "proposition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "private",
+            "privately-suspected-by-multiple",
+            "mutually-suspected",
+            "mutually-known",
+            "openly-acknowledged",
+            "common-knowledge",
+            "publicly-denied-privately-shared",
+            "deliberately-ambiguous",
+            "unknown"
+          ]
+        },
+        "actorIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "publicStatus": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "transitionTrigger": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "signalRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actorId",
+        "signal",
+        "confidence"
+      ],
+      "properties": {
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signalingIntent": {
+          "enum": [
+            "none",
+            "possible",
+            "probable",
+            "explicit",
+            "unknown"
+          ]
+        },
+        "intendedAudience": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "desiredObserverUpdate": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "masking": {
+          "type": "boolean"
+        },
+        "strategicAmbiguity": {
+          "type": "boolean"
+        },
+        "plausibleDeniability": {
+          "type": "boolean"
+        },
+        "actualObserverUpdates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "divergenceBetweenIntendedAndActual": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "evidenceDiagnosticity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidenceRef",
+        "diagnosticity",
+        "confidence"
+      ],
+      "properties": {
+        "evidenceRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "diagnosticity": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "costToActor": {
+          "enum": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "extreme",
+            "unknown"
+          ]
+        },
+        "costDomains": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "material",
+              "reputational",
+              "relational",
+              "moral",
+              "physical",
+              "strategic",
+              "legal",
+              "institutional",
+              "other"
+            ]
+          }
+        },
+        "alternativeExplanationCount": {
+          "enum": [
+            "few",
+            "several",
+            "many",
+            "unknown"
+          ]
+        },
+        "behavioralCommitmentStrength": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "irreversible",
+            "unknown"
+          ]
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "relationshipRepair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relationshipRef",
+        "asOf",
+        "confidence"
+      ],
+      "properties": {
+        "relationshipRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asOf": {
+          "type": "string",
+          "minLength": 1
+        },
+        "apology": {
+          "enum": [
+            "none",
+            "attempted",
+            "accepted",
+            "rejected",
+            "unknown"
+          ]
+        },
+        "acknowledgment": {
+          "enum": [
+            "none",
+            "partial",
+            "substantial",
+            "full",
+            "unknown"
+          ]
+        },
+        "restitution": {
+          "enum": [
+            "none",
+            "partial",
+            "substantial",
+            "full",
+            "unknown"
+          ]
+        },
+        "forgiveness": {
+          "enum": [
+            "none",
+            "partial",
+            "present",
+            "explicitly-withheld",
+            "unknown"
+          ]
+        },
+        "reconciliation": {
+          "enum": [
+            "none",
+            "partial",
+            "present",
+            "unknown"
+          ]
+        },
+        "renewedCooperation": {
+          "enum": [
+            "none",
+            "limited",
+            "substantial",
+            "full",
+            "unknown"
+          ]
+        },
+        "restoredAffection": {
+          "enum": [
+            "none",
+            "partial",
+            "substantial",
+            "full",
+            "unknown"
+          ]
+        },
+        "restoredPredictability": {
+          "enum": [
+            "none",
+            "partial",
+            "substantial",
+            "full",
+            "unknown"
+          ]
+        },
+        "trustRecoveryByDomain": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/trustVectorItem"
+          }
+        },
+        "residualScars": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "valueHierarchyState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actorId",
+        "asOf",
+        "activeValues",
+        "confidence"
+      ],
+      "properties": {
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asOf": {
+          "type": "string",
+          "minLength": 1
+        },
+        "activeValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "valuePriority": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "activeValueConflict": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "winningValue": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "suppressedValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "priorityShift": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "decisionOutcomeSeparation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decisionRef",
+        "exAnteDecisionQuality",
+        "exPostOutcome",
+        "confidence"
+      ],
+      "properties": {
+        "decisionRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "exAnteDecisionQuality": {
+          "enum": [
+            "poorly-supported",
+            "mixed",
+            "well-supported",
+            "indeterminate"
+          ]
+        },
+        "exAnteReasoningNote": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "exPostOutcome": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actorOutcomeInterpretation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "observerOutcomeBias": {
+          "enum": [
+            "none",
+            "possible",
+            "probable",
+            "explicit",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "provenanceChain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proposition",
+        "stages",
+        "confidence"
+      ],
+      "properties": {
+        "proposition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/provenanceStage"
+          }
+        },
+        "independentCorroboration": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "duplicateSourceRisk": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "resultingUncertainty": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "provenanceStage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stageType",
+        "description"
+      ],
+      "properties": {
+        "stageType": {
+          "enum": [
+            "source-event",
+            "source-interpretation",
+            "source-report",
+            "recipient-interpretation",
+            "recipient-model-update",
+            "other"
+          ]
+        },
+        "actorId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceReliability": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "transformationRisk": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metacognitiveCalibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actorId",
+        "modelRef",
+        "modelConfidence",
+        "uncertaintyAwareness",
+        "confidence"
+      ],
+      "properties": {
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "modelRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "modelConfidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "uncertaintyAwareness": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "calibrationQuality": {
+          "enum": [
+            "poor",
+            "mixed",
+            "good",
+            "excellent",
+            "unknown"
+          ]
+        },
+        "unknownUnknownsFlag": {
+          "enum": [
+            "unrecognized",
+            "partially-recognized",
+            "recognized",
+            "unknown"
+          ]
+        },
+        "laterPredictivePerformance": {
+          "enum": [
+            "poor",
+            "mixed",
+            "good",
+            "excellent",
+            "untested"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "memorySalience": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actorId",
+        "memoryRef",
+        "memoryExists",
+        "confidence"
+      ],
+      "properties": {
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "memoryRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "memoryExists": {
+          "type": "boolean"
+        },
+        "memoryAvailability": {
+          "enum": [
+            "inaccessible",
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "currentSalience": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "triggeredRecall": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "decisionRelevanceAtTime": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "laterReactivation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "institutionModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "holderActorId",
+        "institutionId",
+        "modelSummary",
+        "confidence"
+      ],
+      "properties": {
+        "holderActorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "institutionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "modelSummary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "institutionalIncentives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "decisionProcedures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "factions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "publicDoctrine": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "observedBehavior": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "leadershipDependence": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "inertia": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "internalDisagreement": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "memberIntentGeneralizationRisk": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
         },
         "confidence": {
           "enum": [
