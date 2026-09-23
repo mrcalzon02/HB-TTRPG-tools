@@ -1,0 +1,201 @@
+{
+  "schemaVersion": "1.0.0",
+  "skill": "procedural-story-directive-computation",
+  "deterministicByDefault": true,
+  "randomnessDefault": "off",
+  "authorityDefaultOrder": [
+    "current-directive",
+    "canon",
+    "continuity",
+    "character-record",
+    "outline",
+    "established-prose",
+    "style-rule",
+    "proposal",
+    "model-prior"
+  ],
+  "passes": [
+    {
+      "id": "authority",
+      "order": 1,
+      "action": "Resolve precedence, supersession, effective scope, and contradictions.",
+      "outputs": [
+        "authority_lock",
+        "contradictions"
+      ]
+    },
+    {
+      "id": "state",
+      "order": 2,
+      "action": "Normalize start state and separate objective state from actor-specific epistemic state.",
+      "outputs": [
+        "start_state",
+        "knowledge_partitions"
+      ]
+    },
+    {
+      "id": "frontier",
+      "order": 3,
+      "action": "Classify unresolved obligations by prerequisite satisfaction and resolution window.",
+      "outputs": [
+        "mandatory_now",
+        "available_now",
+        "not_yet_valid",
+        "deliberately_deferred",
+        "stale"
+      ]
+    },
+    {
+      "id": "functions",
+      "order": 4,
+      "action": "Derive required narrative functions from active directives and obligation frontier.",
+      "outputs": [
+        "required_functions"
+      ]
+    },
+    {
+      "id": "candidates",
+      "order": 5,
+      "action": "Synthesize bounded beat candidates with causes, preconditions, state mutations, dependencies, and forbidden implications.",
+      "outputs": [
+        "candidate_beats"
+      ]
+    },
+    {
+      "id": "hard-gates",
+      "order": 6,
+      "action": "Reject candidates that violate authority, directives, continuity, epistemic boundaries, scope, resources, or protected future material.",
+      "outputs": [
+        "valid_candidates",
+        "rejections"
+      ]
+    },
+    {
+      "id": "score",
+      "order": 7,
+      "action": "Score only valid candidates using weighted utility dimensions.",
+      "outputs": [
+        "scored_candidates"
+      ]
+    },
+    {
+      "id": "assemble",
+      "order": 8,
+      "action": "Build dependency graph, reject cycles, and select the smallest topologically valid sequence satisfying mandatory work.",
+      "outputs": [
+        "ordered_beats"
+      ]
+    },
+    {
+      "id": "compile",
+      "order": 9,
+      "action": "Emit Story Assembly Directive Packet.",
+      "outputs": [
+        "directive_packet"
+      ]
+    },
+    {
+      "id": "reconcile",
+      "order": 10,
+      "action": "After prose exists, compare implementation to packet and produce proposed state diff.",
+      "outputs": [
+        "post_write_reconciliation"
+      ]
+    }
+  ],
+  "hardGates": [
+    "controlling-authority-contradiction",
+    "must-not-violation",
+    "missing-prerequisite",
+    "actor-knowledge-leak",
+    "protected-reveal-spent-early",
+    "invalid-actor-presence",
+    "unavailable-resource-use",
+    "irreversible-state-violation",
+    "unsupported-coincidence",
+    "out-of-scope-state-change",
+    "meta-authorial-leakage",
+    "forced-protected-future-outcome"
+  ],
+  "primitives": [
+    "orient",
+    "continue-action",
+    "pay-obligation",
+    "pressure",
+    "observe",
+    "infer",
+    "misinfer",
+    "reveal",
+    "conceal",
+    "signal",
+    "choice",
+    "consequence",
+    "relationship-step",
+    "callback",
+    "seed",
+    "transition",
+    "close-local-loop",
+    "defer-loop",
+    "end-turn"
+  ],
+  "defaultWeights": {
+    "continuity": 18,
+    "directive_coverage": 16,
+    "knowledge_integrity": 14,
+    "causality": 12,
+    "obligation_value": 12,
+    "pacing_fit": 8,
+    "character_truth": 8,
+    "future_optionality": 5,
+    "thematic_fit": 4,
+    "economy": 3
+  },
+  "tieBreakers": [
+    "fewer-unsupported-assumptions",
+    "fewer-unnecessary-new-entities",
+    "older-mandatory-obligation-first",
+    "smaller-irreversible-state-mutation",
+    "lexical-candidate-id"
+  ],
+  "selectionRules": {
+    "minimumCandidateCountPerRequiredFunction": 2,
+    "maximumCandidateCountPerRequiredFunction": 7,
+    "objective": "Select the smallest dependency-valid sequence satisfying all possible mandatory-now obligations and prerequisite-valid MUST directives without violating any hard gate.",
+    "cyclePolicy": "reject-and-report",
+    "newPlotMachineryPolicy": "prefer-existing-obligations-first"
+  },
+  "randomness": {
+    "enabledOnlyWhenExplicitlyRequested": true,
+    "applyAfterHardGates": true,
+    "recordCandidateSet": true,
+    "recordDraw": true,
+    "mayOverrideAuthority": false,
+    "mayOverridePrerequisites": false,
+    "mayOverrideKnowledgeBoundaries": false
+  },
+  "outputSections": [
+    "scope",
+    "authority_lock",
+    "start_state",
+    "mandatory_continuity",
+    "knowledge_partitions",
+    "due_obligations",
+    "ordered_beat_directives",
+    "tone_and_presentation_constraints",
+    "protected_future_material",
+    "end_state_target",
+    "post_write_validation"
+  ],
+  "postWriteDiffCategories": [
+    "satisfied_directives",
+    "violated_directives",
+    "new_canon",
+    "actor_knowledge_changes",
+    "relationship_changes",
+    "inventory_resource_changes",
+    "location_time_changes",
+    "obligations_resolved",
+    "obligations_created",
+    "contradictions_introduced"
+  ]
+}
