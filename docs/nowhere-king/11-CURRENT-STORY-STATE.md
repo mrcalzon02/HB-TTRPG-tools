@@ -1,159 +1,184 @@
 # Nowhere King — Current Story State
 
 **Status:** Active temporal continuity ledger  
-**Last completed unit:** Season One, Episode 04 — *First Night*  
-**Updated:** after Episode 04
+**Last completed unit:** Season One, Episode 05 — *Rooms Are Power*  
+**Updated:** after Episode 05
 
 ## Current timeline state
 
-Luceran and the first royal convoy are physically inside Castle Edselsto. The first night has passed or is ending.
+Luceran has spent his first night at Edselsto and completed the first full day of deliberate court-building. The castle remains only partly habitable, while the village below is becoming a crude royal works settlement.
 
-The castle is operational only in fragments: one kitchen works, a second has been repaired enough to function, selected eastern/inhabited rooms are dry, the great hall is usable, treasury/archives/physicians/guards/workers have emergency placements, and multiple wings remain unsafe, locked, wet, or structurally uncertain.
-
-The new court exists before it has formal rules.
+The new court now exists as both a household and an emerging patronage network. Luceran has begun learning that rooms, stairs, contracts, repair priorities, post, storage ground, wells, smithing, and introductions all create political advantage even when each individual choice is sensible.
 
 ## King Luceran
 
-- Adult lawful king, newly bereaved and inexperienced in lived court politics.
-- Parents' deaths remain suspicious to him but unproven.
-- Edselsto is now materially real rather than imagined refuge.
-- Still believes relocation was necessary, but now understands the castle itself demands years of labor, money, and rebuilding.
-- Accepts practical contradiction from Bram, Edrik, Mara, Orven, and skilled workers without treating it as disloyalty.
-- Agrees not to force the family wing on his first night.
-- Hears faint voice-like murmuring behind a sealed family corridor; no words are understood and no supernatural conclusion is reached.
-- Orders the seven nave candles kept lit, not knowing their true function.
-- Sleeps in his grandfather's old west guest chamber rather than a restored royal suite.
+- Adult lawful king, bereaved, educated, and still inexperienced in lived patronage politics.
+- Parents' deaths remain suspicious but unproven.
+- Still believes relocation was necessary and enjoys the comparative warmth/cooperation of his early Edselsto circle.
+- Has begun recognizing that friendly usefulness creates political blocs without conspiracy.
+- Naturally favors people he knows and trusts but is not blindly compliant: he denies Baron Pell immediate roof priority when worker drainage/sanitation is more urgent.
+- Increasingly listens to practical contradiction from Avarren, Mara, Rhyse, Orven, workers, and villagers.
+- Has not entered the family wing.
+- Has no supernatural conclusion about Edselsto.
 
-## Orven Dast
+## Emerging friendly network
 
-- Elderly steward of Edselsto; 47 years at the castle.
-- Blunt, practical, not deferential beyond what he considers necessary.
-- Knows lived maintenance history, local keys, repairs, failures, rooms, routes, and habits of the neglected castle.
-- Does not know buried-series truths by convenience.
-- Knew Luceran's mother during earlier visits and remembers her dislike of Edselsto rain.
-- Reveals that promised Crown repair money failed to arrive twenty-two years ago, forcing a bad roof patch he personally paid for.
-- Maintains seven candles because the prior steward instructed that the nave should always have seven burning; he does not claim doctrinal knowledge of the reason.
-- Explains strange sounds through flues, wind, pipes, boards, rats, and carried voices.
+### Lord Montegrain
+- Retains a chamber very near Luceran and therefore visible informal access.
+- Friendship remains genuine and publicly legible.
 
-## Advance party / household
+### House Edevane / Lady Miren Edevane
+- Miren is Luceran's older royal cousin and a genuine affectionate relationship from childhood.
+- Arrives with bedding, lamp oil, preserved food, servants, clerks, rope, and an offer of household credit.
+- Politically sophisticated: refuses the best suite for herself because of appearances, but Edevane clerks occupy the east solar near the temporary archive because their work is useful there.
+- Edevane now has early administrative/credit access without any secret conspiracy.
 
-### Sir Edran Vey
-- His inspection remains the baseline for immediate habitability.
-- Successfully prepared enough of Edselsto for occupation.
+### House Bellisar / Harl Ven
+- Bellisar supplies remounts, pack horses, oats, farrier capacity, and practical stable support.
+- Factor Harl Ven negotiates scheduled use of the east stair at feed/return times.
+- Captain Rhyse retains security authority to close the route.
+- Bellisar usefulness is becoming access.
 
-### Mara Kest
-- Controls emergency room placement by practical need.
-- Assigns treasury, archives, physicians, workers, guards, and senior household based on dry roofs, locks, and access rather than rank.
-- These placements create accidental political precedent.
+### House Pell / Baron Pellisar Pell
+- Arrives early and openly seeks proximity to Luceran.
+- Receives a personally assigned third-best available room rather than Montegrain's near chamber.
+- Understands access politics and intends to be useful rather than presenting as hostile.
+- Later accepts moving a document chest rather than taking workers off camp drainage/sanitation.
 
-### Corren Bale / Iven Marr
-- Continue as advance mason/carpenter with real inspection and repair knowledge.
-- Their judgments can conflict with Olan/Jory/Derrin without either side becoming foolish.
+### Sera Morcant / Morcant-Bellisar overlap
+- Sera is Morcant-trained through Copper Bell workshops but contracted with Bellisar stables.
+- Establishes the first crude working forge in a ruined village shed.
+- Negotiates Crown pay and becomes working master of the new smithy.
+- Crown work priority: horses, latches/hinges/tools, household necessities; decorative work is lower priority.
+- Her position demonstrates that institutional networks overlap rather than mapping cleanly to one house.
+
+### House Falbrecht
+- Falbrecht charcoal begins arriving for the forge.
+- Timber/charcoal interests are entering Edselsto early and will matter to construction contracts.
+
+## Village Council of Edselsto
+
+Active members established:
+- Tessa Rane — miller and council elder; practical, skeptical, locally authoritative.
+- Marrec Voss — goat keeper/boundary-memory holder; no established relation to Derrin Voss.
+- Lysa Dorn — owner of surviving bakehouse; already confronting flour limits.
+- Perren Holt — family historically maintained lower well; possesses practical knowledge of its failure.
+- Fifth council seat is vacant after a winter death.
+
+Durable position:
+- Village council is now to be consulted in local Crown food purchasing so royal demand does not strip local supply.
+- Half of the old common is temporarily marked for Crown open storage; no permanent use authorized without hearing the council.
+- Council cooperation has increased, but memory of dynastic neglect remains intact.
+
+## Lower settlement / works state
+
+- Worker tents organized along old south lane.
+- Runoff ditching begun above camp.
+- Latrines placed downhill/away from wells.
+- Cookfires and rough camp organization established.
+- Half of old common marked for timber, stone, carts, barrels, lime, fodder, and open storage.
+- Lower well opened for repair; collapse confirmed but water remains. Perren Holt and Derrin Voss are active on it.
+- Upper well remains usable but insufficient for future population.
+- First crude smithy functioning under Sera Morcant.
+- Ruined stone buildings are being triaged for repair/salvage/reuse.
+- Henn-family ruin preserved pending contact because local ownership memory remains valid; abandoned cooper's ruin used instead.
+- Royal hunting-lodge timber on old east track authorized for salvage.
+- Two village boys hired as runners between castle and village; one wage is shared in practical service to council communications.
+- Royal post now carries worker family letters after Luceran grants Jory Fell access; fifty-three letters appear next morning.
 
 ## Construction workforce
 
 ### Master Olan Crewe
-- Identifies structural settlement/sagging roof line immediately.
-- Begins integrating with advance-party trades.
+- Repair priorities remain structural/material rather than noble-status driven.
+- Updates his model of Luceran after the king chooses camp drainage and sanitation over Pell's leaking chamber.
 
 ### Jory Fell
-- Repairs kitchen smoke hood with Iven Marr on first night.
-- Wife Ellyn and children remain active obligations in the capital.
-- Repair priority is beginning to make his practical work politically important.
+- Continues Crown carpentry and village works.
+- Writes wife Ellyn; royal post access established for the letter.
+- Broken toy cart promised to his child remains a small family obligation illustrating displacement cost.
 
 ### Derrin Voss
-- Continues as grounded mason perspective.
-- Family obligations remain active.
+- Works with Perren Holt on lower well.
+- Continues family obligations and grounded mason perspective.
 
-### Labor state
-- Workers are essential to daily court survival.
-- Repair order will become political because whichever rooms become habitable first become offices/lodgings.
+### Corren Bale / Iven Marr
+- Continue integrating advance-party knowledge with recruited works.
 
 ## Royal Guard / escort
 
 ### Captain Tovan Rhyse
-- Establishes initial usable guard posts inside Edselsto.
-- Remaining Royal Companion reviews are still pending.
-- Must convert a neglected fortress into an inhabited royal seat without wasting men on unusable zones.
+- Security geometry now directly intersects patronage/access.
+- Approves conditional east-stair use only after latch repair and retains authority to close it.
+- Remaining Royal Companion reviews remain unresolved.
 
 ### Sergeant Bram Tolland
-- Continues close escort.
-- Hears family-corridor murmuring and treats it as security/acoustics rather than supernatural fact.
+- Continues close escort and corridor control.
 
 ### Guardsman Edrik Saye
-- Continues alternating close position with Bram.
-- Professional non-flattery continues to build Luceran's trust.
+- Continues close escort.
+- Comfortable enough to point out secondary consequences of Luceran's favors, including the worker-post precedent.
+- Professional trust with Luceran continues increasing.
 
-## Emergency household layout
+## Household / room politics
 
-- treasury: dry former linen room with one door and serviceable lock;
-- physicians: two rooms beside great hall;
-- archives: dry old counting room above inner kitchen;
-- Privy Seal: narrow former hunting-secretary chamber;
-- workers: near active repair zones;
-- guards: usable entrances/internal routes;
-- Luceran: west guest chamber formerly used by his grandfather;
-- overflow staff: great hall / other dry common spaces.
+- Montegrain retains near-king chamber.
+- Pell receives third-best available chamber after unsuccessfully seeking Montegrain's.
+- Miren Edevane takes a smaller/farther guest pair while Edevane clerks occupy useful east-solar workspace near archive.
+- Treasury, physicians, archives, Privy Seal, workers, guards, and Luceran retain Episode 04 emergency placements unless later changed.
+- Practical room assignments are now publicly interpreted as favor, rank, access, or insult.
 
-These were made for survival, not status. Episode 05 must show people treating them as political signals anyway.
+## Material/patronage map
 
-## Seven candles
+Early beneficiaries and obligations now overlap:
+- Edevane: clerks, supplies, household credit, archive-adjacent work.
+- Bellisar: horses, oats, farriers, scheduled east-stair use.
+- Morcant: iron/smithing connection through Sera.
+- Falbrecht: charcoal and future timber interest.
+- Pell: personal royal attention/proximity contest.
+- Village Council: purchasing consultation and limited protection of common/property interests.
+- Recruited Crown workers: royal timber priority and worker-post precedent.
 
-- Located in old family nave before black-stone altar.
-- All seven are lit.
-- Orven replaces/maintains them as inherited stewardship custom.
-- Brother Calven is interested but has not established original meaning.
-- No character knows the containment function.
+None of this is currently evidence of corruption or conspiracy. It is the beginning of a recognizable pro-Luceran network through trust, gratitude, usefulness, and early presence.
 
-## Family wing / mystery state
+## Seven candles / mystery state
 
-- Family wing remains partly locked and partly unsafe.
-- Luceran waits until daylight rather than forcing entry.
-- Luceran hears faint murmuring/voice-like sound behind sealed corridor.
-- Bram and Orven hear enough to acknowledge sound.
-- Plausible mundane explanations remain.
-- No words, apparition, impossible movement, or sentient response is confirmed.
-
-## Phase transition after Episode 04
-
-Episodes 01–04 now form the complete lead-in: Luceran experiences the intolerable inherited court, breaks with the capital, physically relocates the first royal train, and occupies Edselsto.
-
-From Episode 05 onward the central Season One education changes from **escaping a court** to **building one**.
-
-The first political environment at Edselsto should be deceptively pleasant. Friendly houses, friends' relatives, factors, guild contacts, officers, merchants, and other useful associates will arrive early because they support Luceran and see opportunity in the new court. Luceran will naturally favor people he trusts and people who have already solved problems for him. Individual choices may be reasonable while collectively producing a recognizable pro-Luceran patronage bloc.
-
-The village below is now an active royal-works problem, not scenery. The court's arrival creates immediate need for worker housing, tents, repaired ruins, usable wells/drains, a working smithy, open storage, timber and stone yards, cart space, animal lines, food, latrines, workshops, and road improvement.
+- Seven candles remain in family nave.
+- Orven trims/maintains them as inherited stewardship practice.
+- Luceran briefly assists by holding the candle box.
+- Seven of seven remain lit.
+- Family wing remains closed.
+- No new impossible event occurs in Episode 05.
+- First-night voice-like acoustics remain unresolved and plausibly mundane.
 
 ## Active political consequences
 
-- Emergency room assignments will become the first map of status/access.
+- Edselsto is beginning to attract suppliers and specialists without direct summons because Crown demand is becoming visible.
+- Morcant iron, Falbrecht charcoal, and a Guild of Keys locksmith arrive at the Episode 05/06 boundary.
+- Luceran's friendly circle is becoming a governing network before hostile/distant houses arrive.
+- Repair sequence is now political precedent: worker drainage/sanitation can outrank noble comfort.
+- Village property memory and council legitimacy constrain easy Crown seizure.
+- Local food supply cannot be treated as infinite.
 - Moncler's compensation claim remains active.
-- Guild/Crown workforce competition remains active.
+- Guild/Crown labor competition remains active.
 - Royal Companion patron fallout remains active.
-- Edselsto's twenty-two-year failed repair promise establishes dynastic neglect.
-- Village dependence and resentment toward royal neglect are legitimate future lanes.
-- Friendly early houses and associates will gain disproportionate early access because they arrive, help, lend resources, and solve problems before hostile or distant factions establish themselves.
-- Luceran's friendship network is therefore beginning to overlap with his governing network.
-- Every construction decision around Edselsto can create a beneficiary: repair contract, supply right, storage ground, workshop site, lodging, road work, timber access, smithing work, estate plot, or office space.
-- The lower settlement should visibly transform from neglected village into crude royal works camp before it becomes anything resembling a proper capital town.
+- Twenty-two-year Crown repair neglect remains politically relevant.
 
 ## Open obligations
 
-1. Episode 05 converts emergency room assignments into court politics.
-2. Establish the first wave of friendly houses/associates as charming, useful, and sincerely supportive before later rivalry hardens.
-3. Let Luceran naturally favor close friends, their houses, factors, craftsmen, and associates because they are already present and useful; do not frame every favor as cynical corruption.
-4. Begin rapid lower-settlement works: tents/rough worker housing, reuse of ruined stone buildings, damaged-well/drain repair, crude smithy, cleared open storage, tool/material yards, and supply organization.
-5. Establish who tries to preserve, upgrade, trade, or contest first-night rooms.
-6. Preserve workers' practical repair priorities even when nobles want prestige rooms first.
-7. Continue Bram/Edrik/Rhyse security geometry around access to Luceran.
-8. Continue Orven as practical institutional memory, not exposition machine.
-9. Keep seven candles lit and unexplained.
-10. Preserve family wing for Episode 07-level investigation.
-11. Continue Moncler's compensation and guild/Crown labor issues through letters/agents.
-12. Preserve Royal Companion fallout and individual reviews.
-13. Keep village residents as people with independent grievances and services; expansion must affect them materially.
-14. Preserve uncertainty around royal deaths.
-15. No confirmed supernatural behavior.
+1. Episode 06 advances locks, hinges, keys, smithing, timber, iron, contracts, and security through the newly arriving suppliers/specialists.
+2. Establish one intentionally sealed route without explaining the buried truth.
+3. Preserve overlapping friendly-house competition: Bellisar, Morcant, Falbrecht, Edevane, Pell and others should not become a single coordinated faction by convenience.
+4. Track Sera Morcant as a recurring low-status/professional actor with independent craft interests.
+5. Continue lower-well repair, camp growth, storage yards, food limits, and village consequences.
+6. Preserve Henn property question and other local ownership memory rather than treating village ruins as ownerless scenery.
+7. Continue Jory/Ellyn correspondence and worker family obligations.
+8. Continue Bram/Edrik/Rhyse access-security geometry.
+9. Continue Moncler's compensation and guild/Crown labor issues.
+10. Preserve Royal Companion reviews/fallout.
+11. Keep family wing for Episode 07 investigation.
+12. Keep seven candles lit and unexplained.
+13. Preserve uncertainty around royal deaths.
+14. No confirmed supernatural behavior.
 
 ## Candle state
 
