@@ -32,13 +32,19 @@
     const items=inventory?.items||[];
     return items.find(item=>item.id===module?.id) || items.find(item=>item.viewerPath===path) || null;
   }
-  function openInViewer(path,scroll=true){
-    const select=document.querySelector('#module-select');
-    if(!select) return false;
-    select.value=path;
-    select.dispatchEvent(new Event('change',{bubbles:true}));
-    if(scroll) document.querySelector('#module-viewer-root')?.scrollIntoView({behavior:'smooth',block:'start'});
-    return true;
+  async function openInViewer(path,scroll=true){
+    let opened=false;
+    if(typeof window.openModuleInViewer==='function'){
+      opened=await window.openModuleInViewer(path);
+    }else{
+      const select=document.querySelector('#module-select');
+      if(!select) return false;
+      select.value=path;
+      select.dispatchEvent(new Event('change',{bubbles:true}));
+      opened=true;
+    }
+    if(opened&&scroll) document.querySelector('#module-viewer-root')?.scrollIntoView({behavior:'smooth',block:'start'});
+    return opened;
   }
   function renderLibrary(){
     const shell=document.querySelector('#module-viewer-root .module-viewer-shell');
@@ -47,7 +53,7 @@
     section.id='module-example-library'; section.className='module-example-library no-print';
     section.innerHTML=`<div class="module-example-library-head"><div><p class="eyebrow">Examples, templates, and use cases</p><h3>Module Example Library</h3><p>These preserved modules are the reference corpus for the module viewer and procedural generator. Open any example here without leaving the Modules workspace.</p></div><span class="module-example-badge">${(inventory?.items||[]).length} references</span></div><div class="module-example-grid">${(inventory?.items||[]).map(item=>`<article class="module-example-card" data-module-example="${esc(item.id)}"><strong>${esc(item.title)}</strong><div class="module-example-badges"><span class="module-example-badge">${esc(item.status)}</span>${(item.role||[]).map(role=>`<span class="module-example-badge">${esc(role)}</span>`).join('')}</div><small>${esc(item.notes||'Preserved module reference.')}</small><button type="button" data-open-module="${esc(item.viewerPath)}">Open in Viewer</button></article>`).join('')}</div>`;
     shell.insertBefore(section,shell.firstChild);
-    section.querySelectorAll('[data-open-module]').forEach(button=>button.addEventListener('click',()=>openInViewer(button.dataset.openModule)));
+    section.querySelectorAll('[data-open-module]').forEach(button=>button.addEventListener('click',()=>{void openInViewer(button.dataset.openModule).catch(error=>console.error('Module example could not be opened.',error));}));
   }
   function removeSourcePane(){
     document.querySelector('#module-source-reference')?.remove();
@@ -94,7 +100,7 @@
     const select=document.querySelector('#module-select');
     const requestedId=new URLSearchParams(location.search).get('module');
     const requested=(inventory.items||[]).find(item=>item.id===requestedId);
-    if(requested && select){ openInViewer(requested.viewerPath,false); return; }
+    if(requested && (select||typeof window.openModuleInViewer==='function')){ await openInViewer(requested.viewerPath,false); return; }
     if(select){ activePath=select.value; const item=(inventory.items||[]).find(entry=>entry.viewerPath===activePath); if(item) addSourcePane(item,{id:item.id,referenceOnly:item.status==='source-reference'}); }
   }
 
