@@ -2,30 +2,22 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after committed Season 1 Episode 24.
-**Forward window:** Episodes 25–29.
+**State:** Rolled forward after Season 1 Episode 25.
+**Forward window:** Episodes 26–30.
 
-## Episode 25 — The King's Progress — LOCKED / DEPENDENCY-VALID
+## Episode 26 — An Empty Throne — LOCKED / DEPENDENCY-VALID
 
-Luceran is physically away from Edselsto with fifty-eight mounted guards/household troops, twelve Black Pine scouts ahead in pairs, Miren, Rhyse, Mara and the necessary travelling household. The six-wagon stores convoy and Tomas Reed remain at Northbridge. The lower fork remains the planned route after the bridge.
+The coup begins inside Edselsto through established systems while Luceran is held at Red Ford by an unauthenticated route-delay message. Bram did not send that message, but Luceran/Rhyse do not yet know this. Two Black Pine pairs and a Northbridge rider are verifying independently.
 
-At Red Ford, both-bank testimony and material evidence must complicate the crisis rather than neatly solve it. Distance matters: letters and orders take time, Edselsto continues without Luceran, and information arriving from home is necessarily partial/stale. The unidentified grey-and-red carter may remain unresolved and must not automatically become coup machinery.
+Attack seams already on-page: legitimate receiving-clerk illness and temporary replacement; obsolete paper stock used inside a genuine change; a young servant studying Edrik's lamp-oil inspection; authentic west-service credential presented one day early after a falsely attributed roster change; known household messenger carrying a false/altered packet. Bram/Edrik are already checking anomalies. The coup therefore must escalate around competent defenders, not erase their competence.
 
-Preserve Episode 24's ordinary-life debt: Luceran/Miren intend to discuss marriage after return; Ardel has works to continue; Bram/Edrik hold competent security; Calienne/Ysabet/others have ordinary plans.
+Any low-status betrayer must possess an established human motive and credible reward. Mera's daughter/dye-vat motive remains available only if prior prose supports it. At least one ordinary staff member must notice material inconsistency because their job gives them baseline knowledge.
 
-**Exit target:** Luceran recognizes that some crisis information was deliberately or accidentally distorted too slowly to reverse instantly; behind him coup conditions become actionable through human systems.
-
-## Episode 26 — An Empty Throne — LOCKED / SEED-DEPENDENT
-
-The coup begins inside Edselsto through established systems: credentials, posts, reliefs, servants, routes, patronage, family obligations and legitimate access. Bram and Edrik remain competent. Attack seams rather than intelligence: authentic credentials used for the wrong purpose, expected relief timing, divided jurisdiction, copied routines, supply access and people with legitimate reasons to be present.
-
-Any low-status betrayer must already possess desire, credible reward, rationalization and opportunity. Mera's daughter/dye-vat motive remains available only if prior prose supports the final choice. At least one ordinary staff member notices a material inconsistency because their job gives them the baseline.
-
-**Exit target:** key systems begin falling through human action while loyalists still lack a complete picture.
+**Exit target:** key systems begin falling through human action while loyalists retain partial resistance and incomplete understanding.
 
 ## Episode 27 — Castle Taken — LOCKED / CONSEQUENCE-BOUND
 
-The coup becomes open. Defenders use Episode 17/24 procedures intelligently. Attackers succeed only through preparation, legitimate access, divided loyalties, surprise, numbers or prior compromise. Some coup supporters must possess internally reasonable political/legal theories rather than secret evil. The physical crown becomes a political objective without magically creating lawful sovereignty.
+The coup becomes open. Defenders use Episode 17/24/25 procedures intelligently. Attackers succeed through preparation, legitimate access, divided loyalties, surprise, numbers and prior compromise. Some coup supporters must possess internally reasonable political/legal theories rather than secret evil. The physical crown becomes a political objective without magically creating lawful sovereignty.
 
 **Exit target:** usurpers control enough of Edselsto by ordinary force that the castle is functionally taken; survivors and missing routines seed consequences.
 
@@ -35,30 +27,39 @@ Pay off established betrayal ladders. Disposable or low-status participants disc
 
 **Exit target:** opposition creates clues, grief and anger while trying to secure control.
 
-## Episode 29 — The Confidant's Last Stand — LOCKED / NEW N+4
+## Episode 29 — The Confidant's Last Stand — LOCKED / PAYOFF-BOUND
 
 The confidant's sacrifice must be a real choice with a viable alternative. The choice must preserve something concrete—lives, evidence, time, lawful continuity, escape, or a combination—at fatal cost. The loss must strike multiple relationships and institutions, not merely Luceran. Episode 24's ordinary-life baseline is payoff fuel: interrupted plans, unfinished work, private promises and routines become legible losses.
 
-Do not use supernatural rescue. Do not make defenders passive. Do not make death decorative. The confidant's action must alter what survivors can do in Episodes 30–32.
-
 **Exit target:** usurpers complete control and close the gates while surviving loyalists carry forward something the sacrifice bought.
 
-## Episode 24 reconciliation
+## Episode 30 — Closed Gates — LOCKED / NEW N+4
 
-- Luceran departs at episode end; Edselsto remains populated and competently defended.
-- Travelling force is fifty-eight mounted guards/household troops plus twelve Black Pine scouts moving ahead in pairs; no general mobilization.
-- Bram and Edrik remain. West service, family corridor, receiving controls and lower-gate reserve remain covered.
-- Route-change messages use a black-thread authentication packet; royal seal alone does not erase verification discipline.
-- Miren travels as lover and Edevane actor. She and Luceran remain unbetrothed but promise to discuss actual marriage after returning.
-- Ardel remains at Edselsto; lower-fork road advice and Kaelmont carriage terms persist. Attraction/jealousy remain acknowledged without impairing competence.
-- Ysabet/Selise damaged trust persists despite ordinary warmth.
-- Six-wagon stores convoy remains at Northbridge with Tomas Reed; bridge condition remains material.
-- Ordinary future plans are explicitly established across court/staff/workers so the coup has something human to destroy.
-- Seven candles remain lit; no supernatural evidence or stair exploration occurs.
+Luceran returns to Edselsto after the coup has achieved ordinary-force control. Siege options threaten the ancestral seat and people still inside. The unauthenticated Episode 25 route-delay message and independent verification attempts must affect his timing/knowledge without granting omniscience. Grief may distort judgment but cannot erase strategy. Allies disagree about assault, negotiation, rescue and what the dead would have wanted.
+
+No supernatural opening yet. Episode 30 must exhaust or render unacceptable ordinary entry options so Episode 31's unprecedented direct command to Edselsto is earned rather than convenient.
+
+**Exit target:** ordinary entry is blocked or catastrophically costly; Luceran stands outside his own closed gates with the human political/military problem unresolved.
+
+## Episode 25 reconciliation
+
+- Northbridge repair is functional but incomplete; coach crosses only after additional bracing. Six Crown stores wagons remain accounted for under Tomas Reed.
+- Red Ford proves a real grievance distorted into a cleaner crisis: mixed cattle ownership, moved river, conflicting judgments, reciprocal armed escalation, Pavel wounded, shelter burned later.
+- Grey/red colors are traced to an unidentified southbound carter in witness memory but identity/affiliation/intent remain unknown.
+- Bellisar/Harrowmere forces begin reciprocal same-bell stand-down; Crown orders fresh flood survey and neutral handling of disputed cattle.
+- Southern market notices are already converting true fragments into a false-war narrative.
+- Luceran/Miren intimacy and post-return marriage-discussion promise persist.
+- An apparently Edselsto-origin route-delay message reaches Luceran without black thread; Rhyse invokes his security authority and Luceran accepts verification rather than impulsive return.
+- Reader-visible Edselsto state: Bram sent no route change. Edrik/Bram notice old-stock paperwork, a servant studying inspections, and an authentic credential used one day early under a falsely attributed roster change.
+- Seven candles remain lit. Castle does nothing supernatural.
 
 ## Active payoff debt
 
-- both-bank Red Ford testimony, cattle ownership, old judgments/flood survey/toll challenges;
+- false/altered route-delay message: origin, insertion point and messenger-chain compromise;
+- young brown-haired servant studying receiving inspection;
+- obsolete paperwork inside legitimate staffing change;
+- authentic west-service credential used at wrong time / false roster attribution;
+- both-bank Red Ford flood survey, cattle ownership, toll/grazing settlement;
 - unidentified color-hearsay carter and whether distortion was deliberate;
 - six-wagon stores convoy/Northbridge repair costs and visibility;
 - Deren Holt commissioning authority and Valcere response;
