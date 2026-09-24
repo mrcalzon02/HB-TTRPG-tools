@@ -2,7 +2,7 @@
 'use strict';
 
 const directoryApi='https://api.github.com/repos/mrcalzon02/HB-TTRPG-tools/contents/docs/beneath-dappled-oaks/chapters?ref=main';
-const chapterPattern=/^(\d+)-(.+)\.md$/i;
+const chapterPattern=/^(\d+(?:\.\d+)?)-(.+)\.md$/i;
 const smallWords=new Set(['a','an','and','as','at','but','by','for','from','in','of','on','or','the','to','with']);
 const encoder=new TextEncoder();
 const fallbackFiles=[
@@ -173,7 +173,7 @@ function renderIndex(chapters,ui){
   for(const chapter of chapters){
     const link=document.createElement('a');
     link.className='chapter-index-entry';
-    link.href='#chapter-'+chapter.number;
+    link.href='#chapter-'+String(chapter.number).replace('.','-');
     link.dataset.chapterNumber=String(chapter.number);
     link.dataset.chapterTitle=chapter.title.toLowerCase();
     link.innerHTML='<span class="chapter-index-number">Chapter '+chapter.number+'</span><span class="chapter-index-title">'+esc(chapter.title)+'</span>';
@@ -204,7 +204,7 @@ function renderStream(chapters,ui){
   for(const chapter of chapters){
     const section=document.createElement('section');
     section.className='chapter-reading-entry';
-    section.id='chapter-'+chapter.number;
+    section.id='chapter-'+String(chapter.number).replace('.','-');
     section.dataset.chapterNumber=String(chapter.number);
 
     const header=document.createElement('header');
@@ -394,6 +394,9 @@ function epubBlob(chapter,section){
   ]);
   return new Blob([bytes],{type:'application/epub+zip'});
 }
+function combinedMarkdown(chapters){
+  return '# Beneath Dappled Oaks — Combined Reader Edition\n\n**Generated in-browser from the released canonical chapter files currently loaded by this reader.**\n\n---\n\n'+chapters.filter(ch=>ch.markdown).map(ch=>ch.markdown.trimEnd()).join('\n\n---\n\n')+'\n';
+}
 function buildDownloadMenu(chapter,section){
   const details=document.createElement('details');
   details.className='chapter-download';
@@ -426,6 +429,7 @@ function buildDownloadMenu(chapter,section){
   option('PDF (.pdf)',()=>downloadBlob(pdfBlob(textFromSection(chapter,section)),stem+'.pdf'));
   option('EPUB e-reader (.epub)',()=>downloadBlob(epubBlob(chapter,section),stem+'.epub'));
   option('Standalone HTML (.html)',()=>downloadBlob(new Blob([standaloneHtml(chapter,section)],{type:'text/html;charset=utf-8'}),stem+'.html'));
+  option('Combined released chapters (.md)',()=>downloadBlob(new Blob([combinedMarkdown(released)],{type:'text/markdown;charset=utf-8'}),'beneath-dappled-oaks-combined-released-chapters.md'));
   return details;
 }
 async function discoverFiles(){
@@ -464,12 +468,13 @@ async function boot(){
     try{return await fetchChapter(chapter)}
     catch(error){return renderLoadFailure(chapter,error)}
   }));
+  released=loaded;
   renderIndex(loaded,ui);
   renderStream(loaded,ui);
   applyFilter(ui);
   watchReadingPosition(ui);
 
-  const target=location.hash&&/^#chapter-\d+$/.test(location.hash)?document.querySelector(location.hash):null;
+  const target=location.hash&&/^#chapter-\d+(?:-\d+)?$/.test(location.hash)?document.querySelector(location.hash):null;
   if(target){
     activatePanel('chapter-index',false);
     requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));
