@@ -1,10 +1,3 @@
-# Nowhere King — Season One, Episodes 01–10
-
-**Reader edition. Story prose only.** Canonical planning metadata, reveal ceilings, episode-end state summaries, continuity notes, and handoff material are intentionally excluded.
-
----
-
-
 # Episode 1 — Crown Without Court
 
 The first report of the morning concerned what the king had eaten.
