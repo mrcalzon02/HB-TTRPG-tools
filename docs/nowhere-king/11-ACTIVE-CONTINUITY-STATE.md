@@ -2,48 +2,56 @@
 
 **Role:** Single authoritative current temporal continuity ledger. Supersedes the retired `11-CURRENT-STORY-STATE.md`.
 
-**Reconciled through:** Season 1 Episode 15, *A Favor Owed*.
+**Reconciled through:** Season 1 Episode 16, *The Measure of Trust*.
 
 ## Character state
 
-**Luceran:** Obtains needed engineering capacity and a credible Moncler review by accepting real constraints rather than converting friendship or attraction into informal privilege. He now distinguishes more clearly between political consequence and purchasable favor: intimacy cannot be made apolitical, but state bargains involving intimates must remain legible and defensible. Accepts that a clean bargain can still create profit, access, jealousy, and future obligation.
+**Luceran:** Security fear now has an explicit institutional check. During an ambiguous west-works scare he initially wants the west gate closed and resists delaying his inspection, but accepts Rhyse's contrary judgment and Miren's argument that fear should not make him the sole interpreter of uncertain evidence. He now accepts a written rule under which Rhyse has route authority during an active security question; Luceran can legally overrule him only explicitly and with the contrary advice recorded. Learns that trust can include letting loyal people constrain him rather than merely obey him.
 
-**Miren Edevane:** Continues intimate relationship with Luceran. Explicitly acknowledges jealousy toward Ardel without treating jealousy as evidence of Kaelmont incompetence or wrongdoing. Establishes a durable personal boundary that Luceran's bargains involving intimate/attracted parties must be open enough for her to stand beside them. Edevane/Maret grain adjacency remains separated from culpability.
+**Miren Edevane:** Continues intimate relationship with Luceran. Materially disagrees with him during the scare, naming his fear without treating him as incompetent. Her refusal to soothe him into a bad security interpretation improves his judgment and deepens Luceran's model of loyalty as friction rather than agreement. Episode 15 jealousy/open-bargain boundary remains active.
 
-**Ardel Kaelmont:** Negotiates a profitable but bounded Kaelmont carriage arrangement and temporary works access. Her attraction to Luceran remains genuine and politically relevant without becoming proof of corruption. She is personally accountable for Kaelmont's observer access or must designate substitutes in writing.
+**Tovan Rhyse:** Refuses Luceran's immediate request to close the west gate, quietly restricts rather than panics traffic, protects irrelevant private sexual information from entering Crown security records, and establishes a formal route-authority rule. His loyalty now includes documented professional dissent. Hunt investigation remains unresolved.
 
-**Pellin Joss:** Temporarily reviews Moncler's compensation claim as a Crown reviewer after refusing reassignment without competent stores coverage. Preliminary finding: Crown owes real compensation, below Moncler's claim but above Crown hopes. His independence and evidentiary authority continue to grow without making him judge or minister.
+**Bram Tolland / Edrik Saye:** Bram treats the unsigned note and missing surveyors as evidence rather than conclusions and traces door logs/material facts. Edrik establishes Dena Mar's whereabouts without recording irrelevant intimate detail. Both demonstrate the security culture Episode 17 can formalize.
 
-**Nera Vos:** Royal Works tool-issue keeper promoted into recurring continuity through demonstrated physical-record competence. Temporarily checks Olan's reconstructed movement records, immediately identifying places where commercial transfer and physical movement were conflated. Receives temporary-duty pay; her ordinary tool desk remains covered rather than disappearing.
+**Lysa Quill:** Her surveyor Corvin Hale disobeys her instruction and suffers a mundane fall at the west cut. She insists that his stupidity not be rewritten as assassination merely because the Crown is frightened, formally reprimands him, and supports safer after-hours sign-out. Twenty-day structural engagement remains active.
 
-**Olan Vey:** Continues supervised grain reconstruction. Identifies Nera as useful replacement capacity, demonstrating that his institutional knowledge remains valuable despite his falsification. Continues to correct records without restored payment authority.
+**Corvin Hale:** Kaelmont-trained surveyor. Leaves before light for a solo level check despite Quill's instruction, is injured by a wet cut failure, and survives. Reports an indistinct rope-carrying worker asked about Luceran's inspection habits the previous afternoon. Cannot reliably identify the man.
 
-**Mara Henn / Tessa Rane:** Independently constrain the Kaelmont bargain. Mara protects drainage/structural reality; Tessa protects village carriers, emergency supply, private land and water rights. Neither becomes a Crown proxy.
+**Dena Mar / Pera Sol:** Dena's apparent absence is explained by consensual private adult conduct with laundress Pera Sol. Their relationship is not made into a court scandal or general security record. Pera demonstrates practical information competence and insists that relevant timing can be established without surrendering unnecessary privacy.
 
-**Lysa Quill:** Kaelmont-trained retaining-wall/drainage specialist now on a paid twenty-day Crown engagement with two surveyors. Begins with west retaining cuts, drainage load and road conditions. Has no stair key, archive right, or automatic authority to explore buried spaces.
+**Nera Vos:** Identifies the unsigned note as lower-works tool-slip stock but refuses to overclaim provenance. Creates a simple paper-control distinction: numbered issue forms remain controlled; scrap is separated and corner-cut. Continues temporary physical-record checking while Pellin handles Moncler.
 
-**Tovan Rhyse:** Existing security controls remain active. Sealed stair remains locked; working key custody unchanged. Hunt investigation remains unresolved.
+**Mara Henn:** Treats the west-cut fall as ordinary water-driven structural failure until evidence says otherwise. Supports inspection windows but rejects surprise royal arrivals that would make works less safe. Continues independent village/property and bounded mapping interests.
+
+## Security state
+
+- Living hunt tester/sponsor remains unidentified.
+- False horn, hunt rope, unidentified riders, fraudulent rope issue and charcoal marks remain unresolved human evidence.
+- New unsigned note: `WEST CUT. BEFORE LIGHT. COME QUIETLY.` Found under Lysa Quill's door; intended recipient and writer unknown.
+- Note paper is ordinary lower-works tool-slip stock accessible to many people. No reliable handwriting match.
+- Corvin Hale reports an indistinct rope-carrying worker asked whether Luceran personally inspected works and may have learned the planned west-cut visit. This is a lead only; no proof connects him to the hunt incident or note.
+- West-cut rock failure currently supports a mundane water-behind-the-face explanation. No evidence of sabotage.
+- General works schedules now carry royal inspection windows rather than exact routes/arrival times.
+- Exact royal routes are held to a smaller escort/security channel and released closer to movement time according to professional judgment.
+- Crown specialists doing before-light/after-hours field work require supervisor marking in addition to ordinary door sign-out; villagers moving on their own land are not subjected to this Crown-work rule.
+- Rhyse has route authority during an active security question. Luceran may overrule him, but the override and Rhyse's contrary advice must be explicit and recorded.
+- Nera's paper control separates controlled numbered forms from corner-cut scrap.
+- Jeron Bellisar remains unable to ride.
+- Vess observation legacy and Royal Works rope controls remain active.
 
 ## Kaelmont bargain
 
-- Three-year nonexclusive carriage opportunity for defined Edselsto structural materials: dressed structural stone, lime, slate, structural timber and ordered structural ironwork.
-- Village and other qualified carriers may bid.
-- Food, fodder, fuel, water works, household goods, military stores and private noble freight excluded unless separately contracted.
-- Kaelmont priority cannot displace emergency food, firewood, medical carriage or village water repair.
-- Existing private land and water rights untouched.
-- Rates posted by route/season rather than improvised through personal access.
-- Lysa Quill plus two surveyors engaged and paid by Crown for twenty days.
-- Two observer seats for next three works conferences only when agenda materially concerns roads, retaining walls, quarry supply or west-side buried structural hazards.
-- Observer access grants no vote, command, key, archive access or stair-entry right and expires automatically.
-- Ardel is named observer or must designate substitutes in writing.
+- Three-year nonexclusive carriage opportunity remains active for defined Edselsto structural materials.
+- Village and other qualified carriers may bid; emergency and excluded categories remain protected.
+- Lysa Quill plus two surveyors remain on the paid twenty-day Crown engagement. Hale is injured/reprimanded; Dena remains available.
+- Two observer seats remain available for the next three relevant works conferences under Episode 15 limits; no vote, command, key, archive or stair-entry right.
+- Ardel remains named observer or must designate substitutes in writing.
 
 ## Moncler / accounting state
 
-- Moncler invokes Episode 13 evidentiary standard and requests Pellin Joss.
-- Pellin serves as Crown reviewer, not Moncler agent; Crown retains his notes.
-- Review remains open after first day.
-- Preliminary result supports real Crown compensation, amount unresolved pending disputed tool inventories.
-- Nera covers physical-record checking in stores while Pellin is absent.
+- Pellin's Moncler compensation review remains open pending disputed tool inventories; preliminary result still supports real Crown compensation.
+- Nera continues physical-record checking in stores while Pellin is absent as required.
 - Tomas Reed remains on six-week river-depot assignment producing independent Crown receiving copies.
 - Maret repayment and Damaris grain negotiation remain active.
 - Olan remains without payment authority and under supervised reconstruction.
@@ -52,20 +60,11 @@
 
 - Temporary heavy timber barrier remains locked.
 - Rhyse holds working key; Avarren holds sealed duplicate.
-- No Episode 15 entry or deeper exploration occurs.
+- No Episode 16 entry or deeper exploration occurs.
 - Deeper exploration still requires new formal authorization.
-- Lysa Quill's paid engagement does not itself authorize stair access.
 - Partial scratched lettering beyond first turn remains unread.
 - Purpose, age, destination and relationship to other sealed spaces remain unknown.
 - No supernatural manifestation.
-
-## Security state
-
-- Living hunt tester/sponsor remains unidentified.
-- False horn, rope, unidentified riders, fraudulent rope issue and charcoal marks remain unresolved human evidence.
-- Jeron Bellisar remains unable to ride.
-- Vess observation legacy and Royal Works rope controls remain active.
-- No evidence links the stair or Kaelmont engineering work to the hunt incident.
 
 ## Family-history / mystery state
 
@@ -84,7 +83,7 @@ Seven of seven remain lit.
 
 ## Immediate handoff
 
-Episode 16 — *The Measure of Trust* is next. A security scare must force Luceran to judge conflicting living testimony under incomplete information. Existing hunt evidence, Rhyse's procedures, Episode 13's evidence discipline and Episode 14's authorization culture are active baselines. A loyal intimate or confidant must materially disagree with Luceran and remain loyal; the disagreement must improve safety rather than be punished as disloyalty.
+Episode 17 — *New Guard* is next. It must institutionalize the practical security lessons accumulated through the hunt and Episode 16: posts, credentials, night watches, route knowledge, relief patterns, information boundaries and command authority. Ordinary guards must acquire durable goals and rivalries. The future coup needs a competent, legible system that can later be learned and attacked rather than defenders becoming stupid.
 
 ## Hard exclusions
 
