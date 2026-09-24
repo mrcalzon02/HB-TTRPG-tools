@@ -4,7 +4,7 @@ document_role: "ROLLING FIVE-CHAPTER FORWARD PLAN"
 status: "ACTIVE PLANNING CONTROL"
 planning_horizon: 5
 last_reconciled: "2026-09-23"
-active_after_chapter: 12
+active_after_chapter: 13
 ---
 
 # Beneath Dappled Oaks — Active Five-Chapter Lookahead
@@ -13,57 +13,47 @@ This is the operational N+1 through N+5 plan for the first-principles rewrite. U
 
 ## Current committed rewrite state
 
-Canonical numbered prose now runs through **Chapter Twelve — Four Houses Listening**.
+Canonical numbered prose now runs through **Chapter Thirteen — The Cost of Keeping Seven**.
 
-Corren waived objection to opening the selector custody explanation and explicitly requested that the record be opened while protected-person identity, destination and route geometry remain sealed. The surviving statement says his custody was limited to preservation or transfer of already-admitted protected material, that he was not authorized to admit a new witness, and that he returned the selector two days later claiming it had not been exercised. This is evidence, not independent proof of non-use. The next evidentiary dependency is the paired receiving-side record that should show whether a completed dual-control exercise occurred.
+The Seven have converted their Chapter Twelve disclosure problem into operational practice through real conflict rather than a sentimental pact. They will not demand oath-breaking as proof of affection; a refusal to disclose is neither proof of betrayal nor proof of innocence; protected knowledge should communicate actionable consequence where lawfully possible; advice based on protected material remains advice rather than proof; gossip remains gossip; confidential sources do not become communal property through friendship; and professional correctness does not erase personal consequences. Ilyan and Mireth retain a real unresolved disagreement over witness autonomy versus evidentiary delay without treating that disagreement as disloyalty.
 
-Political visibility is now ordinary and distributed rather than conspiratorial. Caladren, Eris, Crown/Avariel and Sylvaren networks each possess partial and conflicting pictures because lawful requests, duty rosters, family observation, archive traffic and professional gossip leave traces. Thessa has accepted Lady Maevra Eris's supper invitation and will bring Ilyan explicitly as her guest, making their relationship useful to her family without converting either lover into the other's institutional authority.
+Caelen's bounded Crown warning produced a concrete evidentiary correction: during Corren's two-day selector custody, the receiving-side authority was temporarily reassigned under emergency reserve procedure. The unsealed index gives only the authority class: **Joint receiving authority — external continuity reserve**. This does not establish selector use, identity, destination or route geometry. It means a missing ordinary exercise record cannot be treated as dispositive until the reserve reassignment and its lawful authority are understood.
 
-The Seven have recognized that friendship no longer creates a common clearance. They began negotiating durable information-sharing principles: no requests to violate oaths or protected confidences; inability to disclose is not itself betrayal; protected withholding is distinct from deliberate deception; gossip is not verified intelligence; lovers do not inherit one another's institutional authority; and sources who trusted one member did not thereby consent to become sources for all seven.
+Political visibility remains ordinary and distributed. Lady Maevra Eris's supper is still three nights away. Ilyan will attend explicitly as Thessa's guest, not as an examiner or inherited institutional proxy.
 
 ## Governing debts
 
-**Teren memory debt:** preserve lawful compartment, failed release, later review and still-unproven manipulation as separate propositions. Recovered fragments remain bounded.
+**Seven-network debt:** preserve the new disclosure practices as behavior, not repeated speeches. Let later chapters test them through choices and consequences.
 
-**Mara/protected-person privacy debt:** Ilyan's promise remains binding. The paired receiving-record inquiry must not become a back door into protected identity, destination or route geometry.
+**Mireth/Ilyan disagreement debt:** witness autonomy versus investigative urgency remains a legitimate disagreement between loyal friends. Do not erase it merely because Ilyan apologized.
 
-**Corren complexity debt:** Corren helped engineer Silver Night. His lawful custody and waiver do not exonerate him. Separate possession, authority, use, motive and later return.
+**Mara/protected-person privacy debt:** Ilyan's promise remains binding. The receiving-record inquiry must not become a back door into protected identity, destination or route geometry.
 
-**Institutional failure debt:** correct narrow refusals and ordinary visibility remain real. Do not retrofit a master conspiracy onto every clerk, relative or office.
+**Corren complexity debt:** Corren helped engineer Silver Night. His lawful custody, waiver and claimed non-use do not exonerate him. Separate possession, authority, use, motive and later return.
 
-**Relationship/adult-life debt:** Ilyan/Thessa are lovers with increasing domestic familiarity while retaining separate careers and authority. Their Eris supper must test political usefulness without reducing the relationship to strategy.
+**Institutional failure debt:** correct narrow refusals, reserve procedures and ordinary visibility remain real. Do not retrofit a master conspiracy onto every clerk, relative or office.
+
+**Relationship/adult-life debt:** Ilyan/Thessa are lovers with increasing domestic familiarity while retaining separate careers and authority. Mireth/Caelen and Damaris/Rhyl are also developing as adult relationships whose intimacy creates social visibility without automatic institutional access.
 
 **Demographic motive debt:** student-shield violation and unresolved heir-demographic pressure remain active architecture. Do not prematurely fix the expanding family, rival faction or exact numbers.
 
 ---
 
-## N+1 — Chapter Thirteen: The Cost of Keeping Seven
+## N+1 — Chapter Fourteen: The Invitation That Knows Too Much
 
 **Certainty:** LOCKED INTENT
 
-**Primary purpose:** turn the principles sketched in Chapter Twelve into a mature structural choice about the Seven as an information-sharing network.
-
-Force at least one real case where a friend cannot disclose something the others want. Do not manufacture betrayal. Let the discomfort arise because the protected information genuinely belongs to an oath, client, source, witness or office rather than to the friendship.
-
-The Seven should decide how to handle deliberate deception, urgent danger, corroboration requests, conflicts between lovers and institutions, and what happens when one member believes another is withholding too much. Preserve affection while making the boundaries operational rather than sentimental.
-
-**Exit handoff:** the Seven remain friends but now possess explicit rules and at least one unresolved disagreement about their limits.
-
----
-
-## N+2 — Chapter Fourteen: The Invitation That Knows Too Much
-
-**Certainty:** PLANNED
-
 **Primary purpose:** use Lady Maevra Eris's supper and/or a related socially ordinary invitation to reveal that somebody has reconstructed more of the inquiry than any single source should provide.
 
-The reconstruction may come from lawful traces, gossip, kinship and commercial observation rather than a master conspiracy. Ilyan attends as Thessa's guest. Let Thessa's professional ambition, family competence and romantic attachment all remain real at once. The Seven's new disclosure rules should matter immediately.
+The reconstruction may come from lawful traces, gossip, kinship and commercial observation rather than a master conspiracy. Ilyan attends as Thessa's guest. Let Thessa's professional ambition, family competence and romantic attachment all remain real at once. The Seven's new disclosure practices should matter immediately: Ilyan and Thessa must decide what they can say, what they cannot, and what the other is entitled to know before entering the room.
 
-**Exit handoff:** a present-day political actor has chosen to engage the Seven because of what they are doing now.
+Use the newly discovered **external continuity reserve** authority class as something sophisticated observers may partially recognize without giving them omniscient knowledge.
+
+**Exit handoff:** a present-day political actor has chosen to engage the Seven because of what they are doing now, and the reserve-authority question acquires a socially consequential lead.
 
 ---
 
-## N+3 — Chapter Fifteen: The Things Families Count
+## N+2 — Chapter Fifteen: The Things Families Count
 
 **Certainty:** PLANNED
 
@@ -77,11 +67,11 @@ At least one of the Seven should realize that the same kind of demographic arith
 
 ---
 
-## N+4 — Chapter Sixteen: What Corren Kept
+## N+3 — Chapter Sixteen: What Corren Kept
 
-**Certainty:** DIRECTIONAL
+**Certainty:** PLANNED
 
-**Primary purpose:** return to Corren after the paired receiving-side record and political consequences of notice have propagated.
+**Primary purpose:** return to Corren after the reserve receiving-side discovery and political consequences of notice have propagated.
 
 Explore what he retained: a copy, memory, protected obligation, private warning, unanswered question, oath or evidence he could not safely place in the ordinary chain. Any revelation must remain compatible with his established culpability in Silver Night. A guilty man may still preserve evidence, protect a particular person, distrust co-conspirators or prepare for consequences.
 
@@ -91,17 +81,29 @@ Force Ilyan to distinguish understanding his father from forgiving him. Those ar
 
 ---
 
-## N+5 — Chapter Seventeen: The Other Half of the Lock
+## N+4 — Chapter Seventeen: The Other Half of the Lock
 
-**Certainty:** HORIZON / EXPLORATORY
+**Certainty:** DIRECTIONAL
 
 **Primary purpose:** pay the paired receiving-side dependency without violating protected-person privacy.
 
-Determine whether the receiving mechanism records a completed selector exercise during Corren's two-day custody. If it does, establish only time, authority class and operational consequence that can lawfully survive without identity or destination. If it does not, treat absence carefully: distinguish a true negative from lost, superseded or differently retained records.
+Determine whether the receiving mechanism records a completed selector exercise during Corren's two-day custody. Incorporate the newly established fact that receiving authority was temporarily reassigned to an external continuity reserve. If an exercise exists, establish only time, authority class and operational consequence that can lawfully survive without identity or destination. If no exercise exists, distinguish a true negative from records held under the reserve authority, lost records, supersession or a mechanism that recorded completion elsewhere.
 
-Use the result to narrow who could have acted and what the continuity mechanism actually protected. Do not turn the paired record into omniscient proof.
+**Exit handoff:** the selector question is reduced to a smaller set of defensible possibilities.
 
-**Horizon exit:** the selector question is reduced to a smaller set of defensible possibilities, creating a concrete bridge toward the deeper Silver Night motive rather than another free-floating mystery.
+---
+
+## N+5 — Chapter Eighteen: The Reserve Hand
+
+**Certainty:** HORIZON / EXPLORATORY
+
+**Primary purpose:** identify the lawful architecture behind the external continuity reserve without converting it into a conveniently omniscient secret office.
+
+Determine who could appoint or activate reserve receiving authority, what emergency conditions justified doing so, and which institution retained accountability afterward. The answer may identify an office, order or authority class before it identifies a person. Preserve the possibility that a lawful protective mechanism was used inside a broader criminal or politically compromised emergency.
+
+Use the Seven's disclosure practices under pressure: at least one member should possess a professionally relevant piece they cannot fully disclose, and the others should act on consequence rather than demanding the source.
+
+**Horizon exit:** the reserve authority becomes a concrete institutional bridge toward the deeper Silver Night motive, narrowing who could lawfully have changed the other half of the lock and why.
 
 ---
 
