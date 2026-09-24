@@ -4,7 +4,7 @@ document_role: "ROLLING FIVE-CHAPTER FORWARD PLAN"
 status: "ACTIVE PLANNING CONTROL"
 planning_horizon: 5
 last_reconciled: "2026-09-24"
-active_after_chapter: 15
+active_after_chapter: 16
 ---
 
 # Beneath Dappled Oaks — Active Five-Chapter Lookahead
@@ -13,75 +13,63 @@ This is the operational N+1 through N+5 plan for the first-principles rewrite. U
 
 ## Current committed rewrite state
 
-Canonical numbered prose now runs through **Chapter Fifteen — The Things Families Count**.
+Canonical numbered prose now runs through **Chapter Sixteen — What Corren Kept**.
 
-Chapter Fifteen establishes the ordinary baseline required before demographic evidence can mean anything. House Eris-Vey's current household review shows that competent noble families routinely project births, acknowledged children, cadet-line strength, service obligations, inheritance exposure and future adult capacity. The Seven confirm that their own institutions likewise count future adults for legitimate reasons: Crown commissions, River Ledger exposure, Green Covenant intake, Silver Bough kinship maps and Orthell service capacity.
+Corren's retained packet establishes why the selector record was deliberately incomplete without converting that incompleteness into innocence. His custody statement says he did not exercise the selector; that remains a claim to be tested. His private memorandum and retained accession stub establish that a paired receiving capacity survived under commission **JEC-R/6**, and that Corren preserved the stub because he believed reuniting ordinary records could expose a protected witness path.
 
-The investigation therefore does **not** treat demographic arithmetic as sinister. The actionable historical question is whether pre-Silver-Night counting became unusually specific, crossed student-protection boundaries, or intersected with Dmitrigical planning, emergency credential machinery or later suppression.
+Corren admits that he accepted unlawful manipulation of emergency credentials and a plan intended to break a future political concentration through disqualification, compelled reassignment and engineered scandal, while knowing violence was possible. He denies approving a massacre. This distinction does not exonerate him and must be tested against independent evidence.
 
-A new bounded archival category now exists: **Concord Academy graduating-cohort projection circulation records**. The projection series itself was ordinary. The circulation ledger for the Silver Night cohort remains sealed under student-protection rules, but Judge Vaun has grounds to request non-identifying circulation categories and dates.
+Teren recognizes the JEC-R/6 commission form from his temporary-chair packet but cannot recover whether he signed or read the underlying instrument. His bounded memory gap remains intact rather than being conveniently repaired.
 
-The reserve-authority strand also advances without identifying the protected person or route. Three of four historically available external-reserve authority classes are presently excluded from the west-tower interval by unrelated documented commitments, leaving **jointly commissioned receiving authority** as the only class not yet excluded. Contemporary expenses show ordinary logistical activity under such an authority, but do not prove selector exercise, identity or destination.
+A non-identifying index search establishes that JEC-R/6 was created three days before Silver Night, activated the morning after, and closed on the day Corren returned the selector. It had two commissioning offices. One visible office is **Dmitrigical Tribunal Contingency Secretariat**; the second remains sealed by authority class.
 
-Thessa intends to accept the three-month western transport-assessment posting. Ilyan supports the work while acknowledging that he will dislike the separation. Their relationship is being integrated into adult professional life rather than replacing it.
+Thessa's western posting remains active. Ilyan supports it while their relationship continues to operate around separate professional obligations.
 
 ## Governing debts
 
-**Seven-network debt:** preserve disclosure boundaries as practiced behavior. The Seven may compare categories and consequences without surrendering protected files, private genealogies or sources.
+**Corren culpability debt:** preserve the difference between explanation and exoneration. Corren helped engineer Silver Night's enabling machinery; any protective act afterward coexists with that culpability.
 
-**Mireth/Ilyan disagreement debt:** witness autonomy versus investigative urgency remains unresolved and legitimate.
+**Selector-proof debt:** Corren's statement of non-use is evidence, not proof. Establish whether JEC-R/6 activation required, recorded or implied an actual selector exercise.
 
-**Mara/protected-person privacy debt:** non-identifying archive work must not become a back door into identity, destination or route geometry.
+**Teren-memory debt:** do not manufacture convenient recovery. New fragments must remain bounded, sensory or independently prompted unless lawful release changes his access.
 
-**Corren complexity debt:** Corren helped engineer Silver Night. Lawful custody, waiver, claimed non-use and any protective act remain separate from culpability.
+**Protected-person privacy debt:** investigate authority, dates and consequences without opening identity, destination or route geometry unless later evidence makes that unavoidable.
 
-**Institutional-failure debt:** ordinary lawful systems can be exploited inside a criminal emergency without every clerk, form or mechanism becoming corrupt.
+**Demographic-motive debt:** the ordinary baseline is established. Future cohort-circulation evidence must show abnormal access, timing, granularity, purpose or downstream intersection before it becomes probative.
 
-**Relationship/adult-life debt:** Thessa's posting now requires actual scheduling, travel and emotional consequences. Ilyan/Thessa remain lovers with separate professions. Mireth/Caelen and Damaris/Rhyl retain independent trajectories.
+**Seven-network debt:** preserve practiced disclosure boundaries. Protected withholding is not betrayal; consequence can be shared without surrendering source.
 
-**Demographic-motive debt:** the story now has a normal baseline. Future evidence must establish abnormal access, granularity, purpose or intersection before demographic planning can become probative of Silver Night.
+**Relationship/adult-life debt:** Thessa's western assignment requires actual preparation, departure and distance consequences. Romance does not suspend either lover's work.
 
 ---
 
-## N+1 — Chapter Sixteen: What Corren Kept
+## N+1 — Chapter Seventeen: The Other Half of the Lock
 
 **Certainty:** LOCKED INTENT
 
-Return to Corren after the reserve and demographic baselines have narrowed the questions around him. Determine what he retained after Silver Night: a copy, protected obligation, warning, private memorandum, unanswered question or evidence he believed unsafe in the ordinary chain.
+Use JEC-R/6's creation, activation and closure dates to determine what activation legally required. Establish whether a paired selector exercise can be proven, excluded, or remains indeterminate. Follow authority mechanics rather than protected identity.
 
-Any revelation must remain compatible with his established culpability. Understanding why a guilty man preserved something is not forgiveness and is not exoneration.
+Identify what record class would exist if the receiving half was actually exercised, and distinguish an intentionally separated record from a missing record.
 
-**Exit handoff:** Corren's retained material creates a concrete bridge to either the paired-selector receiving side, the cohort-circulation question, or both.
-
----
-
-## N+2 — Chapter Seventeen: The Other Half of the Lock
-
-**Certainty:** PLANNED
-
-Pay the paired receiving-side dependency without violating protected-person privacy. Use the chartered-order cross-index, expense classes and any lawful Corren material to determine whether a completed selector exercise can be established during his two-day custody.
-
-If an exercise exists, establish only the time, authority class and lawful operational consequence that can survive without identity or destination. If no exercise exists, distinguish a true negative from records held elsewhere, supersession or incomplete archival survival.
-
-**Exit handoff:** the selector question contracts to a smaller defensible set of possibilities.
+**Exit handoff:** contract the selector question to a defensible set of possibilities and narrow the sealed second commissioning authority by class.
 
 ---
 
-## N+3 — Chapter Eighteen: The Reserve Hand
+## N+2 — Chapter Eighteen: The Reserve Hand
 
 **Certainty:** PLANNED
 
-Identify the lawful architecture behind the jointly commissioned receiving authority. Determine who could appoint it, what emergency condition activated it and which institution retained accountability afterward. An office or authority class may be established before a person.
+Identify the lawful architecture behind the jointly commissioned receiving authority. Determine who could appoint it, what emergency condition activated it, which authority family supplied the sealed second commission, and which institution retained accountability afterward. Establish office/class before person.
 
-Use the Seven's disclosure practice under pressure: professionally protected information may be represented by consequence without demanding its source.
+Use Teren's surviving memory only where independently prompted by records. Do not turn memory recovery into a shortcut.
 
 **Exit handoff:** the reserve authority becomes a concrete institutional bridge into the deeper Silver Night planning structure.
 
 ---
 
-## N+4 — Chapter Nineteen: The Arithmetic Before the Fire
+## N+3 — Chapter Nineteen: The Arithmetic Before the Fire
 
-**Certainty:** DIRECTIONAL
+**Certainty:** PLANNED
 
 Open the non-identifying portion of the Silver Night cohort circulation history and compare it with normal Academy, House, Crown, order and commercial demographic planning. Look for abnormal timing, granularity, repeated requests, unexpected institutional access or intersection with already established Valeric/Dmitrigical machinery.
 
@@ -91,15 +79,27 @@ Do not identify the historical expanding family or rival faction merely because 
 
 ---
 
-## N+5 — Chapter Twenty: Who Asked to See the Count
+## N+4 — Chapter Twenty: Who Asked to See the Count
+
+**Certainty:** DIRECTIONAL
+
+Follow any circulation anomaly to the requesting authority rather than immediately to a villain. Determine the stated lawful reason, actual information supplied, and whether the request intersects with Silver Night preparation in time, personnel, authorization or downstream use.
+
+Preserve innocent analysts, mixed motives and lawful information later repurposed by criminal actors as live possibilities.
+
+**Exit handoff:** the demographic strand is positioned to converge with the Valeric/Dmitrigical and emergency-custody strands without collapsing them into one convenient conspiracy.
+
+---
+
+## N+5 — Chapter Twenty-One: What the Second Office Knew
 
 **Certainty:** HORIZON / EXPLORATORY
 
-Follow the circulation anomaly, if one is established, to the requesting authority rather than immediately to a villain. Determine whether access was requested by a House office, Crown body, order, academy administrator, financial institution or intermediary, and what lawful reason was stated at the time.
+Return to the sealed second commissioning authority after the selector and demographic strands have produced enough independent context to ask a narrower question. Determine what that office was told when it joined JEC-R/6, what emergency purpose it believed it was serving, and whether its knowledge matched the Contingency Secretariat's.
 
-The key evidentiary question is not merely who possessed demographic information but whether the request intersected with Silver Night preparation in time, personnel, authorization or downstream use. Preserve the possibility of innocent analysts, mixed motives and information repurposed after lawful collection.
+The dramatic question is institutional theory of mind: two offices may lawfully sign the same instrument while understanding its purpose very differently. Do not infer shared conspiracy merely from shared authorization.
 
-**Horizon exit:** the student-demographic strand is positioned to converge with the Valeric/Dmitrigical and emergency-custody strands without collapsing them into a single convenient conspiracy.
+**Horizon exit:** establish whether JEC-R/6 was created as a protective redundancy later exploited, a knowingly compromised instrument, or a mixed-purpose mechanism whose participants possessed materially different knowledge.
 
 ---
 
