@@ -1,40 +1,78 @@
 # Nowhere King — Active Continuity State
 
-**Reconciled through:** Season 1 Episode 12, `The King's Table`.
+**Reconciled through:** Season 1 Episode 13, *The Missing Ledger*.
 
 ## Character state
 
-**Luceran:** Knows Edselsto's new court already creates patronage through rooms, contracts, routes, meals and access. Treats the hunt rope/false horn as unresolved human security action. Increasingly accepts that affection and political advantage can coexist. Ardel's genuine interest and Kaelmont's interests are both real; no exclusive courtship or consummation exists. Trusts Rhyse's bounded confidence more than before. Edselsto remains ancestral and strange, not confirmed sentient. Seven candles remain lit.
+**Luceran:** Now distinguishes patronage adjacency from transactional evidence in fiscal investigations. Accepts scrutiny of friendly suppliers and signs Moncler's demand for the same documentary standard. Continues intimacy with Miren without treating her family connections as either guilt or immunity. Increasingly tolerates experts answering "we do not know yet."
 
-**Tovan Rhyse:** Treats false horn and rope as real but not proven to share one actor. Changes hunt signals after use, narrows route distribution, reviews route knowledge quietly, and favors observation of the funeral grade over seizure. His model of Luceran improves: still impulsive, increasingly capable of accepting restraint.
+**Tovan Rhyse:** Preserves hunt evidence and treats false commercial records as potentially security-relevant without taking control of the fiscal inquiry. Hunt tester remains unidentified.
 
-**Ardel Kaelmont:** Genuine attraction/curiosity toward Luceran continues alongside house strategy. Kaelmont receives a five-year nonexclusive Crown heavy-carriage concession for the north-road cut, bounded by published maximum rates, Crown self-carriage, paid land acquisition/lease, village drainage review, maintenance standards, and no claim over the old funeral grade.
+**Miren Edevane:** Supports inspection of Edevane-adjacent supplier Maret & Sons while rejecting guilt by association. Expects her aunt to react independently to reputational embarrassment. Intimacy with Luceran continues.
 
-**Tessa Rane:** Continues to protect village land, water and access while accepting the economic benefit of the revived court. Her place at the King's Table creates a social precedent for village participation where Crown projects materially affect village interests.
+**Pellin Joss:** Promoted by competence, not office. Reconstructs the grain chain, insists on physical/accounting distinctions, and recommends Olan's bounded consequence. Remains household-stores staff rather than becoming judge or minister.
 
-**Bram Tolland:** House Bellisar publicly states it remembers his intervention during the hunt. No favor has been requested or promised; this is an unpriced social debt.
+**Tomas Reed:** Recognizes altered entries through handwriting and office-sand practice. Temporarily assigned for six weeks to the river depot as Crown receiving-copy clerk, with travel allowance, dry lodging and two pairs of boots.
 
-**Jeron Bellisar:** Shoulder injury/dislocation and bruised ribs persist. Arm remains immobilized; riding prohibited. Humor does not erase pain or recovery.
+**Olan Vey:** Admits deliberately falsifying the castle grain tally to avoid reopening a paid account and delaying subsequent grain orders. No personal profit proven. Removed from payment authority; ordered to reconstruct all open grain orders under supervision.
 
-**Selise Varo:** Establishes that ordinary family news may travel through her Edevane connection but restricted archive material will not. Ysabet observes her enforce the boundary and grants increased practical trust.
+**Selise Varo / Ysabet Marris:** Archive remains institutionally bounded. Selise suggests staffing capacity; Ysabet's objection is respected rather than overridden.
 
-**Pellin Joss:** Household-stores competence promoted to plot relevance. Reports about twenty-six days of Crown grain at current issue, excluding private/village stores and subject to labor growth. Finds a grain tally mismatch after dinner and begins verification before escalating.
+## Grain / fiscal state
 
-## Institutional and bargain memory
+- Original Crown order: 74 sacks.
+- Physical castle receipt: 64 sacks.
+- Mold inspection and depot handling generated shifting figures; premature certification and later corrections were not reconciled cleanly.
+- Crown payment treated the chain as complete and produced an overpayment.
+- Maret & Sons undertakes repayment.
+- Dovren Haulage road sheet supports 64 loaded/received in the relevant final movement.
+- Jalen Marr's premature depot certification is improper and requires follow-up but does not alone prove theft.
+- Damaris forward-grain negotiation remains active.
+- Crown will seek independent receiving copies at depot transfer rather than relying solely on supplier/carrier copies.
+- Documentary standard now separates order, title transfer, quality inspection, physical carriage, castle receipt, stores issue and payment.
 
-- Kaelmont road concession exists under the Episode 12 limits and must survive future bargaining.
-- Damaris river factors are not in rebellion; they are rationally withholding forward grain commitments until price/carriage risk stabilizes. Crown negotiation on guaranteed volume, price and risk is active.
-- Bellisar remembers Jeron's injury and Bram's intervention while retaining legitimate questions about route security.
-- Village Council knowledge has repeatedly proved necessary for land, water, drainage and route decisions.
-- Moncler compensation remains limited to verified direct losses from the Crown labor requisition.
-- Funeral grade remains village access and a known, unfortified security route.
-- Family-wing missing records and intentional closures remain unresolved.
-- Hunt attacker(s), false horn and rope remain unresolved human-security evidence.
+## Political / institutional consequences
+
+- Moncler invokes the grain inquiry's evidentiary standard for its unresolved direct-loss compensation claim.
+- Luceran signs a documentary review rather than shielding the Crown from its own rule.
+- Maret/Edevane adjacency does not establish Edevane culpability.
+- Kaelmont five-year nonexclusive carriage concession remains active under Episode 12 limits.
+- Bellisar remembers Bram's intervention; Jeron remains injured and unable to ride.
+- Village Council/Tessa retains drainage, water, access and property relevance.
+- Vess paid seven-day observation and unresolved boundary/mill-spring rights remain active.
+- Royal Works rope controls remain.
+- Royal Companion review remains unresolved.
+
+## Security state
+
+- Living hunt tester/sponsor remains unidentified.
+- False horn, rope, unidentified riders, fraudulent rope issue and charcoal marks remain unresolved human evidence.
+- No new security accusation arises from the grain case.
+- Rhyse retains a copy of Olan's confession because false records can conceal movements, but this is precaution, not proof of linkage.
+
+## Family-history / mystery state
+
+- N.F. 44–51 unresolved.
+- Halven Sare unresolved.
+- Father's private-paper restriction/transfer and parental visit remain bounded.
+- Widow's key remains with Orven.
+- Infilled family-passage doorway remains intact.
+- Lower-west service door remains barred.
+- No sealed-stair exploration has occurred yet.
+- No confirmed supernatural behavior.
+
+## Seven candles
+
+Seven of seven remain lit.
 
 ## Immediate handoff
 
-Pellin's grain discrepancy is due in Episode 13. It must be investigated as material accounting reality—error, timing, spoilage, theft, carriage loss or corruption—without supernatural substitution.
+Episode 14 — *The Sealed Stair* is next. Discovery must arise from already active repair/mapping/masonry/drainage work and be handled using Episode 13's evidence discipline. Worker, steward, guard, archive/door expertise and Crown must hold different reasonable theories. Exploration remains shallow and formally authorized.
 
-## Protected knowledge
+## Hard exclusions
 
-No living character has confirmed the buried containment complex, original Nowhere King, castle-interface truth, royal siphoning, or candle-defense mapping. Season One remains below that reveal ceiling.
+- No Magenheim Nowhere King material.
+- No containment truth, prison truth, castle-interface truth, or buried-entity terminology.
+- No sentient-castle proof.
+- No candle extinction.
+- No omniscient interpretation of the stair.
