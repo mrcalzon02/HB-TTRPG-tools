@@ -122,18 +122,18 @@ function parseEpisode(markdown,episode){
   const normalized=markdown.replace(/\r\n?/g,'\n');
   const firstBreak=normalized.indexOf('\n---\n');
   const candidate=firstBreak>=0?normalized.slice(0,firstBreak):normalized;
-  const hasPlanningPreamble=/^\\*\\*Status:\\*\\*/m.test(candidate)&&/^\\*\\*Primary dramatic purpose:\\*\\*/m.test(candidate);
+  const hasPlanningPreamble=/^\*\*Status:\*\*/m.test(candidate)&&/^\*\*Primary dramatic purpose:\*\*/m.test(candidate);
   const preamble=hasPlanningPreamble?candidate:'';
   let prose=hasPlanningPreamble&&firstBreak>=0?normalized.slice(firstBreak+5):normalized;
-  const endState=prose.search(/\n(?:---\n\\s*)?##\\s+Episode-end state\\b/i);
+  const endState=prose.search(/\n(?:---\n\s*)?##\s+Episode-end state\b/i);
   if(endState>=0)prose=prose.slice(0,endState);
   prose=prose.trim();
-  const headings=[...normalized.matchAll(/^#{1,2}\\s+(.+)$/gm)].map(match=>match[1].trim());
+  const headings=[...normalized.matchAll(/^#{1,2}\s+(.+)$/gm)].map(match=>match[1].trim());
   const field=name=>{
     const match=preamble.match(new RegExp('\\*\\*'+name+':\\*\\*\\s*([^\\n]+)','i'));
     return match?match[1].trim():'';
   };
-  const explicitTitle=headings.find(value=>!/^Nowhere King(?:\\s+—|$)/i.test(value)&&!/^Season\\s+/i.test(value));
+  const explicitTitle=headings.find(value=>!/^Nowhere King(?:\s+—|$)/i.test(value)&&!/^Season\s+/i.test(value));
   return {...episode,title:explicitTitle||episode.title,markdown:normalized.endsWith('\n')?normalized:normalized+'\n',prose,rendered:renderMarkdown(prose),meta:{status:field('Status'),season:field('Season'),episode:field('Episode')}};
 }
 async function loadEpisode(episode){
