@@ -1,5 +1,7 @@
 # Nowhere King — Active Continuity State
 
+**Role:** Single authoritative current temporal continuity ledger. Supersedes the retired `11-CURRENT-STORY-STATE.md`.
+
 **Reconciled through:** Season 1 Episode 14, *The Sealed Stair*.
 
 ## Character state

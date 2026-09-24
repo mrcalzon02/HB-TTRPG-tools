@@ -16,9 +16,11 @@ Before planning, drafting, revising, or continuing:
 6. court, house, order, and institution corpus;
 7. five-season macro grid;
 8. active season episode schematic;
-9. rolling five-episode lookahead;
-10. finished committed prose, which becomes historical continuity once written;
-11. lower-authority exploratory notes.
+9. `09-ROLLING-FIVE-EPISODE-LOOKAHEAD-AND-EPISODE-CARD.md` for the **method/template only**;
+10. `11-ACTIVE-CONTINUITY-STATE.md` for the single current temporal ledger;
+11. `12-ACTIVE-ROLLING-FIVE-EPISODE-HORIZON.md` for the single current N through N+4 planning window;
+12. finished committed prose, which becomes historical continuity once written;
+13. lower-authority exploratory notes.
 
 Planning is directional. Finished prose controls what actually happened.
 
@@ -228,3 +230,19 @@ After writing, reconcile actual state and roll forward.
 - Never make the final coalition agree politically. Shared survival is enough.
 - Never let the final coalition arrive cost-free. Bargains and oaths survive victory.
 - Never relight the seven candles at the ending.
+
+## Canonical document roles and anti-duplication rule
+
+The numbered package is intentionally layered. Documents must not acquire a second job merely because an older filename once served that job.
+
+- `00-SERIES-WRITING-GOVERNANCE.md` — invariant writing rules, authority, reveal discipline, cadence, and anti-drift constraints. It does **not** track the current episode.
+- `01-ENSEMBLE-CONTINUITY-THEORY-OF-MIND.md` — schema/rules for character memory, knowledge, belief, relationships, and directional theory of mind. It is not the current character ledger.
+- `02-COURT-HOUSES-ORDERS-INSTITUTIONS-CORPUS.md` — relatively stable world/institution reference. It does not record current bargains unless they become durable institutional canon.
+- `03-FIVE-SEASON-160-EPISODE-MACRO-GRID.md` — series-scale destination and pacing map. It does not chase episode-level changes.
+- `04` through `08` — one directional 32-episode schematic per season. These define intended season causality and reveal ceilings; finished prose may supersede details without turning these into current-state ledgers.
+- `09-ROLLING-FIVE-EPISODE-LOOKAHEAD-AND-EPISODE-CARD.md` — **template and procedure only** for constructing/rolling a five-episode horizon. It contains no authoritative current N through N+4 state.
+- `10-ENSEMBLE-POV-AND-COURT-ECOLOGY-SCHEMATIC.md` — ensemble composition/POV/ecology rules. It is not a cast-state ledger.
+- `11-ACTIVE-CONTINUITY-STATE.md` — **the only authoritative current temporal continuity ledger** after the latest committed episode.
+- `12-ACTIVE-ROLLING-FIVE-EPISODE-HORIZON.md` — **the only authoritative current five-episode planning window**.
+
+Legacy files `11-CURRENT-STORY-STATE.md` and `12-ACTIVE-FIVE-EPISODE-LOOKAHEAD.md` were retired after Episode 11 because they duplicated the active roles now owned by 11 and 12 and had become stale. Do not recreate parallel current-state or lookahead files under renamed variants. When a role changes, migrate it explicitly and delete/retire the superseded artifact in the same change.

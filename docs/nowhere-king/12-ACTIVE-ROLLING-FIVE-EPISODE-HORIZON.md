@@ -1,5 +1,7 @@
 # Nowhere King — Active Rolling Five-Episode Horizon
 
+**Role:** Single authoritative live N through N+4 planning window. Built using document 09's method. Supersedes the retired `12-ACTIVE-FIVE-EPISODE-LOOKAHEAD.md`.
+
 **State:** Rolled forward after committed Season 1 Episode 14.
 **Forward window:** Episodes 15–19.
 

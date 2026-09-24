@@ -1,5 +1,7 @@
 # Nowhere King — Rolling Five-Episode Lookahead & Episode Card
 
+**Role:** Method/template only. The live current horizon is `12-ACTIVE-ROLLING-FIVE-EPISODE-HORIZON.md`; do not store current episode cards here.
+
 ## Rolling horizon
 
 Before writing Episode N, maintain cards for N through N+4.
