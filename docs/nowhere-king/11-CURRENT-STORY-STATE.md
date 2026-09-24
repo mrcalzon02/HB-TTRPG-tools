@@ -1,70 +1,81 @@
 # Nowhere King — Current Story State
 
 **Status:** Active temporal continuity ledger
-**Last completed unit:** Season One, Episode 09 — *The Village Below*
-**Updated:** after Episode 09
+**Last completed unit:** Season One, Episode 10 — *Guests With Patrons*
+**Updated:** after Episode 10
 
 ## Current timeline state
 
-Movement III has begun. Edselsto's successful first court has become a material village event rather than an abstract expansion. The lower-road receiving system processed 107 arrivals in one day. Lodging, food, water, horse space, washing, rents, wages, private property, and old local obligations now visibly constrain the Crown.
+Movement III is halfway complete. Edselsto now has enough arrivals, staff, specialists, guests, petitioners, village intermediaries, and suppliers that ordinary relationships form a dense patronage ecology. Episode 10 establishes that this ecology is not a hidden conspiracy: family, affection, professional history, transport, lodging, guild certification, temple introductions, debt, and employment overlap without determining conduct.
 
-The village is neither automatic opposition nor quaint loyalist scenery. Royal return creates work, rents, sales, repairs, and opportunity while also raising prices, crowding houses, consuming water, increasing dung and traffic, and threatening to turn old Crown assumptions into accidental seizure.
+Luceran has begun replacing the capital's crude question — "who owns this person?" — with the more useful question of what relationships a person may listen to when choosing what to do.
 
 ## King Luceran
 
-- Adult lawful king, bereaved, educated, and learning lived patronage and property politics.
-- Understands that apparently empty land/buildings may still carry ownership, use, custom, memory, or graves.
-- Accepts local evidence and negotiated temporary use rather than converting emergency need into permanent Crown possession.
-- Increasingly uses royal authority to formalize competent systems other people invent rather than personally solving every operational problem.
-- Recognizes that improvement can impose costs and that loyalty does not erase remembered neglect.
+- Adult lawful king, bereaved, educated, politically learning.
+- Understands that a connection is not proof of loyalty, control, espionage, or betrayal.
+- Keeps a patronage/relationship map as a tool while refusing to treat inference as official fact.
+- Begins an informal advisory circle specifically because he needs people who can tell him he is asking the wrong question.
+- Explicitly accepts that trusted people retain agency and may ultimately choose duties, institutions, families, communities, or judgment against his preference.
+- Continues learning that sovereignty depends on people he cannot fully control.
 
-## Village / settlement state
+## Informal advisory circle
 
-- Lower-road receiving line is operational.
-- 107 arrivals processed in Episode 09: 24 castle beds, 38 village beds/floor spaces, 31 marked-tent placements, 14 wagon/household-pavilion arrangements; two households choose a southern-road inn rather than offered terms.
-- No private house seized.
-- Crown staple buyer secures core staples, but side sales expose the limits of purchasing rules.
-- Egg prices approximately double or worse in side markets; bread rises roughly one quarter in the episode's immediate conditions. These are local Episode 09 observations, not permanent rates.
-- Lower well remains under repair; north lining is defective.
-- Upper water remains protected primarily for people.
-- Old tannery overflow channel is being reopened to improve west-trough drainage and horse/washing capacity.
-- A second reliable water source is needed before winter; old mill spring is a candidate but was buried by a slide and its land status must be established first.
-- Overflow camp loses twelve tent spaces after an old flood/fever emergency burial field is identified.
+This is **not** a formal privy council and grants no new office.
 
-## Mara Henn / Henn property
+Current participants:
+- Montegrain — friend; boundary: his own judgment.
+- Miren — intimate/confidant; boundary: family and personal agency.
+- Tovan Rhyse — Royal Guard/security; boundary: law and Guard duty.
+- Avarren — procedure/records; boundary: the record and lawful process.
+- Tessa Rane — Village Council/lower works coordination; boundary: the village; she corrects any assumption that Crown coordination equals Crown ownership of her office.
+- Ysabet Marris — archive; boundary: archive integrity and institutional duty.
 
-- Mara Henn is now a recurring local actor.
-- Henn house was wrongly mapped as unused because nobody sleeps there; it remains used for storage, apples, herbs, tools, and seasonal household purposes.
-- Tax roll stopped calling the property productive twenty-two years earlier, but that is not treated as proof of abandonment.
-- Continuing tithe/custom service, physical boundary stones, occupation practice, and local memory materially support Henn possession without the prose pretending every title question is conclusively solved.
-- Three Crown tents crossed the Henn boundary. Mara negotiates a thirty-day temporary ground lease, renewable only by agreement, with no Crown claim arising from occupation or improvements.
-- Mara accepts a one-month Crown engagement to map water, old routes, property stones, foundations, and local physical/custom knowledge. She retains independent work mornings twice weekly and refuses to certify ownership merely for administrative convenience.
-- Her brother's stored apples/property use are separately protected in writing at her request.
+The circle exists to challenge framing before decisions. It does not supersede ministers, offices, councils, guilds, or lawful authority.
 
-## Local route / graves seed
+## Patronage / information ecology
 
-- Old funeral grade ("corpse road") runs through east pines toward the charcoal track above the ravine; it bypasses the main village approach but does not directly join the north road.
-- Route is currently foot/passable-horse scale; fallen trees obstruct cart use.
-- Rhyse will inspect it with Mara after her morning milking/work.
-- Route is ordinary inherited local knowledge, not supernatural evidence.
-- Old emergency burial field from a flood/fever year survives in local elder memory and chapel death records; burial locations were not on Crown planning maps.
-- Camp clearing stopped when markers were found.
+- Receiving records may state declared employer/household, payer, transporter, introducer, requesting office, and certifying guild.
+- They may not convert inferred patronage into factual household/loyalty labels.
+- Selise Varo is now an archive copyist after passing Ysabet's hand test. Her aunt's Edevane connection, Morcant-linked freight access, Hall of Veils introduction, and Pell kitchen/social connection are ordinary overlapping relationships, not proof of espionage.
+- Village runners, servants, copyists, cooks, stable specialists, locksmiths, surveyors, guards, and workers all carry information through ordinary life.
+- Luceran recognizes that eliminating everyone with external ties would eliminate functional government.
+
+## Relationships
+
+- Miren tells Luceran directly that she loves him. She also acknowledges that her family benefits from her access and has asked her to raise policy matters; she refused during his immediate grief and later directed her brother to proper procedure.
+- Miren asks Luceran to trust her accurately, not to imagine intimacy makes her politically empty.
+- Lady Ardel Kaelmont states that she genuinely likes Luceran and that House Kaelmont benefits if he likes her. She has written her aunt ordinary observations about Edselsto and Luceran. Attraction/warmth is now explicit but no formal courtship or relationship exists.
+- Luceran understands that genuine affection and political utility can coexist.
+- Montegrain remains genuine friend, irreverent companion, and independent judgment rather than a dependent courtier.
+
+## Village / settlement / route state
+
+- Episode 09 arrival, lodging, water, price, Henn lease, burial field, and lower-well states remain active.
+- Mara Henn's one-month mapping engagement has begun.
+- Rhyse and Mara inspect the old funeral grade/corpse road.
+- Route can carry people and careful horses; two fallen pines prevent carts.
+- Villagers regularly observe portions of the route, so it is not a secret approach; it is an unguarded approach.
+- Rhyse proposes a small observation post at the charcoal-track crossing.
+- Construction is deferred until likely Vess land ownership/boundary is verified.
+- Old mill spring viability/ownership remains unresolved.
+- Lower well remains under repair.
+- Emergency burial field remains protected and costs twelve overflow tent spaces.
 
 ## Active bargains / obligations
 
 - Kaelmont road/quarry proposal remains active and ungranted.
 - Moncler direct-loss compensation remains accepted in category and unresolved in amount.
-- Royal Companion commission review remains due within ten days; arrears continue and no close-escort restoration occurs during review.
-- Morcant quotation rights, Falbrecht charcoal arrangement, Bellisar access/stable interests, Edevane archive proximity, Pell proximity/procedural role, Nerezza access objection, Guild of Keys work, and Village Council operational role all remain distinct.
-- Jory Fell's wife Ellyn and children have arrived; worker-family displacement is now part of the settlement rather than an offscreen promise.
-
-## Relationships
-
-- Montegrain remains Luceran's genuine friend and does not rescue him from uncomfortable dynastic responsibility.
-- Miren remains affectionate, politically observant, and willing to let Luceran learn without flattering him.
-- Rhyse treats Mara's local expertise professionally and arranges route inspection around her existing life rather than assuming royal availability.
-- Luceran respects Mara's accuracy, bargaining, and refusal to convert uncertainty into convenient certainty.
-- Village Council/local actors increasingly understand that Luceran can be negotiated with, but this does not erase old grievance.
+- Royal Companion commission review advances but remains unresolved. Old capital movement-notification procedure was partly defective; close-escort failure remains substantive. Arrears continue, ten-day deadline remains, and no dismissed Companion returns to close escort during review.
+- Morcant quotation rights remain limited as previously established.
+- Falbrecht charcoal arrangement remains.
+- Bellisar route/stable interests remain under security/logistics constraints.
+- Edevane archive proximity exists but archive remains institutionally assigned rather than House property.
+- Pell procedural proximity continues through Caldus Pell and household networks.
+- Nerezza access objection remains.
+- Guild of Keys and Village Council roles remain distinct.
+- Henn thirty-day temporary ground lease remains.
+- Possible Vess land interest at proposed observation-post site must be verified before construction.
 
 ## Family-history / mystery state
 
@@ -83,18 +94,19 @@ Seven of seven remain lit.
 
 ## Open obligations
 
-1. Episode 10 uses receiving/lodging/payment records to expose patronage chains carried by new guests, staff, specialists, and petitioners.
-2. Preserve Mara Henn as a recurring local specialist; pay the route inspection forward into Episode 11 hunt/security geography without making her a universal exposition source.
-3. Determine old mill spring viability and land status before treating it as Crown infrastructure.
-4. Continue lower-well repair and water rationing.
-5. Preserve the emergency burial field and camp-capacity loss.
-6. Continue Moncler compensation accounts and Royal Companion ten-day review.
-7. Evaluate Kaelmont road bargain before winter.
-8. Preserve distinct Morcant, Falbrecht, Bellisar, Edevane, Pell, Nerezza, Guild of Keys, Village Council, Henn, and worker-family interests.
-9. Preserve N.F. 44–51, Halven Sare, parental visit, Widow's key, infilled doorway, and lower-west barred door.
-10. Keep seven candles lit and unexplained.
-11. Preserve uncertainty around royal deaths.
-12. No confirmed supernatural behavior.
+1. Episode 11 — *The Hunt* must use already established route/terrain/security logistics and show a living political actor testing security.
+2. Preserve the informal advisory circle as plural, non-exclusive, and capable of disagreement; do not let it erase formal institutions.
+3. Preserve Miren's love confession and family boundary without flattening her into either destined romance or political instrument.
+4. Preserve Ardel's genuine attraction/warmth plus Kaelmont political utility without assuming formal courtship.
+5. Preserve Selise Varo as a competent archive worker with ordinary information pathways, not automatic spy.
+6. Verify Vess ownership/boundary before any observation post.
+7. Determine old mill spring viability and land status before Crown infrastructure use.
+8. Continue lower-well repair, water limits, burial-field protection, Henn lease, Moncler accounts, Companion review, and Kaelmont bargain.
+9. Preserve distinct Morcant, Falbrecht, Bellisar, Edevane, Pell, Nerezza, Guild of Keys, Village Council, Henn, Vess, and worker-family interests.
+10. Preserve N.F. 44–51, Halven Sare, parental visit, Widow's key, infilled doorway, and lower-west barred door.
+11. Keep seven candles lit and unexplained.
+12. Preserve uncertainty around royal deaths.
+13. No confirmed supernatural behavior.
 
 ## Hard exclusions
 
