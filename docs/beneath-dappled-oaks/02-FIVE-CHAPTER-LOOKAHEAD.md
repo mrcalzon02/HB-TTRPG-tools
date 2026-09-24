@@ -4,7 +4,7 @@ document_role: "ROLLING FIVE-CHAPTER FORWARD PLAN"
 status: "ACTIVE PLANNING CONTROL"
 planning_horizon: 5
 last_reconciled: "2026-09-24"
-active_after_chapter: 14
+active_after_chapter: 15
 ---
 
 # Beneath Dappled Oaks — Active Five-Chapter Lookahead
@@ -13,103 +13,93 @@ This is the operational N+1 through N+5 plan for the first-principles rewrite. U
 
 ## Current committed rewrite state
 
-Canonical numbered prose now runs through **Chapter Fourteen — The Invitation That Knows Too Much**.
+Canonical numbered prose now runs through **Chapter Fifteen — The Things Families Count**.
 
-Lady Maevra Eris's supper has paid the invitation debt without turning social visibility into a master conspiracy. The room contained people with independent professional reasons to know fragments: magistrates, a transport clerk, a retired Sundered Shield officer, an auditor, an engineer and House Eris family. Their separate knowledge intersected because the investigation is now visible across ordinary institutions.
+Chapter Fifteen establishes the ordinary baseline required before demographic evidence can mean anything. House Eris-Vey's current household review shows that competent noble families routinely project births, acknowledged children, cadet-line strength, service obligations, inheritance exposure and future adult capacity. The Seven confirm that their own institutions likewise count future adults for legitimate reasons: Crown commissions, River Ledger exposure, Green Covenant intake, Silver Bough kinship maps and Orthell service capacity.
 
-The phrase **external continuity reserve** is no longer being treated as the name of a secret office. Sir Othren Vale establishes it as an emergency **capacity** that could, depending on the governing instrument, be held by Crown transport, a chartered order, a regional continuity officer or another properly authorized receiving actor. The Silver Night holder remains unknown.
+The investigation therefore does **not** treat demographic arithmetic as sinister. The actionable historical question is whether pre-Silver-Night counting became unusually specific, crossed student-protection boundaries, or intersected with Dmitrigical planning, emergency credential machinery or later suppression.
 
-Two lawful non-identifying leads now exist: the chartered-order emergency cross-index for reserve appointments in Bloomtide 264, and supporting expenditure classes that may reveal institutional participation without exposing a protected person, destination or route geometry. Ordinary logistics matter: secrecy does not abolish horses, wayhouses, lamp oil, rooms or accounts.
+A new bounded archival category now exists: **Concord Academy graduating-cohort projection circulation records**. The projection series itself was ordinary. The circulation ledger for the Silver Night cohort remains sealed under student-protection rules, but Judge Vaun has grounds to request non-identifying circulation categories and dates.
 
-Thessa's independent adult trajectory also advances. Lady Maevra offers her a three-month western transport-assessment assignment that was under consideration before the Hall inquiry. Thessa wants the work. Ilyan supports her taking it despite the travel it may require. Their intimacy remains real without becoming a reason for either to shrink the other's profession.
+The reserve-authority strand also advances without identifying the protected person or route. Three of four historically available external-reserve authority classes are presently excluded from the west-tower interval by unrelated documented commitments, leaving **jointly commissioned receiving authority** as the only class not yet excluded. Contemporary expenses show ordinary logistical activity under such an authority, but do not prove selector exercise, identity or destination.
+
+Thessa intends to accept the three-month western transport-assessment posting. Ilyan supports the work while acknowledging that he will dislike the separation. Their relationship is being integrated into adult professional life rather than replacing it.
 
 ## Governing debts
 
-**Seven-network debt:** preserve the disclosure practices as behavior. Chapter Fourteen demonstrates that questions themselves can disclose the shape of protected concerns; sophisticated adults notice what is asked as well as what is answered.
+**Seven-network debt:** preserve disclosure boundaries as practiced behavior. The Seven may compare categories and consequences without surrendering protected files, private genealogies or sources.
 
 **Mireth/Ilyan disagreement debt:** witness autonomy versus investigative urgency remains unresolved and legitimate.
 
-**Mara/protected-person privacy debt:** Ilyan's promise remains binding. Cross-index and expenditure requests must remain non-identifying and must not become a back door into destination or route geometry.
+**Mara/protected-person privacy debt:** non-identifying archive work must not become a back door into identity, destination or route geometry.
 
-**Corren complexity debt:** Corren helped engineer Silver Night. Lawful custody, waiver, claimed non-use and any later protective act do not exonerate him. Continue separating possession, authority, use, motive and later return.
+**Corren complexity debt:** Corren helped engineer Silver Night. Lawful custody, waiver, claimed non-use and any protective act remain separate from culpability.
 
-**Institutional failure debt:** lawful reserve architecture may have operated inside a criminal or compromised emergency. Do not make every mechanism dirty merely because Silver Night was dirty, and do not make lawful form proof of clean purpose.
+**Institutional-failure debt:** ordinary lawful systems can be exploited inside a criminal emergency without every clerk, form or mechanism becoming corrupt.
 
-**Relationship/adult-life debt:** Ilyan/Thessa are lovers with increasing domestic familiarity and separate careers. Thessa's transport-assessment opportunity must have practical consequences rather than evaporating after one romantic conversation. Mireth/Caelen and Damaris/Rhyl retain their own trajectories.
+**Relationship/adult-life debt:** Thessa's posting now requires actual scheduling, travel and emotional consequences. Ilyan/Thessa remain lovers with separate professions. Mireth/Caelen and Damaris/Rhyl retain independent trajectories.
 
-**Political-visibility debt:** several Houses and professional networks now possess different fragments. Recognition, gossip and partial reconstruction are not omniscience. Let actors make reasonable but sometimes wrong models from the pieces they actually have.
-
-**Demographic motive debt:** student-shield violation and unresolved heir-demographic pressure remain active architecture. Chapter Fifteen should bring the arithmetic into present life without prematurely naming the historical expanding family, rival faction or exact numbers.
+**Demographic-motive debt:** the story now has a normal baseline. Future evidence must establish abnormal access, granularity, purpose or intersection before demographic planning can become probative of Silver Night.
 
 ---
 
-## N+1 — Chapter Fifteen: The Things Families Count
+## N+1 — Chapter Sixteen: What Corren Kept
 
 **Certainty:** LOCKED INTENT
 
-**Primary purpose:** bring the unresolved demographic motive into present-tense political life through ordinary House arithmetic rather than a villain confession.
+Return to Corren after the reserve and demographic baselines have narrowed the questions around him. Determine what he retained after Silver Night: a copy, protected obligation, warning, private memorandum, unanswered question or evidence he believed unsafe in the ordinary chain.
 
-Use marriage discussions, inheritance projections, household births, cadet-line expectations, academy cohorts, estate planning or succession memoranda to show why a family producing an unusually strong next generation could alter future voting blocs, offices, marriages and magical chairs. Keep the exact historical expanding family and rival faction unresolved unless the evidence chain earns identification.
+Any revelation must remain compatible with his established culpability. Understanding why a guilty man preserved something is not forgiveness and is not exoneration.
 
-At least one of the Seven should realize that the same kind of demographic arithmetic once used against protected students is now being applied, lawfully and casually, to their own adult relationships. The realization should emerge from competent people doing ordinary succession work, not from a convenient lecture about the Silver Night motive.
-
-Thessa's possible transport-assessment posting should remain present as a real professional decision with scheduling and relationship consequences.
-
-**Exit handoff:** the historical demographic motive acquires a measurable present-day analogue and a bounded archival category worth comparing against the pre-Silver-Night period.
+**Exit handoff:** Corren's retained material creates a concrete bridge to either the paired-selector receiving side, the cohort-circulation question, or both.
 
 ---
 
-## N+2 — Chapter Sixteen: What Corren Kept
+## N+2 — Chapter Seventeen: The Other Half of the Lock
 
 **Certainty:** PLANNED
 
-**Primary purpose:** return to Corren after the reserve receiving-side discovery and the political consequences of notice have propagated.
+Pay the paired receiving-side dependency without violating protected-person privacy. Use the chartered-order cross-index, expense classes and any lawful Corren material to determine whether a completed selector exercise can be established during his two-day custody.
 
-Explore what he retained: a copy, memory, protected obligation, private warning, unanswered question, oath or evidence he could not safely place in the ordinary chain. Any revelation must remain compatible with his established culpability in Silver Night. A guilty man may still preserve evidence, protect a particular person, distrust co-conspirators or prepare for consequences.
+If an exercise exists, establish only the time, authority class and lawful operational consequence that can survive without identity or destination. If no exercise exists, distinguish a true negative from records held elsewhere, supersession or incomplete archival survival.
 
-Force Ilyan to distinguish understanding his father from forgiving him. Those are not the same act.
-
-**Exit handoff:** Corren's specific conduct becomes more legible while the larger Silver Night motive remains open enough for demographic and Dmitrigical strands to converge later.
+**Exit handoff:** the selector question contracts to a smaller defensible set of possibilities.
 
 ---
 
-## N+3 — Chapter Seventeen: The Other Half of the Lock
+## N+3 — Chapter Eighteen: The Reserve Hand
 
 **Certainty:** PLANNED
 
-**Primary purpose:** pay the paired receiving-side dependency without violating protected-person privacy.
+Identify the lawful architecture behind the jointly commissioned receiving authority. Determine who could appoint it, what emergency condition activated it and which institution retained accountability afterward. An office or authority class may be established before a person.
 
-Use the Chapter Fourteen cross-index and expenditure requests to determine whether the receiving mechanism records a completed selector exercise during Corren's two-day custody. If an exercise exists, establish only time, authority class and operational consequence that can lawfully survive without identity or destination. If no exercise exists, distinguish a true negative from records held under reserve authority, lost records, supersession or a mechanism that recorded completion elsewhere.
+Use the Seven's disclosure practice under pressure: professionally protected information may be represented by consequence without demanding its source.
 
-**Exit handoff:** the selector question is reduced to a smaller set of defensible possibilities.
+**Exit handoff:** the reserve authority becomes a concrete institutional bridge into the deeper Silver Night planning structure.
 
 ---
 
-## N+4 — Chapter Eighteen: The Reserve Hand
+## N+4 — Chapter Nineteen: The Arithmetic Before the Fire
 
 **Certainty:** DIRECTIONAL
 
-**Primary purpose:** identify the lawful architecture behind the external continuity reserve without converting it into a conveniently omniscient secret office.
+Open the non-identifying portion of the Silver Night cohort circulation history and compare it with normal Academy, House, Crown, order and commercial demographic planning. Look for abnormal timing, granularity, repeated requests, unexpected institutional access or intersection with already established Valeric/Dmitrigical machinery.
 
-Determine who could appoint or activate reserve receiving authority, what emergency conditions justified doing so, and which institution retained accountability afterward. The answer may identify an office, order or authority class before it identifies a person. Preserve the possibility that a lawful protective mechanism was used inside a broader criminal or politically compromised emergency.
+Do not identify the historical expanding family or rival faction merely because one House had many students. Establish what the records can actually support.
 
-Use the Seven's disclosure practices under pressure: at least one member should possess a professionally relevant piece they cannot fully disclose, and the others should act on consequence rather than demanding the source.
-
-**Exit handoff:** the reserve authority becomes a concrete institutional bridge toward the deeper Silver Night motive, narrowing who could lawfully have changed the other half of the lock and why.
+**Exit handoff:** demographic pressure becomes a bounded evidentiary chain rather than a thematic motive.
 
 ---
 
-## N+5 — Chapter Nineteen: The Arithmetic Before the Fire
+## N+5 — Chapter Twenty: Who Asked to See the Count
 
 **Certainty:** HORIZON / EXPLORATORY
 
-**Primary purpose:** connect the present-day demographic analogue from Chapter Fifteen to pre-Silver-Night institutional planning without prematurely naming the historical target family or rival faction.
+Follow the circulation anomaly, if one is established, to the requesting authority rather than immediately to a villain. Determine whether access was requested by a House office, Crown body, order, academy administrator, financial institution or intermediary, and what lawful reason was stated at the time.
 
-Look for the kinds of records competent Houses and institutions would actually have used: projected Academy graduation cohorts, cadet-line marriage availability, future office eligibility, inheritance contingencies, magical-chair succession, wardship obligations or long-range coalition estimates. Establish whether somebody was counting the coming generation before Silver Night in a way that made protected students politically legible as future adults.
+The key evidentiary question is not merely who possessed demographic information but whether the request intersected with Silver Night preparation in time, personnel, authorization or downstream use. Preserve the possibility of innocent analysts, mixed motives and information repurposed after lawful collection.
 
-Do not turn demographic arithmetic itself into proof of murder. Many Houses legitimately model births, marriages and succession. The evidentiary question is whether a specific pre-disaster calculation intersects with already established Valeric/Dmitrigical planning, emergency credential machinery or later suppression.
-
-**Horizon exit:** demographic pressure ceases to be merely thematic and becomes a bounded evidence chain capable of converging with the existing Silver Night investigation in later chapters.
+**Horizon exit:** the student-demographic strand is positioned to converge with the Valeric/Dmitrigical and emergency-custody strands without collapsing them into a single convenient conspiracy.
 
 ---
 
