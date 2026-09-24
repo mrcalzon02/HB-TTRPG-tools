@@ -2,32 +2,26 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after committed Season 1 Episode 21.
-**Forward window:** Episodes 22–26.
+**State:** Rolled forward after committed Season 1 Episode 22.
+**Forward window:** Episodes 23–27.
 
-## Episode 22 — The Army Question — LOCKED
+## Episode 23 — The False Border — LOCKED
 
-Episode 21 ended with a bounded readiness inquiry, not a general summons. Turn the question into material military reality: actual strengths, command obligations, assembly times, horses, remounts, wagons, bridges, grain days, road capacity and the political meaning of moving any of them. Some garrisons already changed leave under rumor; others deliberately refused. Preserve those rational differences.
+Episode 22 ends with a northern road captain reporting two riders' claim that armed men crossed a disputed grazing boundary beyond Red Ford and burned a toll shelter. No names, confirmed colors or bodies are reported. A local patrol is already checking. Treat the report as reported evidence, not truth.
 
-Episode 17's security staffing remains real: Edselsto cannot donate Doorwardens/close-security posts wholesale without weakening a system the story deliberately built. Jeron Bellisar remains unable to ride but can contribute analysis. Damaris grain/depot obligations, Kaelmont carriage capacity, Vess rights and road realities constrain choices. Asking readiness questions is itself observable and can be misread as preparation for war.
+Build the crisis from real border/grievance machinery plus distortion, forgery, selective transmission or opportunistic interpretation as evidence permits. The Crown already has a six-wagon bounded stores convoy northbound and Northbridge repair underway; these preparations are useful regardless, but their existence makes further action politically easier to misread and cancellation materially costly.
 
-**Exit target:** limited forces or preparations begin moving in a way that makes later false-border pressure materially consequential, while Edselsto remains competently defended rather than conveniently emptied.
+Preserve competent disagreement. Maelin Harrow's deterrence argument and Jeron Bellisar's escalation concern remain live. Do not prove that the hunt sponsor, Valcere, capital rumor network, west-service questioner and Red Ford report are one conspiracy.
 
-## Episode 23 — The False Border — DIRECTIONAL
-
-Real grievances plus forged, distorted or selectively transmitted reports create a plausible external crisis. Build from the readiness dispositions actually established in Episode 22. Someone may suspect timing without proof; Luceran acts under uncertainty because waiting also has costs.
-
-Do not make the crisis a perfect coup device or prove the hunt sponsor. Preserve multiple actors exploiting the same instability for different reasons.
-
-**Exit target:** departure or mobilization becomes costly to cancel.
+**Exit target:** enough verified danger or uncertainty exists that Luceran must act under incomplete information; departure or military movement becomes costly to cancel, while the exact border story remains partially unresolved.
 
 ## Episode 24 — Feast Before Departure — DIRECTIONAL / BASELINE-CRITICAL
 
 A warm, sensual farewell feast makes ordinary life at Edselsto worth losing before the coup sequence. Preserve Luceran/Miren's private promise without converting it into betrothal. Ardel remains a political actor rather than romantic furniture. Friends, staff, guards, workers, clergy and rivals need jokes, irritations, affection, unfinished plans and expectations for Luceran's return.
 
-Practical departure machinery must remain visible: who stays, who leaves, which posts change, what messages are expected, which construction continues and what each person expects to resume afterward.
+Practical departure machinery must remain visible: who stays, who leaves, which posts change, what messages are expected, which construction continues and what each person expects to resume afterward. Episode 22's security discipline must remain intact; Edselsto can be reduced by legitimate field requirements but not emptied by authorial convenience.
 
-**Exit target:** Luceran leaves with substantial loyal military strength while Edselsto remains full of people with plans for his return.
+**Exit target:** Luceran leaves with substantial loyal military strength while Edselsto remains competently defended and full of people with plans for his return.
 
 ## Episode 25 — The King's Progress — DIRECTIONAL
 
@@ -39,34 +33,45 @@ Preserve field logistics, route delays, divided command responsibilities and the
 
 ## Episode 26 — An Empty Throne — DIRECTIONAL / SEED-DEPENDENT
 
-The coup begins inside Edselsto through human systems already made legible: offices, guard posts, credentials, servants, routes, patronage resentments and ordinary access. Do not make competent guards forget Episode 17 procedures. Attack the seams those procedures necessarily create: relief, authorized credentials, divided jurisdictions, supply access, family obligations, copied routines and people with legitimate reasons to be present.
+The coup begins inside Edselsto through human systems already made legible: offices, guard posts, credentials, servants, routes, patronage resentments and ordinary access. Do not make competent guards forget Episode 17 procedures or Episode 22's explicit refusal to hollow them out. Attack necessary seams: relief, authorized credentials, divided jurisdictions, supply access, family obligations, copied routines and people with legitimate reasons to be present.
 
-A tempted servant or low-status worker may make a morally recognized betrayal only if their desire, opportunity, credible payment and rationalization have been established before the decisive act. Episode 26 must not retroactively invent a perfect betrayer. At least one ordinary staff member should notice a small material inconsistency because their job makes them capable of noticing it.
+A tempted servant or low-status worker may make a morally recognized betrayal only if their desire, opportunity, credible payment and rationalization have been established before the decisive act. At least one ordinary staff member should notice a small material inconsistency because their job makes them capable of noticing it.
 
-**Horizon exit:** key systems begin falling through human action while enough uncertainty remains that loyalists cannot instantly identify the whole operation.
+**Exit target:** key systems begin falling through human action while enough uncertainty remains that loyalists cannot instantly identify the whole operation.
 
-## Episode 21 reconciliation
+## Episode 27 — Castle Taken — DIRECTIONAL / CONSEQUENCE-LOCKED
 
-- A hostile capital account reaches Edselsto before the Crown's post-Episode-20 demands could have generated it, preventing automatic attribution to Holt/Valcere.
-- Multiple hostile versions share real facts but differ in wording and emphasis; no demonstrated master text controls them.
-- Credentials, Kaelmont carriage terms, Luceran/Miren intimacy, Moncler compensation, grain negotiation, village administration and the Seven Lights dispute are selectively reframed as weakness, favoritism, seizure or religious impropriety.
-- Damaris-linked grain prices acquire a small rumor premium; distant clergy receive distorted accounts; some Bellisar-area garrisons delay leave; provincial families reconsider sending dependents to Edselsto.
-- Calienne Orsanne and Mother Ysara answer religious distortion through independent clerical correspondence. Calienne refuses Luceran's seal, preserving the credibility and ownership of her testimony.
-- Pellin maps rumor distribution through ordinary social/material routes. Selise, still under archive restrictions, compares only public hostile texts and identifies multiple textual parentages. Ysabet's damaged trust is not reset.
-- Edevane correspondence confirms capital marriage/favoritism assumptions without resolving Corin Varo authorization. Miren refuses to pretend Edevane loyalty is identical to Crown loyalty.
-- Ardel insists that actual Kaelmont terms, not Kaelmont virtue, are what can be defended. Her political independence from romance persists.
-- Rhyse obtains readiness returns rather than treating rumor as rebellion. Jeron Bellisar, still unable to ride, contributes analysis of roads and depots.
-- Luceran authorizes a bounded readiness inquiry and invitations to military/logistical expertise, explicitly not a general summons or theatrical muster.
+The coup becomes open. Pay off the security architecture rather than bypassing it: defenders use posts, credentials, relief procedures and route knowledge intelligently; attackers succeed only where preparation, legitimate access, divided loyalties, surprise, numbers or prior compromise create real advantage.
+
+Some loyalists are killed, bribed, captured or isolated. Some coup supporters must have internally reasonable political or legal theories rather than secret-evil revelation. Selfish or compromised people may protect people they personally care about. The physical crown becomes an objective because possession has symbolic and political value even though it cannot magically create lawful sovereignty.
+
+**Horizon exit:** usurpers control enough of Edselsto by ordinary force that the castle is functionally taken, while surviving loyalists, witnesses, missing routines and unresolved human choices seed Episode 28's betrayal consequences.
+
+## Episode 22 reconciliation
+
+- The readiness inquiry becomes material arithmetic: strength, remounts, wagons, roads, grain, depots and assembly time rather than a parade or paper army.
+- Luceran accepts expert disagreement among Rhyse, Jeron Bellisar, Maelin Harrow, Ardel Kaelmont, Orel Venn, Mara Kest and Tomas Reed.
+- Bram refuses to surrender twelve guards because fixed posts/reserve would be weakened; Luceran accepts four. Episode 17 security remains real.
+- Mara proposes forward stores instead of immediate troop movement; Luceran adopts the bounded alternative.
+- One six-wagon stores convoy moves north with flour, oats, salt meat, shoes, wheel grease and repair iron. Tomas Reed accompanies it for physical verification.
+- Kaelmont/Crown specialists inspect Northbridge. One abutment has shifted; repair is required before sustained military traffic.
+- Northbridge depot is fourteen sacks below paper return because rumor-driven leave suspension/patrols already consumed supplies; no theft is established.
+- Harrowmere remains at ordinary stations but updates assembly rolls. No company moves to Vey Crossing. Bellisar-area leave returns to local discretion absent real cause.
+- Readiness leaks through ordinary market/logistical signals and generates a local false/inflated claim of three thousand men gathering. No master rumor source is established.
+- Miren may truthfully tell Edevane that the Crown is preparing ability to move while no general summons exists; Luceran does not demand secrecy through lying.
+- Episode ends with an unconfirmed Red Ford report: armed men allegedly crossed a disputed grazing boundary and burned a toll shelter. Local patrol verification is pending.
 - No stair entry, supernatural confirmation, hunt-sponsor identification or candle change occurs.
 
 ## Active payoff debt
 
+- verify the Red Ford report without granting it omniscient truth;
+- preserve the cost/visibility of the six-wagon stores convoy and Northbridge repair;
 - Deren Holt's commissioning authority and Valcere response;
 - Corin Varo/Edevane authorization question;
 - Harl identity and whether the west-service questioner is connected;
 - Selise/Ysabet damaged trust and Selise's restricted archive role;
 - Mera's daughter/dye-vat motive and altered Crown work;
-- capital/provincial rumor ecology and consequences of the readiness inquiry;
+- capital/provincial rumor ecology and consequences of readiness preparation;
 - Luceran/Miren private promise, marriage possibility and political-disclosure boundary;
 - Miren jealousy and Luceran/Ardel attraction remain acknowledged rather than resolved;
 - Ardel/Kaelmont political independence from romance;
@@ -91,7 +96,7 @@ A tempted servant or low-status worker may make a morally recognized betrayal on
 - No Magenheim Nowhere King material.
 - No supernatural solution to security, accounting, construction, religion, politics or military readiness.
 - No premature hunt-sponsor identification.
-- No assumption that the Valcere network explains every hostile act or rumor.
+- No assumption that the Valcere network explains every hostile act, rumor or border event.
 - No stair-to-family-mystery connection without evidence.
 - No informal circle replacing lawful institutions.
 - No premature family-history solution.
