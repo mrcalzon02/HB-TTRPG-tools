@@ -2,51 +2,139 @@
 
 ## Rolling horizon
 
-Before writing Episode N, maintain cards for N through N+4. Planning certainty: **LOCKED** = committed causality; **DIRECTIONAL** = preferred dependency-valid route; **EXPLORATORY** = optional seed. Finished prose supersedes planning.
+Before writing Episode N, maintain cards for N through N+4.
 
-## Active horizon after Episode 12
+Planning certainty:
+- **LOCKED:** required by canon or committed causality.
+- **DIRECTIONAL:** preferred route, adjustable if characters create a better dependency-valid path.
+- **EXPLORATORY:** optional seed, POV, complication, or image.
 
-### Episode 13 — The Missing Ledger — LOCKED
-**Entry:** Pellin Joss has found a grain tally that does not reconcile after House Damaris warns that forward grain contracts are tightening. Luceran has just instructed his officers to answer the market with numbers rather than threats.  
-**Purpose:** Make the fiscal discrepancy mundane, material, and politically dangerous. Promote a clerk/store worker through competence. Trace old corruption or leakage through receipts, carriage, storage, and signatures rather than castle magic.  
-**Relationship:** Luceran must tolerate being told that Crown records and friendly suppliers can both be wrong.  
-**Protected:** no supernatural cause; no sealed-stair exploration; no candle failure.  
-**Handoff:** the discrepancy touches a living patronage/opposition chain and makes formal inspection unavoidable.
+After Episode N is written, reconcile actual state and roll the horizon forward.
 
-### Episode 14 — The Sealed Stair — DIRECTIONAL
-A repair team encounters a stair absent from current plans. Worker, steward, guard, scholar, and king form different reasonable theories. Exploration remains shallow and formally authorized. Episode 13's record discipline should affect how evidence is logged. No containment truth.
+## Episode card
 
-### Episode 15 — A Favor Owed — DIRECTIONAL
-Luceran resolves a political problem by exchanging a real concession for a real service. The Kaelmont road bargain, Damaris grain negotiation, Moncler compensation, Bellisar gratitude, and village property protections are available obligations but must not be collapsed into one convenient solution. Personal and state favor become harder to distinguish.
+### Identity
+- Season / Episode:
+- Working title:
+- Certainty:
+- Time since previous episode:
+- Primary locations:
+- POV / POV rotation:
 
-### Episode 16 — The Measure of Trust — DIRECTIONAL
-A security scare requires judgment among conflicting living testimony. Rhyse's post-hunt procedural reforms and Luceran's growing resistance to panic are active baselines. A loyal intimate/confidant disagrees materially and remains loyal. Safety improves because someone can tell the king no.
+### Dramatic purpose
+What must this episode accomplish that no earlier episode has?
 
-### Episode 17 — New Guard — EXPLORATORY
-Security reorganization becomes institutional rather than temporary: posts, credentials, night watches, route knowledge, relief patterns, and command authority become legible. Ordinary guards gain durable goals and rivalries. The system must later be attackable because it is understood, not because everyone becomes incompetent.
+### Entry state
+For each major participant:
+- physical location;
+- active goal;
+- current belief;
+- private intention;
+- obligation already in motion;
+- relevant relationship state.
 
-## Episode 12 reconciliation — The King's Table
+### A-story — sovereignty / politics
+Which faction, institution, office, law, contract, military problem, or public obligation moves?
 
-Episode 12 paid the Episode 11 hunt residue instead of discarding it. Jeron Bellisar remains injured; Bellisar publicly creates a remembered debt to Bram Tolland; Rhyse treats the false horn and rope as human security evidence with bounded confidence and changes hunt procedure without a purge. Luceran keeps the dinner, preventing the attack from defining court behavior.
+### B-story — relationship / intimacy
+Which relationship changes? What does each person think the other wants? For adult erotic material, what changes after intimacy rather than merely during it?
 
-The table converts ordinary life into governance. Kaelmont receives a **five-year, nonexclusive Crown heavy-carriage concession** on the proposed north-road cut, subject to published maximum rates, Crown self-carriage, paid land acquisition/lease, village drainage review, agreed maintenance standard, and explicit preservation of village access to the old funeral grade. This is a durable bargain, not a gift. House Damaris simultaneously warns that river factors are withholding forward grain commitments until carriage risk and prices stabilize. Luceran orders negotiation by volume, price, and risk rather than accusations of disloyalty.
+### C-story — castle / mystery
+What is observed? Who observes it? What do they infer? What remains protected?
 
-Selise Varo establishes a boundary with Pellan Edevane: ordinary family news may travel; restricted archive material does not. Ysabet observes her enforce it and grants her more practical trust. Tessa Rane's presence at the royal table normalizes village participation in decisions that materially affect village land and water. Luceran's model of patronage advances again: affection, usefulness, reporting, family loyalty, and political benefit can coexist without making every relationship fraudulent.
+### D-story — side-character independent life
+Which non-royal character advances an objective that would matter even if the king were absent?
 
-All seven candles remain lit. Luceran and Rhyse briefly observe them; neither gains new supernatural knowledge. The hunt evidence remains human and unresolved. A private letter leaves Edselsto reporting only socially observable political facts, demonstrating that useful intelligence need not contain a secret.
+### Action / adventure
+If present: objective, terrain, opposition, resources, command, cost, and aftermath.
 
-**New payoff debt:** Pellin Joss finds a grain tally that does not reconcile and goes to the responsible clerk before waking the king. Episode 13 begins from that material discrepancy.
+### Institutional / material reality
+What money, labor, roads, food, rooms, servants, guards, archives, construction, corpses, supply, healers, bureaucracy, horses, or messages make the episode real?
 
-## Durable debt ledger
-- Moncler compensation claim remains subject to verified direct losses.
-- Kaelmont road concession now exists under the Episode 12 terms above.
-- Damaris grain volume/price/risk negotiation is active.
-- Bellisar remembers Bram's intervention during the hunt; no price has been named.
-- Funeral grade remains village access and a known but unfortified security route; Rhyse intends observation rather than seizure.
-- Family-wing missing records and intentional closures remain unresolved.
-- Seven candles remain lit and unexplained.
-- Hunt attacker(s), false horn, and rope remain unresolved human-security evidence.
-- Pellin's grain discrepancy is due immediately in Episode 13.
+### Seed debt from N+1 through N+4
+What future event needs earlier groundwork?
+
+### Payoff debt
+Which existing promise, clue, injury, attraction, rumor, threat, debt, invitation, corpse, bargain, or political concession has become due?
+
+### Knowledge partitions
+For each consequential fact:
+- objective truth;
+- reader knowledge;
+- observer knowledge;
+- observer belief;
+- observer uncertainty.
+
+### Directional theory-of-mind updates
+- Observer → Subject:
+- old model:
+- evidence:
+- new model:
+- emotional residue:
+
+### Faction bargain ledger
+When a faction is involved:
+- what it wants;
+- what it offers;
+- what it fears;
+- what it believes the king wants;
+- what it will remember;
+- what promise/debt is created.
+
+### Required state changes
+List durable changes that must exist at episode end.
+
+### Protected future material
+List revelations, betrayals, deaths, consummations, reconciliations, candle failures, or abilities that must **not** occur yet.
+
+### Exit state / handoff
+- who ends where;
+- what they now intend;
+- what they know;
+- what they misunderstand;
+- what political action is already underway;
+- what concrete fact causes the next episode.
 
 ## Scene-level compiler test
-Every retained scene must leave relationship, knowledge, obligation, resource, institution, or future causality changed. Reader knowledge remains distinct from character knowledge; dialogue may not become a database synchronization mechanism.
+
+Every retained scene answers:
+- Who wants something?
+- What do they know?
+- What do they believe others want?
+- What blocks the easy solution?
+- What changes?
+- What consequence survives?
+
+If a scene works only because everyone forgets something obvious, repair the causality.
+
+## Five-episode debt rules
+
+- Never introduce a betrayal with no earlier trust or temptation.
+- Never introduce a romance only when consummation is due.
+- Never reveal a clue before the object, witness, archive, habit, or access path could exist.
+- Never materialize an army without orders, roads, food, transport, command, and time.
+- Never let a castle capability become plot-critical without earlier low-stakes demonstrations.
+- Never let a faction suddenly care about an issue it never had material reason to care about.
+- Never let a body, injury, scandal, promise, marriage, debt, or death disappear because the episode ended.
+- Never let final-season allies forget why they hate the king merely because the Nowhere King is worse.
+- Never let a wartime promise disappear after victory.
+
+## Post-write reconciliation packet
+
+Record:
+- satisfied directives;
+- deviations from plan;
+- new canon;
+- knowledge changes;
+- relationship changes;
+- resource changes;
+- location/time changes;
+- obligations resolved/created;
+- political/institutional changes;
+- castle capability evidence;
+- injuries/casualties;
+- faction bargains and witnessed oaths;
+- seed debt paid;
+- new payoff debt;
+- contradictions introduced;
+- new N+4 card.
