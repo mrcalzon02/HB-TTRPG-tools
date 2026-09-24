@@ -1,194 +1,58 @@
 # Nowhere King — Ensemble Character Continuity & Theory-of-Mind Control
 
-## Purpose
+## Control rules
+Track knowledge, belief, suspicion, affection, desire, debt, skills, material interests, and expected behavior separately. A → B differs from B → A. Unknown remains unknown. Reader knowledge never becomes character knowledge by convenience. Relationships are vectors across political, personal, military, financial, magical, sexual, and secret-keeping trust rather than one-word labels.
 
-This ledger answers:
+## Active continuity state after Season 1 Episode 12
 
-> What does each person still remember, know, believe, want, fear, desire, owe, hide, distrust, know how to do, and think other people are likely to do?
+### King Luceran
+- **Observed/known:** the first Edselsto court has already created patronage through rooms, contracts, routes, meals, introductions, and access; village property and infrastructure cannot be treated as blank Crown space; staff arrive with overlapping affiliations; the hunt involved a false signal and a newly tied rider-height rope; Jeron Bellisar was injured; Kaelmont can materially shorten the north carriage route; Damaris factors are reluctant to lock forward grain prices under current risk.
+- **Belief:** people can listen in several directions without being owned by any one patron. Affection and political advantage can coexist. Human political/security explanations remain sufficient for the hunt attack.
+- **Goal:** make Edselsto function without recreating the capital's opaque access machine; answer market pressure with contracts and information rather than panic.
+- **Theory of Ardel:** likes him genuinely and also advances Kaelmont; neither fact cancels the other. Attraction/curiosity exists; no consummation or exclusive courtship established.
+- **Theory of Tessa:** locally legitimate, materially exact, willing to correct him, useful precisely because she does not behave as a court dependent.
+- **Theory of Rhyse:** trusted friend/captain whose bounded confidence and procedural caution are assets; Luceran increasingly accepts 'not enough evidence' as competent advice.
+- **Theory of Edselsto:** ancestral, strange, unresolved. Seven candles remain lit. No confirmed sentience or containment theory.
 
-Identity/biography and temporal state are separate. Do not flatten history into the newest episode.
+### Tovan Rhyse
+- **Known:** false hunt horn and rope are real; same actor/network is suspected but unconfirmed. Route/signal exposure was too broad.
+- **Action:** changes signals after use, restricts route distribution, reviews knowledge quietly, and plans observation of the funeral grade rather than seizure or a theatrical lockdown.
+- **Theory of Luceran:** still impulsive, but increasingly capable of accepting restraint and delegating procedure; the king's refusal to purge after the hunt is positive evidence.
 
-## Required temporal state
+### Lady Ardel Kaelmont
+- **Goal:** Kaelmont road/quarry influence and a workable Edselsto transport network; personal interest in Luceran remains genuine.
+- **Episode 12 bargain:** five-year nonexclusive Crown heavy-carriage concession for the north-road cut, with published maximum rates, Crown self-carriage, paid land acquisition/lease, village drainage review, maintenance standards, and no Kaelmont claim over the old funeral grade.
+- **Theory of Luceran:** learning quickly; increasingly negotiates useful friendship rather than granting it. Attraction does not imply political surrender.
 
-For recurring characters track where established:
-- public role and private self;
-- family/house/order/guild affiliation;
-- current goal and long-term plan;
-- money and property interests;
-- duties and deadlines;
-- skills and domain competence;
-- domains of inexperience;
-- risk tolerance;
-- violence threshold and aftermath;
-- grief and injuries;
-- secrets known and held;
-- evidence personally observed vs reported information;
-- belief and confidence;
-- lies told and believed;
-- attraction and aversion;
-- affection and attachment;
-- adult bodily/sexual familiarity;
-- jealousy, admiration, contempt, fear, rivalry, protectiveness, dependence;
-- trust by domain;
-- promises, debts, oaths;
-- current theory of Edselsto;
-- current theory of the buried entity only after evidence permits it.
+### Tessa Rane
+- **Goal:** protect village water, land, access, and local legitimacy while taking advantage of renewed work and money.
+- **Position:** village participation at the King's Table is now precedent-like social fact, though not a formal constitutional office.
+- **Theory of Luceran:** teachable when made to confront material consequences; still dangerous because preference can become policy faster than he realizes.
 
-Unknown remains **Unknown / Unresolved / Needs prose evidence**.
+### Bram Tolland
+- **Known/public residue:** prevented Luceran from taking the hunt rope first. House Bellisar publicly states that it remembers the act.
+- **Obligation:** no explicit favor requested or promised. Treat as an unpriced social debt, not ownership.
 
-## Epistemic states
+### Jeron Bellisar
+- **Condition:** shoulder injury/dislocation and bruised ribs from Episode 11; arm remains immobilized, riding prohibited, pain persists despite humor.
+- **Relationship residue:** embarrassment, gratitude, and house pride coexist. Injury cannot vanish next episode.
 
-Use distinct statuses: observed, reported, suspected, believed, doubted, disbelieved, confirmed, misinformed, concealed, publicly known, restricted, superseded.
+### Selise Varo
+- **Role:** archive copyist with Edevane family connection, Morcant-adjacent transport connection, Hall of Veils introduction, and Pell social tie.
+- **Boundary established:** will share ordinary personal/family news; refuses restricted archive information even when a relative probes gently.
+- **Ysabet → Selise:** practical trust increases after observing Selise enforce the boundary herself.
 
-A servant who hears a noble threaten someone knows that a threat was spoken. They do not automatically know whether it was sincere, authorized, or a bluff.
+### Pellin Joss
+- **Role/competence:** household stores; knows Crown food stocks by category rather than ceremonial aggregate.
+- **Episode 12 state:** reports roughly twenty-six days of Crown grain at current issue, subject to labor growth and excluding private/village stores. After dinner discovers a grain tally mismatch and seeks the responsible clerk before escalating.
+- **Next action:** verify whether discrepancy is error, timing, spoilage, theft, carriage loss, or corrupt accounting. No supernatural assumption.
 
-## Directional personality web
+## Active institutional/faction memory
+- **House Kaelmont:** road concession won, but bounded by Crown/village protections; will remember both access and limits.
+- **House Damaris / river factors:** not in rebellion; rationally repricing uncertainty and withholding forward commitments pending clearer carriage risk.
+- **House Bellisar:** Jeron's injury is real institutional memory; gratitude to Bram coexists with questions about route security.
+- **Village Council:** land, water, drainage, and funeral-grade access have repeatedly required village knowledge; exclusion from future material decisions would be noticed.
+- **Royal household:** food stocks, guest growth, road capacity, and market prices are now linked political problems.
 
-A → B and B → A are different records.
-
-Recommended fields:
-- Observer;
-- Subject;
-- Episode/time;
-- Observer's model of Subject;
-- Evidence/memories used;
-- Inferred motives;
-- Expected behavior;
-- Trust by domain;
-- Affection/attachment;
-- Attraction/desire;
-- adult bodily familiarity if established;
-- Fear/threat model;
-- Resentment/jealousy/envy;
-- Admiration/respect;
-- Observer believes Subject feels...;
-- Known secrets;
-- Suspected secrets;
-- Unknown-to-observer contradictions;
-- Confidence;
-- Blind spots / projection / idealization / prejudice;
-- Mask/performance suspected?;
-- Previous model;
-- Cause of update.
-
-Intellectual correction and emotional residue may diverge.
-
-## Relationship vector
-
-Do not use one-word relationship labels.
-
-**Trust:** political / personal / sexual / military / financial / magical / secret-keeping.
-
-**Attachment:** affection / love / dependence / protectiveness / grief risk.
-
-**Desire:** attraction / curiosity / jealousy / possessiveness / shame / pride.
-
-**Power:** rank / wealth / access / law / patronage / blackmail / reputation / bodily vulnerability.
-
-**Conflict:** resentment / ideology / rivalry / injury / betrayal / incompatible obligation.
-
-**Expectation:** what each person thinks the relationship promises.
-
-This permits lovers who do not trust each other politically, enemies with genuine attraction, friends who trust courage but not judgment, and rivals who despise the king but believe the realm needs him alive.
-
-## Side-character independence
-
-Every recurring side character needs at least one concern not reducible to the king: family advancement, debt, apprenticeship, lover, children or parents, military promotion, temple doctrine, research, business, estate survival, artistic ambition, revenge, quiet prosperity, fear of poverty, class resentment, friendship, professional pride, addiction, greed, vanity, retirement, or desire to be remembered.
-
-These plans continue off-page.
-
-## Background-to-foreground promotion
-
-Promote a background character when ordinary continuity makes them valuable:
-- witnessed a conversation;
-- handled a key object;
-- knows a route;
-- remembers a face;
-- has access to laundry, keys, horses, food, ledgers, corpses, doors, maps, guest rooms, messages, weapons, or private chambers;
-- is related to someone newly important;
-- survived a prior event;
-- was blamed for something;
-- received a bribe;
-- fell in love;
-- changed sides;
-- carried a secret too long.
-
-Do not invent expertise at payoff. Seed occupation and access first.
-
-## Flaw / temptation model
-
-For consequential bad choices record:
-- what the character wants;
-- what they fear losing;
-- why the offer is credible;
-- why they think they can survive the risk;
-- what moral objection they recognize;
-- what rationalization they use;
-- who might notice;
-- what they misunderstand.
-
-Possible drivers: greed, lust, fear, pride, envy, humiliation, hunger, class aspiration, family pressure, ideology, romantic obsession, grief, resentment, debt, overconfidence, cowardice, vanity, laziness, naïveté, ambition, misplaced mercy.
-
-## Change-of-heart model
-
-Changing sides is not automatically redemption.
-
-Track original belief, disconfirming evidence, cost paid before admitting error, fear of former allies, whether the new side trusts them, what prejudice remains, and what action proves the change.
-
-A conspirator may discover they backed the wrong claimant. A royal loyalist may discover the king crossed a line they cannot defend. Both transitions can be true.
-
-## The coalition-memory rule
-
-By Season Five, every faction asked to save Edselsto remembers what the king did to it.
-
-Track:
-- grievance;
-- desired payment;
-- minimum acceptable guarantee;
-- whether the grievance is personal, institutional, territorial, religious, financial, or dynastic;
-- who has authority to make the bargain;
-- what the king promises;
-- who witnesses the promise;
-- whether the promise is public, secret, conditional, or magically bound;
-- postwar cost.
-
-A former enemy may save the king and still collect afterward.
-
-## King arc
-
-**S1:** legitimate but insecure; learns living politics; builds a trusted circle; coup and confidant death make betrayal personal.
-
-**S2:** Edselsto solves problems people cannot; rules of necessity erode; the king chooses the occupied-envoy atrocity because it works.
-
-**S3:** highly political, bargaining with former enemies; coalition survival depends on spectacle, concessions, relationships, and castle intelligence.
-
-**S4:** evidence destroys his comfortable model of Edselsto and the dynasty; he remains competent while becoming frightened of the machinery he helped expand.
-
-**S5:** uses every hard political skill to assemble enemies into an army, paying prices he hates, then rejects supernatural control as a substitute for human dependence.
-
-This is not corruption → innocence restored. He becomes more competent throughout.
-
-## Low-status information advantage
-
-Servants and staff often know different truths because they make beds, clean blood, empty fireplaces, carry trays, stable horses, wash clothing, change locks, copy letters, prepare rooms, guard corridors, unload wagons, inventory cellars, and bury bodies.
-
-This does not make them omniscient. It makes them witnesses to material reality.
-
-## Post-episode character diff
-
-For each recurring character who appears record:
-- new memory;
-- new knowledge;
-- belief update;
-- intention;
-- relationship change;
-- secret gained/exposed;
-- desire change;
-- injury/fatigue/grief;
-- obligation;
-- theory-of-mind update;
-- competence demonstrated;
-- material position change;
-- expected next action.
-
-If nothing changed, ask why the character needed to be in the episode.
+## Protected knowledge
+No living character has confirmed the buried containment complex, the original Nowhere King, the castle-interface truth, royal siphoning, or any candle-defense mapping. Season One remains below that reveal ceiling.
