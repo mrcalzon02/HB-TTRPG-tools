@@ -2,49 +2,68 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 1 Episode 21, *Rumor From the Capital*.
+**Reconciled through:** Season 1 Episode 22, *The Army Question*.
 
 ## Character state
 
-**Luceran:** Learns that hostile political narrative can be made almost entirely from true facts arranged toward an interpretation. He resists blaming Valcere for every rumor because the first hostile account predates his demand to the house and later variants demonstrably arise through multiple ordinary information routes. He accepts that independent allies can rebut claims more credibly than royal command can: Calienne refuses his seal on her clerical correction and he allows it. He does not answer insult with theatrical mobilization; instead he authorizes a bounded readiness inquiry into actual movement capacity.
+**Luceran:** Converts Episode 21's readiness inquiry into bounded preparation rather than theatrical mobilization. He learns that readiness is a system of roads, food, horses, wagons, depots, guards and time, and that preparing capacity is politically observable even without a general summons. He accepts expert disagreement rather than demanding one answer, refuses to strip Edselsto's Episode 17 security architecture for convoy guards, and allows Bram's operational no to constrain him. He orders one bounded forward-stores convoy, Northbridge inspection/repair, ordinary assembly-roll updates and local discretion on leave; no troop concentration is ordered. He accepts Miren truthfully describing visible Crown preparation to Edevane rather than asking her to lie for privacy.
 
-**Miren Edevane:** Relationship promise with Luceran persists; no betrothal. Capital rumor now publicly casts her as governing through Luceran's bed and assumes marriage pressure. She reads Edevane correspondence rather than pretending to know the family's reaction in advance. Her assessment remains that Edevane supports its own interests, which often but not automatically align with Luceran, Miren, and the dynasty. Corin Varo authorization remains unresolved. Miren's jealousy of Ardel remains present but controlled; she does not obstruct Kaelmont policy.
+**Miren Edevane:** Relationship promise with Luceran persists; no betrothal. She distinguishes Maelin Harrow's strategic judgment from personal criticism and continues helping Luceran interpret political meaning without pretending Edevane and Crown interests are identical. She intends to answer family questions truthfully: the Crown is preparing the ability to move, but no general summons exists. Corin Varo authorization remains unresolved. Jealousy of Ardel remains controlled and does not obstruct Kaelmont policy.
 
-**Pellin Joss:** Maps rumor as material distribution rather than a single conspiracy. With Selise's bounded assistance he identifies merchant letters, household correspondence, temple networks, discharged workers, guild notices, court visitors, road inns, and paid digests as distinct routes. Establishes that several hostile accounts share facts but not wording and therefore do not descend from one demonstrated master text.
+**Tovan Rhyse:** Maintains the distinction between readiness and war. Supports keeping Edselsto's guard posts intact, accepts a bounded stores/road preparation, and receives the first Red Ford boundary report at episode end. He has not concluded the report is genuine.
 
-**Selise Varo / Ysabet Marris:** Selise remains restricted from current correspondence and sensitive archive work. Pellin uses her copyist competence only on public hostile texts under Ysabet's supervision. Selise identifies independent textual parentage among variants. Ysabet's trust remains damaged; useful work does not erase the breach.
+**Jeron Bellisar:** Still unable to ride. His strategic value remains intact. Opposes premature company movement to Vey Crossing because visible concentration may cause frightened garrisons to validate one another's fears. Identifies the fourteen sacks consumed by rumor-driven patrol/leave changes as proof that mobilization effects begin before formal mobilization.
 
-**Calienne Orsanne / Mother Ysara / Brother Talen:** Calienne and Ysara independently answer religious rumor through their own clerical relationships. Calienne refuses a royal seal because independent testimony is more credible and because the letter is hers. They confirm only bounded facts: ordinary clergy access continues, funerary jurisdiction is disputed in specific places, the Seven Lights physically remain in the royal nave, and their ancient purpose is unknown. Canon Merel's underlying grievance remains real and unresolved.
+**Mara Kest:** Materially shapes policy by proposing forward stores instead of immediate troop movement. Corrects depot arithmetic and preserves Edselsto staffing realities. Continues as a decisive logistical actor independent of royal preference.
 
-**Tovan Rhyse / Jeron Bellisar:** Rhyse treats provincial readiness changes as the material security issue. He obtains routine returns on strength, horses, grain, wagons, leave, roads and assembly time. Jeron remains unable to ride but contributes strategic analysis, identifying approaches where small movements could be misread and depots unable to sustain marching forces. Their competence drives Episode 22 without requiring either to agree on a war.
+**Tomas Reed:** River-depot assignment advances into field logistics. Demonstrates that loaded wagons, depot depletion and route capacity differ from paper availability. Travels with the first bounded forward-stores convoy so physical tallies can be checked against returns. Finds Northbridge depot fourteen sacks below its paper return due to legitimate rumor-driven issues, not demonstrated theft.
 
-**Ardel Kaelmont:** Refuses to let the Crown defend Kaelmont's virtue; wants the actual nonexclusive carriage terms defended if necessary. Kaelmont's interests remain politically independent from Luceran/Ardel attraction and Miren's jealousy.
+**Ardel Kaelmont:** Provides road/carriage expertise while defending the exact boundaries of Kaelmont's nonexclusive carriage terms. Eight Kaelmont contract wagons are potentially divertible only at Crown cost; six wagons actually move in the first stores convoy under proper terms. Ardel refuses a clerk's attempt to treat her as personal commander of hired Kaelmont wagons. Attraction politics remain separate from her institutional interests.
 
-## Political / rumor state
+**Captain Maelin Harrow:** Argues competently for immediate visible movement to Vey Crossing as deterrence. Disagrees with Luceran's bounded-preparation choice without disloyalty. Her position remains unresolved rather than disproven.
 
-The old capital and provinces now circulate multiple hostile interpretations of Edselsto built from real visible facts: credentials become closed access; Kaelmont carriage terms become sale of roads; Luceran/Miren intimacy becomes private government and assumed marriage leverage; Moncler compensation becomes fiscal weakness; grain negotiation becomes shortage; the Seven Ancestral Lights dispute becomes religious impropriety; village/property administration becomes seizure.
+**Orel Venn / Damaris:** Establishes that warehouse grain is not field food and demands seven days for reliable sustainment tallies rather than offering flattering false certainty. Damaris releases bounded stores under signed quantities. Grain-market rumor pressure remains active.
 
-No single demonstrated author or network controls the rumor. Different versions share facts but not sentences or emphasis. Ordinary information ecology is sufficient to propagate them. Valcere may participate in that ecology but is not established as universal source.
+**Bram Tolland / Edrik Saye:** Bram refuses a request for twelve convoy guards because fixed posts/reserve would be weakened; Luceran accepts four, with six only conditionally possible. Edrik continues credential/receiving enforcement. Episode 17 security remains functioning and inconvenient rather than being hollowed out for plot.
 
-Material reactions are already occurring: Damaris-linked grain markets see a small rumor premium; distant Orsanne clergy receive distorted accounts; Bellisar-area garrisons alter leave decisions; provincial families reconsider whether to send dependents to Edselsto. These are recalculations under uncertainty, not proof of coordinated rebellion.
+**Pellin Joss:** Observes readiness rumor escaping through ordinary economic signals. Does not stop a messenger merely for noticing Crown wagons because no lawful basis exists. No single rumor master is established.
 
-Luceran authorizes a readiness inquiry rather than a general summons. Sealed invitations go to relevant military, road, grain, quartermaster and house expertise to determine what forces can actually move, how quickly, under whose command, with what food/horses/wagons, and what Edselsto/frontier capacity would be weakened.
+## Military / political state
+
+The Crown has **not** issued a general summons and has **not** concentrated an army. It has begun bounded readiness preparation:
+- one six-wagon stores convoy moves north with flour, oats, salt meat, replacement shoes, wheel grease and repair iron;
+- four Crown guards escort initially, with local escort thereafter;
+- Tomas Reed accompanies the convoy for physical depot verification;
+- Kaelmont/Crown road specialists inspect Northbridge and stage repair material;
+- Harrowmere units remain at ordinary stations but update assembly rolls;
+- Bellisar-area leave returns to local captain discretion absent actual local reason;
+- no company is moved to Vey Crossing.
+
+Northbridge is worse than its old return: one abutment shifted after rain. Loaded wagons can cross individually if shored, but sustained military traffic risks failure. Repair is ordered before concentration.
+
+The Northbridge depot is fourteen grain sacks below its paper return because stores were legitimately issued to men held by the prior leave suspension and two patrols generated by neighboring-garrison anxiety. Rumor has therefore already consumed food, horse use and patrol capacity without any Crown mobilization order.
+
+The readiness inquiry itself leaks through ordinary material signals: oat-price questions, wagon scheduling, farrier demand, messengers, map cases and visible stores. A local rumor already inflates this into three thousand men gathering at Edselsto. The Crown's bounded public truth remains: readiness is being reviewed; no general summons has been issued.
+
+## Episode 23 trigger / border state
+
+At Episode 22's end, a northern road captain reports that two riders from beyond Red Ford claim armed men crossed a disputed grazing boundary and burned a toll shelter. No names, confirmed colors or bodies are reported. The nearest local officer has sent a patrol and requested instructions. This is **reported, unconfirmed information**. It may be a real grievance, distortion, forgery, opportunism or mixture. No character may treat it as established coup machinery or confirmed invasion.
 
 ## Intelligence / security state
 
-Episode 20's Valcere collection network remains established and bounded. Deren Holt's higher commissioning authority remains unknown. Harl remains unidentified. The unknown west-service questioner may be connected but is not confirmed. Episode 16's unsigned note and rope-carrying questioner remain unconnected. The living hunt tester/sponsor, false horn, hunt rope, unidentified riders, fraudulent rope issue and charcoal marks remain unresolved and are not folded into the rumor or Valcere network.
+Episode 20's Valcere collection network remains established and bounded. Deren Holt's higher commissioning authority remains unknown. Harl remains unidentified. The unknown west-service questioner may be connected but is not confirmed. Episode 16's unsigned note and rope-carrying questioner remain unconnected. The living hunt tester/sponsor, false horn, hunt rope, unidentified riders, fraudulent rope issue and charcoal marks remain unresolved. None are automatically connected to the new Red Ford report.
 
 ## Relationship state
 
-Luceran and Miren remain lovers and are not betrothed. Their private promise to decide marriage together before public inference becomes consent persists. Public rumor now makes that promise harder to protect by treating intimacy as settled political arrangement. Miren's political-disclosure boundary to Edevane remains intact. Luceran/Ardel attraction and Miren's acknowledged jealousy remain unresolved; Ardel's political independence remains intact.
+Luceran and Miren remain lovers and are not betrothed. Their private promise to decide marriage together before public inference becomes consent persists. Miren's political-disclosure boundary to Edevane remains intact: she will not disclose restricted Crown security information, but she will not lie about visible preparation. Luceran accepts that distinction. Luceran/Ardel attraction and Miren's acknowledged jealousy remain unresolved; Ardel's political independence remains intact.
 
 ## Religious / public-symbol state
 
-Seven Ancestral Lights remain an inherited Crown household observance of unknown original meaning. Public interpretations continue multiplying. Calienne/Ysara's correction establishes only observable institutional facts and explicitly preserves uncertainty about ancient purpose. Hall of Veils work and Canon Merel's grievance persist. No supernatural evidence occurs.
+Seven Ancestral Lights remain an inherited Crown household observance of unknown original meaning. Hall of Veils work and Canon Merel's grievance persist. No supernatural evidence occurs.
 
 ## Political / material obligations
 
-Episode 22 must answer the readiness question with actual constraints: strength, command, road capacity, bridges, grain, horses, wagons, garrison obligations and Edselsto security staffing. Asking the question is itself politically observable and may generate further interpretation.
+Episode 23 must test the Red Ford report through bounded evidence while accounting for the fact that stores and road preparation are already moving and therefore costly, visible and useful even if the report proves false or distorted. Waiting and acting both carry costs.
 
 House Valcere must still identify Deren Holt's commissioning authority. House Edevane must answer whether Corin Varo's sale of compiled observations was authorized. Archive outside-correspondence rules and stores receiving-mark rules remain active.
 
@@ -52,7 +71,7 @@ Kaelmont three-year nonexclusive carriage opportunity, Lysa Quill engagement, Mo
 
 ## Sealed stair / mystery state
 
-Temporary heavy timber barrier remains locked; Rhyse holds working key and Avarren sealed duplicate. No Episode 21 entry or deeper exploration occurs. Partial scratched lettering remains unread. N.F. 44–51, Halven Sare, father's restricted papers/parental visit, Widow's key, infilled family doorway and lower-west barred door remain unresolved. No confirmed supernatural behavior.
+Temporary heavy timber barrier remains locked; Rhyse holds working key and Avarren sealed duplicate. No Episode 22 entry or deeper exploration occurs. Partial scratched lettering remains unread. N.F. 44–51, Halven Sare, father's restricted papers/parental visit, Widow's key, infilled family doorway and lower-west barred door remain unresolved. No confirmed supernatural behavior.
 
 ## Seven candles
 
@@ -60,7 +79,7 @@ Seven of seven remain lit. Their actual function remains completely unknown to c
 
 ## Immediate handoff
 
-Episode 22 — *The Army Question* is next. The Crown has not ordered mobilization. It has asked a politically visible readiness question because rumor has already caused rational actors to alter leave, prices and expectations. The episode must turn that question into concrete military/logistical choices without materializing an army overnight or stripping Edselsto's competent security system merely to create later vulnerability.
+Episode 23 — *The False Border* is next. A real report now exists, but its truth and scale do not. The Crown already has six wagons of bounded stores on the northern road and a necessary bridge repair underway. Episode 23 must establish what can actually be verified, preserve the possibility of multiple actors exploiting instability, and make departure/mobilization costly to cancel without turning the crisis into a perfect conspiracy device.
 
 ## Hard exclusions
 
@@ -70,4 +89,4 @@ Episode 22 — *The Army Question* is next. The Crown has not ordered mobilizati
 - No candle extinction.
 - No omniscient interpretation of the stair or lights.
 - No premature identification of the hunt sponsor.
-- No assumption that all intelligence/security anomalies or rumors belong to the Valcere network.
+- No assumption that all intelligence/security anomalies, rumors or Red Ford events belong to one network.
