@@ -1,54 +1,57 @@
 # Nowhere King — Active Continuity State
 
-**Reconciled through:** Season 1 Episode 13, *The Missing Ledger*.
+**Reconciled through:** Season 1 Episode 14, *The Sealed Stair*.
 
 ## Character state
 
-**Luceran:** Now distinguishes patronage adjacency from transactional evidence in fiscal investigations. Accepts scrutiny of friendly suppliers and signs Moncler's demand for the same documentary standard. Continues intimacy with Miren without treating her family connections as either guilt or immunity. Increasingly tolerates experts answering "we do not know yet."
+**Luceran:** Has now applied Episode 13's evidence discipline to architecture. He wants to descend the newly exposed stair but accepts a written inspection limit and does not expand it merely because partial lettering is visible beyond the first turn. Continues intimacy with Miren. Increasingly understands that a limit he can revoke still matters if he expects institutions to trust his procedures.
 
-**Tovan Rhyse:** Preserves hunt evidence and treats false commercial records as potentially security-relevant without taking control of the fiscal inquiry. Hunt tester remains unidentified.
+**Tovan Rhyse:** Controls access to the newly exposed stair and holds the working key to its timber barrier. Finds no recent tracks, occupation, or connection to the hunt evidence. Continues to treat unknown space as a security concern without converting uncertainty into conspiracy.
 
-**Miren Edevane:** Supports inspection of Edevane-adjacent supplier Maret & Sons while rejecting guilt by association. Expects her aunt to react independently to reputational embarrassment. Intimacy with Luceran continues.
+**Mara Henn:** Co-discovers the void through drainage work. Establishes the need to test underground water effects before deeper disturbance and records the feature as **UNMAPPED WEST STAIR — PURPOSE UNKNOWN**. Continues independent village/property interests alongside Crown mapping work.
 
-**Pellin Joss:** Promoted by competence, not office. Reconstructs the grain chain, insists on physical/accounting distinctions, and recommends Olan's bounded consequence. Remains household-stores staff rather than becoming judge or minister.
+**Derrin Voss / Jory Fell / Nella Vey:** Derrin handles masonry/support, Jory timber safety, and Nella openings/hardware. Their competing expertise materially limits what the Crown can safely do. Comparisons do not presently link the stair closure to the known family-passage infill.
 
-**Tomas Reed:** Recognizes altered entries through handwriting and office-sand practice. Temporarily assigned for six weeks to the river depot as Crown receiving-copy clerk, with travel allowance, dry lodging and two pairs of boots.
+**Ysabet Marris / Selise Varo:** Locate an old maintenance entry mentioning separate "stair salt" with a family-service mark. Treat it as supporting evidence rather than proof of purpose. No N.F. 44–51 link is established.
 
-**Olan Vey:** Admits deliberately falsifying the castle grain tally to avoid reopening a paid account and delaying subsequent grain orders. No personal profit proven. Removed from payment authority; ordered to reconstruct all open grain orders under supervision.
+**Orven Dast:** Confirms the visible wall predates his stewardship but does not claim knowledge of the space beyond. Declines a stair key and requests written notice before deeper inspection.
 
-**Selise Varo / Ysabet Marris:** Archive remains institutionally bounded. Selise suggests staffing capacity; Ysabet's objection is respected rather than overridden.
+**Miren Edevane:** Continues intimate relationship with Luceran and supports his restraint. Edevane/Maret grain adjacency remains separated from culpability.
 
-## Grain / fiscal state
+**Pellin Joss / Tomas Reed / Olan Vey:** Episode 13 fiscal consequences remain active. Tomas's six-week depot assignment, Olan's supervised reconstruction, Maret repayment, and Pellin's evidentiary influence continue.
 
-- Original Crown order: 74 sacks.
-- Physical castle receipt: 64 sacks.
-- Mold inspection and depot handling generated shifting figures; premature certification and later corrections were not reconciled cleanly.
-- Crown payment treated the chain as complete and produced an overpayment.
-- Maret & Sons undertakes repayment.
-- Dovren Haulage road sheet supports 64 loaded/received in the relevant final movement.
-- Jalen Marr's premature depot certification is improper and requires follow-up but does not alone prove theft.
-- Damaris forward-grain negotiation remains active.
-- Crown will seek independent receiving copies at depot transfer rather than relying solely on supplier/carrier copies.
-- Documentary standard now separates order, title transfer, quality inspection, physical carriage, castle receipt, stores issue and payment.
+## Sealed stair state
+
+- Discovery arose from established drainage/structural work below the family wing.
+- Former opening was closed in at least two masonry phases.
+- Controlled opening exposes landing, small probable maintenance room, and descending stone stair beyond first turn.
+- Mundane contents: broken clay lamp, hooks, shelving remains, jars, drain, repair mortar, hardware scars, charcoal count/inventory-like marks.
+- Partial scratched lettering is visible beyond authorized limit but unread.
+- No recent tracks or occupants.
+- No supernatural manifestation.
+- Purpose, age, destination and relationship to other sealed spaces remain unknown.
+- Temporary heavy timber barrier installed and locked.
+- Rhyse holds working key; Avarren holds sealed duplicate.
+- Deeper exploration requires new formal authorization.
 
 ## Political / institutional consequences
 
-- Moncler invokes the grain inquiry's evidentiary standard for its unresolved direct-loss compensation claim.
-- Luceran signs a documentary review rather than shielding the Crown from its own rule.
-- Maret/Edevane adjacency does not establish Edevane culpability.
-- Kaelmont five-year nonexclusive carriage concession remains active under Episode 12 limits.
-- Bellisar remembers Bram's intervention; Jeron remains injured and unable to ride.
-- Village Council/Tessa retains drainage, water, access and property relevance.
-- Vess paid seven-day observation and unresolved boundary/mill-spring rights remain active.
-- Royal Works rope controls remain.
+- Royal Works asserts structural interest in unknown voids beneath repaired areas.
+- Village Council requests notice if drainage connects to village springs/old mill water; Luceran accepts that principle.
+- Hall of Veils requests observer status if ancestral funerary space is encountered; acknowledged but not granted blanket access.
+- Moncler documentary compensation packet remains active and specifically requests Pellin Joss as reviewer. Crown has not conceded Pellin's reassignment.
+- Kaelmont engineering capacity is offered for future buried-rock/retaining-wall inspection without yet being accepted.
+- Kaelmont five-year nonexclusive carriage concession remains active.
+- Damaris grain negotiation/depot-copy reform remains active.
+- Vess boundary/mill-spring rights remain unresolved.
 - Royal Companion review remains unresolved.
 
 ## Security state
 
 - Living hunt tester/sponsor remains unidentified.
 - False horn, rope, unidentified riders, fraudulent rope issue and charcoal marks remain unresolved human evidence.
-- No new security accusation arises from the grain case.
-- Rhyse retains a copy of Olan's confession because false records can conceal movements, but this is precaution, not proof of linkage.
+- No evidence links the stair to the hunt incident.
+- Vess observation arrangement and Royal Works rope controls remain active according to their established terms.
 
 ## Family-history / mystery state
 
@@ -58,7 +61,7 @@
 - Widow's key remains with Orven.
 - Infilled family-passage doorway remains intact.
 - Lower-west service door remains barred.
-- No sealed-stair exploration has occurred yet.
+- Newly exposed west stair is not currently evidenced as connected to any of the above.
 - No confirmed supernatural behavior.
 
 ## Seven candles
@@ -67,7 +70,7 @@ Seven of seven remain lit.
 
 ## Immediate handoff
 
-Episode 14 — *The Sealed Stair* is next. Discovery must arise from already active repair/mapping/masonry/drainage work and be handled using Episode 13's evidence discipline. Worker, steward, guard, archive/door expertise and Crown must hold different reasonable theories. Exploration remains shallow and formally authorized.
+Episode 15 — *A Favor Owed* is next. Luceran must obtain a real service by trading a real concession or obligation drawn from existing pressures. The bargain must not collapse Kaelmont, Damaris, Moncler, Bellisar, Vess/Henn, Companion, village, or intimate interests into one convenient bloc. Personal and state favor must become harder to distinguish without making affection itself corrupt.
 
 ## Hard exclusions
 
