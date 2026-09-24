@@ -2,28 +2,20 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after committed Season 1 Episode 20.
-**Forward window:** Episodes 21–25.
+**State:** Rolled forward after committed Season 1 Episode 21.
+**Forward window:** Episodes 22–26.
 
-## Episode 21 — Rumor From the Capital — LOCKED
+## Episode 22 — The Army Question — LOCKED
 
-The old capital is already circulating a hostile story about Edselsto before the Crown's Valcere/Edevane demands can arrive. Build the episode from selective framing of real visible facts rather than omniscient fabrication: guard credentials become locked doors; Kaelmont carriage access becomes sale of roads; Luceran/Miren intimacy becomes private favoritism; Moncler compensation and Damaris grain changes become fiscal weakness; Seven Ancestral Lights controversy becomes religious impropriety; village/property constraints become royal seizure depending on the speaker.
+Episode 21 ended with a bounded readiness inquiry, not a general summons. Turn the question into material military reality: actual strengths, command obligations, assembly times, horses, remounts, wagons, bridges, grain days, road capacity and the political meaning of moving any of them. Some garrisons already changed leave under rumor; others deliberately refused. Preserve those rational differences.
 
-Different provinces, houses, creditors, clergy and military actors must receive different fragments and recalculate differently. Episode 20's Valcere network is one demonstrated information route, not the universal explanation for rumor. Deren Holt's higher commissioning authority remains unknown.
+Episode 17's security staffing remains real: Edselsto cannot donate Doorwardens/close-security posts wholesale without weakening a system the story deliberately built. Jeron Bellisar remains unable to ride but can contribute analysis. Damaris grain/depot obligations, Kaelmont carriage capacity, Vess rights and road realities constrain choices. Asking readiness questions is itself observable and can be misread as preparation for war.
 
-**Exit target:** external political pressure becomes credible enough that military readiness can no longer remain an abstract future concern.
-
-## Episode 22 — The Army Question — DIRECTIONAL
-
-Military readiness debate moves actual people and exposes mobilization time, road capacity, food, horses, command and competing strategic judgments. Episode 17's security staffing holes remain real: Edselsto cannot donate guards to a field force without weakening posts. Jeron Bellisar remains unable to ride; Bellisar expertise can matter without erasing his injury.
-
-Experts disagree from responsibility rather than stupidity or secret villainy. Damaris grain/depot obligations, Kaelmont carriage capacity, Vess rights and road realities constrain choices. Episode 21's external pressure must provide the political reason to ask readiness questions without manufacturing an army overnight.
-
-**Exit target:** forces begin moving or preparing in a way that makes later false-border pressure materially consequential.
+**Exit target:** limited forces or preparations begin moving in a way that makes later false-border pressure materially consequential, while Edselsto remains competently defended rather than conveniently emptied.
 
 ## Episode 23 — The False Border — DIRECTIONAL
 
-Real grievances plus forged, distorted or selectively transmitted reports create a plausible external crisis. Build from the readiness and provincial reactions already established. Someone may suspect timing without proof; Luceran acts under uncertainty because waiting also has costs.
+Real grievances plus forged, distorted or selectively transmitted reports create a plausible external crisis. Build from the readiness dispositions actually established in Episode 22. Someone may suspect timing without proof; Luceran acts under uncertainty because waiting also has costs.
 
 Do not make the crisis a perfect coup device or prove the hunt sponsor. Preserve multiple actors exploiting the same instability for different reasons.
 
@@ -39,29 +31,33 @@ Practical departure machinery must remain visible: who stays, who leaves, which 
 
 ## Episode 25 — The King's Progress — DIRECTIONAL
 
-Outside Edselsto, Luceran encounters inconsistencies in the border crisis and receives partial letters from home. Distance now matters: messages take time, reassurance may already be stale, and political actors can exploit the gap without everyone sharing one conspiracy.
+Outside Edselsto, Luceran encounters inconsistencies in the border crisis and receives partial letters from home. Distance matters: messages take time, reassurance may already be stale, and political actors can exploit the gap without everyone sharing one conspiracy.
 
 Preserve field logistics, route delays, divided command responsibilities and the emotional baseline established in Episode 24. Edselsto's internal plans continue without waiting for the king.
 
-**Horizon exit:** Luceran recognizes that some crisis information is wrong too slowly to reverse instantly; behind him the conditions for the coup become actionable.
+**Exit target:** Luceran recognizes that some crisis information is wrong too slowly to reverse instantly; behind him the conditions for the coup become actionable.
 
-## Episode 20 reconciliation
+## Episode 26 — An Empty Throne — DIRECTIONAL / SEED-DEPENDENT
 
-- Nera discovers three false lamp-oil charges against west-service stores; no oil was delivered. The entries were purchased to create timestamps during guard relief.
-- Ren Vask identifies an unknown "Harl" who paid cash and used an obsolete works token. Harl remains unidentified.
-- Deren Holt's discarded Valcere draft confirms payment for "verification of west-service change interval," tying the false entries to his collection operation.
-- Holt departed openly before discovery. Whether he was warned, finished, or simply scheduled to leave is unknown.
-- Selise Varo's Episode 10 patron-chain ambiguity pays off: after her mother's illness she began taking four crowns per weekly letter routed through Aunt Leth and Corin Varo. She sent court/office observations and limited archive-activity information, not sealed document contents.
-- Corin Varo compiled multiple correspondents and sold digests to Holt. Whether Edevane authorized this is unresolved.
-- Holt also paid Mera Doss, a stable boy, kitchen supplier, carter and a dismissed Companion's cousin. Most sources knew only their own compartmented observations.
-- Mera's motive includes helping her daughter acquire an independent dye vat; she loses unrestricted guard-laundry access but is not treated as a traitor without evidence.
-- Ysabet restricts Selise to public/duplicate archive work pending trust review. Apology matters but does not restore trust.
-- Luceran resists an immediate gate closure and accepts evidence discipline.
-- Miren explicitly demonstrates that love and outside institutional loyalty coexist: she will report bounded political facts to Edevane but not active Crown security methods, and will disclose if that boundary changes.
-- House Valcere receives a demand to identify Holt's commissioning authority; Edevane receives notice regarding Corin Varo.
-- Archive paid-correspondence disclosure and stores receiving-mark rules become active.
-- The Valcere network is not merged with the hunt, Episode 16 note/questioner, or every other anomaly.
-- No stair entry, supernatural confirmation or candle change occurs.
+The coup begins inside Edselsto through human systems already made legible: offices, guard posts, credentials, servants, routes, patronage resentments and ordinary access. Do not make competent guards forget Episode 17 procedures. Attack the seams those procedures necessarily create: relief, authorized credentials, divided jurisdictions, supply access, family obligations, copied routines and people with legitimate reasons to be present.
+
+A tempted servant or low-status worker may make a morally recognized betrayal only if their desire, opportunity, credible payment and rationalization have been established before the decisive act. Episode 26 must not retroactively invent a perfect betrayer. At least one ordinary staff member should notice a small material inconsistency because their job makes them capable of noticing it.
+
+**Horizon exit:** key systems begin falling through human action while enough uncertainty remains that loyalists cannot instantly identify the whole operation.
+
+## Episode 21 reconciliation
+
+- A hostile capital account reaches Edselsto before the Crown's post-Episode-20 demands could have generated it, preventing automatic attribution to Holt/Valcere.
+- Multiple hostile versions share real facts but differ in wording and emphasis; no demonstrated master text controls them.
+- Credentials, Kaelmont carriage terms, Luceran/Miren intimacy, Moncler compensation, grain negotiation, village administration and the Seven Lights dispute are selectively reframed as weakness, favoritism, seizure or religious impropriety.
+- Damaris-linked grain prices acquire a small rumor premium; distant clergy receive distorted accounts; some Bellisar-area garrisons delay leave; provincial families reconsider sending dependents to Edselsto.
+- Calienne Orsanne and Mother Ysara answer religious distortion through independent clerical correspondence. Calienne refuses Luceran's seal, preserving the credibility and ownership of her testimony.
+- Pellin maps rumor distribution through ordinary social/material routes. Selise, still under archive restrictions, compares only public hostile texts and identifies multiple textual parentages. Ysabet's damaged trust is not reset.
+- Edevane correspondence confirms capital marriage/favoritism assumptions without resolving Corin Varo authorization. Miren refuses to pretend Edevane loyalty is identical to Crown loyalty.
+- Ardel insists that actual Kaelmont terms, not Kaelmont virtue, are what can be defended. Her political independence from romance persists.
+- Rhyse obtains readiness returns rather than treating rumor as rebellion. Jeron Bellisar, still unable to ride, contributes analysis of roads and depots.
+- Luceran authorizes a bounded readiness inquiry and invitations to military/logistical expertise, explicitly not a general summons or theatrical muster.
+- No stair entry, supernatural confirmation, hunt-sponsor identification or candle change occurs.
 
 ## Active payoff debt
 
@@ -70,6 +66,7 @@ Preserve field logistics, route delays, divided command responsibilities and the
 - Harl identity and whether the west-service questioner is connected;
 - Selise/Ysabet damaged trust and Selise's restricted archive role;
 - Mera's daughter/dye-vat motive and altered Crown work;
+- capital/provincial rumor ecology and consequences of the readiness inquiry;
 - Luceran/Miren private promise, marriage possibility and political-disclosure boundary;
 - Miren jealousy and Luceran/Ardel attraction remain acknowledged rather than resolved;
 - Ardel/Kaelmont political independence from romance;
@@ -92,7 +89,7 @@ Preserve field logistics, route delays, divided command responsibilities and the
 ## Protected long-future seeds
 
 - No Magenheim Nowhere King material.
-- No supernatural solution to security, accounting, construction, religion or politics.
+- No supernatural solution to security, accounting, construction, religion, politics or military readiness.
 - No premature hunt-sponsor identification.
 - No assumption that the Valcere network explains every hostile act or rumor.
 - No stair-to-family-mystery connection without evidence.
