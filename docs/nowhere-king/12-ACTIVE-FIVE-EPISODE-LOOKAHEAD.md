@@ -1,102 +1,98 @@
 # Nowhere King — Active Five-Episode Lookahead
 
-**Current historical endpoint:** Season One, Episode 10 — *Guests With Patrons*
-**Forward window:** Episodes 11–15
+**Current historical endpoint:** Season One, Episode 11 — *The Hunt*
+**Forward window:** Episodes 12–16
 
 Planning is directional unless marked LOCKED. Finished prose supersedes planning.
 
-## N+1 — Episode 11: The Hunt
+## N+1 — Episode 12: The King's Table
 **Certainty:** LOCKED in function.
 
-**Primary purpose:** Move court outside formal rooms and test landscape competence, informal hierarchy, courage, security, and local knowledge. Evidence must show a **living political actor** is testing royal security; no supernatural shortcut.
+**Primary purpose:** Establish ordinary court companionship worth losing. A long dinner makes food, seating, jokes, flirtation, gossip, provincial news, village supply pressure, and access into governance.
 
-**Dependency-valid geography already established:**
-- old funeral grade/corpse road through east pines to charcoal track above ravine;
-- passable by people and careful horses, not carts until two fallen pines are cleared;
-- villagers regularly observe it, so it is unguarded rather than secret;
-- proposed observation-post site may be Vess land and cannot be built on until ownership/boundary is verified;
-- Bellisar horse/remount pressure and stable logistics already exist;
-- Bram/Edrik close-escort elevation and Royal Companion review remain active.
+**Required political lane:** one faction wins a concrete concession through legitimate table/access politics; another faction begins a legible response. The concession must arise from existing obligations rather than a newly invented issue.
 
-**Action requirements:** establish hunt objective, participants, horses, route, communications, civilian/local presence, security plan, retreat/rally points, opposition/test mechanism, cost, and aftermath before paying the security test.
+**Required relationship lane:** preserve Miren's explicit love and Episode 11 kiss, Ardel's separate genuine attraction/Kaelmont utility, Montegrain friendship, and the wider ensemble. No forced exclusivity or romantic resolution.
 
-**Ensemble requirement:** side characters must solve material parts of the incident. Luceran cannot personally detect every threat. Competence, fear, attraction, embarrassment, and divided loyalties should update directional theory-of-mind.
+**Security carryover:** Jeron Bellisar remains injured. The false horn, rope, fraudulent issue, unidentified riders, and charcoal marks remain unresolved evidence of a living tester. Dinner gossip may distort the incident, but narration must not endorse rumor as fact.
 
-**Exit target:** evidence supports deliberate living observation/testing of royal security without yet proving the full sponsor or future coup network.
+**Material carryover:** food and lodging pressure, lower-well repair/extra stone, Vess water rights, Henn lease, Vess seven-day observation, Royal Works rope controls, Companion review, Moncler compensation, and Kaelmont road offer remain live.
 
-## N+2 — Episode 12: The King's Table
+**Exit target:** court has a recognizable social baseline; one faction has gained something real and another has material reason to respond.
+
+## N+2 — Episode 13: The Missing Ledger
 **Certainty:** DIRECTIONAL.
 
-**Purpose:** Establish ordinary court companionship before later betrayal. Food, seating, jokes, flirtation, gossip, provincial news, village supply pressure, and private familiarity become governance.
+**Purpose:** Turn expanding Edselsto costs into a fiscal investigation. The discrepancy must remain human: error, theft, double billing, patronage, opportunism, or corruption.
 
-**Carryover:** Episode 10's informal advisory circle must not become the only people who matter. Formal officers, houses, staff, villagers, lovers, suppliers, and rivals continue independent lives.
+**Available audit flows:** Moncler losses; Crown staples; Kaelmont transport/tolls; Morcant/Falbrecht iron and charcoal; village rents; Henn/Vess payments; worker wages; carts; timber; stone; well repair; lodging; rope issue; hunt costs; Bellisar horse/injury costs; Episode 10 patronage transactions.
 
-**Political lane:** one faction wins a real concession at table or through access around it; another begins a legible response.
+**Ensemble lane:** promote whoever notices the inconsistency because they understand the books. No omniscient discovery.
 
-**Relationship lane:** Miren's love confession and Ardel's acknowledged attraction/political utility remain separate active truths. Do not force a romantic resolution merely because both are now explicit.
+**Exit target:** mundane financial discrepancy becomes political threat and tests whether scrutiny applies to friendly interests.
 
-**Exit target:** the court has a social baseline worth losing.
-
-## N+3 — Episode 13: The Missing Ledger
-**Certainty:** DIRECTIONAL.
-
-**Purpose:** Turn expanding Edselsto costs into a fiscal investigation. Repair/supply discrepancy must remain human: error, theft, double billing, patronage, opportunism, or corruption.
-
-**Available audit flows:** Moncler losses; Crown staples and weekly prices; Kaelmont transport/tolls; Morcant/Falbrecht iron and charcoal; village rents; Henn ground lease; worker wages; carts; timber; stone; well repair; lodging records; Episode 10 patronage transactions.
-
-**Ensemble lane:** promote whoever notices the inconsistency because they understand the books. Selise, Venn, Avarren, a kitchen clerk, supplier, copyist, worker, or other earned actor may notice a mismatch, but no character becomes omniscient.
-
-**Exit target:** a mundane financial discrepancy becomes political threat and tests whether scrutiny applies to friendly interests.
-
-## N+4 — Episode 14: The Sealed Stair
+## N+3 — Episode 14: The Sealed Stair
 **Certainty:** DIRECTIONAL / REVEAL-CEILING LOCKED.
 
-**Purpose:** A repair team discovers a stair absent from current plans. Discovery must arise from established repair work, mapping, locksmithing, masonry, drainage, or structural inspection rather than supernatural convenience.
+**Purpose:** A repair team discovers a stair absent from current plans. Discovery must arise from established repair, mapping, locksmithing, masonry, drainage, water, or structural work.
 
-**POV / theory-of-mind:** worker, Mara/local knowledge, Orven, Ysabet/archive expertise, Nella/door expertise, Rhyse/security, and Luceran may hold different reasonable theories. No one is omniscient.
+**POV / theory-of-mind:** worker, Mara/local knowledge, Orven, Ysabet/archive expertise, Nella/door expertise, Rhyse/security, and Luceran may hold different reasonable theories.
 
 **Protected:** no containment truth, prison truth, sentient-castle proof, buried-entity terminology, or candle extinction.
 
-**Exit target:** deeper inspection requires formal authorization and becomes a political/material decision rather than an adventure door opened on impulse.
+**Exit target:** deeper inspection requires formal authorization and becomes a political/material decision.
 
-## N+5 — Episode 15: A Favor Owed
+## N+4 — Episode 15: A Favor Owed
 **Certainty:** DIRECTIONAL.
 
-**Purpose:** Luceran solves a political problem by trading one real thing for another. The bargain must emerge from obligations already established rather than a newly invented crisis.
+**Purpose:** Luceran solves a political problem by trading one real thing for another. Bargain must emerge from established obligations.
 
-**Available debt pool:** Kaelmont road/quarry offer, Moncler compensation, Companion review/patrons, Bellisar stable/remount needs, Morcant quotation limits, Falbrecht charcoal, Edevane archive interests, Pell procedural role, Nerezza access grievance, Village Council infrastructure, Henn/Vess property constraints, or consequences created in Episodes 11–14.
+**Available debt pool:** Kaelmont road/quarry offer, Moncler compensation, Companion review/patrons, Bellisar security/remount interests, Morcant quotation limits, Falbrecht charcoal, Edevane archive interests, Pell procedure, Nerezza access grievance, Village Council infrastructure, Henn/Vess property constraints, or Episodes 11–14 consequences.
 
-**Relationship lane:** a personal favor and state favor entangle. Someone close to Luceran must reasonably ask whether affection/access now has a price, without requiring that anyone has acted corruptly.
+**Relationship lane:** a personal favor and state favor entangle; someone close reasonably asks whether affection/access has acquired a price.
 
 **Exit target:** Luceran gains something necessary by creating a durable future obligation.
 
-## Reconciled Episode 10 outcomes
+## N+5 — Episode 16: The Measure of Trust
+**Certainty:** DIRECTIONAL.
 
-- Patronage chains are exposed through ordinary receiving/lodging/payment/transport/introduction records rather than spy revelation.
-- Official records distinguish transactions/declarations from inferred loyalty.
-- Selise Varo joins the archive as a competent copyist with overlapping Edevane, Morcant-linked freight, Hall of Veils, and Pell social pathways.
-- Luceran learns genuine affection, family, professional ties, political usefulness, and divided loyalty can coexist.
-- Miren tells Luceran she loves him and acknowledges family interest in her access; she asks to be trusted accurately.
-- Ardel acknowledges genuine attraction/warmth while openly recognizing Kaelmont benefits from it; no formal courtship established.
-- Luceran creates a six-person informal advisory circle: Montegrain, Miren, Rhyse, Avarren, Tessa, Ysabet. It grants no office and does not supersede institutions.
-- Each adviser identifies an external boundary/loyalty; Luceran accepts their retained agency.
-- Royal Companion review advances but remains unresolved; procedural defect and professional failure coexist.
-- Mara/Rhyse route inspection confirms corpse road is unguarded, not secret.
-- Proposed observation post is deferred pending likely Vess boundary/title verification.
+**Purpose:** A security scare forces Luceran to decide among conflicting living testimony with incomplete information.
+
+**Available setup:** Episode 11 establishes that a living actor is already testing security and that evidence can be genuine without identifying sponsor. Episodes 12–15 should deepen conflicting interests without cheaply solving that line.
+
+**Relationship requirement:** the confidant or another close ally must disagree with Luceran on substance and remain loyal. Friction must improve safety rather than be punished as disloyalty.
+
+**Exit target:** Luceran is safer because someone could tell him no.
+
+## Reconciled Episode 11 outcomes
+
+- Hunt logistics use established terrain, rally points, horses, signals, escort roles, beaters, and fallback routes.
+- Funeral grade remains unused by royal party; it is unguarded rather than secret.
+- Unknown living observer imitates the hold call near the east approach.
+- Fresh rope hazard injures Jeron Bellisar with a dislocated shoulder.
+- Evidence does not prove Luceran was the intended rope target or establish assassination.
+- Lysa Vess reports two unidentified riders asking about west track and king's hunting habits.
+- Jory Fell identifies rope as Royal Works scaffold line.
+- Derrin Voss records reveal fraudulent issue under sick Pellan Dorr's name.
+- Royal Works/security negotiate limited rope-control changes.
+- Vess ownership of west boundary is strongly evidenced; mill spring likely Vess-held with old water-use complications.
+- Seven-day paid Vess upper-pasture observation begins; permanent observation-post boundary remains unresolved.
+- Edrik recovers ambiguous charcoal marks possibly representing party/escort positions.
+- Luceran and Miren share a private kiss; no exclusivity or formal courtship established.
 - Seven candles remain lit; no supernatural confirmation.
 
 ## Active payoff debt
 
-- Episode 11 hunt/security test through established terrain;
-- sponsor/actor behind living security test remains bounded;
-- informal advisory circle disagreement and institutional limits;
-- Miren confession/family boundary;
+- Episode 11 living security tester and unknown sponsor;
+- Jeron Bellisar injury/family response;
+- Vess seven-day observation;
+- Vess boundary and old mill spring rights;
+- lower-well extra stone;
+- Royal Works rope-control compromise;
+- Miren confession/kiss/family boundary;
 - Ardel attraction/Kaelmont utility;
-- Selise archive role and ordinary information ecology;
-- Vess boundary before observation post;
-- old mill spring viability/ownership;
-- lower-well repair and water capacity;
-- burial field and reduced camp capacity;
+- informal advisory circle and institutional limits;
+- Selise archive role/information ecology;
 - Henn temporary lease;
 - Kaelmont road/quarry offer;
 - Moncler compensation accounts;
@@ -114,12 +110,12 @@ Planning is directional unless marked LOCKED. Finished prose supersedes planning
 ## Protected long-future seeds
 
 - No Magenheim Nowhere King material.
+- No premature identification of hunt sponsor.
 - No secretly coordinated friendly bloc by convenience.
 - No patronage map treated as mind-reading or guilt.
 - No informal advisory circle replacing lawful institutions.
-- No village opposition flattened into anti-royal ideology.
 - No Crown construction erasing private ownership.
-- No omniscient Mara, Orven, Ysabet, Selise, or staff.
-- No supernatural explanation for ordinary institutional/material problems.
+- No omniscient Mara, Orven, Ysabet, Selise, Vess family, or staff.
+- No supernatural explanation for ordinary security/material problems.
 - No premature N.F. 44–51 solution.
 - No candle extinction.
