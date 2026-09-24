@@ -2,51 +2,49 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 1 Episode 19, *Lovers and Leverage*.
+**Reconciled through:** Season 1 Episode 20, *The Spy Who Wasn't Alone*.
 
 ## Character state
 
-**Luceran:** Continues treating competent institutions as constraints worth preserving. Episode 19 makes his private relationship a material court fact without converting rumor into policy. He tells Miren he can imagine wanting to marry her, explicitly not as a proposal, and accepts a mutual promise that they will decide any marriage or change in relationship expectations together before court inference becomes consent. He acknowledges attraction to Ardel rather than hiding it. When marriage rumor changes prices and access assumptions, he uses a narrow household notice stating only what is actually true rather than publicly humiliating Miren with a sweeping denial.
+**Luceran:** Episode 20 deepens his understanding that affection, loyalty and outside institutional ties can coexist. He resists his first impulse to close the gates when false lamp-oil entries reveal active testing of west-service relief. He accepts evidence partitions and refuses to merge the exposed Valcere collection network with the hunt, Episode 16 note/questioner, or other unresolved security evidence. Selise's case teaches him that a person may genuinely care for Edselsto and still report outward; Miren makes the same point personally by stating that she loves him and will still report bounded political facts to Edevane. Luceran increasingly values declared boundaries over impossible exclusive possession of people.
 
-**Miren Edevane:** Continues established love, physical familiarity and loyal disagreement with Luceran. Explicitly acknowledges jealousy of Ardel while refusing to turn jealousy into state judgment. She wants the possibility of marriage to remain theirs before becoming a factional instrument. She and Luceran promise to tell one another before changing what they understand their relationship to permit. She directly tells Ardel there is no betrothal and gains a more accurate model of Ardel's attraction and Kaelmont obligations.
+**Miren Edevane:** Relationship promise with Luceran persists. She explicitly distinguishes love from exclusive institutional loyalty: she will tell Edevane that a Valcere network was exposed and that Corin Varo sold digests, but will not disclose active Crown security methods. She reiterates that if her boundary changes, she tells Luceran. Marriage remains possible but there is no betrothal.
 
-**Ardel Kaelmont:** Remains genuinely attracted to Luceran and materially committed to Kaelmont interests. Refuses her family's attempt to use marriage rumor to accelerate privilege, insisting the written three-year nonexclusive carriage bargain stands on its own terms. Tells Miren directly that she is attracted to Luceran and does not offer a false promise to stop wanting him. Gains a more accurate model of Miren as jealous but politically self-aware rather than a simple rival.
+**Selise Varo:** Episode 10's patron-chain ambiguity pays off. After her mother's illness she began accepting four crowns per weekly letter routed through Aunt Leth and Corin Varo. Her letters mixed broadly observable court conditions with some nonpublic archive-activity observations, but she did not transmit sealed documents or contents. She genuinely cares about the archive and Edselsto while having quietly changed her disclosure boundary. Ysabet removes her from family papers, security records, current correspondence and uncatalogued material pending review; Selise remains employed on public/duplicate work under supervision. Apology matters but does not restore trust.
 
-**Tovan Rhyse / Sera Vale / Anja Pell:** Episode 17 access architecture remains active. No Episode 19 security exception is created for intimacy or marriage rumor.
+**Ysabet Marris:** Experiences Selise's disclosure as a personal/professional breach. Correctly identifies Selise's rationalization: most information was public enough that she minimized the smaller private portion. Keeps Selise useful while reducing trust and access rather than collapsing discipline into either forgiveness or destruction.
 
-**Sister Calienne Orsanne:** Episode 18 observation of Luceran/Miren hand-holding remains exactly bounded; Luceran briefly suspects her as a possible rumor path and Miren correctly stops him from converting possibility into accusation. No evidence establishes Calienne as the source. She and Merel recognize that public meaning can form around visible conduct without official authorization.
+**Nera / Pellin Joss:** Discover the operation through three false lamp-oil charges. Nera identifies that the purchased object was the account timestamp, not oil. Pellin traces small payments through dyer wrapping/remittance practice and opens a ledger for intelligence payments. Their independent fiscal competence exposes the network.
 
-**Canon Merel Dast:** Retains his archive/symbolic grievance. His clerk's question about whether the family nave historically hosted royal marriage contributes to the rumor ecology but does not establish Merel as originator or conspirator. Merel sees the Crown's need to answer uncommanded public meaning as supporting his general argument about the candles.
+**Sera Vale / Tovan Rhyse / Anja Pell:** Preserve Episode 17's security architecture and evidence discipline. Sera changes west-service relief while leaving the obsolete visible schedule temporarily in place as a controlled observation. Anja locates Deren Holt's departure receipt. No mass closure or indiscriminate purge occurs.
 
-**Pellin Joss / Nera:** Identify the first concrete fiscal exploitation of the marriage rumor: suppliers raise preserved-fruit and fine-flour prices in anticipation of a royal feast. Nera rejects the invoices; Pellin carries the evidence upward. Their action matters independently of royal romance.
+**Mera Doss:** Crown laundress/private washhouse worker, widowed, with a daughter apprenticed to a dyer in Aster Vale. Accepted Valcere-linked payments for laundry-volume and condition observations to help her daughter pursue her own dye vat. Loses unrestricted Crown guard-laundry access but is not treated as a traitor without evidence; may continue private work and possible unrestricted Crown work outside sensitive loads.
+
+**Deren Holt / Valcere network:** Holt is a Valcere broker who purchased distributed observations from multiple ordinary sources and paid for active verification of west-service relief. He departed openly before discovery. A discarded draft proves a fourth packet of Edselsto household/access observations and a separate payment for west-service interval verification. His higher commissioning authority is unknown. House Valcere is ordered to identify it; no house-wide treason conclusion is authorized.
+
+## Intelligence / security state
+
+One real collection network is now established: Selise → Aunt Leth → Corin Varo → Deren Holt, alongside Holt's other paid sources including Mera, a stable boy, kitchen supplier, carter and a dismissed Companion's cousin. Most sources supplied compartmented observations and did not know the whole network. An unidentified "Harl" used an obsolete works token and three false lamp-oil charges to verify west-service relief; Holt's discarded draft ties the verification task to his operation, but Harl remains unidentified.
+
+The unknown man asking about west-service night watch may be connected to Harl/Holt but is not confirmed. Episode 16's unsigned note and rope-carrying questioner remain unconnected. The living hunt tester/sponsor, false horn, hunt rope, unidentified riders, fraudulent rope issue and charcoal marks remain unresolved and are not folded into the Valcere network.
 
 ## Relationship / rumor state
 
-- Luceran and Miren are **not betrothed**.
-- Luceran tells Miren he can imagine wanting to marry her; Miren reciprocates the possibility but refuses rumor-driven proposal or timetable.
-- Their durable private promise: if they decide to marry, they decide together first; if either changes what they understand the relationship to permit, they tell the other before court inference speaks for them.
-- Miren explicitly acknowledges jealousy of Ardel without treating it as evidence of wrongdoing.
-- Luceran explicitly acknowledges attraction to Ardel; no affair or consummation with Ardel is established.
-- Ardel explicitly acknowledges attraction to Luceran to Miren; she and Miren are not made friends or enemies by the conversation.
-- Court marriage rumor arose through distributed observation and inference: seating, private access, breakfasts, visible touch, cloth demand, kitchen questions, family calculations and clerical curiosity. No single origin is established.
-- Crown household notice states only that no betrothal has been proclaimed, no household precedence or livery has changed, no feast procurement has been authorized, and existing contracts remain in force.
-- Suppliers briefly attempt a wedding premium on preserved fruit/fine flour; Nera rejects it. Romance has now produced a documented economic consequence.
+Luceran and Miren remain lovers and are not betrothed. They continue their private promise to decide marriage together before public inference becomes consent and to disclose changes in relationship expectations to each other first. Miren's jealousy of Ardel and Luceran/Ardel attraction remain acknowledged rather than resolved. Ardel/Kaelmont political independence from romance persists. Episode 20 extends the boundary principle beyond sex/romance into political disclosure without converting Miren into a Crown-only person.
 
 ## Religious / public-symbol state
 
-The Seven Ancestral Lights remain an inherited Crown household observance of unknown original meaning. Popular flowers/ribbons, Hall of Veils obligations, burial consultation, ordinary clergy nave access and Canon Merel's grievance all persist. Episode 19 gives Merel a social analogy—visible things acquire public meaning without authorization—but provides no new evidence about the lights.
-
-## Security state
-
-Episode 17 credential/post architecture remains active. Living hunt tester/sponsor, false horn, hunt rope, unidentified riders, fraudulent rope issue, charcoal marks, Episode 16 unsigned note/rope-carrying questioner, and the unknown man asking about west-service night watch remain unresolved human evidence. Sera's night-staffing need and lower-gate/family-corridor resource rivalry remain unresolved.
+Seven Ancestral Lights remain an inherited Crown household observance of unknown original meaning. Popular devotion, Hall of Veils obligations, ordinary clergy access and Canon Merel's grievance persist. No new supernatural evidence occurs.
 
 ## Political / material obligations
 
-Kaelmont three-year nonexclusive carriage opportunity remains written and unchanged by marriage rumor. Lysa Quill engagement, Moncler compensation review, Nera physical-record work, Tomas Reed's river-depot assignment, Damaris grain negotiation, Vess boundary/mill-spring rights, lower-well capacity, Royal Works rope controls, Henn property protections, Royal Companion review, Hall of Veils work and internally divided resentment all remain active. Kaelmont subcontract proposals may not assume ungranted Vess water rights.
+House Valcere must answer the sealed demand identifying Deren Holt's commissioning authority and accounting for active security verification. House Edevane must answer whether Corin Varo's sale of compiled Edselsto observations was authorized. Archive outside-correspondence rules and stores receiving-mark rules are now active.
+
+Kaelmont three-year nonexclusive carriage opportunity, Lysa Quill engagement, Moncler compensation review, Tomas Reed's river-depot assignment, Damaris grain negotiation, Vess boundary/mill-spring rights, lower-well capacity, Royal Works rope controls, Henn property protections, Royal Companion review, Hall of Veils work and Companion resentment all remain active. Kaelmont subcontract proposals may not assume ungranted Vess water rights.
 
 ## Sealed stair / mystery state
 
-Temporary heavy timber barrier remains locked; Rhyse holds working key and Avarren sealed duplicate. No Episode 19 entry or deeper exploration occurs. Partial scratched lettering remains unread. N.F. 44–51, Halven Sare, father's restricted papers/parental visit, Widow's key, infilled family doorway and lower-west barred door remain unresolved. No confirmed supernatural behavior.
+Temporary heavy timber barrier remains locked; Rhyse holds working key and Avarren sealed duplicate. No Episode 20 entry or deeper exploration occurs. Partial scratched lettering remains unread. N.F. 44–51, Halven Sare, father's restricted papers/parental visit, Widow's key, infilled family doorway and lower-west barred door remain unresolved. No confirmed supernatural behavior.
 
 ## Seven candles
 
@@ -54,7 +52,7 @@ Seven of seven remain lit. Their actual function remains completely unknown to c
 
 ## Immediate handoff
 
-Episode 20 — *The Spy Who Wasn't Alone* is next. Expose one intelligence operation as a network of money, messages, servants and patrons rather than a solitary mastermind. Episode 17's security architecture is legible enough to be studied; Episode 19 reinforces that private affection and institutional loyalty can coexist. Do not collapse the hunt tester, Episode 16 questioner/note and west-service inquiry into one conspiracy without evidence.
+Episode 21 — *Rumor From the Capital* is next. Before Edselsto's demands can arrive, the old capital is already circulating a hostile account of the mountain court built from real but selectively framed facts: locked access, guard credentials, Kaelmont road interests, private favorites, compensation disputes and ancestral-rite controversy. Treat propaganda as interpretation and distribution rather than magical omniscience. Different provinces and institutions must recalculate from different fragments.
 
 ## Hard exclusions
 
@@ -64,3 +62,4 @@ Episode 20 — *The Spy Who Wasn't Alone* is next. Expose one intelligence opera
 - No candle extinction.
 - No omniscient interpretation of the stair or lights.
 - No premature identification of the hunt sponsor.
+- No assumption that all intelligence/security anomalies belong to the Valcere network.
