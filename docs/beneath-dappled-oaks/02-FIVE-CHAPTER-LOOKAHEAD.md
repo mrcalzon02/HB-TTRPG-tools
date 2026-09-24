@@ -4,7 +4,7 @@ document_role: "ROLLING FIVE-CHAPTER FORWARD PLAN"
 status: "ACTIVE PLANNING CONTROL"
 planning_horizon: 5
 last_reconciled: "2026-09-24"
-active_after_chapter: 17
+active_after_chapter: 18
 ---
 
 # Beneath Dappled Oaks — Active Five-Chapter Lookahead
@@ -13,61 +13,51 @@ This is the operational N+1 through N+5 plan for the first-principles rewrite. U
 
 ## Current committed rewrite state
 
-Canonical numbered prose now runs through **Chapter Seventeen — The Other Half of the Lock**.
+Canonical numbered prose now runs through **Chapter Eighteen — The Reserve Hand**.
 
-JEC-R/6 activation is now explicitly separated from selector exercise. The initiating-side abstract contains no exercise confirmation and instead orders reviewers not to close the selector as unused because the receiving abstract was held under separate commissioning authority. Corren's non-use claim therefore remains possible but unproven; use also remains possible but unproven.
+Compact Emergency Civic Commission **264-B/17** is now established as the sealed second commissioning authority behind JEC-R/6. It was jointly constituted by the Commonwealth High Magistracy and the Academy-independent Student Safeguard Board three days before Silver Night as a temporary receiving mechanism for protected civic witnesses, students, or testimony when ordinary institutions might expose them to an interested authority. It could receive, hold, attest, and transfer; it could not investigate, arrest, compel testimony, or authorize force.
 
-The receiving-side abstract is established as intentionally transferred rather than simply missing. The transfer classification narrows the sealed second commissioner to a **Concord-protected civic office**. Historical authority classes capable of protected receiving work narrow that further to civic witness offices, protected magistrates' registries, academy-independent student guardianship offices, and compact emergency civic commissions.
+Its activation required paired certification from officers belonging to different appointing bodies, neither then serving the Academy administration, a Great House household, or the Dmitrigical Tribunal. The commission dissolved after nineteen days, but its accountability archive survived under Commonwealth seal.
 
-Teren's memory remains bounded. Independently prompted by the initiating abstract, he recalls the phrase "do not close as unused" and bright red gritty sealing wax. Procurement records independently establish a chalk-red civic privacy compound and show a packet issued to a compact emergency civic commission three days before Silver Night. This corroborates an administrative detail without proving that the remembered seal and that issue are the same object.
+The non-identifying accession index confirms that the **JEC-R/6 paired receiving abstract still exists**, was transferred into 264-B/17 on the morning after Silver Night, and can be opened by a Commonwealth High Magistrate or delegated magical-crimes judge when the paired initiating record is under lawful review. Judge Vaun has filed for that narrowly defined record; earliest lawful release is the next morning after second bell unless challenged.
 
-The packet issue supplies a separate civic commission number searchable through the Commonwealth seal office. This is the immediate dependency for the reserve-authority strand.
+The commission's expense/support accounts also survive at non-identifying category level. They may later establish whether the commission functioned only on paper or incurred support activity, without identifying a protected bearer.
 
-Thessa has formally accepted the three-month western transport-assessment posting. Departure is in twelve days. Ilyan supports the decision while openly disliking the coming separation; their relationship remains intimate without either treating professional independence as rejection.
+Thessa's western posting departure is now **eleven days away**. Her Warden fitting and route preparation have begun. Ilyan continues to support the posting while disliking the separation; the Seven are increasingly able to let institutions and delegated work continue without requiring their physical presence at every investigative step.
 
 ## Governing debts
 
 **Corren culpability debt:** explanation and protective acts do not erase his admitted role in Silver Night's enabling machinery.
 
-**Selector-proof debt:** neither use nor non-use is established. The receiving abstract is now the proper evidentiary target.
+**Selector-proof debt:** neither use nor non-use is established. The surviving JEC-R/6 receiving abstract is now the immediate evidentiary target.
 
 **Teren-memory debt:** memory fragments remain bounded and useful only when independently prompted or corroborated. Do not convert recognition into recovered narrative.
 
-**Protected-person privacy debt:** continue following authority, commission, dates, record classes and accountability without opening bearer identity, destination or route geometry.
+**Protected-person privacy debt:** follow authority, commission, dates, record classes and accountability without opening bearer identity, destination or route geometry unless later lawful necessity is independently established.
 
 **Demographic-motive debt:** ordinary succession counting is baseline. Abnormal access/timing/granularity must be established before the cohort-circulation strand becomes probative.
 
-**Seven-network debt:** preserve practiced disclosure boundaries and independent adult obligations.
+**Seven-network debt:** preserve practiced disclosure boundaries, delegated institutional work, and independent adult obligations.
 
-**Relationship/adult-life debt:** Thessa leaves in twelve days. Preparation, departure and distance must happen on-page rather than being indefinitely postponed by the investigation.
+**Relationship/adult-life debt:** Thessa leaves in eleven days. Preparation, departure and distance must happen on-page rather than being indefinitely postponed by the investigation.
 
 ---
 
-## N+1 — Chapter Eighteen: The Reserve Hand
+## N+1 — Chapter Nineteen: The Arithmetic Before the Fire
 
 **Certainty:** LOCKED INTENT
-
-Follow the separate civic commission number into the Commonwealth seal office. Establish the lawful architecture behind the compact emergency civic commission: appointing authority, purpose class, activation condition, duration, accountability archive and relationship to JEC-R/6.
-
-Determine whether this commission can be identified as the second commissioning authority without opening protected bearer identity. Treat the chalk-red seal issue as corroborative administrative evidence, not identity proof.
-
-**Exit handoff:** establish office/class and accountability path for the reserve authority, and identify the lawful route to the receiving-side abstract.
-
----
-
-## N+2 — Chapter Nineteen: The Arithmetic Before the Fire
-
-**Certainty:** PLANNED
 
 Open the non-identifying portion of the Silver Night cohort circulation history and compare it with normal Academy, House, Crown, order and commercial demographic planning. Look for abnormal timing, granularity, repeated requests, unexpected institutional access or intersection with already established Valeric/Dmitrigical machinery.
 
 Do not identify the historical expanding family or rival faction merely because one House had many students. Establish what the records actually support.
 
+The JEC-R/6 receiving abstract may lawfully arrive during or after this chapter, but do not allow it to consume the demographic dependency unless its timing naturally changes the scene.
+
 **Exit handoff:** demographic pressure becomes a bounded evidentiary chain rather than a thematic motive.
 
 ---
 
-## N+3 — Chapter Twenty: Who Asked to See the Count
+## N+2 — Chapter Twenty: Who Asked to See the Count
 
 **Certainty:** PLANNED
 
@@ -79,27 +69,39 @@ Preserve innocent analysts, mixed motives and lawful information later repurpose
 
 ---
 
-## N+4 — Chapter Twenty-One: What the Second Office Knew
+## N+3 — Chapter Twenty-One: What the Second Office Knew
 
-**Certainty:** DIRECTIONAL
+**Certainty:** PLANNED
 
-Use the now-bounded second authority to determine what its office was told when it joined JEC-R/6, what emergency purpose it believed it was serving, and whether its knowledge matched the Contingency Secretariat's.
+Read the JEC-R/6 receiving abstract under the narrow authorization established in Chapter Eighteen. Determine what 264-B/17 was told when it accepted the paired mechanism, whether exercise occurred, and what purpose its officers believed they were serving, while preserving protected bearer identity and route data unless genuinely necessary.
 
-The central problem is institutional theory of mind: two offices may lawfully sign the same instrument while understanding its purpose very differently. Do not infer shared conspiracy merely from shared authorization.
+The central problem is institutional theory of mind: the civic commission and Tribunal Contingency Secretariat may have lawfully signed the same mechanism while understanding its purpose very differently.
 
 **Exit handoff:** establish whether JEC-R/6 was protective redundancy later exploited, knowingly compromised machinery, or a mixed-purpose mechanism whose participants possessed materially different knowledge.
 
 ---
 
-## N+5 — Chapter Twenty-Two: Twelve Days West
+## N+4 — Chapter Twenty-Two: Twelve Days West
 
-**Certainty:** HORIZON / EXPLORATORY
+**Certainty:** DIRECTIONAL
 
-Pay Thessa's departure clock before the investigation can swallow it. Use packing, Warden briefings, friends' competing schedules, House expectations and the practical route west to force the Seven to experience adult separation rather than merely discuss it.
+Pay Thessa's departure clock before the investigation can swallow it. Use packing, Warden briefings, friends' competing schedules, House expectations and the practical route west to force the Seven to experience adult separation rather than merely discuss it. Chapter Eighteen has already reduced the clock to eleven days; advance the intervening days naturally rather than preserving the title as literal present-tense arithmetic.
 
 Let the investigation continue through lawful delegated work rather than requiring Ilyan to be physically present for every development. Preserve Thessa's independent professional competence and Ilyan's ability to support her while genuinely missing her.
 
-**Horizon exit:** Thessa departs on schedule; the relationship enters a distance phase; the Seven's network becomes geographically distributed, creating new communication limits and opportunities without turning the posting into a contrived investigation assignment.
+**Exit handoff:** Thessa departs on schedule; the relationship enters a distance phase; the Seven's network becomes geographically distributed.
+
+---
+
+## N+5 — Chapter Twenty-Three: What the Commission Bought
+
+**Certainty:** HORIZON / EXPLORATORY
+
+Use the surviving non-identifying 264-B/17 support-account categories to test whether the emergency civic commission merely existed as dormant legal capacity or actually supported protected custody after Silver Night. Follow mundane expenditure classes—lodging, food, horse or carriage hire, medical support, messenger fees, wayhouse charges, secure-room rental—without using them to reverse-engineer protected bearer identity or route geometry.
+
+Cross-check expenditure timing against the commission's nineteen-day life and any facts lawfully established by the JEC-R/6 receiving abstract. Treat ordinary administrative spending as ordinary unless pattern, timing, or category meaningfully departs from baseline.
+
+**Horizon exit:** establish the operational footprint of the reserve hand and identify the next lawful accountability question without turning expense records into magical omniscience.
 
 ---
 
