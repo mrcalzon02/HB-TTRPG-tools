@@ -4,7 +4,7 @@ document_role: "ROLLING FIVE-CHAPTER FORWARD PLAN"
 status: "ACTIVE PLANNING CONTROL"
 planning_horizon: 5
 last_reconciled: "2026-09-24"
-active_after_chapter: 20
+active_after_chapter: 21
 ---
 
 # Beneath Dappled Oaks — Active Five-Chapter Lookahead
@@ -13,97 +13,95 @@ This is the operational N+1 through N+5 plan for the first-principles rewrite. U
 
 ## Current committed rewrite state
 
-Canonical numbered prose now runs through **Chapter Twenty — Who Asked to See the Count**.
+Canonical numbered prose now runs through **Chapter Twenty-One — What the Second Office Knew**.
 
-The 264 demographic request provenance is materially narrower. The temporary cross-institutional docket itself had a lawful conflict-screening purpose and was jointly commissioned by the Dmitrigical Review liaison desk and Crown Appointments Conflict Secretariat. The Crown participation and ordinary Joint Office template do not explain the unusual demographic granularity.
+The released JEC-R/6 receiving abstract establishes that Compact Emergency Civic Commission 264-B/17 knew a paired selector existed under separate initiating custody and understood itself as an independent protective receiver, not as a subordinate arm of the initiating authority. At activation it added a nonstandard reservation: no initiating designation could compel surrender, disclosure, onward transfer, or exposure contrary to the receiving commission's bearer-protection mandate.
 
-The Joint Office reviewer independently added Great House branch detail for defensible cadet-line conflict reasons and future-office eligibility after the Crown asked about foreseeable public-office conflicts. The unusual **ten-year external-availability field** entered as a commissioning supplementation routed through the Dmitrigical Review liaison desk. The later attempted **probable marriage alignment** field came through the same liaison route; the Joint Office forwarded it with uncertain relevance and the Academy refused it.
+Activation remains distinct from completed reception. The actual initiating notice class remains sealed because disclosure could permit protected-bearer inference. The receiving abstract therefore does not yet prove selector exercise or non-use. Judge Vaun is pursuing a narrower comparison: whether initiating and receiving copies agree on notice class and whether the receiving officers recorded any objection to authenticity or timing, without revealing the class itself. Formation minutes and commissioning correspondence can also be sought without opening bearer identity or route geometry.
 
-A registry abstract now identifies the upstream source class as a **temporary advisory authority attached to Dmitrigical succession and chair-continuity review**, whose recorded objective was to assess **medium-term concentration risk in regulated magical offices arising from cohort-linked kinship, inheritance, appointment eligibility, and external placement**. This does not identify a murderer, expanding family, rival faction, or Valeric origin. It does establish the first known institutional point upstream of the liaison desk where the question was explicitly about generational concentration rather than ordinary individual conflict screening.
+The paired records were deliberately not reunified at closure because of unresolved conflict between initiating confidentiality and receiving protection. This is compatible with Corren's retained concern about exposing the protected path but does not prove identity of motive or vindicate his admitted role in the wider Silver Night machinery.
 
-The exact non-protected product returned by the Academy was bounded. No marriage prediction, fertility information, secret genealogy, or named-student list was supplied through this docket. The final Joint Office summary went to both commissioning offices and lawful chair/retention/contingency recipients; no Great House household appears in this circulation.
+The 264 demographic-provenance track remains separately active. The unusual ten-year external-availability and later marriage-alignment questions came through the Dmitrigical liaison route from an upstream temporary advisory authority concerned with medium-term concentration risk. The upstream commissioning memorandum remains pending.
 
-Compact Emergency Civic Commission **264-B/17** remains the sealed second commissioning authority behind JEC-R/6. Judge Vaun's narrowly authorized request for the surviving paired receiving abstract remains pending for lawful release.
-
-Thessa's western posting departure is now **nine days away**. Her equipment, Warden briefing, baggage assignment and route preparation are actively occurring on-page. Ilyan supports the posting while disliking the separation.
+Thessa's western posting departure is now **eight days away**. Packing, route study, Warden logistics and the emotional cost of separation are active on-page.
 
 ## Governing debts
 
-**Corren culpability debt:** explanation and protective acts do not erase his admitted role in Silver Night's enabling machinery.
+**Corren culpability debt:** protective acts or compatible motives do not erase his admitted role in unlawful Silver Night enabling machinery.
 
-**Selector-proof debt:** neither use nor non-use is established. The surviving JEC-R/6 receiving abstract remains the immediate evidentiary target.
+**Selector-proof debt:** neither exercise nor non-use is established. Compare paired notice records without exposing protected bearer status.
 
-**Teren-memory debt:** memory fragments remain bounded and useful only when independently prompted or corroborated. Do not convert recognition into recovered narrative.
+**Receiving-authority debt:** determine why 264-B/17 inserted its unusual independent-protection reservation and whether the initiating side understood or contested that autonomy.
 
-**Protected-person privacy debt:** follow authority, commission, dates, record classes and accountability without opening bearer identity, destination or route geometry unless later lawful necessity is independently established.
+**Protected-person privacy debt:** do not reverse-engineer bearer identity, receipt status, destination or route geometry merely because the records make such inference tempting.
 
-**Demographic-motive debt:** abnormal timing and granularity plus an upstream concentration-risk concern are established, but the expanding family, rival faction, and murderous purpose remain unresolved. Do not infer them from ordinary House arithmetic or the phrase concentration risk alone.
+**Demographic-motive debt:** abnormal timing and granularity plus upstream concentration-risk concern are established; expanding family, rival faction and murderous purpose remain unresolved.
 
-**Institutional-origin debt:** distinguish processors and lawful intermediaries from the upstream commissioning mind. The Crown secretariat, Joint Office reviewer, liaison desk, temporary advisory authority, and any authority behind that advisory body are separate causal layers.
+**Institutional-origin debt:** keep processors, liaison routes, advisory authority, commissioning offices and any Valeric/Dmitrigical actors causally separate until evidence joins them.
 
-**Seven-network debt:** preserve practiced disclosure boundaries, delegated institutional work, and independent adult obligations.
+**Seven-network debt:** their disclosure boundaries are now practiced habits. Preserve independent work, delegated institutional processes and ordinary adult lives.
 
-**Relationship/adult-life debt:** Thessa leaves in nine days. Preparation, departure and distance must happen on-page rather than being indefinitely postponed by the investigation.
-
----
-
-## N+1 — Chapter Twenty-One: What the Second Office Knew
-
-**Certainty:** LOCKED INTENT
-
-Read the JEC-R/6 receiving abstract under the narrow authorization established in Chapter Eighteen. Determine what 264-B/17 was told when it accepted the paired mechanism, whether selector exercise can be established or excluded, and what purpose its officers believed they were serving, while preserving protected bearer identity and route data unless genuinely necessary.
-
-The central problem is institutional theory of mind: the civic commission and Tribunal Contingency Secretariat may have lawfully signed the same mechanism while understanding its purpose very differently.
-
-**Exit handoff:** establish whether JEC-R/6 was protective redundancy later exploited, knowingly compromised machinery, or a mixed-purpose mechanism whose participants possessed materially different knowledge.
+**Relationship/adult-life debt:** Thessa leaves in eight days. The departure must occur on-page and cannot be indefinitely postponed by investigation.
 
 ---
 
-## N+2 — Chapter Twenty-Two: Twelve Days West
+## N+1 — Chapter Twenty-Two: Twelve Days West
 
-**Certainty:** PLANNED / DEPARTURE LOCKED
+**Certainty:** LOCKED / DEPARTURE ARC
 
-Pay Thessa's departure clock before the investigation can swallow it. The title remains a continuity label; the live clock is nine days. Use packing, Warden briefings, friends' competing schedules, House expectations and the practical route west to force the Seven to experience adult separation rather than merely discuss it.
+Pay Thessa's departure clock. The title remains a continuity label; the live clock is eight days. Use final Warden briefings, packing, route logistics, friends' competing schedules, House expectations and ordinary intimacy to force the Seven to experience adult separation rather than merely discuss it.
 
-Let the investigation continue through lawful delegated work rather than requiring Ilyan to be physically present for every development. Preserve Thessa's independent professional competence and Ilyan's ability to support her while genuinely missing her.
+Let the selector and demographic investigations continue through Vaun, Sael, clerks and lawful requests without requiring Ilyan to be physically present for every development. Preserve Thessa's independent professional competence and Ilyan's ability to support her while genuinely wanting her to stay.
 
-**Exit handoff:** Thessa departs on schedule; the relationship enters a distance phase; the Seven's network becomes geographically distributed.
+**Exit handoff:** Thessa departs on schedule; Ilyan/Thessa enter a distance phase; the Seven become geographically distributed.
 
 ---
 
-## N+3 — Chapter Twenty-Three: What the Commission Bought
+## N+2 — Chapter Twenty-Three: What the Commission Bought
 
 **Certainty:** PLANNED
 
-Use the surviving non-identifying 264-B/17 support-account categories to test whether the emergency civic commission merely existed as dormant legal capacity or actually supported protected custody after Silver Night. Follow mundane expenditure classes—lodging, food, horse or carriage hire, medical support, messenger fees, wayhouse charges, secure-room rental—without using them to reverse-engineer protected bearer identity or route geometry.
+Use surviving non-identifying 264-B/17 support-account categories to determine whether the commission merely opened legal capacity or sustained real protective operations during its nineteen-day life. Follow lodging, food, horse/carriage hire, medical support, messenger fees, wayhouse charges and secure-room rental only at category/timing level sufficient to answer institutional questions.
 
-Cross-check expenditure timing against the commission's nineteen-day life and facts lawfully established by the JEC-R/6 receiving abstract. Treat ordinary administrative spending as ordinary unless pattern, timing or category meaningfully departs from baseline.
+Do not use expenditure to reconstruct the protected bearer's identity or route. Compare against ordinary emergency-commission baselines.
 
-**Exit handoff:** establish the operational footprint of the reserve hand and identify the next lawful accountability question without turning expense records into magical omniscience.
+**Exit handoff:** establish the reserve hand's operational footprint and the next lawful accountability question.
 
 ---
 
-## N+4 — Chapter Twenty-Four: Where the Question Changed
+## N+3 — Chapter Twenty-Four: Where the Question Changed
 
 **Certainty:** PLANNED
 
-Obtain the surviving upstream commissioning memorandum referenced in Chapter Twenty and test the temporary Dmitrigical succession/chair-continuity advisory authority's concern about medium-term concentration risk. Determine why ten years was selected, what information the advisory authority possessed before asking, and whether the concern was general or attached to a particular House, branch, office, projected coalition, or appointment sequence.
+Obtain and test the upstream commissioning memorandum behind the Dmitrigical liaison supplementation. Determine why ten years was selected, what information the temporary succession/chair-continuity advisory authority already possessed, and whether its concentration concern was general or attached to a particular House, branch, office, projected coalition or appointment sequence.
 
-Do not collapse the advisory authority into the Dmitrigical liaison desk. Establish membership, delegated mandate, and provenance separately. If the evidence converges with known Valeric/Dmitrigical actors, earn that convergence through the record.
+Do not collapse the advisory authority into the liaison desk. Establish membership, delegated mandate and provenance separately. If evidence converges with known Valeric/Dmitrigical actors, earn that convergence through records.
 
-**Exit handoff:** identify the first supported commissioning mind or bounded authority behind the unusual demographic question, or establish precisely why the surviving record cannot do so.
+**Exit handoff:** identify the first supported commissioning mind or bounded authority behind the unusual demographic question, or precisely establish why the record cannot.
 
 ---
 
-## N+5 — Chapter Twenty-Five: The Shape of Too Much Future
+## N+4 — Chapter Twenty-Five: The Shape of Too Much Future
+
+**Certainty:** PLANNED
+
+If Chapter Twenty-Four ties concentration risk to a particular projected configuration, compare that concern against ordinary succession, appointment and House demographic baselines. Determine what institutional or dynastic outcome was feared: regulated-chair control, cross-House marriage consolidation, chartered-office accumulation, coalition durability, or another evidence-supported configuration.
+
+Preserve the gap between legitimate policy concern, unlawful interference and Silver Night violence. Do not identify the expanding family or rival faction until the record earns it.
+
+**Exit handoff:** convert "concentration risk" into a bounded political fear with identifiable stakes.
+
+---
+
+## N+5 — Chapter Twenty-Six: The Reservation in Red Wax
 
 **Certainty:** HORIZON / EXPLORATORY
 
-If Chapter Twenty-Four establishes that the concentration-risk concern was tied to a particular projected political configuration, compare that concern against ordinary succession, appointment, and House demographic baselines without treating growth itself as wrongdoing. Determine what institutional or dynastic outcome the advisory authority feared: control of regulated chairs, cross-House marriage consolidation, chartered-office accumulation, coalition durability, or some combination supported by surviving evidence.
+Read the formation minutes and commissioning correspondence for 264-B/17 and determine why the receiving authority inserted its unique independent bearer-protection reservation before activation. Establish whether the initiating side knew of, accepted, resisted or merely tolerated that safeguard and whether the reservation arose from general student-protection doctrine, a specific institutional conflict, or a bounded warning available before Silver Night.
 
-Preserve the unresolved expanding family and rival faction until the record earns identification. The chapter should distinguish a legitimate policy concern about concentration of office from any later decision to manipulate, disqualify, coerce, or kill students.
+Keep Teren's red-wax memory fragment corroborative rather than narrative recovery. Do not expose protected bearer identity or convert institutional caution into proof that officers anticipated massacre.
 
-**Horizon exit:** convert the phrase "concentration risk" into a bounded political fear with identifiable stakes while preserving the evidentiary gap between fear, unlawful interference, and Silver Night violence.
+**Horizon exit:** establish what danger the second office believed it was guarding against when the lock was built, and whether that belief intersects with the demographic and Valeric/Dmitrigical evidence chains.
 
 ---
 
