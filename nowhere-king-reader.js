@@ -3,7 +3,7 @@
 
 const ROOT_API='https://api.github.com/repos/mrcalzon02/HB-TTRPG-tools/contents/docs/nowhere-king/episodes?ref=main';
 const SEASON_RE=/^season-(\d+)$/i;
-const EPISODE_RE=/^(\d+)-(.+)\.md$/i;
+const EPISODE_RE=/^(\d+(?:\.\d+)?)-(.+)\.md$/i;
 const SMALL_WORDS=new Set(['a','an','and','as','at','but','by','for','from','in','of','on','or','the','to','with','without']);
 const FALLBACK=[
   {name:'01-CROWN-WITHOUT-COURT.md',path:'docs/nowhere-king/episodes/season-01/01-CROWN-WITHOUT-COURT.md',type:'file',season:1},
@@ -138,7 +138,7 @@ async function loadEpisode(episode){
   if(!response.ok)throw new Error('Episode request failed: '+response.status);
   return parseEpisode(await response.text(),episode);
 }
-function anchorId(episode){return 'season-'+episode.season+'-episode-'+episode.number}
+function anchorId(episode){return 'season-'+episode.season+'-episode-'+String(episode.number).replace('.','-')}
 function renderIndex(episodes,ui){
   ui.list.replaceChildren();
   for(const episode of episodes){
@@ -196,6 +196,13 @@ function buildDownloadMenu(episode,section){
   option('Raw Markdown (.md)',()=>downloadBlob(new Blob([episode.markdown],{type:'text/markdown;charset=utf-8'}),stem+'.md'));
   option('Reader text (.txt)',()=>downloadBlob(new Blob([proseText(episode,section)],{type:'text/plain;charset=utf-8'}),stem+'.txt'));
   option('Standalone HTML (.html)',()=>downloadBlob(new Blob([standaloneHtml(episode,section)],{type:'text/html;charset=utf-8'}),stem+'.html'));
+  if(Number(episode.number)===10.5){
+    option('Episodes 01–10 Combined (.md)',async()=>{
+      const response=await fetch('docs/nowhere-king/collections/season-01-episodes-01-10-combined.md',{cache:'no-store'});
+      if(!response.ok)throw new Error('Combined edition request failed: '+response.status);
+      downloadBlob(new Blob([await response.text()],{type:'text/markdown;charset=utf-8'}),'nowhere-king-season-01-episodes-01-10-combined.md');
+    });
+  }
   return details;
 }
 function renderStream(episodes,ui){
@@ -253,7 +260,7 @@ async function boot(){
   const loaded=await Promise.all(discovery.episodes.map(async episode=>{try{return await loadEpisode(episode)}catch(error){return failedEpisode(episode,error)}}));
   renderIndex(loaded,ui);renderStream(loaded,ui);applyFilter(ui);watchPosition(ui);
 
-  const target=location.hash&&/^#season-\d+-episode-\d+$/.test(location.hash)?document.querySelector(location.hash):null;
+  const target=location.hash&&/^#season-\d+-episode-\d+(?:-\d+)?$/.test(location.hash)?document.querySelector(location.hash):null;
   if(target){activatePanel('chapter-index',false);requestAnimationFrame(()=>target.scrollIntoView({block:'start'}))}
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
