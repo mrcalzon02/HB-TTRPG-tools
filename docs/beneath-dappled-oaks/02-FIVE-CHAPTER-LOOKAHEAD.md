@@ -4,7 +4,7 @@ document_role: "ROLLING FIVE-CHAPTER FORWARD PLAN"
 status: "ACTIVE PLANNING CONTROL"
 planning_horizon: 5
 last_reconciled: "2026-09-24"
-active_after_chapter: 24
+active_after_chapter: 25
 ---
 
 # Beneath Dappled Oaks — Active Five-Chapter Lookahead
@@ -13,15 +13,15 @@ This is the operational N+1 through N+5 plan for the first-principles rewrite. U
 
 ## Current committed rewrite state
 
-Canonical numbered prose now runs through **Chapter Twenty-Four — Where the Question Changed**.
+Canonical numbered prose now runs through **Chapter Twenty-Five — The Shape of Too Much Future**.
 
-The upstream demographic review is now causally separated into layers. A legitimate Temporary Advisory Review on Regulated Chair Continuity and Medium-Horizon Concentration Exposure selected a ten-year horizon because two appointment cycles overlapped. Its initial concern was ordinary professional concentration, then kinship concentration where multiple lawful offices, inheritance rights and appointment eligibility could become mutually reinforcing.
+The anonymous successor-depth comparison establishes that the pre-Silver-Night demographic concern was analytically defensible without making the expanding family culpable. The exceptional feature was not raw family size. Historical comparison clusters could be larger. The anomaly was persistence: unusually low expected dispersal across declared affiliation, succession pathways, regulated-office eligibility and chartered-office eligibility over the ten-year horizon. The network retained depth even when individual successors hypothetically married out, took other work, or became unavailable.
 
-The advisory memorandum allowed future kinship realignment only where lawfully knowable from public or voluntary material. The later predictive marriage-alignment question was not in the first implementation note. After the first Academy aggregate returned, the continuity subreview sought a prospective kinship-alignment indicator; the rotating technical-assessor seat introduced that motion, the continuity clerk seconded it, and the independent statistician objected to predictive inference from private information. The Academy later refused the predictive field.
+The review's lawful remedy set remained ordinary institutional policy: stagger appointments where lawful, widen recruitment and training pipelines, strengthen recusal and disclosure, and review simultaneous service in linked offices. The anonymous cluster reached the review's highest concentration band but did not itself trigger emergency authority. Pellisar Veyran's later predictive-marriage motion therefore came after a legitimate concentration problem had been identified and after lawful remedies already existed.
 
-At that moment the rotating assessor was **Master Auditor Pellisar Veyran**, temporarily delegated from a Dmitrigical chair-secretariat in which Valeric interests had representation. No evidence yet shows a personal Valeric instruction. Pellisar's released note states that one projected kinship cluster showed **unusually high successor depth and unusually low expected dispersal under existing declared affiliations**. This establishes a pre-Silver-Night demographic concentration concern without yet identifying the expanding family, rival faction, exact numbers, unlawful remedy, or bridge to murder.
+This strengthens rather than resolves the provenance question. Pellisar's initial concentration concern may have arisen from competent performance of his assigned work. The later move from declared affiliations toward predicting private future kinship choices still requires explanation.
 
-Thessa remains actively west with the Western Warden assessment party. Her work is independent professional work. She has now found a supposedly repaired freight road whose fresh surface appears to conceal missing base stone; she recommended load restrictions, physical core sampling and contract audit rather than prematurely alleging fraud. Her distance relationship with Ilyan remains mutually affectionate and sexually charged without displacing either person's work.
+Thessa remains actively west with the Western Warden assessment party. Core samples from the suspect freight-road repair show inconsistent construction: two deficient sections and one correctly built section. She has recommended continued contract audit rather than alleging theft. Her distance relationship with Ilyan remains active, affectionate and sexually charged while both continue independent professional work.
 
 The 264-B/17 receiving-authority and selector chains remain unresolved. Controlled non-person custody and civic acknowledgment remain bounded dependencies for later chapters.
 
@@ -47,21 +47,9 @@ The 264-B/17 receiving-authority and selector chains remain unresolved. Controll
 
 ---
 
-## N+1 — Chapter Twenty-Five: The Shape of Too Much Future
+## N+1 — Chapter Twenty-Six: The Reservation in Red Wax
 
 **Certainty:** LOCKED / INVESTIGATION
-
-Test Pellisar Veyran's claim without opening the protected family identity. Compare the anonymous successor-depth cluster against ordinary Great House, cadet-branch, marriage-dispersal, appointment-eligibility and cohort baselines. Establish exactly what made the projected configuration exceptional and what lawful political consequence competent reviewers reasonably feared.
-
-Keep demographic vigor distinct from wrongdoing. A family producing many heirs is not itself culpable. Preserve the gap between legitimate concentration concern, unlawful interference and Silver Night violence.
-
-**Exit handoff:** convert “unusually high successor depth / low expected dispersal” into a bounded, evidence-supported political configuration with stakes, while keeping family identity and murderous purpose unresolved unless the evidence truly requires release.
-
----
-
-## N+2 — Chapter Twenty-Six: The Reservation in Red Wax
-
-**Certainty:** PLANNED
 
 Read the formation minutes and commissioning correspondence for 264-B/17 and determine why the receiving authority inserted its unique independent bearer-protection reservation before activation. Establish whether the initiating side knew of, accepted, resisted or merely tolerated that safeguard and whether the reservation arose from general student-protection doctrine, a specific institutional conflict, or a bounded warning available before Silver Night.
 
@@ -71,7 +59,7 @@ Keep Teren's red-wax memory fragment corroborative rather than narrative recover
 
 ---
 
-## N+3 — Chapter Twenty-Seven: What the First Office Expected
+## N+2 — Chapter Twenty-Seven: What the First Office Expected
 
 **Certainty:** PLANNED
 
@@ -83,7 +71,7 @@ Do not infer Corren's personal motive from institutional language. Preserve the 
 
 ---
 
-## N+4 — Chapter Twenty-Eight: The Acknowledging Hand
+## N+3 — Chapter Twenty-Eight: The Acknowledging Hand
 
 **Certainty:** PLANNED
 
@@ -95,15 +83,27 @@ Do not identify the held property, protected bearer, destination, or route merel
 
 ---
 
-## N+5 — Chapter Twenty-Nine: Who Sent Pellisar
+## N+4 — Chapter Twenty-Nine: Who Sent Pellisar
+
+**Certainty:** PLANNED
+
+The anonymous baseline now establishes that Pellisar's initial concentration concern was analytically reasonable. Inspect the chair-secretariat's delegation and tasking chain beyond the already released office-level order. Determine whether Pellisar independently recognized the successor-depth problem within his assigned concentration audit, was pointed toward that cluster by ordinary institutional data, or carried a more specific concern from an upstream actor.
+
+The sharper question is now the transition from declared affiliation to predictive private kinship. Do not treat a Valeric representative's mere presence in the chair-secretariat as authorship. Require a document, instruction, witness, or other independent evidence before joining a named actor to the question.
+
+**Exit handoff:** establish the narrowest supported provenance behind Pellisar's focus and decide whether the demographic chain can lawfully converge with the known Valeric/Silver Night machinery or must remain separate.
+
+---
+
+## N+5 — Chapter Thirty: What Lawful Remedies Could Not Do
 
 **Certainty:** HORIZON / EXPLORATORY
 
-Only after the anonymous demographic baseline establishes whether Pellisar's concern was analytically reasonable, inspect the chair-secretariat's delegation and tasking chain beyond the already released office-level order. Determine whether Pellisar independently recognized the successor-depth problem within his assigned concentration audit, was pointed toward that cluster by ordinary institutional data, or carried a more specific concern from an upstream actor.
+Compare the advisory review's ordinary lawful remedies against the unlawful interference Corren admitted was contemplated elsewhere. Determine what political objective could not be achieved quickly enough through recusal, staggered appointments, wider recruitment, disclosure, or pipeline reform, and therefore might have tempted an actor toward disqualification, reassignment, engineered scandal, or worse.
 
-Do not treat a Valeric representative's mere presence in the chair-secretariat as authorship. If a named Valeric/Dmitrigical actor enters the chain, require a document, instruction, witness, or other independent evidence that joins them to the question.
+Do not infer that institutional impatience proves murderous intent. Preserve the distinction between a legitimate concentration problem, actors seeking faster or more durable political outcomes, and the still-unproven bridge to Silver Night violence.
 
-**Horizon exit:** establish the narrowest supported provenance behind Pellisar's focus and decide whether the demographic chain can lawfully converge with the known Valeric/Silver Night machinery or must remain separate.
+**Horizon exit:** identify the first supported point, if any, where legitimate concentration management and unlawful intervention occupy the same causal chain.
 
 ---
 
