@@ -1,21 +1,11 @@
-# Nowhere King — Season One, Episodes 01–10 — Combined Edition
+# Nowhere King — Season One, Episodes 01–10
 
-**Generated reader collection:** Episodes 01 through 10 stitched in canonical order from their existing committed source files.
-**Source revision:** 22dca9d3503b86ae5d480530591ee12707322859
-**Important:** This collection is derivative for continuous reading/download. The individual episode files remain authoritative and unchanged.
+**Reader edition. Story prose only.** Canonical planning metadata, reveal ceilings, episode-end state summaries, continuity notes, and handoff material are intentionally excluded.
 
 ---
 
-# Nowhere King — Season One, Episode One
-## Crown Without Court
 
-**Status:** Committed episode prose — revised to current canon  
-**Season:** One — The Return to Edselsto  
-**Episode:** 01 of 32  
-**Reveal ceiling:** Political fantasy first. No confirmed supernatural event, no candle failure, no undercroft truth.  
-**Primary dramatic purpose:** Establish the unbearable status quo before changing it: Luceran is an adult king but a profoundly inexperienced court politician, newly pushed onto the throne, newly bereaved, watched in every ordinary human act, and exhausted by courtiers turning grief into leverage. He must still perform kingship while wanting everyone to leave him alone. His decision to return to Edselsto is therefore emotionally understandable and politically consequential—but also naïve. He believes distance, ownership, and the ability to choose a new household can let him escape the court game more completely than they actually can.
-
----
+# Episode 1 — Crown Without Court
 
 The first report of the morning concerned what the king had eaten.
 
@@ -1001,34 +991,8 @@ He picked up the brush and painted another black pine.
 
 ---
 
-## Episode-end state
 
-King Luceran is already the lawful reigning king because his father Othmar abdicated shortly before both Othmar and Luceran's mother died in close succession. Luceran privately suspects their deaths may have been hastened or arranged, but he has no proof and explicitly refuses to let suspicion become a factional purge.
-
-The capital court is established as a dense information market. Ordinary service relationships create surveillance without requiring every servant to be a spy. Factions exploit Luceran's grief, fatigue, appetite, visitors, family relationships, private hours, and suspected vulnerability. His central grievance is not merely that courtiers are corrupt; it is that nothing about his human life remains outside somebody's political model.
-
-Montegrain of the Elbren court is established as Luceran's longstanding best friend and one of the few people willing to contradict him privately. Court Wizard Magister Vael Teren is established as another trusted but independent voice who refuses to manufacture certainty about the royal deaths.
-
-Luceran has made the sovereign decision to return the imperial court to Castle Edselsto if the ancestral seat remains physically capable of receiving an initial royal household. His decision is emotionally coherent but politically naïve: he believes distance, a smaller chosen household, and control over rooms and gates can let him escape much of the court game. Avarren explicitly warns that the court will reform around the Crown wherever it goes; Luceran is not yet experienced enough to understand how completely true that is. He does not request a modern feasibility study. Sir Edran Vey has been dispatched with a mason, carpenter, twelve soldiers, and assistant housekeeper Mara Kest to inspect the castle directly, speak with its steward, determine what still stands, and begin immediate preparation if enough of it is habitable.
-
-Frederick Doss remains a young footman with financial ambition and a demonstrated awareness that private information can be sold. He has not betrayed the king. Mara has noticed that his price-based joke contains a real vulnerability.
-
-No supernatural event has been confirmed. No candle has failed. The buried truth remains completely outside character knowledge.
-
-
----
-
-
-# Nowhere King — Season One, Episode Two
-## Packing the Monarchy
-
-**Status:** Committed episode prose — revised to current canon  
-**Season:** One — The Return to Edselsto  
-**Episode:** 02 of 32  
-**Reveal ceiling:** Political and material reality. No confirmed supernatural event, no candle failure, no undercroft truth.  
-**Primary dramatic purpose:** Turn Luceran's decision to leave into a personal collision with the machinery of court. He is told money, wagons, labor, guild obligations, and security make his timetable impossible. He responds not with a prepared political gesture but by physically walking out of lunch, recruiting an active construction crew with his own royal authority, accidentally discovering two competent guards, and exposing the noble-aligned ceremonial escort assigned to him as useless. The episode climaxes with Captain Tovan Rhyse using the escort failure as lawful grounds to purge a nest of patronage appointments from the king's immediate security.
-
----
+# Episode 2 — Packing The Monarchy
 
 The argument began over lunch.
 
@@ -2306,48 +2270,8 @@ That was where the old royal escort ended.
 
 ---
 
-## Episode-end state
 
-Episode 02 ends **before the royal convoy departs**.
-
-Luceran has decreed an early-morning departure for Edselsto, but the palace still has the remainder of the day and night to marshal wagons, labor, guards, food, records, tools, animals, and household necessities.
-
-The episode's central labor incident is now explicitly unplanned. Over lunch, Master **Clavard Clifford** tells Luceran that sufficient skilled labor cannot be assembled on the king's timetable. Luceran realizes he can literally hear Lord Edmund Moncler's mansion being built across from the palace and storms out to recruit the visible workforce himself.
-
-At Moncler's site, foreman **Master Olan Crewe** assembles the active carpenters and masons. Luceran announces that they are entering royal service and will leave for Edselsto in the morning. He promises royal field wages, family allowance, settlement of work-related obligations, and hardship exceptions, but he does not initially frame the situation as an ordinary voluntary employment offer. The coercive ambiguity of royal authority remains deliberate character continuity.
-
-Recurring tradespeople include carpenter **Jory Fell** and mason **Derrin Voss**, whose families must absorb the sudden change in income, risk, separation, and social status.
-
-The king's impulsive departure exposes the existing **Royal Companions**—noble- and patronage-aligned men officially appointed as his personal escorts—as grossly negligent. Nine are found in the lower barracks after the king returns, several literally playing a fashionable counter-flicking game and unaware he had even left the building.
-
-Captain **Tovan Rhyse**, a longstanding friend of Luceran and head of the Royal Guard, uses the incident as clean professional grounds to dismiss nine immediately and review the remaining five individually rather than conducting a factional purge under pretext.
-
-Two ordinary gate guards are elevated by happenstance and demonstrated competence:
-- **Sergeant Bram Tolland**, 36, husband of Nessa and father of two daughters.
-- **Guardsman Edrik Saye**, 24, supporting a widowed mother and younger brother.
-
-They become the nucleus of the King's Close Escort because they actually followed the king, stayed with him, and treated his physical safety as their job.
-
-The episode climaxes on the dismissal of the failed Royal Companions and the elevation of Bram and Edrik.
-
-Episode 03 begins with the fallout: noble patrons objecting, guilds scrambling, families preparing, Crown works suddenly discovering available crews, and the marshaling of wagons before midnight so the king's dawn deadline can be met.
-
-No supernatural event has been confirmed. No candle has failed. The buried truth remains outside all character knowledge.
-
-
----
-
-
-# Nowhere King — Season One, Episode Three
-## The Road North
-
-**Status:** Committed episode prose  
-**Season:** One — The Return to Edselsto  
-**Episode:** 03 of 32  
-**Reveal ceiling:** Political and material reality. Edselsto may be reported as old, damaged, habitable in part, and architecturally strange; no confirmed supernatural event, candle failure, containment truth, or sentient-castle evidence.  
-**Primary dramatic purpose:** Make the consequences of Luceran's haste arrive before the promised dawn departure, then put the new court physically on the road. Convert the escort purge, labor seizure, wagon shortage, family separation, and advance-party uncertainty into durable political and human obligations. End with Edselsto becoming a visible place rather than an idea.
-
----
+# Episode 3 — The Road North
 
 At eleven minutes before midnight, the palace had run out of wagons.
 
@@ -3465,55 +3389,8 @@ Not yet.
 
 ---
 
-## Episode-end state
 
-Season One, Episode 03 completes the capital-to-Edselsto road transition without entering the castle ahead of Episode 04.
-
-### Durable changes
-
-- Luceran's dawn deadline is met, but only because multiple institutions absorb real cost: carters, guilds, Crown household, Damaris grain interests, Bellisar horse interests, Nerezza revenue oversight, Royal Kitchens, physicians, guards and workers.
-- Lord Edmund Moncler's grievance is formalized as a compensation/accounting claim rather than erased or villainized.
-- Captain Tovan Rhyse's escort purge survives first political challenge. Lord Cassian Pell concedes his nephew's failure while warning that dismissal and replacement have factional consequences.
-- The five Royal Companions not summarily dismissed remain subject to individual review; their differing circumstances are explicitly preserved.
-- Bram Tolland and Edrik Saye begin functioning as an actual close-escort pair. Their families are established as continuing personal stakes. Bram's wife Nessa and daughters, and Edrik's mother and brother Len, remain independent continuity obligations.
-- Jory Fell and Ellyn's marriage receives ordinary affection, humor, anxiety and economic reasoning before separation. Jory's royal work is opportunity and coercive disruption at once.
-- Derrin Voss's family remains materially dependent on his wages and skeptical of proximity to power.
-- Sir Edran Vey's first direct report reaches Luceran before departure: Edselsto is damaged but partly habitable; water, kitchens, stables and dry chambers exist; several areas are unsafe or sealed; elderly steward Orven Dast is alive and awaiting the king.
-- The convoy experiences a cracked wheel, thrown shoe, road-speed limits, and a damaged Kaelmont culvert. Luceran learns materially that a royal convoy moves at the speed of necessary logistics rather than sovereign impatience.
-- A Kaelmont toll reeve is established as a competent provincial official who tells the king an inconvenient physical truth without being punished for it.
-- Edselsto and its village are physically visible by episode end. The convoy descends toward the village rather than attempting the wet upper road at dusk.
-- Bram and Edrik successfully tell Luceran no on a practical security matter. Luceran accepts it, beginning a small but important baseline for loyal friction.
-
-### Knowledge state
-
-- Luceran knows Edselsto is partly habitable and materially difficult. He has no supernatural knowledge.
-- Rhyse knows the escort purge is politically costly but professionally defensible.
-- Noble patrons know factual denial of the dismissed guards' negligence is weak; future pressure is therefore likely to target procedure, status, replacement appointments and access.
-- Workers know royal wages may materially improve their families' lives while royal command can disrupt them without meaningful bargaining power.
-- Nobody in the moving court knows the buried truth, the prison, the castle-interface reality, or the candle function.
-
-### Candle state
-
-Seven of seven remain lit. No candle failure has occurred.
-
-### Immediate handoff
-
-Episode 04 begins at the village/upper approach and proceeds into Edselsto for the first night. Orven Dast, Edran's advance party, leaking roofs, usable kitchens, unsafe floors, sealed family rooms, and the seven candles can enter lived prose. Voices or strange acoustics may be experienced only within the Season One reveal ceiling and must remain deniable.
-
-
----
-
-
-# Nowhere King — Season One, Episode Four
-## First Night
-
-**Status:** Committed episode prose  
-**Season:** One — The Return to Edselsto  
-**Episode:** 04 of 32  
-**Reveal ceiling:** First lived occupation of Edselsto. Seven candles may be observed with all seven lit. Strange acoustics, drafts, old mechanisms, sealed rooms, and voices may be experienced only in ways that remain plausibly mundane. No sentient-castle proof, containment truth, candle failure, or buried-entity terminology.  
-**Primary dramatic purpose:** Turn Edselsto from a political idea into a cold, damaged, inhabited place. Make Luceran's first night about labor, exhaustion, household improvisation, old neglect, and the people who kept the ancestral seat standing without him. Let the first uncanny note enter quietly enough that nobody has earned certainty.
-
----
+# Episode 4 — First Night
 
 The village of Edselsto had three streets.
 
@@ -5331,51 +5208,8 @@ All seven.
 
 ---
 
-## Episode-end state
 
-Season One, Episode 04 completes Luceran's first lived occupation of Edselsto without crossing the supernatural reveal ceiling.
-
-### Durable changes
-
-- Luceran, the first royal convoy, and the recruited work crews enter Edselsto.
-- Orven Dast is introduced in person as the elderly steward who has served at Edselsto for forty-seven years. He is loyal to the office and house in a practical sense, but does not automatically defer emotionally to Luceran.
-- Orven knew Luceran's mother personally enough to remember her first visit and dislike of the mountain rain.
-- Crown neglect is concretely established through a roof repair patched twenty-two years earlier after promised royal funding failed to arrive.
-- Edran, Mara, Corren Bale, and Iven Marr's advance work is paid off materially rather than reset.
-- Olan Crewe, Jory Fell, Derrin Voss, Corren Bale, and Iven Marr immediately become active professional interpreters of the castle.
-- Emergency room assignments are made by practical necessity under Mara Kest rather than rank, creating precedents for Episode 05.
-- Treasury is placed in a dry, lockable former linen room; physicians near the great hall; archives in a dry counting room; workers near repair zones; guards at practical access points.
-- Luceran's temporary room is his grandfather's old west guest chamber.
-- Family wing remains locked/partly unsafe. Luceran agrees not to force it on the first night.
-- Brother Calven discovers the family nave.
-- Seven candles are observed burning before the old altar. Orven maintains them as inherited stewardship practice without claiming to know their original meaning.
-- Luceran orders the candles kept lit; Orven already intended to do so.
-- Luceran hears faint voice-like murmuring behind the sealed family corridor. Bram and Orven acknowledge sound, but old flues, wind, pipes, boards, rats, carried voices, and structural acoustics remain plausible explanations.
-- Montegrain explicitly distinguishes "you needed to leave" from "Edselsto will solve your problems."
-- Luceran spends his first night inside Edselsto and remains committed to staying.
-
-### Candle state
-
-Seven of seven remain lit.
-
-### Immediate handoff
-
-Episode 05 — *Rooms Are Power* begins when emergency assignments stop being temporary in other people's minds. Courtiers, officers, guards, workers, clerks, and factions will read rooms, doors, distance from Luceran, repair priority, and access routes as status and allegiance.
-
-
----
-
-
-# Nowhere King — Season One, Episode Five
-## Rooms Are Power
-
-**Status:** Committed episode prose  
-**Season:** One — The Return to Edselsto  
-**Episode:** 05 of 32  
-**Reveal ceiling:** Political and material court-building. Family wing remains closed except for already established approaches. Seven candles remain lit. No confirmed supernatural behavior.  
-**Primary dramatic purpose:** Begin Luceran's real education in creating a court. Friendly people solve genuine problems, receive reasonable favors, and thereby begin becoming a political bloc. Simultaneously turn the neglected village below Edselsto into a crude royal works settlement whose tents, wells, smithy, storage ground, roads, ruins, and labor are inseparable from patronage.
-
----
+# Episode 5 — Rooms Are Power
 
 Luceran discovered the first law of his new capital before breakfast.
 
@@ -6947,66 +6781,8 @@ He was only beginning to understand what it meant.
 
 ---
 
-## Episode-end state
 
-Season One, Episode 05 begins Luceran's political education after the four-episode lead-in.
-
-### Durable changes
-
-- Emergency rooms become recognized political signals rather than mere shelter.
-- Baron Pellisar Pell attempts to secure proximity to Luceran and receives a personally assigned but less prestigious chamber; even the refusal becomes favor because the king handled it personally.
-- House Bellisar, through factor Harl Ven, receives scheduled practical use of the east stair in exchange for solving horse/farrier needs and helping repair its security latch; Captain Rhyse retains authority to close it.
-- Lady Miren Edevane arrives as a genuinely affectionate royal cousin with bedding, oil, preserved food, clerks, servants, rope, and an offer of household credit. She deliberately avoids taking the best suite herself but places useful Edevane clerks in it near the archive, demonstrating sophisticated awareness of appearances and access.
-- Luceran recognizes that friendly, reasonable assistance can produce factional advantage without conspiracy.
-- Village Council of Edselsto becomes part of local Crown purchasing consultation after Tessa Rane challenges capital assumptions about stripping local food supply.
-- Half of the old common is temporarily allocated as open Crown storage, with the boundary marked and no permanent use authorized without hearing the village council.
-- Lower well repair begins under Perren Holt and Derrin Voss; village knowledge materially controls safe work.
-- Worker tents are organized along the old south lane; runoff ditching, latrine placement, cookfires, material yards, and reuse of ruined structures begin.
-- A Henn-family ruin is preserved pending contact rather than casually seized; a genuinely abandoned cooper's ruin is used instead.
-- Sera Morcant, a Morcant-trained smith working under Bellisar contract, establishes the first crude functioning village forge and becomes its working master under negotiated Crown pay.
-- Bellisar, Morcant, and Falbrecht interests now overlap around horses, iron, charcoal, and smithing rather than forming clean single-house monopolies.
-- Luceran sides with worker-camp drainage and sanitation over Baron Pell's leaking-room repair, establishing a visible repair-priority precedent.
-- Jory Fell is permitted to send a family letter by royal post, unintentionally creating the expectation that other displaced Crown workers may do the same; fifty-three letters appear the next morning.
-- New suppliers begin arriving without direct royal summons, including Morcant iron, Falbrecht charcoal, and a Guild of Keys locksmith. Edselsto is becoming a market and patronage center under its own momentum.
-- The court's emerging networks now move information and resources without waiting for Luceran personally.
-
-### Theory-of-mind movement
-
-- Luceran → Avarren: increasing irritation mixed with trust; he now recognizes that Avarren sees political consequences several steps earlier than he does.
-- Luceran → Miren Edevane: genuine familial affection and trust reinforced; he also learns she is politically sophisticated enough to manage appearances while still advancing her household's useful position.
-- Luceran → workers/villagers: begins understanding that apparently minor royal decisions reach families, property memory, food supply, sanitation, and private obligations.
-- Olan → Luceran: updates from impulsive labor-seizing king toward a ruler who may accept practical priority over noble comfort.
-- Village Council → Luceran: cautious willingness to work with him increases because he listens to local knowledge and limits immediate Crown seizure, without erasing memory of dynastic neglect.
-- Edrik → Luceran: comfortable enough to point out secondary consequences and joke about them; professional trust continues growing.
-
-### Political / institutional consequences
-
-An early friendly bloc is forming through useful service rather than conspiracy: Edevane clerks and credit, Bellisar horses and access, Morcant smithing and iron, Falbrecht charcoal, Pell proximity-seeking, village purchasing knowledge, and recruited Crown workers. Luceran likes many of these people and has good reasons for each decision.
-
-The first physical map of the new capital now has political meaning: rooms, stairs, forge, common, wells, ruined houses, storage yards, post, roads, and repair sequence all create access or obligation.
-
-### Mystery / candle state
-
-Family wing remains closed. No new supernatural evidence is established. Orven trims the nave candles as ordinary stewardship while Luceran assists. Seven of seven remain lit.
-
-### Immediate handoff
-
-Episode 06 — *The Price of a Door* begins with suppliers and specialists arriving faster than the unfinished castle can absorb them. Locks, hinges, keys, timber, iron, smithing, security routes, contracts, and one intentionally sealed architectural route turn practical repair into the next political contest.
-
-
----
-
-
-# Nowhere King — Season One, Episode Six
-## The Price of a Door
-
-**Status:** Committed episode prose  
-**Season:** One — The Return to Edselsto  
-**Episode:** 06 of 32  
-**Reveal ceiling:** Suspicious architecture, inherited closures, missing records, and deliberate alterations are permitted. Seven candles remain lit. No containment truth, sentient-castle proof, candle failure, or authoritative explanation of why older routes were sealed.  
-**Primary dramatic purpose:** Turn doors, keys, iron, charcoal, timber, locks, roads, and repair sequence into politics. Let useful friendly suppliers compete without becoming villains. Establish that access control creates durable obligations, and discover one deliberately sealed route whose existence creates a future question rather than answering one.
-
----
+# Episode 6 — The Price Of A Door
 
 The locksmith arrived with eleven locks and nowhere to sleep.
 
@@ -8270,68 +8046,8 @@ All seven.
 
 ---
 
-## Episode-end state
 
-Season One, Episode 06 turns Edselsto's repair economy into explicit access and supply politics while preserving the Season One mystery ceiling.
-
-### Durable changes
-
-- Nella Veyr, Guild of Keys master doorwright, arrives independently because Edselsto's demand has become commercially visible. She becomes a recurring professional actor rather than a summoned plot solution.
-- Nella sells only four of eleven brought locks after inspecting actual doors/frames; treasury retains its existing lock because the door/frame are the greater weakness.
-- Royal security and repair priorities now explicitly distinguish locks, doors, frames, guards, latches, and routes rather than treating a lock as magical security.
-- Sera Morcant demonstrates independent craft authority by rejecting four defective Morcant iron bars despite Morcant training; factor Tomas Brinn accepts the rejection after physical proof.
-- Morcant gains first right to quote on the next two ordinary iron deliveries, not exclusivity. Crown may buy elsewhere for price/quality failure. Sera inspects forge iron regardless of supplier.
-- Maelin Falbrecht establishes a charcoal supply bargain: Falbrecht builds a temporary covered charcoal shed on Crown storage ground; Crown owns the structure after eighteen months; Falbrecht receives first refusal through winter if price and quality remain acceptable; wet charcoal is paid only by dry weight.
-- The Falbrecht shed is moved four paces to preserve Marrec Voss's remembered goat path, costing a half-day and reinforcing village local knowledge as a real constraint.
-- Lower-well repair continues; Perren Holt and Derrin Voss confirm a historic rubble patch and need salvage stone. Luceran gives the well safety priority subject to Olan's structural objection if one exists.
-- Tavin Rane, Tessa Rane's twelve-year-old grandson and one of the village runners, is named and demonstrates low-status information advantage because carrying work notes gives him a practical map of material movement.
-- Widow's key is established as an inherited old key formerly associated, according to steward tradition, with a service door off the old family passage.
-- Derrin Voss, Corren Bale, and Nella identify a deliberately infilled former doorway beside the family passage. The closure predates Orven's forty-seven years at Edselsto; exact date, authority, destination, and reason remain unknown.
-- Luceran refuses to have the infill immediately broken open. He orders shoring, plan/inventory research, and an attempt to identify the lower end first.
-- Orven retains Widow's key; Nella records its pattern; Rhyse records custody. The arrangement creates shared knowledge without stripping inherited stewardship by reflex.
-- A second old lower-west service door is found barred from the opposite side, but remains unopened and unexplained.
-- Bellisar east-stair access begins under previously agreed limited hours after latch repair, subject to Rhyse's security authority.
-- Luceran increasingly understands that material choices create political constituencies even when choices are sensible and suppliers are friendly.
-- Miren reinforces the distinction between information moving socially and actual disloyalty; Luceran accepts that genuine affection and institutional advantage can coexist.
-
-### Political / institutional consequences
-
-- Morcant, Falbrecht, Bellisar, Guild of Keys, Crown Works, village council, guards, and household now overlap around repair decisions without forming one coordinated faction.
-- Edselsto's supply market is self-forming: specialists increasingly arrive because Crown demand is visible.
-- Supply agreements now have dates, quality conditions, first-refusal rights, inspection authority, and remembered obligations.
-- Repair sequence remains a political allocation of scarce labor/material: water, sanitation, kitchens, roofs, doors, and noble comfort compete.
-- Security geometry is becoming formal through rounds, access hours, compensating guards, and route knowledge.
-
-### Knowledge / mystery state
-
-- Luceran knows at least one former family-passage doorway was intentionally filled with masonry before Orven's tenure.
-- Nobody knows why it was sealed, exactly when, who ordered it, or what survives beyond it.
-- Steward tradition says it once led toward a service stair/lower family stores, but this is reported inheritance rather than confirmed geography.
-- No supernatural conclusion is supported.
-- Family wing remains protected for Episode 07 investigation.
-
-### Candle state
-
-Seven of seven remain lit.
-
-### Immediate handoff
-
-Episode 07 — *The Family Wing* now has a material entry mechanism rather than a convenient discovery. Lock/key work, Orven's inherited route knowledge, Nella's professional inspection, the newly identified infilled service route, and archive searches provide reasons to inspect selected family spaces. Luceran can begin encountering portraits, genealogies, records, missing catalog entries, and evidence that his father knew more about Edselsto than he told him without yet learning the buried truth.
-
-
----
-
-
-# Nowhere King — Season One, Episode Seven
-## The Family Wing
-
-**Status:** Committed episode prose  
-**Season:** One — The Return to Edselsto  
-**Episode:** 07 of 32  
-**Reveal ceiling:** Family history, deliberate record management, missing catalog material, inherited closures, and evidence that Luceran's father knew more about Edselsto than he told his son. Seven candles remain lit. No containment truth, sentient-castle proof, Nowhere King archaeology, candle failure, or authoritative explanation of sealed routes.  
-**Primary dramatic purpose:** Turn Edselsto from ancestral refuge into family wound. Let records, rooms, objects, and other people's memories complicate Luceran's model of his parents without granting him the answer he wants. Promote archival competence through work rather than exposition, while construction and court-building continue outside the family wing.
-
----
+# Episode 7 — The Family Wing
 
 The family wing opened at nine in the morning because Nella Veyr refused to open it at eight.
 
@@ -9445,77 +9161,8 @@ Then he went to bed.
 
 ---
 
-## Episode-end state
 
-Season One, Episode 07 advances the family-history investigation without crossing the Season One reveal ceiling.
-
-### Durable changes
-
-- The north family suite is opened through ordinary locksmith/carpentry work; no supernatural mechanism is involved.
-- Luceran encounters his father's former room as an abandoned lived space rather than a mystery chamber.
-- A portrait of Luceran's younger father includes former Edselsto secretary **Halven Sare**, whose face was deliberately cut from the portrait at an unknown time. Orven reports Sare left royal service before Luceran's father became king and was said to have gone south; this remains unverified.
-- **Ysabet Marris**, assistant keeper of royal household records, arrives from the capital by her own request because Edselsto provenance problems matter professionally. She becomes a recurring archival specialist.
-- Ysabet establishes an archival rule important to future continuity: preserving paper without preserving provenance can destroy evidence.
-- The Edselsto family-paper catalog has a gap around entries 44–51.
-- Luceran's father's handwriting is identified on an inventory instruction ordering private North Family papers removed from the general register, kept under household seal, and not copied. Ysabet requires comparison before formal attribution despite Luceran recognizing the hand.
-- A later household-seal register cross-reference says **Edselsto private packet — N.F. 44–51 — transferred under royal instruction**. The associated receipt is not present with current material.
-- The transfer is dated nine years earlier, approximately the period of a quiet two-night visit by Luceran's parents.
-- Orven remembers that visit. Luceran's father asked about old keys, lower family stores, the old north stair, and whether the wall beside the family passage had been opened.
-- Orven remembers Luceran's mother saying during a private argument, **"Not while he is a child."** Orven assumed the pronoun referred to Luceran but cannot confirm subject or context.
-- Luceran recognizes that his parents' love did not imply complete disclosure and revises his model of his father toward deliberate withholding without deciding why.
-- Luceran explicitly resists assembling the evidence into one confident theory.
-- The infilled family-passage doorway remains unopened. No breach occurs.
-- Construction continues independently outside the investigation: forge, lower well, charcoal shed, timber handling, worker camp, and material movement do not stop for royal grief.
-- Seven candles remain lit.
-
-### Relationship / theory-of-mind movement
-
-- Luceran → father: from broadly trusted parent with unexplained omissions toward a man who deliberately managed private Edselsto information; motive remains unknown.
-- Luceran → mother: gains evidence she participated in at least one private Edselsto dispute and may have argued for delaying something while a child remained young; exact meaning unresolved.
-- Luceran → Orven: learns that respecting privacy can itself create frustrating information gaps; accepts that Orven was steward rather than spy.
-- Luceran → Ysabet: quickly values her because she refuses dramatic conclusions and protects evidentiary distinctions even against royal impatience.
-- Ysabet → Luceran: sees a grieving king prone to pattern-making but capable of accepting correction.
-- Luceran ↔ Montegrain: friendship deepens through quiet presence rather than explanation; Montegrain does not solve grief or exploit it.
-- Miren → Luceran: continues affectionate correction and supplies one bounded memory about his parents without pretending certainty.
-
-### Institutional / material consequences
-
-- Ysabet receives a dry room, two copyists, and practical authority to preserve record provenance subject to royal authority.
-- Archive practice at Edselsto becomes more rigorous because records are now evidence as well as property.
-- The missing receipt for packet N.F. 44–51 becomes a concrete documentary obligation.
-- Halven Sare becomes a concrete historical person requiring provenance research rather than a supernatural clue.
-- Construction and supply systems continue operating without waiting on the king, reinforcing side-character and institutional agency.
-
-### Mystery state
-
-Observed: deliberate record restriction by Luceran's father; later transfer of private packet; damaged portrait; quiet parental visit; questions about old keys/stairs/wall; one overheard sentence from Luceran's mother.
-
-Not established: why papers were restricted, what N.F. definitively means, where packet 44–51 went, who received it, why Sare's face was cut out, why the family-passage route was infilled, what Luceran's mother meant, or whether any of these facts share one cause.
-
-No prison truth, castle-interface truth, Nowhere King archaeology, sentient-castle proof, or confirmed supernatural behavior is revealed.
-
-### Candle state
-
-Seven of seven remain lit.
-
-### Immediate handoff
-
-Episode 08 — *The First Court* begins with Edselsto sufficiently functional to receive a formal audience. Friendly houses, guilds, officers, temple representatives, factors, creditors, and later arrivals will discover that temporary rooms, supply bargains, introductions, guard routes, archive access, village arrangements, and personal friendships have already hardened into recognizable advantage. The missing N.F. 44–51 packet and receipt remain documentary payoff debt rather than an immediate mystery solution.
-
-
----
-
-
-# Nowhere King — Season One, Episode Eight
-## The First Court
-
-**Status:** Committed episode prose  
-**Season:** One — The Return to Edselsto  
-**Episode:** 08 of 32  
-**Reveal ceiling:** Edselsto functions as an unfinished political court. Family records, sealed routes, and seven candles remain unresolved background obligations. No confirmed supernatural behavior, containment truth, sentient-castle proof, candle failure, or authoritative explanation of the family-passage closures.  
-**Primary dramatic purpose:** Complete the first court-building movement by letting Luceran experience a formal Edselsto audience as a genuine success while later arrivals correctly recognize that the supposedly blank court already has winners. Turn seating, rooms, stairs, food, roads, contracts, guard procedure, gifts, and waiting time into politics without making the friendly early network secretly coordinated or cynically corrupt.
-
----
+# Episode 8 — The First Court
 
 The first formal court at Edselsto began with a bucket.
 
@@ -10911,66 +10558,8 @@ Above them, the new court slept badly in rooms it had already begun to consider 
 
 ---
 
-## Episode-end state
 
-Season One, Episode 08 completes Movement II by making Edselsto a functioning formal court without pretending it is a finished capital.
-
-### Durable changes
-
-- Edselsto holds its first limited formal royal audience in the unfinished great hall.
-- Physical incompleteness remains visible: leaking roof, scaffolding, improvised throne platform, limited kitchens, restricted rooms, and active construction.
-- Later arrivals visibly recognize that early useful actors already possess advantages in rooms, access, routes, contracts, archive proximity, and personal familiarity.
-- Lady Ardel Kaelmont is introduced as a competent road/quarry representative who correctly identifies the emerging early-access network without treating it as conspiracy or automatic corruption.
-- Kaelmont offers survey crews, reduced quarry access, bridge crews, and temporary toll relief in exchange for post-emergency maintenance/toll recognition on improved charter roads. Luceran does **not** grant the road bargain yet; it becomes active negotiation debt.
-- Lord Moncler's compensation claim reaches formal court through factor Gerant Vale. Luceran recognizes documented direct losses from the Crown labor requisition as legitimate and orders accounts examined rather than dismissing the claim.
-- Luceran explicitly distinguishes compensation for disrupted contracts from ownership of workers. Olan and the recruited workers remain Crown-employed for their present terms and retain later choice.
-- Royal Companion dismissal fallout becomes procedural: Rhyse's immediate removal from duty was within his authority, but formal commissions require Crown disposition. A ten-day review is ordered with arrears continuing until status is determined; no dismissed Companion returns to close escort during review.
-- Sir Caldus Pell publicly raises the commission-status issue without demanding automatic restoration, demonstrating loyal/friendly procedural opposition.
-- Village Council representatives materially shape court policy on horse placement, private land, lodging, food purchasing, and arrival capacity.
-- A lower-road receiving system is ordered for arriving households, horses, carts, tents, and lodging.
-- Private village buildings may not be occupied merely because they appear abandoned; offered lodging is to be recorded and rented/assigned through agreement absent separate lawful order.
-- Crown staple purchasing is consolidated through one buyer with rates reviewed weekly alongside village/supplier reality rather than uncontrolled noble bidding against villagers.
-- Court success itself creates the immediate Episode 09 problem: at least ninety-six more named arrivals are expected while only thirty-one additional beds are presently available and water, washing, food, horse space, and private property are already constrained.
-- Luceran consciously recognizes that observation alone creates political knowledge: who interrupts, waits, enters by which door, receives jokes, receives written answers, or can change his mind.
-- Luceran no longer wants to flee the court he is building. He accepts that the task is to build a better court rather than escape politics.
-
-### Relationship / theory-of-mind movement
-
-- Luceran → Rhyse: trust deepens because Rhyse welcomes independent review of his own legitimate use of authority rather than treating scrutiny as disloyalty.
-- Luceran → Ardel Kaelmont: initial respect forms around her competence and willingness to name both her house's interest and the political map she sees. Attraction is possible but not established as a relationship fact.
-- Ardel → Luceran: sees a young king who rewards usefulness, is more politically observant than rumor may suggest, but still underestimates how visible personal familiarity becomes.
-- Luceran ↔ Miren: affectionate familiarity remains politically visible. A casual shared-cup gesture is noticed by others, reminding both that ordinary intimacy around a sovereign creates public inference.
-- Luceran → Village Council: increasingly accepts that local legitimacy and material knowledge can constrain Crown convenience without constituting rebellion.
-- Luceran → his new court: for the first time experiences political friction as something he can live inside rather than something from which he must flee.
-
-### Faction / bargain ledger
-
-- **Kaelmont:** road/quarry proposal active but ungranted; Crown must compare costs and interests before winter.
-- **Moncler:** documented direct-loss compensation accepted as a legitimate category; amount remains subject to accounts.
-- **Royal Companions / patrons:** ten-day commission review created; arrears continue pending disposition; close-escort restoration prohibited during review.
-- **Morcant:** existing first-quotation arrangement unchanged; attempt to broaden it automatically to nails is refused; future structural-iron tender notice permitted.
-- **Falbrecht:** existing winter charcoal terms reaffirmed, including dry-weight basis.
-- **Bellisar:** east-route/stable access remains under Rhyse security authority; visiting remount pressure now pushes more horse infrastructure below the upper gate.
-- **Edevane:** archive-adjacent advantage remains, but archive equipment is explicitly assigned to the archive institution rather than to House Edevane.
-- **Nerezza:** formally records objection that room distance communicates lower access even where placement arose from roof safety; no immediate relocation granted.
-- **Village Council:** gains operational role in arrival/lodging/property/food coordination because the Crown physically cannot house and feed the expanding court without local cooperation.
-
-### Mystery / archive state
-
-- N.F. 44–51 remains unresolved.
-- Halven Sare remains unresolved.
-- Infilled family-passage doorway remains unbreached.
-- Lower-west barred door remains unresolved.
-- No confirmed supernatural behavior occurs.
-- Seven of seven candles remain lit.
-
-### Immediate handoff
-
-Episode 09 — *The Village Below* begins with the material consequence of court success: more people are coming than Edselsto can presently house, feed, water, stable, or absorb. The village must now negotiate opportunity, rent, property, labor, displacement, food, water, storage, and old royal neglect while the Crown's new receiving system tries to prevent useful expansion from becoming simple seizure.
-
-
----
-
+# Episode 9 — The Village Below
 
 # Season One, Episode 09 — The Village Below
 
@@ -12000,29 +11589,10 @@ Above them, seven candles burned in a nave neither of them could see.
 
 None went out.
 
-## Episode-end state
-
-Season One, Episode 09 completes the village-focused opening of Movement III.
-
-### Durable changes
-
-- The lower-road receiving system is operational rather than merely ordered; 107 new arrivals are processed in one day.
-- No private village house is seized. Lodging becomes a paid, recorded market with visible capacity limits and social friction.
-- Crown staple purchasing limits some competitive bidding but cannot prevent side sales or private households routing around the system.
-- Food prices rise unevenly; wages, rents, sales, and employment also rise. Village households become winners, losers, or both.
-- Water capacity becomes a formal constraint. The tannery overflow channel is reopened as part of horse/washing management, while the lower well remains under repair and a second winter source is now necessary.
-- Mara Henn establishes ordinary evidence for Henn possession: continuing household use, tithe/custom service, remembered and physical boundaries, and surviving occupation practice. The Crown does not declare absolute title; instead it recognizes enough evidence to stop treating the property as abandoned.
-- Three Crown tents accidentally cross the Henn boundary. Rather than remove them immediately, Mara negotiates a thirty-day temporary lease with no Crown claim arising from occupation or improvements.
-- Mara Henn is promoted into recurring importance through demonstrated knowledge of water, drainage, property boundaries, foundations, old tracks, and village custom. She accepts a one-month Crown mapping engagement on negotiated terms while retaining independent work.
-- An old funeral grade, locally called the corpse road, is established through the east pines to the charcoal track above the ravine. Rhyse will inspect it with Mara after her morning work. It is an ordinary local route, not supernatural evidence.
-- An unmarked emergency burial field from a historical flood/fever year is rediscovered through local memory and chapel death records. The proposed overflow camp is moved at the cost of twelve tent spaces.
-- Jory Fell's wife Ellyn and children arrive, paying the worker-family displacement debt forward into lived settlement continuity.
-- Luceran explicitly learns that rebuilding can create injury even when the underlying project is beneficial, and that local ownership, custom, memory, and practical knowledge constrain Crown convenience.
-- Seven of seven candles remain lit. No confirmed supernatural behavior occurs.
-
-
 ---
 
+
+# Episode 10 — Guests With Patrons
 
 # Season One, Episode 10 — Guests With Patrons
 
@@ -13250,21 +12820,4 @@ Brother Calven trimmed none of them.
 
 None required it.
 
-## Episode-end state
-
-Season One, Episode 10 completes the patronage-focused middle of Movement III without converting ordinary relationships into conspiracy.
-
-### Durable changes
-
-- Episode 09 receiving, lodging, transport, introduction, kitchen, guild, and payment records expose overlapping patronage relationships among new arrivals.
-- Selise Varo becomes a recurring archive copyist. She is independently employable and competent while carrying ordinary family, professional, religious, commercial, and social connections that could transmit information without making her a spy.
-- Luceran explicitly learns that patronage, affection, kinship, debt, professional history, and divided loyalty are not interchangeable with ownership or betrayal.
-- Avarren prevents the receiving office from converting inferred patronage into official fact. Records may state transactions and declared relationships; interpretation remains separate.
-- Lady Ardel Kaelmont openly acknowledges that she genuinely likes Luceran while House Kaelmont also benefits from that warmth. She writes ordinary letters to her aunt and does not pretend the relationship is politically empty.
-- Miren tells Luceran she loves him and also acknowledges that her family benefits from her access, has asked her to raise policy matters, and may influence her without every influence being consciously legible. She asks to be trusted accurately rather than treated as either pure intimacy or hidden instrument.
-- Luceran creates an informal six-person advisory circle around Montegrain, Miren, Rhyse, Avarren, Tessa Rane, and Ysabet Marris. It is explicitly not a formal council, grants no new office, and does not require members to surrender external obligations.
-- Each member identifies a boundary or loyalty outside Luceran: family, law/Guard, record, village, archive, or personal judgment. Luceran accepts that when those conflict with him, they retain agency.
-- Royal Companion review advances without resolution. The old-capital movement-notification procedure is recognized as partly defective while the dismissed close escort's professional failure remains real. Arrears and the ten-day review deadline continue; no dismissed Companion returns to close escort.
-- Rhyse and Mara inspect the old funeral grade. It can carry people and careful horses but not carts without clearing. It is not secret from villagers; it is instead an unguarded route.
-- Rhyse proposes an observation post near the charcoal-track crossing, but construction is deferred until likely Vess land ownership/boundary can be verified.
-- Seven of seven candles remain lit. No confirmed supernatural behavior occurs.
+---
