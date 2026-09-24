@@ -4,7 +4,7 @@ document_role: "ROLLING FIVE-CHAPTER FORWARD PLAN"
 status: "ACTIVE PLANNING CONTROL"
 planning_horizon: 5
 last_reconciled: "2026-09-24"
-active_after_chapter: 18
+active_after_chapter: 19
 ---
 
 # Beneath Dappled Oaks — Active Five-Chapter Lookahead
@@ -13,63 +13,55 @@ This is the operational N+1 through N+5 plan for the first-principles rewrite. U
 
 ## Current committed rewrite state
 
-Canonical numbered prose now runs through **Chapter Eighteen — The Reserve Hand**.
+Canonical numbered prose now runs through **Chapter Nineteen — The Arithmetic Before the Fire**.
 
-Compact Emergency Civic Commission **264-B/17** is now established as the sealed second commissioning authority behind JEC-R/6. It was jointly constituted by the Commonwealth High Magistracy and the Academy-independent Student Safeguard Board three days before Silver Night as a temporary receiving mechanism for protected civic witnesses, students, or testimony when ordinary institutions might expose them to an interested authority. It could receive, hold, attest, and transfer; it could not investigate, arrest, compel testimony, or authorize force.
+The non-identifying Silver Night cohort circulation history establishes a bounded demographic evidence chain. The ordinary 264 graduating-cohort projection circulated normally at first. Twenty-two days before Silver Night, however, a Joint Office credential-integrity review request sponsored by the **Dmitrigical Review liaison desk** sought a more granular projection than neighboring comparison years and did so earlier than comparable credential reviews. It combined future licensed-chair capacity with declared Great House branch, future hereditary/chartered-office eligibility, and projected external availability within ten years.
 
-Its activation required paired certification from officers belonging to different appointing bodies, neither then serving the Academy administration, a Great House household, or the Dmitrigical Tribunal. The commission dissolved after nineteen days, but its accountability archive survived under Commonwealth seal.
+A follow-up nine days later sought resolution of selected aggregate discrepancies and also asked for probable marriage alignment outside declared House sphere. The Academy privacy officer refused that marriage field as outside Academy credential administration. The supplied lawful projection was acknowledged by the Joint Office eleven days before Silver Night.
 
-The non-identifying accession index confirms that the **JEC-R/6 paired receiving abstract still exists**, was transferred into 264-B/17 on the morning after Silver Night, and can be opened by a Commonwealth High Magistrate or delegated magical-crimes judge when the paired initiating record is under lawful review. Judge Vaun has filed for that narrowly defined record; earliest lawful release is the next morning after second bell unless challenged.
+This does **not** identify the historical expanding family, establish murderous intent, or prove that the liaison desk itself originated the unusual granularity. It does establish that unusually detailed future-capacity information entered institutional machinery already implicated elsewhere in the Silver Night inquiry.
 
-The commission's expense/support accounts also survive at non-identifying category level. They may later establish whether the commission functioned only on paper or incurred support activity, without identifying a protected bearer.
+The next demographic dependency is to identify the delegated authority and recorded purpose behind the temporary cross-institutional review docket, the exact non-protected product returned, its lawful onward recipients, and where the unusual timing/granularity actually originated.
 
-Thessa's western posting departure is now **eleven days away**. Her Warden fitting and route preparation have begun. Ilyan continues to support the posting while disliking the separation; the Seven are increasingly able to let institutions and delegated work continue without requiring their physical presence at every investigative step.
+Compact Emergency Civic Commission **264-B/17** remains the sealed second commissioning authority behind JEC-R/6. Judge Vaun's narrowly authorized request for the surviving paired receiving abstract remains pending for lawful release after second bell. Selector exercise or non-use is still unresolved.
+
+Thessa's western posting departure is now **ten days away**. Her equipment, Warden briefing and route preparation are actively occurring on-page. Ilyan supports the posting while disliking the separation.
 
 ## Governing debts
 
 **Corren culpability debt:** explanation and protective acts do not erase his admitted role in Silver Night's enabling machinery.
 
-**Selector-proof debt:** neither use nor non-use is established. The surviving JEC-R/6 receiving abstract is now the immediate evidentiary target.
+**Selector-proof debt:** neither use nor non-use is established. The surviving JEC-R/6 receiving abstract remains the immediate evidentiary target.
 
 **Teren-memory debt:** memory fragments remain bounded and useful only when independently prompted or corroborated. Do not convert recognition into recovered narrative.
 
 **Protected-person privacy debt:** follow authority, commission, dates, record classes and accountability without opening bearer identity, destination or route geometry unless later lawful necessity is independently established.
 
-**Demographic-motive debt:** ordinary succession counting is baseline. Abnormal access/timing/granularity must be established before the cohort-circulation strand becomes probative.
+**Demographic-motive debt:** abnormal timing and granularity are now established, but the expanding family, rival faction, and murderous purpose remain unresolved. Do not infer them from ordinary House arithmetic.
+
+**Institutional-origin debt:** distinguish the person who signed or processed a request from the office, delegated authority, commissioning source and actual origin of the unusual question.
 
 **Seven-network debt:** preserve practiced disclosure boundaries, delegated institutional work, and independent adult obligations.
 
-**Relationship/adult-life debt:** Thessa leaves in eleven days. Preparation, departure and distance must happen on-page rather than being indefinitely postponed by the investigation.
+**Relationship/adult-life debt:** Thessa leaves in ten days. Preparation, departure and distance must happen on-page rather than being indefinitely postponed by the investigation.
 
 ---
 
-## N+1 — Chapter Nineteen: The Arithmetic Before the Fire
+## N+1 — Chapter Twenty: Who Asked to See the Count
 
 **Certainty:** LOCKED INTENT
 
-Open the non-identifying portion of the Silver Night cohort circulation history and compare it with normal Academy, House, Crown, order and commercial demographic planning. Look for abnormal timing, granularity, repeated requests, unexpected institutional access or intersection with already established Valeric/Dmitrigical machinery.
+Follow the 264 cohort circulation anomaly to the requesting authority rather than immediately to a villain. Determine the recorded lawful reason for the temporary Dmitrigical cross-institutional review docket, the delegated authority under which the liaison desk sponsored it, what product the Joint Office actually supplied, and the lawful onward recipients.
 
-Do not identify the historical expanding family or rival faction merely because one House had many students. Establish what the records actually support.
+Separate signer, processor, delegated authority and commissioning mind. Preserve the live possibility that an innocent analyst or clerk performed lawful work later repurposed by criminal actors.
 
-The JEC-R/6 receiving abstract may lawfully arrive during or after this chapter, but do not allow it to consume the demographic dependency unless its timing naturally changes the scene.
+Do not identify the expanding family merely because the projection contains House aggregates. Establish where the unusual timing and granularity entered the request chain.
 
-**Exit handoff:** demographic pressure becomes a bounded evidentiary chain rather than a thematic motive.
-
----
-
-## N+2 — Chapter Twenty: Who Asked to See the Count
-
-**Certainty:** PLANNED
-
-Follow any circulation anomaly to the requesting authority rather than immediately to a villain. Determine the stated lawful reason, actual information supplied, and whether the request intersects with Silver Night preparation in time, personnel, authorization or downstream use.
-
-Preserve innocent analysts, mixed motives and lawful information later repurposed by criminal actors as live possibilities.
-
-**Exit handoff:** position the demographic strand to converge with the Valeric/Dmitrigical and emergency-custody strands without collapsing them into one convenient conspiracy.
+**Exit handoff:** locate the institutional point at which an ordinary credential-conflict review became unusually interested in the future political capacity of this particular graduating cohort.
 
 ---
 
-## N+3 — Chapter Twenty-One: What the Second Office Knew
+## N+2 — Chapter Twenty-One: What the Second Office Knew
 
 **Certainty:** PLANNED
 
@@ -81,11 +73,11 @@ The central problem is institutional theory of mind: the civic commission and Tr
 
 ---
 
-## N+4 — Chapter Twenty-Two: Twelve Days West
+## N+3 — Chapter Twenty-Two: Twelve Days West
 
 **Certainty:** DIRECTIONAL
 
-Pay Thessa's departure clock before the investigation can swallow it. Use packing, Warden briefings, friends' competing schedules, House expectations and the practical route west to force the Seven to experience adult separation rather than merely discuss it. Chapter Eighteen has already reduced the clock to eleven days; advance the intervening days naturally rather than preserving the title as literal present-tense arithmetic.
+Pay Thessa's departure clock before the investigation can swallow it. Chapter Nineteen has reduced the actual clock to ten days; the title remains a continuity label, not literal present-tense arithmetic. Use packing, Warden briefings, friends' competing schedules, House expectations and the practical route west to force the Seven to experience adult separation rather than merely discuss it.
 
 Let the investigation continue through lawful delegated work rather than requiring Ilyan to be physically present for every development. Preserve Thessa's independent professional competence and Ilyan's ability to support her while genuinely missing her.
 
@@ -93,15 +85,27 @@ Let the investigation continue through lawful delegated work rather than requiri
 
 ---
 
-## N+5 — Chapter Twenty-Three: What the Commission Bought
+## N+4 — Chapter Twenty-Three: What the Commission Bought
 
-**Certainty:** HORIZON / EXPLORATORY
+**Certainty:** PLANNED
 
 Use the surviving non-identifying 264-B/17 support-account categories to test whether the emergency civic commission merely existed as dormant legal capacity or actually supported protected custody after Silver Night. Follow mundane expenditure classes—lodging, food, horse or carriage hire, medical support, messenger fees, wayhouse charges, secure-room rental—without using them to reverse-engineer protected bearer identity or route geometry.
 
-Cross-check expenditure timing against the commission's nineteen-day life and any facts lawfully established by the JEC-R/6 receiving abstract. Treat ordinary administrative spending as ordinary unless pattern, timing, or category meaningfully departs from baseline.
+Cross-check expenditure timing against the commission's nineteen-day life and facts lawfully established by the JEC-R/6 receiving abstract. Treat ordinary administrative spending as ordinary unless pattern, timing or category meaningfully departs from baseline.
 
-**Horizon exit:** establish the operational footprint of the reserve hand and identify the next lawful accountability question without turning expense records into magical omniscience.
+**Exit handoff:** establish the operational footprint of the reserve hand and identify the next lawful accountability question without turning expense records into magical omniscience.
+
+---
+
+## N+5 — Chapter Twenty-Four: Where the Question Changed
+
+**Certainty:** HORIZON / EXPLORATORY
+
+Trace the demographic request through its drafting and authorization layers far enough to identify where the unusual combination of timing, House-branch granularity, future office eligibility and near-term external availability first appeared. Distinguish a lawful Joint Office template from additions supplied by the Dmitrigical liaison desk or an upstream commissioning authority.
+
+If the evidence supports convergence with established Valeric/Dmitrigical actors, earn that convergence through provenance rather than resemblance. If it instead reveals mixed or partially innocent institutional participation, preserve that complexity. Do not name the expanding family or rival faction until the surviving record actually supports doing so.
+
+**Horizon exit:** transform the demographic strand from suspicious information flow into a provenance chain capable of supporting or excluding specific actors and motives.
 
 ---
 
