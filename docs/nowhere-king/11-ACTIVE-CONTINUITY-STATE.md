@@ -1,80 +1,67 @@
 # Nowhere King — Active Continuity State
 
-**Role:** Single authoritative current temporal continuity ledger. Supersedes the retired `11-CURRENT-STORY-STATE.md`.
+**Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 1 Episode 16, *The Measure of Trust*.
+**Reconciled through:** Season 1 Episode 17, *New Guard*.
 
 ## Character state
 
-**Luceran:** Security fear now has an explicit institutional check. During an ambiguous west-works scare he initially wants the west gate closed and resists delaying his inspection, but accepts Rhyse's contrary judgment and Miren's argument that fear should not make him the sole interpreter of uncertain evidence. He now accepts a written rule under which Rhyse has route authority during an active security question; Luceran can legally overrule him only explicitly and with the contrary advice recorded. Learns that trust can include letting loyal people constrain him rather than merely obey him.
+**Luceran:** Accepts that competent security is a human institution rather than a set of royal commands. Refuses to conjure six night guards by stripping another post without understanding the resulting hole. Increasingly distinguishes legal authority from operational knowledge. Understands that credentials establish accountable access rather than loyalty and that a safer system remains vulnerable to compromised people.
 
-**Miren Edevane:** Continues intimate relationship with Luceran. Materially disagrees with him during the scare, naming his fear without treating him as incompetent. Her refusal to soothe him into a bad security interpretation improves his judgment and deepens Luceran's model of loyalty as friction rather than agreement. Episode 15 jealousy/open-bargain boundary remains active.
+**Tovan Rhyse:** Converts hunt/Episode 16 lessons into a deliberately simple guard architecture: gate/post responsibility, controlled credentials, relief handoffs, post books, late route release, bounded information and recorded corrections. Defends threshold authority even against Royal Companions while preserving Luceran's legal sovereignty. Wants additional night strength but refuses paper staffing that merely relocates vulnerability.
 
-**Tovan Rhyse:** Refuses Luceran's immediate request to close the west gate, quietly restricts rather than panics traffic, protects irrelevant private sexual information from entering Crown security records, and establishes a formal route-authority rule. His loyalty now includes documented professional dissent. Hunt investigation remains unresolved.
+**Bram Tolland:** Helps design and test the system. Treats mistakes as visible, correctable records rather than reasons to erase evidence. Conducts a bounded wrong-credential night test that becomes a real test when an unlisted charcoal worker arrives.
 
-**Bram Tolland / Edrik Saye:** Bram treats the unsigned note and missing surveyors as evidence rather than conclusions and traces door logs/material facts. Edrik establishes Dena Mar's whereabouts without recording irrelevant intimate detail. Both demonstrate the security culture Episode 17 can formalize.
+**Edrik Saye:** Implements west-door controls while managing ordinary inconvenience without turning it into accusation. Preserves bounded security information and hands forward an unresolved report about an unknown man asking which watch holds west service after midnight.
 
-**Lysa Quill:** Her surveyor Corvin Hale disobeys her instruction and suffers a mundane fall at the west cut. She insists that his stupidity not be rewritten as assassination merely because the Crown is frightened, formally reprimands him, and supports safer after-hours sign-out. Twenty-day structural engagement remains active.
+**Sera Vale:** Night-watch corporal promoted into recurring security continuity. Wants six additional night guards because new verification/handoff work consumes time. Believes procedure without staffing can shorten patrols and create different vulnerabilities.
 
-**Corvin Hale:** Kaelmont-trained surveyor. Leaves before light for a solo level check despite Quill's instruction, is injured by a wet cut failure, and survives. Reports an indistinct rope-carrying worker asked about Luceran's inspection habits the previous afternoon. Cannot reliably identify the man.
+**Mikel Orr:** Lower-gate guardsman. Prioritizes high-traffic lower-gate staffing and resents quiet inner posts being protected from manpower pressure. Correctly stops Bram's deliberately wrong credential and handles an unlisted charcoal worker without humiliation or panic.
 
-**Dena Mar / Pera Sol:** Dena's apparent absence is explained by consensual private adult conduct with laundress Pera Sol. Their relationship is not made into a court scandal or general security record. Pera demonstrates practical information competence and insists that relevant timing can be established without surrendering unnecessary privacy.
+**Anja Pell:** Family-wing relief guard. Defends the apparently quiet inner corridor from being treated as spare manpower; understands that repeatedly stripping a post teaches observers which alarm empties it. Has a durable resource rivalry with lower-gate staffing.
 
-**Nera Vos:** Identifies the unsigned note as lower-works tool-slip stock but refuses to overclaim provenance. Creates a simple paper-control distinction: numbered issue forms remain controlled; scrap is separated and corner-cut. Continues temporary physical-record checking while Pellin handles Moncler.
+**Royal Companions:** Internally divided. Sir Caldus Ren believes threshold checks diminish sworn Companion dignity and precedence. Dame Hesta Mor accepts the security logic but warns that low-ranking gate authority can become socially abusive. Sir Orren Vale supports post authority once satisfied that rules also constrain senior officers and record contrary advice to the king. Companion resentment therefore remains plural rather than a unified hostile bloc.
 
-**Mara Henn:** Treats the west-cut fall as ordinary water-driven structural failure until evidence says otherwise. Supports inspection windows but rejects surprise royal arrivals that would make works less safe. Continues independent village/property and bounded mapping interests.
+**Nera Vos / Pera Sol:** Nera discovers mundane material cost of the system, including string, wax and tally supplies. Pera supplies laundry cord through a recorded transfer and confirms Episode 16 privacy remains bounded. Their ordinary work materially supports security without making either omniscient.
+
+**Miren Edevane:** Continues intimate relationship with Luceran. Encourages him to model Caldus as sincerely wrong rather than secretly evil and reinforces that institutions contain people rather than unified faction minds.
 
 ## Security state
 
 - Living hunt tester/sponsor remains unidentified.
 - False horn, hunt rope, unidentified riders, fraudulent rope issue and charcoal marks remain unresolved human evidence.
-- New unsigned note: `WEST CUT. BEFORE LIGHT. COME QUIETLY.` Found under Lysa Quill's door; intended recipient and writer unknown.
-- Note paper is ordinary lower-works tool-slip stock accessible to many people. No reliable handwriting match.
-- Corvin Hale reports an indistinct rope-carrying worker asked whether Luceran personally inspected works and may have learned the planned west-cut visit. This is a lead only; no proof connects him to the hunt incident or note.
-- West-cut rock failure currently supports a mundane water-behind-the-face explanation. No evidence of sabotage.
-- General works schedules now carry royal inspection windows rather than exact routes/arrival times.
-- Exact royal routes are held to a smaller escort/security channel and released closer to movement time according to professional judgment.
-- Crown specialists doing before-light/after-hours field work require supervisor marking in addition to ordinary door sign-out; villagers moving on their own land are not subjected to this Crown-work rule.
-- Rhyse has route authority during an active security question. Luceran may overrule him, but the override and Rhyse's contrary advice must be explicit and recorded.
-- Nera's paper control separates controlled numbered forms from corner-cut scrap.
-- Jeron Bellisar remains unable to ride.
-- Vess observation legacy and Royal Works rope controls remain active.
+- Episode 16 unsigned west-cut note and rope-carrying questioner remain unresolved.
+- New credential architecture uses simple marked tallies for household/works access, day/supplier tallies tied to ordinary gate/windows, and confirmation for uncredentialed visitors.
+- Credentials establish accountable access, not loyalty. A valid credential is not proof of allegiance.
+- Gate/post guards have authority to delay even senior sworn officers while credentials or purpose are confirmed; abuse is reviewable through post books and command.
+- Relief handoffs use a temporary slate plus durable post books. Corrections remain visible with initials rather than being erased.
+- Information is partitioned by operational need. General guards do not receive exact royal routes far in advance; route information remains in the smaller late-release escort channel.
+- Rhyse's Episode 16 route authority during active security questions remains in force, with explicit recorded royal override available.
+- Crown specialists working outside normal hours still require supervisor marking plus ordinary sign-out.
+- Royal Works rope controls and Nera's numbered-form/corner-cut-scrap distinction remain active.
+- Sera Vale has identified a real need for greater night staffing; no additional bodies have yet been authorized without a source.
+- Lower-gate versus family-corridor staffing pressure is now an explicit institutional rivalry.
+- An unknown man has reportedly asked twice which watch holds west service after midnight. Descriptions conflict; no offense is established. Record repetition without inventing identity or guilt.
+- The system is now legible enough to be studied, socially resented, misused or compromised later through human action.
 
 ## Kaelmont bargain
 
 - Three-year nonexclusive carriage opportunity remains active for defined Edselsto structural materials.
-- Village and other qualified carriers may bid; emergency and excluded categories remain protected.
-- Lysa Quill plus two surveyors remain on the paid twenty-day Crown engagement. Hale is injured/reprimanded; Dena remains available.
-- Two observer seats remain available for the next three relevant works conferences under Episode 15 limits; no vote, command, key, archive or stair-entry right.
-- Ardel remains named observer or must designate substitutes in writing.
+- Lysa Quill's paid twenty-day engagement continues; Hale's injury/reprimand and Dena Mar's work continuity persist.
+- Three-conference observer access remains bounded by Episode 15 terms.
 
 ## Moncler / accounting state
 
-- Pellin's Moncler compensation review remains open pending disputed tool inventories; preliminary result still supports real Crown compensation.
-- Nera continues physical-record checking in stores while Pellin is absent as required.
-- Tomas Reed remains on six-week river-depot assignment producing independent Crown receiving copies.
-- Maret repayment and Damaris grain negotiation remain active.
-- Olan remains without payment authority and under supervised reconstruction.
+- Pellin's Moncler compensation review remains open pending disputed tool inventories.
+- Nera continues physical-record checking while also covering ordinary stores/tool-desk consequences.
+- Tomas Reed remains on six-week river-depot assignment; Maret repayment and Damaris grain negotiation remain active.
 
-## Sealed stair state
+## Sealed stair / mystery state
 
-- Temporary heavy timber barrier remains locked.
-- Rhyse holds working key; Avarren holds sealed duplicate.
-- No Episode 16 entry or deeper exploration occurs.
-- Deeper exploration still requires new formal authorization.
-- Partial scratched lettering beyond first turn remains unread.
-- Purpose, age, destination and relationship to other sealed spaces remain unknown.
-- No supernatural manifestation.
-
-## Family-history / mystery state
-
-- N.F. 44–51 unresolved.
-- Halven Sare unresolved.
-- Father's private-paper restriction/transfer and parental visit remain bounded.
-- Widow's key remains with Orven.
-- Infilled family-passage doorway remains intact.
-- Lower-west service door remains barred.
-- Newly exposed west stair is not currently evidenced as connected to any of the above.
+- Temporary heavy timber barrier remains locked; Rhyse holds working key and Avarren sealed duplicate.
+- No Episode 17 entry or deeper exploration occurs. New formal authorization remains required.
+- Partial scratched lettering remains unread. Purpose, age, destination and connections remain unknown.
+- N.F. 44–51, Halven Sare, father's restricted papers/parental visit, Widow's key, infilled family doorway and lower-west barred door remain unresolved.
 - No confirmed supernatural behavior.
 
 ## Seven candles
@@ -83,7 +70,7 @@ Seven of seven remain lit.
 
 ## Immediate handoff
 
-Episode 17 — *New Guard* is next. It must institutionalize the practical security lessons accumulated through the hunt and Episode 16: posts, credentials, night watches, route knowledge, relief patterns, information boundaries and command authority. Ordinary guards must acquire durable goals and rivalries. The future coup needs a competent, legible system that can later be learned and attacked rather than defenders becoming stupid.
+Episode 18 — *Temple and Crown* is next. Religious authorities may now enter through the already seeded Hall of Veils/funerary-space interest and dispute ancestral rites, burial jurisdiction and the public ceremonial meaning of the seven candles. Episode 17's access architecture must matter to who is admitted to nave, archive and family spaces without allowing guards to become theological authorities. Temple actors must disagree internally, and the true candle function remains protected.
 
 ## Hard exclusions
 
