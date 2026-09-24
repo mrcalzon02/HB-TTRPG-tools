@@ -2,75 +2,65 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 1 Episode 17, *New Guard*.
+**Reconciled through:** Season 1 Episode 18, *Temple and Crown*.
 
 ## Character state
 
-**Luceran:** Accepts that competent security is a human institution rather than a set of royal commands. Refuses to conjure six night guards by stripping another post without understanding the resulting hole. Increasingly distinguishes legal authority from operational knowledge. Understands that credentials establish accountable access rather than loyalty and that a safer system remains vulnerable to compromised people.
+**Luceran:** Continues treating competent institutions as constraints worth preserving. Refuses to override archive access rules for Canon Merel merely because Merel is important. Accepts that public meaning cannot be commanded away and declines to certify flattering theology as historical fact. Delegates Hall of Veils material bargaining to people who know drainage, funerary practice and village custom. Continues intimacy with Miren and increasingly understands that information travels without requiring malice.
 
-**Tovan Rhyse:** Converts hunt/Episode 16 lessons into a deliberately simple guard architecture: gate/post responsibility, controlled credentials, relief handoffs, post books, late route release, bounded information and recorded corrections. Defends threshold authority even against Royal Companions while preserving Luceran's legal sovereignty. Wants additional night strength but refuses paper staffing that merely relocates vulnerability.
+**Miren Edevane:** Continues intimate relationship with Luceran. Helps him identify the political trap around either endorsing or suppressing Merel's candle interpretation. Public/private intimacy remains visible enough that observers can notice it without thereby knowing its full meaning.
 
-**Bram Tolland:** Helps design and test the system. Treats mistakes as visible, correctable records rather than reasons to erase evidence. Conducts a bounded wrong-credential night test that becomes a real test when an unlisted charcoal worker arrives.
+**Tovan Rhyse / Sera Vale / Anja Pell:** Episode 17 access architecture survives contact with religious rank. Guards enforce warrants and thresholds rather than doctrine. Sera correctly refuses unlisted archive access; Anja correctly limits family-gallery access while admitting ordinary nave access.
 
-**Edrik Saye:** Implements west-door controls while managing ordinary inconvenience without turning it into accusation. Preserves bounded security information and hands forward an unresolved report about an unknown man asking which watch holds west service after midnight.
+**Sister Calienne Orsanne:** Becomes a recurring religious/archive actor. Values evidentiary honesty over flattering doctrine, notices social information, and will distinguish inherited practice from interpretation. With Ysabet, establishes only that old household accounts treated the seven lights as inherited Crown charges and that an old mourning order required them to remain burning; original purpose remains unknown.
 
-**Sera Vale:** Night-watch corporal promoted into recurring security continuity. Wants six additional night guards because new verification/handoff work consumes time. Believes procedure without staffing can shorten patrols and create different vulnerabilities.
+**Canon Merel Dast:** Wants formal public theology tying the seven lights to dynastic continuity and divine witness. Fails to obtain Crown certification and acquires a real grievance after archive rules are enforced against him. He is ambitious and interpretive, not established as malicious.
 
-**Mikel Orr:** Lower-gate guardsman. Prioritizes high-traffic lower-gate staffing and resents quiet inner posts being protected from manpower pressure. Correctly stops Bram's deliberately wrong credential and handles an unlisted charcoal worker without humiliation or panic.
+**Mother Ysara Orsanne:** Prioritizes funerary capacity, Hall of Veils repair and durable jurisdiction over symbolic flattery. Secures practical cooperation while openly rejecting invented doctrine.
 
-**Anja Pell:** Family-wing relief guard. Defends the apparently quiet inner corridor from being treated as spare manpower; understands that repeatedly stripping a post teaches observers which alarm empties it. Has a durable resource rivalry with lower-gate staffing.
+**Brother Talen Veyr:** Ashen Lamp funerary brother. Focuses on dignity and jurisdiction of household dead, including servants and craftsmen. Supports a boundary against new Crown rites invoking named dead without funerary consultation.
 
-**Royal Companions:** Internally divided. Sir Caldus Ren believes threshold checks diminish sworn Companion dignity and precedence. Dame Hesta Mor accepts the security logic but warns that low-ranking gate authority can become socially abusive. Sir Orren Vale supports post authority once satisfied that rules also constrain senior officers and record contrary advice to the king. Companion resentment therefore remains plural rather than a unified hostile bloc.
+**Mara Henn / Bren Vess:** Keep burial expansion subordinate to drainage, water and existing family/property realities. Their practical knowledge constrains both Crown and temple.
 
-**Nera Vos / Pera Sol:** Nera discovers mundane material cost of the system, including string, wax and tally supplies. Pera supplies laundry cord through a recorded transfer and confirms Episode 16 privacy remains bounded. Their ordinary work materially supports security without making either omniscient.
+## Religious / public-symbol state
 
-**Miren Edevane:** Continues intimate relationship with Luceran. Encourages him to model Caldus as sincerely wrong rather than secretly evil and reinforces that institutions contain people rather than unified faction minds.
+- The seven candles are now publicly recognized by the Crown as **the Seven Ancestral Lights of Edselsto**: an inherited household observance whose original meaning is not presently established.
+- The Crown does **not** certify divine-favor, dynastic-continuity, memorial or other theological interpretations as historical fact.
+- Temple clergy and courtiers may advance interpretations as interpretations.
+- An old funeral order establishes that the lights were not to be extinguished during royal mourning; it gives no reason.
+- Old household inventories list maintenance/continuation of the lights among Crown household charges but do not establish who understood their purpose.
+- Informal popular devotion has begun: flowers and white ribbons appear at the nave. This is public social meaning, not supernatural evidence.
+- Hall of Veils remains jointly usable under inherited royal-household/village funerary custom.
+- Royal Works will provide drainage/stone work before winter; Orsanne foundations provide lime, plasterers and replacement mourning cloth.
+- Burial-ground expansion requires village-family consultation, water review and Crown agreement.
+- Recognized funerary clergy receive ordinary nave access during published devotional hours; archive, family-gallery and restricted access still require specific authority.
+- Guards enforce access, not theology.
+- No new Crown rite invoking named household dead without funerary consultation.
+- Canon Merel retains a legitimate grievance over rejected symbolic authority and access expectations.
 
 ## Security state
 
-- Living hunt tester/sponsor remains unidentified.
-- False horn, hunt rope, unidentified riders, fraudulent rope issue and charcoal marks remain unresolved human evidence.
-- Episode 16 unsigned west-cut note and rope-carrying questioner remain unresolved.
-- New credential architecture uses simple marked tallies for household/works access, day/supplier tallies tied to ordinary gate/windows, and confirmation for uncredentialed visitors.
-- Credentials establish accountable access, not loyalty. A valid credential is not proof of allegiance.
-- Gate/post guards have authority to delay even senior sworn officers while credentials or purpose are confirmed; abuse is reviewable through post books and command.
-- Relief handoffs use a temporary slate plus durable post books. Corrections remain visible with initials rather than being erased.
-- Information is partitioned by operational need. General guards do not receive exact royal routes far in advance; route information remains in the smaller late-release escort channel.
-- Rhyse's Episode 16 route authority during active security questions remains in force, with explicit recorded royal override available.
-- Crown specialists working outside normal hours still require supervisor marking plus ordinary sign-out.
-- Royal Works rope controls and Nera's numbered-form/corner-cut-scrap distinction remain active.
-- Sera Vale has identified a real need for greater night staffing; no additional bodies have yet been authorized without a source.
-- Lower-gate versus family-corridor staffing pressure is now an explicit institutional rivalry.
-- An unknown man has reportedly asked twice which watch holds west service after midnight. Descriptions conflict; no offense is established. Record repetition without inventing identity or guilt.
-- The system is now legible enough to be studied, socially resented, misused or compromised later through human action.
+Episode 17 credential/post architecture remains active. Living hunt tester/sponsor, false horn, hunt rope, unidentified riders, fraudulent rope issue, charcoal marks, Episode 16 unsigned note/rope-carrying questioner, and the unknown man asking about west-service night watch remain unresolved human evidence. Sera's night-staffing need and lower-gate/family-corridor resource rivalry remain unresolved.
 
-## Kaelmont bargain
+## Political / material obligations
 
-- Three-year nonexclusive carriage opportunity remains active for defined Edselsto structural materials.
-- Lysa Quill's paid twenty-day engagement continues; Hale's injury/reprimand and Dena Mar's work continuity persist.
-- Three-conference observer access remains bounded by Episode 15 terms.
+Kaelmont three-year nonexclusive carriage opportunity, Lysa Quill engagement, Moncler compensation review, Nera physical-record work, Tomas Reed's river-depot assignment, Damaris grain negotiation, Vess boundary/mill-spring rights, lower-well capacity, Royal Works rope controls, Henn property protections, Royal Companion review and internally divided resentment all remain active.
 
-## Moncler / accounting state
+## Relationship state
 
-- Pellin's Moncler compensation review remains open pending disputed tool inventories.
-- Nera continues physical-record checking while also covering ordinary stores/tool-desk consequences.
-- Tomas Reed remains on six-week river-depot assignment; Maret repayment and Damaris grain negotiation remain active.
+Miren/Luceran intimacy continues with established love, physical familiarity, loyal disagreement and jealousy boundary. Ardel's genuine attraction and Kaelmont interests remain separate and active. Episode 18 creates a new observation pathway: Calienne has seen Luceran and Miren privately holding hands and deliberately preserves courtesy; she knows only what she observed.
 
 ## Sealed stair / mystery state
 
-- Temporary heavy timber barrier remains locked; Rhyse holds working key and Avarren sealed duplicate.
-- No Episode 17 entry or deeper exploration occurs. New formal authorization remains required.
-- Partial scratched lettering remains unread. Purpose, age, destination and connections remain unknown.
-- N.F. 44–51, Halven Sare, father's restricted papers/parental visit, Widow's key, infilled family doorway and lower-west barred door remain unresolved.
-- No confirmed supernatural behavior.
+Temporary heavy timber barrier remains locked; Rhyse holds working key and Avarren sealed duplicate. No Episode 18 entry or deeper exploration occurs. Partial scratched lettering remains unread. N.F. 44–51, Halven Sare, father's restricted papers/parental visit, Widow's key, infilled family doorway and lower-west barred door remain unresolved. No confirmed supernatural behavior.
 
 ## Seven candles
 
-Seven of seven remain lit.
+Seven of seven remain lit. Their actual function remains completely unknown to characters.
 
 ## Immediate handoff
 
-Episode 18 — *Temple and Crown* is next. Religious authorities may now enter through the already seeded Hall of Veils/funerary-space interest and dispute ancestral rites, burial jurisdiction and the public ceremonial meaning of the seven candles. Episode 17's access architecture must matter to who is admitted to nave, archive and family spaces without allowing guards to become theological authorities. Temple actors must disagree internally, and the true candle function remains protected.
+Episode 19 — *Lovers and Leverage* is next. Center adult relationship reality as political reality without reducing Miren or Ardel to rivalry. Episode 18 has made public interpretation, visible private intimacy and court observation more consequential. A relationship must deepen while an observer reasonably misreads or exploits what can actually be seen, creating a durable promise, expectation, jealousy or political claim.
 
 ## Hard exclusions
 
@@ -78,5 +68,5 @@ Episode 18 — *Temple and Crown* is next. Religious authorities may now enter t
 - No containment truth, prison truth, castle-interface truth or buried-entity terminology.
 - No sentient-castle proof.
 - No candle extinction.
-- No omniscient interpretation of the stair.
+- No omniscient interpretation of the stair or lights.
 - No premature identification of the hunt sponsor.
