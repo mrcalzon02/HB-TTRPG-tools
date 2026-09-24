@@ -2,69 +2,77 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 1 Episode 25, *The King's Progress*.
+**Reconciled through:** Season 1 Episode 26, *An Empty Throne*.
 
 ## Character state
 
-**Luceran:** At Red Ford after three days of hearings and verification. He now knows the original crisis was materially real but substantially distorted: no invasion is established, both sides escalated a genuine cattle/boundary dispute, Pavel Tern was wounded, the toll shelter burned later, and grey/red colors entered testimony through an unidentified carter. He resists collapsing the carter, Valcere, hunt evidence, west-service evidence and capital rumor into one conspiracy. He accepts Rhyse's Episode 16 security authority when an apparently Edselsto-origin route-delay message arrives without black-thread authentication.
+**Luceran:** Returning south after Northbridge disproves the claimed road failure. He accepts Rhyse's security judgment, leaves eighteen troops with Mara to preserve Red Ford obligations, and later leaves six guards with wounded Black Pine scout Hessa Dorn. Thirty-four continue with him. He does not yet know Edselsto's full state.
 
-**Miren Edevane:** At Red Ford with Luceran. Continues as lover and independent political actor. She helps Luceran distinguish the emotional relief of a single liar from the harder reality of a genuine grievance that someone may have amplified. Their post-return marriage discussion promise remains remembered and unresolved.
+**Miren Edevane:** Returning with Luceran. Lover and independent political actor. Their promised post-return marriage discussion remains active.
 
-**Tovan Rhyse:** Commands travelling security. He refuses Luceran's impulse to ride immediately after the unauthenticated route-change message, invokes the previously agreed recorded-override rule, and recommends separate Black Pine verification routes plus Northbridge confirmation. Luceran accepts.
+**Tovan Rhyse:** Commands the return. Episode 16 security authority remains functional. Hostile road interceptors knew the previous day's challenge answer; he treats that as compromised information, not proof of one universal conspiracy.
 
-**Bram Tolland / Edrik Saye:** At Edselsto. Bram sent no route change. Edrik notices old-stock paper used for a legitimate receiving-clerk replacement and a young servant studying his lamp-oil inspection. A legitimate guard later presents an authentic west-service credential one day early after a falsely attributed roster change. Bram orders quiet relief verification rather than panic or general lockdown. Their competence remains intact; somebody may be learning or probing the system.
+**Bram Tolland:** Commands fragmented loyal defense. He identifies that attackers exploit nearly-correct information and legitimate seams. He ends paper-change reliance, changes password/counterword to **boot/tack**, preserves family corridor/lower inner grille/crown route, and sends Pera Crewe through the kitchen drain with an improvised authenticated warning.
 
-**Mara Kest:** At Red Ford. Continues material discipline, verifies Northbridge stores and identifies that the toll shelter's burn pattern may reflect concentrated fuel/kindling without claiming who caused it.
+**Edrik Saye:** Helps identify the pattern, withdraws intelligently from Sir Aven Marr rather than wasting himself, and escorts Pera to the drain route.
 
-**Ardel Kaelmont:** Remains at Edselsto. Her lower-fork advice proves correct. She reports the west retaining-wall estimate has worsened after crews expose older masonry. Attraction/jealousy continuity remains unchanged.
+**Mera Doss:** Accepts enough money to buy her daughter's dye vat and first-quarter workroom rent, signing a legitimate laundry movement that conceals coup access. Once alarms reveal the scale, she voluntarily reports herself and turns over the gold. She identifies recruiter "Parel" asking about ceremonial storage above the old council hall, warning defenders that the physical crown is a target. Remorse does not erase culpability; her daughter's economic future remains real.
 
-**Sera Vale:** At Red Ford. Separates witness streams and reconstructs the migration of grey/red color hearsay. Her evidence handling materially changes the Crown's understanding.
+**Ardel Kaelmont:** Independently evacuates her works crew, blocks the lower village road with stone carts, and refuses movement until officers can be verified. Kaelmont independence remains real rather than automatic Crown loyalty.
 
-## Red Ford verified state
+**Anja Pell:** Detects the concealed receiving entry through physical inspection, survives the breach, helps Mikel Orr, invalidates his stolen seal and holds the upper service junction.
 
-Red Ford is a disputed crossing/common rather than a clean legal border. The river shifted in a flood eleven years ago; old judgments rely on a vanished willow line while a newer toll judgment does not settle grazing title. Markers have moved at least once.
+**Mikel Orr:** Wounded at west service. Alive at last observation. His seal is stolen but rapidly invalidated.
 
-The herd contained mixed ownership: Bellisar, Harrowmere, dual-history animals and unmarked young stock. Bellisar retainers crossed south to challenge an impoundment; Harrowmere tenants/household soldiers met them; additional men arrived; cattle moved north; Pavel was shot after the herd began moving. The shelter burned later. No shooter or arsonist is identified.
+**Sir Aven Marr:** Royal Companion with a clean prior record who supports the coup from a sincere constitutional theory. He helps secure the outer lower gate but attempts to restrain opportunistic misconduct by men entering behind the political action.
 
-The unidentified carter appears in actual witness reconstruction as the source who introduced grey/red colors and a claim that Bellisar blame was already circulating. Name uncertain (Renn/Wren-like), two-wheel covered cart, mule, paid silver, travelled south. Intent and affiliation unknown.
+## Edselsto coup state
 
-Preliminary Crown settlement: freeze new grazing fees; return individually provable cattle; neutral care for disputed animals; fresh flood survey; reciprocal Bellisar/Harrowmere stand-down beginning at the same bell. Neither side treats the other as retreating.
+The coup has begun but Edselsto is not yet fully taken.
 
-A southern market notice turns true fragments into a false-war narrative: king rides north armed; Bellisar musters; Harrowmere answers. Origin unknown.
+Attackers exploit established human seams: authentic credentials at wrong times, falsely attributed roster changes, legitimate staffing changes, routine suppliers, concealed passengers in laundry/grain movements, stolen seals, and near-current challenge knowledge. Competent defenders repeatedly limit each success.
 
-## Departure / military / material state
+**Coup control:** outer lower gate, most receiving, two service stairs, old council antechamber, western great-hall approach.
 
-Travelling force remains fifty-eight mounted guards/household troops plus twelve Black Pine scouts, with Miren, Rhyse, Mara and travelling household. No general mobilization. Northbridge takes riders and baggage under controlled crossing; coach crosses only after additional bracing. Six Crown stores wagons remain physically accounted for at Northbridge under Tomas Reed; prior fourteen-sack consumption remains explained and logged.
+**Loyal control:** inner lower grille, family corridor, guard room, crown approach, upper service junction, barred archive. Ardel controls the lower village road independently. Calienne's chapel functions as practical neutral care space.
 
-Luceran's party is holding at Red Ford overnight pending authentication of the route-delay message. Two Black Pine pairs are to verify by separate routes; a rider goes to Northbridge for confirmation.
+The physical crown remains in loyal-controlled upper space and is now an explicit coup objective. The throne is empty; possession does not create lawful sovereignty.
 
-## Edselsto security / coup-precondition state
+## Message / road state
 
-Edselsto remains populated and competently defended. Fixed posts, west service, family corridor, receiving controls and lower-gate reserve continue.
+Bram did not send the Episode 25 route-delay message. Northbridge received no such order. Its insertion point remains unknown.
 
-New Episode 25 anomalies: a legitimate receiving-clerk illness creates a genuine temporary staffing change written on obsolete paper stock; a young brown-haired servant watches Edrik's lamp-oil inspection closely; an authentic west-service credential is presented by a legitimate guard one day early after someone falsely claims a roster change from Mikel Orr's deputy. Bram orders quiet verification against the watch board and originating officer.
+Bram's emergency warning on boot leather reads **EDSELSTO ATTACKED. RETURN. TRUST BLACK PINE.** with **BOOT / TACK** beneath it. Pera Crewe carries it through a low-status works/kitchen route.
 
-Objective reader-visible fact: Bram did **not** send the route-delay message received by Luceran. Luceran/Rhyse do not yet know that. The messenger is known to the household and claims Edrik handed him the packet. How the false/altered message entered the chain remains unresolved.
+One Black Pine verification pair returned safely. The second was intercepted by four or five armed people who knew the previous day's challenge answer. Hessa Dorn is wounded; her partner is missing. Patronage remains unknown.
 
-## Relationship state
+## Red Ford / military / material state
 
-Luceran and Miren remain lovers, not betrothed. Their promise to discuss actual marriage after returning remains active. At Red Ford their intimacy continues as ordinary adult life amid governance rather than replacing it. Luceran/Ardel attraction and Miren jealousy remain acknowledged and unchanged; Miren reads Ardel's private works/road letter without treating it as romantic threat.
+Mara remains temporarily with eighteen mounted troops to preserve stand-down, survey/cattle process and baggage. Luceran's faster column begins with forty mounted troops/eight scouts; six guards remain with Hessa pending Mara's arrival, leaving thirty-four moving onward.
+
+Six Crown stores wagons remain accounted for at Northbridge under Tomas Reed.
+
+## Relationship / institutional state
+
+Luceran/Miren remain lovers, not betrothed. Post-return marriage discussion remains promised. Luceran/Ardel attraction and Miren jealousy remain unchanged.
+
+Ysabet does not restore Selise's sensitive archive access during crisis; Selise accepts the boundary and helps with public registers.
+
+Calienne treats wounded from both sides and resists political interference with patients while permitting weapon searches.
+
+Sir Aven demonstrates that some coup supporters possess sincere lawful/political theories. The coup is not a single moral category.
 
 ## Religious / mystery state
 
-Seven Ancestral Lights remain lit and tended. Brother Talen is shown trimming their wicks. No supernatural action, proof, candle change, stair entry, containment truth or sentient-castle evidence occurs.
+All Seven Ancestral Lights remain lit. No supernatural action, sentient-castle proof, stair revelation, containment truth or candle change occurs. Edselsto remains physically inert.
 
-## Political / material obligations
+## Unresolved obligations preserved
 
-Fresh Red Ford flood survey, disputed cattle care, toll/grazing adjudication, arson and Pavel-arrow questions remain open. Unidentified color-hearsay carter remains investigation rather than proof.
-
-Valcere commissioning authority, Corin Varo/Edevane authorization, Kaelmont carriage terms, Lysa Quill engagement, Moncler compensation review, Tomas Reed depot assignment, Damaris grain negotiation, Vess boundary/mill-spring rights, lower-well capacity, Royal Works rope controls, Henn protections, Royal Companion review, Hall of Veils work and Companion resentment remain active.
-
-Episode 16 unsigned note and rope-carrying questioner remain unresolved. Hunt tester/sponsor, false horn, hunt rope, unidentified riders, fraudulent rope issue and charcoal marks remain unresolved.
+Red Ford survey/cattle/toll/arson/Pavel-arrow questions; unidentified color-hearsay carter; Valcere commissioning authority; Corin Varo/Edevane authorization; Harl/west-service questioner; Selise/Ysabet trust; Mera culpability/daughter economy; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Kaelmont independence; Canon Merel grievance; Hall of Veils work; Episode 16 unsigned note/rope questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler compensation; Kaelmont carriage terms; Lysa Quill engagement; Dena/Hale continuity; deeper stair authorization; Damaris/Tomas logistics; Jeron Bellisar injury; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door.
 
 ## Immediate handoff
 
-Episode 26 — *An Empty Throne* is next. The coup must begin inside Edselsto through established human systems. Episode 25 has now seeded active seams without making defenders stupid: legitimate illness/staff substitution, obsolete paperwork inside a valid change, authentic credentials used at the wrong time, falsely attributed roster instructions, a servant studying verification routines, and a false/altered message that reached Luceran through a known messenger. Bram and Edrik are already noticing anomalies and checking them.
+Episode 27 — *Castle Taken* is next. The coup must become openly successful through ordinary force while defenders remain competent. The crown is a known objective. Bram's loyal islands, Anja's junction, Ardel's roadblock, Calienne's chapel, the archive, Pera's warning route and Mera's crown-storage clue must have consequences. Sir Aven's sincere coup theory remains distinct from actors willing to exploit the seizure for other ends.
 
 ## Hard exclusions
 
@@ -72,6 +80,6 @@ Episode 26 — *An Empty Throne* is next. The coup must begin inside Edselsto th
 - No containment/prison/castle-interface truth or buried-entity terminology.
 - No sentient-castle proof.
 - No candle extinction.
-- No omniscient interpretation of stair or lights.
+- No supernatural security solution.
 - No premature hunt-sponsor identification.
-- No assumption that Valcere, hunt evidence, west-service evidence, capital rumor and Red Ford belong to one network.
+- No assumption that Valcere, hunt evidence, west-service evidence, capital rumor, Red Ford and coup all belong to one network.
