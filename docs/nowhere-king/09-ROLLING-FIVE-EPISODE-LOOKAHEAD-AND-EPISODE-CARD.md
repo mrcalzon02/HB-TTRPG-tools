@@ -50,6 +50,20 @@ Which non-royal character advances an objective that would matter even if the ki
 ### Action / adventure
 If present: objective, terrain, opposition, resources, command, cost, and aftermath.
 
+For earned climactic combat, add a **room-by-room / position-by-position battle map** rather than collapsing the action into a montage:
+- entry point and immediate objective;
+- who holds the position and why;
+- what each side knows;
+- architecture, cover, choke points and escape routes;
+- named or functionally important casualties;
+- surrender / defection / rescue opportunities;
+- side-character action independent of the king;
+- material damage and spent resources;
+- what changes when the position falls or holds;
+- which consequence propagates into the next room.
+
+Finales may exceed normal episode length substantially when this causal combat detail is necessary.
+
 ### Institutional / material reality
 What money, labor, roads, food, rooms, servants, guards, archives, construction, corpses, supply, healers, bureaucracy, horses, or messages make the episode real?
 

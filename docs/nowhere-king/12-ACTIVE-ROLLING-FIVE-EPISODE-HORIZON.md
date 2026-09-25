@@ -19,35 +19,58 @@ Edselsto obeys publicly and impossibly. Gate mechanisms move without living oper
 
 The response must shock both sides. Luceran should not understand what he has done before Rhyse or another living commander converts the opening into action.
 
-The retaking is human and bloody. The first people through can die. Defenders shoot, surrender, defect, panic or fight according to their own beliefs and relationships. Rhyse, Miren, Ardel, Mara, Anja, Bram, Calienne's network, servants, guards and ordinary workers must materially shape the battle. Edselsto does **not** guide swords, select targets, murder enemies, reveal perfect routes or solve command problems.
+Episode 31 launches the retaking rather than being required to finish it. The breach should be ugly and immediate: gatehouse defenders fire into the first wave, attackers die in the threshold, some coup soldiers surrender or defect while others fight, and familiar defenders recognize familiar attackers. Rhyse, Miren, Ardel, Mara, Anja, Bram, Calienne's network, servants, guards and ordinary workers must materially shape the fighting. Edselsto does **not** guide swords, select targets, murder enemies, reveal perfect routes or solve command problems.
 
-Montegrain remains the personal betrayal payoff. He must survive the battle, be cornered in or near the throne room, and be captured alive while waiting on Luceran's mercy. His survival is mandatory because Luceran must face the human being who betrayed him rather than receiving emotional convenience through death.
+Use enough room-level detail to make the castle's accumulated geography matter: gatehouse, receiving approaches, lower halls, service corridors, barracks routes and the first interior choke points can each become distinct tactical problems. Named casualties, broken formations, rescued wounded, improvised barricades, contradictory orders and side-character choices should carry forward rather than resetting between scenes.
 
-Aven and Rusk remain distinct actors. Their conduct during the retaking should follow their established motives rather than flattening the coup into one faction. Do not make Montegrain retroactively responsible for every prior hostile action.
+Aven, Rusk and Montegrain remain distinct actors. Their conduct must follow established motives rather than flattening the coup into one faction. Do not make Montegrain retroactively responsible for every prior hostile action.
 
 All seven ancestral lights remain lit.
 
-**Exit target:** Edselsto is retaken by living forces after the castle opens the gates; Montegrain is alive in custody in the throne room; the supernatural obedience is undeniable; the immediate political and moral aftermath is unresolved.
+**Length provision:** Episode 31 may run longer than a standard episode. Do not compress the first phase of the breach merely to hit a nominal hour-scale size.
 
-## Season 1 Episode 32 — Sovereign — LOCKED / SEASON-FINALE
+**Exit target:** Luceran's force has entered Edselsto and the retaking is irreversibly underway, but the castle is not yet cleanly secured. The battle continues into the oversized finale.
 
-Process the immediate aftermath rather than skipping to a clean victory. The throne room and surrounding halls are full of wounded, prisoners, contradictory surrender claims, dead staff, damaged rooms, surviving evidence and competing demands for punishment.
+## Season 1 Episode 32 — Sovereign — LOCKED / OVERSIZED SEASON-FINALE
 
-Montegrain must remain physically present as Luceran's captured one-time friend. The court argues what to do with him while Luceran is exhausted from battle and emotionally compromised. Aven's surrender terms, Rusk's separate command, prisoner classification, Mera's culpability, Edrik and Lio Venn's deaths, wounded care and property/record provenance all remain live.
+Episode 32 is explicitly permitted to be **much, much longer than a normal episode**. Its primary job is to let the earned climax breathe.
 
-Do not let the supernatural opening erase human law. The castle opened the gate; it did not issue a verdict.
+Continue the retaking room by room through spaces the audience already knows. Do not montage from breached gate to throne room. Use the season's physical geography and social history as combat terrain: receiving rooms, kitchens, service stairs, guard routes, galleries, chapel approaches, archive corridors, family passages, council rooms, great hall approaches and throne approaches should matter where dependency-valid.
 
-As the argument continues, Luceran finally slumps into the throne from exhaustion rather than staging a ceremonial restoration. Only then does the first personified manifestation appear: a floating pale silver theatrical mask before him.
+The combat may be grisly. Show the bodily cost of close fighting: bolts at short range, spear wounds in choke points, slipping on blood, crushed fingers at doors, smoke, broken teeth, panic, wounded people dragged under tables or through service routes, surrendered men trying not to be mistaken for active defenders, and exhausted fighters killing people they recognize. Violence must remain consequential rather than decorative.
+
+Every retained combat sequence must answer:
+- who is trying to take or hold this room;
+- why the room matters;
+- what each side knows;
+- who commands locally;
+- which recurring or low-status character changes the outcome;
+- who is wounded, killed, captured, rescued, defects or surrenders;
+- what physical damage occurs;
+- what evidence, supplies, routes or relationships survive the fight;
+- how the result changes the next room.
+
+The castle's supernatural contribution remains bounded to the opened access established in Episode 31. It does not kill coup soldiers, choose targets, provide perfect navigation, close traps around enemies, or erase tactical uncertainty. Living people retake Edselsto.
+
+Montegrain is the personal betrayal payoff and must survive the fighting. The room-by-room battle ultimately drives him back to the throne room or its immediate approach, where he is cornered and captured alive. He must face Luceran's mercy. Do not give Luceran the emotional convenience of Montegrain dying heroically, villainously or accidentally in battle.
+
+Aven and Rusk remain separate political and military problems. Surrender terms, medical neutrality and prior protections continue to affect who fights, who yields, who can be lawfully detained, and who later claims atrocity or betrayal. Side characters should exploit or defend those rules even while the fighting is chaotic.
+
+After the fighting, do not immediately cut to quiet. Let the throne room fill with wounded people, prisoners, officers, healers, contradictory accounts and demands for judgment. The argument over Montegrain, surviving coup leaders, surrender protections and the cost of the retaking happens while Luceran is physically exhausted and still carrying the battle on him.
+
+Only then does Luceran finally slump into the throne because his body is giving out, not as a ceremonial restoration.
+
+The first personified manifestation appears: a floating pale silver theatrical mask before him.
 
 It says:
 
 **"Your Majesty."**
 
-That is the season-ending supernatural step-change and the beginning of the Useful Monster era. Do not explain what the mask is. Do not reveal containment truth, prison truth or the castle-interface relationship.
+That is the season-ending supernatural step-change and the beginning of the Useful Monster era. Do not explain the mask. Do not reveal containment truth, prison truth or the castle-interface relationship.
 
 All seven ancestral lights remain lit.
 
-**Exit target:** Season One ends at the moment Luceran discovers that, after living people betrayed him, Edselsto appears capable of perfect obedience.
+**Exit target:** Season One ends only after the bloody human retaking, Montegrain's living capture, the immediate argument over justice and mercy, and the mask's first **"Your Majesty."** The final emotional proposition is that people betrayed Luceran while Edselsto, apparently, obeyed.
 
 ## Season 2 Episode 1 — The Useful Monster — LOCKED / NEW-SEASON ENTRY
 

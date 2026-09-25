@@ -239,16 +239,20 @@ At the same time Edselsto becomes a royal works settlement. The castle is repair
 **Handoff:** Ordinary entry options fail.
 
 ### 31 — Open the Gates
-**Plot engine:** The king gives the unprecedented direct command to Edselsto. Spectral mechanisms and black miasma open access without killing enemies for him.
+**Plot engine:** The king gives the unprecedented direct command to Edselsto. Spectral mechanisms and black miasma open access without killing enemies for him. The stunned loyal force converts the impossible opening into an immediate breach.
 
-**Ensemble / theory-of-mind:** Everyone who witnesses it must revise their model of castle and crown.
+**Ensemble / theory-of-mind:** Everyone who witnesses it must revise their model of castle and crown, but there is no time for consensus. Commanders, defenders, servants, wounded people, coup supporters and wavering guards react differently while the battle begins.
 
-**Handoff:** The loyal army retakes Edselsto.
+**Combat scale:** Episode 31 may exceed normal length, but it does not need to finish the retaking. Establish the gatehouse slaughter, first penetrations, fractures among coup defenders, rescue opportunities, and the tactical reality that Edselsto has opened access but will not fight the battle for Luceran.
+
+**Handoff:** The loyal army is inside Edselsto and the retaking is underway room by room.
 
 ### 32 — Sovereign
-**Plot engine:** Funerals, arrests, triage, and political accounting follow. Alone afterward, the king hears Edselsto address him clearly as sovereign.
+**Plot engine:** This is an intentionally oversized season finale. Continue the retaking in sustained, grisly room-by-room combat through familiar spaces of Edselsto rather than compressing the battle into a summary. The fighting culminates with Montegrain cornered and captured alive in or immediately before the throne room. Only after the physical struggle ends do triage, prisoner arguments, mercy, blame, arrests and political accounting crowd the room. Exhausted and bloodied, Luceran finally collapses into the throne; the pale silver theatrical mask manifests and addresses him: **"Your Majesty."**
 
-**Ensemble / theory-of-mind:** The comforting idea forms: the castle may be the one inheritance that cannot betray him. Living allies are already uneasy.
+**Ensemble / theory-of-mind:** Every major surviving faction and recurring side-character lane should materially affect the battle or its aftermath. Familiar rooms should carry remembered social meaning as they become tactical spaces. The comforting idea then forms: after human betrayal, the castle appears to be the one inheritance that simply obeyed. Living allies have immediate reasons to find that comfort incomplete or dangerous.
 
-**Handoff:** Season Two starts from supernatural participation in government.
+**Length provision:** Episode 32 may be much, much longer than a normal episode. Do not cut room-by-room fighting, casualty consequences, surrender decisions, rescues, betrayals, recognitions, or the captured-friend confrontation merely to preserve the ordinary hour-scale rhythm.
+
+**Handoff:** Season Two starts from supernatural participation in government and the emotionally seductive proposition of the Useful Monster.
 

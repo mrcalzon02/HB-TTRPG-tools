@@ -139,6 +139,22 @@ Typical rhythm:
 
 An episode is not filler if it materially changes character, relationship, obligation, knowledge, resource, institution, place, or future causality.
 
+## Climax-length exception
+
+The normal one-hour / 5–8-sequence episode rhythm is a baseline, not a ceiling. Season finales, coup retakings, major battles, catastrophic collapses, and other earned convergence events may run substantially longer when compression would erase causality, geography, casualties, side-character agency, or emotional consequence.
+
+For a climactic battle, do not summarize a fortress retaking as a montage merely to preserve ordinary episode length. If the audience has spent a season learning the rooms, stairs, offices, service corridors, chapel, gatehouse, archives, kitchens, galleries, barracks, and throne approaches, the climax may revisit those spaces room by room and make their accumulated history tactically meaningful.
+
+Extended combat still obeys ensemble and causality rules:
+- every room has an objective, defenders, attackers, terrain, knowledge state, and consequence;
+- casualties are specific people or functions, not decorative gore;
+- surrender, panic, defection, mercy, revenge, confusion, friendly recognition, and mistaken identity remain possible;
+- low-status workers and household staff can change routes, rescue wounded, barricade doors, identify uniforms, carry messages, or expose shortcuts;
+- supernatural aid never replaces the human fighting unless canon explicitly requires it;
+- room-by-room violence must alter relationships, command, evidence, staffing, political legitimacy, or later grief.
+
+The final episode of a season may be **much longer than standard** when it needs to contain the full physical culmination and its immediate emotional/political landing. Do not cut away from earned grisly combat merely to hit a nominal episode size.
+
 ## Five active story lanes
 
 Most episodes should materially advance at least three:
