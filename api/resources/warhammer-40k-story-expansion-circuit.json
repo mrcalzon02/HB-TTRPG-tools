@@ -178,7 +178,146 @@
       "title": "Of Blood and Wires: The Litanies of Tenelja Station",
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
-      "status": "eligible-next"
+      "status": "architected-active",
+      "currentEndpoint": "Source story complete: Sister Arbentia finishes another Tenelja Station medicae shift after helping keep a catastrophically void-burned Xanadu Salvage Company patient alive. She remains a low-ranking healer caught between Sister Bethany's devotional medicine and Magos Biologis-Abstrator Abraxas 8207's mechanistic practice, hopes to see her intermittent lover Rix on the following day, and remains denied access to the scriptorum archives despite being judged capable because the station has no bureaucratic need for her advancement.",
+      "nextSlice": "Begin the continuation with the promised next-day meeting with Rix and let the surviving Xanadu patient's accident become a practical medicae/salvage consequence rather than an instant conspiracy reveal. Establish what Rix knows, what Arbentia wants from study, and what Tenelja routinely fails to provide before escalating the station's medical and infrastructure pressures.",
+      "eraLock": {
+        "era": "Late Imperial / 41st Millennium station-life setting as established by the source story.",
+        "allowedInstitutions": [
+          "Adeptus Ministorum / Ecclesiarchy",
+          "local medicae order / Silent Daughters of Penance and Balm",
+          "Adeptus Mechanicus / Magos Biologis",
+          "Imperial salvage and station bureaucracy",
+          "Navis Imperialis where source-established"
+        ],
+        "forbiddenDrift": "Do not import famous canon characters, galaxy-level stakes, or unsupported later-history knowledge. Keep Tenelja's pressures local, institutional, medical, industrial and human unless the story itself earns a wider connection."
+      },
+      "authorshipLineageRule": "All future continued pieces in this line must include: Based on the work of: Of Blood and Wires: The Litanies of Tenelja Station.",
+      "chapterCapRule": "Target 18 chapters for this contained Tenelja arc; hard cap 24. Do not expand into an indefinite station chronicle merely because the setting can support one.",
+      "fullArcAuthority": {
+        "finalState": "The Tenelja arc ends after Arbentia has crossed from competent invisible labor into recognized medical responsibility during a station-scale casualty crisis, with her access to advanced study materially changed and her relationship with Rix forced into an explicit durable form. Tenelja itself survives damaged rather than being conveniently destroyed or transformed, Bethany and Abraxas remain functioning professionals whose opposed doctrines have both been tested, and the reader understands which failures were ordinary institutional decay and which were preventable human choices.",
+        "completionBoundary": "End the book once the acute casualty crisis is resolved, the surviving wards and infrastructure are stable enough to return to ordinary Tenelja misery, responsibility for the preventable failures has propagated into station procedure, Arbentia's study/status question has received a concrete answer, and Arbentia and Rix have made a choice about what they are to each other. Later station incidents belong to a new story, not Chapter 19 by inertia.",
+        "targetBudget": {
+          "targetChapters": 18,
+          "hardCap": 24,
+          "sourceEquivalent": "Source story functions as Chapters 1-3 of the arc; continuation should normally close within roughly 15 additional chapters."
+        },
+        "macroArcs": [
+          {
+            "range": "1-3",
+            "name": "Blood and Wires",
+            "purpose": "Source baseline: establish Tenelja's medical culture, Bethany/Abraxas doctrinal friction, Arbentia's invisible competence, the void-burned Xanadu survivor, Rix, and the locked scriptorum."
+          },
+          {
+            "range": "4-7",
+            "name": "What Survives the Shift",
+            "purpose": "Pay the promised Rix meeting; follow the Xanadu injury into salvage-work consequences; show Arbentia seeking knowledge she is denied while recurring station failures make that denial increasingly costly."
+          },
+          {
+            "range": "8-12",
+            "name": "The Cost of Necessary Ignorance",
+            "purpose": "A cluster of industrial/void casualties stresses Tenelja. Arbentia's accumulated observations matter operationally. Bethany and Abraxas must each be right about different parts of treatment, forcing cooperation rather than a winner-takes-all theology debate."
+          },
+          {
+            "range": "13-16",
+            "name": "Triage of a Dying Station",
+            "purpose": "A station-system failure converts chronic decay into an acute casualty crisis. Arbentia receives responsibility because competence and scarcity leave no cleaner option. Rix's salvage knowledge and access become useful but expose him to real cost."
+          },
+          {
+            "range": "17-18",
+            "name": "After the Alarms",
+            "purpose": "Resolve the wards, accountability, study access and Arbentia/Rix relationship. Show changed procedure and ordinary work resuming; close before a fresh mystery or catastrophe can restart the plot."
+          }
+        ],
+        "irreversibleBeats": [
+          "Arbentia and Rix meet as promised, converting the source's private hope into an on-page relationship baseline.",
+          "A preventable medical or infrastructure failure occurs because useful knowledge is institutionally rationed or jurisdictionally trapped; it cannot be blamed on generic stupidity.",
+          "Bethany and Abraxas are forced to rely on one another's method in a case neither doctrine can solve alone, permanently changing how their arguments function without making either abandon belief.",
+          "Arbentia acts beyond her nominal station during the casualty crisis and becomes accountable for the outcome; she cannot return to being wholly invisible afterward.",
+          "Rix chooses whether to risk livelihood, salvage standing or bodily safety to help Arbentia/the ward; the relationship gains a cost rather than remaining an off-shift comfort.",
+          "The crisis leaves Tenelja with a concrete procedural or resource consequence that remains after the patients stop screaming."
+        ],
+        "characterTrajectories": {
+          "Arbentia": "Invisible competent nurse -> frustrated would-be scholar -> practitioner whose denied learning becomes an operational problem -> reluctant decision-maker under casualty pressure -> recognized responsibility with a concrete answer about further study. Do not turn competence into sudden genius or sainthood.",
+          "Rix": "Pleasurable off-shift connection and salvage contact -> source of specific practical knowledge and competing obligations -> person who must choose what Arbentia and Tenelja are worth risking -> durable relationship outcome, whether committed, bounded or ended. Do not reduce him to rescue muscle.",
+          "Bethany": "Confident devotional healer -> confronted by cases where conviction cannot substitute for mechanism -> learns to cooperate without surrendering faith. Her compassion and institutional rigidity must both remain real.",
+          "Abraxas8207": "Mechanistic solver -> confronted by cases where optimization cannot account for consent, morale, faith or human endurance -> adapts practice without becoming sentimental or renouncing Mechanicus logic.",
+          "XanaduSurvivor": "Evidence that survival creates debts, paperwork and downstream consequences; may connect medicae and salvage threads, but must not become a convenient secret villain or exposition device."
+        },
+        "seedPayoffObligations": [
+          {
+            "seed": "The promised next-day meeting with Rix.",
+            "payoff": "Show the meeting early; establish their ordinary intimacy before crisis tests it."
+          },
+          {
+            "seed": "Arbentia's denied scriptorum access despite aptitude.",
+            "payoff": "Make restricted knowledge causally relevant, then resolve her access/status by the ending rather than merely granting a reward."
+          },
+          {
+            "seed": "The void-burned Xanadu patient survived at enormous cost.",
+            "payoff": "Carry medical debt, work incapacity, salvage-company consequences or testimony forward; survival must have aftermath."
+          },
+          {
+            "seed": "Bethany and Abraxas repeatedly argue while Arbentia notices the patient.",
+            "payoff": "Escalate from argument-as-routine to forced complementary practice under pressure."
+          },
+          {
+            "seed": "Tenelja's flickering lights, gravity whine, rust and decaying systems.",
+            "payoff": "At least one acute failure must grow from previously visible maintenance reality, with causal warning signs rather than a surprise disaster."
+          },
+          {
+            "seed": "Arbentia's private room, music and small comforts.",
+            "payoff": "Use ordinary private life as something crisis threatens and as a measure of what survival preserves; do not treat domestic texture as disposable filler."
+          }
+        ],
+        "continuityControls": [
+          "Reader knowledge and character knowledge remain separate; Arbentia begins with no hidden explanation for the Xanadu accident beyond what her role exposes.",
+          "Tenelja's dysfunction must arise from maintenance debt, resource rationing, jurisdiction, doctrine, staffing and incentives rather than everyone becoming incompetent.",
+          "Do not convert the source's local medical/station-life scale into a daemon, xenos, Inquisitorial or galaxy-saving plot without a separately authorized later arc.",
+          "Deaths and injuries consume named expertise, relationships, supplies, beds, time and morale; casualties are not grimdark decoration.",
+          "Shared knowledge shortens dialogue. Bethany, Abraxas and Arbentia do not repeatedly explain their own established doctrines or jobs to one another.",
+          "The source story remains canonical baseline prose; architecture governs continuation and must not rewrite its events."
+        ],
+        "installmentMap": [
+          "4: Rix meeting; Xanadu survivor aftermath; define what Arbentia knows and wants.",
+          "5: Scriptorum petition consequence and a routine case where missing knowledge costs time.",
+          "6: Salvage-side visit or evidence grounds Tenelja's maintenance economy and Rix's obligations.",
+          "7: First preventable near-miss ties medical and infrastructure jurisdictions together.",
+          "8: Casualty influx begins; Bethany and Abraxas disagree for materially different reasons.",
+          "9: Arbentia identifies a pattern but lacks authority/resources to act cleanly.",
+          "10: A treatment succeeds only through combined doctrinal/mechanical practice.",
+          "11: Administrative response protects throughput before learning; consequences accumulate.",
+          "12: Rix faces a salvage-company conflict that makes helping Arbentia costly.",
+          "13: Seeded station-system weakness fails under load and creates the main casualty event.",
+          "14: Arbentia is forced into responsibility beyond nominal rank.",
+          "15: Rix's practical access/knowledge matters; Bethany and Abraxas divide work intelligently.",
+          "16: Crisis peak and irreversible choice; stabilize the station without miraculous repair.",
+          "17: Accountability, ward aftermath, losses and procedural changes.",
+          "18: Resolve study/status and Arbentia/Rix; return Tenelja to changed ordinary life and end."
+        ],
+        "rollingNearTermWindow": [
+          {
+            "installment": "4",
+            "objective": "Pay the Rix promise and establish ordinary relationship behavior before escalation."
+          },
+          {
+            "installment": "5",
+            "objective": "Make the locked scriptorum and rationed advancement produce a small concrete operational consequence."
+          },
+          {
+            "installment": "6",
+            "objective": "Ground Xanadu salvage work, station maintenance reality and Rix's competing obligations."
+          },
+          {
+            "installment": "7",
+            "objective": "Create the first causally seeded near-miss linking medicae limitations to infrastructure decay."
+          },
+          {
+            "installment": "8",
+            "objective": "Begin the larger casualty pressure while preserving bounded knowledge and competent institutional actors."
+          }
+        ]
+      }
     },
     {
       "id": "house-drenal",
