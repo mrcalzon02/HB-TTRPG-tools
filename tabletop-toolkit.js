@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.2.0';
+  const VERSION = '1.2.1';
   const STORAGE_KEY = 'hb-ttrpg-tabletop-toolkit-v1';
   const HISTORY_LIMIT = 60;
   const state = loadState();
@@ -892,8 +892,10 @@
       dice.length + ' three-dimensional dice: ' + dice.map(function(die) { return (die.fate ? 'dF' : 'd' + die.sides) + ' result ' + die.display; }).join(', ')
     );
     diceTrayBodies = buildDiceBodies(dice);
-    const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (instant || reducedMotion) {
+    // Only restored/history rolls may render instantly. A user-triggered roll always
+    // runs the physical throw animation; OS/browser reduced-motion must not silently
+    // turn the dice roller back into a static result display.
+    if (instant) {
       diceTrayBodies.forEach(function(body) {
         body.x = body.targetX;
         body.z = body.targetZ;
