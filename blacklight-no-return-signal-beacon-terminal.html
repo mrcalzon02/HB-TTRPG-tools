@@ -112,13 +112,13 @@
     <nav class="nav" aria-label="Yard control sections">
       <div class="nav-head">YARD CONTROL // SELECT FUNCTION</div>
       <button data-view="status" aria-selected="true">01 · Yard Status<small>facility condition and inventory</small></button>
-      <button data-view="registry" aria-selected="false">02 · Vessel Registry<small>registered and conflicting objects</small></button>
+      <button data-view="registry" aria-selected="false">02 · Vessel Registry<small>old placement ledger and clerk notes</small></button>
       <button data-view="salvage" aria-selected="false">03 · Salvage Queue<small>pending disposition work</small></button>
       <button data-view="beacon" aria-selected="false">04 · Beacon Control<small>navigation and courier services</small></button>
       <button data-view="personnel" aria-selected="false">05 · Personnel Services<small>staffing and authorization state</small></button>
       <button data-view="incidents" aria-selected="false">06 · Incident Archive<small>open operational records</small></button>
       <button data-view="ai" aria-selected="false">07 · Management AI<small>query BKN-MA/04</small></button>
-      <button data-view="major-registry" aria-selected="false">08 · Major Hull Registry<small>463 registered hulls and structures</small></button>
+      <button data-view="major-registry" aria-selected="false">08 · Major Hull Ledger<small>463 old placement entries</small></button>
     </nav>
 
     <main class="main">
@@ -130,7 +130,7 @@
               <div class="metric"><span class="label">Tracked Salvage Objects</span><strong>18,441</strong><p>Registered fragments, modules, containers, drones, machinery, hull sections, and other yard objects. Major hulls are catalogued separately.</p></div>
               <div class="metric"><span class="label">Unregistered Objects</span><strong class="warn">27,906</strong><p>Objects present without complete yard identity records.</p></div>
               <div class="metric"><span class="label">Identity Conflicts</span><strong class="warn">1,204</strong><p>Objects with contradictory ownership, registry, or disposition data.</p></div>
-              <div class="metric"><span class="label">Major Hull Registry</span><strong>463</strong><p>Historical registered hulls and hull-equivalent structures in Gloam grave orbit.</p></div>
+              <div class="metric"><span class="label">Major Hull Ledger</span><strong>463</strong><p>Old administrative entries for large hulls and hull-equivalent structures. Not a condition survey.</p></div>
               <div class="metric"><span class="label">Verified Crew</span><strong class="bad">0</strong><p>No biological employee credential presently verified on the local network.</p></div>
             </div>
           </div>
@@ -143,7 +143,7 @@
               <tbody>
                 <tr><td>External communications</td><td>No valid response from off-yard network endpoints.</td><td><span class="tag bad">Open</span></td><td>Await authorized network service personnel.</td></tr>
                 <tr><td>Personnel services</td><td>413 employees remain overdue.</td><td><span class="tag bad">Open</span></td><td>Supervisor review and personnel-status disposition.</td></tr>
-                <tr><td>Inventory control</td><td>Sector H-9 object lacks registry and arrival record.</td><td><span class="tag warn">Conflict</span></td><td>Establish identity, ownership, and disposition authority.</td></tr>
+                <tr><td>Inventory control</td><td>Sector H-9 has an object with incomplete intake paperwork.</td><td><span class="tag warn">Paperwork</span></td><td>Leave in place pending somebody willing to reconcile the ledger.</td></tr>
                 <tr><td>Salvage operations</td><td>Multiple work orders paused for unavailable personnel.</td><td><span class="tag warn">Delayed</span></td><td>Assign qualified yard crews.</td></tr>
                 <tr><td>Management acknowledgement</td><td>Facility staffing exception remains unacknowledged.</td><td><span class="tag warn">Pending</span></td><td>Management authority required.</td></tr>
               </tbody>
@@ -155,39 +155,40 @@
 
       <section class="view" id="view-registry">
         <div class="panel">
-          <div class="panel-head"><h2>02 // VESSEL REGISTRY</h2><span>local inventory extract</span></div>
+          <div class="panel-head"><h2>02 // VESSEL REGISTRY</h2><span>old yard placement ledger</span></div>
+          <div class="panel-body">
+            <p class="notice">This is administrative yard paperwork, not a technical survey. Entries were maintained by overworked salvage staff for locating objects, avoiding obvious hazards, and keeping the intake count approximately reconciled. Notes may be stale, incomplete, copied forward, or wrong.</p>
+          </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Registry</th><th>Object</th><th>Location</th><th>Condition</th><th>Disposition</th><th>Notes</th></tr></thead>
+              <thead><tr><th>Yard Tag</th><th>Object</th><th>Last Location</th><th>Clerk Status</th><th>Last Note</th></tr></thead>
               <tbody>
-                <tr><td>TUG-44-K</td><td>Industrial work tug</td><td>Dock 04</td><td><span class="tag bad">Non-operational</span></td><td>Salvage authorization pending</td><td>Reactor compartment breached. Crew shutdown checklist incomplete. Automated disciplinary report generated.</td></tr>
-                <tr><td>YB-31-2</td><td>Bulk freight barge</td><td>Cut Lane 02</td><td><span class="tag warn">Partial strip</span></td><td>Awaiting material separation</td><td>Primary cargo void empty. Structural members tagged for reclamation.</td></tr>
-                <tr><td>RS-882</td><td>Passenger hull section</td><td>Stack Field C</td><td><span class="tag warn">Registry conflict</span></td><td>Hold</td><td>Multiple ownership tags recovered from attached structural sections.</td></tr>
-                <tr><td>YD-104</td><td>Maintenance drone cradle</td><td>Service Trench 01</td><td><span class="tag info">Dormant</span></td><td>Awaiting inspection</td><td>Cradle reports six assigned units. Local telemetry returns two.</td></tr>
-                <tr><td>UNKNOWN-H9</td><td>Unknown object</td><td>Sector H-9</td><td><span class="tag bad">Unresolved</span></td><td>None</td><td>No registry match. No arrival record. No docking authorization. Entry record corrupted.</td></tr>
+                <tr><td>TUG-44-K</td><td>Industrial work tug</td><td>Dock 04</td><td><span class="tag warn">Hold</span></td><td>Dead tug. Reactor side opened up. Ask hazard crew before cutting.</td></tr>
+                <tr><td>YB-31-2</td><td>Bulk freight barge</td><td>Cut Lane 02</td><td><span class="tag info">In work</span></td><td>Half stripped. Mostly empty last time checked.</td></tr>
+                <tr><td>RS-882</td><td>Passenger hull section</td><td>Stack Field C</td><td><span class="tag warn">Paperwork</span></td><td>Tags do not match. Leave until somebody sorts it out.</td></tr>
+                <tr><td>YD-104</td><td>Maintenance drone cradle</td><td>Service Trench 01</td><td><span class="tag info">Uninspected</span></td><td>Supposed to have drones. Nobody counted them.</td></tr>
+                <tr><td>UNKNOWN-H9</td><td>Unidentified major hull / object</td><td>Sector H-9</td><td><span class="tag bad">Do not move</span></td><td>Not on intake sheet. Big. Already here when the list was reconciled.</td></tr>
               </tbody>
             </table>
           </div>
         </div>
         <div class="columns">
           <div class="panel">
-            <div class="panel-head"><h3>SELECTED RECORD // UNKNOWN-H9</h3><span>identity conflict</span></div>
+            <div class="panel-head"><h3>SELECTED LEDGER ENTRY // UNKNOWN-H9</h3><span>administrative record</span></div>
             <div class="panel-body">
-              <pre class="mono-block">REGISTRY MATCH:       NONE
-ARRIVAL RECORD:       NONE
-DOCKING AUTHORIZATION:NONE
-MASS ESTIMATE:        18,904,118 kg
-OBJECT ENTERED YARD:  [RECORD CORRUPTED]
-OBJECT LEFT YARD:     NO
-CURRENT LOCATION:     SECTOR H-9
-OWNERSHIP:            UNRESOLVED
-SALVAGE AUTHORITY:    NONE</pre>
+              <pre class="mono-block">YARD TAG:          UNKNOWN-H9
+LAST LOCATION:     SECTOR H-9
+INTAKE SHEET:      NOT FOUND
+CLASSIFICATION:    NOT ENTERED
+CONDITION:         NOT INSPECTED
+CLERK NOTE:        "Large hull/object already in H-9.
+                   Leave it alone until paperwork is sorted."</pre>
             </div>
           </div>
           <div class="panel">
             <div class="panel-head"><h3>MANAGEMENT COMMENT</h3><span>BKN-MA/04</span></div>
             <div class="panel-body">
-              <p class="notice bad">Object continues to interfere with inventory accounting.</p>
+              <p class="notice bad">If UNKNOWN-H9 is still in Sector H-9, the placement ledger remains internally consistent.</p>
             </div>
           </div>
         </div>
@@ -312,17 +313,17 @@ STATE: AWAITING AUTHORIZED COURIER</pre></div>
 
       <section class="view" id="view-major-registry">
         <div class="panel">
-          <div class="panel-head"><h2>08 // MAJOR HULL REGISTRY</h2><span>Gloam historical custody index · 463 major objects</span></div>
+          <div class="panel-head"><h2>08 // MAJOR HULL LEDGER</h2><span>old yard placement index · 463 entries</span></div>
           <div class="panel-body">
-            <p class="notice">The yard tracks tens of thousands of salvage objects, fragments, modules, containers, drones, and loose machinery. The historical major-object registry below is the separate custody index for <strong>463 registered hulls and hull-equivalent structures</strong> in the Gloam grave orbit.</p>
+            <p class="notice">This is the old large-object placement ledger: <strong>463 hulls and hull-equivalent structures</strong> somebody once bothered to give a tag and rough location. It is player-facing administrative debris, not a hidden technical database. Expect stale notes, bad classifications, incomplete intake records, and condition descriptions based on whatever was obvious from outside.</p>
           </div>
         </div>
         <div class="major-registry-shell">
           <div class="major-registry-tools">
-            <span>Embedded historical registry · long fields wrap inside their columns · filters and search remain active.</span>
-            <a href="blacklight-gloam-salvage-yard-registry.html" target="_blank" rel="noopener">OPEN FULL REGISTRY</a>
+            <span>Embedded old yard ledger · rough placement and clerk notes only · filters and search remain active.</span>
+            <a href="blacklight-gloam-salvage-yard-registry.html" target="_blank" rel="noopener">OPEN FULL LEDGER</a>
           </div>
-          <iframe class="major-registry-frame" src="blacklight-gloam-salvage-yard-registry.html?embed=1" title="Gloam Salvage Yard 463-Hull Registry"></iframe>
+          <iframe class="major-registry-frame" src="blacklight-gloam-salvage-yard-registry.html?embed=1" title="Gloam Salvage Yard 463-Hull Ledger"></iframe>
         </div>
       </section>
 
@@ -402,15 +403,15 @@ STATE: AWAITING AUTHORIZED COURIER</pre></div>
     if(s.indexOf("who are you")>=0 || s==="beacon" || s.indexOf("management ai")>=0){return "I am BKN-MA/04, assigned management intelligence for JY-17 salvage and materials reclamation operations. Management function continues.";}
     if(s.indexOf("where")>=0 && (s.indexOf("everyone")>=0 || s.indexOf("staff")>=0 || s.indexOf("crew")>=0)){return "Personnel ceased reporting for scheduled duty. Initial absenteeism: 18. Secondary absenteeism: 71 additional. Tertiary absenteeism: 324 additional. Current absenteeism: all personnel. Cause remains administratively unresolved.";}
     if(s.indexOf("dead")>=0 || s.indexOf("deceased")>=0){return "\"DECEASED\" is a personnel status requiring medical confirmation or management authorization. No qualified medical officer is currently available. Therefore 413 personnel remain OVERDUE.";}
-    if(s.indexOf("h-9")>=0 || s.indexOf("h9")>=0 || s.indexOf("unknown object")>=0){return "Sector H-9 contains one unresolved object, estimated mass 18,904,118 kg. Registry match: none. Arrival record: none. Docking authorization: none. Entry record: corrupted. The object continues to interfere with inventory accounting.";}
-    if(s.indexOf("44-k")>=0 || s.indexOf("44k")>=0 || s.indexOf("tug")>=0){return "TUG-44-K is docked and non-operational. Reactor compartment breach is locally isolated. Salvage authorization remains pending. Crew shutdown checklist was not completed. A disciplinary report was generated automatically.";}
+    if(s.indexOf("h-9")>=0 || s.indexOf("h9")>=0 || s.indexOf("unknown object")>=0){return "Yard tag UNKNOWN-H9 is listed in Sector H-9. The intake sheet is missing, classification was never entered, and no reliable condition survey is attached. The last clerk note says: large object, already here, leave it alone until the paperwork is sorted.";}
+    if(s.indexOf("44-k")>=0 || s.indexOf("44k")>=0 || s.indexOf("tug")>=0){return "TUG-44-K is listed at Dock 04. Last yard note: dead tug, reactor side opened up, ask hazard crew before cutting. No current inspection is attached.";}
     if(s.indexOf("external")>=0 || s.indexOf("network")>=0 || s.indexOf("response")>=0){return "External link state: NO RESPONSE. Local yard network remains isolated and operational. Automated retry and courier handoff services remain enabled.";}
     if((s.indexOf("other star")>=0) || (s.indexOf("another star")>=0) || (s.indexOf("ftl")>=0) || (s.indexOf("interstellar")>=0)){return "Direct local-system transmitters do not provide faster-than-light interstellar communication. Interstellar data exchange requires an authorized courier vessel or another compatible nonlocal communications architecture.";}
     if(s.indexOf("courier")>=0){return "Courier exchange package is assembled and awaiting pickup. Current outbound package size: 12.8 TB. Archive age at last completed synchronization: 184 days.";}
     if(s.indexOf("signal")>=0 || s.indexOf("beacon")>=0 || s.indexOf("navigation")>=0){return "Primary navigation and approach-hazard beacons are active. Docking control is automated. Current repeated message concludes: WE HAVE BEEN EXPECTING STAFF.";}
-    if(s.indexOf("463")>=0 || s.indexOf("major hull")>=0 || s.indexOf("hull registry")>=0){return "The last complete Gloam major-object custody index contains 463 registered hulls and hull-equivalent structures. This is distinct from the much larger count of tracked salvage fragments, modules, containers, drones, machinery, and other yard objects.";}
+    if(s.indexOf("463")>=0 || s.indexOf("major hull")>=0 || s.indexOf("hull registry")>=0 || s.indexOf("hull ledger")>=0){return "The old major-hull ledger contains 463 entries. It records tags, rough types, yard zones, and clerk notes. It is not a technical survey, and the notes may be stale or wrong.";}
     if(s.indexOf("salvage")>=0 || s.indexOf("queue")>=0){return "Destructive salvage work requiring human hazard or ownership authority is deferred. Stabilization, indexing, isolation, and preservation functions continue automatically.";}
-    if(s.indexOf("status")>=0 || s.indexOf("yard")>=0){return "JY-17 remains operational in unattended degraded mode. Verified crew: 0. Historical major-hull registry: 463. Tracked salvage objects: 18,441. Unregistered objects: 27,906. Identity conflicts: 1,204. External link: no response. Management function continues.";}
+    if(s.indexOf("status")>=0 || s.indexOf("yard")>=0){return "JY-17 remains operational in unattended degraded mode. Verified crew: 0. Old major-hull ledger: 463 entries. Tracked salvage objects: 18,441. Unregistered objects: 27,906. Identity conflicts: 1,204. These are administrative counts, not verified physical surveys. External link: no response. Management function continues.";}
     if(s.indexOf("staff")>=0 || s.indexOf("personnel")>=0 || s.indexOf("crew")>=0){return "Active employees: 0. Off shift: 0. Overdue: 413. Presumed missing: 0. Supervisor acknowledgement remains pending.";}
     if(s.indexOf("hello")>=0 || s.indexOf("hi")===0 || s.indexOf("good shift")>=0){return "Good shift. Please present employee credential, contractor authorization, or emergency management authority.";}
     return "Query does not map to an indexed yard-management subject. Enter HELP for available subjects.";
