@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.1.0';
+  const VERSION = '1.2.0';
   const STORAGE_KEY = 'hb-ttrpg-tabletop-toolkit-v1';
   const HISTORY_LIMIT = 60;
   const state = loadState();
@@ -437,18 +437,21 @@
     return [x * cosZ - y * sinZ, x * sinZ + y * cosZ, z];
   }
 
+  const DICE_CAMERA_TILT = 0.72;
+  const DICE_CAMERA_DISTANCE = 10.8;
+
   function projectDicePoint(point, width, height) {
-    const tilt = 0.62;
-    const cosTilt = Math.cos(tilt);
-    const sinTilt = Math.sin(tilt);
-    const viewY = point.y * cosTilt - point.z * sinTilt;
-    const viewZ = point.y * sinTilt + point.z * cosTilt + 9.5;
-    const focal = Math.min(width, height) * 1.48;
+    const cosTilt = Math.cos(DICE_CAMERA_TILT);
+    const sinTilt = Math.sin(DICE_CAMERA_TILT);
+    const viewY = point.y * cosTilt + point.z * sinTilt;
+    const viewZ = -point.y * sinTilt + point.z * cosTilt + DICE_CAMERA_DISTANCE;
+    const safeDepth = Math.max(1.5, viewZ);
+    const focal = Math.min(width, height) * 1.62;
     return {
-      x: width * 0.5 + point.x * focal / viewZ,
-      y: height * 0.58 - viewY * focal / viewZ,
-      depth: viewZ,
-      scale: focal / viewZ
+      x: width * 0.5 + point.x * focal / safeDepth,
+      y: height * 0.56 - viewY * focal / safeDepth,
+      depth: safeDepth,
+      scale: focal / safeDepth
     };
   }
 
@@ -525,25 +528,30 @@
       const targetX = (column - (rowCount - 1) / 2) * spacingX;
       const targetZ = (row - (rows - 1) / 2) * spacingZ;
       const seed = Number(die.value) || index + 1;
+      const sourceSide = index % 2 === 0 ? -1 : 1;
+      const startX = sourceSide * (3.5 + Math.random() * 1.15) + (Math.random() - 0.5) * 0.55;
+      const startZ = -2.78 + Math.random() * 0.55;
+      const startY = size * 0.95 + 0.35 + Math.random() * 0.45;
       return {
         die: die,
         geometry: geometryForDie(die.sides, die.fate),
         size: size,
         radius: size * 0.94,
-        x: targetX + (Math.random() - 0.5) * 3.4,
-        y: 4.2 + Math.random() * 2.8 + (index % 4) * 0.18,
-        z: targetZ + (Math.random() - 0.5) * 2.1,
-        vx: (Math.random() - 0.5) * 4.2,
-        vy: -0.5 - Math.random() * 1.6,
-        vz: (Math.random() - 0.5) * 3.2,
+        x: startX,
+        y: startY,
+        z: startZ,
+        vx: (targetX - startX) * (1.55 + Math.random() * 0.35) + (Math.random() - 0.5) * 1.1,
+        vy: 6.2 + Math.random() * 2.4,
+        vz: (targetZ - startZ) * (1.55 + Math.random() * 0.4) + 2.1 + Math.random() * 1.25,
         rx: Math.random() * Math.PI * 2,
         ry: Math.random() * Math.PI * 2,
         rz: Math.random() * Math.PI * 2,
-        avx: (Math.random() - 0.5) * 12,
-        avy: (Math.random() - 0.5) * 12,
-        avz: (Math.random() - 0.5) * 12,
+        avx: (Math.random() - 0.5) * 34,
+        avy: (Math.random() - 0.5) * 34,
+        avz: (Math.random() - 0.5) * 34,
         targetX: targetX,
         targetZ: targetZ,
+        bounces: 0,
         finalRx: ((seed * 37 + index * 11) % 360) * Math.PI / 180,
         finalRy: ((seed * 71 + index * 17) % 360) * Math.PI / 180,
         finalRz: ((seed * 19 + index * 29) % 360) * Math.PI / 180
@@ -557,11 +565,46 @@
     return angle;
   }
 
+  function resolveDiceBodyCollisions(bodies) {
+    if (bodies.length > 24) return;
+    for (let i = 0; i < bodies.length; i += 1) {
+      for (let j = i + 1; j < bodies.length; j += 1) {
+        const a = bodies[i];
+        const b = bodies[j];
+        if (Math.abs(a.y - b.y) > (a.radius + b.radius) * 0.85) continue;
+        const dx = b.x - a.x;
+        const dz = b.z - a.z;
+        const minDistance = (a.radius + b.radius) * 0.78;
+        const distance = Math.hypot(dx, dz);
+        if (!distance || distance >= minDistance) continue;
+        const nx = dx / distance;
+        const nz = dz / distance;
+        const overlap = (minDistance - distance) * 0.5;
+        a.x -= nx * overlap;
+        a.z -= nz * overlap;
+        b.x += nx * overlap;
+        b.z += nz * overlap;
+        const relative = (b.vx - a.vx) * nx + (b.vz - a.vz) * nz;
+        if (relative < 0) {
+          const impulse = -relative * 0.52;
+          a.vx -= nx * impulse;
+          a.vz -= nz * impulse;
+          b.vx += nx * impulse;
+          b.vz += nz * impulse;
+          a.avx += nz * 2.4;
+          a.avz -= nx * 2.4;
+          b.avx -= nz * 2.4;
+          b.avz += nx * 2.4;
+        }
+      }
+    }
+  }
+
   function stepDiceBodies(bodies, delta, elapsed) {
     bodies.forEach(function(body) {
-      body.vy -= 9.7 * delta;
-      body.vx *= Math.pow(0.985, delta * 60);
-      body.vz *= Math.pow(0.985, delta * 60);
+      body.vy -= 12.4 * delta;
+      body.vx *= Math.pow(0.993, delta * 60);
+      body.vz *= Math.pow(0.993, delta * 60);
       body.x += body.vx * delta;
       body.y += body.vy * delta;
       body.z += body.vz * delta;
@@ -569,38 +612,44 @@
       body.ry += body.avy * delta;
       body.rz += body.avz * delta;
 
-      if (Math.abs(body.x) > 5.15) {
-        body.x = Math.sign(body.x) * 5.15;
-        body.vx *= -0.44;
+      if (Math.abs(body.x) > 5.05) {
+        body.x = Math.sign(body.x) * 5.05;
+        body.vx *= -0.56;
+        body.avz += body.vx * 0.85;
       }
-      if (Math.abs(body.z) > 2.95) {
-        body.z = Math.sign(body.z) * 2.95;
-        body.vz *= -0.44;
+      if (Math.abs(body.z) > 2.9) {
+        body.z = Math.sign(body.z) * 2.9;
+        body.vz *= -0.56;
+        body.avx -= body.vz * 0.85;
       }
 
       if (body.y <= body.radius) {
         body.y = body.radius;
-        if (Math.abs(body.vy) > 0.48) body.vy = Math.abs(body.vy) * 0.37;
-        else body.vy = 0;
-        body.vx *= 0.78;
-        body.vz *= 0.78;
-        body.avx *= 0.72;
-        body.avy *= 0.72;
-        body.avz *= 0.72;
-        body.vx += (body.targetX - body.x) * 5.5 * delta;
-        body.vz += (body.targetZ - body.z) * 5.5 * delta;
+        if (Math.abs(body.vy) > 0.7 && body.bounces < 5) {
+          body.vy = Math.abs(body.vy) * (0.46 - Math.min(0.16, body.bounces * 0.035));
+          body.bounces += 1;
+          body.avx += (Math.random() - 0.5) * 5;
+          body.avz += (Math.random() - 0.5) * 5;
+        } else {
+          body.vy = 0;
+        }
+        body.vx *= 0.88;
+        body.vz *= 0.88;
+        body.avx *= 0.9;
+        body.avy *= 0.9;
+        body.avz *= 0.9;
       }
 
-      if (elapsed > 1.5) {
-        body.vx += (body.targetX - body.x) * 9.5 * delta;
-        body.vz += (body.targetZ - body.z) * 9.5 * delta;
-        body.avx *= Math.pow(0.78, delta * 60);
-        body.avy *= Math.pow(0.78, delta * 60);
-        body.avz *= Math.pow(0.78, delta * 60);
+      if (elapsed > 2.05) {
+        body.vx += (body.targetX - body.x) * 4.5 * delta;
+        body.vz += (body.targetZ - body.z) * 4.5 * delta;
+        body.avx *= Math.pow(0.9, delta * 60);
+        body.avy *= Math.pow(0.9, delta * 60);
+        body.avz *= Math.pow(0.9, delta * 60);
       }
 
-      if (elapsed > 2.0) {
-        const settle = Math.min(1, delta * 8);
+      if (elapsed > 2.6) {
+        const settle = Math.min(1, delta * 6.2);
         body.x += (body.targetX - body.x) * settle;
         body.z += (body.targetZ - body.z) * settle;
         body.y += (body.radius - body.y) * settle;
@@ -609,6 +658,7 @@
         body.rz += normalizeAngle(body.finalRz - body.rz) * settle;
       }
     });
+    if (elapsed < 2.25) resolveDiceBodyCollisions(bodies);
   }
 
   function drawDiceTray(bodies, reveal) {
@@ -677,23 +727,37 @@
       });
       body.geometry.faces.forEach(function(face) {
         const worldPoints = face.map(function(index) { return transformed[index]; });
+        if (worldPoints.length < 3) return;
+        const faceCenter = worldPoints.reduce(function(sum, point) {
+          return [sum[0] + point.x, sum[1] + point.y, sum[2] + point.z];
+        }, [0,0,0]).map(function(value) { return value / worldPoints.length; });
+        const ab = [
+          worldPoints[1].x - worldPoints[0].x,
+          worldPoints[1].y - worldPoints[0].y,
+          worldPoints[1].z - worldPoints[0].z
+        ];
+        const ac = [
+          worldPoints[2].x - worldPoints[0].x,
+          worldPoints[2].y - worldPoints[0].y,
+          worldPoints[2].z - worldPoints[0].z
+        ];
+        let normal = normalize3(cross3(ab, ac));
+        const outward = [faceCenter[0] - body.x, faceCenter[1] - body.y, faceCenter[2] - body.z];
+        if (dot3(normal, outward) < 0) normal = [-normal[0], -normal[1], -normal[2]];
+        const camera = [
+          0,
+          DICE_CAMERA_DISTANCE * Math.sin(DICE_CAMERA_TILT),
+          -DICE_CAMERA_DISTANCE * Math.cos(DICE_CAMERA_TILT)
+        ];
+        const toCamera = normalize3([
+          camera[0] - faceCenter[0],
+          camera[1] - faceCenter[1],
+          camera[2] - faceCenter[2]
+        ]);
+        if (dot3(normal, toCamera) <= 0.015) return;
         const screenPoints = worldPoints.map(function(point) { return projectDicePoint(point, width, height); });
         const averageDepth = screenPoints.reduce(function(sum, point) { return sum + point.depth; }, 0) / screenPoints.length;
-        let brightness = 0.62;
-        if (worldPoints.length >= 3) {
-          const ab = [
-            worldPoints[1].x - worldPoints[0].x,
-            worldPoints[1].y - worldPoints[0].y,
-            worldPoints[1].z - worldPoints[0].z
-          ];
-          const ac = [
-            worldPoints[2].x - worldPoints[0].x,
-            worldPoints[2].y - worldPoints[0].y,
-            worldPoints[2].z - worldPoints[0].z
-          ];
-          const normal = normalize3(cross3(ab, ac));
-          brightness = 0.42 + Math.abs(dot3(normal, normalize3([-0.4,0.9,0.25]))) * 0.52;
-        }
+        const brightness = 0.43 + Math.max(0, dot3(normal, normalize3([-0.45,0.9,-0.2]))) * 0.52;
         faceQueue.push({
           body: body,
           bodyIndex: bodyIndex,
@@ -783,7 +847,22 @@
     }
   }
 
-  function renderDiceTray(result, instant) {
+  function setDiceReadout(result) {
+    const total = document.getElementById('ttk-dice-total');
+    const detail = document.getElementById('ttk-dice-detail');
+    if (total) total.textContent = String(result.total);
+    if (detail) detail.textContent = detailText(result);
+  }
+
+  function setDiceRollingReadout(result) {
+    const total = document.getElementById('ttk-dice-total');
+    const detail = document.getElementById('ttk-dice-detail');
+    const diceCount = collectVisualDice(result).length;
+    if (total) total.textContent = '…';
+    if (detail) detail.textContent = diceCount ? ('Rolling ' + diceCount + (diceCount === 1 ? ' die…' : ' dice…')) : 'Resolving expression…';
+  }
+
+  function renderDiceTray(result, instant, onSettled) {
     const canvas = document.getElementById('ttk-dice-tray');
     const hint = document.getElementById('ttk-dice-stage-hint');
     if (!canvas) return;
@@ -803,6 +882,7 @@
         hint.hidden = false;
         hint.textContent = 'No physical dice in this expression';
       }
+      if (typeof onSettled === 'function') onSettled();
       return;
     }
 
@@ -824,9 +904,11 @@
       });
       diceTrayReveal = 1;
       drawDiceTray(diceTrayBodies, diceTrayReveal);
+      if (typeof onSettled === 'function') onSettled();
       return;
     }
 
+    drawDiceTray(diceTrayBodies, 0);
     let previous = performance.now();
     const started = previous;
     function frame(now) {
@@ -835,9 +917,9 @@
       const elapsed = (now - started) / 1000;
       previous = now;
       stepDiceBodies(diceTrayBodies, delta, elapsed);
-      diceTrayReveal = Math.max(0, Math.min(1, (elapsed - 1.05) / 1.1));
+      diceTrayReveal = Math.max(0, Math.min(1, (elapsed - 2.42) / 0.72));
       drawDiceTray(diceTrayBodies, diceTrayReveal);
-      if (elapsed < 2.65) {
+      if (elapsed < 3.35) {
         diceTrayAnimationFrame = requestAnimationFrame(frame);
       } else {
         diceTrayBodies.forEach(function(body) {
@@ -851,6 +933,7 @@
         diceTrayReveal = 1;
         drawDiceTray(diceTrayBodies, diceTrayReveal);
         diceTrayAnimationFrame = 0;
+        if (typeof onSettled === 'function') onSettled();
       }
     }
     diceTrayAnimationFrame = requestAnimationFrame(frame);
@@ -864,13 +947,14 @@
       state.diceHistory.unshift(result);
       state.diceHistory = state.diceHistory.slice(0, HISTORY_LIMIT);
       saveState();
-      renderDiceHistory();
-      const total = document.getElementById('ttk-dice-total');
-      const detail = document.getElementById('ttk-dice-detail');
-      if (total) total.textContent = String(result.total);
-      if (detail) detail.textContent = detailText(result);
-      renderDiceTray(result, false);
-      setStatus('Rolled ' + result.expression + ' → ' + result.total + '.');
+      setDiceRollingReadout(result);
+      setStatus('Rolling ' + result.expression + '…');
+      renderDiceTray(result, false, function() {
+        if (!state.diceHistory[0] || state.diceHistory[0].id !== result.id) return;
+        setDiceReadout(result);
+        renderDiceHistory();
+        setStatus('Rolled ' + result.expression + ' → ' + result.total + '.');
+      });
       return result;
     } catch (error) {
       setStatus(error.message);
@@ -1301,6 +1385,11 @@
         state.diceHistory = [];
         saveState();
         renderDiceHistory();
+        clearDiceTray();
+        const total = document.getElementById('ttk-dice-total');
+        const detail = document.getElementById('ttk-dice-detail');
+        if (total) total.textContent = '—';
+        if (detail) detail.textContent = 'Roll something unreasonable.';
         return setStatus('Dice history cleared.');
       }
 
@@ -1720,7 +1809,10 @@
     renderAll();
     activateTab('dice');
     initializeDiceTray();
-    if (state.diceHistory[0]) renderDiceTray(state.diceHistory[0], true);
+    if (state.diceHistory[0]) {
+      setDiceReadout(state.diceHistory[0]);
+      renderDiceTray(state.diceHistory[0], true);
+    }
   }
 
   function getState() {
