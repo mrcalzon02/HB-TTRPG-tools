@@ -4,7 +4,7 @@ document_role: "ROLLING FIVE-CHAPTER FORWARD PLAN"
 status: "ACTIVE PLANNING CONTROL"
 planning_horizon: 5
 last_reconciled: "2026-09-25"
-active_after_chapter: 29
+active_after_chapter: 30
 ---
 
 # Beneath Dappled Oaks — Active Five-Chapter Lookahead
@@ -13,15 +13,15 @@ This is the operational N+1 through N+5 plan for the first-principles rewrite. U
 
 ## Current committed rewrite state
 
-Canonical numbered prose now runs through **Chapter Twenty-Nine — Who Sent Pellisar**.
+Canonical numbered prose now runs through **Chapter Thirty — What Lawful Remedies Could Not Do**.
 
-Chapter Twenty-Nine establishes the narrow provenance of Pellisar Veyran's focus without manufacturing an upstream conspirator. The chair-secretariat assigned him to a legitimate concentration review; the aggregate model itself surfaced Cluster G; and a review-wide instruction asked assessors to stress-test persistence against ordinary adult affiliation changes. Pellisar himself proposed moving from aggregate assumptions into person-level predictive kinship because he believed the model retained avoidable error. The independent statistician objected, the chair narrowed the method, and the Academy refused the protected field. The resulting disposition was circulated before Silver Night to the standing liaison structure, including Dmitrigical Review and Valeric representation. This establishes institutional notice of the methodological boundary, not authorship, secret tasking, Cluster G identity outside lawful channels, or responsibility for later violence.
+Chapter Thirty establishes the first supported person-shaped path between the legitimate concentration review and the later unlawful-interference record without yet proving causation. The lawful advisory review had workable remedies—recusal, disclosure, staggered appointments, wider recruitment and training, linked-service limits—but they could manage or dilute concentration rather than create immediate vacancies or erase existing lawful eligibility. A Dmitrigical Review liaison office with Valeric representation consulted the mitigation and timing schedules; nine days later the surviving unlawful-interference record begins. Deputy records officer **Edrin Salver** personally logged the lawful timing material and later handled administrative circulation of an early interference memorandum. The memorandum uses the same appointment-horizon problem and seeks change before the next ordinary vacancy cycle. Salver's later transfer to the Tribunal Contingency Secretariat creates a traceable administrative path into the institutional neighborhood that formed JEC-R/6. None of this yet proves Salver authored, endorsed or transmitted the unlawful plan, that a Valeric personally read the timing schedule, that Cluster G was the interference target, or that Silver Night was the intended remedy.
 
-Adult-life continuity also broadens materially. Mireth and Caelen become sexual lovers by explicit mutual adult choice while preserving the distinction between their desire and their families' political interpretations. Damaris and Rhyl likewise cross from publicly legible emerging lovers into an established sexual relationship; Damaris tells Rhyl she loves him and he reciprocates. Neither development resolves their political or professional trajectories.
+Thessa's western inquiry also advances. The replacement-stone payment cleared through a legitimate emergency works intermediary and was then used against a real bridge repair that already possessed its own appropriation. She is comparing the two payment streams to determine whether the bridge was paid twice, a reimbursement was omitted, or the road account temporarily covered another project's cash-flow gap.
 
-Thessa's western investigation advances: two wagons billed for replacement stone did not enter the quarry on the claimed dates, a third had already been retired and sold for parts, and the named subcontractor remembers providing hauling rather than stone. She is following the payment instrument without yet declaring fraud.
+Mireth and Caelen remain established adult lovers while their families begin treating the relationship as politically legible without claiming ownership of it. Damaris and Rhyl remain established lovers; Damaris explicitly chooses to bring Rhyl into a family dinner, moving the relationship into a more public household context.
 
-The next dependency-valid investigation compares the advisory review's lawful remedies with the faster unlawful interference already established elsewhere: **what could lawful remedies not do quickly enough?**
+The next dependency-valid investigation follows the institutional consequence of refusal in JEC-R/6 and asks whether its bounded accountability trail intersects Salver or another traceable office without exposing protected identity or contents.
 
 ## Governing debts
 
@@ -45,63 +45,63 @@ The next dependency-valid investigation compares the advisory review's lawful re
 
 ---
 
-## N+1 — Chapter Thirty: What Lawful Remedies Could Not Do
+## N+1 — Chapter Thirty-One: The Cost of Refusing
 
 **Certainty:** LOCKED / INVESTIGATION
 
-Compare the advisory review's ordinary lawful remedies against the unlawful interference Corren admitted was contemplated elsewhere. Determine what political objective could not be achieved quickly enough through recusal, staggered appointments, wider recruitment, disclosure, or pipeline reform, and therefore might have tempted an actor toward disqualification, reassignment, engineered scandal, or worse.
-
-Do not infer that institutional impatience proves murderous intent. Preserve the distinction between a legitimate concentration problem, actors seeking faster or more durable political outcomes, and the still-unproven bridge to Silver Night violence.
-
-**Exit handoff:** identify the first supported point, if any, where legitimate concentration management and unlawful intervention occupy the same causal chain.
-
----
-
-## N+2 — Chapter Thirty-One: The Cost of Refusing
-
-**Certainty:** PLANNED
-
-Follow the institutional consequence built into JEC-R/6's deliberate fracture: what happened when the receiving authority refused or delayed an initiating-side demand, what review burden followed, and who acquired lawful notice that the two halves had diverged. Use only bounded procedural records.
+Follow the institutional consequence built into JEC-R/6's deliberate fracture: what happened when the receiving authority refused or delayed an initiating-side demand, what review burden followed, and who acquired lawful notice that the two halves had diverged. Test Edrin Salver's later Tribunal Contingency Secretariat position against that bounded accountability trail without assuming his transfer proves continuity of motive or knowledge.
 
 Do not infer protected identity or contents from the existence of a dispute. Preserve the possibility that the mechanism's resistance was ordinary protective function rather than evidence of wrongdoing.
 
-**Exit handoff:** establish whether any supported post-activation conflict created an accountability trail that can be followed without defeating the protection itself.
+**Exit handoff:** establish whether any supported post-activation conflict created an accountability trail that joins Salver or another ordinary administrator to the already documented chains without defeating the protection itself.
 
 ---
 
-## N+3 — Chapter Thirty-Two: The Ordinary Name on the Extraordinary Paper
+## N+2 — Chapter Thirty-Two: The Ordinary Name on the Extraordinary Paper
 
 **Certainty:** PLANNED
 
-If Chapters Twenty-Nine through Thirty-One produce a lawful accountability path, identify the narrowest named officeholder, clerk, commissioner, or delegating authority whose documented action joins otherwise separate chains. The dramatic task is not to unveil a mastermind but to determine whether ordinary administrative responsibility finally provides a defensible bridge between demographic pressure, unlawful intervention, and the protected machinery.
+Use the narrowest supported officeholder, clerk, commissioner, or delegating authority whose documented actions join otherwise separate chains. Edrin Salver is now a candidate path, not a culprit: determine what he actually received, routed, knew, or was obligated to do at each stage.
 
-If the evidence does not support convergence, preserve the separation and make that failure informative rather than forcing a culprit.
+If the evidence does not support convergence, preserve the separation and make that failure informative rather than forcing a mastermind.
 
 **Exit handoff:** decide which evidence chain can responsibly converge before the Book One ceiling and which uncertainties must remain bounded.
 
 ---
 
-## N+4 — Chapter Thirty-Three: The Price of a Faster Answer
+## N+3 — Chapter Thirty-Three: The Price of a Faster Answer
 
 **Certainty:** PLANNED
 
-Bring the established lawful remedies, supported Pellisar tasking provenance, and Corren's admitted unlawful intervention machinery into a consequence-focused comparison. Ask who materially benefited from avoiding the slower lawful process and what institutional, dynastic, or succession outcome became possible only through accelerated interference.
+Bring the established lawful remedies, supported Pellisar tasking provenance, the nine-day timing relationship, and Corren's admitted unlawful intervention machinery into a consequence-focused comparison. Ask who materially benefited from avoiding the slower lawful process and what institutional, dynastic, or succession outcome became possible only through accelerated interference.
 
-Do not convert benefit into authorship. Preserve rival explanations and require a traceable action, instruction, payment, appointment, or communication before assigning responsibility.
+Do not convert benefit, access, clerical handling, or temporal proximity into authorship. Require a traceable action, instruction, payment, appointment, or communication before assigning responsibility.
 
 **Exit handoff:** establish the strongest defensible causal bridge available before the final Book One convergence arc, or explicitly preserve separation if the evidence still does not support one.
 
 ---
 
-## N+5 — Chapter Thirty-Four: What Notice Made Possible
+## N+4 — Chapter Thirty-Four: What Notice Made Possible
+
+**Certainty:** PLANNED
+
+Use the pre-Silver-Night circulation of the Pellisar disposition and the later consultation of the mitigation timing schedules as bounded notice events. Determine whether any later lawful or unlawful action can be shown to depend on knowledge that the Academy had refused person-level predictive kinship or that lawful concentration remedies could not produce immediate structural change.
+
+Do not infer that every liaison recipient read, understood, shared, or acted on the material.
+
+**Exit handoff:** either establish a traceable post-notice action that earns convergence with the Silver Night machinery, or preserve the demographic and violence chains as separate despite their temporal proximity.
+
+---
+
+## N+5 — Chapter Thirty-Five: The Clerk Who Moved Between Rooms
 
 **Certainty:** HORIZON / EXPLORATORY
 
-Use the pre-Silver-Night circulation of the Pellisar disposition as a bounded notice event. Determine whether any later lawful or unlawful action can be shown to depend on knowledge that the Academy had refused person-level predictive kinship. Trace only documented communications, appointments, requests, payments, or operational changes occurring after that notice.
+Reconstruct Edrin Salver's documented administrative path across the Dmitrigical Review liaison office and Tribunal Contingency Secretariat. Separate routine clerical continuity from meaningful transmission: what files was he assigned, what duties followed his office, what communications can actually be attributed to him, and what knowledge would merely have been available nearby.
 
-Do not infer that every liaison recipient read, understood, shared, or acted on the disposition. Notice creates an opportunity for knowledge, not proof of motive or action.
+Do not promote an ordinary administrator into a hidden architect because his name appears in multiple systems. The dramatic value is whether mundane administrative continuity can establish a defensible evidence bridge where elite suspicion could not.
 
-**Horizon exit:** either establish a traceable post-notice action that earns convergence with the Silver Night machinery, or preserve the demographic and violence chains as separate despite their temporal proximity.
+**Horizon exit:** determine whether Salver is a genuine evidentiary connector, an innocent administrative overlap, or a bounded witness to institutional decisions made by others.
 
 ---
 
