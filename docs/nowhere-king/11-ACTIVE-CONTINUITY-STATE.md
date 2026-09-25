@@ -47,7 +47,7 @@ Red Ford survey/cattle/toll/arson/Pavel-arrow questions; unidentified color-hear
 
 ## Immediate handoff
 
-Episode 28 — *The Price of Betrayal* is next. The coup controls Edselsto but its coalition is internally fractured. Existing betrayal ladders must pay off through Parel, compromised access chains, promised rewards, missing routines and attempts to erase liability. Mera must not become a convenient disposable casualty. Consequences must leave durable evidence, grief, anger or practical disruption.
+Episode 29 — *The Confidant's Last Stand* is next. The coup controls Edselsto but its coalition is internally fractured. Existing betrayal ladders must pay off through Parel, compromised access chains, promised rewards, missing routines and attempts to erase liability. Mera must not become a convenient disposable casualty. Consequences must leave durable evidence, grief, anger or practical disruption.
 
 ## Hard exclusions
 
