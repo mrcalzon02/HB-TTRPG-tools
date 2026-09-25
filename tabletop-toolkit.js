@@ -1,13 +1,19 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
   const STORAGE_KEY = 'hb-ttrpg-tabletop-toolkit-v1';
   const HISTORY_LIMIT = 60;
   const state = loadState();
   let uidCounter = 0;
   let dragContext = null;
   let timerInterval = null;
+  let diceTrayAnimationFrame = 0;
+  let diceTrayRun = 0;
+  let diceTrayBodies = [];
+  let diceTrayReveal = 0;
+  let diceTrayResizeObserver = null;
+  const diceGeometryCache = Object.create(null);
 
   function freshState() {
     return {
@@ -150,7 +156,7 @@
         for (let i = 0; i < term.count; i += 1) rolls.push(randomInt(3) - 1);
         const subtotal = term.sign * rolls.reduce(function(sum, value) { return sum + value; }, 0);
         total += subtotal;
-        return { raw: rawToken, subtotal: subtotal, rolls: rolls, kept: rolls.slice(), fate: true };
+        return { raw: rawToken, subtotal: subtotal, rolls: rolls, kept: rolls.slice(), fate: true, sides: 6 };
       }
 
       const rolls = [];
@@ -177,7 +183,7 @@
 
       const subtotal = term.sign * kept.reduce(function(sum, value) { return sum + value; }, 0);
       total += subtotal;
-      return { raw: rawToken, subtotal: subtotal, rolls: rolls, kept: kept, explode: term.explode, keepMode: term.keepMode };
+      return { raw: rawToken, subtotal: subtotal, rolls: rolls, kept: kept, explode: term.explode, keepMode: term.keepMode, sides: term.sides };
     });
 
     return { expression: normalized, total: total, details: details, rolledAt: new Date().toISOString() };
@@ -193,6 +199,663 @@
     }).join('  ');
   }
 
+
+  function length3(vector) {
+    return Math.hypot(vector[0], vector[1], vector[2]);
+  }
+
+  function normalize3(vector) {
+    const length = length3(vector) || 1;
+    return [vector[0] / length, vector[1] / length, vector[2] / length];
+  }
+
+  function cross3(a, b) {
+    return [
+      a[1] * b[2] - a[2] * b[1],
+      a[2] * b[0] - a[0] * b[2],
+      a[0] * b[1] - a[1] * b[0]
+    ];
+  }
+
+  function dot3(a, b) {
+    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  }
+
+  function fitGeometry(geometry) {
+    let maxRadius = 0;
+    geometry.vertices.forEach(function(vertex) {
+      maxRadius = Math.max(maxRadius, length3(vertex));
+    });
+    maxRadius = maxRadius || 1;
+    return {
+      vertices: geometry.vertices.map(function(vertex) {
+        return [vertex[0] / maxRadius, vertex[1] / maxRadius, vertex[2] / maxRadius];
+      }),
+      faces: geometry.faces.map(function(face) { return face.slice(); })
+    };
+  }
+
+  function makeCoinGeometry() {
+    const vertices = [];
+    const faces = [];
+    const segments = 16;
+    const halfHeight = 0.18;
+    for (let layer = 0; layer < 2; layer += 1) {
+      const y = layer === 0 ? halfHeight : -halfHeight;
+      for (let i = 0; i < segments; i += 1) {
+        const angle = Math.PI * 2 * i / segments;
+        vertices.push([Math.cos(angle), y, Math.sin(angle)]);
+      }
+    }
+    faces.push(Array.from({ length: segments }, function(_, i) { return i; }));
+    faces.push(Array.from({ length: segments }, function(_, i) { return segments + (segments - 1 - i); }));
+    for (let i = 0; i < segments; i += 1) {
+      const next = (i + 1) % segments;
+      faces.push([i, next, segments + next, segments + i]);
+    }
+    return fitGeometry({ vertices: vertices, faces: faces });
+  }
+
+  function makeTetraGeometry() {
+    return fitGeometry({
+      vertices: [[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]],
+      faces: [[0,1,2],[0,3,1],[0,2,3],[1,3,2]]
+    });
+  }
+
+  function makeCubeGeometry() {
+    return fitGeometry({
+      vertices: [
+        [-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],
+        [-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]
+      ],
+      faces: [[0,1,2,3],[4,7,6,5],[0,4,5,1],[1,5,6,2],[2,6,7,3],[4,0,3,7]]
+    });
+  }
+
+  function makeOctaGeometry() {
+    return fitGeometry({
+      vertices: [[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]],
+      faces: [[2,0,4],[2,4,1],[2,1,5],[2,5,0],[3,4,0],[3,1,4],[3,5,1],[3,0,5]]
+    });
+  }
+
+  function makeD10Geometry() {
+    const vertices = [[0,1.08,0],[0,-1.08,0]];
+    const faces = [];
+    for (let i = 0; i < 10; i += 1) {
+      const angle = Math.PI * 2 * i / 10;
+      vertices.push([Math.cos(angle), i % 2 === 0 ? 0.16 : -0.16, Math.sin(angle)]);
+    }
+    for (let i = 0; i < 5; i += 1) {
+      const even = 2 + i * 2;
+      const odd = 2 + ((i * 2 + 1) % 10);
+      const nextEven = 2 + ((i * 2 + 2) % 10);
+      const nextOdd = 2 + ((i * 2 + 3) % 10);
+      faces.push([0, even, odd, nextEven]);
+      faces.push([1, nextOdd, nextEven, odd]);
+    }
+    return fitGeometry({ vertices: vertices, faces: faces });
+  }
+
+  function makeIcosaGeometry() {
+    const phi = (1 + Math.sqrt(5)) / 2;
+    return fitGeometry({
+      vertices: [
+        [-1,phi,0],[1,phi,0],[-1,-phi,0],[1,-phi,0],
+        [0,-1,phi],[0,1,phi],[0,-1,-phi],[0,1,-phi],
+        [phi,0,-1],[phi,0,1],[-phi,0,-1],[-phi,0,1]
+      ],
+      faces: [
+        [0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],
+        [1,5,9],[5,11,4],[11,10,2],[10,7,6],[7,1,8],
+        [3,9,4],[3,4,2],[3,2,6],[3,6,8],[3,8,9],
+        [4,9,5],[2,4,11],[6,2,10],[8,6,7],[9,8,1]
+      ]
+    });
+  }
+
+  function makeDodecaGeometry() {
+    const ico = makeIcosaGeometry();
+    const dualVertices = ico.faces.map(function(face) {
+      const center = face.reduce(function(sum, index) {
+        const vertex = ico.vertices[index];
+        return [sum[0] + vertex[0], sum[1] + vertex[1], sum[2] + vertex[2]];
+      }, [0,0,0]).map(function(value) { return value / face.length; });
+      return normalize3(center);
+    });
+
+    const dualFaces = ico.vertices.map(function(axis, vertexIndex) {
+      const adjacent = [];
+      ico.faces.forEach(function(face, faceIndex) {
+        if (face.indexOf(vertexIndex) !== -1) adjacent.push(faceIndex);
+      });
+      const normalAxis = normalize3(axis);
+      let reference = cross3(normalAxis, [0,1,0]);
+      if (length3(reference) < 0.1) reference = cross3(normalAxis, [1,0,0]);
+      reference = normalize3(reference);
+      const tangent = normalize3(cross3(normalAxis, reference));
+      adjacent.sort(function(a, b) {
+        const va = dualVertices[a];
+        const vb = dualVertices[b];
+        const angleA = Math.atan2(dot3(va, tangent), dot3(va, reference));
+        const angleB = Math.atan2(dot3(vb, tangent), dot3(vb, reference));
+        return angleA - angleB;
+      });
+      return adjacent;
+    });
+
+    return fitGeometry({ vertices: dualVertices, faces: dualFaces });
+  }
+
+  function makeD100Geometry() {
+    const vertices = [[0,1,0],[0,-1,0]];
+    const faces = [];
+    const segments = 10;
+    const rings = 5;
+    for (let ring = 0; ring < rings; ring += 1) {
+      const latitude = Math.PI * (ring + 1) / (rings + 1);
+      const radius = Math.sin(latitude);
+      const y = Math.cos(latitude);
+      const offset = ring % 2 ? Math.PI / segments : 0;
+      for (let i = 0; i < segments; i += 1) {
+        const angle = Math.PI * 2 * i / segments + offset;
+        vertices.push([Math.cos(angle) * radius, y, Math.sin(angle) * radius]);
+      }
+    }
+    for (let i = 0; i < segments; i += 1) {
+      faces.push([0, 2 + i, 2 + ((i + 1) % segments)]);
+    }
+    for (let ring = 0; ring < rings - 1; ring += 1) {
+      const aStart = 2 + ring * segments;
+      const bStart = aStart + segments;
+      for (let i = 0; i < segments; i += 1) {
+        const next = (i + 1) % segments;
+        faces.push([aStart + i, bStart + i, bStart + next]);
+        faces.push([aStart + i, bStart + next, aStart + next]);
+      }
+    }
+    const lastStart = 2 + (rings - 1) * segments;
+    for (let i = 0; i < segments; i += 1) {
+      faces.push([1, lastStart + ((i + 1) % segments), lastStart + i]);
+    }
+    return fitGeometry({ vertices: vertices, faces: faces });
+  }
+
+  function makeGenericGeometry(sides) {
+    if (sides <= 2) return makeCoinGeometry();
+    if (sides >= 30) return makeD100Geometry();
+    const segments = Math.max(3, Math.min(15, Math.round(sides / 2)));
+    const vertices = [[0,1,0],[0,-1,0]];
+    const faces = [];
+    for (let i = 0; i < segments; i += 1) {
+      const angle = Math.PI * 2 * i / segments;
+      vertices.push([Math.cos(angle), 0, Math.sin(angle)]);
+    }
+    for (let i = 0; i < segments; i += 1) {
+      const next = (i + 1) % segments;
+      faces.push([0,2 + i,2 + next]);
+      faces.push([1,2 + next,2 + i]);
+    }
+    return fitGeometry({ vertices: vertices, faces: faces });
+  }
+
+  function geometryForDie(sides, fate) {
+    const key = fate ? 'fate' : String(sides);
+    if (diceGeometryCache[key]) return diceGeometryCache[key];
+    let geometry;
+    if (fate || sides === 6) geometry = makeCubeGeometry();
+    else if (sides === 4) geometry = makeTetraGeometry();
+    else if (sides === 8) geometry = makeOctaGeometry();
+    else if (sides === 10) geometry = makeD10Geometry();
+    else if (sides === 12) geometry = makeDodecaGeometry();
+    else if (sides === 20) geometry = makeIcosaGeometry();
+    else if (sides === 100) geometry = makeD100Geometry();
+    else geometry = makeGenericGeometry(sides);
+    diceGeometryCache[key] = geometry;
+    return geometry;
+  }
+
+  function rotateVertex(vertex, rx, ry, rz) {
+    let x = vertex[0];
+    let y = vertex[1];
+    let z = vertex[2];
+    const cosX = Math.cos(rx);
+    const sinX = Math.sin(rx);
+    const y1 = y * cosX - z * sinX;
+    const z1 = y * sinX + z * cosX;
+    y = y1;
+    z = z1;
+    const cosY = Math.cos(ry);
+    const sinY = Math.sin(ry);
+    const x1 = x * cosY + z * sinY;
+    const z2 = -x * sinY + z * cosY;
+    x = x1;
+    z = z2;
+    const cosZ = Math.cos(rz);
+    const sinZ = Math.sin(rz);
+    return [x * cosZ - y * sinZ, x * sinZ + y * cosZ, z];
+  }
+
+  function projectDicePoint(point, width, height) {
+    const tilt = 0.62;
+    const cosTilt = Math.cos(tilt);
+    const sinTilt = Math.sin(tilt);
+    const viewY = point.y * cosTilt - point.z * sinTilt;
+    const viewZ = point.y * sinTilt + point.z * cosTilt + 9.5;
+    const focal = Math.min(width, height) * 1.48;
+    return {
+      x: width * 0.5 + point.x * focal / viewZ,
+      y: height * 0.58 - viewY * focal / viewZ,
+      depth: viewZ,
+      scale: focal / viewZ
+    };
+  }
+
+  function dieColorFor(die) {
+    if (die.fate) return [220,220,210];
+    const palette = {
+      2: [186,151,91],
+      4: [207,102,76],
+      6: [211,177,88],
+      8: [77,158,171],
+      10: [133,112,194],
+      12: [76,151,105],
+      20: [190,82,123],
+      100: [102,137,184]
+    };
+    return palette[die.sides] || [177,139,91];
+  }
+
+  function collectVisualDice(result) {
+    const dice = [];
+    (result.details || []).forEach(function(detail) {
+      if (!detail.rolls || !detail.rolls.length) return;
+      let fate = Boolean(detail.fate);
+      let sides = Number(detail.sides || 0);
+      if (!sides || fate) {
+        try {
+          const parsed = parseDiceToken(detail.raw);
+          if (parsed.type === 'fate') {
+            fate = true;
+            sides = 6;
+          } else if (parsed.type === 'dice') {
+            sides = parsed.sides;
+          }
+        } catch (_) {
+          sides = sides || 6;
+        }
+      }
+      sides = sides || 6;
+
+      const keptCounts = Object.create(null);
+      (detail.kept || []).forEach(function(value) {
+        const key = String(value);
+        keptCounts[key] = (keptCounts[key] || 0) + 1;
+      });
+
+      detail.rolls.forEach(function(value) {
+        const key = String(value);
+        const kept = Boolean(keptCounts[key]);
+        if (kept) keptCounts[key] -= 1;
+        dice.push({
+          sides: sides,
+          value: value,
+          display: fate ? (value > 0 ? '+' : value < 0 ? '−' : '0') : String(value),
+          fate: fate,
+          kept: kept
+        });
+      });
+    });
+    return dice;
+  }
+
+  function buildDiceBodies(dice) {
+    const count = dice.length;
+    const columns = Math.max(1, Math.ceil(Math.sqrt(count * 1.55)));
+    const rows = Math.max(1, Math.ceil(count / columns));
+    const spacingX = Math.min(1.65, 9.2 / Math.max(1, columns));
+    const spacingZ = Math.min(1.28, 5.2 / Math.max(1, rows));
+    const size = Math.max(0.2, Math.min(0.82, Math.min(spacingX, spacingZ) * 0.52));
+
+    return dice.map(function(die, index) {
+      const row = Math.floor(index / columns);
+      const rowCount = Math.min(columns, count - row * columns);
+      const column = index % columns;
+      const targetX = (column - (rowCount - 1) / 2) * spacingX;
+      const targetZ = (row - (rows - 1) / 2) * spacingZ;
+      const seed = Number(die.value) || index + 1;
+      return {
+        die: die,
+        geometry: geometryForDie(die.sides, die.fate),
+        size: size,
+        radius: size * 0.94,
+        x: targetX + (Math.random() - 0.5) * 3.4,
+        y: 4.2 + Math.random() * 2.8 + (index % 4) * 0.18,
+        z: targetZ + (Math.random() - 0.5) * 2.1,
+        vx: (Math.random() - 0.5) * 4.2,
+        vy: -0.5 - Math.random() * 1.6,
+        vz: (Math.random() - 0.5) * 3.2,
+        rx: Math.random() * Math.PI * 2,
+        ry: Math.random() * Math.PI * 2,
+        rz: Math.random() * Math.PI * 2,
+        avx: (Math.random() - 0.5) * 12,
+        avy: (Math.random() - 0.5) * 12,
+        avz: (Math.random() - 0.5) * 12,
+        targetX: targetX,
+        targetZ: targetZ,
+        finalRx: ((seed * 37 + index * 11) % 360) * Math.PI / 180,
+        finalRy: ((seed * 71 + index * 17) % 360) * Math.PI / 180,
+        finalRz: ((seed * 19 + index * 29) % 360) * Math.PI / 180
+      };
+    });
+  }
+
+  function normalizeAngle(angle) {
+    while (angle > Math.PI) angle -= Math.PI * 2;
+    while (angle < -Math.PI) angle += Math.PI * 2;
+    return angle;
+  }
+
+  function stepDiceBodies(bodies, delta, elapsed) {
+    bodies.forEach(function(body) {
+      body.vy -= 9.7 * delta;
+      body.vx *= Math.pow(0.985, delta * 60);
+      body.vz *= Math.pow(0.985, delta * 60);
+      body.x += body.vx * delta;
+      body.y += body.vy * delta;
+      body.z += body.vz * delta;
+      body.rx += body.avx * delta;
+      body.ry += body.avy * delta;
+      body.rz += body.avz * delta;
+
+      if (Math.abs(body.x) > 5.15) {
+        body.x = Math.sign(body.x) * 5.15;
+        body.vx *= -0.44;
+      }
+      if (Math.abs(body.z) > 2.95) {
+        body.z = Math.sign(body.z) * 2.95;
+        body.vz *= -0.44;
+      }
+
+      if (body.y <= body.radius) {
+        body.y = body.radius;
+        if (Math.abs(body.vy) > 0.48) body.vy = Math.abs(body.vy) * 0.37;
+        else body.vy = 0;
+        body.vx *= 0.78;
+        body.vz *= 0.78;
+        body.avx *= 0.72;
+        body.avy *= 0.72;
+        body.avz *= 0.72;
+        body.vx += (body.targetX - body.x) * 5.5 * delta;
+        body.vz += (body.targetZ - body.z) * 5.5 * delta;
+      }
+
+      if (elapsed > 1.5) {
+        body.vx += (body.targetX - body.x) * 9.5 * delta;
+        body.vz += (body.targetZ - body.z) * 9.5 * delta;
+        body.avx *= Math.pow(0.78, delta * 60);
+        body.avy *= Math.pow(0.78, delta * 60);
+        body.avz *= Math.pow(0.78, delta * 60);
+      }
+
+      if (elapsed > 2.0) {
+        const settle = Math.min(1, delta * 8);
+        body.x += (body.targetX - body.x) * settle;
+        body.z += (body.targetZ - body.z) * settle;
+        body.y += (body.radius - body.y) * settle;
+        body.rx += normalizeAngle(body.finalRx - body.rx) * settle;
+        body.ry += normalizeAngle(body.finalRy - body.ry) * settle;
+        body.rz += normalizeAngle(body.finalRz - body.rz) * settle;
+      }
+    });
+  }
+
+  function drawDiceTray(bodies, reveal) {
+    const canvas = document.getElementById('ttk-dice-tray');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width < 2 || rect.height < 2) return;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const pixelWidth = Math.max(1, Math.round(rect.width * dpr));
+    const pixelHeight = Math.max(1, Math.round(rect.height * dpr));
+    if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+      canvas.width = pixelWidth;
+      canvas.height = pixelHeight;
+    }
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const width = rect.width;
+    const height = rect.height;
+    ctx.clearRect(0, 0, width, height);
+
+    const floorCorners = [
+      {x:-5.7,y:0,z:-3.2},{x:5.7,y:0,z:-3.2},
+      {x:5.7,y:0,z:3.2},{x:-5.7,y:0,z:3.2}
+    ].map(function(point) { return projectDicePoint(point, width, height); });
+    ctx.beginPath();
+    ctx.moveTo(floorCorners[0].x, floorCorners[0].y);
+    for (let i = 1; i < floorCorners.length; i += 1) ctx.lineTo(floorCorners[i].x, floorCorners[i].y);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(7,9,14,.44)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(224,189,123,.18)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(255,255,255,.045)';
+    for (let x = -4; x <= 4; x += 2) {
+      const a = projectDicePoint({x:x,y:0,z:-3.2}, width, height);
+      const b = projectDicePoint({x:x,y:0,z:3.2}, width, height);
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    }
+    for (let z = -2; z <= 2; z += 1) {
+      const a = projectDicePoint({x:-5.7,y:0,z:z}, width, height);
+      const b = projectDicePoint({x:5.7,y:0,z:z}, width, height);
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    }
+
+    bodies.forEach(function(body) {
+      const shadow = projectDicePoint({x:body.x,y:0.015,z:body.z}, width, height);
+      const shadowRadius = Math.max(3, body.size * shadow.scale * 0.85);
+      ctx.beginPath();
+      ctx.ellipse(shadow.x, shadow.y, shadowRadius, shadowRadius * 0.34, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,0,0,.25)';
+      ctx.fill();
+    });
+
+    const faceQueue = [];
+    bodies.forEach(function(body, bodyIndex) {
+      const transformed = body.geometry.vertices.map(function(vertex) {
+        const rotated = rotateVertex(vertex, body.rx, body.ry, body.rz);
+        return {
+          x: body.x + rotated[0] * body.size,
+          y: body.y + rotated[1] * body.size,
+          z: body.z + rotated[2] * body.size
+        };
+      });
+      body.geometry.faces.forEach(function(face) {
+        const worldPoints = face.map(function(index) { return transformed[index]; });
+        const screenPoints = worldPoints.map(function(point) { return projectDicePoint(point, width, height); });
+        const averageDepth = screenPoints.reduce(function(sum, point) { return sum + point.depth; }, 0) / screenPoints.length;
+        let brightness = 0.62;
+        if (worldPoints.length >= 3) {
+          const ab = [
+            worldPoints[1].x - worldPoints[0].x,
+            worldPoints[1].y - worldPoints[0].y,
+            worldPoints[1].z - worldPoints[0].z
+          ];
+          const ac = [
+            worldPoints[2].x - worldPoints[0].x,
+            worldPoints[2].y - worldPoints[0].y,
+            worldPoints[2].z - worldPoints[0].z
+          ];
+          const normal = normalize3(cross3(ab, ac));
+          brightness = 0.42 + Math.abs(dot3(normal, normalize3([-0.4,0.9,0.25]))) * 0.52;
+        }
+        faceQueue.push({
+          body: body,
+          bodyIndex: bodyIndex,
+          points: screenPoints,
+          depth: averageDepth,
+          brightness: brightness
+        });
+      });
+    });
+    faceQueue.sort(function(a, b) { return b.depth - a.depth; });
+
+    faceQueue.forEach(function(face) {
+      const color = dieColorFor(face.body.die);
+      const keptAlpha = face.body.die.kept ? 0.92 : (reveal > 0.7 ? 0.36 : 0.72);
+      const r = Math.min(255, Math.round(color[0] * face.brightness));
+      const g = Math.min(255, Math.round(color[1] * face.brightness));
+      const b = Math.min(255, Math.round(color[2] * face.brightness));
+      ctx.beginPath();
+      ctx.moveTo(face.points[0].x, face.points[0].y);
+      for (let i = 1; i < face.points.length; i += 1) ctx.lineTo(face.points[i].x, face.points[i].y);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + keptAlpha + ')';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,244,218,' + (face.body.die.kept ? 0.42 : 0.18) + ')';
+      ctx.lineWidth = 0.85;
+      ctx.stroke();
+    });
+
+    if (reveal > 0.08) {
+      const labelAlpha = Math.min(1, (reveal - 0.08) / 0.72);
+      bodies.forEach(function(body) {
+        const center = projectDicePoint({x:body.x,y:body.y + body.size * 0.16,z:body.z}, width, height);
+        const radius = Math.max(9, Math.min(27, body.size * center.scale * 0.48));
+        const color = dieColorFor(body.die);
+        ctx.save();
+        ctx.globalAlpha = labelAlpha * (body.die.kept ? 1 : 0.62);
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(8,10,15,.87)';
+        ctx.fill();
+        ctx.lineWidth = body.die.kept ? 2 : 1;
+        ctx.strokeStyle = 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',.95)';
+        ctx.stroke();
+        ctx.fillStyle = '#fff5df';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = '900 ' + Math.max(10, Math.floor(radius * 1.04)) + 'px system-ui, sans-serif';
+        ctx.fillText(body.die.display, center.x, center.y - (bodies.length <= 28 ? 2 : 0));
+        if (bodies.length <= 28) {
+          ctx.fillStyle = 'rgba(255,245,223,.66)';
+          ctx.font = '700 ' + Math.max(7, Math.floor(radius * 0.4)) + 'px system-ui, sans-serif';
+          ctx.fillText(body.die.fate ? 'dF' : 'd' + body.die.sides, center.x, center.y + radius * 0.55);
+        }
+        ctx.restore();
+      });
+    }
+  }
+
+  function clearDiceTray() {
+    diceTrayRun += 1;
+    if (diceTrayAnimationFrame) cancelAnimationFrame(diceTrayAnimationFrame);
+    diceTrayAnimationFrame = 0;
+    diceTrayBodies = [];
+    diceTrayReveal = 0;
+    const canvas = document.getElementById('ttk-dice-tray');
+    const hint = document.getElementById('ttk-dice-stage-hint');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.setAttribute('aria-label', '3D dice tray. Roll dice to animate them.');
+    }
+    if (hint) {
+      hint.hidden = false;
+      hint.textContent = '3D dice tray';
+    }
+  }
+
+  function initializeDiceTray() {
+    const stage = document.getElementById('ttk-dice-stage');
+    if (!stage) return;
+    if (diceTrayResizeObserver) diceTrayResizeObserver.disconnect();
+    if (typeof ResizeObserver === 'function') {
+      diceTrayResizeObserver = new ResizeObserver(function() {
+        if (diceTrayBodies.length) drawDiceTray(diceTrayBodies, diceTrayReveal);
+      });
+      diceTrayResizeObserver.observe(stage);
+    }
+  }
+
+  function renderDiceTray(result, instant) {
+    const canvas = document.getElementById('ttk-dice-tray');
+    const hint = document.getElementById('ttk-dice-stage-hint');
+    if (!canvas) return;
+    const dice = collectVisualDice(result);
+    diceTrayRun += 1;
+    const runId = diceTrayRun;
+    if (diceTrayAnimationFrame) cancelAnimationFrame(diceTrayAnimationFrame);
+    diceTrayAnimationFrame = 0;
+
+    if (!dice.length) {
+      diceTrayBodies = [];
+      diceTrayReveal = 0;
+      const ctx = canvas.getContext('2d');
+      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.setAttribute('aria-label', 'No physical dice in this expression.');
+      if (hint) {
+        hint.hidden = false;
+        hint.textContent = 'No physical dice in this expression';
+      }
+      return;
+    }
+
+    if (hint) hint.hidden = true;
+    canvas.setAttribute(
+      'aria-label',
+      dice.length + ' three-dimensional dice: ' + dice.map(function(die) { return (die.fate ? 'dF' : 'd' + die.sides) + ' result ' + die.display; }).join(', ')
+    );
+    diceTrayBodies = buildDiceBodies(dice);
+    const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (instant || reducedMotion) {
+      diceTrayBodies.forEach(function(body) {
+        body.x = body.targetX;
+        body.z = body.targetZ;
+        body.y = body.radius;
+        body.rx = body.finalRx;
+        body.ry = body.finalRy;
+        body.rz = body.finalRz;
+      });
+      diceTrayReveal = 1;
+      drawDiceTray(diceTrayBodies, diceTrayReveal);
+      return;
+    }
+
+    let previous = performance.now();
+    const started = previous;
+    function frame(now) {
+      if (runId !== diceTrayRun) return;
+      const delta = Math.min(0.034, Math.max(0.001, (now - previous) / 1000));
+      const elapsed = (now - started) / 1000;
+      previous = now;
+      stepDiceBodies(diceTrayBodies, delta, elapsed);
+      diceTrayReveal = Math.max(0, Math.min(1, (elapsed - 1.05) / 1.1));
+      drawDiceTray(diceTrayBodies, diceTrayReveal);
+      if (elapsed < 2.65) {
+        diceTrayAnimationFrame = requestAnimationFrame(frame);
+      } else {
+        diceTrayBodies.forEach(function(body) {
+          body.x = body.targetX;
+          body.z = body.targetZ;
+          body.y = body.radius;
+          body.rx = body.finalRx;
+          body.ry = body.finalRy;
+          body.rz = body.finalRz;
+        });
+        diceTrayReveal = 1;
+        drawDiceTray(diceTrayBodies, diceTrayReveal);
+        diceTrayAnimationFrame = 0;
+      }
+    }
+    diceTrayAnimationFrame = requestAnimationFrame(frame);
+  }
+
   function performRoll(expression, label) {
     try {
       const result = rollExpression(expression);
@@ -206,6 +869,7 @@
       const detail = document.getElementById('ttk-dice-detail');
       if (total) total.textContent = String(result.total);
       if (detail) detail.textContent = detailText(result);
+      renderDiceTray(result, false);
       setStatus('Rolled ' + result.expression + ' → ' + result.total + '.');
       return result;
     } catch (error) {
@@ -1005,7 +1669,7 @@
             '<button type="button" class="ttk-primary" id="ttk-roll">Roll</button>',
             '<div class="ttk-quick-rolls" aria-label="Quick dice"><button type="button" data-quick-roll="1d4">d4</button><button type="button" data-quick-roll="1d6">d6</button><button type="button" data-quick-roll="1d8">d8</button><button type="button" data-quick-roll="1d10">d10</button><button type="button" data-quick-roll="1d12">d12</button><button type="button" data-quick-roll="1d20">d20</button><button type="button" data-quick-roll="1d100">d100</button><button type="button" data-quick-roll="2d20kh1">Advantage</button><button type="button" data-quick-roll="2d20kl1">Disadvantage</button><button type="button" data-quick-roll="4dF">4dF</button></div>',
             '<p class="ttk-help">Supports additive dice, constants, keep-high/keep-low, exploding dice, and Fate/Fudge dice: <code>2d6+3</code>, <code>4d6kh3</code>, <code>2d10!</code>, <code>4dF</code>.</p>',
-          '</div><div class="ttk-roll-result"><span>Result</span><strong id="ttk-dice-total">—</strong><p id="ttk-dice-detail">Roll something unreasonable.</p></div></div>',
+          '</div><div class="ttk-roll-result"><div class="ttk-dice-stage" id="ttk-dice-stage"><canvas id="ttk-dice-tray" role="img" aria-label="3D dice tray. Roll dice to animate them."></canvas><span class="ttk-dice-stage-hint" id="ttk-dice-stage-hint">3D dice tray</span></div><div class="ttk-roll-readout"><span>Total</span><strong id="ttk-dice-total">—</strong><p id="ttk-dice-detail">Roll something unreasonable.</p></div></div></div>',
           '<ol id="ttk-dice-history" class="ttk-history"></ol>',
         '</section>',
 
@@ -1055,6 +1719,8 @@
     bindStaticEvents();
     renderAll();
     activateTab('dice');
+    initializeDiceTray();
+    if (state.diceHistory[0]) renderDiceTray(state.diceHistory[0], true);
   }
 
   function getState() {
@@ -1069,6 +1735,7 @@
     stopTimerLoop();
     renderAll();
     activateTab('dice');
+    clearDiceTray();
   }
 
   window.HBTabletopToolkit = Object.freeze({
