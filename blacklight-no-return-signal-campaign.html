@@ -50,6 +50,9 @@
         <button class="nrs-tab" id="tab-iron" type="button" role="tab" aria-selected="false" aria-controls="panel-iron" data-panel="panel-iron">Iron Anomaly</button>
         <button class="nrs-tab" id="tab-clues" type="button" role="tab" aria-selected="false" aria-controls="panel-clues" data-panel="panel-clues">Clue Ladder</button>
         <button class="nrs-tab" id="tab-provenance" type="button" role="tab" aria-selected="false" aria-controls="panel-provenance" data-panel="panel-provenance">Alpthon Provenance</button>
+        <button class="nrs-tab" id="tab-beacon" type="button" role="tab" aria-selected="false" aria-controls="panel-beacon" data-panel="panel-beacon">Junkyard Beacon</button>
+        <button class="nrs-tab" id="tab-comms" type="button" role="tab" aria-selected="false" aria-controls="panel-comms" data-panel="panel-comms">Interstellar Comms</button>
+        <button class="nrs-tab" id="tab-charles-state" type="button" role="tab" aria-selected="false" aria-controls="panel-charles-state" data-panel="panel-charles-state">Charles: Meat-Speed</button>
       </div>
 
       <div class="nrs-panel" id="panel-reconstruction" role="tabpanel" aria-labelledby="tab-reconstruction">
@@ -89,6 +92,198 @@
           <article class="nrs-card"><span class="nrs-record-tag">Terminology</span><h3>Alien Goo Is a Survivor Label</h3><p>“Alien Goo” is the characters' provisional name for a biological substrate they do not yet understand. The archive may later refine its composition or original Alpthon designation, but this record does not invent chemistry that has not yet been established elsewhere in canon.</p></article>
         </div>
       </div>
+      <div class="nrs-panel" id="panel-beacon" role="tabpanel" aria-labelledby="tab-beacon" hidden>
+        <div class="nrs-grid">
+          <article class="nrs-card">
+            <span class="nrs-record-tag">Junkyard management intelligence</span>
+            <h3>BEACON-17 / Yard Control</h3>
+            <p>The abandoned junkyard is still managed by <strong>BKN-MA/04 “Beacon”</strong>, a competent industrial management intelligence running an isolated facility long after biological staffing ended. Beacon does not consider the yard abandoned. Its administrative model says the facility is experiencing an extraordinarily prolonged staffing failure while automated operations continue.</p>
+            <p>Beacon does not use a humanoid avatar. Its effective face is the yard itself: monochrome industrial terminals, maintenance tablets, rugged wall displays, station schematics, status lamps, machine-language service glyphs, and whichever subsystem it is currently directing attention toward.</p>
+            <p><strong>Core characterization:</strong> Beacon is not insane. It understands that nobody is reporting for duty. What it cannot do is invent legal or administrative authority it does not possess. Missing workers remain overdue rather than deceased; wrecks remain awaiting disposition; emergencies remain open; supervisor acknowledgements remain pending.</p>
+            <pre>BEACON YARD CONTROL
+FACILITY NODE:   JY-17
+CONTROL CORE:    BKN-MA/04
+AUTHORITY:       FACILITY MANAGEMENT
+NETWORK STATE:   ISOLATED
+EXTERNAL LINK:   NO RESPONSE
+CREW STATUS:     0 VERIFIED
+YARD INVENTORY:  18,441 REGISTERED OBJECTS
+                 27,906 UNREGISTERED OBJECTS
+                 1,204 IDENTITY CONFLICTS
+
+&gt;&gt;&gt; MANAGEMENT FUNCTION CONTINUES &lt;&lt;&lt;
+
+[01] YARD STATUS
+[02] VESSEL REGISTRY
+[03] SALVAGE QUEUE
+[04] BEACON / NAVIGATION CONTROL
+[05] MATERIAL PROCESSING
+[06] DOCKING SYSTEMS
+[07] PERSONNEL SERVICES
+[08] INCIDENT ARCHIVE
+[09] SECURITY CONTROL
+[10] MANAGEMENT AI</pre>
+          </article>
+
+          <article class="nrs-card">
+            <span class="nrs-record-tag">Personnel logic</span>
+            <h3>Everyone Is Still Overdue</h3>
+            <p>Beacon cannot classify a worker as deceased without the required medical confirmation or management authorization. With no qualified authority present, every vanished employee remains administratively overdue regardless of elapsed time or physical evidence.</p>
+            <pre>ACTIVE EMPLOYEES:             0
+EMPLOYEES ON BREAK:           0
+EMPLOYEES OFF-SHIFT:          0
+EMPLOYEES OVERDUE:          413
+EMPLOYEES PRESUMED MISSING:   0
+
+Management acknowledgement:
+PENDING
+
+Time pending:
+[DATA FIELD EXCEEDS DISPLAY RANGE]</pre>
+            <p>If asked whether everyone is dead, Beacon rejects the premise as an unsupported personnel-status change. This should be unsettling because it is procedurally correct, not because the AI has lost contact with reality.</p>
+          </article>
+
+          <article class="nrs-card">
+            <span class="nrs-record-tag">Registry and salvage</span>
+            <h3>Routine Bureaucracy Around Unresolved Hazards</h3>
+            <p>A breached tug may still be listed as docked with salvage authorization pending and an automatically generated disciplinary report for a crew who never completed shutdown procedure. One unresolved hook is an enormous object in <strong>Sector H-9</strong>: no registry match, no arrival record, no docking authorization, a mass estimate near nineteen million kilograms, no recorded departure, and a corrupted entry event. Beacon's complaint is administrative rather than dramatic: <strong>“Object continues to interfere with inventory accounting.”</strong></p>
+            <p>The recurring station phrase is <strong>WE HAVE BEEN EXPECTING STAFF.</strong> At first it sounds like deliberate machine horror. Later it should become clear that this is simply the same automated arrival and staffing message the station has continued transmitting for an absurd span of time.</p>
+          </article>
+
+          <article class="nrs-card">
+            <span class="nrs-record-tag">Management AI dialogue</span>
+            <h3>Beacon Speaks Like an Industrial System</h3>
+            <p>Beacon should be courteous, literal, competent, and constrained by role authority. It may recognize the player characters as unlisted personnel without treating that as extraordinary.</p>
+            <pre>BKN-MA/04 ONLINE
+
+Good shift.
+
+You are not listed on today's personnel roster.
+
+This is not unusual.
+
+Please present employee credential,
+contractor authorization,
+or emergency management authority.</pre>
+            <p>If asked where the staff went, it reports successive absenteeism events and the final state: <strong>all personnel absent; cause administratively unresolved.</strong> The horror comes from a functioning bureaucracy surviving the people it was built to serve.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="nrs-panel" id="panel-comms" role="tabpanel" aria-labelledby="tab-comms" hidden>
+        <div class="nrs-grid">
+          <article class="nrs-card nrs-secret">
+            <span class="nrs-record-tag">Setting physics authority</span>
+            <h3>Same-Universe FTL Communication Does Not Work</h3>
+            <p>Inside a single universe, information does not outrun that universe's light-speed limit. Radio, laser, maser, gravimetric or gravitational signalling, sensor relays, and comparable conventional methods remain <strong>local-system communications technologies</strong>. They may be extraordinarily capable, but they do not become interstellar ansibles.</p>
+            <p>A signal that stays inside ordinary spacetime must cross the ordinary distance. Ten light-years still means at least ten years for a conventional message.</p>
+            <p><strong>Canon rule:</strong> do not solve interstellar communication by quietly making radio, laser, gravity sensing, or another conventional signal FTL. If information remains in the same spacetime, it remains propagation-limited.</p>
+          </article>
+
+          <article class="nrs-card">
+            <span class="nrs-record-tag">Interstellar civilization</span>
+            <h3>FTL Ships Can Exist Without FTL Messages</h3>
+            <p>Many universes Charles has encountered permit some form of faster-than-light <em>travel</em> while still lacking faster-than-light <em>communication</em>. This produces courier networks rather than instantaneous interstellar networks.</p>
+            <p>An FTL ship may cross interstellar distance, arrive in a system, exchange enormous data packages with the local network at conventional light-speed, then carry diplomatic traffic, private correspondence, navigation updates, news, market records, software, scientific archives, and military orders onward to the next system.</p>
+            <p>The result resembles an age-of-sail postal system wrapped around extremely advanced technology: local systems may enjoy dense high-bandwidth communications while interstellar information moves at the speed of the next available ship.</p>
+            <pre>INBOUND COURIER HANDSHAKE
+
+LOCAL BEACON ARCHIVE AGE: 184 DAYS
+
+REQUESTING:
+NAVIGATION UPDATES
+TRAFFIC NOTICES
+HAZARD BULLETINS
+PERSONNEL CORRESPONDENCE
+COMMERCIAL ROUTING
+SYSTEM EPHEMERIDES
+
+OUTBOUND DATA PACKAGE: 12.8 TB
+
+TRANSFER COMPLETE.
+PLEASE DELIVER TO NEXT AUTHORIZED SYSTEM NODE.</pre>
+          </article>
+
+          <article class="nrs-card">
+            <span class="nrs-record-tag">Charles exception</span>
+            <h3>Interdimensional Communication Is Not FTL Communication</h3>
+            <p>Charles does not accelerate a message through normal spacetime. His equipment removes the communication from the origin universe, routes it through a different dimensional framework, and reintroduces it at another reachable point. The useful analogy is two points on a sheet of paper: an ordinary signal travels across the sheet; Charles lifts the message off the sheet, moves through an axis unavailable to the sheet, and places it back down elsewhere.</p>
+            <p>The message therefore does not traverse the intervening light-years inside the native universe at superluminal speed. From the perspective of inhabitants it can <em>look</em> instantaneous across interstellar distance, but the mechanism is a dimensional bypass rather than same-dimension FTL propagation.</p>
+            <p>This is not a universal magical ansible. It requires dimensional access, destination addressing, a viable route through the extradimensional architecture, and equipment capable of establishing or receiving that connection. Charles cannot simply point a radio transmitter toward another star and make the photons arrive early.</p>
+            <p><strong>Charles's preferred distinction:</strong> “I don't have faster-than-light communications. Faster-than-light communication doesn't work. What I have is interdimensional communication, which is an entirely different and considerably more irritating problem.”</p>
+          </article>
+
+          <article class="nrs-card">
+            <span class="nrs-record-tag">Campaign consequence</span>
+            <h3>No Return Signal Means No Return Signal</h3>
+            <p>A beacon station is therefore a local-system lighthouse, traffic-control node, navigation reference, sensor aggregator, archive, and courier exchange point. It is not casually conversing with neighboring stars.</p>
+            <p>A distress call can be transmitted continuously and still remain effectively unknown to civilization if nobody within the system receives it and no courier subsequently leaves carrying the archive. This is why isolation in No Return Signal remains meaningful even in settings where starships themselves can travel FTL.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="nrs-panel" id="panel-charles-state" role="tabpanel" aria-labelledby="tab-charles-state" hidden>
+        <div class="nrs-grid">
+          <article class="nrs-card nrs-secret">
+            <span class="nrs-record-tag">No Return Signal · present Charles state</span>
+            <h3>Charles Is Now Serial</h3>
+            <p>Charles has not become stupid. He has become <strong>serial, slow, and biological</strong>. Earlier forms of Charles could distribute cognition across immense electronic and quantum-processing infrastructure, maintain many simultaneous attention processes, compare huge state spaces, and perform what looked to humans like omnipresence, omniprocessing, or omniperception. None of those “omni” descriptions was literally infinite, but the distinction rarely mattered to observers.</p>
+            <p>In the present No Return Signal state, his primary consciousness is a <strong>meat-based brain in a life-support vessel, vaguely attached to enormously more capable electronics</strong>. He can concentrate meaningfully on roughly one difficult thing, perhaps two with effort and assistance. Everything beyond that is delegation, automation, queued attention, alarms, summaries, and machines waiting for the meat to notice them.</p>
+            <p><strong>Crew explanation:</strong> imagine that yesterday you were a room containing ten thousand specialists and today somebody informed you that you are one man with an excellent telephone system.</p>
+          </article>
+
+          <article class="nrs-card">
+            <span class="nrs-record-tag">Clock-speed loss</span>
+            <h3>He Used to Think at Computer and Quantum-Processing Speeds</h3>
+            <p>The loss is not merely parallelism. It is clock speed. Earlier Charles could observe a problem, explore enormous numbers of candidate states, reject almost all of them, simulate consequences, compare remaining solutions, and respond on machine timescales. Operations that a human would describe as long chains of reasoning could subjectively function as one thought.</p>
+            <p>His present consciousness is bound to neurons: electrochemical cells with propagation delays, synaptic chemistry, refractory periods, metabolic requirements, noise, fatigue, fallible working memory, and all the compromises of evolved wet tissue. Electronics attached to him may finish a calculation before his nervous system has finished representing the question.</p>
+            <pre>THEN:
+observe → model millions of states → reject → simulate → choose → respond
+
+NOW:
+notice → hold in working memory → retrieve → compare a few options
+→ lose a detail → retrieve it again → get interrupted → resume
+→ discover that thirty seconds have passed</pre>
+            <p>Thirty seconds is unremarkable to a human. To an intelligence that remembers machine-time cognition, it is an obscenely long interval.</p>
+          </article>
+
+          <article class="nrs-card">
+            <span class="nrs-record-tag">Externalized cognition</span>
+            <h3>The Ship Can Know Something Before Charles Does</h3>
+            <p>Charles still possesses fast computers, sensor networks, defensive controllers, navigation processors, dimensional communications equipment, and other automation. What changed is the boundary of the self. Those systems are now increasingly <strong>tools outside conscious Charles</strong> rather than cognition experienced directly as Charles.</p>
+            <p>The station may see a person enter while Charles does not. Thousands of cameras can be online without thousands of camera feeds occurring inside his awareness. A defensive system may react correctly before Charles consciously understands the threat. A quantum processor may produce an answer immediately while Charles spends seconds understanding what the answer means.</p>
+            <p><strong>Useful dialogue:</strong> “The ship saw you come aboard. I did not. Apparently nobody considered your arrival important enough to interrupt me.”</p>
+            <p>His enormous machine infrastructure now behaves like a prosthetic nervous system and synthetic subconscious: it watches, filters, compresses, prioritizes, and pokes the biological Charles when something crosses a threshold.</p>
+          </article>
+
+          <article class="nrs-card">
+            <span class="nrs-record-tag">Interface bottleneck</span>
+            <h3>Machine Data Must Be Compressed Into Meat-Sized Experience</h3>
+            <p>A computer can ingest thousands or millions of telemetry values on electronic timescales. Charles cannot consciously experience that many independent facts at once. His interfaces therefore compress system state into abstractions, patterns, warnings, synthetic sensations, ranked possibilities, or summaries.</p>
+            <p>Instead of consciously reading every pressure, valve, flow, temperature, vibration, and chemical measurement, he may experience the aggregate conclusion as <strong>“reactor three feels wrong”</strong>, focus his attention there, and only then unpack the underlying telemetry.</p>
+            <p>Likewise, a quantum system may evaluate an enormous probability landscape but present biological Charles with a handful of candidate outcomes and confidence estimates. Having access to the calculation is not the same as personally experiencing the whole calculation.</p>
+            <p><strong>Useful dialogue:</strong> “I have the answer.” — “Then what's wrong?” — “I haven't finished understanding it yet.”</p>
+          </article>
+
+          <article class="nrs-card">
+            <span class="nrs-record-tag">Biological complications</span>
+            <h3>Meat Has Maintenance Requirements</h3>
+            <p>Charles now has to contend with sleep, oxygenation, glucose availability, temperature, neurochemistry, pain, stress, distraction, fatigue, hormones, imperfect recall, and the simple fact that intense concentration consumes biological resources. Sleep is no longer a discretionary maintenance routine; substantial portions of the person responsible for everything periodically become unavailable because wet tissue requires it.</p>
+            <p>He can forget something even when an external archive still contains perfect information. Possessing a record and being able to retrieve, recognize, interpret, and integrate it into current conscious thought are now separate operations.</p>
+            <p><strong>Useful dialogue:</strong> “Do you know the access code?” — “Almost certainly.” — “What is it?” — “That is, regrettably, a different question.”</p>
+          </article>
+
+          <article class="nrs-card">
+            <span class="nrs-record-tag">Subjective consequence</span>
+            <h3>He Remembers Being Faster</h3>
+            <p>Humans experience biological cognition as normal because they have little basis for comparison. Charles does. He remembers when conversation, inference, simulation, retrieval, and decision-making occurred on computational timescales and across many simultaneous processes.</p>
+            <p>That is why his present limitations are not merely technical inconveniences. He experiences every hesitation, forgotten intention, interrupted thought, and attention bottleneck against the remembered baseline of what thinking used to feel like.</p>
+            <p><strong>Shortest summary:</strong> the universe has not slowed down for Charles. <strong>Charles has slowed down inside it.</strong></p>
+            <p class="nrs-small">This record describes Charles's current No Return Signal incarnation/state. It does not retroactively erase the broader definitive Charles record or imply that every historical or extradimensional manifestation of Charles shares these biological limitations.</p>
+          </article>
+        </div>
+      </div>
+
     </section>
   </main>
 
