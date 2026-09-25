@@ -2,34 +2,8 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after corrected Season 1 Episode 30.
-**Forward window:** Season 1 Episodes 31–32 through Season 2 Episode 3.
-
-## Season 1 Episode 31 — Open the Gates — LOCKED / CANON-BOUND
-
-Begin on the same breath as Episode 30's final confrontation. Montegrain, Luceran's genuine old friend, has just declared from above the gate that he has the castle, the throne and defenders controlling the home Luceran claims, and has offered dignified surrender.
-
-Luceran does not discover a spell, mechanism or theory. Exhausted by two days of failed ordinary solutions, grief and betrayal, he erupts with the desperate shouted order:
-
-**OPEN THE GATES!**
-
-The command is open-ended and simultaneously directed at Montegrain, the soldiers on the wall, wavering people inside and—without Luceran knowing this is possible—Edselsto itself.
-
-Edselsto obeys publicly and impossibly. Gate mechanisms move without living operators; spectral mechanism-presences and black miasma may accompany the event. The castle's action is strictly bounded to opening access and defeating attempts to keep that access closed.
-
-The response must shock both sides. Luceran should not understand what he has done before Rhyse or another living commander converts the opening into action.
-
-Episode 31 launches the retaking rather than being required to finish it. The breach should be ugly and immediate: gatehouse defenders fire into the first wave, attackers die in the threshold, some coup soldiers surrender or defect while others fight, and familiar defenders recognize familiar attackers. Rhyse, Miren, Ardel, Mara, Anja, Bram, Calienne's network, servants, guards and ordinary workers must materially shape the fighting. Edselsto does **not** guide swords, select targets, murder enemies, reveal perfect routes or solve command problems.
-
-Use enough room-level detail to make the castle's accumulated geography matter: gatehouse, receiving approaches, lower halls, service corridors, barracks routes and the first interior choke points can each become distinct tactical problems. Named casualties, broken formations, rescued wounded, improvised barricades, contradictory orders and side-character choices should carry forward rather than resetting between scenes.
-
-Aven, Rusk and Montegrain remain distinct actors. Their conduct must follow established motives rather than flattening the coup into one faction. Do not make Montegrain retroactively responsible for every prior hostile action.
-
-All seven ancestral lights remain lit.
-
-**Length provision:** Episode 31 may run longer than a standard episode. Do not compress the first phase of the breach merely to hit a nominal hour-scale size.
-
-**Exit target:** Luceran's force has entered Edselsto and the retaking is irreversibly underway, but the castle is not yet cleanly secured. The battle continues into the oversized finale.
+**State:** Rolled forward after Season 1 Episode 31.
+**Forward window:** Season 1 Episode 32 through Season 2 Episode 4.
 
 ## Season 1 Episode 32 — Sovereign — LOCKED / OVERSIZED SEASON-FINALE
 
@@ -119,9 +93,39 @@ At the same time, show the political cost of a servant that never bargains, refu
 - No supernatural intervention occurs.
 - All seven ancestral lights remain lit.
 
+## Season 2 Episode 4 — Silver in the Walls — PLANNED / HORIZON
+
+Restoration of Edselsto's newly demonstrated capabilities must require material infrastructure rather than effortless escalation. Silver channels, metals, skilled craftspeople, consecration, money, labor and access become political resources.
+
+Suppliers and workers gain leverage because supernatural usefulness still depends on human procurement. Romance, patronage and factional access can attach themselves to contracts and technical expertise.
+
+Do not let Episode 31's gate miracle become proof that Edselsto can simply do anything. Capability expands through bounded discovery and costly restoration.
+
+**Horizon exit:** Edselsto's perception begins to expand because living institutions chose to build and fund the conduits that permit it.
+
+## Episode 31 reconciliation
+
+- Luceran shouts **OPEN THE GATES!** without knowing Edselsto can obey.
+- Edselsto publicly opens the gate through impossible latches, black vapor and spectral mechanism-workers.
+- The supernatural action is bounded to access; it does not attack, guide, target or retake the castle.
+- Rhyse immediately converts the opening into a human assault.
+- Jalen Orris dies in the first breach; Sergeant Iven Marrick later dies after holding a gatehouse corner.
+- Pellan Vey surrenders, prevents Luceran from being shot, later saves him from an axe attack while still insisting on surrender; his culpability remains unresolved.
+- Aven preserves surrender and medical protections and orders withdrawal.
+- Rusk resists surrender, maintains coercive command and withdraws deeper while apparently moving or destroying records.
+- Montegrain withdraws his own people and begins questioning what Rusk is protecting or erasing; he remains politically culpable and uncaptured.
+- Ardel independently takes the north service/gallery route using household knowledge.
+- Fenn's knowledge of his mother's service routes materially enables the gallery attack and warns of lamp-oil movement.
+- Anja, Bram and Mikel remain alive; Bram contributes knowledge rather than receiving an implausible combat recovery.
+- Calienne treats wounded from both sides and preserves the chapel as a real medical space.
+- Miren remains active and continues to tell Luceran what he does not want to hear.
+- Loyal forces hold the outer gate, gatehouse, receiving hall, north service and lower hall.
+- Kitchens remain contested; smoke is present in the administrative wing; great-hall approaches, upper house and throne room remain in coup hands.
+- All seven ancestral lights remain lit.
+
 ## Active payoff debt
 
-Montegrain betrayal/motive/accountability; Aven constitutional culpability and surrender protections; Rusk patronage and coercive command; coup prisoner classification; Edrik/Lio Venn deaths and households; wounded/civilian compensation; Mera/daughter economy/Parel/Pellon chain; false orders and credential provenance; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel roadblock/Kaelmont independence; Ysabet/Selise archive boundary; Calienne care space; Red Ford settlement; unidentified carter; Northbridge stores/repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; Harl connection unproved; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candle interpretation; Hall of Veils work; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door.
+Montegrain betrayal/motive/accountability and living capture; Aven constitutional culpability and surrender protections; Rusk patronage/coercive command/record objective; coup prisoner classification; Pellan Vey individual culpability; Jalen Orris/Iven Marrick/Edrik Saye/Lio Venn deaths and households; wounded/civilian compensation; Mera/daughter economy/Parel/Pellon chain; false orders and credential provenance; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel roadblock/Kaelmont independence; Ysabet/Selise archive boundary; Calienne care space; Red Ford settlement; unidentified carter; Northbridge stores/repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; Harl connection unproved; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candle interpretation; Hall of Veils work; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door.
 
 ## Protected long-future seeds
 
