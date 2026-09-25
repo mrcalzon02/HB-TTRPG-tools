@@ -1,9 +1,16 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.2.1';
+  const VERSION = '1.3.0';
   const STORAGE_KEY = 'hb-ttrpg-tabletop-toolkit-v1';
   const HISTORY_LIMIT = 60;
+  const DICE_SETTING_DEFAULTS = Object.freeze({ tray: 'felt', walls: 'leather', dice: 'classic', sound: 'yes' });
+  const DICE_SETTING_VALUES = Object.freeze({
+    tray: Object.freeze(['felt', 'walnut', 'stone', 'steel', 'arcane']),
+    walls: Object.freeze(['leather', 'walnut', 'stone', 'steel', 'none']),
+    dice: Object.freeze(['classic', 'ivory', 'obsidian', 'metal', 'crystal', 'jade']),
+    sound: Object.freeze(['yes', 'no'])
+  });
   const state = loadState();
   let uidCounter = 0;
   let dragContext = null;
@@ -13,11 +20,14 @@
   let diceTrayBodies = [];
   let diceTrayReveal = 0;
   let diceTrayResizeObserver = null;
+  let diceAudioContext = null;
+  let diceLastImpactAt = 0;
   const diceGeometryCache = Object.create(null);
 
   function freshState() {
     return {
       diceHistory: [],
+      diceSettings: Object.assign({}, DICE_SETTING_DEFAULTS),
       initiative: { round: 1, index: 0, entries: [] },
       roster: [],
       counters: [],
@@ -35,6 +45,10 @@
       const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
       if (!parsed || typeof parsed !== 'object') return fallback;
       const merged = Object.assign(fallback, parsed);
+      merged.diceSettings = Object.assign({}, DICE_SETTING_DEFAULTS, parsed.diceSettings || {});
+      Object.keys(DICE_SETTING_DEFAULTS).forEach(function(key) {
+        if (DICE_SETTING_VALUES[key].indexOf(merged.diceSettings[key]) === -1) merged.diceSettings[key] = DICE_SETTING_DEFAULTS[key];
+      });
       merged.initiative = Object.assign({ round: 1, index: 0, entries: [] }, parsed.initiative || {});
       merged.random = Object.assign({ tableText: '', bagText: '', bagRemaining: [] }, parsed.random || {});
       merged.deck = Object.assign({ remaining: [], discard: [] }, parsed.deck || {});
@@ -455,8 +469,14 @@
     };
   }
 
-  function dieColorFor(die) {
-    if (die.fate) return [220,220,210];
+  function diceMaterialFor(die) {
+    const style = state.diceSettings && state.diceSettings.dice || DICE_SETTING_DEFAULTS.dice;
+    if (style === 'ivory') return { rgb: [224,216,192], edge: [255,248,226], alpha: 0.98, texture: 'speckle' };
+    if (style === 'obsidian') return { rgb: [54,43,68], edge: [190,145,232], alpha: 0.98, texture: 'sheen' };
+    if (style === 'metal') return { rgb: [145,157,169], edge: [232,239,244], alpha: 0.98, texture: 'brushed' };
+    if (style === 'crystal') return { rgb: [91,176,202], edge: [207,245,255], alpha: 0.72, texture: 'crystal' };
+    if (style === 'jade') return { rgb: [62,145,104], edge: [191,239,205], alpha: 0.97, texture: 'vein' };
+    if (die.fate) return { rgb: [220,220,210], edge: [255,248,226], alpha: 0.98, texture: 'classic' };
     const palette = {
       2: [186,151,91],
       4: [207,102,76],
@@ -467,7 +487,222 @@
       20: [190,82,123],
       100: [102,137,184]
     };
-    return palette[die.sides] || [177,139,91];
+    return { rgb: palette[die.sides] || [177,139,91], edge: [255,244,218], alpha: 0.98, texture: 'classic' };
+  }
+
+  function dieColorFor(die) {
+    return diceMaterialFor(die).rgb;
+  }
+
+  function trayFloorStyle() {
+    const style = state.diceSettings && state.diceSettings.tray || DICE_SETTING_DEFAULTS.tray;
+    const styles = {
+      felt: { base: 'rgba(18,48,39,.94)', line: 'rgba(151,205,177,.09)', accent: 'rgba(218,241,227,.12)', texture: 'felt' },
+      walnut: { base: 'rgba(63,38,25,.96)', line: 'rgba(181,121,77,.18)', accent: 'rgba(237,190,135,.12)', texture: 'wood' },
+      stone: { base: 'rgba(54,56,61,.96)', line: 'rgba(214,219,225,.10)', accent: 'rgba(255,255,255,.08)', texture: 'stone' },
+      steel: { base: 'rgba(45,55,65,.97)', line: 'rgba(174,195,210,.13)', accent: 'rgba(232,242,248,.18)', texture: 'steel' },
+      arcane: { base: 'rgba(31,22,52,.97)', line: 'rgba(153,110,222,.18)', accent: 'rgba(226,185,255,.24)', texture: 'arcane' }
+    };
+    return styles[style] || styles.felt;
+  }
+
+  function trayWallStyle() {
+    const style = state.diceSettings && state.diceSettings.walls || DICE_SETTING_DEFAULTS.walls;
+    const styles = {
+      leather: { base: 'rgba(67,42,31,.98)', line: 'rgba(193,139,94,.18)', accent: 'rgba(237,196,150,.16)', texture: 'leather' },
+      walnut: { base: 'rgba(72,43,27,.99)', line: 'rgba(200,136,82,.21)', accent: 'rgba(242,193,129,.16)', texture: 'wood' },
+      stone: { base: 'rgba(67,68,72,.99)', line: 'rgba(214,219,225,.12)', accent: 'rgba(255,255,255,.09)', texture: 'stone' },
+      steel: { base: 'rgba(55,65,75,.99)', line: 'rgba(186,205,218,.17)', accent: 'rgba(240,248,252,.21)', texture: 'steel' },
+      none: { base: 'rgba(0,0,0,0)', line: 'rgba(0,0,0,0)', accent: 'rgba(0,0,0,0)', texture: 'none' }
+    };
+    return styles[style] || styles.leather;
+  }
+
+  function tracePolygon(ctx, points) {
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i += 1) ctx.lineTo(points[i].x, points[i].y);
+    ctx.closePath();
+  }
+
+  function drawFloorTexture(ctx, points, style, width, height) {
+    ctx.save();
+    tracePolygon(ctx, points);
+    ctx.clip();
+    ctx.strokeStyle = style.line;
+    ctx.fillStyle = style.accent;
+    ctx.lineWidth = 1;
+
+    if (style.texture === 'felt') {
+      for (let y = 0; y < height; y += 11) {
+        for (let x = (y % 22 ? 6 : 0); x < width; x += 13) {
+          ctx.fillRect(x, y, 1, 1);
+        }
+      }
+    } else if (style.texture === 'wood') {
+      for (let y = -20; y < height + 40; y += 19) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.bezierCurveTo(width * .3, y + 8, width * .65, y - 8, width, y + 2);
+        ctx.stroke();
+      }
+    } else if (style.texture === 'stone') {
+      for (let x = 0; x < width; x += 54) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 18, height); ctx.stroke();
+      }
+      for (let y = 0; y < height; y += 42) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y + 9); ctx.stroke();
+      }
+    } else if (style.texture === 'steel') {
+      for (let y = 12; y < height; y += 26) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+      }
+      for (let x = 18; x < width; x += 42) {
+        for (let y = 15; y < height; y += 52) {
+          ctx.beginPath(); ctx.arc(x, y, 1.3, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+    } else if (style.texture === 'arcane') {
+      const cx = width * .5;
+      const cy = height * .58;
+      for (let radius = 34; radius < Math.min(width,height) * .75; radius += 43) {
+        ctx.beginPath(); ctx.arc(cx, cy, radius, 0, Math.PI * 2); ctx.stroke();
+      }
+      for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 6) {
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(angle) * width, cy + Math.sin(angle) * height); ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+
+  function drawTrayWalls(ctx, width, height) {
+    const style = trayWallStyle();
+    if (style.texture === 'none') return;
+    const h = 0.62;
+    const walls = [
+      [{x:-5.7,y:0,z:3.2},{x:5.7,y:0,z:3.2},{x:5.7,y:h,z:3.2},{x:-5.7,y:h,z:3.2}],
+      [{x:-5.7,y:0,z:-3.2},{x:-5.7,y:0,z:3.2},{x:-5.7,y:h,z:3.2},{x:-5.7,y:h,z:-3.2}],
+      [{x:5.7,y:0,z:3.2},{x:5.7,y:0,z:-3.2},{x:5.7,y:h,z:-3.2},{x:5.7,y:h,z:3.2}],
+      [{x:5.7,y:0,z:-3.2},{x:-5.7,y:0,z:-3.2},{x:-5.7,y:h*.48,z:-3.2},{x:5.7,y:h*.48,z:-3.2}]
+    ];
+
+    walls.forEach(function(wall, wallIndex) {
+      const points = wall.map(function(point) { return projectDicePoint(point, width, height); });
+      tracePolygon(ctx, points);
+      ctx.fillStyle = style.base;
+      ctx.fill();
+      ctx.strokeStyle = style.line;
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      ctx.save();
+      tracePolygon(ctx, points);
+      ctx.clip();
+      ctx.strokeStyle = style.accent;
+      ctx.fillStyle = style.accent;
+      ctx.lineWidth = 1;
+      if (style.texture === 'leather') {
+        for (let i = 0; i < 8; i += 1) {
+          const y = points[0].y + (i + 1) * 7;
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y + (wallIndex % 2 ? 5 : -3)); ctx.stroke();
+        }
+      } else if (style.texture === 'wood') {
+        for (let i = -4; i < 18; i += 1) {
+          const x = i * 44 + wallIndex * 9;
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 22, height); ctx.stroke();
+        }
+      } else if (style.texture === 'stone') {
+        for (let i = 0; i < 12; i += 1) {
+          const x = i * 58 + (wallIndex % 2) * 21;
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x - 9, height); ctx.stroke();
+        }
+      } else if (style.texture === 'steel') {
+        for (let i = 0; i < 16; i += 1) {
+          const x = i * 46 + 18;
+          const y = (wallIndex * 23 + i * 17) % Math.max(30, height);
+          ctx.beginPath(); ctx.arc(x, y, 1.6, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+      ctx.restore();
+    });
+  }
+
+  function drawDieFaceTexture(ctx, points, material, seed) {
+    if (!material || material.texture === 'classic') return;
+    ctx.save();
+    tracePolygon(ctx, points);
+    ctx.clip();
+    const minX = Math.min.apply(null, points.map(function(point) { return point.x; }));
+    const maxX = Math.max.apply(null, points.map(function(point) { return point.x; }));
+    const minY = Math.min.apply(null, points.map(function(point) { return point.y; }));
+    const maxY = Math.max.apply(null, points.map(function(point) { return point.y; }));
+    ctx.lineWidth = 0.8;
+
+    if (material.texture === 'speckle') {
+      ctx.fillStyle = 'rgba(86,70,45,.18)';
+      for (let i = 0; i < 6; i += 1) {
+        const x = minX + ((seed * 19 + i * 31) % 97) / 97 * Math.max(1,maxX-minX);
+        const y = minY + ((seed * 29 + i * 17) % 89) / 89 * Math.max(1,maxY-minY);
+        ctx.fillRect(x,y,1,1);
+      }
+    } else if (material.texture === 'sheen') {
+      ctx.strokeStyle = 'rgba(227,190,255,.20)';
+      ctx.beginPath(); ctx.moveTo(minX, maxY); ctx.lineTo(maxX, minY); ctx.stroke();
+    } else if (material.texture === 'brushed') {
+      ctx.strokeStyle = 'rgba(255,255,255,.14)';
+      for (let y = minY; y <= maxY; y += 4) {
+        ctx.beginPath(); ctx.moveTo(minX,y); ctx.lineTo(maxX,y+1); ctx.stroke();
+      }
+    } else if (material.texture === 'crystal') {
+      ctx.strokeStyle = 'rgba(225,252,255,.24)';
+      ctx.beginPath();
+      ctx.moveTo(minX + (maxX-minX)*.18, maxY);
+      ctx.lineTo(maxX - (maxX-minX)*.15, minY);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(minX, minY + (maxY-minY)*.42);
+      ctx.lineTo(maxX, maxY - (maxY-minY)*.18);
+      ctx.stroke();
+    } else if (material.texture === 'vein') {
+      ctx.strokeStyle = 'rgba(216,255,224,.17)';
+      ctx.beginPath();
+      ctx.moveTo(minX, minY + (maxY-minY)*.65);
+      ctx.bezierCurveTo((minX+maxX)*.42, minY, (minX+maxX)*.58, maxY, maxX, minY + (maxY-minY)*.32);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function ensureDiceAudio() {
+    if (!state.diceSettings || state.diceSettings.sound !== 'yes') return null;
+    const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextCtor) return null;
+    if (!diceAudioContext) diceAudioContext = new AudioContextCtor();
+    if (diceAudioContext.state === 'suspended') diceAudioContext.resume().catch(function() {});
+    return diceAudioContext;
+  }
+
+  function playDiceImpact(strength, kind) {
+    if (!state.diceSettings || state.diceSettings.sound !== 'yes') return;
+    const audio = ensureDiceAudio();
+    if (!audio || audio.state !== 'running') return;
+    const nowMs = performance.now();
+    if (nowMs - diceLastImpactAt < 22) return;
+    diceLastImpactAt = nowMs;
+    const material = state.diceSettings.dice || 'classic';
+    const frequencies = { classic: 520, ivory: 690, obsidian: 250, metal: 1040, crystal: 880, jade: 460 };
+    const baseFrequency = frequencies[material] || 520;
+    const oscillator = audio.createOscillator();
+    const gain = audio.createGain();
+    oscillator.type = material === 'metal' || material === 'crystal' ? 'triangle' : 'sine';
+    oscillator.frequency.setValueAtTime(baseFrequency * (kind === 'wall' ? .82 : kind === 'dice' ? 1.14 : 1), audio.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(Math.max(85, baseFrequency * .35), audio.currentTime + .045);
+    const volume = Math.max(.006, Math.min(.055, Number(strength || .2) * .048));
+    gain.gain.setValueAtTime(volume, audio.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.0001, audio.currentTime + .055);
+    oscillator.connect(gain);
+    gain.connect(audio.destination);
+    oscillator.start();
+    oscillator.stop(audio.currentTime + .06);
   }
 
   function collectVisualDice(result) {
@@ -586,6 +821,7 @@
         b.z += nz * overlap;
         const relative = (b.vx - a.vx) * nx + (b.vz - a.vz) * nz;
         if (relative < 0) {
+          playDiceImpact(Math.min(1, Math.abs(relative) / 7), 'dice');
           const impulse = -relative * 0.52;
           a.vx -= nx * impulse;
           a.vz -= nz * impulse;
@@ -613,11 +849,13 @@
       body.rz += body.avz * delta;
 
       if (Math.abs(body.x) > 5.05) {
+        playDiceImpact(Math.min(1, Math.abs(body.vx) / 8), 'wall');
         body.x = Math.sign(body.x) * 5.05;
         body.vx *= -0.56;
         body.avz += body.vx * 0.85;
       }
       if (Math.abs(body.z) > 2.9) {
+        playDiceImpact(Math.min(1, Math.abs(body.vz) / 8), 'wall');
         body.z = Math.sign(body.z) * 2.9;
         body.vz *= -0.56;
         body.avx -= body.vz * 0.85;
@@ -626,6 +864,7 @@
       if (body.y <= body.radius) {
         body.y = body.radius;
         if (Math.abs(body.vy) > 0.7 && body.bounces < 5) {
+          playDiceImpact(Math.min(1, Math.abs(body.vy) / 8), 'floor');
           body.vy = Math.abs(body.vy) * (0.46 - Math.min(0.16, body.bounces * 0.035));
           body.bounces += 1;
           body.avx += (Math.random() - 0.5) * 5;
@@ -684,17 +923,17 @@
       {x:-5.7,y:0,z:-3.2},{x:5.7,y:0,z:-3.2},
       {x:5.7,y:0,z:3.2},{x:-5.7,y:0,z:3.2}
     ].map(function(point) { return projectDicePoint(point, width, height); });
-    ctx.beginPath();
-    ctx.moveTo(floorCorners[0].x, floorCorners[0].y);
-    for (let i = 1; i < floorCorners.length; i += 1) ctx.lineTo(floorCorners[i].x, floorCorners[i].y);
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(7,9,14,.44)';
+    const floorStyle = trayFloorStyle();
+    tracePolygon(ctx, floorCorners);
+    ctx.fillStyle = floorStyle.base;
     ctx.fill();
-    ctx.strokeStyle = 'rgba(224,189,123,.18)';
+    ctx.strokeStyle = floorStyle.line;
     ctx.lineWidth = 1;
     ctx.stroke();
+    drawFloorTexture(ctx, floorCorners, floorStyle, width, height);
+    drawTrayWalls(ctx, width, height);
 
-    ctx.strokeStyle = 'rgba(255,255,255,.045)';
+    ctx.strokeStyle = floorStyle.line;
     for (let x = -4; x <= 4; x += 2) {
       const a = projectDicePoint({x:x,y:0,z:-3.2}, width, height);
       const b = projectDicePoint({x:x,y:0,z:3.2}, width, height);
@@ -770,19 +1009,18 @@
     faceQueue.sort(function(a, b) { return b.depth - a.depth; });
 
     faceQueue.forEach(function(face) {
-      const color = dieColorFor(face.body.die);
-      const keptAlpha = face.body.die.kept ? 0.92 : (reveal > 0.7 ? 0.36 : 0.72);
+      const material = diceMaterialFor(face.body.die);
+      const color = material.rgb;
+      const keptAlpha = (face.body.die.kept ? 0.92 : (reveal > 0.7 ? 0.36 : 0.72)) * material.alpha;
       const r = Math.min(255, Math.round(color[0] * face.brightness));
       const g = Math.min(255, Math.round(color[1] * face.brightness));
       const b = Math.min(255, Math.round(color[2] * face.brightness));
-      ctx.beginPath();
-      ctx.moveTo(face.points[0].x, face.points[0].y);
-      for (let i = 1; i < face.points.length; i += 1) ctx.lineTo(face.points[i].x, face.points[i].y);
-      ctx.closePath();
+      tracePolygon(ctx, face.points);
       ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + keptAlpha + ')';
       ctx.fill();
-      ctx.strokeStyle = 'rgba(255,244,218,' + (face.body.die.kept ? 0.42 : 0.18) + ')';
-      ctx.lineWidth = 0.85;
+      drawDieFaceTexture(ctx, face.points, material, face.bodyIndex + face.points.length);
+      ctx.strokeStyle = 'rgba(' + material.edge[0] + ',' + material.edge[1] + ',' + material.edge[2] + ',' + (face.body.die.kept ? 0.44 : 0.2) + ')';
+      ctx.lineWidth = material.texture === 'metal' ? 1.15 : 0.85;
       ctx.stroke();
     });
 
@@ -825,9 +1063,8 @@
     const canvas = document.getElementById('ttk-dice-tray');
     const hint = document.getElementById('ttk-dice-stage-hint');
     if (canvas) {
-      const ctx = canvas.getContext('2d');
-      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
       canvas.setAttribute('aria-label', '3D dice tray. Roll dice to animate them.');
+      drawDiceTray([], 0);
     }
     if (hint) {
       hint.hidden = false;
@@ -845,6 +1082,7 @@
       });
       diceTrayResizeObserver.observe(stage);
     }
+    drawDiceTray(diceTrayBodies, diceTrayReveal);
   }
 
   function setDiceReadout(result) {
@@ -949,6 +1187,8 @@
       state.diceHistory.unshift(result);
       state.diceHistory = state.diceHistory.slice(0, HISTORY_LIMIT);
       saveState();
+      ensureDiceAudio();
+      playDiceImpact(.28, 'dice');
       setDiceRollingReadout(result);
       setStatus('Rolling ' + result.expression + '…');
       renderDiceTray(result, false, function() {
@@ -1356,6 +1596,22 @@
     });
   }
 
+  function syncDiceSettingsControls() {
+    document.querySelectorAll('#tabletop-toolkit-mount [data-dice-setting]').forEach(function(select) {
+      const key = select.dataset.diceSetting;
+      if (key && state.diceSettings && state.diceSettings[key] != null) select.value = state.diceSettings[key];
+    });
+  }
+
+  function updateDiceSetting(key, value) {
+    if (!DICE_SETTING_VALUES[key] || DICE_SETTING_VALUES[key].indexOf(value) === -1) return;
+    state.diceSettings[key] = value;
+    saveState();
+    if (key === 'sound' && value === 'yes') ensureDiceAudio();
+    drawDiceTray(diceTrayBodies, diceTrayReveal);
+    setStatus('Dice ' + key + ' setting changed to ' + value + '.');
+  }
+
   function activateTab(tabName) {
     document.querySelectorAll('#tabletop-toolkit-mount [data-tool-tab]').forEach(function(button) {
       const active = button.dataset.toolTab === tabName;
@@ -1578,7 +1834,10 @@
       if (event.target.id === 'ttk-import-toolkit') {
         importToolkitJson(event.target.files && event.target.files[0]);
         event.target.value = '';
+        return;
       }
+      const setting = event.target.closest('[data-dice-setting]');
+      if (setting) updateDiceSetting(setting.dataset.diceSetting, setting.value);
     });
 
     const diceInput = document.getElementById('ttk-dice-expression');
@@ -1621,6 +1880,10 @@
         if (!incoming || typeof incoming !== 'object') throw new Error('The selected JSON does not contain toolkit state.');
         const replacement = freshState();
         Object.assign(replacement, incoming);
+        replacement.diceSettings = Object.assign({}, DICE_SETTING_DEFAULTS, incoming.diceSettings || {});
+        Object.keys(DICE_SETTING_DEFAULTS).forEach(function(key) {
+          if (DICE_SETTING_VALUES[key].indexOf(replacement.diceSettings[key]) === -1) replacement.diceSettings[key] = DICE_SETTING_DEFAULTS[key];
+        });
         replacement.initiative = Object.assign(freshState().initiative, incoming.initiative || {});
         replacement.random = Object.assign(freshState().random, incoming.random || {});
         replacement.deck = Object.assign(freshState().deck, incoming.deck || {});
@@ -1714,6 +1977,7 @@
 
   function renderAll() {
     renderDiceHistory();
+    syncDiceSettingsControls();
     renderInitiative();
     renderRoster();
     renderTrackers();
@@ -1753,7 +2017,7 @@
         '<p id="ttk-status" class="ttk-status" role="status" aria-live="polite">Toolkit ready. State autosaves locally after changes.</p>',
 
         '<section class="ttk-panel" data-tool-panel="dice">',
-          '<div class="ttk-section-head"><div><p class="eyebrow">RNG and roll history</p><h3>Advanced Dice Roller</h3></div><button type="button" id="ttk-clear-rolls">Clear History</button></div>',
+          '<div class="ttk-section-head ttk-dice-section-head"><div><p class="eyebrow">RNG and roll history</p><h3>Advanced Dice Roller</h3></div><div class="ttk-dice-header-actions"><label class="ttk-dice-setting">Tray<select data-dice-setting="tray" aria-label="Dice tray texture"><option value="felt">Felt</option><option value="walnut">Walnut</option><option value="stone">Stone</option><option value="steel">Steel</option><option value="arcane">Arcane</option></select></label><label class="ttk-dice-setting">Walls<select data-dice-setting="walls" aria-label="Dice tray wall texture"><option value="leather">Leather</option><option value="walnut">Walnut</option><option value="stone">Stone</option><option value="steel">Steel</option><option value="none">None</option></select></label><label class="ttk-dice-setting">Dice<select data-dice-setting="dice" aria-label="Dice texture"><option value="classic">Classic</option><option value="ivory">Ivory</option><option value="obsidian">Obsidian</option><option value="metal">Metal</option><option value="crystal">Crystal</option><option value="jade">Jade</option></select></label><label class="ttk-dice-setting">Sound<select data-dice-setting="sound" aria-label="Dice sound"><option value="yes">Yes</option><option value="no">No</option></select></label><button type="button" id="ttk-clear-rolls">Clear History</button></div></div>',
           '<div class="ttk-dice-layout"><div class="ttk-dice-controls">',
             '<label>Expression<input id="ttk-dice-expression" value="1d20" inputmode="text" placeholder="2d20kh1+5"></label>',
             '<label>Optional Label<input id="ttk-dice-label" placeholder="Perception, dragon fire, initiative…"></label>',
