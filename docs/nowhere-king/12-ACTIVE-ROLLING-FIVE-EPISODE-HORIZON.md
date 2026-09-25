@@ -2,130 +2,75 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 1 Episode 31.
-**Forward window:** Season 1 Episode 32 through Season 2 Episode 4.
-
-## Season 1 Episode 32 — Sovereign — LOCKED / OVERSIZED SEASON-FINALE
-
-Episode 32 is explicitly permitted to be **much, much longer than a normal episode**. Its primary job is to let the earned climax breathe.
-
-Continue the retaking room by room through spaces the audience already knows. Do not montage from breached gate to throne room. Use the season's physical geography and social history as combat terrain: receiving rooms, kitchens, service stairs, guard routes, galleries, chapel approaches, archive corridors, family passages, council rooms, great hall approaches and throne approaches should matter where dependency-valid.
-
-The combat may be grisly. Show the bodily cost of close fighting: bolts at short range, spear wounds in choke points, slipping on blood, crushed fingers at doors, smoke, broken teeth, panic, wounded people dragged under tables or through service routes, surrendered men trying not to be mistaken for active defenders, and exhausted fighters killing people they recognize. Violence must remain consequential rather than decorative.
-
-Every retained combat sequence must answer:
-- who is trying to take or hold this room;
-- why the room matters;
-- what each side knows;
-- who commands locally;
-- which recurring or low-status character changes the outcome;
-- who is wounded, killed, captured, rescued, defects or surrenders;
-- what physical damage occurs;
-- what evidence, supplies, routes or relationships survive the fight;
-- how the result changes the next room.
-
-The castle's supernatural contribution remains bounded to the opened access established in Episode 31. It does not kill coup soldiers, choose targets, provide perfect navigation, close traps around enemies, or erase tactical uncertainty. Living people retake Edselsto.
-
-Montegrain is the personal betrayal payoff and must survive the fighting. The room-by-room battle ultimately drives him back to the throne room or its immediate approach, where he is cornered and captured alive. He must face Luceran's mercy. Do not give Luceran the emotional convenience of Montegrain dying heroically, villainously or accidentally in battle.
-
-Aven and Rusk remain separate political and military problems. Surrender terms, medical neutrality and prior protections continue to affect who fights, who yields, who can be lawfully detained, and who later claims atrocity or betrayal. Side characters should exploit or defend those rules even while the fighting is chaotic.
-
-After the fighting, do not immediately cut to quiet. Let the throne room fill with wounded people, prisoners, officers, healers, contradictory accounts and demands for judgment. The argument over Montegrain, surviving coup leaders, surrender protections and the cost of the retaking happens while Luceran is physically exhausted and still carrying the battle on him.
-
-Only then does Luceran finally slump into the throne because his body is giving out, not as a ceremonial restoration.
-
-The first personified manifestation appears: a floating pale silver theatrical mask before him.
-
-It says:
-
-**"Your Majesty."**
-
-That is the season-ending supernatural step-change and the beginning of the Useful Monster era. Do not explain the mask. Do not reveal containment truth, prison truth or the castle-interface relationship.
-
-All seven ancestral lights remain lit.
-
-**Exit target:** Season One ends only after the bloody human retaking, Montegrain's living capture, the immediate argument over justice and mercy, and the mask's first **"Your Majesty."** The final emotional proposition is that people betrayed Luceran while Edselsto, apparently, obeyed.
+**State:** Rolled forward after Season 1 Episode 32.
+**Forward window:** Season 2 Episodes 1–5.
 
 ## Season 2 Episode 1 — The Useful Monster — LOCKED / NEW-SEASON ENTRY
 
-Begin from the emotional temptation created by the finale. Luceran has experienced institutional betrayal, personal betrayal and costly human friction; the castle apparently answered one desperate command perfectly.
+Begin on the residue of the mask's public **"Your Majesty."** Luceran has just survived institutional betrayal, personal betrayal and a bloody human retaking; Edselsto appears to have answered one desperate direct command perfectly and then recognized him without bargaining.
 
-Establish cautious attempts to communicate with or use Edselsto while different observers form different theories. Luceran's desire to trust it should be understandable rather than foolish.
+Do not skip the bodies for the supernatural novelty. Funerals, casualty lists, compensation, prisoner classification, damaged rooms, staffing holes and surviving evidence remain active. Montegrain, Aven and Rusk are alive in custody. Pellan Vey requires individual judgment. Harl Ven's payment ledger and the partially burned authorization packet create hearings, not instant certainty.
 
-Do not jump to omnipotent castle behavior. Every capability must be bounded, discovered and witnessed.
+Different witnesses must form different models of the mask. Luceran may feel tempted to treat it as ancestral validation. Miren should preserve friction. Rhyse should ask operational questions. Calienne and Merel have different institutional reasons for caution. No one knows the containment truth.
 
-Coup trials, funerals, compensation, staffing losses, Montegrain's fate and Rusk/Aven accountability continue in parallel. Supernatural novelty does not erase human government.
+Test communication cautiously. Every demonstrated capability must be bounded, witnessed and recorded through period-appropriate means. The castle does not become omniscient because it opened a gate.
 
-**Exit target:** supernatural participation in governance becomes a practical question.
+**Exit target:** supernatural participation in government becomes a practical question rather than merely an apparition.
 
-## Season 2 Episode 2 — Terms of Service — PLANNED
+## Season 2 Episode 2 — Terms of Service — LOCKED / PLANNED
 
-Force the first institutional argument over what Edselsto is allowed to do. Rhyse, Miren, Calienne, surviving staff, clergy, nobles and administrators should approach the problem through different duties rather than a simple believers-versus-skeptics split.
+Force the first institutional argument over what Edselsto is allowed to do. Rhyse, Miren, Calienne, surviving staff, clergy, nobles and administrators approach the problem through different duties rather than believers-versus-skeptics.
 
-The central danger is not that Edselsto is obviously evil. It is that perfect obedience is extraordinarily useful after the king has just been betrayed by people.
+The central danger is usefulness. Perfect obedience is extraordinarily attractive after people have just betrayed Luceran.
 
 **Exit target:** provisional human rules exist for asking the castle for help, even though nobody knows whether those rules constrain Edselsto or merely constrain themselves.
 
-## Season 2 Episode 3 — The Perfect Servant — PLANNED / HORIZON
+## Season 2 Episode 3 — The Perfect Servant — PLANNED
 
 Let Edselsto solve one bounded practical problem more efficiently and obediently than human institutions could. The benefit must be real enough to strengthen Luceran's attachment.
 
-At the same time, show the political cost of a servant that never bargains, refuses, tires, has family interests or tells the king no. Human friction has protected Luceran repeatedly; perfect obedience can bypass that correction.
+Show the political cost of a servant that never bargains, refuses, tires, has family interests or tells the king no. Human friction has repeatedly protected Luceran.
 
-**Horizon exit:** Luceran has a genuine reason to want more supernatural assistance while his allies have genuine reasons to insist that usefulness is not the same as trustworthiness.
+**Exit target:** Luceran has a genuine reason to want more supernatural assistance while allies have genuine reasons to insist usefulness is not trustworthiness.
 
-## Episode 30 reconciliation
+## Season 2 Episode 4 — Silver in the Walls — PLANNED
 
-- Luceran's force grows by accumulation rather than instant mobilization.
-- Red Ford retains six troops because prior obligations do not vanish.
-- Ordinary assault, infiltration and siege options are seriously priced.
-- Rhyse refuses to convert uncertain casualties into permission for Luceran.
-- Luceran declines a feasible but costly assault.
-- Bram, Mikel and Anja survive inside through worker knowledge and human action.
-- Edrik's body is identified and village mourning develops independently.
-- Tomas Reed preserves Northbridge stores after contradictory orders.
-- Aven remains a sincere constitutional coup supporter with weakening control over Rusk's faction.
-- Rusk publicly treats wounded people as leverage.
-- Montegrain is revealed as Luceran's genuine old friend who sided with the coup for political reasons.
-- Montegrain is not established as author of every hostile thread.
-- Montegrain gives the final surrender ultimatum from above Edselsto's gate.
-- Episode 30 ends before Luceran answers.
-- No supernatural intervention occurs.
+Restoration of Edselsto's capabilities requires material infrastructure: silver channels, metals, skilled craftspeople, consecration, money, labor and access. Suppliers and workers gain leverage because supernatural usefulness still depends on human procurement.
+
+Do not let the gate miracle become proof Edselsto can simply do anything.
+
+**Exit target:** Edselsto's perception begins expanding because living institutions choose to build and fund conduits that permit it.
+
+## Season 2 Episode 5 — The First Petition — HORIZON
+
+Make ordinary government collide with supernatural convenience. A petitioner, official, household member or provincial representative brings a problem that living institutions would normally investigate through testimony, documents and patronage. Edselsto can provide some bounded assistance, but using it changes who controls information and access.
+
+Keep the answer incomplete enough that human judgment still matters. Someone benefits from the castle's intervention; someone else reasonably fears precedent.
+
+**Exit target:** the court has its first concrete example of supernatural usefulness becoming political precedent.
+
+## Episode 32 reconciliation
+
+- Living forces retake Edselsto room by room; the castle does not kill or guide them.
+- Ardel and kitchen workers secure the scullery crossing and prevent oil fire from controlling the route.
+- Rusk attempts record destruction; Harl Ven preserves a payment ledger and other material, and a partially burned authorization packet survives.
+- Aven surrenders the east guard room under protections and is captured alive.
+- Bram, Anja, Mikel, Ysabet and Selise independently prevent the upper archive from being burned; Bram is injured again after striking Rusk with a crutch.
+- Rusk is captured alive near the old council approach.
+- Montegrain withdraws to the throne room, allows some followers to surrender, is confronted alive by Luceran and is bound rather than killed.
+- Pellan Vey remains alive in separate custody pending individual judgment.
+- Calienne preserves medical neutrality; loyal and coup dead are not segregated by moral category.
+- Iven Marrick dies and Mara ensures his name is recorded.
+- Miren preserves the partially burned authorization packet and continues to provide Luceran with friction rather than obedience.
+- The crown is removed from the throne and set aside rather than ceremonially donned.
+- Luceran collapses into the throne from exhaustion only after the human retaking and immediate legal/medical chaos.
+- A pale silver theatrical mask manifests publicly and says **"Your Majesty."**
 - All seven ancestral lights remain lit.
-
-## Season 2 Episode 4 — Silver in the Walls — PLANNED / HORIZON
-
-Restoration of Edselsto's newly demonstrated capabilities must require material infrastructure rather than effortless escalation. Silver channels, metals, skilled craftspeople, consecration, money, labor and access become political resources.
-
-Suppliers and workers gain leverage because supernatural usefulness still depends on human procurement. Romance, patronage and factional access can attach themselves to contracts and technical expertise.
-
-Do not let Episode 31's gate miracle become proof that Edselsto can simply do anything. Capability expands through bounded discovery and costly restoration.
-
-**Horizon exit:** Edselsto's perception begins to expand because living institutions chose to build and fund the conduits that permit it.
-
-## Episode 31 reconciliation
-
-- Luceran shouts **OPEN THE GATES!** without knowing Edselsto can obey.
-- Edselsto publicly opens the gate through impossible latches, black vapor and spectral mechanism-workers.
-- The supernatural action is bounded to access; it does not attack, guide, target or retake the castle.
-- Rhyse immediately converts the opening into a human assault.
-- Jalen Orris dies in the first breach; Sergeant Iven Marrick later dies after holding a gatehouse corner.
-- Pellan Vey surrenders, prevents Luceran from being shot, later saves him from an axe attack while still insisting on surrender; his culpability remains unresolved.
-- Aven preserves surrender and medical protections and orders withdrawal.
-- Rusk resists surrender, maintains coercive command and withdraws deeper while apparently moving or destroying records.
-- Montegrain withdraws his own people and begins questioning what Rusk is protecting or erasing; he remains politically culpable and uncaptured.
-- Ardel independently takes the north service/gallery route using household knowledge.
-- Fenn's knowledge of his mother's service routes materially enables the gallery attack and warns of lamp-oil movement.
-- Anja, Bram and Mikel remain alive; Bram contributes knowledge rather than receiving an implausible combat recovery.
-- Calienne treats wounded from both sides and preserves the chapel as a real medical space.
-- Miren remains active and continues to tell Luceran what he does not want to hear.
-- Loyal forces hold the outer gate, gatehouse, receiving hall, north service and lower hall.
-- Kitchens remain contested; smoke is present in the administrative wing; great-hall approaches, upper house and throne room remain in coup hands.
-- All seven ancestral lights remain lit.
+- No containment/prison/castle-interface truth is revealed.
 
 ## Active payoff debt
 
-Montegrain betrayal/motive/accountability and living capture; Aven constitutional culpability and surrender protections; Rusk patronage/coercive command/record objective; coup prisoner classification; Pellan Vey individual culpability; Jalen Orris/Iven Marrick/Edrik Saye/Lio Venn deaths and households; wounded/civilian compensation; Mera/daughter economy/Parel/Pellon chain; false orders and credential provenance; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel roadblock/Kaelmont independence; Ysabet/Selise archive boundary; Calienne care space; Red Ford settlement; unidentified carter; Northbridge stores/repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; Harl connection unproved; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candle interpretation; Hall of Veils work; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door.
+Montegrain accountability/fate; Aven constitutional culpability and surrender protections; Rusk patronage/coercive command/payment and authorization evidence; Harl Ven testimony and culpability; coup prisoner classification; Pellan Vey individual culpability; battle deaths and households; wounded/civilian compensation; Mera/daughter economy/Parel/Pellon chain; false orders and credential provenance; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel/Kaelmont independence; Ysabet/Selise archive damage; Calienne care space; Red Ford settlement; Northbridge stores/repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candle interpretation; Hall of Veils work; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door.
 
 ## Protected long-future seeds
 

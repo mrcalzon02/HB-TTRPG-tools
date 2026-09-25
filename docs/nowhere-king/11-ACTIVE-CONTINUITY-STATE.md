@@ -58,13 +58,43 @@ All Seven Ancestral Lights remain lit. No containment truth, prison truth, castl
 
 Montegrain betrayal/motive/accountability; Aven constitutional culpability and surrender protections; Rusk patronage, coercive command and record-destruction objective; coup prisoner classification; Pellan Vey individual culpability; Jalen Orris/Iven Marrick/Edrik Saye/Lio Venn deaths and households; wounded/civilian compensation; Mera culpability/daughter economy/Parel/Pellon chain; false orders and credential provenance; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel roadblock/Kaelmont independence; Ysabet/Selise archive boundary; Calienne care space; Red Ford survey/cattle/toll/arson/Pavel-arrow questions; unidentified color-hearsay carter; Northbridge stores/repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; Harl/west-service questioner; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel grievance/candle interpretation; Hall of Veils work; Episode 16 unsigned note/rope questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler compensation; Kaelmont carriage terms; Lysa Quill engagement; Dena/Hale continuity; deeper stair authorization; Damaris/Tomas logistics; Jeron Bellisar injury; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door.
 
+## Episode 32 durable residue
+
+Season One is complete. The retaking of Edselsto is finished by living forces after the castle's bounded gate-opening intervention.
+
+The kitchens, scullery crossing, administrative wing, great hall, upper archive, council approaches and throne room are retaken position by position. The fighting remains human, costly and locally contingent. Familiar household spaces become tactical terrain without Edselsto selecting targets, guiding routes or killing enemies.
+
+Ardel and kitchen workers secure the scullery crossing and prevent an oil fire from controlling the service route. Fenn's route knowledge continues to matter, but he is sent out of direct combat. Bessa and other workers materially affect fire control.
+
+Rusk attempts to destroy politically important records. Clerk Harl Ven preserves a payment ledger and helps save additional bundles for self-interested reasons. A partially burned authorization packet also survives. These records create evidence and future hearings rather than instantly solving the wider conspiracy.
+
+Aven surrenders the east guard room under explicit protections for his people and is taken alive. His constitutional culpability remains unresolved, but his surrender rules save lives and become part of the post-coup legal problem.
+
+Bram, Anja, Mikel, Ysabet and Selise independently resist Rusk in the upper archive. Bram strikes Rusk with a crutch and is injured again; the group prevents the archive from being burned. Rusk escapes that room but is later cornered and captured alive after attempting to burn an authorization packet.
+
+Montegrain withdraws to the throne approach, allows some of his people to surrender, and refuses personal terms. Luceran confronts him alive in the throne room, strikes him once, rejects his claim to continuing friendship, and orders him bound rather than killed. Montegrain remains a living political, legal and emotional obligation.
+
+Pellan Vey remains alive in separate custody because his coup participation, surrender, rescue of Luceran and post-surrender fighting require individual judgment.
+
+Calienne preserves medical neutrality and refuses separate loyalist/rebel dead. Iven Marrick dies after the gatehouse defense; Mara ensures his name is recorded. Casualty identification, compensation and household consequences remain due.
+
+Rhyse's command discipline remains essential to victory. Miren repeatedly provides friction, negotiates Aven's surrender handling, preserves the burning authorization packet by stamping it out, and remains Luceran's lover rather than a passive royal appendage. Ardel remains an independent ally.
+
+Canon Merel verifies that all Seven Ancestral Lights remain lit after the battle.
+
+After the castle is secured, Luceran does not ceremonially crown himself. He removes the crown from the throne, sets it aside, and collapses into the throne from exhaustion. A pale silver theatrical mask manifests publicly before the surviving court and addresses him: **"Your Majesty."** This is the first personified manifestation and first clear direct address from Edselsto. No one yet knows what it is.
+
+## Unresolved obligations preserved
+
+Montegrain motive/accountability/fate; Aven constitutional culpability and surrender protections; Rusk patronage/coercive command and the surviving payment/authorization evidence; coup prisoner classification; Pellan Vey individual culpability; Jalen Orris/Iven Marrick/Edrik Saye/Lio Venn and other deaths/households; wounded/civilian compensation; Mera culpability/daughter economy/Parel/Pellon chain; false orders and credential provenance; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel roadblock/Kaelmont independence; Ysabet/Selise archive boundary; Calienne care space; Red Ford survey/cattle/toll/arson/Pavel-arrow questions; unidentified color-hearsay carter; Northbridge stores/repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; Harl's exact participation in forged/copy work; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candle interpretation; Hall of Veils work; Episode 16 unsigned note/rope questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler compensation; Kaelmont carriage terms; Lysa Quill engagement; Dena/Hale continuity; deeper stair authorization; Damaris/Tomas logistics; Jeron Bellisar injury; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door.
+
 ## Immediate handoff
 
-Episode 32 — *Sovereign* is next and is the intentionally oversized Season One finale. It must continue the human retaking room by room from the lower hall through the remaining familiar spaces rather than jumping to victory.
+Season 2 Episode 1 — *The Useful Monster* is next. It begins from the public manifestation of the pale silver mask and the emotional temptation created by apparently perfect obedience after catastrophic human betrayal.
 
-The immediate military objectives are to secure the kitchens and service crossings, stop any record fire, establish casualty and prisoner routes, then fight through the great-hall approaches and remaining occupied rooms. Rusk's record movement/destruction must receive a concrete payoff or preserved evidence trail. Aven's surrender protections must continue to affect who lives and how prisoners are classified. Ardel, Mara, Miren, Calienne, Anja, Bram, Fenn and other side characters retain independent agency.
+Coup trials, funerals, compensation, prisoner classification, Montegrain's fate, Aven's culpability, Rusk's surviving records, Harl's testimony, Pellan Vey's mixed conduct, damaged archives, staffing losses and medical aftermath remain active. Supernatural novelty must not erase human government.
 
-Montegrain must survive the fighting and ultimately be cornered and captured alive in or immediately before the throne room. Luceran must face him as a living old friend who made a political betrayal. Only after the human retaking and immediate legal/medical chaos may Luceran collapse into the throne and encounter the pale silver theatrical mask saying **"Your Majesty."**
+Edselsto's capabilities remain bounded and unknown. The court may test communication cautiously, but no one may infer omnipotence from the gate miracle and mask. Different observers must form different theories based on what they actually witnessed.
 
 ## Hard exclusions
 
