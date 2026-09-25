@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 1 Episode 27, *Castle Taken*.
+**Reconciled through:** Season 1 Episode 28, *The Price of Betrayal*.
 
 ## Current state
 
@@ -28,7 +28,7 @@ Luceran and Miren remain lovers, not betrothed. Their promised post-return marri
 
 All Seven Ancestral Lights remain lit. No supernatural intervention, sentient-castle proof, containment truth, stair solution or candle failure occurs. Edselsto remains physically inert.
 
-## Episode 27 durable residue
+## Episode 28 durable residue
 
 - The physical crown is in coup hands under Aven's seal.
 - Aven and Rusk are demonstrably separate command interests.
