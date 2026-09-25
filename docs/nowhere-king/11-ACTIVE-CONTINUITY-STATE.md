@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 1 Episode 28, *The Price of Betrayal*.
+**Reconciled through:** Season 1 Episode 29, *The Confidant's Last Stand*.
 
 ## Current state
 
@@ -47,7 +47,7 @@ Red Ford survey/cattle/toll/arson/Pavel-arrow questions; unidentified color-hear
 
 ## Immediate handoff
 
-Episode 29 — *The Confidant's Last Stand* is next. The coup controls Edselsto but its coalition is internally fractured. Existing betrayal ladders must pay off through Parel, compromised access chains, promised rewards, missing routines and attempts to erase liability. Mera must not become a convenient disposable casualty. Consequences must leave durable evidence, grief, anger or practical disruption.
+Episode 30 — *Closed Gates* is next. Luceran has returned to Edselsto but remains outside the closed gates. Ordinary entry options, negotiation, signaling, reconnaissance and rescue routes must be tested seriously before any direct appeal to Edselsto. The divided Aven/Rusk command, incomplete internal knowledge, surviving loyalists and civilians, and Luceran's fresh grief must constrain every choice. No supernatural opening occurs in Episode 30.
 
 ## Hard exclusions
 
