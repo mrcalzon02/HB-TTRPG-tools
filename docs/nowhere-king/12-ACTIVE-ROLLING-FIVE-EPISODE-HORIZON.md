@@ -2,92 +2,77 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 1 Episode 27.
-**Forward window:** Episodes 28–32.
+**State:** Rolled forward after Season 1 Episode 30.
+**Forward window:** Season 1 Episode 31 through Season 2 Episode 3.
 
-## Episode 28 — The Price of Betrayal — LOCKED / PAYOFF-BOUND
+## Season 1 Episode 31 — Sovereign — LOCKED / AFTERMATH-BOUND
 
-Edselsto is under coup control, but the victors are not one mind. Sir Aven Marr possesses the crown under his seal and has written surrender obligations; Cale Rusk commands a distinct armed element and has already bypassed Aven. Mera is detained after voluntarily confessing and has supplied a new evidentiary lead: Parel knew enough about her daughter, duty history and finances that the washhouse wage/information chain can be investigated.
+Edselsto has been retaken after Luceran's desperate **OPEN THE GATES!** command produced the first unmistakable public supernatural obedience. The castle opened access; living people fought and died to retake it. Aven and Rusk both survive in custody. Bram and Mikel survive. Edrik is dead. The crown coffer remains sealed. All seven lights remain lit.
 
-Pay off betrayal ladders already seeded. At least one disposable participant must discover what the patron hierarchy thinks of them, but Mera must not be reduced to a disposable casualty merely to demonstrate cruelty. Loose-end removal must leave social/material residue: body, missed shift, worried relative, unpaid reward, altered record, missing key, witness, route evidence or contradiction.
+The pale silver theatrical mask has now manifested before the exhausted king and said **"Your Majesty."** Do not repeat this as a second first-contact beat. Begin from its consequence.
 
-Aven's theory must continue colliding with the behavior of allies he cannot fully control. Coup supporters remain morally heterogeneous.
+Process the retaking before political memory hardens: triage, dead and wounded, surrender terms, prisoner classification, Aven's culpability and protections, Rusk's separate command, surviving forged-order evidence, staff losses, damaged rooms, crown provenance and competing narratives. Luceran must confront his former friend alive rather than receiving the emotional convenience of a battlefield death.
 
-**Exit target:** attempts to erase liability create durable clues, grief and anger while tightening coup control ahead of the confidant's final choice.
+The Useful Monster temptation begins here: after people betrayed Luceran and institutions failed, Edselsto appears to have obeyed him perfectly. Living allies must have reasons to find that comforting conclusion incomplete or dangerous without possessing hidden lore.
 
-## Episode 29 — The Confidant's Last Stand — LOCKED / PAYOFF-BOUND
+**Exit target:** Season One closes with a politically damaged but functioning court, supernatural obedience now undeniable, the coup's human debts preserved, and Luceran tempted to treat Edselsto as the one servant that cannot betray him.
 
-The confidant's sacrifice must be a real choice with a viable alternative and preserve something concrete: lives, evidence, time, lawful continuity, escape, or a combination. Episode 24's ordinary-life plans are payoff fuel.
+## Season 2 Episode 1 — The Useful Monster — LOCKED / NEW-SEASON ENTRY
 
-Current geography matters: Bram/Edrik/Mikel are concealed in the old laundry gallery; Anja and two guards use unfinished works passages; Ysabet/Selise and archive staff are in Calienne's chapel; Ardel holds the village road independently; the crown is in coup hands; Luceran is returning but lacks complete knowledge.
+Begin the new governing problem: Edselsto can apparently respond to the sovereign. Establish cautious experiments, competing interpretations and immediate pressure to use the castle's abilities for practical governance and security. Luceran's desire to trust the obedient presence should be emotionally intelligible after the coup.
 
-The loss must affect multiple relationships and institutions, not merely Luceran. Do not make the victim omniscient about the coup.
+Do not jump to full interface, containment truth or omnipotent castle behavior. Capability must be discovered through bounded acts and consequences.
 
-**Exit target:** usurpers solidify control and close the gates while surviving loyalists carry forward something the sacrifice bought.
+**Exit target:** the court accepts that supernatural participation in government is now a practical fact while disagreeing over how much authority to give it.
 
-## Episode 30 — Closed Gates — LOCKED / CONSEQUENCE-BOUND
+## Season 2 Episode 2 — Terms of Service — PLANNED
 
-Luceran returns after ordinary-force control is achieved. Timing/knowledge must reflect Pera's delivered warning, compromised boot/tack, Black Pine casualties, sustainable hard riding, and incomplete information rather than granting omniscience.
+Force the first institutional argument over what Edselsto is allowed to do. Rhyse, Miren, Calienne, surviving staff, clergy, nobles and administrators should approach the problem from different duties rather than a single fear/faith split.
 
-Siege options threaten Edselsto and people inside. The king knows the castle was attacked but must learn current control, casualties and the crown's status through available witnesses/signals. Grief may distort judgment but cannot erase strategy. Allies disagree about assault, negotiation, rescue and what the dead would have wanted.
+Aven/Rusk/coup aftermath remains active; supernatural novelty cannot erase trials, funerals, compensation, staffing and damaged trust.
 
-No supernatural opening yet.
+**Exit target:** provisional human rules exist for asking the castle for help, even though nobody yet understands whether those rules constrain Edselsto or merely constrain themselves.
 
-**Exit target:** ordinary entry is blocked or catastrophically costly; Luceran stands outside his own closed gates.
+## Season 2 Episode 3 — The Perfect Servant — PLANNED
 
-## Episode 31 — Open the Gates — LOCKED / CANON-BOUND
+Let Edselsto solve a bounded practical problem more efficiently and obediently than human institutions could, strengthening Luceran's attachment to the Useful Monster idea. The benefit must be real.
 
-Only after Episode 30 exhausts ordinary entry options may Luceran give the unprecedented direct command to Edselsto itself.
+At the same time, show why perfect obedience is politically destabilizing: it can bypass bargaining, expertise, refusal, due process or the corrective friction of people who can tell a king no.
 
-The response must match canon: spectral mechanisms and black miasma open access and defeat closures, but Edselsto does **not** retake itself. Living forces still have to enter, fight, surrender, capture, rescue and make political choices.
+**Exit target:** Luceran has a genuine reason to want more supernatural assistance and his allies have genuine reasons to insist that usefulness is not the same as trustworthiness.
 
-Witness layers update independently; soldiers, staff, nobles, clergy, workers, lovers and enemies do not all infer the same explanation.
+## Season 2 Episode 4 — HORIZON / EXPLORATORY
 
-All seven candles remain lit; opening the gates is not a candle-failure event.
+Continue from the first three Useful Monster episodes based on actual consequences. Preserve the Seven Lights, deeper stair, family-history, hunt, Valcere, Red Ford, capital-rumor and coup-patron debts unless dependency-valid evidence earns convergence.
 
-**Exit target:** loyal forces regain access and begin the human retaking of Edselsto; the supernatural fact can no longer be dismissed as atmosphere.
+## Episode 30 reconciliation
 
-## Episode 32 — Sovereign — LOCKED / NEW N+4
-
-The season finale must process the retaking rather than skip aftermath. Funerals, arrests, triage, prisoner classification, staff losses, damaged rooms, provenance disputes, political accounting and faction narratives all matter.
-
-Only after public/human consequences are established does Luceran end alone enough to hear Edselsto address him clearly as sovereign. That is the season's supernatural step-change, not retroactive proof that the castle caused or chose the coup.
-
-The comforting interpretation must form: Edselsto may be the one inheritance that cannot betray him. Living allies should already possess reasons to find that comfort dangerous or premature.
-
-All seven candles remain lit through the finale unless later authoritative canon is explicitly changed; Season 1 contains no defense failure.
-
-**Exit target:** Season Two begins from supernatural participation in government, a politically damaged but functioning court, unresolved coup debts, and a king newly tempted to trust a servant that appears incapable of disobedience.
-
-## Episode 27 reconciliation
-
-- Coup forces convert fragmented access into control of all mapped public routes by ordinary force.
-- Crown stair falls after pantry-stair pressure forces Anja's withdrawal and repeated assaults exhaust Bram's defenders.
-- Guardsman Lio Venn dies; Bram is wounded in the thigh; Mikel remains badly wounded.
-- Physical crown is seized by Cale Rusk's men, then placed under Sir Aven Marr's seal in the old council chamber.
-- Aven discovers Rusk commands a distinct armed element under vague patron authority and realizes he does not control all coup forces.
-- Inner grille defenders surrender specifically to Aven under written protections; two copies survive.
-- Family corridor is abandoned only after civilians/wounded are moved and defenders lose coherent reinforcement routes.
-- Bram/Edrik/Mikel and others conceal themselves in an old laundry gallery; Anja and two guards disappear into unfinished works passages.
-- Ysabet evacuates archive staff, preserving accession ledger/current seal register while leaving family papers rather than sacrificing people for objects.
-- Calienne preserves chapel neutrality and establishes no arrest during active treatment.
-- Ardel keeps independent control of the village road and catches false Kaelmont credentials.
-- Mera remains detained and points toward washhouse wage/information records based on what Parel knew.
-- Pera reaches Black Pine and Bram's warning reaches Luceran.
-- Luceran returns at sustainable hard pace with thirty-four, knowing attack occurred but not the castle's full state.
-- All seven candles remain lit; Edselsto does nothing supernatural.
+- Ordinary entry routes and assault options were seriously tested/priced before supernatural intervention.
+- Luceran refused a feasible but costly assault after Rhyse would not convert casualties into convenient arithmetic.
+- Aven remained Luceran's former friend and sincere constitutional opponent; Rusk's separate coercive agenda became publicly undeniable.
+- Aven offered surrender with dignity while claiming the castle and throne were already lost to Luceran.
+- Luceran's desperate **OPEN THE GATES!** command was simultaneously directed at people and, unknowingly, Edselsto itself.
+- Edselsto supernaturally opened the gates in public view using spectral mechanisms/black vapor but did nothing else to retake the castle.
+- Human forces rushed the opening, suffered casualties, split the coup and retook Edselsto by force.
+- Aven and Rusk both survived and were captured; Luceran explicitly ordered Aven kept alive.
+- Bram and Mikel were recovered alive; Edrik remained dead; Anja, Ardel, Mara, Rhyse, Miren, servants and scouts materially shaped the outcome.
+- Tomas Reed kept Northbridge stores secure after contradictory orders.
+- Luceran collapsed into the throne amid unresolved aftermath.
+- A pale silver theatrical mask manifested and said **"Your Majesty."**
+- All seven ancestral lights remained lit.
 
 ## Active payoff debt
 
-Parel/washhouse information chain; Mera/daughter economy; Cale Rusk patronage; Aven/Rusk command fracture; Aven surrender terms; Lio Venn death/social residue; hidden loyalists; crown possession; Pera testimony; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel roadblock/false Kaelmont credentials; Ysabet/Selise archive boundary; Calienne care space; Red Ford settlement; unidentified carter; Northbridge stores/repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; Harl connection unproved; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candle interpretation; Hall of Veils work; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door; Episode 24 ordinary-life plans.
+Aven trial/mercy and former-friend relationship; Rusk patronage; coup prisoner classification; surrender-term enforcement; Edrik/Lio Venn deaths and households; wounded/civilian compensation; Mera/daughter economy/Parel/Pellon chain; false orders and credential provenance; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel roadblock/Kaelmont independence; Ysabet/Selise archive boundary; Calienne care space; Red Ford settlement; unidentified carter; Northbridge stores/repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; Harl connection unproved; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candle interpretation; Hall of Veils work; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door.
 
 ## Protected long-future seeds
 
 - No unrelated Magenheim material.
-- No containment/prison/castle-interface truth.
+- No containment/prison/castle-interface truth yet.
 - No candle extinction.
-- No supernatural security solution before Episode 31.
+- No retroactive claim Edselsto caused the coup.
+- No omnipotent or consequence-free supernatural security.
 - No premature hunt-sponsor identification.
 - No assumption Valcere explains every hostile act.
 - No stair/family-history solution without evidence.
-- No informal circle replacing lawful institutions.
+- No informal supernatural circle replacing lawful institutions.
