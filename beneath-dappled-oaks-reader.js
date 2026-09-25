@@ -35,7 +35,7 @@ const fallbackFiles=[
   {name:'27-WHAT-THE-FIRST-OFFICE-EXPECTED.md',path:'docs/beneath-dappled-oaks/chapters/27-WHAT-THE-FIRST-OFFICE-EXPECTED.md',size:16646,type:'file'},
   {name:'28-THE-ACKNOWLEDGING-HAND.md',path:'docs/beneath-dappled-oaks/chapters/28-THE-ACKNOWLEDGING-HAND.md',size:20055,type:'file'},
   {name:'29-WHO-SENT-PELLISAR.md',path:'docs/beneath-dappled-oaks/chapters/29-WHO-SENT-PELLISAR.md',size:23369,type:'file'},
-  {name:'30-WHAT-LAWFUL-REMEDIES-COULD-NOT-DO.md',path:'docs/beneath-dappled-oaks/chapters/30-WHAT-LAWFUL-REMEDIES-COULD-NOT-DO.md',size:0,type:'file'}
+  {name:'30-WHAT-LAWFUL-REMEDIES-COULD-NOT-DO.md',path:'docs/beneath-dappled-oaks/chapters/30-WHAT-LAWFUL-REMEDIES-COULD-NOT-DO.md',size:29572,type:'file'}
 ];
 let released=[];
 
