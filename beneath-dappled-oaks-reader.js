@@ -34,7 +34,8 @@ const fallbackFiles=[
   {name:'26-THE-RESERVATION-IN-RED-WAX.md',path:'docs/beneath-dappled-oaks/chapters/26-THE-RESERVATION-IN-RED-WAX.md',size:17392,type:'file'},
   {name:'27-WHAT-THE-FIRST-OFFICE-EXPECTED.md',path:'docs/beneath-dappled-oaks/chapters/27-WHAT-THE-FIRST-OFFICE-EXPECTED.md',size:16646,type:'file'},
   {name:'28-THE-ACKNOWLEDGING-HAND.md',path:'docs/beneath-dappled-oaks/chapters/28-THE-ACKNOWLEDGING-HAND.md',size:20055,type:'file'},
-  {name:'29-WHO-SENT-PELLISAR.md',path:'docs/beneath-dappled-oaks/chapters/29-WHO-SENT-PELLISAR.md',size:23369,type:'file'}
+  {name:'29-WHO-SENT-PELLISAR.md',path:'docs/beneath-dappled-oaks/chapters/29-WHO-SENT-PELLISAR.md',size:23369,type:'file'},
+  {name:'30-WHAT-LAWFUL-REMEDIES-COULD-NOT-DO.md',path:'docs/beneath-dappled-oaks/chapters/30-WHAT-LAWFUL-REMEDIES-COULD-NOT-DO.md',size:0,type:'file'}
 ];
 let released=[];
 
