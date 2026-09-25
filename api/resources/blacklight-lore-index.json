@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.3.0",
+  "schemaVersion": "1.4.0",
   "setting": "Blacklight Continuum",
   "description": "Authoritative public campaign, rules, wiki, entity, faction, character, personality-engram, and setting routes exposed for agent retrieval and search.",
   "resources": [
@@ -7,6 +7,7 @@
     "blacklight-continuum-induction.html",
     "blacklight-charles-record.html",
     "blacklight-no-return-signal-beacon-terminal.html",
+    "blacklight-no-return-signal-alpthon-systemic-casualty-archive.html",
     "blacklight-no-return-signal-campaign.html",
     "docs/blacklight/charles-personality-engram-manifest.json",
     "docs/blacklight/charles-personality-engram.json",
