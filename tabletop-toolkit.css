@@ -510,3 +510,62 @@
 @media (prefers-reduced-motion: reduce) {
   #ttk-dice-tray { scroll-behavior: auto; }
 }
+
+
+/* Dice tray customization controls */
+.ttk-dice-section-head {
+  align-items: flex-end;
+}
+.ttk-dice-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 7px;
+}
+.ttk-dice-setting {
+  display: grid !important;
+  grid-template-columns: none !important;
+  gap: 3px !important;
+  min-width: 88px;
+  color: var(--muted) !important;
+  font-size: .64rem !important;
+  font-weight: 850 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .06em !important;
+}
+.ttk-dice-setting select {
+  width: auto;
+  min-width: 88px;
+  min-height: 34px;
+  padding: 6px 26px 6px 8px;
+  font-size: .8rem;
+  font-weight: 750;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.ttk-dice-header-actions #ttk-clear-rolls {
+  min-height: 34px;
+  align-self: end;
+}
+@media (max-width: 1100px) {
+  .ttk-dice-section-head {
+    align-items: flex-start;
+  }
+  .ttk-dice-header-actions {
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
+}
+@media (max-width: 700px) {
+  .ttk-dice-header-actions {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    width: 100%;
+  }
+  .ttk-dice-setting,
+  .ttk-dice-setting select,
+  .ttk-dice-header-actions #ttk-clear-rolls {
+    width: 100%;
+  }
+}
