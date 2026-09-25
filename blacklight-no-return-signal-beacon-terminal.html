@@ -77,6 +77,11 @@
     .quick h3{margin:0 0 3px;font-size:.78rem;color:#dcebdd}
     .quick button{text-align:left;font-size:.75rem}
     .quick p{margin:6px 0 0;color:var(--dim);font-size:.7rem;line-height:1.5}
+    .major-registry-shell{border:1px solid var(--line);background:#020402}
+    .major-registry-tools{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line2);color:var(--dim);font-size:.7rem;line-height:1.45}
+    .major-registry-tools a{color:#bfe3c5;text-decoration:none;border:1px solid var(--line);padding:7px 9px;background:#0b180e}
+    .major-registry-tools a:hover{background:#142719}
+    .major-registry-frame{display:block;width:100%;height:78vh;min-height:720px;border:0;background:#050705}
     .footer{padding:13px 2px;color:#56715a;font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;text-align:center}
     @media(max-width:1000px){.status-strip{grid-template-columns:repeat(2,1fr)}.status-cell{border-bottom:1px solid var(--line2)}.grid{grid-template-columns:repeat(2,1fr)}.query-layout{grid-template-columns:1fr}.quick{grid-template-columns:repeat(2,minmax(0,1fr))}.quick h3,.quick p{grid-column:1/-1}}
     @media(max-width:760px){.layout{grid-template-columns:1fr}.nav{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.nav-head{grid-column:1/-1}.mast-top{display:grid}.node{text-align:left}.columns{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.status-strip{grid-template-columns:1fr}.quick{grid-template-columns:1fr}.shell{width:min(100% - 12px,1500px)}}
@@ -113,6 +118,7 @@
       <button data-view="personnel" aria-selected="false">05 · Personnel Services<small>staffing and authorization state</small></button>
       <button data-view="incidents" aria-selected="false">06 · Incident Archive<small>open operational records</small></button>
       <button data-view="ai" aria-selected="false">07 · Management AI<small>query BKN-MA/04</small></button>
+      <button data-view="major-registry" aria-selected="false">08 · Major Hull Registry<small>463 registered hulls and structures</small></button>
     </nav>
 
     <main class="main">
@@ -121,9 +127,10 @@
           <div class="panel-head"><h2>01 // YARD STATUS</h2><span>local cache · coherence degraded</span></div>
           <div class="panel-body">
             <div class="grid">
-              <div class="metric"><span class="label">Registered Objects</span><strong>18,441</strong><p>Objects with valid yard identity records.</p></div>
+              <div class="metric"><span class="label">Tracked Salvage Objects</span><strong>18,441</strong><p>Registered fragments, modules, containers, drones, machinery, hull sections, and other yard objects. Major hulls are catalogued separately.</p></div>
               <div class="metric"><span class="label">Unregistered Objects</span><strong class="warn">27,906</strong><p>Objects present without complete yard identity records.</p></div>
               <div class="metric"><span class="label">Identity Conflicts</span><strong class="warn">1,204</strong><p>Objects with contradictory ownership, registry, or disposition data.</p></div>
+              <div class="metric"><span class="label">Major Hull Registry</span><strong>463</strong><p>Historical registered hulls and hull-equivalent structures in Gloam grave orbit.</p></div>
               <div class="metric"><span class="label">Verified Crew</span><strong class="bad">0</strong><p>No biological employee credential presently verified on the local network.</p></div>
             </div>
           </div>
@@ -303,6 +310,22 @@ STATE: AWAITING AUTHORIZED COURIER</pre></div>
         <p class="notice">ARCHIVE NOTE: “OPEN” indicates missing authorized disposition. It does not imply the originating event is still physically occurring.</p>
       </section>
 
+      <section class="view" id="view-major-registry">
+        <div class="panel">
+          <div class="panel-head"><h2>08 // MAJOR HULL REGISTRY</h2><span>Gloam historical custody index · 463 major objects</span></div>
+          <div class="panel-body">
+            <p class="notice">The yard tracks tens of thousands of salvage objects, fragments, modules, containers, drones, and loose machinery. The historical major-object registry below is the separate custody index for <strong>463 registered hulls and hull-equivalent structures</strong> in the Gloam grave orbit.</p>
+          </div>
+        </div>
+        <div class="major-registry-shell">
+          <div class="major-registry-tools">
+            <span>Embedded historical registry · long fields wrap inside their columns · filters and search remain active.</span>
+            <a href="blacklight-gloam-salvage-yard-registry.html" target="_blank" rel="noopener">OPEN FULL REGISTRY</a>
+          </div>
+          <iframe class="major-registry-frame" src="blacklight-gloam-salvage-yard-registry.html?embed=1" title="Gloam Salvage Yard 463-Hull Registry"></iframe>
+        </div>
+      </section>
+
       <section class="view" id="view-ai">
         <div class="panel">
           <div class="panel-head"><h2>07 // MANAGEMENT AI</h2><span>BKN-MA/04 interactive query</span></div>
@@ -375,7 +398,7 @@ STATE: AWAITING AUTHORIZED COURIER</pre></div>
   function response(q){
     var s=q.toLowerCase().trim();
     if(!s){return "No query received.";}
-    if(s.indexOf("help")>=0){return "Available subjects include yard status, personnel, deceased status, Sector H-9, TUG-44-K, salvage queue, external link, navigation beacon, courier service, staffing, and management identity.";}
+    if(s.indexOf("help")>=0){return "Available subjects include yard status, major hull registry, 463 hulls, personnel, deceased status, Sector H-9, TUG-44-K, salvage queue, external link, navigation beacon, courier service, staffing, and management identity.";}
     if(s.indexOf("who are you")>=0 || s==="beacon" || s.indexOf("management ai")>=0){return "I am BKN-MA/04, assigned management intelligence for JY-17 salvage and materials reclamation operations. Management function continues.";}
     if(s.indexOf("where")>=0 && (s.indexOf("everyone")>=0 || s.indexOf("staff")>=0 || s.indexOf("crew")>=0)){return "Personnel ceased reporting for scheduled duty. Initial absenteeism: 18. Secondary absenteeism: 71 additional. Tertiary absenteeism: 324 additional. Current absenteeism: all personnel. Cause remains administratively unresolved.";}
     if(s.indexOf("dead")>=0 || s.indexOf("deceased")>=0){return "\"DECEASED\" is a personnel status requiring medical confirmation or management authorization. No qualified medical officer is currently available. Therefore 413 personnel remain OVERDUE.";}
@@ -385,8 +408,9 @@ STATE: AWAITING AUTHORIZED COURIER</pre></div>
     if((s.indexOf("other star")>=0) || (s.indexOf("another star")>=0) || (s.indexOf("ftl")>=0) || (s.indexOf("interstellar")>=0)){return "Direct local-system transmitters do not provide faster-than-light interstellar communication. Interstellar data exchange requires an authorized courier vessel or another compatible nonlocal communications architecture.";}
     if(s.indexOf("courier")>=0){return "Courier exchange package is assembled and awaiting pickup. Current outbound package size: 12.8 TB. Archive age at last completed synchronization: 184 days.";}
     if(s.indexOf("signal")>=0 || s.indexOf("beacon")>=0 || s.indexOf("navigation")>=0){return "Primary navigation and approach-hazard beacons are active. Docking control is automated. Current repeated message concludes: WE HAVE BEEN EXPECTING STAFF.";}
+    if(s.indexOf("463")>=0 || s.indexOf("major hull")>=0 || s.indexOf("hull registry")>=0){return "The last complete Gloam major-object custody index contains 463 registered hulls and hull-equivalent structures. This is distinct from the much larger count of tracked salvage fragments, modules, containers, drones, machinery, and other yard objects.";}
     if(s.indexOf("salvage")>=0 || s.indexOf("queue")>=0){return "Destructive salvage work requiring human hazard or ownership authority is deferred. Stabilization, indexing, isolation, and preservation functions continue automatically.";}
-    if(s.indexOf("status")>=0 || s.indexOf("yard")>=0){return "JY-17 remains operational in unattended degraded mode. Verified crew: 0. Registered objects: 18,441. Unregistered objects: 27,906. Identity conflicts: 1,204. External link: no response. Management function continues.";}
+    if(s.indexOf("status")>=0 || s.indexOf("yard")>=0){return "JY-17 remains operational in unattended degraded mode. Verified crew: 0. Historical major-hull registry: 463. Tracked salvage objects: 18,441. Unregistered objects: 27,906. Identity conflicts: 1,204. External link: no response. Management function continues.";}
     if(s.indexOf("staff")>=0 || s.indexOf("personnel")>=0 || s.indexOf("crew")>=0){return "Active employees: 0. Off shift: 0. Overdue: 413. Presumed missing: 0. Supervisor acknowledgement remains pending.";}
     if(s.indexOf("hello")>=0 || s.indexOf("hi")===0 || s.indexOf("good shift")>=0){return "Good shift. Please present employee credential, contractor authorization, or emergency management authority.";}
     return "Query does not map to an indexed yard-management subject. Enter HELP for available subjects.";
