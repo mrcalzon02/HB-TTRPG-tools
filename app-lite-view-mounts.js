@@ -228,16 +228,22 @@
 
   async function prepareView(viewId) {
     if (viewId === 'modules') {
-      moduleSpatialEntryPromise ||= loadScript('semantic-spatial-engine.js')
-        .then(() => loadScript('semantic-content-populator.js'))
-        .then(() => loadScript('module-map-generator.js'))
-        .then(() => loadScript('vessel-hull-envelope.js'))
-        .then(() => loadScript('alien-vessel-generator.js'))
-        .then(() => loadScript('kaysender-airship-generator.js'))
-        .then(() => loadScript('module-map-generator-entry.js?v=20260924-modules-runtime-4'))
-        .then(() => window.HBModuleWorkbenchReady || Promise.resolve())
-        .then(() => loadScript('alien-vessel-generator-entry.js?v=20260822-modules-interface-1'))
-        .then(() => loadScript('kaysender-airship-generator-entry.js?v=20260822-modules-interface-1'));
+      if (!moduleSpatialEntryPromise) {
+        const attempt = loadScript('semantic-spatial-engine.js')
+          .then(() => loadScript('semantic-content-populator.js'))
+          .then(() => loadScript('module-map-generator.js'))
+          .then(() => loadScript('vessel-hull-envelope.js'))
+          .then(() => loadScript('alien-vessel-generator.js'))
+          .then(() => loadScript('kaysender-airship-generator.js'))
+          .then(() => loadScript('module-map-generator-entry.js?v=20260924-modules-runtime-4'))
+          .then(() => window.HBModuleWorkbenchReady || Promise.resolve())
+          .then(() => loadScript('alien-vessel-generator-entry.js?v=20260822-modules-interface-1'))
+          .then(() => loadScript('kaysender-airship-generator-entry.js?v=20260822-modules-interface-1'));
+        moduleSpatialEntryPromise = attempt.catch((error) => {
+          if (moduleSpatialEntryPromise === attempt) moduleSpatialEntryPromise = null;
+          throw error;
+        });
+      }
       await Promise.all([moduleSpatialEntryPromise, base.prepareView(viewId)]);
       return;
     }
