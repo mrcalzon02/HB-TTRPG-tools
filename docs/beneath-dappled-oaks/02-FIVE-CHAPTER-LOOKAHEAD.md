@@ -3,8 +3,8 @@ series: "Beneath Dappled Oaks"
 document_role: "ROLLING FIVE-CHAPTER FORWARD PLAN"
 status: "ACTIVE PLANNING CONTROL"
 planning_horizon: 5
-last_reconciled: "2026-09-24"
-active_after_chapter: 28
+last_reconciled: "2026-09-25"
+active_after_chapter: 29
 ---
 
 # Beneath Dappled Oaks — Active Five-Chapter Lookahead
@@ -13,15 +13,15 @@ This is the operational N+1 through N+5 plan for the first-principles rewrite. U
 
 ## Current committed rewrite state
 
-Canonical numbered prose now runs through **Chapter Twenty-Eight — The Acknowledging Hand**.
+Canonical numbered prose now runs through **Chapter Twenty-Nine — Who Sent Pellisar**.
 
-Chapter Twenty-Seven established that the initiating office regarded post-acceptance receiver independence as necessary rather than accidental.
+Chapter Twenty-Nine establishes the narrow provenance of Pellisar Veyran's focus without manufacturing an upstream conspirator. The chair-secretariat assigned him to a legitimate concentration review; the aggregate model itself surfaced Cluster G; and a review-wide instruction asked assessors to stress-test persistence against ordinary adult affiliation changes. Pellisar himself proposed moving from aggregate assumptions into person-level predictive kinship because he believed the model retained avoidable error. The independent statistician objected, the chair narrowed the method, and the Academy refused the protected field. The resulting disposition was circulated before Silver Night to the standing liaison structure, including Dmitrigical Review and Valeric representation. This establishes institutional notice of the methodological boundary, not authorship, secret tasking, Cluster G identity outside lawful channels, or responsibility for later violence.
 
-Chapter Twenty-Eight establishes that this independence was actually exercised after Silver Night. The receiver proposed closure; the initiating side entered a scope reservation; duty commissioner Maelin Serrat reviewed the receiver's authority under the ordinary civic rotation; closure stood without judicial escalation or a recorded defect; and the review cited both ordinary closure authority and the changed-interest contingency. The acknowledgment did not itself transfer custody, identify protected material, establish selector exercise, or prove why the changed-interest clause was factually relevant.
+Adult-life continuity also broadens materially. Mireth and Caelen become sexual lovers by explicit mutual adult choice while preserving the distinction between their desire and their families' political interpretations. Damaris and Rhyl likewise cross from publicly legible emerging lovers into an established sexual relationship; Damaris tells Rhyl she loves him and he reciprocates. Neither development resolves their political or professional trajectories.
 
-Thessa's western investigation also advances: the emergency drainage diversion was lawfully authorized, but the drainage account records reimbursement and the road account records replacement while the quarry records show neither a matching payment nor a second dispatch. Money movement is established; missing replacement material, accounting error, subcontracting, or fraud remain unresolved. Thessa is pursuing wagon tallies and subcontractor schedules.
+Thessa's western investigation advances: two wagons billed for replacement stone did not enter the quarry on the claimed dates, a third had already been retired and sold for parts, and the named subcontractor remembers providing hauling rather than stone. She is following the payment instrument without yet declaring fraud.
 
-The next dependency-valid investigation returns to Pellisar Veyran's tasking provenance: who sent him into the successor-depth review, under what instruction, and whether the later predictive-kinship question arose from ordinary analysis or a more specific upstream pressure.
+The next dependency-valid investigation compares the advisory review's lawful remedies with the faster unlawful interference already established elsewhere: **what could lawful remedies not do quickly enough?**
 
 ## Governing debts
 
@@ -45,21 +45,9 @@ The next dependency-valid investigation returns to Pellisar Veyran's tasking pro
 
 ---
 
-## N+1 — Chapter Twenty-Nine: Who Sent Pellisar
+## N+1 — Chapter Thirty: What Lawful Remedies Could Not Do
 
 **Certainty:** LOCKED / INVESTIGATION
-
-Inspect the chair-secretariat's delegation and tasking chain beyond the already released office-level order. Determine whether Pellisar independently recognized the successor-depth problem within his assigned concentration audit, was pointed toward that cluster by ordinary institutional data, or carried a more specific concern from an upstream actor.
-
-The sharper question remains the transition from declared affiliation to predictive private kinship. Do not treat a Valeric representative's mere presence in the chair-secretariat as authorship. Require a document, instruction, witness, or other independent evidence before joining a named actor to the question.
-
-**Exit handoff:** establish the narrowest supported provenance behind Pellisar's focus and decide whether the demographic chain can lawfully converge with the known Valeric/Silver Night machinery or must remain separate.
-
----
-
-## N+2 — Chapter Thirty: What Lawful Remedies Could Not Do
-
-**Certainty:** PLANNED
 
 Compare the advisory review's ordinary lawful remedies against the unlawful interference Corren admitted was contemplated elsewhere. Determine what political objective could not be achieved quickly enough through recusal, staggered appointments, wider recruitment, disclosure, or pipeline reform, and therefore might have tempted an actor toward disqualification, reassignment, engineered scandal, or worse.
 
@@ -69,7 +57,7 @@ Do not infer that institutional impatience proves murderous intent. Preserve the
 
 ---
 
-## N+3 — Chapter Thirty-One: The Cost of Refusing
+## N+2 — Chapter Thirty-One: The Cost of Refusing
 
 **Certainty:** PLANNED
 
@@ -81,7 +69,7 @@ Do not infer protected identity or contents from the existence of a dispute. Pre
 
 ---
 
-## N+4 — Chapter Thirty-Two: The Ordinary Name on the Extraordinary Paper
+## N+3 — Chapter Thirty-Two: The Ordinary Name on the Extraordinary Paper
 
 **Certainty:** PLANNED
 
@@ -93,15 +81,27 @@ If the evidence does not support convergence, preserve the separation and make t
 
 ---
 
-## N+5 — Chapter Thirty-Three: The Price of a Faster Answer
+## N+4 — Chapter Thirty-Three: The Price of a Faster Answer
 
-**Certainty:** HORIZON / EXPLORATORY
+**Certainty:** PLANNED
 
-Bring the established lawful remedies, any supported Pellisar tasking provenance, and Corren's admitted unlawful intervention machinery into a consequence-focused comparison. Ask who materially benefited from avoiding the slower lawful process and what institutional, dynastic, or succession outcome became possible only through accelerated interference.
+Bring the established lawful remedies, supported Pellisar tasking provenance, and Corren's admitted unlawful intervention machinery into a consequence-focused comparison. Ask who materially benefited from avoiding the slower lawful process and what institutional, dynastic, or succession outcome became possible only through accelerated interference.
 
 Do not convert benefit into authorship. Preserve rival explanations and require a traceable action, instruction, payment, appointment, or communication before assigning responsibility.
 
-**Horizon exit:** establish the strongest defensible causal bridge available before the final Book One convergence arc, or explicitly preserve separation if the evidence still does not support one.
+**Exit handoff:** establish the strongest defensible causal bridge available before the final Book One convergence arc, or explicitly preserve separation if the evidence still does not support one.
+
+---
+
+## N+5 — Chapter Thirty-Four: What Notice Made Possible
+
+**Certainty:** HORIZON / EXPLORATORY
+
+Use the pre-Silver-Night circulation of the Pellisar disposition as a bounded notice event. Determine whether any later lawful or unlawful action can be shown to depend on knowledge that the Academy had refused person-level predictive kinship. Trace only documented communications, appointments, requests, payments, or operational changes occurring after that notice.
+
+Do not infer that every liaison recipient read, understood, shared, or acted on the disposition. Notice creates an opportunity for knowledge, not proof of motive or action.
+
+**Horizon exit:** either establish a traceable post-notice action that earns convergence with the Silver Night machinery, or preserve the demographic and violence chains as separate despite their temporal proximity.
 
 ---
 
