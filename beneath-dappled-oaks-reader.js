@@ -6,11 +6,33 @@ const chapterPattern=/^(\d+(?:\.\d+)?)-(.+)\.md$/i;
 const smallWords=new Set(['a','an','and','as','at','but','by','for','from','in','of','on','or','the','to','with']);
 const encoder=new TextEncoder();
 const fallbackFiles=[
-  {name:'01-THE-LAST-SEVEN.md',path:'docs/beneath-dappled-oaks/chapters/01-THE-LAST-SEVEN.md',size:33000,type:'file'},
-  {name:'02-THE-COST-OF-SILK.md',path:'docs/beneath-dappled-oaks/chapters/02-THE-COST-OF-SILK.md',size:32000,type:'file'},
-  {name:'03-SEVEN-DOORS.md',path:'docs/beneath-dappled-oaks/chapters/03-SEVEN-DOORS.md',size:34885,type:'file'},
-  {name:'04-NECESSARY-TRUTH.md',path:'docs/beneath-dappled-oaks/chapters/04-NECESSARY-TRUTH.md',size:38387,type:'file'},
-  {name:'05-SOMETHING-BURIED-NEAR-THE-HOUSE.md',path:'docs/beneath-dappled-oaks/chapters/05-SOMETHING-BURIED-NEAR-THE-HOUSE.md',size:25000,type:'file'}
+  {name:'01-THE-LAST-SEVEN.md',path:'docs/beneath-dappled-oaks/chapters/01-THE-LAST-SEVEN.md',size:31397,type:'file'},
+  {name:'02-THE-COST-OF-SILK.md',path:'docs/beneath-dappled-oaks/chapters/02-THE-COST-OF-SILK.md',size:31458,type:'file'},
+  {name:'03-SEVEN-DOORS.md',path:'docs/beneath-dappled-oaks/chapters/03-SEVEN-DOORS.md',size:39165,type:'file'},
+  {name:'04-NECESSARY-TRUTH.md',path:'docs/beneath-dappled-oaks/chapters/04-NECESSARY-TRUTH.md',size:38405,type:'file'},
+  {name:'05-SOMETHING-BURIED-NEAR-THE-HOUSE.md',path:'docs/beneath-dappled-oaks/chapters/05-SOMETHING-BURIED-NEAR-THE-HOUSE.md',size:163274,type:'file'},
+  {name:'06-THE-PRICE-OF-BEING-SEEN.md',path:'docs/beneath-dappled-oaks/chapters/06-THE-PRICE-OF-BEING-SEEN.md',size:309599,type:'file'},
+  {name:'07-LEAF-SEVENTY-THREE.md',path:'docs/beneath-dappled-oaks/chapters/07-LEAF-SEVENTY-THREE.md',size:23027,type:'file'},
+  {name:'08-THE-EDGES-LEFT-BEHIND.md',path:'docs/beneath-dappled-oaks/chapters/08-THE-EDGES-LEFT-BEHIND.md',size:34432,type:'file'},
+  {name:'09-THE-RIDER.md',path:'docs/beneath-dappled-oaks/chapters/09-THE-RIDER.md',size:26169,type:'file'},
+  {name:'10-WHAT-THE-OATH-KEEPS.md',path:'docs/beneath-dappled-oaks/chapters/10-WHAT-THE-OATH-KEEPS.md',size:24074,type:'file'},
+  {name:'11-THE-SECOND-SIGNATURE.md',path:'docs/beneath-dappled-oaks/chapters/11-THE-SECOND-SIGNATURE.md',size:19783,type:'file'},
+  {name:'12-FOUR-HOUSES-LISTENING.md',path:'docs/beneath-dappled-oaks/chapters/12-FOUR-HOUSES-LISTENING.md',size:17788,type:'file'},
+  {name:'13-THE-COST-OF-KEEPING-SEVEN.md',path:'docs/beneath-dappled-oaks/chapters/13-THE-COST-OF-KEEPING-SEVEN.md',size:25650,type:'file'},
+  {name:'14-THE-INVITATION-THAT-KNOWS-TOO-MUCH.md',path:'docs/beneath-dappled-oaks/chapters/14-THE-INVITATION-THAT-KNOWS-TOO-MUCH.md',size:26710,type:'file'},
+  {name:'15-THE-THINGS-FAMILIES-COUNT.md',path:'docs/beneath-dappled-oaks/chapters/15-THE-THINGS-FAMILIES-COUNT.md',size:27460,type:'file'},
+  {name:'16-WHAT-CORREN-KEPT.md',path:'docs/beneath-dappled-oaks/chapters/16-WHAT-CORREN-KEPT.md',size:24579,type:'file'},
+  {name:'17-THE-OTHER-HALF-OF-THE-LOCK.md',path:'docs/beneath-dappled-oaks/chapters/17-THE-OTHER-HALF-OF-THE-LOCK.md',size:23416,type:'file'},
+  {name:'18-THE-RESERVE-HAND.md',path:'docs/beneath-dappled-oaks/chapters/18-THE-RESERVE-HAND.md',size:18779,type:'file'},
+  {name:'19-THE-ARITHMETIC-BEFORE-THE-FIRE.md',path:'docs/beneath-dappled-oaks/chapters/19-THE-ARITHMETIC-BEFORE-THE-FIRE.md',size:19948,type:'file'},
+  {name:'20-WHO-ASKED-TO-SEE-THE-COUNT.md',path:'docs/beneath-dappled-oaks/chapters/20-WHO-ASKED-TO-SEE-THE-COUNT.md',size:23612,type:'file'},
+  {name:'21-WHAT-THE-SECOND-OFFICE-KNEW.md',path:'docs/beneath-dappled-oaks/chapters/21-WHAT-THE-SECOND-OFFICE-KNEW.md',size:20727,type:'file'},
+  {name:'22-TWELVE-DAYS-WEST.md',path:'docs/beneath-dappled-oaks/chapters/22-TWELVE-DAYS-WEST.md',size:19011,type:'file'},
+  {name:'23-WHAT-THE-COMMISSION-BOUGHT.md',path:'docs/beneath-dappled-oaks/chapters/23-WHAT-THE-COMMISSION-BOUGHT.md',size:26548,type:'file'},
+  {name:'24-WHERE-THE-QUESTION-CHANGED.md',path:'docs/beneath-dappled-oaks/chapters/24-WHERE-THE-QUESTION-CHANGED.md',size:32128,type:'file'},
+  {name:'25-THE-SHAPE-OF-TOO-MUCH-FUTURE.md',path:'docs/beneath-dappled-oaks/chapters/25-THE-SHAPE-OF-TOO-MUCH-FUTURE.md',size:22939,type:'file'},
+  {name:'26-THE-RESERVATION-IN-RED-WAX.md',path:'docs/beneath-dappled-oaks/chapters/26-THE-RESERVATION-IN-RED-WAX.md',size:17392,type:'file'},
+  {name:'27-WHAT-THE-FIRST-OFFICE-EXPECTED.md',path:'docs/beneath-dappled-oaks/chapters/27-WHAT-THE-FIRST-OFFICE-EXPECTED.md',size:16646,type:'file'}
 ];
 let released=[];
 
