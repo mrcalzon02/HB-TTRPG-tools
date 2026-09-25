@@ -239,10 +239,11 @@
           .then(() => window.HBModuleWorkbenchReady || Promise.resolve())
           .then(() => loadScript('alien-vessel-generator-entry.js?v=20260822-modules-interface-1'))
           .then(() => loadScript('kaysender-airship-generator-entry.js?v=20260822-modules-interface-1'));
-        moduleSpatialEntryPromise = attempt.catch((error) => {
-          if (moduleSpatialEntryPromise === attempt) moduleSpatialEntryPromise = null;
+        const guardedAttempt = attempt.catch((error) => {
+          if (moduleSpatialEntryPromise === guardedAttempt) moduleSpatialEntryPromise = null;
           throw error;
         });
+        moduleSpatialEntryPromise = guardedAttempt;
       }
       await Promise.all([moduleSpatialEntryPromise, base.prepareView(viewId)]);
       return;
