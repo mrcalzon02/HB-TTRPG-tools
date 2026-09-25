@@ -95,3 +95,64 @@ Ilyan slid the paper toward Vaun.
 "Can I ask someone useful?"
 
 Neral coughed into his hand. Vaun smiled into her tea.
+
+
+---
+
+The civic register office occupied the back half of a building that had once been a merchant hall and still seemed faintly surprised by government. Its front chamber retained carved vines around the windows, a ceiling painted with ships and silver fish, and a broad stair designed for people who wanted to be seen ascending it. The bureaucracy had answered by putting shelves everywhere.
+
+Ilyan sat beneath a painted dolphin and waited while a registrar checked Vaun's authority. He had learned not to resent waiting. Waiting meant someone was checking.
+
+The registrar returned with a woman whose grey hair was pinned through with two black sticks.
+
+"Master Valeric."
+
+"Ilyan is fine."
+
+"It is also shorter."
+
+She sat opposite him.
+
+"Registrar Halen. Judge Vaun's order permits a bounded answer concerning the closure-dispute class associated with commission 264-B/17."
+
+"I understand."
+
+"Did that post-Silver-Night closure enter the dispute class?"
+
+"Yes."
+
+The answer landed with less force than he expected. The mechanism had been built for disagreement. Finding disagreement no longer felt like discovering sabotage. It felt like finding a door had once been used.
+
+"Which branch?"
+
+"Initiating-side scope reservation."
+
+"Was the closure stopped?"
+
+"No."
+
+"Was it sent to sealed judicial review?"
+
+"No."
+
+"Then the civic reviewer upheld the receiving officer?"
+
+"Yes."
+
+Ilyan looked down at his notes. Somewhere behind the partition, paper slid against paper.
+
+"Did the reviewer record a defect in the receiver's authority?"
+
+"No."
+
+"Did the reviewer state a basis?"
+
+"Partially. The review cites the commission's ordinary closure authority and the changed-interest contingency in the formation instrument."
+
+Ilyan did not write immediately.
+
+The previous day's papers had shown that the initiating office anticipated a future in which an authority that had properly invoked protection might later become conflicted, pressured, displaced or otherwise interested in a way that made obedience dangerous.
+
+Now that clause had appeared in an actual closure dispute after Silver Night.
+
+He wrote the phrase carefully.
