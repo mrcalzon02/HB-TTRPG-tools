@@ -171,7 +171,76 @@
       "title": "Project VIGILANT SHADE",
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
-      "status": "eligible-next"
+      "status": "architected-active",
+      "sourceObservedThrough": "Six substantial recovered installments: Project VIGILANT SHADE Parts 1–4, “A rain soaked day,” and “A dreary thunderstorm.” The current source endpoint is Yarrick, publicly returned and independently witnessed, demanding immediate Astra Militarum reinforcement after a subterranean Ork emergency becomes undeniable on New Presidio.",
+      "currentEndpoint": "A dreary thunderstorm — Detective Waldorf’s impossible Yarrick report has brought Captain Trellis and military authority into the New Presidio emergency. The returned Yarrick has valid-seeming identity evidence and memories but privately notices discrepancies between remembered self and present body. The engineered Ork population is escaping into a real urban battle; an Ork has already told Yarrick that Ghazghkull is looking for him. The source ends with Yarrick forcing skeptical Highmount command to confront visual evidence of the growing horde and demanding reinforcements immediately.",
+      "targetInstallments": 18,
+      "hardInstallmentCap": 24,
+      "finalState": "The New Presidio Ork emergency is materially contained; the existence and catastrophic exposure of VIGILANT SHADE can no longer be treated as an internal laboratory secret; Waldorf has established a defensible causal evidence chain back toward the project; Reinhold, Finkey, Zavoner and surviving project personnel face institutional consequences appropriate to what can actually be proved; and Yarrick receives an Imperial disposition while retaining unresolved private uncertainty about whether continuity of memory, body, soul and identity are the same thing. He chooses what renewed duty means without narrator-certified metaphysical certainty. Ghazghkull remains a later-story horizon rather than consuming this book.",
+      "macroArcs": [
+        "Installments 1–6 — Creation and breach: forbidden resurrection research, artificial WAAAGH generation, resource compromises, Yarrick’s return, project containment failure, Waldorf’s encounter and the New Presidio Ork emergency.",
+        "Installments 7–10 — Surface war and evidence: Highmount must materially answer Yarrick’s reinforcement demand; military containment expands while Waldorf preserves physical and testimonial evidence that points below the city instead of becoming a substitute battlefield hero.",
+        "Installments 11–14 — Provenance and jurisdiction: project evidence, Hans’s anchoring role, Yarrick’s identity discontinuities, Zavoner’s authority and military/Inquisitorial jurisdiction collide in the open. Authentication, genetics, memory, combat habit and psychic evidence remain distinct categories.",
+        "Installments 15–18 — Containment and disposition: the acute Ork crisis is contained at real cost; VIGILANT SHADE’s exposure produces accountability; Yarrick’s institutional status is decided enough to end this book; Waldorf’s causal case reaches a defensible endpoint; Yarrick chooses continued duty without receiving convenient proof of metaphysical identity.",
+        "Installments 19–24 — Reserve only. Use solely if established consequences cannot be resolved honestly inside 18 installments; do not open a new Ghazghkull campaign, new resurrection program or unrelated conspiracy to fill the cap."
+      ],
+      "irreversibleBeats": [
+        "Yarrick’s public return cannot be restored to secrecy after Waldorf, Arbites and military witnesses encounter him.",
+        "The engineered Ork population becomes a real New Presidio casualty event rather than a laboratory abstraction.",
+        "Highmount is forced to treat the subterranean emergency as materially real regardless of its skepticism about Yarrick.",
+        "Waldorf preserves enough evidence that the emergency can be traced toward VIGILANT SHADE rather than written off as an ordinary greenskin incursion.",
+        "The project’s resurrection evidence and Yarrick’s identity discontinuities become an institutional problem that cannot be solved by a single authentication test.",
+        "The book ends only after both the immediate Ork emergency and Yarrick’s near-term Imperial disposition have reached durable states."
+      ],
+      "characterTrajectories": {
+        "Yarrick": "From returned legend acting through instinct and remembered duty, through private recognition that remembered self and present embodiment do not align perfectly, to a deliberate choice of renewed service without requiring certainty that he is metaphysically identical to the dead original.",
+        "Waldorf": "From detective confronted by an impossible identity claim, through disciplined preservation of evidence amid military emergency, to the investigator whose causal chain prevents the project’s exposure from disappearing beneath battlefield necessity.",
+        "Reinhold": "From forbidden specialist treating resurrection as a technical problem to a surviving creator forced to confront the human and institutional consequences of a successful result and catastrophic containment failure.",
+        "Finkey": "From indispensable Ork collaborator and WAAAGH-field expert to a dangerous witness/participant whose methods help explain both success and breach without reducing him to comic exposition.",
+        "Zavoner": "From shield and sponsor able to define the project through Inquisitorial authority to an official forced to defend decisions after those decisions produce a public military emergency.",
+        "Hans": "Preserve his established anchoring function and make his connection to the resurrection process causally relevant to later identity/provenance questions rather than allowing him to disappear after activation."
+      },
+      "seedPayoffObligations": [
+        "Pay off the artificial WAAAGH field as both the mechanism that enabled resurrection and a cause of the containment catastrophe; do not convert it into generic Warp magic.",
+        "Pay off Yarrick’s private discrepancies between remembered self and present body without narrator-certified proof that he is or is not the original soul.",
+        "Pay off Waldorf’s initial impossible report through a real evidence chain and institutional consequences.",
+        "Pay off Hans’s role in the resurrection/anchoring process.",
+        "Pay off Zavoner’s personal authority and resource compromises as accountability questions after public exposure.",
+        "Preserve the Ork statement that Ghazghkull is looking for Yarrick as a future-story horizon; it must not hijack this book’s New Presidio closure."
+      ],
+      "continuityControls": [
+        "Character belief that the returned man is Yarrick is not omniscient proof of metaphysical identity.",
+        "Keep authentication codes, genetics, memories, combat habits, psychic evidence and soul claims as separate evidentiary categories.",
+        "Competent Imperial skepticism must update when evidence changes; do not preserve disbelief merely to manufacture conflict.",
+        "The engineered Ork population must leave casualties, infrastructure damage, cleanup burdens and institutional consequences.",
+        "Do not erase Reinhold, Finkey, Zavoner or Hans once Yarrick reaches the surface; the project remains causally relevant.",
+        "Waldorf remains an investigator whose stubbornness protects evidence; he does not become a replacement frontline commander.",
+        "Do not resolve the project as generic daemon possession or a convenient single-test identity verdict.",
+        "Ghazghkull is outside this book’s completion boundary."
+      ],
+      "installmentMap": [
+        "7 — Highmount responds materially to Yarrick’s reinforcement demand while Waldorf secures the first evidence chain from the surface battle.",
+        "8 — Reinforcements and Arbites establish a containment geometry; casualties and Ork behavior reveal the scale and engineered character of the outbreak.",
+        "9 — Waldorf follows material provenance toward restricted subterranean infrastructure while military command tests Yarrick as an operational authority.",
+        "10 — The acute surface battle reaches a first containment threshold; evidence makes an ordinary Ork incursion explanation increasingly untenable.",
+        "11 — Project provenance and jurisdiction begin surfacing; surviving VIGILANT SHADE personnel cannot keep the event purely internal.",
+        "12 — Yarrick’s authentication evidence and private discontinuities are examined without collapsing distinct evidence categories into one answer.",
+        "13 — Hans and the resurrection mechanism become causally relevant to the identity/provenance inquiry.",
+        "14 — Zavoner’s authority, project compromises and containment decisions face institutional challenge while the city still bears the emergency’s cost.",
+        "15 — Remaining Ork concentrations are contained or destroyed at real human/material cost; cleanup and casualty accounting begin.",
+        "16 — Waldorf’s causal case reaches VIGILANT SHADE strongly enough to prevent bureaucratic disappearance of the project’s role.",
+        "17 — Imperial authorities determine a near-term disposition for Yarrick and surviving project personnel without pretending every metaphysical question is solved.",
+        "18 — Yarrick consciously chooses what renewed duty means; New Presidio remains scarred but stable enough for the book to end. Ghazghkull remains beyond the boundary."
+      ],
+      "rollingWindow": [
+        "7 — Highmount’s material response and Waldorf’s evidence preservation.",
+        "8 — Containment geometry, casualties and engineered-Ork indicators.",
+        "9 — Provenance investigation and operational testing of Yarrick.",
+        "10 — First acute containment threshold and collapse of the ordinary-incursion explanation.",
+        "11 — VIGILANT SHADE provenance and jurisdiction become unavoidable."
+      ],
+      "completionBoundary": "End this book once the New Presidio Ork emergency is materially contained, VIGILANT SHADE’s causal role can no longer be buried as an ordinary incursion, Waldorf’s evidence chain has reached a defensible endpoint, project accountability has entered an enforceable institutional process, and Yarrick has received and consciously accepted or contested a near-term Imperial disposition. Do not continue into a Ghazghkull campaign, a second resurrection experiment or an unrelated conspiracy as Installment 19; those are separate stories.",
+      "nextSlice": "Installment 7: begin with Highmount’s concrete response to Yarrick’s reinforcement demand. Preserve the active New Presidio battle, Trellis/Waldorf witness chain, Yarrick’s private identity discrepancies, the project’s hidden causal role and the Ghazghkull statement as future horizon. Waldorf must preserve investigative evidence while soldiers fight the emergency; he is not to become a substitute battlefield hero."
     },
     {
       "id": "tenelja-station",
