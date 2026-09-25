@@ -243,7 +243,7 @@
     }
     if (viewId === 'utilities') {
       sheetPromise ||= loadScript('character-sheet-view.js');
-      tabletopToolkitPromise ||= loadScript('tabletop-toolkit.js?v=20260924-dice3d-3');
+      tabletopToolkitPromise ||= loadScript('tabletop-toolkit.js?v=20260924-dice-custom-1');
       await Promise.all([sheetPromise, tabletopToolkitPromise]);
       base.initializeSheet();
       window.HBTabletopToolkit?.mount?.();
