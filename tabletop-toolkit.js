@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.3.1';
+  const VERSION = '1.3.2';
   const STORAGE_KEY = 'hb-ttrpg-tabletop-toolkit-v1';
   const HISTORY_LIMIT = 60;
   const DICE_SETTING_DEFAULTS = Object.freeze({ tray: 'felt', walls: 'leather', dice: 'classic', sound: 'yes' });
@@ -13,25 +13,25 @@
   });
   const DICE_TEXTURE_ASSETS = Object.freeze({
     tray: Object.freeze({
-      felt: 'assets/tabletop/dice-textures/tray-felt.svg',
-      walnut: 'assets/tabletop/dice-textures/tray-walnut.svg',
-      stone: 'assets/tabletop/dice-textures/tray-stone.svg',
-      steel: 'assets/tabletop/dice-textures/tray-steel.svg',
-      arcane: 'assets/tabletop/dice-textures/tray-arcane.svg'
+      felt: 'assets/tabletop/dice-textures/tray-felt.png',
+      walnut: 'assets/tabletop/dice-textures/tray-walnut.png',
+      stone: 'assets/tabletop/dice-textures/tray-stone.png',
+      steel: 'assets/tabletop/dice-textures/tray-steel.png',
+      arcane: 'assets/tabletop/dice-textures/tray-arcane.png'
     }),
     walls: Object.freeze({
-      leather: 'assets/tabletop/dice-textures/wall-leather.svg',
+      leather: 'assets/tabletop/dice-textures/wall-leather.png',
       walnut: 'assets/tabletop/dice-textures/tray-walnut.svg',
       stone: 'assets/tabletop/dice-textures/tray-stone.svg',
       steel: 'assets/tabletop/dice-textures/tray-steel.svg'
     }),
     dice: Object.freeze({
-      classic: 'assets/tabletop/dice-textures/dice-classic.svg',
-      ivory: 'assets/tabletop/dice-textures/dice-ivory.svg',
-      obsidian: 'assets/tabletop/dice-textures/dice-obsidian.svg',
-      metal: 'assets/tabletop/dice-textures/dice-metal.svg',
-      crystal: 'assets/tabletop/dice-textures/dice-crystal.svg',
-      jade: 'assets/tabletop/dice-textures/dice-jade.svg'
+      classic: 'assets/tabletop/dice-textures/dice-classic.png',
+      ivory: 'assets/tabletop/dice-textures/dice-ivory.png',
+      obsidian: 'assets/tabletop/dice-textures/dice-obsidian.png',
+      metal: 'assets/tabletop/dice-textures/dice-metal.png',
+      crystal: 'assets/tabletop/dice-textures/dice-crystal.png',
+      jade: 'assets/tabletop/dice-textures/dice-jade.png'
     })
   });
   const state = loadState();
