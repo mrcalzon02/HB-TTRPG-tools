@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.3.0';
+  const VERSION = '1.3.1';
   const STORAGE_KEY = 'hb-ttrpg-tabletop-toolkit-v1';
   const HISTORY_LIMIT = 60;
   const DICE_SETTING_DEFAULTS = Object.freeze({ tray: 'felt', walls: 'leather', dice: 'classic', sound: 'yes' });
@@ -10,6 +10,29 @@
     walls: Object.freeze(['leather', 'walnut', 'stone', 'steel', 'none']),
     dice: Object.freeze(['classic', 'ivory', 'obsidian', 'metal', 'crystal', 'jade']),
     sound: Object.freeze(['yes', 'no'])
+  });
+  const DICE_TEXTURE_ASSETS = Object.freeze({
+    tray: Object.freeze({
+      felt: 'assets/tabletop/dice-textures/tray-felt.svg',
+      walnut: 'assets/tabletop/dice-textures/tray-walnut.svg',
+      stone: 'assets/tabletop/dice-textures/tray-stone.svg',
+      steel: 'assets/tabletop/dice-textures/tray-steel.svg',
+      arcane: 'assets/tabletop/dice-textures/tray-arcane.svg'
+    }),
+    walls: Object.freeze({
+      leather: 'assets/tabletop/dice-textures/wall-leather.svg',
+      walnut: 'assets/tabletop/dice-textures/tray-walnut.svg',
+      stone: 'assets/tabletop/dice-textures/tray-stone.svg',
+      steel: 'assets/tabletop/dice-textures/tray-steel.svg'
+    }),
+    dice: Object.freeze({
+      classic: 'assets/tabletop/dice-textures/dice-classic.svg',
+      ivory: 'assets/tabletop/dice-textures/dice-ivory.svg',
+      obsidian: 'assets/tabletop/dice-textures/dice-obsidian.svg',
+      metal: 'assets/tabletop/dice-textures/dice-metal.svg',
+      crystal: 'assets/tabletop/dice-textures/dice-crystal.svg',
+      jade: 'assets/tabletop/dice-textures/dice-jade.svg'
+    })
   });
   const state = loadState();
   let uidCounter = 0;
@@ -23,6 +46,7 @@
   let diceAudioContext = null;
   let diceLastImpactAt = 0;
   const diceGeometryCache = Object.create(null);
+  const diceTextureImages = Object.create(null);
 
   function freshState() {
     return {
@@ -525,59 +549,59 @@
     ctx.closePath();
   }
 
-  function drawFloorTexture(ctx, points, style, width, height) {
+  function textureImageFor(category, value) {
+    const group = DICE_TEXTURE_ASSETS[category];
+    const path = group && group[value];
+    if (!path) return null;
+    let image = diceTextureImages[path];
+    if (!image) {
+      image = new Image();
+      image.decoding = 'async';
+      image.onload = function() { drawDiceTray(diceTrayBodies, diceTrayReveal); };
+      image.src = path;
+      diceTextureImages[path] = image;
+    }
+    return image.complete && image.naturalWidth ? image : null;
+  }
+
+  function preloadDiceTextureAssets() {
+    Object.keys(DICE_TEXTURE_ASSETS).forEach(function(category) {
+      Object.keys(DICE_TEXTURE_ASSETS[category]).forEach(function(value) {
+        textureImageFor(category, value);
+      });
+    });
+  }
+
+  function fillPolygonWithImageTexture(ctx, points, image, tileSize, alpha) {
+    if (!image || !points.length) return false;
+    const minX = Math.floor(Math.min.apply(null, points.map(function(point) { return point.x; })));
+    const maxX = Math.ceil(Math.max.apply(null, points.map(function(point) { return point.x; })));
+    const minY = Math.floor(Math.min.apply(null, points.map(function(point) { return point.y; })));
+    const maxY = Math.ceil(Math.max.apply(null, points.map(function(point) { return point.y; })));
+    const size = Math.max(12, Number(tileSize) || 64);
     ctx.save();
     tracePolygon(ctx, points);
     ctx.clip();
-    ctx.strokeStyle = style.line;
-    ctx.fillStyle = style.accent;
-    ctx.lineWidth = 1;
-
-    if (style.texture === 'felt') {
-      for (let y = 0; y < height; y += 11) {
-        for (let x = (y % 22 ? 6 : 0); x < width; x += 13) {
-          ctx.fillRect(x, y, 1, 1);
-        }
-      }
-    } else if (style.texture === 'wood') {
-      for (let y = -20; y < height + 40; y += 19) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.bezierCurveTo(width * .3, y + 8, width * .65, y - 8, width, y + 2);
-        ctx.stroke();
-      }
-    } else if (style.texture === 'stone') {
-      for (let x = 0; x < width; x += 54) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 18, height); ctx.stroke();
-      }
-      for (let y = 0; y < height; y += 42) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y + 9); ctx.stroke();
-      }
-    } else if (style.texture === 'steel') {
-      for (let y = 12; y < height; y += 26) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
-      }
-      for (let x = 18; x < width; x += 42) {
-        for (let y = 15; y < height; y += 52) {
-          ctx.beginPath(); ctx.arc(x, y, 1.3, 0, Math.PI * 2); ctx.fill();
-        }
-      }
-    } else if (style.texture === 'arcane') {
-      const cx = width * .5;
-      const cy = height * .58;
-      for (let radius = 34; radius < Math.min(width,height) * .75; radius += 43) {
-        ctx.beginPath(); ctx.arc(cx, cy, radius, 0, Math.PI * 2); ctx.stroke();
-      }
-      for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 6) {
-        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(angle) * width, cy + Math.sin(angle) * height); ctx.stroke();
+    ctx.globalAlpha = alpha == null ? 1 : alpha;
+    for (let y = minY - size; y <= maxY + size; y += size) {
+      for (let x = minX - size; x <= maxX + size; x += size) {
+        ctx.drawImage(image, x, y, size, size);
       }
     }
     ctx.restore();
+    return true;
+  }
+
+  function drawFloorTexture(ctx, points) {
+    const selection = state.diceSettings && state.diceSettings.tray || DICE_SETTING_DEFAULTS.tray;
+    fillPolygonWithImageTexture(ctx, points, textureImageFor('tray', selection), 112, .88);
   }
 
   function drawTrayWalls(ctx, width, height) {
     const style = trayWallStyle();
-    if (style.texture === 'none') return;
+    const selection = state.diceSettings && state.diceSettings.walls || DICE_SETTING_DEFAULTS.walls;
+    if (selection === 'none') return;
+    const image = textureImageFor('walls', selection);
     const h = 0.62;
     const walls = [
       [{x:-5.7,y:0,z:3.2},{x:5.7,y:0,z:3.2},{x:5.7,y:h,z:3.2},{x:-5.7,y:h,z:3.2}],
@@ -585,90 +609,31 @@
       [{x:5.7,y:0,z:3.2},{x:5.7,y:0,z:-3.2},{x:5.7,y:h,z:-3.2},{x:5.7,y:h,z:3.2}],
       [{x:5.7,y:0,z:-3.2},{x:-5.7,y:0,z:-3.2},{x:-5.7,y:h*.48,z:-3.2},{x:5.7,y:h*.48,z:-3.2}]
     ];
-
-    walls.forEach(function(wall, wallIndex) {
+    walls.forEach(function(wall) {
       const points = wall.map(function(point) { return projectDicePoint(point, width, height); });
       tracePolygon(ctx, points);
       ctx.fillStyle = style.base;
       ctx.fill();
+      fillPolygonWithImageTexture(ctx, points, image, 82, .94);
       ctx.strokeStyle = style.line;
       ctx.lineWidth = 1.2;
       ctx.stroke();
-      ctx.save();
-      tracePolygon(ctx, points);
-      ctx.clip();
-      ctx.strokeStyle = style.accent;
-      ctx.fillStyle = style.accent;
-      ctx.lineWidth = 1;
-      if (style.texture === 'leather') {
-        for (let i = 0; i < 8; i += 1) {
-          const y = points[0].y + (i + 1) * 7;
-          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y + (wallIndex % 2 ? 5 : -3)); ctx.stroke();
-        }
-      } else if (style.texture === 'wood') {
-        for (let i = -4; i < 18; i += 1) {
-          const x = i * 44 + wallIndex * 9;
-          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 22, height); ctx.stroke();
-        }
-      } else if (style.texture === 'stone') {
-        for (let i = 0; i < 12; i += 1) {
-          const x = i * 58 + (wallIndex % 2) * 21;
-          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x - 9, height); ctx.stroke();
-        }
-      } else if (style.texture === 'steel') {
-        for (let i = 0; i < 16; i += 1) {
-          const x = i * 46 + 18;
-          const y = (wallIndex * 23 + i * 17) % Math.max(30, height);
-          ctx.beginPath(); ctx.arc(x, y, 1.6, 0, Math.PI * 2); ctx.fill();
-        }
-      }
-      ctx.restore();
     });
   }
 
-  function drawDieFaceTexture(ctx, points, material, seed) {
-    if (!material || material.texture === 'classic') return;
-    ctx.save();
-    tracePolygon(ctx, points);
-    ctx.clip();
+  function drawDieFaceTexture(ctx, points, material) {
+    const selection = state.diceSettings && state.diceSettings.dice || DICE_SETTING_DEFAULTS.dice;
+    const image = textureImageFor('dice', selection);
+    if (!image || !points.length) return;
     const minX = Math.min.apply(null, points.map(function(point) { return point.x; }));
     const maxX = Math.max.apply(null, points.map(function(point) { return point.x; }));
     const minY = Math.min.apply(null, points.map(function(point) { return point.y; }));
     const maxY = Math.max.apply(null, points.map(function(point) { return point.y; }));
-    ctx.lineWidth = 0.8;
-
-    if (material.texture === 'speckle') {
-      ctx.fillStyle = 'rgba(86,70,45,.18)';
-      for (let i = 0; i < 6; i += 1) {
-        const x = minX + ((seed * 19 + i * 31) % 97) / 97 * Math.max(1,maxX-minX);
-        const y = minY + ((seed * 29 + i * 17) % 89) / 89 * Math.max(1,maxY-minY);
-        ctx.fillRect(x,y,1,1);
-      }
-    } else if (material.texture === 'sheen') {
-      ctx.strokeStyle = 'rgba(227,190,255,.20)';
-      ctx.beginPath(); ctx.moveTo(minX, maxY); ctx.lineTo(maxX, minY); ctx.stroke();
-    } else if (material.texture === 'brushed') {
-      ctx.strokeStyle = 'rgba(255,255,255,.14)';
-      for (let y = minY; y <= maxY; y += 4) {
-        ctx.beginPath(); ctx.moveTo(minX,y); ctx.lineTo(maxX,y+1); ctx.stroke();
-      }
-    } else if (material.texture === 'crystal') {
-      ctx.strokeStyle = 'rgba(225,252,255,.24)';
-      ctx.beginPath();
-      ctx.moveTo(minX + (maxX-minX)*.18, maxY);
-      ctx.lineTo(maxX - (maxX-minX)*.15, minY);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(minX, minY + (maxY-minY)*.42);
-      ctx.lineTo(maxX, maxY - (maxY-minY)*.18);
-      ctx.stroke();
-    } else if (material.texture === 'vein') {
-      ctx.strokeStyle = 'rgba(216,255,224,.17)';
-      ctx.beginPath();
-      ctx.moveTo(minX, minY + (maxY-minY)*.65);
-      ctx.bezierCurveTo((minX+maxX)*.42, minY, (minX+maxX)*.58, maxY, maxX, minY + (maxY-minY)*.32);
-      ctx.stroke();
-    }
+    ctx.save();
+    tracePolygon(ctx, points);
+    ctx.clip();
+    ctx.globalAlpha = material && material.texture === 'crystal' ? .72 : .9;
+    ctx.drawImage(image, minX, minY, Math.max(1,maxX-minX), Math.max(1,maxY-minY));
     ctx.restore();
   }
 
@@ -930,7 +895,7 @@
     ctx.strokeStyle = floorStyle.line;
     ctx.lineWidth = 1;
     ctx.stroke();
-    drawFloorTexture(ctx, floorCorners, floorStyle, width, height);
+    drawFloorTexture(ctx, floorCorners);
     drawTrayWalls(ctx, width, height);
 
     ctx.strokeStyle = floorStyle.line;
@@ -1018,7 +983,7 @@
       tracePolygon(ctx, face.points);
       ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + keptAlpha + ')';
       ctx.fill();
-      drawDieFaceTexture(ctx, face.points, material, face.bodyIndex + face.points.length);
+      drawDieFaceTexture(ctx, face.points, material);
       ctx.strokeStyle = 'rgba(' + material.edge[0] + ',' + material.edge[1] + ',' + material.edge[2] + ',' + (face.body.die.kept ? 0.44 : 0.2) + ')';
       ctx.lineWidth = material.texture === 'metal' ? 1.15 : 0.85;
       ctx.stroke();
@@ -1075,6 +1040,7 @@
   function initializeDiceTray() {
     const stage = document.getElementById('ttk-dice-stage');
     if (!stage) return;
+    preloadDiceTextureAssets();
     if (diceTrayResizeObserver) diceTrayResizeObserver.disconnect();
     if (typeof ResizeObserver === 'function') {
       diceTrayResizeObserver = new ResizeObserver(function() {
@@ -1608,6 +1574,7 @@
     state.diceSettings[key] = value;
     saveState();
     if (key === 'sound' && value === 'yes') ensureDiceAudio();
+    if (key !== 'sound') textureImageFor(key, value);
     drawDiceTray(diceTrayBodies, diceTrayReveal);
     setStatus('Dice ' + key + ' setting changed to ' + value + '.');
   }
