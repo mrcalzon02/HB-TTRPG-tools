@@ -14,7 +14,7 @@ assert.ok(index.includes('purpose-aware sites, alien vessels, and Kaysender airs
 assert.ok(index.includes('id="module-viewer-root"'), 'Existing module viewer must remain available');
 
 assert.ok(mounts.includes("if (viewId === 'modules')"), 'Modules route must have an explicit lazy-load branch');
-for (const dependency of ['semantic-spatial-engine.js','semantic-content-populator.js','module-map-generator.js','vessel-hull-envelope.js','alien-vessel-generator.js','kaysender-airship-generator.js','module-map-generator-entry.js?v=20260822-modules-interface-2','alien-vessel-generator-entry.js?v=20260822-modules-interface-1','kaysender-airship-generator-entry.js?v=20260822-modules-interface-1']) {
+for (const dependency of ['semantic-spatial-engine.js','semantic-content-populator.js','module-map-generator.js','vessel-hull-envelope.js','alien-vessel-generator.js','kaysender-airship-generator.js','module-map-generator-entry.js?v=20260924-modules-runtime-4','alien-vessel-generator-entry.js?v=20260822-modules-interface-1','kaysender-airship-generator-entry.js?v=20260822-modules-interface-1']) {
   assert.ok(mounts.includes(dependency), `Modules route must load ${dependency}`);
 }
 
