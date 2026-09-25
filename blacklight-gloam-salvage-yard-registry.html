@@ -21,15 +21,21 @@
     .gloam-tools button{cursor:pointer;font-weight:900}.gloam-tools button:hover{border-color:rgba(217,168,79,.65)}
     .gloam-state{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:6px 2px 8px;color:var(--bli-muted);font-size:.78rem}
     .gloam-state strong{color:#f1c66f}
-    .gloam-table-wrap{overflow:auto;max-height:calc(100vh - 190px);border:1px solid var(--bli-line);border-radius:12px;background:rgba(0,0,0,.18)}
-    table{width:100%;min-width:1760px;border-collapse:separate;border-spacing:0;font-size:.76rem}
-    thead th{position:sticky;top:0;z-index:2;padding:9px 10px;border-bottom:1px solid rgba(217,168,79,.35);background:#10100e;color:#f1c66f;text-align:left;letter-spacing:.055em;text-transform:uppercase;font-size:.67rem}
-    tbody td{padding:9px 10px;border-bottom:1px solid rgba(217,168,79,.09);vertical-align:top;line-height:1.35}
+    .gloam-table-wrap{overflow-y:auto;overflow-x:hidden;max-height:calc(100vh - 190px);border:1px solid var(--bli-line);border-radius:12px;background:rgba(0,0,0,.18)}
+    table{width:100%;min-width:0;table-layout:fixed;border-collapse:separate;border-spacing:0;font-size:.76rem}
+    thead th{position:sticky;top:0;z-index:2;padding:9px 10px;border-bottom:1px solid rgba(217,168,79,.35);background:#10100e;color:#f1c66f;text-align:left;letter-spacing:.055em;text-transform:uppercase;font-size:.67rem;white-space:normal;overflow-wrap:anywhere}
+    tbody td{padding:9px 10px;border-bottom:1px solid rgba(217,168,79,.09);vertical-align:top;line-height:1.35;white-space:normal;overflow-wrap:anywhere;word-break:normal}
+    th:nth-child(1),td:nth-child(1){width:7%}th:nth-child(2),td:nth-child(2){width:12%}th:nth-child(3),td:nth-child(3){width:12%}th:nth-child(4),td:nth-child(4){width:11%}th:nth-child(5),td:nth-child(5){width:10%}th:nth-child(6),td:nth-child(6){width:10%}th:nth-child(7),td:nth-child(7){width:12%}th:nth-child(8),td:nth-child(8){width:13%}th:nth-child(9),td:nth-child(9){width:13%}
     tbody tr:hover{background:rgba(217,168,79,.045)}tbody tr[data-bex="true"]{background:rgba(160,83,48,.13);box-shadow:inset 3px 0 0 #d9a84f}
-    .rid{white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.ship-name{font-weight:950;color:#f2ede3;font-size:.83rem}.legacy{display:block;margin-top:2px;color:#a79b88;font-size:.68rem}
-    .status{display:inline-block;border:1px solid rgba(217,168,79,.24);border-radius:999px;padding:3px 7px;white-space:nowrap;font-size:.67rem}
+    .rid{white-space:normal;overflow-wrap:anywhere;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.ship-name{font-weight:950;color:#f2ede3;font-size:.83rem;overflow-wrap:anywhere}.legacy{display:block;margin-top:2px;color:#a79b88;font-size:.68rem;overflow-wrap:anywhere}
+    .status{display:inline-block;border:1px solid rgba(217,168,79,.24);border-radius:999px;padding:3px 7px;white-space:normal;overflow-wrap:anywhere;font-size:.67rem}
     .status.restricted{border-color:rgba(222,102,76,.55);color:#ffb39c}.status.hazard{border-color:rgba(219,169,74,.55);color:#f4ce7a}
-    .status.memorial{border-color:rgba(136,158,204,.45);color:#b9c9ef}.subtle{color:#aaa08f}.orbit{white-space:nowrap}
+    .status.memorial{border-color:rgba(136,158,204,.45);color:#b9c9ef}.subtle{color:#aaa08f}.orbit{white-space:normal;overflow-wrap:anywhere}
+    body.embed-mode .bli-topbar,body.embed-mode .bli-footer{display:none!important}
+    body.embed-mode .gloam-shell{width:100%;margin:0;padding:0}
+    body.embed-mode .gloam-head{border-radius:0;border-left:0;border-right:0;border-top:0}
+    body.embed-mode .gloam-table-wrap{max-height:none;border-radius:0}
+    body.embed-mode .gloam-note{padding:0 10px 10px}
     .gloam-note{margin:9px 2px;color:#aaa08f;font-size:.74rem;line-height:1.45}
     @media(max-width:1450px){.gloam-summary{grid-template-columns:repeat(6,minmax(110px,1fr))}}
     @media(max-width:850px){.gloam-shell{width:calc(100% - 12px);margin-top:8px}.gloam-head{grid-template-columns:1fr}.gloam-count{text-align:left}.gloam-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.gloam-tools{grid-template-columns:1fr 1fr}.gloam-tools input{grid-column:1/-1}.gloam-table-wrap{max-height:none}}
@@ -37,8 +43,8 @@
 </head>
 <body class="blacklight-corp-body">
   <header class="bli-topbar">
-    <a class="bli-brand" href="blacklight-no-return-signal-campaign.html"><span class="bli-mark"></span><span class="bli-brand-text"><span>Blacklight</span><span>Gloam Registry</span></span></a>
-    <nav class="bli-nav"><a href="blacklight-no-return-signal-campaign.html">No Return Signal</a><a href="blacklight-exo-stellar-sector.html">Helios Vale</a><a href="blacklight-systems-black.html">Black Archive</a></nav>
+    <a class="bli-brand" href="blacklight-no-return-signal-beacon-terminal.html#major-registry"><span class="bli-mark"></span><span class="bli-brand-text"><span>JY-17</span><span>Major Hull Registry</span></span></a>
+    <nav class="bli-nav"><a href="blacklight-no-return-signal-beacon-terminal.html#major-registry">Yard Control</a><a href="blacklight-no-return-signal-alpthon-systemic-casualty-archive.html">Recovered Ship Archive</a></nav>
   </header>
 
   <main class="gloam-shell">
@@ -74,9 +80,11 @@
     <p class="gloam-note">Registry invariant: category totals are 176 freight, 84 industrial, 59 auxiliary, 43 passenger/transport, 21 naval, 20 exploration/science, 17 colony/habitat/ark, 15 security/patrol/courier, 9 medical/quarantine, 4 diplomatic/state/archive, 9 unknown, and 6 yard/station structures. Legacy custody totals are 251 released/abandoned, 96 disputed, 53 memorial/evidence, 38 quarantine/hazard, and 25 restricted strategic exceptions.</p>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · No Return Signal GM archive · Gloam Derelict Custody Anchorage.</footer>
+  <footer class="bli-footer"><strong>JY-17 Yard Control</strong> · Historical major-hull custody registry · Gloam Derelict Custody Anchorage.</footer>
   <script src="blacklight-background-audio.js"></script>
   <script>
+  if(new URLSearchParams(location.search).get('embed')==='1'){document.body.classList.add('embed-mode');}
+  
   (() => {
     'use strict';
 
