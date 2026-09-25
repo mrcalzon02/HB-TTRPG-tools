@@ -234,7 +234,7 @@
         .then(() => loadScript('vessel-hull-envelope.js'))
         .then(() => loadScript('alien-vessel-generator.js'))
         .then(() => loadScript('kaysender-airship-generator.js'))
-        .then(() => loadScript('module-map-generator-entry.js?v=20260923-modules-runtime-3'))
+        .then(() => loadScript('module-map-generator-entry.js?v=20260924-modules-runtime-4'))
         .then(() => window.HBModuleWorkbenchReady || Promise.resolve())
         .then(() => loadScript('alien-vessel-generator-entry.js?v=20260822-modules-interface-1'))
         .then(() => loadScript('kaysender-airship-generator-entry.js?v=20260822-modules-interface-1'));

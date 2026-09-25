@@ -5,6 +5,7 @@
   const RECORD_BRIDGE_SCRIPT = 'module-viewer-record-bridge.js';
   const REFERENCE_LIBRARY_SCRIPT = 'module-reference-library.js';
   const PRIMARY_GENERATOR_BRIDGE_SCRIPT = 'module-generator-primary-bridge.js';
+  const RUNTIME_VERSION = '20260924-modules-runtime-4';
   const VALID_TILE_TYPES = new Set(['void','floor','wall','door','secret-door','trap','stairs','label']);
   let injected = false;
   let fillerButtonInjected = false;
@@ -18,7 +19,7 @@
   function loadScriptOnce(src){
     if([...document.scripts].some(script => (script.getAttribute('src') || '').split('?')[0].endsWith(src))) return;
     const script = document.createElement('script');
-    script.src = src;
+    script.src = `${src}?v=${RUNTIME_VERSION}`;
     script.defer = true;
     document.body.appendChild(script);
   }

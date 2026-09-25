@@ -138,7 +138,7 @@
     });
   }
 
-  const RUNTIME_VERSION = '20260923-modules-runtime-3';
+  const RUNTIME_VERSION = '20260924-modules-runtime-4';
   const runtimeChecks = Object.freeze({
     'semantic-spatial-engine.js': () => Boolean(window.HBSemanticSpatialEngine),
     'semantic-content-populator.js': () => Boolean(window.HBSemanticContentPopulator),

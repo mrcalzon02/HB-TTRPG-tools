@@ -39,11 +39,20 @@
     }else{
       const select=document.querySelector('#module-select');
       if(!select) return false;
+      if(![...select.options].some(option=>option.value===path)){
+        const item=(inventory?.items||[]).find(entry=>entry.viewerPath===path);
+        select.appendChild(new Option(item?.title||'Module reference',path));
+      }
       select.value=path;
       select.dispatchEvent(new Event('change',{bubbles:true}));
       opened=true;
     }
-    if(opened&&scroll) document.querySelector('#module-viewer-root')?.scrollIntoView({behavior:'smooth',block:'start'});
+    if(opened&&scroll){
+      const target=document.querySelector('#module-viewer-root .module-viewer-toolbar')
+        || document.querySelector('#module-viewer-root .module-viewer-layout')
+        || document.querySelector('#module-viewer-root');
+      target?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
     return opened;
   }
   function renderLibrary(){
