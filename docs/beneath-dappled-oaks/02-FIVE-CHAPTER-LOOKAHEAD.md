@@ -4,7 +4,7 @@ document_role: "ROLLING FIVE-CHAPTER FORWARD PLAN"
 status: "ACTIVE PLANNING CONTROL"
 planning_horizon: 5
 last_reconciled: "2026-09-24"
-active_after_chapter: 27
+active_after_chapter: 28
 ---
 
 # Beneath Dappled Oaks — Active Five-Chapter Lookahead
@@ -13,15 +13,15 @@ This is the operational N+1 through N+5 plan for the first-principles rewrite. U
 
 ## Current committed rewrite state
 
-Canonical numbered prose now runs through **Chapter Twenty-Seven — What the First Office Expected**.
+Canonical numbered prose now runs through **Chapter Twenty-Eight — The Acknowledging Hand**.
 
-Chapter Twenty-Six established that 264-B/17's independent bearer-protection reservation arose from pre-existing Student Safeguard doctrine against "reassembly by ordinary process." The Tribunal Contingency Secretariat resisted aspects of the reservation during drafting but ultimately accepted an independently obligated receiver.
+Chapter Twenty-Seven established that the initiating office regarded post-acceptance receiver independence as necessary rather than accidental.
 
-Chapter Twenty-Seven establishes the initiating office's own expectation: it regarded post-acceptance receiver independence as necessary, not accidental. The design anticipated that institutional interests could change after initiation through conflict, pressure, replacement, jurisdictional change, or later involvement of an interested office. The initiating side expected authenticated designations to be accepted without relitigating the initial basis, but accepted that the receiver could later refuse surrender or disclosure under its separate protective duty. This establishes institutional design intent, not Corren's personal motive, selector exercise, receipt status, or protected-bearer identity.
+Chapter Twenty-Eight establishes that this independence was actually exercised after Silver Night. The receiver proposed closure; the initiating side entered a scope reservation; duty commissioner Maelin Serrat reviewed the receiver's authority under the ordinary civic rotation; closure stood without judicial escalation or a recorded defect; and the review cited both ordinary closure authority and the changed-interest contingency. The acknowledgment did not itself transfer custody, identify protected material, establish selector exercise, or prove why the changed-interest clause was factually relevant.
 
-Thessa remains actively west. Her road investigation now traces part of the missing base stone into a real drainage project; diversion is established for some material, but authorization, billing responsibility, motive, and culpability remain unresolved. Her relationship with Ilyan remains active through correspondence while both continue independent work.
+Thessa's western investigation also advances: the emergency drainage diversion was lawfully authorized, but the drainage account records reimbursement and the road account records replacement while the quarry records show neither a matching payment nor a second dispatch. Money movement is established; missing replacement material, accounting error, subcontracting, or fraud remain unresolved. Thessa is pursuing wagon tallies and subcontractor schedules.
 
-The 264-B/17 controlled non-person custody acknowledgment is now the next dependency-valid receiving-authority question.
+The next dependency-valid investigation returns to Pellisar Veyran's tasking provenance: who sent him into the successor-depth review, under what instruction, and whether the later predictive-kinship question arose from ordinary analysis or a more specific upstream pressure.
 
 ## Governing debts
 
@@ -45,23 +45,11 @@ The 264-B/17 controlled non-person custody acknowledgment is now the next depend
 
 ---
 
-## N+1 — Chapter Twenty-Eight: The Acknowledging Hand
+## N+1 — Chapter Twenty-Nine: Who Sent Pellisar
 
 **Certainty:** LOCKED / INVESTIGATION
 
-Return to the controlled non-person custody released after Silver Night now that formation purpose, receiver independence, and initiating-office expectations are established. Determine, if privacy permits, whether the acknowledging civic commissioner acted under ordinary closing procedure, exceptional protection instruction, or a pre-existing contingency rule.
-
-Do not identify the held property, protected bearer, destination, or route merely to satisfy curiosity. Keep acknowledgment distinct from authorship, possession, selector exercise or conspiracy.
-
-**Exit handoff:** establish the narrowest supported responsibility attached to the post-Silver-Night acknowledgment and identify the next lawful evidentiary dependency.
-
----
-
-## N+2 — Chapter Twenty-Nine: Who Sent Pellisar
-
-**Certainty:** PLANNED
-
-The anonymous baseline establishes that Pellisar's initial concentration concern was analytically reasonable. Inspect the chair-secretariat's delegation and tasking chain beyond the already released office-level order. Determine whether Pellisar independently recognized the successor-depth problem within his assigned concentration audit, was pointed toward that cluster by ordinary institutional data, or carried a more specific concern from an upstream actor.
+Inspect the chair-secretariat's delegation and tasking chain beyond the already released office-level order. Determine whether Pellisar independently recognized the successor-depth problem within his assigned concentration audit, was pointed toward that cluster by ordinary institutional data, or carried a more specific concern from an upstream actor.
 
 The sharper question remains the transition from declared affiliation to predictive private kinship. Do not treat a Valeric representative's mere presence in the chair-secretariat as authorship. Require a document, instruction, witness, or other independent evidence before joining a named actor to the question.
 
@@ -69,7 +57,7 @@ The sharper question remains the transition from declared affiliation to predict
 
 ---
 
-## N+3 — Chapter Thirty: What Lawful Remedies Could Not Do
+## N+2 — Chapter Thirty: What Lawful Remedies Could Not Do
 
 **Certainty:** PLANNED
 
@@ -81,7 +69,7 @@ Do not infer that institutional impatience proves murderous intent. Preserve the
 
 ---
 
-## N+4 — Chapter Thirty-One: The Cost of Refusing
+## N+3 — Chapter Thirty-One: The Cost of Refusing
 
 **Certainty:** PLANNED
 
@@ -93,15 +81,27 @@ Do not infer protected identity or contents from the existence of a dispute. Pre
 
 ---
 
-## N+5 — Chapter Thirty-Two: The Ordinary Name on the Extraordinary Paper
+## N+4 — Chapter Thirty-Two: The Ordinary Name on the Extraordinary Paper
 
-**Certainty:** HORIZON / EXPLORATORY
+**Certainty:** PLANNED
 
-If Chapters Twenty-Eight through Thirty-One produce a lawful accountability path, identify the narrowest named officeholder, clerk, commissioner, or delegating authority whose documented action joins otherwise separate chains. The dramatic task is not to unveil a mastermind but to determine whether ordinary administrative responsibility finally provides a defensible bridge between demographic pressure, unlawful intervention, and the protected machinery.
+If Chapters Twenty-Nine through Thirty-One produce a lawful accountability path, identify the narrowest named officeholder, clerk, commissioner, or delegating authority whose documented action joins otherwise separate chains. The dramatic task is not to unveil a mastermind but to determine whether ordinary administrative responsibility finally provides a defensible bridge between demographic pressure, unlawful intervention, and the protected machinery.
 
 If the evidence does not support convergence, preserve the separation and make that failure informative rather than forcing a culprit.
 
-**Horizon exit:** decide which evidence chain Book One can responsibly converge before the Chapter Forty ceiling and which uncertainties must remain bounded.
+**Exit handoff:** decide which evidence chain can responsibly converge before the Book One ceiling and which uncertainties must remain bounded.
+
+---
+
+## N+5 — Chapter Thirty-Three: The Price of a Faster Answer
+
+**Certainty:** HORIZON / EXPLORATORY
+
+Bring the established lawful remedies, any supported Pellisar tasking provenance, and Corren's admitted unlawful intervention machinery into a consequence-focused comparison. Ask who materially benefited from avoiding the slower lawful process and what institutional, dynastic, or succession outcome became possible only through accelerated interference.
+
+Do not convert benefit into authorship. Preserve rival explanations and require a traceable action, instruction, payment, appointment, or communication before assigning responsibility.
+
+**Horizon exit:** establish the strongest defensible causal bridge available before the final Book One convergence arc, or explicitly preserve separation if the evidence still does not support one.
 
 ---
 
