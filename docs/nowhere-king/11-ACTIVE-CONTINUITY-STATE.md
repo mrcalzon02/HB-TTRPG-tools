@@ -2,11 +2,11 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 2 Episode 3, *The First Door-Keeper*.
+**Reconciled through:** Season 2 Episode 4, *Silver in the Walls*.
 
 ## Current state
 
-Season One is complete and Edselsto is back under Luceran's living government. The first three episodes of Season Two have moved the castle from public apparition into bounded institutional use without resolving what Edselsto actually is.
+Season One is complete and Edselsto is back under Luceran's living government. The first four episodes of Season Two have moved the castle from public apparition into bounded institutional use without resolving what Edselsto actually is.
 
 In Episode 1, *The Useful Monster*, the pale silver mask identifies itself as Edselsto and answers only within Luceran's authority. Testing establishes hard limits: Edselsto hears only some rooms/passages, can mistake a motionless person for part of a room, and answers confidently from incomplete perception. It nevertheless helps locate wounded people and identifies the lost west feed beneath the lime room, allowing Vess and living workers to save the lower cistern. The first restoration evidence appears in old silver listening lines. Luceran feels the immediate emotional seduction of a servant that simply obeys after human betrayal; Miren, Rhyse, Calienne and others preserve friction.
 
@@ -19,6 +19,10 @@ The first operational test immediately proves that a dead keeper retains judgmen
 The court records further rules: willing dead service requires the dead person's consent, may be ended at will, cannot be prolonged by royal command, cannot be transferred to another threshold without new consent, creates no debt against family, cannot make family support contingent on continued service, cannot replace living watches, and cannot serve as sole witness against the living. Prepared thresholds require a physical isolation point so their silver connection can be broken. Family access is not a royal favor.
 
 Mrs. Marrick and Tomas retain independent grief and agency. Damaris separates death compensation from dead service so the family cannot be economically coerced into keeping Iven useful. Merel refuses theological certainty for comfort. Calienne refuses to let healers certify willingness. Vess treats the phenomenon as material infrastructure requiring isolation. Rhyse protects living command. Miren remains Luceran's friction. Ysabet records exact terms. Luceran experiences the genuine appeal of a threshold that obeys rule without fatigue while seeing that the real price is human grief, consent and precedent.
+
+In Episode 4, *Silver in the Walls*, Vess turns the old silver channels into a controlled infrastructure survey. Edselsto's remembered routes are treated as claims until living workers physically verify them, because later repairs and metal theft have broken some remembered continuities. House Cendreval enters as a necessary supplier: Alys Cendreval secures a six-month equal-price preference and supervised assay role, but no exclusivity or control over restoration policy. Pell Falbrecht and ordinary workers force workplace privacy into the rules. Active listening rooms receive visible black-ear tiles; deliberately isolated rooms receive plain white tiles; private chambers, treatment rooms, confession, laundry and sealed council work remain disconnected.
+
+The first restored branch expands Edselsto's hearing only into selected public and operational spaces. It correctly detects a sleeping child overlooked by a human count, demonstrating both usefulness and surveillance stakes. A cistern emergency proves complementarity: Edselsto identifies an open west throat, while Vess, Henn and living workers locate the physical reference, free the jammed counterweight and close the feed. Procurement creates silver speculation, wage pressure, theft risk, transport costs and noble leverage. Miren independently obtains qualified Cendreval technical names without promising office; Luceran's jealousy around Corvin briefly surfaces, and Miren rejects architectural spying as a substitute for ordinary trust. The episode ends with Edselsto reporting a long-sealed east-foundation chamber and remembering silver there.
 
 Canon Merel has not reported any candle failure. All Seven Ancestral Lights remain lit.
 
@@ -41,9 +45,9 @@ Montegrain motive/accountability/fate; Aven constitutional culpability and surre
 
 ## Immediate handoff
 
-Season 2 Episode 4 — *Silver in the Walls* is next. Iven's threshold has proven that supernatural service still depends on physical infrastructure, skilled labor, silver, isolation points, witnesses and living command. Vess's survey of listening ways and prepared thresholds can now become a material procurement and labor problem rather than effortless magic.
+Season 2 Episode 5 — *The Forgotten Treasury* is next. Restoration now has a bounded budget, visible privacy architecture, living custody, supplier leverage and demonstrated practical benefit. Edselsto reports a chamber below the east foundation whose door has not opened in one hundred and eighty-three years and says it remembers silver there.
 
-The restoration program must create human winners and leverage: miners, smiths, masons, merchants, priests, carriers, guards and accountants. Edselsto may remember where some lines run, but living people must decide which are restored, which remain cut for privacy, who pays, who works, and who controls access.
+The chamber and any contents require living access, verification, inventory, provenance and legal ownership decisions. Any recovered wealth must be finite. Damaris remains competent: she could not budget assets no living institution knew existed. The temptation is that supernatural usefulness may now appear capable of financing its own expansion.
 
 ## Hard exclusions
 

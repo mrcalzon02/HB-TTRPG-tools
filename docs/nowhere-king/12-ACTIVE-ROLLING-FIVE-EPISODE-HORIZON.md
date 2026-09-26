@@ -2,20 +2,8 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 3, *The First Door-Keeper*.
-**Forward window:** Season 2 Episodes 4–8.
-
-## Season 2 Episode 4 — Silver in the Walls — LOCKED
-
-The first willing dead threshold and the earlier listening-line tests establish that Edselsto's usefulness depends on material infrastructure. Vess begins a controlled survey of silver channels, junctions, bridge pieces and prepared thresholds.
-
-Restoration requires silver, skilled metalwork, masonry, labor, guards, records, consecration where demanded, and money. Edselsto may remember some routes but cannot substitute for excavation, measurement, procurement or judgment.
-
-Privacy becomes architectural. Some rooms should remain disconnected by choice: confession, medical care, private chambers and protected council work. Restoring one line can create a political argument because perception itself becomes infrastructure.
-
-Suppliers and craftspeople gain leverage. Damaris must price the program. Vess must resist pressure to repair everything at once. Miren and Rhyse should insist that a technically possible listening network is not automatically a legitimate one. Luceran has a real reason to want broader capability after the cistern and Iven successes.
-
-**Exit target:** a bounded restoration program is funded and begun; Edselsto's perception expands only because living institutions deliberately build the means.
+**State:** Rolled forward after Season 2 Episode 4, *Silver in the Walls*.
+**Forward window:** Season 2 Episodes 5–9.
 
 ## Season 2 Episode 5 — The Forgotten Treasury — LOCKED / DIRECTIONAL
 
@@ -45,7 +33,7 @@ Opponents begin adapting to the fact that Edselsto can perceive through restored
 
 **Exit target:** supernatural security becomes politically difficult to refuse.
 
-## Season 2 Episode 8 — Rules for Miracles — HORIZON / RECKONING
+## Season 2 Episode 8 — Rules for Miracles — PLANNED / RECKONING
 
 The earlier *Terms of Service* articles now face their first serious revision under accumulated practical pressure. Do not simply repeat Episode 2. Test whether the court strengthens, clarifies or begins eroding its own rules after the cistern, Iven, expanded listening ways, treasury relief, invasive intelligence and attempted assassination.
 
@@ -53,20 +41,28 @@ Iven's precedent must remain consent-based and finite. Privacy rooms, living leg
 
 **Exit target:** standards exist in a mature enough form that later deliberate erosion can be measured against something the audience remembers people fighting to preserve.
 
-## Episode 3 reconciliation
+## Season 2 Episode 9 — The Obstructing Envoy — HORIZON
 
-- Iven Marrick's willing remainder becomes the first bound door-keeper at the inner gatehouse threshold.
-- His mother and brother participate directly; family grief is not reduced to royal utility.
-- Merel requires renewed consent rather than relying on consent given while Iven was dying.
-- Iven retains recognizable personality, partial memory, touch/passage awareness, judgment and bias.
-- Iven may leave service at will; Luceran explicitly cannot compel continuation.
-- Transfer to another threshold requires new consent.
-- Family compensation is separated from continued service to prevent economic coercion.
-- Living guards remain in post; the dead do not replace the living watch.
-- Pel Ordan's passage proves a dead keeper's distrust is not legal authority.
-- A bound keeper cannot be the sole witness against a living person.
-- Prepared thresholds require physical isolation points.
-- Luceran experiences the appeal of rule-obedient supernatural service while recognizing the human price.
+Introduce the powerful envoy whose coalition, money, recognition or military cooperation Luceran materially needs. The envoy must be competent, socially complete and grounded in institutional interests.
+
+Seed the envoy's relationships, appetites, humor, staff, political constituency and non-negotiable obligations. Their obstruction should be reasonable from what they know and what their principals require. Do not let Edselsto solve the dispute merely because Episodes 5–8 have made it increasingly useful.
+
+**Exit target:** Luceran faces a human political obstacle that cannot be reduced to architecture, surveillance or obedient service.
+
+## Episode 4 reconciliation
+
+- Vess distinguishes physically verified silver channels from Edselsto's remembered routes; castle memory can be structurally outdated.
+- House Cendreval becomes a necessary supplier but receives only a six-month equal-price preference and supervised assay role.
+- Alys and Corvin Cendreval enter the active court ecology; Miren obtains qualified technical names without promising office.
+- Pell Falbrecht and ordinary workers force workplace privacy into the restoration rules.
+- Active listening rooms receive visible black-ear tiles; deliberately isolated rooms receive plain white tiles.
+- Private chambers, treatment rooms, confession, laundry and sealed council work remain disconnected by policy.
+- The first bounded restored network covers public and operational spaces rather than private life.
+- Edselsto correctly detects a sleeping child missed by a human count, demonstrating usefulness and surveillance stakes.
+- Silver restoration creates speculation, wage pressure, theft risk, transport costs and supplier leverage.
+- Luceran's jealousy around Corvin surfaces; Miren rejects architectural spying as a substitute for trust and ordinary intimacy.
+- During a cistern emergency Edselsto identifies the condition while Henn, Vess and living workers locate and free the physical mechanism.
+- Edselsto reports a long-sealed east-foundation chamber and remembers silver there, seeding Episode 5.
 - All Seven Ancestral Lights remain lit.
 
 ## Active payoff debt
