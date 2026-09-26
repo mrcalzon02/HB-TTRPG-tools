@@ -2,72 +2,70 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 4, *Silver in the Walls*.
-**Forward window:** Season 2 Episodes 5–9.
+**State:** Rolled forward after Season 2 Episode 5, *The Forgotten Treasury*.
+**Forward window:** Season 2 Episodes 6–10.
 
-## Season 2 Episode 5 — The Forgotten Treasury — LOCKED / DIRECTIONAL
+## Season 2 Episode 6 — Listening Stone — LOCKED / DIRECTIONAL
 
-The cost of restoration collides with post-coup compensation, repairs, wages and ordinary government. Edselsto reveals a forgotten dynastic store or treasury that materially relieves the fiscal pressure.
+The newly funded second conduit phase expands Edselsto's bounded hearing. Through an authorized operational connection, Edselsto reveals a hidden meeting, concealed route, corruption, or private fact that is genuinely useful and genuinely invasive.
 
-The discovery must require living verification, inventory and legal decisions about ownership. Do not make supernatural wealth infinite. Damaris and people who argued for restraint are not made incompetent merely because the castle remembers an asset they could not have known existed.
+Luceran learns something about a person close to him that ordinary authorized access would not have yielded. The fact should matter; the ethical problem cannot be evaded by making the information trivial or false.
 
-**Exit target:** supernatural usefulness appears to pay for its own expansion, strengthening Luceran's incentive to ask for more.
-
-## Season 2 Episode 6 — Listening Stone — PLANNED
-
-Expanded conduits let Edselsto reveal a hidden meeting, concealed route, corruption, or private fact. The information is genuinely useful and genuinely invasive.
-
-Luceran learns something about a person close to him that he could not have learned through ordinary authorized access. The question is not merely whether the fact is true but whether using it corrupts relationships and institutions.
-
-Preserve the Episode 2 rules so any erosion is visible rather than accidental.
+Preserve the Episode 2 rules: private chambers, treatment, confession, laundry and sealed council work remain protected unless a character deliberately breaches or exploits a boundary. The erosion, if any, must therefore be a choice with witnesses and residue.
 
 **Exit target:** castle intelligence becomes tempting as routine governance while someone reasonably demands a place Edselsto cannot hear.
 
 ## Season 2 Episode 7 — The Knife That Missed — PLANNED
 
-An assassination attempt fails because Edselsto gives a bounded warning or mechanically intervenes within demonstrated capability. Living guards still have to identify, pursue, restrain and investigate attackers.
+An assassination attempt fails because Edselsto gives a bounded warning or mechanically intervenes within demonstrated capability. Living guards still identify, pursue, restrain and investigate attackers.
 
-Rhyse and the guard structure should feel both gratitude and professional alarm. Luceran experiences the castle not merely as useful but personally protective.
-
-Opponents begin adapting to the fact that Edselsto can perceive through restored infrastructure.
+Rhyse and the guard structure should feel both gratitude and professional alarm. Luceran experiences the castle not merely as useful but personally protective. Opponents begin adapting to restored listening infrastructure and visible black-ear architecture.
 
 **Exit target:** supernatural security becomes politically difficult to refuse.
 
 ## Season 2 Episode 8 — Rules for Miracles — PLANNED / RECKONING
 
-The earlier *Terms of Service* articles now face their first serious revision under accumulated practical pressure. Do not simply repeat Episode 2. Test whether the court strengthens, clarifies or begins eroding its own rules after the cistern, Iven, expanded listening ways, treasury relief, invasive intelligence and attempted assassination.
+The earlier *Terms of Service* articles face their first serious revision under accumulated pressure from the cistern, Iven, listening ways, treasury relief, invasive intelligence and attempted assassination.
 
-Iven's precedent must remain consent-based and finite. Privacy rooms, living legal judgment, worker chain of command and witnessed royal authorization remain contested institutional safeguards.
+Do not repeat Episode 2. Test whether the court strengthens, clarifies or begins eroding its own safeguards. Iven's consent, privacy rooms, living legal judgment, worker command and witnessed authorization remain meaningful precedents.
 
-**Exit target:** standards exist in a mature enough form that later deliberate erosion can be measured against something the audience remembers people fighting to preserve.
+**Exit target:** standards exist in a mature enough form that later deliberate erosion can be measured against something people fought to preserve.
 
-## Season 2 Episode 9 — The Obstructing Envoy — HORIZON
+## Season 2 Episode 9 — The Obstructing Envoy — PLANNED
 
-Introduce the powerful envoy whose coalition, money, recognition or military cooperation Luceran materially needs. The envoy must be competent, socially complete and grounded in institutional interests.
+Introduce the powerful envoy whose coalition, money, recognition or military cooperation Luceran materially needs. The envoy is competent, socially complete and grounded in institutional interests.
 
-Seed the envoy's relationships, appetites, humor, staff, political constituency and non-negotiable obligations. Their obstruction should be reasonable from what they know and what their principals require. Do not let Edselsto solve the dispute merely because Episodes 5–8 have made it increasingly useful.
+Seed the envoy's staff, relationships, appetites, humor, constituency and non-negotiable obligations. Their obstruction is reasonable from their information and principals' requirements. Edselsto cannot solve the political dispute merely because Episodes 5–8 made it useful.
 
 **Exit target:** Luceran faces a human political obstacle that cannot be reduced to architecture, surveillance or obedient service.
 
-## Episode 4 reconciliation
+## Season 2 Episode 10 — No Good Coalition — HORIZON
 
-- Vess distinguishes physically verified silver channels from Edselsto's remembered routes; castle memory can be structurally outdated.
-- House Cendreval becomes a necessary supplier but receives only a six-month equal-price preference and supervised assay role.
-- Alys and Corvin Cendreval enter the active court ecology; Miren obtains qualified technical names without promising office.
-- Pell Falbrecht and ordinary workers force workplace privacy into the restoration rules.
-- Active listening rooms receive visible black-ear tiles; deliberately isolated rooms receive plain white tiles.
-- Private chambers, treatment rooms, confession, laundry and sealed council work remain disconnected by policy.
-- The first bounded restored network covers public and operational spaces rather than private life.
-- Edselsto correctly detects a sleeping child missed by a human count, demonstrating usefulness and surveillance stakes.
-- Silver restoration creates speculation, wage pressure, theft risk, transport costs and supplier leverage.
-- Luceran's jealousy around Corvin surfaces; Miren rejects architectural spying as a substitute for trust and ordinary intimacy.
-- During a cistern emergency Edselsto identifies the condition while Henn, Vess and living workers locate and free the physical mechanism.
-- Edselsto reports a long-sealed east-foundation chamber and remembers silver there, seeding Episode 5.
+Luceran's government seriously explores alternatives to the obstructing envoy's coalition. Each alternative remains possible but carries real cost in money, time, military exposure, recognition, trade or concessions.
+
+Friendship and romance do not map neatly onto policy. People close to Luceran should disagree intelligently about which price is tolerable.
+
+**Exit target:** conventional options remain available but worsen enough that the envoy problem becomes a sustained pressure rather than an artificial binary.
+
+## Episode 5 reconciliation
+
+- Vess, Pell Falbrecht and living workers physically open the 183-year-sealed east-foundation threshold; Edselsto cannot open it.
+- The Eastern Household Reserve contains thirty-one chests and mixed assets rather than an infinite royal treasure.
+- Damaris establishes possession is not ownership; provenance controls spendability.
+- Verified Crown assets provide months, not years, of fiscal breathing room.
+- Battle compensation, Northbridge timber, Red Ford survey, cistern/roof repairs and guard obligations receive funding.
+- A second bounded conduit phase receives six additional marks of restoration silver after survey and procurement.
+- Hesta Vale proves an ancestral unpaid road claim and converts it into four seasons of toll-free Crown-track quarry hauling, subject to military closure.
+- Senn Daro attempts to sell inventory information for two crowns; Cendreval reports him for institutional reasons.
+- Ysabet removes Senn from sealed material for one year, docks a week of wages and preserves his sister's independent apprenticeship.
+- Luceran and Miren remain intimate; Miren distinguishes supernatural discovery from the living institutions that make it lawful and useful.
+- Edselsto says it remembers other rooms containing broad categories such as weight, metal and paper.
+- Luceran orders Vess shown the next threshold under existing safeguards.
 - All Seven Ancestral Lights remain lit.
 
 ## Active payoff debt
 
-Montegrain accountability/fate; Aven constitutional culpability and surrender protections; Rusk patronage/coercive command/payment and authorization evidence; Harl Ven testimony and culpability; coup prisoner classification; Pellan Vey individual culpability; battle deaths and households; Iven Marrick family/service precedent; wounded/civilian compensation; Mera/daughter economy/Parel/Pellon chain; false orders and credential provenance; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel/Kaelmont independence; Ysabet/Selise archive damage; Calienne care space; Red Ford settlement; Northbridge stores/repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candle interpretation; Hall of Veils work; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door.
+Montegrain accountability/fate; Aven culpability/surrender protections; Rusk patronage/coercive command/payment evidence; Harl testimony/culpability; coup prisoner classification; Pellan Vey culpability; battle deaths/households; Iven family/service precedent; wounded/civilian compensation; Mera/Parel/Pellon chain; false orders/credential provenance; missing Black Pine scout/road interceptors; route-delay insertion point; Ardel/Kaelmont independence; Ysabet/Selise archive damage; Calienne care space; Red Ford settlement; Northbridge repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candles; Hall of Veils; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Vess/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door; Eastern Household Reserve provenance/claimants; Hesta Vale track bargain; Senn Daro exclusion; Cendreval leverage; second conduit phase.
 
 ## Protected long-future seeds
 
@@ -76,6 +74,7 @@ Montegrain accountability/fate; Aven constitutional culpability and surrender pr
 - No candle extinction yet.
 - No retroactive claim Edselsto caused the coup.
 - No omnipotent or consequence-free supernatural security.
+- No infinite or magically self-proving treasure.
 - No compulsory dead service.
 - No dead servant as substitute for living legal judgment.
 - No premature hunt-sponsor identification.
