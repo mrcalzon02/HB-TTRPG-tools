@@ -2,64 +2,49 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 1 Episode 32, *Sovereign*.
+**Reconciled through:** Season 2 Episode 3, *The First Door-Keeper*.
 
 ## Current state
 
-Season One is complete. Luceran's living forces have retaken Edselsto after the castle's first undeniable public intervention. Edselsto obeyed Luceran's desperate **"OPEN THE GATES!"** command by operating the gate mechanisms through black vapor and spectral mechanism-workers, but it did not kill, target, navigate or command the human battle.
+Season One is complete and Edselsto is back under Luceran's living government. The first three episodes of Season Two have moved the castle from public apparition into bounded institutional use without resolving what Edselsto actually is.
 
-The retaking proceeded through the kitchens, scullery crossing, administrative wing, great hall, upper archive, council approaches and throne room. Rhyse's command discipline, Ardel's independent action, Miren's friction, Calienne's medical neutrality, Fenn's route knowledge, kitchen workers' fire control, and the actions of Anja, Bram, Mikel, Ysabet and Selise all materially affected the outcome.
+In Episode 1, *The Useful Monster*, the pale silver mask identifies itself as Edselsto and answers only within Luceran's authority. Testing establishes hard limits: Edselsto hears only some rooms/passages, can mistake a motionless person for part of a room, and answers confidently from incomplete perception. It nevertheless helps locate wounded people and identifies the lost west feed beneath the lime room, allowing Vess and living workers to save the lower cistern. The first restoration evidence appears in old silver listening lines. Luceran feels the immediate emotional seduction of a servant that simply obeys after human betrayal; Miren, Rhyse, Calienne and others preserve friction.
 
-Aven, Rusk and Montegrain are alive in custody and remain distinct political/legal problems. Aven surrendered the east guard room under protections for his people. Rusk attempted to destroy records and was captured after a payment ledger and partially burned authorization packet survived. Montegrain withdrew to the throne room, allowed followers to surrender, and was captured alive after Luceran confronted him. Luceran struck him once, rejected his claim to continuing friendship, and chose binding over killing.
+In Episode 2, *Terms of Service*, the court writes provisional human rules governing Edselsto's use. Permissions are bounded by duty, witnessed, written and renewable; Edselsto's statements about people are information rather than judgment; supernatural answers alone cannot determine guilt, punishment, medical priority, property, payment, appointment, military targeting or sentence; the castle may advise on its structure but not command living workers; confession, private chambers, medical care and sealed council business receive privacy protections. Vess establishes that some listening lines can be isolated by removing silver bridge pieces. The decisive discovery is institutional rather than magical: if Luceran commands Edselsto to ignore the rules, it will obey him. The rules therefore constrain the humans—especially the king—not Edselsto.
 
-Pellan Vey remains in separate custody because his coup participation, surrender, rescue of Luceran and post-surrender fighting require individual judgment. Harl Ven preserved evidence for self-interested reasons and now has both useful testimony and unresolved culpability.
+In Episode 3, *The First Door-Keeper*, Edselsto reveals that Iven Marrick, who died after the gatehouse defense, consented while dying to continue service. After his mother, brother, comrades, clergy, healers, craftsmen and officers confront the proposal, the court requires renewed consent and creates additional protections before allowing a silver-prepared inner gatehouse door to hold Iven's willing remainder. Iven speaks, recognizes family and comrades, retains incomplete memories and personality, can sense touch and passage imperfectly, and may continue for an unknown but finite span measured in years. He explicitly remains because he chooses to, not because Luceran owns his death.
 
-The battle has produced named dead, wounded, damaged records, staffing holes, compensation claims, prisoner classifications and future hearings. Calienne refuses a moral segregation of corpses. Iven Marrick dies after the gatehouse defense; Mara ensures his name is recorded. Bram is alive but reinjured.
+The first operational test immediately proves that a dead keeper retains judgment and bias: Iven refuses Pel Ordan because Pel fought in the coup, despite Pel having surrendered and been cleared for yard duty. Rhyse establishes that distrust is not authority; Iven opens the door when ordered under the living chain of command while remaining free to voice distrust. Living guards remain posted beside him.
 
-Luceran and Miren remain adult lovers with the marriage question unresolved. Miren continues to resist becoming an obedient extension of the king. Ardel remains an independent ally with her own house interests and emotional residue. Rhyse remains a commander whose willingness to tell Luceran no is part of why the retaking succeeds.
+The court records further rules: willing dead service requires the dead person's consent, may be ended at will, cannot be prolonged by royal command, cannot be transferred to another threshold without new consent, creates no debt against family, cannot make family support contingent on continued service, cannot replace living watches, and cannot serve as sole witness against the living. Prepared thresholds require a physical isolation point so their silver connection can be broken. Family access is not a royal favor.
 
-Canon Merel verifies all Seven Ancestral Lights remain lit.
+Mrs. Marrick and Tomas retain independent grief and agency. Damaris separates death compensation from dead service so the family cannot be economically coerced into keeping Iven useful. Merel refuses theological certainty for comfort. Calienne refuses to let healers certify willingness. Vess treats the phenomenon as material infrastructure requiring isolation. Rhyse protects living command. Miren remains Luceran's friction. Ysabet records exact terms. Luceran experiences the genuine appeal of a threshold that obeys rule without fatigue while seeing that the real price is human grief, consent and precedent.
 
-After the human retaking and immediate legal/medical chaos, Luceran removes the crown from the throne and sets it aside rather than ceremonially wearing it. He collapses into the throne from exhaustion. A pale silver theatrical mask then manifests publicly before the surviving court, bows, and says **"Your Majesty."** This is the first personified manifestation and first clear direct address from Edselsto. No living character yet knows what the mask is, what ultimately powers Edselsto, or the buried containment truth.
+Canon Merel has not reported any candle failure. All Seven Ancestral Lights remain lit.
 
-## Episode 32 durable residue
+## Active supernatural capability evidence
 
-Season One is complete. The retaking of Edselsto is finished by living forces after the castle's bounded gate-opening intervention.
-
-The kitchens, scullery crossing, administrative wing, great hall, upper archive, council approaches and throne room are retaken position by position. The fighting remains human, costly and locally contingent. Familiar household spaces become tactical terrain without Edselsto selecting targets, guiding routes or killing enemies.
-
-Ardel and kitchen workers secure the scullery crossing and prevent an oil fire from controlling the service route. Fenn's route knowledge continues to matter, but he is sent out of direct combat. Bessa and other workers materially affect fire control.
-
-Rusk attempts to destroy politically important records. Clerk Harl Ven preserves a payment ledger and helps save additional bundles for self-interested reasons. A partially burned authorization packet also survives. These records create evidence and future hearings rather than instantly solving the wider conspiracy.
-
-Aven surrenders the east guard room under explicit protections for his people and is taken alive. His constitutional culpability remains unresolved, but his surrender rules save lives and become part of the post-coup legal problem.
-
-Bram, Anja, Mikel, Ysabet and Selise independently resist Rusk in the upper archive. Bram strikes Rusk with a crutch and is injured again; the group prevents the archive from being burned. Rusk escapes that room but is later cornered and captured alive after attempting to burn an authorization packet.
-
-Montegrain withdraws to the throne approach, allows some of his people to surrender, and refuses personal terms. Luceran confronts him alive in the throne room, strikes him once, rejects his claim to continuing friendship, and orders him bound rather than killed. Montegrain remains a living political, legal and emotional obligation.
-
-Pellan Vey remains alive in separate custody because his coup participation, surrender, rescue of Luceran and post-surrender fighting require individual judgment.
-
-Calienne preserves medical neutrality and refuses separate loyalist/rebel dead. Iven Marrick dies after the gatehouse defense; Mara ensures his name is recorded. Casualty identification, compensation and household consequences remain due.
-
-Rhyse's command discipline remains essential to victory. Miren repeatedly provides friction, negotiates Aven's surrender handling, preserves the burning authorization packet by stamping it out, and remains Luceran's lover rather than a passive royal appendage. Ardel remains an independent ally.
-
-Canon Merel verifies that all Seven Ancestral Lights remain lit after the battle.
-
-After the castle is secured, Luceran does not ceremonially crown himself. He removes the crown from the throne, sets it aside, and collapses into the throne from exhaustion. A pale silver theatrical mask manifests publicly before the surviving court and addresses him: **"Your Majesty."** This is the first personified manifestation and first clear direct address from Edselsto. No one yet knows what it is.
+- Pale silver mask manifests as Edselsto and addresses Luceran directly.
+- Edselsto can hear only through some rooms, passages and restored/active listening ways; perception is incomplete.
+- It can misclassify a motionless living person as part of the room.
+- It can provide useful structural memory, including old water feeds and some silver listening routes.
+- Some listening ways can be physically isolated by removing silver bridge pieces.
+- Edselsto cannot be made institutionally self-restraining against Luceran's later direct command; human witnesses and institutions must constrain the king.
+- A willing dead defender can be held in a physically prepared threshold through a silver connection.
+- Iven Marrick can speak, recognize known people, remember fragments, sense touch/passage imperfectly, make judgments, disagree, and operate his threshold.
+- Continued dead service is finite but its exact duration is unknown.
+- No evidence establishes omniscience, resurrection, perfect memory, moral judgment, or independent legal authority.
 
 ## Unresolved obligations preserved
 
-Montegrain motive/accountability/fate; Aven constitutional culpability and surrender protections; Rusk patronage/coercive command and the surviving payment/authorization evidence; coup prisoner classification; Pellan Vey individual culpability; Jalen Orris/Iven Marrick/Edrik Saye/Lio Venn and other deaths/households; wounded/civilian compensation; Mera culpability/daughter economy/Parel/Pellon chain; false orders and credential provenance; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel roadblock/Kaelmont independence; Ysabet/Selise archive boundary; Calienne care space; Red Ford survey/cattle/toll/arson/Pavel-arrow questions; unidentified color-hearsay carter; Northbridge stores/repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; Harl's exact participation in forged/copy work; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candle interpretation; Hall of Veils work; Episode 16 unsigned note/rope questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler compensation; Kaelmont carriage terms; Lysa Quill engagement; Dena/Hale continuity; deeper stair authorization; Damaris/Tomas logistics; Jeron Bellisar injury; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door.
+Montegrain motive/accountability/fate; Aven constitutional culpability and surrender protections; Rusk patronage/coercive command and surviving payment/authorization evidence; coup prisoner classification; Pellan Vey individual culpability; Jalen Orris/Iven Marrick/Edrik Saye/Lio Venn and other deaths/households; Iven's family's continuing grief and the precedent of voluntary dead service; wounded/civilian compensation; Mera culpability/daughter economy/Parel/Pellon chain; false orders and credential provenance; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel roadblock/Kaelmont independence; Ysabet/Selise archive boundary; Calienne care space; Red Ford survey/cattle/toll/arson/Pavel-arrow questions; unidentified color-hearsay carter; Northbridge stores/repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; Harl's exact participation in forged/copy work; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candle interpretation; Hall of Veils work; Episode 16 unsigned note/rope questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler compensation; Kaelmont carriage terms; Lysa Quill engagement; Dena/Hale continuity; deeper stair authorization; Damaris/Tomas logistics; Jeron Bellisar injury; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door.
 
 ## Immediate handoff
 
-Season 2 Episode 1 — *The Useful Monster* is next. It begins from the public manifestation of the pale silver mask and the emotional temptation created by apparently perfect obedience after catastrophic human betrayal.
+Season 2 Episode 4 — *Silver in the Walls* is next. Iven's threshold has proven that supernatural service still depends on physical infrastructure, skilled labor, silver, isolation points, witnesses and living command. Vess's survey of listening ways and prepared thresholds can now become a material procurement and labor problem rather than effortless magic.
 
-Coup trials, funerals, compensation, prisoner classification, Montegrain's fate, Aven's culpability, Rusk's surviving records, Harl's testimony, Pellan Vey's mixed conduct, damaged archives, staffing losses and medical aftermath remain active. Supernatural novelty must not erase human government.
-
-Edselsto's capabilities remain bounded and unknown. The court may test communication cautiously, but no one may infer omnipotence from the gate miracle and mask. Different observers must form different theories based on what they actually witnessed.
+The restoration program must create human winners and leverage: miners, smiths, masons, merchants, priests, carriers, guards and accountants. Edselsto may remember where some lines run, but living people must decide which are restored, which remain cut for privacy, who pays, who works, and who controls access.
 
 ## Hard exclusions
 
-No unrelated Magenheim material. No containment/prison/castle-interface truth. No candle extinction. No claim that Edselsto caused or chose the coup. No supernatural killing, target selection, perfect route guidance or magical cleanup of political consequences. No premature hunt-sponsor identification. Do not collapse Valcere, hunt evidence, west-service evidence, capital rumor, Red Ford and coup into one network.
+No unrelated Magenheim material. No containment/prison/castle-interface truth. No candle extinction yet. No claim that Edselsto caused or chose the coup. No supernatural killing, target selection, perfect route guidance, perfect memory, moral infallibility or magical cleanup of political consequences. No compulsory dead service. No transfer of Iven or another dead keeper without renewed consent. No dead keeper replacing living legal judgment or living watches. No premature hunt-sponsor identification. Do not collapse Valcere, hunt evidence, west-service evidence, capital rumor, Red Ford and coup into one network.
