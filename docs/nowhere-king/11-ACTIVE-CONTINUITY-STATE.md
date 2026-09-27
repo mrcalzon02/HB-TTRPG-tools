@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 2 Episode 5, *The Forgotten Treasury*.
+**Reconciled through:** Season 2 Episode 6, *Listening Stone*.
 
 ## Current state
 
@@ -21,6 +21,14 @@ Hesta Vale produces a family receipt matching an unpaid eastern-road compensatio
 Junior archive copyist Senn Daro attempts to sell a preliminary treasury inventory to a Cendreval retainer for two crowns to fund his sister's apprenticeship bond. The retainer reports him because House Cendreval has its own institutional interest in discouraging stolen commercial intelligence. Ysabet removes Senn from sealed material for one year, docks one week's wages, and transfers him to public copy work; his sister's apprenticeship is explicitly not punished for his misconduct. The incident establishes that supernatural discovery immediately creates ordinary corruption pressure.
 
 Luceran and Miren remain intimate and mutually corrective. Miren emphasizes that Edselsto found a room; living institutions converted the discovery into lawful money. Luceran nevertheless asks whether Edselsto remembers other rooms and orders Vess shown the next threshold under existing survey, custody and provenance rules. Miren identifies the deeper danger: safeguards make repeated supernatural use governable enough to become ordinary.
+
+In Episode 6, *Listening Stone*, the second conduit phase expands hearing through approved operational spaces while protected private categories remain disconnected. Ordinary testimony first resolves Jerrik Moss's lamp-oil theft, preserving the value of human witnesses and context.
+
+A narrow listening warrant confirms missing Red Ford courier Eren Vos passed through the stable counting room with Savel, who warned that riders believed connected to Deren Holt watched the north track. Living riders find Vos safe after a lame horse forced an overnight stop. Holt remains a separate road lead rather than proof of a broader conspiracy. The same authority surfaces Parel asking about the Pellon seal; living follow-up finds unauthorized seal-wax removal and a practice impression, so Parel loses seal access pending inquiry without being declared a traitor.
+
+Luceran then exceeds the inquiry's stated purpose after Edselsto reports Miren met Ardel in the connected outer map gallery. He orders the castle to repeat their private conversation and learns Miren loves him but does not yet know whether she should marry him. Rhyse objects and Ysabet records Luceran's responsibility. Miren distinguishes a room being audible from consent to royal retrieval of private speech. Ardel's trust is damaged and she refuses to disclose her winter plans.
+
+The council creates a genuinely deaf withdrawing room off the south gallery. Vess removes silver continuity at the junction and the removed piece is melted back into Crown stock, making reconnection require new material, labor and witnesses. Luceran and Miren remain intimate but unrepaired; she says they are not finished while refusing to let stolen knowledge force the marriage discussion.
 
 Canon Merel has not reported any candle failure. All Seven Ancestral Lights remain lit.
 
@@ -43,9 +51,7 @@ Montegrain motive/accountability/fate; Aven constitutional culpability and surre
 
 ## Immediate handoff
 
-Season 2 Episode 6 — *Listening Stone* is next. The treasury discovery has materially rewarded Luceran for asking Edselsto questions while living safeguards have made repeated use feel responsible rather than reckless. Restoration can now expand by another bounded phase.
-
-The next escalation is informational rather than fiscal. Expanded conduits should reveal a hidden meeting, concealed route, corruption, or private fact that is genuinely useful and genuinely invasive. Luceran must learn something about a person close to him that he could not have learned through ordinary authorized access. Preserve the Episode 2 privacy rules so any use or erosion is a visible choice.
+Season 2 Episode 7 — *The Knife That Missed* is next. Castle intelligence has now proved both operationally valuable and personally invasive. The next episode should test bounded supernatural protection while preserving living investigation, the newly explicit privacy boundary, and the independence of unresolved hostile threads.
 
 ## Hard exclusions
 
