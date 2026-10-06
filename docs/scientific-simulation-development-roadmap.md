@@ -448,6 +448,8 @@ Implemented:
 - quadrature-based extended-body tidal tensor with the same cell-scale regularization used by internal field sampling;
 - page-visible potential and tidal-tensor slice maps in inertial, barycentric, or co-rotating display coordinates;
 - logarithmic map rendering while retaining physical m²/s² and s⁻² ranges.
+- page-visible rubber-sheet / embedding-style potential-well visualization in the main 3D viewport;
+- the potential sheet deforms an actual subdivided grid from normalized, log-compressed Newtonian Φ while explicitly labeling its vertical scale as nonphysical and not literal spacetime curvature.
 
 Still required before GRAV-04 is complete:
 - equipotential contours and optional 3D isosurfaces;

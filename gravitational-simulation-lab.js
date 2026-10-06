@@ -1012,6 +1012,41 @@
     }
   }
 
+  function wellDisplayDepth(normalized,strength) {
+    return -clamp(finite(strength,1.35),0,3.5)*2.15*clamp(normalized,0,1);
+  }
+
+  function updatePotentialWellSheet(extent) {
+    if(!sceneState?.wellSurface)return;
+    const enabled=document.getElementById('gravity-well-sheet')?.checked!==false;
+    sceneState.wellSurface.visible=enabled;sceneState.wellWire.visible=enabled;sceneState.flatGrid.visible=!enabled;
+    if(!enabled)return;
+    const position=sceneState.wellGeometry.attributes.position;
+    const count=position.count,config=solverOptions(),resolution=Math.min(3,config.resolution);
+    const magnitudes=new Float64Array(count);
+    let minMagnitude=Infinity,maxMagnitude=0;
+    for(let i=0;i<count;i++){
+      const sx=sceneState.wellBaseX[i],sy=sceneState.wellBaseY[i];
+      const viewPoint=vec(sx/5*extent,sy/5*extent,0),worldPoint=viewToWorld(viewPoint);
+      const potential=potentialAtPoint(worldPoint,state.bodies,{...config,model:'extended',resolution,farFieldFactor:0,relativityMode:'off',hypothesisMode:'off'});
+      const magnitude=Number.isFinite(potential)?Math.max(0,-potential):0;
+      magnitudes[i]=magnitude;minMagnitude=Math.min(minMagnitude,magnitude);maxMagnitude=Math.max(maxMagnitude,magnitude);
+    }
+    if(!Number.isFinite(minMagnitude))minMagnitude=0;
+    const excessMax=Math.max(maxMagnitude-minMagnitude,1e-30);
+    const compressionScale=Math.max(excessMax*.035,1e-30);
+    const logDen=Math.log1p(excessMax/compressionScale);
+    const strength=finite(document.getElementById('gravity-well-depth')?.value,1.35);
+    for(let i=0;i<count;i++){
+      const excess=Math.max(0,magnitudes[i]-minMagnitude);
+      const normalized=logDen>0?Math.log1p(excess/compressionScale)/logDen:0;
+      position.setZ(i,wellDisplayDepth(normalized,strength));
+    }
+    position.needsUpdate=true;sceneState.wellGeometry.computeVertexNormals();
+    const note=document.getElementById('gravity-well-status');
+    if(note)note.textContent=`Embedding-style potential sheet active · displayed depth is normalized/log-compressed from Newtonian Φ across the current view. Deepest sampled |Φ| = ${formatScientific(maxMagnitude,3)} m²/s². Vertical depth is intentionally not to physical scale and is not literal spacetime curvature.`;
+  }
+
   function updateVisuals(forceField=false){
     if(!sceneState||!state)return;
     const extent=systemExtentM(),displayScale=finite(document.getElementById('gravity-display-radius')?.value,8);
@@ -1025,6 +1060,7 @@
     });
     if(running||forceField)updateTrails(extent);
     if(forceField||frame%12===0)rebuildFieldVectors(extent);
+    if(forceField||frame%18===0)updatePotentialWellSheet(extent);
     if(forceField||frame%30===0||!geometryDiagnosticsCache)geometryDiagnosticsCache=geometryDiagnostics(state.bodies,solverOptions());
     if(forceField||frame%60===0)renderFieldMaps();
     if(forceField||frame%120===0)renderIntrinsicGeometryLab();
@@ -1066,8 +1102,14 @@
   }
 
   async function initScene(){
-    const THREE=await ensureThree(),host=document.getElementById('gravity-viewport');const scene=new THREE.Scene();scene.background=new THREE.Color(0x02060a);const camera=new THREE.PerspectiveCamera(48,1,.01,200);camera.position.set(6,4.5,7);const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputEncoding=THREE.sRGBEncoding;host.replaceChildren(renderer.domElement);const controls=new THREE.OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.06;controls.minDistance=1.2;controls.maxDistance=50;const bodyGroup=new THREE.Group(),trailGroup=new THREE.Group(),fieldGroup=new THREE.Group();scene.add(bodyGroup,trailGroup,fieldGroup);scene.add(new THREE.AmbientLight(0x9ec9e0,.65));const light=new THREE.DirectionalLight(0xffffff,.9);light.position.set(4,7,5);scene.add(light);const grid=new THREE.GridHelper(10,20,0x284655,0x172832);grid.rotation.x=Math.PI/2;scene.add(grid);
-    sceneState={THREE,host,scene,camera,renderer,controls,bodyGroup,trailGroup,fieldGroup,bodyMeshes:[],trailLines:[]};
+    const THREE=await ensureThree(),host=document.getElementById('gravity-viewport');const scene=new THREE.Scene();scene.background=new THREE.Color(0x02060a);const camera=new THREE.PerspectiveCamera(48,1,.01,200);camera.position.set(6,4.5,7);const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputEncoding=THREE.sRGBEncoding;host.replaceChildren(renderer.domElement);const controls=new THREE.OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.06;controls.minDistance=1.2;controls.maxDistance=50;const bodyGroup=new THREE.Group(),trailGroup=new THREE.Group(),fieldGroup=new THREE.Group();scene.add(bodyGroup,trailGroup,fieldGroup);scene.add(new THREE.AmbientLight(0x9ec9e0,.65));const light=new THREE.DirectionalLight(0xffffff,.9);light.position.set(4,7,5);scene.add(light);
+    const flatGrid=new THREE.GridHelper(10,20,0x284655,0x172832);flatGrid.rotation.x=Math.PI/2;scene.add(flatGrid);
+    const wellGeometry=new THREE.PlaneGeometry(10,10,36,36),wellPosition=wellGeometry.attributes.position,wellBaseX=new Float32Array(wellPosition.count),wellBaseY=new Float32Array(wellPosition.count);
+    for(let i=0;i<wellPosition.count;i++){wellBaseX[i]=wellPosition.getX(i);wellBaseY[i]=wellPosition.getY(i);}
+    const wellSurface=new THREE.Mesh(wellGeometry,new THREE.MeshStandardMaterial({color:0x173b4d,transparent:true,opacity:.24,roughness:.72,metalness:.08,side:THREE.DoubleSide}));
+    const wellWire=new THREE.Mesh(wellGeometry,new THREE.MeshBasicMaterial({color:0x4d91ad,wireframe:true,transparent:true,opacity:.62,side:THREE.DoubleSide}));
+    wellSurface.renderOrder=-2;wellWire.renderOrder=-1;scene.add(wellSurface,wellWire);
+    sceneState={THREE,host,scene,camera,renderer,controls,bodyGroup,trailGroup,fieldGroup,flatGrid,wellGeometry,wellSurface,wellWire,wellBaseX,wellBaseY,bodyMeshes:[],trailLines:[]};
     const resize=()=>{const w=Math.max(1,host.clientWidth),h=Math.max(330,host.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};if(window.ResizeObserver)new ResizeObserver(resize).observe(host);else window.addEventListener('resize',resize);resize();rebuildBodiesVisual();updateVisuals(true);animate();
   }
 
@@ -1214,6 +1256,9 @@
         <label>Field-map resolution<input id="gravity-map-resolution" type="number" min="12" max="64" value="32"></label>
         <label class="gravity-check"><input id="gravity-trails" type="checkbox" checked> Show trajectory trails</label>
         <label class="gravity-check"><input id="gravity-field-vectors" type="checkbox" checked> Show gravitational-field vectors</label>
+        <label class="gravity-check"><input id="gravity-well-sheet" type="checkbox" checked> Show rubber-sheet potential wells</label>
+        <label>Potential-well display depth<input id="gravity-well-depth" type="range" min="0.25" max="3.5" step="0.05" value="1.35"></label>
+        <div id="gravity-well-status" class="gravity-source-note">Embedding-style Newtonian potential visualization enabled. This display bends a grid for intuition; it is not a literal material sheet or a solved spacetime metric.</div>
         <div class="gravity-actions"><button id="gravity-run" class="primary">Run</button><button id="gravity-step">Single step</button><button id="gravity-reset">Reset</button><button id="gravity-apply">Apply object parameters</button></div><div id="gravity-status" class="gravity-status">Ready.</div><div id="gravity-collision-audit" class="gravity-status">No collision has been resolved in this run.</div>
       </section>
       <section class="gravity-card"><h3>Objects & Euclidean mass geometry</h3><p class="gravity-source-note">Mass or density can be authoritative. Size X/Y/Z controls the physical mass distribution and collision bounding volume independently from the display multiplier. Static Euler orientation affects non-spherical gravity; rotational dynamics are not yet modeled.</p><div id="gravity-object-list" class="gravity-object-list"></div></section>
@@ -1283,7 +1328,8 @@
     document.getElementById('gravity-step').addEventListener('click',()=>{running=false;updateRunButton();stepSimulation(Math.max(.001,finite(document.getElementById('gravity-timestep').value,60)));updateVisuals(true);});
     document.getElementById('gravity-reset').addEventListener('click',reset);
     document.getElementById('gravity-apply').addEventListener('click',applyEditors);
-    for(const id of ['gravity-field-vectors','gravity-model','gravity-quadrature','gravity-far-field','gravity-relativity-target']) document.getElementById(id)?.addEventListener('change',()=>{geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
+    for(const id of ['gravity-field-vectors','gravity-well-sheet','gravity-model','gravity-quadrature','gravity-far-field','gravity-relativity-target']) document.getElementById(id)?.addEventListener('change',()=>{geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
+    document.getElementById('gravity-well-depth')?.addEventListener('input',()=>updatePotentialWellSheet(systemExtentM()));
     document.getElementById('gravity-relativity')?.addEventListener('change',event=>{if(event.currentTarget.value!=='off'){const h=document.getElementById('gravity-hypothesis');if(h)h.value='off';syncHypothesisControls();}geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
     document.getElementById('gravity-hypothesis')?.addEventListener('change',()=>{syncHypothesisControls();geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
     for(const id of ['gravity-yukawa-alpha','gravity-yukawa-lambda-km']) document.getElementById(id)?.addEventListener('input',()=>{geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
