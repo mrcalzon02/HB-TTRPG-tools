@@ -277,15 +277,21 @@ Required:
 - separate underlying probability from detector response.
 
 ## DSL-07 — Statistics / convergence laboratory
-Status: PLANNED.
+Status: PARTIAL / active.
 
-Required:
-- observed vs theoretical distribution;
-- residuals;
-- χ² / reduced χ² where applicable;
-- RMSE or comparable statistic;
-- staged accumulation presets such as 10, 100, 1,000, 100,000 events;
-- convergence reporting.
+Implemented:
+- deterministic fast accumulation targets at 10, 100, 1,000, 10,000, and 100,000 events;
+- fast accumulation samples the same active detector probability distribution and yields cooperatively;
+- expected per-bin probabilities are derived from the active theoretical distribution;
+- normalized distribution RMSE;
+- Pearson χ² and reduced χ² only across bins whose expected count is at least 5;
+- eligible-bin count and degrees of freedom are reported.
+
+Required completion:
+- residual plot rather than scalar metrics only;
+- confidence/uncertainty bands;
+- staged convergence history as N grows rather than only the current endpoint;
+- statistical validation/regression cases for seeded runs.
 
 ## DSL-08 — Single slit / double slit / N-slit grating
 Status: PLANNED.
