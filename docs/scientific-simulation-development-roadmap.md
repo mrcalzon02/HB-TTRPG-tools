@@ -418,16 +418,24 @@ Still required before GRAV-02 is complete:
 - exact shape contact rather than conservative bounding-volume collision stops;
 - broader regression cases across orientation, aspect ratio, density mode, and quadrature resolution.
 ## GRAV-03 — Multi-body experiment library
-Status: PLANNED.
+Status: INCREMENTAL IMPLEMENTATION.
 
-Required:
-- restricted three-body and circular restricted three-body configurations;
-- Lagrange-point demonstrations;
-- binary and hierarchical triple systems;
-- close-encounter and slingshot experiments;
-- configurable center-of-mass and barycentric reference frames;
-- explicit presets must identify whether they are pedagogical initial conditions, idealized analytic cases, or date-specific ephemerides.
+Implemented:
+- idealized circular restricted three-body state generator;
+- numerically solved collinear L1 equilibrium plus analytic equilateral L4/L5 states;
+- Earth–Moon L1, L4, and L5 demonstration presets using a 1 kg tracer so back-reaction remains negligible;
+- a hierarchical triple benchmark with a two-body inner binary carried on an outer solar orbit;
+- explicit preset provenance notes distinguishing idealized/reference initial conditions from date-specific ephemerides;
+- inertial, full-system center-of-mass, and bodies-1–2 co-rotating display reference frames;
+- reference-frame transforms are presentation-only and do not alter solver state.
 
+Still required before GRAV-03 is complete:
+- L2 and L3 user-facing presets;
+- broader restricted-three-body families and mass-ratio controls;
+- close-encounter and moving-planet gravity-assist/slingshot experiments;
+- additional stable/unstable hierarchical triple configurations;
+- date-specific ephemeris import as a separately labeled empirical initial-condition source;
+- rotating-frame effective-potential / zero-velocity-surface diagnostics.
 ## GRAV-04 — Field, potential, and tidal diagnostics
 Status: PLANNED.
 
