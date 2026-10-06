@@ -12,6 +12,9 @@
   const PROTON_MASS = 1.67262192369e-27;
   const EV_TO_JOULE = 1.602176634e-19;
   const PLANCK_LENGTH = 1.616255e-35;
+  const EPSILON_0 = 8.8541878128e-12;
+  const BOLTZMANN = 1.380649e-23;
+  const COULOMB_K = 8.9875517923e9;
   const FACE_ORDER = ['+Z', '+X', '-X', '+Y', '-Y'];
   const PARTICLE_CHUNK = 512;
   const RAY_CHUNK = 4;
@@ -166,7 +169,7 @@
           <div>
             <p class="ism-lab-eyebrow">Scientific Tools · Interstellar Media Collisions</p>
             <h2 id="ism-lab-title">Vectorized Shadow Casting Laboratory</h2>
-            <p class="ism-lab-subtitle">Phase-light input through literal 1:1 interstellar-medium particles with physically bounded Λ, charged-proton magnetic response, a separately labeled quantum-foam hypothesis, and keyed Shadow scattering. Large runs advance in deterministic bounded slices so slow systems remain responsive.</p>
+            <p class="ism-lab-subtitle">Phase-light input through literal 1:1 interstellar-medium particles with physically bounded Λ, charged-proton magnetic response, explicit closest-approach geometry, a Debye-screened Coulomb proximity benchmark, a separately labeled quantum-foam hypothesis, and keyed Shadow scattering. Large runs advance in deterministic bounded slices so slow systems remain responsive.</p>
           </div>
           <button type="button" class="ism-lab-close" data-ism-close aria-label="Close Interstellar Media Collisions Lab">×</button>
         </header>
@@ -176,6 +179,12 @@
             <label>Phase light beam seed<input id="ism-beam-seed" type="text" value="phase-light-01" autocomplete="off"></label>
             <label>Secondary Shadow Key<input id="ism-shadow-key" type="text" value="shadow-key-01" autocomplete="off"></label>
             <label>ISM density preset<select id="ism-density"><option value="galactic">Galactic average · 1 H-equivalent / cm³</option><option value="local">Local interstellar neutral H · 0.127 / cm³</option></select></label>
+            <div class="ism-control-group">
+              <p class="ism-control-group-title">Established plasma proximity benchmark</p>
+              <label>Ionized H fraction <output id="ism-ionized-fraction-value">10%</output><input id="ism-ionized-fraction" type="range" min="0" max="100" step="1" value="10"></label>
+              <label>Plasma temperature<select id="ism-temperature"><option value="100">100 K · cold neutral benchmark</option><option value="8000" selected>8,000 K · warm plasma benchmark</option><option value="1000000">1,000,000 K · hot ionized benchmark</option></select></label>
+              <p class="ism-lab-note"><strong>Established-physics boundary:</strong> explicit ionized H targets use exact segment-to-particle closest approach plus a Debye-screened fixed-center Coulomb deflection benchmark. This first pass does not yet claim collective plasma self-fields, electron collisions, target recoil, or a full binary-collision operator.</p>
+            </div>
             <label>Literal ISM particles<select id="ism-particles"><option value="256">256</option><option value="1024">1,024</option><option value="4096" selected>4,096</option><option value="16384">16,384</option><option value="65536">65,536</option></select></label>
             <label>Phase-ray samples<select id="ism-rays"><option value="32">32</option><option value="64">64</option><option value="128" selected>128</option><option value="256">256</option><option value="512">512</option></select></label>
             <div class="ism-control-group">
@@ -193,8 +202,13 @@
               <label>Exploratory foam gain <output id="ism-foam-gain-value">10^0 · physical baseline</output><input id="ism-foam-gain" type="range" min="0" max="24" step="1" value="0"></label>
               <p class="ism-lab-note"><strong>Hypothesis boundary:</strong> spacetime foam has no established proton-force law. This maps δℓ ≈ ℓ^(1−α)ℓP^α into a zero-mean stochastic angular-jitter proxy. Gain above 10^0 is a sensitivity test, not a physical prediction.</p>
             </div>
-            <label>Shadow impact reflectivity randomness <output id="ism-reflectivity-value">28%</output><input id="ism-reflectivity" type="range" min="0" max="100" step="1" value="28"></label>
-            <label>Shadow coupling events / ray <output id="ism-events-value">6</output><input id="ism-events" type="range" min="0" max="24" step="1" value="6"></label>
+            <div class="ism-control-group">
+              <p class="ism-control-group-title">Speculative Shadow interaction layer</p>
+              <label>Shadow close-approach coupling <output id="ism-reflectivity-value">28%</output><input id="ism-reflectivity" type="range" min="0" max="100" step="1" value="28"></label>
+              <label>Shadow field radius / mean spacing <output id="ism-shadow-range-value">0.50×</output><input id="ism-shadow-range" type="range" min="0.05" max="2" step="0.05" value="0.5"></label>
+              <p class="ism-lab-note"><strong>Fictional boundary:</strong> Shadow coupling is evaluated only when an explicit particle lies inside the configured proximity field. Oblique encounters use the actual impact parameter; this layer remains fictional and is not presented as a Standard Model interaction.</p>
+            </div>
+            <label>Transport subdivisions / ray <output id="ism-events-value">6</output><input id="ism-events" type="range" min="1" max="24" step="1" value="6"></label>
             <button id="ism-run" type="button" class="ism-lab-run">Cast Phase Beam</button>
             <p class="ism-lab-note"><strong>Execution boundary:</strong> particle generation, ray integration, and display preparation preserve fixed iteration/RNG order while yielding between bounded work chunks. More resolution may take longer, but it should not require one uninterrupted main-thread calculation.</p>
           </aside>
@@ -203,7 +217,7 @@
             <div class="ism-lab-canvas-wrap">
               <div class="ism-viewport-toolbar" aria-label="Three-dimensional viewport controls"><span>Drag: orbit · Wheel: zoom · Right-drag: pan</span><button id="ism-reset-view" type="button">Reset view</button><button id="ism-auto-orbit" type="button" aria-pressed="false">Auto orbit</button></div>
               <div id="ism-viewport" class="ism-lab-viewport" role="img" aria-label="Interactive three-dimensional interstellar-medium cube, magnetic field vector, particles, quantum-foam hypothesis perturbations, and phase trajectories"></div>
-              <div class="ism-lab-legend"><span>● literal H-equivalent particle</span><span>— magnetized proton-response trajectory</span><span>➜ ISM magnetic field</span><span>◆ visible foam-jitter sample</span><span>× keyed Shadow impact</span></div>
+              <div class="ism-lab-legend"><span>● literal H-equivalent particle</span><span>— magnetized proton-response trajectory</span><span>➜ ISM magnetic field</span><span>○ screened-Coulomb proximity sample</span><span>◆ visible foam-jitter sample</span><span>× keyed Shadow close approach</span></div>
             </div>
             <section class="ism-output-section">
               <div class="ism-output-heading"><div><p class="ism-lab-eyebrow">Concurrent detector array</p><h3>All non-input faces</h3></div><p>Input face: −Z. +Z, ±X, and ±Y are accumulated simultaneously; backscatter to −Z and retained rays are reported separately. Detector counts advance with the displayed cast.</p></div>
@@ -231,6 +245,8 @@
       if (output) output.textContent = formatter(Number(event.target.value));
     });
     bind('ism-reflectivity', 'ism-reflectivity-value', value => `${value}%`);
+    bind('ism-shadow-range', 'ism-shadow-range-value', value => `${value.toFixed(2)}×`);
+    bind('ism-ionized-fraction', 'ism-ionized-fraction-value', value => `${value.toFixed(0)}%`);
     bind('ism-events', 'ism-events-value', value => String(value));
     bind('ism-field-strength', 'ism-field-strength-value', value => `${value.toFixed(2)} nT · ${(value * 10).toFixed(1)} μG`);
     bind('ism-field-azimuth', 'ism-field-azimuth-value', value => `${value.toFixed(0)}°`);
@@ -284,6 +300,137 @@
     const gyroAngularFrequency = bTesla > 0 ? PROTON_CHARGE * bTesla / (proton.gamma * PROTON_MASS) : 0;
     const gyroRadius90 = bTesla > 0 && proton.speed > 0 ? proton.gamma * PROTON_MASS * proton.speed / (PROTON_CHARGE * bTesla) : Infinity;
     return { ...proton, bTesla, direction, gyroAngularFrequency, gyroRadius90, magneticAcceleration90: proton.speed * gyroAngularFrequency };
+  }
+
+  function plasmaPhysics(config, density) {
+    const ionizedFraction = clamp(config.ionizedFraction, 0, 1);
+    const temperatureK = Math.max(1, config.temperatureK);
+    const electronDensity = density * ionizedFraction;
+    const debyeLength = electronDensity > 0
+      ? Math.sqrt(EPSILON_0 * BOLTZMANN * temperatureK / (electronDensity * PROTON_CHARGE * PROTON_CHARGE))
+      : Infinity;
+    const meanSpacing = density > 0 ? Math.pow(density, -1 / 3) : Infinity;
+    return { ionizedFraction, temperatureK, electronDensity, debyeLength, meanSpacing };
+  }
+
+  function spatialCellKey(x, y, z, resolution) {
+    return x + resolution * (y + resolution * z);
+  }
+
+  function buildParticleSpatialIndex(context) {
+    const resolution = clamp(Math.ceil(Math.cbrt(Math.max(1, context.particles.length)) / 2), 4, 28);
+    const cellSize = context.side / resolution;
+    const cells = new Map();
+    for (let index = 0; index < context.particles.length; index += 1) {
+      const particle = context.particles[index];
+      const ix = clamp(Math.floor(particle.x / cellSize), 0, resolution - 1);
+      const iy = clamp(Math.floor(particle.y / cellSize), 0, resolution - 1);
+      const iz = clamp(Math.floor(particle.z / cellSize), 0, resolution - 1);
+      const key = spatialCellKey(ix, iy, iz, resolution);
+      let bucket = cells.get(key);
+      if (!bucket) { bucket = []; cells.set(key, bucket); }
+      bucket.push(index);
+    }
+    context.spatialIndex = { resolution, cellSize, cells };
+    return context.spatialIndex;
+  }
+
+  function closestApproachToSegment(start, end, particle) {
+    const segment = { x: end.x - start.x, y: end.y - start.y, z: end.z - start.z };
+    const lengthSquared = vectorDot(segment, segment);
+    const fromStart = { x: particle.x - start.x, y: particle.y - start.y, z: particle.z - start.z };
+    const fraction = lengthSquared > 0 ? clamp(vectorDot(fromStart, segment) / lengthSquared, 0, 1) : 0;
+    const point = vectorAdd(start, vectorScale(segment, fraction));
+    const offset = { x: point.x - particle.x, y: point.y - particle.y, z: point.z - particle.z };
+    return { fraction, point, offset, distance: Math.hypot(offset.x, offset.y, offset.z) };
+  }
+
+  function segmentCandidateIndices(context, start, end) {
+    const index = context.spatialIndex || buildParticleSpatialIndex(context);
+    const segmentLength = Math.hypot(end.x - start.x, end.y - start.y, end.z - start.z);
+    const steps = clamp(Math.ceil(segmentLength / Math.max(index.cellSize * 0.5, 1e-30)), 1, 96);
+    const candidates = new Set();
+    for (let step = 0; step <= steps; step += 1) {
+      const fraction = step / steps;
+      const x = start.x + (end.x - start.x) * fraction;
+      const y = start.y + (end.y - start.y) * fraction;
+      const z = start.z + (end.z - start.z) * fraction;
+      const cx = clamp(Math.floor(x / index.cellSize), 0, index.resolution - 1);
+      const cy = clamp(Math.floor(y / index.cellSize), 0, index.resolution - 1);
+      const cz = clamp(Math.floor(z / index.cellSize), 0, index.resolution - 1);
+      for (let dz = -1; dz <= 1; dz += 1) for (let dy = -1; dy <= 1; dy += 1) for (let dx = -1; dx <= 1; dx += 1) {
+        const ix = cx + dx; const iy = cy + dy; const iz = cz + dz;
+        if (ix < 0 || iy < 0 || iz < 0 || ix >= index.resolution || iy >= index.resolution || iz >= index.resolution) continue;
+        const bucket = index.cells.get(spatialCellKey(ix, iy, iz, index.resolution));
+        if (bucket) bucket.forEach(particleIndex => candidates.add(particleIndex));
+      }
+    }
+    return candidates;
+  }
+
+  function findSegmentEncounters(context, start, end) {
+    let nearest = null;
+    let nearestIonized = null;
+    for (const particleIndex of segmentCandidateIndices(context, start, end)) {
+      const particle = context.particles[particleIndex];
+      const approach = closestApproachToSegment(start, end, particle);
+      const encounter = { ...approach, particleIndex, particle };
+      if (!nearest || encounter.distance < nearest.distance) nearest = encounter;
+      if (particle.ionized && (!nearestIonized || encounter.distance < nearestIonized.distance)) nearestIonized = encounter;
+    }
+    return { nearest, nearestIonized };
+  }
+
+  function perpendicularOutward(direction, encounter) {
+    if (!encounter) return tangentBasis(direction).first;
+    const radial = vectorNormalize(encounter.offset);
+    const parallel = vectorScale(direction, vectorDot(radial, direction));
+    const perpendicular = vectorAdd(radial, vectorScale(parallel, -1));
+    const magnitude = Math.hypot(perpendicular.x, perpendicular.y, perpendicular.z);
+    return magnitude > 1e-12 ? vectorScale(perpendicular, 1 / magnitude) : tangentBasis(direction).first;
+  }
+
+  function applyScreenedCoulombProximity(direction, encounter, context) {
+    if (!encounter || !context.plasma || !(context.magnetics.speed > 0) || !Number.isFinite(context.plasma.debyeLength)) {
+      return { direction, angle: 0, impactParameter: encounter?.distance ?? Infinity, screening: 0 };
+    }
+    const b = Math.max(encounter.distance, Number.MIN_VALUE);
+    const screening = Math.exp(-b / Math.max(context.plasma.debyeLength, Number.MIN_VALUE));
+    if (!(screening > 1e-12)) return { direction, angle: 0, impactParameter: b, screening };
+    const relativisticMomentumFactor = context.magnetics.gamma * PROTON_MASS * context.magnetics.speed * context.magnetics.speed;
+    const b90 = relativisticMomentumFactor > 0
+      ? COULOMB_K * PROTON_CHARGE * PROTON_CHARGE / relativisticMomentumFactor
+      : 0;
+    const unscreenedAngle = 2 * Math.atan2(b90, b);
+    const angle = unscreenedAngle * screening;
+    if (!(angle > 0)) return { direction, angle: 0, impactParameter: b, screening };
+    const outward = perpendicularOutward(direction, encounter);
+    return {
+      direction: vectorNormalize(vectorAdd(vectorScale(direction, Math.cos(angle)), vectorScale(outward, Math.sin(angle)))),
+      angle,
+      impactParameter: b,
+      screening,
+      b90
+    };
+  }
+
+  function applyObliqueShadowScatter(direction, encounter, context, random, phase) {
+    if (!encounter || !(context.shadowFieldRange > 0)) return { direction, keyed: false, proximity: 0, obliquityRad: Math.PI / 2 };
+    const normalizedImpact = encounter.distance / context.shadowFieldRange;
+    const proximity = clamp(1 - normalizedImpact, 0, 1);
+    const keyed = proximity > 0 && random() < context.reflectivity * proximity * proximity;
+    const obliquityRad = Math.asin(clamp(normalizedImpact, 0, 1));
+    if (!keyed) return { direction, keyed, proximity, obliquityRad };
+    const outward = perpendicularOutward(direction, encounter);
+    const basis = tangentBasis(direction);
+    const jitter = (random() - 0.5) * 0.12 * proximity;
+    const deflectionAngle = Math.min(0.72, context.reflectivity * proximity * (0.18 + 0.54 * Math.cos(obliquityRad)));
+    const deflected = vectorNormalize(vectorAdd(
+      vectorScale(direction, Math.cos(deflectionAngle)),
+      vectorScale(outward, Math.sin(deflectionAngle)),
+      vectorScale(basis.second, jitter * Math.sin(phase + random() * Math.PI * 2))
+    ));
+    return { direction: deflected, keyed, proximity, obliquityRad, deflectionAngle };
   }
 
   function foamAlpha(config) {
@@ -391,6 +538,7 @@
     const density = DENSITY_PRESETS[config.density].perM3;
     const side = physicalSideMeters(config.particleCount, density);
     const magnetics = magneticPhysics(config);
+    const plasma = plasmaPhysics(config, density);
     const foam = quantumFoamPhysics(config, side, density);
     return {
       config, density, side,
@@ -398,12 +546,15 @@
       rays: new Array(config.rayCount),
       outputs: { '+Z': 0, '+X': 0, '-X': 0, '+Y': 0, '-Y': 0, '-Z': 0, retained: 0 },
       randomParticles: rngFrom(`ism-physical-particles|${config.density}|${config.particleCount}`),
+      speciesRandom: rngFrom(`ism-ionization-state|${config.density}|${config.particleCount}|${config.ionizedFraction}`),
       beamRandom: rngFrom(`${config.beamSeed}|beam|${config.rayCount}`),
       shadowRandom: rngFrom(`${config.shadowKey}|scatter|${config.reflectivity}|${config.events}`),
       center: side / 2,
       aperture: side * 0.16,
       reflectivity: config.reflectivity / 100,
+      shadowFieldRange: plasma.meanSpacing * Math.max(0.01, config.shadowRangeFactor),
       magnetics,
+      plasma,
       foam,
       foamKickSigma: foam.propagationSigma / Math.sqrt(Math.max(1, config.events + 1))
     };
@@ -411,17 +562,23 @@
 
   function generateParticle(context, index) {
     const random = context.randomParticles;
-    context.particles[index] = { x: random() * context.side, y: random() * context.side, z: random() * context.side };
+    context.particles[index] = {
+      x: random() * context.side,
+      y: random() * context.side,
+      z: random() * context.side,
+      ionized: context.speciesRandom() < context.plasma.ionizedFraction
+    };
   }
 
   function simulateRay(context, rayIndex) {
-    const { config, side, beamRandom, shadowRandom, particles, magnetics, foamKickSigma } = context;
+    const { config, side, beamRandom, shadowRandom, magnetics, foamKickSigma } = context;
     const phase = ((rayIndex / Math.max(1, config.rayCount)) * Math.PI * 2 + beamRandom() * 0.12) % (Math.PI * 2);
     const foamRandom = rngFrom(`${config.foamSeed}|foam|${config.foamModel}|${context.foam.alpha}|${config.foamGainDecades}|${rayIndex}`);
     let position = { x: clamp(context.center + (beamRandom() - 0.5) * context.aperture, 0, side), y: clamp(context.center + (beamRandom() - 0.5) * context.aperture, 0, side), z: 0 };
     let direction = vectorNormalize({ x: Math.cos(phase) * 0.012, y: Math.sin(phase) * 0.012, z: 1 });
     const path = [{ ...position }];
     const impacts = [];
+    const coulombEvents = [];
     const foamEvents = [];
     let foamKickSquares = 0;
     const initialFoam = applyFoamKick(direction, foamRandom, foamKickSigma);
@@ -429,47 +586,101 @@
     foamKickSquares += initialFoam.angle * initialFoam.angle;
     foamEvents.push({ position: { ...position }, angle: initialFoam.angle });
 
-    for (let eventIndex = 0; eventIndex < config.events; eventIndex += 1) {
-      const remaining = nextBoundary(position, direction, side);
-      if (!remaining.t) break;
-      const travel = remaining.t * (0.12 + shadowRandom() * 0.62);
+    const integrateSegment = (travel, allowShadow) => {
+      const segmentStart = { ...position };
       const advanced = advanceMagnetic(position, direction, travel, magnetics);
       position = advanced.position;
       direction = advanced.direction;
       if (advanced.samples.length) advanced.samples.forEach(sample => path.push(sample));
       else path.push({ ...position });
-      const particleIndex = Math.floor(shadowRandom() * particles.length);
-      const particle = particles[particleIndex];
-      const keyedImpact = shadowRandom() < context.reflectivity;
-      impacts.push({ position: { ...position }, particleIndex, keyedImpact, particle });
-      if (keyedImpact) direction = reflectDirection(direction, shadowRandom, context.reflectivity, phase + eventIndex * 0.37);
+
+      const encounters = findSegmentEncounters(context, segmentStart, position);
+      if (encounters.nearestIonized) {
+        const coulomb = applyScreenedCoulombProximity(direction, encounters.nearestIonized, context);
+        direction = coulomb.direction;
+        coulombEvents.push({
+          position: { ...encounters.nearestIonized.point },
+          particleIndex: encounters.nearestIonized.particleIndex,
+          impactParameter: coulomb.impactParameter,
+          angle: coulomb.angle,
+          screening: coulomb.screening
+        });
+      }
+
+      if (allowShadow && encounters.nearest) {
+        const shadow = applyObliqueShadowScatter(direction, encounters.nearest, context, shadowRandom, phase + impacts.length * 0.37);
+        impacts.push({
+          position: { ...encounters.nearest.point },
+          particleIndex: encounters.nearest.particleIndex,
+          keyedImpact: shadow.keyed,
+          particle: encounters.nearest.particle,
+          impactParameter: encounters.nearest.distance,
+          proximity: shadow.proximity,
+          obliquityRad: shadow.obliquityRad,
+          deflectionAngle: shadow.deflectionAngle || 0
+        });
+        direction = shadow.direction;
+      }
+
       const foamKick = applyFoamKick(direction, foamRandom, foamKickSigma);
       direction = foamKick.direction;
       foamKickSquares += foamKick.angle * foamKick.angle;
       foamEvents.push({ position: { ...position }, angle: foamKick.angle });
+    };
+
+    for (let eventIndex = 0; eventIndex < config.events; eventIndex += 1) {
+      const remaining = nextBoundary(position, direction, side);
+      if (!remaining.t) break;
+      const subdivisionsLeft = Math.max(1, config.events - eventIndex + 1);
+      const nominal = remaining.t / subdivisionsLeft;
+      const travel = Math.min(remaining.t * 0.82, nominal * (0.72 + shadowRandom() * 0.56));
+      integrateSegment(travel, true);
     }
 
     const boundary = nextBoundary(position, direction, side);
     if (!boundary.t) context.outputs.retained += 1;
     else {
-      const advanced = advanceMagnetic(position, direction, boundary.t, magnetics);
-      position = advanced.position;
-      direction = advanced.direction;
-      if (advanced.samples.length) advanced.samples.forEach(sample => path.push(sample));
-      else path.push({ ...position });
+      integrateSegment(boundary.t, false);
       context.outputs[boundary.face] = (context.outputs[boundary.face] || 0) + 1;
     }
-    context.rays[rayIndex] = { phase, path, impacts, foamEvents, foamAppliedRmsAngle: Math.sqrt(foamKickSquares), exitFace: boundary.face || 'retained' };
+    context.rays[rayIndex] = {
+      phase, path, impacts, coulombEvents, foamEvents,
+      foamAppliedRmsAngle: Math.sqrt(foamKickSquares),
+      exitFace: boundary.face || 'retained'
+    };
   }
 
   function finalizeSimulation(context) {
-    const { config, side, density, particles, rays, outputs, magnetics, foam } = context;
+    const { config, side, density, particles, rays, outputs, magnetics, plasma, foam } = context;
+    let coulombEventCount = 0;
+    let coulombAngleSquares = 0;
+    let maximumCoulombAngle = 0;
+    let keyedShadowCount = 0;
+    let shadowImpactParameterTotal = 0;
+    let shadowObliquityTotal = 0;
+    rays.forEach(ray => {
+      (ray?.coulombEvents || []).forEach(event => {
+        coulombEventCount += 1;
+        coulombAngleSquares += event.angle * event.angle;
+        maximumCoulombAngle = Math.max(maximumCoulombAngle, event.angle);
+      });
+      (ray?.impacts || []).forEach(impact => {
+        if (!impact.keyedImpact) return;
+        keyedShadowCount += 1;
+        shadowImpactParameterTotal += impact.impactParameter || 0;
+        shadowObliquityTotal += impact.obliquityRad || 0;
+      });
+    });
+    const coulombRmsAngle = coulombEventCount > 0 ? Math.sqrt(coulombAngleSquares / coulombEventCount) : 0;
+    const meanShadowImpactParameter = keyedShadowCount > 0 ? shadowImpactParameterTotal / keyedShadowCount : 0;
+    const meanShadowObliquityRad = keyedShadowCount > 0 ? shadowObliquityTotal / keyedShadowCount : 0;
     const lambdaAcceleration = LAMBDA_COEFFICIENT * side;
     const lightTransit = side / C;
     const lambdaDisplacementAcrossTransit = 0.5 * lambdaAcceleration * lightTransit * lightTransit;
     const magneticDeflectionAcrossCube = Number.isFinite(magnetics.gyroRadius90) ? side * side / (2 * magnetics.gyroRadius90) : 0;
     return {
-      ...config, density, side, particles, rays, outputs, magnetics, foam, lambdaAcceleration, lightTransit, lambdaDisplacementAcrossTransit,
+      ...config, density, side, particles, rays, outputs, magnetics, plasma, foam, lambdaAcceleration, lightTransit, lambdaDisplacementAcrossTransit,
+      coulombEventCount, coulombRmsAngle, maximumCoulombAngle, keyedShadowCount, meanShadowImpactParameter, meanShadowObliquityRad, shadowFieldRange: context.shadowFieldRange,
       magneticDeflectionAcrossCube,
       magneticToLambdaAcceleration: lambdaAcceleration > 0 ? magnetics.magneticAcceleration90 / lambdaAcceleration : Infinity,
       magneticToFoamShift: foam.transverseShiftRms > 0 ? magneticDeflectionAcrossCube / foam.transverseShiftRms : Infinity
@@ -479,6 +690,7 @@
   function simulate(config) {
     const context = createSimulationContext(config);
     for (let index = 0; index < config.particleCount; index += 1) generateParticle(context, index);
+    buildParticleSpatialIndex(context);
     for (let index = 0; index < config.rayCount; index += 1) simulateRay(context, index);
     return finalizeSimulation(context);
   }
@@ -491,6 +703,7 @@
       onProgress: options.onProgress,
       step: index => generateParticle(context, index)
     });
+    buildParticleSpatialIndex(context);
     await taskRunner.forRange({
       start: 0, end: config.rayCount, chunkSize: RAY_CHUNK, token: options.token, label: 'Proton / phase-ray integration',
       onProgress: options.onProgress,
@@ -644,6 +857,14 @@
         rayGroup.add(new THREE.Points(geometry, new THREE.PointsMaterial({ color: 0xb98cff, size: 0.021, transparent: true, opacity: 0.88, sizeAttenuation: true })));
       }
     }
+    const coulombVisible = (ray.coulombEvents || []).filter(event => event.screening > 1e-6);
+    if (coulombVisible.length) {
+      const positions = [];
+      coulombVisible.forEach(event => { const point = toScenePoint(event.position, result.side, THREE); positions.push(point.x, point.y, point.z); });
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      rayGroup.add(new THREE.Points(geometry, new THREE.PointsMaterial({ color: 0x75e0c2, size: 0.014, transparent: true, opacity: 0.78, sizeAttenuation: true })));
+    }
     const keyed = ray.impacts.filter(impact => impact.keyedImpact);
     if (keyed.length) {
       const positions = [];
@@ -662,11 +883,15 @@
     const foamRatio = Number.isFinite(result.magneticToFoamShift) ? formatScientific(result.magneticToFoamShift) : '∞';
     target.innerHTML = [
       ['Literal particles', result.particleCount.toLocaleString()], ['Physical cube edge', formatLength(result.side)], ['Number density', `${formatScientific(result.density)} m⁻³`],
+      ['Mean particle spacing', formatLength(result.plasma.meanSpacing)], ['Ionized H fraction', `${(result.plasma.ionizedFraction * 100).toFixed(1)}%`], ['Plasma temperature', `${result.plasma.temperatureK.toLocaleString()} K`],
+      ['Electron density proxy', `${formatScientific(result.plasma.electronDensity)} m⁻³`], ['Debye screening length', Number.isFinite(result.plasma.debyeLength) ? formatLength(result.plasma.debyeLength) : '∞ · no ionized component'],
+      ['Coulomb proximity model', 'nearest-ion · screened fixed-center'], ['Coulomb samples', result.coulombEventCount.toLocaleString()], ['Coulomb θ RMS', `${formatScientific(result.coulombRmsAngle)} rad`], ['Coulomb θ max', `${formatScientific(result.maximumCoulombAngle)} rad`],
       ['ISM magnetic field', `${result.fieldStrengthNt.toFixed(2)} nT · ${(result.fieldStrengthNt * 10).toFixed(1)} μG`], ['Proton kinetic energy', energyLabel], ['Proton speed', `${formatScientific(result.magnetics.speed)} m/s`],
       ['90° proton gyroradius', Number.isFinite(result.magnetics.gyroRadius90) ? formatLength(result.magnetics.gyroRadius90) : '∞'], ['Magnetic shift / cube', formatLength(result.magneticDeflectionAcrossCube)],
       ['Magnetic acceleration', `${formatScientific(result.magnetics.magneticAcceleration90)} m/s²`], ['aB / aΛ @ edge', Number.isFinite(result.magneticToLambdaAcceleration) ? formatScientific(result.magneticToLambdaAcceleration) : '∞'],
       ['Λ acceleration @ edge', `${formatScientific(result.lambdaAcceleration)} m/s²`], ['Λ displacement / transit', `${formatScientific(result.lambdaDisplacementAcrossTransit)} m`],
       ['Quantum foam model', foamLabel], ['Baseline foam δℓ', formatLength(result.foam.baselineDistanceRms)], ['Applied foam θ RMS', `${formatScientific(result.foam.sigmaAngle)} rad`],
+      ['Shadow field radius', formatLength(result.shadowFieldRange)], ['Keyed Shadow close approaches', result.keyedShadowCount.toLocaleString()], ['Mean Shadow impact parameter', formatLength(result.meanShadowImpactParameter)], ['Mean Shadow obliquity', `${(result.meanShadowObliquityRad * 180 / Math.PI).toFixed(2)}°`],
       ['Foam transverse shift', formatLength(result.foam.transverseShiftRms)], ['Magnetic / foam shift', foamRatio], ['Baseline |Δn| proxy', `${formatScientific(result.foam.baselineDensityDeltaRms)} m⁻³`],
       ['Applied |Δn| / n proxy', formatScientific(result.foam.appliedDensityFractionRms)], ['Foam gain', `10^${result.foamGainDecades}${result.foam.propagationCapped ? ' · propagation capped' : ''}`],
       ['Execution', 'deterministic cooperative slices']
@@ -698,7 +923,8 @@
   function readConfig() {
     return {
       density: document.getElementById('ism-density')?.value || 'galactic', particleCount: Number(document.getElementById('ism-particles')?.value || 4096), rayCount: Number(document.getElementById('ism-rays')?.value || 128),
-      reflectivity: Number(document.getElementById('ism-reflectivity')?.value || 28), events: Number(document.getElementById('ism-events')?.value || 6), fieldStrengthNt: Number(document.getElementById('ism-field-strength')?.value || 0.38),
+      reflectivity: Number(document.getElementById('ism-reflectivity')?.value || 28), shadowRangeFactor: Number(document.getElementById('ism-shadow-range')?.value || 0.5), events: Number(document.getElementById('ism-events')?.value || 6), fieldStrengthNt: Number(document.getElementById('ism-field-strength')?.value || 0.38),
+      ionizedFraction: Number(document.getElementById('ism-ionized-fraction')?.value || 10) / 100, temperatureK: Number(document.getElementById('ism-temperature')?.value || 8000),
       fieldAzimuthDeg: Number(document.getElementById('ism-field-azimuth')?.value || 125), fieldElevationDeg: Number(document.getElementById('ism-field-elevation')?.value || 37), protonEnergyEv: Number(document.getElementById('ism-proton-energy')?.value || 1e6),
       foamModel: document.getElementById('ism-foam-model')?.value || 'constrained', foamSeed: document.getElementById('ism-foam-seed')?.value || 'foam-seed-01', foamAlpha: Number(document.getElementById('ism-foam-alpha')?.value || 0.72),
       foamGainDecades: Number(document.getElementById('ism-foam-gain')?.value || 0), beamSeed: document.getElementById('ism-beam-seed')?.value || 'phase-light-01', shadowKey: document.getElementById('ism-shadow-key')?.value || 'shadow-key-01', setting: activeSetting
@@ -780,7 +1006,7 @@
   }
 
   window.InterstellarMediaCollisionsLab = Object.freeze({
-    constants: Object.freeze({ LAMBDA, LAMBDA_COEFFICIENT, DENSITY_PRESETS, PROTON_CHARGE, PROTON_MASS, PLANCK_LENGTH, FOAM_MODELS }),
+    constants: Object.freeze({ LAMBDA, LAMBDA_COEFFICIENT, DENSITY_PRESETS, PROTON_CHARGE, PROTON_MASS, PLANCK_LENGTH, EPSILON_0, BOLTZMANN, COULOMB_K, FOAM_MODELS }),
     openPanel, closePanel, simulate, simulateAsync, prepareSceneAsync, getLastRun: () => lastRun
   });
 })();
