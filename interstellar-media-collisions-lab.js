@@ -245,7 +245,7 @@
             <div class="ism-lab-canvas-wrap">
               <div class="ism-viewport-toolbar" aria-label="Three-dimensional viewport controls"><span>Drag: orbit · Wheel: zoom · Right-drag: pan</span><button id="ism-reset-view" type="button">Reset view</button><button id="ism-auto-orbit" type="button" aria-pressed="false">Auto orbit</button></div>
               <div id="ism-viewport" class="ism-lab-viewport" role="img" aria-label="Interactive three-dimensional interstellar-medium cube, magnetic field vector, particles, quantum-foam hypothesis perturbations, and phase trajectories"></div>
-              <div class="ism-lab-legend"><span>● literal H-equivalent particle</span><span>— magnetized proton-response trajectory</span><span>➜ ISM magnetic field</span><span>○ screened-Coulomb proximity sample</span><span>◆ visible foam-jitter sample</span><span>× keyed Shadow close approach</span></div>
+              <div class="ism-lab-legend"><span>● literal H/H⁺ particle</span><span>— H⁺ magnetic / H neutral ballistic trajectory</span><span>➜ ISM magnetic field</span><span>○ screened-Coulomb proximity sample</span><span>✦ charge exchange H⁺→H</span><span>◆ optional foam-jitter sample</span><span>× optional Shadow close approach</span></div>
             </div>
             <section class="ism-output-section">
               <div class="ism-output-heading"><div><p class="ism-lab-eyebrow">Concurrent detector array</p><h3>All non-input faces</h3></div><p>Input face: −Z. +Z, ±X, and ±Y are accumulated simultaneously; backscatter to −Z and retained rays are reported separately. Detector counts advance with the displayed cast.</p></div>
@@ -408,14 +408,52 @@
     return context.spatialIndex;
   }
 
-  function closestApproachToSegment(start, end, particle) {
-    const segment = { x: end.x - start.x, y: end.y - start.y, z: end.z - start.z };
-    const lengthSquared = vectorDot(segment, segment);
-    const fromStart = { x: particle.x - start.x, y: particle.y - start.y, z: particle.z - start.z };
-    const fraction = lengthSquared > 0 ? clamp(vectorDot(fromStart, segment) / lengthSquared, 0, 1) : 0;
-    const point = vectorAdd(start, vectorScale(segment, fraction));
-    const offset = { x: point.x - particle.x, y: point.y - particle.y, z: point.z - particle.z };
-    return { fraction, point, offset, distance: Math.hypot(offset.x, offset.y, offset.z) };
+  function particlePositionAtTime(particle, timeSeconds) {
+    const velocity = particle.velocity || { x: 0, y: 0, z: 0 };
+    return {
+      x: particle.x + velocity.x * timeSeconds,
+      y: particle.y + velocity.y * timeSeconds,
+      z: particle.z + velocity.z * timeSeconds
+    };
+  }
+
+  function closestApproachMovingSegment(start, end, particle, startTimeSeconds, durationSeconds) {
+    const projectileDelta = { x: end.x - start.x, y: end.y - start.y, z: end.z - start.z };
+    const targetStart = particlePositionAtTime(particle, startTimeSeconds);
+    const targetVelocity = particle.velocity || { x: 0, y: 0, z: 0 };
+    const targetDelta = vectorScale(targetVelocity, Math.max(0, durationSeconds));
+    const relativeStart = { x: start.x - targetStart.x, y: start.y - targetStart.y, z: start.z - targetStart.z };
+    const relativeDelta = {
+      x: projectileDelta.x - targetDelta.x,
+      y: projectileDelta.y - targetDelta.y,
+      z: projectileDelta.z - targetDelta.z
+    };
+    const relativeLengthSquared = vectorDot(relativeDelta, relativeDelta);
+    const fraction = relativeLengthSquared > 0
+      ? clamp(-vectorDot(relativeStart, relativeDelta) / relativeLengthSquared, 0, 1)
+      : 0;
+    const point = vectorAdd(start, vectorScale(projectileDelta, fraction));
+    const targetPoint = vectorAdd(targetStart, vectorScale(targetDelta, fraction));
+    const offset = { x: point.x - targetPoint.x, y: point.y - targetPoint.y, z: point.z - targetPoint.z };
+    const projectileVelocity = durationSeconds > 0
+      ? vectorScale(projectileDelta, 1 / durationSeconds)
+      : { x: 0, y: 0, z: 0 };
+    const relativeVelocity = {
+      x: projectileVelocity.x - targetVelocity.x,
+      y: projectileVelocity.y - targetVelocity.y,
+      z: projectileVelocity.z - targetVelocity.z
+    };
+    return {
+      fraction,
+      point,
+      targetPoint,
+      offset,
+      distance: Math.hypot(offset.x, offset.y, offset.z),
+      targetVelocity,
+      projectileVelocity,
+      relativeVelocity,
+      relativeSpeed: Math.hypot(relativeVelocity.x, relativeVelocity.y, relativeVelocity.z)
+    };
   }
 
   function segmentCandidateIndices(context, start, end) {
@@ -441,13 +479,13 @@
     return candidates;
   }
 
-  function findSegmentEncounters(context, start, end) {
+  function findSegmentEncounters(context, start, end, startTimeSeconds, durationSeconds) {
     let nearest = null;
     let nearestIonized = null;
     let nearestNeutralH = null;
     for (const particleIndex of segmentCandidateIndices(context, start, end)) {
       const particle = context.particles[particleIndex];
-      const approach = closestApproachToSegment(start, end, particle);
+      const approach = closestApproachMovingSegment(start, end, particle, startTimeSeconds, durationSeconds);
       const encounter = { ...approach, particleIndex, particle };
       if (!nearest || encounter.distance < nearest.distance) nearest = encounter;
       if (particle.chargeC !== 0 && (!nearestIonized || encounter.distance < nearestIonized.distance)) nearestIonized = encounter;
@@ -472,7 +510,10 @@
     const b = Math.max(encounter.distance, Number.MIN_VALUE);
     const screening = Math.exp(-b / Math.max(context.plasma.debyeLength, Number.MIN_VALUE));
     if (!(screening > 1e-12)) return { direction, angle: 0, impactParameter: b, screening };
-    const relativisticMomentumFactor = context.magnetics.gamma * PROTON_MASS * context.magnetics.speed * context.magnetics.speed;
+    const relativeSpeed = encounter.relativeSpeed > 0 ? encounter.relativeSpeed : context.magnetics.speed;
+    const betaSquared = clamp(relativeSpeed * relativeSpeed / (C * C), 0, 1 - 1e-15);
+    const relativeGamma = 1 / Math.sqrt(1 - betaSquared);
+    const relativisticMomentumFactor = relativeGamma * PROTON_MASS * relativeSpeed * relativeSpeed;
     const b90 = relativisticMomentumFactor > 0
       ? COULOMB_K * PROTON_CHARGE * PROTON_CHARGE / relativisticMomentumFactor
       : 0;
@@ -485,7 +526,8 @@
       angle,
       impactParameter: b,
       screening,
-      b90
+      b90,
+      relativeSpeed
     };
   }
 
@@ -609,6 +651,26 @@
     return { position: currentPosition, direction: currentDirection, samples };
   }
 
+  function applyChargeExchangeToTarget(particle) {
+    const ion = SPECIES_CATALOG['H+'];
+    particle.speciesId = 'H+';
+    particle.massKg = ion.massKg;
+    particle.chargeC = ion.chargeC;
+    particle.ionized = true;
+  }
+
+  function relativeProjectileEnergyEv(relativeSpeed) {
+    if (!(relativeSpeed > 0)) return 0;
+    return 0.5 * PROTON_MASS * relativeSpeed * relativeSpeed / EV_TO_JOULE;
+  }
+
+  function advanceProjectile(position, direction, pathLength, context, projectileChargeC) {
+    if (projectileChargeC === 0) {
+      return { position: vectorAdd(position, vectorScale(direction, pathLength)), direction, samples: [] };
+    }
+    return advanceMagnetic(position, direction, pathLength, context.magnetics);
+  }
+
   function createSimulationContext(config) {
     const density = DENSITY_PRESETS[config.density].perM3;
     const side = physicalSideMeters(config.particleCount, density);
@@ -662,16 +724,21 @@
     const foamRandom = rngFrom(`${config.foamSeed}|foam|${config.foamModel}|${context.foam.alpha}|${config.foamGainDecades}|${rayIndex}`);
     let position = { x: clamp(context.center + (beamRandom() - 0.5) * context.aperture, 0, side), y: clamp(context.center + (beamRandom() - 0.5) * context.aperture, 0, side), z: 0 };
     let direction = vectorNormalize({ x: Math.cos(phase) * 0.012, y: Math.sin(phase) * 0.012, z: 1 });
+    let projectileSpeciesId = 'H+';
+    let projectileChargeC = PROTON_CHARGE;
+    const lineage = [{ speciesId: projectileSpeciesId, distance: 0, timeSeconds: 0, reason: 'source' }];
     const path = [{ ...position }];
     const impacts = [];
     const coulombEvents = [];
     const transportEvents = [];
+    const chargeExchangeEvents = [];
     const foamEvents = [];
     const transportRandom = rngFrom(`${config.beamSeed}|transport|${config.transportProcess}|${rayIndex}`);
     const sampledFreePath = context.transport.valid && Number.isFinite(context.transport.meanFreePath)
       ? -context.transport.meanFreePath * Math.log(Math.max(Number.MIN_VALUE, transportRandom()))
       : Infinity;
     let traversedDistance = 0;
+    let elapsedTimeSeconds = 0;
     let foamKickSquares = 0;
     const initialFoam = applyFoamKick(direction, foamRandom, foamKickSigma);
     direction = initialFoam.direction;
@@ -680,43 +747,72 @@
 
     const integrateSegment = (travel, allowShadow) => {
       const segmentStart = { ...position };
-      const advanced = advanceMagnetic(position, direction, travel, magnetics);
+      const segmentStartTime = elapsedTimeSeconds;
+      const segmentDuration = magnetics.speed > 0 ? travel / magnetics.speed : 0;
+      const advanced = advanceProjectile(position, direction, travel, context, projectileChargeC);
       position = advanced.position;
       direction = advanced.direction;
       if (advanced.samples.length) advanced.samples.forEach(sample => path.push(sample));
       else path.push({ ...position });
 
       traversedDistance += travel;
-      const encounters = findSegmentEncounters(context, segmentStart, position);
-      if (encounters.nearestNeutralH && context.transport.valid) {
-        const directHit = encounters.nearestNeutralH.distance <= context.transport.collisionRadius;
+      elapsedTimeSeconds += segmentDuration;
+      const encounters = findSegmentEncounters(context, segmentStart, position, segmentStartTime, segmentDuration);
+
+      if (projectileSpeciesId === 'H+' && encounters.nearestNeutralH && context.transport.enabled) {
+        const relativeEnergyEv = relativeProjectileEnergyEv(encounters.nearestNeutralH.relativeSpeed);
+        const localLookup = interpolateLogCrossSection(HPLUS_H_CHARGE_EXCHANGE, relativeEnergyEv);
+        const localCollisionRadius = localLookup.valid ? Math.sqrt(localLookup.sigmaM2 / Math.PI) : 0;
+        const directHit = localLookup.valid && encounters.nearestNeutralH.distance <= localCollisionRadius;
+        transportEvents.push({
+          kind: directHit ? 'charge-exchange-entry' : 'closest-neutral-h',
+          position: { ...encounters.nearestNeutralH.point },
+          targetPosition: { ...encounters.nearestNeutralH.targetPoint },
+          particleIndex: encounters.nearestNeutralH.particleIndex,
+          impactParameter: encounters.nearestNeutralH.distance,
+          collisionRadius: localCollisionRadius,
+          relativeSpeed: encounters.nearestNeutralH.relativeSpeed,
+          relativeEnergyEv,
+          sigmaM2: localLookup.sigmaM2,
+          crossSectionValid: localLookup.valid
+        });
         if (directHit) {
-          const targetVelocity = encounters.nearestNeutralH.particle.velocity || { x: 0, y: 0, z: 0 };
-          const projectileVelocity = vectorScale(direction, magnetics.speed);
-          const relativeVelocity = {
-            x: projectileVelocity.x - targetVelocity.x,
-            y: projectileVelocity.y - targetVelocity.y,
-            z: projectileVelocity.z - targetVelocity.z
-          };
-          transportEvents.push({
-            kind: 'explicit-cross-section-entry',
+          const target = encounters.nearestNeutralH.particle;
+          applyChargeExchangeToTarget(target);
+          projectileSpeciesId = 'H';
+          projectileChargeC = 0;
+          const exchange = {
+            kind: 'charge-exchange',
             position: { ...encounters.nearestNeutralH.point },
+            targetPosition: { ...encounters.nearestNeutralH.targetPoint },
             particleIndex: encounters.nearestNeutralH.particleIndex,
             impactParameter: encounters.nearestNeutralH.distance,
-            collisionRadius: context.transport.collisionRadius,
-            relativeSpeed: Math.hypot(relativeVelocity.x, relativeVelocity.y, relativeVelocity.z)
-          });
+            relativeSpeed: encounters.nearestNeutralH.relativeSpeed,
+            relativeEnergyEv,
+            sigmaM2: localLookup.sigmaM2,
+            projectileBefore: 'H+',
+            projectileAfter: 'H',
+            targetBefore: 'H',
+            targetAfter: 'H+',
+            distance: traversedDistance,
+            timeSeconds: elapsedTimeSeconds
+          };
+          chargeExchangeEvents.push(exchange);
+          lineage.push({ speciesId: 'H', distance: traversedDistance, timeSeconds: elapsedTimeSeconds, reason: 'charge exchange' });
         }
       }
-      if (encounters.nearestIonized) {
+
+      if (projectileChargeC !== 0 && encounters.nearestIonized) {
         const coulomb = applyScreenedCoulombProximity(direction, encounters.nearestIonized, context);
         direction = coulomb.direction;
         coulombEvents.push({
           position: { ...encounters.nearestIonized.point },
+          targetPosition: { ...encounters.nearestIonized.targetPoint },
           particleIndex: encounters.nearestIonized.particleIndex,
           impactParameter: coulomb.impactParameter,
           angle: coulomb.angle,
-          screening: coulomb.screening
+          screening: coulomb.screening,
+          relativeSpeed: coulomb.relativeSpeed
         });
       }
 
@@ -757,10 +853,14 @@
       context.outputs[boundary.face] = (context.outputs[boundary.face] || 0) + 1;
     }
     context.rays[rayIndex] = {
-      phase, path, impacts, coulombEvents, transportEvents, foamEvents,
+      phase, path, impacts, coulombEvents, transportEvents, chargeExchangeEvents, foamEvents, lineage,
       sampledFreePath,
       sampledCollisionWithinPath: sampledFreePath <= traversedDistance,
       traversedDistance,
+      elapsedTimeSeconds,
+      finalSpeciesId: projectileSpeciesId,
+      finalChargeC: projectileChargeC,
+      energeticNeutral: projectileSpeciesId === 'H',
       foamAppliedRmsAngle: Math.sqrt(foamKickSquares),
       exitFace: boundary.face || 'retained'
     };
@@ -770,6 +870,10 @@
     const { config, side, density, particles, rays, outputs, magnetics, plasma, transport, foam } = context;
     let coulombEventCount = 0;
     let explicitTransportCollisionCount = 0;
+    let chargeExchangeCount = 0;
+    let energeticNeutralCount = 0;
+    let relativeEnergyTotalEv = 0;
+    let relativeEnergySamples = 0;
     let sampledTransportCollisionCount = 0;
     let sampledFreePathTotal = 0;
     let sampledFreePathFiniteCount = 0;
@@ -784,7 +888,15 @@
         coulombAngleSquares += event.angle * event.angle;
         maximumCoulombAngle = Math.max(maximumCoulombAngle, event.angle);
       });
-      explicitTransportCollisionCount += (ray?.transportEvents || []).length;
+      explicitTransportCollisionCount += (ray?.transportEvents || []).filter(event => event.kind === 'charge-exchange-entry').length;
+      chargeExchangeCount += (ray?.chargeExchangeEvents || []).length;
+      if (ray?.energeticNeutral) energeticNeutralCount += 1;
+      (ray?.transportEvents || []).forEach(event => {
+        if (Number.isFinite(event.relativeEnergyEv)) {
+          relativeEnergyTotalEv += event.relativeEnergyEv;
+          relativeEnergySamples += 1;
+        }
+      });
       if (Number.isFinite(ray?.sampledFreePath)) {
         sampledFreePathFiniteCount += 1;
         sampledFreePathTotal += ray.sampledFreePath;
@@ -801,13 +913,15 @@
     const meanShadowImpactParameter = keyedShadowCount > 0 ? shadowImpactParameterTotal / keyedShadowCount : 0;
     const meanShadowObliquityRad = keyedShadowCount > 0 ? shadowObliquityTotal / keyedShadowCount : 0;
     const meanSampledFreePath = sampledFreePathFiniteCount > 0 ? sampledFreePathTotal / sampledFreePathFiniteCount : Infinity;
+    const meanRelativeEnergyEv = relativeEnergySamples > 0 ? relativeEnergyTotalEv / relativeEnergySamples : 0;
     const lambdaAcceleration = LAMBDA_COEFFICIENT * side;
     const lightTransit = side / C;
+    const protonTransit = magnetics.speed > 0 ? side / magnetics.speed : Infinity;
     const lambdaDisplacementAcrossTransit = 0.5 * lambdaAcceleration * lightTransit * lightTransit;
     const magneticDeflectionAcrossCube = Number.isFinite(magnetics.gyroRadius90) ? side * side / (2 * magnetics.gyroRadius90) : 0;
     return {
-      ...config, density, side, particles, rays, outputs, magnetics, plasma, transport, foam, lambdaAcceleration, lightTransit, lambdaDisplacementAcrossTransit,
-      explicitTransportCollisionCount, sampledTransportCollisionCount, meanSampledFreePath,
+      ...config, density, side, particles, rays, outputs, magnetics, plasma, transport, foam, lambdaAcceleration, lightTransit, protonTransit, lambdaDisplacementAcrossTransit,
+      explicitTransportCollisionCount, chargeExchangeCount, energeticNeutralCount, meanRelativeEnergyEv, sampledTransportCollisionCount, meanSampledFreePath,
       coulombEventCount, coulombRmsAngle, maximumCoulombAngle, keyedShadowCount, meanShadowImpactParameter, meanShadowObliquityRad, shadowFieldRange: context.shadowFieldRange,
       magneticDeflectionAcrossCube,
       magneticToLambdaAcceleration: lambdaAcceleration > 0 ? magnetics.magneticAcceleration90 / lambdaAcceleration : Infinity,
@@ -985,6 +1099,14 @@
         rayGroup.add(new THREE.Points(geometry, new THREE.PointsMaterial({ color: 0xb98cff, size: 0.021, transparent: true, opacity: 0.88, sizeAttenuation: true })));
       }
     }
+    const chargeExchangeVisible = ray.chargeExchangeEvents || [];
+    if (chargeExchangeVisible.length) {
+      const positions = [];
+      chargeExchangeVisible.forEach(event => { const point = toScenePoint(event.position, result.side, THREE); positions.push(point.x, point.y, point.z); });
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      rayGroup.add(new THREE.Points(geometry, new THREE.PointsMaterial({ color: 0xf4f08a, size: 0.032, transparent: true, opacity: 0.96, sizeAttenuation: true })));
+    }
     const coulombVisible = (ray.coulombEvents || []).filter(event => event.screening > 1e-6);
     if (coulombVisible.length) {
       const positions = [];
@@ -1022,9 +1144,13 @@
       ['Mean sampled free path', Number.isFinite(result.meanSampledFreePath) ? formatLength(result.meanSampledFreePath) : '∞ / unavailable'],
       ['Sampled collisions within path', result.sampledTransportCollisionCount.toLocaleString()],
       ['Explicit σ-radius encounters', result.explicitTransportCollisionCount.toLocaleString()],
+      ['Charge-exchange transformations', result.chargeExchangeCount.toLocaleString()],
+      ['Energetic neutral exits', result.energeticNeutralCount.toLocaleString()],
+      ['Mean relative encounter energy', result.meanRelativeEnergyEv > 0 ? `${formatScientific(result.meanRelativeEnergyEv)} eV` : '—'],
+      ['Moving-target geometry', 'relative trajectory closest approach'],
       ['Coulomb proximity model', 'nearest-ion · screened fixed-center'], ['Coulomb samples', result.coulombEventCount.toLocaleString()], ['Coulomb θ RMS', `${formatScientific(result.coulombRmsAngle)} rad`], ['Coulomb θ max', `${formatScientific(result.maximumCoulombAngle)} rad`],
       ['ISM magnetic field', `${result.fieldStrengthNt.toFixed(2)} nT · ${(result.fieldStrengthNt * 10).toFixed(1)} μG`], ['Proton kinetic energy', energyLabel], ['Proton speed', `${formatScientific(result.magnetics.speed)} m/s`],
-      ['90° proton gyroradius', Number.isFinite(result.magnetics.gyroRadius90) ? formatLength(result.magnetics.gyroRadius90) : '∞'], ['Magnetic shift / cube', formatLength(result.magneticDeflectionAcrossCube)],
+      ['90° proton gyroradius', Number.isFinite(result.magnetics.gyroRadius90) ? formatLength(result.magnetics.gyroRadius90) : '∞'], ['Proton transit / cube', Number.isFinite(result.protonTransit) ? `${formatScientific(result.protonTransit)} s` : '∞'], ['Magnetic shift / cube', formatLength(result.magneticDeflectionAcrossCube)],
       ['Magnetic acceleration', `${formatScientific(result.magnetics.magneticAcceleration90)} m/s²`], ['aB / aΛ @ edge', Number.isFinite(result.magneticToLambdaAcceleration) ? formatScientific(result.magneticToLambdaAcceleration) : '∞'],
       ['Λ acceleration @ edge', `${formatScientific(result.lambdaAcceleration)} m/s²`], ['Λ displacement / transit', `${formatScientific(result.lambdaDisplacementAcrossTransit)} m`],
       ['Quantum foam model', foamLabel], ['Baseline foam δℓ', formatLength(result.foam.baselineDistanceRms)], ['Applied foam θ RMS', `${formatScientific(result.foam.sigmaAngle)} rad`],
@@ -1054,7 +1180,7 @@
       const percentage = value / denominator * 100;
       return `<div class="ism-face-row"><span class="ism-face-label">${face}</span><div class="ism-face-track"><span style="width:${percentage.toFixed(3)}%"></span></div><strong>${value} · ${percentage.toFixed(2)}%</strong></div>`;
     }).join('');
-    secondary.innerHTML = `<span>Backscatter to input −Z: <strong>${outputs['-Z'] || 0}</strong></span><span>Retained/in-cube: <strong>${outputs.retained || 0}</strong></span><span>Cast progress: <strong>${count}/${result.rayCount}</strong></span><span>Physical light transit: <strong>${esc(formatScientific(result.lightTransit))} s</strong></span><span>Scheduler: <strong>deterministic cooperative</strong></span>`;
+    secondary.innerHTML = `<span>Backscatter to input −Z: <strong>${outputs['-Z'] || 0}</strong></span><span>Retained/in-cube: <strong>${outputs.retained || 0}</strong></span><span>Transport progress: <strong>${count}/${result.rayCount}</strong></span><span>Proton transit / cube: <strong>${esc(formatScientific(result.protonTransit))} s</strong></span><span>Energetic-neutral exits: <strong>${result.energeticNeutralCount}</strong></span><span>Scheduler: <strong>deterministic cooperative</strong></span>`;
   }
 
   function readConfig() {
