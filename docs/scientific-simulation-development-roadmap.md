@@ -1,7 +1,7 @@
 # Scientific Simulation Development Roadmap
 
 Status: active implementation contract  
-Scope: Scientific Tools / Double Slit Experiment Visualizer / Interstellar Media Collisions — Vectorized Shadow Casting Laboratory  
+Scope: Scientific Tools / Double Slit Experiment Visualizer / Interstellar Media Collisions / Gravitational Simulation Laboratory  
 Authority: this document records the intent to design, implement, validate, and retain the complete simulation program described below. Items marked partial are not complete merely because a first approximation exists.
 
 ## Scientific credibility contract
@@ -324,6 +324,102 @@ Status: PLANNED.
 - ordinary optical photon mode with photon-photon interaction effectively zero;
 - separately labeled strong-field/QED light-by-light research mode;
 - nonlinear-medium optical propagation as matter-mediated photon interaction.
+
+# Gravitational Simulation Laboratory program
+
+## GRAV-01 — Newtonian N-body foundation
+Status: IMPLEMENTED FOUNDATION / validation continuing.
+
+Implemented:
+- dedicated full-page laboratory rather than an overlay;
+- 1–12 massive bodies with SI-unit internal state;
+- editable mass, physical radius, 3D position, and 3D velocity;
+- velocity-Verlet integration for pairwise Newtonian gravity;
+- Earth–Moon, Sun–Earth, equal-mass binary, and three-body reference presets;
+- physical-radius overlap detection that halts instead of inventing an impact/merger model;
+- energy, momentum, angular-momentum, center-of-mass, and minimum-separation diagnostics;
+- 3D trajectory trails and normalized Newtonian field-vector inspection;
+- sphere, cube, tetrahedron, octahedron, icosahedron, and torus render primitives.
+
+Scientific boundary:
+- primitive shape affects rendering only in GRAV-01;
+- point-mass gravity is not relabeled as solved cube, torus, or polyhedral gravity;
+- visual trajectories are not represented as metric curvature.
+
+Required completion:
+- regression cases for two-body orbital period and conservation drift across timestep scales;
+- adaptive timestep guidance and numerical-stability warnings;
+- downloadable deterministic run state and diagnostic ledger.
+
+## GRAV-02 — Euclidean extended-mass geometry
+Status: PLANNED.
+
+Required:
+- homogeneous sphere analytic baseline;
+- finite cube/rectangular prism mass integration;
+- tetrahedral/polyhedral mass distributions;
+- ring/torus and disk distributions;
+- user-controlled density and dimensions distinct from display scale;
+- comparison against point-mass far-field limits;
+- numerical convergence/error diagnostics for discretized volume or surface integrals.
+
+## GRAV-03 — Multi-body experiment library
+Status: PLANNED.
+
+Required:
+- restricted three-body and circular restricted three-body configurations;
+- Lagrange-point demonstrations;
+- binary and hierarchical triple systems;
+- close-encounter and slingshot experiments;
+- configurable center-of-mass and barycentric reference frames;
+- explicit presets must identify whether they are pedagogical initial conditions, idealized analytic cases, or date-specific ephemerides.
+
+## GRAV-04 — Field, potential, and tidal diagnostics
+Status: PLANNED.
+
+Required:
+- gravitational potential slices;
+- acceleration magnitude contours and vector fields;
+- tidal tensor / differential-acceleration inspection where numerically supported;
+- escape-speed and zero-velocity surfaces for appropriate models;
+- dominant-source and local-error diagnostics.
+
+## GRAV-05 — Contact, collision, and finite-body interactions
+Status: PLANNED.
+
+Required:
+- collision models must be selectable and physically labeled rather than automatic;
+- inelastic merge baseline with mass and momentum conservation;
+- elastic rigid-body approximation only when its assumptions are satisfied;
+- fragmentation remains disabled until an explicit material/failure model exists;
+- conservation audit before and after every resolved interaction.
+
+## GRAV-06 — General-relativistic model layers
+Status: PLANNED / separate solver.
+
+Required:
+- begin with explicitly scoped Schwarzschild test-particle/geodesic experiments;
+- add periapsis precession and gravitational time-dilation demonstrations with validity ranges;
+- later Kerr/frame-dragging work requires its own solver and diagnostics;
+- never portray Newtonian force arrows or a decorative mesh warp as a solution to Einstein's field equations.
+
+## GRAV-07 — Non-Euclidean geometry laboratory
+Status: PLANNED / separate mathematics layer.
+
+Required:
+- distinguish mathematical non-Euclidean manifolds from physical general relativity;
+- constant-curvature spherical and hyperbolic geometry demonstrations;
+- geodesic/path behavior on selected metrics;
+- metric, coordinates, curvature assumptions, dimensionality, and embedding visualization must be shown explicitly;
+- an embedding picture is visualization only and must not be confused with the intrinsic geometry.
+
+## GRAV-08 — Theory and hypothesis isolation
+Status: PLANNED.
+
+Required:
+- established Newtonian/relativistic models, mathematical geometry experiments, exploratory alternatives, and fictional Blacklight hypotheses must have separate registries and visual labels;
+- speculative modifications to gravity cannot alter the established baseline unless explicitly enabled;
+- hypothesis outputs must carry their parameterization and cannot be reported as empirical prediction.
 
 # Implementation order
 

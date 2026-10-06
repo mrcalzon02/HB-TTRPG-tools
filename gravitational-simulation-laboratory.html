@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Gravitational Simulation Laboratory · Scientific Tools</title>
+  <meta name="description" content="Page-native Newtonian N-body gravitational simulation laboratory with SI-unit state, 1–12 bodies, 3D primitives, field vectors, trails, and conservation diagnostics.">
+  <link rel="stylesheet" href="scientific-laboratory-page.css?v=20261005-page-first-1">
+  <link rel="stylesheet" href="gravitational-simulation-lab.css?v=20261005-gravity-foundation-1">
+</head>
+<body class="scientific-lab-page">
+  <nav class="scientific-lab-page-nav" aria-label="Scientific laboratory navigation">
+    <a class="lab-home" href="index.html#scientific-tools">← Scientific Tools</a>
+    <a href="signals-laboratory.html">Signals</a><a href="live-signals-laboratory.html">Live Signals</a><a href="audio-laboratory.html">Audio</a><a href="interstellar-media-collisions-laboratory.html">ISM Collisions</a><a href="double-slit-laboratory.html">Double Slit</a><a href="gravitational-simulation-laboratory.html" aria-current="page">Gravity</a>
+  </nav>
+  <main id="gravitational-simulation-root"></main>
+  <script src="gravitational-simulation-lab.js?v=20261005-gravity-foundation-1"></script>
+  <script>window.addEventListener('DOMContentLoaded',()=>window.GravitationalSimulationLab.mountPage().catch(error=>{document.getElementById('gravitational-simulation-root').textContent=`Gravity laboratory failed to initialize: ${error.message}`;}));</script>
+</body>
+</html>

@@ -176,13 +176,14 @@
     }
   ],
   "laboratories": [
-    {"id":"signals-laboratory","title":"Signals Laboratory","workspace":"Scientific Tools","status":"runtime-required","capabilityIds":["signals.configuration.analyze","signals.utilities"],"source":["signals-laboratory.js"]},
+    {"id":"signals-laboratory","title":"Signals Laboratory","workspace":"Scientific Tools","status":"runtime-required","page":"signals-laboratory.html","capabilityIds":["signals.configuration.analyze","signals.utilities"],"source":["signals-laboratory.js"]},
     {"id":"binary-cube-laboratory","title":"Binary Cube Encryption Laboratory","workspace":"Shadowrun","status":"runtime-required","capabilityIds":["shadowrun.binary-cube"],"source":["shadowrun-binary-cube-engine.js","shadowrun-binary-cube-encryption.js"]},
-    {"id":"live-signals-laboratory","title":"Live Signals Laboratory","workspace":"Scientific Tools","status":"live-device-context","notes":"Receive-only/live-device laboratory. Sensor access and its safety boundary remain browser/device-context concerns and are not misrepresented as a remote server API."},
-    {"id":"audio-laboratory","title":"Audio Laboratory","workspace":"Scientific Tools","status":"live-device-context","notes":"Active acoustic ranging/mapping laboratory; register pure engines separately as they are extracted."},
+    {"id":"live-signals-laboratory","title":"Live Signals Laboratory","workspace":"Scientific Tools","status":"live-device-context","page":"live-signals-laboratory.html","source":["live-signals-laboratory.js"],"notes":"Live-device laboratory. Sensor access, ranging support, platform limits, and safety boundaries remain browser/device-context concerns and are not misrepresented as a remote server API."},
+    {"id":"audio-laboratory","title":"Audio Laboratory","workspace":"Scientific Tools","status":"live-device-context","page":"audio-laboratory.html","source":["audio-laboratory.js"],"notes":"Active acoustic ranging/mapping laboratory; register pure engines separately as they are extracted."},
     {"id":"steganalysis-laboratory","title":"Advanced Steganalysis Laboratory","workspace":"Scientific Tools","status":"page-context"},
-    {"id":"double-slit-laboratory","title":"Double Slit Laboratory","workspace":"Scientific Tools","status":"page-context"},
-    {"id":"interstellar-media-collisions-laboratory","title":"Interstellar Media Collisions Laboratory","workspace":"Scientific Tools","status":"page-context"}
+    {"id":"double-slit-laboratory","title":"Double Slit Laboratory","workspace":"Scientific Tools","status":"page-context","page":"double-slit-laboratory.html","source":["double-slit-lab.js"]},
+    {"id":"interstellar-media-collisions-laboratory","title":"Interstellar Media Collisions Laboratory","workspace":"Scientific Tools","status":"page-context","page":"interstellar-media-collisions-laboratory.html","source":["interstellar-media-collisions-lab.js"]},
+    {"id":"gravitational-simulation-laboratory","title":"Gravitational Simulation Laboratory","workspace":"Scientific Tools","status":"page-context","page":"gravitational-simulation-laboratory.html","source":["gravitational-simulation-lab.js"],"notes":"Newtonian N-body foundation is implemented. Extended Euclidean mass distributions, general-relativistic spacetime, and non-Euclidean geometry are separate future model layers and are not silently approximated."}
   ],
   "resources": [
     {"id":"foundry.search-index","title":"Foundry Search Index","workspace":"Foundry","kind":"index","format":"json","path":"search-index.json","tags":["site", "tools", "generators", "campaigns"]},
