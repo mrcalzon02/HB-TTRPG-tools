@@ -216,6 +216,15 @@
               <label>Generic matter-wave wavelength <output id="dsl-matter-wavelength-value">100 pm</output>
                 <input id="dsl-matter-wavelength" type="range" min="1" max="1000" step="1" value="100">
               </label>
+              <label>Photon spectral FWHM <output id="dsl-photon-bandwidth-value">0 nm</output>
+                <input id="dsl-photon-bandwidth" type="range" min="0" max="100" step="0.5" value="0">
+              </label>
+              <label>Electron energy FWHM spread <output id="dsl-electron-spread-value">0.0%</output>
+                <input id="dsl-electron-spread" type="range" min="0" max="50" step="0.1" value="0">
+              </label>
+              <label>Matter-wave wavelength FWHM spread <output id="dsl-matter-spread-value">0.0%</output>
+                <input id="dsl-matter-spread" type="range" min="0" max="50" step="0.1" value="0">
+              </label>
               <label>Experiment seed
                 <input id="dsl-seed" type="text" value="double-slit-01" autocomplete="off">
               </label>
@@ -245,9 +254,18 @@
             </div>
 
             <div class="dsl-control-group">
-              <p class="dsl-control-group-title">Coherence and path information</p>
-              <label>Source coherence <output id="dsl-coherence-value">100%</output>
+              <p class="dsl-control-group-title">Physical coherence and path information</p>
+              <label>Residual coherence factor <output id="dsl-coherence-value">100%</output>
                 <input id="dsl-coherence" type="range" min="0" max="100" step="1" value="100">
+              </label>
+              <label>Source transverse RMS size <output id="dsl-source-size-value">0 μm</output>
+                <input id="dsl-source-size" type="range" min="0" max="1000" step="1" value="0">
+              </label>
+              <label>Source-to-slit distance <output id="dsl-source-distance-value">1.00 m</output>
+                <input id="dsl-source-distance" type="range" min="0.01" max="10" step="0.01" value="1">
+              </label>
+              <label>Additional RMS angular divergence <output id="dsl-angular-divergence-value">0 μrad</output>
+                <input id="dsl-angular-divergence" type="range" min="0" max="1000" step="1" value="0">
               </label>
               <label>Relative slit phase <output id="dsl-phase-value">0°</output>
                 <input id="dsl-phase" type="range" min="-180" max="180" step="1" value="0">
@@ -255,7 +273,7 @@
               <label>Path distinguishability D <output id="dsl-distinguishability-value">0.00</output>
                 <input id="dsl-distinguishability" type="range" min="0" max="100" step="1" value="0">
               </label>
-              <p class="dsl-note"><strong>Complementarity:</strong> the accepted two-path bound is V² + D² ≤ 1. Source coherence can reduce V below the ideal limit; increasing D continuously suppresses only the interference cross-term.</p>
+              <p class="dsl-note"><strong>Coherence model:</strong> finite spectrum/energy spread is averaged directly over wavelength samples. Finite source size and angular divergence reduce the cross-term using the Gaussian angular-coherence factor. The residual factor remains available for unmodeled coherence loss. <strong>Complementarity:</strong> V² + D² ≤ 1.</p>
               <label class="dsl-check"><input id="dsl-show-expected" type="checkbox" checked> Show expected distribution behind accumulated hits</label>
               <label class="dsl-check"><input id="dsl-show-field" type="checkbox" checked> Show probability-amplitude field slice</label>
             </div>
@@ -342,11 +360,17 @@
     bindRangeOutput('dsl-photon-wavelength', 'dsl-photon-wavelength-value', value => `${value.toFixed(0)} nm`);
     bindRangeOutput('dsl-electron-energy', 'dsl-electron-energy-value', value => `${value.toFixed(0)} eV`);
     bindRangeOutput('dsl-matter-wavelength', 'dsl-matter-wavelength-value', value => `${value.toFixed(0)} pm`);
+    bindRangeOutput('dsl-photon-bandwidth', 'dsl-photon-bandwidth-value', value => `${value.toFixed(value < 10 ? 1 : 0)} nm`);
+    bindRangeOutput('dsl-electron-spread', 'dsl-electron-spread-value', value => `${value.toFixed(1)}%`);
+    bindRangeOutput('dsl-matter-spread', 'dsl-matter-spread-value', value => `${value.toFixed(1)}%`);
     bindRangeOutput('dsl-slit-width', 'dsl-slit-width-value', value => `${value.toFixed(0)} μm`);
     bindRangeOutput('dsl-slit-separation', 'dsl-slit-separation-value', value => `${value.toFixed(0)} μm`);
     bindRangeOutput('dsl-screen-distance', 'dsl-screen-distance-value', value => formatLength(value));
     bindRangeOutput('dsl-screen-width', 'dsl-screen-width-value', value => value < 1 ? `${value.toFixed(2)} mm` : `${value.toFixed(value < 10 ? 2 : 1)} mm`);
     bindRangeOutput('dsl-coherence', 'dsl-coherence-value', value => `${value.toFixed(0)}%`);
+    bindRangeOutput('dsl-source-size', 'dsl-source-size-value', value => `${value.toFixed(0)} μm`);
+    bindRangeOutput('dsl-source-distance', 'dsl-source-distance-value', value => formatLength(value));
+    bindRangeOutput('dsl-angular-divergence', 'dsl-angular-divergence-value', value => `${value.toFixed(0)} μrad`);
     bindRangeOutput('dsl-phase', 'dsl-phase-value', value => `${value.toFixed(0)}°`);
     bindRangeOutput('dsl-distinguishability', 'dsl-distinguishability-value', value => (value / 100).toFixed(2));
     bindRangeOutput('dsl-detector-exponent', 'dsl-detector-exponent-value', value => value.toFixed(2));
@@ -354,13 +378,15 @@
 
     const experimentControls = [
       'dsl-mode', 'dsl-source-type', 'dsl-photon-wavelength', 'dsl-electron-energy', 'dsl-matter-wavelength',
+      'dsl-photon-bandwidth', 'dsl-electron-spread', 'dsl-matter-spread',
       'dsl-slit-width', 'dsl-slit-separation', 'dsl-screen-distance', 'dsl-screen-width', 'dsl-propagation-mode', 'dsl-coherence',
-      'dsl-phase', 'dsl-distinguishability', 'dsl-show-expected', 'dsl-show-field', 'dsl-hypothesis',
+      'dsl-source-size', 'dsl-source-distance', 'dsl-angular-divergence', 'dsl-phase', 'dsl-distinguishability', 'dsl-show-expected', 'dsl-show-field', 'dsl-hypothesis',
       'dsl-detector-exponent', 'dsl-seed'
     ];
     experimentControls.forEach(id => document.getElementById(id)?.addEventListener('change', requestRefresh));
-    ['dsl-photon-wavelength', 'dsl-electron-energy', 'dsl-matter-wavelength', 'dsl-slit-width', 'dsl-slit-separation',
-      'dsl-screen-distance', 'dsl-screen-width', 'dsl-coherence', 'dsl-phase', 'dsl-distinguishability', 'dsl-detector-exponent']
+    ['dsl-photon-wavelength', 'dsl-electron-energy', 'dsl-matter-wavelength', 'dsl-photon-bandwidth', 'dsl-electron-spread', 'dsl-matter-spread',
+      'dsl-slit-width', 'dsl-slit-separation', 'dsl-screen-distance', 'dsl-screen-width', 'dsl-coherence',
+      'dsl-source-size', 'dsl-source-distance', 'dsl-angular-divergence', 'dsl-phase', 'dsl-distinguishability', 'dsl-detector-exponent']
       .forEach(id => document.getElementById(id)?.addEventListener('input', scheduleRefresh));
 
     document.getElementById('dsl-run')?.addEventListener('click', toggleRunning);
@@ -396,12 +422,18 @@
       photonWavelengthNm: Number(document.getElementById('dsl-photon-wavelength')?.value || 650),
       electronEnergyEv: Number(document.getElementById('dsl-electron-energy')?.value || 150),
       matterWavelengthPm: Number(document.getElementById('dsl-matter-wavelength')?.value || 100),
+      photonBandwidthFwhmNm: Number(document.getElementById('dsl-photon-bandwidth')?.value || 0),
+      electronEnergySpreadFwhmPct: Number(document.getElementById('dsl-electron-spread')?.value || 0),
+      matterWavelengthSpreadFwhmPct: Number(document.getElementById('dsl-matter-spread')?.value || 0),
       slitWidthUm: Number(document.getElementById('dsl-slit-width')?.value || 20),
       slitSeparationUm: Number(document.getElementById('dsl-slit-separation')?.value || 80),
       screenDistanceM: Number(document.getElementById('dsl-screen-distance')?.value || 1.5),
       screenWidthMm: Number(document.getElementById('dsl-screen-width')?.value || 40),
       propagationMode: document.getElementById('dsl-propagation-mode')?.value || 'auto',
       coherence: Number(document.getElementById('dsl-coherence')?.value || 100) / 100,
+      sourceSizeRmsUm: Number(document.getElementById('dsl-source-size')?.value || 0),
+      sourceDistanceM: Number(document.getElementById('dsl-source-distance')?.value || 1),
+      angularDivergenceRmsUrad: Number(document.getElementById('dsl-angular-divergence')?.value || 0),
       phaseOffsetRad: Number(document.getElementById('dsl-phase')?.value || 0) * Math.PI / 180,
       distinguishability: Number(document.getElementById('dsl-distinguishability')?.value || 0) / 100,
       showExpected: Boolean(document.getElementById('dsl-show-expected')?.checked),
@@ -419,6 +451,46 @@
     return config.photonWavelengthNm * 1e-9;
   }
 
+  function sourceSpectrum(config, centralWavelength) {
+    const zValues = [-2, -1, 0, 1, 2];
+    const weights = [0.054488685, 0.244201342, 0.402619946, 0.244201342, 0.054488685];
+    let sigma = 0;
+    let sampler = offset => centralWavelength;
+    if (config.sourceType === 'photon') {
+      sigma = Math.max(0, config.photonBandwidthFwhmNm) * 1e-9 / 2.354820045;
+      sampler = offset => Math.max(1e-15, centralWavelength + offset * sigma);
+    } else if (config.sourceType === 'electron') {
+      const sigmaEnergy = Math.max(0, config.electronEnergyEv * config.electronEnergySpreadFwhmPct / 100) / 2.354820045;
+      sampler = offset => electronWavelength(Math.max(1e-9, config.electronEnergyEv + offset * sigmaEnergy));
+    } else {
+      sigma = Math.max(0, centralWavelength * config.matterWavelengthSpreadFwhmPct / 100) / 2.354820045;
+      sampler = offset => Math.max(1e-15, centralWavelength + offset * sigma);
+    }
+
+    const hasSpread = config.sourceType === 'electron'
+      ? config.electronEnergySpreadFwhmPct > 0
+      : config.sourceType === 'photon'
+        ? config.photonBandwidthFwhmNm > 0
+        : config.matterWavelengthSpreadFwhmPct > 0;
+    const samples = hasSpread
+      ? zValues.map((offset, index) => ({ wavelength: sampler(offset), weight: weights[index] }))
+      : [{ wavelength: centralWavelength, weight: 1 }];
+    let weightedMean = 0;
+    samples.forEach(sample => { weightedMean += sample.wavelength * sample.weight; });
+    let variance = 0;
+    samples.forEach(sample => { variance += sample.weight * Math.pow(sample.wavelength - weightedMean, 2); });
+    const wavelengthSigma = Math.sqrt(Math.max(0, variance));
+    const wavelengthFwhm = wavelengthSigma * 2.354820045;
+    const coherenceLengthEstimate = wavelengthFwhm > 0 ? centralWavelength * centralWavelength / wavelengthFwhm : Infinity;
+    return { samples, wavelengthSigma, wavelengthFwhm, coherenceLengthEstimate };
+  }
+
+  function spatialCoherenceForWavelength(wavelength, slitSeparation, angularSigma) {
+    if (!(angularSigma > 0) || !(wavelength > 0)) return 1;
+    const phaseSigma = TWO_PI * slitSeparation * angularSigma / wavelength;
+    return Math.exp(-0.5 * phaseSigma * phaseSigma);
+  }
+
   function buildPhysics(config) {
     const wavelength = wavelengthForConfig(config);
     const slitWidth = Math.max(1e-9, config.slitWidthUm * 1e-6);
@@ -428,8 +500,15 @@
     const distinguishability = clamp(config.distinguishability, 0, 1);
     const sourceCoherence = clamp(config.coherence, 0, 1);
     const idealVisibilityLimit = Math.sqrt(Math.max(0, 1 - distinguishability * distinguishability));
-    const visibility = sourceCoherence * idealVisibilityLimit;
+    const sourceSizeRms = Math.max(0, config.sourceSizeRmsUm) * 1e-6;
+    const sourceDistance = Math.max(1e-6, config.sourceDistanceM);
+    const sourceSizeAngularSigma = sourceSizeRms / sourceDistance;
+    const additionalAngularSigma = Math.max(0, config.angularDivergenceRmsUrad) * 1e-6;
+    const totalAngularSigma = Math.hypot(sourceSizeAngularSigma, additionalAngularSigma);
+    const spatialCoherence = spatialCoherenceForWavelength(wavelength, slitSeparation, totalAngularSigma);
+    const visibility = sourceCoherence * idealVisibilityLimit * spatialCoherence;
     const complementaritySum = visibility * visibility + distinguishability * distinguishability;
+    const spectrum = sourceSpectrum(config, wavelength);
     const fringeSpacing = wavelength * screenDistance / slitSeparation;
     const firstEnvelopeZero = wavelength * screenDistance / slitWidth;
     const slitFresnelNumber = slitWidth * slitWidth / (wavelength * screenDistance);
@@ -453,7 +532,15 @@
       distinguishability,
       sourceCoherence,
       idealVisibilityLimit,
+      sourceSizeRms,
+      sourceDistance,
+      sourceSizeAngularSigma,
+      additionalAngularSigma,
+      totalAngularSigma,
+      spatialCoherence,
+      spectrum,
       complementaritySum,
+      apertureHalfSpan,
       apertureFresnelNumber,
       regime,
       propagationModel,
@@ -471,6 +558,17 @@
     const envelope = Math.pow(sinc(beta), 2);
     const phase = TWO_PI * physics.slitSeparation * sinTheta / physics.wavelength + config.phaseOffsetRad;
     return Math.max(0, envelope * (1 + physics.visibility * Math.cos(phase)));
+  }
+
+  function physicsAtWavelength(physics, wavelength) {
+    const apertureFresnelNumber = physics.apertureHalfSpan * physics.apertureHalfSpan / (wavelength * physics.screenDistance);
+    const spatialCoherence = spatialCoherenceForWavelength(wavelength, physics.slitSeparation, physics.totalAngularSigma);
+    return {
+      ...physics,
+      wavelength,
+      apertureFresnelNumber,
+      visibility: physics.sourceCoherence * physics.idealVisibilityLimit * spatialCoherence
+    };
   }
 
   function fresnelSlitAmplitudeAtX(x, center, physics, sampleCount) {
@@ -507,9 +605,15 @@
   }
 
   function coherentIntensityAtX(x, physics, config) {
-    return physics.propagationModel === 'fresnel'
-      ? fresnelIntensityAtX(x, physics, config)
-      : fraunhoferIntensityAtX(x, physics, config);
+    let intensity = 0;
+    for (const sample of physics.spectrum.samples) {
+      const samplePhysics = physicsAtWavelength(physics, sample.wavelength);
+      const sampleIntensity = physics.propagationModel === 'fresnel'
+        ? fresnelIntensityAtX(x, samplePhysics, config)
+        : fraunhoferIntensityAtX(x, samplePhysics, config);
+      intensity += sample.weight * sampleIntensity;
+    }
+    return Math.max(0, intensity);
   }
 
   function classicalIntensityAtX(x, physics) {
@@ -687,10 +791,17 @@
       ['Screen distance', formatLength(physics.screenDistance)],
       ['Far-field fringe spacing ≈ λL/d', formatLength(physics.fringeSpacing)],
       ['1st single-slit zero ≈ λL/a', formatLength(physics.firstEnvelopeZero)],
-      ['Source coherence C', physics.sourceCoherence.toFixed(3)],
+      ['Residual coherence factor', physics.sourceCoherence.toFixed(3)],
+      ['Spectral wavelength FWHM', physics.spectrum.wavelengthFwhm > 0 ? formatLength(physics.spectrum.wavelengthFwhm) : 'monochromatic'],
+      ['Approx. coherence length λ²/Δλ', Number.isFinite(physics.spectrum.coherenceLengthEstimate) ? formatLength(physics.spectrum.coherenceLengthEstimate) : '∞ · monochromatic'],
+      ['Source-size angular σ', `${formatScientific(physics.sourceSizeAngularSigma)} rad`],
+      ['Additional angular σ', `${formatScientific(physics.additionalAngularSigma)} rad`],
+      ['Combined angular σ', `${formatScientific(physics.totalAngularSigma)} rad`],
+      ['Spatial coherence factor', physics.spatialCoherence.toFixed(4)],
+      ['Spectral samples', physics.spectrum.samples.length.toString()],
       ['Path distinguishability D', physics.distinguishability.toFixed(3)],
       ['Ideal V limit √(1−D²)', physics.idealVisibilityLimit.toFixed(3)],
-      ['Applied fringe visibility V', physics.visibility.toFixed(3)],
+      ['Central-wavelength visibility V', physics.visibility.toFixed(3)],
       ['Complementarity V² + D²', physics.complementaritySum.toFixed(4)],
       ['Slit Fresnel number', formatScientific(physics.slitFresnelNumber)],
       ['Separation Fresnel number', formatScientific(physics.separationFresnelNumber)],
