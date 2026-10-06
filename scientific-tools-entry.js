@@ -376,7 +376,7 @@
     if (doubleSlitPromise) return doubleSlitPromise;
     doubleSlitPromise = (async () => {
       await loadCooperativeRunner();
-      await loadScript('double-slit-lab.js?v=20261005-statistics-5', () => Boolean(window.DoubleSlitExperimentLab));
+      await loadScript('double-slit-lab.js?v=20261005-visibility-6', () => Boolean(window.DoubleSlitExperimentLab));
       return window.DoubleSlitExperimentLab;
     })();
     doubleSlitPromise.catch(() => { doubleSlitPromise = null; });
