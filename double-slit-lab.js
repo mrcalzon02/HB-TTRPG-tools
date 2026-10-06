@@ -587,17 +587,22 @@
     const polarization = polarizationPhysics(config);
     const detectorPathOverlap = Math.sqrt(Math.max(0, 1 - detectorDistinguishability * detectorDistinguishability));
     const combinedPathOverlap = detectorPathOverlap * polarization.pathOverlap;
-    const distinguishability = Math.sqrt(Math.max(0, 1 - combinedPathOverlap * combinedPathOverlap));
+    const polarizationPower = polarization.amplitudeA * polarization.amplitudeA + polarization.amplitudeB * polarization.amplitudeB;
+    const amplitudeBalanceVisibility = polarizationPower > 0
+      ? 2 * Math.abs(polarization.amplitudeA * polarization.amplitudeB) / polarizationPower
+      : 0;
+    const idealVisibilityLimit = combinedPathOverlap * amplitudeBalanceVisibility;
+    const distinguishability = Math.sqrt(Math.max(0, 1 - idealVisibilityLimit * idealVisibilityLimit));
     const sourceCoherence = clamp(config.coherence, 0, 1);
-    const idealVisibilityLimit = combinedPathOverlap;
     const sourceSizeRms = Math.max(0, config.sourceSizeRmsUm) * 1e-6;
     const sourceDistance = Math.max(1e-6, config.sourceDistanceM);
     const sourceSizeAngularSigma = sourceSizeRms / sourceDistance;
     const additionalAngularSigma = Math.max(0, config.angularDivergenceRmsUrad) * 1e-6;
     const totalAngularSigma = Math.hypot(sourceSizeAngularSigma, additionalAngularSigma);
     const spatialCoherence = spatialCoherenceForWavelength(wavelength, slitSeparation, totalAngularSigma);
-    const visibility = sourceCoherence * idealVisibilityLimit * spatialCoherence;
-    const complementaritySum = visibility * visibility + distinguishability * distinguishability;
+    const visibility = sourceCoherence * combinedPathOverlap * spatialCoherence;
+    const observedVisibility = visibility * amplitudeBalanceVisibility;
+    const complementaritySum = observedVisibility * observedVisibility + distinguishability * distinguishability;
     const spectrum = sourceSpectrum(config, wavelength);
     const fringeSpacing = wavelength * screenDistance / slitSeparation;
     const firstEnvelopeZero = wavelength * screenDistance / slitWidth;
@@ -622,8 +627,11 @@
       distinguishability,
       detectorDistinguishability,
       polarization,
+      combinedPathOverlap,
+      amplitudeBalanceVisibility,
       sourceCoherence,
       idealVisibilityLimit,
+      observedVisibility,
       sourceSizeRms,
       sourceDistance,
       sourceSizeAngularSigma,
@@ -663,7 +671,7 @@
       ...physics,
       wavelength,
       apertureFresnelNumber,
-      visibility: physics.sourceCoherence * physics.idealVisibilityLimit * spatialCoherence
+      visibility: physics.sourceCoherence * physics.combinedPathOverlap * spatialCoherence
     };
   }
 
@@ -946,10 +954,13 @@
       ['Path-detector Ddet', physics.detectorDistinguishability.toFixed(3)],
       ['Polarization Dpol', physics.polarization.polarizationDistinguishability.toFixed(3)],
       ['Effective distinguishability D', physics.distinguishability.toFixed(3)],
-      ['Path-state overlap', physics.idealVisibilityLimit.toFixed(3)],
+      ['Coherent path-state overlap', physics.combinedPathOverlap.toFixed(3)],
+      ['Amplitude-balance visibility', physics.amplitudeBalanceVisibility.toFixed(3)],
+      ['Ideal visibility ceiling', physics.idealVisibilityLimit.toFixed(3)],
       ['Polarization apparatus', physics.polarization.description],
       ['Analyzer relative transmission', `${(physics.polarization.relativeTransmission * 100).toFixed(1)}%`],
-      ['Central-wavelength visibility V', physics.visibility.toFixed(3)],
+      ['Cross-term coherence factor', physics.visibility.toFixed(3)],
+      ['Observed central visibility V', physics.observedVisibility.toFixed(3)],
       ['Complementarity V² + D²', physics.complementaritySum.toFixed(4)],
       ['Slit Fresnel number', formatScientific(physics.slitFresnelNumber)],
       ['Separation Fresnel number', formatScientific(physics.separationFresnelNumber)],
@@ -1098,7 +1109,7 @@
       `<span>Events: <strong>${simulationState.emitted.toLocaleString()}</strong></span>`,
       `<span>Path distinguishability: <strong>Ddet = ${physics.detectorDistinguishability.toFixed(2)} · Dpol = ${physics.polarization.polarizationDistinguishability.toFixed(2)} · Deff = ${physics.distinguishability.toFixed(2)}</strong></span>`,
       `<span>Polarization: <strong>${esc(physics.polarization.analyzerMode === 'linear' ? `analyzer ${config.analyzerAngleDeg.toFixed(0)}° · conditional subset` : `A ${config.polarizationADeg.toFixed(0)}° / B ${config.polarizationBDeg.toFixed(0)}°`)}</strong></span>`,
-      `<span>Fringe visibility: <strong>V = ${physics.visibility.toFixed(2)} · V² + D² = ${physics.complementaritySum.toFixed(3)}</strong></span>`,
+      `<span>Fringe visibility: <strong>V = ${physics.observedVisibility.toFixed(2)} · V² + D² = ${physics.complementaritySum.toFixed(3)}</strong></span>`,
       `<span>Layer: <strong>${esc(layer.label)}</strong></span>`,
       `<span>Fringe spacing: <strong>${esc(formatLength(physics.fringeSpacing))}</strong></span>`,
       (() => { const stats = convergenceStatistics(simulationState); return `<span>Convergence: <strong>RMSE ${Number.isFinite(stats.rmse) ? esc(formatScientific(stats.rmse)) : '—'} · reduced χ² ${Number.isFinite(stats.reducedChiSquare) ? stats.reducedChiSquare.toFixed(3) : '—'}</strong></span>`; })(),
