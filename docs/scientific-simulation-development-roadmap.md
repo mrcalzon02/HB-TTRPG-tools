@@ -1,0 +1,323 @@
+# Scientific Simulation Development Roadmap
+
+Status: active implementation contract  
+Scope: Scientific Tools / Double Slit Experiment Visualizer / Interstellar Media Collisions — Vectorized Shadow Casting Laboratory  
+Authority: this document records the intent to design, implement, validate, and retain the complete simulation program described below. Items marked partial are not complete merely because a first approximation exists.
+
+## Scientific credibility contract
+
+1. Established physics, numerical approximations, exploratory hypotheses, and fictional Blacklight interactions must be visibly distinguished in both code and UI.
+2. Randomness may represent a defined stochastic process, sampled physical distribution, Monte Carlo transport, measurement statistics, or an explicitly fictional hypothesis. Randomness must never be added merely to make motion look interesting.
+3. Controls must reach observable implemented behavior. No inert/placebo scientific controls.
+4. Every approximation must expose its regime of validity where practical. A model should report when an effect is below numerical resolution or when the active approximation is outside its reliable domain.
+5. Seeded runs remain reproducible unless a user explicitly requests nondeterministic sampling.
+6. Conservation of momentum, energy, charge, and probability normalization must be checked wherever the modeled interaction requires them. Numerical drift must be reported rather than hidden.
+7. Established-physics defaults should not silently enable speculative Quantum Foam, Shadow, Phase Light, or other Blacklight-only interactions.
+8. Expensive calculations remain cooperative/interruptible so model fidelity does not require freezing the page.
+
+# Interstellar Media Collisions program
+
+## ISM-01 — Impact-parameter / closest-approach solver with oblique encounters
+Status: PARTIAL / active.
+
+Implemented foundation:
+- explicit segment-to-particle closest approach;
+- spatial neighborhood index;
+- oblique encounter geometry and impact parameter;
+- proximity-triggered interactions instead of choosing an arbitrary particle.
+
+Required completion:
+- moving-target closest approach;
+- relative-velocity geometry;
+- interaction-channel selection based on species, energy, charge state, and cross section;
+- convergence/accuracy validation.
+
+## ISM-02 — Energy-dependent cross sections and mean-free-path collision sampling
+Status: ACTIVE NEXT SLICE.
+
+Required:
+- cross-section registry by projectile, target, charge state, energy, and process;
+- mean free path λ = 1/(nσ);
+- exponential free-path sampling s = -λ ln(U);
+- optical/collision depth diagnostics;
+- process branching with provenance for fitted/tabulated approximations.
+
+## ISM-03 — Debye-screened proximity interactions for charged particles
+Status: PARTIAL / active.
+
+Implemented foundation:
+- ionized-fraction and temperature inputs;
+- Debye-length calculation;
+- fixed-center screened Coulomb proximity deflection benchmark.
+
+Required completion:
+- moving charged targets;
+- mutual momentum transfer;
+- electrons and multiple ion species;
+- clear distinction between binary-collision and collective-field regimes.
+
+## ISM-04 — Species + charge-state foundation
+Status: PARTIAL.
+
+Required species foundation:
+- H;
+- H+;
+- e-;
+- He;
+- He+ where useful;
+- dust grains with mass, radius, composition, and charge state foundation.
+
+Each particle record should support species, mass, charge, velocity, kinetic state, and current interaction state.
+
+## ISM-05 — Charge exchange and energetic-neutral-atom trajectories
+Status: PLANNED.
+
+Required:
+- proton + neutral-H charge exchange;
+- state transformation rather than cosmetic effect;
+- magnetic response ends when projectile becomes neutral;
+- re-ionization/secondary interactions can restore charged behavior;
+- record reaction lineage.
+
+## ISM-06 — Momentum/energy-conserving oblique scattering
+Status: PLANNED.
+
+Required:
+- center-of-momentum or equivalent two-body solution;
+- target recoil;
+- elastic scattering baseline;
+- explicit conservation audit;
+- screened Coulomb/Rutherford-style limiting cases where valid.
+
+## ISM-07 — Temperature and Maxwellian target velocities
+Status: PLANNED.
+
+Required:
+- thermal velocity sampling from species temperature;
+- configurable bulk flow;
+- relative velocity v_rel drives collision energy;
+- cold/warm/hot ISM presets grounded in physically meaningful parameters.
+
+## ISM-08 — Interaction inspection overlays and physical-regime diagnostics
+Status: PLANNED.
+
+Required inspection:
+- local velocity and momentum;
+- nearest candidates and closest approach;
+- impact parameter;
+- relative velocity;
+- Debye radius;
+- mean particle spacing;
+- local magnetic field;
+- gyroradius and pitch angle;
+- selected interaction probability/channel;
+- solver/approximation used.
+
+Required diagnostics should classify effects as dominant, significant, small, negligible, below numerical resolution, or outside model validity when defensible.
+
+## ISM-09 — Hypothesis-layer isolation
+Status: PARTIAL.
+
+Required:
+- Quantum Foam, Shadow, and Phase Light moved behind clearly marked optional hypothesis/fiction layers;
+- established-physics mode defaults to those layers Off;
+- hypothesis gain/amplification cannot be mistaken for physical prediction;
+- established and fictional outputs should be separately reportable.
+
+## ISM future extensions retained by intent
+Status: PLANNED.
+
+- proton–proton, proton–electron, and electron–electron mutual interactions;
+- charged-beam self fields and space-charge effects;
+- pairwise-vs-nearest-neighbor-vs-mean-field comparison;
+- collective Particle-in-Cell-style field mode;
+- plasma oscillations, ion-acoustic, Alfvén, and magnetosonic wave experiments;
+- two-stream instability;
+- beam halo/emittance behavior;
+- spatially varying, curved, turbulent, helical, and shock-compressed magnetic fields;
+- magnetic mirroring, pitch-angle scattering, and cross-field diffusion;
+- oblique shock laboratory;
+- wavelength/energy-dependent photon transport through ISM matter;
+- a conservation/numerical-error auditor.
+
+# Double Slit Experiment program
+
+## DSL-01 — Fresnel ↔ Fraunhofer propagation
+Status: ACTIVE NEXT SLICE.
+
+Current state:
+- Fresnel numbers are calculated;
+- the detector kernel remains fundamentally a far-field Fraunhofer approximation.
+
+Required:
+- actual near-field Fresnel propagation through the finite slit aperture;
+- continuous transition to far-field Fraunhofer behavior as detector distance increases;
+- automatic Near field / Transition regime / Far field classification;
+- an explicit numerical-vs-analytic comparison in the far-field limit.
+
+## DSL-02 — Partial which-path measurement
+Status: IMPLEMENTED FOUNDATION / validation continuing.
+
+Implemented:
+- continuous path distinguishability D rather than a binary checkbox;
+- source-coherence-dependent fringe visibility;
+- V, D, and V² + D² reporting;
+- continuous suppression of the interference cross-term.
+
+Required:
+- apparatus-driven distinguishability from polarization/path markers rather than only a direct D slider;
+- experimental-data validation.
+
+## DSL-03 — Quantum eraser apparatus
+Status: PLANNED.
+
+Required:
+- path marking;
+- conditional subensembles;
+- analyzer basis;
+- recovered conditional fringes/antifringes;
+- delayed-choice configuration may follow;
+- explicit statement that the model does not imply retrocausal information transmission.
+
+## DSL-04 — Physical coherence controls
+Status: PLANNED.
+
+Required:
+- spectral bandwidth / energy spread;
+- source size;
+- angular divergence;
+- derived temporal/spatial coherence;
+- explain quantitatively why visibility is reduced.
+
+## DSL-05 — Polarization per slit
+Status: PLANNED.
+
+Required:
+- independent linear/circular polarization states;
+- analyzer before detector;
+- orthogonal path markers suppress interference;
+- analyzer basis can recover conditional interference where appropriate.
+
+## DSL-06 — Real detector physics
+Status: PLANNED.
+
+Required:
+- pixel size;
+- point-spread function;
+- finite spatial resolution;
+- quantum efficiency;
+- dark counts;
+- background;
+- exposure time;
+- Poisson counting noise;
+- separate underlying probability from detector response.
+
+## DSL-07 — Statistics / convergence laboratory
+Status: PLANNED.
+
+Required:
+- observed vs theoretical distribution;
+- residuals;
+- χ² / reduced χ² where applicable;
+- RMSE or comparable statistic;
+- staged accumulation presets such as 10, 100, 1,000, 100,000 events;
+- convergence reporting.
+
+## DSL-08 — Single slit / double slit / N-slit grating
+Status: PLANNED.
+
+Required:
+- N = 1...configurable;
+- aperture geometry remains physically explicit;
+- continuous diffraction → interference → grating behavior.
+
+## DSL-09 — Unequal slit transmission
+Status: PLANNED.
+
+Required:
+- independent amplitude/transmission per slit;
+- optionally independent width;
+- distinguish visibility loss from unequal amplitudes versus decoherence.
+
+## DSL-10 — Phase plate / path phase control
+Status: PLANNED.
+
+Required:
+- material refractive index and thickness for photon paths;
+- optical-path phase shift;
+- electron analogue via explicitly modeled electrostatic phase shifter where appropriate.
+
+## DSL-11 — Momentum-space / uncertainty view
+Status: PLANNED.
+
+Required:
+- aperture position-space view;
+- transverse momentum distribution;
+- slit-width changes visibly alter momentum spread;
+- quantitative uncertainty diagnostics where the modeled state supports them.
+
+## DSL-12 — Actual particle presets
+Status: PLANNED.
+
+Required foundation:
+- photon;
+- electron;
+- proton;
+- neutron;
+- H atom;
+- He atom;
+- sodium atom;
+- C60 fullerene;
+- generic custom matter particle.
+
+Matter presets should use mass and velocity/kinetic-energy controls rather than arbitrary wavelength alone.
+
+## DSL-13 — Environmental decoherence
+Status: PLANNED.
+
+Required:
+- background-gas pressure;
+- temperature;
+- scattering/decoherence rate;
+- visibility loss derived from modeled environment rather than a cosmetic control.
+
+## DSL-14 — Electromagnetic phase experiments
+Status: PLANNED.
+
+Required:
+- advanced Aharonov–Bohm apparatus;
+- enclosed magnetic flux changes relative phase;
+- no fictitious classical force on shielded propagation paths;
+- clear validity/idealization notes.
+
+## DSL future extensions retained by intent
+Status: PLANNED.
+
+- charged many-particle beam mode distinct from single-event mode;
+- proton/electron beam self-fields and space-charge behavior;
+- neighbor and collective-field diagnostics;
+- interaction-strength/regime gating so negligible effects remain negligible;
+- ordinary optical photon mode with photon-photon interaction effectively zero;
+- separately labeled strong-field/QED light-by-light research mode;
+- nonlinear-medium optical propagation as matter-mediated photon interaction.
+
+# Implementation order
+
+The default implementation order is dependency-driven, not merely numeric:
+
+1. DSL-01 true Fresnel propagation.
+2. ISM-02 energy-dependent cross sections + mean-free-path sampling.
+3. ISM-04 species/charge-state records + ISM-07 thermal velocities, because later interactions depend on them.
+4. ISM-06 conservation-correct moving two-body scattering.
+5. ISM-05 charge exchange.
+6. ISM-08 inspection/regime diagnostics and shared conservation audit.
+7. ISM-09 strict hypothesis-layer isolation.
+8. DSL-04 physical coherence + DSL-05 polarization/path marking.
+9. DSL-03 quantum eraser.
+10. DSL-06 detector physics + DSL-07 convergence statistics.
+11. DSL-08/09/10 aperture generalization, unequal transmission, and phase plates.
+12. DSL-11/12 matter-wave and momentum-space expansion.
+13. DSL-13/14 environmental decoherence and electromagnetic phase experiments.
+14. Collective-field, plasma-wave, shock, nonlinear optics, and strong-field QED extensions.
+
+This order may be revised when a prerequisite or validation result shows that a different dependency order is scientifically safer.
