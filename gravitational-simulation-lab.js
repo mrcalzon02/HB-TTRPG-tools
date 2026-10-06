@@ -403,6 +403,61 @@
     return {...schwarzschildDiagnostics(bodies[0],bodies[targetIndex]),targetIndex};
   }
 
+  function yukawaPotentialMultiplier(distanceM,alpha,lambdaM) {
+    const r=Math.max(0,finite(distanceM,0)),lambda=Math.max(1e-30,finite(lambdaM,1));
+    return 1+finite(alpha,0)*Math.exp(-r/lambda);
+  }
+
+  function yukawaForceMultiplier(distanceM,alpha,lambdaM) {
+    const r=Math.max(0,finite(distanceM,0)),lambda=Math.max(1e-30,finite(lambdaM,1)),x=r/lambda;
+    return 1+finite(alpha,0)*Math.exp(-x)*(1+x);
+  }
+
+  function hypothesisOptions(overrides={}) {
+    const hasDocument=typeof document!=='undefined';
+    const mode=overrides.hypothesisMode||(hasDocument?document.getElementById('gravity-hypothesis')?.value:null)||'off';
+    const alpha=finite(overrides.hypothesisAlpha,hasDocument?document.getElementById('gravity-yukawa-alpha')?.value:.01);
+    const lambdaM=Math.max(1e-9,finite(overrides.hypothesisLambdaM,hasDocument?finite(document.getElementById('gravity-yukawa-lambda-km')?.value,100000)*1000:1e8));
+    return {hypothesisMode:mode==='yukawa'?'yukawa':'off',hypothesisAlpha:alpha,hypothesisLambdaM:lambdaM};
+  }
+
+  function hypothesisPairMultipliers(distanceM,options={}) {
+    const config=hypothesisOptions(options);
+    if(config.hypothesisMode!=='yukawa')return {potential:1,force:1,...config};
+    return {
+      potential:yukawaPotentialMultiplier(distanceM,config.hypothesisAlpha,config.hypothesisLambdaM),
+      force:yukawaForceMultiplier(distanceM,config.hypothesisAlpha,config.hypothesisLambdaM),
+      ...config
+    };
+  }
+
+  function applyHypothesisToForce(force,distanceM,options={}) {
+    const h=hypothesisPairMultipliers(distanceM,options);
+    return {force:vec(force.x*h.force,force.y*h.force,force.z*h.force),hypothesis:h};
+  }
+
+  function hypothesisDiagnosticForState(bodies,options={}) {
+    const h=hypothesisOptions(options);
+    if(h.hypothesisMode==='off'||bodies.length<2)return {active:false,...h};
+    let nearest=Infinity,pair=null;
+    for(let i=0;i<bodies.length;i++)for(let j=i+1;j<bodies.length;j++){
+      const r=Math.hypot(bodies[j].position.x-bodies[i].position.x,bodies[j].position.y-bodies[i].position.y,bodies[j].position.z-bodies[i].position.z);
+      if(r<nearest){nearest=r;pair=[i,j];}
+    }
+    const m=hypothesisPairMultipliers(nearest,h);
+    return {active:true,...h,nearestDistanceM:nearest,nearestPair:pair,forceMultiplier:m.force,potentialMultiplier:m.potential};
+  }
+
+  function syncHypothesisControls() {
+    if(typeof document==='undefined')return;
+    const active=document.getElementById('gravity-hypothesis')?.value==='yukawa';
+    for(const id of ['gravity-yukawa-alpha','gravity-yukawa-lambda-km']){const node=document.getElementById(id);if(node)node.disabled=!active;}
+    if(active){
+      const relativity=document.getElementById('gravity-relativity');
+      if(relativity&&relativity.value!=='off')relativity.value='off';
+    }
+  }
+
   function solverOptions(overrides={}) {
     const hasDocument=typeof document!=='undefined';
     const model=overrides.model||(hasDocument?document.getElementById('gravity-model')?.value:null)||'point';
@@ -410,35 +465,49 @@
     const farFieldFactor=Math.max(0,finite(overrides.farFieldFactor,hasDocument?document.getElementById('gravity-far-field')?.value:DEFAULT_FAR_FIELD_FACTOR));
     const relativityMode=overrides.relativityMode||(hasDocument?document.getElementById('gravity-relativity')?.value:null)||'off';
     const relativityTargetIndex=Math.max(1,Math.round(finite(overrides.relativityTargetIndex,hasDocument?finite(document.getElementById('gravity-relativity-target')?.value,2)-1:1)));
-    return {model:model==='extended'?'extended':'point',resolution,farFieldFactor,relativityMode:relativityMode==='schwarzschild-1pn'?'schwarzschild-1pn':'off',relativityTargetIndex};
+    const hypothesis=hypothesisOptions(overrides);
+    const normalizedRelativity=hypothesis.hypothesisMode==='off'&&relativityMode==='schwarzschild-1pn'?'schwarzschild-1pn':'off';
+    return {model:model==='extended'?'extended':'point',resolution,farFieldFactor,relativityMode:normalizedRelativity,relativityTargetIndex,...hypothesis};
   }
 
   function pairForce(a,b,options={}) {
     const config=solverOptions(options),point=pointMassForce(a,b);
-    if(config.model!=='extended'||!(point.distanceM>0))return point;
+    if(config.model!=='extended'||!(point.distanceM>0)){
+      const modified=applyHypothesisToForce(point.force,point.distanceM,config);
+      return {...point,force:modified.force,hypothesis:modified.hypothesis};
+    }
     const separation=point.distanceM,combinedRadius=a.radiusM+b.radiusM;
-    if(isAnalyticSphere(a)&&isAnalyticSphere(b)&&separation>=combinedRadius)return {...point,mode:'analytic-sphere'};
-    if(config.farFieldFactor>0&&separation>=config.farFieldFactor*combinedRadius)return {...point,mode:'far-field-point-limit'};
+    if(isAnalyticSphere(a)&&isAnalyticSphere(b)&&separation>=combinedRadius){
+      const modified=applyHypothesisToForce(point.force,separation,config);
+      return {...point,force:modified.force,mode:'analytic-sphere',hypothesis:modified.hypothesis};
+    }
+    if(config.farFieldFactor>0&&separation>=config.farFieldFactor*combinedRadius){
+      const modified=applyHypothesisToForce(point.force,separation,config);
+      return {...point,force:modified.force,mode:'far-field-point-limit',hypothesis:modified.hypothesis};
+    }
     const sa=buildMassSamples(a,config.resolution),sb=buildMassSamples(b,config.resolution),force=vec();let interactions=0;
     for(const pa of sa)for(const pb of sb){
       const dx=(b.position.x+pb.x)-(a.position.x+pa.x),dy=(b.position.y+pb.y)-(a.position.y+pa.y),dz=(b.position.z+pb.z)-(a.position.z+pa.z);
       const r2=dx*dx+dy*dy+dz*dz,r=Math.sqrt(r2);if(!(r>0))continue;
       const f=G*pa.massKg*pb.massKg/(r2*r);force.x+=dx*f;force.y+=dy*f;force.z+=dz*f;interactions++;
     }
-    return {force,distanceM:separation,mode:'extended-quadrature',interactions};
+    const modified=applyHypothesisToForce(force,separation,config);
+    return {force:modified.force,distanceM:separation,mode:'extended-quadrature',interactions,hypothesis:modified.hypothesis};
   }
 
   function pairPotential(a,b,options={}) {
     const config=solverOptions(options),separation=Math.hypot(b.position.x-a.position.x,b.position.y-a.position.y,b.position.z-a.position.z);
     if(!(separation>0))return 0;
     const combinedRadius=a.radiusM+b.radiusM;
-    if(config.model!=='extended'||(isAnalyticSphere(a)&&isAnalyticSphere(b)&&separation>=combinedRadius)||(config.farFieldFactor>0&&separation>=config.farFieldFactor*combinedRadius))return -G*a.massKg*b.massKg/separation;
+    if(config.model!=='extended'||(isAnalyticSphere(a)&&isAnalyticSphere(b)&&separation>=combinedRadius)||(config.farFieldFactor>0&&separation>=config.farFieldFactor*combinedRadius)){
+      return -G*a.massKg*b.massKg/separation*hypothesisPairMultipliers(separation,config).potential;
+    }
     const sa=buildMassSamples(a,config.resolution),sb=buildMassSamples(b,config.resolution);let potential=0;
     for(const pa of sa)for(const pb of sb){
       const r=Math.hypot((b.position.x+pb.x)-(a.position.x+pa.x),(b.position.y+pb.y)-(a.position.y+pa.y),(b.position.z+pb.z)-(a.position.z+pa.z));
       if(r>0)potential-=G*pa.massKg*pb.massKg/r;
     }
-    return potential;
+    return potential*hypothesisPairMultipliers(separation,config).potential;
   }
 
   function accelerations(bodies,options={}) {
@@ -571,30 +640,35 @@
 
   function fieldAccelerationFromBody(body,point,options={}) {
     const config=solverOptions(options),dx=body.position.x-point.x,dy=body.position.y-point.y,dz=body.position.z-point.z,r=Math.hypot(dx,dy,dz);
+    let out;
     if(config.model!=='extended'){
-      if(!(r>0))return vec();const factor=G*body.massKg/(r*r*r);return vec(dx*factor,dy*factor,dz*factor);
+      if(!(r>0))out=vec();
+      else {const factor=G*body.massKg/(r*r*r);out=vec(dx*factor,dy*factor,dz*factor);}
+    }else if(isAnalyticSphere(body)){
+      const radius=bodyHalfExtents(body).x;
+      if(!(r>0))out=vec();
+      else {const factor=r>=radius?G*body.massKg/(r*r*r):G*body.massKg/(radius*radius*radius);out=vec(dx*factor,dy*factor,dz*factor);}
+    }else{
+      const samples=buildMassSamples(body,config.resolution),sum=vec(),h=bodyHalfExtents(body),softening=Math.min(h.x,h.y,h.z)/config.resolution*.28;
+      for(const s of samples){
+        const sx=body.position.x+s.x-point.x,sy=body.position.y+s.y-point.y,sz=body.position.z+s.z-point.z;
+        const r2=sx*sx+sy*sy+sz*sz+softening*softening,rr=Math.sqrt(r2),factor=G*s.massKg/(r2*rr);sum.x+=sx*factor;sum.y+=sy*factor;sum.z+=sz*factor;
+      }
+      out=sum;
     }
-    if(isAnalyticSphere(body)){
-      const radius=bodyHalfExtents(body).x;if(!(r>0))return vec();
-      const factor=r>=radius?G*body.massKg/(r*r*r):G*body.massKg/(radius*radius*radius);return vec(dx*factor,dy*factor,dz*factor);
-    }
-    const samples=buildMassSamples(body,config.resolution),out=vec(),h=bodyHalfExtents(body),softening=Math.min(h.x,h.y,h.z)/config.resolution*.28;
-    for(const s of samples){
-      const sx=body.position.x+s.x-point.x,sy=body.position.y+s.y-point.y,sz=body.position.z+s.z-point.z;
-      const r2=sx*sx+sy*sy+sz*sz+softening*softening,rr=Math.sqrt(r2),factor=G*s.massKg/(r2*rr);out.x+=sx*factor;out.y+=sy*factor;out.z+=sz*factor;
-    }
-    return out;
+    return applyHypothesisToForce(out,r,config).force;
   }
 
   function potentialFromBody(body,point,options={}) {
     const config=solverOptions(options),dx=body.position.x-point.x,dy=body.position.y-point.y,dz=body.position.z-point.z,r=Math.hypot(dx,dy,dz);
     if(config.model!=='extended'){
-      return r>0?-G*body.massKg/r:Number.NEGATIVE_INFINITY;
+      return r>0?-G*body.massKg/r*hypothesisPairMultipliers(r,config).potential:Number.NEGATIVE_INFINITY;
     }
     if(isAnalyticSphere(body)){
       const radius=bodyHalfExtents(body).x;
-      if(r>=radius)return -G*body.massKg/r;
-      return -G*body.massKg*(3*radius*radius-r*r)/(2*radius*radius*radius);
+      if(r>=radius)return -G*body.massKg/r*hypothesisPairMultipliers(r,config).potential;
+      const established=-G*body.massKg*(3*radius*radius-r*r)/(2*radius*radius*radius);
+      return established*hypothesisPairMultipliers(r,config).potential;
     }
     const samples=buildMassSamples(body,config.resolution),h=bodyHalfExtents(body),softening=Math.min(h.x,h.y,h.z)/config.resolution*.28;
     let potential=0;
@@ -602,7 +676,7 @@
       const sx=body.position.x+s.x-point.x,sy=body.position.y+s.y-point.y,sz=body.position.z+s.z-point.z;
       potential-=G*s.massKg/Math.sqrt(sx*sx+sy*sy+sz*sz+softening*softening);
     }
-    return potential;
+    return potential*hypothesisPairMultipliers(r,config).potential;
   }
 
   function potentialAtPoint(point,bodies,options={}) {
@@ -983,6 +1057,12 @@
       else if(rel.valid)relStatus.textContent=`1PN test-particle correction active on body ${rel.targetIndex+1}. Weak-field indicators: Rs/r=${rel.compactness.toExponential(3)}, v/c=${rel.speedFraction.toExponential(3)}, mass ratio=${rel.massRatio.toExponential(3)}. Newtonian energy-drift readout is not a conserved 1PN energy integral.`;
       else relStatus.textContent=`1PN correction withheld: ${rel.reasons.join('; ')}.`;
     }
+    const hd=hypothesisDiagnosticForState(state.bodies,config),hMetric=document.getElementById('gravity-hypothesis-force'),hStatus=document.getElementById('gravity-hypothesis-status');
+    if(hMetric)hMetric.textContent=hd.active?hd.forceMultiplier.toFixed(9):'1.000000000';
+    if(hStatus){
+      if(!hd.active)hStatus.textContent='Hypothesis layer off. No speculative force modifies the established baseline.';
+      else hStatus.textContent=`HYPOTHESIS ACTIVE · Yukawa center-separation sensitivity: α=${hd.hypothesisAlpha}, λ=${formatDistance(hd.hypothesisLambdaM)}. Nearest pair multiplier=${hd.forceMultiplier.toFixed(9)} at ${formatDistance(hd.nearestDistanceM)}. This is a phenomenological sensitivity parameterization, not an empirical prediction; for extended shapes the Yukawa factor is applied to the established integrated force at center separation rather than re-integrating a Yukawa kernel over each volume element.`;
+    }
   }
 
   async function initScene(){
@@ -1087,6 +1167,7 @@
     const relativity=document.getElementById('gravity-relativity'),relTarget=document.getElementById('gravity-relativity-target'),timestep=document.getElementById('gravity-timestep');
     if(relativity)relativity.value=id==='compact-precession'?'schwarzschild-1pn':'off';
     if(relTarget)relTarget.value='2';
+    const hypothesis=document.getElementById('gravity-hypothesis');if(hypothesis)hypothesis.value='off';syncHypothesisControls();
     if(id==='compact-precession'&&timestep)timestep.value='0.002';
     clearTrails();
     renderObjectEditors();
@@ -1118,6 +1199,10 @@
         <label>Relativity layer<select id="gravity-relativity"><option value="off" selected>Off · Newtonian dynamics only</option><option value="schwarzschild-1pn">Schwarzschild 1PN test-particle correction</option></select></label>
         <label>Relativistic target body number<input id="gravity-relativity-target" type="number" min="2" max="12" value="2"></label>
         <div id="gravity-relativity-status" class="gravity-source-note">Relativity layer off.</div>
+        <label>Optional hypothesis layer<select id="gravity-hypothesis"><option value="off" selected>Off · established models only</option><option value="yukawa">Yukawa fifth-force sensitivity · phenomenological</option></select></label>
+        <label>Yukawa strength α<input id="gravity-yukawa-alpha" type="number" step="any" value="0.01" disabled></label>
+        <label>Yukawa range λ (km)<input id="gravity-yukawa-lambda-km" type="number" min="0.000001" step="any" value="100000" disabled></label>
+        <div id="gravity-hypothesis-status" class="gravity-source-note">Hypothesis layer off. No speculative force modifies the established baseline.</div>
         <label>Quadrature cells / axis<input id="gravity-quadrature" type="number" min="2" max="${MAX_QUADRATURE_RESOLUTION}" value="${DEFAULT_QUADRATURE_RESOLUTION}"></label>
         <label>Far-field point-limit threshold (combined bounding radii; 0 = never)<input id="gravity-far-field" type="number" min="0" step=".5" value="${DEFAULT_FAR_FIELD_FACTOR}"></label>
         <label>Collision handling<select id="gravity-collision-model"><option value="halt" selected>Halt at collision boundary</option><option value="merge">Perfectly inelastic merge · spherical remnant</option><option value="elastic">Frictionless elastic hard spheres · spheres only</option></select></label>
@@ -1146,6 +1231,7 @@
         <div class="gravity-metric"><span>Target radius / Rs</span><strong id="gravity-r-over-rs">—</strong></div>
         <div class="gravity-metric"><span>Static clock dτ/dt</span><strong id="gravity-clock-rate">—</strong></div>
         <div class="gravity-metric"><span>1PN Δperiapsis / orbit</span><strong id="gravity-precession">—</strong></div>
+        <div class="gravity-metric"><span>Hypothesis force multiplier</span><strong id="gravity-hypothesis-force">1.000000</strong></div>
       </section>
       <div id="gravity-viewport" class="gravity-viewport" aria-label="Three-dimensional gravitational simulation viewport"></div>
       <section class="gravity-field-grid">
@@ -1179,6 +1265,8 @@
         <p><strong>Field diagnostics:</strong> Φ is evaluated analytically for homogeneous spheres and by the same volume quadrature for other solids. The tidal map sums the symmetric Newtonian acceleration-gradient tensor from the same mass model. Outside point masses the tensor trace approaches zero; inside a homogeneous sphere the analytic tensor is isotropically compressive.</p>
         <p><strong>Collision models:</strong> Halt preserves the pre-contact model boundary. Perfectly inelastic merge conserves total mass, volume, and linear momentum while replacing the pair with an equivalent-volume spherical remnant; lost orbital angular momentum is not converted into spin. Elastic response is available only for two homogeneous spheres and uses a frictionless hard-sphere impulse plus center-of-mass-preserving depenetration.</p>
         <p><strong>Relativistic layer:</strong> the optional Schwarzschild 1PN mode adds the standard weak-field test-particle correction to one selected body's Newtonian acceleration around body 1. It is automatically withheld when the target/central mass ratio exceeds 10⁻³, speed reaches 0.3c, or radius falls within 10 Schwarzschild radii. Diagnostics include Rs = 2GM/c², static Schwarzschild clock rate √(1−Rs/r), and the first-order periapsis advance 6πGM/[a(1−e²)c²]. This is not a full Einstein-field-equation or exact geodesic solver.</p>
+        <p><strong>Hypothesis isolation:</strong> Yukawa sensitivity uses V = VNewton[1 + α exp(−r/λ)] and force multiplier 1 + α exp(−r/λ)(1+r/λ). It is off by default, visibly labeled HYPOTHESIS when enabled, and mutually exclusive with the 1PN layer in the interactive UI. The intrinsic GRAV-07 geometry workbench never modifies dynamics. No fictional Blacklight gravity layer is exposed until it has an implemented equation and observable behavior.</p>
+        <div class="gravity-layer-register"><strong>Layer register:</strong> <span>Established: Newtonian point/extended mass</span><span>Approximation: Schwarzschild 1PN test particle</span><span>Mathematics-only: constant-curvature intrinsic geometry</span><span>Hypothesis: Yukawa sensitivity, opt-in</span></div>
         <p class="gravity-source-note">Reference constants/presets: G = 6.67430×10⁻¹¹ m³·kg⁻¹·s⁻² (2022 CODATA recommended value); Earth mass 5.9722×10²⁴ kg and mean radius 6371 km; Sun mass 1.9884×10³⁰ kg and mean radius 695,700 km; mean Earth–Moon distance 384,400 km. Preset values are reference initial conditions, not date-specific ephemerides.</p>
       </section>
       <section class="gravity-boundary"><strong>Scientific boundary:</strong> GRAV-02/03 remains Newtonian. Shape-dependent forces here are Euclidean volume integrations, not spacetime curvature. L1/L4/L5 presets use idealized circular restricted-three-body initial conditions with a 1 kg tracer; the tracer is not literally massless, but its back-reaction is negligible at the displayed scale. Co-rotating and barycentric modes transform only the visualization, never the solver state. Collision detection is presently a conservative bounding-volume stop, not exact mesh contact. Rigid-body spin and tidal deformation remain incomplete. The optional 1PN layer is a weak-field Schwarzschild test-particle approximation only; exact Schwarzschild geodesics, comparable-mass post-Newtonian dynamics, Kerr/frame dragging, and gravitational radiation remain separate future solvers. The GRAV-07 constant-curvature workbench is an intrinsic mathematics layer only and is not coupled to gravitational dynamics.</section>
@@ -1195,7 +1283,10 @@
     document.getElementById('gravity-step').addEventListener('click',()=>{running=false;updateRunButton();stepSimulation(Math.max(.001,finite(document.getElementById('gravity-timestep').value,60)));updateVisuals(true);});
     document.getElementById('gravity-reset').addEventListener('click',reset);
     document.getElementById('gravity-apply').addEventListener('click',applyEditors);
-    for(const id of ['gravity-field-vectors','gravity-model','gravity-quadrature','gravity-far-field','gravity-relativity','gravity-relativity-target']) document.getElementById(id)?.addEventListener('change',()=>{geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
+    for(const id of ['gravity-field-vectors','gravity-model','gravity-quadrature','gravity-far-field','gravity-relativity-target']) document.getElementById(id)?.addEventListener('change',()=>{geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
+    document.getElementById('gravity-relativity')?.addEventListener('change',event=>{if(event.currentTarget.value!=='off'){const h=document.getElementById('gravity-hypothesis');if(h)h.value='off';syncHypothesisControls();}geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
+    document.getElementById('gravity-hypothesis')?.addEventListener('change',()=>{syncHypothesisControls();geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
+    for(const id of ['gravity-yukawa-alpha','gravity-yukawa-lambda-km']) document.getElementById(id)?.addEventListener('input',()=>{geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
     document.getElementById('gravity-view-frame')?.addEventListener('change',()=>{clearTrails();updateVisuals(true);});
     for(const id of ['gravity-field-z-km','gravity-map-resolution']) document.getElementById(id)?.addEventListener('change',()=>renderFieldMaps());
     for(const id of ['gravity-geometry-model','gravity-curvature-radius-km','gravity-geometry-probe-km','gravity-geometry-triangle-km']) document.getElementById(id)?.addEventListener('input',()=>renderIntrinsicGeometryLab());
@@ -1207,7 +1298,7 @@
   const api=Object.freeze({
     mountPage,
     constants:Object.freeze({G,C,AU_M,EARTH_MASS,EARTH_RADIUS_M,MOON_MASS,MOON_RADIUS_M,MOON_DISTANCE_M,SUN_MASS,SUN_RADIUS_M,MAX_BODIES,DEFAULT_QUADRATURE_RESOLUTION,MAX_QUADRATURE_RESOLUTION,DEFAULT_FAR_FIELD_FACTOR}),
-    bodyVolumeM3,bodyBoundingRadiusM,normalizeBody,buildMassSamples,fieldAccelerationFromBody,potentialFromBody,potentialAtPoint,tidalTensorFromBody,tidalTensorAtPoint,tidalFrobeniusNorm,pointMassForce,pairForce,accelerations,diagnostics,geometryDiagnostics,mergeCollisionBodies,elasticSphereCollisionResult,schwarzschildRadius,orbitalElementsAround,schwarzschildDiagnostics,schwarzschild1PNCorrection,constantCurvatureK,curvatureS,geodesicCircleMetrics,equilateralGeodesicTriangle,intrinsicGeometryDiagnostics,restrictedThreeBodyState,collinearLagrangeX,effectiveRotatingAccelerationX
+    bodyVolumeM3,bodyBoundingRadiusM,normalizeBody,buildMassSamples,fieldAccelerationFromBody,potentialFromBody,potentialAtPoint,tidalTensorFromBody,tidalTensorAtPoint,tidalFrobeniusNorm,pointMassForce,pairForce,accelerations,diagnostics,geometryDiagnostics,mergeCollisionBodies,elasticSphereCollisionResult,schwarzschildRadius,orbitalElementsAround,schwarzschildDiagnostics,schwarzschild1PNCorrection,yukawaPotentialMultiplier,yukawaForceMultiplier,hypothesisPairMultipliers,hypothesisDiagnosticForState,constantCurvatureK,curvatureS,geodesicCircleMetrics,equilateralGeodesicTriangle,intrinsicGeometryDiagnostics,restrictedThreeBodyState,collinearLagrangeX,effectiveRotatingAccelerationX
   });
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(typeof window!=='undefined')window.GravitationalSimulationLab=api;

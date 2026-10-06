@@ -39,3 +39,7 @@
 .gravity-geometry-metrics{display:grid;grid-template-columns:repeat(3,minmax(125px,1fr));gap:8px;margin:12px 0}
 .gravity-card code{color:#d9eef8;overflow-wrap:anywhere}
 @media(max-width:700px){.gravity-geometry-controls,.gravity-geometry-metrics{grid-template-columns:1fr}}
+
+.gravity-layer-register{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.gravity-layer-register span{padding:6px 8px;border:1px solid rgba(126,184,215,.2);border-radius:999px;background:rgba(255,255,255,.025);color:#9fb0bc;font-size:.74rem}
+.gravity-layer-register strong{flex-basis:100%;color:#e8f3f8}

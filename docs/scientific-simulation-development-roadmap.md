@@ -523,13 +523,32 @@ Still required before GRAV-07 is complete:
 - higher-dimensional constant-curvature manifolds and user-supplied metric tensors only after metric validation and singularity handling are implemented;
 - any coupling between non-Euclidean mathematics and a physical gravity model must be introduced as a separate solver with explicit field equations, not by reusing visualization curvature.
 ## GRAV-08 — Theory and hypothesis isolation
-Status: PLANNED.
+Status: INCREMENTAL IMPLEMENTATION.
 
-Required:
-- established Newtonian/relativistic models, mathematical geometry experiments, exploratory alternatives, and fictional Blacklight hypotheses must have separate registries and visual labels;
-- speculative modifications to gravity cannot alter the established baseline unless explicitly enabled;
-- hypothesis outputs must carry their parameterization and cannot be reported as empirical prediction.
+Implemented:
+- explicit visible layer register separating established Newtonian dynamics, weak-field relativistic approximation, intrinsic mathematical geometry, and optional hypotheses;
+- speculative force modifications are off by default and do not alter the established baseline unless explicitly enabled;
+- first optional hypothesis layer: composition-independent Yukawa fifth-force sensitivity using V = VNewton[1 + α exp(−r/λ)];
+- matching Yukawa force multiplier 1 + α exp(−r/λ)(1+r/λ);
+- user controls for dimensionless strength α and range λ;
+- live nearest-pair hypothesis force-multiplier diagnostic;
+- hypothesis status records α, λ, nearest-pair separation, and the active force multiplier;
+- Yukawa and Schwarzschild 1PN layers are mutually exclusive in the interactive UI to avoid silently combining incompatible approximations;
+- extended-shape Yukawa mode is explicitly identified as a center-separation sensitivity multiplier over the established integrated force, not a full volume integral of a Yukawa kernel;
+- intrinsic non-Euclidean geometry remains mathematics-only and never changes gravitational dynamics;
+- fictional Blacklight gravity layers remain absent from the UI until an actual equation and observable runtime behavior exist.
 
+Scientific boundary:
+- the Yukawa form is a phenomenological inverse-square-law/fifth-force parameterization used in gravity tests; enabling it is a sensitivity experiment, not evidence that such a force exists;
+- hypothesis parameter values are user-supplied experiment values and must not be reported as empirical measurements or constraints.
+
+Still required before GRAV-08 is complete:
+- machine-readable per-run layer/provenance ledger exported with simulation state;
+- optional exact mass-element Yukawa integration for extended bodies;
+- parameter-sweep comparison against the established baseline;
+- literature-backed constraint overlays kept separate from user-defined hypothesis parameters;
+- plugin/registry contract for future theory layers with capability and validity declarations;
+- any fictional Blacklight model must remain unmistakably fictional/hypothetical and separate from scientific inference.
 # Implementation order
 
 The default implementation order is dependency-driven, not merely numeric:
