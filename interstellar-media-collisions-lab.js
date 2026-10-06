@@ -953,6 +953,69 @@
     };
   }
 
+  function classifyMagnitude(value, thresholds) {
+    if (!Number.isFinite(value)) return 'unbounded / unavailable';
+    if (value < thresholds[0]) return 'negligible';
+    if (value < thresholds[1]) return 'small';
+    if (value < thresholds[2]) return 'significant';
+    return 'dominant';
+  }
+
+  function physicalRegimeDiagnostics(context, protonTransit) {
+    const { side, density, magnetics, plasma, transport } = context;
+    const collisionFrequency = transport.valid && transport.sigmaM2 > 0
+      ? transport.targetDensity * transport.sigmaM2 * magnetics.speed
+      : 0;
+    const magnetizationRatio = collisionFrequency > 0
+      ? magnetics.gyroAngularFrequency / collisionFrequency
+      : Infinity;
+    const knudsenNumber = Number.isFinite(transport.meanFreePath) && side > 0
+      ? transport.meanFreePath / side
+      : Infinity;
+    const gyroScaleRatio = Number.isFinite(magnetics.gyroRadius90) && side > 0
+      ? magnetics.gyroRadius90 / side
+      : Infinity;
+    const debyeParticleCount = Number.isFinite(plasma.debyeLength)
+      ? 4 * Math.PI / 3 * Math.max(0, plasma.electronDensity) * Math.pow(plasma.debyeLength, 3)
+      : Infinity;
+    const debyeToSpacing = Number.isFinite(plasma.debyeLength) && plasma.meanSpacing > 0
+      ? plasma.debyeLength / plasma.meanSpacing
+      : Infinity;
+    const collisionProbability = transport.valid ? 1 - Math.exp(-Math.max(0, transport.opticalDepth)) : 0;
+    const collisionality = classifyMagnitude(transport.opticalDepth, [1e-3, 0.1, 1]);
+    const magneticDeflectionRatio = Number.isFinite(magnetics.gyroRadius90) && magnetics.gyroRadius90 > 0
+      ? side / magnetics.gyroRadius90
+      : 0;
+    const magneticImportance = classifyMagnitude(magneticDeflectionRatio, [1e-4, 1e-2, 0.3]);
+    const plasmaCollectiveValidity = debyeParticleCount >= 100 && debyeToSpacing >= 3
+      ? 'collective plasma approximation well populated'
+      : debyeParticleCount >= 10 && debyeToSpacing >= 1
+        ? 'collective plasma approximation marginal'
+        : 'binary-particle picture favored at this sampled scale';
+    const interactionRegime = transport.opticalDepth >= 1
+      ? 'collision-dominated traversal'
+      : magnetizationRatio > 10
+        ? 'magnetized / weakly collisional'
+        : collisionFrequency > 0
+          ? 'mixed magnetic-collisional'
+          : 'effectively collisionless in active transport channel';
+    return {
+      collisionFrequency,
+      magnetizationRatio,
+      knudsenNumber,
+      gyroScaleRatio,
+      debyeParticleCount,
+      debyeToSpacing,
+      collisionProbability,
+      collisionality,
+      magneticDeflectionRatio,
+      magneticImportance,
+      plasmaCollectiveValidity,
+      interactionRegime,
+      protonTransit
+    };
+  }
+
   function finalizeSimulation(context) {
     const { config, side, density, particles, rays, outputs, magnetics, plasma, transport, foam } = context;
     let coulombEventCount = 0;
@@ -1012,10 +1075,11 @@
     const lambdaAcceleration = LAMBDA_COEFFICIENT * side;
     const lightTransit = side / C;
     const protonTransit = magnetics.speed > 0 ? side / magnetics.speed : Infinity;
+    const regime = physicalRegimeDiagnostics(context, protonTransit);
     const lambdaDisplacementAcrossTransit = 0.5 * lambdaAcceleration * lightTransit * lightTransit;
     const magneticDeflectionAcrossCube = Number.isFinite(magnetics.gyroRadius90) ? side * side / (2 * magnetics.gyroRadius90) : 0;
     return {
-      ...config, density, side, particles, rays, outputs, magnetics, plasma, transport, foam, lambdaAcceleration, lightTransit, protonTransit, lambdaDisplacementAcrossTransit,
+      ...config, density, side, particles, rays, outputs, magnetics, plasma, transport, regime, foam, lambdaAcceleration, lightTransit, protonTransit, lambdaDisplacementAcrossTransit,
       explicitTransportCollisionCount, chargeExchangeCount, energeticNeutralCount, meanRelativeEnergyEv, sampledTransportCollisionCount, meanSampledFreePath,
       coulombEventCount, coulombValidCount, coulombInvalidCount, coulombRmsAngle, maximumCoulombAngle,
       maximumMomentumRelativeResidual, maximumEnergyRelativeError, keyedShadowCount, meanShadowImpactParameter, meanShadowObliquityRad, shadowFieldRange: context.shadowFieldRange,
@@ -1231,6 +1295,16 @@
       ['Literal particles', result.particleCount.toLocaleString()], ['Physical cube edge', formatLength(result.side)], ['Number density', `${formatScientific(result.density)} m⁻³`],
       ['Mean particle spacing', formatLength(result.plasma.meanSpacing)], ['Ionized H fraction', `${(result.plasma.ionizedFraction * 100).toFixed(1)}%`], ['Plasma temperature', `${result.plasma.temperatureK.toLocaleString()} K`],
       ['Particle record model', 'species + mass + charge + Maxwellian velocity'],
+      ['Physical interaction regime', result.regime.interactionRegime],
+      ['Collisionality', `${result.regime.collisionality} · τ=${formatScientific(result.transport.opticalDepth)}`],
+      ['Per-traversal collision probability', `${(result.regime.collisionProbability * 100).toExponential(2)}%`],
+      ['Knudsen λ/L', Number.isFinite(result.regime.knudsenNumber) ? formatScientific(result.regime.knudsenNumber) : '∞'],
+      ['Gyro-radius / cube', Number.isFinite(result.regime.gyroScaleRatio) ? formatScientific(result.regime.gyroScaleRatio) : '∞'],
+      ['Magnetic importance', result.regime.magneticImportance],
+      ['ωc / νcollision', Number.isFinite(result.regime.magnetizationRatio) ? formatScientific(result.regime.magnetizationRatio) : '∞'],
+      ['Particles / Debye sphere', Number.isFinite(result.regime.debyeParticleCount) ? formatScientific(result.regime.debyeParticleCount) : '∞'],
+      ['λD / mean spacing', Number.isFinite(result.regime.debyeToSpacing) ? formatScientific(result.regime.debyeToSpacing) : '∞'],
+      ['Plasma-regime diagnostic', result.regime.plasmaCollectiveValidity],
       ['Electron density proxy', `${formatScientific(result.plasma.electronDensity)} m⁻³`], ['Debye screening length', Number.isFinite(result.plasma.debyeLength) ? formatLength(result.plasma.debyeLength) : '∞ · no ionized component'],
       ['Transport process', result.transport.enabled ? result.transport.label : 'Off'],
       ['Charge-exchange σ(E)', result.transport.valid ? `${formatScientific(result.transport.sigmaM2)} m²` : result.transport.enabled ? 'outside 5–80 keV table' : '—'],
