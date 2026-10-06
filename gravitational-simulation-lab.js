@@ -427,6 +427,101 @@
     return out;
   }
 
+  function potentialFromBody(body,point,options={}) {
+    const config=solverOptions(options),dx=body.position.x-point.x,dy=body.position.y-point.y,dz=body.position.z-point.z,r=Math.hypot(dx,dy,dz);
+    if(config.model!=='extended'){
+      return r>0?-G*body.massKg/r:Number.NEGATIVE_INFINITY;
+    }
+    if(isAnalyticSphere(body)){
+      const radius=bodyHalfExtents(body).x;
+      if(r>=radius)return -G*body.massKg/r;
+      return -G*body.massKg*(3*radius*radius-r*r)/(2*radius*radius*radius);
+    }
+    const samples=buildMassSamples(body,config.resolution),h=bodyHalfExtents(body),softening=Math.min(h.x,h.y,h.z)/config.resolution*.28;
+    let potential=0;
+    for(const s of samples){
+      const sx=body.position.x+s.x-point.x,sy=body.position.y+s.y-point.y,sz=body.position.z+s.z-point.z;
+      potential-=G*s.massKg/Math.sqrt(sx*sx+sy*sy+sz*sz+softening*softening);
+    }
+    return potential;
+  }
+
+  function potentialAtPoint(point,bodies,options={}) {
+    let potential=0;
+    for(const body of bodies){const value=potentialFromBody(body,point,options);if(!Number.isFinite(value))return value;potential+=value;}
+    return potential;
+  }
+
+  function tidalTensorFromBody(body,point,options={}) {
+    const config=solverOptions(options),dx=body.position.x-point.x,dy=body.position.y-point.y,dz=body.position.z-point.z,r2=dx*dx+dy*dy+dz*dz,r=Math.sqrt(r2);
+    if(config.model==='extended'&&isAnalyticSphere(body)){
+      const radius=bodyHalfExtents(body).x;
+      if(r<radius){
+        const k=-G*body.massKg/(radius*radius*radius);
+        return [k,0,0,k,0,k];
+      }
+    }
+    const accumulate=(tensor,mass,x,y,z,softening=0)=>{
+      const q2=x*x+y*y+z*z+softening*softening;if(!(q2>0))return;
+      const q=Math.sqrt(q2),inv3=1/(q2*q),inv5=inv3/q2,f=G*mass;
+      tensor[0]+=f*(3*x*x*inv5-inv3);
+      tensor[1]+=f*(3*x*y*inv5);
+      tensor[2]+=f*(3*x*z*inv5);
+      tensor[3]+=f*(3*y*y*inv5-inv3);
+      tensor[4]+=f*(3*y*z*inv5);
+      tensor[5]+=f*(3*z*z*inv5-inv3);
+    };
+    if(config.model!=='extended'||isAnalyticSphere(body)){
+      const tensor=[0,0,0,0,0,0];accumulate(tensor,body.massKg,dx,dy,dz);return tensor;
+    }
+    const tensor=[0,0,0,0,0,0],samples=buildMassSamples(body,config.resolution),h=bodyHalfExtents(body),softening=Math.min(h.x,h.y,h.z)/config.resolution*.28;
+    for(const s of samples)accumulate(tensor,s.massKg,body.position.x+s.x-point.x,body.position.y+s.y-point.y,body.position.z+s.z-point.z,softening);
+    return tensor;
+  }
+
+  function tidalTensorAtPoint(point,bodies,options={}) {
+    const total=[0,0,0,0,0,0];
+    for(const body of bodies){const t=tidalTensorFromBody(body,point,options);for(let i=0;i<6;i++)total[i]+=t[i];}
+    return total;
+  }
+
+  function tidalFrobeniusNorm(tensor) {
+    return Math.sqrt(tensor[0]*tensor[0]+tensor[3]*tensor[3]+tensor[5]*tensor[5]+2*(tensor[1]*tensor[1]+tensor[2]*tensor[2]+tensor[4]*tensor[4]));
+  }
+
+  function drawScalarMap(canvas,sampler,{kind='potential',resolution=32}={}) {
+    if(!canvas)return;
+    const width=Math.max(320,Math.round(canvas.clientWidth||640)),height=Math.max(260,Math.round(canvas.clientHeight||340));
+    const dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
+    const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);
+    const n=clamp(Math.round(resolution),12,64),values=[],transformed=[];let rawMin=Infinity,rawMax=-Infinity,tMin=Infinity,tMax=-Infinity;
+    for(let iy=0;iy<n;iy++)for(let ix=0;ix<n;ix++){
+      const raw=sampler(ix/(n-1)*2-1,iy/(n-1)*2-1),safe=Number.isFinite(raw)?raw:NaN;
+      const tv=Number.isFinite(safe)?Math.log10(Math.max(Math.abs(safe),1e-300)):NaN;
+      values.push(safe);transformed.push(tv);
+      if(Number.isFinite(safe)){rawMin=Math.min(rawMin,safe);rawMax=Math.max(rawMax,safe);tMin=Math.min(tMin,tv);tMax=Math.max(tMax,tv);}
+    }
+    const cellW=width/n,cellH=height/n,range=Math.max(tMax-tMin,1e-12);
+    for(let iy=0;iy<n;iy++)for(let ix=0;ix<n;ix++){
+      const tv=transformed[iy*n+ix],u=Number.isFinite(tv)?clamp((tv-tMin)/range,0,1):1;
+      const hue=kind==='potential'?220+105*u:210-190*u;
+      ctx.fillStyle=`hsl(${hue} 78% ${24+42*u}%)`;ctx.fillRect(ix*cellW,iy*cellH,Math.ceil(cellW)+1,Math.ceil(cellH)+1);
+    }
+    ctx.fillStyle='rgba(3,8,12,.78)';ctx.fillRect(8,8,Math.min(width-16,430),48);
+    ctx.fillStyle='#e8f3f8';ctx.font='12px ui-monospace,monospace';
+    const units=kind==='potential'?'m²/s²':'s⁻²';
+    ctx.fillText(`${kind==='potential'?'Potential Φ':'Tidal tensor ‖T‖F'} · log-magnitude display`,16,27);
+    ctx.fillStyle='#a9bac6';ctx.fillText(`physical range: ${formatScientific(rawMin,2)} → ${formatScientific(rawMax,2)} ${units}`,16,46);
+  }
+
+  function renderFieldMaps() {
+    if(!state)return;
+    const span=systemExtentM()*.9,z=finite(document.getElementById('gravity-field-z-km')?.value,0)*1000,resolution=clamp(Math.round(finite(document.getElementById('gravity-map-resolution')?.value,32)),12,64),config=solverOptions();
+    const worldPoint=(nx,ny)=>viewToWorld({x:nx*span,y:ny*span,z});
+    drawScalarMap(document.getElementById('gravity-potential-map'),(x,y)=>potentialAtPoint(worldPoint(x,y),state.bodies,config),{kind:'potential',resolution});
+    drawScalarMap(document.getElementById('gravity-tidal-map'),(x,y)=>tidalFrobeniusNorm(tidalTensorAtPoint(worldPoint(x,y),state.bodies,config)),{kind:'tidal',resolution:Math.min(resolution,48)});
+  }
+
   function accelerationAtPoint(point,bodies,options={}) {
     const out=vec(),config=solverOptions(options);
     for(const body of bodies){const a=fieldAccelerationFromBody(body,point,config);out.x+=a.x;out.y+=a.y;out.z+=a.z;}return out;
@@ -586,6 +681,7 @@
     if(running||forceField)updateTrails(extent);
     if(forceField||frame%12===0)rebuildFieldVectors(extent);
     if(forceField||frame%30===0||!geometryDiagnosticsCache)geometryDiagnosticsCache=geometryDiagnostics(state.bodies,solverOptions());
+    if(forceField||frame%60===0)renderFieldMaps();
     renderMetrics();
   }
 
@@ -732,6 +828,8 @@
         <label>Integrator timestep (s)<input id="gravity-timestep" type="number" min="0.001" step="any" value="60"></label>
         <label>Integration steps / rendered frame<input id="gravity-steps-frame" type="number" min="1" max="64" value="8"></label>
         <label>Display size multiplier<input id="gravity-display-radius" type="range" min="1" max="80" step="1" value="12"></label>
+        <label>Field diagnostic slice Z (km, display-frame coordinates)<input id="gravity-field-z-km" type="number" step="any" value="0"></label>
+        <label>Field-map resolution<input id="gravity-map-resolution" type="number" min="12" max="64" value="32"></label>
         <label class="gravity-check"><input id="gravity-trails" type="checkbox" checked> Show trajectory trails</label>
         <label class="gravity-check"><input id="gravity-field-vectors" type="checkbox" checked> Show gravitational-field vectors</label>
         <div class="gravity-actions"><button id="gravity-run" class="primary">Run</button><button id="gravity-step">Single step</button><button id="gravity-reset">Reset</button><button id="gravity-apply">Apply object parameters</button></div><div id="gravity-status" class="gravity-status">Ready.</div>
@@ -749,10 +847,15 @@
         <div class="gravity-metric"><span>20R far-field Δ vs point</span><strong id="gravity-far-field-delta">0%</strong></div>
       </section>
       <div id="gravity-viewport" class="gravity-viewport" aria-label="Three-dimensional gravitational simulation viewport"></div>
-      <section class="gravity-card"><h3>GRAV-02 physical model</h3>
+      <section class="gravity-field-grid">
+        <article class="gravity-card"><h3>Newtonian potential slice</h3><p class="gravity-source-note">Scalar potential Φ on the selected display-frame plane. Color is logarithmic in |Φ|; the readout preserves physical m²/s² values.</p><canvas id="gravity-potential-map" class="gravity-scalar-map"></canvas></article>
+        <article class="gravity-card"><h3>Tidal tensor slice</h3><p class="gravity-source-note">Frobenius norm of the Newtonian tidal tensor ∂gᵢ/∂xⱼ in s⁻². This is differential acceleration structure, not spacetime curvature.</p><canvas id="gravity-tidal-map" class="gravity-scalar-map"></canvas></article>
+      </section>
+      <section class="gravity-card"><h3>GRAV-02/04 physical model</h3>
         <p><strong>Analytic baseline:</strong> a homogeneous spherical body uses g = GM/r² outside and g = GMr/R³ inside. Two separated homogeneous spheres therefore retain the exact point-mass mutual force by the shell theorem.</p>
         <p><strong>Extended solids:</strong> rectangular prisms, tetrahedra, octahedra, icosahedra, finite elliptical disks, ellipsoids, and tori are represented by deterministic equal-volume cell-center mass quadrature. Near-body pair forces sum every participating mass-element pair once and apply equal/opposite forces to the two centers of mass. This preserves linear momentum even when shape corrections are active.</p>
         <p><strong>Numerical diagnostics:</strong> the laboratory reports the current extended-force difference from the point model, a representative resolution-to-resolution field difference, and a standardized 20-bounding-radius far-field difference. Field samples inside discretized non-spherical bodies use cell-scale regularization because a point mass at a quadrature-cell center is not the continuous cell volume.</p>
+        <p><strong>Field diagnostics:</strong> Φ is evaluated analytically for homogeneous spheres and by the same volume quadrature for other solids. The tidal map sums the symmetric Newtonian acceleration-gradient tensor from the same mass model. Outside point masses the tensor trace approaches zero; inside a homogeneous sphere the analytic tensor is isotropically compressive.</p>
         <p class="gravity-source-note">Reference constants/presets: G = 6.67430×10⁻¹¹ m³·kg⁻¹·s⁻² (2022 CODATA recommended value); Earth mass 5.9722×10²⁴ kg and mean radius 6371 km; Sun mass 1.9884×10³⁰ kg and mean radius 695,700 km; mean Earth–Moon distance 384,400 km. Preset values are reference initial conditions, not date-specific ephemerides.</p>
       </section>
       <section class="gravity-boundary"><strong>Scientific boundary:</strong> GRAV-02/03 remains Newtonian. Shape-dependent forces here are Euclidean volume integrations, not spacetime curvature. L1/L4/L5 presets use idealized circular restricted-three-body initial conditions with a 1 kg tracer; the tracer is not literally massless, but its back-reaction is negligible at the displayed scale. Co-rotating and barycentric modes transform only the visualization, never the solver state. Collision detection is presently a conservative bounding-volume stop, not exact mesh contact. Rigid-body spin, tidal deformation, general relativity, frame dragging, gravitational radiation, and intrinsic non-Euclidean geometry remain separate future solvers.</section>
@@ -771,6 +874,7 @@
     document.getElementById('gravity-apply').addEventListener('click',applyEditors);
     for(const id of ['gravity-field-vectors','gravity-model','gravity-quadrature','gravity-far-field']) document.getElementById(id)?.addEventListener('change',()=>{geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
     document.getElementById('gravity-view-frame')?.addEventListener('change',()=>{clearTrails();updateVisuals(true);});
+    for(const id of ['gravity-field-z-km','gravity-map-resolution']) document.getElementById(id)?.addEventListener('change',()=>renderFieldMaps());
     document.getElementById('gravity-display-radius').addEventListener('input',()=>updateVisuals(false));
     await initScene();
     return root;
@@ -779,7 +883,7 @@
   const api=Object.freeze({
     mountPage,
     constants:Object.freeze({G,AU_M,EARTH_MASS,EARTH_RADIUS_M,MOON_MASS,MOON_RADIUS_M,MOON_DISTANCE_M,SUN_MASS,SUN_RADIUS_M,MAX_BODIES,DEFAULT_QUADRATURE_RESOLUTION,MAX_QUADRATURE_RESOLUTION,DEFAULT_FAR_FIELD_FACTOR}),
-    bodyVolumeM3,bodyBoundingRadiusM,normalizeBody,buildMassSamples,fieldAccelerationFromBody,pointMassForce,pairForce,accelerations,diagnostics,geometryDiagnostics,restrictedThreeBodyState,collinearLagrangeX,effectiveRotatingAccelerationX
+    bodyVolumeM3,bodyBoundingRadiusM,normalizeBody,buildMassSamples,fieldAccelerationFromBody,potentialFromBody,potentialAtPoint,tidalTensorFromBody,tidalTensorAtPoint,tidalFrobeniusNorm,pointMassForce,pairForce,accelerations,diagnostics,geometryDiagnostics,restrictedThreeBodyState,collinearLagrangeX,effectiveRotatingAccelerationX
   });
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(typeof window!=='undefined')window.GravitationalSimulationLab=api;

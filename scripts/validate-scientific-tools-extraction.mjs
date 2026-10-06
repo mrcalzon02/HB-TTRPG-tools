@@ -90,6 +90,10 @@ assert.ok(Math.abs(Math.hypot(gravityL4.position.x-gravityL4.x1,gravityL4.positi
 assert.ok(Math.abs(Math.hypot(gravityL4.position.x-gravityL4.x2,gravityL4.position.y)-gravityL4.separationM)/gravityL4.separationM < 1e-12);
 assert.ok(gravityL1.position.x>gravityL1.x1 && gravityL1.position.x<gravityL1.x2);
 assert.ok(Math.abs(Gravity.effectiveRotatingAccelerationX(gravityL1.position.x,Gravity.constants.EARTH_MASS,Gravity.constants.MOON_MASS,gravityL1.x1,gravityL1.x2,gravityL1.omega)) < 1e-8);
+const gravityPotential = Gravity.potentialFromBody(gravitySphere,{x:10000,y:0,z:0},{model:'extended'});
+assert.ok(Math.abs(gravityPotential + Gravity.constants.G*gravitySphere.massKg/10000)/Math.abs(gravityPotential) < 1e-12);
+const gravityTidal = Gravity.tidalTensorFromBody(gravitySphere,{x:10000,y:0,z:0},{model:'extended'});
+assert.ok(Math.abs(gravityTidal[0]+gravityTidal[3]+gravityTidal[5]) < Gravity.tidalFrobeniusNorm(gravityTidal)*1e-12);
 
 const checks = [];
 
@@ -198,7 +202,7 @@ for (const [label, page, runtime] of [
   checks.push(includes(`${label} has a dedicated laboratory page`, page, [runtime, 'scientific-laboratory-page.js', 'ScientificLaboratoryPageConfig']));
 }
 checks.push(includes('Gravity laboratory is page-native and scientifically bounded', sources.gravityPage, ['gravitational-simulation-lab.js', 'gravitational-simulation-root']));
-checks.push(includes('Gravity foundation exposes N-body state, extended geometry, integration, diagnostics, and explicit model boundaries', sources.gravity, ['const G = 6.67430e-11;', 'const MAX_BODIES = 12;', 'function buildMassSamples(body', 'function pairForce(a,b', 'function accelerations(bodies', 'function stepSimulation(dt)', 'function diagnostics(bodies', 'function geometryDiagnostics(bodies', 'Extended Geometry · analytic sphere + quadrature solids', 'function restrictedThreeBodyState(', 'function collinearLagrangeX(', 'earth-moon-l4', 'gravity-view-frame', 'Co-rotating with bodies 1–2', 'non-Euclidean']));
+checks.push(includes('Gravity foundation exposes N-body state, extended geometry, integration, diagnostics, and explicit model boundaries', sources.gravity, ['const G = 6.67430e-11;', 'const MAX_BODIES = 12;', 'function buildMassSamples(body', 'function pairForce(a,b', 'function accelerations(bodies', 'function stepSimulation(dt)', 'function diagnostics(bodies', 'function geometryDiagnostics(bodies', 'Extended Geometry · analytic sphere + quadrature solids', 'function restrictedThreeBodyState(', 'function collinearLagrangeX(', 'earth-moon-l4', 'gravity-view-frame', 'Co-rotating with bodies 1–2', 'function potentialFromBody(', 'function tidalTensorFromBody(', 'gravity-potential-map', 'gravity-tidal-map', 'non-Euclidean']));
 
 checks.push(includes('Media demonstration corpus remains authoritative and launchable', sources.mediaDemos, ['BinaryCubeMediaForensicsDemoCorpus', 'buildDemoBytes', 'openPanel', 'openInAppropriateTool']));
 checks.push(includes('ISM remains cooperative and model-bounded', sources.ism, ['const LAMBDA = 1.097e-52;', 'const PLANCK_LENGTH = 1.616255e-35;', 'function magneticPhysics(config)', 'async function simulateAsync(config, options = {})', 'ScientificToolsCooperativeRunner']));
@@ -211,7 +215,7 @@ checks.push('Scientific Tools styles, raster evidence routing, calibration data,
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.29.0',
+  schemaVersion: '0.30.0',
   pass: true,
   checkCount: checks.length,
   checks

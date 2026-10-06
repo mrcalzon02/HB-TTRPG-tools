@@ -437,15 +437,24 @@ Still required before GRAV-03 is complete:
 - date-specific ephemeris import as a separately labeled empirical initial-condition source;
 - rotating-frame effective-potential / zero-velocity-surface diagnostics.
 ## GRAV-04 — Field, potential, and tidal diagnostics
-Status: PLANNED.
+Status: INCREMENTAL IMPLEMENTATION.
 
-Required:
-- gravitational potential slices;
-- acceleration magnitude contours and vector fields;
-- tidal tensor / differential-acceleration inspection where numerically supported;
-- escape-speed and zero-velocity surfaces for appropriate models;
-- dominant-source and local-error diagnostics.
+Implemented:
+- 3D gravitational acceleration vector field inspection;
+- scalar Newtonian potential Φ evaluation for point masses, analytic homogeneous spheres, and quadrature-based extended solids;
+- analytic homogeneous-sphere interior potential;
+- symmetric Newtonian tidal tensor evaluation ∂gᵢ/∂xⱼ;
+- analytic homogeneous-sphere interior tidal tensor;
+- quadrature-based extended-body tidal tensor with the same cell-scale regularization used by internal field sampling;
+- page-visible potential and tidal-tensor slice maps in inertial, barycentric, or co-rotating display coordinates;
+- logarithmic map rendering while retaining physical m²/s² and s⁻² ranges.
 
+Still required before GRAV-04 is complete:
+- equipotential contours and optional 3D isosurfaces;
+- escape-speed surfaces and zero-velocity surfaces for compatible rotating-frame models;
+- dominant-source decomposition and local contribution inspection;
+- per-cell numerical-error / convergence overlays;
+- principal tidal eigenvalue/eigenvector visualization and Roche-limit experiment support.
 ## GRAV-05 — Contact, collision, and finite-body interactions
 Status: PLANNED.
 

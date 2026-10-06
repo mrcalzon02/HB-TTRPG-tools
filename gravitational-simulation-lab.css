@@ -23,11 +23,13 @@
 .gravity-object-head{display:flex;justify-content:space-between;gap:8px;align-items:center}.gravity-object-head strong{font-size:.86rem}.gravity-object-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.gravity-object-grid label{margin:0;font-size:.72rem}
 .gravity-viewport{height:min(62vh,720px);min-height:460px;border:1px solid rgba(126,184,215,.22);border-radius:16px;overflow:hidden;background:#03070b;touch-action:none}
 .gravity-viewport canvas{display:block;width:100%;height:100%}
+.gravity-field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.gravity-scalar-map{display:block;width:100%;height:340px;border:1px solid rgba(126,184,215,.18);border-radius:12px;background:#03070b}
 .gravity-metrics{display:grid;grid-template-columns:repeat(4,minmax(125px,1fr));gap:8px}
 .gravity-metric{display:grid;gap:4px;padding:9px 10px;border:1px solid rgba(126,184,215,.18);border-radius:11px;background:rgba(255,255,255,.022)}
 .gravity-metric span{color:#879ba8;font-size:.7rem}.gravity-metric strong{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.78rem;overflow-wrap:anywhere}
 .gravity-boundary{border-left:3px solid #72d5ff;padding:12px 14px;background:rgba(114,213,255,.05);color:#a8bac5;line-height:1.55}
 .gravity-boundary strong{color:#eaf8ff}.gravity-source-note{font-size:.78rem;color:#8ea2af;line-height:1.45}
 @media(max-width:1120px){.gravity-metrics{grid-template-columns:repeat(2,minmax(125px,1fr))}}
-@media(max-width:940px){.gravity-layout{grid-template-columns:1fr}.gravity-object-list{max-height:none}.gravity-viewport{height:55vh;min-height:380px}.gravity-metrics{grid-template-columns:repeat(2,minmax(125px,1fr))}}
+@media(max-width:940px){.gravity-layout{grid-template-columns:1fr}.gravity-field-grid{grid-template-columns:1fr}.gravity-object-list{max-height:none}.gravity-viewport{height:55vh;min-height:380px}.gravity-metrics{grid-template-columns:repeat(2,minmax(125px,1fr))}}
 @media(max-width:560px){.gravity-layout{padding:9px}.gravity-header{padding:16px}.gravity-object-grid,.gravity-actions,.gravity-metrics{grid-template-columns:1fr}.gravity-viewport{height:48vh;min-height:330px}}
