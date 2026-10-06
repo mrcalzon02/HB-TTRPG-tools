@@ -196,14 +196,14 @@
           <div>
             <p class="ism-lab-eyebrow">Scientific Tools · Interstellar Media Collisions</p>
             <h2 id="ism-lab-title">Vectorized Shadow Casting Laboratory</h2>
-            <p class="ism-lab-subtitle">Phase-light input through literal 1:1 interstellar-medium particles with physically bounded Λ, charged-proton magnetic response, explicit closest-approach geometry, a Debye-screened Coulomb proximity benchmark, a separately labeled quantum-foam hypothesis, and keyed Shadow scattering. Large runs advance in deterministic bounded slices so slow systems remain responsive.</p>
+            <p class="ism-lab-subtitle">Established proton transport through literal 1:1 interstellar-medium particles, with charged-particle magnetic response, explicit closest-approach geometry, cross-section transport, and a Debye-screened Coulomb proximity benchmark. Quantum Foam, Shadow, and other Blacklight-only effects remain optional hypothesis layers and are off by default.</p>
           </div>
           <button type="button" class="ism-lab-close" data-ism-close aria-label="Close Interstellar Media Collisions Lab">×</button>
         </header>
         <div class="ism-lab-layout">
           <aside class="ism-lab-controls">
             <div class="ism-lab-setting"><span>Workspace context</span><strong id="ism-setting-label">Scientific Tools</strong></div>
-            <label>Phase light beam seed<input id="ism-beam-seed" type="text" value="phase-light-01" autocomplete="off"></label>
+            <label>Transport beam seed<input id="ism-beam-seed" type="text" value="proton-beam-01" autocomplete="off"></label>
             <label>Secondary Shadow Key<input id="ism-shadow-key" type="text" value="shadow-key-01" autocomplete="off"></label>
             <label>ISM density preset<select id="ism-density"><option value="galactic">Galactic average · 1 H-equivalent / cm³</option><option value="local">Local interstellar neutral H · 0.127 / cm³</option></select></label>
             <div class="ism-control-group">
@@ -223,21 +223,21 @@
               <label>Proton kinetic energy<select id="ism-proton-energy"><option value="1000">1 keV</option><option value="10000">10 keV</option><option value="100000">100 keV</option><option value="1000000" selected>1 MeV</option><option value="10000000">10 MeV</option><option value="100000000">100 MeV</option></select></label>
             </div>
             <div class="ism-control-group">
-              <p class="ism-control-group-title">Quantum-foam hypothesis layer</p>
-              <label>Foam accumulation model<select id="ism-foam-model"><option value="off">Off</option><option value="constrained" selected>Constraint-scale benchmark · α = 0.72</option><option value="holographic">Holographic benchmark · α = 2/3</option><option value="randomWalk">Random-walk benchmark · α = 1/2</option><option value="custom">Custom α</option></select></label>
+              <p class="ism-control-group-title">Optional hypothesis · Quantum Foam</p>
+              <label>Foam accumulation model<select id="ism-foam-model"><option value="off" selected>Off · established-physics default</option><option value="constrained">Constraint-scale benchmark · α = 0.72</option><option value="holographic">Holographic benchmark · α = 2/3</option><option value="randomWalk">Random-walk benchmark · α = 1/2</option><option value="custom">Custom α</option></select></label>
               <label>Quantum foam seed<input id="ism-foam-seed" type="text" value="foam-seed-01" autocomplete="off"></label>
               <label>Custom accumulation exponent α <output id="ism-foam-alpha-value">0.720</output><input id="ism-foam-alpha" type="range" min="0.5" max="1" step="0.005" value="0.72"></label>
               <label>Exploratory foam gain <output id="ism-foam-gain-value">10^0 · physical baseline</output><input id="ism-foam-gain" type="range" min="0" max="24" step="1" value="0"></label>
               <p class="ism-lab-note"><strong>Hypothesis boundary:</strong> spacetime foam has no established proton-force law. This maps δℓ ≈ ℓ^(1−α)ℓP^α into a zero-mean stochastic angular-jitter proxy. Gain above 10^0 is a sensitivity test, not a physical prediction.</p>
             </div>
             <div class="ism-control-group">
-              <p class="ism-control-group-title">Speculative Shadow interaction layer</p>
-              <label>Shadow close-approach coupling <output id="ism-reflectivity-value">28%</output><input id="ism-reflectivity" type="range" min="0" max="100" step="1" value="28"></label>
+              <p class="ism-control-group-title">Optional fiction hypothesis · Shadow</p>
+              <label>Shadow close-approach coupling <output id="ism-reflectivity-value">0%</output><input id="ism-reflectivity" type="range" min="0" max="100" step="1" value="0"></label>
               <label>Shadow field radius / mean spacing <output id="ism-shadow-range-value">0.50×</output><input id="ism-shadow-range" type="range" min="0.05" max="2" step="0.05" value="0.5"></label>
               <p class="ism-lab-note"><strong>Fictional boundary:</strong> Shadow coupling is evaluated only when an explicit particle lies inside the configured proximity field. Oblique encounters use the actual impact parameter; this layer remains fictional and is not presented as a Standard Model interaction.</p>
             </div>
             <label>Transport subdivisions / ray <output id="ism-events-value">6</output><input id="ism-events" type="range" min="1" max="24" step="1" value="6"></label>
-            <button id="ism-run" type="button" class="ism-lab-run">Cast Phase Beam</button>
+            <button id="ism-run" type="button" class="ism-lab-run">Run Transport</button>
             <p class="ism-lab-note"><strong>Execution boundary:</strong> particle generation, ray integration, and display preparation preserve fixed iteration/RNG order while yielding between bounded work chunks. More resolution may take longer, but it should not require one uninterrupted main-thread calculation.</p>
           </aside>
           <main class="ism-lab-stage">
@@ -1060,11 +1060,11 @@
   function readConfig() {
     return {
       density: document.getElementById('ism-density')?.value || 'galactic', particleCount: Number(document.getElementById('ism-particles')?.value || 4096), rayCount: Number(document.getElementById('ism-rays')?.value || 128),
-      reflectivity: Number(document.getElementById('ism-reflectivity')?.value || 28), shadowRangeFactor: Number(document.getElementById('ism-shadow-range')?.value || 0.5), events: Number(document.getElementById('ism-events')?.value || 6), fieldStrengthNt: Number(document.getElementById('ism-field-strength')?.value || 0.38),
+      reflectivity: Number(document.getElementById('ism-reflectivity')?.value || 0), shadowRangeFactor: Number(document.getElementById('ism-shadow-range')?.value || 0.5), events: Number(document.getElementById('ism-events')?.value || 6), fieldStrengthNt: Number(document.getElementById('ism-field-strength')?.value || 0.38),
       ionizedFraction: Number(document.getElementById('ism-ionized-fraction')?.value || 10) / 100, temperatureK: Number(document.getElementById('ism-temperature')?.value || 8000), transportProcess: document.getElementById('ism-transport-process')?.value || 'hplus-h-cx',
       fieldAzimuthDeg: Number(document.getElementById('ism-field-azimuth')?.value || 125), fieldElevationDeg: Number(document.getElementById('ism-field-elevation')?.value || 37), protonEnergyEv: Number(document.getElementById('ism-proton-energy')?.value || 1e6),
-      foamModel: document.getElementById('ism-foam-model')?.value || 'constrained', foamSeed: document.getElementById('ism-foam-seed')?.value || 'foam-seed-01', foamAlpha: Number(document.getElementById('ism-foam-alpha')?.value || 0.72),
-      foamGainDecades: Number(document.getElementById('ism-foam-gain')?.value || 0), beamSeed: document.getElementById('ism-beam-seed')?.value || 'phase-light-01', shadowKey: document.getElementById('ism-shadow-key')?.value || 'shadow-key-01', setting: activeSetting
+      foamModel: document.getElementById('ism-foam-model')?.value || 'off', foamSeed: document.getElementById('ism-foam-seed')?.value || 'foam-seed-01', foamAlpha: Number(document.getElementById('ism-foam-alpha')?.value || 0.72),
+      foamGainDecades: Number(document.getElementById('ism-foam-gain')?.value || 0), beamSeed: document.getElementById('ism-beam-seed')?.value || 'proton-beam-01', shadowKey: document.getElementById('ism-shadow-key')?.value || 'shadow-key-01', setting: activeSetting
     };
   }
 
@@ -1091,7 +1091,7 @@
     const button = document.getElementById('ism-run');
     const numericToken = ++castToken;
     cooperativeToken?.cancel?.('superseded by newer cast');
-    const token = runner().createToken('ISM phase beam cast');
+    const token = runner().createToken('ISM particle transport');
     cooperativeToken = token;
     if (button) { button.disabled = true; button.textContent = 'Preparing particle field…'; }
     try {
@@ -1107,13 +1107,13 @@
       if (!completed || numericToken !== castToken) return;
     } catch (error) {
       if (!isCancellation(error)) {
-        console.error('ISM phase-beam cast failed.', error);
+        console.error('ISM particle transport failed.', error);
         const secondary = document.getElementById('ism-secondary-output');
         if (secondary) secondary.innerHTML = `<span class="ism-error">Cast failed: ${esc(error.message)}</span>`;
       }
     } finally {
       if (cooperativeToken === token) cooperativeToken = null;
-      if (numericToken === castToken && button) { button.disabled = false; button.textContent = 'Cast Phase Beam'; }
+      if (numericToken === castToken && button) { button.disabled = false; button.textContent = 'Run Transport'; }
     }
   }
 
