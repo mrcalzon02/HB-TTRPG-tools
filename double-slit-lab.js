@@ -183,7 +183,7 @@
           <div>
             <p class="dsl-eyebrow">Scientific Tools · Quantum Interference</p>
             <h2 id="dsl-title">Double Slit Experiment Visualizer</h2>
-            <p class="dsl-subtitle">Interactive three-dimensional comparison of classical geometric particles, coherent wave interference, and single-event quantum accumulation. Expensive setup work is performed in deterministic bounded slices so slow hardware keeps responding.</p>
+            <p class="dsl-subtitle">Interactive three-dimensional comparison of classical geometric particles, coherent wave interference, and single-event quantum accumulation, with continuous path distinguishability constrained by quantitative wave-particle complementarity. Expensive setup work is performed in deterministic bounded slices so slow hardware keeps responding.</p>
           </div>
           <button type="button" class="dsl-close" data-dsl-close aria-label="Close Double Slit Experiment Visualizer">×</button>
         </header>
@@ -245,7 +245,10 @@
               <label>Relative slit phase <output id="dsl-phase-value">0°</output>
                 <input id="dsl-phase" type="range" min="-180" max="180" step="1" value="0">
               </label>
-              <label class="dsl-check"><input id="dsl-which-path" type="checkbox"> Which-path information available</label>
+              <label>Path distinguishability D <output id="dsl-distinguishability-value">0.00</output>
+                <input id="dsl-distinguishability" type="range" min="0" max="100" step="1" value="0">
+              </label>
+              <p class="dsl-note"><strong>Complementarity:</strong> the accepted two-path bound is V² + D² ≤ 1. Source coherence can reduce V below the ideal limit; increasing D continuously suppresses only the interference cross-term.</p>
               <label class="dsl-check"><input id="dsl-show-expected" type="checkbox" checked> Show expected distribution behind accumulated hits</label>
               <label class="dsl-check"><input id="dsl-show-field" type="checkbox" checked> Show probability-amplitude field slice</label>
             </div>
@@ -273,7 +276,7 @@
               </div>
             </div>
 
-            <p class="dsl-note"><strong>Execution rule:</strong> model resolution changes how long setup takes, not whether the page remains usable. Distribution, detector, and field sampling preserve fixed index order and yield between bounded chunks. Quantum mode samples discrete detector events from the same baseline probability distribution and does not invent a definite post-barrier trajectory.</p>
+            <p class="dsl-note"><strong>Execution rule:</strong> model resolution changes how long setup takes, not whether the page remains usable. Distribution, detector, and field sampling preserve fixed index order and yield between bounded chunks. Quantum mode samples discrete detector events from the same baseline probability distribution and does not invent a definite post-barrier trajectory. The current diffraction kernel is a Fraunhofer model; the Fresnel-number diagnostics explicitly flag configurations where near-field propagation should replace it.</p>
           </aside>
 
           <main class="dsl-stage">
@@ -338,18 +341,19 @@
     bindRangeOutput('dsl-screen-width', 'dsl-screen-width-value', value => `${value.toFixed(0)} mm`);
     bindRangeOutput('dsl-coherence', 'dsl-coherence-value', value => `${value.toFixed(0)}%`);
     bindRangeOutput('dsl-phase', 'dsl-phase-value', value => `${value.toFixed(0)}°`);
+    bindRangeOutput('dsl-distinguishability', 'dsl-distinguishability-value', value => (value / 100).toFixed(2));
     bindRangeOutput('dsl-detector-exponent', 'dsl-detector-exponent-value', value => value.toFixed(2));
     bindRangeOutput('dsl-rate', 'dsl-rate-value', value => `${value.toFixed(0)} events/s`);
 
     const experimentControls = [
       'dsl-mode', 'dsl-source-type', 'dsl-photon-wavelength', 'dsl-electron-energy', 'dsl-matter-wavelength',
       'dsl-slit-width', 'dsl-slit-separation', 'dsl-screen-distance', 'dsl-screen-width', 'dsl-coherence',
-      'dsl-phase', 'dsl-which-path', 'dsl-show-expected', 'dsl-show-field', 'dsl-hypothesis',
+      'dsl-phase', 'dsl-distinguishability', 'dsl-show-expected', 'dsl-show-field', 'dsl-hypothesis',
       'dsl-detector-exponent', 'dsl-seed'
     ];
     experimentControls.forEach(id => document.getElementById(id)?.addEventListener('change', requestRefresh));
     ['dsl-photon-wavelength', 'dsl-electron-energy', 'dsl-matter-wavelength', 'dsl-slit-width', 'dsl-slit-separation',
-      'dsl-screen-distance', 'dsl-screen-width', 'dsl-coherence', 'dsl-phase', 'dsl-detector-exponent']
+      'dsl-screen-distance', 'dsl-screen-width', 'dsl-coherence', 'dsl-phase', 'dsl-distinguishability', 'dsl-detector-exponent']
       .forEach(id => document.getElementById(id)?.addEventListener('input', scheduleRefresh));
 
     document.getElementById('dsl-run')?.addEventListener('click', toggleRunning);
@@ -391,7 +395,7 @@
       screenWidthMm: Number(document.getElementById('dsl-screen-width')?.value || 40),
       coherence: Number(document.getElementById('dsl-coherence')?.value || 100) / 100,
       phaseOffsetRad: Number(document.getElementById('dsl-phase')?.value || 0) * Math.PI / 180,
-      whichPath: Boolean(document.getElementById('dsl-which-path')?.checked),
+      distinguishability: Number(document.getElementById('dsl-distinguishability')?.value || 0) / 100,
       showExpected: Boolean(document.getElementById('dsl-show-expected')?.checked),
       showField: Boolean(document.getElementById('dsl-show-field')?.checked),
       hypothesisId: document.getElementById('dsl-hypothesis')?.value || 'none',
@@ -413,11 +417,17 @@
     const slitSeparation = Math.max(slitWidth * 1.01, config.slitSeparationUm * 1e-6);
     const screenDistance = Math.max(1e-6, config.screenDistanceM);
     const screenWidth = Math.max(1e-6, config.screenWidthMm * 1e-3);
-    const visibility = config.whichPath ? 0 : clamp(config.coherence, 0, 1);
+    const distinguishability = clamp(config.distinguishability, 0, 1);
+    const sourceCoherence = clamp(config.coherence, 0, 1);
+    const idealVisibilityLimit = Math.sqrt(Math.max(0, 1 - distinguishability * distinguishability));
+    const visibility = sourceCoherence * idealVisibilityLimit;
+    const complementaritySum = visibility * visibility + distinguishability * distinguishability;
     const fringeSpacing = wavelength * screenDistance / slitSeparation;
     const firstEnvelopeZero = wavelength * screenDistance / slitWidth;
     const slitFresnelNumber = slitWidth * slitWidth / (wavelength * screenDistance);
     const separationFresnelNumber = slitSeparation * slitSeparation / (wavelength * screenDistance);
+    const apertureHalfSpan = (slitSeparation + slitWidth) * 0.5;
+    const apertureFresnelNumber = apertureHalfSpan * apertureHalfSpan / (wavelength * screenDistance);
     return {
       wavelength,
       slitWidth,
@@ -425,6 +435,11 @@
       screenDistance,
       screenWidth,
       visibility,
+      distinguishability,
+      sourceCoherence,
+      idealVisibilityLimit,
+      complementaritySum,
+      apertureFresnelNumber,
       fringeSpacing,
       firstEnvelopeZero,
       slitFresnelNumber,
@@ -594,7 +609,11 @@
       : config.sourceType === 'matter'
         ? `${config.matterWavelengthPm.toFixed(0)} pm matter wave`
         : `${config.photonWavelengthNm.toFixed(0)} nm photon`;
-    const regime = physics.separationFresnelNumber < 0.1 ? 'far-field favorable' : 'near-field corrections may matter';
+    const regime = physics.apertureFresnelNumber < 0.1
+      ? 'Fraunhofer / far-field favorable'
+      : physics.apertureFresnelNumber < 1
+        ? 'Fresnel transition · far-field model approximate'
+        : 'Fresnel near field · far-field model not quantitatively reliable';
     target.innerHTML = [
       ['Source', sourceLabel],
       ['Effective wavelength', formatLength(physics.wavelength)],
@@ -603,9 +622,14 @@
       ['Screen distance', formatLength(physics.screenDistance)],
       ['Fringe spacing ≈ λL/d', formatLength(physics.fringeSpacing)],
       ['1st single-slit zero ≈ λL/a', formatLength(physics.firstEnvelopeZero)],
-      ['Interference visibility input', `${(physics.visibility * 100).toFixed(1)}%`],
+      ['Source coherence C', physics.sourceCoherence.toFixed(3)],
+      ['Path distinguishability D', physics.distinguishability.toFixed(3)],
+      ['Ideal V limit √(1−D²)', physics.idealVisibilityLimit.toFixed(3)],
+      ['Applied fringe visibility V', physics.visibility.toFixed(3)],
+      ['Complementarity V² + D²', physics.complementaritySum.toFixed(4)],
       ['Slit Fresnel number', formatScientific(physics.slitFresnelNumber)],
       ['Separation Fresnel number', formatScientific(physics.separationFresnelNumber)],
+      ['Whole-aperture Fresnel number', formatScientific(physics.apertureFresnelNumber)],
       ['Approximation regime', regime],
       ['Detected events', simulationState.emitted.toLocaleString()],
       ['Execution', 'deterministic cooperative slices']
@@ -743,7 +767,8 @@
     target.innerHTML = [
       `<span>Mode: <strong>${esc(config.mode)}</strong></span>`,
       `<span>Events: <strong>${simulationState.emitted.toLocaleString()}</strong></span>`,
-      `<span>Which-path: <strong>${config.whichPath ? 'available · cross-term suppressed' : 'not available'}</strong></span>`,
+      `<span>Path distinguishability: <strong>D = ${physics.distinguishability.toFixed(2)}</strong></span>`,
+      `<span>Fringe visibility: <strong>V = ${physics.visibility.toFixed(2)} · V² + D² = ${physics.complementaritySum.toFixed(3)}</strong></span>`,
       `<span>Layer: <strong>${esc(layer.label)}</strong></span>`,
       `<span>Fringe spacing: <strong>${esc(formatLength(physics.fringeSpacing))}</strong></span>`,
       `<span>Scheduler: <strong>incremental deterministic</strong></span>`
