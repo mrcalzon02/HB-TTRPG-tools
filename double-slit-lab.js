@@ -315,6 +315,17 @@
                 <button id="dsl-step" type="button">Emit one</button>
                 <button id="dsl-reset" type="button">Reset</button>
               </div>
+              <label>Convergence target
+                <select id="dsl-stat-target">
+                  <option value="10">10 events</option>
+                  <option value="100">100 events</option>
+                  <option value="1000" selected>1,000 events</option>
+                  <option value="10000">10,000 events</option>
+                  <option value="100000">100,000 events</option>
+                </select>
+              </label>
+              <button id="dsl-accumulate" type="button">Accumulate to target</button>
+              <p class="dsl-note">Fast accumulation samples the same active probability distribution without animating each event. It remains seeded and deterministic, and yields between bounded chunks.</p>
             </div>
 
             <p class="dsl-note"><strong>Execution rule:</strong> model resolution changes how long setup takes, not whether the page remains usable. Distribution, detector, and field sampling preserve fixed index order and yield between bounded chunks. Quantum mode samples discrete detector events from the same probability distribution and does not invent a definite post-barrier trajectory. Automatic propagation now uses a numerical Fresnel aperture integral in near/transition regimes and the analytic Fraunhofer form in the far field. The paraxial-geometry diagnostic warns when the Fresnel approximation itself is being pushed outside its conservative range.</p>
@@ -414,6 +425,7 @@
     document.getElementById('dsl-run')?.addEventListener('click', toggleRunning);
     document.getElementById('dsl-step')?.addEventListener('click', emitSingleEvent);
     document.getElementById('dsl-reset')?.addEventListener('click', resetExperiment);
+    document.getElementById('dsl-accumulate')?.addEventListener('click', () => void accumulateToSelectedTarget());
     document.getElementById('dsl-reset-view')?.addEventListener('click', () => setCameraPreset('default'));
     document.getElementById('dsl-view-front')?.addEventListener('click', () => setCameraPreset('front'));
     document.getElementById('dsl-view-top')?.addEventListener('click', () => setCameraPreset('top'));
@@ -824,6 +836,47 @@
     return canvas;
   }
 
+  function expectedBinProbabilities(distribution, binCount) {
+    const bins = new Float64Array(binCount);
+    if (!(distribution.total > 0)) return bins;
+    for (let index = 0; index < distribution.values.length; index += 1) {
+      const bin = Math.min(binCount - 1, Math.floor(index / distribution.values.length * binCount));
+      bins[bin] += distribution.values[index] / distribution.total;
+    }
+    let normalization = 0;
+    bins.forEach(value => { normalization += value; });
+    if (normalization > 0) for (let index = 0; index < bins.length; index += 1) bins[index] /= normalization;
+    return bins;
+  }
+
+  function convergenceStatistics(state) {
+    const n = state.emitted;
+    if (!(n > 0)) return { rmse: NaN, chiSquare: NaN, reducedChiSquare: NaN, eligibleBins: 0, dof: 0 };
+    let squaredError = 0;
+    let chiSquare = 0;
+    let eligibleBins = 0;
+    for (let index = 0; index < state.hitBins.length; index += 1) {
+      const observedFraction = state.hitBins[index] / n;
+      const expectedProbability = state.expectedBinProbabilities[index];
+      const difference = observedFraction - expectedProbability;
+      squaredError += difference * difference;
+      const expectedCount = n * expectedProbability;
+      if (expectedCount >= 5) {
+        const residual = state.hitBins[index] - expectedCount;
+        chiSquare += residual * residual / expectedCount;
+        eligibleBins += 1;
+      }
+    }
+    const dof = Math.max(0, eligibleBins - 1);
+    return {
+      rmse: Math.sqrt(squaredError / state.hitBins.length),
+      chiSquare: eligibleBins > 0 ? chiSquare : NaN,
+      reducedChiSquare: dof > 0 ? chiSquare / dof : NaN,
+      eligibleBins,
+      dof
+    };
+  }
+
   function createSimulationState(config, physics, distribution) {
     const detectorCanvas = createDetectorCanvas();
     const hitBins = new Uint32Array(120);
@@ -835,6 +888,7 @@
       detectorContext: detectorCanvas.getContext('2d'),
       hits: [],
       hitBins,
+      expectedBinProbabilities: expectedBinProbabilities(distribution, hitBins.length),
       hitBinMaximum: 1,
       running: false,
       emitted: 0,
@@ -904,6 +958,9 @@
       ['Active propagation kernel', propagationLabel],
       ['Paraxial geometry ratio', `${formatScientific(physics.paraxialRatio)} · ${paraxialLabel}`],
       ['Detected events', simulationState.emitted.toLocaleString()],
+      ['Distribution RMSE', (() => { const stats = convergenceStatistics(simulationState); return Number.isFinite(stats.rmse) ? formatScientific(stats.rmse) : 'insufficient events'; })()],
+      ['Reduced χ²', (() => { const stats = convergenceStatistics(simulationState); return Number.isFinite(stats.reducedChiSquare) ? `${stats.reducedChiSquare.toFixed(3)} · dof ${stats.dof}` : 'awaiting bins with expected count ≥ 5'; })()],
+      ['χ² eligible bins', convergenceStatistics(simulationState).eligibleBins.toString()],
       ['Execution', 'deterministic cooperative slices']
     ].map(([label, value]) => `<div class="dsl-metric"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');
   }
@@ -1044,6 +1101,7 @@
       `<span>Fringe visibility: <strong>V = ${physics.visibility.toFixed(2)} · V² + D² = ${physics.complementaritySum.toFixed(3)}</strong></span>`,
       `<span>Layer: <strong>${esc(layer.label)}</strong></span>`,
       `<span>Fringe spacing: <strong>${esc(formatLength(physics.fringeSpacing))}</strong></span>`,
+      (() => { const stats = convergenceStatistics(simulationState); return `<span>Convergence: <strong>RMSE ${Number.isFinite(stats.rmse) ? esc(formatScientific(stats.rmse)) : '—'} · reduced χ² ${Number.isFinite(stats.reducedChiSquare) ? stats.reducedChiSquare.toFixed(3) : '—'}</strong></span>`; })(),
       `<span>Scheduler: <strong>incremental deterministic</strong></span>`
     ].join('');
   }
@@ -1420,6 +1478,48 @@
     if (!event) return false;
     simulationState.activeEvents.push(event);
     return true;
+  }
+
+  function recordStatisticalHit(hit) {
+    if (!simulationState) return;
+    simulationState.emitted += 1;
+    const normalized = clamp(hit.x / simulationState.physics.screenWidth + 0.5, 0, 0.999999);
+    const binIndex = Math.floor(normalized * simulationState.hitBins.length);
+    simulationState.hitBins[binIndex] += 1;
+    simulationState.hitBinMaximum = Math.max(simulationState.hitBinMaximum, simulationState.hitBins[binIndex]);
+    if (simulationState.hits.length < 12000) simulationState.hits.push(hit);
+  }
+
+  async function accumulateToSelectedTarget() {
+    if (!simulationState || simulationState.config.mode === 'wave') return;
+    const target = Math.max(simulationState.emitted, Number(document.getElementById('dsl-stat-target')?.value || 1000));
+    const remaining = target - simulationState.emitted;
+    if (!(remaining > 0)) {
+      renderMetrics();
+      renderChart();
+      renderStatus();
+      return;
+    }
+    const button = document.getElementById('dsl-accumulate');
+    if (button) { button.disabled = true; button.textContent = 'Accumulating…'; }
+    const startEmitted = simulationState.emitted;
+    try {
+      await runner().forRange({
+        start: 0,
+        end: remaining,
+        chunkSize: 1000,
+        label: 'Statistical accumulation',
+        onProgress: progress => {
+          if (button) button.textContent = `Accumulating ${Math.min(target, startEmitted + Math.floor(progress.fraction * remaining)).toLocaleString()}/${target.toLocaleString()}`;
+        },
+        step: () => recordStatisticalHit(sampleHit())
+      });
+      renderMetrics();
+      renderChart();
+      renderStatus();
+    } finally {
+      if (button) { button.disabled = false; button.textContent = 'Accumulate to target'; }
+    }
   }
 
   function toggleRunning() {
