@@ -364,7 +364,7 @@
     if (ismPromise) return ismPromise;
     ismPromise = (async () => {
       await loadCooperativeRunner();
-      await loadScript('interstellar-media-collisions-lab.js?v=20261005-transport-5', () => Boolean(window.InterstellarMediaCollisionsLab));
+      await loadScript('interstellar-media-collisions-lab.js?v=20261005-regime-6', () => Boolean(window.InterstellarMediaCollisionsLab));
       return window.InterstellarMediaCollisionsLab;
     })();
     ismPromise.catch(() => { ismPromise = null; });
@@ -376,7 +376,7 @@
     if (doubleSlitPromise) return doubleSlitPromise;
     doubleSlitPromise = (async () => {
       await loadCooperativeRunner();
-      await loadScript('double-slit-lab.js?v=20261005-coherence-3', () => Boolean(window.DoubleSlitExperimentLab));
+      await loadScript('double-slit-lab.js?v=20261005-polarization-4', () => Boolean(window.DoubleSlitExperimentLab));
       return window.DoubleSlitExperimentLab;
     })();
     doubleSlitPromise.catch(() => { doubleSlitPromise = null; });
