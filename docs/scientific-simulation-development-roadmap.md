@@ -82,37 +82,50 @@ Required species foundation:
 Each particle record should support species, mass, charge, velocity, kinetic state, and current interaction state.
 
 ## ISM-05 — Charge exchange and energetic-neutral-atom trajectories
-Status: PLANNED.
+Status: PARTIAL / active.
 
-Required:
-- proton + neutral-H charge exchange;
-- state transformation rather than cosmetic effect;
-- magnetic response ends when projectile becomes neutral;
-- re-ionization/secondary interactions can restore charged behavior;
-- record reaction lineage.
+Implemented:
+- explicit H+ + H close encounters evaluate the local relative collision energy;
+- the local energy-dependent charge-exchange cross section determines the effective interaction radius;
+- successful exchange transforms projectile H+ → H and target H → H+;
+- the energetic neutral immediately stops magnetic gyration and continues ballistically;
+- reaction lineage, impact parameter, relative speed, energy and state transition are retained.
+
+Required completion:
+- stochastic mean-free-path event execution over continuum transport mode without double-counting explicit-particle encounters;
+- re-ionization and additional reaction channels;
+- broader cross-section provenance/data coverage;
+- dedicated energetic-neutral inspection and detector products.
 
 ## ISM-06 — Momentum/energy-conserving oblique scattering
-Status: PLANNED.
+Status: PARTIAL / active.
 
-Required:
-- center-of-momentum or equivalent two-body solution;
-- target recoil;
-- elastic scattering baseline;
-- explicit conservation audit;
-- screened Coulomb/Rutherford-style limiting cases where valid.
+Implemented:
+- Debye-screened H+–H+ two-body center-of-momentum elastic scattering;
+- oblique geometry derives the scattering plane from the actual impact parameter;
+- projectile and target velocities are both updated;
+- per-run maximum momentum residual and kinetic-energy error are reported;
+- nonrelativistic solver is explicitly gated at relative β ≥ 0.1.
+
+Required completion:
+- relativistic two-body solver for higher-energy settings;
+- additional species/mass combinations;
+- validated limiting-case comparisons against Rutherford/screened-scattering expectations;
+- conservation regression thresholds.
 
 ## ISM-07 — Temperature and Maxwellian target velocities
 Status: PARTIAL / active.
 
 Implemented foundation:
 - Maxwellian thermal velocity is sampled from species mass and configured temperature;
-- cold/warm/hot temperature presets remain available.
+- cold/warm/hot temperature presets remain available;
+- closest approach now follows the relative projectile/target trajectory during each transport segment;
+- relative speed drives local charge-exchange energy and Coulomb scattering.
 
 Required completion:
 - configurable bulk flow;
-- moving-target closest approach;
-- relative velocity v_rel drives collision energy and channel selection;
-- species-specific temperature handling where appropriate.
+- species-specific temperature handling where appropriate;
+- moving-particle spatial-index expansion for regimes where thermal displacement is no longer negligible across a segment.
 
 ## ISM-08 — Interaction inspection overlays and physical-regime diagnostics
 Status: PLANNED.
@@ -204,14 +217,22 @@ Required:
 - explicit statement that the model does not imply retrocausal information transmission.
 
 ## DSL-04 — Physical coherence controls
-Status: PLANNED.
+Status: PARTIAL / active.
 
-Required:
-- spectral bandwidth / energy spread;
-- source size;
-- angular divergence;
-- derived temporal/spatial coherence;
-- explain quantitatively why visibility is reduced.
+Implemented:
+- photon spectral FWHM, electron energy FWHM spread, and matter-wave wavelength FWHM spread;
+- deterministic five-sample Gaussian spectral/energy averaging of the actual propagation kernel;
+- transverse RMS source size and source-to-slit distance derive an angular source width;
+- independent RMS angular divergence;
+- Gaussian spatial-coherence factor suppresses the interference cross-term;
+- approximate spectral coherence length λ²/Δλ and all angular/coherence factors are reported;
+- residual phenomenological coherence remains explicitly labeled as residual rather than physical source geometry.
+
+Required completion:
+- higher-order/adaptive spectral quadrature for broad distributions;
+- source-profile selection beyond Gaussian/RMS approximation;
+- validation cases against analytic coherence envelopes;
+- source-type-specific coherence terminology and energy/wavelength conversion diagnostics.
 
 ## DSL-05 — Polarization per slit
 Status: PLANNED.
