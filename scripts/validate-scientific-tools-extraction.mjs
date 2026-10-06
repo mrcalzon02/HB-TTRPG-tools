@@ -39,8 +39,16 @@ const sources = Object.freeze({
   diagnosticLocal: read('scripts/run-scientific-diagnostic-local.mjs'),
   calibrationRunner: read('scripts/calibrate-scientific-diagnostic-pipeline.mjs'),
   diagnosticPlan: read('docs/scientific-diagnostic-pipeline-plan.md'),
+  pageShell: read('scientific-laboratory-page.js'),
+  signalsPage: read('signals-laboratory.html'),
+  liveSignalsPage: read('live-signals-laboratory.html'),
+  audioPage: read('audio-laboratory.html'),
+  ismPage: read('interstellar-media-collisions-laboratory.html'),
+  doubleSlitPage: read('double-slit-laboratory.html'),
+  gravityPage: read('gravitational-simulation-laboratory.html'),
   ism: read('interstellar-media-collisions-lab.js'),
-  doubleSlit: read('double-slit-lab.js')
+  doubleSlit: read('double-slit-lab.js'),
+  gravity: read('gravitational-simulation-lab.js')
 });
 
 function includes(label, source, values) {
@@ -149,22 +157,36 @@ checks.push(includes('Diagnostic plan records staged local/offline architecture'
 checks.push(includes('Scientific Tools centrally loads raster evidence and calibration before routed pipeline', sources.workspace, [
   "const ASSET_VERSION = '20260809-scientific-help-1';", 'function loadDiagnosticPipeline()', "loadScript('binary-cube-key-generation-research.js'", "loadScript('binary-cube-cubic-decryptor-engine.js'", "loadScript('binary-cube-cubic-decryptor-worker-pool.js'", "loadScript('binary-cube-steganalysis-evidence-profile.js'", "loadScript('binary-cube-steganalysis-worker-client.js'", "loadScript('binary-cube-diagnostic-calibration-registry.js'", "loadScript('binary-cube-diagnostic-calibration-baseline.js'", "loadScript('binary-cube-diagnostic-pipeline.js'", "loadScript('binary-cube-diagnostic-pipeline-panel.js'", 'Measured calibration:', 'RGB-LSB false negative', 'function loadCubicDecryptor()', 'function loadHelpSystem()', "loadStyle('scientific-tools-help.css')", "loadScript('scientific-tools-help.js'", 'id="scientific-tools-open-diagnostic-pipeline"', 'id="scientific-tools-open-cubic-decryptor"', 'absence of positive evidence is not evidence of absence'
 ]));
-checks.push(includes('Scientific Tools preserves established destinations', sources.workspace, ['data-scientific-tools-tab="binary-cube"', 'data-scientific-tools-tab="decryption-dashboard"', 'data-scientific-tools-tab="ism-media-simulation"', 'data-scientific-tools-tab="double-slit"', 'id="scientific-tools-open-binary-cube-visualizer"', 'id="scientific-tools-open-binary-cube-laboratory"', 'id="scientific-tools-open-media-forensics-demos"', 'id="scientific-tools-open-ism"', 'id="scientific-tools-open-double-slit"', 'loadMediaForensicsDemoCorpus', 'openMediaForensicsDemoCorpus']));
-for (const tab of ['binary-cube', 'decryption-dashboard', 'ism-media-simulation', 'double-slit']) assert.equal(count(sources.workspace, `data-scientific-tools-tab="${tab}"`), 1, `${tab} must have one owner.`);
+checks.push(includes('Scientific Tools preserves established destinations and page-first laboratories', sources.workspace, ['data-scientific-tools-tab="binary-cube"', 'data-scientific-tools-tab="decryption-dashboard"', 'data-scientific-tools-tab="signals-laboratory"', 'data-scientific-tools-tab="ism-media-simulation"', 'data-scientific-tools-tab="double-slit"', 'data-scientific-tools-tab="gravity"', 'id="scientific-tools-open-binary-cube-visualizer"', 'id="scientific-tools-open-binary-cube-laboratory"', 'id="scientific-tools-open-media-forensics-demos"', 'href="signals-laboratory.html"', 'href="live-signals-laboratory.html"', 'href="audio-laboratory.html"', 'href="interstellar-media-collisions-laboratory.html"', 'href="double-slit-laboratory.html"', 'href="gravitational-simulation-laboratory.html"', 'loadMediaForensicsDemoCorpus', 'openMediaForensicsDemoCorpus']));
+checks.push(excludes('Scientific simulation launchers no longer bind modal-only hub controls', sources.workspace, ['id="scientific-tools-open-signals-laboratory"', 'id="scientific-tools-open-live-signals-laboratory"', 'id="scientific-tools-open-ism"', 'id="scientific-tools-open-double-slit"']));
+for (const tab of ['binary-cube', 'decryption-dashboard', 'signals-laboratory', 'ism-media-simulation', 'double-slit', 'gravity']) assert.equal(count(sources.workspace, `data-scientific-tools-tab="${tab}"`), 1, `${tab} must have one owner.`);
 checks.push('Scientific Tools tab ownership is singular');
+
+checks.push(includes('Dedicated laboratory page shell promotes canonical runtimes into document flow', sources.pageShell, ['ScientificLaboratoryPageConfig', 'function promoteToPage(', "root.replaceChildren(shell)", "document.body.classList.add('scientific-lab-page-ready')"]));
+for (const [label, page, runtime] of [
+  ['Signals', sources.signalsPage, 'signals-laboratory.js'],
+  ['Live Signals', sources.liveSignalsPage, 'live-signals-laboratory.js'],
+  ['Audio', sources.audioPage, 'audio-laboratory.js'],
+  ['ISM', sources.ismPage, 'interstellar-media-collisions-lab.js'],
+  ['Double Slit', sources.doubleSlitPage, 'double-slit-lab.js']
+]) {
+  checks.push(includes(`${label} has a dedicated laboratory page`, page, [runtime, 'scientific-laboratory-page.js', 'ScientificLaboratoryPageConfig']));
+}
+checks.push(includes('Gravity laboratory is page-native and scientifically bounded', sources.gravityPage, ['gravitational-simulation-lab.js', 'gravitational-simulation-root']));
+checks.push(includes('Gravity foundation exposes N-body state, integration, diagnostics, and explicit model boundaries', sources.gravity, ['const G = 6.67430e-11;', 'const MAX_BODIES = 12;', 'function accelerations(bodies)', 'function stepSimulation(dt)', 'function diagnostics(bodies)', 'velocity-Verlet', 'Shape selection affects rendering only', 'non-Euclidean']));
 
 checks.push(includes('Media demonstration corpus remains authoritative and launchable', sources.mediaDemos, ['BinaryCubeMediaForensicsDemoCorpus', 'buildDemoBytes', 'openPanel', 'openInAppropriateTool']));
 checks.push(includes('ISM remains cooperative and model-bounded', sources.ism, ['const LAMBDA = 1.097e-52;', 'const PLANCK_LENGTH = 1.616255e-35;', 'function magneticPhysics(config)', 'async function simulateAsync(config, options = {})', 'ScientificToolsCooperativeRunner']));
 checks.push(includes('Double Slit remains cooperative with hypothesis separation', sources.doubleSlit, ['function electronWavelength(kineticEv)', 'function coherentIntensityAtX(x, physics, config)', 'function registerHypothesisLayer(definition)', 'async function buildDistributionAsync(', 'ScientificToolsCooperativeRunner']));
 
 for (const relativePath of [
-  'scientific-tools-local-media.js', 'scientific-tools-help.js', 'scientific-tools-help.css', 'scripts/validate-scientific-tools-help.mjs', 'binary-cube-key-generation-visualizer.css', 'scripts/validate-binary-cube-key-generation-visualizer.mjs', 'binary-cube-decryption-dashboard.css', 'binary-cube-cryptanalytic-test-lab.css', 'binary-cube-information-analysis-suite.css', 'binary-cube-communication-capacity-analyzer.css', 'binary-cube-media-forensics-suite.css', 'binary-cube-steganalysis-engine.js', 'binary-cube-steganalysis-evidence-profile.js', 'binary-cube-steganalysis-worker.js', 'binary-cube-steganalysis-worker-client.js', 'binary-cube-steganalysis-lab.css', 'scripts/validate-binary-cube-steganalysis-lab.mjs', 'scripts/validate-diagnostic-raster-evidence-routing.mjs', 'binary-cube-diagnostic-calibration-registry.js', 'binary-cube-diagnostic-calibration-baseline.js', 'binary-cube-diagnostic-pipeline.css', 'binary-cube-cubic-decryptor.css', 'scripts/validate-binary-cube-cubic-decryptor.mjs', 'scripts/validate-scientific-diagnostic-pipeline.mjs', 'scripts/calibrate-scientific-diagnostic-pipeline.mjs', 'scripts/validate-scientific-diagnostic-calibration.mjs', 'scripts/run-scientific-diagnostic-local.mjs', 'docs/scientific-diagnostic-pipeline-plan.md', 'interstellar-media-collisions-lab.css', 'double-slit-lab.css'
+  'scientific-tools-local-media.js', 'scientific-tools-help.js', 'scientific-tools-help.css', 'scientific-laboratory-page.js', 'scientific-laboratory-page.css', 'signals-laboratory.html', 'live-signals-laboratory.html', 'audio-laboratory.html', 'interstellar-media-collisions-laboratory.html', 'double-slit-laboratory.html', 'gravitational-simulation-laboratory.html', 'gravitational-simulation-lab.js', 'gravitational-simulation-lab.css', 'scripts/validate-scientific-tools-help.mjs', 'binary-cube-key-generation-visualizer.css', 'scripts/validate-binary-cube-key-generation-visualizer.mjs', 'binary-cube-decryption-dashboard.css', 'binary-cube-cryptanalytic-test-lab.css', 'binary-cube-information-analysis-suite.css', 'binary-cube-communication-capacity-analyzer.css', 'binary-cube-media-forensics-suite.css', 'binary-cube-steganalysis-engine.js', 'binary-cube-steganalysis-evidence-profile.js', 'binary-cube-steganalysis-worker.js', 'binary-cube-steganalysis-worker-client.js', 'binary-cube-steganalysis-lab.css', 'scripts/validate-binary-cube-steganalysis-lab.mjs', 'scripts/validate-diagnostic-raster-evidence-routing.mjs', 'binary-cube-diagnostic-calibration-registry.js', 'binary-cube-diagnostic-calibration-baseline.js', 'binary-cube-diagnostic-pipeline.css', 'binary-cube-cubic-decryptor.css', 'scripts/validate-binary-cube-cubic-decryptor.mjs', 'scripts/validate-scientific-diagnostic-pipeline.mjs', 'scripts/calibrate-scientific-diagnostic-pipeline.mjs', 'scripts/validate-scientific-diagnostic-calibration.mjs', 'scripts/run-scientific-diagnostic-local.mjs', 'docs/scientific-diagnostic-pipeline-plan.md', 'interstellar-media-collisions-lab.css', 'double-slit-lab.css'
 ]) nonEmpty(relativePath);
 checks.push('Scientific Tools styles, raster evidence routing, calibration data, local runtime, plan, and validators are present');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.26.0',
+  schemaVersion: '0.27.0',
   pass: true,
   checkCount: checks.length,
   checks

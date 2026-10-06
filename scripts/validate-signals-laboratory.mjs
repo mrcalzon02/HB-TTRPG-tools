@@ -130,7 +130,9 @@ const surfaceScene=U.buildSurfaceScene(surfaces,12,10);assert.equal(surfaceScene
 const mixer=U.buildMixerProductScene({heterodyne,probe:carrierProbe,experiments:{interfrequency:rxExperiment}});assert.ok(mixer.some(row=>row.frequencyHz===25e6));
 
 const entry=await readFile(new URL('../scientific-tools-entry.js',import.meta.url),'utf8');
-assert.match(entry,/data-scientific-tools-tab="signals-laboratory"/);assert.match(entry,/id="scientific-tools-open-signals-laboratory"/);assert.match(entry,/function loadSignalsLaboratory\(/);assert.match(entry,/loadStyle\('signals-laboratory\.css'\)/);assert.match(entry,/loadScript\('signals-laboratory\.js'/);
+assert.match(entry,/data-scientific-tools-tab="signals-laboratory"/);assert.match(entry,/href="signals-laboratory\.html"/);assert.doesNotMatch(entry,/id="scientific-tools-open-signals-laboratory"/);assert.match(entry,/function loadSignalsLaboratory\(/);assert.match(entry,/loadStyle\('signals-laboratory\.css'\)/);assert.match(entry,/loadScript\('signals-laboratory\.js'/);
+const signalsPage=await readFile(new URL('../signals-laboratory.html',import.meta.url),'utf8');
+assert.match(signalsPage,/signals-laboratory\.js/);assert.match(signalsPage,/scientific-laboratory-page\.js/);assert.match(signalsPage,/ScientificLaboratoryPageConfig/);
 const sourceText=await readFile(new URL('../signals-laboratory.js',import.meta.url),'utf8');
 for(const pattern of [/Simulation map \/ experiment register/,/Current run data ledger/,/Copy current run JSON/,/hb-ttrpg-signals-laboratory-run-record/,/simulation-model-output/,/configured → modeled → inferred/,/Material-aware surfaces/,/Adaptive spatial sampling/,/Receiver\/front-end nonlinear detector/,/Source-side nonlinear generation/,/Increasing pixel count alone/,/id="sl-adaptive-canvas"/,/id="sl-field-3d-canvas"/,/id="sl-antenna-3d-canvas"/,/id="sl-environment-3d-canvas"/,/id="sl-mixer-3d-canvas"/,/prefers-reduced-motion/,/Mathematical processing alone cannot reconstruct arbitrary RF energy/]) assert.match(sourceText,pattern);
 
