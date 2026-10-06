@@ -94,6 +94,16 @@ const gravityPotential = Gravity.potentialFromBody(gravitySphere,{x:10000,y:0,z:
 assert.ok(Math.abs(gravityPotential + Gravity.constants.G*gravitySphere.massKg/10000)/Math.abs(gravityPotential) < 1e-12);
 const gravityTidal = Gravity.tidalTensorFromBody(gravitySphere,{x:10000,y:0,z:0},{model:'extended'});
 assert.ok(Math.abs(gravityTidal[0]+gravityTidal[3]+gravityTidal[5]) < Gravity.tidalFrobeniusNorm(gravityTidal)*1e-12);
+const gravityCollisionA = Gravity.normalizeBody({name:'A',shape:'sphere',massMode:'mass',massKg:2e10,dimensionsM:{x:2000,y:2000,z:2000},rotationDeg:{x:0,y:0,z:0},position:{x:-900,y:0,z:0},velocity:{x:10,y:0,z:0}});
+const gravityCollisionB = Gravity.normalizeBody({name:'B',shape:'sphere',massMode:'mass',massKg:3e10,dimensionsM:{x:2000,y:2000,z:2000},rotationDeg:{x:0,y:0,z:0},position:{x:900,y:0,z:0},velocity:{x:-5,y:0,z:0}});
+const gravityMerge = Gravity.mergeCollisionBodies(gravityCollisionA,gravityCollisionB);
+assert.equal(gravityMerge.audit.massRelativeError,0);
+assert.ok(gravityMerge.audit.momentumResidual < 1e-6);
+const gravityElastic = Gravity.elasticSphereCollisionResult(gravityCollisionA,gravityCollisionB);
+assert.equal(gravityElastic.valid,true);
+assert.ok(Math.abs(gravityElastic.audit.kineticRelativeError) < 1e-12);
+const gravityCollisionCube = Gravity.normalizeBody({name:'Cube',shape:'cube',massMode:'mass',massKg:1e10,dimensionsM:{x:2000,y:2000,z:2000},rotationDeg:{x:0,y:0,z:0},position:{x:0,y:0,z:0},velocity:{x:0,y:0,z:0}});
+assert.equal(Gravity.elasticSphereCollisionResult(gravityCollisionA,gravityCollisionCube).valid,false);
 
 const checks = [];
 
@@ -202,7 +212,7 @@ for (const [label, page, runtime] of [
   checks.push(includes(`${label} has a dedicated laboratory page`, page, [runtime, 'scientific-laboratory-page.js', 'ScientificLaboratoryPageConfig']));
 }
 checks.push(includes('Gravity laboratory is page-native and scientifically bounded', sources.gravityPage, ['gravitational-simulation-lab.js', 'gravitational-simulation-root']));
-checks.push(includes('Gravity foundation exposes N-body state, extended geometry, integration, diagnostics, and explicit model boundaries', sources.gravity, ['const G = 6.67430e-11;', 'const MAX_BODIES = 12;', 'function buildMassSamples(body', 'function pairForce(a,b', 'function accelerations(bodies', 'function stepSimulation(dt)', 'function diagnostics(bodies', 'function geometryDiagnostics(bodies', 'Extended Geometry · analytic sphere + quadrature solids', 'function restrictedThreeBodyState(', 'function collinearLagrangeX(', 'earth-moon-l4', 'gravity-view-frame', 'Co-rotating with bodies 1–2', 'function potentialFromBody(', 'function tidalTensorFromBody(', 'gravity-potential-map', 'gravity-tidal-map', 'non-Euclidean']));
+checks.push(includes('Gravity foundation exposes N-body state, extended geometry, integration, diagnostics, and explicit model boundaries', sources.gravity, ['const G = 6.67430e-11;', 'const MAX_BODIES = 12;', 'function buildMassSamples(body', 'function pairForce(a,b', 'function accelerations(bodies', 'function stepSimulation(dt)', 'function diagnostics(bodies', 'function geometryDiagnostics(bodies', 'Extended Geometry · analytic sphere + quadrature solids', 'function restrictedThreeBodyState(', 'function collinearLagrangeX(', 'earth-moon-l4', 'gravity-view-frame', 'Co-rotating with bodies 1–2', 'function potentialFromBody(', 'function tidalTensorFromBody(', 'gravity-potential-map', 'gravity-tidal-map', 'function mergeCollisionBodies(', 'function elasticSphereCollisionResult(', 'gravity-collision-model', 'Perfectly inelastic merge', 'Frictionless elastic hard spheres', 'non-Euclidean']));
 
 checks.push(includes('Media demonstration corpus remains authoritative and launchable', sources.mediaDemos, ['BinaryCubeMediaForensicsDemoCorpus', 'buildDemoBytes', 'openPanel', 'openInAppropriateTool']));
 checks.push(includes('ISM remains cooperative and model-bounded', sources.ism, ['const LAMBDA = 1.097e-52;', 'const PLANCK_LENGTH = 1.616255e-35;', 'function magneticPhysics(config)', 'async function simulateAsync(config, options = {})', 'ScientificToolsCooperativeRunner']));
@@ -215,7 +225,7 @@ checks.push('Scientific Tools styles, raster evidence routing, calibration data,
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.30.0',
+  schemaVersion: '0.31.0',
   pass: true,
   checkCount: checks.length,
   checks

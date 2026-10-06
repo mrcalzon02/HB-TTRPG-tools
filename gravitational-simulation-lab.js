@@ -32,6 +32,7 @@
   const scriptPromises = new Map();
   const quadratureCache = new WeakMap();
   let geometryDiagnosticsCache = null;
+  let lastCollisionAudit = null;
 
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
   const finite = (v, fallback = 0) => Number.isFinite(Number(v)) ? Number(v) : fallback;
@@ -388,6 +389,86 @@
     return acc;
   }
 
+  function momentumVectorForBodies(bodies) {
+    const p=vec();
+    for(const b of bodies){p.x+=b.massKg*b.velocity.x;p.y+=b.massKg*b.velocity.y;p.z+=b.massKg*b.velocity.z;}
+    return p;
+  }
+
+  function kineticEnergyForBodies(bodies) {
+    let total=0;
+    for(const b of bodies)total+=0.5*b.massKg*(b.velocity.x*b.velocity.x+b.velocity.y*b.velocity.y+b.velocity.z*b.velocity.z);
+    return total;
+  }
+
+  function mergeCollisionBodies(a,b) {
+    const totalMass=a.massKg+b.massKg,totalVolume=bodyVolumeM3(a)+bodyVolumeM3(b);
+    const beforeMomentum=momentumVectorForBodies([a,b]),beforeKinetic=kineticEnergyForBodies([a,b]);
+    const position=vec((a.position.x*a.massKg+b.position.x*b.massKg)/totalMass,(a.position.y*a.massKg+b.position.y*b.massKg)/totalMass,(a.position.z*a.massKg+b.position.z*b.massKg)/totalMass);
+    const velocity=vec(beforeMomentum.x/totalMass,beforeMomentum.y/totalMass,beforeMomentum.z/totalMass);
+    const equivalentRadius=Math.cbrt(3*totalVolume/(4*Math.PI));
+    const merged=normalizeBody({name:`${a.name} + ${b.name}`,shape:'sphere',massMode:'mass',massKg:totalMass,dimensionsM:dimensionsFromRadius(equivalentRadius),rotationDeg:vec(),position,velocity},0);
+    const afterMomentum=momentumVectorForBodies([merged]),afterKinetic=kineticEnergyForBodies([merged]);
+    return {body:merged,audit:Object.freeze({
+      model:'perfectly-inelastic-spherical-remnant',
+      beforeMassKg:totalMass,afterMassKg:merged.massKg,massRelativeError:(merged.massKg-totalMass)/totalMass,
+      momentumResidual:Math.hypot(afterMomentum.x-beforeMomentum.x,afterMomentum.y-beforeMomentum.y,afterMomentum.z-beforeMomentum.z),
+      kineticBeforeJ:beforeKinetic,kineticAfterJ:afterKinetic,kineticDeltaJ:afterKinetic-beforeKinetic,
+      volumeBeforeM3:totalVolume,volumeAfterM3:bodyVolumeM3(merged)
+    })};
+  }
+
+  function elasticSphereCollisionResult(a,b) {
+    if(!isAnalyticSphere(a)||!isAnalyticSphere(b))return {valid:false,reason:'Elastic hard-sphere response requires two homogeneous spherical bodies.'};
+    const dx=b.position.x-a.position.x,dy=b.position.y-a.position.y,dz=b.position.z-a.position.z,dist=Math.hypot(dx,dy,dz);
+    if(!(dist>0))return {valid:false,reason:'Coincident sphere centers do not define a collision normal.'};
+    const n=vec(dx/dist,dy/dist,dz/dist),beforeMomentum=momentumVectorForBodies([a,b]),beforeKinetic=kineticEnergyForBodies([a,b]);
+    const rv=vec(b.velocity.x-a.velocity.x,b.velocity.y-a.velocity.y,b.velocity.z-a.velocity.z),normalSpeed=rv.x*n.x+rv.y*n.y+rv.z*n.z;
+    const aa=cloneBody(a),bb=cloneBody(b);
+    if(normalSpeed<0){
+      const impulse=-2*normalSpeed/(1/a.massKg+1/b.massKg);
+      aa.velocity.x-=impulse*n.x/a.massKg;aa.velocity.y-=impulse*n.y/a.massKg;aa.velocity.z-=impulse*n.z/a.massKg;
+      bb.velocity.x+=impulse*n.x/b.massKg;bb.velocity.y+=impulse*n.y/b.massKg;bb.velocity.z+=impulse*n.z/b.massKg;
+    }
+    const overlap=Math.max(0,a.radiusM+b.radiusM-dist)+Math.max(a.radiusM+b.radiusM,1)*1e-10,totalMass=a.massKg+b.massKg;
+    aa.position.x-=n.x*overlap*b.massKg/totalMass;aa.position.y-=n.y*overlap*b.massKg/totalMass;aa.position.z-=n.z*overlap*b.massKg/totalMass;
+    bb.position.x+=n.x*overlap*a.massKg/totalMass;bb.position.y+=n.y*overlap*a.massKg/totalMass;bb.position.z+=n.z*overlap*a.massKg/totalMass;
+    const afterMomentum=momentumVectorForBodies([aa,bb]),afterKinetic=kineticEnergyForBodies([aa,bb]);
+    return {valid:true,a:aa,b:bb,audit:Object.freeze({
+      model:'frictionless-elastic-hard-sphere',
+      momentumResidual:Math.hypot(afterMomentum.x-beforeMomentum.x,afterMomentum.y-beforeMomentum.y,afterMomentum.z-beforeMomentum.z),
+      kineticRelativeError:(afterKinetic-beforeKinetic)/Math.max(Math.abs(beforeKinetic),1e-30),
+      depenetrationM:overlap,normalClosingSpeedMps:normalSpeed
+    })};
+  }
+
+  function collisionMode(){return typeof document!=='undefined'?(document.getElementById('gravity-collision-model')?.value||'halt'):'halt';}
+
+  function renderCollisionAudit() {
+    const node=typeof document!=='undefined'?document.getElementById('gravity-collision-audit'):null;if(!node)return;
+    if(!lastCollisionAudit){node.textContent='No collision has been resolved in this run.';node.dataset.kind='';return;}
+    if(lastCollisionAudit.model==='perfectly-inelastic-spherical-remnant'){
+      node.textContent=`Last collision: inelastic spherical-remnant merge · mass error ${lastCollisionAudit.massRelativeError.toExponential(2)} · momentum residual ${formatScientific(lastCollisionAudit.momentumResidual,2)} kg·m/s · ΔKE ${formatScientific(lastCollisionAudit.kineticDeltaJ,2)} J. Angular momentum is not transferred into remnant spin in this approximation.`;
+    }else{
+      node.textContent=`Last collision: elastic hard-sphere response · momentum residual ${formatScientific(lastCollisionAudit.momentumResidual,2)} kg·m/s · kinetic-energy relative error ${lastCollisionAudit.kineticRelativeError.toExponential(2)} · depenetration ${formatDistance(lastCollisionAudit.depenetrationM)}.`;
+    }
+  }
+
+  function resolveCollision(hit) {
+    const mode=collisionMode(),a=state.bodies[hit.i],b=state.bodies[hit.j];
+    if(mode==='halt')return {halt:true};
+    if(mode==='merge'){
+      const result=mergeCollisionBodies(a,b),next=state.bodies.filter((_,index)=>index!==hit.i&&index!==hit.j);
+      next.splice(Math.min(hit.i,hit.j),0,result.body);state.bodies=next;lastCollisionAudit=result.audit;return {resolved:true,rebuild:true};
+    }
+    if(mode==='elastic'){
+      const result=elasticSphereCollisionResult(a,b);
+      if(!result.valid){setStatus(result.reason+' Simulation halted rather than applying an invalid rigid-body approximation.','warning');return {halt:true};}
+      state.bodies[hit.i]=result.a;state.bodies[hit.j]=result.b;lastCollisionAudit=result.audit;return {resolved:true,rebuild:false};
+    }
+    return {halt:true};
+  }
+
   function findCollision(bodies) {
     for(let i=0;i<bodies.length;i++)for(let j=i+1;j<bodies.length;j++){
       const a=bodies[i],b=bodies[j],d=Math.hypot(b.position.x-a.position.x,b.position.y-a.position.y,b.position.z-a.position.z);
@@ -399,15 +480,25 @@
   function stepSimulation(dt) {
     const config=solverOptions(),a0=accelerations(state.bodies,config);
     for(let i=0;i<state.bodies.length;i++){
-      const b=state.bodies[i],a=a0[i];b.position.x+=b.velocity.x*dt+0.5*a.x*dt*dt;b.position.y+=b.velocity.y*dt+0.5*a.y*dt*dt;b.position.z+=b.velocity.z*dt+0.5*a.z*dt*dt;
+      const b=state.bodies[i],a=a0[i];
+      b.velocity.x+=0.5*a.x*dt;b.velocity.y+=0.5*a.y*dt;b.velocity.z+=0.5*a.z*dt;
+      b.position.x+=b.velocity.x*dt;b.position.y+=b.velocity.y*dt;b.position.z+=b.velocity.z*dt;
     }
-    const hit=findCollision(state.bodies);
-    if(hit){running=false;setStatus(`Conservative bounding-volume collision reached: ${state.bodies[hit.i].name} ↔ ${state.bodies[hit.j].name}. GRAV-02 halts rather than inventing contact, deformation, or merger physics.`,'warning');updateRunButton();return false;}
+    let rebuilt=false;
+    for(let pass=0;pass<MAX_BODIES;pass++){
+      const hit=findCollision(state.bodies);if(!hit)break;
+      const resolution=resolveCollision(hit);
+      if(resolution.halt){
+        running=false;setStatus(`Collision boundary reached: ${state.bodies[hit.i]?.name||'body'} ↔ ${state.bodies[hit.j]?.name||'body'}. Collision mode is Halt, or the selected response is invalid for these shapes.`,'warning');
+        updateRunButton();renderCollisionAudit();return false;
+      }
+      rebuilt=rebuilt||resolution.rebuild;
+    }
     const a1=accelerations(state.bodies,config);
-    for(let i=0;i<state.bodies.length;i++){
-      const b=state.bodies[i];b.velocity.x+=0.5*(a0[i].x+a1[i].x)*dt;b.velocity.y+=0.5*(a0[i].y+a1[i].y)*dt;b.velocity.z+=0.5*(a0[i].z+a1[i].z)*dt;
-    }
-    state.timeS+=dt;return true;
+    for(let i=0;i<state.bodies.length;i++){const b=state.bodies[i],a=a1[i];b.velocity.x+=0.5*a.x*dt;b.velocity.y+=0.5*a.y*dt;b.velocity.z+=0.5*a.z*dt;}
+    state.timeS+=dt;
+    if(rebuilt&&sceneState){const count=document.getElementById('gravity-body-count');if(count)count.value=state.bodies.length;renderObjectEditors();rebuildBodiesVisual();clearTrails();}
+    renderCollisionAudit();return true;
   }
 
   function fieldAccelerationFromBody(body,point,options={}) {
@@ -763,8 +854,10 @@
     baseline=state.bodies.map(cloneBody);
     initialDiagnostics=diagnostics(state.bodies,solverOptions());
     geometryDiagnosticsCache=null;
+    lastCollisionAudit=null;
     running=false;
     updateRunButton();
+    renderCollisionAudit();
     renderObjectEditors();
     rebuildBodiesVisual();
     updateVisuals(true);
@@ -792,8 +885,10 @@
     baseline=state.bodies.map(cloneBody);
     initialDiagnostics=diagnostics(state.bodies,solverOptions());
     geometryDiagnosticsCache=null;
+    lastCollisionAudit=null;
     running=false;
     updateRunButton();
+    renderCollisionAudit();
     const count=document.getElementById('gravity-body-count');if(count)count.value=state.bodies.length;
     const note=document.getElementById('gravity-preset-note');if(note)note.textContent=PRESET_INFO[id]||PRESET_INFO['earth-moon'];
     const frameSelect=document.getElementById('gravity-view-frame');if(frameSelect)frameSelect.value=id.startsWith('earth-moon-l')?'corotating':'inertial';
@@ -807,8 +902,10 @@
     state={bodies:baseline.map(cloneBody),timeS:0};
     initialDiagnostics=diagnostics(state.bodies,solverOptions());
     geometryDiagnosticsCache=null;
+    lastCollisionAudit=null;
     running=false;
     updateRunButton();
+    renderCollisionAudit();
     renderObjectEditors();
     rebuildBodiesVisual();
     updateVisuals(true);
@@ -824,6 +921,7 @@
         <label>Gravity interaction model<select id="gravity-model"><option value="extended" selected>Extended Geometry · analytic sphere + quadrature solids</option><option value="point">Point Mass · center-of-mass baseline</option></select></label>
         <label>Quadrature cells / axis<input id="gravity-quadrature" type="number" min="2" max="${MAX_QUADRATURE_RESOLUTION}" value="${DEFAULT_QUADRATURE_RESOLUTION}"></label>
         <label>Far-field point-limit threshold (combined bounding radii; 0 = never)<input id="gravity-far-field" type="number" min="0" step=".5" value="${DEFAULT_FAR_FIELD_FACTOR}"></label>
+        <label>Collision handling<select id="gravity-collision-model"><option value="halt" selected>Halt at collision boundary</option><option value="merge">Perfectly inelastic merge · spherical remnant</option><option value="elastic">Frictionless elastic hard spheres · spheres only</option></select></label>
         <label>Body count 1–12<input id="gravity-body-count" type="number" min="1" max="12" value="2"></label>
         <label>Integrator timestep (s)<input id="gravity-timestep" type="number" min="0.001" step="any" value="60"></label>
         <label>Integration steps / rendered frame<input id="gravity-steps-frame" type="number" min="1" max="64" value="8"></label>
@@ -832,7 +930,7 @@
         <label>Field-map resolution<input id="gravity-map-resolution" type="number" min="12" max="64" value="32"></label>
         <label class="gravity-check"><input id="gravity-trails" type="checkbox" checked> Show trajectory trails</label>
         <label class="gravity-check"><input id="gravity-field-vectors" type="checkbox" checked> Show gravitational-field vectors</label>
-        <div class="gravity-actions"><button id="gravity-run" class="primary">Run</button><button id="gravity-step">Single step</button><button id="gravity-reset">Reset</button><button id="gravity-apply">Apply object parameters</button></div><div id="gravity-status" class="gravity-status">Ready.</div>
+        <div class="gravity-actions"><button id="gravity-run" class="primary">Run</button><button id="gravity-step">Single step</button><button id="gravity-reset">Reset</button><button id="gravity-apply">Apply object parameters</button></div><div id="gravity-status" class="gravity-status">Ready.</div><div id="gravity-collision-audit" class="gravity-status">No collision has been resolved in this run.</div>
       </section>
       <section class="gravity-card"><h3>Objects & Euclidean mass geometry</h3><p class="gravity-source-note">Mass or density can be authoritative. Size X/Y/Z controls the physical mass distribution and collision bounding volume independently from the display multiplier. Static Euler orientation affects non-spherical gravity; rotational dynamics are not yet modeled.</p><div id="gravity-object-list" class="gravity-object-list"></div></section>
     </aside><main class="gravity-workspace">
@@ -856,6 +954,7 @@
         <p><strong>Extended solids:</strong> rectangular prisms, tetrahedra, octahedra, icosahedra, finite elliptical disks, ellipsoids, and tori are represented by deterministic equal-volume cell-center mass quadrature. Near-body pair forces sum every participating mass-element pair once and apply equal/opposite forces to the two centers of mass. This preserves linear momentum even when shape corrections are active.</p>
         <p><strong>Numerical diagnostics:</strong> the laboratory reports the current extended-force difference from the point model, a representative resolution-to-resolution field difference, and a standardized 20-bounding-radius far-field difference. Field samples inside discretized non-spherical bodies use cell-scale regularization because a point mass at a quadrature-cell center is not the continuous cell volume.</p>
         <p><strong>Field diagnostics:</strong> Φ is evaluated analytically for homogeneous spheres and by the same volume quadrature for other solids. The tidal map sums the symmetric Newtonian acceleration-gradient tensor from the same mass model. Outside point masses the tensor trace approaches zero; inside a homogeneous sphere the analytic tensor is isotropically compressive.</p>
+        <p><strong>Collision models:</strong> Halt preserves the pre-contact model boundary. Perfectly inelastic merge conserves total mass, volume, and linear momentum while replacing the pair with an equivalent-volume spherical remnant; lost orbital angular momentum is not converted into spin. Elastic response is available only for two homogeneous spheres and uses a frictionless hard-sphere impulse plus center-of-mass-preserving depenetration.</p>
         <p class="gravity-source-note">Reference constants/presets: G = 6.67430×10⁻¹¹ m³·kg⁻¹·s⁻² (2022 CODATA recommended value); Earth mass 5.9722×10²⁴ kg and mean radius 6371 km; Sun mass 1.9884×10³⁰ kg and mean radius 695,700 km; mean Earth–Moon distance 384,400 km. Preset values are reference initial conditions, not date-specific ephemerides.</p>
       </section>
       <section class="gravity-boundary"><strong>Scientific boundary:</strong> GRAV-02/03 remains Newtonian. Shape-dependent forces here are Euclidean volume integrations, not spacetime curvature. L1/L4/L5 presets use idealized circular restricted-three-body initial conditions with a 1 kg tracer; the tracer is not literally massless, but its back-reaction is negligible at the displayed scale. Co-rotating and barycentric modes transform only the visualization, never the solver state. Collision detection is presently a conservative bounding-volume stop, not exact mesh contact. Rigid-body spin, tidal deformation, general relativity, frame dragging, gravitational radiation, and intrinsic non-Euclidean geometry remain separate future solvers.</section>
@@ -883,7 +982,7 @@
   const api=Object.freeze({
     mountPage,
     constants:Object.freeze({G,AU_M,EARTH_MASS,EARTH_RADIUS_M,MOON_MASS,MOON_RADIUS_M,MOON_DISTANCE_M,SUN_MASS,SUN_RADIUS_M,MAX_BODIES,DEFAULT_QUADRATURE_RESOLUTION,MAX_QUADRATURE_RESOLUTION,DEFAULT_FAR_FIELD_FACTOR}),
-    bodyVolumeM3,bodyBoundingRadiusM,normalizeBody,buildMassSamples,fieldAccelerationFromBody,potentialFromBody,potentialAtPoint,tidalTensorFromBody,tidalTensorAtPoint,tidalFrobeniusNorm,pointMassForce,pairForce,accelerations,diagnostics,geometryDiagnostics,restrictedThreeBodyState,collinearLagrangeX,effectiveRotatingAccelerationX
+    bodyVolumeM3,bodyBoundingRadiusM,normalizeBody,buildMassSamples,fieldAccelerationFromBody,potentialFromBody,potentialAtPoint,tidalTensorFromBody,tidalTensorAtPoint,tidalFrobeniusNorm,pointMassForce,pairForce,accelerations,diagnostics,geometryDiagnostics,mergeCollisionBodies,elasticSphereCollisionResult,restrictedThreeBodyState,collinearLagrangeX,effectiveRotatingAccelerationX
   });
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(typeof window!=='undefined')window.GravitationalSimulationLab=api;

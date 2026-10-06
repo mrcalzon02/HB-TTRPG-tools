@@ -456,15 +456,25 @@ Still required before GRAV-04 is complete:
 - per-cell numerical-error / convergence overlays;
 - principal tidal eigenvalue/eigenvector visualization and Roche-limit experiment support.
 ## GRAV-05 — Contact, collision, and finite-body interactions
-Status: PLANNED.
+Status: INCREMENTAL IMPLEMENTATION.
 
-Required:
-- collision models must be selectable and physically labeled rather than automatic;
-- inelastic merge baseline with mass and momentum conservation;
-- elastic rigid-body approximation only when its assumptions are satisfied;
-- fragmentation remains disabled until an explicit material/failure model exists;
-- conservation audit before and after every resolved interaction.
+Implemented:
+- explicit user-selectable collision handling rather than automatic hidden behavior;
+- Halt mode preserves the pre-contact model boundary;
+- perfectly inelastic spherical-remnant merge with mass, volume, and linear-momentum conservation audit;
+- collision-remnant equivalent-volume radius and derived density;
+- frictionless elastic hard-sphere impulse available only when both bodies are homogeneous spheres;
+- center-of-mass-preserving positional depenetration for the hard-sphere approximation;
+- collision audit reporting momentum residual, kinetic-energy change/error, mass error, and depenetration;
+- velocity-Verlet reorganized into half-step velocity form so collision response occurs between drift and final acceleration kick;
+- unsupported elastic shape combinations halt instead of silently applying sphere physics.
 
+Still required before GRAV-05 is complete:
+- exact shape contact rather than conservative bounding-volume overlap for non-spherical bodies;
+- angular momentum transfer into remnant spin for inelastic mergers;
+- rigid-body angular velocity, inertia tensors, friction, and tangential impulse;
+- deformation/material response models;
+- fragmentation remains disabled until an explicit material/failure model exists.
 ## GRAV-06 — General-relativistic model layers
 Status: PLANNED / separate solver.
 
