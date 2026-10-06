@@ -118,6 +118,17 @@ const gravityExpectedPrecession = 6*Math.PI*gravityRelMu/(gravityRelA*(1-gravity
 assert.ok(Math.abs(gravityRelDiag.periapsisAdvanceRad-gravityExpectedPrecession)/gravityExpectedPrecession < 1e-10);
 assert.ok(Number.isFinite(gravityRelCorrection.acceleration.x) && Number.isFinite(gravityRelCorrection.acceleration.y) && Number.isFinite(gravityRelCorrection.acceleration.z));
 assert.ok(gravityRelDiag.staticClockRate > 0 && gravityRelDiag.staticClockRate < 1);
+const gravityGeometryEuclid = Gravity.intrinsicGeometryDiagnostics('euclidean',1e6,5e5,5e5);
+const gravityGeometrySphere = Gravity.intrinsicGeometryDiagnostics('spherical',1e6,5e5,5e5);
+const gravityGeometryHyperbolic = Gravity.intrinsicGeometryDiagnostics('hyperbolic',1e6,5e5,5e5);
+assert.equal(gravityGeometryEuclid.circle.circumferenceRatio,1);
+assert.equal(gravityGeometryEuclid.circle.areaRatio,1);
+assert.ok(Math.abs(gravityGeometryEuclid.triangle.angleSumRad-Math.PI) < 1e-15);
+assert.ok(gravityGeometrySphere.gaussianCurvature > 0);
+assert.ok(gravityGeometrySphere.circle.circumferenceRatio < 1 && gravityGeometrySphere.circle.areaRatio < 1 && gravityGeometrySphere.triangle.excessRad > 0);
+assert.ok(gravityGeometryHyperbolic.gaussianCurvature < 0);
+assert.ok(gravityGeometryHyperbolic.circle.circumferenceRatio > 1 && gravityGeometryHyperbolic.circle.areaRatio > 1 && gravityGeometryHyperbolic.triangle.excessRad < 0);
+assert.equal(gravityGeometrySphere.physicalGravityCoupling,false);
 
 const checks = [];
 
@@ -226,7 +237,7 @@ for (const [label, page, runtime] of [
   checks.push(includes(`${label} has a dedicated laboratory page`, page, [runtime, 'scientific-laboratory-page.js', 'ScientificLaboratoryPageConfig']));
 }
 checks.push(includes('Gravity laboratory is page-native and scientifically bounded', sources.gravityPage, ['gravitational-simulation-lab.js', 'gravitational-simulation-root']));
-checks.push(includes('Gravity foundation exposes N-body state, extended geometry, integration, diagnostics, and explicit model boundaries', sources.gravity, ['const G = 6.67430e-11;', 'const MAX_BODIES = 12;', 'function buildMassSamples(body', 'function pairForce(a,b', 'function accelerations(bodies', 'function stepSimulation(dt)', 'function diagnostics(bodies', 'function geometryDiagnostics(bodies', 'Extended Geometry · analytic sphere + quadrature solids', 'function restrictedThreeBodyState(', 'function collinearLagrangeX(', 'earth-moon-l4', 'gravity-view-frame', 'Co-rotating with bodies 1–2', 'function potentialFromBody(', 'function tidalTensorFromBody(', 'gravity-potential-map', 'gravity-tidal-map', 'function mergeCollisionBodies(', 'function elasticSphereCollisionResult(', 'gravity-collision-model', 'Perfectly inelastic merge', 'Frictionless elastic hard spheres', 'const C = 299792458;', 'function schwarzschildRadius(', 'function schwarzschild1PNCorrection(', 'gravity-relativity', 'compact-precession', 'Schwarzschild 1PN test-particle correction', 'non-Euclidean']));
+checks.push(includes('Gravity foundation exposes N-body state, extended geometry, integration, diagnostics, and explicit model boundaries', sources.gravity, ['const G = 6.67430e-11;', 'const MAX_BODIES = 12;', 'function buildMassSamples(body', 'function pairForce(a,b', 'function accelerations(bodies', 'function stepSimulation(dt)', 'function diagnostics(bodies', 'function geometryDiagnostics(bodies', 'Extended Geometry · analytic sphere + quadrature solids', 'function restrictedThreeBodyState(', 'function collinearLagrangeX(', 'earth-moon-l4', 'gravity-view-frame', 'Co-rotating with bodies 1–2', 'function potentialFromBody(', 'function tidalTensorFromBody(', 'gravity-potential-map', 'gravity-tidal-map', 'function mergeCollisionBodies(', 'function elasticSphereCollisionResult(', 'gravity-collision-model', 'Perfectly inelastic merge', 'Frictionless elastic hard spheres', 'const C = 299792458;', 'function schwarzschildRadius(', 'function schwarzschild1PNCorrection(', 'gravity-relativity', 'compact-precession', 'Schwarzschild 1PN test-particle correction', 'function intrinsicGeometryDiagnostics(', 'function geodesicCircleMetrics(', 'function equilateralGeodesicTriangle(', 'gravity-geometry-model', 'Intrinsic Geometry Laboratory · GRAV-07', 'physicalGravityCoupling:false', 'non-Euclidean']));
 
 checks.push(includes('Media demonstration corpus remains authoritative and launchable', sources.mediaDemos, ['BinaryCubeMediaForensicsDemoCorpus', 'buildDemoBytes', 'openPanel', 'openInAppropriateTool']));
 checks.push(includes('ISM remains cooperative and model-bounded', sources.ism, ['const LAMBDA = 1.097e-52;', 'const PLANCK_LENGTH = 1.616255e-35;', 'function magneticPhysics(config)', 'async function simulateAsync(config, options = {})', 'ScientificToolsCooperativeRunner']));
@@ -239,7 +250,7 @@ checks.push('Scientific Tools styles, raster evidence routing, calibration data,
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.32.0',
+  schemaVersion: '0.33.0',
   pass: true,
   checkCount: checks.length,
   checks

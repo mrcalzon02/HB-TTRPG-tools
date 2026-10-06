@@ -724,6 +724,118 @@
     return {farFieldDelta,currentPairDelta,convergence,resolution:config.resolution};
   }
 
+  function constantCurvatureK(model,radiusM) {
+    const radius=Math.max(1e-12,finite(radiusM,1));
+    if(model==='spherical')return 1/(radius*radius);
+    if(model==='hyperbolic')return -1/(radius*radius);
+    return 0;
+  }
+
+  function curvatureS(model,radiusM,geodesicRadiusM) {
+    const R=Math.max(1e-12,finite(radiusM,1)),r=Math.max(0,finite(geodesicRadiusM,0)),x=r/R;
+    if(model==='spherical')return R*Math.sin(Math.min(x,Math.PI));
+    if(model==='hyperbolic')return R*Math.sinh(Math.min(x,20));
+    return r;
+  }
+
+  function geodesicCircleMetrics(model,radiusM,geodesicRadiusM) {
+    const R=Math.max(1e-12,finite(radiusM,1)),r=Math.max(0,finite(geodesicRadiusM,0));
+    const maxSphere=Math.PI*R;
+    const bounded=model==='spherical'?Math.min(r,maxSphere):r;
+    const S=curvatureS(model,R,bounded);
+    const circumference=2*Math.PI*S;
+    let area;
+    if(model==='spherical')area=2*Math.PI*R*R*(1-Math.cos(bounded/R));
+    else if(model==='hyperbolic')area=2*Math.PI*R*R*(Math.cosh(Math.min(bounded/R,20))-1);
+    else area=Math.PI*bounded*bounded;
+    return {
+      model,curvatureRadiusM:R,geodesicRadiusM:bounded,
+      gaussianCurvature:constantCurvatureK(model,R),
+      circumferenceM:circumference,
+      areaM2:area,
+      circumferenceRatio:bounded>0?circumference/(2*Math.PI*bounded):1,
+      areaRatio:bounded>0?area/(Math.PI*bounded*bounded):1,
+      jacobiRatio:bounded>0?S/bounded:1,
+      sphereRadiusClamped:model==='spherical'&&r>maxSphere
+    };
+  }
+
+  function equilateralGeodesicTriangle(model,radiusM,sideM) {
+    const R=Math.max(1e-12,finite(radiusM,1)),raw=Math.max(0,finite(sideM,0));
+    if(raw===0)return {model,sideM:0,angleRad:Math.PI/3,angleSumRad:Math.PI,excessRad:0};
+    if(model==='euclidean')return {model,sideM:raw,angleRad:Math.PI/3,angleSumRad:Math.PI,excessRad:0};
+    if(model==='spherical'){
+      const side=Math.min(raw,Math.PI*R*.999999),x=side/R,c=Math.cos(x),s=Math.sin(x);
+      const cosAngle=clamp((c-c*c)/Math.max(s*s,1e-30),-1,1),angle=Math.acos(cosAngle);
+      return {model,sideM:side,angleRad:angle,angleSumRad:3*angle,excessRad:3*angle-Math.PI,sideClamped:raw!==side};
+    }
+    const x=Math.min(raw/R,20),ch=Math.cosh(x),sh=Math.sinh(x);
+    const cosAngle=clamp((ch*ch-ch)/Math.max(sh*sh,1e-30),-1,1),angle=Math.acos(cosAngle);
+    return {model,sideM:raw,angleRad:angle,angleSumRad:3*angle,excessRad:3*angle-Math.PI};
+  }
+
+  function intrinsicGeometryDiagnostics(model='euclidean',radiusM=1,probeRadiusM=1,triangleSideM=1) {
+    const normalized=['euclidean','spherical','hyperbolic'].includes(model)?model:'euclidean';
+    const circle=geodesicCircleMetrics(normalized,radiusM,probeRadiusM);
+    const triangle=equilateralGeodesicTriangle(normalized,radiusM,triangleSideM);
+    const metricFunction=normalized==='spherical'?'R sin(r/R)':normalized==='hyperbolic'?'R sinh(r/R)':'r';
+    return Object.freeze({
+      model:normalized,
+      coordinateSystem:'geodesic polar coordinates (r, θ)',
+      dimensionality:'2D intrinsic constant-curvature manifold',
+      lineElement:`ds² = dr² + [${metricFunction}]² dθ²`,
+      gaussianCurvature:circle.gaussianCurvature,
+      curvatureRadiusM:circle.curvatureRadiusM,
+      circle,
+      triangle,
+      embeddingRequired:false,
+      physicalGravityCoupling:false,
+      boundary:'This is intrinsic mathematical geometry. It does not alter the Newtonian or 1PN gravitational solver and is not an embedding-space model of gravity.'
+    });
+  }
+
+  function renderIntrinsicGeometryLab() {
+    if(typeof document==='undefined')return;
+    const model=document.getElementById('gravity-geometry-model')?.value||'euclidean';
+    const R=Math.max(1e-9,finite(document.getElementById('gravity-curvature-radius-km')?.value,1000)*1000);
+    const probe=Math.max(0,finite(document.getElementById('gravity-geometry-probe-km')?.value,500)*1000);
+    const side=Math.max(0,finite(document.getElementById('gravity-geometry-triangle-km')?.value,500)*1000);
+    const d=intrinsicGeometryDiagnostics(model,R,probe,side);
+    const values={
+      'gravity-geometry-k':formatScientific(d.gaussianCurvature,3)+' m⁻²',
+      'gravity-geometry-circ-ratio':d.circle.circumferenceRatio.toFixed(8),
+      'gravity-geometry-area-ratio':d.circle.areaRatio.toFixed(8),
+      'gravity-geometry-jacobi-ratio':d.circle.jacobiRatio.toFixed(8),
+      'gravity-geometry-angle-sum':(d.triangle.angleSumRad*180/Math.PI).toFixed(8)+'°',
+      'gravity-geometry-excess':(d.triangle.excessRad*180/Math.PI).toFixed(8)+'°'
+    };
+    for(const [id,value] of Object.entries(values)){const node=document.getElementById(id);if(node)node.textContent=value;}
+    const metric=document.getElementById('gravity-geometry-metric');if(metric)metric.textContent=d.lineElement;
+    const status=document.getElementById('gravity-geometry-status');
+    if(status)status.textContent=`${d.dimensionality}. ${d.boundary}${d.circle.sphereRadiusClamped?' Spherical probe radius was clamped to πR.':''}${d.triangle.sideClamped?' Spherical triangle side was clamped below πR.':''}`;
+    const canvas=document.getElementById('gravity-geometry-chart');if(!canvas)return;
+    const width=Math.max(320,Math.round(canvas.clientWidth||700)),height=Math.max(260,Math.round(canvas.clientHeight||340)),dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
+    const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);ctx.fillStyle='#03070b';ctx.fillRect(0,0,width,height);
+    const pad={l:55,r:18,t:28,b:42},plotW=width-pad.l-pad.r,plotH=height-pad.t-pad.b,maxX=model==='spherical'?Math.PI*.95:3;
+    const samples=120,rows=[];
+    for(let i=1;i<=samples;i++){
+      const x=maxX*i/samples,m=geodesicCircleMetrics(model,R,x*R);
+      rows.push({x,c:m.circumferenceRatio,a:m.areaRatio});
+    }
+    let maxY=1.05;for(const row of rows)maxY=Math.max(maxY,row.c,row.a);maxY=Math.min(maxY,12);
+    ctx.strokeStyle='rgba(126,184,215,.25)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,height-pad.b);ctx.lineTo(width-pad.r,height-pad.b);ctx.stroke();
+    const draw=(key,stroke)=>{
+      ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.beginPath();
+      rows.forEach((row,i)=>{const x=pad.l+row.x/maxX*plotW,y=height-pad.b-clamp(row[key]/maxY,0,1)*plotH;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});ctx.stroke();
+    };
+    draw('c','#72d5ff');draw('a','#f3c36a');
+    ctx.fillStyle='#dceaf1';ctx.font='12px ui-monospace,monospace';ctx.fillText('r / R',width/2-20,height-12);
+    ctx.save();ctx.translate(14,height/2+35);ctx.rotate(-Math.PI/2);ctx.fillText('ratio to Euclidean',0,0);ctx.restore();
+    ctx.fillStyle='#72d5ff';ctx.fillText('C / 2πr',pad.l+8,pad.t+14);ctx.fillStyle='#f3c36a';ctx.fillText('A / πr²',pad.l+95,pad.t+14);
+    ctx.fillStyle='#9fb0bc';ctx.fillText(`selected: ${model} · K=${formatScientific(d.gaussianCurvature,2)} m⁻²`,pad.l+8,height-pad.b+20);
+  }
+
   function relativeDrift(value, initial) {
     const scale=Math.max(Math.abs(initial),1e-30);return (value-initial)/scale;
   }
@@ -841,6 +953,7 @@
     if(forceField||frame%12===0)rebuildFieldVectors(extent);
     if(forceField||frame%30===0||!geometryDiagnosticsCache)geometryDiagnosticsCache=geometryDiagnostics(state.bodies,solverOptions());
     if(forceField||frame%60===0)renderFieldMaps();
+    if(forceField||frame%120===0)renderIntrinsicGeometryLab();
     renderMetrics();
   }
 
@@ -1039,6 +1152,26 @@
         <article class="gravity-card"><h3>Newtonian potential slice</h3><p class="gravity-source-note">Scalar potential Φ on the selected display-frame plane. Color is logarithmic in |Φ|; the readout preserves physical m²/s² values.</p><canvas id="gravity-potential-map" class="gravity-scalar-map"></canvas></article>
         <article class="gravity-card"><h3>Tidal tensor slice</h3><p class="gravity-source-note">Frobenius norm of the Newtonian tidal tensor ∂gᵢ/∂xⱼ in s⁻². This is differential acceleration structure, not spacetime curvature.</p><canvas id="gravity-tidal-map" class="gravity-scalar-map"></canvas></article>
       </section>
+      <section class="gravity-card"><h3>Intrinsic Geometry Laboratory · GRAV-07</h3>
+        <p class="gravity-source-note">This workbench is deliberately decoupled from physical gravity. It evaluates the intrinsic metric of ideal 2D constant-curvature spaces without pretending a Euclidean 3D embedding is the geometry itself.</p>
+        <div class="gravity-geometry-controls">
+          <label>Intrinsic geometry<select id="gravity-geometry-model"><option value="euclidean">Euclidean · K = 0</option><option value="spherical">Spherical · K = +1/R²</option><option value="hyperbolic">Hyperbolic · K = −1/R²</option></select></label>
+          <label>Curvature radius R (km)<input id="gravity-curvature-radius-km" type="number" min="0.000001" step="any" value="1000"></label>
+          <label>Geodesic-circle radius r (km)<input id="gravity-geometry-probe-km" type="number" min="0" step="any" value="500"></label>
+          <label>Equilateral geodesic side (km)<input id="gravity-geometry-triangle-km" type="number" min="0" step="any" value="500"></label>
+        </div>
+        <div class="gravity-geometry-metrics">
+          <div class="gravity-metric"><span>Gaussian curvature K</span><strong id="gravity-geometry-k">0 m⁻²</strong></div>
+          <div class="gravity-metric"><span>Circumference ratio C/(2πr)</span><strong id="gravity-geometry-circ-ratio">1</strong></div>
+          <div class="gravity-metric"><span>Disk-area ratio A/(πr²)</span><strong id="gravity-geometry-area-ratio">1</strong></div>
+          <div class="gravity-metric"><span>Geodesic deviation J/r</span><strong id="gravity-geometry-jacobi-ratio">1</strong></div>
+          <div class="gravity-metric"><span>Equilateral angle sum</span><strong id="gravity-geometry-angle-sum">180°</strong></div>
+          <div class="gravity-metric"><span>Angle excess / defect</span><strong id="gravity-geometry-excess">0°</strong></div>
+        </div>
+        <p><strong>Intrinsic metric:</strong> <code id="gravity-geometry-metric">ds² = dr² + r² dθ²</code></p>
+        <canvas id="gravity-geometry-chart" class="gravity-scalar-map"></canvas>
+        <div id="gravity-geometry-status" class="gravity-status"></div>
+      </section>
       <section class="gravity-card"><h3>GRAV-02/04 physical model</h3>
         <p><strong>Analytic baseline:</strong> a homogeneous spherical body uses g = GM/r² outside and g = GMr/R³ inside. Two separated homogeneous spheres therefore retain the exact point-mass mutual force by the shell theorem.</p>
         <p><strong>Extended solids:</strong> rectangular prisms, tetrahedra, octahedra, icosahedra, finite elliptical disks, ellipsoids, and tori are represented by deterministic equal-volume cell-center mass quadrature. Near-body pair forces sum every participating mass-element pair once and apply equal/opposite forces to the two centers of mass. This preserves linear momentum even when shape corrections are active.</p>
@@ -1048,7 +1181,7 @@
         <p><strong>Relativistic layer:</strong> the optional Schwarzschild 1PN mode adds the standard weak-field test-particle correction to one selected body's Newtonian acceleration around body 1. It is automatically withheld when the target/central mass ratio exceeds 10⁻³, speed reaches 0.3c, or radius falls within 10 Schwarzschild radii. Diagnostics include Rs = 2GM/c², static Schwarzschild clock rate √(1−Rs/r), and the first-order periapsis advance 6πGM/[a(1−e²)c²]. This is not a full Einstein-field-equation or exact geodesic solver.</p>
         <p class="gravity-source-note">Reference constants/presets: G = 6.67430×10⁻¹¹ m³·kg⁻¹·s⁻² (2022 CODATA recommended value); Earth mass 5.9722×10²⁴ kg and mean radius 6371 km; Sun mass 1.9884×10³⁰ kg and mean radius 695,700 km; mean Earth–Moon distance 384,400 km. Preset values are reference initial conditions, not date-specific ephemerides.</p>
       </section>
-      <section class="gravity-boundary"><strong>Scientific boundary:</strong> GRAV-02/03 remains Newtonian. Shape-dependent forces here are Euclidean volume integrations, not spacetime curvature. L1/L4/L5 presets use idealized circular restricted-three-body initial conditions with a 1 kg tracer; the tracer is not literally massless, but its back-reaction is negligible at the displayed scale. Co-rotating and barycentric modes transform only the visualization, never the solver state. Collision detection is presently a conservative bounding-volume stop, not exact mesh contact. Rigid-body spin and tidal deformation remain incomplete. The optional 1PN layer is a weak-field Schwarzschild test-particle approximation only; exact Schwarzschild geodesics, comparable-mass post-Newtonian dynamics, Kerr/frame dragging, gravitational radiation, and intrinsic non-Euclidean geometry remain separate future solvers.</section>
+      <section class="gravity-boundary"><strong>Scientific boundary:</strong> GRAV-02/03 remains Newtonian. Shape-dependent forces here are Euclidean volume integrations, not spacetime curvature. L1/L4/L5 presets use idealized circular restricted-three-body initial conditions with a 1 kg tracer; the tracer is not literally massless, but its back-reaction is negligible at the displayed scale. Co-rotating and barycentric modes transform only the visualization, never the solver state. Collision detection is presently a conservative bounding-volume stop, not exact mesh contact. Rigid-body spin and tidal deformation remain incomplete. The optional 1PN layer is a weak-field Schwarzschild test-particle approximation only; exact Schwarzschild geodesics, comparable-mass post-Newtonian dynamics, Kerr/frame dragging, and gravitational radiation remain separate future solvers. The GRAV-07 constant-curvature workbench is an intrinsic mathematics layer only and is not coupled to gravitational dynamics.</section>
     </main></div></section>`;
   }
 
@@ -1065,6 +1198,7 @@
     for(const id of ['gravity-field-vectors','gravity-model','gravity-quadrature','gravity-far-field','gravity-relativity','gravity-relativity-target']) document.getElementById(id)?.addEventListener('change',()=>{geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
     document.getElementById('gravity-view-frame')?.addEventListener('change',()=>{clearTrails();updateVisuals(true);});
     for(const id of ['gravity-field-z-km','gravity-map-resolution']) document.getElementById(id)?.addEventListener('change',()=>renderFieldMaps());
+    for(const id of ['gravity-geometry-model','gravity-curvature-radius-km','gravity-geometry-probe-km','gravity-geometry-triangle-km']) document.getElementById(id)?.addEventListener('input',()=>renderIntrinsicGeometryLab());
     document.getElementById('gravity-display-radius').addEventListener('input',()=>updateVisuals(false));
     await initScene();
     return root;
@@ -1073,7 +1207,7 @@
   const api=Object.freeze({
     mountPage,
     constants:Object.freeze({G,C,AU_M,EARTH_MASS,EARTH_RADIUS_M,MOON_MASS,MOON_RADIUS_M,MOON_DISTANCE_M,SUN_MASS,SUN_RADIUS_M,MAX_BODIES,DEFAULT_QUADRATURE_RESOLUTION,MAX_QUADRATURE_RESOLUTION,DEFAULT_FAR_FIELD_FACTOR}),
-    bodyVolumeM3,bodyBoundingRadiusM,normalizeBody,buildMassSamples,fieldAccelerationFromBody,potentialFromBody,potentialAtPoint,tidalTensorFromBody,tidalTensorAtPoint,tidalFrobeniusNorm,pointMassForce,pairForce,accelerations,diagnostics,geometryDiagnostics,mergeCollisionBodies,elasticSphereCollisionResult,schwarzschildRadius,orbitalElementsAround,schwarzschildDiagnostics,schwarzschild1PNCorrection,restrictedThreeBodyState,collinearLagrangeX,effectiveRotatingAccelerationX
+    bodyVolumeM3,bodyBoundingRadiusM,normalizeBody,buildMassSamples,fieldAccelerationFromBody,potentialFromBody,potentialAtPoint,tidalTensorFromBody,tidalTensorAtPoint,tidalFrobeniusNorm,pointMassForce,pairForce,accelerations,diagnostics,geometryDiagnostics,mergeCollisionBodies,elasticSphereCollisionResult,schwarzschildRadius,orbitalElementsAround,schwarzschildDiagnostics,schwarzschild1PNCorrection,constantCurvatureK,curvatureS,geodesicCircleMetrics,equilateralGeodesicTriangle,intrinsicGeometryDiagnostics,restrictedThreeBodyState,collinearLagrangeX,effectiveRotatingAccelerationX
   });
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(typeof window!=='undefined')window.GravitationalSimulationLab=api;

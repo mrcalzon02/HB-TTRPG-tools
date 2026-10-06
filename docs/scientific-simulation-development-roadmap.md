@@ -500,15 +500,28 @@ Still required before GRAV-06 is complete:
 - gravitational-radiation reaction and waveform layers only after their own validity regime is implemented;
 - never portray the Newtonian field arrows, scalar potential maps, or decorative embedding surfaces as a solution to Einstein's field equations.
 ## GRAV-07 — Non-Euclidean geometry laboratory
-Status: PLANNED / separate mathematics layer.
+Status: INCREMENTAL IMPLEMENTATION / intrinsic mathematics layer only.
 
-Required:
-- distinguish mathematical non-Euclidean manifolds from physical general relativity;
-- constant-curvature spherical and hyperbolic geometry demonstrations;
-- geodesic/path behavior on selected metrics;
-- metric, coordinates, curvature assumptions, dimensionality, and embedding visualization must be shown explicitly;
-- an embedding picture is visualization only and must not be confused with the intrinsic geometry.
+Implemented:
+- explicit separation between intrinsic mathematical geometry and physical gravitational dynamics;
+- 2D constant-curvature Euclidean, spherical, and hyperbolic models in geodesic polar coordinates;
+- line element ds² = dr² + S_K(r)² dθ² with S_K(r) = r, R sin(r/R), or R sinh(r/R);
+- Gaussian curvature K = 0, +1/R², or −1/R²;
+- geodesic-circle circumference and disk-area calculations;
+- normalized circumference C/(2πr), area A/(πr²), and radial geodesic-deviation J/r diagnostics;
+- equilateral geodesic-triangle angle sum with positive spherical excess and negative hyperbolic defect;
+- page-visible intrinsic-geometry chart comparing circumference and area growth against Euclidean geometry;
+- explicit metric, coordinate system, dimensionality, curvature radius, and no-gravity-coupling declaration;
+- no Euclidean 3D embedding is required or presented as the intrinsic geometry.
 
+Still required before GRAV-07 is complete:
+- arbitrary geodesic initial-value integration on selected metrics;
+- explicit spherical and hyperbolic geodesic path visualizations;
+- selectable coordinate charts, including stereographic/Poincaré representations labeled as coordinate models rather than embeddings;
+- geodesic triangles with arbitrary side lengths and Gauss–Bonnet area cross-checks;
+- parallel transport and holonomy demonstrations;
+- higher-dimensional constant-curvature manifolds and user-supplied metric tensors only after metric validation and singularity handling are implemented;
+- any coupling between non-Euclidean mathematics and a physical gravity model must be introduced as a separate solver with explicit field equations, not by reusing visualization curvature.
 ## GRAV-08 — Theory and hypothesis isolation
 Status: PLANNED.
 
