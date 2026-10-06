@@ -132,13 +132,19 @@ Required inspection:
 Required diagnostics should classify effects as dominant, significant, small, negligible, below numerical resolution, or outside model validity when defensible.
 
 ## ISM-09 — Hypothesis-layer isolation
-Status: PARTIAL.
+Status: PARTIAL / active.
 
-Required:
-- Quantum Foam, Shadow, and Phase Light moved behind clearly marked optional hypothesis/fiction layers;
-- established-physics mode defaults to those layers Off;
+Implemented foundation:
+- established proton transport is now the default laboratory path;
+- Quantum Foam defaults Off;
+- Shadow coupling defaults to zero and is explicitly labeled an optional fiction hypothesis;
+- Phase Light wording has been removed from the default beam/run controls.
+
+Required completion:
+- formal layer registry with independent enable/disable state;
 - hypothesis gain/amplification cannot be mistaken for physical prediction;
-- established and fictional outputs should be separately reportable.
+- established and fictional outputs should be separately reportable;
+- Blacklight-specific Phase Light behavior, when implemented, must live only inside its explicit optional layer.
 
 ## ISM future extensions retained by intent
 Status: PLANNED.
