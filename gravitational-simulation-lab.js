@@ -12,6 +12,12 @@
   const SUN_RADIUS_M = 695700000;
   const MAX_BODIES = 12;
   const TRAIL_POINTS = 420;
+  const DEFAULT_QUADRATURE_RESOLUTION = 4;
+  const MAX_QUADRATURE_RESOLUTION = 6;
+  const DEFAULT_FAR_FIELD_FACTOR = 8;
+  const TORUS_MAJOR_RATIO = 0.62;
+  const TORUS_MINOR_RATIO = 0.38;
+  const GOLDEN_RATIO = (1 + Math.sqrt(5)) / 2;
   const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
   const ORBIT_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
 
@@ -24,11 +30,15 @@
   let frame = 0;
   let initialDiagnostics = null;
   const scriptPromises = new Map();
+  const quadratureCache = new WeakMap();
+  let geometryDiagnosticsCache = null;
 
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
   const finite = (v, fallback = 0) => Number.isFinite(Number(v)) ? Number(v) : fallback;
   const vec = (x=0,y=0,z=0) => ({x,y,z});
-  const cloneBody = b => ({...b, position:{...b.position}, velocity:{...b.velocity}, trail:[]});
+  const cloneBody = b => ({...b, position:{...b.position}, velocity:{...b.velocity}, dimensionsM:{...b.dimensionsM}, rotationDeg:{...b.rotationDeg}, trail:[]});
+  const vectorMagnitude = v => Math.hypot(v.x, v.y, v.z);
+  const vectorDifferenceMagnitude = (a,b) => Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z);
 
   function loadScript(src) {
     if (scriptPromises.has(src)) return scriptPromises.get(src);
@@ -58,19 +68,28 @@
     return {r1, r2, v1:omega*r1, v2:omega*r2};
   }
 
+  function dimensionsFromRadius(radiusM) {
+    const diameter = Math.max(0, radiusM) * 2;
+    return {x:diameter,y:diameter,z:diameter};
+  }
+
+  function makeBody(name, shape, massKg, radiusM, position, velocity, extra={}) {
+    return {name,shape,massKg,massMode:'mass',dimensionsM:dimensionsFromRadius(radiusM),rotationDeg:vec(),position,velocity,...extra};
+  }
+
   function earthMoonPreset() {
     const orbit = orbitalPair(EARTH_MASS, MOON_MASS, MOON_DISTANCE_M);
     return [
-      {name:'Earth',shape:'sphere',massKg:EARTH_MASS,radiusM:EARTH_RADIUS_M,position:vec(-orbit.r1,0,0),velocity:vec(0,-orbit.v1,0)},
-      {name:'Moon',shape:'sphere',massKg:MOON_MASS,radiusM:MOON_RADIUS_M,position:vec(orbit.r2,0,0),velocity:vec(0,orbit.v2,0)}
+      makeBody('Earth','sphere',EARTH_MASS,EARTH_RADIUS_M,vec(-orbit.r1,0,0),vec(0,-orbit.v1,0)),
+      makeBody('Moon','sphere',MOON_MASS,MOON_RADIUS_M,vec(orbit.r2,0,0),vec(0,orbit.v2,0))
     ];
   }
 
   function sunEarthPreset() {
     const orbit = orbitalPair(SUN_MASS, EARTH_MASS, AU_M);
     return [
-      {name:'Sun',shape:'sphere',massKg:SUN_MASS,radiusM:SUN_RADIUS_M,position:vec(-orbit.r1,0,0),velocity:vec(0,-orbit.v1,0)},
-      {name:'Earth',shape:'sphere',massKg:EARTH_MASS,radiusM:EARTH_RADIUS_M,position:vec(orbit.r2,0,0),velocity:vec(0,orbit.v2,0)}
+      makeBody('Sun','sphere',SUN_MASS,SUN_RADIUS_M,vec(-orbit.r1,0,0),vec(0,-orbit.v1,0)),
+      makeBody('Earth','sphere',EARTH_MASS,EARTH_RADIUS_M,vec(orbit.r2,0,0),vec(0,orbit.v2,0))
     ];
   }
 
@@ -78,8 +97,8 @@
     const separation = 120000000;
     const orbit = orbitalPair(EARTH_MASS, EARTH_MASS, separation);
     return [
-      {name:'A',shape:'icosahedron',massKg:EARTH_MASS,radiusM:5000000,position:vec(-orbit.r1,0,0),velocity:vec(0,-orbit.v1,0)},
-      {name:'B',shape:'cube',massKg:EARTH_MASS,radiusM:5000000,position:vec(orbit.r2,0,0),velocity:vec(0,orbit.v2,0)}
+      makeBody('A','icosahedron',EARTH_MASS,5000000,vec(-orbit.r1,0,0),vec(0,-orbit.v1,0),{rotationDeg:vec(12,18,8)}),
+      makeBody('B','cube',EARTH_MASS,5000000,vec(orbit.r2,0,0),vec(0,orbit.v2,0),{rotationDeg:vec(0,28,15)})
     ];
   }
 
@@ -88,9 +107,9 @@
     const r = 90000000;
     const speed = Math.sqrt(G*m/r) * 0.72;
     return [
-      {name:'One',shape:'sphere',massKg:m,radiusM:4500000,position:vec(-r,0,0),velocity:vec(0,-speed,0)},
-      {name:'Two',shape:'tetrahedron',massKg:m,radiusM:4500000,position:vec(r,0,0),velocity:vec(0,-speed,0)},
-      {name:'Three',shape:'torus',massKg:m,radiusM:4500000,position:vec(0,r*1.25,0),velocity:vec(speed*1.35,speed*0.9,0)}
+      makeBody('One','sphere',m,4500000,vec(-r,0,0),vec(0,-speed,0)),
+      makeBody('Two','tetrahedron',m,4500000,vec(r,0,0),vec(0,-speed,0),{rotationDeg:vec(18,12,0)}),
+      makeBody('Three','torus',m,4500000,vec(0,r*1.25,0),vec(speed*1.35,speed*0.9,0),{rotationDeg:vec(62,0,15)})
     ];
   }
 
@@ -102,77 +121,279 @@
   }
 
   function blankBody(index) {
-    return {name:`Body ${index+1}`,shape:['sphere','cube','tetrahedron','octahedron','icosahedron','torus'][index%6],massKg:EARTH_MASS,radiusM:3000000,position:vec((index-(MAX_BODIES-1)/2)*70000000,0,0),velocity:vec(0,0,0)};
+    const shapes=['sphere','cube','tetrahedron','octahedron','icosahedron','disk','torus'];
+    return makeBody(`Body ${index+1}`,shapes[index%shapes.length],EARTH_MASS,3000000,vec((index-(MAX_BODIES-1)/2)*70000000,0,0),vec());
   }
 
-  function normalizeBodies(bodies) { return bodies.map((b,i) => cloneBody({...blankBody(i),...b})); }
+  function canonicalVertices(shape) {
+    if (shape === 'tetrahedron') return [vec(1,1,1),vec(1,-1,-1),vec(-1,1,-1),vec(-1,-1,1)];
+    if (shape === 'icosahedron') {
+      const a=1/GOLDEN_RATIO;
+      return [
+        vec(0,a,1),vec(0,a,-1),vec(0,-a,1),vec(0,-a,-1),
+        vec(a,1,0),vec(a,-1,0),vec(-a,1,0),vec(-a,-1,0),
+        vec(1,0,a),vec(1,0,-a),vec(-1,0,a),vec(-1,0,-a)
+      ];
+    }
+    return [];
+  }
 
-  function accelerations(bodies) {
-    const acc = bodies.map(() => vec());
-    for (let i=0;i<bodies.length;i++) for (let j=i+1;j<bodies.length;j++) {
-      const a=bodies[i], b=bodies[j];
-      const dx=b.position.x-a.position.x, dy=b.position.y-a.position.y, dz=b.position.z-a.position.z;
-      const r2=dx*dx+dy*dy+dz*dz;
-      const r=Math.sqrt(r2);
-      if (!(r>0)) continue;
-      const invR3=1/(r2*r);
-      const ai=G*b.massKg*invR3, aj=G*a.massKg*invR3;
-      acc[i].x+=dx*ai; acc[i].y+=dy*ai; acc[i].z+=dz*ai;
-      acc[j].x-=dx*aj; acc[j].y-=dy*aj; acc[j].z-=dz*aj;
+  function convexHullFaces(vertices) {
+    const faces=[],eps=1e-9;
+    for(let i=0;i<vertices.length-2;i++) for(let j=i+1;j<vertices.length-1;j++) for(let k=j+1;k<vertices.length;k++){
+      const a=vertices[i],b=vertices[j],c=vertices[k];
+      const ab=vec(b.x-a.x,b.y-a.y,b.z-a.z),ac=vec(c.x-a.x,c.y-a.y,c.z-a.z);
+      let n=vec(ab.y*ac.z-ab.z*ac.y,ab.z*ac.x-ab.x*ac.z,ab.x*ac.y-ab.y*ac.x);
+      const len=vectorMagnitude(n); if(len<eps) continue;
+      n=vec(n.x/len,n.y/len,n.z/len);
+      let d=n.x*a.x+n.y*a.y+n.z*a.z;
+      let positive=false,negative=false;
+      for(let q=0;q<vertices.length;q++){
+        if(q===i||q===j||q===k) continue;
+        const side=n.x*vertices[q].x+n.y*vertices[q].y+n.z*vertices[q].z-d;
+        if(side>eps)positive=true;if(side<-eps)negative=true;if(positive&&negative)break;
+      }
+      if(positive&&negative) continue;
+      if(d<0){n=vec(-n.x,-n.y,-n.z);d=-d;}
+      if(vertices.some((v,q)=>q!==i&&q!==j&&q!==k&&Math.abs(n.x*v.x+n.y*v.y+n.z*v.z-d)<eps)) continue;
+      faces.push({indices:[i,j,k],normal:n,d});
+    }
+    return faces;
+  }
+
+  const TETRA_FACES = convexHullFaces(canonicalVertices('tetrahedron'));
+  const ICOSA_FACES = convexHullFaces(canonicalVertices('icosahedron'));
+
+  function pointInsideConvex(point, faces) {
+    return faces.every(face => face.normal.x*point.x+face.normal.y*point.y+face.normal.z*point.z <= face.d + 1e-9);
+  }
+
+  function bodyHalfExtents(body) {
+    const d=body.dimensionsM||dimensionsFromRadius(body.radiusM||1);
+    return {x:Math.max(1e-12,d.x/2),y:Math.max(1e-12,d.y/2),z:Math.max(1e-12,d.z/2)};
+  }
+
+  function bodyVolumeM3(body) {
+    const h=bodyHalfExtents(body);
+    if(body.shape==='cube') return 8*h.x*h.y*h.z;
+    if(body.shape==='tetrahedron') return (8/3)*h.x*h.y*h.z;
+    if(body.shape==='octahedron') return (4/3)*h.x*h.y*h.z;
+    if(body.shape==='icosahedron'){
+      const normalizedVolume=((10/3)*(3+Math.sqrt(5)))/Math.pow(GOLDEN_RATIO,3);
+      return normalizedVolume*h.x*h.y*h.z;
+    }
+    if(body.shape==='disk') return 2*Math.PI*h.x*h.y*h.z;
+    if(body.shape==='torus') return 2*Math.PI*Math.PI*TORUS_MAJOR_RATIO*TORUS_MINOR_RATIO*h.x*h.y*h.z;
+    return (4/3)*Math.PI*h.x*h.y*h.z;
+  }
+
+  function bodyBoundingRadiusM(body) {
+    const h=bodyHalfExtents(body);
+    if(body.shape==='sphere') return Math.max(h.x,h.y,h.z);
+    if(body.shape==='disk'||body.shape==='torus') return Math.hypot(Math.max(h.x,h.y),h.z);
+    return Math.hypot(h.x,h.y,h.z);
+  }
+
+  function normalizeBody(body,index=0) {
+    const fallback=blankBody(index);
+    const normalized={...fallback,...body,dimensionsM:{...(body.dimensionsM||fallback.dimensionsM)},rotationDeg:{...(body.rotationDeg||vec())},position:{...(body.position||fallback.position)},velocity:{...(body.velocity||fallback.velocity)}};
+    normalized.dimensionsM.x=Math.max(1e-9,finite(normalized.dimensionsM.x,fallback.dimensionsM.x));
+    normalized.dimensionsM.y=Math.max(1e-9,finite(normalized.dimensionsM.y,fallback.dimensionsM.y));
+    normalized.dimensionsM.z=Math.max(1e-9,finite(normalized.dimensionsM.z,fallback.dimensionsM.z));
+    normalized.massMode=normalized.massMode==='density'?'density':'mass';
+    const volume=bodyVolumeM3(normalized);
+    if(normalized.massMode==='density'){
+      normalized.densityKgM3=Math.max(1e-18,finite(normalized.densityKgM3,finite(normalized.massKg,EARTH_MASS)/volume));
+      normalized.massKg=normalized.densityKgM3*volume;
+    }else{
+      normalized.massKg=Math.max(1e-18,finite(normalized.massKg,EARTH_MASS));
+      normalized.densityKgM3=normalized.massKg/volume;
+    }
+    normalized.radiusM=bodyBoundingRadiusM(normalized);
+    normalized.trail=[];
+    return normalized;
+  }
+
+  function normalizeBodies(bodies) { return bodies.map((b,i)=>normalizeBody(b,i)); }
+
+  function rotateLocalPoint(point, rotationDeg) {
+    const rx=finite(rotationDeg?.x)*Math.PI/180,ry=finite(rotationDeg?.y)*Math.PI/180,rz=finite(rotationDeg?.z)*Math.PI/180;
+    let x=point.x,y=point.y,z=point.z;
+    let c=Math.cos(rx),s=Math.sin(rx); [y,z]=[y*c-z*s,y*s+z*c];
+    c=Math.cos(ry);s=Math.sin(ry); [x,z]=[x*c+z*s,-x*s+z*c];
+    c=Math.cos(rz);s=Math.sin(rz); [x,y]=[x*c-y*s,x*s+y*c];
+    return vec(x,y,z);
+  }
+
+  function normalizedPointInside(shape,p) {
+    if(shape==='cube') return true;
+    if(shape==='tetrahedron') return pointInsideConvex(p,TETRA_FACES);
+    if(shape==='octahedron') return Math.abs(p.x)+Math.abs(p.y)+Math.abs(p.z)<=1+1e-12;
+    if(shape==='icosahedron') return pointInsideConvex(p,ICOSA_FACES);
+    if(shape==='disk') return p.x*p.x+p.y*p.y<=1+1e-12 && Math.abs(p.z)<=1;
+    if(shape==='torus') {
+      const radial=Math.hypot(p.x,p.y),tube=(radial-TORUS_MAJOR_RATIO)/TORUS_MINOR_RATIO;
+      return tube*tube+p.z*p.z<=1+1e-12;
+    }
+    return p.x*p.x+p.y*p.y+p.z*p.z<=1+1e-12;
+  }
+
+  function buildMassSamples(body,resolution=DEFAULT_QUADRATURE_RESOLUTION) {
+    const n=clamp(Math.round(resolution),2,MAX_QUADRATURE_RESOLUTION);
+    const cacheKey=`${body.shape}|${n}|${body.dimensionsM.x}|${body.dimensionsM.y}|${body.dimensionsM.z}|${body.rotationDeg.x}|${body.rotationDeg.y}|${body.rotationDeg.z}|${body.massKg}`;
+    const cached=quadratureCache.get(body);if(cached?.key===cacheKey)return cached.samples;
+    const h=bodyHalfExtents(body),samples=[];
+    for(let iz=0;iz<n;iz++)for(let iy=0;iy<n;iy++)for(let ix=0;ix<n;ix++){
+      const p=vec((ix+.5)/n*2-1,(iy+.5)/n*2-1,(iz+.5)/n*2-1);
+      if(!normalizedPointInside(body.shape,p))continue;
+      const local=rotateLocalPoint(vec(p.x*h.x,p.y*h.y,p.z*h.z),body.rotationDeg);samples.push(local);
+    }
+    if(!samples.length)samples.push(vec());
+    const sampleMassKg=body.massKg/samples.length;
+    const frozen=samples.map(p=>Object.freeze({x:p.x,y:p.y,z:p.z,massKg:sampleMassKg}));
+    quadratureCache.set(body,{key:cacheKey,samples:frozen});return frozen;
+  }
+
+  function isAnalyticSphere(body) {
+    if(body.shape!=='sphere')return false;
+    const h=bodyHalfExtents(body),scale=Math.max(h.x,h.y,h.z);
+    return Math.max(Math.abs(h.x-h.y),Math.abs(h.y-h.z),Math.abs(h.z-h.x))<=scale*1e-10;
+  }
+
+  function pointMassForce(a,b) {
+    const dx=b.position.x-a.position.x,dy=b.position.y-a.position.y,dz=b.position.z-a.position.z;
+    const r2=dx*dx+dy*dy+dz*dz,r=Math.sqrt(r2);
+    if(!(r>0))return {force:vec(),distanceM:r,mode:'coincident'};
+    const factor=G*a.massKg*b.massKg/(r2*r);
+    return {force:vec(dx*factor,dy*factor,dz*factor),distanceM:r,mode:'point'};
+  }
+
+  function solverOptions(overrides={}) {
+    const hasDocument=typeof document!=='undefined';
+    const model=overrides.model||(hasDocument?document.getElementById('gravity-model')?.value:null)||'point';
+    const resolution=clamp(Math.round(finite(overrides.resolution,hasDocument?document.getElementById('gravity-quadrature')?.value:DEFAULT_QUADRATURE_RESOLUTION)),2,MAX_QUADRATURE_RESOLUTION);
+    const farFieldFactor=Math.max(0,finite(overrides.farFieldFactor,hasDocument?document.getElementById('gravity-far-field')?.value:DEFAULT_FAR_FIELD_FACTOR));
+    return {model:model==='extended'?'extended':'point',resolution,farFieldFactor};
+  }
+
+  function pairForce(a,b,options={}) {
+    const config=solverOptions(options),point=pointMassForce(a,b);
+    if(config.model!=='extended'||!(point.distanceM>0))return point;
+    const separation=point.distanceM,combinedRadius=a.radiusM+b.radiusM;
+    if(isAnalyticSphere(a)&&isAnalyticSphere(b)&&separation>=combinedRadius)return {...point,mode:'analytic-sphere'};
+    if(config.farFieldFactor>0&&separation>=config.farFieldFactor*combinedRadius)return {...point,mode:'far-field-point-limit'};
+    const sa=buildMassSamples(a,config.resolution),sb=buildMassSamples(b,config.resolution),force=vec();let interactions=0;
+    for(const pa of sa)for(const pb of sb){
+      const dx=(b.position.x+pb.x)-(a.position.x+pa.x),dy=(b.position.y+pb.y)-(a.position.y+pa.y),dz=(b.position.z+pb.z)-(a.position.z+pa.z);
+      const r2=dx*dx+dy*dy+dz*dz,r=Math.sqrt(r2);if(!(r>0))continue;
+      const f=G*pa.massKg*pb.massKg/(r2*r);force.x+=dx*f;force.y+=dy*f;force.z+=dz*f;interactions++;
+    }
+    return {force,distanceM:separation,mode:'extended-quadrature',interactions};
+  }
+
+  function pairPotential(a,b,options={}) {
+    const config=solverOptions(options),separation=Math.hypot(b.position.x-a.position.x,b.position.y-a.position.y,b.position.z-a.position.z);
+    if(!(separation>0))return 0;
+    const combinedRadius=a.radiusM+b.radiusM;
+    if(config.model!=='extended'||(isAnalyticSphere(a)&&isAnalyticSphere(b)&&separation>=combinedRadius)||(config.farFieldFactor>0&&separation>=config.farFieldFactor*combinedRadius))return -G*a.massKg*b.massKg/separation;
+    const sa=buildMassSamples(a,config.resolution),sb=buildMassSamples(b,config.resolution);let potential=0;
+    for(const pa of sa)for(const pb of sb){
+      const r=Math.hypot((b.position.x+pb.x)-(a.position.x+pa.x),(b.position.y+pb.y)-(a.position.y+pa.y),(b.position.z+pb.z)-(a.position.z+pa.z));
+      if(r>0)potential-=G*pa.massKg*pb.massKg/r;
+    }
+    return potential;
+  }
+
+  function accelerations(bodies,options={}) {
+    const config=solverOptions(options),acc=bodies.map(()=>vec());
+    for(let i=0;i<bodies.length;i++)for(let j=i+1;j<bodies.length;j++){
+      const a=bodies[i],b=bodies[j],pair=pairForce(a,b,config);
+      acc[i].x+=pair.force.x/a.massKg;acc[i].y+=pair.force.y/a.massKg;acc[i].z+=pair.force.z/a.massKg;
+      acc[j].x-=pair.force.x/b.massKg;acc[j].y-=pair.force.y/b.massKg;acc[j].z-=pair.force.z/b.massKg;
     }
     return acc;
   }
 
   function findCollision(bodies) {
-    for (let i=0;i<bodies.length;i++) for (let j=i+1;j<bodies.length;j++) {
-      const a=bodies[i],b=bodies[j];
-      const d=Math.hypot(b.position.x-a.position.x,b.position.y-a.position.y,b.position.z-a.position.z);
-      if (d <= a.radiusM + b.radiusM) return {i,j,d};
+    for(let i=0;i<bodies.length;i++)for(let j=i+1;j<bodies.length;j++){
+      const a=bodies[i],b=bodies[j],d=Math.hypot(b.position.x-a.position.x,b.position.y-a.position.y,b.position.z-a.position.z);
+      if(d<=a.radiusM+b.radiusM)return {i,j,d};
     }
     return null;
   }
 
   function stepSimulation(dt) {
-    const a0=accelerations(state.bodies);
+    const config=solverOptions(),a0=accelerations(state.bodies,config);
     for(let i=0;i<state.bodies.length;i++){
-      const b=state.bodies[i],a=a0[i];
-      b.position.x+=b.velocity.x*dt+0.5*a.x*dt*dt;
-      b.position.y+=b.velocity.y*dt+0.5*a.y*dt*dt;
-      b.position.z+=b.velocity.z*dt+0.5*a.z*dt*dt;
+      const b=state.bodies[i],a=a0[i];b.position.x+=b.velocity.x*dt+0.5*a.x*dt*dt;b.position.y+=b.velocity.y*dt+0.5*a.y*dt*dt;b.position.z+=b.velocity.z*dt+0.5*a.z*dt*dt;
     }
     const hit=findCollision(state.bodies);
-    if(hit){running=false;setStatus(`Collision boundary reached: ${state.bodies[hit.i].name} ↔ ${state.bodies[hit.j].name}. The foundation solver halts rather than inventing a merge or impact model.`,'warning');updateRunButton();return false;}
-    const a1=accelerations(state.bodies);
+    if(hit){running=false;setStatus(`Conservative bounding-volume collision reached: ${state.bodies[hit.i].name} ↔ ${state.bodies[hit.j].name}. GRAV-02 halts rather than inventing contact, deformation, or merger physics.`,'warning');updateRunButton();return false;}
+    const a1=accelerations(state.bodies,config);
     for(let i=0;i<state.bodies.length;i++){
-      const b=state.bodies[i];
-      b.velocity.x+=0.5*(a0[i].x+a1[i].x)*dt;
-      b.velocity.y+=0.5*(a0[i].y+a1[i].y)*dt;
-      b.velocity.z+=0.5*(a0[i].z+a1[i].z)*dt;
+      const b=state.bodies[i];b.velocity.x+=0.5*(a0[i].x+a1[i].x)*dt;b.velocity.y+=0.5*(a0[i].y+a1[i].y)*dt;b.velocity.z+=0.5*(a0[i].z+a1[i].z)*dt;
     }
-    state.timeS+=dt;
-    return true;
+    state.timeS+=dt;return true;
   }
 
-  function diagnostics(bodies) {
-    let kinetic=0,potential=0,totalMass=0;
-    const p=vec(), com=vec(), L=vec();
-    let minSep=Infinity;
+  function fieldAccelerationFromBody(body,point,options={}) {
+    const config=solverOptions(options),dx=body.position.x-point.x,dy=body.position.y-point.y,dz=body.position.z-point.z,r=Math.hypot(dx,dy,dz);
+    if(config.model!=='extended'){
+      if(!(r>0))return vec();const factor=G*body.massKg/(r*r*r);return vec(dx*factor,dy*factor,dz*factor);
+    }
+    if(isAnalyticSphere(body)){
+      const radius=bodyHalfExtents(body).x;if(!(r>0))return vec();
+      const factor=r>=radius?G*body.massKg/(r*r*r):G*body.massKg/(radius*radius*radius);return vec(dx*factor,dy*factor,dz*factor);
+    }
+    const samples=buildMassSamples(body,config.resolution),out=vec(),h=bodyHalfExtents(body),softening=Math.min(h.x,h.y,h.z)/config.resolution*.28;
+    for(const s of samples){
+      const sx=body.position.x+s.x-point.x,sy=body.position.y+s.y-point.y,sz=body.position.z+s.z-point.z;
+      const r2=sx*sx+sy*sy+sz*sz+softening*softening,rr=Math.sqrt(r2),factor=G*s.massKg/(r2*rr);out.x+=sx*factor;out.y+=sy*factor;out.z+=sz*factor;
+    }
+    return out;
+  }
+
+  function accelerationAtPoint(point,bodies,options={}) {
+    const out=vec(),config=solverOptions(options);
+    for(const body of bodies){const a=fieldAccelerationFromBody(body,point,config);out.x+=a.x;out.y+=a.y;out.z+=a.z;}return out;
+  }
+
+  function diagnostics(bodies,options={}) {
+    const config=solverOptions(options);let kinetic=0,potential=0,totalMass=0;const p=vec(),com=vec(),L=vec();let minSep=Infinity;
     for(const b of bodies){
-      const v2=b.velocity.x*b.velocity.x+b.velocity.y*b.velocity.y+b.velocity.z*b.velocity.z;
-      kinetic+=0.5*b.massKg*v2; totalMass+=b.massKg;
-      p.x+=b.massKg*b.velocity.x;p.y+=b.massKg*b.velocity.y;p.z+=b.massKg*b.velocity.z;
-      com.x+=b.massKg*b.position.x;com.y+=b.massKg*b.position.y;com.z+=b.massKg*b.position.z;
-      L.x+=b.massKg*(b.position.y*b.velocity.z-b.position.z*b.velocity.y);
-      L.y+=b.massKg*(b.position.z*b.velocity.x-b.position.x*b.velocity.z);
-      L.z+=b.massKg*(b.position.x*b.velocity.y-b.position.y*b.velocity.x);
+      const v2=b.velocity.x*b.velocity.x+b.velocity.y*b.velocity.y+b.velocity.z*b.velocity.z;kinetic+=0.5*b.massKg*v2;totalMass+=b.massKg;
+      p.x+=b.massKg*b.velocity.x;p.y+=b.massKg*b.velocity.y;p.z+=b.massKg*b.velocity.z;com.x+=b.massKg*b.position.x;com.y+=b.massKg*b.position.y;com.z+=b.massKg*b.position.z;
+      L.x+=b.massKg*(b.position.y*b.velocity.z-b.position.z*b.velocity.y);L.y+=b.massKg*(b.position.z*b.velocity.x-b.position.x*b.velocity.z);L.z+=b.massKg*(b.position.x*b.velocity.y-b.position.y*b.velocity.x);
     }
     if(totalMass){com.x/=totalMass;com.y/=totalMass;com.z/=totalMass;}
-    for(let i=0;i<bodies.length;i++)for(let j=i+1;j<bodies.length;j++){
-      const a=bodies[i],b=bodies[j],r=Math.hypot(b.position.x-a.position.x,b.position.y-a.position.y,b.position.z-a.position.z);
-      if(r>0) potential-=G*a.massKg*b.massKg/r;
-      minSep=Math.min(minSep,r);
-    }
+    for(let i=0;i<bodies.length;i++)for(let j=i+1;j<bodies.length;j++){potential+=pairPotential(bodies[i],bodies[j],config);minSep=Math.min(minSep,Math.hypot(bodies[j].position.x-bodies[i].position.x,bodies[j].position.y-bodies[i].position.y,bodies[j].position.z-bodies[i].position.z));}
     return {kinetic,potential,totalEnergy:kinetic+potential,momentum:Math.hypot(p.x,p.y,p.z),angularMomentum:Math.hypot(L.x,L.y,L.z),com,minSep};
+  }
+
+  function geometryDiagnostics(bodies,options={}) {
+    const config=solverOptions({...options,model:'extended',farFieldFactor:0});let farFieldDelta=0,currentPairDelta=0,convergence=0,representative=null;
+    for(const body of bodies){
+      const direction=vec(.91,.34,.23),norm=vectorMagnitude(direction),distance=Math.max(body.radiusM*20,1);
+      const point=vec(body.position.x+direction.x/norm*distance,body.position.y+direction.y/norm*distance,body.position.z+direction.z/norm*distance);
+      const extended=fieldAccelerationFromBody(body,point,config),pointModel=fieldAccelerationFromBody(body,point,{model:'point'});
+      farFieldDelta=Math.max(farFieldDelta,vectorDifferenceMagnitude(extended,pointModel)/Math.max(vectorMagnitude(pointModel),1e-30));
+      if(!representative&&!isAnalyticSphere(body))representative={body,point:vec(body.position.x+direction.x/norm*body.radiusM*3,body.position.y+direction.y/norm*body.radiusM*3,body.position.z+direction.z/norm*body.radiusM*3)};
+    }
+    let closestPair=null,closestRatio=Infinity;
+    for(let i=0;i<bodies.length;i++)for(let j=i+1;j<bodies.length;j++){
+      const point=pointMassForce(bodies[i],bodies[j]),ratio=point.distanceM/Math.max(bodies[i].radiusM+bodies[j].radiusM,1e-30);
+      if(ratio<closestRatio){closestRatio=ratio;closestPair=[bodies[i],bodies[j],point.force];}
+    }
+    if(closestPair){
+      const extended=pairForce(closestPair[0],closestPair[1],config).force,point=closestPair[2];
+      currentPairDelta=vectorDifferenceMagnitude(extended,point)/Math.max(vectorMagnitude(point),1e-30);
+    }
+    if(representative){
+      const low=fieldAccelerationFromBody(representative.body,representative.point,{...config,resolution:config.resolution});
+      const high=fieldAccelerationFromBody(representative.body,representative.point,{...config,resolution:Math.min(MAX_QUADRATURE_RESOLUTION,config.resolution+1)});
+      convergence=vectorDifferenceMagnitude(low,high)/Math.max(vectorMagnitude(high),1e-30);
+    }
+    return {farFieldDelta,currentPairDelta,convergence,resolution:config.resolution};
   }
 
   function relativeDrift(value, initial) {
@@ -193,12 +414,13 @@
 
   function geometryFor(shape) {
     const T=sceneState.THREE;
-    if(shape==='cube')return new T.BoxGeometry(1,1,1);
-    if(shape==='tetrahedron')return new T.TetrahedronGeometry(.72,0);
-    if(shape==='octahedron')return new T.OctahedronGeometry(.72,0);
-    if(shape==='icosahedron')return new T.IcosahedronGeometry(.72,1);
-    if(shape==='torus')return new T.TorusGeometry(.56,.22,12,28);
-    return new T.SphereGeometry(.62,28,18);
+    if(shape==='cube')return new T.BoxGeometry(2,2,2);
+    if(shape==='tetrahedron')return new T.TetrahedronGeometry(1,0);
+    if(shape==='octahedron')return new T.OctahedronGeometry(1,0);
+    if(shape==='icosahedron')return new T.IcosahedronGeometry(1,0);
+    if(shape==='disk')return new T.CylinderGeometry(1,1,2,36,1,false);
+    if(shape==='torus')return new T.TorusGeometry(TORUS_MAJOR_RATIO,TORUS_MINOR_RATIO,18,42);
+    return new T.SphereGeometry(1,32,22);
   }
 
   function bodyColor(index){return [0x6fc9ff,0xf3c36a,0x9ee493,0xd4a5ff,0xff8fa3,0x86e7d4,0xffd6a5,0xa0c4ff,0xfdffb6,0xcaffbf,0xbdb2ff,0xffadad][index%12];}
@@ -222,35 +444,47 @@
     });
   }
 
-  function accelerationAtPoint(point,bodies){
-    const out=vec();for(const b of bodies){const dx=b.position.x-point.x,dy=b.position.y-point.y,dz=b.position.z-point.z;const r2=dx*dx+dy*dy+dz*dz;const r=Math.sqrt(r2);if(r<=Math.max(b.radiusM,.0001))continue;const f=G*b.massKg/(r2*r);out.x+=dx*f;out.y+=dy*f;out.z+=dz*f;}return out;
-  }
-
   function rebuildFieldVectors(extent){
     const enabled=document.getElementById('gravity-field-vectors')?.checked;if(!enabled){sceneState.fieldGroup.visible=false;return;}sceneState.fieldGroup.visible=true;clearGroup(sceneState.fieldGroup);
     const T=sceneState.THREE,n=9,span=extent*.9;
     for(let yi=0;yi<n;yi++)for(let xi=0;xi<n;xi++){
       const point={x:(xi/(n-1)*2-1)*span,y:(yi/(n-1)*2-1)*span,z:0};
-      const a=accelerationAtPoint(point,state.bodies);const mag=Math.hypot(a.x,a.y,a.z);if(!(mag>0))continue;
+      const a=accelerationAtPoint(point,state.bodies,solverOptions());const mag=Math.hypot(a.x,a.y,a.z);if(!(mag>0))continue;
       const dir=new T.Vector3(a.x,a.y,a.z).normalize();const origin=scenePosition(point,extent);const length=clamp(.08+Math.log10(1+mag*1e8)*.06,.08,.42);
       const arrow=new T.ArrowHelper(dir,origin,length,0x76d7ff,.07,.035);sceneState.fieldGroup.add(arrow);
     }
   }
 
   function updateVisuals(forceField=false){
-    if(!sceneState||!state)return;const extent=systemExtentM();const displayScale=finite(document.getElementById('gravity-display-radius')?.value,8);
-    state.bodies.forEach((b,i)=>{const mesh=sceneState.bodyMeshes[i];if(!mesh)return;mesh.position.copy(scenePosition(b.position,extent));const scale=clamp((b.radiusM/extent*5)*displayScale,.045,.82);mesh.scale.setScalar(scale);mesh.rotation.x+=.003*(i+1);mesh.rotation.y+=.0025;});
-    if(running||forceField)updateTrails(extent);if(forceField||frame%12===0)rebuildFieldVectors(extent);renderMetrics();
+    if(!sceneState||!state)return;
+    const extent=systemExtentM(),displayScale=finite(document.getElementById('gravity-display-radius')?.value,8);
+    state.bodies.forEach((b,i)=>{
+      const mesh=sceneState.bodyMeshes[i];if(!mesh)return;
+      mesh.position.copy(scenePosition(b.position,extent));
+      const h=bodyHalfExtents(b),factor=5/extent*displayScale;
+      if(b.shape==='torus')mesh.scale.set(clamp(h.x*factor,.035,.95),clamp(h.y*factor,.035,.95),clamp(h.z/TORUS_MINOR_RATIO*factor,.035,.95));
+      else mesh.scale.set(clamp(h.x*factor,.035,.95),clamp(h.y*factor,.035,.95),clamp(h.z*factor,.035,.95));
+      mesh.rotation.set(finite(b.rotationDeg.x)*Math.PI/180,finite(b.rotationDeg.y)*Math.PI/180,finite(b.rotationDeg.z)*Math.PI/180);
+    });
+    if(running||forceField)updateTrails(extent);
+    if(forceField||frame%12===0)rebuildFieldVectors(extent);
+    if(forceField||frame%30===0||!geometryDiagnosticsCache)geometryDiagnosticsCache=geometryDiagnostics(state.bodies,solverOptions());
+    renderMetrics();
   }
 
   function renderMetrics(){
-    const d=diagnostics(state.bodies);const e0=initialDiagnostics?.totalEnergy??d.totalEnergy,p0=initialDiagnostics?.momentum??d.momentum,l0=initialDiagnostics?.angularMomentum??d.angularMomentum;
+    const config=solverOptions(),d=diagnostics(state.bodies,config);
+    const e0=initialDiagnostics?.totalEnergy??d.totalEnergy,p0=initialDiagnostics?.momentum??d.momentum,l0=initialDiagnostics?.angularMomentum??d.angularMomentum;
+    const g=geometryDiagnosticsCache||{farFieldDelta:0,currentPairDelta:0,convergence:0};
     const values={
       'gravity-time':formatTime(state.timeS),
       'gravity-energy-drift':`${(relativeDrift(d.totalEnergy,e0)*100).toExponential(2)}%`,
       'gravity-momentum':formatScientific(d.momentum-p0,2),
       'gravity-angular-drift':`${(relativeDrift(d.angularMomentum,l0)*100).toExponential(2)}%`,
-      'gravity-min-separation':formatDistance(d.minSep)
+      'gravity-min-separation':formatDistance(d.minSep),
+      'gravity-shape-delta':`${(g.currentPairDelta*100).toExponential(2)}%`,
+      'gravity-convergence':`${(g.convergence*100).toExponential(2)}%`,
+      'gravity-far-field-delta':`${(g.farFieldDelta*100).toExponential(2)}%`
     };
     for(const [id,value] of Object.entries(values)){const n=document.getElementById(id);if(n)n.textContent=value;}
   }
@@ -270,38 +504,160 @@
   function updateRunButton(){const b=document.getElementById('gravity-run');if(b)b.textContent=running?'Pause':'Run';}
 
   function bodyEditorHtml(body,index){
-    const km=v=>(v/1000).toPrecision(8).replace(/\.0+$/,'');const shapes=['sphere','cube','tetrahedron','octahedron','icosahedron','torus'];
-    return `<section class="gravity-object" data-body-index="${index}"><div class="gravity-object-head"><strong>${body.name}</strong><span>#${index+1}</span></div><div class="gravity-object-grid"><label>Name<input data-k="name" value="${body.name}"></label><label>Shape<select data-k="shape">${shapes.map(s=>`<option value="${s}"${s===body.shape?' selected':''}>${s}</option>`).join('')}</select></label><label>Mass kg<input data-k="massKg" type="number" step="any" value="${body.massKg}"></label><label>Physical radius km<input data-k="radiusKm" type="number" step="any" value="${body.radiusM/1000}"></label><label>X km<input data-k="xKm" type="number" step="any" value="${km(body.position.x)}"></label><label>Y km<input data-k="yKm" type="number" step="any" value="${km(body.position.y)}"></label><label>Z km<input data-k="zKm" type="number" step="any" value="${km(body.position.z)}"></label><label>Vx km/s<input data-k="vxKms" type="number" step="any" value="${body.velocity.x/1000}"></label><label>Vy km/s<input data-k="vyKms" type="number" step="any" value="${body.velocity.y/1000}"></label><label>Vz km/s<input data-k="vzKms" type="number" step="any" value="${body.velocity.z/1000}"></label></div></section>`;
+    const km=v=>(v/1000).toPrecision(8).replace(/\.0+$/,'');
+    const shapes=['sphere','cube','tetrahedron','octahedron','icosahedron','disk','torus'];
+    const d=body.dimensionsM||dimensionsFromRadius(body.radiusM);
+    return `<section class="gravity-object" data-body-index="${index}"><div class="gravity-object-head"><strong>${body.name}</strong><span>#${index+1}</span></div><div class="gravity-object-grid">
+      <label>Name<input data-k="name" value="${body.name}"></label>
+      <label>Shape<select data-k="shape">${shapes.map(s=>`<option value="${s}"${s===body.shape?' selected':''}>${s==='cube'?'cube / rectangular prism':s}</option>`).join('')}</select></label>
+      <label>Mass basis<select data-k="massMode"><option value="mass"${body.massMode!=='density'?' selected':''}>Mass authoritative</option><option value="density"${body.massMode==='density'?' selected':''}>Density authoritative</option></select></label>
+      <label>Mass kg<input data-k="massKg" type="number" step="any" value="${body.massKg}"></label>
+      <label>Density kg/m³<input data-k="densityKgM3" type="number" step="any" value="${body.densityKgM3}"></label>
+      <label>Size X km<input data-k="sizeXKm" type="number" step="any" value="${d.x/1000}"></label>
+      <label>Size Y km<input data-k="sizeYKm" type="number" step="any" value="${d.y/1000}"></label>
+      <label>Size Z km<input data-k="sizeZKm" type="number" step="any" value="${d.z/1000}"></label>
+      <label>Rotation X°<input data-k="rotX" type="number" step="any" value="${finite(body.rotationDeg?.x)}"></label>
+      <label>Rotation Y°<input data-k="rotY" type="number" step="any" value="${finite(body.rotationDeg?.y)}"></label>
+      <label>Rotation Z°<input data-k="rotZ" type="number" step="any" value="${finite(body.rotationDeg?.z)}"></label>
+      <label>X km<input data-k="xKm" type="number" step="any" value="${km(body.position.x)}"></label>
+      <label>Y km<input data-k="yKm" type="number" step="any" value="${km(body.position.y)}"></label>
+      <label>Z km<input data-k="zKm" type="number" step="any" value="${km(body.position.z)}"></label>
+      <label>Vx km/s<input data-k="vxKms" type="number" step="any" value="${body.velocity.x/1000}"></label>
+      <label>Vy km/s<input data-k="vyKms" type="number" step="any" value="${body.velocity.y/1000}"></label>
+      <label>Vz km/s<input data-k="vzKms" type="number" step="any" value="${body.velocity.z/1000}"></label>
+    </div></section>`;
   }
 
   function renderObjectEditors(){const list=document.getElementById('gravity-object-list');if(list)list.innerHTML=state.bodies.map(bodyEditorHtml).join('');}
 
   function applyEditors(){
-    const cards=[...document.querySelectorAll('[data-body-index]')];const bodies=cards.map((card,i)=>{
-      const get=k=>card.querySelector(`[data-k="${k}"]`)?.value;return {name:String(get('name')||`Body ${i+1}`),shape:String(get('shape')||'sphere'),massKg:Math.max(1e-12,finite(get('massKg'),EARTH_MASS)),radiusM:Math.max(0,finite(get('radiusKm'),1000)*1000),position:vec(finite(get('xKm'))*1000,finite(get('yKm'))*1000,finite(get('zKm'))*1000),velocity:vec(finite(get('vxKms'))*1000,finite(get('vyKms'))*1000,finite(get('vzKms'))*1000)};});
-    state={bodies:normalizeBodies(bodies),timeS:0};baseline=state.bodies.map(cloneBody);initialDiagnostics=diagnostics(state.bodies);running=false;updateRunButton();rebuildBodiesVisual();updateVisuals(true);setStatus('Object parameters applied. Newtonian integration reset to t = 0.');
+    const cards=[...document.querySelectorAll('[data-body-index]')];
+    const bodies=cards.map((card,i)=>{
+      const get=k=>card.querySelector(`[data-k="${k}"]`)?.value;
+      return {
+        name:String(get('name')||`Body ${i+1}`),
+        shape:String(get('shape')||'sphere'),
+        massMode:get('massMode')==='density'?'density':'mass',
+        massKg:Math.max(1e-18,finite(get('massKg'),EARTH_MASS)),
+        densityKgM3:Math.max(1e-18,finite(get('densityKgM3'),1)),
+        dimensionsM:{x:Math.max(1e-9,finite(get('sizeXKm'),1)*1000),y:Math.max(1e-9,finite(get('sizeYKm'),1)*1000),z:Math.max(1e-9,finite(get('sizeZKm'),1)*1000)},
+        rotationDeg:vec(finite(get('rotX')),finite(get('rotY')),finite(get('rotZ'))),
+        position:vec(finite(get('xKm'))*1000,finite(get('yKm'))*1000,finite(get('zKm'))*1000),
+        velocity:vec(finite(get('vxKms'))*1000,finite(get('vyKms'))*1000,finite(get('vzKms'))*1000)
+      };
+    });
+    state={bodies:normalizeBodies(bodies),timeS:0};
+    baseline=state.bodies.map(cloneBody);
+    initialDiagnostics=diagnostics(state.bodies,solverOptions());
+    geometryDiagnosticsCache=null;
+    running=false;
+    updateRunButton();
+    renderObjectEditors();
+    rebuildBodiesVisual();
+    updateVisuals(true);
+    const config=solverOptions();
+    const warning=config.model==='extended'&&config.resolution>=5&&state.bodies.length>=5?' High-resolution close-encounter quadrature can become computationally expensive; the far-field point-limit threshold reduces the usual cost.':'';
+    setStatus(`Object geometry applied. ${config.model==='extended'?'Extended-body quadrature is active.':'Point-mass gravity is active.'}${warning}`);
   }
 
-  function setBodyCount(count){count=clamp(Math.round(count),1,MAX_BODIES);const current=state.bodies.map(cloneBody);while(current.length<count)current.push(blankBody(current.length));current.length=count;state={bodies:normalizeBodies(current),timeS:0};baseline=state.bodies.map(cloneBody);initialDiagnostics=diagnostics(state.bodies);renderObjectEditors();rebuildBodiesVisual();updateVisuals(true);}
+  function setBodyCount(count){
+    count=clamp(Math.round(count),1,MAX_BODIES);
+    const current=state.bodies.map(cloneBody);
+    while(current.length<count)current.push(blankBody(current.length));
+    current.length=count;
+    state={bodies:normalizeBodies(current),timeS:0};
+    baseline=state.bodies.map(cloneBody);
+    initialDiagnostics=diagnostics(state.bodies,solverOptions());
+    geometryDiagnosticsCache=null;
+    renderObjectEditors();
+    rebuildBodiesVisual();
+    updateVisuals(true);
+  }
 
-  function loadPreset(id){state={bodies:normalizeBodies(presetBodies(id)),timeS:0};baseline=state.bodies.map(cloneBody);initialDiagnostics=diagnostics(state.bodies);running=false;updateRunButton();document.getElementById('gravity-body-count').value=state.bodies.length;renderObjectEditors();if(sceneState){rebuildBodiesVisual();updateVisuals(true);}setStatus('Preset loaded from physical-data defaults. Shape selection affects rendering only in the foundation solver.');}
+  function loadPreset(id){
+    state={bodies:normalizeBodies(presetBodies(id)),timeS:0};
+    baseline=state.bodies.map(cloneBody);
+    initialDiagnostics=diagnostics(state.bodies,solverOptions());
+    geometryDiagnosticsCache=null;
+    running=false;
+    updateRunButton();
+    const count=document.getElementById('gravity-body-count');if(count)count.value=state.bodies.length;
+    renderObjectEditors();
+    if(sceneState){rebuildBodiesVisual();updateVisuals(true);}
+    setStatus('Preset loaded. Uniform spheres use the analytic Newtonian field; non-spherical extended bodies use deterministic volumetric quadrature when Extended Geometry is selected.');
+  }
 
-  function reset(){state={bodies:baseline.map(cloneBody),timeS:0};initialDiagnostics=diagnostics(state.bodies);running=false;updateRunButton();renderObjectEditors();rebuildBodiesVisual();updateVisuals(true);setStatus('Simulation reset to the last applied initial state.');}
+  function reset(){
+    state={bodies:baseline.map(cloneBody),timeS:0};
+    initialDiagnostics=diagnostics(state.bodies,solverOptions());
+    geometryDiagnosticsCache=null;
+    running=false;
+    updateRunButton();
+    renderObjectEditors();
+    rebuildBodiesVisual();
+    updateVisuals(true);
+    setStatus('Simulation reset to the last applied initial state.');
+  }
 
   function buildUi(host){
-    host.innerHTML=`<section class="gravity-lab"><header class="gravity-header"><p class="gravity-eyebrow">Scientific Tools · Gravitation</p><h1>Gravitational Simulation Laboratory</h1><p>Page-native Newtonian N-body laboratory using SI units internally, velocity-Verlet integration, explicit collision boundaries, 1–12 massive bodies, 3D primitive renderings, trails, normalized gravitational-field vectors, and conservation diagnostics. Extended-shape gravity and relativistic/non-Euclidean spacetime are deliberately not faked by visual effects; those remain separate future solvers.</p></header><div class="gravity-layout"><aside class="gravity-controls"><section class="gravity-card"><h2>Simulation</h2><label>Physical preset<select id="gravity-preset"><option value="earth-moon">Earth–Moon barycentric pair</option><option value="sun-earth">Sun–Earth barycentric pair</option><option value="equal-binary">Equal-mass binary benchmark</option><option value="three-body">Three-body free evolution benchmark</option></select></label><label>Body count 1–12<input id="gravity-body-count" type="number" min="1" max="12" value="2"></label><label>Integrator timestep (s)<input id="gravity-timestep" type="number" min="0.001" step="any" value="60"></label><label>Integration steps / rendered frame<input id="gravity-steps-frame" type="number" min="1" max="64" value="8"></label><label>Display radius multiplier<input id="gravity-display-radius" type="range" min="1" max="80" step="1" value="12"></label><label class="gravity-check"><input id="gravity-trails" type="checkbox" checked> Show trajectory trails</label><label class="gravity-check"><input id="gravity-field-vectors" type="checkbox" checked> Show normalized Newtonian field vectors</label><div class="gravity-actions"><button id="gravity-run" class="primary">Run</button><button id="gravity-step">Single step</button><button id="gravity-reset">Reset</button><button id="gravity-apply">Apply object parameters</button></div><div id="gravity-status" class="gravity-status">Ready.</div></section><section class="gravity-card"><h3>Objects</h3><p class="gravity-source-note">Mass, physical radius, position, and velocity affect the solver. Primitive shape currently affects only 3D rendering; the point-mass gravity model does not pretend cubes or tori have solved extended-body fields.</p><div id="gravity-object-list" class="gravity-object-list"></div></section></aside><main class="gravity-workspace"><section class="gravity-metrics"><div class="gravity-metric"><span>Simulated time</span><strong id="gravity-time">0 s</strong></div><div class="gravity-metric"><span>Total-energy drift</span><strong id="gravity-energy-drift">0%</strong></div><div class="gravity-metric"><span>Momentum change kg·m/s</span><strong id="gravity-momentum">0</strong></div><div class="gravity-metric"><span>Angular-momentum drift</span><strong id="gravity-angular-drift">0%</strong></div><div class="gravity-metric"><span>Minimum separation</span><strong id="gravity-min-separation">—</strong></div></section><div id="gravity-viewport" class="gravity-viewport" aria-label="Three-dimensional gravitational simulation viewport"></div><section class="gravity-card"><h3>Current physical model</h3><p><strong>Implemented:</strong> Newtonian pairwise gravity, SI-unit state, velocity-Verlet time integration, barycentric presets, finite physical radii used as collision boundaries, and explicit conservation-error reporting.</p><p><strong>Not silently approximated:</strong> general relativity, frame dragging, gravitational radiation, curved-spacetime geodesics, non-Euclidean manifolds, tidal deformation, rigid-body rotation, and shape-dependent extended mass fields. Those require separate mathematical solvers and validity diagnostics rather than a cosmetic “space warp” effect.</p><p class="gravity-source-note">Foundation constants/presets: G = 6.67430×10⁻¹¹ m³·kg⁻¹·s⁻² (2022 CODATA recommended value); Earth mass 5.9722×10²⁴ kg and mean radius 6371 km; Sun mass 1.9884×10³⁰ kg and mean radius 695,700 km; mean Earth–Moon distance 384,400 km. Preset values are reference initial conditions, not ephemerides for a specific date.</p></section><section class="gravity-boundary"><strong>Scientific boundary:</strong> the curved-looking motion in the 3D viewport is the trajectory of bodies under Newtonian force, not a rendered metric tensor or a proof of spacetime curvature. Shape primitives are presently visualization geometry. The planned extended-body solver will integrate mass elements over actual Euclidean solids; relativistic and non-Euclidean experiments will live behind separately labeled model layers with their own equations, assumptions, and validity checks.</section></main></div></section>`;
+    host.innerHTML=`<section class="gravity-lab"><header class="gravity-header"><p class="gravity-eyebrow">Scientific Tools · Gravitation</p><h1>Gravitational Simulation Laboratory</h1><p>Newtonian N-body laboratory with a point-mass baseline and an explicitly selectable extended-body solver. Uniform spheres use the analytic shell-theorem solution; boxes, tetrahedra, octahedra, icosahedra, disks, and tori use deterministic equal-volume quadrature with symmetric pair forces, far-field convergence diagnostics, and SI-unit state.</p></header><div class="gravity-layout"><aside class="gravity-controls">
+      <section class="gravity-card"><h2>Simulation</h2>
+        <label>Physical preset<select id="gravity-preset"><option value="earth-moon">Earth–Moon barycentric pair</option><option value="sun-earth">Sun–Earth barycentric pair</option><option value="equal-binary">Equal-mass shaped binary benchmark</option><option value="three-body">Three-body free evolution benchmark</option></select></label>
+        <label>Gravity interaction model<select id="gravity-model"><option value="extended" selected>Extended Geometry · analytic sphere + quadrature solids</option><option value="point">Point Mass · center-of-mass baseline</option></select></label>
+        <label>Quadrature cells / axis<input id="gravity-quadrature" type="number" min="2" max="${MAX_QUADRATURE_RESOLUTION}" value="${DEFAULT_QUADRATURE_RESOLUTION}"></label>
+        <label>Far-field point-limit threshold (combined bounding radii; 0 = never)<input id="gravity-far-field" type="number" min="0" step=".5" value="${DEFAULT_FAR_FIELD_FACTOR}"></label>
+        <label>Body count 1–12<input id="gravity-body-count" type="number" min="1" max="12" value="2"></label>
+        <label>Integrator timestep (s)<input id="gravity-timestep" type="number" min="0.001" step="any" value="60"></label>
+        <label>Integration steps / rendered frame<input id="gravity-steps-frame" type="number" min="1" max="64" value="8"></label>
+        <label>Display size multiplier<input id="gravity-display-radius" type="range" min="1" max="80" step="1" value="12"></label>
+        <label class="gravity-check"><input id="gravity-trails" type="checkbox" checked> Show trajectory trails</label>
+        <label class="gravity-check"><input id="gravity-field-vectors" type="checkbox" checked> Show gravitational-field vectors</label>
+        <div class="gravity-actions"><button id="gravity-run" class="primary">Run</button><button id="gravity-step">Single step</button><button id="gravity-reset">Reset</button><button id="gravity-apply">Apply object parameters</button></div><div id="gravity-status" class="gravity-status">Ready.</div>
+      </section>
+      <section class="gravity-card"><h3>Objects & Euclidean mass geometry</h3><p class="gravity-source-note">Mass or density can be authoritative. Size X/Y/Z controls the physical mass distribution and collision bounding volume independently from the display multiplier. Static Euler orientation affects non-spherical gravity; rotational dynamics are not yet modeled.</p><div id="gravity-object-list" class="gravity-object-list"></div></section>
+    </aside><main class="gravity-workspace">
+      <section class="gravity-metrics">
+        <div class="gravity-metric"><span>Simulated time</span><strong id="gravity-time">0 s</strong></div>
+        <div class="gravity-metric"><span>Total-energy drift</span><strong id="gravity-energy-drift">0%</strong></div>
+        <div class="gravity-metric"><span>Momentum change kg·m/s</span><strong id="gravity-momentum">0</strong></div>
+        <div class="gravity-metric"><span>Angular-momentum drift</span><strong id="gravity-angular-drift">0%</strong></div>
+        <div class="gravity-metric"><span>Minimum separation</span><strong id="gravity-min-separation">—</strong></div>
+        <div class="gravity-metric"><span>Current shape-force Δ vs point</span><strong id="gravity-shape-delta">0%</strong></div>
+        <div class="gravity-metric"><span>Quadrature convergence Δ</span><strong id="gravity-convergence">0%</strong></div>
+        <div class="gravity-metric"><span>20R far-field Δ vs point</span><strong id="gravity-far-field-delta">0%</strong></div>
+      </section>
+      <div id="gravity-viewport" class="gravity-viewport" aria-label="Three-dimensional gravitational simulation viewport"></div>
+      <section class="gravity-card"><h3>GRAV-02 physical model</h3>
+        <p><strong>Analytic baseline:</strong> a homogeneous spherical body uses g = GM/r² outside and g = GMr/R³ inside. Two separated homogeneous spheres therefore retain the exact point-mass mutual force by the shell theorem.</p>
+        <p><strong>Extended solids:</strong> rectangular prisms, tetrahedra, octahedra, icosahedra, finite elliptical disks, ellipsoids, and tori are represented by deterministic equal-volume cell-center mass quadrature. Near-body pair forces sum every participating mass-element pair once and apply equal/opposite forces to the two centers of mass. This preserves linear momentum even when shape corrections are active.</p>
+        <p><strong>Numerical diagnostics:</strong> the laboratory reports the current extended-force difference from the point model, a representative resolution-to-resolution field difference, and a standardized 20-bounding-radius far-field difference. Field samples inside discretized non-spherical bodies use cell-scale regularization because a point mass at a quadrature-cell center is not the continuous cell volume.</p>
+        <p class="gravity-source-note">Reference constants/presets: G = 6.67430×10⁻¹¹ m³·kg⁻¹·s⁻² (2022 CODATA recommended value); Earth mass 5.9722×10²⁴ kg and mean radius 6371 km; Sun mass 1.9884×10³⁰ kg and mean radius 695,700 km; mean Earth–Moon distance 384,400 km. Preset values are reference initial conditions, not date-specific ephemerides.</p>
+      </section>
+      <section class="gravity-boundary"><strong>Scientific boundary:</strong> GRAV-02 remains Newtonian. Shape-dependent forces here are Euclidean volume integrations, not spacetime curvature. Collision detection is presently a conservative bounding-volume stop, not exact mesh contact. Static object orientation is supported, but rigid-body spin, tidal deformation, general relativity, frame dragging, gravitational radiation, and intrinsic non-Euclidean geometry remain separate future solvers.</section>
+    </main></div></section>`;
   }
 
   async function mountPage(host=document.getElementById('gravitational-simulation-root')){
-    root=host;if(!root)throw new Error('Gravity laboratory page root is missing.');buildUi(root);loadPreset('earth-moon');
+    root=host;if(!root)throw new Error('Gravity laboratory page root is missing.');
+    buildUi(root);
+    loadPreset('earth-moon');
     document.getElementById('gravity-preset').addEventListener('change',e=>loadPreset(e.target.value));
     document.getElementById('gravity-body-count').addEventListener('change',e=>setBodyCount(finite(e.target.value,2)));
     document.getElementById('gravity-run').addEventListener('click',()=>{running=!running;updateRunButton();setStatus(running?'Simulation running.':'Simulation paused.');});
     document.getElementById('gravity-step').addEventListener('click',()=>{running=false;updateRunButton();stepSimulation(Math.max(.001,finite(document.getElementById('gravity-timestep').value,60)));updateVisuals(true);});
-    document.getElementById('gravity-reset').addEventListener('click',reset);document.getElementById('gravity-apply').addEventListener('click',applyEditors);
-    document.getElementById('gravity-field-vectors').addEventListener('change',()=>updateVisuals(true));document.getElementById('gravity-display-radius').addEventListener('input',()=>updateVisuals(false));
-    await initScene();return root;
+    document.getElementById('gravity-reset').addEventListener('click',reset);
+    document.getElementById('gravity-apply').addEventListener('click',applyEditors);
+    for(const id of ['gravity-field-vectors','gravity-model','gravity-quadrature','gravity-far-field']) document.getElementById(id)?.addEventListener('change',()=>{geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
+    document.getElementById('gravity-display-radius').addEventListener('input',()=>updateVisuals(false));
+    await initScene();
+    return root;
   }
 
-  window.GravitationalSimulationLab=Object.freeze({mountPage,constants:Object.freeze({G,AU_M,EARTH_MASS,EARTH_RADIUS_M,MOON_MASS,MOON_RADIUS_M,MOON_DISTANCE_M,SUN_MASS,SUN_RADIUS_M,MAX_BODIES}),diagnostics});
+  const api=Object.freeze({
+    mountPage,
+    constants:Object.freeze({G,AU_M,EARTH_MASS,EARTH_RADIUS_M,MOON_MASS,MOON_RADIUS_M,MOON_DISTANCE_M,SUN_MASS,SUN_RADIUS_M,MAX_BODIES,DEFAULT_QUADRATURE_RESOLUTION,MAX_QUADRATURE_RESOLUTION,DEFAULT_FAR_FIELD_FACTOR}),
+    bodyVolumeM3,bodyBoundingRadiusM,normalizeBody,buildMassSamples,fieldAccelerationFromBody,pointMassForce,pairForce,accelerations,diagnostics,geometryDiagnostics
+  });
+  if(typeof module==='object'&&module.exports)module.exports=api;
+  if(typeof window!=='undefined')window.GravitationalSimulationLab=api;
 })();

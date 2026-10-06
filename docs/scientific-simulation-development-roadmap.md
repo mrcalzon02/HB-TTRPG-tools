@@ -398,17 +398,25 @@ Required completion:
 - downloadable deterministic run state and diagnostic ledger.
 
 ## GRAV-02 — Euclidean extended-mass geometry
-Status: PLANNED.
+Status: INCREMENTAL IMPLEMENTATION.
 
-Required:
-- homogeneous sphere analytic baseline;
-- finite cube/rectangular prism mass integration;
-- tetrahedral/polyhedral mass distributions;
-- ring/torus and disk distributions;
-- user-controlled density and dimensions distinct from display scale;
-- comparison against point-mass far-field limits;
-- numerical convergence/error diagnostics for discretized volume or surface integrals.
+Implemented:
+- homogeneous sphere analytic interior/exterior Newtonian field;
+- symmetric pairwise extended-body force integration that applies equal/opposite forces and preserves linear momentum;
+- deterministic equal-volume quadrature for rectangular prisms, tetrahedra, octahedra, icosahedra, finite elliptical disks, ellipsoids, and tori;
+- user-selectable point-mass versus extended-geometry interaction model;
+- user-controlled mass or density authority, physical X/Y/Z dimensions, and static Euler orientation independent from display scale;
+- configurable quadrature resolution and far-field collapse threshold;
+- current shape-force delta versus the point model;
+- standardized 20-bounding-radius far-field comparison against the point-mass limit;
+- resolution-to-resolution convergence diagnostic.
 
+Still required before GRAV-02 is complete:
+- higher-order/adaptive quadrature near surfaces and close encounters;
+- analytic rectangular-prism comparison cases;
+- explicit thin-ring limit and higher-fidelity disk/ring families;
+- exact shape contact rather than conservative bounding-volume collision stops;
+- broader regression cases across orientation, aspect ratio, density mode, and quadrature resolution.
 ## GRAV-03 — Multi-body experiment library
 Status: PLANNED.
 

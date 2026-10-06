@@ -4,6 +4,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
 
 const root = process.cwd();
 const read = relativePath => fs.readFileSync(path.join(root, relativePath), 'utf8');
@@ -65,6 +67,23 @@ function nonEmpty(relativePath) {
   assert.ok(fs.existsSync(absolutePath), `${relativePath} is missing.`);
   assert.ok(fs.statSync(absolutePath).size > 0, `${relativePath} is empty.`);
 }
+
+const Gravity = require('../gravitational-simulation-lab.js');
+const gravitySphere = Gravity.normalizeBody({name:'sphere',shape:'sphere',massMode:'mass',massKg:5e20,dimensionsM:{x:2000,y:2000,z:2000},rotationDeg:{x:0,y:0,z:0},position:{x:0,y:0,z:0},velocity:{x:0,y:0,z:0}});
+const gravityCube = Gravity.normalizeBody({name:'cube',shape:'cube',massMode:'mass',massKg:1e20,dimensionsM:{x:2000,y:3000,z:4000},rotationDeg:{x:10,y:20,z:30},position:{x:-5000,y:0,z:0},velocity:{x:0,y:0,z:0}});
+const gravityTorus = Gravity.normalizeBody({name:'torus',shape:'torus',massMode:'mass',massKg:2e20,dimensionsM:{x:3000,y:3000,z:1000},rotationDeg:{x:40,y:0,z:10},position:{x:5000,y:0,z:0},velocity:{x:0,y:0,z:0}});
+assert.ok(Math.abs(Gravity.bodyVolumeM3(gravitySphere) - 4/3*Math.PI*1e9) < 1e-3);
+const gravitySamples = Gravity.buildMassSamples(gravityCube,4);
+assert.ok(gravitySamples.length > 0);
+assert.ok(Math.abs(gravitySamples.reduce((sum,row)=>sum+row.massKg,0)-gravityCube.massKg)/gravityCube.massKg < 1e-12);
+const gravityField = Gravity.fieldAccelerationFromBody(gravitySphere,{x:10000,y:0,z:0},{model:'extended',resolution:4,farFieldFactor:0});
+const gravityExpected = Gravity.constants.G*gravitySphere.massKg/1e8;
+assert.ok(Math.abs(Math.abs(gravityField.x)-gravityExpected)/gravityExpected < 1e-12);
+const gravityAcc = Gravity.accelerations([gravityCube,gravityTorus],{model:'extended',resolution:4,farFieldFactor:0});
+const gravityResidual = Math.hypot(gravityCube.massKg*gravityAcc[0].x+gravityTorus.massKg*gravityAcc[1].x,gravityCube.massKg*gravityAcc[0].y+gravityTorus.massKg*gravityAcc[1].y,gravityCube.massKg*gravityAcc[0].z+gravityTorus.massKg*gravityAcc[1].z);
+assert.ok(gravityResidual < 1e-6);
+const gravityGeometry = Gravity.geometryDiagnostics([gravityCube,gravityTorus],{model:'extended',resolution:4,farFieldFactor:0});
+assert.ok(Number.isFinite(gravityGeometry.farFieldDelta) && Number.isFinite(gravityGeometry.convergence));
 
 const checks = [];
 
@@ -173,7 +192,7 @@ for (const [label, page, runtime] of [
   checks.push(includes(`${label} has a dedicated laboratory page`, page, [runtime, 'scientific-laboratory-page.js', 'ScientificLaboratoryPageConfig']));
 }
 checks.push(includes('Gravity laboratory is page-native and scientifically bounded', sources.gravityPage, ['gravitational-simulation-lab.js', 'gravitational-simulation-root']));
-checks.push(includes('Gravity foundation exposes N-body state, integration, diagnostics, and explicit model boundaries', sources.gravity, ['const G = 6.67430e-11;', 'const MAX_BODIES = 12;', 'function accelerations(bodies)', 'function stepSimulation(dt)', 'function diagnostics(bodies)', 'velocity-Verlet', 'Shape selection affects rendering only', 'non-Euclidean']));
+checks.push(includes('Gravity foundation exposes N-body state, extended geometry, integration, diagnostics, and explicit model boundaries', sources.gravity, ['const G = 6.67430e-11;', 'const MAX_BODIES = 12;', 'function buildMassSamples(body', 'function pairForce(a,b', 'function accelerations(bodies', 'function stepSimulation(dt)', 'function diagnostics(bodies', 'function geometryDiagnostics(bodies', 'Extended Geometry · analytic sphere + quadrature solids', 'non-Euclidean']));', 'const MAX_BODIES = 12;', 'function accelerations(bodies)', 'function stepSimulation(dt)', 'function diagnostics(bodies)', 'velocity-Verlet', 'Shape selection affects rendering only', 'non-Euclidean']));
 
 checks.push(includes('Media demonstration corpus remains authoritative and launchable', sources.mediaDemos, ['BinaryCubeMediaForensicsDemoCorpus', 'buildDemoBytes', 'openPanel', 'openInAppropriateTool']));
 checks.push(includes('ISM remains cooperative and model-bounded', sources.ism, ['const LAMBDA = 1.097e-52;', 'const PLANCK_LENGTH = 1.616255e-35;', 'function magneticPhysics(config)', 'async function simulateAsync(config, options = {})', 'ScientificToolsCooperativeRunner']));
@@ -186,7 +205,7 @@ checks.push('Scientific Tools styles, raster evidence routing, calibration data,
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.27.0',
+  schemaVersion: '0.28.0',
   pass: true,
   checkCount: checks.length,
   checks
