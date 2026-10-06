@@ -10,6 +10,9 @@
   const LAMBDA_COEFFICIENT = LAMBDA * C * C / 3;
   const PROTON_CHARGE = 1.602176634e-19;
   const PROTON_MASS = 1.67262192369e-27;
+  const ELECTRON_MASS = 9.1093837139e-31;
+  const HYDROGEN_MASS = 1.673532838e-27;
+  const HELIUM_MASS = 6.646476989e-27;
   const EV_TO_JOULE = 1.602176634e-19;
   const PLANCK_LENGTH = 1.616255e-35;
   const EPSILON_0 = 8.8541878128e-12;
@@ -23,6 +26,30 @@
     galactic: { label: 'Galactic average · 1 H-equivalent / cm³', perM3: 1e6 },
     local: { label: 'Local interstellar neutral H · 0.127 / cm³', perM3: 1.27e5 }
   });
+  const SPECIES_CATALOG = Object.freeze({
+    H: Object.freeze({ id: 'H', label: 'neutral hydrogen', massKg: HYDROGEN_MASS, chargeC: 0 }),
+    'H+': Object.freeze({ id: 'H+', label: 'proton / ionized hydrogen', massKg: PROTON_MASS, chargeC: PROTON_CHARGE }),
+    electron: Object.freeze({ id: 'electron', label: 'electron', massKg: ELECTRON_MASS, chargeC: -PROTON_CHARGE }),
+    He: Object.freeze({ id: 'He', label: 'neutral helium', massKg: HELIUM_MASS, chargeC: 0 }),
+    dust: Object.freeze({ id: 'dust', label: 'generic dust-grain foundation', massKg: 1e-18, chargeC: 0 })
+  });
+  // H+ + H charge-transfer benchmark points. 5–80 keV values follow the published
+  // H-H+ charge-transfer calculations tabulated by Tseliakhovich et al.,
+  // MNRAS 422 (2012) 2357; the production roadmap retains replacement with a
+  // fuller provenance-tracked ADAS/IAEA table before this process is considered complete.
+  const HPLUS_H_CHARGE_EXCHANGE = Object.freeze([
+    Object.freeze({ energyEv: 5e3, sigmaM2: 1.092e-19 }),
+    Object.freeze({ energyEv: 7.5e3, sigmaM2: 9.28e-20 }),
+    Object.freeze({ energyEv: 1e4, sigmaM2: 7.95e-20 }),
+    Object.freeze({ energyEv: 1.25e4, sigmaM2: 6.95e-20 }),
+    Object.freeze({ energyEv: 1.5e4, sigmaM2: 5.93e-20 }),
+    Object.freeze({ energyEv: 2e4, sigmaM2: 4.25e-20 }),
+    Object.freeze({ energyEv: 2.5e4, sigmaM2: 3.09e-20 }),
+    Object.freeze({ energyEv: 3e4, sigmaM2: 2.24e-20 }),
+    Object.freeze({ energyEv: 4e4, sigmaM2: 1.20e-20 }),
+    Object.freeze({ energyEv: 6e4, sigmaM2: 4.20e-21 }),
+    Object.freeze({ energyEv: 8e4, sigmaM2: 1.70e-21 })
+  ]);
   const FOAM_MODELS = Object.freeze({
     off: { label: 'Off', alpha: null },
     constrained: { label: 'Constraint-scale benchmark · α = 0.72', alpha: 0.72 },
@@ -183,7 +210,8 @@
               <p class="ism-control-group-title">Established plasma proximity benchmark</p>
               <label>Ionized H fraction <output id="ism-ionized-fraction-value">10%</output><input id="ism-ionized-fraction" type="range" min="0" max="100" step="1" value="10"></label>
               <label>Plasma temperature<select id="ism-temperature"><option value="100">100 K · cold neutral benchmark</option><option value="8000" selected>8,000 K · warm plasma benchmark</option><option value="1000000">1,000,000 K · hot ionized benchmark</option></select></label>
-              <p class="ism-lab-note"><strong>Established-physics boundary:</strong> explicit ionized H targets use exact segment-to-particle closest approach plus a Debye-screened fixed-center Coulomb deflection benchmark. This first pass does not yet claim collective plasma self-fields, electron collisions, target recoil, or a full binary-collision operator.</p>
+              <label>Collision transport process<select id="ism-transport-process"><option value="hplus-h-cx" selected>H+ + H charge exchange · 5–80 keV benchmark</option><option value="off">Off</option></select></label>
+              <p class="ism-lab-note"><strong>Established-physics boundary:</strong> particles now carry species, mass, charge and Maxwellian thermal velocity. Explicit ionized H targets use exact closest approach plus a Debye-screened fixed-center Coulomb benchmark. Charge-exchange transport uses an energy-dependent cross-section table only inside its 5–80 keV data range; outside that range it reports unavailable rather than silently extrapolating.</p>
             </div>
             <label>Literal ISM particles<select id="ism-particles"><option value="256">256</option><option value="1024">1,024</option><option value="4096" selected>4,096</option><option value="16384">16,384</option><option value="65536">65,536</option></select></label>
             <label>Phase-ray samples<select id="ism-rays"><option value="32">32</option><option value="64">64</option><option value="128" selected>128</option><option value="256">256</option><option value="512">512</option></select></label>
@@ -302,6 +330,51 @@
     return { ...proton, bTesla, direction, gyroAngularFrequency, gyroRadius90, magneticAcceleration90: proton.speed * gyroAngularFrequency };
   }
 
+  function interpolateLogCrossSection(table, energyEv) {
+    if (!Array.isArray(table) || table.length < 2 || !(energyEv > 0)) return { valid: false, sigmaM2: 0, extrapolated: false };
+    if (energyEv < table[0].energyEv || energyEv > table[table.length - 1].energyEv) {
+      return { valid: false, sigmaM2: 0, extrapolated: false, minimumEv: table[0].energyEv, maximumEv: table[table.length - 1].energyEv };
+    }
+    for (let index = 1; index < table.length; index += 1) {
+      const high = table[index];
+      const low = table[index - 1];
+      if (energyEv > high.energyEv) continue;
+      const logEnergy = Math.log(energyEv);
+      const fraction = (logEnergy - Math.log(low.energyEv)) / (Math.log(high.energyEv) - Math.log(low.energyEv));
+      const logSigma = Math.log(low.sigmaM2) + fraction * (Math.log(high.sigmaM2) - Math.log(low.sigmaM2));
+      return { valid: true, sigmaM2: Math.exp(logSigma), extrapolated: false, minimumEv: table[0].energyEv, maximumEv: table[table.length - 1].energyEv };
+    }
+    return { valid: false, sigmaM2: 0, extrapolated: false };
+  }
+
+  function thermalVelocity(random, temperatureK, massKg) {
+    const sigma = Math.sqrt(BOLTZMANN * Math.max(0, temperatureK) / Math.max(Number.MIN_VALUE, massKg));
+    return { x: gaussian(random) * sigma, y: gaussian(random) * sigma, z: gaussian(random) * sigma, sigma };
+  }
+
+  function transportPhysics(config, density, side) {
+    if (config.transportProcess !== 'hplus-h-cx') {
+      return { enabled: false, process: 'off', valid: false, sigmaM2: 0, collisionRadius: 0, targetDensity: 0, meanFreePath: Infinity, opticalDepth: 0 };
+    }
+    const lookup = interpolateLogCrossSection(HPLUS_H_CHARGE_EXCHANGE, config.protonEnergyEv);
+    const targetDensity = density * (1 - clamp(config.ionizedFraction, 0, 1));
+    const meanFreePath = lookup.valid && targetDensity > 0 ? 1 / (targetDensity * lookup.sigmaM2) : Infinity;
+    return {
+      enabled: true,
+      process: 'hplus-h-cx',
+      label: 'H+ + H charge exchange',
+      valid: lookup.valid,
+      sigmaM2: lookup.sigmaM2,
+      minimumEv: lookup.minimumEv,
+      maximumEv: lookup.maximumEv,
+      collisionRadius: lookup.valid ? Math.sqrt(lookup.sigmaM2 / Math.PI) : 0,
+      targetDensity,
+      meanFreePath,
+      opticalDepth: Number.isFinite(meanFreePath) && meanFreePath > 0 ? side / meanFreePath : 0,
+      provenance: 'Tseliakhovich et al., MNRAS 422 (2012) 2357 · 5–80 keV benchmark'
+    };
+  }
+
   function plasmaPhysics(config, density) {
     const ionizedFraction = clamp(config.ionizedFraction, 0, 1);
     const temperatureK = Math.max(1, config.temperatureK);
@@ -371,14 +444,16 @@
   function findSegmentEncounters(context, start, end) {
     let nearest = null;
     let nearestIonized = null;
+    let nearestNeutralH = null;
     for (const particleIndex of segmentCandidateIndices(context, start, end)) {
       const particle = context.particles[particleIndex];
       const approach = closestApproachToSegment(start, end, particle);
       const encounter = { ...approach, particleIndex, particle };
       if (!nearest || encounter.distance < nearest.distance) nearest = encounter;
-      if (particle.ionized && (!nearestIonized || encounter.distance < nearestIonized.distance)) nearestIonized = encounter;
+      if (particle.chargeC !== 0 && (!nearestIonized || encounter.distance < nearestIonized.distance)) nearestIonized = encounter;
+      if (particle.speciesId === 'H' && (!nearestNeutralH || encounter.distance < nearestNeutralH.distance)) nearestNeutralH = encounter;
     }
-    return { nearest, nearestIonized };
+    return { nearest, nearestIonized, nearestNeutralH };
   }
 
   function perpendicularOutward(direction, encounter) {
@@ -539,6 +614,7 @@
     const side = physicalSideMeters(config.particleCount, density);
     const magnetics = magneticPhysics(config);
     const plasma = plasmaPhysics(config, density);
+    const transport = transportPhysics(config, density, side);
     const foam = quantumFoamPhysics(config, side, density);
     return {
       config, density, side,
@@ -547,6 +623,7 @@
       outputs: { '+Z': 0, '+X': 0, '-X': 0, '+Y': 0, '-Y': 0, '-Z': 0, retained: 0 },
       randomParticles: rngFrom(`ism-physical-particles|${config.density}|${config.particleCount}`),
       speciesRandom: rngFrom(`ism-ionization-state|${config.density}|${config.particleCount}|${config.ionizedFraction}`),
+      thermalRandom: rngFrom(`ism-thermal-velocity|${config.density}|${config.particleCount}|${config.temperatureK}`),
       beamRandom: rngFrom(`${config.beamSeed}|beam|${config.rayCount}`),
       shadowRandom: rngFrom(`${config.shadowKey}|scatter|${config.reflectivity}|${config.events}`),
       center: side / 2,
@@ -555,6 +632,7 @@
       shadowFieldRange: plasma.meanSpacing * Math.max(0.01, config.shadowRangeFactor),
       magnetics,
       plasma,
+      transport,
       foam,
       foamKickSigma: foam.propagationSigma / Math.sqrt(Math.max(1, config.events + 1))
     };
@@ -562,11 +640,19 @@
 
   function generateParticle(context, index) {
     const random = context.randomParticles;
+    const speciesId = context.speciesRandom() < context.plasma.ionizedFraction ? 'H+' : 'H';
+    const species = SPECIES_CATALOG[speciesId];
+    const velocity = thermalVelocity(context.thermalRandom, context.plasma.temperatureK, species.massKg);
     context.particles[index] = {
       x: random() * context.side,
       y: random() * context.side,
       z: random() * context.side,
-      ionized: context.speciesRandom() < context.plasma.ionizedFraction
+      speciesId,
+      massKg: species.massKg,
+      chargeC: species.chargeC,
+      velocity: { x: velocity.x, y: velocity.y, z: velocity.z },
+      thermalSigma: velocity.sigma,
+      ionized: species.chargeC !== 0
     };
   }
 
@@ -579,7 +665,13 @@
     const path = [{ ...position }];
     const impacts = [];
     const coulombEvents = [];
+    const transportEvents = [];
     const foamEvents = [];
+    const transportRandom = rngFrom(`${config.beamSeed}|transport|${config.transportProcess}|${rayIndex}`);
+    const sampledFreePath = context.transport.valid && Number.isFinite(context.transport.meanFreePath)
+      ? -context.transport.meanFreePath * Math.log(Math.max(Number.MIN_VALUE, transportRandom()))
+      : Infinity;
+    let traversedDistance = 0;
     let foamKickSquares = 0;
     const initialFoam = applyFoamKick(direction, foamRandom, foamKickSigma);
     direction = initialFoam.direction;
@@ -594,7 +686,28 @@
       if (advanced.samples.length) advanced.samples.forEach(sample => path.push(sample));
       else path.push({ ...position });
 
+      traversedDistance += travel;
       const encounters = findSegmentEncounters(context, segmentStart, position);
+      if (encounters.nearestNeutralH && context.transport.valid) {
+        const directHit = encounters.nearestNeutralH.distance <= context.transport.collisionRadius;
+        if (directHit) {
+          const targetVelocity = encounters.nearestNeutralH.particle.velocity || { x: 0, y: 0, z: 0 };
+          const projectileVelocity = vectorScale(direction, magnetics.speed);
+          const relativeVelocity = {
+            x: projectileVelocity.x - targetVelocity.x,
+            y: projectileVelocity.y - targetVelocity.y,
+            z: projectileVelocity.z - targetVelocity.z
+          };
+          transportEvents.push({
+            kind: 'explicit-cross-section-entry',
+            position: { ...encounters.nearestNeutralH.point },
+            particleIndex: encounters.nearestNeutralH.particleIndex,
+            impactParameter: encounters.nearestNeutralH.distance,
+            collisionRadius: context.transport.collisionRadius,
+            relativeSpeed: Math.hypot(relativeVelocity.x, relativeVelocity.y, relativeVelocity.z)
+          });
+        }
+      }
       if (encounters.nearestIonized) {
         const coulomb = applyScreenedCoulombProximity(direction, encounters.nearestIonized, context);
         direction = coulomb.direction;
@@ -644,15 +757,22 @@
       context.outputs[boundary.face] = (context.outputs[boundary.face] || 0) + 1;
     }
     context.rays[rayIndex] = {
-      phase, path, impacts, coulombEvents, foamEvents,
+      phase, path, impacts, coulombEvents, transportEvents, foamEvents,
+      sampledFreePath,
+      sampledCollisionWithinPath: sampledFreePath <= traversedDistance,
+      traversedDistance,
       foamAppliedRmsAngle: Math.sqrt(foamKickSquares),
       exitFace: boundary.face || 'retained'
     };
   }
 
   function finalizeSimulation(context) {
-    const { config, side, density, particles, rays, outputs, magnetics, plasma, foam } = context;
+    const { config, side, density, particles, rays, outputs, magnetics, plasma, transport, foam } = context;
     let coulombEventCount = 0;
+    let explicitTransportCollisionCount = 0;
+    let sampledTransportCollisionCount = 0;
+    let sampledFreePathTotal = 0;
+    let sampledFreePathFiniteCount = 0;
     let coulombAngleSquares = 0;
     let maximumCoulombAngle = 0;
     let keyedShadowCount = 0;
@@ -664,6 +784,12 @@
         coulombAngleSquares += event.angle * event.angle;
         maximumCoulombAngle = Math.max(maximumCoulombAngle, event.angle);
       });
+      explicitTransportCollisionCount += (ray?.transportEvents || []).length;
+      if (Number.isFinite(ray?.sampledFreePath)) {
+        sampledFreePathFiniteCount += 1;
+        sampledFreePathTotal += ray.sampledFreePath;
+        if (ray.sampledCollisionWithinPath) sampledTransportCollisionCount += 1;
+      }
       (ray?.impacts || []).forEach(impact => {
         if (!impact.keyedImpact) return;
         keyedShadowCount += 1;
@@ -674,12 +800,14 @@
     const coulombRmsAngle = coulombEventCount > 0 ? Math.sqrt(coulombAngleSquares / coulombEventCount) : 0;
     const meanShadowImpactParameter = keyedShadowCount > 0 ? shadowImpactParameterTotal / keyedShadowCount : 0;
     const meanShadowObliquityRad = keyedShadowCount > 0 ? shadowObliquityTotal / keyedShadowCount : 0;
+    const meanSampledFreePath = sampledFreePathFiniteCount > 0 ? sampledFreePathTotal / sampledFreePathFiniteCount : Infinity;
     const lambdaAcceleration = LAMBDA_COEFFICIENT * side;
     const lightTransit = side / C;
     const lambdaDisplacementAcrossTransit = 0.5 * lambdaAcceleration * lightTransit * lightTransit;
     const magneticDeflectionAcrossCube = Number.isFinite(magnetics.gyroRadius90) ? side * side / (2 * magnetics.gyroRadius90) : 0;
     return {
-      ...config, density, side, particles, rays, outputs, magnetics, plasma, foam, lambdaAcceleration, lightTransit, lambdaDisplacementAcrossTransit,
+      ...config, density, side, particles, rays, outputs, magnetics, plasma, transport, foam, lambdaAcceleration, lightTransit, lambdaDisplacementAcrossTransit,
+      explicitTransportCollisionCount, sampledTransportCollisionCount, meanSampledFreePath,
       coulombEventCount, coulombRmsAngle, maximumCoulombAngle, keyedShadowCount, meanShadowImpactParameter, meanShadowObliquityRad, shadowFieldRange: context.shadowFieldRange,
       magneticDeflectionAcrossCube,
       magneticToLambdaAcceleration: lambdaAcceleration > 0 ? magnetics.magneticAcceleration90 / lambdaAcceleration : Infinity,
@@ -884,7 +1012,16 @@
     target.innerHTML = [
       ['Literal particles', result.particleCount.toLocaleString()], ['Physical cube edge', formatLength(result.side)], ['Number density', `${formatScientific(result.density)} m⁻³`],
       ['Mean particle spacing', formatLength(result.plasma.meanSpacing)], ['Ionized H fraction', `${(result.plasma.ionizedFraction * 100).toFixed(1)}%`], ['Plasma temperature', `${result.plasma.temperatureK.toLocaleString()} K`],
+      ['Particle record model', 'species + mass + charge + Maxwellian velocity'],
       ['Electron density proxy', `${formatScientific(result.plasma.electronDensity)} m⁻³`], ['Debye screening length', Number.isFinite(result.plasma.debyeLength) ? formatLength(result.plasma.debyeLength) : '∞ · no ionized component'],
+      ['Transport process', result.transport.enabled ? result.transport.label : 'Off'],
+      ['Charge-exchange σ(E)', result.transport.valid ? `${formatScientific(result.transport.sigmaM2)} m²` : result.transport.enabled ? 'outside 5–80 keV table' : '—'],
+      ['Neutral-H target density', `${formatScientific(result.transport.targetDensity)} m⁻³`],
+      ['Mean free path λ = 1/(nσ)', Number.isFinite(result.transport.meanFreePath) ? formatLength(result.transport.meanFreePath) : '∞ / unavailable'],
+      ['Collision optical depth / cube', formatScientific(result.transport.opticalDepth)],
+      ['Mean sampled free path', Number.isFinite(result.meanSampledFreePath) ? formatLength(result.meanSampledFreePath) : '∞ / unavailable'],
+      ['Sampled collisions within path', result.sampledTransportCollisionCount.toLocaleString()],
+      ['Explicit σ-radius encounters', result.explicitTransportCollisionCount.toLocaleString()],
       ['Coulomb proximity model', 'nearest-ion · screened fixed-center'], ['Coulomb samples', result.coulombEventCount.toLocaleString()], ['Coulomb θ RMS', `${formatScientific(result.coulombRmsAngle)} rad`], ['Coulomb θ max', `${formatScientific(result.maximumCoulombAngle)} rad`],
       ['ISM magnetic field', `${result.fieldStrengthNt.toFixed(2)} nT · ${(result.fieldStrengthNt * 10).toFixed(1)} μG`], ['Proton kinetic energy', energyLabel], ['Proton speed', `${formatScientific(result.magnetics.speed)} m/s`],
       ['90° proton gyroradius', Number.isFinite(result.magnetics.gyroRadius90) ? formatLength(result.magnetics.gyroRadius90) : '∞'], ['Magnetic shift / cube', formatLength(result.magneticDeflectionAcrossCube)],
@@ -924,7 +1061,7 @@
     return {
       density: document.getElementById('ism-density')?.value || 'galactic', particleCount: Number(document.getElementById('ism-particles')?.value || 4096), rayCount: Number(document.getElementById('ism-rays')?.value || 128),
       reflectivity: Number(document.getElementById('ism-reflectivity')?.value || 28), shadowRangeFactor: Number(document.getElementById('ism-shadow-range')?.value || 0.5), events: Number(document.getElementById('ism-events')?.value || 6), fieldStrengthNt: Number(document.getElementById('ism-field-strength')?.value || 0.38),
-      ionizedFraction: Number(document.getElementById('ism-ionized-fraction')?.value || 10) / 100, temperatureK: Number(document.getElementById('ism-temperature')?.value || 8000),
+      ionizedFraction: Number(document.getElementById('ism-ionized-fraction')?.value || 10) / 100, temperatureK: Number(document.getElementById('ism-temperature')?.value || 8000), transportProcess: document.getElementById('ism-transport-process')?.value || 'hplus-h-cx',
       fieldAzimuthDeg: Number(document.getElementById('ism-field-azimuth')?.value || 125), fieldElevationDeg: Number(document.getElementById('ism-field-elevation')?.value || 37), protonEnergyEv: Number(document.getElementById('ism-proton-energy')?.value || 1e6),
       foamModel: document.getElementById('ism-foam-model')?.value || 'constrained', foamSeed: document.getElementById('ism-foam-seed')?.value || 'foam-seed-01', foamAlpha: Number(document.getElementById('ism-foam-alpha')?.value || 0.72),
       foamGainDecades: Number(document.getElementById('ism-foam-gain')?.value || 0), beamSeed: document.getElementById('ism-beam-seed')?.value || 'phase-light-01', shadowKey: document.getElementById('ism-shadow-key')?.value || 'shadow-key-01', setting: activeSetting
@@ -1006,7 +1143,7 @@
   }
 
   window.InterstellarMediaCollisionsLab = Object.freeze({
-    constants: Object.freeze({ LAMBDA, LAMBDA_COEFFICIENT, DENSITY_PRESETS, PROTON_CHARGE, PROTON_MASS, PLANCK_LENGTH, EPSILON_0, BOLTZMANN, COULOMB_K, FOAM_MODELS }),
+    constants: Object.freeze({ LAMBDA, LAMBDA_COEFFICIENT, DENSITY_PRESETS, SPECIES_CATALOG, HPLUS_H_CHARGE_EXCHANGE, PROTON_CHARGE, PROTON_MASS, ELECTRON_MASS, HYDROGEN_MASS, HELIUM_MASS, PLANCK_LENGTH, EPSILON_0, BOLTZMANN, COULOMB_K, FOAM_MODELS }),
     openPanel, closePanel, simulate, simulateAsync, prepareSceneAsync, getLastRun: () => lastRun
   });
 })();
