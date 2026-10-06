@@ -122,7 +122,7 @@
       const title = document.createElement('h3');
       title.textContent = 'Scientific Tools';
       const copy = document.createElement('p');
-      copy.textContent = 'Setting-neutral experimental systems, including Network Investigator local Windows diagnostics, the shared Binary Cube Laboratory, Encoder Visualizer, key-generation structure comparison, routed Diagnostic Evaluation Pipeline, Decryption Dashboard, Information & Deobfuscation Analysis Suite, Communication Capacity Analyzer, Steganography, Signal & Media Forensics Suite, Advanced Steganalysis Laboratory, ISM Media Simulation, and quantum experiment tools.';
+      copy.textContent = 'Setting-neutral experimental systems, including the shared Binary Cube Laboratory, Encoder Visualizer, key-generation structure comparison, routed Diagnostic Evaluation Pipeline, Decryption Dashboard, Information & Deobfuscation Analysis Suite, Communication Capacity Analyzer, Steganography, Signal & Media Forensics Suite, Advanced Steganalysis Laboratory, ISM Media Simulation, and quantum experiment tools.';
       const button = document.createElement('button');
       button.className = 'link-button';
       button.type = 'button';
@@ -146,38 +146,6 @@
       document.querySelector('main')?.appendChild(view);
     }
     return view;
-  }
-
-  function ensureNetworkInvestigatorRoute() {
-    const primaryNav = document.querySelector('.top-nav[aria-label="Primary"]');
-    if (primaryNav && !primaryNav.querySelector('[data-view="network-investigator"]')) {
-      const button = document.createElement('button');
-      button.className = 'nav-button';
-      button.type = 'button';
-      button.dataset.view = 'network-investigator';
-      button.textContent = 'Network Investigator';
-      const scientificToolsButton = primaryNav.querySelector('[data-view="scientific-tools"]');
-      const searchLink = primaryNav.querySelector('a[href="#foundry-search"]');
-      primaryNav.insertBefore(button, scientificToolsButton || searchLink || null);
-    }
-
-    const menuGrid = document.querySelector('#tools .menu-grid');
-    if (menuGrid && !menuGrid.querySelector('[data-network-investigator-card="true"]')) {
-      const card = document.createElement('article');
-      card.className = 'menu-card';
-      card.dataset.networkInvestigatorCard = 'true';
-      const title = document.createElement('h3');
-      title.textContent = 'Network Investigator';
-      const copy = document.createElement('p');
-      copy.textContent = 'Open the local Windows network diagnostics and forensic recording doorway directly, with its own stable workspace address.';
-      const button = document.createElement('button');
-      button.className = 'link-button';
-      button.type = 'button';
-      button.dataset.view = 'network-investigator';
-      button.textContent = 'Open Network Investigator';
-      card.append(title, copy, button);
-      menuGrid.appendChild(card);
-    }
   }
 
   function ensureWarhammerLoreView() {
@@ -348,7 +316,6 @@
   }
 
   ensureScientificToolsView();
-  ensureNetworkInvestigatorRoute();
   ensureWarhammerLoreView();
 
   document.addEventListener('click', event => {
