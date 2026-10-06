@@ -230,10 +230,17 @@
                 <input id="dsl-slit-separation" type="range" min="20" max="500" step="1" value="80">
               </label>
               <label>Screen distance <output id="dsl-screen-distance-value">1.50 m</output>
-                <input id="dsl-screen-distance" type="range" min="0.1" max="5" step="0.05" value="1.5">
+                <input id="dsl-screen-distance" type="range" min="0.001" max="5" step="0.001" value="1.5">
               </label>
               <label>Detector width <output id="dsl-screen-width-value">40 mm</output>
-                <input id="dsl-screen-width" type="range" min="5" max="120" step="1" value="40">
+                <input id="dsl-screen-width" type="range" min="0.05" max="120" step="0.05" value="40">
+              </label>
+              <label>Propagation model
+                <select id="dsl-propagation-mode">
+                  <option value="auto" selected>Automatic · Fresnel ↔ Fraunhofer</option>
+                  <option value="fresnel">Numerical Fresnel propagation</option>
+                  <option value="fraunhofer">Analytic Fraunhofer approximation</option>
+                </select>
               </label>
             </div>
 
@@ -276,7 +283,7 @@
               </div>
             </div>
 
-            <p class="dsl-note"><strong>Execution rule:</strong> model resolution changes how long setup takes, not whether the page remains usable. Distribution, detector, and field sampling preserve fixed index order and yield between bounded chunks. Quantum mode samples discrete detector events from the same baseline probability distribution and does not invent a definite post-barrier trajectory. The current diffraction kernel is a Fraunhofer model; the Fresnel-number diagnostics explicitly flag configurations where near-field propagation should replace it.</p>
+            <p class="dsl-note"><strong>Execution rule:</strong> model resolution changes how long setup takes, not whether the page remains usable. Distribution, detector, and field sampling preserve fixed index order and yield between bounded chunks. Quantum mode samples discrete detector events from the same probability distribution and does not invent a definite post-barrier trajectory. Automatic propagation now uses a numerical Fresnel aperture integral in near/transition regimes and the analytic Fraunhofer form in the far field. The paraxial-geometry diagnostic warns when the Fresnel approximation itself is being pushed outside its conservative range.</p>
           </aside>
 
           <main class="dsl-stage">
@@ -337,8 +344,8 @@
     bindRangeOutput('dsl-matter-wavelength', 'dsl-matter-wavelength-value', value => `${value.toFixed(0)} pm`);
     bindRangeOutput('dsl-slit-width', 'dsl-slit-width-value', value => `${value.toFixed(0)} μm`);
     bindRangeOutput('dsl-slit-separation', 'dsl-slit-separation-value', value => `${value.toFixed(0)} μm`);
-    bindRangeOutput('dsl-screen-distance', 'dsl-screen-distance-value', value => `${value.toFixed(2)} m`);
-    bindRangeOutput('dsl-screen-width', 'dsl-screen-width-value', value => `${value.toFixed(0)} mm`);
+    bindRangeOutput('dsl-screen-distance', 'dsl-screen-distance-value', value => formatLength(value));
+    bindRangeOutput('dsl-screen-width', 'dsl-screen-width-value', value => value < 1 ? `${value.toFixed(2)} mm` : `${value.toFixed(value < 10 ? 2 : 1)} mm`);
     bindRangeOutput('dsl-coherence', 'dsl-coherence-value', value => `${value.toFixed(0)}%`);
     bindRangeOutput('dsl-phase', 'dsl-phase-value', value => `${value.toFixed(0)}°`);
     bindRangeOutput('dsl-distinguishability', 'dsl-distinguishability-value', value => (value / 100).toFixed(2));
@@ -347,7 +354,7 @@
 
     const experimentControls = [
       'dsl-mode', 'dsl-source-type', 'dsl-photon-wavelength', 'dsl-electron-energy', 'dsl-matter-wavelength',
-      'dsl-slit-width', 'dsl-slit-separation', 'dsl-screen-distance', 'dsl-screen-width', 'dsl-coherence',
+      'dsl-slit-width', 'dsl-slit-separation', 'dsl-screen-distance', 'dsl-screen-width', 'dsl-propagation-mode', 'dsl-coherence',
       'dsl-phase', 'dsl-distinguishability', 'dsl-show-expected', 'dsl-show-field', 'dsl-hypothesis',
       'dsl-detector-exponent', 'dsl-seed'
     ];
@@ -393,6 +400,7 @@
       slitSeparationUm: Number(document.getElementById('dsl-slit-separation')?.value || 80),
       screenDistanceM: Number(document.getElementById('dsl-screen-distance')?.value || 1.5),
       screenWidthMm: Number(document.getElementById('dsl-screen-width')?.value || 40),
+      propagationMode: document.getElementById('dsl-propagation-mode')?.value || 'auto',
       coherence: Number(document.getElementById('dsl-coherence')?.value || 100) / 100,
       phaseOffsetRad: Number(document.getElementById('dsl-phase')?.value || 0) * Math.PI / 180,
       distinguishability: Number(document.getElementById('dsl-distinguishability')?.value || 0) / 100,
@@ -428,6 +436,13 @@
     const separationFresnelNumber = slitSeparation * slitSeparation / (wavelength * screenDistance);
     const apertureHalfSpan = (slitSeparation + slitWidth) * 0.5;
     const apertureFresnelNumber = apertureHalfSpan * apertureHalfSpan / (wavelength * screenDistance);
+    const regime = apertureFresnelNumber < 0.1 ? 'far' : apertureFresnelNumber < 1 ? 'transition' : 'near';
+    const propagationModel = config.propagationMode === 'fresnel'
+      ? 'fresnel'
+      : config.propagationMode === 'fraunhofer'
+        ? 'fraunhofer'
+        : regime === 'far' ? 'fraunhofer' : 'fresnel';
+    const paraxialRatio = (screenWidth * 0.5 + apertureHalfSpan) / screenDistance;
     return {
       wavelength,
       slitWidth,
@@ -440,6 +455,9 @@
       idealVisibilityLimit,
       complementaritySum,
       apertureFresnelNumber,
+      regime,
+      propagationModel,
+      paraxialRatio,
       fringeSpacing,
       firstEnvelopeZero,
       slitFresnelNumber,
@@ -447,12 +465,51 @@
     };
   }
 
-  function coherentIntensityAtX(x, physics, config) {
+  function fraunhoferIntensityAtX(x, physics, config) {
     const sinTheta = x / Math.sqrt(x * x + physics.screenDistance * physics.screenDistance);
     const beta = Math.PI * physics.slitWidth * sinTheta / physics.wavelength;
     const envelope = Math.pow(sinc(beta), 2);
     const phase = TWO_PI * physics.slitSeparation * sinTheta / physics.wavelength + config.phaseOffsetRad;
     return Math.max(0, envelope * (1 + physics.visibility * Math.cos(phase)));
+  }
+
+  function fresnelSlitAmplitudeAtX(x, center, physics, sampleCount) {
+    const count = Math.max(16, sampleCount | 0);
+    const du = physics.slitWidth / count;
+    const start = center - physics.slitWidth * 0.5;
+    const phaseCoefficient = Math.PI / (physics.wavelength * physics.screenDistance);
+    let re = 0;
+    let im = 0;
+    for (let index = 0; index < count; index += 1) {
+      const apertureX = start + (index + 0.5) * du;
+      const delta = x - apertureX;
+      const phase = phaseCoefficient * delta * delta;
+      re += Math.cos(phase);
+      im += Math.sin(phase);
+    }
+    return { re: re * du, im: im * du };
+  }
+
+  function fresnelIntensityAtX(x, physics, config) {
+    const samplesPerSlit = clamp(Math.ceil(28 + Math.sqrt(Math.max(0, physics.apertureFresnelNumber)) * 18), 28, 160);
+    const left = fresnelSlitAmplitudeAtX(x, -physics.slitSeparation * 0.5, physics, samplesPerSlit);
+    const rightRaw = fresnelSlitAmplitudeAtX(x, physics.slitSeparation * 0.5, physics, samplesPerSlit);
+    const phaseCos = Math.cos(config.phaseOffsetRad);
+    const phaseSin = Math.sin(config.phaseOffsetRad);
+    const right = {
+      re: rightRaw.re * phaseCos - rightRaw.im * phaseSin,
+      im: rightRaw.re * phaseSin + rightRaw.im * phaseCos
+    };
+    const leftPower = left.re * left.re + left.im * left.im;
+    const rightPower = right.re * right.re + right.im * right.im;
+    const cross = left.re * right.re + left.im * right.im;
+    return Math.max(0, leftPower + rightPower + 2 * physics.visibility * cross);
+  }
+
+  function coherentIntensityAtX(x, physics, config) {
+    return physics.propagationModel === 'fresnel'
+      ? fresnelIntensityAtX(x, physics, config)
+      : fraunhoferIntensityAtX(x, physics, config);
   }
 
   function classicalIntensityAtX(x, physics) {
@@ -609,18 +666,26 @@
       : config.sourceType === 'matter'
         ? `${config.matterWavelengthPm.toFixed(0)} pm matter wave`
         : `${config.photonWavelengthNm.toFixed(0)} nm photon`;
-    const regime = physics.apertureFresnelNumber < 0.1
-      ? 'Fraunhofer / far-field favorable'
-      : physics.apertureFresnelNumber < 1
-        ? 'Fresnel transition · far-field model approximate'
-        : 'Fresnel near field · far-field model not quantitatively reliable';
+    const regime = physics.regime === 'far'
+      ? 'Far field'
+      : physics.regime === 'transition'
+        ? 'Transition regime'
+        : 'Near field';
+    const propagationLabel = physics.propagationModel === 'fresnel'
+      ? 'Numerical Fresnel aperture integral'
+      : 'Analytic Fraunhofer approximation';
+    const paraxialLabel = physics.paraxialRatio < 0.2
+      ? 'good'
+      : physics.paraxialRatio < 0.5
+        ? 'caution'
+        : 'outside conservative paraxial range';
     target.innerHTML = [
       ['Source', sourceLabel],
       ['Effective wavelength', formatLength(physics.wavelength)],
       ['Slit width', formatLength(physics.slitWidth)],
       ['Slit separation', formatLength(physics.slitSeparation)],
       ['Screen distance', formatLength(physics.screenDistance)],
-      ['Fringe spacing ≈ λL/d', formatLength(physics.fringeSpacing)],
+      ['Far-field fringe spacing ≈ λL/d', formatLength(physics.fringeSpacing)],
       ['1st single-slit zero ≈ λL/a', formatLength(physics.firstEnvelopeZero)],
       ['Source coherence C', physics.sourceCoherence.toFixed(3)],
       ['Path distinguishability D', physics.distinguishability.toFixed(3)],
@@ -630,7 +695,9 @@
       ['Slit Fresnel number', formatScientific(physics.slitFresnelNumber)],
       ['Separation Fresnel number', formatScientific(physics.separationFresnelNumber)],
       ['Whole-aperture Fresnel number', formatScientific(physics.apertureFresnelNumber)],
-      ['Approximation regime', regime],
+      ['Propagation regime', regime],
+      ['Active propagation kernel', propagationLabel],
+      ['Paraxial geometry ratio', `${formatScientific(physics.paraxialRatio)} · ${paraxialLabel}`],
       ['Detected events', simulationState.emitted.toLocaleString()],
       ['Execution', 'deterministic cooperative slices']
     ].map(([label, value]) => `<div class="dsl-metric"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');
