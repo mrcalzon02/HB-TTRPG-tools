@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+driver.zip
+driver-package/
+preview*.png
+test-data/

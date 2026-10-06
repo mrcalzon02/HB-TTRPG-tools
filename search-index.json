@@ -458,5 +458,25 @@
       "rpg tools search"
     ],
     "url": "site-map.html"
+  },
+  {
+    "id": "simple-sound-manager",
+    "title": "Simple Sound Manager",
+    "workspace": "Desktop Tools",
+    "description": "Free Windows and Linux sound manager download with multi-output routing, per-device EQ, waveforms, microphone controls, and timing adjustment.",
+    "keywords": [
+      "sound",
+      "audio",
+      "equalizer",
+      "bass",
+      "treble",
+      "microphone",
+      "bluetooth",
+      "speakers",
+      "download",
+      "Linux",
+      "Windows"
+    ],
+    "url": "simple-sound-manager.html"
   }
 ]

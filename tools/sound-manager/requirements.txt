@@ -1,0 +1,5 @@
+numpy>=2.2,<3
+scipy>=1.15,<2
+SoundCard>=0.4.5,<0.5
+PySide6>=6.9,<7
+pycaw>=20260927; sys_platform == 'win32'
