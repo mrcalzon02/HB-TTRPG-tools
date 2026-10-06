@@ -270,9 +270,25 @@
               <label>Relative slit phase <output id="dsl-phase-value">0°</output>
                 <input id="dsl-phase" type="range" min="-180" max="180" step="1" value="0">
               </label>
-              <label>Path distinguishability D <output id="dsl-distinguishability-value">0.00</output>
+              <label>Path-detector distinguishability Ddet <output id="dsl-distinguishability-value">0.00</output>
                 <input id="dsl-distinguishability" type="range" min="0" max="100" step="1" value="0">
               </label>
+              <label>Photon polarization at slit A <output id="dsl-polarization-a-value">0°</output>
+                <input id="dsl-polarization-a" type="range" min="0" max="180" step="1" value="0">
+              </label>
+              <label>Photon polarization at slit B <output id="dsl-polarization-b-value">0°</output>
+                <input id="dsl-polarization-b" type="range" min="0" max="180" step="1" value="0">
+              </label>
+              <label>Polarization analyzer
+                <select id="dsl-analyzer-mode">
+                  <option value="none" selected>None · retain path polarization</option>
+                  <option value="linear">Linear analyzer · conditional transmitted ensemble</option>
+                </select>
+              </label>
+              <label>Analyzer angle <output id="dsl-analyzer-angle-value">0°</output>
+                <input id="dsl-analyzer-angle" type="range" min="0" max="180" step="1" value="0">
+              </label>
+              <p class="dsl-note"><strong>Polarization path marking:</strong> for photons, different slit polarizations reduce path-state overlap. A linear analyzer projects both paths onto one polarization basis, creating the conditional quantum-eraser-style subset without implying retrocausal information transfer.</p>
               <p class="dsl-note"><strong>Coherence model:</strong> finite spectrum/energy spread is averaged directly over wavelength samples. Finite source size and angular divergence reduce the cross-term using the Gaussian angular-coherence factor. The residual factor remains available for unmodeled coherence loss. <strong>Complementarity:</strong> V² + D² ≤ 1.</p>
               <label class="dsl-check"><input id="dsl-show-expected" type="checkbox" checked> Show expected distribution behind accumulated hits</label>
               <label class="dsl-check"><input id="dsl-show-field" type="checkbox" checked> Show probability-amplitude field slice</label>
@@ -373,6 +389,9 @@
     bindRangeOutput('dsl-angular-divergence', 'dsl-angular-divergence-value', value => `${value.toFixed(0)} μrad`);
     bindRangeOutput('dsl-phase', 'dsl-phase-value', value => `${value.toFixed(0)}°`);
     bindRangeOutput('dsl-distinguishability', 'dsl-distinguishability-value', value => (value / 100).toFixed(2));
+    bindRangeOutput('dsl-polarization-a', 'dsl-polarization-a-value', value => `${value.toFixed(0)}°`);
+    bindRangeOutput('dsl-polarization-b', 'dsl-polarization-b-value', value => `${value.toFixed(0)}°`);
+    bindRangeOutput('dsl-analyzer-angle', 'dsl-analyzer-angle-value', value => `${value.toFixed(0)}°`);
     bindRangeOutput('dsl-detector-exponent', 'dsl-detector-exponent-value', value => value.toFixed(2));
     bindRangeOutput('dsl-rate', 'dsl-rate-value', value => `${value.toFixed(0)} events/s`);
 
@@ -380,13 +399,16 @@
       'dsl-mode', 'dsl-source-type', 'dsl-photon-wavelength', 'dsl-electron-energy', 'dsl-matter-wavelength',
       'dsl-photon-bandwidth', 'dsl-electron-spread', 'dsl-matter-spread',
       'dsl-slit-width', 'dsl-slit-separation', 'dsl-screen-distance', 'dsl-screen-width', 'dsl-propagation-mode', 'dsl-coherence',
-      'dsl-source-size', 'dsl-source-distance', 'dsl-angular-divergence', 'dsl-phase', 'dsl-distinguishability', 'dsl-show-expected', 'dsl-show-field', 'dsl-hypothesis',
+      'dsl-source-size', 'dsl-source-distance', 'dsl-angular-divergence', 'dsl-phase', 'dsl-distinguishability',
+      'dsl-polarization-a', 'dsl-polarization-b', 'dsl-analyzer-mode', 'dsl-analyzer-angle',
+      'dsl-show-expected', 'dsl-show-field', 'dsl-hypothesis',
       'dsl-detector-exponent', 'dsl-seed'
     ];
     experimentControls.forEach(id => document.getElementById(id)?.addEventListener('change', requestRefresh));
     ['dsl-photon-wavelength', 'dsl-electron-energy', 'dsl-matter-wavelength', 'dsl-photon-bandwidth', 'dsl-electron-spread', 'dsl-matter-spread',
       'dsl-slit-width', 'dsl-slit-separation', 'dsl-screen-distance', 'dsl-screen-width', 'dsl-coherence',
-      'dsl-source-size', 'dsl-source-distance', 'dsl-angular-divergence', 'dsl-phase', 'dsl-distinguishability', 'dsl-detector-exponent']
+      'dsl-source-size', 'dsl-source-distance', 'dsl-angular-divergence', 'dsl-phase', 'dsl-distinguishability',
+      'dsl-polarization-a', 'dsl-polarization-b', 'dsl-analyzer-angle', 'dsl-detector-exponent']
       .forEach(id => document.getElementById(id)?.addEventListener('input', scheduleRefresh));
 
     document.getElementById('dsl-run')?.addEventListener('click', toggleRunning);
@@ -436,6 +458,10 @@
       angularDivergenceRmsUrad: Number(document.getElementById('dsl-angular-divergence')?.value || 0),
       phaseOffsetRad: Number(document.getElementById('dsl-phase')?.value || 0) * Math.PI / 180,
       distinguishability: Number(document.getElementById('dsl-distinguishability')?.value || 0) / 100,
+      polarizationADeg: Number(document.getElementById('dsl-polarization-a')?.value || 0),
+      polarizationBDeg: Number(document.getElementById('dsl-polarization-b')?.value || 0),
+      analyzerMode: document.getElementById('dsl-analyzer-mode')?.value || 'none',
+      analyzerAngleDeg: Number(document.getElementById('dsl-analyzer-angle')?.value || 0),
       showExpected: Boolean(document.getElementById('dsl-show-expected')?.checked),
       showField: Boolean(document.getElementById('dsl-show-field')?.checked),
       hypothesisId: document.getElementById('dsl-hypothesis')?.value || 'none',
@@ -491,15 +517,67 @@
     return Math.exp(-0.5 * phaseSigma * phaseSigma);
   }
 
+  function polarizationPhysics(config) {
+    if (config.sourceType !== 'photon') {
+      return {
+        active: false,
+        analyzerMode: 'none',
+        pathOverlap: 1,
+        polarizationDistinguishability: 0,
+        amplitudeA: 1,
+        amplitudeB: 1,
+        crossSign: 1,
+        relativeTransmission: 1,
+        description: 'not applicable to non-photon source'
+      };
+    }
+    const angleA = config.polarizationADeg * Math.PI / 180;
+    const angleB = config.polarizationBDeg * Math.PI / 180;
+    if (config.analyzerMode === 'linear') {
+      const analyzer = config.analyzerAngleDeg * Math.PI / 180;
+      const amplitudeA = Math.cos(angleA - analyzer);
+      const amplitudeB = Math.cos(angleB - analyzer);
+      const relativeTransmission = clamp((amplitudeA * amplitudeA + amplitudeB * amplitudeB) / 2, 0, 1);
+      return {
+        active: true,
+        analyzerMode: 'linear',
+        pathOverlap: 1,
+        polarizationDistinguishability: 0,
+        amplitudeA,
+        amplitudeB,
+        crossSign: 1,
+        relativeTransmission,
+        description: 'linear analyzer projects both paths into one transmitted polarization basis'
+      };
+    }
+    const signedOverlap = Math.cos(angleA - angleB);
+    const pathOverlap = Math.abs(signedOverlap);
+    return {
+      active: true,
+      analyzerMode: 'none',
+      pathOverlap,
+      polarizationDistinguishability: Math.sqrt(Math.max(0, 1 - pathOverlap * pathOverlap)),
+      amplitudeA: 1,
+      amplitudeB: 1,
+      crossSign: Math.sign(signedOverlap) || 1,
+      relativeTransmission: 1,
+      description: 'unobserved polarization overlap marks path distinguishability'
+    };
+  }
+
   function buildPhysics(config) {
     const wavelength = wavelengthForConfig(config);
     const slitWidth = Math.max(1e-9, config.slitWidthUm * 1e-6);
     const slitSeparation = Math.max(slitWidth * 1.01, config.slitSeparationUm * 1e-6);
     const screenDistance = Math.max(1e-6, config.screenDistanceM);
     const screenWidth = Math.max(1e-6, config.screenWidthMm * 1e-3);
-    const distinguishability = clamp(config.distinguishability, 0, 1);
+    const detectorDistinguishability = clamp(config.distinguishability, 0, 1);
+    const polarization = polarizationPhysics(config);
+    const detectorPathOverlap = Math.sqrt(Math.max(0, 1 - detectorDistinguishability * detectorDistinguishability));
+    const combinedPathOverlap = detectorPathOverlap * polarization.pathOverlap;
+    const distinguishability = Math.sqrt(Math.max(0, 1 - combinedPathOverlap * combinedPathOverlap));
     const sourceCoherence = clamp(config.coherence, 0, 1);
-    const idealVisibilityLimit = Math.sqrt(Math.max(0, 1 - distinguishability * distinguishability));
+    const idealVisibilityLimit = combinedPathOverlap;
     const sourceSizeRms = Math.max(0, config.sourceSizeRmsUm) * 1e-6;
     const sourceDistance = Math.max(1e-6, config.sourceDistanceM);
     const sourceSizeAngularSigma = sourceSizeRms / sourceDistance;
@@ -530,6 +608,8 @@
       screenWidth,
       visibility,
       distinguishability,
+      detectorDistinguishability,
+      polarization,
       sourceCoherence,
       idealVisibilityLimit,
       sourceSizeRms,
@@ -557,7 +637,11 @@
     const beta = Math.PI * physics.slitWidth * sinTheta / physics.wavelength;
     const envelope = Math.pow(sinc(beta), 2);
     const phase = TWO_PI * physics.slitSeparation * sinTheta / physics.wavelength + config.phaseOffsetRad;
-    return Math.max(0, envelope * (1 + physics.visibility * Math.cos(phase)));
+    const amplitudeA = physics.polarization.amplitudeA;
+    const amplitudeB = physics.polarization.amplitudeB;
+    const incoherentPower = amplitudeA * amplitudeA + amplitudeB * amplitudeB;
+    const cross = 2 * amplitudeA * amplitudeB * physics.polarization.crossSign * physics.visibility * Math.cos(phase);
+    return Math.max(0, envelope * 0.5 * (incoherentPower + cross));
   }
 
   function physicsAtWavelength(physics, wavelength) {
@@ -601,7 +685,13 @@
     const leftPower = left.re * left.re + left.im * left.im;
     const rightPower = right.re * right.re + right.im * right.im;
     const cross = left.re * right.re + left.im * right.im;
-    return Math.max(0, leftPower + rightPower + 2 * physics.visibility * cross);
+    const amplitudeA = physics.polarization.amplitudeA;
+    const amplitudeB = physics.polarization.amplitudeB;
+    return Math.max(0,
+      amplitudeA * amplitudeA * leftPower +
+      amplitudeB * amplitudeB * rightPower +
+      2 * amplitudeA * amplitudeB * physics.polarization.crossSign * physics.visibility * cross
+    );
   }
 
   function coherentIntensityAtX(x, physics, config) {
@@ -799,8 +889,12 @@
       ['Combined angular σ', `${formatScientific(physics.totalAngularSigma)} rad`],
       ['Spatial coherence factor', physics.spatialCoherence.toFixed(4)],
       ['Spectral samples', physics.spectrum.samples.length.toString()],
-      ['Path distinguishability D', physics.distinguishability.toFixed(3)],
-      ['Ideal V limit √(1−D²)', physics.idealVisibilityLimit.toFixed(3)],
+      ['Path-detector Ddet', physics.detectorDistinguishability.toFixed(3)],
+      ['Polarization Dpol', physics.polarization.polarizationDistinguishability.toFixed(3)],
+      ['Effective distinguishability D', physics.distinguishability.toFixed(3)],
+      ['Path-state overlap', physics.idealVisibilityLimit.toFixed(3)],
+      ['Polarization apparatus', physics.polarization.description],
+      ['Analyzer relative transmission', `${(physics.polarization.relativeTransmission * 100).toFixed(1)}%`],
       ['Central-wavelength visibility V', physics.visibility.toFixed(3)],
       ['Complementarity V² + D²', physics.complementaritySum.toFixed(4)],
       ['Slit Fresnel number', formatScientific(physics.slitFresnelNumber)],
@@ -945,7 +1039,8 @@
     target.innerHTML = [
       `<span>Mode: <strong>${esc(config.mode)}</strong></span>`,
       `<span>Events: <strong>${simulationState.emitted.toLocaleString()}</strong></span>`,
-      `<span>Path distinguishability: <strong>D = ${physics.distinguishability.toFixed(2)}</strong></span>`,
+      `<span>Path distinguishability: <strong>Ddet = ${physics.detectorDistinguishability.toFixed(2)} · Dpol = ${physics.polarization.polarizationDistinguishability.toFixed(2)} · Deff = ${physics.distinguishability.toFixed(2)}</strong></span>`,
+      `<span>Polarization: <strong>${esc(physics.polarization.analyzerMode === 'linear' ? `analyzer ${config.analyzerAngleDeg.toFixed(0)}° · conditional subset` : `A ${config.polarizationADeg.toFixed(0)}° / B ${config.polarizationBDeg.toFixed(0)}°`)}</strong></span>`,
       `<span>Fringe visibility: <strong>V = ${physics.visibility.toFixed(2)} · V² + D² = ${physics.complementaritySum.toFixed(3)}</strong></span>`,
       `<span>Layer: <strong>${esc(layer.label)}</strong></span>`,
       `<span>Fringe spacing: <strong>${esc(formatLength(physics.fringeSpacing))}</strong></span>`,
