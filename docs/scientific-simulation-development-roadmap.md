@@ -128,21 +128,29 @@ Required completion:
 - moving-particle spatial-index expansion for regimes where thermal displacement is no longer negligible across a segment.
 
 ## ISM-08 — Interaction inspection overlays and physical-regime diagnostics
-Status: PLANNED.
+Status: PARTIAL / active.
 
-Required inspection:
-- local velocity and momentum;
-- nearest candidates and closest approach;
-- impact parameter;
-- relative velocity;
-- Debye radius;
-- mean particle spacing;
-- local magnetic field;
+Implemented diagnostics:
+- interaction regime classification from active collision and magnetic scales;
+- collision optical depth and per-traversal collision probability;
+- Knudsen λ/L;
+- gyro-radius / cube scale;
+- ωc / collision-frequency magnetization ratio;
+- particles per Debye sphere and Debye-length / mean-spacing diagnostics;
+- magnetic importance and collisionality labels;
+- explicit solver validity gating and conservation residuals.
+
+Required inspection overlays:
+- selectable trajectory/event inspection;
+- local velocity and momentum vectors;
+- nearest candidates and closest approach geometry;
+- impact parameter and relative velocity;
+- Debye radius and local magnetic field;
 - gyroradius and pitch angle;
 - selected interaction probability/channel;
-- solver/approximation used.
+- solver/approximation used at the inspected event.
 
-Required diagnostics should classify effects as dominant, significant, small, negligible, below numerical resolution, or outside model validity when defensible.
+Required diagnostics should continue classifying effects as dominant, significant, small, negligible, below numerical resolution, or outside model validity when defensible.
 
 ## ISM-09 — Hypothesis-layer isolation
 Status: PARTIAL / active.
@@ -206,15 +214,20 @@ Required:
 - experimental-data validation.
 
 ## DSL-03 — Quantum eraser apparatus
-Status: PLANNED.
+Status: PARTIAL / active.
 
-Required:
-- path marking;
-- conditional subensembles;
-- analyzer basis;
-- recovered conditional fringes/antifringes;
-- delayed-choice configuration may follow;
-- explicit statement that the model does not imply retrocausal information transmission.
+Implemented foundation:
+- slit-specific photon polarization can mark the paths;
+- a linear analyzer projects both paths into one transmitted polarization basis;
+- the displayed detector distribution becomes the conditional transmitted ensemble;
+- orthogonal path marking suppresses ordinary interference and analyzer projection can restore conditional interference;
+- UI explicitly states that this does not imply retrocausal information transfer.
+
+Required completion:
+- paired complementary analyzer outputs / fringes and antifringes;
+- simultaneous unconditional ensemble plus conditional subensemble comparison;
+- event tagging by analyzer output channel;
+- delayed-choice configuration may follow only after the ordinary eraser is validated.
 
 ## DSL-04 — Physical coherence controls
 Status: PARTIAL / active.
@@ -235,13 +248,19 @@ Required completion:
 - source-type-specific coherence terminology and energy/wavelength conversion diagnostics.
 
 ## DSL-05 — Polarization per slit
-Status: PLANNED.
+Status: PARTIAL / active.
 
-Required:
-- independent linear/circular polarization states;
-- analyzer before detector;
-- orthogonal path markers suppress interference;
-- analyzer basis can recover conditional interference where appropriate.
+Implemented:
+- independent linear polarization angle at slit A and slit B;
+- polarization overlap contributes quantitatively to path distinguishability;
+- orthogonal path markers suppress the interference cross-term;
+- optional linear analyzer applies Malus-law path amplitudes and restores interference in the conditional transmitted subset;
+- analyzer transmission and polarization distinguishability are reported.
+
+Required completion:
+- circular and elliptical polarization states;
+- complementary analyzer output channel rather than only transmitted conditional subset;
+- polarization-state visualization and Stokes/Jones diagnostics where useful.
 
 ## DSL-06 — Real detector physics
 Status: PLANNED.
