@@ -33,14 +33,21 @@ Required completion:
 - convergence/accuracy validation.
 
 ## ISM-02 — Energy-dependent cross sections and mean-free-path collision sampling
-Status: ACTIVE NEXT SLICE.
+Status: PARTIAL / active.
 
-Required:
-- cross-section registry by projectile, target, charge state, energy, and process;
+Implemented foundation:
+- provenance-labeled H+ + H charge-exchange table for 5–80 keV;
+- log-space interpolation inside the data range with no silent extrapolation;
 - mean free path λ = 1/(nσ);
 - exponential free-path sampling s = -λ ln(U);
-- optical/collision depth diagnostics;
-- process branching with provenance for fitted/tabulated approximations.
+- optical/collision-depth diagnostics;
+- explicit cross-section-radius encounter detection.
+
+Required completion:
+- broader projectile/target/process registry;
+- production-grade ADAS/IAEA data ingestion and provenance;
+- process branching and actual state transformation;
+- validation across additional energy ranges.
 
 ## ISM-03 — Debye-screened proximity interactions for charged particles
 Status: PARTIAL / active.
@@ -57,7 +64,12 @@ Required completion:
 - clear distinction between binary-collision and collective-field regimes.
 
 ## ISM-04 — Species + charge-state foundation
-Status: PARTIAL.
+Status: PARTIAL / active.
+
+Implemented foundation:
+- particle records now carry species id, mass, charge and velocity;
+- catalog foundation exists for H, H+, electron, He and dust;
+- current generated medium populates H/H+ while additional species remain staged for the next composition pass.
 
 Required species foundation:
 - H;
@@ -90,13 +102,17 @@ Required:
 - screened Coulomb/Rutherford-style limiting cases where valid.
 
 ## ISM-07 — Temperature and Maxwellian target velocities
-Status: PLANNED.
+Status: PARTIAL / active.
 
-Required:
-- thermal velocity sampling from species temperature;
+Implemented foundation:
+- Maxwellian thermal velocity is sampled from species mass and configured temperature;
+- cold/warm/hot temperature presets remain available.
+
+Required completion:
 - configurable bulk flow;
-- relative velocity v_rel drives collision energy;
-- cold/warm/hot ISM presets grounded in physically meaningful parameters.
+- moving-target closest approach;
+- relative velocity v_rel drives collision energy and channel selection;
+- species-specific temperature handling where appropriate.
 
 ## ISM-08 — Interaction inspection overlays and physical-regime diagnostics
 Status: PLANNED.
@@ -143,17 +159,19 @@ Status: PLANNED.
 # Double Slit Experiment program
 
 ## DSL-01 — Fresnel ↔ Fraunhofer propagation
-Status: ACTIVE NEXT SLICE.
+Status: IMPLEMENTED FOUNDATION / validation continuing.
 
-Current state:
-- Fresnel numbers are calculated;
-- the detector kernel remains fundamentally a far-field Fraunhofer approximation.
-
-Required:
-- actual near-field Fresnel propagation through the finite slit aperture;
-- continuous transition to far-field Fraunhofer behavior as detector distance increases;
+Implemented:
+- numerical finite-aperture Fresnel integral;
+- automatic selection of Fresnel propagation in transition/near regimes and analytic Fraunhofer propagation in the far field;
+- detector distance extended down to 1 mm;
 - automatic Near field / Transition regime / Far field classification;
-- an explicit numerical-vs-analytic comparison in the far-field limit.
+- paraxial-geometry validity diagnostic.
+
+Required completion:
+- numerical-vs-analytic convergence comparison in the far-field limit;
+- validation cases and regression thresholds;
+- optional higher-fidelity scalar propagation when the paraxial approximation is outside its reliable range.
 
 ## DSL-02 — Partial which-path measurement
 Status: IMPLEMENTED FOUNDATION / validation continuing.
