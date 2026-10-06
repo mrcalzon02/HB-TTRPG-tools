@@ -104,6 +104,20 @@ assert.equal(gravityElastic.valid,true);
 assert.ok(Math.abs(gravityElastic.audit.kineticRelativeError) < 1e-12);
 const gravityCollisionCube = Gravity.normalizeBody({name:'Cube',shape:'cube',massMode:'mass',massKg:1e10,dimensionsM:{x:2000,y:2000,z:2000},rotationDeg:{x:0,y:0,z:0},position:{x:0,y:0,z:0},velocity:{x:0,y:0,z:0}});
 assert.equal(Gravity.elasticSphereCollisionResult(gravityCollisionA,gravityCollisionCube).valid,false);
+const gravityRelCentral = Gravity.normalizeBody({name:'central',shape:'sphere',massMode:'mass',massKg:10*Gravity.constants.SUN_MASS,dimensionsM:{x:60000,y:60000,z:60000},rotationDeg:{x:0,y:0,z:0},position:{x:0,y:0,z:0},velocity:{x:0,y:0,z:0}});
+const gravityRs = Gravity.schwarzschildRadius(gravityRelCentral.massKg);
+const gravityRelA = 250*gravityRs, gravityRelE = .3, gravityRelRp = gravityRelA*(1-gravityRelE);
+const gravityRelMu = Gravity.constants.G*gravityRelCentral.massKg;
+const gravityRelVp = Math.sqrt(gravityRelMu*(1+gravityRelE)/(gravityRelA*(1-gravityRelE)));
+const gravityRelTarget = Gravity.normalizeBody({name:'tracer',shape:'sphere',massMode:'mass',massKg:1,dimensionsM:{x:2,y:2,z:2},rotationDeg:{x:0,y:0,z:0},position:{x:gravityRelRp,y:0,z:0},velocity:{x:0,y:gravityRelVp,z:0}});
+const gravityRelDiag = Gravity.schwarzschildDiagnostics(gravityRelCentral,gravityRelTarget);
+const gravityRelCorrection = Gravity.schwarzschild1PNCorrection(gravityRelCentral,gravityRelTarget);
+assert.equal(gravityRelDiag.valid,true);
+assert.ok(Math.abs(gravityRelDiag.rOverRs-175) < 1e-9);
+const gravityExpectedPrecession = 6*Math.PI*gravityRelMu/(gravityRelA*(1-gravityRelE*gravityRelE)*Gravity.constants.C*Gravity.constants.C);
+assert.ok(Math.abs(gravityRelDiag.periapsisAdvanceRad-gravityExpectedPrecession)/gravityExpectedPrecession < 1e-10);
+assert.ok(Number.isFinite(gravityRelCorrection.acceleration.x) && Number.isFinite(gravityRelCorrection.acceleration.y) && Number.isFinite(gravityRelCorrection.acceleration.z));
+assert.ok(gravityRelDiag.staticClockRate > 0 && gravityRelDiag.staticClockRate < 1);
 
 const checks = [];
 
@@ -212,7 +226,7 @@ for (const [label, page, runtime] of [
   checks.push(includes(`${label} has a dedicated laboratory page`, page, [runtime, 'scientific-laboratory-page.js', 'ScientificLaboratoryPageConfig']));
 }
 checks.push(includes('Gravity laboratory is page-native and scientifically bounded', sources.gravityPage, ['gravitational-simulation-lab.js', 'gravitational-simulation-root']));
-checks.push(includes('Gravity foundation exposes N-body state, extended geometry, integration, diagnostics, and explicit model boundaries', sources.gravity, ['const G = 6.67430e-11;', 'const MAX_BODIES = 12;', 'function buildMassSamples(body', 'function pairForce(a,b', 'function accelerations(bodies', 'function stepSimulation(dt)', 'function diagnostics(bodies', 'function geometryDiagnostics(bodies', 'Extended Geometry · analytic sphere + quadrature solids', 'function restrictedThreeBodyState(', 'function collinearLagrangeX(', 'earth-moon-l4', 'gravity-view-frame', 'Co-rotating with bodies 1–2', 'function potentialFromBody(', 'function tidalTensorFromBody(', 'gravity-potential-map', 'gravity-tidal-map', 'function mergeCollisionBodies(', 'function elasticSphereCollisionResult(', 'gravity-collision-model', 'Perfectly inelastic merge', 'Frictionless elastic hard spheres', 'non-Euclidean']));
+checks.push(includes('Gravity foundation exposes N-body state, extended geometry, integration, diagnostics, and explicit model boundaries', sources.gravity, ['const G = 6.67430e-11;', 'const MAX_BODIES = 12;', 'function buildMassSamples(body', 'function pairForce(a,b', 'function accelerations(bodies', 'function stepSimulation(dt)', 'function diagnostics(bodies', 'function geometryDiagnostics(bodies', 'Extended Geometry · analytic sphere + quadrature solids', 'function restrictedThreeBodyState(', 'function collinearLagrangeX(', 'earth-moon-l4', 'gravity-view-frame', 'Co-rotating with bodies 1–2', 'function potentialFromBody(', 'function tidalTensorFromBody(', 'gravity-potential-map', 'gravity-tidal-map', 'function mergeCollisionBodies(', 'function elasticSphereCollisionResult(', 'gravity-collision-model', 'Perfectly inelastic merge', 'Frictionless elastic hard spheres', 'const C = 299792458;', 'function schwarzschildRadius(', 'function schwarzschild1PNCorrection(', 'gravity-relativity', 'compact-precession', 'Schwarzschild 1PN test-particle correction', 'non-Euclidean']));
 
 checks.push(includes('Media demonstration corpus remains authoritative and launchable', sources.mediaDemos, ['BinaryCubeMediaForensicsDemoCorpus', 'buildDemoBytes', 'openPanel', 'openInAppropriateTool']));
 checks.push(includes('ISM remains cooperative and model-bounded', sources.ism, ['const LAMBDA = 1.097e-52;', 'const PLANCK_LENGTH = 1.616255e-35;', 'function magneticPhysics(config)', 'async function simulateAsync(config, options = {})', 'ScientificToolsCooperativeRunner']));
@@ -225,7 +239,7 @@ checks.push('Scientific Tools styles, raster evidence routing, calibration data,
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.31.0',
+  schemaVersion: '0.32.0',
   pass: true,
   checkCount: checks.length,
   checks

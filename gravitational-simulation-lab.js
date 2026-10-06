@@ -2,6 +2,7 @@
   'use strict';
 
   const G = 6.67430e-11;
+  const C = 299792458;
   const AU_M = 149597870700;
   const EARTH_MASS = 5.9722e24;
   const EARTH_RADIUS_M = 6371000;
@@ -181,8 +182,18 @@
     'earth-moon-l1':'Idealized circular restricted three-body Earth–Moon L1 state. The 1 kg tracer makes its back-reaction physically negligible.',
     'earth-moon-l4':'Idealized circular restricted three-body Earth–Moon L4 equilateral state. Use the co-rotating view to inspect stationarity.',
     'earth-moon-l5':'Idealized circular restricted three-body Earth–Moon L5 equilateral state. Use the co-rotating view to inspect stationarity.',
-    'hierarchical-triple':'Idealized hierarchical triple: a two-Earth-mass inner binary whose barycenter begins on a circular 1 AU orbit around a solar-mass primary.'
+    'hierarchical-triple':'Idealized hierarchical triple: a two-Earth-mass inner binary whose barycenter begins on a circular 1 AU orbit around a solar-mass primary.',
+    'compact-precession':'Weak-field Schwarzschild/1PN demonstration: a 1 kg tracer orbits a 10-solar-mass compact source with a = 250 Rs and e = 0.3. The source sphere is only an event-horizon display/collision proxy; the external field is treated as a monopole.'
   });
+
+  function compactPrecessionPreset() {
+    const centralMass=10*SUN_MASS,rs=schwarzschildRadius(centralMass),semiMajor=250*rs,eccentricity=.3,periapsis=semiMajor*(1-eccentricity),mu=G*centralMass;
+    const periapsisSpeed=Math.sqrt(mu*(1+eccentricity)/(semiMajor*(1-eccentricity)));
+    return [
+      makeBody('10 M☉ Schwarzschild source · horizon proxy','sphere',centralMass,rs,vec(0,0,0),vec()),
+      makeBody('1 kg test particle','sphere',1,1,vec(periapsis,0,0),vec(0,periapsisSpeed,0),{experimentRole:'test-particle'})
+    ];
+  }
 
   function presetBodies(id) {
     if (id === 'sun-earth') return sunEarthPreset();
@@ -192,6 +203,7 @@
     if (id === 'earth-moon-l4') return earthMoonRestrictedPreset('L4');
     if (id === 'earth-moon-l5') return earthMoonRestrictedPreset('L5');
     if (id === 'hierarchical-triple') return hierarchicalTriplePreset();
+    if (id === 'compact-precession') return compactPrecessionPreset();
     return earthMoonPreset();
   }
 
@@ -343,12 +355,62 @@
     return {force:vec(dx*factor,dy*factor,dz*factor),distanceM:r,mode:'point'};
   }
 
+  function schwarzschildRadius(massKg) {
+    return 2*G*massKg/(C*C);
+  }
+
+  function orbitalElementsAround(central,target) {
+    const rx=target.position.x-central.position.x,ry=target.position.y-central.position.y,rz=target.position.z-central.position.z;
+    const vx=target.velocity.x-central.velocity.x,vy=target.velocity.y-central.velocity.y,vz=target.velocity.z-central.velocity.z;
+    const r=Math.hypot(rx,ry,rz),v2=vx*vx+vy*vy+vz*vz,mu=G*central.massKg;
+    if(!(r>0)||!(mu>0))return {bound:false,rM:r,semiMajorM:NaN,eccentricity:NaN,specificEnergy:NaN,specificAngularMomentum:NaN};
+    const hx=ry*vz-rz*vy,hy=rz*vx-rx*vz,hz=rx*vy-ry*vx,h2=hx*hx+hy*hy+hz*hz;
+    const energy=v2/2-mu/r,bound=energy<0,semiMajor=bound?-mu/(2*energy):Infinity;
+    const eccentricity=Math.sqrt(Math.max(0,1+2*energy*h2/(mu*mu)));
+    return {bound,rM:r,semiMajorM:semiMajor,eccentricity,specificEnergy:energy,specificAngularMomentum:Math.sqrt(h2),speedMps:Math.sqrt(v2)};
+  }
+
+  function schwarzschildDiagnostics(central,target) {
+    const elements=orbitalElementsAround(central,target),rs=schwarzschildRadius(central.massKg),r=elements.rM;
+    const massRatio=target.massKg/central.massKg,speedFraction=elements.speedMps/C,compactness=rs/r;
+    const staticClockRate=r>rs?Math.sqrt(1-rs/r):0;
+    let periapsisAdvanceRad=NaN;
+    if(elements.bound&&elements.eccentricity<1&&Number.isFinite(elements.semiMajorM)){
+      periapsisAdvanceRad=6*Math.PI*G*central.massKg/(elements.semiMajorM*(1-elements.eccentricity*elements.eccentricity)*C*C);
+    }
+    const valid=massRatio<=1e-3&&speedFraction<0.3&&r>10*rs;
+    const reasons=[];
+    if(massRatio>1e-3)reasons.push('target/central mass ratio exceeds the test-particle regime');
+    if(speedFraction>=0.3)reasons.push('relative speed is at or above 0.3c');
+    if(!(r>10*rs))reasons.push('radius is too close to the Schwarzschild scale for this weak-field 1PN layer');
+    return {valid,reasons,schwarzschildRadiusM:rs,radiusM:r,rOverRs:r/rs,compactness,speedFraction,massRatio,staticClockRate,periapsisAdvanceRad,elements};
+  }
+
+  function schwarzschild1PNCorrection(central,target) {
+    const diagnostics=schwarzschildDiagnostics(central,target);
+    if(!diagnostics.valid)return {acceleration:vec(),diagnostics};
+    const rx=target.position.x-central.position.x,ry=target.position.y-central.position.y,rz=target.position.z-central.position.z,r=Math.hypot(rx,ry,rz);
+    const vx=target.velocity.x-central.velocity.x,vy=target.velocity.y-central.velocity.y,vz=target.velocity.z-central.velocity.z;
+    const v2=vx*vx+vy*vy+vz*vz,mu=G*central.massKg,nx=rx/r,ny=ry/r,nz=rz/r,ndotv=nx*vx+ny*vy+nz*vz;
+    const scale=mu/(r*r*C*C),radial=4*mu/r-v2;
+    return {acceleration:vec(scale*(radial*nx+4*ndotv*vx),scale*(radial*ny+4*ndotv*vy),scale*(radial*nz+4*ndotv*vz)),diagnostics};
+  }
+
+  function relativityDiagnosticsForState(bodies,options={}) {
+    const config=solverOptions(options);
+    if(config.relativityMode!=='schwarzschild-1pn'||bodies.length<2)return null;
+    const targetIndex=clamp(config.relativityTargetIndex,1,bodies.length-1);
+    return {...schwarzschildDiagnostics(bodies[0],bodies[targetIndex]),targetIndex};
+  }
+
   function solverOptions(overrides={}) {
     const hasDocument=typeof document!=='undefined';
     const model=overrides.model||(hasDocument?document.getElementById('gravity-model')?.value:null)||'point';
     const resolution=clamp(Math.round(finite(overrides.resolution,hasDocument?document.getElementById('gravity-quadrature')?.value:DEFAULT_QUADRATURE_RESOLUTION)),2,MAX_QUADRATURE_RESOLUTION);
     const farFieldFactor=Math.max(0,finite(overrides.farFieldFactor,hasDocument?document.getElementById('gravity-far-field')?.value:DEFAULT_FAR_FIELD_FACTOR));
-    return {model:model==='extended'?'extended':'point',resolution,farFieldFactor};
+    const relativityMode=overrides.relativityMode||(hasDocument?document.getElementById('gravity-relativity')?.value:null)||'off';
+    const relativityTargetIndex=Math.max(1,Math.round(finite(overrides.relativityTargetIndex,hasDocument?finite(document.getElementById('gravity-relativity-target')?.value,2)-1:1)));
+    return {model:model==='extended'?'extended':'point',resolution,farFieldFactor,relativityMode:relativityMode==='schwarzschild-1pn'?'schwarzschild-1pn':'off',relativityTargetIndex};
   }
 
   function pairForce(a,b,options={}) {
@@ -385,6 +447,12 @@
       const a=bodies[i],b=bodies[j],pair=pairForce(a,b,config);
       acc[i].x+=pair.force.x/a.massKg;acc[i].y+=pair.force.y/a.massKg;acc[i].z+=pair.force.z/a.massKg;
       acc[j].x-=pair.force.x/b.massKg;acc[j].y-=pair.force.y/b.massKg;acc[j].z-=pair.force.z/b.massKg;
+    }
+    if(config.relativityMode==='schwarzschild-1pn'&&bodies.length>=2){
+      const targetIndex=clamp(config.relativityTargetIndex,1,bodies.length-1),correction=schwarzschild1PNCorrection(bodies[0],bodies[targetIndex]);
+      if(correction.diagnostics.valid){
+        acc[targetIndex].x+=correction.acceleration.x;acc[targetIndex].y+=correction.acceleration.y;acc[targetIndex].z+=correction.acceleration.z;
+      }
     }
     return acc;
   }
@@ -790,7 +858,18 @@
       'gravity-convergence':`${(g.convergence*100).toExponential(2)}%`,
       'gravity-far-field-delta':`${(g.farFieldDelta*100).toExponential(2)}%`
     };
+    const rel=relativityDiagnosticsForState(state.bodies,config);
+    values['gravity-rs']=rel?formatDistance(rel.schwarzschildRadiusM):'—';
+    values['gravity-r-over-rs']=rel?formatScientific(rel.rOverRs,3):'—';
+    values['gravity-clock-rate']=rel?rel.staticClockRate.toFixed(9):'—';
+    values['gravity-precession']=rel&&Number.isFinite(rel.periapsisAdvanceRad)?`${(rel.periapsisAdvanceRad*180/Math.PI).toFixed(6)}°`:'—';
     for(const [id,value] of Object.entries(values)){const n=document.getElementById(id);if(n)n.textContent=value;}
+    const relStatus=document.getElementById('gravity-relativity-status');
+    if(relStatus){
+      if(!rel)relStatus.textContent='Relativity layer off.';
+      else if(rel.valid)relStatus.textContent=`1PN test-particle correction active on body ${rel.targetIndex+1}. Weak-field indicators: Rs/r=${rel.compactness.toExponential(3)}, v/c=${rel.speedFraction.toExponential(3)}, mass ratio=${rel.massRatio.toExponential(3)}. Newtonian energy-drift readout is not a conserved 1PN energy integral.`;
+      else relStatus.textContent=`1PN correction withheld: ${rel.reasons.join('; ')}.`;
+    }
   }
 
   async function initScene(){
@@ -892,6 +971,10 @@
     const count=document.getElementById('gravity-body-count');if(count)count.value=state.bodies.length;
     const note=document.getElementById('gravity-preset-note');if(note)note.textContent=PRESET_INFO[id]||PRESET_INFO['earth-moon'];
     const frameSelect=document.getElementById('gravity-view-frame');if(frameSelect)frameSelect.value=id.startsWith('earth-moon-l')?'corotating':'inertial';
+    const relativity=document.getElementById('gravity-relativity'),relTarget=document.getElementById('gravity-relativity-target'),timestep=document.getElementById('gravity-timestep');
+    if(relativity)relativity.value=id==='compact-precession'?'schwarzschild-1pn':'off';
+    if(relTarget)relTarget.value='2';
+    if(id==='compact-precession'&&timestep)timestep.value='0.002';
     clearTrails();
     renderObjectEditors();
     if(sceneState){rebuildBodiesVisual();updateVisuals(true);}
@@ -915,10 +998,13 @@
   function buildUi(host){
     host.innerHTML=`<section class="gravity-lab"><header class="gravity-header"><p class="gravity-eyebrow">Scientific Tools · Gravitation</p><h1>Gravitational Simulation Laboratory</h1><p>Newtonian N-body laboratory with a point-mass baseline and an explicitly selectable extended-body solver. Uniform spheres use the analytic shell-theorem solution; boxes, tetrahedra, octahedra, icosahedra, disks, and tori use deterministic equal-volume quadrature with symmetric pair forces, far-field convergence diagnostics, and SI-unit state.</p></header><div class="gravity-layout"><aside class="gravity-controls">
       <section class="gravity-card"><h2>Simulation</h2>
-        <label>Physical preset<select id="gravity-preset"><option value="earth-moon">Earth–Moon circular pair</option><option value="sun-earth">Sun–Earth circular pair</option><option value="equal-binary">Equal-mass shaped binary benchmark</option><option value="three-body">Three-body free evolution benchmark</option><option value="earth-moon-l1">Earth–Moon CR3BP · L1</option><option value="earth-moon-l4">Earth–Moon CR3BP · L4</option><option value="earth-moon-l5">Earth–Moon CR3BP · L5</option><option value="hierarchical-triple">Hierarchical triple benchmark</option></select></label>
+        <label>Physical preset<select id="gravity-preset"><option value="earth-moon">Earth–Moon circular pair</option><option value="sun-earth">Sun–Earth circular pair</option><option value="equal-binary">Equal-mass shaped binary benchmark</option><option value="three-body">Three-body free evolution benchmark</option><option value="earth-moon-l1">Earth–Moon CR3BP · L1</option><option value="earth-moon-l4">Earth–Moon CR3BP · L4</option><option value="earth-moon-l5">Earth–Moon CR3BP · L5</option><option value="hierarchical-triple">Hierarchical triple benchmark</option><option value="compact-precession">Compact-source 1PN precession demo</option></select></label>
         <div id="gravity-preset-note" class="gravity-source-note"></div>
         <label>Display reference frame<select id="gravity-view-frame"><option value="inertial">Inertial coordinates</option><option value="barycentric">System center-of-mass frame</option><option value="corotating">Co-rotating with bodies 1–2</option></select></label>
         <label>Gravity interaction model<select id="gravity-model"><option value="extended" selected>Extended Geometry · analytic sphere + quadrature solids</option><option value="point">Point Mass · center-of-mass baseline</option></select></label>
+        <label>Relativity layer<select id="gravity-relativity"><option value="off" selected>Off · Newtonian dynamics only</option><option value="schwarzschild-1pn">Schwarzschild 1PN test-particle correction</option></select></label>
+        <label>Relativistic target body number<input id="gravity-relativity-target" type="number" min="2" max="12" value="2"></label>
+        <div id="gravity-relativity-status" class="gravity-source-note">Relativity layer off.</div>
         <label>Quadrature cells / axis<input id="gravity-quadrature" type="number" min="2" max="${MAX_QUADRATURE_RESOLUTION}" value="${DEFAULT_QUADRATURE_RESOLUTION}"></label>
         <label>Far-field point-limit threshold (combined bounding radii; 0 = never)<input id="gravity-far-field" type="number" min="0" step=".5" value="${DEFAULT_FAR_FIELD_FACTOR}"></label>
         <label>Collision handling<select id="gravity-collision-model"><option value="halt" selected>Halt at collision boundary</option><option value="merge">Perfectly inelastic merge · spherical remnant</option><option value="elastic">Frictionless elastic hard spheres · spheres only</option></select></label>
@@ -943,6 +1029,10 @@
         <div class="gravity-metric"><span>Current shape-force Δ vs point</span><strong id="gravity-shape-delta">0%</strong></div>
         <div class="gravity-metric"><span>Quadrature convergence Δ</span><strong id="gravity-convergence">0%</strong></div>
         <div class="gravity-metric"><span>20R far-field Δ vs point</span><strong id="gravity-far-field-delta">0%</strong></div>
+        <div class="gravity-metric"><span>Schwarzschild radius</span><strong id="gravity-rs">—</strong></div>
+        <div class="gravity-metric"><span>Target radius / Rs</span><strong id="gravity-r-over-rs">—</strong></div>
+        <div class="gravity-metric"><span>Static clock dτ/dt</span><strong id="gravity-clock-rate">—</strong></div>
+        <div class="gravity-metric"><span>1PN Δperiapsis / orbit</span><strong id="gravity-precession">—</strong></div>
       </section>
       <div id="gravity-viewport" class="gravity-viewport" aria-label="Three-dimensional gravitational simulation viewport"></div>
       <section class="gravity-field-grid">
@@ -955,9 +1045,10 @@
         <p><strong>Numerical diagnostics:</strong> the laboratory reports the current extended-force difference from the point model, a representative resolution-to-resolution field difference, and a standardized 20-bounding-radius far-field difference. Field samples inside discretized non-spherical bodies use cell-scale regularization because a point mass at a quadrature-cell center is not the continuous cell volume.</p>
         <p><strong>Field diagnostics:</strong> Φ is evaluated analytically for homogeneous spheres and by the same volume quadrature for other solids. The tidal map sums the symmetric Newtonian acceleration-gradient tensor from the same mass model. Outside point masses the tensor trace approaches zero; inside a homogeneous sphere the analytic tensor is isotropically compressive.</p>
         <p><strong>Collision models:</strong> Halt preserves the pre-contact model boundary. Perfectly inelastic merge conserves total mass, volume, and linear momentum while replacing the pair with an equivalent-volume spherical remnant; lost orbital angular momentum is not converted into spin. Elastic response is available only for two homogeneous spheres and uses a frictionless hard-sphere impulse plus center-of-mass-preserving depenetration.</p>
+        <p><strong>Relativistic layer:</strong> the optional Schwarzschild 1PN mode adds the standard weak-field test-particle correction to one selected body's Newtonian acceleration around body 1. It is automatically withheld when the target/central mass ratio exceeds 10⁻³, speed reaches 0.3c, or radius falls within 10 Schwarzschild radii. Diagnostics include Rs = 2GM/c², static Schwarzschild clock rate √(1−Rs/r), and the first-order periapsis advance 6πGM/[a(1−e²)c²]. This is not a full Einstein-field-equation or exact geodesic solver.</p>
         <p class="gravity-source-note">Reference constants/presets: G = 6.67430×10⁻¹¹ m³·kg⁻¹·s⁻² (2022 CODATA recommended value); Earth mass 5.9722×10²⁴ kg and mean radius 6371 km; Sun mass 1.9884×10³⁰ kg and mean radius 695,700 km; mean Earth–Moon distance 384,400 km. Preset values are reference initial conditions, not date-specific ephemerides.</p>
       </section>
-      <section class="gravity-boundary"><strong>Scientific boundary:</strong> GRAV-02/03 remains Newtonian. Shape-dependent forces here are Euclidean volume integrations, not spacetime curvature. L1/L4/L5 presets use idealized circular restricted-three-body initial conditions with a 1 kg tracer; the tracer is not literally massless, but its back-reaction is negligible at the displayed scale. Co-rotating and barycentric modes transform only the visualization, never the solver state. Collision detection is presently a conservative bounding-volume stop, not exact mesh contact. Rigid-body spin, tidal deformation, general relativity, frame dragging, gravitational radiation, and intrinsic non-Euclidean geometry remain separate future solvers.</section>
+      <section class="gravity-boundary"><strong>Scientific boundary:</strong> GRAV-02/03 remains Newtonian. Shape-dependent forces here are Euclidean volume integrations, not spacetime curvature. L1/L4/L5 presets use idealized circular restricted-three-body initial conditions with a 1 kg tracer; the tracer is not literally massless, but its back-reaction is negligible at the displayed scale. Co-rotating and barycentric modes transform only the visualization, never the solver state. Collision detection is presently a conservative bounding-volume stop, not exact mesh contact. Rigid-body spin and tidal deformation remain incomplete. The optional 1PN layer is a weak-field Schwarzschild test-particle approximation only; exact Schwarzschild geodesics, comparable-mass post-Newtonian dynamics, Kerr/frame dragging, gravitational radiation, and intrinsic non-Euclidean geometry remain separate future solvers.</section>
     </main></div></section>`;
   }
 
@@ -971,7 +1062,7 @@
     document.getElementById('gravity-step').addEventListener('click',()=>{running=false;updateRunButton();stepSimulation(Math.max(.001,finite(document.getElementById('gravity-timestep').value,60)));updateVisuals(true);});
     document.getElementById('gravity-reset').addEventListener('click',reset);
     document.getElementById('gravity-apply').addEventListener('click',applyEditors);
-    for(const id of ['gravity-field-vectors','gravity-model','gravity-quadrature','gravity-far-field']) document.getElementById(id)?.addEventListener('change',()=>{geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
+    for(const id of ['gravity-field-vectors','gravity-model','gravity-quadrature','gravity-far-field','gravity-relativity','gravity-relativity-target']) document.getElementById(id)?.addEventListener('change',()=>{geometryDiagnosticsCache=null;initialDiagnostics=diagnostics(state.bodies,solverOptions());updateVisuals(true);});
     document.getElementById('gravity-view-frame')?.addEventListener('change',()=>{clearTrails();updateVisuals(true);});
     for(const id of ['gravity-field-z-km','gravity-map-resolution']) document.getElementById(id)?.addEventListener('change',()=>renderFieldMaps());
     document.getElementById('gravity-display-radius').addEventListener('input',()=>updateVisuals(false));
@@ -981,8 +1072,8 @@
 
   const api=Object.freeze({
     mountPage,
-    constants:Object.freeze({G,AU_M,EARTH_MASS,EARTH_RADIUS_M,MOON_MASS,MOON_RADIUS_M,MOON_DISTANCE_M,SUN_MASS,SUN_RADIUS_M,MAX_BODIES,DEFAULT_QUADRATURE_RESOLUTION,MAX_QUADRATURE_RESOLUTION,DEFAULT_FAR_FIELD_FACTOR}),
-    bodyVolumeM3,bodyBoundingRadiusM,normalizeBody,buildMassSamples,fieldAccelerationFromBody,potentialFromBody,potentialAtPoint,tidalTensorFromBody,tidalTensorAtPoint,tidalFrobeniusNorm,pointMassForce,pairForce,accelerations,diagnostics,geometryDiagnostics,mergeCollisionBodies,elasticSphereCollisionResult,restrictedThreeBodyState,collinearLagrangeX,effectiveRotatingAccelerationX
+    constants:Object.freeze({G,C,AU_M,EARTH_MASS,EARTH_RADIUS_M,MOON_MASS,MOON_RADIUS_M,MOON_DISTANCE_M,SUN_MASS,SUN_RADIUS_M,MAX_BODIES,DEFAULT_QUADRATURE_RESOLUTION,MAX_QUADRATURE_RESOLUTION,DEFAULT_FAR_FIELD_FACTOR}),
+    bodyVolumeM3,bodyBoundingRadiusM,normalizeBody,buildMassSamples,fieldAccelerationFromBody,potentialFromBody,potentialAtPoint,tidalTensorFromBody,tidalTensorAtPoint,tidalFrobeniusNorm,pointMassForce,pairForce,accelerations,diagnostics,geometryDiagnostics,mergeCollisionBodies,elasticSphereCollisionResult,schwarzschildRadius,orbitalElementsAround,schwarzschildDiagnostics,schwarzschild1PNCorrection,restrictedThreeBodyState,collinearLagrangeX,effectiveRotatingAccelerationX
   });
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(typeof window!=='undefined')window.GravitationalSimulationLab=api;

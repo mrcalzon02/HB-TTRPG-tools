@@ -476,14 +476,29 @@ Still required before GRAV-05 is complete:
 - deformation/material response models;
 - fragmentation remains disabled until an explicit material/failure model exists.
 ## GRAV-06 — General-relativistic model layers
-Status: PLANNED / separate solver.
+Status: INCREMENTAL IMPLEMENTATION / weak-field test-particle layer only.
 
-Required:
-- begin with explicitly scoped Schwarzschild test-particle/geodesic experiments;
-- add periapsis precession and gravitational time-dilation demonstrations with validity ranges;
-- later Kerr/frame-dragging work requires its own solver and diagnostics;
-- never portray Newtonian force arrows or a decorative mesh warp as a solution to Einstein's field equations.
+Implemented:
+- exact speed-of-light constant c = 299,792,458 m/s;
+- Schwarzschild radius Rs = 2GM/c² diagnostics for body 1;
+- relative two-body orbital-element extraction for the selected tracer;
+- static Schwarzschild clock-rate diagnostic sqrt(1 - Rs/r);
+- first-order Schwarzschild periapsis-advance prediction 6πGM/[a(1-e²)c²];
+- optional standard weak-field 1PN Schwarzschild test-particle acceleration correction for one selected target body around body 1;
+- automatic validity gate that withholds the correction when target/central mass ratio exceeds 10⁻³, relative speed reaches 0.3c, or radius falls within 10 Rs;
+- a compact-source precession demonstration using a 1 kg tracer around a 10-solar-mass source;
+- live display of Rs, r/Rs, static dτ/dt, predicted periapsis advance, compactness, v/c, and mass-ratio validity information;
+- explicit warning that the Newtonian energy-drift diagnostic is not a conserved 1PN energy integral.
 
+Still required before GRAV-06 is complete:
+- exact Schwarzschild test-particle geodesic integration and comparison against the 1PN approximation;
+- measured numerical periapsis advance from completed simulated orbits versus the analytic weak-field prediction;
+- proper 1PN conserved quantities / diagnostic ledger;
+- comparable-mass 1PN or Einstein-Infeld-Hoffmann dynamics;
+- proper-time accumulation along moving trajectories rather than only the static clock factor;
+- Kerr metric and frame-dragging work in a separate explicitly labeled solver;
+- gravitational-radiation reaction and waveform layers only after their own validity regime is implemented;
+- never portray the Newtonian field arrows, scalar potential maps, or decorative embedding surfaces as a solution to Einstein's field equations.
 ## GRAV-07 — Non-Euclidean geometry laboratory
 Status: PLANNED / separate mathematics layer.
 
