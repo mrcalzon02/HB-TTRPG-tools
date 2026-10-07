@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "recordType": "spatial-regression-diagnostic",
-  "sourceCommit": "19d9703f3708c0772ebe8b1d98e6bca5892af894",
+  "sourceCommit": "94ed6a4a5cb794f2b8f783f361e506942d2eb09a",
   "overallStatus": 0,
   "ok": true,
   "tests": [
