@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 2 Episode 6, *Listening Stone*.
+**Reconciled through:** Season 2 Episode 7, *The Knife That Missed*.
 
 ## Current state
 
@@ -30,6 +30,20 @@ Luceran then exceeds the inquiry's stated purpose after Edselsto reports Miren m
 
 The council creates a genuinely deaf withdrawing room off the south gallery. Vess removes silver continuity at the junction and the removed piece is melted back into Crown stock, making reconnection require new material, labor and witnesses. Luceran and Miren remain intimate but unrepaired; she says they are not finished while refusing to let stolen knowledge force the marriage discussion.
 
+In Episode 7, *The Knife That Missed*, a hired laborer recorded as Marek Venn penetrates the lower archive approach during a royal inspection. The breach is materially ordinary rather than magical: active works, a service recess not treated as an access route, visible listening-zone markings, incomplete worker familiarity, and a momentary watch distraction let him cross a cordon that living guards had otherwise established.
+
+A Doorwarden gives the first warning after seeing movement where none belongs. Edselsto then hears the blade leave its wrapping through a connected approach and tells Luceran "left." Luceran turns; the knife tears his collar and leaves only a shallow wound above the shoulder instead of striking his throat. Rhyse and the Doorwardens subdue Marek alive. A guard takes a second blade across the back of the hand and is expected to retain use of his fingers if the wound remains clean. Pell prevents a loosened brace from becoming a second casualty.
+
+The attack demonstrates a narrow but consequential capability: Edselsto can provide directional auditory warning inside a connected listening path quickly enough to alter an immediate outcome. It does not establish intent-reading, visual omniscience, predictive threat classification, or perception inside unconnected recesses. The living guard had already challenged Marek and Rhyse was already moving before the castle's warning.
+
+Marek claims that unnamed others told him Luceran would be alone and invokes a brother as motive or leverage. Rhyse and Ysabet explicitly preserve uncertainty: Marek may be coached, lying, or telling some truth. No sponsor is identified. The blades do not identify a patron. Hesta Vale remembers seeing Marek with clean insteps and folded cloth near an improperly covered lime cart; her observation is useful for route reconstruction but is not upgraded into foreknowledge of the attack. Physical follow-up finds a strip of linen beneath the cart axle for comparison by living investigators.
+
+Rhyse treats the breach as a repairable security failure rather than proof that living guards are obsolete. Work routes, recess control, worker lists, inspection timing and guard authority all require correction. He is sincerely grateful Edselsto spoke and sincerely frightened by how useful that makes supernatural security. Luceran accepts the bounded reading: the castle heard a blade, not a murderer.
+
+Miren remains intimate with Luceran but unrepaired over Episode 6. She is grateful he survived, gives him physical comfort, and rejects any claim that the successful warning retroactively made the privacy breach lawful. Luceran understands the distinction and does not force the marriage question. Ardel's independence also remains intact; she provides a Kaelmont road answer on its own timetable while keeping her winter question private.
+
+The council does not expand listening infrastructure after the attack. Luceran orders living watches, closed work passages and no new listening branches without the existing survey. Episode 8 must therefore decide what an alarm may be, who receives it, who may act on it, what happens when it is wrong, and how it can be challenged without delegating judgment to the castle.
+
 Canon Merel has not reported any candle failure. All Seven Ancestral Lights remain lit.
 
 ## Active supernatural capability evidence
@@ -43,15 +57,19 @@ Canon Merel has not reported any candle failure. All Seven Ancestral Lights rema
 - Iven Marrick voluntarily persists at a prepared threshold with incomplete memory, personality, judgment and finite service.
 - Edselsto remembers sealed spaces and broad qualities such as silver, weight, metal and paper, but this does not establish ownership, exact contents, legal provenance, present structural condition, or omniscience.
 - Edselsto cannot open the sealed east-foundation masonry itself.
+- In a connected approach it can hear a blade being drawn and provide a useful directional warning quickly enough to affect an attack already noticed by living guards.
+- Episode 7 does not establish intent-reading, threat classification, perception through unconnected recesses, predictive security, or a substitute for living guards and investigation.
 - No evidence establishes resurrection, perfect memory, moral judgment, independent legal authority, or unlimited material creation.
 
 ## Unresolved obligations preserved
 
-Montegrain motive/accountability/fate; Aven constitutional culpability and surrender protections; Rusk patronage/coercive command and surviving payment/authorization evidence; coup prisoner classification; Pellan Vey individual culpability; battle deaths/households; Iven family/service precedent; wounded/civilian compensation; Mera/daughter economy/Parel/Pellon chain; false orders/credential provenance; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel/Kaelmont independence; Ysabet/Selise archive boundary; Calienne care space; Red Ford survey/cattle/toll/arson/Pavel-arrow questions; Northbridge repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; Harl participation; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candle interpretation; Hall of Veils; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Jeron Bellisar injury; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door; provenance and claimant review for the Eastern Household Reserve; Hesta Vale four-season Crown-track bargain; Senn Daro's one-year sealed-material exclusion; Cendreval leverage; the newly authorized second conduit phase.
+Montegrain motive/accountability/fate; Aven constitutional culpability and surrender protections; Rusk patronage/coercive command and surviving payment/authorization evidence; coup prisoner classification; Pellan Vey individual culpability; battle deaths/households; Iven family/service precedent; wounded/civilian compensation; Mera/daughter economy/Parel/Pellon chain; false orders/credential provenance; missing Black Pine scout/road interceptors; false route-delay insertion point; Ardel/Kaelmont independence; Ysabet/Selise archive boundary; Calienne care space; Red Ford survey/cattle/toll/arson/Pavel-arrow questions; Northbridge repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; Harl participation; capital rumor ecology; Luceran/Miren marriage discussion; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candle interpretation; Hall of Veils; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Jeron Bellisar injury; Vess/mill-spring/lower-well/rope/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door; provenance and claimant review for the Eastern Household Reserve; Hesta Vale four-season Crown-track bargain and disputed wheel fee; Senn Daro's one-year sealed-material exclusion; Cendreval leverage; the second conduit phase; Marek Venn's true identity, brother claim, hiring path and unknown sponsor; comparison of recovered linen; the wounded Doorwarden's recovery and family pay; repair of the east receiving service-recess breach; living-watch revisions; rules for supernatural alarms; Luceran's temptation to read Episode 7 as vindication of wider listening.
 
 ## Immediate handoff
 
-Season 2 Episode 7 — *The Knife That Missed* is next. Castle intelligence has now proved both operationally valuable and personally invasive. The next episode should test bounded supernatural protection while preserving living investigation, the newly explicit privacy boundary, and the independence of unresolved hostile threads.
+Season 2 Episode 8 — *Rules for Miracles* is next. Episode 7 made supernatural security materially difficult to refuse without making it sufficient. The next episode must revise the court's rules under pressure while preserving the Episode 6 privacy boundary, living legal judgment, visible notice of connected spaces, worker and guard authority, challenge procedures, and the distinction between reporting an observable event and deciding that a person is dangerous.
+
+Luceran and Miren remain intimate but unrepaired. Rhyse's gratitude and professional alarm coexist. Marek's sponsor remains unknown and must not be collapsed into Valcere, Holt, Red Ford, the hunt evidence or coup residue without evidence.
 
 ## Hard exclusions
 
