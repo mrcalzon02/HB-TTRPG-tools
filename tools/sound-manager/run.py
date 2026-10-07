@@ -1,8 +1,56 @@
 import argparse
+import faulthandler
 import json
 import os
 from pathlib import Path
 import sys
+import traceback
+
+_CRASH_LOG = None
+
+def configure_crash_logging():
+    """Keep Python, Qt, and fatal-signal diagnostics in the per-user app log."""
+    global _CRASH_LOG
+    from sound_manager.settings import data_dir
+    data_dir().mkdir(parents=True, exist_ok=True)
+    _CRASH_LOG = (data_dir()/"app.log").open("a", encoding="utf-8", buffering=1)
+    print("\n=== Simple Sound Manager launch ===", file=_CRASH_LOG)
+    print(f"platform={sys.platform} python={sys.version.split()[0]} executable={sys.executable}", file=_CRASH_LOG)
+
+    try:
+        faulthandler.enable(file=_CRASH_LOG, all_threads=True)
+    except (OSError, RuntimeError, ValueError) as exc:
+        print(f"Could not enable faulthandler: {exc}", file=_CRASH_LOG)
+
+    previous_hook = sys.excepthook
+    def log_exception(exc_type, exc, tb):
+        print("Uncaught exception:", file=_CRASH_LOG)
+        traceback.print_exception(exc_type, exc, tb, file=_CRASH_LOG)
+        _CRASH_LOG.flush()
+        if previous_hook is not sys.__excepthook__:
+            previous_hook(exc_type, exc, tb)
+    sys.excepthook = log_exception
+
+    if sys.stdout is None:
+        sys.stdout = _CRASH_LOG
+    if sys.stderr is None:
+        sys.stderr = _CRASH_LOG
+    return _CRASH_LOG
+
+def install_qt_message_logging():
+    if _CRASH_LOG is None:
+        return
+    from PySide6.QtCore import qInstallMessageHandler
+    def qt_message_handler(mode, context, message):
+        location = ""
+        if context is not None:
+            file_name = getattr(context, "file", None)
+            line = getattr(context, "line", 0)
+            function = getattr(context, "function", None)
+            details = ":".join(str(part) for part in (file_name, line, function) if part)
+            location = f" [{details}]" if details else ""
+        print(f"Qt {mode}: {message}{location}", file=_CRASH_LOG)
+    qInstallMessageHandler(qt_message_handler)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -18,16 +66,12 @@ def main():
     if args.screenshot:
         os.environ["QT_QPA_PLATFORM"] = "offscreen"
     if not args.screenshot:
-        from sound_manager.settings import data_dir
-        data_dir().mkdir(parents=True, exist_ok=True)
-        log = (data_dir()/"app.log").open("a", encoding="utf-8", buffering=1)
-        if sys.stdout is None:
-            sys.stdout = log
-        if sys.stderr is None:
-            sys.stderr = log
+        configure_crash_logging()
     from PySide6.QtCore import QTimer, QLockFile, QStandardPaths
     from PySide6.QtWidgets import QApplication, QMessageBox
     from PySide6.QtGui import QFontDatabase
+    if not args.screenshot:
+        install_qt_message_logging()
     from sound_manager.ui import Window, STYLE
     app = QApplication(sys.argv[:1])
     if args.screenshot and sys.platform == "win32":
@@ -84,6 +128,8 @@ def main():
                     state['window'].show()
                 waiting.hide()
             except Exception as exc:
+                print("Startup audio initialization failed:", file=_CRASH_LOG)
+                traceback.print_exc(file=_CRASH_LOG)
                 delays = (1, 2, 4, 8, 16)
                 attempt = state['attempt']
                 waiting_text.setText(f'Audio system is not ready: {exc}\n'+(f'Retrying in {delays[attempt]} seconds.' if attempt<len(delays) else 'Automatic startup retries stopped. Start your audio service and click Try again.'))
