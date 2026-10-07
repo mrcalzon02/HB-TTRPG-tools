@@ -1,5 +1,7 @@
 # Sound Manager feature research and implementation backlog
 
+Version 0.6.1 restores always-visible delay/synchronization controls and adds product-scoped GitHub Release checks, optional daily startup checking, release notes, Update / Not now, SHA-256 verified package staging, cancellation, and explicit clean-stop installer handoff. Other Foundry tools are filtered by tag prefix. Live Linux update installation remains unverified.
+
 Research date: October 5, 2026. This is a tracked implementation list, not a claim that all features are implemented. The existing 0.6.0 baseline is listed separately below.
 
 ## Programs worth studying

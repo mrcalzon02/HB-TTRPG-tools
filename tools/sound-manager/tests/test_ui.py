@@ -115,6 +115,30 @@ class WindowTests(unittest.TestCase):
             self.assertEqual(self.window.settings.output(outputs[1].id)['delay_ms'], 0)
         self.window.running = False
 
+    def test_delay_controls_survive_compact_view_and_refresh(self):
+        self.window.set_advanced(False)
+        for card in self.window.cards.values():
+            self.assertFalse(card.delay.isHidden())
+            self.assertFalse(card.delay_value.isHidden())
+        self.assertFalse(self.window.system_timing_panel.isHidden())
+        device = next(d for d in self.window.devices if d.kind == 'output')
+        with patch.object(self.window, 'save_and_apply'):
+            self.window.set_delay(device, 175)
+        self.window.refresh(True)
+        self.assertEqual(self.window.cards[device.id].delay_value.value(), 175)
+        self.assertFalse(self.window.cards[device.id].delay.isHidden())
+
+    def test_update_handoff_requires_successful_audio_cleanup(self):
+        from sound_manager import updates
+        from pathlib import Path
+        self.window.updater.staged = Path('fixture')
+        self.window.running = True
+        with patch.object(self.window, 'stop', side_effect=RuntimeError('Audio cleanup failed')), patch.object(updates, 'handoff') as handoff:
+            self.window.updater.install()
+            handoff.assert_not_called()
+            self.assertIn('Audio cleanup failed', self.window.updater.message)
+        self.window.running = False
+
     def test_input_classic_eq_is_saved_separately_from_output_eq(self):
         from sound_manager.ui import EqDialog
         device = next(d for d in self.window.devices if d.kind=='input')

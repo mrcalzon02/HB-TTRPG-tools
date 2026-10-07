@@ -4,6 +4,20 @@ A local desktop app for Windows 10/11 and Linux. No subscription, account, brows
 
 ## Controls
 
+Version 0.6.1 restores always-visible Output delay, Monitor delay, exact millisecond entries, and System audio input delay in the Inputs tab. Auto sync delays remains in the main toolbar. Layout / backup hides only channel layouts and the backup-output picker. Existing delays and EQ headroom settings are retained.
+
+## Updates
+
+Open **Updates** in the window, or **Check for updates** in the tray. Optional startup checking is enabled by default and runs at most once per day. Disable it in Updates for fully offline operation. Checks read the public `mrcalzon02/HB-TTRPG-tools` GitHub Releases list and filter stable `simple-sound-manager-vMAJOR.MINOR.PATCH` tags. Other Foundry tools, drafts, and prereleases are ignored. No account or token is needed.
+
+A newer release offers **Update / Not now** and release notes. Update downloads while audio continues and verifies the GitHub SHA-256 asset digest or published SHA256SUMS.txt, advertised size, and ZIP paths. **Install and restart** is a separate explicit action. It restores owned audio defaults, closes streams, and starts a helper that waits for the process to exit before running the per-user installer and reopening the app. Settings and prior Windows releases are retained. Updates do not install audio drivers or enable login startup. Failed checks/downloads leave audio and the installed version intact. Installer logs are in the settings folder under `updates/install.log`.
+
+Linux receives the source ZIP and uses its regular user installer, including dependency downloads; the same Python/Qt/Pulse prerequisites apply. Live Linux handoff still needs hardware validation. Windows packages are not Authenticode signed; hashes verify correspondence to the trusted GitHub release, not an independent publisher certificate.
+
+Maintainers: build with build.ps1, run `python prepare-release.py`, and publish both ZIPs plus SHA256SUMS.txt as an actual GitHub Release under the product-specific tag. Use `--latest=false` so other tools using `/releases/latest` retain their existing download. Update the Foundry page and tools/sound-manager/release.json to match. This tag convention allows independent tools to have separate release series in the same repository.
+
+## Routing and device controls
+
 Version 0.6 adds stable-reconnect recovery, a chosen backup output, explicit Retry selected, and bounded recovery after capture/service failures. Reconnection requires a device to disappear and then remain available for six seconds; attempts have a thirty-second cooldown and a three-attempt limit per five minutes. A failed device that merely stays listed is not repeatedly reopened. Manual Stop or Cancel retry cancels recovery. Startup/service availability is retried for a bounded period; persistent failures display a manual retry option. Resume notifications request delayed recovery on Windows and Linux systems with logind/QtDBus support.
 
 Choose a **Backup output** under Timing / layout. It is used only if selected outputs fail, and does not overwrite your saved selection. Microphone processing is restarted only if its Meter/Listen setting was already enabled.
@@ -12,7 +26,7 @@ Windows shortcuts now use a stable launcher at the main install path. The launch
 
 Version 0.5 adds **Mute all outputs** and **Mute all microphones** in the window and tray. Restore returns devices to their previous mute states, so an already-muted device stays muted. Output panic mute also silences the processing path without reopening streams. The group mute remains in force for newly connected devices and survives an app restart. `Ctrl+Alt+P` and `Ctrl+Alt+M` operate these controls while the manager window is active; these are not desktop-wide hotkeys yet.
 
-Use **Pin** to put a device first, **Rename** for a friendly label, and the search box to filter devices. The driver names and IDs are preserved. The default view keeps volume, EQ, and waveforms compact; **Timing / layout** reveals the delay and multichannel controls.
+Use **Pin** to put a device first, **Rename** for a friendly label, and the search box to filter devices. Driver names and IDs are preserved. Volume, EQ, timing and waveforms stay visible; **Layout / backup** reveals channel layouts and backup controls.
 
 EQ **Undo/Redo** keeps up to 50 states for each device during the app session, including profile loads and reset. Rapid changes to one slider form one editing step. Waveforms display peak hold, smoothed RMS level in dBFS, and samples that hit the EQ peak guard. Double-click a waveform to clear its peak/clip hold. These levels describe the processed stream before the OS endpoint's volume control.
 

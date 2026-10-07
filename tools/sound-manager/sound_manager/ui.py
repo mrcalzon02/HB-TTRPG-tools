@@ -154,8 +154,6 @@ class DeviceCard(QFrame):
         reset_delay = QPushButton('Reset delay')
         reset_delay.clicked.connect(lambda: window.set_delay(device, 0))
         timing.addWidget(reset_delay)
-        for control in (delay_label, self.delay, self.delay_value, reset_delay):
-            control.setVisible(window.settings.data.get('advanced_visible', False))
         box.addLayout(timing)
         if device.kind == 'output':
             formats = QHBoxLayout()
@@ -251,11 +249,11 @@ class Window(QMainWindow):
         retry = QPushButton('Retry selected')
         retry.clicked.connect(lambda: self.perform(self.retry_selected))
         row.addWidget(retry)
-        sync = QPushButton('Auto sync')
+        sync = QPushButton('Auto sync delays')
         sync.setToolTip('Estimate output alignment using driver latency. Fine-tune Bluetooth manually if needed.')
         sync.clicked.connect(lambda: self.perform(self.auto_sync))
         row.addWidget(sync)
-        advanced = QPushButton('Timing / layout')
+        advanced = QPushButton('Layout / backup')
         advanced.setCheckable(True)
         advanced.setChecked(self.settings.data.get('advanced_visible', False))
         advanced.toggled.connect(self.set_advanced)
@@ -283,6 +281,9 @@ class Window(QMainWindow):
         self.cancel_recovery_button.clicked.connect(self.cancel_recovery)
         self.cancel_recovery_button.hide()
         preferences.addWidget(self.cancel_recovery_button)
+        self.update_button = QPushButton('Updates')
+        self.update_button.clicked.connect(lambda: self.updater.show())
+        preferences.addWidget(self.update_button)
         preferences.addStretch()
         layout.addLayout(preferences)
         quick = QHBoxLayout()
@@ -357,7 +358,6 @@ class Window(QMainWindow):
                 system_row.addWidget(self.system_delay_label)
                 self.system_timing_panel = QWidget()
                 self.system_timing_panel.setLayout(system_row)
-                self.system_timing_panel.setVisible(self.settings.data.get('advanced_visible', False))
                 page_layout.addWidget(self.system_timing_panel)
             scroll = QScrollArea()
             scroll.setWidgetResizable(True)
@@ -388,6 +388,8 @@ class Window(QMainWindow):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.tick)
         self.timer.start(2000)
+        from .update_ui import UpdateController
+        self.updater = UpdateController(self)
         self.resume_events = None if screenshot else ResumeEvents(QApplication.instance(), self.request_recovery)
         # A screenshot/probe never mutates the user's audio state.
         if not screenshot:
@@ -494,7 +496,6 @@ class Window(QMainWindow):
         self.settings.data['advanced_visible'] = visible
         self.settings.save()
         self.format_panel.setVisible(visible)
-        self.system_timing_panel.setVisible(visible)
         self.refresh(True)
 
     def display_name(self, device):
@@ -916,6 +917,7 @@ class Window(QMainWindow):
             action.toggled.connect(lambda checked, identifier=device.id: self.select(identifier, checked))
             menu.addAction(action)
         menu.addSeparator()
+        menu.addAction('Check for updates', lambda: self.updater.check(manual=True))
         menu.addAction("Quit", self.quit)
         previous = self.tray.contextMenu()
         self.tray.setContextMenu(menu)

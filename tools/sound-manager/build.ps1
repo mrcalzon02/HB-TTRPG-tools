@@ -8,7 +8,7 @@ if (-not (Test-Path -LiteralPath '.venv\Scripts\python.exe')) {
 if ($LASTEXITCODE -ne 0) { throw 'Dependency installation failed.' }
 & '.venv\Scripts\python.exe' -m unittest discover -s tests -v
 if ($LASTEXITCODE -ne 0) { throw 'Audio checks failed.' }
-& '.venv\Scripts\python.exe' -m PyInstaller --noconfirm --onedir --windowed --name SimpleSoundManager --add-data 'windows-audio-setup.ps1;.' --collect-data soundcard --copy-metadata SoundCard --copy-metadata pycaw --copy-metadata PySide6 run.py
+& '.venv\Scripts\python.exe' -m PyInstaller --noconfirm --onedir --windowed --name SimpleSoundManager --add-data 'windows-audio-setup.ps1;.' --add-data 'update-handoff.ps1;.' --collect-data soundcard --copy-metadata SoundCard --copy-metadata pycaw --copy-metadata PySide6 run.py
 if ($LASTEXITCODE -ne 0) { throw 'Application build failed.' }
 & '.venv\Scripts\python.exe' -m PyInstaller --noconfirm --onefile --windowed --name SimpleSoundManagerLauncher --distpath dist\launcher --workpath build\launcher launcher.py
 if ($LASTEXITCODE -ne 0) { throw 'Stable launcher build failed.' }

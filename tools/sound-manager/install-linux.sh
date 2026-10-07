@@ -11,7 +11,7 @@ done
 pactl info >/dev/null
 install_dir="${XDG_DATA_HOME:-$HOME/.local/share}/simple-sound-manager"
 mkdir -p "$install_dir/sound_manager" "$install_dir/tests"
-cp "$source_dir/run.py" "$source_dir/requirements.txt" "$source_dir/README.md" "$source_dir/LICENSE" "$source_dir/THIRD-PARTY-NOTICES.md" "$install_dir/"
+cp "$source_dir/run.py" "$source_dir/update-handoff.sh" "$source_dir/requirements.txt" "$source_dir/README.md" "$source_dir/LICENSE" "$source_dir/THIRD-PARTY-NOTICES.md" "$install_dir/"
 cp "$source_dir"/sound_manager/*.py "$install_dir/sound_manager/"
 cp "$source_dir"/tests/*.py "$install_dir/tests/"
 python3 -m venv "$install_dir/.venv"

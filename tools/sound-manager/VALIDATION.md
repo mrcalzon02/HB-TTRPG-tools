@@ -1,4 +1,6 @@
-# Validation — October 5, 2026
+# Validation — October 6, 2026
+
+Version 0.6.1: 77 automated checks passed, including delay visibility/persistence in compact view, numeric release ordering, unrelated/draft/prerelease filtering, platform asset selection, pagination, checksum fallback, verified download staging, cancellation, unsafe/duplicate/symlink ZIP rejection, and refusal to install after audio cleanup fails. Existing routing/DSP/launcher checks remain green. Real release-feed discovery and packaged Windows startup are checked during publication. Live Linux updater execution remains unverified.
 
 Environment: Windows 11 x64, Python 3.14.5, SoundCard 0.4.6, PySide6 6.11.2, NumPy 2.5.3, SciPy 1.18.1, pycaw 20260927.
 
