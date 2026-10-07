@@ -8,6 +8,8 @@ Version 0.6.2 adds a saved **Waveform** checkbox on each input and output. In it
 
 Clicking the pinned/Start Menu shortcut while the app is running now directly reopens its window through a user-local channel, even if the tray icon is hidden. It does not start another audio engine. Existing versions older than 0.6.2 need to be closed once during installation because they cannot receive reopen requests.
 
+The app, tray, stable launcher and shortcuts now share an original speaker/waves/level-dial icon. SVG artwork is rendered directly at each required size; Windows embeds seven sizes from 16–256 px. The installer assigns the current release's icon file to repaired shortcuts to avoid stale generic icons. Linux launchers use the same SVG.
+
 Both graphic EQ banks have horizontal dB guide lines and a highlighted zero line: classic ±12 dB in 3 dB divisions, earlier ±24 dB in 6 dB divisions. Guides track the actual slider travel when the window is resized.
 
 Version 0.6.1 restores always-visible Output delay, Monitor delay, exact millisecond entries, and System audio input delay in the Inputs tab. Auto sync delays remains in the main toolbar. Layout / backup hides only channel layouts and the backup-output picker. Existing delays and EQ headroom settings are retained.

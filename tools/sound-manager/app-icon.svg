@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>Simple Sound Manager — speaker, sound waves and level dial</title>
+  <defs>
+    <linearGradient id="case" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2c394d"/>
+      <stop offset="1" stop-color="#111822"/>
+    </linearGradient>
+    <linearGradient id="sound" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8ef3db"/>
+      <stop offset="1" stop-color="#43bda7"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="244" height="244" rx="48" fill="url(#case)" stroke="#536178" stroke-width="6"/>
+  <path d="M48 100H80L126 64V188L80 152H48Z" fill="#f0f5fc"/>
+  <path d="M154 99C174 115 174 139 154 155M178 77C215 108 215 146 178 177" fill="none" stroke="url(#sound)" stroke-width="15" stroke-linecap="round"/>
+  <circle cx="194" cy="211" r="20" fill="url(#sound)"/>
+  <path d="M194 211L204 200" fill="none" stroke="#12242b" stroke-width="7" stroke-linecap="round"/>
+</svg>

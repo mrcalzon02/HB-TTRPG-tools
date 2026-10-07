@@ -50,15 +50,17 @@ QMenu::item { padding: 8px 22px; }
 QMenu::item:selected { background: #40506a; }
 """
 
-def icon():
-    pixmap = QPixmap(64, 64)
+def icon(size=64):
+    from PySide6.QtSvg import QSvgRenderer
+    source = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parent.parent))/'app-icon.svg'
+    renderer = QSvgRenderer(str(source))
+    if not renderer.isValid():
+        raise RuntimeError('Application icon asset is missing or invalid')
+    pixmap = QPixmap(size, size)
     pixmap.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pixmap)
     painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-    painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(QColor("#64dbc2"))
-    for x, height in ((8, 20), (21, 42), (34, 30), (47, 52)):
-        painter.drawRoundedRect(x, (64-height)//2, 9, height, 4, 4)
+    renderer.render(painter)
     painter.end()
     return QIcon(pixmap)
 

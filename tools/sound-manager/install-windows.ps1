@@ -25,6 +25,7 @@ $shortcutFolder = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs'
 $shortcutShell = New-Object -ComObject WScript.Shell
 $shortcut = $shortcutShell.CreateShortcut((Join-Path $shortcutFolder 'Simple Sound Manager.lnk'))
 $shortcut.TargetPath = $canonicalApp
+$shortcut.IconLocation = (Join-Path $installPath 'app.ico')
 $shortcut.WorkingDirectory = $installRoot
 $shortcut.Save()
 # Repair stale app shortcuts, including taskbar pins pointing at older releases.
@@ -36,6 +37,7 @@ foreach ($shortcutLocation in $shortcutLocations) {
         $oldTarget = $appShortcut.TargetPath
         if ($oldTarget -and $oldTarget.StartsWith($installRoot + '\', [StringComparison]::OrdinalIgnoreCase) -and [IO.Path]::GetFileName($oldTarget) -eq 'SimpleSoundManager.exe') {
             $appShortcut.TargetPath = $canonicalApp
+            $appShortcut.IconLocation = (Join-Path $installPath 'app.ico')
             $appShortcut.WorkingDirectory = $installRoot
             $appShortcut.Save()
         }
