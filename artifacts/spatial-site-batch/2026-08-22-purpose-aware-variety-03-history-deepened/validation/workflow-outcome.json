@@ -2,7 +2,7 @@
   "schemaVersion": "1.2.0",
   "recordType": "spatial-site-batch-workflow-outcome",
   "batchId": "2026-08-22-purpose-aware-variety-03-history-deepened",
-  "sourceCommit": "444b5fc86b93a0cd88e77bd000505ace8b788fcd",
+  "sourceCommit": "19d9703f3708c0772ebe8b1d98e6bca5892af894",
   "regressionStatus": 0,
   "batchStatus": 0,
   "tests": [
