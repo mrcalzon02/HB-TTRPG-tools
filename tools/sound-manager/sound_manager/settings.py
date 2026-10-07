@@ -33,6 +33,7 @@ class Settings:
         if not isinstance(item, dict):
             item = self.data["outputs"][identifier] = {}
         item.setdefault("selected", selected)
+        item.setdefault('waveform', True)
         item.setdefault("eq", True)
         gains = item.get("gains", [0]*10)
         if not isinstance(gains, list) or len(gains) != 10:
@@ -54,6 +55,7 @@ class Settings:
         if not isinstance(item, dict):
             item = self.data['inputs'][identifier] = {}
         item.setdefault('monitor', False)
+        item.setdefault('waveform', True)
         item.setdefault('delay_ms', 0)
         item.setdefault('meter', False)
         defaults = dict(eq=True, gains=[0]*10, classic_gains=[0]*15, tones=[0, 0, 0], preamp=0, balance=0, protect=True, filters=[])

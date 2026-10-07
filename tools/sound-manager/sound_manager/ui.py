@@ -88,6 +88,11 @@ class DeviceCard(QFrame):
         rename = QPushButton('Rename')
         rename.clicked.connect(lambda: window.rename(device))
         top.addWidget(rename)
+        self.waveform_toggle = QCheckBox('Waveform')
+        self.waveform_toggle.setChecked(window.settings.device(device).get('waveform', True))
+        self.waveform_toggle.setToolTip('Show or hide this device’s waveform. Audio and Meter/Listen are unchanged.')
+        self.waveform_toggle.toggled.connect(lambda enabled: window.set_waveform(device, enabled))
+        top.addWidget(self.waveform_toggle)
         if device.kind == 'output':
             top.addWidget(QLabel(f'{len(device.channels)} channels'))
         box.addLayout(top)
@@ -170,7 +175,8 @@ class DeviceCard(QFrame):
             panel.setLayout(formats)
             panel.setVisible(window.settings.data.get('advanced_visible', False))
             box.addWidget(panel)
-        box.addWidget(WaveformWidget(window, device))
+        self.waveform = WaveformWidget(window, device)
+        box.addWidget(self.waveform)
 
     def commit_volume(self):
         if not self.volume.isSliderDown():
@@ -191,6 +197,10 @@ class DeviceCard(QFrame):
             self.selected.setChecked(self.window.selected(device))
             self.selected.blockSignals(False)
         config = self.window.settings.output(device.id) if device.kind == 'output' else self.window.settings.input(device.id)
+        self.waveform_toggle.blockSignals(True)
+        self.waveform_toggle.setChecked(config.get('waveform', True))
+        self.waveform_toggle.blockSignals(False)
+        self.waveform.set_display_enabled(config.get('waveform', True))
         if not self.delay.isSliderDown() and not self.delay_value.hasFocus():
             self.delay.setValue(round(config['delay_ms']))
         if hasattr(self, 'listen'):
@@ -298,6 +308,18 @@ class Window(QMainWindow):
         self.search.textChanged.connect(self.filter_cards)
         quick.addWidget(self.search, 1)
         layout.addLayout(quick)
+        convenience = QHBoxLayout()
+        self.bypass_eq = QCheckBox('Bypass all EQ')
+        self.bypass_eq.setChecked(self.settings.data.get('bypass_eq', False))
+        self.bypass_eq.setToolTip('Compare without EQ/preamp/headroom processing on routed inputs and outputs. Saved EQ settings and timing stay unchanged.')
+        self.bypass_eq.toggled.connect(self.set_eq_bypass)
+        convenience.addWidget(self.bypass_eq)
+        reset_timing = QPushButton('Reset all delays')
+        reset_timing.setToolTip('Set output, microphone-monitor and system-input delays to zero, including saved disconnected devices.')
+        reset_timing.clicked.connect(self.reset_all_delays)
+        convenience.addWidget(reset_timing)
+        convenience.addStretch()
+        layout.addLayout(convenience)
         for key, kind in (('Ctrl+Alt+P', 'output'), ('Ctrl+Alt+M', 'input')):
             shortcut = QShortcut(QKeySequence(key), self)
             shortcut.activated.connect(lambda selected=kind: self.perform(lambda: self.group_mute(selected, not self.mutes.active(selected))))
@@ -410,7 +432,34 @@ class Window(QMainWindow):
             traceback.print_exc()
 
     def configurations(self):
-        return {d.id: dict(self.settings.output(d.id, d.default), selected=self.selected(d) and not self.returns.settling(d.id), _native_roles=d.channels, _panic=self.mutes.active('output')) for d in self.devices if d.kind == "output" and not d.virtual}
+        return {d.id: self.processing_config(dict(self.settings.output(d.id, d.default), selected=self.selected(d) and not self.returns.settling(d.id), _native_roles=d.channels, _panic=self.mutes.active('output'))) for d in self.devices if d.kind == "output" and not d.virtual}
+
+    def processing_config(self, config):
+        result = dict(config)
+        if self.settings.data.get('bypass_eq', False):
+            result.update(eq=False, preamp=0, balance=0, protect=False)
+        return result
+
+    def set_waveform(self, device, enabled):
+        self.settings.device(device)['waveform'] = enabled
+        self.settings.save()
+        for widget in self.findChildren(WaveformWidget):
+            if widget.device.id == device.id:
+                widget.set_display_enabled(enabled)
+
+    def set_eq_bypass(self, enabled):
+        self.settings.data['bypass_eq'] = enabled
+        self.perform(self.save_and_apply)
+        self.status.setText('All EQ bypassed. Saved EQ settings and timing are retained.' if enabled else 'Saved device EQ settings are active again.')
+
+    def reset_all_delays(self):
+        for kind in ('outputs', 'inputs'):
+            for config in self.settings.data[kind].values():
+                config['delay_ms'] = 0
+        self.settings.data['system_delay_ms'] = 0
+        self.system_delay.setValue(0)
+        self.perform(self.save_and_apply)
+        self.status.setText('All output, monitor and system-input delays reset to 0 ms. EQ settings are retained.')
 
     def selected(self, device):
         return self.settings.output(device.id, device.default)['selected'] or device.id==self.fallback_active
@@ -551,7 +600,7 @@ class Window(QMainWindow):
         result = {}
         for device in self.devices:
             if device.kind=='input':
-                config = dict(self.settings.input(device.id), _muted=self.mutes.active('input'))
+                config = self.processing_config(dict(self.settings.input(device.id), _muted=self.mutes.active('input')))
                 if self.returns.settling(device.id):
                     config.update(monitor=False, meter=False)
                 result[device.id] = config

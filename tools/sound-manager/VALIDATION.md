@@ -1,5 +1,7 @@
 # Validation — October 6, 2026
 
+Version 0.6.2: 83 automated checks passed. Added integrated checks for independent persistent waveform switches without microphone capture, hidden display timers, saved advanced EQ/live-waveform display modes, waveform state in EQ dialogs, global bypass preserving profiles and each device's EQ flag, resetting all delays including disconnected devices without changing EQ, and actual second-process reopen requests without a tray icon. EQ dB-guide layouts were rendered and inspected. The 0.6.1 release/updater checks remain green.
+
 Version 0.6.1: 77 automated checks passed, including delay visibility/persistence in compact view, numeric release ordering, unrelated/draft/prerelease filtering, platform asset selection, pagination, checksum fallback, verified download staging, cancellation, unsafe/duplicate/symlink ZIP rejection, and refusal to install after audio cleanup fails. Existing routing/DSP/launcher checks remain green. Real release-feed discovery and packaged Windows startup are checked during publication. Live Linux updater execution remains unverified.
 
 Environment: Windows 11 x64, Python 3.14.5, SoundCard 0.4.6, PySide6 6.11.2, NumPy 2.5.3, SciPy 1.18.1, pycaw 20260927.

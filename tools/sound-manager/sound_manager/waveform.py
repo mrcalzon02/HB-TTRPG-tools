@@ -67,7 +67,23 @@ class WaveformWidget(QWidget):
         self.setToolTip('Processed audio, peak hold, and RMS level. Visual scaling does not change volume. Double-click to reset peak/clip hold.')
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update)
+        if not window.settings.device(device).get('waveform', True):
+            self.hide()
+
+    def set_display_enabled(self, enabled):
+        self.setVisible(enabled)
+        if enabled and self.isVisible():
+            self.timer.start(50)
+        else:
+            self.timer.stop()
+
+    def showEvent(self, event):
         self.timer.start(50)
+        super().showEvent(event)
+
+    def hideEvent(self, event):
+        self.timer.stop()
+        super().hideEvent(event)
 
     def paintEvent(self, event):
         painter = QPainter(self)

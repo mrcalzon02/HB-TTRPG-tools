@@ -1,18 +1,18 @@
 {
-  "version": "0.6.1",
-  "tag": "simple-sound-manager-v0.6.1",
+  "version": "0.6.2",
+  "tag": "simple-sound-manager-v0.6.2",
   "assets": [
     {
-      "name": "SimpleSoundManager-0.6.1-Windows-x64.zip",
-      "bytes": 104416632,
-      "sha256": "ff8e04e56bd52ada216af99d1c97c7ff35388b03d34bf917560e30c0648305bc",
-      "url": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/simple-sound-manager-v0.6.1/SimpleSoundManager-0.6.1-Windows-x64.zip"
+      "name": "SimpleSoundManager-0.6.2-Windows-x64.zip",
+      "bytes": 104432977,
+      "sha256": "a0e87855d810490fe8d67df2d245c582dd485ac05151ccb0f49805666e11dd28",
+      "url": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/simple-sound-manager-v0.6.2/SimpleSoundManager-0.6.2-Windows-x64.zip"
     },
     {
-      "name": "SimpleSoundManager-0.6.1-Source.zip",
-      "bytes": 93928,
-      "sha256": "2897848affb83776d10900c60e3091f3f435d9d1040cfb84d3741fb624b55252",
-      "url": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/simple-sound-manager-v0.6.1/SimpleSoundManager-0.6.1-Source.zip"
+      "name": "SimpleSoundManager-0.6.2-Source.zip",
+      "bytes": 99511,
+      "sha256": "d9094755665b1ed589c8bf22a8a8dd2549f8bf651633233de2f21315521f2de2",
+      "url": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/simple-sound-manager-v0.6.2/SimpleSoundManager-0.6.2-Source.zip"
     }
   ]
 }

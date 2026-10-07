@@ -4,15 +4,45 @@ import math
 from pathlib import Path
 import numpy as np
 from scipy.signal import sosfreqz
-from PySide6.QtCore import Qt, QPointF
+from PySide6.QtCore import Qt, QPointF, QPoint
 from PySide6.QtGui import QPainter, QColor, QPen, QPolygonF
 from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QDoubleSpinBox,
     QFileDialog, QFormLayout, QHBoxLayout, QInputDialog, QLabel, QPushButton,
-    QScrollArea, QSlider, QTabWidget, QVBoxLayout, QWidget)
+    QScrollArea, QSlider, QStackedWidget, QStyle, QStyleOptionSlider, QTabWidget, QVBoxLayout, QWidget)
 from .dsp import FREQUENCIES, CLASSIC_FREQUENCIES, PRESETS, FILTER_TYPES, filter_chain
 from .settings import eq_profile, validate_profile
 from .waveform import WaveformWidget
 from .controls import EqHistory
+
+class BandGrid(QWidget):
+    """Graduated dB guides aligned to the slider handle travel, at any size."""
+    def __init__(self, maximum, step):
+        super().__init__()
+        self.maximum, self.step = maximum, step
+        self.reference_slider = None
+        self.bands = QHBoxLayout(self)
+        self.bands.setContentsMargins(44, 0, 8, 0)
+
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        slider = self.reference_slider
+        if slider is None:
+            return
+        option = QStyleOptionSlider()
+        slider.initStyleOption(option)
+        positions = []
+        for value in (slider.maximum(), slider.minimum()):
+            option.sliderPosition = option.sliderValue = value
+            handle = slider.style().subControlRect(QStyle.ComplexControl.CC_Slider, option, QStyle.SubControl.SC_SliderHandle, slider)
+            positions.append(slider.mapTo(self, QPoint(0, handle.center().y())).y())
+        top, bottom = positions
+        painter = QPainter(self)
+        for level in range(-self.maximum, self.maximum+1, self.step):
+            y = bottom-(level+self.maximum)/(2*self.maximum)*(bottom-top)
+            painter.setPen(QPen(QColor('#718197' if level == 0 else '#374357'), 1))
+            painter.drawLine(QPointF(41, y), QPointF(self.width()-8, y))
+            painter.setPen(QColor('#c6d0df' if level == 0 else '#96a5bc'))
+            painter.drawText(1, round(y)+4, f'{level:+d}' if level else '0 dB')
 
 class ResponseCurve(QWidget):
     def __init__(self, config):
@@ -63,6 +93,8 @@ class EqDialog(QDialog):
         heading.setStyleSheet('font-size: 18px; font-weight: 600;')
         layout.addWidget(heading)
         self.message = QLabel('Bass, mids, and treble for this device. Input EQ affects Listen monitoring and its meter.')
+        if window.settings.data.get('bypass_eq', False):
+            self.message.setText('Global EQ bypass is on. You can edit saved EQ here; turn off Bypass all EQ in the main window to hear it.')
         self.message.setWordWrap(True)
         self.message.setObjectName('note')
         layout.addWidget(self.message)
@@ -72,9 +104,17 @@ class EqDialog(QDialog):
         self.redo_button.clicked.connect(self.redo)
         editing.addWidget(self.undo_button)
         editing.addWidget(self.redo_button)
+        editing.addWidget(QLabel('Display'))
+        self.display_mode = QComboBox()
+        self.display_mode.addItems(['EQ controls', 'Live waveform'])
+        self.display_mode.setToolTip('Switch the advanced EQ controls to a larger live waveform for this device.')
+        editing.addWidget(self.display_mode)
+        self.waveform_switch = QCheckBox('Waveform')
+        self.waveform_switch.setChecked(self.config.get('waveform', True))
+        self.waveform_switch.setToolTip('Saved for this device, including its main-window card. Does not enable microphone capture.')
+        editing.addWidget(self.waveform_switch)
         editing.addStretch()
         layout.addLayout(editing)
-        layout.addWidget(WaveformWidget(window, device))
         if device.kind == 'input':
             meter = QCheckBox('Live input meter')
             meter.setChecked(self.config['meter'])
@@ -129,13 +169,16 @@ class EqDialog(QDialog):
             region.setAlignment(Qt.AlignmentFlag.AlignCenter)
             regions.addWidget(region, count)
         classic_layout.addLayout(regions)
-        classic_row = QHBoxLayout()
+        self.classic_grid = BandGrid(12, 3)
+        classic_row = self.classic_grid.bands
         self.classic_values = []
         for frequency, gain in zip(CLASSIC_FREQUENCIES, self.config['classic_gains']):
             column = QVBoxLayout()
             value = self.spin(-12, 12, gain, .1, '')
             value.setMinimumWidth(52)
             slider = QSlider(Qt.Orientation.Vertical)
+            slider.setStyleSheet('QSlider { background: transparent; }')
+            self.classic_grid.reference_slider = slider
             slider.setRange(-120, 120)
             slider.setValue(round(gain*10))
             slider.setTickInterval(30)
@@ -151,17 +194,20 @@ class EqDialog(QDialog):
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             column.addWidget(label)
             classic_row.addLayout(column)
-        classic_layout.addLayout(classic_row)
+        classic_layout.addWidget(self.classic_grid, 1)
         tabs.addTab(classic, 'Classic equalizer')
         graphic = QWidget()
         graphic_layout = QVBoxLayout(graphic)
-        row = QHBoxLayout()
+        self.graphic_grid = BandGrid(24, 6)
+        row = self.graphic_grid.bands
         self.sliders, self.values = [], []
         for frequency, gain in zip(FREQUENCIES, self.config['gains']):
             column = QVBoxLayout()
             value = self.spin(-24, 24, gain, .1, ' dB')
             value.setMinimumWidth(72)
             slider = QSlider(Qt.Orientation.Vertical)
+            slider.setStyleSheet('QSlider { background: transparent; }')
+            self.graphic_grid.reference_slider = slider
             slider.setRange(-240, 240)
             slider.setValue(round(gain*10))
             slider.setTickInterval(60)
@@ -177,7 +223,7 @@ class EqDialog(QDialog):
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             column.addWidget(label)
             row.addLayout(column)
-        graphic_layout.addLayout(row)
+        graphic_layout.addWidget(self.graphic_grid, 1)
         tabs.addTab(graphic, 'Earlier band settings')
         parametric = QWidget()
         parametric_layout = QVBoxLayout(parametric)
@@ -203,7 +249,22 @@ class EqDialog(QDialog):
         add.clicked.connect(lambda: self.add_filter())
         parametric_layout.addWidget(add)
         tabs.addTab(parametric, 'Parametric EQ')
-        layout.addWidget(tabs, 1)
+        self.display_stack = QStackedWidget()
+        self.display_stack.addWidget(tabs)
+        live_page = QWidget()
+        live_layout = QVBoxLayout(live_page)
+        self.live_waveform = WaveformWidget(window, device)
+        self.live_waveform.setMinimumHeight(280)
+        self.waveform_hidden_note = QLabel('Waveform is hidden for this device. Turn on Waveform above to show it. Microphone capture still requires Meter or Listen.')
+        self.waveform_hidden_note.setWordWrap(True)
+        live_layout.addWidget(self.live_waveform, 1)
+        live_layout.addWidget(self.waveform_hidden_note)
+        self.display_stack.addWidget(live_page)
+        layout.addWidget(self.display_stack, 1)
+        self.display_mode.setCurrentIndex(1 if self.config.get('eq_view') == 'Live waveform' else 0)
+        self.display_mode.currentIndexChanged.connect(self.select_display)
+        self.waveform_switch.toggled.connect(self.show_waveform)
+        self.select_display(self.display_mode.currentIndex(), save=False)
         for item in self.config['filters']:
             self.add_filter(item)
         presets = QHBoxLayout()
@@ -232,6 +293,19 @@ class EqDialog(QDialog):
         layout.addLayout(copy_row)
         self.loading = False
         self.update_curve()
+
+    def select_display(self, index, save=True):
+        self.display_stack.setCurrentIndex(index)
+        self.curve.setVisible(index == 0)
+        self.headroom.setVisible(index == 0)
+        self.waveform_hidden_note.setVisible(not self.config.get('waveform', True))
+        if save:
+            self.config['eq_view'] = self.display_mode.currentText()
+            self.window.settings.save()
+
+    def show_waveform(self, enabled):
+        self.window.set_waveform(self.device, enabled)
+        self.waveform_hidden_note.setVisible(not enabled)
 
     @staticmethod
     def spin(low, high, value, step, suffix):

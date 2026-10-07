@@ -40,7 +40,10 @@ def main():
     if not args.screenshot:
         lock = QLockFile(str(Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.TempLocation))/"simple-sound-manager.lock"))
         if not lock.tryLock(100):
-            QMessageBox.information(None, "Simple Sound Manager", "Sound Manager is already running. Open it from the system tray.")
+            from sound_manager.single_instance import reopen_existing
+            if args.tray or reopen_existing():
+                return
+            QMessageBox.information(None, "Simple Sound Manager", "Another Sound Manager version is running but could not reopen its window. Quit the old version before installing this update, or restart Windows once. This version's pinned shortcut will reopen its running window directly.")
             return
     if args.screenshot:
         window = Window(screenshot=True)
@@ -57,6 +60,19 @@ def main():
         retry = QPushButton('Try again')
         waiting_layout.addWidget(retry)
         state = dict(attempt=0, window=None, generation=0)
+        def reopen_window():
+            if state['window'] is not None:
+                state['window'].show_window()
+                if not state['window'].tray.isVisible():
+                    from PySide6.QtWidgets import QSystemTrayIcon
+                    if QSystemTrayIcon.isSystemTrayAvailable():
+                        state['window'].tray.show()
+            else:
+                waiting.showNormal()
+                waiting.raise_()
+                waiting.activateWindow()
+        from sound_manager.single_instance import InstanceServer
+        instance_server = InstanceServer(reopen_window, app)
         def create_window(generation):
             if generation!=state['generation'] or state['window'] is not None:
                 return

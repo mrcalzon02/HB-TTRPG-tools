@@ -4,6 +4,12 @@ A local desktop app for Windows 10/11 and Linux. No subscription, account, brows
 
 ## Controls
 
+Version 0.6.2 adds a saved **Waveform** checkbox on each input and output. In its Equalizer, **Display** switches between the advanced EQ controls and a larger **Live waveform**; the mode is saved per device. Its Waveform checkbox shares the main card's preference. Hidden waveform display timers stop without changing routing or Meter/Listen. **Bypass all EQ** temporarily bypasses filters, preamp, balance and EQ headroom across routed inputs/outputs without overwriting profiles or delays; the final peak guard and mute controls remain active. **Reset all delays** clears output, monitor, and system-input timing, including saved disconnected devices, while preserving EQ and selection.
+
+Clicking the pinned/Start Menu shortcut while the app is running now directly reopens its window through a user-local channel, even if the tray icon is hidden. It does not start another audio engine. Existing versions older than 0.6.2 need to be closed once during installation because they cannot receive reopen requests.
+
+Both graphic EQ banks have horizontal dB guide lines and a highlighted zero line: classic ±12 dB in 3 dB divisions, earlier ±24 dB in 6 dB divisions. Guides track the actual slider travel when the window is resized.
+
 Version 0.6.1 restores always-visible Output delay, Monitor delay, exact millisecond entries, and System audio input delay in the Inputs tab. Auto sync delays remains in the main toolbar. Layout / backup hides only channel layouts and the backup-output picker. Existing delays and EQ headroom settings are retained.
 
 ## Updates
@@ -20,7 +26,7 @@ Maintainers: build with build.ps1, run `python prepare-release.py`, and publish 
 
 Version 0.6 adds stable-reconnect recovery, a chosen backup output, explicit Retry selected, and bounded recovery after capture/service failures. Reconnection requires a device to disappear and then remain available for six seconds; attempts have a thirty-second cooldown and a three-attempt limit per five minutes. A failed device that merely stays listed is not repeatedly reopened. Manual Stop or Cancel retry cancels recovery. Startup/service availability is retried for a bounded period; persistent failures display a manual retry option. Resume notifications request delayed recovery on Windows and Linux systems with logind/QtDBus support.
 
-Choose a **Backup output** under Timing / layout. It is used only if selected outputs fail, and does not overwrite your saved selection. Microphone processing is restarted only if its Meter/Listen setting was already enabled.
+Choose a **Backup output** under Layout / backup. It is used only if selected outputs fail, and does not overwrite your saved selection. Microphone processing is restarted only if its Meter/Listen setting was already enabled.
 
 Windows shortcuts now use a stable launcher at the main install path. The launcher opens the current release, rather than a stale old executable. The installer repairs matching desktop/Start Menu/taskbar shortcuts and updates login startup to the stable entry. The version is displayed in the window title and heading.
 

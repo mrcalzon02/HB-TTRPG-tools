@@ -139,6 +139,81 @@ class WindowTests(unittest.TestCase):
             self.assertIn('Audio cleanup failed', self.window.updater.message)
         self.window.running = False
 
+    def test_waveform_toggle_is_per_device_persistent_and_does_not_capture_audio(self):
+        from sound_manager.settings import Settings
+        from sound_manager.ui import EqDialog
+        microphone = next(d for d in self.window.devices if d.kind == 'input')
+        other = next(d for d in self.window.devices if d.kind == 'output')
+        with patch.object(self.window.engine, 'configure_inputs') as capture:
+            self.window.cards[microphone.id].waveform_toggle.setChecked(False)
+            capture.assert_not_called()
+        card = self.window.cards[microphone.id]
+        self.assertTrue(card.waveform.isHidden())
+        self.assertFalse(card.waveform.timer.isActive())
+        self.assertFalse(self.window.settings.input(microphone.id)['meter'])
+        self.assertFalse(self.window.settings.input(microphone.id)['monitor'])
+        self.assertTrue(self.window.settings.output(other.id)['waveform'])
+        self.assertFalse(Settings(Path(self.folder.name)/'settings.json').input(microphone.id)['waveform'])
+        dialog = EqDialog(self.window, microphone)
+        from sound_manager.waveform import WaveformWidget
+        self.assertTrue(dialog.findChild(WaveformWidget).isHidden())
+        dialog.close()
+        self.window.refresh(True)
+        self.assertFalse(self.window.cards[microphone.id].waveform_toggle.isChecked())
+
+    def test_global_eq_bypass_preserves_profiles_and_device_bypass_flags(self):
+        output = next(d for d in self.window.devices if d.kind == 'output')
+        microphone = next(d for d in self.window.devices if d.kind == 'input')
+        self.window.settings.output(output.id).update(eq=True, preamp=-5, delay_ms=125)
+        self.window.settings.input(microphone.id)['eq'] = False
+        with patch.object(self.window, 'save_and_apply'):
+            self.window.set_eq_bypass(True)
+            self.assertFalse(self.window.configurations()[output.id]['eq'])
+            self.assertEqual(self.window.configurations()[output.id]['preamp'], 0)
+            self.assertFalse(self.window.configurations()[output.id]['protect'])
+            self.assertTrue(self.window.settings.output(output.id)['eq'])
+            self.assertEqual(self.window.settings.output(output.id)['delay_ms'], 125)
+            self.window.set_eq_bypass(False)
+            self.assertTrue(self.window.configurations()[output.id]['eq'])
+            self.assertFalse(self.window.input_configurations()[microphone.id]['eq'])
+            self.assertEqual(self.window.settings.output(output.id)['preamp'], -5)
+
+    def test_reset_all_delays_keeps_eq_and_resets_disconnected_devices(self):
+        self.window.settings.output('disconnected').update(delay_ms=400, preamp=-4)
+        self.window.settings.input('missing-mic').update(delay_ms=120, monitor=False)
+        self.window.system_delay.setValue(80)
+        with patch.object(self.window, 'save_and_apply'):
+            self.window.reset_all_delays()
+        self.assertEqual(self.window.settings.output('disconnected')['delay_ms'], 0)
+        self.assertEqual(self.window.settings.input('missing-mic')['delay_ms'], 0)
+        self.assertEqual(self.window.system_delay.value(), 0)
+        self.assertEqual(self.window.settings.data['system_delay_ms'], 0)
+        self.assertEqual(self.window.settings.output('disconnected')['preamp'], -4)
+
+    def test_equalizer_display_switch_remembers_device_and_does_not_start_monitoring(self):
+        from sound_manager.ui import EqDialog
+        device = next(d for d in self.window.devices if d.kind == 'input')
+        config = self.window.settings.input(device.id)
+        config['tones'] = [2, -1, 3]
+        dialog = EqDialog(self.window, device)
+        with patch.object(self.window.engine, 'configure_inputs') as capture:
+            dialog.display_mode.setCurrentIndex(1)
+            self.assertEqual(dialog.display_stack.currentIndex(), 1)
+            self.assertTrue(dialog.curve.isHidden())
+            dialog.waveform_switch.setChecked(False)
+            self.assertTrue(dialog.live_waveform.isHidden())
+            dialog.waveform_switch.setChecked(True)
+            capture.assert_not_called()
+        self.assertEqual(config['tones'], [2, -1, 3])
+        self.assertFalse(config['monitor'])
+        self.assertFalse(config['meter'])
+        dialog.close()
+        reopened = EqDialog(self.window, device)
+        self.assertEqual(reopened.display_mode.currentText(), 'Live waveform')
+        reopened.display_mode.setCurrentIndex(0)
+        self.assertFalse(reopened.curve.isHidden())
+        reopened.close()
+
     def test_input_classic_eq_is_saved_separately_from_output_eq(self):
         from sound_manager.ui import EqDialog
         device = next(d for d in self.window.devices if d.kind=='input')
