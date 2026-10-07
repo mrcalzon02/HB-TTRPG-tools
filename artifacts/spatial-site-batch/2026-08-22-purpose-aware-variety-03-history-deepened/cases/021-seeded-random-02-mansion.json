@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "recordType": "spatial-site-generation-test-artifact",
   "batchId": "2026-08-22-purpose-aware-variety-03-history-deepened",
-  "sourceCommit": "94ed6a4a5cb794f2b8f783f361e506942d2eb09a",
+  "sourceCommit": "8c308940fc6b82371478287e584dcd93534b99c0",
   "caseNumber": 21,
   "caseId": "seeded-random-02-mansion",
   "caseKind": "seeded-random",
