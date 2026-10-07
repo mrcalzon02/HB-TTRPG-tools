@@ -1,5 +1,18 @@
 # Sound Manager feature research and implementation backlog
 
+### Delivered in 0.10.0
+
+| IDs | Delivered behavior and remaining scope |
+|---|---|
+| D03, D04 | Hide/show devices without disabling audio; saved order using Move up/down. Portable backups retain both. Drag-to-reorder remains pending. |
+| D06, V09, V10 | Stream states and source-silence guidance; reported errors, queue drops, estimated driver latency, measured DSP milliseconds/block. Total CPU usage and native underrun counters remain pending. No acoustic playback claim. |
+| C05 | Per-output Solo / End solo preserves selections and native mute; panic still silences it. Applies to manager-routed streams. |
+| T03, T07 | Every input/output has ±1/5/10 ms delay nudges; a bounded ten-second click train passes through output processing for listening comparisons. |
+| C01, C02, C04, scenes | Opt-in customizable global mute/cycle/scene keys on Windows and X11, conflict reporting, plus user-local --action commands for desktop-configured Wayland bindings. Automatic Wayland portal registration remains pending. |
+| A01, A02 | Native per-app session volume/mute and locally persisted output assignment for Windows and PulseAudio/PipeWire-Pulse. Manager mix or physical destination; errors surfaced, failed routes not churned. Physical routes bypass manager processing. App preferences are not in portable backups/scenes yet. |
+
+125 automated checks pass. Live Windows app-session enumeration and an isolated process's policy assignment/readback/default restoration pass. Linux app routing uses mocked command coverage; live Linux hardware and global-key delivery remain verification tasks. Existing user playback is not changed by routing tests.
+
 Version 0.7.0 completes V03 Freeze waveform with a shared per-device/session snapshot, explicit Frozen status, no audio pause/capture changes, and no recordings on disk. Explicit per-device and global peak/clip hold reset buttons extend V02. Visibility/display preferences, EQ bypass, delay reset, and pinned-window recovery from 0.6.2/0.6.3 are retained.
 
 Version 0.6.2 convenience controls: per-input/output persistent waveform visibility with hidden rendering timers stopped; saved EQ controls / Live waveform display mode; graduated background dB guides for both slider banks; global non-destructive EQ bypass for sound comparison; and one-click reset of all delays, including disconnected devices. These are implemented controls, not future proposals. Waveform capture remains governed by routing and input Meter/Listen.
@@ -242,6 +255,27 @@ P0 = reliability and missing core paths. P1 = daily convenience. P2 = richer pro
 | U08 | P3 | Separate monitor and broadcast mixes | Support a listen mix and a different streaming mix, including mix-minus. |
 | U09 | P3 | Network audio | Optional local-network destinations with explicit latency handling. |
 | U10 | P3 | Plugin hosting | Load compatible effects with isolation and separate license handling. |
+
+### 11. Extensive built-in help section — requested October 6, 2026
+
+Status: shipped HELP.md reference and code map are the foundation; the complete built-in Help system is planned. Build an offline, searchable Help window accessible from the main window and tray. Start with plain-language explanations and expandable technical detail, with a complete button/function reference and architecture guide. Keep it versioned with the app and available alongside the source/download documentation.
+
+Development requirement: every addition or behavioral change must include an explanation of what it is and how it works in the help, in the same change. Correct/remove obsolete information when behavior changes or is removed. Review related examples/screenshots/links, distinguish current from historical/planned behavior, and block release when matching help is missing or inaccurate. This rule is maintained in AGENTS.md and CONTRIBUTING.md.
+
+| ID | Priority | Help topic | Acceptance target |
+|---|---|---|---|
+| H01 | P1 | Help navigation and search | Table of contents, keyword search, glossary, back/forward navigation, copyable text and links; usable offline without an account. |
+| H02 | P1 | Every button and function | Cover every window, tab, tray action, shortcut and command. For each: purpose, exact effect, prerequisites, affected devices/streams, persistence, reset/undo behavior, failures and examples. Maintain a control inventory so additions cannot silently lack help. |
+| H03 | P1 | Routing explained | Trace app audio → Windows cable/Linux sink → capture → channel conversion → microphone mix → delay/EQ → independent output queues → endpoint. Explain Manager mix versus physical app destinations, OS defaults, native volume, mute, exclusive audio, monitoring and feedback. |
+| H04 | P1 | EQ and metering guide | Bass/mid/treble, graphic/parametric bands, Hz/dB/Q, preamp, balance, headroom, peak guard, profiles, undo/redo, waveform visibility/freeze, EQ response versus waveform, RMS/peak/clip readings and graduated scales. Show practical examples and explain measurement limits. |
+| H05 | P1 | Timing and channel guide | Per-input/output/system delay, nudges, click tests, reported-latency Auto sync, Bluetooth codec delay, drift, acoustic versus sample measurements; PCM layouts/downmix/channel maps and actual Dolby/Atmos limitations. |
+| H06 | P1 | Daily workflows | Startup/login, tray/pinned-window recovery, hide/reorder/favorites, search/rename, solo/panic/mic mute, hotkeys, per-app controls, scenes/previous mix, backups/remapping and privacy-preserving microphone restore defaults. |
+| H07 | P1 | Troubleshooting and diagnostics | Decision paths for silence, missing waveform, missing/disconnected devices, failed streams, wrong app route, Bluetooth call mode, latency/desync, clipping, service restart, driver setup and stale shortcuts. Explain health fields, logs, bounded retries, and reversible recovery steps. |
+| H08 | P1 | Behind-the-scenes code reference | Explain each source module, public classes/functions, interactions and platform-specific calls; threads/locks/queues, buffers/sample rates, DSP state, device/session identity, native hotkeys and local IPC, settings validation/migrations, crash logging, packaging/launcher and update handoff. Link descriptions to matching source and describe why key choices were made. |
+| H09 | P1 | Persistence, updates and privacy | State what saves across restarts versus session-only controls, where settings/logs/backups live on Windows/Linux, scene/backup inclusions and omissions, native OS settings, release verification, install/uninstall, separate driver licenses, local waveform memory and microphone access. |
+| H10 | P1 | Context help and maintenance | Help links beside complex controls open the correct topic. Use screenshots/examples from the current version, distinguish implemented/experimental/planned behavior and platform limits, add accessible keyboard/scaling support, and check control/source coverage during releases. |
+
+This section is an implementation backlog, not permission to expose internal code jargon throughout the ordinary mixer. The Help window should let users choose the detail they need, including the extensive code explanations requested here.
 
 ## Suggested implementation order
 

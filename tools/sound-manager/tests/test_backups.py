@@ -8,6 +8,15 @@ from sound_manager.scenes import capture_scene
 from sound_manager.backups import capture_backup, validate_backup, identities_for, suggest_mapping, remap_backup
 
 class BackupTests(unittest.TestCase):
+    def test_hidden_order_preferences_are_validated_and_remapped(self):
+        self.settings.preference('old-speaker').update(hidden=True,order=2)
+        value=capture_backup(self.settings,self.devices)
+        mapped=remap_backup(value,{'old-speaker':'new-speaker','old-mic':None},[Device('new-speaker','USB speakers','output')])
+        self.assertTrue(mapped['display']['new-speaker']['hidden'])
+        self.assertEqual(mapped['display']['new-speaker']['order'],2)
+        value['display']['old-speaker']['order']=-1
+        with self.assertRaises(ValueError):
+            validate_backup(value)
     def setUp(self):
         self.folder = tempfile.TemporaryDirectory()
         self.addCleanup(self.folder.cleanup)

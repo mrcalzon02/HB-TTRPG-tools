@@ -82,6 +82,8 @@ class DeviceCard(QFrame):
         self.default = QLabel("Default" if device.default else "")
         self.default.setStyleSheet("color: #64dbc2;")
         top.addWidget(self.default)
+        self.health_label = QLabel()
+        top.addWidget(self.health_label)
         favorite = QPushButton('Pinned' if window.settings.preference(device.id)['favorite'] else 'Pin')
         favorite.setCheckable(True)
         favorite.setChecked(window.settings.preference(device.id)['favorite'])
@@ -128,6 +130,11 @@ class DeviceCard(QFrame):
         eq = QPushButton("Equalizer")
         eq.clicked.connect(lambda: EqDialog(window, self.device).exec())
         controls.addWidget(eq)
+        if device.kind=='output':
+            self.solo = QPushButton('Solo')
+            self.solo.setCheckable(True)
+            self.solo.clicked.connect(lambda: window.set_solo(None if window.solo_id==device.id else device.id))
+            controls.addWidget(self.solo)
         default = QPushButton("Use as default")
         default.clicked.connect(lambda: window.perform(lambda: window.backend.set_default(self.device.id, self.device.kind)))
         if device.kind == "output":
@@ -168,6 +175,14 @@ class DeviceCard(QFrame):
         reset_delay.clicked.connect(lambda: window.set_delay(device, 0))
         timing.addWidget(reset_delay)
         box.addLayout(timing)
+        nudges = QHBoxLayout()
+        nudges.addWidget(QLabel('Nudge delay'))
+        for delta in (-10,-5,-1,1,5,10):
+            nudge=QPushButton(f'{delta:+d} ms')
+            nudge.clicked.connect(lambda _, amount=delta: window.set_delay(device, window.settings.device(device).get('delay_ms',0)+amount))
+            nudges.addWidget(nudge)
+        nudges.addStretch()
+        box.addLayout(nudges)
         if device.kind == 'output':
             formats = QHBoxLayout()
             formats.addWidget(QLabel('Playback layout'))
@@ -185,6 +200,7 @@ class DeviceCard(QFrame):
             box.addWidget(panel)
         self.waveform = WaveformWidget(window, device)
         box.addWidget(self.waveform)
+        self.sync(device)
 
     def commit_volume(self):
         if not self.volume.isSliderDown():
@@ -192,6 +208,8 @@ class DeviceCard(QFrame):
 
     def sync(self, device):
         self.device = device
+        from .health import stream_state
+        self.health_label.setText(stream_state(self.window,device.id,device.kind))
         self.default.setText("Default" if device.default else "")
         self.mute.setText("Unmute" if device.muted else "Mute")
         self.mute.setEnabled(not self.window.mutes.active(device.kind))
@@ -201,6 +219,7 @@ class DeviceCard(QFrame):
             self.volume.blockSignals(False)
             self.number.setText(f"{self.volume.value()}%")
         if hasattr(self, "selected"):
+            self.solo.setChecked(self.window.solo_id==device.id)
             self.selected.blockSignals(True)
             self.selected.setChecked(self.window.selected(device))
             self.selected.blockSignals(False)
@@ -233,6 +252,7 @@ class Window(QMainWindow):
         self.mutes = MuteController(self.settings)
         self.eq_histories = {}
         self.waveform_freezes = {}
+        self.solo_id = None
         self.backend = backend or Backend()
         self.engine = Engine(self.backend.sc)
         self.running = False
@@ -314,6 +334,9 @@ class Window(QMainWindow):
         backups_button = QPushButton('Backup / restore')
         backups_button.clicked.connect(lambda: self.backups.show())
         preferences.addWidget(backups_button)
+        health_button=QPushButton('Health / devices')
+        health_button.clicked.connect(lambda: self.show_health())
+        preferences.addWidget(health_button)
         preferences.addStretch()
         layout.addLayout(preferences)
         quick = QHBoxLayout()
@@ -342,6 +365,19 @@ class Window(QMainWindow):
         reset_meters.setToolTip('Clear held peaks and clip counts without stopping audio. Frozen waveform shapes are retained.')
         reset_meters.clicked.connect(lambda: self.reset_meter_holds())
         convenience.addWidget(reset_meters)
+        self.solo_button=QPushButton('End solo')
+        self.solo_button.clicked.connect(lambda:self.set_solo(None))
+        self.solo_button.hide()
+        convenience.addWidget(self.solo_button)
+        self.test_click_button=QPushButton('Test sync clicks')
+        self.test_click_button.clicked.connect(self.test_clicks)
+        convenience.addWidget(self.test_click_button)
+        app_button=QPushButton('App mixer')
+        app_button.clicked.connect(lambda:self.app_mixer.show())
+        convenience.addWidget(app_button)
+        keys_button=QPushButton('Hotkeys')
+        keys_button.clicked.connect(lambda:self.hotkeys.show())
+        convenience.addWidget(keys_button)
         convenience.addStretch()
         layout.addLayout(convenience)
         for key, kind in (('Ctrl+Alt+P', 'output'), ('Ctrl+Alt+M', 'input')):
@@ -427,6 +463,8 @@ class Window(QMainWindow):
         self.scenes = SceneController(self)
         from .backups_ui import BackupController
         self.backups = BackupController(self)
+        from .app_mixer_ui import AppMixerController
+        self.app_mixer=AppMixerController(self)
         self.refresh(True)
         available = {d.id for d in self.devices}
         for identifier, config in self.settings.data['outputs'].items():
@@ -440,6 +478,8 @@ class Window(QMainWindow):
         self.timer.start(2000)
         from .update_ui import UpdateController
         self.updater = UpdateController(self)
+        from .hotkeys_ui import HotkeyController
+        self.hotkeys=HotkeyController(self)
         self.resume_events = None if screenshot else ResumeEvents(QApplication.instance(), self.request_recovery)
         # A screenshot/probe never mutates the user's audio state.
         if not screenshot:
@@ -460,13 +500,82 @@ class Window(QMainWindow):
             traceback.print_exc()
 
     def configurations(self):
-        return {d.id: self.processing_config(dict(self.settings.output(d.id, d.default), selected=self.selected(d) and not self.returns.settling(d.id), _native_roles=d.channels, _panic=self.mutes.active('output'))) for d in self.devices if d.kind == "output" and not d.virtual}
+        return {d.id: self.processing_config(dict(self.settings.output(d.id, d.default), selected=self.selected(d) and not self.returns.settling(d.id), _native_roles=d.channels, _panic=self.mutes.active('output'), _solo_silenced=self.solo_id is not None and d.id != self.solo_id)) for d in self.devices if d.kind == "output" and not d.virtual}
 
     def processing_config(self, config):
         result = dict(config)
         if self.settings.data.get('bypass_eq', False):
             result.update(eq=False, preamp=0, balance=0, protect=False)
         return result
+
+    def show_health(self):
+        from .everyday import EverydayDialog
+        dialog=EverydayDialog(self)
+        dialog.show()
+
+    def dispatch_action(self,action):
+        if action=='mute-outputs':
+            self.group_mute('output',not self.mutes.active('output'))
+        elif action=='mute-mics':
+            self.group_mute('input',not self.mutes.active('input'))
+        elif action=='cycle-output':
+            outputs=[d for d in self.devices if d.kind=='output' and not self.settings.preference(d.id).get('hidden',False)]
+            favorites=[d for d in outputs if self.settings.preference(d.id)['favorite']]
+            outputs=favorites or outputs
+            if not outputs:
+                raise RuntimeError('No available outputs to cycle')
+            current=next((i for i,d in enumerate(outputs) if self.selected(d)),-1)
+            target=outputs[(current+1)%len(outputs)]
+            for device in self.devices:
+                if device.kind=='output':
+                    self.settings.output(device.id)['selected']=device.id==target.id
+            self.solo_id=None
+            self.solo_button.hide()
+            self.save_and_apply()
+            self.backend.mute(target,self.mutes.active('output'))
+        elif action=='next-scene':
+            names=sorted(self.scenes.catalog,key=str.casefold)
+            if not names:
+                raise RuntimeError('Save an audio scene before cycling scenes')
+            old=getattr(self,'hotkey_scene_index',-1)
+            self.hotkey_scene_index=(old+1)%len(names)
+            self.scenes.apply(names[self.hotkey_scene_index])
+        else:
+            raise ValueError('Unknown desktop action')
+
+    def move_device(self, identifier, delta):
+        order=[d.id for d in self.devices]
+        index=order.index(identifier)
+        target=index+delta
+        if not 0<=target<len(order):
+            return
+        order[index],order[target]=order[target],order[index]
+        for position,key in enumerate(order):
+            self.settings.preference(key)['order']=position
+        self.settings.save()
+        self.refresh(True)
+
+    def set_solo(self, identifier):
+        if identifier is not None and not any(d.id==identifier and d.kind=='output' and self.selected(d) for d in self.devices):
+            self.status.setText('Select Play here on that output before soloing it.')
+            return
+        self.solo_id=identifier
+        self.solo_button.setVisible(identifier is not None)
+        self.perform(self.save_and_apply)
+        for card in self.cards.values():
+            card.sync(card.device)
+
+    def test_clicks(self):
+        if not self.running:
+            self.status.setText('Start sound before playing synchronization test clicks.')
+            return
+        if time.monotonic()<self.engine.test_click_end:
+            self.engine.test_click_end=0
+        else:
+            self.engine.test_click_cursor=0
+            self.engine.test_click_end=time.monotonic()+10
+        self.test_click_button.setText('Stop test clicks' if time.monotonic()<self.engine.test_click_end else 'Test sync clicks')
+        QTimer.singleShot(10050, lambda:self.test_click_button.setText('Test sync clicks') if time.monotonic()>=self.engine.test_click_end else None)
 
     def set_waveform(self, device, enabled):
         self.settings.device(device)['waveform'] = enabled
@@ -644,7 +753,7 @@ class Window(QMainWindow):
         for device in self.devices:
             card = self.cards.get(device.id)
             if card:
-                card.setVisible(query in (self.display_name(device)+' '+device.name+' '+device.kind).casefold())
+                card.setVisible(not self.settings.preference(device.id).get('hidden',False) and query in (self.display_name(device)+' '+device.name+' '+device.kind).casefold())
 
     def group_mute(self, kind, enabled):
         errors = self.mutes.set(kind, enabled, self.devices, self.backend.mute)
@@ -765,7 +874,7 @@ class Window(QMainWindow):
 
     def refresh(self, rebuild=False):
         self.devices = [d for d in self.backend.devices() if not d.virtual]
-        self.devices.sort(key=lambda d: (not self.settings.preference(d.id)['favorite'],
+        self.devices.sort(key=lambda d: (self.settings.preference(d.id).get('order',100000), not self.settings.preference(d.id)['favorite'],
                                          not (self.settings.output(d.id, d.default)['selected'] if d.kind=='output' else d.default),
                                          self.display_name(d).casefold()))
         returned = self.returns.observe([d.id for d in self.devices]) if not self.transition else []
@@ -775,6 +884,9 @@ class Window(QMainWindow):
             if errors:
                 self.status.setText('Mute update failed: '+'; '.join(errors))
         identifiers = {d.id for d in self.devices}
+        if self.solo_id is not None and not any(d.id==self.solo_id and self.selected(d) for d in self.devices if d.kind=='output'):
+            self.solo_id = None
+            self.solo_button.hide()
         if rebuild or identifiers != set(self.cards) or any(d.id in self.cards and d.channels != self.cards[d.id].device.channels for d in self.devices):
             for group in self.groups.values():
                 while group.count():
@@ -818,6 +930,8 @@ class Window(QMainWindow):
         if identifier==self.fallback_active and not selected:
             self.release_fallback()
         self.settings.output(identifier)["selected"] = selected
+        if not selected and self.solo_id==identifier:
+            self.set_solo(None)
         if self.running:
             device = next(d for d in self.devices if d.id == identifier)
             self.perform(lambda: self.backend.mute(device, not selected or self.mutes.active('output')))
@@ -917,6 +1031,9 @@ class Window(QMainWindow):
             self.transition = False
 
     def stop_routing(self, preserve_intent=False):
+        self.solo_id = None
+        self.solo_button.hide()
+        self.test_click_button.setText('Test sync clicks')
         # Restore system playback first, even if a broken device hangs on close.
         if not preserve_intent:
             self.audio_intent = False
@@ -1049,6 +1166,9 @@ class Window(QMainWindow):
             scene_menu.addAction(name, lambda selected=name: self.perform(lambda: self.scenes.apply(selected)))
         scene_menu.addAction('Previous mix', lambda: self.perform(self.scenes.restore_previous)).setEnabled(self.scenes.previous is not None)
         menu.addAction('Backup / restore setup', self.backups.show)
+        menu.addAction('Device health / organization',self.show_health)
+        menu.addAction('Per-app mixer',self.app_mixer.show)
+        menu.addAction('Desktop hotkeys',lambda:self.hotkeys.show())
         menu.addAction('Check for updates', lambda: self.updater.check(manual=True))
         menu.addAction("Quit", self.quit)
         previous = self.tray.contextMenu()

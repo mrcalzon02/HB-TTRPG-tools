@@ -4,6 +4,18 @@ A local desktop app for Windows 10/11 and Linux. No subscription, account, brows
 
 ## Controls
 
+See [HELP.md](HELP.md) for current controls and the code map. [CONTRIBUTING.md](CONTRIBUTING.md) requires help updates with every behavior change, including correcting/removing obsolete information. The searchable Help interface and complete function-level reference are tracked as H01–H10.
+
+Version 0.10 adds **Health / devices**, **App mixer**, and opt-in **Hotkeys**, plus **Solo** on each output and ±1/5/10 ms timing nudges on every input/output. **Test sync clicks** sends quiet, once-per-second pulses through the selected output processing for ten seconds; press it again to stop. It helps you listen for timing differences and does not perform acoustic measurement.
+
+**Health / devices** shows connected, disconnected, muted, failed, waiting and processing states; source-silence guidance; queue drops; driver latency; and measured DSP time per block. Processing time excludes native playback waits and is not total CPU usage. Move devices up/down to save their order, or hide/show them in the menu. Hidden devices keep their existing audio selection. Manual ordering takes precedence over Pin; hidden devices remain accessible in this dialog. Visibility and order are included in setup backups.
+
+**Solo** temporarily silences other manager-routed outputs without changing their selection or native mute settings. **End solo**, stopping routing, deselecting the solo target, or its disconnection restores the other routed outputs. Panic mute still wins. Solo is a session-only control.
+
+**App mixer** groups current app sessions for volume/mute and saved destination assignment. Windows uses native render sessions and its internal audio policy API; Linux uses PulseAudio/PipeWire-Pulse sink inputs. **Manager mix** sends through the manager's selected outputs and processing. A physical destination bypasses manager EQ/delay/solo. Some apps require playback restarted after an assignment. Unsupported policy calls and missing outputs are reported; failed assignments do not retry every poll. App routing preferences persist locally, including new app streams, but are not part of portable backups or scenes. Native app volume/mute belongs to the OS and is not saved in scenes.
+
+Desktop hotkeys are off by default. Enable them in **Hotkeys**: Ctrl+Alt+Shift+P/M toggles output/microphone mute, O cycles visible pinned outputs (or visible outputs if none are pinned), and S cycles saved scenes. Customize each combination; registration conflicts are shown. Windows and X11 support native registration. On Wayland, configure the displayed `--action` commands in desktop settings. Commands control the already-running manager through its user-local channel. Automatic Wayland portal registration is still pending. Local Ctrl+Alt+P/M shortcuts remain available in the app window.
+
 Version 0.9 adds **Backup / restore** in the window and tray. Export the current mix, named EQ profiles, scenes, labels, pinned devices, waveform/display choices and app preferences as one portable JSON file. Loading a file only builds a preview: nothing is applied until **Restore reviewed setup** is clicked.
 
 Every saved device has a mapping choice: use current hardware of the same input/output type, keep its saved ID for later reconnection, or skip it. Exact IDs and unique native-name/type matches are suggested; ambiguous names never choose arbitrary hardware. Duplicate target assignments are rejected. Mappings also update saved scenes and their backup-output references. Named scene/profile catalogs are replaced by the backup; unrelated device display preferences are retained.
@@ -52,7 +64,7 @@ Choose a **Backup output** under Layout / backup. It is used only if selected ou
 
 Windows shortcuts now use a stable launcher at the main install path. The launcher opens the current release, rather than a stale old executable. The installer repairs matching desktop/Start Menu/taskbar shortcuts and updates login startup to the stable entry. The version is displayed in the window title and heading.
 
-Version 0.5 adds **Mute all outputs** and **Mute all microphones** in the window and tray. Restore returns devices to their previous mute states, so an already-muted device stays muted. Output panic mute also silences the processing path without reopening streams. The group mute remains in force for newly connected devices and survives an app restart. `Ctrl+Alt+P` and `Ctrl+Alt+M` operate these controls while the manager window is active; these are not desktop-wide hotkeys yet.
+Version 0.5 adds **Mute all outputs** and **Mute all microphones** in the window and tray. Restore returns devices to their previous mute states, so an already-muted device stays muted. Output panic mute also silences the processing path without reopening streams. The group mute remains in force for newly connected devices and survives an app restart. `Ctrl+Alt+P` and `Ctrl+Alt+M` operate these controls while the manager window is active. Version 0.10 adds separate opt-in desktop hotkeys described above.
 
 Use **Pin** to put a device first, **Rename** for a friendly label, and the search box to filter devices. Driver names and IDs are preserved. Volume, EQ, timing and waveforms stay visible; **Layout / backup** reveals channel layouts and backup controls.
 

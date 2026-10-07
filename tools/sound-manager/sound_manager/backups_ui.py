@@ -58,7 +58,7 @@ class BackupController:
             kind = descriptions[identifier]['kind']
             config = window.settings.output(identifier) if kind=='output' else window.settings.input(identifier)
             config.update(waveform=display['waveform'], eq_view=display['eq_view'])
-            window.settings.preference(identifier).update(alias=display['alias'], favorite=display['favorite'])
+            window.settings.preference(identifier).update(alias=display['alias'], favorite=display['favorite'], hidden=display['hidden'], order=display['order'])
         window.settings.data.update(restored['preferences'])
         final_mic_policy = restored['preferences']['scene_restore_inputs'] if restore_capture else False
         window.settings.data['scene_restore_inputs'] = bool(restore_capture)

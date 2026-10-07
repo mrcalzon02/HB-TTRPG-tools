@@ -56,6 +56,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--probe", action="store_true", help="List audio endpoints without changing settings")
     parser.add_argument('--tray', action='store_true', help='Start minimized to the system tray')
+    from sound_manager.hotkeys import ACTIONS
+    parser.add_argument('--action', choices=list(ACTIONS), help='Control the already-running manager from a desktop shortcut')
     parser.add_argument("--screenshot", metavar="PNG", help="Render the actual UI offscreen, without audio changes")
     args = parser.parse_args()
     if not args.probe and not args.screenshot:
@@ -88,9 +90,12 @@ def main():
         lock = QLockFile(str(Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.TempLocation))/"simple-sound-manager.lock"))
         if not lock.tryLock(100):
             from sound_manager.single_instance import reopen_existing
-            if args.tray or reopen_existing():
+            if args.action and reopen_existing(action=args.action) or not args.action and (args.tray or reopen_existing()):
                 return
             QMessageBox.information(None, "Simple Sound Manager", "Another Sound Manager version is running but could not reopen its window. Quit the old version before installing this update, or restart Windows once. This version's pinned shortcut will reopen its running window directly.")
+            return
+        if args.action:
+            QMessageBox.information(None,'Simple Sound Manager','Start the manager before using desktop action bindings.')
             return
     if args.screenshot:
         window = Window(screenshot=True)
@@ -119,7 +124,12 @@ def main():
                 waiting.raise_()
                 waiting.activateWindow()
         from sound_manager.single_instance import InstanceServer
-        instance_server = InstanceServer(reopen_window, app)
+        def desktop_action(action):
+            if state['window'] is None:
+                return False
+            state['window'].perform(lambda:state['window'].dispatch_action(action))
+            return True
+        instance_server = InstanceServer(reopen_window, app, on_action=desktop_action)
         def create_window(generation):
             if generation!=state['generation'] or state['window'] is not None:
                 return

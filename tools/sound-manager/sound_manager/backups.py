@@ -51,7 +51,10 @@ def validate_backup(value):
         alias, favorite, waveform, view = item.get('alias', ''), item.get('favorite', False), item.get('waveform', True), item.get('eq_view', 'EQ controls')
         if not isinstance(alias, str) or len(alias)>100 or type(favorite) is not bool or type(waveform) is not bool or view not in ('EQ controls', 'Live waveform'):
             raise ValueError('Invalid backup label or waveform preference')
-        safe_display[identifier] = dict(alias=alias, favorite=favorite, waveform=waveform, eq_view=view)
+        hidden, order = item.get('hidden',False), item.get('order',100000)
+        if type(hidden) is not bool or type(order) is not int or not 0<=order<=100000:
+            raise ValueError('Invalid backup visibility or device order')
+        safe_display[identifier] = dict(alias=alias, favorite=favorite, waveform=waveform, eq_view=view, hidden=hidden, order=order)
     prefs = value.get('preferences', {})
     if not isinstance(prefs, dict):
         raise ValueError('Invalid backup preferences')
@@ -71,7 +74,7 @@ def capture_backup(settings, devices, mutes=None):
     for identifier, description in identities_for(current, scenes).items():
         config = settings.data['outputs' if description['kind']=='output' else 'inputs'].get(identifier, {})
         pref = settings.data.get('device_preferences', {}).get(identifier, dict(alias='', favorite=False))
-        display[identifier] = dict(alias=pref['alias'], favorite=pref['favorite'], waveform=config.get('waveform', True), eq_view=config.get('eq_view', 'EQ controls'))
+        display[identifier] = dict(alias=pref['alias'], favorite=pref['favorite'], waveform=config.get('waveform', True), eq_view=config.get('eq_view', 'EQ controls'), hidden=pref.get('hidden',False), order=pref.get('order',100000))
     return validate_backup(dict(schema='simple-sound-manager-backup', version=1, current=current, scenes=scenes,
                                 profiles=profiles, display=display,
                                 preferences={key:settings.data.get(key, default) for key, default in PREFERENCES.items()}))

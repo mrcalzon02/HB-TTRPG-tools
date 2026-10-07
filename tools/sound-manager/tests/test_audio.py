@@ -96,6 +96,21 @@ def config(selected=True):
     return {'selected': selected, 'gains': [0]*10, 'eq': True}
 
 class RoutingTests(unittest.TestCase):
+    def test_solo_silences_only_other_managed_stream_and_can_be_released(self):
+        card=FakeCard()
+        engine=Engine(card)
+        engine.start('bus',{'a':config(),'b':dict(config(),_solo_silenced=True)})
+        try:
+            time.sleep(.08)
+            self.assertGreater(abs(card.played['a'][-1]).max(),0)
+            self.assertEqual(abs(card.played['b'][-1]).max(),0)
+            self.assertGreater(engine.workers['a'].process_ms,0)
+            engine.configure({'a':config(),'b':config()})
+            time.sleep(.08)
+            self.assertGreater(abs(card.played['b'][-1]).max(),0)
+            self.assertEqual(card.opens['b'],1)
+        finally:
+            engine.stop()
     def test_failed_primary_starts_unselected_backup_without_second_primary_open(self):
         card = FakeCard()
         engine = Engine(card)

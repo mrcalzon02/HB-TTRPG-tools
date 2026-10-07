@@ -9,7 +9,7 @@ import numpy as np
 from .dsp import Equalizer
 from .playback import open_player, open_recorder, capture_latency
 from .channels import device_roles, LAYOUTS, convert
-from .timing import DelayLine
+from .timing import DelayLine, click_train
 from .waveform import WaveHistory
 
 RATE, BLOCK = 48000, 480
@@ -36,6 +36,7 @@ class OutputWorker(threading.Thread):
         self.ready = threading.Event()
         self.error = None
         self.drops = 0
+        self.process_ms = 0
         self.device_name = identifier
         self.latency_ms = None
         self.wave = WaveHistory()
@@ -83,6 +84,7 @@ class OutputWorker(threading.Thread):
                         continue
                     with self.lock:
                         config = self.config
+                    processing_started = time.perf_counter()
                     source_roles = tuple(config.get('_source_roles', LAYOUTS['Stereo']))
                     mode = config.get('mode', 'Auto')
                     if mode == 'Mono':
@@ -97,6 +99,9 @@ class OutputWorker(threading.Thread):
                                            filters=config.get('filters', []), preamp=config.get('preamp', 0),
                                            balance=config.get('balance', 0), protect=config.get('protect', True),
                                            classic_gains=config.get('classic_gains'), tones=config.get('tones'))
+                    if config.get('_solo_silenced',False):
+                        processed *= 0
+                    self.process_ms = (time.perf_counter()-processing_started)*1000
                     player.play(processed)
                     self.wave.append(processed, clipped=eq.clipped_samples)
                     try:
@@ -126,6 +131,8 @@ class Engine:
         self.source_roles = LAYOUTS['Stereo']
         self.capture_roles = LAYOUTS['Stereo']
         self.fallback_active = None
+        self.test_click_end = 0
+        self.test_click_cursor = 0
 
     def configure(self, configs):
         with self.lock:
@@ -284,6 +291,12 @@ class Engine:
                         for microphone in inputs:
                             if microphone.config['monitor'] and not microphone.stop_event.is_set():
                                 block += convert(microphone.take(len(block)), LAYOUTS['Stereo'], self.source_roles)
+                        if time.monotonic() < self.test_click_end:
+                            pulse=click_train(len(block), self.test_click_cursor)
+                            self.test_click_cursor += len(block)
+                            block[:,0] += pulse
+                            if block.shape[1]>1:
+                                block[:,1] += pulse
                         np.clip(block, -.99, .99, out=block)
                         for worker in workers:
                             worker.push(block)
@@ -295,6 +308,7 @@ class Engine:
             self.ready.set()
 
     def stop(self):
+        self.test_click_end = 0
         self.stop_event.set()
         with self.lock:
             workers = list(self.workers.values()) + list(self.inputs.values())
@@ -319,6 +333,9 @@ class InputWorker(threading.Thread):
         self.pending = np.zeros((0, 2), dtype=np.float32)
         self.latency_ms = None
         self.wave = WaveHistory()
+        self.error = None
+        self.drops = 0
+        self.process_ms = 0
 
     def run(self):
         try:
@@ -335,6 +352,7 @@ class InputWorker(threading.Thread):
                         pass
                     while not self.stop_event.is_set():
                         block = recorder.record(numframes=BLOCK)
+                        processing_started = time.perf_counter()
                         if block.shape[1] == 1:
                             block = np.repeat(block, 2, axis=1)
                         block = delay.process(block, self.config.get('delay_ms', 0))
@@ -343,14 +361,17 @@ class InputWorker(threading.Thread):
                                            filters=config.get('filters', []), preamp=config.get('preamp', 0),
                                            balance=config.get('balance', 0), protect=config.get('protect', True),
                                            classic_gains=config.get('classic_gains'), tones=config.get('tones'))
+                        self.process_ms = (time.perf_counter()-processing_started)*1000
                         self.wave.append(block, clipped=eq.clipped_samples)
                         if self.queue.full():
                             try:
                                 self.queue.get_nowait()
+                                self.drops += 1
                             except queue.Empty:
                                 pass
                         self.queue.put_nowait(block)
         except Exception as exc:
+            self.error = str(exc)
             self.report(f'Microphone monitoring paused: {exc}. Turn Listen off and on to retry.')
 
     def take(self, frames):

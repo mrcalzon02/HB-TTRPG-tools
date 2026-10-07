@@ -17,7 +17,7 @@ icu_files.extend((target/'_internal').glob('icudt*.dll'))
 for candidate in icu_files:
     if candidate.resolve().is_relative_to(target.resolve()) and candidate.exists():
         candidate.unlink()
-for name in ('README.md', 'LICENSE', 'THIRD-PARTY-NOTICES.md', 'FEATURE_BACKLOG.md', 'app.ico', 'app-icon.svg'):
+for name in ('README.md', 'HELP.md', 'CONTRIBUTING.md', 'AGENTS.md', 'LICENSE', 'THIRD-PARTY-NOTICES.md', 'FEATURE_BACKLOG.md', 'app.ico', 'app-icon.svg'):
     shutil.copy2(root/name, target/name)
 (target/'version.txt').write_text(__version__, encoding='utf-8')
 for dist in distributions():
@@ -33,6 +33,8 @@ for dist in distributions():
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, destination)
 with zipfile.ZipFile(target/'source.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+    for name in ('HELP.md','CONTRIBUTING.md','AGENTS.md'):
+        archive.write(root/name,'sound-manager/'+name)
     for name in ('run.py', 'launcher.py', 'app.ico', 'app-icon.svg', 'make-icon.py', 'requirements.txt', 'build.ps1', 'install-windows.ps1', 'shortcut-identity.ps1', 'windows-audio-setup.ps1', 'update-handoff.ps1', 'update-handoff.sh', 'Install.cmd', 'install-linux.sh', 'package.py', 'prepare-release.py', 'check_live_audio.py', 'check_bluetooth.py', 'check_multichannel.py', 'VALIDATION.md', 'FEATURE_BACKLOG.md', 'README.md', 'LICENSE', 'THIRD-PARTY-NOTICES.md'):
         archive.write(root/name, 'sound-manager/'+name)
     for folder in ('sound_manager', 'tests'):

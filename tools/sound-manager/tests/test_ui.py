@@ -477,3 +477,65 @@ class WindowTests(unittest.TestCase):
         with patch.object(self.window, 'toggle') as restart:
             self.window.attempt_start()
             restart.assert_not_called()
+
+    def test_solo_preserves_device_selections_and_panic_mute(self):
+        outputs=[d for d in self.window.devices if d.kind=='output']
+        self.assertGreaterEqual(len(outputs),2)
+        for device in outputs:
+            self.window.settings.output(device.id)['selected']=True
+        with patch.object(self.window.backend,'mute') as mute:
+            self.window.set_solo(outputs[0].id)
+            configurations=self.window.configurations()
+            self.assertFalse(configurations[outputs[0].id]['_solo_silenced'])
+            self.assertTrue(configurations[outputs[1].id]['_solo_silenced'])
+            self.assertTrue(all(self.window.settings.output(d.id)['selected'] for d in outputs))
+            mute.assert_not_called()
+            self.window.mutes.state['output']['active']=True
+            self.assertTrue(self.window.configurations()[outputs[0].id]['_panic'])
+            self.window.set_solo(None)
+            self.assertFalse(any(c['_solo_silenced'] for c in self.window.configurations().values()))
+
+    def test_hidden_devices_remain_routed_and_can_be_restored_in_organization(self):
+        from sound_manager.everyday import EverydayDialog
+        output=next(d for d in self.window.devices if d.kind=='output')
+        self.window.settings.output(output.id)['selected']=True
+        dialog=EverydayDialog(self.window)
+        dialog.list.setCurrentRow(dialog.ids.index(output.id))
+        dialog.hide_device()
+        self.assertTrue(self.window.settings.preference(output.id)['hidden'])
+        self.assertTrue(self.window.configurations()[output.id]['selected'])
+        self.assertTrue(self.window.cards[output.id].isHidden())
+        dialog.hide_device()
+        self.assertFalse(self.window.settings.preference(output.id)['hidden'])
+        dialog.close()
+
+    def test_saved_order_and_delay_nudges_survive_rebuild_and_clamp(self):
+        original=[d.id for d in self.window.devices]
+        self.window.move_device(original[1],-1)
+        self.assertEqual(self.window.devices[0].id,original[1])
+        self.window.refresh(True)
+        self.assertEqual(self.window.devices[0].id,original[1])
+        device=self.window.devices[0]
+        from PySide6.QtWidgets import QPushButton
+        card=self.window.cards[device.id]
+        plus=next(b for b in card.findChildren(QPushButton) if b.text()=='+5 ms')
+        minus=next(b for b in card.findChildren(QPushButton) if b.text()=='-10 ms')
+        self.window.set_delay(device,1998)
+        plus.click()
+        self.assertEqual(self.window.settings.device(device)['delay_ms'],2000)
+        self.window.set_delay(device,3)
+        minus.click()
+        self.assertEqual(self.window.settings.device(device)['delay_ms'],0)
+
+    def test_cycle_outputs_respects_favorites_and_privacy_mute(self):
+        outputs=[d for d in self.window.devices if d.kind=='output']
+        self.window.settings.preference(outputs[0].id)['favorite']=True
+        self.window.settings.preference(outputs[1].id)['favorite']=True
+        for d in outputs:
+            self.window.settings.output(d.id)['selected']=d.id==outputs[0].id
+        self.window.mutes.state['output']['active']=True
+        with patch.object(self.window.backend,'mute') as mute:
+            self.window.dispatch_action('cycle-output')
+            self.assertTrue(self.window.settings.output(outputs[1].id)['selected'])
+            self.assertEqual(sum(c['selected'] for c in self.window.settings.data['outputs'].values()),1)
+            mute.assert_called_once_with(outputs[1],True)

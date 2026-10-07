@@ -28,3 +28,11 @@ def alignment_delays(latencies):
         raise ValueError('At least two active outputs must report latency for Auto sync.')
     slowest = max(valid.values())
     return {key: round(min(2000, slowest-value)) for key, value in valid.items()}
+
+def click_train(frames, cursor, rate=48000):
+    phase=(np.arange(frames)+cursor)%rate
+    length=round(rate*.008)
+    active=phase<length
+    signal=np.zeros(frames,dtype=np.float32)
+    signal[active]=.08*np.sin(2*np.pi*1000*phase[active]/rate)*np.sin(np.pi*phase[active]/length)**2
+    return signal
