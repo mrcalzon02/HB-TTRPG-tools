@@ -347,6 +347,63 @@ class WindowTests(unittest.TestCase):
             self.window.scenes.apply(value=scene)
         self.assertEqual(before, self.window.settings.data)
 
+    def test_backup_restore_preserves_recovery_mute_guards_and_saves_old_setup(self):
+        from sound_manager.backups import identities_for
+        controller = self.window.backups
+        value = controller.capture()
+        device = next(d for d in self.window.devices if d.kind=='output')
+        value['display'][device.id].update(alias='Restored label', favorite=True, waveform=False)
+        value['current']['devices'][device.id]['config']['delay_ms'] = 190
+        value['preferences'].update(advanced_visible=True, check_updates=False, scene_restore_inputs=True)
+        self.window.settings.data['restore'] = {'bus':'owned bus'}
+        self.window.mutes.state['input']['active'] = True
+        mapping = {key:key for key in identities_for(value['current'], value['scenes'])}
+        with patch.object(self.window.backend, 'volume'), patch.object(self.window.backend, 'mute'):
+            path = controller.restore(value, mapping)
+        self.assertTrue(path.is_file())
+        self.assertEqual(self.window.settings.data['restore'], {'bus':'owned bus'})
+        self.assertTrue(self.window.mutes.active('input'))
+        self.assertFalse(self.window.settings.data['scene_restore_inputs'])
+        self.assertEqual(self.window.settings.preference(device.id)['alias'], 'Restored label')
+        self.assertFalse(self.window.settings.output(device.id)['waveform'])
+        self.assertEqual(self.window.settings.output(device.id)['delay_ms'], 190)
+        self.assertTrue(self.window.advanced_button.isChecked())
+        import json
+        original = json.loads(path.read_text())
+        self.assertNotEqual(original['display'][device.id]['alias'], 'Restored label')
+        from sound_manager.backups_ui import BackupController
+        self.assertEqual(BackupController(self.window).last_safety, path)
+
+    def test_backup_load_preview_does_not_mutate_or_open_input_capture(self):
+        from sound_manager.backups_ui import write_backup
+        self.window.backups.show()
+        dialog = self.window.backups.dialog
+        value = self.window.backups.capture()
+        file = Path(self.folder.name)/'portable.json'
+        write_backup(file, value)
+        import copy
+        before = copy.deepcopy(self.window.settings.data)
+        with patch.object(self.window.engine, 'configure_inputs') as capture:
+            dialog.load_path(file)
+            capture.assert_not_called()
+        self.assertEqual(before, self.window.settings.data)
+        self.assertTrue(dialog.restore_button.isEnabled())
+        self.assertFalse(dialog.microphones.isChecked())
+        file.write_text('{invalid', encoding='utf-8')
+        dialog.load_path(file)
+        self.assertFalse(dialog.restore_button.isEnabled())
+        self.assertIsNone(dialog.loaded)
+        dialog.close()
+
+    def test_backup_invalid_mapping_does_not_change_settings_or_write_safety_file(self):
+        import copy
+        value = self.window.backups.capture()
+        before = copy.deepcopy(self.window.settings.data)
+        with self.assertRaises(ValueError):
+            self.window.backups.restore(value, {})
+        self.assertEqual(before, self.window.settings.data)
+        self.assertIsNone(self.window.backups.last_safety)
+
     def test_input_classic_eq_is_saved_separately_from_output_eq(self):
         from sound_manager.ui import EqDialog
         device = next(d for d in self.window.devices if d.kind=='input')

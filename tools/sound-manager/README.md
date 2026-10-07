@@ -4,6 +4,12 @@ A local desktop app for Windows 10/11 and Linux. No subscription, account, brows
 
 ## Controls
 
+Version 0.9 adds **Backup / restore** in the window and tray. Export the current mix, named EQ profiles, scenes, labels, pinned devices, waveform/display choices and app preferences as one portable JSON file. Loading a file only builds a preview: nothing is applied until **Restore reviewed setup** is clicked.
+
+Every saved device has a mapping choice: use current hardware of the same input/output type, keep its saved ID for later reconnection, or skip it. Exact IDs and unique native-name/type matches are suggested; ambiguous names never choose arbitrary hardware. Duplicate target assignments are rejected. Mappings also update saved scenes and their backup-output references. Named scene/profile catalogs are replaced by the backup; unrelated device display preferences are retained.
+
+Restore first saves a local **pre-restore copy**, available through **Open pre-restore copy** even after restarting the app. Microphone Listen/Meter restoration is off by default, and scene microphone-restore policy is reset to off unless explicitly opted in. Current mute guards remain active. Driver setup, login registration, recovery records, update-check timestamps and executable paths are excluded. Freeze snapshots stay session-only and are cleared on restore. Restore keeps routing's current on/off state; a source-layout change may restart an already-running route. Native hardware failures are reported, and the safety copy remains available.
+
 Version 0.8 adds **Scenes** in the window and **Audio scenes** in the tray. Configure a mix, then save it under a name such as Desk, Gaming or Movies. Apply restores stored output selections, connected-device volumes/mutes, input/output EQ, delays, PCM layout, EQ bypass and the chosen backup output. Save/update, rename, delete, import and export scenes from the same panel; up to 64 named scenes are supported.
 
 **Previous mix** returns to the mix captured just before the last scene application. Repeated use swaps the two mixes for A/B comparison. It is session-only. Routing retains its on/off state. Healthy streams stay open when the system capture layout is unchanged; changing capture layout while running requires one controlled restart. Panic and microphone mute groups remain in force, and waveform/display preferences are preserved.

@@ -34,6 +34,14 @@ Limits: input processing is not exposed as a system virtual microphone; per-app 
 
 ## Priorities
 
+### Delivered in 0.9.0
+
+| Backlog item | Delivered behavior |
+|---|---|
+| P07 | Portable setup export/import covering the current mix, profiles, scenes, aliases/favorites and display preferences, with previewed input/output device mapping and automatic pre-restore copies. |
+
+Operational driver/recovery records and login registration stay local. Microphone capture restoration requires opt-in. Scene and backup-output references follow mapping; wrong-type/duplicate targets are rejected. Live Linux hardware validation is still outstanding.
+
 ### Delivered in 0.8.0
 
 | Backlog item | Delivered behavior |

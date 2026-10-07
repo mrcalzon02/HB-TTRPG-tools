@@ -277,6 +277,7 @@ class Window(QMainWindow):
         sync.clicked.connect(lambda: self.perform(self.auto_sync))
         row.addWidget(sync)
         advanced = QPushButton('Layout / backup')
+        self.advanced_button = advanced
         advanced.setCheckable(True)
         advanced.setChecked(self.settings.data.get('advanced_visible', False))
         advanced.toggled.connect(self.set_advanced)
@@ -310,6 +311,9 @@ class Window(QMainWindow):
         scenes_button = QPushButton('Scenes')
         scenes_button.clicked.connect(lambda: self.scenes.show())
         preferences.addWidget(scenes_button)
+        backups_button = QPushButton('Backup / restore')
+        backups_button.clicked.connect(lambda: self.backups.show())
+        preferences.addWidget(backups_button)
         preferences.addStretch()
         layout.addLayout(preferences)
         quick = QHBoxLayout()
@@ -421,6 +425,8 @@ class Window(QMainWindow):
             self.tray.show()
         from .scenes_ui import SceneController
         self.scenes = SceneController(self)
+        from .backups_ui import BackupController
+        self.backups = BackupController(self)
         self.refresh(True)
         available = {d.id for d in self.devices}
         for identifier, config in self.settings.data['outputs'].items():
@@ -1042,6 +1048,7 @@ class Window(QMainWindow):
         for name in sorted(self.scenes.catalog, key=str.casefold):
             scene_menu.addAction(name, lambda selected=name: self.perform(lambda: self.scenes.apply(selected)))
         scene_menu.addAction('Previous mix', lambda: self.perform(self.scenes.restore_previous)).setEnabled(self.scenes.previous is not None)
+        menu.addAction('Backup / restore setup', self.backups.show)
         menu.addAction('Check for updates', lambda: self.updater.check(manual=True))
         menu.addAction("Quit", self.quit)
         previous = self.tray.contextMenu()
