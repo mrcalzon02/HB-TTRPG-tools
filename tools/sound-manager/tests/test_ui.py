@@ -196,9 +196,11 @@ class WindowTests(unittest.TestCase):
         config = self.window.settings.input(device.id)
         config['tones'] = [2, -1, 3]
         dialog = EqDialog(self.window, device)
+        self.assertFalse(dialog.compact_waveform.isHidden())
         with patch.object(self.window.engine, 'configure_inputs') as capture:
             dialog.display_mode.setCurrentIndex(1)
             self.assertEqual(dialog.display_stack.currentIndex(), 1)
+            self.assertTrue(dialog.compact_waveform.isHidden())
             self.assertTrue(dialog.curve.isHidden())
             dialog.waveform_switch.setChecked(False)
             self.assertTrue(dialog.live_waveform.isHidden())
@@ -212,7 +214,28 @@ class WindowTests(unittest.TestCase):
         self.assertEqual(reopened.display_mode.currentText(), 'Live waveform')
         reopened.display_mode.setCurrentIndex(0)
         self.assertFalse(reopened.curve.isHidden())
+        self.assertFalse(reopened.compact_waveform.isHidden())
         reopened.close()
+
+    def test_waveform_checked_shows_compact_trace_alongside_eq_controls(self):
+        from sound_manager.ui import EqDialog
+        device = next(d for d in self.window.devices if d.kind == 'output')
+        dialog = EqDialog(self.window, device)
+        dialog.display_mode.setCurrentIndex(0)
+        dialog.show()
+        self.app.processEvents()
+        self.assertTrue(dialog.compact_waveform.isVisible())
+        self.assertTrue(dialog.compact_waveform.timer.isActive())
+        dialog.waveform_switch.setChecked(False)
+        self.assertTrue(dialog.compact_waveform.isHidden())
+        self.assertFalse(dialog.compact_waveform.timer.isActive())
+        dialog.waveform_switch.setChecked(True)
+        self.assertTrue(dialog.compact_waveform.isVisible())
+        dialog.display_mode.setCurrentIndex(1)
+        self.assertFalse(dialog.compact_waveform.timer.isActive())
+        self.assertTrue(dialog.live_waveform.isVisible())
+        self.assertTrue(dialog.live_waveform.timer.isActive())
+        dialog.close()
 
     def test_input_classic_eq_is_saved_separately_from_output_eq(self):
         from sound_manager.ui import EqDialog

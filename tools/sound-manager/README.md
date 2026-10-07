@@ -4,6 +4,8 @@ A local desktop app for Windows 10/11 and Linux. No subscription, account, brows
 
 ## Controls
 
+Version 0.6.3 fixes EQ waveform visibility: Waveform on now displays a compact live trace beside EQ controls, while Display → Live waveform gives the larger view. Both obey the device's Waveform switch. The response curve remains a static EQ gain curve, distinct from the moving audio trace.
+
 Version 0.6.2 adds a saved **Waveform** checkbox on each input and output. In its Equalizer, **Display** switches between the advanced EQ controls and a larger **Live waveform**; the mode is saved per device. Its Waveform checkbox shares the main card's preference. Hidden waveform display timers stop without changing routing or Meter/Listen. **Bypass all EQ** temporarily bypasses filters, preamp, balance and EQ headroom across routed inputs/outputs without overwriting profiles or delays; the final peak guard and mute controls remain active. **Reset all delays** clears output, monitor, and system-input timing, including saved disconnected devices, while preserving EQ and selection.
 
 Clicking the pinned/Start Menu shortcut while the app is running now directly reopens its window through a user-local channel, even if the tray icon is hidden. It does not start another audio engine. Existing versions older than 0.6.2 need to be closed once during installation because they cannot receive reopen requests.

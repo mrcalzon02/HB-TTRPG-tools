@@ -115,6 +115,8 @@ class EqDialog(QDialog):
         editing.addWidget(self.waveform_switch)
         editing.addStretch()
         layout.addLayout(editing)
+        self.compact_waveform = WaveformWidget(window, device)
+        layout.addWidget(self.compact_waveform)
         if device.kind == 'input':
             meter = QCheckBox('Live input meter')
             meter.setChecked(self.config['meter'])
@@ -296,6 +298,7 @@ class EqDialog(QDialog):
 
     def select_display(self, index, save=True):
         self.display_stack.setCurrentIndex(index)
+        self.compact_waveform.set_display_enabled(index == 0 and self.config.get('waveform', True))
         self.curve.setVisible(index == 0)
         self.headroom.setVisible(index == 0)
         self.waveform_hidden_note.setVisible(not self.config.get('waveform', True))
@@ -306,6 +309,7 @@ class EqDialog(QDialog):
     def show_waveform(self, enabled):
         self.window.set_waveform(self.device, enabled)
         self.waveform_hidden_note.setVisible(not enabled)
+        self.select_display(self.display_mode.currentIndex(), save=False)
 
     @staticmethod
     def spin(low, high, value, step, suffix):
