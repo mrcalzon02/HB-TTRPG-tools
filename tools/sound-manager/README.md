@@ -4,7 +4,9 @@ A local desktop app for Windows 10/11 and Linux. No subscription, account, brows
 
 ## Controls
 
-See [HELP.md](HELP.md) for current controls and the code map. [CONTRIBUTING.md](CONTRIBUTING.md) requires help updates with every behavior change, including correcting/removing obsolete information. The searchable Help interface and complete function-level reference are tracked as H01–H10.
+Open **Manage → Help** or tray **Help** for the offline searchable [HELP.md](HELP.md) reference and code map. [CONTRIBUTING.md](CONTRIBUTING.md) requires help updates with every behavior change, including correcting/removing obsolete information. Further navigation, contextual help and the complete function-level reference remain tracked as H01–H10.
+
+The compact interface keeps Start/Stop, mute, EQ bypass, Auto sync, test clicks, search, layout and App mixer visible. Device timing and nudges share one row. **Manage** groups Scenes, Health/devices, backups, Help, Hotkeys and Updates, with submenus for startup/reconnect and recovery/resets. Each device's **...** menu holds Pin/Rename/default/Hide. Smaller buttons and spacing make more devices visible; existing audio settings are retained.
 
 Version 0.10 adds **Health / devices**, **App mixer**, and opt-in **Hotkeys**, plus **Solo** on each output and ±1/5/10 ms timing nudges on every input/output. **Test sync clicks** sends quiet, once-per-second pulses through the selected output processing for ten seconds; press it again to stop. It helps you listen for timing differences and does not perform acoustic measurement.
 

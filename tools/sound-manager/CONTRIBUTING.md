@@ -21,4 +21,4 @@ When functionality changes or is removed, find related help and correct or remov
 - Run checks relevant to the change; document platform/hardware verification limits.
 - Keep ordinary controls simple. Extensive technical explanations belong in Help with plain-language entry points.
 
-The planned searchable built-in Help window must consume this maintained content, not become a stale second copy. Until it exists, HELP.md is the shipped help reference. Full function-level reference and contextual links remain tracked in H01–H10.
+The built-in searchable Help window reads maintained HELP.md directly, avoiding a stale second copy. Full function-level reference, contextual links and additional navigation remain tracked in H01–H10.

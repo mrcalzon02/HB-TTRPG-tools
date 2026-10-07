@@ -56,6 +56,7 @@ class EverydayTests(unittest.TestCase):
             mixer.items['player']['handles']=[11]
             mixer.saved_routes(settings,None,devices)
             self.assertEqual(route.call_count,2)
+            self.assertEqual(len(mixer.attempted),1)
 
     def test_manager_destination_waits_for_running_bus_without_native_changes(self):
         mixer=self.linux_mixer()

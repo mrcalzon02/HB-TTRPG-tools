@@ -1,6 +1,14 @@
 # Simple Sound Manager help — 0.10.0
 
-This is the shipped reference for current controls. The searchable built-in Help window and complete function-by-function code reference are planned in H01–H10 of FEATURE_BACKLOG.md. Historical milestone descriptions in README.md/VALIDATION.md describe earlier versions.
+This is the shipped reference displayed by Manage → Help and tray Help. The initial offline search/viewer uses this file; complete function-by-function reference, contextual links and further navigation are planned in H01–H10. Historical milestone descriptions in README.md/VALIDATION.md describe earlier versions.
+
+## Finding controls in the compact interface
+
+Daily controls stay visible: Start/Stop, Auto sync, test clicks, EQ bypass, mute, search, layout options and App mixer. Each device keeps volume/mute, EQ, selection, monitoring switches, waveform toggles and timing together. Six delay nudges share the timing row; its **Reset** button clears that device's delay.
+
+**Manage** groups Scenes, Health/devices, Backup/restore, Help, Hotkeys and Updates. **Startup and reconnect** contains saved auto-start/login/reconnect switches. **Audio recovery and resets** contains Refresh devices, Retry selected, global delay/meter reset and Windows audio setup. Each device's **...** options contain favorite Pin, Rename, Use as default and Hide. Hidden devices can be restored through Manage → Health/devices. These menu moves change presentation, not audio settings.
+
+**Help** opens this file locally. Type a control/function/topic and press Enter or **Find next** to select the next text match. Search wraps to the beginning and shows a clear no-match message. Select text to copy it. The viewer reads the source directory or installed version folder, needs no login/network, and reports a missing file instead of showing stale embedded text.
 
 ## Where sound goes
 
@@ -64,7 +72,7 @@ Apps appear while native sessions exist. **Refresh apps** enumerates again. Each
 
 **Manager mix** routes into the running capture bus and selected processed outputs. Physical destinations bypass manager EQ/delay/solo. **System default** restores ordinary default routing. Some apps need playback restarted. Windows uses native render sessions/internal audio policy; Linux moves PulseAudio/PipeWire-Pulse sink inputs. Unsupported calls/disconnected outputs show errors.
 
-Preferences persist locally by Windows executable identity or Linux app binary/name; new sessions receive saved destinations. A failed same-session route does not churn every poll; explicit Assign/new session permits another attempt. Manager mix waits for a running bus. App routes and OS app volume/mute are not included in portable backups/scenes yet.
+Preferences persist locally by Windows executable identity or Linux app binary/name; new sessions receive saved destinations. A failed same-session route does not churn every poll; explicit Assign/new session permits another attempt. Retry records for old stream/process sets are discarded, keeping tracking limited to current app sessions. Manager mix waits for a running bus. App routes and OS app volume/mute are not included in portable backups/scenes yet.
 
 ## Hotkeys and commands
 
@@ -100,6 +108,7 @@ Tray Open/Start/Stop/mute/device-selection/scenes/previous-mix/backup/health/app
 | app_mixer.py, app_mixer_ui.py | Group/control native sessions; poll new sessions; track saved assignments and bounded retry history. |
 | app_routing.py | Independent ctypes WinRT policy ABI binding for render-role destinations; supported interface variants and surfaced HRESULT failures. Internal API can change. |
 | hotkeys.py, hotkeys_ui.py | Validate/register/unregister global shortcuts, report conflicts and dispatch known actions. No keyboard recording. |
+| help_ui.py | Read the shipped Markdown into a local QTextBrowser; find_next searches forward, wraps and reports match/no-match. |
 | single_instance.py | User-local OPEN/whitelisted ACTION socket requests and delivery acknowledgement. |
 | settings.py | JSON persistence, defaults/profile validation and atomic settings replacement. |
 | scenes.py/scenes_ui.py, backups.py/backups_ui.py | Validated audio snapshots/previous mix and portable remapping/preview/pre-restore copies. |

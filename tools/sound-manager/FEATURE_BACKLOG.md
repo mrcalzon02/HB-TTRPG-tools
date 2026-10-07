@@ -11,7 +11,9 @@
 | C01, C02, C04, scenes | Opt-in customizable global mute/cycle/scene keys on Windows and X11, conflict reporting, plus user-local --action commands for desktop-configured Wayland bindings. Automatic Wayland portal registration remains pending. |
 | A01, A02 | Native per-app session volume/mute and locally persisted output assignment for Windows and PulseAudio/PipeWire-Pulse. Manager mix or physical destination; errors surfaced, failed routes not churned. Physical routes bypass manager processing. App preferences are not in portable backups/scenes yet. |
 
-125 automated checks pass. Live Windows app-session enumeration and an isolated process's policy assignment/readback/default restoration pass. Linux app routing uses mocked command coverage; live Linux hardware and global-key delivery remain verification tasks. Existing user playback is not changed by routing tests.
+127 automated checks pass. Live Windows app-session enumeration, an isolated process's policy assignment/readback/default restoration and native shortcut registration/conflict/release checks pass. Linux app routing uses mocked command coverage; live Linux hardware and global-key delivery remain verification tasks. Existing user playback is not changed by routing tests.
+
+The compact main toolbar keeps daily controls visible and groups management/startup/recovery actions under Manage. Device options move to the ... menu, and timing nudges share the delay row. H01/H02/H08 are partial: the offline searchable Help window reads the shipped control reference/code map directly; full function-level detail, contextual links and additional navigation remain pending.
 
 Version 0.7.0 completes V03 Freeze waveform with a shared per-device/session snapshot, explicit Frozen status, no audio pause/capture changes, and no recordings on disk. Explicit per-device and global peak/clip hold reset buttons extend V02. Visibility/display preferences, EQ bypass, delay reset, and pinned-window recovery from 0.6.2/0.6.3 are retained.
 
@@ -258,7 +260,7 @@ P0 = reliability and missing core paths. P1 = daily convenience. P2 = richer pro
 
 ### 11. Extensive built-in help section — requested October 6, 2026
 
-Status: shipped HELP.md reference and code map are the foundation; the complete built-in Help system is planned. Build an offline, searchable Help window accessible from the main window and tray. Start with plain-language explanations and expandable technical detail, with a complete button/function reference and architecture guide. Keep it versioned with the app and available alongside the source/download documentation.
+Status: an offline searchable Help window is shipped through Manage and the tray, reading HELP.md's current control reference and code map. Complete the remaining table-of-contents/glossary/navigation, contextual links, function-level reference and examples listed below. Keep it versioned with the app and available alongside source/download documentation.
 
 Development requirement: every addition or behavioral change must include an explanation of what it is and how it works in the help, in the same change. Correct/remove obsolete information when behavior changes or is removed. Review related examples/screenshots/links, distinguish current from historical/planned behavior, and block release when matching help is missing or inaccurate. This rule is maintained in AGENTS.md and CONTRIBUTING.md.
 

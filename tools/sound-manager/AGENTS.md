@@ -6,4 +6,4 @@ Every added or changed feature, button, setting, function, command, or internal 
 
 Review related help and remove or rewrite information that is no longer accurate when changing or removing behavior. Current help must describe the current implementation; historical release notes must be clearly identified as historical. Never present planned or unverified functionality as working.
 
-Keep HELP.md, README.md, FEATURE_BACKLOG.md, VALIDATION.md and download-page claims consistent. Package help with binary and source releases. Future built-in Help must use the same maintained content. A change is not release-ready until its help is reviewed along with its behavior and relevant tests.
+Keep HELP.md, README.md, FEATURE_BACKLOG.md, VALIDATION.md and download-page claims consistent. Package help with binary and source releases. Built-in Help must use the same maintained content. A change is not release-ready until its help is reviewed along with its behavior and relevant tests.

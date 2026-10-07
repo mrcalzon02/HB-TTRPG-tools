@@ -122,5 +122,5 @@ class AppMixer:
                 self.route_errors[key]=str(exc)
         # Bound history to live sessions; exited processes cannot grow it forever.
         live=set(self.items)
-        self.attempted={token for token in self.attempted if token[0] in live}
+        self.attempted={token for token in self.attempted if token[0] in live and token[1]==tuple(sorted(self.items[token[0]]['pids'] if self.backend.windows else self.items[token[0]]['handles']))}
         self.route_errors={key:value for key,value in self.route_errors.items() if key in live}
