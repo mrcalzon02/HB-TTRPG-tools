@@ -1,7 +1,7 @@
 # Spatial Site Generation Batch Archive
 
 Batch: **2026-08-22-purpose-aware-variety-03-history-deepened**  
-Source commit tested: **5f79aadddebeb32795dcdab2c72f5585d532d846**  
+Source commit tested: **94ed6a4a5cb794f2b8f783f361e506942d2eb09a**  
 Cases: **32** (19 curated + 13 seeded-random)  
 Acceptance: **PASS**
 
