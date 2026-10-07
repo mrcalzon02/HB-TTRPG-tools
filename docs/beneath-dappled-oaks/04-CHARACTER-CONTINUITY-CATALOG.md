@@ -654,3 +654,7 @@ Use:
 where canon has not established an answer.
 
 It is preferable to preserve a meaningful blank than to manufacture a false personality trait.
+
+## Current reconciliation gate (2026-10-07)
+
+The persistent Drive Excel continuity workbook was last modified on 2026-09-23, while canonical rewrite prose and the five-chapter lookahead have advanced through Chapter Thirty. Before releasing Chapter Thirty-One or asserting long-memory parity, reconcile the intervening chapters into the workbook, including temporal character-state changes and Chapter_Touch_Log entries. Do not treat the older workbook as proof that later character knowledge or relationship developments never occurred. Preserve the workbook's original Drive file ID and its historical rows; do not replace it with a parallel catalog. This is a maintenance gate, not a new story fact.
