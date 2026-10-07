@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "recordType": "spatial-site-generation-test-artifact",
   "batchId": "2026-08-22-purpose-aware-variety-03-history-deepened",
-  "sourceCommit": "8c308940fc6b82371478287e584dcd93534b99c0",
+  "sourceCommit": "0db7b4f1793478112f2ee246bc574be57fd25ef8",
   "caseNumber": 27,
   "caseId": "seeded-random-08-prison",
   "caseKind": "seeded-random",
