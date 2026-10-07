@@ -4,6 +4,12 @@ A local desktop app for Windows 10/11 and Linux. No subscription, account, brows
 
 ## Controls
 
+Version 0.8 adds **Scenes** in the window and **Audio scenes** in the tray. Configure a mix, then save it under a name such as Desk, Gaming or Movies. Apply restores stored output selections, connected-device volumes/mutes, input/output EQ, delays, PCM layout, EQ bypass and the chosen backup output. Save/update, rename, delete, import and export scenes from the same panel; up to 64 named scenes are supported.
+
+**Previous mix** returns to the mix captured just before the last scene application. Repeated use swaps the two mixes for A/B comparison. It is session-only. Routing retains its on/off state. Healthy streams stay open when the system capture layout is unchanged; changing capture layout while running requires one controlled restart. Panic and microphone mute groups remain in force, and waveform/display preferences are preserved.
+
+The optional **Also restore microphone Listen / Meter switches** checkbox is off by default: normal scene recall preserves current microphone capture switches. Opting in allows a saved scene to enable them. Input EQ and native input volume/mute are still scene controls. Native endpoint errors are reported rather than hidden. Disconnected device profiles are retained by exact ID; reapply a scene after reconnection to restore its native levels. Imported scenes validate before application and never import driver, login-startup, default-restoration or other operational settings. Automatic device remapping, per-app routes and scene-on-startup/connect rules remain separate backlog work.
+
 Version 0.7 adds per-device **Freeze** in the main card and Equalizer. It holds a shared three-second waveform snapshot and level readings while routing, EQ, and input capture continue. Switch views or resize without losing the held trace; unfreeze to resume live rendering. Freeze is session-only, is labelled clearly, and never saves audio to disk. With no stream available it shows an honest empty snapshot instead of enabling a microphone.
 
 Windows taskbar grouping now uses the stable `Calzon.SimpleSoundManager` identity on the launcher, app process, and app-owned shortcuts. This follows [Microsoft's AppUserModelID rules](https://learn.microsoft.com/en-us/windows/win32/shell/appids) so versioned releases do not become separate taskbar applications. The installer repairs matching pins, including hidden shortcut folders. A legacy cached pin may need one unpin/re-pin from the running app after upgrading.

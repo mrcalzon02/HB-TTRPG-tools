@@ -34,6 +34,16 @@ Limits: input processing is not exposed as a system virtual microphone; per-app 
 
 ## Priorities
 
+### Delivered in 0.8.0
+
+| Backlog item | Delivered behavior |
+|---|---|
+| P01 (partial) | Named scenes capture selected outputs, connected-device volumes/mutes, input/output EQ/delays, PCM layout and backup output. Per-app routes are not yet implemented. |
+| P02 | One-click scene recall from the tray and a common management panel. |
+| P06 (partial) | Previous mix swaps back to the preceding configuration for A/B comparison; timed audition/cancel remains planned. |
+
+Scenes can be imported/exported individually. P07 full settings backup with device remapping is still separate work. Microphone capture switches restore only with explicit opt-in, and mute groups remain active.
+
 ### Completed in 0.7.0
 
 | Backlog item | Delivered behavior |

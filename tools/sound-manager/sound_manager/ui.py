@@ -307,6 +307,9 @@ class Window(QMainWindow):
         self.update_button = QPushButton('Updates')
         self.update_button.clicked.connect(lambda: self.updater.show())
         preferences.addWidget(self.update_button)
+        scenes_button = QPushButton('Scenes')
+        scenes_button.clicked.connect(lambda: self.scenes.show())
+        preferences.addWidget(scenes_button)
         preferences.addStretch()
         layout.addLayout(preferences)
         quick = QHBoxLayout()
@@ -416,6 +419,8 @@ class Window(QMainWindow):
         self.tray.activated.connect(lambda reason: self.show_window() if reason == QSystemTrayIcon.ActivationReason.Trigger else None)
         if not screenshot and QSystemTrayIcon.isSystemTrayAvailable():
             self.tray.show()
+        from .scenes_ui import SceneController
+        self.scenes = SceneController(self)
         self.refresh(True)
         available = {d.id for d in self.devices}
         for identifier, config in self.settings.data['outputs'].items():
@@ -1011,7 +1016,7 @@ class Window(QMainWindow):
         self.settings.save()
 
     def tray_menu(self):
-        signature = (self.running, self.mutes.active('output'), self.mutes.active('input'), tuple((d.id, self.display_name(d), self.settings.output(d.id, d.default)["selected"]) for d in self.devices if d.kind == "output"))
+        signature = (self.running, self.mutes.active('output'), self.mutes.active('input'), tuple(sorted(self.scenes.catalog)), tuple((d.id, self.display_name(d), self.settings.output(d.id, d.default)["selected"]) for d in self.devices if d.kind == "output"))
         if signature == getattr(self, "tray_signature", None):
             return
         if self.tray.contextMenu() and self.tray.contextMenu().isVisible():
@@ -1032,6 +1037,11 @@ class Window(QMainWindow):
             action.toggled.connect(lambda checked, identifier=device.id: self.select(identifier, checked))
             menu.addAction(action)
         menu.addSeparator()
+        scene_menu = menu.addMenu('Audio scenes')
+        scene_menu.addAction('Manage scenes', self.scenes.show)
+        for name in sorted(self.scenes.catalog, key=str.casefold):
+            scene_menu.addAction(name, lambda selected=name: self.perform(lambda: self.scenes.apply(selected)))
+        scene_menu.addAction('Previous mix', lambda: self.perform(self.scenes.restore_previous)).setEnabled(self.scenes.previous is not None)
         menu.addAction('Check for updates', lambda: self.updater.check(manual=True))
         menu.addAction("Quit", self.quit)
         previous = self.tray.contextMenu()

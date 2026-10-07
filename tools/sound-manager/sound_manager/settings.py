@@ -22,7 +22,8 @@ class Settings:
                 if not isinstance(parsed, dict) or not isinstance(parsed.get("outputs", {}), dict):
                     raise ValueError("Invalid settings format")
                 self.data.update(parsed)
-                for name in ('inputs', 'profiles'):
+                for name in ('inputs', 'profiles', 'scenes'):
+                    self.data.setdefault(name, {})
                     if not isinstance(self.data[name], dict):
                         self.data[name] = {}
             except (ValueError, OSError) as exc:

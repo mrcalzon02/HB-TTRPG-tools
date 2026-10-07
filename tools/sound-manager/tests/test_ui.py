@@ -279,6 +279,74 @@ class WindowTests(unittest.TestCase):
         self.assertFalse(self.window.settings.input(device.id)['meter'])
         self.assertFalse(self.window.settings.input(device.id)['monitor'])
 
+    def test_scene_recall_native_controls_and_previous_mix_preserve_mute_guards(self):
+        controller = self.window.scenes
+        device = next(d for d in self.window.devices if d.kind == 'output')
+        original = controller.capture()
+        desired = __import__('copy').deepcopy(original)
+        desired['devices'][device.id]['config']['delay_ms'] = 180
+        desired['devices'][device.id]['volume'] = .35
+        desired['devices'][device.id]['muted'] = False
+        controller.store('Desk', desired)
+        self.window.mutes.state['output']['active'] = True
+        with patch.object(self.window.backend, 'volume') as volume, patch.object(self.window.backend, 'mute') as mute:
+            controller.apply('Desk')
+            self.assertEqual(self.window.settings.output(device.id)['delay_ms'], 180)
+            volume.assert_any_call(device, .35)
+            mute.assert_any_call(device, True)
+            self.assertTrue(self.window.mutes.active('output'))
+            self.assertFalse(self.window.mutes.state['output']['before'][device.id])
+            controller.restore_previous()
+        self.assertEqual(self.window.settings.output(device.id)['delay_ms'], original['devices'][device.id]['config']['delay_ms'])
+
+    def test_scene_does_not_restart_running_audio_for_same_capture_layout(self):
+        scene = self.window.scenes.capture()
+        device = next(d for d in self.window.devices if d.kind == 'output')
+        scene['devices'][device.id]['config']['delay_ms'] = 120
+        self.window.scenes.store('Gaming', scene)
+        self.window.running = True
+        with patch.object(self.window.backend, 'volume'), patch.object(self.window.backend, 'mute'), patch.object(self.window, 'stop') as stop, patch.object(self.window, 'toggle') as start, patch.object(self.window.engine, 'retry_outputs'), patch.object(self.window.engine, 'configure'), patch.object(self.window.engine, 'configure_inputs'):
+            self.window.scenes.apply('Gaming')
+            stop.assert_not_called()
+            start.assert_not_called()
+        self.window.running = False
+
+    def test_scene_names_are_persisted_and_visible_in_tray(self):
+        self.window.scenes.store('Movies', self.window.scenes.capture())
+        self.window.tray_menu()
+        actions = self.window.tray.contextMenu().actions()
+        scene_menu = next(a.menu() for a in actions if a.text() == 'Audio scenes')
+        self.assertIn('Movies', [a.text() for a in scene_menu.actions()])
+        from sound_manager.settings import Settings
+        self.assertIn('Movies', Settings(Path(self.folder.name)/'settings.json').data['scenes'])
+
+    def test_scene_source_layout_change_restarts_only_if_already_running(self):
+        scene = self.window.scenes.capture()
+        scene['layout'] = 'Mono' if self.window.capture_layout() != 'Mono' else 'Stereo'
+        self.window.scenes.store('Alternate layout', scene)
+        self.window.running = True
+        with patch.object(self.window.backend, 'volume'), patch.object(self.window.backend, 'mute'), patch.object(self.window, 'stop') as stop, patch.object(self.window, 'toggle') as start, patch.object(self.window.engine, 'configure'), patch.object(self.window.engine, 'configure_inputs'):
+            self.window.scenes.apply('Alternate layout')
+            stop.assert_called_once()
+            start.assert_called_once()
+        self.window.running = False
+        scene['layout'] = 'Stereo'
+        with patch.object(self.window.backend, 'volume'), patch.object(self.window.backend, 'mute'), patch.object(self.window, 'stop') as stop, patch.object(self.window, 'toggle') as start:
+            self.window.scenes.apply(value=scene)
+            stop.assert_not_called()
+            start.assert_not_called()
+
+    def test_scene_hardware_kind_mismatch_does_not_change_settings(self):
+        import copy
+        scene = self.window.scenes.capture()
+        device = next(d for d in self.window.devices if d.kind == 'output')
+        scene['devices'][device.id]['kind'] = 'input'
+        scene['devices'][device.id]['config'].update(monitor=False, meter=False)
+        before = copy.deepcopy(self.window.settings.data)
+        with self.assertRaises(ValueError):
+            self.window.scenes.apply(value=scene)
+        self.assertEqual(before, self.window.settings.data)
+
     def test_input_classic_eq_is_saved_separately_from_output_eq(self):
         from sound_manager.ui import EqDialog
         device = next(d for d in self.window.devices if d.kind=='input')

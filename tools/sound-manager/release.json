@@ -1,18 +1,18 @@
 {
-  "version": "0.7.0",
-  "tag": "simple-sound-manager-v0.7.0",
+  "version": "0.8.0",
+  "tag": "simple-sound-manager-v0.8.0",
   "assets": [
     {
-      "name": "SimpleSoundManager-0.7.0-Windows-x64.zip",
-      "bytes": 104515071,
-      "sha256": "7f36ac512e619bd18b2c991a23773c3096d0a7a0db5d85442345b84eb5c5d59f",
-      "url": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/simple-sound-manager-v0.7.0/SimpleSoundManager-0.7.0-Windows-x64.zip"
+      "name": "SimpleSoundManager-0.8.0-Windows-x64.zip",
+      "bytes": 104541625,
+      "sha256": "87658fbbe2cae1009870418b20b22579b3bea8259fbde438f6f96b7bd32a1d95",
+      "url": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/simple-sound-manager-v0.8.0/SimpleSoundManager-0.8.0-Windows-x64.zip"
     },
     {
-      "name": "SimpleSoundManager-0.7.0-Source.zip",
-      "bytes": 135699,
-      "sha256": "79d55fbac4d0da2c961e9e998db57cd85a039f5882d0f5d687b926c6b98392f1",
-      "url": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/simple-sound-manager-v0.7.0/SimpleSoundManager-0.7.0-Source.zip"
+      "name": "SimpleSoundManager-0.8.0-Source.zip",
+      "bytes": 144788,
+      "sha256": "4e3968e4bbc95900d11e673bea6e6a5d1c76f2e704018c2b6d5adc1dff9cdaf1",
+      "url": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/simple-sound-manager-v0.8.0/SimpleSoundManager-0.8.0-Source.zip"
     }
   ]
 }
