@@ -1,5 +1,7 @@
 # Sound Manager feature research and implementation backlog
 
+Version 0.7.0 completes V03 Freeze waveform with a shared per-device/session snapshot, explicit Frozen status, no audio pause/capture changes, and no recordings on disk. Explicit per-device and global peak/clip hold reset buttons extend V02. Visibility/display preferences, EQ bypass, delay reset, and pinned-window recovery from 0.6.2/0.6.3 are retained.
+
 Version 0.6.2 convenience controls: per-input/output persistent waveform visibility with hidden rendering timers stopped; saved EQ controls / Live waveform display mode; graduated background dB guides for both slider banks; global non-destructive EQ bypass for sound comparison; and one-click reset of all delays, including disconnected devices. These are implemented controls, not future proposals. Waveform capture remains governed by routing and input Meter/Listen.
 
 Version 0.6.1 restores always-visible delay/synchronization controls and adds product-scoped GitHub Release checks, optional daily startup checking, release notes, Update / Not now, SHA-256 verified package staging, cancellation, and explicit clean-stop installer handoff. Other Foundry tools are filtered by tag prefix. Live Linux update installation remains unverified.
@@ -31,6 +33,14 @@ Also implemented: named Mono/Stereo/Quad/5.1/7.1/7.1.4 PCM layouts, per-output n
 Limits: input processing is not exposed as a system virtual microphone; per-app routing is not implemented; driver estimates cannot measure Bluetooth acoustic delay; live Linux validation and live microphone processing validation remain outstanding. Current peak protection is a sample clamp, not a professional lookahead limiter. Waveform history is a memory-only envelope, not a stored audio recording.
 
 ## Priorities
+
+### Completed in 0.7.0
+
+| Backlog item | Delivered behavior |
+|---|---|
+| V03 | Shared per-device Freeze snapshots in mixer and EQ views, explicit Frozen indication, continued audio, and no files recorded. |
+| V02 extension | Visible per-device and global reset buttons for peak/clip holds, retaining frozen waveform shapes. |
+| R10 (partial) | Matching Windows AppUserModelIDs across launcher, process and repaired shortcuts prevent separate application identities after updates. Automatic rollback remains planned. |
 
 ### Reliability milestone in 0.6.0
 

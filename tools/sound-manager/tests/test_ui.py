@@ -237,6 +237,48 @@ class WindowTests(unittest.TestCase):
         self.assertTrue(dialog.live_waveform.timer.isActive())
         dialog.close()
 
+    def test_freeze_holds_shared_waveform_snapshot_without_changing_audio(self):
+        import numpy as np
+        from sound_manager.waveform import WaveHistory
+        from sound_manager.ui import EqDialog
+        device = next(d for d in self.window.devices if d.kind == 'output')
+        history = WaveHistory()
+        history.append(np.full((960, 2), .1, dtype=np.float32), clipped=3)
+        with patch.object(self.window.engine, 'history', return_value=history), patch.object(self.window.engine, 'configure') as configure:
+            self.window.set_waveform_frozen(device, True)
+            frozen = self.window.waveform_freezes[device.id]
+            before = list(frozen['points'])
+            history.append(np.full((960, 2), .7, dtype=np.float32), clipped=5)
+            self.assertEqual(frozen['points'], before)
+            self.assertEqual(frozen['levels'][2], 3)
+            self.assertFalse(self.window.cards[device.id].waveform.timer.isActive())
+            dialog = EqDialog(self.window, device)
+            self.assertTrue(dialog.freeze_switch.isChecked())
+            dialog.show()
+            self.app.processEvents()
+            self.assertFalse(dialog.compact_waveform.timer.isActive())
+            self.window.reset_meter_holds(device.id)
+            self.assertEqual(history.levels()[2], 0)
+            self.assertEqual(frozen['levels'][2], 0)
+            self.assertEqual(frozen['points'], before)
+            self.window.set_waveform_frozen(device, False)
+            self.assertNotIn(device.id, self.window.waveform_freezes)
+            self.assertFalse(dialog.freeze_switch.isChecked())
+            self.assertTrue(dialog.compact_waveform.timer.isActive())
+            configure.assert_not_called()
+            dialog.close()
+
+    def test_freeze_before_audio_does_not_enable_input_capture_or_save_samples(self):
+        device = next(d for d in self.window.devices if d.kind == 'input')
+        with patch.object(self.window.engine, 'history', return_value=None), patch.object(self.window.engine, 'configure_inputs') as capture:
+            self.window.set_waveform_frozen(device, True)
+            capture.assert_not_called()
+            self.assertFalse(self.window.waveform_freezes[device.id]['signal'])
+        self.window.settings.save()
+        self.assertNotIn('waveform_freezes', self.window.settings.data)
+        self.assertFalse(self.window.settings.input(device.id)['meter'])
+        self.assertFalse(self.window.settings.input(device.id)['monitor'])
+
     def test_input_classic_eq_is_saved_separately_from_output_eq(self):
         from sound_manager.ui import EqDialog
         device = next(d for d in self.window.devices if d.kind=='input')

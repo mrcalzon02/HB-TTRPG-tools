@@ -16,7 +16,7 @@ windows = f'SimpleSoundManager-{version}-Windows-x64.zip'
 source = f'SimpleSoundManager-{version}-Source.zip'
 shutil.copy2(target/'source.zip', out/source)
 with zipfile.ZipFile(out/windows, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
-    for name in ('Install.cmd', 'install-windows.ps1', 'README.md', 'LICENSE', 'THIRD-PARTY-NOTICES.md'):
+    for name in ('Install.cmd', 'install-windows.ps1', 'shortcut-identity.ps1', 'README.md', 'LICENSE', 'THIRD-PARTY-NOTICES.md'):
         archive.write(root/name, 'SimpleSoundManager/'+name)
     for file in target.rglob('*'):
         if file.is_file():

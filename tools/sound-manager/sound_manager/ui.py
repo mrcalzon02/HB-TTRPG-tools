@@ -95,6 +95,12 @@ class DeviceCard(QFrame):
         self.waveform_toggle.setToolTip('Show or hide this device’s waveform. Audio and Meter/Listen are unchanged.')
         self.waveform_toggle.toggled.connect(lambda enabled: window.set_waveform(device, enabled))
         top.addWidget(self.waveform_toggle)
+        self.freeze_toggle = QCheckBox('Freeze')
+        self.freeze_toggle.setChecked(device.id in window.waveform_freezes)
+        self.freeze_toggle.setEnabled(self.waveform_toggle.isChecked())
+        self.freeze_toggle.setToolTip('Hold this device’s waveform and readings for inspection. Audio keeps playing. Session only; no audio is saved.')
+        self.freeze_toggle.toggled.connect(lambda enabled: window.set_waveform_frozen(device, enabled))
+        top.addWidget(self.freeze_toggle)
         if device.kind == 'output':
             top.addWidget(QLabel(f'{len(device.channels)} channels'))
         box.addLayout(top)
@@ -202,6 +208,10 @@ class DeviceCard(QFrame):
         self.waveform_toggle.blockSignals(True)
         self.waveform_toggle.setChecked(config.get('waveform', True))
         self.waveform_toggle.blockSignals(False)
+        self.freeze_toggle.blockSignals(True)
+        self.freeze_toggle.setChecked(device.id in self.window.waveform_freezes)
+        self.freeze_toggle.setEnabled(config.get('waveform', True))
+        self.freeze_toggle.blockSignals(False)
         self.waveform.set_display_enabled(config.get('waveform', True))
         if not self.delay.isSliderDown() and not self.delay_value.hasFocus():
             self.delay.setValue(round(config['delay_ms']))
@@ -222,6 +232,7 @@ class Window(QMainWindow):
         self.settings = Settings()
         self.mutes = MuteController(self.settings)
         self.eq_histories = {}
+        self.waveform_freezes = {}
         self.backend = backend or Backend()
         self.engine = Engine(self.backend.sc)
         self.running = False
@@ -320,6 +331,10 @@ class Window(QMainWindow):
         reset_timing.setToolTip('Set output, microphone-monitor and system-input delays to zero, including saved disconnected devices.')
         reset_timing.clicked.connect(self.reset_all_delays)
         convenience.addWidget(reset_timing)
+        reset_meters = QPushButton('Reset meter holds')
+        reset_meters.setToolTip('Clear held peaks and clip counts without stopping audio. Frozen waveform shapes are retained.')
+        reset_meters.clicked.connect(lambda: self.reset_meter_holds())
+        convenience.addWidget(reset_meters)
         convenience.addStretch()
         layout.addLayout(convenience)
         for key, kind in (('Ctrl+Alt+P', 'output'), ('Ctrl+Alt+M', 'input')):
@@ -448,6 +463,55 @@ class Window(QMainWindow):
         for widget in self.findChildren(WaveformWidget):
             if widget.device.id == device.id:
                 widget.set_display_enabled(enabled)
+        card = self.cards.get(device.id)
+        if card:
+            card.waveform_toggle.blockSignals(True)
+            card.waveform_toggle.setChecked(enabled)
+            card.waveform_toggle.blockSignals(False)
+            card.freeze_toggle.setEnabled(enabled)
+        for dialog in self.findChildren(EqDialog):
+            if dialog.device.id == device.id:
+                dialog.waveform_switch.blockSignals(True)
+                dialog.waveform_switch.setChecked(enabled)
+                dialog.waveform_switch.blockSignals(False)
+                dialog.freeze_switch.setEnabled(enabled)
+                dialog.select_display(dialog.display_mode.currentIndex(), save=False)
+
+    def set_waveform_frozen(self, device, enabled):
+        if enabled:
+            history = self.engine.history(device.id)
+            points = history.snapshot() if history else []
+            self.waveform_freezes[device.id] = dict(points=points, levels=history.levels() if history else (0, 0, 0), signal=bool(points))
+        else:
+            self.waveform_freezes.pop(device.id, None)
+        for widget in self.findChildren(WaveformWidget):
+            if widget.device.id == device.id:
+                widget.set_display_enabled(not widget.isHidden())
+                widget.update()
+        card = self.cards.get(device.id)
+        if card:
+            card.freeze_toggle.blockSignals(True)
+            card.freeze_toggle.setChecked(enabled)
+            card.freeze_toggle.blockSignals(False)
+        for dialog in self.findChildren(EqDialog):
+            if dialog.device.id == device.id:
+                dialog.freeze_switch.blockSignals(True)
+                dialog.freeze_switch.setChecked(enabled)
+                dialog.freeze_switch.blockSignals(False)
+
+    def reset_meter_holds(self, identifier=None):
+        identifiers = [identifier] if identifier else list({d.id for d in self.devices} | set(self.waveform_freezes))
+        for key in identifiers:
+            history = self.engine.history(key)
+            if history:
+                history.reset_levels()
+            if key in self.waveform_freezes:
+                frozen = self.waveform_freezes[key]
+                frozen['levels'] = (0, frozen['levels'][1], 0)
+        for widget in self.findChildren(WaveformWidget):
+            if widget.device.id in identifiers:
+                widget.update()
+        self.status.setText('Peak and clip holds cleared. Audio and waveform shapes are unchanged.')
 
     def set_eq_bypass(self, enabled):
         self.settings.data['bypass_eq'] = enabled

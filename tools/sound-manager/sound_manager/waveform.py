@@ -72,13 +72,14 @@ class WaveformWidget(QWidget):
 
     def set_display_enabled(self, enabled):
         self.setVisible(enabled)
-        if enabled and self.isVisible():
+        if enabled and self.isVisible() and self.device.id not in self.window.waveform_freezes:
             self.timer.start(50)
         else:
             self.timer.stop()
 
     def showEvent(self, event):
-        self.timer.start(50)
+        if self.device.id not in self.window.waveform_freezes:
+            self.timer.start(50)
         super().showEvent(event)
 
     def hideEvent(self, event):
@@ -92,19 +93,23 @@ class WaveformWidget(QWidget):
         painter.setPen(QPen(QColor('#344258'), 1))
         painter.drawLine(QPointF(0, center), QPointF(self.width(), center))
         painter.setPen(QColor('#9baac0'))
-        painter.drawText(6, 14, 'Waveform · last 3 seconds')
+        frozen = self.window.waveform_freezes.get(self.device.id)
+        painter.drawText(6, 14, 'Frozen · 3-second snapshot' if frozen is not None else 'Waveform · last 3 seconds')
         history = self.window.engine.history(self.device.id)
-        if history is None:
+        if frozen is not None and not frozen['signal']:
+            painter.drawText(6, self.height()-6, 'Frozen without a signal. Unfreeze to see incoming audio.')
+            return
+        if history is None and frozen is None:
             label = 'Enable Meter or Listen for this input' if self.device.kind == 'input' else 'No routed audio'
             painter.drawText(6, self.height()-6, label)
             return
-        peak, rms, clipped = history.levels()
+        peak, rms, clipped = frozen['levels'] if frozen is not None else history.levels()
         def db(value):
             return f'{20*math.log10(value):.1f}' if value>1e-8 else '−∞'
         painter.setPen(QColor('#ff8e8e' if clipped else '#a7b2c5'))
         painter.drawText(max(220, self.width()-380), 14, f'Peak {db(peak)} · RMS {db(rms)} dBFS · Clip {clipped}')
         painter.setPen(QPen(QColor('#65c5f5'), 1))
-        points = history.snapshot()
+        points = frozen['points'] if frozen is not None else history.snapshot()
         peak = max((max(abs(low), abs(high)) for _, low, high in points), default=0)
         scale = min(20, 1/max(.05, peak*1.2))
         for position, low, high in points:
@@ -112,7 +117,5 @@ class WaveformWidget(QWidget):
             painter.drawLine(QPointF(x, center-low*scale*(center-16)), QPointF(x, center-high*scale*(center-16)))
 
     def mouseDoubleClickEvent(self, event):
-        history = self.window.engine.history(self.device.id)
-        if history:
-            history.reset_levels()
+        self.window.reset_meter_holds(self.device.id)
         self.update()

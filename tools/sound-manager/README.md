@@ -4,6 +4,12 @@ A local desktop app for Windows 10/11 and Linux. No subscription, account, brows
 
 ## Controls
 
+Version 0.7 adds per-device **Freeze** in the main card and Equalizer. It holds a shared three-second waveform snapshot and level readings while routing, EQ, and input capture continue. Switch views or resize without losing the held trace; unfreeze to resume live rendering. Freeze is session-only, is labelled clearly, and never saves audio to disk. With no stream available it shows an honest empty snapshot instead of enabling a microphone.
+
+Windows taskbar grouping now uses the stable `Calzon.SimpleSoundManager` identity on the launcher, app process, and app-owned shortcuts. This follows [Microsoft's AppUserModelID rules](https://learn.microsoft.com/en-us/windows/win32/shell/appids) so versioned releases do not become separate taskbar applications. The installer repairs matching pins, including hidden shortcut folders. A legacy cached pin may need one unpin/re-pin from the running app after upgrading.
+
+**Reset meter holds** in the main window clears held peaks and clip counts for all devices. **Reset meter hold** in an Equalizer affects only that device. Frozen shapes and their RMS readings are retained, and audio continues. Double-clicking a trace still resets that device's holds. Hiding Waveform pauses rendering; Freeze pauses the displayed data rather than playback.
+
 Version 0.6.3 fixes EQ waveform visibility: Waveform on now displays a compact live trace beside EQ controls, while Display → Live waveform gives the larger view. Both obey the device's Waveform switch. The response curve remains a static EQ gain curve, distinct from the moving audio trace.
 
 Version 0.6.2 adds a saved **Waveform** checkbox on each input and output. In its Equalizer, **Display** switches between the advanced EQ controls and a larger **Live waveform**; the mode is saved per device. Its Waveform checkbox shares the main card's preference. Hidden waveform display timers stop without changing routing or Meter/Listen. **Bypass all EQ** temporarily bypasses filters, preamp, balance and EQ headroom across routed inputs/outputs without overwriting profiles or delays; the final peak guard and mute controls remain active. **Reset all delays** clears output, monitor, and system-input timing, including saved disconnected devices, while preserving EQ and selection.

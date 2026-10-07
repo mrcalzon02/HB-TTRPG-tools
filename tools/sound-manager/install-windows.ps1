@@ -1,5 +1,6 @@
 $ErrorActionPreference = 'Stop'
 Set-Location -LiteralPath $PSScriptRoot
+. (Join-Path $PSScriptRoot 'shortcut-identity.ps1')
 $sourcePath = Join-Path $PSScriptRoot 'dist\SimpleSoundManager'
 if (-not (Test-Path -LiteralPath (Join-Path $sourcePath 'SimpleSoundManager.exe'))) {
     & (Join-Path $PSScriptRoot 'build.ps1')
@@ -28,11 +29,12 @@ $shortcut.TargetPath = $canonicalApp
 $shortcut.IconLocation = (Join-Path $installPath 'app.ico')
 $shortcut.WorkingDirectory = $installRoot
 $shortcut.Save()
+Set-SoundManagerShortcutIdentity (Join-Path $shortcutFolder 'Simple Sound Manager.lnk')
 # Repair stale app shortcuts, including taskbar pins pointing at older releases.
 $shortcutLocations = @([Environment]::GetFolderPath('Desktop'), $shortcutFolder, (Join-Path $env:APPDATA 'Microsoft\Internet Explorer\Quick Launch\User Pinned'))
 foreach ($shortcutLocation in $shortcutLocations) {
-    if (-not (Test-Path -LiteralPath $shortcutLocation)) { continue }
-    foreach ($shortcutFile in Get-ChildItem -LiteralPath $shortcutLocation -Filter '*.lnk' -Recurse -ErrorAction SilentlyContinue) {
+    if (-not [IO.Directory]::Exists($shortcutLocation)) { continue }
+    foreach ($shortcutFile in Get-ChildItem -LiteralPath $shortcutLocation -Filter '*.lnk' -Recurse -Force -ErrorAction SilentlyContinue) {
         $appShortcut = $shortcutShell.CreateShortcut($shortcutFile.FullName)
         $oldTarget = $appShortcut.TargetPath
         if ($oldTarget -and $oldTarget.StartsWith($installRoot + '\', [StringComparison]::OrdinalIgnoreCase) -and [IO.Path]::GetFileName($oldTarget) -eq 'SimpleSoundManager.exe') {
@@ -40,6 +42,7 @@ foreach ($shortcutLocation in $shortcutLocations) {
             $appShortcut.IconLocation = (Join-Path $installPath 'app.ico')
             $appShortcut.WorkingDirectory = $installRoot
             $appShortcut.Save()
+            Set-SoundManagerShortcutIdentity $shortcutFile.FullName
         }
     }
 }

@@ -26,6 +26,8 @@ def resolve_release(root):
 
 def main():
     try:
+        from sound_manager.windows_identity import set_process_identity
+        set_process_identity()
         root = Path(sys.executable).parent if getattr(sys, 'frozen', False) else Path(__file__).parent
         target = resolve_release(root)
         env = dict(os.environ, PYINSTALLER_RESET_ENVIRONMENT='1')

@@ -33,7 +33,7 @@ for dist in distributions():
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, destination)
 with zipfile.ZipFile(target/'source.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
-    for name in ('run.py', 'launcher.py', 'app.ico', 'app-icon.svg', 'make-icon.py', 'requirements.txt', 'build.ps1', 'install-windows.ps1', 'windows-audio-setup.ps1', 'update-handoff.ps1', 'update-handoff.sh', 'Install.cmd', 'install-linux.sh', 'package.py', 'prepare-release.py', 'check_live_audio.py', 'check_bluetooth.py', 'check_multichannel.py', 'VALIDATION.md', 'FEATURE_BACKLOG.md', 'README.md', 'LICENSE', 'THIRD-PARTY-NOTICES.md'):
+    for name in ('run.py', 'launcher.py', 'app.ico', 'app-icon.svg', 'make-icon.py', 'requirements.txt', 'build.ps1', 'install-windows.ps1', 'shortcut-identity.ps1', 'windows-audio-setup.ps1', 'update-handoff.ps1', 'update-handoff.sh', 'Install.cmd', 'install-linux.sh', 'package.py', 'prepare-release.py', 'check_live_audio.py', 'check_bluetooth.py', 'check_multichannel.py', 'VALIDATION.md', 'FEATURE_BACKLOG.md', 'README.md', 'LICENSE', 'THIRD-PARTY-NOTICES.md'):
         archive.write(root/name, 'sound-manager/'+name)
     for folder in ('sound_manager', 'tests'):
         for file in (root/folder).glob('*.py'):

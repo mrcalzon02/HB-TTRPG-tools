@@ -58,6 +58,9 @@ def main():
     parser.add_argument('--tray', action='store_true', help='Start minimized to the system tray')
     parser.add_argument("--screenshot", metavar="PNG", help="Render the actual UI offscreen, without audio changes")
     args = parser.parse_args()
+    if not args.probe and not args.screenshot:
+        from sound_manager.windows_identity import set_process_identity
+        set_process_identity()
     if args.probe:
         from dataclasses import asdict
         from sound_manager.backend import Backend

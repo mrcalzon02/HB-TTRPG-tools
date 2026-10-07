@@ -1,5 +1,7 @@
 # Validation — October 6, 2026
 
+Version 0.7.0: 89 automated checks passed. New checks prove a frozen shared trace/levels remain unchanged while incoming samples change, hidden/frozen timers stay stopped, new EQ dialogs share the device's held view, reset clears real and frozen clip holds without changing shapes, unfreeze resumes rendering, and no-signal freeze does not capture microphones or save samples. Tests also verify the real Windows process identity and the installer's matching version-independent ID. A real shortcut property-store round trip passed; the running window and official Start Menu shortcut were independently read back with the same AppUserModelID. Previous update, timing, graphic EQ and second-process checks remain green.
+
 Version 0.6.3: 84 automated checks passed, including a shown EQ dialog proving that Waveform on displays a running compact trace timer in EQ controls mode, Waveform off hides/stops it, and switching to Live waveform transfers rendering to the larger trace.
 
 Version 0.6.2: 83 automated checks passed. Added integrated checks for independent persistent waveform switches without microphone capture, hidden display timers, saved advanced EQ/live-waveform display modes, waveform state in EQ dialogs, global bypass preserving profiles and each device's EQ flag, resetting all delays including disconnected devices without changing EQ, and actual second-process reopen requests without a tray icon. EQ dB-guide layouts were rendered and inspected. The 0.6.1 release/updater checks remain green.

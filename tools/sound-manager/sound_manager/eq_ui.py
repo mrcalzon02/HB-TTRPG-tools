@@ -113,6 +113,15 @@ class EqDialog(QDialog):
         self.waveform_switch.setChecked(self.config.get('waveform', True))
         self.waveform_switch.setToolTip('Saved for this device, including its main-window card. Does not enable microphone capture.')
         editing.addWidget(self.waveform_switch)
+        self.freeze_switch = QCheckBox('Freeze')
+        self.freeze_switch.setChecked(device.id in window.waveform_freezes)
+        self.freeze_switch.setEnabled(self.waveform_switch.isChecked())
+        self.freeze_switch.setToolTip('Inspect a held waveform without pausing audio. Shared with this device’s main card; session only.')
+        self.freeze_switch.toggled.connect(lambda enabled: window.set_waveform_frozen(device, enabled))
+        editing.addWidget(self.freeze_switch)
+        clear_meter = QPushButton('Reset meter hold')
+        clear_meter.clicked.connect(lambda: window.reset_meter_holds(device.id))
+        editing.addWidget(clear_meter)
         editing.addStretch()
         layout.addLayout(editing)
         self.compact_waveform = WaveformWidget(window, device)
@@ -310,6 +319,7 @@ class EqDialog(QDialog):
         self.window.set_waveform(self.device, enabled)
         self.waveform_hidden_note.setVisible(not enabled)
         self.select_display(self.display_mode.currentIndex(), save=False)
+        self.freeze_switch.setEnabled(enabled)
 
     @staticmethod
     def spin(low, high, value, step, suffix):
