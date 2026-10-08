@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-07",
+  "platform": "Linux x86-64",
+  "checks": {
+    "shell_syntax_scripts": 17,
+    "download_archive_extraction_and_sha256": "passed both",
+    "recorded_TGMC_tool_hashes": 8,
+    "map_selection_editor_launchers": "all four in both environments",
+    "SS14_play_prototypes": "all four",
+    "invalid_map_rejection": "passed both",
+    "existing_target_refusal": "passed both",
+    "local_document_links_and_anchors": 44
+  },
+  "fresh_end_to_end_installation": "not tested; existing environments have separate native validation records"
+}

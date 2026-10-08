@@ -1,0 +1,4 @@
+SERVER_NAME TGMC Local Mapping
+TITLE TGMC Local Mapping
+HOSTEDBY Local developer
+LOCALHOST_RANK

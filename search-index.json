@@ -478,5 +478,95 @@
       "Windows"
     ],
     "url": "simple-sound-manager.html"
+  },
+  {
+    "id": "ss13-ss14-conversion",
+    "title": "SS13–SS14 Map Conversion",
+    "workspace": "SS13–SS14",
+    "description": "TGMC restoration and native SS14 conversion, validation, local editing and hosting for Tyson, Port Hamburg, SS Ourang Medan and Vapor.",
+    "keywords": [
+      "SS13",
+      "SS14",
+      "TGMC",
+      "DMM",
+      "map conversion",
+      "Tyson",
+      "Port Hamburg",
+      "Ourang Medan",
+      "Vapor",
+      "Sandbox"
+    ],
+    "url": "ss13-ss14.html"
+  },
+  {
+    "id": "ss13-ss14-dev-setup",
+    "title": "SS13–SS14 Development Setup",
+    "workspace": "SS13–SS14",
+    "description": "Complete Linux map editing setup bundles for TGMC StrongDMM and native SS14, including installers, maps, build tools and local hosting.",
+    "keywords": [
+      "SS13",
+      "SS14",
+      "TGMC",
+      "StrongDMM",
+      "setup",
+      "installer",
+      "map editor",
+      "local server"
+    ],
+    "url": "ss13-ss14-dev-setup.html"
+  },
+  {
+    "id": "acquisition-library",
+    "title": "Sources and Reinstall Library",
+    "workspace": "Library",
+    "description": "Recorded sources and recovery instructions for installed apps, free games, emulators, development tools, project backups, books, music and offline references.",
+    "keywords": [
+      "source",
+      "download",
+      "reinstall",
+      "acquisition",
+      "library",
+      "software",
+      "games",
+      "music",
+      "books",
+      "emulators",
+      "backup"
+    ],
+    "url": "acquisition-library.html"
+  },
+  {
+    "id": "low-power-system-setup-archive",
+    "title": "Low power system setup archive",
+    "workspace": "Library",
+    "description": "Download source records, inventories, TGMC and SS14 setup bundles, and recovery guidance for rebuilding a modest laptop software collection.",
+    "keywords": [
+      "low power",
+      "setup",
+      "archive",
+      "reinstall",
+      "laptop",
+      "inventory",
+      "downloads",
+      "sources"
+    ],
+    "url": "low-power-system-setup-archive.html"
+  },
+  {
+    "id": "low-power-windows-alternative",
+    "title": "Windows alternative setup",
+    "workspace": "Library",
+    "description": "Optional Windows app profiles, content recovery, and native PowerShell TGMC StrongDMM and SS14 map setup scripts for the low-power archive.",
+    "keywords": [
+      "Windows",
+      "PowerShell",
+      "winget",
+      "alternative config",
+      "setup",
+      "TGMC",
+      "SS14",
+      "low power"
+    ],
+    "url": "low-power-system-setup-windows.html"
   }
 ]

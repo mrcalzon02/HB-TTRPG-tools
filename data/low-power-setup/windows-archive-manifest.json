@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-07",
+  "file": "low-power-system-setup-windows-2026-10-07.zip",
+  "bytes": 1081883,
+  "sha256": "3fa3a7793f5cb430c17ad445a061418dfbd5aa901b63dd2ee21a59331e969774",
+  "platform": "Windows x64 alternative",
+  "configuration_folder": "windows-alt",
+  "includes": [
+    "PowerShell installers, editors, hosting and map backup helpers",
+    "Optional WinGet application profiles",
+    "Source catalog and Windows equivalents",
+    "All four TGMC and SS14 map payloads",
+    "License and provenance notices"
+  ],
+  "tested_on_windows": false
+}

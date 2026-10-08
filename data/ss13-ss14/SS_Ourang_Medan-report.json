@@ -1,0 +1,2135 @@
+{
+  "source": "/home/adminis/Documents/Data/Projects/TGMC/_maps/map_files/SS_Ourang_Medan/SS_Ourang_Medan.dmm",
+  "source_sha256": "61db14c7b176c74c7c8896be8dcc02c96447873d7ce780182b311a4b50cf3598",
+  "port": "/home/adminis/Documents/Data/Projects/SS14/Resources/Maps/TGMC/SS_Ourang_Medan.yml",
+  "port_sha256": "36fb6741afb0a278e9740038497def7361939f9534eb5ef5569f3cb0c542424f",
+  "size": [
+    255,
+    100,
+    1
+  ],
+  "entities": 6606,
+  "floor_tiles": 9110,
+  "wall_tiles": 2866,
+  "spawn_tile": [
+    128,
+    50
+  ],
+  "added_lattice_support_tiles": [
+    {
+      "coordinate": [
+        1,
+        99
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        12,
+        80
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        12,
+        78
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        12,
+        76
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        12,
+        74
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        12,
+        72
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        12,
+        47
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        12,
+        45
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        12,
+        43
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        12,
+        41
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        12,
+        39
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        26,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        26,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        26,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        26,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        30,
+        91
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        30,
+        61
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        30,
+        58
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        30,
+        28
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        32,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        32,
+        62
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        32,
+        57
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        32,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        33,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        33,
+        62
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        33,
+        57
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        33,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        34,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        34,
+        62
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        34,
+        57
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        34,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        35,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        35,
+        62
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        35,
+        57
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        35,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        36,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        36,
+        62
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        36,
+        57
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        36,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        37,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        37,
+        62
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        37,
+        57
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        37,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        38,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        38,
+        62
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        38,
+        57
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        38,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        39,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        39,
+        62
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        39,
+        57
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        39,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        41,
+        91
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        41,
+        61
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        41,
+        58
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        41,
+        28
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        45,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        45,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        45,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        45,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        53,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        53,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        53,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        53,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        59,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        59,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        60,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        60,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        65,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        65,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        66,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        66,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        72,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        72,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        72,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        72,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        80,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        80,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        80,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        80,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        84,
+        91
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        84,
+        61
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        84,
+        58
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        84,
+        28
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        95,
+        91
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        95,
+        61
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        95,
+        58
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        95,
+        28
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        99,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        99,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        99,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        99,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        111,
+        61
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        111,
+        28
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        113,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        113,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        114,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        114,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        115,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        116,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        117,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        118,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        119,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        119,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        120,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        120,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        122,
+        61
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        122,
+        28
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        126,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        126,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        126,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        126,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        134,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        134,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        134,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        134,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        138,
+        91
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        138,
+        61
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        138,
+        58
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        138,
+        28
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        149,
+        91
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        149,
+        61
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        149,
+        58
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        149,
+        28
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        153,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        153,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        153,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        153,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        161,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        161,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        161,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        161,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        167,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        167,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        168,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        168,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        169,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        170,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        171,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        172,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        173,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        173,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        174,
+        90
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        174,
+        29
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        180,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        180,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        180,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        180,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        188,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        188,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        188,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        188,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        192,
+        91
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        192,
+        61
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        192,
+        58
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        192,
+        28
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        203,
+        91
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        203,
+        61
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        203,
+        58
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        203,
+        28
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        207,
+        63
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        207,
+        30
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        208,
+        89
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        208,
+        76
+      ],
+      "trigger": "CableApcExtension"
+    },
+    {
+      "coordinate": [
+        208,
+        56
+      ],
+      "trigger": "WindowReinforcedDirectional"
+    },
+    {
+      "coordinate": [
+        208,
+        43
+      ],
+      "trigger": "CableApcExtension"
+    }
+  ],
+  "native_objects": {
+    "WallReinforced": 1314,
+    "WindowReinforcedDirectional": 167,
+    "WindowDirectional": 23,
+    "WallSolid": 1552,
+    "AlwaysPoweredWallLight": 348,
+    "TableReinforced": 30,
+    "GasVentPump": 45,
+    "GasPipeBend": 4,
+    "TableWood": 20,
+    "GasPipeStraight": 433,
+    "APCBasic": 54,
+    "CableApcExtension": 1530,
+    "Chair": 9,
+    "Airlock": 120,
+    "Bed": 32,
+    "GasPipeTJunction": 22,
+    "Bookshelf": 8,
+    "SubstationBasic": 18,
+    "CableTerminal": 18,
+    "GasPipeBendAlt1": 4,
+    "GasPipeStraightAlt1": 505,
+    "GasPipeTJunctionAlt1": 7,
+    "GasVentScrubberAlt1": 13,
+    "AirlockGlass": 57,
+    "AlwaysPoweredLightExterior": 8,
+    "Barricade": 108,
+    "KitchenMicrowave": 1,
+    "ReagentGrinderIndustrial": 1,
+    "VendingMachineSnack": 2,
+    "GasPipeFourwayAlt1": 2,
+    "ComputerCrewMonitoring": 2,
+    "FloorWaterEntity": 114,
+    "SeedExtractor": 2,
+    "GasPipeFourway": 10,
+    "Recycler": 1,
+    "WeaponCapacitorRecharger": 1,
+    "Autolathe": 4,
+    "GeneratorRTG": 12,
+    "SpawnPointLatejoin": 1,
+    "SpawnPointObserver": 1,
+    "SpawnPointAnyJob": 1
+  },
+  "types": {
+    "/area/bridge": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 154
+    },
+    "/area/bridge/meeting_room": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 88
+    },
+    "/area/crew_quarters/captain": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 61
+    },
+    "/area/lv624/lazarus/atmos": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 288
+    },
+    "/area/lv624/lazarus/canteen": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 82
+    },
+    "/area/lv624/lazarus/chapel": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 45
+    },
+    "/area/lv624/lazarus/comms": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 48
+    },
+    "/area/lv624/lazarus/engineering": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 648
+    },
+    "/area/lv624/lazarus/fitness": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 180
+    },
+    "/area/lv624/lazarus/hop": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 61
+    },
+    "/area/lv624/lazarus/hydroponics": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 288
+    },
+    "/area/lv624/lazarus/main_hall": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 2670
+    },
+    "/area/lv624/lazarus/medbay": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 236
+    },
+    "/area/lv624/lazarus/quart": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 45
+    },
+    "/area/lv624/lazarus/quartstorage": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 488
+    },
+    "/area/lv624/lazarus/research": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 180
+    },
+    "/area/lv624/lazarus/robotics": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 135
+    },
+    "/area/lv624/lazarus/secure_storage": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 45
+    },
+    "/area/lv624/lazarus/sleep_female": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 476
+    },
+    "/area/lv624/lazarus/sleep_male": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 476
+    },
+    "/area/lv624/lazarus/toilet": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 90
+    },
+    "/area/maintenance/asmaint2": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 293
+    },
+    "/area/maintenance/atmos_control": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 293
+    },
+    "/area/maintenance/cargo": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 315
+    },
+    "/area/maintenance/dormitory": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 672
+    },
+    "/area/maintenance/engi_engine": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 1231
+    },
+    "/area/maintenance/engineering": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 416
+    },
+    "/area/maintenance/fore": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 504
+    },
+    "/area/security/armoury": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 59
+    },
+    "/area/security/checkpoint/engineering": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 37
+    },
+    "/area/security/checkpoint/supply": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 37
+    },
+    "/area/security/main": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 52
+    },
+    "/area/shuttle/drop1/lz1": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 458
+    },
+    "/area/shuttle/drop2/lz2": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 458
+    },
+    "/area/space": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 13891
+    },
+    "/obj/docking_port/stationary/marine_dropship/lz1": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/docking_port/stationary/marine_dropship/lz2": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/ai_node": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 479
+    },
+    "/obj/effect/landmark/corpsespawner/engineer": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 6
+    },
+    "/obj/effect/landmark/corpsespawner/scientist": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 8
+    },
+    "/obj/effect/landmark/corpsespawner/security": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/effect/landmark/nuke_spawn": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/start/job/survivor": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 6
+    },
+    "/obj/effect/landmark/start/job/xenomorph": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 8
+    },
+    "/obj/effect/landmark/weed_node": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 88
+    },
+    "/obj/effect/landmark/xeno_silo_spawn": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 4
+    },
+    "/obj/machinery/apiary": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/machinery/atmospherics/components/unary/vent_pump": {
+      "prototype": "GasVentPump",
+      "reason": "native vent",
+      "native_variants": [
+        "GasVentPump"
+      ],
+      "source_instances": 45
+    },
+    "/obj/machinery/atmospherics/components/unary/vent_scrubber": {
+      "prototype": "GasVentScrubberAlt1",
+      "reason": "native scrubber",
+      "native_variants": [
+        "GasVentScrubberAlt1"
+      ],
+      "source_instances": 13
+    },
+    "/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden": {
+      "prototype": "GasPipeTJunctionAlt1",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeTJunctionAlt1"
+      ],
+      "source_instances": 6
+    },
+    "/obj/machinery/atmospherics/pipe/manifold/scrubbers/visible": {
+      "prototype": "GasPipeTJunctionAlt1",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeTJunctionAlt1"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer1": {
+      "prototype": "GasPipeTJunction",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeTJunction"
+      ],
+      "source_instances": 22
+    },
+    "/obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden": {
+      "prototype": "GasPipeFourwayAlt1",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeFourwayAlt1"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden/layer1": {
+      "prototype": "GasPipeFourway",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeFourway"
+      ],
+      "source_instances": 10
+    },
+    "/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden": {
+      "prototype": "GasPipeStraightAlt1",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeBendAlt1",
+        "GasPipeStraightAlt1"
+      ],
+      "source_instances": 509
+    },
+    "/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1": {
+      "prototype": "GasPipeStraight",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeBend",
+        "GasPipeStraight"
+      ],
+      "source_instances": 437
+    },
+    "/obj/machinery/botany": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 32
+    },
+    "/obj/machinery/botany/editor": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/machinery/botany/extractor": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/machinery/camera/autoname/lz_camera": {
+      "prototype": null,
+      "reason": "candidate SurveillanceCamera unavailable; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 12
+    },
+    "/obj/machinery/computer/intel_computer": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/door/airlock/command": {
+      "prototype": "Airlock",
+      "reason": "interactive airlock",
+      "native_variants": [
+        "Airlock"
+      ],
+      "source_instances": 10
+    },
+    "/obj/machinery/door/airlock/glass": {
+      "prototype": "AirlockGlass",
+      "reason": "interactive glass airlock",
+      "native_variants": [
+        "AirlockGlass"
+      ],
+      "source_instances": 36
+    },
+    "/obj/machinery/door/airlock/glass_engineering": {
+      "prototype": "AirlockGlass",
+      "reason": "interactive glass airlock",
+      "native_variants": [
+        "AirlockGlass"
+      ],
+      "source_instances": 10
+    },
+    "/obj/machinery/door/airlock/glass_research": {
+      "prototype": "AirlockGlass",
+      "reason": "interactive glass airlock",
+      "native_variants": [
+        "AirlockGlass"
+      ],
+      "source_instances": 4
+    },
+    "/obj/machinery/door/airlock/glass_science": {
+      "prototype": "AirlockGlass",
+      "reason": "interactive glass airlock",
+      "native_variants": [
+        "AirlockGlass"
+      ],
+      "source_instances": 3
+    },
+    "/obj/machinery/door/airlock/glass_security": {
+      "prototype": "AirlockGlass",
+      "reason": "interactive glass airlock",
+      "native_variants": [
+        "AirlockGlass"
+      ],
+      "source_instances": 4
+    },
+    "/obj/machinery/door/airlock/maintenance": {
+      "prototype": "Airlock",
+      "reason": "interactive airlock",
+      "native_variants": [
+        "Airlock"
+      ],
+      "source_instances": 58
+    },
+    "/obj/machinery/door/airlock/multi_tile/engineering": {
+      "prototype": "Airlock",
+      "reason": "interactive airlock",
+      "native_variants": [
+        "Airlock"
+      ],
+      "source_instances": 24
+    },
+    "/obj/machinery/door/airlock/multi_tile/mainship/generic": {
+      "prototype": "Airlock",
+      "reason": "interactive airlock",
+      "native_variants": [
+        "Airlock"
+      ],
+      "source_instances": 28
+    },
+    "/obj/machinery/floodlight/landing": {
+      "prototype": "AlwaysPoweredLightExterior",
+      "reason": "native equivalent",
+      "native_variants": [
+        "AlwaysPoweredLightExterior"
+      ],
+      "source_instances": 8
+    },
+    "/obj/machinery/gibber": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/machinery/landinglight/lz2": {
+      "prototype": null,
+      "reason": "candidate AlwaysPoweredSmallLight unavailable; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 128
+    },
+    "/obj/machinery/light": {
+      "prototype": "AlwaysPoweredWallLight",
+      "reason": "native equivalent",
+      "native_variants": [
+        "AlwaysPoweredWallLight"
+      ],
+      "source_instances": 348
+    },
+    "/obj/machinery/microwave": {
+      "prototype": "KitchenMicrowave",
+      "reason": "native equivalent",
+      "native_variants": [
+        "KitchenMicrowave"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/power/apc": {
+      "prototype": "APCBasic",
+      "reason": "native equivalent",
+      "native_variants": [
+        "APCBasic"
+      ],
+      "source_instances": 54
+    },
+    "/obj/machinery/power/geothermal": {
+      "prototype": "GeneratorRTG",
+      "reason": "native equivalent",
+      "native_variants": [
+        "GeneratorRTG"
+      ],
+      "source_instances": 12
+    },
+    "/obj/machinery/power/smes": {
+      "prototype": "SubstationBasic",
+      "reason": "native equivalent",
+      "native_variants": [
+        "SubstationBasic"
+      ],
+      "source_instances": 18
+    },
+    "/obj/machinery/power/terminal": {
+      "prototype": "CableTerminal",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CableTerminal"
+      ],
+      "source_instances": 18
+    },
+    "/obj/machinery/processor": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/machinery/prop/autolathe": {
+      "prototype": "Autolathe",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Autolathe"
+      ],
+      "source_instances": 4
+    },
+    "/obj/machinery/reagentgrinder": {
+      "prototype": "ReagentGrinderIndustrial",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ReagentGrinderIndustrial"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/recharge_station": {
+      "prototype": "WeaponCapacitorRecharger",
+      "reason": "native equivalent",
+      "native_variants": [
+        "WeaponCapacitorRecharger"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/recycler": {
+      "prototype": "Recycler",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Recycler"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/robotic_fabricator": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/machinery/seed_extractor": {
+      "prototype": "SeedExtractor",
+      "reason": "native equivalent",
+      "native_variants": [
+        "SeedExtractor"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/vending/snack": {
+      "prototype": "VendingMachineSnack",
+      "reason": "native stocked vendor replacement",
+      "native_variants": [
+        "VendingMachineSnack"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/barricade/wooden": {
+      "prototype": "Barricade",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Barricade"
+      ],
+      "source_instances": 108
+    },
+    "/obj/structure/bed": {
+      "prototype": "Bed",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Bed"
+      ],
+      "source_instances": 20
+    },
+    "/obj/structure/bed/chair": {
+      "prototype": "Chair",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Chair"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/bed/chair/comfy": {
+      "prototype": "Chair",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Chair"
+      ],
+      "source_instances": 6
+    },
+    "/obj/structure/bed/chair/sofa": {
+      "prototype": "Chair",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Chair"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/bed/fancy": {
+      "prototype": "Bed",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Bed"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/bed/nest": {
+      "prototype": "Bed",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Bed"
+      ],
+      "source_instances": 8
+    },
+    "/obj/structure/bedsheetbin": {
+      "prototype": "Bed",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Bed"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/bookcase": {
+      "prototype": "Bookshelf",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Bookshelf"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/bookcase/manuals/engineering": {
+      "prototype": "Bookshelf",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Bookshelf"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/bookcase/manuals/medical": {
+      "prototype": "Bookshelf",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Bookshelf"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/bookcase/manuals/research_and_development": {
+      "prototype": "Bookshelf",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Bookshelf"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/cable": {
+      "prototype": "CableApcExtension",
+      "reason": "native LV cable",
+      "native_variants": [
+        "CableApcExtension"
+      ],
+      "source_instances": 1530
+    },
+    "/obj/structure/nuke_disk_candidate": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/structure/safe": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/structure/showcase": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/structure/table/reinforced": {
+      "prototype": "TableReinforced",
+      "reason": "native table",
+      "native_variants": [
+        "TableReinforced"
+      ],
+      "source_instances": 30
+    },
+    "/obj/structure/table/wood": {
+      "prototype": "TableWood",
+      "reason": "native table",
+      "native_variants": [
+        "TableWood"
+      ],
+      "source_instances": 20
+    },
+    "/obj/structure/window/framed/colony": {
+      "prototype": "WindowDirectional",
+      "reason": "native directional window preserving separate edges",
+      "native_variants": [
+        "WindowDirectional"
+      ],
+      "source_instances": 23
+    },
+    "/obj/structure/window/framed/prison/reinforced/hull": {
+      "prototype": "WindowReinforcedDirectional",
+      "reason": "native directional window preserving separate edges",
+      "native_variants": [
+        "WindowReinforcedDirectional"
+      ],
+      "source_instances": 163
+    },
+    "/obj/structure/window/reinforced": {
+      "prototype": "WindowReinforcedDirectional",
+      "reason": "native directional window preserving separate edges",
+      "native_variants": [
+        "WindowReinforcedDirectional"
+      ],
+      "source_instances": 4
+    },
+    "/turf/closed/wall": {
+      "prototype": "WallSolid",
+      "reason": "wall",
+      "native_variants": [
+        "WallSolid"
+      ],
+      "source_instances": 1552
+    },
+    "/turf/closed/wall/indestructible/bulkhead": {
+      "prototype": "WallReinforced",
+      "reason": "reinforced wall",
+      "native_variants": [
+        "WallReinforced"
+      ],
+      "source_instances": 1314
+    },
+    "/turf/open/floor": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 2755
+    },
+    "/turf/open/floor/engine": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 827
+    },
+    "/turf/open/floor/grimy": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 1180
+    },
+    "/turf/open/floor/plating": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 1814
+    },
+    "/turf/open/floor/plating/asteroidfloor": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 8
+    },
+    "/turf/open/floor/plating/asteroidwarning": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 128
+    },
+    "/turf/open/floor/tile/bar": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 32
+    },
+    "/turf/open/floor/tile/blue/whitebluecorner": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 168
+    },
+    "/turf/open/floor/tile/brown": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 352
+    },
+    "/turf/open/floor/tile/dark/yellow2": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 360
+    },
+    "/turf/open/floor/tile/darkgreen/darkgreen2": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 320
+    },
+    "/turf/open/floor/tile/darkish": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 90
+    },
+    "/turf/open/floor/tile/green/full": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 54
+    },
+    "/turf/open/floor/tile/purple/whitepurple": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 96
+    },
+    "/turf/open/floor/tile/purple/whitepurplefull": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 72
+    },
+    "/turf/open/floor/tile/red/full": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 134
+    },
+    "/turf/open/floor/tile/red/yellowfull": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 48
+    },
+    "/turf/open/floor/tile/vault": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 318
+    },
+    "/turf/open/floor/tile/white": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 48
+    },
+    "/turf/open/floor/tile/whiteyellow": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 48
+    },
+    "/turf/open/floor/wood": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 144
+    },
+    "/turf/open/liquid/water/river": {
+      "prototype": "FloorWaterEntity",
+      "reason": "native water with movement slowdown and drawable water",
+      "native_variants": [
+        "FloorWaterEntity"
+      ],
+      "source_instances": 60
+    },
+    "/turf/open/liquid/water/river/deep": {
+      "prototype": "FloorWaterEntity",
+      "reason": "native water with movement slowdown and drawable water",
+      "native_variants": [
+        "FloorWaterEntity"
+      ],
+      "source_instances": 54
+    },
+    "/turf/open/space/basic": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 13524
+    }
+  },
+  "profile": "Local mapping sandbox: breathable atmosphere; gravity; unrestricted, independently powered APC devices; no TGMC game rules."
+}

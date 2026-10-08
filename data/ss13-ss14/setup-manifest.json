@@ -1,0 +1,35 @@
+{
+  "ss14_commit": "07c0caa76bf941d2a5ed53b827c0bc25f16eb162",
+  "tgmc_commit": "d17228095d2bbc94359acaf7421119a60c672261",
+  "engine": "292.0.0",
+  "ports": {
+    "Tyson_Station": {
+      "path": "/home/adminis/Documents/Data/Projects/SS14/Resources/Maps/TGMC/Tyson_Station.yml",
+      "sha256": "1d8fb52d67d0ed6a694c8214f80a49f8a9101abfcda544ea67efa0ec8db748c8",
+      "objects": 10366,
+      "lattice_support_cells": 309
+    },
+    "Port_Hamburg": {
+      "path": "/home/adminis/Documents/Data/Projects/SS14/Resources/Maps/TGMC/Port_Hamburg.yml",
+      "sha256": "5305708d9d2d4c8c7a4ea481d0fa6e6d02a6d7e91d59c9b686d8fc94c315453f",
+      "objects": 37304,
+      "lattice_support_cells": 4
+    },
+    "SS_Ourang_Medan": {
+      "path": "/home/adminis/Documents/Data/Projects/SS14/Resources/Maps/TGMC/SS_Ourang_Medan.yml",
+      "sha256": "36fb6741afb0a278e9740038497def7361939f9534eb5ef5569f3cb0c542424f",
+      "objects": 6606,
+      "lattice_support_cells": 165
+    },
+    "Vapor_Processing": {
+      "path": "/home/adminis/Documents/Data/Projects/SS14/Resources/Maps/TGMC/Vapor_Processing.yml",
+      "sha256": "5247f64edf7987298dc35b983adaf1192eda398be838cd665081ff8aee5f56fd",
+      "objects": 4854,
+      "lattice_support_cells": 0
+    }
+  },
+  "hosting": "127.0.0.1:1212",
+  "profile": "Native SS14 Sandbox; independent APC device power; TGMC game modes not recreated",
+  "verified": "All four: native load/save/mapinit, identical tiles/entity counts/world transforms. Sandbox station loading and Vapor client human connection verified.",
+  "editor_startup_verified": "Tiny breathable Mapping starting area: station created, server Ready, no errors, clean shutdown."
+}

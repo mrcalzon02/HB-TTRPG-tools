@@ -1,0 +1,14 @@
+{
+  "map_name": "SS Ourang Medan",
+  "map_path": "map_files/SS_Ourang_Medan",
+  "map_file": "SS_Ourang_Medan.dmm",
+  "traits": [
+    {
+      "No Parallax": true,
+      "Baseturf": "/turf/open/floor/plating"
+    }
+  ],
+  "disk_sets": {
+    "basic": 1
+  }
+}

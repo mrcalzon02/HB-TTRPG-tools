@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-07",
+  "file": "low-power-system-setup-archive-2026-10-07.zip",
+  "bytes": 910367,
+  "sha256": "a4f6faa2474f796e7a0d8c01ba9645cbd2e9318336dc1f4b42831cfb11937a31",
+  "contents": [
+    "START-HERE.md",
+    "catalog/REINSTALL.md",
+    "catalog/catalog.json",
+    "catalog/catalog.tsv",
+    "catalog/installed-flatpak-apps.json",
+    "catalog/installed-system-packages.json",
+    "catalog/installed-system-packages.tsv",
+    "catalog/manual-package-names.txt",
+    "setup-bundles/ss14-map-dev-linux.tar.gz",
+    "setup-bundles/ss14-map-dev-linux.tar.gz.sha256",
+    "setup-bundles/tgmc-map-dev-linux.tar.gz",
+    "setup-bundles/tgmc-map-dev-linux.tar.gz.sha256"
+  ],
+  "scope": "Setup records and map installers; not a complete OS/application/media backup"
+}

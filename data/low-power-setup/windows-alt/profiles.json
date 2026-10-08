@@ -1,0 +1,31 @@
+{
+  "Essentials": [
+    "7zip.7zip",
+    "VideoLAN.VLC",
+    "calibre.calibre",
+    "KeePassXCTeam.KeePassXC"
+  ],
+  "Utilities": [
+    "Mozilla.Firefox",
+    "TheDocumentFoundation.LibreOffice",
+    "Audacity.Audacity",
+    "HandBrake.HandBrake",
+    "WinMerge.WinMerge"
+  ],
+  "Retro": [
+    "DOSBoxStaging.DOSBoxStaging",
+    "ScummVM.ScummVM",
+    "OpenTTD.OpenTTD",
+    "Wesnoth.BattleForWesnoth"
+  ],
+  "Emulators": [
+    "Libretro.RetroArch",
+    "PPSSPPTeam.PPSSPP"
+  ],
+  "Development": [
+    "Git.Git",
+    "Python.Python.3.12",
+    "Microsoft.VCRedist.2015+.x86",
+    "Microsoft.VCRedist.2015+.x64"
+  ]
+}

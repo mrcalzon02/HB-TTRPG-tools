@@ -1,0 +1,119 @@
+- type: gameMap
+  id: TGMCTysonStation
+  mapName: Tyson Station (Local TGMC port)
+  mapPath: /Maps/TGMC/Tyson_Station.yml
+  minPlayers: 0
+  stations:
+    TGMCTysonStation:
+      stationProto: StandardNanotrasenStation
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: Tyson Station
+      - type: StationJobs
+        availableJobs:
+          Passenger:
+          - -1
+          - -1
+          Captain:
+          - 1
+          - 1
+          StationEngineer:
+          - 4
+          - 4
+          MedicalDoctor:
+          - 4
+          - 4
+- type: gameMap
+  id: TGMCPortHamburg
+  mapName: Port Hamburg (Local TGMC port)
+  mapPath: /Maps/TGMC/Port_Hamburg.yml
+  minPlayers: 0
+  stations:
+    TGMCPortHamburg:
+      stationProto: StandardNanotrasenStation
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: Port Hamburg
+      - type: StationJobs
+        availableJobs:
+          Passenger:
+          - -1
+          - -1
+          Captain:
+          - 1
+          - 1
+          StationEngineer:
+          - 4
+          - 4
+          MedicalDoctor:
+          - 4
+          - 4
+- type: gameMap
+  id: TGMCSSOurangMedan
+  mapName: SS Ourang Medan (Local TGMC port)
+  mapPath: /Maps/TGMC/SS_Ourang_Medan.yml
+  minPlayers: 0
+  stations:
+    TGMCSSOurangMedan:
+      stationProto: StandardNanotrasenStation
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: SS Ourang Medan
+      - type: StationJobs
+        availableJobs:
+          Passenger:
+          - -1
+          - -1
+          Captain:
+          - 1
+          - 1
+          StationEngineer:
+          - 4
+          - 4
+          MedicalDoctor:
+          - 4
+          - 4
+- type: gameMap
+  id: TGMCVaporProcessing
+  mapName: Vapor Processing (Local TGMC port)
+  mapPath: /Maps/TGMC/Vapor_Processing.yml
+  minPlayers: 0
+  stations:
+    TGMCVaporProcessing:
+      stationProto: StandardNanotrasenStation
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: Vapor Processing
+      - type: StationJobs
+        availableJobs:
+          Passenger:
+          - -1
+          - -1
+          Captain:
+          - 1
+          - 1
+          StationEngineer:
+          - 4
+          - 4
+          MedicalDoctor:
+          - 4
+          - 4
+- type: gameMap
+  id: TGMCMappingsDepot
+  mapName: Mapping starting area
+  mapPath: /Maps/TGMC/MappingLobby.yml
+  minPlayers: 0
+  stations:
+    Empty:
+      stationProto: StandardNanotrasenStation
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: Mapping starting area
+      - type: StationJobs
+        availableJobs:
+          Captain:
+          - 1
+          - 1
+          Passenger:
+          - -1
+          - -1

@@ -1,0 +1,2863 @@
+{
+  "source": "/home/adminis/Documents/Data/Projects/TGMC/_maps/map_files/Vapor_Processing/Vapor_Processing.dmm",
+  "source_sha256": "8aecf27942b38c779b8529dc5d45a48c0a541e4c694ba036699a608bd5c1be18",
+  "port": "/home/adminis/Documents/Data/Projects/SS14/Resources/Maps/TGMC/Vapor_Processing.yml",
+  "port_sha256": "5247f64edf7987298dc35b983adaf1192eda398be838cd665081ff8aee5f56fd",
+  "size": [
+    100,
+    100,
+    1
+  ],
+  "entities": 4854,
+  "floor_tiles": 6969,
+  "wall_tiles": 3031,
+  "spawn_tile": [
+    50,
+    50
+  ],
+  "added_lattice_support_tiles": [],
+  "native_objects": {
+    "WallRock": 1838,
+    "WallSolid": 904,
+    "WeldingFuelTankFull": 12,
+    "CrateGenericSteel": 103,
+    "Airlock": 79,
+    "AlwaysPoweredWallLight": 146,
+    "WindowDirectional": 52,
+    "LockerSteel": 85,
+    "TableReinforced": 9,
+    "VendingMachineSec": 1,
+    "DrinkWaterBottleFull": 21,
+    "WeaponRifleAk": 10,
+    "Chair": 17,
+    "WaterTankFull": 10,
+    "AlwaysPoweredLightExterior": 34,
+    "Barricade": 54,
+    "VendingMachineCoffee": 4,
+    "VendingMachineSnack": 3,
+    "VendingMachineCigs": 4,
+    "Table": 126,
+    "RadioHandheld": 1,
+    "ComputerCrewMonitoring": 26,
+    "AirlockGlass": 21,
+    "KitchenMicrowave": 3,
+    "ClothingUniformJumpsuitColorGrey": 6,
+    "ToolboxMechanical": 10,
+    "ClothingBackpack": 3,
+    "FloraTree": 292,
+    "APCBasic": 18,
+    "CableApcExtension": 407,
+    "MedkitFilled": 1,
+    "WindowReinforcedDirectional": 33,
+    "Windoor": 6,
+    "Morgue": 3,
+    "GasPipeStraight": 207,
+    "Defibrillator": 4,
+    "VendingMachineMedical": 7,
+    "Biogenerator": 3,
+    "MedicalScanner": 3,
+    "MedicalBed": 2,
+    "OxygenTankFilled": 2,
+    "AirAlarm": 1,
+    "ChemMaster": 2,
+    "WaterCooler": 2,
+    "FlashlightLantern": 1,
+    "GasThermoMachineFreezer": 1,
+    "GasPipeBend": 22,
+    "FenceMetalStraight": 30,
+    "CryoPod": 2,
+    "GasPipeTJunction": 24,
+    "GasPipeStraightAlt1": 1,
+    "ReagentGrinderIndustrial": 1,
+    "Beaker": 3,
+    "Stool": 6,
+    "HydroponicsTrayEmpty": 2,
+    "FireAlarm": 6,
+    "SeedExtractor": 2,
+    "ChemDispenser": 3,
+    "SmartFridgeMedical": 1,
+    "ClothingHandsGlovesColorBlack": 2,
+    "PowerCellRecharger": 1,
+    "ComputerCriminalRecords": 1,
+    "SubstationBasic": 5,
+    "CableTerminal": 5,
+    "GasVentPump": 28,
+    "GeneratorRTG": 4,
+    "ComputerAtmosMonitoring": 2,
+    "filingCabinet": 2,
+    "WeaponCapacitorRecharger": 2,
+    "Rack": 11,
+    "ComputerPowerMonitoring": 4,
+    "Autolathe": 4,
+    "GasPipeFourway": 2,
+    "Bed": 11,
+    "Crowbar": 1,
+    "SheetSteel": 1,
+    "PortableScrubber": 2,
+    "VendingMachineRobotics": 1,
+    "VendingMachineYouTool": 2,
+    "VendingMachineEngivend": 2,
+    "WallMeat": 76,
+    "SpawnPointLatejoin": 1,
+    "SpawnPointObserver": 1,
+    "SpawnPointAnyJob": 1
+  },
+  "types": {
+    "/area/crew_quarters/sleep/bedrooms": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 91
+    },
+    "/area/crew_quarters/sleep_male": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 54
+    },
+    "/area/lv624/ground/caves/central1": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 467
+    },
+    "/area/lv624/ground/caves/central2": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 768
+    },
+    "/area/lv624/ground/caves/east1": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 785
+    },
+    "/area/lv624/ground/caves/west1": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 457
+    },
+    "/area/lv624/ground/compound/c": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 468
+    },
+    "/area/lv624/ground/compound/n": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 438
+    },
+    "/area/lv624/ground/compound/se": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 779
+    },
+    "/area/lv624/ground/compound/sw": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 252
+    },
+    "/area/lv624/lazarus/canteen": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 121
+    },
+    "/area/lv624/lazarus/comms": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 92
+    },
+    "/area/lv624/lazarus/engineering": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 319
+    },
+    "/area/lv624/lazarus/fitness": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 75
+    },
+    "/area/lv624/lazarus/hydroponics": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 48
+    },
+    "/area/lv624/lazarus/internal_affairs": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 64
+    },
+    "/area/lv624/lazarus/medbay": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 99
+    },
+    "/area/lv624/lazarus/quart": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 72
+    },
+    "/area/lv624/lazarus/quartstorage": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 34
+    },
+    "/area/lv624/lazarus/research": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 292
+    },
+    "/area/lv624/lazarus/robotics": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 24
+    },
+    "/area/lv624/lazarus/security": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 71
+    },
+    "/area/maintenance/apmaint": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 174
+    },
+    "/area/maintenance/substation": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 100
+    },
+    "/area/medical/medbay2": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 88
+    },
+    "/area/shuttle/drop1/lz1": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 651
+    },
+    "/area/shuttle/drop2/lz2": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 669
+    },
+    "/area/space": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 510
+    },
+    "/area/storage/tools": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 232
+    },
+    "/area/vapor_processing/cargo2": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 42
+    },
+    "/area/vapor_processing/cargo3": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 81
+    },
+    "/area/vapor_processing/cargo_maint_s": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 224
+    },
+    "/area/vapor_processing/caves/se": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 205
+    },
+    "/area/vapor_processing/east_compound": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 305
+    },
+    "/area/vapor_processing/south_compound": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 646
+    },
+    "/area/vapor_processing/west_compound": {
+      "prototype": null,
+      "reason": "area metadata retained in conversion record",
+      "native_variants": [],
+      "source_instances": 203
+    },
+    "/obj/docking_port/stationary/crashmode": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/docking_port/stationary/marine_dropship/lz1": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/docking_port/stationary/marine_dropship/lz2": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/ai_node": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 383
+    },
+    "/obj/effect/decal/cleanable/blood": {
+      "prototype": null,
+      "reason": "cosmetic or TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 52
+    },
+    "/obj/effect/decal/cleanable/blood/gibs/xeno": {
+      "prototype": null,
+      "reason": "cosmetic or TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/effect/decal/cleanable/blood/oil": {
+      "prototype": null,
+      "reason": "cosmetic or TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 12
+    },
+    "/obj/effect/decal/cleanable/blood/xeno": {
+      "prototype": null,
+      "reason": "cosmetic or TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/decal/cleanable/blood/xtracks": {
+      "prototype": null,
+      "reason": "cosmetic or TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 4
+    },
+    "/obj/effect/decal/cleanable/dirt": {
+      "prototype": null,
+      "reason": "cosmetic or TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 7
+    },
+    "/obj/effect/landmark/corpsespawner/chef": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/effect/landmark/corpsespawner/doctor": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 10
+    },
+    "/obj/effect/landmark/corpsespawner/engineer": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 10
+    },
+    "/obj/effect/landmark/corpsespawner/engineer/rig": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/corpsespawner/miner": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 11
+    },
+    "/obj/effect/landmark/corpsespawner/miner/rig": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/corpsespawner/prisoner": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/corpsespawner/scientist": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 13
+    },
+    "/obj/effect/landmark/corpsespawner/security": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 12
+    },
+    "/obj/effect/landmark/corpsespawner/syndicatecommando": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/corpsespawner/syndicatesoldier": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/dropship_start_location": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/itemspawner/butler": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/lv624/fog_blocker": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 30
+    },
+    "/obj/effect/landmark/lv624/fog_blocker/xeno_spawn": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 94
+    },
+    "/obj/effect/landmark/nuke_spawn": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/patrol_point/som/som_11": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/patrol_point/som/som_21": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/patrol_point/tgmc_11": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/patrol_point/tgmc_21": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/patrol_point/xeno/xeno_11": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/patrol_point/xeno/xeno_21": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/landmark/start/job/survivor": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 12
+    },
+    "/obj/effect/landmark/start/job/xenomorph": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 18
+    },
+    "/obj/effect/landmark/supplyspawner/food": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/effect/landmark/weed_node": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 28
+    },
+    "/obj/effect/landmark/xeno_resin_door": {
+      "prototype": "Airlock",
+      "reason": "native door preserving original resin doorway",
+      "native_variants": [
+        "Airlock"
+      ],
+      "source_instances": 12
+    },
+    "/obj/effect/landmark/xeno_resin_wall": {
+      "prototype": "WallMeat",
+      "reason": "native resin obstacle preserving original wall footprint",
+      "native_variants": [
+        "WallMeat"
+      ],
+      "source_instances": 76
+    },
+    "/obj/effect/landmark/xeno_silo_spawn": {
+      "prototype": null,
+      "reason": "TGMC game marker omitted; native SS14 spawn points added",
+      "native_variants": [],
+      "source_instances": 4
+    },
+    "/obj/effect/spawner/random/clothing/sunglasses": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/spawner/random/engineering/bomb_supply": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 5
+    },
+    "/obj/effect/spawner/random/engineering/ore_box": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 5
+    },
+    "/obj/effect/spawner/random/engineering/powercell": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 4
+    },
+    "/obj/effect/spawner/random/engineering/tech_supply": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 21
+    },
+    "/obj/effect/spawner/random/engineering/technology_scanner": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/effect/spawner/random/engineering/tool": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 5
+    },
+    "/obj/effect/spawner/random/engineering/toolbox": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 14
+    },
+    "/obj/effect/spawner/random/food_or_drink/kitchenknife": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/spawner/random/machinery/random_broken_computer/crewmonitor": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/spawner/random/machinery/random_broken_computer/small/comms": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/spawner/random/misc/cigarettes": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/spawner/random/misc/paperbin": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/spawner/random/weaponry/ammo/shotgun": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/effect/turf_decal/warning_stripes": {
+      "prototype": null,
+      "reason": "TGMC-only effect recorded",
+      "native_variants": [],
+      "source_instances": 7
+    },
+    "/obj/item/alien_embryo": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 7
+    },
+    "/obj/item/bedsheet/blue": {
+      "prototype": "Bed",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Bed"
+      ],
+      "source_instances": 2
+    },
+    "/obj/item/binoculars": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/clothing/gloves/botanic_leather": {
+      "prototype": "ClothingHandsGlovesColorBlack",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ClothingHandsGlovesColorBlack"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/clothing/gloves/insulated": {
+      "prototype": "ClothingHandsGlovesColorBlack",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ClothingHandsGlovesColorBlack"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/clothing/mask/breath/medical": {
+      "prototype": "ClothingUniformJumpsuitColorGrey",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ClothingUniformJumpsuitColorGrey"
+      ],
+      "source_instances": 2
+    },
+    "/obj/item/clothing/suit/armor/det_suit": {
+      "prototype": "ClothingUniformJumpsuitColorGrey",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ClothingUniformJumpsuitColorGrey"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/clothing/under/CM_uniform": {
+      "prototype": "ClothingUniformJumpsuitColorGrey",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ClothingUniformJumpsuitColorGrey"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/clothing/under/colonist": {
+      "prototype": "ClothingUniformJumpsuitColorGrey",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ClothingUniformJumpsuitColorGrey"
+      ],
+      "source_instances": 2
+    },
+    "/obj/item/defibrillator": {
+      "prototype": "Defibrillator",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Defibrillator"
+      ],
+      "source_instances": 4
+    },
+    "/obj/item/flash": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/flashlight/lamp": {
+      "prototype": "FlashlightLantern",
+      "reason": "native equivalent",
+      "native_variants": [
+        "FlashlightLantern"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/folder/red": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/healthanalyzer": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/item/pizzabox/meat": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/item/radio": {
+      "prototype": "RadioHandheld",
+      "reason": "native equivalent",
+      "native_variants": [
+        "RadioHandheld"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/cup/glass/drinkingglass": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 4
+    },
+    "/obj/item/reagent_containers/food/condiment/peppermill": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/food/condiment/saltshaker": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/food/condiment/sugar": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/food/drinks/bottle/bluecuracao": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/food/drinks/bottle/goldschlager": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/food/drinks/bottle/patron": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/food/drinks/bottle/whiskey": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 2
+    },
+    "/obj/item/reagent_containers/food/drinks/flask": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/food/drinks/shaker": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/glass/beaker": {
+      "prototype": "Beaker",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Beaker"
+      ],
+      "source_instances": 2
+    },
+    "/obj/item/reagent_containers/glass/beaker/large": {
+      "prototype": "Beaker",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Beaker"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/glass/bucket": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 2
+    },
+    "/obj/item/reagent_containers/glass/rag": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/hypospray": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/hypospray/advanced": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/spray": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_containers/spray/cleaner": {
+      "prototype": "DrinkWaterBottleFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "DrinkWaterBottleFull"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/reagent_scanner": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/restraints/handcuffs": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/rsf": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/rsp": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/stack/medical/heal_pack/gauze": {
+      "prototype": "SheetSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "SheetSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/stool": {
+      "prototype": "Stool",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Stool"
+      ],
+      "source_instances": 6
+    },
+    "/obj/item/storage/backpack/satchel/med": {
+      "prototype": "ClothingBackpack",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ClothingBackpack"
+      ],
+      "source_instances": 3
+    },
+    "/obj/item/storage/box/donkpockets": {
+      "prototype": "ToolboxMechanical",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ToolboxMechanical"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/storage/box/gloves": {
+      "prototype": "ToolboxMechanical",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ToolboxMechanical"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/storage/donut_box": {
+      "prototype": "ToolboxMechanical",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ToolboxMechanical"
+      ],
+      "source_instances": 3
+    },
+    "/obj/item/storage/fancy/candle_box": {
+      "prototype": "ToolboxMechanical",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ToolboxMechanical"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/storage/firstaid/adv": {
+      "prototype": "MedkitFilled",
+      "reason": "native equivalent",
+      "native_variants": [
+        "MedkitFilled"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/storage/kitchen_tray": {
+      "prototype": "ToolboxMechanical",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ToolboxMechanical"
+      ],
+      "source_instances": 2
+    },
+    "/obj/item/storage/surgical_tray": {
+      "prototype": "ToolboxMechanical",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ToolboxMechanical"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/storage/syringe_case/burn": {
+      "prototype": "ToolboxMechanical",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ToolboxMechanical"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/tank/anesthetic": {
+      "prototype": "OxygenTankFilled",
+      "reason": "native equivalent",
+      "native_variants": [
+        "OxygenTankFilled"
+      ],
+      "source_instances": 2
+    },
+    "/obj/item/taperecorder": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/tool/analyzer/plant_analyzer": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/item/tool/crowbar": {
+      "prototype": "Crowbar",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Crowbar"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/tool/kitchen/rollingpin": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/tool/lighter/random": {
+      "prototype": "AlwaysPoweredWallLight",
+      "reason": "native equivalent",
+      "native_variants": [
+        "AlwaysPoweredWallLight"
+      ],
+      "source_instances": 1
+    },
+    "/obj/item/tool/mop": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/item/tool/pen": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/tool/surgery/FixOVein": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/tool/surgery/bonegel": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/tool/surgery/bonesetter": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/tool/surgery/cautery": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/item/tool/surgery/circular_saw": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/tool/surgery/hemostat": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/tool/surgery/retractor": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/tool/surgery/scalpel": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/tool/surgery/surgicaldrill": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/item/toy/deck": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/item/weapon/gun/flamer/hydro_cannon": {
+      "prototype": "WeaponRifleAk",
+      "reason": "native equivalent",
+      "native_variants": [
+        "WeaponRifleAk"
+      ],
+      "source_instances": 6
+    },
+    "/obj/item/weapon/gun/pistol/holdout": {
+      "prototype": "WeaponRifleAk",
+      "reason": "native equivalent",
+      "native_variants": [
+        "WeaponRifleAk"
+      ],
+      "source_instances": 2
+    },
+    "/obj/item/weapon/gun/shotgun/pump/cmb": {
+      "prototype": "WeaponRifleAk",
+      "reason": "native equivalent",
+      "native_variants": [
+        "WeaponRifleAk"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/air_alarm": {
+      "prototype": "AirAlarm",
+      "reason": "native equivalent",
+      "native_variants": [
+        "AirAlarm"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/apiary": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/machinery/atm": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/machinery/atmospherics/components/unary/cryo_cell": {
+      "prototype": "CryoPod",
+      "reason": "native atmos machine; pipe routing requires SS14 redesign",
+      "native_variants": [
+        "CryoPod"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/atmospherics/components/unary/tank/oxygen": {
+      "prototype": null,
+      "reason": "TGMC atmos device requires manual redesign; not replaced by a misleading prop",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/machinery/atmospherics/components/unary/thermomachine/freezer": {
+      "prototype": "GasThermoMachineFreezer",
+      "reason": "native atmos machine; pipe routing requires SS14 redesign",
+      "native_variants": [
+        "GasThermoMachineFreezer"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/atmospherics/components/unary/vent_pump/layer1": {
+      "prototype": "GasVentPump",
+      "reason": "native vent",
+      "native_variants": [
+        "GasVentPump"
+      ],
+      "source_instances": 28
+    },
+    "/obj/machinery/atmospherics/pipe/manifold/general/visible": {
+      "prototype": "GasPipeTJunction",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeTJunction"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer1": {
+      "prototype": "GasPipeTJunction",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeTJunction"
+      ],
+      "source_instances": 22
+    },
+    "/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden/layer1": {
+      "prototype": "GasPipeFourway",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeFourway"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/atmospherics/pipe/simple/general/visible": {
+      "prototype": "GasPipeStraight",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeBend"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden": {
+      "prototype": "GasPipeStraightAlt1",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeStraightAlt1"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1": {
+      "prototype": "GasPipeStraight",
+      "reason": "native gas pipe",
+      "native_variants": [
+        "GasPipeStraight",
+        "GasPipeBend"
+      ],
+      "source_instances": 227
+    },
+    "/obj/machinery/biogenerator": {
+      "prototype": "Biogenerator",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Biogenerator"
+      ],
+      "source_instances": 3
+    },
+    "/obj/machinery/bioprinter": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/machinery/bodyscanner": {
+      "prototype": "MedicalScanner",
+      "reason": "native equivalent",
+      "native_variants": [
+        "MedicalScanner"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/camera": {
+      "prototype": null,
+      "reason": "candidate SurveillanceCamera unavailable; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/machinery/camera/autoname/lz_camera": {
+      "prototype": null,
+      "reason": "candidate SurveillanceCamera unavailable; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 12
+    },
+    "/obj/machinery/cell_charger": {
+      "prototype": "PowerCellRecharger",
+      "reason": "native equivalent",
+      "native_variants": [
+        "PowerCellRecharger"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/chem_dispenser": {
+      "prototype": "ChemDispenser",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ChemDispenser"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/chem_dispenser/beer": {
+      "prototype": "ChemDispenser",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ChemDispenser"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/chem_dispenser/soda": {
+      "prototype": "ChemDispenser",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ChemDispenser"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/chem_master": {
+      "prototype": "ChemMaster",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ChemMaster"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/chem_master/condimaster": {
+      "prototype": "ChemMaster",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ChemMaster"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/colony_floodlight_switch": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/aifixer": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/area_atmos": {
+      "prototype": "ComputerAtmosMonitoring",
+      "reason": "native console; uses SS14 station systems",
+      "native_variants": [
+        "ComputerAtmosMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/atmos_alert": {
+      "prototype": "ComputerAtmosMonitoring",
+      "reason": "native console; uses SS14 station systems",
+      "native_variants": [
+        "ComputerAtmosMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/body_scanconsole": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/forensic_scanning": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/general_air_control": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/guestpass": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/intel_computer": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/computer/mecha": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/med_data": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/computer/med_data/laptop": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/operating": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/pandemic": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/prisoner": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/robotics": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/secure_data": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/security": {
+      "prototype": "ComputerCriminalRecords",
+      "reason": "native console; uses SS14 station systems",
+      "native_variants": [
+        "ComputerCriminalRecords"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/shuttle/shuttle_control": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/computer/sleep_console": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/computer/station_alert": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/telecomms/monitor": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/computer/telecomms/server": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/door/airlock/glass": {
+      "prototype": "AirlockGlass",
+      "reason": "interactive glass airlock",
+      "native_variants": [
+        "AirlockGlass"
+      ],
+      "source_instances": 8
+    },
+    "/obj/machinery/door/airlock/glass_command": {
+      "prototype": "AirlockGlass",
+      "reason": "interactive glass airlock",
+      "native_variants": [
+        "AirlockGlass"
+      ],
+      "source_instances": 3
+    },
+    "/obj/machinery/door/airlock/glass_engineering": {
+      "prototype": "AirlockGlass",
+      "reason": "interactive glass airlock",
+      "native_variants": [
+        "AirlockGlass"
+      ],
+      "source_instances": 9
+    },
+    "/obj/machinery/door/airlock/mainship/generic": {
+      "prototype": "Airlock",
+      "reason": "interactive airlock",
+      "native_variants": [
+        "Airlock"
+      ],
+      "source_instances": 9
+    },
+    "/obj/machinery/door/airlock/medical": {
+      "prototype": "Airlock",
+      "reason": "interactive airlock",
+      "native_variants": [
+        "Airlock"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/door/airlock/multi_tile/mainship/engineering": {
+      "prototype": "Airlock",
+      "reason": "interactive airlock",
+      "native_variants": [
+        "Airlock"
+      ],
+      "source_instances": 4
+    },
+    "/obj/machinery/door/airlock/multi_tile/mainship/generic": {
+      "prototype": "Airlock",
+      "reason": "interactive airlock",
+      "native_variants": [
+        "Airlock"
+      ],
+      "source_instances": 32
+    },
+    "/obj/machinery/door/airlock/multi_tile/mainship/medidoor": {
+      "prototype": "Airlock",
+      "reason": "interactive airlock",
+      "native_variants": [
+        "Airlock"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/door/airlock/multi_tile/mainship/secdoor/glass": {
+      "prototype": "AirlockGlass",
+      "reason": "interactive glass airlock",
+      "native_variants": [
+        "AirlockGlass"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/door/poddoor/mainship": {
+      "prototype": "Airlock",
+      "reason": "interactive door replacement",
+      "native_variants": [
+        "Airlock"
+      ],
+      "source_instances": 20
+    },
+    "/obj/machinery/door/window": {
+      "prototype": "Windoor",
+      "reason": "interactive windoor",
+      "native_variants": [
+        "Windoor"
+      ],
+      "source_instances": 6
+    },
+    "/obj/machinery/door_control": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/machinery/firealarm": {
+      "prototype": "FireAlarm",
+      "reason": "native equivalent",
+      "native_variants": [
+        "FireAlarm"
+      ],
+      "source_instances": 6
+    },
+    "/obj/machinery/floodlight/colony": {
+      "prototype": "AlwaysPoweredLightExterior",
+      "reason": "native equivalent",
+      "native_variants": [
+        "AlwaysPoweredLightExterior"
+      ],
+      "source_instances": 24
+    },
+    "/obj/machinery/floodlight/landing": {
+      "prototype": "AlwaysPoweredLightExterior",
+      "reason": "native equivalent",
+      "native_variants": [
+        "AlwaysPoweredLightExterior"
+      ],
+      "source_instances": 10
+    },
+    "/obj/machinery/gibber": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/machinery/hydroponics": {
+      "prototype": "HydroponicsTrayEmpty",
+      "reason": "native equivalent",
+      "native_variants": [
+        "HydroponicsTrayEmpty"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/iv_drip": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/machinery/landinglight/lz1": {
+      "prototype": null,
+      "reason": "candidate AlwaysPoweredSmallLight unavailable; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 72
+    },
+    "/obj/machinery/landinglight/lz2": {
+      "prototype": null,
+      "reason": "candidate AlwaysPoweredSmallLight unavailable; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 64
+    },
+    "/obj/machinery/lapvend": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/machinery/light": {
+      "prototype": "AlwaysPoweredWallLight",
+      "reason": "native equivalent",
+      "native_variants": [
+        "AlwaysPoweredWallLight"
+      ],
+      "source_instances": 143
+    },
+    "/obj/machinery/light/small": {
+      "prototype": "AlwaysPoweredWallLight",
+      "reason": "native equivalent",
+      "native_variants": [
+        "AlwaysPoweredWallLight"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/mech_bay_recharge_port": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/machinery/microwave": {
+      "prototype": "KitchenMicrowave",
+      "reason": "native equivalent",
+      "native_variants": [
+        "KitchenMicrowave"
+      ],
+      "source_instances": 3
+    },
+    "/obj/machinery/miner/damaged": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/machinery/miner/damaged/platinum": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/machinery/optable": {
+      "prototype": "MedicalBed",
+      "reason": "native equivalent",
+      "native_variants": [
+        "MedicalBed"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/photocopier": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/machinery/pipedispenser": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/machinery/portable_atmospherics/pump": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/machinery/portable_atmospherics/scrubber": {
+      "prototype": "PortableScrubber",
+      "reason": "native equivalent",
+      "native_variants": [
+        "PortableScrubber"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/power/apc/drained": {
+      "prototype": "APCBasic",
+      "reason": "native equivalent",
+      "native_variants": [
+        "APCBasic"
+      ],
+      "source_instances": 18
+    },
+    "/obj/machinery/power/geothermal": {
+      "prototype": "GeneratorRTG",
+      "reason": "native equivalent",
+      "native_variants": [
+        "GeneratorRTG"
+      ],
+      "source_instances": 4
+    },
+    "/obj/machinery/power/monitor": {
+      "prototype": "ComputerPowerMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerPowerMonitoring"
+      ],
+      "source_instances": 4
+    },
+    "/obj/machinery/power/smes/buildable": {
+      "prototype": "SubstationBasic",
+      "reason": "native equivalent",
+      "native_variants": [
+        "SubstationBasic"
+      ],
+      "source_instances": 5
+    },
+    "/obj/machinery/power/terminal": {
+      "prototype": "CableTerminal",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CableTerminal"
+      ],
+      "source_instances": 5
+    },
+    "/obj/machinery/processor": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/machinery/prop/autolathe": {
+      "prototype": "Autolathe",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Autolathe"
+      ],
+      "source_instances": 4
+    },
+    "/obj/machinery/prop/computer/rdconsole": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/prop/computer/rdservercontrol": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/reagentgrinder": {
+      "prototype": "ReagentGrinderIndustrial",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ReagentGrinderIndustrial"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/recharge_station": {
+      "prototype": "WeaponCapacitorRecharger",
+      "reason": "native equivalent",
+      "native_variants": [
+        "WeaponCapacitorRecharger"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/recharger": {
+      "prototype": "WeaponCapacitorRecharger",
+      "reason": "native equivalent",
+      "native_variants": [
+        "WeaponCapacitorRecharger"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/robotic_fabricator": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/obj/machinery/seed_extractor": {
+      "prototype": "SeedExtractor",
+      "reason": "native equivalent",
+      "native_variants": [
+        "SeedExtractor"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/sleeper": {
+      "prototype": "MedicalScanner",
+      "reason": "native equivalent",
+      "native_variants": [
+        "MedicalScanner"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/smartfridge": {
+      "prototype": "SmartFridgeMedical",
+      "reason": "native equivalent",
+      "native_variants": [
+        "SmartFridgeMedical"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/vending/MarineMed/Blood": {
+      "prototype": "VendingMachineMedical",
+      "reason": "native stocked vendor",
+      "native_variants": [
+        "VendingMachineMedical"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/vending/cigarette": {
+      "prototype": "VendingMachineCigs",
+      "reason": "native stocked vendor",
+      "native_variants": [
+        "VendingMachineCigs"
+      ],
+      "source_instances": 3
+    },
+    "/obj/machinery/vending/cigarette/colony": {
+      "prototype": "VendingMachineCigs",
+      "reason": "native stocked vendor",
+      "native_variants": [
+        "VendingMachineCigs"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/vending/coffee": {
+      "prototype": "VendingMachineCoffee",
+      "reason": "native stocked vendor",
+      "native_variants": [
+        "VendingMachineCoffee"
+      ],
+      "source_instances": 4
+    },
+    "/obj/machinery/vending/engineering": {
+      "prototype": "VendingMachineEngivend",
+      "reason": "native stocked vendor",
+      "native_variants": [
+        "VendingMachineEngivend"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/vending/engivend": {
+      "prototype": "VendingMachineEngivend",
+      "reason": "native stocked vendor",
+      "native_variants": [
+        "VendingMachineEngivend"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/vending/medical": {
+      "prototype": "VendingMachineMedical",
+      "reason": "native stocked vendor",
+      "native_variants": [
+        "VendingMachineMedical"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/vending/nanomed": {
+      "prototype": "VendingMachineMedical",
+      "reason": "native stocked vendor",
+      "native_variants": [
+        "VendingMachineMedical"
+      ],
+      "source_instances": 5
+    },
+    "/obj/machinery/vending/robotics": {
+      "prototype": "VendingMachineRobotics",
+      "reason": "native stocked vendor",
+      "native_variants": [
+        "VendingMachineRobotics"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/vending/security": {
+      "prototype": "VendingMachineSec",
+      "reason": "native stocked vendor",
+      "native_variants": [
+        "VendingMachineSec"
+      ],
+      "source_instances": 1
+    },
+    "/obj/machinery/vending/snack": {
+      "prototype": "VendingMachineSnack",
+      "reason": "native stocked vendor replacement",
+      "native_variants": [
+        "VendingMachineSnack"
+      ],
+      "source_instances": 3
+    },
+    "/obj/machinery/vending/tool": {
+      "prototype": "VendingMachineYouTool",
+      "reason": "native stocked vendor",
+      "native_variants": [
+        "VendingMachineYouTool"
+      ],
+      "source_instances": 2
+    },
+    "/obj/machinery/washing_machine": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/structure/barricade/wooden": {
+      "prototype": "Barricade",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Barricade"
+      ],
+      "source_instances": 54
+    },
+    "/obj/structure/bed": {
+      "prototype": "Bed",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Bed"
+      ],
+      "source_instances": 8
+    },
+    "/obj/structure/bed/chair": {
+      "prototype": "Chair",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Chair"
+      ],
+      "source_instances": 7
+    },
+    "/obj/structure/bed/chair/office/light": {
+      "prototype": "Chair",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Chair"
+      ],
+      "source_instances": 6
+    },
+    "/obj/structure/bed/chair/wood/wings": {
+      "prototype": "Chair",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Chair"
+      ],
+      "source_instances": 4
+    },
+    "/obj/structure/bed/roller": {
+      "prototype": "Bed",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Bed"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/cable": {
+      "prototype": "CableApcExtension",
+      "reason": "native LV cable",
+      "native_variants": [
+        "CableApcExtension"
+      ],
+      "source_instances": 407
+    },
+    "/obj/structure/cargo_container": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/structure/cargo_container/green": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/structure/cargo_container/horizontal": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/structure/cargo_container/red": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/structure/closet": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 4
+    },
+    "/obj/structure/closet/bodybag": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/bodybag/cryobag": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 4
+    },
+    "/obj/structure/closet/crate": {
+      "prototype": "CrateGenericSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CrateGenericSteel"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/closet/emcloset": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 14
+    },
+    "/obj/structure/closet/fireaxecabinet": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/firecloset": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 14
+    },
+    "/obj/structure/closet/gmcloset": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/jcloset": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 3
+    },
+    "/obj/structure/closet/lawcloset": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/closet/open": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/closet/radiation": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 4
+    },
+    "/obj/structure/closet/secure_closet/CMO": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/RD": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/atmos_personal": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/bar": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/captain": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/chemical": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/detective": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/engineering_electrical": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/closet/secure_closet/engineering_welding": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/freezer/fridge": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/freezer/kitchen": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/hos": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/marshal": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/closet/secure_closet/medical1": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/medical2": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/closet/secure_closet/medical3": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/medical_doctor": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/closet/secure_closet/miner": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/closet/secure_closet/personal": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 5
+    },
+    "/obj/structure/closet/secure_closet/quartermaster": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/closet/secure_closet/scientist": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 3
+    },
+    "/obj/structure/closet/secure_closet/shiptech": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/closet/toolcloset": {
+      "prototype": "LockerSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "LockerSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/computerframe": {
+      "prototype": "ComputerCrewMonitoring",
+      "reason": "native equivalent",
+      "native_variants": [
+        "ComputerCrewMonitoring"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/dispenser": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 22
+    },
+    "/obj/structure/fence": {
+      "prototype": "FenceMetalStraight",
+      "reason": "native equivalent",
+      "native_variants": [
+        "FenceMetalStraight"
+      ],
+      "source_instances": 30
+    },
+    "/obj/structure/filingcabinet": {
+      "prototype": "filingCabinet",
+      "reason": "native equivalent",
+      "native_variants": [
+        "filingCabinet"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/flora/pottedplant/twentytwo": {
+      "prototype": "FloraTree",
+      "reason": "native equivalent",
+      "native_variants": [
+        "FloraTree"
+      ],
+      "source_instances": 3
+    },
+    "/obj/structure/janitorialcart": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/structure/largecrate": {
+      "prototype": "CrateGenericSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CrateGenericSteel"
+      ],
+      "source_instances": 68
+    },
+    "/obj/structure/largecrate/random": {
+      "prototype": "CrateGenericSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CrateGenericSteel"
+      ],
+      "source_instances": 19
+    },
+    "/obj/structure/largecrate/supply/generator": {
+      "prototype": "CrateGenericSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CrateGenericSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/largecrate/supply/machine": {
+      "prototype": "CrateGenericSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CrateGenericSteel"
+      ],
+      "source_instances": 4
+    },
+    "/obj/structure/largecrate/supply/powerloader": {
+      "prototype": "CrateGenericSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CrateGenericSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/largecrate/supply/supplies": {
+      "prototype": "CrateGenericSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CrateGenericSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/largecrate/supply/supplies/flares": {
+      "prototype": "CrateGenericSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CrateGenericSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/largecrate/supply/supplies/mre": {
+      "prototype": "CrateGenericSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CrateGenericSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/largecrate/supply/supplies/plasteel": {
+      "prototype": "CrateGenericSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CrateGenericSteel"
+      ],
+      "source_instances": 1
+    },
+    "/obj/structure/largecrate/supply/supplies/tables_racks": {
+      "prototype": "CrateGenericSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CrateGenericSteel"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/largecrate/supply/supplies/water": {
+      "prototype": "CrateGenericSteel",
+      "reason": "native equivalent",
+      "native_variants": [
+        "CrateGenericSteel"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/morgue": {
+      "prototype": "Morgue",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Morgue"
+      ],
+      "source_instances": 3
+    },
+    "/obj/structure/nuke_disk_candidate": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/obj/structure/powerloader_wreckage": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/structure/prop/mainship/research/mechafab": {
+      "prototype": null,
+      "reason": "no reliable native equivalent; manual replacement listed",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/obj/structure/rack": {
+      "prototype": "Rack",
+      "reason": "native equivalent",
+      "native_variants": [
+        "Rack"
+      ],
+      "source_instances": 11
+    },
+    "/obj/structure/reagent_dispensers/fueltank": {
+      "prototype": "WeldingFuelTankFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "WeldingFuelTankFull"
+      ],
+      "source_instances": 12
+    },
+    "/obj/structure/reagent_dispensers/water_cooler": {
+      "prototype": "WaterCooler",
+      "reason": "native equivalent",
+      "native_variants": [
+        "WaterCooler"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/reagent_dispensers/watertank": {
+      "prototype": "WaterTankFull",
+      "reason": "native equivalent",
+      "native_variants": [
+        "WaterTankFull"
+      ],
+      "source_instances": 10
+    },
+    "/obj/structure/table": {
+      "prototype": "Table",
+      "reason": "native table",
+      "native_variants": [
+        "Table"
+      ],
+      "source_instances": 37
+    },
+    "/obj/structure/table/flipped": {
+      "prototype": "Table",
+      "reason": "native table",
+      "native_variants": [
+        "Table"
+      ],
+      "source_instances": 74
+    },
+    "/obj/structure/table/mainship": {
+      "prototype": "Table",
+      "reason": "native table",
+      "native_variants": [
+        "Table"
+      ],
+      "source_instances": 15
+    },
+    "/obj/structure/table/reinforced": {
+      "prototype": "TableReinforced",
+      "reason": "native table",
+      "native_variants": [
+        "TableReinforced"
+      ],
+      "source_instances": 7
+    },
+    "/obj/structure/table/reinforced/flipped": {
+      "prototype": "TableReinforced",
+      "reason": "native table",
+      "native_variants": [
+        "TableReinforced"
+      ],
+      "source_instances": 2
+    },
+    "/obj/structure/window/framed/colony": {
+      "prototype": "WindowDirectional",
+      "reason": "native directional window preserving separate edges",
+      "native_variants": [
+        "WindowDirectional"
+      ],
+      "source_instances": 42
+    },
+    "/obj/structure/window/framed/wood": {
+      "prototype": "WindowDirectional",
+      "reason": "native directional window preserving separate edges",
+      "native_variants": [
+        "WindowDirectional"
+      ],
+      "source_instances": 4
+    },
+    "/obj/structure/window/reinforced": {
+      "prototype": "WindowReinforcedDirectional",
+      "reason": "native directional window preserving separate edges",
+      "native_variants": [
+        "WindowReinforcedDirectional"
+      ],
+      "source_instances": 33
+    },
+    "/obj/structure/window_frame/wood": {
+      "prototype": "WindowDirectional",
+      "reason": "native directional window preserving separate edges",
+      "native_variants": [
+        "WindowDirectional"
+      ],
+      "source_instances": 6
+    },
+    "/turf/closed/gm/dense": {
+      "prototype": "FloraTree",
+      "reason": "solid jungle obstacle",
+      "native_variants": [
+        "FloraTree"
+      ],
+      "source_instances": 289
+    },
+    "/turf/closed/mineral/smooth": {
+      "prototype": "WallRock",
+      "reason": "native mineable rock",
+      "native_variants": [
+        "WallRock"
+      ],
+      "source_instances": 431
+    },
+    "/turf/closed/mineral/smooth/indestructible": {
+      "prototype": "WallRock",
+      "reason": "native mineable rock",
+      "native_variants": [
+        "WallRock"
+      ],
+      "source_instances": 1407
+    },
+    "/turf/closed/wall": {
+      "prototype": "WallSolid",
+      "reason": "wall",
+      "native_variants": [
+        "WallSolid"
+      ],
+      "source_instances": 840
+    },
+    "/turf/closed/wall/r_wall": {
+      "prototype": "WallSolid",
+      "reason": "wall",
+      "native_variants": [
+        "WallSolid"
+      ],
+      "source_instances": 1
+    },
+    "/turf/closed/wall/wood": {
+      "prototype": "WallSolid",
+      "reason": "wall",
+      "native_variants": [
+        "WallSolid"
+      ],
+      "source_instances": 63
+    },
+    "/turf/open/floor": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 949
+    },
+    "/turf/open/floor/carpet": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 62
+    },
+    "/turf/open/floor/grass": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 1015
+    },
+    "/turf/open/floor/grimy": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 36
+    },
+    "/turf/open/floor/marking/warning": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/turf/open/floor/mech_bay_recharge_floor": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 6
+    },
+    "/turf/open/floor/plating": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 808
+    },
+    "/turf/open/floor/plating/asteroidfloor": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 4
+    },
+    "/turf/open/floor/plating/asteroidwarning": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 53
+    },
+    "/turf/open/floor/plating/asteroidwarning/down": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 11
+    },
+    "/turf/open/floor/plating/dmg1": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 5
+    },
+    "/turf/open/floor/plating/dmg2": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 5
+    },
+    "/turf/open/floor/plating/dmg3": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 10
+    },
+    "/turf/open/floor/plating/ground/dirt": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 10
+    },
+    "/turf/open/floor/prison/sterilewhite": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 47
+    },
+    "/turf/open/floor/prison/whitepurple": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 44
+    },
+    "/turf/open/floor/prison/yellow": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 114
+    },
+    "/turf/open/floor/prison/yellow/full": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 32
+    },
+    "/turf/open/floor/scorched/two": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 164
+    },
+    "/turf/open/floor/tile/bar": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 15
+    },
+    "/turf/open/floor/tile/blue/whiteblue": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 55
+    },
+    "/turf/open/floor/tile/blue/whitebluecorner": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 2
+    },
+    "/turf/open/floor/tile/blue/whitebluefull": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 6
+    },
+    "/turf/open/floor/tile/dark": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 1
+    },
+    "/turf/open/floor/tile/green/greentaupe": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 6
+    },
+    "/turf/open/floor/tile/green/whitegreen": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 63
+    },
+    "/turf/open/floor/tile/green/whitegreenfull": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 3
+    },
+    "/turf/open/floor/tile/red/redtaupe": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 40
+    },
+    "/turf/open/floor/tile/white": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 21
+    },
+    "/turf/open/floor/tile/whiteyellow/corner": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 99
+    },
+    "/turf/open/floor/tile/whiteyellow/full": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 36
+    },
+    "/turf/open/floor/wood": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 103
+    },
+    "/turf/open/floor/wood/broken": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 22
+    },
+    "/turf/open/ground": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 1975
+    },
+    "/turf/open/ground/grass/grass2": {
+      "prototype": null,
+      "reason": "floor/space geometry",
+      "native_variants": [],
+      "source_instances": 1145
+    }
+  },
+  "profile": "Local mapping sandbox: breathable atmosphere; gravity; unrestricted, independently powered APC devices; no TGMC game rules."
+}

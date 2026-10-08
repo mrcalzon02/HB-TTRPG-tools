@@ -1,0 +1,92 @@
+[
+  {
+    "application": "com.discordapp.Discord",
+    "name": "Discord",
+    "version": "1.0.160",
+    "origin": "flathub"
+  },
+  {
+    "application": "com.github.geigi.cozy",
+    "name": "Cozy",
+    "version": "1.3.0",
+    "origin": "flathub"
+  },
+  {
+    "application": "com.github.johnfactotum.Foliate",
+    "name": "Foliate",
+    "version": "3.3.0",
+    "origin": "flathub"
+  },
+  {
+    "application": "im.bernard.Parolu",
+    "name": "Parolu",
+    "version": "0.1.2",
+    "origin": "flathub"
+  },
+  {
+    "application": "io.github.dosbox-staging",
+    "name": "DOSBox Staging",
+    "version": "0.83.0",
+    "origin": "flathub"
+  },
+  {
+    "application": "io.github.sharkwouter.Minigalaxy",
+    "name": "Minigalaxy",
+    "version": "1.4.1",
+    "origin": "flathub"
+  },
+  {
+    "application": "io.mgba.mGBA",
+    "name": "mGBA",
+    "version": "0.10.5",
+    "origin": "flathub"
+  },
+  {
+    "application": "io.speedofsound.SpeedOfSound",
+    "name": "Speed of Sound",
+    "version": "0.14.0",
+    "origin": "flathub"
+  },
+  {
+    "application": "net.mkiol.SpeechNote",
+    "name": "Speech Note",
+    "version": "4.8.4",
+    "origin": "flathub"
+  },
+  {
+    "application": "org.duckstation.DuckStation",
+    "name": "DuckStation",
+    "version": "0.1-9482-g0a53bc47c",
+    "origin": "flathub"
+  },
+  {
+    "application": "org.flycast.Flycast",
+    "name": "Flycast",
+    "version": "v2.7",
+    "origin": "flathub"
+  },
+  {
+    "application": "org.libretro.RetroArch",
+    "name": "RetroArch",
+    "version": "1.22.2",
+    "origin": "flathub"
+  },
+  {
+    "application": "org.ppsspp.PPSSPP",
+    "name": "PPSSPP",
+    "version": "1.20.4",
+    "origin": "flathub"
+  },
+  {
+    "application": "org.pvermeer.WebAppHub",
+    "name": "Web App Hub",
+    "version": "1.2.0",
+    "origin": "flathub"
+  },
+  {
+    "application": "org.sugarlabs.ReadETexts",
+    "name": "Read ETexts",
+    "version": "28",
+    "origin": "flathub"
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "Vapor_Processing": {
+    "saved_map": "/home/adminis/Documents/Data/Tools/SS14/port-test-data/Vapor-roundtrip.yml",
+    "tile_geometry_identical": true,
+    "entity_counts_identical": true,
+    "positions_and_rotations_identical": true,
+    "entities": 4854,
+    "tiles": 10000,
+    "saved_sha256": "41be2d679c83cf42845b0298414f8e5c74c452bf7027f0c1436d27ab2a59b4ce"
+  },
+  "SS_Ourang_Medan": {
+    "saved_map": "/home/adminis/Documents/Data/Tools/SS14/port-test-data/Ourang-roundtrip.yml",
+    "tile_geometry_identical": true,
+    "entity_counts_identical": true,
+    "positions_and_rotations_identical": true,
+    "entities": 6606,
+    "tiles": 12141,
+    "saved_sha256": "0748f573c7700444812c0e556c89d1d4d7292b548cb33243068e2592d8cc132b"
+  },
+  "Tyson_Station": {
+    "saved_map": "/home/adminis/Documents/Data/Tools/SS14/port-test-data/Tyson-roundtrip.yml",
+    "tile_geometry_identical": true,
+    "entity_counts_identical": true,
+    "positions_and_rotations_identical": true,
+    "entities": 10366,
+    "tiles": 14310,
+    "saved_sha256": "2189091bfd063ca56d710132bee2489822b7de3ebd9f9e950fc7fbe023566a6f"
+  },
+  "Port_Hamburg": {
+    "saved_map": "/home/adminis/Documents/Data/Tools/SS14/port-test-data/Hamburg-roundtrip.yml",
+    "tile_geometry_identical": true,
+    "entity_counts_identical": true,
+    "positions_and_rotations_identical": true,
+    "entities": 37304,
+    "tiles": 65025,
+    "saved_sha256": "824b622c3cce1a52c58eeb41da2c6c11ef4d21a6d66533d49823f27f5f0f7c1c"
+  }
+}

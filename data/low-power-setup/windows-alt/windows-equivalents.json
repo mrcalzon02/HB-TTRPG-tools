@@ -1,0 +1,13 @@
+{
+  "MiniGalaxy": "Use GOG Galaxy on Windows or download your owned games directly from GOG; no account credentials are included.",
+  "Foliate / Cozy": "Use Calibre for EPUBs and VLC for audiobook files; the original content sources stay in the catalog.",
+  "Kiwix": "Download the Windows desktop build from https://kiwix.org/en/applications/ and open the same ZIM files.",
+  "mGBA": "Windows download: https://mgba.io/downloads/",
+  "DuckStation": "Windows download: https://github.com/stenzek/duckstation/releases",
+  "Flycast": "Windows download: https://github.com/flyinghead/flycast/releases",
+  "GitKraken": "Official Windows installer: https://help.gitkraken.com/gitkraken-desktop/how-to-install/",
+  "FileZilla": "Official Windows client: https://filezilla-project.org/download.php?type=client",
+  "Simple Sound Manager": "Choose a Windows release from https://mrcalzon02.github.io/HB-TTRPG-tools/simple-sound-manager.html",
+  "Vocalinux / Speech Note": "The Linux installations do not copy across; choose a Windows-native dictation workflow separately.",
+  "Flatpak, Synaptic, GParted and Linux desktop components": "Linux-specific packages are not installed on Windows. Use Windows/vendor tools appropriate to the job."
+}

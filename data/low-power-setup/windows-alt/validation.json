@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-07",
+  "configuration": "Windows alternative",
+  "script_count": 15,
+  "parser": "official PowerShell 7.6.6 on Linux",
+  "verified": [
+    "All scripts parse without errors",
+    "All bundle files checked against SHA256SUMS",
+    "Map selection for all four layouts",
+    "Existing installation folder refused",
+    "Cached downloaded file accepted only with matching hash",
+    "Incorrect downloaded file hash rejected",
+    "19 WinGet package identifiers found in Microsoft manifest directories"
+  ],
+  "not_tested": [
+    "Fresh installation on Windows",
+    "Windows PowerShell 5.1 execution",
+    "WinGet installation flows",
+    "Native GUI applications",
+    "TGMC host firewall/connection behavior",
+    "Complete Windows game builds and gameplay"
+  ]
+}
