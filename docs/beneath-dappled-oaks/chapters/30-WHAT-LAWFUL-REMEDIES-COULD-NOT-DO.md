@@ -1156,114 +1156,66 @@ Damaris nodded slowly.
 
 "Yes."
 
-That was the difference.
+Damaris kept the two records side by side while the keeper searched for the personnel book. Ilyan was grateful she did not look at him. He had been ready, for one terrible moment, to call the deputy's name an answer.
 
-Not guilt.
+A name was not an answer. It was someone they might still be able to ask about.
 
-A path.
+The keeper returned carrying a narrower volume. Its binding had been repaired with green thread; the label had peeled at one corner.
 
-For thirty chapters, too many of their questions had dissolved into institutions, sealed classes, offices, protections and families large enough to make responsibility feel atmospheric.
+"Salver stayed in administrative service," she said, following a line with the back of her fingernail. "Transferred two years after Silver Night."
 
-Edrin Salver was ordinary.
+"Where?" Damaris asked.
 
-That made him valuable.
+The keeper turned the register toward them.
 
-An ordinary person could have a duty book.
+**Tribunal Contingency Secretariat.**
 
-An employment record.
+Ilyan felt the old impulse to run ahead of the evidence. That Secretariat belonged to the institutional neighborhood from which JEC-R/6 had emerged. A clerk who had handled the lawful timing annex and later logged an unlawful memorandum had eventually taken a post there.
 
-A supervisor.
+It was tempting to imagine one long chain passing through the same pair of hands. The dates did not allow it. The transfer came two years after the massacre, and the personnel line said nothing about the work Salver performed after it.
 
-A desk.
+Damaris was studying the register.
 
-A route by which one memorandum became another person's problem.
+"Can we see his assignment records?"
 
-"What happened to him?" Ilyan asked.
+"Some of them," the keeper said. "The later office keeps its own."
 
-The archive keeper consulted the personnel register.
+Vaun nodded. "Then we request those separately."
 
-"Transferred two years after Silver Night."
+Ilyan turned back to the memorandum. The words *before the next ordinary vacancy cycle* still seemed to burn through the page. Someone had wanted a faster result than lawful recusal and appointment reform could deliver. Whether that person had borrowed the review's calculations or reached the same conclusion independently remained unknown.
 
-"Where?"
+"There's another place to look," Damaris said.
 
-The keeper read.
+She was not looking at Salver now. Her finger rested on a note she had copied about the receiving authority's independent reservation.
 
-"Tribunal Contingency Secretariat."
+"The disagreement," she said. "When the receiving side wouldn't do what the initiating side wanted. Would anyone have been told?"
 
-Ilyan closed his eyes.
+"Possibly," Vaun said. "The instrument was designed to permit independent refusal. Its administrative consequences may have been recorded."
 
-Damaris whispered something impolite.
+"By the Secretariat?"
 
-Vaun said nothing.
+"Perhaps by the initiating office, perhaps by a separate reviewer. We need the notice rules before we ask for a particular notice."
 
-The name had moved.
+The keeper looked up at the mention of the protected instrument, then deliberately returned to her own work. Ilyan noticed the courtesy. They had made a profession of discussing sealed matters in rooms where other people were trying to earn an ordinary living.
 
-From the liaison office that accessed the lawful timing schedules.
+He moved the papers farther from the edge of the desk.
 
-Through administrative handling of an early interference memorandum.
+"Nothing about the bearer," he said.
 
-Later into the institutional neighborhood that had created JEC-R/6.
+Vaun gave him a brief look. "Nothing about the bearer."
 
-That still did not make Salver a conspirator.
+There was relief in having a question narrow enough to write down. Not who had been protected, not where anyone had gone, not what a sealed record might reveal if they could only persuade the right official to betray it. Merely who had been responsible for acknowledging a refusal, and whether a surviving record showed that the obligation had been discharged.
 
-It did not prove he knew the protected mechanism's later use.
+Damaris copied the two Salver entries, leaving the original dates intact. She did not draw a line between them. The keeper watched her work, satisfied at last that no one intended to fold a corner or lean on a brittle page.
 
-It did not prove he carried anything from one office to another.
+Outside, the late bells sounded. A draft moved under the archive door, carrying the damp smell of stone and the river beyond it. The keeper began extinguishing the lamps at the far end of the room.
 
-But the same ordinary administrator now touched three previously separate maps.
+Ilyan wrote Salver's name once more. Beneath it he left space for the office assignments they had not yet seen.
 
-Ilyan opened his eyes.
+He thought of the dead students, of the ease with which his family had spoken of necessity, and of the innumerable people who had carried papers without knowing what those papers would eventually permit. He would not make an innocent clerk into a murderer merely to shorten the distance between the two.
 
-"Chapter thirty-one," Damaris said softly.
+Vaun waited while he closed the book.
 
-He looked at her.
+At the bottom of his page he wrote one question, for tomorrow's requests.
 
-She tapped the personnel line.
-
-"The cost of refusing."
-
-The receiving mechanism had been built to resist initiating pressure.
-
-After Silver Night, it had actually done so.
-
-If that refusal created an accountability trail, someone in the initiating institutional network would have received notice that control had fractured.
-
-And now they had a name to look for without tearing open the protected side.
-
-Edrin Salver.
-
-Ilyan copied it carefully.
-
-Outside, bells marked the late hour.
-
-The archive keeper began extinguishing lamps at the far end of the room.
-
-No one had confessed.
-
-No hidden order had named the dead students.
-
-No page had finally announced why Silver Night happened.
-
-What they had found was smaller.
-
-The lawful process had identified a real concentration problem.
-
-It had identified remedies.
-
-It had also identified the limit of those remedies: they could manage power, dilute it, disclose it, constrain it and change the future, but they could not erase lawful eligibility on demand.
-
-A liaison office with Valeric representation consulted the timing analysis.
-
-Nine days later, unlawful interference entered the surviving record.
-
-And the deputy who handled the first document also handled the second.
-
-For the first time, the gap between respectable concern and unlawful intervention contained a person-shaped path that could be followed.
-
-Ilyan closed the duty book.
-
-He did not know whether Edrin Salver was guilty of anything.
-
-That was tomorrow's problem.
-
-Tonight, it was enough that the path existed.
+*Who received notice when the receiving authority refused?*
