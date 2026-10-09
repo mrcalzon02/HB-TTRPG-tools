@@ -435,6 +435,306 @@ Not yet.
 
 ---
 
+The district works office was housed above a cooper's yard, where the smell of wet oak rose through the floorboards whenever someone opened the window. By the time Thessa reached it the following morning, two carts had already stopped outside with complaints about the bridge, the road, or the price of repairing either.
+
+Captain Sorn stayed at the door. She had brought the carpenter's figures, a list of the men he had paid, and a packet of district warrants that Thessa had requested the day before. The clerk who received them was young enough to be careful about the way he addressed a noble and old enough to resent having to be careful.
+
+"You are asking whether the bridge was paid for twice," he said.
+
+"I am asking you to show me how it was paid for once."
+
+He looked down at her papers.
+
+"The bridge has an appropriation."
+
+"I've seen it."
+
+"And an emergency works warrant."
+
+"I've seen that too."
+
+"Then you have the answer."
+
+Thessa pulled up the chair opposite his desk. Its back had been repaired with a strip of darker wood.
+
+"Will you put your name to that answer?"
+
+His fingers stopped on the warrant.
+
+She regretted the question as soon as she saw his expression. It had sounded like a threat. In this room, with her house name and a Warden's badge, perhaps it was one.
+
+"I'll put mine to the request," she said. "And to anything I conclude from it. You needn't accept my conclusion."
+
+Sorn, at the door, made no attempt to rescue her.
+
+The clerk drew a second book from the shelf. Its pages were narrower than the district ledger, ruled for cash actually issued rather than money authorized. He turned it toward her but kept a hand on the binding.
+
+"The appropriation is permission to spend," he said. "This is what the cashier says left the office. They are not the same book."
+
+"Thank you."
+
+He glanced up, surprised by her tone, and then found the entry.
+
+The bridge account had paid the carpenter the balance of his labor and timber claim. The date matched the notation in the man's own notebook. A separate entry charged the emergency intermediary for an earlier advance, but the office copy did not contain the intermediary's original payment instruction. The amount was close to the first installment the carpenter remembered. Close was not identical.
+
+"Fees?" Thessa asked.
+
+"Possibly. Cartage. An advance to the timber yard rather than to the carpenter. Or a correction entered later."
+
+"Can you show me the correction?"
+
+"Not here. If there was one, it would be in the intermediary's clearing book."
+
+"And the road-stone charge?"
+
+He found the road ledger and set it beside the cash book. The stone warrant had been properly authorized as an emergency purchase. Its payment reference led to the same intermediary, not to the quarry. The attached description still read *replacement stone*. There was no delivery acknowledgment in this office's copy.
+
+Thessa stared at the empty space where she wanted a receipt.
+
+"Could the quarry have supplied stone through the intermediary?"
+
+"Yes."
+
+"Could the money have been used temporarily for the bridge and then restored?"
+
+"Yes."
+
+"Could the two warrants have covered the same cost?"
+
+"Yes."
+
+"You're enjoying this."
+
+"No, Warden. I'm trying not to say something that gets repeated as a finding."
+
+That made her look at him properly. He had a burn mark on one cuff, probably from the stove beside the accounts window, and ink along the side of his smallest finger. A pile of ordinary wage vouchers waited under his elbow. The man had been working before she arrived and would have more work after she left.
+
+"Neither am I," she said.
+
+He allowed her to copy the two payment references. He would not let her take the book. She had not intended to ask.
+
+Outside, a hammer struck a barrel hoop three times. Sorn came to the desk.
+
+"We were due on the north road by noon."
+
+"I know."
+
+"That's a day's ride if the ford is passable."
+
+"I know that too."
+
+The clerk looked between them.
+
+Thessa had been assigned a road inspection, not a roving inquiry into every suspicious account in the western districts. The first task mattered. A washout could strand a village as thoroughly as a stolen appropriation. She had already spent longer at the bridge than her orders allowed.
+
+Sorn waited.
+
+Thessa closed her notebook.
+
+"We don't hold the north-road patrol for this."
+
+"Good."
+
+"But I want the source documents preserved."
+
+The clerk's hand tightened on the cash book.
+
+"Preserved how?"
+
+"Not impounded. Not sealed away from your work. A written request that the original warrants, delivery acknowledgments, intermediary clearing entries and any corrections be retained until the district auditor can compare them."
+
+"Those records have ordinary retention periods."
+
+"Then the request may cost you nothing."
+
+"And if it doesn't?"
+
+"Put the cost in your reply. I'll take it to my commander."
+
+Sorn's eyes shifted toward her, but she said nothing.
+
+The clerk considered the pages. "An audit request can make a cashier reluctant to release the next payment."
+
+"Then the request must say that it is not an order to stop payments. I don't want the bridge crew waiting another fortnight because I dislike a column."
+
+"The auditor may choose to suspend something."
+
+"That will be the auditor's decision, on the auditor's evidence. Not mine."
+
+He took out a clean form.
+
+"What finding shall I enter?"
+
+"None."
+
+He paused.
+
+"Not even an irregularity?"
+
+"Enter that the available copies do not yet reconcile the road-stone charge with the bridge advance. Enter the missing documents by name. That's what I can stand behind."
+
+He began to write.
+
+Thessa watched the nib move. A great many people could make a convincing accusation from the two ledgers on the table. Her family had built fortunes on the ability to read accounts faster than their rivals. She had expected to be pleased when the arithmetic stopped making sense. Instead she found herself thinking of the carpenter who had paid his crew from his own purse, and of a clerk whose signature might be carried into a dispute long after she had ridden away.
+
+"Your name?" he asked.
+
+"Thessa Eris-Vey."
+
+"I have that."
+
+"On the request. As the officer responsible."
+
+He looked up.
+
+"It will be there."
+
+"And note that you supplied the records without endorsing my interpretation."
+
+Sorn gave a small cough, which Thessa suspected was hiding a smile.
+
+The clerk finished the form and handed her a copy. Its wording was dry and unremarkable. That was a relief.
+
+They were halfway down the stairs when he called after them.
+
+"Warden?"
+
+She turned.
+
+"The intermediary keeps its clearing books at the river market, not here. If you write to the district auditor, tell her to ask there first. Otherwise someone will spend a week sending notices to the wrong office."
+
+"Thank you."
+
+He nodded and returned to his work.
+
+Outside, Sorn untied the horses while Thessa wrote a note to her commander explaining the delay, the records she had seen, and the patrol hours they could no longer recover. She did not blame the clerk, the bridge, or the weather. Her own name went at the bottom.
+
+"You've made yourself responsible for a question that might have a perfectly dull answer," Sorn said.
+
+"That is becoming a habit."
+
+"One day you'll discover a crime."
+
+"One day I'd like to discover a well-kept account."
+
+Sorn swung into the saddle.
+
+"Ambitious."
+
+Thessa put away her pen. Before mounting she wrote one more note, this one for Ilyan. She gave him the payment dates and the two references, and asked him not to circulate them beyond Vaun's inquiry until the original clearing entries could be checked. Then, because she was tired of every letter between them resembling an affidavit, she added a line about the carpenter's terrible tea and the way the river had soaked her boots.
+
+*Tell me what you've been eating. Properly. I know what you call supper when nobody is there to stop you.*
+
+She folded the letter and sealed it.
+
+By the time they reached the north road, the light had begun to change. They would have less daylight for the inspection than they ought to have had. Sorn made Thessa calculate the remaining distance aloud, then made her choose which section could be safely examined before dusk and which would require a return visit.
+
+The work did not wait politely while she solved another piece of it.
+
+At the first milepost north of the ford, a cart stood with one wheel in the ditch and its driver sitting on a stone. He was not injured. His mule was eating the grass beside him with the serene expression of an animal that had already decided the day's work was finished.
+
+Sorn dismounted first.
+
+"What happened?"
+
+"The edge gave way," the driver said. "Not much. Enough."
+
+He showed them where a narrow runnel had eaten under the packed road. The surface looked sound from above. When Thessa pressed her heel into it, the earth shifted, leaving a crack no wider than her thumb.
+
+"How many carts came through before yours?" she asked.
+
+"Six since dawn. Mine's the heaviest."
+
+"Where were you going?"
+
+"North mill. Flour sacks. The miller is waiting."
+
+Sorn walked the verge with a measuring cord while Thessa helped the man ease his wheel clear. The axle had survived. The road had not. Beneath the thin cap of gravel the spring water had carried off the smaller stones, leaving a hollow that would swallow the next loaded wheel in much the same place.
+
+A farm boy arrived from the far side of the bend with a pair of oxen and a length of chain. He offered both before anyone asked. He knew the driver, who called him a nuisance and accepted the help.
+
+By the time they had hauled the cart free, the light had dropped behind the trees.
+
+"Can you get to the mill by the east track?" Thessa asked.
+
+"With this load? If the ford holds."
+
+"Does it?"
+
+The driver scratched his cheek. "This morning it did."
+
+Sorn gave her a look. They had both heard the difference.
+
+Thessa took out the district road sheet. The north route was under Warden inspection because the thaw had damaged several water crossings. The east track lay outside their immediate assignment, but a teamster could not be ordered onto it merely because the inspected road had become inconvenient.
+
+"We can mark the hollow and stop the heavy traffic until morning," Sorn said quietly. "We can send a rider to the district road crew. We cannot repair a drainage cut in the dark."
+
+"The miller won't thank us."
+
+"The miller can come and inspect it himself if he wants."
+
+Thessa crouched beside the damaged verge. Someone had packed fresh gravel into the rut within the last few days. The new material was pale against the older surface, but there was no timber support beneath it and no open channel for the water to escape.
+
+"Was this patch here yesterday?" she asked the driver.
+
+"It was. They did it after the last rain."
+
+"Who?"
+
+"Road hands, I suppose. I didn't stop to ask."
+
+She could have taken the answer back to the works office as another suspicious expenditure. She had no reason to do so. A bad repair did not prove a false payment, and a road hand could be doing exactly what he had been told with exactly the materials he had been given.
+
+She rose and brushed her hands on her coat.
+
+"Put the warning posts on both approaches," she told Sorn. "Heavy loads wait. Light traffic passes on the inner side, one at a time, until the crew can judge the ground. I'll sign the restriction."
+
+Sorn nodded, then pointed at the road sheet.
+
+"And the northern crossing?"
+
+"Tomorrow. We won't pretend we've inspected what we haven't seen."
+
+The driver stood beside his cart, unhappy but listening. Thessa explained the restriction to him herself. He asked whether the Wardens would pay for the flour arriving late. She said she did not know, but gave him the office where a delay claim could be filed and promised to record his name and the time. She did not promise the claim would succeed.
+
+He looked at her badge, then at the broken road.
+
+"At least you've written it down," he said.
+
+The farm boy helped drag the first warning post into place. Sorn set the second while Thessa drew the damaged section on the back of her road sheet. She measured it twice, using the driver's cart wheel as a reference because the light had become too poor to see the marks on the measuring cord.
+
+When she finished, Sorn handed her the lantern.
+
+"Your commander will have a cheerful report."
+
+"Two incomplete inspections and a road restriction."
+
+"And one cart recovered without a broken axle."
+
+"Three people delayed."
+
+"Four, if you count the mule."
+
+The mule had resumed eating.
+
+They took the north-road patrol shelter for the night. It was a stone hut with a leaky eave, two narrow benches, and a hearth that smoked until Sorn opened the upper shutter. Thessa dried her boots by the fire and copied the day's observations into the Warden book while they were still clear in her mind. She put the missing clearing entries from the district office on a separate page. The road failure went into the patrol report, where it belonged.
+
+Afterward she unfolded the copy of her letter to Ilyan. She had kept the rough sheet by accident, along with the carpenter's figures. Her last question to him looked strangely domestic beside the payment references.
+
+She imagined him in Vaun's workroom, forgetting a meal while he waited for someone to answer a carefully worded request. The thought made her smile. It also made her want to shake him.
+
+Sorn passed her a bowl of lentils from the pot.
+
+"Eat before you write another letter."
+
+"Who says I'm writing one?"
+
+"You have been looking at that page for ten minutes."
+
+Thessa folded it away and accepted the bowl. She would have to ride at first light. Whatever Ilyan learned tomorrow would reach her later, after the roads and the couriers had had their say. For the moment, there was hot food, an honest account of an unfinished day's work, and a road that would still need watching when morning came.
+
+---
+
 Damaris's mother had laid the table for four.
 
 That was the first thing Damaris noticed when she and Rhyl arrived. The second was that her mother had chosen the smaller dining room, where the windows looked into the enclosed garden and the chairs did not force guests to address one another across an acreage of polished wood.

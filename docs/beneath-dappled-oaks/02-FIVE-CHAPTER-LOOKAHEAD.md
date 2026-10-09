@@ -23,6 +23,8 @@ Mireth and Caelen remain established adult lovers while their families begin tre
 
 The next dependency-valid investigation follows the institutional consequence of refusal in JEC-R/6 and asks whether its bounded accountability trail intersects Salver or another traceable office without exposing protected identity or contents.
 
+**Working-only development (not canon):** The provisional Chapter Thirty-One draft now integrates Thessa's western district accounts inquiry and the north-road inspection consequence. The original Drive Excel continuity workbook remains unreconciled through Chapter Thirty; no Chapter Thirty-One material may be released or rolled into the canonical five-chapter window until that in-place reconciliation and character-state audit are completed.
+
 ## Governing debts
 
 **Corren culpability debt:** protective acts or compatible motives do not erase his admitted role in unlawful Silver Night enabling machinery.
