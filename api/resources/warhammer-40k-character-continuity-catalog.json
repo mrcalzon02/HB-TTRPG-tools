@@ -2892,6 +2892,17 @@
             "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
             "sourceType": "legacy-backfill"
           }
+        },
+        {
+          "id": "drenal-lighter-manifest-event-01",
+          "event": "Found a hospital lighter removed from a priority manifest, established that its Navigator was injured and life-support reserves were limited, arranged a receiving-station quarantine hold, guided the lighter before the contracted tithe carrier, and completed both passages.",
+          "status": "observed",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Toll at the Inner Gate",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
+            "sourceType": "committed-continuation"
+          }
         }
       ],
       "knowledgeBeliefs": [
@@ -2917,6 +2928,30 @@
             "segment": "Original migrated chronicle — temporal backfill",
             "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
             "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "id": "drenal-lighter-three-deaths-01",
+          "knowledge": "House liaison reported three patients died before transfer; the medical report was not final. Mulvane does not know whether earlier passage would have saved them.",
+          "certainty": "House report, unresolved causality",
+          "status": "reported",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Toll at the Inner Gate",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
+            "sourceType": "committed-continuation"
+          }
+        },
+        {
+          "id": "drenal-manifest-independent-records-01",
+          "knowledge": "Knows that the receiving station, lighter's shipmaster, and tithe carrier's captain retain independent records of the altered sequence; this makes quiet erasure harder, not impossible.",
+          "certainty": "direct operational knowledge",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Toll at the Inner Gate",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
+            "sourceType": "committed-continuation"
           }
         }
       ],
@@ -2979,6 +3014,17 @@
             "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
             "sourceType": "legacy-backfill"
           }
+        },
+        {
+          "id": "drenal-uncontracted-passage-review-01",
+          "obligation": "House Drenal charged quarantine-hold conversion to Mulvane's service allocation and opened review of the uncontracted lighter passage; possible tithe-carrier delay damages remain unclaimed, not established debt.",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Toll at the Inner Gate",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
+            "sourceType": "committed-continuation"
+          }
         }
       ],
       "physicalMedicalState": [
@@ -2992,6 +3038,17 @@
             "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
             "sourceType": "legacy-backfill"
           }
+        },
+        {
+          "id": "drenal-post-double-opening-tremor-01",
+          "condition": "Left-hand tremor and expected headaches after two near-Terra third-eye openings without normal recovery interval; House physician ordered several days without another inner passage and reassessment before return to service.",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Toll at the Inner Gate",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
+            "sourceType": "committed-continuation"
+          }
         }
       ],
       "equipmentResources": [],
@@ -3004,6 +3061,16 @@
             "segment": "Original migrated chronicle — temporal backfill",
             "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
             "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "segment": "The Toll at the Inner Gate",
+          "changeSummary": "New continuation: observed lighter rescue and contracted tithe passage, three reported patient deaths, temporary left-hand tremor and medical suspension, charged service allocation, open House review and independent manifest witnesses. Earlier beliefs, House dependence, reported twelve sons and established navigation skills remain unchanged.",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Toll at the Inner Gate",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
+            "sourceType": "committed-continuation"
           }
         }
       ]
