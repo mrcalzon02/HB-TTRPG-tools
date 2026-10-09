@@ -32,8 +32,8 @@
       "sourceDocumentId": "1Ga_Zy3--AxyCTgzE8C5yokEeD5VTRUv-js58bm3Vnxo",
       "recoveredThrough": "X. THE FORWARD HOLDS — complete through Broussard organizing the search for Jerrik Noll, Edren Vale and Pallas Dorn and ending: “Let’s go find them.”",
       "sourceObservedThrough": "X. THE FORWARD HOLDS — complete; the connected Google working draft contains no later chapter.",
-      "currentEndpoint": "XIII. THE THING UNDER THE ICE — a large High Presidio predator breaches the recovery perimeter and attacks Chimera Two before moving beneath the stranded Hesperant Vale. Broussard uses the four Chimeras as a controlled fire channel, refuses pursuit onto fractured ice, releases the recovery hauler from its tow rig before the predator can use the connection against the ship, and kills the animal when it resurfaces. Chimera Two remains mobile with a destroyed vision block and minor track damage; no additional personnel are lost. The predator takes much of the tow alignment into the broken ice, and the ship repair estimate slips to roughly thirty-seven hours. The fourteen-second telemetry anomaly remains untouched and separate from the predator attack and prior electrocution.",
-      "nextSlice": "When Broussard next becomes rotation-eligible, advance the recovery after the predator attack toward restored mobility and eventual convoy return. Preserve the damaged-but-mobile Chimera Two, lost/delayed tow alignment, contracted perimeter, roughly thirty-seven-hour repair estimate, genuine electrocution accident, and unresolved fourteen-second telemetry gap. The deeper falsified-origin/Genestealer truth remains concealed until earned; do not make the predator attack explain it. Apply human-conversation governance and preserve the outcome lock that Broussard ultimately escorts the repaired freighter back to the convoy while the reader eventually sees the hidden Xenos compromise survive. The book may contain no more than 40 chapters.",
+      "currentEndpoint": "XIV. THE PRICE OF MOVEMENT — the predator's frozen tow frame is recovered and field-repaired from safe ice; Sella certifies controlled thrust after repairing a shifted outer brace; Kelm secures the forward-hold cargo with supervised Guardsmen. The Hesperant Vale passes its first three-metre test, but marker twenty-two begins leaning unseen as Broussard orders a ten-metre test. Chimera Two remains mobile with a plated vision block and two missing outer track pads. The fourteen-second impact telemetry gap remains unresolved and separate from the electrocution.",
+      "nextSlice": "Continue with the ten-metre movement test and the unstable route revealed by marker twenty-two. Use measured ice surveys, recovery-hauler constraints and controlled ship thrust; do not teleport the freighter back to the convoy. Preserve the repaired tow frame, Chimera Two damage, intact-but-contracted perimeter, genuine electrocution, and unresolved fourteen-second telemetry gap. Do not reveal the hidden Genestealer-compromised crew or falsified origin to Broussard prematurely.",
       "constraints": [
         "Fourteen-second telemetry gap is a surface anomaly, not the main plot hole.",
         "Deep-indexed older telemetry was falsified to conceal the freighter's true port of origin.",
@@ -70,11 +70,12 @@
         "remainingMaterialType": "authorial continuity / planning constraints, not recoverable verbatim prose"
       },
       "characterContinuityAssessment": {
-        "segment": "XIII. THE THING UNDER THE ICE",
-        "durableCharacterStateChanged": false,
-        "reason": "The chapter materially advances the recovery operation and consumes equipment but does not change the established recurring cast's durable personal knowledge, relationships, injuries, obligations, skills, or long-term plans. Broussard applies already-established survival-focused command competence, Jalesthesian continues established cooperative observation, Kelm continues ship-preservation command, and Sella continues established technical recovery work. The equipment/perimeter consequences are persisted in the circuit rather than manufacturing redundant personal-state entries."
+        "sufficientForNewProse": true,
+        "segment": "XIV. THE PRICE OF MOVEMENT",
+        "durableCharacterStateChanged": true,
+        "reason": "Backfilled XII–XIV touch logs for the active cast; completed the obsolete missing-team search goals and recorded current recovery vehicle and tow-frame constraints before XV prose."
       },
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-03.md"
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md"
     },
     {
       "id": "house-vallimere-sons",

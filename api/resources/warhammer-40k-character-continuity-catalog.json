@@ -5176,14 +5176,15 @@
           "id": "broussard-goal-forward-search-01",
           "goal": "Find Jerrik Noll, Edren Vale and Pallas Dorn in the damaged forward holds using a controlled recovery team, ship guides, marked junctions and hard-line vox relays while avoiding unstable cargo routes.",
           "horizon": "immediate",
-          "status": "active",
+          "status": "completed",
           "provenance": {
             "story": "The Long Patrol of Broussard",
             "segment": "X. THE FORWARD HOLDS",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
-          }
+          },
+          "resolution": "Search completed in XI. THE THIRD MAN: all three missing workers found dead from accidental electrocution; bodies recovered and cross-feed isolated."
         }
       ],
       "skillsCompetence": [
@@ -5260,7 +5261,19 @@
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
-      "equipmentResources": [],
+      "equipmentResources": [
+        {
+          "id": "broussard-recovery-vehicles-xiv",
+          "resource": "Four Chimeras and a recovery hauler remain on High Presidio; Chimera Two is mobile with its damaged vision block plated and two track pads missing; tow frame recovered, repaired and inspected after the predator attack; first three-metre controlled-thrust test passed.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XIV. THE PRICE OF MOVEMENT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "chapterTouchLog": [
         {
           "segment": "V. HARD LESSONS",
@@ -5326,6 +5339,36 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
             "sourceType": "continuation",
             "authority": "user-explicit"
+          }
+        },
+        {
+          "segment": "XII. THE WORK AFTER",
+          "changeSummary": "Separated the three accidental electrocution deaths from the still-missing fourteen seconds of impact telemetry; prioritized preserving the auxiliary bus, repaired systems and the external perimeter before investigating the recording.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XII. THE WORK AFTER",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XIII. THE THING UNDER THE ICE",
+          "changeSummary": "Commanded four Chimeras against a large sub-ice predator; forbade pursuit over fractured ice, detached the tow rig to protect the recovery hauler and contracted the perimeter after the kill.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XIII. THE THING UNDER THE ICE",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XIV. THE PRICE OF MOVEMENT",
+          "changeSummary": "Authorized cable-only salvage of the lost tow frame from intact ice, traded military cargo labor for winch time, and supervised the first successful three-metre controlled-thrust test; the route remains unstable and the freighter is not yet recovered.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XIV. THE PRICE OF MOVEMENT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md",
+            "sourceType": "continuation"
           }
         }
       ]
@@ -5615,6 +5658,36 @@
             "sourceType": "continuation",
             "authority": "user-explicit"
           }
+        },
+        {
+          "segment": "XII. THE WORK AFTER",
+          "changeSummary": "Helped carry the dead and maintained restraint around grieving crew; continued treating the telemetry gap as separate from the resolved electrocution.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XII. THE WORK AFTER",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XIII. THE THING UNDER THE ICE",
+          "changeSummary": "Witnessed the predator engagement and supported Broussard's measured containment rather than a hazardous pursuit.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XIII. THE THING UNDER THE ICE",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XIV. THE PRICE OF MOVEMENT",
+          "changeSummary": "Continued perimeter watch with Broussard as marker twenty-one disappeared; did not treat the event as proof of a new predator.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XIV. THE PRICE OF MOVEMENT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -5854,6 +5927,36 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
             "sourceType": "continuation",
             "authority": "user-explicit"
+          }
+        },
+        {
+          "segment": "XII. THE WORK AFTER",
+          "changeSummary": "Informed the Hesperant Vale crew of Jerrik, Edren and Pallas's deaths; continued coordinating ship recovery and permitted the impact telemetry to remain under review.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XII. THE WORK AFTER",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XIII. THE THING UNDER THE ICE",
+          "changeSummary": "Managed ship power and temporary bypass recovery during the predator impacts; retained responsibility for the stranded Hesperant Vale.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XIII. THE THING UNDER THE ICE",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XIV. THE PRICE OF MOVEMENT",
+          "changeSummary": "Refused to release the utility winch until loose produce-hold cargo was secured; accepted supervised soldiers under his cargo master, then certified cargo ready for the controlled movement test.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XIV. THE PRICE OF MOVEMENT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md",
+            "sourceType": "continuation"
           }
         }
       ]
@@ -6128,6 +6231,26 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "segment": "XII. THE WORK AFTER",
+          "changeSummary": "Maintained the secondary bridge telemetry diagnostic; confirmed the fourteen-second interval remained absent while current recording continued normally.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XII. THE WORK AFTER",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XIV. THE PRICE OF MOVEMENT",
+          "changeSummary": "Remained bridge liaison through repair and movement preparation without receiving any new explanation for the telemetry gap.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XIV. THE PRICE OF MOVEMENT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -6208,14 +6331,15 @@
           "id": "sella-goal-find-missing-01",
           "goal": "Join the controlled search for Jerrik Noll, Edren Vale and Pallas Dorn in the forward holds.",
           "horizon": "immediate",
-          "status": "active",
+          "status": "completed",
           "provenance": {
             "story": "The Long Patrol of Broussard",
             "segment": "X. THE FORWARD HOLDS",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
-          }
+          },
+          "resolution": "Search completed in XI. THE THIRD MAN: all three missing workers found dead from accidental electrocution; bodies recovered and cross-feed isolated."
         }
       ],
       "skillsCompetence": [
@@ -6319,6 +6443,36 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
             "sourceType": "continuation",
             "authority": "user-explicit"
+          }
+        },
+        {
+          "segment": "XII. THE WORK AFTER",
+          "changeSummary": "Accepted enforced brief rest after the electrocution deaths, then resumed repair work with an estimated 36–48-hour technical horizon.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XII. THE WORK AFTER",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XIII. THE THING UNDER THE ICE",
+          "changeSummary": "Reassessed the damaged freighter after predator impacts; repair horizon rose to approximately thirty-seven hours before the later brace reassessment.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XIII. THE THING UNDER THE ICE",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XIV. THE PRICE OF MOVEMENT",
+          "changeSummary": "Identified an impact-shifted outer brace, required its repair before thrust, and certified controlled—not full—drive load after inspection; the three-metre movement test passed.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XIV. THE PRICE OF MOVEMENT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md",
+            "sourceType": "continuation"
           }
         }
       ]
