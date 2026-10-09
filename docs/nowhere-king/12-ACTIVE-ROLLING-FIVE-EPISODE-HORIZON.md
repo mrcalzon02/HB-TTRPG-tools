@@ -2,16 +2,10 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 8, *Rules for Miracles*.
-**Forward window:** Season 2 Episodes 9–13.
+**State:** Rolled forward after Season 2 Episode 9, *The Obstructing Envoy*.
+**Forward window:** Season 2 Episodes 10–14.
 
-## Season 2 Episode 9 — The Obstructing Envoy — CURRENT / RECKONING
-
-Introduce the powerful envoy whose coalition, money, recognition or military cooperation Luceran materially needs. The envoy is competent, socially complete and grounded in institutional interests. Seed staff, relationships, humor, constituency and non-negotiable obligations. The signed Episode 8 miracle rules constrain what Luceran may ask Edselsto to do around a foreign political actor. The House Lethayne courier has announced a delegation requesting safe lodging, precedence and a room free of supernatural listening; the envoy's identity, demands, constituency and personal life remain to be established in prose.
-
-**Exit target:** Luceran faces a human political obstacle that cannot be reduced to architecture, surveillance or obedient service.
-
-## Season 2 Episode 10 — No Good Coalition — PLANNED
+## Season 2 Episode 10 — No Good Coalition — CURRENT / RECKONING
 
 Luceran's government seriously explores alternatives to the envoy's coalition. Each remains possible but carries real cost in money, time, military exposure, recognition, trade or concessions. Friendship and romance do not map neatly onto policy. The Episode 8 standards should create friction rather than silently disappear when conventional politics becomes painful.
 
@@ -40,6 +34,24 @@ After the envoy's refusal and the first tangible consequences of the court's dec
 **Schematic reconciliation debt:** The season schematic calls Episode 12 *Below the Wine Cellars*, while the prior active horizon calls Episode 12 *Terms of Refusal*. Preserve both the refusal-cost arc and the staffed undercroft-expedition obligation. Before writing Episode 12, reconcile their placement against the committed Episodes 9–11 without silently erasing either beat or prematurely revealing the castle's buried truth.
 
 **Exit target:** Luceran is still capable of ordinary political action, but its accumulating price makes the later supernatural temptation causally credible.
+
+## Season 2 Episode 14 — A Human Solution — NEW N+4 / DIRECTIONAL
+
+Continue genuine conventional negotiation after the costs of refusal are visible. Corven's separate river benches, the unresolved military crossing, the provisional civilian convoy, Crown-house financing, and any independent provincial alternative must have time, credible representatives and political prices. Allow partial success and human persuasion without erasing the central obstruction. This is a directional placement from the Season Two schematic, subject to the Episode 12 undercroft/refusal-cost reconciliation debt; do not advance the occupied-envoy atrocity or reveal the buried prison.
+
+**Exit target:** Luceran can see workable human concessions, but must decide which costs he will ask his people and his allies to bear.
+
+## Episode 9 reconciliation
+
+- Corven Sareth arrives as the Three Estuaries League's appointed envoy, accompanied by secretary Yara Fen and a separate delegation representing Merehaven, Dols and Teth. He negotiates for their distinct warrants; he does not possess their obedience. His wife Leora and ill mother-in-law exist beyond the court and his private letter keeps their relationship alive.
+- A broken coach wheel on Edselsto's damaged approach, plus Yara's later survey with Hesta Vale, expose a real grain-cart capacity problem. Hesta's four-season Crown-track quarry bargain survives; Yara and Hesta explore return carriage of quarry stone without signing a contract.
+- The delegation inspects the south-gallery deaf room through living witnesses and foreign mason Pellan Orve. Removed silver continuity remains physical, but the foreigners explicitly do not treat the castle's full hearing limits as proved. They accept the room and keep their own attendants inside with Doorwardens outside.
+- The League offers possible civilian grain movement and short credit, but Dols's bridge council retains its military countersign and Teth demands enforceable compensation for seized ferries. Corven seeks named cargo rolls and a jointly appointed hearing for requisition disputes. Rhyse objects on legitimate military-security grounds.
+- Damaris identifies a smaller first civilian convoy as feasible only with staggered carts, a roofed store, a bond and defensible Crown payment. No treaty, credit, convoy, military passage or bond has yet been approved by all necessary parties.
+- Luceran orders a captain to inspect the League crossing under escort without troops, Ysabet to request the river benches' reception, and Damaris to price the first convoy and roof. These orders create future work, not completed movement.
+- Miren remains intimate with Luceran but does not forgive his Episode 6 privacy breach or answer the marriage question. Ardel's winter plans remain undisclosed to him.
+- Edselsto offers to repeat foreign conversations from a connected, marked arch. Luceran declines because there is no alarm or authorized inquiry; his temptation remains active. No new magical capability is demonstrated.
+- All seven ancestral candles remain lit. Marek Venn's sponsor, his brother claim, and unrelated investigations remain unresolved.
 
 ## Episode 8 reconciliation
 
