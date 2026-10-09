@@ -2,119 +2,55 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 9, *The Obstructing Envoy*.
-**Forward window:** Season 2 Episodes 10–14.
+**State:** Rolled forward after Season 2 Episode 10, *No Good Coalition*.
+**Forward window:** Season 2 Episodes 11–15.
 
-## Season 2 Episode 10 — No Good Coalition — CURRENT / RECKONING
+## Season 2 Episode 11 — The Castle's Proposal — CURRENT / LOCKED
 
-Luceran's government seriously explores alternatives to the envoy's coalition. Each remains possible but carries real cost in money, time, military exposure, recognition, trade or concessions. Friendship and romance do not map neatly onto policy. The Episode 8 standards should create friction rather than silently disappear when conventional politics becomes painful.
+The League's three separate warrants still obstruct comprehensive military passage. Conventional alternatives are real but costly: a limited Tervain grain purchase, Kaelmont's weather-dependent road, a narrower Jorvan credit request, and Cendreval's rejected silver exclusivity. A temporary roof is being built; the first civilian convoy still needs bench consent and bond. Corven remains a complete political actor with family and institutional obligations.
 
-**Exit target:** conventional options remain available but worsen enough that the envoy problem becomes sustained pressure rather than an artificial binary.
+Edselsto calmly proposes killing and replacing Corven with a loyal shade. Luceran refuses at this stage. Establish precisely who hears the suggestion, who is told afterward, who records it and who keeps it secret. The Episode 8 miracle order regulates living authority; it does not render the castle incapable of speaking. No killing, occupation, compulsory dead service or premature magical ability.
 
-## Season 2 Episode 11 — The Castle's Proposal — PLANNED / LOCKED DESTINATION
+**Exit:** The forbidden option exists and has witnesses or secrecy consequences; Luceran still must govern without it.
 
-After the envoy is established as a complete political actor and the cost of continued obstruction is materially demonstrated, Edselsto offers the forbidden supernatural shortcut required by the season schematic. Luceran refuses it at this stage.
+## Season 2 Episode 12 — Below the Wine Cellars — DIRECTIONAL / SCHEMATIC RECONCILIATION
 
-Who hears the proposal matters. Secrecy boundaries, the Episode 6 surveillance breach, the deaf-room precedent, Episode 7's successful warning and the revised Episode 8 miracle rules all shape what follows.
+The season schematic requires a staffed undercroft expedition finding architecture that seems designed to fight inward. Fund, provision, escort and survey it through living institutions; give workers and specialists independent judgment, risk and aftermath. The earlier horizon provisionally called this slot *Terms of Refusal*. Preserve that refusal-cost arc within the expedition's funding, political disputes and continuing supply obligations rather than silently erasing it or creating a duplicate current plan. The precise title and placement remain subject to Episode 11's committed consequences.
 
-**Exit target:** the forbidden option exists concretely without yet becoming policy.
+**Exit:** A deeper exploration program becomes an institutional choice without revealing the prison or the true castle interface.
 
-## Season 2 Episode 12 — Terms of Refusal — HORIZON / NEW N+4
+## Season 2 Episode 13 — The Cost of Saying No — DIRECTIONAL
 
-The court lives with the consequences of refusing Edselsto's shortcut. The envoy's obstruction continues to cost something tangible, while factions interpret Luceran's refusal differently: principle to some, weakness to others, tactical patience to others still. The episode should make clear that keeping the supernatural boundary has a price, not merely moral satisfaction.
+Refusing Edselsto's shortcut has material consequences: supplies, roads, credit, weather, garrison readiness, legal rights and relationships. Give a non-royal actor an independent choice with a real price. Keep Corven's warrants and the Episode 8 human rules intact. Do not make conventional choices magically impossible to justify a later atrocity.
 
-At least one non-royal actor should materially advance an independent objective created by the envoy dispute. Do not let Episode 12 function only as a bridge to later atrocity.
+**Exit:** The human cost of restraint is visible, and pressure grows without predetermining the king's choice.
 
-**Exit target:** the human costs of restraint are visible enough that a later decision to cross the line can arise from accumulated pressure rather than sudden corruption.
+## Season 2 Episode 14 — A Human Solution — DIRECTIONAL
 
-## Season 2 Episode 13 — The Cost of Saying No — NEW N+4 / DIRECTIONAL
+Try real concessions, third-party guarantees and persuasion. The Dols bridge council, Teth ferry masters, Merehaven creditors, Hesta/Yara carriage proposal, Tervain purchase, Jorvan terms and Kaelmont road each have their own agents and interests. Allow partial success, and let Corven's wife Leora and household exist beyond Luceran's negotiation. Do not erase the core military crossing dispute.
 
-After the envoy's refusal and the first tangible consequences of the court's decision not to use Edselsto's forbidden shortcut, show how money, road access, recognition, security and court relationships worsen despite the king's continuing access to conventional options. At least one non-royal actor must pay a specific cost and make an independent choice. The Episode 8 miracle rules must remain operative even when costly. Do not imply that declining atrocity is automatically a complete policy.
+**Exit:** Luceran knows what a viable human compromise would cost him and his government.
 
-**Schematic reconciliation debt:** The season schematic calls Episode 12 *Below the Wine Cellars*, while the prior active horizon calls Episode 12 *Terms of Refusal*. Preserve both the refusal-cost arc and the staffed undercroft-expedition obligation. Before writing Episode 12, reconcile their placement against the committed Episodes 9–11 without silently erasing either beat or prematurely revealing the castle's buried truth.
+## Season 2 Episode 15 — What Necessity Means — NEW N+4 / DIRECTIONAL
 
-**Exit target:** Luceran is still capable of ordinary political action, but its accumulating price makes the later supernatural temptation causally credible.
+Intersect the established League impasse with another already-seeded institutional fragility, rather than inventing a sudden crisis. Luceran's language shifts from 'never' toward 'unless'; those around him notice according to their own knowledge and loyalties. Do not ask Edselsto whether replacement would work until the proper Episode 16 threshold.
 
-## Season 2 Episode 14 — A Human Solution — NEW N+4 / DIRECTIONAL
+**Exit:** The imagined exception has history, witnesses and consequences before it becomes an actionable question.
 
-Continue genuine conventional negotiation after the costs of refusal are visible. Corven's separate river benches, the unresolved military crossing, the provisional civilian convoy, Crown-house financing, and any independent provincial alternative must have time, credible representatives and political prices. Allow partial success and human persuasion without erasing the central obstruction. This is a directional placement from the Season Two schematic, subject to the Episode 12 undercroft/refusal-cost reconciliation debt; do not advance the occupied-envoy atrocity or reveal the buried prison.
+## Episode 10 reconciliation
 
-**Exit target:** Luceran can see workable human concessions, but must decide which costs he will ask his people and his allies to bear.
-
-## Episode 9 reconciliation
-
-- Corven Sareth arrives as the Three Estuaries League's appointed envoy, accompanied by secretary Yara Fen and a separate delegation representing Merehaven, Dols and Teth. He negotiates for their distinct warrants; he does not possess their obedience. His wife Leora and ill mother-in-law exist beyond the court and his private letter keeps their relationship alive.
-- A broken coach wheel on Edselsto's damaged approach, plus Yara's later survey with Hesta Vale, expose a real grain-cart capacity problem. Hesta's four-season Crown-track quarry bargain survives; Yara and Hesta explore return carriage of quarry stone without signing a contract.
-- The delegation inspects the south-gallery deaf room through living witnesses and foreign mason Pellan Orve. Removed silver continuity remains physical, but the foreigners explicitly do not treat the castle's full hearing limits as proved. They accept the room and keep their own attendants inside with Doorwardens outside.
-- The League offers possible civilian grain movement and short credit, but Dols's bridge council retains its military countersign and Teth demands enforceable compensation for seized ferries. Corven seeks named cargo rolls and a jointly appointed hearing for requisition disputes. Rhyse objects on legitimate military-security grounds.
-- Damaris identifies a smaller first civilian convoy as feasible only with staggered carts, a roofed store, a bond and defensible Crown payment. No treaty, credit, convoy, military passage or bond has yet been approved by all necessary parties.
-- Luceran orders a captain to inspect the League crossing under escort without troops, Ysabet to request the river benches' reception, and Damaris to price the first convoy and roof. These orders create future work, not completed movement.
-- Miren remains intimate with Luceran but does not forgive his Episode 6 privacy breach or answer the marriage question. Ardel's winter plans remain undisclosed to him.
-- Edselsto offers to repeat foreign conversations from a connected, marked arch. Luceran declines because there is no alarm or authorized inquiry; his temptation remains active. No new magical capability is demonstrated.
-- All seven ancestral candles remain lit. Marek Venn's sponsor, his brother claim, and unrelated investigations remain unresolved.
-
-## Episode 8 reconciliation
-
-- Luceran, Rhyse, Ysabet, Damaris, Vess, Miren, Canon Merel and Pell establish witnessed six-clause rules for observable auditory reports, living-watch response, physically deaf rooms, bounded inquiries, alarm review/challenge and responsible human authorization.
-- The rule does not grant Edselsto intent-reading, legal judgment, unlimited memory or independent authority; direct royal commands remain possible and attributable to Luceran.
-- A cooper cutting damaged harness in the connected east receiving passage receives an accurate sound report and a human challenge, then release on living evidence. A worker in the unconnected recess is not heard.
-- The east receiving recess is physically closed and the watch/worker route survey continues. Black ear notices remain visible.
-- Oren Bale, the wounded Doorwarden, is recovering with uncertain full use of one finger; his wife Lysa Bale receives wages and demands that living officers remain liable for injury and compensation.
-- Hesta Vale wins refund of the disputed four-penny wheel fee and secures an alarm-record challenge right with a reader or witness of the petitioner's choosing.
-- Marek Venn remains under guard; the linen comparison is inconclusive as to common origin, his brother remains unverified and his sponsor unknown. No merged conspiracy is inferred.
-- Luceran accepts the written record of his Episode 6 privacy breach. Miren remains physically close but unreconciled, with the marriage question unanswered and the south-gallery withdrawing room physically deaf.
-- House Lethayne forwards a foreign delegation's demand for safe lodging, precedence and private conference space. No envoy identity or demands have been fixed.
-- All seven ancestral candles remain lit.
-
-## Episode 7 reconciliation
-
-- A worker recorded as Marek Venn enters the lower archive approach during an active royal inspection and attacks Luceran with two knives.
-- A living Doorwarden sees movement first and challenges him; Rhyse is already moving before Edselsto speaks.
-- Edselsto hears the first blade leave its wrapping through a connected approach and warns "left," causing Luceran to turn enough that the strike tears his collar and leaves a shallow wound instead of reaching his throat.
-- Rhyse and the Doorwardens take Marek alive. One Doorwarden suffers a hand wound from the second blade; continued use is expected if healing proceeds normally.
-- Pell prevents a loosened brace from causing a secondary casualty.
-- The breach is materially ordinary: active works, a service recess not treated as a route, incomplete familiarity, visible listening-zone markings and a distracted watch point.
-- Edselsto's demonstrated capability remains bounded auditory warning, not intent-reading, visual omniscience, predictive threat classification or awareness inside unconnected recesses.
-- Marek says others told him Luceran would be alone and invokes a brother, but sponsor, brother, motive and true identity remain unverified.
-- Hesta Vale's clean-boots/folded-cloth observation and the recovered linen support route reconstruction without becoming proof of conspiracy.
-- Rhyse is grateful Edselsto spoke and frightened by how useful that makes it. He refuses to replace living guards with castle intelligence.
-- Miren remains intimate with Luceran but unrepaired; she is grateful he survived and explicitly rejects retroactive justification of the Episode 6 privacy breach.
-- Ardel's winter plans remain private and Kaelmont answers proceed independently.
-- Luceran orders no new listening branches pending the next day's rule-setting; living watches and work-passage controls remain primary.
-- The wounded guard's family pay is ordered while he heals.
-- All Seven Ancestral Lights remain lit.
-
-## Prior Episode 6 reconciliation
-
-- Second-phase listening expands only through approved operational spaces; protected private categories remain disconnected.
-- Jerrik Moss's lamp-oil theft is solved first through living testimony and Nera Vale's social knowledge.
-- A narrow listening warrant confirms Eren Vos passed through the stable counting room with Savel, who warned of riders believed connected to Deren Holt.
-- Vos is found safe after a lame horse forced an overnight stop; Holt remains a road lead rather than proof of coup connection.
-- Edselsto reports Parel asking about the Pellon seal; living follow-up finds unauthorized seal-wax removal and a practice impression. Parel loses seal access pending inquiry.
-- Luceran knowingly exceeds the warrant's purpose after Edselsto mentions Miren's meeting with Ardel.
-- Luceran learns without consent that Miren loves him but does not know whether she should marry him.
-- Rhyse objects; Ysabet records Luceran's responsibility.
-- Miren distinguishes architectural audibility from consent to royal retrieval of private speech.
-- Ardel's trust is damaged and she refuses to disclose her winter plans.
-- A south-gallery withdrawing room is made physically deaf by removing silver continuity; reconnection requires fresh material, labor and witnesses.
-- Luceran and Miren remain intimate but unrepaired; the marriage question remains unresolved.
-- All Seven Ancestral Lights remain lit.
+- Damaris and Tomas price alternatives under money, time and consent. House Tervain can sell a limited grain portion without taking tenant winter reserves; Kaelmont offers a high road needing bridge decking and vulnerable to snow; Jorvan offers credit against future customs; Cendreval asks for restoration-silver exclusivity. None is an effortless solution or an impossibility.
+- Luceran orders the limited Tervain purchase negotiated, Kaelmont decking surveyed, narrower Jorvan terms sought and Cendreval's exclusive condition refused. Rhyse maintains a possible alternate march; no complete alternate supply line has been created.
+- Captain Savelin inspects Dols's bridge, brings back civilian tolls, a sketch and an offer of a joint approach survey, but no military countersign. Rhyse separates troop information from public cargo figures; a ferryman saved Savelin from falling.
+- Hesta Vale and Yara Fen devise proposed grain-uphill/stone-downhill cart hours, a paid porter, widened passing place and liability terms. The proposal is unsigned, and Hesta's four-season Crown-track right remains intact. Her brother must measure smaller quarry blocks for return barges.
+- Damaris releases timber and wages for the temporary receiving-yard roof on Vess's measured design, a useful asset regardless of League consent. The expenditure reduces discretionary Crown silver. The first civilian convoy remains subject to bench consent and bond; no bond is deposited and no grain has crossed.
+- Corven will recommend the civilian movement within his commission, praises Savelin's conduct to Dols, and continues private correspondence with Leora about her mother's health. He has not surrendered any bench's rights.
+- Luceran and Miren remain intimate but unreconciled after the Episode 6 stolen listening; no forgiveness or marriage answer. Ardel's winter plans remain private. No new Edselsto power or listening authorization. All seven ancestral candles remain lit.
 
 ## Active payoff debt
 
-Montegrain accountability/fate; Aven culpability/surrender protections; Rusk patronage/coercive command/payment evidence; Harl testimony/culpability; coup prisoner classification; Pellan Vey culpability; battle deaths/households; Iven family/service precedent; wounded/civilian compensation; Mera/Parel/Pellon chain; Parel seal-wax inquiry; false orders/credential provenance; missing Black Pine scout/road interceptors; route-delay insertion point; Deren Holt north-track rider lead; Eren Vos/Savel testimony; Ardel/Kaelmont independence and winter-plan refusal; Ysabet/Selise archive damage; Calienne care space; Red Ford settlement; Northbridge repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; capital rumor ecology; Luceran/Miren marriage discussion and trust repair; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candles; Hall of Veils; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Vess/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door; Eastern Household Reserve provenance/claimants; Hesta Vale track bargain; Senn Daro exclusion; Cendreval leverage; Jerrik Moss hearing/oil debt; Episode 6 listening-authority breach; south-gallery deaf-room precedent; Marek Venn true identity/brother claim/sponsor; recovered-linen comparison; east-service-recess access failure; wounded Doorwarden recovery/family pay; Hesta Vale wheel-fee dispute; Episode 8 signed miracle-order enforcement and alarm-review precedent; Oren Bale recovery and Lysa Bale's pay/compensation concern; Hesta Vale's refund and public-notice interest; foreign delegation's deaf-room inspection request; Rhyse's mixed gratitude and professional alarm; Luceran's temptation to broaden listening.
+Carry forward all unresolved obligations from document 11, especially: the coup and compensation; Iven Marrick's voluntary finite service; Marek Venn's sponsor/brother/linen; Oren and Lysa Bale; Parel/Pellon; Red Ford/Northbridge; the Eastern Household Reserve claimants; Senn Daro; the signed Episode 8 miracle rules and physical deaf room; Luceran/Miren privacy, forgiveness and marriage; Ardel's private plans; Corven/Yara/Leora and three distinct League warrants; Dols's military countersign; Teth ferry compensation and the proposed joint hearing; Merehaven short credit; first civilian convoy's unapproved bond and staged wagons; Tervain tenant reserves; Jorvan's narrower-credit request; Cendreval's rejected exclusivity; Kaelmont's decking and weather risk; Hesta/Yara unsigned cart agreement; Savelin's ferryman; and all seven candles.
 
 ## Protected long-future seeds
 
-- No unrelated Magenheim material.
-- No containment/prison/castle-interface truth yet.
-- No candle extinction yet.
-- No retroactive claim Edselsto caused the coup.
-- No retroactive justification of Episode 6's privacy breach from later security success.
-- No omnipotent or consequence-free supernatural security.
-- No infinite or magically self-proving treasure.
-- No compulsory dead service.
-- No dead servant as substitute for living legal judgment.
-- No premature hunt-sponsor identification.
-- No assumption Valcere, Holt, Red Ford, hunt evidence and coup evidence are one network.
-- No stair/family-history solution without evidence.
+No Magenheim crossover; no containment/prison/castle-interface truth; no candle failure in Season Two; no premature occupied envoy or supernatural killing; no compulsory dead service; no unlimited castle perception, judgment or treasury; no retroactive justification of the Episode 6 privacy breach; no forced resolution of Miren's marriage answer, Ardel's winter plans or Marek's sponsor; no conflation of unrelated investigations.
