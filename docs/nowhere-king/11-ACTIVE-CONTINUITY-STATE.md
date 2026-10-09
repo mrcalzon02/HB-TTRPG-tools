@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 2 Episode 10, *No Good Coalition*.
+**Reconciled through:** Season 2 Episode 11, *The Castle's Proposal*.
 
 ## Current state
 
@@ -76,6 +76,14 @@ Damaris authorizes timber and wages for a temporary receiving-yard roof on Vess'
 
 Luceran and Miren remain physically affectionate but unreconciled over the Episode 6 stolen listening. She acknowledges that he did not spy on Corven without forgiving him or answering the marriage question. Ardel's winter plans remain private; her road letter is treated as a practical bounded offer. No new castle capability or listening authorization is established. All seven candles remain lit. The political impasse and genuine cost of human alternatives set the stage for Episode 11's forbidden castle proposal without making it the only possible solution.
 
+In Episode 11, *The Castle's Proposal*, rain delays the receiving-yard roof and Pell Falbrecht requires its third footing reset before signing the work; the footing is accepted, but the roof is not finished. Hesta Vale and Yara Fen maintain an unsigned grain-uphill/stone-downhill cart plan with a paid porter and measured smaller quarry blocks. Yara has a private commercial interest in her brother's flood-damaged river warehouse. Merehaven has received Corven's civilian recommendation; Teth wants independent valuation of seized ferries; Dols will receive Captain Savelin for a joint western-approach survey under civilian limits, but grants no military countersign. The first civilian convoy still lacks the necessary consents and bond.
+
+Corven remains alive and independent, with Leora's letters about her ill mother and his separate duty to three river councils. Tervain's limited grain purchase is agreed but undelivered; Jorvan offers a narrower loan secured on two named market-gate tolls rather than broad customs, and Damaris leaves it unanswered for one messenger cycle while pricing deferred gate repairs. Kaelmont decking remains weather-dependent. Edselsto recalls a possible northern culvert but cannot verify its condition; Vess must inspect it by living means.
+
+In the connected east map gallery, with Ysabet present, Edselsto independently proposes that Corven die and a loyal shade inhabit his body, imitating him to carry the League commission. This is an unverified **proposal and claim**, not a demonstrated capacity, a killing, an occupation, or an authorization. Ysabet asks for proof and receives none. Luceran explicitly refuses harm, shade-seeking and any action under the suggestion. Ysabet records the exact words; the outer Doorwarden is not assumed to have heard them.
+
+Luceran tells Rhyse, who orders named living protection for Corven's lodging, escorts, meals and summons without making him a prisoner. Ysabet and Rhyse retain sealed accounts of the supernatural proposal; a separate restricted watch notice records a threat without its details. Corven and Yara are not informed, and Rhyse disputes whether secrecy can remain justified if risk changes. Damaris knows only that a restricted unwelcome suggestion exists, not its contents. Luceran voluntarily tells Miren in the physically deaf south-gallery room. She believes his refusal without forgiving his Episode 6 privacy breach or answering marriage. No new castle ability or listening authorization is established. No treaty, military crossing, killing, compulsory shade, body occupation or candle failure occurs. All seven candles remain lit.
+
 ## Active supernatural capability evidence
 
 - Pale silver mask manifests as Edselsto and addresses Luceran directly.
@@ -91,6 +99,7 @@ Luceran and Miren remain physically affectionate but unreconciled over the Episo
 - Episode 7 does not establish intent-reading, threat classification, perception through unconnected recesses, predictive security, or a substitute for living guards and investigation.
 - A connected arch may yield an accurate but context-free report of metal being drawn from leather; the cooper's harmless harness repair is an observed false-positive for danger, not a false report of sound.
 - Edselsto cannot hear the unconnected service recess, independently infer intent, or keep every sound as a clerk-perfect transcript. Written alarm rules constrain living users and witnesses, not the castle's ability to obey a direct royal command.
+- Episode 11 establishes an unverified castle proposal of envoy death and shade occupation, explicitly refused and never carried out; it does not establish bodily-occupation capability.
 - No evidence establishes resurrection, perfect memory, moral judgment, independent legal authority, or unlimited material creation.
 
 ## Unresolved obligations preserved
@@ -99,7 +108,7 @@ Montegrain motive/accountability/fate; Aven constitutional culpability and surre
 
 ## Immediate handoff
 
-Season 2 Episode 11 — *The Castle's Proposal* is next. The Crown has viable but costly alternatives: limited Tervain grain, Kaelmont's seasonal high road, Jorvan credit, and Cendreval's rejected exclusive silver offer. Savelin inspected Dols without obtaining military permission. The receiving-yard roof is underway, the first civilian convoy still needs three-bench consent and a bond, and Hesta/Yara's carriage hours remain unsigned. Corven's distinct river-bench warrants and independent family loyalties survive. Episode 11 must introduce Edselsto's forbidden proposal and Luceran's initial refusal with exact witness and secrecy boundaries, without eliminating ordinary human options. The Episode 8 miracle order and physically deaf south-gallery room remain in force. Miren has not forgiven Luceran's privacy breach or answered marriage; Ardel's winter plans remain hers. All seven candles burn.
+Season 2 Episode 12 — *Below the Wine Cellars* is next. Staff and provision a living undercroft expedition that finds apparently inward-facing architecture without revealing the prison/interface truth. Carry Episode 11's sealed proposal and Luceran's witnessed refusal: Ysabet/Rhyse know the exact words, Miren was told, Damaris has only limited notice, and Corven/Yara remain uninformed. The proposal's feasibility remains unproved; Rhyse must reconsider warning the envoy if the risk changes. Keep the unfinished roof, undelivered Tervain grain, unanswered Jorvan toll-gate credit, Kaelmont decking, unsigned Hesta/Yara carriage plan, incomplete civilian bench consents and bond, Dols joint survey invitation without military passage, Teth ferry valuation and seven lit candles.
 
 ## Hard exclusions
 
