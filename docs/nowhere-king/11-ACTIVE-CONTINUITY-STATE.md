@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 2 Episode 12, *Below the Wine Cellars*.
+**Reconciled through:** Season 2 Episode 13, *The Cost of Saying No*.
 
 ## Current state
 
@@ -94,6 +94,16 @@ Corven notices the newly attentive living guard detail. Rhyse truthfully cites t
 
 Luceran sees the inward-facing slits as troubling but accepts the surveyor's uncertainty. He does not consult Edselsto for an interpretation or approve new listening branches. Miren remains intimate and affectionate without forgiving the Episode 6 intrusion or answering marriage. She reminds Luceran that Damaris can price work without knowing the restricted proposal, but Corven's undisclosed personal risk is an ethical decision held by Luceran, Ysabet and Rhyse. Ysabet keeps the sealed proposal record restricted and does not interpret silence as permanent permission. Edselsto's body-occupation boast remains unverified, Corven remains alive and independent, and all seven ancestral candles remain lit.
 
+In Episode 13, *The Cost of Saying No*, Savelin and the Dols reeve, carpenter and watch captain conduct a joint civilian approach survey. They find a water-weakened bank and submit timber shoring and daylight cart hours to the bridge council; no completed civilian consent or military countersign is given. Savelin personally pays for the ferryman's damaged hook from his earlier rescue. The Tervain steward has set aside the Crown's contracted grain without touching protected tenant seed, but the purchase includes no estate wagons; five more days of free storage remain. Damaris hires Crown carts for a first portion, displacing nonessential quarry haulage, and informs Hesta. The grain has not reached the northern garrisons.
+
+The northern post's fodder shortage forces Luceran to sign the return of eighteen mounts to lower pasture, reducing the eastern timber-track patrol and coverage of two hamlets; he orders the villages told and slower foot patrols where weather allows. This is the episode's real cost of refusing Edselsto's proposed shortcut, not proof that living solutions are impossible. Damaris prices spring gate repairs, rejects immediate acceptance of Jorvan's two-market-gate loan and sends a one-gate smaller-advance counteroffer; no credit has arrived. The receiving-yard roof remains unfinished. Hesta and Yara sign a **private conditional** uphill-grain/downhill-stone carriage agreement with porter wages, damage terms and Hesta's existing four-season Crown-track rights intact. Yara discloses her brother's flood-damaged warehouse interest to Hesta and Corven, who requires that it be declared to the benches. The agreement does not bind League warrants or move League cargo.
+
+Corven remains alive and independent, corresponding with Leora and renewing his request that Rhyse warn him before concealed danger deprives him of choice. Rhyse carries the request and increasingly understands secrecy as a positive risk; Corven and Yara still do not know Edselsto's exact unverified shade-occupation proposal. Ysabet retains the sealed Episode 11 record and witnessed refusal, Miren knows the words by Luceran's voluntary disclosure and remains affectionate but unreconciled over Episode 6, while Damaris still knows only of a restricted unwelcome suggestion. Luceran has not asked whether the proposal could work.
+
+Pell's safe-side brace for the unsafe lower lintel waits on timber after the priority roof; Talla's shutter is fitted but drain and cask protections remain, the injured worker needs medical clearance, and Nessa has independent mill work requiring paid recall. No second descent, verified northern culvert, listening-silver extension, new castle ability, death, occupation or candle failure occurs. All seven ancestral candles remain lit.
+
+**Character-state diff:** Luceran knowingly accepts responsibility for lost mounted protection; Damaris/Tomas price the security and repair tradeoff without knowing the sealed proposal; Savelin keeps the civilian/military boundary and repays a personal debt; Hesta and Yara bind private trade while revealing a conflict of interest; Corven distinguishes courtesy from informed consent; Rhyse's protective duty and secrecy increasingly conflict; Miren's affection and political disagreement coexist; Nessa protects independent measurement over speculative maps; Talla and Pell maintain physical safety requirements.
+
 ## Active supernatural capability evidence
 
 - Pale silver mask manifests as Edselsto and addresses Luceran directly.
@@ -118,7 +128,7 @@ Montegrain motive/accountability/fate; Aven constitutional culpability and surre
 
 ## Immediate handoff
 
-Season 2 Episode 12 — *Below the Wine Cellars* is next. Staff and provision a living undercroft expedition that finds apparently inward-facing architecture without revealing the prison/interface truth. Carry Episode 11's sealed proposal and Luceran's witnessed refusal: Ysabet/Rhyse know the exact words, Miren was told, Damaris has only limited notice, and Corven/Yara remain uninformed. The proposal's feasibility remains unproved; Rhyse must reconsider warning the envoy if the risk changes. Keep the unfinished roof, undelivered Tervain grain, unanswered Jorvan toll-gate credit, Kaelmont decking, unsigned Hesta/Yara carriage plan, incomplete civilian bench consents and bond, Dols joint survey invitation without military passage, Teth ferry valuation and seven lit candles.
+Season 2 Episode 14 — *A Human Solution* is next. Negotiate genuine partial civilian League consent, bridge approach shoring, independent ferry valuation and roofed-store/bond conditions without pretending Corven controls three councils or the military countersign. Carry the five-day Tervain storage grace, paid Crown cart collection, signed but conditional Hesta/Yara agreement and Yara's disclosed warehouse interest, Jorvan's unanswered one-gate counteroffer, unfinished roof, Kaelmont weather, and eighteen mounts withdrawn from the northern circuit. Corven has again demanded timely warning of concealed danger; Rhyse has carried it. The sealed Episode 11 proposal remains unknown to Corven/Yara/Damaris, while Miren's trust remains unrepaired. No undercroft descent until bracing, cellar protections, wages and Nessa's return. All seven candles burn.
 
 ## Hard exclusions
 
