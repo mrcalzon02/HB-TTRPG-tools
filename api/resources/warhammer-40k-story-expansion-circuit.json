@@ -82,9 +82,9 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
       "status": "active",
-      "currentEndpoint": "Continuation IV — The First Appeal. Eleven days into the one-term assessment pilot, Cadet Commander Solren appeals a failed evaluation after abandoning a damaged troop transport to preserve a refinery and inhabited moon. The review establishes that evaluators must distinguish hindsight disagreement with a command choice from a demonstrated defect in the reasoning available when the order was issued. House Caldrake has a personal stake through a dead officer aboard the transport, but the appeal is resolved procedurally rather than by duel or political capitulation. The Academy codifies the distinction and the pilot continues.",
-      "nextSlice": "On the next House Vallimere rotation, let the one-term pilot generate a new consequence rather than another restatement of the review-board philosophy. Preserve the new appeal precedent: instructor hindsight or moral preference alone is not proof of defective command reasoning. Solren's case remains an institutional example, not an excuse to turn every future chapter into courtroom procedure. Continue the trio's development as teachers and preserve Darcelle's increasing confidence when technical/procedural ground is firm, Renault's restrained humor, Prite's reluctance to reduce doctrine to slogans, the Headmaster's institutional protection, and Vane's Priority Omega role. Shared history should shorten dialogue.",
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-04.md",
+      "currentEndpoint": "Continuation V — The Minutes Between Orders. The pilot inadvertently rewards delay while cadets build defensible explanations. Prite, Darcelle and Renault trial scenario-native opportunity costs without a fixed speed bonus or retrospective deadlines. Curriculum approves a remainder-of-term trial; whether this produces better officers remains unknown.",
+      "nextSlice": "Evaluate whether the revised timing-display pilot transfers into better fleet decisions. Preserve the appeal standard, no fixed speed bonus, no retrospective deadlines, and the unresolved question of effectiveness.",
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-05.md",
       "eraLock": {
         "era": "Mature Imperium / late-era Imperial Navy Academy setting; exact millennium not fixed by the attached chronicle",
         "allowedInstitutions": [
@@ -392,8 +392,11 @@
       "id": "house-drenal",
       "title": "Scion of the Warp-Born Blood",
       "source": "migrated-long-form",
-      "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
-      "status": "eligible-next"
+      "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
+      "status": "active",
+      "currentEndpoint": "Continuation I — The Toll at the Inner Gate. Mulvane guides a displaced hospital lighter to a quarantine hold before completing the tithe-carrier passage. Three deaths are reported. The House charges his account and reviews the deviation; his physician restricts further third-eye opening after two close passages and a left-hand tremor persists.",
+      "nextSlice": "Continue the House review and Mulvane's medical recovery without prematurely resolving the three deaths, possible delay claim, House debt or restrictions. Preserve the distributed corrected manifest and Mulvane's narrow procedural resistance.",
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md"
     }
   ],
   "governanceDocument": "api/resources/warhammer-40k-fiction-governance.md",
