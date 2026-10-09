@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1050" role="img" aria-labelledby="title desc">
+<title id="title">Final stone launch ramp cross-section</title><desc id="desc">Technical line drawing. From a level tunnel exit, the natural hillside falls 10 feet over 35 feet; newly shaped stone and rails rise 10 feet above tunnel elevation, producing a 20 foot thick triangular wedge at the outer end. Ramp width 10 feet, solid volume 3500 cubic feet, inclination 15.95 degrees.</desc>
+<defs><pattern id="hatch" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(48)"><line x1="0" y1="0" x2="0" y2="18" stroke="#c9c9c9" stroke-width="3"/></pattern><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="black"/></marker></defs>
+<rect width="1400" height="1050" fill="white"/>
+<g font-family="Arial,Helvetica,sans-serif" fill="#111">
+<rect x="36" y="80" width="480" height="106" fill="white" stroke="black" stroke-width="3"/><text x="58" y="124" font-size="29">Ramp width: 10 ft</text><text x="58" y="167" font-size="29">Total solid stone volume: 3,500 ft³</text>
+<polygon points="160,560 1090,230 1090,800" fill="url(#hatch)"/>
+<g stroke="black" stroke-width="4" fill="none"><path d="M40 560H160L1090 230"/><path d="M160 560L1090 800"/></g>
+<g stroke="black" stroke-width="2.5" fill="none" stroke-dasharray="12 10"><path d="M160 560H1225"/><path d="M1090 230V905"/><path d="M160 560V905"/><path d="M1090 230H1320M1090 800H1320"/></g>
+<g stroke="black" stroke-width="2.6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"><path d="M160 882H1090"/><path d="M1130 230V560"/><path d="M1130 560V800"/><path d="M1300 230V800"/></g>
+<g font-size="30"><text x="36" y="460">Level tunnel exit</text><text x="70" y="502">(elevation 0)</text><text x="575" y="300">Launch ramp / rails</text><text x="685" y="340">(+15.95°)</text><text x="286" y="776">Natural hillside: drops 10 ft over 35 ft</text><text x="520" y="816">(−15.95°)</text><text x="603" y="930" font-size="36">35 ft</text><text x="1150" y="376" font-size="29">+10 ft</text><text x="1150" y="412" font-size="25">above</text><text x="1150" y="447" font-size="25">tunnel level</text><text x="1150" y="666" font-size="29">10 ft</text><text x="1150" y="706" font-size="25">hillside drop</text><text x="1247" y="516" font-size="27">20 ft</text><text x="1247" y="552" font-size="24">wedge</text><text x="1247" y="584" font-size="24">height</text></g>
+<g stroke="black" stroke-width="2.5" fill="none" marker-end="url(#arrow)"><path d="M158 505L165 550"/><path d="M770 350L725 362"/><path d="M695 745L670 705"/></g>
+</g></svg>
