@@ -4123,6 +4123,18 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "prite-command-delay-cost-05",
+          "knowledge": "The assessment pilot's protection against hindsight bias encouraged some cadets to delay orders while compiling defensible explanations. Prite recognizes waiting as an active choice that consumes tactical opportunities, and teaches it through scenario-native deadlines rather than a universal speed score.",
+          "certainty": "direct observed teaching experience",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation V — The Minutes Between Orders",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-05.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -4150,6 +4162,18 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation II — The Practical Examination",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "prite-third-lesson-timing-05",
+          "goal": "Teach and evaluate the syllabus's third question, 'What changes while you wait?', through the remainder-of-term pilot without treating faster orders as automatically better.",
+          "horizon": "current pilot term",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation V — The Minutes Between Orders",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-05.md",
             "sourceType": "continuation"
           }
         }
@@ -4210,6 +4234,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation II — The Practical Examination",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation V — The Minutes Between Orders",
+          "changeSummary": "Recognized delay's opportunity cost after a cadet's defensible report accompanied a failed convoy exercise; added a third syllabus question and accepted a non-retroactive, scenario-bound trial of timing evidence. No change to Solren's earlier appeal precedent.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation V — The Minutes Between Orders",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-05.md",
             "sourceType": "continuation"
           }
         }
@@ -4336,6 +4370,18 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "darcelle-command-timing-analysis-05",
+          "skill": "Tracing draft-order and accepted-order timestamps through Academy simulation logs and exposing opportunity windows without inventing hindsight deadlines",
+          "demonstratedLevel": "Identified missing evaluator summary data, directed synchronization checks, and secured curriculum approval for a remainder-of-term trial",
+          "status": "demonstrated",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation V — The Minutes Between Orders",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-05.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "relationshipsTrust": [],
@@ -4379,6 +4425,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation II — The Practical Examination",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation V — The Minutes Between Orders",
+          "changeSummary": "Instrumented the simulation's preexisting order-timing records and defended a timing-evidence trial against a legitimate curriculum objection; his technical confidence is demonstrated rather than newly invented.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation V — The Minutes Between Orders",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-05.md",
             "sourceType": "continuation"
           }
         }
