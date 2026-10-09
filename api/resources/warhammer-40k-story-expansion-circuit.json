@@ -113,14 +113,14 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
       "status": "active",
-      "currentEndpoint": "Continuation III — The Record That Waited. Atrovald's S-Rank search finds a possible Witness Two in Mortuary-Seventeen: a sealed remains container whose destruction record says the textual witness was burned, whose mass still matches the ancient certificate, and whose hidden physical inscription says not to destroy it until the first is present. Predulum, without being shown that inscription, reports a fragmentary memory of a furnace, ash and the phrase 'Wait until the first is present.' The missing fifty-third guard acquires a paper-only identity, Custody Auxiliar Hesk Venn, plus an unsigned tomorrow-dated instruction returning him to Null-Seven. Atrovald refuses to sign it and orders future-dated authority treated as evidence rather than instruction.",
-      "nextSlice": "On the next Atrovald rotation, advance the search for Hesk Venn and the provenance of the possible Witness Two without opening or reconciling evidence merely for explanatory convenience. Preserve Predulum's independent furnace/phrase memory, Atrovald's rule that future-dated orders are evidence until issued in ordinary sequence, the unopened Mortuary-Seventeen container, the 53/52 custody discrepancy, Witness Four and Predulum still sealed in Null-Seven, and the unresolved tomorrow-dated accession. Do not explain the anomaly as generic Warp/daemon mechanics. Apply natural-conversation governance: shared facts should shape decisions and shorthand, not be re-recited.",
+      "currentEndpoint": "Continuation IV — The Empty Place. Atrovald investigates Hesk Venn's paper-only escort position. Stores issued supplies but no ordinary personnel, death, or barracks record identifies him. The clerk who opened a missing-person inquiry disputes its unsigned closure; he remembers a cold escort reporter, consistent with a documented refrigeration fault. Sorn's old Mortuary-Seventeen shelf report returns with an unattributed instruction. Predulum, still confined, recalls an empty place in the escort but independence is unproven. Atrovald seals the future-dated return instruction with dual-clock witnesses and issues a separate present-day missing-person notice. Witness Two's possible container stays sealed, and Witness Four remains in Null-Seven.",
+      "nextSlice": "Trace the escort chit and unsigned inquiry closure through ordinary custody channels; test witness independence without assuming Hesk Venn's existence or fate. Preserve the present-day missing-person notice, unsigned tomorrow order, 53/52 discrepancy, sealed Mortuary-Seventeen container, and Predulum with Witness Four in Null-Seven.",
       "legacyBackfillRequired": false,
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "Continuation III — The Record That Waited",
+        "segment": "Continuation IV — The Empty Place",
         "durableCharacterStateChanged": true,
-        "reason": "Legacy backfill for Atrovald and Predulum was committed before drafting. Continuation III then added durable knowledge and active investigative orders for Atrovald plus an independent unresolved furnace/phrase memory for Predulum; both temporal records and Chapter Touch Logs were updated."
+        "reason": "Atrovald issues a missing-person notice and preserves conflicting evidence; Predulum reports an empty escort place. Temporal records and touch logs updated."
       },
       "eraLock": {
         "era": "Mature Imperium; exact millennium not fixed by the attached chronicle",
@@ -136,7 +136,7 @@
       },
       "authorshipLineageRule": "All future recovered/continued pieces in this line must include: Based on the work of: Matron Lagas Atrovald.",
       "chapterCapRule": "Hard cap of 40 chapters per book; Chapter XL is the latest permissible chapter number within a book.",
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md"
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-04.md"
     },
     {
       "id": "on-the-fuzzy-edge",
