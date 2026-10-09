@@ -3772,6 +3772,18 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "atrovald-venn-missing-inquiry",
+          "knowledge": "An unsigned closure of a position-53 missing-person inquiry is disputed by the clerk who opened it; the reporting escort complained of cold, consistent with a documented transit-lift refrigeration fault. Stores issued supplies against the position without identifying a recipient. The existence, identity and fate of Hesk Venn remain unresolved.",
+          "certainty": "physical records and testimony; no conclusive person identification",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation IV — The Empty Place",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-04.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3863,6 +3875,18 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "atrovald-venn-present-day-notice",
+          "order": "Seek Hesk Venn as potentially missing, neither presumed dead nor alive; accept no transfer in his name without an identifiable living officer taking responsibility. Preserve the unsigned tomorrow-dated return order separately with dual-clock custody witnesses.",
+          "issuingAuthority": "Matron Lagas Atrovald",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation IV — The Empty Place",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-04.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [],
@@ -3910,6 +3934,16 @@
             "story": "Matron Lagas Atrovald",
             "segment": "Continuation III — The Record That Waited",
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation IV — The Empty Place",
+          "changeSummary": "Interviewed the inquiry clerk and Predulum without showing them the disputed records; preserved Sorn's returned shelf report and a dual-clock sealed future instruction, then issued a separate ordinary missing-person notice for Hesk Venn.",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation IV — The Empty Place",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-04.md",
             "sourceType": "continuation"
           }
         }
@@ -4031,6 +4065,18 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "predulum-empty-escort-position",
+          "knowledge": "While still confined in Null-Seven, Predulum says he remembers an empty rear-rank place to the left of the sixth witness bier and an escort count of fifty-three; he cannot establish whether anyone told him of a disappearance before confinement.",
+          "certainty": "self-reported recollection; independence and accuracy unproven",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation IV — The Empty Place",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-04.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -4092,6 +4138,16 @@
             "story": "Matron Lagas Atrovald",
             "segment": "Continuation III — The Record That Waited",
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation IV — The Empty Place",
+          "changeSummary": "Reported a rear-rank empty place in the sixth-witness escort without seeing the missing-guard inquiry; remains confined with Witness Four and concerned about further memory sanitization.",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation IV — The Empty Place",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-04.md",
             "sourceType": "continuation"
           }
         }
