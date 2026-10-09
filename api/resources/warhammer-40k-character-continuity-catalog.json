@@ -5154,6 +5154,22 @@
             "sourceType": "continuation",
             "authority": "user-explicit"
           }
+        },
+        {
+          "id": "broussard-kb-pressure-seam-xv",
+          "information": "Marker twenty-two stands on a laterally shifting pressure seam; the old straight route is unsafe, and the surveyed eastern detour has supported fifty metres of inspected movement.",
+          "epistemicStatus": "observed",
+          "belief": "ice displacement is not itself evidence of a new predator",
+          "certainty": "high for measured displacement; future stability unproven",
+          "sourceCharacter": "Survey chief and direct reports",
+          "actionTaken": "Ordered an eastern survey and restricted staged movement.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XV. THE GROUND THAT MOVES",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -5368,6 +5384,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XIV. THE PRICE OF MOVEMENT",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XV. THE GROUND THAT MOVES",
+          "changeSummary": "Halted the ten-metre test after marker twenty-two tilted, ordered an eastern ice survey, accepted six hours of delay, and moved the freighter fifty metres in inspected stages without reaching the convoy.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XV. THE GROUND THAT MOVES",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
             "sourceType": "continuation"
           }
         }
@@ -5688,6 +5714,16 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "segment": "XV. THE GROUND THAT MOVES",
+          "changeSummary": "Joined the eastern survey, helped retrieve a tether after a sounding probe was lost, and maintained perimeter discipline.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XV. THE GROUND THAT MOVES",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -5956,6 +5992,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XIV. THE PRICE OF MOVEMENT",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XV. THE GROUND THAT MOVES",
+          "changeSummary": "Co-signed the movement delay and assigned cargo hands to the environmental bypass while preserving cargo security.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XV. THE GROUND THAT MOVES",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
             "sourceType": "continuation"
           }
         }
@@ -6251,6 +6297,16 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "segment": "XV. THE GROUND THAT MOVES",
+          "changeSummary": "Recorded old and new ice surveys under separate timestamps and preserved the still-missing fourteen-second impact interval.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XV. THE GROUND THAT MOVES",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -6321,6 +6377,22 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
             "sourceType": "continuation",
             "authority": "user-explicit"
+          }
+        },
+        {
+          "id": "sella-kb-staged-thrust-xv",
+          "information": "After renewed inspection and clamp replacement, the repaired brace and tow frame held through inspected controlled-thrust movement to fifty metres.",
+          "epistemicStatus": "confirmed",
+          "belief": "full thrust remains uncertified",
+          "certainty": "high for completed stages only",
+          "sourceCharacter": "Direct technical inspection",
+          "actionTaken": "Required further stop-and-inspect stages.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XV. THE GROUND THAT MOVES",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
+            "sourceType": "continuation"
           }
         }
       ],
@@ -6472,6 +6544,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XIV. THE PRICE OF MOVEMENT",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XV. THE GROUND THAT MOVES",
+          "changeSummary": "Re-inspected the outer brace after the delay, replaced a heat-stressed clamp and maintained controlled-thrust and inspection restrictions.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XV. THE GROUND THAT MOVES",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
             "sourceType": "continuation"
           }
         }

@@ -32,8 +32,8 @@
       "sourceDocumentId": "1Ga_Zy3--AxyCTgzE8C5yokEeD5VTRUv-js58bm3Vnxo",
       "recoveredThrough": "X. THE FORWARD HOLDS — complete through Broussard organizing the search for Jerrik Noll, Edren Vale and Pallas Dorn and ending: “Let’s go find them.”",
       "sourceObservedThrough": "X. THE FORWARD HOLDS — complete; the connected Google working draft contains no later chapter.",
-      "currentEndpoint": "XIV. THE PRICE OF MOVEMENT — the predator's frozen tow frame is recovered and field-repaired from safe ice; Sella certifies controlled thrust after repairing a shifted outer brace; Kelm secures the forward-hold cargo with supervised Guardsmen. The Hesperant Vale passes its first three-metre test, but marker twenty-two begins leaning unseen as Broussard orders a ten-metre test. Chimera Two remains mobile with a plated vision block and two missing outer track pads. The fourteen-second impact telemetry gap remains unresolved and separate from the electrocution.",
-      "nextSlice": "Continue with the ten-metre movement test and the unstable route revealed by marker twenty-two. Use measured ice surveys, recovery-hauler constraints and controlled ship thrust; do not teleport the freighter back to the convoy. Preserve the repaired tow frame, Chimera Two damage, intact-but-contracted perimeter, genuine electrocution, and unresolved fourteen-second telemetry gap. Do not reveal the hidden Genestealer-compromised crew or falsified origin to Broussard prematurely.",
+      "currentEndpoint": "XV. THE GROUND THAT MOVES — marker twenty-two's lateral ice displacement invalidates the straight route. A six-hour eastern survey establishes a detour; the repaired tow frame and restricted-thrust ship pass staged inspections and move fifty metres, still far from the convoy. Kelm reallocates cargo labor to refrigeration and Sella replaces a stressed clamp. The telemetry gap, genuine electrocution and concealed origin remain distinct.",
+      "nextSlice": "Continue the measured eastern-route extraction. Preserve restricted thrust, repaired tow frame, damaged Chimera Two, refrigeration and convoy costs, the genuine electrocution, the unresolved fourteen-second impact gap and the unrevealed compromised origin. No premature convoy arrival.",
       "constraints": [
         "Fourteen-second telemetry gap is a surface anomaly, not the main plot hole.",
         "Deep-indexed older telemetry was falsified to conceal the freighter's true port of origin.",
@@ -71,11 +71,11 @@
       },
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "XIV. THE PRICE OF MOVEMENT",
+        "segment": "XV. THE GROUND THAT MOVES",
         "durableCharacterStateChanged": true,
-        "reason": "Backfilled XII–XIV touch logs for the active cast; completed the obsolete missing-team search goals and recorded current recovery vehicle and tow-frame constraints before XV prose."
+        "reason": "Five XV touch logs and two operational knowledge entries added to the authoritative temporal catalog."
       },
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-04.md"
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md"
     },
     {
       "id": "house-vallimere-sons",
