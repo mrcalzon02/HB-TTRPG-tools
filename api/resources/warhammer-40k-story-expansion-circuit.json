@@ -394,9 +394,9 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
       "status": "active",
-      "currentEndpoint": "Continuation I — The Toll at the Inner Gate. Mulvane guides a displaced hospital lighter to a quarantine hold before completing the tithe-carrier passage. Three deaths are reported. The House charges his account and reviews the deviation; his physician restricts further third-eye opening after two close passages and a left-hand tremor persists.",
-      "nextSlice": "Continue the House review and Mulvane's medical recovery without prematurely resolving the three deaths, possible delay claim, House debt or restrictions. Preserve the distributed corrected manifest and Mulvane's narrow procedural resistance.",
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md"
+      "currentEndpoint": "Continuation II — The Corrected Line. The House review is pending, the three-death chronology has been corrected without assigning cause, and Mulvane remains medically restricted. Supported station expenses are assigned to his service account; carrier damages are unproven.",
+      "nextSlice": "Continue the pending House review and medical recovery, preserving all outstanding liabilities, evidence and procedural limits.",
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md"
     }
   ],
   "governanceDocument": "api/resources/warhammer-40k-fiction-governance.md",

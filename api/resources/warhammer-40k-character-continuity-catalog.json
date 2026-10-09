@@ -2903,6 +2903,17 @@
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
             "sourceType": "committed-continuation"
           }
+        },
+        {
+          "id": "drenal-corrected-line-review-02",
+          "event": "Participated in House allocation review of the displaced hospital lighter, distinguished initial hazard examination from later supporting signals, and saw the House preserve the competing claim rather than issue a final finding.",
+          "status": "observed",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Corrected Line",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "knowledgeBeliefs": [
@@ -2952,6 +2963,42 @@
             "segment": "The Toll at the Inner Gate",
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
             "sourceType": "committed-continuation"
+          }
+        },
+        {
+          "id": "drenal-three-deaths-timeline-02",
+          "knowledge": "A corrected station record places one death before final approach, one during quarantine-hold preparation and one pronounced after transfer. Neither earlier rescue nor delay has been shown to determine the outcomes; names and medical causes remain restricted.",
+          "certainty": "documentary correction and physician's bounded assessment",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Corrected Line",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "drenal-invoice-claim-review-02",
+          "knowledge": "The station rejected duplicate conversion charges, and House Drenal reduced the charge to his service account. The carrier factor submitted a post-discharge spoilage survey; earlier temperature records have been requested and no delay damages have been established.",
+          "certainty": "House review records",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Corrected Line",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "drenal-record-privacy-tradeoff-02",
+          "knowledge": "The station proposed an auditable record of priority alterations; the House officer explained legitimate medical-privacy, client-security and premature-hazard-disclosure constraints. Mulvane suggested recording authority without publicly disclosing every reason. No new House policy has been adopted.",
+          "certainty": "direct conversation",
+          "status": "observed",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Corrected Line",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md",
+            "sourceType": "continuation"
           }
         }
       ],
@@ -3025,6 +3072,17 @@
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
             "sourceType": "committed-continuation"
           }
+        },
+        {
+          "id": "drenal-review-interim-cost-02",
+          "obligation": "House review remains open. Supported quarantine-hold costs remain assigned to Mulvane's service account; possible carrier damages remain disputed and unproven. He has not been cleared to resume inner navigation.",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Corrected Line",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [
@@ -3049,6 +3107,17 @@
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
             "sourceType": "committed-continuation"
           }
+        },
+        {
+          "id": "drenal-recovery-check-02",
+          "condition": "During subsequent recovery, left-hand writing control improved but visual response and afterimage remained abnormal; physician maintained the prohibition on further third-eye opening and did not give a date for clearance.",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Corrected Line",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "equipmentResources": [],
@@ -3071,6 +3140,16 @@
             "segment": "The Toll at the Inner Gate",
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
             "sourceType": "committed-continuation"
+          }
+        },
+        {
+          "segment": "The Corrected Line",
+          "changeSummary": "Witnessed preliminary House review; learned corrected three-death sequence and still-unresolved causality, reduced supported conversion invoice and unproven carrier claim, and limits of public audit records. Physician retained navigation restriction despite partial hand recovery. No release from House service, final damages ruling or new House policy.",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Corrected Line",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md",
+            "sourceType": "continuation"
           }
         }
       ]
