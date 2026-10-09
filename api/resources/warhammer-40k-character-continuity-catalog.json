@@ -2881,20 +2881,132 @@
           }
         ]
       },
-      "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "memoriesEvents": [
+        {
+          "id": "drenal-rite-failed-kin-legacy",
+          "event": "Survived the Rite of Eyes Unshuttered at fourteen, later witnessed failed House Drenal kin retained as living psychic assets; both experiences shape his obedience.",
+          "status": "established",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Original migrated chronicle — temporal backfill",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "knowledgeBeliefs": [
+        {
+          "id": "drenal-astronomican-experience-legacy",
+          "knowledge": "Mulvane perceives the Astronomican as overwhelming psychic suffering translated into direction; this is his experience and interpretation, not omniscient metaphysical proof.",
+          "certainty": "subjective direct experience",
+          "status": "believed",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Original migrated chronicle — temporal backfill",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "id": "drenal-twelve-sons-legacy",
+          "knowledge": "House Drenal told him after two decades of service that his archived germline had produced at least twelve sons and one showed promise; no personal relationship with them is depicted.",
+          "certainty": "House report",
+          "status": "reported",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Original migrated chronicle — temporal backfill",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
-      "plansGoals": [],
-      "skillsCompetence": [],
-      "relationshipsTrust": [],
+      "plansGoals": [
+        {
+          "id": "drenal-service-goal-legacy",
+          "goal": "Continue mission-critical inner-system navigation assignments and endure House service; no independent private escape plan is source-established.",
+          "horizon": "ongoing",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Original migrated chronicle — temporal backfill",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "skillsCompetence": [
+        {
+          "id": "drenal-inner-sol-navigation-legacy",
+          "skill": "Near-Terra warp approach navigation under severe Astronomican pressure",
+          "demonstratedLevel": "Decades of successful assignments; specialist endurance and discipline, not immunity to injury or perfect foresight.",
+          "status": "demonstrated",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Original migrated chronicle — temporal backfill",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "relationshipsTrust": [
+        {
+          "id": "drenal-house-relationship-legacy",
+          "counterpart": "House Drenal",
+          "direction": "Mulvane toward House",
+          "relationship": "Conditioned obedience, institutional dependency, awareness that failed kin may be repurposed; no open rebellion established.",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Original migrated chronicle — temporal backfill",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
-      "physicalMedicalState": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "drenal-house-service-legacy",
+          "obligation": "House Drenal controls his navigation assignments, conditioned training, and archived reproductive legacy.",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Original migrated chronicle — temporal backfill",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "physicalMedicalState": [
+        {
+          "id": "drenal-eye-conditioning-legacy",
+          "condition": "Third eye awakened at fourteen; years of chemical and psychic conditioning; still functional after decades of service. No current disabling injury established.",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Original migrated chronicle — temporal backfill",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Original migrated chronicle — temporal backfill",
+          "changeSummary": "Recovered original-source temporal anchors for Mulvane's Rite, failed kin, subjective Astronomican experience, twelve reported sons, inner-system navigation skill, House obligation and present active service. No continuation prose generated or new facts invented.",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Original migrated chronicle — temporal backfill",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ]
     },
     "doctor-reinhold-vigilant-shade": {
       "personaId": "doctor-reinhold-vigilant-shade",
