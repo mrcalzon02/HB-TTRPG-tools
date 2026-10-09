@@ -2,31 +2,12 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 7, *The Knife That Missed*.
-**Forward window:** Season 2 Episodes 8–12.
+**State:** Rolled forward after Season 2 Episode 8, *Rules for Miracles*.
+**Forward window:** Season 2 Episodes 9–13.
 
-## Season 2 Episode 8 — Rules for Miracles — CURRENT / RECKONING
+## Season 2 Episode 9 — The Obstructing Envoy — CURRENT / RECKONING
 
-The earlier rules face revision under accumulated pressure from the cistern, Iven, listening ways, treasury relief, Episode 6's privacy breach and Episode 7's security consequences. Do not repeat Episode 2. The question is no longer whether supernatural help may ever be used, but how a living government limits a servant that can hear, warn and obey without independently possessing lawful judgment.
-
-Required live pressures:
-- Rhyse is grateful Edselsto's warning helped save Luceran and frightened by how useful that makes it.
-- Miren refuses any retrospective justification of the Episode 6 privacy breach.
-- Ysabet requires recordable authority, review and challenge rather than informal royal exception.
-- Vess and workers need visible notice of connected spaces and rules that do not turn a construction site into a hidden listening maze.
-- The wounded Doorwarden and the east-service breach preserve the fact that living security remains indispensable.
-- Marek's sponsor remains unknown; his brother claim is unverified.
-- Luceran is tempted toward broader protection because he has now personally felt its value.
-
-The standards should define at minimum: what observable events Edselsto may report; who receives alarms; what human action may follow without further evidence; false-alarm review; whether private/deaf spaces remain protected; how connected areas are marked; who may authorize temporary exceptions; what records survive; and who can challenge misuse.
-
-Luceran and Miren remain intimate but unrepaired. Do not resolve the marriage question because danger increased.
-
-**Exit target:** mature, contested standards exist so later erosion can be measured against something people fought to preserve.
-
-## Season 2 Episode 9 — The Obstructing Envoy — PLANNED
-
-Introduce the powerful envoy whose coalition, money, recognition or military cooperation Luceran materially needs. The envoy is competent, socially complete and grounded in institutional interests. Seed staff, relationships, humor, constituency and non-negotiable obligations. Episode 8's miracle rules should already constrain what Luceran may ask Edselsto to do around a foreign political actor.
+Introduce the powerful envoy whose coalition, money, recognition or military cooperation Luceran materially needs. The envoy is competent, socially complete and grounded in institutional interests. Seed staff, relationships, humor, constituency and non-negotiable obligations. The signed Episode 8 miracle rules constrain what Luceran may ask Edselsto to do around a foreign political actor. The House Lethayne courier has announced a delegation requesting safe lodging, precedence and a room free of supernatural listening; the envoy's identity, demands, constituency and personal life remain to be established in prose.
 
 **Exit target:** Luceran faces a human political obstacle that cannot be reduced to architecture, surveillance or obedient service.
 
@@ -51,6 +32,27 @@ The court lives with the consequences of refusing Edselsto's shortcut. The envoy
 At least one non-royal actor should materially advance an independent objective created by the envoy dispute. Do not let Episode 12 function only as a bridge to later atrocity.
 
 **Exit target:** the human costs of restraint are visible enough that a later decision to cross the line can arise from accumulated pressure rather than sudden corruption.
+
+## Season 2 Episode 13 — The Cost of Saying No — NEW N+4 / DIRECTIONAL
+
+After the envoy's refusal and the first tangible consequences of the court's decision not to use Edselsto's forbidden shortcut, show how money, road access, recognition, security and court relationships worsen despite the king's continuing access to conventional options. At least one non-royal actor must pay a specific cost and make an independent choice. The Episode 8 miracle rules must remain operative even when costly. Do not imply that declining atrocity is automatically a complete policy.
+
+**Schematic reconciliation debt:** The season schematic calls Episode 12 *Below the Wine Cellars*, while the prior active horizon calls Episode 12 *Terms of Refusal*. Preserve both the refusal-cost arc and the staffed undercroft-expedition obligation. Before writing Episode 12, reconcile their placement against the committed Episodes 9–11 without silently erasing either beat or prematurely revealing the castle's buried truth.
+
+**Exit target:** Luceran is still capable of ordinary political action, but its accumulating price makes the later supernatural temptation causally credible.
+
+## Episode 8 reconciliation
+
+- Luceran, Rhyse, Ysabet, Damaris, Vess, Miren, Canon Merel and Pell establish witnessed six-clause rules for observable auditory reports, living-watch response, physically deaf rooms, bounded inquiries, alarm review/challenge and responsible human authorization.
+- The rule does not grant Edselsto intent-reading, legal judgment, unlimited memory or independent authority; direct royal commands remain possible and attributable to Luceran.
+- A cooper cutting damaged harness in the connected east receiving passage receives an accurate sound report and a human challenge, then release on living evidence. A worker in the unconnected recess is not heard.
+- The east receiving recess is physically closed and the watch/worker route survey continues. Black ear notices remain visible.
+- Oren Bale, the wounded Doorwarden, is recovering with uncertain full use of one finger; his wife Lysa Bale receives wages and demands that living officers remain liable for injury and compensation.
+- Hesta Vale wins refund of the disputed four-penny wheel fee and secures an alarm-record challenge right with a reader or witness of the petitioner's choosing.
+- Marek Venn remains under guard; the linen comparison is inconclusive as to common origin, his brother remains unverified and his sponsor unknown. No merged conspiracy is inferred.
+- Luceran accepts the written record of his Episode 6 privacy breach. Miren remains physically close but unreconciled, with the marriage question unanswered and the south-gallery withdrawing room physically deaf.
+- House Lethayne forwards a foreign delegation's demand for safe lodging, precedence and private conference space. No envoy identity or demands have been fixed.
+- All seven ancestral candles remain lit.
 
 ## Episode 7 reconciliation
 
@@ -88,7 +90,7 @@ At least one non-royal actor should materially advance an independent objective 
 
 ## Active payoff debt
 
-Montegrain accountability/fate; Aven culpability/surrender protections; Rusk patronage/coercive command/payment evidence; Harl testimony/culpability; coup prisoner classification; Pellan Vey culpability; battle deaths/households; Iven family/service precedent; wounded/civilian compensation; Mera/Parel/Pellon chain; Parel seal-wax inquiry; false orders/credential provenance; missing Black Pine scout/road interceptors; route-delay insertion point; Deren Holt north-track rider lead; Eren Vos/Savel testimony; Ardel/Kaelmont independence and winter-plan refusal; Ysabet/Selise archive damage; Calienne care space; Red Ford settlement; Northbridge repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; capital rumor ecology; Luceran/Miren marriage discussion and trust repair; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candles; Hall of Veils; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Vess/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door; Eastern Household Reserve provenance/claimants; Hesta Vale track bargain; Senn Daro exclusion; Cendreval leverage; Jerrik Moss hearing/oil debt; Episode 6 listening-authority breach; south-gallery deaf-room precedent; Marek Venn true identity/brother claim/sponsor; recovered-linen comparison; east-service-recess access failure; wounded Doorwarden recovery/family pay; Hesta Vale wheel-fee dispute; Episode 7 alarm-rule obligation; Rhyse's mixed gratitude and professional alarm; Luceran's temptation to treat successful warning as precedent for broader listening.
+Montegrain accountability/fate; Aven culpability/surrender protections; Rusk patronage/coercive command/payment evidence; Harl testimony/culpability; coup prisoner classification; Pellan Vey culpability; battle deaths/households; Iven family/service precedent; wounded/civilian compensation; Mera/Parel/Pellon chain; Parel seal-wax inquiry; false orders/credential provenance; missing Black Pine scout/road interceptors; route-delay insertion point; Deren Holt north-track rider lead; Eren Vos/Savel testimony; Ardel/Kaelmont independence and winter-plan refusal; Ysabet/Selise archive damage; Calienne care space; Red Ford settlement; Northbridge repair; Deren Holt/Valcere authority; Corin Varo/Edevane authorization; capital rumor ecology; Luceran/Miren marriage discussion and trust repair; Miren jealousy/Luceran-Ardel attraction; Canon Merel/candles; Hall of Veils; Episode 16 note/questioner; hunt tester/sponsor/false horn/rope/riders; Royal Companion review; Moncler/Kaelmont/Lysa/Dena/Hale obligations; deeper stair authorization; Damaris/Tomas logistics; Vess/Henn obligations; N.F. 44–51/Halven Sare/parental visit/Widow's key/infilled doorway/lower-west barred door; Eastern Household Reserve provenance/claimants; Hesta Vale track bargain; Senn Daro exclusion; Cendreval leverage; Jerrik Moss hearing/oil debt; Episode 6 listening-authority breach; south-gallery deaf-room precedent; Marek Venn true identity/brother claim/sponsor; recovered-linen comparison; east-service-recess access failure; wounded Doorwarden recovery/family pay; Hesta Vale wheel-fee dispute; Episode 8 signed miracle-order enforcement and alarm-review precedent; Oren Bale recovery and Lysa Bale's pay/compensation concern; Hesta Vale's refund and public-notice interest; foreign delegation's deaf-room inspection request; Rhyse's mixed gratitude and professional alarm; Luceran's temptation to broaden listening.
 
 ## Protected long-future seeds
 
