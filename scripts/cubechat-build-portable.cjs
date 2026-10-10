@@ -5,7 +5,7 @@ const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'dist');
 const FILES=[
 'cubechat-server.cjs','cubechat-forum.cjs','cubechat-forum.html','cubechat-host.html',
 'cubechat-network.html','cubechat-provision.html','cubechat-key-handoff.html',
-'cubechat-large-keys.html','cubechat-large-key-adapter.js','cubechat.html',
+'cubechat-large-keys.html','cubechat-large-key-adapter.js','cubechat-key-ledger-core.js','cubechat-key-ledger.js','cubechat.html',
 'shadowrun-binary-cube-engine.js','docs/cubechat-lan-development.md',
 'docs/cubechat-release-candidate.md'
 ];
