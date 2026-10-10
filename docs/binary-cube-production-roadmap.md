@@ -180,3 +180,16 @@ Design requirements:
 - Measure differential diffusion/avalanche, locality leakage, chosen-input behavior, error propagation, redundancy and expansion, timing, and memory independently for fixed masks, subcube codewords, chaining, true reversible diffusion, and combined message-dependent mask modes.
 - Do not equate visual complexity or unexpectedly structured ciphertext with cryptographic security. Keep standard authenticated encryption protecting experimental cube transforms as independently versioned layers.
 - Wire the experimental option through one shared engine authority across the text example, file application, lab visualizer and test suites only after a staged validated prototype. Label unimplemented operations explicitly.
+
+## Pre-distributed keychain schedule and mutation epochs (2026-10-10)
+
+**Concept, not implemented:** Support a collection of independently physical-entropy-generated, locally held large cube-key files arranged as a reversible translation chain. A schedule can permute the *order of application* without needing a new key transfer on every rotation. Illustration: initial L→R→S→M→R2→S2→L2, swap R and R2 at 12:00, swap M and S at 17:00, and activate a separately provisioned new keychain at 00:00. These named operations are provisional labels; precise semantics require confirmation before implementation.
+
+Design:
+- Maintain immutable independently generated key files with opaque IDs and a compact, versioned **mutation manifest** mapping named operations to specific key files and allowed transforms; include deterministic operation order, timezone, schedule version, and future chain epoch.
+- Prepare next keychain **out of band** in advance, using a verified secret handoff. Do not encrypt the next wholly independent keychain under a compromised former channel and claim compromise recovery.
+- Use an authenticated per-message epoch ID, monotonic sequence number, manifest version and activation state. Decode according to the sender's authenticated state, not the receiver's current wall clock.
+- Define midnight activation and each clock mutation in UTC or an explicitly pinned timezone with daylight-saving behavior; include activation boundaries and retry/reorder handling for delayed/offline packets. Treat schedule as operational coordination, not a cryptographic secret.
+- Require exact inverse traversal and reversible subcube transforms; measure interoperability after every mutation. Preserve old epochs only for explicit bounded read windows; separate old-message decryption from permission to encrypt new messages.
+- Distinguish reordering/reusing the same keys from actual introduction of fresh independent entropy. Changing order alone does not restore secrecy after key compromise, prevent replay, or guarantee avalanche resistance.
+- Add validation: 11:59/12:00, 16:59/17:00, 23:59/00:00 boundaries, clock skew, delayed delivery, missed rotations, wrong manifest, identical operation names, interrupted upgrades, chain rollback, compromised key, and crash recovery.
