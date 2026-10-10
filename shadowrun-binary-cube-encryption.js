@@ -112,7 +112,7 @@
     panel.id = PANEL_ID;
     panel.hidden = true;
     panel.innerHTML = `
-      <div class="cube-lab-header"><div><p class="eyebrow">Experimental Matrix utility · engine ${SCHEMA_VERSION}</p><h2>Binary Cube Encryption Laboratory</h2><p>Generate, validate, export, inspect, and exchange canonical Binary Cube keys and packages.</p></div><button type="button" class="layout-button" data-cube-close>Close Laboratory</button></div>
+      <div class="cube-lab-header"><div><p class="eyebrow">Experimental Matrix utility · engine ${SCHEMA_VERSION}</p><h2>Binary Cube Encryption Laboratory</h2><p>Generate, validate, export, inspect, and exchange canonical Binary Cube keys and packages.</p></div><div class="cube-lab-header-actions"><a class="layout-button" href="binary-cube-text-encoder.html">Examples · Encoder</a> <button type="button" class="layout-button" data-cube-close>Close Laboratory</button></div></div>
       <p class="cube-lab-warning"><strong>Research and game-use warning:</strong> this is experimental permutation and obfuscation research. The checksum detects accidental changes but is not a cryptographic authenticator. Do not use this system to protect real credentials, financial records, private messages, or sensitive data.</p>
       <p class="cube-lab-runtime"><strong>Slow-hardware execution:</strong> expensive key, projection, encryption, decryption, and validation calls run in a dedicated Web Worker using the same canonical engine. The page remains interactive while slower systems work. Routine encrypt/decrypt uses the algebraic collision-free invariant; <em>Validate Pair</em> performs the deliberately slower exhaustive six-face projection check.</p>
       <div class="cube-transfer-lanes" aria-label="Binary Cube file transfer lanes">
