@@ -1,12 +1,13 @@
 'use strict';
 // CubeChat LAN transport: Node built-ins only. Relays opaque encrypted envelopes, never key material.
-const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
+const http=require('node:http'),https=require('node:https'),fs=require('node:fs'),path=require('node:path');
 const ROOT=__dirname, PORT=Number(process.env.CUBECHAT_PORT||process.argv[2]||8787), HOST=process.env.CUBECHAT_HOST||'0.0.0.0';
 if(!Number.isInteger(PORT)||PORT<1||PORT>65535)throw Error('Invalid port');
 const clients={A:new Set(),B:new Set()};const MAX=1024*1024;
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8'};
 function respond(res,code,text,type='text/plain; charset=utf-8'){res.writeHead(code,{'Content-Type':type,'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self' 'unsafe-inline'; connect-src 'self'"});res.end(text)}
-const server=http.createServer((req,res)=>{
+const tls=process.env.CUBECHAT_TLS_CERT&&process.env.CUBECHAT_TLS_KEY;
+const server=(tls?https.createServer({cert:fs.readFileSync(process.env.CUBECHAT_TLS_CERT),key:fs.readFileSync(process.env.CUBECHAT_TLS_KEY)}):http.createServer)((req,res)=>{
 const base='http://localhost';let u;try{u=new URL(req.url,base)}catch{return respond(res,400,'Bad request')}
 if(req.method==='GET'&&u.pathname==='/events'){
  const role=u.searchParams.get('role');if(!clients[role])return respond(res,400,'Invalid role');
@@ -31,4 +32,4 @@ if(req.method==='GET'&&['/','/cubechat-network.html','/shadowrun-binary-cube-eng
 }
 respond(res,404,'Not found');
 });
-server.listen(PORT,HOST,()=>console.log('CubeChat LAN listening on '+HOST+':'+PORT+' (HTTP: LAN test only; no TLS)'));
+server.listen(PORT,HOST,()=>console.log('CubeChat listening on '+(tls?'https://':'http://')+HOST+':'+PORT+(tls?' (TLS enabled)':' (localhost-only Web Crypto; use TLS for other devices)')));
