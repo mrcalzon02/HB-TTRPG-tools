@@ -1564,3 +1564,194 @@ When they finished, Damaris turned the third bowl upright and left it covered, w
 She took her ledger and went upstairs. Ilyan put the shutter bar back in place, as the cook had asked. The sealed inquiry had left the Hall. The personnel request had not. Neither fact had changed over supper.
 
 He went home intending to write a letter that asked no one to prove anything.
+
+---
+
+Rhyl came in after the kitchen had been put to bed.
+
+The door from the yard opened on a narrow passage, and he stood there for a moment with his boots in his hands, listening to the house. Someone had left a lamp on the shelf. Its flame had burned low enough to make the passage smell of warm metal. The kitchen shutter was barred, as it ought to be, and a third bowl sat beneath a cloth beside the cold hearth.
+
+He had expected to find a note telling him to eat somewhere else.
+
+Instead there was bread, and a spoon laid across the bowl so that its handle would not fall into the stew.
+
+He was halfway through the first mouthful when Damaris appeared in the doorway. She had loosened her hair and changed into a plain gown with a soft, rather battered sash. He knew the sash. She wore it when she intended to work after everyone else had decided the day was finished.
+
+"You came back," she said.
+
+"I said I would."
+
+"You said you'd go to the ford."
+
+"I did that too."
+
+She came close enough to smell the river on his coat. There was dried mud along one sleeve, a tear in the leather of his glove, and a thin red line where the glove had failed to protect his wrist. Her gaze settled on the cut.
+
+"Was that the ford?"
+
+"A bramble on the way to it."
+
+"An ambitious bramble."
+
+"It was defending a perfectly ordinary hedge."
+
+She took his wrist, turned it gently toward the lamp, and satisfied herself that the scratch had been cleaned. He let her look. He had once been embarrassed by the way she noticed injuries he considered beneath notice. Now he would have been disappointed if she hadn't.
+
+"Eat," she said. "Then you can tell me."
+
+He sat. Damaris fetched a second cup and poured water for them both. She did not ask for his field book. She had learned that there were questions she could ask of the man she loved and other questions that belonged to the Red Hart, even when the two happened to be sitting in her kitchen.
+
+Rhyl broke the bread.
+
+"The near bank has changed less than I feared. The far approach is worse."
+
+"Can you tell me that?"
+
+"It's in the public warning. I added a supplementary observation for the road keeper. The restricted field sheet is separate."
+
+She nodded, but he heard the slight delay before it. He had become good at hearing when she had chosen not to ask something.
+
+At first light he had reached the crossing before the sun cleared the wet alder branches. The river had fallen a little overnight. That made the exposed gravel look inviting, which was precisely what troubled him. The old approach stones were not merely missing. One lay downstream, tilted in a bed of silt, and the current had eaten a narrow pocket behind the bank where a loaded wheel would have put its weight.
+
+He had tested the accessible edge with a long pole, not by stepping into water whose bottom he could not see. The pole entered cleanly through the crust at a place that had looked firm enough to stand on. When he pulled it free, the river took several breaths to fill the hole.
+
+A young carter arrived with an empty wagon before Rhyl finished measuring. The man had heard that the ford was passable again. He was not reckless; he had come early, with an empty cart, precisely because he did not want to risk his master's charcoal team without trying the approach first.
+
+"Can I turn there?" he asked.
+
+"You can turn on the road."
+
+"That's not what I meant."
+
+"I know."
+
+The carter walked down to the gravel beside him. Rhyl showed him the depression the pole had left and the place where the current moved beneath the apparent edge. The man studied it with the unhappy attention of someone who had already imagined telling his employer that the cheaper road was still unavailable.
+
+"Last autumn that was solid."
+
+"Last autumn it may have been."
+
+"Will you close it?"
+
+"I can't close a public road from here."
+
+"Then what's the warning worth?"
+
+Rhyl could have answered with the names of several officials, the distinctions among their jurisdictions, and a description of the Red Hart's charter. The carter wanted to know whether he could get a wagon across.
+
+"It's worth knowing what I wouldn't put a loaded wheel on," Rhyl said.
+
+The man looked at the gravel again. He turned his empty wagon on the road.
+
+They had not parted friends, but the carter had gone away with his axle intact.
+
+By midmorning a road-office assistant arrived carrying a measuring rod and a small case of wax tablets. He was older than Rhyl, with the weathered patience of someone who had seen too many confident young officers declare roads safe from horseback. He did not accept Rhyl's judgment merely because Rhyl wore Red Hart colors. He tested the near approach himself, asked where the original markers had stood, and made Rhyl distinguish what he had measured from what he inferred about the unseen bed.
+
+They agreed on the scoured edge. They did not agree that the entire crossing could yet be called unsafe. The assistant wanted the road keeper's inspection before the office changed its public status.
+
+Rhyl had been irritated. He was still irritated. The delay was real, and so was the difference between a field warning and an order that might stop a village's deliveries.
+
+"I gave him my signed observations," he told Damaris. "The road keeper is to examine the approach before issuing anything stronger. Until then the warning stands, and the crossing isn't certified for loaded traffic."
+
+"So the public status hasn't changed."
+
+"Not yet."
+
+"And our wagons have gone by the paved road."
+
+"I saw their tracks where the roads divide."
+
+Damaris set down her cup.
+
+"Did you follow them?"
+
+"No. I had a report to finish."
+
+She smiled. "That is a very satisfactory answer."
+
+"It wasn't meant to be."
+
+"I know."
+
+He finished his stew. It was cold at the edges and better than anything he had eaten since dawn. He had been thinking about the signed warning all afternoon, wondering whether the public account of his work would make Damaris's family resent him. He had no wish to become the expensive man at their dinner table, the one whose scruples had to be accounted for in a margin.
+
+A folded letter lay in his coat pocket. The yard messenger had brought it after he returned from the road office. He took it out now, careful not to stain it with his fingers.
+
+"Your note arrived."
+
+"Did you read it?"
+
+"Twice."
+
+"That sounds suspicious."
+
+He unfolded the sheet. The part about the toll was practical, the part about her aunt was funny, and the last sentence had occupied him for the length of the walk home.
+
+"You wrote that you were proud of me."
+
+"I was."
+
+"For costing your family money?"
+
+"For refusing to pretend you knew something you hadn't established. And for telling my cousin no when it would have been easier to give him a private answer."
+
+"I wanted to give him an answer."
+
+"Of course you did. He was worried about the kiln. He had people waiting on the delivery. He wasn't trying to make a fool of you."
+
+"I know that too."
+
+Damaris looked down at the letter. She had thought his refusal easy because he had made it sound easy. She had not considered how much he disliked leaving a practical question unresolved when a person was standing in front of him asking for help.
+
+"My aunt has asked me to put the loss into the charter accounts," she said. "Not hide it among general carriage costs."
+
+"Will that be difficult?"
+
+"Unpleasant. Which is different. The margin will be smaller, and my cousin will want the next contract to make the carrier's discretion explicit. He is right about that."
+
+Rhyl considered her for a moment.
+
+"Would it help if I spoke to the council?"
+
+"Only if the road office asks you for evidence. I can't use you as my defense before my own committee."
+
+He nodded. Then he looked up again.
+
+"That sounds rather like something I said at dinner."
+
+"It does. I found it annoying at the time."
+
+"And now?"
+
+"Now it is still annoying. But I know what it is for."
+
+He laughed, quietly enough not to wake the household. She leaned against his shoulder, and for a little while they listened to the old boards settle around them. The lamp made a small warm circle on the table. Outside, a late cart rattled over the stones, carrying someone else's goods to someone else's obligation.
+
+After a time Rhyl said, "I was afraid you'd think I cared more about a rule than about you."
+
+Damaris lifted her head. It was a more vulnerable admission than anything he had said about the ford.
+
+"I know you care about me," she said. "I don't want you to prove it by giving away the things you're trusted to keep."
+
+"And I don't want you to bear every cost of that decision alone."
+
+"I won't. The carrier's account will bear some. My cousin will remember some. You'll have to answer for your observations if the road keeper disputes them. That's what happens when a choice leaves the dining room."
+
+She brushed a crumb from his collar. He caught her hand and kissed the inside of her wrist, slowly enough that she forgot the cold accounts upstairs. She kissed him in return, with none of the household's front-step discretion required. There was no audience to impress and no favor to ask. When they drew apart she remained close, her fingers curled in the torn leather of his glove.
+
+"Come upstairs," she said. "Before you fall asleep in the kitchen."
+
+"There's still the report."
+
+"You finished the report."
+
+"I have to appear if the road keeper wants a witness."
+
+"Then you can appear tomorrow after you've slept."
+
+He let her take the bowl. Together they washed it and set it upside down with the others. Damaris folded his letter into her sash, not because it contained useful intelligence but because she wanted to keep the sight of his handwriting beside hers.
+
+The ford was not certified safe. No office had yet closed it. The charcoal was on the longer road, and someone would have to explain the toll in a room full of people who had not been present when the river took the stones away.
+
+Rhyl followed Damaris up the stairs, leaving the lamp for the cook to find at dawn.
+
