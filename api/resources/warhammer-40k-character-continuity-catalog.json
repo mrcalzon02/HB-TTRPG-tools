@@ -3852,6 +3852,30 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-04.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "atrovald-counterfoil-53-52",
+          "knowledge": "A surviving physical dispatch counterfoil made before the missing-person inquiry records 53 escort positions at dispatch and 52 returned. A numbered chit was issued and returned as an exception; neither record proves Hesk Venn personally occupied the position.",
+          "certainty": "documentary count confirmed; identity and missing-person outcome unresolved",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation V — The Counterfoil",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "atrovald-auto-closure-mechanism",
+          "knowledge": "A legacy reconciliation process automatically closed the numerical missing-person inquiry after a 52-count adjustment without the original complainant's signature. The adjustment's initiating officer is not identified, so the process explains closure but not the original discrepancy.",
+          "certainty": "process verified; initiating authority unresolved",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation V — The Counterfoil",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-05.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3955,6 +3979,18 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-04.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "atrovald-reopened-inquiry-dual-chain",
+          "order": "Restore the Venn inquiry while preserving its improper closure; keep disputed custody/missing-person cases outside automatic closure pending joint approval; preserve the original counterfoil, request the escort duty roster and the count-adjustment authorization through separate chains, and correct the quartermaster's wrongful suspension. Preserve existing seals and Null-Seven confinement.",
+          "issuingAuthority": "Matron Lagas Atrovald",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation V — The Counterfoil",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-05.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [],
@@ -4012,6 +4048,16 @@
             "story": "Matron Lagas Atrovald",
             "segment": "Continuation IV — The Empty Place",
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-04.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation V — The Counterfoil",
+          "changeSummary": "Confirmed pre-inquiry 53/52 paper discrepancy without proving Hesk Venn's identity, discovered the automatic-closure procedure, reopened the case, stayed the quartermaster's suspension, and sought two independent authorization records; unresolved Witness Two, Witness Four and future-order restrictions remain.",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation V — The Counterfoil",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-05.md",
             "sourceType": "continuation"
           }
         }
