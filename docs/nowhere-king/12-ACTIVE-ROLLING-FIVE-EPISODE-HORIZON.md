@@ -2,22 +2,10 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 14, *A Human Solution*.
-**Forward window:** Season 2 Episodes 15–19.
+**State:** Rolled forward after Season 2 Episode 15, *What Necessity Means*.
+**Forward window:** Season 2 Episodes 16–20.
 
-## Season 2 Episode 15 — What Necessity Means — CURRENT / LOCKED
-
-**Entry:** A first twelve Tervain sacks have reached Edselsto under a completed roof bay, but the northern garrisons remain short and eighteen mounts have been withdrawn from the eastern timber-track patrol. Hesta's quarry work was displaced and its real wages/costs are being counted. Dols permits shoring and only a conditional future daylight civilian interval after independent inspection, without a military countersign. Teth has a two-boatwright/owner challengeable valuation procedure, not emergency seizure permission. Merehaven has received a smaller first-cargo bond proposal tied to roof capacity and witnessed counts, not consent. Jorvan seeks another surety or a higher fee. Corven still speaks for three separate benches; Yara's brother's warehouse interest is disclosed and the Hesta/Yara private carriage agreement remains conditional.
-
-**Political/institutional engine:** An already-seeded weakness—winter supply, diminished patrols, bridge weather, disputed compensation, incomplete storage, or credit—intersects the partial League agreement. Avoid inventing a new catastrophe to force the shortcut. Human options remain available, slow and costly. Corven must retain real alternatives and judgment; the benches remain legally separate.
-
-**Character and relationship engine:** Rhyse and Ysabet secured Luceran's written deadline to warn Corven of an unproved unwelcome proposal concerning his life before the next private audience. Luceran has not yet warned him or disclosed the exact shade plan. That obligation must come due on page; Corven's response should have real consequences for trust and negotiation. Miren is affectionate but still unreconciled over Episode 6 and challenges delays. Damaris knows only of a restricted unwelcome suggestion. Luceran's vocabulary may shift from an unconditional refusal toward a dangerous 'unless', noticed by those present, without asking whether body occupation works (Episode 16).
-
-**Undercroft:** Pell's safe-side brace still requires fitting/inspection; Talla needs the drain and casks protected; the injured worker has only light-duty clearance; Nessa is away at a mill and requires paid three-day notice. No descent or proof from inward-facing architecture.
-
-**Exit:** Partial living solutions survive, but a real second pressure makes Luceran entertain a conditional exception. The moral and informational debt is witnessed. Corven lives, no shade occupation is tested, and all seven candles remain lit.
-
-## Season 2 Episode 16 — Would It Work? — DIRECTIONAL
+## Season 2 Episode 16 — Would It Work? — CURRENT / LOCKED
 
 After the disclosure conflict and earned deterioration, Luceran asks Edselsto whether the Episode 11 plan could work. The question is itself a breach in his prior moral position, not proof of Edselsto's claim. Preserve the difference between what Edselsto asserts, what Ysabet recorded, what Rhyse and Miren know, and what Corven was told. No killing or occupation. Living alternatives and bench jurisdictions do not disappear.
 
@@ -35,25 +23,29 @@ The apparently returned envoy resumes some public function, but residual bodily 
 
 **Exit:** Narrow treaty work can resume while personal and legal exposure debt grows.
 
-## Season 2 Episode 19 — Peace by Counterfeit — NEW N+4 / DIRECTIONAL
+## Season 2 Episode 19 — Peace by Counterfeit — DIRECTIONAL
 
 A counterfeit envoy's cooperation produces **real but bounded** good: funds or grain move under lawful-looking instruments, a threatened confrontation eases, and people publicly credit Luceran for relief. The success must be traceable through existing Dols/Teth/Merehaven procedures, the roof, carters, bond, witnesses and three distinct jurisdictions rather than a single magical signature. Hesta, Yara, Corven's loved ones and ordinary workers should experience both material benefit and unease. Keep the occupied envoy's imperfect memory and body habits, and the later exposure schedule, intact.
 
 **Exit:** The king receives praise for an outcome built upon a concealed atrocity, making the next intimate and political reckoning harder.
 
-## Episode 14 reconciliation
+## Season 2 Episode 20 — Pillow Truths — NEW N+4 / DIRECTIONAL
 
-- Twelve sacks of Tervain grain reach Edselsto by hired Crown cart and are counted beneath one completed roof bay; other sacks and northern transport remain pending. Hesta records quarry displacement and porter costs.
-- Dols grants shoring permission and a **conditional** daylight civilian cart interval only after inspection; no cart crosses yet and no military countersign is issued. Savelin receives the narrow written terms.
-- Teth's two boatwrights and ferry owner produce a challengeable valuation method, not a price or requisition warrant. Yara's brother's warehouse interest is declared in the League-facing papers; her Hesta carriage agreement remains privately signed and publicly conditional.
-- Merehaven receives a smaller first-cargo bond proposal based on witnessed sacks and actual roof capacity, not acceptance. Damaris refuses to certify an unfinished roof. Jorvan requests extra surety or a higher fee on the one-gate advance; no loan or bond has been paid.
-- Nessa departs for her mill contract, with paid recall on three days' notice after safety preparations; Pell has not cleared the lintel, Talla still needs drain/cask protections, and the injured worker remains on light duty.
-- Rhyse and Ysabet require Luceran to warn Corven of a refused, unverified life-threatening proposal before the next private audience. Ysabet records the deadline; **the warning is not yet delivered**, and Corven, Yara and Damaris do not know the exact shade proposal. Miren remains affectionate without forgiveness or a marriage answer.
-- Eighteen northern mounts remain withdrawn; two hamlets still have reduced patrol coverage. Corven lives and acts independently. No new castle capability or candle failure occurs.
+After the counterfeit peace, private relationships bear the burden of complicity, fear and withheld knowledge. Miren, Rhyse, Ysabet, Yara and Leora have distinct information and duties. Allow intimacy, anger, comfort, loyalty and refusal to have separate consequences. Material gains from Episode 19 remain real; a private confession does not automatically earn forgiveness.
+
+**Exit:** The king's circle struggles to separate public relief from its concealed cost.
+
+## Episode 15 reconciliation
+
+- Rain destabilizes Dols's western bank. The reeve and watch captain halt shoring inspection; Savelin accepts their authority. The upstream miller's drainage consent and fresh work are pending. No civilian passage or military countersign is issued.
+- Bram the porter injures his fingers; Hesta and Yara pay his rest wage. The smith's nail bill and unfinished roof still matter. Twelve Tervain sacks remain dry, the rest uncollected, and no northern convoy has departed.
+- Damaris sends Jorvan narrower fee terms without pledging the second gate or Hesta's four-season track right. Luceran signs earned wages, not the loan.
+- Luceran warns Corven before their next private audience, witnessed by Yara, Rhyse and Ysabet in the deaf room. He describes a refused unverified proposal concerning Corven's life and a further service, but withholds the precise means. Corven chooses conditional continued presence with living guards and witnesses; Yara preserves the three separate warrants and sends a limited notice.
+- Miren hears Luceran say "Unless there is no other way" and reports the exact speech to Ysabet. She remains affectionate but unreconciled over the earlier privacy breach. No test, harm to Corven, undercroft descent or candle failure occurs.
 
 ## Active payoff debt
 
-Carry document 11's wider unresolved obligations, especially the due Corven warning; Dols shoring and inspection; military countersign; Teth owner-challengeable valuation; Merehaven roof/bond consent; remaining Tervain sacks and transport to the northern garrisons; Hesta's displaced work and porter wages; Yara's declared family interest; Jorvan's second-surety/higher-fee response; unfinished roof; reduced northern patrol; Kaelmont decking and snow; Pell/Talla/Nessa's physical safeguards; Miren's privacy grievance; Ysabet's sealed record; Marek's unknown sponsor; Oren/Lysa compensation; Iven's finite service; and the seven candles.
+Carry document 11's wider unresolved obligations, especially Corven's incomplete disclosure and conditional safety arrangements; Dols shoring, miller drainage consent and inspection; military countersign; Teth owner-challengeable valuation; Merehaven roof/bond consent; remaining Tervain sacks and transport to the northern garrisons; Hesta's displaced work, Bram's injury and porter wages; Yara's declared family interest; Jorvan's second-surety/higher-fee response; unfinished roof; reduced northern patrol; Kaelmont decking and snow; Pell/Talla/Nessa's physical safeguards; Miren's privacy grievance; Ysabet's sealed record; Marek's unknown sponsor; Oren/Lysa compensation; Iven's finite service; and the seven candles.
 
 ## Protected long-future seeds
 
