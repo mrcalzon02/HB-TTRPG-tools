@@ -5,7 +5,7 @@
 **State:** Rolled forward after Season 2 Episode 16, *Would It Work?*.
 **Forward window:** Season 2 Episodes 17–21.
 
-**Reconciliation exception:** The single authoritative temporal ledger in document 11 still declares Episode 14 because connector safety checks rejected its complete-file updates. Episodes 15 and 16 are committed prose; their facts and the reconciliation packets below control intervening events until document 11 can be updated **in place**. Do not create a duplicate temporal ledger or treat the missing ledger update as evidence the events did not happen.
+**Continuity status:** Document 11 has been reconciled in place through Episode 16, including the Episode 15 and 16 knowledge partitions, relationship changes and material obligations. This file remains the sole rolling N through N+4 horizon; no duplicate temporal ledger was created.
 
 ## Season 2 Episode 17 — The Necessary Death — CURRENT / LOCKED
 

@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 2 Episode 14, *A Human Solution*.
+**Reconciled through:** Season 2 Episode 16, *Would It Work?*.
 
 ## Current state
 
@@ -108,6 +108,13 @@ In Episode 14, *A Human Solution*, twelve Tervain grain sacks reach Edselsto by 
 
 **Character-state diff:** Luceran takes a witnessed warning obligation; Corven retains his demand for informed choice; Rhyse and Ysabet reject indefinite protective silence; Miren distinguishes promise from repair; Damaris resists false certification and expensive credit; Hesta insists on honest labor accounting; Yara discloses a personal trade interest; Savelin preserves civilian/military jurisdiction; Nessa, Talla and Pell maintain safety limits.
 
+
+In Episode 15, *What Necessity Means*, rain halts Dols shoring, and the reeve and watch captain withhold civilian inspection and military countersign; Savelin seeks the upstream miller's drainage consent. Bram injures his fingers at the receiving-yard turn, so Hesta and Yara pay his rest wages and hire a replacement traffic porter. The smith's nails remain partly unpaid, the roof incomplete, twelve Tervain sacks dry at Edselsto, the rest uncollected and no northern convoy dispatched. Damaris signs earned wages but neither Jorvan's revised loan nor a pledge of Hesta's four-season track right; eighteen patrol mounts remain withdrawn. Luceran warns Corven, before the next private audience and with Ysabet, Rhyse and Yara witnessing, that Edselsto offered to end his life; he refuses to disclose the claimed shade-occupation means. Corven recognizes incomplete disclosure, stays conditionally with living guards, free attendants and witnessed summons, and has Yara send a limited bench notice. Miren hears Luceran say "Unless there is no other way" and reports the exact words to Ysabet. She remains affectionate but unreconciled over the Episode 6 listening violation. No inquiry into the castle's claimed capability, harm or new power occurs.
+
+In Episode 16, *Would It Work?*, the Dols miller grants conditional written consent to a shallow drainage cut with a timber lip and renewed inspection, without surrendering his water rights or opening the bridge. Savelin witnesses the agreement; no loaded-cart or military passage is authorized. Damaris pays the nail apprentices while the remaining smith's bill, bridge and roof costs prevent immediate hiring of the next grain cart. Twelve sacks remain at Edselsto, the rest uncollected, the northern posts undelivered and the eighteen mounts unrecalled. In the connected east map gallery Luceran asks Edselsto before Ysabet whether a loyal shade placed in a dead Corven's body would carry his office: "Would it work?" The castle asserts a prepared vessel and residual bodily habits but offers no verified witness, nonlethal demonstration, dependable personal memory or legal authority over the three separate benches. Ysabet records assertions as unverified and distinguishes a signature from council consent. Luceran signs the exact question and explicitly renews the prohibition on any preparation, shade, approach to Corven or alteration of protection. No death, occupation or new capability is demonstrated. With Luceran's witnessed permission, Rhyse warns Corven and Yara of the renewed inquiry without revealing the proposed method. Corven orders his travelling chest packed for lower-village lodging, retains his commission and freedom to depart, and leaves the three separate warrants in Yara's custody; his attendants may dismiss the escort. Miren learns the exact question directly from Luceran, refuses to let affection count as assent and remains unreconciled over Episode 6. Leora has not yet answered the latest letter; all seven candles remain lit.
+
+**Epistemic/relationship diff through Episode 16:** Luceran and Ysabet directly heard Edselsto's unproved assertions; Rhyse knows the exact method from Episode 11 but reports only renewed danger; Miren knows the method and inquiry by Luceran's voluntary disclosure; Corven and Yara know of a life-threatening proposal and renewed inquiry but **not** the shade method; Damaris and Tomas know material accounts, **not** the restricted question. Corven's distrust increases without erasing his separate diplomatic obligations. Miren's affection does not repair privacy trust. Edselsto's claim remains unverified, and all living institutions retain independent judgment.
+
 ## Active supernatural capability evidence
 
 - Pale silver mask manifests as Edselsto and addresses Luceran directly.
@@ -132,7 +139,7 @@ Montegrain motive/accountability/fate; Aven constitutional culpability and surre
 
 ## Immediate handoff
 
-Season 2 Episode 15 — *What Necessity Means* is next. The partial human settlement has not produced military passage, an accepted Merehaven bond, a safe Dols crossing or northern grain delivery. The reduced patrol, Jorvan's revised surety demand, displaced quarry work and winter repairs still impose costs. Luceran's witnessed promise to warn Corven of a refused unproved life-threatening proposal **before the next private audience** is due; he has not yet done so. His language may move toward 'unless' under already-seeded pressures, but he must not ask Edselsto whether occupation would work until Episode 16. No second undercroft descent until Pell/Talla/Nessa safeguards. All seven candles remain lit.
+Season 2 Episode 17 — *The Necessary Death* is next. Luceran has asked whether the forbidden service would work and received no proof. Corven knows the question was reopened but not the shade method, retains independent warrants and intends to move to lower-village lodging with freedom to leave. Any deliberate death and attempted occupation must earn physical access, living agents, legal consequences and distinct character choices rather than arise automatically from castle power. Dols drainage remains conditional; Teth ferry valuation, Merehaven bond, Jorvan credit, the roof, grain collection and northern patrol remain unresolved. No undercroft descent before Pell/Talla/Nessa safeguards. All seven candles burn.
 
 ## Hard exclusions
 
