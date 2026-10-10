@@ -5404,6 +5404,22 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "broussard-kb-eastern-extraction-xvi",
+          "information": "The amended eastern route supports inspected staged towing through 210 metres from the original position, but the convoy is not visible and further ground has not been surveyed under the load.",
+          "epistemicStatus": "observed",
+          "belief": "continued movement is possible only while surveyed ground, repaired brace and hauler load angles remain within separate certified limits",
+          "certainty": "high for completed stages; future passage unproven",
+          "sourceCharacter": "Survey chief, Sella Varn and direct movement reports",
+          "actionTaken": "Ordered load released during new seam survey, accepted delayed anchor reset and transmitted a joint progress report without arrival estimate.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVI. THE WEIGHT OF THE ROAD",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -5628,6 +5644,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XV. THE GROUND THAT MOVES",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XVI. THE WEIGHT OF THE ROAD",
+          "changeSummary": "Held the tow during an 87-minute surface-seam survey, preserved revised route records and rejected an unsupported convoy return estimate; the recovery reached 210 metres without reaching the convoy.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVI. THE WEIGHT OF THE ROAD",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
             "sourceType": "continuation"
           }
         }
@@ -5958,6 +5984,16 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "segment": "XVI. THE WEIGHT OF THE ROAD",
+          "changeSummary": "Caught a soldier stumbling toward a marked fracture edge, then acknowledged the three existing electrocution deaths rather than treating the surviving detachment as a complete success.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVI. THE WEIGHT OF THE ROAD",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -6137,7 +6173,20 @@
       ],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "kelm-obligation-hauler-seals-xvi",
+          "order": "The Hesperant Vale owes the recovery detachment replacement reserve-compressor seals transferred from its hauler; the transfer reduces the hauler's spare margin until replenished.",
+          "issuingAuthority": "Jointly signed Kelm, cargo master and recovery-hauler chief transfer record",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVI. THE WEIGHT OF THE ROAD",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "physicalMedicalState": [
         {
           "id": "kelm-physical-post-impact-01",
@@ -6236,6 +6285,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XV. THE GROUND THAT MOVES",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XVI. THE WEIGHT OF THE ROAD",
+          "changeSummary": "Authorized reserve-seal transfer to keep perishable cargo cold, accepted the resulting debt and jointly signed an honest 80-metre interim convoy report rather than promising a return time.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVI. THE WEIGHT OF THE ROAD",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
             "sourceType": "continuation"
           }
         }
@@ -6432,6 +6491,22 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "id": "holt-kb-eastern-movement-xvi",
+          "information": "Bridge movement log records 210 metres of inspected extraction under revised eastern survey, with the original fourteen-second impact recording still absent.",
+          "epistemicStatus": "confirmed",
+          "belief": "new successful movement and the historical telemetry absence are independent records",
+          "certainty": "high for records; unknown cause of historical gap",
+          "sourceCharacter": "Bridge load and survey records",
+          "actionTaken": "Entered distance, times and route revisions while preserving the older unexplained interval.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVI. THE WEIGHT OF THE ROAD",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -6541,6 +6616,16 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "segment": "XVI. THE WEIGHT OF THE ROAD",
+          "changeSummary": "Recorded staged movement to 210 metres and both route revisions without altering the original missing impact interval.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVI. THE WEIGHT OF THE ROAD",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -6626,6 +6711,22 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XV. THE GROUND THAT MOVES",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "sella-kb-load-angle-xvi",
+          "information": "The repaired starboard brace passed inspected movement to 210 metres, but a proposed inward pulley-anchor move would add an uncertified lateral component to the load.",
+          "epistemicStatus": "confirmed",
+          "belief": "completed stages do not authorize full thrust or the next unsurveyed stage",
+          "certainty": "high for measured load traces",
+          "sourceCharacter": "Direct inspection and recovery chief's proposed anchor drawing",
+          "actionTaken": "Rejected the new load angle, required forward anchor reset and maintained staged certification.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVI. THE WEIGHT OF THE ROAD",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
             "sourceType": "continuation"
           }
         }
@@ -6788,6 +6889,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XV. THE GROUND THAT MOVES",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XVI. THE WEIGHT OF THE ROAD",
+          "changeSummary": "Enforced separate stage certification and load-angle limits, rejected an uncertified anchor shift and supervised the refrigeration-compressor service before further movement.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVI. THE WEIGHT OF THE ROAD",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
             "sourceType": "continuation"
           }
         }
