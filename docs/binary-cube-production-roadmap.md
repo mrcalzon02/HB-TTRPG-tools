@@ -193,3 +193,19 @@ Design:
 - Require exact inverse traversal and reversible subcube transforms; measure interoperability after every mutation. Preserve old epochs only for explicit bounded read windows; separate old-message decryption from permission to encrypt new messages.
 - Distinguish reordering/reusing the same keys from actual introduction of fresh independent entropy. Changing order alone does not restore secrecy after key compromise, prevent replay, or guarantee avalanche resistance.
 - Add validation: 11:59/12:00, 16:59/17:00, 23:59/00:00 boundaries, clock skew, delayed delivery, missed rotations, wrong manifest, identical operation names, interrupted upgrades, chain rollback, compromised key, and crash recovery.
+
+## First production application: CubeChat two-way directional-key messenger (2026-10-10)
+
+**Priority override:** Develop a functional two-party text chat as the first end-to-end application before advanced file manager, scheduled keychain mutation or automated epoch hopping. Preserve these later roadmap sections as deferred. CubeChat is a small local-first client with two distinct pre-shared directional key files per peer pair, one A→B and one B→A. Both parties must hold their direction's key to encrypt/decrypt; symmetric possession alone does not prove exclusive authorship.
+
+Implementation slices and release gates:
+1. Extract a shared byte-safe cube transform adapter; don't duplicate canonical implementation in UI. Add UTF-8 text and exact recovery fixtures, including NUL, multibyte Unicode, long zeros and boundaries.
+2. Create a local key manager for independently generated high-entropy cube key material, explicit outbound vs inbound assignment, import/export and key fingerprints. True external physical entropy cannot be asserted from ordinary browser CSPRNG; label entropy provenance, use reviewed OS CSPRNG for prototype and support trusted hardware entropy ingestion with health tests before making hardware-TRNG claims. Do not put keys into chat payloads.
+3. Build an authenticated message envelope with opaque conversation/direction/channel IDs, monotonic sequence, algorithm and cube profile versions, nonce, ciphertext and authentication tag. Use established AEAD to secure text, retaining cubic steps as experimental, reversible inner transforms. Wrong key/tampering/replay fail closed.
+4. Two isolated clients in one local test harness exchange serialized encrypted envelopes only, each owning its respective inbound/outbound key store. Pass exact send→receive→decode in both directions, and tamper/wrong-key/duplicate/out-of-order tests. Avoid simulation that shares the plaintext across clients.
+5. Add real two-party message transport (user chooses direct connection, LAN relay, or optional relay). The relay may see only encrypted envelopes and may not hold keys. Define connection setup, offline queue expectations, bounded message sizes and delivery/ack state. Avoid advertising Internet peer-to-peer without NAT traversal/transport actually implemented.
+6. Ship accessible, keyboard-friendly, responsive chat UI with contact selection, send, message status, copy, local history policy, key import warning, clear failure states, offline/online transport indication. Do not automatically persist plaintext history.
+7. Browser and desktop tests, serialization compatibility, security review, resource benchmarks for the 64/128/256/512/1024 logical side tiers; upper tiers can be blocked explicitly pending bounded processing validation but never silently replaced with a smaller tier.
+8. Release claim only after real two-device send/receive verification, secure key-handoff documentation, authenticated ciphertext tamper rejection, no plaintext or secret key transmission, and repository/deployment readback.
+
+First usable prototype should be a 2-window local exchange and separate key vaults, then transport. Keychain hopping and route mutations remain **out of scope** until basic chat reliably works.
