@@ -102,3 +102,33 @@ Private keys and CEKs are **never exchanged in plaintext**. A passphrase handoff
 
 ## Immediate next implementation
 P0 first: mark the text encoder's current bundled-key JSON unprotected; introduce clear **demo package** vs **protected container** language and prohibit saving sensitive messages in current demo. Then implement P1 byte-oriented adapter and file format tests. Production claims await P2-P7.
+
+## Optional directional channel and key-epoch hopping profile (design extension, 2026-10-10)
+
+**Status: planned only.** This does not replace the AEAD boundary or establish production security. All capabilities are optional and negotiated explicitly: one-way A→B and B→A independent shared symmetric keys; per-contact identity/trust policy; manual, interval-based, randomized, or event-triggered key rotation; independent per-message cubic-geometry changes; experimental sender-authentication add-ons subject to their own proofs and limits. No public key, PKI, directory server or permanent network connection is mandatory for the offline symmetric mode.
+
+### Enrollment
+- For each direction, two peers securely hand off a **high-entropy shared secret** using an authenticated private physical or existing secure channel; no unauthenticated online plaintext transfer or password-as-key shortcut.
+- Create random opaque channel ID, direction and key epoch, independent sending and receiving state, contact-specific trust policy, and protected local key vault. Never embed the channel root key or next-epoch secret in ordinary plaintext exported file JSON.
+- Symmetric sharing cannot prove exclusive sender authorship or prevent the recipient from forging a message under the same key. Show that limitation explicitly; optional authorship proofs require additional keys/protocols and independent scrutiny.
+
+### Rekey control protocol
+1. Sender under authenticated epoch E sends `KEY_PROPOSE` containing new random secret material encrypted by existing AEAD, proposed epoch E+1, proposal ID, min activation sequence, algorithm suite/profile, bounded expiry/rollback policy, and transcript binding.
+2. Receiver decrypts/authenticates under E, rejects duplicates/replays/rollback/incompatible suites, stages secret without activation, and sends authenticated `KEY_ACK` bound to the exact proposal hash and next epoch.
+3. Sender commits via authenticated `KEY_COMMIT`, with activation boundary defined by **per-direction authenticated message sequence number**, not wall clock or local operation count; receiver confirms. Sender must not emit E+1 payloads before acknowledgments necessary to avoid stranded peers.
+4. Receive side accepts epochs E and E+1 only in a narrow bounded reordering window; previously used sequence IDs/nonces are rejected. Eventually retire E securely when confirmed and retention limits permit.
+5. Lost proposal, lost ACK/COMMIT, simultaneous rekey, offline recipient, delayed files and crashes require durable pending state and bounded retransmission or explicit recovery. Do not silently guess keys or downgrade authentication.
+6. Randomized hopping draws intervals from a CSPRNG with configured min/max messages or elapsed time, while enforcing AEAD nonce/usage limits and preventing adversarial forced frequent rotation (DoS). Geometry/profile changes have separately derived independent keys and versioned authenticated metadata.
+7. Rekeying under E **does not restore secrecy if E was compromised**, since an eavesdropper with E can decrypt the key proposal. Compromise recovery requires fresh secret handoff over a secure channel; symmetric rekey alone does not provide post-compromise security or forward secrecy for historical captured traffic.
+
+### Wire and storage requirements
+- Envelope includes version, channel ID (opaque), direction, epoch, sequence, cipher suite, authenticated length/metadata and authenticated transcript/rekey control references, with unique per-key nonces.
+- State machine: `ACTIVE_E` → `PROPOSED_NEXT` → `ACKNOWLEDGED` → `COMMITTED` → `ACTIVE_NEXT` → `RETIRED_E`. Abort or retry safely on missing acknowledgments.
+- Encrypt control and payload records; sender/receiver must persist counters atomically across restart. Separate epoch key derivation, control authentication, payload encryption and cube structure derivation by domain-separated KDF inputs.
+- Optional traffic padding and delivery batching can reduce some metadata leakage, not guarantee anonymity or make the traffic undetectable.
+- A genuine radio-frequency-hopping transport is out of scope for a browser file app and requires compatible radio hardware/physical-layer protocol. Here “frequency hopping” means **logical key/parameter rotation**, not radio frequency control.
+
+### Required new acceptance tests
+- Clean rekey with sequence boundary; delayed/reordered/duplicated/replayed payloads; tampered proposal, ACK or COMMIT; rollover; crash recovery after each transition; simultaneous rotation; divergent time clocks; lost acknowledgments; offline recipient; key deletion/retention; key leakage and compromise drill.
+- Verify old epoch never encrypts new messages past committed switch; next epoch never activates prematurely; no nonce reuse after crash or restart; no unauthenticated fallback; no secret in logs/exports.
+- Record separate limitations: no exclusive sender-authentication from symmetric shared key and no post-compromise recovery from an old-key-protected rekey message.
