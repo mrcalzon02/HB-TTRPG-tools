@@ -49,3 +49,19 @@ CubeChat v0.1.0-alpha.1 — experimental local-first host/recipient chat, multi-
 ## Release-process constraint
 
 There are presently no authorized connected actions for creating a GitHub Release or uploading release assets. Commit this candidate document to main, then use GitHub's existing Releases UI or an authorized publishing integration to create the **pre-release** after the gates above pass. Do not claim release publication merely because a candidate file or tag exists. Do not add GitHub Actions.
+
+
+## Reproducible portable build & Node host tests (2026-10-10)
+
+From the repository root with Node.js 20 or later:
+
+```sh
+node scripts/cubechat-integration-test.cjs
+node scripts/cubechat-build-portable.cjs
+```
+
+The integration command launches a loopback-only test server with a temporary forum database and administrator token. It checks all key HTTP routes, forum board creation restrictions, thread/reply persistence across restart, and profile-isolated SSE forwarding. Test database and temporary process are torn down afterward. **Running this command is required**; presence of source code or a syntax parse does not prove the runtime checks pass.
+
+The build command creates `dist/cubechat-v0.1.0-alpha.1-portable.zip` with the host, client, forum, key lab and engine sources, plus `dist/SHA256SUMS.txt` and `dist/FILE-MANIFEST.txt`. Uses only Node built-ins, a ZIP store-mode archive with no compression, and no npm dependency. It does not include live forum data, key files, generated passwords or secrets. The archive is an OS-neutral **source/runtime bundle**, not an .exe, .apk, .dmg or installer.
+
+**Current verification:** scripts were committed to `main`, read back and JavaScript syntax-parsed. Full Node command execution on an actual clone, extracted ZIP smoke test, browser tests, and published GitHub Release are still pending. The test and build scripts have not been claimed as successfully executed merely because they parsed.
