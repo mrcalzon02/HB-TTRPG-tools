@@ -39,3 +39,14 @@ Browse to `https://192.168.1.25:8787/` or `https://[IPv6-address]:8787/` **only 
 5. Before describing a publicly deployable encrypted messaging system, build a hardened authenticated session protocol, safe key lifetime and counter persistence, key-provisioning workflow, transport security and independent security review.
 
 Related files: `cubechat-network.html` (network client), `cubechat-server.cjs` (small Node transport), `cubechat.html` (isolated local simulation), `shadowrun-binary-cube-engine.js` (canonical cube engine).
+
+
+## Host-issued first-client provisioning (2026-10-10)
+
+The first concrete host-provisioning slice is available at `cubechat-provision.html`, with package import support in `cubechat-network.html`. From an HTTPS or localhost context, a host chooses a recipient label, host address (IPv4/IPv6/DNS), port, and HTTP(S) scheme and selects **Generate two separate provisioned packages**.
+
+The page draws two independent 32-byte secrets with browser `crypto.getRandomValues` (not a certified hardware TRNG), then exports **two distinct JSON files**: `cubechat-HOST-private-<id>.json` for the host and `cubechat-GUEST-SECRET-<id>.json` for the intended recipient. Each contains that relationship's A→B and B→A shared secrets; neither contains a larger host master vault. The host and guest copies have different role fields, but by design both parties know both shared directional channel secrets. Treat **either file as highly sensitive**, and use a trusted private handoff. The generated ID labels a pair; the relay currently does not enforce it.
+
+**Important order of operations:** Serve `cubechat-network.html` from the final Node host origin first, then import the appropriate file on each device; the import automatically assigns A/B role and the recorded address/port. Do not import from GitHub Pages and then navigate to a different host—this prototype stores key material in memory and it will be lost when the page navigates. Click **Connect to host** on both devices, then test A→B and B→A. A recipient can download and install a future native package later; these are currently JSON provisioning packages, not executable installers.
+
+**Scope limit:** The present Node relay routes by roles A and B rather than by recipient profile ID. It supports **one host/guest pair per server instance**. Do not create several guests on the same port and assume channel isolation: clients could be misrouted. Multi-client registration, authenticated profile/role routing, proper peer authentication, persistent state, revocation and hardened handoff remain future work. A guest package copied by an attacker is compromised; no confidentiality is assured by embedding keys inside it alone. No existing master host secret is accessed or exported in this implementation.
