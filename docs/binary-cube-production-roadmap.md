@@ -145,3 +145,23 @@ P0 first: mark the text encoder's current bundled-key JSON unprotected; introduc
 - Do not regenerate whole oversized cubes solely to discard bytes. Stream filler/chunks where possible and cap worst-case traversal attempts; fail explicitly rather than silently downgrading safety.
 - Publish diagnostic metrics: plaintext bytes, encoded bits, selected side/dimensions, active cells, filler/decoy count and proportion, total container bytes, generation time, memory high-water mark, and exact decode verification.
 - Tests: empty file, all zeros, long zero runs, terminal zeros, mixed binary data, 1-bit-to-capacity boundaries, oversized selected cube, malformed or lying length, volume overflow, randomization reproducibility, interrupted processing, padded-ciphertext indistinguishability experiments (no security proof), and bounded worst-case latency.
+
+## Production cube size policy: minimum 64, four doublings (2026-10-10)
+
+The user-selected **logical side-length tiers** for production-grade cubic research are **64, 128, 256, 512, 1024**. These replace earlier suggestions of tiny cube sizes for production. Small sizes remain permitted only in explicitly labeled demo/fixture/test modes; production mode must not silently fall back below 64. Select only among the five supported tiers with CSPRNG input and capacity checks. The size tier is not a security-strength rating or an assertion that large cubes themselves resist cryptanalysis.
+
+| Side N | Latin-cube logical positions N² | Full voxel positions N³ |
+|---:|---:|---:|
+| 64 | 4,096 | 262,144 |
+| 128 | 16,384 | 2,097,152 |
+| 256 | 65,536 | 16,777,216 |
+| 512 | 262,144 | 134,217,728 |
+| 1024 | 1,048,576 | 1,073,741,824 |
+
+- Distinguish side length (N), active encoded positions, physical volume, logical capacity, and serialized overhead; current Latin-cube engine is N², not N³.
+- Full-volume N=1024 requires over **1 GiB just for one byte per voxel** (and 128 MiB for densely bit-packed occupancy alone). JS arrays, object/coordinate maps, and traversal-state structures can cost far more. This tier cannot be naively allocated or filled in a browser.
+- Use chunked/implicit/lazy generated geometry and sparse/bit-packed structures where compatible with the algorithm; establish benchmark-proven resource budgets for each tier. A mode/tier unsupported on the running device must fail clearly or require deliberate user selection of a supported tier, not silently downgrade to a smaller cube.
+- A short payload in a minimum 64-side Latin cube still requires filler to cover unused logical positions in any fully serialized block. For full-volume modes, do not require N³ transmitted filler unless justified by measured benefit; define how implicit filler is regenerated and how metadata is authenticated.
+- Before accepting upper tiers, benchmark latency, peak resident memory, serialized expansion and exact recovery across payload sizes, on representative low-end and desktop devices. Cap padding ratio and configure explicit user-acknowledged full-volume cost modes when needed.
+- New production UI should offer side tiers 64/128/256/512/1024, with 64 default, estimated capacity/memory/time, and separate mode badges for Latin N² vs volumetric N³.
+- Changes to the existing engine and legacy package schema must not break historical keys/packages; add a separately versioned production profile and rigorous migration/rejection tests.
