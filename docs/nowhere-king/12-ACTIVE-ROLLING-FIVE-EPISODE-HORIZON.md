@@ -2,20 +2,12 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 16, *Would It Work?*.
-**Forward window:** Season 2 Episodes 17–21.
+**State:** Rolled forward after Season 2 Episode 17, *The Necessary Death*.
+**Forward window:** Season 2 Episodes 18–22.
 
-**Continuity status:** Document 11 has been reconciled in place through Episode 16, including the Episode 15 and 16 knowledge partitions, relationship changes and material obligations. This file remains the sole rolling N through N+4 horizon; no duplicate temporal ledger was created.
+**Continuity status:** Document 11 is current through Episode 16 and requires the Episode 17 post-write reconciliation; this horizon records that outstanding dependency without claiming the ledger was updated. This file remains the sole rolling N through N+4 horizon; no duplicate temporal ledger was created.
 
-## Season 2 Episode 17 — The Necessary Death — CURRENT / LOCKED
-
-Luceran's question has become a moral breach, not a proof of Edselsto's proposed capability. He must make a deliberate, accountable choice that leads to Corven's death and the attempted occupation by a loyal shade as required by the season schematic. No accident, sudden mind control, pre-existing secret authorization, or retroactive justification of Episode 6. Establish living access and movement between Corven's lower-village lodging, the Crown and the League; whose consent is withheld; the exact physical and political means; who knows the king's intent; and why a person might obey or refuse an unlawful order. The audience must see Corven as Leora's husband, Yara's colleague and an independent envoy whose three bench warrants cannot be replaced by his signature. His personal safety arrangements and ability to depart must constrain the plot rather than vanish for convenience.
-
-Preserve the epistemic partitions: Luceran and Ysabet have heard the unverified claim; Rhyse knows its exact method from Episode 11; Miren knows it by Luceran's voluntary disclosure; Corven and Yara know only the threat to his life and that the king reopened the question. Damaris knows neither the method nor the Episode 16 question. Edselsto's assertion is not evidence of actual body-occupation power. If a shade is sought, its identity, prior service, consent and limitations must be earned; Iven's voluntary threshold service does not make any shade interchangeable or available. Corven's death must not automatically authorize a forged treaty or bind Dols, Teth or Merehaven.
-
-**Exit:** The king has crossed a concrete moral and political line; if occupation is attempted, its practical limits and exposure debt begin immediately.
-
-## Season 2 Episode 18 — The Man Who Returned — DIRECTIONAL
+## Season 2 Episode 18 — The Man Who Returned — CURRENT / LOCKED
 
 The apparently returned envoy may resume some public functions, but bodily habits, memory and manner must remain imperfect, with living witnesses capable of noticing. Yara, Leora, Rhyse, Ysabet and the river benches possess different information, loyalties and means of challenge. Any attempted impersonation needs custody, clothes, letters, travel, access, escorts and a plausible reason for changes in behavior; it must not make competent associates conveniently stupid. No shade can manufacture legal authority or a second bench's assent. Protect the late-season foreign verification schedule and the season's final bodily exposure.
 
@@ -39,14 +31,18 @@ Edselsto answers smaller administrative and household questions with credible sp
 
 **Exit:** Ordinary institutional habit begins to normalize reliance on castle answers, preparing Episode 22's explicit exception.
 
-## Episode 16 post-write reconciliation
+## Season 2 Episode 22 — Another Exception — NEW N+4 / DIRECTIONAL
 
-- Dols miller gives limited written consent to a shallow drainage cut and timber lip, with renewed inspection and no surrender of water rights. The reeve, carpenter and watch captain retain jurisdiction; the bridge is still closed to loaded carts, and no military countersign exists. Savelin witnesses the agreement and sends the new price.
-- Damaris releases earned nail-apprentice wages while preserving the remaining smith's bill, bridge and roof costs, Hesta's four-season track right and the refusal to pledge a second gate. The next grain cart is not hired. Twelve Tervain sacks remain dry at Edselsto, the remainder uncollected, the roof incomplete and the northern convoy undelivered. Eighteen patrol mounts remain withdrawn.
-- Corven moves his papers nearer the outer stair, retains his attendants' keys and sends separate bench notices through Yara. He and Yara know the life-threatening proposal exists, not its claimed shade method. Leora's latest letter is still unanswered in person.
-- In the connected east map gallery Luceran asks Edselsto, before Ysabet, whether the proposed shade occupation would work. Edselsto asserts a possible prepared vessel and retained bodily habits but supplies no living witness, nonlethal demonstration, proven memory or legal authority. Ysabet distinguishes signature from the independent benches' consent. Luceran renews the ban on any preparation, shade, approach to Corven or alteration of his protection; Ysabet records and Luceran signs the exact question.
-- Rhyse and Ysabet insist on a renewed warning. With Luceran's witnessed permission Rhyse tells Corven and Yara of the king's inquiry and the lack of proof, not the specific method. Corven orders a travelling chest packed for lower-village lodging with a roadward exit, retains his commission and the right to leave, and keeps the warrants in Yara's custody. His attendants may dismiss the living escort at the village gate. He has not decided to return home.
-- Luceran voluntarily tells Miren what he asked. She sees the difference between no order and a changed moral threshold, refuses to let affection count as agreement, and remains unreconciled over the Episode 6 listening violation. They share brief contact without absolution. No killing, occupation, undercroft descent, new supernatural proof or candle failure occurs.
+A smaller request to Edselsto tests whether existing safeguards remain meaningful after the royal breach. The requesting household officer, affected worker, cost, alternative, authorization, witness and later review must be visible. Distinguish actual physical evidence from the castle's claims, and preserve the separate river-bench warrants and the consequences still emerging from Episode 17.
+
+**Exit:** A documented exception begins to alter the habits of the living court without erasing its established rules.
+
+## Episode 17 post-write reconciliation
+
+- Corven's departure followed the established living-escort limits. His lower-village journey ended in an attack; his remains were brought back to the existing mortuary. Yara retains the separate bench warrants and his personal letter to Leora. His attendants and the village watch have their own evidence.
+- Luceran acknowledged his direct responsibility to Ysabet, who retained the sealed household instruction. Beren Kalt refused the order; the courier service and household accounts contain additional witnesses. Rhyse has been summoned but has not yet reached the mortuary.
+- Edselsto demonstrated a limited occupation of Corven's remains by Jalen Orris. Jalen's agreement was obtained after death, contrary to the established living-consent safeguard; Ysabet declined to certify it as lawful. The occupant's first words and unfamiliarity with Corven's knee establish serious limits. Neither Corven's identity nor the three benches' authority transfers by magic.
+- Dols inspection, the first-cargo bond, further grain collection and the northern delivery remain incomplete. All seven candles burn.
 
 ## Active payoff debt
 
@@ -54,4 +50,4 @@ Carry document 11's wider unresolved obligations and Episode 15's repair/credit 
 
 ## Protected long-future seeds
 
-No Magenheim crossover; no prison/containment/castle-interface truth; no candle failure; no unlimited perception, judgment or treasury; no retroactive justification of Episode 6; no compulsory dead service treated as routine; no forced marriage answer or Ardel winter revelation; no conflation of unrelated investigations. The Episode 16 question is not evidence the proposed occupation works. Preserve the late Season Two exposure schedule and the three separate river jurisdictions.
+No Magenheim crossover; no prison/containment/castle-interface truth; no candle failure; no unlimited perception, judgment or treasury; no retroactive justification of Episode 6; no compulsory dead service treated as routine; no forced marriage answer or Ardel winter revelation; no conflation of unrelated investigations. Episode 17 establishes only a limited occupation, not restoration of identity, personal memory or lawful authority. Preserve the late Season Two exposure schedule and the three separate river jurisdictions.
