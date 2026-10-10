@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 2 Episode 16, *Would It Work?*.
+**Reconciled through:** Season 2 Episode 18, *The Man Who Returned*.
 
 ## Current state
 
@@ -117,6 +117,20 @@ In Episode 16, *Would It Work?*, the Dols miller grants conditional written cons
 
 In Episode 17, *The Necessary Death*, Corven leaves the castle under his agreed escort arrangement and proceeds toward lower-village lodging. Yara retains his three separate river-bench warrants and his letter to Leora. The journey ends in an attack; Corven's remains are brought to the existing mortuary, and his attendants and village watch retain independent evidence. Luceran acknowledges his responsibility to Ysabet, who keeps the signed private instruction. Beren Kalt refused the assignment, and the courier master, other road-service men, groom and roll clerk have distinct knowledge. Vess refuses the mortuary work; a lesser smith acts under the king's seal. Edselsto calls Jalen Orris, who agrees after death to attempt service in Corven's body but never consented in life. Ysabet contests this against the Episode 3 safeguard. The occupant remembers the gate and is unfamiliar with Corven's injured knee. This is limited bodily occupation, not resurrection or the transfer of a League commission. Rhyse has been summoned but has not yet arrived; Yara has heard of the attack but not the mortuary events. Dols still awaits inspection, only twelve Tervain sacks are sheltered, and the northern convoy remains undelivered. All seven candles burn.
 
+In Episode 18, *The Man Who Returned*, Yara independently records the village watch account of Corven's disappearance, the two attendants' limited eyewitness evidence, the injured attendant's continuing fever and the cooper widow's observations. The watch clerk refuses to rewrite a missing-person entry as a living return merely on an unaccompanied royal messenger's assertion. Yara sends Leora an accurate but incomplete warning that Corven was attacked and his condition cannot yet be established, and instructs all three river benches to suspend new uses of his authority until independently confirmed. She retains the three warrants and a watch-copy. The original watch book remains in the village. Leora has not received a confirmed death notice or the truth of the occupation.
+
+Rhyse reads Ysabet's sealed evidence of Luceran's signed instruction and the mortuary occupation. He sees a breathing man in Corven's body whose left-knee behavior and soldier's glance differ from Corven's established habits; he does not claim personal recognition of Jalen, whom he knew only from the casualty roll. Beren Kalt remains at the castle under protective guard with visits and priest permitted, not convicted for refusing the royal errand. Rhyse orders independent living protection for Beren, the wounded attendant and other witnesses, and forbids private road-service men being alone with them. He acknowledges that his watch order could also conceal the crime and records his own hour of delay.
+
+Jalen Orris, inhabiting Corven's body, can read slowly, fold letters by bodily habit and feel Corven's old knee and newer injuries. He does not possess Corven's knowledge of the three benches, Leora, Yara or the legal limits of the warrants. A living physician records pulse, breathing, bruises and the old knee condition without certifying a conventional recovery or a lawful resurrection. Jalen asks about his sister and unpaid casualty obligations; neither her current life nor payment is established. Edselsto can repeat names but cannot supply Corven's judgment or make the benches' consent. Jalen's after-death agreement remains contested by Ysabet under the living-consent rule.
+
+At Dols, Savelin and the reeve receive contradictory reports of Corven missing and returned. The reeve refuses to enter the second as established fact without a living witness. The miller's timber lip holds but the approach remains too soft for carts; another paid load inspection is required. No military countersign, open civilian crossing or northern delivery is established. Savelin asks who witnessed Corven's return rather than abandoning the independently negotiated drainage consent.
+
+Yara sees the breathing body in the physically deaf south-gallery room, observes its unfamiliar knee movement, uncertain recall and glance toward Luceran for answers, and refuses to release the warrants or certify any new Corven recommendation. She does not observe the occupation rite or establish its supernatural mechanism. She permits separate factual dispatches in the names of their living authors: Dols measurements, receiving-roof and twelve-sack tallies, and carriage terms, subject to the benches' independent judgment. Rhyse witnesses the restriction. The treaty process restarts only as narrow factual correspondence, not an accepted counterfeit commission, signed bond, military crossing or League consent.
+
+Luceran explicitly confesses to Miren that he ordered Corven's killing and that Jalen occupies his body. Miren now knows the royal admission, not merely the earlier unverified question; she condemns the concealment from Leora, refuses the usual consoling intimacy and sleeps behind the physically deaf room's locked door. Her affection persists but political and personal trust suffer a new breach; she has not forgiven the Episode 6 privacy violation or answered marriage. Ysabet's clerk records the distinct dispatches without Corven's signature. The village watch entry stays unchanged, the wounded attendant remains ill, Beren retains witnesses' protection, the northern supply remains undelivered, and all seven candles burn.
+
+**Episode 18 directional knowledge and action:** Yara → apparent Corven: observed memory and bodily inconsistencies; suspects the claimed return is unreliable, withholds warrant use, has no direct knowledge of shade occupation. Rhyse → Luceran: has seen signed lethal instruction and the resulting body, knows the king can deliberately violate a witnessed refusal, continues lawful protection of witnesses while distrusting royal direction. Ysabet → Luceran: witnessed the order and rite, preserves original evidence and challenges consent. Miren → Luceran: knows his explicit confession, withdraws physical access without pretending affection has vanished. Jalen → Corven/Leora: knows he is not the dead envoy and cannot supply the man's private relationships or judgment; his own sister and casualty payments remain unresolved. Savelin/Dols → royal household: received contradictory reports, seek living proof, continue bridge inspection independently. Leora → Corven: has only Yara's dispatched attack warning, not verified delivery or the later royal admission.
+
 ## Active supernatural capability evidence
 
 - Pale silver mask manifests as Edselsto and addresses Luceran directly.
@@ -132,8 +146,8 @@ In Episode 17, *The Necessary Death*, Corven leaves the castle under his agreed 
 - Episode 7 does not establish intent-reading, threat classification, perception through unconnected recesses, predictive security, or a substitute for living guards and investigation.
 - A connected arch may yield an accurate but context-free report of metal being drawn from leather; the cooper's harmless harness repair is an observed false-positive for danger, not a false report of sound.
 - Edselsto cannot hear the unconnected service recess, independently infer intent, or keep every sound as a clerk-perfect transcript. Written alarm rules constrain living users and witnesses, not the castle's ability to obey a direct royal command.
-- Episode 11 establishes an unverified castle proposal of envoy death and shade occupation, explicitly refused and never carried out; it does not establish bodily-occupation capability.
-- No evidence establishes resurrection, perfect memory, moral judgment, independent legal authority, or unlimited material creation.
+- Episode 11 records an unverified proposal; Episode 16 records unproved claims; Episode 17 establishes a limited, witnessed occupation of Corven's dead body by Jalen Orris, with bodily habits but without the envoy's personal memory, diplomatic judgment or lawful commission. Episode 18 confirms living pulse, breath and pain in that body, not resurrection of Corven or general transferability.
+- No evidence establishes resurrection of the original person, perfect memory, moral judgment, independent legal authority, reliable long-term occupation, or unlimited material creation.
 
 ## Unresolved obligations preserved
 
@@ -141,7 +155,7 @@ Montegrain motive/accountability/fate; Aven constitutional culpability and surre
 
 ## Immediate handoff
 
-Season 2 Episode 18 — *The Man Who Returned* follows the imperfect occupation of Corven's body. Yara holds the warrants, Ysabet holds the private instruction, Rhyse is summoned, and village witnesses and household workers retain separate evidence. Preserve their independent agency and the ongoing Dols, Teth, Merehaven, grain and northern supply obligations. All seven candles burn.
+Season 2 Episode 19 — *Peace by Counterfeit* follows narrow factual correspondence allowed by Yara, not a transferred commission. The river benches must independently decide what they will fund or permit; Savelin's bridge test, Teth's ferry valuation, Merehaven's bond, the roof, grain and northern supply remain materially incomplete. Leora has been warned of the attack but not the death and occupation. Yara, Rhyse, Ysabet, Miren, Jalen, Beren and village witnesses carry distinct knowledge and risk. All seven candles burn.
 
 ## Hard exclusions
 
