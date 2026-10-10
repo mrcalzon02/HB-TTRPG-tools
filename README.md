@@ -4,6 +4,10 @@ A lightweight, browser-based toolkit for homebrew tabletop RPG tools, utilities,
 
 The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It can run directly from GitHub Pages without an application build step.
 
+## CubeChat saved transit packages
+
+The [**CubeChat transit test package archive**](tests/fixtures/cubechat-transit-only/README.md) contains five verified experimental ciphertext-only media packages (JPEG, GIF, WebP, PDF, ZIP), with immutable revision links, sizes, Git blob hashes, and an explicit list of uncommitted or untested variants. These are public deterministic Binary Cube laboratory fixtures, **not secure encrypted attachments**.
+
 ## Blacklight Intelligence: Charles
 
 Charles now has two repository-level reference documents intended for both human authors and AI integrations:
