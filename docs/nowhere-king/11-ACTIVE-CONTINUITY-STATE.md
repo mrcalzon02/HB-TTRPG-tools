@@ -115,6 +115,8 @@ In Episode 16, *Would It Work?*, the Dols miller grants conditional written cons
 
 **Epistemic/relationship diff through Episode 16:** Luceran and Ysabet directly heard Edselsto's unproved assertions; Rhyse knows the exact method from Episode 11 but reports only renewed danger; Miren knows the method and inquiry by Luceran's voluntary disclosure; Corven and Yara know of a life-threatening proposal and renewed inquiry but **not** the shade method; Damaris and Tomas know material accounts, **not** the restricted question. Corven's distrust increases without erasing his separate diplomatic obligations. Miren's affection does not repair privacy trust. Edselsto's claim remains unverified, and all living institutions retain independent judgment.
 
+In Episode 17, *The Necessary Death*, Corven leaves the castle under his agreed escort arrangement and proceeds toward lower-village lodging. Yara retains his three separate river-bench warrants and his letter to Leora. The journey ends in an attack; Corven's remains are brought to the existing mortuary, and his attendants and village watch retain independent evidence. Luceran acknowledges his responsibility to Ysabet, who keeps the signed private instruction. Beren Kalt refused the assignment, and the courier master, other road-service men, groom and roll clerk have distinct knowledge. Vess refuses the mortuary work; a lesser smith acts under the king's seal. Edselsto calls Jalen Orris, who agrees after death to attempt service in Corven's body but never consented in life. Ysabet contests this against the Episode 3 safeguard. The occupant remembers the gate and is unfamiliar with Corven's injured knee. This is limited bodily occupation, not resurrection or the transfer of a League commission. Rhyse has been summoned but has not yet arrived; Yara has heard of the attack but not the mortuary events. Dols still awaits inspection, only twelve Tervain sacks are sheltered, and the northern convoy remains undelivered. All seven candles burn.
+
 ## Active supernatural capability evidence
 
 - Pale silver mask manifests as Edselsto and addresses Luceran directly.
@@ -139,7 +141,7 @@ Montegrain motive/accountability/fate; Aven constitutional culpability and surre
 
 ## Immediate handoff
 
-Season 2 Episode 17 — *The Necessary Death* is next. Luceran has asked whether the forbidden service would work and received no proof. Corven knows the question was reopened but not the shade method, retains independent warrants and intends to move to lower-village lodging with freedom to leave. Any deliberate death and attempted occupation must earn physical access, living agents, legal consequences and distinct character choices rather than arise automatically from castle power. Dols drainage remains conditional; Teth ferry valuation, Merehaven bond, Jorvan credit, the roof, grain collection and northern patrol remain unresolved. No undercroft descent before Pell/Talla/Nessa safeguards. All seven candles burn.
+Season 2 Episode 18 — *The Man Who Returned* follows the imperfect occupation of Corven's body. Yara holds the warrants, Ysabet holds the private instruction, Rhyse is summoned, and village witnesses and household workers retain separate evidence. Preserve their independent agency and the ongoing Dols, Teth, Merehaven, grain and northern supply obligations. All seven candles burn.
 
 ## Hard exclusions
 
