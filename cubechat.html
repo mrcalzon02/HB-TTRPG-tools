@@ -11,7 +11,7 @@ button:disabled{opacity:.55}button:focus-visible{outline:3px solid #f2ce7b}code{
 #wire{max-height:190px;overflow:auto;font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}#status{min-height:24px}#status.error{color:#ffb6a9}
 @media(max-width:750px){.grid{grid-template-columns:1fr}}
 </style></head><body>
-<p><a href="binary-cube-text-encoder.html">← Cube Text Encoder</a> · <a href="blacklight-binary-cube-encryption.html">Cube Laboratory</a></p>
+<p><a href="binary-cube-text-encoder.html">← Cube Text Encoder</a> · <a href="cubechat-network.html">IPv4 / IPv6 Chat Connection</a> · <a href="blacklight-binary-cube-encryption.html">Cube Laboratory</a></p>
 <h1>CubeChat</h1><p class="muted">First functional milestone: two local independent participants using different A→B and B→A cube keys. This is a local exchange test, not an Internet messenger.</p>
 <p class="warn"><strong>Experimental local prototype.</strong> The Latin-cube permutation is not a secure cipher. This prototype additionally authenticates and encrypts each cube-encoded message with AES-256-GCM. It uses the browser's secure random API, not a certified external physical random source. Keys are kept only in page memory, and both participants are simulated locally.</p>
 <button id="setup">Create two directional channels</button><button id="reset">Clear session</button>
