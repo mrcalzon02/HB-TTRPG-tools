@@ -57,6 +57,8 @@ From the repository root with Node.js 20 or later:
 
 ```sh
 node scripts/cubechat-integration-test.cjs
+node scripts/cubechat-file-type-roundtrip.cjs
+node scripts/cubechat-key-ledger-contract.cjs
 node scripts/cubechat-build-portable.cjs
 ```
 
@@ -65,3 +67,9 @@ The integration command launches a loopback-only test server with a temporary fo
 The build command creates `dist/cubechat-v0.1.0-alpha.1-portable.zip` with the host, client, forum, key lab and engine sources, plus `dist/SHA256SUMS.txt` and `dist/FILE-MANIFEST.txt`. Uses only Node built-ins, a ZIP store-mode archive with no compression, and no npm dependency. It does not include live forum data, key files, generated passwords or secrets. The archive is an OS-neutral **source/runtime bundle**, not an .exe, .apk, .dmg or installer.
 
 **Current verification:** scripts were committed to `main`, read back and JavaScript syntax-parsed. Full Node command execution on an actual clone, extracted ZIP smoke test, browser tests, and published GitHub Release are still pending. The test and build scripts have not been claimed as successfully executed merely because they parsed.
+
+## Expanded binary fixtures and local consumable-key ledger (2026-10-10)
+
+The current experimental implementation additionally contains image/file round-trip acceptance code for PNG, JPEG, GIF, WebP, PDF, WAV, ZIP, Unicode text, JSON, and arbitrary binary files; see `docs/cubechat-file-types-and-ledger.md`. The host and guest now call a strict IndexedDB same-origin ledger before consuming outgoing CCLK2 key bytes and atomically record received ranges, while preserving an explicit first-enrollment warning. The relay and source ZIP now include the two ledger modules. This does not protect against deleted/restored storage, cross-origin or cross-device reuse, malicious cloned material, browser power-loss rollback, or the still-volatile non-large-key replay counters.
+
+**Verification boundary:** The 11 fixture paths and pure state transitions were executed in a JavaScript compatibility host using the fetched canonical engine; this is not a native Node test run. Full Node, IndexedDB/browser, two-device, binary file transport, ZIP extraction, and release tests remain outstanding. Do not tag or publish on this evidence alone.
