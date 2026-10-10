@@ -1,0 +1,945 @@
+{
+  "schema": "cubechat-media-cryptanalysis-v1",
+  "classification": "RESEARCH ONLY: deterministic public test keys; not cryptographic protection",
+  "threatModel": "Known media, publicly reproducible keys, four chosen-plaintext bit flips per file, identical-message repetition and cube block repetition; not blind key recovery or AES-GCM",
+  "parameters": {
+    "fanOut": 3,
+    "regionCount": 3,
+    "subcube": "keyed-codeword",
+    "distinctRegions": true,
+    "seedPolicy": "public deterministic filename-derived"
+  },
+  "summary": [
+    {
+      "mode": "baseline",
+      "fixtures": 5,
+      "bitFlipTrials": 20,
+      "meanChangedBits": 1,
+      "meanChangedFraction": 0.000780579039184112,
+      "meanExpansion": 1.6411679079214623,
+      "allExactRecovery": true,
+      "allRepeatedMessagesIdentical": true
+    },
+    {
+      "mode": "subcube",
+      "fixtures": 5,
+      "bitFlipTrials": 20,
+      "meanChangedBits": 3,
+      "meanChangedFraction": 0.0008147195516507652,
+      "meanExpansion": 4.830165030467164,
+      "allExactRecovery": true,
+      "allRepeatedMessagesIdentical": true
+    },
+    {
+      "mode": "chaining",
+      "fixtures": 5,
+      "bitFlipTrials": 20,
+      "meanChangedBits": 587.4,
+      "meanChangedFraction": 0.19569932987788513,
+      "meanExpansion": 1.6411679079214623,
+      "allExactRecovery": true,
+      "allRepeatedMessagesIdentical": true
+    },
+    {
+      "mode": "chaining-then-subcube",
+      "fixtures": 5,
+      "bitFlipTrials": 20,
+      "meanChangedBits": 1762.2,
+      "meanChangedFraction": 0.20237615941103387,
+      "meanExpansion": 4.830165030467164,
+      "allExactRecovery": true,
+      "allRepeatedMessagesIdentical": true
+    },
+    {
+      "mode": "subcube-then-chaining",
+      "fixtures": 5,
+      "bitFlipTrials": 20,
+      "meanChangedBits": 2276.45,
+      "meanChangedFraction": 0.26787799353547453,
+      "meanExpansion": 4.830165030467164,
+      "allExactRecovery": true,
+      "allRepeatedMessagesIdentical": true
+    }
+  ],
+  "cases": [
+    {
+      "file": "tiny.jpg",
+      "mime": "image/jpeg",
+      "preset": "full-mask-no-filler-capacity",
+      "sourceBytes": 633,
+      "sourceBitStringSha256": "d79b5d64401fd87e3486d61bcb2e94919701affa3169448486984dc9efb32ea5",
+      "variants": [
+        {
+          "mode": "baseline",
+          "roundTrip": true,
+          "sourceBits": 5064,
+          "encodedBits": 5064,
+          "ciphertextBits": 5184,
+          "expansion": 1.0236966824644549,
+          "bitEntropy": 0.9590008940190757,
+          "duplicateCubeBlocks": 1,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00019290123456790122
+            },
+            {
+              "sourceBitIndex": 1266,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00019290123456790122
+            },
+            {
+              "sourceBitIndex": 2532,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00019290123456790122
+            },
+            {
+              "sourceBitIndex": 5063,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00019290123456790122
+            }
+          ]
+        },
+        {
+          "mode": "subcube",
+          "roundTrip": true,
+          "sourceBits": 5064,
+          "encodedBits": 15192,
+          "ciphertextBits": 15264,
+          "expansion": 3.014218009478673,
+          "bitEntropy": 0.99996388738289,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.00019654088050314466
+            },
+            {
+              "sourceBitIndex": 1266,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.00019654088050314466
+            },
+            {
+              "sourceBitIndex": 2532,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.00019654088050314466
+            },
+            {
+              "sourceBitIndex": 5063,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.00019654088050314466
+            }
+          ]
+        },
+        {
+          "mode": "chaining",
+          "roundTrip": true,
+          "sourceBits": 5064,
+          "encodedBits": 5064,
+          "ciphertextBits": 5184,
+          "expansion": 1.0236966824644549,
+          "bitEntropy": 0.9999998926320751,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 2568,
+              "changedFraction": 0.49537037037037035
+            },
+            {
+              "sourceBitIndex": 1266,
+              "changedCiphertextBits": 1848,
+              "changedFraction": 0.35648148148148145
+            },
+            {
+              "sourceBitIndex": 2532,
+              "changedCiphertextBits": 1234,
+              "changedFraction": 0.23804012345679013
+            },
+            {
+              "sourceBitIndex": 5063,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00019290123456790122
+            }
+          ]
+        },
+        {
+          "mode": "chaining-then-subcube",
+          "roundTrip": true,
+          "sourceBits": 5064,
+          "encodedBits": 15192,
+          "ciphertextBits": 15264,
+          "expansion": 3.014218009478673,
+          "bitEntropy": 1,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 7704,
+              "changedFraction": 0.5047169811320755
+            },
+            {
+              "sourceBitIndex": 1266,
+              "changedCiphertextBits": 5544,
+              "changedFraction": 0.3632075471698113
+            },
+            {
+              "sourceBitIndex": 2532,
+              "changedCiphertextBits": 3702,
+              "changedFraction": 0.2425314465408805
+            },
+            {
+              "sourceBitIndex": 5063,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.00019654088050314466
+            }
+          ]
+        },
+        {
+          "mode": "subcube-then-chaining",
+          "roundTrip": true,
+          "sourceBits": 5064,
+          "encodedBits": 15192,
+          "ciphertextBits": 15264,
+          "expansion": 3.014218009478673,
+          "bitEntropy": 0.99996388738289,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 6119,
+              "changedFraction": 0.40087788259958074
+            },
+            {
+              "sourceBitIndex": 1266,
+              "changedCiphertextBits": 5445,
+              "changedFraction": 0.35672169811320753
+            },
+            {
+              "sourceBitIndex": 2532,
+              "changedCiphertextBits": 7331,
+              "changedFraction": 0.48028039832285113
+            },
+            {
+              "sourceBitIndex": 5063,
+              "changedCiphertextBits": 2848,
+              "changedFraction": 0.18658280922431866
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "tiny.gif",
+      "mime": "image/gif",
+      "preset": "repeated-byte-pattern",
+      "sourceBytes": 45,
+      "sourceBitStringSha256": "b8b6dfbee7b89378245493155aca9fd3ea924991325418331f00738a0fa8bf5d",
+      "variants": [
+        {
+          "mode": "baseline",
+          "roundTrip": true,
+          "sourceBits": 360,
+          "encodedBits": 360,
+          "ciphertextBits": 720,
+          "expansion": 2,
+          "bitEntropy": 0.9224062617590723,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.001388888888888889
+            },
+            {
+              "sourceBitIndex": 90,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.001388888888888889
+            },
+            {
+              "sourceBitIndex": 180,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.001388888888888889
+            },
+            {
+              "sourceBitIndex": 359,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.001388888888888889
+            }
+          ]
+        },
+        {
+          "mode": "subcube",
+          "roundTrip": true,
+          "sourceBits": 360,
+          "encodedBits": 1080,
+          "ciphertextBits": 2160,
+          "expansion": 6,
+          "bitEntropy": 0.9994055982606296,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.001388888888888889
+            },
+            {
+              "sourceBitIndex": 90,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.001388888888888889
+            },
+            {
+              "sourceBitIndex": 180,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.001388888888888889
+            },
+            {
+              "sourceBitIndex": 359,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.001388888888888889
+            }
+          ]
+        },
+        {
+          "mode": "chaining",
+          "roundTrip": true,
+          "sourceBits": 360,
+          "encodedBits": 360,
+          "ciphertextBits": 720,
+          "expansion": 2,
+          "bitEntropy": 0.9996437496778561,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 208,
+              "changedFraction": 0.28888888888888886
+            },
+            {
+              "sourceBitIndex": 90,
+              "changedCiphertextBits": 126,
+              "changedFraction": 0.175
+            },
+            {
+              "sourceBitIndex": 180,
+              "changedCiphertextBits": 87,
+              "changedFraction": 0.12083333333333333
+            },
+            {
+              "sourceBitIndex": 359,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.001388888888888889
+            }
+          ]
+        },
+        {
+          "mode": "chaining-then-subcube",
+          "roundTrip": true,
+          "sourceBits": 360,
+          "encodedBits": 1080,
+          "ciphertextBits": 2160,
+          "expansion": 6,
+          "bitEntropy": 0.9992849661105088,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 624,
+              "changedFraction": 0.28888888888888886
+            },
+            {
+              "sourceBitIndex": 90,
+              "changedCiphertextBits": 378,
+              "changedFraction": 0.175
+            },
+            {
+              "sourceBitIndex": 180,
+              "changedCiphertextBits": 261,
+              "changedFraction": 0.12083333333333333
+            },
+            {
+              "sourceBitIndex": 359,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.001388888888888889
+            }
+          ]
+        },
+        {
+          "mode": "subcube-then-chaining",
+          "roundTrip": true,
+          "sourceBits": 360,
+          "encodedBits": 1080,
+          "ciphertextBits": 2160,
+          "expansion": 6,
+          "bitEntropy": 0.9988562035530577,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 240,
+              "changedFraction": 0.1111111111111111
+            },
+            {
+              "sourceBitIndex": 90,
+              "changedCiphertextBits": 533,
+              "changedFraction": 0.24675925925925926
+            },
+            {
+              "sourceBitIndex": 180,
+              "changedCiphertextBits": 475,
+              "changedFraction": 0.2199074074074074
+            },
+            {
+              "sourceBitIndex": 359,
+              "changedCiphertextBits": 375,
+              "changedFraction": 0.1736111111111111
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "tiny.webp",
+      "mime": "image/webp",
+      "preset": "full-mask-no-filler-capacity",
+      "sourceBytes": 64,
+      "sourceBitStringSha256": "4acafc5252b1a3ea6fe5c7d92f02578d7dacf1bf32720dcec0548c09a5f5f975",
+      "variants": [
+        {
+          "mode": "baseline",
+          "roundTrip": true,
+          "sourceBits": 512,
+          "encodedBits": 512,
+          "ciphertextBits": 576,
+          "expansion": 1.125,
+          "bitEntropy": 0.9392295411559678,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.001736111111111111
+            },
+            {
+              "sourceBitIndex": 128,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.001736111111111111
+            },
+            {
+              "sourceBitIndex": 256,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.001736111111111111
+            },
+            {
+              "sourceBitIndex": 511,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.001736111111111111
+            }
+          ]
+        },
+        {
+          "mode": "subcube",
+          "roundTrip": true,
+          "sourceBits": 512,
+          "encodedBits": 1536,
+          "ciphertextBits": 1584,
+          "expansion": 3.09375,
+          "bitEntropy": 0.99966762727589,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.001893939393939394
+            },
+            {
+              "sourceBitIndex": 128,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.001893939393939394
+            },
+            {
+              "sourceBitIndex": 256,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.001893939393939394
+            },
+            {
+              "sourceBitIndex": 511,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.001893939393939394
+            }
+          ]
+        },
+        {
+          "mode": "chaining",
+          "roundTrip": true,
+          "sourceBits": 512,
+          "encodedBits": 512,
+          "ciphertextBits": 576,
+          "expansion": 1.125,
+          "bitEntropy": 0.9999652125135791,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 275,
+              "changedFraction": 0.4774305555555556
+            },
+            {
+              "sourceBitIndex": 128,
+              "changedCiphertextBits": 219,
+              "changedFraction": 0.3802083333333333
+            },
+            {
+              "sourceBitIndex": 256,
+              "changedCiphertextBits": 145,
+              "changedFraction": 0.2517361111111111
+            },
+            {
+              "sourceBitIndex": 511,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.001736111111111111
+            }
+          ]
+        },
+        {
+          "mode": "chaining-then-subcube",
+          "roundTrip": true,
+          "sourceBits": 512,
+          "encodedBits": 1536,
+          "ciphertextBits": 1584,
+          "expansion": 3.09375,
+          "bitEntropy": 0.9995399549752402,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 825,
+              "changedFraction": 0.5208333333333334
+            },
+            {
+              "sourceBitIndex": 128,
+              "changedCiphertextBits": 657,
+              "changedFraction": 0.4147727272727273
+            },
+            {
+              "sourceBitIndex": 256,
+              "changedCiphertextBits": 435,
+              "changedFraction": 0.2746212121212121
+            },
+            {
+              "sourceBitIndex": 511,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.001893939393939394
+            }
+          ]
+        },
+        {
+          "mode": "subcube-then-chaining",
+          "roundTrip": true,
+          "sourceBits": 512,
+          "encodedBits": 1536,
+          "ciphertextBits": 1584,
+          "expansion": 3.09375,
+          "bitEntropy": 0.9997745901599132,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 741,
+              "changedFraction": 0.4678030303030303
+            },
+            {
+              "sourceBitIndex": 128,
+              "changedCiphertextBits": 647,
+              "changedFraction": 0.40845959595959597
+            },
+            {
+              "sourceBitIndex": 256,
+              "changedCiphertextBits": 729,
+              "changedFraction": 0.4602272727272727
+            },
+            {
+              "sourceBitIndex": 511,
+              "changedCiphertextBits": 593,
+              "changedFraction": 0.37436868686868685
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "sample.pdf",
+      "mime": "application/pdf",
+      "preset": "repeated-byte-pattern",
+      "sourceBytes": 414,
+      "sourceBitStringSha256": "d4c6ea863bb22660cfde1cd6c2f76febd05ccf238f056d53f622c2a9d463e8ff",
+      "variants": [
+        {
+          "mode": "baseline",
+          "roundTrip": true,
+          "sourceBits": 3312,
+          "encodedBits": 3312,
+          "ciphertextBits": 6624,
+          "expansion": 2,
+          "bitEntropy": 0.9916496776378092,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00015096618357487922
+            },
+            {
+              "sourceBitIndex": 828,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00015096618357487922
+            },
+            {
+              "sourceBitIndex": 1656,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00015096618357487922
+            },
+            {
+              "sourceBitIndex": 3311,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00015096618357487922
+            }
+          ]
+        },
+        {
+          "mode": "subcube",
+          "roundTrip": true,
+          "sourceBits": 3312,
+          "encodedBits": 9936,
+          "ciphertextBits": 19872,
+          "expansion": 6,
+          "bitEntropy": 0.9999652125135791,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.00015096618357487922
+            },
+            {
+              "sourceBitIndex": 828,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.00015096618357487922
+            },
+            {
+              "sourceBitIndex": 1656,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.00015096618357487922
+            },
+            {
+              "sourceBitIndex": 3311,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.00015096618357487922
+            }
+          ]
+        },
+        {
+          "mode": "chaining",
+          "roundTrip": true,
+          "sourceBits": 3312,
+          "encodedBits": 3312,
+          "ciphertextBits": 6624,
+          "expansion": 2,
+          "bitEntropy": 0.9998289506597051,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 1656,
+              "changedFraction": 0.25
+            },
+            {
+              "sourceBitIndex": 828,
+              "changedCiphertextBits": 1243,
+              "changedFraction": 0.18765096618357488
+            },
+            {
+              "sourceBitIndex": 1656,
+              "changedCiphertextBits": 840,
+              "changedFraction": 0.12681159420289856
+            },
+            {
+              "sourceBitIndex": 3311,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00015096618357487922
+            }
+          ]
+        },
+        {
+          "mode": "chaining-then-subcube",
+          "roundTrip": true,
+          "sourceBits": 3312,
+          "encodedBits": 9936,
+          "ciphertextBits": 19872,
+          "expansion": 6,
+          "bitEntropy": 0.9999992693297064,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 4968,
+              "changedFraction": 0.25
+            },
+            {
+              "sourceBitIndex": 828,
+              "changedCiphertextBits": 3729,
+              "changedFraction": 0.18765096618357488
+            },
+            {
+              "sourceBitIndex": 1656,
+              "changedCiphertextBits": 2520,
+              "changedFraction": 0.12681159420289856
+            },
+            {
+              "sourceBitIndex": 3311,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.00015096618357487922
+            }
+          ]
+        },
+        {
+          "mode": "subcube-then-chaining",
+          "roundTrip": true,
+          "sourceBits": 3312,
+          "encodedBits": 9936,
+          "ciphertextBits": 19872,
+          "expansion": 6,
+          "bitEntropy": 0.9997863341871711,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 4455,
+              "changedFraction": 0.22418478260869565
+            },
+            {
+              "sourceBitIndex": 828,
+              "changedCiphertextBits": 1080,
+              "changedFraction": 0.05434782608695652
+            },
+            {
+              "sourceBitIndex": 1656,
+              "changedCiphertextBits": 4556,
+              "changedFraction": 0.2292673107890499
+            },
+            {
+              "sourceBitIndex": 3311,
+              "changedCiphertextBits": 4313,
+              "changedFraction": 0.2170390499194847
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "sample.zip",
+      "mime": "application/zip",
+      "preset": "repeated-byte-pattern",
+      "sourceBytes": 140,
+      "sourceBitStringSha256": "ab37ef0a7eb127566e0feba22645ee602a3b2673a65c7472d45f6c074d270960",
+      "variants": [
+        {
+          "mode": "baseline",
+          "roundTrip": true,
+          "sourceBits": 1120,
+          "encodedBits": 1120,
+          "ciphertextBits": 2304,
+          "expansion": 2.057142857142857,
+          "bitEntropy": 0.9587986960251991,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00043402777777777775
+            },
+            {
+              "sourceBitIndex": 280,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00043402777777777775
+            },
+            {
+              "sourceBitIndex": 560,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00043402777777777775
+            },
+            {
+              "sourceBitIndex": 1119,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00043402777777777775
+            }
+          ]
+        },
+        {
+          "mode": "subcube",
+          "roundTrip": true,
+          "sourceBits": 1120,
+          "encodedBits": 3360,
+          "ciphertextBits": 6768,
+          "expansion": 6.042857142857143,
+          "bitEntropy": 0.9999506138861949,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.0004432624113475177
+            },
+            {
+              "sourceBitIndex": 280,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.0004432624113475177
+            },
+            {
+              "sourceBitIndex": 560,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.0004432624113475177
+            },
+            {
+              "sourceBitIndex": 1119,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.0004432624113475177
+            }
+          ]
+        },
+        {
+          "mode": "chaining",
+          "roundTrip": true,
+          "sourceBits": 1120,
+          "encodedBits": 1120,
+          "ciphertextBits": 2304,
+          "expansion": 2.057142857142857,
+          "bitEntropy": 0.9996868924868421,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 576,
+              "changedFraction": 0.25
+            },
+            {
+              "sourceBitIndex": 280,
+              "changedCiphertextBits": 428,
+              "changedFraction": 0.1857638888888889
+            },
+            {
+              "sourceBitIndex": 560,
+              "changedCiphertextBits": 290,
+              "changedFraction": 0.12586805555555555
+            },
+            {
+              "sourceBitIndex": 1119,
+              "changedCiphertextBits": 1,
+              "changedFraction": 0.00043402777777777775
+            }
+          ]
+        },
+        {
+          "mode": "chaining-then-subcube",
+          "roundTrip": true,
+          "sourceBits": 1120,
+          "encodedBits": 3360,
+          "ciphertextBits": 6768,
+          "expansion": 6.042857142857143,
+          "bitEntropy": 0.9999090379676003,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 1728,
+              "changedFraction": 0.2553191489361702
+            },
+            {
+              "sourceBitIndex": 280,
+              "changedCiphertextBits": 1284,
+              "changedFraction": 0.18971631205673758
+            },
+            {
+              "sourceBitIndex": 560,
+              "changedCiphertextBits": 870,
+              "changedFraction": 0.12854609929078015
+            },
+            {
+              "sourceBitIndex": 1119,
+              "changedCiphertextBits": 3,
+              "changedFraction": 0.0004432624113475177
+            }
+          ]
+        },
+        {
+          "mode": "subcube-then-chaining",
+          "roundTrip": true,
+          "sourceBits": 1120,
+          "encodedBits": 3360,
+          "ciphertextBits": 6768,
+          "expansion": 6.042857142857143,
+          "bitEntropy": 0.9999354954627657,
+          "duplicateCubeBlocks": 0,
+          "sameMessageSameCiphertext": true,
+          "differential": [
+            {
+              "sourceBitIndex": 0,
+              "changedCiphertextBits": 1464,
+              "changedFraction": 0.21631205673758866
+            },
+            {
+              "sourceBitIndex": 280,
+              "changedCiphertextBits": 1049,
+              "changedFraction": 0.15499408983451538
+            },
+            {
+              "sourceBitIndex": 560,
+              "changedCiphertextBits": 1033,
+              "changedFraction": 0.15263002364066194
+            },
+            {
+              "sourceBitIndex": 1119,
+              "changedCiphertextBits": 1503,
+              "changedFraction": 0.2220744680851064
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "evidence": {
+    "date": "2026-10-10",
+    "runtime": "V8 executing original repository modules and preserved packet inputs",
+    "cases": 25,
+    "generatedStrengthenedPackets": 20,
+    "gitArchiveStatus": "separately tracked; consult published strengthened fixture index",
+    "sevenRegionPlannerIssue": "distinct-region plan can reject valid media lengths with certain seeds; test was executed using three distinct regions instead",
+    "securityBoundary": "No confidentiality, authentication, blind key-recovery, or AES-GCM claims"
+  }
+}
