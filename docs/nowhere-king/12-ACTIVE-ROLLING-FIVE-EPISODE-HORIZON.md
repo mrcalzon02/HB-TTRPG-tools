@@ -2,20 +2,14 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 20, *Pillow Truths*.
-**Forward window:** Season 2 Episodes 21–25.
+**State:** Rolled forward after Season 2 Episode 21, *The Easy Question*.
+**Forward window:** Season 2 Episodes 22–26.
 
-**Continuity status:** Committed prose now reaches Episode 20. Document 11 remains reconciled only through Episode 19 pending a blocked large-file update; the Episode 20 delta below is a temporary explicit reconciliation note, not a substitute ledger. This is the sole rolling horizon.
+**Continuity status:** Canonical prose and the single authoritative temporal ledger both extend through Episode 21. The six-clause listening order remains operative, while staff reliance on useful answers is becoming a procedural habit.
 
-## Season 2 Episode 21 — The Easy Question — CURRENT / LOCKED
+## Season 2 Episode 22 — Another Exception — CURRENT / LOCKED
 
-Edselsto answers smaller administrative and household questions with credible speed. Living clerks, guards and stewards begin asking it first, even when a human witness or account would be slower but better grounded. The Episode 8 six-clause listening order, physical deaf rooms and named human reviewers still exist; erosion must be visible in specific requests, signatures and exceptions, not asserted as a sudden wholesale change. Let at least one low-status worker or officer recognize the cost before a councillor does.
-
-**Exit:** Ordinary institutional habit begins to normalize reliance on castle answers, preparing Episode 22's explicit exception.
-
-## Season 2 Episode 22 — Another Exception — DIRECTIONAL
-
-A smaller request to Edselsto tests whether existing safeguards remain meaningful after the royal breach. The requesting household officer, affected worker, cost, alternative, authorization, witness and later review must be visible. Distinguish actual physical evidence from the castle's claims, and preserve the separate river-bench warrants and the consequences still emerging from Episode 17.
+The unresolved cartman's hire-fee question, or a comparably grounded minor request, tests whether the six-clause safeguards have meaning after the Crown's major breach. Episode 21 established Etta's source wrapper, Henn's searched chest, Rhyse's mistaken mail report, the cleared carter and Tomas's four-column daybook. An exception must be visibly requested and signed; the affected worker, disputed fact, actual connected hearing, living alternatives, cost, witness and later review must be shown. Distinguish actual physical evidence from the castle's claims, and preserve the separate river-bench warrants and the consequences still emerging from Episode 17.
 
 **Exit:** A documented exception begins to alter the habits of the living court without erasing its established rules.
 
@@ -24,14 +18,6 @@ A smaller request to Edselsto tests whether existing safeguards remain meaningfu
 The finite, consent-bound service of Iven Marrick must remain the established comparison for any proposal to widen dead labor. Follow living families, wages, offices, temple objections and the physical limits of thresholds. The occupation of Corven by Jalen cannot silently become an accepted precedent: Jalen's after-death assent and missing living consent remain contested, and his personal wants and Corven's widow retain moral force.
 
 **Exit:** What began as an exceptional personal violation threatens to become a disputed institution, while individual dead servants and living families remain distinct people.
-
-## Episode 19 post-write reconciliation
-
-- Merehaven accepted a witnessed surety for six sacks only; Teth authorized owner-challengeable ferry valuation, not requisition; Dols authorized one civilian crossing interval, not military use or a general bridge opening.
-- Six sacks crossed into a far-bank store, six remain at Edselsto, and none reached northern posts; the forty-eight-hour reprieve for two hamlets is expiring. The eighteen patrol mounts remain withdrawn.
-- Yara retains the three warrants and warns Leora of observed inconsistencies without claiming knowledge of the rite. Leora's newest reply has not been confirmed delivered.
-- Miren rejects the idea that real relief can purchase forgiveness for Corven's murder. Jalen has not acquired Corven's judgment or his commission; his sister and casualty claim remain unresolved.
-- Ysabet retains original evidence, Rhyse protects witnesses under restrictions, and all seven candles remain burning.
 
 ## Season 2 Episode 24 — Fortifications Facing Inward — NEW N+4 / DIRECTIONAL
 
@@ -45,18 +31,15 @@ Foreign houses and river governments begin independently testing the apparent en
 
 **Exit:** The counterfeit begins to cost the Crown the confidence it purchased, while independent institutions retain authority to withhold recognition.
 
-## Episode 20 post-write reconciliation (pending entry into document 11)
+## Season 2 Episode 26 — Residual Memory — NEW N+4 / DIRECTIONAL
 
-- Miren established a signed chamber-privacy request before Ysabet; she continues to refuse consoling intimacy and recognizes Luceran's wish to escape refusal without forgiving it.
-- Yara preserved the village watch's missing-man entry and broken stick, paid the cooper's widow, and sent Leora a second warning about observed memory discrepancies. She has not witnessed the rite, and neither warning's receipt is confirmed.
-- Rhyse recorded Beren's confinement as well as his refusal, ordered an outside copy to the village priest, and separated the unpaid horse claim from witness protection. The priest's receipt is not yet confirmed; Beren remains restricted.
-- Jalen found a blank casualty-payment line and requested the paymaster's original, without proving his sister's location or payment status. He refused to open correspondence addressed to Corven.
-- Dols stopped a second cart; six sacks remain beyond Dols, six at Edselsto, none delivered north. One hamlet receives one additional day of forage reprieve, the other does not. No military passage, new surety or treaty.
-- All seven candles burn. The authoritative temporal ledger still needs this reconciliation entered without duplicate history.
+An intimate or bodily detail exposes a defect in Jalen's occupation of Corven that no amount of official correspondence can remedy. The first person to recognize it must possess a credible history with Corven, and should distinguish direct observation from suspicion or knowledge of the mortuary rite. Yara's protected village-watch records, Leora's unanswered questions, the three independently held warrants and Corven's old knee remain earlier evidence. Jalen still has his own sister, casualty-payment claim, and after-death choices; he is neither Corven resurrected nor a blank puppet. Any finding sharpens scrutiny without accelerating the later Episode 28 body-abroad proof or resolving the buried nature of Edselsto.
+
+**Exit:** A private mismatch becomes durable evidence with an independently motivated custodian, increasing exposure risk while the wider diplomatic and supply debts remain.
 
 ## Active payoff debt
 
-Carry document 11's wider unresolved obligations and Episode 15's repair/credit pressures: Corven's incomplete disclosure, renewed warning, lower-village lodging, independent attendants, Leora's letters and the three separate bench warrants; Dols miller drainage work, shoring and inspection; military countersign; Teth owner-challengeable ferry valuation; Merehaven roof/bond consent; Tervain sacks, hired carts and northern garrison delivery; Hesta's displaced work and four-season right; Bram's injured fingers and porter wages; Yara's declared warehouse interest; Jorvan's second-surety/higher-fee demand; unfinished receiving roof and smith's remaining bill; eighteen withdrawn patrol mounts and reduced hamlet coverage; Kaelmont decking/snow; Pell/Talla/Nessa's undercroft safety safeguards; Miren's privacy grievance; Ysabet's sealed record; Marek's unknown sponsor; Oren/Lysa compensation; Iven's finite voluntary service; seven burning candles.
+Carry document 11's wider unresolved obligations, Episode 20's independent witness and privacy consequences, and Episode 21's new source-provenance hazards (Etta's wrapper, Henn's work chest, the corrected guard sheet, Hesta's cleared carter, and the unverified hire-fee question). Also preserve Episode 15's repair/credit pressures: Corven's incomplete disclosure, renewed warning, lower-village lodging, independent attendants, Leora's letters and the three separate bench warrants; Dols miller drainage work, shoring and inspection; military countersign; Teth owner-challengeable ferry valuation; Merehaven roof/bond consent; Tervain sacks, hired carts and northern garrison delivery; Hesta's displaced work and four-season right; Bram's injured fingers and porter wages; Yara's declared warehouse interest; Jorvan's second-surety/higher-fee demand; unfinished receiving roof and smith's remaining bill; eighteen withdrawn patrol mounts and reduced hamlet coverage; Kaelmont decking/snow; Pell/Talla/Nessa's undercroft safety safeguards; Miren's privacy grievance; Ysabet's sealed record; Marek's unknown sponsor; Oren/Lysa compensation; Iven's finite voluntary service; seven burning candles.
 
 ## Protected long-future seeds
 
