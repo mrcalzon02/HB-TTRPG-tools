@@ -1,8 +1,9 @@
 ---
 series: "Beneath Dappled Oaks"
 chapter_target: 31
-status: "WORKING PROSE SEGMENT — NONCANONICAL / NOT RELEASED"
+status: "SOURCE SEGMENT — INTEGRATED IN WORKING DRAFT / NOT CANON"
 continuity_parent: "docs/beneath-dappled-oaks/drafts/31-THE-COST-OF-REFUSING-OPENING-DRAFT.md"
+integrated_into: "docs/beneath-dappled-oaks/drafts/31-THE-COST-OF-REFUSING-OPENING-DRAFT.md"
 placement_a: "Immediately before Damaris's family dinner"
 placement_b: "During the dinner, after the cousin asks Rhyl about tracks"
 release_gate: "Original Drive character workbook must be reconciled through Chapter Thirty; audit before numbered release"

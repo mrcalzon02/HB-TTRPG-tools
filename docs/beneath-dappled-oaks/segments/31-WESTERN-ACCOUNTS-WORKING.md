@@ -2,8 +2,9 @@
 series: "Beneath Dappled Oaks"
 chapter_target: 31
 title: "The Cost of Refusing — Western Accounts Sequence"
-status: "WORKING PROSE SEGMENT — NOT CANON / NOT RELEASED"
+status: "SOURCE SEGMENT — INTEGRATED IN WORKING DRAFT / NOT CANON"
 continuity_parent: "docs/beneath-dappled-oaks/drafts/31-THE-COST-OF-REFUSING-OPENING-DRAFT.md"
+integrated_into: "docs/beneath-dappled-oaks/drafts/31-THE-COST-OF-REFUSING-OPENING-DRAFT.md"
 placement: "After Thessa's bridge inspection and before the Damaris/Rhyl family dinner"
 release_gate: "Original Drive character-continuity workbook must be reconciled through Chapter Thirty before Chapter Thirty-One release."
 ---
