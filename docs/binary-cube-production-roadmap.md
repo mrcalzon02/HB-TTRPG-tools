@@ -165,3 +165,18 @@ The user-selected **logical side-length tiers** for production-grade cubic resea
 - Before accepting upper tiers, benchmark latency, peak resident memory, serialized expansion and exact recovery across payload sizes, on representative low-end and desktop devices. Cap padding ratio and configure explicit user-acknowledged full-volume cost modes when needed.
 - New production UI should offer side tiers 64/128/256/512/1024, with 64 default, estimated capacity/memory/time, and separate mode badges for Latin N² vs volumetric N³.
 - Changes to the existing engine and legacy package schema must not break historical keys/packages; add a separately versioned production profile and rigorous migration/rejection tests.
+
+## Subcube diffusion and message-dependent entry masks (2026-10-10)
+
+**Preserve this as a distinct experimental method**, not simply subcube bit replication and not the existing fixed pre-entry noise masks.
+
+Historical intent: a single logical bit may influence multiple subcube entries, and reversible diffusion (Mix → Permute → Mix → Permute) spreads its influence into other bits; a message-dependent entry-mask variant uses message content to select spatial entry patterns over larger cube clusters, aspiring to "sub-bit" representation through distributed coded influence. The existing `binary-cube-subcube-indexing.js` implements keyed codeword multi-placement at fan-outs 1, 3, 5, 7, but its regions are presently logical bit-index partitions rather than physically nested 3D voxels. `binary-cube-data-dependent-chaining.js` is separately implemented and is not sufficient evidence of the desired clustered diffusion.
+
+Design requirements:
+- Define "sub-bit" precisely as *distributed influence/coded representation of one logical bit across multiple physical positions*; never claim information-theoretic storage of more than one independent bit per classical bit.
+- Select 64/128/256/512/1024 size tier within the established budget; define physical cluster partition and explicit active/inactive/masked positions.
+- Use invertible mixing steps and keyed permutations, recording round count, domain separation, deterministic seed and protected frame settings. If the message drives a mask, ensure the inverse can reconstruct decisions from recovered state or decryptable authenticated control information; do not introduce a plaintext-dependent circular decoder dependency.
+- Preserve exact recovery, collision-free assignment, zero-filled inputs, long terminal zero runs and arbitrary binary data; fill unused serialized slots with securely generated padding per the underflow policy.
+- Measure differential diffusion/avalanche, locality leakage, chosen-input behavior, error propagation, redundancy and expansion, timing, and memory independently for fixed masks, subcube codewords, chaining, true reversible diffusion, and combined message-dependent mask modes.
+- Do not equate visual complexity or unexpectedly structured ciphertext with cryptographic security. Keep standard authenticated encryption protecting experimental cube transforms as independently versioned layers.
+- Wire the experimental option through one shared engine authority across the text example, file application, lab visualizer and test suites only after a staged validated prototype. Label unimplemented operations explicitly.
