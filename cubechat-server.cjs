@@ -28,7 +28,7 @@ if(req.method==='POST'&&u.pathname==='/send'){
  respond(res,200,JSON.stringify({deliveredConnections:group.size}),'application/json; charset=utf-8');
  }catch{return respond(res,400,'Bad JSON')}});return;
 }
-if(req.method==='GET'&&['/','/cubechat-network.html','/shadowrun-binary-cube-engine.js'].includes(u.pathname)){
+if(req.method==='GET'&&['/','/cubechat-network.html','/cubechat-host.html','/cubechat-provision.html','/shadowrun-binary-cube-engine.js'].includes(u.pathname)){
  const name=u.pathname==='/'?'cubechat-network.html':u.pathname.slice(1);
  const file=path.join(ROOT,name);return fs.readFile(file,(err,data)=>err?respond(res,404,'Not found'):respond(res,200,data,mime[path.extname(file)]));
 }
