@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 2 Episode 13, *The Cost of Saying No*.
+**Reconciled through:** Season 2 Episode 14, *A Human Solution*.
 
 ## Current state
 
@@ -104,6 +104,10 @@ Pell's safe-side brace for the unsafe lower lintel waits on timber after the pri
 
 **Character-state diff:** Luceran knowingly accepts responsibility for lost mounted protection; Damaris/Tomas price the security and repair tradeoff without knowing the sealed proposal; Savelin keeps the civilian/military boundary and repays a personal debt; Hesta and Yara bind private trade while revealing a conflict of interest; Corven distinguishes courtesy from informed consent; Rhyse's protective duty and secrecy increasingly conflict; Miren's affection and political disagreement coexist; Nessa protects independent measurement over speculative maps; Talla and Pell maintain physical safety requirements.
 
+In Episode 14, *A Human Solution*, twelve Tervain grain sacks reach Edselsto by hired Crown cart and are counted beneath the first completed roof bay; the rest of the purchase and all northern delivery remain pending. Hesta records displaced quarry work and porter costs. Dols permits Crown-funded timber shoring and a conditional daylight civilian cart interval only after local inspection; no passage or military countersign is issued. Teth's boatwrights and a ferry owner establish a challengeable valuation process, not requisition authority. Yara discloses her brother's warehouse interest in the League-facing papers. Merehaven receives Corven's recommendation of a smaller first-cargo bond tied to witnessed counts and inspected roof capacity, not consent. Jorvan requests a second surety or higher fee on the one-gate smaller advance; no loan is accepted. Pell's brace remains unfitted, Talla's drain and cask protections unfinished, the injured worker on light duty, and Nessa away on a mill commission with paid recall on three days' notice. Rhyse and Ysabet press Luceran to warn Corven before his next private audience of a refused unverified proposal concerning his life; Luceran promises but has **not yet warned Corven** or disclosed the precise shade proposal. Ysabet records the deadline. Miren remains affectionate without forgiveness. Damaris and Yara do not know the exact proposal. Northern patrol coverage remains reduced, Corven remains alive and independent, and all seven candles burn.
+
+**Character-state diff:** Luceran takes a witnessed warning obligation; Corven retains his demand for informed choice; Rhyse and Ysabet reject indefinite protective silence; Miren distinguishes promise from repair; Damaris resists false certification and expensive credit; Hesta insists on honest labor accounting; Yara discloses a personal trade interest; Savelin preserves civilian/military jurisdiction; Nessa, Talla and Pell maintain safety limits.
+
 ## Active supernatural capability evidence
 
 - Pale silver mask manifests as Edselsto and addresses Luceran directly.
@@ -128,7 +132,7 @@ Montegrain motive/accountability/fate; Aven constitutional culpability and surre
 
 ## Immediate handoff
 
-Season 2 Episode 14 — *A Human Solution* is next. Negotiate genuine partial civilian League consent, bridge approach shoring, independent ferry valuation and roofed-store/bond conditions without pretending Corven controls three councils or the military countersign. Carry the five-day Tervain storage grace, paid Crown cart collection, signed but conditional Hesta/Yara agreement and Yara's disclosed warehouse interest, Jorvan's unanswered one-gate counteroffer, unfinished roof, Kaelmont weather, and eighteen mounts withdrawn from the northern circuit. Corven has again demanded timely warning of concealed danger; Rhyse has carried it. The sealed Episode 11 proposal remains unknown to Corven/Yara/Damaris, while Miren's trust remains unrepaired. No undercroft descent until bracing, cellar protections, wages and Nessa's return. All seven candles burn.
+Season 2 Episode 15 — *What Necessity Means* is next. The partial human settlement has not produced military passage, an accepted Merehaven bond, a safe Dols crossing or northern grain delivery. The reduced patrol, Jorvan's revised surety demand, displaced quarry work and winter repairs still impose costs. Luceran's witnessed promise to warn Corven of a refused unproved life-threatening proposal **before the next private audience** is due; he has not yet done so. His language may move toward 'unless' under already-seeded pressures, but he must not ask Edselsto whether occupation would work until Episode 16. No second undercroft descent until Pell/Talla/Nessa safeguards. All seven candles remain lit.
 
 ## Hard exclusions
 
