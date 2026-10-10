@@ -1,6 +1,7 @@
 'use strict';
 // CubeChat LAN transport: Node built-ins only. Relays opaque encrypted envelopes, never key material.
 const http=require('node:http'),https=require('node:https'),fs=require('node:fs'),path=require('node:path');
+const forum=require('./cubechat-forum.cjs');
 const ROOT=__dirname, PORT=Number(process.env.CUBECHAT_PORT||process.argv[2]||8787), HOST=process.env.CUBECHAT_HOST||'0.0.0.0';
 if(!Number.isInteger(PORT)||PORT<1||PORT>65535)throw Error('Invalid port');
 const clients=new Map();const MAX=1024*1024;
@@ -11,6 +12,7 @@ function respond(res,code,text,type='text/plain; charset=utf-8'){res.writeHead(c
 const tls=process.env.CUBECHAT_TLS_CERT&&process.env.CUBECHAT_TLS_KEY;
 const server=(tls?https.createServer({cert:fs.readFileSync(process.env.CUBECHAT_TLS_CERT),key:fs.readFileSync(process.env.CUBECHAT_TLS_KEY)}):http.createServer)((req,res)=>{
 const base='http://localhost';let u;try{u=new URL(req.url,base)}catch{return respond(res,400,'Bad request')}
+if(forum.handle(req,res,u))return;
 if(req.method==='GET'&&u.pathname==='/events'){
  const role=u.searchParams.get('role'),profile=u.searchParams.get('profile')||'000000000000000000000000',group=subscribers(profile,role);if(!group)return respond(res,400,'Invalid profile or role');
  res.writeHead(200,{'Content-Type':'text/event-stream','Cache-Control':'no-store','Connection':'keep-alive','X-Accel-Buffering':'no','Access-Control-Allow-Origin':'none'});
@@ -28,7 +30,7 @@ if(req.method==='POST'&&u.pathname==='/send'){
  respond(res,200,JSON.stringify({deliveredConnections:group.size}),'application/json; charset=utf-8');
  }catch{return respond(res,400,'Bad JSON')}});return;
 }
-if(req.method==='GET'&&['/','/cubechat-network.html','/cubechat-host.html','/cubechat-provision.html','/shadowrun-binary-cube-engine.js'].includes(u.pathname)){
+if(req.method==='GET'&&['/','/cubechat-network.html','/cubechat-host.html','/cubechat-provision.html','/cubechat-forum.html','/shadowrun-binary-cube-engine.js'].includes(u.pathname)){
  const name=u.pathname==='/'?'cubechat-network.html':u.pathname.slice(1);
  const file=path.join(ROOT,name);return fs.readFile(file,(err,data)=>err?respond(res,404,'Not found'):respond(res,200,data,mime[path.extname(file)]));
 }
