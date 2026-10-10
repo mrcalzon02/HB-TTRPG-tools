@@ -1749,9 +1749,178 @@ She brushed a crumb from his collar. He caught her hand and kissed the inside of
 
 "Then you can appear tomorrow after you've slept."
 
-He let her take the bowl. Together they washed it and set it upside down with the others. Damaris folded his letter into her sash, not because it contained useful intelligence but because she wanted to keep the sight of his handwriting beside hers.
+He let her take the bowl. Together they washed it and set it upside down with the others. Rhyl folded her note along its old creases and returned it to his coat pocket. Damaris watched him do it, absurdly pleased that he meant to keep a letter about charcoal.
 
 The ford was not certified safe. No office had yet closed it. The charcoal was on the longer road, and someone would have to explain the toll in a room full of people who had not been present when the river took the stones away.
 
 Rhyl followed Damaris up the stairs, leaving the lamp for the cook to find at dawn.
 
+
+
+---
+
+The next morning, Ilyan found Neral at the long table with two parcels of paper and a length of blue string.
+
+One parcel belonged to the charter accounts. The other was a collection of petitions for the Hall, some neatly folded, some repaired at the edges where their owners had opened them too often. Neral had tied neither parcel yet.
+
+"Judge Vaun?" Ilyan asked.
+
+"With a petitioner."
+
+"Is it likely to take long?"
+
+"It is a dispute over a wall. It has been taking long for eleven years."
+
+Ilyan put the draft personnel request on the table. Neral did not reach for it.
+
+"Did she ask you to deliver that?"
+
+"She asked me to bring it for review."
+
+"Then leave it for review."
+
+There was a chair by the window. Ilyan sat in it, and for a while listened to the household going about its business. Somewhere beyond the passage, a clerk was trying to persuade a man that a boundary drawn on a map did not oblige the ground to move. The man appeared to think it should.
+
+Neral finished tying the charter parcel. He set the second beside it, glanced at Ilyan, and went on with his accounts.
+
+"You've written the date of the transfer," he said at last.
+
+Ilyan looked down. "Two years after Silver Night."
+
+"Yes. What are you asking the office to establish?"
+
+"Which duties Salver took up."
+
+"All of them?"
+
+"The ones recorded."
+
+"That isn't the same thing."
+
+Ilyan brought the paper over. Neral turned it so they could both read it.
+
+The first sentence asked for Edrin Salver's appointment order to the Tribunal Contingency Secretariat. That was narrow enough. The next asked for all communications handled in the office during his tenure. Ilyan had written it late, while imagining the two halves of the disputed commission lying in the same room as a man whose name had appeared elsewhere.
+
+Neral tapped the second sentence.
+
+"You want an office to search years of correspondence because you have one clerk's name."
+
+"I want to know whether his work connected the offices."
+
+"Then ask for the duties of his position. If you later have a supported reason to request a particular record, you can identify it. This doesn't identify anything."
+
+"I thought the request was careful."
+
+"It is careful about the secret you already know. It is not careful about the work you would make other people do."
+
+Ilyan took out his pen. Neral moved the charter accounts before he could spill ink on them.
+
+He struck the broad sentence and wrote a smaller one. It asked for the original assignment order, any surviving amendment to the position's formal responsibilities, and the name of the office that maintained those employment records. It did not ask what Salver had believed, whom he had met, or which sealed matters might have passed through the Secretariat.
+
+The change left an embarrassing amount of white paper.
+
+"I could have done that yesterday," Ilyan said.
+
+"You could have."
+
+"You're not going to console me?"
+
+"No."
+
+Neral returned to his figures. Ilyan had once mistaken that manner for dislike. He knew now that Neral treated a corrected document as a corrected document, not as an occasion to decide whether its author deserved affection.
+
+Vaun came in when the wall petitioner had gone. Her sleeve bore a smear of plaster dust.
+
+"He brought a piece of it," she said, seeing Ilyan's glance. "An admirable wall, except where it has fallen down."
+
+She read the request standing up. At the end she looked at Neral.
+
+"Your work?"
+
+"The worst of it was his."
+
+"Good. He needs practice."
+
+Ilyan tried to look injured. Neither of them obliged him.
+
+Vaun sat to consider the wording. She asked him to separate the request for a historical appointment order from the request for the standing duties of the post. A later description, she said, might not prove what the deputy had been authorized to do on the date of his transfer. Ilyan made the distinction. She initialled the amended page and handed it to Neral.
+
+"Ordinary route," she said.
+
+"Of course," Neral replied.
+
+"Separate from the custodian's packet."
+
+"Of course."
+
+Ilyan had not suggested otherwise. He found that the repetition annoyed him, which was a useful warning about the state of his temper.
+
+They went together to the public dispatch counter. It was crowded with people who had not been invited to regard the Valeric inquiry as the most important business in the city. A baker needed an inspection certificate returned before the ovens were repaired. Two women argued over the proper address for a pension appeal. A messenger with an injured foot sat on a bench, sorting deliveries he could no longer make before noon.
+
+Neral took their place in the queue.
+
+When the clerk called them forward, she checked the request's addressee, the signature authorizing the inquiry, and the fee entered against the Hall account. She would accept the packet for delivery to the personnel records office. She would not promise that the office held the original appointment order, or that every part of the request could be answered.
+
+Ilyan had prepared himself to ask how long it would take. He looked at the messenger on the bench, at the baker holding his certificate application by one damp corner, and let the question wait until the clerk had finished her entry.
+
+"Will there be a receipt?"
+
+"There will be a dispatch receipt," she said. "The receiving office decides what it can certify."
+
+"Thank you."
+
+She pressed the counterfoil with her seal and gave it to Neral. He examined the reference and tucked it into his book. The request went into the ordinary outgoing tray. No one rang a bell or cleared a path for it.
+
+On the steps outside, Ilyan stopped to put his gloves on.
+
+"Do you think Salver knew?" he asked.
+
+Neral waited for him to say what he meant.
+
+"About the interference. When he handled the memorandum."
+
+"I don't know."
+
+"He'd read the lawful timing schedules."
+
+"He'd logged access to them."
+
+"And later he logged the other paper."
+
+"Yes."
+
+Ilyan looked back through the open doorway. A clerk had taken the next petitioner. The outgoing tray was already half hidden beneath other letters.
+
+He had wanted a person who could be placed at both ends of a chain. Now he had a request moving toward a records office that might not even possess the paper he needed.
+
+"I know," he said. "It's not enough."
+
+Neral adjusted the strap of his account bag.
+
+"It is enough to ask the question you sent."
+
+They walked back to the Hall by the longer street, where the gutters were clear and the shopkeepers had begun setting out their goods. Ilyan bought a little packet of candied peel from a woman whose stall smelled of citrus and wet canvas. Neral watched him count out the coins.
+
+"For the judge?"
+
+"For a letter."
+
+"That is a very small letter."
+
+"It's not the letter."
+
+Neral left him at the Hall door. Ilyan went upstairs and took a sheet from his own writing case, not the inquiry drawer. He began with the weather. He told Thessa about the man who had brought a broken wall into court and about the woman selling candied peel. He told her he had eaten breakfast before going to work, which would at least deprive her of one familiar complaint.
+
+He nearly added a question about the bridge accounts. The habit was strong enough that he had already written the first word before he stopped.
+
+He crossed it out.
+
+Instead he described the small garden behind the Hall, where the rain had left the young leaves bright and the gardener was losing a patient argument with a patch of weeds. He wished she were there to mock his account of the wall. He did not ask when she would return.
+
+The letter was shorter than the ones he had been sending. He folded the packet of peel into a separate little parcel and addressed both to the western post, knowing that roads and duties would decide when they arrived.
+
+At the bottom of the page he had written, without intending to make a declaration of it, that he missed her company.
+
+He left it there.
+
+The civic custodian had not answered. The personnel office had not answered. Neral held one dispatch receipt, and Ilyan had sent a letter that required no reply at all.
