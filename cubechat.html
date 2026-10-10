@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CubeChat — Directional Cube Chat Prototype</title>
+<style>
+:root{color-scheme:dark;font:15px/1.5 system-ui,sans-serif;background:#101722;color:#e8f0fc}*{box-sizing:border-box}body{max-width:1100px;margin:0 auto;padding:20px}a{color:#9bcdff}h1{margin:8px 0}.muted{color:#adbed2}.warn{border-left:4px solid #e8b65f;background:#31291e;padding:12px;border-radius:5px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{border:1px solid #45556b;border-radius:13px;padding:16px;background:#182536;min-width:0}
+.messages{min-height:270px;max-height:450px;overflow:auto;background:#0e1724;border:1px solid #3b4d62;border-radius:8px;padding:12px;margin:12px 0}
+.bubble{max-width:88%;padding:9px 12px;border-radius:11px;margin:8px 0;background:#344355;overflow-wrap:anywhere}.bubble.out{margin-left:auto;background:#164c71}
+textarea,input{width:100%;background:#0c1724;color:inherit;border:1px solid #617189;border-radius:8px;padding:9px;font:inherit}textarea{min-height:68px}
+button{background:#256e98;border:1px solid #79bce4;color:#fff;border-radius:7px;padding:9px 14px;cursor:pointer;margin:7px 6px 7px 0}
+button:disabled{opacity:.55}button:focus-visible{outline:3px solid #f2ce7b}code{overflow-wrap:anywhere}
+#wire{max-height:190px;overflow:auto;font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}#status{min-height:24px}#status.error{color:#ffb6a9}
+@media(max-width:750px){.grid{grid-template-columns:1fr}}
+</style></head><body>
+<p><a href="binary-cube-text-encoder.html">← Cube Text Encoder</a> · <a href="blacklight-binary-cube-encryption.html">Cube Laboratory</a></p>
+<h1>CubeChat</h1><p class="muted">First functional milestone: two local independent participants using different A→B and B→A cube keys. This is a local exchange test, not an Internet messenger.</p>
+<p class="warn"><strong>Experimental local prototype.</strong> The Latin-cube permutation is not a secure cipher. This prototype additionally authenticates and encrypts each cube-encoded message with AES-256-GCM. It uses the browser's secure random API, not a certified external physical random source. Keys are kept only in page memory, and both participants are simulated locally.</p>
+<button id="setup">Create two directional channels</button><button id="reset">Clear session</button>
+<div id="status" role="status" aria-live="polite">Select “Create two directional channels” to begin.</div>
+<div class="grid"><section class="card"><h2>Participant A</h2><small class="muted">Outgoing: A→B · Incoming: B→A</small><div class="messages" id="am" aria-label="Participant A messages"></div><label for="at">Message from A</label><textarea id="at" placeholder="Write as A"></textarea><button id="as" disabled>Send to B</button></section>
+<section class="card"><h2>Participant B</h2><small class="muted">Outgoing: B→A · Incoming: A→B</small><div class="messages" id="bm" aria-label="Participant B messages"></div><label for="bt">Message from B</label><textarea id="bt" placeholder="Write as B"></textarea><button id="bs" disabled>Send to A</button></section></div>
+<section class="card"><h2>Wire inspection</h2><p class="muted">Only the serialized encrypted envelope crosses the simulated boundary. No plaintext or cube key is included.</p><pre id="wire">No messages sent.</pre><button id="tamper" disabled>Test corrupted ciphertext rejection</button><button id="test" disabled>Run bidirectional round-trip self-test</button></section>
+<script src="shadowrun-binary-cube-engine.js"></script><script>
+(()=>{'use strict';
+const E=window.ShadowrunBinaryCubeEngine,$=id=>document.getElementById(id),encoder=new TextEncoder(),decoder=new TextDecoder('utf-8',{fatal:true});
+const HEADER='cubechat-local-v1';let peers=null,lastEnvelope=null,busy=false;
+const hex=a=>Array.from(a,x=>x.toString(16).padStart(2,'0')).join('');
+const b64=a=>btoa(Array.from(a,x=>String.fromCharCode(x)).join(''));
+const un64=s=>Uint8Array.from(atob(s),x=>x.charCodeAt(0));
+const bits=a=>Array.from(a,x=>x.toString(2).padStart(8,'0')).join('');
+function fromBits(s){if(s.length%8)throw Error('Non-byte-aligned recovered data');return Uint8Array.from({length:s.length/8},(_,i)=>parseInt(s.slice(i*8,i*8+8),2))}
+function announce(s,error=false){$('status').textContent=s;$('status').className=error?'error':''}
+function makeChannel(name){const secret=crypto.getRandomValues(new Uint8Array(32)),key=E.createKey({gridSize:64,seed:hex(secret),maskDensity:1,inputFace:'top',outputFace:'front'});return {name,secret,cubeKey:key,keyPromise:crypto.subtle.importKey('raw',secret,'AES-GCM',false,['encrypt','decrypt']),next:0,seen:new Set()}}
+function makePeer(name,outgoing,incoming){return {name,outgoing,incoming}}
+async function setup(){if(!E||!crypto?.subtle||!crypto.getRandomValues)throw Error('Canonical engine or Web Crypto is unavailable');const ab=makeChannel('AB'),ba=makeChannel('BA');peers={A:makePeer('A',ab,ba),B:makePeer('B',ba,ab)};lastEnvelope=null;$('am').textContent='';$('bm').textContent='';$('wire').textContent='No messages sent.';for(const id of ['as','bs','test'])$(id).disabled=false;$('tamper').disabled=true;announce('Independent A→B and B→A channel keys created locally. No private key exported.')}
+function aad(obj){return encoder.encode(JSON.stringify({format:obj.format,channel:obj.channel,sequence:obj.sequence,profile:obj.profile}))}
+async function send(senderName,text,render=true){if(!peers)throw Error('Create channels first');if(!text)throw Error('Type a message first');
+const sender=peers[senderName],receiver=peers[senderName==='A'?'B':'A'],ch=sender.outgoing;
+const raw=encoder.encode(text),cube=E.encryptBinary(bits(raw),ch.cubeKey);
+const iv=crypto.getRandomValues(new Uint8Array(12)),env={format:HEADER,channel:ch.name,sequence:ch.next,profile:'latin-cube-64',iv:b64(iv),ciphertext:''};
+const encrypted=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:aad(env)},await ch.keyPromise,encoder.encode(JSON.stringify(cube))));
+env.ciphertext=b64(encrypted);
+const wire=JSON.stringify(env);const received=await receive(receiver,wire);
+ch.next++;
+if(received!==text)throw Error('Round-trip mismatch');
+if(render){bubble(senderName,text,true);bubble(receiver.name,received,false);$('wire').textContent=JSON.stringify(env,null,2);lastEnvelope={wire,receiver:receiver.name};$('tamper').disabled=false}
+return {received,wire};
+}
+async function receive(receiver,wire){
+const env=JSON.parse(wire),ch=receiver.incoming;
+if(env.format!==HEADER||env.channel!==ch.name||env.profile!=='latin-cube-64'||!Number.isSafeInteger(env.sequence)||env.sequence<0)throw Error('Invalid channel envelope');
+if(ch.seen.has(env.sequence))throw Error('Replay rejected');
+const iv=un64(env.iv),ciphertext=un64(env.ciphertext);if(iv.length!==12)throw Error('Invalid nonce');
+const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv,additionalData:aad(env)},await ch.keyPromise,ciphertext);
+const cube=JSON.parse(decoder.decode(plain));const decoded=decoder.decode(fromBits(E.decryptBinary(cube,ch.cubeKey)));
+ch.seen.add(env.sequence);return decoded;
+}
+function bubble(name,text,out){const d=document.createElement('div');d.className='bubble'+(out?' out':'');d.textContent=text;const box=$(name.toLowerCase()+'m');box.append(d);box.scrollTop=box.scrollHeight}
+async function action(fn){if(busy)return;busy=true;for(const id of ['as','bs','test','tamper','setup'])$(id).disabled=true;try{await fn()}catch(e){announce(e.message,true)}finally{busy=false;$('setup').disabled=false;for(const id of ['as','bs','test'])$(id).disabled=!peers;$('tamper').disabled=!lastEnvelope}}
+$('setup').onclick=()=>action(setup);
+$('reset').onclick=()=>{peers=null;lastEnvelope=null;for(const id of ['as','bs','tamper','test'])$(id).disabled=true;$('am').textContent='';$('bm').textContent='';$('wire').textContent='No messages sent.';announce('Session cleared from page memory.')};
+$('as').onclick=()=>action(async()=>{await send('A',$('at').value);$('at').value='';announce('A → B: cube encoded, AES-GCM authenticated, delivered and decoded.')});
+$('bs').onclick=()=>action(async()=>{await send('B',$('bt').value);$('bt').value='';announce('B → A: cube encoded, AES-GCM authenticated, delivered and decoded.')});
+$('test').onclick=()=>action(async()=>{const samples=['Test A → B: 你好 🌍','Test B → A: zeros 0000000000'];for(let i=0;i<samples.length;i++)await send(i?'B':'A',samples[i],false);announce('PASS: both directional channels recovered their distinct UTF-8 payloads exactly.')});
+$('tamper').onclick=()=>action(async()=>{const env=JSON.parse(lastEnvelope.wire),data=un64(env.ciphertext);data[0]^=1;env.ciphertext=b64(data);try{await receive(peers[lastEnvelope.receiver],JSON.stringify(env));throw Error('FAIL: modified ciphertext was accepted')}catch(e){if(e.message.startsWith('FAIL:'))throw e;announce('PASS: modified ciphertext rejected by authenticated decryption.')}})
+})();
+</script></body></html>
