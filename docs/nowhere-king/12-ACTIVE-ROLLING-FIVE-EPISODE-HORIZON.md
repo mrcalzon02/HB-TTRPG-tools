@@ -5,6 +5,8 @@
 **State:** Rolled forward after Season 2 Episode 15, *What Necessity Means*.
 **Forward window:** Season 2 Episodes 16–20.
 
+**Reconciliation exception:** The single temporal ledger in document 11 still declares Episode 14 because GitHub safety checks rejected its full-file update. Episode 15's committed prose and this post-write reconciliation control the intervening events; repair document 11 in place before the next canonical continuity roll. Do not create a duplicate temporal ledger.
+
 ## Season 2 Episode 16 — Would It Work? — CURRENT / LOCKED
 
 After the disclosure conflict and earned deterioration, Luceran asks Edselsto whether the Episode 11 plan could work. The question is itself a breach in his prior moral position, not proof of Edselsto's claim. Preserve the difference between what Edselsto asserts, what Ysabet recorded, what Rhyse and Miren know, and what Corven was told. No killing or occupation. Living alternatives and bench jurisdictions do not disappear.
