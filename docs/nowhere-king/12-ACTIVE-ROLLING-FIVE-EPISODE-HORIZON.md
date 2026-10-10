@@ -2,18 +2,12 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 19, *Peace by Counterfeit*.
-**Forward window:** Season 2 Episodes 20–24.
+**State:** Rolled forward after Season 2 Episode 20, *Pillow Truths*.
+**Forward window:** Season 2 Episodes 21–25.
 
-**Continuity status:** Document 11 is reconciled through Episode 19. The six-sack Dols crossing, distinct League permissions, misleading public credit, and separated evidence and knowledge remain binding. This is the sole rolling horizon.
+**Continuity status:** Committed prose now reaches Episode 20. Document 11 remains reconciled only through Episode 19 pending a blocked large-file update; the Episode 20 delta below is a temporary explicit reconciliation note, not a substitute ledger. This is the sole rolling horizon.
 
-## Season 2 Episode 20 — Pillow Truths — CURRENT / LOCKED
-
-Private consequences dominate. Miren, Rhyse, Ysabet, Yara and Leora have distinct knowledge, obligations, affections and thresholds of refusal. Affection does not confer consent, confession does not earn automatic forgiveness, and protecting a secret is itself an action with costs. Preserve Miren's Episode 6 privacy injury, her Episode 15 report and Episode 16 refusal to make love a moral permission slip. Material gains from Episode 19 remain real and politically tempting.
-
-**Exit:** The king's circle struggles to separate relief from its concealed price; an intimate secret acquires exposure risk.
-
-## Season 2 Episode 21 — The Easy Question — DIRECTIONAL
+## Season 2 Episode 21 — The Easy Question — CURRENT / LOCKED
 
 Edselsto answers smaller administrative and household questions with credible speed. Living clerks, guards and stewards begin asking it first, even when a human witness or account would be slower but better grounded. The Episode 8 six-clause listening order, physical deaf rooms and named human reviewers still exist; erosion must be visible in specific requests, signatures and exceptions, not asserted as a sudden wholesale change. Let at least one low-status worker or officer recognize the cost before a councillor does.
 
@@ -44,6 +38,21 @@ The finite, consent-bound service of Iven Marrick must remain the established co
 A staffed and funded deeper inspection of the already-established undercroft examines walls, embrasures and access routes. Masons, guards, priests and record keepers preserve rival interpretations, equipment needs, and worker safety. No final prison/interface truth, candle failure or omniscient castle capability is revealed. The work must compete for money and people with northern food, roof repairs and witness protection.
 
 **Exit:** A concrete architectural contradiction justifies further human inquiry without answering the larger mystery.
+
+## Season 2 Episode 25 — The Foreign Test — NEW N+4 / DIRECTIONAL
+
+Foreign houses and river governments begin independently testing the apparent envoy's identity using already-established handwriting, bodily habits, private correspondence, witnesses and lawful commissions. Each verifier has a separate reason and threshold; Leora's personal knowledge must not be reduced to a convenient test question. This is a tightening of scrutiny, not a premature complete exposure or revelation of the castle's buried truth.
+
+**Exit:** The counterfeit begins to cost the Crown the confidence it purchased, while independent institutions retain authority to withhold recognition.
+
+## Episode 20 post-write reconciliation (pending entry into document 11)
+
+- Miren established a signed chamber-privacy request before Ysabet; she continues to refuse consoling intimacy and recognizes Luceran's wish to escape refusal without forgiving it.
+- Yara preserved the village watch's missing-man entry and broken stick, paid the cooper's widow, and sent Leora a second warning about observed memory discrepancies. She has not witnessed the rite, and neither warning's receipt is confirmed.
+- Rhyse recorded Beren's confinement as well as his refusal, ordered an outside copy to the village priest, and separated the unpaid horse claim from witness protection. The priest's receipt is not yet confirmed; Beren remains restricted.
+- Jalen found a blank casualty-payment line and requested the paymaster's original, without proving his sister's location or payment status. He refused to open correspondence addressed to Corven.
+- Dols stopped a second cart; six sacks remain beyond Dols, six at Edselsto, none delivered north. One hamlet receives one additional day of forage reprieve, the other does not. No military passage, new surety or treaty.
+- All seven candles burn. The authoritative temporal ledger still needs this reconciliation entered without duplicate history.
 
 ## Active payoff debt
 
