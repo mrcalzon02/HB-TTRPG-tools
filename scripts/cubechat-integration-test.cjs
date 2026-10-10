@@ -15,7 +15,7 @@ const P1='111111111111111111111111',P2='222222222222222222222222';
 const envelope=JSON.stringify({format:'cubechat-local-v1',channel:'AB',sequence:0,profile:'latin-cube-64',iv:'AAAAAAAAAAAAAAAA',ciphertext:'c2VyaWFsaXplZC1vcGFxdWU='});
 async function run(){port=await vacantPort();try{
  await start();const base='http://127.0.0.1:'+port;
- for(const file of ['/','/cubechat-host.html','/cubechat-network.html','/cubechat-forum.html','/cubechat-provision.html','/cubechat-key-handoff.html','/cubechat-large-keys.html','/cubechat-large-key-adapter.js','/shadowrun-binary-cube-engine.js']){const r=await request('GET',base+file);assert.equal(r.status,200,file);assert.ok(r.text.length>100,file)}
+ for(const file of ['/','/cubechat-host.html','/cubechat-network.html','/cubechat-forum.html','/cubechat-provision.html','/cubechat-key-handoff.html','/cubechat-large-keys.html','/cubechat-large-key-adapter.js','/cubechat-key-ledger-core.js','/cubechat-key-ledger.js','/shadowrun-binary-cube-engine.js']){const r=await request('GET',base+file);assert.equal(r.status,200,file);assert.ok(r.text.length>100,file)}
  const boards=JSON.parse((await request('GET',base+'/forum/api/boards')).text);assert.ok(boards.boards.some(b=>b.id==='general'));
  assert.equal((await request('POST',base+'/forum/api/boards',{name:'Wrong credential',description:''})).status,403);
  // Server throttles posting by IP. Wait between mutations to exercise accepted paths.
