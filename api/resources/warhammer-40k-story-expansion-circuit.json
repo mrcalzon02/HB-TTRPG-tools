@@ -83,9 +83,9 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
       "status": "active",
-      "currentEndpoint": "Continuation V — The Minutes Between Orders. The pilot inadvertently rewards delay while cadets build defensible explanations. Prite, Darcelle and Renault trial scenario-native opportunity costs without a fixed speed bonus or retrospective deadlines. Curriculum approves a remainder-of-term trial; whether this produces better officers remains unknown.",
-      "nextSlice": "Evaluate whether the revised timing-display pilot transfers into better fleet decisions. Preserve the appeal standard, no fixed speed bonus, no retrospective deadlines, and the unresolved question of effectiveness.",
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-05.md",
+      "currentEndpoint": "Continuation VI — The Test Outside the Room. An independent four-team Academy evaluation finds pilot cadets can reconstruct errors more precisely but have not demonstrated uniformly better tactical results. One cadet wastes a depot closure window trying to override another command's authority; another treats mine clearance as if the enemy situation has stopped changing. Darcelle identifies a simulator-design limitation: independent commands are modeled as messages rather than officers with their own duties. The Headmaster authorizes a limited human-counterpart joint trial under fleet-controlled independent assessment, preserving existing marks and the current pilot. Prite proposes an unnumbered question: 'Who is allowed to say no?'",
+      "nextSlice": "Stage the limited human-counterpart joint trial, with an officer exercising real jurisdiction and a defensible right to refuse. Show what both the cadet and counterpart know and how their incentives interact; do not equate procedural compliance with superior fleet performance. Preserve no retroactive grading, scenario-native time costs, independent fleet assessment, existing appeal rights, and House observer access only to signed findings.",
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
       "eraLock": {
         "era": "Mature Imperium / late-era Imperial Navy Academy setting; exact millennium not fixed by the attached chronicle",
         "allowedInstitutions": [
@@ -102,9 +102,9 @@
       "chapterCapRule": "Hard cap of 40 chapters per book; Chapter XL is the latest permissible chapter number within a book.",
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "Continuation IV — The First Appeal",
-        "durableCharacterStateChanged": false,
-        "reason": "The chapter materially advances Academy procedure and the assessment pilot, but the recurring indexed cast primarily applies already-recorded competence, doctrine, confidence, humor, protective strategy and Priority Omega duties. No new durable personal knowledge, injury, relationship, secret, order or goal was established strongly enough to justify manufacturing temporal ledger entries."
+        "segment": "Continuation VI — The Test Outside the Room",
+        "durableCharacterStateChanged": true,
+        "reason": "Prite and Darcelle recognize a distinct command-training failure and the Headmaster authorizes a limited joint evaluation; temporal touch records required."
       }
     },
     {

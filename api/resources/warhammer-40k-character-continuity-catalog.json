@@ -4338,6 +4338,18 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-05.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "prite-independent-command-authority-06",
+          "knowledge": "Independent fleet assessment shows pilot cadets explain mistakes more precisely but not consistently achieve better outcomes; other commanders' separate authority and changing enemy conditions remain unaddressed training problems.",
+          "certainty": "direct independent evaluation, small sample",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VI — The Test Outside the Room",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -4447,6 +4459,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation V — The Minutes Between Orders",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VI — The Test Outside the Room",
+          "changeSummary": "Accepts inconclusive independent results; rejects a new scoring shortcut and proposes testing human counterpart commanders with authority to refuse. Adds an unnumbered fourth question rather than claiming the pilot is proven.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VI — The Test Outside the Room",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
             "sourceType": "continuation"
           }
         }
@@ -4585,6 +4607,18 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-05.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "darcelle-independent-authority-simulation-audit-06",
+          "skill": "Identifies that simulated independent commands behave as scripted messages rather than actors with their own operational obligations; proposes a human-counterpart trial with preserved evidence and appeal rights.",
+          "demonstratedLevel": "Specific technical-pedagogical diagnosis confirmed in fleet review",
+          "status": "demonstrated",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VI — The Test Outside the Room",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "relationshipsTrust": [],
@@ -4638,6 +4672,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation V — The Minutes Between Orders",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VI — The Test Outside the Room",
+          "changeSummary": "Reviews independent trial evidence and identifies missing human counterpart autonomy in simulation design; explains the proposed corrective trial to the Headmaster and fleet evaluator.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VI — The Test Outside the Room",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
             "sourceType": "continuation"
           }
         }
@@ -4797,6 +4841,16 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "segment": "Continuation VI — The Test Outside the Room",
+          "changeSummary": "Participates in independent evaluation and recognizes that stronger explanations have not yet established better tactical performance; supports the next trial without claiming victory.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VI — The Test Outside the Room",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -4949,6 +5003,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation II — The Practical Examination",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VI — The Test Outside the Room",
+          "changeSummary": "Authorizes a limited joint human-counterpart trial while retaining independent fleet assessment, the conventional course, the ongoing pilot and existing marks; declines to designate the new question as a proven lesson.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VI — The Test Outside the Room",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
             "sourceType": "continuation"
           }
         }
