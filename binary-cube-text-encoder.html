@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Examples / Encoder | Binary Cube Laboratory</title>
+<style>
+:root{color-scheme:dark;font:16px/1.5 system-ui,sans-serif;background:#0e1520;color:#edf3fc}
+*{box-sizing:border-box}body{max-width:1060px;margin:auto;padding:28px 20px}
+a{color:#99caff}h1{margin:.2rem 0}p,.muted{color:#b9c6d9}
+nav{display:flex;gap:12px;align-items:center;margin:18px 0 25px}nav a{border:1px solid #405269;border-radius:8px;padding:7px 14px;text-decoration:none}
+nav .active{background:#235071;border-color:#5eaad9}
+.panel{border:1px solid #405269;background:#162231;border-radius:14px;padding:20px;margin:16px 0}
+label{display:block;font-weight:650;margin:10px 0 6px}
+textarea,input,select{width:100%;padding:11px;background:#0c1725;border:1px solid #52657b;border-radius:8px;color:inherit;font:inherit}
+textarea{min-height:140px;resize:vertical;font-family:ui-monospace,monospace}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+button{background:#226a96;border:1px solid #79b0d8;color:white;padding:10px 16px;border-radius:8px;cursor:pointer;margin:8px 8px 8px 0}
+button:focus-visible,a:focus-visible{outline:3px solid #ffcd76;outline-offset:3px}
+small{color:#a8bdd2}.warning{border-left:4px solid #efbd68;padding:10px 14px;background:#3b3023}
+#status{min-height:1.8em}#status[data-error=true]{color:#ffadad}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+</style></head><body>
+<p class="muted"><a href="blacklight-binary-cube-encryption.html">Binary Cube Laboratory</a> / Examples / Encoder</p>
+<h1>Cube Text Encoder</h1><p>A compact text demonstration using the laboratory's existing reversible Latin-cube encoding engine.</p>
+<nav aria-label="Example subtabs"><a href="blacklight-binary-cube-encryption.html">Laboratory</a><a class="active" href="binary-cube-text-encoder.html" aria-current="page">Examples · Encoder</a></nav>
+<p class="warning"><strong>Experimental obfuscation only.</strong> The canonical Binary Cube permutation is not production encryption. Do not use this app to protect confidential or sensitive text. The key must be kept to recover saved packages.</p>
+<div class="panel"><h2>Encode text</h2>
+<label for="plain">Input text</label><textarea id="plain" placeholder="Type or paste a message; Unicode and line breaks are supported.">Hello, Cube Lab!</textarea>
+<div class="grid"><div><label for="seed">Seed / laboratory key</label><input id="seed" value="cube-text-demo" autocomplete="off" spellcheck="false"></div>
+<div><label for="size">Cube grid size</label><select id="size"><option>3</option><option>4</option><option>5</option><option>6</option><option selected>8</option><option>12</option><option>16</option><option>24</option><option>32</option></select></div></div>
+<button id="encode">Encode text</button><button id="copy" disabled>Copy package</button><button id="download" disabled>Download package</button>
+<label for="packet">Portable package (JSON, includes key and data)</label>
+<textarea id="packet" spellcheck="false" placeholder="The encoded package appears here. You can paste a saved package here to decode."></textarea>
+</div>
+<div class="panel"><h2>Decode text</h2><p class="muted">Paste a previously exported JSON package above, then decode. Encoding settings are carried inside the package.</p>
+<button id="decode">Decode package</button><button id="roundtrip">Verify current round-trip</button>
+<label for="recovered">Recovered text</label><textarea id="recovered" readonly></textarea>
+<p id="status" role="status" aria-live="polite"></p></div>
+<script src="shadowrun-binary-cube-engine.js"></script>
+<script>
+(function(){
+'use strict';
+const E=window.ShadowrunBinaryCubeEngine;
+const $=id=>document.getElementById(id);
+const te=new TextEncoder(),td=new TextDecoder('utf-8',{fatal:true});
+const FORMAT='hb-ttrpg-binary-cube-text-example',VERSION=1;
+function bytesToBits(bytes){return Array.from(bytes,b=>b.toString(2).padStart(8,'0')).join('')}
+function bitsToBytes(bits){if(bits.length%8)throw Error('Recovered bit length is not byte aligned');const out=new Uint8Array(bits.length/8);for(let i=0;i<out.length;i++)out[i]=parseInt(bits.slice(i*8,i*8+8),2);return out}
+function status(msg,error=false){$('status').textContent=msg;$('status').dataset.error=String(error)}
+function make(){
+if(!E)throw Error('Canonical Binary Cube engine did not load.');
+const input=$('plain').value;if(!input)throw Error('Enter text before encoding.');
+const seed=$('seed').value;if(!seed)throw Error('Choose a nonempty seed.');
+const key=E.createKey({gridSize:Number($('size').value),seed,inputFace:'top',outputFace:'front',maskDensity:1});
+const source=te.encode(input),encrypted=E.encryptBinary(bytesToBits(source),key);
+return {format:FORMAT,version:VERSION,encoding:'utf-8',byteLength:source.length,key,encrypted};
+}
+function decode(obj){
+if(!obj||obj.format!==FORMAT||obj.version!==VERSION||obj.encoding!=='utf-8')throw Error('Not a supported Cube Text Encoder package.');
+if(!Number.isSafeInteger(obj.byteLength)||obj.byteLength<1)throw Error('Invalid recorded byte length.');
+const bits=E.decryptBinary(obj.encrypted,obj.key);
+const bytes=bitsToBytes(bits);
+if(bytes.length!==obj.byteLength)throw Error('Recovered byte length differs from the package.');
+return td.decode(bytes);
+}
+$('encode').addEventListener('click',()=>{try{const obj=make();$('packet').value=JSON.stringify(obj,null,2);$('recovered').value='';$('copy').disabled=false;$('download').disabled=false;status('Encoded '+obj.byteLength+' UTF-8 bytes into '+obj.encrypted.blockCount+' cube blocks.')}catch(e){status(e.message,true)}});
+$('decode').addEventListener('click',()=>{try{const text=decode(JSON.parse($('packet').value));$('recovered').value=text;status('Decoded successfully ('+te.encode(text).length+' bytes).')}catch(e){$('recovered').value='';status(e.message,true)}});
+$('roundtrip').addEventListener('click',()=>{try{const obj=make();const text=decode(obj);if(text!==$('plain').value)throw Error('Round-trip mismatch');status('PASS: exact UTF-8 encode/decode round-trip ('+obj.byteLength+' bytes).')}catch(e){status(e.message,true)}});
+$('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('packet').value);status('Package copied to clipboard.')}catch(e){status('Clipboard unavailable. Select and copy the JSON manually.',true)}});
+$('download').addEventListener('click',()=>{try{JSON.parse($('packet').value);const blob=new Blob([$('packet').value],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='cube-text-package.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}catch(e){status('Package must contain valid JSON to download.',true)}});
+})();
+</script></body></html>
