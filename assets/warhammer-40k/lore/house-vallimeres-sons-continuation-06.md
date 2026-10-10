@@ -129,6 +129,145 @@ The evaluator's face was almost expressionless. Almost.
 
 ---
 
+The two pilot cadets were waiting outside the records chamber when Prite came down.
+
+He had not expected them to wait. Their interviews were complete and the marks had been signed. There was nothing to appeal yet.
+
+The convoy commander stepped forward.
+
+"Professor. Did we fail?"
+
+"Your assessments are in the office."
+
+"That's not what I asked."
+
+Prite recognized the tone. He had used it himself against the curriculum board.
+
+"Your convoy reached the depot with a damaged lighter. The other command lost its carrier's cargo. Neither result was what you wanted."
+
+"We did what you taught us."
+
+"Some of it."
+
+She looked at him without blinking.
+
+"I asked how long the tender could stay. I set a limit on waiting. I didn't invent a deadline afterward. When the sweep came back clear, I used it."
+
+"Yes."
+
+"Then what was I supposed to do?"
+
+It would have been easy to say that the enemy was not obliged to respect her doctrine. He had already written that sentence once. Repeating it now would have answered nothing.
+
+"What changed while you waited?" he asked.
+
+"The tender's position. Our fuel. The harbor window."
+
+"And the enemy?"
+
+She hesitated.
+
+"I didn't know."
+
+"Did you ask?"
+
+"No."
+
+Prite could see her deciding whether he was trying to trap her into admitting a failure she could not have anticipated. She was entitled to the suspicion. She had just spent a term learning that an instructor could judge the past using information the cadet had never possessed.
+
+"I didn't know either," he said. "Not while I watched. I saw you preserve the tug and thought you had understood the whole problem. I nearly praised you before the enemy moved."
+
+That surprised her.
+
+"You designed the lesson."
+
+"I helped design it."
+
+"Then why didn't you see it?"
+
+"Because I was watching whether you used our timing method."
+
+She stared at him for a moment.
+
+"That's a poor reason."
+
+"Yes."
+
+The other cadet, the squadron commander, had been standing near the wall with his cap in his hands.
+
+"I knew the depot could refuse," he said.
+
+"I heard."
+
+"I thought I could convince them. A real depot commander might have agreed."
+
+"A real one might."
+
+"Then how can you fail me for asking?"
+
+"We can't fail you merely for asking."
+
+"But for asking twice?"
+
+"Not merely for that either. The question is what you expected to change between the requests, and what else you could have done while waiting."
+
+The cadet looked toward the closed chamber door.
+
+"The simulation never told me why they refused."
+
+Prite considered that.
+
+It was true. The depot had a jurisdiction and a scripted refusal. It did not have a commander who might be protecting a wounded repair crew, holding a defensive reserve, obeying an order from above, or simply misunderstanding the squadron's situation. The cadet had tried to persuade a sentence.
+
+"You should have had someone to ask," Prite said.
+
+"Will that change my mark?"
+
+"No. Your mark is being decided against the exercise you actually took. We won't invent a new requirement because we noticed a flaw afterward."
+
+The cadet looked disappointed. Perhaps he had hoped for a better mark. Perhaps he had hoped the professor would admit the whole exercise was worthless.
+
+Neither would have been a useful lesson.
+
+The convoy commander adjusted the cuff of her uniform.
+
+"Will the next class get a better exercise?"
+
+"If we can make one."
+
+"That isn't much of an answer."
+
+"No," Prite said. "But it's the answer I can defend."
+
+They left together, still arguing quietly about whether a mine tender ought to be trusted after reporting a clear channel.
+
+Prite watched them go. They had learned to question a judgment without treating the person delivering it as an enemy. He was less certain that the Academy had learned the same skill.
+
+The fleet evaluator emerged from the records chamber.
+
+"You let them question you."
+
+"They had a question."
+
+"Most professors would have sent them to the appeal office."
+
+"They can still go."
+
+The evaluator looked down the corridor.
+
+"Your problem is larger than the timing display."
+
+"I know."
+
+"Do you?"
+
+Prite had been about to answer. Instead he waited.
+
+The officer nodded once and went back inside.
+
+
+---
+
 Darcelle spread the records across a maintenance bench beneath Hall Four.
 
 "The simulator treats other commands as messages," he said. "If the depot refuses, the cadet assumes there's another request that will unlock the route. If the tender agrees, the cadet assumes that part of the problem is finished."
