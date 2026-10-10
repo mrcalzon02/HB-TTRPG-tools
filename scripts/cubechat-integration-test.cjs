@@ -28,7 +28,10 @@ async function run(){port=await vacantPort();try{
  const posts=JSON.parse((await request('GET',base+'/forum/api/posts?thread='+thread)).text);assert.equal(posts.posts.length,2);
  const a=await subscribe(P1,'B'),b=await subscribe(P2,'B');
  const sent=await request('POST',base+'/send',{profile:P1,from:'A',to:'B',envelope});assert.equal(sent.status,200);assert.equal(JSON.parse(sent.text).deliveredConnections,1);
- await new Promise(r=>setTimeout(r,100));assert.ok(a.log().includes('serialized-opaque')===false);assert.ok(a.log().includes('ciphertext'));assert.ok(!b.log().includes('ciphertext'));
+ await new Promise(r=>setTimeout(r,100));assert.ok(a.log().includes('ciphertext'),'profile 1 must receive opaque envelope');assert.ok(!b.log().includes('ciphertext'),'profile 2 must not receive profile 1 envelope');
+ const other=await request('POST',base+'/send',{profile:P2,from:'A',to:'B',envelope});assert.equal(other.status,200);assert.equal(JSON.parse(other.text).deliveredConnections,1);
+ await new Promise(r=>setTimeout(r,100));assert.ok(b.log().includes('ciphertext'),'profile 2 must receive its own envelope');
+ assert.equal((await request('POST',base+'/send',{profile:'not-a-profile',from:'A',to:'B',envelope})).status,400);
  a.req.destroy();b.req.destroy();
  await stop();await start();
  const persisted=JSON.parse((await request('GET',base+'/forum/api/posts?thread='+thread)).text);assert.equal(persisted.posts.length,2);
