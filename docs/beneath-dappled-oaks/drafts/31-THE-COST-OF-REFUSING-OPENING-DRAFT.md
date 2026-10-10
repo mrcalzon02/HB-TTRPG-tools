@@ -999,6 +999,174 @@ That was enough to make tomorrow different.
 
 ---
 
+The River Ledger had three copies of the road warning by breakfast, and none had arrived by way of Damaris.
+
+One accompanied the carrier's account. One came from the coaching yard. The third was folded into a letter from the charcoal merchant, who wanted to know whether a signed warning counted as a reason to charge him more for a delivery he had already bought.
+
+Damaris laid them side by side. The handwriting differed, but Rhyl's signature and the description of the missing ford markers agreed.
+
+Lady Maeryn Caladren-Voss examined the merchant's letter over her spectacles. She wore a dark green gown with narrow silver buttons, and her hair had been pinned up to survive a day of arguing with borrowers and relations. A small pile of coin stood beside her inkstand. Damaris suspected it was there to remind visitors that money existed in pieces, not merely in accounts.
+
+"Your cousin says the paved road is an extravagance," Maeryn said.
+
+"He said the toll was an extravagance."
+
+"By his third letter, I believe he meant the entire road."
+
+The cousin stood at the window, his coat still damp from the morning mist. He had come straight from the warehouse, where the charcoal wagons had spent the night waiting for instructions.
+
+"The contract allows the carrier to choose the route," he said. "It doesn't say we must buy him the dearest one."
+
+"No," Damaris agreed. "It doesn't require his driver to take a loaded wagon into a ford he has been warned may be unsafe, either."
+
+"The ford hasn't been closed."
+
+"I know."
+
+He sounded tired rather than angry. A kiln was waiting on the charcoal, and its owner had threatened to charge for every hour it stood cold. Her cousin was trying to get a wagon moving before the delay cost more than the toll.
+
+Maeryn pushed the letters toward Damaris.
+
+"Then tell me what we're paying for."
+
+Damaris spread out the calculation she had made before coming: the toll, the additional distance, the driver's time, and the warehouse charge if the charcoal missed the next firing. She had also noted the cost of a broken axle, though that estimate ceased to be useful if a horse or driver was injured.
+
+"The paved road is cheaper than another day in the yard."
+
+"If they depart now," her cousin said.
+
+"Yes."
+
+"And if the ford proves safe tomorrow?"
+
+"Then we've paid to avoid a risk we couldn't judge today."
+
+He studied her. "Easy to say when it isn't your margin."
+
+"It is our account. My name is on the recommendation."
+
+Maeryn tapped the paper. "Your name isn't a purse. Which account bears it?"
+
+Damaris turned to the next sheet. The charcoal had been priced before the thaw. The merchant had agreed to a fixed delivered price, and the carrier's ordinary toll allowance applied only to a route named in advance. No route had been named. The difference would come from the Caladren carrying margin.
+
+Her cousin stared at the figures.
+
+"We'll make almost nothing."
+
+"On this delivery."
+
+"That distinction will comfort the factor."
+
+"Then the next contract needs a route contingency. We can't charge yesterday's customer for a clause we neglected to write."
+
+Maeryn's mouth moved very slightly. Damaris had seen that expression before. It did not mean approval. It meant her aunt had found something worth testing.
+
+"And your Red Hart gentleman?" Maeryn asked.
+
+Damaris felt herself color. Her cousin became interested in the garden.
+
+"What about him?"
+
+"Would you have accepted the warning from a stranger?"
+
+"Yes."
+
+"Would you have paid the toll?"
+
+"Yes."
+
+"Would you have argued quite so fiercely?"
+
+Last night Rhyl had sat at her mother's table and refused a favor that would have made this morning cheaper. She had been proud of him. She had also known, before her cousin asked, that he would refuse.
+
+"I hope so," she said. "But I can't prove it by telling you how I feel about him."
+
+"No," Maeryn said. "You can't."
+
+She separated the coaching-yard copy from the others.
+
+"Have the road office certify this for the contract file. Your gentleman needn't be asked for anything. If there is a dispute, I want an office copy and its issue date, not a dinner guest's recollection."
+
+Damaris nodded. She had already drafted the request.
+
+Her cousin picked up the calculation. "And the wagons?"
+
+"Pay the toll," Maeryn said. "The carrying account bears the difference. I'll sign after the clerk verifies the rate."
+
+He exhaled. "I could have had that answer yesterday."
+
+"Yesterday you were trying to get a different one."
+
+He did not deny it. He folded the calculation, unfolded it to check the distance, and went to inform the warehouse. He was good at his work; Damaris knew he would remember the loss when next season's prices were set. It would not be a sentimental lesson. Someone would have to explain a thinner profit to people expecting a thicker one.
+
+At the door he paused. "Shall I tell the merchant we found the ford unsafe?"
+
+"Tell him the crossing is under warning and the carrier has elected the paved road."
+
+He nodded and left.
+
+Maeryn put away her spectacles and reached for the next account. Damaris remained seated.
+
+"You brought him to your mother's table," Maeryn said.
+
+"I did."
+
+"Was it pleasant?"
+
+"Mostly."
+
+"Your cousin says he was courteous. And difficult."
+
+"He wouldn't give us something that wasn't ours."
+
+"Good. I've known a great many men who give away other people's property and expect gratitude for it."
+
+Damaris laughed.
+
+"But don't make him a virtue you can spend instead of money," Maeryn added. "The driver still needs his toll. The kiln still needs charcoal. Your cousin still has to make the accounts balance."
+
+"I know."
+
+"You may have to know it again next week."
+
+At the cash desk, Damaris waited while the clerk counted the advance into a canvas pouch. The driver came to collect it, cap in hand, with a crease between his brows.
+
+"Is this for the paved road?"
+
+"Yes."
+
+"And the extra miles?"
+
+"Entered here. Bring the toll receipt back."
+
+He checked the amount with the clerk. He did not thank Damaris for doing what his employer should have arranged before dawn. He asked whether the warehouse had been told to expect him late. She showed him the notice.
+
+"Then I'd best be off," he said.
+
+He paused at the door. "The younger lad wanted to try the ford with an empty cart first. Told him he could do it on his own time."
+
+"Was he annoyed?"
+
+"Terribly."
+
+He grinned and went down the steps, shaking the pouch to settle the coins.
+
+Damaris watched him cross the yard. He was thinking about his team, the daylight and the delivery. He had no reason to care that the man whose warning had altered his route had kissed a Caladren daughter on her mother's front steps.
+
+Back at her desk she turned to the harbor reconciliations. There were missing weights to query, a disputed wharf fee, and a miller's letter written in a hand so cramped she had to turn the page sideways. She worked until the bells marked noon.
+
+Only then did she take a fresh sheet and write to Rhyl.
+
+*Your warning cost us a toll, two letters and a morning's argument. I thought you would like to know the wagons took the paved road.*
+
+She considered adding that she had been proud of him. The words looked rather grand for a note about charcoal.
+
+She wrote them anyway, beneath a line about her aunt's opinion of men who gave away other people's property.
+
+She sealed the note with her own small mark and left it for the ordinary yard messenger. She did not ask when Rhyl would be back from the ford. He had told her what he intended to do, and she had work enough to fill the time before he could tell her what he found.
+
+---
+
 At the Hall, the first bounded answer arrived just before the lamps were lit.
 
 It was not an answer to who had been protected.
