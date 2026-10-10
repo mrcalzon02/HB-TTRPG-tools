@@ -2,18 +2,12 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 18, *The Man Who Returned*.
-**Forward window:** Season 2 Episodes 19–23.
+**State:** Rolled forward after Season 2 Episode 19, *Peace by Counterfeit*.
+**Forward window:** Season 2 Episodes 20–24.
 
-**Continuity status:** Document 11 is reconciled through Episode 18, including Corven's death, Jalen's limited occupation, independent witness and warrant custody, and the separate knowledge of Yara, Rhyse, Ysabet, Miren and Leora. This is the sole rolling horizon.
+**Continuity status:** Document 11 is reconciled through Episode 19. The six-sack Dols crossing, distinct League permissions, misleading public credit, and separated evidence and knowledge remain binding. This is the sole rolling horizon.
 
-## Season 2 Episode 19 — Peace by Counterfeit — CURRENT / LOCKED
-
-Counterfeit cooperation produces real but bounded relief through the already-established Dols drain and shoring inspection, Teth owner-challengeable ferry valuation, Merehaven's smaller witnessed first-cargo bond, the receiving-yard roof, hired carters and Tervain grain. No instant military countersign or magical supply convoy. Show who receives food, who is paid, who is delayed, who is endangered and who claims political credit. Hesta and Yara keep their private commercial interests distinct from the League's public warrants. The success must not erase the crime or the original envoy's relationships.
-
-**Exit:** Public gratitude and practical relief reward a concealed atrocity, deepening Luceran's dependence on useful obedience.
-
-## Season 2 Episode 20 — Pillow Truths — DIRECTIONAL
+## Season 2 Episode 20 — Pillow Truths — CURRENT / LOCKED
 
 Private consequences dominate. Miren, Rhyse, Ysabet, Yara and Leora have distinct knowledge, obligations, affections and thresholds of refusal. Affection does not confer consent, confession does not earn automatic forgiveness, and protecting a secret is itself an action with costs. Preserve Miren's Episode 6 privacy injury, her Episode 15 report and Episode 16 refusal to make love a moral permission slip. Material gains from Episode 19 remain real and politically tempting.
 
@@ -37,13 +31,19 @@ The finite, consent-bound service of Iven Marrick must remain the established co
 
 **Exit:** What began as an exceptional personal violation threatens to become a disputed institution, while individual dead servants and living families remain distinct people.
 
-## Episode 18 post-write reconciliation
+## Episode 19 post-write reconciliation
 
-- Yara obtained the village watch account, protected the three separate bench warrants, warned Leora accurately but without confirmed death, and required independent verification before any new use of Corven's commission.
-- Rhyse examined Ysabet's original evidence, protected Beren and the wounded attendant, restricted private road-service access, and recorded his own delay. Ysabet continues to hold the signed instruction and her account of the mortuary rite.
-- Jalen breathes and suffers Corven's injuries but lacks his memories, family knowledge and diplomatic judgment. The physician certified observations only. Yara witnessed inconsistency, not the supernatural mechanism.
-- Savelin and Dols retained the incomplete bridge inspection and refused to certify a household claim of return without a living witness. Yara allowed only named factual correspondence, not a Corven signature, bond, military countersign or treaty.
-- Luceran confessed murder and occupation to Miren; she withdrew intimacy and locked the physically deaf room. Leora does not know the death or occupation. All seven candles burn.
+- Merehaven accepted a witnessed surety for six sacks only; Teth authorized owner-challengeable ferry valuation, not requisition; Dols authorized one civilian crossing interval, not military use or a general bridge opening.
+- Six sacks crossed into a far-bank store, six remain at Edselsto, and none reached northern posts; the forty-eight-hour reprieve for two hamlets is expiring. The eighteen patrol mounts remain withdrawn.
+- Yara retains the three warrants and warns Leora of observed inconsistencies without claiming knowledge of the rite. Leora's newest reply has not been confirmed delivered.
+- Miren rejects the idea that real relief can purchase forgiveness for Corven's murder. Jalen has not acquired Corven's judgment or his commission; his sister and casualty claim remain unresolved.
+- Ysabet retains original evidence, Rhyse protects witnesses under restrictions, and all seven candles remain burning.
+
+## Season 2 Episode 24 — Fortifications Facing Inward — NEW N+4 / DIRECTIONAL
+
+A staffed and funded deeper inspection of the already-established undercroft examines walls, embrasures and access routes. Masons, guards, priests and record keepers preserve rival interpretations, equipment needs, and worker safety. No final prison/interface truth, candle failure or omniscient castle capability is revealed. The work must compete for money and people with northern food, roof repairs and witness protection.
+
+**Exit:** A concrete architectural contradiction justifies further human inquiry without answering the larger mystery.
 
 ## Active payoff debt
 
