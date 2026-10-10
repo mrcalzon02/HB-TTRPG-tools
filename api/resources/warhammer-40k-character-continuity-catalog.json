@@ -442,6 +442,18 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-03.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "javard-montpclair-interview-04",
+          "knowledge": "Montpclair confirms he asked whether Javard had 'opened Sol', remembers his predecessor's warning not to sign for a body not received, and distinguishes burial rites from physical custody. He cannot account for knowing Javard's concealed name after his augmetic casualty. Halva reports hearing the question before full orientation, but can only attest to what was said in her hearing. The interview establishes no identity for 'he' in Vorn's printed warning.",
+          "certainty": "direct interview plus limited medicae corroboration; name source, Sol contents and warning interpretation unresolved",
+          "status": "unresolved",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation IV — The Question That Remained",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-04.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -451,7 +463,7 @@
           "id": "javard-ossuary-goal-backfill",
           "goal": "Reach condemned Lower Ossuary Nineteen through maintenance galleries and investigate the pending Sol transfer while preserving the old archive seal.",
           "horizon": "immediate",
-          "status": "active",
+          "status": "completed",
           "provenance": {
             "story": "On the Fuzzy Edge",
             "segment": "Continuation II — The Unbroken Seal",
@@ -463,11 +475,23 @@
           "id": "javard-question-montpclair-03",
           "goal": "Interview the awakened Pontiff Montpclair before opening Sol's niche, preserving the physical evidence and testing what Montpclair knows independently.",
           "horizon": "immediate",
-          "status": "active",
+          "status": "completed",
           "provenance": {
             "story": "On the Fuzzy Edge",
             "segment": "Continuation III — Lower Ossuary Nineteen",
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "javard-preserve-ossuary-records-04",
+          "goal": "Preserve original burial office annual inspection cards, maintenance orders and separately recorded Montpclair/Halva/Caldris witness accounts before any new opening of Sol's niche or the prior sealed cabinet.",
+          "horizon": "immediate",
+          "status": "active",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation IV — The Question That Remained",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-04.md",
             "sourceType": "continuation"
           }
         }
@@ -546,6 +570,16 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-03.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "segment": "Continuation IV — The Question That Remained",
+          "changeSummary": "Interviewed recovering Montpclair within Halva's medical limits; learned the Pontiff's inherited warning distinguishes burial from custody but does not explain his knowledge of Javard's name; arranged independent statements and preservation of original maintenance records while keeping Sol's niche and the prior archive seal unopened.",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation IV — The Question That Remained",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-04.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -596,7 +630,20 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "montpclair-sol-custody-warning-04",
+          "knowledge": "Montpclair remembers his predecessor warning him not to certify receipt of Sol without custody evidence and asking whether Sol had been 'opened'. He has authorized general ossuary maintenance funding but has never certified Sol's arrival, seen Sol's body, or established who controls the prior Inquisitorial seal.",
+          "certainty": "his own reported memory and admissions; no independent documentary confirmation yet",
+          "status": "reported",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation IV — The Question That Remained",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-04.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
       "plansGoals": [],
@@ -617,6 +664,17 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-01.md",
             "sourceType": "legacy-backfill"
           }
+        },
+        {
+          "id": "montpclair-postoperative-limits-04",
+          "condition": "Survived the sermon augmetic casualty, is awake after surgery with ruined eye socket dressed and left ear removed; still bleeding slightly, fatigued and medically restricted by Halva to brief interviews.",
+          "status": "recovering; not cleared for ordinary duties",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation IV — The Question That Remained",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-04.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "equipmentResources": [],
@@ -629,6 +687,16 @@
             "segment": "Continuation I — The Saint of Administrative Delay",
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-01.md",
             "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "segment": "Continuation IV — The Question That Remained",
+          "changeSummary": "Alive and coherent but medically limited; confirmed asking Javard about 'opening Sol', acknowledged predecessor's custody warning and inability to remember the source of Javard's name, and opposed opening the niche before evidence of responsibility is preserved.",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation IV — The Question That Remained",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-04.md",
+            "sourceType": "continuation"
           }
         }
       ]
