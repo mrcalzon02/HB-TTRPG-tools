@@ -2,20 +2,14 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 21, *The Easy Question*.
-**Forward window:** Season 2 Episodes 22–26.
+**State:** Rolled forward after Season 2 Episode 22, *Another Exception*.
+**Forward window:** Season 2 Episodes 23–27.
 
-**Continuity status:** Canonical prose and the single authoritative temporal ledger both extend through Episode 21. The six-clause listening order remains operative, while staff reliance on useful answers is becoming a procedural habit.
+**Continuity status:** Canonical prose and the single authoritative temporal ledger both extend through Episode 22. The six-clause listening order remains in force after one signed, contested retrieval exception.
 
-## Season 2 Episode 22 — Another Exception — CURRENT / LOCKED
+## Season 2 Episode 23 — The Loyal Dead at Work — CURRENT / LOCKED
 
-The unresolved cartman's hire-fee question, or a comparably grounded minor request, tests whether the six-clause safeguards have meaning after the Crown's major breach. Episode 21 established Etta's source wrapper, Henn's searched chest, Rhyse's mistaken mail report, the cleared carter and Tomas's four-column daybook. An exception must be visibly requested and signed; the affected worker, disputed fact, actual connected hearing, living alternatives, cost, witness and later review must be shown. Distinguish actual physical evidence from the castle's claims, and preserve the separate river-bench warrants and the consequences still emerging from Episode 17.
-
-**Exit:** A documented exception begins to alter the habits of the living court without erasing its established rules.
-
-## Season 2 Episode 23 — The Loyal Dead at Work — NEW N+4 / DIRECTIONAL
-
-The finite, consent-bound service of Iven Marrick must remain the established comparison for any proposal to widen dead labor. Follow living families, wages, offices, temple objections and the physical limits of thresholds. The occupation of Corven by Jalen cannot silently become an accepted precedent: Jalen's after-death assent and missing living consent remain contested, and his personal wants and Corven's widow retain moral force.
+The finite, consent-bound service of Iven Marrick must remain the established comparison for any proposal to widen dead labor. Episode 22's signed one-time castle-retrieval exception, the reusable but non-authoritative blank form, Etta's paid copying and Rhyse's refusal to invade Beren's protected family conversation show how exceptions can become routine. Do not convert that retrieval precedent into an authority over dead service. Follow living families, wages, offices, temple objections and the physical limits of thresholds. The occupation of Corven by Jalen cannot silently become an accepted precedent: Jalen's after-death assent and missing living consent remain contested, and his personal wants and Corven's widow retain moral force.
 
 **Exit:** What began as an exceptional personal violation threatens to become a disputed institution, while individual dead servants and living families remain distinct people.
 
@@ -37,9 +31,15 @@ An intimate or bodily detail exposes a defect in Jalen's occupation of Corven th
 
 **Exit:** A private mismatch becomes durable evidence with an independently motivated custodian, increasing exposure risk while the wider diplomatic and supply debts remain.
 
+## Season 2 Episode 27 — The High-Water Mark — NEW N+4 / DIRECTIONAL
+
+Give the restored court a credible but bounded high point in public confidence, finance, roof repair, civil grain arrangements and apparent League cooperation. Each gain must be made by living work, actual wages, limited permissions and separately accountable consent, rather than retroactive magic or blanket treaty. The roof bay, hired carriers, Dols miller's drainage damage, Merehaven surety, Teth ferry valuations, hamlet forage claims and withdrawn patrol horses must remain visible as specific costs. Jalen's occupied body may receive undeserved public credit but cannot acquire Corven's personal memory, three-bench warrants or diplomatic legitimacy. Show a person who benefits materially and another who bears the hidden cost. No prison/interface revelation, candle failure, military crossing without countersign, premature northern delivery or early Episode 28 proof.
+
+**Exit:** The Crown's political success looks strongest precisely as the moral and evidentiary cost of its shortcuts becomes harder to conceal.
+
 ## Active payoff debt
 
-Carry document 11's wider unresolved obligations, Episode 20's independent witness and privacy consequences, and Episode 21's new source-provenance hazards (Etta's wrapper, Henn's work chest, the corrected guard sheet, Hesta's cleared carter, and the unverified hire-fee question). Also preserve Episode 15's repair/credit pressures: Corven's incomplete disclosure, renewed warning, lower-village lodging, independent attendants, Leora's letters and the three separate bench warrants; Dols miller drainage work, shoring and inspection; military countersign; Teth owner-challengeable ferry valuation; Merehaven roof/bond consent; Tervain sacks, hired carts and northern garrison delivery; Hesta's displaced work and four-season right; Bram's injured fingers and porter wages; Yara's declared warehouse interest; Jorvan's second-surety/higher-fee demand; unfinished receiving roof and smith's remaining bill; eighteen withdrawn patrol mounts and reduced hamlet coverage; Kaelmont decking/snow; Pell/Talla/Nessa's undercroft safety safeguards; Miren's privacy grievance; Ysabet's sealed record; Marek's unknown sponsor; Oren/Lysa compensation; Iven's finite voluntary service; seven burning candles.
+Carry document 11's wider unresolved obligations, Episode 22's signed exception and blank reusable petition, Etta's paid copying, Kett's settlement and Rhyse's refusal of the Beren-family listening request, Episode 20's independent witness and privacy consequences, and Episode 21's source-provenance hazards (Etta's wrapper, Henn's work chest, the corrected guard sheet, Hesta's cleared carter, and the unverified hire-fee question). Also preserve Episode 15's repair/credit pressures: Corven's incomplete disclosure, renewed warning, lower-village lodging, independent attendants, Leora's letters and the three separate bench warrants; Dols miller drainage work, shoring and inspection; military countersign; Teth owner-challengeable ferry valuation; Merehaven roof/bond consent; Tervain sacks, hired carts and northern garrison delivery; Hesta's displaced work and four-season right; Bram's injured fingers and porter wages; Yara's declared warehouse interest; Jorvan's second-surety/higher-fee demand; unfinished receiving roof and smith's remaining bill; eighteen withdrawn patrol mounts and reduced hamlet coverage; Kaelmont decking/snow; Pell/Talla/Nessa's undercroft safety safeguards; Miren's privacy grievance; Ysabet's sealed record; Marek's unknown sponsor; Oren/Lysa compensation; Iven's finite voluntary service; seven burning candles.
 
 ## Protected long-future seeds
 
