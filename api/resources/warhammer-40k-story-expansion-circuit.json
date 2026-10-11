@@ -144,8 +144,8 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
       "status": "active",
-      "currentEndpoint": "Continuation IV — The Question That Remained. Javard interviews the recovering Montpclair under Halva's medical restrictions. The Pontiff confirms his question about 'opening Sol' and recalls his predecessor's warning not to certify custody without a receipt, but cannot account for knowing Javard's name after surgery. He has authorized general ossuary upkeep without personally certifying Sol's arrival. Javard preserves the distinction between burial rites and custody, commissions separate witness accounts and original maintenance records, and leaves the Sol niche and prior Inquisitorial seal unopened.",
-      "nextSlice": "Follow the cathedral burial-office maintenance and transfer records, with separate medicae/Caldris witness accounts, to test who requested seventeen annual inspections and whether any custody receipt exists. Preserve Montpclair's medical restrictions and unexplained knowledge of Javard, the unresolved meaning of 'open Sol' and Vorn's 'he asks' warning, the untouched Sol niche and prior archive seal, the Tides of Tomorrow return contradiction, and the Graveheart/disputed-reader evidence. Do not treat a shared phrase as proof of a shared cause.",
+      "currentEndpoint": "Continuation V — The Receipt That Wasn't. Seventeen readiness inspections arose from the predecessor-bursar's initial preparation instruction and sixteen later warrants, not proof of burial. The transit office accepted the delivery request but records no departure, arrival or recipient receipt. Independent witness accounts do not explain Montpclair's knowledge. Javard holds authenticated copies; the Sol niche and prior Inquisitorial seal remain unopened.",
+      "nextSlice": "Continuation VI: trace the carrier's surviving dispatch records, predecessor-bursar instruction and recurring maintenance payments without presuming Sol was transported. Preserve Montpclair's medical limits and unexplained knowledge, Vorn's ambiguous 'he' warning, the Tides of Tomorrow return contradiction, and the untouched niche and archive seal.",
       "eraLock": {
         "era": "Mature Imperium; exact millennium not fixed by the attached chronicle",
         "allowedInstitutions": [
@@ -161,11 +161,11 @@
       "legacyBackfillRequired": false,
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "Continuation IV — The Question That Remained",
+        "segment": "Continuation V — The Receipt That Wasn't",
         "durableCharacterStateChanged": true,
-        "reason": "Javard's interview, evidence-preservation plan and two character touch records; Montpclair's knowledge claims and postoperative limitations entered in temporal catalog."
+        "reason": "Javard's receipt findings, evidence copies and next plan and Montpclair's continuing restrictions are reconciled through V."
       },
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-04.md"
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md"
     },
     {
       "id": "project-vigilant-shade",

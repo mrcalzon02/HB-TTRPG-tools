@@ -454,6 +454,30 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-04.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "javard-sol-records-no-receipt-05",
+          "knowledge": "Seventeen transfer-readiness inspections derive from a predecessor-bursar instruction to prepare Sol's destination and sixteen later warrants. The transit office accepted a delivery request but has no departure, arrival or recipient receipt. Carrier records may exist; delivery is unproven.",
+          "certainty": "original burial records and signed transit statement; carrier unexamined",
+          "status": "confirmed",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation V — The Receipt That Wasn't",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "javard-montpclair-independent-witnesses-05",
+          "knowledge": "Halva and Caldris separately corroborate Montpclair asking for Javard and whether Sol was opened, but neither excludes prior exposure to those names; the origin of his knowledge and Vorn's 'he' remain unresolved.",
+          "certainty": "independent statements with bounded witness attention",
+          "status": "unresolved",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation V — The Receipt That Wasn't",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -487,11 +511,23 @@
           "id": "javard-preserve-ossuary-records-04",
           "goal": "Preserve original burial office annual inspection cards, maintenance orders and separately recorded Montpclair/Halva/Caldris witness accounts before any new opening of Sol's niche or the prior sealed cabinet.",
           "horizon": "immediate",
-          "status": "active",
+          "status": "completed",
           "provenance": {
             "story": "On the Fuzzy Edge",
             "segment": "Continuation IV — The Question That Remained",
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-04.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "javard-trace-carrier-and-bursar-05",
+          "goal": "Trace surviving carrier records, predecessor-bursar's original instruction and recurring maintenance payments while preserving the unopened Sol niche and prior Inquisitorial seal.",
+          "horizon": "near-term",
+          "status": "active",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation V — The Receipt That Wasn't",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
             "sourceType": "continuation"
           }
         }
@@ -538,6 +574,17 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-03.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "javard-sol-verified-copies-05",
+          "resource": "Authenticated copies of burial-office readiness cards, preparation instruction, sixteen maintenance warrants, independent Halva/Caldris statements and transit registrar's signed no-receipt statement; originals remain in cathedral custody under dual inventory.",
+          "status": "in possession",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation V — The Receipt That Wasn't",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "chapterTouchLog": [
@@ -578,6 +625,16 @@
             "story": "On the Fuzzy Edge",
             "segment": "Continuation IV — The Question That Remained",
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-04.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation V — The Receipt That Wasn't",
+          "changeSummary": "Reconciled seventeen inspections to initial preparation instruction and sixteen warrants, established that no delivery receipt or departure is recorded, preserved original custody and independent limited witness statements, and redirected inquiry toward carrier and predecessor-bursar provenance.",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation V — The Receipt That Wasn't",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
             "sourceType": "continuation"
           }
         }
@@ -675,6 +732,17 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-04.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "montpclair-medicae-followup-05",
+          "condition": "Halva reports continued pain, sleep, dressing changes and prohibition of visitors or administrative work after augmetic surgery.",
+          "status": "recovering; medically restricted",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation V — The Receipt That Wasn't",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "equipmentResources": [],
@@ -696,6 +764,16 @@
             "story": "On the Fuzzy Edge",
             "segment": "Continuation IV — The Question That Remained",
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-04.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation V — The Receipt That Wasn't",
+          "changeSummary": "Medicae report confirms continued postoperative pain and restrictions; Montpclair gives no further testimony or explanation of his knowledge.",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation V — The Receipt That Wasn't",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
             "sourceType": "continuation"
           }
         }
