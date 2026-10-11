@@ -2,45 +2,47 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 22, *Another Exception*.
-**Forward window:** Season 2 Episodes 23–27.
+**State:** Rolled forward after Season 2 Episode 23, *The Loyal Dead at Work*.
+**Forward window:** Season 2 Episodes 24–28.
 
-**Continuity status:** Canonical prose and the single authoritative temporal ledger both extend through Episode 22. The six-clause listening order remains in force after one signed, contested retrieval exception.
+**Continuity status:** Canonical prose and the single authoritative temporal ledger both extend through Episode 23. Iven Marrick's finite voluntary gate duty remains distinct from Jalen Orris's contested occupation of Corven Sareth; no additional dead keeper has been bound.
 
-## Season 2 Episode 23 — The Loyal Dead at Work — CURRENT / LOCKED
+## Season 2 Episode 24 — Fortifications Facing Inward — CURRENT / LOCKED
 
-The finite, consent-bound service of Iven Marrick must remain the established comparison for any proposal to widen dead labor. Episode 22's signed one-time castle-retrieval exception, the reusable but non-authoritative blank form, Etta's paid copying and Rhyse's refusal to invade Beren's protected family conversation show how exceptions can become routine. Do not convert that retrieval precedent into an authority over dead service. Follow living families, wages, offices, temple objections and the physical limits of thresholds. The occupation of Corven by Jalen cannot silently become an accepted precedent: Jalen's after-death assent and missing living consent remain contested, and his personal wants and Corven's widow retain moral force.
+A staffed, funded deeper inspection of the already-established undercroft must use Nessa Rell, Vess, Pell Falbrecht, Talla Rusk, living guards and workers as appropriate to the established safety rules. Begin from the known unsafe lintel, paired low slits, former door fittings and unpassed turn. Establish access, shoring, ropes, wages, light, guards, material cost and responsibility for injuries before moving farther. Allow the architecture to support competing explanations; do not prove the prison/interface truth, create an omniscient Edselsto, extinguish a candle or erase the northern grain and roof costs. Episode 23's corrected living watch roster and Vess's proposed unaltered archive-door inspection are separate obligations, not a magical shortcut into the undercroft.
 
-**Exit:** What began as an exceptional personal violation threatens to become a disputed institution, while individual dead servants and living families remain distinct people.
+**Exit:** A specific inward-facing defensive contradiction supports continued inquiry, with living evidence and unresolved explanations.
 
-## Season 2 Episode 24 — Fortifications Facing Inward — NEW N+4 / DIRECTIONAL
+## Season 2 Episode 25 — The Foreign Test — DIRECTIONAL
 
-A staffed and funded deeper inspection of the already-established undercroft examines walls, embrasures and access routes. Masons, guards, priests and record keepers preserve rival interpretations, equipment needs, and worker safety. No final prison/interface truth, candle failure or omniscient castle capability is revealed. The work must compete for money and people with northern food, roof repairs and witness protection.
+Foreign houses and the three river governments independently test the apparent envoy's identity through already-seeded handwriting, bodily habits, correspondence, lawful commissions and witnesses. Yara has the three warrants and a separate village-watch record; Leora has personal questions and no confirmed receipt of Yara's latest warning. Do not grant any single test omniscience or prematurely expose the mortuary rite. The Crown's continuing reliance on a useful counterfeit becomes an actual diplomatic cost.
 
-**Exit:** A concrete architectural contradiction justifies further human inquiry without answering the larger mystery.
+**Exit:** Multiple jurisdictions begin withholding confidence for different, intelligible reasons.
 
-## Season 2 Episode 25 — The Foreign Test — NEW N+4 / DIRECTIONAL
+## Season 2 Episode 26 — Residual Memory — DIRECTIONAL
 
-Foreign houses and river governments begin independently testing the apparent envoy's identity using already-established handwriting, bodily habits, private correspondence, witnesses and lawful commissions. Each verifier has a separate reason and threshold; Leora's personal knowledge must not be reduced to a convenient test question. This is a tightening of scrutiny, not a premature complete exposure or revelation of the castle's buried truth.
+A credible intimate or bodily mismatch becomes durable evidence for someone with genuine prior knowledge of Corven. Preserve his bad knee, Leora's relationship, Yara's observations and the limited physician's report. Jalen retains his own sister, casualty-pay inquiry and uncertainty about leaving the body; he does not acquire Corven's private memories or diplomatic authority. Episode 23's consent distinctions sharpen the moral pressure but do not give the public knowledge of the occupation.
 
-**Exit:** The counterfeit begins to cost the Crown the confidence it purchased, while independent institutions retain authority to withhold recognition.
+**Exit:** A private discrepancy acquires an independent custodian and a route toward external scrutiny.
 
-## Season 2 Episode 26 — Residual Memory — NEW N+4 / DIRECTIONAL
+## Season 2 Episode 27 — The High-Water Mark — DIRECTIONAL
 
-An intimate or bodily detail exposes a defect in Jalen's occupation of Corven that no amount of official correspondence can remedy. The first person to recognize it must possess a credible history with Corven, and should distinguish direct observation from suspicion or knowledge of the mortuary rite. Yara's protected village-watch records, Leora's unanswered questions, the three independently held warrants and Corven's old knee remain earlier evidence. Jalen still has his own sister, casualty-payment claim, and after-death choices; he is neither Corven resurrected nor a blank puppet. Any finding sharpens scrutiny without accelerating the later Episode 28 body-abroad proof or resolving the buried nature of Edselsto.
+The Crown achieves a bounded public high point through actual roof labor, wages, civilian grain arrangements and separate bench permissions rather than magic or a blanket treaty. Keep the Dols miller's drainage damage, Merehaven surety, Teth valuations, far-bank sacks, hired carriers, hamlet forage claims, withdrawn patrol horses and unfinished obligations visible. Show one material beneficiary and one person bearing the hidden cost. Jalen's occupied body may receive unearned public credit but not Corven's personal memory or three-bench authority.
 
-**Exit:** A private mismatch becomes durable evidence with an independently motivated custodian, increasing exposure risk while the wider diplomatic and supply debts remain.
+**Exit:** Apparent competence and prosperity intensify the coming exposure rather than cancel its costs.
 
-## Season 2 Episode 27 — The High-Water Mark — NEW N+4 / DIRECTIONAL
+## Season 2 Episode 28 — The Body Abroad — DIRECTIONAL / PROTECTED PAYOFF
 
-Give the restored court a credible but bounded high point in public confidence, finance, roof repair, civil grain arrangements and apparent League cooperation. Each gain must be made by living work, actual wages, limited permissions and separately accountable consent, rather than retroactive magic or blanket treaty. The roof bay, hired carriers, Dols miller's drainage damage, Merehaven surety, Teth ferry valuations, hamlet forage claims and withdrawn patrol horses must remain visible as specific costs. Jalen's occupied body may receive undeserved public credit but cannot acquire Corven's personal memory, three-bench warrants or diplomatic legitimacy. Show a person who benefits materially and another who bears the hidden cost. No prison/interface revelation, candle failure, military crossing without countersign, premature northern delivery or early Episode 28 proof.
+The season schematic requires foreign actors to encounter impossible bodily evidence that the apparent envoy was dead while acting. Seed physical provenance, custodians, travel, jurisdiction and witness reliability in Episodes 24–27; do not conjure proof without an evidentiary path. Leora and those who knew Corven must experience personal violation, not merely a diplomatic scandal. This is the scheduled exposure escalation, not a license to reveal Edselsto's buried truth or solve all disputes.
 
-**Exit:** The Crown's political success looks strongest precisely as the moral and evidentiary cost of its shortcuts becomes harder to conceal.
+**Exit:** Independent proof begins traveling toward Edselsto, creating the crisis for Episode 29's denial conference.
 
 ## Active payoff debt
 
-Carry document 11's wider unresolved obligations, Episode 22's signed exception and blank reusable petition, Etta's paid copying, Kett's settlement and Rhyse's refusal of the Beren-family listening request, Episode 20's independent witness and privacy consequences, and Episode 21's source-provenance hazards (Etta's wrapper, Henn's work chest, the corrected guard sheet, Hesta's cleared carter, and the unverified hire-fee question). Also preserve Episode 15's repair/credit pressures: Corven's incomplete disclosure, renewed warning, lower-village lodging, independent attendants, Leora's letters and the three separate bench warrants; Dols miller drainage work, shoring and inspection; military countersign; Teth owner-challengeable ferry valuation; Merehaven roof/bond consent; Tervain sacks, hired carts and northern garrison delivery; Hesta's displaced work and four-season right; Bram's injured fingers and porter wages; Yara's declared warehouse interest; Jorvan's second-surety/higher-fee demand; unfinished receiving roof and smith's remaining bill; eighteen withdrawn patrol mounts and reduced hamlet coverage; Kaelmont decking/snow; Pell/Talla/Nessa's undercroft safety safeguards; Miren's privacy grievance; Ysabet's sealed record; Marek's unknown sponsor; Oren/Lysa compensation; Iven's finite voluntary service; seven burning candles.
+Preserve document 11's wider unresolved obligations, including Episode 23's corrected two-living-guard gate roster, Pel's distrustful cooperation with Iven, Mara and Tomas Marrick's family access, the three distinct dead-service petitions, separate widow compensation, Merel's refusal to certify unknown consent, the archive night-clerk wage, and Luceran's signed prohibition on new binding/transfer/threshold preparation without further authorization. Iven may depart voluntarily. Jalen's original casualty-pay record, sister, consent question and potential exit remain unresolved; no one may classify his occupation as equivalent to Iven's service.
+
+Carry Episode 22's single signed castle-retrieval exception, Aldren's non-authoritative blank form, Etta's paid copying hour, Kett's twelve-penny settlement and Rhyse's refusal of the Beren-family listening request. Preserve Episode 21's original source records and correction rights, Miren's physically deaf room and continuing grievance, Yara's three warrants and Leora's uncertain correspondence, Beren's witness restrictions, the separate Dols/Merehaven/Teth jurisdictions, the northern sacks (six beyond Dols, six at Edselsto, none delivered), absent military countersign, roof and smith bills, eighteen withdrawn mounts, Hesta's four-season road bargain, undercroft worker safety, and all seven burning candles.
 
 ## Protected long-future seeds
 
-No Magenheim crossover; no prison/containment/castle-interface truth; no candle failure; no unlimited perception, judgment or treasury; no retroactive justification of Episode 6; no compulsory dead service treated as routine; no forced marriage answer or Ardel winter revelation; no conflation of unrelated investigations. Episode 17 establishes only a limited occupation, not restoration of identity, personal memory or lawful authority. Preserve the late Season Two exposure schedule and the three separate river jurisdictions.
+No Magenheim crossover; no prison/containment/castle-interface truth; no candle failure; no unlimited perception, legal judgment or treasury; no retroactive justification of Episode 6; no compulsory dead service treated as routine; no automatic family wages for dead labor; no forced marriage answer or Ardel winter revelation; no conflation of unrelated investigations. Episode 17 establishes limited occupation, not resurrection of Corven, personal memory or lawful authority. Keep the Episode 28 exposure schedule and the three separate river jurisdictions.

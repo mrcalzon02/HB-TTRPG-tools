@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 2 Episode 22, *Another Exception*.
+**Reconciled through:** Season 2 Episode 23, *The Loyal Dead at Work*.
 
 ## Current state
 
@@ -183,6 +183,24 @@ Aldren receives three further petitions, rejects the one asking who stood outsid
 
 Dols water remains too high for another grain cart. Six sacks remain at the far-bank store, six under Edselsto's roof, none delivered to northern posts. No military countersign, second surety, general bridge opening or treaty is established. Yara's three river-bench warrants and warnings to Leora, Jalen's unresolved sister and casualty payment, Corven's murdered identity, the eighteen withdrawn mounts and all seven burning candles remain unchanged.
 
+## Episode 23 — The Loyal Dead at Work (committed continuity reconciliation)
+
+A junior clerk copies Iven Marrick into a second gate-watch slot while diverting Pel Ordan toward the receiving roof. Pel notices the altered roster; Iven expressly distinguishes his voluntary threshold duty from replacing a living watch. Rhyse restores the original two-living-guard coverage, witnesses the correction and requires any roof reassignment to be separately ordered. Iven hears through his prepared gate and recognizes some voices but cannot inspect passes, identify people from boots, follow a person into the yard or replace a living officer's judgment. His old distrust of Pel survives their competent cooperation.
+
+Mara Marrick and Tomas Marrick visit Iven with a scarf belonging to his former life. Iven misremembers which boots he had saved, but the family cannot prove whether the lapse is fatigue, ordinary imperfect memory or finite dead persistence. Mara insists that family contact is not a royal favor and that his continued presence must not become family income. Iven affirms he may leave whenever he chooses, without making a fixed new term of service.
+
+Damaris receives three distinct petitions: an unsupported request to approach a deceased gate soldier, an archive officer's proposal to replace a paid night clerk with a dead threshold keeper, and a relative's inquiry about a widow's allowance. Aldren initially gives them one administrative heading, then separates them under Damaris's direction. The widow's question is routed to existing family compensation, not made conditional on dead labor. No dead worker is newly bound; no night-clerk wage or living watch is cut.
+
+Merel and Calienne hold a witnessed family-nave hearing with Mara, Tomas Marrick and Pel. They preserve Iven's original terms: consent, revocation, no punitive continuation, no transfer, no replacement of living watches, separate family compensation and ordinary living authority. They refuse to treat an unnamed deceased person or an uninspected archive door as an available servant. The hearing records questions rather than authorizations.
+
+Jalen Orris, occupying murdered Corven Sareth's body, sees only an extract of his own casualty-pay entry: his name, blank payment line and unresolved family inquiry. The original remains uninspected, his sister's location and payment unknown. He remembers consenting after death but recognizes that Corven never consented to the occupation; he asks what leaving the body would mean, and Ysabet refuses to claim knowledge or guarantee a safe exit. Jalen requests not to be classified with Iven. His own desires and Corven's stolen identity remain separate. Yara retains the three bench warrants; Leora has no confirmed new information.
+
+Luceran orders individual hearing of petitions and forbids any new binding, transfer, prepared threshold, or displacement of living posts/wages on the expectation of dead service. Vess may cost a physical inspection of the archive door without alteration. The decision does not dissolve the new administrative temptation: the petitions, classification problem and potential wage savings remain live. Miren acknowledges that Luceran refused another binding without forgiving Corven's murder, the occupied body, or the earlier privacy intrusion; no intimacy or marriage answer is restored.
+
+**Knowledge/belief/trust/action after Episode 23:** Pel knows the gate roster was incorrectly changed and Rhyse corrected it; Iven knows his own refusal was honored and remains free to depart, but cannot prove why some memories falter; Mara and Tomas Marrick know Iven's present voice and uncertainty without claiming perfect identity evidence; Damaris knows how labor-cost proposals could turn family compensation into leverage; Aldren knows his headings influence expectations; Merel and Calienne know no new consent or threshold has been established; Jalen knows his own incomplete casualty-pay extract and cannot infer his sister's fate; Ysabet knows the difference between Iven's original witnessed terms and Jalen's after-death assent; Luceran knows the usefulness of dead labor and the cost of refusing its immediate expansion; Miren knows his limited refusal but grants no absolution. The reader knows Corven was murdered and occupied; ordinary petitioners do not gain that restricted knowledge.
+
+Dols remains closed to another grain cart. Six sacks remain beyond Dols, six at Edselsto, none at the northern posts. No military countersign, comprehensive treaty, second surety, confirmed casualty payment, new dead keeper, new castle perception, undercroft discovery or candle failure occurs. All seven candles remain lit.
+
 ## Active supernatural capability evidence
 
 - Pale silver mask manifests as Edselsto and addresses Luceran directly.
@@ -207,7 +225,7 @@ Montegrain motive/accountability/fate; Aven constitutional culpability and surre
 
 ## Immediate handoff
 
-Season 2 Episode 23 — *The Loyal Dead at Work* begins after the single authorized retrieval of Kett's cart-hire speech. Ysabet retains the signed, one-time exception, its living witness list, Kett's wage decision, Aldren's **Not authority** blank form, and Rhyse's refusal to retrieve protected Beren-family speech. Etta's source-copying now receives one paid hour with replacement kitchen labor accounted for. The next institutional temptation concerns finite dead service, not unlimited resurrection: Iven Marrick's voluntarily accepted, bounded threshold duty must remain distinct from Jalen Orris's contested after-death assent to occupy Corven's body without living consent. Follow families, wages, temple objections, thresholds and living legal judgment. Miren still withholds intimacy; Yara retains the three river-bench warrants; Leora has no confirmed receipt of the latest warning; Jalen's sister and casualty claim remain unknown. Six sacks are at Edselsto, six beyond Dols, none north; no military countersign or new treaty. All seven candles burn.
+Season 2 Episode 24 — *Fortifications Facing Inward* begins with the established undercroft survey, its unsafe lintel, inward-looking fittings, physical safety obligations and competing expert interpretations. Episode 23's corrected gate roster, family compensation and separate petitions for dead service remain live but do not authorize new binding or transfer. Iven may leave; Jalen's after-death assent and Corven's missing consent are not interchangeable. Ysabet retains the signed Episode 22 listening exception and its restrictions; Miren's room remains physically deaf and her grievances unreconciled. Yara retains the three warrants, Leora's receipt of later warnings is unconfirmed, and Jalen's sister and original casualty payment remain unknown. Six sacks are at Edselsto, six beyond Dols, none north; no military countersign or comprehensive treaty. All seven candles burn.
 
 ## Hard exclusions
 
