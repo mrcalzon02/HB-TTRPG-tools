@@ -1924,3 +1924,267 @@ At the bottom of the page he had written, without intending to make a declaratio
 He left it there.
 
 The civic custodian had not answered. The personnel office had not answered. Neral held one dispatch receipt, and Ilyan had sent a letter that required no reply at all.
+
+---
+
+The following morning, the western letter had gone out with the post. Meris had asked Damaris to call before the midday meal.
+
+Damaris arrived with ink on her fingers and the charcoal carrier's revised account in her satchel.
+
+"You've eaten?" Meris asked.
+
+"At the Ledger."
+
+"What?"
+
+"Something with onions."
+
+"That is not a meal."
+
+"It was when I ate it."
+
+Her aunt pointed toward a plate of oat cakes. Damaris took one. The windows were misted by Bloomtide rain, and a narrow green family credit book lay open beside Meris's tea.
+
+"Maeryn says the ford has cost you a toll."
+
+"Out of our margin. The next contract will provide for a diversion."
+
+"Good. I have another account."
+
+Meris turned the book. Damaris recognized the family credit-review binding and stopped short of reading the page.
+
+"A grain factor wants longer terms on a Valeric-backed undertaking," Meris said. "Nothing irregular in the papers. But the Valerics are attracting attention."
+
+"You want to know what Ilyan will do."
+
+"I want to know whether an accusation may make a signature difficult to obtain before the next payment."
+
+"Ask his house."
+
+"They'll tell me what they want me to know."
+
+"And I can tell you only what I'm entitled to tell you."
+
+Meris settled into the chair opposite her.
+
+"Then tell me that."
+
+"No public charge has been brought through the inquiry I know. I cannot promise one won't be. I won't describe what Ilyan has asked Vaun privately or pretend an unanswered request proves anything."
+
+"I haven't asked for the request."
+
+"Not yet."
+
+"I have asked for your judgment."
+
+"Shorten the terms of any new advance, or hold it for review. Honor existing agreements. Don't use my friendship as a substitute for an assessment."
+
+Meris looked at her for a while.
+
+"You've become very fond of limits."
+
+"Maeryn has been making me sign accounts."
+
+"A dangerous influence."
+
+Damaris smiled. Meris did not.
+
+"You told me at graduation to stay close to Ilyan," Damaris said. "You wanted to know what he knew."
+
+"I remember."
+
+"I told the others you had asked. I stayed close because he's my friend."
+
+"Both can be true."
+
+"Yes. That's why I cannot do what you want."
+
+Meris set down her cup. She had once sat beside Damaris's childhood sickbed for three nights, changing damp cloths and arguing with the physician when he suggested a treatment she distrusted. Damaris remembered those hands more readily than the family seal they now wore.
+
+"Do you think I want the Valerics to hurt him?" Meris asked.
+
+"No. I think you want to protect us. But you would accept information through me that he might not choose to give you."
+
+"Would you prefer I make our decisions blind?"
+
+"I would prefer you admitted where you cannot see. That's what you taught me to do with money."
+
+A wagon stopped outside. Someone argued about a warehouse door. Meris waited until the noise had passed.
+
+"Your mother suggested you attend the next Valeric exposure review."
+
+"I've prepared the market figures."
+
+"Send those to the committee secretary. I will have someone else sit in on the decision."
+
+Damaris had wanted the seat. She had spent two evenings on those figures and imagined herself contributing something beyond her surname.
+
+"Because I refused you?"
+
+"Because your interest is real. If we refuse the advance, the factor may accuse you of acting on private knowledge. If we approve it, another member may say you favored your friend."
+
+"I could declare the interest."
+
+"You have. I'm taking it seriously."
+
+It would have been easier if Meris had punished her.
+
+"I wanted to do the work," Damaris said.
+
+"Then do it. There will be other reviews."
+
+"Not this one."
+
+"No."
+
+Meris poured more tea. Damaris remembered how enormous her aunt had seemed when she was small. Now they sat on opposite sides of a table neither could move without the other noticing.
+
+"Does this change my River Ledger appointment?"
+
+"Of course not. Maeryn would throw me in the river."
+
+"She'd send an invoice first."
+
+"Naturally."
+
+Neither apologized. Meris reached across the table and brushed a crumb from Damaris's sleeve, an old familiar gesture. Damaris let her.
+
+---
+
+At the Hall, Ilyan was waiting for the western dispatch clerk to finish checking a receipt. His letter to Thessa had gone with the candied peel the previous evening, and he had returned to make certain the packet had been entered.
+
+"You sent it," Damaris said, when she found him beside the counter.
+
+"I know."
+
+"Then leave the poor clerk alone."
+
+"I was only asking whether the oilcloth was sufficient."
+
+"You asked that yesterday."
+
+He took the receipt the clerk offered, thanked her, and followed Damaris into the passage.
+
+"Meris asked about you."
+
+His expression changed, but he did not look surprised.
+
+"What did you tell her?"
+
+"That there has been no public charge through the inquiry I know. Nothing about your private work. I suggested she price uncertainty instead."
+
+"Did she accept it?"
+
+"Partly."
+
+"What did it cost?"
+
+"My seat at a family review. Only that review."
+
+"I'm sorry."
+
+"Don't be. I wanted you to hear it from me. No existing contract has been changed on my advice."
+
+Ilyan leaned against the stone. A few weeks earlier he might have asked which contracts, whose names, what sums. Now he waited.
+
+"You don't have to tell me what the committee decides," he said.
+
+"I wasn't going to."
+
+"I know."
+
+Damaris took his arm for the length of the passage. They parted where the afternoon petitioners were entering. Ilyan returned to his unanswered inquiries. Damaris returned to the River Ledger and opened the harbor account she had promised to finish.
+
+The committee would meet without her. She still had figures that needed to be right.
+
+---
+
+The harbor account was still open when the committee secretary's boy arrived.
+
+Damaris had begun with the old wharf dues, where a winter repair had left the books full of small, legitimate expenses that looked fraudulent until one remembered how much rope a damaged mooring could consume. The boy waited at the edge of her desk with a folded receipt in his hand. His boots had dried into a pale fringe of mud.
+
+"Lady Meris said you had the market figures."
+
+"I do."
+
+"She said they were to go to the secretary."
+
+"Yes."
+
+He made no move to leave. Damaris looked up.
+
+"Is there another message?"
+
+"The secretary asked whether your opinion was attached."
+
+She could hear the small difference between the questions. The figures had been gathered from posted grain prices, freight charges, warehouse fees and the most recent public notices. They were work she had done and could defend. Her opinion about a particular advance would have been a judgment on an account she was no longer permitted to decide.
+
+"Tell him the figures are mine. The recommendation is not."
+
+The boy looked doubtful. "He asked me to bring back an answer."
+
+"That is an answer."
+
+She drew the pages toward her and checked the totals again. The grain factor had requested longer terms than the last two seasons' average. That was not proof of distress. A merchant might be expanding storage, waiting for a late convoy, or merely testing how much patience a creditor would sell. The posted river freight rates were up. The road diversion had made them worse. Her tables showed both changes without guessing which one had caused the request.
+
+She wrote the date of the public price notices across the top and initialed each page. Then she added a separate line beneath the totals: **No assessment of pending Valeric litigation or confidential Hall inquiries is included.** The secretary could strike the line if it offended his sense of style. He could not later pretend that her silence was a private assurance.
+
+"Do you want a copy?" the boy asked.
+
+"Of the receipt, yes."
+
+He blinked. "I meant the figures."
+
+"I have the figures."
+
+He grinned despite himself, then looked worried that he had done so. Damaris gave him the packet and the ordinary office fee. She watched him count the coins before he went. At least one person in the transaction would be paid without a dispute about who had authorized it.
+
+Maeryn appeared in the doorway a few minutes later, carrying a stack of harbor returns under one arm.
+
+"Your aunt has written," she said.
+
+Damaris put down her pen.
+
+"Already?"
+
+"She says you are to remain at the Ledger this afternoon. She has found another reviewer for the credit committee."
+
+"That was settled at her house."
+
+"She thought I might object to losing you."
+
+"Would you?"
+
+"I object to losing anyone when the harbor dues are due." Maeryn set the returns on the desk. "She also says the committee can wait for an independent estimate of the factor's storage exposure."
+
+Damaris had not expected that. She had expected Meris to replace her and carry on at once. A postponement might cost the family a favorable rate; it might also prevent a poor advance. Neither result belonged to Damaris now.
+
+"Did she say who would prepare it?"
+
+"No."
+
+"Then I won't ask."
+
+Maeryn watched her a moment. "You wanted that chair."
+
+"Yes."
+
+"Still do?"
+
+"Yes."
+
+"Good. People who say they don't care about the work are usually asking someone else to do it."
+
+She handed Damaris the first harbor return. It smelled faintly of fish oil. On the margin, a quay keeper had corrected the number of empty barrels twice, each time with a different hand.
+
+"Here," Maeryn said. "You can be useful without a chair."
+
+Damaris bent over the figures. She found the missing barrels in a later entry, then discovered that the quay keeper had charged the same porter for carrying them twice. The correction required three signatures and an apology from a man who would have preferred a fourth signature to the apology.
+
+By evening she had cleared the charge. The porter would receive the wages withheld against it. The family credit committee had made no decision that she knew of, and no message from Ilyan's inquiry had reached her desk. She could live with that, though she still resented the empty chair.
+
+When she washed the ink from her hands, the water turned the color of weak tea. She thought of Meris brushing a crumb from her sleeve, and of the years when that small kindness had seemed to settle every argument between them.
+
+It still mattered.
+
+It simply had not settled this one.
