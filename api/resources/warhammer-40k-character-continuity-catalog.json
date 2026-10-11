@@ -3876,6 +3876,42 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-05.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "atrovald-duty-roster-53-positions",
+          "knowledge": "The escort commander's released duty assignment authorizes fifty-three numbered positions, including a relief auxiliar custody-transfer position, but the detachable named attendance sheet is absent and said to be in the commander's traveling chest. Authorization of a position does not prove occupancy or identify Hesk Venn.",
+          "certainty": "physical roster inspected; attendance and actual occupancy unverified",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VI — Two Chains of Custody",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "atrovald-count-adjustment-receipt",
+          "knowledge": "Two independent reviewers matched the torn lower strip to the original fifty-two-person adjustment. Halden's hooked mark acknowledges receiving the request; it is not an officer's authorization. A departmental seal was sufficient for a routine balance correction under the then-effective rule, while the decision to classify the disputed count as routine and the authorizing officer remain unrecorded.",
+          "certainty": "matching paper, dated procedure and reviewers' signed accounts; ordering authority unresolved",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VI — Two Chains of Custody",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "atrovald-traveling-chest-courier",
+          "knowledge": "A packing register records the commander's traveling chest leaving with a messenger and changing hands at the southern transit junction; the second courier's name was corrected in the register. Neither the original attendance sheet nor the corrected handoff has been authenticated by the handing-over courier or the junction's original book.",
+          "certainty": "packing-register report; handoff identity and chest contents unverified",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VI — Two Chains of Custody",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-06.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3903,6 +3939,18 @@
             "story": "Matron Lagas Atrovald",
             "segment": "Continuation III — The Record That Waited",
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "atrovald-independent-two-chain-next-requests",
+          "goal": "Trace the traveling chest through its original junction book and handing-over courier; separately identify the officer who authorized the fifty-two-count adjustment. Do not infer conspiracy or Hesk Venn's occupancy from either chain alone.",
+          "horizon": "next investigative segment",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VI — Two Chains of Custody",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-06.md",
             "sourceType": "continuation"
           }
         }
@@ -3991,6 +4039,18 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-05.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "atrovald-missing-person-review-amendment",
+          "order": "Require human review for missing-person and physical-custody count disputes; preserve prior closure and the independent reviewer accounts, interview Halden without retrospective discipline for a formerly valid rule, and have both offices sign the amended procedure. Quartermaster's missed-shift allowance approved by Personnel but payment pending the next accounting cycle.",
+          "issuingAuthority": "Matron Lagas Atrovald and affected custody offices",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VI — Two Chains of Custody",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-06.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [],
@@ -4058,6 +4118,16 @@
             "story": "Matron Lagas Atrovald",
             "segment": "Continuation V — The Counterfoil",
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VI — Two Chains of Custody",
+          "changeSummary": "Inspected the 53-position roster without assuming an occupied fifty-third slot; used independent reviewers to authenticate the torn 52-adjustment receipt but not its ordering officer; protected duty clerk Halden from retroactive punishment, demanded signed missing-person review, secured quartermaster back-pay approval without disbursement, and split future investigation between the commander's traveling chest and count authorization. Kept Mortuary-Seventeen sealed, Witness Four and Predulum confined in Null-Seven, and the future-dated instruction unacted upon.",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VI — Two Chains of Custody",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-06.md",
             "sourceType": "continuation"
           }
         }
@@ -4262,6 +4332,16 @@
             "story": "Matron Lagas Atrovald",
             "segment": "Continuation IV — The Empty Place",
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-04.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VI — Two Chains of Custody",
+          "changeSummary": "Remained confined with Witness Four in Null-Seven. Asked whether Atrovald had found evidence of tomorrow or would erase him again; she reported no authenticated future event and no sanitization order. His memory of previous sanitizations remains unverified, and he was not shown the new roster, adjustment strip, or chest handoff.",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VI — Two Chains of Custody",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-06.md",
             "sourceType": "continuation"
           }
         }
