@@ -2,20 +2,14 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 24, *Fortifications Facing Inward*.
-**Forward window:** Season 2 Episodes 25–29.
+**State:** Rolled forward after Season 2 Episode 25, *The Foreign Test*.
+**Forward window:** Season 2 Episodes 26–30.
 
-**Continuity status:** Committed prose and the single temporal ledger extend through Episode 24. Nessa's second measured undercroft section and the two inward-directed barrier arrangements establish a structural contradiction, not proof of a prison or a castle interface. No new listening branch or dead keeper is authorized.
+**Continuity status:** Committed prose and the single temporal ledger extend through Episode 25. Dols, Merehaven and Teth independently require different living witnesses or legal permissions before treating the apparent envoy's recovery as authority. Leora received the first attack warning and dispatched a private question still on the road; no foreign custodian knows the mortuary rite. Nessa's measured undercroft barriers remain ambiguous, with no new listening branch or dead keeper authorized.
 
-## Season 2 Episode 25 — The Foreign Test — CURRENT / LOCKED
+## Season 2 Episode 26 — Residual Memory — CURRENT / LOCKED
 
-Dols, Merehaven and Teth independently question whether the apparent Corven Sareth has personal authority to attest the terms attributed to him. Yara retains the three distinct warrants, Dols's received inquiry, an independently held village-watch record and prior correspondence; Leora has personal knowledge and unconfirmed receipt of Yara's warnings. Build materially specific, jurisdictionally distinct tests of signature, bodily habit, private correspondence and authority, with living witnesses and realistic message travel. Do not make any single test omniscient or prematurely expose the mortuary rite. Jalen has his own sister and unresolved casualty-pay record; he cannot reproduce Corven's private memory or claim the three benches' authority.
-
-**Exit:** More than one foreign custodian withholds confidence for different intelligible reasons, while the Crown remains dependent on the counterfeit's usefulness.
-
-## Season 2 Episode 26 — Residual Memory — DIRECTIONAL
-
-A credible intimate or bodily mismatch becomes durable evidence for someone who genuinely knew Corven. Preserve the bad left knee, Leora's private relationship, Yara's observations, and the limited physician's report. Jalen retains his separate memory, original sister and unanswered question about leaving Corven's body. No resurrection, perfect recall or new legal authority.
+A credible intimate or bodily mismatch becomes durable evidence for someone who genuinely knew Corven. Leora has received the earliest attack warning and sent a sealed personal question, still in transit; her own handwritten/dictated comparison originals remain in her custody. Yara holds the three warrants and independent watch copy, while Dols requests a living witness, Merehaven withholds only new surety, and Teth requires owner-challengeable testimony. Preserve the bad left knee, Corven's ordinary private habits, Yara's observed inconsistencies, the limited physician's report, and realistic message travel. Jalen retains his separate memory, sister/pay uncertainty and unanswered question about leaving the body. No resurrection, perfect recall, public exposure of the rite or new legal authority.
 
 **Exit:** A private discrepancy gains an independent custodian and a credible route toward foreign scrutiny.
 
@@ -37,7 +31,16 @@ Court actors with different culpability and information debate confession, denia
 
 **Exit:** A politically legible answer creates a testable liability for Episode 30's return.
 
+## Season 2 Episode 30 — Half a Man at the Gate — DIRECTIONAL / PROTECTED PAYOFF
+
+The occupied and physically ruined body returns to Edselsto after independently verified foreign evidence begins moving through the river jurisdictions. Its continued animation cannot be passed off as an ordinary recovery. Establish travel, injury, witnesses, physical limits, escort decisions, and which foreign authority can demand answers. Preserve Jalen's separate personhood, the murdered Corven's nonconsent, Leora's independent grief and the Crown's signed responsibility. The return must be horrifying because Episode 17's crime has persisted, not because a new magic rule appears. No premature arrival, no candle failure and no exoneration by reclassification as voluntary dead service.
+
+**Exit:** The public confrontation makes the royal answer chosen in Episode 29 untenable and forces the political and personal consequences into Episode 31.
+
 ## Active payoff debt
+
+Episode 25 establishes three independent foreign verification tracks rather than a common recognition test: Dols's witnessed recommendation and separate military countersign, Merehaven's still-valid first surety and withheld second advance, and Teth's owner-challengeable ferry valuation. Yara's paid dispatches have independent custody and travel times. Leora has received only the first attack warning and has sent two distinct requests, including a sealed private question whose answer she alone retains; the packet has not reached Edselsto. Preserve her original handwritten and dictated Corven letters, her ill mother, and her niece; do not turn one wrong answer into proof of a mortuary rite. The village watch retains its original missing-person entry and damaged walking stick, the wounded attendant is not yet a traveling witness, and the limited physician's report is not a death certificate. Jalen's refusal to inherit Corven's authority, unanswered sister/casualty-pay claim, and uncertain exit remain active. Luceran's corrected royal letter does not erase prior public claims or Ysabet's original signed lethal instruction.
+
 
 Episode 24 leaves Nessa's independent measured section, Vess's Crown copy, Pell's braced but still unsafe next turn, Dain's living-guard requirement, Talla's fitted shutter and drain, and a *drawing/timber estimate only* authorization. The upper-side bar socket and lower-face bruising support an inward-facing defense inference, not the identity of those defended against. Preserve the injured worker's pay and the second worker's dressing; do not use a newly opened passage as a shortcut for the Crown's grain or security.
 
