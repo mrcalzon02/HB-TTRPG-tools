@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 2 Episode 23, *The Loyal Dead at Work*.
+**Reconciled through:** Season 2 Episode 24, *Fortifications Facing Inward*.
 
 ## Current state
 
@@ -201,6 +201,20 @@ Luceran orders individual hearing of petitions and forbids any new binding, tran
 
 Dols remains closed to another grain cart. Six sacks remain beyond Dols, six at Edselsto, none at the northern posts. No military countersign, comprehensive treaty, second surety, confirmed casualty payment, new dead keeper, new castle perception, undercroft discovery or candle failure occurs. All seven candles remain lit.
 
+## Episode 24 — Fortifications Facing Inward (committed continuity reconciliation)
+
+Talla Rusk's fitted shutter and repaired cellar drain are complete, with witnessed cask seals and continued cellar control. The worker injured in Episode 12 was paid for the lost shift and remains on above-ground timber sorting pending medical clearance. Damaris authorizes a separate two-day, named, bounded second undercroft survey: six workers by rotation, Nessa Rell, Vess, Pell Falbrecht, Sergeant Dain and another Doorwarden; wages, one new prop, lamps and materials are entered apart from roof, guard, compensation and northern-grain accounts. Rhyse refuses to strip Pel Ordan from the corrected two-living-guard gate roster.
+
+Pell braces the formerly unsafe lintel from safe positions and retains its principal supports. Nessa and the living party pass only far enough to measure six steps beyond it and a second narrow landing: a transverse groove, iron-stained sockets, a long upper-side bar socket, and chips on the lower face of stone. The earlier paired low slits remain directed toward the lower turn. The arrangement supports a specific inference that successive barriers could be held from above against movement uphill, but alternative uses—mine entrance control, internal garrison confinement, armed approach defense, later dismantling damage—remain live. No one sees beyond the next turn, reads an inscription, proves a prison, establishes a supernatural capability, or discovers the castle's true nature. Dain calls withdrawal at the next unexamined descent; a worker's small hand cut receives a recorded paid dressing. Nessa keeps an independent measured section; Vess retains the Crown copy; interpretation is explicitly separated from measurement.
+
+Yara Fen receives a Dols request distinguishing the envoy household's western-approach recommendation from the separate three-bench authority. She acknowledges receipt but does not forge a bench countersign or treat the apparent envoy's present voice as proof of Corven Sareth's lawful commission. She retains the three warrants and village-watch copy, intends to request a living attesting officer from the benches, and still has no confirmed delivery of her warnings to Leora. Hesta Vale's brother discovers the proposed return-stone block is too broad for the cart and must remeasure rather than pretend the carriage bargain is complete.
+
+Luceran is disturbed by the inward-facing fittings and tempted to ask Edselsto for historical answers, but explicitly declines to substitute the castle's memory for witnessed masonry evidence. He authorizes only a future drawing and timber estimate for the next turn, with no deeper entry, listening-silver branch, new dead service or diversion of existing gate guards. Damaris will price any later descent against continuing roof, grain and wage obligations. Miren recognizes the restraint without granting forgiveness for the stolen conversation or Corven's murder/occupation, and neither marriage nor intimacy is reset.
+
+**Knowledge/belief/trust/action after Episode 24:** Nessa knows the measured groove, sockets, stone bruising and directional slits; she suspects deliberate inward defense but refuses to name its purpose and retains an independent copy. Pell knows the braced lintel remains a maintained risk and will not permit further descent without sounding the next bearing. Dain knows the next turn is unexamined and insists on living guard coverage. Talla knows her drain and shutter are restored but continues guarding the wine and cellar access. Damaris knows the cost and tradeoffs, not the buried truth. Rhyse knows the living roster was preserved. Vess has the Crown section and owes a bounded estimate. Luceran believes an inward defense is likely, wants an ancestral answer, and has not asked Edselsto; Miren knows this limited restraint but does not equate it with repair. Yara knows the warrants do not combine into blanket authority, has not confirmed Leora's receipt, and seeks independent living attestations. Hesta and her brother know the return-load measurements are still insufficient. None of these observers knows the protected prison/interface truth.
+
+Six sacks remain at Edselsto, six beyond Dols, none delivered to the northern posts. No military countersign, comprehensive treaty, confirmed casualty payment, new dead keeper, castle perception expansion, proof of a buried prison, or candle failure occurs. All seven candles remain lit.
+
 ## Active supernatural capability evidence
 
 - Pale silver mask manifests as Edselsto and addresses Luceran directly.
@@ -225,7 +239,7 @@ Montegrain motive/accountability/fate; Aven constitutional culpability and surre
 
 ## Immediate handoff
 
-Season 2 Episode 24 — *Fortifications Facing Inward* begins with the established undercroft survey, its unsafe lintel, inward-looking fittings, physical safety obligations and competing expert interpretations. Episode 23's corrected gate roster, family compensation and separate petitions for dead service remain live but do not authorize new binding or transfer. Iven may leave; Jalen's after-death assent and Corven's missing consent are not interchangeable. Ysabet retains the signed Episode 22 listening exception and its restrictions; Miren's room remains physically deaf and her grievances unreconciled. Yara retains the three warrants, Leora's receipt of later warnings is unconfirmed, and Jalen's sister and original casualty payment remain unknown. Six sacks are at Edselsto, six beyond Dols, none north; no military countersign or comprehensive treaty. All seven candles burn.
+Season 2 Episode 25 — *The Foreign Test* begins with Yara holding Corven's three separate warrants, Dols's inquiry about who may attest western-approach terms, her prior correspondence and the village-watch copy. Leora's receipt of Yara's warnings remains unconfirmed. Foreign benches retain independent authority and may test identity without knowing the rite; Jalen's own memories and unresolved casualty-pay/sister questions do not make him Corven. Episode 24's two measured undercroft barriers remain ambiguous, the next turn unpassed, the principal braces maintained, and only a future drawing and timber estimate authorized. The two-living-guard roster and dead-service prohibition remain in force; Miren's grievances remain unrepaired. Six sacks are at Edselsto, six beyond Dols, none north; no military countersign or comprehensive treaty. All seven candles burn.
 
 ## Hard exclusions
 
