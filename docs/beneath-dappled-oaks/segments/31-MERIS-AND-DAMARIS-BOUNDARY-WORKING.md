@@ -4,6 +4,7 @@ chapter_target: 31
 title: "The Cost of Refusing"
 status: "WORKING PROSE — NOT CANON / NOT RELEASED"
 release_gate: "Original Drive character-continuity workbook must be reconciled through Chapter Thirty."
+placement: "After the working Chapter Thirty-One western letter and dispatch scene; before The Chair She Lost"
 ---
 
 # The Price of Knowing
@@ -134,17 +135,19 @@ Neither apologized. Meris reached across the table and brushed a crumb from Dama
 
 ---
 
-At the Hall, Ilyan was debating with a messenger whether a parcel of candied peel would survive the western post.
+At the Hall, Ilyan was waiting for the western dispatch clerk to finish checking a receipt. His letter to Thessa had gone with the candied peel the previous evening, and he had returned to make certain the packet had been entered.
 
-"Wrap it in oilcloth," Damaris said.
+"You sent it," Damaris said, when she found him beside the counter.
 
-The messenger nodded with relief. Ilyan gave her an injured look.
+"I know."
 
-"I was considering that."
+"Then leave the poor clerk alone."
 
-"At length."
+"I was only asking whether the oilcloth was sufficient."
 
-She waited until the messenger had gone.
+"You asked that yesterday."
+
+He took the receipt the clerk offered, thanked her, and followed Damaris into the passage.
 
 "Meris asked about you."
 
