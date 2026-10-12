@@ -603,5 +603,113 @@
       "finale"
     ],
     "url": "final-battle-scenario.html"
+  },
+  {
+    "id": "cubechat-network",
+    "title": "CubeChat Network Client",
+    "workspace": "CubeChat",
+    "description": "Experimental IPv4/IPv6 LAN recipient chat client, host address configuration and manual directional-key import.",
+    "keywords": [
+      "cubechat",
+      "network",
+      "LAN",
+      "IPv6",
+      "recipient",
+      "messaging",
+      "client"
+    ],
+    "url": "cubechat-network.html"
+  },
+  {
+    "id": "cubechat-host",
+    "title": "CubeChat Host Manager",
+    "workspace": "CubeChat",
+    "description": "Local host contacts and multiple recipient profiles for the experimental CubeChat messaging prototype.",
+    "keywords": [
+      "cubechat",
+      "host",
+      "server",
+      "contacts",
+      "recipient",
+      "profiles"
+    ],
+    "url": "cubechat-host.html"
+  },
+  {
+    "id": "cubechat-provision",
+    "title": "CubeChat Client Provisioning",
+    "workspace": "CubeChat",
+    "description": "Create host and recipient connection packages for manually provisioned experimental CubeChat sessions.",
+    "keywords": [
+      "cubechat",
+      "provision",
+      "keys",
+      "host",
+      "recipient",
+      "setup"
+    ],
+    "url": "cubechat-provision.html"
+  },
+  {
+    "id": "cubechat-key-handoff",
+    "title": "CubeChat Key Handoff",
+    "workspace": "CubeChat",
+    "description": "Experimental private key-transfer string and audio handoff for manually distributed messaging secrets.",
+    "keywords": [
+      "cubechat",
+      "handoff",
+      "audio",
+      "keys",
+      "manual key distribution",
+      "transfer"
+    ],
+    "url": "cubechat-key-handoff.html"
+  },
+  {
+    "id": "cubechat-large-keys",
+    "title": "CubeChat Large Secret Key Laboratory",
+    "workspace": "CubeChat",
+    "description": "Generate consumable experimental 1, 4 or 16 MiB directional secret-key files for offline exchange.",
+    "keywords": [
+      "cubechat",
+      "large keys",
+      "secret files",
+      "key generation",
+      "offline",
+      "experimental"
+    ],
+    "url": "cubechat-large-keys.html"
+  },
+  {
+    "id": "cubechat-forum",
+    "title": "CubeChat Forum",
+    "workspace": "CubeChat",
+    "description": "Experimental community forum interface; unlike encrypted messaging, forum posts are stored in plaintext.",
+    "keywords": [
+      "cubechat",
+      "forum",
+      "threads",
+      "posts",
+      "plaintext"
+    ],
+    "url": "cubechat-forum.html"
+  },
+  {
+    "id": "cubechat-release-plan",
+    "title": "CubeChat Release Candidate Planning",
+    "workspace": "CubeChat",
+    "description": "Experimental alpha release plan, platform targets, limitations and smoke-test gates. No production-security claim.",
+    "keywords": [
+      "cubechat",
+      "roadmap",
+      "development",
+      "release candidate",
+      "planning",
+      "Windows",
+      "Linux",
+      "macOS",
+      "Android"
+    ],
+    "url": "https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/cubechat-release-candidate.md"
   }
 ]
