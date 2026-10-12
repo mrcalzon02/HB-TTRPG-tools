@@ -584,5 +584,24 @@
     "description": "CubeChat implementation notes, host development, release candidate planning, platform compatibility and source code history.",
     "keywords": ["CubeChat", "development history", "programming", "planning", "source code", "release candidate", "Node", "LAN"],
     "url": "https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/cubechat-lan-development.md"
+  },
+  {
+    "id": "final-battle-scenario",
+    "title": "Final Battle Scenario — The Last Voyage of Moredon's Heart",
+    "workspace": "Modules",
+    "description": "Carnelian Prophecy finale GM scenario with battlefield map, encounter stages, enemy waves, NPC allies and encounter tracking.",
+    "keywords": [
+      "Final Battle Scenario",
+      "Carnelian Prophecy",
+      "Moredon",
+      "Moredon's Heart",
+      "GM",
+      "encounter",
+      "battle map",
+      "Time Police",
+      "module",
+      "finale"
+    ],
+    "url": "final-battle-scenario.html"
   }
 ]
