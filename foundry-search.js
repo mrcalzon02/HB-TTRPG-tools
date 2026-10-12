@@ -98,7 +98,7 @@
       .map(entry => ({ entry, score: terms.length ? scoreEntry(entry, terms) : 0 }))
       .filter(item => item.score >= 0)
       .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
-      .slice(0, terms.length ? 18 : 12);
+      .slice(0, terms.length ? entries.length : 12);
 
     results.replaceChildren();
     if (!ranked.length) {
@@ -122,6 +122,14 @@
     const initialQuery = new URLSearchParams(location.search).get('search');
     if (initialQuery) input.value = initialQuery.slice(0, 160);
 
+    // Bind controls even when the index request fails: fallback search stays usable.
+    input.addEventListener('input', render);
+    document.getElementById('foundry-search-clear')?.addEventListener('click', () => {
+      input.value = '';
+      input.focus();
+      render();
+    });
+
     try {
       const response = await fetch(INDEX_URL, { cache: 'no-cache' });
       if (!response.ok) throw new Error(`Index request failed: ${response.status}`);
@@ -131,12 +139,6 @@
       entries = [...baseEntries.filter(entry => !builtInIds.has(entry.id)), ...BUILT_IN_ENTRIES];
       render();
       if (initialQuery) document.getElementById('foundry-search')?.scrollIntoView({ block: 'start' });
-      input.addEventListener('input', render);
-      document.getElementById('foundry-search-clear')?.addEventListener('click', () => {
-        input.value = '';
-        input.focus();
-        render();
-      });
     } catch (error) {
       entries = [...BUILT_IN_ENTRIES];
       render();
