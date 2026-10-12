@@ -2,18 +2,12 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 28, *The Body Abroad*.
-**Forward window:** Season 2 Episodes 29–32 and Season 3 Episode 1.
+**State:** Rolled forward after Season 2 Episode 29, *The Denial Conference*.
+**Forward window:** Season 2 Episodes 30–32 and Season 3 Episodes 1–2.
 
-**Continuity status:** Committed prose and the temporal ledger now extend through Episode 28. Jalen voluntarily testified at Dols under his own name and accepted an independent physical examination; anomalous dependent-looking back markings are documented but do not certify death, murder or a rite. Dols keeps its own hearing and medical drawings, has requested original sources and dispatched separately sealed notices, none delivered on-page. Leora received the witnessed refusal of her private question and preserves originals; the village watch preserves separate source records and dispatches another packet. Six sacks reached the northern posts, six remain at Edselsto; Dols wall repair remains unaccepted, Merehaven's second advance withheld, Teth's ferry owner-controlled, eighteen patrol mounts withdrawn. Jalen retains freedom, Ysabet the original lethal instruction, and all seven candles remain lit.
+**Continuity status:** Episode 29 is committed. A separately sealed Dols hearing account and Isera's limited observations reached Edselsto with named carrier and date; original drawings remain at Dols. Luceran knowingly signed a false Dols-addressed denial that he instructed no Crown officer to arrange Corven's attack, contradicted by Ysabet's preserved original lethal instruction. Ysabet refused truth-attestation, Aldren attested copying only, Rhyse protected living witnesses and Miren refused to defend the lie. Damaris knows the foreign identity challenge and road costs, not the crime. The Crown's Dols reply and narrower Merehaven/Teth notices departed but have not arrived. Dols separately received the village-watch packet, with originals remaining in the village. Leora sent a representative to inspect source records but does not know Isera's examination. Jalen remains voluntarily at Dols awaiting a delayed second physician, with his sister and casualty pay unresolved. Six sacks reached the northern posts, six remain at Edselsto; Dols wall remains unaccepted, Merehaven second advance withheld, Teth ferry owner-controlled, eighteen mounts withdrawn. All seven candles burn.
 
-## Season 2 Episode 29 — The Denial Conference — CURRENT / LOCKED
-
-First establish the actual arrival, seal, clerk, date and limited contents of Dols's separate messages; the village-watch packet and Leora's private refusal do not arrive by narrative convenience. Different court actors debate confession, denial, legal parsing, scapegoating and concessions under pressure from the foreign observations and Jalen's voluntary testimony. Luceran must make a deliberate choice. Ysabet's original lethal instruction, Yara's records, Rhyse's living witness duties, Miren's unrepaired trust, and Jalen's constrained agency remain distinct. No one may erase Corven's murder by renaming it service. Preserve paid northern delivery as a genuine achievement without converting it into absolution.
-
-**Exit:** The Crown chooses a public answer before every participant has the same evidence; that answer becomes a testable liability.
-
-## Season 2 Episode 30 — Half a Man at the Gate — DIRECTIONAL / PROTECTED PAYOFF
+## Season 2 Episode 30 — Half a Man at the Gate — CURRENT / LOCKED
 
 The occupied and physically ruined body returns to Edselsto after independently verified foreign evidence has begun moving through river jurisdictions. Establish how the injury occurs, who witnessed it, transport, escort decisions, medical limits and which foreign authority can demand answers. Its continued animation cannot be passed off as ordinary recovery. Preserve Jalen's distinct identity, Corven's nonconsent, Leora's grief and Luceran's signed responsibility. No new magic rule, premature arrival, candle failure or retroactive exoneration.
 
@@ -31,13 +25,21 @@ Show the institutional consequences of the exposed crime without instant resolut
 
 **Exit:** Season Three begins from a politically isolated king's need to bargain with former enemies for an expensive new coalition.
 
-## Season 3 Episode 01 — The Empty Table — EXPLORATORY
+## Season 3 Episode 01 — The Empty Table — DIRECTIONAL
 
 Open from the Season Two finale's political and private losses rather than resetting the court. Luceran must seek human cooperation from houses, river jurisdictions, former opponents and intimate allies who remember the killing and false envoy, with actual concessions, witnesses, food, money, transport and legal authority. Edselsto remains apparently useful but cannot substitute for consent or absolution. Specific beats defer to the Season Three schematic and to the final canon of Episodes 29–32.
 
 **Exit:** Establish the first costly negotiation and whose independent interests will shape the new coalition.
 
+## Season 3 Episode 02 — The Price of a Seat — EXPLORATORY
+
+The first negotiations of Season Three must develop from actual offers and remembered grievances after Season Two's exposed crime. A house or river jurisdiction should demand an enforceable concession in return for renewed cooperation, with named witnesses, transport, money and the ability to withhold performance. A living ally must face a cost from that bargain, while a lower-status worker sees its material consequence. The king's increased competence should not erase the consequences of the false Dols denial or turn Edselsto into a source of consent.
+
+**Exit:** A necessary human bargain imposes a durable limit on Luceran's authority.
+
 ## Active payoff debt
+
+Episode 29 adds a dated Dols arrival record and limited physician/hearing enclosure, the king's knowingly false sealed denial (“No officer of Our Crown was instructed by Us to bring about the attack upon Corven Sareth”), Ysabet's original contradictory lethal instruction and retained drafts, Aldren's copying-only attestation, Rhyse's separate living-witness protection, Miren's refusal to witness the lie, and three separately dispatched Crown replies not yet received. Damaris knows the road and foreign identity challenge but not the restricted crime. Leora's paid representative has departed for source inspection but has not arrived; she knows nothing of Isera's Dols examination. Dols received the village-watch copies independently; original watch book and stick remain in the village. Jalen is free, voluntarily awaiting the delayed second physician, and his sister/discharge/pay remain unresolved. The Crown's false reply must arrive and be recorded before it can be challenged as received evidence.
 
 Episode 28 adds Jalen's voluntary Dols testimony under his own name, Master Isera's independently witnessed drawings of unexplained dependent-looking marks, the Crown physician's limited corroboration, a requested second examination, the Dols reeve's separate sealed notices and original-source demands, Leora's delivered witnessed private-question refusal and retained actual answer, the watch clerk's preserved original missing-person/stick/attendant/widow records and independent packet, and the injured attendant's unpaid wages and lodging. Neither the foreign notices nor the watch packet has a confirmed delivery at episode end. Dols wall footing remains defective; no second civilian wagon or military countersign is authorized. No one has certified Corven's death or identified the mortuary rite.
 
@@ -58,4 +60,4 @@ Carry Episode 22's single signed retrieval exception, Aldren's non-authoritative
 
 ## Protected long-future seeds
 
-No Magenheim crossover; no prison/containment/castle-interface truth; no candle failure; no unlimited Edselsto perception, legal judgment or treasury; no retroactive justification of Episode 6; no compulsory dead service; no dead family wages contingent on obedience; no forced marriage answer or Ardel winter revelation; no conflation of unrelated investigations. Episode 17 proves limited occupation, not resurrection of Corven, private memory or diplomatic authority. Preserve Episode 29's evidence-based receipt and decision schedule and the independent river jurisdictions.
+No Magenheim crossover; no prison/containment/castle-interface truth; no candle failure; no unlimited Edselsto perception, legal judgment or treasury; no retroactive justification of Episode 6; no compulsory dead service; no dead family wages contingent on obedience; no forced marriage answer or Ardel winter revelation; no conflation of unrelated investigations. Episode 17 proves limited occupation, not resurrection of Corven, private memory or diplomatic authority. Preserve Episode 29's dated courier receipts, false royal denial, independent evidence custody and separate river jurisdictions.
