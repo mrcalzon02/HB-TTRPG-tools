@@ -569,4 +569,20 @@
     ],
     "url": "low-power-system-setup-windows.html"
   }
+  ,{
+    "id": "cubechat-messaging",
+    "title": "CubeChat Experimental Messaging",
+    "workspace": "CubeChat",
+    "description": "Local dual-participant cube chat prototype with host, network recipient and experimental key provisioning applications.",
+    "keywords": ["CubeChat", "messenger", "encryption", "LAN", "client", "host", "key provisioning", "experimental"],
+    "url": "cubechat.html"
+  },
+  {
+    "id": "cubechat-development",
+    "title": "CubeChat Development and Release Planning",
+    "workspace": "CubeChat",
+    "description": "CubeChat implementation notes, host development, release candidate planning, platform compatibility and source code history.",
+    "keywords": ["CubeChat", "development history", "programming", "planning", "source code", "release candidate", "Node", "LAN"],
+    "url": "https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/cubechat-lan-development.md"
+  }
 ]
