@@ -478,6 +478,42 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "javard-carrier-reservation-06",
+          "knowledge": "The former carrier's creditor-deposited books show a covered carriage reserved for Sol's transfer, two hours of standby, an unused-hire charge and no issued movement chit or recorded release for that particular vehicle; the surviving custody seal dates only from eleven years after the event. This does not exclude other conveyance or unrecorded movement.",
+          "certainty": "tariff clerk's signed bounded statement, preserved carrier account and unused chit stub",
+          "status": "confirmed",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VI — The Carriage Held in Readiness",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "javard-bursar-original-06",
+          "knowledge": "The predecessor-bursar's original instruction ordered preparation and maintenance of one destination for Sol and expressly forbade a receipt without witnessed delivery; the annual inspection schedule was a later burial-office annotation. The bursar's reasons and any prior Inquisitorial direction remain unproven.",
+          "certainty": "original signed instruction witnessed in cathedral financial archive",
+          "status": "confirmed",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VI — The Carriage Held in Readiness",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "javard-maintenance-costs-06",
+          "knowledge": "Sixteen maintenance warrants were paid through the ordinary unused-burial-space allowance, not a demonstrated secret fund. Historical reconciliation would have delayed twenty-six grave-tablet checks; Javard limited clerical diversion and accepted a slower investigation.",
+          "certainty": "cathedral finance records and witnessed staffing decision",
+          "status": "confirmed",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VI — The Carriage Held in Readiness",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-06.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -528,6 +564,18 @@
             "story": "On the Fuzzy Edge",
             "segment": "Continuation V — The Receipt That Wasn't",
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "javard-transfer-release-authority-06",
+          "goal": "Obtain independent cathedral and Inquisitorial responses identifying which office may release, cancel or continue Sol's still-open transfer; do not open the sealed cabinet or niche without an established lawful and evidentiary basis.",
+          "horizon": "near-term",
+          "status": "active",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VI — The Carriage Held in Readiness",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-06.md",
             "sourceType": "continuation"
           }
         }
@@ -585,6 +633,17 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "javard-carrier-and-bursar-copies-06",
+          "resource": "Authenticated carrier standby/account and unused movement-chit copies, tariff clerk's bounded statement, witnessed copy of predecessor-bursar original instruction, and reconciled ordinary-maintenance funding account; originals remain with custodians.",
+          "status": "in possession",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VI — The Carriage Held in Readiness",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-06.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "chapterTouchLog": [
@@ -635,6 +694,16 @@
             "story": "On the Fuzzy Edge",
             "segment": "Continuation V — The Receipt That Wasn't",
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VI — The Carriage Held in Readiness",
+          "changeSummary": "Traced the carrier's unused standby rather than assuming a journey; authenticated the original bursar instruction distinguishing readiness from receipt; established ordinary maintenance funding and accepted slower inquiry to protect burial-office obligations; initiated separate requests for authority to release or cancel the open transfer. Sol's contents, Vorn's warning, and prior Inquisitorial identity remain unresolved.",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VI — The Carriage Held in Readiness",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-06.md",
             "sourceType": "continuation"
           }
         }

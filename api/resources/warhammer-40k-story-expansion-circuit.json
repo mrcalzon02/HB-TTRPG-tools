@@ -144,8 +144,8 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
       "status": "active",
-      "currentEndpoint": "Continuation V — The Receipt That Wasn't. Seventeen readiness inspections arose from the predecessor-bursar's initial preparation instruction and sixteen later warrants, not proof of burial. The transit office accepted the delivery request but records no departure, arrival or recipient receipt. Independent witness accounts do not explain Montpclair's knowledge. Javard holds authenticated copies; the Sol niche and prior Inquisitorial seal remain unopened.",
-      "nextSlice": "Continuation VI: trace the carrier's surviving dispatch records, predecessor-bursar instruction and recurring maintenance payments without presuming Sol was transported. Preserve Montpclair's medical limits and unexplained knowledge, Vorn's ambiguous 'he' warning, the Tides of Tomorrow return contradiction, and the untouched niche and archive seal.",
+      "currentEndpoint": "Continuation VI — The Carriage Held in Readiness. The old carrier's creditor-deposited records show a covered carriage reserved for Sol, two hours' standby and an unused-hire charge, but no issued movement chit or recorded release of that particular vehicle; they do not exclude other conveyance. The predecessor-bursar's original order required a maintained destination and forbade a receipt without witnessed delivery. Sixteen annual maintenance warrants were ordinary upkeep costs. Javard accepted a slower inquiry to avoid delaying twenty-six families' grave-tablet checks and sent separate cathedral/Inquisitorial requests to identify the authority holding the transfer open. Montpclair remains medically restricted; the niche, prior cabinet seal, Vorn's 'he', Graveheart and Tides of Tomorrow contradictions remain unresolved.",
+      "nextSlice": "Continuation VII — Trace the responses to the separate cathedral and Inquisitorial transfer-release requests, and the provenance of the prior authority designation without breaking the sealed cabinet or opening Sol's niche. Preserve carrier evidence as proof of standby only, not proof of no delivery; preserve Montpclair's recovery limits, Vorn's ambiguous warning and the unresolved Tides of Tomorrow return.",
       "eraLock": {
         "era": "Mature Imperium; exact millennium not fixed by the attached chronicle",
         "allowedInstitutions": [
@@ -161,11 +161,11 @@
       "legacyBackfillRequired": false,
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "Continuation V — The Receipt That Wasn't",
+        "segment": "Continuation VI — The Carriage Held in Readiness",
         "durableCharacterStateChanged": true,
-        "reason": "Javard's receipt findings, evidence copies and next plan and Montpclair's continuing restrictions are reconciled through V."
+        "reason": "Javard's carrier/bursar findings, funding trade-off, evidence copies and release-authority plan recorded with one new touch log; existing 59 personae preserved."
       },
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md"
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-06.md"
     },
     {
       "id": "project-vigilant-shade",
