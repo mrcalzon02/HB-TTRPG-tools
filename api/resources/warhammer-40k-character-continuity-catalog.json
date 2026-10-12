@@ -39,7 +39,7 @@
     "forgotten-explicitly",
     "memory-altered"
   ],
-  "characterCount": 62,
+  "characterCount": 63,
   "seededFrom": {
     "file": "assets/warhammer-40k/imperial-dramatis-personae-v1.js",
     "version": "1.15.0",
@@ -8276,6 +8276,20 @@
             "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
             "sourceType": "legacy-backfill"
           }
+        },
+        {
+          "id": "waldorf-casualty-chain-07",
+          "information": "Recorded the shield-pipe casualty's identifying number, medic custody and photographed shield damage while explicitly leaving the pipe's location unconfirmed.",
+          "epistemicStatus": "observed",
+          "belief": "the original estate investigation must retain evidence provenance despite the military emergency",
+          "certainty": "high for personally recorded chain, unresolved for the pipe",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -8316,7 +8330,19 @@
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "waldorf-duplicate-ledger-07",
+          "obligation": "Maintains duplicate estate/breach evidence records under senior Arbites approval; original to precinct captain, no estate clerk access; requested to provide firsthand witness statement to Highmount.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "physicalMedicalState": [
         {
           "id": "waldorf-prosthetic-backfill",
@@ -8328,6 +8354,17 @@
             "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
             "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jqc7we/a_rain_soaked_day/",
             "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "id": "waldorf-socket-pain-07",
+          "condition": "Prosthetic socket discomfort worsens after prolonged wet duty; loosens fitting while continuing investigative work.",
+          "status": "observed",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
           }
         }
       ],
@@ -8342,6 +8379,16 @@
             "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
             "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
             "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "segment": "Installment VII — The Line on the Map",
+          "changeSummary": "Preserved independent casualty and estate evidence, refused to infer missing custody, obtained duplicate-ledger authority and prepared a bounded witness statement while remaining outside frontline command.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
           }
         }
       ]
@@ -8406,6 +8453,20 @@
             "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
             "sourceType": "legacy-backfill"
           }
+        },
+        {
+          "id": "trellis-threat-command-07",
+          "information": "Saw Orks using improvised cover and weapons, accepted tactical advice about evacuation and approach geometry without treating that advice as identity proof.",
+          "epistemicStatus": "observed",
+          "belief": "the claimant's field advice is useful but legal command remains with commissioned officers",
+          "certainty": "high about local threat, unresolved about identity",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -8428,6 +8489,17 @@
             "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
             "sourceType": "legacy-backfill"
           }
+        },
+        {
+          "id": "trellis-three-positions-07",
+          "obligation": "Coordinated military arrival at north warehouse, east freight lane and south evacuation road, authorized engineering demolitions after clearance and requested Waldorf's bounded statement.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [],
@@ -8442,6 +8514,16 @@
             "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
             "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
             "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "segment": "Installment VII — The Line on the Map",
+          "changeSummary": "Integrated first company into the defense while preserving formal military chain of command and civil evidence custody; treated Yarrick's advice as tactical input rather than authentication.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
           }
         }
       ]
@@ -8512,6 +8594,20 @@
             "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
             "sourceType": "legacy-backfill"
           }
+        },
+        {
+          "id": "returned-yarrick-field-07",
+          "information": "Observed Orks test the warehouse with a shutter shield and later probe eastern approaches; saw limited first-company arrival and no final containment.",
+          "epistemicStatus": "observed",
+          "belief": "the enemy will adapt to available weapons and pressure multiple approaches",
+          "certainty": "high for observed tactical behavior",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -8527,6 +8623,18 @@
             "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
             "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
             "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "id": "returned-yarrick-claw-mismatch-07",
+          "secret": "A second small motor/body mismatch occurred when reaching for a map weight; he corrected it unseen and still does not understand his present embodiment.",
+          "exposureRisk": "private and unreported",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
           }
         }
       ],
@@ -8546,7 +8654,22 @@
         }
       ],
       "skillsCompetence": [],
-      "relationshipsTrust": [],
+      "relationshipsTrust": [
+        {
+          "id": "returned-yarrick-trellis-command-07",
+          "counterpartPersonaId": "captain-irvine-trellis",
+          "direction": "returned claimant → Trellis",
+          "trust": "functional in crisis",
+          "currentInterpretation": "Trellis keeps lawful command while transmitting useful advice and arranging reinforcements.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
@@ -8576,6 +8699,141 @@
             "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
             "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
             "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "segment": "Installment VII — The Line on the Map",
+          "changeSummary": "Directed tactical attention to Ork adaptation, retained his private physical-memory discrepancy, and worked through Trellis's command chain while the first defensive perimeter held without resolving his identity.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ]
+    },
+    "general-snadler-helgren": {
+      "personaId": "general-snadler-helgren",
+      "referenceId": "PERSONA-063",
+      "name": "Snadler Helgren",
+      "baseline": {
+        "title": "General Snadler Helgren",
+        "rank": "General",
+        "role": "Commander of the New Presidio Forces at Highmount during the Varnhold estate Ork emergency",
+        "branch": "Astra Militarum / New Presidio garrison",
+        "affiliations": [
+          "New Presidio Forces",
+          "Highmount Command"
+        ],
+        "currentLocation": "Highmount · New Presidio military command spire",
+        "status": "Active at the latest continuation; directing a constrained reinforcement response and maintaining separate identity verification.",
+        "standing": "Source-attached planetary garrison general",
+        "temperament": [
+          "Skeptical of extraordinary claims",
+          "Institutionally conscious",
+          "Capable of revising orders when evidence changes",
+          "Concerned with accountability"
+        ],
+        "doctrine": "Respond materially to independently observed military threats while preserving command responsibility, civilian evacuation and separate verification of extraordinary identity claims.",
+        "source": {
+          "label": "A dreary thunderstorm",
+          "url": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+          "status": "verified"
+        },
+        "sourceAuthority": "Named Highmount commander in the original source; the subsequent operational response is established by the committed continuation. Skepticism does not mean incompetence, and no final verdict on Yarrick's identity is established.",
+        "baselineRelationshipNames": [
+          "Captain Irvine Trellis",
+          "Returned Sebastian Yarrick claimant",
+          "New Presidio Arbites"
+        ],
+        "baselineStoryBeats": [
+          {
+            "place": "Highmount · A dreary thunderstorm",
+            "beat": "Questioned the apparent return of Yarrick and demanded verification while the estate Ork emergency was unfolding."
+          },
+          {
+            "place": "Highmount · Installment VII",
+            "beat": "Responded to direct breach footage by mobilizing two companies in stages, engineers and casualty accounting while withholding identity certification."
+          }
+        ]
+      },
+      "memoriesEvents": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "helgren-original-verification-backfill",
+          "information": "Highmount received Yarrick's old authentication codes and an impossible identity claim while the estate emergency unfolded.",
+          "epistemicStatus": "reported",
+          "belief": "originally skeptical of the claim",
+          "certainty": "identity unresolved",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "legacy-backfill",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/"
+          }
+        },
+        {
+          "id": "helgren-breach-footage-07",
+          "information": "Direct video shows an Ork force at the northern warehouse breach and an Arbites casualty struck by improvised metal ordnance.",
+          "epistemicStatus": "observed",
+          "belief": "an immediate military emergency exists regardless of the claimant's identity",
+          "certainty": "high for breach, unresolved for identity",
+          "actionTaken": "mobilized available companies and engineers",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
+      "secretsKnown": [],
+      "secretsHeld": [],
+      "plansGoals": [],
+      "skillsCompetence": [],
+      "relationshipsTrust": [],
+      "temperamentPerformance": [],
+      "preferencesAversions": [],
+      "faithIdeologyLoyalty": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "helgren-reinforcement-orders-07",
+          "obligation": "Assumed military responsibility for the breach perimeter, ordered staged companies and engineers, prohibited artillery until civilian clearance, retained Arbites evidence custody and required incomplete casualty counts to remain explicitly incomplete.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
+      "physicalMedicalState": [],
+      "equipmentResources": [],
+      "chapterTouchLog": [
+        {
+          "segment": "A dreary thunderstorm",
+          "changeSummary": "Source-backed prewrite record of the skeptical Highmount command response and the unresolved identity verification.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "legacy-backfill",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/"
+          }
+        },
+        {
+          "segment": "Installment VII — The Line on the Map",
+          "changeSummary": "Updated from skepticism to material response after direct video; deployed staged forces, separated command and identity authority, preserved civil evidence custody and incomplete casualty reporting.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VII — The Line on the Map",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
           }
         }
       ]

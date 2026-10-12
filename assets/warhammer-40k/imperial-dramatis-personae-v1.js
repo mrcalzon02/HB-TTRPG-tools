@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const VERSION='1.16.0';
+const VERSION='1.16.1';
 const SOURCE_STATUS='verified';
 const freezeList=a=>Object.freeze(a.map(x=>typeof x==='object'&&x?Object.freeze(x):x));
 const PERSONAE=Object.freeze([
@@ -248,6 +248,29 @@ Object.freeze({
  storyBeats:freezeList([{"place":"Varnhold estate industrial yard","beat":"Killed an Ork before Arbites witnesses, heard a claim about Ghazghkull, and identified himself as Sebastian Yarrick."},{"place":"New Presidio command","beat":"Provided authentication codes and described underground Ork breeding and collapsing containment; urged evacuation."},{"place":"Varnhold estate command","beat":"Declined transfer to Highmount, experienced a private bodily-memory discrepancy, and demanded military reinforcement after showing the ongoing breach."}]),
  source:Object.freeze({"label":"A dreary thunderstorm","url":"https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/","status":"verified"}),
  sourceAuthority:"The original source explicitly introduces the returned figure as Yarrick, authorizing his appearance in this line. Archive treatment deliberately distinguishes apparent historical identity, authentic-looking codes, memory and command competence from unproven continuity of body, soul and origin."
+}),
+Object.freeze({
+ id:"general-snadler-helgren",
+ referenceId:"PERSONA-063",
+ name:"Snadler Helgren",
+ title:"General Snadler Helgren",
+ rank:"General",
+ role:"Commander of the New Presidio Forces at Highmount during the Varnhold estate Ork emergency",
+ branch:"Astra Militarum / New Presidio garrison",
+ affiliations:freezeList(["New Presidio Forces","Highmount Command"]),
+ currentLocation:"Highmount · New Presidio military command spire",
+ offMapConcordance:"New Presidio · Highmount; no verified mapped system coordinate",
+ status:"Active at the latest continuation; directing a constrained reinforcement response and maintaining separate identity verification.",
+ standing:"Source-attached planetary garrison general",
+ biography:"General Snadler Helgren commands the New Presidio Forces from Highmount. The original account presents him as deeply skeptical of a returned Yarrick and inclined to summon the claimant for verification. After direct visual evidence of the Ork breach, he orders a real military reinforcement response, separates immediate tactical necessity from certification of an impossible identity claim, and accepts the jurisdictional, logistical and casualty-accounting consequences of defending the Varnhold estate.",
+ temperament:freezeList(["Skeptical of extraordinary claims","Institutionally conscious","Capable of revising orders when evidence changes","Concerned with accountability"]),
+ doctrine:"Respond materially to independently observed military threats while preserving command responsibility, civilian evacuation and separate verification of extraordinary identity claims.",
+ physicalHistory:freezeList([]),
+ possessions:freezeList(["Highmount military vox and command displays","Garrison readiness and transport allocations"]),
+ relationships:freezeList([{"name":"Captain Irvine Trellis","nature":"Subordinate sent to assess the claimant and report from the estate."},{"name":"Returned Sebastian Yarrick claimant","nature":"Exceptional claimant whose military advice is conditionally used while identity certification remains unresolved."},{"name":"New Presidio Arbites","nature":"Civil authority whose emergency evidence custody remains separate from Highmount's military breach responsibility."}]),
+ storyBeats:freezeList([{"place":"Highmount · A dreary thunderstorm","beat":"Questioned the apparent return of Yarrick and demanded verification while the estate Ork emergency was unfolding."},{"place":"Highmount · Installment VII","beat":"Responded to direct breach footage by mobilizing two companies in stages, engineers and casualty accounting while withholding identity certification."}]),
+ source:Object.freeze({"label":"A dreary thunderstorm","url":"https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/","status":"verified"}),
+ sourceAuthority:"Named Highmount commander in the original source; the subsequent operational response is established by the committed continuation. Skepticism does not mean incompetence, and no final verdict on Yarrick's identity is established."
 })
 
 ]);
@@ -259,6 +282,6 @@ function chronology(p){if(p.offMapConcordance)return`Extra-sector · ${p.offMapC
 function recordFor(p){return Object.freeze({id:`dramatis-${p.id}`,referenceId:p.referenceId,name:p.title,category:'personae',objectType:'Chronicle-attached Imperial person',provenance:'story-grounded',confidence:'Confirmed',status:p.status,classification:p.standing,summary:p.biography,relationships:Object.freeze(p.relationships.map(x=>`${x.name}: ${x.nature}`)),mapNodeIds:p.mapNodeIds,tags:Object.freeze(['dramatis personae',p.branch,p.role,...p.affiliations]),source:p.source,sources:sourceHistory(p),keyStory:p.source.label,logistics:Object.freeze({kind:'dramatis-persona',personId:p.id,branch:p.branch,rank:p.rank,status:p.status,currentLocation:p.currentLocation})})}
 const records=Object.freeze(PERSONAE.map(recordFor));
 function renderRecordContext(rec){const id=rec?.logistics?.personId,p=byId.get(id);if(!p)return null;const sec=E('section','wh-entry-section wh-dramatis-persona'),dl=E('dl','wh-entry-ledger');sec.append(E('p','wh-kicker','♙ Archivum Personae · Chronicle-Sealed Dramatis Persona'),E('h3','',p.title),E('p','wh-entry-copy',p.biography));[['Present-era concordance',chronology(p)],['Rank / office',p.rank],['Imperial arm',p.branch],['Recorded role',p.role],['Affiliations',p.affiliations],['Latest attached location',p.currentLocation],['Present standing',p.status],['Attached chronicle seals',sourceHistory(p).map(s=>s.label)],['Archive authority',p.sourceAuthority],['Temperament entered from testimony',p.temperament],['Observed doctrine / working method',p.doctrine],['Known physical history',p.physicalHistory],['Known possessions / equipment',p.possessions]].forEach(x=>D(dl,...x));sec.append(dl);if(p.relationships.length){const d=E('details','wh-linked'),q=E('summary','',`Unseal personal & institutional concordances · ${p.relationships.length}`),body=E('div','wh-docket-grid');for(const r of p.relationships){const a=E('article','wh-docket-card');a.append(E('h5','',r.name),E('p','',r.nature));body.append(a)}d.append(q,body);sec.append(d)}if(p.storyBeats.length){const d=E('details','wh-linked'),q=E('summary','',`Unseal attached life testimony · ${p.storyBeats.length}`),body=E('div','wh-medicae-history-list');for(const beat of p.storyBeats){const a=E('article','wh-medicae-history-row');a.append(E('strong','',beat.place),E('p','',beat.beat));body.append(a)}d.append(q,body);sec.append(d)}return sec}
-function validate(){const ids=new Set(),refs=new Set(),bad=[],sourceRoute=/^https:\/\/www\.reddit\.com\/r\/EmperorProtects\/comments\/[a-z0-9]+\//i,localAuthorial=/^assets\/warhammer-40k\/lore\/.+\.md$/i,validSource=s=>!!s?.url&&((s.status==='verified'&&sourceRoute.test(s.url))||(s.status==='authorial'&&localAuthorial.test(s.url)));for(const p of PERSONAE){const sources=sourceHistory(p);if(ids.has(p.id)||refs.has(p.referenceId)||!p.name||!sources.length||sources.some(s=>!validSource(s))||!p.biography||!(p.mapNodeIds?.length||p.offMapConcordance)||!p.storyBeats?.length||!p.relationships?.length)bad.push(p.id);ids.add(p.id);refs.add(p.referenceId)}return Object.freeze({personae:PERSONAE.length,duplicateOrInvalid:Object.freeze(bad),allSourceSealed:PERSONAE.every(p=>sourceHistory(p).every(validSource)),allValid:PERSONAE.length===62&&!bad.length})}
+function validate(){const ids=new Set(),refs=new Set(),bad=[],sourceRoute=/^https:\/\/www\.reddit\.com\/r\/EmperorProtects\/comments\/[a-z0-9]+\//i,localAuthorial=/^assets\/warhammer-40k\/lore\/.+\.md$/i,validSource=s=>!!s?.url&&((s.status==='verified'&&sourceRoute.test(s.url))||(s.status==='authorial'&&localAuthorial.test(s.url)));for(const p of PERSONAE){const sources=sourceHistory(p);if(ids.has(p.id)||refs.has(p.referenceId)||!p.name||!sources.length||sources.some(s=>!validSource(s))||!p.biography||!(p.mapNodeIds?.length||p.offMapConcordance)||!p.storyBeats?.length||!p.relationships?.length)bad.push(p.id);ids.add(p.id);refs.add(p.referenceId)}return Object.freeze({personae:PERSONAE.length,duplicateOrInvalid:Object.freeze(bad),allSourceSealed:PERSONAE.every(p=>sourceHistory(p).every(validSource)),allValid:PERSONAE.length===63&&!bad.length})}
 window.CafarronDramatisPersonaeV1=Object.freeze({VERSION,PERSONAE,records,byId,sourceHistory,renderRecordContext,validate});
 })();
