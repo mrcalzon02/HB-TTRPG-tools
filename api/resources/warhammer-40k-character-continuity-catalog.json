@@ -6506,6 +6506,22 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "broussard-kb-medical-tow-xviii",
+          "information": "Etten was transferred via the existing certified inbound route to a convoy road infirmary; three inspected tow stages advanced the Hesperant Vale to 380 metres from origin. Replacement auger remains undelivered; 27-kg bin discrepancy remains a cargo measurement, not proven wrongdoing.",
+          "epistemicStatus": "confirmed",
+          "belief": "Medical care and safe recovery must be balanced against fuel, refrigeration, escort and survey constraints; no arrival estimate is warranted.",
+          "certainty": "high for handoff and movement, unresolved for medical prognosis and cargo cause",
+          "sourceCharacter": "Signed convoy medical handoff, survey chief, Sella and Kelm",
+          "actionTaken": "Kept limited convoy fuel and cooling reserve accounted for and requested a safe unloading berth.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVIII. THE DISTANCE BETWEEN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-08.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -6750,6 +6766,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XVII. THE MARGIN LEFT",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XVIII. THE DISTANCE BETWEEN",
+          "changeSummary": "Authorized Etten's convoy-road medical exchange using Chimera Three and contracted perimeter, limited towing by refrigeration service and certified loads, recorded 380 metres without arrival estimate, and received bounded cargo reweigh results.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVIII. THE DISTANCE BETWEEN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-08.md",
             "sourceType": "continuation"
           }
         }
@@ -7100,6 +7126,16 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "segment": "XVIII. THE DISTANCE BETWEEN",
+          "changeSummary": "Accompanied Etten's casualty transfer with Hessel on certified road, handled the handoff without treating equipment loss as guilt, and returned to the reduced-fuel recovery perimeter; prognosis remains uncertain.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVIII. THE DISTANCE BETWEEN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-08.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -7303,6 +7339,18 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "kelm-obligation-disputed-bin-xviii",
+          "order": "Keep disputed forward produce bin sealed and unsold at its declared weight until a safe unloading berth permits witnessed reweigh and inspection; retain original measurements.",
+          "issuingAuthority": "Kelm to Holt and cargo master",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVIII. THE DISTANCE BETWEEN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-08.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [
@@ -7423,6 +7471,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XVII. THE MARGIN LEFT",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XVIII. THE DISTANCE BETWEEN",
+          "changeSummary": "Authorized closed-bin external reweigh, retained the 27-kg discrepancy for a witnessed unloading-berth recheck and accepted refrigeration priority over hauler convenience without alleging sabotage.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVIII. THE DISTANCE BETWEEN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-08.md",
             "sourceType": "continuation"
           }
         }
@@ -7651,6 +7709,22 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "holt-kb-bin-measure-xviii",
+          "information": "External calibrated second weighing of twelve sealed forward bins found ten within tolerance, one light, and one 27 kg over manifest; cause not established.",
+          "epistemicStatus": "observed",
+          "belief": "Retain measured discrepancy pending witnessed unloading-berth reweigh; weight alone does not establish cause.",
+          "certainty": "high for repeated measurement, unresolved for content or origin",
+          "sourceCharacter": "Cargo working sheets and own record",
+          "actionTaken": "Preserved successive measurements and Kelm's seal/hold instruction.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVIII. THE DISTANCE BETWEEN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-08.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -7778,6 +7852,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XVII. THE MARGIN LEFT",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XVIII. THE DISTANCE BETWEEN",
+          "changeSummary": "Recorded twelve-bin second weighing, preserved original and repeat figures with one 27-kg excess, and logged movement to 380 metres while leaving the older fourteen-second telemetry gap unchanged.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVIII. THE DISTANCE BETWEEN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-08.md",
             "sourceType": "continuation"
           }
         }
@@ -7987,7 +8071,19 @@
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
-      "equipmentResources": [],
+      "equipmentResources": [
+        {
+          "id": "sella-resource-cooling-xviii",
+          "resource": "Reserve compressor seal retained for refrigeration; recovery hauler remains owed replacement spares and is limited to certified draw; next tow requires a compressor inspection.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVIII. THE DISTANCE BETWEEN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-08.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "chapterTouchLog": [
         {
           "segment": "IX. REPAIRS",
@@ -8079,6 +8175,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XVII. THE MARGIN LEFT",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XVIII. THE DISTANCE BETWEEN",
+          "changeSummary": "Detected cold-contracted cable-guide contact, required repair and staged load proof, protected the last serviceable seal for refrigeration, and certified only inspected towing to 380 metres.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVIII. THE DISTANCE BETWEEN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-08.md",
             "sourceType": "continuation"
           }
         }
