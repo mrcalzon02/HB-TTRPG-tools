@@ -297,7 +297,7 @@ The authoritative character/personage register is:
 
 `assets/warhammer-40k/imperial-dramatis-personae-v1.js`
 
-It currently contains 53 sealed personae and must be loaded before adding, renaming, killing, promoting, transferring, resurrecting, biologically altering, or materially changing an established character.
+It currently contains 63 sealed personae and must be loaded before adding, renaming, killing, promoting, transferring, resurrecting, biologically altering, or materially changing an established character.
 
 Do **not** copy the full register into this document. This document governs use; the registry owns detailed biography and cross-index data.
 
