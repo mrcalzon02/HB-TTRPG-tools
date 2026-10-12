@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 2 Episode 31, *Desecration*.
+**Reconciled through:** Season 2 Episode 32, *The Useful Monster*.
 
 ## Current state
 
@@ -301,7 +301,8 @@ Montegrain motive/accountability/fate; Aven constitutional culpability and surre
 
 ## Immediate handoff
 
-Season 2 Episode 32 — *The Useful Monster* begins after Luceran's witnessed admission of the original attack order and his knowingly false Dols denial. Ysabet retains the original; Dols witnesses and Yara's separate river reports have not reached the receiving benches. Leora has only the earlier cart notice. Miren remains affectionate but unreconciled; Damaris now knows the crime and defends honest grain receipts. Jalen's bodily injury, autonomy, sister and discharge claim persist. No new binding, undercroft entry or candle failure; all seven candles burn.
+Season 3 Episode 1 — *The Empty Table*. Senna and Harven carry separate attested records of Luceran's admission and Jalen's later accident, but Dols has not yet received them. Yara's separate reports have no confirmed Merehaven or Teth receipt. Leora's representative inspected original village-watch records, but she has not received his report or the royal admission. Damaris released the waiting wagon at a real cost in future readiness; six sacks remain at Edselsto and six reached the northern posts. Jalen's adapted chair and private correspondence are in preparation; original service papers and family claims remain unresolved. Miren remains affectionate but separate. All seven candles burn.
+
 
 ## Hard exclusions
 
@@ -352,3 +353,18 @@ Leora receives the **earlier** Dols notice of Jalen's cart injury and return, bu
 Miren is glad Luceran tells the truth in the audience but remains affectionate without restoring intimacy or political trust. Luceran learns that truthful confession cannot reverse the earlier choice. Edselsto answers a narrow question about a historical cistern outlet, without claiming present structural condition, lawful permission or moral authority; living masons must survey and repair. The castle's unarguing usefulness grows emotionally tempting without a new capability. Iven's finite voluntary threshold service, two-living-guard roster, restricted undercroft work, and all seven candles remain unchanged.
 
 **Directional state:** Luceran → Miren: wants forgiveness but recognizes she will not turn love into acquittal. Miren → Luceran: acknowledges one honest act, still distrusts his prior judgment. Damaris → Luceran: now knows the concealed order and false denial, trusts only separately witnessed accounts for financial commitments. Ysabet → Luceran: preserves originals, refuses a second false account, accepts witnessed comparison. Rhyse → foreign witnesses/Jalen: protects autonomy and safe conduct despite royal pressure. Jalen → Crown: insists on independent name, consent and family pay obligations. Yara → river benches: retains jurisdictional separation and evidentiary limits. Senna/Harven → Dols: possess firsthand hearing of Luceran's admission, not firsthand knowledge of Corven's attack. Leora → Dols/Jalen: knows only the earlier accident notice and requests a named channel for independent correspondence. Edselsto → Luceran: remains narrowly useful, uncritical and incompletely informed.
+
+
+## Episode 32 — The Useful Monster (committed continuity reconciliation)
+
+Senna and Harven witness Luceran's admission at Edselsto and inspect Ysabet's original private instruction without taking custody. Etta and Aldren distinguish transcription and receipt from firsthand knowledge of the attack. The Dols witnesses depart with two separately sealed packets: Senna's admission/comparison record and Harven's later stone-cart account. Rhyse supplies a named six-guard escort with written non-interference terms; Luceran signs the non-retaliation instruction after Rhyse. The witnesses are on the road at episode end. The Dols reeve has not received their report; Yara's distinct Merehaven and Teth notices have no confirmed receipt. No new foreign verdict, bridge permission or treaty exists.
+
+Damaris pays the carter's earned waiting wages and fodder and releases the idle second team, saving ongoing cost while sacrificing immediate readiness if Dols accepts the still-defective wall. Tomas must price another team. The Merehaven factor honors the first witnessed northern six-sack delivery and accepts a separate inventory of the six sacks stored at Edselsto, but cannot authorize the withheld second advance. Roof gutter/staging repair requires paid work. Northern posts receive an accurate no-date notice. Eighteen mounts remain withdrawn; Teth's ferry stays owner-controlled.
+
+Jalen chooses a supported-chair modification for practical autonomy. Rhyse's search finds only a reference to his casualty discharge, not the original or family payment evidence. Yara offers a private writing board without asserting foreign warrant custody; an ordinary named courier is offered without any condition of further dead service. The Dols apprentice's carved horse remains Jalen's gift. No bodily restoration or new binding occurs.
+
+Leora's representative inspects the original village-watch book, damaged stick and separate attendant accounts; the original sources remain with their custodians. The widow limits her testimony to an unused room, and the injured attendant's unsettled lodging remains an obligation. The representative's dated report has not reached Leora. She still has only the earlier accident notice, retains her private-question refusal and original letters, and cares for her mother and niece without knowing Luceran's admission.
+
+Miren acknowledges Luceran's honest act and renewed witness protection without restoring intimacy, forgiveness or political trust. Edselsto supplies a bounded historical memory of a cistern outlet and mason's mark, physically confirmed only as a mark by a living mason. Luceran authorizes limited supported inspection, not a proven working channel or new castle power. He increasingly favors Edselsto's unarguing usefulness as human allies remain independent. Iven's finite service, living guard roster, undercroft limits and all seven candles persist.
+
+**Directional character changes:** Luceran → Miren: hopes confession repairs closeness; learns it does not, seeks Edselsto's easier answers. Miren → Luceran: sees competent restraint while retaining the injury to trust. Damaris → factor/Crown: insists on attestable counts and separate credit/passage authority. Rhyse → witnesses: commits written protection despite royal exposure. Ysabet/Etta/Aldren → evidence: maintain source/copy/hearing distinctions. Senna/Harven → Dols: carry firsthand hearing, not firsthand murder evidence. Jalen → Crown: asserts personal agency and service-document claim. Yara → Jalen: distinguishes personal correspondence from foreign authority. Leora → records: awaits independent source inspection without premature certainty.

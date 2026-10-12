@@ -2,26 +2,24 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 31, *Desecration*.
-**Forward window:** Season 2 Episode 32 and Season 3 Episodes 1–4.
+**State:** Rolled forward after Season 2 Episode 32, *The Useful Monster*.
+**Forward window:** Season 3 Episodes 1–5.
 
-**Continuity status:** Luceran has acknowledged his earlier order and false Dols denial in a witnessed Edselsto audience. Ysabet retains the original instruction and offers attested comparison. Dols witnesses Senna and Harven have not yet delivered their report to the reeve; Yara's separate Dols, Merehaven and Teth letters have not arrived. Leora received only the earlier Dols notice of Jalen's cart accident, not the king's admission; her village-watch representative has not reported. Miren remains affectionate but unreconciled. Damaris now knows the concealed order and continues to defend the valid first grain receipt while the second advance is withheld. Jalen's injury is unchanged and his sister, original discharge and pay receipt remain unresolved. Six sacks remain at Edselsto, six were delivered north, the Dols wall and second wagon are unaccepted, Teth ferry owner-controlled, eighteen mounts withdrawn and roof guttering unfinished. All seven candles burn.
+**Continuity status:** Luceran has publicly acknowledged the original attack order and false Dols denial. Ysabet retains the original; Senna and Harven carry two separate attested packets toward Dols, with no confirmed arrival. Yara's distinct Merehaven/Teth reports have no confirmed bench receipt. Leora's agent has inspected the original watch records but she has not received his report or the king's admission. Damaris released the second waiting wagon to stop mounting hire costs, losing immediate readiness; six sacks remain at Edselsto, six reached northern posts. The first Merehaven receipt stands; second advance remains withheld. Dols wall unaccepted, Teth ferry owner-controlled, eighteen mounts withdrawn, gutter work incomplete. Jalen's adapted rest is planned, his personal correspondence is being arranged and his original discharge/family claim unresolved. Miren remains affectionate but unreconciled; Edselsto remains useful without new power. All seven candles burn.
 
-## Season 2 Episode 32 — The Useful Monster — CURRENT / LOCKED
+## Season 3 Episode 01 — The Empty Table — CURRENT / LOCKED
 
-**Purpose:** Conclude Season Two with the actual consequences of the admitted crime and the king's temptation to prefer a servant that does not argue. Avoid instant universal foreign verdicts: Senna/Harven must travel to Dols, Yara's separate reports must arrive independently, and each bench retains its own jurisdiction and interests. Leora's response must follow a dated arrival of the admission rather than retroactive knowledge.
+**Purpose:** Open the season from the actual empty seats, damaged credibility and material shortages rather than resetting court politics. Luceran needs human partners who can refuse him. No river bench may act on an admission it has not yet received.
 
-**Political/institutional:** Dols may continue to withhold crossing authority; Merehaven may condition fresh credit while honoring the first surety; Teth controls its own ferry. Keep road, grain, carter pay, roof, withdrawn mounts and household witnesses concrete. Rhyse, Ysabet, Damaris and Yara have independent obligations, not merely reactions to Luceran.
+**A-story:** Damaris, Rhyse and Ysabet identify which local houses, road authorities, former rivals or creditors can negotiate a narrow grain/road/security solution and what each can lawfully offer. Carry the released wagon, roof repair, withdrawn mounts and first-valid/second-withheld Merehaven sureties. A new proposal must have a named messenger, price and enforceable terms.
 
-**Relationship/mystery:** Miren can love without pardoning; Jalen retains his own name, bodily consent and family pay claim; Leora retains independent source custody and grief. Edselsto remains useful but cannot confer legal legitimacy or forgiveness. No undercroft revelation, new binding or candle failure.
+**B-story:** Miren's affection is not restored intimacy; Luceran cannot make confession an invoice for forgiveness. Jalen's personal correspondence and accessible care proceed without new service claims. Leora's own evidence custody remains independent, and her knowledge advances only through dated receipt.
 
-**Exit:** Luceran is more politically isolated and more drawn to Edselsto's obedient usefulness; Season Three's human bargains become unavoidable.
+**C-story:** Edselsto offers narrow historical usefulness, not judgment, omniscience, new binding or legal consent. The king's temptation to use the unarguing castle increases precisely when living people set conditions.
 
-## Season 3 Episode 01 — The Empty Table — DIRECTIONAL
+**D-story:** A named low-status worker or factor acts on an independent livelihood obligation, with consequences for the Crown's bargain.
 
-Open from Season Two's earned diplomatic and personal losses. Establish who will negotiate with Luceran despite remembered grievances, which former rivals can offer food, roads, guards or credit, and what each requires in return. Show named messengers, witnesses, real travel times and private relationships without reset.
-
-**Exit:** A first costly negotiation is unavoidable.
+**Exit:** One costly human negotiation becomes unavoidable, with its witness, payer and jurisdiction established.
 
 ## Season 3 Episode 02 — The Price of a Seat — DIRECTIONAL
 
@@ -41,7 +39,15 @@ Offices, trade rights, passage terms, compensation and guarantees purchase narro
 
 **Exit:** A compromised coalition begins functioning with remembered debts.
 
+## Season 3 Episode 05 — Reopening Night — EXPLORATORY
+
+Plan a genuine social reopening only after the first concessions have made it affordable. Seed the hall, musicians, provisions, invited households, guest rights, staff labor and security during Episodes 1–4. Celebration must create actual pleasure and politically useful contact without curing old crimes. No candle failure before the scheduled Season Three Episode 8 threshold.
+
+**Exit:** Beauty and spectacle become plausible instruments of the compromised coalition.
+
 ## Active payoff debt (historical carry-forward)
+
+Episode 32 adds the two separately sealed Dols packets and protected witness departure (not arrival); Damaris's release of the waiting wagon with a future rehiring delay; a valid first Merehaven receipt and still-withheld second advance; Jalen's chosen chair adjustment and ordinary private correspondence; Leora's agent's inspection of original watch sources with report still in transit; Miren's continuing separation; Luceran's signed witness protection; and a bounded cistern memory confirmed only as an old mason's mark. No foreign bench ruling or new castle power occurs.
 
 Episode 30 adds the witnessed Dols stone-cart injury, Jalen's voluntary return, independent physicians, and the dated receipt of the Crown denial before the accident. The wall remains unaccepted and the second grain wagon blocked. Leora's notice and Jalen's casualty discharge remain unresolved.
 
