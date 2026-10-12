@@ -256,9 +256,9 @@
       "title": "Of Blood and Wires: The Litanies of Tenelja Station",
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
-      "status": "architected-active",
-      "currentEndpoint": "Source story complete: Sister Arbentia finishes another Tenelja Station medicae shift after helping keep a catastrophically void-burned Xanadu Salvage Company patient alive. She remains a low-ranking healer caught between Sister Bethany's devotional medicine and Magos Biologis-Abstrator Abraxas 8207's mechanistic practice, hopes to see her intermittent lover Rix on the following day, and remains denied access to the scriptorum archives despite being judged capable because the station has no bureaucratic need for her advancement.",
-      "nextSlice": "Begin the continuation with the promised next-day meeting with Rix and let the surviving Xanadu patient's accident become a practical medicae/salvage consequence rather than an instant conspiracy reveal. Establish what Rix knows, what Arbentia wants from study, and what Tenelja routinely fails to provide before escalating the station's medical and infrastructure pressures.",
+      "status": "active",
+      "currentEndpoint": "Chapter IV — The Price of a Morning. Arbentia and Rix met as promised and established an affectionate but bounded relationship; Rix supplied a secondhand account of Xanadu fitting assistant Beren Holt's jammed-release accident, explicitly lacking direct inspection or formal declaration. Holt remains alive but exertion-limited after discharge, with a scheduled follow-up, disputed invoice and uncertain compensation/work status. Arbentia obtained written requirements for two supervised scriptorum hours, not permission; Abraxas has not sponsored her and Bethany has not approved replacement ward coverage. The ward corridor's secondary-feed matched fuse remains unissued; no acute failure has occurred. Rix's next tug watch and equipment-charge obligations continue.",
+      "nextSlice": "Chapter V — Make Arbentia's sponsorship and duty-cover request produce a concrete staffing and procedural choice; develop Holt's restricted rehabilitation and Xanadu's compensation dispute without making Rix an illicit evidence courier. Let the corridor fuse and station maintenance queue remain causal, documented risks rather than instant disaster. Preserve the professional autonomy and competent disagreements of Bethany and Abraxas.",
       "eraLock": {
         "era": "Late Imperial / 41st Millennium station-life setting as established by the source story.",
         "allowedInstitutions": [
@@ -375,10 +375,6 @@
         ],
         "rollingNearTermWindow": [
           {
-            "installment": "4",
-            "objective": "Pay the Rix promise and establish ordinary relationship behavior before escalation."
-          },
-          {
             "installment": "5",
             "objective": "Make the locked scriptorum and rationed advancement produce a small concrete operational consequence."
           },
@@ -393,8 +389,19 @@
           {
             "installment": "8",
             "objective": "Begin the larger casualty pressure while preserving bounded knowledge and competent institutional actors."
+          },
+          {
+            "installment": "9",
+            "objective": "Arbentia recognizes an emerging pattern without claiming unsupported access or authority."
           }
         ]
+      },
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+      "characterContinuityAssessment": {
+        "sufficientForNewProse": true,
+        "segment": "Chapter IV — The Price of a Morning",
+        "durableCharacterStateChanged": true,
+        "reason": "Arbentia, Abraxas and Bethany received bounded knowledge and chapter touch logs; Arbentia's Rix trust boundary, study objective, Holt follow-up obligation and maintenance-tag resource were added without altering previous histories. Three existing sealed personae preserved."
       }
     },
     {

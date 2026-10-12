@@ -2885,19 +2885,106 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "tenelja-arbentia-holt-claims-04",
+          "knowledge": "Rix reports that Xanadu fitting assistant Beren Holt was injured during a jammed release, but Rix did not witness the incident or inspect the fitting. The rescuers' accounts, the company's authorization claim and the dock hold are not yet reconciled; Holt's ability to walk a few paces does not establish fitness for salvage duty.",
+          "certainty": "Rix's bounded secondhand account plus Arbentia's direct follow-up examination",
+          "status": "reported",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter IV — The Price of a Morning",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "tenelja-arbentia-study-rule-04",
+          "knowledge": "The scriptorum permits two supervised study hours this cycle, both allocated to certified trainees; reallocation requires a medical sponsor and replacement infirmaria duty coverage. The clerk supplied the rule in writing but did not authorize access.",
+          "certainty": "stamped annex allocation rule obtained directly",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter IV — The Price of a Morning",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
-      "plansGoals": [],
+      "plansGoals": [
+        {
+          "id": "tenelja-arbentia-supervised-study-04",
+          "goal": "Seek a medically sponsored two-hour archival reading period on post-void exposure pulmonary rehabilitation, with ward coverage approved by her order; preserve patient care and do not misrepresent current authority as permission.",
+          "horizon": "near-term",
+          "status": "active",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter IV — The Price of a Morning",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "skillsCompetence": [],
-      "relationshipsTrust": [],
+      "relationshipsTrust": [
+        {
+          "id": "tenelja-arbentia-rix-boundaries-04",
+          "other": "Rix",
+          "direction": "Arbentia toward Rix",
+          "trust": "Affection and trust in his willingness to distinguish firsthand knowledge from rumor; she respects his livelihood and declines to use their intimacy to acquire restricted Xanadu documents.",
+          "status": "active",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter IV — The Price of a Morning",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "tenelja-arbentia-holt-followup-04",
+          "obligation": "Carry Holt's revised exertion/rest limits and follow-up appointment forward through the infirmaria, without treating the medical assessment as authority over the salvage investigation.",
+          "status": "active",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter IV — The Price of a Morning",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "physicalMedicalState": [],
-      "equipmentResources": [],
-      "chapterTouchLog": []
+      "equipmentResources": [
+        {
+          "id": "tenelja-arbentia-study-copy-04",
+          "resource": "Stamped copy of the scriptorum's supervised-reading reallocation requirements and recorded ward-corridor secondary-feed maintenance tag; neither grants study access nor proves imminent infrastructure failure.",
+          "status": "held",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter IV — The Price of a Morning",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
+      "chapterTouchLog": [
+        {
+          "segment": "Chapter IV — The Price of a Morning",
+          "changeSummary": "Met Rix as planned and established ordinary mutual affection with professional boundaries; distinguished his secondhand Xanadu account from direct knowledge; witnessed Holt's limited recovery; obtained written supervised-study requirements without access; noted unresolved corridor fuse issue and began a bounded sponsorship request.",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter IV — The Price of a Morning",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ]
     },
     "magos-abraxas-8207": {
       "personaId": "magos-abraxas-8207",
@@ -2951,7 +3038,20 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "tenelja-abraxas-holt-metric-04",
+          "knowledge": "Holt's improved walking-distance figure lacks a comparable rest interval, so it cannot alone establish pulmonary recovery; Abraxas ordered standardized exertion observations and acknowledged the existence of archival cohorts without granting Arbentia access.",
+          "certainty": "direct examination and review of the ward chart",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter IV — The Price of a Morning",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
       "plansGoals": [],
@@ -2963,7 +3063,18 @@
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Chapter IV — The Price of a Morning",
+          "changeSummary": "At Holt's scheduled follow-up, challenged a noncomparable walking-distance metric, required a documented rest interval and identified archival rehabilitation cohorts; he has not agreed to sponsor Arbentia's study.",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter IV — The Price of a Morning",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ]
     },
     "sister-bethany-pradaxa": {
       "personaId": "sister-bethany-pradaxa",
@@ -3017,7 +3128,20 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "tenelja-bethany-arbentia-rule-04",
+          "knowledge": "Arbentia has obtained a stamped rule allowing a supervised reading period only with sponsorship and ward coverage; Bethany has seen the rule but has not agreed to release staff time.",
+          "certainty": "directly read Arbentia's stamped annex paper",
+          "status": "observed",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter IV — The Price of a Morning",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
       "plansGoals": [],
@@ -3029,7 +3153,18 @@
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Chapter IV — The Price of a Morning",
+          "changeSummary": "Performed Holt's graft review with explicit warning and consent, upheld exertion limits and read Arbentia's study-allocation rule without granting duty coverage.",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter IV — The Price of a Morning",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        }
+      ]
     },
     "mulvane-drenal": {
       "personaId": "mulvane-drenal",
