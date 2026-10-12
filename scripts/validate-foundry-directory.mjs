@@ -14,6 +14,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
 const home = read('index.html');
 const siteMap = read('site-map.html');
+const xmlSiteMap = read('sitemap.xml');
 const index = JSON.parse(read('search-index.json'));
 const searchScript = read('foundry-search.js');
 
@@ -53,6 +54,14 @@ for (const marker of ['data-cubechat-card="true"', 'data-final-battle-scenario-c
 for (const path of ['cubechat.html', 'final-battle-scenario.html']) {
   assert.ok(siteMap.includes('href="' + path + '"'), 'Human site map missing ' + path);
   assert.ok(index.some(entry => entry.url === path), 'Search index missing ' + path);
+}
+for (const path of [
+  'cubechat.html', 'cubechat-network.html', 'cubechat-host.html',
+  'cubechat-provision.html', 'cubechat-key-handoff.html',
+  'cubechat-large-keys.html', 'cubechat-forum.html',
+  'final-battle-scenario.html'
+]) {
+  assert.ok(xmlSiteMap.includes('/HB-TTRPG-tools/' + path + '</loc>'), 'XML sitemap missing ' + path);
 }
 
 function fakeBrowser() {
