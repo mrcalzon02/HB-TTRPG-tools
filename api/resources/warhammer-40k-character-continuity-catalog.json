@@ -3990,6 +3990,30 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-06.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "atrovald-junction-handoff-chain",
+          "knowledge": "The original southern-junction register and handing-over courier Reth Carrow establish transfer of the commander's sealed chest to a route receiver whose personal identity remains unverified; a correction changed a presumed name into a duty designation. Lower cage checks preserve the same seal number, and onward transfer is recorded under commander's traveling authority; the attendance sheet is not yet examined.",
+          "certainty": "original register, watch packet and courier account; receiver identity and chest contents unresolved",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VII — The Name Beneath the Correction",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-07.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "atrovald-dain-routine-batch",
+          "knowledge": "Deputy Balance Officer Seret Dain personally signed the watch batch containing the 53-to-52 adjustment and acknowledged responsibility for treating it as routine. He did not originate the number and says he did not know of the separate missing-person complaint. Escort-office procedure coded both an unfilled authorized relief position and an unidentified missing person as NO DECLARED LOSS unless an exceptional casualty form was filed.",
+          "certainty": "signed batch, direct interview, contemporaneous classification procedure; originating officer and occupancy unresolved",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VII — The Name Beneath the Correction",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-07.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -4129,6 +4153,18 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-06.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "atrovald-review-staffing-cost",
+          "order": "Enforce jointly signed human review of disputed custody/missing-person count adjustments, reassign four historical-index clerks per watch and two supervisors for at least three weeks; preserve sealed-case confidentiality while disclosing staffing impact to Logos. Obtain separate testimony from route steward and cage attendants, and continue seeking the escort-originating officer. Quartermaster's back pay approved but not yet disbursed.",
+          "issuingAuthority": "Matron Lagas Atrovald and joint custody offices",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VII — The Name Beneath the Correction",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-07.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [],
@@ -4206,6 +4242,16 @@
             "story": "Matron Lagas Atrovald",
             "segment": "Continuation VI — Two Chains of Custody",
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VII — The Name Beneath the Correction",
+          "changeSummary": "Verified the southern junction's corrected duty-designation entry and first courier's physical handoff without identifying the receiver; identified Seret Dain as authorizer of the routine adjustment batch but not its originating figure; discovered a procedural NO DECLARED LOSS ambiguity and accepted concrete staffing costs to prevent missing-person inquiries being closed by arithmetic. Hesk Venn's existence/whereabouts, named attendance sheet, originating officer, sealed future order, Mortuary-Seventeen and Null-Seven remain unresolved.",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VII — The Name Beneath the Correction",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-07.md",
             "sourceType": "continuation"
           }
         }

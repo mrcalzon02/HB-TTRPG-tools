@@ -113,14 +113,14 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
       "status": "active",
-      "currentEndpoint": "Continuation VI — Two Chains of Custody. A 53-position duty roster does not prove that the unnamed relief auxiliar position was occupied; the detachable attendance sheet is reportedly in the commander's traveling chest. Two reviewers matched the torn lower half of the 52-adjustment form and confirmed Halden only received a then-valid department-sealed request, without identifying the ordering officer. Human review is now required for missing-person/custody disputes; quartermaster back pay is approved but not yet disbursed. The chest changed courier at the southern junction under a corrected name. Predulum remains confined with sealed Witness Four; Mortuary-Seventeen and the future-dated order remain sealed.",
-      "nextSlice": "Continuation VII: independently trace the chest via the original junction book and the courier who handed it over; separately identify the count-adjustment authorizing officer and why the case was treated as routine. Preserve the open Venn inquiry, unresolved occupancy, sealed anomalies, and undisbursed back pay.",
+      "currentEndpoint": "Continuation VII — The Name Beneath the Correction. Carrow's original southern-junction handoff and the corrected duty-designation entry establish the chest's movement through a lower cage and onward under commander's authority, but not the receiving person's identity or the attendance sheet's contents. Deputy Balance Officer Seret Dain signed the routine 53-to-52 adjustment batch without originating the number; a NO DECLARED LOSS category failed to distinguish an unused position from an unregistered missing person. Joint human-review safeguards now impose a three-week historical-index staffing diversion. Hesk Venn, the initiating officer, Predulum/Witness Four, Mortuary-Seventeen and future order remain unresolved; quartermaster back pay approved but unpaid.",
+      "nextSlice": "Continuation VIII — Obtain separate testimony from the route steward and two cage attendants; seek the commander's sealed named attendance sheet by lawful request, not seizure. Trace who originated the 52 returned-strength figure and whether an exceptional-loss declaration was available or suppressed. Show the costs and potential limits of the human-review staffing diversion. Preserve Hesk Venn's unresolved occupancy, the sealed anomalies, Predulum's confinement and the undisbursed quartermaster allowance.",
       "legacyBackfillRequired": false,
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "Continuation VI — Two Chains of Custody",
+        "segment": "Continuation VII — The Name Beneath the Correction",
         "durableCharacterStateChanged": true,
-        "reason": "Prose establishes distinct roster/adjustment chains, Halden's non-authorizing receipt, procedural review, pending back pay, and a corrected courier handoff; reconcile catalog before writing VII."
+        "reason": "Atrovald's documented junction handoff and routine-batch authority findings, new review staffing obligation, and touch log reconciled; supporting Pell remains an established unindexed archivist."
       },
       "eraLock": {
         "era": "Mature Imperium; exact millennium not fixed by the attached chronicle",
@@ -136,7 +136,7 @@
       },
       "authorshipLineageRule": "All future recovered/continued pieces in this line must include: Based on the work of: Matron Lagas Atrovald.",
       "chapterCapRule": "Hard cap of 40 chapters per book; Chapter XL is the latest permissible chapter number within a book.",
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-06.md"
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-07.md"
     },
     {
       "id": "on-the-fuzzy-edge",
