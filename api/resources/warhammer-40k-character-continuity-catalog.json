@@ -3264,6 +3264,17 @@
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "drenal-authority-amend-review-03",
+          "event": "Witnessed the House's interim review, the disputed carrier cargo-loss evidence, separate hospital receipt and collection hold, clerk's lawful manifest authorization, and the senior officer's limited drydock change-register trial.",
+          "status": "observed",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Authority to Amend",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "knowledgeBeliefs": [
@@ -3350,6 +3361,42 @@
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "drenal-carrier-temperature-causality-03",
+          "knowledge": "Carrier temperature readings began rising before the priority deviation; later warming followed the delayed berth but coincided with a hold inspection and auxiliary supply interruption. Neither causation by delay nor absence of causation has been established; pump logs and original receiving-grade certificate remain requested.",
+          "certainty": "documentary evidence under dispute",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Authority to Amend",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "drenal-lighter-debt-separation-03",
+          "knowledge": "The receiving station's supported conversion bill is paid by House Drenal and held against his service allocation pending accounting; a corrected lighter receipt acknowledges services without conceding liability, and collection against the lighter is temporarily held. Ongoing patient care is a separate station obligation.",
+          "certainty": "interim House review and station records",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Authority to Amend",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "drenal-drydock-register-trial-03",
+          "knowledge": "The senior House officer authorized a thirty-day trial at this drydock recording displacement time and accountable authority, with restricted reasons separately sealed. It is not a House-wide rule or a final disposition of the allocation review.",
+          "certainty": "signed interim order",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Authority to Amend",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3395,6 +3442,19 @@
             "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
             "sourceType": "legacy-backfill"
           }
+        },
+        {
+          "id": "drenal-clerk-procedural-cost-03",
+          "counterpart": "Drydock clerk who retrieved the earlier manifest",
+          "direction": "Mulvane toward clerk",
+          "relationship": "Recognizes the clerk's authorized conduct and professional cost; requested accurate no-misconduct notation without claiming authority over the unresolved reassignment or future advancement.",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Authority to Amend",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "temperamentPerformance": [],
@@ -3433,6 +3493,17 @@
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "drenal-interim-review-liabilities-03",
+          "obligation": "Hazard examination found within professional discretion but uncontracted lighter passage not retroactively approved. Supported station costs remain against Mulvane's service allocation; carrier loss claim is disputed pending further records, with no established damages debt; clerk's personnel outcome unresolved.",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Authority to Amend",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [
@@ -3468,6 +3539,17 @@
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "drenal-partial-medical-clearance-03",
+          "condition": "Left-hand tremor nearly resolved and reading afterimage improved but persisted. Physician authorized shielded ordinary trajectory planning, not navigation commissions, third-eye openings, or sight exercises; no full recovery date established.",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Authority to Amend",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "equipmentResources": [],
@@ -3499,6 +3581,16 @@
             "story": "Scion of the Warp-Born Blood",
             "segment": "The Corrected Line",
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "The Authority to Amend",
+          "changeSummary": "House interim review accepts the hazard examination as within discretion without retrospectively approving the passage; cargo spoilage causation and damages remain unproven; supported hospital conversion cost stays on Mulvane's service allocation, with lighter collection held pending review. A thirty-day drydock change-register trial is signed by the senior officer. Clerk's no-misconduct status is recorded but career outcome unresolved. Physician permits shielded routine planning, not navigation or third-eye use; afterimage persists.",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "The Authority to Amend",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
             "sourceType": "continuation"
           }
         }

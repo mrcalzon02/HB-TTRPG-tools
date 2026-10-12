@@ -410,9 +410,15 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-01.md",
       "status": "active",
-      "currentEndpoint": "Continuation II — The Corrected Line. The House review is pending, the three-death chronology has been corrected without assigning cause, and Mulvane remains medically restricted. Supported station expenses are assigned to his service account; carrier damages are unproven.",
-      "nextSlice": "Continue the pending House review and medical recovery, preserving all outstanding liabilities, evidence and procedural limits.",
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-02.md"
+      "currentEndpoint": "Continuation III — The Authority to Amend. House Drenal accepts Mulvane's initial hazard examination as within professional discretion but does not retroactively authorize the uncontracted lighter passage. A carrier temperature rise predates the delay, but later fluctuations, hold inspection and auxiliary failure leave damages causation unresolved pending records. Supported station conversion costs remain charged to Mulvane's service allocation; the lighter's corrected acknowledgment does not admit liability, and collection is held. A thirty-day, drydock-only change-register trial records displaced entries and accountable authority with restricted reasons sealed. The clerk's no-misconduct record does not restore his post. Mulvane's tremor improves but persistent afterimage bars further navigation; he is cleared only for shielded routine planning. The three deaths remain medically unassigned to the delay.",
+      "nextSlice": "Continuation IV — Test the thirty-day drydock register trial against actual traffic, restricted movements and the cost of duplicate records without declaring a House-wide reform. Receive or explicitly defer carrier pump/grade evidence and a fair damages decision; preserve the supported station charge against Mulvane's service allocation, the lighter's non-admission of debt, the clerk's unresolved career cost and the three patients' medically restricted causes. Continue measured recovery and physician-led clearance; no miraculous third-eye cure or open House rebellion.",
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
+      "characterContinuityAssessment": {
+        "sufficientForNewProse": true,
+        "segment": "Continuation III — The Authority to Amend",
+        "durableCharacterStateChanged": true,
+        "reason": "Mulvane's disputed cargo causation, limited collection hold, drydock-only register trial, clerk relationship, ongoing medical restriction, obligations and touch log reconciled."
+      }
     }
   ],
   "governanceDocument": "api/resources/warhammer-40k-fiction-governance.md",
