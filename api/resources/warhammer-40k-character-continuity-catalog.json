@@ -5578,6 +5578,22 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "broussard-kb-channel-predator-xvii",
+          "information": "The next eastern shelf contains an unverified thin-roof channel and an active High Presidio predator; a fresh surveyed inland line supports only the two completed certified towing stages, now 286 metres from origin.",
+          "epistemicStatus": "observed",
+          "belief": "The injured predator remains unconfirmed dead; no arrival estimate is justified.",
+          "certainty": "high for measurements and attack; unresolved for predator disposition",
+          "sourceCharacter": "Survey chief, Gabriel and movement records",
+          "actionTaken": "Kept Chimeras on tested ground, prohibited pursuit and recorded costs, injuries and supply debt.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVII. THE MARGIN LEFT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -5812,6 +5828,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XVI. THE WEIGHT OF THE ROAD",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XVII. THE MARGIN LEFT",
+          "changeSummary": "Accounted for convoy fuel pressure; halted at a new channel, ordered protected survey and non-pursuit of an unconfirmed predator, authorized only certified stages and recorded 286 metres with no arrival estimate.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVII. THE MARGIN LEFT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
             "sourceType": "continuation"
           }
         }
@@ -6152,6 +6178,16 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "segment": "XVII. THE MARGIN LEFT",
+          "changeSummary": "Accompanied the survey team under the survey chief’s authority; held Chimera One fire while surveyors were in its line, helped extract Etten with a fractured leg, and reported the injury without embellishment.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVII. THE MARGIN LEFT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -6343,6 +6379,18 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "kelm-obligation-cargo-reweigh-xvii",
+          "order": "Require a second measured weighing of forward produce bins before sale or disposal; preserve discrepancies rather than altering manifests to match estimates.",
+          "issuingAuthority": "Kelm to cargo master and Meren Holt",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVII. THE MARGIN LEFT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [
@@ -6453,6 +6501,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XVI. THE WEIGHT OF THE ROAD",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XVII. THE MARGIN LEFT",
+          "changeSummary": "Accepted continuing refrigeration and convoy supply costs; ordered reweighing before sale or disposal without opening bins under emergency conditions; countersigned a report without arrival estimate.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVII. THE MARGIN LEFT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
             "sourceType": "continuation"
           }
         }
@@ -6665,6 +6723,22 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "holt-kb-forward-bin-reweigh-xvii",
+          "information": "One forward produce bin remains heavier than the pre-impact manifest estimate, among other cargo discrepancies; Kelm has ordered a second measured weighing before sale or disposal.",
+          "epistemicStatus": "observed",
+          "belief": "A discrepancy is not evidence of deliberate interference without corroboration.",
+          "certainty": "high for recorded figures; cause unresolved",
+          "sourceCharacter": "Cargo working book and Kelm",
+          "actionTaken": "Preserved the original figure and opened a separate comparison sheet.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVII. THE MARGIN LEFT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -6784,6 +6858,16 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "segment": "XVII. THE MARGIN LEFT",
+          "changeSummary": "Recorded 286 metres while preserving prior movement and telemetry records; carried forward the heavy-bin discrepancy without inventing a corrected figure.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVII. THE MARGIN LEFT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -6885,6 +6969,22 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XVI. THE WEIGHT OF THE ROAD",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "sella-kb-tackle-angle-xvii",
+          "information": "A proposed anchor drawing reused a retired marker, invalidating its load-angle reference; corrected and newly measured tackle angles supported inspected movement from 210 to 286 metres.",
+          "epistemicStatus": "confirmed",
+          "belief": "Successful prior stages do not certify future stages or unrestricted thrust.",
+          "certainty": "high for direct load traces and certified stages",
+          "sourceCharacter": "Survey and recovery chief drawings; own inspection",
+          "actionTaken": "Rejected obsolete marker, inspected pulley mount and signed only completed movement stages.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVII. THE MARGIN LEFT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
             "sourceType": "continuation"
           }
         }
@@ -7057,6 +7157,16 @@
             "story": "The Long Patrol of Broussard",
             "segment": "XVI. THE WEIGHT OF THE ROAD",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "XVII. THE MARGIN LEFT",
+          "changeSummary": "Caught the obsolete anchor reference, required new measurement and load-angle correction, and maintained staged certification through 286 metres.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XVII. THE MARGIN LEFT",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-07.md",
             "sourceType": "continuation"
           }
         }
