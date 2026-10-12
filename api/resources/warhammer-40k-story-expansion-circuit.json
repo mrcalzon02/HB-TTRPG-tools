@@ -241,7 +241,14 @@
         "11 — VIGILANT SHADE provenance and jurisdiction become unavoidable."
       ],
       "completionBoundary": "End this book once the New Presidio Ork emergency is materially contained, VIGILANT SHADE’s causal role can no longer be buried as an ordinary incursion, Waldorf’s evidence chain has reached a defensible endpoint, project accountability has entered an enforceable institutional process, and Yarrick has received and consciously accepted or contested a near-term Imperial disposition. Do not continue into a Ghazghkull campaign, a second resurrection experiment or an unrelated conspiracy as Installment 19; those are separate stories.",
-      "nextSlice": "Installment 7: begin with Highmount’s concrete response to Yarrick’s reinforcement demand. Preserve the active New Presidio battle, Trellis/Waldorf witness chain, Yarrick’s private identity discrepancies, the project’s hidden causal role and the Ghazghkull statement as future horizon. Waldorf must preserve investigative evidence while soldiers fight the emergency; he is not to become a substitute battlefield hero."
+      "nextSlice": "Installment 7: begin with Highmount’s concrete response to Yarrick’s reinforcement demand. Preserve the active New Presidio battle, Trellis/Waldorf witness chain, Yarrick’s private identity discrepancies, the project’s hidden causal role and the Ghazghkull statement as future horizon. Waldorf must preserve investigative evidence while soldiers fight the emergency; he is not to become a substitute battlefield hero.",
+      "legacyBackfillRequired": false,
+      "characterContinuityAssessment": {
+        "sufficientForNewProse": true,
+        "segment": "Prewrite reconciliation through source installment 6",
+        "durableCharacterStateChanged": true,
+        "reason": "Backfilled six established VIGILANT SHADE personae and registered the three active surface witnesses/command figures (Waldorf, Trellis and the returned Yarrick claimant) with bounded source-provenance ledgers and touch logs. No new installment published in this reconciliation run."
+      }
     },
     {
       "id": "tenelja-station",

@@ -39,7 +39,7 @@
     "forgotten-explicitly",
     "memory-altered"
   ],
-  "characterCount": 59,
+  "characterCount": 62,
   "seededFrom": {
     "file": "assets/warhammer-40k/imperial-dramatis-personae-v1.js",
     "version": "1.15.0",
@@ -3436,19 +3436,99 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "reinhold-identity-systems-backfill",
+          "knowledge": "A clone body and mnemonic conditioning alone have failed to establish a recovered Yarrick identity; Reinhold treats body, memory, psychic imprint and WAAAGH pressure as separate necessary systems.",
+          "certainty": "direct project experience",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-1",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lcyc58/project_vigilant_shade_part1/",
+            "sourceType": "legacy-backfill"
+          }
+        },
+        {
+          "id": "reinhold-field-stability-backfill",
+          "knowledge": "The first artificial WAAAGH field exceeded safe containment, required shutdown and drove a recalculation toward thousands of Orkoid participants and expanded suppression architecture.",
+          "certainty": "direct readings and project calculations",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-2",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lffz82/project_vigilant_shade_part2/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "secretsKnown": [],
-      "secretsHeld": [],
-      "plansGoals": [],
+      "secretsHeld": [
+        {
+          "id": "reinhold-false-expansion-covers-backfill",
+          "secret": "The project uses concealed construction and staffing covers to disguise an expanded forbidden Orkoid research facility.",
+          "exposureRisk": "severe if audited by outside Imperial authority",
+          "status": "classified",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-3",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lg965s/project_vigilant_shade_part3/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "plansGoals": [
+        {
+          "id": "reinhold-stasis-imprint-backfill",
+          "goal": "Keep Hans preserved in the specialized stasis lattice, control field saturation and complete the soul-cage transfer before the borrowed lens and resources are withdrawn.",
+          "horizon": "immediate project window",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-4",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1ljgl26/project_vigilant_shade_part4/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "skillsCompetence": [],
       "relationshipsTrust": [],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "reinhold-zavoner-final-chance-backfill",
+          "obligation": "Zavoner permits one final project attempt under threat of lethal sanction if the expansion fails.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-3",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lg965s/project_vigilant_shade_part3/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Project VIGILANT SHADE Part-4",
+          "changeSummary": "Source-backed prewrite reconstruction: failed identity methods, unsafe field, covert expansion, Hans preservation and Zavoner's deadline; no claim that Reinhold knows the later New Presidio surface battle.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-4",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1ljgl26/project_vigilant_shade_part4/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ]
     },
     "doc-finkey-vigilant-shade": {
       "personaId": "doc-finkey-vigilant-shade",
@@ -3514,19 +3594,90 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "finkey-waaagh-pressure-backfill",
+          "knowledge": "Finkey understands Orkoid shared fighting impulse and WAAAGH resonance as a living technical medium; interruption of an unstable field may kill immature Orkoids.",
+          "certainty": "specialist observation and direct project work",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-1",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lcyc58/project_vigilant_shade_part1/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
-      "plansGoals": [],
-      "skillsCompetence": [],
-      "relationshipsTrust": [],
+      "plansGoals": [
+        {
+          "id": "finkey-defeat-death-backfill",
+          "goal": "Complete the Yarrick soul-cage transfer and protect the experimental mechanism; explicitly frames death, not humanity, as his adversary.",
+          "horizon": "project completion",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-4",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1ljgl26/project_vigilant_shade_part4/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "skillsCompetence": [
+        {
+          "id": "finkey-ork-buffers-backfill",
+          "domain": "Orkoid biosystems, psychic field buffers and mixed Ork-Imperial engineering",
+          "demonstratedLevel": "practical expert in the project's exceptional conditions",
+          "limitations": "methods are unstable, politically lethal and not proof of general safety",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-3",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lg965s/project_vigilant_shade_part3/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "relationshipsTrust": [
+        {
+          "id": "finkey-zabrin-working-respect-backfill",
+          "counterpartPersonaId": "magos-elebendentis-zabrin",
+          "direction": "Finkey → Zabrin",
+          "trust": "conditional professional collaboration",
+          "currentInterpretation": "Orthodox Magos accepts effective hybrid buffers after testing; doctrinal hostility persists.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-3",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lg965s/project_vigilant_shade_part3/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Project VIGILANT SHADE Part-4",
+          "changeSummary": "Source-backed prewrite reconstruction: specialist field knowledge, working compromise with Zabrin, Painboy/Mekboy resources and his explicit motive to fight death.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-4",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1ljgl26/project_vigilant_shade_part4/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ]
     },
     "inquisitor-atwell-zavoner": {
       "personaId": "inquisitor-atwell-zavoner",
@@ -3588,19 +3739,86 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "zavoner-near-heresy-backfill",
+          "knowledge": "Zavoner recognizes that the project uses unsanctioned xeno-technology, soul-binding and psychic manipulation approaching sanctioned heresy.",
+          "certainty": "his own Omega Black report",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-4",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1ljgl26/project_vigilant_shade_part4/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "secretsKnown": [],
-      "secretsHeld": [],
-      "plansGoals": [],
+      "secretsHeld": [
+        {
+          "id": "zavoner-project-sponsorship-backfill",
+          "secret": "Personal sponsorship, exceptional authorizations, House Integrassra resource arrangements and classified resurrection program.",
+          "exposureRisk": "institutional accountability if the project is exposed",
+          "status": "classified",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-4",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1ljgl26/project_vigilant_shade_part4/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "plansGoals": [
+        {
+          "id": "zavoner-strategic-yarrick-backfill",
+          "goal": "Recover a strategically useful Yarrick and preserve project command authority while confronting the high risk of failure.",
+          "horizon": "project completion",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-4",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1ljgl26/project_vigilant_shade_part4/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "skillsCompetence": [],
       "relationshipsTrust": [],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "zavoner-vyle-report-backfill",
+          "obligation": "Submitted Omega Black report to Lord-Command Inquisitor Hestoran Vyle and awaits further instruction or judgment; has invested favors and resources in the project.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-4",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1ljgl26/project_vigilant_shade_part4/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Project VIGILANT SHADE Part-4",
+          "changeSummary": "Source-backed prewrite reconstruction: informed near-heretical sponsor, costly material favors, final-chance order and pending higher Inquisitorial judgment.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-4",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1ljgl26/project_vigilant_shade_part4/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ]
     },
     "lieutenant-hendrick-laar": {
       "personaId": "lieutenant-hendrick-laar",
@@ -3652,7 +3870,20 @@
           }
         ]
       },
-      "memoriesEvents": [],
+      "memoriesEvents": [
+        {
+          "id": "laar-yarrick-final-service-backfill",
+          "memory": "Served Yarrick personally in his final years and witnessed the Commissar's physical decline; this is firsthand memory, not proof of the returned claimant's identity.",
+          "status": "observed",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-1",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lcyc58/project_vigilant_shade_part1/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "knowledgeBeliefs": [],
       "secretsKnown": [],
       "secretsHeld": [],
@@ -3663,9 +3894,34 @@
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
-      "physicalMedicalState": [],
+      "physicalMedicalState": [
+        {
+          "id": "laar-old-age-augmetics-backfill",
+          "condition": "Unnaturally aged veteran with spinal servo-braces and a tracheal augmetic; no later recovery, location or death is source-confirmed.",
+          "status": "observed",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-1",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lcyc58/project_vigilant_shade_part1/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Project VIGILANT SHADE Part-1",
+          "changeSummary": "Source-backed prewrite reconstruction of former Yarrick service and aged augmented condition; later project whereabouts remain unknown.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-1",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lcyc58/project_vigilant_shade_part1/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ]
     },
     "magos-elebendentis-zabrin": {
       "personaId": "magos-elebendentis-zabrin",
@@ -3725,19 +3981,75 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "zabrin-hybrid-necessary-backfill",
+          "knowledge": "Conventional Mechanicus hardware fails under the project's WAAAGH pressure; layered Ork-Imperial buffering is an operational compromise, not a general doctrinal endorsement.",
+          "certainty": "project testing",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-2",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lffz82/project_vigilant_shade_part2/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
       "plansGoals": [],
-      "skillsCompetence": [],
-      "relationshipsTrust": [],
+      "skillsCompetence": [
+        {
+          "id": "zabrin-hans-stasis-backfill",
+          "domain": "Biologis stasis lattice engineering",
+          "demonstratedLevel": "specified and integrated Pattern Omicron-Null preservation for failing mnemonic witness Hans",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-3",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lg965s/project_vigilant_shade_part3/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "relationshipsTrust": [
+        {
+          "id": "zabrin-finkey-respect-backfill",
+          "counterpartPersonaId": "doc-finkey-vigilant-shade",
+          "direction": "Zabrin → Finkey",
+          "trust": "grudging and conditional",
+          "respect": "increased for practical field insight",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-3",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lg965s/project_vigilant_shade_part3/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Project VIGILANT SHADE Part-3",
+          "changeSummary": "Source-backed prewrite reconstruction: hybrid-buffer concession, bounded respect for Finkey and direct Hans stasis work; later location not established.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-3",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lg965s/project_vigilant_shade_part3/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ]
     },
     "hans-vigilant-shade": {
       "personaId": "hans-vigilant-shade",
@@ -3796,7 +4108,20 @@
           }
         ]
       },
-      "memoriesEvents": [],
+      "memoriesEvents": [
+        {
+          "id": "hans-yarrick-final-witness-backfill",
+          "memory": "Source identifies Hans as the last known living witness to Yarrick's final moments and the person who dressed him for the deathbed; present conscious access to those memories is not established.",
+          "status": "reported",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-2",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lffz82/project_vigilant_shade_part2/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
       "knowledgeBeliefs": [],
       "secretsKnown": [],
       "secretsHeld": [],
@@ -3807,9 +4132,47 @@
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
-      "physicalMedicalState": [],
-      "equipmentResources": [],
-      "chapterTouchLog": []
+      "physicalMedicalState": [
+        {
+          "id": "hans-locked-before-death-backfill",
+          "condition": "Severe biological and mnemonic deterioration arrested in a specialized full-stasis lattice midway through an exhale, immediately before death; neither conventional recovery nor death is established.",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-3",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1lg965s/project_vigilant_shade_part3/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "equipmentResources": [
+        {
+          "id": "hans-anchor-role-backfill",
+          "resource": "Irreplaceable living memory/psychic targeting anchor intended for the Yarrick soul cage; current stasis prevents ordinary testimony.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-4",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1ljgl26/project_vigilant_shade_part4/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "chapterTouchLog": [
+        {
+          "segment": "Project VIGILANT SHADE Part-4",
+          "changeSummary": "Source-backed prewrite reconstruction: historic witness, failing mnemonic integrity and continuing full stasis; do not give him post-stasis speech or knowledge.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Project VIGILANT SHADE Part-4",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1ljgl26/project_vigilant_shade_part4/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ]
     },
     "matron-lagas-atrovald": {
       "personaId": "matron-lagas-atrovald",
@@ -7845,6 +8208,377 @@
         "cause": "accidental electrocution at intermittent energized forward-hold service junction",
         "segment": "XI. THE THIRD MAN"
       }
+    },
+    "detective-waldorf-new-presidio": {
+      "personaId": "detective-waldorf-new-presidio",
+      "referenceId": "PERSONA-060",
+      "name": "Waldorf",
+      "baseline": {
+        "title": "Detective Waldorf",
+        "rank": "Junior detective",
+        "role": "New Presidio Arbites investigator and original witness to the returned Commissar's appearance",
+        "branch": "Adeptus Arbites / New Presidio precinct",
+        "affiliations": [
+          "New Presidio Arbites",
+          "Varnhold estate investigation"
+        ],
+        "currentLocation": "New Presidio · Varnhold estate emergency command and northern warehouse perimeter",
+        "status": "Active at the latest source endpoint; assisting scene command and military communications amid the Ork breach.",
+        "standing": "Source-attached investigator and independent eyewitness",
+        "temperament": [
+          "Dogged",
+          "Procedural",
+          "Dryly sardonic",
+          "Unwilling to abandon cold cases",
+          "Shaken but functional in crisis"
+        ],
+        "doctrine": "Protect testimony and physical evidence even when local jurisdiction and institutional convenience encourage an investigation to disappear.",
+        "source": {
+          "label": "A rain soaked day",
+          "url": "https://www.reddit.com/r/EmperorProtects/comments/1jqc7we/a_rain_soaked_day/",
+          "status": "verified"
+        },
+        "sourceAuthority": "Direct viewpoint in the archived source and continuing witness in A dreary thunderstorm. He has not personally verified the underground project's sponsorship, Yarrick's metaphysical identity or the cause of the Ork emergence.",
+        "baselineRelationshipNames": [
+          "Detectives Grayson and Ralston",
+          "Patrolmen Henshaw and Carver",
+          "Returned Sebastian Yarrick claimant",
+          "Captain Irvine Trellis"
+        ],
+        "baselineStoryBeats": [
+          {
+            "place": "New Presidio Arbites precinct",
+            "beat": "Continued investigating discarded cases despite hostility, poor resources and the pain of a new prosthetic leg."
+          },
+          {
+            "place": "Varnhold estate industrial yard",
+            "beat": "Witnessed the apparent Commissar kill an Ork, heard the Ghazghkull warning, and radioed that Yarrick had returned."
+          },
+          {
+            "place": "Varnhold estate command",
+            "beat": "Relayed authentication codes and assisted communications while the precinct shifted to evacuation and emergency defense."
+          }
+        ]
+      },
+      "memoriesEvents": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "waldorf-ork-claim-backfill",
+          "information": "Personally saw an Ork fight and heard the apparent Commissar identify himself as Sebastian Yarrick; later heard that authentication codes returned valid.",
+          "epistemicStatus": "observed",
+          "belief": "recognizes extraordinary apparent evidence without proving identity or origin",
+          "certainty": "high for witnessed events, unresolved for metaphysical identity",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "secretsKnown": [],
+      "secretsHeld": [],
+      "plansGoals": [
+        {
+          "id": "waldorf-case-evidence-backfill",
+          "goal": "Remain an investigator while assisting emergency response; the original Varnhold estate inquiry has not been evidentially closed.",
+          "horizon": "immediate",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "skillsCompetence": [],
+      "relationshipsTrust": [
+        {
+          "id": "waldorf-returned-yarrick-backfill",
+          "counterpartPersonaId": "returned-sebastian-yarrick-vigilant-shade",
+          "direction": "Waldorf → returned claimant",
+          "trust": "awed but evidentially incomplete",
+          "currentInterpretation": "Direct witness to extraordinary combat and reported codes; uncertain about origin and personal continuity.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "temperamentPerformance": [],
+      "preferencesAversions": [],
+      "faithIdeologyLoyalty": [],
+      "ordersObligationsLeverage": [],
+      "physicalMedicalState": [
+        {
+          "id": "waldorf-prosthetic-backfill",
+          "condition": "Recent prosthetic leg with phantom-limb pain; not an unhindered infantry combatant.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A rain soaked day",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jqc7we/a_rain_soaked_day/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "equipmentResources": [],
+      "chapterTouchLog": [
+        {
+          "segment": "A dreary thunderstorm",
+          "changeSummary": "Source-backed prewrite reconstruction: burdened casework, prosthetic limits, Ork eyewitness account, authentication report and continuing investigative responsibility.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ]
+    },
+    "captain-irvine-trellis": {
+      "personaId": "captain-irvine-trellis",
+      "referenceId": "PERSONA-061",
+      "name": "Irvine Trellis",
+      "baseline": {
+        "title": "Captain Irvine Trellis",
+        "rank": "Captain",
+        "role": "Highmount military verification officer dispatched to assess the returned Yarrick claimant",
+        "branch": "Astra Militarum / New Presidio garrison",
+        "affiliations": [
+          "New Presidio Forces",
+          "Highmount Command"
+        ],
+        "currentLocation": "New Presidio · Varnhold estate military shuttle and emergency command post",
+        "status": "Active at latest source endpoint; relayed the reinforcement demand to General Helgren after observing the claimant.",
+        "standing": "Source-attached military captain and verification witness",
+        "temperament": [
+          "Initially skeptical",
+          "Formally disciplined",
+          "Susceptible to awe but capable of transmitting inconvenient military facts"
+        ],
+        "doctrine": "Verify exceptional identity claims through command procedure while keeping operational evidence and immediate threats in view.",
+        "source": {
+          "label": "A dreary thunderstorm",
+          "url": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+          "status": "verified"
+        },
+        "sourceAuthority": "Directly depicted in the source as a military verification officer. His report of what he sees does not settle the claimant's ontological identity.",
+        "baselineRelationshipNames": [
+          "General Snadler Helgren",
+          "Returned Sebastian Yarrick claimant",
+          "New Presidio Arbites"
+        ],
+        "baselineStoryBeats": [
+          {
+            "place": "Highmount / New Presidio",
+            "beat": "Dispatched to verify the impossible Yarrick claim after authentic-looking codes were reported."
+          },
+          {
+            "place": "Varnhold estate command",
+            "beat": "Observed the claimant and saluted, then relayed the refusal to travel and the request for immediate reinforcements."
+          }
+        ]
+      },
+      "memoriesEvents": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "trellis-identity-claim-backfill",
+          "information": "Highmount received apparently valid Yarrick authentication codes; Trellis observed a younger figure with the old scars, augmetic eye, claw and command bearing.",
+          "epistemicStatus": "observed",
+          "belief": "initial expectation of fraud weakened by direct encounter",
+          "certainty": "unresolved regarding metaphysical identity",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "secretsKnown": [],
+      "secretsHeld": [],
+      "plansGoals": [],
+      "skillsCompetence": [],
+      "relationshipsTrust": [],
+      "temperamentPerformance": [],
+      "preferencesAversions": [],
+      "faithIdeologyLoyalty": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "trellis-helgren-report-backfill",
+          "obligation": "Convey General Helgren's summons, then report that the claimant refuses transport and requests immediate reinforcements for an active Ork breach.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "physicalMedicalState": [],
+      "equipmentResources": [],
+      "chapterTouchLog": [
+        {
+          "segment": "A dreary thunderstorm",
+          "changeSummary": "Source-backed prewrite reconstruction: skeptical verifier became a witness and transmitted the military reinforcement request; no final identity certification.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ]
+    },
+    "returned-sebastian-yarrick-vigilant-shade": {
+      "personaId": "returned-sebastian-yarrick-vigilant-shade",
+      "referenceId": "PERSONA-062",
+      "name": "Sebastian Yarrick (returned claimant)",
+      "baseline": {
+        "title": "Returned Commissar Sebastian Yarrick",
+        "rank": "Lord Commissar (claimed; historical rank and codes are recognized)",
+        "role": "Returned Yarrick claimant directing immediate defense against the Ork emergence on New Presidio",
+        "branch": "Astra Militarum / identity under extraordinary review",
+        "affiliations": [
+          "New Presidio emergency defense (provisional)",
+          "Historical Astra Militarum service as claimed"
+        ],
+        "currentLocation": "New Presidio · Varnhold estate command perimeter",
+        "status": "Alive and active at the latest source endpoint; apparent identity is accepted by many witnesses but continuity of soul and body is unresolved.",
+        "standing": "Source-authorized famous canon figure in this story line only; returned-identity question remains open",
+        "temperament": [
+          "Commanding",
+          "Tactically urgent",
+          "Unwilling to abandon a live battlefield",
+          "Privately disturbed by bodily-memory discontinuity"
+        ],
+        "doctrine": "Contain the greenskin emergence, evacuate civilians, and bring actual military force to bear before the Orks improvise greater weapons.",
+        "source": {
+          "label": "A dreary thunderstorm",
+          "url": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+          "status": "verified"
+        },
+        "sourceAuthority": "The original source explicitly introduces the returned figure as Yarrick, authorizing his appearance in this line. Archive treatment deliberately distinguishes apparent historical identity, authentic-looking codes, memory and command competence from unproven continuity of body, soul and origin.",
+        "baselineRelationshipNames": [
+          "Detective Waldorf",
+          "Captain Irvine Trellis",
+          "General Snadler Helgren",
+          "Ghazghkull Thraka"
+        ],
+        "baselineStoryBeats": [
+          {
+            "place": "Varnhold estate industrial yard",
+            "beat": "Killed an Ork before Arbites witnesses, heard a claim about Ghazghkull, and identified himself as Sebastian Yarrick."
+          },
+          {
+            "place": "New Presidio command",
+            "beat": "Provided authentication codes and described underground Ork breeding and collapsing containment; urged evacuation."
+          },
+          {
+            "place": "Varnhold estate command",
+            "beat": "Declined transfer to Highmount, experienced a private bodily-memory discrepancy, and demanded military reinforcement after showing the ongoing breach."
+          }
+        ]
+      },
+      "memoriesEvents": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "returned-yarrick-underground-backfill",
+          "information": "Remembers awakening inside an Ork-breeding labyrinth, seeing containment fail and reaching the surface; does not know the project's sponsors or how he was made.",
+          "epistemicStatus": "observed",
+          "belief": "identifies himself as Sebastian Yarrick",
+          "certainty": "high about experienced scenes; unresolved about provenance",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "secretsKnown": [],
+      "secretsHeld": [
+        {
+          "id": "returned-yarrick-discontinuity-backfill",
+          "secret": "Privately experienced an involuntary mismatch between remembered battle movement and the present body's weight/shape.",
+          "exposureRisk": "unknown; no witness noticed the brief stumble",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "plansGoals": [
+        {
+          "id": "returned-yarrick-defend-presidio-backfill",
+          "goal": "Keep civilians away from the breach, bring Astra Militarum reinforcements to the surface and prevent the Orks from assembling greater wargear.",
+          "horizon": "immediate battle",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "skillsCompetence": [],
+      "relationshipsTrust": [],
+      "temperamentPerformance": [],
+      "preferencesAversions": [],
+      "faithIdeologyLoyalty": [],
+      "ordersObligationsLeverage": [],
+      "physicalMedicalState": [],
+      "equipmentResources": [
+        {
+          "id": "returned-yarrick-claw-eye-backfill",
+          "resource": "Functional powered claw and red augmetic eye, along with recognized military codes; origin and identity continuity unresolved.",
+          "status": "observed",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A rain soaked day",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jqc7we/a_rain_soaked_day/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ],
+      "chapterTouchLog": [
+        {
+          "segment": "A dreary thunderstorm",
+          "changeSummary": "Source-backed prewrite reconstruction: direct Ork combat, claimed identity, bounded ignorance of his creation, private body-memory discrepancy and refusal to abandon the live battle.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "A dreary thunderstorm",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourcePostUrl": "https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/",
+            "sourceType": "legacy-backfill"
+          }
+        }
+      ]
     }
   }
 }

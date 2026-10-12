@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const VERSION='1.15.1';
+const VERSION='1.16.0';
 const SOURCE_STATUS='verified';
 const freezeList=a=>Object.freeze(a.map(x=>typeof x==='object'&&x?Object.freeze(x):x));
 const PERSONAE=Object.freeze([
@@ -179,6 +179,75 @@ Object.freeze({
 }),
 Object.freeze({
  id:'pallas-dorn-hesperant',referenceId:'PERSONA-059',name:'Pallas Dorn',title:'Pallas Dorn',rank:'Cargo Crew',role:'Hesperant Vale cargo crew member assigned to forward-hold inspection',branch:'Imperial civilian freight / surface convoy service',affiliations:freezeList(['Hesperant Vale']),currentLocation:'Hesperant Vale · recovered from forward hold service corridor · deceased',mapNodeIds:freezeList([]),offMapConcordance:'High Presidio · seasonal frozen-ocean trade route; exact Cafarron Corridor system node not yet mapped',status:'Deceased in Chapter XI; electrocuted after finding Jerrik Noll and Edren Vale down and attempting to help them.',standing:'Hesperant Vale cargo casualty · accidental electrocution during attempted rescue',biography:'Pallas Dorn was one of three Hesperant Vale cargo crew sent to inspect the forward bulk-produce holds for secondary damage. In Chapter XI he is found dead beyond Jerrik Noll and Edren Vale, still clutching fabric from Edren’s coat. The scene indicates he encountered the first two casualties and was electrocuted when he attempted to help them.',temperament:freezeList([]),doctrine:'Not yet established in source prose.',physicalHistory:freezeList([]),possessions:freezeList([]),relationships:freezeList([{name:'Jerrik Noll and Edren Vale',nature:'Fellow cargo crew assigned to the same forward-hold inspection sweep.'}]),storyBeats:freezeList([{place:'Hesperant Vale · forward holds',beat:'Entered the forward hold complex with Jerrik Noll and Edren Vale and failed to return by Chapter X.'},{place:'Hesperant Vale · forward service corridor',beat:'Was found dead after apparently reaching for Edren, becoming the third casualty in the same intermittent electrical fault.'}]),source:Object.freeze({label:'The Long Patrol of Broussard — X. The Forward Holds',url:'assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md',status:'authorial'}),sourceAuthority:'Chapter X source recovery establishes Pallas’s disappearance; user-directed Chapter XI continuation establishes that he died attempting to help the first two casualties at the energized service junction.'
+}),
+Object.freeze({
+ id:"detective-waldorf-new-presidio",
+ referenceId:"PERSONA-060",
+ name:"Waldorf",
+ title:"Detective Waldorf",
+ rank:"Junior detective",
+ role:"New Presidio Arbites investigator and original witness to the returned Commissar's appearance",
+ branch:"Adeptus Arbites / New Presidio precinct",
+ affiliations:freezeList(["New Presidio Arbites","Varnhold estate investigation"]),
+ currentLocation:"New Presidio · Varnhold estate emergency command and northern warehouse perimeter",
+ offMapConcordance:"New Presidio · Varnhold estate; no verified mapped system coordinate",
+ status:"Active at the latest source endpoint; assisting scene command and military communications amid the Ork breach.",
+ standing:"Source-attached investigator and independent eyewitness",
+ biography:"Waldorf is a stubborn junior Arbites detective whose unpopular insistence on pursuing neglected cases has left him with an overburdened desk. He has a recently fitted prosthetic leg and is assigned patrolmen Henshaw and Carver during the Varnhold estate search. He personally witnesses an Ork fighting a man who identifies himself as Sebastian Yarrick, relays that claim and valid-seeming authentication codes, and becomes an accidental communications intermediary. His direct observations and the claimant's statements are distinct evidence, and he has not yet proven the resurrection mechanism or the identity of its sponsors.",
+ temperament:freezeList(["Dogged","Procedural","Dryly sardonic","Unwilling to abandon cold cases","Shaken but functional in crisis"]),
+ doctrine:"Protect testimony and physical evidence even when local jurisdiction and institutional convenience encourage an investigation to disappear.",
+ physicalHistory:freezeList(["Recently fitted prosthetic leg; phantom-limb pain and habitual attention to its seam are directly depicted."]),
+ possessions:freezeList(["Concealed detective's revolver","Working precinct radio","Prosthetic leg"]),
+ relationships:freezeList([{"name":"Detectives Grayson and Ralston","nature":"Precinct colleagues who share institutional frustrations and informal conversation."},{"name":"Patrolmen Henshaw and Carver","nature":"Assigned squad members on the Varnhold estate search."},{"name":"Returned Sebastian Yarrick claimant","nature":"Direct eyewitness to the Ork fight and first investigator to relay the claimant's extraordinary identification and military request."},{"name":"Captain Irvine Trellis","nature":"Military verification officer whose arrival and communications Waldorf witnesses during the emergency."}]),
+ storyBeats:freezeList([{"place":"New Presidio Arbites precinct","beat":"Continued investigating discarded cases despite hostility, poor resources and the pain of a new prosthetic leg."},{"place":"Varnhold estate industrial yard","beat":"Witnessed the apparent Commissar kill an Ork, heard the Ghazghkull warning, and radioed that Yarrick had returned."},{"place":"Varnhold estate command","beat":"Relayed authentication codes and assisted communications while the precinct shifted to evacuation and emergency defense."}]),
+ source:Object.freeze({"label":"A rain soaked day","url":"https://www.reddit.com/r/EmperorProtects/comments/1jqc7we/a_rain_soaked_day/","status":"verified"}),
+ sourceAuthority:"Direct viewpoint in the archived source and continuing witness in A dreary thunderstorm. He has not personally verified the underground project's sponsorship, Yarrick's metaphysical identity or the cause of the Ork emergence."
+}),
+Object.freeze({
+ id:"captain-irvine-trellis",
+ referenceId:"PERSONA-061",
+ name:"Irvine Trellis",
+ title:"Captain Irvine Trellis",
+ rank:"Captain",
+ role:"Highmount military verification officer dispatched to assess the returned Yarrick claimant",
+ branch:"Astra Militarum / New Presidio garrison",
+ affiliations:freezeList(["New Presidio Forces","Highmount Command"]),
+ currentLocation:"New Presidio · Varnhold estate military shuttle and emergency command post",
+ offMapConcordance:"New Presidio · Varnhold estate; no verified mapped system coordinate",
+ status:"Active at latest source endpoint; relayed the reinforcement demand to General Helgren after observing the claimant.",
+ standing:"Source-attached military captain and verification witness",
+ biography:"Captain Irvine Trellis is dispatched from Highmount with a transport shuttle to examine a purported Sebastian Yarrick after the old authentication codes return as valid. He initially expects a fraud, then observes a figure with the familiar scars, augmetic eye, power claw, command bearing and a younger, stronger body than the remembered dead Commissar. Trellis reports to General Snadler Helgren that the claimant refuses an escorted trip to Highmount and requests reinforcements for an ongoing Ork emergency. His respect and revised assessment are not proof of metaphysical identity.",
+ temperament:freezeList(["Initially skeptical","Formally disciplined","Susceptible to awe but capable of transmitting inconvenient military facts"]),
+ doctrine:"Verify exceptional identity claims through command procedure while keeping operational evidence and immediate threats in view.",
+ physicalHistory:freezeList([]),
+ possessions:freezeList(["Military vox link to Highmount","Assigned transport shuttle"]),
+ relationships:freezeList([{"name":"General Snadler Helgren","nature":"Superior whose summons Trellis is ordered to convey and whose command receives his reinforcement report."},{"name":"Returned Sebastian Yarrick claimant","nature":"Subject of an initially skeptical verification mission; Trellis is impressed by his appearance and military authority without completing an identity proof."},{"name":"New Presidio Arbites","nature":"Local responders whose emergency command post Trellis visits."}]),
+ storyBeats:freezeList([{"place":"Highmount / New Presidio","beat":"Dispatched to verify the impossible Yarrick claim after authentic-looking codes were reported."},{"place":"Varnhold estate command","beat":"Observed the claimant and saluted, then relayed the refusal to travel and the request for immediate reinforcements."}]),
+ source:Object.freeze({"label":"A dreary thunderstorm","url":"https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/","status":"verified"}),
+ sourceAuthority:"Directly depicted in the source as a military verification officer. His report of what he sees does not settle the claimant's ontological identity."
+}),
+Object.freeze({
+ id:"returned-sebastian-yarrick-vigilant-shade",
+ referenceId:"PERSONA-062",
+ name:"Sebastian Yarrick (returned claimant)",
+ title:"Returned Commissar Sebastian Yarrick",
+ rank:"Lord Commissar (claimed; historical rank and codes are recognized)",
+ role:"Returned Yarrick claimant directing immediate defense against the Ork emergence on New Presidio",
+ branch:"Astra Militarum / identity under extraordinary review",
+ affiliations:freezeList(["New Presidio emergency defense (provisional)","Historical Astra Militarum service as claimed"]),
+ currentLocation:"New Presidio · Varnhold estate command perimeter",
+ offMapConcordance:"New Presidio · Varnhold estate; no verified mapped system coordinate",
+ status:"Alive and active at the latest source endpoint; apparent identity is accepted by many witnesses but continuity of soul and body is unresolved.",
+ standing:"Source-authorized famous canon figure in this story line only; returned-identity question remains open",
+ biography:"A man bearing the appearance, military memories, scars, augmetic eye, power claw and valid-seeming authentication codes of the deceased Commissar Sebastian Yarrick emerges from an underground Ork-breeding complex and is witnessed killing an Ork on the Varnhold estate. He remembers Yarrick's wars and assumes his duty, yet privately experiences brief discrepancies between remembered movement and the shape and weight of his present body. He refuses an escorted journey to Highmount while Orks break toward the surface, demanding troops instead. Neither witnesses nor narrator have certified metaphysical identity.",
+ temperament:freezeList(["Commanding","Tactically urgent","Unwilling to abandon a live battlefield","Privately disturbed by bodily-memory discontinuity"]),
+ doctrine:"Contain the greenskin emergence, evacuate civilians, and bring actual military force to bear before the Orks improvise greater weapons.",
+ physicalHistory:freezeList(["Appears younger and stronger than the dead historical Yarrick remembered by Trellis.","Has a glowing red augmetic eye and powered claw.","Privately experiences momentary disorientation when recalled battle movements do not fit his present body."]),
+ possessions:freezeList(["Powered claw","Augmetic eye","Commissarial greatcoat and regalia"]),
+ relationships:freezeList([{"name":"Detective Waldorf","nature":"First independent investigator who witnesses his Ork fight and relays his claimed identity."},{"name":"Captain Irvine Trellis","nature":"Verification officer whom he asks to relay a reinforcement demand rather than escort him to Highmount."},{"name":"General Snadler Helgren","nature":"Remote military commander whose skepticism he confronts with direct battlefield video evidence."},{"name":"Ghazghkull Thraka","nature":"An Ork claims Ghazghkull is looking for him; no present encounter or independent corroboration occurs in the source."}]),
+ storyBeats:freezeList([{"place":"Varnhold estate industrial yard","beat":"Killed an Ork before Arbites witnesses, heard a claim about Ghazghkull, and identified himself as Sebastian Yarrick."},{"place":"New Presidio command","beat":"Provided authentication codes and described underground Ork breeding and collapsing containment; urged evacuation."},{"place":"Varnhold estate command","beat":"Declined transfer to Highmount, experienced a private bodily-memory discrepancy, and demanded military reinforcement after showing the ongoing breach."}]),
+ source:Object.freeze({"label":"A dreary thunderstorm","url":"https://www.reddit.com/r/EmperorProtects/comments/1jr6yjc/a_dreary_thunderstorm/","status":"verified"}),
+ sourceAuthority:"The original source explicitly introduces the returned figure as Yarrick, authorizing his appearance in this line. Archive treatment deliberately distinguishes apparent historical identity, authentic-looking codes, memory and command competence from unproven continuity of body, soul and origin."
 })
 
 ]);
@@ -190,6 +259,6 @@ function chronology(p){if(p.offMapConcordance)return`Extra-sector · ${p.offMapC
 function recordFor(p){return Object.freeze({id:`dramatis-${p.id}`,referenceId:p.referenceId,name:p.title,category:'personae',objectType:'Chronicle-attached Imperial person',provenance:'story-grounded',confidence:'Confirmed',status:p.status,classification:p.standing,summary:p.biography,relationships:Object.freeze(p.relationships.map(x=>`${x.name}: ${x.nature}`)),mapNodeIds:p.mapNodeIds,tags:Object.freeze(['dramatis personae',p.branch,p.role,...p.affiliations]),source:p.source,sources:sourceHistory(p),keyStory:p.source.label,logistics:Object.freeze({kind:'dramatis-persona',personId:p.id,branch:p.branch,rank:p.rank,status:p.status,currentLocation:p.currentLocation})})}
 const records=Object.freeze(PERSONAE.map(recordFor));
 function renderRecordContext(rec){const id=rec?.logistics?.personId,p=byId.get(id);if(!p)return null;const sec=E('section','wh-entry-section wh-dramatis-persona'),dl=E('dl','wh-entry-ledger');sec.append(E('p','wh-kicker','♙ Archivum Personae · Chronicle-Sealed Dramatis Persona'),E('h3','',p.title),E('p','wh-entry-copy',p.biography));[['Present-era concordance',chronology(p)],['Rank / office',p.rank],['Imperial arm',p.branch],['Recorded role',p.role],['Affiliations',p.affiliations],['Latest attached location',p.currentLocation],['Present standing',p.status],['Attached chronicle seals',sourceHistory(p).map(s=>s.label)],['Archive authority',p.sourceAuthority],['Temperament entered from testimony',p.temperament],['Observed doctrine / working method',p.doctrine],['Known physical history',p.physicalHistory],['Known possessions / equipment',p.possessions]].forEach(x=>D(dl,...x));sec.append(dl);if(p.relationships.length){const d=E('details','wh-linked'),q=E('summary','',`Unseal personal & institutional concordances · ${p.relationships.length}`),body=E('div','wh-docket-grid');for(const r of p.relationships){const a=E('article','wh-docket-card');a.append(E('h5','',r.name),E('p','',r.nature));body.append(a)}d.append(q,body);sec.append(d)}if(p.storyBeats.length){const d=E('details','wh-linked'),q=E('summary','',`Unseal attached life testimony · ${p.storyBeats.length}`),body=E('div','wh-medicae-history-list');for(const beat of p.storyBeats){const a=E('article','wh-medicae-history-row');a.append(E('strong','',beat.place),E('p','',beat.beat));body.append(a)}d.append(q,body);sec.append(d)}return sec}
-function validate(){const ids=new Set(),refs=new Set(),bad=[],sourceRoute=/^https:\/\/www\.reddit\.com\/r\/EmperorProtects\/comments\/[a-z0-9]+\//i,localAuthorial=/^assets\/warhammer-40k\/lore\/.+\.md$/i,validSource=s=>!!s?.url&&((s.status==='verified'&&sourceRoute.test(s.url))||(s.status==='authorial'&&localAuthorial.test(s.url)));for(const p of PERSONAE){const sources=sourceHistory(p);if(ids.has(p.id)||refs.has(p.referenceId)||!p.name||!sources.length||sources.some(s=>!validSource(s))||!p.biography||!(p.mapNodeIds?.length||p.offMapConcordance)||!p.storyBeats?.length||!p.relationships?.length)bad.push(p.id);ids.add(p.id);refs.add(p.referenceId)}return Object.freeze({personae:PERSONAE.length,duplicateOrInvalid:Object.freeze(bad),allSourceSealed:PERSONAE.every(p=>sourceHistory(p).every(validSource)),allValid:PERSONAE.length===59&&!bad.length})}
+function validate(){const ids=new Set(),refs=new Set(),bad=[],sourceRoute=/^https:\/\/www\.reddit\.com\/r\/EmperorProtects\/comments\/[a-z0-9]+\//i,localAuthorial=/^assets\/warhammer-40k\/lore\/.+\.md$/i,validSource=s=>!!s?.url&&((s.status==='verified'&&sourceRoute.test(s.url))||(s.status==='authorial'&&localAuthorial.test(s.url)));for(const p of PERSONAE){const sources=sourceHistory(p);if(ids.has(p.id)||refs.has(p.referenceId)||!p.name||!sources.length||sources.some(s=>!validSource(s))||!p.biography||!(p.mapNodeIds?.length||p.offMapConcordance)||!p.storyBeats?.length||!p.relationships?.length)bad.push(p.id);ids.add(p.id);refs.add(p.referenceId)}return Object.freeze({personae:PERSONAE.length,duplicateOrInvalid:Object.freeze(bad),allSourceSealed:PERSONAE.every(p=>sourceHistory(p).every(validSource)),allValid:PERSONAE.length===62&&!bad.length})}
 window.CafarronDramatisPersonaeV1=Object.freeze({VERSION,PERSONAE,records,byId,sourceHistory,renderRecordContext,validate});
 })();
