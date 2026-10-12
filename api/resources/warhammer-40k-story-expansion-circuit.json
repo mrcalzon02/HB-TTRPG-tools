@@ -83,9 +83,9 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
       "status": "active",
-      "currentEndpoint": "Continuation VIII — The Cost of an Answer. After an expensive and inconclusive live counterpart trial, the Academy runs a non-graded two-command seminar with existing cadets. The relief transport delivers two urgent membrane pallets and evacuates four simulated workers, but five pallets remain aboard and the damaged berth remains closed. The separate first accounts and later cross-brief debrief expose reasonable but incomplete assumptions without proving better fleet performance. House Caldrake receives signed findings, not private transcripts. The Headmaster requires an actual staffing and funding plan before another independent fleet assessment.",
-      "nextSlice": "Continuation IX — Resolve or explicitly defer the fleet's staffing and funding decision for another independent counterpart assessment. Show the practical consequences of displaced Academy training and observer scrutiny; preserve signed-findings access, sealed cadet debriefs, original marks, appeal rights and the conventional course. Do not treat non-graded seminar results as evidence of superior fleet performance.",
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
+      "currentEndpoint": "Continuation IX — The Hours Owed. The fleet's second independent counterpart assessment was deferred until the next review cycle, pending restoration of displaced engine-room exercises and an approved staffing/funding plan. The Academy restored two cadets' gunnery review, completed Hall Four's equipment check, and rostered the technician's owed rest. Caldrake received signed findings and a corrected public notice; its narrower custody challenge remains open. Original marks, sealed cadet records, appeals and the conventional course are unchanged. No improved fleet performance has been established.",
+      "nextSlice": "Continuation X — Follow Caldrake's seal-custody challenge through ordinary review; reconcile the fleet's displaced exercises and independent staffing costs before a new trial can be approved. Preserve original marks, privacy and the conventional course.",
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
       "eraLock": {
         "era": "Mature Imperium / late-era Imperial Navy Academy setting; exact millennium not fixed by the attached chronicle",
         "allowedInstitutions": [
@@ -102,9 +102,9 @@
       "chapterCapRule": "Hard cap of 40 chapters per book; Chapter XL is the latest permissible chapter number within a book.",
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "Continuation VIII — The Cost of an Answer",
+        "segment": "Continuation IX — The Hours Owed",
         "durableCharacterStateChanged": true,
-        "reason": "Five established-character VII backfill touch logs, five VIII touch logs and eight sourced temporal ledger entries reconciled; 59 personae preserved."
+        "reason": "Five character touch logs and six durable entries added; 63 personae preserved."
       }
     },
     {

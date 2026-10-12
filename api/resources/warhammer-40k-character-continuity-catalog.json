@@ -5272,6 +5272,18 @@
           },
           "knowledge": "The independent counterpart trial demonstrated real conflicts of jurisdiction and costly choices, not proven superiority of the pilot.",
           "certainty": "observed in committed prose"
+        },
+        {
+          "id": "prite-institutional-refusal-cost-ix",
+          "knowledge": "The gunnery instructor, bursar, fleet evaluator, Headmaster and Caldrake observer each exercised distinct legitimate limits; the Academy must count displaced instruction and cannot present its non-graded seminar as fleet-performance proof.",
+          "certainty": "direct observed institutional decisions",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation IX — The Hours Owed",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -5311,6 +5323,18 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation V — The Minutes Between Orders",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "prite-funded-fleet-reassessment-ix",
+          "goal": "Seek another independent human-counterpart fleet assessment only after displaced training is restored and an independently staffed, funded, bounded evaluation is authorized; no date or approval exists yet.",
+          "horizon": "next fleet review cycle",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation IX — The Hours Owed",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
             "sourceType": "continuation"
           }
         }
@@ -5425,6 +5449,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation VIII — The Cost of an Answer",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation IX — The Hours Owed",
+          "changeSummary": "Accepted deferral of another independent fleet trial after learning that Academy money cannot replace fleet staff availability; surrendered his next demonstration period to repay the gunnery review, distinguished teaching from fleet proof, and left the unnumbered authority question open.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation IX — The Hours Owed",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
             "sourceType": "continuation"
           }
         }
@@ -5625,7 +5659,19 @@
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
-      "equipmentResources": [],
+      "equipmentResources": [
+        {
+          "id": "darcelle-hall-four-restoration-ix",
+          "resource": "Hall Four replacement emitter contact passed inspection for the restored gunnery review; the technician's owed rest was entered on the duty roster. The seminar's actual maintenance cost remains accounted to instructional use.",
+          "status": "confirmed",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation IX — The Hours Owed",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "chapterTouchLog": [
         {
           "segment": "Continuation I — The First Lecture",
@@ -5686,6 +5732,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation VIII — The Cost of an Answer",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation IX — The Hours Owed",
+          "changeSummary": "Documented actual simulator service costs, avoided double billing, confirmed replacement contact and technician rest entry, and preserved separate sealed cadet records during the observer's procedural challenge.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation IX — The Hours Owed",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
             "sourceType": "continuation"
           }
         }
@@ -5833,7 +5889,20 @@
       ],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "renault-timetable-restoration-ix",
+          "order": "Returned the displaced two-cadet gunnery review to the Academy's next demonstration period without moving conventional navigation or damage-control instruction.",
+          "issuingAuthority": "Academy Headmaster / Academy timetable",
+          "status": "completed",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation IX — The Hours Owed",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "physicalMedicalState": [],
       "equipmentResources": [],
       "chapterTouchLog": [
@@ -5886,6 +5955,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation VIII — The Cost of an Answer",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation IX — The Hours Owed",
+          "changeSummary": "Built and corrected the staffing account, restored the displaced gunnery review without moving conventional instruction, and recognized the remaining fleet staffing and funding shortfall.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation IX — The Hours Owed",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
             "sourceType": "continuation"
           }
         }
@@ -6042,6 +6121,18 @@
           },
           "order": "Require an actual fleet staffing and funding plan before a further independent live counterpart assessment.",
           "issuingAuthority": "Academy Headmaster"
+        },
+        {
+          "id": "headmaster-defer-independent-assessment-ix",
+          "order": "Defer, without approving or cancelling, a second independent fleet-counterpart assessment until the fleet's displaced exercises are restored and a complete staffed/funded plan is certified. Retain original marks, cadet privacy, conventional course and ordinary appeal rights.",
+          "issuingAuthority": "Academy Headmaster",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation IX — The Hours Owed",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [],
@@ -6096,6 +6187,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation VIII — The Cost of an Answer",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation IX — The Hours Owed",
+          "changeSummary": "Formally deferred the second independent counterpart trial to the next review cycle subject to staffing/funding and restoration of fleet training; protected marks, appeals and conventional courses; ordered a factual public notice correction.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation IX — The Hours Owed",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
             "sourceType": "continuation"
           }
         }
@@ -6194,6 +6295,18 @@
           },
           "knowledge": "House Caldrake is entitled to signed findings under the existing observer agreement, not private cadet debriefs or raw command transcripts.",
           "certainty": "observed in committed prose"
+        },
+        {
+          "id": "vane-caldrake-public-notice-challenge-ix",
+          "knowledge": "House Caldrake's observer legitimately challenged an overbroad public 'successful seminar' claim and requested a narrower custody-procedure review; signed findings were released, private first accounts and debriefs withheld, and the original notice corrected without erasing its archive record.",
+          "certainty": "direct records-chamber encounter",
+          "status": "confirmed",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation IX — The Hours Owed",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [
@@ -6288,6 +6401,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation VIII — The Cost of an Answer",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation IX — The Hours Owed",
+          "changeSummary": "Handled Caldrake's formal observer request within contractual limits, acknowledged the legitimate publicity-wording objection, and routed a narrower seal-custody challenge through ordinary independent review without releasing private cadet records.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation IX — The Hours Owed",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
             "sourceType": "continuation"
           }
         }
