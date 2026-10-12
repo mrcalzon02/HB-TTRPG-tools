@@ -2,18 +2,12 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 25, *The Foreign Test*.
-**Forward window:** Season 2 Episodes 26–30.
+**State:** Rolled forward after Season 2 Episode 26, *Residual Memory*.
+**Forward window:** Season 2 Episodes 27–31.
 
-**Continuity status:** Committed prose and the single temporal ledger extend through Episode 25. Dols, Merehaven and Teth independently require different living witnesses or legal permissions before treating the apparent envoy's recovery as authority. Leora received the first attack warning and dispatched a private question still on the road; no foreign custodian knows the mortuary rite. Nessa's measured undercroft barriers remain ambiguous, with no new listening branch or dead keeper authorized.
+**Continuity status:** Committed prose and the single temporal ledger extend through Episode 26. Leora's private question reached the person presented as Corven; Jalen's witnessed refusal to invent a memory is returning by ordinary courier, not yet received. Leora retains witnessed custody of comparison originals, while the village watch keeps separate limited attendant observations and the original missing-person entry. No foreign custodian knows the rite. The northern carriage bids are nonbinding, the undercroft remains closed, and no new dead keeper is authorized.
 
-## Season 2 Episode 26 — Residual Memory — CURRENT / LOCKED
-
-A credible intimate or bodily mismatch becomes durable evidence for someone who genuinely knew Corven. Leora has received the earliest attack warning and sent a sealed personal question, still in transit; her own handwritten/dictated comparison originals remain in her custody. Yara holds the three warrants and independent watch copy, while Dols requests a living witness, Merehaven withholds only new surety, and Teth requires owner-challengeable testimony. Preserve the bad left knee, Corven's ordinary private habits, Yara's observed inconsistencies, the limited physician's report, and realistic message travel. Jalen retains his separate memory, sister/pay uncertainty and unanswered question about leaving the body. No resurrection, perfect recall, public exposure of the rite or new legal authority.
-
-**Exit:** A private discrepancy gains an independent custodian and a credible route toward foreign scrutiny.
-
-## Season 2 Episode 27 — The High-Water Mark — DIRECTIONAL
+## Season 2 Episode 27 — The High-Water Mark — CURRENT / LOCKED
 
 The Crown reaches a bounded public success through real wages, roof labor, civilian grain and separate bench permissions, not magical cargo movement or a blanket treaty. Keep the Dols miller's drainage loss, Merehaven surety, Teth valuation, far-bank sacks, hired carriers, hamlet forage claims, withdrawn patrol horses, Hesta's quarry carriage and continuing northern need visible. Give a material beneficiary and a person bearing the hidden cost.
 
@@ -37,7 +31,16 @@ The occupied and physically ruined body returns to Edselsto after independently 
 
 **Exit:** The public confrontation makes the royal answer chosen in Episode 29 untenable and forces the political and personal consequences into Episode 31.
 
+## Season 2 Episode 31 — Desecration — DIRECTIONAL / PROTECTED PAYOFF
+
+The public confrontation after the ruined occupied body returns must distinguish murder, corpse occupation, foreign diplomatic fraud, sovereignty violation and the continued separate personhood of Jalen. Dols, Merehaven and Teth may withdraw or demand remedies for different reasons. Leora's grief and her independently kept original letters cannot be overwritten by the Crown's preferred story; Ysabet's lethal instruction, village watch records and the delayed private-question reply remain evidence with distinct custodians. Luceran must face the cost of his deliberate order without being exonerated by Jalen's limited after-death assent. Preserve Miren's unhealed privacy grievance, Rhyse's witness protections and the northern material costs. No Edselsto prison/interface reveal, no candle failure, no instant uniform foreign coalition.
+
+**Exit:** Diplomatic withdrawals and personal ruptures leave Luceran more isolated while Edselsto remains apparently useful, setting up Episode 32.
+
 ## Active payoff debt
+
+Episode 26 adds a separately witnessed private-question refusal, a courier and seal chain, Leora's independently witnessed inventory of original marriage letters, and two independently dated village-watch attendant statements that preserve uncertainty and injury alternatives. None proves death or a rite. The return reply and separate watch copy are in transit, not delivered. The wounded man's wages/lodging and Jalen's missing casualty discharge are unresolved. Damaris has three carriage bids but no hired northern carrier.
+
 
 Episode 25 establishes three independent foreign verification tracks rather than a common recognition test: Dols's witnessed recommendation and separate military countersign, Merehaven's still-valid first surety and withheld second advance, and Teth's owner-challengeable ferry valuation. Yara's paid dispatches have independent custody and travel times. Leora has received only the first attack warning and has sent two distinct requests, including a sealed private question whose answer she alone retains; the packet has not reached Edselsto. Preserve her original handwritten and dictated Corven letters, her ill mother, and her niece; do not turn one wrong answer into proof of a mortuary rite. The village watch retains its original missing-person entry and damaged walking stick, the wounded attendant is not yet a traveling witness, and the limited physician's report is not a death certificate. Jalen's refusal to inherit Corven's authority, unanswered sister/casualty-pay claim, and uncertain exit remain active. Luceran's corrected royal letter does not erase prior public claims or Ysabet's original signed lethal instruction.
 
