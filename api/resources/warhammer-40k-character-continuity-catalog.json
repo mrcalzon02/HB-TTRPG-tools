@@ -4554,6 +4554,19 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "prite-kb-counterpart-vii",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VII — The Other End of the Channel",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-07.md",
+            "sourceType": "legacy-backfill",
+            "derivedSourceType": "continuation"
+          },
+          "knowledge": "The independent counterpart trial demonstrated real conflicts of jurisdiction and costly choices, not proven superiority of the pilot.",
+          "certainty": "observed in committed prose"
         }
       ],
       "secretsKnown": [],
@@ -4631,7 +4644,20 @@
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "prite-obligation-seminar-cost-viii",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VIII — The Cost of an Answer",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
+            "sourceType": "continuation"
+          },
+          "order": "Future seminars must disclose displaced teaching, staff time and bounded instructional purpose; no fleet-performance claim follows from the non-graded seminar.",
+          "issuingAuthority": "Academy Headmaster"
+        }
+      ],
       "physicalMedicalState": [],
       "equipmentResources": [],
       "chapterTouchLog": [
@@ -4673,6 +4699,27 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation VI — The Test Outside the Room",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VII — The Other End of the Channel",
+          "changeSummary": "Observed independent live counterpart trial: distinct command jurisdictions produced defensible, costly decisions, without proof of improved fleet performance.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VII — The Other End of the Channel",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-07.md",
+            "sourceType": "legacy-backfill",
+            "derivedSourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VIII — The Cost of an Answer",
+          "changeSummary": "Held a non-graded command seminar at explicit instructional cost; protected original first accounts from hindsight, separated teaching from fleet evaluation, and requested budgeted follow-up.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VIII — The Cost of an Answer",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
             "sourceType": "continuation"
           }
         }
@@ -4769,6 +4816,19 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "darcelle-kb-independent-counterpart-vii",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VII — The Other End of the Channel",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-07.md",
+            "sourceType": "legacy-backfill",
+            "derivedSourceType": "continuation"
+          },
+          "knowledge": "Human counterpart autonomy and incomplete voluntary information-sharing cannot be reduced to a scripted refusal.",
+          "certainty": "observed in committed prose"
         }
       ],
       "secretsKnown": [],
@@ -4823,6 +4883,20 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "darcelle-skill-independent-brief-viii",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VIII — The Cost of an Answer",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
+            "sourceType": "continuation"
+          },
+          "domain": "simulation assessment and record integrity",
+          "proficiency": "demonstrated",
+          "context": "Prepared separate command briefs, preserved first accounts before cross-brief debrief, and tracked maintenance overtime.",
+          "limitations": "Non-graded Academy instruction is not independent fleet validation."
         }
       ],
       "relationshipsTrust": [],
@@ -4886,6 +4960,27 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation VI — The Test Outside the Room",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VII — The Other End of the Channel",
+          "changeSummary": "Maintained synchronized independent command channels; learned the scripted refusal could not model an officer's separate duty and communication omissions.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VII — The Other End of the Channel",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-07.md",
+            "sourceType": "legacy-backfill",
+            "derivedSourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VIII — The Cost of an Answer",
+          "changeSummary": "Prepared separate seminar briefs, preserved sealed first accounts before debrief, and recorded technician overtime as instructional cost.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VIII — The Cost of an Answer",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
             "sourceType": "continuation"
           }
         }
@@ -4982,6 +5077,18 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "renault-kb-scheduling-cost-viii",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VIII — The Cost of an Answer",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
+            "sourceType": "continuation"
+          },
+          "knowledge": "Academy rooms and instructors have existing assignments; additional command seminars displace real teaching rather than using free capacity.",
+          "certainty": "observed in committed prose"
         }
       ],
       "secretsKnown": [],
@@ -5053,6 +5160,27 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation VI — The Test Outside the Room",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VII — The Other End of the Channel",
+          "changeSummary": "Recognized staffing expense and inconclusive results of live independent counterpart trial; supported a limited seminar.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VII — The Other End of the Channel",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-07.md",
+            "sourceType": "legacy-backfill",
+            "derivedSourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VIII — The Cost of an Answer",
+          "changeSummary": "Accepted navigation instructor's room refusal, negotiated another slot by displacing optional tactical review, and tracked resource cost.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VIII — The Cost of an Answer",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
             "sourceType": "continuation"
           }
         }
@@ -5184,6 +5312,31 @@
             "sourceType": "continuation",
             "legacyBackfill": true
           }
+        },
+        {
+          "id": "headmaster-order-seminar-vii",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VII — The Other End of the Channel",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-07.md",
+            "sourceType": "legacy-backfill",
+            "derivedSourceType": "continuation"
+          },
+          "order": "Authorize limited non-graded human-command seminar without changing existing marks or replacing the conventional course.",
+          "issuingAuthority": "Academy Headmaster"
+        },
+        {
+          "id": "headmaster-order-fleet-staffing-viii",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VIII — The Cost of an Answer",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
+            "sourceType": "continuation"
+          },
+          "order": "Require an actual fleet staffing and funding plan before a further independent live counterpart assessment.",
+          "issuingAuthority": "Academy Headmaster"
         }
       ],
       "physicalMedicalState": [],
@@ -5217,6 +5370,27 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation VI — The Test Outside the Room",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VII — The Other End of the Channel",
+          "changeSummary": "Approved only a limited seminar after an inconclusive and expensive independent counterpart trial, preserving conventional instruction and marks.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VII — The Other End of the Channel",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-07.md",
+            "sourceType": "legacy-backfill",
+            "derivedSourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VIII — The Cost of an Answer",
+          "changeSummary": "Signed seminar's actual costs and required a staffed, funded plan for any new independent live assessment.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VIII — The Cost of an Answer",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
             "sourceType": "continuation"
           }
         }
@@ -5303,6 +5477,18 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "vane-kb-observer-records-viii",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VIII — The Cost of an Answer",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
+            "sourceType": "continuation"
+          },
+          "knowledge": "House Caldrake is entitled to signed findings under the existing observer agreement, not private cadet debriefs or raw command transcripts.",
+          "certainty": "observed in committed prose"
         }
       ],
       "secretsKnown": [
@@ -5376,6 +5562,27 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation II — The Practical Examination",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VII — The Other End of the Channel",
+          "changeSummary": "Preserved House Caldrake's signed-findings access without releasing independent officer briefs, raw messages or private debriefs.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VII — The Other End of the Channel",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-07.md",
+            "sourceType": "legacy-backfill",
+            "derivedSourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VIII — The Cost of an Answer",
+          "changeSummary": "Logged a formal House Caldrake request for seminar transcripts; limited access to signed findings under existing agreement, with no new duel petition reported.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation VIII — The Cost of an Answer",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-08.md",
             "sourceType": "continuation"
           }
         }
