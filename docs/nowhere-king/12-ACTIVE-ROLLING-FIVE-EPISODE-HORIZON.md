@@ -2,20 +2,14 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 29, *The Denial Conference*.
-**Forward window:** Season 2 Episodes 30–32 and Season 3 Episodes 1–2.
+**State:** Rolled forward after Season 2 Episode 30, *Half a Man at the Gate*.
+**Forward window:** Season 2 Episodes 31–32 and Season 3 Episodes 1–3.
 
-**Continuity status:** Episode 29 is committed. A separately sealed Dols hearing account and Isera's limited observations reached Edselsto with named carrier and date; original drawings remain at Dols. Luceran knowingly signed a false Dols-addressed denial that he instructed no Crown officer to arrange Corven's attack, contradicted by Ysabet's preserved original lethal instruction. Ysabet refused truth-attestation, Aldren attested copying only, Rhyse protected living witnesses and Miren refused to defend the lie. Damaris knows the foreign identity challenge and road costs, not the crime. The Crown's Dols reply and narrower Merehaven/Teth notices departed but have not arrived. Dols separately received the village-watch packet, with originals remaining in the village. Leora sent a representative to inspect source records but does not know Isera's examination. Jalen remains voluntarily at Dols awaiting a delayed second physician, with his sister and casualty pay unresolved. Six sacks reached the northern posts, six remain at Edselsto; Dols wall remains unaccepted, Merehaven second advance withheld, Teth ferry owner-controlled, eighteen mounts withdrawn. All seven candles burn.
+**Continuity status:** Episode 30 is committed. The Crown's false sealed Dols denial reached Dols before a separate stone-cart accident nearly divided Corven Sareth's body. Two independent physicians and Dols witnesses observed Jalen Orris continue speaking after the catastrophic injury; that does not establish the earlier murder or rite. Jalen voluntarily returned to Edselsto under his own name with two Dols witnesses and separate attested medical records. Ysabet retains the contradictory original royal lethal instruction, not disclosed to Dols. Luceran saw Jalen and the dated denial receipt but has not confessed. Miren remains affectionate without restoring trust. Damaris knows the accident and road costs, not the crime. Leora's notice and her representative's inspection have no confirmed receipt/completion. The Dols wall remains unaccepted and second wagon blocked; six sacks delivered north and six at Edselsto; Merehaven second advance withheld, Teth ferry owner-controlled, eighteen mounts withdrawn, roof guttering unfinished. Jalen's sister, discharge and pay remain unresolved. All seven candles burn.
 
-## Season 2 Episode 30 — Half a Man at the Gate — CURRENT / LOCKED
+## Season 2 Episode 31 — Desecration — CURRENT / LOCKED
 
-The occupied and physically ruined body returns to Edselsto after independently verified foreign evidence has begun moving through river jurisdictions. Establish how the injury occurs, who witnessed it, transport, escort decisions, medical limits and which foreign authority can demand answers. Its continued animation cannot be passed off as ordinary recovery. Preserve Jalen's distinct identity, Corven's nonconsent, Leora's grief and Luceran's signed responsibility. No new magic rule, premature arrival, candle failure or retroactive exoneration.
-
-**Exit:** The visible return breaks the Crown's chosen public answer and forces direct political and personal consequences.
-
-## Season 2 Episode 31 — Desecration — DIRECTIONAL / PROTECTED PAYOFF
-
-The public confrontation distinguishes murder, corpse occupation, diplomatic fraud, sovereignty violation and Jalen's separate personhood. Dols, Merehaven and Teth can withdraw or demand different remedies; do not collapse them into one government. Leora's independent original letters and grief cannot be overwritten by Crown claims. Ysabet's lethal instruction, the village-watch records and private-question reply retain separate custodians. Miren's privacy injury, Rhyse's witness protections, northern supply costs and the limits of Luceran's recent material success persist.
+The public confrontation begins with Dols's two witnesses and its dated receipt of Luceran's false denial. Distinguish their witnessed catastrophe from the earlier murder, corpse occupation, diplomatic fraud, sovereignty violation and Jalen's separate personhood. Dols, Merehaven and Teth can withdraw or demand different remedies; do not collapse them into one government. Leora's independent original letters and grief cannot be overwritten by Crown claims. Ysabet's lethal instruction, the village-watch records and private-question reply retain separate custodians. Miren's privacy injury, Rhyse's witness protections, northern supply costs and the limits of Luceran's recent material success persist.
 
 **Exit:** Diplomatic rupture and personal estrangement leave Luceran isolated while Edselsto remains apparently useful.
 
@@ -37,7 +31,15 @@ The first negotiations of Season Three must develop from actual offers and remem
 
 **Exit:** A necessary human bargain imposes a durable limit on Luceran's authority.
 
+## Season 3 Episode 03 — Proof of Life — EXPLORATORY
+
+After the scandal and first coalition bargains, anti-replacement guarantees must take form through sworn testimony, bodily consent, intimate identity questions, and the independent jurisdiction of foreign benches. Such guarantees cannot become infallible magic. Leora, Jalen and Yara retain personhood and independent aims. Specific bargains defer to finished Season Two and early Season Three prose.
+
+**Exit:** Human safeguards permit some cooperation but exact a political and personal price.
+
 ## Active payoff debt
+
+Episode 30 adds the witnessed Dols stone-cart injury, Jalen's voluntary return, independent physicians, and the dated receipt of the Crown denial before the accident. The wall remains unaccepted and the second grain wagon blocked. Leora's notice and Jalen's casualty discharge remain unresolved.
 
 Episode 29 adds a dated Dols arrival record and limited physician/hearing enclosure, the king's knowingly false sealed denial (“No officer of Our Crown was instructed by Us to bring about the attack upon Corven Sareth”), Ysabet's original contradictory lethal instruction and retained drafts, Aldren's copying-only attestation, Rhyse's separate living-witness protection, Miren's refusal to witness the lie, and three separately dispatched Crown replies not yet received. Damaris knows the road and foreign identity challenge but not the restricted crime. Leora's paid representative has departed for source inspection but has not arrived; she knows nothing of Isera's Dols examination. Dols received the village-watch copies independently; original watch book and stick remain in the village. Jalen is free, voluntarily awaiting the delayed second physician, and his sister/discharge/pay remain unresolved. The Crown's false reply must arrive and be recorded before it can be challenged as received evidence.
 
