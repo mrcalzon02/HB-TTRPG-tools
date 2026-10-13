@@ -1,13 +1,11 @@
-# Tenelja Chapter V — pending continuity reconciliation
+# Tenelja Chapter V — reconciliation status
 
-The committed Chapter V prose is `assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md`. The Lore index now exposes it. The authoritative temporal catalog and expansion circuit remain at Chapter IV because connector safety checks rejected both complete-file updates. This handoff is **not** a substitute catalog.
+**Character catalog reconciled; expansion circuit still pending.** This handoff is a status note, not a second continuity authority.
 
-For `sister-arbentia-tenelja`, append six provenance-backed entries: conditional two-hour study allocation (not actual access); Holt's consented restricted fitness notice with compensation/berth costs unresolved; observed eleven-second secondary-feed interruption with emergency strips working and rated fuse missing; active next-cycle custodian/roster confirmation goal; continuing bounded affection toward Rix, who owes disputed equipment charges; and held sponsorship/allocation receipts.
+The published and indexed Chapter V prose is `assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md`. Commit `9ef737cd2bbdabdc9d8e07727b87e92d761d8921` adds eleven provenance-backed Chapter V entries (six Arbentia, two Abraxas, three Bethany) and three Chapter V touch logs to the authoritative catalog, preserving all 63 personae.
 
-For `magos-abraxas-8207`, append two entries: incomparable pulmonary cohort metrics and restricted sponsorship requiring anonymous comparison and ward review, without granting archive access.
+**Required next:** Reconcile `tenelja-station` in `api/resources/warhammer-40k-story-expansion-circuit.json` from Chapter IV to V; record Chapter VI as next, advance the five-chapter window to VI–X, and set the last advanced segment to the published Chapter V prose. The circuit write was rejected by connector safety checks. Do not claim circuit completion or publish Chapter VI before remote verification.
 
-For `sister-bethany-pradaxa`, append three entries: real roster limitations and trainee-hour exchange; conditional emergency cover and one-time delayed meal; and transfer-only manual watch for the faulty corridor. Add a Chapter V touch log for each of these three personae.
+**Continuity locks:** Arbentia's two-hour study allocation is conditional, not exercised; ward roster and annex custodian remain to be confirmed. Holt remains exertion-limited; the consent-limited fitness notice does not decide accident causation, compensation or berth costs. Emergency strips worked during the eleven-second corridor interruption, but the rated fuse remains missing. Rix completed his first tug transfer using borrowed release equipment with a disputed job-allowance charge; he has not inspected Holt's fitting or obtained confidential crew statements.
 
-Use provenance: story `Of Blood and Wires: The Litanies of Tenelja Station`, segment `Chapter V — The Hours Between`, path to the committed Chapter V prose, sourceType `continuation`. Preserve all 63 personae and historical entries.
-
-Advance `tenelja-station` in the circuit to Chapter V, with Chapter VI next: Rix's salvage obligations, station maintenance procurement, and confirmation or deferral of conditional archive access. Preserve Holt's medical consent and compensation separation. Roll the five-chapter window to VI–X. Do not claim catalog completion or publish Chapter VI until the original catalog and circuit have been updated and verified by remote readback.
+Next Chapter VI work should ground salvage and procurement costs and confirm or defer study access without inventing a sudden catastrophe.
