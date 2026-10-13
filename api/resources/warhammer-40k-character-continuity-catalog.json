@@ -2999,6 +2999,30 @@
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "tenelja-arbentia-holt-restrictions-consent-05",
+          "knowledge": "Holt's repeated exertion examination still does not establish salvage fitness; he consented to a restricted company fitness notice, not private examination notes or a finding about accident causation. His convalescent berth is currently authorized, but compensation and possible charge against future allowance remain unresolved.",
+          "certainty": "direct examination, Holt's signed consent and Xanadu clerk's acknowledgement",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "tenelja-arbentia-corridor-outage-05",
+          "knowledge": "The ward crossing's primary lamps dimmed for eleven seconds during an imaging return; emergency strips functioned, the crossing doors stayed manual and the patient transfer was delayed. The secondary-feed rated fuse remains unissued; no replacement is confirmed on the next tender.",
+          "certainty": "direct ward incident report and maintenance issue docket",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3013,6 +3037,18 @@
             "story": "Of Blood and Wires: The Litanies of Tenelja Station",
             "segment": "Chapter IV — The Price of a Morning",
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "tenelja-arbentia-archive-next-cycle-05",
+          "goal": "Confirm next-cycle infirmaria roster and annex custodian for the signed conditional two-hour supervised reading allocation; if staffing or custodian is unavailable, defer rather than abandon patient cover.",
+          "horizon": "next-cycle",
+          "status": "active",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
             "sourceType": "continuation"
           }
         }
@@ -3031,6 +3067,19 @@
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "tenelja-arbentia-rix-continued-boundary-05",
+          "other": "Rix",
+          "direction": "Arbentia toward Rix",
+          "trust": "Continued affectionate, mutually considerate correspondence. She shares only Holt's consent-compatible condition, does not ask for restricted crew statements, and recognizes Rix's borrowed-release-equipment charge against his job allowance as a livelihood pressure.",
+          "status": "active",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "temperamentPerformance": [],
@@ -3047,6 +3096,17 @@
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "tenelja-arbentia-consented-fitness-dispatch-05",
+          "obligation": "Dispatched Holt's consent-limited restricted-fitness notice through ordinary ward channels; protect private medical findings, maintain exertion/rest restrictions and follow-up, and do not certify the Xanadu accident or promise compensation.",
+          "status": "active",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [],
@@ -3061,6 +3121,17 @@
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "tenelja-arbentia-conditional-archive-receipts-05",
+          "resource": "Holds Abraxas's bounded sponsorship seal, a signed conditional two-hour next-cycle scriptorum allocation, revised duty coverage and exchange approvals, and two clerk receipts; she has not entered the annex or read its historical pulmonary cohorts.",
+          "status": "held",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "chapterTouchLog": [
@@ -3071,6 +3142,16 @@
             "story": "Of Blood and Wires: The Litanies of Tenelja Station",
             "segment": "Chapter IV — The Price of a Morning",
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Chapter V — The Hours Between",
+          "changeSummary": "Obtained Abraxas's bounded sponsorship and a signed, conditional next-cycle two-hour archive allocation through a real trainee exchange and constrained ward coverage; recorded Holt's consented fitness restrictions, eleven-second corridor interruption and missing fuse; preserved professional and affectionate boundaries with Rix while tracking equipment-charge costs.",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
             "sourceType": "continuation"
           }
         }
@@ -3140,6 +3221,18 @@
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "tenelja-abraxas-cohort-comparability-05",
+          "knowledge": "Historical post-void pulmonary cohorts mix rest intervals, exertion loads and exposure classes; raw comparisons are unsafe without separating these variables. Holt's current exertion measurements support continued restriction, not a guaranteed prognosis.",
+          "certainty": "his own archival expertise and review of current analyzer records",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3150,7 +3243,19 @@
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "tenelja-abraxas-bounded-sponsorship-05",
+          "obligation": "Sealed Arbentia's request for two supervised study hours restricted to anonymous comparison criteria, with no named patient records, sealed company returns or removed original charts; findings require ward review before treatment changes. Sponsorship is not annex access and does not supply his own clinical supervision time.",
+          "status": "active",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "physicalMedicalState": [],
       "equipmentResources": [],
       "chapterTouchLog": [
@@ -3161,6 +3266,16 @@
             "story": "Of Blood and Wires: The Litanies of Tenelja Station",
             "segment": "Chapter IV — The Price of a Morning",
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Chapter V — The Hours Between",
+          "changeSummary": "Distinguished incompatible archival pulmonary cohort standards, sponsored a strictly anonymous two-hour comparison request subject to ward review, and did not grant access or relinquish clinical supervision.",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
             "sourceType": "continuation"
           }
         }
@@ -3230,6 +3345,18 @@
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "tenelja-bethany-trainee-coverage-limits-05",
+          "knowledge": "The apparent shift overlap cannot provide two hours of experienced nursing cover; the displaced trainee may assist with clean dressings under supervision but cannot answer emergency calls as a qualified sister. The trainee's postponed reading time must be restored next cycle.",
+          "certainty": "direct roster review and negotiated supervised exchange",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3240,7 +3367,30 @@
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "tenelja-bethany-conditional-cover-05",
+          "obligation": "Accepted narrow emergency-bell coverage for Arbentia's conditional study period if the next-cycle roster holds; one outgoing sister agreed to a single delayed meal, explicitly not an indefinite staffing assumption. The arrangement remains subject to confirmation.",
+          "status": "conditional",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "tenelja-bethany-transfer-watch-05",
+          "obligation": "Authorized a manual crossing-door watch for transfers involving beds or oxygen carts and signed the eleven-second service interruption into the ward book. Routine imaging journeys are rescheduled around shift overlap; the rated fuse remains unavailable, and unsafe substitution was refused.",
+          "status": "active",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "physicalMedicalState": [],
       "equipmentResources": [],
       "chapterTouchLog": [
@@ -3251,6 +3401,16 @@
             "story": "Of Blood and Wires: The Litanies of Tenelja Station",
             "segment": "Chapter IV — The Price of a Morning",
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Chapter V — The Hours Between",
+          "changeSummary": "Rejected fictional staffing capacity, negotiated a supervised trainee-hour exchange and one-time delayed meal with emergency cover, and ordered transfer-only manual watch after the corridor's eleven-second lighting failure.",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter V — The Hours Between",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
             "sourceType": "continuation"
           }
         }
