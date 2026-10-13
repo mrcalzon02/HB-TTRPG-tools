@@ -2,18 +2,12 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 3 Episode 04, *The First Concessions*.
-**Forward window:** Season 3 Episodes 5–9.
+**State:** Rolled forward after Season 3 Episode 05, *Reopening Night*.
+**Forward window:** Season 3 Episodes 6–10.
 
-**Continuity status:** Dols's limited evidence-reception letter and separate wall-refusal report have reached Edselsto; no murder/rite verdict or crossing acceptance. Jalen has dispatched his private reply to Leora, not delivered, and has withheld permission to send medical records to Dols. Leora still lacks Luceran's admission. Hesta's witnessed thirty-day/twelve-accepted-load Crown-side stone first-refusal preference is active, with publicly posted price, ordinary remedy, retained four-season toll exemption and competing supplier grievance. One drain block remains accepted; the second failed on a chipped corner and the third is untested. The Jorvan 24/27 east-gate terms are unchanged; no repayment/default is established. Six sacks remain at Edselsto, six north, Dols wall unaccepted, Merehaven second advance withheld, Teth ferry owner-controlled, eighteen mounts withdrawn, gutter/drain incomplete. Hall reopening is only being costed. All seven candles burn.
+**Continuity status:** The hall reopened for thirty-six with paid staff, musicians and guards from the household reserve, deferring linen and roof repairs. Orlen Morcant's quotation and supplier grievance seed independent outside bargaining. Rhyse stopped a door wager involving a kitchen boy. Jalen's medical refusal and undelivered letters remain; Miren did not resume intimacy. Jorvan 24/27, Hesta twelve-load preference and all transport restrictions persist. Seven candles burn.
 
-## Season 3 Episode 05 — Reopening Night — CURRENT / LOCKED
-
-Stage a genuinely attractive, modest reopening **only after** the cooks, fuel, hearth inspection, wet guest rooms, wash-up labor, musicians' coin, invitations and watch coverage are paid and staffed. Sorelle players' road allowance must be counted. Let guests have independent motives and real pleasure; the public Hesta preference should make a competing supplier's attendance politically consequential. Jorvan's observer remains at the gate, not a guest with sovereign powers. Miren may attend or refuse without restoring intimacy; Jalen cannot be exhibited. No magically provided banquet, new debt forgiveness, unearned foreign treaty or candle failure.
-
-**Exit:** A pleasurable, limited gathering reveals how expensive confidence and social access have become, seeding door games and outside-the-walls negotiations.
-
-## Season 3 Episode 06 — Doors With Opinions — DIRECTIONAL
+## Season 3 Episode 06 — Doors With Opinions — CURRENT / LOCKED
 
 Use only established selective threshold responses, living Doorwardens, marked silver listening ways and the physically deaf room. A court game around bounded architectural responses embarrasses a lower-status participant; let living authority stop it, and show the social cost after. No omniscient doors, intent reading or new castle cognition.
 
@@ -37,7 +31,15 @@ Families, foreign representatives and households develop separate identity chall
 
 **Exit:** Privacy and trust become more expensive, not more certain.
 
+## Season 3 Episode 10 — The Treasury Leak — EXPLORATORY
+
+Damaris must reconcile the paid hall gathering, deferred winter reserve, Jorvan's limited east-gate claim and Hesta's supplier preference with physical receipts. Bessa, Orlen and the house observer retain separate authority. No invented default, fraud or magical wealth.
+
+**Exit:** A concrete financial choice survives.
+
 ## Active payoff debt (historical carry-forward)
+
+**S3E5:** Paid hall supper for thirty-six, two usable hearths, third cold, three dry guest rooms; linen/roof reserve reduced, kettle and hearth follow-up due. Orlen quotation and off-wall supplier talks seeded; Rhyse stopped service-door wager. Jalen refusal and private letter transit unchanged, Miren independent, seven candles lit.
 
 **Episode S3E4:** Dols's two distinct replies reached Edselsto, but the road keeper still rejects the wall and the reeve offers only voluntary evidence consideration. Hesta's witnessed thirty-day/twelve-accepted-load public Crown-side first-refusal contract is enforceable, with old four-season toll exemption preserved; the second block failed inspection and the third remains untested. Jalen dispatched his personal letter to Leora, not yet delivered, and has not authorized medical transmission. Leora remains unaware of Luceran's admission. Hall reopening is only a costed proposal; all seven candles remain lit.
 
