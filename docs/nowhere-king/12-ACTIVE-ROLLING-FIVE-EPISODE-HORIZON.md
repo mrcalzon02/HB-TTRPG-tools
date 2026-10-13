@@ -2,42 +2,44 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 3 Episode 03, *Proof of Life*.
-**Forward window:** Season 3 Episodes 4–8.
+**State:** Rolled forward after Season 3 Episode 04, *The First Concessions*.
+**Forward window:** Season 3 Episodes 5–9.
 
-**Continuity status:** Dols witnesses Senna and Harven **arrived**, delivered separately sealed accounts, and the reeve recorded Luceran's admission alongside his earlier false denial without a completed murder/rite finding. Dols dispatched, but Edselsto has **not received**, a narrow voluntary-evidence reception offer; no new foreign verdict or crossing authorization exists. Jalen voluntarily accepted one private, independently witnessed examination and a household refusal safeguard, not an infallible identity test or political exhibition. Leora received her representative's village-watch source inventory but **does not know the admission**; her separate letter **reached Jalen**, who has not written a reply. His sister letter remains first-road-house receipted only. The Jorvan 24-mark debt/27-mark cap and east-gate observer remain unchanged. Tomas hired a conditional replacement carter with a deposit, not a wagon at Dols. Hesta's one accepted drain block remains the only accepted one; the second is held, the third untested. Six sacks remain at Edselsto, six at the northern posts, Dols wall unaccepted, Merehaven second advance withheld, Teth ferry owner-controlled, eighteen mounts withdrawn, roof guttering and drain incomplete. All seven candles burn.
+**Continuity status:** Dols's limited evidence-reception letter and separate wall-refusal report have reached Edselsto; no murder/rite verdict or crossing acceptance. Jalen has dispatched his private reply to Leora, not delivered, and has withheld permission to send medical records to Dols. Leora still lacks Luceran's admission. Hesta's witnessed thirty-day/twelve-accepted-load Crown-side stone first-refusal preference is active, with publicly posted price, ordinary remedy, retained four-season toll exemption and competing supplier grievance. One drain block remains accepted; the second failed on a chipped corner and the third is untested. The Jorvan 24/27 east-gate terms are unchanged; no repayment/default is established. Six sacks remain at Edselsto, six north, Dols wall unaccepted, Merehaven second advance withheld, Teth ferry owner-controlled, eighteen mounts withdrawn, gutter/drain incomplete. Hall reopening is only being costed. All seven candles burn.
 
-## Season 3 Episode 04 — The First Concessions — CURRENT / LOCKED
+## Season 3 Episode 05 — Reopening Night — CURRENT / LOCKED
 
-Make the limited Dols evidence-reception letter arrive by its own paid courier before any Crown response. Let Dols, Merehaven and Teth retain separate legal authorities and independent reasons to refuse a wider bargain. A first enforceable concession may buy narrowly specified passage, guest rights, offices or trade access only with actual counterpart authority, witnesses, term, payment and remedy. Preserve the executed Jorvan east-gate terms and Bessa's watch/repair priority; the observer cannot command the gate. The conditional replacement carter cannot cross until Dols accepts the wall and grants a real interval. Jalen's private answer to Leora, if written, remains his choice; it is not a condition of trade. Leora still lacks the royal admission until a dated, credible delivery establishes it.
+Stage a genuinely attractive, modest reopening **only after** the cooks, fuel, hearth inspection, wet guest rooms, wash-up labor, musicians' coin, invitations and watch coverage are paid and staffed. Sorelle players' road allowance must be counted. Let guests have independent motives and real pleasure; the public Hesta preference should make a competing supplier's attendance politically consequential. Jorvan's observer remains at the gate, not a guest with sovereign powers. Miren may attend or refuse without restoring intimacy; Jalen cannot be exhibited. No magically provided banquet, new debt forgiveness, unearned foreign treaty or candle failure.
 
-**Exit:** A practical but politically disliked first concession has named costs and a real enforcing counterparty; no blanket treaty or personal reconciliation is purchased.
-
-## Season 3 Episode 05 — Reopening Night — DIRECTIONAL
-
-Stage a courtly reopening only after kitchens, hall repairs, guest rooms, musician wages, watch coverage, invitations and affordable food are accounted for. Genuine pleasure and adult relationships may grow even while the Crown is disgraced. No magic banquet, unearned debt forgiveness, return of Miren's intimacy or compelled guest participation.
-
-**Exit:** Spectacle becomes a useful, expensive setting for independent political and personal plans.
+**Exit:** A pleasurable, limited gathering reveals how expensive confidence and social access have become, seeding door games and outside-the-walls negotiations.
 
 ## Season 3 Episode 06 — Doors With Opinions — DIRECTIONAL
 
-Use already established threshold/door behavior and the living Doorwardens; no new door cognition, omniscience or ability to judge motives. A game around bounded architectural responses creates real embarrassment and unequal social costs for a lower-status participant. Living authority can refuse a practice; preserve the physically deaf room and marked listening ways.
+Use only established selective threshold responses, living Doorwardens, marked silver listening ways and the physically deaf room. A court game around bounded architectural responses embarrasses a lower-status participant; let living authority stop it, and show the social cost after. No omniscient doors, intent reading or new castle cognition.
 
-**Exit:** Courtly habit normalizes an unsettling but useful castle interaction without declaring it trustworthy.
+**Exit:** The court has normalized a useful but unsettling habit while some living witnesses resent it.
 
 ## Season 3 Episode 07 — Business Outside the Walls — DIRECTIONAL
 
-Jorvan's observer, Hesta's independent quarry rights, the three river benches and the limited household identity practice give creditors, merchants, clergy and opponents reasons to meet beyond connected castle listening ways. Seed actual meeting sites, paid travel, letters, servants' observations and separate motives; do not invent a unified conspiracy or grant Edselsto hearing through unconnected places.
+The Hesta preference, Jorvan observer, Dols evidence limits and identity-refusal practice give independent creditors, merchants, clergy and rivals reason to meet beyond verified listening ways. Seed actual sites, travel, ordinary staff knowledge, paid messengers and separate motives. Do not invent a unified conspiracy or make Edselsto hear unconnected places.
 
-**Exit:** Human off-castle bargaining becomes materially real and partially opaque to Luceran.
+**Exit:** Luceran can no longer assume court presence equals access to every bargain.
 
-## Season 3 Episode 08 — The First Flame — EXPLORATORY / SEASON-SCHEMATIC LOCK
+## Season 3 Episode 08 — The First Flame — DIRECTIONAL / SEASON-SCHEMATIC LOCK
 
-The first candle may fail **only here or at an otherwise canonically earned later point**, during an independently causal below-ground containment event with observed effects above, practical consequences and competing interpretations. The failure must not be a decorative omen, and no character may suddenly know the true prisoner/castle-interface history. All seven candles remain lit through Episode 03. An apparently successful social moment may make the loss more frightening, not magically cause it.
+An independently causal below-ground containment failure may extinguish **the first** ancestral candle only here, after real physical observation, competing interpretations and concrete consequences. Earlier social successes must not magically cause the failure. Do not disclose true prisoner/castle-interface history or new abilities ahead of canon.
 
-**Exit:** Six candles remain, and a funded, contested inquiry becomes necessary.
+**Exit:** Six candles remain and a costly, disputed inquiry must be funded.
+
+## Season 3 Episode 09 — Passwords — EXPLORATORY
+
+Families, foreign representatives and households develop separate identity challenges from real anxieties about Jalen and the occupied envoy scandal. Distinguish private questions, witnessed records and unreliable recollection from infallible proof. Show the intimate harm of making personal knowledge into a credential, and the way servants carry the burden of new precautions.
+
+**Exit:** Privacy and trust become more expensive, not more certain.
 
 ## Active payoff debt (historical carry-forward)
+
+**Episode S3E4:** Dols's two distinct replies reached Edselsto, but the road keeper still rejects the wall and the reeve offers only voluntary evidence consideration. Hesta's witnessed thirty-day/twelve-accepted-load public Crown-side first-refusal contract is enforceable, with old four-season toll exemption preserved; the second block failed inspection and the third remains untested. Jalen dispatched his personal letter to Leora, not yet delivered, and has not authorized medical transmission. Leora remains unaware of Luceran's admission. Hall reopening is only a costed proposal; all seven candles remain lit.
 
 **Episode S3E3:** Dols has received Senna's admission record and Harven's separate accident account; it retains the earlier false denial and has dispatched a narrow evidence-reception reply, **not yet delivered**. Leora has received her representative's village-watch inventory, not Luceran's confession; her letter to Jalen **arrived**, and he has chosen but not written a private answer. Jalen's single voluntary examination and Crown-household refusal order establish limited recording safeguards, not identity certification, general law or foreign authority. Bessa's east-gate original toll custody and Jorvan's limited observer seat are operational. Tomas's conditional cart deposit buys readiness after accepted Dols inspection, not present movement. Hesta/Lenn have repaired the rut; one block accepted, second held, third untested. No new death finding, rite proof, candle failure or magical ability.
 
