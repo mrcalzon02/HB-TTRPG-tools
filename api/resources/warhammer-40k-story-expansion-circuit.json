@@ -113,14 +113,14 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
       "status": "active",
-      "currentEndpoint": "Continuation VII — The Name Beneath the Correction. Carrow's original southern-junction handoff and the corrected duty-designation entry establish the chest's movement through a lower cage and onward under commander's authority, but not the receiving person's identity or the attendance sheet's contents. Deputy Balance Officer Seret Dain signed the routine 53-to-52 adjustment batch without originating the number; a NO DECLARED LOSS category failed to distinguish an unused position from an unregistered missing person. Joint human-review safeguards now impose a three-week historical-index staffing diversion. Hesk Venn, the initiating officer, Predulum/Witness Four, Mortuary-Seventeen and future order remain unresolved; quartermaster back pay approved but unpaid.",
-      "nextSlice": "Continuation VIII — Obtain separate testimony from the route steward and two cage attendants; seek the commander's sealed named attendance sheet by lawful request, not seizure. Trace who originated the 52 returned-strength figure and whether an exceptional-loss declaration was available or suppressed. Show the costs and potential limits of the human-review staffing diversion. Preserve Hesk Venn's unresolved occupancy, the sealed anomalies, Predulum's confinement and the undisbursed quartermaster allowance.",
+      "currentEndpoint": "Continuation VIII — The Witnesses of the Cage. Three independent cage-chain interviews and the steward's account establish receipt and onward carriage of the commander's chest, but not the identity of Carrow's receiver, direct examination of the seal impression, or the attendance sheet. A lawful request for supervised inspection or a certified extract awaits the commander's response. The fifty-two return figure is traced to the escort return desk, not the originating person. No exceptional-loss declaration appears in the registers checked; late-entry review remains open. Nineteen human-review cases divert historical-index staff. The quartermaster's approved allowance remains unpaid. Hesk Venn, Predulum, Witness Four, Mortuary-Seventeen and the future-dated instruction remain unresolved.",
+      "nextSlice": "Continuation IX — Follow the commander's answer or recorded delay, the return-strength origin and late-entry register, the actual human-review outcomes and staffing costs, and the quartermaster's payment status. Preserve unresolved custody and anomalous evidence without premature identification or closure.",
       "legacyBackfillRequired": false,
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "Continuation VII — The Name Beneath the Correction",
+        "segment": "Continuation VIII — The Witnesses of the Cage",
         "durableCharacterStateChanged": true,
-        "reason": "Atrovald's documented junction handoff and routine-batch authority findings, new review staffing obligation, and touch log reconciled; supporting Pell remains an established unindexed archivist."
+        "reason": "Atrovald's separate witness findings, bounded knowledge, command request, review costs and chapter touch log reconciled."
       },
       "eraLock": {
         "era": "Mature Imperium; exact millennium not fixed by the attached chronicle",
@@ -136,7 +136,7 @@
       },
       "authorshipLineageRule": "All future recovered/continued pieces in this line must include: Based on the work of: Matron Lagas Atrovald.",
       "chapterCapRule": "Hard cap of 40 chapters per book; Chapter XL is the latest permissible chapter number within a book.",
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-07.md"
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-08.md"
     },
     {
       "id": "on-the-fuzzy-edge",

@@ -4673,6 +4673,30 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-07.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "atrovald-cage-witness-limits-viii",
+          "knowledge": "Separate testimony establishes that the route steward carried the sealed traveling chest from the lower cage to the commander's baggage wagon, but did not see its contents or identify Carrow's receiver. The first and second cage attendants checked the cord guard and matching paper number, not the impression beneath; key records cover a locked watch change without continuous eyewitness custody. No evidence yet establishes tampering, an uninterrupted personally witnessed chain, or the named attendance sheet's contents.",
+          "certainty": "separate first-hand testimony and receipt comparison; identity, contents and continuous observation unresolved",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VIII — The Witnesses of the Cage",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-08.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "atrovald-52-origin-declaration-viii",
+          "knowledge": "The escort return desk transmitted fifty-two under a valid office stamp to reconciliation; Dain authorized the routine batch but neither Dain nor the return clerk originated the figure. Examined declaration registers contain no linked exceptional-loss form for the relevant watches, but a late-entry register check remains. Absence in examined registers does not prove no declaration existed or was suppressed.",
+          "certainty": "documented office transmission and bounded negative search; originating human and possible late declaration unresolved",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VIII — The Witnesses of the Cage",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-08.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -4824,6 +4848,30 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-07.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "atrovald-commander-lawful-attendance-request-viii",
+          "order": "Await the escort commander's accountable reply to alternatives for supervised inspection of the original named attendance sheet or a certified extract identifying the fifty-third position's occupancy at dispatch and return; accept an explicit signed inability/refusal without treating it as evidence of guilt. Preserve junction key book, cage slips, original corrections and return-office packet under their own custodians.",
+          "issuingAuthority": "Matron Lagas Atrovald",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VIII — The Witnesses of the Cage",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-08.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "atrovald-review-queue-and-backpay-viii",
+          "order": "Keep the nineteen-case human-review queue distinct from ordinary automatic closure, maintain four diverted historical-index clerks per watch and two supervisors pending review, disclose legitimate staffing impact but not sealed identities to Logos, and assess documented preservation-risk priority requests. Quartermaster's missed-shift allowance remains approved but not disbursed.",
+          "issuingAuthority": "Matron Lagas Atrovald and joint custody offices",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VIII — The Witnesses of the Cage",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-08.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [],
@@ -4911,6 +4959,16 @@
             "story": "Matron Lagas Atrovald",
             "segment": "Continuation VII — The Name Beneath the Correction",
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-07.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VIII — The Witnesses of the Cage",
+          "changeSummary": "Heard route steward and two cage attendants separately, distinguished seal-number paperwork and cord-guard checks from observation of the actual impression, and sent a lawful two-option request for the commander's named attendance sheet without seizing his chest. Traced fifty-two to the escort return desk but not the originating person; bounded the negative exceptional-declaration search pending late-entry review. Continued costly nineteen-case human review, acknowledged Logos backlog, and kept quartermaster back pay approved but unpaid. Hesk Venn, future order, Mortuary-Seventeen and Predulum/Witness Four remain unresolved.",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation VIII — The Witnesses of the Cage",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-08.md",
             "sourceType": "continuation"
           }
         }
