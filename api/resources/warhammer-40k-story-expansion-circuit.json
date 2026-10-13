@@ -257,8 +257,8 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
       "status": "active",
-      "currentEndpoint": "Chapter IV — The Price of a Morning. Arbentia and Rix met as promised and established an affectionate but bounded relationship; Rix supplied a secondhand account of Xanadu fitting assistant Beren Holt's jammed-release accident, explicitly lacking direct inspection or formal declaration. Holt remains alive but exertion-limited after discharge, with a scheduled follow-up, disputed invoice and uncertain compensation/work status. Arbentia obtained written requirements for two supervised scriptorum hours, not permission; Abraxas has not sponsored her and Bethany has not approved replacement ward coverage. The ward corridor's secondary-feed matched fuse remains unissued; no acute failure has occurred. Rix's next tug watch and equipment-charge obligations continue.",
-      "nextSlice": "Chapter V — Make Arbentia's sponsorship and duty-cover request produce a concrete staffing and procedural choice; develop Holt's restricted rehabilitation and Xanadu's compensation dispute without making Rix an illicit evidence courier. Let the corridor fuse and station maintenance queue remain causal, documented risks rather than instant disaster. Preserve the professional autonomy and competent disagreements of Bethany and Abraxas.",
+      "currentEndpoint": "Chapter V — The Hours Between. Arbentia gained Abraxas's restricted sponsorship and a conditional two-hour reading allocation, pending ward roster and annex custodian confirmation; she has not yet studied the archival cohorts. Holt remains exertion-limited, and only his consent-limited fitness notice reached Xanadu; compensation, accident causation and possible berth charges remain unresolved. The ward crossing suffered an eleven-second primary-light interruption with emergency strips functioning; the rated secondary-feed fuse remains missing and a limited manual watch is in force. Rix completed his first tug transfer with borrowed release equipment and a disputed allowance charge; he has not inspected Holt's fitting or obtained confidential statements.",
+      "nextSlice": "Chapter VI — The Price of Borrowed Things. Ground Rix's borrowed release-equipment charge and the salvage maintenance economy through authorized records and competing work obligations. Confirm or defer Arbentia's conditional scriptorum appointment without assuming access. Preserve Holt's consent-limited notice, unresolved compensation, and the documented missing-fuse risk. Avoid premature catastrophe, unauthorized evidence access, and false certainty.",
       "eraLock": {
         "era": "Late Imperial / 41st Millennium station-life setting as established by the source story.",
         "allowedInstitutions": [
@@ -375,33 +375,33 @@
         ],
         "rollingNearTermWindow": [
           {
-            "installment": "5",
-            "objective": "Make the locked scriptorum and rationed advancement produce a small concrete operational consequence."
-          },
-          {
             "installment": "6",
-            "objective": "Ground Xanadu salvage work, station maintenance reality and Rix's competing obligations."
+            "objective": "Salvage-side equipment charge, Rix's obligations and conditional scriptorum roster/custodian confirmation."
           },
           {
             "installment": "7",
-            "objective": "Create the first causally seeded near-miss linking medicae limitations to infrastructure decay."
+            "objective": "First preventable near-miss linking documented maintenance and medicae jurisdictions."
           },
           {
             "installment": "8",
-            "objective": "Begin the larger casualty pressure while preserving bounded knowledge and competent institutional actors."
+            "objective": "Causally seeded industrial/void casualty influx with real staffing and supply consequences."
           },
           {
             "installment": "9",
-            "objective": "Arbentia recognizes an emerging pattern without claiming unsupported access or authority."
+            "objective": "Arbentia notices a pattern but lacks authority and clean evidence to act."
+          },
+          {
+            "installment": "10",
+            "objective": "Bethany and Abraxas must combine complementary practice without losing their doctrines."
           }
         ]
       },
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-01.md",
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "Chapter IV — The Price of a Morning",
+        "segment": "Chapter V — The Hours Between",
         "durableCharacterStateChanged": true,
-        "reason": "Arbentia, Abraxas and Bethany received bounded knowledge and chapter touch logs; Arbentia's Rix trust boundary, study objective, Holt follow-up obligation and maintenance-tag resource were added without altering previous histories. Three existing sealed personae preserved."
+        "reason": "Chapter V prose is published and eleven continuity entries plus three touch logs are committed. Study remains conditional; Holt's restrictions, the missing fuse and Rix's equipment charge persist."
       }
     },
     {
