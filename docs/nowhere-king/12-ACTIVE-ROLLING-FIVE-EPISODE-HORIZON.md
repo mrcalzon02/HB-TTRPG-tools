@@ -2,42 +2,45 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 3 Episode 06, *Doors With Opinions*.
-**Forward window:** Season 3 Episodes 7–11.
+**State:** Rolled forward after Season 3 Episode 07, *Business Outside the Walls*.
+**Forward window:** Season 3 Episodes 8–12.
 
-**Continuity status:** Episode 06 turns court threshold wagers into a real service obstruction and living-authority correction. Tavin's delayed water delivery, Alden Pell's named warning and apology, Iven's refusal to perform rank judgments, Rhyse/Dain's notice, Miren/Yara's use of the physically deaf room, and Orlen's paid baker-room appointment persist. No new castle cognition or candle failure. Jalen's medical refusal, Miren's unreturned intimacy, the 24/27 Jorvan terms, Hesta's twelve-load preference, deferred household repairs and blocked Dols crossing remain. Seven candles burn.
+**Continuity status:** S3E07 establishes independent village price comparisons, limited east-gate observation, restricted foreign courier custody, and royal restraint toward off-wall speech. A lower service stair is barred for inspection; seven candles remain lit. All prior material and relationship obligations persist.
 
-## Season 3 Episode 07 — Business Outside the Walls — CURRENT / DIRECTIONAL
+## Season 3 Episode 08 — The First Flame — CURRENT / SCHEMATIC LOCK
 
-The Hesta preference, Jorvan observer, Dols evidence limits and identity-refusal practice give independent creditors, merchants, clergy and rivals reason to meet beyond verified listening ways. Seed actual sites, travel, ordinary staff knowledge, paid messengers and separate motives. Do not invent a unified conspiracy or make Edselsto hear unconnected places.
+An independently evidenced below-ground containment failure may extinguish only the first candle, with witnessed inspection, disputed interpretations and material costs. The barred stair is a lead, not proof. No prison/interface truth or new ability.
 
-**Exit:** Luceran can no longer assume court presence equals access to every bargain.
+**Exit:** Six candles remain; costly inquiry begins.
 
-## Season 3 Episode 08 — The First Flame — DIRECTIONAL / SEASON-SCHEMATIC LOCK
+## Season 3 Episode 09 — Passwords — DIRECTIONAL
 
-An independently causal below-ground containment failure may extinguish **the first** ancestral candle only here, after real physical observation, competing interpretations and concrete consequences. Earlier social successes must not magically cause the failure. Do not disclose true prisoner/castle-interface history or new abilities ahead of canon.
+Separate fallible identity tests arise from Jalen and the envoy scandal, burdening households and private relationships. No infallible certification.
 
-**Exit:** Six candles remain and a costly, disputed inquiry must be funded.
+**Exit:** Trust becomes more expensive.
 
-## Season 3 Episode 09 — Passwords — EXPLORATORY
+## Season 3 Episode 10 — The Treasury Leak — DIRECTIONAL
 
-Families, foreign representatives and households develop separate identity challenges from real anxieties about Jalen and the occupied envoy scandal. Distinguish private questions, witnessed records and unreliable recollection from infallible proof. Show the intimate harm of making personal knowledge into a credential, and the way servants carry the burden of new precautions.
+Damaris reconciles hall costs, deferred repairs, Jorvan's bounded gate claim, Hesta's preference and Orlen's delivered prices without inventing fraud, default or magical wealth.
 
-**Exit:** Privacy and trust become more expensive, not more certain.
-
-## Season 3 Episode 10 — The Treasury Leak — EXPLORATORY
-
-Damaris must reconcile the paid hall gathering, deferred winter reserve, Jorvan's limited east-gate claim and Hesta's supplier preference with physical receipts. Bessa, Orlen and the house observer retain separate authority. No invented default, fraud or magical wealth.
-
-**Exit:** A concrete financial choice survives.
+**Exit:** A consequential fiscal choice survives.
 
 ## Season 3 Episode 11 — A Dangerous Attachment — EXPLORATORY
 
-An adult cross-faction attachment should develop through already established repeated contact and conflicting duties, not sudden confession or convenient scandal. Preserve directional uncertainty, professional competence, costs of private access, and independent motivations. No forced reconciliation between Luceran and Miren, no automatic romance from Miren/Yara's dance, and no identity coercion of Jalen.
+Build an adult cross-faction attachment through repeated contact and conflicting obligations; no forced Luceran/Miren reunion or Miren/Yara romance.
 
-**Exit:** A relationship creates a future obligation neither party can dismiss as a passing attraction.
+**Exit:** A relationship creates a durable obligation.
+
+## Season 3 Episode 12 — The Rune Upstairs — EXPLORATORY / SCHEMATIC LOCK
+
+Establish independent provenance for copied new-room inscriptions and later undercroft comparison; no early prisoner/interface disclosure.
+
+**Exit:** Architecture becomes testable evidence.
 
 ## Active payoff debt (historical carry-forward)
+
+**S3E7:** Orlen, Hesta's brother, two haulers and Kaelmont clerk Edda Kelm compare delivered prices at a paid village room without new contract; Hesta's preference and unaccepted stones stand. Bessa retains toll custody; Jorvan's observer only witnesses traffic. Yara receives restricted Dols mail with no crossing or verdict. Luceran refuses off-wall inquisitions. A lower stair is barred for living inspection; all seven candles burn.
+
 
 **S3E6:** Alden Pell publicly attempted to turn a marked listening way, ordinary service latch and Iven Marrick's prepared threshold into noble-status games. Pel admitted Tavin; Iven declined rank judgments. Rhyse/Dain posted a living-service notice and named Alden in the watch account; his apology did not erase Tavin's humiliation or lost kitchen labor. The loose flag, kettle repair, depleted linen/roof reserve and ordinary watch costs remain. Miren/Yara used the physically deaf room without creating a romance or sharing Jalen's restricted medical observations. Orlen, Hesta's brother and haulers booked a paid baker's room for independent delivered-price comparison; no conspiracy, foreign road permission, or candle failure. Seven candles burn.
 
