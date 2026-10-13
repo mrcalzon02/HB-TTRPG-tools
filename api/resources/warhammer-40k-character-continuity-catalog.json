@@ -8894,6 +8894,34 @@
             "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "waldorf-witness-limits-08",
+          "information": "Gave Highmount a witnessed-events statement, distinguishing direct observation of claimant/Ork combat from reported authentication checks; reconciled separate gate tallies as different counting methods.",
+          "epistemicStatus": "observed",
+          "belief": "Neither extraordinary identity nor civilian loss count may be inferred from incomplete records",
+          "certainty": "high for firsthand observations, unresolved for identity and missing bus",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "waldorf-clamp-custody-08",
+          "information": "Accepted witnessed battlefield-collected clamp and cable crimp from pump-house approach in a sealed pouch; maker and origin unverified; requested lawful comparison with estate freight and maintenance inventories.",
+          "epistemicStatus": "observed",
+          "belief": "Industrial fittings might be ordinary salvage or a useful provenance lead, not proof of hidden sponsorship",
+          "certainty": "high for collection chain, unresolved for manufacturer",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -8945,6 +8973,17 @@
             "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "waldorf-inventory-request-08",
+          "obligation": "Await Arbites evidence-office response to maintenance/freight inventory comparison; preserve separate custody from original tunnel, shield and missing pipe, and continue missing-bus inquiry.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [
@@ -8992,6 +9031,16 @@
             "story": "Project VIGILANT SHADE",
             "segment": "Installment VII — The Line on the Map",
             "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Installment VIII — The Cost of the Perimeter",
+          "changeSummary": "Delivered bounded Highmount testimony; reconciled mismatched evacuation tallies, retained shield and battlefield fragment custody limits, requested inventory comparison, and kept second bus unresolved while respecting Henshaw's injury.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
             "sourceType": "continuation"
           }
         }
@@ -9071,6 +9120,20 @@
             "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "trellis-pump-cost-08",
+          "information": "Pump-house inspection hatch admitted Orks; upper isolator and backup bank restored partial pumping, but lower bank remained damaged and residential flooding continued.",
+          "epistemicStatus": "observed",
+          "belief": "holding the perimeter requires preserving drainage and civilian access, not just killing Orks",
+          "certainty": "high for operational damage, unknown for remaining subterranean routes",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -9104,6 +9167,17 @@
             "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "trellis-perimeter-three-lines-08",
+          "obligation": "Maintain northern warehouse defense, eastern freight reserve, southern one-way evacuation, watched drainage crossings and conditional pump-house withdrawal; log engineering objections and casualties through Highmount.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [],
@@ -9127,6 +9201,16 @@
             "story": "Project VIGILANT SHADE",
             "segment": "Installment VII — The Line on the Map",
             "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Installment VIII — The Cost of the Perimeter",
+          "changeSummary": "Committed limited reserve to keep pump-house service route open, supervised upper-platform rescue and partial pump isolation, maintained legal military command while using the claimant's advice; logged unresolved infrastructure and civilian costs.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
             "sourceType": "continuation"
           }
         }
@@ -9212,6 +9296,20 @@
             "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "returned-yarrick-pump-threat-08",
+          "information": "Saw Orks exploit neglected inspection hatch and cutting equipment at pump house; advised upper-platform isolation rather than damaging necessary pipework.",
+          "epistemicStatus": "observed",
+          "belief": "Orks will exploit narrow utility approaches while a line holds at the surface",
+          "certainty": "high for witnessed attack, unresolved for outbreak source",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -9272,6 +9370,20 @@
             "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "returned-yarrick-trellis-accountability-08",
+          "counterpartPersonaId": "captain-irvine-trellis",
+          "direction": "returned claimant → Trellis",
+          "trust": "functional and more respectful of Trellis's refusal to certify an impossible identity without proof",
+          "currentInterpretation": "Accepts tactical advice can be recorded independently of identity judgment; no surrender of command to claimant",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "temperamentPerformance": [],
@@ -9312,6 +9424,16 @@
             "story": "Project VIGILANT SHADE",
             "segment": "Installment VII — The Line on the Map",
             "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Installment VIII — The Cost of the Perimeter",
+          "changeSummary": "Offered practical pump-house tactical advice through Trellis, saw wounded soldier evacuated, and accepted that operational credibility does not establish continuity of personal identity; private body-memory mismatch remains unresolved.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
             "sourceType": "continuation"
           }
         }
@@ -9393,6 +9515,20 @@
             "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "helgren-provisional-count-08",
+          "information": "Received morning provisional report of eleven confirmed military/Arbites dead and nineteen medically received wounded, later worsening without reconciled final figures; industrial fittings not provenance proof.",
+          "epistemicStatus": "reported",
+          "belief": "casualty totals and Ork supply attribution require independent verification",
+          "certainty": "provisional casualty accounting; unverified manufacturing origin",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -9412,6 +9548,17 @@
             "story": "Project VIGILANT SHADE",
             "segment": "Installment VII — The Line on the Map",
             "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "helgren-fuel-relief-08",
+          "obligation": "Allocated two fuel-supported carriers to engineers and medicae; held third company on conditional readiness pending transport-security relief; sought field dressings and fuel without abandoning outer districts.",
+          "status": "active",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
             "sourceType": "continuation"
           }
         }
@@ -9437,6 +9584,16 @@
             "story": "Project VIGILANT SHADE",
             "segment": "Installment VII — The Line on the Map",
             "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Installment VIII — The Cost of the Perimeter",
+          "changeSummary": "Preserved provisional casualty classifications, rationed transport between military, medical and civilian requirements, refused to strip outer districts and rejected premature provenance conclusions.",
+          "provenance": {
+            "story": "Project VIGILANT SHADE",
+            "segment": "Installment VIII — The Cost of the Perimeter",
+            "path": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md",
             "sourceType": "continuation"
           }
         }

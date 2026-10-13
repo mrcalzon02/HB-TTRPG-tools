@@ -174,7 +174,7 @@
       "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
       "status": "architected-active",
       "sourceObservedThrough": "Six substantial recovered installments: Project VIGILANT SHADE Parts 1–4, “A rain soaked day,” and “A dreary thunderstorm.” The current source endpoint is Yarrick, publicly returned and independently witnessed, demanding immediate Astra Militarum reinforcement after a subterranean Ork emergency becomes undeniable on New Presidio.",
-      "currentEndpoint": "Installment VII — The Line on the Map. Direct Ork-breach footage forced General Helgren to mobilize staged infantry and engineers while leaving Yarrick's identity uncertified. Trellis integrated first-company defenses with Arbites positions and kept evacuation access open; the northern warehouse remains contested and the Orks remain below and at the first perimeter. Waldorf preserved a bounded casualty/shield custody chain and duplicate estate evidence while explicitly leaving the pipe's location and the project's provenance unresolved. Yarrick experienced a second private body-memory mismatch. Casualty totals, full evacuation, reinforcements and project accountability remain open.",
+      "currentEndpoint": "Installment VIII — The Cost of the Perimeter. Highmount allocated two fuel-supported carriers to engineers and medicae while holding the third company pending district relief. Trellis established north/east/south defense and evacuation geometry, but Orks exploited a neglected pump-house hatch, disabled one pump bank, and flooded the lower residential quarter; an upper-platform rescue restored partial pumping at additional human cost. One missing machine-shop bus was located; another remains unaccounted for. Waldorf's bounded testimony and separate witnessed battlefield fragment pouch preserve evidence without identifying the manufacturer or VIGILANT SHADE. The north warehouse remains contested, the southern one-way road open, casualties provisional, and the claimant's identity unresolved.",
       "targetInstallments": 18,
       "hardInstallmentCap": 24,
       "finalState": "The New Presidio Ork emergency is materially contained; the existence and catastrophic exposure of VIGILANT SHADE can no longer be treated as an internal laboratory secret; Waldorf has established a defensible causal evidence chain back toward the project; Reinhold, Finkey, Zavoner and surviving project personnel face institutional consequences appropriate to what can actually be proved; and Yarrick receives an Imperial disposition while retaining unresolved private uncertainty about whether continuity of memory, body, soul and identity are the same thing. He chooses what renewed duty means without narrator-certified metaphysical certainty. Ghazghkull remains a later-story horizon rather than consuming this book.",
@@ -234,22 +234,22 @@
         "18 — Yarrick consciously chooses what renewed duty means; New Presidio remains scarred but stable enough for the book to end. Ghazghkull remains beyond the boundary."
       ],
       "rollingWindow": [
-        "8 — Containment geometry, casualties and engineered-Ork indicators.",
-        "9 — Provenance investigation and operational testing of Yarrick.",
-        "10 — First acute containment threshold and collapse of the ordinary-incursion explanation.",
-        "11 — VIGILANT SHADE provenance and jurisdiction become unavoidable.",
-        "12 — Examine the claimant's authentication and private discontinuities as distinct evidence categories."
+        "9 — Inventory provenance inquiry, missing second bus and claimant's operational credibility.",
+        "10 — First acute containment threshold; ordinary-incursion explanation comes under evidential pressure.",
+        "11 — Project provenance and jurisdiction surface without instant full access.",
+        "12 — Examine claimant authentication, memory and embodiment as separate categories.",
+        "13 — Hans and the anchor process become relevant to provenance and identity inquiry."
       ],
       "completionBoundary": "End this book once the New Presidio Ork emergency is materially contained, VIGILANT SHADE’s causal role can no longer be buried as an ordinary incursion, Waldorf’s evidence chain has reached a defensible endpoint, project accountability has entered an enforceable institutional process, and Yarrick has received and consciously accepted or contested a near-term Imperial disposition. Do not continue into a Ghazghkull campaign, a second resurrection experiment or an unrelated conspiracy as Installment 19; those are separate stories.",
-      "nextSlice": "Installment 8 — Establish the wider containment geometry and consequences of delayed reinforcements, casualties and damaged infrastructure. Let Waldorf's sealed evidence and separate military logs begin exposing unusual Ork equipment or provenance without magically identifying VIGILANT SHADE. Preserve the returned Yarrick claimant's private uncertainty and the incomplete civilian evacuation.",
+      "nextSlice": "Installment IX — Follow Waldorf's lawful maintenance/freight inventory comparison and the missing second bus without manufacturing a direct provenance verdict; have Trellis and Helgren test the provisional perimeter against the remaining drainage routes, damaged pumps, ammunition, medical supply and third-company relief. Test the claimant's operational advice without certifying his identity. Preserve distinct evidence custody and incomplete casualty counts.",
       "legacyBackfillRequired": false,
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "Installment VII — The Line on the Map",
+        "segment": "Installment VIII — The Cost of the Perimeter",
         "durableCharacterStateChanged": true,
-        "reason": "Four active surface-command characters received new bounded knowledge, orders, medical/secret state and chapter touch logs; General Helgren entered the identity and temporal registries. All preexisting character history preserved."
+        "reason": "Four surface-command personae received nine bounded temporal entries and four chapter touch logs; all 63 records retained."
       },
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-01.md"
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/project-vigilant-shade-continuation-02.md"
     },
     {
       "id": "tenelja-station",
