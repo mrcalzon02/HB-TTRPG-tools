@@ -2,50 +2,52 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 2 Episode 32, *The Useful Monster*.
-**Forward window:** Season 3 Episodes 1–5.
+**State:** Rolled forward after Season 3 Episode 01, *The Empty Table*.
+**Forward window:** Season 3 Episodes 2–6.
 
-**Continuity status:** Luceran has publicly acknowledged the original attack order and false Dols denial. Ysabet retains the original; Senna and Harven carry two separate attested packets toward Dols, with no confirmed arrival. Yara's distinct Merehaven/Teth reports have no confirmed bench receipt. Leora's agent has inspected the original watch records but she has not received his report or the king's admission. Damaris released the second waiting wagon to stop mounting hire costs, losing immediate readiness; six sacks remain at Edselsto, six reached northern posts. The first Merehaven receipt stands; second advance remains withheld. Dols wall unaccepted, Teth ferry owner-controlled, eighteen mounts withdrawn, gutter work incomplete. Jalen's adapted rest is planned, his personal correspondence is being arranged and his original discharge/family claim unresolved. Miren remains affectionate but unreconciled; Edselsto remains useful without new power. All seven candles burn.
+**Continuity status:** Luceran's witnessed confession is not yet received by Dols; Senna and Harven remain en route with separate packets. Merehaven and Teth have no confirmed receipt of Yara's notices. Leora knows only the earlier accident and has separately dispatched a letter to Jalen; her source-inspection report is still in transit. Jalen has tested an adapted chair and dispatched his own private letter; no family answer or original casualty discharge is recovered. Six sacks remain at Edselsto, six reached the northern posts; the second wagon has been released and not rehired. Dols wall unaccepted, Teth ferry owner-controlled, Merehaven first receipt valid/second advance withheld, eighteen mounts withdrawn and gutter work incomplete. Hesta's four-season toll exemption persists; her paid porter/return-stone proposal awaits acceptance and mason verification. A witnessed invitation to inspect two Jorvan market-gate toll rolls is dispatched but neither received nor accepted, and no credit or lien is granted. Miren remains affectionate but separate; Edselsto has only bounded historical memory; all seven candles burn.
 
-## Season 3 Episode 01 — The Empty Table — CURRENT / LOCKED
+## Season 3 Episode 02 — The Price of a Seat — CURRENT / LOCKED
 
-**Purpose:** Open the season from the actual empty seats, damaged credibility and material shortages rather than resetting court politics. Luceran needs human partners who can refuse him. No river bench may act on an admission it has not yet received.
+**Purpose:** Force the first prospective creditor or road partner to price real Crown weakness. The dispatched Jorvan invitation is not yet received; establish courier delivery and named factor's lawful authority before any hearing. A creditor's right to refuse and the Crown's need for usable grain carriage must both be credible.
 
-**A-story:** Damaris, Rhyse and Ysabet identify which local houses, road authorities, former rivals or creditors can negotiate a narrow grain/road/security solution and what each can lawfully offer. Carry the released wagon, roof repair, withdrawn mounts and first-valid/second-withheld Merehaven sureties. A new proposal must have a named messenger, price and enforceable terms.
+**A-story:** Jorvan's factor, if duly authorized and arrived, examines gate toll rolls under named custodians and proposes a witnessed, enforceable concession with priority and default terms. Damaris and Ysabet separate inspection from actual lien, protect existing night-watch and gate repair charges, and require a real payer. Hesta's conditional paid-porter proposal is answered without silently overriding her toll right, and the Dols wall remains unaccepted absent independent action.
 
-**B-story:** Miren's affection is not restored intimacy; Luceran cannot make confession an invoice for forgiveness. Jalen's personal correspondence and accessible care proceed without new service claims. Leora's own evidence custody remains independent, and her knowledge advances only through dated receipt.
+**B-story:** Luceran must accept a human partner who may decline; Miren cannot be purchased with his better behavior. Jalen's and Leora's separately dispatched letters have their own routes, privacy and delivery delays.
 
-**C-story:** Edselsto offers narrow historical usefulness, not judgment, omniscience, new binding or legal consent. The king's temptation to use the unarguing castle increases precisely when living people set conditions.
+**C-story:** Edselsto can recall old stone but cannot appraise a lender's motives or provide consent. Do not add a castle capability or candle failure.
 
-**D-story:** A named low-status worker or factor acts on an independent livelihood obligation, with consequences for the Crown's bargain.
+**D-story:** Gate keepers, carters, Hesta and paid clerks defend work and income independent of the king.
 
-**Exit:** One costly human negotiation becomes unavoidable, with its witness, payer and jurisdiction established.
+**Exit:** One narrowly witnessed, politically costly concession is either agreed or explicitly rejected, with no free alliance or premature foreign verdict.
 
-## Season 3 Episode 02 — The Price of a Seat — DIRECTIONAL
+## Season 3 Episode 03 — Proof of Life — DIRECTIONAL
 
-A named house or river power demands a witnessed, enforceable concession. Its own grievances and capacity to withhold cooperation remain real; an ally or low-status worker bears part of the cost. No free coalition or magically supplied consent.
+Separate identity safeguards grow from Jalen's actual injury and Leora's unresolved personal claims. Independent physicians, voluntary questioning and jurisdiction-specific reception matter; no infallible test, new rite proof or confiscation of Jalen's consent. Preserve Jorvan and Hesta costs.
 
-**Exit:** Luceran's authority acquires a durable human limit.
+**Exit:** A bounded identity practice permits some cooperation without resolving Corven's fate or erasing the original crime.
 
-## Season 3 Episode 03 — Proof of Life — EXPLORATORY
+## Season 3 Episode 04 — The First Concessions — DIRECTIONAL
 
-Independent identity safeguards arise from lived injury: separate testimony, voluntary examination, intimate questions and foreign bench authority. Jalen and Leora are persons rather than verification instruments. No infallible test or premature mystery answer.
+Extend the initial creditor/road concession into specific offices, trade rights or passage guarantees only after witnesses, payers and limits are established. Protect three river jurisdictions and independent opponents' reasons to withhold cooperation. Personal relationships remain distinct from political bargaining.
 
-**Exit:** Some cooperation resumes at a political and personal price.
-
-## Season 3 Episode 04 — The First Concessions — EXPLORATORY
-
-Offices, trade rights, passage terms, compensation and guarantees purchase narrow, expensive cooperation. Keep the people paying and enforcing the bargains visible. Political allies do not become admirers by signing.
-
-**Exit:** A compromised coalition begins functioning with remembered debts.
+**Exit:** A working but disliked coalition has obligations someone will collect.
 
 ## Season 3 Episode 05 — Reopening Night — EXPLORATORY
 
-Plan a genuine social reopening only after the first concessions have made it affordable. Seed the hall, musicians, provisions, invited households, guest rights, staff labor and security during Episodes 1–4. Celebration must create actual pleasure and politically useful contact without curing old crimes. No candle failure before the scheduled Season Three Episode 8 threshold.
+Only stage a social reopening after affordable provisioning, invited households, guest rights, hall work, musicians, kitchens and guard hours have been seeded and paid. Beauty should be genuine, political and expensive, not a cure for the king's crime.
 
-**Exit:** Beauty and spectacle become plausible instruments of the compromised coalition.
+**Exit:** Spectacle becomes a usable, compromised political environment.
+
+## Season 3 Episode 06 — Doors With Opinions — EXPLORATORY
+
+Develop courtly games around *already established, bounded* threshold behavior, with a living Doorwarden able to explain and contest the practice. Do not conjure new door cognition or surveillance. A low-status worker bears the social cost of an apparently amusing rule.
+
+**Exit:** The court grows accustomed to using castle behavior as etiquette, without yet approaching the Episode 8 candle failure.
 
 ## Active payoff debt (historical carry-forward)
+
+Episode S3E1 adds the Jorvan invitation (dispatched, not received or accepted), two toll rolls offered for witnessed inspection (not pledged), conditional paid Hesta porter trial (not accepted), measured smaller quarry stones (not accepted by Dols), Jalen's sealed private letter (dispatched), Leora's separate paid letter (dispatched), a fitted but not final-braced chair, and cistern timber found too wet to trust. Preserve every prior debt below.
 
 Episode 32 adds the two separately sealed Dols packets and protected witness departure (not arrival); Damaris's release of the waiting wagon with a future rehiring delay; a valid first Merehaven receipt and still-withheld second advance; Jalen's chosen chair adjustment and ordinary private correspondence; Leora's agent's inspection of original watch sources with report still in transit; Miren's continuing separation; Luceran's signed witness protection; and a bounded cistern memory confirmed only as an old mason's mark. No foreign bench ruling or new castle power occurs.
 
