@@ -2,18 +2,12 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 3 Episode 05, *Reopening Night*.
-**Forward window:** Season 3 Episodes 6–10.
+**State:** Rolled forward after Season 3 Episode 06, *Doors With Opinions*.
+**Forward window:** Season 3 Episodes 7–11.
 
-**Continuity status:** The hall reopened for thirty-six with paid staff, musicians and guards from the household reserve, deferring linen and roof repairs. Orlen Morcant's quotation and supplier grievance seed independent outside bargaining. Rhyse stopped a door wager involving a kitchen boy. Jalen's medical refusal and undelivered letters remain; Miren did not resume intimacy. Jorvan 24/27, Hesta twelve-load preference and all transport restrictions persist. Seven candles burn.
+**Continuity status:** Episode 06 turns court threshold wagers into a real service obstruction and living-authority correction. Tavin's delayed water delivery, Alden Pell's named warning and apology, Iven's refusal to perform rank judgments, Rhyse/Dain's notice, Miren/Yara's use of the physically deaf room, and Orlen's paid baker-room appointment persist. No new castle cognition or candle failure. Jalen's medical refusal, Miren's unreturned intimacy, the 24/27 Jorvan terms, Hesta's twelve-load preference, deferred household repairs and blocked Dols crossing remain. Seven candles burn.
 
-## Season 3 Episode 06 — Doors With Opinions — CURRENT / LOCKED
-
-Use only established selective threshold responses, living Doorwardens, marked silver listening ways and the physically deaf room. A court game around bounded architectural responses embarrasses a lower-status participant; let living authority stop it, and show the social cost after. No omniscient doors, intent reading or new castle cognition.
-
-**Exit:** The court has normalized a useful but unsettling habit while some living witnesses resent it.
-
-## Season 3 Episode 07 — Business Outside the Walls — DIRECTIONAL
+## Season 3 Episode 07 — Business Outside the Walls — CURRENT / DIRECTIONAL
 
 The Hesta preference, Jorvan observer, Dols evidence limits and identity-refusal practice give independent creditors, merchants, clergy and rivals reason to meet beyond verified listening ways. Seed actual sites, travel, ordinary staff knowledge, paid messengers and separate motives. Do not invent a unified conspiracy or make Edselsto hear unconnected places.
 
@@ -37,7 +31,15 @@ Damaris must reconcile the paid hall gathering, deferred winter reserve, Jorvan'
 
 **Exit:** A concrete financial choice survives.
 
+## Season 3 Episode 11 — A Dangerous Attachment — EXPLORATORY
+
+An adult cross-faction attachment should develop through already established repeated contact and conflicting duties, not sudden confession or convenient scandal. Preserve directional uncertainty, professional competence, costs of private access, and independent motivations. No forced reconciliation between Luceran and Miren, no automatic romance from Miren/Yara's dance, and no identity coercion of Jalen.
+
+**Exit:** A relationship creates a future obligation neither party can dismiss as a passing attraction.
+
 ## Active payoff debt (historical carry-forward)
+
+**S3E6:** Alden Pell publicly attempted to turn a marked listening way, ordinary service latch and Iven Marrick's prepared threshold into noble-status games. Pel admitted Tavin; Iven declined rank judgments. Rhyse/Dain posted a living-service notice and named Alden in the watch account; his apology did not erase Tavin's humiliation or lost kitchen labor. The loose flag, kettle repair, depleted linen/roof reserve and ordinary watch costs remain. Miren/Yara used the physically deaf room without creating a romance or sharing Jalen's restricted medical observations. Orlen, Hesta's brother and haulers booked a paid baker's room for independent delivered-price comparison; no conspiracy, foreign road permission, or candle failure. Seven candles burn.
 
 **S3E5:** Paid hall supper for thirty-six, two usable hearths, third cold, three dry guest rooms; linen/roof reserve reduced, kettle and hearth follow-up due. Orlen quotation and off-wall supplier talks seeded; Rhyse stopped service-door wager. Jalen refusal and private letter transit unchanged, Miren independent, seven candles lit.
 
