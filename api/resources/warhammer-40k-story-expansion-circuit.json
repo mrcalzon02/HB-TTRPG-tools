@@ -144,8 +144,8 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
       "status": "active",
-      "currentEndpoint": "Continuation VI — The Carriage Held in Readiness. The old carrier's creditor-deposited records show a covered carriage reserved for Sol, two hours' standby and an unused-hire charge, but no issued movement chit or recorded release of that particular vehicle; they do not exclude other conveyance. The predecessor-bursar's original order required a maintained destination and forbade a receipt without witnessed delivery. Sixteen annual maintenance warrants were ordinary upkeep costs. Javard accepted a slower inquiry to avoid delaying twenty-six families' grave-tablet checks and sent separate cathedral/Inquisitorial requests to identify the authority holding the transfer open. Montpclair remains medically restricted; the niche, prior cabinet seal, Vorn's 'he', Graveheart and Tides of Tomorrow contradictions remain unresolved.",
-      "nextSlice": "Continuation VII — Trace the responses to the separate cathedral and Inquisitorial transfer-release requests, and the provenance of the prior authority designation without breaking the sealed cabinet or opening Sol's niche. Preserve carrier evidence as proof of standby only, not proof of no delivery; preserve Montpclair's recovery limits, Vorn's ambiguous warning and the unresolved Tides of Tomorrow return.",
+      "currentEndpoint": "Continuation VII — The Name of the Office. Separate cathedral and Inquisitorial replies establish that 'PRIOR DELEGATION — CUSTODY HOLD' is a historical routing designation, not an identified issuing officer. The cathedral can maintain Sol's destination but cannot release the transfer; the Inquisitorial desk authenticates the retired routing category but cannot identify the underlying author or authorize opening. An associated packet's external custody index exists in a controlled register; Javard has petitioned for supervised metadata inspection only. The carrier's reserved carriage remains unrecorded as released, not proof of no other conveyance. The cabinet, Sol's niche, Vorn's warning, Graveheart and the Tides return remain unresolved. Montpclair remains medically restricted; ordinary grave-tablet work continues; Serik has an agreed review point for participation.",
+      "nextSlice": "Continuation VIII — Follow the response to Javard's narrowly framed controlled-register metadata petition, distinguish the historical receiving-office mark from the original issuing authority, and account for the cost of a supervised review. Preserve separate custody chains, the unopened cabinet and Sol niche, the limited carrier finding, Montpclair's medical restrictions, Serik's review point, and all unresolved Graveheart/Tides/Vorn anomalies. Do not grant retrospective authorization or invent the contents of the controlled packet.",
       "eraLock": {
         "era": "Mature Imperium; exact millennium not fixed by the attached chronicle",
         "allowedInstitutions": [
@@ -161,11 +161,11 @@
       "legacyBackfillRequired": false,
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "Continuation VI — The Carriage Held in Readiness",
+        "segment": "Continuation VII — The Name of the Office",
         "durableCharacterStateChanged": true,
-        "reason": "Javard's carrier/bursar findings, funding trade-off, evidence copies and release-authority plan recorded with one new touch log; existing 59 personae preserved."
+        "reason": "Javard gains two bounded institutional responses, an external custody-index lead and a supervised-metadata petition; five durable entries and a touch log preserve evidence limits and Serik's voluntary participation. Montpclair receives one medically bounded report and touch log."
       },
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-06.md"
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-07.md"
     },
     {
       "id": "project-vigilant-shade",

@@ -514,6 +514,30 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-06.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "javard-dual-routing-replies-07",
+          "knowledge": "The cathedral confirms it can maintain Sol's destination but cannot cancel or certify receipt; its inherited 'PRIOR DELEGATION — CUSTODY HOLD' designation came through an old routing card, not an identified signatory. The Inquisitorial authentication desk confirms the designation was a valid historical routing category retired twelve years ago, but cannot identify the original issuing officer or authorize opening either seal.",
+          "certainty": "two independently returned signed institutional replies; underlying original instruction and signatory remain unknown",
+          "status": "confirmed",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VII — The Name of the Office",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-07.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "javard-controlled-register-07",
+          "knowledge": "An external custody index records transfer of a packet associated with the historical designation into a controlled register during the period of Sol's death; its contents, authorship and relationship to the cathedral instruction are unproved. A supervised external-register-line inspection can be petitioned through existing authority.",
+          "certainty": "Inquisitorial authentication desk metadata; no inspection of original packet",
+          "status": "reported",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VII — The Name of the Office",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-07.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -578,6 +602,18 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-06.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "javard-external-metadata-petition-07",
+          "goal": "Seek supervised examination of the controlled register's external custody line through Javard's existing Inquisitorial chain, limited to receiving authority and subsequent custody transfers, without opening the cabinet or niche.",
+          "horizon": "near-term",
+          "status": "active",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VII — The Name of the Office",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-07.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "skillsCompetence": [
@@ -598,7 +634,19 @@
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "javard-serik-review-07",
+          "obligation": "Review Serik's continued participation after the current custody-register petition; allow him to return to trade-house work without treating departure as disloyalty; maintain agreed pay meanwhile.",
+          "status": "active",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VII — The Name of the Office",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-07.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "physicalMedicalState": [],
       "equipmentResources": [
         {
@@ -642,6 +690,17 @@
             "story": "On the Fuzzy Edge",
             "segment": "Continuation VI — The Carriage Held in Readiness",
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "javard-dual-replies-petition-07",
+          "resource": "Separate cathedral routing reply, Inquisitorial authentication response and submitted supervised-metadata petition; cathedral originals and controlled packet remain with their custodians.",
+          "status": "copies and outgoing petition documented",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VII — The Name of the Office",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-07.md",
             "sourceType": "continuation"
           }
         }
@@ -704,6 +763,16 @@
             "story": "On the Fuzzy Edge",
             "segment": "Continuation VI — The Carriage Held in Readiness",
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-06.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VII — The Name of the Office",
+          "changeSummary": "Received independently bounded cathedral and Inquisitorial replies showing a historical routing designation rather than an identified issuing officer; learned of a controlled-register custody index and petitioned for external metadata only. Preserved the unopened cabinet and niche, protected ordinary burial-office work and Montpclair's recovery, and agreed to a review point for Serik's voluntary participation.",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VII — The Name of the Office",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-07.md",
             "sourceType": "continuation"
           }
         }
@@ -812,6 +881,17 @@
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "montpclair-medicae-light-limits-07",
+          "condition": "Halva reports Montpclair remains alive and fatigued after cranial augmetic surgery, with pain provoked by attempting to read under light; he remains uncleared for visitors or administrative duties.",
+          "status": "recovering; medically restricted; no direct new testimony",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VII — The Name of the Office",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-07.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "equipmentResources": [],
@@ -843,6 +923,16 @@
             "story": "On the Fuzzy Edge",
             "segment": "Continuation V — The Receipt That Wasn't",
             "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-05.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation VII — The Name of the Office",
+          "changeSummary": "Indirect Halva medical report confirms continuing recovery, reading-light pain and visitor/duty restrictions; Montpclair is not interviewed and learns no new investigative facts.",
+          "provenance": {
+            "story": "On the Fuzzy Edge",
+            "segment": "Continuation VII — The Name of the Office",
+            "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-07.md",
             "sourceType": "continuation"
           }
         }
