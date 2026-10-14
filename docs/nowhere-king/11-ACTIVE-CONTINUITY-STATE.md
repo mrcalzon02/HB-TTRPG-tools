@@ -2,7 +2,7 @@
 
 **Role:** Single authoritative current temporal continuity ledger.
 
-**Reconciled through:** Season 3 Episode 08, *The First Flame*.
+**Reconciled through:** Season 3 Episode 09, *Passwords*.
 
 ## Current state
 
