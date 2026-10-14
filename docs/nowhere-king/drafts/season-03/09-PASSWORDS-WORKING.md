@@ -208,10 +208,225 @@ She folded the note beside the unpaid workers' wages and the nave-watch hours. T
 
 Above the gate, six candles burned beside the one that had gone dark. None of the new questions made the seventh flame return.
 
-<!-- NONCANONICAL WORKING HANDOFF
-Rhyse/Dain: living invitation/witness procedures remain fallible; log delays and labor cost. Alden Pell's proposals lack watch authority. Tavin's kitchen boundary persists.
-Jalen/Yara: no new Dols jurisdiction, medical disclosure or letter receipt; Leora has not acknowledged Jalen's private reply. Childhood-question request refused, with Jalen retaining consent.
-Miren/Luceran: no restored intimacy, marriage assent or political trust; no new Edselsto authentication ability; conversation outside the physically disconnected room.
-Damaris/Bessa: gate original custody and Jorvan 24/27 capped terms unchanged; no invented repayment or road closure. Hesta preference, Orlen quote, hauler delay, works and wage obligations persist.
-First candle dark, six lit. No second failure, no prison revelation, no universal identity proof. This is working prose only: reconcile 11 and roll 12 to Episodes 10–14 upon canonical completion of Episode 09, not now.
+---
+
+The second mason brought his own line, his own weights, and an apprentice instructed not to look at Vess's figures.
+
+Vess met them at the barred lower stair before the yard had warmed. Pell Falbrecht waited with Tomas and the worker who had bruised his heel when the passage trembled. The man could bear weight now, but he did not bear it easily.
+
+“Where shall I hang the line?” the mason asked.
+
+“From stone we know has not moved,” Vess said.
+
+The mason studied the landing. “Which stone is that?”
+
+Vess had no answer he liked. They chose an iron staple two landings above and checked its mortar. The apprentice wrote down each reading before either master compared the figures. At the lower turn, the new line passed a finger's breadth from yesterday's mark.
+
+“So the wall moved,” Pell said.
+
+“Or our points differ,” the mason replied. “You asked me to measure. I cannot make your fear into a fact.”
+
+The injured worker shifted his foot. “Can we go back to work?”
+
+“Not down there,” Vess said.
+
+“We were told another mason would settle it.”
+
+“He has measured it,” Pell said, with more patience than he felt. “That is not the same as settling it.”
+
+Tomas could put two men in the upper yard carrying clean stone. The man with the bruised heel might count pieces from a seat if the physician approved his return, but Pell would not pretend that counting was a mason's task merely to reduce wages owed for the stoppage. He told Tomas to enter the difference in the works account.
+
+The visiting mason wanted another reading after a dry night, with a second reference point checked independently. Vess agreed. He disliked needing another man's doubt and liked even less the thought of sending a laborer down the stair because the Crown had already paid for an inspection.
+
+“Will you sign the passage safe?” Pell asked.
+
+“No.”
+
+“Will you sign what you measured?”
+
+The mason held out his hand for the book. “That I can do.”
+
+Beyond the bar the stair remained dark. Nothing moved while they watched it. The workers would be paid for waiting; the stone had offered no answer in return.
+
+---
+
+At the east gate the trouble began with two cloaks drying beside the same stove.
+
+One hauler's was faded brown. The other's was a brown that had once been blue. In the morning each took the nearer garment. Neither noticed until a guard demanded the name entered against the brown cloak's tally and received a different one.
+
+“I've been myself since breakfast,” the hauler said. “I was myself when I paid for the yard.”
+
+“You have another man's tally.”
+
+“I have another man's cloak.”
+
+The guard had heard Alden Pell's ideas about private challenges, though Rhyse had forbidden treating noble advice as a watch order. The man knew the distinction. He was frightened enough by the stories from the nave to wish for a test stronger than wet wool. He held both haulers to one side and sent for Bessa.
+
+By the time she arrived, Orlen Morcant had come to ask why the iron carriage had not moved. Hesta's brother had come for an unrelated quarry measurement, and he objected when someone called the delay a failure of his family's first-refusal right. Two men began arguing over a cart that neither owned.
+
+Bessa sent for the covered-yard keeper. He knew which hauler had paid for which place and had watched them unhitch their teams. He had not watched them change cloaks. The guard had seen the tallies in their hands but not their issue. Bessa set the receipts beside the gate book and corrected the copied entry without scraping away the original.
+
+“Then you know which is which,” the guard said.
+
+“I know who paid the yard keeper and who came through my gate,” Bessa answered. “I know men can put on the wrong coats. I do not know what lies in their souls, and neither do you.”
+
+The younger hauler had lost the hour in which he might have taken a load at the quoted rate. Orlen offered to hold his iron price until the next market day if the carrier paid for another night's shelter. The carrier declined. A fixed price without a paid cart was not much of a favor. Hesta's brother refused to let either man call the stoppage a failure of the quarry's lawful preference.
+
+The Jorvan observer watched Bessa enter the delay and its correction. He asked whether the guard's time would be charged against the pledged gate net.
+
+“He was on gate duty,” she said. “The noble questions belong to whichever house asks them. We shall count the hours actually worked, not rename them.”
+
+She could not yet say who would bear the hauler's lost hour. No delivery contract had been made; no royal road closure had been ordered. The loss existed without a convenient debtor.
+
+The haulers exchanged cloaks in front of the guard, who looked as though he would have preferred a miracle.
+
+---
+
+Alden Pell had scarcely finished hearing about the gate when the steward of his cousin's guest chamber refused to admit him.
+
+“Who taught you your letters?” the steward asked.
+
+Alden stared. “What?”
+
+“Your cousin says the answer will prove you.”
+
+“My mother hired three tutors. Which one does he want?”
+
+“The first.”
+
+“The first could scarcely keep a sober morning. I remember the third.”
+
+The steward had known Alden since childhood. That was what made the exchange intolerable. The man did not doubt him. He was obeying a cousin who had ordered everyone questioned and was now entertaining two guests inside.
+
+“You know me,” Alden said.
+
+“I do.”
+
+“Then open the door.”
+
+“If I do, he will say I have made his precaution worthless.”
+
+Alden had written precautions like this himself. He had imagined an impostor defeated by a clever memory. He had not imagined a familiar servant who could lose his place for disobedience, or a guest who honestly could not recall which of three men had first taught him a letter.
+
+The steward sent for the cousin. A servant waited with a tray of hot cups while the cousin took his time. By the time he appeared, the cups had cooled and the servant had missed the hour when she usually took bread to her mother in the village.
+
+The cousin laughed at Alden's anger. “It was a jest.”
+
+“It was your order.”
+
+“A harmless one.”
+
+Alden looked at the woman holding the tray. She was not smiling. He took a coin from his purse and offered it for the lost errand. She asked whether the cousin would permit her to leave. Alden turned to him, and for once the question he asked was not clever.
+
+“Will you?”
+
+The cousin waved her away. The steward opened the door.
+
+Alden went in, but the triumph he had expected from devising a test had become a small, sour thing. He could not buy back the woman's hour. He could not make Tavin trust him by suddenly noticing that other people had work.
+
+He told the steward not to ask that question again. The steward replied that the cousin, not Alden, had issued the instruction.
+
+“Then I shall speak to him,” Alden said.
+
+He had thought giving the correct answer would be the difficult part. He was beginning to learn how much trouble a person could cause by asking a question he would never have to answer himself.
+
+---
+
+---
+
+Merel's assistant had made two copies of the nave testimony and spoiled a third.
+
+He held the spoiled sheet toward the brazier, but the canon caught his wrist before the edge reached the coals.
+
+“Why are you burning it?”
+
+“I wrote that the rail shook for three breaths. In my first account I wrote two.”
+
+“Then we have two accounts.”
+
+“I was there. Surely I ought to know.”
+
+Merel took the sheet from him. The boy had slept poorly and had been asked the same question by six visitors before the noon bell. In the morning he had remembered the tremor as a single blow; after hearing the mason's account, he had begun to remember a rumbling before it. Neither recollection was proof of what had occurred beneath the floor.
+
+A lady from one of the houses waited outside with a clerk and a list of questions. She wanted the witnesses named in the household hall so that every family might test their answers separately. The clerk was not unkind. He had brought his own paper and offered to pay the assistant for his time, as if that disposed of the matter.
+
+“May I speak with the boy?” the lady asked when Merel received her.
+
+“You may ask me for his account.”
+
+“I should prefer to hear it from his own mouth.”
+
+“You have his written account. He will be here at the evening office, and he has already spoken under witness.”
+
+“But if someone had taken his place—”
+
+“Then you would need grounds to believe it. He has not disappeared between the vestry and this table.”
+
+She looked past Merel to the assistant. “You need not fear a simple question.”
+
+The boy flushed. Merel had been a young priest once, proud enough to answer every challenge and too inexperienced to recognize when an invitation had become a demand.
+
+“He need not fear it,” Merel said. “He need not answer it either.”
+
+The lady objected that the seven lights belonged to the royal family and the realm, not to a canon's private keeping. On that point he agreed with her. He showed her the public notice: the first candle had gone dark before witnesses; the other six burned; the wick had not been touched. The hour was given as the watch bell had been heard. Neither the names nor the unharmonized testimony were posted for the amusement of every frightened visitor.
+
+“I cannot tell my household why it happened,” she said.
+
+“Neither can I.”
+
+“Then what use are your records?”
+
+“If tomorrow someone claims we put out all seven ourselves, we can say what we saw. That is useful enough for today.”
+
+When she had gone, the assistant asked whether the spoiled sheet belonged in the record. Merel laid it beneath the other two, with the hour of its writing. He would rather preserve an honest change of memory than teach a frightened young man to make his recollections match.
+
+---
+
+Ysabet found Luceran with Dain's watch book open beside the household accounts. He had reached the entry concerning two haulers and a pair of exchanged cloaks.
+
+“Have we become so frightened that a man's coat is now his name?” he asked.
+
+“Not by your order,” Ysabet said.
+
+“Is that meant to comfort me?”
+
+“It is meant to tell you which orders you can correct.”
+
+Rhyse had already instructed his guards to record invitations, living witnesses and delays rather than demand household secrets. Dain's pages showed what the instruction had not prevented: a frightened guard could hold two men while seeking someone with authority to release them. The loss of an hour was written in one hand. The cost of the delay was not yet settled in any hand.
+
+Luceran turned to the next entry. A kitchen boy had carried water to the nave under an assigned errand. A noble visitor had asked why he was not required to answer the same questions as a returning guest.
+
+“Shall I command every house to stop?” Luceran asked.
+
+“You may command your own watches,” Rhyse replied. “A mother questioning a stranger at her nursery door is not the same thing as a guard holding a porter who is expected at work. If you make them the same, the houses will either defy you or make a show of obeying.”
+
+Luceran knew the first response well. The second had lately proved almost as costly.
+
+Ysabet pointed to the account. “The house that insists upon a private challenge may pay for its own servants' time. That does not make every loss a royal debt. Nor does it let the watch turn a household request into a warrant.”
+
+“And the hauler?”
+
+“Bessa has recorded what she can attest. Whether the man has a claim for his lost hour is a question to be heard, not answered because you dislike the story.”
+
+He had wanted an order that would make people recognize one another. Instead he could issue an order about what his own guards were permitted to do. It seemed a meagre return for being king.
+
+“Write the watch instruction under my seal,” he said. “No challenge invented by a household shall become a condition of passage through a royal working gate without a named officer's authority. Keep the entries. Let the petitions come by the ordinary clerk.”
+
+Rhyse inclined his head, satisfied with the narrowness of it. Ysabet was less pleased than she appeared. A signed order could be used against Luceran if he broke it; that was part of its value.
+
+“The gate charges?” Luceran asked.
+
+“Damaris will have the proper books,” Ysabet said. “She will not be grateful if you decide their sums in advance.”
+
+He closed Dain's book. In the nave a candle remained dark. On the stair a mason would not sign a wall safe. At the gate two men had been delayed by coats that were not theirs. None of these facts had yielded the certainty people wanted. He could at least keep his own uncertainty from becoming another person's compulsory confession.
+
+<!-- NONCANONICAL WORKING HANDOFF — S3E09, integrated working draft
+Status: working, not canonical. S3E08 remains the last published episode. No authoritative 11/12 updates until S3E09 release.
+Rhyse/Dain/Ysabet/Luceran: watch procedure distinguishes named officer authority, living witnesses, and written delay records from compulsory household secret questions. Luceran's narrow signed reinforcement applies to royal working gates, not private domestic questioning; it is not universal identity certification. Dain's original watch entries survive; lost hauler time is recorded but liability unadjudicated.
+Alden Pell: learns private challenges burden familiar servants, a cousin's steward, a kitchen worker's errand, and himself. His coin and shame do not erase Tavin's distrust or confer watch command.
+Bessa/Orlen/Hesta/Jorvan: two haulers exchanged cloaks; the yard keeper and receipts support a corrected copied gate entry, not proof of souls. Original custody remains Bessa's. No haulage contract, royal road closure, compensation award, Jorvan repayment/default, or change to the 24/27, twelve-market-day plus limited four-day tail. Hesta's first-refusal and four-season toll rights, Orlen's quotation, untested third drain block and hauler's loss persist.
+Vess/Pell/Tomas: independent mason's reference differs; a new measurement cannot prove stone movement or safety. Lower stair barred, another dry-night reading due, stopped-worker wages and bruised heel owed, no new undercroft access.
+Merel/assistant: assistant's discrepant recollections retained with their order and times; no harmonized miracle testimony. First wick dark and untouched, six flames lit; witnesses not subjected to unsanctioned public interrogation. No link between tremor and flame proven.
+Jalen/Yara/Leora: no medical disclosure, Dols jurisdiction or receipt acknowledgment; Jalen refuses strangers' childhood-question test. Miren/Luceran: affection without renewed political trust, marriage assent or absolution. Edselsto gains no identification, mind-reading, or new hearing powers. No prison truth, no second candle failure.
+Future: Episode 10 treasury strain can account for actual watch, works, wages and gate costs without invented fraud. Reconcile document 11 and roll document 12 to S3E10–14 only upon canonical publication.
 END HANDOFF -->
