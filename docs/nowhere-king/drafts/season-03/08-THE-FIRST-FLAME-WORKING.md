@@ -293,6 +293,32 @@ A noble suggested that a rival house had arranged the extinction as a warning. R
 
 Another insisted the dark wick was divine judgment on the king. Merel answered that a priest could call for prayer without claiming to know which sin heaven had chosen to name.
 
+Merel's assistant had been waiting beside the door with the names of the witnesses held against his chest. He had written them carefully, but the ink at the bottom of the sheet had spread where his thumb rested. When the argument about divine judgment ended, he tried to speak. Merel saw him and raised one hand.
+
+"There are people waiting outside," the assistant said. "They want to pray before the six. We turned them away when we closed the doors, and now they think we know something worse than we have told them."
+
+"Did you tell them that?" Rhyse asked.
+
+"No. I told them one candle had gone out."
+
+Merel laid the boy's account beside his own. Both recorded the shiver before the darkness. The boy thought the brass rail had trembled for several breaths; Merel remembered only one movement. Neither had a clock precise enough to settle the difference. He left both accounts unchanged.
+
+"We cannot close a house of prayer until a mason tells us what the mountain is doing," Merel said. "Nor can we turn a witnessed object into something every frightened visitor may handle. I want the first candle preserved and the living permitted before the other six."
+
+Rhyse knew the narrow side passage would become a crush if the doors opened without order. He proposed one living guard at the inner rail, another at the broad entrance, and admission in small groups during the ordinary evening hours. The narrower passage would remain free for departure. No guard would interpret a prayer or interrogate the worshippers.
+
+"That takes men," Damaris said.
+
+"From the hall watch for one evening, not the gate," Rhyse answered. "I will bring you the hours actually served tomorrow."
+
+Damaris marked the obligation without inventing its cost. Merel would continue supplying the candles from temple stores. The Crown had not bought their light and would not acquire their meaning merely by paying a watchman.
+
+Someone proposed relighting the dark wick before the villagers saw it. Merel shook his head.
+
+"If I do that, what shall I tell the people who saw it fail? That their eyes were mistaken? We may yet find a proper rite. I will not manufacture an answer with a taper."
+
+The assistant returned to the waiting people with a difficult but honest task: tell them what had been witnessed, admit what remained unknown, and show them a way to pray without disturbing the evidence.
+
 Luceran listened. He had expected the room to divide between those who trusted Edselsto and those who did not. Instead he found people who disagreed about money, authority, evidence, ritual and the limits of their own trades. None of those disagreements made the others imaginary.
 
 "How many men?" he asked Vess.
