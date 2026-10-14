@@ -257,8 +257,8 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
       "status": "active",
-      "currentEndpoint": "Chapter V — The Hours Between. Arbentia gained Abraxas's restricted sponsorship and a conditional two-hour reading allocation, pending ward roster and annex custodian confirmation; she has not yet studied the archival cohorts. Holt remains exertion-limited, and only his consent-limited fitness notice reached Xanadu; compensation, accident causation and possible berth charges remain unresolved. The ward crossing suffered an eleven-second primary-light interruption with emergency strips functioning; the rated secondary-feed fuse remains missing and a limited manual watch is in force. Rix completed his first tug transfer with borrowed release equipment and a disputed allowance charge; he has not inspected Holt's fitting or obtained confidential statements.",
-      "nextSlice": "Chapter VI — The Price of Borrowed Things. Ground Rix's borrowed release-equipment charge and the salvage maintenance economy through authorized records and competing work obligations. Confirm or defer Arbentia's conditional scriptorum appointment without assuming access. Preserve Holt's consent-limited notice, unresolved compensation, and the documented missing-fuse risk. Avoid premature catastrophe, unauthorized evidence access, and false certainty.",
+      "currentEndpoint": "Chapter VI — The Price of Borrowed Things. Rix's equipment charge remains disputed; Arbentia's supervised study establishes missing follow-up limits; Holt remains restricted; the rated corridor fuse remains absent.",
+      "nextSlice": "Chapter VII — Follow the corridor maintenance and medical-watch constraints into the first preventable near-miss; preserve existing restrictions, records and staffing costs.",
       "eraLock": {
         "era": "Late Imperial / 41st Millennium station-life setting as established by the source story.",
         "allowedInstitutions": [
@@ -375,33 +375,33 @@
         ],
         "rollingNearTermWindow": [
           {
-            "installment": "6",
-            "objective": "Salvage-side equipment charge, Rix's obligations and conditional scriptorum roster/custodian confirmation."
-          },
-          {
             "installment": "7",
-            "objective": "First preventable near-miss linking documented maintenance and medicae jurisdictions."
+            "objective": "Medical and maintenance near-miss."
           },
           {
             "installment": "8",
-            "objective": "Causally seeded industrial/void casualty influx with real staffing and supply consequences."
+            "objective": "Industrial casualty influx."
           },
           {
             "installment": "9",
-            "objective": "Arbentia notices a pattern but lacks authority and clean evidence to act."
+            "objective": "Arbentia's constrained pattern finding."
           },
           {
             "installment": "10",
-            "objective": "Bethany and Abraxas must combine complementary practice without losing their doctrines."
+            "objective": "Bethany and Abraxas combined practice."
+          },
+          {
+            "installment": "11",
+            "objective": "Institutional response and costs."
           }
         ]
       },
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "Chapter V — The Hours Between",
+        "segment": "Chapter VI — The Price of Borrowed Things",
         "durableCharacterStateChanged": true,
-        "reason": "Chapter V prose is published and eleven continuity entries plus three touch logs are committed. Study remains conditional; Holt's restrictions, the missing fuse and Rix's equipment charge persist."
+        "reason": "Three existing Tenelja character records and Chapter VI touch logs reconciled."
       }
     },
     {
