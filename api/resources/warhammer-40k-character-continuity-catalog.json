@@ -3023,6 +3023,30 @@
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "tenelja-arbentia-annex-cohort-06",
+          "knowledge": "Arbentia exercised an eighty-minute supervised annex reading after a forty-minute custodian delay, using anonymous pulmonary cohort definitions only. The longest-followed cases disproportionately remained in paid convalescent berths; missing follow-up is not evidence of recovery, death, or employment fitness. Abraxas cautioned that denominators differ, and no Holt prognosis or treatment change follows.",
+          "certainty": "direct supervised extract, Abraxas's review",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter VI — The Price of Borrowed Things",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "tenelja-arbentia-holt-restricted-review-06",
+          "knowledge": "Holt's current standardized exertion test still supports restriction; he renewed consent for a limited fitness notice without pain details. His berth charges accumulate as an advance while liability remains blank. The requested extra review is not authorized yet.",
+          "certainty": "direct examination, Holt's consent and his account sheet",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter VI — The Price of Borrowed Things",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3044,11 +3068,23 @@
           "id": "tenelja-arbentia-archive-next-cycle-05",
           "goal": "Confirm next-cycle infirmaria roster and annex custodian for the signed conditional two-hour supervised reading allocation; if staffing or custodian is unavailable, defer rather than abandon patient cover.",
           "horizon": "next-cycle",
-          "status": "active",
+          "status": "completed",
           "provenance": {
             "story": "Of Blood and Wires: The Litanies of Tenelja Station",
             "segment": "Chapter V — The Hours Between",
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "tenelja-arbentia-followup-request-06",
+          "goal": "Request one additional Holt review through ordinary ward authorization, distinguishing a requested appointment from a granted one; pursue aggregate cohort transfer/discharge/nonattendance categories without accessing identities or sealed charts.",
+          "horizon": "next-cycle",
+          "status": "active",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter VI — The Price of Borrowed Things",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
             "sourceType": "continuation"
           }
         }
@@ -3078,6 +3114,19 @@
             "story": "Of Blood and Wires: The Litanies of Tenelja Station",
             "segment": "Chapter V — The Hours Between",
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "tenelja-arbentia-rix-equipment-cost-06",
+          "other": "Rix",
+          "direction": "Arbentia toward Rix",
+          "trust": "Rix showed her his partial undisputed allowance and ongoing deposit hold, acknowledged accepting another watch before informing her, and respected the separation of Holt's sealed accident evidence from his own borrowed-ram dispute. Their affection remains real while time and money constrain meetings.",
+          "status": "active",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter VI — The Price of Borrowed Things",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
             "sourceType": "continuation"
           }
         }
@@ -3132,6 +3181,17 @@
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "tenelja-arbentia-stamped-extract-06",
+          "resource": "Holds custodian-stamped eighty-minute anonymous cohort extract with Abraxas's denominator corrections; trainee's displaced hour remains due in the next cycle; not authorized to remove original charts or change Holt treatment.",
+          "status": "held",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter VI — The Price of Borrowed Things",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "chapterTouchLog": [
@@ -3152,6 +3212,16 @@
             "story": "Of Blood and Wires: The Litanies of Tenelja Station",
             "segment": "Chapter V — The Hours Between",
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Chapter VI — The Price of Borrowed Things",
+          "changeSummary": "Exercised eighty minutes of conditional supervised study after custodian delay; learned archival follow-up denominators exclude untracked departures, received Abraxas's correction, and sought only a normal-authority additional Holt review. Preserved trainee's restored hour and patient confidentiality. Repeated Holt's consent-limited restriction after a standardized review, learned Rix's partial payment and new watch, and retained their relationship's practical cost without seeking restricted salvage evidence.",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter VI — The Price of Borrowed Things",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
             "sourceType": "continuation"
           }
         }
@@ -3233,6 +3303,30 @@
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "tenelja-abraxas-archival-denominators-06",
+          "knowledge": "The anonymous archival pulmonary cohorts contain differing denominators and incomplete follow-up, especially where company-paid convalescent berths ended. Their aggregate figures cannot determine Holt's individual prognosis or justify a treatment change; a future aggregate request may distinguish transfer, discharge and nonattendance without named charts.",
+          "certainty": "direct review of Arbentia's stamped supervised extract",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter VI — The Price of Borrowed Things",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "tenelja-abraxas-holt-standardized-followup-06",
+          "knowledge": "Holt's latest standardized exertion readings still support restricted activity, and the aggregate archival study does not establish his individual prognosis.",
+          "certainty": "direct clinical review of current measurements",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter VI — The Price of Borrowed Things",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3247,7 +3341,7 @@
         {
           "id": "tenelja-abraxas-bounded-sponsorship-05",
           "obligation": "Sealed Arbentia's request for two supervised study hours restricted to anonymous comparison criteria, with no named patient records, sealed company returns or removed original charts; findings require ward review before treatment changes. Sponsorship is not annex access and does not supply his own clinical supervision time.",
-          "status": "active",
+          "status": "completed",
           "provenance": {
             "story": "Of Blood and Wires: The Litanies of Tenelja Station",
             "segment": "Chapter V — The Hours Between",
@@ -3276,6 +3370,16 @@
             "story": "Of Blood and Wires: The Litanies of Tenelja Station",
             "segment": "Chapter V — The Hours Between",
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Chapter VI — The Price of Borrowed Things",
+          "changeSummary": "Reviewed Arbentia's custodian-stamped anonymous cohort extract, corrected incompatible denominators and limited its clinical use; did not grant access to named charts or change Holt's treatment. Reviewed Holt's latest standardized measurements and retained the restriction without claiming new prognosis.",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter VI — The Price of Borrowed Things",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
             "sourceType": "continuation"
           }
         }
@@ -3371,7 +3475,7 @@
         {
           "id": "tenelja-bethany-conditional-cover-05",
           "obligation": "Accepted narrow emergency-bell coverage for Arbentia's conditional study period if the next-cycle roster holds; one outgoing sister agreed to a single delayed meal, explicitly not an indefinite staffing assumption. The arrangement remains subject to confirmation.",
-          "status": "conditional",
+          "status": "completed",
           "provenance": {
             "story": "Of Blood and Wires: The Litanies of Tenelja Station",
             "segment": "Chapter V — The Hours Between",
@@ -3387,6 +3491,28 @@
             "story": "Of Blood and Wires: The Litanies of Tenelja Station",
             "segment": "Chapter V — The Hours Between",
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "tenelja-bethany-manual-watch-accounting-06",
+          "obligation": "Maintained a transfer-only manual watch while the rated secondary-feed fuse remains unavailable; recorded the maintenance worker's diverted hours, required ordinary authorization for an additional Holt review, and kept the trainee's deferred study hour on the next-cycle slate.",
+          "status": "active",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter VI — The Price of Borrowed Things",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "tenelja-bethany-transfer-watch-review-06",
+          "obligation": "After the supply tender arrived without the rated fuse, required the crossing watch to be reviewed at the next change of watch rather than quietly becoming a permanent uncounted post; maintained Holt's graft and exertion restrictions.",
+          "status": "active",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter VI — The Price of Borrowed Things",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
             "sourceType": "continuation"
           }
         }
@@ -3411,6 +3537,16 @@
             "story": "Of Blood and Wires: The Litanies of Tenelja Station",
             "segment": "Chapter V — The Hours Between",
             "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Chapter VI — The Price of Borrowed Things",
+          "changeSummary": "Covered the shortened supervised annex allocation without inventing staff capacity; maintained transfer-only crossing watch and its real labor cost, and allowed an additional Holt review request but not an unauthorized appointment. Reaffirmed Holt's graft limits and required a next-watch review when the tender lacked the rated fuse.",
+          "provenance": {
+            "story": "Of Blood and Wires: The Litanies of Tenelja Station",
+            "segment": "Chapter VI — The Price of Borrowed Things",
+            "path": "assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md",
             "sourceType": "continuation"
           }
         }
