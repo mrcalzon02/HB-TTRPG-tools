@@ -83,9 +83,9 @@
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
       "status": "active",
-      "currentEndpoint": "Continuation IX — The Hours Owed. The fleet's second independent counterpart assessment was deferred until the next review cycle, pending restoration of displaced engine-room exercises and an approved staffing/funding plan. The Academy restored two cadets' gunnery review, completed Hall Four's equipment check, and rostered the technician's owed rest. Caldrake received signed findings and a corrected public notice; its narrower custody challenge remains open. Original marks, sealed cadet records, appeals and the conventional course are unchanged. No improved fleet performance has been established.",
-      "nextSlice": "Continuation X — Follow Caldrake's seal-custody challenge through ordinary review; reconcile the fleet's displaced exercises and independent staffing costs before a new trial can be approved. Preserve original marks, privacy and the conventional course.",
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
+      "currentEndpoint": "Continuation X — The Missing Receipt (Parts I–IV). A lawful appeals review found intact cadet first-account seals and no overnight cabinet opening, but the unsigned receiving handover prevents an uninterrupted named-custodian certification. Caldrake received a bounded finding without private debriefs or evidence of alteration. The Headmaster ordered an accurate correction and a costed transfer procedure. One of two displaced fleet exercises is complete; the second remains pending, and independent assessment remains unfunded and unscheduled. Original marks, privacy, conventional course and Priority Omega persist.",
+      "nextSlice": "Continuation XI — Reconcile the records-office staffing cost, Caldrake's lawful appeal options, the second displaced fleet exercise and independent-assessor funding before another trial; no retrospective perfect custody or protected-account disclosure.",
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-10-part-04.md",
       "eraLock": {
         "era": "Mature Imperium / late-era Imperial Navy Academy setting; exact millennium not fixed by the attached chronicle",
         "allowedInstitutions": [
@@ -102,9 +102,9 @@
       "chapterCapRule": "Hard cap of 40 chapters per book; Chapter XL is the latest permissible chapter number within a book.",
       "characterContinuityAssessment": {
         "sufficientForNewProse": true,
-        "segment": "Continuation IX — The Hours Owed",
+        "segment": "Continuation X — The Missing Receipt",
         "durableCharacterStateChanged": true,
-        "reason": "Five character touch logs and six durable entries added; 63 personae preserved."
+        "reason": "Five personae gained touch logs and six bounded knowledge/obligation entries; 63 preserved."
       }
     },
     {
