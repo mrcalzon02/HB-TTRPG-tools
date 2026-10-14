@@ -2,16 +2,10 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 3 Episode 07, *Business Outside the Walls*.
-**Forward window:** Season 3 Episodes 8–12.
+**State:** Rolled forward after Season 3 Episode 08, *The First Flame*.
+**Forward window:** Season 3 Episodes 9–13.
 
-**Continuity status:** S3E07 establishes independent village price comparisons, limited east-gate observation, restricted foreign courier custody, and royal restraint toward off-wall speech. A lower service stair is barred for inspection; seven candles remain lit. All prior material and relationship obligations persist.
-
-## Season 3 Episode 08 — The First Flame — CURRENT / SCHEMATIC LOCK
-
-An independently evidenced below-ground containment failure may extinguish only the first candle, with witnessed inspection, disputed interpretations and material costs. The barred stair is a lead, not proof. No prison/interface truth or new ability.
-
-**Exit:** Six candles remain; costly inquiry begins.
+**Continuity status:** S3E08 records the witnessed extinction of the first ancestral flame during a separate lower-stair tremor, without establishing a common cause. Six remain lit. The first wick is preserved; nave worship resumes under supervised access, and the lower stair stays barred pending independent masonry measurements. Distinct living witness, works, watch and expenditure records remain open. All previous contracts, foreign limits, debts and relationships persist.
 
 ## Season 3 Episode 09 — Passwords — DIRECTIONAL
 
@@ -37,7 +31,15 @@ Establish independent provenance for copied new-room inscriptions and later unde
 
 **Exit:** Architecture becomes testable evidence.
 
+## Season 3 Episode 13 — Festival of Masks — EXPLORATORY
+
+A multi-day celebration lets competing houses display unity while pursuing independent desires, wagers, patronage and courtship. Seed costs, invitations, costume makers, musicians, watch coverage and public skepticism before spectacle. Masking must not become an infallible identity device or a magical ability; do not convert S3E09's bounded tests into certainty. The first candle stays dark, and six burn unless a separately earned later failure is documented.
+
+**Exit:** Visible vitality disguises material and political weakness; no fresh candle extinction.
+
 ## Active payoff debt (historical carry-forward)
+
+**S3E8:** Canon Merel and his assistant independently witness the first candle go out after a tremor; the six others remain lit, and the wick is not relit. Vess records a separate lower-stair movement, bars access and awaits an independent mason; coincidence is not proof of a shared cause. Rhyse keeps nave worship possible through living guards and witness custody; his hall-watch hours remain to be counted. Pell Falbrecht/Tomas owe wages to workers stopped for safety, including a minor heel injury and charcoal for their waiting brazier. Damaris separates works, hall, gate and nave expenses and defers upper-gallery hangings; no Jorvan pledge is touched. Bessa corrects the seven-candle rumor and records a hauler's gate passage, not a royal stoppage. Tavin retains kitchen duties and bounded water delivery. Miren and Yara protect Jalen's refusal and private medical record; he did not witness the candle. Luceran asks Edselsto only from the connected east map gallery and receives no causal answer. Preserve the six flames and distinct records; no early containment or interface explanation.
 
 **S3E7:** Orlen, Hesta's brother, two haulers and Kaelmont clerk Edda Kelm compare delivered prices at a paid village room without new contract; Hesta's preference and unaccepted stones stand. Bessa retains toll custody; Jorvan's observer only witnesses traffic. Yara receives restricted Dols mail with no crossing or verdict. Luceran refuses off-wall inquisitions. A lower stair is barred for living inspection; all seven candles burn.
 
@@ -60,4 +62,4 @@ Establish independent provenance for copied new-room inscriptions and later unde
 
 ## Protected long-future seeds
 
-No Magenheim crossover; no prison/containment/castle-interface truth; no candle failure before the earned Season 3 first-flame event; no unlimited Edselsto perception, legal judgment, money, or new body powers; no retroactive justification of Corven's killing or the false denial; no compulsory dead service; no transfer of Corven's office, marriage or consent to Jalen; no forced answer to Leora's private question; no universal identity ritual; no premature Ardel winter revelation; no conflation of distinct foreign jurisdictions or unrelated investigations. Preserve exact courier receipts, the original contradictory order, independent witness protection, Jorvan's 24/27 terms, and the distinction between evidence received and verdict rendered.
+No Magenheim crossover; no prison/containment/castle-interface truth; no second candle failure before its separately earned later event; the first candle remains dark and six remain lit; no unlimited Edselsto perception, legal judgment, money, or new body powers; no retroactive justification of Corven's killing or the false denial; no compulsory dead service; no transfer of Corven's office, marriage or consent to Jalen; no forced answer to Leora's private question; no universal identity ritual; no premature Ardel winter revelation; no conflation of distinct foreign jurisdictions or unrelated investigations. Preserve exact courier receipts, the original contradictory order, independent witness protection, Jorvan's 24/27 terms, and the distinction between evidence received and verdict rendered.
