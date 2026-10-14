@@ -149,7 +149,9 @@ Tomas asked whether he should call all the masons off the upper yard. Luceran ne
 
 The king went to the nave with Rhyse. The first candle was dark. Its wick was black, and a thin rim of wax stood where the flame had been. Merel had placed no new light beside it. The other six burned without disturbance.
 
-Luceran asked Edselsto what had happened.
+Luceran studied the wick until Merel asked him to leave it undisturbed. Then the king walked with Merel and Rhyse to the connected east map gallery, where the marked listening work had been inspected before. He would not turn an unproved hearing in the nave into another marvel by asking the walls to speak there.
+
+He asked Edselsto what had happened.
 
 The reply came after a pause long enough for him to feel foolish in front of the canon.
 
@@ -212,6 +214,74 @@ After Yara went, Miren listened to the faint music from the yard. The fiddler ha
 "That I do not know."
 
 She did not offer to make the king brave by forgiving him. She was no longer willing to purchase his peace with her own silence.
+
+---
+
+At the east gate the first rumor arrived ahead of the messenger.
+
+The boy carrying it had run from the upper kitchens. He told the guard that every light in the family nave had gone dark. He had heard this from a washerwoman who had heard it from a man bringing water to the masons. By the time he reached Bessa's desk he had acquired the certainty that all seven flames had died together.
+
+Bessa was mending a torn corner of the toll book with a narrow strip of paper. She laid the brush down.
+
+"Who saw them?"
+
+"I don't know."
+
+"Then you've brought me a story about a story. You may have some water before you run back, but you will not have my seal on it."
+
+The boy looked wounded. He had thought he was being useful.
+
+A little later Merel's actual notice came down with a living guard: the first flame had failed before witnesses; six remained. No visitor had been permitted to touch the wick. The cause was unknown. Bessa read it to her two gate servants and made the younger repeat the number before sending him to correct the boy in the kitchen.
+
+The Jorvan observer had listened without moving from his allotted place. He waited until she returned to the figures.
+
+"Will the gate close?"
+
+"Has a captain ordered it?"
+
+"Not that I've heard."
+
+"Then it stays open."
+
+He tapped his copy book. "If they send extra guards here, will their pay come before the surplus?"
+
+"If they stand gate watch under the captain's order, the ordinary gate expense will be entered as ordinary gate expense. If they stand beside a candle in the nave, they are not gate watch. You know the difference."
+
+"I do," he said. "I wanted to hear you say it."
+
+That was a creditor's question, not an insult. He had been sent to witness the agreed net, and an unexplained charge would injure his house as surely as an invented surplus would injure the Crown. Bessa disliked the terms of the loan but not the man's arithmetic.
+
+A hauler came up the wet road leading a mule with an empty cart. He had intended to take a load of iron uphill at first light. Now his partner wanted to leave the team in the lower village until someone could swear the mountain would not split beneath its wheels.
+
+"Can you swear it?" he asked Bessa.
+
+"No."
+
+"Then how am I to carry the iron?"
+
+"By the road, if your team and the road are sound. Or not at all, if you judge otherwise. I can count a cart. I cannot promise you the mountain."
+
+He rubbed the wet mane of the mule. "Orlen will call it a broken promise."
+
+"Did you promise to carry it today?"
+
+"I promised to come and hear the price."
+
+"Then you've kept that promise."
+
+The hauler laughed in spite of himself. He would leave the team below and pay for one night in a covered yard. He could afford that better than a snapped axle, but not many nights of it. He asked Bessa to witness that he had come as far as the gate. She agreed to enter the passage, not the reason for his delay, and gave him the name of the clerk who could copy the ordinary count.
+
+The observer watched the cart turn downhill again.
+
+"That will be called a royal stoppage by tomorrow," he said.
+
+"Then whoever calls it that can produce the royal order."
+
+"What if they cannot?"
+
+"Then the words will be cheaper than the iron."
+
+She returned to the book. The toll was the toll. The household might soon ask for more watchmen, more masons, more timber and more money, but none of those needs made a cart appear where it had not passed. Bessa had once thought such distinctions dull. Tonight they were the only thing between a frightened village and a very expensive lie.
 
 ---
 
