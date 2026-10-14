@@ -5796,6 +5796,30 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "prite-custody-review-limits-x",
+          "knowledge": "Caldrake's custody challenge established an unsigned overnight handover but no evidence of altered sealed accounts; technical seal/access evidence does not certify an uninterrupted named-person chain.",
+          "certainty": "signed procedural finding and fleet dispatch",
+          "status": "confirmed",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation X — The Missing Receipt",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-10-part-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "prite-fleet-dispatch-limits-x",
+          "knowledge": "One of two displaced fleet exercises has been restored; the second and independent assessor funding remain outstanding. A new assessment has no approval or date.",
+          "certainty": "fleet dispatch and Academy budget review",
+          "status": "confirmed",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation X — The Missing Receipt",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-10-part-04.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -5973,6 +5997,16 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "segment": "Continuation X — The Missing Receipt",
+          "changeSummary": "Accepted a genuinely adverse custody limitation without claiming fraud or innocence beyond the evidence; learned one displaced fleet exercise is complete while the second and independent assessment remain unfunded/unscheduled; declined to schedule another seminar.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation X — The Missing Receipt",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-10-part-04.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -6080,6 +6114,18 @@
           },
           "knowledge": "Human counterpart autonomy and incomplete voluntary information-sharing cannot be reduced to a scripted refusal.",
           "certainty": "observed in committed prose"
+        },
+        {
+          "id": "darcelle-cabinet-monitor-limits-x",
+          "knowledge": "The seminar cabinet monitor recorded no overnight opening, but records lock cycles rather than named custody; the receiving signature was never entered. Protected cadet contents remain sealed.",
+          "certainty": "direct technical logs and signed review",
+          "status": "confirmed",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation X — The Missing Receipt",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-10-part-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -6256,6 +6302,16 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "segment": "Continuation X — The Missing Receipt",
+          "changeSummary": "Distinguished simulator seal timing and cabinet lock records from missing named custody; preserved technical evidence limitations and protected cadet accounts.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation X — The Missing Receipt",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-10-part-02.md",
+            "sourceType": "continuation"
+          }
         }
       ]
     },
@@ -6362,6 +6418,18 @@
           },
           "knowledge": "Academy rooms and instructors have existing assignments; additional command seminars displace real teaching rather than using free capacity.",
           "certainty": "observed in committed prose"
+        },
+        {
+          "id": "renault-fleet-personnel-constraint-x",
+          "knowledge": "Fleet restored one of the two displaced engine-room exercises; the other still awaits qualified instructor and maintenance-team availability despite pressure-rig availability. Academy money does not confer authority to recall fleet personnel.",
+          "certainty": "fleet scheduling dispatch",
+          "status": "confirmed",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation X — The Missing Receipt",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-10-part-04.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -6477,6 +6545,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation IX — The Hours Owed",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation X — The Missing Receipt",
+          "changeSummary": "Reviewed the restored first fleet exercise and continuing personnel constraint; kept Academy training distinct from independent fleet validation.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation X — The Missing Receipt",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-10-part-04.md",
             "sourceType": "continuation"
           }
         }
@@ -6645,6 +6723,18 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "headmaster-named-custody-procedure-x",
+          "order": "Correct the seminar custody summary without replacing the original finding; label single-custodian movements accurately and cost a two-person transfer procedure before requiring independent countersignature.",
+          "issuingAuthority": "Academy Headmaster / records authority",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation X — The Missing Receipt",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-10-part-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [],
@@ -6709,6 +6799,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation IX — The Hours Owed",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation X — The Missing Receipt",
+          "changeSummary": "Ordered an accurate custody-summary correction and costed two-person receipt procedure without inventing staffing; preserved protected records, appeal rights and conventional course.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation X — The Missing Receipt",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-10-part-03.md",
             "sourceType": "continuation"
           }
         }
@@ -6819,6 +6919,18 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "vane-caldrake-partial-finding-x",
+          "knowledge": "The appeals officer found a missing receiving signature but intact account seals and no observed overnight cabinet access; Caldrake received the bounded finding without private cadet debriefs, and retained its lawful challenge rights.",
+          "certainty": "review disposition and dispatch receipt",
+          "status": "confirmed",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation X — The Missing Receipt",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-10-part-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [
@@ -6923,6 +7035,16 @@
             "story": "House Vallimere's Sons",
             "segment": "Continuation IX — The Hours Owed",
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-09.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation X — The Missing Receipt",
+          "changeSummary": "Maintained Priority Omega protection and lawful observer access while the procedural challenge found an incomplete handover without proving record alteration.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation X — The Missing Receipt",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-10-part-04.md",
             "sourceType": "continuation"
           }
         }
