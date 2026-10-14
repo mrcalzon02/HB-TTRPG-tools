@@ -1,11 +1,13 @@
-# Tenelja Chapter V — reconciliation status
+# Tenelja — Chapter VI reconciliation handoff
 
-**Chapter V character catalog and expansion circuit reconciled on `main`; Chapter VI prose still unpublished.** This handoff is a status note, not a second continuity authority.
+**Canonical endpoint:** Chapter VI, *The Price of Borrowed Things*, at `assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-03.md`. The next planned chapter is VII, with a rolling VII–XI horizon in the authoritative expansion circuit.
 
-The published and indexed Chapter V prose is `assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md`. Commit `9ef737cd2bbdabdc9d8e07727b87e92d761d8921` adds eleven provenance-backed Chapter V entries (six Arbentia, two Abraxas, three Bethany) and three Chapter V touch logs to the authoritative catalog, preserving all 63 personae.
+Chapter VI establishes that Rix's borrowed release ram was inspected but its handle scoring could not be dated or assigned to him. The replacement assessment was suspended; partial pay was released, while fees, deposit, older debt and another work watch remain consequential. This ram is not Holt's accident fitting.
 
-**Verified reconciliation:** Commit `3fffe3421bfb8731831f61de4b4284fe50ca31cb` advanced the circuit to Chapter V, set Chapter VI as next and VI–X as the rolling window, and pointed to published Chapter V prose. Independent `main` readback confirmed the new circuit and preserved the other six story-line entries. Chapter VI is dependency-eligible but not yet committed or indexed. A 2,813-word, five-sequence Chapter VI draft was prepared during this run; its GitHub blob write was rejected by connector safety checks, so no Chapter VI prose was published.
+Arbentia completed eighty minutes of supervised, anonymous pulmonary-cohort study. Abraxas identified unequal follow-up denominators; the material does not establish Holt's prognosis. Holt's exertion restriction and consent-limited notice remain in force. His compensation and berth charges are undecided; an additional review has been requested but not approved.
 
-**Continuity locks:** Arbentia's two-hour study allocation is conditional, not exercised; ward roster and annex custodian remain to be confirmed. Holt remains exertion-limited; the consent-limited fitness notice does not decide accident causation, compensation or berth costs. Emergency strips worked during the eleven-second corridor interruption, but the rated fuse remains missing. Rix completed his first tug transfer using borrowed release equipment with a disputed job-allowance charge; he has not inspected Holt's fitting or obtained confidential crew statements.
+The corridor's rated secondary-feed fuse did not arrive. Bethany's transfer-only watch continues, with diverted maintenance labor and a next-watch staffing review. The displaced trainee's study hour remains due. Arbentia and Rix's relationship continues with genuine competing work obligations.
 
-Next Chapter VI work should ground salvage and procurement costs and confirm or defer study access without inventing a sudden catastrophe.
+Chapter VI character-state entries and touch logs belong in `api/resources/warhammer-40k-character-continuity-catalog.json`; the story must be discoverable through `api/resources/warhammer-40k-lore-index.json`. Do not interpret the cohort gaps as recovery, the equipment dispute as proof of fault, or the manual watch as a permanent repair.
+
+**Previous chapter:** Chapter V, *The Hours Between*, at `assets/warhammer-40k/lore/of-blood-and-wires-tenelja-continuation-02.md`. Its earlier circuit repair is commit `3fffe3421bfb8731831f61de4b4284fe50ca31cb`.
