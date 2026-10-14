@@ -2,16 +2,10 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 3 Episode 08, *The First Flame*.
-**Forward window:** Season 3 Episodes 9–13.
+**State:** Rolled forward after Season 3 Episode 09, *Passwords*.
+**Forward window:** Season 3 Episodes 10–14.
 
-**Continuity status:** S3E08 records the witnessed extinction of the first ancestral flame during a separate lower-stair tremor, without establishing a common cause. Six remain lit. The first wick is preserved; nave worship resumes under supervised access, and the lower stair stays barred pending independent masonry measurements. Distinct living witness, works, watch and expenditure records remain open. All previous contracts, foreign limits, debts and relationships persist.
-
-## Season 3 Episode 09 — Passwords — DIRECTIONAL
-
-Separate fallible identity tests arise from Jalen and the envoy scandal, burdening households and private relationships. No infallible certification.
-
-**Exit:** Trust becomes more expensive.
+**Continuity status:** S3E09 leaves the first candle dark and six lit, with the barred lower stair still uncertified. Royal working-gate challenges now require named living authority; private household tests remain fallible and separate. Dain's delay records, Bessa's corrected gate copy, the hauler's lost hour, stopped-worker wages, Fera's signed but unpaid sickroom voucher and worn linen all require follow-up. Existing foreign jurisdictions, debts, contracts, consent limits and relationships persist.
 
 ## Season 3 Episode 10 — The Treasury Leak — DIRECTIONAL
 
@@ -37,7 +31,16 @@ A multi-day celebration lets competing houses display unity while pursuing indep
 
 **Exit:** Visible vitality disguises material and political weakness; no fresh candle extinction.
 
+## Season 3 Episode 14 — The Price of Friends — EXPLORATORY
+
+A useful court ally asks to convert recent hospitality, household access or a costed favor into lasting precedence. Show the specific rooms, paid work, watch hours and other claimants who would bear the cost; do not invent a prior royal promise or turn a provisional favor into an automatic grant. Damaris's Episode 10 fiscal choice and Episode 13 festival commitments must be visible in the price.
+
+**Exit:** A personal favor becomes a public political debt without erasing the original friendship.
+
 ## Active payoff debt (historical carry-forward)
+
+**S3E9:** Private identity challenges delayed servants and haulers without proving an impostor. Luceran sealed a narrow royal working-gate authority rule; private household questions remain fallible. Dain's watch delays and Bessa's original/corrected gate tallies survive. The younger hauler's lost earning hour has no adjudicated payer. Vess and the independent mason disagree about the barred lower stair; a further dry-night reading is due. Merel retains inconsistent assistant recollections, first wick dark and six lit. Fera has a signed sickroom overtime voucher due at the next pay chest, not yet cash; worn covers remain unprovided. Jalen's private childhood refusal and restricted medical record, Miren/Luceran estrangement, all Jorvan and Hesta terms, and distinct foreign receipts persist.
+
 
 **S3E8:** Canon Merel and his assistant independently witness the first candle go out after a tremor; the six others remain lit, and the wick is not relit. Vess records a separate lower-stair movement, bars access and awaits an independent mason; coincidence is not proof of a shared cause. Rhyse keeps nave worship possible through living guards and witness custody; his hall-watch hours remain to be counted. Pell Falbrecht/Tomas owe wages to workers stopped for safety, including a minor heel injury and charcoal for their waiting brazier. Damaris separates works, hall, gate and nave expenses and defers upper-gallery hangings; no Jorvan pledge is touched. Bessa corrects the seven-candle rumor and records a hauler's gate passage, not a royal stoppage. Tavin retains kitchen duties and bounded water delivery. Miren and Yara protect Jalen's refusal and private medical record; he did not witness the candle. Luceran asks Edselsto only from the connected east map gallery and receives no causal answer. Preserve the six flames and distinct records; no early containment or interface explanation.
 

@@ -1,7 +1,5 @@
 # Season Three, Episode 09 — Passwords
 
-**Working draft.** The canonical endpoint remains S3E08, *The First Flame*. This is a provisional development slice, not an Episode 09 release.
-
 The trouble with a password, Dain discovered, was that everyone wanted to know it.
 
 By breakfast, a visiting cousin had been asked his name twice between the east gate and the hall. The porter sent to fetch a witness had missed the unloading of two carts. A guard at the service turn had begun asking returning kitchen hands what they had eaten that morning.
@@ -332,8 +330,6 @@ He had thought giving the correct answer would be the difficult part. He was beg
 
 ---
 
----
-
 Merel's assistant had made two copies of the nave testimony and spoiled a third.
 
 He held the spoiled sheet toward the brazier, but the canon caught his wrist before the edge reached the coals.
@@ -382,6 +378,93 @@ When she had gone, the assistant asked whether the spoiled sheet belonged in the
 
 ---
 
+Yara found the attendant Jalen had asked about behind the sickroom, trying to wash a stain from the cuff of her gown.
+
+Her name was Fera. She had stayed late when frightened visitors filled the passages after the candle went out, and had remained when the other attendant went to fetch a physician. The sickroom clerk said the nave should bear the extra hours because the news had caused the disturbance. The nave clerk said Fera had never worked in the nave. Both men had written nothing.
+
+"I was paid for my ordinary watch," Fera said. "Not the rest."
+
+"Who asked you to remain?"
+
+"The household officer. He was standing here when the visitors came. He knows."
+
+"Then we shall ask him."
+
+Fera twisted the damp cuff. "My sister is taking my morning watch. I owe her the hours she covered last week. If this watch goes unpaid, I cannot ask her to take another."
+
+Yara knew the embarrassed little smile with which the woman finished. It was the expression of someone who had been taught that requesting payment for work made the work less generous.
+
+She brought Fera to Damaris instead of sending another note between clerks.
+
+The steward had two books open and a third balanced upon a pile of folded accounts. She heard Fera's account, sent for the sickroom slate, and compared the name of the summoning officer with the watch entry. The hours matched. The officer's order had been proper. The failure lay between the books.
+
+"She was summoned to the sickroom," Damaris said. "The sickroom belongs to the household. We cannot charge a nurse's wages to the temple because the trouble began at its door."
+
+"Nor to the east gate," Yara said.
+
+"Least of all to the east gate. Jorvan has a right to witness the deductions from that surplus, not to purchase the attendance of the wounded."
+
+Fera watched the steward draw a line beneath the entry.
+
+"Will I be paid?"
+
+"Your hours are allowed. The pay chest opens tomorrow morning. I shall sign the voucher now."
+
+Damaris calculated the sum from the agreed rate, sanded the writing and gave the paper to Fera. It was a promise with a date and a name, not money in her hand.
+
+"There is another thing," Fera said, lingering. "The covers are wearing through. I have mended the same two twice."
+
+"I know we are short of linen."
+
+"I thought you ought to know what short means before somebody sends another guest to the sickroom."
+
+Damaris looked up. The household could not spare money it did not have, but it could at least hear from the person who would be asked to lay a patient upon torn cloth.
+
+"Put both covers on the sickroom list. I cannot promise replacements this week."
+
+Fera nodded. At the door she asked whether the guards would question her again when she came to work.
+
+"Not as a condition of reaching your assigned room," Yara said. "Rhyse has forbidden it without a named officer's authority."
+
+"And if a guest asks?"
+
+"You may name the officer who sent you. A guest who wants more may take his question to him."
+
+Fera went to find her sister.
+
+Jalen was awake when Yara returned, struggling to turn a page without letting the writing board slide from his lap.
+
+"Was she paid?" he asked.
+
+"She has a signed voucher for tomorrow."
+
+"So not yet."
+
+"Not yet."
+
+He nodded. He had endured so many comforting assurances since his injury that the exactness of her answer seemed to please him.
+
+"She said she could not afford another late watch," he said. "I thought perhaps they had forgotten."
+
+"They disagreed about which room should pay."
+
+"Did you settle it?"
+
+"Damaris settled the account. Fera remembered the hours and who had summoned her."
+
+"Then she proved who she was by remembering her work."
+
+"No," Yara said. "She proved what work she did. We have been confusing those things all day."
+
+Jalen looked down at the letter to Leora, still his own to finish. A guard's steps passed the sickroom door without stopping to demand a childhood name.
+
+"Tomorrow," he said, "ask whether the voucher was honored."
+
+"I will."
+
+This time Yara wrote the promise down.
+---
+
 Ysabet found Luceran with Dain's watch book open beside the household accounts. He had reached the entry concerning two haulers and a pair of exchanged cloaks.
 
 “Have we become so frightened that a man's coat is now his name?” he asked.
@@ -419,14 +502,3 @@ Rhyse inclined his head, satisfied with the narrowness of it. Ysabet was less pl
 “Damaris will have the proper books,” Ysabet said. “She will not be grateful if you decide their sums in advance.”
 
 He closed Dain's book. In the nave a candle remained dark. On the stair a mason would not sign a wall safe. At the gate two men had been delayed by coats that were not theirs. None of these facts had yielded the certainty people wanted. He could at least keep his own uncertainty from becoming another person's compulsory confession.
-
-<!-- NONCANONICAL WORKING HANDOFF — S3E09, integrated working draft
-Status: working, not canonical. S3E08 remains the last published episode. No authoritative 11/12 updates until S3E09 release.
-Rhyse/Dain/Ysabet/Luceran: watch procedure distinguishes named officer authority, living witnesses, and written delay records from compulsory household secret questions. Luceran's narrow signed reinforcement applies to royal working gates, not private domestic questioning; it is not universal identity certification. Dain's original watch entries survive; lost hauler time is recorded but liability unadjudicated.
-Alden Pell: learns private challenges burden familiar servants, a cousin's steward, a kitchen worker's errand, and himself. His coin and shame do not erase Tavin's distrust or confer watch command.
-Bessa/Orlen/Hesta/Jorvan: two haulers exchanged cloaks; the yard keeper and receipts support a corrected copied gate entry, not proof of souls. Original custody remains Bessa's. No haulage contract, royal road closure, compensation award, Jorvan repayment/default, or change to the 24/27, twelve-market-day plus limited four-day tail. Hesta's first-refusal and four-season toll rights, Orlen's quotation, untested third drain block and hauler's loss persist.
-Vess/Pell/Tomas: independent mason's reference differs; a new measurement cannot prove stone movement or safety. Lower stair barred, another dry-night reading due, stopped-worker wages and bruised heel owed, no new undercroft access.
-Merel/assistant: assistant's discrepant recollections retained with their order and times; no harmonized miracle testimony. First wick dark and untouched, six flames lit; witnesses not subjected to unsanctioned public interrogation. No link between tremor and flame proven.
-Jalen/Yara/Leora: no medical disclosure, Dols jurisdiction or receipt acknowledgment; Jalen refuses strangers' childhood-question test. Miren/Luceran: affection without renewed political trust, marriage assent or absolution. Edselsto gains no identification, mind-reading, or new hearing powers. No prison truth, no second candle failure.
-Future: Episode 10 treasury strain can account for actual watch, works, wages and gate costs without invented fraud. Reconcile document 11 and roll document 12 to S3E10–14 only upon canonical publication.
-END HANDOFF -->
