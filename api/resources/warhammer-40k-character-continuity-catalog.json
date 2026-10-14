@@ -3783,6 +3783,30 @@
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "drenal-trial-week-one-04",
+          "knowledge": "After seven days the drydock-only dual-copy trial found three clock distinctions, two authorization corrections, one restricted timing reconciliation and one berth transposition, with no further missing movement. Assignment time and physical movement time are distinct; duplicate records consume paid clerk/witness hours and remain subject to the thirty-day trial, not House-wide adoption.",
+          "certainty": "direct supervised seven-day review and signed reconciliation report",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Continuation IV — The Weight of the Second Copy",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-04.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "drenal-carrier-pump-evidence-04",
+          "knowledge": "The carrier pump-service extract confirms irregular cycling before the passage deviation, but a later auxiliary interruption and pressure-stylus gap prevent assigning spoilage to the delay or excluding its contribution. The receiving factor's original grade certificate and signed terms remain outstanding; a separate holding charge has been presented but not adjudicated.",
+          "certainty": "factor's supplied extract and contested witness timings; original grade record not received",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Continuation IV — The Weight of the Second Copy",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-04.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3841,6 +3865,18 @@
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "drenal-clerk-trial-cost-04",
+          "relationship": "Mulvane recognizes that the reassigned clerk's accurate reconciliation work consumes paid time while his advancement remains undecided; he offers neither restoration nor influence he lacks. The clerk keeps signed copies and does not interpret Mulvane's thanks as a promise.",
+          "direction": "Mulvane toward unnamed drydock clerk",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Continuation IV — The Weight of the Second Copy",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-04.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "temperamentPerformance": [],
@@ -3890,6 +3926,17 @@
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "drenal-trial-cost-and-review-04",
+          "obligation": "The senior allocation officer extends the drydock-only register trial to its original thirty-day end date with separately recorded overtime and restricted custody. The House's station conversion charge remains against Mulvane's service allocation; carrier damages, holding charges, lighter recourse and clerk personnel outcome remain unresolved.",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Continuation IV — The Weight of the Second Copy",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-04.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [
@@ -3936,6 +3983,17 @@
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
             "sourceType": "continuation"
           }
+        },
+        {
+          "id": "drenal-eye-recovery-seven-day-04",
+          "state": "Left-hand tremor absent in the cup-and-reading task and lamp afterimage reduced to three breaths under comparable testing, but physician maintains prohibition on third-eye opening, navigation lamps, simulated beacon pressure and shipboard assignment; only shielded trajectory study with review is allowed.",
+          "status": "active",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Continuation IV — The Weight of the Second Copy",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-04.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "equipmentResources": [],
@@ -3977,6 +4035,16 @@
             "story": "Scion of the Warp-Born Blood",
             "segment": "The Authority to Amend",
             "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "segment": "Continuation IV — The Weight of the Second Copy",
+          "summary": "Observed the seven-day drydock-only dual-register trial, bounded restricted-movement reconciliation and paid staffing costs; received partial but causally inconclusive carrier pump evidence; acknowledged clerk's unresolved career cost; showed measured neurological improvement without clearance. House liability and patient-cause questions remain open.",
+          "provenance": {
+            "story": "Scion of the Warp-Born Blood",
+            "segment": "Continuation IV — The Weight of the Second Copy",
+            "path": "assets/warhammer-40k/lore/scion-of-the-warp-born-blood-continuation-04.md",
             "sourceType": "continuation"
           }
         }
