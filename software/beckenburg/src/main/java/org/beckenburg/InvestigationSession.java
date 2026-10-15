@@ -21,7 +21,8 @@ public final class InvestigationSession {
     private final ArrayList<String> journal = new ArrayList<>();
     private Outcome outcome = Outcome.ACTIVE;
     private int ticks, health = 100, stress, wards, payouts;
-    private int ghostRoom, lastStrike = -1000;
+    private final GhostDomain ghost;
+    private final GhostDomain.AiController ghostAi;
     private boolean prepared, haunted, rewarded;
     private String message = "Find disturbances, collect 3 instruments' evidence, prepare a ward, cleanse the anchor.";
 
@@ -29,7 +30,8 @@ public final class InvestigationSession {
         this.map=map; this.role=role; this.random=new Random(seed);
         this.wards=role==Role.CLERIC?3:2;
         this.anchorRoom=1+random.nextInt(8);
-        this.ghostRoom=anchorRoom;
+        this.ghost=new GhostDomain(anchorRoom);
+        this.ghostAi=new GhostDomain.AiController(seed ^ 0x4245434b454eL);
         journal.add("Case 001 / Spirit-class disturbance. Three complementary readings required.");
         journal.add("All classes can finish the contract; specialist actions change efficiency.");
     }
@@ -37,7 +39,7 @@ public final class InvestigationSession {
     public Role role() { return role; }
     public String missionId() { return missionId; }
     public int anchorRoom() { return anchorRoom; } // simulation/test authority; do not expose in player HUD
-    public int ghostRoom() { return ghostRoom; }
+    public int ghostRoom() { return ghost.room(); }
     public int ticks() { return ticks; }
     public int health() { return health; }
     public int stress() { return stress; }
@@ -59,34 +61,40 @@ public final class InvestigationSession {
     public void tick(double playerX, double playerZ) {
         if(outcome!=Outcome.ACTIVE) return;
         ticks++;
-        // Fixed 100ms simulation ticks. For a given seed and actions, state does not depend on render frame rate.
-        if(ticks%35==0) {
-            // Ghost wanders only between neighboring room nodes (no omniscient teleport to player).
-            int col=ghostRoom%3,row=ghostRoom/3;
-            int[] moves={ghostRoom, row>0?ghostRoom-3:ghostRoom, row<2?ghostRoom+3:ghostRoom,
-                col>0?ghostRoom-1:ghostRoom, col<2?ghostRoom+1:ghostRoom};
-            ghostRoom=moves[random.nextInt(moves.length)];
-        }
+        // Every supernatural action, including AI behavior, follows the same host-style dispatcher.
+        // Ghost observation has only room-local presence, never the hunter's global position or notebook.
         int playerRoom=map.roomAt(playerX,playerZ);
-        haunted=(ticks>80 && playerRoom==ghostRoom && (ticks%160)<75);
-        if(haunted && ticks%10==0) stress=Math.min(100,stress+1);
-        // First strike requires a substantial investigation window; there is a recovery cooldown.
-        if(ticks>160 && playerRoom==ghostRoom && stress>=8 && ticks-lastStrike>80 && ticks%17==0) {
-            lastStrike=ticks;
-            int wound=prepared?4:role==Role.CLERIC?8:12;
-            health=Math.max(0,health-wound);
-            stress=Math.min(100,stress+6);
-            log("A spectral strike! -"+wound+" health. Retreat, or use protective wards.");
-            if(health==0) finish(Outcome.LOST);
+        ghost.advance(ticks,playerRoom);
+        GhostDomain.Command command=ghostAi.decide(ghost.observe());
+        if(command!=null) {
+            GhostDomain.Resolution result=ghost.dispatch(command);
+            if(result.applied()) {
+                if(result.fear()>0) stress=Math.min(100,stress+result.fear());
+                // Only present events a hunter could plausibly hear in their current room.
+                if(playerRoom==result.room() && result.action()==GhostDomain.Action.WHISPER)
+                    log("An indistinct whisper moves through "+map.roomName(playerRoom)+".");
+                if(playerRoom==result.room() && result.action()==GhostDomain.Action.DISTURB)
+                    log("Loose objects shudder in "+map.roomName(playerRoom)+".");
+                if(result.harm()>0) {
+                    int wound=prepared?Math.min(result.harm(),4):role==Role.CLERIC?Math.min(result.harm(),8):result.harm();
+                    health=Math.max(0,health-wound);
+                    log("A spectral strike! -"+wound+" health. Retreat, or use protective wards.");
+                    if(health==0) finish(Outcome.LOST);
+                }
+            }
         }
+        haunted=ghost.manifested();
+        if(haunted && playerRoom==ghost.room() && ticks%10==0)
+            stress=Math.min(100,stress+1);
     }
+
     public boolean scan(Instrument tool, double x, double z) {
         if(outcome!=Outcome.ACTIVE) return false;
         int room=map.roomAt(x,z);
         if(room<0) return false;
         int distance=Math.abs(room%3-anchorRoom%3)+Math.abs(room/3-anchorRoom/3);
         int signal=distance==0?5:distance==1?2:0;
-        if(tool==Instrument.EMF && room==ghostRoom) signal=Math.max(signal,3);
+        if(tool==Instrument.EMF && room==ghost.room()) signal=Math.max(signal,3);
         boolean strong=signal>=5 || (signal>=2 && ((role==Role.OBSERVER && tool==Instrument.EMF) ||
             (role==Role.DEMONOLOGIST && tool==Instrument.SPIRIT_BOX)));
         String reading=switch(tool) {

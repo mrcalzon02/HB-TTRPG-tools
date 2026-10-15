@@ -1,6 +1,9 @@
 # The Beckenburg Project — Java 17, Swing, 3D and LAN Architecture
 Status: engineering proposals requiring Stage 1 and Stage 3 technical proofs. Nothing here asserts working application code.
 
+## Local engineering progress — 2026-10-15
+`software/beckenburg/src/main/java/org/beckenburg/GhostDomain.java` now supplies one in-process GhostCommand dispatcher for legal adjacent drift, haunting whispers, room disturbances, manifestations and incremental strikes. It validates energy, target room, per-action cooldowns, early attack windows and command sequences. `AiController` sees only filtered room-local hunter presence, its own room/anchor, exits, legal actions and energy; it submits commands to the same dispatcher a human ghost controller will use. `InvestigationSession` now consumes authoritative resolutions rather than mutating ghost movement and damage directly. Unit tests compare AI/HUMAN-labeled action results and negative cases. This is **not LAN host authority, player ghost input, or completed P09**.
+
 ## Process model
 Windows-distributed Java 17 desktop product. Swing/AWT launcher provides profiles, settings, local host/join, class selection, server browser, crash reporting and patch/version information. A real-time engine owns the 3D view, input mapping, world physics, scene graph, shaders, audio and rendering. jMonkeyEngine is a priority feasibility candidate; assess supported Java version, LWJGL backend, native packaging, GL driver compatibility, animation and physics, and Swing canvas integration. A dedicated 3D window launched from Swing is acceptable if embedding causes input/focus or rendering fragility. Prefer reliable behavior over artificial "Swing inside the 3D viewport" requirement. UI thread updates remain on EDT; renderer/world mutates on engine/simulation thread.
 

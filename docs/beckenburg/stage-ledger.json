@@ -657,7 +657,18 @@
           "status": "not_started",
           "description": "Reject illegal command and demonstrate no hidden controller-only mutation path."
         }
-      ]
+      ],
+      "preparatory_work": {
+        "status": "verified source-level proof; P09 not_started pending required P03/P06 and full archetypes/actions",
+        "summary": "GhostDomain single dispatch of DRIFT, WHISPER, DISTURB, MANIFEST, STRIKE shared for AI/HUMAN labels. Immutable filtered observation, cooldown/energy/target gates and duplicate sequence rejection. AI Spirit integrated; no remote authority or player-ghost controls.",
+        "tests": [
+          "javac --release 17",
+          "GameplaySmokeTest",
+          "GhostDomainTest",
+          "GuiSmokeTest under Linux xvfb"
+        ],
+        "limitations": "No LAN authority, human-ghost UI or thirteen ghost archetypes; not tested on Windows."
+      }
     },
     {
       "id": "P10",

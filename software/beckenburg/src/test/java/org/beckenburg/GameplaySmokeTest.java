@@ -62,6 +62,14 @@ public final class GameplaySmokeTest {
             ok(!game.cleanse(gx,gz),"role must use ward");
             ok(game.placeWard(gx,gz)&&game.cleanse(gx,gz),"all roles can cleanse");
         }
+        InvestigationSession encounter=new InvestigationSession(map,InvestigationSession.Role.OBSERVER,2026L);
+        int hostile=encounter.anchorRoom();
+        double hx=map.centerX(hostile),hz=map.centerZ(hostile);
+        for(int t=0;t<160;t++)encounter.tick(hx,hz);
+        ok(encounter.health()==100,"ghost cannot damage a fresh hunter during initial warning window");
+        for(int t=160;t<440;t++)encounter.tick(hx,hz);
+        ok(encounter.health()<100,"AI-ghost shared dispatcher can inflict real incremental wounds");
+        ok(encounter.health()>0,"hunter survives multiple initial encounters and may retreat");
         System.out.println("PASS: nine zones, door/collision, 3D render/depth, instruments, wards, cleansing, extraction, economy save and all role baseline safety");
     }
 }
