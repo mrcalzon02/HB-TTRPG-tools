@@ -17,6 +17,10 @@ Charles now has two repository-level reference documents intended for both human
 
 The profile and engram describe Charles's presentation and response logic. Specific Blacklight facts, history, campaign state, and deeper Charles lore remain authoritative in the relevant repository sources and should be retrieved only when needed.
 
+## Software programs and The Beckenburg Project
+
+The [Software section](software.html) groups [Simple Sound Manager](simple-sound-manager.html), [CubeChat](cubechat.html) and the new [Beckenburg planning page](beckenburg.html). The game's authoritative planning sources are under [docs/beckenburg](docs/beckenburg/README.md), with production stages, ghost/hunter systems, maps, Java/Swing/3D/LAN architecture and test gates. The game itself is not yet implemented.
+
 ## Current structure
 
 - `index.html` — main menu page, character sheet utility, Kaysender module dashboard, and script loading.

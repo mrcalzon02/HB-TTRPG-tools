@@ -15,6 +15,44 @@
     "url": "index.html"
   },
   {
+    "id": "software-directory",
+    "title": "Software — Programs and Game Projects",
+    "workspace": "Software",
+    "description": "Desktop programs and software projects including Simple Sound Manager, CubeChat and The Beckenburg Project.",
+    "keywords": [
+      "programs",
+      "software",
+      "sound manager",
+      "cubechat",
+      "ghost hunting",
+      "beckenburg"
+    ],
+    "url": "software.html"
+  },
+  {
+    "id": "beckenburg-planning",
+    "title": "The Beckenburg Project — 3D Asymmetric Ghost Game",
+    "workspace": "Software",
+    "description": "3 hunter versus player or AI ghost LAN game planning, ghost parity, thirteen types, rites, environments, 3D Java 17 Swing and production stages.",
+    "keywords": [
+      "Beckenburg",
+      "Phasmophobia alike",
+      "ghost",
+      "ghost hunting",
+      "AI ghost",
+      "3v1",
+      "multiplayer",
+      "Java 17",
+      "Swing",
+      "LAN",
+      "planning",
+      "evidence",
+      "rituals",
+      "locations"
+    ],
+    "url": "beckenburg.html"
+  },
+  {
     "id": "utilities-workspace",
     "title": "TTRPG Utilities Workspace",
     "workspace": "Utilities",
@@ -574,7 +612,16 @@
     "title": "CubeChat Experimental Messaging",
     "workspace": "CubeChat",
     "description": "Local dual-participant cube chat prototype with host, network recipient and experimental key provisioning applications.",
-    "keywords": ["CubeChat", "messenger", "encryption", "LAN", "client", "host", "key provisioning", "experimental"],
+    "keywords": [
+      "CubeChat",
+      "messenger",
+      "encryption",
+      "LAN",
+      "client",
+      "host",
+      "key provisioning",
+      "experimental"
+    ],
     "url": "cubechat.html"
   },
   {
@@ -582,7 +629,16 @@
     "title": "CubeChat Development and Release Planning",
     "workspace": "CubeChat",
     "description": "CubeChat implementation notes, host development, release candidate planning, platform compatibility and source code history.",
-    "keywords": ["CubeChat", "development history", "programming", "planning", "source code", "release candidate", "Node", "LAN"],
+    "keywords": [
+      "CubeChat",
+      "development history",
+      "programming",
+      "planning",
+      "source code",
+      "release candidate",
+      "Node",
+      "LAN"
+    ],
     "url": "https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/cubechat-lan-development.md"
   },
   {

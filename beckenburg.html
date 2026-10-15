@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Beckenburg Project — Game Design and Production | Calzon’s TTRPG Foundry</title><meta name="description" content="Game design and production specifications for The Beckenburg Project, a 3v1 LAN first-person ghost-hunting game built with Java 17 and a Swing launcher.">
+<meta name="robots" content="index,follow"><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/beckenburg.html">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="workspace-landing.css">
+<style>
+.software-shell{max-width:1150px;margin:0 auto;padding:24px 18px 80px}
+.software-intro{margin-bottom:22px}
+.software-tabs{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0 22px}
+.software-tabs a{padding:10px 16px;border:1px solid #66758b;border-radius:10px;color:inherit;text-decoration:none;background:rgba(95,119,154,.12)}
+.software-tabs a[aria-current="page"],.software-tabs a:hover,.software-tabs a:focus-visible{border-color:#b4d5ff;background:rgba(95,150,212,.23)}
+.software-panel{scroll-margin-top:20px;margin:22px 0}
+.software-panel .workspace-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.software-panel a{overflow-wrap:anywhere}
+.software-content-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:16px}
+.software-tag{display:inline-block;margin:6px 8px 0 0;padding:4px 10px;border:1px solid #66758b;border-radius:20px;font-size:.9em}
+.software-muted{opacity:.8}
+.software-shell li{margin:8px 0}
+.software-shell a:focus-visible{outline:2px solid #b4d5ff;outline-offset:3px}
+</style>
+</head><body class="workspace-landing-body">
+<header class="site-header"><div><p class="eyebrow">Homebrew Tabletop RPG Tools / Software / Game Projects</p><h1>The Beckenburg Project</h1><p class="subtitle">Three hunters. One haunting intelligence. Humanity reclaims the world one site at a time.</p></div><nav class="top-nav" aria-label="Primary"><a class="nav-button" href="index.html">Foundry Home</a><a class="nav-button active" href="software.html" aria-current="page">Software</a><a class="nav-button" href="site-map.html">Site Map</a></nav></header>
+<main class="software-shell">
+<nav class="software-tabs" aria-label="Software sub-tabs"><a href="software.html#sound-manager">Sound Manager</a><a href="software.html#cubechat">CubeChat</a><a href="software.html#beckenburg" aria-current="page">The Beckenburg Project</a></nav>
+<section class="hero-card software-intro"><p class="eyebrow">Game design dossier · v0.1 · 14 October 2026</p><h2>Asymmetric supernatural investigation</h2>
+<p>A worldwide metaphysical event has awakened long-remembered terrors, spirits and older things. Conventional weapons accomplish nothing. From the old castle of Beckenburg, specialist expeditions reclaim houses, schools, religious sites and entire districts by investigation, containment and cleansing.</p>
+<p><strong>Current status:</strong> design/planning only. No Java game, 3D map, LAN service or downloadable game build has been implemented or released.</p>
+<div class="workspace-actions"><a class="link-button primary-action" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/beckenburg/README.md">Read Master Design</a><a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/beckenburg/production-stages.md">Read All Production Stages</a><a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/tree/main/docs/beckenburg">Browse Planning Folder</a></div></section>
+<div class="software-content-grid">
+<article class="menu-card"><h2>Three investigator classes</h2><p><strong>Cleric</strong>: wards, prayer, protection and banishment. <strong>Observer</strong>: record, triangulate, detect and analyze. <strong>Demonologist</strong>: lore, provocations, séances, curses and occult negotiation.</p></article>
+<article class="menu-card"><h2>Ghost parity by design</h2><p>Human and AI ghosts use the same host-validated powers, influence cost, cooldowns, damage, movement rules and clues. Human control is harder through manual timing, positioning and limited observation rather than weaker mechanics.</p></article>
+<article class="menu-card"><h2>Thirteen ghost archetypes</h2><p>Possessive, Poltergeist, Demon, Yokai, Banshee, Wraith, Shade, Specter, Spirit, Hantu, Devil, Mimic and Twins. Each receives signature evidence, special abilities, hunting behaviours, counters and fair telegraphs.</p></article>
+<article class="menu-card"><h2>Nine location categories</h2><p>Houses, mansions, prisons, asylums, schools, farmhouses, academies, colleges and churches. Named room zones drive evidence, doors, ghost movement, equipment and spatial rituals.</p></article>
+<article class="menu-card"><h2>Escalation &amp; rituals</h2><p>Ghosts manipulate and haunt before hunts become lethal. Hunters accrue injury, stress and afflictions, collect and cross-check clues, then perform dangerous séances, warding, banishment and site cleansing.</p></article>
+<article class="menu-card"><h2>Platform &amp; operations</h2><p>Java 17 and Swing desktop launcher for Windows, integrated 3D renderer selected by technical proof, host-authoritative four-slot LAN, AI ghost fallback, castle economy, gear purchases and experience progression.</p></article>
+</div>
+<section class="menu-card software-panel" aria-labelledby="design-library"><h2 id="design-library">Full planning library</h2><p>Each source file contains implementation requirements, tests, prerequisites or stage-gate criteria. Every system is planned, not implemented.</p>
+<ul>
+<li><a href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/beckenburg/README.md" target="_blank" rel="noopener">Master Game Design Document</a> — premise, mode, product scope, story, priorities and design decisions.</li>
+<li><a href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/beckenburg/production-stages.md" target="_blank" rel="noopener">Production Stages S0–S13</a> — dependency-ordered work, implementation steps and exit gates.</li>
+<li><a href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/beckenburg/ghosts.md" target="_blank" rel="noopener">Ghost Catalogue &amp; Controller Parity</a> — all thirteen identities, clues, counters, hunting and shared commands.</li>
+<li><a href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/beckenburg/hunters-equipment-rituals.md" target="_blank" rel="noopener">Hunters, Tools, Evidence, Rituals &amp; Economy</a> — class kits, instrument rules, rites, harm and progression.</li>
+<li><a href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/beckenburg/locations-environments.md" target="_blank" rel="noopener">3D Location Design &amp; Zone Authoring</a> — all nine site archetypes, room schema, test house and castle.</li>
+<li><a href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/beckenburg/technical-architecture.md" target="_blank" rel="noopener">Java/Swing/3D/LAN Technical Architecture</a> — module boundaries, host authority, serialization and packaging.</li>
+<li><a href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/beckenburg/acceptance-and-backlog.md" target="_blank" rel="noopener">Acceptance Matrix &amp; Initial Backlog</a> — real verification tests, known not-started status and first implementation steps.</li>
+</ul></section>
+<section class="menu-card software-panel"><h2>First development milestone</h2><p>Prove Java 17 launch, reliable first-person 3D and Swing/engine focus on Windows, then implement a host-authoritative simulation and four-slot LAN. Only after that should the first grayboxed house, three classes, Spirit/Poltergeist/Wraith and complete séance-to-banishment vertical slice be declared playable.</p><p><a class="link-button" href="software.html#beckenburg">Return to Software Directory</a></p></section>
+</main></body></html>
