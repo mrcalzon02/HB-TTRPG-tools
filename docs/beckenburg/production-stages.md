@@ -14,6 +14,8 @@ Dependencies: none. Objective: freeze what the first playable slice must demonst
 Gate: master document signed off as internally consistent; no contradictory hunter-count, class/ghost names, powers or victory conditions; launch scope explicitly divided from stretch scope.
 
 ## S1 — Runtime/engine and desktop integration proof
+**Work underway:** dependency-free Java 17 software 3D spike with Swing, doors, movement, camera pitch/yaw, polygon depth buffer and headless tests has been built and locally verified (2026-10-15). The full stage remains **IN PROGRESS**: actual Windows desktop tests, sound, engine candidate comparison, runtime packaging and performance gates are still open. This prototype is intentionally not the final engine.
+
 Dependencies: S0.
 - S1.1 Scaffold Java 17 build and dependency locking; reproducible local build on Windows with a documented one-command build.
 - S1.2 Time-box 3D Java engine feasibility (jMonkeyEngine candidate) with a Swing launcher/menu, reentrant play/session lifecycle and focus safe transition between Swing and 3D canvas/window.

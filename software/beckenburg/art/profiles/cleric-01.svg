@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="740" viewBox="0 0 1200 740" role="img" aria-labelledby="title desc">
+<title id="title">The Beckenburg Project — Cleric hunter 01 low-poly model sheet</title>
+<desc id="desc">Three orthographic-looking blocky 1990s PlayStation style concept silhouettes: front, side and back; class colors, ward details and construction notes.</desc>
+<defs>
+<linearGradient id="bg" x2="0" y2="1"><stop stop-color="#171c24"/><stop offset="1" stop-color="#0e1119"/></linearGradient>
+<pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="#79808a" stroke-opacity=".11"/></pattern>
+<g id="legs"><path d="M-41 0L-7 0L-9 112L-35 115Z" fill="#34383d" stroke="#918b80" stroke-width="1.5"/><path d="M6 0L41 0L34 115L9 112Z" fill="#292e33" stroke="#918b80" stroke-width="1.5"/><path d="M-36 111L-6 110L-1 130L-43 130Z" fill="#5b4939"/><path d="M10 110L34 110L42 130L2 130Z" fill="#5b4939"/><path d="M-37 80L-9 83M9 84L36 81" stroke="#6e6050" stroke-width="6"/></g>
+</defs>
+<rect width="1200" height="740" fill="url(#bg)"/><rect width="1200" height="740" fill="url(#grid)"/>
+<g fill="#d6c7a1" font-family="Georgia,serif"><text x="45" y="62" font-size="32" letter-spacing="4">BECKENBURG  /  HUNTER 01</text><text x="45" y="96" font-size="17" letter-spacing="3">CLERIC  —  FIELD SANCTIFICATION UNIT</text></g>
+<path d="M45 116H1155" stroke="#a1855c" stroke-width="2"/>
+<g font-family="monospace" fill="#aeb8c3" font-size="16" letter-spacing="2"><text x="154" y="156">FRONT</text><text x="478" y="156">SIDE</text><text x="795" y="156">BACK</text><text x="1020" y="157" font-size="13">PALETTE</text></g>
+<g transform="translate(196 232)">
+  <path d="M-32 8L-48 36L-56 144L-47 248L48 248L57 144L48 35L29 10" fill="#3d4449" stroke="#9e9483" stroke-width="2"/>
+  <path d="M-46 50L-27 38L-20 132L-11 228L-46 248Z" fill="#2b3038"/><path d="M46 48L25 36L18 132L12 226L48 248Z" fill="#2b3038"/>
+  <path d="M-33 -5L-31 37L-12 83L0 65L12 83L31 37L33 -5" fill="#565b5b"/>
+  <path d="M-24 49L0 81L24 49" fill="none" stroke="#a69c8a" stroke-width="7"/>
+  <path d="M-47 38L-64 47L-73 159L-53 161L-37 96" fill="#343c40" stroke="#958b7c" stroke-width="2"/><path d="M47 38L63 47L70 157L52 162L36 96" fill="#343c40" stroke="#958b7c" stroke-width="2"/>
+  <path d="M-70 155L-50 155L-53 176L-72 176ZM52 155L70 155L73 176L53 176Z" fill="#9b8777"/>
+  <rect x="-54" y="161" width="108" height="10" rx="2" fill="#49382c"/><rect x="-7" y="158" width="15" height="17" fill="#a18556"/>
+  <path d="M-25 -52L-18 -64L19 -64L27 -52L23 -15L9 0L-7 1L-23 -15Z" fill="#ac9080" stroke="#6c6a6a" stroke-width="2"/>
+  <path d="M-24 -53L-10 -73L16 -70L27 -52L15 -60L-19 -48Z" fill="#24282d"/>
+  <path d="M-14 -30L-5 -30M6 -30L15 -30" stroke="#31353a" stroke-width="3"/>
+  <circle cx="0" cy="105" r="21" fill="#8c7350" stroke="#d7c6a4" stroke-width="3"/><path d="M0 89L11 107L0 119L-11 107Z" fill="#d4c6a3"/><path d="M-9 107H9" stroke="#303a40" stroke-width="3"/>
+  <path d="M-37 250H-15L-11 298L-38 298Z M15 250H38L37 298L11 298Z" fill="#30343a"/>
+  <use href="#legs" transform="translate(0 295)"/>
+</g>
+<g transform="translate(515 232)">
+  <path d="M-19 18L7 18L42 58L29 244L-36 245L-28 74Z" fill="#373d44" stroke="#938777" stroke-width="2"/>
+  <path d="M0 4L34 23L43 65L4 85L-17 53Z" fill="#69665b"/>
+  <path d="M-5 -64L22 -64L35 -34L18 0L-10 -7L-15 -42Z" fill="#a58b77" stroke="#695d52" stroke-width="2"/>
+  <path d="M-13 -57L12 -72L28 -55L0 -57Z" fill="#262b31"/>
+  <path d="M23 57L53 70L47 166L26 173L20 112" fill="#333b3e" stroke="#988a78" stroke-width="2"/>
+  <path d="M31 164L48 160L52 184L33 186Z" fill="#9b8875"/>
+  <path d="M-33 118L-65 128L-62 192L-24 187Z" fill="#6b4e37" stroke="#ac8762" stroke-width="2"/><path d="M-33 152H-64" stroke="#a28d66" stroke-width="5"/>
+  <path d="M-27 252L-7 252L-3 295L-26 295ZM11 251L29 251L26 298L10 295Z" fill="#35383d"/>
+  <use href="#legs" transform="translate(0 294) scale(.82 1)"/>
+</g>
+<g transform="translate(828 232)">
+  <path d="M-34 15L-52 42L-58 243L59 243L53 42L34 15" fill="#3a4145" stroke="#9d8d79" stroke-width="2"/>
+  <path d="M-28 27L0 79L28 27L38 238L-40 238Z" fill="#30353c"/>
+  <path d="M-46 44L-67 54L-68 167L-49 174L-35 100" fill="#373b41"/><path d="M49 44L66 52L69 169L52 174L36 100" fill="#373b41"/>
+  <path d="M-17 -57L22 -57L29 -28L18 2L-15 2L-26 -28Z" fill="#6e6056"/><path d="M-23 -61L-11 -75L18 -75L29 -60Z" fill="#252a2e"/>
+  <path d="M-49 148L50 148" stroke="#71563b" stroke-width="13"/>
+  <rect x="-24" y="143" width="48" height="54" rx="6" fill="#6a503c" stroke="#b69c6a" stroke-width="3"/>
+  <path d="M-11 153L11 153L15 184L-16 184Z" fill="#30343b"/><path d="M-34 248H-12L-9 299L-37 298ZM11 248H36L36 299L10 299Z" fill="#34383b"/>
+  <use href="#legs" transform="translate(0 295)"/>
+</g>
+<g transform="translate(990 197)" font-family="monospace" font-size="13" fill="#d8d0bd"><rect x="0" width="45" height="33" fill="#3a4245"/><text x="54" y="22">COAT</text><rect x="0" y="49" width="45" height="33" fill="#564739"/><text x="54" y="70">LEATHER</text><rect x="0" y="98" width="45" height="33" fill="#90754e"/><text x="54" y="119">BRASS</text><rect x="0" y="147" width="45" height="33" fill="#d4c6a3"/><text x="54" y="168">WARD</text><rect x="0" y="196" width="45" height="33" fill="#a58b77"/><text x="54" y="218">SKIN</text></g>
+<path d="M45 665H1155" stroke="#a1855c" stroke-width="2"/>
+<g font-family="monospace" font-size="14" fill="#c4bea8"><text x="55" y="694">TARGET: 450–850 TRIANGLES  •  128×128 BODY ATLAS + 64×64 FACE</text><text x="55" y="716">CLEAR SILHOUETTE / FICTIONAL WARD SEAL / LOW-POLY RIG / CONCEPT ONLY</text></g>
+</svg>

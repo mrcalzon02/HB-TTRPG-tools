@@ -2,7 +2,7 @@
 Updated: 2026-10-14. No stage may be marked implemented based solely on this design repository, demonstration screenshots or an unverified commit.
 
 ## Current state
-Design initialized and published in HB-TTRPG-tools Software section. Java game runtime: **NOT STARTED**. 3D scene: NOT STARTED. LAN transport: NOT STARTED. AI or human ghost control: NOT STARTED. Hunter UI: NOT STARTED. Maps: NOT STARTED. Ghost archetypes: SPECIFIED, NOT IMPLEMENTED. Castle: SPECIFIED, NOT IMPLEMENTED. Windows app/release: NOT STARTED. This honesty is part of the project contract.
+Design initialized in HB-TTRPG-tools Software section. **S1 work in progress:** a dependency-free Java 17 Swing + software 3D test-house renderer and deterministic headless smoke test are in `software/beckenburg`; local `javac --release 17` compilation and `SmokeTest` passed on a Java 21 runtime targeting Java 17 class files. Windows GUI/installer, renderer finalization, real-time sound and input/fullscreen acceptance remain UNVERIFIED. LAN transport: NOT STARTED. AI or human ghost control: NOT STARTED. Hunter gameplay: NOT STARTED. The test house is a **visual/interaction prototype**, not a complete mission map. Ghost archetypes: SPECIFIED, NOT IMPLEMENTED. Castle: SPECIFIED, NOT IMPLEMENTED. Game Windows release: NOT STARTED. Two editable SVG concept studies and art budgets exist; no production 3D character meshes or gear models are implemented.
 
 ## Traceable acceptance cases
 | ID | Requirement | Verification | Stage |
@@ -45,3 +45,9 @@ Record stage/requirement ID, authoritative commit SHA, date, test command/machin
 
 ## Decisions still requiring prototype evidence
 Engine and window embedding viability; render/API minimum; exact network transport/snapshot cadence; physics implementation; room tag schema final form; replay format; ghost resource and win-rate tuning; character stats/economy prices; art direction and animation budget; launch site count; distribution/license terms. Defaults in design documents are hypotheses to validate, never silent binding commitments.
+## S1 preliminary local verification — 2026-10-15
+- `javac --release 17 -d build/classes src/main/java/org/beckenburg/BeckenburgPrototype.java src/test/java/org/beckenburg/SmokeTest.java` — PASS on OpenJDK 21 with Java 17 language/class target (class file major 61).
+- `java -Djava.awt.headless=true -cp build/classes org.beckenburg.SmokeTest` — PASS: map rectangularity, spawn/collision, door open/close/range, raster color variation, depth-buffer finite values, alternate view and lighting.
+- `sh build.sh` — PASS; produces JAR with Main-Class manifest.
+- `art/profiles/cleric-01.svg` and `equipment-01.svg` — valid XML (parse test). Concept art only, not models or game assets.
+- Outstanding: Windows 10/11 launch, GUI manual input, render performance, packaging and LAN. These PASS notes are local authoring checks; independent GitHub read-back of committed source is recorded separately.
