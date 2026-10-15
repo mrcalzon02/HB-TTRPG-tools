@@ -98,15 +98,21 @@
       "exit": "Latest local nine-room gameplay build reviewed and integrated into main; real PNG files committed and displayed on the Beckenburg site.",
       "hard_gate": "100% intended sources and every gallery image remotely present and byte-verified; Windows runtime claims separately tested.",
       "status": "blocked",
-      "commit_sha": null,
-      "verification_evidence": [],
+      "commit_sha": "0a1f8a0dd3ae56f233d50f70a0d6a0fccd237f0f",
+      "verification_evidence": [
+        "https://github.com/mrcalzon02/HB-TTRPG-tools/commit/0a1f8a0dd3ae56f233d50f70a0d6a0fccd237f0f",
+        "Headless GameplaySmokeTest passed with javac --release 17 on OpenJDK 21 / Linux",
+        "Swing GUI menu→first-person panel passed under Linux virtual-display / xvfb; not Windows acceptance"
+      ],
       "blockers": [
-        "New local gameplay and generated PNG original assets are not on GitHub main; website image gallery still uses SVG studies"
+        "Original full-resolution concept PNGs are not remotely verified as GitHub blobs and webpage displays placeholder SVGs",
+        "No physical/clean Windows GUI build test or bundled Windows runtime installer",
+        "Original earlier nine-room source working tree not available in this container; source was independently reimplemented and tested"
       ],
       "steps": [
         {
           "id": "P00.01",
-          "status": "not_started",
+          "status": "complete",
           "description": "Snapshot GitHub main SHA and file hashes, local candidate sources, tests, build products and existing asset inventory."
         },
         {
@@ -116,12 +122,12 @@
         },
         {
           "id": "P00.03",
-          "status": "not_started",
+          "status": "active",
           "description": "Rerun javac --release 17 and deterministic headless tests from the clean remote baseline and from the candidate."
         },
         {
           "id": "P00.04",
-          "status": "not_started",
+          "status": "complete",
           "description": "Merge the gameplay candidate with minimal changes, add negative-path tests, and compile from a clean worktree."
         },
         {
@@ -131,7 +137,7 @@
         },
         {
           "id": "P00.06",
-          "status": "not_started",
+          "status": "complete",
           "description": "Commit verified Java changes without force and read back main, key file blobs, tests and the resulting source tree."
         },
         {
@@ -1917,5 +1923,6 @@
         }
       ]
     }
-  ]
+  ],
+  "current_source_integration_sha": "0a1f8a0dd3ae56f233d50f70a0d6a0fccd237f0f"
 }

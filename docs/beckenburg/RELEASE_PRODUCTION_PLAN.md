@@ -1,6 +1,9 @@
 # The Beckenburg Project — Release Production Masterplan
 Version 1.0, 2026-10-15. This file specifies required **future work**; it is not evidence of code completion.
 
+## Current integration update — 2026-10-15
+The solo investigation source is now committed and read back in `0a1f8a0dd3ae56f233d50f70a0d6a0fccd237f0f`: nine-room authoring/collision, Swing menu/field HUD, procedural 3D props, AI Spirit, evidence scanning, cleansing/warding/extraction and local profile payout. The prior local candidate's original source files were not mounted, so this was a newly authored, testable replacement slice rather than a byte-for-byte copy. The early audit paragraph below is retained as historical evidence, **not the current code status**. Remaining P00 blockers: verify all original generated PNGs as remote GitHub blobs, display the correct art gallery, and execute Windows graphical testing. Gate remains blocked; use `stage-ledger.json` for the sole live status.
+
 ## Audited starting point
 At audit, GitHub `main` was `67b19334ec30ced7fe16f4a169192cd4012950dc`, holding the Java 17 Swing/Java2D software-rendered proof and its early smoke test, **not** the newer solo gameplay implementation. A separate local working folder contains a nine-room Java gameplay candidate with AI Spirit, three classes, three detectors, wards, rituals, extraction and rewards; `sh build.sh` passed locally using Java 21 `javac --release 17`. Neither a remote game commit nor a clean Windows test of that candidate was verified. The Beckenburg website shows two older SVG studies; generated full-resolution PNG boards are still not verified as real GitHub image blobs. Those source/art/website repairs form **P00**, and block milestone M0.
 
