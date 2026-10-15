@@ -1,5 +1,5 @@
 # The Beckenburg Project — Dependency-Ordered Production Stages
-Status: proposed build sequence, not a claim of implemented features. Every step specifies implementation work and a verifiable exit condition. Progress is tracked in acceptance-and-backlog.md.
+Status: historical high-level **S0–S13 design** sequence, not an implementation completion claim. Execution now uses [RELEASE_PRODUCTION_PLAN.md](RELEASE_PRODUCTION_PLAN.md) (P00–P31, 256 microsteps), [QUALITY_GATES.md](QUALITY_GATES.md) and sole active status source [stage-ledger.json](stage-ledger.json). This file remains valuable for original requirements and mapping but does not override P-stage gates.
 
 ## Common stage protocol
 For every stage: (1) confirm preceding contracts and baseline, (2) implement minimal end-to-end vertical functionality, (3) run repeatable test cases and capture evidence, (4) inspect integration regressions, (5) update design decisions/backlog, (6) commit with read-back verification. A demo that only renders a mock menu does not complete a network/gameplay stage. Do not add GitHub Actions by default. Use small targeted source edits, no stubs or no-op acceptance substitutes.

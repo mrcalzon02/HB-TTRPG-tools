@@ -1,0 +1,1921 @@
+{
+  "schema_version": 1,
+  "project": "The Beckenburg Project",
+  "updated": "2026-10-15",
+  "branch": "main",
+  "repo": "mrcalzon02/HB-TTRPG-tools",
+  "baseline_sha": "67b19334ec30ced7fe16f4a169192cd4012950dc",
+  "source_of_truth": "This ledger is the only stage status tracker; stage plans describe planned work, never reported completion.",
+  "status_values": [
+    "not_started",
+    "active",
+    "blocked",
+    "verification",
+    "complete"
+  ],
+  "milestones": [
+    {
+      "name": "M0 Source and artwork baseline",
+      "requires": [
+        "P00"
+      ],
+      "criterion": "Both the gameplay source candidate and full-resolution concept-art originals verified on main; image gallery displays original PNGs.",
+      "status": "blocked"
+    },
+    {
+      "name": "M1 Windows solo vertical slice",
+      "requires": [
+        "P01",
+        "P02",
+        "P03",
+        "P04",
+        "P05",
+        "P06",
+        "P09",
+        "P11",
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17"
+      ],
+      "criterion": "Ten seeded solo runs with real validated evidence, haunts, victory/retreat, and hands-on Windows gameplay.",
+      "status": "not_started"
+    },
+    {
+      "name": "M2 LAN 3v1 alpha",
+      "requires": [
+        "P07",
+        "P08",
+        "P10",
+        "P18"
+      ],
+      "criterion": "Four distinct clients finish 20 LAN matches, at least five with human ghost, without critical desync.",
+      "status": "not_started"
+    },
+    {
+      "name": "M3 Content complete",
+      "requires": [
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25"
+      ],
+      "criterion": "3 classes, 13 ghosts, 9 site categories, castle, equipment, original assets, audio and rituals in game.",
+      "status": "not_started"
+    },
+    {
+      "name": "M4 Content-locked beta",
+      "requires": [
+        "P26",
+        "P27",
+        "P28",
+        "P29"
+      ],
+      "criterion": "Balance, accessibility, authoritative network robustness and soak acceptance; zero P0/P1.",
+      "status": "not_started"
+    },
+    {
+      "name": "M5 Windows Gold",
+      "requires": [
+        "P30",
+        "P31"
+      ],
+      "criterion": "Reproducible bundled-runtime installer, checked binary, verified download and clean-machine LAN play.",
+      "status": "not_started"
+    }
+  ],
+  "stages": [
+    {
+      "id": "P00",
+      "title": "Repository reconciliation and original-art delivery",
+      "deps": [],
+      "track": "Foundation",
+      "exit": "Latest local nine-room gameplay build reviewed and integrated into main; real PNG files committed and displayed on the Beckenburg site.",
+      "hard_gate": "100% intended sources and every gallery image remotely present and byte-verified; Windows runtime claims separately tested.",
+      "status": "blocked",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [
+        "New local gameplay and generated PNG original assets are not on GitHub main; website image gallery still uses SVG studies"
+      ],
+      "steps": [
+        {
+          "id": "P00.01",
+          "status": "not_started",
+          "description": "Snapshot GitHub main SHA and file hashes, local candidate sources, tests, build products and existing asset inventory."
+        },
+        {
+          "id": "P00.02",
+          "status": "not_started",
+          "description": "Diff the local nine-room GameSession and menus against the committed Java prototype; inspect conflicting changes before edit."
+        },
+        {
+          "id": "P00.03",
+          "status": "not_started",
+          "description": "Rerun javac --release 17 and deterministic headless tests from the clean remote baseline and from the candidate."
+        },
+        {
+          "id": "P00.04",
+          "status": "not_started",
+          "description": "Merge the gameplay candidate with minimal changes, add negative-path tests, and compile from a clean worktree."
+        },
+        {
+          "id": "P00.05",
+          "status": "not_started",
+          "description": "Run a real Windows GUI and input/focus test; log observed failures instead of accepting headless results as GUI proof."
+        },
+        {
+          "id": "P00.06",
+          "status": "not_started",
+          "description": "Commit verified Java changes without force and read back main, key file blobs, tests and the resulting source tree."
+        },
+        {
+          "id": "P00.07",
+          "status": "not_started",
+          "description": "Import all existing full-resolution concept PNGs with unique names and SHA-256 manifest; preserve originals without thumbnail substitution."
+        },
+        {
+          "id": "P00.08",
+          "status": "not_started",
+          "description": "Replace SVG-only gallery references with actual committed PNGs and verify their rendered page paths and image loading."
+        }
+      ]
+    },
+    {
+      "id": "P01",
+      "title": "Java runtime boundary and 3D engine choice",
+      "deps": [
+        "P00"
+      ],
+      "track": "Engine",
+      "exit": "Chosen Java 17-compatible real-time 3D renderer with explicit Swing/renderer integration boundaries.",
+      "hard_gate": "50 menu/game cycles without fatal focus/resource failure; actual Windows driver/hardware proof and documented renderer decision.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P01.01",
+          "status": "not_started",
+          "description": "Separate simulation entities and state from Swing, Java2D renderer and UI event loop."
+        },
+        {
+          "id": "P01.02",
+          "status": "not_started",
+          "description": "Benchmark existing perspective renderer, memory, frame time, resize and pitch/yaw consistency."
+        },
+        {
+          "id": "P01.03",
+          "status": "not_started",
+          "description": "Prototype hardware rendering candidate and compare low-poly triangle, atlas texture and fog capabilities."
+        },
+        {
+          "id": "P01.04",
+          "status": "not_started",
+          "description": "Implement a first-person walk-through test with one light, textured wall, doorway, prop and animated entity."
+        },
+        {
+          "id": "P01.05",
+          "status": "not_started",
+          "description": "Test high DPI, fullscreen/windowed transitions, ALT-TAB, mouse release and swing EDT dispatch."
+        },
+        {
+          "id": "P01.06",
+          "status": "not_started",
+          "description": "Declare supported GPU and Java runtime targets from observed results, not untested assumptions."
+        },
+        {
+          "id": "P01.07",
+          "status": "not_started",
+          "description": "Implement engine adapter and no duplicate/hidden world-state ownership in renderer."
+        },
+        {
+          "id": "P01.08",
+          "status": "not_started",
+          "description": "Validate lifecycle stress and fresh Windows startup; commit measurements and selected decision."
+        }
+      ]
+    },
+    {
+      "id": "P02",
+      "title": "Desktop menus, profiles and lobby shell",
+      "deps": [
+        "P01"
+      ],
+      "track": "UX",
+      "exit": "Real connected menu actions, ready seats and navigation, not a stack of decorative panels.",
+      "hard_gate": "No dead prominent button, no keyboard trap, each disabled action gives a reason.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P02.01",
+          "status": "not_started",
+          "description": "Implement compact Start/Continue/Host/Join/Settings/Exit menu with direct actions."
+        },
+        {
+          "id": "P02.02",
+          "status": "not_started",
+          "description": "Provide local player profile creation/loading and explicit save folder."
+        },
+        {
+          "id": "P02.03",
+          "status": "not_started",
+          "description": "Create role selection with Cleric, Observer and Demonologist and visible ability summaries."
+        },
+        {
+          "id": "P02.04",
+          "status": "not_started",
+          "description": "Build mission board showing location, risk, contract objectives and available payout."
+        },
+        {
+          "id": "P02.05",
+          "status": "not_started",
+          "description": "Build equipment loadout and shop screens with bounded capacity and current inventory."
+        },
+        {
+          "id": "P02.06",
+          "status": "not_started",
+          "description": "Build four-seat LAN lobby interface with owner controls, ready signals and session state."
+        },
+        {
+          "id": "P02.07",
+          "status": "not_started",
+          "description": "Add resolution, graphics, controls, accessibility and audio settings that actually persist."
+        },
+        {
+          "id": "P02.08",
+          "status": "not_started",
+          "description": "Exercise mouse/keyboard navigation, back/escape and screen scaling at several sizes."
+        }
+      ]
+    },
+    {
+      "id": "P03",
+      "title": "Canonical room graph and first production house",
+      "deps": [
+        "P01"
+      ],
+      "track": "Level",
+      "exit": "Fully navigable small test house with meaningful floor/room/zone identity and references.",
+      "hard_gate": "Every room and door id validates; zero unreachable ritual anchor, clue socket or extraction point.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P03.01",
+          "status": "not_started",
+          "description": "Define room zone IDs, parent floors, physical volumes, thresholds and physical/spectral adjacency."
+        },
+        {
+          "id": "P03.02",
+          "status": "not_started",
+          "description": "Define static authored JSON level schema, content hashes, required fields and migration rules."
+        },
+        {
+          "id": "P03.03",
+          "status": "not_started",
+          "description": "Block out foyer, hall, living room, kitchen, bedroom, bathroom, utility, basement and exterior."
+        },
+        {
+          "id": "P03.04",
+          "status": "not_started",
+          "description": "Create usable door frames, stairs, correct wall collisions and named floor map."
+        },
+        {
+          "id": "P03.05",
+          "status": "not_started",
+          "description": "Wire independent electricity/light, temperature/ventilation and local acoustics zone components."
+        },
+        {
+          "id": "P03.06",
+          "status": "not_started",
+          "description": "Place safe spawn/extraction, environmental hazard, object sockets, evidence sockets and ritual anchors."
+        },
+        {
+          "id": "P03.07",
+          "status": "not_started",
+          "description": "Build validator for disconnected rooms, duplicate IDs, invalid circuits or unreachable anchor."
+        },
+        {
+          "id": "P03.08",
+          "status": "not_started",
+          "description": "Run all role sizes and both hunter and spectral traversal through every zone."
+        }
+      ]
+    },
+    {
+      "id": "P04",
+      "title": "First-person character movement and interaction",
+      "deps": [
+        "P03"
+      ],
+      "track": "Player",
+      "exit": "Stable player locomotion and collision, clear use prompts, reach-constrained object interactions.",
+      "hard_gate": "No collision escape, blocked exit or input/focus lock in the required test path.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P04.01",
+          "status": "not_started",
+          "description": "Implement independent mouse yaw/pitch plus rebindable keyboard/controller-compatible mapping."
+        },
+        {
+          "id": "P04.02",
+          "status": "not_started",
+          "description": "Implement walk, sprint, crouch, stamina, acceleration and gravity with fixed-step reconciliation."
+        },
+        {
+          "id": "P04.03",
+          "status": "not_started",
+          "description": "Implement validated interaction distance and line-of-sight and visible prompt suppression."
+        },
+        {
+          "id": "P04.04",
+          "status": "not_started",
+          "description": "Implement opening/closing doors, breakers and light switches with appropriate animation."
+        },
+        {
+          "id": "P04.05",
+          "status": "not_started",
+          "description": "Implement held and placed items, swap/drop/inspect and camera/hand pose."
+        },
+        {
+          "id": "P04.06",
+          "status": "not_started",
+          "description": "Smoke-test stairwells, tight passages, sloped thresholds and collision corners."
+        },
+        {
+          "id": "P04.07",
+          "status": "not_started",
+          "description": "Test pausing, focus loss, modal controls, escape-to-menu and pointer release."
+        },
+        {
+          "id": "P04.08",
+          "status": "not_started",
+          "description": "Run replayed walk/interaction scripts across 30, 60 and 144 render FPS."
+        }
+      ]
+    },
+    {
+      "id": "P05",
+      "title": "Object interaction, physics and environment state",
+      "deps": [
+        "P04"
+      ],
+      "track": "World",
+      "exit": "Reliable interactive furnishings and stateful props suitable for supernatural manipulation.",
+      "hard_gate": "No unbounded impulses, permanently jammed mission routes, NaN transforms or prop-ownership exploits.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P05.01",
+          "status": "not_started",
+          "description": "Classify every prop static/interactable/throwable/breakable and assign mass plus transform limits."
+        },
+        {
+          "id": "P05.02",
+          "status": "not_started",
+          "description": "Implement deterministic ghost/hunter push and item displacement event IDs."
+        },
+        {
+          "id": "P05.03",
+          "status": "not_started",
+          "description": "Implement safe door/blocker response to jamming, stacking and repeated impulses."
+        },
+        {
+          "id": "P05.04",
+          "status": "not_started",
+          "description": "Expose electricity, heat, light and switches as authoritative room-state components."
+        },
+        {
+          "id": "P05.05",
+          "status": "not_started",
+          "description": "Build physical trace and surface-mark events that can legitimately produce evidence."
+        },
+        {
+          "id": "P05.06",
+          "status": "not_started",
+          "description": "Implement sleep/deactivation and per-room active prop limits to bound CPU load."
+        },
+        {
+          "id": "P05.07",
+          "status": "not_started",
+          "description": "Create impact/fragment events separated from render-only particle systems."
+        },
+        {
+          "id": "P05.08",
+          "status": "not_started",
+          "description": "Stress test cluttered rooms, item spam and four nearby actors with frame profiles."
+        }
+      ]
+    },
+    {
+      "id": "P06",
+      "title": "Fixed-step simulation, commands and replay",
+      "deps": [
+        "P01"
+      ],
+      "track": "Core",
+      "exit": "Deterministic host-reusable simulation with versioned commands and replay.",
+      "hard_gate": "Same seed + ordered command transcript produces identical authoritative state across render-frame schedules.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P06.01",
+          "status": "not_started",
+          "description": "Implement simulation tick time independent of rendering and EDT."
+        },
+        {
+          "id": "P06.02",
+          "status": "not_started",
+          "description": "Introduce stable entities, world event types, command IDs and sequence numbers."
+        },
+        {
+          "id": "P06.03",
+          "status": "not_started",
+          "description": "Centralize authoritative health, location, cooldown, energy, inventory and ritual mutation."
+        },
+        {
+          "id": "P06.04",
+          "status": "not_started",
+          "description": "Create schema validation, bounded input sizes and duplicate-command rejection."
+        },
+        {
+          "id": "P06.05",
+          "status": "not_started",
+          "description": "Make RNG deterministic with owned seed/state and no hidden rendering random source."
+        },
+        {
+          "id": "P06.06",
+          "status": "not_started",
+          "description": "Implement state snapshots, event journal, replay reader and actionable failure diffs."
+        },
+        {
+          "id": "P06.07",
+          "status": "not_started",
+          "description": "Test invalid commands, duplicate events, missing asset schema and world version mismatch."
+        },
+        {
+          "id": "P06.08",
+          "status": "not_started",
+          "description": "Validate identical state hashes at 30/60/144 simulated renderer schedules."
+        }
+      ]
+    },
+    {
+      "id": "P07",
+      "title": "LAN host/join and four-seat lifecycle",
+      "deps": [
+        "P02",
+        "P06"
+      ],
+      "track": "Network",
+      "exit": "Host three investigator slots and one ghost slot on LAN, with optional AI ghost fallback.",
+      "hard_gate": "Four clients ready and start a real session using direct local IP without a cloud account.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P07.01",
+          "status": "not_started",
+          "description": "Choose protocol transport and document local port, IPv4/IPv6 and host interface options."
+        },
+        {
+          "id": "P07.02",
+          "status": "not_started",
+          "description": "Implement direct-IP join plus optional LAN discovery with graceful disabled-network behavior."
+        },
+        {
+          "id": "P07.03",
+          "status": "not_started",
+          "description": "Implement handshake for version, map pack hash, player identity and allowed seat."
+        },
+        {
+          "id": "P07.04",
+          "status": "not_started",
+          "description": "Enforce 3 hunter seats plus 1 ghost seat, role and ready transitions."
+        },
+        {
+          "id": "P07.05",
+          "status": "not_started",
+          "description": "Implement client/host session start, mission loading and lobby back-out."
+        },
+        {
+          "id": "P07.06",
+          "status": "not_started",
+          "description": "Implement unoccupied ghost seat AI fallback with explicit ghost-player takeover policy."
+        },
+        {
+          "id": "P07.07",
+          "status": "not_started",
+          "description": "Add disconnect, duplicate connection, timeout and clean host-exit behavior."
+        },
+        {
+          "id": "P07.08",
+          "status": "not_started",
+          "description": "Test two physical Windows machines and four independent clients through launch and cancel."
+        }
+      ]
+    },
+    {
+      "id": "P08",
+      "title": "Network authority, replication and reconnect",
+      "deps": [
+        "P05",
+        "P07"
+      ],
+      "track": "Network",
+      "exit": "Consistent authoritative world state across all participants, with exploit rejection.",
+      "hard_gate": "Critical event IDs converge on 4 clients, no duplicate damage or payment, and no permanent state desync.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P08.01",
+          "status": "not_started",
+          "description": "Choose snapshots and reliable event framing, with monotonic timestamps and ACKs."
+        },
+        {
+          "id": "P08.02",
+          "status": "not_started",
+          "description": "Replicate hunters, equipment, doors, object impulses, light/temperature, ghost effects and rituals."
+        },
+        {
+          "id": "P08.03",
+          "status": "not_started",
+          "description": "Implement client presentation interpolation without client-authoritative damage, evidence or payouts."
+        },
+        {
+          "id": "P08.04",
+          "status": "not_started",
+          "description": "Reject wrong-role commands, fabricated position, impossible object transforms and action spam."
+        },
+        {
+          "id": "P08.05",
+          "status": "not_started",
+          "description": "Implement reconnect tokens, catch-up snapshots, replay-guarded events and seat timeouts."
+        },
+        {
+          "id": "P08.06",
+          "status": "not_started",
+          "description": "Inject latency, packet reordering, 2% loss and duplicate messages in reproducible harness."
+        },
+        {
+          "id": "P08.07",
+          "status": "not_started",
+          "description": "Test event reordering around ritual completion, inventory transfer and player incapacitation."
+        },
+        {
+          "id": "P08.08",
+          "status": "not_started",
+          "description": "Run repeated four-client join/play/leave cycles with replicated state hashes."
+        }
+      ]
+    },
+    {
+      "id": "P09",
+      "title": "Shared ghost action and ability contracts",
+      "deps": [
+        "P03",
+        "P06"
+      ],
+      "track": "Ghost",
+      "exit": "One legal ghost command library supports AI and human ghosts without privileged variants.",
+      "hard_gate": "Every shipped command has identical cost/range/damage/cooldown/telegraph for AI and human controllers.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P09.01",
+          "status": "not_started",
+          "description": "Define energy, influence, manifestation, roaming, agitation, hunt and recovery states."
+        },
+        {
+          "id": "P09.02",
+          "status": "not_started",
+          "description": "Implement move/phase/sound/appearance/knock/throw/light disruption commands."
+        },
+        {
+          "id": "P09.03",
+          "status": "not_started",
+          "description": "Implement possession, physical strike, evidence signature and ritual interruption commands."
+        },
+        {
+          "id": "P09.04",
+          "status": "not_started",
+          "description": "Host-validate legal target, cooldown, energy, distance, zone and allowed ghost archetype."
+        },
+        {
+          "id": "P09.05",
+          "status": "not_started",
+          "description": "Emit world events that create audio/video clues and deterministic telemetry."
+        },
+        {
+          "id": "P09.06",
+          "status": "not_started",
+          "description": "Define ghost archetype data schema and per-command accessibility/telegraph expectations."
+        },
+        {
+          "id": "P09.07",
+          "status": "not_started",
+          "description": "Create golden tests dispatching same command from human and AI in identical state."
+        },
+        {
+          "id": "P09.08",
+          "status": "not_started",
+          "description": "Reject illegal command and demonstrate no hidden controller-only mutation path."
+        }
+      ]
+    },
+    {
+      "id": "P10",
+      "title": "Human ghost mode, controls and HUD",
+      "deps": [
+        "P08",
+        "P09"
+      ],
+      "track": "Ghost",
+      "exit": "One player can take ghost seat, observe lawful world and use ghost powers.",
+      "hard_gate": "All available AI ghost actions reachable through human UI with identical validation and no private hunter omniscience.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P10.01",
+          "status": "not_started",
+          "description": "Implement first-person spectral camera with legal walls, portals and anchored travel."
+        },
+        {
+          "id": "P10.02",
+          "status": "not_started",
+          "description": "Implement human ghost perception limited to observed sounds, rooms and manifestations."
+        },
+        {
+          "id": "P10.03",
+          "status": "not_started",
+          "description": "Display influence energy, agitation, cooldowns, target and state hints."
+        },
+        {
+          "id": "P10.04",
+          "status": "not_started",
+          "description": "Implement focused control set for manifestations, object movement, phase and hunt."
+        },
+        {
+          "id": "P10.05",
+          "status": "not_started",
+          "description": "Implement possession targeting and zone/prop legality feedback."
+        },
+        {
+          "id": "P10.06",
+          "status": "not_started",
+          "description": "Implement ghost victory/loss, ritual counteraction and recovery/reposition states."
+        },
+        {
+          "id": "P10.07",
+          "status": "not_started",
+          "description": "Test human ghost adversarial exploit attempts and denied private notebook/positions."
+        },
+        {
+          "id": "P10.08",
+          "status": "not_started",
+          "description": "Compare human-controlled recorded commands to same AI-dispatched commands in replay."
+        }
+      ]
+    },
+    {
+      "id": "P11",
+      "title": "AI ghost decisions without omniscience",
+      "deps": [
+        "P09"
+      ],
+      "track": "Ghost AI",
+      "exit": "A Spirit AI capable of genuine missions through shared commands and imperfect observations.",
+      "hard_gate": "AI has zero access to information beyond GhostObservation and can win/lose organically.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P11.01",
+          "status": "not_started",
+          "description": "Define filtered GhostObservation interface and last-known hunter position memory."
+        },
+        {
+          "id": "P11.02",
+          "status": "not_started",
+          "description": "Implement seeded decision cadence, idle wandering and location/anchor preference."
+        },
+        {
+          "id": "P11.03",
+          "status": "not_started",
+          "description": "Implement measured curiosity toward player noise and physical disturbance."
+        },
+        {
+          "id": "P11.04",
+          "status": "not_started",
+          "description": "Generate physical evidence and ambient harassment from real command dispatcher."
+        },
+        {
+          "id": "P11.05",
+          "status": "not_started",
+          "description": "Choose escalation/manifestation/hunt based on measured pressure and accessible signals."
+        },
+        {
+          "id": "P11.06",
+          "status": "not_started",
+          "description": "Implement defensive response to wards, rites and failed attacks."
+        },
+        {
+          "id": "P11.07",
+          "status": "not_started",
+          "description": "Prove AI code cannot read raw player inventory, journal or hidden position."
+        },
+        {
+          "id": "P11.08",
+          "status": "not_started",
+          "description": "Run multiple seeded hunt/retreat cases and compare results to player ghost legal behavior."
+        }
+      ]
+    },
+    {
+      "id": "P12",
+      "title": "Three investigator disciplines and loadout mechanics",
+      "deps": [
+        "P02",
+        "P04",
+        "P06"
+      ],
+      "track": "Hunters",
+      "exit": "Cleric, Observer and Demonologist all function as differentiated roles.",
+      "hard_gate": "3/3 classes complete baseline case; no class hard-lock on required universal objectives.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P12.01",
+          "status": "not_started",
+          "description": "Define class IDs, starting gear, cooldowns, specialties, passives and upgrade sockets."
+        },
+        {
+          "id": "P12.02",
+          "status": "not_started",
+          "description": "Implement Cleric wards, stabilization, temporary safe zones and rite preparation."
+        },
+        {
+          "id": "P12.03",
+          "status": "not_started",
+          "description": "Implement Observer sensor calibration, triangulation, map annotation and analysis boosts."
+        },
+        {
+          "id": "P12.04",
+          "status": "not_started",
+          "description": "Implement Demonologist provocation, lore inference, séance interaction and pact risk."
+        },
+        {
+          "id": "P12.05",
+          "status": "not_started",
+          "description": "Implement shared flashlight, inventory slots, status and fallback ritual participation."
+        },
+        {
+          "id": "P12.06",
+          "status": "not_started",
+          "description": "Create equip/drop/trade and exhausted supplies behavior and host ownership checks."
+        },
+        {
+          "id": "P12.07",
+          "status": "not_started",
+          "description": "Add clear and compact role activity HUD including costs and tooltips."
+        },
+        {
+          "id": "P12.08",
+          "status": "not_started",
+          "description": "Test all three classes against the same Spirit mission with and without ideal equipment."
+        }
+      ]
+    },
+    {
+      "id": "P13",
+      "title": "Evidence tool integration and sensor simulation",
+      "deps": [
+        "P05",
+        "P12"
+      ],
+      "track": "Evidence",
+      "exit": "Working world-state-driven EMF, temperature, spirit-box, camera and auxiliary gear.",
+      "hard_gate": "Every required tool reading traceable to simulator cause and location, not decorative random UI.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P13.01",
+          "status": "not_started",
+          "description": "Implement EMF intensity from supernatural events with falloff and calibrated baseline."
+        },
+        {
+          "id": "P13.02",
+          "status": "not_started",
+          "description": "Implement thermometer readings from air/heating/ventilation and ghost cold effects."
+        },
+        {
+          "id": "P13.03",
+          "status": "not_started",
+          "description": "Implement directional audio recorder/spirit-box with voice conditions and occlusion."
+        },
+        {
+          "id": "P13.04",
+          "status": "not_started",
+          "description": "Implement image/video event capture with time, camera pose and visible ghost trace."
+        },
+        {
+          "id": "P13.05",
+          "status": "not_started",
+          "description": "Implement UV/residue and motion sensors through common tool event interface."
+        },
+        {
+          "id": "P13.06",
+          "status": "not_started",
+          "description": "Add charge, placement, retrieval and durability to every field instrument."
+        },
+        {
+          "id": "P13.07",
+          "status": "not_started",
+          "description": "Provide captions/visual feedback for all actionable audio instrument readings."
+        },
+        {
+          "id": "P13.08",
+          "status": "not_started",
+          "description": "Test cause/no-cause, environment interference, cross-client and multi-instrument readings."
+        }
+      ]
+    },
+    {
+      "id": "P14",
+      "title": "Notebook, evidence inference and deception",
+      "deps": [
+        "P09",
+        "P13"
+      ],
+      "track": "Deduction",
+      "exit": "Journal supports meaningful multi-channel identification with uncertainty and counterfeits.",
+      "hard_gate": "Each ghost has at least three distinguishable investigations; no hidden type auto-reveal in HUD.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P14.01",
+          "status": "not_started",
+          "description": "Define reading record schema: instrument, position, zone, time, severity, source and contamination."
+        },
+        {
+          "id": "P14.02",
+          "status": "not_started",
+          "description": "Collect corroborating clues across repeated observations and assign confidence."
+        },
+        {
+          "id": "P14.03",
+          "status": "not_started",
+          "description": "Implement hypothesis comparison, contradictory readings and negative tests."
+        },
+        {
+          "id": "P14.04",
+          "status": "not_started",
+          "description": "Implement map heat and named zone markers without perfect ghost knowledge."
+        },
+        {
+          "id": "P14.05",
+          "status": "not_started",
+          "description": "Share hunter notes to teammates while preventing ghost from seeing private entries."
+        },
+        {
+          "id": "P14.06",
+          "status": "not_started",
+          "description": "Implement Mimic-compatible deliberately fake signals with falsifiable internal tells."
+        },
+        {
+          "id": "P14.07",
+          "status": "not_started",
+          "description": "Prevent repeated single event from counting as independent evidence."
+        },
+        {
+          "id": "P14.08",
+          "status": "not_started",
+          "description": "Run a blind test for Spirit/Poltergeist/Wraith identification and inspect misdiagnosis."
+        }
+      ]
+    },
+    {
+      "id": "P15",
+      "title": "Haunting, injury, pursuit and escape",
+      "deps": [
+        "P04",
+        "P09",
+        "P11"
+      ],
+      "track": "Hunts",
+      "exit": "Predictable escalation, dangerous but learnable ghost hunts, and recoverable injuries.",
+      "hard_gate": "Zero first-spawn unavoidable death, infinite stun chains or unescapable hunt traps in scripted matrix.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P15.01",
+          "status": "not_started",
+          "description": "Implement escalation curve from quiet haunt to warn, manifest, hunt and exhaustion."
+        },
+        {
+          "id": "P15.02",
+          "status": "not_started",
+          "description": "Implement incremental injury, stress, corruption, incapacitation and rescue."
+        },
+        {
+          "id": "P15.03",
+          "status": "not_started",
+          "description": "Implement hunt route, imperfect target memory and bounded chase speed."
+        },
+        {
+          "id": "P15.04",
+          "status": "not_started",
+          "description": "Emit discoverable warnings before full attack and provide reliable audio/visual alternatives."
+        },
+        {
+          "id": "P15.05",
+          "status": "not_started",
+          "description": "Implement protective response to temporary wards, lighting and zone-specific counters."
+        },
+        {
+          "id": "P15.06",
+          "status": "not_started",
+          "description": "Allow ally stabilization, recoverable fear and controlled extraction after injury."
+        },
+        {
+          "id": "P15.07",
+          "status": "not_started",
+          "description": "Ensure cooldown, damage and movement obey host state across AI/human control."
+        },
+        {
+          "id": "P15.08",
+          "status": "not_started",
+          "description": "Test fresh-player survivability, repeated attack loops, door traps and failure clarity."
+        }
+      ]
+    },
+    {
+      "id": "P16",
+      "title": "Spatial rituals, séances and site cleansing",
+      "deps": [
+        "P12",
+        "P14",
+        "P15"
+      ],
+      "track": "Rituals",
+      "exit": "Fully interactive rites with spatial anchors, ghost resistance and multiple outcomes.",
+      "hard_gate": "100% ritual success depends on validated world predicates, not animations; interrupted rites remain playable.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P16.01",
+          "status": "not_started",
+          "description": "Define ritual recipe/phase schema for zone tags, ingredients, anchors and objectives."
+        },
+        {
+          "id": "P16.02",
+          "status": "not_started",
+          "description": "Implement chalk/salt/circle placement and temporary sanctified thresholds."
+        },
+        {
+          "id": "P16.03",
+          "status": "not_started",
+          "description": "Implement séance with provocation, response, evidence and the ability to end safely."
+        },
+        {
+          "id": "P16.04",
+          "status": "not_started",
+          "description": "Implement anchor detection, true-name/history inquiry and reagent preparation."
+        },
+        {
+          "id": "P16.05",
+          "status": "not_started",
+          "description": "Implement multi-phase banishment with interruption, retry and ghost counteraction."
+        },
+        {
+          "id": "P16.06",
+          "status": "not_started",
+          "description": "Implement wrong anchor, ghost or ingredient responses with recoverable consequences."
+        },
+        {
+          "id": "P16.07",
+          "status": "not_started",
+          "description": "Implement final residual cleanse and mission completion on authoritative state."
+        },
+        {
+          "id": "P16.08",
+          "status": "not_started",
+          "description": "Test no-anchor exploit, invalid placement, interrupted loop and human-ghost resistance."
+        }
+      ]
+    },
+    {
+      "id": "P17",
+      "title": "Playable solo mission vertical slice",
+      "deps": [
+        "P02",
+        "P03",
+        "P11",
+        "P16"
+      ],
+      "track": "Milestone",
+      "exit": "One fully reproducible solo mission from menu to AI ghost to extraction or defeat.",
+      "hard_gate": "10/10 seeded cases have valid outcome with no blocking defect and a hands-on Windows test.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P17.01",
+          "status": "not_started",
+          "description": "Connect mission board to room loading, selected class and equipment."
+        },
+        {
+          "id": "P17.02",
+          "status": "not_started",
+          "description": "Implement Spirit haunting in the production test house with randomized legal anchor."
+        },
+        {
+          "id": "P17.03",
+          "status": "not_started",
+          "description": "Require actual equipment measurements and a journal evidence conclusion."
+        },
+        {
+          "id": "P17.04",
+          "status": "not_started",
+          "description": "Allow correct séance or ward/banishment attempt within active ghost counterplay."
+        },
+        {
+          "id": "P17.05",
+          "status": "not_started",
+          "description": "Provide visible warning and hunt stage plus injury/retreat."
+        },
+        {
+          "id": "P17.06",
+          "status": "not_started",
+          "description": "Allow successful cleansing and location extraction, including partial failure exit."
+        },
+        {
+          "id": "P17.07",
+          "status": "not_started",
+          "description": "Finalize debrief, item losses and single transaction reward event."
+        },
+        {
+          "id": "P17.08",
+          "status": "not_started",
+          "description": "Capture build SHA, 10 seeds, test logs and real graphical Windows playthrough."
+        }
+      ]
+    },
+    {
+      "id": "P18",
+      "title": "End-to-end 3v1 LAN alpha",
+      "deps": [
+        "P08",
+        "P10",
+        "P17"
+      ],
+      "track": "Milestone",
+      "exit": "Three hunters and human/AI Spirit complete real networked matches.",
+      "hard_gate": "4 peers finish 20 test matches (>=5 human-ghost) with zero critical desync and single payouts.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P18.01",
+          "status": "not_started",
+          "description": "Wire four-role lobby selections and synchronized match start."
+        },
+        {
+          "id": "P18.02",
+          "status": "not_started",
+          "description": "Spawn and display all three hunter avatars with individual tools and data."
+        },
+        {
+          "id": "P18.03",
+          "status": "not_started",
+          "description": "Enable human ghost seat with full shared-command abilities or AI Spirit fallback."
+        },
+        {
+          "id": "P18.04",
+          "status": "not_started",
+          "description": "Synchronize clues, item physics, rooms, injuries, warding and ritual state."
+        },
+        {
+          "id": "P18.05",
+          "status": "not_started",
+          "description": "Implement ghost victory, hunter victory, extraction and failure per seat."
+        },
+        {
+          "id": "P18.06",
+          "status": "not_started",
+          "description": "Handle reconnect, nonhost disconnect, match pause and host departure policies."
+        },
+        {
+          "id": "P18.07",
+          "status": "not_started",
+          "description": "Test cheating client commands, ghost unfair sight and inventory duplication."
+        },
+        {
+          "id": "P18.08",
+          "status": "not_started",
+          "description": "Capture multi-machine match records, packet replay and synchronized final outcomes."
+        }
+      ]
+    },
+    {
+      "id": "P19",
+      "title": "Beckenburg Castle and persistent campaign",
+      "deps": [
+        "P02",
+        "P06",
+        "P17"
+      ],
+      "track": "Progression",
+      "exit": "Castle acts as persistent accessible hub and records actual expedition changes.",
+      "hard_gate": "No double reward/duplicate purchase; profile and reclaimed sites survive restart and migration.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P19.01",
+          "status": "not_started",
+          "description": "Author castle zones: board, armory, archive, workshop, infirmary, sanctuary and vault."
+        },
+        {
+          "id": "P19.02",
+          "status": "not_started",
+          "description": "Provide direct fast-access operation menus with optional explorable hub navigation."
+        },
+        {
+          "id": "P19.03",
+          "status": "not_started",
+          "description": "Implement versioned local player identities, XP and class progression."
+        },
+        {
+          "id": "P19.04",
+          "status": "not_started",
+          "description": "Implement equipment purchase, sell, repair, stash and resupply transactions."
+        },
+        {
+          "id": "P19.05",
+          "status": "not_started",
+          "description": "Persist site reclamation, unlocked options, discovered lore and injury recovery."
+        },
+        {
+          "id": "P19.06",
+          "status": "not_started",
+          "description": "Add return-to-castle and next mission quick restart after any outcome."
+        },
+        {
+          "id": "P19.07",
+          "status": "not_started",
+          "description": "Make all pay/recovery writes atomic and idempotent under reconnect."
+        },
+        {
+          "id": "P19.08",
+          "status": "not_started",
+          "description": "Inject save corruption, migration and interrupted-write tests with safe backups."
+        }
+      ]
+    },
+    {
+      "id": "P20",
+      "title": "Complete economy, tools and role progression",
+      "deps": [
+        "P14",
+        "P19"
+      ],
+      "track": "Equipment",
+      "exit": "All listed shipping field/ritual equipment purchasable and meaningful.",
+      "hard_gate": "No unwinnable bankruptcy spiral; all devices have actual gameplay events and ownership checks.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P20.01",
+          "status": "not_started",
+          "description": "Finalize common sensor tools, protective objects and ritual reagents catalog."
+        },
+        {
+          "id": "P20.02",
+          "status": "not_started",
+          "description": "Implement charges, wear, attachments, maintenance and salvage behavior."
+        },
+        {
+          "id": "P20.03",
+          "status": "not_started",
+          "description": "Create class-specific upgrade paths focused on choices and sidegrades."
+        },
+        {
+          "id": "P20.04",
+          "status": "not_started",
+          "description": "Balance loadout budget, purchases, starting currency and item durability."
+        },
+        {
+          "id": "P20.05",
+          "status": "not_started",
+          "description": "Implement ghost-player XP or reputation without abuse incentives."
+        },
+        {
+          "id": "P20.06",
+          "status": "not_started",
+          "description": "Run 20-case economic simulations including wrong IDs, deaths and retreat."
+        },
+        {
+          "id": "P20.07",
+          "status": "not_started",
+          "description": "Check exploit resistance to trading, sale duplication, negative credits and reconnect."
+        },
+        {
+          "id": "P20.08",
+          "status": "not_started",
+          "description": "Expose accurate costs/benefits in compact shop UI and field handbook."
+        }
+      ]
+    },
+    {
+      "id": "P21",
+      "title": "Original art, models, textures and animation pipeline",
+      "deps": [
+        "P01",
+        "P03"
+      ],
+      "track": "Art",
+      "exit": "Approved PlayStation-era concept styles become verified production assets.",
+      "hard_gate": "All shipping assets have committed originals, provenance, mesh/atlas budget and in-engine preview.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P21.01",
+          "status": "not_started",
+          "description": "Commit and validate all concept boards, current 19 PNG originals and historical variants; link gallery."
+        },
+        {
+          "id": "P21.02",
+          "status": "not_started",
+          "description": "Lock silhouette, texture/pixel palette, UV atlas and poly-budget convention from approved board."
+        },
+        {
+          "id": "P21.03",
+          "status": "not_started",
+          "description": "Build import converter for FBX/GLTF or selected mesh format and canonical unit scale."
+        },
+        {
+          "id": "P21.04",
+          "status": "not_started",
+          "description": "Create low-poly player hunter bodies, hands, backpacks and three distinct role kits."
+        },
+        {
+          "id": "P21.05",
+          "status": "not_started",
+          "description": "Create Spirit, Poltergeist and Wraith initial model/sprite sets and move/manifest poses."
+        },
+        {
+          "id": "P21.06",
+          "status": "not_started",
+          "description": "Create door, furniture, ritual circle, detector, church/castle kit assets and animation hooks."
+        },
+        {
+          "id": "P21.07",
+          "status": "not_started",
+          "description": "Capture low-res in-game screenshots alongside each approved sheet for visual audit."
+        },
+        {
+          "id": "P21.08",
+          "status": "not_started",
+          "description": "Profile triangle counts, draw calls, texture sampling and LOD on reference hardware."
+        }
+      ]
+    },
+    {
+      "id": "P22",
+      "title": "All thirteen ghost types and fairness matrix",
+      "deps": [
+        "P14",
+        "P18",
+        "P21"
+      ],
+      "track": "Ghost roster",
+      "exit": "Full diverse roster playable by AI and human with lore-consistent counterplay.",
+      "hard_gate": "13/13 ghost types mechanically distinct, >=3 tell avenues and >=2 counters each; parity suite fully green.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P22.01",
+          "status": "not_started",
+          "description": "Finalize Spirit, Poltergeist and Wraith distinctive abilities and tutorial encounters."
+        },
+        {
+          "id": "P22.02",
+          "status": "not_started",
+          "description": "Implement Shade, Specter and Banshee visual/acoustic darkness and decoy mechanisms."
+        },
+        {
+          "id": "P22.03",
+          "status": "not_started",
+          "description": "Implement Hantu cold/heat interaction and associated environment coupling."
+        },
+        {
+          "id": "P22.04",
+          "status": "not_started",
+          "description": "Implement Yokai sound/etiquette and Possessive object/owner-link behaviors."
+        },
+        {
+          "id": "P22.05",
+          "status": "not_started",
+          "description": "Implement Demon corruption and Devil contract/bargain systems as different mechanics."
+        },
+        {
+          "id": "P22.06",
+          "status": "not_started",
+          "description": "Implement Mimic copied evidence and time-separated contradiction clues."
+        },
+        {
+          "id": "P22.07",
+          "status": "not_started",
+          "description": "Implement Twins dual manifestations with one shared actor resource and legal event budget."
+        },
+        {
+          "id": "P22.08",
+          "status": "not_started",
+          "description": "Run all ghost types under human and AI input against legal actions, injuries and counter-rites."
+        }
+      ]
+    },
+    {
+      "id": "P23",
+      "title": "Nine finished location categories",
+      "deps": [
+        "P03",
+        "P18",
+        "P21"
+      ],
+      "track": "Environments",
+      "exit": "At least one complete shippable map per requested location family.",
+      "hard_gate": "9/9 maps clear traversal, evidence/ritual reachability, ghost action parity and reference frame budget.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P23.01",
+          "status": "not_started",
+          "description": "Finish starter house with safe exits, lore and all location interactions."
+        },
+        {
+          "id": "P23.02",
+          "status": "not_started",
+          "description": "Create farmhouse and mansion as distinct medium-complexity room graphs."
+        },
+        {
+          "id": "P23.03",
+          "status": "not_started",
+          "description": "Create school and church with contextual signs, circuits, acoustic and ritual sites."
+        },
+        {
+          "id": "P23.04",
+          "status": "not_started",
+          "description": "Create prison and asylum with gate/ward/cell areas and no hard-lock traps."
+        },
+        {
+          "id": "P23.05",
+          "status": "not_started",
+          "description": "Create academy and college with large-but-bounded zone routes and course-related lore."
+        },
+        {
+          "id": "P23.06",
+          "status": "not_started",
+          "description": "Assign floor maps, heat/occlusion, breakers, doors and evidence sockets for every location."
+        },
+        {
+          "id": "P23.07",
+          "status": "not_started",
+          "description": "Validate ghost shortcuts, physical portals, spawning, roaming and chase escapes."
+        },
+        {
+          "id": "P23.08",
+          "status": "not_started",
+          "description": "Run full match regression by level and record FPS, memory and content validity."
+        }
+      ]
+    },
+    {
+      "id": "P24",
+      "title": "Audio, paranormal effects and atmosphere",
+      "deps": [
+        "P15",
+        "P21"
+      ],
+      "track": "Sound",
+      "exit": "Readable haunted soundscape, efficient visual effects and cleared source rights.",
+      "hard_gate": "Every critical audio cue has visual equivalent; 100% audio provenance recorded; no game-critical unreadable darkness.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P24.01",
+          "status": "not_started",
+          "description": "Create cue taxonomy: footsteps, doors, equipment, rooms, ghost types, rituals and hunt warnings."
+        },
+        {
+          "id": "P24.02",
+          "status": "not_started",
+          "description": "Source original/royalty-free sound with usage rights, attribution and format manifest."
+        },
+        {
+          "id": "P24.03",
+          "status": "not_started",
+          "description": "Implement positional zone-aware occlusion, material-dependent footsteps and emitter priorities."
+        },
+        {
+          "id": "P24.04",
+          "status": "not_started",
+          "description": "Implement all ghost voices, EVP, Banshee wails and Yokai auditory triggers."
+        },
+        {
+          "id": "P24.05",
+          "status": "not_started",
+          "description": "Implement low-res particles, spectral trails, frost, ritual glyphs and dithered fog."
+        },
+        {
+          "id": "P24.06",
+          "status": "not_started",
+          "description": "Add dynamic ambience, safe mixing, reverb and clipping control."
+        },
+        {
+          "id": "P24.07",
+          "status": "not_started",
+          "description": "Implement captions or visual analyzers for every mandatory evidence and warning sound."
+        },
+        {
+          "id": "P24.08",
+          "status": "not_started",
+          "description": "Profile 4-player simultaneous sound/effect scenarios against performance targets."
+        }
+      ]
+    },
+    {
+      "id": "P25",
+      "title": "User interfaces, controls and accessibility polish",
+      "deps": [
+        "P02",
+        "P13",
+        "P18"
+      ],
+      "track": "UX",
+      "exit": "Usable compact UI with full onboarding, in-game map, ghost HUD and remapping.",
+      "hard_gate": "100% critical flows keyboard reachable and no key information encoded only by hearing or color.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P25.01",
+          "status": "not_started",
+          "description": "Condense castle and lobby layouts into functional information-dense menus."
+        },
+        {
+          "id": "P25.02",
+          "status": "not_started",
+          "description": "Polish held-equipment HUD, interaction prompts, health, evidence journal and objective tracking."
+        },
+        {
+          "id": "P25.03",
+          "status": "not_started",
+          "description": "Build ghost HUD with state, legal ability range and clear cooldown feedback."
+        },
+        {
+          "id": "P25.04",
+          "status": "not_started",
+          "description": "Build floor-aware readable map, marked named zones and uncertainty overlays."
+        },
+        {
+          "id": "P25.05",
+          "status": "not_started",
+          "description": "Add beginner training for each role and the ghost-player position."
+        },
+        {
+          "id": "P25.06",
+          "status": "not_started",
+          "description": "Provide readable text scaling, high contrast, colorblind-safe indicators and flashing options."
+        },
+        {
+          "id": "P25.07",
+          "status": "not_started",
+          "description": "Provide control rebinds, input sensitivity, camera movement/motion accommodations and sound captions."
+        },
+        {
+          "id": "P25.08",
+          "status": "not_started",
+          "description": "Conduct user tests with first-time players and no outside instructions."
+        }
+      ]
+    },
+    {
+      "id": "P26",
+      "title": "Progression tuning and multiplayer competitive balance",
+      "deps": [
+        "P20",
+        "P22",
+        "P23"
+      ],
+      "track": "Balance",
+      "exit": "Ghost/hunter outcomes and economy tuned through evidence and replay, not hidden power disparities.",
+      "hard_gate": "No statistically established unwinnable map/ghost/role matchup; 0 AI-versus-human powers divergences.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P26.01",
+          "status": "not_started",
+          "description": "Define playtest observation data that stays local unless participants explicitly opt in."
+        },
+        {
+          "id": "P26.02",
+          "status": "not_started",
+          "description": "Measure time-to-clue, ghost escalation, investigation length and ritual completion by site."
+        },
+        {
+          "id": "P26.03",
+          "status": "not_started",
+          "description": "Measure injured/downed/rescued/extracted players and ghost/hunter match outcomes."
+        },
+        {
+          "id": "P26.04",
+          "status": "not_started",
+          "description": "Triage dominant/unplayable archetypes with enough samples to interpret confidence."
+        },
+        {
+          "id": "P26.05",
+          "status": "not_started",
+          "description": "Tune observer/cleric/demonologist cooperation and solo viability."
+        },
+        {
+          "id": "P26.06",
+          "status": "not_started",
+          "description": "Tune gear prices, losses, rewards and XP curves after economic simulations."
+        },
+        {
+          "id": "P26.07",
+          "status": "not_started",
+          "description": "Run AI/human parity replay after each ability or combat balance edit."
+        },
+        {
+          "id": "P26.08",
+          "status": "not_started",
+          "description": "Review fairness complaints against actual events and adjust telegraphs/counters."
+        }
+      ]
+    },
+    {
+      "id": "P27",
+      "title": "Performance, LAN security and long-session reliability",
+      "deps": [
+        "P24",
+        "P25",
+        "P26"
+      ],
+      "track": "Quality",
+      "exit": "Long-play stable client/server with safe saves and bounded resource use.",
+      "hard_gate": "No critical security or save defect; declared hardware reaches 30 FPS min/60 FPS target; soak tests green.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P27.01",
+          "status": "not_started",
+          "description": "Define minimum and recommended Windows test machines, resolution and driver records."
+        },
+        {
+          "id": "P27.02",
+          "status": "not_started",
+          "description": "Profile p95 frame time, 1% lows, CPU, memory and object/AI costs."
+        },
+        {
+          "id": "P27.03",
+          "status": "not_started",
+          "description": "Optimize render draw calls, dynamic lights, occlusion, physics and audio work."
+        },
+        {
+          "id": "P27.04",
+          "status": "not_started",
+          "description": "Soak four clients through two-hour missions and 30 repeated load/unload cycles."
+        },
+        {
+          "id": "P27.05",
+          "status": "not_started",
+          "description": "Inject 0–150ms latency, 2% loss, message duplication and reconnect races."
+        },
+        {
+          "id": "P27.06",
+          "status": "not_started",
+          "description": "Validate untrusted packets, limits, content IDs and save inputs; disallow unsafe deserialization."
+        },
+        {
+          "id": "P27.07",
+          "status": "not_started",
+          "description": "Crash-inject during ritual, payout and local save flush and verify recovery."
+        },
+        {
+          "id": "P27.08",
+          "status": "not_started",
+          "description": "Capture reproducible regression failures and root-cause fixes with post-fix proof."
+        }
+      ]
+    },
+    {
+      "id": "P28",
+      "title": "Feature freeze and closed alpha acceptance",
+      "deps": [
+        "P21",
+        "P22",
+        "P23",
+        "P27"
+      ],
+      "track": "Alpha",
+      "exit": "Closed alpha build contains entire agreed scope under testable feature manifest.",
+      "hard_gate": "0 missing release-scope systems and 0 P0; all unfinished art/models/maps remain blocking.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P28.01",
+          "status": "not_started",
+          "description": "Freeze scope manifest with class, ghost, map, tools, hub, rituals and LAN feature IDs."
+        },
+        {
+          "id": "P28.02",
+          "status": "not_started",
+          "description": "Inspect GitHub art binary commitments, in-engine image proof and rights records."
+        },
+        {
+          "id": "P28.03",
+          "status": "not_started",
+          "description": "Run full mission flow on all nine sites and with every ghost controller."
+        },
+        {
+          "id": "P28.04",
+          "status": "not_started",
+          "description": "Run four-client LAN sessions with late join, disconnect, ghost swap and retreat."
+        },
+        {
+          "id": "P28.05",
+          "status": "not_started",
+          "description": "Execute novice onboarding and recoverable failure/bug reproduction sessions."
+        },
+        {
+          "id": "P28.06",
+          "status": "not_started",
+          "description": "Triage P0/P1/P2 bugs with reproduction and root-cause ownership."
+        },
+        {
+          "id": "P28.07",
+          "status": "not_started",
+          "description": "Rerun impacted tests following every correction in bounded repair windows."
+        },
+        {
+          "id": "P28.08",
+          "status": "not_started",
+          "description": "Record signed closed-alpha completion decision with actual build and test evidence."
+        }
+      ]
+    },
+    {
+      "id": "P29",
+      "title": "Beta acceptance and regression closure",
+      "deps": [
+        "P28"
+      ],
+      "track": "Beta",
+      "exit": "Content-locked game across classes/ghosts/maps is stable enough for release-candidate build.",
+      "hard_gate": "0 open P0/P1, 100% mandatory regression rows pass with signed omissions only after approved scope change.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P29.01",
+          "status": "not_started",
+          "description": "Freeze content IDs, schemas and migration before public testing."
+        },
+        {
+          "id": "P29.02",
+          "status": "not_started",
+          "description": "Run entire ghost-by-role-by-site compatibility matrix and mimic/twins edge cases."
+        },
+        {
+          "id": "P29.03",
+          "status": "not_started",
+          "description": "Run clean-install Windows GUI, sound, input and graphics setting checks."
+        },
+        {
+          "id": "P29.04",
+          "status": "not_started",
+          "description": "Run network reconnect, profile save and payment-once regression suite."
+        },
+        {
+          "id": "P29.05",
+          "status": "not_started",
+          "description": "Fix every P0/P1 at source and verify impacted cross-feature paths."
+        },
+        {
+          "id": "P29.06",
+          "status": "not_started",
+          "description": "Retest accessibility, captioning, quest map readability and tutorial completion."
+        },
+        {
+          "id": "P29.07",
+          "status": "not_started",
+          "description": "Gather and interpret beta session stability, fairness and performance results."
+        },
+        {
+          "id": "P29.08",
+          "status": "not_started",
+          "description": "Archive beta sign-off, trace captures, defects and regression evidence."
+        }
+      ]
+    },
+    {
+      "id": "P30",
+      "title": "Release candidate, Windows installer and support docs",
+      "deps": [
+        "P29"
+      ],
+      "track": "Release",
+      "exit": "Clean-machine installable Windows product with complete documentation and executable evidence.",
+      "hard_gate": "100% required clean-machine paths pass; 0 open P0/P1; exact installer hashes recorded and read back.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P30.01",
+          "status": "not_started",
+          "description": "Build from clean main checkout with pinned Java 17 target and asset manifest."
+        },
+        {
+          "id": "P30.02",
+          "status": "not_started",
+          "description": "Package bundled-runtime Windows installer/ZIP without requiring developer JDK."
+        },
+        {
+          "id": "P30.03",
+          "status": "not_started",
+          "description": "Record commit/version/build ID, file size, content license list and SHA-256."
+        },
+        {
+          "id": "P30.04",
+          "status": "not_started",
+          "description": "Install, start, host LAN, join ghost and three hunters, play and finish a mission on clean PCs."
+        },
+        {
+          "id": "P30.05",
+          "status": "not_started",
+          "description": "Verify profile persistence, downgrade/reinstall behavior and clean uninstall."
+        },
+        {
+          "id": "P30.06",
+          "status": "not_started",
+          "description": "Test graphics switching, focus handling, DPI, accessibility, missing-audio and corrupt config."
+        },
+        {
+          "id": "P30.07",
+          "status": "not_started",
+          "description": "Publish complete key map, host/join instructions, troubleshooting and known issues."
+        },
+        {
+          "id": "P30.08",
+          "status": "not_started",
+          "description": "Redownload RC candidate and compare hash, then sign release readiness."
+        }
+      ]
+    },
+    {
+      "id": "P31",
+      "title": "Gold release and postrelease maintenance",
+      "deps": [
+        "P30"
+      ],
+      "track": "Gold",
+      "exit": "Verified Windows production release, source/tag/assets and reproducible evidence.",
+      "hard_gate": "Verified published binary and complete LAN clean-machine test with 0 P0/P1; no fake completion from successful commit alone.",
+      "status": "not_started",
+      "commit_sha": null,
+      "verification_evidence": [],
+      "blockers": [],
+      "steps": [
+        {
+          "id": "P31.01",
+          "status": "not_started",
+          "description": "Conduct formal go/no-go based on signed gates and product-scope requirements."
+        },
+        {
+          "id": "P31.02",
+          "status": "not_started",
+          "description": "Create versioned release tag at verified default branch SHA."
+        },
+        {
+          "id": "P31.03",
+          "status": "not_started",
+          "description": "Publish final Windows installer/ZIP and accurate system requirements, release notes and licensing."
+        },
+        {
+          "id": "P31.04",
+          "status": "not_started",
+          "description": "Read back published asset, exact size and SHA-256 against source package."
+        },
+        {
+          "id": "P31.05",
+          "status": "not_started",
+          "description": "Test downloaded product on a clean supported Windows machine, including LAN match and saves."
+        },
+        {
+          "id": "P31.06",
+          "status": "not_started",
+          "description": "Publish known issues, crash-log instructions, accessibility notes and support contact."
+        },
+        {
+          "id": "P31.07",
+          "status": "not_started",
+          "description": "Define emergency patch criteria, compatibility rules and main-branch-only recovery approach."
+        },
+        {
+          "id": "P31.08",
+          "status": "not_started",
+          "description": "Keep archived release verification, artifacts and measured metrics for future maintenance."
+        }
+      ]
+    }
+  ]
+}

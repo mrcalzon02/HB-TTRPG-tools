@@ -1,6 +1,11 @@
 # The Beckenburg Project — Master Game Design Document
 Version: 0.1, updated 2026-10-15. Status: **preproduction with a Java 17 Swing/software-3D visual prototype only**. The repository includes a headless smoke test and two editable SVG concept studies; no finished Windows game, LAN multiplayer, ghost gameplay or playable release is claimed. Ten full-resolution concept PNGs are in an independently checksummed source package but **not yet committed as GitHub image blobs**; see [artwork archive status](art/ASSET_ARCHIVAL_STATUS.md).
 
+## Authoritative release-production roadmap
+The [32-stage and 256-microstep Production Plan](RELEASE_PRODUCTION_PLAN.md) governs feature order and exit criteria; [Quality Gates](QUALITY_GATES.md) defines recurring improvement windows and test thresholds; [stage-ledger.json](stage-ledger.json) is the **single stage-status authority**; [Asset Pipeline](ASSET_PIPELINE.md) governs original PNG upload and correct website display; [Gold Release Acceptance](RELEASE_ACCEPTANCE.md) defines production completion. The original S0–S13 [production-stages.md](production-stages.md) remains design context, not a duplicate progress tracker.
+
+At audit, a newer nine-room game build passed local Java 17-targeted tests but is not yet committed to main. Original generated concept PNGs and the website's proper PNG gallery likewise are not verified remotely. P00 must resolve both; this document does not claim them complete.
+
 ## 1. Creative statement
 The Beckenburg Project is an original Windows-first 3D first-person supernatural investigation, survival and reclamation game. Three human investigators enter a haunted site while a fourth player controls a ghost, or an AI ghost fills that role. The hunt revolves around eliciting evidence, identifying an entity, exploiting its rules and conducting site-cleansing rituals while surviving escalating, *incremental* supernatural harm. The player-run Beckenburg Castle headquarters represents humanity reclaiming settlements site by site after a global metaphysical event has revived ancient spirits and fears. Conventional weapons are ineffective against these entities: understanding their metaphysics, evidence and countermeasures is the path to victory.
 
