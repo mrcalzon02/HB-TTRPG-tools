@@ -15,6 +15,9 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.Gh
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanProtocolTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanCaseTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanCaseIntegrationTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanWorldTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanWorldIntegrationTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanWorldRenderTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanLobbyTest
 if [ -f src/test/java/org/beckenburg/SmokeTest.java ]; then java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.SmokeTest; fi
 jar --create --file build/beckenburg-game.jar --main-class org.beckenburg.InvestigationGame -C build/classes org/beckenburg

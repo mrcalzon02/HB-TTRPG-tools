@@ -150,7 +150,7 @@ public final class SceneRenderer {
         vanBox(faces,van,-.55,.10,r-.28,1.1,.5,.18,MaterialAtlas.AGED_WOOD);
         vanBox(faces,van,-w+.1,.05,f-.3,w*2-.2,.08,.3,MaterialAtlas.IRON);
     }
-    private List<Face> scene(HouseMap map,int ghostRoom,boolean ghostVisible,int wardRoom,int hunterRoom,double clock) {
+    private List<Face> scene(HouseMap map,int ghostRoom,boolean ghostVisible,int wardRoom,int hunterRoom,double clock,List<RemoteBody> others) {
         List<Face> out=new ArrayList<>(2000);
         for(int zz=1;zz<map.height()-1;zz++)for(int xx=1;xx<map.width()-1;xx++) {
             if(map.tile(xx,zz)=='#') continue;
@@ -198,6 +198,18 @@ public final class SceneRenderer {
             box(out,hx-.31,.22,hz-.20,.18,.75,.24,0x242932);
             box(out,hx+.14,.22,hz-.20,.18,.75,.24,0x242932);
         }
+        // Host-authoritative teammate bodies are only drawn in the hunters' shared view.
+        for(RemoteBody person:others){
+            if(!Double.isFinite(person.x())||!Double.isFinite(person.z()))continue;
+            double distance=Math.hypot(person.x()-x,person.z()-z);
+            if(distance>14||distance<.70)continue;
+            double hx=person.x(),hz=person.z();int col=switch(person.slot()){
+                case 0 -> 0x667c68;case 1 -> 0x697c90;default -> 0x927864;
+            };
+            box(out,hx-.23,0,hz-.18,.46,.92,.35,0x33383e);
+            box(out,hx-.28,.9,hz-.22,.56,.55,.44,col);
+            box(out,hx-.19,1.49,hz-.16,.38,.30,.32,0xb89e87);
+        }
         if(wardRoom>=0){
             int r=wardRoom;double wx=map.centerX(r),wz=map.centerZ(r);
             // Visible prepared circle is constrained to the anchor room; it is not a magic menu flag.
@@ -228,17 +240,22 @@ public final class SceneRenderer {
         }
         return out;
     }
+    /** First-person network rendering with low-poly teammate models and host-managed doors. */
+    public record RemoteBody(double x,double z,int slot) { }
+    public void drawNetwork(HouseMap map,List<RemoteBody> others,int visibleGhostRoom,double clock){
+        render(map,visibleGhostRoom,visibleGhostRoom>=0,-1,-1,clock,others);
+    }
     public void draw(HouseMap map,InvestigationSession session,double clock){
         render(map,session.ghostRoom(),session.outcome()==InvestigationSession.Outcome.ACTIVE && session.ghostManifesting(),
-            session.wardPrepared()?session.anchorRoom():-1,-1,clock);
+            session.wardPrepared()?session.anchorRoom():-1,-1,clock,List.of());
     }
     /** Spectral viewpoint: only a room-local sensed hunter is rendered. */
     public void drawPractice(HouseMap map,int visibleHunterRoom,double clock){
-        render(map,-1,false,-1,visibleHunterRoom,clock);
+        render(map,-1,false,-1,visibleHunterRoom,clock,List.of());
     }
-    private void render(HouseMap map,int ghostRoom,boolean visibleGhost,int wardRoom,int hunterRoom,double clock){
+    private void render(HouseMap map,int ghostRoom,boolean visibleGhost,int wardRoom,int hunterRoom,double clock,List<RemoteBody> others){
         Arrays.fill(pixels,0x171b25); Arrays.fill(depths,Double.POSITIVE_INFINITY);
-        for(Face face:scene(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock)){
+        for(Face face:scene(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock,others)){
             List<Vertex> pts=clip(new Vertex(camera(face.a),face.au,face.av),
                 new Vertex(camera(face.b),face.bu,face.bv),new Vertex(camera(face.c),face.cu,face.cv));
             for(int i=1;i<pts.size()-1;i++)triangle(pts.get(0),pts.get(i),pts.get(i+1),face.color,face.material);

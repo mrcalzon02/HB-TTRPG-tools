@@ -697,6 +697,37 @@
             "software/beckenburg/src/main/java/org/beckenburg/LanCase.java",
             "software/beckenburg/src/main/java/org/beckenburg/LanHost.java"
           ]
+        },
+        "alpha09_shared_world": {
+          "state": "implemented and locally tested; P08 still not_started pending complete 3v1 rendered mission and prerequisite gates",
+          "capabilities": [
+            "host-controlled 3D hunter positions and mm fixed-point teammate packets",
+            "HouseMap collision, per-tick movement rate bounds, adjacent door toggles with occupied-door protection",
+            "physical door state serialized/replayed from host to hunter 3D scene",
+            "filtered host-disclosed ghost manifestations; no ghost access to hunter body transforms or door map",
+            "Swing Enter 3D House action, W/A/S/D movement, look controls and visible low-poly teammate avatars",
+            "per-hunter exclusive world mode rejects legacy room jumps after entering 3D"
+          ],
+          "verification": [
+            "sh build.sh on OpenJDK compiling --release 17; legacy and new tests passed",
+            "LanWorldTest",
+            "LanWorldIntegrationTest with 4 TCP sockets",
+            "LanWorldRenderTest",
+            "LanWorldGuiTest on Linux Xvfb with actual hosted session and two teammate avatars",
+            "clean extracted source ZIP rebuilt"
+          ],
+          "limitations": [
+            "3D interface and evidence/ritual actions currently live in separate windows",
+            "ghost player still uses room-level command interface, not spatial 3D control",
+            "no full 3D prop physics or player body collision/reconciliation",
+            "Windows real-machine multi-computer LAN remains unverified",
+            "approved concept originals not yet integrated as game assets"
+          ],
+          "files": [
+            "software/beckenburg/src/main/java/org/beckenburg/LanWorld.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanWorldPanel.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanHost.java"
+          ]
         }
       }
     },

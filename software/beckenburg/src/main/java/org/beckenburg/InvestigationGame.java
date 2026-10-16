@@ -45,7 +45,7 @@ public final class InvestigationGame {
         selected.setForeground(new Color(225,226,230));
         JButton begin=button("BEGIN SOLO INVESTIGATION");
         JButton ghost=button("GHOST PRACTICE / LOCAL");
-        JButton lan=button("LAN HOST / JOIN (ROOM TEST)");
+        JButton lan=button("LAN HOST / JOIN (3D HOUSE ALPHA)");
         JButton guide=button("FIELD MANUAL / CONTROLS");
         JButton quit=button("EXIT");
         account.setForeground(new Color(172,204,183));
@@ -55,7 +55,7 @@ public final class InvestigationGame {
         inner.add(selected);inner.add(Box.createVerticalStrut(6));inner.add(rolePicker);
         for(JButton b:new JButton[]{begin,ghost,lan,guide,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
         inner.add(Box.createVerticalStrut(20));inner.add(account);
-        JLabel limitation=new JLabel("LAN room simulation available; complete 3v1 world sync is still in development.",SwingConstants.CENTER);
+        JLabel limitation=new JLabel("LAN shared house navigation is available; complete 3v1 simulation is still in development.",SwingConstants.CENTER);
         limitation.setForeground(new Color(147,154,165));inner.add(Box.createVerticalStrut(12));inner.add(limitation);
         for(Component c:inner.getComponents())if(c instanceof JComponent jc)jc.setAlignmentX(Component.CENTER_ALIGNMENT);
         menu.add(inner);

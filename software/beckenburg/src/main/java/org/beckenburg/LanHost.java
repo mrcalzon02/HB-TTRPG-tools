@@ -5,7 +5,7 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-/** Real, small, host-authoritative TCP LAN *room simulation*, not a 3D network match.
+/** Host-authoritative TCP LAN case with room mode and physically validated 3D hunter mode.
  * A socket is bound to one seat; remote peers cannot submit a Source or authoritative damage.
  */
 public final class LanHost implements AutoCloseable {
@@ -17,6 +17,7 @@ public final class LanHost implements AutoCloseable {
     private final int[] hunterRooms={HouseMap.EXTRACTION_ROOM,HouseMap.EXTRACTION_ROOM,HouseMap.EXTRACTION_ROOM};
     private final long[] hunterSequences={-1,-1,-1};
     private final HouseMap map=new HouseMap();
+    private final LanWorld world=new LanWorld(map);
     private final GhostDomain ghost=new GhostDomain(map,4);
     private final LanCase mission=new LanCase(4);
     private final GhostDomain.AiController ai=new GhostDomain.AiController(20261016L);
@@ -86,10 +87,36 @@ public final class LanHost implements AutoCloseable {
                     if(running||everStarted)throw new IllegalArgumentException("fresh host required for another match");
                     for(int i=0;i<3;i++)if(seats[i]==null||!seats[i].ready)throw new IllegalArgumentException("three hunters must be ready");
                     if(seats[3]!=null&&!seats[3].ready)throw new IllegalArgumentException("ghost must be ready");
-                    running=true;everStarted=true;tick=0;notifyAllPeers("INFO|mission started with "+(seats[3]==null?"AI":"human")+" ghost");broadcastState();broadcastProgress();
+                    running=true;everStarted=true;tick=0;notifyAllPeers("INFO|mission started with "+(seats[3]==null?"AI":"human")+" ghost");broadcastState();broadcastProgress();broadcastWorld();
+                }
+                case "VIEW3D" -> {
+                    if(!running||peer.slot==3||p.size()!=1)throw new IllegalArgumentException("3D view requires active hunter");
+                    peer.worldMode=true;
+                    reply(peer,"ACCEPT|VIEW3D");broadcastWorld();
+                }
+                case "STEP" -> {
+                    if(!running||peer.slot==3||!peer.worldMode||p.size()!=4)throw new IllegalArgumentException("3D movement unavailable");
+                    int dx=LanProtocol.integer(p.get(1),-100,100),dz=LanProtocol.integer(p.get(2),-100,100);
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(3)));
+                    world.move(peer.slot,dx,dz,tick);
+                    hunterRooms[peer.slot]=world.body(peer.slot).room();
+                    reply(peer,"ACCEPT|STEP");broadcastWorld();broadcastState();
+                }
+                case "TURN" -> {
+                    if(!running||peer.slot==3||!peer.worldMode||p.size()!=3)throw new IllegalArgumentException("3D heading unavailable");
+                    int heading=LanProtocol.integer(p.get(1),0,359);
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
+                    world.turn(peer.slot,heading);broadcastWorld();
+                }
+                case "DOOR" -> {
+                    if(!running||peer.slot==3||!peer.worldMode||p.size()!=2)throw new IllegalArgumentException("door command unavailable");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    if(!world.door(peer.slot,tick))throw new IllegalArgumentException("no reachable door");
+                    reply(peer,"ACCEPT|DOOR");broadcastWorld();
                 }
                 case "MOVE" -> {
                     if(!running||peer.slot==3||p.size()!=3)throw new IllegalArgumentException("hunter command unavailable");
+                    if(peer.worldMode)throw new IllegalArgumentException("room jumps disabled in 3D mode");
                     int target=LanProtocol.integer(p.get(1),0,HouseMap.ROOM_COUNT-1);
                     long seq=LanProtocol.sequence(p.get(2));
                     acceptHunterSequence(peer,seq);
@@ -97,7 +124,7 @@ public final class LanHost implements AutoCloseable {
                     if(target==at||Math.abs(target/HouseMap.COLS-at/HouseMap.COLS)+Math.abs(target%HouseMap.COLS-at%HouseMap.COLS)!=1)
                         throw new IllegalArgumentException("room not adjacent");
                     // Room-level topology proof only; physical door and body collision still need synced transform validation.
-                    hunterRooms[peer.slot]=target;reply(peer,"ACCEPT|MOVE|"+target);broadcastState();
+                    hunterRooms[peer.slot]=target;world.setRoom(peer.slot,target);reply(peer,"ACCEPT|MOVE|"+target);broadcastState();broadcastWorld();
                 }
                 case "SCAN" -> {
                     if(!running||peer.slot==3||p.size()!=3)throw new IllegalArgumentException("hunter action unavailable");
@@ -169,10 +196,16 @@ public final class LanHost implements AutoCloseable {
                 if(result.applied())distributeEffect(result);
             }}
             mission.advance();
-            if(tick%5==0){broadcastState();broadcastProgress();}
+            if(tick%5==0){broadcastState();broadcastProgress();broadcastWorld();}
             finishIfComplete();
         }catch(RuntimeException ex){running=false;notifyAllPeers("INFO|host simulation stopped");System.err.println("LAN tick failure: "+ex.getMessage());}
     }}
+    /** Visible body positions go only to hunter peers; no omniscient team feed for ghosts. */
+    private void broadcastWorld(){
+        String doors="DOORS|"+map.doorSnapshot();
+        notifyHunters(doors);
+        for(int i=0;i<3;i++)notifyHunters(world.bodyFrame(i,tick));
+    }
     private void broadcastState(){
         GhostDomain.Observation o=ghost.observe();
         notifyHunters("TEAMMAP|"+hunterRooms[0]+"|"+hunterRooms[1]+"|"+hunterRooms[2]);
@@ -195,7 +228,7 @@ public final class LanHost implements AutoCloseable {
         clock.shutdownNow();workers.shutdownNow();
     }
     private static final class Peer{
-        final Socket socket;final Reader input;final Writer output;final int slot;final String name;boolean ready;
+        final Socket socket;final Reader input;final Writer output;final int slot;final String name;boolean ready,worldMode;
         Peer(Socket s,Reader in,Writer out,int slot,String name){socket=s;input=in;output=out;this.slot=slot;this.name=name;}
     }
 }

@@ -8,6 +8,15 @@ Install a **Java 17 or newer JDK** to build (`javac`, `java`, `jar` on PATH). Fr
 
 On Linux/macOS with a JDK: `sh build.sh`, `sh build.sh run`. The launcher and Java2D 3D rasterizer have no external dependencies. Target class files are produced with `javac --release 17` (the local test environment uses a JDK 21 compiler targeting Java 17).
 
+
+## Alpha 0.9: synchronized first-person LAN house (partial gameplay)
+
+After three hunters are ready and the host starts the match, each hunter can select **Enter 3D House** in the LAN lobby. That opens a separate textured first-person window with **WASD** movement, **mouse drag / arrow keys** to look, **E** to open or close nearby doors, and **Esc** to return to the lobby. The original room-number controls remain as a **legacy room-simulation** mode, but are rejected once that player enters 3D mode. The host, not the client, advances bodies by a bounded movement impulse per simulation tick and checks collisions against the same physical `HouseMap` used by the renderer. It also owns door states, distributes teammate avatars to hunters, and displays host-declared manifestations; private hunter transforms and the team journal are not sent to the ghost seat.
+
+To run the actual 3D LAN demo: on one machine choose LAN Host, then connect two other hunters by host LAN IP; optionally join a human ghost from a fourth client. All connected players choose Ready and Hunter 1 clicks Start Match, then hunter players click **Enter 3D House**. The LAN case-scanning, warding, and cleansing controls remain in the separate lobby panel while 3D interactions are being integrated; do **not** mistake this for a finished seamless 3v1 first-person experience. LAN operates on TCP port 27717 by default and may need Windows Firewall permission. The game still requires a local Java runtime.
+
+Test with `sh build.sh` / `build.cmd` (includes `LanWorldTest`, `LanWorldIntegrationTest`, `LanWorldRenderTest`); under a Linux graphical display run `java -cp build/classes:build/test org.beckenburg.LanWorldGuiTest <optional_screenshot_path>`. This suite has passed locally on OpenJDK targeting Java 17 and Linux Xvfb; multi-PC Windows acceptance and real network latency testing remain outstanding.
+
 ## Currently implemented
 
 - **Launcher:** title screen, Cleric/Observer/Demonologist selection, controls manual, session start and exit. Pausing exposes return/retreat safely.

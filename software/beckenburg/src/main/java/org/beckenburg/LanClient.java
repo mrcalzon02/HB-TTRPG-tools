@@ -40,6 +40,10 @@ public final class LanClient implements AutoCloseable {
     public synchronized void ready()throws IOException {send("READY");}
     public synchronized void start()throws IOException {send("START");}
     public synchronized void move(int room)throws IOException {send("MOVE|"+room+"|"+(++sequence));}
+    public synchronized void view3D()throws IOException {send("VIEW3D");}
+    public synchronized void step(int dx,int dz)throws IOException {send("STEP|"+dx+"|"+dz+"|"+(++sequence));}
+    public synchronized void turn(int degrees)throws IOException {send("TURN|"+degrees+"|"+(++sequence));}
+    public synchronized void door()throws IOException {send("DOOR|"+(++sequence));}
     public synchronized void scan(LanCase.Tool tool)throws IOException {
         Objects.requireNonNull(tool);send("SCAN|"+tool+"|"+(++sequence));
     }

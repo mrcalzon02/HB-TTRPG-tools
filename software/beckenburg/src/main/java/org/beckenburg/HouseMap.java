@@ -34,6 +34,20 @@ public final class HouseMap {
         for(int z:new int[]{6,12,18,24})for(int x:new int[]{4,12,20})tiles[z][x]='D';
         // Side paths stay open for the back garden, porch and van staging.
     }
+    /** Sorted fixed tile IDs allow clients to reproduce the server's physical doors. */
+    public String doorSnapshot(){
+        return openDoors.stream().sorted().map(String::valueOf).collect(java.util.stream.Collectors.joining(","));
+    }
+    public void applyDoorSnapshot(String encoded){
+        if(encoded==null||encoded.length()>100)throw new IllegalArgumentException("invalid doors");
+        Set<Integer> result=new HashSet<>();
+        if(!encoded.isEmpty())for(String token:encoded.split(",",-1)){
+            if(!token.matches("[0-9]{1,4}"))throw new IllegalArgumentException("invalid door id");
+            int id=Integer.parseInt(token),dx=id%WIDTH,dz=id/WIDTH;
+            if(dz>=HEIGHT||tile(dx,dz)!='D'||!result.add(id))throw new IllegalArgumentException("invalid door list");
+        }
+        openDoors.clear();openDoors.addAll(result);
+    }
     public int width(){return WIDTH;}
     public int height(){return HEIGHT;}
     public int roomCount(){return ROOM_COUNT;}

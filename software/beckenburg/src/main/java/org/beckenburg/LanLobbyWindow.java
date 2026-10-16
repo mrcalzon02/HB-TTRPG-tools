@@ -20,11 +20,14 @@ public final class LanLobbyWindow extends JFrame {
     private LanHost hosted;
     private LanClient connection;
     private int myRoom=HouseMap.EXTRACTION_ROOM;
-    private boolean busy;
+    private boolean busy,missionRunning,worldMode;
+    private LanWorldPanel worldView;
+    private JFrame worldFrame;
+    private final JButton enter3D=new JButton("Enter 3D House");
     private final JButton ready=new JButton("Ready / Unready"),start=new JButton("Start Match"),move=new JButton("Move Room"),use=new JButton("Ghost Action");
 
     public LanLobbyWindow(){
-        super("Beckenburg — Local LAN Room-Simulation Alpha");setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        super("Beckenburg — LAN House Alpha 0.9");setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         JPanel controls=new JPanel(new FlowLayout(FlowLayout.LEFT,5,5));
         controls.add(new JLabel("IP"));controls.add(ip);controls.add(new JLabel("Port"));controls.add(port);
         controls.add(new JLabel("Name"));controls.add(name);controls.add(role);
@@ -32,7 +35,7 @@ public final class LanLobbyWindow extends JFrame {
         JPanel commands=new JPanel(new FlowLayout(FlowLayout.LEFT,6,4));
         commands.add(ready);commands.add(start);commands.add(new JLabel("Room"));commands.add(target);
         commands.add(move);commands.add(instrument);commands.add(scan);commands.add(ward);
-        commands.add(cleanse);commands.add(extract);commands.add(action);commands.add(use);
+        commands.add(cleanse);commands.add(extract);commands.add(action);commands.add(use);commands.add(enter3D);
         log.setEditable(false);log.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
         log.setLineWrap(true);log.setWrapStyleWord(true);
         JPanel info=new JPanel(new GridLayout(3,1));info.add(status);info.add(caseStatus);info.add(teamStatus);
@@ -46,8 +49,9 @@ public final class LanLobbyWindow extends JFrame {
         ward.addActionListener(e->send("WARD|"+(++sequence)));
         cleanse.addActionListener(e->send("CLEANSE|"+(++sequence)));
         extract.addActionListener(e->send("EXTRACT|"+(++sequence)));
+        enter3D.addActionListener(e->open3D());
         setCommandEnabled(false);pack();setMinimumSize(new Dimension(810,370));setLocationRelativeTo(null);
-        addWindowListener(new java.awt.event.WindowAdapter(){@Override public void windowClosed(java.awt.event.WindowEvent e){if(connection!=null)connection.close();if(hosted!=null)hosted.close();}});
+        addWindowListener(new java.awt.event.WindowAdapter(){@Override public void windowClosed(java.awt.event.WindowEvent e){if(worldFrame!=null)worldFrame.dispose();if(connection!=null)connection.close();if(hosted!=null)hosted.close();}});
     }
     private long sequence;
     private void connect(boolean localHost){
@@ -63,12 +67,31 @@ public final class LanLobbyWindow extends JFrame {
                     frame->SwingUtilities.invokeLater(()->receive(frame)));
                 final LanHost own=newHost;
                 SwingUtilities.invokeLater(()->{hosted=own;connection=client;busy=false;
-                    status.setText("Seat "+client.seat()+" — room-level LAN test");
+                    status.setText("Seat "+client.seat()+" — room case + shared house");
                     setCommandEnabled(true);log.append("Connected. Ready when your team is assembled.\n");});
             }catch(Exception ex){if(newHost!=null)newHost.close();String msg=ex.getMessage();SwingUtilities.invokeLater(()->{busy=false;status.setText("Connection failed");log.append("Error: "+msg+"\n");});}
         },"beckenburg-connect");task.setDaemon(true);task.start();
     }
+    private void open3D(){
+        if(connection==null||"GHOST".equals(connection.seat())||!missionRunning)return;
+        if(worldFrame!=null&&worldFrame.isDisplayable()){worldFrame.toFront();worldView.requestFocusInWindow();return;}
+        try{connection.view3D();}catch(IOException ex){log.append("3D start failed: "+ex.getMessage()+"\n");return;}
+        worldMode=true;setCommandEnabled(true);
+        worldView=new LanWorldPanel(connection);
+        worldFrame=new JFrame("Beckenburg — Shared LAN House");
+        worldFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        worldFrame.setContentPane(worldView);
+        worldFrame.pack();worldFrame.setLocationRelativeTo(this);
+        worldFrame.addWindowListener(new java.awt.event.WindowAdapter(){
+            @Override public void windowClosed(java.awt.event.WindowEvent e){worldView.close();worldFrame=null;}
+        });
+        worldFrame.setVisible(true);worldView.requestFocusInWindow();
+        // The host sends an immediate snapshot after VIEW3D. Subsequent frames update this viewport.
+    }
     private void receive(String event){
+        if(worldView!=null&&worldFrame!=null&&worldFrame.isDisplayable())worldView.onEvent(event);
+        if(event.startsWith("INFO|mission started")){missionRunning=true;setCommandEnabled(true);}
+        if(event.startsWith("RESULT|")||event.startsWith("INFO|match stopped")){missionRunning=false;setCommandEnabled(true);}
         if(event.startsWith("STATE|")){
             var p=LanProtocol.parts(event);if(p.size()>=4)try{myRoom=Integer.parseInt(p.get(2));}catch(NumberFormatException ignored){}
             status.setText("Room: "+new HouseMap().roomName(myRoom)+"  |  tick "+p.get(1)+"  |  energy "+p.get(4));
@@ -85,11 +108,12 @@ public final class LanLobbyWindow extends JFrame {
     private void setCommandEnabled(boolean available){
         ready.setEnabled(available);
         start.setEnabled(available&&connection!=null&&"H1".equals(connection.seat()));
-        move.setEnabled(available&&connection!=null&&!"GHOST".equals(connection.seat()));
+        move.setEnabled(available&&!worldMode&&connection!=null&&!"GHOST".equals(connection.seat()));
         use.setEnabled(available&&connection!=null&&"GHOST".equals(connection.seat()));
         boolean hunter=available&&connection!=null&&!"GHOST".equals(connection.seat());
         scan.setEnabled(hunter);ward.setEnabled(hunter);cleanse.setEnabled(hunter);extract.setEnabled(hunter);
         instrument.setEnabled(hunter);
+        enter3D.setEnabled(hunter&&missionRunning);
     }
     private void send(String frame){try{if(connection==null)throw new IOException("not connected");connection.send(frame);}
         catch(Exception e){log.append("Send failed: "+e.getMessage()+"\n");}}
