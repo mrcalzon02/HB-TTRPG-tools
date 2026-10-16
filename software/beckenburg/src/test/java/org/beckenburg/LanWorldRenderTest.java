@@ -11,6 +11,8 @@ public final class LanWorldRenderTest {
         render.x=12.5;render.z=9.5;render.yaw=1.3;
         render.drawNetwork(map,List.of(),-1,0);
         int[] baseline=render.pixels().clone();
+        render.drawNetwork(map,List.of(new SceneRenderer.RemoteBody(render.x+.88,render.z,1)),-1,0);
+        ok(Arrays.equals(baseline,render.pixels()),"nearby teammate cannot occlude first-person camera");
         render.drawNetwork(map,List.of(new SceneRenderer.RemoteBody(14.0,10.3,1)),-1,0);
         ok(!Arrays.equals(baseline,render.pixels()),"teammate visible in perspective scene");
         ok(Arrays.stream(render.pixels()).distinct().count()>110,"real colored raster with materials");

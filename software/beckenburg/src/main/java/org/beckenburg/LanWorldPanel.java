@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.List;
 
 /** Networked hunter viewport. Render state is projected from host packets, never trusted as authority. */
-public final class LanWorldPanel extends JPanel implements KeyListener, MouseListener, MouseMotionListener, FocusListener {
+public final class LanWorldPanel extends JPanel implements KeyListener, FocusListener {
     private final LanClient client;
     private final int seat;
     private final HouseMap map=new HouseMap();
@@ -18,8 +18,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, MouseLis
     private final Set<Integer> keys=new HashSet<>();
     private String feedback="Awaiting host world snapshot";
     private int lastTurn=-1,tick,visibleGhost=-1,health=100,evidence;
-    private int mouseX,mouseY;
-    private boolean dragging;
+    private final MouseLook mouseLook;
+    private LanCase.Tool selected=LanCase.Tool.EMF;
+    private String caseResult="";
 
     public LanWorldPanel(LanClient client){
         this.client=Objects.requireNonNull(client);
@@ -28,10 +29,12 @@ public final class LanWorldPanel extends JPanel implements KeyListener, MouseLis
         setFocusable(true);setBackground(Color.BLACK);
         setPreferredSize(new Dimension(850,555));
         renderer.yaw=1.4;renderer.pitch=-.08;
-        addKeyListener(this);addMouseListener(this);addMouseMotionListener(this);addFocusListener(this);
+        mouseLook=new MouseLook(this,(dx,dy)->MouseLook.rotate(renderer,dx,dy));
+        addKeyListener(this);addMouseListener(mouseLook);addMouseMotionListener(mouseLook);
+        addFocusListener(mouseLook);addFocusListener(this);
         timer=new javax.swing.Timer(110,e->frame());timer.start();
     }
-    public void close(){timer.stop();keys.clear();dragging=false;}
+    public void close(){timer.stop();keys.clear();mouseLook.close();}
     public void onEvent(String frame){
         if(!SwingUtilities.isEventDispatchThread())throw new IllegalStateException("network view must update on EDT");
         try{
@@ -51,7 +54,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, MouseLis
             }else if(p.size()==8&&p.get(0).equals("PROGRESS")){
                 health=LanProtocol.integer(p.get(1),0,100);
                 evidence=LanProtocol.integer(p.get(4),0,3);
-            }else if(frame.startsWith("REJECT|")||frame.startsWith("ACCEPT|DOOR")){
+            }else if(frame.startsWith("RESULT|")){
+                caseResult=frame.substring(7);feedback="CASE CLOSED: "+caseResult;
+                keys.clear();
+            }else if(frame.startsWith("ACCEPT|")||frame.startsWith("REJECT|")||frame.startsWith("EVIDENCE|")||frame.startsWith("RITUAL|")) {
                 feedback=frame;
             }
         }catch(IllegalArgumentException ignored){feedback="Invalid world update rejected";}
@@ -62,7 +68,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, MouseLis
     public double cameraZ(){return renderer.z;}
     public int visiblePeers(){return peers.size();}
     private void frame(){
-        if(!isDisplayable()){return;}
+        if(!isDisplayable()||!caseResult.isEmpty()){repaint();return;}
         int right=(keys.contains(KeyEvent.VK_D)?1:0)-(keys.contains(KeyEvent.VK_A)?1:0);
         int forward=(keys.contains(KeyEvent.VK_W)?1:0)-(keys.contains(KeyEvent.VK_S)?1:0);
         try{
@@ -92,14 +98,23 @@ public final class LanWorldPanel extends JPanel implements KeyListener, MouseLis
             g.drawString("+",getWidth()/2,h/2);
             g.setColor(new Color(17,19,25));g.fillRect(0,h,getWidth(),getHeight()-h);
             g.setColor(new Color(216,215,202));
-            g.drawString("WASD MOVE  •  DRAG / ARROWS LOOK  •  E OPEN DOOR  •  ESC RETURN TO LOBBY",13,h+27);
-            g.setColor(new Color(145,204,175));g.drawString(feedback,13,h+54);
+            g.drawString("WASD MOVE  •  CLICK TO CAPTURE MOUSE / ARROWS LOOK  •  E DOOR",13,h+23);
+            g.drawString("1-3 TOOL: "+selected+"  R SCAN  C WARD  B RITUAL  X EXTRACT  ESC EXIT",13,h+42);
+            g.setColor(new Color(145,204,175));
+            g.drawString((mouseLook.captured()?"MOUSE LOCKED | ":"CLICK TO LOCK LOOK | ")+feedback,13,h+62);
         }finally{g.dispose();}
     }
     @Override public void keyPressed(KeyEvent e){
         switch(e.getKeyCode()){
             case KeyEvent.VK_ESCAPE -> {Window window=SwingUtilities.getWindowAncestor(this);if(window!=null)window.dispose();}
-            case KeyEvent.VK_E -> {try{client.door();}catch(IOException ex){feedback="Cannot open door: "+ex.getMessage();}}
+            case KeyEvent.VK_E -> sendAction("door",()->client.door());
+            case KeyEvent.VK_1 -> selected=LanCase.Tool.EMF;
+            case KeyEvent.VK_2 -> selected=LanCase.Tool.THERMOMETER;
+            case KeyEvent.VK_3 -> selected=LanCase.Tool.SPIRIT_BOX;
+            case KeyEvent.VK_R -> sendAction("scan",()->client.scan(selected));
+            case KeyEvent.VK_C -> sendAction("ward",()->client.ward());
+            case KeyEvent.VK_B -> sendAction("ritual",()->client.cleanse());
+            case KeyEvent.VK_X -> sendAction("extract",()->client.extract());
             case KeyEvent.VK_LEFT -> renderer.yaw-=.09;
             case KeyEvent.VK_RIGHT -> renderer.yaw+=.09;
             case KeyEvent.VK_UP -> renderer.pitch=Math.min(1.05,renderer.pitch+.06);
@@ -107,16 +122,16 @@ public final class LanWorldPanel extends JPanel implements KeyListener, MouseLis
             default -> keys.add(e.getKeyCode());
         }
     }
+    @FunctionalInterface private interface NetworkAction {void run()throws IOException;}
+    private void sendAction(String verb,NetworkAction action){
+        if(!caseResult.isEmpty())return;
+        try{action.run();feedback="Awaiting host "+verb+" result";}
+        catch(IOException ex){feedback="LAN "+verb+" failed: "+ex.getMessage();}
+    }
+    public LanCase.Tool selectedTool(){return selected;}
+    public String caseFeedback(){return feedback;}
     @Override public void keyReleased(KeyEvent e){keys.remove(e.getKeyCode());}
     @Override public void keyTyped(KeyEvent e){}
-    @Override public void mousePressed(MouseEvent e){mouseX=e.getX();mouseY=e.getY();dragging=e.getButton()==MouseEvent.BUTTON1;requestFocusInWindow();}
-    @Override public void mouseDragged(MouseEvent e){if(!dragging)return;renderer.yaw+=(e.getX()-mouseX)*.004;
-        renderer.pitch=Math.max(-1.05,Math.min(1.05,renderer.pitch-(e.getY()-mouseY)*.004));mouseX=e.getX();mouseY=e.getY();}
-    @Override public void mouseReleased(MouseEvent e){dragging=false;}
-    @Override public void mouseMoved(MouseEvent e){}
-    @Override public void mouseClicked(MouseEvent e){}
-    @Override public void mouseEntered(MouseEvent e){}
-    @Override public void mouseExited(MouseEvent e){}
     @Override public void focusGained(FocusEvent e){}
-    @Override public void focusLost(FocusEvent e){keys.clear();dragging=false;}
+    @Override public void focusLost(FocusEvent e){keys.clear();mouseLook.release();}
 }

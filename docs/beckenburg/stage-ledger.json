@@ -405,7 +405,34 @@
           "status": "not_started",
           "description": "Run replayed walk/interaction scripts across 30, 60 and 144 render FPS."
         }
-      ]
+      ],
+      "preparatory_work": {
+        "alpha10_mouse_and_field": {
+          "state": "implemented and locally verified; overall stage not_started pending dependencies and Windows multi-PC acceptance",
+          "features": [
+            "click-to-capture unheld mouse yaw/pitch across solo hunter, ghost practice and LAN 3D hunter",
+            "native pointer recenter with safe relative fallback; focus and pause restore cursor",
+            "Q wheel consumes mouse deltas while selection is active",
+            "LAN 3D field controls send authenticated scan/ward/ritual/extract through LanClient and host-owned LanCase",
+            "near-camera avatar hide prevents teammate occlusion"
+          ],
+          "tests": [
+            "MouseLookTest",
+            "MouseLookGuiTest under Linux Xvfb with Robot click, rotation and focus release",
+            "LanWorldControlsTest with three real TCP sockets",
+            "LanWorldRenderTest",
+            "full 16 headless suites with source ZIP clean rebuild",
+            "LanWorldGuiTest and GhostPracticeGuiTest under Linux Xvfb"
+          ],
+          "environment": "OpenJDK 21 javac --release 17; Linux Xvfb. Windows hardware runtime acceptance not performed.",
+          "docs": "docs/beckenburg/network/MOUSE_CONTROLS_IMPLEMENTATION_004.md",
+          "missing": [
+            "Windows multi-PC testing",
+            "in-scene player-ghost 3D controls, full 3v1",
+            "finished graphics models and original art gallery"
+          ]
+        }
+      }
     },
     {
       "id": "P05",
@@ -728,6 +755,31 @@
             "software/beckenburg/src/main/java/org/beckenburg/LanWorldPanel.java",
             "software/beckenburg/src/main/java/org/beckenburg/LanHost.java"
           ]
+        },
+        "alpha10_mouse_and_field": {
+          "state": "implemented and locally verified; overall stage not_started pending dependencies and Windows multi-PC acceptance",
+          "features": [
+            "click-to-capture unheld mouse yaw/pitch across solo hunter, ghost practice and LAN 3D hunter",
+            "native pointer recenter with safe relative fallback; focus and pause restore cursor",
+            "Q wheel consumes mouse deltas while selection is active",
+            "LAN 3D field controls send authenticated scan/ward/ritual/extract through LanClient and host-owned LanCase",
+            "near-camera avatar hide prevents teammate occlusion"
+          ],
+          "tests": [
+            "MouseLookTest",
+            "MouseLookGuiTest under Linux Xvfb with Robot click, rotation and focus release",
+            "LanWorldControlsTest with three real TCP sockets",
+            "LanWorldRenderTest",
+            "full 16 headless suites with source ZIP clean rebuild",
+            "LanWorldGuiTest and GhostPracticeGuiTest under Linux Xvfb"
+          ],
+          "environment": "OpenJDK 21 javac --release 17; Linux Xvfb. Windows hardware runtime acceptance not performed.",
+          "docs": "docs/beckenburg/network/MOUSE_CONTROLS_IMPLEMENTATION_004.md",
+          "missing": [
+            "Windows multi-PC testing",
+            "in-scene player-ghost 3D controls, full 3v1",
+            "finished graphics models and original art gallery"
+          ]
         }
       }
     },
@@ -876,6 +928,31 @@
             "Simulated one-hunter practice only",
             "No real LAN client/server or 3v1 ghost seat",
             "No native Windows installer or real Windows runtime acceptance"
+          ]
+        },
+        "alpha10_mouse_and_field": {
+          "state": "implemented and locally verified; overall stage not_started pending dependencies and Windows multi-PC acceptance",
+          "features": [
+            "click-to-capture unheld mouse yaw/pitch across solo hunter, ghost practice and LAN 3D hunter",
+            "native pointer recenter with safe relative fallback; focus and pause restore cursor",
+            "Q wheel consumes mouse deltas while selection is active",
+            "LAN 3D field controls send authenticated scan/ward/ritual/extract through LanClient and host-owned LanCase",
+            "near-camera avatar hide prevents teammate occlusion"
+          ],
+          "tests": [
+            "MouseLookTest",
+            "MouseLookGuiTest under Linux Xvfb with Robot click, rotation and focus release",
+            "LanWorldControlsTest with three real TCP sockets",
+            "LanWorldRenderTest",
+            "full 16 headless suites with source ZIP clean rebuild",
+            "LanWorldGuiTest and GhostPracticeGuiTest under Linux Xvfb"
+          ],
+          "environment": "OpenJDK 21 javac --release 17; Linux Xvfb. Windows hardware runtime acceptance not performed.",
+          "docs": "docs/beckenburg/network/MOUSE_CONTROLS_IMPLEMENTATION_004.md",
+          "missing": [
+            "Windows multi-PC testing",
+            "in-scene player-ghost 3D controls, full 3v1",
+            "finished graphics models and original art gallery"
           ]
         }
       }

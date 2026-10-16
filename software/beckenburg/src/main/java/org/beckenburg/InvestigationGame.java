@@ -60,7 +60,7 @@ public final class InvestigationGame {
         for(Component c:inner.getComponents())if(c instanceof JComponent jc)jc.setAlignmentX(Component.CENTER_ALIGNMENT);
         menu.add(inner);
         begin.addActionListener(e->begin());ghost.addActionListener(e->beginGhost());lan.addActionListener(e->new LanLobbyWindow().setVisible(true));guide.addActionListener(e->JOptionPane.showMessageDialog(window,
-            "WASD move • Shift sprint • Arrow keys / left-drag look • F flashlight • E doors\n"+
+            "WASD move • Shift sprint • Click to capture mouse-look / arrows • F flashlight • E doors\n"+
             "1 EMF  •  2 Thermometer  •  3 Spirit Box  •  R scan\n"+
             "C defensive or ritual ward (2 per case)  •  B cleanse anchor\n"+
             "Hold Q, move mouse, release Q for contextual callouts and world pings.\n"+
@@ -71,10 +71,10 @@ public final class InvestigationGame {
             "then return to VAN STAGING to extract. You can retreat earlier.\n"+
             "An AI Spirit can roam, manifest and inflict incremental damage.\n\n"+
             "GHOST PRACTICE: [ / ] select room, SPACE drift, 1 whisper, 2 disturb,\n"+
-            "3 manifest, 4 strike, arrows or mouse-drag look, ESC return.\n"+
+            "3 manifest, 4 strike, mouse-look or arrows, ESC return.\n"+
             "A simulated investigator is present; this is not a LAN match.\n"+
             "LAN ROOM TEST: 3 hunter seats + ghost/AI, ready/start, room moves and ghost actions.\n"+
-            "Full 3D player transforms, object sync and Internet multiplayer are not implemented.",
+            "LAN first-person hunter movement and doors work; full 3v1 integration remains unfinished.",
             "Field Manual",JOptionPane.INFORMATION_MESSAGE));
         quit.addActionListener(e->window.dispose());refreshAccount();
     }
@@ -105,32 +105,38 @@ public final class InvestigationGame {
         refreshAccount();
         ((CardLayout)cards.getLayout()).show(cards,"menu");
     }
-    private final class GamePanel extends JPanel implements KeyListener,MouseMotionListener,MouseListener,FocusListener {
+    private final class GamePanel extends JPanel implements KeyListener,FocusListener {
         private final Set<Integer> down=new HashSet<>();
         private final HouseMap map=new HouseMap();
         private final SceneRenderer scene=new SceneRenderer();
         private final InvestigationSession session;
         private final javax.swing.Timer timer;
         private InvestigationSession.Instrument selected=InvestigationSession.Instrument.EMF;
-        private boolean mapShown,journalShown,dragging,claimSaved,wheelOpen;
+        private boolean mapShown,journalShown,claimSaved,wheelOpen;
+        private final MouseLook mouseLook;
         private final TeamCallout.Board callouts=new TeamCallout.Board(map);
         private double wheelDx,wheelDy;
-        private int wheelMouseX,wheelMouseY;
         private TeamCallout.Ping lastPing;
         private String vanNotice="";
         private int vanNoticeExpires;
         private boolean briefingShown;
-        private int previousX,previousY,frameCount;
+        private int frameCount;
         private long last=System.nanoTime();
         private double accumulator;
         GamePanel(InvestigationSession.Role role,int ordinal){
-            setFocusable(true);addKeyListener(this);addMouseMotionListener(this);addMouseListener(this);addFocusListener(this);
+            setFocusable(true);
+            mouseLook=new MouseLook(this,(dx,dy)->{
+                if(wheelOpen){wheelDelta(dx,dy);}
+                else MouseLook.rotate(scene,dx,dy);
+            });
+            addKeyListener(this);addMouseMotionListener(mouseLook);addMouseListener(mouseLook);
+            addFocusListener(mouseLook);addFocusListener(this);
             // Reproducible case seed, varies by session, no silent random site conversion.
             session=new InvestigationSession(map,role,20261015L+ordinal);
             scene.draw(map,session,0);
             timer=new javax.swing.Timer(33,e->frame());timer.start();
         }
-        void close(){timer.stop();down.clear();wheelOpen=false;}
+        void close(){timer.stop();down.clear();wheelOpen=false;mouseLook.close();}
         private void frame(){
             long now=System.nanoTime();double dt=Math.max(0,Math.min(.075,(now-last)/1e9));last=now;
             double forward=wheelOpen?0:(down.contains(KeyEvent.VK_W)?1:0)-(down.contains(KeyEvent.VK_S)?1:0);
@@ -163,7 +169,7 @@ public final class InvestigationGame {
             SwingUtilities.invokeLater(InvestigationGame.this::returnHome);
         }
         private void pause(){
-            timer.stop();down.clear();dragging=false;wheelOpen=false;briefingShown=false;
+            timer.stop();down.clear();mouseLook.release();wheelOpen=false;briefingShown=false;
             Object[] choices={"Resume", "Retreat & return", "Controls"};
             int choice=JOptionPane.showOptionDialog(window,"Expedition paused", "Field Pause",
                 JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,choices,choices[0]);
@@ -173,7 +179,7 @@ public final class InvestigationGame {
                     JOptionPane.showMessageDialog(window,"Return to the entry marker to extract safely.","Not at extraction",JOptionPane.INFORMATION_MESSAGE);
                 }else{endCase("Expedition ended.");return;}
             }
-            if(choice==2) JOptionPane.showMessageDialog(window,"WASD / drag look • 1/2/3 gear • R scan • C ward • B ritual • E door • Q hold communication wheel • M map • J journal • X extract","Controls",JOptionPane.INFORMATION_MESSAGE);
+            if(choice==2) JOptionPane.showMessageDialog(window,"WASD / click to mouse-look • 1/2/3 gear • R scan • C ward • B ritual • E door • Q hold communication wheel • M map • J journal • X extract","Controls",JOptionPane.INFORMATION_MESSAGE);
             last=System.nanoTime();timer.start();requestFocusInWindow();
         }
         @Override public void keyPressed(KeyEvent e){
@@ -181,8 +187,6 @@ public final class InvestigationGame {
             if(key==KeyEvent.VK_ESCAPE){if(wheelOpen){wheelOpen=false;down.remove(KeyEvent.VK_Q);repaint();}else pause();return;}
             if(key==KeyEvent.VK_Q){
                 wheelOpen=true;wheelDx=0;wheelDy=0;
-                wheelMouseX=getMousePosition()==null?getWidth()/2:getMousePosition().x;
-                wheelMouseY=getMousePosition()==null?getHeight()/2:getMousePosition().y;
                 down.add(key);repaint();return;
             }
             if(wheelOpen){ // Arrow keys also select callouts without a mouse.
@@ -246,25 +250,13 @@ public final class InvestigationGame {
             }
         }
         @Override public void keyTyped(KeyEvent e){}
-        @Override public void mousePressed(MouseEvent e){previousX=e.getX();previousY=e.getY();dragging=e.getButton()==MouseEvent.BUTTON1;requestFocusInWindow();}
-        @Override public void mouseReleased(MouseEvent e){dragging=false;}
-        @Override public void mouseDragged(MouseEvent e){if(wheelOpen){wheelMotion(e);return;}if(!dragging)return;
-            scene.yaw+=(e.getX()-previousX)*.004;
-            scene.pitch=Math.max(-1.05,Math.min(1.05,scene.pitch-(e.getY()-previousY)*.004));
-            previousX=e.getX();previousY=e.getY();}
-        private void wheelMotion(MouseEvent e){
-            int dx=e.getX()-wheelMouseX,dy=e.getY()-wheelMouseY;
-            wheelMouseX=e.getX();wheelMouseY=e.getY();
+        private void wheelDelta(int dx,int dy){
             wheelDx=Math.max(-125,Math.min(125,wheelDx+dx));
             wheelDy=Math.max(-125,Math.min(125,wheelDy+dy));
             repaint();
         }
-        @Override public void mouseMoved(MouseEvent e){if(wheelOpen)wheelMotion(e);}
-        @Override public void mouseClicked(MouseEvent e){}
-        @Override public void mouseEntered(MouseEvent e){}
-        @Override public void mouseExited(MouseEvent e){dragging=false;}
         @Override public void focusGained(FocusEvent e){last=System.nanoTime();}
-        @Override public void focusLost(FocusEvent e){down.clear();dragging=false;wheelOpen=false;}
+        @Override public void focusLost(FocusEvent e){down.clear();mouseLook.release();wheelOpen=false;}
         @Override protected void paintComponent(Graphics graphics){super.paintComponent(graphics);
             Graphics2D g=(Graphics2D)graphics.create();
             try{
@@ -284,7 +276,7 @@ public final class InvestigationGame {
                 String msg=session.message();
                 g.drawString(msg.length()>120?msg.substring(0,117)+"...":msg,16,stageH+45);
                 g.setColor(new Color(194,171,139));
-                g.drawString("WASD / DRAG LOOK    1/2/3 TOOLS    R SCAN    C WARD    B RITE    E DOOR    Q HOLD PING    M/J MAP/LOG    X EXIT",16,stageH+72);
+                g.drawString("WASD / CLICK MOUSE LOOK    1/2/3 TOOLS    R SCAN    C WARD    B RITE    E DOOR    Q HOLD PING    M/J MAP/LOG    X EXIT",16,stageH+72);
                 if(lastPing!=null && callouts.visible(session.ticks()).contains(lastPing)){
                     g.setColor(new Color(238,196,109));
                     g.drawString("CALLOUT: "+lastPing.phrase().spoken+"   ["+map.roomName(lastPing.zone())+"]",16,stageH+88);

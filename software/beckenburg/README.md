@@ -9,11 +9,17 @@ Install a **Java 17 or newer JDK** to build (`javac`, `java`, `jar` on PATH). Fr
 On Linux/macOS with a JDK: `sh build.sh`, `sh build.sh run`. The launcher and Java2D 3D rasterizer have no external dependencies. Target class files are produced with `javac --release 17` (the local test environment uses a JDK 21 compiler targeting Java 17).
 
 
+## Alpha 1.0: mouse-look and unified LAN field hotkeys
+
+**Mouse control:** Click anywhere in the playable first-person viewport to lock and hide the pointer. Then move the mouse to look around **without holding a button**. The pointer automatically recenters on supported desktop systems to permit unlimited turning; it releases when the window loses focus, when the view closes, and when a solo case is paused. Click the view again to recapture after a menu or Alt-Tab. Arrow keys remain available. This applies to the solo hunter, local ghost practice and 3D LAN hunter. If the window manager prohibits desktop pointer movement, the camera falls back to relative movement inside the panel. The 3D HUD indicates whether capture is active.
+
+**LAN first-person tools:** 1 EMF, 2 thermometer, 3 spirit box, R scan, C defensive ward, B cleansing, X extraction and E door. These actions go through the existing authenticated session command sequence and host-owned `LanCase`; nothing is locally awarded from pressing a key. Ghost-player 3D viewpoint, full equipment models, gameplay balance, Windows hardware testing and production installer remain to be implemented.
+
 ## Alpha 0.9: synchronized first-person LAN house (partial gameplay)
 
-After three hunters are ready and the host starts the match, each hunter can select **Enter 3D House** in the LAN lobby. That opens a separate textured first-person window with **WASD** movement, **mouse drag / arrow keys** to look, **E** to open or close nearby doors, and **Esc** to return to the lobby. The original room-number controls remain as a **legacy room-simulation** mode, but are rejected once that player enters 3D mode. The host, not the client, advances bodies by a bounded movement impulse per simulation tick and checks collisions against the same physical `HouseMap` used by the renderer. It also owns door states, distributes teammate avatars to hunters, and displays host-declared manifestations; private hunter transforms and the team journal are not sent to the ghost seat.
+After three hunters are ready and the host starts the match, each hunter can select **Enter 3D House** in the LAN lobby. That opens a separate textured first-person window with **WASD** movement, **click once to capture mouse-look** (no held button) or use arrow keys, **E** to open or close nearby doors, and **Esc** to return to the lobby. The original room-number controls remain as a **legacy room-simulation** mode, but are rejected once that player enters 3D mode. The host, not the client, advances bodies by a bounded movement impulse per simulation tick and checks collisions against the same physical `HouseMap` used by the renderer. It also owns door states, distributes teammate avatars to hunters, and displays host-declared manifestations; private hunter transforms and the team journal are not sent to the ghost seat.
 
-To run the actual 3D LAN demo: on one machine choose LAN Host, then connect two other hunters by host LAN IP; optionally join a human ghost from a fourth client. All connected players choose Ready and Hunter 1 clicks Start Match, then hunter players click **Enter 3D House**. The LAN case-scanning, warding, and cleansing controls remain in the separate lobby panel while 3D interactions are being integrated; do **not** mistake this for a finished seamless 3v1 first-person experience. LAN operates on TCP port 27717 by default and may need Windows Firewall permission. The game still requires a local Java runtime.
+To run the actual 3D LAN demo: on one machine choose LAN Host, then connect two other hunters by host LAN IP; optionally join a human ghost from a fourth client. All connected players choose Ready and Hunter 1 clicks Start Match, then hunter players click **Enter 3D House**. In the 3D viewport, press **1/2/3** for EMF/thermometer/spirit box, **R** to scan, **C** to ward, **B** to start cleansing and **X** to extract; each command is validated by the host. The legacy lobby still provides those controls; do **not** mistake this for a finished seamless 3v1 first-person experience. LAN operates on TCP port 27717 by default and may need Windows Firewall permission. The game still requires a local Java runtime.
 
 Test with `sh build.sh` / `build.cmd` (includes `LanWorldTest`, `LanWorldIntegrationTest`, `LanWorldRenderTest`); under a Linux graphical display run `java -cp build/classes:build/test org.beckenburg.LanWorldGuiTest <optional_screenshot_path>`. This suite has passed locally on OpenJDK targeting Java 17 and Linux Xvfb; multi-PC Windows acceptance and real network latency testing remain outstanding.
 
@@ -21,7 +27,7 @@ Test with `sh build.sh` / `build.cmd` (includes `LanWorldTest`, `LanWorldIntegra
 
 - **Launcher:** title screen, Cleric/Observer/Demonologist selection, controls manual, session start and exit. Pausing exposes return/retreat safely.
 - **Fifteen-zone starter house:** twelve named interior rooms (bathroom, master bedroom, nursery, living room, main hall, kitchen, library, dining room, study, storage cellar, foyer and utility room) plus rear garden, front porch and standard van staging. A single **grayboxed building**, not nine separate finished level categories. Rooms have real low-poly floor/wall/ceiling geometry and distinct simple props. Doors can be opened and closed, with authoritative collision in the local map model.
-- **First-person 3D:** 320×200 internal RGB+depth triangle renderer, pixel-upscaled nearest-neighbor, simple fog and ordered pixel lighting. WASD movement, Shift sprint, drag or arrows look, room collision, flashlight.
+- **First-person 3D:** 320×200 internal RGB+depth triangle renderer, pixel-upscaled nearest-neighbor, simple fog and ordered pixel lighting. WASD movement, Shift sprint, click-to-capture mouse-look or arrows, room collision, flashlight.
 - **Equipment:** EMF, Thermometer and Spirit Box emit different simulated signals linked to the ghost anchor or movement. Strong readings are journaled as confirmed evidence. The Observer and Demonologist get small profession-appropriate field advantages, and the Cleric receives an additional ward and reduced incoming damage.
 - **Spirit ghost command foundation:** local AI chooses actions from a filtered GhostObservation and issues GhostCommand entries through the *same validator* human control will use. Adjacent-room drift, whisper, kinetic disturbance, timed manifestation and incremental strike have shared energy, cooldowns, sequence replay protection and opening-hunt safety. The shared local rules core now also feeds the experimental LAN room simulation below. Full remotely synchronized 3D movement, equipment and rites are not implemented.
 - **Case closure:** record three instrument clues, place a ward at the real anchor, complete a simple cleansing action and return to the shared van staging extraction point. Early retreat pays only for collected evidence. Health defeat fails the case.
@@ -42,7 +48,7 @@ Detailed technical handoff: [Texture Implementation 001](TEXTURE_IMPLEMENTATION_
 | Input | Action |
 |---|---|
 | WASD / Shift | Move / sprint |
-| Drag left mouse / arrows | Look |
+| Click view once, then move mouse / arrows | First-person look without holding a button |
 | F / E | Flashlight / interact with door |
 | 1, 2, 3 | Select EMF / thermometer / spirit box |
 | R | Scan and record instrument result |
@@ -82,7 +88,7 @@ practice objective; it does not award campaign currency or XP.
 | Space / Enter | Phase into selected adjacent room, subject to legal action rules |
 | `1`, `2` | Whisper / environmental disturbance |
 | `3`, `4` | Manifest / strike, subject to warning and cooldown rules |
-| Mouse drag / arrows | Orient spectral viewpoint |
+| Click view once, then move mouse / arrows | Orient spectral viewpoint |
 | Escape | Return to main menu and the original hunter mode |
 
 The ghost HUD exposes own room, current energy, legal actions, permitted exits,

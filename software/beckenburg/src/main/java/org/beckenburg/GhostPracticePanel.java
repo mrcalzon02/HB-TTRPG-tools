@@ -6,7 +6,7 @@ import java.awt.event.*;
 import java.util.List;
 
 /** Local first-person spectral command-training viewport. No privileged ghost information. */
-public final class GhostPracticePanel extends JPanel implements KeyListener,MouseListener,MouseMotionListener,FocusListener {
+public final class GhostPracticePanel extends JPanel implements KeyListener,FocusListener {
     private final HouseMap map=new HouseMap();
     private final GhostPracticeSession practice=new GhostPracticeSession(map,20261015L);
     private final SceneRenderer renderer=new SceneRenderer();
@@ -14,20 +14,22 @@ public final class GhostPracticePanel extends JPanel implements KeyListener,Mous
     private final javax.swing.Timer timer;
     private long last=System.nanoTime();
     private double accumulator;
-    private int choice,oldX,oldY;
-    private boolean dragging;
+    private int choice;
+    private final MouseLook mouseLook;
 
     public GhostPracticePanel(Runnable exit){
         this.exit=java.util.Objects.requireNonNull(exit);
         setFocusable(true);
-        addKeyListener(this);addMouseListener(this);addMouseMotionListener(this);addFocusListener(this);
+        mouseLook=new MouseLook(this,(dx,dy)->MouseLook.rotate(renderer,dx,dy));
+        addKeyListener(this);addMouseListener(mouseLook);addMouseMotionListener(mouseLook);
+        addFocusListener(mouseLook);addFocusListener(this);
         // Face the first audible investigator, not an empty wall at startup.
         renderer.yaw=-.56;renderer.pitch=-.04;
         syncCamera();
         renderer.drawPractice(map,practice.visibleHunterRoom(),0);
         timer=new javax.swing.Timer(33,e->frame());timer.start();
     }
-    public void close(){timer.stop();dragging=false;}
+    public void close(){timer.stop();mouseLook.close();}
     public GhostPracticeSession session(){return practice;}
     private void syncCamera(){
         renderer.x=map.centerX(practice.ghostRoom());
@@ -75,20 +77,8 @@ public final class GhostPracticePanel extends JPanel implements KeyListener,Mous
     }
     @Override public void keyReleased(KeyEvent e){}
     @Override public void keyTyped(KeyEvent e){}
-    @Override public void mousePressed(MouseEvent e){oldX=e.getX();oldY=e.getY();dragging=e.getButton()==MouseEvent.BUTTON1;requestFocusInWindow();}
-    @Override public void mouseReleased(MouseEvent e){dragging=false;}
-    @Override public void mouseDragged(MouseEvent e){
-        if(!dragging)return;
-        renderer.yaw+=(e.getX()-oldX)*.004;
-        renderer.pitch=Math.max(-1.05,Math.min(1.05,renderer.pitch-(e.getY()-oldY)*.004));
-        oldX=e.getX();oldY=e.getY();
-    }
-    @Override public void mouseMoved(MouseEvent e){}
-    @Override public void mouseClicked(MouseEvent e){}
-    @Override public void mouseEntered(MouseEvent e){}
-    @Override public void mouseExited(MouseEvent e){dragging=false;}
     @Override public void focusGained(FocusEvent e){last=System.nanoTime();}
-    @Override public void focusLost(FocusEvent e){dragging=false;}
+    @Override public void focusLost(FocusEvent e){mouseLook.release();}
     @Override protected void paintComponent(Graphics original){
         super.paintComponent(original);
         Graphics2D g=(Graphics2D)original.create();

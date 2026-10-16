@@ -202,7 +202,7 @@ public final class SceneRenderer {
         for(RemoteBody person:others){
             if(!Double.isFinite(person.x())||!Double.isFinite(person.z()))continue;
             double distance=Math.hypot(person.x()-x,person.z()-z);
-            if(distance>14||distance<.70)continue;
+            if(distance>14||distance<1.35)continue; // Never let a teammate avatar fill the player camera.
             double hx=person.x(),hz=person.z();int col=switch(person.slot()){
                 case 0 -> 0x667c68;case 1 -> 0x697c90;default -> 0x927864;
             };
