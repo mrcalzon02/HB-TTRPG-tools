@@ -12,7 +12,9 @@ public final class SceneRenderer {
     private static final double NEAR=.065,FOCAL=224;
     private static final int[] BAYER={0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5};
     private record Point(double x,double y,double z) { }
-    private record Face(Point a,Point b,Point c,int color) { }
+    private record Vertex(Point p,double u,double v) { }
+    private record Face(Point a,Point b,Point c,int color,int material,
+                        double au,double av,double bu,double bv,double cu,double cv) { }
     private final BufferedImage frame = new BufferedImage(W,H,BufferedImage.TYPE_INT_RGB);
     private final int[] pixels=((DataBufferInt)frame.getRaster().getDataBuffer()).getData();
     private final double[] depths=new double[W*H];
@@ -24,7 +26,25 @@ public final class SceneRenderer {
     private static int shade(int c,double k){return (Math.min(255,(int)(((c>>16)&255)*k))<<16) |
         (Math.min(255,(int)(((c>>8)&255)*k))<<8) | Math.min(255,(int)((c&255)*k));}
     private static void quad(List<Face> out,Point a,Point b,Point c,Point d,int col) {
-        out.add(new Face(a,b,c,col));out.add(new Face(a,c,d,col));
+        out.add(new Face(a,b,c,col,-1,0,0,0,0,0,0));
+        out.add(new Face(a,c,d,col,-1,0,0,0,0,0,0));
+    }
+    private static void texturedQuad(List<Face> out,Point a,Point b,Point c,Point d,
+            int material,double au,double av,double bu,double bv,
+            double cu,double cv,double du,double dv,int tint) {
+        out.add(new Face(a,b,c,tint,material,au,av,bu,bv,cu,cv));
+        out.add(new Face(a,c,d,tint,material,au,av,cu,cv,du,dv));
+    }
+    private static void texturedBox(List<Face> out,double x,double y,double z,
+            double sx,double sy,double sz,int material) {
+        Point a=new Point(x,y,z),b=new Point(x+sx,y,z),c=new Point(x+sx,y+sy,z),d=new Point(x,y+sy,z);
+        Point e=new Point(x,y,z+sz),f=new Point(x+sx,y,z+sz),g=new Point(x+sx,y+sy,z+sz),h=new Point(x,y+sy,z+sz);
+        texturedQuad(out,a,b,c,d,material,0,0,sx,0,sx,sy,0,sy,0xffffff);
+        texturedQuad(out,f,e,h,g,material,0,0,sx,0,sx,sy,0,sy,0xd4d4d4);
+        texturedQuad(out,e,a,d,h,material,0,0,sz,0,sz,sy,0,sy,0xd0d0d0);
+        texturedQuad(out,b,f,g,c,material,0,0,sz,0,sz,sy,0,sy,0xffffff);
+        texturedQuad(out,d,c,g,h,material,0,0,sx,0,sx,sz,0,sz,0xffffff);
+        texturedQuad(out,e,f,b,a,material,0,0,sx,0,sx,sz,0,sz,0xbebebe);
     }
     private static void box(List<Face> out,double x,double y,double z,double sx,double sy,double sz,int col){
         Point a=new Point(x,y,z),b=new Point(x+sx,y,z),c=new Point(x+sx,y+sy,z),d=new Point(x,y+sy,z);
@@ -78,17 +98,23 @@ public final class SceneRenderer {
             double mx=xx+.5,mz=zz+.5;
             // Far geometry may be skipped only when beyond near/far fog; clipping handles visibility.
             if(Math.hypot(mx-x,mz-z)>14)continue;
-            int n=map.roomAt(mx,mz),base=n%2==0?0x44413d:0x3e403f;
-            quad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),((xx+zz)&1)==0?base:shade(base,.91));
-            quad(out,new Point(xx,2.7,zz+1),new Point(xx+1,2.7,zz+1),new Point(xx+1,2.7,zz),new Point(xx,2.7,zz),0x343238);
-            int stone=(xx+zz)%7==0?0x686064:0x575054;
-            if(map.solid(xx-1,zz))quad(out,new Point(xx,0,zz+1),new Point(xx,0,zz),new Point(xx,2.7,zz),new Point(xx,2.7,zz+1),shade(stone,.83));
-            if(map.solid(xx+1,zz))quad(out,new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx+1,2.7,zz+1),new Point(xx+1,2.7,zz),stone);
-            if(map.solid(xx,zz-1))quad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,2.7,zz),new Point(xx,2.7,zz),shade(stone,.92));
-            if(map.solid(xx,zz+1))quad(out,new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),new Point(xx,2.7,zz+1),new Point(xx+1,2.7,zz+1),shade(stone,.86));
+            int n=map.roomAt(mx,mz);
+            int floor=MaterialAtlas.floor(n),wall=MaterialAtlas.wall(n);
+            texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),
+                floor,xx,zz,xx+1,zz,xx+1,zz+1,xx,zz+1,0xffffff);
+            texturedQuad(out,new Point(xx,2.7,zz+1),new Point(xx+1,2.7,zz+1),new Point(xx+1,2.7,zz),new Point(xx,2.7,zz),
+                MaterialAtlas.CEILING,xx,zz+1,xx+1,zz+1,xx+1,zz,xx,zz,0xffffff);
+            if(map.solid(xx-1,zz))texturedQuad(out,new Point(xx,0,zz+1),new Point(xx,0,zz),new Point(xx,2.7,zz),new Point(xx,2.7,zz+1),
+                wall,zz+1,0,zz,0,zz,2.7,zz+1,2.7,0xd0d0d0);
+            if(map.solid(xx+1,zz))texturedQuad(out,new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx+1,2.7,zz+1),new Point(xx+1,2.7,zz),
+                wall,zz,0,zz+1,0,zz+1,2.7,zz,2.7,0xfafafa);
+            if(map.solid(xx,zz-1))texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,2.7,zz),new Point(xx,2.7,zz),
+                wall,xx,0,xx+1,0,xx+1,2.7,xx,2.7,0xe0e0e0);
+            if(map.solid(xx,zz+1))texturedQuad(out,new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),new Point(xx,2.7,zz+1),new Point(xx+1,2.7,zz+1),
+                wall,xx+1,0,xx,0,xx,2.7,xx+1,2.7,0xebebeb);
             if(map.tile(xx,zz)=='D'&&!map.doorOpen(xx,zz)){
-                if(xx==8||xx==16)box(out,xx+.22,0,zz+.07,.54,2.35,.86,0x7b503b);
-                else box(out,xx+.08,0,zz+.23,.85,2.35,.54,0x7b503b);
+                if(xx==8||xx==16)texturedBox(out,xx+.22,0,zz+.07,.54,2.35,.86,MaterialAtlas.DOOR);
+                else texturedBox(out,xx+.08,0,zz+.23,.85,2.35,.54,MaterialAtlas.DOOR);
             }
         }
         for(int r=0;r<9;r++) if(Math.hypot(map.centerX(r)-x,map.centerZ(r)-z)<14) furniture(out,r,map);
@@ -117,23 +143,33 @@ public final class SceneRenderer {
         double cp=Math.cos(pitch),sp=Math.sin(pitch);
         return new Point(xc,dy*cp-zc*sp,dy*sp+zc*cp);
     }
-    private static List<Point> clip(Point a,Point b,Point c){
-        List<Point> in=List.of(a,b,c),out=new ArrayList<>(4);
+    private static List<Vertex> clip(Vertex a,Vertex b,Vertex c){
+        List<Vertex> in=List.of(a,b,c),out=new ArrayList<>(4);
         for(int i=0;i<3;i++){
-            Point s=in.get(i),e=in.get((i+1)%3); boolean front=s.z>=NEAR,next=e.z>=NEAR;
-            if(front)out.add(s);
-            if(front!=next){double t=(NEAR-s.z)/(e.z-s.z);out.add(new Point(s.x+(e.x-s.x)*t,s.y+(e.y-s.y)*t,NEAR));}
+            Vertex first=in.get(i),next=in.get((i+1)%3);
+            boolean front=first.p.z>=NEAR,following=next.p.z>=NEAR;
+            if(front)out.add(first);
+            if(front!=following){
+                double t=(NEAR-first.p.z)/(next.p.z-first.p.z);
+                Point v=new Point(first.p.x+(next.p.x-first.p.x)*t,
+                    first.p.y+(next.p.y-first.p.y)*t,NEAR);
+                out.add(new Vertex(v,first.u+(next.u-first.u)*t,
+                    first.v+(next.v-first.v)*t));
+            }
         }
         return out;
     }
     public void draw(HouseMap map,InvestigationSession session,double clock){
         Arrays.fill(pixels,0x171b25); Arrays.fill(depths,Double.POSITIVE_INFINITY);
         for(Face face:scene(map,session,clock,session.wardPrepared())){
-            List<Point> pts=clip(camera(face.a),camera(face.b),camera(face.c));
-            for(int i=1;i<pts.size()-1;i++)triangle(pts.get(0),pts.get(i),pts.get(i+1),face.color);
+            List<Vertex> pts=clip(new Vertex(camera(face.a),face.au,face.av),
+                new Vertex(camera(face.b),face.bu,face.bv),new Vertex(camera(face.c),face.cu,face.cv));
+            for(int i=1;i<pts.size()-1;i++)triangle(pts.get(0),pts.get(i),pts.get(i+1),face.color,face.material);
         }
     }
-    private void triangle(Point a,Point b,Point c,int color){
+    private void triangle(Vertex va,Vertex vb,Vertex vc,int tint,int material){
+        Point a=va.p,b=vb.p,c=vc.p;
+        int color=tint;
         double x0=W*.5+a.x/a.z*FOCAL,y0=H*.5-a.y/a.z*FOCAL;
         double x1=W*.5+b.x/b.z*FOCAL,y1=H*.5-b.y/b.z*FOCAL;
         double x2=W*.5+c.x/c.z*FOCAL,y2=H*.5-c.y/c.z*FOCAL;
@@ -151,6 +187,17 @@ public final class SceneRenderer {
             double inv=u/a.z+v/b.z+w/c.z,d=1/inv;int k=py*W+px;
             if(d>=depths[k])continue;
             depths[k]=d;
+            if(material>=0) {
+                // Perspective-correct material lookup. Screen-space UV interpolation
+                // distorts strongly at PS-era FOV and is unsuitable for room walls.
+                double uu=(u*va.u/a.z + v*vb.u/b.z + w*vc.u/c.z)/inv;
+                double vv=(u*va.v/a.z + v*vb.v/b.z + w*vc.v/c.z)/inv;
+                int texel=MaterialAtlas.sample(material,uu,vv);
+                int tr=(texel>>16)&255,tg=(texel>>8)&255,tb=texel&255;
+                color=((tr*((tint>>16)&255)/255)<<16) |
+                    ((tg*((tint>>8)&255)/255)<<8) |
+                     (tb*(tint&255)/255);
+            }
             double light=(lamp?1.22:.55)*Math.max(.22,1-d/26.0);
             light=Math.max(.1,Math.min(1.45,light+(BAYER[(px&3)+((py&3)<<2)]-7.5)/140.0));
             int red=(int)(((color>>16)&255)*light),green=(int)(((color>>8)&255)*light),blue=(int)((color&255)*light);

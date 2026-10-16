@@ -1358,7 +1358,27 @@
           "status": "not_started",
           "description": "Profile triangle counts, draw calls, texture sampling and LOD on reference hardware."
         }
-      ]
+      ],
+      "preparatory_work": {
+        "starter_material_atlas": {
+          "state": "implemented and locally tested; this is a preparatory sub-slice, not stage completion",
+          "materials": 16,
+          "resolution": "128x128 RGB atlas, sixteen 32x32 tiles, nearest-neighbor",
+          "rendering": "perspective-correct UVs on house floors, walls, ceiling and doors; near-plane UV clipping",
+          "tests": [
+            "GameplaySmokeTest",
+            "GhostDomainTest",
+            "MaterialAtlasTest",
+            "GuiSmokeTest on Linux xvfb"
+          ],
+          "next": "authored PNG atlas import, validated zone material data, full 12-space house and original reference-asset archival",
+          "source_paths": [
+            "software/beckenburg/src/main/java/org/beckenburg/MaterialAtlas.java",
+            "software/beckenburg/src/main/java/org/beckenburg/SceneRenderer.java"
+          ],
+          "handoff": "docs/beckenburg/environments/TEXTURE_IMPLEMENTATION_001.md"
+        }
+      }
     },
     {
       "id": "P22",

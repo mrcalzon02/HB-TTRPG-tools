@@ -19,6 +19,14 @@ On Linux/macOS with a JDK: `sh build.sh`, `sh build.sh run`. The launcher and Ja
 - **Progression seed:** atomic local Java Properties save, currency/experience rewards, schema validation, session receipt deduplication. Not a network economy or complete castle/shop.
 - **Field interfaces:** map with marked rooms, live HUD, evidence journal, limited wards, case messages and equipment selection.
 
+## Texture atlas production slice
+
+The Java 17 renderer now uses an actual **128×128 source-color atlas with sixteen 32×32 PS-era diffuse tiles**. Stone, plaster, parquet, ceramic, doors, ceiling panels, carpet, brick, wallpaper, concrete, soil, iron, foliage, aged wood, glass and ritual material are procedurally authored and shaded. Each zone chooses its own floor and wall families; doors receive wood grain. The rasterizer interpolates UVs *perspective-correctly*, including geometry clipped by the near camera plane, while preserving the original 320×200 nearest-neighbor pixel look and distance fog. `MaterialAtlasTest` checks atlas reproducibility, tile wrapping, room differentiation, illumination and clipping. This is an implementable *starter palette*, not final user-approved texture art or a completed nine-site kit.
+
+Detailed technical handoff: [Texture Implementation 001](TEXTURE_IMPLEMENTATION_001.md).
+
+**Asset handoff:** `MaterialAtlas.java` is the current runtime authority for the starter diffuse colors; individual authored PNG atlases, UV-model import, exterior materials, and original PNG concept gallery remain independent follow-up deliverables. No JRE/Windows installer or LAN claim is implied.
+
 ## Controls
 
 | Input | Action |
