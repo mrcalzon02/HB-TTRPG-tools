@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-/** Beckenburg local solo investigation alpha. No networking or player-ghost control claim. */
+/** Playable solo modes plus an explicitly limited LAN room-simulation test harness. */
 public final class InvestigationGame {
     private final JFrame window=new JFrame("The Beckenburg Project — Expedition Alpha");
     private final JPanel cards=new JPanel(new CardLayout());
@@ -45,6 +45,7 @@ public final class InvestigationGame {
         selected.setForeground(new Color(225,226,230));
         JButton begin=button("BEGIN SOLO INVESTIGATION");
         JButton ghost=button("GHOST PRACTICE / LOCAL");
+        JButton lan=button("LAN HOST / JOIN (ROOM TEST)");
         JButton guide=button("FIELD MANUAL / CONTROLS");
         JButton quit=button("EXIT");
         account.setForeground(new Color(172,204,183));
@@ -52,13 +53,13 @@ public final class InvestigationGame {
         inner.add(title);inner.add(Box.createVerticalStrut(8));inner.add(tagline);
         inner.add(Box.createVerticalStrut(15));inner.add(status);inner.add(Box.createVerticalStrut(18));
         inner.add(selected);inner.add(Box.createVerticalStrut(6));inner.add(rolePicker);
-        for(JButton b:new JButton[]{begin,ghost,guide,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
+        for(JButton b:new JButton[]{begin,ghost,lan,guide,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
         inner.add(Box.createVerticalStrut(20));inner.add(account);
-        JLabel limitation=new JLabel("LAN, human ghosts and nine finished locations are future milestones.",SwingConstants.CENTER);
+        JLabel limitation=new JLabel("LAN room simulation available; complete 3v1 world sync is still in development.",SwingConstants.CENTER);
         limitation.setForeground(new Color(147,154,165));inner.add(Box.createVerticalStrut(12));inner.add(limitation);
         for(Component c:inner.getComponents())if(c instanceof JComponent jc)jc.setAlignmentX(Component.CENTER_ALIGNMENT);
         menu.add(inner);
-        begin.addActionListener(e->begin());ghost.addActionListener(e->beginGhost());guide.addActionListener(e->JOptionPane.showMessageDialog(window,
+        begin.addActionListener(e->begin());ghost.addActionListener(e->beginGhost());lan.addActionListener(e->new LanLobbyWindow().setVisible(true));guide.addActionListener(e->JOptionPane.showMessageDialog(window,
             "WASD move • Shift sprint • Arrow keys / left-drag look • F flashlight • E doors\n"+
             "1 EMF  •  2 Thermometer  •  3 Spirit Box  •  R scan\n"+
             "C defensive or ritual ward (2 per case)  •  B cleanse anchor\n"+
@@ -71,7 +72,9 @@ public final class InvestigationGame {
             "An AI Spirit can roam, manifest and inflict incremental damage.\n\n"+
             "GHOST PRACTICE: [ / ] select room, SPACE drift, 1 whisper, 2 disturb,\n"+
             "3 manifest, 4 strike, arrows or mouse-drag look, ESC return.\n"+
-            "A simulated investigator is present; this is not a LAN match.",
+            "A simulated investigator is present; this is not a LAN match.\n"+
+            "LAN ROOM TEST: 3 hunter seats + ghost/AI, ready/start, room moves and ghost actions.\n"+
+            "Full 3D player transforms, object sync and Internet multiplayer are not implemented.",
             "Field Manual",JOptionPane.INFORMATION_MESSAGE));
         quit.addActionListener(e->window.dispose());refreshAccount();
     }

@@ -14,7 +14,7 @@ On Linux/macOS with a JDK: `sh build.sh`, `sh build.sh run`. The launcher and Ja
 - **Fifteen-zone starter house:** twelve named interior rooms (bathroom, master bedroom, nursery, living room, main hall, kitchen, library, dining room, study, storage cellar, foyer and utility room) plus rear garden, front porch and standard van staging. A single **grayboxed building**, not nine separate finished level categories. Rooms have real low-poly floor/wall/ceiling geometry and distinct simple props. Doors can be opened and closed, with authoritative collision in the local map model.
 - **First-person 3D:** 320×200 internal RGB+depth triangle renderer, pixel-upscaled nearest-neighbor, simple fog and ordered pixel lighting. WASD movement, Shift sprint, drag or arrows look, room collision, flashlight.
 - **Equipment:** EMF, Thermometer and Spirit Box emit different simulated signals linked to the ghost anchor or movement. Strong readings are journaled as confirmed evidence. The Observer and Demonologist get small profession-appropriate field advantages, and the Cleric receives an additional ward and reduced incoming damage.
-- **Spirit ghost command foundation:** local AI chooses actions from a filtered GhostObservation and issues GhostCommand entries through the *same validator* human control will use. Adjacent-room drift, whisper, kinetic disturbance, timed manifestation and incremental strike have shared energy, cooldowns, sequence replay protection and opening-hunt safety. This is a host-style **local rules core only**: there is no remote host, authenticated multiplayer command transport or playable human-ghost session yet.
+- **Spirit ghost command foundation:** local AI chooses actions from a filtered GhostObservation and issues GhostCommand entries through the *same validator* human control will use. Adjacent-room drift, whisper, kinetic disturbance, timed manifestation and incremental strike have shared energy, cooldowns, sequence replay protection and opening-hunt safety. The shared local rules core now also feeds the experimental LAN room simulation below. Full remotely synchronized 3D movement, equipment and rites are not implemented.
 - **Case closure:** record three instrument clues, place a ward at the real anchor, complete a simple cleansing action and return to the shared van staging extraction point. Early retreat pays only for collected evidence. Health defeat fails the case.
 - **Progression seed:** atomic local Java Properties save, currency/experience rewards, schema validation, session receipt deduplication. Not a network economy or complete castle/shop.
 - **Field interfaces:** map with marked rooms, live HUD, evidence journal, limited wards, case messages, equipment selection, and a contextual hold-Q wheel with eight validated map pings.
@@ -26,7 +26,7 @@ The Java 17 renderer now uses an actual **128×128 source-color atlas with sixte
 
 Detailed technical handoff: [Texture Implementation 001](TEXTURE_IMPLEMENTATION_001.md).
 
-**Asset handoff:** `MaterialAtlas.java` is the current runtime authority for the starter diffuse colors; individual authored PNG atlases, UV-model import, exterior materials, and original PNG concept gallery remain independent follow-up deliverables. No JRE/Windows installer or LAN claim is implied.
+**Asset handoff:** `MaterialAtlas.java` is the current runtime authority for the starter diffuse colors; individual authored PNG atlases, UV-model import, exterior materials, and original PNG concept gallery remain independent follow-up deliverables. No JRE/Windows installer or finished 3v1 LAN claim is implied.
 
 ## Controls
 
@@ -91,3 +91,11 @@ On a graphical Linux test display, `xvfb-run -a java -cp build/classes:build/tes
 org.beckenburg.GhostPracticeGuiTest ghost-practice.png` verifies the second
 launcher mode, renders the actual viewport and checks Escape restores the original
 hunter control flow. It does **not** constitute Windows or multiplayer acceptance.
+
+## Alpha 0.7 — LAN room simulation (first real socket transport)
+
+From the launcher choose **LAN HOST / JOIN (ROOM TEST)**. One player hosts on TCP port `27717` (or another chosen local port). Other clients join by entering that machine's private LAN IP and choosing Hunter or Ghost. Three hunter seats and one ghost seat are available. Everyone marks Ready, then Hunter 1 chooses Start Match. If no human has taken the ghost seat, the AI ghost uses the existing shared `GhostDomain` rules. This is a local network test and should not be exposed directly to the public Internet.
+
+Use the room number spinner with Move Room for legal adjacent hunter steps; ghost players can select an action and its target room. The host rejects remote damage, commands from the wrong seat, replayed commands, invalid room jumps, and actions denied by the ghost's energy/cooldown/timing constraints. The room-level state projection gives human ghosts their own room, energy, legal actions and **only permitted local hunter sensing**, never other players' exact hidden locations. Disconnecting a participant ends the match; reopen a new LAN host to start again.
+
+**Current boundaries:** LAN discovery, reconnect, synchronized first-person camera/position/doors/items, audio, full match investigation/cleansing, network-compatible saves, more ghost types and Windows clean-machine QA are **not yet implemented**. Room-number movement is temporary infrastructure for testing authority; it does not simulate 3D body physics. Do not advertise this as complete 3v1 gameplay. Run `sh build.sh` (or `build.cmd`) to compile and execute `LanProtocolTest` and the four-socket `LanLobbyTest` alongside the established gameplay suites.

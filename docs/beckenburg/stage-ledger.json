@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "project": "The Beckenburg Project",
-  "updated": "2026-10-15",
+  "updated": "2026-10-16",
   "branch": "main",
   "repo": "mrcalzon02/HB-TTRPG-tools",
   "baseline_sha": "67b19334ec30ced7fe16f4a169192cd4012950dc",
@@ -574,7 +574,27 @@
           "status": "not_started",
           "description": "Test two physical Windows machines and four independent clients through launch and cancel."
         }
-      ]
+      ],
+      "preparatory_work": {
+        "alpha07_tcp_lobby": {
+          "state": "implemented and locally tested; full P07 remains not_started pending remaining dependency gates and physical Windows LAN",
+          "capabilities": [
+            "real TCP host/direct-IP join, host-assigned 3 hunter + 1 ghost seats",
+            "protocol version 1, bounded message frames, ready/start and AI ghost fallback",
+            "Swing Host/Join interface and role-constrained buttons"
+          ],
+          "tests": [
+            "LanProtocolTest",
+            "LanLobbyTest over four independent TCP sockets",
+            "LanWindowSmokeTest on Linux graphical Xvfb"
+          ],
+          "limitations": [
+            "no physical multi-PC Windows LAN acceptance",
+            "no reconnect/content-hash/version compatibility beyond protocol",
+            "not full 3D multiplayer"
+          ]
+        }
+      }
     },
     {
       "id": "P08",
@@ -631,7 +651,27 @@
           "status": "not_started",
           "description": "Run repeated four-client join/play/leave cycles with replicated state hashes."
         }
-      ]
+      ],
+      "preparatory_work": {
+        "alpha07_host_commands": {
+          "state": "implemented room-level authoritative simulation; full P08 remains not_started",
+          "capabilities": [
+            "100 ms fixed tick and host-validated room intent",
+            "ghost actions routed through GhostDomain.dispatch for AI/human parity",
+            "role/sequence validation, rejected teleports and private ghost-state filtering",
+            "victim-only ghost attack events and snapshots"
+          ],
+          "tests": [
+            "LanLobbyTest",
+            "GhostDomainTest"
+          ],
+          "limitations": [
+            "no networked 3D collision/doors/physics or interpolation",
+            "no end-to-end evidence or ritual replication",
+            "no reconnection, authoritative inventory or mission payout"
+          ]
+        }
+      }
     },
     {
       "id": "P09",
