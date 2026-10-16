@@ -2,6 +2,12 @@
 
 **Status:** a local solo investigation vertical slice, **not the finished four-player game**. It expands the original Swing/software-3D renderer experiment with a fifteen-zone test house (twelve interior rooms and three exterior spaces), low-poly room props, an AI-driven Spirit ghost, working evidence tools and a complete case-resolution loop. All artwork here is procedural placeholder geometry; the user-approved full-resolution PNG concepts remain awaiting verified GitHub binary archival and model integration.
 
+## Alpha 1.5 — bounded AI acoustic pursuit (development)
+
+The LAN AI ghost now listens to **legitimate footsteps, opened doors, equipment use and rituals** rather than drifting at random indefinitely. It retains one short-lived approximate sound location in two-metre cells, respects room-distance hearing limits and van safety, and follows the legal `GhostDomain` room graph to investigate. Once it reaches the source room, it walks toward the approximate cue using the **same host-validated spatial step** that the human ghost uses. The AI cannot access live hunter coordinates, private evidence or health; merely occupying the same room does not authorize a silent omniscient pursuit. Strike/manifest power costs, range, cooldowns and wind-ups still use the shared ghost dispatcher. `LanGhostPursuitTest` covers acoustic falloff, cue expiration, movement legality, route choices and information boundaries.
+
+This is the first room-and-tile-level search behavior, **not finished player-equivalent AI**, positional audio, furniture navigation, Windows acceptance, or Gold release. See `LAN_GHOST_PURSUIT_009.md`.
+
 ## Alpha 1.4 — host-timed spectral attacks (development)
 
 In the shared first-person LAN house, a legal spatial ghost strike now **winds up for eight authoritative 100 ms ticks** before dealing damage. Hunters in the affected room receive `THREAT|START` and a visible **GHOST STRIKE WIND-UP** warning; moving out of two-meter range, breaking door line of sight, or changing rooms avoids the hit. The host locks the original target at initiation: impact never silently retargets another investigator. Successful contact yields one victim-only damage event; evasion yields no damage, but the original energy and cooldown still apply to the ghost. This is the same resolution path for AI and human-ghost commands. Older non-spatial room-mode sessions retain their prior behavior. See `LAN_TELEGRAPHED_STRIKES_008.md` and the new `LanTelegraphedStrikeTest` and four-socket `LanTelegraphedStrikeIntegrationTest`.

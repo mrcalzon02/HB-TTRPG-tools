@@ -884,6 +884,33 @@
             "software/beckenburg/src/main/java/org/beckenburg/LanHost.java",
             "software/beckenburg/src/main/java/org/beckenburg/LanWorldPanel.java"
           ]
+        },
+        "alpha15_acoustic_pursuit": {
+          "state": "implemented in Java source and tested locally; this preparatory implementation does not satisfy completion of P11/P08",
+          "behavior": [
+            "event-driven sound source from host-authorized footstep, door, instrument, ward and cleansing commands",
+            "bounded single acoustic memory, coarse 2-meter approximate cell, sound kind range and finite expiry",
+            "ghost-exit BFS routing toward valid audible source room using ordinary energy/cooldown-gated GhostDomain DRIFT",
+            "within-room AI pursuit through the same validated LanGhostSpatial.step used by the human ghost",
+            "AI requires a recent audible clue for MANIFEST/STRIKE; no private hunter positions or private team telemetry",
+            "no ghost-client access to AI memory or hunter body data"
+          ],
+          "checks": [
+            "25 headless test groups passed with sh build.sh on OpenJDK 21 using javac --release 17",
+            "LanGhostPursuitTest including van safety, acoustic range, sound expiry, path legal edges, AI/human movement parity and no omniscience",
+            "LanWorldGuiTest and LanGhostGuiTest passed under Linux Xvfb",
+            "clean-extracted ZIP source compiles and target GhostDomainTest/LanGhostPursuitTest pass"
+          ],
+          "limitations": [
+            "coarse graph acoustics, not door-material propagation or complex navmesh search",
+            "no physical Windows multi-PC LAN acceptance or installer",
+            "13-type ghost AI personalities and authored original art gallery remain unfinished"
+          ],
+          "source": [
+            "software/beckenburg/src/main/java/org/beckenburg/LanGhostPursuit.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanHost.java",
+            "software/beckenburg/src/test/java/org/beckenburg/LanGhostPursuitTest.java"
+          ]
         }
       }
     },
@@ -1170,7 +1197,36 @@
           "status": "not_started",
           "description": "Run multiple seeded hunt/retreat cases and compare results to player ghost legal behavior."
         }
-      ]
+      ],
+      "preparatory_work": {
+        "alpha15_acoustic_pursuit": {
+          "state": "implemented in Java source and tested locally; this preparatory implementation does not satisfy completion of P11/P08",
+          "behavior": [
+            "event-driven sound source from host-authorized footstep, door, instrument, ward and cleansing commands",
+            "bounded single acoustic memory, coarse 2-meter approximate cell, sound kind range and finite expiry",
+            "ghost-exit BFS routing toward valid audible source room using ordinary energy/cooldown-gated GhostDomain DRIFT",
+            "within-room AI pursuit through the same validated LanGhostSpatial.step used by the human ghost",
+            "AI requires a recent audible clue for MANIFEST/STRIKE; no private hunter positions or private team telemetry",
+            "no ghost-client access to AI memory or hunter body data"
+          ],
+          "checks": [
+            "25 headless test groups passed with sh build.sh on OpenJDK 21 using javac --release 17",
+            "LanGhostPursuitTest including van safety, acoustic range, sound expiry, path legal edges, AI/human movement parity and no omniscience",
+            "LanWorldGuiTest and LanGhostGuiTest passed under Linux Xvfb",
+            "clean-extracted ZIP source compiles and target GhostDomainTest/LanGhostPursuitTest pass"
+          ],
+          "limitations": [
+            "coarse graph acoustics, not door-material propagation or complex navmesh search",
+            "no physical Windows multi-PC LAN acceptance or installer",
+            "13-type ghost AI personalities and authored original art gallery remain unfinished"
+          ],
+          "source": [
+            "software/beckenburg/src/main/java/org/beckenburg/LanGhostPursuit.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanHost.java",
+            "software/beckenburg/src/test/java/org/beckenburg/LanGhostPursuitTest.java"
+          ]
+        }
+      }
     },
     {
       "id": "P12",

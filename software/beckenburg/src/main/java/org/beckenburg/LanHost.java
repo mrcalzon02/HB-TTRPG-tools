@@ -21,7 +21,7 @@ public final class LanHost implements AutoCloseable {
     private final LanGhostSpatial ghostPose=new LanGhostSpatial(map,4);
     private final GhostDomain ghost=new GhostDomain(map,4);
     private final LanCase mission=new LanCase(4);
-    private final GhostDomain.AiController ai=new GhostDomain.AiController(20261016L);
+    private final LanGhostPursuit ai=new LanGhostPursuit(map,20261016L);
     private volatile boolean closed;
     private boolean running,everStarted;
     private int tick;
@@ -122,6 +122,7 @@ public final class LanHost implements AutoCloseable {
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(3)));
                     world.move(peer.slot,dx,dz,tick);
                     hunterRooms[peer.slot]=world.body(peer.slot).room();
+                    recordSound(peer.slot,LanGhostPursuit.Sound.FOOTSTEP);
                     reply(peer,"ACCEPT|STEP");broadcastWorld();broadcastState();
                 }
                 case "TURN" -> {
@@ -134,6 +135,7 @@ public final class LanHost implements AutoCloseable {
                     if(!running||peer.slot==3||!peer.worldMode||p.size()!=2)throw new IllegalArgumentException("door command unavailable");
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
                     if(!world.door(peer.slot,tick))throw new IllegalArgumentException("no reachable door");
+                    recordSound(peer.slot,LanGhostPursuit.Sound.DOOR);
                     reply(peer,"ACCEPT|DOOR");broadcastWorld();
                 }
                 case "MOVE" -> {
@@ -146,7 +148,7 @@ public final class LanHost implements AutoCloseable {
                     if(target==at||Math.abs(target/HouseMap.COLS-at/HouseMap.COLS)+Math.abs(target%HouseMap.COLS-at%HouseMap.COLS)!=1)
                         throw new IllegalArgumentException("room not adjacent");
                     // Room-level topology proof only; physical door and body collision still need synced transform validation.
-                    hunterRooms[peer.slot]=target;world.setRoom(peer.slot,target);reply(peer,"ACCEPT|MOVE|"+target);broadcastState();broadcastWorld();
+                    hunterRooms[peer.slot]=target;world.setRoom(peer.slot,target);recordSound(peer.slot,LanGhostPursuit.Sound.FOOTSTEP);reply(peer,"ACCEPT|MOVE|"+target);broadcastState();broadcastWorld();
                 }
                 case "SCAN" -> {
                     if(!running||peer.slot==3||p.size()!=3)throw new IllegalArgumentException("hunter action unavailable");
@@ -154,6 +156,7 @@ public final class LanHost implements AutoCloseable {
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
                     LanCase.Report result=mission.scan(peer.slot,tool,hunterRooms[peer.slot],ghost.room());
                     answerHunter(peer,"SCAN",result);
+                    if(result.accepted())recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
                     if(result.accepted()&&result.message().startsWith("CONFIRMED"))notifyHunters("EVIDENCE|"+tool+"|"+mission.evidenceCount());
                     broadcastProgress();
                 }
@@ -168,6 +171,7 @@ public final class LanHost implements AutoCloseable {
                         default -> throw new AssertionError();
                     };
                     answerHunter(peer,p.get(0),result);
+                    if(result.accepted()&&!p.get(0).equals("EXTRACT"))recordSound(peer.slot,LanGhostPursuit.Sound.RITUAL);
                     if(result.accepted()&&p.get(0).equals("CLEANSE"))notifyHunters("RITUAL|STARTED");
                     broadcastProgress();finishIfComplete();
                 }
@@ -205,6 +209,14 @@ public final class LanHost implements AutoCloseable {
     }
     private static void answerHunter(Peer peer,String action,LanCase.Report result){
         reply(peer,(result.accepted()?"ACCEPT":"REJECT")+"|"+action+"|"+result.message());
+    }
+    /** Only successfully validated hunter actions produce AI-detectable noises.
+     * No sound event, inferred position, or target memory is ever sent to a ghost peer.
+     */
+    private void recordSound(int seat,LanGhostPursuit.Sound type){
+        if(seats[3]!=null)return; // The human ghost gets no internal AI sensory information.
+        LanWorld.Body b=world.body(seat);
+        ai.heard(ghost.room(),hunterRooms[seat],b.x(),b.z(),type,tick);
     }
     private void notifyHunters(String event){for(int i=0;i<3;i++)if(seats[i]!=null)reply(seats[i],event);}
     private void broadcastProgress(){for(int i=0;i<3;i++)if(seats[i]!=null)reply(seats[i],mission.privateState(i));}
@@ -266,7 +278,11 @@ public final class LanHost implements AutoCloseable {
         try{tick++;
             int audible=-1;for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==ghost.room()){audible=hunterRooms[i];break;}
             ghost.advance(tick,audible);
-            if(seats[3]==null){GhostDomain.Command choice=ai.decide(ghost.observe());if(choice!=null){
+            if(seats[3]==null){GhostDomain.Observation seen=ghost.observe();
+                LanGhostPursuit.Impulse impulse=ai.approach(seen,ghostPose.pose());
+                if(impulse!=null){try{ghostPose.step(impulse.dx(),impulse.dz(),tick);broadcastApparitions();}
+                    catch(IllegalArgumentException blocked){ /* Same physical rejection as a human ghost. */ }}
+                GhostDomain.Command choice=ai.decide(seen,LanSpatialCombat.any(strikeVictims()));if(choice!=null){
                 // AI and human strikes use the same host-owned spatial reach gate.
                 if(choice.action()!=GhostDomain.Action.STRIKE||LanSpatialCombat.any(strikeVictims())){
                     GhostDomain.Resolution result=ghost.dispatch(choice);
