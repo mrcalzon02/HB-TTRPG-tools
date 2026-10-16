@@ -16,6 +16,7 @@ public final class InvestigationGame {
     private final JLabel account=new JLabel();
     private JComboBox<InvestigationSession.Role> rolePicker;
     private GamePanel game;
+    private GhostPracticePanel ghostPractice;
     private int caseNumber;
 
     private InvestigationGame(){
@@ -43,6 +44,7 @@ public final class InvestigationGame {
         JLabel selected=new JLabel("Investigator discipline",SwingConstants.CENTER);
         selected.setForeground(new Color(225,226,230));
         JButton begin=button("BEGIN SOLO INVESTIGATION");
+        JButton ghost=button("GHOST PRACTICE / LOCAL");
         JButton guide=button("FIELD MANUAL / CONTROLS");
         JButton quit=button("EXIT");
         account.setForeground(new Color(172,204,183));
@@ -50,13 +52,13 @@ public final class InvestigationGame {
         inner.add(title);inner.add(Box.createVerticalStrut(8));inner.add(tagline);
         inner.add(Box.createVerticalStrut(15));inner.add(status);inner.add(Box.createVerticalStrut(18));
         inner.add(selected);inner.add(Box.createVerticalStrut(6));inner.add(rolePicker);
-        for(JButton b:new JButton[]{begin,guide,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
+        for(JButton b:new JButton[]{begin,ghost,guide,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
         inner.add(Box.createVerticalStrut(20));inner.add(account);
         JLabel limitation=new JLabel("LAN, human ghosts and nine finished locations are future milestones.",SwingConstants.CENTER);
         limitation.setForeground(new Color(147,154,165));inner.add(Box.createVerticalStrut(12));inner.add(limitation);
         for(Component c:inner.getComponents())if(c instanceof JComponent jc)jc.setAlignmentX(Component.CENTER_ALIGNMENT);
         menu.add(inner);
-        begin.addActionListener(e->begin());guide.addActionListener(e->JOptionPane.showMessageDialog(window,
+        begin.addActionListener(e->begin());ghost.addActionListener(e->beginGhost());guide.addActionListener(e->JOptionPane.showMessageDialog(window,
             "WASD move • Shift sprint • Arrow keys / left-drag look • F flashlight • E doors\n"+
             "1 EMF  •  2 Thermometer  •  3 Spirit Box  •  R scan\n"+
             "C defensive or ritual ward (2 per case)  •  B cleanse anchor\n"+
@@ -66,7 +68,10 @@ public final class InvestigationGame {
             "Search every room: readings strengthen near the Spirit's anchor.\n"+
             "Record three types of evidence, place a ward in the anchor room, cleanse,\n"+
             "then return to VAN STAGING to extract. You can retreat earlier.\n"+
-            "An AI Spirit can roam, manifest and inflict incremental damage.",
+            "An AI Spirit can roam, manifest and inflict incremental damage.\n\n"+
+            "GHOST PRACTICE: [ / ] select room, SPACE drift, 1 whisper, 2 disturb,\n"+
+            "3 manifest, 4 strike, arrows or mouse-drag look, ESC return.\n"+
+            "A simulated investigator is present; this is not a LAN match.",
             "Field Manual",JOptionPane.INFORMATION_MESSAGE));
         quit.addActionListener(e->window.dispose());refreshAccount();
     }
@@ -77,14 +82,24 @@ public final class InvestigationGame {
     private void refreshAccount(){account.setText("CASTLE LEDGER     £"+profile.currency()+"       XP "+profile.experience());}
     private void begin(){
         if(game!=null){game.close();cards.remove(game);game=null;}
+        if(ghostPractice!=null){ghostPractice.close();cards.remove(ghostPractice);ghostPractice=null;}
         caseNumber++;
         game=new GamePanel((InvestigationSession.Role)rolePicker.getSelectedItem(),caseNumber);
         cards.add(game,"play");((CardLayout)cards.getLayout()).show(cards,"play");
         SwingUtilities.invokeLater(game::requestFocusInWindow);
     }
+    private void beginGhost(){
+        if(game!=null){game.close();cards.remove(game);game=null;}
+        if(ghostPractice!=null){ghostPractice.close();cards.remove(ghostPractice);}
+        ghostPractice=new GhostPracticePanel(this::returnHome);
+        cards.add(ghostPractice,"ghost");
+        ((CardLayout)cards.getLayout()).show(cards,"ghost");
+        SwingUtilities.invokeLater(ghostPractice::requestFocusInWindow);
+    }
     private void returnHome(){
-        if(game==null)return;
-        game.close();cards.remove(game);game=null;refreshAccount();
+        if(game!=null){game.close();cards.remove(game);game=null;}
+        if(ghostPractice!=null){ghostPractice.close();cards.remove(ghostPractice);ghostPractice=null;}
+        refreshAccount();
         ((CardLayout)cards.getLayout()).show(cards,"menu");
     }
     private final class GamePanel extends JPanel implements KeyListener,MouseMotionListener,MouseListener,FocusListener {

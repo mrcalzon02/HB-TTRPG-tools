@@ -150,7 +150,7 @@ public final class SceneRenderer {
         vanBox(faces,van,-.55,.10,r-.28,1.1,.5,.18,MaterialAtlas.AGED_WOOD);
         vanBox(faces,van,-w+.1,.05,f-.3,w*2-.2,.08,.3,MaterialAtlas.IRON);
     }
-    private List<Face> scene(HouseMap map,InvestigationSession session,double clock,boolean ward) {
+    private List<Face> scene(HouseMap map,int ghostRoom,boolean ghostVisible,int wardRoom,int hunterRoom,double clock) {
         List<Face> out=new ArrayList<>(2000);
         for(int zz=1;zz<map.height()-1;zz++)for(int xx=1;xx<map.width()-1;xx++) {
             if(map.tile(xx,zz)=='#') continue;
@@ -178,8 +178,8 @@ public final class SceneRenderer {
         }
         for(int r=0;r<map.roomCount();r++) if(Math.hypot(map.centerX(r)-x,map.centerZ(r)-z)<14) furniture(out,r,map);
         if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14) vanModel(out,map.van());
-        if(session.outcome()==InvestigationSession.Outcome.ACTIVE && session.ghostManifesting()){
-            double gx=map.centerX(session.ghostRoom()), gz=map.centerZ(session.ghostRoom());
+        if(ghostVisible){
+            double gx=map.centerX(ghostRoom), gz=map.centerZ(ghostRoom);
             double bob=.12*Math.sin(clock*3);
             // Faceted low-poly spirit: shrouded torso, hood, arms and glowing eye pair.
             box(out,gx-.32,.48+bob,gz-.2,.64,1.05,.4,0x747d9b);
@@ -189,8 +189,17 @@ public final class SceneRenderer {
             box(out,gx-.15,1.7+bob,gz-.24,.09,.06,.055,0xd4d9ff);
             box(out,gx+.08,1.7+bob,gz-.24,.09,.06,.055,0xd4d9ff);
         }
-        if(ward){
-            int r=session.anchorRoom();double wx=map.centerX(r),wz=map.centerZ(r);
+        if(hunterRoom>=0){
+            double hx=map.centerX(hunterRoom)-1.25,hz=map.centerZ(hunterRoom)+2.0;
+            // The simulated hunter is only drawn when local ghost senses their room.
+            box(out,hx-.27,0,hz-.19,.54,.95,.36,0x3a4548);
+            box(out,hx-.28,.97,hz-.20,.56,.56,.4,0x5a6660);
+            box(out,hx-.20,1.53,hz-.12,.40,.32,.28,0xa68d7c);
+            box(out,hx-.31,.22,hz-.20,.18,.75,.24,0x242932);
+            box(out,hx+.14,.22,hz-.20,.18,.75,.24,0x242932);
+        }
+        if(wardRoom>=0){
+            int r=wardRoom;double wx=map.centerX(r),wz=map.centerZ(r);
             // Visible prepared circle is constrained to the anchor room; it is not a magic menu flag.
             quad(out,new Point(wx-.8,.035,wz-.8),new Point(wx+.8,.035,wz-.8),new Point(wx+.8,.035,wz-.65),new Point(wx-.8,.035,wz-.65),0x9b85b8);
             quad(out,new Point(wx-.8,.035,wz+.65),new Point(wx+.8,.035,wz+.65),new Point(wx+.8,.035,wz+.8),new Point(wx-.8,.035,wz+.8),0x9b85b8);
@@ -220,8 +229,16 @@ public final class SceneRenderer {
         return out;
     }
     public void draw(HouseMap map,InvestigationSession session,double clock){
+        render(map,session.ghostRoom(),session.outcome()==InvestigationSession.Outcome.ACTIVE && session.ghostManifesting(),
+            session.wardPrepared()?session.anchorRoom():-1,-1,clock);
+    }
+    /** Spectral viewpoint: only a room-local sensed hunter is rendered. */
+    public void drawPractice(HouseMap map,int visibleHunterRoom,double clock){
+        render(map,-1,false,-1,visibleHunterRoom,clock);
+    }
+    private void render(HouseMap map,int ghostRoom,boolean visibleGhost,int wardRoom,int hunterRoom,double clock){
         Arrays.fill(pixels,0x171b25); Arrays.fill(depths,Double.POSITIVE_INFINITY);
-        for(Face face:scene(map,session,clock,session.wardPrepared())){
+        for(Face face:scene(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock)){
             List<Vertex> pts=clip(new Vertex(camera(face.a),face.au,face.av),
                 new Vertex(camera(face.b),face.bu,face.bv),new Vertex(camera(face.c),face.cu,face.cv));
             for(int i=1;i<pts.size()-1;i++)triangle(pts.get(0),pts.get(i),pts.get(i+1),face.color,face.material);
