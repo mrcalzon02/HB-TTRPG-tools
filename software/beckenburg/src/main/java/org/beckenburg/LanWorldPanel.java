@@ -18,6 +18,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final Set<Integer> keys=new HashSet<>();
     private String feedback="Awaiting host world snapshot";
     private int lastTurn=-1,tick,visibleGhost=-1,health=100,evidence;
+    private SceneRenderer.Apparition apparition;
+    private int apparitionWarningTick=-1;
     private final MouseLook mouseLook;
     private LanCase.Tool selected=LanCase.Tool.EMF;
     private String caseResult="";
@@ -47,6 +49,16 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 tick=LanProtocol.integer(p.get(5),0,99999999);
                 if(who==seat){renderer.x=x;renderer.z=z;feedback="HOST SYNC ACTIVE — movement and doors server controlled";}
                 else peers.put(who,new SceneRenderer.RemoteBody(x,z,who));
+            }else if(p.get(0).equals("APPARITION")){
+                if(p.size()==3 && p.get(1).equals("HIDDEN")){
+                    apparition=null;
+                }else if(p.size()==5 && p.get(1).equals("VISIBLE")){
+                    double gx=LanProtocol.integer(p.get(2),0,HouseMap.WIDTH*1000)/1000.0;
+                    double gz=LanProtocol.integer(p.get(3),0,HouseMap.HEIGHT*1000)/1000.0;
+                    int eventTick=LanProtocol.integer(p.get(4),0,99999999);
+                    if(apparition==null)apparitionWarningTick=eventTick;
+                    apparition=new SceneRenderer.Apparition(gx,gz);
+                }else throw new IllegalArgumentException("malformed apparition");
             }else if(p.size()==2&&p.get(0).equals("DOORS")){
                 map.applyDoorSnapshot(p.get(1));
             }else if(p.size()==7&&p.get(0).equals("STATE")){
@@ -67,6 +79,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     public double cameraX(){return renderer.x;}
     public double cameraZ(){return renderer.z;}
     public int visiblePeers(){return peers.size();}
+    public boolean seesApparition(){return apparition!=null;}
+    public SceneRenderer.Apparition apparitionPose(){return apparition;}
     private void frame(){
         if(!isDisplayable()||!caseResult.isEmpty()){repaint();return;}
         int right=(keys.contains(KeyEvent.VK_D)?1:0)-(keys.contains(KeyEvent.VK_A)?1:0);
@@ -82,7 +96,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             int heading=Math.floorMod((int)Math.round(Math.toDegrees(renderer.yaw)),360);
             if(heading!=lastTurn){client.turn(heading);lastTurn=heading;}
         }catch(IOException e){feedback="LAN disconnected: "+e.getMessage();close();}
-        renderer.drawNetwork(map,new ArrayList<>(peers.values()),visibleGhost,tick*.1);
+        renderer.drawNetwork(map,new ArrayList<>(peers.values()),apparition,tick*.1);
         repaint();
     }
     @Override protected void paintComponent(Graphics original){
@@ -96,6 +110,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString("BECKENBURG / LAN HOUSE — HUNTER "+(seat+1),13,26);
             g.drawString(map.roomName(renderer.x,renderer.z)+" | TEAM "+peers.size()+" / 2 | HP "+health+" | CLUES "+evidence+"/3",13,46);
             g.drawString("+",getWidth()/2,h/2);
+            if(apparition!=null){
+                g.setColor(new Color(228,158,177));
+                g.drawString("ENTITY MANIFESTED — KEEP DISTANCE / USE WARDS",13,68);
+            }
             g.setColor(new Color(17,19,25));g.fillRect(0,h,getWidth(),getHeight()-h);
             g.setColor(new Color(216,215,202));
             g.drawString("WASD MOVE  •  CLICK TO CAPTURE MOUSE / ARROWS LOOK  •  E DOOR",13,h+23);

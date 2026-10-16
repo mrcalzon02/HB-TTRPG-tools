@@ -829,6 +829,33 @@
             "Windows physical multi-machine LAN not verified"
           ],
           "documentation": "docs/beckenburg/network/LAN_SPATIAL_COMBAT_006.md"
+        },
+        "alpha13_apparition_visibility": {
+          "state": "partial implementation and tests pass locally, overall milestone still pending",
+          "capabilities": [
+            "actual 3D ghost pose disclosed to authorized hunters, not forced to room center",
+            "10-meter same-room visibility gate with solid wall and closed-door occlusion",
+            "hunter-local HIDDEN packet clears manifested ghost on drift/expiry",
+            "on-screen manifestation warning; unchanged AI and player ghost legality"
+          ],
+          "tests": [
+            "LanApparitionTest",
+            "LanApparitionRenderTest",
+            "LanApparitionIntegrationTest (4 live loopback sockets)",
+            "all prior 19 headless suites",
+            "LanWorldGuiTest on Linux Xvfb"
+          ],
+          "remaining": [
+            "attack wind-up animation and delayed impact",
+            "spatial AI pursuit and hearing",
+            "real physical Windows four-PC session and installed build",
+            "original authored mesh and image gallery"
+          ],
+          "source": [
+            "software/beckenburg/src/main/java/org/beckenburg/LanApparition.java",
+            "software/beckenburg/src/main/java/org/beckenburg/SceneRenderer.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanHost.java"
+          ]
         }
       }
     },
@@ -1340,6 +1367,33 @@
             "Windows physical multi-machine LAN not verified"
           ],
           "documentation": "docs/beckenburg/network/LAN_SPATIAL_COMBAT_006.md"
+        },
+        "alpha13_apparition_visibility": {
+          "state": "partial implementation and tests pass locally, overall milestone still pending",
+          "capabilities": [
+            "actual 3D ghost pose disclosed to authorized hunters, not forced to room center",
+            "10-meter same-room visibility gate with solid wall and closed-door occlusion",
+            "hunter-local HIDDEN packet clears manifested ghost on drift/expiry",
+            "on-screen manifestation warning; unchanged AI and player ghost legality"
+          ],
+          "tests": [
+            "LanApparitionTest",
+            "LanApparitionRenderTest",
+            "LanApparitionIntegrationTest (4 live loopback sockets)",
+            "all prior 19 headless suites",
+            "LanWorldGuiTest on Linux Xvfb"
+          ],
+          "remaining": [
+            "attack wind-up animation and delayed impact",
+            "spatial AI pursuit and hearing",
+            "real physical Windows four-PC session and installed build",
+            "original authored mesh and image gallery"
+          ],
+          "source": [
+            "software/beckenburg/src/main/java/org/beckenburg/LanApparition.java",
+            "software/beckenburg/src/main/java/org/beckenburg/SceneRenderer.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanHost.java"
+          ]
         }
       }
     },

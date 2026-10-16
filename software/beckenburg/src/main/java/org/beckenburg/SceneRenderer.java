@@ -150,7 +150,7 @@ public final class SceneRenderer {
         vanBox(faces,van,-.55,.10,r-.28,1.1,.5,.18,MaterialAtlas.AGED_WOOD);
         vanBox(faces,van,-w+.1,.05,f-.3,w*2-.2,.08,.3,MaterialAtlas.IRON);
     }
-    private List<Face> scene(HouseMap map,int ghostRoom,boolean ghostVisible,int wardRoom,int hunterRoom,double clock,List<RemoteBody> others) {
+    private List<Face> scene(HouseMap map,int ghostRoom,boolean ghostVisible,int wardRoom,int hunterRoom,double clock,List<RemoteBody> others,Apparition apparition) {
         List<Face> out=new ArrayList<>(2000);
         for(int zz=1;zz<map.height()-1;zz++)for(int xx=1;xx<map.width()-1;xx++) {
             if(map.tile(xx,zz)=='#') continue;
@@ -179,7 +179,8 @@ public final class SceneRenderer {
         for(int r=0;r<map.roomCount();r++) if(Math.hypot(map.centerX(r)-x,map.centerZ(r)-z)<14) furniture(out,r,map);
         if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14) vanModel(out,map.van());
         if(ghostVisible){
-            double gx=map.centerX(ghostRoom), gz=map.centerZ(ghostRoom);
+            double gx=apparition==null?map.centerX(ghostRoom):apparition.x(),
+                   gz=apparition==null?map.centerZ(ghostRoom):apparition.z();
             double bob=.12*Math.sin(clock*3);
             // Faceted low-poly spirit: shrouded torso, hood, arms and glowing eye pair.
             box(out,gx-.32,.48+bob,gz-.2,.64,1.05,.4,0x747d9b);
@@ -242,8 +243,18 @@ public final class SceneRenderer {
     }
     /** First-person network rendering with low-poly teammate models and host-managed doors. */
     public record RemoteBody(double x,double z,int slot) { }
+    public record Apparition(double x,double z) {
+        public Apparition {
+            if(!Double.isFinite(x)||!Double.isFinite(z))throw new IllegalArgumentException("invalid apparition");
+        }
+    }
+    /** Keep the legacy room-mode signature for old render regression tests. */
     public void drawNetwork(HouseMap map,List<RemoteBody> others,int visibleGhostRoom,double clock){
         render(map,visibleGhostRoom,visibleGhostRoom>=0,-1,-1,clock,others);
+    }
+    /** Render a 3D LAN apparition at its actual server-disclosed pose, never a guessed room center. */
+    public void drawNetwork(HouseMap map,List<RemoteBody> others,Apparition apparition,double clock){
+        render(map,-1,apparition!=null,-1,-1,clock,others,apparition);
     }
     public void draw(HouseMap map,InvestigationSession session,double clock){
         render(map,session.ghostRoom(),session.outcome()==InvestigationSession.Outcome.ACTIVE && session.ghostManifesting(),
@@ -254,8 +265,11 @@ public final class SceneRenderer {
         render(map,-1,false,-1,visibleHunterRoom,clock,List.of());
     }
     private void render(HouseMap map,int ghostRoom,boolean visibleGhost,int wardRoom,int hunterRoom,double clock,List<RemoteBody> others){
+        render(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock,others,null);
+    }
+    private void render(HouseMap map,int ghostRoom,boolean visibleGhost,int wardRoom,int hunterRoom,double clock,List<RemoteBody> others,Apparition apparition){
         Arrays.fill(pixels,0x171b25); Arrays.fill(depths,Double.POSITIVE_INFINITY);
-        for(Face face:scene(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock,others)){
+        for(Face face:scene(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock,others,apparition)){
             List<Vertex> pts=clip(new Vertex(camera(face.a),face.au,face.av),
                 new Vertex(camera(face.b),face.bu,face.bv),new Vertex(camera(face.c),face.cu,face.cv));
             for(int i=1;i<pts.size()-1;i++)triangle(pts.get(0),pts.get(i),pts.get(i+1),face.color,face.material);

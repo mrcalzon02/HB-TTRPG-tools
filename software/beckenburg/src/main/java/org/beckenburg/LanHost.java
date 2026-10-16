@@ -93,7 +93,7 @@ public final class LanHost implements AutoCloseable {
                 case "VIEW3D" -> {
                     if(!running||peer.slot==3||p.size()!=1)throw new IllegalArgumentException("3D view requires active hunter");
                     peer.worldMode=true;
-                    reply(peer,"ACCEPT|VIEW3D");broadcastWorld();
+                    reply(peer,"ACCEPT|VIEW3D");broadcastWorld();broadcastApparitions();
                 }
                 case "GVIEW3D" -> {
                     if(!running||peer.slot!=3||p.size()!=1)throw new IllegalArgumentException("ghost view requires active ghost seat");
@@ -106,7 +106,7 @@ public final class LanHost implements AutoCloseable {
                     int dx=LanProtocol.integer(p.get(1),-100,100),dz=LanProtocol.integer(p.get(2),-100,100);
                     acceptGhostPoseSequence(peer,LanProtocol.sequence(p.get(3)));
                     ghostPose.step(dx,dz,tick);
-                    reply(peer,"ACCEPT|GSTEP");reply(peer,ghostPose.frame(tick));
+                    reply(peer,"ACCEPT|GSTEP");reply(peer,ghostPose.frame(tick));broadcastApparitions();
                 }
                 case "GTURN" -> {
                     if(!running||peer.slot!=3||!peer.ghostWorldMode||p.size()!=3)
@@ -188,7 +188,7 @@ public final class LanHost implements AutoCloseable {
                     distributeEffect(result);
                     ghostPose.syncRoom(ghost.room());
                     if(peer.ghostWorldMode)reply(peer,ghostPose.frame(tick));
-                    broadcastState();broadcastProgress();finishIfComplete();
+                    broadcastState();broadcastApparitions();broadcastProgress();finishIfComplete();
                 }
                 default -> throw new IllegalArgumentException("unknown command");
             }
@@ -236,15 +236,28 @@ public final class LanHost implements AutoCloseable {
                 // AI and human strikes use the same host-owned spatial reach gate.
                 if(choice.action()!=GhostDomain.Action.STRIKE||LanSpatialCombat.any(strikeVictims())){
                     GhostDomain.Resolution result=ghost.dispatch(choice);
-                    if(result.applied()){distributeEffect(result);ghostPose.syncRoom(ghost.room());}
+                    if(result.applied()){distributeEffect(result);ghostPose.syncRoom(ghost.room());broadcastApparitions();}
                 }
             }}
             mission.advance();
-            if(tick%5==0){broadcastState();broadcastProgress();broadcastWorld();
+            if(tick%5==0){broadcastState();broadcastApparitions();broadcastProgress();broadcastWorld();
                 if(seats[3]!=null&&seats[3].ghostWorldMode)reply(seats[3],ghostPose.frame(tick));}
             finishIfComplete();
         }catch(RuntimeException ex){running=false;notifyAllPeers("INFO|host simulation stopped");System.err.println("LAN tick failure: "+ex.getMessage());}
     }}
+    /** Every 3D investigator receives only their own host-validated line-of-sight projection.
+     * An explicit HIDDEN packet also clears stale manifestations after a move or expiry.
+     * This is never sent to the ghost seat or used for ghost AI decisions.
+     */
+    private void broadcastApparitions(){
+        LanGhostSpatial.Pose pose=ghostPose.pose();
+        for(int i=0;i<3;i++){
+            Peer hunter=seats[i];
+            if(hunter!=null && hunter.worldMode)
+                reply(hunter,LanApparition.frame(map,world.body(i),true,pose,ghost.manifested(),tick));
+        }
+    }
+
     /** Visible body positions go only to hunter peers; no omniscient team feed for ghosts. */
     private void broadcastWorld(){
         String doors="DOORS|"+map.doorSnapshot();

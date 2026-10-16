@@ -16,6 +16,9 @@ javac --release 17 -encoding UTF-8 -d build\classes @build\sources-main.txt || e
 javac --release 17 -encoding UTF-8 -cp build\classes -d build\test @build\sources-tests.txt || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostSpatialTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSpatialCombatTest || exit /b 1
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanApparitionTest || exit /b 1
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanApparitionRenderTest || exit /b 1
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanApparitionIntegrationTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostIntegrationTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.MouseLookTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanWorldControlsTest || exit /b 1
