@@ -856,6 +856,34 @@
             "software/beckenburg/src/main/java/org/beckenburg/SceneRenderer.java",
             "software/beckenburg/src/main/java/org/beckenburg/LanHost.java"
           ]
+        },
+        "alpha14_strike_windup": {
+          "status": "Implemented, locally tested on Java 17-targeting JDK 21; overall stage gates still incomplete",
+          "functionality": [
+            "Host locks one eligible spatial target and delays STRIKE harm for 8 simulation ticks (800 ms)",
+            "Hunters in ghost room receive THREAT warning and clear HUD wind-up",
+            "Impact revalidates original target's connected seat, world mode, current room, range and line of sight; no retargeting",
+            "Legacy room-only damage stays immediate; AI and human ghost paths share resolveGhostAction",
+            "Successful impact delivers one damage event; movement and closed-door evasion suppress harm without refunding ghost energy"
+          ],
+          "tests": [
+            "LanTelegraphedStrikeTest",
+            "LanTelegraphedStrikeIntegrationTest four actual sockets",
+            "LanTelegraphedHudTest Swing rendering",
+            "all 24 headless test groups passed",
+            "LanWorldGuiTest and LanGhostGuiTest under Xvfb passed"
+          ],
+          "missing": [
+            "directional attack animation/audio",
+            "spatial AI hearing-based pursuit",
+            "Windows real-machine multi-PC LAN acceptance",
+            "model and original image archival"
+          ],
+          "source": [
+            "software/beckenburg/src/main/java/org/beckenburg/LanTelegraphedStrike.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanHost.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanWorldPanel.java"
+          ]
         }
       }
     },
@@ -1057,6 +1085,34 @@
             "reconnect/sync resilience and mixed-mode UX need further verification"
           ],
           "documentation": "docs/beckenburg/network/LAN_GHOST_WORLD_IMPLEMENTATION_005.md"
+        },
+        "alpha14_strike_windup": {
+          "status": "Implemented, locally tested on Java 17-targeting JDK 21; overall stage gates still incomplete",
+          "functionality": [
+            "Host locks one eligible spatial target and delays STRIKE harm for 8 simulation ticks (800 ms)",
+            "Hunters in ghost room receive THREAT warning and clear HUD wind-up",
+            "Impact revalidates original target's connected seat, world mode, current room, range and line of sight; no retargeting",
+            "Legacy room-only damage stays immediate; AI and human ghost paths share resolveGhostAction",
+            "Successful impact delivers one damage event; movement and closed-door evasion suppress harm without refunding ghost energy"
+          ],
+          "tests": [
+            "LanTelegraphedStrikeTest",
+            "LanTelegraphedStrikeIntegrationTest four actual sockets",
+            "LanTelegraphedHudTest Swing rendering",
+            "all 24 headless test groups passed",
+            "LanWorldGuiTest and LanGhostGuiTest under Xvfb passed"
+          ],
+          "missing": [
+            "directional attack animation/audio",
+            "spatial AI hearing-based pursuit",
+            "Windows real-machine multi-PC LAN acceptance",
+            "model and original image archival"
+          ],
+          "source": [
+            "software/beckenburg/src/main/java/org/beckenburg/LanTelegraphedStrike.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanHost.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanWorldPanel.java"
+          ]
         }
       }
     },
@@ -1393,6 +1449,34 @@
             "software/beckenburg/src/main/java/org/beckenburg/LanApparition.java",
             "software/beckenburg/src/main/java/org/beckenburg/SceneRenderer.java",
             "software/beckenburg/src/main/java/org/beckenburg/LanHost.java"
+          ]
+        },
+        "alpha14_strike_windup": {
+          "status": "Implemented, locally tested on Java 17-targeting JDK 21; overall stage gates still incomplete",
+          "functionality": [
+            "Host locks one eligible spatial target and delays STRIKE harm for 8 simulation ticks (800 ms)",
+            "Hunters in ghost room receive THREAT warning and clear HUD wind-up",
+            "Impact revalidates original target's connected seat, world mode, current room, range and line of sight; no retargeting",
+            "Legacy room-only damage stays immediate; AI and human ghost paths share resolveGhostAction",
+            "Successful impact delivers one damage event; movement and closed-door evasion suppress harm without refunding ghost energy"
+          ],
+          "tests": [
+            "LanTelegraphedStrikeTest",
+            "LanTelegraphedStrikeIntegrationTest four actual sockets",
+            "LanTelegraphedHudTest Swing rendering",
+            "all 24 headless test groups passed",
+            "LanWorldGuiTest and LanGhostGuiTest under Xvfb passed"
+          ],
+          "missing": [
+            "directional attack animation/audio",
+            "spatial AI hearing-based pursuit",
+            "Windows real-machine multi-PC LAN acceptance",
+            "model and original image archival"
+          ],
+          "source": [
+            "software/beckenburg/src/main/java/org/beckenburg/LanTelegraphedStrike.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanHost.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanWorldPanel.java"
           ]
         }
       }

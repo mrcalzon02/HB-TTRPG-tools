@@ -25,6 +25,7 @@ public final class LanHost implements AutoCloseable {
     private volatile boolean closed;
     private boolean running,everStarted;
     private int tick;
+    private LanTelegraphedStrike.Pending pendingStrike;
     private final String bindAddress;
 
     public LanHost(String ip,int port)throws IOException {
@@ -185,8 +186,8 @@ public final class LanHost implements AutoCloseable {
                     GhostDomain.Resolution result=ghost.dispatch(new GhostDomain.Command(action,room,seq,GhostDomain.Source.HUMAN));
                     if(!result.applied())throw new IllegalArgumentException(result.reason());
                     reply(peer,"ACCEPT|GHOST|"+action+"|"+result.energy());
-                    distributeEffect(result);
                     ghostPose.syncRoom(ghost.room());
+                    resolveGhostAction(result);
                     if(peer.ghostWorldMode)reply(peer,ghostPose.frame(tick));
                     broadcastState();broadcastApparitions();broadcastProgress();finishIfComplete();
                 }
@@ -213,12 +214,45 @@ public final class LanHost implements AutoCloseable {
         return LanSpatialCombat.victims(map,world,ghostPose.pose(),hunterRooms,connected,spatial);
     }
     private void distributeEffect(GhostDomain.Resolution result){
+        distributeEffect(result,result.action()==GhostDomain.Action.STRIKE?strikeVictims():new boolean[]{true,true,true});
+    }
+    private void distributeEffect(GhostDomain.Resolution result,boolean[] affected){
         if(!result.applied())return;
-        boolean[] affected=result.action()==GhostDomain.Action.STRIKE?strikeVictims():new boolean[]{true,true,true};
         mission.applyGhostEffect(result.room(),hunterRooms,result,affected);
         if(result.fear()>0||result.harm()>0)
             for(int i=0;i<3;i++)if(seats[i]!=null&&affected[i]&&hunterRooms[i]==result.room())
                 reply(seats[i],"EFFECT|"+result.action()+"|"+result.fear()+"|"+result.harm());
+    }
+    /** AI and human origins both enter this exact damage/telegraph pipeline. */
+    private void resolveGhostAction(GhostDomain.Resolution result){
+        if(!result.applied())return;
+        if(result.action()!=GhostDomain.Action.STRIKE){distributeEffect(result);return;}
+        boolean[] acquired=strikeVictims(),immediate=new boolean[3];
+        int target=-1;
+        for(int i=0;i<3;i++)if(acquired[i]){
+            if(seats[i]!=null&&seats[i].worldMode)target=i;
+            else immediate[i]=true; // Preserve room-only clients' existing hit semantics.
+        }
+        if(LanSpatialCombat.any(immediate))distributeEffect(result,immediate);
+        if(target>=0){
+            pendingStrike=LanTelegraphedStrike.begin(tick,target,result);
+            for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==result.room())
+                reply(seats[i],"THREAT|START|"+LanTelegraphedStrike.WINDUP_TICKS+"|"+target);
+        }
+    }
+    private void resolvePendingStrike(){
+        LanTelegraphedStrike.Pending pending=pendingStrike;
+        if(pending==null||!pending.due(tick))return;
+        pendingStrike=null;
+        boolean[] connected=new boolean[3],spatial=new boolean[3];
+        for(int i=0;i<3;i++)if(seats[i]!=null){connected[i]=true;spatial[i]=seats[i].worldMode;}
+        boolean hit=pending.hits(map,world,ghostPose.pose(),hunterRooms,connected,spatial);
+        if(hit){
+            boolean[] one=new boolean[3];one[pending.targetSeat()]=true;
+            distributeEffect(pending.effect(),one);
+        }
+        for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==pending.room())
+            reply(seats[i],"THREAT|"+(hit?"HIT":"EVADED")+"|"+pending.targetSeat());
     }
     private void finishIfComplete(){
         if(mission.outcome()==LanCase.Outcome.ACTIVE)return;
@@ -236,9 +270,10 @@ public final class LanHost implements AutoCloseable {
                 // AI and human strikes use the same host-owned spatial reach gate.
                 if(choice.action()!=GhostDomain.Action.STRIKE||LanSpatialCombat.any(strikeVictims())){
                     GhostDomain.Resolution result=ghost.dispatch(choice);
-                    if(result.applied()){distributeEffect(result);ghostPose.syncRoom(ghost.room());broadcastApparitions();}
+                    if(result.applied()){ghostPose.syncRoom(ghost.room());resolveGhostAction(result);broadcastApparitions();}
                 }
             }}
+            resolvePendingStrike();
             mission.advance();
             if(tick%5==0){broadcastState();broadcastApparitions();broadcastProgress();broadcastWorld();
                 if(seats[3]!=null&&seats[3].ghostWorldMode)reply(seats[3],ghostPose.frame(tick));}

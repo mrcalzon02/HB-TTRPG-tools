@@ -102,7 +102,7 @@ public final class GhostDomain {
             case WHISPER -> fear = hearsHunter ? 2 : 0;
             case DISTURB -> fear = hearsHunter ? 1 : 0;
             case MANIFEST -> manifestUntil = tick + 49;
-            case STRIKE -> { harm = 12; fear = 6; manifestUntil = tick + 6; }
+            case STRIKE -> { harm = 12; fear = 6; manifestUntil = tick + 9; }
         }
         return new Resolution(true, "accepted", a, room, energy, fear, harm, manifested());
     }

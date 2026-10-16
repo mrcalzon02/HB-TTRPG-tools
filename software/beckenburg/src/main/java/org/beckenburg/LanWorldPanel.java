@@ -20,6 +20,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private int lastTurn=-1,tick,visibleGhost=-1,health=100,evidence;
     private SceneRenderer.Apparition apparition;
     private int apparitionWarningTick=-1;
+    private int threatUntilTick=-1;
+    private int threatTarget=-1;
+    private String threatOutcome="";
     private final MouseLook mouseLook;
     private LanCase.Tool selected=LanCase.Tool.EMF;
     private String caseResult="";
@@ -66,6 +69,18 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(p.size()==8&&p.get(0).equals("PROGRESS")){
                 health=LanProtocol.integer(p.get(1),0,100);
                 evidence=LanProtocol.integer(p.get(4),0,3);
+            }else if(p.get(0).equals("THREAT")){
+                if(p.size()==4&&p.get(1).equals("START")){
+                    int ticks=LanProtocol.integer(p.get(2),1,LanTelegraphedStrike.WINDUP_TICKS);
+                    threatTarget=LanProtocol.integer(p.get(3),0,2);
+                    threatUntilTick=tick+ticks;
+                    threatOutcome="";
+                }else if(p.size()==3&&(p.get(1).equals("EVADED")||p.get(1).equals("HIT"))){
+                    threatTarget=LanProtocol.integer(p.get(2),0,2);
+                    threatUntilTick=-1;
+                    threatOutcome=p.get(1).equals("HIT")?"SPECTRAL STRIKE CONNECTED":"STRIKE EVADED — KEEP MOVING";
+                    feedback=threatOutcome;
+                }else throw new IllegalArgumentException("invalid threat packet");
             }else if(frame.startsWith("RESULT|")){
                 caseResult=frame.substring(7);feedback="CASE CLOSED: "+caseResult;
                 keys.clear();
@@ -110,7 +125,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString("BECKENBURG / LAN HOUSE — HUNTER "+(seat+1),13,26);
             g.drawString(map.roomName(renderer.x,renderer.z)+" | TEAM "+peers.size()+" / 2 | HP "+health+" | CLUES "+evidence+"/3",13,46);
             g.drawString("+",getWidth()/2,h/2);
-            if(apparition!=null){
+            if(threatUntilTick>=tick && threatTarget>=0){
+                g.setColor(new Color(240,149,124));
+                int remaining=threatUntilTick-tick;
+                g.drawString("GHOST STRIKE WIND-UP — EVADE OR BREAK SIGHT"+(threatTarget==seat?" / TARGETED":"")+" ("+remaining+")",13,68);
+            }else if(apparition!=null){
                 g.setColor(new Color(228,158,177));
                 g.drawString("ENTITY MANIFESTED — KEEP DISTANCE / USE WARDS",13,68);
             }

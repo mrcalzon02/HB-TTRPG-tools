@@ -2,6 +2,12 @@
 
 **Status:** a local solo investigation vertical slice, **not the finished four-player game**. It expands the original Swing/software-3D renderer experiment with a fifteen-zone test house (twelve interior rooms and three exterior spaces), low-poly room props, an AI-driven Spirit ghost, working evidence tools and a complete case-resolution loop. All artwork here is procedural placeholder geometry; the user-approved full-resolution PNG concepts remain awaiting verified GitHub binary archival and model integration.
 
+## Alpha 1.4 — host-timed spectral attacks (development)
+
+In the shared first-person LAN house, a legal spatial ghost strike now **winds up for eight authoritative 100 ms ticks** before dealing damage. Hunters in the affected room receive `THREAT|START` and a visible **GHOST STRIKE WIND-UP** warning; moving out of two-meter range, breaking door line of sight, or changing rooms avoids the hit. The host locks the original target at initiation: impact never silently retargets another investigator. Successful contact yields one victim-only damage event; evasion yields no damage, but the original energy and cooldown still apply to the ghost. This is the same resolution path for AI and human-ghost commands. Older non-spatial room-mode sessions retain their prior behavior. See `LAN_TELEGRAPHED_STRIKES_008.md` and the new `LanTelegraphedStrikeTest` and four-socket `LanTelegraphedStrikeIntegrationTest`.
+
+**Remaining:** directional animation, supernatural audio and pursuit, online reconnect, authored assets, final balance, tested Windows LAN and installer; this is not Gold.
+
 ## Alpha 1.2 — spatial ghost strike targeting (development)
 
 In the LAN match, both AI and player ghosts use one host-side reach and sight test before a strike consumes energy. A 3D strike reaches up to **2 meters** through unobstructed space and damages only the nearest eligible 3D hunter; closed doors stop it. Hunter coordinates remain private from the ghost client. Room-only compatibility seats retain their older abstract encounter behavior. The host rejects out-of-reach attacks and consumes their network sequence numbers to prevent replay; `LanSpatialCombatTest` validates reach, sight and single-target damage. This is **not yet** cross-map pursuit, spatial ghost animations or a complete 3v1 balance pass. See `LAN_SPATIAL_COMBAT_006.md`.
@@ -139,4 +145,4 @@ The LAN host now broadcasts `APPARITION|VISIBLE|x_mm|z_mm|tick` only to a hunter
 
 The shared 3D hunter renderer displays the actual authorized ghost position, rather than the room center, with an on-screen **ENTITY MANIFESTED** warning. The AI ghost and the human ghost share the same authority. `LanApparitionTest`, `LanApparitionRenderTest` and the genuine four-socket `LanApparitionIntegrationTest` cover privacy, range, door occlusion, spatial drawing and despawn.
 
-This is not complete attack telegraphing, directional animation or finished 3v1 content. The warning accompanies manifestation; strikes still obey host-authoritative rules and cooldowns. Host/client do not yet support positional audio or interpolation of remote ghost movement. Physical Windows multi-machine testing and original image archival are still outstanding.
+Alpha 1.4 adds a timed attack telegraph and locked-target impact validation, but not directional attack animation or finished 3v1 content. The warning accompanies manifestation; strikes still obey host-authoritative rules and cooldowns. Host/client do not yet support positional audio or interpolation of remote ghost movement. Physical Windows multi-machine testing and original image archival are still outstanding.

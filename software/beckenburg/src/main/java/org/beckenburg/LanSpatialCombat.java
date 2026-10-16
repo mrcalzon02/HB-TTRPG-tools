@@ -22,16 +22,25 @@ public final class LanSpatialCombat {
             if(!connected[i]||hunterRooms[i]!=ghost.room())continue;
             if(!spatial[i]) { selected[i]=true; continue; } // Existing room-level compatibility.
             LanWorld.Body body=world.body(i);
-            if(body.room()!=ghost.room())continue;
+            if(!canStrike(map,world,ghost,i))continue;
             double dx=body.x()-ghost.x(), dz=body.z()-ghost.z();
             double d2=dx*dx+dz*dz;
-            if(d2>best||!lineOfSight(map,ghost.x(),ghost.z(),body.x(),body.z()))continue;
             if(closest<0||d2<best-1.0e-9){best=d2;closest=i;}
         }
         if(closest>=0)selected[closest]=true;
         return selected;
     }
     public static boolean any(boolean[] victims){for(boolean victim:victims)if(victim)return true;return false;}
+
+    /** Host-only recheck for a LOCKED seat; never retarget to a different hunter at impact. */
+    public static boolean canStrike(HouseMap map,LanWorld world,LanGhostSpatial.Pose ghost,int seat){
+        LanWorld.Body body=world.body(seat);
+        if(body.room()!=ghost.room())return false;
+        double dx=body.x()-ghost.x(), dz=body.z()-ghost.z();
+        double d2=dx*dx+dz*dz;
+        return Double.isFinite(d2)&&d2<=STRIKE_RANGE*STRIKE_RANGE
+                &&lineOfSight(map,ghost.x(),ghost.z(),body.x(),body.z());
+    }
 
     /** Check fixed geometry and closed doors with short ray samples; no client coordinates involved. */
     static boolean lineOfSight(HouseMap map,double x0,double z0,double x1,double z1) {
