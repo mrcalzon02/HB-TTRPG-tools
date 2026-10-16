@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "project": "The Beckenburg Project",
+  "status": "nine PNGs staged in Google Drive, not yet GitHub binary committed",
+  "locations": [
+    {
+      "id": "house",
+      "room_count": 12,
+      "source_drive_url": "https://drive.google.com/file/d/1XqxB1jdgJmYsFsM_6aRwqlr6TBM72i_P/view",
+      "expected_git_path": "assets/beckenburg/concept-art/v001/04-environments/house-environment-original.png",
+      "state": "Drive uploaded; GitHub PNG blob not verified"
+    },
+    {
+      "id": "mansion",
+      "room_count": 12,
+      "source_drive_url": "https://drive.google.com/file/d/1hY6YT9ssyjbVBSmsuttM-ZJUlCssep3R/view",
+      "expected_git_path": "assets/beckenburg/concept-art/v001/04-environments/mansion-environment-original.png",
+      "state": "Drive uploaded; GitHub PNG blob not verified"
+    },
+    {
+      "id": "prison",
+      "room_count": 12,
+      "source_drive_url": "https://drive.google.com/file/d/1-Su7BxaF23T_IK65hbl8AfXxkLoKyuzc/view",
+      "expected_git_path": "assets/beckenburg/concept-art/v001/04-environments/prison-environment-original.png",
+      "state": "Drive uploaded; GitHub PNG blob not verified"
+    },
+    {
+      "id": "asylum",
+      "room_count": 12,
+      "source_drive_url": "https://drive.google.com/file/d/1gU0SWlcEl99sRCrOEBEni2wCuqiBYPj2/view",
+      "expected_git_path": "assets/beckenburg/concept-art/v001/04-environments/asylum-environment-original.png",
+      "state": "Drive uploaded; GitHub PNG blob not verified"
+    },
+    {
+      "id": "school",
+      "room_count": 12,
+      "source_drive_url": "https://drive.google.com/file/d/1EInLKEdTZ3cJUNEve_a_SqH5LUms5ZPk/view",
+      "expected_git_path": "assets/beckenburg/concept-art/v001/04-environments/school-environment-original.png",
+      "state": "Drive uploaded; GitHub PNG blob not verified"
+    },
+    {
+      "id": "farmhouse",
+      "room_count": 12,
+      "source_drive_url": "https://drive.google.com/file/d/1qQ6QqW4ptMyBPFF8J8iu7CXaoWSvAmlS/view",
+      "expected_git_path": "assets/beckenburg/concept-art/v001/04-environments/farmhouse-environment-original.png",
+      "state": "Drive uploaded; GitHub PNG blob not verified"
+    },
+    {
+      "id": "academy",
+      "room_count": 12,
+      "source_drive_url": "https://drive.google.com/file/d/1_V1QLq_hy8SRB8kIpdLPj2AoF2pB5AmQ/view",
+      "expected_git_path": "assets/beckenburg/concept-art/v001/04-environments/academy-environment-original.png",
+      "state": "Drive uploaded; GitHub PNG blob not verified"
+    },
+    {
+      "id": "college",
+      "room_count": 12,
+      "source_drive_url": "https://drive.google.com/file/d/1pUrYz95-m-41sMP7vUMWW-lpyyxqTBjw/view",
+      "expected_git_path": "assets/beckenburg/concept-art/v001/04-environments/college-environment-original.png",
+      "state": "Drive uploaded; GitHub PNG blob not verified"
+    },
+    {
+      "id": "church",
+      "room_count": 12,
+      "source_drive_url": "https://drive.google.com/file/d/17rRI8lYsPox77s5EUl62JvgR0_JpBpkI/view",
+      "expected_git_path": "assets/beckenburg/concept-art/v001/04-environments/church-environment-original.png",
+      "state": "Drive uploaded; GitHub PNG blob not verified"
+    }
+  ]
+}
