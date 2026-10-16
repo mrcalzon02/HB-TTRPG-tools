@@ -18,6 +18,7 @@ public final class LanHost implements AutoCloseable {
     private final long[] hunterSequences={-1,-1,-1};
     private final HouseMap map=new HouseMap();
     private final GhostDomain ghost=new GhostDomain(map,4);
+    private final LanCase mission=new LanCase(4);
     private final GhostDomain.AiController ai=new GhostDomain.AiController(20261016L);
     private volatile boolean closed;
     private boolean running,everStarted;
@@ -85,19 +86,41 @@ public final class LanHost implements AutoCloseable {
                     if(running||everStarted)throw new IllegalArgumentException("fresh host required for another match");
                     for(int i=0;i<3;i++)if(seats[i]==null||!seats[i].ready)throw new IllegalArgumentException("three hunters must be ready");
                     if(seats[3]!=null&&!seats[3].ready)throw new IllegalArgumentException("ghost must be ready");
-                    running=true;everStarted=true;tick=0;notifyAllPeers("INFO|mission started with "+(seats[3]==null?"AI":"human")+" ghost");broadcastState();
+                    running=true;everStarted=true;tick=0;notifyAllPeers("INFO|mission started with "+(seats[3]==null?"AI":"human")+" ghost");broadcastState();broadcastProgress();
                 }
                 case "MOVE" -> {
                     if(!running||peer.slot==3||p.size()!=3)throw new IllegalArgumentException("hunter command unavailable");
                     int target=LanProtocol.integer(p.get(1),0,HouseMap.ROOM_COUNT-1);
                     long seq=LanProtocol.sequence(p.get(2));
-                    if(seq<=hunterSequences[peer.slot])throw new IllegalArgumentException("stale movement sequence");
-                    hunterSequences[peer.slot]=seq;
+                    acceptHunterSequence(peer,seq);
                     int at=hunterRooms[peer.slot];
                     if(target==at||Math.abs(target/HouseMap.COLS-at/HouseMap.COLS)+Math.abs(target%HouseMap.COLS-at%HouseMap.COLS)!=1)
                         throw new IllegalArgumentException("room not adjacent");
                     // Room-level topology proof only; physical door and body collision still need synced transform validation.
                     hunterRooms[peer.slot]=target;reply(peer,"ACCEPT|MOVE|"+target);broadcastState();
+                }
+                case "SCAN" -> {
+                    if(!running||peer.slot==3||p.size()!=3)throw new IllegalArgumentException("hunter action unavailable");
+                    LanCase.Tool tool=LanCase.Tool.valueOf(p.get(1));
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
+                    LanCase.Report result=mission.scan(peer.slot,tool,hunterRooms[peer.slot],ghost.room());
+                    answerHunter(peer,"SCAN",result);
+                    if(result.accepted()&&result.message().startsWith("CONFIRMED"))notifyHunters("EVIDENCE|"+tool+"|"+mission.evidenceCount());
+                    broadcastProgress();
+                }
+                case "WARD", "CLEANSE", "EXTRACT" -> {
+                    if(!running||peer.slot==3||p.size()!=2)throw new IllegalArgumentException("hunter action unavailable");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    int here=hunterRooms[peer.slot];
+                    LanCase.Report result=switch(p.get(0)){
+                        case "WARD" -> mission.ward(peer.slot,here);
+                        case "CLEANSE" -> mission.cleanse(peer.slot,here);
+                        case "EXTRACT" -> mission.extract(peer.slot,here);
+                        default -> throw new AssertionError();
+                    };
+                    answerHunter(peer,p.get(0),result);
+                    if(result.accepted()&&p.get(0).equals("CLEANSE"))notifyHunters("RITUAL|STARTED");
+                    broadcastProgress();finishIfComplete();
                 }
                 case "GHOST" -> {
                     if(!running||peer.slot!=3||p.size()!=4)throw new IllegalArgumentException("ghost seat required");
@@ -107,15 +130,34 @@ public final class LanHost implements AutoCloseable {
                     GhostDomain.Resolution result=ghost.dispatch(new GhostDomain.Command(action,room,seq,GhostDomain.Source.HUMAN));
                     if(!result.applied())throw new IllegalArgumentException(result.reason());
                     reply(peer,"ACCEPT|GHOST|"+action+"|"+result.energy());
-                    if(result.fear()>0||result.harm()>0){
-                        for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==result.room())
-                            reply(seats[i],"EFFECT|"+action+"|"+result.fear()+"|"+result.harm());
-                    }
-                    broadcastState();
+                    distributeEffect(result);
+                    broadcastState();broadcastProgress();finishIfComplete();
                 }
                 default -> throw new IllegalArgumentException("unknown command");
             }
         }catch(IllegalArgumentException ex){reply(peer,"REJECT|"+safeReason(ex.getMessage()));}
+    }
+    private void acceptHunterSequence(Peer peer,long sequence){
+        if(sequence<=hunterSequences[peer.slot])throw new IllegalArgumentException("stale hunter command sequence");
+        hunterSequences[peer.slot]=sequence;
+    }
+    private static void answerHunter(Peer peer,String action,LanCase.Report result){
+        reply(peer,(result.accepted()?"ACCEPT":"REJECT")+"|"+action+"|"+result.message());
+    }
+    private void notifyHunters(String event){for(int i=0;i<3;i++)if(seats[i]!=null)reply(seats[i],event);}
+    private void broadcastProgress(){for(int i=0;i<3;i++)if(seats[i]!=null)reply(seats[i],mission.privateState(i));}
+    private void distributeEffect(GhostDomain.Resolution result){
+        if(!result.applied())return;
+        mission.applyGhostEffect(result.room(),hunterRooms,result);
+        if(result.fear()>0||result.harm()>0)
+            for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==result.room())
+                reply(seats[i],"EFFECT|"+result.action()+"|"+result.fear()+"|"+result.harm());
+    }
+    private void finishIfComplete(){
+        if(mission.outcome()==LanCase.Outcome.ACTIVE)return;
+        running=false;
+        notifyAllPeers("RESULT|"+mission.outcome());
+        broadcastProgress();
     }
     private static String safeReason(String s){return s==null?"invalid command":s.replaceAll("[^A-Za-z0-9 ._-]","").substring(0,Math.min(85,s.replaceAll("[^A-Za-z0-9 ._-]","").length()));}
     private void tickSafely(){if(closed)return; synchronized(mutex){
@@ -124,13 +166,16 @@ public final class LanHost implements AutoCloseable {
             int audible=-1;for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==ghost.room()){audible=hunterRooms[i];break;}
             ghost.advance(tick,audible);
             if(seats[3]==null){GhostDomain.Command choice=ai.decide(ghost.observe());if(choice!=null){GhostDomain.Resolution result=ghost.dispatch(choice);
-                if(result.applied()&&(result.fear()>0||result.harm()>0))for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==result.room())reply(seats[i],"EFFECT|"+result.action()+"|"+result.fear()+"|"+result.harm());
+                if(result.applied())distributeEffect(result);
             }}
-            if(tick%5==0)broadcastState();
+            mission.advance();
+            if(tick%5==0){broadcastState();broadcastProgress();}
+            finishIfComplete();
         }catch(RuntimeException ex){running=false;notifyAllPeers("INFO|host simulation stopped");System.err.println("LAN tick failure: "+ex.getMessage());}
     }}
     private void broadcastState(){
         GhostDomain.Observation o=ghost.observe();
+        notifyHunters("TEAMMAP|"+hunterRooms[0]+"|"+hunterRooms[1]+"|"+hunterRooms[2]);
         for(int i=0;i<4;i++){
             Peer peer=seats[i];if(peer==null)continue;
             boolean isGhost=i==3;

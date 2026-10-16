@@ -670,6 +670,33 @@
             "no end-to-end evidence or ritual replication",
             "no reconnection, authoritative inventory or mission payout"
           ]
+        },
+        "alpha08_case": {
+          "state": "implemented and locally tested; P08 not_started pending full 3D networking and earlier gates",
+          "capabilities": [
+            "server-owned clue validation and 3-family team evidence",
+            "room-authoritative ward, fear/health and 45-tick cleansing",
+            "ghost DISTURB delay and shared win/retreat results",
+            "hunter-only team map and case progress; no ghost data leakage",
+            "shared anti-replay hunter sequences across MOVE, SCAN, WARD, CLEANSE, EXTRACT"
+          ],
+          "tests": [
+            "LanCaseTest",
+            "LanCaseIntegrationTest with 4 actual sockets",
+            "LanLobbyTest, LanProtocolTest, GhostDomainTest",
+            "LanWindowSmokeTest under Xvfb",
+            "clean ZIP extraction/rebuild"
+          ],
+          "missing": [
+            "synchronized 3D first-person transforms and doors",
+            "real Windows multi-PC LAN test",
+            "reconnect, session recovery and persistent team payouts",
+            "content roster and verified original-art gallery"
+          ],
+          "source": [
+            "software/beckenburg/src/main/java/org/beckenburg/LanCase.java",
+            "software/beckenburg/src/main/java/org/beckenburg/LanHost.java"
+          ]
         }
       }
     },
