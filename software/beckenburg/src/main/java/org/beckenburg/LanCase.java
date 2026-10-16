@@ -73,8 +73,13 @@ public final class LanCase {
         return new Report(true,"TEAM WITHDREW - haunting unresolved");
     }
     public void applyGhostEffect(int room,int[] hunterRooms,GhostDomain.Resolution effect) {
+        applyGhostEffect(room,hunterRooms,effect,new boolean[]{true,true,true});
+    }
+    /** Host may narrow an actual spatial strike to eligible seats; never trust a client mask. */
+    public void applyGhostEffect(int room,int[] hunterRooms,GhostDomain.Resolution effect,boolean[] affected) {
+        if(hunterRooms.length!=3||affected.length!=3)throw new IllegalArgumentException("three hunter seats required");
         if(outcome!=Outcome.ACTIVE||!effect.applied())return;
-        for(int i=0;i<3;i++)if(hunterRooms[i]==room && health[i]>0){
+        for(int i=0;i<3;i++)if(affected[i]&&hunterRooms[i]==room && health[i]>0){
             stress[i]=Math.min(100,stress[i]+effect.fear());
             if(effect.harm()>0)health[i]=Math.max(0,health[i]-Math.max(1,wardRoom==room?Math.min(4,effect.harm()):effect.harm()));
         }

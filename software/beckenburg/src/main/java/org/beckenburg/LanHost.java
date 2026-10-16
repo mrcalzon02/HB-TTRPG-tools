@@ -175,6 +175,13 @@ public final class LanHost implements AutoCloseable {
                     GhostDomain.Action action=GhostDomain.Action.valueOf(p.get(1));
                     int room=LanProtocol.integer(p.get(2),0,HouseMap.ROOM_COUNT-1);
                     long seq=LanProtocol.sequence(p.get(3));
+                    // Consume the input sequence even for out-of-reach attacks, preventing late replays.
+                    if(seq<=peer.lastGhostActionSequence)throw new IllegalArgumentException("stale ghost action sequence");
+                    peer.lastGhostActionSequence=seq;
+                    // Spatial reach is checked by the host BEFORE consuming the ability's energy.
+                    if(action==GhostDomain.Action.STRIKE && ghost.observe().legalActions().contains(action)
+                            && !LanSpatialCombat.any(strikeVictims()))
+                        throw new IllegalArgumentException("no hunter within striking reach");
                     GhostDomain.Resolution result=ghost.dispatch(new GhostDomain.Command(action,room,seq,GhostDomain.Source.HUMAN));
                     if(!result.applied())throw new IllegalArgumentException(result.reason());
                     reply(peer,"ACCEPT|GHOST|"+action+"|"+result.energy());
@@ -200,11 +207,17 @@ public final class LanHost implements AutoCloseable {
     }
     private void notifyHunters(String event){for(int i=0;i<3;i++)if(seats[i]!=null)reply(seats[i],event);}
     private void broadcastProgress(){for(int i=0;i<3;i++)if(seats[i]!=null)reply(seats[i],mission.privateState(i));}
+    private boolean[] strikeVictims(){
+        boolean[] connected=new boolean[3],spatial=new boolean[3];
+        for(int i=0;i<3;i++)if(seats[i]!=null){connected[i]=true;spatial[i]=seats[i].worldMode;}
+        return LanSpatialCombat.victims(map,world,ghostPose.pose(),hunterRooms,connected,spatial);
+    }
     private void distributeEffect(GhostDomain.Resolution result){
         if(!result.applied())return;
-        mission.applyGhostEffect(result.room(),hunterRooms,result);
+        boolean[] affected=result.action()==GhostDomain.Action.STRIKE?strikeVictims():new boolean[]{true,true,true};
+        mission.applyGhostEffect(result.room(),hunterRooms,result,affected);
         if(result.fear()>0||result.harm()>0)
-            for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==result.room())
+            for(int i=0;i<3;i++)if(seats[i]!=null&&affected[i]&&hunterRooms[i]==result.room())
                 reply(seats[i],"EFFECT|"+result.action()+"|"+result.fear()+"|"+result.harm());
     }
     private void finishIfComplete(){
@@ -219,8 +232,12 @@ public final class LanHost implements AutoCloseable {
         try{tick++;
             int audible=-1;for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==ghost.room()){audible=hunterRooms[i];break;}
             ghost.advance(tick,audible);
-            if(seats[3]==null){GhostDomain.Command choice=ai.decide(ghost.observe());if(choice!=null){GhostDomain.Resolution result=ghost.dispatch(choice);
-                if(result.applied()){distributeEffect(result);ghostPose.syncRoom(ghost.room());}
+            if(seats[3]==null){GhostDomain.Command choice=ai.decide(ghost.observe());if(choice!=null){
+                // AI and human strikes use the same host-owned spatial reach gate.
+                if(choice.action()!=GhostDomain.Action.STRIKE||LanSpatialCombat.any(strikeVictims())){
+                    GhostDomain.Resolution result=ghost.dispatch(choice);
+                    if(result.applied()){distributeEffect(result);ghostPose.syncRoom(ghost.room());}
+                }
             }}
             mission.advance();
             if(tick%5==0){broadcastState();broadcastProgress();broadcastWorld();
@@ -256,7 +273,7 @@ public final class LanHost implements AutoCloseable {
         clock.shutdownNow();workers.shutdownNow();
     }
     private static final class Peer{
-        final Socket socket;final Reader input;final Writer output;final int slot;final String name;boolean ready,worldMode,ghostWorldMode;long lastGhostPoseSequence=-1;
+        final Socket socket;final Reader input;final Writer output;final int slot;final String name;boolean ready,worldMode,ghostWorldMode;long lastGhostPoseSequence=-1,lastGhostActionSequence=-1;
         Peer(Socket s,Reader in,Writer out,int slot,String name){socket=s;input=in;output=out;this.slot=slot;this.name=name;}
     }
 }

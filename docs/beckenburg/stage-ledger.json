@@ -807,6 +807,28 @@
             "reconnect/sync resilience and mixed-mode UX need further verification"
           ],
           "documentation": "docs/beckenburg/network/LAN_GHOST_WORLD_IMPLEMENTATION_005.md"
+        },
+        "alpha12_spatial_strikes": {
+          "state": "implemented and locally tested; full stage gate remains not_started",
+          "features": [
+            "2m reach and host-only line-of-sight against door solids",
+            "nearest eligible 3D hunter takes incremental STRIKE injury; other 3D hunters unharmed",
+            "same preflight reach rule for AI and human ghosts without private client coordinates",
+            "room-level clients retain legacy compatibility",
+            "rejected out-of-reach attempts consume host command sequence but not ghost energy"
+          ],
+          "verification": [
+            "javac --release 17 full build and 19 headless test groups",
+            "LanSpatialCombatTest range, visibility, nearest target, injury masks and legacy protection",
+            "isolated four-socket LanLobbyTest and clean full-suite retry passed",
+            "previous Alpha 1.1 four-seat Xvfb ghost viewport smoke passed"
+          ],
+          "limits": [
+            "AI hearing-based pursuit is not yet spatially steered",
+            "no facing cone or attack animation; old room-mode fallback retained",
+            "Windows physical multi-machine LAN not verified"
+          ],
+          "documentation": "docs/beckenburg/network/LAN_SPATIAL_COMBAT_006.md"
         }
       }
     },
@@ -1295,7 +1317,31 @@
           "status": "not_started",
           "description": "Test fresh-player survivability, repeated attack loops, door traps and failure clarity."
         }
-      ]
+      ],
+      "preparatory_work": {
+        "alpha12_spatial_strikes": {
+          "state": "implemented and locally tested; full stage gate remains not_started",
+          "features": [
+            "2m reach and host-only line-of-sight against door solids",
+            "nearest eligible 3D hunter takes incremental STRIKE injury; other 3D hunters unharmed",
+            "same preflight reach rule for AI and human ghosts without private client coordinates",
+            "room-level clients retain legacy compatibility",
+            "rejected out-of-reach attempts consume host command sequence but not ghost energy"
+          ],
+          "verification": [
+            "javac --release 17 full build and 19 headless test groups",
+            "LanSpatialCombatTest range, visibility, nearest target, injury masks and legacy protection",
+            "isolated four-socket LanLobbyTest and clean full-suite retry passed",
+            "previous Alpha 1.1 four-seat Xvfb ghost viewport smoke passed"
+          ],
+          "limits": [
+            "AI hearing-based pursuit is not yet spatially steered",
+            "no facing cone or attack animation; old room-mode fallback retained",
+            "Windows physical multi-machine LAN not verified"
+          ],
+          "documentation": "docs/beckenburg/network/LAN_SPATIAL_COMBAT_006.md"
+        }
+      }
     },
     {
       "id": "P16",
