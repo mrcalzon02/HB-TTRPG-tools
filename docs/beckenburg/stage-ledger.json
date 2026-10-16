@@ -936,6 +936,30 @@
             "original PNG concept image gallery and engine integration"
           ],
           "docs": "docs/beckenburg/network/LAN_ACOUSTIC_SEARCH_010.md"
+        },
+        "alpha17_positional_audio": {
+          "state": "implemented source with green Linux build; full stage remains unfinished",
+          "features": [
+            "Host creates hunter-only SOUND packets for validated human/AI WHISPER, DISTURB, MANIFEST, STRIKE and manifested AI movement",
+            "Server projects 25-step quantized stereo panning and distance/material-attenuated volume; packets never include ghost coordinates",
+            "Bounded worker synthesizes five original 16kHz 16-bit stereo paranormal cues off Swing EDT without audio assets",
+            "Silent-device fallback and -Dbeckenburg.audio.mute=true preserve visual directional captions and game functionality",
+            "20-tick caption expiry and higher visual priority for physical strike windup"
+          ],
+          "checks": [
+            "sh build.sh compiled Java 17-targeted JAR; 32 PASS groups",
+            "LanSoundTest deterministic stereo PCM, left-right volume and source privacy",
+            "LanSoundIntegrationTest four true TCP clients, ghost-only projection and safe-van exclusion",
+            "LanSoundHudTest visible muted caption and expiry",
+            "LanWorldGuiTest and LanGhostGuiTest on Linux Xvfb",
+            "release ZIP integrity and clean extracted source compiler and focused audio tests"
+          ],
+          "limits": [
+            "actual physical Windows audio device and LAN multi-PC not tested",
+            "procedural effects are temporary; no authored audio library, surround or final spatial reverb",
+            "no implementation of 13 ghosts or completed original-art PNG gallery"
+          ],
+          "docs": "docs/beckenburg/network/LAN_POSITIONAL_AUDIO_011.md"
         }
       }
     },
@@ -2125,7 +2149,33 @@
           "status": "not_started",
           "description": "Profile 4-player simultaneous sound/effect scenarios against performance targets."
         }
-      ]
+      ],
+      "preparatory_work": {
+        "alpha17_positional_audio": {
+          "state": "implemented source with green Linux build; full stage remains unfinished",
+          "features": [
+            "Host creates hunter-only SOUND packets for validated human/AI WHISPER, DISTURB, MANIFEST, STRIKE and manifested AI movement",
+            "Server projects 25-step quantized stereo panning and distance/material-attenuated volume; packets never include ghost coordinates",
+            "Bounded worker synthesizes five original 16kHz 16-bit stereo paranormal cues off Swing EDT without audio assets",
+            "Silent-device fallback and -Dbeckenburg.audio.mute=true preserve visual directional captions and game functionality",
+            "20-tick caption expiry and higher visual priority for physical strike windup"
+          ],
+          "checks": [
+            "sh build.sh compiled Java 17-targeted JAR; 32 PASS groups",
+            "LanSoundTest deterministic stereo PCM, left-right volume and source privacy",
+            "LanSoundIntegrationTest four true TCP clients, ghost-only projection and safe-van exclusion",
+            "LanSoundHudTest visible muted caption and expiry",
+            "LanWorldGuiTest and LanGhostGuiTest on Linux Xvfb",
+            "release ZIP integrity and clean extracted source compiler and focused audio tests"
+          ],
+          "limits": [
+            "actual physical Windows audio device and LAN multi-PC not tested",
+            "procedural effects are temporary; no authored audio library, surround or final spatial reverb",
+            "no implementation of 13 ghosts or completed original-art PNG gallery"
+          ],
+          "docs": "docs/beckenburg/network/LAN_POSITIONAL_AUDIO_011.md"
+        }
+      }
     },
     {
       "id": "P25",
@@ -2183,7 +2233,33 @@
           "status": "not_started",
           "description": "Conduct user tests with first-time players and no outside instructions."
         }
-      ]
+      ],
+      "preparatory_work": {
+        "alpha17_positional_audio": {
+          "state": "implemented source with green Linux build; full stage remains unfinished",
+          "features": [
+            "Host creates hunter-only SOUND packets for validated human/AI WHISPER, DISTURB, MANIFEST, STRIKE and manifested AI movement",
+            "Server projects 25-step quantized stereo panning and distance/material-attenuated volume; packets never include ghost coordinates",
+            "Bounded worker synthesizes five original 16kHz 16-bit stereo paranormal cues off Swing EDT without audio assets",
+            "Silent-device fallback and -Dbeckenburg.audio.mute=true preserve visual directional captions and game functionality",
+            "20-tick caption expiry and higher visual priority for physical strike windup"
+          ],
+          "checks": [
+            "sh build.sh compiled Java 17-targeted JAR; 32 PASS groups",
+            "LanSoundTest deterministic stereo PCM, left-right volume and source privacy",
+            "LanSoundIntegrationTest four true TCP clients, ghost-only projection and safe-van exclusion",
+            "LanSoundHudTest visible muted caption and expiry",
+            "LanWorldGuiTest and LanGhostGuiTest on Linux Xvfb",
+            "release ZIP integrity and clean extracted source compiler and focused audio tests"
+          ],
+          "limits": [
+            "actual physical Windows audio device and LAN multi-PC not tested",
+            "procedural effects are temporary; no authored audio library, surround or final spatial reverb",
+            "no implementation of 13 ghosts or completed original-art PNG gallery"
+          ],
+          "docs": "docs/beckenburg/network/LAN_POSITIONAL_AUDIO_011.md"
+        }
+      }
     },
     {
       "id": "P26",

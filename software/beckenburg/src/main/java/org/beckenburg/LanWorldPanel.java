@@ -24,6 +24,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private int threatTarget=-1;
     private String threatOutcome="";
     private final MouseLook mouseLook;
+    private final LanAudio audio=new LanAudio();
+    private String soundCaption="";
+    private int soundUntilTick=-1;
     private LanCase.Tool selected=LanCase.Tool.EMF;
     private String caseResult="";
 
@@ -39,7 +42,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         addFocusListener(mouseLook);addFocusListener(this);
         timer=new javax.swing.Timer(110,e->frame());timer.start();
     }
-    public void close(){timer.stop();keys.clear();mouseLook.close();}
+    public void close(){timer.stop();keys.clear();mouseLook.close();audio.close();}
     public void onEvent(String frame){
         if(!SwingUtilities.isEventDispatchThread())throw new IllegalStateException("network view must update on EDT");
         try{
@@ -69,6 +72,12 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(p.size()==8&&p.get(0).equals("PROGRESS")){
                 health=LanProtocol.integer(p.get(1),0,100);
                 evidence=LanProtocol.integer(p.get(4),0,3);
+            }else if(p.get(0).equals("SOUND")){
+                LanSound.CueEvent cue=LanSound.decode(frame);
+                // Caption is an independent non-audio clue for deaf players/no sound device.
+                soundCaption=cue.cue().caption()+" / "+(cue.pan()< -25?"LEFT":cue.pan()>25?"RIGHT":"AHEAD");
+                soundUntilTick=cue.tick()+20;
+                audio.play(cue);
             }else if(p.get(0).equals("THREAT")){
                 if(p.size()==4&&p.get(1).equals("START")){
                     int ticks=LanProtocol.integer(p.get(2),1,LanTelegraphedStrike.WINDUP_TICKS);
@@ -96,6 +105,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     public int visiblePeers(){return peers.size();}
     public boolean seesApparition(){return apparition!=null;}
     public SceneRenderer.Apparition apparitionPose(){return apparition;}
+    public String activeSoundCaption(){return tick<=soundUntilTick?soundCaption:"";}
     private void frame(){
         if(!isDisplayable()||!caseResult.isEmpty()){repaint();return;}
         int right=(keys.contains(KeyEvent.VK_D)?1:0)-(keys.contains(KeyEvent.VK_A)?1:0);
@@ -132,6 +142,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(apparition!=null){
                 g.setColor(new Color(228,158,177));
                 g.drawString("ENTITY MANIFESTED — KEEP DISTANCE / USE WARDS",13,68);
+            }else if(!activeSoundCaption().isEmpty()){
+                g.setColor(new Color(204,188,231));
+                g.drawString("HEARD: "+activeSoundCaption(),13,68);
             }
             g.setColor(new Color(17,19,25));g.fillRect(0,h,getWidth(),getHeight()-h);
             g.setColor(new Color(216,215,202));

@@ -227,6 +227,15 @@ public final class LanHost implements AutoCloseable {
         for(int i=0;i<3;i++)if(seats[i]!=null){connected[i]=true;spatial[i]=seats[i].worldMode;}
         return LanSpatialCombat.victims(map,world,ghostPose.pose(),hunterRooms,connected,spatial);
     }
+    /** Hunter-only positional acoustic projection; never a ghost pose or private team feed. */
+    private void broadcastGhostSound(LanSound.Cue cue){
+        LanGhostSpatial.Pose pose=ghostPose.pose();
+        for(int i=0;i<3;i++){
+            if(seats[i]==null||!seats[i].worldMode)continue;
+            LanSound.CueEvent sound=LanSound.project(map,world.body(i),pose.room(),pose.x(),pose.z(),cue,tick);
+            if(sound!=null)reply(seats[i],sound.frame());
+        }
+    }
     private void distributeEffect(GhostDomain.Resolution result){
         distributeEffect(result,result.action()==GhostDomain.Action.STRIKE?strikeVictims():new boolean[]{true,true,true});
     }
@@ -240,6 +249,14 @@ public final class LanHost implements AutoCloseable {
     /** AI and human origins both enter this exact damage/telegraph pipeline. */
     private void resolveGhostAction(GhostDomain.Resolution result){
         if(!result.applied())return;
+        LanSound.Cue cue=switch(result.action()){
+            case WHISPER->LanSound.Cue.WHISPER;
+            case DISTURB->LanSound.Cue.DISTURB;
+            case MANIFEST->LanSound.Cue.MANIFEST;
+            case STRIKE->LanSound.Cue.STRIKE;
+            default->null;
+        };
+        if(cue!=null)broadcastGhostSound(cue);
         if(result.action()!=GhostDomain.Action.STRIKE){distributeEffect(result);return;}
         boolean[] acquired=strikeVictims(),immediate=new boolean[3];
         int target=-1;
@@ -282,7 +299,8 @@ public final class LanHost implements AutoCloseable {
             ghost.advance(tick,audible);
             if(seats[3]==null){GhostDomain.Observation seen=ghost.observe();
                 LanGhostPursuit.Impulse impulse=ai.approach(seen,ghostPose.pose());
-                if(impulse!=null){try{ghostPose.step(impulse.dx(),impulse.dz(),tick);broadcastApparitions();}
+                if(impulse!=null){try{ghostPose.step(impulse.dx(),impulse.dz(),tick);broadcastApparitions();
+                    if(ghost.manifested()&&tick%5==0)broadcastGhostSound(LanSound.Cue.FOOTFALL);}
                     catch(IllegalArgumentException blocked){ /* Same physical rejection as a human ghost. */ }}
                 GhostDomain.Command choice=ai.decide(seen,LanSpatialCombat.any(strikeVictims()));if(choice!=null){
                 // AI and human strikes use the same host-owned spatial reach gate.
