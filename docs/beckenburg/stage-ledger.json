@@ -911,6 +911,31 @@
             "software/beckenburg/src/main/java/org/beckenburg/LanHost.java",
             "software/beckenburg/src/test/java/org/beckenburg/LanGhostPursuitTest.java"
           ]
+        },
+        "alpha16_acoustic_architecture": {
+          "state": "implemented and locally verified; dependency-gated P08 and P11 stages remain not_started",
+          "code": [
+            "LanAcoustics: Dijkstra propagation across actual door thresholds with open/closed attenuation, stone cellar dampening and exterior wind",
+            "FOOTSTEP/DOOR/EQUIPMENT/RITUAL acoustic budgets, finite memory shortened by path attenuation",
+            "AI searches around expired 2-meter sound cell for 24 ticks with deterministic sequential waypoints; action routing still uses GhostDomain and LanGhostSpatial",
+            "human ghost STATE hears flag lasts only after authorized audible host event (12 ticks), never from raw quiet same-room presence",
+            "van ghost-safe room omitted; no private hunter positions, notebook or live path feed"
+          ],
+          "tests": [
+            "LanAcousticsTest",
+            "LanGhostSearchTest",
+            "LanGhostHearingIntegrationTest on four real TCP sockets",
+            "LanGhostPursuitTest backward compatibility",
+            "sh build.sh: 29 PASS lines, JAR packaging reached",
+            "LanWorldGuiTest and LanGhostGuiTest on Linux Xvfb"
+          ],
+          "missing": [
+            "Windows multi-PC on-device acceptance",
+            "actual positional sound playback and dense occlusion materials",
+            "all 13 ghost AI profiles, advanced path search and polished models",
+            "original PNG concept image gallery and engine integration"
+          ],
+          "docs": "docs/beckenburg/network/LAN_ACOUSTIC_SEARCH_010.md"
         }
       }
     },
@@ -1225,6 +1250,31 @@
             "software/beckenburg/src/main/java/org/beckenburg/LanHost.java",
             "software/beckenburg/src/test/java/org/beckenburg/LanGhostPursuitTest.java"
           ]
+        },
+        "alpha16_acoustic_architecture": {
+          "state": "implemented and locally verified; dependency-gated P08 and P11 stages remain not_started",
+          "code": [
+            "LanAcoustics: Dijkstra propagation across actual door thresholds with open/closed attenuation, stone cellar dampening and exterior wind",
+            "FOOTSTEP/DOOR/EQUIPMENT/RITUAL acoustic budgets, finite memory shortened by path attenuation",
+            "AI searches around expired 2-meter sound cell for 24 ticks with deterministic sequential waypoints; action routing still uses GhostDomain and LanGhostSpatial",
+            "human ghost STATE hears flag lasts only after authorized audible host event (12 ticks), never from raw quiet same-room presence",
+            "van ghost-safe room omitted; no private hunter positions, notebook or live path feed"
+          ],
+          "tests": [
+            "LanAcousticsTest",
+            "LanGhostSearchTest",
+            "LanGhostHearingIntegrationTest on four real TCP sockets",
+            "LanGhostPursuitTest backward compatibility",
+            "sh build.sh: 29 PASS lines, JAR packaging reached",
+            "LanWorldGuiTest and LanGhostGuiTest on Linux Xvfb"
+          ],
+          "missing": [
+            "Windows multi-PC on-device acceptance",
+            "actual positional sound playback and dense occlusion materials",
+            "all 13 ghost AI profiles, advanced path search and polished models",
+            "original PNG concept image gallery and engine integration"
+          ],
+          "docs": "docs/beckenburg/network/LAN_ACOUSTIC_SEARCH_010.md"
         }
       }
     },

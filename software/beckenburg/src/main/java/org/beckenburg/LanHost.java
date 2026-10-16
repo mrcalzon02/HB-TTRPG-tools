@@ -25,6 +25,7 @@ public final class LanHost implements AutoCloseable {
     private volatile boolean closed;
     private boolean running,everStarted;
     private int tick;
+    private int lastGhostSoundTick=-10000;
     private LanTelegraphedStrike.Pending pendingStrike;
     private final String bindAddress;
 
@@ -214,9 +215,10 @@ public final class LanHost implements AutoCloseable {
      * No sound event, inferred position, or target memory is ever sent to a ghost peer.
      */
     private void recordSound(int seat,LanGhostPursuit.Sound type){
-        if(seats[3]!=null)return; // The human ghost gets no internal AI sensory information.
         LanWorld.Body b=world.body(seat);
-        ai.heard(ghost.room(),hunterRooms[seat],b.x(),b.z(),type,tick);
+        if(LanAcoustics.audible(map,ghost.room(),hunterRooms[seat],type))lastGhostSoundTick=tick;
+        if(seats[3]==null) // AI memory is private, never sent to human ghost.
+            ai.heard(ghost.room(),hunterRooms[seat],b.x(),b.z(),type,tick);
     }
     private void notifyHunters(String event){for(int i=0;i<3;i++)if(seats[i]!=null)reply(seats[i],event);}
     private void broadcastProgress(){for(int i=0;i<3;i++)if(seats[i]!=null)reply(seats[i],mission.privateState(i));}
@@ -323,7 +325,7 @@ public final class LanHost implements AutoCloseable {
             boolean isGhost=i==3;
             int myRoom=isGhost?o.room():hunterRooms[i];
             int visible=isGhost?-1:(o.manifested()&&myRoom==o.room()?o.room():-1);
-            reply(peer,"STATE|"+tick+"|"+myRoom+"|"+visible+"|"+(isGhost?o.energy():-1)+"|"+(isGhost?o.legalActions().toString().replace(" ",""):("role:"+peer.slot))+"|"+(isGhost&&o.hearsHunter()?1:0));
+            reply(peer,"STATE|"+tick+"|"+myRoom+"|"+visible+"|"+(isGhost?o.energy():-1)+"|"+(isGhost?o.legalActions().toString().replace(" ",""):("role:"+peer.slot))+"|"+(isGhost&&tick-lastGhostSoundTick<12?1:0));
         }
     }
     private void broadcastLobby(){

@@ -10,16 +10,19 @@ import java.util.Random;
  * dispatcher and LanGhostSpatial step method remain the only ways to move/affect the world.
  */
 public final class LanGhostPursuit {
-    public enum Sound { FOOTSTEP(1, 25), DOOR(2, 55), EQUIPMENT(2, 55), RITUAL(3, 85);
-        final int rooms, lifetime;
-        Sound(int rooms, int lifetime) { this.rooms=rooms;this.lifetime=lifetime; }
+    public enum Sound { FOOTSTEP(1, 25), DOOR(4, 55), EQUIPMENT(4, 55), RITUAL(8, 85);
+        final int budget, lifetime;
+        Sound(int budget, int lifetime) { this.budget=budget;this.lifetime=lifetime; }
     }
     public record Echo(int room, double approximateX, double approximateZ, int heardTick,
                        int expiryTick, Sound source) { }
     public record Impulse(int dx, int dz) { }
+    /** Short search at the last audible location, with no future body updates. */
+    public record Search(int room, double approximateX, double approximateZ, int startedTick, int expiryTick) { }
     private final HouseMap map;
     private final Random random;
     private Echo memory;
+    private Search search;
     private long sequence;
 
     public LanGhostPursuit(HouseMap map, long seed) {
@@ -33,23 +36,31 @@ public final class LanGhostPursuit {
                 ||sourceRoom<0||sourceRoom>=HouseMap.EXTRACTION_ROOM
                 ||!Double.isFinite(x)||!Double.isFinite(z)||tick<0
                 ||map.roomAt(x,z)!=sourceRoom)return;
-        int hops=distance(ghostRoom,sourceRoom);
-        if(hops>kind.rooms)return;
-        // Far-away, quiet steps cannot give away a hunter behind several rooms.
-        int lifetime=kind.lifetime-hops*10;
+        int attenuation = LanAcoustics.cost(map,ghostRoom,sourceRoom);
+        if(attenuation > kind.budget)return;
+        // Doors, masonry and wind shorten each finite-lived acoustic clue.
+        int lifetime=kind.lifetime-attenuation*5;
         if(lifetime<=0)return;
         // Tile-centred estimate, not an exact hunter body position.
         double cx=2*Math.floor(x/2)+1,cz=2*Math.floor(z/2)+1;
         Echo candidate=new Echo(sourceRoom,cx,cz,tick,tick+lifetime,kind);
         if(memory==null || tick>=memory.expiryTick() || kind.ordinal()>=memory.source().ordinal()
-                || memory.heardTick()+10<tick) memory=candidate;
+                || memory.heardTick()+10<tick) { memory=candidate; search=null; }
     }
     /** Time-limited immutable ghost observation, not a feed of all hunter locations. */
     public Echo memory(int tick) {
-        if(memory!=null && tick>=memory.expiryTick()) memory=null;
+        if(memory!=null && tick>=memory.expiryTick()) {
+            // Searching uses the expired clue, not a live position subscription.
+            Echo ended=memory;
+            memory=null;
+            search=new Search(ended.room(),ended.approximateX(),ended.approximateZ(),
+                    ended.expiryTick(),ended.expiryTick()+24);
+        }
+        if(search!=null && tick>=search.expiryTick())search=null;
         return memory;
     }
-    public void forget(){memory=null;}
+    public Search search(int tick) { memory(tick);return search; }
+    public void forget(){memory=null;search=null;}
 
     /** Choose room actions from legal host observations and a finite memory of audible events. */
     public GhostDomain.Command decide(GhostDomain.Observation seen, boolean hasSpatialVictim) {
@@ -69,13 +80,20 @@ public final class LanGhostPursuit {
                 action=GhostDomain.Action.DRIFT;target=next;
             }
         }
+        // A fading sound buys only a brief local sweep. No post-expiry STRIKE or MANIFEST.
+        Search sweep=search(seen.tick());
+        if(action==null && sweep!=null && seen.room()!=sweep.room()
+                && legal.contains(GhostDomain.Action.DRIFT)) {
+            int next=route(seen.room(),sweep.room());
+            if(next>=0 && seen.exits().contains(next)){action=GhostDomain.Action.DRIFT;target=next;}
+        }
         if(action==null && seen.tick()%29==0 && legal.contains(GhostDomain.Action.WHISPER))
             action=GhostDomain.Action.WHISPER;
         if(action==null && seen.tick()%41==0 && legal.contains(GhostDomain.Action.DISTURB))
             action=GhostDomain.Action.DISTURB;
         // With no sound, patrol occasionally rather than knowing where the team is.
         if(action==null && seen.tick()%35==0 && legal.contains(GhostDomain.Action.DRIFT)
-                && !seen.exits().isEmpty() && memory(seen.tick())==null){
+                && !seen.exits().isEmpty() && memory(seen.tick())==null && search(seen.tick())==null){
             action=GhostDomain.Action.DRIFT;
             target=seen.exits().get(random.nextInt(seen.exits().size()));
         }
@@ -87,25 +105,21 @@ public final class LanGhostPursuit {
     public Impulse approach(GhostDomain.Observation seen, LanGhostSpatial.Pose pose) {
         if(seen==null||pose==null||seen.room()!=pose.room())return null;
         Echo e=memory(seen.tick());
-        if(e==null||e.room()!=pose.room())return null;
-        double dx=e.approximateX()-pose.x(), dz=e.approximateZ()-pose.z();
+        double tx,tz;
+        if(e!=null && e.room()==pose.room()) {tx=e.approximateX();tz=e.approximateZ();}
+        else {
+            Search sweep=search(seen.tick());
+            if(sweep==null||sweep.room()!=pose.room())return null;
+            int phase=((seen.tick()-sweep.startedTick())/6)%4;
+            // Search nearby positions, using only the stale 2m acoustic cell.
+            double[] ox={1.0,0,-1.0,0}, oz={0,1.0,0,-1.0};
+            tx=sweep.approximateX()+ox[phase];tz=sweep.approximateZ()+oz[phase];
+        }
+        double dx=tx-pose.x(), dz=tz-pose.z();
         if(Math.hypot(dx,dz)<.55)return null;
         // A direction, not a teleport or arbitrary speed.
         return new Impulse((int)Math.round(Math.max(-100,Math.min(100,dx*100))),
                 (int)Math.round(Math.max(-100,Math.min(100,dz*100))));
-    }
-    private int distance(int from,int to){
-        if(from==to)return 0;
-        boolean[] seen=new boolean[HouseMap.ROOM_COUNT];
-        ArrayDeque<int[]> todo=new ArrayDeque<>();todo.add(new int[]{from,0});seen[from]=true;
-        while(!todo.isEmpty()){
-            int[] at=todo.removeFirst();
-            for(int next:map.ghostExits(at[0]))if(!seen[next]){
-                if(next==to)return at[1]+1;
-                seen[next]=true;todo.addLast(new int[]{next,at[1]+1});
-            }
-        }
-        return Integer.MAX_VALUE;
     }
     private int route(int from,int to){
         if(from==to)return from;
