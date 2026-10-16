@@ -756,7 +756,31 @@
           "status": "not_started",
           "description": "Compare human-controlled recorded commands to same AI-dispatched commands in replay."
         }
-      ]
+      ],
+      "preparatory_work": {
+        "local_ghost_practice": {
+          "status": "implemented and tested; P10 remains not_started until dependency gates P08/P09 and actual 3v1",
+          "summary": "Second functional Swing mode uses GhostDomain.Source.HUMAN with same per-action authority as AI, filtered observations, spectral room travel, abilities, cooldowns and 2-strike training objective",
+          "tests": [
+            "GhostPracticeTest",
+            "GhostPracticeGuiTest under Linux xvfb",
+            "existing GameplaySmokeTest",
+            "existing GhostDomainTest parity",
+            "MaterialAtlasTest",
+            "TeamCalloutTest",
+            "VanStagingTest"
+          ],
+          "source_paths": [
+            "software/beckenburg/src/main/java/org/beckenburg/GhostPracticeSession.java",
+            "software/beckenburg/src/main/java/org/beckenburg/GhostPracticePanel.java"
+          ],
+          "restrictions": [
+            "Simulated one-hunter practice only",
+            "No real LAN client/server or 3v1 ghost seat",
+            "No native Windows installer or real Windows runtime acceptance"
+          ]
+        }
+      }
     },
     {
       "id": "P11",

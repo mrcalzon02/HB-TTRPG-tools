@@ -56,3 +56,38 @@ Detailed technical handoff: [Texture Implementation 001](TEXTURE_IMPLEMENTATION_
 `GhostDomain.java` introduces `Observation`, `Command`, `Resolution` and a single `dispatch` method for `DRIFT`, `WHISPER`, `DISTURB`, `MANIFEST`, `STRIKE`. The source label (AI/HUMAN) is attribution only, with no branch on controller origin; `GhostDomainTest` executes the same action sequences from both labels and compares every state transition. Ghost AI chooses commands from its own room, permitted exits, energy, cooldowns and **room-local audible hunter presence**, not arbitrary player coordinates, health, role or private journal. `InvestigationSession.tick()` uses this dispatcher for the existing Spirit encounter rather than mutating ghost state directly. This is a prerequisite for later P09/P10 3v1 functionality, **not evidence those stages are complete**.
 
 Detailed handoffs: [Shared Van Module](VAN_MODULE.md), [Alpha 0.5 Implementation](IMPLEMENTATION_SLICE.md).
+
+## Alpha 0.6 — Local human-ghost practice
+
+The **GHOST PRACTICE / LOCAL** button is a functional second game mode. It starts a
+spectral first-person camera in the 15-zone house and uses `GhostPracticeSession` as
+an in-process controller for the real `GhostDomain` host-style rules. Ghost movement
+is room-to-room phasing at this stage, not a full free-flying spectral rig. The
+practice hunter is an intentionally basic scripted trainee, not a playable hunter
+or one of three LAN participants. Two legal incremental strikes complete the
+practice objective; it does not award campaign currency or XP.
+
+| Ghost input | Action |
+| --- | --- |
+| `[`, `]` | Select adjacent spectral destination |
+| Space / Enter | Phase into selected adjacent room, subject to legal action rules |
+| `1`, `2` | Whisper / environmental disturbance |
+| `3`, `4` | Manifest / strike, subject to warning and cooldown rules |
+| Mouse drag / arrows | Orient spectral viewpoint |
+| Escape | Return to main menu and the original hunter mode |
+
+The ghost HUD exposes own room, current energy, legal actions, permitted exits,
+nearby *audible* hunter presence and match-state feedback. It does **not** reveal
+the trainee's unseen position, private evidence, health or equipment. Both the AI
+and manually controlled ghost use `GhostDomain.dispatch()`. `GhostPracticeTest`
+verifies accepted and rejected actions, first-hunt safety, cooldowns, state
+transition, information filtering and the nonlethal-first training objective.
+
+**Not implemented:** LAN, four-player real-time sessions, a human-controlled ghost
+in another player's mission, positional sound, independent hunter AI, thirteen
+playable ghost types and final animated character models. These are future stages.
+
+On a graphical Linux test display, `xvfb-run -a java -cp build/classes:build/test
+org.beckenburg.GhostPracticeGuiTest ghost-practice.png` verifies the second
+launcher mode, renders the actual viewport and checks Escape restores the original
+hunter control flow. It does **not** constitute Windows or multiplayer acceptance.
