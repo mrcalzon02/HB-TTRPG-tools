@@ -60,11 +60,12 @@ public final class InvestigationGame {
             "WASD move • Shift sprint • Arrow keys / left-drag look • F flashlight • E doors\n"+
             "1 EMF  •  2 Thermometer  •  3 Spirit Box  •  R scan\n"+
             "C defensive or ritual ward (2 per case)  •  B cleanse anchor\n"+
-            "J toggle evidence journal  •  M toggle floor plan  •  X extract at entry\n"+
+            "Hold Q, move mouse, release Q for contextual callouts and world pings.\n"+
+            "J toggle evidence journal  •  M toggle floor plan  •  X extract at van\n"+
             "Escape pauses and offers return to castle.\n\n"+
             "Search every room: readings strengthen near the Spirit's anchor.\n"+
             "Record three types of evidence, place a ward in the anchor room, cleanse,\n"+
-            "then return to the CELLAR entry to extract. You can retreat earlier.\n"+
+            "then return to VAN STAGING to extract. You can retreat earlier.\n"+
             "An AI Spirit can roam, manifest and inflict incremental damage.",
             "Field Manual",JOptionPane.INFORMATION_MESSAGE));
         quit.addActionListener(e->window.dispose());refreshAccount();
@@ -93,7 +94,14 @@ public final class InvestigationGame {
         private final InvestigationSession session;
         private final javax.swing.Timer timer;
         private InvestigationSession.Instrument selected=InvestigationSession.Instrument.EMF;
-        private boolean mapShown,journalShown,dragging,claimSaved;
+        private boolean mapShown,journalShown,dragging,claimSaved,wheelOpen;
+        private final TeamCallout.Board callouts=new TeamCallout.Board(map);
+        private double wheelDx,wheelDy;
+        private int wheelMouseX,wheelMouseY;
+        private TeamCallout.Ping lastPing;
+        private String vanNotice="";
+        private int vanNoticeExpires;
+        private boolean briefingShown;
         private int previousX,previousY,frameCount;
         private long last=System.nanoTime();
         private double accumulator;
@@ -104,15 +112,15 @@ public final class InvestigationGame {
             scene.draw(map,session,0);
             timer=new javax.swing.Timer(33,e->frame());timer.start();
         }
-        void close(){timer.stop();down.clear();}
+        void close(){timer.stop();down.clear();wheelOpen=false;}
         private void frame(){
             long now=System.nanoTime();double dt=Math.max(0,Math.min(.075,(now-last)/1e9));last=now;
-            double forward=(down.contains(KeyEvent.VK_W)?1:0)-(down.contains(KeyEvent.VK_S)?1:0);
-            double strafe=(down.contains(KeyEvent.VK_D)?1:0)-(down.contains(KeyEvent.VK_A)?1:0);
-            if(down.contains(KeyEvent.VK_LEFT))scene.yaw-=dt*1.8;
-            if(down.contains(KeyEvent.VK_RIGHT))scene.yaw+=dt*1.8;
-            if(down.contains(KeyEvent.VK_UP))scene.pitch=Math.min(1.05,scene.pitch+dt*.9);
-            if(down.contains(KeyEvent.VK_DOWN))scene.pitch=Math.max(-1.05,scene.pitch-dt*.9);
+            double forward=wheelOpen?0:(down.contains(KeyEvent.VK_W)?1:0)-(down.contains(KeyEvent.VK_S)?1:0);
+            double strafe=wheelOpen?0:(down.contains(KeyEvent.VK_D)?1:0)-(down.contains(KeyEvent.VK_A)?1:0);
+            if(!wheelOpen && down.contains(KeyEvent.VK_LEFT))scene.yaw-=dt*1.8;
+            if(!wheelOpen && down.contains(KeyEvent.VK_RIGHT))scene.yaw+=dt*1.8;
+            if(!wheelOpen && down.contains(KeyEvent.VK_UP))scene.pitch=Math.min(1.05,scene.pitch+dt*.9);
+            if(!wheelOpen && down.contains(KeyEvent.VK_DOWN))scene.pitch=Math.max(-1.05,scene.pitch-dt*.9);
             double length=Math.hypot(forward,strafe);
             if(length>0 && (session.outcome()==InvestigationSession.Outcome.ACTIVE || session.outcome()==InvestigationSession.Outcome.CLEANSED)){
                 forward/=length;strafe/=length;
@@ -137,7 +145,7 @@ public final class InvestigationGame {
             SwingUtilities.invokeLater(InvestigationGame.this::returnHome);
         }
         private void pause(){
-            timer.stop();down.clear();dragging=false;
+            timer.stop();down.clear();dragging=false;wheelOpen=false;briefingShown=false;
             Object[] choices={"Resume", "Retreat & return", "Controls"};
             int choice=JOptionPane.showOptionDialog(window,"Expedition paused", "Field Pause",
                 JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,choices,choices[0]);
@@ -147,17 +155,34 @@ public final class InvestigationGame {
                     JOptionPane.showMessageDialog(window,"Return to the entry marker to extract safely.","Not at extraction",JOptionPane.INFORMATION_MESSAGE);
                 }else{endCase("Expedition ended.");return;}
             }
-            if(choice==2) JOptionPane.showMessageDialog(window,"WASD / drag look • 1/2/3 gear • R scan • C ward • B ritual • E door • M map • J journal • X extract","Controls",JOptionPane.INFORMATION_MESSAGE);
+            if(choice==2) JOptionPane.showMessageDialog(window,"WASD / drag look • 1/2/3 gear • R scan • C ward • B ritual • E door • Q hold communication wheel • M map • J journal • X extract","Controls",JOptionPane.INFORMATION_MESSAGE);
             last=System.nanoTime();timer.start();requestFocusInWindow();
         }
         @Override public void keyPressed(KeyEvent e){
             int key=e.getKeyCode();if(down.contains(key))return;
-            if(key==KeyEvent.VK_ESCAPE){pause();return;}
+            if(key==KeyEvent.VK_ESCAPE){if(wheelOpen){wheelOpen=false;down.remove(KeyEvent.VK_Q);repaint();}else pause();return;}
+            if(key==KeyEvent.VK_Q){
+                wheelOpen=true;wheelDx=0;wheelDy=0;
+                wheelMouseX=getMousePosition()==null?getWidth()/2:getMousePosition().x;
+                wheelMouseY=getMousePosition()==null?getHeight()/2:getMousePosition().y;
+                down.add(key);repaint();return;
+            }
+            if(wheelOpen){ // Arrow keys also select callouts without a mouse.
+                if(key==KeyEvent.VK_LEFT)wheelDx=-75;
+                if(key==KeyEvent.VK_RIGHT)wheelDx=75;
+                if(key==KeyEvent.VK_UP)wheelDy=-75;
+                if(key==KeyEvent.VK_DOWN)wheelDy=75;
+                down.add(key);repaint();return;
+            }
             if(key==KeyEvent.VK_1)selected=InvestigationSession.Instrument.EMF;
             if(key==KeyEvent.VK_2)selected=InvestigationSession.Instrument.THERMOMETER;
             if(key==KeyEvent.VK_3)selected=InvestigationSession.Instrument.SPIRIT_BOX;
             if(key==KeyEvent.VK_F)scene.lamp=!scene.lamp;
-            if(key==KeyEvent.VK_E)map.toggleNearestDoor(scene.x,scene.z);
+            if(key==KeyEvent.VK_E){
+                VanStaging.Station service=map.van().stationAt(scene.x,scene.z);
+                if(service!=null)useVan(service);
+                else if(!map.toggleNearestDoor(scene.x,scene.z))showVanNotice("No usable door or van station nearby.");
+            }
             if(key==KeyEvent.VK_R)session.scan(selected,scene.x,scene.z);
             if(key==KeyEvent.VK_C)session.placeWard(scene.x,scene.z);
             if(key==KeyEvent.VK_B)session.cleanse(scene.x,scene.z);
@@ -166,20 +191,62 @@ public final class InvestigationGame {
             if(key==KeyEvent.VK_X && session.extract(scene.x,scene.z)) {timer.stop();endCase("Extraction processed.");return;}
             down.add(key);repaint();
         }
-        @Override public void keyReleased(KeyEvent e){down.remove(e.getKeyCode());}
+        private void showVanNotice(String text){vanNotice=text;vanNoticeExpires=session.ticks()+85;}
+        private void useVan(VanStaging.Station station){
+            switch(station){
+                case BRIEFING -> {
+                    briefingShown=!briefingShown;
+                    showVanNotice(briefingShown?"CASE BOARD OPEN — current role, objectives and progress":"Case board closed.");
+                }
+                case EQUIPMENT -> {
+                    var tools=InvestigationSession.Instrument.values();
+                    selected=tools[(selected.ordinal()+1)%tools.length];
+                    showVanNotice("EQUIPMENT RACK — equipped "+selected.name().replace('_',' '));
+                }
+                case RELAY -> {
+                    journalShown=!journalShown;
+                    showVanNotice("RADIO RELAY — "+session.evidenceCount()+" clues logged; "+callouts.visible(session.ticks()).size()+" active pings.");
+                }
+                case EXTRACTION -> {
+                    if(session.extract(scene.x,scene.z)){timer.stop();endCase("Van extraction confirmed.");}
+                    else showVanNotice("Move to the extraction marker inside the van.");
+                }
+            }
+        }
+        @Override public void keyReleased(KeyEvent e){
+            down.remove(e.getKeyCode());
+            if(e.getKeyCode()==KeyEvent.VK_Q && wheelOpen){
+                wheelOpen=false;
+                TeamCallout.Phrase choice=TeamCallout.choose(wheelDx,wheelDy);
+                if(choice!=null){
+                    double[] where=choice==TeamCallout.Phrase.HERE || choice==TeamCallout.Phrase.FOLLOW ||
+                        choice==TeamCallout.Phrase.HELP || choice==TeamCallout.Phrase.HOLD ?
+                        new double[]{scene.x,scene.z} : TeamCallout.aim(map,scene.x,scene.z,scene.yaw,12);
+                    lastPing=callouts.submit(new TeamCallout.Request(0,choice,scene.x,scene.z,where[0],where[1],session.ticks()));
+                }
+                repaint();
+            }
+        }
         @Override public void keyTyped(KeyEvent e){}
         @Override public void mousePressed(MouseEvent e){previousX=e.getX();previousY=e.getY();dragging=e.getButton()==MouseEvent.BUTTON1;requestFocusInWindow();}
         @Override public void mouseReleased(MouseEvent e){dragging=false;}
-        @Override public void mouseDragged(MouseEvent e){if(!dragging)return;
+        @Override public void mouseDragged(MouseEvent e){if(wheelOpen){wheelMotion(e);return;}if(!dragging)return;
             scene.yaw+=(e.getX()-previousX)*.004;
             scene.pitch=Math.max(-1.05,Math.min(1.05,scene.pitch-(e.getY()-previousY)*.004));
             previousX=e.getX();previousY=e.getY();}
-        @Override public void mouseMoved(MouseEvent e){}
+        private void wheelMotion(MouseEvent e){
+            int dx=e.getX()-wheelMouseX,dy=e.getY()-wheelMouseY;
+            wheelMouseX=e.getX();wheelMouseY=e.getY();
+            wheelDx=Math.max(-125,Math.min(125,wheelDx+dx));
+            wheelDy=Math.max(-125,Math.min(125,wheelDy+dy));
+            repaint();
+        }
+        @Override public void mouseMoved(MouseEvent e){if(wheelOpen)wheelMotion(e);}
         @Override public void mouseClicked(MouseEvent e){}
         @Override public void mouseEntered(MouseEvent e){}
         @Override public void mouseExited(MouseEvent e){dragging=false;}
         @Override public void focusGained(FocusEvent e){last=System.nanoTime();}
-        @Override public void focusLost(FocusEvent e){down.clear();dragging=false;}
+        @Override public void focusLost(FocusEvent e){down.clear();dragging=false;wheelOpen=false;}
         @Override protected void paintComponent(Graphics graphics){super.paintComponent(graphics);
             Graphics2D g=(Graphics2D)graphics.create();
             try{
@@ -199,7 +266,22 @@ public final class InvestigationGame {
                 String msg=session.message();
                 g.drawString(msg.length()>120?msg.substring(0,117)+"...":msg,16,stageH+45);
                 g.setColor(new Color(194,171,139));
-                g.drawString("WASD MOVE  DRAG LOOK  1/2/3 GEAR  R SCAN  C WARD  B RITUAL  E DOOR  M MAP  J JOURNAL  X EXTRACT  ESC",16,stageH+72);
+                g.drawString("WASD / DRAG LOOK    1/2/3 TOOLS    R SCAN    C WARD    B RITE    E DOOR    Q HOLD PING    M/J MAP/LOG    X EXIT",16,stageH+72);
+                if(lastPing!=null && callouts.visible(session.ticks()).contains(lastPing)){
+                    g.setColor(new Color(238,196,109));
+                    g.drawString("CALLOUT: "+lastPing.phrase().spoken+"   ["+map.roomName(lastPing.zone())+"]",16,stageH+88);
+                }
+                if(map.van().stationAt(scene.x,scene.z)!=null){
+                    VanStaging.Station service=map.van().stationAt(scene.x,scene.z);
+                    g.setColor(new Color(255,212,137));
+                    g.drawString("E  /  "+service.label,16,stageH-19);
+                }
+                if(vanNoticeExpires>session.ticks()){
+                    g.setColor(new Color(160,218,216));
+                    g.drawString(vanNotice.substring(0,Math.min(vanNotice.length(),94)),16,stageH-39);
+                }
+                if(briefingShown)drawBriefing(g);
+                if(wheelOpen) drawCalloutWheel(g,stageH);
                 if(mapShown)drawMap(g);
                 if(journalShown)drawJournal(g);
             }finally{g.dispose();}
@@ -207,19 +289,56 @@ public final class InvestigationGame {
         private void drawMap(Graphics2D g){
             int tile=12,ox=20,oy=77,bw=map.width()*tile,bh=map.height()*tile;
             g.setColor(new Color(15,18,26,239));g.fillRoundRect(ox-7,oy-24,bw+14,bh+37,8,8);
-            g.setColor(new Color(232,203,149));g.drawString("FIELD MAP / nine room zones",ox,oy-7);
+            g.setColor(new Color(232,203,149));g.drawString("FIELD MAP / 12 rooms + 3 exterior",ox,oy-7);
             for(int z=0;z<map.height();z++)for(int x=0;x<map.width();x++){
                 char cell=map.tile(x,z);
                 g.setColor(cell=='#'?new Color(105,105,119):cell=='D'?(map.doorOpen(x,z)?new Color(91,131,112):new Color(163,103,64)):new Color(49,56,64));
                 g.fillRect(ox+x*tile,oy+z*tile,tile-1,tile-1);
             }
             g.setColor(new Color(236,219,125));g.fillOval(ox+(int)(scene.x*tile)-5,oy+(int)(scene.z*tile)-5,10,10);
+            for(var ping:callouts.visible(session.ticks())){
+                g.setColor(new Color(245,172,84));
+                int px=ox+(int)(ping.x()*tile),pz=oy+(int)(ping.z()*tile);
+                g.drawOval(px-6,pz-6,12,12);g.drawLine(px-8,pz,px+8,pz);g.drawLine(px,pz-8,px,pz+8);
+            }
             g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,10));
-            for(int i=0;i<9;i++){
+            for(int i=0;i<map.roomCount();i++){
                 int col=i%3,row=i/3;
                 g.setColor(new Color(215,221,222));
-                String s=map.roomName(i);g.drawString(s.substring(0,Math.min(9,s.length())),ox+col*8*tile+14,oy+row*6*tile+29);
+                String s=map.roomName(i);g.drawString(s.substring(0,Math.min(9,s.length())),ox+col*8*tile+6,oy+row*6*tile+20);
             }
+        }
+        private void drawCalloutWheel(Graphics2D g,int stageH){
+            int cx=getWidth()/2,cy=stageH/2;
+            g.setColor(new Color(7,11,17,218));g.fillOval(cx-148,cy-148,296,296);
+            g.setColor(new Color(176,158,121));g.drawOval(cx-146,cy-146,292,292);
+            for(TeamCallout.Phrase phrase:TeamCallout.Phrase.values()){
+                double angle=switch(phrase){
+                    case THERE -> 0; case DANGER -> Math.PI/4; case HOLD -> Math.PI/2;
+                    case DONT_GO -> 3*Math.PI/4; case HERE -> Math.PI;
+                    case FOLLOW -> 5*Math.PI/4; case EVIDENCE -> 3*Math.PI/2;
+                    case HELP -> 7*Math.PI/4;
+                };
+                TeamCallout.Phrase chosen=TeamCallout.choose(wheelDx,wheelDy);
+                int tx=cx+(int)(Math.cos(angle)*108),ty=cy-(int)(Math.sin(angle)*108);
+                g.setColor(chosen==phrase?new Color(255,206,124):new Color(195,196,211));
+                g.setFont(new Font(Font.MONOSPACED,Font.BOLD,12));
+                FontMetrics fm=g.getFontMetrics();g.drawString(phrase.label,tx-fm.stringWidth(phrase.label)/2,ty+5);
+            }
+            g.setColor(new Color(233,212,172));g.drawString("RELEASE Q",cx-34,cy+3);
+            g.drawString("to call out",cx-38,cy+19);
+            g.setColor(new Color(244,179,102));
+            g.fillOval(cx+(int)wheelDx-5,cy+(int)wheelDy-5,10,10);
+        }
+        private void drawBriefing(Graphics2D g){
+            int width=440,x=Math.max(12,(getWidth()-width)/2),y=65;
+            g.setColor(new Color(14,19,26,238));g.fillRoundRect(x,y,width,140,8,8);
+            g.setColor(new Color(233,197,142));g.drawString("VAN / BECKENBURG FIELD BRIEFING",x+16,y+26);
+            g.setColor(new Color(210,216,225));
+            g.drawString("Role: "+session.role()+"  /  Threat: SPIRIT (test contract)",x+16,y+50);
+            g.drawString("Gather EMF, temperature and spirit-box readings.",x+16,y+74);
+            g.drawString("Ward the anchor; cleanse; return to this van.",x+16,y+96);
+            g.drawString("Evidence "+session.evidenceCount()+"/3    Wards "+session.wards()+"    Health "+session.health(),x+16,y+119);
         }
         private void drawJournal(Graphics2D g){
             int boxW=Math.min(490,getWidth()-50),x=getWidth()-boxW-18,y=70,boxH=Math.min(getHeight()-165,395);

@@ -318,7 +318,38 @@
           "status": "not_started",
           "description": "Run all role sizes and both hunter and spectral traversal through every zone."
         }
-      ]
+      ],
+      "preparatory_work": {
+        "house15": {
+          "status": "implemented source and local tests; full stage gate not yet met",
+          "committed_features": [
+            "12 indoor zones and 3 external zones; door and collision graph",
+            "Shared van module, 4 functional stations and extraction",
+            "Context callouts: 8 options, spatial ray LOS and cooldown",
+            "Scene renderer furniture adjustments"
+          ],
+          "local_tests": [
+            "sh build.sh Java 21 targeting --release 17",
+            "GameplaySmokeTest",
+            "GhostDomainTest",
+            "MaterialAtlasTest",
+            "TeamCalloutTest",
+            "VanStagingTest",
+            "GuiSmokeTest under Linux xvfb"
+          ],
+          "missing": [
+            "Windows on-device acceptance",
+            "Authored outdoor ground/zone collision integration across nine maps",
+            "Original concept images in GitHub and visible gallery",
+            "Complete 3v1 networking"
+          ],
+          "source_paths": [
+            "software/beckenburg/src/main/java/org/beckenburg/HouseMap.java",
+            "software/beckenburg/src/main/java/org/beckenburg/VanStaging.java",
+            "software/beckenburg/src/main/java/org/beckenburg/TeamCallout.java"
+          ]
+        }
+      }
     },
     {
       "id": "P04",

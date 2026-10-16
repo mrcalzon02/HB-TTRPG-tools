@@ -29,8 +29,8 @@ public final class InvestigationSession {
     public InvestigationSession(HouseMap map, Role role, long seed) {
         this.map=map; this.role=role; this.random=new Random(seed);
         this.wards=role==Role.CLERIC?3:2;
-        this.anchorRoom=1+random.nextInt(8);
-        this.ghost=new GhostDomain(anchorRoom);
+        this.anchorRoom=random.nextInt(map.interiorRoomCount());
+        this.ghost=new GhostDomain(map,anchorRoom);
         this.ghostAi=new GhostDomain.AiController(seed ^ 0x4245434b454eL);
         journal.add("Case 001 / Spirit-class disturbance. Three complementary readings required.");
         journal.add("All classes can finish the contract; specialist actions change efficiency.");
@@ -126,7 +126,9 @@ public final class InvestigationSession {
         return true;
     }
     public boolean extract(double x,double z) {
-        if(Math.hypot(x-4.5,z-15.5)>1.65) { log("Extraction point is in the CELLAR, by your entry mark.");return false; }
+        if(map.roomAt(x,z)!=HouseMap.EXTRACTION_ROOM ||
+                Math.hypot(x-map.centerX(HouseMap.EXTRACTION_ROOM),z-map.centerZ(HouseMap.EXTRACTION_ROOM))>1.65) {
+            log("Extraction is at the VAN STAGING area beyond the front porch.");return false; }
         if(outcome==Outcome.ACTIVE) { finish(Outcome.RETREATED);log("Team withdrew with partial evidence. The haunting remains."); }
         else if(outcome==Outcome.CLEANSED) log("Site secured. Beckenburg case closed.");
         return outcome!=Outcome.LOST;

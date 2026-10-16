@@ -10,16 +10,16 @@ public final class GameplaySmokeTest {
     private static void ok(boolean condition,String reason){if(!condition)throw new AssertionError(reason);}
     public static void main(String[] args) throws Exception {
         HouseMap map=new HouseMap();
-        ok(map.width()==25&&map.height()==19&&map.valid(),"valid nine-room map");
-        for(int r=0;r<9;r++)ok(map.roomAt(map.centerX(r),map.centerZ(r))==r,"zone "+r);
-        ok(map.traversable(4.5,15.5),"valid spawn");
+        ok(map.width()==25&&map.height()==31&&map.valid(),"valid fifteen-zone map");
+        for(int r=0;r<map.roomCount();r++)ok(map.roomAt(map.centerX(r),map.centerZ(r))==r,"zone "+r);
+        ok(map.traversable(20.5,27.5),"valid spawn");
         ok(!map.traversable(.3,.3),"no wall clipping");
-        ok(!map.traversable(8.5,15.5),"closed door blocks");
-        ok(map.toggleNearestDoor(7.5,15.5),"open door");
-        ok(map.traversable(8.5,15.5),"open door passable");
-        ok(map.toggleNearestDoor(7.5,15.5),"close door");
-        ok(!map.traversable(8.5,15.5),"door reclosed");
-        ok(!map.toggleNearestDoor(4.5,15.5),"distant door rejected");
+        ok(!map.traversable(16.5,21.5),"closed door blocks");
+        ok(map.toggleNearestDoor(15.5,21.5),"open door");
+        ok(map.traversable(16.5,21.5),"open door passable");
+        ok(map.toggleNearestDoor(15.5,21.5),"close door");
+        ok(!map.traversable(16.5,21.5),"door reclosed");
+        ok(!map.toggleNearestDoor(20.5,27.5),"distant door rejected");
         InvestigationSession spirit=new InvestigationSession(map,InvestigationSession.Role.OBSERVER,734L);
         SceneRenderer renderer=new SceneRenderer();
         renderer.draw(map,spirit,0);
@@ -29,7 +29,7 @@ public final class GameplaySmokeTest {
         ok(Arrays.stream(renderer.pixels()).distinct().count()>20,"alternate orientation and lamp renders");
         int ar=spirit.anchorRoom();double ax=map.centerX(ar),az=map.centerZ(ar);
         ok(!spirit.cleanse(ax,az),"cannot cleanse without evidence");
-        ok(!spirit.scan(InvestigationSession.Instrument.EMF,4.5,15.5)||ar==6,"remote baseline not guaranteed positive");
+        ok(!spirit.scan(InvestigationSession.Instrument.EMF,20.5,27.5)||ar==11,"remote baseline not guaranteed positive");
         for(InvestigationSession.Instrument i:InvestigationSession.Instrument.values())
             ok(spirit.scan(i,ax,az),"signature evidence for "+i);
         ok(spirit.evidenceCount()==3,"all evidence families recorded once");
@@ -38,7 +38,7 @@ public final class GameplaySmokeTest {
         ok(spirit.wards()==1&&spirit.wardPrepared(),"ward has material cost");
         ok(spirit.cleanse(ax,az),"cleansing succeeds at correct anchor");
         ok(spirit.outcome()==InvestigationSession.Outcome.CLEANSED,"complete state");
-        ok(spirit.extract(4.5,15.5),"cleansed case can extract");
+        ok(spirit.extract(20.5,27.5),"cleansed case can extract");
         ok(spirit.payout()>200,"cleanse compensation");
         Path temp=Files.createTempDirectory("beckenburg-profile-");
         try{
@@ -55,7 +55,7 @@ public final class GameplaySmokeTest {
         }finally{try(var files=Files.list(temp)){files.forEach(p->{try{Files.delete(p);}catch(IOException e){throw new RuntimeException(e);}});}Files.delete(temp);}
         for(var role:InvestigationSession.Role.values()){
             InvestigationSession game=new InvestigationSession(map,role,11);
-            for(int i=0;i<800;i++) game.tick(4.5,15.5);
+            for(int i=0;i<800;i++) game.tick(20.5,27.5);
             ok(game.health()>0,"spawn-zone not unfairly lethal for "+role);
             double gx=map.centerX(game.anchorRoom()), gz=map.centerZ(game.anchorRoom());
             for(var item:InvestigationSession.Instrument.values())ok(game.scan(item,gx,gz),"role can scan "+item);
@@ -70,6 +70,6 @@ public final class GameplaySmokeTest {
         for(int t=160;t<440;t++)encounter.tick(hx,hz);
         ok(encounter.health()<100,"AI-ghost shared dispatcher can inflict real incremental wounds");
         ok(encounter.health()>0,"hunter survives multiple initial encounters and may retreat");
-        System.out.println("PASS: nine zones, door/collision, 3D render/depth, instruments, wards, cleansing, extraction, economy save and all role baseline safety");
+        System.out.println("PASS: fifteen zones, door/collision, 3D render/depth, instruments, wards, cleansing, extraction, economy save and all role baseline safety");
     }
 }

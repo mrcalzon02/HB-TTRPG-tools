@@ -34,13 +34,16 @@ public final class GhostDomain {
     private static final int[] COST = { 2, 6, 8, 18, 30 };
     private static final int[] COOLDOWN = { 35, 22, 30, 78, 90 };
     private final int anchorRoom;
+    private final HouseMap map;
     private final int[] lastActionTick = new int[Action.values().length];
     private int room, tick, energy = 100, manifestUntil;
     private boolean hearsHunter;
     private long lastSequence = -1;
 
-    public GhostDomain(int anchorRoom) {
-        if (anchorRoom < 0 || anchorRoom > 8) throw new IllegalArgumentException("invalid anchor room");
+    public GhostDomain(int anchorRoom) { this(new HouseMap(), anchorRoom); }
+    public GhostDomain(HouseMap map, int anchorRoom) {
+        this.map=Objects.requireNonNull(map, "map");
+        if (anchorRoom < 0 || anchorRoom >= map.interiorRoomCount()) throw new IllegalArgumentException("invalid anchor room");
         this.anchorRoom = anchorRoom;
         this.room = anchorRoom;
         Arrays.fill(lastActionTick, -100000);
@@ -57,14 +60,8 @@ public final class GhostDomain {
         hearsHunter = hunterRoom >= 0 && hunterRoom == room;
         if (tick % 3 == 0) energy = Math.min(100, energy + 1);
     }
-    private static List<Integer> exits(int current) {
-        List<Integer> out = new ArrayList<>(4);
-        int row = current / 3, col = current % 3;
-        if (row > 0) out.add(current - 3);
-        if (row < 2) out.add(current + 3);
-        if (col > 0) out.add(current - 1);
-        if (col < 2) out.add(current + 1);
-        return List.copyOf(out);
+    private List<Integer> exits(int current) {
+        return map.ghostExits(current);
     }
     private boolean valid(Action a, int target) {
         if (energy < COST[a.ordinal()] || tick - lastActionTick[a.ordinal()] < COOLDOWN[a.ordinal()]) return false;

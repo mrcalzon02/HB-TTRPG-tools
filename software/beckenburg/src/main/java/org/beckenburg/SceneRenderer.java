@@ -18,7 +18,7 @@ public final class SceneRenderer {
     private final BufferedImage frame = new BufferedImage(W,H,BufferedImage.TYPE_INT_RGB);
     private final int[] pixels=((DataBufferInt)frame.getRaster().getDataBuffer()).getData();
     private final double[] depths=new double[W*H];
-    public double x=4.5,z=15.5,yaw=Math.PI/2,pitch=-.18;
+    public double x=20.5,z=27.5,yaw=1.65,pitch=-.09;
     public boolean lamp=true;
     public BufferedImage image(){return frame;}
     public int[] pixels(){return pixels;}
@@ -57,39 +57,98 @@ public final class SceneRenderer {
         double cx=map.centerX(room),cz=map.centerZ(room);
         // Props deliberately have actual 3D volumes and distinctive silhouettes.
         switch(room) {
-            case 0 -> { // chapel altar, candles and raised cross
-                box(out,cx-1,0,cz-1.5,2,.85,.8,0x564333);
-                box(out,cx-.85,.85,cz-1.38,1.7,.12,.55,0x987657);
-                box(out,cx-.07,1,cz-1.25,.14,.75,.12,0x9b855b);
-                box(out,cx-.39,1.49,cz-1.25,.8,.13,.12,0x9b855b);
-                box(out,cx-.73,1,cz-1.25,.12,.28,.12,0xd7ab62);
+            case 0 -> { // bathroom: bath basin, sink, mirror
+                box(out,cx-1.65,0,cz-1.45,2.2,.55,.85,0xb1a9a1);
+                box(out,cx-1.42,.55,cz-1.25,1.77,.09,.48,0x5b6d76);
+                box(out,cx+1.7,0,cz-.9,.6,.93,.6,0xa5a5a5);
+                box(out,cx+1.7,.92,cz-.9,.6,.10,.6,0xe2d4bc);
+                box(out,cx+1.71,1.2,cz-.86,.05,.68,.5,0x6d8b98);
             }
-            case 1 -> { box(out,cx-2.5,0,cz-1.8,.65,2.2,3.25,0x503c31);
-                box(out,cx-2.55,.7,cz-1.7,.7,.08,3.1,0x9a7351);
-                box(out,cx-2.55,1.4,cz-1.7,.7,.08,3.1,0x906846);
-                for(int i=0;i<8;i++)box(out,cx-2.35,.74,cz-1.55+i*.38,.35,.62,.25,i%2==0?0x774432:0x455466);
+            case 1 -> { // master bedroom: bed and chest
+                box(out,cx-1.7,0,cz-1.6,2.55,.53,1.65,0x594031);
+                box(out,cx-1.6,.54,cz-1.5,2.35,.16,1.48,0x8c7671);
+                box(out,cx-1.7,.66,cz-1.5,2.35,.42,.14,0x614336);
+                box(out,cx+1.65,0,cz+1.15,.75,1.5,.6,0x544437);
             }
             case 2 -> {box(out,cx-1.7,0,cz-1.7,2,.6,1.1,0x5b4140);
                 box(out,cx-1.65,.62,cz-1.66,1.9,.18,.96,0x82736b);
                 box(out,cx+1.6,0,cz+1.1,.6,1.25,.6,0x76593a);}
-            case 3 -> {box(out,cx-1.5,0,cz-1.5,3,1,.6,0x453733);
-                box(out,cx-1.3,1,cz-1.4,2.6,.06,.45,0x8f7762);
-                box(out,cx+.85,0,cz+1.1,.65,1.1,.55,0x695746);}
+            case 3 -> { // living room: couch and low coffee table
+                box(out,cx-1.75,0,cz-1.55,3.1,.55,.86,0x52413d);
+                box(out,cx-1.75,.52,cz-1.55,3.1,.59,.22,0x6b5351);
+                box(out,cx-.95,0,cz+1.0,1.75,.45,.8,0x694c38);
+                box(out,cx+1.9,0,cz-.8,.66,1.5,.55,0x4e463f);
+            }
             case 4 -> {box(out,cx-1.0,0,cz-1.25,2,.7,1.3,0x584333);
                 box(out,cx-1.02,.7,cz-1.25,2.05,.09,1.35,0x8e6247);
                 box(out,cx+.45,.79,cz-.8,.2,.27,.2,0xd3a865);}
-            case 5 -> {box(out,cx-1.9,0,cz-1.45,2.3,.5,1.75,0x594b4a);
-                box(out,cx-1.81,.51,cz-1.40,2.1,.19,1.58,0x646c77);
-                box(out,cx+1.8,0,cz-.8,.65,1.25,.9,0x4f433a);}
-            case 6 -> {box(out,cx+1.3,0,cz-.8,.8,1.3,.7,0x58483a);
-                box(out,cx-1.7,0,cz+1.0,1.1,1.1,.85,0x685b48);}
-            case 7 -> {box(out,cx-1.3,0,cz+.75,2.1,.8,1.2,0x535941);
-                box(out,cx-.7,.85,cz+1.2,.4,.7,.35,0x365d46);}
+            case 5 -> { // kitchen: counters, sink and stove
+                box(out,cx-2.5,0,cz-1.45,2.45,.95,.7,0x66615d);
+                box(out,cx-2.46,.96,cz-1.4,2.4,.1,.63,0xa7a09a);
+                box(out,cx+1.5,0,cz-.85,1.0,1.18,.7,0x454b51);
+                box(out,cx+1.6,1.18,cz-.79,.79,.05,.54,0xaaa59d);
+                box(out,cx+1.53,1.26,cz-.75,.08,.18,.08,0xc7bca0);
+            }
+            case 6 -> { // library: bookcases and reader's table
+                box(out,cx-2.45,0,cz-1.8,.55,2.15,3.2,0x614735);
+                for(int i=0;i<5;i++)box(out,cx-2.37,.38+i*.35,cz-1.69,.58,.08,2.97,0x936e4e);
+                box(out,cx-.2,0,cz+1.0,1.7,.82,.85,0x5e4938);
+            }
+            case 7 -> { // dining room: table and four seats
+                box(out,cx-1.1,0,cz-.7,2.15,.74,1.35,0x574337);
+                box(out,cx-1.15,.76,cz-.72,2.25,.09,1.41,0x97734e);
+                box(out,cx-1.3,0,cz-1.55,.76,.54,.52,0x68513b);
+                box(out,cx+.58,0,cz+1.14,.76,.54,.52,0x68513b);
+            }
             case 8 -> {box(out,cx-1.45,0,cz-1.1,2.4,.82,1.1,0x6a5140);
                 box(out,cx+1.7,0,cz-.85,.65,1.5,1.25,0x473d3b);
                 box(out,cx-1.2,.88,cz-.95,.63,.1,.53,0x8e7757);}
+            case 9 -> {box(out,cx-1.3,0,cz-.9,2,.75,1.1,0x4e3e36);box(out,cx+1.7,0,cz-1.6,.7,1.9,1.1,0x5d605d);}
+            case 10 -> {box(out,cx-1.5,0,cz-.9,1.8,.88,.65,0x70513c);box(out,cx+1.8,0,cz+.4,.8,1.6,.7,0x564c42);}
+            case 11 -> {box(out,cx-1.4,0,cz-1.5,1.2,1.8,.8,0x58615b);box(out,cx+1.7,0,cz+.8,1,.8,.9,0x5c4a39);}
+            case 12 -> { // rear garden: fence, garden bench and planting bed
+                box(out,cx-2,0,cz-1.5,.2,1.25,.2,0x554f3c);
+                box(out,cx+2,0,cz-1.5,.2,1.25,.2,0x554f3c);
+                box(out,cx-.8,0,cz+.8,1.6,.43,.35,0x6a5643);
+                box(out,cx+1.7,.01,cz+.3,.65,.16,1.2,0x59664d);
+            }
+            case 13 -> {box(out,cx+1.3,0,cz-1,.85,1,.85,0x64503e);}
+            case 14 -> { /* Full operational van is instanced once from VanStaging below. */ }
             default -> { }
         }
+    }
+    /** Standard van shell and service fixtures. Reused unchanged on every location. */
+    private static void vanBox(List<Face> faces,VanStaging van,
+            double lx,double y,double lz,double sx,double sy,double sz,int material){
+        // Translate all eight corners, preserving van yaw (including ninety-degree sites).
+        VanStaging.Position a=van.world(lx,lz),b=van.world(lx+sx,lz),
+            c=van.world(lx+sx,lz+sz),d=van.world(lx,lz+sz);
+        Point p0=new Point(a.x(),y,a.z()),p1=new Point(b.x(),y,b.z()),
+            p2=new Point(c.x(),y,c.z()),p3=new Point(d.x(),y,d.z());
+        Point p4=new Point(a.x(),y+sy,a.z()),p5=new Point(b.x(),y+sy,b.z()),
+            p6=new Point(c.x(),y+sy,c.z()),p7=new Point(d.x(),y+sy,d.z());
+        texturedQuad(faces,p0,p1,p5,p4,material,0,0,sx,0,sx,sy,0,sy,0xffffff);
+        texturedQuad(faces,p3,p0,p4,p7,material,0,0,sz,0,sz,sy,0,sy,0xd4d4d4);
+        texturedQuad(faces,p1,p2,p6,p5,material,0,0,sz,0,sz,sy,0,sy,0xf1f1f1);
+        texturedQuad(faces,p2,p3,p7,p6,material,0,0,sx,0,sx,sy,0,sy,0xdadada);
+        texturedQuad(faces,p4,p5,p6,p7,material,0,0,sx,0,sx,sz,0,sz,0xffffff);
+        texturedQuad(faces,p3,p2,p1,p0,material,0,0,sx,0,sx,sz,0,sz,0xbebebe);
+    }
+    private static void vanModel(List<Face> faces,VanStaging van){
+        double w=VanStaging.HALF_WIDTH,f=VanStaging.FRONT,r=VanStaging.REAR;
+        // Three obstructing wall segments surround a traversable open cargo entrance.
+        vanBox(faces,van,-w,0,f,.16,2.27,r-f,MaterialAtlas.IRON);
+        vanBox(faces,van,w-.16,0,f,.16,2.27,r-f,MaterialAtlas.IRON);
+        vanBox(faces,van,-w,0,r-.16,w*2,2.27,.16,MaterialAtlas.AGED_WOOD);
+        vanBox(faces,van,-w,2.27,f,w*2,.17,r-f,MaterialAtlas.IRON);
+        vanBox(faces,van,-w,.015,f,w*2,.04,r-f,MaterialAtlas.CONCRETE);
+        // Side-mounted lockers, distinct coloured monitor/briefing boards and ramps.
+        vanBox(faces,van,-1.90,.20,-1.25,.30,1.45,1.00,MaterialAtlas.AGED_WOOD);
+        vanBox(faces,van,1.60,.20,-1.25,.28,1.45,1.00,MaterialAtlas.IRON);
+        vanBox(faces,van,-1.90,.68,.28,.32,.95,1.0,MaterialAtlas.WINDOW);
+        vanBox(faces,van,1.55,.7,.28,.36,.9,.95,MaterialAtlas.RITUAL);
+        vanBox(faces,van,-.55,.10,r-.28,1.1,.5,.18,MaterialAtlas.AGED_WOOD);
+        vanBox(faces,van,-w+.1,.05,f-.3,w*2-.2,.08,.3,MaterialAtlas.IRON);
     }
     private List<Face> scene(HouseMap map,InvestigationSession session,double clock,boolean ward) {
         List<Face> out=new ArrayList<>(2000);
@@ -102,7 +161,7 @@ public final class SceneRenderer {
             int floor=MaterialAtlas.floor(n),wall=MaterialAtlas.wall(n);
             texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),
                 floor,xx,zz,xx+1,zz,xx+1,zz+1,xx,zz+1,0xffffff);
-            texturedQuad(out,new Point(xx,2.7,zz+1),new Point(xx+1,2.7,zz+1),new Point(xx+1,2.7,zz),new Point(xx,2.7,zz),
+            if(!map.outside(n))texturedQuad(out,new Point(xx,2.7,zz+1),new Point(xx+1,2.7,zz+1),new Point(xx+1,2.7,zz),new Point(xx,2.7,zz),
                 MaterialAtlas.CEILING,xx,zz+1,xx+1,zz+1,xx+1,zz,xx,zz,0xffffff);
             if(map.solid(xx-1,zz))texturedQuad(out,new Point(xx,0,zz+1),new Point(xx,0,zz),new Point(xx,2.7,zz),new Point(xx,2.7,zz+1),
                 wall,zz+1,0,zz,0,zz,2.7,zz+1,2.7,0xd0d0d0);
@@ -117,7 +176,8 @@ public final class SceneRenderer {
                 else texturedBox(out,xx+.08,0,zz+.23,.85,2.35,.54,MaterialAtlas.DOOR);
             }
         }
-        for(int r=0;r<9;r++) if(Math.hypot(map.centerX(r)-x,map.centerZ(r)-z)<14) furniture(out,r,map);
+        for(int r=0;r<map.roomCount();r++) if(Math.hypot(map.centerX(r)-x,map.centerZ(r)-z)<14) furniture(out,r,map);
+        if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14) vanModel(out,map.van());
         if(session.outcome()==InvestigationSession.Outcome.ACTIVE && session.ghostManifesting()){
             double gx=map.centerX(session.ghostRoom()), gz=map.centerZ(session.ghostRoom());
             double bob=.12*Math.sin(clock*3);

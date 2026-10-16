@@ -9,6 +9,8 @@ javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GameplaySmokeTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostDomainTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.MaterialAtlasTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.TeamCalloutTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.VanStagingTest
 if [ -f src/test/java/org/beckenburg/SmokeTest.java ]; then java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.SmokeTest; fi
 jar --create --file build/beckenburg-game.jar --main-class org.beckenburg.InvestigationGame -C build/classes org/beckenburg
 printf '%s\n' 'Built build/beckenburg-game.jar'

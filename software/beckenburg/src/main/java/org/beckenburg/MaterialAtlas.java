@@ -76,18 +76,21 @@ public final class MaterialAtlas {
         return out;
     }
     public static int floor(int room) { return switch(room) {
-        case 0,6 -> STONE;
-        case 1,4,8 -> PARQUET;
-        case 2,5 -> CARPET;
-        case 3,7 -> CERAMIC;
+        case 0,5 -> CERAMIC;
+        case 1,2,7 -> CARPET;
+        case 3,4,6,8,10 -> PARQUET;
+        case 9,11 -> CONCRETE;
+        case 12 -> FOLIAGE;
+        case 13 -> AGED_WOOD;
+        case 14 -> SOIL;
         default -> CONCRETE;
     }; }
     public static int wall(int room) { return switch(room) {
-        case 0 -> STONE;
-        case 1,4,5 -> WALLPAPER;
-        case 2,8 -> PLASTER;
-        case 3,7 -> CERAMIC;
-        case 6 -> BRICK;
+        case 0,5 -> CERAMIC;
+        case 1,2,3,4,7,8 -> WALLPAPER;
+        case 6,9 -> BRICK;
+        case 10,11 -> PLASTER;
+        case 12,13,14 -> AGED_WOOD;
         default -> PLASTER;
     }; }
 }
