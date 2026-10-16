@@ -2,6 +2,12 @@
 
 **Status:** a local solo investigation vertical slice, **not the finished four-player game**. It expands the original Swing/software-3D renderer experiment with a fifteen-zone test house (twelve interior rooms and three exterior spaces), low-poly room props, an AI-driven Spirit ghost, working evidence tools and a complete case-resolution loop. All artwork here is procedural placeholder geometry; the user-approved full-resolution PNG concepts remain awaiting verified GitHub binary archival and model integration.
 
+## Alpha 1.1 — first-person LAN ghost (development)
+
+Three hunters and one human ghost can now enter their own rendered first-person LAN views. When the host starts a match, click **Enter 3D World**. Hunters use physical server-controlled movement, doors, equipment and rituals. The fourth player uses a violet spectral 3D camera, `WASD` movement within the current ghost room and mouse-look (click once to capture). Use `[`/`]` to choose an adjacent room and `SPACE` to make a host-validated, energy-costed `DRIFT`. `1` whisper, `2` disturb, `3` manifest, `4` strike; `ESC` returns to the lobby. Ghost abilities retain AI parity via `GhostDomain` and reject illegal actions. See `LAN_GHOST_WORLD_IMPLEMENTATION_005.md`.
+
+**Limits:** Ghost pose is a view-only within-room camera, not positional attack authority; attacks, sensing and evidence still resolve at room level. The ghost never receives exact hunter positions or private evidence. This does not yet make the entire competitive 3v1 encounter spatial. Java 17 target; Windows real-machine build/install and multi-PC tests remain unverified.
+
 ## Run on Windows
 
 Install a **Java 17 or newer JDK** to build (`javac`, `java`, `jar` on PATH). From this directory run `build.cmd`, then `build.cmd run`; or run `java -jar build\beckenburg-game.jar` after building. Requires a graphical desktop. The produced JAR is a development build and **does not yet bundle a JRE, installer, code signature or tested Windows native GPU driver path**.

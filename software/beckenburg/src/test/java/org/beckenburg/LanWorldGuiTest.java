@@ -43,8 +43,8 @@ public final class LanWorldGuiTest {
                     return areas.stream().anyMatch(x->x.getText().contains("LOBBY|3|AI|3|WAITING"));
                 });}catch(Exception e){return false;}},"three ready seats");
                 onEdt(()->{LanWindowSmokeTest.button(frame,"Start Match").doClick();return null;});
-                until(()->{try{return onEdt(()->LanWindowSmokeTest.button(frame,"Enter 3D House").isEnabled());}catch(Exception e){return false;}},"mission start and 3D button");
-                onEdt(()->{LanWindowSmokeTest.button(frame,"Enter 3D House").doClick();return null;});
+                until(()->{try{return onEdt(()->LanWindowSmokeTest.button(frame,"Enter 3D World").isEnabled());}catch(Exception e){return false;}},"mission start and 3D button");
+                onEdt(()->{LanWindowSmokeTest.button(frame,"Enter 3D World").doClick();return null;});
                 until(()->{try{return onEdt(()->Arrays.stream(Window.getWindows()).anyMatch(w->w instanceof JFrame f&&f.isVisible()&&f.getContentPane() instanceof LanWorldPanel));}catch(Exception e){return false;}},"world viewport");
                 JFrame world=onEdt(()->Arrays.stream(Window.getWindows()).filter(w->w instanceof JFrame f&&f.isVisible()&&f.getContentPane() instanceof LanWorldPanel).map(w->(JFrame)w).findFirst().orElseThrow());
                 LanWorldPanel panel=(LanWorldPanel)world.getContentPane();

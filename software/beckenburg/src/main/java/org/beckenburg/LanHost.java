@@ -18,6 +18,7 @@ public final class LanHost implements AutoCloseable {
     private final long[] hunterSequences={-1,-1,-1};
     private final HouseMap map=new HouseMap();
     private final LanWorld world=new LanWorld(map);
+    private final LanGhostSpatial ghostPose=new LanGhostSpatial(map,4);
     private final GhostDomain ghost=new GhostDomain(map,4);
     private final LanCase mission=new LanCase(4);
     private final GhostDomain.AiController ai=new GhostDomain.AiController(20261016L);
@@ -94,6 +95,26 @@ public final class LanHost implements AutoCloseable {
                     peer.worldMode=true;
                     reply(peer,"ACCEPT|VIEW3D");broadcastWorld();
                 }
+                case "GVIEW3D" -> {
+                    if(!running||peer.slot!=3||p.size()!=1)throw new IllegalArgumentException("ghost view requires active ghost seat");
+                    peer.ghostWorldMode=true;
+                    reply(peer,"ACCEPT|GVIEW3D");reply(peer,ghostPose.frame(tick));broadcastState();
+                }
+                case "GSTEP" -> {
+                    if(!running||peer.slot!=3||!peer.ghostWorldMode||p.size()!=4)
+                        throw new IllegalArgumentException("spectral movement requires ghost view");
+                    int dx=LanProtocol.integer(p.get(1),-100,100),dz=LanProtocol.integer(p.get(2),-100,100);
+                    acceptGhostPoseSequence(peer,LanProtocol.sequence(p.get(3)));
+                    ghostPose.step(dx,dz,tick);
+                    reply(peer,"ACCEPT|GSTEP");reply(peer,ghostPose.frame(tick));
+                }
+                case "GTURN" -> {
+                    if(!running||peer.slot!=3||!peer.ghostWorldMode||p.size()!=3)
+                        throw new IllegalArgumentException("spectral heading requires ghost view");
+                    int heading=LanProtocol.integer(p.get(1),0,359);
+                    acceptGhostPoseSequence(peer,LanProtocol.sequence(p.get(2)));
+                    ghostPose.turn(heading);reply(peer,ghostPose.frame(tick));
+                }
                 case "STEP" -> {
                     if(!running||peer.slot==3||!peer.worldMode||p.size()!=4)throw new IllegalArgumentException("3D movement unavailable");
                     int dx=LanProtocol.integer(p.get(1),-100,100),dz=LanProtocol.integer(p.get(2),-100,100);
@@ -158,11 +179,17 @@ public final class LanHost implements AutoCloseable {
                     if(!result.applied())throw new IllegalArgumentException(result.reason());
                     reply(peer,"ACCEPT|GHOST|"+action+"|"+result.energy());
                     distributeEffect(result);
+                    ghostPose.syncRoom(ghost.room());
+                    if(peer.ghostWorldMode)reply(peer,ghostPose.frame(tick));
                     broadcastState();broadcastProgress();finishIfComplete();
                 }
                 default -> throw new IllegalArgumentException("unknown command");
             }
         }catch(IllegalArgumentException ex){reply(peer,"REJECT|"+safeReason(ex.getMessage()));}
+    }
+    private void acceptGhostPoseSequence(Peer peer,long sequence){
+        if(sequence<=peer.lastGhostPoseSequence)throw new IllegalArgumentException("stale spectral command sequence");
+        peer.lastGhostPoseSequence=sequence;
     }
     private void acceptHunterSequence(Peer peer,long sequence){
         if(sequence<=hunterSequences[peer.slot])throw new IllegalArgumentException("stale hunter command sequence");
@@ -193,10 +220,11 @@ public final class LanHost implements AutoCloseable {
             int audible=-1;for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==ghost.room()){audible=hunterRooms[i];break;}
             ghost.advance(tick,audible);
             if(seats[3]==null){GhostDomain.Command choice=ai.decide(ghost.observe());if(choice!=null){GhostDomain.Resolution result=ghost.dispatch(choice);
-                if(result.applied())distributeEffect(result);
+                if(result.applied()){distributeEffect(result);ghostPose.syncRoom(ghost.room());}
             }}
             mission.advance();
-            if(tick%5==0){broadcastState();broadcastProgress();broadcastWorld();}
+            if(tick%5==0){broadcastState();broadcastProgress();broadcastWorld();
+                if(seats[3]!=null&&seats[3].ghostWorldMode)reply(seats[3],ghostPose.frame(tick));}
             finishIfComplete();
         }catch(RuntimeException ex){running=false;notifyAllPeers("INFO|host simulation stopped");System.err.println("LAN tick failure: "+ex.getMessage());}
     }}
@@ -228,7 +256,7 @@ public final class LanHost implements AutoCloseable {
         clock.shutdownNow();workers.shutdownNow();
     }
     private static final class Peer{
-        final Socket socket;final Reader input;final Writer output;final int slot;final String name;boolean ready,worldMode;
+        final Socket socket;final Reader input;final Writer output;final int slot;final String name;boolean ready,worldMode,ghostWorldMode;long lastGhostPoseSequence=-1;
         Peer(Socket s,Reader in,Writer out,int slot,String name){socket=s;input=in;output=out;this.slot=slot;this.name=name;}
     }
 }

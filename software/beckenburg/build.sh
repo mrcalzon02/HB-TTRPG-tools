@@ -6,6 +6,8 @@ rm -rf build/classes build/test
 mkdir -p build/classes build/test
 javac --release 17 -encoding UTF-8 -d build/classes src/main/java/org/beckenburg/*.java
 javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java/org/beckenburg/*.java
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostSpatialTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.MouseLookTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanWorldControlsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GameplaySmokeTest

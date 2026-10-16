@@ -780,6 +780,33 @@
             "in-scene player-ghost 3D controls, full 3v1",
             "finished graphics models and original art gallery"
           ]
+        },
+        "alpha11_spatial_lan_ghost": {
+          "status": "implemented, locally validated; production stage remains not_started until all prerequisites and spatial combat evidence pass",
+          "capabilities": [
+            "real fourth-seat ghost LAN first-person panel opened through lobby",
+            "host-owned GPOSE spatial ghost camera, bounded one-per-tick within-room movement and heading",
+            "all room transitions via GhostDomain.DRIFT; MANIFEST and STRIKE retain AI/human command parity",
+            "room-bound ghost positions/energy and legal-actions HUD, mouse capture, keyboard powers and rejection feedback",
+            "same monotonic LanClient command sequencing across lobby and in-world input",
+            "no hunter body/door/team map/private evidence frames sent to ghost"
+          ],
+          "tests": [
+            "LanGhostSpatialTest",
+            "LanGhostIntegrationTest (4 sockets, spoof/replay/privacy)",
+            "LanGhostGuiTest under Linux Xvfb",
+            "LanWorldGuiTest hunter view under Linux Xvfb",
+            "entire Java --release 17 headless build suite",
+            "clean source ZIP extracted/rebuilt"
+          ],
+          "known_gaps": [
+            "ghost damage, hunt acquisition and manifestations are still room-targeted rather than 3D line-of-sight hit validated",
+            "no production 13-ghost data contracts in LAN",
+            "no Windows hardware/multi-PC acceptance",
+            "no reconciled full-resolution concept gallery and production models",
+            "reconnect/sync resilience and mixed-mode UX need further verification"
+          ],
+          "documentation": "docs/beckenburg/network/LAN_GHOST_WORLD_IMPLEMENTATION_005.md"
         }
       }
     },
@@ -954,6 +981,33 @@
             "in-scene player-ghost 3D controls, full 3v1",
             "finished graphics models and original art gallery"
           ]
+        },
+        "alpha11_spatial_lan_ghost": {
+          "status": "implemented, locally validated; production stage remains not_started until all prerequisites and spatial combat evidence pass",
+          "capabilities": [
+            "real fourth-seat ghost LAN first-person panel opened through lobby",
+            "host-owned GPOSE spatial ghost camera, bounded one-per-tick within-room movement and heading",
+            "all room transitions via GhostDomain.DRIFT; MANIFEST and STRIKE retain AI/human command parity",
+            "room-bound ghost positions/energy and legal-actions HUD, mouse capture, keyboard powers and rejection feedback",
+            "same monotonic LanClient command sequencing across lobby and in-world input",
+            "no hunter body/door/team map/private evidence frames sent to ghost"
+          ],
+          "tests": [
+            "LanGhostSpatialTest",
+            "LanGhostIntegrationTest (4 sockets, spoof/replay/privacy)",
+            "LanGhostGuiTest under Linux Xvfb",
+            "LanWorldGuiTest hunter view under Linux Xvfb",
+            "entire Java --release 17 headless build suite",
+            "clean source ZIP extracted/rebuilt"
+          ],
+          "known_gaps": [
+            "ghost damage, hunt acquisition and manifestations are still room-targeted rather than 3D line-of-sight hit validated",
+            "no production 13-ghost data contracts in LAN",
+            "no Windows hardware/multi-PC acceptance",
+            "no reconciled full-resolution concept gallery and production models",
+            "reconnect/sync resilience and mixed-mode UX need further verification"
+          ],
+          "documentation": "docs/beckenburg/network/LAN_GHOST_WORLD_IMPLEMENTATION_005.md"
         }
       }
     },
