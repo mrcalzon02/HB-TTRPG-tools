@@ -1,5 +1,5 @@
 # The Beckenburg Project — Generated Artwork Inventory & Remote Archival Gate
-Updated: 2026-10-15. **CURRENT STATE: full-resolution PNGs verified in a separate source archive, but NOT uploaded/committed to GitHub as image blobs.** This status must remain explicit until a GitHub remote tree read confirms all ten original images and their SHA-256 hashes.
+Updated: 2026-10-16. **ARCHIVED:** all ten original full-resolution baseline concept PNGs have been committed as GitHub binary image blobs and exposed on the project website. The three additional hunter alternative-model PNG boards are now separately archived under `assets/beckenburg/concept-art/v001/01-hunters/variants/` with checksums and original Drive copies.
 
 ## Artistic authority
 The **first concept ensemble** (listed first below) is the user's selected style baseline. The second alternate ensemble is superseded as a reference; retain it for historical comparison, not as a visual mandate. The binding hard style guide is [VISUAL_DIRECTION.md](../../../software/beckenburg/art/VISUAL_DIRECTION.md): early-to-mid original PlayStation era, faceted low-poly 3D models, compact 64–128px diffuse atlases, muted textured grit, near-fog, low lighting complexity, functional compact UI. Concepts can be highly polished illustrations while *production models* stay in the listed triangle/texture budgets. Do not silently reinterpret them as high-poly meshes.
@@ -29,8 +29,8 @@ The canonical asset path is `assets/beckenburg/concept-art/v001/`. Preserve orig
 4. Read back main HEAD and every new binary Git blob. Verify path presence and byte hashes. Only then change status from **pending original-image archival** to **archived/verified**, insert working image thumbnails in the project page, and report the commit SHA.
 5. Record artwork's visual acceptance (approved first ensemble; other character/ghost boards remain concept references pending modeling), authorship/provenance, and the absence of production models. Do not confuse art-source archival with functioning game asset integration.
 
-### Transport constraint observed on 2026-10-15
-The connected GitHub file/commit methods accept text or Base64 strings for blobs, but do not accept a local binary file reference. The local execution sandbox has no authenticated git push transport. This is **not** a successful archive; it is a documented upload blocker. A locally verified package with an import-and-verify script is available in the associated conversation output; it must still be pushed to GitHub before this gate passes.
+### Historical transport limitation, resolved by Drive-to-GitHub blob transfer
+The connected GitHub file/commit methods accept text or Base64 strings for blobs, but do not accept a local binary file reference. The local execution sandbox has no authenticated git push transport. This restriction was subsequently resolved by obtaining original raw PNG bytes through the connected Drive file bridge, creating real GitHub binary blobs, writing a Git tree and commit, and verifying the remote branch. Keep this paragraph as historical diagnostic evidence, not current status.
 
 ## Production art handoff
 - Hunter sheets completed as *concepts*: Cleric, Observer, Demonologist (3/3 baseline profiles). Model/rig/UV/in-game validation: pending for all.

@@ -1,0 +1,60 @@
+{
+  "collection": "The Beckenburg Project — Hunter Alternative Model Source Art",
+  "schemaVersion": 1,
+  "version": "v001",
+  "status": "original-png-source-art",
+  "sourceType": "generated concept art (not 3D assets)",
+  "styleAuthority": "assets/beckenburg/concept-art/v001/00-foundation/visual-direction-selected.png",
+  "description": "Distinct four-model silhouette/body/outfit variant designs for each hunter class, not the earlier hair-color-only boards. Hair dye and color choices will be separately configurable later; original PNGs must not be replaced with SVG reconstructions.",
+  "sourceGoogleDriveFolder": "https://drive.google.com/drive/folders/1mssrqsrp0F4RlNgeitiFKh-uh8NWD7iU",
+  "files": [
+    {
+      "role": "Cleric",
+      "path": "assets/beckenburg/concept-art/v001/01-hunters/variants/cleric-alternative-models-v001.png",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 2412133,
+      "sha256": "5d7120e499c6dbac16dd0414b7a4078f080488a728e362f6658b7e080f76f4f3",
+      "gitBlobSha1": "44f99b17a9105bf3e024937ac0199407cf3b265f",
+      "driveFileId": "1ld3H8Hf3ZJQ0r6WVu8cpaSs2sH9A1OI2",
+      "characterOptions": [
+        "Veteran Cleric (male)",
+        "Field Cleric (female)",
+        "Novice Cleric (male)",
+        "Matriarch Cleric (female)"
+      ]
+    },
+    {
+      "role": "Observer",
+      "path": "assets/beckenburg/concept-art/v001/01-hunters/variants/observer-alternative-models-v001.png",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 2336814,
+      "sha256": "7fc34972fe6b8cf76ffbdb9f71b0877ceb0a5439af5d58b7de0e16b188619e26",
+      "gitBlobSha1": "97663b17c2870ff72e6aa6ffefb0c86508db4b6d",
+      "driveFileId": "1ALDspYXhtvxo0Gu3gnvO7lmJp2KBUZjO",
+      "characterOptions": [
+        "Field Investigator (female)",
+        "Documentarian (male)",
+        "Tech Specialist (female)",
+        "Senior Analyst (male)"
+      ]
+    },
+    {
+      "role": "Demonologist",
+      "path": "assets/beckenburg/concept-art/v001/01-hunters/variants/demonologist-alternative-models-v001.png",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 2424905,
+      "sha256": "fae09ea52e26d3fe88a58d0f251bb852c670c6cfc69ad9f22b496b4c1e8e6219",
+      "gitBlobSha1": "8f866e36070de68c556c53dc2a9bc58e53c650f6",
+      "driveFileId": "1aydZTm7tn9k2vJmmbIxRHlO88FgSVCN9",
+      "characterOptions": [
+        "Field Scholar (male)",
+        "Occult Investigator (female)",
+        "Young Provoker (male)",
+        "Elder Ritualist (female)"
+      ]
+    }
+  ]
+}
