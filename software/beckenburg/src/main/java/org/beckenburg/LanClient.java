@@ -56,6 +56,11 @@ public final class LanClient implements AutoCloseable {
     }
     public synchronized void banish()throws IOException {send("BANISH|"+(++sequence));}
     public synchronized void absolve()throws IOException {send("ABSOLVE|"+(++sequence));}
+    /** Only a kind name and replay-protected sequence cross the wire; trajectory is host-owned. */
+    public synchronized void deploy(HunterCounters.Kind kind)throws IOException {
+        Objects.requireNonNull(kind);send("DEPLOY|"+kind+"|"+(++sequence));
+    }
+    public synchronized void scanUv()throws IOException {send("UVSCAN|"+(++sequence));}
     public synchronized void ward()throws IOException {send("WARD|"+(++sequence));}
     public synchronized void cleanse()throws IOException {send("CLEANSE|"+(++sequence));}
     public synchronized void extract()throws IOException {send("EXTRACT|"+(++sequence));}
