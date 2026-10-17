@@ -1,0 +1,78 @@
+{
+  "project": "The Beckenburg Project",
+  "collection": "v001",
+  "category": "original-concept-art",
+  "note": "Original PNG bytes preserved. Source Drive foundation-board filenames are inverted relative to archive labels; path assignments follow verified SHA-256 inventory, not Drive titles.",
+  "files": [
+    {
+      "path": "assets/beckenburg/concept-art/v001/00-foundation/visual-direction-selected.png",
+      "title": "Visual direction — selected",
+      "bytes": 2284282,
+      "sha256": "8f70daf4f2e802922df7406208db54b68b3ef885132f7fd7e7ed28bf7efc0412",
+      "gitBlobSha1": "69b8f7c62a6de80a42981576cb757d7189da3111"
+    },
+    {
+      "path": "assets/beckenburg/concept-art/v001/00-foundation/visual-direction-alternate.png",
+      "title": "Visual direction — alternate",
+      "bytes": 2356054,
+      "sha256": "6d0d3778d37c31cbb3380d9f4f046ad54ef849ec25c29864f6f7950f2ddeacf6",
+      "gitBlobSha1": "520fc036de7548628c8ba153549d88ec00fc046f"
+    },
+    {
+      "path": "assets/beckenburg/concept-art/v001/01-hunters/cleric-character-profile.png",
+      "title": "Cleric — character profile",
+      "bytes": 2293875,
+      "sha256": "3b317eaa11116893d1f98e7df37d355f5ad7f4fe4c97b55b5b36fcb56e8f9a41",
+      "gitBlobSha1": "9df483b042abf39af5efc6eb4b12c1f07398042f"
+    },
+    {
+      "path": "assets/beckenburg/concept-art/v001/01-hunters/observer-character-profile.png",
+      "title": "Observer — character profile",
+      "bytes": 2199246,
+      "sha256": "ec8c6be769c473542701e9435f8a265a1b5792df6928f81e387ec22cdf5ba0eb",
+      "gitBlobSha1": "cb2c9f2171273a1f3056bf78f53c9414495554ec"
+    },
+    {
+      "path": "assets/beckenburg/concept-art/v001/01-hunters/demonologist-character-profile.png",
+      "title": "Demonologist — character profile",
+      "bytes": 2364360,
+      "sha256": "3b074ecf8884a9190e593e7115befe02f520aaaf3d68dcef8882327bac9a8ca3",
+      "gitBlobSha1": "096e83ed2e1459b253441b6153beb2ab56120264"
+    },
+    {
+      "path": "assets/beckenburg/concept-art/v001/02-equipment/investigation-field-kit.png",
+      "title": "Investigation field kit",
+      "bytes": 2453488,
+      "sha256": "6297af9b9f366f202c8be8b33b1c4d61dc457453e05b7d4a51758b4ec5604f81",
+      "gitBlobSha1": "38b0387d5df7bdc56776fec01290c98b1b1c1798"
+    },
+    {
+      "path": "assets/beckenburg/concept-art/v001/03-ghosts/possessive-ghost-profile.png",
+      "title": "Possessive — ghost profile",
+      "bytes": 2426796,
+      "sha256": "021a6e0adf7a47b31bdedb41330db15f8f02192f63cc04c8ac569ae392d60327",
+      "gitBlobSha1": "07390d546e68ee5536df3175c5eee8f2274e29df"
+    },
+    {
+      "path": "assets/beckenburg/concept-art/v001/03-ghosts/poltergeist-ghost-profile.png",
+      "title": "Poltergeist — ghost profile",
+      "bytes": 2438672,
+      "sha256": "d9271a263c07b025de5826749ea1323c481b9030a735a238851d29c9a4d43a4b",
+      "gitBlobSha1": "c65367e73dc8a3139fcdb8db5e6dc80a761ad7c9"
+    },
+    {
+      "path": "assets/beckenburg/concept-art/v001/03-ghosts/demon-ghost-profile.png",
+      "title": "Demon — ghost profile",
+      "bytes": 2321027,
+      "sha256": "43f9da2b88ddd6a360c6ee9a07fe6f92ef37c6323341f3bcaba379a4d467abb8",
+      "gitBlobSha1": "9af1c3a4f7452c328224b5b80da62770f7bcd55e"
+    },
+    {
+      "path": "assets/beckenburg/concept-art/v001/03-ghosts/yokai-ghost-profile.png",
+      "title": "Yokai — ghost profile",
+      "bytes": 2313414,
+      "sha256": "eededdeb474df249af86abca0ac03694cd26dc53c2ff131eba9e134afe0cf513",
+      "gitBlobSha1": "5ebd33c2f0fc042a3d6281a5833ea19e0b4ad20d"
+    }
+  ]
+}
