@@ -50,6 +50,7 @@ public final class LanClient implements AutoCloseable {
     public synchronized void scan(LanCase.Tool tool)throws IOException {
         Objects.requireNonNull(tool);send("SCAN|"+tool+"|"+(++sequence));
     }
+    public synchronized void journal()throws IOException {send("JOURNAL");}
     public synchronized void ward()throws IOException {send("WARD|"+(++sequence));}
     public synchronized void cleanse()throws IOException {send("CLEANSE|"+(++sequence));}
     public synchronized void extract()throws IOException {send("EXTRACT|"+(++sequence));}

@@ -17,7 +17,8 @@ public final class LanSpatialEvidenceIntegrationTest {
                 String s=queue.poll(80,TimeUnit.MILLISECONDS);if(s==null)continue;
                 if("GHOST".equals(client.seat())&&(s.startsWith("BODY|")
                     ||s.startsWith("PROGRESS|")||s.startsWith("TEAMMAP|")
-                    ||s.startsWith("EVIDENCE|")||s.startsWith("DOORS|")))
+                    ||s.startsWith("EVIDENCE|")||s.startsWith("DOORS|")
+                    ||s.startsWith("CASEFILE|")))
                     throw new AssertionError("ghost received hunter-private state: "+s);
                 if(s.startsWith(prefix))return s;
             }

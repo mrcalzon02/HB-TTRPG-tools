@@ -21,6 +21,7 @@ public final class LanHost implements AutoCloseable {
     private final LanGhostSpatial ghostPose=new LanGhostSpatial(map,4);
     private final GhostDomain ghost=new GhostDomain(map,4);
     private final LanCase mission=new LanCase(4);
+    private final LanEvidenceJournal casefile=new LanEvidenceJournal();
     private final LanGhostPursuit ai=new LanGhostPursuit(map,20261016L);
     private final LanGhostAnimation animation=new LanGhostAnimation();
     private volatile boolean closed;
@@ -194,9 +195,20 @@ public final class LanHost implements AutoCloseable {
                             ?mission.scanSpatial(peer.slot,tool,world.body(peer.slot),ghost.room(),map)
                             :mission.scan(peer.slot,tool,hunterRooms[peer.slot],ghost.room());
                     answerHunter(peer,"SCAN",result);
-                    if(result.accepted())recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                    if(result.accepted()){
+                        recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                        String note=casefile.record(tick,peer.slot,hunterRooms[peer.slot],tool,result);
+                        if(note!=null)notifyHunters(note);
+                    }
                     if(result.accepted()&&result.message().startsWith("CONFIRMED"))notifyHunters("EVIDENCE|"+tool+"|"+mission.evidenceCount());
                     broadcastProgress();
+                }
+                case "JOURNAL" -> {
+                    if(!running||peer.slot==3||p.size()!=1)
+                        throw new IllegalArgumentException("active hunter required for casefile");
+                    reply(peer,"CASEFILE|RESET");
+                    for(String note:casefile.snapshot())reply(peer,note);
+                    reply(peer,"ACCEPT|JOURNAL");
                 }
                 case "WARD", "CLEANSE", "EXTRACT" -> {
                     if(!running||peer.slot==3||p.size()!=2)throw new IllegalArgumentException("hunter action unavailable");
