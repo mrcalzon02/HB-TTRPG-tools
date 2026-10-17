@@ -16,7 +16,10 @@ public final class LanCase {
     private static final int RITUAL_TICKS = 45, ABANDON_GRACE_TICKS = 20;
     public enum RitualAdvance { NONE, PAUSED, RESUMED, BROKEN, CLEANSED }
     private final int anchor;
-    private final EnumSet<Tool> evidence=EnumSet.noneOf(Tool.class);
+    private final EnumSet<Tool> evidence=EnumSet.noneOf(Tool.class), tested=EnumSet.noneOf(Tool.class);
+    private GhostIdentity.Type archetype=GhostIdentity.Type.SPIRIT, identified;
+    private boolean identificationRequired;
+    private int lastGuessTick=-1000;
     private final int[] health={100,100,100},stress={0,0,0},wards={2,2,2};
     private final boolean[] active={true,true,true};
     private int wardRoom=-1,ritualProgress=-1,unguardedTicks;
@@ -29,6 +32,33 @@ public final class LanCase {
     private static void hunter(int seat){if(seat<0||seat>=3)throw new IllegalArgumentException("hunter seat required");}
     public Outcome outcome(){return outcome;}
     public int evidenceCount(){return evidence.size();}
+    public int testedCount(){return tested.size();}
+    public GhostIdentity.Type type(){return archetype;}
+    public GhostIdentity.Type identified(){return identified;}
+    /** Call only before a session; selection belongs to the host, not remote scan packets. */
+    public void configure(GhostIdentity.Type type,boolean requireIdentification){
+        if(outcome!=Outcome.ACTIVE||!evidence.isEmpty()||!tested.isEmpty()||ritualProgress>=0)
+            throw new IllegalStateException("cannot change an active investigation");
+        archetype=java.util.Objects.requireNonNull(type);
+        identificationRequired=requireIdentification;
+        identified=null;
+    }
+    public Report identify(int seat,GhostIdentity.Type guess,int tick){
+        hunter(seat);
+        java.util.Objects.requireNonNull(guess);
+        if(outcome!=Outcome.ACTIVE||!alive(seat))return new Report(false,"identification unavailable");
+        if(!identificationRequired)return new Report(false,"identity dossier not enabled");
+        if(tested.size()!=Tool.values().length)return new Report(false,"test all three instruments at the haunting anchor");
+        if(identified!=null)return new Report(false,"entity already identified");
+        if(tick<0||tick-lastGuessTick<30)return new Report(false,"allow the entity to settle before another deduction");
+        lastGuessTick=tick;
+        if(guess!=archetype){
+            stress[seat]=Math.min(100,stress[seat]+15);
+            return new Report(false,"evidence contradicts that entity; investigator fear increases");
+        }
+        identified=guess;
+        return new Report(true,"ENTITY IDENTIFIED "+guess);
+    }
     public int health(int seat){hunter(seat);return health[seat];}
     /** Single host-owned predicate for participation, pursuit and strike eligibility. */
     public boolean alive(int seat){
@@ -60,13 +90,12 @@ public final class LanCase {
         hunter(seat);
         if(outcome!=Outcome.ACTIVE||!active[seat]||health[seat]<=0)return new Report(false,"investigation unavailable");
         int distance=Math.abs(room%HouseMap.COLS-anchor%HouseMap.COLS)+Math.abs(room/HouseMap.COLS-anchor/HouseMap.COLS);
-        boolean strong=room==anchor;
-        // EMF can detect ghost activity elsewhere, but a transient spike alone is not proof of its anchor.
-        String reading=switch(tool){
-            case EMF -> strong?"EMF level 5":room==ghostRoom?"EMF level 3":"EMF baseline";
-            case THERMOMETER -> strong?"Unnatural cold 2C":distance==1?"Cool air 11C":"Ambient 19C";
-            case SPIRIT_BOX -> strong?"Response detected":"No conclusive response";
-        };
+        boolean atAnchor=room==anchor;
+        if(atAnchor)tested.add(tool);
+        boolean strong=atAnchor&&archetype.signature(tool);
+        // Each instrument has a discoverable signature and possible negative result.
+        // Presence in the same room is insufficient for a positive reading on every type.
+        String reading=GhostIdentity.reading(archetype,tool,strong,distance,room==ghostRoom);
         if(strong){boolean newlyAdded=evidence.add(tool);
             return new Report(true,(newlyAdded?"CONFIRMED ":"REPEAT ")+tool+" in "+room+" - "+reading);
         }
@@ -99,7 +128,10 @@ public final class LanCase {
     public Report cleanse(int seat,int room) {
         hunter(seat);
         if(outcome!=Outcome.ACTIVE||!active[seat]||health[seat]<=0)return new Report(false,"cannot perform rite");
-        if(evidence.size()!=Tool.values().length)return new Report(false,"three corroborated evidence families required");
+        if(evidence.size()!=archetype.signatureCount())
+            return new Report(false,"complete the entity's signature evidence set");
+        if(identificationRequired&&identified!=archetype)
+            return new Report(false,"identify the haunting entity before completing the rite");
         if(room!=anchor)return new Report(false,"no true attachment anchor here");
         if(!wardPrepared())return new Report(false,"anchor ward required");
         if(ritualProgress>=0)return new Report(false,"ritual already underway");
