@@ -1,0 +1,56 @@
+{
+  "project": "The Beckenburg Project",
+  "category": "texture-reference-sheets",
+  "collection": "v001",
+  "description": "Four generated early/mid PlayStation-style concept texture atlas sheets; not game-ready UV texture assets.",
+  "resolution": [
+    1254,
+    1254
+  ],
+  "colorMode": "RGB",
+  "mediaType": "image/png",
+  "files": [
+    {
+      "file": "assets/beckenburg/textures/v001/exterior-texture-atlas-01.png",
+      "title": "Exterior masonry, roofs, ground, stained glass",
+      "role": "Reference atlas 01; block walls, aged timber, stone and outdoor props",
+      "sourceOriginalFilename": "gothic_exterior_texture_atlas.png",
+      "committedBytes": 3026696,
+      "gitBlobSha1": "e1733a11673043b6b3c16e3089a296e539474e04",
+      "committedSha256": "43f199cc0e0182da3cd76c75932c90aebae55a39b04a5b2d5ed3dbb3a7fc756a",
+      "originalBytesPreserved": true
+    },
+    {
+      "file": "assets/beckenburg/textures/v001/interior-texture-atlas-02.png",
+      "title": "Interior plaster, walls, floors, doors and fabrics",
+      "role": "Reference atlas 02; indoor material and set-dressing palette",
+      "sourceOriginalFilename": "the_beckenburg_interior_texture_atlas.png",
+      "committedBytes": 2710488,
+      "gitBlobSha1": "4f345e44887e738f1c70049a176e72eb3ce7338a",
+      "committedSha256": "2705d861a42b95af2f2b4bda64c46f70f9fca86d2f28e37841de5c637ed299d8",
+      "originalBytesPreserved": true
+    },
+    {
+      "file": "assets/beckenburg/textures/v001/equipment-texture-atlas-03.png",
+      "title": "Field equipment plastics, metals, displays and ritual accessories",
+      "role": "Reference atlas 03; device housings, active LCDs, leather and books",
+      "sourceOriginalFilename": "beckenburg_equipment_texture_atlas.png",
+      "committedBytes": 2754639,
+      "gitBlobSha1": "e3cc3d3cb83e9d5f0f0d16a70a0d4990c85183b4",
+      "committedSha256": "4460206cd64e0df38e4b4fc9406a1641e1158ddad5125ca4d53cbbcdfa3bd66c",
+      "originalBytesPreserved": true
+    },
+    {
+      "file": "assets/beckenburg/textures/v001/occult-texture-atlas-04.png",
+      "title": "Spectral, ritual, occult and ghost material effects",
+      "role": "Reference atlas 04; spectral effects, sigils, stains and overlays",
+      "sourceOriginalFilename": "occult_texture_atlas_04.png",
+      "committedBytes": 2980558,
+      "gitBlobSha1": "8ce87d4e6f2ba581e88996f47c0c7d7dc6ae69c3",
+      "committedSha256": "5f4b841e36f0194290d91a593fe482473ae743254e1dd79bb9fabe709c35ba4a",
+      "sourceOriginalSha256": "e4e33084322b6e598ae1c0b89f945116953068586b66115678e29dfb5b1bb9c8",
+      "sourceOriginalBytes": 3216398,
+      "changeFromOriginal": "lossless PNG recompression; identical 1254×1254 RGB pixels, verified via image difference"
+    }
+  ]
+}
