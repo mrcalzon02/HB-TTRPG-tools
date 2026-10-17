@@ -5,6 +5,10 @@ mkdir -p build
 rm -rf build/classes build/test
 mkdir -p build/classes build/test
 javac --release 17 -encoding UTF-8 -d build/classes src/main/java/org/beckenburg/*.java
+# The shipped JAR and the test classpath must include the actual in-game sprite resource.
+test -s assets/runtime/directional-sprites.zip
+mkdir -p build/classes/org/beckenburg
+cp assets/runtime/directional-sprites.zip build/classes/org/beckenburg/directional-sprites.zip
 javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java/org/beckenburg/*.java
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostBehaviorTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostIdentityTest
@@ -39,6 +43,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.La
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanTelegraphedStrikeIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanTelegraphedHudTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanApparitionTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.DirectionalSpritesIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanApparitionRenderTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanApparitionIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostIntegrationTest

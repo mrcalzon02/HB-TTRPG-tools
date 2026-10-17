@@ -218,49 +218,7 @@ public final class SceneRenderer {
         for(RitualSites.Site site:RitualSites.all(map))
             if(Math.hypot(site.x()-x,site.z()-z)<14)ritualInstallation(out,site);
         if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14) vanModel(out,map.van());
-        if(ghostVisible){
-            double gx=apparition==null?map.centerX(ghostRoom):apparition.x(),
-                   gz=apparition==null?map.centerZ(ghostRoom):apparition.z();
-            double bob=.12*Math.sin(clock*3);
-            LanGhostAnimation.Phase phase=apparition==null?LanGhostAnimation.Phase.LURK:apparition.phase();
-            int progress=apparition==null?0:apparition.progress();
-            double stature=phase==LanGhostAnimation.Phase.MATERIALIZE
-                    ?.45+.55*Math.min(1,progress/(double)LanGhostAnimation.MATERIALIZE_TICKS)
-                    :phase==LanGhostAnimation.Phase.RECOVER?.84:1.0;
-            double lift=phase==LanGhostAnimation.Phase.WINDUP?.13*Math.min(1,progress/8.0):0;
-            int shroud=phase==LanGhostAnimation.Phase.WINDUP?0xa75e6d:0x747d9b;
-            int eyes=phase==LanGhostAnimation.Phase.WINDUP?0xffb3a4:0xd4d9ff;
-            // Distinct PS-era poses: rising form, lunging reach, slumped impact recovery.
-            box(out,gx-.32,.48+bob,gz-.2,.64,1.05*stature,.4,shroud);
-            box(out,gx-.23,.48+1.02*stature+bob,gz-.14,.46,.43*stature,.35,0x888eaf);
-            double rad=Math.toRadians(apparition==null?0:apparition.heading());
-            double reach=phase==LanGhostAnimation.Phase.WINDUP?.20+.35*Math.min(1,progress/8.0):0;
-            box(out,gx-.44+Math.sin(rad)*reach,.70+bob+lift,gz-.2+Math.cos(rad)*reach,.15,.80*stature,.28,0x626983);
-            box(out,gx+.29,.72+bob-lift,gz-.2,.15,.80*stature,.28,0x626983);
-            box(out,gx-.15,.48+1.20*stature+bob,gz-.24,.09,.06,.055,eyes);
-            box(out,gx+.08,.48+1.20*stature+bob,gz-.24,.09,.06,.055,eyes);
-        }
-        if(hunterRoom>=0){
-            double hx=map.centerX(hunterRoom)-1.25,hz=map.centerZ(hunterRoom)+2.0;
-            // The simulated hunter is only drawn when local ghost senses their room.
-            box(out,hx-.27,0,hz-.19,.54,.95,.36,0x3a4548);
-            box(out,hx-.28,.97,hz-.20,.56,.56,.4,0x5a6660);
-            box(out,hx-.20,1.53,hz-.12,.40,.32,.28,0xa68d7c);
-            box(out,hx-.31,.22,hz-.20,.18,.75,.24,0x242932);
-            box(out,hx+.14,.22,hz-.20,.18,.75,.24,0x242932);
-        }
-        // Host-authoritative teammate bodies are only drawn in the hunters' shared view.
-        for(RemoteBody person:others){
-            if(!Double.isFinite(person.x())||!Double.isFinite(person.z()))continue;
-            double distance=Math.hypot(person.x()-x,person.z()-z);
-            if(distance>14||distance<1.35)continue; // Never let a teammate avatar fill the player camera.
-            double hx=person.x(),hz=person.z();int col=switch(person.slot()){
-                case 0 -> 0x667c68;case 1 -> 0x697c90;default -> 0x927864;
-            };
-            box(out,hx-.23,0,hz-.18,.46,.92,.35,0x33383e);
-            box(out,hx-.28,.9,hz-.22,.56,.55,.44,col);
-            box(out,hx-.19,1.49,hz-.16,.38,.30,.32,0xb89e87);
-        }
+        // Character bodies are rendered as directional alpha-masked sprites after geometry.
         if(wardRoom>=0){
             int r=wardRoom;double wx=map.centerX(r),wz=map.centerZ(r);
             // Visible prepared circle is constrained to the anchor room; it is not a magic menu flag.
@@ -292,7 +250,13 @@ public final class SceneRenderer {
         return out;
     }
     /** First-person network rendering with low-poly teammate models and host-managed doors. */
-    public record RemoteBody(double x,double z,int slot) { }
+    public record RemoteBody(double x,double z,int slot,int heading) {
+        public RemoteBody(double x,double z,int slot){this(x,z,slot,0);}
+        public RemoteBody {
+            if(!Double.isFinite(x)||!Double.isFinite(z)||slot<0||slot>2||heading<0||heading>=360)
+                throw new IllegalArgumentException("invalid remote body");
+        }
+    }
     public record Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress) {
         public Apparition(double x,double z){this(x,z,LanGhostAnimation.Phase.LURK,0,0);}
         public Apparition {
@@ -325,6 +289,40 @@ public final class SceneRenderer {
             List<Vertex> pts=clip(new Vertex(camera(face.a),face.au,face.av),
                 new Vertex(camera(face.b),face.bu,face.bv),new Vertex(camera(face.c),face.cu,face.cv));
             for(int i=1;i<pts.size()-1;i++)triangle(pts.get(0),pts.get(i),pts.get(i+1),face.color,face.material);
+        }
+        renderCharacterSprites(map,ghostRoom,visibleGhost,hunterRoom,clock,others,apparition);
+    }
+    /** Billboards share the world Z-buffer, so room walls correctly hide hunter and ghost bodies.
+     * Visibility, headings and phase remain projected from the host's simulation.
+     */
+    private void renderCharacterSprites(HouseMap map,int ghostRoom,boolean visibleGhost,
+            int hunterRoom,double clock,List<RemoteBody> others,Apparition apparition){
+        if(visibleGhost){
+            double gx=apparition==null?map.centerX(ghostRoom):apparition.x();
+            double gz=apparition==null?map.centerZ(ghostRoom):apparition.z();
+            LanGhostAnimation.Phase phase=apparition==null?LanGhostAnimation.Phase.LURK:apparition.phase();
+            int progress=apparition==null?0:apparition.progress();
+            double stature=phase==LanGhostAnimation.Phase.MATERIALIZE
+                    ?.45+.55*Math.min(1,progress/(double)LanGhostAnimation.MATERIALIZE_TICKS)
+                    :phase==LanGhostAnimation.Phase.RECOVER?.84:1.0;
+            double lift=phase==LanGhostAnimation.Phase.WINDUP?.13*Math.min(1,progress/8.0):0;
+            int alpha=phase==LanGhostAnimation.Phase.MATERIALIZE
+                    ?Math.max(45,(int)(255*progress/(double)LanGhostAnimation.MATERIALIZE_TICKS))
+                    :phase==LanGhostAnimation.Phase.RECOVER?205:255;
+            DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,gx,gz,
+                apparition==null?0:apparition.heading(),"banshee",1.95*stature,1.16,
+                .09*Math.sin(clock*3)+lift,alpha,lamp);
+        }
+        if(hunterRoom>=0){
+            DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,
+                map.centerX(hunterRoom)-1.25,map.centerZ(hunterRoom)+2.0,
+                0,"observer",1.75,1.04,0,255,lamp);
+        }
+        for(RemoteBody person:others){
+            double distance=Math.hypot(person.x()-x,person.z()-z);
+            if(distance>14||distance<1.35)continue;
+            DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,person.x(),person.z(),
+                person.heading(),"observer",1.75,1.04,0,255,lamp);
         }
     }
     private void triangle(Vertex va,Vertex vb,Vertex vc,int tint,int material){

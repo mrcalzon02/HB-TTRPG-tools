@@ -58,7 +58,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 int heading=LanProtocol.integer(p.get(4),0,359);
                 tick=LanProtocol.integer(p.get(5),0,99999999);
                 if(who==seat){renderer.x=x;renderer.z=z;feedback="HOST SYNC ACTIVE — movement and doors server controlled";}
-                else peers.put(who,new SceneRenderer.RemoteBody(x,z,who));
+                else peers.put(who,new SceneRenderer.RemoteBody(x,z,who,heading));
             }else if(p.size()==3&&p.get(0).equals("PEER")&&p.get(1).equals("LEFT")){
                 int gone=LanProtocol.integer(p.get(2),0,2);
                 if(gone!=seat)peers.remove(gone);
