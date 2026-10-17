@@ -69,11 +69,17 @@ public final class InvestigationSession {
         // Every supernatural action, including AI behavior, follows the same host-style dispatcher.
         // Ghost observation has only room-local presence, never the hunter's global position or notebook.
         int playerRoom=map.roomAt(playerX,playerZ);
-        ghost.advance(ticks,playerRoom);
+        ghost.advance(ticks,playerRoom,playerRoom==ghost.room()?1:0);
+        int feed=GhostTraits.passiveFear(ghost.type(),ticks,playerRoom==ghost.room()?1:0);
+        if(feed>0){
+            stress=Math.min(100,stress+feed);
+            if(ticks%90==0)log("Your sanity keeps draining. Something is feeding on your presence.");
+        }
         if(ghost.room()>=0&&ghost.room()<spectralTrace.length){
             spectralTrace[ghost.room()]=ticks;
-            if(saltRoom==ghost.room()&&ticks>saltTick){
-                log("Salt disturbed in "+map.roomName(saltRoom)+" — a spectral path is confirmed.");
+            if(saltRoom==ghost.room()&&ticks>saltTick&&GhostTraits.saltAffects(ghost.type())){
+                ghost.reveal(30);ghost.slowFor(26);
+                log("Salt disturbed in "+map.roomName(saltRoom)+" — grounded spirit slowed and briefly revealed.");
                 saltRoom=-1;saltTick=-1;
             }
         }

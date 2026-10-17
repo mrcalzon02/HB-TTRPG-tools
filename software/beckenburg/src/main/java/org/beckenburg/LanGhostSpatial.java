@@ -8,7 +8,11 @@ import java.util.Objects;
 public final class LanGhostSpatial {
     public record Pose(int room,double x,double z,int heading) { }
     private final HouseMap map;
-    private int room,heading=180,lastStepTick=-1;
+    private int room,heading=180,lastStepTick=-1,slowedUntil=-1;
+    public void slowFor(int currentTick,int duration){
+        if(currentTick<0||duration<1||duration>100)throw new IllegalArgumentException("invalid slow period");
+        slowedUntil=Math.max(slowedUntil,currentTick+duration);
+    }
     private double x,z;
 
     public LanGhostSpatial(HouseMap map,int startingRoom){
@@ -25,7 +29,8 @@ public final class LanGhostSpatial {
         if(tick<=lastStepTick)throw new IllegalArgumentException("ghost step rate exceeded");
         lastStepTick=tick;
         double length=Math.hypot(dx,dz);
-        double nx=x+0.31*dx/length,nz=z+0.31*dz/length;
+        double speed=tick<slowedUntil?.105:.31;
+        double nx=x+speed*dx/length,nz=z+speed*dz/length;
         // Move around furnishings; crossing room boundaries is a paid, cooldown-gated DRIFT only.
         if(map.roomAt(nx,nz)!=room||map.tile((int)nx,(int)nz)=='#')
             throw new IllegalArgumentException("spectral room boundary; use DRIFT");

@@ -90,6 +90,18 @@ public final class HouseMap {
         if(!openDoors.add(candidate))openDoors.remove(candidate);
         return true;
     }
+    /** A non-phasing ghost physically opens an authored door between adjacent rooms. */
+    public boolean openDoorBetweenRooms(int from,int to){
+        if(from<0||to<0||from>=ROOM_COUNT||to>=ROOM_COUNT
+            ||Math.abs(from/COLS-to/COLS)+Math.abs(from%COLS-to%COLS)!=1)
+            throw new IllegalArgumentException("adjacent room IDs required");
+        int row=Math.min(from/COLS,to/COLS),col=Math.min(from%COLS,to%COLS);
+        int xx,zz;
+        if(from/COLS==to/COLS){xx=8+col*8;zz=3+row*6;}
+        else {xx=4+col*8;zz=6+row*6;}
+        if(tile(xx,zz)!='D')return false;
+        return openDoors.add(doorId(xx,zz));
+    }
     public int roomAt(double x,double z){
         if(!Double.isFinite(x)||!Double.isFinite(z))return -1;
         int xx=(int)Math.floor(x),zz=(int)Math.floor(z);

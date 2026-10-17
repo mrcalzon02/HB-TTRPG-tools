@@ -75,6 +75,14 @@ public final class LanCase {
         hunter(seat);return active[seat]&&health[seat]>0;
     }
     public int stress(int seat){hunter(seat);return stress[seat];}
+    /** Host-only, bounded, individual slow sanity drain from presence-feeding ghosts. */
+    public boolean drainSanity(int seat,int amount){
+        hunter(seat);
+        if(amount<0||amount>3)throw new IllegalArgumentException("invalid sanity drain");
+        if(outcome!=Outcome.ACTIVE||!alive(seat)||amount==0)return false;
+        stress[seat]=Math.min(100,stress[seat]+amount);
+        return true;
+    }
     public int wards(int seat){hunter(seat);return wards[seat];}
     public boolean wardPrepared(){return wardRoom==anchor;}
     public int ritualProgress(){return ritualProgress;}

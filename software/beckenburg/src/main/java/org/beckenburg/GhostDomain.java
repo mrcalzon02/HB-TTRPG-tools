@@ -38,6 +38,7 @@ public final class GhostDomain {
     private final GhostIdentity.Type archetype;
     private final int[] lastActionTick = new int[Action.values().length];
     private int room, tick, energy = 100, manifestUntil;
+    private int suppressedUntil=-1,slowedUntil=-1;
     private boolean hearsHunter;
     private long lastSequence = -1;
 
@@ -56,13 +57,33 @@ public final class GhostDomain {
     public int energy() { return energy; }
     public int tickCount() { return tick; }
     public boolean manifested() { return tick > 0 && tick <= manifestUntil; }
+    public void reveal(int duration){
+        if(duration<1||duration>100)throw new IllegalArgumentException("invalid reveal duration");
+        manifestUntil=Math.max(manifestUntil,tick+duration);
+    }
+    public void suppress(int duration){
+        if(duration<1||duration>100)throw new IllegalArgumentException("invalid suppression duration");
+        suppressedUntil=Math.max(suppressedUntil,tick+duration);
+    }
+    public void slowFor(int duration){
+        if(duration<1||duration>100)throw new IllegalArgumentException("invalid slow duration");
+        slowedUntil=Math.max(slowedUntil,tick+duration);
+    }
+    public void repel(int duration){
+        suppress(duration);reveal(Math.min(duration,18));
+        energy=Math.max(0,energy-12);
+    }
 
     /** Called exactly once each 100ms simulation step, independent of renderer FPS. */
     public void advance(int nextTick, int hunterRoom) {
+        advance(nextTick,hunterRoom,hunterRoom==room?1:0);
+    }
+    /** Room occupancy controls energy. Controllers never receive the actual occupant count. */
+    public void advance(int nextTick, int hunterRoom, int occupants) {
         if (nextTick != tick + 1) throw new IllegalArgumentException("ghost tick must advance exactly once");
-        tick = nextTick;
-        hearsHunter = hunterRoom >= 0 && hunterRoom == room;
-        if (tick % 3 == 0) energy = Math.min(100, energy + 1);
+        if(occupants<0||occupants>3)throw new IllegalArgumentException("invalid occupancy");
+        tick=nextTick;hearsHunter = hunterRoom >= 0 && hunterRoom == room;
+        energy=Math.min(100,energy+GhostTraits.gained(archetype,tick,occupants));
     }
     private List<Integer> exits(int current) {
         return map.ghostExits(current);
@@ -71,7 +92,8 @@ public final class GhostDomain {
         if (energy < GhostBehavior.cost(archetype,a,COST[a.ordinal()])
                 || tick - lastActionTick[a.ordinal()] < GhostBehavior.cooldown(archetype,a,COOLDOWN[a.ordinal()]))
             return false;
-        if (a == Action.DRIFT) return exits(room).contains(target);
+        if(a!=Action.DRIFT && tick<suppressedUntil)return false;
+        if(a==Action.DRIFT)return tick>=slowedUntil && exits(room).contains(target);
         if (target != room) return false;
         return switch (a) {
             case MANIFEST -> tick >= 80 && hearsHunter && !manifested();
@@ -106,12 +128,17 @@ public final class GhostDomain {
         switch (a) {
             case DRIFT -> room = command.targetRoom();
             case WHISPER -> fear = hearsHunter ? 2 : 0;
-            case DISTURB -> fear = hearsHunter ? 1 : 0;
-            case MANIFEST -> manifestUntil = tick + 49 + GhostBehavior.profile(archetype).manifestTicks();
+            case DISTURB -> {fear = hearsHunter ? 3 : 0;
+                harm = hearsHunter && (archetype==GhostIdentity.Type.POLTERGEIST
+                    ||archetype==GhostIdentity.Type.DEMON) ? 3 : 0;}
+            case MANIFEST -> {manifestUntil = tick + 49 + GhostBehavior.profile(archetype).manifestTicks();
+                fear=hearsHunter?5:0;}
             case STRIKE -> { harm = 12; fear = 6; manifestUntil = tick + 9; }
         }
         fear=GhostBehavior.fear(archetype,a,fear);
         harm=GhostBehavior.harm(archetype,a,harm);
+        fear=GhostTraits.fear(archetype,fear);
+        harm=GhostTraits.harm(archetype,harm);
         return new Resolution(true, "accepted", a, room, energy, fear, harm, manifested());
     }
     private Resolution rejected(Command command, String why) {
