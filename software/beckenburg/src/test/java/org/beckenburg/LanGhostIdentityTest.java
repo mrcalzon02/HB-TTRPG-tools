@@ -31,9 +31,13 @@ public final class LanGhostIdentityTest {
    ok(!mission.performRite(0,type.rite(),site.room(),false).accepted(),"outside circle denied");
    ok(mission.performRite(0,type.rite(),site.room(),true).accepted(),"right rite at correct site");
    int[] guard={site.room(),14,14};
-   for(int i=0;i<44;i++)mission.advance(guard);
+   int required=type.rite()==GhostIdentity.Rite.BANISHMENT?55:type.rite()==GhostIdentity.Rite.ABSOLUTION?60:45;
+   for(int i=0;i<required-1;i++)mission.advance(guard);
    ok(mission.outcome()==LanCase.Outcome.ACTIVE,"cannot auto-complete early");
    ok(mission.advance(guard)==LanCase.RitualAdvance.CLEANSED,"fully defended rite");
+   var terminal=type.rite()==GhostIdentity.Rite.BANISHMENT?LanCase.Outcome.BANISHED
+           :type.rite()==GhostIdentity.Rite.CLEANSING?LanCase.Outcome.CLEANSED:LanCase.Outcome.ABSOLVED;
+   ok(mission.outcome()==terminal,"distinct ritual outcome "+type);
   }
   ok(rites.size()==3,"all three ritual categories used");
   var legacy=new LanCase(4);

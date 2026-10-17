@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 /** Room-level LAN case rules. All changes are made by LanHost, never by peer-supplied damage or evidence. */
 public final class LanCase {
-    public enum Outcome { ACTIVE, CLEANSED, RETREATED, LOST }
+    public enum Outcome { ACTIVE, CLEANSED, BANISHED, ABSOLVED, RETREATED, LOST }
     /** Detection falls off within the actual 3D room; the room-mode demo remains abstract. */
     public enum Tool {
         EMF(2.6), THERMOMETER(3.4), SPIRIT_BOX(2.1);
@@ -14,6 +14,14 @@ public final class LanCase {
     }
     public record Report(boolean accepted, String message) { }
     private static final int RITUAL_TICKS = 45, ABANDON_GRACE_TICKS = 20;
+    private int riteTicks(){
+        if(!identificationRequired)return RITUAL_TICKS;
+        return switch(selectedRite){
+            case BANISHMENT->55;
+            case CLEANSING->45;
+            case ABSOLUTION->60;
+        };
+    }
     public enum RitualAdvance { NONE, PAUSED, RESUMED, BROKEN, CLEANSED }
     private final int anchor;
     private final EnumSet<Tool> evidence=EnumSet.noneOf(Tool.class), tested=EnumSet.noneOf(Tool.class);
@@ -199,8 +207,10 @@ public final class LanCase {
         }
         boolean resumed=unguardedTicks>0;
         unguardedTicks=0;
-        if(++ritualProgress>=RITUAL_TICKS){
-            outcome=Outcome.CLEANSED;
+        if(++ritualProgress>=riteTicks()){
+            outcome=(!identificationRequired||selectedRite==GhostIdentity.Rite.CLEANSING)
+                    ?Outcome.CLEANSED:selectedRite==GhostIdentity.Rite.BANISHMENT
+                    ?Outcome.BANISHED:Outcome.ABSOLVED;
             return RitualAdvance.CLEANSED;
         }
         return resumed?RitualAdvance.RESUMED:RitualAdvance.NONE;

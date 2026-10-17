@@ -51,6 +51,11 @@ public final class LanClient implements AutoCloseable {
         Objects.requireNonNull(tool);send("SCAN|"+tool+"|"+(++sequence));
     }
     public synchronized void journal()throws IOException {send("JOURNAL");}
+    public synchronized void identify(GhostIdentity.Type type)throws IOException{
+        Objects.requireNonNull(type);send("IDENTIFY|"+type+"|"+(++sequence));
+    }
+    public synchronized void banish()throws IOException {send("BANISH|"+(++sequence));}
+    public synchronized void absolve()throws IOException {send("ABSOLVE|"+(++sequence));}
     public synchronized void ward()throws IOException {send("WARD|"+(++sequence));}
     public synchronized void cleanse()throws IOException {send("CLEANSE|"+(++sequence));}
     public synchronized void extract()throws IOException {send("EXTRACT|"+(++sequence));}
