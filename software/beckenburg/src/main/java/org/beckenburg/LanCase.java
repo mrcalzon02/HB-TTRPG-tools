@@ -11,6 +11,7 @@ public final class LanCase {
     private final int anchor;
     private final EnumSet<Tool> evidence=EnumSet.noneOf(Tool.class);
     private final int[] health={100,100,100},stress={0,0,0},wards={2,2,2};
+    private final boolean[] active={true,true,true};
     private int wardRoom=-1,ritualProgress=-1;
     private Outcome outcome=Outcome.ACTIVE;
 
@@ -26,13 +27,24 @@ public final class LanCase {
     public int wards(int seat){hunter(seat);return wards[seat];}
     public boolean wardPrepared(){return wardRoom==anchor;}
     public int ritualProgress(){return ritualProgress;}
+    public int remainingHunters(){
+        int count=0;for(boolean connected:active)if(connected)count++;
+        return count;
+    }
+    /** Only the host can retire a departing seat; no reconnect/seat reuse in this alpha. */
+    public void depart(int seat){
+        hunter(seat);
+        if(!active[seat])return;
+        active[seat]=false;
+        if(outcome==Outcome.ACTIVE&&remainingHunters()==0)outcome=Outcome.LOST;
+    }
     public String privateState(int seat) {
         hunter(seat);
         return "PROGRESS|"+health[seat]+"|"+stress[seat]+"|"+wards[seat]+"|"+evidence.size()+"|"+(wardPrepared()?1:0)+"|"+Math.max(0,ritualProgress)+"|"+outcome;
     }
     public Report scan(int seat,Tool tool,int room,int ghostRoom) {
         hunter(seat);
-        if(outcome!=Outcome.ACTIVE||health[seat]<=0)return new Report(false,"investigation unavailable");
+        if(outcome!=Outcome.ACTIVE||!active[seat]||health[seat]<=0)return new Report(false,"investigation unavailable");
         int distance=Math.abs(room%HouseMap.COLS-anchor%HouseMap.COLS)+Math.abs(room/HouseMap.COLS-anchor/HouseMap.COLS);
         boolean strong=room==anchor;
         // EMF can detect ghost activity elsewhere, but a transient spike alone is not proof of its anchor.
@@ -48,7 +60,7 @@ public final class LanCase {
     }
     public Report ward(int seat,int room) {
         hunter(seat);
-        if(outcome!=Outcome.ACTIVE||health[seat]<=0)return new Report(false,"cannot ward now");
+        if(outcome!=Outcome.ACTIVE||!active[seat]||health[seat]<=0)return new Report(false,"cannot ward now");
         if(wards[seat]<=0)return new Report(false,"no wards remaining");
         wards[seat]--;
         stress[seat]=Math.max(0,stress[seat]-20);
@@ -57,7 +69,7 @@ public final class LanCase {
     }
     public Report cleanse(int seat,int room) {
         hunter(seat);
-        if(outcome!=Outcome.ACTIVE||health[seat]<=0)return new Report(false,"cannot perform rite");
+        if(outcome!=Outcome.ACTIVE||!active[seat]||health[seat]<=0)return new Report(false,"cannot perform rite");
         if(evidence.size()!=Tool.values().length)return new Report(false,"three corroborated evidence families required");
         if(room!=anchor)return new Report(false,"no true attachment anchor here");
         if(!wardPrepared())return new Report(false,"anchor ward required");
@@ -67,7 +79,7 @@ public final class LanCase {
     }
     public Report extract(int seat,int room) {
         hunter(seat);
-        if(outcome!=Outcome.ACTIVE||health[seat]<=0)return new Report(false,"extraction unavailable");
+        if(outcome!=Outcome.ACTIVE||!active[seat]||health[seat]<=0)return new Report(false,"extraction unavailable");
         if(room!=HouseMap.EXTRACTION_ROOM)return new Report(false,"return to van staging");
         outcome=Outcome.RETREATED;
         return new Report(true,"TEAM WITHDREW - haunting unresolved");
@@ -79,14 +91,17 @@ public final class LanCase {
     public void applyGhostEffect(int room,int[] hunterRooms,GhostDomain.Resolution effect,boolean[] affected) {
         if(hunterRooms.length!=3||affected.length!=3)throw new IllegalArgumentException("three hunter seats required");
         if(outcome!=Outcome.ACTIVE||!effect.applied())return;
-        for(int i=0;i<3;i++)if(affected[i]&&hunterRooms[i]==room && health[i]>0){
+        for(int i=0;i<3;i++)if(active[i]&&affected[i]&&hunterRooms[i]==room && health[i]>0){
             stress[i]=Math.min(100,stress[i]+effect.fear());
             if(effect.harm()>0)health[i]=Math.max(0,health[i]-Math.max(1,wardRoom==room?Math.min(4,effect.harm()):effect.harm()));
         }
         if(ritualProgress>=0 && room==anchor && effect.action()==GhostDomain.Action.DISTURB){
             ritualProgress=Math.max(0,ritualProgress-12); // Contest, but bounded disruption cannot permanently stun the rite.
         }
-        if(health[0]==0&&health[1]==0&&health[2]==0)outcome=Outcome.LOST;
+        // Disconnected seats cannot become invulnerable phantom survivors.
+        boolean survivor=false;
+        for(int i=0;i<3;i++)if(active[i]&&health[i]>0)survivor=true;
+        if(!survivor)outcome=Outcome.LOST;
     }
     public boolean advance() {
         if(outcome!=Outcome.ACTIVE||ritualProgress<0)return false;

@@ -87,11 +87,18 @@ public final class LanHost implements AutoCloseable {
                             ai.forget();
                             notifyHunters("INFO|human ghost disconnected - AI has taken control");
                             broadcastState();
-                        }else{
-                            // Hunter departure still terminates this experimental match;
-                            // hunter reconnect is a separate unsatisfied production gate.
+                        }else if(peer.slot==0){
+                            // The host-owned hunter still owns the session lifecycle.
                             running=false;
-                            notifyAllPeers("INFO|match stopped after disconnect");
+                            notifyAllPeers("INFO|match stopped after host departure");
+                        }else{
+                            // A guest hunter cannot destroy the other players' investigation.
+                            mission.depart(peer.slot);
+                            notifyHunters("PEER|LEFT|"+peer.slot);
+                            notifyHunters("INFO|hunter "+(peer.slot+1)+" departed - "
+                                    +mission.remainingHunters()+" investigator(s) remaining");
+                            broadcastState();broadcastWorld();broadcastProgress();
+                            finishIfComplete();
                         }
                     }
                     broadcastLobby();
@@ -381,11 +388,13 @@ public final class LanHost implements AutoCloseable {
     private void broadcastWorld(){
         String doors="DOORS|"+map.doorSnapshot();
         notifyHunters(doors);
-        for(int i=0;i<3;i++)notifyHunters(world.bodyFrame(i,tick));
+        for(int i=0;i<3;i++)if(seats[i]!=null)notifyHunters(world.bodyFrame(i,tick));
     }
     private void broadcastState(){
         GhostDomain.Observation o=ghost.observe();
-        notifyHunters("TEAMMAP|"+hunterRooms[0]+"|"+hunterRooms[1]+"|"+hunterRooms[2]);
+        notifyHunters("TEAMMAP|"+(seats[0]==null?-1:hunterRooms[0])+"|"
+                +(seats[1]==null?-1:hunterRooms[1])+"|"
+                +(seats[2]==null?-1:hunterRooms[2]));
         for(int i=0;i<4;i++){
             Peer peer=seats[i];if(peer==null)continue;
             boolean isGhost=i==3;

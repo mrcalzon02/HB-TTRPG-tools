@@ -110,12 +110,17 @@ public final class LanLobbyWindow extends JFrame {
         }else if(event.startsWith("TEAMMAP|")){
             var parts=LanProtocol.parts(event);
             if(parts.size()==4){HouseMap layout=new HouseMap();
-                teamStatus.setText("Hunters: "+layout.roomName(Integer.parseInt(parts.get(1)))+" / "+layout.roomName(Integer.parseInt(parts.get(2)))+" / "+layout.roomName(Integer.parseInt(parts.get(3))));
+                teamStatus.setText("Hunters: "+teamRoom(layout,parts.get(1))+" / "
+                        +teamRoom(layout,parts.get(2))+" / "+teamRoom(layout,parts.get(3)));
             }
         }else if(event.startsWith("PROGRESS|")){
             var fields=LanProtocol.parts(event);
             if(fields.size()==8)caseStatus.setText("Health "+fields.get(1)+"  Fear "+fields.get(2)+"  Wards "+fields.get(3)+"  Evidence "+fields.get(4)+"/3  Circle "+fields.get(5)+"  Ritual "+fields.get(6)+"/45  "+fields.get(7));
         }else{log.append(event+"\n");log.setCaretPosition(log.getDocument().getLength());}
+    }
+    private static String teamRoom(HouseMap map,String raw){
+        int room=LanProtocol.integer(raw,-1,HouseMap.ROOM_COUNT-1);
+        return room<0?"DISCONNECTED":map.roomName(room);
     }
     private void setCommandEnabled(boolean available){
         ready.setEnabled(available);
