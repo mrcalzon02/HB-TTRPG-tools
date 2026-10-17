@@ -319,7 +319,7 @@ public final class SceneRenderer {
     }
     public void draw(HouseMap map,InvestigationSession session,double clock){
         render(map,session.ghostRoom(),session.outcome()==InvestigationSession.Outcome.ACTIVE && session.ghostManifesting(),
-            session.wardPrepared()?session.anchorRoom():-1,-1,clock,List.of());
+            session.wardPrepared()?session.anchorRoom():-1,-1,clock,List.of(),null,session.counterMarks());
     }
     /** Spectral viewpoint: only a room-local sensed hunter is rendered. */
     public void drawPractice(HouseMap map,int visibleHunterRoom,double clock){

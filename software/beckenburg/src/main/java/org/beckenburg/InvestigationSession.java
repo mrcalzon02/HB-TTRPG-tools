@@ -25,6 +25,7 @@ public final class InvestigationSession {
     private Outcome outcome = Outcome.ACTIVE;
     private int ticks, health = 100, stress, wards, payouts;
     private final GhostDomain ghost;
+    private final HunterCounters counters=new HunterCounters();
     private final GhostDomain.AiController ghostAi;
     private boolean prepared, haunted, rewarded;
     private String message = "Find disturbances, collect 3 instruments' evidence, prepare a ward, cleanse the anchor.";
@@ -44,6 +45,22 @@ public final class InvestigationSession {
     public String missionId() { return missionId; }
     public int anchorRoom() { return anchorRoom; } // simulation/test authority; do not expose in player HUD
     public int ghostRoom() { return ghost.room(); }
+    public java.util.List<SceneRenderer.WorldMark> counterMarks(){
+        return counters.snapshot(ticks).stream()
+                .map(m->new SceneRenderer.WorldMark(m.x(),m.z(),m.height(),m.kind())).toList();
+    }
+    public int counterCharges(HunterCounters.Kind kind){return counters.charges(0,kind);}
+    public boolean deployCounter(HunterCounters.Kind kind,double x,double z,double yaw){
+        if(outcome!=Outcome.ACTIVE)return false;
+        try{
+            int heading=Math.floorMod((int)Math.round(Math.toDegrees(yaw)),360);
+            counters.launch(0,kind,new LanWorld.Body(x,z,heading,map.roomAt(x,z)),map,ticks);
+            log(switch(kind){case CROSS->"Cross thrown: try to interrupt a manifested strike.";
+                case WARD->"Ward thrown: temporary shelter where it lands.";
+                case SALT->"Salt deployed: slows and reveals grounded spirits only.";});
+            return true;
+        }catch(IllegalArgumentException denied){log(denied.getMessage());return false;}
+    }
     public int ticks() { return ticks; }
     public int health() { return health; }
     public int stress() { return stress; }
@@ -83,6 +100,10 @@ public final class InvestigationSession {
                 saltRoom=-1;saltTick=-1;
             }
         }
+        HunterCounters.Impact counter=counters.advance(map,ghost.type(),ghost,
+            new LanGhostSpatial.Pose(ghost.room(),map.centerX(ghost.room()),map.centerZ(ghost.room()),0),ticks);
+        if(counter.saltTrack())log("Salt tracks: the grounded ghost is visible and slowed.");
+        if(counter.repelled())log("Cross struck the manifestation: attack interrupted.");
         GhostDomain.Command command=ghostAi.decide(ghost.observe());
         if(command!=null) {
             GhostDomain.Resolution result=ghost.dispatch(command);

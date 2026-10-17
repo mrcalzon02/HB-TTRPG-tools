@@ -273,6 +273,9 @@ public final class InvestigationGame {
             }
             if(key==KeyEvent.VK_R)session.useEquipment(loadout,scene.x,scene.z,scene.yaw);
             if(key==KeyEvent.VK_C)session.placeWard(scene.x,scene.z);
+            if(key==KeyEvent.VK_Z)session.deployCounter(HunterCounters.Kind.CROSS,scene.x,scene.z,scene.yaw);
+            if(key==KeyEvent.VK_G)session.deployCounter(HunterCounters.Kind.WARD,scene.x,scene.z,scene.yaw);
+            if(key==KeyEvent.VK_H)session.deployCounter(HunterCounters.Kind.SALT,scene.x,scene.z,scene.yaw);
             if(key==KeyEvent.VK_B)session.cleanse(scene.x,scene.z);
             if(key==KeyEvent.VK_J)journalShown=!journalShown;
             if(key==KeyEvent.VK_M)mapShown=!mapShown;
@@ -339,7 +342,10 @@ public final class InvestigationGame {
                 String msg=session.message();
                 g.drawString(msg.length()>120?msg.substring(0,117)+"...":msg,16,stageH+45);
                 g.setColor(new Color(194,171,139));
-                g.drawString("1-4 SELECT  R USE  F TORCH  E INTERACT/RACK/BREAKER  C WARD  B RITE  J NOTES  M MAP  X EXIT",16,stageH+72);
+                g.drawString("1-4 GEAR / R USE  Z CROSS("+session.counterCharges(HunterCounters.Kind.CROSS)+
+                    ")  G WARD("+session.counterCharges(HunterCounters.Kind.WARD)+
+                    ")  H SALT("+session.counterCharges(HunterCounters.Kind.SALT)+
+                    ")  C RITUAL WARD  B RITE  E INTERACT",16,stageH+72);
                 if(lastPing!=null && callouts.visible(session.ticks()).contains(lastPing)){
                     g.setColor(new Color(238,196,109));
                     g.drawString("CALLOUT: "+lastPing.phrase().spoken+"   ["+map.roomName(lastPing.zone())+"]",16,stageH+88);
