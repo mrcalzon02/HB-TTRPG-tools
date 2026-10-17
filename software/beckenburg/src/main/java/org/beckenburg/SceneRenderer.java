@@ -20,6 +20,8 @@ public final class SceneRenderer {
     private final double[] depths=new double[W*H];
     public double x=20.5,z=27.5,yaw=1.65,pitch=-.09;
     public boolean lamp=true;
+    /** Solo environment presets; default multipliers retain legacy LAN lighting. */
+    public double environmentLight=1.0,fogDensity=1.0;
     public BufferedImage image(){return frame;}
     public int[] pixels(){return pixels;}
     public double[] depths(){return depths;}
@@ -356,10 +358,10 @@ public final class SceneRenderer {
                     ((tg*((tint>>8)&255)/255)<<8) |
                      (tb*(tint&255)/255);
             }
-            double light=(lamp?1.22:.55)*Math.max(.22,1-d/26.0);
+            double light=(lamp?1.22:.55)*environmentLight*Math.max(.22,1-d/26.0);
             light=Math.max(.1,Math.min(1.45,light+(BAYER[(px&3)+((py&3)<<2)]-7.5)/140.0));
             int red=(int)(((color>>16)&255)*light),green=(int)(((color>>8)&255)*light),blue=(int)((color&255)*light);
-            double fog=Math.min(.75,Math.max(0,(d-5)/15));
+            double fog=Math.min(.92,Math.max(0,(d-5)/15)*fogDensity);
             red=(int)(red*(1-fog)+18*fog);green=(int)(green*(1-fog)+21*fog);blue=(int)(blue*(1-fog)+30*fog);
             pixels[k]=(Math.min(255,red)<<16)|(Math.min(255,green)<<8)|Math.min(255,blue);
         }

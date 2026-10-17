@@ -17,6 +17,9 @@ public final class InvestigationSession {
     private final Role role;
     private final String missionId=UUID.randomUUID().toString();
     private final int anchorRoom;
+    private final int[] spectralTrace=new int[HouseMap.ROOM_COUNT];
+    private int saltRoom=-1,saltTick=-1;
+    private boolean apparitionPhotographed;
     private final EnumSet<Instrument> evidence = EnumSet.noneOf(Instrument.class);
     private final ArrayList<String> journal = new ArrayList<>();
     private Outcome outcome = Outcome.ACTIVE;
@@ -28,6 +31,7 @@ public final class InvestigationSession {
 
     public InvestigationSession(HouseMap map, Role role, long seed) {
         this.map=map; this.role=role; this.random=new Random(seed);
+        java.util.Arrays.fill(spectralTrace,-100000);
         this.wards=role==Role.CLERIC?3:2;
         this.anchorRoom=random.nextInt(map.interiorRoomCount());
         this.ghost=new GhostDomain(map,anchorRoom);
@@ -45,6 +49,7 @@ public final class InvestigationSession {
     public int stress() { return stress; }
     public int wards() { return wards; }
     public int payout() { return payouts; }
+    public boolean apparitionPhotographed(){return apparitionPhotographed;}
     public int evidenceCount() { return evidence.size(); }
     public boolean hasEvidence(Instrument instrument) { return evidence.contains(instrument); }
     public boolean wardPrepared() { return prepared; }
@@ -65,6 +70,13 @@ public final class InvestigationSession {
         // Ghost observation has only room-local presence, never the hunter's global position or notebook.
         int playerRoom=map.roomAt(playerX,playerZ);
         ghost.advance(ticks,playerRoom);
+        if(ghost.room()>=0&&ghost.room()<spectralTrace.length){
+            spectralTrace[ghost.room()]=ticks;
+            if(saltRoom==ghost.room()&&ticks>saltTick){
+                log("Salt disturbed in "+map.roomName(saltRoom)+" — a spectral path is confirmed.");
+                saltRoom=-1;saltTick=-1;
+            }
+        }
         GhostDomain.Command command=ghostAi.decide(ghost.observe());
         if(command!=null) {
             GhostDomain.Resolution result=ghost.dispatch(command);
@@ -86,6 +98,46 @@ public final class InvestigationSession {
         haunted=ghost.manifested();
         if(haunted && playerRoom==ghost.room() && ticks%10==0)
             stress=Math.min(100,stress+1);
+    }
+
+    /** In-hand use has real case effects. Only three evidence instruments count toward a cleansing. */
+    public boolean useEquipment(EquipmentLoadout loadout,double x,double z){
+        java.util.Objects.requireNonNull(loadout);
+        if(outcome!=Outcome.ACTIVE||!map.traversable(x,z)){
+            log("Cannot operate equipment here.");return false;
+        }
+        EquipmentLoadout.Item item=loadout.equipped();
+        return switch(item){
+            case EMF->scan(Instrument.EMF,x,z);
+            case THERMOMETER->scan(Instrument.THERMOMETER,x,z);
+            case SPIRIT_BOX->scan(Instrument.SPIRIT_BOX,x,z);
+            case UV_LAMP->{
+                int room=map.roomAt(x,z);
+                boolean residue=room>=0&&ticks-spectralTrace[room]<=100;
+                log(residue?"UV: transient spectral residue detected in "+map.roomName(room)+"."
+                    :"UV: no fresh traces in "+map.roomName(room)+".");
+                yield true;
+            }
+            case PHOTO_CAMERA->{
+                if(!loadout.consume(item)){log("Camera empty. Reload at the van equipment rack.");yield false;}
+                int room=map.roomAt(x,z);
+                boolean visible=haunted&&room==ghost.room()
+                    &&Math.hypot(x-map.centerX(ghost.room()),z-map.centerZ(ghost.room()))<4.5;
+                if(visible&&!apparitionPhotographed){
+                    apparitionPhotographed=true;
+                    log("APPARITION PHOTOGRAPHED. The developed image will count in your case payout.");
+                }else log(visible?"Apparition photographed again.":"No apparition visible in the photograph.");
+                yield visible;
+            }
+            case SALT->{
+                int room=map.roomAt(x,z);
+                if(room<0||map.outside(room)){log("Salt must be placed in a traversable interior.");yield false;}
+                if(!loadout.consume(item)){log("No salt left. Refill at the van equipment rack.");yield false;}
+                saltRoom=room;saltTick=ticks;
+                log("Salt scattered in "+map.roomName(room)+". Return later to check for tracks.");
+                yield true;
+            }
+        };
     }
 
     public boolean scan(Instrument tool, double x, double z) {
@@ -136,6 +188,6 @@ public final class InvestigationSession {
     private void finish(Outcome result) {
         if(rewarded)return;
         outcome=result;rewarded=true;
-        payouts=switch(result){case CLEANSED->220 + evidence.size()*40 + health/2;case RETREATED->evidence.size()*30;case LOST->0;case ACTIVE->0;};
+        payouts=switch(result){case CLEANSED->220 + evidence.size()*40 + health/2 + (apparitionPhotographed?45:0);case RETREATED->evidence.size()*30 + (apparitionPhotographed?25:0);case LOST->0;case ACTIVE->0;};
     }
 }

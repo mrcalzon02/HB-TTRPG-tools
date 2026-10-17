@@ -15,6 +15,8 @@ public final class InvestigationGame {
     private final ProfileStore profile=new ProfileStore(ProfileStore.defaultPath());
     private final JLabel account=new JLabel();
     private JComboBox<InvestigationSession.Role> rolePicker;
+    private JComboBox<SiteCatalog.Location> locationPicker;
+    private JComboBox<SiteCatalog.Conditions> conditionsPicker;
     private GamePanel game;
     private GhostPracticePanel ghostPractice;
     private int caseNumber;
@@ -43,7 +45,20 @@ public final class InvestigationGame {
         rolePicker.setMaximumSize(new Dimension(330,35));
         JLabel selected=new JLabel("Investigator discipline",SwingConstants.CENTER);
         selected.setForeground(new Color(225,226,230));
+        locationPicker=new JComboBox<>(SiteCatalog.Location.values());
+        conditionsPicker=new JComboBox<>(SiteCatalog.Conditions.values());
+        JPanel selectors=new JPanel(new GridLayout(2,2,7,5));
+        selectors.setBackground(new Color(28,31,39));
+        selectors.add(new JLabel("Site"));selectors.add(locationPicker);
+        selectors.add(new JLabel("Conditions"));selectors.add(conditionsPicker);
+        selectors.setMaximumSize(new Dimension(410,75));
         JButton begin=button("BEGIN SOLO INVESTIGATION");
+        locationPicker.addActionListener(e->{
+            boolean available=((SiteCatalog.Location)locationPicker.getSelectedItem()).playable();
+            begin.setEnabled(available);conditionsPicker.setEnabled(available);
+            status.setText(available?"LOCAL SOLO ALPHA   /   HOUSE SITE READY"
+                    :"SITE NOT PLAYABLE - LEVEL GEOMETRY STILL IN PRODUCTION");
+        });
         JButton ghost=button("GHOST PRACTICE / LOCAL");
         JButton lan=button("LAN HOST / JOIN (3D HOUSE ALPHA)");
         JButton guide=button("FIELD MANUAL / CONTROLS");
@@ -53,6 +68,7 @@ public final class InvestigationGame {
         inner.add(title);inner.add(Box.createVerticalStrut(8));inner.add(tagline);
         inner.add(Box.createVerticalStrut(15));inner.add(status);inner.add(Box.createVerticalStrut(18));
         inner.add(selected);inner.add(Box.createVerticalStrut(6));inner.add(rolePicker);
+        inner.add(Box.createVerticalStrut(10));inner.add(selectors);
         for(JButton b:new JButton[]{begin,ghost,lan,guide,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
         inner.add(Box.createVerticalStrut(20));inner.add(account);
         JLabel limitation=new JLabel("LAN shared house navigation is available; complete 3v1 simulation is still in development.",SwingConstants.CENTER);
@@ -61,10 +77,10 @@ public final class InvestigationGame {
         menu.add(inner);
         begin.addActionListener(e->begin());ghost.addActionListener(e->beginGhost());lan.addActionListener(e->new LanLobbyWindow().setVisible(true));guide.addActionListener(e->JOptionPane.showMessageDialog(window,
             "WASD move • Shift sprint • Click to capture mouse-look / arrows • F flashlight • E doors\n"+
-            "1 EMF  •  2 Thermometer  •  3 Spirit Box  •  R scan\n"+
+            "1–4 select carried gear • R use • E at van rack to change loadout/restock\n"+
             "C defensive or ritual ward (2 per case)  •  B cleanse anchor\n"+
             "Hold Q, move mouse, release Q for contextual callouts and world pings.\n"+
-            "J toggle evidence journal  •  M toggle floor plan  •  X extract at van\n"+
+            "J toggle evidence journal • M floor map • X extract • E at utility breaker toggles power\n"+
             "Escape pauses and offers return to castle.\n\n"+
             "Search every room: readings strengthen near the Spirit's anchor.\n"+
             "Record three types of evidence, place a ward in the anchor room, cleanse,\n"+
@@ -87,7 +103,10 @@ public final class InvestigationGame {
         if(game!=null){game.close();cards.remove(game);game=null;}
         if(ghostPractice!=null){ghostPractice.close();cards.remove(ghostPractice);ghostPractice=null;}
         caseNumber++;
-        game=new GamePanel((InvestigationSession.Role)rolePicker.getSelectedItem(),caseNumber);
+        SiteCatalog.Location location=(SiteCatalog.Location)locationPicker.getSelectedItem();
+        SiteCatalog.requirePlayable(location);
+        game=new GamePanel((InvestigationSession.Role)rolePicker.getSelectedItem(),caseNumber,
+            location,(SiteCatalog.Conditions)conditionsPicker.getSelectedItem());
         cards.add(game,"play");((CardLayout)cards.getLayout()).show(cards,"play");
         SwingUtilities.invokeLater(game::requestFocusInWindow);
     }
@@ -111,7 +130,10 @@ public final class InvestigationGame {
         private final SceneRenderer scene=new SceneRenderer();
         private final InvestigationSession session;
         private final javax.swing.Timer timer;
-        private InvestigationSession.Instrument selected=InvestigationSession.Instrument.EMF;
+        private final EquipmentLoadout loadout=new EquipmentLoadout();
+        private final SiteCatalog.Location location;
+        private final SiteCatalog.Conditions conditions;
+        private boolean powerOn;
         private boolean mapShown,journalShown,claimSaved,wheelOpen;
         private final MouseLook mouseLook;
         private final TeamCallout.Board callouts=new TeamCallout.Board(map);
@@ -123,7 +145,12 @@ public final class InvestigationGame {
         private int frameCount;
         private long last=System.nanoTime();
         private double accumulator;
-        GamePanel(InvestigationSession.Role role,int ordinal){
+        GamePanel(InvestigationSession.Role role,int ordinal,SiteCatalog.Location site,
+                SiteCatalog.Conditions mode){
+            SiteCatalog.requirePlayable(site);
+            location=site;conditions=java.util.Objects.requireNonNull(mode);
+            powerOn=conditions.initiallyPowered();
+            syncEnvironment();
             setFocusable(true);
             mouseLook=new MouseLook(this,(dx,dy)->{
                 if(wheelOpen){wheelDelta(dx,dy);}
@@ -137,6 +164,38 @@ public final class InvestigationGame {
             timer=new javax.swing.Timer(33,e->frame());timer.start();
         }
         void close(){timer.stop();down.clear();wheelOpen=false;mouseLook.close();}
+        private void syncEnvironment(){
+            scene.environmentLight=conditions.lightMultiplier()*(powerOn?1.0:.48);
+            scene.fogDensity=conditions.fogMultiplier();
+        }
+        private boolean nearBreaker(){
+            return map.roomAt(scene.x,scene.z)==11
+                &&Math.hypot(scene.x-map.centerX(11),scene.z-map.centerZ(11))<1.5;
+        }
+        private void editRack(){
+            timer.stop();down.clear();mouseLook.release();
+            java.util.List<JComboBox<EquipmentLoadout.Item>> fields=new java.util.ArrayList<>();
+            JPanel entries=new JPanel(new GridLayout(4,2,6,5));
+            for(int i=0;i<EquipmentLoadout.SLOTS;i++){
+                entries.add(new JLabel("Slot "+(i+1)));
+                JComboBox<EquipmentLoadout.Item> choice=new JComboBox<>(EquipmentLoadout.Item.values());
+                choice.setSelectedItem(loadout.at(i));fields.add(choice);entries.add(choice);
+            }
+            int result=JOptionPane.showConfirmDialog(this,entries,
+                "EQUIPMENT RACK / 4 DISTINCT CARRIED ITEMS",JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+            if(result==JOptionPane.OK_OPTION){
+                EquipmentLoadout.Item[] chosen=new EquipmentLoadout.Item[EquipmentLoadout.SLOTS];
+                for(int i=0;i<chosen.length;i++)chosen[i]=(EquipmentLoadout.Item)fields.get(i).getSelectedItem();
+                try{
+                    loadout.replaceAtRack(chosen);
+                    showVanNotice("Equipment exchanged and expendable supplies restocked.");
+                }catch(IllegalArgumentException invalid){
+                    showVanNotice("Each hotbar slot must contain a DIFFERENT item. Selection unchanged.");
+                }
+            }
+            last=System.nanoTime();timer.start();requestFocusInWindow();
+        }
         private void frame(){
             long now=System.nanoTime();double dt=Math.max(0,Math.min(.075,(now-last)/1e9));last=now;
             double forward=wheelOpen?0:(down.contains(KeyEvent.VK_W)?1:0)-(down.contains(KeyEvent.VK_S)?1:0);
@@ -196,16 +255,19 @@ public final class InvestigationGame {
                 if(key==KeyEvent.VK_DOWN)wheelDy=75;
                 down.add(key);repaint();return;
             }
-            if(key==KeyEvent.VK_1)selected=InvestigationSession.Instrument.EMF;
-            if(key==KeyEvent.VK_2)selected=InvestigationSession.Instrument.THERMOMETER;
-            if(key==KeyEvent.VK_3)selected=InvestigationSession.Instrument.SPIRIT_BOX;
+            if(key>=KeyEvent.VK_1&&key<=KeyEvent.VK_4)loadout.select(key-KeyEvent.VK_1);
             if(key==KeyEvent.VK_F)scene.lamp=!scene.lamp;
             if(key==KeyEvent.VK_E){
                 VanStaging.Station service=map.van().stationAt(scene.x,scene.z);
                 if(service!=null)useVan(service);
-                else if(!map.toggleNearestDoor(scene.x,scene.z))showVanNotice("No usable door or van station nearby.");
+                else if(nearBreaker()){
+                    powerOn=!powerOn;syncEnvironment();
+                    showVanNotice(powerOn?"Utility power restored.":"Utility breaker switched off.");
+                }
+                else if(!map.toggleNearestDoor(scene.x,scene.z))
+                    showVanNotice("No usable door or station nearby.");
             }
-            if(key==KeyEvent.VK_R)session.scan(selected,scene.x,scene.z);
+            if(key==KeyEvent.VK_R)session.useEquipment(loadout,scene.x,scene.z);
             if(key==KeyEvent.VK_C)session.placeWard(scene.x,scene.z);
             if(key==KeyEvent.VK_B)session.cleanse(scene.x,scene.z);
             if(key==KeyEvent.VK_J)journalShown=!journalShown;
@@ -220,11 +282,7 @@ public final class InvestigationGame {
                     briefingShown=!briefingShown;
                     showVanNotice(briefingShown?"CASE BOARD OPEN — current role, objectives and progress":"Case board closed.");
                 }
-                case EQUIPMENT -> {
-                    var tools=InvestigationSession.Instrument.values();
-                    selected=tools[(selected.ordinal()+1)%tools.length];
-                    showVanNotice("EQUIPMENT RACK — equipped "+selected.name().replace('_',' '));
-                }
+                case EQUIPMENT -> editRack();
                 case RELAY -> {
                     journalShown=!journalShown;
                     showVanNotice("RADIO RELAY — "+session.evidenceCount()+" clues logged; "+callouts.visible(session.ticks()).size()+" active pings.");
@@ -266,20 +324,30 @@ public final class InvestigationGame {
                 g.drawImage(scene.image(),0,0,getWidth(),stageH,null);
                 g.setFont(new Font(Font.MONOSPACED,Font.BOLD,Math.max(12,getHeight()/52)));
                 g.setColor(new Color(242,212,156));
-                g.drawString("BECKENBURG  /  CASE 001  /  "+session.role(),16,25);
+                g.drawString("BECKENBURG / "+location.label.toUpperCase()+" / "+conditions.label.toUpperCase()+" / "+session.role(),16,25);
                 g.drawString(map.roomName(scene.x,scene.z),16,46);
                 g.drawString("+",getWidth()/2-5,stageH/2+5);
                 g.setColor(new Color(21,23,30));g.fillRect(0,stageH,getWidth(),getHeight()-stageH);
                 g.setColor(new Color(221,214,194));
-                g.drawString(session.statusLine()+"     SELECTED "+selected.name().replace('_',' '),16,stageH+23);
+                g.drawString(session.statusLine()+"   HELD "+loadout.equipped().label.toUpperCase()+
+                    (loadout.usesLeft(loadout.equipped())<0?"":" ("+loadout.usesLeft(loadout.equipped())+" LEFT)"),16,stageH+23);
                 g.setColor(new Color(180,196,203));
                 String msg=session.message();
                 g.drawString(msg.length()>120?msg.substring(0,117)+"...":msg,16,stageH+45);
                 g.setColor(new Color(194,171,139));
-                g.drawString("WASD / CLICK MOUSE LOOK    1/2/3 TOOLS    R SCAN    C WARD    B RITE    E DOOR    Q HOLD PING    M/J MAP/LOG    X EXIT",16,stageH+72);
+                g.drawString("1-4 SELECT  R USE  F TORCH  E INTERACT/RACK/BREAKER  C WARD  B RITE  J NOTES  M MAP  X EXIT",16,stageH+72);
                 if(lastPing!=null && callouts.visible(session.ticks()).contains(lastPing)){
                     g.setColor(new Color(238,196,109));
                     g.drawString("CALLOUT: "+lastPing.phrase().spoken+"   ["+map.roomName(lastPing.zone())+"]",16,stageH+88);
+                }
+                g.setColor(new Color(175,208,199));
+                String slots="";for(int i=0;i<EquipmentLoadout.SLOTS;i++)
+                    slots+=(i==0?"":"   ")+(i+1)+":"+
+                        loadout.at(i).label.toUpperCase()+(i==loadout.activeSlot()?"*":"");
+                g.drawString(slots,16,stageH-17);
+                if(nearBreaker()){
+                    g.setColor(new Color(255,212,137));
+                    g.drawString("E / UTILITY BREAKER: "+(powerOn?"ON":"OFF"),16,stageH-36);
                 }
                 if(map.van().stationAt(scene.x,scene.z)!=null){
                     VanStaging.Station service=map.van().stationAt(scene.x,scene.z);
@@ -348,7 +416,7 @@ public final class InvestigationGame {
             g.drawString("Role: "+session.role()+"  /  Threat: SPIRIT (test contract)",x+16,y+50);
             g.drawString("Gather EMF, temperature and spirit-box readings.",x+16,y+74);
             g.drawString("Ward the anchor; cleanse; return to this van.",x+16,y+96);
-            g.drawString("Evidence "+session.evidenceCount()+"/3    Wards "+session.wards()+"    Health "+session.health(),x+16,y+119);
+            g.drawString("Evidence "+session.evidenceCount()+"/3  Wards "+session.wards()+"  HP "+session.health()+"  Photo "+(session.apparitionPhotographed()?"YES":"NO"),x+16,y+119);
         }
         private void drawJournal(Graphics2D g){
             int boxW=Math.min(490,getWidth()-50),x=getWidth()-boxW-18,y=70,boxH=Math.min(getHeight()-165,395);
