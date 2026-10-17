@@ -19,6 +19,7 @@ public final class LanLobbyWindow extends JFrame {
     private LanClient connection;
     private int myRoom=HouseMap.EXTRACTION_ROOM;
     private boolean busy,missionRunning,worldMode;
+    private long connectionGeneration;
     private LanWorldPanel worldView;
     private LanGhostPanel ghostView;
     private JFrame worldFrame;
@@ -56,7 +57,10 @@ public final class LanLobbyWindow extends JFrame {
     private void action(Command command){try{if(connection==null)throw new IOException("not connected");command.send();}
         catch(Exception ex){log.append("Send failed: "+ex.getMessage()+"\n");}}
     private void connect(boolean localHost){
-        if(busy||connection!=null)return;busy=true;status.setText("Connecting...");
+        if(busy||connection!=null)return;
+        busy=true;
+        long generation=++connectionGeneration;
+        status.setText("Connecting...");
         String hostname=ip.getText().trim(),nickname=name.getText();String p=port.getText().trim();
         boolean ghost=role.getSelectedIndex()==1;
         Thread task=new Thread(()->{
@@ -65,17 +69,39 @@ public final class LanLobbyWindow extends JFrame {
                 int portNumber=LanProtocol.integer(p,1,65535);
                 if(localHost){newHost=new LanHost("0.0.0.0",portNumber);}
                 LanClient client=new LanClient(localHost?"127.0.0.1":hostname,portNumber,localHost?false:ghost,nickname,
-                    frame->SwingUtilities.invokeLater(()->receive(frame)));
+                    frame->SwingUtilities.invokeLater(()->{
+                        if(generation==connectionGeneration)receive(frame);
+                    }));
                 final LanHost own=newHost;
-                SwingUtilities.invokeLater(()->{hosted=own;connection=client;busy=false;
+                SwingUtilities.invokeLater(()->{
+                    if(generation!=connectionGeneration){
+                        client.close();
+                        if(own!=null)own.close();
+                        return; // Stale connection completed after EOF or a replacement request.
+                    }
+                    hosted=own;connection=client;busy=false;
                     status.setText("Seat "+client.seat()+" — room case + shared house");
-                    setCommandEnabled(true);log.append("Connected. Ready when your team is assembled.\n");});
-            }catch(Exception ex){if(newHost!=null)newHost.close();String msg=ex.getMessage();SwingUtilities.invokeLater(()->{busy=false;status.setText("Connection failed");log.append("Error: "+msg+"\n");});}
+                    setCommandEnabled(true);log.append("Connected. Ready when your team is assembled.\n");
+                });
+            }catch(Exception ex){
+                if(newHost!=null)newHost.close();
+                String msg=ex.getMessage();
+                SwingUtilities.invokeLater(()->{
+                    if(generation!=connectionGeneration)return;
+                    busy=false;status.setText("Connection failed");
+                    log.append("Error: "+msg+"\n");
+                });
+            }
         },"beckenburg-connect");task.setDaemon(true);task.start();
     }
     private void open3D(){
         if(connection==null||!missionRunning)return;
-        if(worldFrame!=null&&worldFrame.isDisplayable()){worldFrame.toFront();worldView.requestFocusInWindow();return;}
+        if(worldFrame!=null&&worldFrame.isDisplayable()){
+            worldFrame.toFront();
+            JComponent openView=worldView!=null?worldView:ghostView;
+            if(openView!=null)openView.requestFocusInWindow();
+            return;
+        }
         boolean ghost="GHOST".equals(connection.seat());
         try{if(ghost)connection.viewGhost3D();else connection.view3D();}
         catch(IOException ex){log.append("3D start failed: "+ex.getMessage()+"\n");return;}
@@ -98,6 +124,22 @@ public final class LanLobbyWindow extends JFrame {
         // The host sends an immediate snapshot after VIEW3D. Subsequent frames update this viewport.
     }
     private void receive(String event){
+        if(event.equals("INFO|network connection ended")){
+            // A clean server EOF is terminal. Reclaim all owned handles so Host/Join
+            // can be used again; queued events from the former socket are generation-gated.
+            connectionGeneration++;
+            missionRunning=false;worldMode=false;busy=false;
+            if(worldFrame!=null){worldFrame.dispose();worldFrame=null;}
+            if(connection!=null){connection.close();connection=null;}
+            if(hosted!=null){hosted.close();hosted=null;}
+            myRoom=HouseMap.EXTRACTION_ROOM;
+            status.setText("Disconnected — host or server connection lost");
+            caseStatus.setText("Case: connection ended");
+            teamStatus.setText("Team: disconnected");
+            setCommandEnabled(false);
+            log.append("Connection ended. You can host or join a fresh match.\n");
+            return;
+        }
         if(worldFrame!=null&&worldFrame.isDisplayable()){
             if(worldView!=null)worldView.onEvent(event);
             if(ghostView!=null)ghostView.onEvent(event);

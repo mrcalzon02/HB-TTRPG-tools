@@ -59,10 +59,23 @@ public final class LanClient implements AutoCloseable {
     public synchronized void send(String message)throws IOException {
         if(closed)throw new IOException("LAN connection closed");LanProtocol.write(out,message);
     }
-    private void readLoop(){try{while(!closed){String line=LanProtocol.read(in);if(line==null)break;
-        // No unauthenticated UI text interpreted as HTML or network instructions.
-        LanProtocol.parts(line);observer.accept(line);
-    }}catch(Exception ex){if(!closed)observer.accept("INFO|network connection ended");}
-        finally{close();}}
+    private void readLoop(){
+        try{
+            while(!closed){
+                String line=LanProtocol.read(in);
+                if(line==null)break; // Clean remote EOF still ends the connection.
+                LanProtocol.parts(line);
+                observer.accept(line);
+            }
+        }catch(Exception ex){
+            // Truncated, malformed or interrupted input shares the same terminal event.
+        }finally{
+            if(!closed){
+                try{observer.accept("INFO|network connection ended");}
+                catch(RuntimeException ignored){ /* A failing UI callback cannot prevent socket cleanup. */ }
+            }
+            close();
+        }
+    }
     @Override public void close(){if(closed)return;closed=true;try{socket.close();}catch(IOException ignored){}}
 }

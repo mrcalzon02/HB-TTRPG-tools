@@ -50,6 +50,10 @@ public final class LanGhostGuiTest {
                 until(()->{try{return edt(()->Arrays.stream(Window.getWindows()).anyMatch(w->w instanceof JFrame f&&f.isVisible()&&f.getContentPane() instanceof LanGhostPanel));}catch(Exception e){return false;}},"ghost scene");
                 JFrame world=edt(()->Arrays.stream(Window.getWindows()).filter(w->w instanceof JFrame f&&f.isVisible()&&f.getContentPane() instanceof LanGhostPanel).map(w->(JFrame)w).findFirst().orElseThrow());
                 LanGhostPanel panel=(LanGhostPanel)world.getContentPane();
+                // Repeated Enter 3D must focus the existing ghost scene, never dereference a hunter-only panel.
+                edt(()->{LanWindowSmokeTest.button(ghost,"Enter 3D World").doClick();return null;});
+                if(!world.isDisplayable()||world.getContentPane()!=panel)
+                    throw new AssertionError("second ghost 3D request replaced or closed the spectral viewport");
                 until(()->{try{return edt(()->panel.ghostRoom()==4);}catch(Exception e){return false;}},"spectral host position");
                 Thread.sleep(600);
                 BufferedImage shot=edt(()->{BufferedImage im=new BufferedImage(world.getWidth(),world.getHeight(),BufferedImage.TYPE_INT_RGB);world.paint(im.getGraphics());return im;});
