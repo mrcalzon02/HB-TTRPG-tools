@@ -22,7 +22,8 @@ public final class LanCase {
     private int lastGuessTick=-1000;
     private final int[] health={100,100,100},stress={0,0,0},wards={2,2,2};
     private final boolean[] active={true,true,true};
-    private int wardRoom=-1,ritualProgress=-1,unguardedTicks;
+    private int wardRoom=-1,ritualProgress=-1,unguardedTicks,ritualRoom=-1;
+    private GhostIdentity.Rite selectedRite;
     private Outcome outcome=Outcome.ACTIVE;
 
     public LanCase(int anchor) {
@@ -48,7 +49,8 @@ public final class LanCase {
         java.util.Objects.requireNonNull(guess);
         if(outcome!=Outcome.ACTIVE||!alive(seat))return new Report(false,"identification unavailable");
         if(!identificationRequired)return new Report(false,"identity dossier not enabled");
-        if(tested.size()!=Tool.values().length)return new Report(false,"test all three instruments at the haunting anchor");
+        if(tested.size()!=Tool.values().length||evidence.size()<3)
+            return new Report(false,"confirm three positive evidence states at the true haunting anchor");
         if(identified!=null)return new Report(false,"entity already identified");
         if(tick<0||tick-lastGuessTick<30)return new Report(false,"allow the entity to settle before another deduction");
         lastGuessTick=tick;
@@ -68,6 +70,10 @@ public final class LanCase {
     public int wards(int seat){hunter(seat);return wards[seat];}
     public boolean wardPrepared(){return wardRoom==anchor;}
     public int ritualProgress(){return ritualProgress;}
+    public int ritualRoom(){return ritualRoom;}
+    public GhostIdentity.Rite requiredRite(){return archetype.rite();}
+    public GhostIdentity.Rite activeRite(){return selectedRite;}
+    public boolean identificationRequired(){return identificationRequired;}
     public int remainingHunters(){
         int count=0;for(boolean connected:active)if(connected)count++;
         return count;
@@ -125,18 +131,26 @@ public final class LanCase {
         if(room==anchor)wardRoom=room;
         return new Report(true,room==anchor?"ANCHOR WARD PREPARED":"DEFENSIVE WARD PLACED");
     }
-    public Report cleanse(int seat,int room) {
-        hunter(seat);
-        if(outcome!=Outcome.ACTIVE||!active[seat]||health[seat]<=0)return new Report(false,"cannot perform rite");
-        if(evidence.size()!=archetype.signatureCount())
-            return new Report(false,"complete the entity's signature evidence set");
+    public Report cleanse(int seat,int room){
+        return performRite(seat,GhostIdentity.Rite.CLEANSING,room,true);
+    }
+    /** Both room mode and 3D mode are checked here against the site's host location. */
+    public Report performRite(int seat,GhostIdentity.Rite rite,int room,boolean nearSite){
+        hunter(seat);java.util.Objects.requireNonNull(rite);
+        if(outcome!=Outcome.ACTIVE||!alive(seat))return new Report(false,"cannot perform rite");
+        if(evidence.size()<3)return new Report(false,"three confirmed evidence states required");
         if(identificationRequired&&identified!=archetype)
-            return new Report(false,"identify the haunting entity before completing the rite");
-        if(room!=anchor)return new Report(false,"no true attachment anchor here");
+            return new Report(false,"identify the ghost before choosing its rite");
+        if(identificationRequired){
+            if(rite!=archetype.rite())return new Report(false,"incorrect rite for this ghost");
+            var site=RitualSites.site(new HouseMap(),rite);
+            if(room!=site.room()||!nearSite)return new Report(false,"go to the correct ritual installation");
+        }else if(rite!=GhostIdentity.Rite.CLEANSING||room!=anchor)
+            return new Report(false,"legacy rite requires the haunting anchor");
         if(!wardPrepared())return new Report(false,"anchor ward required");
         if(ritualProgress>=0)return new Report(false,"ritual already underway");
-        ritualProgress=0;unguardedTicks=0;
-        return new Report(true,"RITUAL STARTED - defend the prepared circle");
+        selectedRite=rite;ritualRoom=room;ritualProgress=0;unguardedTicks=0;
+        return new Report(true,"RITUAL STARTED - "+rite+" - defend the prepared circle");
     }
     public Report extract(int seat,int room) {
         hunter(seat);
@@ -156,7 +170,7 @@ public final class LanCase {
             stress[i]=Math.min(100,stress[i]+effect.fear());
             if(effect.harm()>0)health[i]=Math.max(0,health[i]-Math.max(1,wardRoom==room?Math.min(4,effect.harm()):effect.harm()));
         }
-        if(ritualProgress>=0 && room==anchor && effect.action()==GhostDomain.Action.DISTURB){
+        if(ritualProgress>=0 && room==ritualRoom && effect.action()==GhostDomain.Action.DISTURB){
             ritualProgress=Math.max(0,ritualProgress-12); // Contest, but bounded disruption cannot permanently stun the rite.
         }
         // Disconnected seats cannot become invulnerable phantom survivors.
@@ -174,7 +188,7 @@ public final class LanCase {
         if(outcome!=Outcome.ACTIVE||ritualProgress<0)return RitualAdvance.NONE;
         boolean guarded=false;
         for(int seat=0;seat<3;seat++)
-            if(active[seat]&&health[seat]>0&&hunterRooms[seat]==anchor)guarded=true;
+            if(active[seat]&&health[seat]>0&&hunterRooms[seat]==ritualRoom)guarded=true;
         if(!guarded){
             if(++unguardedTicks>=ABANDON_GRACE_TICKS){
                 ritualProgress=-1;
