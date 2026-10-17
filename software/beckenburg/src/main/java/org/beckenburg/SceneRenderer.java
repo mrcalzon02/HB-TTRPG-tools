@@ -22,6 +22,7 @@ public final class SceneRenderer {
     public boolean lamp=true;
     /** Solo environment presets; default multipliers retain legacy LAN lighting. */
     public double environmentLight=1.0,fogDensity=1.0;
+    public boolean environmentPowerOn=true;
     public BufferedImage image(){return frame;}
     public int[] pixels(){return pixels;}
     public double[] depths(){return depths;}
@@ -219,6 +220,14 @@ public final class SceneRenderer {
         for(int r=0;r<map.roomCount();r++) if(Math.hypot(map.centerX(r)-x,map.centerZ(r)-z)<14) furniture(out,r,map);
         for(RitualSites.Site site:RitualSites.all(map))
             if(Math.hypot(site.x()-x,site.z()-z)<14)ritualInstallation(out,site);
+        // A visible power breaker at the correct utility-room interaction socket.
+        if(Math.hypot(map.centerX(11)-x,map.centerZ(11)-z)<14){
+            double bx=map.centerX(11),bz=map.centerZ(11);
+            box(out,bx+.47,0,bz-.85,.53,1.20,.36,0x4d5359);
+            box(out,bx+.55,1.20,bz-.79,.37,.45,.21,0x343945);
+            box(out,bx+.64,1.31,bz-.57,.15,.18,.045,
+                environmentPowerOn?0x70c592:0xc66b62);
+        }
         if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14) vanModel(out,map.van());
         // Character bodies are rendered as directional alpha-masked sprites after geometry.
         if(wardRoom>=0){

@@ -57,6 +57,18 @@ public final class HouseMap {
     private static int doorId(int x,int z){return z*WIDTH+x;}
     public boolean doorOpen(int x,int z){return tile(x,z)=='D'&&openDoors.contains(doorId(x,z));}
     public boolean solid(int x,int z){char t=tile(x,z);return t=='#'||(t=='D'&&!doorOpen(x,z));}
+    /** Collision-aware level ray for camera shots, including real open/closed doors. */
+    public boolean clearLineOfSight(double ax,double az,double bx,double bz){
+        if(!Double.isFinite(ax)||!Double.isFinite(az)||!Double.isFinite(bx)||!Double.isFinite(bz))return false;
+        double distance=Math.hypot(bx-ax,bz-az);
+        if(distance<.01||distance>20)return false;
+        int steps=Math.max(2,(int)Math.ceil(distance/.10));
+        for(int i=1;i<steps;i++){
+            double t=i/(double)steps;
+            if(solid((int)Math.floor(ax+(bx-ax)*t),(int)Math.floor(az+(bz-az)*t)))return false;
+        }
+        return true;
+    }
     public boolean traversable(double x,double z){
         if(!Double.isFinite(x)||!Double.isFinite(z))return false;
         double r=.19;

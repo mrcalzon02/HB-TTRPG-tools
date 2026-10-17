@@ -167,6 +167,7 @@ public final class InvestigationGame {
         private void syncEnvironment(){
             scene.environmentLight=conditions.lightMultiplier()*(powerOn?1.0:.48);
             scene.fogDensity=conditions.fogMultiplier();
+            scene.environmentPowerOn=powerOn;
         }
         private boolean nearBreaker(){
             return map.roomAt(scene.x,scene.z)==11
@@ -267,7 +268,7 @@ public final class InvestigationGame {
                 else if(!map.toggleNearestDoor(scene.x,scene.z))
                     showVanNotice("No usable door or station nearby.");
             }
-            if(key==KeyEvent.VK_R)session.useEquipment(loadout,scene.x,scene.z);
+            if(key==KeyEvent.VK_R)session.useEquipment(loadout,scene.x,scene.z,scene.yaw);
             if(key==KeyEvent.VK_C)session.placeWard(scene.x,scene.z);
             if(key==KeyEvent.VK_B)session.cleanse(scene.x,scene.z);
             if(key==KeyEvent.VK_J)journalShown=!journalShown;

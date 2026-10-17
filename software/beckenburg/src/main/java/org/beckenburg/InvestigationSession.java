@@ -102,6 +102,9 @@ public final class InvestigationSession {
 
     /** In-hand use has real case effects. Only three evidence instruments count toward a cleansing. */
     public boolean useEquipment(EquipmentLoadout loadout,double x,double z){
+        return useEquipment(loadout,x,z,0);
+    }
+    public boolean useEquipment(EquipmentLoadout loadout,double x,double z,double yaw){
         java.util.Objects.requireNonNull(loadout);
         if(outcome!=Outcome.ACTIVE||!map.traversable(x,z)){
             log("Cannot operate equipment here.");return false;
@@ -122,7 +125,8 @@ public final class InvestigationSession {
                 if(!loadout.consume(item)){log("Camera empty. Reload at the van equipment rack.");yield false;}
                 int room=map.roomAt(x,z);
                 boolean visible=haunted&&room==ghost.room()
-                    &&Math.hypot(x-map.centerX(ghost.room()),z-map.centerZ(ghost.room()))<4.5;
+                    &&CameraAim.onTarget(x,z,yaw,map.centerX(ghost.room()),map.centerZ(ghost.room()))
+                    &&map.clearLineOfSight(x,z,map.centerX(ghost.room()),map.centerZ(ghost.room()));
                 if(visible&&!apparitionPhotographed){
                     apparitionPhotographed=true;
                     log("APPARITION PHOTOGRAPHED. The developed image will count in your case payout.");
