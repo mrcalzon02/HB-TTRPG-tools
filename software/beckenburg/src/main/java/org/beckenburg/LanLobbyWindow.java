@@ -13,6 +13,8 @@ public final class LanLobbyWindow extends JFrame {
     private final JSpinner target=new JSpinner(new SpinnerNumberModel(4,0,HouseMap.ROOM_COUNT-1,1));
     private final JComboBox<GhostDomain.Action> action=new JComboBox<>(GhostDomain.Action.values());
     private final JComboBox<LanCase.Tool> instrument=new JComboBox<>(LanCase.Tool.values());
+    private final JComboBox<GhostIdentity.Type> hypothesis=new JComboBox<>(GhostIdentity.Type.values());
+    private final JButton identify=new JButton("Identify"),banish=new JButton("Banish"),absolve=new JButton("Absolve");
     private final JButton scan=new JButton("Scan"),ward=new JButton("Ward"),cleanse=new JButton("Ritual"),extract=new JButton("Extract");
     private final JLabel caseStatus=new JLabel("Case: not started"),teamStatus=new JLabel("Team: awaiting session");
     private LanHost hosted;
@@ -35,7 +37,8 @@ public final class LanLobbyWindow extends JFrame {
         JPanel commands=new JPanel(new FlowLayout(FlowLayout.LEFT,6,4));
         commands.add(ready);commands.add(start);commands.add(new JLabel("Room"));commands.add(target);
         commands.add(move);commands.add(instrument);commands.add(scan);commands.add(ward);
-        commands.add(cleanse);commands.add(extract);commands.add(action);commands.add(use);commands.add(enter3D);
+        commands.add(cleanse);commands.add(banish);commands.add(absolve);commands.add(extract);
+        commands.add(hypothesis);commands.add(identify);commands.add(action);commands.add(use);commands.add(enter3D);
         log.setEditable(false);log.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
         log.setLineWrap(true);log.setWrapStyleWord(true);
         JPanel info=new JPanel(new GridLayout(3,1));info.add(status);info.add(caseStatus);info.add(teamStatus);
@@ -48,6 +51,9 @@ public final class LanLobbyWindow extends JFrame {
         scan.addActionListener(e->action(() -> connection.scan((LanCase.Tool)instrument.getSelectedItem())));
         ward.addActionListener(e->action(() -> connection.ward()));
         cleanse.addActionListener(e->action(() -> connection.cleanse()));
+        banish.addActionListener(e->action(() -> connection.banish()));
+        absolve.addActionListener(e->action(() -> connection.absolve()));
+        identify.addActionListener(e->action(() -> connection.identify((GhostIdentity.Type)hypothesis.getSelectedItem())));
         extract.addActionListener(e->action(() -> connection.extract()));
         enter3D.addActionListener(e->open3D());
         setCommandEnabled(false);pack();setMinimumSize(new Dimension(810,370));setLocationRelativeTo(null);
@@ -67,7 +73,11 @@ public final class LanLobbyWindow extends JFrame {
             LanHost newHost=null;
             try{
                 int portNumber=LanProtocol.integer(p,1,65535);
-                if(localHost){newHost=new LanHost("0.0.0.0",portNumber);}
+                if(localHost){
+                    var types=GhostIdentity.Type.values();
+                    var chosen=types[java.util.concurrent.ThreadLocalRandom.current().nextInt(types.length)];
+                    newHost=new LanHost("0.0.0.0",portNumber,chosen);
+                }
                 LanClient client=new LanClient(localHost?"127.0.0.1":hostname,portNumber,localHost?false:ghost,nickname,
                     frame->SwingUtilities.invokeLater(()->{
                         if(generation==connectionGeneration)receive(frame);
@@ -158,7 +168,7 @@ public final class LanLobbyWindow extends JFrame {
             }
         }else if(event.startsWith("PROGRESS|")){
             var fields=LanProtocol.parts(event);
-            if(fields.size()==8)caseStatus.setText("Health "+fields.get(1)+"  Fear "+fields.get(2)+"  Wards "+fields.get(3)+"  Evidence "+fields.get(4)+"/3  Circle "+fields.get(5)+"  Ritual "+fields.get(6)+"/45  "+fields.get(7));
+            if(fields.size()==8)caseStatus.setText("Health "+fields.get(1)+"  Fear "+fields.get(2)+"  Wards "+fields.get(3)+"  Evidence "+fields.get(4)+"/3  Circle "+fields.get(5)+"  Ritual "+fields.get(6)+"  "+fields.get(7));
         }else{log.append(event+"\n");log.setCaretPosition(log.getDocument().getLength());}
     }
     private static String teamRoom(HouseMap map,String raw){
@@ -171,7 +181,10 @@ public final class LanLobbyWindow extends JFrame {
         move.setEnabled(available&&!worldMode&&connection!=null&&!"GHOST".equals(connection.seat()));
         use.setEnabled(available&&connection!=null&&"GHOST".equals(connection.seat()));
         boolean hunter=available&&connection!=null&&!"GHOST".equals(connection.seat());
-        scan.setEnabled(hunter);ward.setEnabled(hunter);cleanse.setEnabled(hunter);extract.setEnabled(hunter);
+        scan.setEnabled(hunter);ward.setEnabled(hunter);cleanse.setEnabled(hunter);
+        banish.setEnabled(hunter);absolve.setEnabled(hunter);
+        identify.setEnabled(hunter);hypothesis.setEnabled(hunter);
+        extract.setEnabled(hunter);
         instrument.setEnabled(hunter);
         enter3D.setEnabled(available&&missionRunning&&connection!=null);
     }

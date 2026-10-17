@@ -23,6 +23,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     private String legal="[]",feedback="Awaiting private spectral pose";
     private LanGhostHearing.Event hearing;
     private int lastHearingTick=-1;
+    private String ghostSpecies="UNKNOWN",behaviorName="RESTLESS";
 
     public LanGhostPanel(LanClient client){
         this.client=Objects.requireNonNull(client);
@@ -56,6 +57,9 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                 audible=p.get(6).equals("1");
                 // The host's ROOM state always wins if a GPOSE packet is delayed.
                 if(room!=-1&&reportedRoom!=room)feedback="Room transition pending host pose";
+            }else if(p.size()==3&&p.get(0).equals("GTYPE")){
+                ghostSpecies=GhostIdentity.Type.valueOf(p.get(1)).name();
+                behaviorName=GhostIdentity.Behavior.valueOf(p.get(2)).name();
             }else if(p.get(0).equals("GHEAR")){
                 LanGhostHearing.Event cue=LanGhostHearing.decode(packet);
                 if(!finished&&cue.tick()>=lastHearingTick&&cue.tick()>=tick-18){
@@ -106,6 +110,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     }
     public int ghostRoom(){return room;}
     public int energy(){return energy;}
+    public String ghostSpecies(){return ghostSpecies;}
     public String feedback(){return feedback;}
     public boolean isCaptured(){return mouseLook.captured();}
     public String currentHearing(){
@@ -143,7 +148,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
             // Translucent purple visual language, independent of hunter-only data.
             g.setColor(new Color(76,26,100,36));g.fillRect(0,0,getWidth(),h);
             g.setColor(new Color(223,194,249));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));
-            g.drawString("BECKENBURG / LAN SPECTRAL GHOST",14,25);
+            g.drawString("BECKENBURG / "+ghostSpecies+" / "+behaviorName,14,25);
             g.drawString("ROOM "+map.roomName(room)+"   ENERGY "+energy+"/100   "+(audible?"NOISE DETECTED":"SILENT"),14,47);
             if(!currentHearing().isEmpty()){
                 g.setColor(new Color(194,165,236));

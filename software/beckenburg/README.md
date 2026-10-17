@@ -1,5 +1,13 @@
 # The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
 
+## Alpha 2.7 — 13 ghost evidence triples and three resolution sites (development)
+
+New LAN matches hosted through the launcher choose one of the thirteen original ghosts. Each has three positive anchored evidence readings (EMF, thermometer, spirit-box), with subtype combinations that distinguish the full roster. The hunters must investigate, select a ghost identity (**I** cycles, **P** submits a deduction), prepare an anchor ward (**C**), then travel to the correct ritual installation and guard it: **N** banishes at the storage-cellar iron circle, **B** cleanses at the library font, or **V** performs absolution at the foyer memorial. Every type has exactly one correct rite; the host checks the equipment readings, deduction, room, and two-metre 3D rite range. Banishment, cleansing and absolution have different 55/45/60 tick channel lengths and terminal outcomes. The new PS-era low-poly fixtures are drawn in the existing house renderer. Teammate notes remain hunter-private. Human ghost clients are told their own species; their powers use the same type-modified energy, cooldown, fear and damage rules as AI ghost commands. Each archetype has a distinct favored action, host-audited mechanical profile and recognizable nearby supernatural tell; the full planned special-power repertoire and other eight complete 3D maps are **not yet** built.
+
+Legacy room-mode demos using the two-argument `LanHost` constructor retain the original Spirit/anchor-cleansing behavior for compatibility; this is not the normal new-launcher session.
+
+# The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
+
 **Status:** a local solo investigation vertical slice, **not the finished four-player game**. It expands the original Swing/software-3D renderer experiment with a fifteen-zone test house (twelve interior rooms and three exterior spaces), low-poly room props, an AI-driven Spirit ghost, working evidence tools and a complete case-resolution loop. All artwork here is procedural placeholder geometry; the user-approved full-resolution PNG concepts remain awaiting verified GitHub binary archival and model integration.
 
 ## Alpha 2.6 — shared hunter casefile (development)

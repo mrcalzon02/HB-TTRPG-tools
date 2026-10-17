@@ -32,6 +32,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private String caseResult="";
     private final List<LanEvidenceJournal.Entry> casefile=new ArrayList<>();
     private boolean casefileOpen;
+    private GhostIdentity.Type selectedGuess=GhostIdentity.Type.SPIRIT;
 
     public LanWorldPanel(LanClient client){
         this.client=Objects.requireNonNull(client);
@@ -94,6 +95,12 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 if(down==seat){
                     keys.clear();feedback="INCAPACITATED - YOU CAN OBSERVE BUT NOT ACT";
                 }else feedback="INVESTIGATOR "+(down+1)+" IS DOWN";
+            }else if(p.get(0).equals("IDENTIFIED")&&p.size()==3){
+                feedback="TEAM IDENTIFIED "+p.get(1)+" - REQUIRED "+p.get(2);
+            }else if(p.get(0).equals("TELL")&&p.size()==2){
+                feedback="ENTITY TELL: "+p.get(1);
+            }else if(p.get(0).equals("SITES")&&p.size()==4){
+                feedback="Ritual sites active: Banish=cellar Cleanse=library Absolve=foyer";
             }else if(p.get(0).equals("CASEFILE")){
                 if(p.size()==2&&p.get(1).equals("RESET"))casefile.clear();
                 else {
@@ -137,6 +144,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     public String activeSoundCaption(){return tick<=soundUntilTick?soundCaption:"";}
     public int casefileSize(){return casefile.size();}
     public boolean casefileOpen(){return casefileOpen;}
+    public GhostIdentity.Type selectedGuess(){return selectedGuess;}
     private void frame(){
         if(!isDisplayable()||!caseResult.isEmpty()){repaint();return;}
         int right=(keys.contains(KeyEvent.VK_D)?1:0)-(keys.contains(KeyEvent.VK_A)?1:0);
@@ -166,6 +174,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString("BECKENBURG / LAN HOUSE — HUNTER "+(seat+1),13,26);
             g.drawString(map.roomName(renderer.x,renderer.z)+" | TEAM "+peers.size()+" / 2 | HP "+health+" | CLUES "+evidence+"/3",13,46);
             g.drawString("+",getWidth()/2,h/2);
+            g.setColor(new Color(214,195,151));
+            g.drawString("IDENTIFY: "+selectedGuess+"  [I NEXT / P SUBMIT]",13,91);
             if(health==0){
                 g.setColor(new Color(235,154,159));
                 g.drawString("INCAPACITATED - VIEW ONLY / AWAIT CASE RESULT",13,68);
@@ -187,7 +197,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString(health==0?"ARROWS / MOUSE LOOK - OBSERVE ONLY - ESC EXIT":
                     "WASD MOVE  •  CLICK TO CAPTURE MOUSE / ARROWS LOOK  •  E DOOR",13,h+23);
             g.drawString(health==0?"NO MOVEMENT OR EQUIPMENT WHILE INCAPACITATED":
-                    "1-3 TOOL: "+selected+"  R SCAN  J CASEFILE  C WARD  B RITUAL  X EXTRACT",13,h+42);
+                    "1-3 TOOL "+selected+"  R SCAN  I/P IDENTIFY  J NOTES  C WARD  B CLEANSE  N BANISH  V ABSOLVE  X EXIT",13,h+42);
             g.setColor(new Color(145,204,175));
             g.drawString((mouseLook.captured()?"MOUSE LOCKED | ":"CLICK TO LOCK LOOK | ")+feedback,13,h+62);
             if(casefileOpen){
@@ -224,8 +234,13 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_3 -> selected=LanCase.Tool.SPIRIT_BOX;
             case KeyEvent.VK_R -> sendAction("scan",()->client.scan(selected));
             case KeyEvent.VK_J -> casefileOpen=!casefileOpen;
+            case KeyEvent.VK_I -> selectedGuess=GhostIdentity.Type.values()[
+                    (selectedGuess.ordinal()+1)%GhostIdentity.Type.values().length];
+            case KeyEvent.VK_P -> sendAction("identify",()->client.identify(selectedGuess));
             case KeyEvent.VK_C -> sendAction("ward",()->client.ward());
-            case KeyEvent.VK_B -> sendAction("ritual",()->client.cleanse());
+            case KeyEvent.VK_B -> sendAction("cleansing",()->client.cleanse());
+            case KeyEvent.VK_N -> sendAction("banishment",()->client.banish());
+            case KeyEvent.VK_V -> sendAction("absolution",()->client.absolve());
             case KeyEvent.VK_X -> sendAction("extract",()->client.extract());
             case KeyEvent.VK_LEFT -> renderer.yaw-=.09;
             case KeyEvent.VK_RIGHT -> renderer.yaw+=.09;

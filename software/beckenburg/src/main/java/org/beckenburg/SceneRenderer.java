@@ -150,6 +150,44 @@ public final class SceneRenderer {
         vanBox(faces,van,-.55,.10,r-.28,1.1,.5,.18,MaterialAtlas.AGED_WOOD);
         vanBox(faces,van,-w+.1,.05,f-.3,w*2-.2,.08,.3,MaterialAtlas.IRON);
     }
+
+    /** Three visually distinct small PS-era rite installations at fixed room sockets. */
+    private static void ritualInstallation(List<Face> out,RitualSites.Site site){
+        double x=site.x(),z=site.z();
+        int trim=switch(site.rite()){
+            case BANISHMENT->0x965d50;case CLEANSING->0x73a9ac;case ABSOLUTION->0xc0a66b;
+        };
+        // Square floor seals: simple triangles rather than high-polygon circles.
+        box(out,x-1.05,.025,z-.9,2.1,.04,.12,trim);
+        box(out,x-1.05,.025,z+.78,2.1,.04,.12,trim);
+        box(out,x-1.05,.025,z-.78,.12,.04,1.56,trim);
+        box(out,x+.93,.025,z-.78,.12,.04,1.56,trim);
+        switch(site.rite()){
+            case BANISHMENT->{
+                // Iron containment seal: low altar, metal pylons and an unlit central spike.
+                box(out,x-.42,.045,z-.4,.84,.16,.8,0x444448);
+                for(int sx:new int[]{-1,1})for(int sz:new int[]{-1,1})
+                    box(out,x+sx*.79-.08,.05,z+sz*.63-.08,.16,.6,.16,0x665b5a);
+                box(out,x-.07,.22,z-.07,.14,.48,.14,0xd18165);
+            }
+            case CLEANSING->{
+                // A shallow water font: obvious basin, blue-green interior and lip.
+                box(out,x-.52,.05,z-.42,1.04,.75,.84,0x796e62);
+                box(out,x-.45,.81,z-.35,.90,.055,.70,0x70a7ac);
+                box(out,x-.57,.83,z-.46,1.14,.09,.10,0xe0c9a6);
+                box(out,x-.57,.83,z+.36,1.14,.09,.10,0xe0c9a6);
+            }
+            case ABSOLUTION->{
+                // Memorial lectern with a warm amber relief and paired candles.
+                box(out,x-.45,.06,z-.3,.90,.96,.60,0x655247);
+                box(out,x-.50,1.02,z-.35,1.00,.12,.70,0xb09873);
+                box(out,x-.08,1.14,z-.20,.16,.38,.08,0xd9bf8e);
+                box(out,x-.24,1.28,z-.20,.48,.08,.08,0xd9bf8e);
+                box(out,x-.70,.95,z-.16,.1,.36,.1,0xefdfae);
+                box(out,x+.60,.95,z-.16,.1,.36,.1,0xefdfae);
+            }
+        }
+    }
     private List<Face> scene(HouseMap map,int ghostRoom,boolean ghostVisible,int wardRoom,int hunterRoom,double clock,List<RemoteBody> others,Apparition apparition) {
         List<Face> out=new ArrayList<>(2000);
         for(int zz=1;zz<map.height()-1;zz++)for(int xx=1;xx<map.width()-1;xx++) {
@@ -177,6 +215,8 @@ public final class SceneRenderer {
             }
         }
         for(int r=0;r<map.roomCount();r++) if(Math.hypot(map.centerX(r)-x,map.centerZ(r)-z)<14) furniture(out,r,map);
+        for(RitualSites.Site site:RitualSites.all(map))
+            if(Math.hypot(site.x()-x,site.z()-z)<14)ritualInstallation(out,site);
         if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14) vanModel(out,map.van());
         if(ghostVisible){
             double gx=apparition==null?map.centerX(ghostRoom):apparition.x(),
