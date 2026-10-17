@@ -49,8 +49,11 @@ public final class InvestigationGame {
         conditionsPicker=new JComboBox<>(SiteCatalog.Conditions.values());
         JPanel selectors=new JPanel(new GridLayout(2,2,7,5));
         selectors.setBackground(new Color(28,31,39));
-        selectors.add(new JLabel("Site"));selectors.add(locationPicker);
-        selectors.add(new JLabel("Conditions"));selectors.add(conditionsPicker);
+        JLabel siteLabel=new JLabel("Site"),conditionsLabel=new JLabel("Conditions");
+        siteLabel.setForeground(new Color(216,215,202));
+        conditionsLabel.setForeground(new Color(216,215,202));
+        selectors.add(siteLabel);selectors.add(locationPicker);
+        selectors.add(conditionsLabel);selectors.add(conditionsPicker);
         selectors.setMaximumSize(new Dimension(410,75));
         JButton begin=button("BEGIN SOLO INVESTIGATION");
         locationPicker.addActionListener(e->{
@@ -353,11 +356,11 @@ public final class InvestigationGame {
                 if(map.van().stationAt(scene.x,scene.z)!=null){
                     VanStaging.Station service=map.van().stationAt(scene.x,scene.z);
                     g.setColor(new Color(255,212,137));
-                    g.drawString("E  /  "+service.label,16,stageH-19);
+                    g.drawString("E  /  "+service.label,16,stageH-37);
                 }
                 if(vanNoticeExpires>session.ticks()){
                     g.setColor(new Color(160,218,216));
-                    g.drawString(vanNotice.substring(0,Math.min(vanNotice.length(),94)),16,stageH-39);
+                    g.drawString(vanNotice.substring(0,Math.min(vanNotice.length(),94)),16,stageH-57);
                 }
                 if(briefingShown)drawBriefing(g);
                 if(wheelOpen) drawCalloutWheel(g,stageH);
