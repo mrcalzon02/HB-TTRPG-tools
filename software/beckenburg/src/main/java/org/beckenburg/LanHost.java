@@ -22,6 +22,7 @@ public final class LanHost implements AutoCloseable {
     private final GhostDomain ghost;
     private final LanCase mission;
     private final LanEvidenceJournal casefile=new LanEvidenceJournal();
+    private final FieldJournal fieldNotes=new FieldJournal();
     private final LanGhostPursuit ai;
     private final GhostIdentity.Type ghostType;
     private final LanGhostAnimation animation=new LanGhostAnimation();
@@ -245,7 +246,20 @@ public final class LanHost implements AutoCloseable {
                         throw new IllegalArgumentException("active hunter required for casefile");
                     reply(peer,"CASEFILE|RESET");
                     for(String note:casefile.snapshot())reply(peer,note);
+                    reply(peer,"NOTES|RESET");
+                    for(String note:fieldNotes.snapshot())reply(peer,note);
                     reply(peer,"ACCEPT|JOURNAL");
+                }
+                case "NOTE" -> {
+                    if(!running||peer.slot==3||p.size()!=4)
+                        throw new IllegalArgumentException("active hunter notes required");
+                    GhostFieldGuide.Clue clue=GhostFieldGuide.Clue.valueOf(p.get(1));
+                    FieldJournal.Status status=FieldJournal.Status.valueOf(p.get(2));
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(3)));
+                    ensureActiveHunter(peer);
+                    FieldJournal.Note note=fieldNotes.set(clue,status,peer.slot,tick);
+                    notifyHunters(note.frame()); // observed mark only; never confirms an instrument result
+                    reply(peer,"ACCEPT|NOTE|"+clue);
                 }
                 case "IDENTIFY" -> {
                     if(!running||peer.slot==3||p.size()!=3)throw new IllegalArgumentException("hunter identification required");
