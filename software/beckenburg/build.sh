@@ -55,6 +55,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.Ca
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.EquipmentSightTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.SoloEquipmentUseTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GameplaySmokeTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.FieldJournalTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostTraitsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.HunterCountersTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostDomainTest

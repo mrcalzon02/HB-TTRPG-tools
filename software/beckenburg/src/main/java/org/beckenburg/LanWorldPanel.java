@@ -305,6 +305,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }
     }
     @Override public void keyPressed(KeyEvent e){
+        if(e.getKeyCode()==KeyEvent.VK_ESCAPE && casefileOpen){
+            casefileOpen=false;repaint();return;
+        }
         if(e.getKeyCode()==KeyEvent.VK_TAB){
             if(!casefileOpen){casefileOpen=true;journalPage=1;}
             else journalPage=(journalPage+1)%3;
