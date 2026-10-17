@@ -35,20 +35,24 @@ public final class GhostDomain {
     private static final int[] COOLDOWN = { 35, 22, 30, 78, 90 };
     private final int anchorRoom;
     private final HouseMap map;
+    private final GhostIdentity.Type archetype;
     private final int[] lastActionTick = new int[Action.values().length];
     private int room, tick, energy = 100, manifestUntil;
     private boolean hearsHunter;
     private long lastSequence = -1;
 
-    public GhostDomain(int anchorRoom) { this(new HouseMap(), anchorRoom); }
-    public GhostDomain(HouseMap map, int anchorRoom) {
+    public GhostDomain(int anchorRoom) { this(new HouseMap(), anchorRoom, GhostIdentity.Type.SPIRIT); }
+    public GhostDomain(HouseMap map, int anchorRoom) { this(map,anchorRoom,GhostIdentity.Type.SPIRIT); }
+    public GhostDomain(HouseMap map,int anchorRoom,GhostIdentity.Type type) {
         this.map=Objects.requireNonNull(map, "map");
+        this.archetype=Objects.requireNonNull(type,"type");
         if (anchorRoom < 0 || anchorRoom >= map.interiorRoomCount()) throw new IllegalArgumentException("invalid anchor room");
         this.anchorRoom = anchorRoom;
         this.room = anchorRoom;
         Arrays.fill(lastActionTick, -100000);
     }
     public int room() { return room; }
+    public GhostIdentity.Type type(){return archetype;}
     public int energy() { return energy; }
     public int tickCount() { return tick; }
     public boolean manifested() { return tick > 0 && tick <= manifestUntil; }
@@ -64,7 +68,9 @@ public final class GhostDomain {
         return map.ghostExits(current);
     }
     private boolean valid(Action a, int target) {
-        if (energy < COST[a.ordinal()] || tick - lastActionTick[a.ordinal()] < COOLDOWN[a.ordinal()]) return false;
+        if (energy < GhostBehavior.cost(archetype,a,COST[a.ordinal()])
+                || tick - lastActionTick[a.ordinal()] < GhostBehavior.cooldown(archetype,a,COOLDOWN[a.ordinal()]))
+            return false;
         if (a == Action.DRIFT) return exits(room).contains(target);
         if (target != room) return false;
         return switch (a) {
@@ -94,16 +100,18 @@ public final class GhostDomain {
         if (!valid(command.action(), command.targetRoom()))
             return rejected(command, "insufficient energy, cooldown or invalid target/state");
         Action a = command.action();
-        energy -= COST[a.ordinal()];
+        energy -= GhostBehavior.cost(archetype,a,COST[a.ordinal()]);
         lastActionTick[a.ordinal()] = tick;
         int fear = 0, harm = 0;
         switch (a) {
             case DRIFT -> room = command.targetRoom();
             case WHISPER -> fear = hearsHunter ? 2 : 0;
             case DISTURB -> fear = hearsHunter ? 1 : 0;
-            case MANIFEST -> manifestUntil = tick + 49;
+            case MANIFEST -> manifestUntil = tick + 49 + GhostBehavior.profile(archetype).manifestTicks();
             case STRIKE -> { harm = 12; fear = 6; manifestUntil = tick + 9; }
         }
+        fear=GhostBehavior.fear(archetype,a,fear);
+        harm=GhostBehavior.harm(archetype,a,harm);
         return new Resolution(true, "accepted", a, room, energy, fear, harm, manifested());
     }
     private Resolution rejected(Command command, String why) {

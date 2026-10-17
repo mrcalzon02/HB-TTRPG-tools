@@ -20,13 +20,16 @@ public final class LanGhostPursuit {
     /** Short search at the last audible location, with no future body updates. */
     public record Search(int room, double approximateX, double approximateZ, int startedTick, int expiryTick) { }
     private final HouseMap map;
+    private final GhostIdentity.Type archetype;
     private final Random random;
     private Echo memory;
     private Search search;
     private long sequence;
 
-    public LanGhostPursuit(HouseMap map, long seed) {
+    public LanGhostPursuit(HouseMap map,long seed){this(map,seed,GhostIdentity.Type.SPIRIT);}
+    public LanGhostPursuit(HouseMap map,long seed,GhostIdentity.Type type) {
         this.map=Objects.requireNonNull(map);
+        this.archetype=Objects.requireNonNull(type);
         random=new Random(seed);
     }
     /** World-authorized events only. Coarse 2m cells intentionally discard exact positions. */
@@ -87,12 +90,18 @@ public final class LanGhostPursuit {
             int next=route(seen.room(),sweep.room());
             if(next>=0 && seen.exits().contains(next)){action=GhostDomain.Action.DRIFT;target=next;}
         }
+        // Species bias uses only filtered host observations; never private hunter positions.
+        GhostBehavior.Profile bias=GhostBehavior.profile(archetype);
+        if(action==null && bias.favored()!=GhostDomain.Action.DRIFT
+                && seen.tick()%bias.aiPeriod()==0 && legal.contains(bias.favored()))
+            action=bias.favored();
         if(action==null && seen.tick()%29==0 && legal.contains(GhostDomain.Action.WHISPER))
             action=GhostDomain.Action.WHISPER;
         if(action==null && seen.tick()%41==0 && legal.contains(GhostDomain.Action.DISTURB))
             action=GhostDomain.Action.DISTURB;
         // With no sound, patrol occasionally rather than knowing where the team is.
-        if(action==null && seen.tick()%35==0 && legal.contains(GhostDomain.Action.DRIFT)
+        if(action==null && seen.tick()%(bias.favored()==GhostDomain.Action.DRIFT?bias.aiPeriod():35)==0
+                && legal.contains(GhostDomain.Action.DRIFT)
                 && !seen.exits().isEmpty() && memory(seen.tick())==null && search(seen.tick())==null){
             action=GhostDomain.Action.DRIFT;
             target=seen.exits().get(random.nextInt(seen.exits().size()));
