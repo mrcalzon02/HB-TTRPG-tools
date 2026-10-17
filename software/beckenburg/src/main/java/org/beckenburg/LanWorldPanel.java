@@ -20,6 +20,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private int lastTurn=-1,tick,visibleGhost=-1,health=100,evidence;
     private SceneRenderer.Apparition apparition;
     private int apparitionWarningTick=-1;
+    private int lastMotionTick=-1;
     private int threatUntilTick=-1;
     private int threatTarget=-1;
     private String threatOutcome="";
@@ -58,13 +59,22 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(p.get(0).equals("APPARITION")){
                 if(p.size()==3 && p.get(1).equals("HIDDEN")){
                     apparition=null;
+                    lastMotionTick=-1;
                 }else if(p.size()==5 && p.get(1).equals("VISIBLE")){
                     double gx=LanProtocol.integer(p.get(2),0,HouseMap.WIDTH*1000)/1000.0;
                     double gz=LanProtocol.integer(p.get(3),0,HouseMap.HEIGHT*1000)/1000.0;
                     int eventTick=LanProtocol.integer(p.get(4),0,99999999);
                     if(apparition==null)apparitionWarningTick=eventTick;
-                    apparition=new SceneRenderer.Apparition(gx,gz);
+                    apparition=apparition==null?new SceneRenderer.Apparition(gx,gz)
+                            :new SceneRenderer.Apparition(gx,gz,apparition.phase(),apparition.heading(),apparition.progress());
                 }else throw new IllegalArgumentException("malformed apparition");
+            }else if(p.get(0).equals("MOTION")){
+                LanGhostAnimation.Motion motion=LanGhostAnimation.decode(frame);
+                if(apparition!=null && motion.tick()>=lastMotionTick){
+                    apparition=new SceneRenderer.Apparition(apparition.x(),apparition.z(),
+                            motion.phase(),motion.heading(),motion.progress());
+                    lastMotionTick=motion.tick();
+                }
             }else if(p.size()==2&&p.get(0).equals("DOORS")){
                 map.applyDoorSnapshot(p.get(1));
             }else if(p.size()==7&&p.get(0).equals("STATE")){
@@ -141,7 +151,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 g.drawString("GHOST STRIKE WIND-UP — EVADE OR BREAK SIGHT"+(threatTarget==seat?" / TARGETED":"")+" ("+remaining+")",13,68);
             }else if(apparition!=null){
                 g.setColor(new Color(228,158,177));
-                g.drawString("ENTITY MANIFESTED — KEEP DISTANCE / USE WARDS",13,68);
+                String state=apparition.phase()==LanGhostAnimation.Phase.MATERIALIZE?"MATERIALIZING"
+                        :apparition.phase()==LanGhostAnimation.Phase.RECOVER?"RECOVERING":"MANIFESTED";
+                g.drawString("ENTITY "+state+" — KEEP DISTANCE / USE WARDS",13,68);
             }else if(!activeSoundCaption().isEmpty()){
                 g.setColor(new Color(204,188,231));
                 g.drawString("HEARD: "+activeSoundCaption(),13,68);

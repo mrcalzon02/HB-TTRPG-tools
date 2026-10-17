@@ -1043,8 +1043,12 @@
       "hard_gate": "All available AI ghost actions reachable through human UI with identical validation and no private hunter omniscience.",
       "status": "not_started",
       "commit_sha": null,
-      "verification_evidence": [],
-      "blockers": [],
+      "verification_evidence": [
+        "Alpha 1.8 isolated javac --release 17 + LanGhostAnimationTest passed on OpenJDK 21/Linux; full clean-source regression and Windows GUI/LAN acceptance unverified (connector source unavailable to local build runtime)."
+      ],
+      "blockers": [
+        "Alpha 1.8 phase projection and human ghost movement audio require clean-source build plus four-client LAN verification; stage not complete."
+      ],
       "steps": [
         {
           "id": "P10.01",

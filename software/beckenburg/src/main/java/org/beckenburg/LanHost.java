@@ -22,6 +22,7 @@ public final class LanHost implements AutoCloseable {
     private final GhostDomain ghost=new GhostDomain(map,4);
     private final LanCase mission=new LanCase(4);
     private final LanGhostPursuit ai=new LanGhostPursuit(map,20261016L);
+    private final LanGhostAnimation animation=new LanGhostAnimation();
     private volatile boolean closed;
     private boolean running,everStarted;
     private int tick;
@@ -109,6 +110,7 @@ public final class LanHost implements AutoCloseable {
                     acceptGhostPoseSequence(peer,LanProtocol.sequence(p.get(3)));
                     ghostPose.step(dx,dz,tick);
                     reply(peer,"ACCEPT|GSTEP");reply(peer,ghostPose.frame(tick));broadcastApparitions();
+                    if(ghost.manifested()&&tick%5==0)broadcastGhostSound(LanSound.Cue.FOOTFALL);
                 }
                 case "GTURN" -> {
                     if(!running||peer.slot!=3||!peer.ghostWorldMode||p.size()!=3)
@@ -249,6 +251,7 @@ public final class LanHost implements AutoCloseable {
     /** AI and human origins both enter this exact damage/telegraph pipeline. */
     private void resolveGhostAction(GhostDomain.Resolution result){
         if(!result.applied())return;
+        if(result.action()==GhostDomain.Action.MANIFEST)animation.manifested(tick);
         LanSound.Cue cue=switch(result.action()){
             case WHISPER->LanSound.Cue.WHISPER;
             case DISTURB->LanSound.Cue.DISTURB;
@@ -267,6 +270,7 @@ public final class LanHost implements AutoCloseable {
         if(LanSpatialCombat.any(immediate))distributeEffect(result,immediate);
         if(target>=0){
             pendingStrike=LanTelegraphedStrike.begin(tick,target,result);
+            animation.windup(tick);
             for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==result.room())
                 reply(seats[i],"THREAT|START|"+LanTelegraphedStrike.WINDUP_TICKS+"|"+target);
         }
@@ -275,6 +279,7 @@ public final class LanHost implements AutoCloseable {
         LanTelegraphedStrike.Pending pending=pendingStrike;
         if(pending==null||!pending.due(tick))return;
         pendingStrike=null;
+        animation.impact(tick);
         boolean[] connected=new boolean[3],spatial=new boolean[3];
         for(int i=0;i<3;i++)if(seats[i]!=null){connected[i]=true;spatial[i]=seats[i].worldMode;}
         boolean hit=pending.hits(map,world,ghostPose.pose(),hunterRooms,connected,spatial);
@@ -311,6 +316,7 @@ public final class LanHost implements AutoCloseable {
             }}
             resolvePendingStrike();
             mission.advance();
+            if(animation.animating(tick)||pendingStrike!=null)broadcastApparitions();
             if(tick%5==0){broadcastState();broadcastApparitions();broadcastProgress();broadcastWorld();
                 if(seats[3]!=null&&seats[3].ghostWorldMode)reply(seats[3],ghostPose.frame(tick));}
             finishIfComplete();
@@ -324,8 +330,14 @@ public final class LanHost implements AutoCloseable {
         LanGhostSpatial.Pose pose=ghostPose.pose();
         for(int i=0;i<3;i++){
             Peer hunter=seats[i];
-            if(hunter!=null && hunter.worldMode)
-                reply(hunter,LanApparition.frame(map,world.body(i),true,pose,ghost.manifested(),tick));
+            if(hunter!=null && hunter.worldMode) {
+                String sight=LanApparition.frame(map,world.body(i),true,pose,ghost.manifested(),tick);
+                reply(hunter,sight);
+                if(sight.startsWith("APPARITION|VISIBLE|")) {
+                    LanGhostAnimation.Motion motion=animation.project(true,pendingStrike!=null,pose.heading(),tick);
+                    reply(hunter,motion.frame()); // No private coordinates, only already-disclosed sight.
+                }
+            }
         }
     }
 

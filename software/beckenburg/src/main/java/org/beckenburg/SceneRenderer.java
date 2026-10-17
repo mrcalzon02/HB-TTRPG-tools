@@ -182,13 +182,23 @@ public final class SceneRenderer {
             double gx=apparition==null?map.centerX(ghostRoom):apparition.x(),
                    gz=apparition==null?map.centerZ(ghostRoom):apparition.z();
             double bob=.12*Math.sin(clock*3);
-            // Faceted low-poly spirit: shrouded torso, hood, arms and glowing eye pair.
-            box(out,gx-.32,.48+bob,gz-.2,.64,1.05,.4,0x747d9b);
-            box(out,gx-.23,1.5+bob,gz-.14,.46,.43,.35,0x888eaf);
-            box(out,gx-.44,.72+bob,gz-.2,.15,.8,.28,0x626983);
-            box(out,gx+.29,.72+bob,gz-.2,.15,.8,.28,0x626983);
-            box(out,gx-.15,1.7+bob,gz-.24,.09,.06,.055,0xd4d9ff);
-            box(out,gx+.08,1.7+bob,gz-.24,.09,.06,.055,0xd4d9ff);
+            LanGhostAnimation.Phase phase=apparition==null?LanGhostAnimation.Phase.LURK:apparition.phase();
+            int progress=apparition==null?0:apparition.progress();
+            double stature=phase==LanGhostAnimation.Phase.MATERIALIZE
+                    ?.45+.55*Math.min(1,progress/(double)LanGhostAnimation.MATERIALIZE_TICKS)
+                    :phase==LanGhostAnimation.Phase.RECOVER?.84:1.0;
+            double lift=phase==LanGhostAnimation.Phase.WINDUP?.13*Math.min(1,progress/8.0):0;
+            int shroud=phase==LanGhostAnimation.Phase.WINDUP?0xa75e6d:0x747d9b;
+            int eyes=phase==LanGhostAnimation.Phase.WINDUP?0xffb3a4:0xd4d9ff;
+            // Distinct PS-era poses: rising form, lunging reach, slumped impact recovery.
+            box(out,gx-.32,.48+bob,gz-.2,.64,1.05*stature,.4,shroud);
+            box(out,gx-.23,.48+1.02*stature+bob,gz-.14,.46,.43*stature,.35,0x888eaf);
+            double rad=Math.toRadians(apparition==null?0:apparition.heading());
+            double reach=phase==LanGhostAnimation.Phase.WINDUP?.20+.35*Math.min(1,progress/8.0):0;
+            box(out,gx-.44+Math.sin(rad)*reach,.70+bob+lift,gz-.2+Math.cos(rad)*reach,.15,.80*stature,.28,0x626983);
+            box(out,gx+.29,.72+bob-lift,gz-.2,.15,.80*stature,.28,0x626983);
+            box(out,gx-.15,.48+1.20*stature+bob,gz-.24,.09,.06,.055,eyes);
+            box(out,gx+.08,.48+1.20*stature+bob,gz-.24,.09,.06,.055,eyes);
         }
         if(hunterRoom>=0){
             double hx=map.centerX(hunterRoom)-1.25,hz=map.centerZ(hunterRoom)+2.0;
@@ -243,9 +253,11 @@ public final class SceneRenderer {
     }
     /** First-person network rendering with low-poly teammate models and host-managed doors. */
     public record RemoteBody(double x,double z,int slot) { }
-    public record Apparition(double x,double z) {
+    public record Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress) {
+        public Apparition(double x,double z){this(x,z,LanGhostAnimation.Phase.LURK,0,0);}
         public Apparition {
-            if(!Double.isFinite(x)||!Double.isFinite(z))throw new IllegalArgumentException("invalid apparition");
+            if(!Double.isFinite(x)||!Double.isFinite(z)||phase==null||heading<0||heading>=360
+                    ||progress<0||progress>100)throw new IllegalArgumentException("invalid apparition");
         }
     }
     /** Keep the legacy room-mode signature for old render regression tests. */
