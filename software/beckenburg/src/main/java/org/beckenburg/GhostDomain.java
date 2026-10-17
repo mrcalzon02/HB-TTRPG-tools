@@ -12,7 +12,7 @@ import java.util.Random;
  * No networking or remote command authentication is implied by this local implementation.
  */
 public final class GhostDomain {
-    public enum Action { DRIFT, WHISPER, DISTURB, MANIFEST, STRIKE }
+    public enum Action { DRIFT, WHISPER, DISTURB, MANIFEST, STRIKE, SIGNATURE }
     public enum Source { AI, HUMAN }
     public record Command(Action action, int targetRoom, long sequence, Source source) {
         public Command {
@@ -31,13 +31,13 @@ public final class GhostDomain {
     public record Resolution(boolean applied, String reason, Action action, int room, int energy,
             int fear, int harm, boolean manifested) { }
 
-    private static final int[] COST = { 2, 6, 8, 18, 30 };
-    private static final int[] COOLDOWN = { 35, 22, 30, 78, 90 };
+    private static final int[] COST = { 2, 6, 8, 18, 30, 55 };
+    private static final int[] COOLDOWN = { 35, 22, 30, 78, 90, 180 };
     private final int anchorRoom;
     private final HouseMap map;
     private final GhostIdentity.Type archetype;
     private final int[] lastActionTick = new int[Action.values().length];
-    private int room, tick, energy = 100, manifestUntil;
+    private int room, tick, energy = 100, manifestUntil, occupants;
     private int suppressedUntil=-1,slowedUntil=-1;
     private boolean hearsHunter;
     private long lastSequence = -1;
@@ -82,7 +82,8 @@ public final class GhostDomain {
     public void advance(int nextTick, int hunterRoom, int occupants) {
         if (nextTick != tick + 1) throw new IllegalArgumentException("ghost tick must advance exactly once");
         if(occupants<0||occupants>3)throw new IllegalArgumentException("invalid occupancy");
-        tick=nextTick;hearsHunter = hunterRoom >= 0 && hunterRoom == room;
+        tick=nextTick;this.occupants=occupants;
+        hearsHunter = hunterRoom >= 0 && hunterRoom == room;
         energy=Math.min(100,energy+GhostTraits.gained(archetype,tick,occupants));
     }
     private List<Integer> exits(int current) {
@@ -97,7 +98,9 @@ public final class GhostDomain {
         if (target != room) return false;
         return switch (a) {
             case MANIFEST -> tick >= 80 && hearsHunter && !manifested();
-            case STRIKE -> tick > 160 && hearsHunter && manifested();
+            case STRIKE -> tick > 160 && hearsHunter && manifested()
+                &&(!GhostTraits.of(archetype).huntsSolitary()||occupants==1);
+            case SIGNATURE -> tick>130 && hearsHunter &&(!GhostTraits.of(archetype).huntsSolitary()||occupants==1);
             case WHISPER, DISTURB -> true;
             case DRIFT -> throw new AssertionError();
         };
@@ -134,6 +137,13 @@ public final class GhostDomain {
             case MANIFEST -> {manifestUntil = tick + 49 + GhostBehavior.profile(archetype).manifestTicks();
                 fear=hearsHunter?5:0;}
             case STRIKE -> { harm = 12; fear = 6; manifestUntil = tick + 9; }
+            case SIGNATURE -> {
+                // Species-specific modifiers apply below. This is an expensive room-scale event,
+                // not a free kill and not a substitute for completing the assigned rite.
+                fear=hearsHunter?14:0;
+                harm=hearsHunter?6:0;
+                manifestUntil=Math.max(manifestUntil,tick+18);
+            }
         }
         fear=GhostBehavior.fear(archetype,a,fear);
         harm=GhostBehavior.harm(archetype,a,harm);
@@ -156,6 +166,8 @@ public final class GhostDomain {
             int target = observation.room();
             List<Action> legal = observation.legalActions();
             if (observation.hearsHunter() && legal.contains(Action.STRIKE)) a = Action.STRIKE;
+            else if(observation.hearsHunter()&&observation.tick()%197==0
+                    &&legal.contains(Action.SIGNATURE))a=Action.SIGNATURE;
             else if (observation.hearsHunter() && legal.contains(Action.MANIFEST)) a = Action.MANIFEST;
             else if (observation.tick() % 29 == 0 && legal.contains(Action.WHISPER)) a = Action.WHISPER;
             else if (observation.tick() % 41 == 0 && legal.contains(Action.DISTURB)) a = Action.DISTURB;
