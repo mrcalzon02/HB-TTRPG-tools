@@ -5,6 +5,7 @@ public final class HunterCountersTest {
   HouseMap map=new HouseMap();HunterCounters traps=new HunterCounters();
   LanWorld.Body hunter=new LanWorld.Body(12.5,9.5,0,4);
   GhostDomain spirit=new GhostDomain(map,4,GhostIdentity.Type.SPIRIT);
+  spirit.advance(1,4);
   LanGhostSpatial.Pose pose=new LanGhostSpatial.Pose(4,12.5,9.5,0);
   traps.launch(0,HunterCounters.Kind.SALT,hunter,map,12);
   ok(traps.charges(0,HunterCounters.Kind.SALT)==2,"finite salt");
