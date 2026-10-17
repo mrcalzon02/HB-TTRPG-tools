@@ -7,6 +7,9 @@ mkdir -p build/classes build/test
 javac --release 17 -encoding UTF-8 -d build/classes src/main/java/org/beckenburg/*.java
 javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java/org/beckenburg/*.java
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostPursuitTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostHearingTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostHearingIntegrationTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostHearingHudTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostAnimationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostAnimationIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanSoundTest

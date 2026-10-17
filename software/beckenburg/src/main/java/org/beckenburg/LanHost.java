@@ -27,6 +27,7 @@ public final class LanHost implements AutoCloseable {
     private boolean running,everStarted;
     private int tick;
     private int lastGhostSoundTick=-10000;
+    private final int[] lastGhostFootstepCueTick={-10000,-10000,-10000};
     private LanTelegraphedStrike.Pending pendingStrike;
     private final String bindAddress;
 
@@ -213,14 +214,23 @@ public final class LanHost implements AutoCloseable {
     private static void answerHunter(Peer peer,String action,LanCase.Report result){
         reply(peer,(result.accepted()?"ACCEPT":"REJECT")+"|"+action+"|"+result.message());
     }
-    /** Only successfully validated hunter actions produce AI-detectable noises.
-     * No sound event, inferred position, or target memory is ever sent to a ghost peer.
+    /** Only accepted hunter actions create sounds. Both controller paths use the
+     * same host door graph; a human gets a bounded bearing, never exact positions.
      */
     private void recordSound(int seat,LanGhostPursuit.Sound type){
-        LanWorld.Body b=world.body(seat);
+        LanWorld.Body body=world.body(seat);
         if(LanAcoustics.audible(map,ghost.room(),hunterRooms[seat],type))lastGhostSoundTick=tick;
-        if(seats[3]==null) // AI memory is private, never sent to human ghost.
-            ai.heard(ghost.room(),hunterRooms[seat],b.x(),b.z(),type,tick);
+        if(seats[3]==null){
+            ai.heard(ghost.room(),hunterRooms[seat],body.x(),body.z(),type,tick);
+        }else if(seats[3].ghostWorldMode){
+            LanGhostHearing.Event cue=LanGhostHearing.project(map,ghostPose.pose(),
+                    hunterRooms[seat],body.x(),body.z(),type,tick);
+            if(cue!=null&&(type!=LanGhostPursuit.Sound.FOOTSTEP
+                    ||tick-lastGhostFootstepCueTick[seat]>=4)){
+                reply(seats[3],cue.frame());
+                if(type==LanGhostPursuit.Sound.FOOTSTEP)lastGhostFootstepCueTick[seat]=tick;
+            }
+        }
     }
     private void notifyHunters(String event){for(int i=0;i<3;i++)if(seats[i]!=null)reply(seats[i],event);}
     private void broadcastProgress(){for(int i=0;i<3;i++)if(seats[i]!=null)reply(seats[i],mission.privateState(i));}

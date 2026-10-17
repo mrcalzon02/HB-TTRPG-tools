@@ -17,9 +17,12 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     private final MouseLook mouseLook;
     private final Set<Integer> keys=new HashSet<>();
     private final javax.swing.Timer timer;
+    private final LanAudio audio=new LanAudio();
     private int room=-1,energy,tick,choice,lastTurn=-1;
     private boolean audible,finished;
     private String legal="[]",feedback="Awaiting private spectral pose";
+    private LanGhostHearing.Event hearing;
+    private int lastHearingTick=-1;
 
     public LanGhostPanel(LanClient client){
         this.client=Objects.requireNonNull(client);
@@ -31,7 +34,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
         addFocusListener(this);addFocusListener(mouseLook);
         timer=new javax.swing.Timer(110,e->frame());timer.start();
     }
-    public void close(){timer.stop();keys.clear();mouseLook.close();}
+    public void close(){timer.stop();keys.clear();mouseLook.close();audio.close();}
     /** Accept only frames addressed to ghost; never interpret BODY/TEAMMAP/PROGRESS. */
     public void onEvent(String packet){
         if(!SwingUtilities.isEventDispatchThread())throw new IllegalStateException("ghost UI update must be on EDT");
@@ -53,6 +56,24 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                 audible=p.get(6).equals("1");
                 // The host's ROOM state always wins if a GPOSE packet is delayed.
                 if(room!=-1&&reportedRoom!=room)feedback="Room transition pending host pose";
+            }else if(p.get(0).equals("GHEAR")){
+                LanGhostHearing.Event cue=LanGhostHearing.decode(packet);
+                if(!finished&&cue.tick()>=lastHearingTick&&cue.tick()>=tick-18){
+                    hearing=cue;lastHearingTick=cue.tick();
+                    LanSound.Cue sound=switch(cue.source()){
+                        case FOOTSTEP->LanSound.Cue.FOOTFALL;
+                        case DOOR->LanSound.Cue.DOOR;
+                        case EQUIPMENT->LanSound.Cue.EQUIPMENT;
+                        case RITUAL->LanSound.Cue.RITUAL;
+                    };
+                    int pan=switch(cue.direction()){
+                        case LEFT->-75;case RIGHT->75;case AHEAD,BEHIND,HERE->0;
+                    };
+                    int volume=switch(cue.strength()){
+                        case FAINT->30;case NEAR->58;case LOUD->86;
+                    };
+                    audio.play(new LanSound.CueEvent(sound,pan,volume,cue.tick()));
+                }
             }else if(packet.startsWith("RESULT|")){finished=true;feedback=packet;keys.clear();}
             else if(packet.startsWith("ACCEPT|")||packet.startsWith("REJECT|"))feedback=packet;
         }catch(IllegalArgumentException ex){feedback="Invalid spectral snapshot rejected";}
@@ -87,6 +108,9 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     public int energy(){return energy;}
     public String feedback(){return feedback;}
     public boolean isCaptured(){return mouseLook.captured();}
+    public String currentHearing(){
+        return !finished&&hearing!=null&&tick<=hearing.tick()+18?hearing.caption():"";
+    }
     @Override public void keyPressed(KeyEvent e){
         switch(e.getKeyCode()){
             case KeyEvent.VK_ESCAPE -> {Window w=SwingUtilities.getWindowAncestor(this);if(w!=null)w.dispose();}
@@ -120,7 +144,12 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
             g.setColor(new Color(76,26,100,36));g.fillRect(0,0,getWidth(),h);
             g.setColor(new Color(223,194,249));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));
             g.drawString("BECKENBURG / LAN SPECTRAL GHOST",14,25);
-            g.drawString("ROOM "+map.roomName(room)+"   ENERGY "+energy+"/100   "+(audible?"FOOTSTEPS AUDIBLE":"SILENT"),14,47);
+            g.drawString("ROOM "+map.roomName(room)+"   ENERGY "+energy+"/100   "+(audible?"NOISE DETECTED":"SILENT"),14,47);
+            if(!currentHearing().isEmpty()){
+                g.setColor(new Color(194,165,236));
+                g.drawString("HEARD: "+currentHearing(),14,69);
+                g.setColor(new Color(223,194,249));
+            }
             g.drawString("+",getWidth()/2,h/2);
             g.setColor(new Color(17,16,25));g.fillRect(0,h,getWidth(),getHeight()-h);
             g.setColor(new Color(219,196,242));

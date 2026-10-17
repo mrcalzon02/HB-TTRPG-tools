@@ -1,0 +1,5 @@
+# Beckenburg Alpha 1.9 — Human ghost acoustic perception
+
+Four host-accepted hunter action classes (footsteps, doors, equipment and rituals) now provide directional feedback to the human ghost's 3D view, using the same room graph, door attenuation and ghost-safe van as the existing AI hearing. A GHEAR frame contains a sound category, relative quadrant (or HERE), three-level strength and host tick only. No hunter coordinates, room, seat, health, inventory or private evidence is disclosed. Per-hunter footsteps are throttled to avoid acoustic packet spam.
+
+The ghost viewport captions valid sounds and plays dedicated deterministic 16-kHz stereo synth cues. No sound hardware or audio mute does not conceal the caption. New unit, four-peer socket and Swing HUD tests are wired into both Java 17 build scripts. Isolated helper logic compiled and passed Java 17-targeted verification with explicit dependency stubs on OpenJDK 21/Linux. Full clean-source integration, Windows audio/GUI, and multi-PC acceptance are still unverified; no P10/P18 stage-complete claim.

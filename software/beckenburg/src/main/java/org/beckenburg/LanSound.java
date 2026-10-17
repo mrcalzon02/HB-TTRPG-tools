@@ -13,7 +13,10 @@ public final class LanSound {
         DISTURB(7, 90, "AN OBJECT MOVES"),
         MANIFEST(7, 100, "AN ENTITY MANIFESTS"),
         STRIKE(7, 96, "SPECTRAL ATTACK BUILDING"),
-        FOOTFALL(3, 53, "SOMETHING IS MOVING");
+        FOOTFALL(3, 53, "SOMETHING IS MOVING"),
+        DOOR(6, 80, "DOOR MOVEMENT"),
+        EQUIPMENT(5, 70, "ELECTRONIC DEVICE"),
+        RITUAL(9, 93, "RITUAL ACTIVITY");
         final int acousticBudget, baseGain;
         final String caption;
         Cue(int budget, int gain, String caption) { acousticBudget=budget;baseGain=gain;this.caption=caption; }
