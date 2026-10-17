@@ -34,6 +34,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private String caseResult="";
     private final List<LanEvidenceJournal.Entry> casefile=new ArrayList<>();
     private boolean casefileOpen;
+    private final FieldJournal fieldNotes=new FieldJournal();
+    private int journalPage,guideCursor,guideGhostIndex;
     private GhostIdentity.Type selectedGuess=GhostIdentity.Type.SPIRIT;
 
     public LanWorldPanel(LanClient client){
@@ -121,6 +123,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 saltPouches=LanProtocol.integer(p.get(3),0,3);
             }else if(p.get(0).equals("FIELD")||p.get(0).equals("FEED")){
                 feedback=p.get(0).equals("FEED")?"SANITY DRAIN: an entity is feeding nearby":frame.substring(6);
+            }else if(p.size()==2&&p.get(0).equals("NOTES")&&p.get(1).equals("RESET")){
+                fieldNotes.clear();
+            }else if(p.get(0).equals("NOTE")){
+                fieldNotes.accept(FieldJournal.Note.decode(frame));
             }else if(p.get(0).equals("CASEFILE")){
                 if(p.size()==2&&p.get(1).equals("RESET"))casefile.clear();
                 else {
@@ -221,7 +227,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     "1-3 "+selected+" / R SCAN   Z CROSS("+crosses+")  G THROW WARD("+throwWards+")  H SALT("+saltPouches+")  U UV  J LOG",13,h+42);
             g.setColor(new Color(145,204,175));
             g.drawString((mouseLook.captured()?"MOUSE LOCKED | ":"CLICK TO LOCK LOOK | ")+feedback,13,h+62);
-            if(casefileOpen){
+            if(casefileOpen && journalPage!=0)drawFieldJournal(g,h);
+            if(casefileOpen && journalPage==0){
                 int rows=Math.min(casefile.size(),Math.min(8,Math.max(1,(h-135)/37)));
                 int width=Math.max(260,getWidth()-48),height=52+rows*37,top=83;
                 g.setColor(new Color(10,14,23,232));g.fillRoundRect(20,top,width,height,10,10);
@@ -246,7 +253,80 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }
         }finally{g.dispose();}
     }
+    /** One compact casebook with instrument results, observations and type reference. */
+    private void drawFieldJournal(Graphics2D g,int viewHeight){
+        int left=20,top=82,width=Math.min(getWidth()-40,750),height=Math.max(175,Math.min(viewHeight-100,390));
+        g.setColor(new Color(11,15,23,241));g.fillRoundRect(left,top,width,height,8,8);
+        g.setColor(new Color(213,195,153));
+        g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));
+        g.drawString(journalPage==1?"FIELD NOTES / TAB: QUICK REFERENCE":"GHOST REFERENCE / TAB: INSTRUMENT LOG",
+            left+13,top+23);
+        g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
+        if(journalPage==1){
+            GhostFieldGuide.Clue[] clues=GhostFieldGuide.Clue.values();
+            int first=Math.max(0,Math.min(clues.length-11,guideCursor-5));
+            for(int row=0;row<11&&first+row<clues.length;row++){
+                int at=first+row;
+                GhostFieldGuide.Clue clue=clues[at];
+                FieldJournal.Status value=fieldNotes.status(clue);
+                g.setColor(at==guideCursor?new Color(247,221,161):value==FieldJournal.Status.SEEN?
+                    new Color(154,223,169):new Color(204,208,210));
+                String mark=value==FieldJournal.Status.SEEN?"[X]":value==FieldJournal.Status.UNSURE?"[?]":"[ ]";
+                String label=clue.label;
+                if(label.length()>42)label=label.substring(0,39)+"...";
+                g.drawString((at==guideCursor?">":" ")+mark+" "+label,left+13,top+47+row*21);
+            }
+            int right=left+width-218;
+            g.setColor(new Color(202,183,143));g.drawString("POSSIBLE GHOSTS",right,top+47);
+            var list=GhostFieldGuide.ordered(fieldNotes);
+            g.drawString(list.size()+"/13 remain",right,top+67);
+            int shown=Math.min(10,list.size());
+            for(int i=0;i<shown;i++){
+                var type=list.get(i);
+                g.setColor(i==0?new Color(233,210,169):new Color(198,208,208));
+                g.drawString(type.name()+"  "+GhostFieldGuide.suspicion(type,fieldNotes),
+                    right,top+92+i*20);
+            }
+            if(list.isEmpty())g.drawString("CONFLICTING CLUES",right,top+94);
+            g.setColor(new Color(175,194,210));
+            g.drawString("UP/DOWN select   SPACE mark   TAB page   J close",left+13,top+height-12);
+        }else{
+            GhostIdentity.Type type=GhostIdentity.Type.values()[guideGhostIndex];
+            int y=top+48;
+            for(String line:GhostFieldGuide.reference(type).split("\n")){
+                String text=line.length()>Math.max(20,(width-25)/8)?
+                    line.substring(0,Math.max(17,(width-35)/8))+"...":line;
+                g.drawString(text,left+13,y);y+=26;
+            }
+            y+=10;
+            for(String line:GhostFieldGuide.hint(type).split("\n")){g.drawString(line,left+13,y);y+=22;}
+            g.setColor(new Color(175,194,210));
+            g.drawString("LEFT/RIGHT browse species  TAB evidence  J close",left+13,top+height-12);
+        }
+    }
     @Override public void keyPressed(KeyEvent e){
+        if(e.getKeyCode()==KeyEvent.VK_TAB){
+            if(!casefileOpen){casefileOpen=true;journalPage=1;}
+            else journalPage=(journalPage+1)%3;
+            e.consume();repaint();return;
+        }
+        if(casefileOpen&&journalPage==1){
+            if(e.getKeyCode()==KeyEvent.VK_UP){guideCursor=(guideCursor+GhostFieldGuide.Clue.values().length-1)%GhostFieldGuide.Clue.values().length;repaint();return;}
+            if(e.getKeyCode()==KeyEvent.VK_DOWN){guideCursor=(guideCursor+1)%GhostFieldGuide.Clue.values().length;repaint();return;}
+            if(e.getKeyCode()==KeyEvent.VK_SPACE){
+                GhostFieldGuide.Clue clue=GhostFieldGuide.Clue.values()[guideCursor];
+                FieldJournal.Status next=switch(fieldNotes.status(clue)){
+                    case UNKNOWN->FieldJournal.Status.SEEN;
+                    case SEEN->FieldJournal.Status.UNSURE;
+                    case UNSURE->FieldJournal.Status.UNKNOWN;
+                };
+                sendAction("note",()->client.note(clue,next));repaint();return;
+            }
+        }
+        if(casefileOpen&&journalPage==2){
+            if(e.getKeyCode()==KeyEvent.VK_LEFT){guideGhostIndex=Math.floorMod(guideGhostIndex-1,GhostIdentity.Type.values().length);repaint();return;}
+            if(e.getKeyCode()==KeyEvent.VK_RIGHT){guideGhostIndex=(guideGhostIndex+1)%GhostIdentity.Type.values().length;repaint();return;}
+        }
         switch(e.getKeyCode()){
             case KeyEvent.VK_ESCAPE -> {Window window=SwingUtilities.getWindowAncestor(this);if(window!=null)window.dispose();}
             case KeyEvent.VK_E -> sendAction("door",()->client.door());
@@ -258,7 +338,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_G -> sendAction("thrown ward",()->client.deploy(HunterCounters.Kind.WARD));
             case KeyEvent.VK_H -> sendAction("salt",()->client.deploy(HunterCounters.Kind.SALT));
             case KeyEvent.VK_U -> sendAction("UV",()->client.scanUv());
-            case KeyEvent.VK_J -> casefileOpen=!casefileOpen;
+            case KeyEvent.VK_J -> {casefileOpen=!casefileOpen;if(casefileOpen)journalPage=0;}
             case KeyEvent.VK_I -> selectedGuess=GhostIdentity.Type.values()[
                     (selectedGuess.ordinal()+1)%GhostIdentity.Type.values().length];
             case KeyEvent.VK_P -> sendAction("identify",()->client.identify(selectedGuess));
