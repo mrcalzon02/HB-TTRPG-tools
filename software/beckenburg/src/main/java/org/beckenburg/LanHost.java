@@ -190,7 +190,9 @@ public final class LanHost implements AutoCloseable {
                     if(!running||peer.slot==3||p.size()!=3)throw new IllegalArgumentException("hunter action unavailable");
                     LanCase.Tool tool=LanCase.Tool.valueOf(p.get(1));
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
-                    LanCase.Report result=mission.scan(peer.slot,tool,hunterRooms[peer.slot],ghost.room());
+                    LanCase.Report result=peer.worldMode
+                            ?mission.scanSpatial(peer.slot,tool,world.body(peer.slot),ghost.room(),map)
+                            :mission.scan(peer.slot,tool,hunterRooms[peer.slot],ghost.room());
                     answerHunter(peer,"SCAN",result);
                     if(result.accepted())recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
                     if(result.accepted()&&result.message().startsWith("CONFIRMED"))notifyHunters("EVIDENCE|"+tool+"|"+mission.evidenceCount());

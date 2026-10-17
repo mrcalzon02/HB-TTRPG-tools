@@ -5,7 +5,13 @@ import java.util.EnumSet;
 /** Room-level LAN case rules. All changes are made by LanHost, never by peer-supplied damage or evidence. */
 public final class LanCase {
     public enum Outcome { ACTIVE, CLEANSED, RETREATED, LOST }
-    public enum Tool { EMF, THERMOMETER, SPIRIT_BOX }
+    /** Detection falls off within the actual 3D room; the room-mode demo remains abstract. */
+    public enum Tool {
+        EMF(2.6), THERMOMETER(3.4), SPIRIT_BOX(2.1);
+        private final double sensingRadius;
+        Tool(double radius){sensingRadius=radius;}
+        public double sensingRadius(){return sensingRadius;}
+    }
     public record Report(boolean accepted, String message) { }
     private static final int RITUAL_TICKS = 45, ABANDON_GRACE_TICKS = 20;
     public enum RitualAdvance { NONE, PAUSED, RESUMED, BROKEN, CLEANSED }
@@ -65,6 +71,21 @@ public final class LanCase {
             return new Report(true,(newlyAdded?"CONFIRMED ":"REPEAT ")+tool+" in "+room+" - "+reading);
         }
         return new Report(true,"INCONCLUSIVE "+tool+" in "+room+" - "+reading);
+    }
+    /** Physical first-person scans use the host-owned world body, not a peer-supplied room
+     * or claimed distance. Merely entering the anchor room no longer confirms every clue.
+     */
+    public Report scanSpatial(int seat,Tool tool,LanWorld.Body body,int ghostRoom,HouseMap map) {
+        hunter(seat);
+        if(outcome!=Outcome.ACTIVE||!alive(seat))return new Report(false,"investigation unavailable");
+        if(tool==null||body==null||map==null||!Double.isFinite(body.x())||!Double.isFinite(body.z())
+                ||map.roomAt(body.x(),body.z())!=body.room())
+            return new Report(false,"invalid instrument or host body");
+        int room=body.room();
+        if(room==anchor&&Math.hypot(body.x()-map.centerX(anchor),body.z()-map.centerZ(anchor))
+                >tool.sensingRadius())
+            return new Report(true,"INCONCLUSIVE "+tool+" - weak reading; move closer to the source");
+        return scan(seat,tool,room,ghostRoom);
     }
     public Report ward(int seat,int room) {
         hunter(seat);

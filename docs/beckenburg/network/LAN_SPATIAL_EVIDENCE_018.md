@@ -1,0 +1,7 @@
+# Alpha 2.5 — Spatial evidence instruments
+
+In the true 3D LAN house, walking into the attachment room no longer instantly confirms every evidence category from anywhere in that room. LanHost supplies the actual server-controlled LanWorld.Body to LanCase.scanSpatial, which validates finite coordinates and consistency against HouseMap before awarding clues. Inside the correct anchor room, the source is provisionally at the authored room center. EMF confirms within 2.6m, thermometer within 3.4m, and Spirit Box within 2.1m. Readings beyond range remain accepted but INCONCLUSIVE, do not grow the shared evidence set, and prompt hunters to move closer; they still create host-authored equipment noise. Outside the anchor room existing readings remain inconclusive. The legacy room-only SCAN path is unchanged.
+
+This is an initial authored hotspot and tool-range implementation, not final ghost-dependent evidence behaviors, 3D handheld meshes or inventory ownership. It makes positioning relevant without asking clients to submit their own positions.
+
+LanSpatialEvidenceTest covers physical distances, three-range distinction, finite host body validation, evidence count and room-only backward compatibility. LanSpatialEvidenceIntegrationTest exercises four TCP seats, host 3D travel, distance-gated proof collection, ward, defended cleansing and ghost-private packet exclusion. Windows and Linux Java 17 build runners include both tests. Full end-to-end execution and multi-PC hardware acceptance remain unverified until observed.
