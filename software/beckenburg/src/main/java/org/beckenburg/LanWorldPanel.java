@@ -17,7 +17,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final javax.swing.Timer timer;
     private final Set<Integer> keys=new HashSet<>();
     private String feedback="Awaiting host world snapshot";
-    private int lastTurn=-1,tick,visibleGhost=-1,health=100,evidence;
+    private int lastTurn=-1,tick,visibleGhost=-1,health=100,sanity=100,evidence;
+    private int crosses=2,throwWards=2,saltPouches=3;
+    private final List<SceneRenderer.WorldMark> counterMarks=new ArrayList<>();
     private SceneRenderer.Apparition apparition;
     private int apparitionWarningTick=-1;
     private int lastMotionTick=-1;
@@ -89,6 +91,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(p.size()==8&&p.get(0).equals("PROGRESS")){
                 health=LanProtocol.integer(p.get(1),0,100);
                 evidence=LanProtocol.integer(p.get(4),0,3);
+                sanity=100-LanProtocol.integer(p.get(2),0,100);
                 if(health==0){keys.clear();feedback="INCAPACITATED - YOU CAN OBSERVE BUT NOT ACT";}
             }else if(p.size()==3&&p.get(0).equals("HUNTER")&&p.get(1).equals("DOWN")){
                 int down=LanProtocol.integer(p.get(2),0,2);
@@ -101,6 +104,23 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 feedback="ENTITY TELL: "+p.get(1);
             }else if(p.get(0).equals("SITES")&&p.size()==4){
                 feedback="Ritual sites active: Banish=cellar Cleanse=library Absolve=foyer";
+            }else if(p.get(0).equals("COUNTER")){
+                if(p.size()==2&&p.get(1).equals("RESET"))counterMarks.clear();
+                else if(p.size()==7){
+                    LanProtocol.integer(p.get(1),1,10000000);
+                    HunterCounters.Kind kind=HunterCounters.Kind.valueOf(p.get(2));
+                    double xx=LanProtocol.integer(p.get(3),0,HouseMap.WIDTH*1000)/1000.0;
+                    double zz=LanProtocol.integer(p.get(4),0,HouseMap.HEIGHT*1000)/1000.0;
+                    double yy=LanProtocol.integer(p.get(5),0,3000)/1000.0;
+                    LanProtocol.integer(p.get(6),0,300);
+                    counterMarks.add(new SceneRenderer.WorldMark(xx,zz,yy,kind));
+                }else throw new IllegalArgumentException("bad counter snapshot");
+            }else if(p.size()==4&&p.get(0).equals("COUNTERAMMO")){
+                crosses=LanProtocol.integer(p.get(1),0,2);
+                throwWards=LanProtocol.integer(p.get(2),0,2);
+                saltPouches=LanProtocol.integer(p.get(3),0,3);
+            }else if(p.get(0).equals("FIELD")||p.get(0).equals("FEED")){
+                feedback=p.get(0).equals("FEED")?"SANITY DRAIN: an entity is feeding nearby":frame.substring(6);
             }else if(p.get(0).equals("CASEFILE")){
                 if(p.size()==2&&p.get(1).equals("RESET"))casefile.clear();
                 else {
@@ -160,7 +180,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             int heading=Math.floorMod((int)Math.round(Math.toDegrees(renderer.yaw)),360);
             if(heading!=lastTurn){client.turn(heading);lastTurn=heading;}
         }catch(IOException e){feedback="LAN disconnected: "+e.getMessage();close();}
-        renderer.drawNetwork(map,new ArrayList<>(peers.values()),apparition,tick*.1);
+        renderer.drawNetwork(map,new ArrayList<>(peers.values()),apparition,tick*.1,List.copyOf(counterMarks));
         repaint();
     }
     @Override protected void paintComponent(Graphics original){
@@ -172,7 +192,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.setFont(new Font(Font.MONOSPACED,Font.BOLD,Math.max(12,getHeight()/46)));
             g.setColor(new Color(234,222,189));
             g.drawString("BECKENBURG / LAN HOUSE — HUNTER "+(seat+1),13,26);
-            g.drawString(map.roomName(renderer.x,renderer.z)+" | TEAM "+peers.size()+" / 2 | HP "+health+" | CLUES "+evidence+"/3",13,46);
+            g.drawString(map.roomName(renderer.x,renderer.z)+" | TEAM "+peers.size()+" / 2 | HP "+health+
+                " | SANITY "+sanity+" | CLUES "+evidence+"/3",13,46);
             g.drawString("+",getWidth()/2,h/2);
             g.setColor(new Color(214,195,151));
             g.drawString("IDENTIFY: "+selectedGuess+"  [I NEXT / P SUBMIT]",13,91);
@@ -197,7 +218,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString(health==0?"ARROWS / MOUSE LOOK - OBSERVE ONLY - ESC EXIT":
                     "WASD MOVE  •  CLICK TO CAPTURE MOUSE / ARROWS LOOK  •  E DOOR",13,h+23);
             g.drawString(health==0?"NO MOVEMENT OR EQUIPMENT WHILE INCAPACITATED":
-                    "1-3 TOOL "+selected+"  R SCAN  I/P IDENTIFY  J NOTES  C WARD  B CLEANSE  N BANISH  V ABSOLVE  X EXIT",13,h+42);
+                    "1-3 "+selected+" / R SCAN   Z CROSS("+crosses+")  G THROW WARD("+throwWards+")  H SALT("+saltPouches+")  U UV  J LOG",13,h+42);
             g.setColor(new Color(145,204,175));
             g.drawString((mouseLook.captured()?"MOUSE LOCKED | ":"CLICK TO LOCK LOOK | ")+feedback,13,h+62);
             if(casefileOpen){
@@ -233,6 +254,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_2 -> selected=LanCase.Tool.THERMOMETER;
             case KeyEvent.VK_3 -> selected=LanCase.Tool.SPIRIT_BOX;
             case KeyEvent.VK_R -> sendAction("scan",()->client.scan(selected));
+            case KeyEvent.VK_Z -> sendAction("cross",()->client.deploy(HunterCounters.Kind.CROSS));
+            case KeyEvent.VK_G -> sendAction("thrown ward",()->client.deploy(HunterCounters.Kind.WARD));
+            case KeyEvent.VK_H -> sendAction("salt",()->client.deploy(HunterCounters.Kind.SALT));
+            case KeyEvent.VK_U -> sendAction("UV",()->client.scanUv());
             case KeyEvent.VK_J -> casefileOpen=!casefileOpen;
             case KeyEvent.VK_I -> selectedGuess=GhostIdentity.Type.values()[
                     (selectedGuess.ordinal()+1)%GhostIdentity.Type.values().length];
