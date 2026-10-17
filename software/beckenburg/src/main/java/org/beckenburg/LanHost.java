@@ -400,6 +400,9 @@ public final class LanHost implements AutoCloseable {
     private void resolveGhostAction(GhostDomain.Resolution result){
         if(!result.applied())return;
         if(result.action()==GhostDomain.Action.MANIFEST)animation.manifested(tick);
+        if(result.action()==GhostDomain.Action.SIGNATURE)
+            for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==result.room())
+                reply(seats[i],"TELL|"+GhostTraits.of(ghostType).clue());
         GhostBehavior.Profile behavior=GhostBehavior.profile(ghostType);
         if(result.action()==behavior.favored())
             for(int i=0;i<3;i++)if(seats[i]!=null&&mission.alive(i)
@@ -411,6 +414,7 @@ public final class LanHost implements AutoCloseable {
             case DISTURB->LanSound.Cue.DISTURB;
             case MANIFEST->LanSound.Cue.MANIFEST;
             case STRIKE->LanSound.Cue.STRIKE;
+            case SIGNATURE->LanSound.Cue.MANIFEST;
             default->null;
         };
         if(cue!=null)broadcastGhostSound(cue);

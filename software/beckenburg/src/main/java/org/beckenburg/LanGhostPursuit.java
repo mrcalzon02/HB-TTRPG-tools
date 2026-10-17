@@ -72,7 +72,10 @@ public final class LanGhostPursuit {
         GhostDomain.Action action=null;
         int target=seen.room();
         boolean locallyHeard=memory(seen.tick())!=null && memory.room()==seen.room();
-        if(locallyHeard && seen.hearsHunter() && hasSpatialVictim && legal.contains(GhostDomain.Action.STRIKE))
+        if(locallyHeard && seen.hearsHunter() && seen.tick()%211==0
+                &&legal.contains(GhostDomain.Action.SIGNATURE))
+            action=GhostDomain.Action.SIGNATURE;
+        else if(locallyHeard && seen.hearsHunter() && hasSpatialVictim && legal.contains(GhostDomain.Action.STRIKE))
             action=GhostDomain.Action.STRIKE;
         else if(locallyHeard && seen.hearsHunter() && legal.contains(GhostDomain.Action.MANIFEST))
             action=GhostDomain.Action.MANIFEST;

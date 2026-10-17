@@ -126,6 +126,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_2 -> ability(GhostDomain.Action.DISTURB);
             case KeyEvent.VK_3 -> ability(GhostDomain.Action.MANIFEST);
             case KeyEvent.VK_4 -> ability(GhostDomain.Action.STRIKE);
+            case KeyEvent.VK_5 -> ability(GhostDomain.Action.SIGNATURE);
             case KeyEvent.VK_LEFT -> camera.yaw-=.1;
             case KeyEvent.VK_RIGHT -> camera.yaw+=.1;
             case KeyEvent.VK_UP -> camera.pitch=Math.min(1.05,camera.pitch+.06);
@@ -161,7 +162,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
             List<Integer> exits=exits();
             g.drawString("WASD SPECTRAL VIEW  CLICK TO CAPTURE / ARROWS LOOK  ESC EXIT",12,h+22);
             g.drawString("[ ] SELECT ROOM  SPACE DRIFT -> "+(exits.isEmpty()?"NONE":map.roomName(exits.get(Math.floorMod(choice,exits.size())))),12,h+42);
-            g.drawString("1 WHISPER   2 DISTURB   3 MANIFEST   4 STRIKE   READY "+legal,12,h+64);
+            g.drawString("1 WHISPER  2 DISTURB  3 MANIFEST  4 STRIKE  5 SIGNATURE  READY "+legal,12,h+64);
             g.setColor(new Color(144,206,189));
             g.drawString(feedback.substring(0,Math.min(feedback.length(),108)),12,h+86);
         }finally{g.dispose();}

@@ -186,8 +186,12 @@ public final class LanCase {
             stress[i]=Math.min(100,stress[i]+effect.fear());
             if(effect.harm()>0)health[i]=Math.max(0,health[i]-Math.max(1,wardRoom==room?Math.min(4,effect.harm()):effect.harm()));
         }
-        if(ritualProgress>=0 && room==ritualRoom && effect.action()==GhostDomain.Action.DISTURB){
-            ritualProgress=Math.max(0,ritualProgress-12); // Contest, but bounded disruption cannot permanently stun the rite.
+        if(ritualProgress>=0 && room==ritualRoom
+                &&(effect.action()==GhostDomain.Action.DISTURB
+                   ||effect.action()==GhostDomain.Action.SIGNATURE)){
+            ritualProgress=Math.max(0,ritualProgress-
+                (effect.action()==GhostDomain.Action.SIGNATURE?18:12));
+            // Interruptions are bounded; ghosts cannot trivially reset an entire ritual.
         }
         // Disconnected seats cannot become invulnerable phantom survivors.
         boolean survivor=false;
