@@ -14,7 +14,7 @@ public final class LanCaseDepartureTest {
             ok(mission.scan(0,tool,4,4).accepted(),"survivor can investigate");
         ok(mission.ward(0,4).accepted(),"survivor can place anchor ward");
         ok(mission.cleanse(2,4).accepted(),"remaining teammate can complete rite");
-        for(int tick=0;tick<45;tick++)mission.advance();
+        for(int tick=0;tick<45;tick++)mission.advance(new int[]{4,14,4});
         ok(mission.outcome()==LanCase.Outcome.CLEANSED,"surviving team wins in progress");
         LanCase lost=new LanCase(4);
         lost.depart(1);lost.depart(2);

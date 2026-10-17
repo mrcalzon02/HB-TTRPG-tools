@@ -17,15 +17,15 @@ public final class LanCaseTest {
         check(mission.wardPrepared(),"ward persisted");
         check(mission.cleanse(2,4).accepted(),"teammate can begin rite");
         check(!mission.cleanse(1,4).accepted(),"double ritual rejected");
-        for(int i=0;i<15;i++)mission.advance();
         int[] rooms={4,4,14};
+        for(int i=0;i<15;i++)mission.advance(rooms);
         GhostDomain.Resolution attack=new GhostDomain.Resolution(true,"ok",GhostDomain.Action.STRIKE,4,50,6,12,true);
         mission.applyGhostEffect(4,rooms,attack);
         check(mission.health(0)==96&&mission.health(1)==96&&mission.health(2)==100,"ward-protected incremental injury for only present hunters");
         GhostDomain.Resolution disturb=new GhostDomain.Resolution(true,"ok",GhostDomain.Action.DISTURB,4,40,1,0,true);
         mission.applyGhostEffect(4,rooms,disturb);
         check(mission.ritualProgress()==3,"ghost disturbance delays but does not erase ritual");
-        for(int i=0;i<42;i++)mission.advance();
+        for(int i=0;i<42;i++)mission.advance(rooms);
         check(mission.outcome()==LanCase.Outcome.CLEANSED,"ritual resolves deterministically");
         check(!mission.ward(0,4).accepted(),"finished case rejects commands");
         check(mission.privateState(0).startsWith("PROGRESS|96|"),"individual health in private projection");

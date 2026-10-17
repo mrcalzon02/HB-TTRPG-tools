@@ -7,12 +7,13 @@ public final class LanCase {
     public enum Outcome { ACTIVE, CLEANSED, RETREATED, LOST }
     public enum Tool { EMF, THERMOMETER, SPIRIT_BOX }
     public record Report(boolean accepted, String message) { }
-    private static final int RITUAL_TICKS = 45;
+    private static final int RITUAL_TICKS = 45, ABANDON_GRACE_TICKS = 20;
+    public enum RitualAdvance { NONE, PAUSED, RESUMED, BROKEN, CLEANSED }
     private final int anchor;
     private final EnumSet<Tool> evidence=EnumSet.noneOf(Tool.class);
     private final int[] health={100,100,100},stress={0,0,0},wards={2,2,2};
     private final boolean[] active={true,true,true};
-    private int wardRoom=-1,ritualProgress=-1;
+    private int wardRoom=-1,ritualProgress=-1,unguardedTicks;
     private Outcome outcome=Outcome.ACTIVE;
 
     public LanCase(int anchor) {
@@ -74,7 +75,7 @@ public final class LanCase {
         if(room!=anchor)return new Report(false,"no true attachment anchor here");
         if(!wardPrepared())return new Report(false,"anchor ward required");
         if(ritualProgress>=0)return new Report(false,"ritual already underway");
-        ritualProgress=0;
+        ritualProgress=0;unguardedTicks=0;
         return new Report(true,"RITUAL STARTED - defend the prepared circle");
     }
     public Report extract(int seat,int room) {
@@ -103,9 +104,31 @@ public final class LanCase {
         for(int i=0;i<3;i++)if(active[i]&&health[i]>0)survivor=true;
         if(!survivor)outcome=Outcome.LOST;
     }
-    public boolean advance() {
-        if(outcome!=Outcome.ACTIVE||ritualProgress<0)return false;
-        if(++ritualProgress>=RITUAL_TICKS){outcome=Outcome.CLEANSED;return true;}
-        return false;
+    /** Advance on the host's 100ms simulation clock, never on a client timer.
+     * An investigator must be active, alive and physically in the anchor room.
+     * A vacated circle pauses immediately and unravels after twenty unattended ticks.
+     */
+    public RitualAdvance advance(int[] hunterRooms) {
+        if(hunterRooms==null||hunterRooms.length!=3)
+            throw new IllegalArgumentException("three hunter room snapshots required");
+        if(outcome!=Outcome.ACTIVE||ritualProgress<0)return RitualAdvance.NONE;
+        boolean guarded=false;
+        for(int seat=0;seat<3;seat++)
+            if(active[seat]&&health[seat]>0&&hunterRooms[seat]==anchor)guarded=true;
+        if(!guarded){
+            if(++unguardedTicks>=ABANDON_GRACE_TICKS){
+                ritualProgress=-1;
+                unguardedTicks=0;
+                return RitualAdvance.BROKEN;
+            }
+            return unguardedTicks==1?RitualAdvance.PAUSED:RitualAdvance.NONE;
+        }
+        boolean resumed=unguardedTicks>0;
+        unguardedTicks=0;
+        if(++ritualProgress>=RITUAL_TICKS){
+            outcome=Outcome.CLEANSED;
+            return RitualAdvance.CLEANSED;
+        }
+        return resumed?RitualAdvance.RESUMED:RitualAdvance.NONE;
     }
 }

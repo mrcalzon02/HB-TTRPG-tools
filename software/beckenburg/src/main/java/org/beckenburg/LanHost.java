@@ -358,7 +358,13 @@ public final class LanHost implements AutoCloseable {
                 }
             }}
             resolvePendingStrike();
-            mission.advance();
+            LanCase.RitualAdvance ritual=mission.advance(hunterRooms);
+            if(ritual==LanCase.RitualAdvance.PAUSED
+                    ||ritual==LanCase.RitualAdvance.RESUMED
+                    ||ritual==LanCase.RitualAdvance.BROKEN){
+                notifyHunters("RITUAL|"+ritual);
+                broadcastProgress();
+            }
             if(animation.animating(tick)||pendingStrike!=null)broadcastApparitions();
             if(tick%5==0){broadcastState();broadcastApparitions();broadcastProgress();broadcastWorld();
                 if(seats[3]!=null&&seats[3].ghostWorldMode)reply(seats[3],ghostPose.frame(tick));}
