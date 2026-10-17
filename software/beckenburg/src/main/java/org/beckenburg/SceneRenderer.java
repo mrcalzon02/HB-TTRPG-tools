@@ -191,7 +191,8 @@ public final class SceneRenderer {
             }
         }
     }
-    private List<Face> scene(HouseMap map,int ghostRoom,boolean ghostVisible,int wardRoom,int hunterRoom,double clock,List<RemoteBody> others,Apparition apparition) {
+    private List<Face> scene(HouseMap map,int ghostRoom,boolean ghostVisible,int wardRoom,int hunterRoom,
+            double clock,List<RemoteBody> others,Apparition apparition,List<WorldMark> marks) {
         List<Face> out=new ArrayList<>(2000);
         for(int zz=1;zz<map.height()-1;zz++)for(int xx=1;xx<map.width()-1;xx++) {
             if(map.tile(xx,zz)=='#') continue;
@@ -236,6 +237,28 @@ public final class SceneRenderer {
             quad(out,new Point(wx-.8,.035,wz-.8),new Point(wx+.8,.035,wz-.8),new Point(wx+.8,.035,wz-.65),new Point(wx-.8,.035,wz-.65),0x9b85b8);
             quad(out,new Point(wx-.8,.035,wz+.65),new Point(wx+.8,.035,wz+.65),new Point(wx+.8,.035,wz+.8),new Point(wx-.8,.035,wz+.8),0x9b85b8);
         }
+        for(WorldMark mark:marks) {
+            double mx=mark.x(),mz=mark.z(),yy=mark.height();
+            if(Math.hypot(mx-x,mz-z)>14)continue;
+            switch(mark.kind()){
+                case CROSS -> {
+                    box(out,mx-.055,yy,mz-.055,.11,.34,.11,0xd7c08c);
+                    box(out,mx-.21,yy+.15,mz-.055,.42,.10,.11,0xe1d4a3);
+                }
+                case WARD -> {
+                    // Ground seal remains visible even when the projectile has landed.
+                    box(out,mx-.75,.038,mz-.75,1.50,.06,.095,0x7fc6bf);
+                    box(out,mx-.75,.038,mz+.655,1.50,.06,.095,0x7fc6bf);
+                    box(out,mx-.75,.038,mz-.65,.095,.06,1.30,0x7fc6bf);
+                    box(out,mx+.655,.038,mz-.65,.095,.06,1.30,0x7fc6bf);
+                    if(yy>.10)box(out,mx-.09,yy,mz-.09,.18,.20,.18,0x9bede0);
+                }
+                case SALT -> {
+                    box(out,mx-.47,.042,mz-.42,.94,.035,.09,0xe0d9bd);
+                    box(out,mx-.47,.042,mz+.33,.94,.035,.09,0xc7c3ad);
+                }
+            }
+        }
         return out;
     }
     private Point camera(Point p){
@@ -260,6 +283,13 @@ public final class SceneRenderer {
         }
         return out;
     }
+    /** Physical counter objects share room geometry and participate in the same depth buffer. */
+    public record WorldMark(double x,double z,double height,HunterCounters.Kind kind) {
+        public WorldMark {
+            if(!Double.isFinite(x)||!Double.isFinite(z)||!Double.isFinite(height)||kind==null)
+                throw new IllegalArgumentException("invalid counter mark");
+        }
+    }
     /** First-person network rendering with low-poly teammate models and host-managed doors. */
     public record RemoteBody(double x,double z,int slot,int heading) {
         public RemoteBody(double x,double z,int slot){this(x,z,slot,0);}
@@ -283,6 +313,10 @@ public final class SceneRenderer {
     public void drawNetwork(HouseMap map,List<RemoteBody> others,Apparition apparition,double clock){
         render(map,-1,apparition!=null,-1,-1,clock,others,apparition);
     }
+    public void drawNetwork(HouseMap map,List<RemoteBody> others,Apparition apparition,double clock,
+            List<WorldMark> markers){
+        render(map,-1,apparition!=null,-1,-1,clock,others,apparition,markers);
+    }
     public void draw(HouseMap map,InvestigationSession session,double clock){
         render(map,session.ghostRoom(),session.outcome()==InvestigationSession.Outcome.ACTIVE && session.ghostManifesting(),
             session.wardPrepared()?session.anchorRoom():-1,-1,clock,List.of());
@@ -295,8 +329,12 @@ public final class SceneRenderer {
         render(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock,others,null);
     }
     private void render(HouseMap map,int ghostRoom,boolean visibleGhost,int wardRoom,int hunterRoom,double clock,List<RemoteBody> others,Apparition apparition){
+        render(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock,others,apparition,List.of());
+    }
+    private void render(HouseMap map,int ghostRoom,boolean visibleGhost,int wardRoom,int hunterRoom,
+            double clock,List<RemoteBody> others,Apparition apparition,List<WorldMark> markers){
         Arrays.fill(pixels,0x171b25); Arrays.fill(depths,Double.POSITIVE_INFINITY);
-        for(Face face:scene(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock,others,apparition)){
+        for(Face face:scene(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock,others,apparition,markers)){
             List<Vertex> pts=clip(new Vertex(camera(face.a),face.au,face.av),
                 new Vertex(camera(face.b),face.bu,face.bv),new Vertex(camera(face.c),face.cu,face.cv));
             for(int i=1;i<pts.size()-1;i++)triangle(pts.get(0),pts.get(i),pts.get(i+1),face.color,face.material);
