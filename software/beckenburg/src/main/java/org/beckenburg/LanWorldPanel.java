@@ -86,6 +86,12 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(p.size()==8&&p.get(0).equals("PROGRESS")){
                 health=LanProtocol.integer(p.get(1),0,100);
                 evidence=LanProtocol.integer(p.get(4),0,3);
+                if(health==0){keys.clear();feedback="INCAPACITATED - YOU CAN OBSERVE BUT NOT ACT";}
+            }else if(p.size()==3&&p.get(0).equals("HUNTER")&&p.get(1).equals("DOWN")){
+                int down=LanProtocol.integer(p.get(2),0,2);
+                if(down==seat){
+                    keys.clear();feedback="INCAPACITATED - YOU CAN OBSERVE BUT NOT ACT";
+                }else feedback="INVESTIGATOR "+(down+1)+" IS DOWN";
             }else if(p.get(0).equals("SOUND")){
                 LanSound.CueEvent cue=LanSound.decode(frame);
                 // Caption is an independent non-audio clue for deaf players/no sound device.
@@ -125,7 +131,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         int right=(keys.contains(KeyEvent.VK_D)?1:0)-(keys.contains(KeyEvent.VK_A)?1:0);
         int forward=(keys.contains(KeyEvent.VK_W)?1:0)-(keys.contains(KeyEvent.VK_S)?1:0);
         try{
-            if(forward!=0||right!=0){
+            if(health>0&&(forward!=0||right!=0)){
                 double dx=Math.sin(renderer.yaw)*forward+Math.cos(renderer.yaw)*right;
                 double dz=Math.cos(renderer.yaw)*forward-Math.sin(renderer.yaw)*right;
                 double len=Math.hypot(dx,dz);
@@ -149,7 +155,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString("BECKENBURG / LAN HOUSE — HUNTER "+(seat+1),13,26);
             g.drawString(map.roomName(renderer.x,renderer.z)+" | TEAM "+peers.size()+" / 2 | HP "+health+" | CLUES "+evidence+"/3",13,46);
             g.drawString("+",getWidth()/2,h/2);
-            if(threatUntilTick>=tick && threatTarget>=0){
+            if(health==0){
+                g.setColor(new Color(235,154,159));
+                g.drawString("INCAPACITATED - VIEW ONLY / AWAIT CASE RESULT",13,68);
+            }else if(threatUntilTick>=tick && threatTarget>=0){
                 g.setColor(new Color(240,149,124));
                 int remaining=threatUntilTick-tick;
                 g.drawString("GHOST STRIKE WIND-UP — EVADE OR BREAK SIGHT"+(threatTarget==seat?" / TARGETED":"")+" ("+remaining+")",13,68);
@@ -164,8 +173,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }
             g.setColor(new Color(17,19,25));g.fillRect(0,h,getWidth(),getHeight()-h);
             g.setColor(new Color(216,215,202));
-            g.drawString("WASD MOVE  •  CLICK TO CAPTURE MOUSE / ARROWS LOOK  •  E DOOR",13,h+23);
-            g.drawString("1-3 TOOL: "+selected+"  R SCAN  C WARD  B RITUAL  X EXTRACT  ESC EXIT",13,h+42);
+            g.drawString(health==0?"ARROWS / MOUSE LOOK - OBSERVE ONLY - ESC EXIT":
+                    "WASD MOVE  •  CLICK TO CAPTURE MOUSE / ARROWS LOOK  •  E DOOR",13,h+23);
+            g.drawString(health==0?"NO MOVEMENT OR EQUIPMENT WHILE INCAPACITATED":
+                    "1-3 TOOL: "+selected+"  R SCAN  C WARD  B RITUAL  X EXTRACT  ESC EXIT",13,h+42);
             g.setColor(new Color(145,204,175));
             g.drawString((mouseLook.captured()?"MOUSE LOCKED | ":"CLICK TO LOCK LOOK | ")+feedback,13,h+62);
         }finally{g.dispose();}
@@ -185,12 +196,13 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_RIGHT -> renderer.yaw+=.09;
             case KeyEvent.VK_UP -> renderer.pitch=Math.min(1.05,renderer.pitch+.06);
             case KeyEvent.VK_DOWN -> renderer.pitch=Math.max(-1.05,renderer.pitch-.06);
-            default -> keys.add(e.getKeyCode());
+            default -> {if(health>0)keys.add(e.getKeyCode());}
         }
     }
     @FunctionalInterface private interface NetworkAction {void run()throws IOException;}
     private void sendAction(String verb,NetworkAction action){
         if(!caseResult.isEmpty())return;
+        if(health==0){feedback="INCAPACITATED - CANNOT "+verb.toUpperCase();return;}
         try{action.run();feedback="Awaiting host "+verb+" result";}
         catch(IOException ex){feedback="LAN "+verb+" failed: "+ex.getMessage();}
     }

@@ -24,6 +24,10 @@ public final class LanCase {
     public Outcome outcome(){return outcome;}
     public int evidenceCount(){return evidence.size();}
     public int health(int seat){hunter(seat);return health[seat];}
+    /** Single host-owned predicate for participation, pursuit and strike eligibility. */
+    public boolean alive(int seat){
+        hunter(seat);return active[seat]&&health[seat]>0;
+    }
     public int stress(int seat){hunter(seat);return stress[seat];}
     public int wards(int seat){hunter(seat);return wards[seat];}
     public boolean wardPrepared(){return wardRoom==anchor;}
@@ -37,7 +41,10 @@ public final class LanCase {
         hunter(seat);
         if(!active[seat])return;
         active[seat]=false;
-        if(outcome==Outcome.ACTIVE&&remainingHunters()==0)outcome=Outcome.LOST;
+        // Vacant and incapacitated seats cannot keep an already lost case active.
+        boolean survivor=false;
+        for(int i=0;i<3;i++)if(alive(i))survivor=true;
+        if(outcome==Outcome.ACTIVE&&!survivor)outcome=Outcome.LOST;
     }
     public String privateState(int seat) {
         hunter(seat);

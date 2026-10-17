@@ -1,0 +1,7 @@
+# Alpha 2.4 — Host-owned hunter incapacitation
+
+In the LAN investigation, a zero-health hunter is an incapacitated spectator, not an immortal scout. LanCase.alive(seat) is the authoritative participation check across active/departed status and health. The host still consumes anti-replay sequence numbers but rejects downed STEP, DOOR and legacy MOVE commands before mutating world positions, doors or ghost acoustic memory. Existing case-rule checks reject scan, ward, cleanse and extract. TURN and VIEW3D remain available to look around without affecting the match.
+
+Ghost STRIKE victim selection, telegraphed impact validation and AI same-room hearing now exclude zero-health hunters. The host sends hunter-only HUNTER|DOWN|seat exactly on a living-to-downed damage transition, never as ghost-private tactical data. The 3D hunter viewport clears movement keys, blocks action hotkeys and displays an incapacitated view-only message. A last living player's departure results in LOST rather than leaving behind connected downed seats that prevent a conclusion.
+
+LanIncapacitationTest checks living-seat combat masks, disallowed actions and last-survivor departure; LanIncapacitationHudTest checks the offscreen Swing HUD and suppressed field hotkeys. Both are included in Windows/Linux Java 17 build runners. This does not add revival, corpse models, reconnect or any production-complete claim. Full clean-source and physical Windows LAN acceptance remain separate gates.
