@@ -442,7 +442,10 @@ public final class LanHost implements AutoCloseable {
         for(int i=0;i<3;i++)if(seats[i]!=null&&mission.alive(i)){
             connected[i]=true;spatial[i]=seats[i].worldMode;
         }
-        boolean hit=pending.hits(map,world,ghostPose.pose(),hunterRooms,connected,spatial)
+        int near=0;
+        for(int i=0;i<3;i++)if(seats[i]!=null&&mission.alive(i)&&hunterRooms[i]==pending.room())near++;
+        boolean soloAllowed=!GhostTraits.of(ghostType).huntsSolitary()||near==1;
+        boolean hit=soloAllowed&&pending.hits(map,world,ghostPose.pose(),hunterRooms,connected,spatial)
             &&!counters.wardsAt(world.body(pending.targetSeat()).x(),
                                world.body(pending.targetSeat()).z(),tick);
         if(hit){
