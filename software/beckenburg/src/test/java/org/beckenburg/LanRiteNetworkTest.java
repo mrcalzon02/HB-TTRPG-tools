@@ -43,7 +43,7 @@ public final class LanRiteNetworkTest {
    for(LanCase.Tool instrument:LanCase.Tool.values()){
     a.client.scan(instrument);a.until("ACCEPT|SCAN|CONFIRMED");
    }
-   ok(!host.running()==false,"case still active after evidence");
+   ok(host.running(),"case still active after evidence");
    a.client.identify(GhostIdentity.Type.WRAITH);
    a.until("ACCEPT|IDENTIFY|ENTITY IDENTIFIED WRAITH");
    b.until("IDENTIFIED|WRAITH|BANISHMENT");

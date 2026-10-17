@@ -6,8 +6,6 @@ New LAN matches hosted through the launcher choose one of the thirteen original 
 
 Legacy room-mode demos using the two-argument `LanHost` constructor retain the original Spirit/anchor-cleansing behavior for compatibility; this is not the normal new-launcher session.
 
-# The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
-
 **Status:** a local solo investigation vertical slice, **not the finished four-player game**. It expands the original Swing/software-3D renderer experiment with a fifteen-zone test house (twelve interior rooms and three exterior spaces), low-poly room props, an AI-driven Spirit ghost, working evidence tools and a complete case-resolution loop. All artwork here is procedural placeholder geometry; the user-approved full-resolution PNG concepts remain awaiting verified GitHub binary archival and model integration.
 
 ## Alpha 2.6 — shared hunter casefile (development)

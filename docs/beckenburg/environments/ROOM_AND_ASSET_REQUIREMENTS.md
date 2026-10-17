@@ -172,6 +172,8 @@ Original source: [Drive PNG](https://drive.google.com/file/d/17rRI8lYsPox77s5EUl
 | CHURCH-11 | Bell tower | inside | vertical/audio |
 | CHURCH-12 | Graveyard / rectory garden | outside | outdoor anchor |
 
+**Three-site completion gate:** every family listed above must feature one **Banishment**, one **Cleansing**, and one **Absolution** installation in separate traversable spaces. The complete zone-by-zone concepts and distinct functional models are tracked in [THREE_RITUAL_SITES.md](THREE_RITUAL_SITES.md). Only the playable house has implemented geometry and host-bound interaction at this stage; the other eight are authored site requirements, not verified runtime maps.
+
 ## Low-poly material and kit contract
 **Texture production:** initial atlas sizes 128×128 and 256×256 pixels, PNG lossless RGBA or RGB. Nearest filtering; no blurred textures or physically based layers required. Material families: masonry, wood, paint/plaster, carpet/fabric, rough metal, glass/window, tiled ceramic, earth/grass and occult accent. Individual atlas cells named and UV gutters padded 2–4 pixels to prevent bleed; any pixel-look upscaling must preserve hard edges. Preserve editable source project and palette sheet. Concept-art images are **never** sampled as a replacement for a properly authored texture atlas.
 
