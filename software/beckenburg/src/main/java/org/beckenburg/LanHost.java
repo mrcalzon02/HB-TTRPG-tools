@@ -546,8 +546,11 @@ public final class LanHost implements AutoCloseable {
         for(int i=0;i<3;i++){
             Peer hunter=seats[i];
             if(hunter!=null && hunter.worldMode) {
+                GhostTraits.Sight form=GhostTraits.of(ghostType).sight();
                 String sight=LanApparition.frame(map,world.body(i),true,pose,
-                    ghost.manifested()&&GhostTraits.of(ghostType).sight()==GhostTraits.Sight.VISIBLE,tick);
+                    ghost.manifested()&&form!=GhostTraits.Sight.CAMERA_ONLY,tick);
+                if(sight.startsWith("APPARITION|VISIBLE|"))
+                    reply(hunter,"FORM|"+(form==GhostTraits.Sight.ORBS?"ORBS":"FIGURE"));
                 reply(hunter,sight);
                 if(sight.startsWith("APPARITION|VISIBLE|")) {
                     LanGhostAnimation.Motion motion=animation.project(true,pendingStrike!=null,pose.heading(),tick);

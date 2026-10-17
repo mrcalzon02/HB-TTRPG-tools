@@ -298,8 +298,11 @@ public final class SceneRenderer {
                 throw new IllegalArgumentException("invalid remote body");
         }
     }
-    public record Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress) {
-        public Apparition(double x,double z){this(x,z,LanGhostAnimation.Phase.LURK,0,0);}
+    public record Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress,boolean orb) {
+        public Apparition(double x,double z){this(x,z,LanGhostAnimation.Phase.LURK,0,0,false);}
+        public Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress){
+            this(x,z,phase,heading,progress,false);
+        }
         public Apparition {
             if(!Double.isFinite(x)||!Double.isFinite(z)||phase==null||heading<0||heading>=360
                     ||progress<0||progress>100)throw new IllegalArgumentException("invalid apparition");
@@ -358,9 +361,13 @@ public final class SceneRenderer {
             int alpha=phase==LanGhostAnimation.Phase.MATERIALIZE
                     ?Math.max(45,(int)(255*progress/(double)LanGhostAnimation.MATERIALIZE_TICKS))
                     :phase==LanGhostAnimation.Phase.RECOVER?205:255;
-            DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,gx,gz,
-                apparition==null?0:apparition.heading(),"banshee",1.95*stature,1.16,
-                .09*Math.sin(clock*3)+lift,alpha,lamp);
+            if(apparition!=null&&apparition.orb()){
+                renderSpiritOrb(gx,gz,.98+.18*Math.sin(clock*4),clock);
+            }else{
+                DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,gx,gz,
+                    apparition==null?0:apparition.heading(),"banshee",1.95*stature,1.16,
+                    .09*Math.sin(clock*3)+lift,alpha,lamp);
+            }
         }
         if(hunterRoom>=0){
             DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,
@@ -373,6 +380,25 @@ public final class SceneRenderer {
             DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,person.x(),person.z(),
                 person.heading(),"observer",1.75,1.04,0,255,lamp);
         }
+    }
+    /** A real luminous orb in perspective, occluded by walls and the existing Z-buffer. */
+    private void renderSpiritOrb(double gx,double gz,double bob,double clock){
+        Point p=camera(new Point(gx,bob,gz));
+        if(p.z<NEAR||p.z>17)return;
+        int cx=(int)Math.round(W*.5+p.x/p.z*FOCAL),cy=(int)Math.round(H*.5-p.y/p.z*FOCAL);
+        int radius=Math.min(29,Math.max(2,(int)Math.round(FOCAL*.19/p.z)));
+        for(int sy=Math.max(0,cy-radius);sy<=Math.min(H-1,cy+radius);sy++)
+            for(int sx=Math.max(0,cx-radius);sx<=Math.min(W-1,cx+radius);sx++){
+                double distance=Math.hypot(sx-cx,sy-cy)/(double)radius;
+                if(distance>1)continue;
+                int at=sy*W+sx;
+                if(p.z>=depths[at])continue;
+                double glow=(1-distance*distance)*(.85+.15*Math.sin(clock*7));
+                int red=(int)(65+90*glow),green=(int)(85+160*glow),
+                    blue=(int)(115+140*glow);
+                pixels[at]=(Math.min(255,red)<<16)|(Math.min(255,green)<<8)|Math.min(255,blue);
+                depths[at]=p.z;
+            }
     }
     private void triangle(Vertex va,Vertex vb,Vertex vc,int tint,int material){
         Point a=va.p,b=vb.p,c=vc.p;
