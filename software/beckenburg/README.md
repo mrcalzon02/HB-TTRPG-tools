@@ -2,6 +2,12 @@
 
 **Status:** a local solo investigation vertical slice, **not the finished four-player game**. It expands the original Swing/software-3D renderer experiment with a fifteen-zone test house (twelve interior rooms and three exterior spaces), low-poly room props, an AI-driven Spirit ghost, working evidence tools and a complete case-resolution loop. All artwork here is procedural placeholder geometry; the user-approved full-resolution PNG concepts remain awaiting verified GitHub binary archival and model integration.
 
+## Alpha 2.6 — shared hunter casefile (development)
+
+Host-authored LAN evidence now retains the investigator seat, named room, host tick, tool, finding confidence and actual reading from every accepted scan. Connected hunters get the same capped 32-note history; duplicate one-second samples are coalesced. Press **J** in the LAN 3D hunter view to open/close the compact casefile while the simulation continues. Closing and reopening the 3D view requests a replay without forging new evidence. Human and AI ghosts receive neither the private notes nor journal command access. This adds collaborative observation; ghost-type identification and final deductions remain future work.
+
+The local unit and four-socket tests are `LanEvidenceJournalTest`, `LanCaseFileIntegrationTest` and `LanCaseFileHudTest`. These run with the existing `build.sh` or `build.cmd` commands.
+
 ## Alpha 1.5 — bounded AI acoustic pursuit (development)
 
 The LAN AI ghost now listens to **legitimate footsteps, opened doors, equipment use and rituals** rather than drifting at random indefinitely. It retains one short-lived approximate sound location in two-metre cells, respects room-distance hearing limits and van safety, and follows the legal `GhostDomain` room graph to investigate. Once it reaches the source room, it walks toward the approximate cue using the **same host-validated spatial step** that the human ghost uses. The AI cannot access live hunter coordinates, private evidence or health; merely occupying the same room does not authorize a silent omniscient pursuit. Strike/manifest power costs, range, cooldowns and wind-ups still use the shared ghost dispatcher. `LanGhostPursuitTest` covers acoustic falloff, cue expiration, movement legality, route choices and information boundaries.

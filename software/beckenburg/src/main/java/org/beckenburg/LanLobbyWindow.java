@@ -121,6 +121,7 @@ public final class LanLobbyWindow extends JFrame {
             }
         });
         worldFrame.setVisible(true);active.requestFocusInWindow();
+        if(!ghost)action(()->connection.journal()); // Replay existing evidence after the viewport is ready.
         // The host sends an immediate snapshot after VIEW3D. Subsequent frames update this viewport.
     }
     private void receive(String event){

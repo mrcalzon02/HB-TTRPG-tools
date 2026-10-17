@@ -30,6 +30,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private int soundUntilTick=-1;
     private LanCase.Tool selected=LanCase.Tool.EMF;
     private String caseResult="";
+    private final List<LanEvidenceJournal.Entry> casefile=new ArrayList<>();
+    private boolean casefileOpen;
 
     public LanWorldPanel(LanClient client){
         this.client=Objects.requireNonNull(client);
@@ -92,6 +94,13 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 if(down==seat){
                     keys.clear();feedback="INCAPACITATED - YOU CAN OBSERVE BUT NOT ACT";
                 }else feedback="INVESTIGATOR "+(down+1)+" IS DOWN";
+            }else if(p.get(0).equals("CASEFILE")){
+                if(p.size()==2&&p.get(1).equals("RESET"))casefile.clear();
+                else {
+                    LanEvidenceJournal.Entry entry=LanEvidenceJournal.Entry.decode(frame);
+                    casefile.add(entry);
+                    if(casefile.size()>LanEvidenceJournal.CAPACITY)casefile.remove(0);
+                }
             }else if(p.get(0).equals("SOUND")){
                 LanSound.CueEvent cue=LanSound.decode(frame);
                 // Caption is an independent non-audio clue for deaf players/no sound device.
@@ -126,6 +135,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     public boolean seesApparition(){return apparition!=null;}
     public SceneRenderer.Apparition apparitionPose(){return apparition;}
     public String activeSoundCaption(){return tick<=soundUntilTick?soundCaption:"";}
+    public int casefileSize(){return casefile.size();}
+    public boolean casefileOpen(){return casefileOpen;}
     private void frame(){
         if(!isDisplayable()||!caseResult.isEmpty()){repaint();return;}
         int right=(keys.contains(KeyEvent.VK_D)?1:0)-(keys.contains(KeyEvent.VK_A)?1:0);
@@ -176,9 +187,27 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString(health==0?"ARROWS / MOUSE LOOK - OBSERVE ONLY - ESC EXIT":
                     "WASD MOVE  •  CLICK TO CAPTURE MOUSE / ARROWS LOOK  •  E DOOR",13,h+23);
             g.drawString(health==0?"NO MOVEMENT OR EQUIPMENT WHILE INCAPACITATED":
-                    "1-3 TOOL: "+selected+"  R SCAN  C WARD  B RITUAL  X EXTRACT  ESC EXIT",13,h+42);
+                    "1-3 TOOL: "+selected+"  R SCAN  J CASEFILE  C WARD  B RITUAL  X EXTRACT",13,h+42);
             g.setColor(new Color(145,204,175));
             g.drawString((mouseLook.captured()?"MOUSE LOCKED | ":"CLICK TO LOCK LOOK | ")+feedback,13,h+62);
+            if(casefileOpen){
+                int rows=Math.min(casefile.size(),Math.min(12,Math.max(2,(h-125)/21)));
+                int width=Math.max(260,getWidth()-48),height=52+rows*21,top=83;
+                g.setColor(new Color(10,14,23,232));g.fillRoundRect(20,top,width,height,10,10);
+                g.setColor(new Color(190,172,131));g.drawRoundRect(20,top,width,height,10,10);
+                g.setFont(new Font(Font.MONOSPACED,Font.BOLD,15));
+                g.drawString("SHARED CASEFILE / "+casefile.size()+" READINGS / J TO CLOSE",33,top+23);
+                g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,13));
+                g.setColor(new Color(217,218,209));
+                if(casefile.isEmpty())g.drawString("No readings. Select a tool, then press R to scan.",33,top+48);
+                for(int i=0;i<rows;i++){
+                    LanEvidenceJournal.Entry entry=casefile.get(casefile.size()-rows+i);
+                    String line=String.format("T%05d  H%d  %-18s  %-12s  %s",entry.tick(),
+                            entry.seat()+1,map.roomName(entry.room()),entry.tool(),entry.finding());
+                    int max=Math.max(12,(width-36)/8);
+                    g.drawString(line.length()>max?line.substring(0,max-1)+"...":line,33,top+48+i*21);
+                }
+            }
         }finally{g.dispose();}
     }
     @Override public void keyPressed(KeyEvent e){
@@ -189,6 +218,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_2 -> selected=LanCase.Tool.THERMOMETER;
             case KeyEvent.VK_3 -> selected=LanCase.Tool.SPIRIT_BOX;
             case KeyEvent.VK_R -> sendAction("scan",()->client.scan(selected));
+            case KeyEvent.VK_J -> casefileOpen=!casefileOpen;
             case KeyEvent.VK_C -> sendAction("ward",()->client.ward());
             case KeyEvent.VK_B -> sendAction("ritual",()->client.cleanse());
             case KeyEvent.VK_X -> sendAction("extract",()->client.extract());
