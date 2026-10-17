@@ -17,6 +17,7 @@ javac --release 17 -encoding UTF-8 -cp build\classes -d build\test @build\source
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostPursuitTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostHearingTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostHearingIntegrationTest || exit /b 1
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostTakeoverIntegrationTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostHearingHudTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostAnimationTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostAnimationIntegrationTest || exit /b 1
@@ -25,7 +26,7 @@ java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.La
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSoundHudTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanAcousticsTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostSearchTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostHearingIntegrationTest || exit /b 1
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostLegacyHearingIntegrationTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostSpatialTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSpatialCombatTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanTelegraphedStrikeTest || exit /b 1

@@ -9,6 +9,7 @@ javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostPursuitTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostHearingTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostHearingIntegrationTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostTakeoverIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostHearingHudTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostAnimationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostAnimationIntegrationTest
@@ -17,7 +18,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.La
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanSoundHudTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanAcousticsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostSearchTest
-java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostHearingIntegrationTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostLegacyHearingIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostSpatialTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanSpatialCombatTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanTelegraphedStrikeTest

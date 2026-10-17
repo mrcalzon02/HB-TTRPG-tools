@@ -25,6 +25,7 @@ public final class LanHost implements AutoCloseable {
     private final LanGhostAnimation animation=new LanGhostAnimation();
     private volatile boolean closed;
     private boolean running,everStarted;
+    private long hostGhostActionSequence=-1;
     private int tick;
     private int lastGhostSoundTick=-10000;
     private final int[] lastGhostFootstepCueTick={-10000,-10000,-10000};
@@ -75,7 +76,28 @@ public final class LanHost implements AutoCloseable {
                 synchronized(mutex){if(closed)break;handle(peer,frame);}
             }
         }catch(Exception e){if(!closed&&peer!=null){synchronized(mutex){reply(peer,"REJECT|connection terminated");}}}
-        finally {if(peer!=null){synchronized(mutex){if(seats[peer.slot]==peer){seats[peer.slot]=null;if(running){running=false;notifyAllPeers("INFO|match stopped after disconnect");}broadcastLobby();}}}}
+        finally {
+            if(peer!=null) synchronized(mutex){
+                if(seats[peer.slot]==peer){
+                    seats[peer.slot]=null;
+                    if(running){
+                        if(peer.slot==3){
+                            // No world reset: the AI inherits the same room, energy, cooldowns,
+                            // manifestation and pending strike. Only the controller is swapped.
+                            ai.forget();
+                            notifyHunters("INFO|human ghost disconnected - AI has taken control");
+                            broadcastState();
+                        }else{
+                            // Hunter departure still terminates this experimental match;
+                            // hunter reconnect is a separate unsatisfied production gate.
+                            running=false;
+                            notifyAllPeers("INFO|match stopped after disconnect");
+                        }
+                    }
+                    broadcastLobby();
+                }
+            }
+        }
     }
     private int firstVacantHunter(){for(int i=0;i<3;i++)if(seats[i]==null)return i;return -1;}
     private void handle(Peer peer,String frame){
@@ -191,7 +213,7 @@ public final class LanHost implements AutoCloseable {
                     if(action==GhostDomain.Action.STRIKE && ghost.observe().legalActions().contains(action)
                             && !LanSpatialCombat.any(strikeVictims()))
                         throw new IllegalArgumentException("no hunter within striking reach");
-                    GhostDomain.Resolution result=ghost.dispatch(new GhostDomain.Command(action,room,seq,GhostDomain.Source.HUMAN));
+                    GhostDomain.Resolution result=ghost.dispatch(new GhostDomain.Command(action,room,++hostGhostActionSequence,GhostDomain.Source.HUMAN));
                     if(!result.applied())throw new IllegalArgumentException(result.reason());
                     reply(peer,"ACCEPT|GHOST|"+action+"|"+result.energy());
                     ghostPose.syncRoom(ghost.room());
@@ -320,7 +342,11 @@ public final class LanHost implements AutoCloseable {
                 GhostDomain.Command choice=ai.decide(seen,LanSpatialCombat.any(strikeVictims()));if(choice!=null){
                 // AI and human strikes use the same host-owned spatial reach gate.
                 if(choice.action()!=GhostDomain.Action.STRIKE||LanSpatialCombat.any(strikeVictims())){
-                    GhostDomain.Resolution result=ghost.dispatch(choice);
+                    // The incoming AI sequence belongs to its controller only. The host's
+                    // single monotonic domain sequence survives human/AI controller swaps.
+                    GhostDomain.Command authorized=new GhostDomain.Command(choice.action(),
+                            choice.targetRoom(),++hostGhostActionSequence,GhostDomain.Source.AI);
+                    GhostDomain.Resolution result=ghost.dispatch(authorized);
                     if(result.applied()){ghostPose.syncRoom(ghost.room());resolveGhostAction(result);broadcastApparitions();}
                 }
             }}
