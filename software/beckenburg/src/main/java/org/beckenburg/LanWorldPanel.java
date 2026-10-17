@@ -191,8 +191,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.setColor(new Color(145,204,175));
             g.drawString((mouseLook.captured()?"MOUSE LOCKED | ":"CLICK TO LOCK LOOK | ")+feedback,13,h+62);
             if(casefileOpen){
-                int rows=Math.min(casefile.size(),Math.min(12,Math.max(2,(h-125)/21)));
-                int width=Math.max(260,getWidth()-48),height=52+rows*21,top=83;
+                int rows=Math.min(casefile.size(),Math.min(8,Math.max(1,(h-135)/37)));
+                int width=Math.max(260,getWidth()-48),height=52+rows*37,top=83;
                 g.setColor(new Color(10,14,23,232));g.fillRoundRect(20,top,width,height,10,10);
                 g.setColor(new Color(190,172,131));g.drawRoundRect(20,top,width,height,10,10);
                 g.setFont(new Font(Font.MONOSPACED,Font.BOLD,15));
@@ -202,10 +202,15 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 if(casefile.isEmpty())g.drawString("No readings. Select a tool, then press R to scan.",33,top+48);
                 for(int i=0;i<rows;i++){
                     LanEvidenceJournal.Entry entry=casefile.get(casefile.size()-rows+i);
-                    String line=String.format("T%05d  H%d  %-18s  %-12s  %s",entry.tick(),
+                    String line=String.format("T%05d  H%d  %s  /  %s  /  %s",entry.tick(),
                             entry.seat()+1,map.roomName(entry.room()),entry.tool(),entry.finding());
-                    int max=Math.max(12,(width-36)/8);
-                    g.drawString(line.length()>max?line.substring(0,max-1)+"...":line,33,top+48+i*21);
+                    int max=Math.max(12,(width-36)/8),y=top+48+i*37;
+                    g.setColor(entry.finding()==LanEvidenceJournal.Finding.CONFIRMED
+                            ?new Color(149,219,179):new Color(221,207,167));
+                    g.drawString(line.length()>max?line.substring(0,max-3)+"...":line,33,y);
+                    g.setColor(new Color(217,218,209));
+                    String raw=entry.reading();
+                    g.drawString(raw.length()>max?raw.substring(0,max-3)+"...":raw,33,y+16);
                 }
             }
         }finally{g.dispose();}
