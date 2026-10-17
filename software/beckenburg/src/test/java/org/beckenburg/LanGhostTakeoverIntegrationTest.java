@@ -49,8 +49,13 @@ public final class LanGhostTakeoverIntegrationTest {
             a.client.scan(LanCase.Tool.EMF);a.expect("ACCEPT|SCAN");
             a.expect("EFFECT|WHISPER|2|0");
             ok(server.running(),"AI ghost's first post-takeover cast resolved through shared domain");
-            b.close();a.expect("INFO|match stopped after disconnect");
-            ok(!server.running(),"hunter departure retains explicit stop behavior");
+            b.close();
+            a.expect("PEER|LEFT|1");
+            a.expect("INFO|hunter 2 departed - 2 investigator(s) remaining");
+            ok(server.running(),"departing guest hunter does not cancel investigation");
+            a.close();
+            c.expect("INFO|match stopped after host departure");
+            ok(!server.running(),"host departure still terminates authoritative session");
             System.out.println("PASS: human to AI ghost continuity, sequence monotonicity and hunter exit");
         }
     }
