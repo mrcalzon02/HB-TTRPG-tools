@@ -197,6 +197,7 @@ public final class LanHost implements AutoCloseable {
                     // ONLY for a disconnected reserved seat, never a live controller.
                     peer.previousResumeToken=waiting.previousToken==null
                             ?waiting.token:waiting.previousToken;
+                    peer.unconfirmedResumeDeadlineNanos=waiting.expiresNanos;
                     // The old reservation must survive a failed WELCOME write.
                     // Never consume a seat until its new credentials are sent.
                     LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken+"|"+seatSequenceHighWater(peer));
@@ -266,8 +267,13 @@ public final class LanHost implements AutoCloseable {
                             // Even the local owner's CLIENT socket can fail while this
                             // authoritative host process stays alive; only an explicit
                             // owner Leave or actual host shutdown ends that match.
-                            reserved[peer.slot]=new Reservation(peer,System.nanoTime()
-                                    +TimeUnit.SECONDS.toNanos(reconnectGraceSeconds));
+                            long expires=System.nanoTime()
+                                    +TimeUnit.SECONDS.toNanos(reconnectGraceSeconds);
+                            // Failed token rotations cannot renew an old capability's
+                            // reservation forever. Acknowledged sessions get a new grace.
+                            if(peer.previousResumeToken!=null)
+                                expires=Math.min(expires,peer.unconfirmedResumeDeadlineNanos);
+                            reserved[peer.slot]=new Reservation(peer,expires);
                             if(peer.slot==GHOST_SEAT){
                                 ai.forget();
                                 notifyHunters("INFO|human ghost disconnected - AI has taken control");
@@ -339,6 +345,7 @@ public final class LanHost implements AutoCloseable {
                             ||!resumeTokenMatches(peer.resumeToken,p.get(1)))
                         throw new IllegalArgumentException("invalid recovery acknowledgement");
                     peer.previousResumeToken=null;
+                    peer.unconfirmedResumeDeadlineNanos=0;
                     reply(peer,"ACCEPT|RESUMEACK");
                 }
                 case "LOBBYCHAT" -> {
@@ -1050,6 +1057,7 @@ public final class LanHost implements AutoCloseable {
         final Socket socket;final Reader input;final Writer output;final int slot;final String name;
         final String resumeToken=newResumeToken();
         String previousResumeToken; // erased after client confirms durable replacement
+        long unconfirmedResumeDeadlineNanos; // no unlimited grace via failed reconnect loop
         boolean ready,worldMode,ghostWorldMode,intentionalLeave;
         long lastGhostPoseSequence=-1,lastGhostActionSequence=-1;
         int lastMonitorTick=-100000,lastChatTick=-100000,lastLightTick=-100000;
