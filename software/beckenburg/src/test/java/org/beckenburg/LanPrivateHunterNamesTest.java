@@ -22,7 +22,8 @@ public final class LanPrivateHunterNamesTest {
                 String message=packets.poll(80,TimeUnit.MILLISECONDS);
                 if(message!=null&&message.startsWith(prefix))return message;
             }
-            throw new AssertionError("missing "+prefix+" on "+client.seat());
+            throw new AssertionError("missing "+prefix+" on "+client.seat()+
+                "; recent frames="+history.stream().skip(Math.max(0,history.size()-18)).toList());
         }
         @Override public void close(){client.close();}
     }
