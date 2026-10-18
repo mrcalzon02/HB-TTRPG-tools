@@ -21,11 +21,11 @@ public final class EvidenceSignalsTest {
         ok(natural.celsius()<0&&!natural.paranormalExtreme(),
             "naturally freezing outside cannot produce false ghost evidence");
         var cold=EvidenceSignals.temperature(7,40,winterInside,
-            EvidenceSignals.Polarity.COLD,true,7);
+            EvidenceSignals.Polarity.COLD,true,10);
         ok(cold.celsius()<0&&cold.paranormalExtreme(),
             "paranormal negative temperature recognized");
         var heat=EvidenceSignals.temperature(7,40,winterInside,
-            EvidenceSignals.Polarity.HOT,true,7);
+            EvidenceSignals.Polarity.HOT,true,10);
         ok(heat.display(EvidenceSignals.Unit.FAHRENHEIT)>=90&&heat.paranormalExtreme(),
             "paranormal 90F+ room recognized even in winter");
         ok(Math.abs(EvidenceSignals.fToC(90)-32.2222222)<.00001,
@@ -33,19 +33,31 @@ public final class EvidenceSignalsTest {
         for(int tick=0;tick<150;tick++){
             var passive=EvidenceSignals.emf(19,tick,4,4,0);
             var displaced=EvidenceSignals.emf(19,tick,4,8,10);
-            ok(passive.level()>=1&&passive.level()<=10&&!passive.positiveEvidence(),
-                "ordinary EMF 1-10 range, never self-confirms");
-            ok(!displaced.positiveEvidence(),"remote event cannot be local positive");
+            ok(passive.level()>=2&&passive.level()<=7&&!passive.highEvent(),
+                "ordinary EMF 2-7 is a measurement");
+            ok(!displaced.highEvent(),"remote event cannot be local positive");
             var active=EvidenceSignals.emf(19,tick,4,4,10);
-            ok(active.level()>6&&active.positiveEvidence(),
-                "strong local event should record >6 EMF");
+            ok(active.level()>=8&&active.highEvent(),
+                "strong local event yields 8-10 EMF");
         }
+        for(int strength=1;strength<=7;strength++){
+            var normal=EvidenceSignals.emf(19,20,4,4,strength);
+            ok(normal.level()>=2&&normal.level()<=7&&!normal.highEvent(),
+                "weak/mid ghost events give ordinary 2-7 EMF");
+        }
+        var neutral=EvidenceSignals.temperature(7,40,winterInside,
+            EvidenceSignals.Polarity.NONE,true,10);
+        ok(!neutral.paranormalExtreme(),"neutral ghost cannot generate thermal extreme");
+        var otherNeutral=EvidenceSignals.temperature(7,80,winterInside,
+            EvidenceSignals.Polarity.NONE,true,2);
+        ok(otherNeutral.celsius()!=neutral.celsius(),
+            "normal temperature fluctuates with time and event strength");
         ok(EvidenceSignals.emf(19,51,4,4,10).level()
            ==EvidenceSignals.emf(19,51,4,4,10).level(),
            "repeated same-tick polling cannot reroll a measurement");
         ok(!EvidenceSignals.temperature(17,12,winterInside,
                 EvidenceSignals.Polarity.HOT,false,10).paranormalExtreme(),
                 "ghost influence must really exist before awarding thermal evidence");
-        System.out.println("PASS: EMF 1-10, event evidence >6, hot/cold, seasonal baselines and F/C");
+        System.out.println("PASS: ordinary EMF 2-7, high 8-10, neutral thermal variation, extremes and F/C");
     }
 }
