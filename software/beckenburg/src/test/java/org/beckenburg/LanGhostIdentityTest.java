@@ -11,6 +11,13 @@ public final class LanGhostIdentityTest {
   for(var type:GhostIdentity.Type.values()){
    ok(behaviors.add(type.behavior()),"distinct assigned behavior "+type);
    rites.add(type.rite());
+   // Ghost identity and ritual readiness are investigator choices, not scan quotas.
+   var unaided=new LanCase(4);unaided.configure(type,true);
+   ok(unaided.identify(0,type,1).accepted(),"deduction needs no confirmation counter "+type);
+   ok(unaided.ward(0,4).accepted(),"physical ward still required "+type);
+   var unaidedSite=RitualSites.site(map,type.rite());
+   ok(unaided.performRite(0,type.rite(),unaidedSite.room(),true).accepted(),
+        "ritual does not require auto-awarded readings "+type);
    var mission=new LanCase(4);mission.configure(type,true);
    for(var tool:LanCase.Tool.values()){
     ok(mission.scan(0,tool,3,0).message().startsWith("READING "),"ordinary room reading");
