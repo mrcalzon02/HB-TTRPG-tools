@@ -81,7 +81,9 @@ public final class LanHost implements AutoCloseable {
         ghostType=Objects.requireNonNull(type);
         contract=Objects.requireNonNull(config);
         ghostMayStart=hostAsGhost;
-        ownerSeat=hostAsGhost?GHOST_SEAT:0;
+        // Legacy host constructors preserve H1 ownership; production GUI hosts
+        // explicitly claim their selected H1 or ghost role with a local secret.
+        ownerSeat=secureLocalOwner&&hostAsGhost?GHOST_SEAT:0;
         ownerJoinSecret=secureLocalOwner?newResumeToken():null;
         Arrays.fill(hunterRooms,HouseMap.EXTRACTION_ROOM);
         Arrays.fill(hunterSequences,-1);
