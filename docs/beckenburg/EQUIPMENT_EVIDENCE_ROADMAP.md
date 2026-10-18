@@ -122,8 +122,8 @@ All equipment effects and evidence confirmations originate on the server: spatia
 
 ## Implementation gates and ownership
 
-1. **Slice E-01 — sourced/partial:** register all 42 candidate tools and status; add `EvidenceSignals` for 1–10 EMF, true events and seasonal hot/cold thermals; connect live LAN scanner to it; retire fake identity-coded field-guide clues. Source/test entries committed. Fresh Java runtime acceptance not yet established.
-2. **E-02 — next:** unify solo/LAN environmental simulation, hosted weather/heating switches, both temperature units as saved per-player settings; durable event intensity/falloff; fix remaining legacy helper methods and tests, prove event evidence does not appear from mere anchor proximity.
+1. **Slice E-01 — sourced/partial:** register all 42 candidate tools and status; add `EvidenceSignals` for 1–10 EMF, true events and seasonal hot/cold thermals; connect both live LAN and solo scans to it; retire fake identity-coded field-guide clues. Source/test entries committed. Fresh Java runtime acceptance not yet established.
+2. **E-02 — next:** consolidate the currently separate solo/LAN climate settings, implement hosted weather/heating controls, support saved per-player temperature units; durable event intensity/falloff; fix remaining legacy helper methods and tests, prove event evidence does not appear from mere anchor proximity.
 3. **E-03:** build 7 reference evidence families *end to end* (writing, D.O.T.S.-equivalent, UV, cameras/orbs and current instruments), with matching world props, meaningful audio/visual cues and isolated host tests.
 4. **E-04:** connect own evidence categories from the original kits; design a balanced 13-ghost three-evidence matrix, verify each type has three reachable positives and no trivially deterministic two-instrument species code.
 5. **E-05:** shop, loadout, inventory stock, upgrades/tiers, consumables, user-readable equipment interfaces, batteries and physical interactions. Make all 8 starter, 13 optional and 7 van categories genuinely selectable/usable where relevant.
