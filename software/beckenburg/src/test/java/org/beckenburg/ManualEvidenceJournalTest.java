@@ -53,10 +53,15 @@ public final class ManualEvidenceJournalTest {
             boolean writer=GhostEvidenceProfile.availableWriting(type).length>0;
             ok(GhostEvidenceProfile.compatible(type,GhostFieldGuide.Clue.GHOST_WRITING)==writer,
                 "manual checklist and physical writing producer agree for "+type);
-            ok(GhostEvidenceProfile.compatible(type,GhostFieldGuide.Clue.EXTREME_COLD)
-                !=GhostEvidenceProfile.compatible(type,GhostFieldGuide.Clue.EXTREME_HEAT),
-                "each species has one consistent thermal tendency "+type);
+            boolean cold=GhostEvidenceProfile.compatible(type,GhostFieldGuide.Clue.EXTREME_COLD);
+            boolean hot=GhostEvidenceProfile.compatible(type,GhostFieldGuide.Clue.EXTREME_HEAT);
+            ok(!(cold&&hot),"no ghost can be inherently freezing and very hot at once: "+type);
         }
+        journal.set(GhostFieldGuide.Clue.TEMPERATURE_NORMAL,FieldJournal.Status.SEEN,0,20);
+        journal.set(GhostFieldGuide.Clue.EMF_NORMAL,FieldJournal.Status.SEEN,0,21);
+        ok(GhostFieldGuide.shortlist(journal).size()==13,
+            "ordinary EMF and temperature cannot grey any ghost");
+        journal.clear();
         ok(Arrays.stream(GhostFieldGuide.activeClues()).noneMatch(c->c.name().startsWith("COLD_ANCHOR")),
            "rejected synthetic evidence subtypes remain hidden");
         ok(GhostFieldGuide.activeClues().length>=18,
