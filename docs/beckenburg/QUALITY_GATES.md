@@ -17,6 +17,9 @@ A source-code commit is not a passing stage. Each *completed* microstep must hav
 
 Use meaningful vertical improvements, not a giant speculative code rewrite. An independent workstream may prepare future specifications, but **prerequisite stage completion cannot be skipped**. When a GitHub connector call times out, first inspect remote state for acceptance, retry transient failure with bounded delay/reconcile head, and report persistent auth/permissions/conflicts; never blind force-push. No GitHub Actions unless expressly requested.
 
+## Restart recovery source and evidence addendum (2026-10-18)
+[LAN Restart Recovery 020](network/LAN_RESTART_RECOVERY_AND_SNAPSHOT_020.md) records a Java 17-isolated PASS for storing/reopening/rotating temporary reconnect credentials, independent from player saves. Host command-watermark recovery and role-filtered progress/journal replay are committed source with expanded tests **not yet fully executed**. Keep all game networking and Windows stage criteria unverified pending real logs and devices.
+
 ## LAN recovery source-status clarification (2026-10-18)
 [LAN Session Recovery Implementation 019](network/LAN_SESSION_RESUME_IMPLEMENTATION_019.md) is a committed source slice for unexpected guest transport loss, same-seat token-based recovery, AI ghost reassignment, LAN room password/lock and local address diagnostics. Its new regression tests are included in both build drivers, but were **not run as a complete Java 17 game suite or tested on physical Windows machines here**. Preserve all existing LAN, fairness, role privacy, P0/P1 and real-install acceptance gates as unverified until evidence exists.
 
