@@ -18,7 +18,7 @@ public final class LanNetworkDiagnosticsTest {
             .contains("locked"),"lock rejection classified");
         try(LanHost host=new LanHost("127.0.0.1",0)){
             String info=LanNetworkDiagnostics.hostInfo(host);
-            ok(info.contains("TCP gameplay and UDP voice"),"actual port types reported");
+            ok(info.contains("Gameplay TCP:")&&info.contains("Voice UDP: "+host.voicePort()),"actual TCP listener and UDP allocation reported");
             ok(info.contains(":"+host.port()),"real bound port in support view");
             ok(info.contains("NOT encrypted"),"no false public WAN security claims");
             ok(!info.contains("hardware.profile"),"no device ID leakage");
