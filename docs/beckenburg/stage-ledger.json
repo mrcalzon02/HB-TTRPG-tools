@@ -635,7 +635,10 @@
       "hard_gate": "Critical event IDs converge on 4 clients, no duplicate damage or payment, and no permanent state desync.",
       "status": "not_started",
       "commit_sha": null,
-      "verification_evidence": [],
+      "verification_evidence": [
+        "2026-10-18 source-only: host replays hiding and remaining strike warning to a rejoined 3D hunter. Commit https://github.com/mrcalzon02/HB-TTRPG-tools/commit/47beaf423362be5681752d97d2553708e95b8980; integration regression https://github.com/mrcalzon02/HB-TTRPG-tools/commit/4bf5773f5412424f21ff1d13b9895043ff5d5225. Both files read back; full Java/Windows socket tests remain UNVERIFIED.",
+        "2026-10-18 source-only: bounded per-peer asynchronous TCP output and host heartbeat / RTT. Commits https://github.com/mrcalzon02/HB-TTRPG-tools/commit/ada689bfaef42c2d817adc9a5bf7d9018104ad2e and https://github.com/mrcalzon02/HB-TTRPG-tools/commit/7e53e5024264c75de8b4c8d0a2fcae669cc56557; complete test suite NOT executed."
+      ],
       "blockers": [],
       "steps": [
         {
@@ -2336,7 +2339,10 @@
       "hard_gate": "No critical security or save defect; declared hardware reaches 30 FPS min/60 FPS target; soak tests green.",
       "status": "not_started",
       "commit_sha": null,
-      "verification_evidence": [],
+      "verification_evidence": [
+        "2026-10-18 source-only: LanOutboundQueueTest plus LanNetworkLatencyTest added to Linux and Windows build scripts; delayed 0/50/150 ms PONG and one missed PONG are scripted, not passed or true OS packet-impairment measurements. Source commits https://github.com/mrcalzon02/HB-TTRPG-tools/commit/7fe7d4559c9c16c7840d264f1fe176fc0e5ab8c9 and https://github.com/mrcalzon02/HB-TTRPG-tools/commit/ae161c3fade10553bc7ef5423c76a7c6dcca53bd.",
+        "Still UNVERIFIED: clean Java 17 compile, tests, packet-loss emulation, tick-time samples, physical Windows 2-PC session, microphone/device hotplug, encrypted WAN and install/release acceptance."
+      ],
       "blockers": [],
       "steps": [
         {
@@ -2609,5 +2615,5 @@
       ]
     }
   ],
-  "current_source_integration_sha": "0a1f8a0dd3ae56f233d50f70a0d6a0fccd237f0f"
+  "current_source_integration_sha": "4bf5773f5412424f21ff1d13b9895043ff5d5225"
 }
