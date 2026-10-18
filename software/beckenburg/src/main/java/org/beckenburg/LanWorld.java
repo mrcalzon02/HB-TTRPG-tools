@@ -8,7 +8,7 @@ public final class LanWorld {
     private static final double SPEED=.31;
     private final HouseMap map;
     private final double[] xs=new double[6],zs=new double[6];
-    private final int[] headings={90,90,90,90,90,90};
+    private final int[] headings={270,270,270,270,270,270};
     private final int[] lastTick={-1,-1,-1,-1,-1,-1};
     private final int[] lastDoorTick={-3,-3,-3,-3,-3,-3};
     private double playerSpeed=1.0,sprintSpeed=1.5;

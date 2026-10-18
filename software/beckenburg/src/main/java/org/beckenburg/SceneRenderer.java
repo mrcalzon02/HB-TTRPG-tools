@@ -9,7 +9,7 @@ import java.util.List;
 /** True perspective-triangle software rasterizer, depth tested at a period-appropriate 320x200. */
 public final class SceneRenderer {
     public static final int W=320,H=200;
-    private static final double NEAR=.065,FOCAL=224;
+    private static final double NEAR=.065,FOCAL=153; // ~93 degree horizontal first-person FOV
     private static final int[] BAYER={0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5};
     private record Point(double x,double y,double z) { }
     private record Vertex(Point p,double u,double v) { }
@@ -18,7 +18,7 @@ public final class SceneRenderer {
     private final BufferedImage frame = new BufferedImage(W,H,BufferedImage.TYPE_INT_RGB);
     private final int[] pixels=((DataBufferInt)frame.getRaster().getDataBuffer()).getData();
     private final double[] depths=new double[W*H];
-    public double x=20.5,z=27.5,yaw=1.65,pitch=-.09;
+    public double x=20.5,z=27.5,yaw=-Math.PI/2,pitch=-.09;
     public boolean lamp=true;
     /** Solo environment presets; default multipliers retain legacy LAN lighting. */
     public double environmentLight=1.0,fogDensity=1.0;
@@ -153,6 +153,21 @@ public final class SceneRenderer {
         vanBox(faces,van,1.55,.7,.28,.36,.9,.95,MaterialAtlas.RITUAL);
         vanBox(faces,van,-.55,.10,r-.28,1.1,.5,.18,MaterialAtlas.AGED_WOOD);
         vanBox(faces,van,-w+.1,.05,f-.3,w*2-.2,.08,.3,MaterialAtlas.IRON);
+        // Visible equipment shelf: six distinct physical sockets. Items can be aimed at and taken.
+        vanBox(faces,van,1.76,.58,-1.88,.10,1.14,3.30,MaterialAtlas.AGED_WOOD);
+        vanBox(faces,van,1.35,.53,-1.88,.53,.085,3.30,MaterialAtlas.IRON);
+        for(EquipmentLoadout.Item item:EquipmentLoadout.Item.values()){
+            double lz=-1.58+item.ordinal()*.52;
+            int finish=switch(item){
+                case EMF->0x517d73; case THERMOMETER->0xaaa99b;
+                case SPIRIT_BOX->0x49535f;case UV_LAMP->0x8a70b1;
+                case PHOTO_CAMERA->0x3b4553;case SALT->0xd1c49d;
+            };
+            VanStaging.Position v=van.world(1.48,lz);
+            // Distinct silhouettes rather than textureless pickup collision flags.
+            box(faces,v.x()-.11,.65,v.z()-.09,.21,.50,.18,finish);
+            box(faces,v.x()-.09,1.12,v.z()-.07,.17,.08,.14,0xa1aab4);
+        }
     }
 
     /** Three visually distinct small PS-era rite installations at fixed room sockets. */
@@ -206,17 +221,34 @@ public final class SceneRenderer {
                 floor,xx,zz,xx+1,zz,xx+1,zz+1,xx,zz+1,0xffffff);
             if(!map.outside(n))texturedQuad(out,new Point(xx,2.7,zz+1),new Point(xx+1,2.7,zz+1),new Point(xx+1,2.7,zz),new Point(xx,2.7,zz),
                 MaterialAtlas.CEILING,xx,zz+1,xx+1,zz+1,xx+1,zz,xx,zz,0xffffff);
-            if(map.solid(xx-1,zz))texturedQuad(out,new Point(xx,0,zz+1),new Point(xx,0,zz),new Point(xx,2.7,zz),new Point(xx,2.7,zz+1),
+            if(map.solid(xx-1,zz)&&map.tile(xx-1,zz)!='D')texturedQuad(out,new Point(xx,0,zz+1),new Point(xx,0,zz),new Point(xx,2.7,zz),new Point(xx,2.7,zz+1),
                 wall,zz+1,0,zz,0,zz,2.7,zz+1,2.7,0xd0d0d0);
-            if(map.solid(xx+1,zz))texturedQuad(out,new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx+1,2.7,zz+1),new Point(xx+1,2.7,zz),
+            if(map.solid(xx+1,zz)&&map.tile(xx+1,zz)!='D')texturedQuad(out,new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx+1,2.7,zz+1),new Point(xx+1,2.7,zz),
                 wall,zz,0,zz+1,0,zz+1,2.7,zz,2.7,0xfafafa);
-            if(map.solid(xx,zz-1))texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,2.7,zz),new Point(xx,2.7,zz),
+            if(map.solid(xx,zz-1)&&map.tile(xx,zz-1)!='D')texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,2.7,zz),new Point(xx,2.7,zz),
                 wall,xx,0,xx+1,0,xx+1,2.7,xx,2.7,0xe0e0e0);
-            if(map.solid(xx,zz+1))texturedQuad(out,new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),new Point(xx,2.7,zz+1),new Point(xx+1,2.7,zz+1),
+            if(map.solid(xx,zz+1)&&map.tile(xx,zz+1)!='D')texturedQuad(out,new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),new Point(xx,2.7,zz+1),new Point(xx+1,2.7,zz+1),
                 wall,xx+1,0,xx,0,xx,2.7,xx+1,2.7,0xebebeb);
-            if(map.tile(xx,zz)=='D'&&!map.doorOpen(xx,zz)){
-                if(xx==8||xx==16)texturedBox(out,xx+.22,0,zz+.07,.54,2.35,.86,MaterialAtlas.DOOR);
-                else texturedBox(out,xx+.08,0,zz+.23,.85,2.35,.54,MaterialAtlas.DOOR);
+            if(map.tile(xx,zz)=='D'){
+                // Door geometry must occupy the opening, not sit behind wallpaper faces.
+                boolean eastWest=xx==8||xx==16;
+                if(eastWest){
+                    box(out,xx+.18,0,zz+.02,.64,2.45,.10,0x8f805e);
+                    box(out,xx+.18,0,zz+.88,.64,2.45,.10,0x8f805e);
+                    box(out,xx+.18,2.35,zz,.64,.11,1.0,0x8f805e);
+                    if(!map.doorOpen(xx,zz)){
+                        texturedBox(out,xx+.27,0,zz+.09,.46,2.34,.82,MaterialAtlas.DOOR);
+                        box(out,xx+.245,1.02,zz+.69,.055,.12,.075,0xe1ba62);
+                    }
+                }else{
+                    box(out,xx+.02,0,zz+.18,.10,2.45,.64,0x8f805e);
+                    box(out,xx+.88,0,zz+.18,.10,2.45,.64,0x8f805e);
+                    box(out,xx,2.35,zz+.18,1,.11,.64,0x8f805e);
+                    if(!map.doorOpen(xx,zz)){
+                        texturedBox(out,xx+.09,0,zz+.27,.82,2.34,.46,MaterialAtlas.DOOR);
+                        box(out,xx+.68,1.02,zz+.245,.075,.12,.055,0xe1ba62);
+                    }
+                }
             }
         }
         for(int r=0;r<map.roomCount();r++) if(Math.hypot(map.centerX(r)-x,map.centerZ(r)-z)<14) furniture(out,r,map);
@@ -377,13 +409,45 @@ public final class SceneRenderer {
     }
     private void render(HouseMap map,int ghostRoom,boolean visibleGhost,int wardRoom,int hunterRoom,
             double clock,List<RemoteBody> others,Apparition apparition,List<WorldMark> markers){
-        Arrays.fill(pixels,0x171b25); Arrays.fill(depths,Double.POSITIVE_INFINITY);
+        paintSky(map);
+        Arrays.fill(depths,Double.POSITIVE_INFINITY);
         for(Face face:scene(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock,others,apparition,markers)){
             List<Vertex> pts=clip(new Vertex(camera(face.a),face.au,face.av),
                 new Vertex(camera(face.b),face.bu,face.bv),new Vertex(camera(face.c),face.cu,face.cv));
             for(int i=1;i<pts.size()-1;i++)triangle(pts.get(0),pts.get(i),pts.get(i+1),face.color,face.material);
         }
         renderCharacterSprites(map,ghostRoom,visibleGhost,hunterRoom,clock,others,apparition);
+    }
+    /** Procedural sky gradient, distant hills and moving moon; only rendered through outdoor openings. */
+    private void paintSky(HouseMap map){
+        final double eye=1.62;
+        final int horizon=(int)Math.round(H*.51+Math.tan(pitch)*153);
+        boolean outside=map.outside(map.roomAt(x,z));
+        for(int sy=0;sy<H;sy++){
+            double t=Math.max(0,Math.min(1,sy/(double)H));
+            boolean upper=sy<horizon;
+            int red=upper?(int)(13+18*t):(int)(18+18*t);
+            int green=upper?(int)(23+18*t):(int)(27+19*t);
+            int blue=upper?(int)(41+31*t):(int)(32+16*t);
+            int packed=(red<<16)|(green<<8)|blue;
+            Arrays.fill(pixels,sy*W,(sy+1)*W,packed);
+        }
+        if(!outside)return; // Interiors are covered by physical walls/ceilings.
+        // World-fixed silhouette panorama with no repeated bitmap / no proprietary assets.
+        for(int sx=0;sx<W;sx++){
+            double bearing=yaw+Math.atan2(sx-W*.5,153.0);
+            int hills=horizon+(int)(13*Math.sin(bearing*2.1)+8*Math.sin(bearing*5.7)
+                    +5*Math.sin(bearing*13.2));
+            for(int sy=Math.max(0,hills);sy<H;sy++)pixels[sy*W+sx]=0x18202a;
+        }
+        // No artificial moon inside the house; the exterior sky provides a navigation anchor.
+        double moonBearing=-1.2;
+        double diff=Math.atan2(Math.sin(moonBearing-yaw),Math.cos(moonBearing-yaw));
+        int mx=(int)Math.round(W*.5+Math.tan(diff)*153),my=Math.max(13,horizon-43);
+        if(Math.abs(diff)<.8)for(int dy=-5;dy<=5;dy++)for(int dx=-5;dx<=5;dx++){
+            int px=mx+dx,py=my+dy;
+            if(px>=0&&px<W&&py>=0&&py<H&&dx*dx+dy*dy<25)pixels[py*W+px]=0xb8c8d5;
+        }
     }
     /** Billboards share the world Z-buffer, so room walls correctly hide hunter and ghost bodies.
      * Visibility, headings and phase remain projected from the host's simulation.

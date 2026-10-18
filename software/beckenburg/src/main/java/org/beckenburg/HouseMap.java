@@ -19,7 +19,7 @@ public final class HouseMap {
     };
     private final char[][] tiles=new char[HEIGHT][WIDTH];
     private final Set<Integer> openDoors=new HashSet<>();
-    private final VanStaging van=new VanStaging(new VanStaging.Placement(20.5,27.5,0));
+    private final VanStaging van=new VanStaging(new VanStaging.Placement(20.5,27.5,-Math.PI/2));
     public VanStaging van(){return van;}
 
     public HouseMap(){

@@ -44,6 +44,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private String soundCaption="";
     private int soundUntilTick=-1;
     private LanCase.Tool selected=LanCase.Tool.EMF;
+    private int heldUseUntilTick;
     private String caseResult="";
     private final List<LanEvidenceJournal.Entry> casefile=new ArrayList<>();
     private boolean casefileOpen;
@@ -69,7 +70,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         });
         add(chatInput);
         setPreferredSize(new Dimension(850,555));
-        renderer.yaw=1.4;renderer.pitch=-.08;
+        renderer.yaw=-Math.PI/2;renderer.pitch=-.08;
         mouseLook=new MouseLook(this,(dx,dy)->MouseLook.rotate(renderer,dx,dy));
         addKeyListener(this);addMouseListener(mouseLook);addMouseMotionListener(mouseLook);
         addFocusListener(mouseLook);addFocusListener(this);
@@ -349,7 +350,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             keys.clear();
             releaseVoice();
         }
-        if(vanDisplay&&!insideVan()){vanDisplay=false;meters=null;}
+        vanDisplay=insideVan();
+        if(!vanDisplay){meters=null;}
         if(vanDisplay&&tick-lastVanPoll>=11){
             try{client.vanMonitor();lastVanPoll=tick;}
             catch(IOException e){feedback="Van display disconnected: "+e.getMessage();vanDisplay=false;}
@@ -379,6 +381,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             int h=Math.max(160,getHeight()-82);
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g.drawImage(renderer.image(),0,0,getWidth(),h,null);
+            HeldToolView.draw(g,getWidth(),h,selected.name(),tick,tick<=heldUseUntilTick);
             drawHunterNameplates(g,h);
             g.setFont(new Font(Font.MONOSPACED,Font.BOLD,Math.max(12,getHeight()/46)));
             g.setColor(new Color(234,222,189));
@@ -498,44 +501,36 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }
     }
     private void drawVanMeters(Graphics2D g,int h){
-        int left=Math.max(15,(getWidth()-560)/2),top=73,w=Math.min(560,getWidth()-30),height=330;
-        g.setColor(new Color(12,17,25,244));g.fillRoundRect(left,top,w,height,9,9);
-        g.setColor(new Color(219,208,177));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,15));
-        g.drawString("VAN / SANITY AND ACTIVITY",left+18,top+29);
-        g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
-        if(meters==null){
-            g.drawString("Awaiting host instrument sample...",left+18,top+56);return;
-        }
+        int w=Math.min(212,Math.max(160,getWidth()/4)),left=getWidth()-w-12,top=85;
+        int height=275;
+        g.setColor(new Color(12,17,25,207));g.fillRoundRect(left,top,w,height,8,8);
+        g.setColor(new Color(219,208,177));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,12));
+        g.drawString("VAN / TEAM METERS",left+10,top+19);
+        g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,11));
+        if(meters==null){g.drawString("Sampling...",left+10,top+39);return;}
         int[] sanity=meters.sanity();
         for(int i=0;i<6;i++){
-            int y=top+56+i*27;
-            int value=sanity[i];
+            int y=top+42+i*22,value=sanity[i];
             g.setColor(new Color(209,219,223));
-            g.drawString("H"+(i+1)+" "+(value<0?"OFFLINE":value+"%"),left+18,y);
-            g.setColor(new Color(45,54,60));g.fillRoundRect(left+125,y-12,115,10,3,3);
+            g.drawString("H"+(i+1)+" "+(value<0?"--":value+"%"),left+10,y);
+            g.setColor(new Color(45,54,60));g.fillRect(left+64,y-9,w-74,8);
             if(value>=0){
-                g.setColor(value<35?new Color(209,113,115):value<65?
-                    new Color(203,168,105):new Color(126,199,168));
-                g.fillRoundRect(left+125,y-12,115*value/100,10,3,3);
+                g.setColor(value<35?new Color(209,113,115):new Color(126,199,168));
+                g.fillRect(left+64,y-9,(w-74)*value/100,8);
             }
         }
-        int x0=left+266,y0=top+65,plotWidth=Math.max(130,w-286),plotHeight=154;
-        g.setColor(new Color(42,51,65));g.fillRect(x0,y0,plotWidth,plotHeight);
-        g.setColor(new Color(180,200,203));
-        g.drawString("ACTIVITY / UNCERTAIN",x0,y0-8);
-        g.drawString(meters.activity()+"/10",x0+plotWidth-42,y0-8);
+        g.setColor(new Color(180,200,203));g.drawString("ACTIVITY ~"+meters.activity()+"/10",left+10,top+186);
+        int x0=left+10,y0=top+205,plotWidth=w-20,plotHeight=42;
+        g.setColor(new Color(35,46,58));g.fillRect(x0,y0,plotWidth,plotHeight);
         int size=activityHistory.size(),index=0,prevX=-1,prevY=-1;
         g.setColor(new Color(147,213,190));
         for(int val:activityHistory){
             int px=x0+(size<=1?0:index*plotWidth/(size-1));
-            int py=y0+plotHeight-6-val*(plotHeight-12)/10;
+            int py=y0+plotHeight-3-val*(plotHeight-7)/10;
             if(prevX>=0)g.drawLine(prevX,prevY,px,py);
             prevX=px;prevY=py;index++;
         }
-        g.setColor(new Color(183,188,198));
-        g.drawString("LAGGED / NOISY / NOT EXACT GHOST ENERGY",left+18,top+260);
-        g.drawString("M CLOSE  |  K AT RACK TO BUY   T HEALTH  Y SANITY",left+18,top+282);
-        g.drawString("CREDITS £"+fieldCredits,left+18,top+306);
+        g.setColor(new Color(183,188,198));g.drawString("NOISY / NOT EXACT",left+10,top+264);
     }
     /** One compact casebook with instrument results, observations and type reference. */
     private void drawFieldJournal(Graphics2D g,int viewHeight){
@@ -630,20 +625,13 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_1 -> selected=LanCase.Tool.EMF;
             case KeyEvent.VK_2 -> selected=LanCase.Tool.THERMOMETER;
             case KeyEvent.VK_3 -> selected=LanCase.Tool.SPIRIT_BOX;
-            case KeyEvent.VK_R -> sendAction("scan",()->client.scan(selected));
+            case KeyEvent.VK_R -> {heldUseUntilTick=tick+4;sendAction("scan",()->client.scan(selected));}
             case KeyEvent.VK_Z -> sendAction("cross",()->client.deploy(HunterCounters.Kind.CROSS));
             case KeyEvent.VK_G -> sendAction("thrown ward",()->client.deploy(HunterCounters.Kind.WARD));
             case KeyEvent.VK_H -> sendAction("salt",()->client.deploy(HunterCounters.Kind.SALT));
             case KeyEvent.VK_U -> sendAction("UV",()->client.scanUv());
             case KeyEvent.VK_L -> sendAction("hide",()->client.hide());
-            case KeyEvent.VK_M -> {
-                if(vanDisplay)vanDisplay=false;
-                else if(insideVan()){
-                    vanDisplay=true;meters=null;activityHistory.clear();lastVanPoll=-100000;
-                    sendAction("van monitor",()->client.vanMonitor());
-                    lastVanPoll=tick;
-                }else feedback="MONITORS ONLY ACCESSIBLE INSIDE THE VAN";
-            }
+            case KeyEvent.VK_M -> feedback=insideVan()?"MONITOR ALWAYS VISIBLE ON RIGHT":"VAN TELEMETRY ONLY INSIDE THE VAN";
             case KeyEvent.VK_K -> showSupplyStore();
             case KeyEvent.VK_T -> consumeMedicine(FieldSupplies.Kind.HEALTH);
             case KeyEvent.VK_Y -> consumeMedicine(FieldSupplies.Kind.SANITY);

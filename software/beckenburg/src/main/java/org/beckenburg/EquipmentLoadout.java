@@ -24,6 +24,12 @@ public final class EquipmentLoadout {
     public int activeSlot(){return active;}
     public Item equipped(){return slots[active];}
     public void select(int slot){checkSlot(slot);active=slot;}
+    /** Pick up the world-space instrument. No phantom duplicate slots are created. */
+    public void pickup(Item item){
+        Objects.requireNonNull(item);
+        for(int i=0;i<SLOTS;i++)if(slots[i]==item){active=i;return;}
+        slots[active]=item;
+    }
     public int usesLeft(Item item){Objects.requireNonNull(item);return switch(item){
         case PHOTO_CAMERA->film;case SALT->salt;default->-1;
     };}

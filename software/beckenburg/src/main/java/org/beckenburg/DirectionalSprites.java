@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
  */
 public final class DirectionalSprites {
     private static final int W=SceneRenderer.W,H=SceneRenderer.H;
-    private static final double FOCAL=224.0,NEAR=.065;
+    private static final double FOCAL=153.0,NEAR=.065; // exactly match SceneRenderer
     private static final String[] FACINGS={"front","front","side", "back_three_quarter",
             "back","back_three_quarter_mirrored","side_mirrored","front"};
     private static final Map<String,BufferedImage> IMAGES=load();
