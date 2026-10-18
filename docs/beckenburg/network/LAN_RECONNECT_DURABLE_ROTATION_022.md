@@ -29,6 +29,14 @@ A production GUI-hosted session reserves its selected **H1 or human-ghost** owne
 
 For the 120-second default (host-configurable) reservation period, temporarily absent hunters keep their host-owned room, world body, damage susceptibility and inventory rather than vanishing from `TEAMMAP` or player body frames. The host transmits their last body and room to authorized hunter teammates; the ghost never receives the private hunter map or journal. After reservation expiration the existing `mission.depart` rules apply.
 
+## Follow-up: local listen-host survival after owner TCP EOF (023)
+
+A GUI integration defect survived the earlier seat-recovery work: `LanLobbyWindow.receive("INFO|network connection ended")` closed its own `LanHost` whenever the **host player's local client TCP** failed. This terminated the authoritative mission for everyone, despite the host engine correctly supporting an unexpectedly lost owner's reserved seat.
+
+The lobby now evaluates the actual host process and existing host-issued seat ticket through `keepRunningLocalHost(host,ticket)`. If the authoritative host remains running, an unexpected local client EOF preserves that server, retains the in-process reconnect ticket, closes only the defunct client/3D view, keeps host diagnostics and join-lock controls available, and allows its original owner seat to reconnect over loopback. A successful owner reconnection re-enables host controls and acknowledges its in-memory rotated credential without creating an inappropriate disk-based guest ticket. The host and join buttons are guarded against creating a second room while the old host remains active. Explicit owner Leave, host process shutdown and an already-ended mission still terminate as before.
+
+The existing real-socket `LanHostOwnerRecoveryTest` now calls the *same actual* GUI host-survival decision for the hunter-host owner, guest H1 in ghost-hosted rooms, missing resume capability and terminated host. The test is registered in both build scripts but cannot be called passing until compiled and run. Swing window focus, reconnect UI events and multiple actual Windows machines remain unverified.
+
 ## Tests and evidence required
 
 - **Expanded `LanSessionResumeIntegrationTest`**: unexpected TCP EOF, same-seat hunter/ghost return, invalid/replayed token rejection, evidence note rehydrate, authoritative body persistence and role privacy, and now a crash immediately after unacknowledged token rotation; original saved token can recover again, but fails once a newer token has been saved and acknowledged. It directly checks that failed rotation does not extend the initial reservation deadline.
