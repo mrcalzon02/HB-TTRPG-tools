@@ -13,6 +13,11 @@ public final class HeldToolView {
     }
     public static void draw(Graphics2D graphics,int width,int height,String kind,long tick,
             boolean operating,boolean flashlightOn){
+        draw(graphics,width,height,kind,tick,operating,flashlightOn,null);
+    }
+    /** The screen/LED display reads server-reported measurements; no fake animated readouts. */
+    public static void draw(Graphics2D graphics,int width,int height,String kind,long tick,
+            boolean operating,boolean flashlightOn,String measurement){
         if(graphics==null||kind==null||width<180||height<140)return;
         HeldMeshView.draw(graphics,width,height,tick,flashlightOn);
         Graphics2D g=(Graphics2D)graphics.create();
@@ -35,12 +40,19 @@ public final class HeldToolView {
                 case "EMF" ->{
                     body(g, -41,-144,85,142,0x242d34);
                     body(g,-35,-135,72,79,0x3d5355);
-                    int light=(int)Math.floorMod(tick/7,5);
+                    int level=-1;
+                    if(measurement!=null){
+                        java.util.regex.Matcher reading=java.util.regex.Pattern
+                            .compile("EMF (\\d{1,2})/10").matcher(measurement);
+                        if(reading.find())level=Integer.parseInt(reading.group(1));
+                    }
+                    int lit=level<0?-1:(level+1)/2-1;
                     for(int i=0;i<5;i++){
-                        g.setColor(new Color(i<=light?0x73eaa0:0x2c5146));
+                        g.setColor(new Color(i<=lit?0x73eaa0:0x2c5146));
                         g.fillRoundRect(-26+i*13,-119,10,16,3,3);
                     }
-                    g.setColor(new Color(209,216,193));g.drawString("EMF",-15,-78);
+                    g.setColor(new Color(209,216,193));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,13));
+                    g.drawString(level<0?"-- / 10":level+" / 10",-25,-78);
                     g.setColor(new Color(81,93,105));g.fillRoundRect(-20,-43,44,24,6,6);
                     g.setColor(new Color(202,205,197));g.fillRect(-7,-34,18,6);
                 }
@@ -48,7 +60,13 @@ public final class HeldToolView {
                     body(g,-31,-161,69,162,0xb6b8ad);
                     body(g,-24,-139,55,65,0x222f37);
                     g.setColor(new Color(103,204,200));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,20));
-                    g.drawString(operating?"02C":"19C",-19,-95);
+                    String degrees="--";
+                    if(measurement!=null){
+                        java.util.regex.Matcher reading=java.util.regex.Pattern
+                            .compile("Air (-?\\d+(?:\\.\\d+)?)°C").matcher(measurement);
+                        if(reading.find())degrees=reading.group(1)+"C";
+                    }
+                    g.drawString(degrees,-19,-95);
                     g.setColor(new Color(68,71,72));g.fillOval(-7,-61,22,22);
                     g.setColor(new Color(240,200,102));g.fillOval(1,-53,6,6);
                 }
