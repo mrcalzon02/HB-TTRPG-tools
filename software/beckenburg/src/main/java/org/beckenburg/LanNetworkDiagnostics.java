@@ -51,15 +51,16 @@ public final class LanNetworkDiagnostics {
     public static String hostInfo(LanHost host) {
         Objects.requireNonNull(host);
         StringBuilder out=new StringBuilder("Beckenburg LAN host\n");
-        out.append("Listening: ").append(host.bindAddress()).append(':').append(host.port())
-            .append("  (TCP gameplay and UDP voice, same numeric port)\n")
+        out.append("Gameplay TCP: ").append(host.bindAddress()).append(':').append(host.port())
+            .append("  Voice UDP: ").append(host.voicePort()).append('\n')
             .append("Guests: ").append(host.connected())
             .append("  Reserved seats: ").append(host.reservedSeats())
             .append("  New joins: ").append(host.lobbyLocked()?"Locked":"Open").append('\n')
             .append("Candidate LAN addresses (not validated public Internet addresses):\n");
         List<String> choices=localAddresses();
         if(choices.isEmpty())out.append("  No non-loopback adapter detected; check network settings.\n");
-        else for(String address:choices)out.append("  ").append(address).append(':').append(host.port()).append('\n');
+        else for(String address:choices)out.append("  ").append(address).append(':').append(host.port()).append(" (TCP)").append('\n');
+        out.append("Voice requires UDP ").append(host.voicePort()).append("; allow it separately in the Windows Firewall.\n");
         out.append("Share an address only with trusted LAN players. Firewalls can still block inbound connections.\n")
             .append("LAN game/password signaling and voice are NOT encrypted; do not expose this listener to the public Internet.");
         return out.toString();
