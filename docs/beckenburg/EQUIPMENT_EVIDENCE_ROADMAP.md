@@ -16,7 +16,8 @@
 
 | Family | Qualifying observation | Instruments | Gate |
 | --- | --- | --- | --- |
-| High EMF | Local ghost event can produce EMF 7–10 | EMF reader, synchronized array | numeric LAN source slice |\n| Suppressed EMF | A ghost-caused electromagnetic cancellation reads 0; each sample is immediately logged | EMF reader | numeric LAN source slice |
+| High EMF | Local ghost event can produce EMF 7–10 | EMF reader, synchronized array | numeric LAN source slice |
+| Suppressed EMF | A ghost-caused electromagnetic cancellation reads 0; each sample is immediately logged | EMF reader | numeric LAN source slice |
 | Freezing | Paranormal sub-zero room reading below 0°C | thermometer, thermal beacons | numeric LAN source slice |
 | Extreme heat | Paranormal temperature at least 90°F | thermometer, thermal beacons | numeric LAN source slice |
 | Direct spirit reply | Valid reply to actual question/interaction near ghost | spirit box, recording system | legacy partial; question handling needed |
