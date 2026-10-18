@@ -17,6 +17,9 @@ A source-code commit is not a passing stage. Each *completed* microstep must hav
 
 Use meaningful vertical improvements, not a giant speculative code rewrite. An independent workstream may prepare future specifications, but **prerequisite stage completion cannot be skipped**. When a GitHub connector call times out, first inspect remote state for acceptance, retry transient failure with bounded delay/reconcile head, and report persistent auth/permissions/conflicts; never blind force-push. No GitHub Actions unless expressly requested.
 
+## LAN owner admission and handshake gate (021, 2026-10-18)
+[LAN Hosting and Reconnect Hardening 021](network/LAN_HOSTING_RECOVERY_HARDENING_021.md) adds regression requirements for five-field host welcome credentials, actual TCP/UDP listener ports, H1 owner-vs-guest semantics, interrupted resume writes and production-only random local owner credentials. The new socket test sources are committed and included in both build scripts; a full build and physical Windows LAN proof are **UNVERIFIED**. Do not promote the network release gate from source commits alone.
+
 ## Restart recovery source and evidence addendum (2026-10-18)
 [LAN Restart Recovery 020](network/LAN_RESTART_RECOVERY_AND_SNAPSHOT_020.md) records a Java 17-isolated PASS for storing/reopening/rotating temporary reconnect credentials, independent from player saves. Host command-watermark recovery and role-filtered progress/journal replay are committed source with expanded tests **not yet fully executed**. Keep all game networking and Windows stage criteria unverified pending real logs and devices.
 
