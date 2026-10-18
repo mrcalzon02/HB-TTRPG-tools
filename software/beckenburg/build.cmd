@@ -7,10 +7,10 @@ if exist build\test rmdir /s /q build\test
 if not exist build\classes mkdir build\classes
 if not exist build\test mkdir build\test
 > build\sources-main.txt (
-  for %%F in (src\main\java\org\beckenburg\*.java) do @echo "%%~fF"
+  for %%F in (src\main\java\org\beckenburg\*.java) do @echo "src/main/java/org/beckenburg/%%~nxF"
 )
 > build\sources-tests.txt (
-  for %%F in (src\test\java\org\beckenburg\*.java) do @echo "%%~fF"
+  for %%F in (src\test\java\org\beckenburg\*.java) do @echo "src/test/java/org/beckenburg/%%~nxF"
 )
 javac --release 17 -encoding UTF-8 -d build\classes @build\sources-main.txt || exit /b 1
 if not exist assets\runtime\directional-sprites.zip (echo ERROR: required in-game sprite assets missing & exit /b 1)
