@@ -9,9 +9,13 @@ import java.util.Objects;
 /** In-game field guide: separates mechanically defined clues from non-exclusive behavioral hypotheses. */
 public final class GhostFieldGuide {
     private GhostFieldGuide(){}
-    public enum Category { EMF, TEMPERATURE, SPIRIT_BOX, PHYSICAL, CAMERA, BEHAVIOR }
+    public enum Category { EMF, TEMPERATURE, SPIRIT_BOX, WRITING, PHYSICAL, CAMERA, BEHAVIOR }
     public enum Clue {
         EMF_OVER_SIX(Category.EMF,"EMF / event reading greater than 6",false),
+        EMF_SUPPRESSION(Category.EMF,"EMF / three zero reads during active haunting",false),
+        WRITING_CHILD(Category.WRITING,"Book / childlike drawings",false),
+        WRITING_SCRAWL(Category.WRITING,"Book / frantic scribbles",false),
+        WRITING_RITUAL(Category.WRITING,"Book / ritual circles",false),
         EXTREME_COLD(Category.TEMPERATURE,"Thermal / below 0°C (paranormal)",false),
         EXTREME_HEAT(Category.TEMPERATURE,"Thermal / at least 90°F (paranormal)",false),
         EMF_SURGE(Category.EMF,"EMF / pulsing field surge",false),
@@ -81,6 +85,7 @@ public final class GhostFieldGuide {
         GhostTraits.Profile p=GhostTraits.of(type);
         return type.name().replace('_',' ') + "  /  " + type.rite().name()+"\n"
             +"REAL SIGNALS: EMF >6 / COLD <0°C / HOT >=90°F\n"
+            +"WRITING: CHILD DRAWINGS / FRANTIC SCRAWLS / RITUAL CIRCLES\n"
             +"WIDER EVIDENCE MATRIX: UNDER DEVELOPMENT\n"
             +(p.locomotion()==GhostTraits.Locomotion.FLOAT?"FLOATING":"WALKING")
             +" / "+(p.canPhase()?"WALL PHASING":"DOOR TRAVEL")
@@ -97,7 +102,8 @@ public final class GhostFieldGuide {
         return switch(clue){
             // Measurement categories no longer encode a specific ghost species.
             // Archive enum members only survive for old journal notes.
-            case EMF_OVER_SIX,EXTREME_COLD,EXTREME_HEAT,
+            case EMF_OVER_SIX,EMF_SUPPRESSION,EXTREME_COLD,EXTREME_HEAT,
+                 WRITING_CHILD,WRITING_SCRAWL,WRITING_RITUAL,
                  EMF_SURGE,EMF_TETHER,EMF_KINETIC,EMF_INTERFERENCE,
                  COLD_ANCHOR,COLD_POCKET,COLD_SHEAR,COLD_DRAFT,
                  VOICE_DIRECT,VOICE_ECHO,VOICE_FRAGMENT,VOICE_DISPLACED->true;
