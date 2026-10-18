@@ -164,6 +164,9 @@ public final class LanClient implements AutoCloseable {
         Objects.requireNonNull(kind);send("DEPLOY|"+kind+"|"+(++sequence));
     }
     public synchronized void scanUv()throws IOException {send("UVSCAN|"+(++sequence));}
+    public synchronized void placeBook()throws IOException {send("PLACEBOOK|"+(++sequence));}
+    public synchronized void readBook()throws IOException {send("READBOOK|"+(++sequence));}
+    public synchronized void takeBook()throws IOException {send("TAKEBOOK|"+(++sequence));}
     public synchronized void ward()throws IOException {send("WARD|"+(++sequence));}
     public synchronized void cleanse()throws IOException {send("CLEANSE|"+(++sequence));}
     public synchronized void extract()throws IOException {send("EXTRACT|"+(++sequence));}
