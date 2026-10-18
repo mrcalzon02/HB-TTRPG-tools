@@ -14,6 +14,9 @@ public final class LanHostOwnerRecoveryTest {
         Peer(int port,boolean ghost,String name)throws Exception{
             client=new LanClient("127.0.0.1",port,ghost,name,events::offer);
         }
+        Peer(int port,boolean ghost,String name,String ownerProof)throws Exception{
+            client=new LanClient("127.0.0.1",port,ghost,name,"",ownerProof,events::offer);
+        }
         Peer(int port,LanClient.ResumeTicket saved)throws Exception{
             client=new LanClient("127.0.0.1",port,saved,events::offer);
         }
@@ -33,12 +36,12 @@ public final class LanHostOwnerRecoveryTest {
     }
     private static void ghostHosting()throws Exception{
         try(LanHost host=new LanHost("127.0.0.1",0,
-                GhostIdentity.Type.SPIRIT,CustomContract.standard(3),true)){
+                GhostIdentity.Type.SPIRIT,CustomContract.standard(3),true,true)){
             host.setReconnectGraceSeconds(5);
             try(Peer a=new Peer(host.port(),false,"HunterHostSeat");
                 Peer b=new Peer(host.port(),false,"HunterTwo");
                 Peer c=new Peer(host.port(),false,"HunterThree");
-                Peer ghost=new Peer(host.port(),true,"ActualHostGhost")){
+                Peer ghost=new Peer(host.port(),true,"ActualHostGhost",host.localOwnerCredential())){
                 a.client.ready();b.client.ready();c.client.ready();ghost.client.ready();
                 ghost.await("LOBBY|3|HUMAN|4|WAITING");
                 ghost.client.start();ghost.await("INFO|mission started");
