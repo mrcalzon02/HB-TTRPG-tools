@@ -44,7 +44,19 @@ public final class LanClient implements AutoCloseable {
     public synchronized void viewGhost3D()throws IOException {send("GVIEW3D");}
     public synchronized void ghostStep(int dx,int dz)throws IOException {send("GSTEP|"+dx+"|"+dz+"|"+(++sequence));}
     public synchronized void ghostTurn(int degrees)throws IOException {send("GTURN|"+degrees+"|"+(++sequence));}
-    public synchronized void step(int dx,int dz)throws IOException {send("STEP|"+dx+"|"+dz+"|"+(++sequence));}
+    public synchronized void step(int dx,int dz)throws IOException {step(dx,dz,false);}
+    public synchronized void step(int dx,int dz,boolean running)throws IOException {
+        send("STEP|"+dx+"|"+dz+"|"+(running?1:0)+"|"+(++sequence));
+    }
+    public synchronized void vanMonitor()throws IOException {send("VANMON|"+(++sequence));}
+    public synchronized void purchaseSupply(FieldSupplies.Kind kind,FieldSupplies.Tier tier)throws IOException{
+        Objects.requireNonNull(kind);Objects.requireNonNull(tier);
+        send("BUY|"+kind+"|"+tier+"|"+(++sequence));
+    }
+    public synchronized void useSupply(FieldSupplies.Kind kind,FieldSupplies.Tier tier)throws IOException{
+        Objects.requireNonNull(kind);Objects.requireNonNull(tier);
+        send("USESUPPLY|"+kind+"|"+tier+"|"+(++sequence));
+    }
     public synchronized void turn(int degrees)throws IOException {send("TURN|"+degrees+"|"+(++sequence));}
     public synchronized void door()throws IOException {send("DOOR|"+(++sequence));}
     public synchronized void scan(LanCase.Tool tool)throws IOException {

@@ -163,7 +163,10 @@ public final class LanHost implements AutoCloseable {
                 case "VIEW3D" -> {
                     if(!running||peer.slot==GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("3D view requires active hunter");
                     peer.worldMode=true;
-                    reply(peer,"ACCEPT|VIEW3D");broadcastWorld();broadcastApparitions();broadcastCounters();sendCounterAmmo(peer);
+                    reply(peer,"ACCEPT|VIEW3D");
+                    broadcastWorld();broadcastApparitions();broadcastCounters();sendCounterAmmo(peer);
+                    reply(peer,supplies[peer.slot].frame());
+                    reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
                 }
                 case "GVIEW3D" -> {
                     if(!running||peer.slot!=GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("ghost view requires active ghost seat");
@@ -226,6 +229,54 @@ public final class LanHost implements AutoCloseable {
                         throw new IllegalArgumentException("room not adjacent");
                     // Room-level topology proof only; physical door and body collision still need synced transform validation.
                     hunterRooms[peer.slot]=target;world.setRoom(peer.slot,target);recordSound(peer.slot,LanGhostPursuit.Sound.FOOTSTEP);reply(peer,"ACCEPT|MOVE|"+target);broadcastState();broadcastWorld();
+                }
+                case "VANMON" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
+                        throw new IllegalArgumentException("hunter van display required");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    if(!contract.sanityMonitor()&&!contract.activityMonitor())
+                        throw new IllegalArgumentException("monitors disabled by contract");
+                    if(!insideVan(peer.slot))throw new IllegalArgumentException("van monitors are only usable in the van");
+                    if(tick-peer.lastMonitorTick<5)throw new IllegalArgumentException("monitor update cooldown");
+                    peer.lastMonitorTick=tick;
+                    int[] sane=new int[HUNTERS];
+                    for(int i=0;i<HUNTERS;i++)
+                        sane[i]=contract.sanityMonitor()&&seats[i]!=null?100-mission.stress(i):-1;
+                    int activity=contract.activityMonitor()?monitor.sample(tick,ghost.energy()):0;
+                    reply(peer,new VanTelemetry.Display(tick,activity,sane).frame());
+                }
+                case "BUY" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=4)
+                        throw new IllegalArgumentException("hunter store required");
+                    FieldSupplies.Kind kind=FieldSupplies.Kind.valueOf(p.get(1));
+                    FieldSupplies.Tier tier=FieldSupplies.Tier.valueOf(p.get(2));
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(3)));
+                    ensureActiveHunter(peer);
+                    if(map.van().stationAt(world.body(peer.slot).x(),world.body(peer.slot).z())
+                        !=VanStaging.Station.EQUIPMENT)
+                        throw new IllegalArgumentException("purchase supplies at the van equipment rack");
+                    if(!supplies[peer.slot].purchase(kind,tier))
+                        throw new IllegalArgumentException("insufficient credits or full stock");
+                    reply(peer,"ACCEPT|BUY|"+kind+"|"+tier);
+                    reply(peer,supplies[peer.slot].frame());
+                }
+                case "USESUPPLY" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=4)
+                        throw new IllegalArgumentException("hunter medicine required");
+                    FieldSupplies.Kind kind=FieldSupplies.Kind.valueOf(p.get(1));
+                    FieldSupplies.Tier tier=FieldSupplies.Tier.valueOf(p.get(2));
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(3)));
+                    ensureActiveHunter(peer);
+                    if(supplies[peer.slot].stock(kind,tier)==0)
+                        throw new IllegalArgumentException("medicine not purchased");
+                    int amount=tier.restore(kind);
+                    boolean used=kind==FieldSupplies.Kind.HEALTH
+                        ?mission.heal(peer.slot,amount):mission.calm(peer.slot,amount);
+                    if(!used)throw new IllegalArgumentException("already at full health or sanity");
+                    supplies[peer.slot].consume(kind,tier);
+                    reply(peer,"ACCEPT|USESUPPLY|"+kind+"|"+tier);
+                    reply(peer,supplies[peer.slot].frame());
+                    broadcastProgress();
                 }
                 case "DEPLOY" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=3)
@@ -380,6 +431,13 @@ public final class LanHost implements AutoCloseable {
             }
         }
     }
+    private boolean insideVan(int seat){
+        LanWorld.Body body=world.body(seat);
+        VanStaging.Position p=map.van().local(body.x(),body.z());
+        return body.room()==HouseMap.EXTRACTION_ROOM&&
+            Math.abs(p.x())<VanStaging.HALF_WIDTH-.2&&
+            p.z()>=VanStaging.FRONT&&p.z()<VanStaging.REAR-.2;
+    }
     private void sendCounterAmmo(Peer peer){
         reply(peer,"COUNTERAMMO|"+counters.charges(peer.slot,HunterCounters.Kind.CROSS)+"|"
             +counters.charges(peer.slot,HunterCounters.Kind.WARD)+"|"
@@ -507,6 +565,7 @@ public final class LanHost implements AutoCloseable {
             for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&mission.alive(i)
                     &&hunterRooms[i]==ghost.room()){audible=hunterRooms[i];occupants++;}
             ghost.advance(tick,audible,occupants);
+            if(tick%12==0)monitor.sample(tick,ghost.energy());
             int drain=GhostTraits.passiveFear(ghostType,tick,occupants);
             if(drain>0)for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&hunterRooms[i]==ghost.room()
                     &&mission.drainSanity(i,drain))reply(seats[i],"FEED|SANITY DRAIN");
@@ -614,7 +673,9 @@ public final class LanHost implements AutoCloseable {
         clock.shutdownNow();workers.shutdownNow();
     }
     private static final class Peer{
-        final Socket socket;final Reader input;final Writer output;final int slot;final String name;boolean ready,worldMode,ghostWorldMode;long lastGhostPoseSequence=-1,lastGhostActionSequence=-1;
+        final Socket socket;final Reader input;final Writer output;final int slot;final String name;boolean ready,worldMode,ghostWorldMode;
+        long lastGhostPoseSequence=-1,lastGhostActionSequence=-1;
+        int lastMonitorTick=-100000;
         Peer(Socket s,Reader in,Writer out,int slot,String name){socket=s;input=in;output=out;this.slot=slot;this.name=name;}
     }
 }
