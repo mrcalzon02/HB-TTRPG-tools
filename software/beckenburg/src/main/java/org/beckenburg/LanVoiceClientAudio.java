@@ -39,9 +39,15 @@ public final class LanVoiceClientAudio implements AutoCloseable {
         return java.util.List.copyOf(compatible);
     }
     public void selectMicrophone(Mixer.Info device){
-        if(device!=null&&!microphones().contains(device))
-            throw new IllegalArgumentException("microphone no longer available");
-        selectedMicrophone=device;
+        if(device==null){selectedMicrophone=null;return;}
+        for(Mixer.Info available:microphones()){
+            if(available.getName().equals(device.getName())
+                &&available.getVendor().equals(device.getVendor())
+                &&available.getVersion().equals(device.getVersion())){
+                selectedMicrophone=available;return;
+            }
+        }
+        throw new IllegalArgumentException("microphone no longer available");
     }
     public Mixer.Info selectedMicrophone(){return selectedMicrophone;}
     private volatile TargetDataLine microphone;
