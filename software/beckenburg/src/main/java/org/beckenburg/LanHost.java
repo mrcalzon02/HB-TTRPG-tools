@@ -117,7 +117,12 @@ public final class LanHost implements AutoCloseable {
                     java.util.concurrent.ThreadLocalRandom.current());
                 LanProtocol.write(out,"WELCOME|"+(slot==GHOST_SEAT?"GHOST":"H"+(slot+1))+"|"+LanProtocol.VERSION);
                 if(slot!=GHOST_SEAT){
-                    // Validated investigator names are private to the hunter team.
+                    // Joining hunters also receive earlier teammates' names, not just the
+                    // current join. This avoids a stale lobby before their first 3D view.
+                    for(int i=0;i<HUNTERS;i++)
+                        if(i!=slot&&seats[i]!=null)
+                            reply(peer,"PLAYERNAME|"+i+"|"+seats[i].name);
+                    // The ghost is never in the private hunter packet fanout.
                     notifyHunters("PLAYERNAME|"+slot+"|"+nickname);
                 }
                 broadcastLobby();

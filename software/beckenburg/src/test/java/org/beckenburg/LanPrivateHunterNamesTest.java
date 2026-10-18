@@ -33,9 +33,14 @@ public final class LanPrivateHunterNamesTest {
             Peer ghost=new Peer(host.port(),true,"Haunting");
             Peer b=new Peer(host.port(),false,"Fred")){
 
-            String costume=a.await("LOBBYAVATAR|");
-            ok(costume.startsWith("LOBBYAVATAR|")&&!costume.contains("WRAITH"),
-                "lobby role appearance cannot expose actual species");
+            String costume;
+            do{costume=a.await("LOBBYAVATAR|");}
+            while(costume.equals("LOBBYAVATAR|NONE"));
+            var visibleDisguise=LobbyGhostAvatar.Look.decode(costume);
+            ok(visibleDisguise.facing()==0||visibleDisguise.facing()==2
+                ||visibleDisguise.facing()==6,"random visible lobby ghost uses approved facing");
+            ok(!costume.contains("WRAITH"),
+                "lobby appearance cannot expose actual species");
             ok(a.await("PLAYERNAME|1|").equals("PLAYERNAME|1|Fred"),
                 "validated teammate name delivered to hunter");
             ok(b.await("PLAYERNAME|0|").equals("PLAYERNAME|0|Archivist"),
