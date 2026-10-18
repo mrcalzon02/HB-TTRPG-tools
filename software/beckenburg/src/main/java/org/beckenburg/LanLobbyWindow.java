@@ -8,6 +8,11 @@ import java.io.IOException;
 public final class LanLobbyWindow extends JFrame {
     private final JTextField ip=new JTextField("127.0.0.1",13),port=new JTextField("27717",5),name=new JTextField("Investigator",11);
     private final JComboBox<String> role=new JComboBox<>(new String[]{"Hunter","Ghost"});
+    private final LobbyGhostAvatar.Preview avatar=new LobbyGhostAvatar.Preview();
+    private LobbyGhostAvatar.Look localLook=LobbyGhostAvatar.random(
+        java.util.concurrent.ThreadLocalRandom.current());
+    private LobbyGhostAvatar.Look remoteLook;
+    private boolean ghostJoined;
     private final JSpinner partySize=new JSpinner(new SpinnerNumberModel(3,1,6,1));
     private final JButton tuneContract=new JButton("Contract options");
     private CustomContract custom=CustomContract.standard(3);
@@ -48,7 +53,16 @@ public final class LanLobbyWindow extends JFrame {
         log.setLineWrap(true);log.setWrapStyleWord(true);
         JPanel info=new JPanel(new GridLayout(3,1));info.add(status);info.add(caseStatus);info.add(teamStatus);
         JPanel top=new JPanel(new BorderLayout());top.add(controls,BorderLayout.NORTH);top.add(info,BorderLayout.SOUTH);
-        add(top,BorderLayout.NORTH);add(new JScrollPane(log),BorderLayout.CENTER);add(commands,BorderLayout.SOUTH);
+        add(top,BorderLayout.NORTH);add(new JScrollPane(log),BorderLayout.CENTER);
+        add(avatar,BorderLayout.EAST);add(commands,BorderLayout.SOUTH);
+        avatar.showHunter();
+        role.addActionListener(e->{
+            if(connection!=null)return; // Seat/role is fixed once the handshake succeeds.
+            if(role.getSelectedIndex()==1){
+                localLook=LobbyGhostAvatar.random(java.util.concurrent.ThreadLocalRandom.current());
+                avatar.showGhost(localLook,false);
+            }else avatar.showHunter();
+        });
         host.addActionListener(e->connect(true));join.addActionListener(e->connect(false));
         tuneContract.addActionListener(e->configureCustomContract());
         ready.addActionListener(e->send("READY"));start.addActionListener(e->send("START"));
@@ -135,9 +149,9 @@ public final class LanLobbyWindow extends JFrame {
                 if(localHost){
                     var types=GhostIdentity.Type.values();
                     var chosen=types[java.util.concurrent.ThreadLocalRandom.current().nextInt(types.length)];
-                    newHost=new LanHost("0.0.0.0",portNumber,chosen,request);
+                    newHost=new LanHost("0.0.0.0",portNumber,chosen,request,ghost);
                 }
-                LanClient client=new LanClient(localHost?"127.0.0.1":hostname,portNumber,localHost?false:ghost,nickname,
+                LanClient client=new LanClient(localHost?"127.0.0.1":hostname,portNumber,ghost,nickname,
                     frame->SwingUtilities.invokeLater(()->{
                         if(generation==connectionGeneration)receive(frame);
                     }));
@@ -149,7 +163,12 @@ public final class LanLobbyWindow extends JFrame {
                         return; // Stale connection completed after EOF or a replacement request.
                     }
                     hosted=own;connection=client;busy=false;
+                    role.setEnabled(false);
                     status.setText("Seat "+client.seat()+" — room case + shared house");
+                    if("GHOST".equals(client.seat()))avatar.showGhost(
+                        remoteLook!=null?remoteLook:localLook,remoteLook!=null);
+                    else if(ghostJoined&&remoteLook!=null)avatar.showGhost(remoteLook,true);
+                    else avatar.showHunter();
                     setCommandEnabled(true);log.append("Connected. Ready when your team is assembled.\n");
                 });
             }catch(Exception ex){
@@ -203,6 +222,9 @@ public final class LanLobbyWindow extends JFrame {
             if(connection!=null){connection.close();connection=null;}
             if(hosted!=null){hosted.close();hosted=null;}
             myRoom=HouseMap.EXTRACTION_ROOM;
+            role.setEnabled(true);ghostJoined=false;remoteLook=null;
+            if(role.getSelectedIndex()==1)avatar.showGhost(localLook,false);
+            else avatar.showHunter();
             status.setText("Disconnected — host or server connection lost");
             caseStatus.setText("Case: connection ended");
             teamStatus.setText("Team: disconnected");
@@ -216,7 +238,18 @@ public final class LanLobbyWindow extends JFrame {
         }
         if(event.startsWith("INFO|mission started")){missionRunning=true;setCommandEnabled(true);}
         if(event.startsWith("RESULT|")||event.startsWith("INFO|match stopped")){missionRunning=false;setCommandEnabled(true);}
-        if(event.startsWith("STATE|")){
+        if(event.startsWith("LOBBYAVATAR|")){
+            var parts=LanProtocol.parts(event);
+            if(parts.size()==2&&parts.get(1).equals("NONE")){
+                ghostJoined=false;remoteLook=null;
+                if(connection==null&&role.getSelectedIndex()==1)avatar.showGhost(localLook,false);
+                else avatar.showHunter();
+            }else{
+                remoteLook=LobbyGhostAvatar.Look.decode(event);
+                ghostJoined=true;
+                avatar.showGhost(remoteLook,true);
+            }
+        }else if(event.startsWith("STATE|")){
             var p=LanProtocol.parts(event);if(p.size()>=4)try{myRoom=Integer.parseInt(p.get(2));}catch(NumberFormatException ignored){}
             status.setText("Room: "+new HouseMap().roomName(myRoom)+"  |  tick "+p.get(1)+"  |  energy "+p.get(4));
         }else if(event.startsWith("TEAMMAP|")){
@@ -242,7 +275,9 @@ public final class LanLobbyWindow extends JFrame {
     }
     private void setCommandEnabled(boolean available){
         ready.setEnabled(available);
-        start.setEnabled(available&&connection!=null&&"H1".equals(connection.seat()));
+        start.setEnabled(available&&connection!=null&&
+            ("H1".equals(connection.seat())||
+             (hosted!=null&&"GHOST".equals(connection.seat()))));
         move.setEnabled(available&&!worldMode&&connection!=null&&!"GHOST".equals(connection.seat()));
         use.setEnabled(available&&connection!=null&&"GHOST".equals(connection.seat()));
         boolean hunter=available&&connection!=null&&!"GHOST".equals(connection.seat());
