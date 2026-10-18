@@ -26,7 +26,7 @@ public final class GlbProps {
         "chair_mp_5","ceiling_lamp_1_on","cross_mp_2","flashlight_mp_1",
         "vape_mp_1","dosimeter_1","dosimeter_2","walkie_talkie_2",
         "handheld_tablet_1","monitoring_screen_mp_1","pc_mp_1",
-        "button_12","book_mp_1","open_book_mp_1"
+        "button_12","book_mp_1","open_book_mp_1","dosimeter_4","walkie_talkie_1"
     };
     public record Vertex(double x,double y,double z,double u,double v) { }
     public record Triangle(Vertex a,Vertex b,Vertex c,int material) { }
