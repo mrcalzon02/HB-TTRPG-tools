@@ -86,7 +86,7 @@ public final class GhostDomain {
     /** Room occupancy controls energy. Controllers never receive the actual occupant count. */
     public void advance(int nextTick, int hunterRoom, int occupants) {
         if (nextTick != tick + 1) throw new IllegalArgumentException("ghost tick must advance exactly once");
-        if(occupants<0||occupants>3)throw new IllegalArgumentException("invalid occupancy");
+        if(occupants<0||occupants>6)throw new IllegalArgumentException("invalid occupancy");
         tick=nextTick;this.occupants=occupants;
         hearsHunter = hunterRoom >= 0 && hunterRoom == room;
         energyRemainder+=GhostTraits.gained(archetype,tick,occupants)*energyRecovery;
