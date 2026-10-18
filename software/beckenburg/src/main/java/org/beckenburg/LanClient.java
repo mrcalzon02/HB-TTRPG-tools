@@ -27,6 +27,13 @@ public final class LanClient implements AutoCloseable {
         String key=resumeKey;
         return key==null?null:new ResumeTicket(seat,key,sequence);
     }
+    /** Confirm a rotated resume credential ONLY after storing it durably on disk.
+     * A failed write must leave the older reserved credential recoverable.
+     */
+    public synchronized void acknowledgeStoredResume() throws IOException {
+        if(resumeKey==null)throw new IOException("host did not issue recovery capability");
+        send("RESUMEACK|"+resumeKey);
+    }
     public String address() {return connectAddress;}
     public int port() {return connectPort;}
 
