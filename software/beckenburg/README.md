@@ -1,5 +1,17 @@
 # The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
 
+## Microphone voice — local LAN developer build
+
+**3D hunter controls:** Hold **F3** to speak locally or **F4** to transmit on the hunter radio; release to stop. **F7** opens a compact mute/voice-playback-volume control. Losing keyboard focus or opening text input stops transmission. Ghost seats only receive nearby physical speech; they cannot transmit on the investigators' radio. A hunter's outgoing radio voice is also audible to a ghost physically close to the speaker, but the ghost cannot eavesdrop remotely on radio recipients.
+
+**Implementation:** JavaSound performs real default-device microphone capture and speaker playback. 20 ms **G.711 mu-law** (8 kHz mono, 64 kbit/s) frames use a bounded, separate UDP socket, on the same numeric port as TCP. The host issues 128-bit ephemeral per-seat voice tokens only after authorized world-view entry; it checks UDP source IP, pinned endpoint and replay sequences before routing. Proximity depends on host-owned coordinates, audible doors, and distance; the ghost receives an anonymous voice sender ID rather than hunter identity/position metadata. A small capped receive queue mixes multiple speaking investigators and drops stale frames. Speech creates only throttled ghost hearing cues.
+
+**Security boundary:** This is intended for **trusted local networks**, not the public internet. Token checking is not encryption, and the existing TCP signalling is also plaintext. Real internet play requires DTLS-SRTP (or equivalent secure voice) and NAT traversal. Never market this implementation as encrypted or safe for untrusted WAN sessions. Voice selection currently uses operating-system default microphone and output; device enumeration, stereo directional panning, professional jitter handling, noise suppression and encrypted transport are later acceptance gates.
+
+**Open-source codec roadmap:** The first playable implementation has no external runtime dependency because it uses the standardized G.711 adapter plus JDK JavaSound APIs. Replaceable next step: **Concentus pure Java Opus** (https://github.com/lostromb/concentus), after packaging its library and license in the all-in-one game distribution. No native audio DLLs or downloads are required to use the current LAN voice path.
+
+**Verification:** Both build scripts include `LanVoiceCodecTest` (format, codec, packet parser) and `LanVoiceRelayTest` (real loopback UDP, session key, spoof/replay, recipient-specific keys and anonymous ghost playback). Actual microphone/speaker hardware, six simultaneous talkers and full Java application compilation still need complete-environment acceptance; source commits alone do not prove headset or multiplayer audio quality.
+
 ## LAN communications: local and radio text (working implementation slice)
 
 Press **Enter** in the first-person hunter view to type a **local** message; **F2** to type a **radio** message. Press Enter inside the chat box to send, or Escape to cancel. A compact temporary chat overlay shows messages with the validated investigator nickname and a channel indicator. Typing releases mouse capture and cancels held movement keys.
