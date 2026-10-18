@@ -659,10 +659,10 @@ public final class LanHost implements AutoCloseable {
                     LanCase.Report result=peer.worldMode
                         ?mission.scanSpatialMeasured(peer.slot,tool,world.body(peer.slot),
                             ghost.room(),map,tick,lastEvidenceEventRoom,eventPower,
-                            ghostType==GhostIdentity.Type.SHADE)
+                            GhostEvidenceProfile.emfSuppressed(ghostType))
                         :mission.scanMeasured(peer.slot,tool,hunterRooms[peer.slot],
                             ghost.room(),tick,lastEvidenceEventRoom,eventPower,
-                            ghostType==GhostIdentity.Type.SHADE);
+                            GhostEvidenceProfile.emfSuppressed(ghostType));
                     answerHunter(peer,"SCAN",result);
                     if(result.accepted()){
                         recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
