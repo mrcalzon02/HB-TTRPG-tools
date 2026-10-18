@@ -17,6 +17,9 @@ A source-code commit is not a passing stage. Each *completed* microstep must hav
 
 Use meaningful vertical improvements, not a giant speculative code rewrite. An independent workstream may prepare future specifications, but **prerequisite stage completion cannot be skipped**. When a GitHub connector call times out, first inspect remote state for acceptance, retry transient failure with bounded delay/reconcile head, and report persistent auth/permissions/conflicts; never blind force-push. No GitHub Actions unless expressly requested.
 
+## Durable recovery and host authority source gates (022, 2026-10-18)
+[Recovery and Host Authority 022](network/LAN_RECONNECT_DURABLE_ROTATION_022.md) adds unacknowledged token-loss recovery, exact post-persistence RESUMEACK, bounded original grace, strict local host START authorization and physically present disconnected hunters. Both build scripts reference the extended socket regressions. These are **committed code/tests**, not passed Windows/game-wide acceptance; keep their production QA gates open until executable evidence is captured.
+
 ## LAN owner admission and handshake gate (021, 2026-10-18)
 [LAN Hosting and Reconnect Hardening 021](network/LAN_HOSTING_RECOVERY_HARDENING_021.md) adds regression requirements for five-field host welcome credentials, actual TCP/UDP listener ports, H1 owner-vs-guest semantics, interrupted resume writes and production-only random local owner credentials. The new socket test sources are committed and included in both build scripts; a full build and physical Windows LAN proof are **UNVERIFIED**. Do not promote the network release gate from source commits alone.
 
