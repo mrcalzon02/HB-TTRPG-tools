@@ -58,7 +58,10 @@ public final class LanSessionResumeIntegrationTest {
                 b.breakTransportWithoutLeaving();
                 a.await("PEER|LOST|1");
                 check(host.running()&&host.reservedSeats()==1,"hunter still owns host-side state");
-                try(Peer restored=new Peer(host.port(),original)){
+                // A JVM crash can leave an older last-command counter on disk. Host
+                // handshake supplies the accepted high-water mark, so input still works.
+                var stale=new LanClient.ResumeTicket(original.seat(),original.token(),0);
+                try(Peer restored=new Peer(host.port(),stale)){
                     check("H2".equals(restored.client.seat()),"old seat restored, no new hunter");
                     restored.await("INFO|mission resumed");
                     restored.client.view3D();restored.await("ACCEPT|VIEW3D");
