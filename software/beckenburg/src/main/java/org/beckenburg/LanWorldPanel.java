@@ -15,6 +15,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final SceneRenderer renderer=new SceneRenderer();
     private final Map<Integer,SceneRenderer.RemoteBody> peers=new HashMap<>();
     private final Map<Integer,String> hunterNames=new HashMap<>();
+    private final java.util.ArrayDeque<LanChat.Entry> chatHistory=new java.util.ArrayDeque<>();
+    private final JTextField chatInput=new JTextField();
+    private LanChat.Channel chatChannel=LanChat.Channel.LOCAL;
+    private int chatVisibleUntil;
     private final javax.swing.Timer timer;
     private final Set<Integer> keys=new HashSet<>();
     private String feedback="Awaiting host world snapshot";
@@ -50,7 +54,19 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         this.client=Objects.requireNonNull(client);
         if(client.seat().equals("GHOST"))throw new IllegalArgumentException("hunter-only world view");
         seat=Integer.parseInt(client.seat().substring(1))-1;
-        setFocusable(true);setBackground(Color.BLACK);
+        setFocusable(true);setBackground(Color.BLACK);setLayout(null);
+        chatInput.setVisible(false);
+        chatInput.setFont(new Font(Font.MONOSPACED,Font.PLAIN,14));
+        chatInput.setBackground(new Color(15,20,28));
+        chatInput.setForeground(new Color(229,232,222));
+        chatInput.setCaretColor(new Color(242,219,158));
+        chatInput.addActionListener(e->submitChat());
+        chatInput.addKeyListener(new KeyAdapter(){
+            @Override public void keyPressed(KeyEvent e){
+                if(e.getKeyCode()==KeyEvent.VK_ESCAPE){closeChat();e.consume();}
+            }
+        });
+        add(chatInput);
         setPreferredSize(new Dimension(850,555));
         renderer.yaw=1.4;renderer.pitch=-.08;
         mouseLook=new MouseLook(this,(dx,dy)->MouseLook.rotate(renderer,dx,dy));
@@ -58,12 +74,47 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         addFocusListener(mouseLook);addFocusListener(this);
         timer=new javax.swing.Timer(110,e->frame());timer.start();
     }
+    @Override public void doLayout(){
+        super.doLayout();
+        int viewH=Math.max(160,getHeight()-82);
+        chatInput.setBounds(14,Math.max(40,viewH-32),Math.max(145,getWidth()-28),26);
+    }
+    private void openChat(LanChat.Channel channel){
+        if(health==0||!caseResult.isEmpty())return;
+        chatChannel=channel;
+        keys.clear();mouseLook.release();
+        chatInput.setText("");
+        chatInput.setVisible(true);
+        chatInput.requestFocusInWindow();
+        repaint();
+    }
+    private void closeChat(){
+        chatInput.setVisible(false);
+        chatInput.setText("");
+        requestFocusInWindow();
+        repaint();
+    }
+    private void submitChat(){
+        String message=chatInput.getText();
+        try{
+            client.say(chatChannel,message);
+            closeChat();
+        }catch(IOException|IllegalArgumentException error){
+            feedback="CHAT REJECTED: "+error.getMessage();
+            chatInput.requestFocusInWindow();
+        }
+    }
     public void close(){timer.stop();keys.clear();mouseLook.close();audio.close();}
     public void onEvent(String frame){
         if(!SwingUtilities.isEventDispatchThread())throw new IllegalStateException("network view must update on EDT");
         try{
             List<String> p=LanProtocol.parts(frame);
-            if(p.size()==3&&p.get(0).equals("PLAYERNAME")){
+            if(p.get(0).equals("CHAT")){
+                LanChat.Entry line=LanChat.Entry.decode(frame);
+                chatHistory.addLast(line);
+                if(chatHistory.size()>28)chatHistory.removeFirst();
+                chatVisibleUntil=tick+75;
+            }else if(p.size()==3&&p.get(0).equals("PLAYERNAME")){
                 int hunter=LanProtocol.integer(p.get(1),0,5);
                 String nickname=LanProtocol.cleanName(p.get(2));
                 if(hunter!=seat)hunterNames.put(hunter,nickname);
@@ -244,6 +295,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     }
     private void frame(){
         if(!isDisplayable()||!caseResult.isEmpty()){repaint();return;}
+        if(chatInput.isVisible()){
+            keys.clear();
+        }
         if(vanDisplay&&!insideVan()){vanDisplay=false;meters=null;}
         if(vanDisplay&&tick-lastVanPoll>=11){
             try{client.vanMonitor();lastVanPoll=tick;}
@@ -252,7 +306,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         int right=(keys.contains(KeyEvent.VK_D)?1:0)-(keys.contains(KeyEvent.VK_A)?1:0);
         int forward=(keys.contains(KeyEvent.VK_W)?1:0)-(keys.contains(KeyEvent.VK_S)?1:0);
         try{
-            if(health>0&&(forward!=0||right!=0)){
+            if(!chatInput.isVisible()&&health>0&&(forward!=0||right!=0)){
                 double dx=Math.sin(renderer.yaw)*forward+Math.cos(renderer.yaw)*right;
                 double dz=Math.cos(renderer.yaw)*forward-Math.sin(renderer.yaw)*right;
                 double len=Math.hypot(dx,dz);
@@ -303,12 +357,13 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.setColor(new Color(17,19,25));g.fillRect(0,h,getWidth(),getHeight()-h);
             g.setColor(new Color(216,215,202));
             g.drawString(health==0?"ARROWS / MOUSE LOOK - OBSERVE ONLY - ESC EXIT":
-                    "WASD MOVE / SHIFT SPRINT / L HIDE / M VAN / E DOOR / ARROWS LOOK",13,h+23);
+                    "WASD MOVE / SHIFT SPRINT / ENTER TALK / F2 RADIO / L HIDE / E DOOR",13,h+23);
             g.drawString(health==0?"NO MOVEMENT OR EQUIPMENT WHILE INCAPACITATED":
                     "1-3 "+selected+" R SCAN  Z CROSS("+crosses+")  G WARD("+throwWards+
                     ") H SALT("+saltPouches+") K SHOP  T HP  Y SAN  M VAN",13,h+42);
             g.setColor(new Color(145,204,175));
             g.drawString((mouseLook.captured()?"MOUSE LOCKED | ":"CLICK TO LOCK LOOK | ")+feedback,13,h+62);
+            drawChat(g,h);
             if(vanDisplay)drawVanMeters(g,h);
             if(casefileOpen && journalPage!=0)drawFieldJournal(g,h);
             if(casefileOpen && journalPage==0){
@@ -335,6 +390,33 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 }
             }
         }finally{g.dispose();}
+    }
+    /** Three compact chat rows by default; editing reveals six. No extra menu hierarchy. */
+    private void drawChat(Graphics2D g,int viewHeight){
+        if(chatHistory.isEmpty()&&!chatInput.isVisible())return;
+        if(!chatInput.isVisible()&&tick>chatVisibleUntil)return;
+        int rows=chatInput.isVisible()?6:3;
+        int start=Math.max(0,chatHistory.size()-rows),index=0;
+        int x=14,y=viewHeight-56-rows*20,w=Math.min(getWidth()-28,590);
+        g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
+        g.setColor(new Color(11,17,23,203));
+        g.fillRoundRect(x,y-19,w,rows*20+24,7,7);
+        g.setColor(new Color(203,214,218));
+        g.drawString(chatInput.isVisible()?
+            ("CHAT / "+chatChannel+"  / ENTER SEND  ESC CANCEL"):
+            "TEAM COMMS / ENTER LOCAL  F2 RADIO",x+9,y-5);
+        for(LanChat.Entry line:chatHistory){
+            if(index++<start)continue;
+            String author=line.seat()==seat?"YOU":
+                hunterNames.getOrDefault(line.seat(),"H"+(line.seat()+1));
+            String msg=(line.channel()==LanChat.Channel.RADIO?"[R] ":"[L] ")+
+                author+": "+line.message();
+            int max=Math.max(8,(w-20)/7);
+            if(msg.length()>max)msg=msg.substring(0,max-3)+"...";
+            g.setColor(line.channel()==LanChat.Channel.RADIO?
+                new Color(155,216,207):new Color(222,211,183));
+            g.drawString(msg,x+9,y+12+(index-start-1)*20);
+        }
     }
     /** In-van board: actual individual sanity, deliberately approximate activity history. */
     /** Hunter-only 2D labels projected from real 3D sprite locations after depth rendering. */
@@ -452,6 +534,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }
     }
     @Override public void keyPressed(KeyEvent e){
+        if(chatInput.isVisible())return;
+        if(e.getKeyCode()==KeyEvent.VK_ENTER){openChat(LanChat.Channel.LOCAL);return;}
+        if(e.getKeyCode()==KeyEvent.VK_F2){openChat(LanChat.Channel.RADIO);return;}
         if(e.getKeyCode()==KeyEvent.VK_ESCAPE && casefileOpen){
             casefileOpen=false;repaint();return;
         }
