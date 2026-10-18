@@ -1,10 +1,10 @@
 # The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
 
-## Manually ticked evidence and full ghost roster — source integration (2026-10-18)
+## Thirteen-ghost evidence matrix and manually ticked journal (2026-10-18)
 
 The LAN hunter field journal now implements a **clickable evidence checklist** alongside the **complete 13-ghost roster**, keeping incompatible names visible but greyed out. Every tick is an **investigator's own assumption**, not a reading that the host confirms. Unticking restores matches, contradictory ticks are permitted, and clicking even an excluded ghost selects a guess without submitting it. Ghost writing has child-drawing, frantic-scrawl, and ritual-circle subtypes; compatible reading/writing, Shade's suppressive EMF behavior, and temperature profiles use the same rules as the journal. Equipment data is never automatically ticked; the actual measurements remain in the separate timestamped logbook. Current hunter marks are team-shared via private LAN notes.
 
-See the [manual evidence journal implementation and remaining gates](../../docs/beckenburg/MANUAL_EVIDENCE_JOURNAL.md). Source, keyboard/mouse UI integration, and registered tests are committed; **Java/Windows and multiplayer end-to-end verification remain outstanding**. D.O.T.S. and several other instruments are still catalog/planned-only; marking one in the journal does not make that device playable.
+The complete [13-ghost evidence matrix](../../docs/beckenburg/GHOST_EVIDENCE_MATRIX.md) now enumerates each ghost's EMF/temperature/writing/UV/optical abilities, candidate projector interactions, original planned instruments and rite, and is backed by `GhostEvidenceMatrix.java`. Future devices are explicitly separated from real implemented producers. See the [manual evidence journal implementation and remaining gates](../../docs/beckenburg/MANUAL_EVIDENCE_JOURNAL.md). Source, keyboard/mouse UI integration, and registered tests are committed; **Java/Windows and multiplayer end-to-end verification remain outstanding**. D.O.T.S. and several other instruments are still catalog/planned-only; marking one in the journal does not make that device playable.
 
 ## Equipment, raw readings, and investigator deduction — source integration underway (2026-10-18)
 
