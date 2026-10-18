@@ -31,16 +31,21 @@ public final class LanClient implements AutoCloseable {
     public int port() {return connectPort;}
 
     public LanClient(String address,int port,boolean ghost,String nickname,Consumer<String> observer)throws IOException {
-        this(address,port,ghost,nickname,null,"",observer);
+        this(address,port,ghost,nickname,null,"","",observer);
     }
     /** LAN-only join password is sent over plaintext until an encrypted transport is implemented. */
     public LanClient(String address,int port,boolean ghost,String nickname,String password,Consumer<String> observer)throws IOException {
-        this(address,port,ghost,nickname,null,password,observer);
+        this(address,port,ghost,nickname,null,password,"",observer);
+    }
+    /** Strict local host admission: only the in-process launcher gets this secret. */
+    public LanClient(String address,int port,boolean ghost,String nickname,
+            String password,String ownerCredential,Consumer<String> observer)throws IOException {
+        this(address,port,ghost,nickname,null,password,ownerCredential,observer);
     }
     public LanClient(String address,int port,ResumeTicket ticket,Consumer<String> observer)throws IOException {
-        this(address,port,"GHOST".equals(Objects.requireNonNull(ticket).seat()),"",ticket,"",observer);
+        this(address,port,"GHOST".equals(Objects.requireNonNull(ticket).seat()),"",ticket,"","",observer);
     }
-    private LanClient(String address,int port,boolean ghost,String nickname,ResumeTicket ticket,String password,Consumer<String> observer)throws IOException {
+    private LanClient(String address,int port,boolean ghost,String nickname,ResumeTicket ticket,String password,String ownerCredential,Consumer<String> observer)throws IOException {
         this.observer=Objects.requireNonNull(observer);
         this.connectAddress=Objects.requireNonNull(address);
         this.connectPort=port;
@@ -52,13 +57,16 @@ public final class LanClient implements AutoCloseable {
         if(password==null||password.length()>64||password.indexOf('|')>=0
                 ||password.chars().anyMatch(ch->ch<32||ch>126))
             throw new IllegalArgumentException("password must be at most 64 printable ASCII characters");
+        if(ownerCredential==null||(!ownerCredential.isEmpty()
+                && !ownerCredential.matches("[0-9a-f]{48}")))
+            throw new IllegalArgumentException("invalid local host credential");
         Reader input=null;Writer output=null;String assigned=null;long hostSequence=0;
         try{
             socket.connect(new InetSocketAddress(address,port),3000);
             socket.setTcpNoDelay(true);socket.setSoTimeout(5000);
             input=LanProtocol.reader(socket.getInputStream());output=LanProtocol.writer(socket.getOutputStream());
             LanProtocol.write(output,ticket==null
-                    ?"JOIN|1|"+(ghost?"GHOST":"HUNTER")+"|"+nickname+(password.isEmpty()?"":"|"+password)
+                    ?"JOIN|1|"+(ghost?"GHOST":"HUNTER")+"|"+nickname+(ownerCredential.isEmpty()?(password.isEmpty()?"":"|"+password):"|"+password+"|"+ownerCredential)
                     :"RESUME|1|"+ticket.seat()+"|"+ticket.token());
             String response=LanProtocol.read(input);
             var parts=LanProtocol.parts(response);
