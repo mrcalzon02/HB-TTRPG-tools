@@ -140,7 +140,7 @@ public final class LanLobbyWindow extends JFrame {
         }
     }
     private boolean saveResume(LanClient client){
-        if(hosted!=null)return false; // Destroyed local host cannot be recovered.
+        if(hosted!=null)return false; // A listen host dies with this process; no disk ticket.
         LanClient.ResumeTicket ticket=client.resumeTicket();
         if(ticket==null)return false;
         try {
@@ -217,6 +217,10 @@ public final class LanLobbyWindow extends JFrame {
         catch(Exception ex){log.append("Send failed: "+ex.getMessage()+"\n");}}
     private void connect(boolean localHost){
         if(busy||connection!=null)return;
+        if(hosted!=null){
+            log.append("Your LAN host is still running. Reconnect its reserved seat before starting another room; closing this window ends hosting.\n");
+            return;
+        }
         busy=true;
         long generation=++connectionGeneration;
         status.setText("Connecting...");
@@ -293,7 +297,15 @@ public final class LanLobbyWindow extends JFrame {
                 SwingUtilities.invokeLater(()->{
                     if(generation!=connectionGeneration){restored.close();return;}
                     connection=restored;resumeTicket=null;busy=false;
-                    if(saveResume(restored)){
+                    if(hosted!=null){
+                        // The local host lives in this same JVM, so the rotated token
+                        // is retained by the connected client for its lifetime.
+                        // No stale on-disk guest ticket is written for a listen host.
+                        try{restored.acknowledgeStoredResume();}
+                        catch(IOException ex){
+                            log.append("Local host reconnect acknowledgement unavailable: "+ex.getMessage()+"\n");
+                        }
+                    }else if(saveResume(restored)){
                         // Only retire the old host capability AFTER the replacement
                         // has been durably persisted for process-restart recovery.
                         try{restored.acknowledgeStoredResume();}
@@ -306,7 +318,10 @@ public final class LanLobbyWindow extends JFrame {
                     missionRunning=true;worldMode=false;
                     role.setSelectedIndex("GHOST".equals(restored.seat())?1:0);
                     role.setEnabled(false);reconnect.setEnabled(false);
-                    roomPassword.setEnabled(false);lobbyLock.setEnabled(false);hostInfo.setEnabled(false);
+                    roomPassword.setEnabled(false);
+                    lobbyLock.setEnabled(hosted!=null);
+                    if(hosted!=null)lobbyLock.setSelected(hosted.lobbyLocked());
+                    hostInfo.setEnabled(hosted!=null);
                     status.setText("Seat "+restored.seat()+" restored - enter 3D world");
                     caseStatus.setText("Case: mission resumed");
                     setCommandEnabled(true);
@@ -359,8 +374,8 @@ public final class LanLobbyWindow extends JFrame {
     }
     private void receive(String event){
         if(event.equals("INFO|network connection ended")){
-            // A clean server EOF is terminal. Reclaim all owned handles so Host/Join
-            // can be used again; queued events from the former socket are generation-gated.
+            // This event is a transport loss, NOT necessarily the death of the
+            // authoritative listen-host process. Keep a running local host alive.
             connectionGeneration++;
             // Capture the host-issued per-seat reconnect capability before closing
             // the old socket. It is not the local installation/player profile ID.
@@ -369,20 +384,27 @@ public final class LanLobbyWindow extends JFrame {
                 resumeAddress=connection.address();resumePort=connection.port();
                 saveResume(connection);
             }
-            if(hosted!=null)resumeTicket=null; // A closed listen host cannot accept rejoin.
+            boolean localHostSurvives=hosted!=null&&hosted.running()&&resumeTicket!=null;
+            if(hosted!=null&&!localHostSurvives)resumeTicket=null;
             reconnect.setEnabled(resumeTicket!=null);
             missionRunning=false;worldMode=false;busy=false;
             if(worldFrame!=null){worldFrame.dispose();worldFrame=null;}
             if(connection!=null){connection.close();connection=null;}
-            if(hosted!=null){hosted.close();hosted=null;}
+            // An unexpected local TCP EOF does not imply authoritative host death.
+            // Destroying the host here would disconnect every remaining investigator.
+            if(hosted!=null&&!localHostSurvives){hosted.close();hosted=null;}
             myRoom=HouseMap.EXTRACTION_ROOM;
-            role.setEnabled(true);ghostJoined=false;remoteLook=null;
-            roomPassword.setEnabled(true);lobbyLock.setEnabled(false);lobbyLock.setSelected(false);
-            hostInfo.setEnabled(false);
+            role.setEnabled(!localHostSurvives);ghostJoined=false;remoteLook=null;
+            roomPassword.setEnabled(hosted==null);
+            lobbyLock.setEnabled(localHostSurvives);
+            lobbyLock.setSelected(localHostSurvives&&hosted.lobbyLocked());
+            hostInfo.setEnabled(localHostSurvives);
             if(role.getSelectedIndex()==1)avatar.showGhost(localLook,false);
             else avatar.showHunter();
-            status.setText("Disconnected — host or server connection lost");
-            caseStatus.setText("Case: connection ended");
+            status.setText(localHostSurvives
+                ?"Local host still running — reconnect your reserved seat"
+                :"Disconnected — host or server connection lost");
+            caseStatus.setText(localHostSurvives?"Case: active on local host":"Case: connection ended");
             teamStatus.setText("Team: disconnected");
             setCommandEnabled(false);
             log.append(resumeTicket==null?"Connection ended. You can host or join a fresh match.\n":
