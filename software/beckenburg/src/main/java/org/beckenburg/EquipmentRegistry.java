@@ -15,7 +15,7 @@ public final class EquipmentRegistry {
     public enum Origin { STARTER, OPTIONAL, TRUCK, ORIGINAL }
     public enum Purpose { EVIDENCE, SURVEY, COUNTER, CONSUMABLE, MONITOR, RITUAL }
     public enum State { ABSENT, PARTIAL_SOURCE }
-    public enum Evidence { HIGH_EMF, FREEZING, EXTREME_HEAT, SPIRIT_REPLY,
+    public enum Evidence { HIGH_EMF, EMF_SILENCE, FREEZING, EXTREME_HEAT, SPIRIT_REPLY,
         UV_MARKS, GHOST_WRITING, SPIRIT_ORBS, STRUCTURED_LIGHT, ECTOPLASM,
         RESONANCE, SEISMIC_IMPACT, ATMOSPHERIC_REVERSAL, SPECTRAL_SHADOW, OBJECT_IMPRINT }
     public record Tool(String id, String name, Origin origin, Purpose purpose,
@@ -36,7 +36,7 @@ public final class EquipmentRegistry {
     }
     private static final List<Tool> ALL = List.of(
         entry("DOTS_PROJECTOR","Pattern projector",Origin.STARTER,Purpose.EVIDENCE,State.ABSENT,State.ABSENT,Evidence.STRUCTURED_LIGHT),
-        entry("EMF_READER","EMF reader (1–10)",Origin.STARTER,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.HIGH_EMF),
+        entry("EMF_READER","EMF reader (0–10; zero for suppression)",Origin.STARTER,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.HIGH_EMF,Evidence.EMF_SILENCE),
         entry("FLASHLIGHT","Flashlight",Origin.STARTER,Purpose.SURVEY,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE),
         entry("GHOST_WRITING_BOOK","Ghost writing book",Origin.STARTER,Purpose.EVIDENCE,State.ABSENT,State.ABSENT,Evidence.GHOST_WRITING),
         entry("SPIRIT_BOX","Spirit box",Origin.STARTER,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.SPIRIT_REPLY),
