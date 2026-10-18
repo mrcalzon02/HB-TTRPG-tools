@@ -10,6 +10,8 @@ import java.util.concurrent.*;
  */
 public final class LanHost implements AutoCloseable {
     private final ServerSocket listener;
+    /** UDP media socket on the same numeric port as TCP. LAN-only, not encrypted. */
+    private final LanVoiceRelay voice;
     private final ExecutorService workers=Executors.newCachedThreadPool(r->{Thread t=new Thread(r,"beckenburg-lan-peer");t.setDaemon(true);return t;});
     private final ScheduledExecutorService clock=Executors.newSingleThreadScheduledExecutor(r->{Thread t=new Thread(r,"beckenburg-lan-tick");t.setDaemon(true);return t;});
     private final Object mutex=new Object();
@@ -41,6 +43,7 @@ public final class LanHost implements AutoCloseable {
     private int tick;
     private int lastGhostSoundTick=-10000;
     private final int[] lastGhostFootstepCueTick=new int[HUNTERS];
+    private final int[] lastVoiceCueTick=new int[HUNTERS];
     private LanTelegraphedStrike.Pending pendingStrike;
     private final String bindAddress;
 
@@ -68,6 +71,7 @@ public final class LanHost implements AutoCloseable {
         Arrays.fill(hunterRooms,HouseMap.EXTRACTION_ROOM);
         Arrays.fill(hunterSequences,-1);
         Arrays.fill(lastGhostFootstepCueTick,-10000);
+        Arrays.fill(lastVoiceCueTick,-10000);
         for(int i=0;i<HUNTERS;i++)supplies[i]=new FieldSupplies();
         world.configure(contract);
         ghostPose.configureSpeed(contract.ghostSpeed());
@@ -84,6 +88,8 @@ public final class LanHost implements AutoCloseable {
         bindAddress=Objects.requireNonNull(ip);
         listener=new ServerSocket();listener.setReuseAddress(true);
         listener.bind(new InetSocketAddress(InetAddress.getByName(ip),port),8);
+        try{voice=new LanVoiceRelay(listener.getInetAddress(),listener.getLocalPort(),this::routeVoice);}
+        catch(SocketException failure){listener.close();throw failure;}
         workers.execute(this::acceptLoop);
         clock.scheduleAtFixedRate(this::tickSafely,100,100,TimeUnit.MILLISECONDS);
     }
@@ -138,6 +144,7 @@ public final class LanHost implements AutoCloseable {
             if(peer!=null) synchronized(mutex){
                 if(seats[peer.slot]==peer){
                     seats[peer.slot]=null;
+                    voice.unregister(peer.slot);
                     if(peer.slot==GHOST_SEAT)ghostLobbyLook=null;
                     if(running){
                         if(peer.slot==GHOST_SEAT){
@@ -213,12 +220,14 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,supplies[peer.slot].frame());
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
                     reply(peer,"HIDECONFIG|"+contract.hidingSpots());
+                    reply(peer,"VOICEKEY|"+voice.port()+"|"+voice.register(peer.slot,peer.socket.getInetAddress()));
                     for(LanChat.Entry line:radioHistory)reply(peer,line.frame());
                 }
                 case "GVIEW3D" -> {
                     if(!running||peer.slot!=GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("ghost view requires active ghost seat");
                     peer.ghostWorldMode=true;
                     reply(peer,"ACCEPT|GVIEW3D");
+                    reply(peer,"VOICEKEY|"+voice.port()+"|"+voice.register(peer.slot,peer.socket.getInetAddress()));
                     reply(peer,"GTYPE|"+ghostType+"|"+ghostType.behavior());
                     reply(peer,ghostPose.frame(tick));broadcastState();
                 }
@@ -499,6 +508,46 @@ public final class LanHost implements AutoCloseable {
     /** Only accepted hunter actions create sounds. Both controller paths use the
      * same host door graph; a human gets a bounded bearing, never exact positions.
      */
+    /** Authenticated, rate-limited UDP input; every recipient is chosen using live host state. */
+    private void routeVoice(int seat,LanVoicePacket.Frame frame){
+        synchronized(mutex){
+            if(closed||!running||seat<0||seat>=HUNTERS
+                ||seats[seat]==null||!seats[seat].worldMode||!mission.alive(seat))return;
+            LanWorld.Body speaker=world.body(seat);
+            for(int i=0;i<HUNTERS;i++){
+                Peer listener=seats[i];
+                if(i==seat||listener==null||!listener.worldMode)continue;
+                if(frame.channel()==LanChat.Channel.RADIO ||
+                    LanChat.localVisible(map,speaker,world.body(i))){
+                    double distance=Math.hypot(speaker.x()-world.body(i).x(),
+                                               speaker.z()-world.body(i).z());
+                    int gain=frame.channel()==LanChat.Channel.RADIO?85:
+                        Math.max(18,100-(int)(distance*8));
+                    if(frame.channel()==LanChat.Channel.LOCAL &&speaker.room()!=world.body(i).room())
+                        gain=Math.max(15,gain-20);
+                    voice.forward(i,seat,frame,gain);
+                }
+            }
+            // The ghost hears a nearby physical voice, including somebody speaking
+            // into a radio. The ghost cannot listen to the RADIO broadcast itself.
+            if(speaker.room()>=0&&speaker.room()<HouseMap.EXTRACTION_ROOM){
+                int attenuation=LanAcoustics.cost(map,ghost.room(),speaker.room());
+                double range=Math.hypot(speaker.x()-ghostPose.pose().x(),
+                                        speaker.z()-ghostPose.pose().z());
+                if(attenuation<=3&&range<=9){
+                    Peer spectral=seats[GHOST_SEAT];
+                    if(spectral!=null&&spectral.ghostWorldMode)
+                        voice.forward(GHOST_SEAT,seat,frame,
+                            Math.max(12,70-attenuation*13-(int)(range*4)));
+                }
+            }
+            // One coarse ghost clue per second, not fifty high-resolution positions.
+            if(tick-lastVoiceCueTick[seat]>=10){
+                lastVoiceCueTick[seat]=tick;
+                recordSound(seat,LanGhostPursuit.Sound.VOICE);
+            }
+        }
+    }
     private void recordSound(int seat,LanGhostPursuit.Sound type){
         LanWorld.Body body=world.body(seat);
         if(LanAcoustics.audible(map,ghost.room(),hunterRooms[seat],type))lastGhostSoundTick=tick;
@@ -753,7 +802,7 @@ public final class LanHost implements AutoCloseable {
     }
     private void notifyAllPeers(String event){for(Peer peer:seats)if(peer!=null)reply(peer,event);}
     private static void reply(Peer peer,String event){try{LanProtocol.write(peer.output,event);}catch(IOException ex){try{peer.socket.close();}catch(IOException ignored){}}}
-    @Override public void close(){closed=true;try{listener.close();}catch(IOException ignored){}
+    @Override public void close(){closed=true;voice.close();try{listener.close();}catch(IOException ignored){}
         synchronized(mutex){for(Peer peer:seats)if(peer!=null){try{peer.socket.close();}catch(IOException ignored){}}}
         clock.shutdownNow();workers.shutdownNow();
     }

@@ -14,6 +14,7 @@ public final class LanClient implements AutoCloseable {
     private final Thread reader;
     private final String seat;
     private volatile boolean closed;
+    private volatile LanVoiceClientAudio voice;
     private long sequence;
 
     public LanClient(String address,int port,boolean ghost,String nickname,Consumer<String> observer)throws IOException {
@@ -37,6 +38,22 @@ public final class LanClient implements AutoCloseable {
         reader=new Thread(this::readLoop,"beckenburg-client-events");reader.setDaemon(true);reader.start();
     }
     public String seat(){return seat;}
+    public LanVoiceClientAudio voice(){return voice;}
+    private void setupVoice(String packet){
+        var fields=LanProtocol.parts(packet);
+        if(fields.size()!=3)throw new IllegalArgumentException("bad voice offer");
+        int port=LanProtocol.integer(fields.get(1),1,65535);
+        int position=seat.equals("GHOST")?6:Integer.parseInt(seat.substring(1))-1;
+        try{
+            LanVoiceClientAudio active=new LanVoiceClientAudio(socket.getInetAddress(),
+                port,fields.get(2),position,observer);
+            LanVoiceClientAudio previous=voice;
+            voice=active;
+            if(previous!=null)previous.close();
+        }catch(SocketException|IllegalArgumentException error){
+            observer.accept("INFO|Voice link unavailable: "+error.getMessage());
+        }
+    }
     public synchronized void ready()throws IOException {send("READY");}
     public synchronized void lobbyChat(String message)throws IOException{
         send("LOBBYCHAT|"+LanChat.clean(message));
@@ -100,6 +117,7 @@ public final class LanClient implements AutoCloseable {
                 String line=LanProtocol.read(in);
                 if(line==null)break; // Clean remote EOF still ends the connection.
                 LanProtocol.parts(line);
+                if(line.startsWith("VOICEKEY|"))setupVoice(line);
                 observer.accept(line);
             }
         }catch(Exception ex){
@@ -112,5 +130,10 @@ public final class LanClient implements AutoCloseable {
             close();
         }
     }
-    @Override public void close(){if(closed)return;closed=true;try{socket.close();}catch(IOException ignored){}}
+    @Override public void close(){
+        if(closed)return;closed=true;
+        LanVoiceClientAudio media=voice;voice=null;
+        if(media!=null)media.close();
+        try{socket.close();}catch(IOException ignored){}
+    }
 }
