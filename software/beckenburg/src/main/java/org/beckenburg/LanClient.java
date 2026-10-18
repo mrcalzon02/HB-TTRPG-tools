@@ -15,7 +15,7 @@ public final class LanClient implements AutoCloseable {
     private final String seat;
     private volatile boolean closed;
     private volatile LanVoiceClientAudio voice;
-    private long sequence;
+    private volatile long sequence;
     private final String connectAddress;
     private final int connectPort;
     private volatile String resumeKey;
