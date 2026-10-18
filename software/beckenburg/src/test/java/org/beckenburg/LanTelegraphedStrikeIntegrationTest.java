@@ -53,7 +53,8 @@ public final class LanTelegraphedStrikeIntegrationTest {
             for(int attempts=0;attempts<10&&hp==100;attempts++){
                 status=a.expect("PROGRESS|");hp=Integer.parseInt(status.split("\\|")[1]);
             }
-            ok(hp==88,"only targeted hunter receives twelve health damage");
+            // Three hunters impose fixed +3 party threat: 12 base harm becomes 15 damage.
+            ok(hp==85,"only targeted hunter receives difficulty-scaled fifteen health damage");
             // A distant observer never gets the attack event or a manufactured 3D hit.
             String other=b.expect("PROGRESS|");
             ok(Integer.parseInt(other.split("\\|")[1])==100,"non-target hunter unharmed");
