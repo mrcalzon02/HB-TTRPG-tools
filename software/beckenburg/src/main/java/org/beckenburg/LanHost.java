@@ -637,7 +637,10 @@ public final class LanHost implements AutoCloseable {
         }
     }
     private void distributeEffect(GhostDomain.Resolution result){
-        distributeEffect(result,result.action()==GhostDomain.Action.STRIKE?strikeVictims():new boolean[]{true,true,true});
+        // All live matches maintain six fixed hunter sockets, even in a three-hunter lobby.
+        // The effect mask must match hunterRooms; a three-element mask stops the host tick.
+        boolean[] all=new boolean[HUNTERS];java.util.Arrays.fill(all,true);
+        distributeEffect(result,result.action()==GhostDomain.Action.STRIKE?strikeVictims():all);
     }
     private void distributeEffect(GhostDomain.Resolution result,boolean[] affected){
         if(!result.applied())return;

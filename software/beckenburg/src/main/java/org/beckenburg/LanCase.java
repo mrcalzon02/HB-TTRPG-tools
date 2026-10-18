@@ -207,7 +207,12 @@ public final class LanCase {
         return new Report(true,"TEAM WITHDREW - haunting unresolved");
     }
     public void applyGhostEffect(int room,int[] hunterRooms,GhostDomain.Resolution effect) {
-        applyGhostEffect(room,hunterRooms,effect,new boolean[]{true,true,true});
+        // Derive the legacy room-effect mask from the actual 3- or 6-seat snapshot.
+        // Do not apply a 3-seat mask to the six-slot hosted simulation.
+        if(hunterRooms==null||(hunterRooms.length!=3&&hunterRooms.length!=6))
+            throw new IllegalArgumentException("three or six hunter positions required");
+        boolean[] all=new boolean[hunterRooms.length];java.util.Arrays.fill(all,true);
+        applyGhostEffect(room,hunterRooms,effect,all);
     }
     /** Host may narrow an actual spatial strike to eligible seats; never trust a client mask. */
     public void applyGhostEffect(int room,int[] hunterRooms,GhostDomain.Resolution effect,boolean[] affected) {
