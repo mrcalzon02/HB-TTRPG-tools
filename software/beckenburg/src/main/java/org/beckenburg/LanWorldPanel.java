@@ -340,7 +340,15 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(frame.startsWith("RESULT|")){
                 caseResult=frame.substring(7);feedback="CASE CLOSED: "+caseResult;
                 keys.clear();
+            }else if(p.size()==2&&p.get(0).equals("VANDOOR")){
+                map.van().setCargoDoorClosed(LanProtocol.integer(p.get(1),0,1)==1);
+                feedback=map.van().cargoDoorClosed()
+                    ?"VAN CARGO DOOR CLOSED":"VAN CARGO DOOR OPEN";
             }else if(frame.startsWith("BOOK|")){
+                if(p.size()==3&&p.get(1).equals("DEPLOYED"))
+                    renderer.placedWritingBookRoom=LanProtocol.integer(p.get(2),0,HouseMap.INDOOR_ROOMS-1);
+                else if(p.size()==3&&p.get(1).equals("REMOVED"))
+                    renderer.placedWritingBookRoom=-1;
                 feedback="WRITING BOOK: "+frame.substring(5);
             }else if(p.size()==4&&p.get(0).equals("ACCEPT")
                     &&p.get(1).equals("GEARUSE")){
@@ -817,7 +825,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_ESCAPE -> {Window window=SwingUtilities.getWindowAncestor(this);if(window!=null)window.dispose();}
             case KeyEvent.VK_E -> {
                 int aimed=lights.aimed(map,renderer.x,renderer.z,renderer.yaw);
-                if(aimed>=0)sendAction("light switch",()->client.light());
+                if(map.van().nearDoorButton(renderer.x,renderer.z))
+                    sendAction("van cargo door",()->client.vanDoor());
+                else if(aimed>=0)sendAction("light switch",()->client.light());
                 else if(map.roomAt(renderer.x,renderer.z)==11 &&
                         Math.hypot(renderer.x-map.centerX(11),renderer.z-map.centerZ(11))<1.5)
                     sendAction("power breaker",()->client.power());
