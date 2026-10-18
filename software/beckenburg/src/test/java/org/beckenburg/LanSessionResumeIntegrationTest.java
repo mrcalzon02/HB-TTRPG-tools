@@ -51,8 +51,8 @@ public final class LanSessionResumeIntegrationTest {
                 Peer b=new Peer(host.port(),false,"Observer");
                 Peer c=new Peer(host.port(),false,"Demonologist")){
                 begin(a,b,c);
-                b.client.view3D();b.await("ACCEPT|VIEW3D");
                 b.client.move(11);b.await("ACCEPT|MOVE|11");
+                b.client.view3D();b.await("ACCEPT|VIEW3D");
                 var original=b.client.resumeTicket();
                 check(original!=null,"new host sends opaque reconnect credentials");
                 b.breakTransportWithoutLeaving();
@@ -65,7 +65,7 @@ public final class LanSessionResumeIntegrationTest {
                     check("H2".equals(restored.client.seat()),"old seat restored, no new hunter");
                     restored.await("INFO|mission resumed");
                     restored.client.view3D();restored.await("ACCEPT|VIEW3D");
-                    restored.client.move(8);restored.await("ACCEPT|MOVE|8");
+                    restored.client.step(0,1);restored.await("ACCEPT|STEP");
                     check(host.reservedSeats()==0&&host.connected()==3,"same mission/connected party recovered");
                     check(restored.client.resumeTicket()!=null
                         &&!restored.client.resumeTicket().token().equals(original.token()),"resume secret rotated");
