@@ -1,5 +1,17 @@
 # The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
 
+## LAN communications: local and radio text (working implementation slice)
+
+Press **Enter** in the first-person hunter view to type a **local** message; **F2** to type a **radio** message. Press Enter inside the chat box to send, or Escape to cancel. A compact temporary chat overlay shows messages with the validated investigator nickname and a channel indicator. Typing releases mouse capture and cancels held movement keys.
+
+Messages use the existing authenticated gameplay socket and are bounded to 80 safe printable ASCII characters (the current version-1 protocol is ASCII). The host enforces a 0.6-second rate limit, command replay protection, active-living-hunter status, and recipients. **Local** chat is delivered by real proximity and acoustic room connectivity: open passages carry voices farther than isolated rooms, and van conversation does not magically reach the whole building. **Radio** chat is delivered only to investigator clients, with bounded private history replay for a newly opened hunter viewport. Text and nickname packets are **never** sent to the ghost client.
+
+Speaking on either channel generates a **VOICE** acoustic event at the real hunter position. The human ghost receives only a nearby coarse hearing cue (direction/strength), never the transcript or speaker identity; AI ghosts use the same bounded audible-memory pathway. Spoken text in the safe van does not produce house-wide paranormal hearing. Existing ghost pursuit and ghost sound privacy are retained.
+
+This is real networked **text chat**, not yet microphone audio. Embedded voice (device capture, secure low-latency transport, Opus codec, mixing, spatialisation, mic/radio selection and volume/mute settings) remains the next stage; it needs an accepted Java 17 open-source media dependency and live hardware validation. Do not transmit PCM through the ASCII gameplay protocol or claim voice is implemented.
+
+Tests: `LanChatTest` and `LanChatIntegrationTest` exercise packet validation, ghost-channel isolation, real localhost sockets, local distance and radio delivery. Both Linux and Windows build scripts run them.
+
 ## Hunter name labels and ghost anonymity
 
 In the **LAN first-person hunter scene**, a visible teammate has their join nickname directly above their character. The host validates each name and sends `PLAYERNAME` only to hunter seats, with a fresh snapshot whenever an investigator opens the 3D viewport. Labels project from the real sprite's head and are suppressed when the hunter is behind a wall/closed door, outside the camera, beyond render distance or hidden by nearer geometry. Disconnects remove their label. Neither actual ghost manifestations nor the **playable ghost viewpoint** display labels, and ghosts never receive `PLAYERNAME` packets. The existing randomized `LOBBYAVATAR` presentation is independent of the assigned ghost species; `GTYPE` is released to the ghost controller only inside an active match.
