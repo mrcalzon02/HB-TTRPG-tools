@@ -172,4 +172,4 @@ A game-specific adaptation of the following checklist must be run on *each game*
 4. **No lowering of a documented acceptance gate without explicit scope approval.** Hardware/tool unavailability means pending proof, not accepted proof.
 5. **Maintain a central source and reference it from projects** rather than letting multiple conflicting versions of the philosophy proliferate.
 
-**Recovery note:** The original *Gaming defaults mistakes* Google document is still the most comprehensive inventory of game-specific annoyances; this file reorganizes it with other prior contracts into a portable enforcement framework. It does not overwrite the Google original or commit to any project repository.
+**Recovery note:** The original *Gaming defaults mistakes* Google document is still the most comprehensive inventory of game-specific annoyances; this file reorganizes it with other prior contracts into a portable enforcement framework. The Google original remains unchanged. This reconstructed standard is adopted as Beckenburg guidance on GitHub main; adoption alone does not mean any described feature has been implemented.
