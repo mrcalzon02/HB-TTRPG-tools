@@ -20,7 +20,7 @@ public final class EquipmentSelectionTest {
         for(int i=0;i<3;i++)ok(kit.consume(EquipmentLoadout.Item.SALT),"salt placement consumes pouch");
         ok(!kit.consume(EquipmentLoadout.Item.SALT),"salt runs out");
         reject(()->kit.select(4));reject(()->kit.replaceAtRack(new EquipmentLoadout.Item[]{EquipmentLoadout.Item.EMF}));
-        ok(Arrays.stream(EquipmentLoadout.Item.values()).filter(EquipmentLoadout.Item::evidence).count()==3,"three evidence families remain mandatory");
+        ok(Arrays.stream(EquipmentLoadout.Item.values()).filter(EquipmentLoadout.Item::evidence).count()>=3,"three is the minimum; the tool evidence pool must expand");
         System.out.println("PASS: four-slot selection, distinct rack swaps, consumables and resupply");
     }
 }
