@@ -620,7 +620,7 @@ public final class LanHost implements AutoCloseable {
                     String words=writingBook.inspect(room);
                     reply(peer,"ACCEPT|READBOOK|"+words);
                     notifyHunters(casefile.recordDevice(tick,peer.slot,room,"GHOST_WRITING_BOOK",
-                        found?LanEvidenceJournal.Finding.CONFIRMED:LanEvidenceJournal.Finding.INCONCLUSIVE,
+                        LanEvidenceJournal.Finding.OBSERVED,
                         "Book inspection - "+words));
                     recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
                 }
@@ -644,8 +644,8 @@ public final class LanHost implements AutoCloseable {
                     boolean trace=counters.recentUv(room,tick);
                     reply(peer,"ACCEPT|UVSCAN|"+(trace?"FRESH SURFACE TRACE":"NO RECENT TRACE"));
                     String uvNote=casefile.recordDevice(tick,peer.slot,room,"UV_LAMP",
-                        trace?LanEvidenceJournal.Finding.CONFIRMED:LanEvidenceJournal.Finding.INCONCLUSIVE,
-                        trace?"UV lamp - fresh supernatural surface trace":"UV lamp - no recent trace");
+                        LanEvidenceJournal.Finding.OBSERVED,
+                        trace?"UV lamp - fresh surface trace":"UV lamp - no recent trace");
                     notifyHunters(uvNote);
                     recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
                 }
@@ -669,7 +669,6 @@ public final class LanHost implements AutoCloseable {
                         String note=casefile.record(tick,peer.slot,hunterRooms[peer.slot],tool,result);
                         if(note!=null)notifyHunters(note);
                     }
-                    if(result.accepted()&&result.message().startsWith("CONFIRMED"))notifyHunters("EVIDENCE|"+tool+"|"+mission.evidenceCount());
                     broadcastProgress();
                 }
                 case "JOURNAL" -> {
