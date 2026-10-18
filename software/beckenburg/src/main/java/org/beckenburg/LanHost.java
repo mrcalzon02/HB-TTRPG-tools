@@ -47,6 +47,7 @@ public final class LanHost implements AutoCloseable {
     private final CustomContract contract;
     private final VanTelemetry monitor=new VanTelemetry(20261017L);
     private final FieldSupplies[] supplies=new FieldSupplies[HUNTERS];
+    private final FieldEquipment[] equipment=new FieldEquipment[HUNTERS];
     private volatile boolean closed;
     private boolean running,everStarted;
     private long hostGhostActionSequence=-1;
@@ -54,6 +55,7 @@ public final class LanHost implements AutoCloseable {
     private int lastGhostSoundTick=-10000;
     /** Recent authorized spectral events provide genuine transient EMF peaks. */
     private int lastEvidenceEventTick=-10000,lastEvidenceEventRoom=-1,lastEvidenceEventPower;
+    private GhostDomain.Action lastEvidenceEventAction=GhostDomain.Action.DRIFT;
     private final int[] lastGhostFootstepCueTick=new int[HUNTERS];
     private final int[] lastVoiceCueTick=new int[HUNTERS];
     private LanTelegraphedStrike.Pending pendingStrike;
@@ -93,7 +95,10 @@ public final class LanHost implements AutoCloseable {
         Arrays.fill(hunterSequences,-1);
         Arrays.fill(lastGhostFootstepCueTick,-10000);
         Arrays.fill(lastVoiceCueTick,-10000);
-        for(int i=0;i<HUNTERS;i++)supplies[i]=new FieldSupplies();
+        for(int i=0;i<HUNTERS;i++){
+            supplies[i]=new FieldSupplies();
+            equipment[i]=new FieldEquipment();
+        }
         world.configure(contract);
         ghostPose.configureSpeed(contract.ghostSpeed());
         ghost=new GhostDomain(map,4,type);
@@ -425,6 +430,7 @@ public final class LanHost implements AutoCloseable {
                             reply(peer,"PLAYERNAME|"+i+"|"+seats[i].name);
                     broadcastWorld();broadcastApparitions();broadcastCounters();sendCounterAmmo(peer);
                     reply(peer,supplies[peer.slot].frame());
+                    sendEquipmentState(peer);
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
                     reply(peer,"HIDECONFIG|"+contract.hidingSpots());
                     reply(peer,"LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
@@ -554,6 +560,112 @@ public final class LanHost implements AutoCloseable {
                         sane[i]=contract.sanityMonitor()&&seats[i]!=null?100-mission.stress(i):-1;
                     int activity=contract.activityMonitor()?monitor.sample(tick,ghost.energy()):0;
                     reply(peer,new VanTelemetry.Display(tick,activity,sane).frame());
+                }
+                case "GEARSTATE" -> {
+                    if(!running||peer.slot==GHOST_SEAT||p.size()!=1)
+                        throw new IllegalArgumentException("hunter rack state only");
+                    sendEquipmentState(peer);
+                }
+                case "GEARBUY" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=4)
+                        throw new IllegalArgumentException("hunter equipment purchase only");
+                    String id=p.get(1);
+                    EquipmentTiers.Tier tier=EquipmentTiers.Tier.valueOf(p.get(2));
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(3)));
+                    ensureActiveHunter(peer);
+                    if(map.van().stationAt(world.body(peer.slot).x(),world.body(peer.slot).z())
+                            !=VanStaging.Station.EQUIPMENT)
+                        throw new IllegalArgumentException("purchase upgrades at the equipment rack");
+                    int cost=equipment[peer.slot].upgradePrice(id,tier);
+                    if(!supplies[peer.slot].spend(cost))
+                        throw new IllegalArgumentException("insufficient credits for instrument");
+                    equipment[peer.slot].upgrade(id,tier);
+                    reply(peer,"ACCEPT|GEARBUY|"+id+"|"+tier);
+                    reply(peer,supplies[peer.slot].frame());
+                    sendEquipmentState(peer);
+                }
+                case "GEAREQUIP" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=4)
+                        throw new IllegalArgumentException("hunter loadout only");
+                    int slot=LanProtocol.integer(p.get(1),0,FieldEquipment.SLOTS-1);
+                    String id=p.get(2);
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(3)));
+                    ensureActiveHunter(peer);
+                    if(map.van().stationAt(world.body(peer.slot).x(),world.body(peer.slot).z())
+                            !=VanStaging.Station.EQUIPMENT)
+                        throw new IllegalArgumentException("change field equipment at the van rack");
+                    equipment[peer.slot].equip(slot,id);
+                    reply(peer,"ACCEPT|GEAREQUIP|"+slot+"|"+id);
+                    sendEquipmentState(peer);
+                }
+                case "GEARSLOT" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=3)
+                        throw new IllegalArgumentException("hunter gear slot only");
+                    int slot=LanProtocol.integer(p.get(1),0,FieldEquipment.SLOTS-1);
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
+                    ensureActiveHunter(peer);
+                    equipment[peer.slot].selectSlot(slot);
+                    sendEquipmentState(peer);
+                }
+                case "GEARUSE" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
+                        throw new IllegalArgumentException("hunter instrument required");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    ensureActiveHunter(peer);
+                    FieldEquipment gear=equipment[peer.slot];
+                    String id=gear.active();
+                    if(!gear.ready(id,tick))
+                        throw new IllegalArgumentException("instrument refreshing");
+                    int room=world.body(peer.slot).room();
+                    EquipmentTiers.Stage stage=gear.stage(id);
+                    String reading;
+                    switch(id){
+                        case "EMF_READER", "THERMOMETER" -> {
+                            double distance=Math.hypot(
+                                world.body(peer.slot).x()-map.centerX(room),
+                                world.body(peer.slot).z()-map.centerZ(room));
+                            int eventAge=tick-lastEvidenceEventTick;
+                            int eventPower=eventAge>=0&&eventAge<=40
+                                ?Math.max(0,lastEvidenceEventPower-eventAge/7):0;
+                            boolean inReach=distance<=stage.reachCm()/100.0;
+                            int origin=inReach?lastEvidenceEventRoom:-1;
+                            boolean thermal=id.equals("THERMOMETER");
+                            LanCase.Report measure=mission.scanMeasured(peer.slot,
+                                thermal?LanCase.Tool.THERMOMETER:LanCase.Tool.EMF,
+                                room,ghost.room(),tick,origin,inReach?eventPower:0,
+                                GhostEvidenceProfile.emfSuppressed(ghostType));
+                            if(!measure.accepted())throw new IllegalArgumentException("instrument unavailable");
+                            reading=measure.message().substring(measure.message().indexOf(" - ")+3);
+                            if(!inReach)reading+=" / beyond haunting-signal range";
+                        }
+                        case "SPIRIT_BOX" -> {
+                            boolean voiceEvent=room==lastEvidenceEventRoom
+                                &&tick-lastEvidenceEventTick<=45
+                                &&tick>=lastEvidenceEventTick
+                                &&(lastEvidenceEventAction==GhostDomain.Action.WHISPER
+                                    ||lastEvidenceEventAction==GhostDomain.Action.SIGNATURE)
+                                &&Math.hypot(world.body(peer.slot).x()-ghostPose.pose().x(),
+                                     world.body(peer.slot).z()-ghostPose.pose().z())
+                                    <=stage.reachCm()/100.0;
+                            reading=voiceEvent?"Voice response / spectral vocal event detected":
+                                "No direct vocal response";
+                        }
+                        case "UV_LIGHT" -> reading=counters.recentUv(room,tick)
+                            ?"UV light / recent physical surface trace":"UV light / no visible trace";
+                        case "GHOST_WRITING_BOOK" -> {
+                            if(!writingBook.placed()){
+                                writingBook.place(peer.slot,room,tick);
+                                notifyHunters("BOOK|DEPLOYED|"+room);
+                                reading="Writing book placed / page blank";
+                            }else reading="Writing book / "+writingBook.inspect(room);
+                        }
+                        default -> throw new IllegalArgumentException("device has no working backend");
+                    }
+                    gear.sampled(id,tick);
+                    notifyHunters(casefile.recordDevice(tick,peer.slot,room,id,
+                        LanEvidenceJournal.Finding.OBSERVED,reading));
+                    reply(peer,"ACCEPT|GEARUSE|"+id+"|"+reading);
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
                 }
                 case "BUY" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=4)
@@ -864,6 +976,11 @@ public final class LanHost implements AutoCloseable {
             Math.abs(p.x())<VanStaging.HALF_WIDTH-.2&&
             p.z()>=VanStaging.FRONT&&p.z()<VanStaging.REAR-.2;
     }
+    private void sendEquipmentState(Peer peer){
+        if(peer.slot==GHOST_SEAT)throw new IllegalArgumentException("ghost cannot access equipment");
+        reply(peer,equipment[peer.slot].frame(supplies[peer.slot].credits()));
+        reply(peer,equipment[peer.slot].inventoryFrame());
+    }
     private void sendCounterAmmo(Peer peer){
         reply(peer,"COUNTERAMMO|"+counters.charges(peer.slot,HunterCounters.Kind.CROSS)+"|"
             +counters.charges(peer.slot,HunterCounters.Kind.WARD)+"|"
@@ -942,6 +1059,7 @@ public final class LanHost implements AutoCloseable {
             lastEvidenceEventTick=tick;
             lastEvidenceEventRoom=result.room();
             lastEvidenceEventPower=eventPower;
+            lastEvidenceEventAction=result.action();
         }
         if(result.action()==GhostDomain.Action.MANIFEST)animation.manifested(tick);
         RoomLighting.Interference disruption=switch(result.action()){
