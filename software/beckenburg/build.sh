@@ -79,6 +79,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.Gh
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.MaterialAtlasTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.TeamCalloutTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.VanStagingTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.VanNavigationVisualTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostPracticeTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanProtocolTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanClientDisconnectTest
