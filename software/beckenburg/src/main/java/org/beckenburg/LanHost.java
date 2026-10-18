@@ -20,6 +20,8 @@ public final class LanHost implements AutoCloseable {
     private final Reservation[] reserved=new Reservation[HUNTERS+1];
     private static final java.security.SecureRandom RESUME_RANDOM=new java.security.SecureRandom();
     private int reconnectGraceSeconds=120;
+    private String lobbyPassword="";
+    private boolean lobbyLocked;
     private final int[] hunterRooms=new int[HUNTERS];
     private final long[] hunterSequences=new long[HUNTERS];
     private final HouseMap map=new HouseMap();
@@ -110,6 +112,18 @@ public final class LanHost implements AutoCloseable {
         synchronized(mutex){if(running||everStarted)throw new IllegalStateException("match already started");
             reconnectGraceSeconds=seconds;}
     }
+    /** Host-only local administration. Never expose setter as an unprivileged packet. */
+    public void setLobbyPassword(String password){
+        if(password==null||password.length()>64||password.indexOf('|')>=0
+                ||password.chars().anyMatch(ch->ch<32||ch>126))
+            throw new IllegalArgumentException("password must be at most 64 printable ASCII characters");
+        synchronized(mutex){
+            if(running||everStarted||connected()>0)throw new IllegalStateException("configure password before joining");
+            lobbyPassword=password;
+        }
+    }
+    public void setLobbyLocked(boolean locked){synchronized(mutex){lobbyLocked=locked;}}
+    public boolean lobbyLocked(){synchronized(mutex){return lobbyLocked;}}
     private static String newResumeToken(){
         byte[] bytes=new byte[24];RESUME_RANDOM.nextBytes(bytes);
         return HexFormat.of().formatHex(bytes);
@@ -132,7 +146,7 @@ public final class LanHost implements AutoCloseable {
             Writer out=LanProtocol.writer(socket.getOutputStream());
             String initial=LanProtocol.read(in);
             List<String> hello=LanProtocol.parts(initial);
-            boolean fresh=hello.size()==4&&"JOIN".equals(hello.get(0))&&"1".equals(hello.get(1));
+            boolean fresh=(hello.size()==4||hello.size()==5)&&"JOIN".equals(hello.get(0))&&"1".equals(hello.get(1));
             boolean resume=hello.size()==4&&"RESUME".equals(hello.get(0))&&"1".equals(hello.get(1));
             if(!fresh&&!resume){LanProtocol.write(out,"REJECT|protocol version or handshake");return;}
             synchronized(mutex){
@@ -165,6 +179,13 @@ public final class LanHost implements AutoCloseable {
                         default -> throw new IllegalArgumentException("invalid role");
                     };
                     String nickname=LanProtocol.cleanName(hello.get(3));
+                    if(lobbyLocked){LanProtocol.write(out,"REJECT|lobby locked");return;}
+                    String supplied=hello.size()==5?hello.get(4):"";
+                    if(!java.security.MessageDigest.isEqual(
+                            lobbyPassword.getBytes(java.nio.charset.StandardCharsets.US_ASCII),
+                            supplied.getBytes(java.nio.charset.StandardCharsets.US_ASCII))){
+                        LanProtocol.write(out,"REJECT|incorrect room password");return;
+                    }
                     if(running){LanProtocol.write(out,"REJECT|match already running - reconnect needed");return;}
                     int slot=wantsGhost?GHOST_SEAT:firstVacantHunter();
                     if(slot<0||seats[slot]!=null){LanProtocol.write(out,"REJECT|seat unavailable");return;}
