@@ -41,6 +41,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.La
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanSecureOwnerAdmissionTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanHostAuthorizationRegressionTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanSessionResumeIntegrationTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanOutboundQueueTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanHostAccessIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanNetworkDiagnosticsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanRitualDefenseTest
