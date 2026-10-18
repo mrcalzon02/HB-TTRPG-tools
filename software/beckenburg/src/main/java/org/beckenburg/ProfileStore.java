@@ -114,7 +114,6 @@ public final class ProfileStore {
      * active profile; leave a versioned backup of the prior save.
      */
     public void importFrom(Path source) throws IOException {
-        if (blocked) throw new IOException("Active profile is blocked after failed load");
         if (source == null) throw new IOException("No imported save selected");
         Path target = file.toAbsolutePath().normalize();
         Path selected = source.toAbsolutePath().normalize();
@@ -140,6 +139,7 @@ public final class ProfileStore {
             // Candidate was already validated, so in-memory state can be updated without reopening.
             currency = candidate.currency;
             experience = candidate.experience;
+            blocked = false; // successful valid import can recover a previously corrupt profile
             awarded.clear(); awarded.addAll(candidate.awarded);
             purchasedEquipment.clear(); purchasedEquipment.addAll(candidate.purchasedEquipment);
             for (int k = 0; k < medicines.length; k++)
