@@ -66,8 +66,8 @@ These capabilities are observed in real multiplayer game documentation, not a su
 - Source: software/beckenburg/src/main/java/org/beckenburg/LanHost.java, LanClient.java, LanProtocol.java, LanVoiceRelay.java and current docs in network/.
 - A real Java 17 TCP LAN host with seat-authoritative commands, 1–6 hunters, ghost seat and host-tick loop already exists. Client messages are a bounded version-1 ASCII protocol; this is a legacy design constraint for future feature negotiation.
 - Separate UDP voice shares numeric port but is not encrypted; real WAN exposure is not supported.
-- A human ghost leaving already triggers AI control of the same ghost domain with conserved energy/cooldowns, while a hunter disconnect still ends the current experimental match.
-- No verified mid-match rejoin, full headless dedicated server, host migration, public lobby browser, NAT/relay provider, public WAN authentication or physical Windows validation is claimed.
+- Human ghost loss already yielded AI takeover, and guest hunter **deliberate Leave** already preserved the mission. Source slice 019 now distinguishes unexpected guest loss from Leave, reserves the lost seat and supports validated in-process rejoin; H1/listen host departure still stops the match.
+- The source-level resume, room password/lock and local LAN diagnostics are documented in [LAN Session Recovery 019](LAN_SESSION_RESUME_IMPLEMENTATION_019.md), with tests wired but a full rebuild and Windows acceptance still unverified. No completed dedicated server, host migration, public lobby, NAT/relay provider or public WAN authentication is claimed.
 - The Java 17 solo local save (ProfileStore) already uses atomic properties files, mission receipt de-duplication, credits, experience and equipment.
 
 ### Implemented source slice added in this initiative (requires full-project/Windows verification)
