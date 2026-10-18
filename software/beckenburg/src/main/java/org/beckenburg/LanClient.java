@@ -52,7 +52,7 @@ public final class LanClient implements AutoCloseable {
         if(password==null||password.length()>64||password.indexOf('|')>=0
                 ||password.chars().anyMatch(ch->ch<32||ch>126))
             throw new IllegalArgumentException("password must be at most 64 printable ASCII characters");
-        Reader input=null;Writer output=null;String assigned=null;
+        Reader input=null;Writer output=null;String assigned=null;long hostSequence=0;
         try{
             socket.connect(new InetSocketAddress(address,port),3000);
             socket.setTcpNoDelay(true);socket.setSoTimeout(5000);
@@ -62,11 +62,12 @@ public final class LanClient implements AutoCloseable {
                     :"RESUME|1|"+ticket.seat()+"|"+ticket.token());
             String response=LanProtocol.read(input);
             var parts=LanProtocol.parts(response);
-            if((parts.size()!=3&&parts.size()!=4)||!parts.get(0).equals("WELCOME"))
+            if((parts.size()!=3&&parts.size()!=4&&parts.size()!=5)||!parts.get(0).equals("WELCOME"))
                 throw new IOException("join failed: "+response);
             if(parts.size()==4){
                 if(!parts.get(3).matches("[0-9a-f]{48}"))throw new IOException("invalid session credential");
                 resumeKey=parts.get(3); // Never send this secret to the UI event log.
+                if(parts.size()==5)hostSequence=LanProtocol.sequence(parts.get(4));
             }
             assigned=parts.get(1);
             if(!(assigned.equals("GHOST")||assigned.matches("H[1-6]")))throw new IOException("invalid host seat");
@@ -75,7 +76,7 @@ public final class LanClient implements AutoCloseable {
             socket.setSoTimeout(0);
         }catch(Exception error){try{socket.close();}catch(IOException ignored){}if(error instanceof IOException ioe)throw ioe;throw new IOException("invalid join response",error);}
         in=input;out=output;seat=assigned;
-        sequence=ticket==null?0:ticket.nextSequence();
+        sequence=Math.max(ticket==null?0:ticket.nextSequence(),hostSequence);
         reader=new Thread(this::readLoop,"beckenburg-client-events");reader.setDaemon(true);reader.start();
     }
     public String seat(){return seat;}
