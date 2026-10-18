@@ -23,6 +23,8 @@ public final class SceneRenderer {
     /** Solo environment presets; default multipliers retain legacy LAN lighting. */
     public double environmentLight=1.0,fogDensity=1.0;
     public boolean environmentPowerOn=true;
+    /** Authoritative book-deployment signal; all investigator views share its room. */
+    public int placedWritingBookRoom=-1;
     public RoomLighting roomLights;
     public int roomLightTick;
     public int hidingDensity;
@@ -176,6 +178,22 @@ public final class SceneRenderer {
         vanBox(faces,van,1.55,.7,.28,.36,.9,.95,MaterialAtlas.RITUAL);
         vanBox(faces,van,-.55,.10,r-.28,1.1,.5,.18,MaterialAtlas.AGED_WOOD);
         vanBox(faces,van,-w+.1,.05,f-.3,w*2-.2,.08,.3,MaterialAtlas.IRON);
+        // Actual owner-supplied display and physical computer assemblies replace
+        // arbitrary color slabs; the panel face is independently authorable.
+        VanStaging.Position console=van.world(-1.68,.62);
+        imported(faces,"monitoring_screen_mp_1",console.x(),1.24,console.z(),
+            2.0,van.placement().yaw()+Math.PI/2);
+        VanStaging.Position computer=van.world(-1.36,-.9);
+        imported(faces,"pc_mp_1",computer.x(),.83,computer.z(),
+            1.35,van.placement().yaw());
+        VanStaging.Position button=van.doorButton();
+        imported(faces,"button_12",button.x(),1.15,button.z(),
+            .48,van.placement().yaw());
+        if(van.cargoDoorClosed()){
+            vanBox(faces,van,-w,0,f,w*2,2.16,.12,MaterialAtlas.IRON);
+            VanStaging.Position shutter=van.world(0,f);
+            box(faces,shutter.x()-.13,.58,shutter.z()-.12,.26,.88,.24,0x626d74);
+        }
         // Built-in flashlight rests on a real van shelf; F switches the carried lamp.
         VanStaging.Position torch=van.world(-1.52,-1.53);
         imported(faces,"flashlight_mp_1",torch.x(),.83,torch.z(),2.2,van.placement().yaw());
@@ -195,10 +213,25 @@ public final class SceneRenderer {
                 case PHOTO_CAMERA->0x3b4553;case SALT->0xd1c49d;
             };
             VanStaging.Position v=van.world(1.48,lz);
-            // Distinct silhouettes rather than textureless pickup collision flags.
-            box(faces,v.x()-.11,.65,v.z()-.09,.21,.50,.18,finish);
-            box(faces,v.x()-.09,1.12,v.z()-.07,.17,.08,.14,0xa1aab4);
+            String source=switch(item){
+                case EMF->"dosimeter_1";
+                case THERMOMETER->"handheld_tablet_1";
+                case SPIRIT_BOX->"walkie_talkie_2";
+                default->null;
+            };
+            if(source!=null)
+                imported(faces,source,v.x(),.85,v.z(),1.65,van.placement().yaw());
+            else {
+                box(faces,v.x()-.11,.65,v.z()-.09,.21,.50,.18,finish);
+                box(faces,v.x()-.09,1.12,v.z()-.07,.17,.08,.14,0xa1aab4);
+            }
         }
+        VanStaging.Position book=van.world(1.48,1.05);
+        imported(faces,"book_mp_1",book.x(),1.00,book.z(),2.1,van.placement().yaw());
+        // A D.O.T.S. Tier I shell is present in the kit; actual projected dots
+        // only appear in the world when a working deployed sensor is activated.
+        VanStaging.Position projector=van.world(.87,-1.4);
+        imported(faces,"vape_mp_1",projector.x(),.89,projector.z(),1.9,van.placement().yaw());
     }
 
     /** Three visually distinct small PS-era rite installations at fixed room sockets. */
@@ -320,7 +353,13 @@ public final class SceneRenderer {
             box(out,bx+.64,1.31,bz-.57,.15,.18,.045,
                 environmentPowerOn?0x70c592:0xc66b62);
         }
-        if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14) vanModel(out,map.van(),rackStock);
+        if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14)
+            vanModel(out,map.van(),rackStock);
+        if(placedWritingBookRoom>=0&&placedWritingBookRoom<HouseMap.INDOOR_ROOMS){
+            double bx=map.centerX(placedWritingBookRoom),bz=map.centerZ(placedWritingBookRoom);
+            if(Math.hypot(bx-x,bz-z)<14)
+                imported(out,"open_book_mp_1",bx-.5,.075,bz-.35,1.65,0);
+        }
         // Character bodies are rendered as directional alpha-masked sprites after geometry.
         if(wardRoom>=0){
             int r=wardRoom;double wx=map.centerX(r),wz=map.centerZ(r);
