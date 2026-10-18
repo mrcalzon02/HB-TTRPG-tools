@@ -8,7 +8,7 @@ import java.util.Objects;
 /** Host-owned, bounded observation journal. Never transmitted to the ghost seat. */
 public final class LanEvidenceJournal {
     public static final int CAPACITY=2048;
-    public enum Finding { CONFIRMED, REPEAT, INCONCLUSIVE }
+    public enum Finding { OBSERVED, CONFIRMED, REPEAT, INCONCLUSIVE } // legacy wire values remain decodable
     public record Entry(int tick,int seat,int room,String tool,Finding finding,String reading) {
         public Entry {
             if(tick<0||seat<0||seat>=6||room<0||room>=HouseMap.ROOM_COUNT)
@@ -42,7 +42,8 @@ public final class LanEvidenceJournal {
         Objects.requireNonNull(report);
         if(!report.accepted())throw new IllegalArgumentException("rejected scan cannot create evidence");
         String reading=report.message();
-        Finding finding=reading.startsWith("CONFIRMED ")?Finding.CONFIRMED:
+        Finding finding=reading.startsWith("READING ")?Finding.OBSERVED:
+                reading.startsWith("CONFIRMED ")?Finding.CONFIRMED:
                 reading.startsWith("REPEAT ")?Finding.REPEAT:
                 reading.startsWith("INCONCLUSIVE ")?Finding.INCONCLUSIVE:null;
         if(finding==null)throw new IllegalArgumentException("unrecognized reading");
