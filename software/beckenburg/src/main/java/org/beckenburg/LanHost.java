@@ -325,6 +325,11 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
                     reply(peer,"HIDECONFIG|"+contract.hidingSpots());
                     reply(peer,"LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
+                    // Re-entering a view (including after socket recovery) must supply
+                    // the current personal progression and all authorized case notes.
+                    if(mission.identificationRequired())reply(peer,"SITES|9|6|10");
+                    reply(peer,mission.privateState(peer.slot));
+                    sendCaseFile(peer);
                     reply(peer,"VOICEKEY|"+voice.port()+"|"+voice.register(peer.slot,peer.socket.getInetAddress()));
                     for(LanChat.Entry line:radioHistory)reply(peer,line.frame());
                 }
@@ -514,10 +519,7 @@ public final class LanHost implements AutoCloseable {
                 case "JOURNAL" -> {
                     if(!running||peer.slot==GHOST_SEAT||p.size()!=1)
                         throw new IllegalArgumentException("active hunter required for casefile");
-                    reply(peer,"CASEFILE|RESET");
-                    for(String note:casefile.snapshot())reply(peer,note);
-                    reply(peer,"NOTES|RESET");
-                    for(String note:fieldNotes.snapshot())reply(peer,note);
+                    sendCaseFile(peer);
                     reply(peer,"ACCEPT|JOURNAL");
                 }
                 case "SAY" -> {
@@ -720,6 +722,14 @@ public final class LanHost implements AutoCloseable {
         String detail=trait.canPhase()?"WALL PASSAGE":"DOOR ACTIVITY";
         for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&(hunterRooms[i]==from||hunterRooms[i]==to))
             reply(seats[i],"FIELD|"+detail);
+    }
+    /** Never send investigator notes to a human or AI ghost seat. */
+    private void sendCaseFile(Peer peer){
+        if(peer.slot==GHOST_SEAT)throw new IllegalArgumentException("ghost cannot read casefile");
+        reply(peer,"CASEFILE|RESET");
+        for(String note:casefile.snapshot())reply(peer,note);
+        reply(peer,"NOTES|RESET");
+        for(String note:fieldNotes.snapshot())reply(peer,note);
     }
     private void notifyHunters(String event){for(int i=0;i<HUNTERS;i++)if(seats[i]!=null)reply(seats[i],event);}
     private void broadcastProgress(){for(int i=0;i<HUNTERS;i++)if(seats[i]!=null)reply(seats[i],mission.privateState(i));}
