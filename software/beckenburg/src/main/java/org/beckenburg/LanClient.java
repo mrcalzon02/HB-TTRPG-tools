@@ -140,6 +140,7 @@ public final class LanClient implements AutoCloseable {
     }
     public synchronized void turn(int degrees)throws IOException {send("TURN|"+degrees+"|"+(++sequence));}
     public synchronized void door()throws IOException {send("DOOR|"+(++sequence));}
+    public synchronized void vanDoor()throws IOException {send("VANDOOR|"+(++sequence));}
     public synchronized void light()throws IOException {send("LIGHT|"+(++sequence));}
     public synchronized void power()throws IOException {send("POWER|"+(++sequence));}
     public synchronized void scan(LanCase.Tool tool)throws IOException {
