@@ -31,6 +31,7 @@ public final class LanHost implements AutoCloseable {
     private final GhostDomain ghost;
     private final LanCase mission;
     private final LanEvidenceJournal casefile=new LanEvidenceJournal();
+    private final GhostWriting writingBook=new GhostWriting();
     private final FieldJournal fieldNotes=new FieldJournal();
     // Radio history is bounded and investigator-only. Local speech has no global replay.
     private final java.util.ArrayDeque<LanChat.Entry> radioHistory=new java.util.ArrayDeque<>();
@@ -603,6 +604,10 @@ public final class LanHost implements AutoCloseable {
                     int room=world.body(peer.slot).room();
                     boolean trace=counters.recentUv(room,tick);
                     reply(peer,"ACCEPT|UVSCAN|"+(trace?"FRESH SURFACE TRACE":"NO RECENT TRACE"));
+                    String uvNote=casefile.recordDevice(tick,peer.slot,room,"UV_LAMP",
+                        trace?LanEvidenceJournal.Finding.CONFIRMED:LanEvidenceJournal.Finding.INCONCLUSIVE,
+                        trace?"UV lamp - fresh supernatural surface trace":"UV lamp - no recent trace");
+                    notifyHunters(uvNote);
                     recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
                 }
                 case "SCAN" -> {
@@ -614,9 +619,11 @@ public final class LanHost implements AutoCloseable {
                         ?Math.max(0,lastEvidenceEventPower-eventAge/7):0;
                     LanCase.Report result=peer.worldMode
                         ?mission.scanSpatialMeasured(peer.slot,tool,world.body(peer.slot),
-                            ghost.room(),map,tick,lastEvidenceEventRoom,eventPower)
+                            ghost.room(),map,tick,lastEvidenceEventRoom,eventPower,
+                            ghostType==GhostIdentity.Type.SHADE)
                         :mission.scanMeasured(peer.slot,tool,hunterRooms[peer.slot],
-                            ghost.room(),tick,lastEvidenceEventRoom,eventPower);
+                            ghost.room(),tick,lastEvidenceEventRoom,eventPower,
+                            ghostType==GhostIdentity.Type.SHADE);
                     answerHunter(peer,"SCAN",result);
                     if(result.accepted()){
                         recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
@@ -887,6 +894,7 @@ public final class LanHost implements AutoCloseable {
             case STRIKE,SIGNATURE->10;case DRIFT->0;
         };
         if(eventPower>0){
+            writingBook.witness(20261018L,tick,result);
             lastEvidenceEventTick=tick;
             lastEvidenceEventRoom=result.room();
             lastEvidenceEventPower=eventPower;
