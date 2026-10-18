@@ -39,7 +39,7 @@ public final class InvestigationSession {
     public InvestigationSession(HouseMap map, Role role, long seed) {
         this.map=map; this.role=role; this.random=new Random(seed);
         evidenceSeed=seed;
-        thermalPolarity=(seed&1L)==0?EvidenceSignals.Polarity.COLD:EvidenceSignals.Polarity.HOT;
+        thermalPolarity=GhostEvidenceProfile.thermal(GhostIdentity.Type.SPIRIT);
         int month=java.time.LocalDate.now().getMonthValue();
         season=switch(month){
             case 12,1,2->EvidenceSignals.Season.WINTER;
