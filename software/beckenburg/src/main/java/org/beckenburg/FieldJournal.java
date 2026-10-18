@@ -11,14 +11,14 @@ public final class FieldJournal {
     public record Note(GhostFieldGuide.Clue clue,Status status,int seat,int tick){
         public Note{
             Objects.requireNonNull(clue);Objects.requireNonNull(status);
-            if(seat<0||seat>2||tick<0)throw new IllegalArgumentException("invalid note origin");
+            if(seat<0||seat>5||tick<0)throw new IllegalArgumentException("invalid note origin");
         }
         public String frame(){return "NOTE|"+clue+"|"+status+"|"+seat+"|"+tick;}
         public static Note decode(String frame){
             List<String> p=LanProtocol.parts(frame);
             if(p.size()!=5||!p.get(0).equals("NOTE"))throw new IllegalArgumentException("invalid note");
             return new Note(GhostFieldGuide.Clue.valueOf(p.get(1)),Status.valueOf(p.get(2)),
-                LanProtocol.integer(p.get(3),0,2),LanProtocol.integer(p.get(4),0,99999999));
+                LanProtocol.integer(p.get(3),0,5),LanProtocol.integer(p.get(4),0,99999999));
         }
     }
     private final EnumMap<GhostFieldGuide.Clue,Note> notes=new EnumMap<>(GhostFieldGuide.Clue.class);

@@ -11,7 +11,7 @@ public final class LanEvidenceJournal {
     public enum Finding { CONFIRMED, REPEAT, INCONCLUSIVE }
     public record Entry(int tick,int seat,int room,LanCase.Tool tool,Finding finding,String reading) {
         public Entry {
-            if(tick<0||seat<0||seat>=3||room<0||room>=HouseMap.ROOM_COUNT)
+            if(tick<0||seat<0||seat>=6||room<0||room>=HouseMap.ROOM_COUNT)
                 throw new IllegalArgumentException("invalid evidence origin");
             Objects.requireNonNull(tool);
             Objects.requireNonNull(finding);
@@ -28,7 +28,7 @@ public final class LanEvidenceJournal {
             if(p.size()!=7||!p.get(0).equals("CASEFILE"))
                 throw new IllegalArgumentException("invalid casefile frame");
             return new Entry(LanProtocol.integer(p.get(1),0,99999999),
-                    LanProtocol.integer(p.get(2),0,2),
+                    LanProtocol.integer(p.get(2),0,5),
                     LanProtocol.integer(p.get(3),0,HouseMap.ROOM_COUNT-1),
                     LanCase.Tool.valueOf(p.get(4)),Finding.valueOf(p.get(5)),p.get(6));
         }
