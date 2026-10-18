@@ -26,7 +26,10 @@ public final class HeldToolView {
             boolean operating,boolean flashlightOn,String measurement,EquipmentTiers.Tier tier){
         if(graphics==null||kind==null||width<180||height<140)return;
         if(tier==null)tier=EquipmentTiers.Tier.I;
-        HeldMeshView.draw(graphics,width,height,tick,flashlightOn);
+        // The authored GLB flashlight cannot masquerade as every other instrument.
+        // Correct licensed tool meshes are attached per item as they are integrated.
+        if(kind.equals("FLASHLIGHT"))
+            HeldMeshView.draw(graphics,width,height,tick,flashlightOn);
         Graphics2D g=(Graphics2D)graphics.create();
         try{
             double scale=Math.min(width/850.0,height/480.0);
