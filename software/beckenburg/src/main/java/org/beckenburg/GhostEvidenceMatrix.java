@@ -31,22 +31,37 @@ public final class GhostEvidenceMatrix {
             future=List.copyOf(future);
         }
     }
+    /** Planned additional equipment must correspond to an actual authored world
+     * event when implemented. These entries NEVER generate measurements by themselves.
+     */
     private static List<EquipmentRegistry.Evidence> future(GhostIdentity.Type ghost) {
         return switch(ghost) {
-            case POSSESSIVE -> List.of(EquipmentRegistry.Evidence.OBJECT_IMPRINT);
-            case POLTERGEIST -> List.of(EquipmentRegistry.Evidence.SEISMIC_IMPACT);
-            case DEMON -> List.of(EquipmentRegistry.Evidence.RESONANCE);
-            case YOKAI -> List.of(EquipmentRegistry.Evidence.RESONANCE);
-            case BANSHEE -> List.of(EquipmentRegistry.Evidence.ECTOPLASM);
-            case WRAITH -> List.of(EquipmentRegistry.Evidence.STRUCTURED_LIGHT);
-            case SHADE -> List.of(EquipmentRegistry.Evidence.SPECTRAL_SHADOW);
+            case POSSESSIVE -> List.of(EquipmentRegistry.Evidence.OBJECT_IMPRINT,
+                EquipmentRegistry.Evidence.ECTOPLASM);
+            case POLTERGEIST -> List.of(EquipmentRegistry.Evidence.SEISMIC_IMPACT,
+                EquipmentRegistry.Evidence.OBJECT_IMPRINT);
+            case DEMON -> List.of(EquipmentRegistry.Evidence.RESONANCE,
+                EquipmentRegistry.Evidence.ATMOSPHERIC_REVERSAL);
+            case YOKAI -> List.of(EquipmentRegistry.Evidence.RESONANCE,
+                EquipmentRegistry.Evidence.SEISMIC_IMPACT);
+            case BANSHEE -> List.of(EquipmentRegistry.Evidence.ECTOPLASM,
+                EquipmentRegistry.Evidence.RESONANCE);
+            case WRAITH -> List.of(EquipmentRegistry.Evidence.STRUCTURED_LIGHT,
+                EquipmentRegistry.Evidence.ATMOSPHERIC_REVERSAL);
+            case SHADE -> List.of(EquipmentRegistry.Evidence.SPECTRAL_SHADOW,
+                EquipmentRegistry.Evidence.ATMOSPHERIC_REVERSAL);
             case SPECTER -> List.of(EquipmentRegistry.Evidence.SPECTRAL_SHADOW,
-                                   EquipmentRegistry.Evidence.RESONANCE);
-            case SPIRIT -> List.of(EquipmentRegistry.Evidence.OBJECT_IMPRINT);
-            case HANTU -> List.of(EquipmentRegistry.Evidence.ATMOSPHERIC_REVERSAL);
-            case DEVIL -> List.of(EquipmentRegistry.Evidence.RESONANCE);
-            case MIMIC -> List.of(EquipmentRegistry.Evidence.OBJECT_IMPRINT);
-            case TWINS -> List.of(EquipmentRegistry.Evidence.SEISMIC_IMPACT);
+                EquipmentRegistry.Evidence.RESONANCE);
+            case SPIRIT -> List.of(EquipmentRegistry.Evidence.OBJECT_IMPRINT,
+                EquipmentRegistry.Evidence.SEISMIC_IMPACT);
+            case HANTU -> List.of(EquipmentRegistry.Evidence.ATMOSPHERIC_REVERSAL,
+                EquipmentRegistry.Evidence.ECTOPLASM);
+            case DEVIL -> List.of(EquipmentRegistry.Evidence.RESONANCE,
+                EquipmentRegistry.Evidence.OBJECT_IMPRINT);
+            case MIMIC -> List.of(EquipmentRegistry.Evidence.OBJECT_IMPRINT,
+                EquipmentRegistry.Evidence.RESONANCE);
+            case TWINS -> List.of(EquipmentRegistry.Evidence.SEISMIC_IMPACT,
+                EquipmentRegistry.Evidence.RESONANCE);
         };
     }
     public static Row forGhost(GhostIdentity.Type type){
@@ -55,8 +70,11 @@ public final class GhostEvidenceMatrix {
         return new Row(type,
             GhostEvidenceProfile.emfSuppressed(type)
                 ?GhostFieldGuide.Clue.EMF_SUPPRESSION:GhostFieldGuide.Clue.EMF_OVER_SIX,
-            GhostEvidenceProfile.thermal(type)==EvidenceSignals.Polarity.COLD
-                ?GhostFieldGuide.Clue.EXTREME_COLD:GhostFieldGuide.Clue.EXTREME_HEAT,
+            switch(GhostEvidenceProfile.thermal(type)){
+                case COLD->GhostFieldGuide.Clue.EXTREME_COLD;
+                case HOT->GhostFieldGuide.Clue.EXTREME_HEAT;
+                case NONE->GhostFieldGuide.Clue.TEMPERATURE_NORMAL;
+            },
             Arrays.asList(GhostEvidenceProfile.availableWriting(type)),
             trait.leavesUv(),trait.sight(),future(type),type.rite(),type.behavior());
     }
