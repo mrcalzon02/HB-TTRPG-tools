@@ -55,6 +55,8 @@ public final class LanSessionResumeIntegrationTest {
                 begin(a,b,c);
                 b.client.move(11);b.await("ACCEPT|MOVE|11");
                 b.client.view3D();b.await("ACCEPT|VIEW3D");
+                b.client.note(GhostFieldGuide.Clue.FOOTPRINTS,FieldJournal.Status.SEEN);
+                b.await("ACCEPT|NOTE|FOOTPRINTS");
                 var original=b.client.resumeTicket();
                 check(original!=null,"new host sends opaque reconnect credentials");
                 b.breakTransportWithoutLeaving();
@@ -70,6 +72,7 @@ public final class LanSessionResumeIntegrationTest {
                     restored.await("PROGRESS|"); // Immediate host-owned state, not next periodic tick.
                     restored.await("CASEFILE|RESET"); // Auto-replay, no UI journal request.
                     restored.await("NOTES|RESET");
+                    restored.await("NOTE|FOOTPRINTS|SEEN|1|"); // Same shared observation, no re-marking.
                     restored.client.step(0,1);restored.await("ACCEPT|STEP");
                     check(host.reservedSeats()==0&&host.connected()==3,"same mission/connected party recovered");
                     check(restored.client.resumeTicket()!=null
