@@ -42,9 +42,15 @@ public final class ManualEvidenceJournalTest {
         ok(GhostFieldGuide.remainsPossible(GhostIdentity.Type.POSSESSIVE,journal),
            "multiple writing styles can overlap without magical one-species codes");
         journal.clear();
+        journal.set(GhostFieldGuide.Clue.GHOST_WRITING,FieldJournal.Status.SEEN,0,15);
+        ok(GhostFieldGuide.remainsPossible(GhostIdentity.Type.SHADE,journal)
+            &&!GhostFieldGuide.remainsPossible(GhostIdentity.Type.YOKAI,journal),
+            "generic ghost-writing tick actually greys non-writer species");
+        journal.clear();
         for(GhostIdentity.Type type:GhostIdentity.Type.values()){
-            ok(GhostEvidenceProfile.availableWriting(type).length>0,
-                "every species assigned a real writable subtype "+type);
+            boolean writer=GhostEvidenceProfile.availableWriting(type).length>0;
+            ok(GhostEvidenceProfile.compatible(type,GhostFieldGuide.Clue.GHOST_WRITING)==writer,
+                "manual checklist and physical writing producer agree for "+type);
             ok(GhostEvidenceProfile.compatible(type,GhostFieldGuide.Clue.EXTREME_COLD)
                 !=GhostEvidenceProfile.compatible(type,GhostFieldGuide.Clue.EXTREME_HEAT),
                 "each species has one consistent thermal tendency "+type);
