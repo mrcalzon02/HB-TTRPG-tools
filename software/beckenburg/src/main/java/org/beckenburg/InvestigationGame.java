@@ -13,6 +13,7 @@ public final class InvestigationGame {
     private final JPanel cards=new JPanel(new CardLayout());
     private final JPanel menu=new JPanel(new GridBagLayout());
     private final ProfileStore profile=new ProfileStore(ProfileStore.defaultPath());
+    private BeckenburgInstallIdentity.Identity installation;
     private final JLabel account=new JLabel();
     private JComboBox<InvestigationSession.Role> rolePicker;
     private JComboBox<SiteCatalog.Location> locationPicker;
@@ -23,7 +24,12 @@ public final class InvestigationGame {
     private int caseNumber;
 
     private InvestigationGame(){
-        try{profile.load();}catch(IOException ex){JOptionPane.showMessageDialog(null,
+        try{installation=BeckenburgInstallIdentity.loadOrCreate(ProfileStore.defaultPath().getParent());}
+        catch(IOException ex){JOptionPane.showMessageDialog(null,
+            "Local installation ID could not be loaded. Existing identity was not replaced: "+ex.getMessage(),
+            "Installation identity",JOptionPane.WARNING_MESSAGE);}
+        try{profile.load();if(!java.nio.file.Files.exists(ProfileStore.defaultPath()))profile.save();}
+        catch(IOException ex){JOptionPane.showMessageDialog(null,
             "Profile could not be loaded. Existing file was not overwritten: "+ex.getMessage(),
             "Profile error",JOptionPane.WARNING_MESSAGE);}
         buildMenu();
@@ -82,6 +88,7 @@ public final class InvestigationGame {
         JButton lan=button("LAN HOST / JOIN (3D HOUSE ALPHA)");
         JButton guide=button("FIELD MANUAL / CONTROLS");
         JButton updates=button("UPDATES");
+        JButton importSave=button("IMPORT LOCAL SAVE");
         JButton quit=button("EXIT");
         account.setForeground(new Color(172,204,183));
         account.setHorizontalAlignment(SwingConstants.CENTER);
@@ -89,7 +96,7 @@ public final class InvestigationGame {
         inner.add(Box.createVerticalStrut(15));inner.add(status);inner.add(Box.createVerticalStrut(18));
         inner.add(selected);inner.add(Box.createVerticalStrut(6));inner.add(rolePicker);
         inner.add(Box.createVerticalStrut(10));inner.add(selectors);
-        for(JButton b:new JButton[]{enterCastle,begin,ghost,lan,guide,updates,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
+        for(JButton b:new JButton[]{enterCastle,begin,ghost,lan,guide,importSave,updates,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
         inner.add(Box.createVerticalStrut(20));inner.add(account);
         JLabel limitation=new JLabel("LAN shared house navigation is available; complete 3v1 simulation is still in development.",SwingConstants.CENTER);
         limitation.setForeground(new Color(147,154,165));inner.add(Box.createVerticalStrut(12));inner.add(limitation);
@@ -113,6 +120,7 @@ public final class InvestigationGame {
             "LAN ROOM TEST: 3 hunter seats + ghost/AI, ready/start, room moves and ghost actions.\n"+
             "LAN first-person hunter movement and doors work; full 3v1 integration remains unfinished.",
             "Field Manual",JOptionPane.INFORMATION_MESSAGE));
+        importSave.addActionListener(e->importLocalSave());
         updates.addActionListener(e->BeckenburgUpdatesUI.open(window));
         quit.addActionListener(e->window.dispose());refreshAccount();
     }
@@ -120,7 +128,26 @@ public final class InvestigationGame {
         JButton b=new JButton(s);b.setMaximumSize(new Dimension(330,38));
         b.setFocusPainted(true);return b;
     }
-    private void refreshAccount(){account.setText("CASTLE LEDGER     £"+profile.currency()+"       XP "+profile.experience());}
+    private void refreshAccount(){account.setText("CASTLE LEDGER  £"+profile.currency()+"   XP "+profile.experience()
+            +(installation==null?"":"   PLAYER "+installation.shortPlayerId()));}
+    private void importLocalSave(){
+        JFileChooser chooser=new JFileChooser();
+        chooser.setDialogTitle("Import a Beckenburg local progression save");
+        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Beckenburg profile (*.properties)","properties"));
+        if(chooser.showOpenDialog(window)!=JFileChooser.APPROVE_OPTION)return;
+        int answer=JOptionPane.showConfirmDialog(window,
+            "Import this save? Your current progress will be backed up automatically. Your installation ID will not change.",
+            "Import local save",JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE);
+        if(answer!=JOptionPane.OK_OPTION)return;
+        try{
+            profile.importFrom(chooser.getSelectedFile().toPath());
+            refreshAccount();castle.repaint();
+            JOptionPane.showMessageDialog(window,"Local progress imported. The previous save was backed up; installation identity is unchanged.",
+                "Save imported",JOptionPane.INFORMATION_MESSAGE);
+        }catch(IOException ex){JOptionPane.showMessageDialog(window,
+            "Import refused; your existing progress was not intentionally overwritten: "+ex.getMessage(),
+            "Import failed",JOptionPane.ERROR_MESSAGE);}
+    }
     private void begin(){
         if(game!=null){game.close();cards.remove(game);game=null;}
         if(ghostPractice!=null){ghostPractice.close();cards.remove(ghostPractice);ghostPractice=null;}
