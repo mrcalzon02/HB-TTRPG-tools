@@ -19,6 +19,12 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private String feedback="Awaiting host world snapshot";
     private int lastTurn=-1,tick,visibleGhost=-1,health=100,sanity=100,evidence;
     private int crosses=2,throwWards=2,saltPouches=3;
+    private int partySize=3,partyDifficulty=3,fieldCredits=400;
+    private final int[] medicine=new int[6];
+    private VanTelemetry.Display meters;
+    private final java.util.ArrayDeque<Integer> activityHistory=new java.util.ArrayDeque<>();
+    private boolean vanDisplay;
+    private int lastVanPoll=-100000;
     private final List<SceneRenderer.WorldMark> counterMarks=new ArrayList<>();
     private SceneRenderer.Apparition apparition;
     private boolean orbForm;
@@ -124,6 +130,19 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     LanProtocol.integer(p.get(6),0,300);
                     counterMarks.add(new SceneRenderer.WorldMark(xx,zz,yy,kind));
                 }else throw new IllegalArgumentException("bad counter snapshot");
+            }else if(p.size()==3&&p.get(0).equals("PARTY")){
+                partySize=LanProtocol.integer(p.get(1),1,6);
+                partyDifficulty=LanProtocol.integer(p.get(2),1,30);
+            }else if(p.get(0).equals("VANMETERS")){
+                VanTelemetry.Display next=VanTelemetry.Display.decode(frame);
+                if(meters==null||meters.tick()!=next.tick()){
+                    activityHistory.addLast(next.activity());
+                    if(activityHistory.size()>32)activityHistory.removeFirst();
+                }
+                meters=next;
+            }else if(p.size()==8&&p.get(0).equals("SUPPLY")){
+                fieldCredits=LanProtocol.integer(p.get(1),0,100000);
+                for(int i=0;i<6;i++)medicine[i]=LanProtocol.integer(p.get(i+2),0,4);
             }else if(p.size()==4&&p.get(0).equals("COUNTERAMMO")){
                 crosses=LanProtocol.integer(p.get(1),0,2);
                 throwWards=LanProtocol.integer(p.get(2),0,2);
@@ -178,8 +197,48 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     public int casefileSize(){return casefile.size();}
     public boolean casefileOpen(){return casefileOpen;}
     public GhostIdentity.Type selectedGuess(){return selectedGuess;}
+    private boolean insideVan(){
+        var local=map.van().local(renderer.x,renderer.z);
+        return map.roomAt(renderer.x,renderer.z)==HouseMap.EXTRACTION_ROOM
+            &&Math.abs(local.x())<VanStaging.HALF_WIDTH-.2
+            &&local.z()>=VanStaging.FRONT&&local.z()<VanStaging.REAR-.2;
+    }
+    private void showSupplyStore(){
+        if(map.van().stationAt(renderer.x,renderer.z)!=VanStaging.Station.EQUIPMENT){
+            feedback="PURCHASE MEDICINE AT THE EQUIPMENT RACK";return;
+        }
+        mouseLook.release();keys.clear();
+        String[] options=new String[6];
+        int i=0;
+        for(FieldSupplies.Kind kind:FieldSupplies.Kind.values())
+            for(FieldSupplies.Tier tier:FieldSupplies.Tier.values())
+                options[i++]=kind+" / "+tier.name()+" / £"+tier.price+" / restore "+tier.restore(kind);
+        Object choice=JOptionPane.showInputDialog(this,
+            "CREDITS £"+fieldCredits+"    /    PURCHASE 1 FIELD ITEM",
+            "VAN EQUIPMENT SUPPLIES",JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
+        if(choice!=null)for(int n=0;n<options.length;n++)if(options[n].equals(choice)){
+            FieldSupplies.Kind kind=FieldSupplies.Kind.values()[n/3];
+            FieldSupplies.Tier tier=FieldSupplies.Tier.values()[n%3];
+            sendAction("buy "+kind,()->client.purchaseSupply(kind,tier));
+            break;
+        }
+        requestFocusInWindow();
+    }
+    private void consumeMedicine(FieldSupplies.Kind kind){
+        int offset=kind.ordinal()*3;
+        for(int at=2;at>=0;at--)if(medicine[offset+at]>0){
+            FieldSupplies.Tier tier=FieldSupplies.Tier.values()[at];
+            sendAction("use "+kind,()->client.useSupply(kind,tier));return;
+        }
+        feedback="NO PURCHASED "+kind+" MEDICINE";
+    }
     private void frame(){
         if(!isDisplayable()||!caseResult.isEmpty()){repaint();return;}
+        if(vanDisplay&&!insideVan()){vanDisplay=false;meters=null;}
+        if(vanDisplay&&tick-lastVanPoll>=11){
+            try{client.vanMonitor();lastVanPoll=tick;}
+            catch(IOException e){feedback="Van display disconnected: "+e.getMessage();vanDisplay=false;}
+        }
         int right=(keys.contains(KeyEvent.VK_D)?1:0)-(keys.contains(KeyEvent.VK_A)?1:0);
         int forward=(keys.contains(KeyEvent.VK_W)?1:0)-(keys.contains(KeyEvent.VK_S)?1:0);
         try{
@@ -188,7 +247,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 double dz=Math.cos(renderer.yaw)*forward-Math.sin(renderer.yaw)*right;
                 double len=Math.hypot(dx,dz);
                 int mx=(int)Math.round(dx/len*100),mz=(int)Math.round(dz/len*100);
-                if(mx!=0||mz!=0)client.step(mx,mz);
+                if(mx!=0||mz!=0)client.step(mx,mz,keys.contains(KeyEvent.VK_SHIFT));
             }
             int heading=Math.floorMod((int)Math.round(Math.toDegrees(renderer.yaw)),360);
             if(heading!=lastTurn){client.turn(heading);lastTurn=heading;}
@@ -204,7 +263,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawImage(renderer.image(),0,0,getWidth(),h,null);
             g.setFont(new Font(Font.MONOSPACED,Font.BOLD,Math.max(12,getHeight()/46)));
             g.setColor(new Color(234,222,189));
-            g.drawString("BECKENBURG / LAN HOUSE — HUNTER "+(seat+1),13,26);
+            g.drawString("BECKENBURG / LAN HOUSE — HUNTER "+(seat+1)+
+                "   PARTY "+partySize+"  DIFFICULTY +"+partyDifficulty,13,26);
             g.drawString(map.roomName(renderer.x,renderer.z)+" | TEAM "+(peers.size()+1)+" / 6 | HP "+health+
                 " | SANITY "+sanity+" | CLUES "+evidence+"/3",13,46);
             g.drawString("+",getWidth()/2,h/2);
@@ -231,9 +291,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString(health==0?"ARROWS / MOUSE LOOK - OBSERVE ONLY - ESC EXIT":
                     "WASD MOVE  •  CLICK TO CAPTURE MOUSE / ARROWS LOOK  •  E DOOR",13,h+23);
             g.drawString(health==0?"NO MOVEMENT OR EQUIPMENT WHILE INCAPACITATED":
-                    "1-3 "+selected+" / R SCAN   Z CROSS("+crosses+")  G THROW WARD("+throwWards+")  H SALT("+saltPouches+")  U UV  J LOG",13,h+42);
+                    "1-3 "+selected+" R SCAN  Z CROSS("+crosses+")  G WARD("+throwWards+
+                    ") H SALT("+saltPouches+") K SHOP  T HP  Y SAN  M VAN",13,h+42);
             g.setColor(new Color(145,204,175));
             g.drawString((mouseLook.captured()?"MOUSE LOCKED | ":"CLICK TO LOCK LOOK | ")+feedback,13,h+62);
+            if(vanDisplay)drawVanMeters(g,h);
             if(casefileOpen && journalPage!=0)drawFieldJournal(g,h);
             if(casefileOpen && journalPage==0){
                 int rows=Math.min(casefile.size(),Math.min(8,Math.max(1,(h-135)/37)));
@@ -259,6 +321,47 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 }
             }
         }finally{g.dispose();}
+    }
+    /** In-van board: actual individual sanity, deliberately approximate activity history. */
+    private void drawVanMeters(Graphics2D g,int h){
+        int left=Math.max(15,(getWidth()-560)/2),top=73,w=Math.min(560,getWidth()-30),height=330;
+        g.setColor(new Color(12,17,25,244));g.fillRoundRect(left,top,w,height,9,9);
+        g.setColor(new Color(219,208,177));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,15));
+        g.drawString("VAN / SANITY AND ACTIVITY",left+18,top+29);
+        g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
+        if(meters==null){
+            g.drawString("Awaiting host instrument sample...",left+18,top+56);return;
+        }
+        int[] sanity=meters.sanity();
+        for(int i=0;i<6;i++){
+            int y=top+56+i*27;
+            int value=sanity[i];
+            g.setColor(new Color(209,219,223));
+            g.drawString("H"+(i+1)+" "+(value<0?"OFFLINE":value+"%"),left+18,y);
+            g.setColor(new Color(45,54,60));g.fillRoundRect(left+125,y-12,115,10,3,3);
+            if(value>=0){
+                g.setColor(value<35?new Color(209,113,115):value<65?
+                    new Color(203,168,105):new Color(126,199,168));
+                g.fillRoundRect(left+125,y-12,115*value/100,10,3,3);
+            }
+        }
+        int x0=left+266,y0=top+65,plotWidth=Math.max(130,w-286),plotHeight=154;
+        g.setColor(new Color(42,51,65));g.fillRect(x0,y0,plotWidth,plotHeight);
+        g.setColor(new Color(180,200,203));
+        g.drawString("ACTIVITY / UNCERTAIN",x0,y0-8);
+        g.drawString(meters.activity()+"/10",x0+plotWidth-42,y0-8);
+        int size=activityHistory.size(),index=0,prevX=-1,prevY=-1;
+        g.setColor(new Color(147,213,190));
+        for(int val:activityHistory){
+            int px=x0+(size<=1?0:index*plotWidth/(size-1));
+            int py=y0+plotHeight-6-val*(plotHeight-12)/10;
+            if(prevX>=0)g.drawLine(prevX,prevY,px,py);
+            prevX=px;prevY=py;index++;
+        }
+        g.setColor(new Color(183,188,198));
+        g.drawString("LAGGED / NOISY / NOT EXACT GHOST ENERGY",left+18,top+260);
+        g.drawString("M CLOSE  |  K AT RACK TO BUY   T HEALTH  Y SANITY",left+18,top+282);
+        g.drawString("CREDITS £"+fieldCredits,left+18,top+306);
     }
     /** One compact casebook with instrument results, observations and type reference. */
     private void drawFieldJournal(Graphics2D g,int viewHeight){
@@ -348,6 +451,17 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_G -> sendAction("thrown ward",()->client.deploy(HunterCounters.Kind.WARD));
             case KeyEvent.VK_H -> sendAction("salt",()->client.deploy(HunterCounters.Kind.SALT));
             case KeyEvent.VK_U -> sendAction("UV",()->client.scanUv());
+            case KeyEvent.VK_M -> {
+                if(vanDisplay)vanDisplay=false;
+                else if(insideVan()){
+                    vanDisplay=true;meters=null;activityHistory.clear();lastVanPoll=-100000;
+                    sendAction("van monitor",()->client.vanMonitor());
+                    lastVanPoll=tick;
+                }else feedback="MONITORS ONLY ACCESSIBLE INSIDE THE VAN";
+            }
+            case KeyEvent.VK_K -> showSupplyStore();
+            case KeyEvent.VK_T -> consumeMedicine(FieldSupplies.Kind.HEALTH);
+            case KeyEvent.VK_Y -> consumeMedicine(FieldSupplies.Kind.SANITY);
             case KeyEvent.VK_J -> {casefileOpen=!casefileOpen;if(casefileOpen)journalPage=0;}
             case KeyEvent.VK_I -> selectedGuess=GhostIdentity.Type.values()[
                     (selectedGuess.ordinal()+1)%GhostIdentity.Type.values().length];
