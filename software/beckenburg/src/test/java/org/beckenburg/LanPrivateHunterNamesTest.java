@@ -51,6 +51,10 @@ public final class LanPrivateHunterNamesTest {
                 "real ghost type not revealed during queueing");
 
             a.client.ready();b.client.ready();ghost.client.ready();
+            // READY messages arrive on independent sockets. Observe the host's
+            // all-ready lobby acknowledgement before asking Hunter 1 to start.
+            // Otherwise START can legally be rejected ahead of a teammate READY.
+            a.await("LOBBY|2|HUMAN|3|WAITING");
             a.client.start();
             a.await("INFO|mission started");
             a.client.view3D();
