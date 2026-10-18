@@ -17,6 +17,9 @@ A source-code commit is not a passing stage. Each *completed* microstep must hav
 
 Use meaningful vertical improvements, not a giant speculative code rewrite. An independent workstream may prepare future specifications, but **prerequisite stage completion cannot be skipped**. When a GitHub connector call times out, first inspect remote state for acceptance, retry transient failure with bounded delay/reconcile head, and report persistent auth/permissions/conflicts; never blind force-push. No GitHub Actions unless expressly requested.
 
+## Multiplayer comparison acceptance addendum
+The [researched multiplayer complaints and reliability contract](network/MULTIPLAYER_COMPLAINTS_AND_RELIABILITY_CONTRACT_2026.md) governs host/server authority, editable local saves, direct LAN, connected-seat recovery, ghost AI takeover, role-filtered snapshots, independent voice recovery, lobby flow and measured latency/hit validation. The N-G01–N-G15 scenarios are proposed acceptance checks, **not passed tests**. Until they pass, reconnect, host migration, secure WAN and other deferred features are not advertised as supported. Local save editing is explicitly allowed; multiplayer authority and packet validation still apply. Reference each result in the existing stage-ledger.json, with no independent progress tracker.
+
 ## Cross-domain quality thresholds
 Some numbers below are explicit **provisional release targets**, not claims of observed performance; minimum/recommended hardware must be selected by P01 and measured again in P27. Changing a threshold requires an explicit recorded engineering decision and a repeated independent validation, not silent relaxation during a failing test.
 
