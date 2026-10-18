@@ -19,6 +19,7 @@ public final class LanClient implements AutoCloseable {
     private final String connectAddress;
     private final int connectPort;
     private volatile String resumeKey;
+    private volatile int latencyMillis=-1;
 
     /** A reconnect capability, not an identity or proof of ownership outside this match. */
     public record ResumeTicket(String seat,String token,long nextSequence) { }
@@ -36,6 +37,8 @@ public final class LanClient implements AutoCloseable {
     }
     public String address() {return connectAddress;}
     public int port() {return connectPort;}
+    /** Last host-measured TCP heartbeat round-trip; -1 until sampled. */
+    public int latencyMillis(){return latencyMillis;}
 
     public LanClient(String address,int port,boolean ghost,String nickname,Consumer<String> observer)throws IOException {
         this(address,port,ghost,nickname,null,"","",observer);
@@ -176,6 +179,19 @@ public final class LanClient implements AutoCloseable {
                 String line=LanProtocol.read(in);
                 if(line==null)break; // Clean remote EOF still ends the connection.
                 LanProtocol.parts(line);
+                if(line.startsWith("PING|")){
+                    var fields=LanProtocol.parts(line);
+                    if(fields.size()!=2)throw new IOException("invalid host heartbeat");
+                    int challenge=LanProtocol.integer(fields.get(1),0,99999999);
+                    synchronized(this){send("PONG|"+challenge);}
+                    continue;
+                }
+                if(line.startsWith("NETSTATS|")){
+                    var fields=LanProtocol.parts(line);
+                    if(fields.size()!=2)throw new IOException("invalid connection telemetry");
+                    latencyMillis=LanProtocol.integer(fields.get(1),0,60000);
+                    continue;
+                }
                 if(line.startsWith("VOICEKEY|")){
                     // The UDP key is secret protocol control data, never a UI/log packet.
                     setupVoice(line);
