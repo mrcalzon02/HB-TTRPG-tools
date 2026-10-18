@@ -416,7 +416,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString("BECKENBURG / LAN HOUSE — HUNTER "+(seat+1)+
                 "   PARTY "+partySize+"  DIFFICULTY +"+partyDifficulty,13,26);
             g.drawString(map.roomName(renderer.x,renderer.z)+" | TEAM "+(peers.size()+1)+" / 6 | HP "+health+
-                " | SANITY "+sanity+" | CLUES "+evidence+"/3",13,46);
+                " | SANITY "+sanity+" | LOG "+casefile.size(),13,46);
             g.drawString("+",getWidth()/2,h/2);
             int switchTarget=lights.aimed(map,renderer.x,renderer.z,renderer.yaw);
             if(switchTarget>=0){
@@ -472,8 +472,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     String line=String.format("T%05d  H%d  %s  /  %s  /  %s",entry.tick(),
                             entry.seat()+1,map.roomName(entry.room()),entry.tool(),entry.finding());
                     int max=Math.max(12,(width-36)/8),y=top+48+i*37;
-                    g.setColor(entry.finding()==LanEvidenceJournal.Finding.CONFIRMED
-                            ?new Color(149,219,179):new Color(221,207,167));
+                    g.setColor(new Color(221,207,167));
                     g.drawString(line.length()>max?line.substring(0,max-3)+"...":line,33,y);
                     g.setColor(new Color(217,218,209));
                     String raw=entry.reading();
