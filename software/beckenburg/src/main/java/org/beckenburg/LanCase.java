@@ -200,15 +200,12 @@ public final class LanCase {
         if(tool==null||room<0||room>=HouseMap.ROOM_COUNT||tick<0
                 ||eventStrength<0||eventStrength>10)
             return new Report(false,"invalid environmental scan context");
-        boolean positive;
         String reading;
         switch(tool){
             case EMF -> {
                 EvidenceSignals.Electromagnetic sample=EvidenceSignals.emf(
                     0xB3CC3BL,tick,room,eventRoom,eventStrength,emfSilence);
-                reading="EMF "+sample.level()+"/10"
-                    +(sample.suppressed()?" - field suppressed":" - live field activity");
-                positive=sample.positiveEvidence();
+                reading="EMF "+sample.level()+"/10";
             }
             case THERMOMETER -> {
                 boolean inside=room<HouseMap.INDOOR_ROOMS;
@@ -216,20 +213,13 @@ public final class LanCase {
                     evidenceSeason,evidenceWeather,evidenceHour,room,inside,evidenceHeating);
                 EvidenceSignals.Temperature sample=EvidenceSignals.temperature(
                     0xA11CE5L,tick,place,evidenceThermal,room==anchor,eventStrength);
-                positive=sample.paranormalExtreme();
                 reading="Air "+sample.displayText(EvidenceSignals.Unit.CELSIUS)
-                    +" / "+sample.displayText(EvidenceSignals.Unit.FAHRENHEIT)
-                    +(positive?" - extreme anomaly":" - environment");
+                    +" / "+sample.displayText(EvidenceSignals.Unit.FAHRENHEIT);
             }
-            case SPIRIT_BOX -> {
-                positive=room==ghostRoom;
-                reading=positive?"Direct response captured in current ghost room"
-                    :"No verifiable direct response";
-            }
+            case SPIRIT_BOX -> reading=room==ghostRoom
+                ?"Voice response detected":"No response detected";
             default -> throw new AssertionError(tool);
         }
-        // Instrument measurements are raw observations, not automatic proof or an
-        // unlock condition. Hunter deductions live in the manual field journal.
         return new Report(true,"READING "+tool+" in "+room+" - "+reading);
     }
     public Report scanSpatialMeasured(int seat,Tool tool,LanWorld.Body body,
