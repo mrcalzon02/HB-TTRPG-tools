@@ -37,10 +37,32 @@ public final class EvidenceSignals {
                 unit==Unit.CELSIUS?"°C":"°F");
         }
     }
-    public record Electromagnetic(int level, boolean positiveEvidence) {
+    public record Electromagnetic(int level, boolean positiveEvidence, boolean suppressed) {
         public Electromagnetic {
-            if(level<1||level>10||positiveEvidence&&level<=6)
+            if(level<0||level>10||(level==0)!=suppressed
+                    ||positiveEvidence&&(level<=6||suppressed))
                 throw new IllegalArgumentException("invalid EMF");
+        }
+        public Electromagnetic(int level,boolean positiveEvidence){
+            this(level,positiveEvidence,false);
+        }
+    }
+    /** A zero reading is abnormal only if a live, powered meter observes a genuine
+     * suppression event. Absence of high EMF is NOT evidence of spectral silence.
+     */
+    public static final class QuietFieldTracker {
+        private int lastTick=-1,firstTick=-1,room=-1,count;
+        public int observe(int tick,int observedRoom,Electromagnetic sample){
+            if(tick<0||observedRoom<0||sample==null)
+                throw new IllegalArgumentException("invalid quiet-field observation");
+            if(!sample.suppressed()){
+                room=-1;count=0;lastTick=-1;firstTick=-1;return 0;
+            }
+            if(room!=observedRoom||tick-lastTick>40){
+                room=observedRoom;firstTick=tick;lastTick=tick;count=1;return 1;
+            }
+            if(tick-lastTick>=5){lastTick=tick;count=Math.min(3,count+1);}
+            return count>=3&&tick-firstTick>=10?3:count;
         }
     }
     public static double cToF(double c){return c*9.0/5.0+32.0;}
@@ -55,12 +77,18 @@ public final class EvidenceSignals {
     /** 1..10 activity; >6 is positive ONLY for a genuine local ghost event. */
     public static Electromagnetic emf(long seed,int tick,int room,
                                     int eventRoom,int eventStrength){
+        return emf(seed,tick,room,eventRoom,eventStrength,false);
+    }
+    public static Electromagnetic emf(long seed,int tick,int room,
+                                    int eventRoom,int eventStrength,boolean suppression){
         if(tick<0||room<0||eventStrength<0||eventStrength>10)
             throw new IllegalArgumentException("invalid EMF context");
         int ambient=1+hash(seed,room,tick/5)%4;
         boolean local=room==eventRoom&&eventStrength>0;
+        // Cancellation is a real entity action, not failure to detect an ordinary event.
+        if(local&&suppression)return new Electromagnetic(0,false,true);
         int level=Math.min(10,ambient+(local?(eventStrength*7+5)/10:0));
-        return new Electromagnetic(level,local&&level>6);
+        return new Electromagnetic(level,local&&level>6,false);
     }
     /** Seasonal/weather/time baseline, applied to both outside and indoor air. */
     public static double ambientC(Location place){
