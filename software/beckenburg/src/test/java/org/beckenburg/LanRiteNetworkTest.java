@@ -45,7 +45,7 @@ public final class LanRiteNetworkTest {
    g.client.ghost(GhostDomain.Action.DISTURB,4);
    g.until("ACCEPT|GHOST|DISTURB|");
    for(LanCase.Tool instrument:LanCase.Tool.values()){
-    a.client.scan(instrument);a.until("ACCEPT|SCAN|CONFIRMED");
+    a.client.scan(instrument);a.until("ACCEPT|SCAN|READING");
    }
    ok(host.running(),"case still active after evidence");
    a.client.identify(GhostIdentity.Type.WRAITH);
@@ -60,7 +60,7 @@ public final class LanRiteNetworkTest {
    b.until("RESULT|BANISHED");
    g.until("RESULT|BANISHED");
    ok(!host.running(),"banishment outcome stops match");
-   System.out.println("PASS: 4 real sockets, Wraith triple clues, hunter-only identification, required site/banishment, human-ghost privacy");
+   System.out.println("PASS: 4 real sockets, raw measurements, hunter deduction, correct site/banishment, human-ghost privacy");
   }
  }
 }
