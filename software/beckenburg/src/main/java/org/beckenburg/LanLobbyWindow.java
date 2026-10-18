@@ -442,9 +442,10 @@ public final class LanLobbyWindow extends JFrame {
         lobbyChat.setEnabled(available&&!missionRunning);
         sendLobbyChat.setEnabled(available&&!missionRunning);
         ready.setEnabled(available);
-        start.setEnabled(available&&connection!=null&&
-            ("H1".equals(connection.seat())||
-             (hosted!=null&&"GHOST".equals(connection.seat()))));
+        // Production GUI hosts explicitly claim H1 or GHOST at creation.
+        // A remote guest occupying H1 in a ghost-hosted room is NOT the owner.
+        start.setEnabled(available&&hosted!=null&&connection!=null&&
+            ("H1".equals(connection.seat())||"GHOST".equals(connection.seat())));
         move.setEnabled(available&&!worldMode&&connection!=null&&!"GHOST".equals(connection.seat()));
         use.setEnabled(available&&connection!=null&&"GHOST".equals(connection.seat()));
         boolean hunter=available&&connection!=null&&!"GHOST".equals(connection.seat());
