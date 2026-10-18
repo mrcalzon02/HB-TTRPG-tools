@@ -132,6 +132,15 @@ public final class LanSessionResumeIntegrationTest {
             }
         }
     }
+    /** Inspect only the host's grace bound, not a fake timing measurement. */
+    private static long reservationDeadline(LanHost host,int seat)throws Exception{
+        var slots=LanHost.class.getDeclaredField("reserved");slots.setAccessible(true);
+        Object reservation=java.lang.reflect.Array.get(slots.get(host),seat);
+        check(reservation!=null,"requested seat has an active recovery reservation");
+        var end=reservation.getClass().getDeclaredField("expiresNanos");
+        end.setAccessible(true);
+        return end.getLong(reservation);
+    }
     private static void durableResumeRotation()throws Exception {
         java.nio.file.Path folder=java.nio.file.Files.createTempDirectory("beckenburg-rotation-");
         try(LanHost host=new LanHost("127.0.0.1",0)){
@@ -144,6 +153,7 @@ public final class LanSessionResumeIntegrationTest {
                 check(original!=null,"original reserved-seat recovery capability exists");
                 b.breakTransportWithoutLeaving();
                 a.await("PEER|LOST|1");
+                long firstExpiry=reservationDeadline(host,1);
                 // First attempt receives a replacement, but crashes before it
                 // can atomically store or acknowledge that replacement.
                 try(Peer failed=new Peer(host.port(),original)){
@@ -151,6 +161,8 @@ public final class LanSessionResumeIntegrationTest {
                     failed.breakTransportWithoutLeaving();
                 }
                 a.await("PEER|LOST|1");
+                check(reservationDeadline(host,1)<=firstExpiry,
+                    "repeated failed token rotation cannot extend initial disconnect grace");
                 try(Peer retried=new Peer(host.port(),original)){
                     retried.await("INFO|mission resumed");
                     LanClient.ResumeTicket replacement=retried.client.resumeTicket();
