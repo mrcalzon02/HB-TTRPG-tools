@@ -20,7 +20,7 @@ public final class InvestigationSession {
     private final int[] spectralTrace=new int[HouseMap.ROOM_COUNT];
     private int saltRoom=-1,saltTick=-1;
     private boolean apparitionPhotographed;
-    private final EnumSet<Instrument> evidence = EnumSet.noneOf(Instrument.class);
+    private final EnumSet<Instrument> measuredTools = EnumSet.noneOf(Instrument.class);
     private final ArrayList<String> journal = new ArrayList<>();
     private Outcome outcome = Outcome.ACTIVE;
     private int ticks, health = 100, stress, wards, payouts;
@@ -34,7 +34,7 @@ public final class InvestigationSession {
     private final HunterCounters counters=new HunterCounters();
     private final GhostDomain.AiController ghostAi;
     private boolean prepared, haunted, rewarded;
-    private String message = "Find disturbances, collect 3 instruments' evidence, prepare a ward, cleanse the anchor.";
+    private String message = "Inspect the haunting, record instrument measurements, prepare a ward, and attempt the rite.";
 
     public InvestigationSession(HouseMap map, Role role, long seed) {
         this.map=map; this.role=role; this.random=new Random(seed);
@@ -52,7 +52,7 @@ public final class InvestigationSession {
         this.anchorRoom=random.nextInt(map.interiorRoomCount());
         this.ghost=new GhostDomain(map,anchorRoom);
         this.ghostAi=new GhostDomain.AiController(seed ^ 0x4245434b454eL);
-        journal.add("Case 001 / Spirit-class disturbance. Three complementary readings required.");
+        journal.add("Case 001 / All valid instrument measurements are recorded; interpret the evidence yourself.");
         journal.add("All classes can finish the contract; specialist actions change efficiency.");
     }
     public HouseMap map() { return map; }
@@ -97,8 +97,9 @@ public final class InvestigationSession {
     public int wards() { return wards; }
     public int payout() { return payouts; }
     public boolean apparitionPhotographed(){return apparitionPhotographed;}
-    public int evidenceCount() { return evidence.size(); }
-    public boolean hasEvidence(Instrument instrument) { return evidence.contains(instrument); }
+    /** Legacy HUD/API count: different instruments used, NOT verified ghost evidence. */
+    public int evidenceCount() { return measuredTools.size(); }
+    public boolean hasEvidence(Instrument instrument) { return measuredTools.contains(instrument); }
     public boolean wardPrepared() { return prepared; }
     public boolean ghostManifesting() { return haunted; }
     public Outcome outcome() { return outcome; }
@@ -221,6 +222,7 @@ public final class InvestigationSession {
     }
 
     /** Environmental measurements mirror the LAN's numeric evidence model. */
+    /** A valid scan ALWAYS produces a measurement and a journal entry. */
     public boolean scan(Instrument tool, double x, double z) {
         if(outcome!=Outcome.ACTIVE||tool==null)return false;
         int room=map.roomAt(x,z);
@@ -228,14 +230,11 @@ public final class InvestigationSession {
         int age=ticks-lastEvidenceTick;
         int eventPower=age>=0&&age<=40
             ?Math.max(0,lastEvidenceStrength-age/7):0;
-        boolean strong;
         String reading;
         switch(tool){
             case EMF -> {
                 var measured=EvidenceSignals.emf(evidenceSeed,ticks,room,lastEvidenceRoom,eventPower);
-                strong=measured.positiveEvidence();
-                reading="EMF "+measured.level()+"/10"
-                    +(strong?" - paranormal event":" - fluctuating background");
+                reading="EMF "+measured.level()+"/10";
             }
             case THERMOMETER -> {
                 boolean indoor=room<HouseMap.INDOOR_ROOMS;
@@ -244,22 +243,16 @@ public final class InvestigationSession {
                     14,room,indoor,heated);
                 var measured=EvidenceSignals.temperature(evidenceSeed,ticks,location,
                     thermalPolarity,room==anchorRoom,eventPower);
-                strong=measured.paranormalExtreme();
                 reading="Air "+measured.displayText(EvidenceSignals.Unit.CELSIUS)
-                    +" / "+measured.displayText(EvidenceSignals.Unit.FAHRENHEIT)
-                    +(strong?" - paranormal extreme":" - environment");
+                    +" / "+measured.displayText(EvidenceSignals.Unit.FAHRENHEIT);
             }
-            case SPIRIT_BOX -> {
-                strong=room==ghost.room();
-                reading=strong?"Direct nearby spirit response":"No verifiable nearby response";
-            }
+            case SPIRIT_BOX -> reading=room==ghost.room()
+                ?"Voice response detected":"No response detected";
             default -> throw new AssertionError(tool);
         }
-        if(strong&&evidence.add(tool)){
-            log("CONFIRMED "+tool.name().replace('_',' ')+" / "+map.roomName(room)+" — "+reading);
-        }else log(reading+" / "+map.roomName(room)
-                +(strong?" (already recorded)":" (not conclusive)"));
-        return strong;
+        measuredTools.add(tool);
+        log("T"+ticks+" / "+map.roomName(room)+" / "+tool+" / "+reading);
+        return true;
     }
     public boolean placeWard(double x,double z) {
         if(outcome!=Outcome.ACTIVE || wards<=0) return false;
@@ -272,7 +265,6 @@ public final class InvestigationSession {
     }
     public boolean cleanse(double x,double z) {
         if(outcome!=Outcome.ACTIVE) return false;
-        if(evidence.size()!=3) { log("Cannot cleanse: corroborate all three evidence families first.");return false; }
         if(map.roomAt(x,z)!=anchorRoom) { log("Ritual failed: no true attachment anchor in this room.");stress=Math.min(100,stress+5);return false; }
         if(!prepared) { log("The anchor needs a prepared ward before the banishment rite.");return false; }
         finish(Outcome.CLEANSED);
@@ -290,6 +282,6 @@ public final class InvestigationSession {
     private void finish(Outcome result) {
         if(rewarded)return;
         outcome=result;rewarded=true;
-        payouts=switch(result){case CLEANSED->220 + evidence.size()*40 + health/2 + (apparitionPhotographed?45:0);case RETREATED->evidence.size()*30 + (apparitionPhotographed?25:0);case LOST->0;case ACTIVE->0;};
+        payouts=switch(result){case CLEANSED->220 + measuredTools.size()*40 + health/2 + (apparitionPhotographed?45:0);case RETREATED->measuredTools.size()*30 + (apparitionPhotographed?25:0);case LOST->0;case ACTIVE->0;};
     }
 }
