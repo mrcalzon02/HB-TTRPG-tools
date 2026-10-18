@@ -24,6 +24,8 @@ public final class LanHost implements AutoCloseable {
     private final LanCase mission;
     private final LanEvidenceJournal casefile=new LanEvidenceJournal();
     private final FieldJournal fieldNotes=new FieldJournal();
+    // Radio history is bounded and investigator-only. Local speech has no global replay.
+    private final java.util.ArrayDeque<LanChat.Entry> radioHistory=new java.util.ArrayDeque<>();
     private final LanGhostPursuit ai;
     private final GhostIdentity.Type ghostType;
     private final boolean ghostMayStart; 
@@ -200,6 +202,7 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,supplies[peer.slot].frame());
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
                     reply(peer,"HIDECONFIG|"+contract.hidingSpots());
+                    for(LanChat.Entry line:radioHistory)reply(peer,line.frame());
                 }
                 case "GVIEW3D" -> {
                     if(!running||peer.slot!=GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("ghost view requires active ghost seat");
@@ -365,6 +368,34 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"NOTES|RESET");
                     for(String note:fieldNotes.snapshot())reply(peer,note);
                     reply(peer,"ACCEPT|JOURNAL");
+                }
+                case "SAY" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=4)
+                        throw new IllegalArgumentException("hunter world chat required");
+                    LanChat.Channel channel=LanChat.Channel.valueOf(p.get(1));
+                    String message=LanChat.clean(p.get(2));
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(3)));
+                    ensureActiveHunter(peer);
+                    if(tick-peer.lastChatTick<6)
+                        throw new IllegalArgumentException("chat cooling down");
+                    peer.lastChatTick=tick;
+                    LanChat.Entry line=new LanChat.Entry(channel,peer.slot,tick,message);
+                    LanWorld.Body from=world.body(peer.slot);
+                    for(int i=0;i<HUNTERS;i++){
+                        Peer recipient=seats[i];
+                        if(recipient==null||!recipient.worldMode)continue;
+                        if(channel==LanChat.Channel.RADIO ||
+                           i==peer.slot||LanChat.localVisible(map,from,world.body(i)))
+                            reply(recipient,line.frame());
+                    }
+                    if(channel==LanChat.Channel.RADIO){
+                        radioHistory.addLast(line);
+                        if(radioHistory.size()>16)radioHistory.removeFirst();
+                    }
+                    // The physical act of speaking creates a coarse ghost hearing cue,
+                    // but the ghost receives neither transcript nor speaker identity.
+                    recordSound(peer.slot,LanGhostPursuit.Sound.VOICE);
+                    reply(peer,"ACCEPT|SAY|"+channel);
                 }
                 case "NOTE" -> {
                     if(!running||peer.slot==GHOST_SEAT||p.size()!=4)
@@ -718,7 +749,7 @@ public final class LanHost implements AutoCloseable {
     private static final class Peer{
         final Socket socket;final Reader input;final Writer output;final int slot;final String name;boolean ready,worldMode,ghostWorldMode;
         long lastGhostPoseSequence=-1,lastGhostActionSequence=-1;
-        int lastMonitorTick=-100000;
+        int lastMonitorTick=-100000,lastChatTick=-100000;
         Peer(Socket s,Reader in,Writer out,int slot,String name){socket=s;input=in;output=out;this.slot=slot;this.name=name;}
     }
 }

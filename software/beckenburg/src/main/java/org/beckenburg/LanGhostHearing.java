@@ -21,7 +21,7 @@ public final class LanGhostHearing {
         public String caption(){
             String category=switch(source){
                 case FOOTSTEP->"FOOTSTEPS";case DOOR->"DOOR MOVEMENT";
-                case EQUIPMENT->"EQUIPMENT";case RITUAL->"RITUAL ACTIVITY";
+                case EQUIPMENT->"EQUIPMENT";case RITUAL->"RITUAL ACTIVITY";case VOICE->"DISTANT VOICES";
             };
             return category+" / "+direction+" / "+strength;
         }

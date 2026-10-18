@@ -64,6 +64,10 @@ public final class LanClient implements AutoCloseable {
         Objects.requireNonNull(tool);send("SCAN|"+tool+"|"+(++sequence));
     }
     public synchronized void journal()throws IOException {send("JOURNAL");}
+    public synchronized void say(LanChat.Channel channel,String message)throws IOException{
+        Objects.requireNonNull(channel);
+        send("SAY|"+channel+"|"+LanChat.clean(message)+"|"+(++sequence));
+    }
     public synchronized void note(GhostFieldGuide.Clue clue,FieldJournal.Status status)throws IOException{
         Objects.requireNonNull(clue);Objects.requireNonNull(status);
         send("NOTE|"+clue+"|"+status+"|"+(++sequence));

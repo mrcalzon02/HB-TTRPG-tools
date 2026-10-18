@@ -69,6 +69,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                         case DOOR->LanSound.Cue.DOOR;
                         case EQUIPMENT->LanSound.Cue.EQUIPMENT;
                         case RITUAL->LanSound.Cue.RITUAL;
+                        case VOICE->LanSound.Cue.WHISPER;
                     };
                     int pan=switch(cue.direction()){
                         case LEFT->-75;case RIGHT->75;case AHEAD,BEHIND,HERE->0;
