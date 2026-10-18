@@ -1,5 +1,11 @@
 # The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
 
+## Hunter name labels and ghost anonymity
+
+In the **LAN first-person hunter scene**, a visible teammate has their join nickname directly above their character. The host validates each name and sends `PLAYERNAME` only to hunter seats, with a fresh snapshot whenever an investigator opens the 3D viewport. Labels project from the real sprite's head and are suppressed when the hunter is behind a wall/closed door, outside the camera, beyond render distance or hidden by nearer geometry. Disconnects remove their label. Neither actual ghost manifestations nor the **playable ghost viewpoint** display labels, and ghosts never receive `PLAYERNAME` packets. The existing randomized `LOBBYAVATAR` presentation is independent of the assigned ghost species; `GTYPE` is released to the ghost controller only inside an active match.
+
+Validation gates: `LanHunterNameplateTest`, `LanPrivateHunterNamesTest`, `LobbyGhostAvatarTest`, and `LanGhostLobbySecrecyTest`, run by the Java build scripts. As with other in-game revisions, full Windows playability and complete multiplayer UI acceptance still require a complete build and real-session verification.
+
 ## Secret ghost identity and visible lobby role (implementation)
 
 Choosing **Ghost** in the lobby immediately draws a randomly tinted/directioned **approved Banshee character sprite** as a placeholder disguise, with **IDENTITY: UNKNOWN**. This lobby look is purely cosmetic and is NOT linked to the match's hidden ghost archetype, evidence, special attacks, or required ritual. Selecting **Hunter** shows the approved Observer concept sprite. Once a player connects as a ghost, the host selects and broadcasts one cosmetic appearance (`LOBBYAVATAR`) to **every** lobby participant so everyone can see that the ghost slot is occupied; the portrait is replaced/cleared when the ghost leaves. The role selector locks after connection to avoid claiming that a seat can change when the handshake has already assigned it.
