@@ -107,9 +107,14 @@ jobs:
           & jar --update --file $jar -C $classes org/beckenburg/release.properties
           if ($LASTEXITCODE -ne 0) { throw 'Failed to embed installed release version into JAR' }
           $dest=Join-Path $game 'build\release'
-          New-Item -ItemType Directory -Force -Path $dest | Out-Null
+          $payload=Join-Path $game 'build\package-input'
+          New-Item -ItemType Directory -Force -Path $dest,$payload | Out-Null
+          # Never use build/ as jpackage input: that also contains build/release/,
+          # compiled test classes and eventually its own generated app image.
+          # Package only the verified gameplay JAR, not recursively generated installers.
+          Copy-Item -LiteralPath $jar -Destination (Join-Path $payload 'beckenburg-game.jar') -Force
           $args=@('--name','Beckenburg','--app-version',$env:VERSION,
-                  '--input',(Join-Path $game 'build'),
+                  '--input',$payload,
                   '--main-jar','beckenburg-game.jar',
                   '--main-class','org.beckenburg.InvestigationGame',
                   '--dest',$dest,'--vendor','Beckenburg Project')
