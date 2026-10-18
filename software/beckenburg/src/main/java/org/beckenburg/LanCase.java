@@ -137,35 +137,15 @@ public final class LanCase {
         hunter(seat);
         return "PROGRESS|"+health[seat]+"|"+stress[seat]+"|"+wards[seat]+"|"+evidence.size()+"|"+(wardPrepared()?1:0)+"|"+Math.max(0,ritualProgress)+"|"+outcome;
     }
-    public Report scan(int seat,Tool tool,int room,int ghostRoom) {
-        hunter(seat);
-        if(outcome!=Outcome.ACTIVE||!active[seat]||health[seat]<=0)return new Report(false,"investigation unavailable");
-        int distance=Math.abs(room%HouseMap.COLS-anchor%HouseMap.COLS)+Math.abs(room/HouseMap.COLS-anchor/HouseMap.COLS);
-        boolean atAnchor=room==anchor;
-        if(atAnchor)tested.add(tool);
-        boolean strong=atAnchor&&archetype.signature(tool);
-        // Each instrument has a discoverable signature and possible negative result.
-        // Presence in the same room is insufficient for a positive reading on every type.
-        String reading=GhostIdentity.reading(archetype,tool,strong,distance,room==ghostRoom);
-        if(strong){boolean newlyAdded=evidence.add(tool);
-            return new Report(true,(newlyAdded?"CONFIRMED ":"REPEAT ")+tool+" in "+room+" - "+reading);
-        }
-        return new Report(true,"INCONCLUSIVE "+tool+" in "+room+" - "+reading);
-    }
-    /** Physical first-person scans use the host-owned world body, not a peer-supplied room
-     * or claimed distance. Merely entering the anchor room no longer confirms every clue.
+    /** Compatibility entry point for room-only callers: always return a measured
+     * value. Old fixed species-specific EMF/thermal/voice subtype codes are retired.
      */
-    public Report scanSpatial(int seat,Tool tool,LanWorld.Body body,int ghostRoom,HouseMap map) {
-        hunter(seat);
-        if(outcome!=Outcome.ACTIVE||!alive(seat))return new Report(false,"investigation unavailable");
-        if(tool==null||body==null||map==null||!Double.isFinite(body.x())||!Double.isFinite(body.z())
-                ||map.roomAt(body.x(),body.z())!=body.room())
-            return new Report(false,"invalid instrument or host body");
-        int room=body.room();
-        if(room==anchor&&Math.hypot(body.x()-map.centerX(anchor),body.z()-map.centerZ(anchor))
-                >tool.sensingRadius())
-            return new Report(true,"INCONCLUSIVE "+tool+" - weak reading; move closer to the source");
-        return scan(seat,tool,room,ghostRoom);
+    public Report scan(int seat,Tool tool,int room,int ghostRoom){
+        return scanMeasured(seat,tool,room,ghostRoom,0,-1,0);
+    }
+    /** A host-owned body determines which real room can be measured. */
+    public Report scanSpatial(int seat,Tool tool,LanWorld.Body body,int ghostRoom,HouseMap map){
+        return scanSpatialMeasured(seat,tool,body,ghostRoom,map,0,-1,0);
     }
     /**
      * Expanded-evidence measurement path. Unlike the legacy fixed signature path,
