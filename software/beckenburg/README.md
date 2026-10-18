@@ -4,13 +4,15 @@
 
 Press **Enter** in the first-person hunter view to type a **local** message; **F2** to type a **radio** message. Press Enter inside the chat box to send, or Escape to cancel. A compact temporary chat overlay shows messages with the validated investigator nickname and a channel indicator. Typing releases mouse capture and cancels held movement keys.
 
-Messages use the existing authenticated gameplay socket and are bounded to 80 safe printable ASCII characters (the current version-1 protocol is ASCII). The host enforces a 0.6-second rate limit, command replay protection, active-living-hunter status, and recipients. **Local** chat is delivered by real proximity and acoustic room connectivity: open passages carry voices farther than isolated rooms, and van conversation does not magically reach the whole building. **Radio** chat is delivered only to investigator clients, with bounded private history replay for a newly opened hunter viewport. Text and nickname packets are **never** sent to the ghost client.
+Messages use the existing seat-bound LAN gameplay socket (not cryptographically authenticated) and are bounded to 80 safe printable ASCII characters (the current version-1 protocol is ASCII). The host enforces a 0.6-second rate limit, command replay protection, active-living-hunter status, and recipients. **Local** chat is delivered by real proximity and acoustic room connectivity: open passages carry voices farther than isolated rooms, and van conversation does not magically reach the whole building. **Radio** chat is delivered only to investigator clients, with bounded private history replay for a newly opened hunter viewport. Text and nickname packets are **never** sent to the ghost client.
 
 Speaking on either channel generates a **VOICE** acoustic event at the real hunter position. The human ghost receives only a nearby coarse hearing cue (direction/strength), never the transcript or speaker identity; AI ghosts use the same bounded audible-memory pathway. Spoken text in the safe van does not produce house-wide paranormal hearing. Existing ghost pursuit and ghost sound privacy are retained.
 
 This is real networked **text chat**, not yet microphone audio. Embedded voice (device capture, secure low-latency transport, Opus codec, mixing, spatialisation, mic/radio selection and volume/mute settings) remains the next stage; it needs an accepted Java 17 open-source media dependency and live hardware validation. Do not transmit PCM through the ASCII gameplay protocol or claim voice is implemented.
 
 Tests: `LanChatTest` and `LanChatIntegrationTest` exercise packet validation, ghost-channel isolation, real localhost sockets, local distance and radio delivery. Both Linux and Windows build scripts run them.
+
+The **LAN lobby** also has one compact chat input. Connected hunters and the ghost-role player can speak before match start; the host validates and rate-limits messages, and everyone sees the sender's role and selected nickname. The ghost's *actual species remains secret*. After starting the match, lobby chat closes and active investigators use in-world local/radio text instead.
 
 ## Hunter name labels and ghost anonymity
 
