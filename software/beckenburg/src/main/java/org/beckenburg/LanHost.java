@@ -116,6 +116,10 @@ public final class LanHost implements AutoCloseable {
                 if(wantsGhost)ghostLobbyLook=LobbyGhostAvatar.random(
                     java.util.concurrent.ThreadLocalRandom.current());
                 LanProtocol.write(out,"WELCOME|"+(slot==GHOST_SEAT?"GHOST":"H"+(slot+1))+"|"+LanProtocol.VERSION);
+                if(slot!=GHOST_SEAT){
+                    // Validated investigator names are private to the hunter team.
+                    notifyHunters("PLAYERNAME|"+slot+"|"+nickname);
+                }
                 broadcastLobby();
             }
             socket.setSoTimeout(0);
@@ -182,6 +186,11 @@ public final class LanHost implements AutoCloseable {
                     if(!running||peer.slot==GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("3D view requires active hunter");
                     peer.worldMode=true;
                     reply(peer,"ACCEPT|VIEW3D");
+                    // Replay real investigator nicknames to newly opened hunter windows.
+                    // Ghost seats cannot enter VIEW3D and are never name recipients.
+                    for(int i=0;i<HUNTERS;i++)
+                        if(i!=peer.slot&&seats[i]!=null)
+                            reply(peer,"PLAYERNAME|"+i+"|"+seats[i].name);
                     broadcastWorld();broadcastApparitions();broadcastCounters();sendCounterAmmo(peer);
                     reply(peer,supplies[peer.slot].frame());
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());

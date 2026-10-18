@@ -14,6 +14,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final HouseMap map=new HouseMap();
     private final SceneRenderer renderer=new SceneRenderer();
     private final Map<Integer,SceneRenderer.RemoteBody> peers=new HashMap<>();
+    private final Map<Integer,String> hunterNames=new HashMap<>();
     private final javax.swing.Timer timer;
     private final Set<Integer> keys=new HashSet<>();
     private String feedback="Awaiting host world snapshot";
@@ -62,7 +63,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         if(!SwingUtilities.isEventDispatchThread())throw new IllegalStateException("network view must update on EDT");
         try{
             List<String> p=LanProtocol.parts(frame);
-            if(p.size()==6&&p.get(0).equals("BODY")){
+            if(p.size()==3&&p.get(0).equals("PLAYERNAME")){
+                int hunter=LanProtocol.integer(p.get(1),0,5);
+                String nickname=LanProtocol.cleanName(p.get(2));
+                if(hunter!=seat)hunterNames.put(hunter,nickname);
+            }else if(p.size()==6&&p.get(0).equals("BODY")){
                 int who=LanProtocol.integer(p.get(1),0,5);
                 double x=LanProtocol.integer(p.get(2),0,HouseMap.WIDTH*1000)/1000.0;
                 double z=LanProtocol.integer(p.get(3),0,HouseMap.HEIGHT*1000)/1000.0;
@@ -72,7 +77,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 else peers.put(who,new SceneRenderer.RemoteBody(x,z,who,heading));
             }else if(p.size()==3&&p.get(0).equals("PEER")&&p.get(1).equals("LEFT")){
                 int gone=LanProtocol.integer(p.get(2),0,5);
-                if(gone!=seat)peers.remove(gone);
+                if(gone!=seat){peers.remove(gone);hunterNames.remove(gone);}
                 feedback="INVESTIGATOR "+(gone+1)+" DISCONNECTED - CASE CONTINUES";
             }else if(p.size()==2&&p.get(0).equals("FORM")){
                 if(!p.get(1).equals("ORBS")&&!p.get(1).equals("FIGURE"))
@@ -269,6 +274,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             int h=Math.max(160,getHeight()-82);
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g.drawImage(renderer.image(),0,0,getWidth(),h,null);
+            drawHunterNameplates(g,h);
             g.setFont(new Font(Font.MONOSPACED,Font.BOLD,Math.max(12,getHeight()/46)));
             g.setColor(new Color(234,222,189));
             g.drawString("BECKENBURG / LAN HOUSE — HUNTER "+(seat+1)+
@@ -331,6 +337,29 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }finally{g.dispose();}
     }
     /** In-van board: actual individual sanity, deliberately approximate activity history. */
+    /** Hunter-only 2D labels projected from real 3D sprite locations after depth rendering. */
+    private void drawHunterNameplates(Graphics2D g,int viewHeight){
+        g.setFont(new Font(Font.MONOSPACED,Font.BOLD,13));
+        FontMetrics metrics=g.getFontMetrics();
+        for(var entry:peers.entrySet()){
+            String label=hunterNames.get(entry.getKey());
+            if(label==null||label.isBlank())continue;
+            SceneRenderer.Nameplate anchor=renderer.teammateNameplate(map,entry.getValue());
+            if(anchor==null)continue;
+            int px=(int)Math.round(anchor.x()*getWidth()/(double)SceneRenderer.W);
+            int py=(int)Math.round(anchor.y()*viewHeight/(double)SceneRenderer.H);
+            int width=metrics.stringWidth(label)+12;
+            int left=Math.max(4,Math.min(getWidth()-width-4,px-width/2));
+            if(py<metrics.getHeight()+4||py>viewHeight-6||width>=getWidth()-8)continue;
+            int top=py-metrics.getAscent()-7;
+            g.setColor(new Color(9,16,21,190));g.fillRoundRect(left,top,width,
+                metrics.getHeight()+6,7,7);
+            g.setColor(new Color(179,219,224));
+            g.drawRoundRect(left,top,width,metrics.getHeight()+6,7,7);
+            g.setColor(new Color(245,248,240));
+            g.drawString(label,left+6,py);
+        }
+    }
     private void drawVanMeters(Graphics2D g,int h){
         int left=Math.max(15,(getWidth()-560)/2),top=73,w=Math.min(560,getWidth()-30),height=330;
         g.setColor(new Color(12,17,25,244));g.fillRoundRect(left,top,w,height,9,9);

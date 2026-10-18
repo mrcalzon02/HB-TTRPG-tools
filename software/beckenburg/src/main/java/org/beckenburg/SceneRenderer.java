@@ -309,6 +309,36 @@ public final class SceneRenderer {
                 throw new IllegalArgumentException("invalid remote body");
         }
     }
+    /** Screen position above a visible investigator. No ghost or text type is accepted. */
+    public record Nameplate(int x,int y){ }
+    public Nameplate teammateNameplate(HouseMap map,RemoteBody teammate){
+        if(map==null||teammate==null)return null;
+        double distance=Math.hypot(teammate.x()-x,teammate.z()-z);
+        if(distance<1.35||distance>14.0)return null;
+        // Closed doors and solid walls suppress labels even before the raster check.
+        if(!map.clearLineOfSight(x,z,teammate.x(),teammate.z()))return null;
+        Point torso=camera(new Point(teammate.x(),1.35,teammate.z()));
+        Point head=camera(new Point(teammate.x(),1.95,teammate.z()));
+        if(torso.z<NEAR||torso.z>14.0||head.z<NEAR)return null;
+        double cx=W*.5+torso.x/torso.z*FOCAL;
+        double cy=H*.5-torso.y/torso.z*FOCAL;
+        double labelX=W*.5+head.x/head.z*FOCAL;
+        double labelY=H*.5-head.y/head.z*FOCAL-5;
+        if(!Double.isFinite(cx)||!Double.isFinite(cy)||
+            !Double.isFinite(labelX)||!Double.isFinite(labelY))return null;
+        int px=(int)Math.round(cx),py=(int)Math.round(cy);
+        if(px<3||px>=W-3||py<3||py>=H-3||
+            labelX<8||labelX>=W-8||labelY<4||labelY>=H-5)return null;
+        // The teammate must occupy at least one nearby torso Z pixel. Nearby
+        // foreground geometry or another sprite covering them hides the label.
+        boolean depthVisible=false;
+        for(int dy=-2;dy<=2&&!depthVisible;dy++)
+            for(int dx=-2;dx<=2&&!depthVisible;dx++){
+                double d=depths[(py+dy)*W+px+dx];
+                if(d>=torso.z-.45&&d<=torso.z+.55)depthVisible=true;
+            }
+        return depthVisible?new Nameplate((int)Math.round(labelX),(int)Math.round(labelY)):null;
+    }
     public record Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress,boolean orb) {
         public Apparition(double x,double z){this(x,z,LanGhostAnimation.Phase.LURK,0,0,false);}
         public Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress){
