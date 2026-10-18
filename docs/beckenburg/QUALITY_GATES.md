@@ -24,6 +24,9 @@ New or expanded regression sources: `LanSessionResumeIntegrationTest` (true host
 
 Outstanding hard gates: full clean-checkout Java 17 build; repeated two-PC Windows 1–6 hunter and human-ghost sessions; reconnect during active strike/ritual and while hidden; stalled socket reader under sustained world updates; graceful handling of full queues, surprise EOF and host shutdown; measurement of tick scheduling under 0/50/150 ms network impairment and 0/2% loss; audio/UDP isolation; proof that no ghost receives hunter-only snapshots or health/sanity; clean installation and release provenance. Until passing evidence is attached to the existing `stage-ledger.json`, keep multiplayer production status `verification` or `blocked`, never `complete`. No GitHub Action is introduced.
 
+## Local owner TCP failure must not destroy an active listen host (023)
+The GUI now preserves a live authoritative `LanHost` and reconnectable owner seat when only its local `LanClient` socket drops, rather than closing the entire shared investigation. `LanHostOwnerRecoveryTest` verifies the same host-survival predicate used by the GUI across hunter ownership, ghost-hosted guest H1, missing ticket and ended-server cases. Source is committed to main; full Java test execution and actual Windows GUI/2-PC demonstration remain **unverified**. See [022 follow-up](network/LAN_RECONNECT_DURABLE_ROTATION_022.md).
+
 ## Durable recovery and host authority source gates (022, 2026-10-18)
 [Recovery and Host Authority 022](network/LAN_RECONNECT_DURABLE_ROTATION_022.md) adds unacknowledged token-loss recovery, exact post-persistence RESUMEACK, bounded original grace, strict local host START authorization and physically present disconnected hunters. Both build scripts reference the extended socket regressions. These are **committed code/tests**, not passed Windows/game-wide acceptance; keep their production QA gates open until executable evidence is captured.
 
