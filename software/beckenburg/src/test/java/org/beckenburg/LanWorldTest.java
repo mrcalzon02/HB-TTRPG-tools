@@ -10,7 +10,8 @@ public final class LanWorldTest {
         ok(map.valid(),"valid initial map");
         rejected(()->map.applyDoorSnapshot("garbage"),"invalid door ID");
         rejected(()->map.applyDoorSnapshot("10,10"),"duplicate door ID");
-        rejected(()->world.move(3,100,0,1),"ghost seat world movement");
+        ok(world.body(5).room()==HouseMap.EXTRACTION_ROOM,"sixth hunter has a real world body");
+        rejected(()->world.move(6,100,0,1),"ghost seat world movement");
         rejected(()->world.move(0,200,0,1),"oversized movement");
         rejected(()->world.move(0,0,0,1),"zero length movement");
         world.setRoom(0,4); // Main hall x=12.5 z=9.5; north door at x12/z6 is closed.

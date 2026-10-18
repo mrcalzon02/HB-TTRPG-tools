@@ -38,7 +38,7 @@ public final class LanLobbyTest {
             try{new LanClient("127.0.0.1",host.port(),true,"Fifth",s->{});throw new AssertionError("fifth ghost seat allowed");}
             catch(java.io.IOException expected){}
             h2.client.start();check(h2.waitPrefix("REJECT|",2).contains("host hunter"),"non-host cannot start");
-            h1.client.start();check(h1.waitPrefix("REJECT|",2).contains("three hunters"),"start gate");
+            h1.client.start();check(h1.waitPrefix("REJECT|",2).contains("hunter party must be ready"),"start gate");
             h1.client.ready();h2.client.ready();h3.client.ready();g.client.ready();
             h1.waitPrefix("LOBBY|3|HUMAN|4|WAITING",3);
             h1.client.start();check(h1.waitPrefix("INFO|mission started",2).contains("human ghost"),"human-ghost match starts");

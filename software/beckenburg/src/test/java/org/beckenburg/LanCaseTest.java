@@ -6,7 +6,8 @@ public final class LanCaseTest {
     private static void rejects(Runnable call){try{call.run();throw new AssertionError("invalid role accepted");}catch(IllegalArgumentException expected){}}
     public static void main(String[] args) {
         LanCase mission=new LanCase(4);
-        rejects(()->mission.health(3));rejects(()->mission.scan(-1,LanCase.Tool.EMF,4,4));
+        check(mission.health(3)==100,"fourth hunter socket exists for six-player parties");
+        rejects(()->mission.health(6));rejects(()->mission.scan(-1,LanCase.Tool.EMF,4,4));
         check(mission.scan(0,LanCase.Tool.EMF,3,3).message().startsWith("INCONCLUSIVE"),"ghost activity should not auto-confirm an anchor");
         check(mission.evidenceCount()==0,"no evidence leakage");
         check(!mission.cleanse(1,4).accepted(),"unsolved cleanse rejected");
