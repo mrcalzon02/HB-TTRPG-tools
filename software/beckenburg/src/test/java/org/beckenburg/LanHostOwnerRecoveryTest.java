@@ -58,8 +58,27 @@ public final class LanHostOwnerRecoveryTest {
                     returned.client.view3D();returned.await("ACCEPT|VIEW3D");
                     ok(host.running()&&host.reservedSeats()==0,"ghost host stays authoritative");
                 }
-                ghost.client.close();
-                b.await("INFO|match stopped after host departure");
+                // Now drop the actual ghost owner's TCP connection, not merely
+                // guest H1. The authoritative server must outlive this socket too.
+                LanClient.ResumeTicket ghostTicket=ghost.client.resumeTicket();
+                ghost.interruptSocket();
+                b.await("INFO|human ghost disconnected - AI has taken control");
+                ok(host.running()&&host.reservedSeats()==1,
+                    "ghost host transport EOF retains the server and original ghost seat");
+                ok(LanLobbyWindow.keepRunningLocalHost(host,ghostTicket),
+                    "real ghost owner should see local-session Reconnect, not lose hosting");
+                try(Peer returnedGhost=new Peer(host.port(),ghostTicket)){
+                    returnedGhost.await("INFO|mission resumed");
+                    ok("GHOST".equals(returnedGhost.client.seat()),
+                        "ghost owner regains exact same authorized role");
+                    returnedGhost.client.viewGhost3D();
+                    returnedGhost.await("ACCEPT|GVIEW3D");
+                    returnedGhost.await("GTYPE|");
+                    ok(host.running()&&host.reservedSeats()==0,
+                        "ghost AI handoff returns to same running authoritative world");
+                    returnedGhost.client.close();
+                    b.await("INFO|match stopped after host departure");
+                }
                 ok(!host.running(),"explicit ghost-owner departure terminates listen match");
             }
         }
