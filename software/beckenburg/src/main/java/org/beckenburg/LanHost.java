@@ -29,6 +29,7 @@ public final class LanHost implements AutoCloseable {
     private final LanWorld world=new LanWorld(map);
     private final LanGhostSpatial ghostPose=new LanGhostSpatial(map,4);
     private final GhostDomain ghost;
+    private final GhostActionCadence actionCadence;
     private final LanCase mission;
     private final LanEvidenceJournal casefile=new LanEvidenceJournal();
     private final GhostWriting writingBook=new GhostWriting();
@@ -96,6 +97,7 @@ public final class LanHost implements AutoCloseable {
         world.configure(contract);
         ghostPose.configureSpeed(contract.ghostSpeed());
         ghost=new GhostDomain(map,4,type);
+        actionCadence=new GhostActionCadence(type);
         mission=new LanCase(4);
         mission.configureHunters(contract.hunters());
         mission.configurePartyThreat(contract.partyDifficulty());
@@ -407,6 +409,7 @@ public final class LanHost implements AutoCloseable {
                     if(seats[GHOST_SEAT]!=null&&!seats[GHOST_SEAT].ready)throw new IllegalArgumentException("ghost must be ready");
                     running=true;everStarted=true;tick=0;
                     notifyAllPeers("INFO|mission started with "+(seats[GHOST_SEAT]==null?"AI":"human")+" ghost");
+                    if(seats[GHOST_SEAT]!=null)sendGhostPrompt();
                     if(mission.identificationRequired())notifyHunters("SITES|9|6|10");
                     broadcastState();broadcastProgress();broadcastWorld();
                     notifyHunters("PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
@@ -446,6 +449,7 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"VOICEKEY|"+voice.port()+"|"+voice.register(peer.slot,peer.socket.getInetAddress()));
                     reply(peer,"GTYPE|"+ghostType+"|"+ghostType.behavior());
                     reply(peer,ghostPose.frame(tick));broadcastState();
+                    sendGhostPrompt();
                 }
                 case "GSTEP" -> {
                     if(!running||peer.slot!=GHOST_SEAT||!peer.ghostWorldMode||p.size()!=4)
@@ -764,12 +768,14 @@ public final class LanHost implements AutoCloseable {
                     int from=ghost.room();
                     GhostDomain.Resolution result=ghost.dispatch(new GhostDomain.Command(action,room,++hostGhostActionSequence,GhostDomain.Source.HUMAN));
                     if(!result.applied())throw new IllegalArgumentException(result.reason());
+                    actionCadence.completed(tick,result);
                     reply(peer,"ACCEPT|GHOST|"+action+"|"+result.energy());
                     ghostPose.syncRoom(ghost.room());
                     onGhostTravel(from,ghost.room());
                     resolveGhostAction(result);
                     if(peer.ghostWorldMode)reply(peer,ghostPose.frame(tick));
                     broadcastState();broadcastApparitions();broadcastProgress();finishIfComplete();
+                    sendGhostPrompt();
                 }
                 default -> throw new IllegalArgumentException("unknown command");
             }
@@ -986,6 +992,38 @@ public final class LanHost implements AutoCloseable {
                 reply(seats[i],"THREAT|START|"+LanTelegraphedStrike.WINDUP_TICKS+"|"+target);
         }
     }
+    /** Small private action menu, never copied to the hunter journal. */
+    private void sendGhostPrompt(){
+        Peer player=seats[GHOST_SEAT];
+        if(player!=null&&running&&player.ghostWorldMode)
+            reply(player,actionCadence.prompt(ghost.observe()));
+    }
+    /**
+     * A human ghost cannot veto every encounter by remaining idle. At a missed
+     * deadline apply an ordinary real, legal spectral action from its actual pose.
+     * Wards/cooldowns/energy still win; if nothing is legal, retry on future ticks.
+     */
+    private void enforceGhostDeadline(){
+        if(!actionCadence.due(tick))return;
+        GhostDomain.Observation state=ghost.observe();
+        GhostDomain.Action action=actionCadence.fallback(state,
+            LanSpatialCombat.any(strikeVictims()));
+        if(action==null)return;
+        int before=ghost.room();
+        GhostDomain.Resolution result=ghost.dispatch(new GhostDomain.Command(
+            action,state.room(),++hostGhostActionSequence,GhostDomain.Source.AI));
+        if(!result.applied())return;
+        actionCadence.completed(tick,result);
+        ghostPose.syncRoom(ghost.room());
+        onGhostTravel(before,ghost.room());
+        resolveGhostAction(result);
+        broadcastApparitions();
+        Peer player=seats[GHOST_SEAT];
+        if(player!=null&&player.ghostWorldMode){
+            reply(player,"GFORCED|"+action+"|"+result.room()+"|"+tick);
+            sendGhostPrompt();
+        }
+    }
     private void resolvePendingStrike(){
         LanTelegraphedStrike.Pending pending=pendingStrike;
         if(pending==null||!pending.due(tick))return;
@@ -1061,10 +1099,14 @@ public final class LanHost implements AutoCloseable {
                         int from=ghostPose.pose().room();
                         ghostPose.syncRoom(ghost.room());
                         onGhostTravel(from,ghost.room());
+                        actionCadence.completed(tick,result);
                         resolveGhostAction(result);broadcastApparitions();
                     }
                 }
             }}
+            // Runs even with a connected human ghost; without a human it is the
+            // safety floor beneath AI's normal behavior scheduler.
+            enforceGhostDeadline();
             resolvePendingStrike();
             LanCase.RitualAdvance ritual=mission.advance(hunterRooms);
             if(ritual==LanCase.RitualAdvance.PAUSED
@@ -1076,7 +1118,10 @@ public final class LanHost implements AutoCloseable {
             if(animation.animating(tick)||pendingStrike!=null)broadcastApparitions();
             if(tick%2==0)broadcastCounters();
             if(tick%5==0){broadcastState();broadcastApparitions();broadcastProgress();broadcastWorld();
-                if(seats[GHOST_SEAT]!=null&&seats[GHOST_SEAT].ghostWorldMode)reply(seats[GHOST_SEAT],ghostPose.frame(tick));}
+                if(seats[GHOST_SEAT]!=null&&seats[GHOST_SEAT].ghostWorldMode){
+                    reply(seats[GHOST_SEAT],ghostPose.frame(tick));
+                    sendGhostPrompt();
+                }}
             maintainPeerHealth();
             finishIfComplete();
         }catch(RuntimeException ex){running=false;notifyAllPeers("INFO|host simulation stopped");System.err.println("LAN tick failure: "+ex.getMessage());}
