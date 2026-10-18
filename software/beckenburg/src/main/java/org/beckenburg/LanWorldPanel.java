@@ -343,6 +343,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     public int casefileSize(){return casefile.size();}
     public boolean casefileOpen(){return casefileOpen;}
     public GhostIdentity.Type selectedGuess(){return selectedGuess;}
+    /** Public manual-reference lookup only; never consults the host's hidden type. */
+    boolean journalAllows(GhostIdentity.Type type){
+        return GhostFieldGuide.remainsPossible(type,fieldNotes);
+    }
     private boolean insideVan(){
         var local=map.van().local(renderer.x,renderer.z);
         return map.roomAt(renderer.x,renderer.z)==HouseMap.EXTRACTION_ROOM
