@@ -42,7 +42,7 @@ public final class LanSessionResumeIntegrationTest {
     }
     private static void begin(Peer a,Peer b,Peer c)throws Exception {
         a.client.ready();b.client.ready();c.client.ready();
-        a.await("LOBBY|3|");a.client.start();a.await("INFO|mission started");
+        a.await("LOBBY|3|AI|3|WAITING");a.client.start();a.await("INFO|mission started");
     }
     private static void hunterRejoin()throws Exception {
         try(LanHost host=new LanHost("127.0.0.1",0)){
@@ -100,7 +100,7 @@ public final class LanSessionResumeIntegrationTest {
                 Peer c=new Peer(host.port(),false,"Demonologist");
                 Peer ghost=new Peer(host.port(),true,"Specter")){
                 a.client.ready();b.client.ready();c.client.ready();ghost.client.ready();
-                a.await("LOBBY|3|HUMAN");a.client.start();a.await("INFO|mission started");
+                a.await("LOBBY|3|HUMAN|4|WAITING");a.client.start();a.await("INFO|mission started");
                 ghost.client.viewGhost3D();ghost.await("ACCEPT|GVIEW3D");
                 var ticket=ghost.client.resumeTicket();
                 ghost.breakTransportWithoutLeaving();
