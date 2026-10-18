@@ -113,7 +113,44 @@ public final class LanLobbyWindow extends JFrame {
         extract.addActionListener(e->action(() -> connection.extract()));
         enter3D.addActionListener(e->open3D());
         setCommandEnabled(false);pack();setMinimumSize(new Dimension(810,370));setLocationRelativeTo(null);
-        addWindowListener(new java.awt.event.WindowAdapter(){@Override public void windowClosed(java.awt.event.WindowEvent e){if(worldFrame!=null)worldFrame.dispose();if(connection!=null)connection.close();if(hosted!=null)hosted.close();}});
+        restoreLocalResumeOffer();
+        addWindowListener(new java.awt.event.WindowAdapter(){@Override public void windowClosed(java.awt.event.WindowEvent e){
+            if(worldFrame!=null)worldFrame.dispose();
+            // Closing an active guest connection is an intentional Leave. A previously
+            // interrupted session retains its ticket for recovery in a new window.
+            if(connection!=null)clearSavedResume();
+            if(connection!=null)connection.close();
+            if(hosted!=null)hosted.close();
+        }});
+    }
+    private void restoreLocalResumeOffer(){
+        try {
+            var saved=LanResumeStore.load(LanResumeStore.defaultPath());
+            if(saved.isEmpty())return;
+            LanResumeStore.Saved last=saved.get();
+            resumeAddress=last.address();resumePort=last.port();
+            resumeTicket=new LanClient.ResumeTicket(last.seat(),last.token(),last.sequence());
+            reconnect.setEnabled(true);
+            status.setText("Previous LAN seat may be recoverable — Reconnect");
+            log.append("Saved recovery ticket found. The original host must still be running and keeping your seat.\n");
+        }catch(IOException ex){
+            log.append("Stored reconnect ticket could not be read; original file was preserved: "+ex.getMessage()+"\n");
+        }
+    }
+    private void saveResume(LanClient client){
+        if(hosted!=null)return; // Local host can never restore its own lost server process.
+        LanClient.ResumeTicket ticket=client.resumeTicket();
+        if(ticket==null)return;
+        try {
+            LanResumeStore.save(LanResumeStore.defaultPath(),client.address(),client.port(),
+                    ticket.seat(),ticket.token(),ticket.nextSequence());
+        }catch(IOException ex){
+            log.append("Session recovery file unavailable: "+ex.getMessage()+"\n");
+        }
+    }
+    private void clearSavedResume(){
+        try { LanResumeStore.clear(LanResumeStore.defaultPath()); }
+        catch(IOException ex){ log.append("Cannot clear stale recovery ticket: "+ex.getMessage()+"\n"); }
     }
     private static JSpinner spin(int value,int low,int high,int step){
         return new JSpinner(new SpinnerNumberModel(value,low,high,step));
@@ -211,6 +248,8 @@ public final class LanLobbyWindow extends JFrame {
                     }
                     hosted=own;connection=client;busy=false;
                     resumeTicket=null;reconnect.setEnabled(false);
+                    if(hosted!=null)clearSavedResume();
+                    else saveResume(client);
                     roomPassword.setEnabled(false);
                     lobbyLock.setEnabled(hosted!=null);hostInfo.setEnabled(hosted!=null);
                     role.setEnabled(false);
@@ -247,6 +286,7 @@ public final class LanLobbyWindow extends JFrame {
                 SwingUtilities.invokeLater(()->{
                     if(generation!=connectionGeneration){restored.close();return;}
                     connection=restored;resumeTicket=null;busy=false;
+                    saveResume(restored); // The old resume capability was rotated by the host.
                     missionRunning=true;worldMode=false;
                     role.setEnabled(false);reconnect.setEnabled(false);
                     roomPassword.setEnabled(false);lobbyLock.setEnabled(false);hostInfo.setEnabled(false);
@@ -259,6 +299,9 @@ public final class LanLobbyWindow extends JFrame {
                 SwingUtilities.invokeLater(()->{
                     if(generation!=connectionGeneration)return;
                     busy=false;reconnect.setEnabled(true);
+                    if(ex.getMessage()!=null&&ex.getMessage().contains("reconnect seat expired")){
+                        resumeTicket=null;reconnect.setEnabled(false);clearSavedResume();
+                    }
                     status.setText("Reconnect unavailable");
                     log.append("Reconnect failed: "+ex.getMessage()+"\n");
                 });
@@ -304,7 +347,10 @@ public final class LanLobbyWindow extends JFrame {
             // Capture the host-issued per-seat reconnect capability before closing
             // the old socket. It is not the local installation/player profile ID.
             resumeTicket=connection==null?null:connection.resumeTicket();
-            if(connection!=null){resumeAddress=connection.address();resumePort=connection.port();}
+            if(connection!=null){
+                resumeAddress=connection.address();resumePort=connection.port();
+                saveResume(connection);
+            }
             if(hosted!=null)resumeTicket=null; // A closed listen host cannot accept rejoin.
             reconnect.setEnabled(resumeTicket!=null);
             missionRunning=false;worldMode=false;busy=false;
