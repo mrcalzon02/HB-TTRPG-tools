@@ -26,6 +26,39 @@ public final class HeldToolView {
             boolean operating,boolean flashlightOn,String measurement,EquipmentTiers.Tier tier){
         if(graphics==null||kind==null||width<180||height<140)return;
         if(tier==null)tier=EquipmentTiers.Tier.I;
+        // Prefer original licensed geometry. Its live display belongs to the
+        // physical instrument face, not a ghost-confirmation HUD.
+        if(HeldInstrumentMesh.source(kind,tier)!=null){
+            HeldInstrumentMesh.draw(graphics,width,height,kind,tier);
+            if(measurement!=null&&!measurement.isBlank()
+                    &&!kind.equals("GHOST_WRITING_BOOK")
+                    &&!kind.equals("DOTS_PROJECTOR")){
+                Graphics2D display=(Graphics2D)graphics.create();
+                try{
+                    int x=width-175,y=height-108;
+                    int h=tier==EquipmentTiers.Tier.III?42:32;
+                    display.setColor(new Color(7,17,22,225));
+                    display.fillRoundRect(x,y,167,h,5,5);
+                    display.setColor(new Color(111,218,187));
+                    display.setFont(new Font(Font.MONOSPACED,Font.BOLD,
+                        tier==EquipmentTiers.Tier.III?14:12));
+                    String text=measurement;
+                    if(kind.equals("EMF")){
+                        java.util.regex.Matcher m=java.util.regex.Pattern
+                            .compile("EMF (\\d{1,2})/10").matcher(measurement);
+                        if(m.find())text="EMF "+m.group(1)+" / 10";
+                    }
+                    if(text.length()>23)text=text.substring(0,23);
+                    display.drawString(text,x+6,y+19);
+                    if(tier==EquipmentTiers.Tier.III&&measurement.length()>23){
+                        display.setFont(new Font(Font.MONOSPACED,Font.PLAIN,9));
+                        display.drawString(measurement.substring(23,Math.min(51,measurement.length())),
+                            x+6,y+32);
+                    }
+                }finally{display.dispose();}
+            }
+            return;
+        }
         // The authored GLB flashlight cannot masquerade as every other instrument.
         // Correct licensed tool meshes are attached per item as they are integrated.
         if(kind.equals("FLASHLIGHT"))
