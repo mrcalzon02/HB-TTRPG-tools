@@ -34,7 +34,7 @@ public final class LanCaseTest {
         LanCase six=new LanCase(4);six.configureHunters(6);
         int[] allRooms={4,4,HouseMap.EXTRACTION_ROOM,4,HouseMap.EXTRACTION_ROOM,4};
         six.applyGhostEffect(4,allRooms,new GhostDomain.Resolution(true,"ok",
-            GhostDomain.Action.WHISPER,4,80,0,0,true));
+            GhostDomain.Action.WHISPER,4,80,5,0,true));
         check(six.stress(0)>0&&six.stress(1)>0&&six.stress(3)>0&&six.stress(5)>0,
             "all four nearby seats receive whisper stress");
         check(six.stress(2)==0&&six.stress(4)==0,
