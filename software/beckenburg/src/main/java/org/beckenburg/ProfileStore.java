@@ -85,9 +85,15 @@ public final class ProfileStore {
                     if(count<0||count>4)throw new NumberFormatException("invalid medicine stock");
                     medicines[kind.ordinal()][tier.ordinal()]=count;
                 }
-            for(EquipmentLoadout.Item item:EquipmentLoadout.Item.values())
-                if(equipmentPrice(item)>0 && Boolean.parseBoolean(p.getProperty("equipment."+item,"false")))
+            for(EquipmentLoadout.Item item:EquipmentLoadout.Item.values()) {
+                if(equipmentPrice(item)<=0)continue;
+                // Persist enum identifiers, never a user-facing display label.
+                // Earlier profiles used Item.toString() (e.g. "UV lamp").
+                String stableKey="equipment."+item.name();
+                String legacyKey="equipment."+item.toString();
+                if(Boolean.parseBoolean(p.getProperty(stableKey,p.getProperty(legacyKey,"false"))))
                     purchasedEquipment.add(item);
+            }
             String receipts=p.getProperty("awarded","");
             for(String receipt:receipts.split(",")) if(!receipt.isBlank()) {
                 if(!receipt.matches("[0-9a-f\\-]{36}"))throw new NumberFormatException("invalid receipt");
@@ -159,7 +165,7 @@ public final class ProfileStore {
             p.setProperty("awarded",String.join(",",new ArrayList<>(awarded)));
             for(EquipmentLoadout.Item item:EquipmentLoadout.Item.values())
                 if(equipmentPrice(item)>0)
-                    p.setProperty("equipment."+item,Boolean.toString(ownsEquipment(item)));
+                    p.setProperty("equipment."+item.name(),Boolean.toString(ownsEquipment(item)));
             for(FieldSupplies.Kind kind:FieldSupplies.Kind.values())
                 for(FieldSupplies.Tier tier:FieldSupplies.Tier.values())
                     p.setProperty("supply."+kind+"."+tier,
