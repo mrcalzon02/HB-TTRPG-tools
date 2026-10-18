@@ -40,6 +40,10 @@ public final class LanRiteNetworkTest {
    g.client.identify(GhostIdentity.Type.SPIRIT);
    ok(g.until("REJECT|").contains("hunter"),"ghost cannot make investigator deduction");
    for(int r:new int[]{11,8,5,4})a.move(r);
+   // Trigger an authorized actual ghost disturbance; a static room scan no longer
+   // manufactures EMF evidence before any event has happened.
+   g.client.ghost(GhostDomain.Action.DISTURB,4);
+   g.until("ACCEPT|GHOST|DISTURB|");
    for(LanCase.Tool instrument:LanCase.Tool.values()){
     a.client.scan(instrument);a.until("ACCEPT|SCAN|CONFIRMED");
    }
