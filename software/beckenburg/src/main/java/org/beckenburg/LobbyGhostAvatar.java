@@ -76,13 +76,19 @@ public final class LobbyGhostAvatar {
                 int sw=Math.max(1,(int)(sprite.getWidth()*scale)),
                     sh=Math.max(1,(int)(sprite.getHeight()*scale));
                 int left=(w-sw)/2,top=43+(availableH-sh)/2;
-                g.drawImage(sprite,left,top,sw,sh,null);
                 if(ghost){
-                    g.setComposite(AlphaComposite.SrcAtop);
-                    g.setColor(TINTS[look.palette()]);
-                    g.fillRect(left,top,sw,sh);
-                    g.setComposite(AlphaComposite.SrcOver);
-                }
+                    // Tint only opaque artwork pixels; never paint a rectangle over the lobby.
+                    BufferedImage tinted=new BufferedImage(sprite.getWidth(),sprite.getHeight(),
+                        BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D ink=tinted.createGraphics();
+                    try{
+                        ink.drawImage(sprite,0,0,null);
+                        ink.setComposite(AlphaComposite.SrcAtop);
+                        ink.setColor(TINTS[look.palette()]);
+                        ink.fillRect(0,0,tinted.getWidth(),tinted.getHeight());
+                    }finally{ink.dispose();}
+                    g.drawImage(tinted,left,top,sw,sh,null);
+                }else g.drawImage(sprite,left,top,sw,sh,null);
                 g.setColor(new Color(176,189,206));
                 g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,10));
                 g.drawString(ghost?"IDENTITY: UNKNOWN":"INVESTIGATOR",18,h-43);
