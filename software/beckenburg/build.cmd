@@ -74,6 +74,7 @@ java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.La
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanChatIntegrationTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanVoiceCodecTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanVoiceRelayTest || exit /b 1
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanVoiceHostIntegrationTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostLobbySecrecyTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSixHunterVanTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostActiveBehaviorTest || exit /b 1
