@@ -19,6 +19,7 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
     private final MouseLook look;
     private final Set<Integer> down=new HashSet<>();
     private final javax.swing.Timer timer;
+    private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.CASTLE);
     private long last=System.nanoTime();
     private double clock;
     private String notice="Welcome to Beckenburg Castle. The equipment is real; look and press E.";
@@ -34,8 +35,9 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
         renderer.drawCastle(map,0);
         timer=new javax.swing.Timer(33,e->frame());timer.start();
     }
-    public void close(){timer.stop();down.clear();look.close();}
+    public void close(){timer.stop();down.clear();look.close();atmosphere.close();}
     private void frame(){
+        atmosphere.setActive(isShowing());
         if(!isShowing()){last=System.nanoTime();return;}
         long now=System.nanoTime();double dt=Math.min(.07,Math.max(0,(now-last)/1e9));last=now;
         if(down.contains(KeyEvent.VK_LEFT))renderer.yaw-=dt*1.65;

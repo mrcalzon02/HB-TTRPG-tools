@@ -642,7 +642,7 @@ public final class LanHost implements AutoCloseable {
             case DISTURB->LanSound.Cue.DISTURB;
             case MANIFEST->LanSound.Cue.MANIFEST;
             case STRIKE->LanSound.Cue.STRIKE;
-            case SIGNATURE->LanSound.Cue.MANIFEST;
+            case SIGNATURE->LanSound.Cue.SIGNATURE;
             default->null;
         };
         if(cue!=null)broadcastGhostSound(cue);

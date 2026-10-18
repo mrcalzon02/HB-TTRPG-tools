@@ -58,6 +58,7 @@ public final class LanAudio implements AutoCloseable {
             case WHISPER->5600; case DISTURB->3200; case MANIFEST->7200;
             case STRIKE->3800; case FOOTFALL->2400;
             case DOOR->3400; case EQUIPMENT->3000; case RITUAL->7300;
+            case SIGNATURE->18000;
         };
         byte[] output=new byte[samples*4];
         double pan=event.pan()/100.0;
@@ -78,6 +79,9 @@ public final class LanAudio implements AutoCloseable {
                 case DOOR->.52*Math.sin(2*Math.PI*(88-30*t)*t)+.35*noise*Math.exp(-t*16);
                 case EQUIPMENT->.50*Math.sin(2*Math.PI*840*t)+.22*Math.sin(2*Math.PI*420*t);
                 case RITUAL->.40*Math.sin(2*Math.PI*(122+13*Math.sin(t*15))*t)+.27*noise*Math.sin(2*Math.PI*27*t);
+                case SIGNATURE->.30*Math.sin(2*Math.PI*(67+160*t*t)*t)
+                    +.29*Math.sin(2*Math.PI*(97+22*Math.sin(t*21))*t)
+                    +.23*noise*Math.sin(2*Math.PI*31*t);
             };
             double value=Math.max(-.85,Math.min(.85,wave*env*gain));
             short lv=(short)Math.round(value*left*22000),rv=(short)Math.round(value*right*22000);

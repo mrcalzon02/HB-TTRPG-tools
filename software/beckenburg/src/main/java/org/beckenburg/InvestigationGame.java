@@ -164,6 +164,7 @@ public final class InvestigationGame {
         private boolean briefingShown;
         private int useHeldUntilTick;
         private final VanTelemetry monitor=new VanTelemetry(20261017L);
+        private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
         private final java.util.ArrayDeque<Integer> activityHistory=new java.util.ArrayDeque<>();
         private int frameCount;
         private long last=System.nanoTime();
@@ -187,7 +188,7 @@ public final class InvestigationGame {
             scene.draw(map,session,0);
             timer=new javax.swing.Timer(33,e->frame());timer.start();
         }
-        void close(){timer.stop();down.clear();wheelOpen=false;mouseLook.close();}
+        void close(){timer.stop();down.clear();wheelOpen=false;mouseLook.close();atmosphere.close();}
         private void syncEnvironment(){
             scene.environmentLight=conditions.lightMultiplier()*(powerOn?1.0:.48);
             scene.fogDensity=conditions.fogMultiplier();
@@ -245,6 +246,7 @@ public final class InvestigationGame {
                 p.z()>=VanStaging.FRONT && p.z()<VanStaging.REAR-.2;
         }
         private void frame(){
+            atmosphere.setActive(isShowing());
             long now=System.nanoTime();double dt=Math.max(0,Math.min(.075,(now-last)/1e9));last=now;
             double forward=wheelOpen?0:(down.contains(KeyEvent.VK_W)?1:0)-(down.contains(KeyEvent.VK_S)?1:0);
             double strafe=wheelOpen?0:(down.contains(KeyEvent.VK_D)?1:0)-(down.contains(KeyEvent.VK_A)?1:0);

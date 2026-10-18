@@ -13,6 +13,7 @@ public final class LanSound {
         DISTURB(7, 90, "AN OBJECT MOVES"),
         MANIFEST(7, 100, "AN ENTITY MANIFESTS"),
         STRIKE(7, 96, "SPECTRAL ATTACK BUILDING"),
+        SIGNATURE(9, 100, "A SIGNATURE HAUNTING ERUPTS"),
         FOOTFALL(3, 53, "SOMETHING IS MOVING"),
         DOOR(6, 80, "DOOR MOVEMENT"),
         EQUIPMENT(5, 70, "ELECTRONIC DEVICE"),
@@ -21,7 +22,15 @@ public final class LanSound {
         final String caption;
         Cue(int budget, int gain, String caption) { acousticBudget=budget;baseGain=gain;this.caption=caption; }
         public String caption(){return caption;}
+        public Tier tier(){return switch(this){
+            case FOOTFALL,DOOR,EQUIPMENT,RITUAL->Tier.AMBIENT;
+            case WHISPER->Tier.MINOR;
+            case DISTURB,MANIFEST->Tier.MODERATE;
+            case STRIKE->Tier.DANGEROUS;
+            case SIGNATURE->Tier.SIGNATURE;
+        };}
     }
+    public enum Tier { AMBIENT, MINOR, MODERATE, DANGEROUS, SIGNATURE }
     public record CueEvent(Cue cue, int pan, int volume, int tick) {
         public CueEvent {
             Objects.requireNonNull(cue);

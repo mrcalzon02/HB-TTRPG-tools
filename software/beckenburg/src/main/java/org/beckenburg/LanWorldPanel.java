@@ -41,6 +41,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private String threatOutcome="";
     private final MouseLook mouseLook;
     private final LanAudio audio=new LanAudio();
+    private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
     private String soundCaption="";
     private int soundUntilTick=-1;
     private LanCase.Tool selected=LanCase.Tool.EMF;
@@ -107,7 +108,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }
     }
     public void close(){
-        releaseVoice();timer.stop();keys.clear();mouseLook.close();audio.close();
+        releaseVoice();timer.stop();keys.clear();mouseLook.close();audio.close();atmosphere.close();
     }
     private void beginVoice(LanChat.Channel channel){
         if(health<=0||!caseResult.isEmpty()||chatInput.isVisible())return;
@@ -345,6 +346,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         feedback="NO PURCHASED "+kind+" MEDICINE";
     }
     private void frame(){
+        atmosphere.setActive(isShowing());
         if(!isDisplayable()||!caseResult.isEmpty()){repaint();return;}
         if(chatInput.isVisible()){
             keys.clear();
