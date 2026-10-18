@@ -1,5 +1,11 @@
 # The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
 
+## Manually ticked evidence and full ghost roster — source integration (2026-10-18)
+
+The LAN hunter field journal now implements a **clickable evidence checklist** alongside the **complete 13-ghost roster**, keeping incompatible names visible but greyed out. Every tick is an **investigator's own assumption**, not a reading that the host confirms. Unticking restores matches, contradictory ticks are permitted, and clicking even an excluded ghost selects a guess without submitting it. Ghost writing has child-drawing, frantic-scrawl, and ritual-circle subtypes; compatible reading/writing, Shade's suppressive EMF behavior, and temperature profiles use the same rules as the journal. Equipment data is never automatically ticked; the actual measurements remain in the separate timestamped logbook. Current hunter marks are team-shared via private LAN notes.
+
+See the [manual evidence journal implementation and remaining gates](../../docs/beckenburg/MANUAL_EVIDENCE_JOURNAL.md). Source, keyboard/mouse UI integration, and registered tests are committed; **Java/Windows and multiplayer end-to-end verification remain outstanding**. D.O.T.S. and several other instruments are still catalog/planned-only; marking one in the journal does not make that device playable.
+
 ## Equipment, raw readings, and investigator deduction — source integration underway (2026-10-18)
 
 The project now tracks **8 starter + 13 optional + 7 van equipment categories** from the complete ghost-hunting reference, plus **14 original Beckenburg tools**, in [the authoritative equipment/evidence roadmap](../../docs/beckenburg/EQUIPMENT_EVIDENCE_ROADMAP.md). **Do not call this 42-item registry a playable inventory:** most devices have no world implementation yet. Solo and LAN source scans now use the shared `EvidenceSignals` numeric model: EMF varies **1–10** with **>6** positive only for a recent local ghost event, and season/weather/room conditions support genuinely **sub-zero or 90°F+** anomaly readings. Both temperatures are printed while the saved individual Celsius/Fahrenheit toggle is still pending.
