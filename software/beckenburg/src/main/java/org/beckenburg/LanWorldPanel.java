@@ -584,9 +584,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     boolean handleJournalClick(int x,int y,boolean uncertain){
         if(!casefileOpen||journalPage!=1)return false;
         int width=noteWidth(),right=NOTE_LEFT+width-420;
-        if(x>=NOTE_LEFT+10&&x<right-8&&y>=NOTE_TOP+34
-                &&y<NOTE_TOP+34+11*NOTE_ROW_HEIGHT){
-            int row=(y-(NOTE_TOP+34))/NOTE_ROW_HEIGHT,at=noteFirst()+row;
+        if(x>=NOTE_LEFT+10&&x<right-8&&y>=NOTE_TOP+60
+                &&y<NOTE_TOP+60+11*NOTE_ROW_HEIGHT){
+            int row=(y-(NOTE_TOP+60))/NOTE_ROW_HEIGHT,at=noteFirst()+row;
             GhostFieldGuide.Clue[] clues=GhostFieldGuide.activeClues();
             if(at>=clues.length)return true;
             guideCursor=at;
@@ -630,7 +630,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.setFont(new Font(Font.MONOSPACED,Font.BOLD,13));
             g.drawString("MANUAL CHECKLIST",left+12,top+43);
             for(int row=0;row<11&&first+row<clues.length;row++){
-                int at=first+row,y=top+34+row*NOTE_ROW_HEIGHT+12;
+                int at=first+row,y=top+60+row*NOTE_ROW_HEIGHT+12;
                 GhostFieldGuide.Clue clue=clues[at];
                 FieldJournal.Status mark=fieldNotes.status(clue);
                 boolean focused=guideCursor==at;
