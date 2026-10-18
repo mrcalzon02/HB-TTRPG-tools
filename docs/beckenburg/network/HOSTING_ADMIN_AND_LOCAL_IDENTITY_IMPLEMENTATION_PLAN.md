@@ -121,6 +121,8 @@ All controls expose whether they apply now, at next match, or require rehosting.
 
 Inspect listener/bind lifecycle and show actual bound TCP/UDP addresses, port and local IP candidates, game version, seat limits, last failed join reason, live LAN status. Improve errors and publish a small logging schema without writing voice/chat or secrets. Instrument current TCP queue and tick stall; distinguish 10 Hz game logic from display FPS. Test Windows firewall, two NICs, IPv4/IPv6 and UDP blocked/TCP works.
 
+**Source implementation update (2026-10-18):** [020 restart recovery integration](LAN_RESTART_RECOVERY_AND_SNAPSHOT_020.md) extends 019 with first-run stored resume tickets, authoritative command sequence watermark and host-filtered casefile/progress rehydrate. Its isolated Java 17 ticket-store test passed; the complete socket game suite and Windows LAN session are not yet verified. Continue H-02 hardening rather than marking the release gate complete.
+
 ### H-02 — Connection recovery (highest gameplay priority)
 
 First implement hunter drop continuity with host seat reservation and 120-second **provisional** deadline; then a safe seat-specific resume token and full role-filtered state snapshot. Reuse existing ghost AI takeover and add a human ghost return path with one world controller/epoch. No teleporting, item duplication, false final result or hidden-info leak. Reconnect UI appears only when tested on distinct PCs. Host process death is separate and explicitly reported.
