@@ -16,10 +16,12 @@ public final class LanEvidenceJournalTest {
         var strong=new LanCase.Report(true,"CONFIRMED EMF in 4 - EMF level 5");
         ok(LanEvidenceJournal.Entry.decode(journal.record(11,1,4,LanCase.Tool.EMF,strong)).finding()
                 ==LanEvidenceJournal.Finding.CONFIRMED,"confirmation preserved");
-        reject(()->journal.record(12,3,4,LanCase.Tool.EMF,strong));
+        ok(LanEvidenceJournal.Entry.decode(journal.record(12,5,4,LanCase.Tool.EMF,strong)).seat()==5,
+                "sixth hunter is a legitimate evidence author");
+        reject(()->journal.record(12,6,4,LanCase.Tool.EMF,strong));
         reject(()->journal.record(12,0,4,LanCase.Tool.EMF,new LanCase.Report(false,"rejected")));
         reject(()->LanEvidenceJournal.Entry.decode("CASEFILE|5|0|1|EMF|CONFIRMED|spoof|extra"));
-        reject(()->LanEvidenceJournal.Entry.decode("CASEFILE|5|3|1|EMF|CONFIRMED|spoof"));
+        reject(()->LanEvidenceJournal.Entry.decode("CASEFILE|5|6|1|EMF|CONFIRMED|spoof"));
         for(int i=0;i<LanEvidenceJournal.CAPACITY+12;i++)
             journal.record(i*12+24,2,i%HouseMap.ROOM_COUNT,LanCase.Tool.SPIRIT_BOX,
                     new LanCase.Report(true,"INCONCLUSIVE SPIRIT_BOX scan "+i));
