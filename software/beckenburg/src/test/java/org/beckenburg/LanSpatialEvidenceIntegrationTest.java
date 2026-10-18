@@ -48,7 +48,7 @@ public final class LanSpatialEvidenceIntegrationTest {
             ok(hunter.await("ACCEPT|SCAN|CONFIRMED").contains("EMF"),"event-driven EMF >6");
             for(int i=0;i<10;i++)hunter.step(100);
             hunter.client.scan(LanCase.Tool.SPIRIT_BOX);
-            ok(hunter.await("ACCEPT|SCAN|INCONCLUSIVE").contains("weak reading"),
+            ok(hunter.await("ACCEPT|SCAN|INCONCLUSIVE").contains("move closer"),
                 "out-of-range spirit box cannot provide evidence");
             hunter.client.scan(LanCase.Tool.THERMOMETER);
             ok(hunter.await("ACCEPT|SCAN|CONFIRMED").contains("THERMOMETER"),
