@@ -36,7 +36,8 @@ public final class LanHost implements AutoCloseable {
     private final java.util.ArrayDeque<LanChat.Entry> radioHistory=new java.util.ArrayDeque<>();
     private final LanGhostPursuit ai;
     private final GhostIdentity.Type ghostType;
-    private final boolean ghostMayStart; 
+    private final boolean ghostMayStart;
+    private final int ownerSeat;
     private LobbyGhostAvatar.Look ghostLobbyLook;
     private final LanGhostAnimation animation=new LanGhostAnimation();
     private final HunterCounters counters=new HunterCounters();
@@ -74,6 +75,7 @@ public final class LanHost implements AutoCloseable {
         ghostType=Objects.requireNonNull(type);
         contract=Objects.requireNonNull(config);
         ghostMayStart=hostAsGhost;
+        ownerSeat=hostAsGhost?GHOST_SEAT:0;
         Arrays.fill(hunterRooms,HouseMap.EXTRACTION_ROOM);
         Arrays.fill(hunterSequences,-1);
         Arrays.fill(lastGhostFootstepCueTick,-10000);
@@ -103,6 +105,7 @@ public final class LanHost implements AutoCloseable {
         clock.scheduleAtFixedRate(this::tickSafely,100,100,TimeUnit.MILLISECONDS);
     }
     public int port(){return listener.getLocalPort();}
+    public int voicePort(){return voice.port();}
     public String bindAddress(){return bindAddress;}
     public boolean running(){synchronized(mutex){return running;}}
     public int connected(){synchronized(mutex){int count=0;for(Peer peer:seats)if(peer!=null)count++;return count;}}
@@ -160,7 +163,7 @@ public final class LanHost implements AutoCloseable {
                 if(resume){
                     int slot=parseSeat(hello.get(2));
                     Reservation waiting=slot>=0?reserved[slot]:null;
-                    if(!running||slot==0||waiting==null||seats[slot]!=null
+                    if(!running||slot==ownerSeat||waiting==null||seats[slot]!=null
                             ||System.nanoTime()-waiting.expiresNanos>=0
                             ||!java.security.MessageDigest.isEqual(
                                 waiting.token.getBytes(java.nio.charset.StandardCharsets.US_ASCII),
@@ -220,7 +223,7 @@ public final class LanHost implements AutoCloseable {
                     voice.unregister(peer.slot);
                     if(peer.slot==GHOST_SEAT&&(peer.intentionalLeave||!running))ghostLobbyLook=null;
                     if(running){
-                        if(!peer.intentionalLeave && peer.slot!=0){
+                        if(!peer.intentionalLeave && peer.slot!=ownerSeat){
                             // An unexpected TCP loss is not a player decision to abandon the match.
                             reserved[peer.slot]=new Reservation(peer,System.nanoTime()
                                     +TimeUnit.SECONDS.toNanos(reconnectGraceSeconds));
@@ -232,16 +235,15 @@ public final class LanHost implements AutoCloseable {
                                 notifyHunters("INFO|hunter "+(peer.slot+1)+" disconnected - reconnect reserved");
                             }
                             broadcastState();broadcastWorld();
+                        }else if(peer.slot==ownerSeat){
+                            // Listen-host ownership follows the player who ACTUALLY hosted,
+                            // which can be a human ghost. A guest H1 isn't the owner then.
+                            running=false;
+                            notifyAllPeers("INFO|match stopped after host departure");
                         }else if(peer.slot==GHOST_SEAT){
-                            // No world reset: the AI inherits the same room, energy, cooldowns,
-                            // manifestation and pending strike. Only the controller is swapped.
                             ai.forget();
                             notifyHunters("INFO|human ghost disconnected - AI has taken control");
                             broadcastState();
-                        }else if(peer.slot==0){
-                            // The host-owned hunter still owns the session lifecycle.
-                            running=false;
-                            notifyAllPeers("INFO|match stopped after host departure");
                         }else{
                             // A guest hunter cannot destroy the other players' investigation.
                             mission.depart(peer.slot);
@@ -260,7 +262,7 @@ public final class LanHost implements AutoCloseable {
     private int firstVacantHunter(){for(int i=0;i<contract.hunters();i++)if(seats[i]==null&&reserved[i]==null)return i;return -1;}
     private void expireDisconnectedSeats(){
         long now=System.nanoTime();
-        for(int i=1;i<reserved.length;i++){
+        for(int i=0;i<reserved.length;i++){
             Reservation seat=reserved[i];
             if(seat==null||now-seat.expiresNanos<0)continue;
             reserved[i]=null;
