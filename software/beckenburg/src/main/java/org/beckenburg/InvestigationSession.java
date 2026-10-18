@@ -24,6 +24,10 @@ public final class InvestigationSession {
     private final ArrayList<String> journal = new ArrayList<>();
     private Outcome outcome = Outcome.ACTIVE;
     private int ticks, health = 100, stress, wards, payouts;
+    private final long evidenceSeed;
+    private final EvidenceSignals.Polarity thermalPolarity;
+    private final EvidenceSignals.Season season;
+    private int lastEvidenceTick=-10000,lastEvidenceRoom=-1,lastEvidenceStrength;
     private final GhostDomain ghost;
     private RoomLighting roomLights;
     public void connectLighting(RoomLighting roomLights){this.roomLights=roomLights;}
@@ -34,6 +38,15 @@ public final class InvestigationSession {
 
     public InvestigationSession(HouseMap map, Role role, long seed) {
         this.map=map; this.role=role; this.random=new Random(seed);
+        evidenceSeed=seed;
+        thermalPolarity=(seed&1L)==0?EvidenceSignals.Polarity.COLD:EvidenceSignals.Polarity.HOT;
+        int month=java.time.LocalDate.now().getMonthValue();
+        season=switch(month){
+            case 12,1,2->EvidenceSignals.Season.WINTER;
+            case 3,4,5->EvidenceSignals.Season.SPRING;
+            case 6,7,8->EvidenceSignals.Season.SUMMER;
+            default->EvidenceSignals.Season.AUTUMN;
+        };
         java.util.Arrays.fill(spectralTrace,-100000);
         this.wards=role==Role.CLERIC?3:2;
         this.anchorRoom=random.nextInt(map.interiorRoomCount());
@@ -125,6 +138,15 @@ public final class InvestigationSession {
         if(command!=null) {
             GhostDomain.Resolution result=ghost.dispatch(command);
             if(result.applied()) {
+                int power=switch(result.action()){
+                    case WHISPER->3;case DISTURB->8;case MANIFEST->9;
+                    case STRIKE,SIGNATURE->10;case DRIFT->0;
+                };
+                if(power>0){
+                    lastEvidenceTick=ticks;
+                    lastEvidenceRoom=result.room();
+                    lastEvidenceStrength=power;
+                }
                 if(roomLights!=null && result.room()<HouseMap.INDOOR_ROOMS){
                     RoomLighting.Interference effect=switch(result.action()){
                         case WHISPER->RoomLighting.Interference.MINOR;
@@ -198,23 +220,45 @@ public final class InvestigationSession {
         };
     }
 
+    /** Environmental measurements mirror the LAN's numeric evidence model. */
     public boolean scan(Instrument tool, double x, double z) {
-        if(outcome!=Outcome.ACTIVE) return false;
+        if(outcome!=Outcome.ACTIVE||tool==null)return false;
         int room=map.roomAt(x,z);
-        if(room<0) return false;
-        int distance=Math.abs(room%3-anchorRoom%3)+Math.abs(room/3-anchorRoom/3);
-        int signal=distance==0?5:distance==1?2:0;
-        if(tool==Instrument.EMF && room==ghost.room()) signal=Math.max(signal,3);
-        boolean strong=signal>=5 || (signal>=2 && ((role==Role.OBSERVER && tool==Instrument.EMF) ||
-            (role==Role.DEMONOLOGIST && tool==Instrument.SPIRIT_BOX)));
-        String reading=switch(tool) {
-            case EMF -> "EMF " + (signal==0?"baseline": "level "+signal);
-            case THERMOMETER -> "Air temperature " + (signal==5?"2°C / unnatural cold":signal==2?"11°C / unstable":"19°C / normal");
-            case SPIRIT_BOX -> signal==5?"Reply recorded: LEAVE THIS PLACE":signal==2?"Carrier static / faint whisper":"No anomalous reply";
-        };
-        if(strong && evidence.add(tool)) {
+        if(room<0)return false;
+        int age=ticks-lastEvidenceTick;
+        int eventPower=age>=0&&age<=40
+            ?Math.max(0,lastEvidenceStrength-age/7):0;
+        boolean strong;
+        String reading;
+        switch(tool){
+            case EMF -> {
+                var measured=EvidenceSignals.emf(evidenceSeed,ticks,room,lastEvidenceRoom,eventPower);
+                strong=measured.positiveEvidence();
+                reading="EMF "+measured.level()+"/10"
+                    +(strong?" - paranormal event":" - fluctuating background");
+            }
+            case THERMOMETER -> {
+                boolean indoor=room<HouseMap.INDOOR_ROOMS;
+                boolean heated=roomLights==null||roomLights.breaker();
+                var location=new EvidenceSignals.Location(season,EvidenceSignals.Weather.CLEAR,
+                    14,room,indoor,heated);
+                var measured=EvidenceSignals.temperature(evidenceSeed,ticks,location,
+                    thermalPolarity,room==anchorRoom,eventPower);
+                strong=measured.paranormalExtreme();
+                reading="Air "+measured.displayText(EvidenceSignals.Unit.CELSIUS)
+                    +" / "+measured.displayText(EvidenceSignals.Unit.FAHRENHEIT)
+                    +(strong?" - paranormal extreme":" - environment");
+            }
+            case SPIRIT_BOX -> {
+                strong=room==ghost.room();
+                reading=strong?"Direct nearby spirit response":"No verifiable nearby response";
+            }
+            default -> throw new AssertionError(tool);
+        }
+        if(strong&&evidence.add(tool)){
             log("CONFIRMED "+tool.name().replace('_',' ')+" / "+map.roomName(room)+" — "+reading);
-        } else log(reading+" / "+map.roomName(room)+(strong?" (already recorded)":" (not conclusive)"));
+        }else log(reading+" / "+map.roomName(room)
+                +(strong?" (already recorded)":" (not conclusive)"));
         return strong;
     }
     public boolean placeWard(double x,double z) {
