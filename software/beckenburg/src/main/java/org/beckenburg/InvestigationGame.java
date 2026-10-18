@@ -144,7 +144,9 @@ public final class InvestigationGame {
         private TeamCallout.Ping lastPing;
         private String vanNotice="";
         private int vanNoticeExpires;
-        private boolean briefingShown;
+        private boolean briefingShown,monitorsShown;
+        private final VanTelemetry monitor=new VanTelemetry(20261017L);
+        private final java.util.ArrayDeque<Integer> activityHistory=new java.util.ArrayDeque<>();
         private int frameCount;
         private long last=System.nanoTime();
         private double accumulator;
@@ -175,6 +177,40 @@ public final class InvestigationGame {
         private boolean nearBreaker(){
             return map.roomAt(scene.x,scene.z)==11
                 &&Math.hypot(scene.x-map.centerX(11),scene.z-map.centerZ(11))<1.5;
+        }
+        private void buyMedicine(){
+            timer.stop();down.clear();mouseLook.release();
+            String[] names=new String[6];int at=0;
+            for(FieldSupplies.Kind kind:FieldSupplies.Kind.values())
+                for(FieldSupplies.Tier tier:FieldSupplies.Tier.values())
+                    names[at++]=kind+" / "+tier.name()+" / £"+tier.price+" / +"+tier.restore(kind);
+            Object chosen=JOptionPane.showInputDialog(window,"ACCOUNT £"+profile.currency()+
+                "  /  Purchase field medicine","VAN SUPPLY COUNTER",
+                JOptionPane.PLAIN_MESSAGE,null,names,names[0]);
+            if(chosen!=null)for(int i=0;i<names.length;i++)if(names[i].equals(chosen)){
+                FieldSupplies.Kind kind=FieldSupplies.Kind.values()[i/3];
+                FieldSupplies.Tier tier=FieldSupplies.Tier.values()[i%3];
+                try{showVanNotice(profile.purchase(kind,tier)?
+                    "Purchased "+kind+" "+tier+".":"Insufficient credits or stock capacity.");}
+                catch(IOException error){showVanNotice("PURCHASE FAILED: "+error.getMessage());}
+                break;
+            }
+            last=System.nanoTime();timer.start();requestFocusInWindow();
+        }
+        private void useMedicine(FieldSupplies.Kind kind){
+            FieldSupplies.Tier tier=profile.strongest(kind);
+            if(tier==null){showVanNotice("No purchased "+kind+" medicine. Buy at the van rack.");return;}
+            if(session.outcome()!=InvestigationSession.Outcome.ACTIVE||
+                    (kind==FieldSupplies.Kind.HEALTH&&session.health()==100)||
+                    (kind==FieldSupplies.Kind.SANITY&&session.stress()==0)){
+                showVanNotice("No treatment necessary or mission inactive.");return;
+            }
+            try{
+                if(profile.consume(kind,tier)){
+                    session.useMedicine(kind,tier.restore(kind));
+                    showVanNotice(kind+" "+tier+" used. Supplies deducted from the saved inventory.");
+                }
+            }catch(IOException error){showVanNotice("TREATMENT FAILED: "+error.getMessage());}
         }
         private void editRack(){
             timer.stop();down.clear();mouseLook.release();
@@ -218,7 +254,15 @@ public final class InvestigationGame {
                 if(map.traversable(scene.x,scene.z+dz))scene.z+=dz;
             }
             accumulator+=dt;
-            while(accumulator>=.1){session.tick(scene.x,scene.z);accumulator-=.1;}
+            while(accumulator>=.1){
+                session.tick(scene.x,scene.z);
+                int activity=monitor.sample(session.ticks(),session.ghostEnergy());
+                if(session.ticks()%12==0){
+                    activityHistory.addLast(activity);
+                    if(activityHistory.size()>32)activityHistory.removeFirst();
+                }
+                accumulator-=.1;
+            }
             scene.draw(map,session,frameCount++/30.0);repaint();
             if(session.outcome()==InvestigationSession.Outcome.LOST){
                 timer.stop();endCase("You were overcome. The case remains open.");
@@ -277,6 +321,8 @@ public final class InvestigationGame {
             if(key==KeyEvent.VK_G)session.deployCounter(HunterCounters.Kind.WARD,scene.x,scene.z,scene.yaw);
             if(key==KeyEvent.VK_H)session.deployCounter(HunterCounters.Kind.SALT,scene.x,scene.z,scene.yaw);
             if(key==KeyEvent.VK_B)session.cleanse(scene.x,scene.z);
+            if(key==KeyEvent.VK_T)useMedicine(FieldSupplies.Kind.HEALTH);
+            if(key==KeyEvent.VK_Y)useMedicine(FieldSupplies.Kind.SANITY);
             if(key==KeyEvent.VK_J)journalShown=!journalShown;
             if(key==KeyEvent.VK_M)mapShown=!mapShown;
             if(key==KeyEvent.VK_X && session.extract(scene.x,scene.z)) {timer.stop();endCase("Extraction processed.");return;}
@@ -289,10 +335,17 @@ public final class InvestigationGame {
                     briefingShown=!briefingShown;
                     showVanNotice(briefingShown?"CASE BOARD OPEN — current role, objectives and progress":"Case board closed.");
                 }
-                case EQUIPMENT -> editRack();
+                case EQUIPMENT -> {
+                    Object[] actions={"Change loadout","Buy health / sanity","Cancel"};
+                    int pick=JOptionPane.showOptionDialog(window,
+                        "Equipment rack / profile credits £"+profile.currency(),
+                        "VAN EQUIPMENT",JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,
+                        null,actions,actions[0]);
+                    if(pick==0)editRack();else if(pick==1)buyMedicine();
+                }
                 case RELAY -> {
-                    journalShown=!journalShown;
-                    showVanNotice("RADIO RELAY — "+session.evidenceCount()+" clues logged; "+callouts.visible(session.ticks()).size()+" active pings.");
+                    monitorsShown=!monitorsShown;
+                    showVanNotice(monitorsShown?"VAN LIVE SANITY / UNCERTAIN ACTIVITY BOARD":"Van monitor closed.");
                 }
                 case EXTRACTION -> {
                     if(session.extract(scene.x,scene.z)){timer.stop();endCase("Van extraction confirmed.");}
@@ -368,6 +421,13 @@ public final class InvestigationGame {
                     g.setColor(new Color(160,218,216));
                     g.drawString(vanNotice.substring(0,Math.min(vanNotice.length(),94)),16,stageH-57);
                 }
+                if(monitorsShown){
+                    var here=map.van().local(scene.x,scene.z);
+                    if(map.roomAt(scene.x,scene.z)!=HouseMap.EXTRACTION_ROOM||
+                       Math.abs(here.x())>=VanStaging.HALF_WIDTH-.2||
+                       here.z()<VanStaging.FRONT||here.z()>=VanStaging.REAR-.2)monitorsShown=false;
+                    else drawVanMeters(g);
+                }
                 if(briefingShown)drawBriefing(g);
                 if(wheelOpen) drawCalloutWheel(g,stageH);
                 if(mapShown)drawMap(g);
@@ -417,6 +477,31 @@ public final class InvestigationGame {
             g.drawString("to call out",cx-38,cy+19);
             g.setColor(new Color(244,179,102));
             g.fillOval(cx+(int)wheelDx-5,cy+(int)wheelDy-5,10,10);
+        }
+        private void drawVanMeters(Graphics2D g){
+            int w=Math.min(440,getWidth()-26),x=(getWidth()-w)/2,y=68;
+            g.setColor(new Color(12,18,27,243));g.fillRoundRect(x,y,w,194,8,8);
+            g.setFont(new Font(Font.MONOSPACED,Font.BOLD,15));
+            g.setColor(new Color(230,209,165));g.drawString("VAN / TEAM SANITY + GHOST ACTIVITY",x+16,y+25);
+            g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,13));
+            int sane=Math.max(0,100-session.stress());
+            g.setColor(new Color(196,217,213));g.drawString("H1 SANITY  "+sane+"%",x+16,y+55);
+            g.setColor(new Color(46,58,62));g.fillRect(x+154,y+45,156,10);
+            g.setColor(sane<35?new Color(203,113,117):new Color(128,192,161));
+            g.fillRect(x+154,y+45,156*sane/100,10);
+            g.setColor(new Color(196,217,213));
+            int activity=monitor.sample(session.ticks(),session.ghostEnergy());
+            g.drawString("ACTIVITY (APPROX.)  "+activity+"/10",x+16,y+86);
+            int priorX=-1,priorY=-1,index=0,size=activityHistory.size();
+            g.setColor(new Color(126,198,178));
+            for(int value:activityHistory){
+                int px=x+16+(size<=1?0:index*(w-38)/(size-1));
+                int py=y+151-value*5;
+                if(priorX>=0)g.drawLine(priorX,priorY,px,py);
+                priorX=px;priorY=py;index++;
+            }
+            g.setColor(new Color(174,183,194));
+            g.drawString("LAGGED / NOISY / NOT AN EXACT ENERGY READOUT",x+16,y+176);
         }
         private void drawBriefing(Graphics2D g){
             int width=440,x=Math.max(12,(getWidth()-width)/2),y=65;

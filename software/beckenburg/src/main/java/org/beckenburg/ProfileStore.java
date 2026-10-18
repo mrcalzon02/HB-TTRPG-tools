@@ -17,6 +17,31 @@ public final class ProfileStore {
     private int currency, experience;
     private final Set<String> awarded=new HashSet<>();
     private boolean blocked;
+    private final int[][] medicines=new int[2][3];
+    public int supplyCount(FieldSupplies.Kind kind,FieldSupplies.Tier tier){
+        return medicines[kind.ordinal()][tier.ordinal()];
+    }
+    public FieldSupplies.Tier strongest(FieldSupplies.Kind kind){
+        for(int t=FieldSupplies.Tier.values().length-1;t>=0;t--)
+            if(medicines[kind.ordinal()][t]>0)return FieldSupplies.Tier.values()[t];
+        return null;
+    }
+    public boolean purchase(FieldSupplies.Kind kind,FieldSupplies.Tier tier)throws IOException{
+        if(blocked)throw new IOException("Profile cannot be modified after failed load");
+        if(currency<tier.price||supplyCount(kind,tier)>=4)return false;
+        currency-=tier.price;medicines[kind.ordinal()][tier.ordinal()]++;
+        try{save();}catch(IOException e){
+            currency+=tier.price;medicines[kind.ordinal()][tier.ordinal()]--;throw e;
+        }
+        return true;
+    }
+    public boolean consume(FieldSupplies.Kind kind,FieldSupplies.Tier tier)throws IOException{
+        if(blocked)throw new IOException("Profile cannot be modified after failed load");
+        if(supplyCount(kind,tier)==0)return false;
+        medicines[kind.ordinal()][tier.ordinal()]--;
+        try{save();}catch(IOException e){medicines[kind.ordinal()][tier.ordinal()]++;throw e;}
+        return true;
+    }
     public ProfileStore(Path file) { this.file=file; }
     public int currency() { return currency; }
     public int experience() { return experience; }
@@ -32,6 +57,13 @@ public final class ProfileStore {
             int xp=Integer.parseInt(p.getProperty("experience"));
             if(money<0||xp<0)throw new NumberFormatException("negative balance");
             currency=money;experience=xp;
+            for(FieldSupplies.Kind kind:FieldSupplies.Kind.values())
+                for(FieldSupplies.Tier tier:FieldSupplies.Tier.values()){
+                    String key="supply."+kind+"."+tier;
+                    int count=Integer.parseInt(p.getProperty(key,"0"));
+                    if(count<0||count>4)throw new NumberFormatException("invalid medicine stock");
+                    medicines[kind.ordinal()][tier.ordinal()]=count;
+                }
             String receipts=p.getProperty("awarded","");
             for(String receipt:receipts.split(",")) if(!receipt.isBlank()) {
                 if(!receipt.matches("[0-9a-f\\-]{36}"))throw new NumberFormatException("invalid receipt");
@@ -62,6 +94,10 @@ public final class ProfileStore {
             Properties p=new Properties();p.setProperty("schema","1");
             p.setProperty("currency",Integer.toString(currency));p.setProperty("experience",Integer.toString(experience));
             p.setProperty("awarded",String.join(",",new ArrayList<>(awarded)));
+            for(FieldSupplies.Kind kind:FieldSupplies.Kind.values())
+                for(FieldSupplies.Tier tier:FieldSupplies.Tier.values())
+                    p.setProperty("supply."+kind+"."+tier,
+                        Integer.toString(supplyCount(kind,tier)));
             try(OutputStream out=Files.newOutputStream(tmp)){p.store(out,"Beckenburg local profile v1");}
             try{Files.move(tmp,file,StandardCopyOption.REPLACE_EXISTING,StandardCopyOption.ATOMIC_MOVE);}
             catch(java.nio.file.AtomicMoveNotSupportedException e){Files.move(tmp,file,StandardCopyOption.REPLACE_EXISTING);}

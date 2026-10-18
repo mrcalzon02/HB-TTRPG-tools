@@ -45,6 +45,8 @@ public final class InvestigationSession {
     public String missionId() { return missionId; }
     public int anchorRoom() { return anchorRoom; } // simulation/test authority; do not expose in player HUD
     public int ghostRoom() { return ghost.room(); }
+    /** Used only by the local simulated van sensor, never by the hunter's HUD. */
+    int ghostEnergy(){return ghost.energy();}
     public java.util.List<SceneRenderer.WorldMark> counterMarks(){
         return counters.snapshot(ticks).stream()
                 .map(m->new SceneRenderer.WorldMark(m.x(),m.z(),m.height(),m.kind())).toList();
@@ -64,6 +66,19 @@ public final class InvestigationSession {
     public int ticks() { return ticks; }
     public int health() { return health; }
     public int stress() { return stress; }
+    public boolean useMedicine(FieldSupplies.Kind kind,int amount){
+        if(outcome!=Outcome.ACTIVE||amount<1||amount>100)return false;
+        if(kind==FieldSupplies.Kind.HEALTH){
+            if(health>=100)return false;
+            health=Math.min(100,health+amount);
+            log("Medical treatment restored health. Current HP "+health);
+        }else{
+            if(stress==0)return false;
+            stress=Math.max(0,stress-amount);
+            log("Sanity treatment eased distress. Remaining fear "+stress);
+        }
+        return true;
+    }
     public int wards() { return wards; }
     public int payout() { return payouts; }
     public boolean apparitionPhotographed(){return apparitionPhotographed;}
