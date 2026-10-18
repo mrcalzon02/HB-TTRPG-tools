@@ -29,6 +29,10 @@ public final class LanLobbyWindow extends JFrame {
     private final JLabel caseStatus=new JLabel("Case: not started"),teamStatus=new JLabel("Team: awaiting session");
     private LanHost hosted;
     private LanClient connection;
+    private LanClient.ResumeTicket resumeTicket;
+    private String resumeAddress;
+    private int resumePort;
+    private final JButton reconnect=new JButton("Reconnect");
     private int myRoom=HouseMap.EXTRACTION_ROOM;
     private boolean busy,missionRunning,worldMode;
     private long connectionGeneration;
@@ -45,7 +49,7 @@ public final class LanLobbyWindow extends JFrame {
         controls.add(new JLabel("Name"));controls.add(name);controls.add(role);
         JButton host=new JButton("Host LAN"),join=new JButton("Join IP");
         controls.add(new JLabel("Hunters"));controls.add(partySize);
-        controls.add(tuneContract);controls.add(host);controls.add(join);
+        controls.add(tuneContract);controls.add(host);controls.add(join);controls.add(reconnect);
         JPanel commands=new JPanel(new FlowLayout(FlowLayout.LEFT,6,4));
         commands.add(ready);commands.add(start);commands.add(new JLabel("Room"));commands.add(target);
         commands.add(move);commands.add(instrument);commands.add(scan);commands.add(ward);
@@ -72,6 +76,8 @@ public final class LanLobbyWindow extends JFrame {
             }else avatar.showHunter();
         });
         host.addActionListener(e->connect(true));join.addActionListener(e->connect(false));
+        reconnect.addActionListener(e->reconnect());
+        reconnect.setEnabled(false);
         sendLobbyChat.addActionListener(e->sendLobbyMessage());
         lobbyChat.addActionListener(e->sendLobbyMessage());
         tuneContract.addActionListener(e->configureCustomContract());
@@ -201,6 +207,39 @@ public final class LanLobbyWindow extends JFrame {
             }
         },"beckenburg-connect");task.setDaemon(true);task.start();
     }
+    private void reconnect(){
+        if(busy||connection!=null||resumeTicket==null)return;
+        LanClient.ResumeTicket ticket=resumeTicket;
+        final String address=resumeAddress;final int reconnectPort=resumePort;
+        busy=true;reconnect.setEnabled(false);status.setText("Reconnecting to original seat...");
+        long generation=++connectionGeneration;
+        Thread task=new Thread(()->{
+            try{
+                LanClient restored=new LanClient(address,reconnectPort,ticket,
+                    frame->SwingUtilities.invokeLater(()->{
+                        if(generation==connectionGeneration)receive(frame);
+                    }));
+                SwingUtilities.invokeLater(()->{
+                    if(generation!=connectionGeneration){restored.close();return;}
+                    connection=restored;resumeTicket=null;busy=false;
+                    missionRunning=true;worldMode=false;
+                    role.setEnabled(false);reconnect.setEnabled(false);
+                    status.setText("Seat "+restored.seat()+" restored - enter 3D world");
+                    caseStatus.setText("Case: mission resumed");
+                    setCommandEnabled(true);
+                    log.append("Reconnected to the same mission. Reopen 3D view to restore live audio and scene.\n");
+                });
+            }catch(Exception ex){
+                SwingUtilities.invokeLater(()->{
+                    if(generation!=connectionGeneration)return;
+                    busy=false;reconnect.setEnabled(true);
+                    status.setText("Reconnect unavailable");
+                    log.append("Reconnect failed: "+ex.getMessage()+"\n");
+                });
+            }
+        },"beckenburg-resume");
+        task.setDaemon(true);task.start();
+    }
     private void open3D(){
         if(connection==null||!missionRunning)return;
         if(worldFrame!=null&&worldFrame.isDisplayable()){
@@ -236,6 +275,12 @@ public final class LanLobbyWindow extends JFrame {
             // A clean server EOF is terminal. Reclaim all owned handles so Host/Join
             // can be used again; queued events from the former socket are generation-gated.
             connectionGeneration++;
+            // Capture the host-issued per-seat reconnect capability before closing
+            // the old socket. It is not the local installation/player profile ID.
+            resumeTicket=connection==null?null:connection.resumeTicket();
+            if(connection!=null){resumeAddress=connection.address();resumePort=connection.port();}
+            if(hosted!=null)resumeTicket=null; // A closed listen host cannot accept rejoin.
+            reconnect.setEnabled(resumeTicket!=null);
             missionRunning=false;worldMode=false;busy=false;
             if(worldFrame!=null){worldFrame.dispose();worldFrame=null;}
             if(connection!=null){connection.close();connection=null;}
@@ -248,7 +293,8 @@ public final class LanLobbyWindow extends JFrame {
             caseStatus.setText("Case: connection ended");
             teamStatus.setText("Team: disconnected");
             setCommandEnabled(false);
-            log.append("Connection ended. You can host or join a fresh match.\n");
+            log.append(resumeTicket==null?"Connection ended. You can host or join a fresh match.\n":
+                "Connection interrupted. Reconnect to the same mission while the host reserves your seat.\n");
             return;
         }
         if(worldFrame!=null&&worldFrame.isDisplayable()){
