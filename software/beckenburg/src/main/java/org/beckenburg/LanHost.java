@@ -173,8 +173,10 @@ public final class LanHost implements AutoCloseable {
                     peer=new Peer(socket,in,out,slot,waiting.name);
                     peer.lastGhostActionSequence=waiting.lastActionSequence;
                     peer.lastGhostPoseSequence=waiting.lastPoseSequence;
-                    reserved[slot]=null;seats[slot]=peer;
+                    // The old reservation must survive a failed WELCOME write.
+                    // Never consume a seat until its new credentials are sent.
                     LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken+"|"+seatSequenceHighWater(peer));
+                    reserved[slot]=null;seats[slot]=peer;
                     reply(peer,"INFO|mission resumed - reopen 3D view");
                     if(slot!=GHOST_SEAT){
                         for(int i=0;i<HUNTERS;i++)if(i!=slot&&seats[i]!=null)
