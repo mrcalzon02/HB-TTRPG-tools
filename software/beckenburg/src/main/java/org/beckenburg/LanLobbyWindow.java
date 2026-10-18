@@ -188,6 +188,7 @@ public final class LanLobbyWindow extends JFrame {
                         return; // Stale connection completed after EOF or a replacement request.
                     }
                     hosted=own;connection=client;busy=false;
+                    resumeTicket=null;reconnect.setEnabled(false);
                     role.setEnabled(false);
                     status.setText("Seat "+client.seat()+" — room case + shared house");
                     if("GHOST".equals(client.seat()))avatar.showGhost(
