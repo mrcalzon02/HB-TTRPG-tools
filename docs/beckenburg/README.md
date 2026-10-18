@@ -4,6 +4,9 @@ Version: 0.2, updated 2026-10-15. **Solo gameplay alpha source implemented and c
 ## Authoritative release-production roadmap
 The [32-stage and 256-microstep Production Plan](RELEASE_PRODUCTION_PLAN.md) governs feature order and exit criteria; [Quality Gates](QUALITY_GATES.md) defines recurring improvement windows and test thresholds; [stage-ledger.json](stage-ledger.json) is the **single stage-status authority**; [Asset Pipeline](ASSET_PIPELINE.md) governs original PNG upload and correct website display; [Gold Release Acceptance](RELEASE_ACCEPTANCE.md) defines production completion.
 
+## LAN implementation 021 — owner-seat security and protocol repair
+[LAN Hosting & Reconnect Hardening 021](network/LAN_HOSTING_RECOVERY_HARDENING_021.md) repairs five-field reconnect parsing, reports the actual UDP voice port, distinguishes owner role from H1, and protects the local owner's slot from guest-first racing in GUI-hosted matches. New real-socket tests are wired into build drivers. Full Java 17 and Windows multicomp acceptance is still unverified.
+
 ## LAN source integration 020 — restart recovery and automatic casefile rehydration
 [Restart-Safe LAN Recovery and Snapshot 020](network/LAN_RESTART_RECOVERY_AND_SNAPSHOT_020.md) commits local temporary recovery-ticket persistence, host-authoritative replay sequence repair and a full authorized 3D entry replay of current progress, casefile and field notes. The isolated Java 17 ticket-storage test passed. Full game build, socket integration and physical Windows/voice tests still require acceptance; no public-WAN or host-migration capability is claimed.
 
