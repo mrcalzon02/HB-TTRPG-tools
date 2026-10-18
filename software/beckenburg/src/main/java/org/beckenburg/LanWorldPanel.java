@@ -561,7 +561,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             left+13,top+23);
         g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
         if(journalPage==1){
-            GhostFieldGuide.Clue[] clues=GhostFieldGuide.Clue.values();
+            GhostFieldGuide.Clue[] clues=GhostFieldGuide.activeClues();
             int first=Math.max(0,Math.min(clues.length-11,guideCursor-5));
             for(int row=0;row<11&&first+row<clues.length;row++){
                 int at=first+row;
@@ -622,10 +622,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             e.consume();repaint();return;
         }
         if(casefileOpen&&journalPage==1){
-            if(e.getKeyCode()==KeyEvent.VK_UP){guideCursor=(guideCursor+GhostFieldGuide.Clue.values().length-1)%GhostFieldGuide.Clue.values().length;repaint();return;}
-            if(e.getKeyCode()==KeyEvent.VK_DOWN){guideCursor=(guideCursor+1)%GhostFieldGuide.Clue.values().length;repaint();return;}
+            if(e.getKeyCode()==KeyEvent.VK_UP){guideCursor=(guideCursor+GhostFieldGuide.activeClues().length-1)%GhostFieldGuide.activeClues().length;repaint();return;}
+            if(e.getKeyCode()==KeyEvent.VK_DOWN){guideCursor=(guideCursor+1)%GhostFieldGuide.activeClues().length;repaint();return;}
             if(e.getKeyCode()==KeyEvent.VK_SPACE){
-                GhostFieldGuide.Clue clue=GhostFieldGuide.Clue.values()[guideCursor];
+                GhostFieldGuide.Clue clue=GhostFieldGuide.activeClues()[guideCursor];
                 FieldJournal.Status next=switch(fieldNotes.status(clue)){
                     case UNKNOWN->FieldJournal.Status.SEEN;
                     case SEEN->FieldJournal.Status.UNSURE;
