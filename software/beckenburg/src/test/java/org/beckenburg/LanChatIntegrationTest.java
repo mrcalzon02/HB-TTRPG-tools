@@ -33,6 +33,11 @@ public final class LanChatIntegrationTest {
             Peer a=new Peer(host.port(),false,"Fred");
             Peer b=new Peer(host.port(),false,"Martha");
             Peer ghost=new Peer(host.port(),true,"Specter")){
+            ghost.client.lobbyChat("Good luck.");
+            ok(a.await("LOBBYCHAT|GHOST|").endsWith("|Good luck."),
+                "visible ghost-role player can speak in lobby anonymously by species");
+            ok(ghost.history.stream().noneMatch(x->x.startsWith("GTYPE|")),
+                "lobby chat never discloses ghost type");
             a.client.ready();b.client.ready();ghost.client.ready();
             a.client.start();a.await("INFO|mission started");
             // Move Martha through existing authored adjacent rooms without teleporting in 3D.

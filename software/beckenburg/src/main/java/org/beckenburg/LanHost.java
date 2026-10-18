@@ -171,6 +171,17 @@ public final class LanHost implements AutoCloseable {
         try{p=LanProtocol.parts(frame);}catch(IllegalArgumentException ex){reply(peer,"REJECT|invalid frame");return;}
         try{
             switch(p.get(0)){
+                case "LOBBYCHAT" -> {
+                    if(running||p.size()!=2)throw new IllegalArgumentException("lobby chat only before match");
+                    String words=LanChat.clean(p.get(1));
+                    long now=System.nanoTime();
+                    if(peer.lastLobbyChatNanos!=0 &&
+                            now-peer.lastLobbyChatNanos<500_000_000L)
+                        throw new IllegalArgumentException("lobby chat cooling down");
+                    peer.lastLobbyChatNanos=now;
+                    notifyAllPeers("LOBBYCHAT|"+(peer.slot==GHOST_SEAT?"GHOST":"H"+(peer.slot+1))
+                        +"|"+peer.name+"|"+words);
+                }
                 case "READY" -> {
                     if(p.size()!=1||running)throw new IllegalArgumentException("invalid ready command");
                     peer.ready=!peer.ready;broadcastLobby();
@@ -750,6 +761,7 @@ public final class LanHost implements AutoCloseable {
         final Socket socket;final Reader input;final Writer output;final int slot;final String name;boolean ready,worldMode,ghostWorldMode;
         long lastGhostPoseSequence=-1,lastGhostActionSequence=-1;
         int lastMonitorTick=-100000,lastChatTick=-100000;
+        long lastLobbyChatNanos;
         Peer(Socket s,Reader in,Writer out,int slot,String name){socket=s;input=in;output=out;this.slot=slot;this.name=name;}
     }
 }

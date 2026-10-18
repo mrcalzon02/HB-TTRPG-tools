@@ -38,6 +38,9 @@ public final class LanClient implements AutoCloseable {
     }
     public String seat(){return seat;}
     public synchronized void ready()throws IOException {send("READY");}
+    public synchronized void lobbyChat(String message)throws IOException{
+        send("LOBBYCHAT|"+LanChat.clean(message));
+    }
     public synchronized void start()throws IOException {send("START");}
     public synchronized void move(int room)throws IOException {send("MOVE|"+room+"|"+(++sequence));}
     public synchronized void view3D()throws IOException {send("VIEW3D");}

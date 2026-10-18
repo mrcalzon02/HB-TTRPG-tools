@@ -17,6 +17,8 @@ public final class LanLobbyWindow extends JFrame {
     private final JButton tuneContract=new JButton("Contract options");
     private CustomContract custom=CustomContract.standard(3);
     private final JTextArea log=new JTextArea(12,52);
+    private final JTextField lobbyChat=new JTextField(30);
+    private final JButton sendLobbyChat=new JButton("Send");
     private final JLabel status=new JLabel("Not connected");
     private final JSpinner target=new JSpinner(new SpinnerNumberModel(4,0,HouseMap.ROOM_COUNT-1,1));
     private final JComboBox<GhostDomain.Action> action=new JComboBox<>(GhostDomain.Action.values());
@@ -53,8 +55,14 @@ public final class LanLobbyWindow extends JFrame {
         log.setLineWrap(true);log.setWrapStyleWord(true);
         JPanel info=new JPanel(new GridLayout(3,1));info.add(status);info.add(caseStatus);info.add(teamStatus);
         JPanel top=new JPanel(new BorderLayout());top.add(controls,BorderLayout.NORTH);top.add(info,BorderLayout.SOUTH);
+        JPanel chatRow=new JPanel(new BorderLayout(5,0));
+        chatRow.add(lobbyChat,BorderLayout.CENTER);
+        chatRow.add(sendLobbyChat,BorderLayout.EAST);
+        JPanel bottom=new JPanel(new BorderLayout(0,3));
+        bottom.add(commands,BorderLayout.NORTH);
+        bottom.add(chatRow,BorderLayout.SOUTH);
         add(top,BorderLayout.NORTH);add(new JScrollPane(log),BorderLayout.CENTER);
-        add(avatar,BorderLayout.EAST);add(commands,BorderLayout.SOUTH);
+        add(avatar,BorderLayout.EAST);add(bottom,BorderLayout.SOUTH);
         avatar.showHunter();
         role.addActionListener(e->{
             if(connection!=null)return; // Seat/role is fixed once the handshake succeeds.
@@ -64,6 +72,8 @@ public final class LanLobbyWindow extends JFrame {
             }else avatar.showHunter();
         });
         host.addActionListener(e->connect(true));join.addActionListener(e->connect(false));
+        sendLobbyChat.addActionListener(e->sendLobbyMessage());
+        lobbyChat.addActionListener(e->sendLobbyMessage());
         tuneContract.addActionListener(e->configureCustomContract());
         ready.addActionListener(e->send("READY"));start.addActionListener(e->send("START"));
         move.addActionListener(e->action(() -> connection.move((int)target.getValue())));
@@ -124,6 +134,15 @@ public final class LanLobbyWindow extends JFrame {
                 (int)hiding.getValue(),sanMonitor.isSelected(),actMonitor.isSelected());
             log.append("Custom settings armed for next hosted case, "+custom.hunters()+
                 " hunters / difficulty +"+custom.partyDifficulty()+".\n");
+        }
+    }
+    private void sendLobbyMessage(){
+        if(connection==null){log.append("Connect before using lobby chat.\n");return;}
+        try{
+            connection.lobbyChat(lobbyChat.getText());
+            lobbyChat.setText("");
+        }catch(IOException|IllegalArgumentException ex){
+            log.append("Lobby chat: "+ex.getMessage()+"\n");
         }
     }
     @FunctionalInterface private interface Command {void send()throws IOException;}
@@ -236,6 +255,14 @@ public final class LanLobbyWindow extends JFrame {
             if(worldView!=null)worldView.onEvent(event);
             if(ghostView!=null)ghostView.onEvent(event);
         }
+        if(event.startsWith("LOBBYCHAT|")){
+            var line=LanProtocol.parts(event);
+            if(line.size()==4){
+                log.append("["+line.get(1)+" / "+line.get(2)+"] "+line.get(3)+"\n");
+                log.setCaretPosition(log.getDocument().getLength());
+            }
+            return;
+        }
         if(event.startsWith("INFO|mission started")){missionRunning=true;setCommandEnabled(true);}
         if(event.startsWith("RESULT|")||event.startsWith("INFO|match stopped")){missionRunning=false;setCommandEnabled(true);}
         if(event.startsWith("LOBBYAVATAR|")){
@@ -274,6 +301,8 @@ public final class LanLobbyWindow extends JFrame {
         return room<0?"DISCONNECTED":map.roomName(room);
     }
     private void setCommandEnabled(boolean available){
+        lobbyChat.setEnabled(available&&!missionRunning);
+        sendLobbyChat.setEnabled(available&&!missionRunning);
         ready.setEnabled(available);
         start.setEnabled(available&&connection!=null&&
             ("H1".equals(connection.seat())||
