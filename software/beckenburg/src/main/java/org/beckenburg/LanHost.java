@@ -17,6 +17,9 @@ public final class LanHost implements AutoCloseable {
     private final Object mutex=new Object();
     private static final int HUNTERS=6,GHOST_SEAT=HUNTERS;
     private final Peer[] seats=new Peer[HUNTERS+1];
+    private final Reservation[] reserved=new Reservation[HUNTERS+1];
+    private static final java.security.SecureRandom RESUME_RANDOM=new java.security.SecureRandom();
+    private int reconnectGraceSeconds=120;
     private final int[] hunterRooms=new int[HUNTERS];
     private final long[] hunterSequences=new long[HUNTERS];
     private final HouseMap map=new HouseMap();
@@ -101,6 +104,22 @@ public final class LanHost implements AutoCloseable {
     public String bindAddress(){return bindAddress;}
     public boolean running(){synchronized(mutex){return running;}}
     public int connected(){synchronized(mutex){int count=0;for(Peer peer:seats)if(peer!=null)count++;return count;}}
+    public int reservedSeats(){synchronized(mutex){int count=0;for(Reservation r:reserved)if(r!=null)count++;return count;}}
+    public void setReconnectGraceSeconds(int seconds){
+        if(seconds<1||seconds>300)throw new IllegalArgumentException("grace must be 1..300 seconds");
+        synchronized(mutex){if(running||everStarted)throw new IllegalStateException("match already started");
+            reconnectGraceSeconds=seconds;}
+    }
+    private static String newResumeToken(){
+        byte[] bytes=new byte[24];RESUME_RANDOM.nextBytes(bytes);
+        return HexFormat.of().formatHex(bytes);
+    }
+    private static int parseSeat(String label){
+        if("GHOST".equals(label))return GHOST_SEAT;
+        if(label.matches("H[1-6]"))return Integer.parseInt(label.substring(1))-1;
+        return -1;
+    }
+    private static String seatName(int slot){return slot==GHOST_SEAT?"GHOST":"H"+(slot+1);}
     private void acceptLoop(){
         while(!closed){try{Socket socket=listener.accept();socket.setTcpNoDelay(true);
             workers.execute(()->serve(socket));
@@ -176,7 +195,21 @@ public final class LanHost implements AutoCloseable {
             }
         }
     }
-    private int firstVacantHunter(){for(int i=0;i<contract.hunters();i++)if(seats[i]==null)return i;return -1;}
+    private int firstVacantHunter(){for(int i=0;i<contract.hunters();i++)if(seats[i]==null&&reserved[i]==null)return i;return -1;}
+    private void expireDisconnectedSeats(){
+        long now=System.nanoTime();
+        for(int i=1;i<reserved.length;i++){
+            Reservation seat=reserved[i];
+            if(seat==null||now-seat.expiresNanos<0)continue;
+            reserved[i]=null;
+            if(i==GHOST_SEAT)continue;
+            mission.depart(i);
+            notifyHunters("PEER|LEFT|"+i);
+            notifyHunters("INFO|hunter "+(i+1)+" reconnect expired - "+mission.remainingHunters()+" investigator(s) remaining");
+            broadcastWorld();broadcastProgress();
+        }
+        finishIfComplete();
+    }
     private void handle(Peer peer,String frame){
         List<String> p;
         try{p=LanProtocol.parts(frame);}catch(IllegalArgumentException ex){reply(peer,"REJECT|invalid frame");return;}
@@ -854,8 +887,21 @@ public final class LanHost implements AutoCloseable {
         synchronized(mutex){for(Peer peer:seats)if(peer!=null){try{peer.socket.close();}catch(IOException ignored){}}}
         clock.shutdownNow();workers.shutdownNow();
     }
+    private static final class Reservation {
+        final String name,token;
+        final long expiresNanos,lastActionSequence,lastPoseSequence;
+        final boolean worldMode;
+        Reservation(Peer p,long expires){
+            name=p.name;token=p.resumeToken;expiresNanos=expires;
+            lastActionSequence=p.lastGhostActionSequence;
+            lastPoseSequence=p.lastGhostPoseSequence;
+            worldMode=p.worldMode;
+        }
+    }
     private static final class Peer{
-        final Socket socket;final Reader input;final Writer output;final int slot;final String name;boolean ready,worldMode,ghostWorldMode;
+        final Socket socket;final Reader input;final Writer output;final int slot;final String name;
+        final String resumeToken=newResumeToken();
+        boolean ready,worldMode,ghostWorldMode,intentionalLeave;
         long lastGhostPoseSequence=-1,lastGhostActionSequence=-1;
         int lastMonitorTick=-100000,lastChatTick=-100000,lastLightTick=-100000;
         long lastLobbyChatNanos;
