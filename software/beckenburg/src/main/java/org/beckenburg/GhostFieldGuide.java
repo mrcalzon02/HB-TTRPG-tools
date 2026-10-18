@@ -11,13 +11,16 @@ public final class GhostFieldGuide {
     private GhostFieldGuide(){}
     public enum Category { EMF, TEMPERATURE, SPIRIT_BOX, WRITING, PHYSICAL, CAMERA, BEHAVIOR }
     public enum Clue {
-        EMF_OVER_SIX(Category.EMF,"EMF / event reading greater than 6",false),
-        EMF_SUPPRESSION(Category.EMF,"EMF / three zero reads during active haunting",false),
-        WRITING_CHILD(Category.WRITING,"Book / childlike drawings",false),
-        WRITING_SCRAWL(Category.WRITING,"Book / frantic scribbles",false),
-        WRITING_RITUAL(Category.WRITING,"Book / ritual circles",false),
-        EXTREME_COLD(Category.TEMPERATURE,"Thermal / below 0°C (paranormal)",false),
-        EXTREME_HEAT(Category.TEMPERATURE,"Thermal / at least 90°F (paranormal)",false),
+        EMF_OVER_SIX(Category.EMF,"EMF over 6",true),
+        EMF_SUPPRESSION(Category.EMF,"EMF zero / suppressed field",true),
+        WRITING_CHILD(Category.WRITING,"Childlike drawings",true),
+        WRITING_SCRAWL(Category.WRITING,"Frantic scrawls",true),
+        WRITING_RITUAL(Category.WRITING,"Ritual circles",true),
+        EXTREME_COLD(Category.TEMPERATURE,"Freezing / below 0°C",true),
+        EXTREME_HEAT(Category.TEMPERATURE,"Extreme heat / 90°F+",true),
+        SPIRIT_REPLY(Category.SPIRIT_BOX,"Spirit-box response",true),
+        GHOST_WRITING(Category.WRITING,"Ghost writing",true),
+        DOTS_PATTERN(Category.CAMERA,"D.O.T.S. projection (planned)",true),
         EMF_SURGE(Category.EMF,"EMF / pulsing field surge",false),
         EMF_TETHER(Category.EMF,"EMF / object tether resonance",false),
         EMF_KINETIC(Category.EMF,"EMF / clustered kinetic spikes",false),
@@ -84,9 +87,10 @@ public final class GhostFieldGuide {
         Objects.requireNonNull(type);
         GhostTraits.Profile p=GhostTraits.of(type);
         return type.name().replace('_',' ') + "  /  " + type.rite().name()+"\n"
-            +"REAL SIGNALS: EMF >6 / COLD <0°C / HOT >=90°F\n"
-            +"WRITING: CHILD DRAWINGS / FRANTIC SCRAWLS / RITUAL CIRCLES\n"
-            +"WIDER EVIDENCE MATRIX: UNDER DEVELOPMENT\n"
+            +"EMF: "+(GhostEvidenceProfile.compatible(type,Clue.EMF_OVER_SIX)?"HIGH 7–10":"SILENCE 0")
+            +" | "+(GhostEvidenceProfile.thermal(type)==EvidenceSignals.Polarity.COLD?"FREEZING":"HEAT 90F+")+"\\n"
+            +"WRITING: "+java.util.Arrays.toString(GhostEvidenceProfile.availableWriting(type))+"\\n"
+            +"PROJECTION GEAR STILL IN DEVELOPMENT\\n"
             +(p.locomotion()==GhostTraits.Locomotion.FLOAT?"FLOATING":"WALKING")
             +" / "+(p.canPhase()?"WALL PHASING":"DOOR TRAVEL")
             +" / SALT "+(p.grounded()?"REACTIVE":"IMMUNE")+"\n"
@@ -104,7 +108,8 @@ public final class GhostFieldGuide {
             // Archive enum members only survive for old journal notes.
             case EMF_OVER_SIX,EMF_SUPPRESSION,EXTREME_COLD,EXTREME_HEAT,
                  WRITING_CHILD,WRITING_SCRAWL,WRITING_RITUAL,
-                 EMF_SURGE,EMF_TETHER,EMF_KINETIC,EMF_INTERFERENCE,
+                 SPIRIT_REPLY,GHOST_WRITING,DOTS_PATTERN->GhostEvidenceProfile.compatible(type,clue);
+            case EMF_SURGE,EMF_TETHER,EMF_KINETIC,EMF_INTERFERENCE,
                  COLD_ANCHOR,COLD_POCKET,COLD_SHEAR,COLD_DRAFT,
                  VOICE_DIRECT,VOICE_ECHO,VOICE_FRAGMENT,VOICE_DISPLACED->true;
             case FOOTPRINTS->p.grounded();
@@ -121,16 +126,19 @@ public final class GhostFieldGuide {
             case GROUP_ATTACK->!p.huntsSolitary();
         };
     }
+    /** Every selected checkmark is a player claim, never a server finding. */
+    public static boolean remainsPossible(GhostIdentity.Type type,FieldJournal notes){
+        Objects.requireNonNull(notes);Objects.requireNonNull(type);
+        for(Clue clue:activeClues())
+            if(clue.exclusionSafe&&notes.status(clue)==FieldJournal.Status.SEEN
+                &&!possible(type,clue))return false;
+        return true;
+    }
     public static List<GhostIdentity.Type> shortlist(FieldJournal notes){
         Objects.requireNonNull(notes);
         List<GhostIdentity.Type> results=new ArrayList<>();
         for(GhostIdentity.Type type:GhostIdentity.Type.values()){
-            boolean valid=true;
-            for(Clue clue:Clue.values())if(clue.exclusionSafe
-                &&notes.status(clue)==FieldJournal.Status.SEEN && !possible(type,clue)){
-                valid=false;break;
-            }
-            if(valid)results.add(type);
+            if(remainsPossible(type,notes))results.add(type);
         }
         return List.copyOf(results);
     }
