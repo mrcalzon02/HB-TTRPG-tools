@@ -13,9 +13,10 @@ public final class LanHost implements AutoCloseable {
     private final ExecutorService workers=Executors.newCachedThreadPool(r->{Thread t=new Thread(r,"beckenburg-lan-peer");t.setDaemon(true);return t;});
     private final ScheduledExecutorService clock=Executors.newSingleThreadScheduledExecutor(r->{Thread t=new Thread(r,"beckenburg-lan-tick");t.setDaemon(true);return t;});
     private final Object mutex=new Object();
-    private final Peer[] seats=new Peer[4];
-    private final int[] hunterRooms={HouseMap.EXTRACTION_ROOM,HouseMap.EXTRACTION_ROOM,HouseMap.EXTRACTION_ROOM};
-    private final long[] hunterSequences={-1,-1,-1};
+    private static final int HUNTERS=6,GHOST_SEAT=HUNTERS;
+    private final Peer[] seats=new Peer[HUNTERS+1];
+    private final int[] hunterRooms=new int[HUNTERS];
+    private final long[] hunterSequences=new long[HUNTERS];
     private final HouseMap map=new HouseMap();
     private final LanWorld world=new LanWorld(map);
     private final LanGhostSpatial ghostPose=new LanGhostSpatial(map,4);
@@ -27,23 +28,41 @@ public final class LanHost implements AutoCloseable {
     private final GhostIdentity.Type ghostType;
     private final LanGhostAnimation animation=new LanGhostAnimation();
     private final HunterCounters counters=new HunterCounters();
+    private final CustomContract contract;
+    private final VanTelemetry monitor=new VanTelemetry(20261017L);
+    private final FieldSupplies[] supplies=new FieldSupplies[HUNTERS];
     private volatile boolean closed;
     private boolean running,everStarted;
     private long hostGhostActionSequence=-1;
     private int tick;
     private int lastGhostSoundTick=-10000;
-    private final int[] lastGhostFootstepCueTick={-10000,-10000,-10000};
+    private final int[] lastGhostFootstepCueTick=new int[HUNTERS];
     private LanTelegraphedStrike.Pending pendingStrike;
     private final String bindAddress;
 
-    public LanHost(String ip,int port)throws IOException {this(ip,port,GhostIdentity.Type.SPIRIT,false);}
-    /** Authored type makes evidence, action economy and required ritual host-authoritative. */
-    public LanHost(String ip,int port,GhostIdentity.Type type)throws IOException {this(ip,port,type,true);}
-    private LanHost(String ip,int port,GhostIdentity.Type type,boolean identityMode)throws IOException {
+    public LanHost(String ip,int port)throws IOException{
+        this(ip,port,GhostIdentity.Type.SPIRIT,false,CustomContract.standard(3));
+    }
+    /** Legacy three-hunter host is retained for existing integration tests. */
+    public LanHost(String ip,int port,GhostIdentity.Type type)throws IOException{
+        this(ip,port,type,true,CustomContract.standard(3));
+    }
+    public LanHost(String ip,int port,GhostIdentity.Type type,CustomContract config)throws IOException{
+        this(ip,port,type,true,config);
+    }
+    private LanHost(String ip,int port,GhostIdentity.Type type,boolean identityMode,CustomContract config)throws IOException {
         if(port<0||port>65535)throw new IllegalArgumentException("invalid port");
         ghostType=Objects.requireNonNull(type);
+        contract=Objects.requireNonNull(config);
+        Arrays.fill(hunterRooms,HouseMap.EXTRACTION_ROOM);
+        Arrays.fill(hunterSequences,-1);
+        Arrays.fill(lastGhostFootstepCueTick,-10000);
+        for(int i=0;i<HUNTERS;i++)supplies[i]=new FieldSupplies();
+        world.configure(contract);
         ghost=new GhostDomain(map,4,type);
         mission=new LanCase(4);
+        mission.configureHunters(contract.hunters());
+        mission.setStartingSanity(contract.startingSanity());
         if(identityMode)mission.configure(type,true);
         ai=new LanGhostPursuit(map,20261016L,type);
         bindAddress=Objects.requireNonNull(ip);
@@ -77,10 +96,10 @@ public final class LanHost implements AutoCloseable {
             String nickname=LanProtocol.cleanName(hello.get(3));
             synchronized(mutex){
                 if(running){LanProtocol.write(out,"REJECT|match already running");return;}
-                int slot=wantsGhost?3:firstVacantHunter();
+                int slot=wantsGhost?GHOST_SEAT:firstVacantHunter();
                 if(slot<0||seats[slot]!=null){LanProtocol.write(out,"REJECT|seat unavailable");return;}
                 peer=new Peer(socket,in,out,slot,nickname);seats[slot]=peer;
-                LanProtocol.write(out,"WELCOME|"+(slot==3?"GHOST":"H"+(slot+1))+"|"+LanProtocol.VERSION);
+                LanProtocol.write(out,"WELCOME|"+(slot==GHOST_SEAT?"GHOST":"H"+(slot+1))+"|"+LanProtocol.VERSION);
                 broadcastLobby();
             }
             socket.setSoTimeout(0);
@@ -93,7 +112,7 @@ public final class LanHost implements AutoCloseable {
                 if(seats[peer.slot]==peer){
                     seats[peer.slot]=null;
                     if(running){
-                        if(peer.slot==3){
+                        if(peer.slot==GHOST_SEAT){
                             // No world reset: the AI inherits the same room, energy, cooldowns,
                             // manifestation and pending strike. Only the controller is swapped.
                             ai.forget();
@@ -118,7 +137,7 @@ public final class LanHost implements AutoCloseable {
             }
         }
     }
-    private int firstVacantHunter(){for(int i=0;i<3;i++)if(seats[i]==null)return i;return -1;}
+    private int firstVacantHunter(){for(int i=0;i<contract.hunters();i++)if(seats[i]==null)return i;return -1;}
     private void handle(Peer peer,String frame){
         List<String> p;
         try{p=LanProtocol.parts(frame);}catch(IllegalArgumentException ex){reply(peer,"REJECT|invalid frame");return;}
@@ -131,27 +150,30 @@ public final class LanHost implements AutoCloseable {
                 case "START" -> {
                     if(p.size()!=1||peer.slot!=0)throw new IllegalArgumentException("host hunter must start");
                     if(running||everStarted)throw new IllegalArgumentException("fresh host required for another match");
-                    for(int i=0;i<3;i++)if(seats[i]==null||!seats[i].ready)throw new IllegalArgumentException("three hunters must be ready");
-                    if(seats[3]!=null&&!seats[3].ready)throw new IllegalArgumentException("ghost must be ready");
+                    for(int i=0;i<contract.hunters();i++)
+                        if(seats[i]==null||!seats[i].ready)
+                            throw new IllegalArgumentException("configured hunter party must be ready");
+                    if(seats[GHOST_SEAT]!=null&&!seats[GHOST_SEAT].ready)throw new IllegalArgumentException("ghost must be ready");
                     running=true;everStarted=true;tick=0;
-                    notifyAllPeers("INFO|mission started with "+(seats[3]==null?"AI":"human")+" ghost");
+                    notifyAllPeers("INFO|mission started with "+(seats[GHOST_SEAT]==null?"AI":"human")+" ghost");
                     if(mission.identificationRequired())notifyHunters("SITES|9|6|10");
                     broadcastState();broadcastProgress();broadcastWorld();
+                    notifyHunters("PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
                 }
                 case "VIEW3D" -> {
-                    if(!running||peer.slot==3||p.size()!=1)throw new IllegalArgumentException("3D view requires active hunter");
+                    if(!running||peer.slot==GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("3D view requires active hunter");
                     peer.worldMode=true;
                     reply(peer,"ACCEPT|VIEW3D");broadcastWorld();broadcastApparitions();broadcastCounters();sendCounterAmmo(peer);
                 }
                 case "GVIEW3D" -> {
-                    if(!running||peer.slot!=3||p.size()!=1)throw new IllegalArgumentException("ghost view requires active ghost seat");
+                    if(!running||peer.slot!=GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("ghost view requires active ghost seat");
                     peer.ghostWorldMode=true;
                     reply(peer,"ACCEPT|GVIEW3D");
                     reply(peer,"GTYPE|"+ghostType+"|"+ghostType.behavior());
                     reply(peer,ghostPose.frame(tick));broadcastState();
                 }
                 case "GSTEP" -> {
-                    if(!running||peer.slot!=3||!peer.ghostWorldMode||p.size()!=4)
+                    if(!running||peer.slot!=GHOST_SEAT||!peer.ghostWorldMode||p.size()!=4)
                         throw new IllegalArgumentException("spectral movement requires ghost view");
                     int dx=LanProtocol.integer(p.get(1),-100,100),dz=LanProtocol.integer(p.get(2),-100,100);
                     acceptGhostPoseSequence(peer,LanProtocol.sequence(p.get(3)));
@@ -160,30 +182,32 @@ public final class LanHost implements AutoCloseable {
                     if(ghost.manifested()&&tick%5==0)broadcastGhostSound(LanSound.Cue.FOOTFALL);
                 }
                 case "GTURN" -> {
-                    if(!running||peer.slot!=3||!peer.ghostWorldMode||p.size()!=3)
+                    if(!running||peer.slot!=GHOST_SEAT||!peer.ghostWorldMode||p.size()!=3)
                         throw new IllegalArgumentException("spectral heading requires ghost view");
                     int heading=LanProtocol.integer(p.get(1),0,359);
                     acceptGhostPoseSequence(peer,LanProtocol.sequence(p.get(2)));
                     ghostPose.turn(heading);reply(peer,ghostPose.frame(tick));
                 }
                 case "STEP" -> {
-                    if(!running||peer.slot==3||!peer.worldMode||p.size()!=4)throw new IllegalArgumentException("3D movement unavailable");
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||(p.size()!=4&&p.size()!=5))
+                        throw new IllegalArgumentException("3D movement unavailable");
                     int dx=LanProtocol.integer(p.get(1),-100,100),dz=LanProtocol.integer(p.get(2),-100,100);
-                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(3)));
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(p.size()-1)));
                     ensureActiveHunter(peer);
-                    world.move(peer.slot,dx,dz,tick);
+                    boolean runningFast=p.size()==5&&LanProtocol.integer(p.get(3),0,1)==1;
+                    world.move(peer.slot,dx,dz,tick,runningFast);
                     hunterRooms[peer.slot]=world.body(peer.slot).room();
                     recordSound(peer.slot,LanGhostPursuit.Sound.FOOTSTEP);
                     reply(peer,"ACCEPT|STEP");broadcastWorld();broadcastState();
                 }
                 case "TURN" -> {
-                    if(!running||peer.slot==3||!peer.worldMode||p.size()!=3)throw new IllegalArgumentException("3D heading unavailable");
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=3)throw new IllegalArgumentException("3D heading unavailable");
                     int heading=LanProtocol.integer(p.get(1),0,359);
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
                     world.turn(peer.slot,heading);broadcastWorld();
                 }
                 case "DOOR" -> {
-                    if(!running||peer.slot==3||!peer.worldMode||p.size()!=2)throw new IllegalArgumentException("door command unavailable");
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)throw new IllegalArgumentException("door command unavailable");
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
                     ensureActiveHunter(peer);
                     if(!world.door(peer.slot,tick))throw new IllegalArgumentException("no reachable door");
@@ -191,7 +215,7 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"ACCEPT|DOOR");broadcastWorld();
                 }
                 case "MOVE" -> {
-                    if(!running||peer.slot==3||p.size()!=3)throw new IllegalArgumentException("hunter command unavailable");
+                    if(!running||peer.slot==GHOST_SEAT||p.size()!=3)throw new IllegalArgumentException("hunter command unavailable");
                     if(peer.worldMode)throw new IllegalArgumentException("room jumps disabled in 3D mode");
                     int target=LanProtocol.integer(p.get(1),0,HouseMap.ROOM_COUNT-1);
                     long seq=LanProtocol.sequence(p.get(2));
@@ -204,7 +228,7 @@ public final class LanHost implements AutoCloseable {
                     hunterRooms[peer.slot]=target;world.setRoom(peer.slot,target);recordSound(peer.slot,LanGhostPursuit.Sound.FOOTSTEP);reply(peer,"ACCEPT|MOVE|"+target);broadcastState();broadcastWorld();
                 }
                 case "DEPLOY" -> {
-                    if(!running||peer.slot==3||!peer.worldMode||p.size()!=3)
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=3)
                         throw new IllegalArgumentException("physical hunter view required");
                     HunterCounters.Kind kind=HunterCounters.Kind.valueOf(p.get(1));
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
@@ -216,7 +240,7 @@ public final class LanHost implements AutoCloseable {
                     broadcastCounters();
                 }
                 case "UVSCAN" -> {
-                    if(!running||peer.slot==3||!peer.worldMode||p.size()!=2)
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
                         throw new IllegalArgumentException("physical hunter view required");
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
                     ensureActiveHunter(peer);
@@ -226,7 +250,7 @@ public final class LanHost implements AutoCloseable {
                     recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
                 }
                 case "SCAN" -> {
-                    if(!running||peer.slot==3||p.size()!=3)throw new IllegalArgumentException("hunter action unavailable");
+                    if(!running||peer.slot==GHOST_SEAT||p.size()!=3)throw new IllegalArgumentException("hunter action unavailable");
                     LanCase.Tool tool=LanCase.Tool.valueOf(p.get(1));
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
                     LanCase.Report result=peer.worldMode
@@ -242,7 +266,7 @@ public final class LanHost implements AutoCloseable {
                     broadcastProgress();
                 }
                 case "JOURNAL" -> {
-                    if(!running||peer.slot==3||p.size()!=1)
+                    if(!running||peer.slot==GHOST_SEAT||p.size()!=1)
                         throw new IllegalArgumentException("active hunter required for casefile");
                     reply(peer,"CASEFILE|RESET");
                     for(String note:casefile.snapshot())reply(peer,note);
@@ -251,7 +275,7 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"ACCEPT|JOURNAL");
                 }
                 case "NOTE" -> {
-                    if(!running||peer.slot==3||p.size()!=4)
+                    if(!running||peer.slot==GHOST_SEAT||p.size()!=4)
                         throw new IllegalArgumentException("active hunter notes required");
                     GhostFieldGuide.Clue clue=GhostFieldGuide.Clue.valueOf(p.get(1));
                     FieldJournal.Status status=FieldJournal.Status.valueOf(p.get(2));
@@ -262,7 +286,7 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"ACCEPT|NOTE|"+clue);
                 }
                 case "IDENTIFY" -> {
-                    if(!running||peer.slot==3||p.size()!=3)throw new IllegalArgumentException("hunter identification required");
+                    if(!running||peer.slot==GHOST_SEAT||p.size()!=3)throw new IllegalArgumentException("hunter identification required");
                     GhostIdentity.Type guess=GhostIdentity.Type.valueOf(p.get(1));
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
                     LanCase.Report result=mission.identify(peer.slot,guess,tick);
@@ -271,7 +295,7 @@ public final class LanHost implements AutoCloseable {
                     broadcastProgress();
                 }
                 case "WARD", "CLEANSE", "BANISH", "ABSOLVE", "EXTRACT" -> {
-                    if(!running||peer.slot==3||p.size()!=2)throw new IllegalArgumentException("hunter action unavailable");
+                    if(!running||peer.slot==GHOST_SEAT||p.size()!=2)throw new IllegalArgumentException("hunter action unavailable");
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
                     int here=hunterRooms[peer.slot];
                     LanCase.Report result=switch(p.get(0)){
@@ -295,7 +319,7 @@ public final class LanHost implements AutoCloseable {
                     broadcastProgress();finishIfComplete();
                 }
                 case "GHOST" -> {
-                    if(!running||peer.slot!=3||p.size()!=4)throw new IllegalArgumentException("ghost seat required");
+                    if(!running||peer.slot!=GHOST_SEAT||p.size()!=4)throw new IllegalArgumentException("ghost seat required");
                     GhostDomain.Action action=GhostDomain.Action.valueOf(p.get(1));
                     int room=LanProtocol.integer(p.get(2),0,HouseMap.ROOM_COUNT-1);
                     long seq=LanProtocol.sequence(p.get(3));
@@ -328,7 +352,7 @@ public final class LanHost implements AutoCloseable {
      * Look/viewport operations remain available as inert first-person spectating.
      */
     private void ensureActiveHunter(Peer peer){
-        if(peer.slot>=3||!mission.alive(peer.slot))
+        if(peer.slot>=HUNTERS||!mission.alive(peer.slot))
             throw new IllegalArgumentException("hunter incapacitated");
     }
     private void acceptHunterSequence(Peer peer,long sequence){
@@ -344,14 +368,14 @@ public final class LanHost implements AutoCloseable {
     private void recordSound(int seat,LanGhostPursuit.Sound type){
         LanWorld.Body body=world.body(seat);
         if(LanAcoustics.audible(map,ghost.room(),hunterRooms[seat],type))lastGhostSoundTick=tick;
-        if(seats[3]==null){
+        if(seats[GHOST_SEAT]==null){
             ai.heard(ghost.room(),hunterRooms[seat],body.x(),body.z(),type,tick);
-        }else if(seats[3].ghostWorldMode){
+        }else if(seats[GHOST_SEAT].ghostWorldMode){
             LanGhostHearing.Event cue=LanGhostHearing.project(map,ghostPose.pose(),
                     hunterRooms[seat],body.x(),body.z(),type,tick);
             if(cue!=null&&(type!=LanGhostPursuit.Sound.FOOTSTEP
                     ||tick-lastGhostFootstepCueTick[seat]>=4)){
-                reply(seats[3],cue.frame());
+                reply(seats[GHOST_SEAT],cue.frame());
                 if(type==LanGhostPursuit.Sound.FOOTSTEP)lastGhostFootstepCueTick[seat]=tick;
             }
         }
@@ -373,14 +397,14 @@ public final class LanHost implements AutoCloseable {
             broadcastWorld();
         if(trait.leavesUv()){counters.leaveUv(from,tick);counters.leaveUv(to,tick);}
         String detail=trait.canPhase()?"WALL PASSAGE":"DOOR ACTIVITY";
-        for(int i=0;i<3;i++)if(seats[i]!=null&&(hunterRooms[i]==from||hunterRooms[i]==to))
+        for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&(hunterRooms[i]==from||hunterRooms[i]==to))
             reply(seats[i],"FIELD|"+detail);
     }
-    private void notifyHunters(String event){for(int i=0;i<3;i++)if(seats[i]!=null)reply(seats[i],event);}
-    private void broadcastProgress(){for(int i=0;i<3;i++)if(seats[i]!=null)reply(seats[i],mission.privateState(i));}
+    private void notifyHunters(String event){for(int i=0;i<HUNTERS;i++)if(seats[i]!=null)reply(seats[i],event);}
+    private void broadcastProgress(){for(int i=0;i<HUNTERS;i++)if(seats[i]!=null)reply(seats[i],mission.privateState(i));}
     private boolean[] strikeVictims(){
-        boolean[] connected=new boolean[3],spatial=new boolean[3];
-        for(int i=0;i<3;i++)if(seats[i]!=null&&mission.alive(i)){
+        boolean[] connected=new boolean[HUNTERS],spatial=new boolean[HUNTERS];
+        for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&mission.alive(i)){
             connected[i]=true;spatial[i]=seats[i].worldMode;
         }
         return LanSpatialCombat.victims(map,world,ghostPose.pose(),hunterRooms,connected,spatial);
@@ -388,7 +412,7 @@ public final class LanHost implements AutoCloseable {
     /** Hunter-only positional acoustic projection; never a ghost pose or private team feed. */
     private void broadcastGhostSound(LanSound.Cue cue){
         LanGhostSpatial.Pose pose=ghostPose.pose();
-        for(int i=0;i<3;i++){
+        for(int i=0;i<HUNTERS;i++){
             if(seats[i]==null||!seats[i].worldMode)continue;
             LanSound.CueEvent sound=LanSound.project(map,world.body(i),pose.room(),pose.x(),pose.z(),cue,tick);
             if(sound!=null)reply(seats[i],sound.frame());
@@ -399,15 +423,15 @@ public final class LanHost implements AutoCloseable {
     }
     private void distributeEffect(GhostDomain.Resolution result,boolean[] affected){
         if(!result.applied())return;
-        boolean[] wasAlive=new boolean[3];
-        for(int i=0;i<3;i++)wasAlive[i]=seats[i]!=null&&mission.alive(i);
+        boolean[] wasAlive=new boolean[HUNTERS];
+        for(int i=0;i<HUNTERS;i++)wasAlive[i]=seats[i]!=null&&mission.alive(i);
         mission.applyGhostEffect(result.room(),hunterRooms,result,affected);
         if(result.fear()>0||result.harm()>0)
-            for(int i=0;i<3;i++)if(wasAlive[i]&&affected[i]&&hunterRooms[i]==result.room())
+            for(int i=0;i<HUNTERS;i++)if(wasAlive[i]&&affected[i]&&hunterRooms[i]==result.room())
                 reply(seats[i],"EFFECT|"+result.action()+"|"+result.fear()+"|"+result.harm());
         // Announce only actual living-to-downed transitions to the hunter team.
         // Human ghosts never receive health, incapacitation or team-state telemetry.
-        for(int i=0;i<3;i++)if(wasAlive[i]&&!mission.alive(i))
+        for(int i=0;i<HUNTERS;i++)if(wasAlive[i]&&!mission.alive(i))
             notifyHunters("HUNTER|DOWN|"+i);
     }
     /** AI and human origins both enter this exact damage/telegraph pipeline. */
@@ -415,11 +439,11 @@ public final class LanHost implements AutoCloseable {
         if(!result.applied())return;
         if(result.action()==GhostDomain.Action.MANIFEST)animation.manifested(tick);
         if(result.action()==GhostDomain.Action.SIGNATURE)
-            for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==result.room())
+            for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&hunterRooms[i]==result.room())
                 reply(seats[i],"TELL|"+GhostTraits.of(ghostType).clue());
         GhostBehavior.Profile behavior=GhostBehavior.profile(ghostType);
         if(result.action()==behavior.favored())
-            for(int i=0;i<3;i++)if(seats[i]!=null&&mission.alive(i)
+            for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&mission.alive(i)
                     &&Math.abs(hunterRooms[i]/HouseMap.COLS-result.room()/HouseMap.COLS)
                       +Math.abs(hunterRooms[i]%HouseMap.COLS-result.room()%HouseMap.COLS)<=1)
                 reply(seats[i],"TELL|"+behavior.tell());
@@ -433,9 +457,9 @@ public final class LanHost implements AutoCloseable {
         };
         if(cue!=null)broadcastGhostSound(cue);
         if(result.action()!=GhostDomain.Action.STRIKE){distributeEffect(result);return;}
-        boolean[] acquired=strikeVictims(),immediate=new boolean[3];
+        boolean[] acquired=strikeVictims(),immediate=new boolean[HUNTERS];
         int target=-1;
-        for(int i=0;i<3;i++)if(acquired[i]){
+        for(int i=0;i<HUNTERS;i++)if(acquired[i]){
             if(seats[i]!=null&&seats[i].worldMode)target=i;
             else immediate[i]=true; // Preserve room-only clients' existing hit semantics.
         }
@@ -443,7 +467,7 @@ public final class LanHost implements AutoCloseable {
         if(target>=0){
             pendingStrike=LanTelegraphedStrike.begin(tick,target,result);
             animation.windup(tick);
-            for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==result.room())
+            for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&hunterRooms[i]==result.room())
                 reply(seats[i],"THREAT|START|"+LanTelegraphedStrike.WINDUP_TICKS+"|"+target);
         }
     }
@@ -452,21 +476,21 @@ public final class LanHost implements AutoCloseable {
         if(pending==null||!pending.due(tick))return;
         pendingStrike=null;
         animation.impact(tick);
-        boolean[] connected=new boolean[3],spatial=new boolean[3];
-        for(int i=0;i<3;i++)if(seats[i]!=null&&mission.alive(i)){
+        boolean[] connected=new boolean[HUNTERS],spatial=new boolean[HUNTERS];
+        for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&mission.alive(i)){
             connected[i]=true;spatial[i]=seats[i].worldMode;
         }
         int near=0;
-        for(int i=0;i<3;i++)if(seats[i]!=null&&mission.alive(i)&&hunterRooms[i]==pending.room())near++;
+        for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&mission.alive(i)&&hunterRooms[i]==pending.room())near++;
         boolean soloAllowed=!GhostTraits.of(ghostType).huntsSolitary()||near==1;
         boolean hit=soloAllowed&&pending.hits(map,world,ghostPose.pose(),hunterRooms,connected,spatial)
             &&!counters.wardsAt(world.body(pending.targetSeat()).x(),
                                world.body(pending.targetSeat()).z(),tick);
         if(hit){
-            boolean[] one=new boolean[3];one[pending.targetSeat()]=true;
+            boolean[] one=new boolean[HUNTERS];one[pending.targetSeat()]=true;
             distributeEffect(pending.effect(),one);
         }
-        for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==pending.room())
+        for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&hunterRooms[i]==pending.room())
             reply(seats[i],"THREAT|"+(hit?"HIT":"EVADED")+"|"+pending.targetSeat());
     }
     private void finishIfComplete(){
@@ -480,16 +504,16 @@ public final class LanHost implements AutoCloseable {
         if(!running)return;
         try{tick++;
             int audible=-1,occupants=0;
-            for(int i=0;i<3;i++)if(seats[i]!=null&&mission.alive(i)
+            for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&mission.alive(i)
                     &&hunterRooms[i]==ghost.room()){audible=hunterRooms[i];occupants++;}
             ghost.advance(tick,audible,occupants);
             int drain=GhostTraits.passiveFear(ghostType,tick,occupants);
-            if(drain>0)for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==ghost.room()
+            if(drain>0)for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&hunterRooms[i]==ghost.room()
                     &&mission.drainSanity(i,drain))reply(seats[i],"FEED|SANITY DRAIN");
             HunterCounters.Impact impact=counters.advance(map,ghostType,ghost,ghostPose.pose(),tick);
             if(impact.saltTrack()){
                 ghostPose.slowFor(tick,28);
-                for(int i=0;i<3;i++)if(seats[i]!=null&&hunterRooms[i]==ghost.room())
+                for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&hunterRooms[i]==ghost.room())
                     reply(seats[i],"FIELD|SALT TRACKS AND SLOWED ENTITY");
                 broadcastApparitions();
             }
@@ -501,7 +525,7 @@ public final class LanHost implements AutoCloseable {
                 notifyHunters("FIELD|CROSS REPELLED THE ENTITY");
                 broadcastApparitions();
             }
-            if(seats[3]==null){GhostDomain.Observation seen=ghost.observe();
+            if(seats[GHOST_SEAT]==null){GhostDomain.Observation seen=ghost.observe();
                 LanGhostPursuit.Impulse impulse=ai.approach(seen,ghostPose.pose());
                 if(impulse!=null){try{ghostPose.step(impulse.dx(),impulse.dz(),tick);broadcastApparitions();
                     if(ghost.manifested()&&tick%5==0)broadcastGhostSound(LanSound.Cue.FOOTFALL);}
@@ -533,7 +557,7 @@ public final class LanHost implements AutoCloseable {
             if(animation.animating(tick)||pendingStrike!=null)broadcastApparitions();
             if(tick%2==0)broadcastCounters();
             if(tick%5==0){broadcastState();broadcastApparitions();broadcastProgress();broadcastWorld();
-                if(seats[3]!=null&&seats[3].ghostWorldMode)reply(seats[3],ghostPose.frame(tick));}
+                if(seats[GHOST_SEAT]!=null&&seats[GHOST_SEAT].ghostWorldMode)reply(seats[GHOST_SEAT],ghostPose.frame(tick));}
             finishIfComplete();
         }catch(RuntimeException ex){running=false;notifyAllPeers("INFO|host simulation stopped");System.err.println("LAN tick failure: "+ex.getMessage());}
     }}
@@ -543,7 +567,7 @@ public final class LanHost implements AutoCloseable {
      */
     private void broadcastApparitions(){
         LanGhostSpatial.Pose pose=ghostPose.pose();
-        for(int i=0;i<3;i++){
+        for(int i=0;i<HUNTERS;i++){
             Peer hunter=seats[i];
             if(hunter!=null && hunter.worldMode) {
                 GhostTraits.Sight form=GhostTraits.of(ghostType).sight();
@@ -564,24 +588,24 @@ public final class LanHost implements AutoCloseable {
     private void broadcastWorld(){
         String doors="DOORS|"+map.doorSnapshot();
         notifyHunters(doors);
-        for(int i=0;i<3;i++)if(seats[i]!=null)notifyHunters(world.bodyFrame(i,tick));
+        for(int i=0;i<HUNTERS;i++)if(seats[i]!=null)notifyHunters(world.bodyFrame(i,tick));
     }
     private void broadcastState(){
         GhostDomain.Observation o=ghost.observe();
-        notifyHunters("TEAMMAP|"+(seats[0]==null?-1:hunterRooms[0])+"|"
-                +(seats[1]==null?-1:hunterRooms[1])+"|"
-                +(seats[2]==null?-1:hunterRooms[2]));
-        for(int i=0;i<4;i++){
+        StringBuilder team=new StringBuilder("TEAMMAP");
+        for(int i=0;i<HUNTERS;i++)team.append('|').append(seats[i]==null?-1:hunterRooms[i]);
+        notifyHunters(team.toString());
+        for(int i=0;i<seats.length;i++){
             Peer peer=seats[i];if(peer==null)continue;
-            boolean isGhost=i==3;
+            boolean isGhost=i==GHOST_SEAT;
             int myRoom=isGhost?o.room():hunterRooms[i];
             int visible=isGhost?-1:(o.manifested()&&myRoom==o.room()?o.room():-1);
             reply(peer,"STATE|"+tick+"|"+myRoom+"|"+visible+"|"+(isGhost?o.energy():-1)+"|"+(isGhost?o.legalActions().toString().replace(" ",""):("role:"+peer.slot))+"|"+(isGhost&&tick-lastGhostSoundTick<12?1:0));
         }
     }
     private void broadcastLobby(){
-        int hunters=0,ready=0;for(int i=0;i<4;i++)if(seats[i]!=null){if(i<3)hunters++;if(seats[i].ready)ready++;}
-        notifyAllPeers("LOBBY|"+hunters+"|"+(seats[3]==null?"AI":"HUMAN")+"|"+ready+"|"+(running?"RUNNING":"WAITING"));
+        int hunters=0,ready=0;for(int i=0;i<seats.length;i++)if(seats[i]!=null){if(i<HUNTERS)hunters++;if(seats[i].ready)ready++;}
+        notifyAllPeers("LOBBY|"+hunters+"|"+(seats[GHOST_SEAT]==null?"AI":"HUMAN")+"|"+ready+"|"+(running?"RUNNING":"WAITING"));
     }
     private void notifyAllPeers(String event){for(Peer peer:seats)if(peer!=null)reply(peer,event);}
     private static void reply(Peer peer,String event){try{LanProtocol.write(peer.output,event);}catch(IOException ex){try{peer.socket.close();}catch(IOException ignored){}}}
