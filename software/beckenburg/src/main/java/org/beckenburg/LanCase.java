@@ -169,6 +169,86 @@ public final class LanCase {
             return new Report(true,"INCONCLUSIVE "+tool+" - weak reading; move closer to the source");
         return scan(seat,tool,room,ghostRoom);
     }
+    /**
+     * Expanded-evidence measurement path. Unlike the legacy fixed signature path,
+     * EMF is a 1-10 environmental event measurement and room temperatures follow
+     * season, weather and a genuine hot/cold haunting. Other evidence families
+     * still require the later equipment/ghost-matrix integration.
+     */
+    private EvidenceSignals.Season evidenceSeason=EvidenceSignals.Season.AUTUMN;
+    private EvidenceSignals.Weather evidenceWeather=EvidenceSignals.Weather.CLEAR;
+    private EvidenceSignals.Polarity evidenceThermal=EvidenceSignals.Polarity.COLD;
+    private int evidenceHour=14;
+    private boolean evidenceHeating=true;
+    public void configureEvidenceClimate(EvidenceSignals.Season season,
+            EvidenceSignals.Weather weather,int hour,boolean heating,
+            EvidenceSignals.Polarity thermalPolarity){
+        if(outcome!=Outcome.ACTIVE||hour<0||hour>23)
+            throw new IllegalArgumentException("invalid evidence climate");
+        evidenceSeason=java.util.Objects.requireNonNull(season);
+        evidenceWeather=java.util.Objects.requireNonNull(weather);
+        evidenceThermal=java.util.Objects.requireNonNull(thermalPolarity);
+        evidenceHour=hour;evidenceHeating=heating;
+    }
+    public Report scanMeasured(int seat,Tool tool,int room,int ghostRoom,
+            int tick,int eventRoom,int eventStrength){
+        hunter(seat);
+        if(outcome!=Outcome.ACTIVE||!alive(seat))
+            return new Report(false,"investigation unavailable");
+        if(tool==null||room<0||room>=HouseMap.ROOM_COUNT||tick<0
+                ||eventStrength<0||eventStrength>10)
+            return new Report(false,"invalid environmental scan context");
+        boolean positive;
+        String reading;
+        switch(tool){
+            case EMF -> {
+                EvidenceSignals.Electromagnetic sample=EvidenceSignals.emf(
+                    0xB3CC3BL,tick,room,eventRoom,eventStrength);
+                positive=sample.positiveEvidence();
+                reading="EMF "+sample.level()+"/10"
+                    +(positive?" - event threshold exceeded":" - fluctuating activity");
+            }
+            case THERMOMETER -> {
+                boolean inside=room<HouseMap.INDOOR_ROOMS;
+                EvidenceSignals.Location place=new EvidenceSignals.Location(
+                    evidenceSeason,evidenceWeather,evidenceHour,room,inside,evidenceHeating);
+                EvidenceSignals.Temperature sample=EvidenceSignals.temperature(
+                    0xA11CE5L,tick,place,evidenceThermal,room==anchor,eventStrength);
+                positive=sample.paranormalExtreme();
+                reading="Air "+sample.displayText(EvidenceSignals.Unit.CELSIUS)
+                    +" / "+sample.displayText(EvidenceSignals.Unit.FAHRENHEIT)
+                    +(positive?" - extreme anomaly":" - environment");
+            }
+            case SPIRIT_BOX -> {
+                positive=room==ghostRoom;
+                reading=positive?"Direct response captured in current ghost room"
+                    :"No verifiable direct response";
+            }
+            default -> throw new AssertionError(tool);
+        }
+        if(positive){
+            tested.add(tool);
+            boolean fresh=evidence.add(tool);
+            return new Report(true,(fresh?"CONFIRMED ":"REPEAT ")+tool+" in "+room+" - "+reading);
+        }
+        return new Report(true,"INCONCLUSIVE "+tool+" in "+room+" - "+reading);
+    }
+    public Report scanSpatialMeasured(int seat,Tool tool,LanWorld.Body body,
+            int ghostRoom,HouseMap map,int tick,int eventRoom,int eventStrength){
+        hunter(seat);
+        if(outcome!=Outcome.ACTIVE||!alive(seat))
+            return new Report(false,"investigation unavailable");
+        if(tool==null||body==null||map==null
+                ||!Double.isFinite(body.x())||!Double.isFinite(body.z())
+                ||map.roomAt(body.x(),body.z())!=body.room())
+            return new Report(false,"invalid instrument or host body");
+        int room=body.room();
+        if(Math.hypot(body.x()-map.centerX(room),body.z()-map.centerZ(room))
+                >tool.sensingRadius())
+            return new Report(true,"INCONCLUSIVE "+tool+" - move closer for reliable measurement");
+        return scanMeasured(seat,tool,room,ghostRoom,tick,eventRoom,eventStrength);
+    }
+
     public Report ward(int seat,int room) {
         hunter(seat);
         if(outcome!=Outcome.ACTIVE||!active[seat]||health[seat]<=0)return new Report(false,"cannot ward now");
