@@ -8,6 +8,9 @@ import java.io.IOException;
 public final class LanLobbyWindow extends JFrame {
     private final JTextField ip=new JTextField("127.0.0.1",13),port=new JTextField("27717",5),name=new JTextField("Investigator",11);
     private final JComboBox<String> role=new JComboBox<>(new String[]{"Hunter","Ghost"});
+    private final JSpinner partySize=new JSpinner(new SpinnerNumberModel(3,1,6,1));
+    private final JButton tuneContract=new JButton("Contract options");
+    private CustomContract custom=CustomContract.standard(3);
     private final JTextArea log=new JTextArea(12,52);
     private final JLabel status=new JLabel("Not connected");
     private final JSpinner target=new JSpinner(new SpinnerNumberModel(4,0,HouseMap.ROOM_COUNT-1,1));
@@ -33,7 +36,9 @@ public final class LanLobbyWindow extends JFrame {
         JPanel controls=new JPanel(new FlowLayout(FlowLayout.LEFT,5,5));
         controls.add(new JLabel("IP"));controls.add(ip);controls.add(new JLabel("Port"));controls.add(port);
         controls.add(new JLabel("Name"));controls.add(name);controls.add(role);
-        JButton host=new JButton("Host LAN"),join=new JButton("Join IP");controls.add(host);controls.add(join);
+        JButton host=new JButton("Host LAN"),join=new JButton("Join IP");
+        controls.add(new JLabel("Hunters"));controls.add(partySize);
+        controls.add(tuneContract);controls.add(host);controls.add(join);
         JPanel commands=new JPanel(new FlowLayout(FlowLayout.LEFT,6,4));
         commands.add(ready);commands.add(start);commands.add(new JLabel("Room"));commands.add(target);
         commands.add(move);commands.add(instrument);commands.add(scan);commands.add(ward);
@@ -45,6 +50,7 @@ public final class LanLobbyWindow extends JFrame {
         JPanel top=new JPanel(new BorderLayout());top.add(controls,BorderLayout.NORTH);top.add(info,BorderLayout.SOUTH);
         add(top,BorderLayout.NORTH);add(new JScrollPane(log),BorderLayout.CENTER);add(commands,BorderLayout.SOUTH);
         host.addActionListener(e->connect(true));join.addActionListener(e->connect(false));
+        tuneContract.addActionListener(e->configureCustomContract());
         ready.addActionListener(e->send("READY"));start.addActionListener(e->send("START"));
         move.addActionListener(e->action(() -> connection.move((int)target.getValue())));
         use.addActionListener(e->action(() -> connection.ghost((GhostDomain.Action)action.getSelectedItem(),(int)target.getValue())));
@@ -59,6 +65,51 @@ public final class LanLobbyWindow extends JFrame {
         setCommandEnabled(false);pack();setMinimumSize(new Dimension(810,370));setLocationRelativeTo(null);
         addWindowListener(new java.awt.event.WindowAdapter(){@Override public void windowClosed(java.awt.event.WindowEvent e){if(worldFrame!=null)worldFrame.dispose();if(connection!=null)connection.close();if(hosted!=null)hosted.close();}});
     }
+    private static JSpinner spin(int value,int low,int high,int step){
+        return new JSpinner(new SpinnerNumberModel(value,low,high,step));
+    }
+    /** Only effective rules are editable; unsupported Phasmophobia-inspired controls are not sold as complete. */
+    private void configureCustomContract(){
+        JPanel form=new JPanel(new GridLayout(0,2,5,5));
+        var walk=spin(custom.playerSpeed(),50,150,25);
+        var run=spin(custom.sprintSpeed(),100,200,25);
+        var ghost=spin(custom.ghostSpeed(),50,150,25);
+        var recharge=spin(custom.energyRecovery(),50,200,25);
+        var sanity=spin(custom.startingSanity(),0,100,25);
+        var drain=spin(custom.sanityDrain(),0,200,25);
+        var events=spin(custom.eventFrequency(),50,200,25);
+        var sprint=new JComboBox<>(CustomContract.Sprint.values());
+        sprint.setSelectedItem(custom.sprint());
+        var sanMonitor=new JCheckBox("Sanity display",custom.sanityMonitor());
+        var actMonitor=new JCheckBox("Activity display",custom.activityMonitor());
+        java.util.List<Object[]> rows=java.util.List.of(
+            new Object[]{"Walking speed %",walk},
+            new Object[]{"Sprint multiplier %",run},
+            new Object[]{"Sprinting",sprint},
+            new Object[]{"Ghost speed %",ghost},
+            new Object[]{"Ghost energy recharge %",recharge},
+            new Object[]{"Starting sanity %",sanity},
+            new Object[]{"Sanity loss rate %",drain},
+            new Object[]{"Ghost events frequency %",events},
+            new Object[]{"Van sanity display",sanMonitor},
+            new Object[]{"Van activity display",actMonitor}
+        );
+        for(Object[] row:rows){form.add(new JLabel((String)row[0]));form.add((JComponent)row[1]);}
+        JScrollPane scroll=new JScrollPane(form);
+        scroll.setPreferredSize(new Dimension(440,325));
+        int answer=JOptionPane.showConfirmDialog(this,scroll,
+            "CUSTOM CONTRACT / IMPLEMENTED CONTROLS",
+            JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
+        if(answer==JOptionPane.OK_OPTION){
+            custom=new CustomContract((int)partySize.getValue(),
+                (int)walk.getValue(),(int)run.getValue(),(int)ghost.getValue(),
+                (int)recharge.getValue(),(int)drain.getValue(),(int)sanity.getValue(),
+                (int)events.getValue(),(CustomContract.Sprint)sprint.getSelectedItem(),
+                custom.hidingSpots(),sanMonitor.isSelected(),actMonitor.isSelected());
+            log.append("Custom settings armed for next hosted case, "+custom.hunters()+
+                " hunters / difficulty +"+custom.partyDifficulty()+".\n");
+        }
+    }
     @FunctionalInterface private interface Command {void send()throws IOException;}
     private void action(Command command){try{if(connection==null)throw new IOException("not connected");command.send();}
         catch(Exception ex){log.append("Send failed: "+ex.getMessage()+"\n");}}
@@ -69,6 +120,12 @@ public final class LanLobbyWindow extends JFrame {
         status.setText("Connecting...");
         String hostname=ip.getText().trim(),nickname=name.getText();String p=port.getText().trim();
         boolean ghost=role.getSelectedIndex()==1;
+        // Capture the GUI state before the background socket connection begins.
+        CustomContract request=new CustomContract((int)partySize.getValue(),
+            custom.playerSpeed(),custom.sprintSpeed(),custom.ghostSpeed(),
+            custom.energyRecovery(),custom.sanityDrain(),custom.startingSanity(),
+            custom.eventFrequency(),custom.sprint(),custom.hidingSpots(),
+            custom.sanityMonitor(),custom.activityMonitor());
         Thread task=new Thread(()->{
             LanHost newHost=null;
             try{
@@ -76,7 +133,7 @@ public final class LanLobbyWindow extends JFrame {
                 if(localHost){
                     var types=GhostIdentity.Type.values();
                     var chosen=types[java.util.concurrent.ThreadLocalRandom.current().nextInt(types.length)];
-                    newHost=new LanHost("0.0.0.0",portNumber,chosen);
+                    newHost=new LanHost("0.0.0.0",portNumber,chosen,request);
                 }
                 LanClient client=new LanClient(localHost?"127.0.0.1":hostname,portNumber,localHost?false:ghost,nickname,
                     frame->SwingUtilities.invokeLater(()->{
@@ -162,10 +219,16 @@ public final class LanLobbyWindow extends JFrame {
             status.setText("Room: "+new HouseMap().roomName(myRoom)+"  |  tick "+p.get(1)+"  |  energy "+p.get(4));
         }else if(event.startsWith("TEAMMAP|")){
             var parts=LanProtocol.parts(event);
-            if(parts.size()==4){HouseMap layout=new HouseMap();
-                teamStatus.setText("Hunters: "+teamRoom(layout,parts.get(1))+" / "
-                        +teamRoom(layout,parts.get(2))+" / "+teamRoom(layout,parts.get(3)));
+            if(parts.size()==7){
+                HouseMap layout=new HouseMap();
+                StringBuilder summary=new StringBuilder("Hunters");
+                for(int i=1;i<=6;i++)summary.append(" H").append(i).append(':')
+                        .append(teamRoom(layout,parts.get(i)));
+                teamStatus.setText(summary.toString());
             }
+        }else if(event.startsWith("PARTY|")){
+            var parts=LanProtocol.parts(event);
+            if(parts.size()==3)status.setText("Party "+parts.get(1)+"/6  /  difficulty +"+parts.get(2));
         }else if(event.startsWith("PROGRESS|")){
             var fields=LanProtocol.parts(event);
             if(fields.size()==8)caseStatus.setText("Health "+fields.get(1)+"  Fear "+fields.get(2)+"  Wards "+fields.get(3)+"  Evidence "+fields.get(4)+"/3  Circle "+fields.get(5)+"  Ritual "+fields.get(6)+"  "+fields.get(7));
