@@ -58,6 +58,12 @@ public final class LanHostOwnerRecoveryTest {
                     returned.client.view3D();returned.await("ACCEPT|VIEW3D");
                     ok(host.running()&&host.reservedSeats()==0,"ghost host stays authoritative");
                 }
+                // A disconnect/departure is processed by a different TCP worker.
+                // Confirm the explicit H1 LEAVE has actually been observed by the
+                // authoritative server before testing the next independent outage.
+                b.await("PEER|LEFT|0");
+                ok(host.reservedSeats()==0,
+                    "explicit guest leave releases its reservation before ghost host dropout");
                 // Now drop the actual ghost owner's TCP connection, not merely
                 // guest H1. The authoritative server must outlive this socket too.
                 LanClient.ResumeTicket ghostTicket=ghost.client.resumeTicket();
