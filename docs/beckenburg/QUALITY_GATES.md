@@ -17,6 +17,9 @@ A source-code commit is not a passing stage. Each *completed* microstep must hav
 
 Use meaningful vertical improvements, not a giant speculative code rewrite. An independent workstream may prepare future specifications, but **prerequisite stage completion cannot be skipped**. When a GitHub connector call times out, first inspect remote state for acceptance, retry transient failure with bounded delay/reconcile head, and report persistent auth/permissions/conflicts; never blind force-push. No GitHub Actions unless expressly requested.
 
+## LAN recovery source-status clarification (2026-10-18)
+[LAN Session Recovery Implementation 019](network/LAN_SESSION_RESUME_IMPLEMENTATION_019.md) is a committed source slice for unexpected guest transport loss, same-seat token-based recovery, AI ghost reassignment, LAN room password/lock and local address diagnostics. Its new regression tests are included in both build drivers, but were **not run as a complete Java 17 game suite or tested on physical Windows machines here**. Preserve all existing LAN, fairness, role privacy, P0/P1 and real-install acceptance gates as unverified until evidence exists.
+
 ## Hosting and installation identity acceptance addendum
 The [Hosting Tools and Local Installation Identity Plan](network/HOSTING_ADMIN_AND_LOCAL_IDENTITY_IMPLEMENTATION_PLAN.md) adds HOST-01 through HOST-18 verification gates: stable hardware-class/random first-run IDs, save import and recovery, host control authorization, firewall/connection diagnosis, session/ghost reconnect, independent voice recovery and private-server readiness. These are not declared passed by source commits; full Java 17 package tests and physical Windows LAN installs remain required. The sole implementation-status ledger is stage-ledger.json.
 
