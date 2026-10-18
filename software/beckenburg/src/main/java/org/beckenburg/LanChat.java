@@ -12,13 +12,15 @@ public final class LanChat {
     public static String clean(String raw){
         if(raw==null||raw.isBlank()||raw.length()>MAX_CHARS)
             throw new IllegalArgumentException("chat must be 1-80 characters");
+        // Validate the ORIGINAL frame first: strip() must never remove CR/LF or
+        // other injected control characters before the protocol checks run.
+        for(int i=0;i<raw.length();i++){
+            char c=raw.charAt(i);
+            if(c<32||c>126||c=='|')throw new IllegalArgumentException("invalid chat character");
+        }
         String message=raw.strip();
         if(message.isEmpty()||message.length()>MAX_CHARS)
             throw new IllegalArgumentException("empty chat");
-        for(int i=0;i<message.length();i++){
-            char c=message.charAt(i);
-            if(c<32||c>126||c=='|')throw new IllegalArgumentException("invalid chat character");
-        }
         return message;
     }
 
