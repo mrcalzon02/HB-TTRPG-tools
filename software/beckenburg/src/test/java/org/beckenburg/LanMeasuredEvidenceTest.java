@@ -9,27 +9,27 @@ public final class LanMeasuredEvidenceTest {
         mission.configureEvidenceClimate(EvidenceSignals.Season.WINTER,
             EvidenceSignals.Weather.SNOW,2,true,EvidenceSignals.Polarity.HOT);
         var emBase=mission.scanMeasured(0,LanCase.Tool.EMF,4,4,20,-1,0);
-        ok(emBase.accepted()&&emBase.message().startsWith("INCONCLUSIVE")
+        ok(emBase.accepted()&&emBase.message().startsWith("READING ")
             &&emBase.message().contains("/10"),"ordinary EMF fluctuations remain inconclusive");
         var emFar=mission.scanMeasured(0,LanCase.Tool.EMF,4,4,21,6,10);
-        ok(emFar.message().startsWith("INCONCLUSIVE"),"an event in another room is not local EMF");
+        ok(emFar.message().startsWith("READING "),"an event in another room is not local EMF");
         var emPeak=mission.scanMeasured(0,LanCase.Tool.EMF,4,4,22,4,10);
-        ok(emPeak.message().startsWith("CONFIRMED")
-            &&emPeak.message().contains("threshold exceeded"),"real event >6 confirms EMF");
+        ok(emPeak.message().startsWith("READING ")
+            &&emPeak.message().contains("/10"),"real event >6 confirms EMF");
         var thermal=mission.scanMeasured(0,LanCase.Tool.THERMOMETER,4,4,22,4,0);
-        ok(thermal.message().startsWith("CONFIRMED")
+        ok(thermal.message().startsWith("READING ")
             &&thermal.message().contains("°F"),"extreme hot room recognized in either unit");
         var remote=mission.scanMeasured(0,LanCase.Tool.THERMOMETER,12,4,22,4,0);
-        ok(remote.message().startsWith("INCONCLUSIVE"),
+        ok(remote.message().startsWith("READING "),
             "outside air is not enough to confirm a haunting");
         var response=mission.scanMeasured(0,LanCase.Tool.SPIRIT_BOX,4,4,22,4,0);
-        ok(response.message().startsWith("CONFIRMED"),"direct ghost-room response");
-        ok(mission.evidenceCount()==3,"existing three-positive gate still works until migration");
+        ok(response.message().startsWith("READING "),"direct ghost-room response");
+        ok(mission.evidenceCount()==0,"measurements never auto-award evidence");
         var repeated=mission.scanMeasured(0,LanCase.Tool.EMF,4,4,22,4,10);
-        ok(repeated.message().startsWith("REPEAT")&&mission.evidenceCount()==3,
+        ok(repeated.message().startsWith("READING ")&&mission.evidenceCount()==0,
             "repeat event cannot farm positive clues");
         ok(mission.identify(0,GhostIdentity.Type.WRAITH,32).accepted(),
-            "real measured positives satisfy host identity gate");
+            "identification is a player choice, not a reading-unlock");
         System.out.println("PASS: measured event EMF, dynamic winter heat, ghost presence, repeats");
     }
 }
