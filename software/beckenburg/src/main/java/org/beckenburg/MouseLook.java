@@ -28,7 +28,13 @@ public final class MouseLook extends MouseAdapter implements FocusListener {
     private boolean captured, hasPrevious;
     private int previousX, previousY;
 
+    private final java.util.function.BooleanSupplier capturePermitted;
     public MouseLook(Component view, Delta listener) {
+        this(view,listener,()->true);
+    }
+    public MouseLook(Component view, Delta listener,
+            java.util.function.BooleanSupplier capturePermitted) {
+        this.capturePermitted=Objects.requireNonNull(capturePermitted);
         this.view=Objects.requireNonNull(view);
         this.listener=Objects.requireNonNull(listener);
         originalCursor=view.getCursor();
@@ -48,7 +54,7 @@ public final class MouseLook extends MouseAdapter implements FocusListener {
     public boolean captured(){return captured;}
     /** The capture gesture must originate inside a visible, focused play viewport. */
     public void capture(){
-        if(captured||!view.isShowing()||!view.isFocusOwner())return;
+        if(captured||!capturePermitted.getAsBoolean()||!view.isShowing()||!view.isFocusOwner())return;
         captured=true;hasPrevious=false;
         view.setCursor(hiddenCursor);
         centerPointer();
