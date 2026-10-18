@@ -45,7 +45,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
     private String soundCaption="";
     private int soundUntilTick=-1;
-    private LanCase.Tool selected=LanCase.Tool.EMF;
+    private LanCase.Tool selected=LanCase.Tool.EMF; // compatibility with legacy tests
+    private final String[] equippedGear={"EMF_READER","THERMOMETER","SPIRIT_BOX","UV_LIGHT"};
+    private final java.util.Map<String,EquipmentTiers.Tier> equipmentTier=new java.util.HashMap<>();
+    private final java.util.Map<String,String> deviceReading=new java.util.HashMap<>();
+    private int activeGearSlot;
     private int heldUseUntilTick;
     private String caseResult="";
     private final List<LanEvidenceJournal.Entry> casefile=new ArrayList<>();
@@ -278,6 +282,24 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(p.size()==8&&p.get(0).equals("SUPPLY")){
                 fieldCredits=LanProtocol.integer(p.get(1),0,100000);
                 for(int i=0;i<6;i++)medicine[i]=LanProtocol.integer(p.get(i+2),0,4);
+            }else if(p.size()==7&&p.get(0).equals("GEARSTATE")){
+                fieldCredits=LanProtocol.integer(p.get(1),0,100000);
+                activeGearSlot=LanProtocol.integer(p.get(2),0,FieldEquipment.SLOTS-1);
+                for(int i=0;i<FieldEquipment.SLOTS;i++){
+                    String[] parts=p.get(i+3).split(":",-1);
+                    if(parts.length!=2||!FieldEquipment.functional(parts[0]))
+                        throw new IllegalArgumentException("invalid owned equipment");
+                    equippedGear[i]=parts[0];
+                    equipmentTier.put(parts[0],EquipmentTiers.Tier.valueOf(parts[1]));
+                }
+                feedback="EQUIPPED: "+equippedGear[activeGearSlot]+" / "+equipmentTier.get(equippedGear[activeGearSlot]);
+            }else if(p.get(0).equals("GEAROWNED")){
+                for(int i=1;i<p.size();i++){
+                    String[] parts=p.get(i).split(":",-1);
+                    if(parts.length!=2||!FieldEquipment.functional(parts[0]))
+                        throw new IllegalArgumentException("invalid gear inventory");
+                    equipmentTier.put(parts[0],EquipmentTiers.Tier.valueOf(parts[1]));
+                }
             }else if(p.size()==4&&p.get(0).equals("COUNTERAMMO")){
                 crosses=LanProtocol.integer(p.get(1),0,2);
                 throwWards=LanProtocol.integer(p.get(2),0,2);
@@ -320,6 +342,15 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 keys.clear();
             }else if(frame.startsWith("BOOK|")){
                 feedback="WRITING BOOK: "+frame.substring(5);
+            }else if(p.size()==4&&p.get(0).equals("ACCEPT")
+                    &&p.get(1).equals("GEARUSE")){
+                if(!FieldEquipment.functional(p.get(2)))
+                    throw new IllegalArgumentException("unknown gear result");
+                deviceReading.put(p.get(2),p.get(3));
+                if(p.get(2).equals("EMF_READER"))lastMeasurement.put(LanCase.Tool.EMF,p.get(3));
+                if(p.get(2).equals("THERMOMETER"))lastMeasurement.put(LanCase.Tool.THERMOMETER,p.get(3));
+                if(p.get(2).equals("SPIRIT_BOX"))lastMeasurement.put(LanCase.Tool.SPIRIT_BOX,p.get(3));
+                feedback=p.get(2)+" / "+p.get(3);
             }else if(frame.startsWith("ACCEPT|SCAN|")){
                 String value=frame.substring(12);
                 for(LanCase.Tool tool:LanCase.Tool.values())
@@ -374,6 +405,41 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }
         requestFocusInWindow();
     }
+    /** One compact van rack list for actual working devices, never inert catalog props. */
+    private void showEquipmentRack(){
+        if(map.van().stationAt(renderer.x,renderer.z)!=VanStaging.Station.EQUIPMENT){
+            feedback="RETURN TO VAN EQUIPMENT RACK";return;
+        }
+        mouseLook.release();keys.clear();
+        java.util.List<String> options=new java.util.ArrayList<>();
+        java.util.List<Runnable> actions=new java.util.ArrayList<>();
+        for(String id:java.util.List.of("EMF_READER","THERMOMETER","SPIRIT_BOX",
+                "UV_LIGHT","GHOST_WRITING_BOOK")){
+            EquipmentTiers.Tier tier=equipmentTier.getOrDefault(id,EquipmentTiers.Tier.I);
+            if(tier!=EquipmentTiers.Tier.III){
+                EquipmentTiers.Tier next=EquipmentTiers.Tier.values()[tier.ordinal()+1];
+                EquipmentTiers.Stage stage=EquipmentTiers.stage(id,next);
+                options.add("UPGRADE "+id+" → "+next+" / £"+stage.creditCost()
+                    +" / "+stage.effect());
+                actions.add(()->sendAction("upgrade",()->client.buyEquipment(id,next)));
+            }
+            for(int slot=0;slot<FieldEquipment.SLOTS;slot++){
+                final int selectedSlot=slot;
+                if(!equippedGear[slot].equals(id)){
+                    options.add("EQUIP "+id+" / SLOT "+(slot+1));
+                    actions.add(()->sendAction("equip",()->client.equipAt(selectedSlot,id)));
+                }
+            }
+        }
+        Object choice=JOptionPane.showInputDialog(this,
+            "CREDITS £"+fieldCredits+" / CURRENT "+equippedGear[activeGearSlot]+" / "+equipmentTier.get(equippedGear[activeGearSlot]),
+            "FIELD EQUIPMENT",JOptionPane.PLAIN_MESSAGE,null,options.toArray(),
+            options.get(0));
+        if(choice!=null)for(int i=0;i<options.size();i++)if(options.get(i).equals(choice)){
+            actions.get(i).run();break;
+        }
+        requestFocusInWindow();
+    }
     private void consumeMedicine(FieldSupplies.Kind kind){
         int offset=kind.ordinal()*3;
         for(int at=2;at>=0;at--)if(medicine[offset+at]>0){
@@ -421,8 +487,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             int h=Math.max(160,getHeight()-82);
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g.drawImage(renderer.image(),0,0,getWidth(),h,null);
-            HeldToolView.draw(g,getWidth(),h,selected.name(),tick,tick<=heldUseUntilTick,
-                renderer.lamp,lastMeasurement.get(selected));
+            String held=equippedGear[activeGearSlot];
+            String visual=held.equals("EMF_READER")?"EMF":held;
+            HeldToolView.draw(g,getWidth(),h,visual,tick,tick<=heldUseUntilTick,
+                renderer.lamp,deviceReading.get(held),
+                equipmentTier.getOrDefault(held,EquipmentTiers.Tier.I));
             drawHunterNameplates(g,h);
             g.setFont(new Font(Font.MONOSPACED,Font.BOLD,Math.max(12,getHeight()/46)));
             g.setColor(new Color(234,222,189));
@@ -459,8 +528,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString(health==0?"ARROWS / MOUSE LOOK - OBSERVE ONLY - ESC EXIT":
                     "WASD / SHIFT RUN / ENTER TEXT / F2 TEXT RADIO / F3 VOICE / F4 RADIO VOICE",13,h+23);
             g.drawString(health==0?"NO MOVEMENT OR EQUIPMENT WHILE INCAPACITATED":
-                    "1-3 "+selected+" R SCAN  Z CROSS("+crosses+")  G WARD("+throwWards+
-                    ") H SALT("+saltPouches+") K SHOP  T HP  Y SAN  M VAN",13,h+42);
+                    "1-4 GEAR "+equippedGear[activeGearSlot]+" / "+equipmentTier.getOrDefault(equippedGear[activeGearSlot],EquipmentTiers.Tier.I)
+                    +"  R USE  F6 GEAR RACK  K MEDICINE  Z CROSS  G WARD  H SALT",13,h+42);
             g.setColor(new Color(145,204,175));
             LanVoiceClientAudio voice=client.voice();
             String mic=voice==null?"VOICE: OFF":voice.muted()?"VOICE: MUTED":
@@ -754,10 +823,29 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     sendAction("power breaker",()->client.power());
                 else sendAction("door",()->client.door());
             }
-            case KeyEvent.VK_1 -> selected=LanCase.Tool.EMF;
-            case KeyEvent.VK_2 -> selected=LanCase.Tool.THERMOMETER;
-            case KeyEvent.VK_3 -> selected=LanCase.Tool.SPIRIT_BOX;
-            case KeyEvent.VK_R -> {heldUseUntilTick=tick+4;sendAction("scan",()->client.scan(selected));}
+            case KeyEvent.VK_1 -> {
+                activeGearSlot=0;
+                selected=LanCase.Tool.EMF;
+                sendAction("select gear",()->client.selectGearSlot(0));
+            }
+            case KeyEvent.VK_2 -> {
+                activeGearSlot=1;
+                selected=LanCase.Tool.THERMOMETER;
+                sendAction("select gear",()->client.selectGearSlot(1));
+            }
+            case KeyEvent.VK_3 -> {
+                activeGearSlot=2;
+                selected=LanCase.Tool.SPIRIT_BOX;
+                sendAction("select gear",()->client.selectGearSlot(2));
+            }
+            case KeyEvent.VK_4 -> {
+                activeGearSlot=3;
+                
+                sendAction("select gear",()->client.selectGearSlot(3));
+            }
+            case KeyEvent.VK_R -> {heldUseUntilTick=tick+4;
+                sendAction("device reading",()->client.useHeldEquipment());
+            }
             case KeyEvent.VK_Z -> sendAction("cross",()->client.deploy(HunterCounters.Kind.CROSS));
             case KeyEvent.VK_G -> sendAction("thrown ward",()->client.deploy(HunterCounters.Kind.WARD));
             case KeyEvent.VK_H -> sendAction("salt",()->client.deploy(HunterCounters.Kind.SALT));
@@ -768,6 +856,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_L -> sendAction("hide",()->client.hide());
             case KeyEvent.VK_M -> feedback=insideVan()?"MONITOR ALWAYS VISIBLE ON RIGHT":"VAN TELEMETRY ONLY INSIDE THE VAN";
             case KeyEvent.VK_K -> showSupplyStore();
+            case KeyEvent.VK_F6 -> showEquipmentRack();
             case KeyEvent.VK_T -> consumeMedicine(FieldSupplies.Kind.HEALTH);
             case KeyEvent.VK_Y -> consumeMedicine(FieldSupplies.Kind.SANITY);
             case KeyEvent.VK_J -> {casefileOpen=!casefileOpen;
