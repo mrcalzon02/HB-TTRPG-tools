@@ -41,8 +41,11 @@ public final class LanSpatialEvidenceIntegrationTest {
             hunter.client.start();hunter.await("INFO|mission started");
             for(int r:new int[]{11,8,5,4})hunter.room(r);
             hunter.client.view3D();hunter.await("ACCEPT|VIEW3D");
+            // The human ghost must actually disturb the room to create >6 EMF.
+            ghost.client.ghost(GhostDomain.Action.DISTURB,4);
+            ghost.await("ACCEPT|GHOST|DISTURB|");
             hunter.client.scan(LanCase.Tool.EMF);
-            ok(hunter.await("ACCEPT|SCAN|CONFIRMED").contains("EMF"),"near anchor EMF");
+            ok(hunter.await("ACCEPT|SCAN|CONFIRMED").contains("EMF"),"event-driven EMF >6");
             for(int i=0;i<10;i++)hunter.step(100);
             hunter.client.scan(LanCase.Tool.SPIRIT_BOX);
             ok(hunter.await("ACCEPT|SCAN|INCONCLUSIVE").contains("weak reading"),
