@@ -60,8 +60,11 @@ public final class LanSessionResumeIntegrationTest {
                 var worldField=LanHost.class.getDeclaredField("world");worldField.setAccessible(true);
                 LanWorld actualWorld=(LanWorld)worldField.get(host);
                 var hiddenField=LanWorld.class.getDeclaredField("hiding");hiddenField.setAccessible(true);
-                ((boolean[])hiddenField.get(actualWorld))[1]=true;
-                check(actualWorld.hidden(1),"host owns concealed state before disconnection");
+                var hostMutex=LanHost.class.getDeclaredField("mutex");hostMutex.setAccessible(true);
+                synchronized(hostMutex.get(host)){
+                    ((boolean[])hiddenField.get(actualWorld))[1]=true;
+                    check(actualWorld.hidden(1),"host owns concealed state before disconnection");
+                }
                 b.client.note(GhostFieldGuide.Clue.FOOTPRINTS,FieldJournal.Status.SEEN);
                 b.await("ACCEPT|NOTE|FOOTPRINTS");
                 var original=b.client.resumeTicket();
