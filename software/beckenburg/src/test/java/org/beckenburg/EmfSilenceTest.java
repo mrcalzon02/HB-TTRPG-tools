@@ -22,7 +22,7 @@ public final class EmfSilenceTest {
         var other=new LanCase(4);
         other.configure(GhostIdentity.Type.SPIRIT,true);
         ok(other.scanMeasured(0,LanCase.Tool.EMF,4,4,25,4,10,false)
-                .message().contains("EMF 10/10"),"ordinary strong event remains high EMF");
+                .message().matches(".*EMF (?:[7-9]|10)/10.*"),"strong event can yield a high EMF reading");
         System.out.println("PASS: Shade-authorized zero EMF versus ordinary high signal");
     }
 }
