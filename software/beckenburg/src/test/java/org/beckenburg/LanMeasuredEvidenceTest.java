@@ -15,7 +15,7 @@ public final class LanMeasuredEvidenceTest {
         ok(emFar.message().startsWith("READING "),"an event in another room is not local EMF");
         var emPeak=mission.scanMeasured(0,LanCase.Tool.EMF,4,4,22,4,10);
         ok(emPeak.message().startsWith("READING ")
-            &&emPeak.message().contains("/10"),"real event >6 confirms EMF");
+            &&emPeak.message().contains("/10"),"real high EMF reading is logged, no confirmation");
         var thermal=mission.scanMeasured(0,LanCase.Tool.THERMOMETER,4,4,22,4,0);
         ok(thermal.message().startsWith("READING ")
             &&thermal.message().contains("°F"),"extreme hot room recognized in either unit");
