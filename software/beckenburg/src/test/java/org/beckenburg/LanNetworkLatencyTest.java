@@ -37,10 +37,8 @@ public final class LanNetworkLatencyTest {
             delayed.setSoTimeout(12000);
             Reader input=LanProtocol.reader(delayed.getInputStream());
             Writer output=LanProtocol.writer(delayed.getOutputStream());
-            // Reserve H1/H2 before the raw lag-probe connection, independent of
-            // operating-system task scheduling and socket arrival order.
-            // A raw peer is deliberately used to control when PONG is sent.
-            // The raw connection is opened first; it is H1 by construction.
+            // Connect the raw lag-probe first so it owns H1 and can control
+            // its application-level PONG timing independently of the client.
             LanProtocol.write(output,"JOIN|1|HUNTER|LagProbe");
             check(until(input,"WELCOME|").startsWith("WELCOME|H1|"),"raw probe owns H1");
             var secondEvents=new LinkedBlockingQueue<String>();
