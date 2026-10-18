@@ -1,151 +1,66 @@
-# Beckenburg — Ghost Evidence Loop and Complete 13-Species Catalog
+# Beckenburg — Ghost roster and evidence-loop acceptance catalog
 
-**Authority:** current `main` game source (`GhostIdentity`, `GhostTraits`, `GhostBehavior`, `GhostDomain`, `LanCase`, `RitualSites`); cataloged 2026-10-18. **Status:** source-audited rules and design acceptance criteria, **not** a claim of fresh executable/Windows multiplayer playtesting. Maintain one canonical definition in Java; this document describes it and identifies future changes.
+**Corrected 2026-10-18:** Earlier versions of this catalog wrongly presented the obsolete `FIELD_SURGE/TETHER/KINETIC/INTERFERENCE`, four named cold anomalies and four named voice categories as real player evidence. **That design is rejected.** They are old code metadata, not intended identity signals, and the active journal no longer shows them as evidence. Do not implement them under a new name. The authoritative equipment/evidence design is [Equipment and Evidence Roadmap](EQUIPMENT_EVIDENCE_ROADMAP.md).
 
-## Investigator loop — current authoritative rules
+## Intended common loop
 
-1. **Find the anchor.** Search for events, then sweep with the EMF meter, thermometer, and spirit box. In the current implementation, a strong result is anchored to the ghost's true haunting room. Room-only mode accepts all three at the anchor; first-person spatial mode additionally requires being within each instrument's own radius of the room center (EMF 2.6 m, thermometer 3.4 m, spirit box 2.1 m). A ghost visiting a different room can cause an inconclusive transient reading, never a substitute confirmed signature.
-2. **Record positive, host-created evidence.** Exactly three tool families currently exist: EMF, thermal, spirit box. Every one of the 13 species has a distinct *subtype* in each family, as shown below. Repeats do not increment the three-family tally. The host owns scan position, result, investigator/tick record and shared hunter casefile. The ghost client must not receive private case notes.
-3. **Observe behavior as corroboration.** Distinguish locomotion, wall phasing versus door traversal, salt response, UV traces, camera/orb visibility, ghost tells, energy context and target choice. The hunter journal supports manual SEEN / UNSURE / UNKNOWN observations; compatible traits affect the shortlist, while anecdotal sightings affect suspicion rather than automatically confirming the type. These notes **do not replace** any mandatory positive instrument reading.
-4. **Identify the entity.** All three positive instrument families must be confirmed at the true anchor, and a hunter must submit the correct ghost species. A wrong guess raises that investigator's stress by 15 and a 30-tick cooldown prevents immediate retries. Species truth is host-owned; players cannot spoof identity or manufacture evidence via client messages.
-5. **Prepare the anchor.** Place a ritual ward **at the original haunting anchor**, not at the destination rite station. A defensive or thrown ward placed elsewhere cannot satisfy the ritual-preparation gate.
-6. **Complete its assigned rite.** Go to the correct fixed installation, stand within 2 m to start the channel in 3D, and hold/guard the room while the host timer runs. The three outcomes are distinct. If everyone leaves, progress pauses and the rite breaks after 20 unguarded simulation ticks (2 s); host-authorized disturbance/signature abilities can also reduce progress. Extraction remains a valid unresolved withdrawal.
+Locate disturbances; determine an actual haunted area through multiple environmental measurements; observe genuine server-authored events; collect **at least three distinct, mechanically obtainable positive evidence families** from a multi-device pool; compare physical behaviors and recordings; submit a deduction; prepare the haunting anchor; carry out the ghost's correct **banishment, cleansing or absolution** at the map's authored site; defend the ritual against interference, or withdraw.
 
-## Canonical positive evidence combinations
+**EMF** measures fluctuating event intensity from **1–10** and is positive at **7–10**, during real local paranormal activity. **Temperature** uses shared weather/season/day/night, room insulation, heat and local ghost anomalies; paranormal **below 0°C / 32°F** or **at least 90°F / 32.22°C** are candidate positives. Fahrenheit/Celsius presentation is a user choice, not different mechanics. Ordinary weather-driven extremes are not ghost evidence. Other positives must include functional UV, writing, orbs/video, structured light, recordings and original Beckenburg sampling/sensor systems.
 
-| Ghost | EMF state | Thermal state | Spirit-box state | Required rite |
-| --- | --- | --- | --- | --- |
-| **POSSESSIVE** | EMF 5 — object tether resonance | Cold pocket, 3°C | Double echo through static | Absolution |
-| **POLTERGEIST** | EMF 5 — clustered kinetic spikes | Thermal shear, 4°C | Broken syllables / distant reply | Banishment |
-| **DEMON** | EMF 5 — patterned interference | Cold wall seam, 1°C | Voice from the wrong direction | Banishment |
-| **YOKAI** | EMF 5 — pulsing field surge | Cold pocket, 3°C | Broken syllables / distant reply | Absolution |
-| **BANSHEE** | EMF 5 — object tether resonance | Thermal shear, 4°C | Voice from the wrong direction | Absolution |
-| **WRAITH** | EMF 5 — clustered kinetic spikes | Cold wall seam, 1°C | Clear direct response | Banishment |
-| **SHADE** | EMF 5 — patterned interference | Unnatural cold, 2°C — anchor chill | Double echo through static | Cleansing |
-| **SPECTER** | EMF 5 — pulsing field surge | Thermal shear, 4°C | Double echo through static | Cleansing |
-| **SPIRIT** | EMF 5 — pulsing field surge | Unnatural cold, 2°C — anchor chill | Clear direct response | Absolution |
-| **HANTU** | EMF 5 — object tether resonance | Cold wall seam, 1°C | Broken syllables / distant reply | Cleansing |
-| **DEVIL** | EMF 5 — clustered kinetic spikes | Unnatural cold, 2°C — anchor chill | Voice from the wrong direction | Banishment |
-| **MIMIC** | EMF 5 — patterned interference | Cold pocket, 3°C | Clear direct response | Cleansing |
-| **TWINS** | EMF 5 — pulsing field surge | Cold wall seam, 1°C | Double echo through static | Absolution |
+**Present transition state:** `EvidenceSignals` implements the numeric environmental model. The host-side `LanCase.scanMeasured` and live `LanHost` measurement pathway use it; event strength comes from authorized ghost actions. Solo currently retains an older placeholder scan path, and the LAN main equipment scanner still has only three instrument entries. Full 14-family acquisition, ghost-specific evidence assignments, UI, physical devices, finished video and per-player °C/°F settings are **not complete**. The game must not be advertised as possessing them until end-to-end verification. An obsolete `LanCase.scan` remains for legacy fixtures; its subtype strings must not be treated as approved design.
 
-**Important implementation finding:** All 13 triples are unique, but all **13 EMF + thermal pairs are already unique**; 13/13 thermal + voice pairs and 11/13 EMF + voice pairs are also unique. Thus the third confirmed family is a code-enforced objective but often adds no deductive information. Every ghost always has exactly the same three mandatory instrument *families*, and `GhostIdentity.Type.signature(tool)` currently accepts any non-null instrument. The apparent variety comes from signal subtypes, not genuinely different equipment-family combinations. This is a **documented balance/design gap**, not a claim that heterogeneous evidence families exist.
+## 13 ghost identities: actual mechanical behavior and resolution
 
-## Behavioral profile and independent corroboration
+| Ghost | Required rite | Behavior tag | Movement | Ghost tell | Evidence assignment |
+| --- | --- | --- | --- | --- | --- |
+| **POSSESSIVE** | absolution | object_claim | walk / doors | Small keepsakes shift toward a single object | **Pending functional evidence matrix** |
+| **POLTERGEIST** | banishment | object_storm | walk / doors | Several unsecured objects rattle in sequence | **Pending functional evidence matrix** |
+| **DEMON** | banishment | aggression | walk / doors | An aggressive impact shakes the nearest threshold | **Pending functional evidence matrix** |
+| **YOKAI** | absolution | sound_reaction | float / doors | A familiar voice repeats from the wrong room | **Pending functional evidence matrix** |
+| **BANSHEE** | absolution | wail | float / doors | A rising wail fills the corridor | **Pending functional evidence matrix** |
+| **WRAITH** | banishment | phase_travel | float / walls | Footfall echoes shift to the far side of a wall | **Pending functional evidence matrix** |
+| **SHADE** | cleansing | lurk | float / walls | An outline holds still in the darkest corner | **Pending functional evidence matrix** |
+| **SPECTER** | cleansing | apparition | float / walls | An apparition lingers after the movement ends | **Pending functional evidence matrix** |
+| **SPIRIT** | absolution | restless | walk / doors | A faint voice carries through the old rooms | **Pending functional evidence matrix** |
+| **HANTU** | cleansing | cold_feed | float / doors | A sudden cold draft brushes past the investigators | **Pending functional evidence matrix** |
+| **DEVIL** | banishment | bargain | walk / doors | A soft voice offers an unsettling promise | **Pending functional evidence matrix** |
+| **MIMIC** | cleansing | imitation | walk / doors | The last call repeats with a slight delay | **Pending functional evidence matrix** |
+| **TWINS** | absolution | paired_echo | float / doors | Two knocks answer from neighboring rooms | **Pending functional evidence matrix** |
 
-| Ghost | Traversal | Visibility | Charge source | Solitary attacks only? | UV traces | Favored action |
-| --- | --- | --- | --- | --- | --- | --- |
-| POSSESSIVE | Walk / doors | Directly visible | Empty room | Yes | Yes | disturb |
-| POLTERGEIST | Walk / doors | Directly visible | Hunter present | No | Yes | disturb |
-| DEMON | Walk / doors | Directly visible | Ambient | No | No | strike |
-| YOKAI | Float / doors | Orbs | Hunter present | No | No | whisper |
-| BANSHEE | Float / doors | Directly visible | Empty room | Yes | No | whisper |
-| WRAITH | Float / phase walls | Directly visible | Empty room | No | Yes | drift |
-| SHADE | Float / phase walls | Camera only | Empty room | Yes | Yes | manifest |
-| SPECTER | Float / phase walls | Camera only | Ambient | No | Yes | manifest |
-| SPIRIT | Walk / doors | Directly visible | Ambient | No | Yes | whisper |
-| HANTU | Float / doors | Orbs | Empty room | No | No | disturb |
-| DEVIL | Walk / doors | Directly visible | Hunter present | Yes | Yes | whisper |
-| MIMIC | Walk / doors | Directly visible | Hunter present | No | Yes | whisper |
-| TWINS | Float / doors | Orbs | Ambient | No | No | drift |
+## Supplementary observations tied to implemented source traits
 
-`Empty room` is the implementation's `ISOLATION` *recharge* rule, not a synonym for hunting lone players; the separate `huntsSolitary` flag gates strike/signature actions to rooms occupied by exactly one hunter. `Hunter present` recharge means occupancy greater than zero. Salt affects **walkers**, not floaters. Camera-only and orb ghosts have host-side visibility categories, but a complete remote CCTV/surveillance view is not yet playable.
+- **POSSESSIVE:** Moves objects near its attachment; waits for isolation. Visibility: visible; energy recharge: isolation; requires one target in room for strike/signature; UV traces: yes. This describes source behavior, **not proof of complete audiovisual realization**.
+- **POLTERGEIST:** Violent object storms and ordinary door passage. Visibility: visible; energy recharge: presence; may strike with multiple occupants; UV traces: yes. This describes source behavior, **not proof of complete audiovisual realization**.
+- **DEMON:** Hard strikes; relatively little fear for the harm. Visibility: visible; energy recharge: ambient; may strike with multiple occupants; UV traces: no. This describes source behavior, **not proof of complete audiovisual realization**.
+- **YOKAI:** Floating voice-chaser that still opens doors. Visibility: orbs; energy recharge: presence; may strike with multiple occupants; UV traces: no. This describes source behavior, **not proof of complete audiovisual realization**.
+- **BANSHEE:** Wails and picks out isolated investigators. Visibility: visible; energy recharge: isolation; requires one target in room for strike/signature; UV traces: no. This describes source behavior, **not proof of complete audiovisual realization**.
+- **WRAITH:** Floats directly through walls without opening doors. Visibility: visible; energy recharge: isolation; may strike with multiple occupants; UV traces: yes. This describes source behavior, **not proof of complete audiovisual realization**.
+- **SHADE:** Camera apparition when no investigator is watching. Visibility: camera_only; energy recharge: isolation; requires one target in room for strike/signature; UV traces: yes. This describes source behavior, **not proof of complete audiovisual realization**.
+- **SPECTER:** Camera-only figure and spectral wall traces. Visibility: camera_only; energy recharge: ambient; may strike with multiple occupants; UV traces: yes. This describes source behavior, **not proof of complete audiovisual realization**.
+- **SPIRIT:** Footsteps, opened doors, and ordinary traces. Visibility: visible; energy recharge: ambient; may strike with multiple occupants; UV traces: yes. This describes source behavior, **not proof of complete audiovisual realization**.
+- **HANTU:** Cold orbs moving through open doorways. Visibility: orbs; energy recharge: isolation; may strike with multiple occupants; UV traces: no. This describes source behavior, **not proof of complete audiovisual realization**.
+- **DEVIL:** Feeds on a lone investigator's sanity. Visibility: visible; energy recharge: presence; requires one target in room for strike/signature; UV traces: yes. This describes source behavior, **not proof of complete audiovisual realization**.
+- **MIMIC:** Repeats voices and gains strength from nearby listeners. Visibility: visible; energy recharge: presence; may strike with multiple occupants; UV traces: yes. This describes source behavior, **not proof of complete audiovisual realization**.
+- **TWINS:** Twin orbs and paired knocks, never wall-phases. Visibility: orbs; energy recharge: ambient; may strike with multiple occupants; UV traces: no. This describes source behavior, **not proof of complete audiovisual realization**.
 
-## Individual field casefiles
+## Existing ritual installations (house)
 
-### POSSESSIVE
-**Evidence:** EMF 5 — object tether resonance; Cold pocket, 3°C; Double echo through static. **Resolution:** Absolution.
-**Host behavioral clue:** Moves objects near its attachment; waits for isolation. **Favored-action tell:** Small keepsakes shift toward a single object.
-**Corroboration:** Walk / doors; directly visible; empty room energy recharge; strike/signature require a single hunter in room; can leave UV traces; can interact with floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-### POLTERGEIST
-**Evidence:** EMF 5 — clustered kinetic spikes; Thermal shear, 4°C; Broken syllables / distant reply. **Resolution:** Banishment.
-**Host behavioral clue:** Violent object storms and ordinary door passage. **Favored-action tell:** Several unsecured objects rattle in sequence.
-**Corroboration:** Walk / doors; directly visible; hunter present energy recharge; strikes are not limited to single-occupant rooms; can leave UV traces; can interact with floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-### DEMON
-**Evidence:** EMF 5 — patterned interference; Cold wall seam, 1°C; Voice from the wrong direction. **Resolution:** Banishment.
-**Host behavioral clue:** Hard strikes; relatively little fear for the harm. **Favored-action tell:** An aggressive impact shakes the nearest threshold.
-**Corroboration:** Walk / doors; directly visible; ambient energy recharge; strikes are not limited to single-occupant rooms; no UV traces from this trait; can interact with floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-### YOKAI
-**Evidence:** EMF 5 — pulsing field surge; Cold pocket, 3°C; Broken syllables / distant reply. **Resolution:** Absolution.
-**Host behavioral clue:** Floating voice-chaser that still opens doors. **Favored-action tell:** A familiar voice repeats from the wrong room.
-**Corroboration:** Float / doors; orbs; hunter present energy recharge; strikes are not limited to single-occupant rooms; no UV traces from this trait; unaffected by floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-### BANSHEE
-**Evidence:** EMF 5 — object tether resonance; Thermal shear, 4°C; Voice from the wrong direction. **Resolution:** Absolution.
-**Host behavioral clue:** Wails and picks out isolated investigators. **Favored-action tell:** A rising wail fills the corridor.
-**Corroboration:** Float / doors; directly visible; empty room energy recharge; strike/signature require a single hunter in room; no UV traces from this trait; unaffected by floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-### WRAITH
-**Evidence:** EMF 5 — clustered kinetic spikes; Cold wall seam, 1°C; Clear direct response. **Resolution:** Banishment.
-**Host behavioral clue:** Floats directly through walls without opening doors. **Favored-action tell:** Footfall echoes shift to the far side of a wall.
-**Corroboration:** Float / phase walls; directly visible; empty room energy recharge; strikes are not limited to single-occupant rooms; can leave UV traces; unaffected by floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-### SHADE
-**Evidence:** EMF 5 — patterned interference; Unnatural cold, 2°C — anchor chill; Double echo through static. **Resolution:** Cleansing.
-**Host behavioral clue:** Camera apparition when no investigator is watching. **Favored-action tell:** An outline holds still in the darkest corner.
-**Corroboration:** Float / phase walls; camera only; empty room energy recharge; strike/signature require a single hunter in room; can leave UV traces; unaffected by floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-### SPECTER
-**Evidence:** EMF 5 — pulsing field surge; Thermal shear, 4°C; Double echo through static. **Resolution:** Cleansing.
-**Host behavioral clue:** Camera-only figure and spectral wall traces. **Favored-action tell:** An apparition lingers after the movement ends.
-**Corroboration:** Float / phase walls; camera only; ambient energy recharge; strikes are not limited to single-occupant rooms; can leave UV traces; unaffected by floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-### SPIRIT
-**Evidence:** EMF 5 — pulsing field surge; Unnatural cold, 2°C — anchor chill; Clear direct response. **Resolution:** Absolution.
-**Host behavioral clue:** Footsteps, opened doors, and ordinary traces. **Favored-action tell:** A faint voice carries through the old rooms.
-**Corroboration:** Walk / doors; directly visible; ambient energy recharge; strikes are not limited to single-occupant rooms; can leave UV traces; can interact with floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-### HANTU
-**Evidence:** EMF 5 — object tether resonance; Cold wall seam, 1°C; Broken syllables / distant reply. **Resolution:** Cleansing.
-**Host behavioral clue:** Cold orbs moving through open doorways. **Favored-action tell:** A sudden cold draft brushes past the investigators.
-**Corroboration:** Float / doors; orbs; empty room energy recharge; strikes are not limited to single-occupant rooms; no UV traces from this trait; unaffected by floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-### DEVIL
-**Evidence:** EMF 5 — clustered kinetic spikes; Unnatural cold, 2°C — anchor chill; Voice from the wrong direction. **Resolution:** Banishment.
-**Host behavioral clue:** Feeds on a lone investigator's sanity. **Favored-action tell:** A soft voice offers an unsettling promise.
-**Corroboration:** Walk / doors; directly visible; hunter present energy recharge; strike/signature require a single hunter in room; can leave UV traces; can interact with floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-### MIMIC
-**Evidence:** EMF 5 — patterned interference; Cold pocket, 3°C; Clear direct response. **Resolution:** Cleansing.
-**Host behavioral clue:** Repeats voices and gains strength from nearby listeners. **Favored-action tell:** The last call repeats with a slight delay.
-**Corroboration:** Walk / doors; directly visible; hunter present energy recharge; strikes are not limited to single-occupant rooms; can leave UV traces; can interact with floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-### TWINS
-**Evidence:** EMF 5 — pulsing field surge; Cold wall seam, 1°C; Double echo through static. **Resolution:** Absolution.
-**Host behavioral clue:** Twin orbs and paired knocks, never wall-phases. **Favored-action tell:** Two knocks answer from neighboring rooms.
-**Corroboration:** Float / doors; orbs; ambient energy recharge; strikes are not limited to single-occupant rooms; no UV traces from this trait; unaffected by floor salt. These are sourced attributes/tells, **not** proof all implied animations/physical set pieces have been built.
-
-## Ritual station catalog — starter house
-
-| Rite | Actual site (`RitualSites`) | Room | Host channel | Terminal outcome |
+| Rite | Host installation | Room | Duration | Host terminal outcome |
 | --- | --- | ---: | ---: | --- |
-| **Banishment** | Sealed Iron Circle, storage cellar | 9 | 55 ticks / 5.5 s | BANISHED |
-| **Cleansing** | Purification Font, library | 6 | 45 ticks / 4.5 s | CLEANSED |
-| **Absolution** | Memorial Lectern, foyer | 10 | 60 ticks / 6.0 s | ABSOLVED |
+| Banishment | Sealed Iron Circle, cellar | 9 | 55 ticks / 5.5 s | BANISHED |
+| Cleansing | Purification Font, library | 6 | 45 ticks / 4.5 s | CLEANSED |
+| Absolution | Memorial Lectern, foyer | 10 | 60 ticks / 6.0 s | ABSOLVED |
 
-These times apply when `identificationRequired` is enabled in the current modern LAN contract. A legacy compatibility contract remains a simpler 45-tick cleansing-at-anchor path; do not present legacy behavior as the intended full thirteen-ghost experience. Other authored location families must acquire independently traversable equivalent rite sites; do not claim nine finished playable maps merely because they appear in planning or selection.
+The host retains correct-species deduction, anchor ward, correct ritual, site proximity and ritual defense checks. Those safeguards must survive the evidence migration. Other maps require real authored, reachable ritual stations; a map selection entry is not a validated site.
 
-## Design improvements still to implement — do not mislabel as shipped
+## Completion criteria (per ghost; all 13)
 
-- **Evidence diversity:** Retain at least **three positive, observable states per ghost** but broaden the source families and acquisition conditions. Make at least two archetypes remain plausible after two verified clues in normal cases; require a genuinely differentiating third clue and ensure no ghost can be identified by a trivial universal two-tool pair. Preserve three-positives gate, document any evidence-limited difficulty mode explicitly, and prevent unavoidable softlocks.
-- **Independent tests:** Connect UV, salt, spectral photographs/orbs, manifestation, motion/footsteps and behavioral provocation to genuine, observable, reproducible player-facing logic. Avoid merely adding checkboxes or free host-only reveals. Distinguish rumor, observed behavior, and host-confirmed physical measurement.
-- **Species-specific affordances:** Increase differences in power timing, reactions, limitations, environmental consequences and counterplay rather than treating the 13 profiles as different flavor strings. Particularly verify that MIMIC actually copies behavior if that becomes a promise, TWINS can create credible paired activity without being an invisible extra player, and camera-only species have a usable camera.
-- **Fair asymmetric play:** Both AI and player-controlled ghosts must use the same energy, action legality, cooldown, hit checks, and evidence-producing world effects; ghost players get their own species only inside the live match. Neither role receives confidential opponent coordinates or notes. Counter tools cannot cancel an otherwise legal ghost action by client fiat.
-- **Presentation:** Show recognizable visual/audio indications instead of just `TELL|` text, with subtitles/alternate channels, accessibility options, and no reliance on sound-only clues or subtle color discrimination. Distinguish premonition/minor/moderate/dangerous/signature event tiers and respect the agreed escalation budget.
-- **Ritual defense:** Extend room-level guard validation to physically meaningful site-area defense when ready, record interruption/recovery feedback, and test each ghost/rite/map. Current channeling start requires 2 m proximity, but ongoing guard presence is only room-level in `LanCase.advance`.
+1. At least three **different authentic positive types** assigned from the expanded evidence families, each with a host-authored producer, equipment detector, world interaction, timeout/decay and reproducible timing test.
+2. Signal reliability verified through false positives: weather, ordinary electronics, normal movement, human-caused heat, camera limitations, player voices and non-ghost events must not silently satisfy a ghost proof.
+3. Enough clues and behavioral differentiators to identify the species without hidden data leaks; a third proof should matter and no universal two-instrument species shortcut should exist.
+4. Complete solo + 1–6 hunter LAN + human-ghost acquisition path. The same true event may create multiple instrument reactions, but it must not turn into automatically confirmed independent evidence by repeated polling.
+5. All three ritual types reachable and completion defended; hostile ghost control must use identical authorized world event rules as AI; reconnect preserves installed sensors and private case history.
+6. Java 17 headless/GUI, Windows and multiplayer acceptance logged in existing quality gates, not inferred from a successful text commit. No additional GitHub Actions.
 
-## Acceptance gates and source pointers
-
-- `software/beckenburg/src/main/java/org/beckenburg/GhostIdentity.java`: roster, canonical signature states, rites, distinct behavior IDs and printed instrument readings.
-- `software/beckenburg/src/main/java/org/beckenburg/GhostTraits.java`: mobility, passage, sight, recharge, solitary rules, UV, health/fear multipliers.
-- `software/beckenburg/src/main/java/org/beckenburg/GhostBehavior.java`: favored actions, discounts, cooldowns and nearby tells.
-- `software/beckenburg/src/main/java/org/beckenburg/GhostDomain.java`: shared AI/human controller execution and signature action limits.
-- `software/beckenburg/src/main/java/org/beckenburg/LanCase.java` and `RitualSites.java`: three-positive identification and rite sites, anchor ward, guard timing and terminal outcomes.
-- `software/beckenburg/src/test/java/org/beckenburg/LanGhostIdentityTest.java`: iterates **all 13**, verifies unique triples, positives only at anchor, wrong guess/rite/site denial, and channel completion.
-- `software/beckenburg/src/test/java/org/beckenburg/GhostTraitsTest.java`, `GhostBehaviorTest.java`: traits, action parity and balance assertions.
-- `software/beckenburg/src/test/java/org/beckenburg/LanRiteNetworkTest.java`: four-socket Wraith investigation/banishment and hunter-only evidence/identity privacy.
-
-**Before claiming a finished ghost:** rerun all ghost matrix/ritual tests from a clean Java 17 checkout, test all 13 in solo and hosted LAN including a human ghost, exercise false/duplicate scans, side effects, 1–6 hunters, reconnects, incapacitation, camera/UV/salt evidence and all ritual outcomes, then record verified outputs in `docs/beckenburg/stage-ledger.json`. Source audit and this catalog commit alone are not gameplay proof. Do not add GitHub Actions.
+**Source pointers:** `GhostIdentity.java`, `GhostTraits.java`, `GhostBehavior.java`, `GhostDomain.java`, `EvidenceSignals.java`, `EquipmentRegistry.java`, `LanCase.java`, `RitualSites.java`; project quality gates at `docs/beckenburg/QUALITY_GATES.md`.
