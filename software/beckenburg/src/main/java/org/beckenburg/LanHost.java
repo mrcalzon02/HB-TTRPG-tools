@@ -635,7 +635,8 @@ public final class LanHost implements AutoCloseable {
                                 room,ghost.room(),tick,origin,inReach?eventPower:0,
                                 GhostEvidenceProfile.emfSuppressed(ghostType));
                             if(!measure.accepted())throw new IllegalArgumentException("instrument unavailable");
-                            reading=measure.message().substring(measure.message().indexOf(" - ")+3);
+                            reading=measure.message().substring(measure.message().indexOf(" - ")+3)
+                                .replace("°","deg ");
                             if(!inReach)reading+=" / beyond haunting-signal range";
                         }
                         case "SPIRIT_BOX" -> {
@@ -653,6 +654,8 @@ public final class LanHost implements AutoCloseable {
                         case "UV_LIGHT" -> reading=counters.recentUv(room,tick)
                             ?"UV light / recent physical surface trace":"UV light / no visible trace";
                         case "GHOST_WRITING_BOOK" -> {
+                            if(room>=HouseMap.INDOOR_ROOMS)
+                                throw new IllegalArgumentException("writing book requires an interior room");
                             if(!writingBook.placed()){
                                 writingBook.place(peer.slot,room,tick);
                                 notifyHunters("BOOK|DEPLOYED|"+room);
