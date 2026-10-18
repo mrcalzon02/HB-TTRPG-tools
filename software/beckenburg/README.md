@@ -1,5 +1,9 @@
 # The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
 
+## LAN recovery and hosting controls — committed source, pending full application tests
+
+Private LAN hosts can set an optional plaintext room password and lock new joins. A **Host info** panel shows the real bound port, candidate local addresses and actionable network failure categories; these are not proof of remote WAN reachability. An unexpected guest transport drop reserves the hunter/ghost seat for a bounded interval (default 120 seconds), while an intentional Leave departs immediately. The connected client can reconnect to the **same** host and seat using a rotating host-generated secret; reopening the 3D view restores its normal scene/voice handshake. The AI inherits ghost control while its player is absent, and the human may reclaim the same ghost if the host is still running and the reserved ticket is valid. Host-player/H1 departure still stops a listen-hosted case. Public WAN security/encryption, host migration, background process-restart token storage and complete state-resync proof are not implemented. See [LAN source integration 019](../../docs/beckenburg/network/LAN_SESSION_RESUME_IMPLEMENTATION_019.md). New socket-level tests are in build.sh/build.cmd but the full Java 17 game suite and physical Windows LAN acceptance remain **unverified**.
+
 ## Microphone voice — local LAN developer build
 
 **3D hunter controls:** Choose the microphone from **F7** (system default or any compatible device). Hold **F3** to speak locally or **F4** to transmit on the hunter radio; release to stop. **F7** opens a compact mute/voice-playback-volume control. Losing keyboard focus or opening text input stops transmission. Ghost seats only receive nearby physical speech; they cannot transmit on the investigators' radio. A hunter's outgoing radio voice is also audible to a ghost physically close to the speaker, but the ghost cannot eavesdrop remotely on radio recipients.
