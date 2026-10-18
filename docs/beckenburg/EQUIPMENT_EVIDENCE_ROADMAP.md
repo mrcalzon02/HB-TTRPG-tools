@@ -25,7 +25,7 @@
 | Ghost writing | Ghost chooses/marks book and leaves inspectable writing | writing book, video camera | missing |
 | Spirit orbs | Ghost-authored drifting orbs visible under correct optical conditions | camera, head gear, van video | visibility category only; feed missing |
 | Structured-light silhouette | Real spectral motion distorts projector/laser volume | pattern projector, laser grid | missing |
-| Ectoplasm | Ghost-authored sample with decay/contamination rules | swab, microscope/assay | original; missing |
+| Ectoplasm | Ghost-authored sample; degraded/contaminated samples are unreadable, never ghost evidence | swab, microscope/assay | original; missing |
 | Resonance | Repeatable supernatural frequency response to a controlled stimulus | tuning forks, spectrum analyzer | original; missing |
 | Seismic disturbance | Multi-sensor floor/structure response incompatible with ordinary traffic | seismic recorder | original; missing |
 | Atmospheric inversion | Local pressure/airflow anomaly beyond HVAC and weather | barometric probe | original; missing |
@@ -101,23 +101,23 @@
 ## Original equipment design contracts
 
 - **Anchor triangulator:** Combine spatial evidence bearing measurements; uncertainty radius contracts with multiple placements, never an instant exact location reveal.
-- **Ectoplasm swab and assay:** Recover fresh residue from eligible surfaces; sample integrity, contamination, lab readout and limited cartridges.
+- **Ectoplasm swab and assay:** Recover real ghost-authored residue. Non-ghost material or contaminated samples produce no spectral finding; limited cartridges and decay may affect sample viability.
 - **Resonance tuning forks:** Strike tuned forks and measure frequency-dependent paranormal responses, exposing the player to sound attraction.
 - **Barometric anomaly probe:** Detect sustained indoor pressure reversals against exterior weather and room HVAC baselines.
 - **Seismic floor recorder:** Mount on floors to register impacts and genuine traversal; distinguishes walkers and poltergeist object strikes.
 - **Spectral prism filter:** Use polarized camera optics to resolve ghost silhouettes/shadow displacements that normal light cannot show.
 - **Lidar displacement grid:** Structured beam volume; interruptions follow real ghost geometry and line-of-sight rather than random HUD popups.
-- **Deployable EMF array:** Place three synchronized nodes to triangulate actual EMF events; every node receives delayed/noisy samples.
+- **Deployable EMF array:** Place three synchronized nodes to triangulate only actual ghost-authored EMF events. Distance and latency may affect display timing, not generate a paranormal event.
 - **Remote thermal probe array:** Deploy remote temperature loggers; season, room insulation, heating and anomaly movement affect all readings.
 - **Ritual anchor meter:** Find a ward's affinity with the haunting anchor; does not reveal the hidden species or bypass the ritual's physical requirements.
 - **Ward stability probe:** Measure the defended rite's remaining stability and ghost interference in real time.
-- **Anomalous object imprint kit:** Scan claimed objects for residual imprint after genuine interactions; false positives from human use are possible.
+- **Anomalous object imprint kit:** Scan items only for genuine residual ghost imprints. Ordinary human handling cannot create a paranormal imprint or imitate its detection.
 - **Chalk and portable sigils:** Lay portable defensive lines with materials/time cost; never a free substitute for a map's ritual installation.
 - **Spectral frequency analyzer:** Analyze live EVP/resonance spectral features in the van; require a real recorded source and avoid directly revealing species.
 
 ## Ghost resolution and multiplayer safeguards
 
-The case retains all 13 established ghost identities and their three ritual categories. Existing behavioral traits and required rites remain distinct from evidence types. The authored true evidence matrix must be created only after each chosen evidence producer exists; do not resurrect `FIELD_SURGE/TETHER/KINETIC/INTERFERENCE` or `ANCHOR_CHILL/COLD_SPOT/SHEAR/WALL_DRAFT` as required ghost evidence. Those old enums are internal compatibility metadata, not intended instrument outcomes.
+The case retains all 13 established ghost identities and their three ritual categories. [The complete ghost evidence matrix](GHOST_EVIDENCE_MATRIX.md) now defines the intended species/equipment relationships, with the future tools labeled unimplemented. Behavior and required rite remain distinct from instrument readings. The physical evidence producers must be completed before release; do not resurrect `FIELD_SURGE/TETHER/KINETIC/INTERFERENCE` or `ANCHOR_CHILL/COLD_SPOT/SHEAR/WALL_DRAFT` as required ghost evidence. Those old enums are internal compatibility metadata, not intended instrument outcomes.
 
 All physical events and recorded instrument values originate on the server, **without any automatic evidence confirmation**: spatial measurements use host-owned positions and line-of-sight; placeable sensors have host-owned placement, physics, lifetime, batteries, clocks and event association; hunters share journal records with origin/tick/room; a ghost client must not see casefile/secret species-inference or hunter location; AI/human ghost produce the same event signals. Reconnect must replay sensor states and bounded historical observations without manufacturing new instrument events.
 
@@ -126,7 +126,7 @@ All physical events and recorded instrument values originate on the server, **wi
 1. **Slice E-01 — sourced/partial:** register all 42 candidate tools and status; add `EvidenceSignals` for 1–10 EMF, true events and seasonal hot/cold thermals; connect both live LAN and solo scans to it; retire fake identity-coded field-guide clues. Source/test entries committed. Fresh Java runtime acceptance not yet established.
 2. **E-02 — next:** consolidate the currently separate solo/LAN climate settings, implement hosted weather/heating controls, support saved per-player temperature units; durable event intensity/falloff; fix remaining legacy helper methods and tests, prove event evidence does not appear from mere anchor proximity.
 3. **E-03:** build 7 reference evidence families *end to end* (writing, D.O.T.S.-equivalent, UV, cameras/orbs and current instruments), with matching world props, meaningful audio/visual cues and isolated host tests.
-4. **E-04:** connect own evidence categories from the original kits; design a balanced 13-ghost three-evidence matrix, ensure each type can generate at least three distinguishable clues without requiring the player to tick them off; avoid trivial one-to-one instrument codes.
+4. **E-04:** implement and balance the committed [13-ghost source-backed matrix](GHOST_EVIDENCE_MATRIX.md), completing original instruments and at least three real obtainable ghost clues per species without a player checklist quota. Avoid invented subtype codes or fabricated readings.
 5. **E-05:** shop, loadout, inventory stock, upgrades/tiers, consumables, user-readable equipment interfaces, batteries and physical interactions. Make all 8 starter, 13 optional and 7 van categories genuinely selectable/usable where relevant.
 6. **E-06:** repeatable LAN 1–6 hunter + ghost-controller runs; event timelines, power cuts, weather, death/reconnect, edge cases, interference and photo/video/audio evidence, host privacy and accessibility acceptance. Record pass/fail results in the project's existing stage ledger. Do not create GitHub Actions unless explicitly directed.
 
