@@ -163,7 +163,7 @@ public final class LanHost implements AutoCloseable {
                 if(resume){
                     int slot=parseSeat(hello.get(2));
                     Reservation waiting=slot>=0?reserved[slot]:null;
-                    if(!running||slot==ownerSeat||waiting==null||seats[slot]!=null
+                    if(!running||waiting==null||seats[slot]!=null
                             ||System.nanoTime()-waiting.expiresNanos>=0
                             ||!java.security.MessageDigest.isEqual(
                                 waiting.token.getBytes(java.nio.charset.StandardCharsets.US_ASCII),
@@ -223,8 +223,10 @@ public final class LanHost implements AutoCloseable {
                     voice.unregister(peer.slot);
                     if(peer.slot==GHOST_SEAT&&(peer.intentionalLeave||!running))ghostLobbyLook=null;
                     if(running){
-                        if(!peer.intentionalLeave && peer.slot!=ownerSeat){
-                            // An unexpected TCP loss is not a player decision to abandon the match.
+                        if(!peer.intentionalLeave){
+                            // Even the local owner's CLIENT socket can fail while this
+                            // authoritative host process stays alive; only an explicit
+                            // owner Leave or actual host shutdown ends that match.
                             reserved[peer.slot]=new Reservation(peer,System.nanoTime()
                                     +TimeUnit.SECONDS.toNanos(reconnectGraceSeconds));
                             if(peer.slot==GHOST_SEAT){
