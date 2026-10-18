@@ -61,6 +61,25 @@ public final class SceneRenderer {
         quad(out,e,a,d,h,shade(col,.8));quad(out,b,f,g,c,shade(col,.92));
         quad(out,d,c,g,h,shade(col,1.12));quad(out,e,f,b,a,shade(col,.5));
     }
+
+    // Meshes supplied by the owner: true indexed 3D geometry with embedded
+    // albedo PNGs. No primitive substitution or image-card stand-ins.
+    private static void imported(List<Face> out,String id,
+            double x,double y,double z,double scale,double yaw){
+        final double cos=Math.cos(yaw),sin=Math.sin(yaw);
+        for(GlbProps.Triangle t:GlbProps.model(id).triangles()){
+            GlbProps.Vertex[] vv={t.a(),t.b(),t.c()};
+            Point[] pp=new Point[3];
+            for(int i=0;i<3;i++){
+                GlbProps.Vertex v=vv[i];
+                pp[i]=new Point(x+scale*(v.x()*cos-v.z()*sin),
+                    y+scale*v.y(),z+scale*(v.x()*sin+v.z()*cos));
+            }
+            out.add(new Face(pp[0],pp[1],pp[2],0xffffff,t.material(),
+                vv[0].u(),vv[0].v(),vv[1].u(),vv[1].v(),
+                vv[2].u(),vv[2].v()));
+        }
+    }
     private static void furniture(List<Face> out,int room,HouseMap map){
         double cx=map.centerX(room),cz=map.centerZ(room);
         // Props deliberately have actual 3D volumes and distinctive silhouettes.
@@ -97,16 +116,16 @@ public final class SceneRenderer {
                 box(out,cx+1.6,1.18,cz-.79,.79,.05,.54,0xaaa59d);
                 box(out,cx+1.53,1.26,cz-.75,.08,.18,.08,0xc7bca0);
             }
-            case 6 -> { // library: bookcases and reader's table
-                box(out,cx-2.45,0,cz-1.8,.55,2.15,3.2,0x614735);
-                for(int i=0;i<5;i++)box(out,cx-2.37,.38+i*.35,cz-1.69,.58,.08,2.97,0x936e4e);
+            case 6 -> { // real licensed wood shelf and reader's table
+                imported(out,"shelf_mp_6",cx-2.20,0,cz-.45,2.15,Math.PI/2);
+                imported(out,"shelf_mp_6",cx-2.20,0,cz+.75,2.15,Math.PI/2);
                 box(out,cx-.2,0,cz+1.0,1.7,.82,.85,0x5e4938);
             }
             case 7 -> { // dining room: table and four seats
                 box(out,cx-1.1,0,cz-.7,2.15,.74,1.35,0x574337);
                 box(out,cx-1.15,.76,cz-.72,2.25,.09,1.41,0x97734e);
-                box(out,cx-1.3,0,cz-1.55,.76,.54,.52,0x68513b);
-                box(out,cx+.58,0,cz+1.14,.76,.54,.52,0x68513b);
+                imported(out,"chair_mp_5",cx-1.1,0,cz-1.54,1.0,0);
+                imported(out,"chair_mp_5",cx+.71,0,cz+1.22,1.0,Math.PI);
             }
             case 8 -> {box(out,cx-1.45,0,cz-1.1,2.4,.82,1.1,0x6a5140);
                 box(out,cx+1.7,0,cz-.85,.65,1.5,1.25,0x473d3b);
@@ -158,8 +177,12 @@ public final class SceneRenderer {
         vanBox(faces,van,-.55,.10,r-.28,1.1,.5,.18,MaterialAtlas.AGED_WOOD);
         vanBox(faces,van,-w+.1,.05,f-.3,w*2-.2,.08,.3,MaterialAtlas.IRON);
         // Visible equipment shelf: six distinct physical sockets. Items can be aimed at and taken.
-        vanBox(faces,van,1.76,.58,-1.88,.10,1.14,3.30,MaterialAtlas.AGED_WOOD);
-        vanBox(faces,van,1.35,.53,-1.88,.53,.085,3.30,MaterialAtlas.IRON);
+        for(double lz : new double[]{-1.18,.18}) {
+            VanStaging.Position p=van.world(1.50,lz);
+            VanStaging.Position right=van.world(2.50,lz);
+            double yaw=Math.atan2(right.z()-p.z(),right.x()-p.x());
+            imported(faces,"shelf_mp_6",p.x(),.36,p.z(),1.35,yaw);
+        }
         for(EquipmentLoadout.Item item:EquipmentLoadout.Item.values()){
             if(!stock.contains(item))continue;
             double lz=-1.58+item.ordinal()*.52;
@@ -242,16 +265,14 @@ public final class SceneRenderer {
                     box(out,xx+.18,0,zz+.88,.64,2.45,.10,0x8f805e);
                     box(out,xx+.18,2.35,zz,.64,.11,1.0,0x8f805e);
                     if(!map.doorOpen(xx,zz)){
-                        texturedBox(out,xx+.27,0,zz+.09,.46,2.34,.82,MaterialAtlas.DOOR);
-                        box(out,xx+.245,1.02,zz+.69,.055,.12,.075,0xe1ba62);
+                        imported(out,"door_1_loose",xx+.50,0,zz+.90,1.05,Math.PI/2);
                     }
                 }else{
                     box(out,xx+.02,0,zz+.18,.10,2.45,.64,0x8f805e);
                     box(out,xx+.88,0,zz+.18,.10,2.45,.64,0x8f805e);
                     box(out,xx,2.35,zz+.18,1,.11,.64,0x8f805e);
                     if(!map.doorOpen(xx,zz)){
-                        texturedBox(out,xx+.09,0,zz+.27,.82,2.34,.46,MaterialAtlas.DOOR);
-                        box(out,xx+.68,1.02,zz+.245,.075,.12,.055,0xe1ba62);
+                        imported(out,"door_1_loose",xx+.97,0,zz+.50,1.05,0);
                     }
                 }
             }
@@ -261,14 +282,18 @@ public final class SceneRenderer {
             RoomLighting.Switch sw=RoomLighting.location(r);
             if(Math.hypot(sw.x()-x,sw.z()-z)>14)continue;
             double px=sw.x(),pz=sw.z();
-            box(out,px-.095,1.17,pz-.13,.10,.30,.26,0xc8c1af); // stone switch plate
+            imported(out,"light_switch_1",px,1.30,pz,2.0,0);
             boolean lit=roomLights==null||roomLights.on(r);
-            box(out,px+.007,lit?1.34:1.21,pz-.038,.075,.09,.075,lit?0xdac67c:0x50505a);
+            // A tiny functional state indicator stays connected to RoomLighting.
+            box(out,px+.033,lit?1.34:1.25,pz+.023,.025,.055,.025,
+                lit?0xdac67c:0x50505a);
             double cx=map.centerX(r),cz=map.centerZ(r);
-            box(out,cx-.40,2.54,cz-.30,.8,.14,.6,0x5f625e);
-            double energy=roomLights==null?1:roomLights.brightness(r,roomLightTick);
-            box(out,cx-.26,2.50,cz-.20,.52,.06,.40,
-                energy>.45?0xffe4a4:energy>.13?0x9c7b62:0x343c46);
+            if(Math.hypot(cx-x,cz-z)<=7.5) {
+                imported(out,"ceiling_lamp_1_off",cx,2.58,cz,.76,0);
+                double energy=roomLights==null?1:roomLights.brightness(r,roomLightTick);
+                box(out,cx-.19,2.49,cz-.17,.38,.024,.34,
+                    energy>.45?0xffe4a4:energy>.13?0x9c7b62:0x343c46);
+            }
         }
         for(int r=0;r<map.roomCount();r++) if(Math.hypot(map.centerX(r)-x,map.centerZ(r)-z)<14) furniture(out,r,map);
         for(int r=0;r<HouseMap.INDOOR_ROOMS;r++){
@@ -613,7 +638,9 @@ public final class SceneRenderer {
                 // distorts strongly at PS-era FOV and is unsuitable for room walls.
                 double uu=(u*va.u/a.z + v*vb.u/b.z + w*vc.u/c.z)/inv;
                 double vv=(u*va.v/a.z + v*vb.v/b.z + w*vc.v/c.z)/inv;
-                int texel=MaterialAtlas.sample(material,uu,vv);
+                int texel=material>=GlbProps.TEXTURE_BASE
+                    ?GlbProps.sample(material,uu,vv)
+                    :MaterialAtlas.sample(material,uu,vv);
                 int tr=(texel>>16)&255,tg=(texel>>8)&255,tb=texel&255;
                 color=((tr*((tint>>16)&255)/255)<<16) |
                     ((tg*((tint>>8)&255)/255)<<8) |
