@@ -16,6 +16,12 @@ public final class GhostEvidenceProfile {
         for(var choice:choices)set.add(choice);
         return set;
     }
+    private static final EnumSet<GhostIdentity.Type> SILENT=types(
+        GhostIdentity.Type.SHADE,GhostIdentity.Type.SPECTER,
+        GhostIdentity.Type.HANTU);
+    public static boolean emfSuppressed(GhostIdentity.Type type){
+        return SILENT.contains(Objects.requireNonNull(type));
+    }
     private static final EnumSet<GhostIdentity.Type> COLD=types(
         GhostIdentity.Type.POSSESSIVE,GhostIdentity.Type.BANSHEE,
         GhostIdentity.Type.WRAITH,GhostIdentity.Type.SHADE,
@@ -57,8 +63,8 @@ public final class GhostEvidenceProfile {
     public static boolean compatible(GhostIdentity.Type type,GhostFieldGuide.Clue clue){
         Objects.requireNonNull(type);Objects.requireNonNull(clue);
         return switch(clue){
-            case EMF_OVER_SIX->type!=GhostIdentity.Type.SHADE;
-            case EMF_SUPPRESSION->type==GhostIdentity.Type.SHADE;
+            case EMF_OVER_SIX->!emfSuppressed(type);
+            case EMF_SUPPRESSION->emfSuppressed(type);
             case EXTREME_COLD->thermal(type)==EvidenceSignals.Polarity.COLD;
             case EXTREME_HEAT->thermal(type)==EvidenceSignals.Polarity.HOT;
             case WRITING_CHILD->writing(type,GhostWriting.Style.CHILD_DRAWINGS);
