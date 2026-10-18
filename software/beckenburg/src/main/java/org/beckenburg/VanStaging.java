@@ -29,6 +29,21 @@ public final class VanStaging {
     }
     public static final double HALF_WIDTH=2.1, FRONT=-2.1, REAR=2.05;
     public static final double WALL_THICKNESS=.16, USE_RANGE=.85;
+    /** Host-owned cargo shutter: initially open so newly spawned hunters can leave. */
+    private boolean cargoDoorClosed;
+    public boolean cargoDoorClosed(){return cargoDoorClosed;}
+    public void setCargoDoorClosed(boolean closed){cargoDoorClosed=closed;}
+    /** Exact physical button location beside the van's cargo entrance. */
+    public Position doorButton(){return world(-1.68,FRONT+.47);}
+    public boolean nearDoorButton(double x,double z){
+        if(!Double.isFinite(x)||!Double.isFinite(z))return false;
+        Position p=doorButton();
+        return Math.hypot(x-p.x(),z-p.z())<1.10;
+    }
+    public boolean toggleCargoDoor(){
+        cargoDoorClosed=!cargoDoorClosed;
+        return cargoDoorClosed;
+    }
     private final Placement placement;
     public VanStaging(Placement placement) { this.placement=Objects.requireNonNull(placement); }
     public Placement placement() { return placement; }
@@ -53,7 +68,8 @@ public final class VanStaging {
         double w=HALF_WIDTH,f=FRONT,r=REAR,t=WALL_THICKNESS;
         return overlaps(p.x(),p.z(),radius,-w,-w+t,f,r) ||
             overlaps(p.x(),p.z(),radius,w-t,w,f,r) ||
-            overlaps(p.x(),p.z(),radius,-w,w,r-t,r);
+            overlaps(p.x(),p.z(),radius,-w,w,r-t,r) ||
+            (cargoDoorClosed&&overlaps(p.x(),p.z(),radius,-w,w,f,f+t));
     }
     private static boolean overlaps(double x,double z,double radius,
             double minX,double maxX,double minZ,double maxZ) {
