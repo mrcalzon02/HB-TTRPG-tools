@@ -357,8 +357,10 @@ public final class LanHost implements AutoCloseable {
                     peer.ready=!peer.ready;broadcastLobby();
                 }
                 case "START" -> {
-                    if(p.size()!=1||(peer.slot!=0&&!(ghostMayStart&&peer.slot==GHOST_SEAT)))
-                        throw new IllegalArgumentException("host hunter or hosting ghost must start");
+                    if(p.size()!=1||(ownerJoinSecret!=null
+                            ?peer.slot!=ownerSeat
+                            :(peer.slot!=0&&!(ghostMayStart&&peer.slot==GHOST_SEAT))))
+                        throw new IllegalArgumentException("only verified hosting player may start");
                     if(running||everStarted)throw new IllegalArgumentException("fresh host required for another match");
                     for(int i=0;i<contract.hunters();i++)
                         if(seats[i]==null||!seats[i].ready)
@@ -1001,12 +1003,16 @@ public final class LanHost implements AutoCloseable {
     private void broadcastWorld(){
         String doors="DOORS|"+map.doorSnapshot();
         notifyHunters(doors);
-        for(int i=0;i<HUNTERS;i++)if(seats[i]!=null)notifyHunters(world.bodyFrame(i,tick));
+        // A disconnected hunter remains physically present and vulnerable for the
+        // entire reservation window, not invisible until the UI reconnects.
+        for(int i=0;i<HUNTERS;i++)if((seats[i]!=null||reserved[i]!=null)&&mission.alive(i))
+            notifyHunters(world.bodyFrame(i,tick));
     }
     private void broadcastState(){
         GhostDomain.Observation o=ghost.observe();
         StringBuilder team=new StringBuilder("TEAMMAP");
-        for(int i=0;i<HUNTERS;i++)team.append('|').append(seats[i]==null?-1:hunterRooms[i]);
+        for(int i=0;i<HUNTERS;i++)team.append('|')
+            .append(seats[i]==null&&reserved[i]==null?-1:hunterRooms[i]);
         notifyHunters(team.toString());
         for(int i=0;i<seats.length;i++){
             Peer peer=seats[i];if(peer==null)continue;
