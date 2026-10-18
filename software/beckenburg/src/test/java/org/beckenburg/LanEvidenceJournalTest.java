@@ -1,6 +1,6 @@
 package org.beckenburg;
 
-/** Source provenance, bounds, duplicate suppression and protocol guards. */
+/** Every sample, tool provenance, replay bounds and protocol guards. */
 public final class LanEvidenceJournalTest {
     static void ok(boolean yes,String reason){if(!yes)throw new AssertionError(reason);}
     static void reject(Runnable operation){
@@ -12,7 +12,14 @@ public final class LanEvidenceJournalTest {
         var weak=new LanCase.Report(true,"INCONCLUSIVE EMF in 14 - EMF baseline");
         var first=LanEvidenceJournal.Entry.decode(journal.record(1,0,14,LanCase.Tool.EMF,weak));
         ok(first.seat()==0&&first.room()==14&&first.finding()==LanEvidenceJournal.Finding.INCONCLUSIVE,"source retained");
-        ok(journal.record(2,0,14,LanCase.Tool.EMF,weak)==null,"rapid duplicate suppressed");
+        ok(journal.record(2,0,14,LanCase.Tool.EMF,weak)!=null,"repeated measurement must be logged");
+        ok(journal.snapshot().size()==2,"no silently discarded repeat");
+        var uv=LanEvidenceJournal.Entry.decode(journal.recordDevice(4,0,4,"UV_LAMP",
+            LanEvidenceJournal.Finding.INCONCLUSIVE,"No trace under UV"));
+        ok(uv.tool().equals("UV_LAMP"),"supplementary instrument visible in the log");
+        var book=LanEvidenceJournal.Entry.decode(journal.recordDevice(8,0,4,"GHOST_WRITING_BOOK",
+            LanEvidenceJournal.Finding.CONFIRMED,"Childlike figures on the page"));
+        ok(book.tool().equals("GHOST_WRITING_BOOK"),"book observation logged");
         var strong=new LanCase.Report(true,"CONFIRMED EMF in 4 - EMF level 5");
         ok(LanEvidenceJournal.Entry.decode(journal.record(11,1,4,LanCase.Tool.EMF,strong)).finding()
                 ==LanEvidenceJournal.Finding.CONFIRMED,"confirmation preserved");
