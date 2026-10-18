@@ -61,6 +61,10 @@ public final class LanSessionResumeIntegrationTest {
                 check(original!=null,"new host sends opaque reconnect credentials");
                 b.breakTransportWithoutLeaving();
                 a.await("PEER|LOST|1");
+                String markedMap=a.await("TEAMMAP|");
+                check(markedMap.split("\\|",-1)[2].equals("11"),
+                    "reserved hunter remains at host-owned room, not vanished from team map");
+                a.await("BODY|1|"); // Their last real 3D body stays visible and vulnerable.
                 check(host.running()&&host.reservedSeats()==1,"hunter still owns host-side state");
                 // A JVM crash can leave an older last-command counter on disk. Host
                 // handshake supplies the accepted high-water mark, so input still works.
