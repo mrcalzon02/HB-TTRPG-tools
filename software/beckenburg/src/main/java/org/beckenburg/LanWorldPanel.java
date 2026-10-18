@@ -57,7 +57,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         try{
             List<String> p=LanProtocol.parts(frame);
             if(p.size()==6&&p.get(0).equals("BODY")){
-                int who=LanProtocol.integer(p.get(1),0,2);
+                int who=LanProtocol.integer(p.get(1),0,5);
                 double x=LanProtocol.integer(p.get(2),0,HouseMap.WIDTH*1000)/1000.0;
                 double z=LanProtocol.integer(p.get(3),0,HouseMap.HEIGHT*1000)/1000.0;
                 int heading=LanProtocol.integer(p.get(4),0,359);
@@ -65,7 +65,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 if(who==seat){renderer.x=x;renderer.z=z;feedback="HOST SYNC ACTIVE — movement and doors server controlled";}
                 else peers.put(who,new SceneRenderer.RemoteBody(x,z,who,heading));
             }else if(p.size()==3&&p.get(0).equals("PEER")&&p.get(1).equals("LEFT")){
-                int gone=LanProtocol.integer(p.get(2),0,2);
+                int gone=LanProtocol.integer(p.get(2),0,5);
                 if(gone!=seat)peers.remove(gone);
                 feedback="INVESTIGATOR "+(gone+1)+" DISCONNECTED - CASE CONTINUES";
             }else if(p.size()==2&&p.get(0).equals("FORM")){
@@ -150,11 +150,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(p.get(0).equals("THREAT")){
                 if(p.size()==4&&p.get(1).equals("START")){
                     int ticks=LanProtocol.integer(p.get(2),1,LanTelegraphedStrike.WINDUP_TICKS);
-                    threatTarget=LanProtocol.integer(p.get(3),0,2);
+                    threatTarget=LanProtocol.integer(p.get(3),0,5);
                     threatUntilTick=tick+ticks;
                     threatOutcome="";
                 }else if(p.size()==3&&(p.get(1).equals("EVADED")||p.get(1).equals("HIT"))){
-                    threatTarget=LanProtocol.integer(p.get(2),0,2);
+                    threatTarget=LanProtocol.integer(p.get(2),0,5);
                     threatUntilTick=-1;
                     threatOutcome=p.get(1).equals("HIT")?"SPECTRAL STRIKE CONNECTED":"STRIKE EVADED — KEEP MOVING";
                     feedback=threatOutcome;
@@ -205,7 +205,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.setFont(new Font(Font.MONOSPACED,Font.BOLD,Math.max(12,getHeight()/46)));
             g.setColor(new Color(234,222,189));
             g.drawString("BECKENBURG / LAN HOUSE — HUNTER "+(seat+1),13,26);
-            g.drawString(map.roomName(renderer.x,renderer.z)+" | TEAM "+peers.size()+" / 2 | HP "+health+
+            g.drawString(map.roomName(renderer.x,renderer.z)+" | TEAM "+(peers.size()+1)+" / 6 | HP "+health+
                 " | SANITY "+sanity+" | CLUES "+evidence+"/3",13,46);
             g.drawString("+",getWidth()/2,h/2);
             g.setColor(new Color(214,195,151));

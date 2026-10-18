@@ -13,12 +13,13 @@ public final class LanSpatialCombat {
     public static boolean[] victims(HouseMap map, LanWorld world, LanGhostSpatial.Pose ghost,
                                     int[] hunterRooms, boolean[] connected, boolean[] spatial) {
         Objects.requireNonNull(map); Objects.requireNonNull(world); Objects.requireNonNull(ghost);
-        if(hunterRooms.length!=3||connected.length!=3||spatial.length!=3)
-            throw new IllegalArgumentException("exactly three hunter seats required");
-        boolean[] selected=new boolean[3];
+        if((hunterRooms.length!=3&&hunterRooms.length!=6)
+            ||connected.length!=hunterRooms.length||spatial.length!=hunterRooms.length)
+            throw new IllegalArgumentException("matched 3 or 6 hunter seats required");
+        boolean[] selected=new boolean[hunterRooms.length];
         double best=STRIKE_RANGE*STRIKE_RANGE;
         int closest=-1;
-        for(int i=0;i<3;i++) {
+        for(int i=0;i<hunterRooms.length;i++) {
             if(!connected[i]||hunterRooms[i]!=ghost.room())continue;
             if(!spatial[i]) { selected[i]=true; continue; } // Existing room-level compatibility.
             LanWorld.Body body=world.body(i);

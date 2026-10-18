@@ -28,8 +28,25 @@ public final class LanCase {
     private GhostIdentity.Type archetype=GhostIdentity.Type.SPIRIT, identified;
     private boolean identificationRequired;
     private int lastGuessTick=-1000;
-    private final int[] health={100,100,100},stress={0,0,0},wards={2,2,2};
-    private final boolean[] active={true,true,true};
+    private final int[] health={100,100,100,100,100,100},stress=new int[6],wards={2,2,2,2,2,2};
+    private final boolean[] active={true,true,true,false,false,false};
+    /** Called before a hosted match. Tests using the legacy three-seat case remain unchanged. */
+    public void configureHunters(int count){
+        if(count<1||count>6||outcome!=Outcome.ACTIVE)throw new IllegalArgumentException("1-6 hunters required");
+        for(int i=0;i<6;i++)active[i]=i<count;
+    }
+    public void setStartingSanity(int value){
+        if(value<0||value>100)throw new IllegalArgumentException("invalid starting sanity");
+        for(int i=0;i<6;i++)stress[i]=100-value;
+    }
+    public boolean heal(int seat,int amount){
+        hunter(seat);if(amount<1||amount>100||!alive(seat)||health[seat]==100)return false;
+        health[seat]=Math.min(100,health[seat]+amount);return true;
+    }
+    public boolean calm(int seat,int amount){
+        hunter(seat);if(amount<1||amount>100||!alive(seat)||stress[seat]==0)return false;
+        stress[seat]=Math.max(0,stress[seat]-amount);return true;
+    }
     private int wardRoom=-1,ritualProgress=-1,unguardedTicks,ritualRoom=-1;
     private GhostIdentity.Rite selectedRite;
     private Outcome outcome=Outcome.ACTIVE;
@@ -38,7 +55,7 @@ public final class LanCase {
         if(anchor<0||anchor>=HouseMap.INDOOR_ROOMS)throw new IllegalArgumentException("invalid anchor");
         this.anchor=anchor;
     }
-    private static void hunter(int seat){if(seat<0||seat>=3)throw new IllegalArgumentException("hunter seat required");}
+    private static void hunter(int seat){if(seat<0||seat>=6)throw new IllegalArgumentException("hunter seat required");}
     public Outcome outcome(){return outcome;}
     public int evidenceCount(){return evidence.size();}
     public int testedCount(){return tested.size();}
@@ -101,7 +118,7 @@ public final class LanCase {
         active[seat]=false;
         // Vacant and incapacitated seats cannot keep an already lost case active.
         boolean survivor=false;
-        for(int i=0;i<3;i++)if(alive(i))survivor=true;
+        for(int i=0;i<6;i++)if(alive(i))survivor=true;
         if(outcome==Outcome.ACTIVE&&!survivor)outcome=Outcome.LOST;
     }
     public String privateState(int seat) {
@@ -180,9 +197,10 @@ public final class LanCase {
     }
     /** Host may narrow an actual spatial strike to eligible seats; never trust a client mask. */
     public void applyGhostEffect(int room,int[] hunterRooms,GhostDomain.Resolution effect,boolean[] affected) {
-        if(hunterRooms.length!=3||affected.length!=3)throw new IllegalArgumentException("three hunter seats required");
+        if(hunterRooms.length!=affected.length||(hunterRooms.length!=3&&hunterRooms.length!=6))
+            throw new IllegalArgumentException("matched 3 or 6 hunter positions required");
         if(outcome!=Outcome.ACTIVE||!effect.applied())return;
-        for(int i=0;i<3;i++)if(active[i]&&affected[i]&&hunterRooms[i]==room && health[i]>0){
+        for(int i=0;i<hunterRooms.length;i++)if(active[i]&&affected[i]&&hunterRooms[i]==room && health[i]>0){
             stress[i]=Math.min(100,stress[i]+effect.fear());
             if(effect.harm()>0)health[i]=Math.max(0,health[i]-Math.max(1,wardRoom==room?Math.min(4,effect.harm()):effect.harm()));
         }
@@ -195,7 +213,7 @@ public final class LanCase {
         }
         // Disconnected seats cannot become invulnerable phantom survivors.
         boolean survivor=false;
-        for(int i=0;i<3;i++)if(active[i]&&health[i]>0)survivor=true;
+        for(int i=0;i<6;i++)if(active[i]&&health[i]>0)survivor=true;
         if(!survivor)outcome=Outcome.LOST;
     }
     /** Advance on the host's 100ms simulation clock, never on a client timer.
@@ -203,11 +221,11 @@ public final class LanCase {
      * A vacated circle pauses immediately and unravels after twenty unattended ticks.
      */
     public RitualAdvance advance(int[] hunterRooms) {
-        if(hunterRooms==null||hunterRooms.length!=3)
-            throw new IllegalArgumentException("three hunter room snapshots required");
+        if(hunterRooms==null||(hunterRooms.length!=3&&hunterRooms.length!=6))
+            throw new IllegalArgumentException("three or six hunter room snapshots required");
         if(outcome!=Outcome.ACTIVE||ritualProgress<0)return RitualAdvance.NONE;
         boolean guarded=false;
-        for(int seat=0;seat<3;seat++)
+        for(int seat=0;seat<hunterRooms.length;seat++)
             if(active[seat]&&health[seat]>0&&hunterRooms[seat]==ritualRoom)guarded=true;
         if(!guarded){
             if(++unguardedTicks>=ABANDON_GRACE_TICKS){

@@ -294,7 +294,7 @@ public final class SceneRenderer {
     public record RemoteBody(double x,double z,int slot,int heading) {
         public RemoteBody(double x,double z,int slot){this(x,z,slot,0);}
         public RemoteBody {
-            if(!Double.isFinite(x)||!Double.isFinite(z)||slot<0||slot>2||heading<0||heading>=360)
+            if(!Double.isFinite(x)||!Double.isFinite(z)||slot<0||slot>=6||heading<0||heading>=360)
                 throw new IllegalArgumentException("invalid remote body");
         }
     }

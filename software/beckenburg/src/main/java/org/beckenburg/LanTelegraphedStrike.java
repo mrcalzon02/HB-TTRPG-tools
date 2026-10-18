@@ -11,7 +11,7 @@ public final class LanTelegraphedStrike {
     private LanTelegraphedStrike() { }
     public record Pending(int targetSeat, int room, int impactTick, GhostDomain.Resolution effect) {
         public Pending {
-            if(targetSeat<0||targetSeat>2||room<0||room>=HouseMap.INDOOR_ROOMS||impactTick<0)
+            if(targetSeat<0||targetSeat>=6||room<0||room>=HouseMap.INDOOR_ROOMS||impactTick<0)
                 throw new IllegalArgumentException("invalid windup target");
             if(!Objects.requireNonNull(effect).applied()||effect.action()!=GhostDomain.Action.STRIKE||effect.room()!=room)
                 throw new IllegalArgumentException("windup requires accepted strike");
@@ -20,8 +20,9 @@ public final class LanTelegraphedStrike {
         public boolean hits(HouseMap map,LanWorld world,LanGhostSpatial.Pose ghost,
                             int[] rooms, boolean[] connected, boolean[] spatial){
             Objects.requireNonNull(map);Objects.requireNonNull(world);Objects.requireNonNull(ghost);
-            if(rooms.length!=3||connected.length!=3||spatial.length!=3)
-                throw new IllegalArgumentException("three hunter seats required");
+            if((rooms.length!=3&&rooms.length!=6)||connected.length!=rooms.length
+                    ||spatial.length!=rooms.length||targetSeat>=rooms.length)
+                throw new IllegalArgumentException("three or six hunters required");
             return connected[targetSeat]&&spatial[targetSeat]&&rooms[targetSeat]==room
                     &&ghost.room()==room&&LanSpatialCombat.canStrike(map,world,ghost,targetSeat);
         }

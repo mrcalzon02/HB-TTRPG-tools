@@ -30,7 +30,7 @@ public final class LanClient implements AutoCloseable {
             var parts=LanProtocol.parts(response);
             if(parts.size()!=3||!parts.get(0).equals("WELCOME"))throw new IOException("join failed: "+response);
             assigned=parts.get(1);
-            if(!(assigned.equals("GHOST")||assigned.matches("H[1-3]")))throw new IOException("invalid host seat");
+            if(!(assigned.equals("GHOST")||assigned.matches("H[1-6]")))throw new IOException("invalid host seat");
             socket.setSoTimeout(0);
         }catch(Exception error){try{socket.close();}catch(IOException ignored){}if(error instanceof IOException ioe)throw ioe;throw new IOException("invalid join response",error);}
         in=input;out=output;seat=assigned;
