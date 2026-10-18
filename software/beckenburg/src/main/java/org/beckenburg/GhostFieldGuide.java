@@ -88,9 +88,9 @@ public final class GhostFieldGuide {
         GhostTraits.Profile p=GhostTraits.of(type);
         return type.name().replace('_',' ') + "  /  " + type.rite().name()+"\n"
             +"EMF: "+(GhostEvidenceProfile.compatible(type,Clue.EMF_OVER_SIX)?"HIGH 7–10":"SILENCE 0")
-            +" | "+(GhostEvidenceProfile.thermal(type)==EvidenceSignals.Polarity.COLD?"FREEZING":"HEAT 90F+")+"\\n"
-            +"WRITING: "+java.util.Arrays.toString(GhostEvidenceProfile.availableWriting(type))+"\\n"
-            +"PROJECTION GEAR STILL IN DEVELOPMENT\\n"
+            +" | "+(GhostEvidenceProfile.thermal(type)==EvidenceSignals.Polarity.COLD?"FREEZING":"HEAT 90F+")+"\n"
+            +"WRITING: "+java.util.Arrays.toString(GhostEvidenceProfile.availableWriting(type))+"\n"
+            +"PROJECTION GEAR STILL IN DEVELOPMENT\n"
             +(p.locomotion()==GhostTraits.Locomotion.FLOAT?"FLOATING":"WALKING")
             +" / "+(p.canPhase()?"WALL PHASING":"DOOR TRAVEL")
             +" / SALT "+(p.grounded()?"REACTIVE":"IMMUNE")+"\n"
