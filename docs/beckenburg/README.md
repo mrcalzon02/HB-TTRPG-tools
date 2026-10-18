@@ -4,6 +4,9 @@ Version: 0.2, updated 2026-10-15. **Solo gameplay alpha source implemented and c
 ## Authoritative release-production roadmap
 The [32-stage and 256-microstep Production Plan](RELEASE_PRODUCTION_PLAN.md) governs feature order and exit criteria; [Quality Gates](QUALITY_GATES.md) defines recurring improvement windows and test thresholds; [stage-ledger.json](stage-ledger.json) is the **single stage-status authority**; [Asset Pipeline](ASSET_PIPELINE.md) governs original PNG upload and correct website display; [Gold Release Acceptance](RELEASE_ACCEPTANCE.md) defines production completion.
 
+## LAN source implementation 019 — reconnect and private-room hosting
+[LAN Session Recovery & Private Hosting 019](network/LAN_SESSION_RESUME_IMPLEMENTATION_019.md) documents committed source for reconnectable guest seats, human ghost takeover/reclaim, room password and owner join-lock, plus local address/error diagnostics. New localhost tests are in both build scripts but have **not** been promoted as passing the full Java 17/physical Windows network suite; public WAN, full moderation, independent headless server and host migration remain out of scope.
+
 ## Hosting tools and local installation identities (2026)
 The [Host Administration, Local Identity and Implementation Plan](network/HOSTING_ADMIN_AND_LOCAL_IDENTITY_IMPLEMENTATION_PLAN.md) covers compact listen-server controls, passwords and membership policy, host error diagnostics, reconnection, optional headless hosting, and future WAN/NAT/relay dependencies. First-run local installation identity is deliberately separate from editable progression saves; the existing ProfileStore supports validated import with pre-import backup. A committed Java source slice is not a verified Windows installer or proof of complete host administration. Future work follows existing stage gates and the single stage ledger.
 
