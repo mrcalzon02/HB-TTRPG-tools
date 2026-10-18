@@ -6,9 +6,9 @@
 
 ## Corrections to the evidence definition
 
-**EMF is a numeric local signal from 1 to 10, not an identity-specific subtype.** Readings fluctuate with actual events, strength, location and background variation. **Readings above 6** during a local ghost event are high-EMF clues; a ghost-caused suppressed field can read **0**, which is also a logged observation; ordinary EMF spikes and unrelated disturbances may register smaller numbers. Repeated reads in one observation window cannot generate additional ghost actions or reroll a desirable result.
+**EMF readings:** ordinary equipment readings fluctuate **2–7** for every ghost, including weak or ordinary ghost events. Powerful local actions can yield **8–10** on high-EMF species, or ghost-authored suppression **0** on suppression-capable species. All readings are recorded without certifying evidence, and instrument polling cannot create ghost actions.
 
-**Temperature is a world/environment variable, not a four-label ghost code.** Season, weather, time of day, building insulation/heating, room-specific offsets, and paranormal heating/cooling influence measured room and outdoor temperatures. **Below 0°C / 32°F** qualifies as a cold extreme *when the anomaly is paranormal*; **90°F or higher (32.22°C)** qualifies as a hot extreme *when paranormal*. Outdoor freezing or hot weather are environmental readings, never automatically certified as ghost evidence. Dynamic readings should remain consistent across players and stable in the same measurement window. Fahrenheit or Celsius is a player display preference; the host stores and evaluates canonical temperatures in Celsius. Current LAN source reports both units; per-player selection/setting is still needed.
+**Temperature is a world/environment variable, not a species code.** Season, weather, time of day, building insulation/heating and ordinary ghost-event fluctuations affect all 13 ghosts. Only some species can additionally develop paranormal freezing or extreme heat; five currently have neither extreme. **Below 0°C / 32°F** qualifies as a cold extreme *when the anomaly is paranormal*; **90°F or higher (32.22°C)** qualifies as a hot extreme *when paranormal*. Outdoor freezing or hot weather are environmental readings, never automatically certified as ghost evidence. Dynamic readings should remain consistent across players and stable in the same measurement window. Fahrenheit or Celsius is a player display preference; the host stores and evaluates canonical temperatures in Celsius. Current LAN source reports both units; per-player selection/setting is still needed.
 
 **At least three distinctive evidence states can occur for each ghost** remains the design rule; this is a content-availability requirement, **not** a mandatory count of readings a player must obtain to identify or perform a rite. The simulation will provide varied evidence families from the wider equipment pool. Behaviors, counter-tests, photos, recordings and auxiliary instruments must contribute useful deductive context; not every equipment interaction is automatically a qualifying positive. No ghost gets a promised evidence family until its producer, detector, journal, difficulty variations, host validation and acquisition tests actually exist.
 
@@ -16,7 +16,7 @@
 
 | Family | Qualifying observation | Instruments | Gate |
 | --- | --- | --- | --- |
-| High EMF | Local ghost event can produce EMF 7–10 | EMF reader, synchronized array | numeric LAN source slice |
+| High EMF | Strong local ghost event produces EMF 8–10 | EMF reader, synchronized array | numeric LAN source slice |
 | Suppressed EMF | A ghost-caused electromagnetic cancellation reads 0; each sample is immediately logged | EMF reader | numeric LAN source slice |
 | Freezing | Paranormal sub-zero room reading below 0°C | thermometer, thermal beacons | numeric LAN source slice |
 | Extreme heat | Paranormal temperature at least 90°F | thermometer, thermal beacons | numeric LAN source slice |
@@ -34,6 +34,8 @@
 
 **Restrictions:** Temperature variants can constitute distinct potential evidence categories but cannot both count as separate proof from the same room's one environmental anomaly unless explicit species rules and independent event validation justify it. Photos and audio recordings have separate media rewards; they should not automatically satisfy multiple evidence categories for one event. Movement and sanity changes are supporting deductions unless explicitly designed as obtainable positives.
 
+The source-backed [complete equipment tier matrix](EQUIPMENT_TIER_MATRIX.md) defines three distinct models/behaviors for every tool (42 × 3), and [the ghost matrix](GHOST_EVIDENCE_MATRIX.md) defines **two different future additional sensor readings per ghost**. Neither registry alone makes a detector physically playable.
+
 ## Complete reference equipment and original tools
 
 ### Eight starter-equivalent items
@@ -41,7 +43,7 @@
 | ID | Device | Role | Solo / LAN source | Candidate signal(s) |
 | --- | --- | --- | --- | --- |
 | `DOTS_PROJECTOR` | Pattern projector | evidence | not yet / not yet | STRUCTURED_LIGHT |
-| `EMF_READER` | EMF reader (1–10) | evidence | partial / partial | HIGH_EMF |
+| `EMF_READER` | EMF reader (2–7 usual, 8–10 high, 0 suppressed) | evidence | partial / partial | HIGH_EMF |
 | `FLASHLIGHT` | Flashlight | survey | partial / partial | — |
 | `GHOST_WRITING_BOOK` | Ghost writing book | evidence | not yet / not yet | GHOST_WRITING |
 | `SPIRIT_BOX` | Spirit box | evidence | partial / partial | SPIRIT_REPLY |
@@ -123,11 +125,11 @@ All physical events and recorded instrument values originate on the server, **wi
 
 ## Implementation gates and ownership
 
-1. **Slice E-01 — sourced/partial:** register all 42 candidate tools and status; add `EvidenceSignals` for 1–10 EMF, true events and seasonal hot/cold thermals; connect both live LAN and solo scans to it; retire fake identity-coded field-guide clues. Source/test entries committed. Fresh Java runtime acceptance not yet established.
+1. **Slice E-01 — sourced/partial:** register all 42 candidate tools and status; add `EvidenceSignals` for ordinary 2–7 / high 8–10 / ghost-suppressed 0 EMF, and seasonal thermal variation including neutral ghosts; connect both live LAN and solo scans to it; retire fake identity-coded field-guide clues. Source/test entries committed. Fresh Java runtime acceptance not yet established.
 2. **E-02 — next:** consolidate the currently separate solo/LAN climate settings, implement hosted weather/heating controls, support saved per-player temperature units; durable event intensity/falloff; fix remaining legacy helper methods and tests, prove event evidence does not appear from mere anchor proximity.
 3. **E-03:** build 7 reference evidence families *end to end* (writing, D.O.T.S.-equivalent, UV, cameras/orbs and current instruments), with matching world props, meaningful audio/visual cues and isolated host tests.
 4. **E-04:** implement and balance the committed [13-ghost source-backed matrix](GHOST_EVIDENCE_MATRIX.md), completing original instruments and at least three real obtainable ghost clues per species without a player checklist quota. Avoid invented subtype codes or fabricated readings.
-5. **E-05:** shop, loadout, inventory stock, upgrades/tiers, consumables, user-readable equipment interfaces, batteries and physical interactions. Make all 8 starter, 13 optional and 7 van categories genuinely selectable/usable where relevant.
+5. **E-05:** implement purchasable, loadout-serializable and visible versions of [all 126 cataloged equipment tier stages](EQUIPMENT_TIER_MATRIX.md) across 42 tool types; integrate host-owned cost, tier reach/refresh/capacity/readability, batteries and interactions. Only existing medicine tiers are purchasable so far. Make all 8 starter, 13 optional and 7 van categories genuinely usable where relevant.
 6. **E-06:** repeatable LAN 1–6 hunter + ghost-controller runs; event timelines, power cuts, weather, death/reconnect, edge cases, interference and photo/video/audio evidence, host privacy and accessibility acceptance. Record pass/fail results in the project's existing stage ledger. Do not create GitHub Actions unless explicitly directed.
 
 **No false completion claims:** a machine-readable registry, reference document or committed test is *not* equivalent to implementation of the instrument, running the test, packaging a Windows build, or confirming the UI exists. Further releases must prove those independently.
