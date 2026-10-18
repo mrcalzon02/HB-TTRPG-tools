@@ -66,6 +66,7 @@ public final class GhostPracticeSession {
                 case DISTURB -> "Environmental disturbance released.";
                 case MANIFEST -> "Manifestation active. Strike when the investigator is near.";
                 case STRIKE -> "Strike resolved.";
+                case SIGNATURE -> "Signature haunting released. Energy "+result.energy()+".";
             };
         }
         return result;
