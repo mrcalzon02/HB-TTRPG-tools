@@ -35,7 +35,7 @@ public final class ManualEvidenceJournalTest {
             "heat checklist uses same polarity as live ghost simulation");
         journal.clear();
         journal.set(GhostFieldGuide.Clue.WRITING_CHILD,FieldJournal.Status.SEEN,2,7);
-        ok(GhostFieldGuide.remainsPossible(GhostIdentity.Type.BANSHEE,journal)
+        ok(GhostFieldGuide.remainsPossible(GhostIdentity.Type.SPIRIT,journal)
            &&!GhostFieldGuide.remainsPossible(GhostIdentity.Type.DEMON,journal),
            "childlike drawings have defined candidate ghost families");
         journal.set(GhostFieldGuide.Clue.WRITING_RITUAL,FieldJournal.Status.SEEN,2,8);
