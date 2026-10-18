@@ -57,7 +57,16 @@ public final class LanSixHunterVanTest {
                     "ghost cannot receive monitoring or teammate information");
                 check(players.get(1).inbox.stream().noneMatch(x->x.startsWith("VANMETERS|")),
                     "van telemetry addressed to requester only");
-                check(host.running(),"active six-hunter case survived");
+                // The previous GhostDomain bound was only three occupants. Move all six
+                // through legal connected rooms to the real host-owned ghost room.
+                for(Peer player:players){
+                    for(int room:new int[]{11,8,5,4}){
+                        player.client.move(room);
+                        player.expect("ACCEPT|MOVE|"+room);
+                    }
+                }
+                Thread.sleep(350); // Several 100 ms authoritative ghost ticks with six occupants.
+                check(host.running(),"all six hunters in the ghost room must not stop the case");
                 System.out.println("PASS: 6+1 sockets, +6 threat, private van telemetry, seventh hunter denied");
             }finally{
                 for(Peer p:players)p.close();
