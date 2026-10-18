@@ -77,8 +77,17 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         setPreferredSize(new Dimension(850,555));
         renderer.yaw=-Math.PI/2;renderer.pitch=-.08;
         renderer.roomLights=lights;
-        mouseLook=new MouseLook(this,(dx,dy)->MouseLook.rotate(renderer,dx,dy));
+        mouseLook=new MouseLook(this,(dx,dy)->MouseLook.rotate(renderer,dx,dy),
+            ()->!casefileOpen);
         addKeyListener(this);addMouseListener(mouseLook);addMouseMotionListener(mouseLook);
+        addMouseListener(new MouseAdapter(){
+            @Override public void mousePressed(MouseEvent e){
+                if(casefileOpen&&journalPage==1&&handleJournalClick(e.getX(),e.getY(),
+                        SwingUtilities.isRightMouseButton(e))){
+                    e.consume();mouseLook.release();requestFocusInWindow();repaint();
+                }
+            }
+        });
         addFocusListener(mouseLook);addFocusListener(this);
         timer=new javax.swing.Timer(110,e->frame());timer.start();
     }
@@ -565,54 +574,127 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         g.setColor(new Color(183,188,198));g.drawString("NOISY / NOT EXACT",left+10,top+264);
     }
     /** One compact casebook with instrument results, observations and type reference. */
+    private static final int NOTE_LEFT=20, NOTE_TOP=82, NOTE_ROW_HEIGHT=22;
+    private int noteWidth(){return Math.min(getWidth()-40,750);}
+    private int noteFirst(){
+        int count=GhostFieldGuide.activeClues().length;
+        return Math.max(0,Math.min(Math.max(0,count-11),guideCursor-5));
+    }
+    /** Clicking never invokes the host identity validator, only submits a hunter note. */
+    boolean handleJournalClick(int x,int y,boolean uncertain){
+        if(!casefileOpen||journalPage!=1)return false;
+        int width=noteWidth(),right=NOTE_LEFT+width-420;
+        if(x>=NOTE_LEFT+10&&x<right-8&&y>=NOTE_TOP+34
+                &&y<NOTE_TOP+34+11*NOTE_ROW_HEIGHT){
+            int row=(y-(NOTE_TOP+34))/NOTE_ROW_HEIGHT,at=noteFirst()+row;
+            GhostFieldGuide.Clue[] clues=GhostFieldGuide.activeClues();
+            if(at>=clues.length)return true;
+            guideCursor=at;
+            GhostFieldGuide.Clue clue=clues[at];
+            FieldJournal.Status current=fieldNotes.status(clue);
+            FieldJournal.Status next=uncertain
+                ?(current==FieldJournal.Status.UNSURE?FieldJournal.Status.UNKNOWN
+                    :FieldJournal.Status.UNSURE)
+                :(current==FieldJournal.Status.SEEN?FieldJournal.Status.UNKNOWN
+                    :FieldJournal.Status.SEEN);
+            sendAction("mark evidence",()->client.note(clue,next));
+            return true;
+        }
+        int spacing=Math.max(140,(NOTE_LEFT+width-right-18)/2);
+        if(x>=right&&x<right+spacing*2
+                &&y>=NOTE_TOP+86&&y<NOTE_TOP+86+7*NOTE_ROW_HEIGHT){
+            int column=(x-right)/spacing,row=(y-(NOTE_TOP+86))/NOTE_ROW_HEIGHT;
+            int index=column*7+row;
+            GhostIdentity.Type[] all=GhostIdentity.Type.values();
+            if(index<all.length){
+                selectedGuess=all[index];
+                feedback="YOUR GHOST CHOICE: "+selectedGuess+" / P TO SUBMIT";
+            }
+            return true;
+        }
+        return false;
+    }
     private void drawFieldJournal(Graphics2D g,int viewHeight){
-        int left=20,top=82,width=Math.min(getWidth()-40,750),height=Math.max(175,Math.min(viewHeight-100,390));
-        g.setColor(new Color(11,15,23,241));g.fillRoundRect(left,top,width,height,8,8);
-        g.setColor(new Color(213,195,153));
+        int left=NOTE_LEFT,top=NOTE_TOP,width=noteWidth();
+        int height=Math.max(175,Math.min(viewHeight-100,390));
+        g.setColor(new Color(15,18,26,244));g.fillRoundRect(left,top,width,height,7,7);
+        g.setColor(new Color(218,200,158));g.drawRoundRect(left,top,width,height,7,7);
         g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));
-        g.drawString(journalPage==1?"FIELD NOTES / TAB: QUICK REFERENCE":"GHOST REFERENCE / TAB: INSTRUMENT LOG",
-            left+13,top+23);
-        g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
+        g.drawString(journalPage==1?"EVIDENCE / PLAYER NOTES":"GHOST REFERENCE / TAB: LOG",
+            left+13,top+24);
         if(journalPage==1){
             GhostFieldGuide.Clue[] clues=GhostFieldGuide.activeClues();
-            int first=Math.max(0,Math.min(clues.length-11,guideCursor-5));
+            int first=noteFirst();
+            int right=left+width-420;
+            g.setColor(new Color(207,195,172));
+            g.setFont(new Font(Font.MONOSPACED,Font.BOLD,13));
+            g.drawString("MANUAL CHECKLIST",left+12,top+43);
             for(int row=0;row<11&&first+row<clues.length;row++){
-                int at=first+row;
+                int at=first+row,y=top+34+row*NOTE_ROW_HEIGHT+12;
                 GhostFieldGuide.Clue clue=clues[at];
-                FieldJournal.Status value=fieldNotes.status(clue);
-                g.setColor(at==guideCursor?new Color(247,221,161):value==FieldJournal.Status.SEEN?
-                    new Color(154,223,169):new Color(204,208,210));
-                String mark=value==FieldJournal.Status.SEEN?"[X]":value==FieldJournal.Status.UNSURE?"[?]":"[ ]";
+                FieldJournal.Status mark=fieldNotes.status(clue);
+                boolean focused=guideCursor==at;
+                g.setColor(focused?new Color(246,214,148):new Color(185,182,174));
+                g.drawRect(left+15,y-10,12,12);
+                if(mark==FieldJournal.Status.SEEN){
+                    g.fillRect(left+18,y-7,7,7);
+                }else if(mark==FieldJournal.Status.UNSURE)g.drawString("?",left+17,y+1);
+                g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
                 String label=clue.label;
-                if(label.length()>42)label=label.substring(0,39)+"...";
-                g.drawString((at==guideCursor?">":" ")+mark+" "+label,left+13,top+47+row*21);
+                int cap=Math.max(12,(right-left-62)/7);
+                if(label.length()>cap)label=label.substring(0,cap-1)+"…";
+                g.drawString(label,left+34,y);
             }
-            int right=left+width-218;
-            g.setColor(new Color(202,183,143));g.drawString("POSSIBLE GHOSTS",right,top+47);
-            var list=GhostFieldGuide.ordered(fieldNotes);
-            g.drawString(list.size()+"/13 remain",right,top+67);
-            int shown=Math.min(10,list.size());
-            for(int i=0;i<shown;i++){
-                var type=list.get(i);
-                g.setColor(i==0?new Color(233,210,169):new Color(198,208,208));
-                g.drawString(type.name()+"  "+GhostFieldGuide.suspicion(type,fieldNotes),
-                    right,top+92+i*20);
+            g.setColor(new Color(211,191,144));
+            g.drawLine(right-12,top+35,right-12,top+height-36);
+            g.setFont(new Font(Font.MONOSPACED,Font.BOLD,13));
+            g.drawString("GHOST TYPES",right,top+45);
+            int remaining=GhostFieldGuide.shortlist(fieldNotes).size();
+            g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,11));
+            g.setColor(new Color(188,190,181));
+            g.drawString(remaining+"/"+GhostIdentity.Type.values().length
+                +" match YOUR notes",right,top+65);
+            int spacing=Math.max(140,(left+width-right-18)/2);
+            GhostIdentity.Type[] all=GhostIdentity.Type.values();
+            for(int i=0;i<all.length;i++){
+                GhostIdentity.Type type=all[i];
+                boolean possible=GhostFieldGuide.remainsPossible(type,fieldNotes);
+                int x=right+(i/7)*spacing,y=top+98+(i%7)*NOTE_ROW_HEIGHT;
+                if(type==selectedGuess){
+                    g.setColor(new Color(165,169,156,70));
+                    g.fillRoundRect(x-3,y-14,spacing-8,19,4,4);
+                }
+                g.setFont(new Font(Font.MONOSPACED,type==selectedGuess?Font.BOLD:Font.PLAIN,12));
+                g.setColor(!possible?new Color(103,105,112):
+                           type==selectedGuess?new Color(244,211,139):
+                           new Color(223,224,209));
+                g.drawString(type.name().replace('_',' '),x,y);
+                if(!possible){
+                    int lineWidth=Math.min(spacing-15,g.getFontMetrics().stringWidth(type.name()));
+                    g.drawLine(x,y-4,x+lineWidth,y-4);
+                }
             }
-            if(list.isEmpty())g.drawString("CONFLICTING CLUES",right,top+94);
-            g.setColor(new Color(175,194,210));
-            g.drawString("UP/DOWN select   SPACE mark   TAB page   J close",left+13,top+height-12);
+            g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,11));
+            g.setColor(new Color(183,190,201));
+            g.drawString("CLICK / SPACE: tick   RIGHT CLICK: ?   UP/DOWN: scroll",
+                left+13,top+height-14);
+            g.drawString("Ghost names select a GUESS; nothing is verified",right,top+height-32);
         }else{
             GhostIdentity.Type type=GhostIdentity.Type.values()[guideGhostIndex];
-            int y=top+48;
-            for(String line:GhostFieldGuide.reference(type).split("\n")){
+            int y=top+50;
+            g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
+            for(String line:GhostFieldGuide.reference(type).split("\\n")){
                 String text=line.length()>Math.max(20,(width-25)/8)?
                     line.substring(0,Math.max(17,(width-35)/8))+"...":line;
                 g.drawString(text,left+13,y);y+=26;
             }
             y+=10;
-            for(String line:GhostFieldGuide.hint(type).split("\n")){g.drawString(line,left+13,y);y+=22;}
+            for(String line:GhostFieldGuide.hint(type).split("\\n")){
+                g.drawString(line,left+13,y);y+=22;
+            }
             g.setColor(new Color(175,194,210));
-            g.drawString("LEFT/RIGHT browse species  TAB evidence  J close",left+13,top+height-12);
+            g.drawString("LEFT/RIGHT browse species   TAB log   J close",
+                left+13,top+height-12);
         }
     }
     @Override public void keyPressed(KeyEvent e){
@@ -630,7 +712,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             casefileOpen=false;repaint();return;
         }
         if(e.getKeyCode()==KeyEvent.VK_TAB){
-            if(!casefileOpen){casefileOpen=true;journalPage=1;}
+            if(!casefileOpen){casefileOpen=true;journalPage=1;mouseLook.release();keys.clear();}
             else journalPage=(journalPage+1)%3;
             e.consume();repaint();return;
         }
@@ -648,11 +730,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             if(e.getKeyCode()==KeyEvent.VK_DOWN){guideCursor=(guideCursor+1)%GhostFieldGuide.activeClues().length;repaint();return;}
             if(e.getKeyCode()==KeyEvent.VK_SPACE){
                 GhostFieldGuide.Clue clue=GhostFieldGuide.activeClues()[guideCursor];
-                FieldJournal.Status next=switch(fieldNotes.status(clue)){
-                    case UNKNOWN->FieldJournal.Status.SEEN;
-                    case SEEN->FieldJournal.Status.UNSURE;
-                    case UNSURE->FieldJournal.Status.UNKNOWN;
-                };
+                FieldJournal.Status next=fieldNotes.status(clue)==FieldJournal.Status.SEEN
+                    ?FieldJournal.Status.UNKNOWN:FieldJournal.Status.SEEN;
                 sendAction("note",()->client.note(clue,next));repaint();return;
             }
         }
@@ -660,6 +739,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             if(e.getKeyCode()==KeyEvent.VK_LEFT){guideGhostIndex=Math.floorMod(guideGhostIndex-1,GhostIdentity.Type.values().length);repaint();return;}
             if(e.getKeyCode()==KeyEvent.VK_RIGHT){guideGhostIndex=(guideGhostIndex+1)%GhostIdentity.Type.values().length;repaint();return;}
         }
+        if(casefileOpen)return; // An open journal never triggers world equipment or movement.
         switch(e.getKeyCode()){
             case KeyEvent.VK_ESCAPE -> {Window window=SwingUtilities.getWindowAncestor(this);if(window!=null)window.dispose();}
             case KeyEvent.VK_E -> {
@@ -686,7 +766,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_K -> showSupplyStore();
             case KeyEvent.VK_T -> consumeMedicine(FieldSupplies.Kind.HEALTH);
             case KeyEvent.VK_Y -> consumeMedicine(FieldSupplies.Kind.SANITY);
-            case KeyEvent.VK_J -> {casefileOpen=!casefileOpen;if(casefileOpen)journalPage=0;}
+            case KeyEvent.VK_J -> {casefileOpen=!casefileOpen;
+                if(casefileOpen){journalPage=0;mouseLook.release();keys.clear();}
+            }
             case KeyEvent.VK_I -> selectedGuess=GhostIdentity.Type.values()[
                     (selectedGuess.ordinal()+1)%GhostIdentity.Type.values().length];
             case KeyEvent.VK_P -> sendAction("identify",()->client.identify(selectedGuess));
