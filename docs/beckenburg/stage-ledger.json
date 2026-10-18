@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "project": "The Beckenburg Project",
-  "updated": "2026-10-16",
+  "updated": "2026-10-18",
   "branch": "main",
   "repo": "mrcalzon02/HB-TTRPG-tools",
   "baseline_sha": "67b19334ec30ced7fe16f4a169192cd4012950dc",
@@ -1377,19 +1377,30 @@
       "track": "Evidence",
       "exit": "Working world-state-driven EMF, temperature, spirit-box, camera and auxiliary gear.",
       "hard_gate": "Every required tool reading traceable to simulator cause and location, not decorative random UI.",
-      "status": "not_started",
-      "commit_sha": null,
-      "verification_evidence": [],
-      "blockers": [],
+      "status": "active",
+      "commit_sha": "4e95c26eb6960229d88daea38bf07f97e6f7617a",
+      "verification_evidence": [
+        "https://github.com/mrcalzon02/HB-TTRPG-tools/commit/8c32a2f47b02bfde57336cfce7cfa39d04490e03 (EvidenceSignals source, NOT a test result)",
+        "https://github.com/mrcalzon02/HB-TTRPG-tools/commit/21947480fcea20efe4aec64bf62ac5bf545ce97f (LAN host source)",
+        "https://github.com/mrcalzon02/HB-TTRPG-tools/commit/4e95c26eb6960229d88daea38bf07f97e6f7617a (solo source)",
+        "New EvidenceSignalsTest, LanMeasuredEvidenceTest, SoloEnvironmentalEvidenceTest and EquipmentRegistryTest are included in build.sh/build.cmd; no fresh full Java runtime execution proof."
+      ],
+      "blockers": [
+        "Full Java 17 clean-checkout compilation and runtime test suite not observed, no Windows hardware acceptance",
+        "Event-distance falloff, persistent weather/HVAC/room simulation, player-selected Celsius/Fahrenheit and noisy instrument calibration remain incomplete",
+        "Seven baseline evidence types plus new equipment signals, ghost-specific three-evidence matrix and actual 42-tool usable inventory remain incomplete",
+        "Existing legacy three-tool identity gate and fixture methods require migration after physical detectors exist",
+        "P05/P12 dependencies and full multiplayer QA not verified"
+      ],
       "steps": [
         {
           "id": "P13.01",
-          "status": "not_started",
+          "status": "active",
           "description": "Implement EMF intensity from supernatural events with falloff and calibrated baseline."
         },
         {
           "id": "P13.02",
-          "status": "not_started",
+          "status": "active",
           "description": "Implement thermometer readings from air/heating/ventilation and ghost cold effects."
         },
         {
@@ -1419,7 +1430,7 @@
         },
         {
           "id": "P13.08",
-          "status": "not_started",
+          "status": "active",
           "description": "Test cause/no-cause, environment interference, cross-client and multi-instrument readings."
         }
       ]
