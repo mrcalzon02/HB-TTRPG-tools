@@ -34,6 +34,15 @@ public final class GhostWritingTest {
             styles.add(book.page().style());
         }
         ok(styles.size()==3,"child drawings, frantic scrawls and ritual circles all reachable");
+        for(GhostIdentity.Type type:GhostIdentity.Type.values()){
+            for(int seed=0;seed<25;seed++){
+                book.place(0,4,10);
+                ok(book.witness(seed,15,event(GhostDomain.Action.MANIFEST,4,true),type),
+                    "ghost must be allowed to author its compatible styles");
+                ok(GhostEvidenceProfile.writing(type,book.page().style()),
+                    "journal compatibility must agree with actual rendered writing");
+            }
+        }
         System.out.println("PASS: genuine room-authored writing and all three readable variants");
     }
 }
