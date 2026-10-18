@@ -121,6 +121,8 @@ All controls expose whether they apply now, at next match, or require rehosting.
 
 Inspect listener/bind lifecycle and show actual bound TCP/UDP addresses, port and local IP candidates, game version, seat limits, last failed join reason, live LAN status. Improve errors and publish a small logging schema without writing voice/chat or secrets. Instrument current TCP queue and tick stall; distinguish 10 Hz game logic from display FPS. Test Windows firewall, two NICs, IPv4/IPv6 and UDP blocked/TCP works.
 
+**Further 021 hardening:** [LAN Hosting & Recovery 021](LAN_HOSTING_RECOVERY_HARDENING_021.md) repairs five-field welcome parsing, the UDP voice port report and ghost-host H1 ownership, and gates production owner claims with a private local token. Its added socket regressions are registered but await full build/Windows evidence. Owner claim and party permissions must not rely on a nickname, an editable local profile or joining first.
+
 **Source implementation update (2026-10-18):** [020 restart recovery integration](LAN_RESTART_RECOVERY_AND_SNAPSHOT_020.md) extends 019 with first-run stored resume tickets, authoritative command sequence watermark and host-filtered casefile/progress rehydrate. Its isolated Java 17 ticket-store test passed; the complete socket game suite and Windows LAN session are not yet verified. Continue H-02 hardening rather than marking the release gate complete.
 
 ### H-02 — Connection recovery (highest gameplay priority)
