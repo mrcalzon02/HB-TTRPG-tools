@@ -38,7 +38,7 @@ public final class EquipmentRegistry {
         entry("DOTS_PROJECTOR","Pattern projector",Origin.STARTER,Purpose.EVIDENCE,State.ABSENT,State.ABSENT,Evidence.STRUCTURED_LIGHT),
         entry("EMF_READER","EMF reader (0–10; zero for suppression)",Origin.STARTER,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.HIGH_EMF,Evidence.EMF_SILENCE),
         entry("FLASHLIGHT","Flashlight",Origin.STARTER,Purpose.SURVEY,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE),
-        entry("GHOST_WRITING_BOOK","Ghost writing book",Origin.STARTER,Purpose.EVIDENCE,State.ABSENT,State.ABSENT,Evidence.GHOST_WRITING),
+        entry("GHOST_WRITING_BOOK","Ghost writing book",Origin.STARTER,Purpose.EVIDENCE,State.ABSENT,State.PARTIAL_SOURCE,Evidence.GHOST_WRITING),
         entry("SPIRIT_BOX","Spirit box",Origin.STARTER,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.SPIRIT_REPLY),
         entry("THERMOMETER","Thermometer (°C/°F)",Origin.STARTER,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.FREEZING,Evidence.EXTREME_HEAT),
         entry("UV_LIGHT","UV light",Origin.STARTER,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.UV_MARKS),
