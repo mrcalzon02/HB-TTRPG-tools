@@ -1,5 +1,13 @@
 # The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
 
+## Secret ghost identity and visible lobby role (implementation)
+
+Choosing **Ghost** in the lobby immediately draws a randomly tinted/directioned **approved Banshee character sprite** as a placeholder disguise, with **IDENTITY: UNKNOWN**. This lobby look is purely cosmetic and is NOT linked to the match's hidden ghost archetype, evidence, special attacks, or required ritual. Selecting **Hunter** shows the approved Observer concept sprite. Once a player connects as a ghost, the host selects and broadcasts one cosmetic appearance (`LOBBYAVATAR`) to **every** lobby participant so everyone can see that the ghost slot is occupied; the portrait is replaced/cleared when the ghost leaves. The role selector locks after connection to avoid claiming that a seat can change when the handshake has already assigned it.
+
+The real ghost archetype remains **server-only before the match** and is sent to the **ghost client alone**, as `GTYPE`, only after its `GVIEW3D` request succeeds in active play. No lobby avatar packet contains the ghost's archetype. **Host as Ghost** now creates a real ghost connection instead of silently converting the owner into a hunter; its start button works once the configured investigators are ready. The appearance variation is currently a cosmetic palette/facing of the single approved Banshee turnaround. It is not a set of thirteen finished unique ghost models; those art variants still need authoring.
+
+The Java build scripts now include `LobbyGhostAvatarTest` and a real socket-level `LanGhostLobbySecrecyTest`, which check cosmetic packet consistency, delayed private species reveal, ghost hosting and disconnection fallback. These regressions must still be executed on a complete build before production acceptance.
+
 ## Expedition van telemetry, purchased treatment and custom difficulty (in development)
 
 **LAN:** Up to **six hunters** (H1-H6), plus one optional ghost controller. Hosts choose the required hunter count (1-6) and configure gameplay modifiers **before hosting**. A minimum difficulty of **+1 per configured hunter** is displayed, and the server scales ghost sanity/harm pressure by the same party bonus. The classic three-hunter constructor remains the compatibility default for test fixtures. Movement is synchronized from server-owned bodies and has a real sprint allowance; custom walking, sprint, ghost movement and energy regeneration and AI event-frequency settings affect live simulation. Additional contract settings: starting sanity, sanity drain speed, sanity/activity monitor enabled state.
