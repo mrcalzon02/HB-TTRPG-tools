@@ -35,6 +35,8 @@ The previous `LanHost` already retained a running investigation after a guest's 
 
 Both `software/beckenburg/build.sh` and `software/beckenburg/build.cmd` list these tests in the regular headless regression run. The tests are **written and wired**, not asserted passed. Independently, `BeckenburgInstallIdentityTest` runs under Java 17-targeted javac locally and passes its deterministic identity stability and corruption cases.
 
+**Subsequent engineering progress:** [LAN Restart Recovery and Snapshot 020](LAN_RESTART_RECOVERY_AND_SNAPSHOT_020.md) adds disk-persisted temporary recovery tickets, host sequence high-water protection and automatic hunter casefile/notes/progress replay. Statements below describe the original 019 slice and are superseded where 020 provides implementation; the full game build and Windows network tests remain unverified.
+
 ## Explicit limitations and follow-up gates
 
 1. **Process-restart reconnection:** Resume credentials currently live only in an active client process/GUI. A crashed/exited client cannot recover the in-memory ticket; safe disk persistence for *short-lived seat secrets* is a separate privacy/security decision.
