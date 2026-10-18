@@ -39,6 +39,10 @@ public final class LanCaseFileIntegrationTest {
             var first=LanEvidenceJournal.Entry.decode(o.await("CASEFILE|"));
             ok(first.seat()==0&&first.room()==HouseMap.EXTRACTION_ROOM
                     &&first.finding()==LanEvidenceJournal.Finding.INCONCLUSIVE,"teammate receives weak reading");
+            // Every hunter receives this first casefile packet. Consume it for D too;
+            // otherwise the next assertion mistakenly reads the earlier weak clue.
+            ok(LanEvidenceJournal.Entry.decode(d.await("CASEFILE|")).finding()
+                    ==LanEvidenceJournal.Finding.INCONCLUSIVE,"third hunter receives weak reading");
             for(int room:new int[]{11,8,5,4}){
                 h.client.move(room);h.await("ACCEPT|MOVE|"+room);
             }
