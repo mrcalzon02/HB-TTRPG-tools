@@ -34,8 +34,20 @@ public final class GhostWriting {
      * placement, can mark a page. The caller must submit an already-authorized
      * GhostDomain.Resolution; no player chooses the writing content.
      */
+    /** Compatibility overload for generic ghost-writing event fixtures. */
     public boolean witness(long caseSeed,int tick,GhostDomain.Resolution event){
+        return witnessAllowed(caseSeed,tick,event,Style.values());
+    }
+    /** Live authored style is restricted to the ghost's published evidence profile. */
+    public boolean witness(long caseSeed,int tick,GhostDomain.Resolution event,
+            GhostIdentity.Type species){
+        return witnessAllowed(caseSeed,tick,event,
+            GhostEvidenceProfile.availableWriting(Objects.requireNonNull(species)));
+    }
+    private boolean witnessAllowed(long caseSeed,int tick,GhostDomain.Resolution event,
+            Style[] permitted){
         Objects.requireNonNull(event);
+        if(permitted.length==0)return false;
         if(page!=null||room<0||tick<=placedTick||!event.applied()
            ||event.room()!=room)return false;
         if(event.action()!=GhostDomain.Action.DISTURB
@@ -46,7 +58,7 @@ public final class GhostWriting {
         mixed^=mixed>>>30;mixed*=0xbf58476d1ce4e5b9L;
         mixed^=mixed>>>27;mixed*=0x94d049bb133111ebL;
         mixed^=mixed>>>31;
-        Style style=Style.values()[(int)Math.floorMod(mixed,Style.values().length)];
+        Style style=permitted[(int)Math.floorMod(mixed,permitted.length)];
         String detail=switch(style){
             case CHILD_DRAWINGS->"Childlike figures, uneven houses and repeated eyes";
             case FRANTIC_SCRAWLS->"Layered frantic strokes, broken lines and crossed-out words";
