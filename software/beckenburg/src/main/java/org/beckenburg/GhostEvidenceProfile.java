@@ -22,26 +22,24 @@ public final class GhostEvidenceProfile {
         GhostIdentity.Type.SPECTER,GhostIdentity.Type.SPIRIT,
         GhostIdentity.Type.HANTU);
     private static final EnumSet<GhostIdentity.Type> CHILD=types(
-        GhostIdentity.Type.POSSESSIVE,GhostIdentity.Type.BANSHEE,
-        GhostIdentity.Type.SPIRIT,GhostIdentity.Type.HANTU,
-        GhostIdentity.Type.YOKAI,GhostIdentity.Type.MIMIC,GhostIdentity.Type.TWINS);
+        GhostIdentity.Type.POSSESSIVE,GhostIdentity.Type.SPIRIT,
+        GhostIdentity.Type.MIMIC);
     private static final EnumSet<GhostIdentity.Type> SCRAWL=types(
         GhostIdentity.Type.POLTERGEIST,GhostIdentity.Type.DEMON,
         GhostIdentity.Type.WRAITH,GhostIdentity.Type.DEVIL,
-        GhostIdentity.Type.MIMIC,GhostIdentity.Type.TWINS);
+        GhostIdentity.Type.MIMIC);
     private static final EnumSet<GhostIdentity.Type> CIRCLE=types(
         GhostIdentity.Type.POSSESSIVE,GhostIdentity.Type.DEMON,
         GhostIdentity.Type.SHADE,GhostIdentity.Type.SPECTER,
-        GhostIdentity.Type.HANTU,GhostIdentity.Type.DEVIL,
-        GhostIdentity.Type.WRAITH);
+        GhostIdentity.Type.DEVIL,GhostIdentity.Type.WRAITH);
 
     /** Shared between the simulated heat/cold generator and manual ghost guide. */
     public static EvidenceSignals.Polarity thermal(GhostIdentity.Type type){
         Objects.requireNonNull(type);
         return COLD.contains(type)?EvidenceSignals.Polarity.COLD:EvidenceSignals.Polarity.HOT;
     }
-    /** Ghost-authored writing can be any of its allowed subtypes, never a
-     * unique magic species code. Multiple ghosts share every writing style.
+    /** Writing is not universal: YOKAI, BANSHEE, HANTU and TWINS
+     * use other evidence producers. Multiple writers share each subtype.
      */
     public static boolean writing(GhostIdentity.Type type,GhostWriting.Style style){
         Objects.requireNonNull(type);Objects.requireNonNull(style);
