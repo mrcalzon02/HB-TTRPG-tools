@@ -192,7 +192,19 @@ public final class LanHost implements AutoCloseable {
                     voice.unregister(peer.slot);
                     if(peer.slot==GHOST_SEAT)ghostLobbyLook=null;
                     if(running){
-                        if(peer.slot==GHOST_SEAT){
+                        if(!peer.intentionalLeave && peer.slot!=0){
+                            // An unexpected TCP loss is not a player decision to abandon the match.
+                            reserved[peer.slot]=new Reservation(peer,System.nanoTime()
+                                    +TimeUnit.SECONDS.toNanos(reconnectGraceSeconds));
+                            if(peer.slot==GHOST_SEAT){
+                                ai.forget();
+                                notifyHunters("INFO|human ghost disconnected - AI has taken control");
+                            }else{
+                                notifyHunters("PEER|LOST|"+peer.slot);
+                                notifyHunters("INFO|hunter "+(peer.slot+1)+" disconnected - reconnect reserved");
+                            }
+                            broadcastState();broadcastWorld();
+                        }else if(peer.slot==GHOST_SEAT){
                             // No world reset: the AI inherits the same room, energy, cooldowns,
                             // manifestation and pending strike. Only the controller is swapped.
                             ai.forget();
@@ -237,6 +249,11 @@ public final class LanHost implements AutoCloseable {
         try{p=LanProtocol.parts(frame);}catch(IllegalArgumentException ex){reply(peer,"REJECT|invalid frame");return;}
         try{
             switch(p.get(0)){
+                case "LEAVE" -> {
+                    if(p.size()!=1)throw new IllegalArgumentException("invalid departure");
+                    peer.intentionalLeave=true;
+                    try{peer.socket.close();}catch(IOException ignored){}
+                }
                 case "LOBBYCHAT" -> {
                     if(running||p.size()!=2)throw new IllegalArgumentException("lobby chat only before match");
                     String words=LanChat.clean(p.get(1));
@@ -680,8 +697,9 @@ public final class LanHost implements AutoCloseable {
     private void broadcastProgress(){for(int i=0;i<HUNTERS;i++)if(seats[i]!=null)reply(seats[i],mission.privateState(i));}
     private boolean[] strikeVictims(){
         boolean[] connected=new boolean[HUNTERS],spatial=new boolean[HUNTERS];
-        for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&mission.alive(i)){
-            connected[i]=true;spatial[i]=seats[i].worldMode;
+        for(int i=0;i<HUNTERS;i++)if(mission.alive(i)){
+            if(seats[i]!=null){connected[i]=true;spatial[i]=seats[i].worldMode;}
+            else if(reserved[i]!=null){connected[i]=true;spatial[i]=reserved[i].worldMode;}
         }
         return LanSpatialCombat.victims(map,world,ghostPose.pose(),hunterRooms,connected,spatial);
     }
@@ -703,7 +721,7 @@ public final class LanHost implements AutoCloseable {
     private void distributeEffect(GhostDomain.Resolution result,boolean[] affected){
         if(!result.applied())return;
         boolean[] wasAlive=new boolean[HUNTERS];
-        for(int i=0;i<HUNTERS;i++)wasAlive[i]=seats[i]!=null&&mission.alive(i);
+        for(int i=0;i<HUNTERS;i++)wasAlive[i]=(seats[i]!=null||reserved[i]!=null)&&mission.alive(i);
         mission.applyGhostEffect(result.room(),hunterRooms,result,affected);
         if(result.fear()>0||result.harm()>0)
             for(int i=0;i<HUNTERS;i++)if(wasAlive[i]&&affected[i]&&hunterRooms[i]==result.room())
@@ -796,6 +814,8 @@ public final class LanHost implements AutoCloseable {
     private void tickSafely(){if(closed)return; synchronized(mutex){
         if(!running)return;
         try{tick++;
+            expireDisconnectedSeats();
+            if(!running)return;
             int audible=-1,occupants=0;
             for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&mission.alive(i)
                     &&hunterRooms[i]==ghost.room()){audible=hunterRooms[i];occupants++;}
