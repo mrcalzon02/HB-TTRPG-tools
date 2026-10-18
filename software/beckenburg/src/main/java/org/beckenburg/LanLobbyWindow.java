@@ -123,6 +123,12 @@ public final class LanLobbyWindow extends JFrame {
             if(hosted!=null)hosted.close();
         }});
     }
+    /** Host lifetime is independent of its local player's transport socket.
+     * Callable without constructing Swing windows for headless LAN regression tests.
+     */
+    static boolean keepRunningLocalHost(LanHost host,LanClient.ResumeTicket ticket){
+        return host!=null && host.running() && ticket!=null;
+    }
     private void restoreLocalResumeOffer(){
         try {
             var saved=LanResumeStore.load(LanResumeStore.defaultPath());
@@ -384,7 +390,7 @@ public final class LanLobbyWindow extends JFrame {
                 resumeAddress=connection.address();resumePort=connection.port();
                 saveResume(connection);
             }
-            boolean localHostSurvives=hosted!=null&&hosted.running()&&resumeTicket!=null;
+            boolean localHostSurvives=keepRunningLocalHost(hosted,resumeTicket);
             if(hosted!=null&&!localHostSurvives)resumeTicket=null;
             reconnect.setEnabled(resumeTicket!=null);
             missionRunning=false;worldMode=false;busy=false;
