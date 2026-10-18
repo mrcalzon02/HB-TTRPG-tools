@@ -37,10 +37,12 @@ public final class GhostWritingTest {
         for(GhostIdentity.Type type:GhostIdentity.Type.values()){
             for(int seed=0;seed<25;seed++){
                 book.place(0,4,10);
-                ok(book.witness(seed,15,event(GhostDomain.Action.MANIFEST,4,true),type),
-                    "ghost must be allowed to author its compatible styles");
-                ok(GhostEvidenceProfile.writing(type,book.page().style()),
+                boolean produced=book.witness(seed,15,event(GhostDomain.Action.MANIFEST,4,true),type);
+                boolean allowed=GhostEvidenceProfile.availableWriting(type).length>0;
+                ok(produced==allowed,"writer-only species must actually author book markings");
+                if(allowed)ok(GhostEvidenceProfile.writing(type,book.page().style()),
                     "journal compatibility must agree with actual rendered writing");
+                else ok(book.page()==null,"non-writer never creates false writing");
             }
         }
         System.out.println("PASS: genuine room-authored writing and all three readable variants");
