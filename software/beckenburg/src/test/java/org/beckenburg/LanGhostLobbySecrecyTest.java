@@ -46,6 +46,7 @@ public final class LanGhostLobbySecrecyTest {
                 check(ghost.received.stream().noneMatch(s->s.startsWith("GTYPE|")),
                     "no real ghost species in pre-match messages");
                 ghost.client.ready();hunter.client.ready();
+                ghost.await("LOBBY|1|HUMAN|2|WAITING"); // Do not race hunter READY.
                 ghost.client.start();
                 ghost.await("INFO|mission started");
                 check(ghost.received.stream().noneMatch(s->s.startsWith("GTYPE|")),

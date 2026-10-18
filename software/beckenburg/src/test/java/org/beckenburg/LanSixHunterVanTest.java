@@ -40,6 +40,7 @@ public final class LanSixHunterVanTest {
                 check(ghost.client.seat().equals("GHOST"),"ghost owns independent seventh socket");
                 for(Peer player:players)player.client.ready();
                 ghost.client.ready();
+                players.get(0).expect("LOBBY|6|HUMAN|7|WAITING");
                 players.get(0).client.start();
                 check(players.get(0).expect("PARTY|6|6").equals("PARTY|6|6"),
                     "real max-party difficulty +6");

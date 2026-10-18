@@ -39,6 +39,7 @@ public final class LanChatIntegrationTest {
             ok(ghost.history.stream().noneMatch(x->x.startsWith("GTYPE|")),
                 "lobby chat never discloses ghost type");
             a.client.ready();b.client.ready();ghost.client.ready();
+            a.await("LOBBY|2|HUMAN|3|WAITING"); // Host has processed all independent READY packets.
             a.client.start();a.await("INFO|mission started");
             // Move Martha through existing authored adjacent rooms without teleporting in 3D.
             for(int room:new int[]{11,8,5,4}){

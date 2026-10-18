@@ -82,6 +82,7 @@ public final class LanVoiceHostIntegrationTest {
             Peer house=new Peer(host.port(),false,"House");
             Peer ghost=new Peer(host.port(),true,"Mystery")){
             van.send("READY");house.send("READY");ghost.send("READY");
+            van.await("LOBBY|2|HUMAN|3|WAITING");
             van.send("START");van.await("INFO|mission started");
             for(int room:new int[]{11,8,5,4}){
                 house.send("MOVE|"+room+"|"+(++house.sequence));
