@@ -517,6 +517,33 @@ public final class LanHost implements AutoCloseable {
                     notifyHunters("LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
                     reply(peer,"ACCEPT|POWER|"+(lights.breaker()?"ON":"OFF"));
                 }
+                case "VANDOOR" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
+                        throw new IllegalArgumentException("hunter at cargo button required");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    ensureActiveHunter(peer);
+                    if(tick-peer.lastLightTick<4)
+                        throw new IllegalArgumentException("door control cooling down");
+                    LanWorld.Body user=world.body(peer.slot);
+                    if(!map.van().nearDoorButton(user.x(),user.z()))
+                        throw new IllegalArgumentException("van door button out of reach");
+                    boolean closed=map.van().toggleCargoDoor();
+                    if(closed){
+                        boolean blocked=false;
+                        for(int i=0;i<HUNTERS;i++)
+                            if((seats[i]!=null||reserved[i]!=null)
+                                &&!map.traversable(world.body(i).x(),world.body(i).z()))
+                                blocked=true;
+                        if(blocked){
+                            map.van().toggleCargoDoor();
+                            throw new IllegalArgumentException("van doorway occupied");
+                        }
+                    }
+                    peer.lastLightTick=tick;
+                    notifyHunters("VANDOOR|"+(closed?1:0));
+                    reply(peer,"ACCEPT|VANDOOR|"+(closed?"CLOSED":"OPEN"));
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                }
                 case "DOOR" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)throw new IllegalArgumentException("door command unavailable");
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
@@ -1288,6 +1315,7 @@ public final class LanHost implements AutoCloseable {
     private void broadcastWorld(){
         String doors="DOORS|"+map.doorSnapshot();
         notifyHunters(doors);
+        notifyHunters("VANDOOR|"+(map.van().cargoDoorClosed()?1:0));
         // A disconnected hunter remains physically present and vulnerable for the
         // entire reservation window, not invisible until the UI reconnects.
         for(int i=0;i<HUNTERS;i++)if((seats[i]!=null||reserved[i]!=null)&&mission.alive(i))
