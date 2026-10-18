@@ -99,11 +99,14 @@ public final class LanVoiceHostIntegrationTest {
                 ok(speaker.read().seat()==0,"van radio reaches hunter in house");
                 spectral.empty(); // The safe van has no physical ghost-hearing source.
                 speaker.emit(LanVoicePacket.AUDIO,1,LanChat.Channel.LOCAL,tone);
-                ok(spectral.read().seat()==255,"nearby ghost hears anonymous hunter speech");
+                int sourceId=spectral.read().seat();
+                ok(LanVoicePacket.ghostStream(sourceId),
+                    "nearby ghost hears a pseudonymous voice source");
                 distant.empty();
                 speaker.emit(LanVoicePacket.AUDIO,2,LanChat.Channel.RADIO,tone);
                 ok(distant.read().seat()==1,"house radio reaches distant van");
-                ok(spectral.read().seat()==255,"ghost nearby hears the physical radio speaker");
+                ok(spectral.read().seat()==sourceId,
+                    "ghost hears the same anonymous speaker across local/radio modes");
                 spectral.emit(LanVoicePacket.AUDIO,1,LanChat.Channel.RADIO,tone);
                 distant.empty();
             }
