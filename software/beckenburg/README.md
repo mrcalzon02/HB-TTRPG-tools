@@ -10,7 +10,7 @@
 
 **Open-source codec roadmap:** The first playable implementation has no external runtime dependency because it uses the standardized G.711 adapter plus JDK JavaSound APIs. Replaceable next step: **Concentus pure Java Opus** (https://github.com/lostromb/concentus), after packaging its library and license in the all-in-one game distribution. No native audio DLLs or downloads are required to use the current LAN voice path.
 
-**Verification:** Both build scripts include `LanVoiceCodecTest` (format, codec, packet parser) and `LanVoiceRelayTest` (real loopback UDP, session key, spoof/replay, recipient-specific keys and anonymous ghost playback). Actual microphone/speaker hardware, six simultaneous talkers and full Java application compilation still need complete-environment acceptance; source commits alone do not prove headset or multiplayer audio quality.
+**Verification:** Both build scripts include `LanVoiceCodecTest` (format, codec, packet parser), `LanVoiceRelayTest` (real loopback UDP, session keys, spoof/replay and anonymous ghost playback), `LanVoiceHostIntegrationTest` (actual host routing for van, radio and nearby ghost), and `LanVoiceClientHandshakeTest` (headless client UDP handshake, mute, volume, and ghost transmit lock). Actual microphone/speaker hardware, six simultaneous talkers and full Java application compilation still need complete-environment acceptance; source commits alone do not prove headset or multiplayer audio quality.
 
 ## LAN communications: local and radio text (working implementation slice)
 
