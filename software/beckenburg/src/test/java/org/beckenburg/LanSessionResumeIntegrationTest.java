@@ -128,8 +128,62 @@ public final class LanSessionResumeIntegrationTest {
             }
         }
     }
+    private static void durableResumeRotation()throws Exception {
+        java.nio.file.Path folder=java.nio.file.Files.createTempDirectory("beckenburg-rotation-");
+        try(LanHost host=new LanHost("127.0.0.1",0)){
+            host.setReconnectGraceSeconds(8);
+            try(Peer a=new Peer(host.port(),false,"Cleric");
+                Peer b=new Peer(host.port(),false,"Observer");
+                Peer c=new Peer(host.port(),false,"Demonologist")){
+                begin(a,b,c);
+                LanClient.ResumeTicket original=b.client.resumeTicket();
+                check(original!=null,"original reserved-seat recovery capability exists");
+                b.breakTransportWithoutLeaving();
+                a.await("PEER|LOST|1");
+                // First attempt receives a replacement, but crashes before it
+                // can atomically store or acknowledge that replacement.
+                try(Peer failed=new Peer(host.port(),original)){
+                    failed.await("INFO|mission resumed");
+                    failed.breakTransportWithoutLeaving();
+                }
+                a.await("PEER|LOST|1");
+                try(Peer retried=new Peer(host.port(),original)){
+                    retried.await("INFO|mission resumed");
+                    LanClient.ResumeTicket replacement=retried.client.resumeTicket();
+                    check(replacement!=null&&!replacement.token().equals(original.token()),
+                        "every reconnect receives a new random capability");
+                    java.nio.file.Path stored=folder.resolve("lan-resume.properties");
+                    LanResumeStore.save(stored,"127.0.0.1",host.port(),replacement.seat(),
+                        replacement.token(),replacement.nextSequence());
+                    check(LanResumeStore.load(stored).orElseThrow().token().equals(replacement.token()),
+                        "replacement stored before acknowledgement");
+                    retried.client.acknowledgeStoredResume();
+                    retried.await("ACCEPT|RESUMEACK");
+                    retried.breakTransportWithoutLeaving();
+                    a.await("PEER|LOST|1");
+                    try(Peer replay=new Peer(host.port(),original)){
+                        throw new AssertionError("acknowledged previous recovery secret replayed");
+                    }catch(java.io.IOException expected){}
+                    var saved=LanResumeStore.load(stored).orElseThrow();
+                    try(Peer recovered=new Peer(host.port(),
+                        new LanClient.ResumeTicket(saved.seat(),saved.token(),saved.sequence()))){
+                        recovered.await("INFO|mission resumed");
+                        check(host.running()&&host.reservedSeats()==0,
+                            "durably confirmed seat token recovers original world");
+                    }
+                }
+            }
+        }finally {
+            try(var all=java.nio.file.Files.walk(folder)){
+                all.sorted(java.util.Comparator.reverseOrder()).forEach(p->{
+                    try{java.nio.file.Files.deleteIfExists(p);}
+                    catch(java.io.IOException ex){throw new RuntimeException(ex);}
+                });
+            }
+        }
+    }
     public static void main(String[] args)throws Exception {
-        hunterRejoin();timeoutExpires();ghostRejoin();
+        hunterRejoin();timeoutExpires();ghostRejoin();durableResumeRotation();
         System.out.println("PASS: unexpected loss, real rejoin/token rotation, expiry, ghost AI continuity and role privacy");
     }
 }
