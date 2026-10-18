@@ -38,6 +38,7 @@ public final class LanHost implements AutoCloseable {
     private final GhostIdentity.Type ghostType;
     private final boolean ghostMayStart;
     private final int ownerSeat;
+    private final String ownerJoinSecret;
     private LobbyGhostAvatar.Look ghostLobbyLook;
     private final LanGhostAnimation animation=new LanGhostAnimation();
     private final HunterCounters counters=new HunterCounters();
@@ -55,27 +56,33 @@ public final class LanHost implements AutoCloseable {
     private final String bindAddress;
 
     public LanHost(String ip,int port)throws IOException{
-        this(ip,port,GhostIdentity.Type.SPIRIT,false,CustomContract.standard(3),false);
+        this(ip,port,GhostIdentity.Type.SPIRIT,false,CustomContract.standard(3),false,false);
     }
     /** Legacy three-hunter host is retained for existing integration tests. */
     public LanHost(String ip,int port,GhostIdentity.Type type)throws IOException{
-        this(ip,port,type,true,CustomContract.standard(3),false);
+        this(ip,port,type,true,CustomContract.standard(3),false,false);
     }
     public LanHost(String ip,int port,GhostIdentity.Type type,CustomContract config)throws IOException{
-        this(ip,port,type,true,config,false);
+        this(ip,port,type,true,config,false,false);
     }
     /** Hosting as a ghost is possible only when the local host explicitly selected it. */
     public LanHost(String ip,int port,GhostIdentity.Type type,CustomContract config,
             boolean hostAsGhost)throws IOException{
-        this(ip,port,type,true,config,hostAsGhost);
+        this(ip,port,type,true,config,hostAsGhost,false);
+    }
+    /** Production local host: reserve its actual player seat before accepting guests. */
+    public LanHost(String ip,int port,GhostIdentity.Type type,CustomContract config,
+            boolean hostAsGhost,boolean secureLocalOwner)throws IOException {
+        this(ip,port,type,true,config,hostAsGhost,secureLocalOwner);
     }
     private LanHost(String ip,int port,GhostIdentity.Type type,boolean identityMode,
-            CustomContract config,boolean hostAsGhost)throws IOException {
+            CustomContract config,boolean hostAsGhost,boolean secureLocalOwner)throws IOException {
         if(port<0||port>65535)throw new IllegalArgumentException("invalid port");
         ghostType=Objects.requireNonNull(type);
         contract=Objects.requireNonNull(config);
         ghostMayStart=hostAsGhost;
         ownerSeat=hostAsGhost?GHOST_SEAT:0;
+        ownerJoinSecret=secureLocalOwner?newResumeToken():null;
         Arrays.fill(hunterRooms,HouseMap.EXTRACTION_ROOM);
         Arrays.fill(hunterSequences,-1);
         Arrays.fill(lastGhostFootstepCueTick,-10000);
@@ -103,6 +110,11 @@ public final class LanHost implements AutoCloseable {
         catch(SocketException failure){listener.close();throw failure;}
         workers.execute(this::acceptLoop);
         clock.scheduleAtFixedRate(this::tickSafely,100,100,TimeUnit.MILLISECONDS);
+    }
+    /** Returned only to the in-process launcher, never in a lobby broadcast. */
+    public String localOwnerCredential(){
+        if(ownerJoinSecret==null)throw new IllegalStateException("local owner claim not enabled");
+        return ownerJoinSecret;
     }
     public int port(){return listener.getLocalPort();}
     public int voicePort(){return voice.port();}
@@ -156,7 +168,7 @@ public final class LanHost implements AutoCloseable {
             Writer out=LanProtocol.writer(socket.getOutputStream());
             String initial=LanProtocol.read(in);
             List<String> hello=LanProtocol.parts(initial);
-            boolean fresh=(hello.size()==4||hello.size()==5)&&"JOIN".equals(hello.get(0))&&"1".equals(hello.get(1));
+            boolean fresh=(hello.size()>=4&&hello.size()<=6)&&"JOIN".equals(hello.get(0))&&"1".equals(hello.get(1));
             boolean resume=hello.size()==4&&"RESUME".equals(hello.get(0))&&"1".equals(hello.get(1));
             if(!fresh&&!resume){LanProtocol.write(out,"REJECT|protocol version or handshake");return;}
             synchronized(mutex){
@@ -192,14 +204,27 @@ public final class LanHost implements AutoCloseable {
                     };
                     String nickname=LanProtocol.cleanName(hello.get(3));
                     if(lobbyLocked){LanProtocol.write(out,"REJECT|lobby locked");return;}
-                    String supplied=hello.size()==5?hello.get(4):"";
+                    boolean ownerClaim=hello.size()==6;
+                    if(ownerClaim){
+                        boolean roleMatches=wantsGhost==(ownerSeat==GHOST_SEAT);
+                        String attempt=hello.get(5);
+                        if(ownerJoinSecret==null||!roleMatches||!socket.getInetAddress().isLoopbackAddress()
+                                ||!java.security.MessageDigest.isEqual(
+                                    ownerJoinSecret.getBytes(java.nio.charset.StandardCharsets.US_ASCII),
+                                    attempt.getBytes(java.nio.charset.StandardCharsets.US_ASCII))){
+                            LanProtocol.write(out,"REJECT|unauthorized owner claim");return;
+                        }
+                    }else if(ownerJoinSecret!=null&&wantsGhost&&(ownerSeat==GHOST_SEAT)){
+                        LanProtocol.write(out,"REJECT|host ghost seat reserved");return;
+                    }
+                    String supplied=hello.size()>=5?hello.get(4):"";
                     if(!java.security.MessageDigest.isEqual(
                             lobbyPassword.getBytes(java.nio.charset.StandardCharsets.US_ASCII),
                             supplied.getBytes(java.nio.charset.StandardCharsets.US_ASCII))){
                         LanProtocol.write(out,"REJECT|incorrect room password");return;
                     }
                     if(running){LanProtocol.write(out,"REJECT|match already running - reconnect needed");return;}
-                    int slot=wantsGhost?GHOST_SEAT:firstVacantHunter();
+                    int slot=wantsGhost?GHOST_SEAT:firstVacantHunter(ownerClaim);
                     if(slot<0||seats[slot]!=null){LanProtocol.write(out,"REJECT|seat unavailable");return;}
                     peer=new Peer(socket,in,out,slot,nickname);seats[slot]=peer;
                     if(wantsGhost)ghostLobbyLook=LobbyGhostAvatar.random(
@@ -263,7 +288,14 @@ public final class LanHost implements AutoCloseable {
             }
         }
     }
-    private int firstVacantHunter(){for(int i=0;i<contract.hunters();i++)if(seats[i]==null&&reserved[i]==null)return i;return -1;}
+    private int firstVacantHunter(boolean ownerClaim){
+        for(int i=0;i<contract.hunters();i++){
+            if(ownerJoinSecret!=null&&!ownerClaim&&i==ownerSeat)continue;
+            if(ownerClaim&&i!=ownerSeat)continue;
+            if(seats[i]==null&&reserved[i]==null)return i;
+        }
+        return -1;
+    }
     private void expireDisconnectedSeats(){
         long now=System.nanoTime();
         for(int i=0;i<reserved.length;i++){
