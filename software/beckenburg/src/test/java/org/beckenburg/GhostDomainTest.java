@@ -64,6 +64,21 @@ public final class GhostDomainTest {
             }
         }
         ok(moved && manifested,"AI uses shared movement and manifestation commands");
+        // A legal six-hunter lobby must never halt the host when investigators gather.
+        GhostDomain crowdedAi=new GhostDomain(4),crowdedHuman=new GhostDomain(4);
+        for(int count=1;count<=6;count++){
+            crowdedAi.advance(count,4,count);
+            crowdedHuman.advance(count,4,count);
+            ok(crowdedAi.observe().equals(crowdedHuman.observe()),
+                "ghost AI/human state diverges with "+count+" investigators in one room");
+            ok(crowdedAi.observe().hearsHunter(),"crowded room still audible to ghost");
+        }
+        for(int invalid:new int[]{-1,7}){
+            try{
+                new GhostDomain(4).advance(1,4,invalid);
+                throw new AssertionError("invalid hunter count accepted: "+invalid);
+            }catch(IllegalArgumentException expected){}
+        }
         System.out.println("PASS: ghost AI/human command parity, reachability, action energy/cooldowns, observation filtering, escalating strike safety, replay protection");
     }
 }
