@@ -81,7 +81,7 @@ public final class LanResumeStore {
             // much shorter disconnect-grace period and authoritative seat checks.
             if(age<0||age>MAX_AGE_SECONDS)return Optional.empty();
             return Optional.of(new Saved(address,port,seat,token,sequence,written));
-        }catch(IllegalArgumentException ex){throw new IOException("invalid stored LAN recovery ticket",ex);}
+        }catch(RuntimeException ex){throw new IOException("invalid stored LAN recovery ticket",ex);}
     }
 
     public static void clear(Path path) throws IOException {Files.deleteIfExists(path);}
