@@ -8,8 +8,8 @@ public final class GlbPropsTest {
     private GlbPropsTest() { }
     public static void main(String[] args) {
         String[] names={"light_switch_1","ceiling_lamp_1_off","door_1_loose",
-                        "shelf_mp_6","chair_mp_5"};
-        int[] counts={38,1132,712,46,576};
+                        "shelf_mp_6","chair_mp_5","ceiling_lamp_1_on","cross_mp_2","flashlight_mp_1"};
+        int[] counts={38,1132,712,46,576,1132,92,284};
         for(int i=0;i<names.length;i++){
             GlbProps.Model model=GlbProps.model(names[i]);
             assert model==GlbProps.model(names[i]):"Cache should not reparses models";
@@ -35,6 +35,6 @@ public final class GlbPropsTest {
             GlbProps.decode(new byte[]{0,0,0});
             throw new AssertionError("Invalid GLB must not render");
         }catch(java.io.IOException expected){/* rejects invalid binary */}
-        System.out.println("Five real Beckenburg GLB meshes, UVs and PNG materials validated");
+        System.out.println("Eight real Beckenburg GLB meshes, UVs and PNG materials validated");
     }
 }

@@ -22,7 +22,7 @@ public final class GlbProps {
     private GlbProps() { }
     public static final int TEXTURE_BASE=256;
     private static final String[] NAMES={
-        "light_switch_1","ceiling_lamp_1_off","door_1_loose","shelf_mp_6","chair_mp_5"
+        "light_switch_1","ceiling_lamp_1_off","door_1_loose","shelf_mp_6","chair_mp_5","ceiling_lamp_1_on","cross_mp_2","flashlight_mp_1"
     };
     public record Vertex(double x,double y,double z,double u,double v) { }
     public record Triangle(Vertex a,Vertex b,Vertex c,int material) { }

@@ -176,6 +176,9 @@ public final class SceneRenderer {
         vanBox(faces,van,1.55,.7,.28,.36,.9,.95,MaterialAtlas.RITUAL);
         vanBox(faces,van,-.55,.10,r-.28,1.1,.5,.18,MaterialAtlas.AGED_WOOD);
         vanBox(faces,van,-w+.1,.05,f-.3,w*2-.2,.08,.3,MaterialAtlas.IRON);
+        // Built-in flashlight rests on a real van shelf; F switches the carried lamp.
+        VanStaging.Position torch=van.world(-1.52,-1.53);
+        imported(faces,"flashlight_mp_1",torch.x(),.83,torch.z(),2.2,van.placement().yaw());
         // Visible equipment shelf: six distinct physical sockets. Items can be aimed at and taken.
         for(double lz : new double[]{-1.18,.18}) {
             VanStaging.Position p=van.world(1.50,lz);
@@ -289,8 +292,9 @@ public final class SceneRenderer {
                 lit?0xdac67c:0x50505a);
             double cx=map.centerX(r),cz=map.centerZ(r);
             if(Math.hypot(cx-x,cz-z)<=7.5) {
-                imported(out,"ceiling_lamp_1_off",cx,2.58,cz,.76,0);
                 double energy=roomLights==null?1:roomLights.brightness(r,roomLightTick);
+                imported(out,energy>.45?"ceiling_lamp_1_on":"ceiling_lamp_1_off",
+                    cx,2.58,cz,.76,0);
                 box(out,cx-.19,2.49,cz-.17,.38,.024,.34,
                     energy>.45?0xffe4a4:energy>.13?0x9c7b62:0x343c46);
             }
@@ -329,8 +333,8 @@ public final class SceneRenderer {
             if(Math.hypot(mx-x,mz-z)>14)continue;
             switch(mark.kind()){
                 case CROSS -> {
-                    box(out,mx-.055,yy,mz-.055,.11,.34,.11,0xd7c08c);
-                    box(out,mx-.21,yy+.15,mz-.055,.42,.10,.11,0xe1d4a3);
+                    // Laid cross: original source geometry, not a hard-coded cruciform box.
+                    imported(out,"cross_mp_2",mx,yy,mz,1.7,0);
                 }
                 case WARD -> {
                     // Ground seal remains visible even when the projectile has landed.

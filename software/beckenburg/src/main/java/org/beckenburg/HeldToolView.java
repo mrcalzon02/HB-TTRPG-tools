@@ -9,7 +9,12 @@ import java.awt.geom.AffineTransform;
 public final class HeldToolView {
     private HeldToolView(){}
     public static void draw(Graphics2D graphics,int width,int height,String kind,long tick,boolean operating){
+        draw(graphics,width,height,kind,tick,operating,false);
+    }
+    public static void draw(Graphics2D graphics,int width,int height,String kind,long tick,
+            boolean operating,boolean flashlightOn){
         if(graphics==null||kind==null||width<180||height<140)return;
+        HeldMeshView.draw(graphics,width,height,tick,flashlightOn);
         Graphics2D g=(Graphics2D)graphics.create();
         try{
             double scale=Math.min(width/850.0,height/480.0);

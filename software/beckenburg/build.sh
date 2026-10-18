@@ -11,11 +11,12 @@ mkdir -p build/classes/org/beckenburg
 cp assets/runtime/directional-sprites.zip build/classes/org/beckenburg/directional-sprites.zip
 # Licensed in-game subset, not the upstream paid PSX asset archive.
 mkdir -p build/classes/org/beckenburg/models
-for name in light_switch_1 ceiling_lamp_1_off door_1_loose shelf_mp_6 chair_mp_5; do
+for name in light_switch_1 ceiling_lamp_1_off door_1_loose shelf_mp_6 chair_mp_5 ceiling_lamp_1_on cross_mp_2 flashlight_mp_1; do
     test -s "assets/runtime/models/${name}.glb"
     cp "assets/runtime/models/${name}.glb" "build/classes/org/beckenburg/models/${name}.glb"
 done
 javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java/org/beckenburg/*.java
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.HeldMeshViewTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GlbPropsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostBehaviorTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostIdentityTest

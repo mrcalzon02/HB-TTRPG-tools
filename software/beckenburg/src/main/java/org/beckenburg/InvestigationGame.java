@@ -401,7 +401,7 @@ public final class InvestigationGame {
                 g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                 g.drawImage(scene.image(),0,0,getWidth(),stageH,null);
                 HeldToolView.draw(g,getWidth(),stageH,loadout.equipped().name(),session.ticks(),
-                    session.ticks()<=useHeldUntilTick);
+                    session.ticks()<=useHeldUntilTick,scene.lamp);
                 g.setFont(new Font(Font.MONOSPACED,Font.BOLD,Math.max(12,getHeight()/52)));
                 g.setColor(new Color(242,212,156));
                 g.drawString("BECKENBURG / "+location.label.toUpperCase()+" / "+conditions.label.toUpperCase()+" / "+session.role(),16,25);

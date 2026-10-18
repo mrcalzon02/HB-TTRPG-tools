@@ -394,7 +394,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             int h=Math.max(160,getHeight()-82);
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g.drawImage(renderer.image(),0,0,getWidth(),h,null);
-            HeldToolView.draw(g,getWidth(),h,selected.name(),tick,tick<=heldUseUntilTick);
+            HeldToolView.draw(g,getWidth(),h,selected.name(),tick,tick<=heldUseUntilTick,
+                renderer.lamp);
             drawHunterNameplates(g,h);
             g.setFont(new Font(Font.MONOSPACED,Font.BOLD,Math.max(12,getHeight()/46)));
             g.setColor(new Color(234,222,189));
