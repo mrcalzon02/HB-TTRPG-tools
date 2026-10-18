@@ -19,9 +19,11 @@ public final class ManualEvidenceJournalTest {
         ok(GhostFieldGuide.shortlist(journal).size()==13,
            "unticking restores ghosts without rerunning a scan");
         journal.set(zero,FieldJournal.Status.SEEN,1,3);
-        ok(GhostFieldGuide.shortlist(journal).size()==1
-            &&GhostFieldGuide.shortlist(journal).contains(GhostIdentity.Type.SHADE),
-            "suppressed field narrows to Shade by published profile");
+        ok(GhostFieldGuide.shortlist(journal).size()==3
+            &&GhostFieldGuide.shortlist(journal).contains(GhostIdentity.Type.SHADE)
+            &&GhostFieldGuide.shortlist(journal).contains(GhostIdentity.Type.SPECTER)
+            &&GhostFieldGuide.shortlist(journal).contains(GhostIdentity.Type.HANTU),
+            "suppressed EMF narrows candidates, never reveals one ghost immediately");
         journal.set(emf,FieldJournal.Status.SEEN,0,4);
         ok(GhostFieldGuide.shortlist(journal).isEmpty(),
             "contradictory ticks show zero possible ghosts without correcting player");
