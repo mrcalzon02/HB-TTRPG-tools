@@ -23,6 +23,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.Gl
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.EvidenceSignalsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.EquipmentRegistryTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanMeasuredEvidenceTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.SoloEnvironmentalEvidenceTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostBehaviorTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostIdentityTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanRiteNetworkTest
