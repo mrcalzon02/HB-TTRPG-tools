@@ -1,6 +1,8 @@
 # Beckenburg — Iteration Windows, Quality Thresholds, and Acceptance Evidence
 Version 1.0 · 2026-10-15. Companion to [Production Plan](RELEASE_PRODUCTION_PLAN.md) and authoritative [stage ledger](stage-ledger.json).
 
+**Mandatory guidance references:** [Game Development QoL & Design Philosophy](GAME_DEVELOPMENT_QOL_AND_PHILOSOPHY_STANDARD.md) and [Hardware, Accessibility, Graphics & Menu Options](HARDWARE_ACCESSIBILITY_GRAPHICS_AND_OPTIONS_STANDARD.md). Their applicable CORE, CONDITIONAL and capability-gated options require actual functional evidence. A written requirement or shader option in a catalogue is not a completed feature. Every shipped setting must change actual behavior, persist where promised, have fallback/recovery, and pass the accessibility/performance paths relevant to it.
+
 ## Gate enforcement
 A source-code commit is not a passing stage. Each *completed* microstep must have a tested result and remote proof. Every release promotion requires both all prerequisite stages' exits and the cross-domain gates below. Test results should be linked from `stage-ledger.json` rather than duplicated into unsynchronized status spreadsheets or additional trackers. `stage-ledger.json` is initially conservative: remote code and the image archive must be reconciled before implementation claims advance.
 
