@@ -18,13 +18,23 @@ public final class HeldToolView {
     /** The screen/LED display reads server-reported measurements; no fake animated readouts. */
     public static void draw(Graphics2D graphics,int width,int height,String kind,long tick,
             boolean operating,boolean flashlightOn,String measurement){
+        draw(graphics,width,height,kind,tick,operating,flashlightOn,
+            measurement,EquipmentTiers.Tier.I);
+    }
+    /** Upgraded hardware has a physically larger, more legible diegetic face. */
+    public static void draw(Graphics2D graphics,int width,int height,String kind,long tick,
+            boolean operating,boolean flashlightOn,String measurement,EquipmentTiers.Tier tier){
         if(graphics==null||kind==null||width<180||height<140)return;
+        if(tier==null)tier=EquipmentTiers.Tier.I;
         HeldMeshView.draw(graphics,width,height,tick,flashlightOn);
         Graphics2D g=(Graphics2D)graphics.create();
         try{
             double scale=Math.min(width/850.0,height/480.0);
             // Fixed pixel-space weapon placement at the lower-right, gentle walking/using motion.
             scale=Math.max(.48,Math.min(1.65,scale));
+            scale*=switch(tier){
+                case I->1.0;case II->1.10;case III->1.20;
+            };
             double bob=3*Math.sin(tick*.15),kick=operating?-13:0;
             g.translate(width-126*scale,height-41*scale+bob+kick);
             g.scale(scale,scale);
@@ -74,11 +84,29 @@ public final class HeldToolView {
                     body(g,-63,-117,125,116,0x292d32);
                     body(g,-51,-102,102,55,0x384e53);
                     g.setColor(new Color(112,201,153));
-                    for(int i=0;i<9;i++)g.drawLine(-40+i*10,-75,-40+i*10,-75-(int)(8+8*Math.sin(i+tick*.14)));
+                    boolean replied=measurement!=null&&measurement.contains("response / spectral");
+                    for(int i=0;i<9;i++){
+                        int h=replied?9+(i*7%14):2;
+                        g.drawLine(-40+i*10,-75,-40+i*10,-75-h);
+                    }
                     g.setColor(new Color(183,178,155));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,10));
                     g.drawString("SPIRIT FM",-32,-53);
                     g.setColor(new Color(15,20,22));g.fillOval(-40,-36,31,30);g.fillOval(18,-36,31,30);
                     g.setColor(new Color(142,153,159));g.drawOval(-40,-36,31,30);g.drawOval(18,-36,31,30);
+                }
+                case "GHOST_WRITING_BOOK" ->{
+                    body(g,-78,-123,153,117,0x564736);
+                    g.setColor(new Color(219,202,162));
+                    g.fillPolygon(new int[]{-73,-5,-5,-73},new int[]{-116,-106,-10,-22},4);
+                    g.fillPolygon(new int[]{1,69,70,1},new int[]{-107,-116,-22,-10},4);
+                    g.setColor(new Color(113,61,53));
+                    if(measurement!=null&&measurement.contains("Childlike"))
+                        for(int i=0;i<4;i++)g.drawOval(-50+i*19,-82,12,12);
+                    else if(measurement!=null&&measurement.contains("frantic"))
+                        for(int i=0;i<7;i++)g.drawLine(-63+i*15,-93,-55+i*13,-29);
+                    else if(measurement!=null&&measurement.contains("ritual"))
+                        for(int i=0;i<3;i++)g.drawOval(13+i*2,-95+i*2,46-i*4,46-i*4);
+                    g.setColor(new Color(84,62,39));g.drawLine(0,-112,0,-9);
                 }
                 case "UV_LAMP" ->{
                     body(g,-30,-151,58,153,0x383947);
@@ -106,6 +134,7 @@ public final class HeldToolView {
             }
             g.setColor(new Color(10,14,17,190));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,11));
             g.drawString(kind.replace('_',' '),-65,37);
+            g.drawString("TIER "+tier,-65,52);
         }finally{g.dispose();}
     }
     private static void body(Graphics2D g,int x,int y,int w,int h,int color){
