@@ -134,6 +134,13 @@ public final class LanHost implements AutoCloseable {
         return -1;
     }
     private static String seatName(int slot){return slot==GHOST_SEAT?"GHOST":"H"+(slot+1);}
+    private long seatSequenceHighWater(Peer peer){
+        // Authoritative replay high-water mark survives loss of the client's volatile
+        // counters. Recovery must not rely on a potentially stale disk ticket.
+        return peer.slot==GHOST_SEAT
+            ?Math.max(0,Math.max(peer.lastGhostActionSequence,peer.lastGhostPoseSequence))
+            :Math.max(0,hunterSequences[peer.slot]);
+    }
     private void acceptLoop(){
         while(!closed){try{Socket socket=listener.accept();socket.setTcpNoDelay(true);
             workers.execute(()->serve(socket));
@@ -164,7 +171,7 @@ public final class LanHost implements AutoCloseable {
                     peer.lastGhostActionSequence=waiting.lastActionSequence;
                     peer.lastGhostPoseSequence=waiting.lastPoseSequence;
                     reserved[slot]=null;seats[slot]=peer;
-                    LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken);
+                    LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken+"|"+seatSequenceHighWater(peer));
                     reply(peer,"INFO|mission resumed - reopen 3D view");
                     if(slot!=GHOST_SEAT){
                         for(int i=0;i<HUNTERS;i++)if(i!=slot&&seats[i]!=null)
@@ -192,7 +199,7 @@ public final class LanHost implements AutoCloseable {
                     peer=new Peer(socket,in,out,slot,nickname);seats[slot]=peer;
                     if(wantsGhost)ghostLobbyLook=LobbyGhostAvatar.random(
                         java.util.concurrent.ThreadLocalRandom.current());
-                    LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken);
+                    LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken+"|"+seatSequenceHighWater(peer));
                     if(slot!=GHOST_SEAT){
                         for(int i=0;i<HUNTERS;i++)if(i!=slot&&seats[i]!=null)
                             reply(peer,"PLAYERNAME|"+i+"|"+seats[i].name);
