@@ -16,7 +16,7 @@ public final class LanCaseFileHudTest {
                 LanWorldPanel panel=new LanWorldPanel(hunter);
                 panel.setSize(850,555);
                 panel.onEvent("CASEFILE|RESET");
-                panel.onEvent("CASEFILE|18|0|4|EMF|CONFIRMED|CONFIRMED EMF in 4 - EMF level 5");
+                panel.onEvent("CASEFILE|18|0|4|EMF|OBSERVED|READING EMF in 4 - EMF 5/10");
                 ok(panel.casefileSize()==1,"host casefile packet accepted");
                 panel.keyPressed(new KeyEvent(panel,KeyEvent.KEY_PRESSED,System.currentTimeMillis(),0,KeyEvent.VK_J,'J'));
                 ok(panel.casefileOpen(),"J toggles actual casefile panel");
