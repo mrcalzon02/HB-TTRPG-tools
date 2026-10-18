@@ -4,6 +4,9 @@ Version: 0.2, updated 2026-10-15. **Solo gameplay alpha source implemented and c
 ## Authoritative release-production roadmap
 The [32-stage and 256-microstep Production Plan](RELEASE_PRODUCTION_PLAN.md) governs feature order and exit criteria; [Quality Gates](QUALITY_GATES.md) defines recurring improvement windows and test thresholds; [stage-ledger.json](stage-ledger.json) is the **single stage-status authority**; [Asset Pipeline](ASSET_PIPELINE.md) governs original PNG upload and correct website display; [Gold Release Acceptance](RELEASE_ACCEPTANCE.md) defines production completion.
 
+## LAN source integration 020 — restart recovery and automatic casefile rehydration
+[Restart-Safe LAN Recovery and Snapshot 020](network/LAN_RESTART_RECOVERY_AND_SNAPSHOT_020.md) commits local temporary recovery-ticket persistence, host-authoritative replay sequence repair and a full authorized 3D entry replay of current progress, casefile and field notes. The isolated Java 17 ticket-storage test passed. Full game build, socket integration and physical Windows/voice tests still require acceptance; no public-WAN or host-migration capability is claimed.
+
 ## LAN source implementation 019 — reconnect and private-room hosting
 [LAN Session Recovery & Private Hosting 019](network/LAN_SESSION_RESUME_IMPLEMENTATION_019.md) documents committed source for reconnectable guest seats, human ghost takeover/reclaim, room password and owner join-lock, plus local address/error diagnostics. New localhost tests are in both build scripts but have **not** been promoted as passing the full Java 17/physical Windows network suite; public WAN, full moderation, independent headless server and host migration remain out of scope.
 
