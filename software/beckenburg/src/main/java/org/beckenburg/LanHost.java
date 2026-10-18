@@ -132,31 +132,53 @@ public final class LanHost implements AutoCloseable {
             Writer out=LanProtocol.writer(socket.getOutputStream());
             String initial=LanProtocol.read(in);
             List<String> hello=LanProtocol.parts(initial);
-            if(hello.size()!=4||!hello.get(0).equals("JOIN")||!hello.get(1).equals("1")){
-                LanProtocol.write(out,"REJECT|protocol version or handshake");return;
-            }
-            boolean wantsGhost=switch(hello.get(2)){
-                case "GHOST" -> true;case "HUNTER" -> false;default -> throw new IllegalArgumentException("invalid role");
-            };
-            String nickname=LanProtocol.cleanName(hello.get(3));
+            boolean fresh=hello.size()==4&&"JOIN".equals(hello.get(0))&&"1".equals(hello.get(1));
+            boolean resume=hello.size()==4&&"RESUME".equals(hello.get(0))&&"1".equals(hello.get(1));
+            if(!fresh&&!resume){LanProtocol.write(out,"REJECT|protocol version or handshake");return;}
             synchronized(mutex){
-                if(running){LanProtocol.write(out,"REJECT|match already running");return;}
-                int slot=wantsGhost?GHOST_SEAT:firstVacantHunter();
-                if(slot<0||seats[slot]!=null){LanProtocol.write(out,"REJECT|seat unavailable");return;}
-                peer=new Peer(socket,in,out,slot,nickname);seats[slot]=peer;
-                if(wantsGhost)ghostLobbyLook=LobbyGhostAvatar.random(
-                    java.util.concurrent.ThreadLocalRandom.current());
-                LanProtocol.write(out,"WELCOME|"+(slot==GHOST_SEAT?"GHOST":"H"+(slot+1))+"|"+LanProtocol.VERSION);
-                if(slot!=GHOST_SEAT){
-                    // Joining hunters also receive earlier teammates' names, not just the
-                    // current join. This avoids a stale lobby before their first 3D view.
-                    for(int i=0;i<HUNTERS;i++)
-                        if(i!=slot&&seats[i]!=null)
+                if(resume){
+                    int slot=parseSeat(hello.get(2));
+                    Reservation waiting=slot>=0?reserved[slot]:null;
+                    if(!running||slot==0||waiting==null||seats[slot]!=null
+                            ||System.nanoTime()-waiting.expiresNanos>=0
+                            ||!java.security.MessageDigest.isEqual(
+                                waiting.token.getBytes(java.nio.charset.StandardCharsets.US_ASCII),
+                                hello.get(3).getBytes(java.nio.charset.StandardCharsets.US_ASCII))){
+                        LanProtocol.write(out,"REJECT|reconnect seat expired or unavailable");return;
+                    }
+                    peer=new Peer(socket,in,out,slot,waiting.name);
+                    peer.lastGhostActionSequence=waiting.lastActionSequence;
+                    peer.lastGhostPoseSequence=waiting.lastPoseSequence;
+                    reserved[slot]=null;seats[slot]=peer;
+                    LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken);
+                    reply(peer,"INFO|mission resumed - reopen 3D view");
+                    if(slot!=GHOST_SEAT){
+                        for(int i=0;i<HUNTERS;i++)if(i!=slot&&seats[i]!=null)
                             reply(peer,"PLAYERNAME|"+i+"|"+seats[i].name);
-                    // The ghost is never in the private hunter packet fanout.
-                    notifyHunters("PLAYERNAME|"+slot+"|"+nickname);
+                        notifyHunters("PLAYERNAME|"+slot+"|"+peer.name);
+                        reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
+                    }else notifyHunters("INFO|human ghost reconnected - AI released control");
+                    broadcastLobby();broadcastState();broadcastProgress();broadcastWorld();
+                }else{
+                    boolean wantsGhost=switch(hello.get(2)){
+                        case "GHOST" -> true;case "HUNTER" -> false;
+                        default -> throw new IllegalArgumentException("invalid role");
+                    };
+                    String nickname=LanProtocol.cleanName(hello.get(3));
+                    if(running){LanProtocol.write(out,"REJECT|match already running - reconnect needed");return;}
+                    int slot=wantsGhost?GHOST_SEAT:firstVacantHunter();
+                    if(slot<0||seats[slot]!=null){LanProtocol.write(out,"REJECT|seat unavailable");return;}
+                    peer=new Peer(socket,in,out,slot,nickname);seats[slot]=peer;
+                    if(wantsGhost)ghostLobbyLook=LobbyGhostAvatar.random(
+                        java.util.concurrent.ThreadLocalRandom.current());
+                    LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken);
+                    if(slot!=GHOST_SEAT){
+                        for(int i=0;i<HUNTERS;i++)if(i!=slot&&seats[i]!=null)
+                            reply(peer,"PLAYERNAME|"+i+"|"+seats[i].name);
+                        notifyHunters("PLAYERNAME|"+slot+"|"+nickname);
+                    }
+                    broadcastLobby();
                 }
-                broadcastLobby();
             }
             socket.setSoTimeout(0);
             while(!closed){String frame=LanProtocol.read(in);if(frame==null)break;
