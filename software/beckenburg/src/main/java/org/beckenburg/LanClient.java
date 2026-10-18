@@ -145,6 +145,24 @@ public final class LanClient implements AutoCloseable {
     public synchronized void scan(LanCase.Tool tool)throws IOException {
         Objects.requireNonNull(tool);send("SCAN|"+tool+"|"+(++sequence));
     }
+    /** Private equipment rack transactions; the host alone owns stock/tier and funds. */
+    public synchronized void equipmentState()throws IOException{send("GEARSTATE");}
+    public synchronized void buyEquipment(String id,EquipmentTiers.Tier tier)throws IOException{
+        EquipmentRegistry.get(id);Objects.requireNonNull(tier);
+        send("GEARBUY|"+id+"|"+tier+"|"+(++sequence));
+    }
+    public synchronized void equipAt(int slot,String id)throws IOException{
+        EquipmentRegistry.get(id);
+        if(slot<0||slot>=FieldEquipment.SLOTS)throw new IllegalArgumentException("slot 1-4");
+        send("GEAREQUIP|"+slot+"|"+id+"|"+(++sequence));
+    }
+    public synchronized void selectGearSlot(int slot)throws IOException{
+        if(slot<0||slot>=FieldEquipment.SLOTS)throw new IllegalArgumentException("slot 1-4");
+        send("GEARSLOT|"+slot+"|"+(++sequence));
+    }
+    public synchronized void useHeldEquipment()throws IOException{
+        send("GEARUSE|"+(++sequence));
+    }
     public synchronized void journal()throws IOException {send("JOURNAL");}
     public synchronized void say(LanChat.Channel channel,String message)throws IOException{
         Objects.requireNonNull(channel);
