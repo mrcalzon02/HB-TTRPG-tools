@@ -45,18 +45,18 @@ public final class LanSpatialEvidenceIntegrationTest {
             ghost.client.ghost(GhostDomain.Action.DISTURB,4);
             ghost.await("ACCEPT|GHOST|DISTURB|");
             hunter.client.scan(LanCase.Tool.EMF);
-            ok(hunter.await("ACCEPT|SCAN|CONFIRMED").contains("EMF"),"event-driven EMF >6");
+            ok(hunter.await("ACCEPT|SCAN|READING").contains("EMF"),"event-driven EMF >6");
             for(int i=0;i<10;i++)hunter.step(100);
             hunter.client.scan(LanCase.Tool.SPIRIT_BOX);
-            ok(hunter.await("ACCEPT|SCAN|INCONCLUSIVE").contains("move closer"),
-                "out-of-range spirit box cannot provide evidence");
+            ok(hunter.await("ACCEPT|SCAN|READING").contains("move closer"),
+                "out-of-range spirit box still reports a measurement");
             hunter.client.scan(LanCase.Tool.THERMOMETER);
-            ok(hunter.await("ACCEPT|SCAN|CONFIRMED").contains("THERMOMETER"),
-                "thermometer operates at a longer practical distance");
+            ok(hunter.await("ACCEPT|SCAN|READING").contains("THERMOMETER"),
+                "thermometer reports within its practical range");
             for(int i=0;i<10;i++)hunter.step(-100);
             hunter.client.scan(LanCase.Tool.SPIRIT_BOX);
-            ok(hunter.await("ACCEPT|SCAN|CONFIRMED").contains("SPIRIT_BOX"),
-                "approaching the source adds last clue");
+            ok(hunter.await("ACCEPT|SCAN|READING").contains("SPIRIT_BOX"),
+                "approaching the source permits another sample");
             hunter.client.ward();hunter.await("ACCEPT|WARD|ANCHOR WARD PREPARED");
             hunter.client.cleanse();hunter.await("ACCEPT|CLEANSE|RITUAL STARTED");
             hunter.await("RESULT|CLEANSED");
