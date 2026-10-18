@@ -50,6 +50,8 @@ public final class LanHost implements AutoCloseable {
     private long hostGhostActionSequence=-1;
     private int tick;
     private int lastGhostSoundTick=-10000;
+    /** Recent authorized spectral events provide genuine transient EMF peaks. */
+    private int lastEvidenceEventTick=-10000,lastEvidenceEventRoom=-1,lastEvidenceEventPower;
     private final int[] lastGhostFootstepCueTick=new int[HUNTERS];
     private final int[] lastVoiceCueTick=new int[HUNTERS];
     private LanTelegraphedStrike.Pending pendingStrike;
@@ -100,6 +102,18 @@ public final class LanHost implements AutoCloseable {
         mission.configureSanityDrain(contract.sanityDrain());
         ghost.configureRecovery(contract.energyRecovery());
         if(identityMode)mission.configure(type,true);
+        // One host-owned climate snapshot per session: all rooms share the season
+        // and weather while their indoor heating and local anomalies still vary.
+        java.time.LocalDateTime climateClock=java.time.LocalDateTime.now();
+        EvidenceSignals.Season season=switch(climateClock.getMonthValue()){
+            case 12,1,2->EvidenceSignals.Season.WINTER;
+            case 3,4,5->EvidenceSignals.Season.SPRING;
+            case 6,7,8->EvidenceSignals.Season.SUMMER;
+            default->EvidenceSignals.Season.AUTUMN;
+        };
+        mission.configureEvidenceClimate(season,EvidenceSignals.Weather.CLEAR,
+            climateClock.getHour(),true,
+            (RESUME_RANDOM.nextBoolean()?EvidenceSignals.Polarity.COLD:EvidenceSignals.Polarity.HOT));
         ai=new LanGhostPursuit(map,20261016L,type);
         ai.configureFrequency(contract.eventFrequency());
         bindAddress=Objects.requireNonNull(ip);
@@ -595,9 +609,14 @@ public final class LanHost implements AutoCloseable {
                     if(!running||peer.slot==GHOST_SEAT||p.size()!=3)throw new IllegalArgumentException("hunter action unavailable");
                     LanCase.Tool tool=LanCase.Tool.valueOf(p.get(1));
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
+                    int eventAge=tick-lastEvidenceEventTick;
+                    int eventPower=eventAge>=0&&eventAge<=40
+                        ?Math.max(0,lastEvidenceEventPower-eventAge/7):0;
                     LanCase.Report result=peer.worldMode
-                            ?mission.scanSpatial(peer.slot,tool,world.body(peer.slot),ghost.room(),map)
-                            :mission.scan(peer.slot,tool,hunterRooms[peer.slot],ghost.room());
+                        ?mission.scanSpatialMeasured(peer.slot,tool,world.body(peer.slot),
+                            ghost.room(),map,tick,lastEvidenceEventRoom,eventPower)
+                        :mission.scanMeasured(peer.slot,tool,hunterRooms[peer.slot],
+                            ghost.room(),tick,lastEvidenceEventRoom,eventPower);
                     answerHunter(peer,"SCAN",result);
                     if(result.accepted()){
                         recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
@@ -863,6 +882,15 @@ public final class LanHost implements AutoCloseable {
     /** AI and human origins both enter this exact damage/telegraph pipeline. */
     private void resolveGhostAction(GhostDomain.Resolution result){
         if(!result.applied())return;
+        int eventPower=switch(result.action()){
+            case WHISPER->3;case DISTURB->8;case MANIFEST->9;
+            case STRIKE,SIGNATURE->10;case DRIFT->0;
+        };
+        if(eventPower>0){
+            lastEvidenceEventTick=tick;
+            lastEvidenceEventRoom=result.room();
+            lastEvidenceEventPower=eventPower;
+        }
         if(result.action()==GhostDomain.Action.MANIFEST)animation.manifested(tick);
         RoomLighting.Interference disruption=switch(result.action()){
             case WHISPER->RoomLighting.Interference.MINOR;
