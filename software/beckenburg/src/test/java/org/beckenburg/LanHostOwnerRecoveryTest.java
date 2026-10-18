@@ -50,6 +50,8 @@ public final class LanHostOwnerRecoveryTest {
                 b.await("PEER|LOST|0");
                 ok(host.running()&&host.reservedSeats()==1,
                     "guest H1 cannot kill a ghost-owned match on transient disconnect");
+                ok(LanLobbyWindow.keepRunningLocalHost(host,ghost.client.resumeTicket()),
+                    "a valid live ghost-owned listen host must not be torn down by GUI transport recovery");
                 try(Peer returned=new Peer(host.port(),old)){
                     ok("H1".equals(returned.client.seat()),"ghost-host guest H1 can reclaim same seat");
                     returned.await("INFO|mission resumed");
@@ -74,6 +76,10 @@ public final class LanHostOwnerRecoveryTest {
                 var ticket=owner.client.resumeTicket();
                 owner.interruptSocket();b.await("PEER|LOST|0");
                 ok(host.running(),"authoritative listen process remains alive despite owner TCP loss");
+                ok(LanLobbyWindow.keepRunningLocalHost(host,ticket),
+                    "GUI transport EOF must preserve the running authoritative listen host");
+                ok(!LanLobbyWindow.keepRunningLocalHost(host,null),
+                    "missing recovery credential cannot claim an owner seat");
                 try(Peer returned=new Peer(host.port(),ticket)){
                     returned.await("INFO|mission resumed");
                     ok("H1".equals(returned.client.seat()),"owner reclaims H1 while server alive");
@@ -81,6 +87,8 @@ public final class LanHostOwnerRecoveryTest {
                     b.await("INFO|match stopped after host departure");
                 }
                 ok(!host.running(),"owner intentional Leave ends listen match");
+                ok(!LanLobbyWindow.keepRunningLocalHost(host,ticket),
+                    "the GUI must not resurrect a stopped authoritative host");
             }
         }
     }
