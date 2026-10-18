@@ -234,10 +234,13 @@ public final class LanLobbyWindow extends JFrame {
                 if(localHost){
                     var types=GhostIdentity.Type.values();
                     var chosen=types[java.util.concurrent.ThreadLocalRandom.current().nextInt(types.length)];
-                    newHost=new LanHost("0.0.0.0",portNumber,chosen,request,ghost);
+                    newHost=new LanHost("0.0.0.0",portNumber,chosen,request,ghost,true);
                     newHost.setLobbyPassword(requestedPassword);
                 }
-                LanClient client=new LanClient(localHost?"127.0.0.1":hostname,portNumber,ghost,nickname,requestedPassword,
+                // A remote guest cannot race the local player to H1 or ghost-owner seat.
+                String localProof=newHost==null?"":newHost.localOwnerCredential();
+                LanClient client=new LanClient(localHost?"127.0.0.1":hostname,portNumber,
+                    ghost,nickname,requestedPassword,localProof,
                     frame->SwingUtilities.invokeLater(()->{
                         if(generation==connectionGeneration)receive(frame);
                     }));
