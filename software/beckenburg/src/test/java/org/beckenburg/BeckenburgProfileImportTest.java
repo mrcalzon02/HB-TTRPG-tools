@@ -40,7 +40,29 @@ public final class BeckenburgProfileImportTest {
             active.importFrom(imported);
             check(active.currency()==12500, "valid import recovers blocked save");
             active.save();
-            System.out.println("PASS: import valid progression, replace atomically, preserve backup and install ID, reject bad imports, recover corrupted profile");
+            // Stable storage keys must be machine-readable enum names, even though
+            // EquipmentLoadout.Item.toString() returns a human-readable label.
+            java.util.Properties canonical = new java.util.Properties();
+            try(var in=Files.newInputStream(activePath)){canonical.load(in);}
+            check("true".equals(canonical.getProperty("equipment.UV_LAMP")),
+                "saved profile uses stable UV_LAMP enum key");
+            Path legacy = root.resolve("older-saved-game.properties");
+            java.util.Properties old = new java.util.Properties();
+            old.setProperty("schema","1");old.setProperty("currency","55");
+            old.setProperty("experience","5");
+            old.setProperty("equipment."+EquipmentLoadout.Item.SALT.toString(),"true");
+            try(var out=Files.newOutputStream(legacy)){old.store(out,"legacy label-based save");}
+            active.importFrom(legacy);
+            check(active.ownsEquipment(EquipmentLoadout.Item.SALT),
+                "previously issued label-based equipment remains importable");
+            active.save();
+            java.util.Properties migrated = new java.util.Properties();
+            try(var in=Files.newInputStream(activePath)){migrated.load(in);}
+            check("true".equals(migrated.getProperty("equipment.SALT")),
+                "older equipment key migrates to stable enum identifier on save");
+            check(id.equals(BeckenburgInstallIdentity.loadOrCreate(root)),
+                "equipment key migration does not alter local installation identity");
+            System.out.println("PASS: canonical and legacy equipment keys, valid imports, backups, identity and corrupt-save recovery");
         } finally {
             try(var paths=Files.walk(root)) {
                 paths.sorted(java.util.Comparator.reverseOrder()).forEach(p-> {
