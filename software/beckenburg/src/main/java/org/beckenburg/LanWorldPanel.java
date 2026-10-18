@@ -18,6 +18,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final java.util.ArrayDeque<LanChat.Entry> chatHistory=new java.util.ArrayDeque<>();
     private final JTextField chatInput=new JTextField();
     private LanChat.Channel chatChannel=LanChat.Channel.LOCAL;
+    private LanChat.Channel heldVoice;
     private int chatVisibleUntil;
     private final javax.swing.Timer timer;
     private final Set<Integer> keys=new HashSet<>();
@@ -104,7 +105,41 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             chatInput.requestFocusInWindow();
         }
     }
-    public void close(){timer.stop();keys.clear();mouseLook.close();audio.close();}
+    public void close(){
+        releaseVoice();timer.stop();keys.clear();mouseLook.close();audio.close();
+    }
+    private void beginVoice(LanChat.Channel channel){
+        if(health<=0||!caseResult.isEmpty()||chatInput.isVisible())return;
+        LanVoiceClientAudio voice=client.voice();
+        if(voice==null){feedback="VOICE LINK NOT YET READY";return;}
+        if(voice.muted()){feedback="VOICE MUTED — F7 TO ENABLE";return;}
+        heldVoice=channel;
+        voice.setPushToTalk(channel);
+        feedback="MIC ON / "+channel+" — RELEASE F3/F4 TO STOP";
+    }
+    private void releaseVoice(){
+        heldVoice=null;
+        LanVoiceClientAudio voice=client.voice();
+        if(voice!=null)voice.setPushToTalk(null);
+    }
+    private void voiceSettings(){
+        LanVoiceClientAudio voice=client.voice();
+        if(voice==null){feedback="VOICE LINK UNAVAILABLE";return;}
+        releaseVoice();keys.clear();mouseLook.release();
+        JCheckBox mute=new JCheckBox("Mute microphone",voice.muted());
+        JSlider volume=new JSlider(0,100,voice.playbackVolume());
+        volume.setMajorTickSpacing(25);volume.setPaintTicks(true);
+        JPanel panel=new JPanel(new GridLayout(0,1,4,4));
+        panel.add(new JLabel("F3 local / F4 radio — hold to speak"));
+        panel.add(mute);panel.add(new JLabel("Incoming voice volume"));panel.add(volume);
+        int answer=JOptionPane.showConfirmDialog(this,panel,"VOICE / LOCAL LAN",
+            JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
+        if(answer==JOptionPane.OK_OPTION){
+            voice.setMuted(mute.isSelected());
+            voice.setPlaybackVolume(volume.getValue());
+        }
+        requestFocusInWindow();
+    }
     public void onEvent(String frame){
         if(!SwingUtilities.isEventDispatchThread())throw new IllegalStateException("network view must update on EDT");
         try{
@@ -297,6 +332,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         if(!isDisplayable()||!caseResult.isEmpty()){repaint();return;}
         if(chatInput.isVisible()){
             keys.clear();
+            releaseVoice();
         }
         if(vanDisplay&&!insideVan()){vanDisplay=false;meters=null;}
         if(vanDisplay&&tick-lastVanPoll>=11){
@@ -357,12 +393,16 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.setColor(new Color(17,19,25));g.fillRect(0,h,getWidth(),getHeight()-h);
             g.setColor(new Color(216,215,202));
             g.drawString(health==0?"ARROWS / MOUSE LOOK - OBSERVE ONLY - ESC EXIT":
-                    "WASD MOVE / SHIFT SPRINT / ENTER TALK / F2 RADIO / L HIDE / E DOOR",13,h+23);
+                    "WASD / SHIFT RUN / ENTER TEXT / F2 TEXT RADIO / F3 VOICE / F4 RADIO VOICE",13,h+23);
             g.drawString(health==0?"NO MOVEMENT OR EQUIPMENT WHILE INCAPACITATED":
                     "1-3 "+selected+" R SCAN  Z CROSS("+crosses+")  G WARD("+throwWards+
                     ") H SALT("+saltPouches+") K SHOP  T HP  Y SAN  M VAN",13,h+42);
             g.setColor(new Color(145,204,175));
-            g.drawString((mouseLook.captured()?"MOUSE LOCKED | ":"CLICK TO LOCK LOOK | ")+feedback,13,h+62);
+            LanVoiceClientAudio voice=client.voice();
+            String mic=voice==null?"VOICE: OFF":voice.muted()?"VOICE: MUTED":
+                voice.transmitting()?"MIC: "+heldVoice:voice.connected()?"VOICE: READY":"VOICE: LINKING";
+            g.drawString((mouseLook.captured()?"MOUSE LOCKED | ":"CLICK TO LOCK LOOK | ")+
+                mic+" | "+feedback,13,h+62);
             drawChat(g,h);
             if(vanDisplay)drawVanMeters(g,h);
             if(casefileOpen && journalPage!=0)drawFieldJournal(g,h);
@@ -535,7 +575,14 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     }
     @Override public void keyPressed(KeyEvent e){
         if(chatInput.isVisible())return;
-        if(e.getKeyCode()==KeyEvent.VK_ENTER){openChat(LanChat.Channel.LOCAL);return;}
+        if(e.getKeyCode()==KeyEvent.VK_F3){
+            beginVoice(LanChat.Channel.LOCAL);return;
+        }
+        if(e.getKeyCode()==KeyEvent.VK_F4){
+            beginVoice(LanChat.Channel.RADIO);return;
+        }
+        if(e.getKeyCode()==KeyEvent.VK_F7){voiceSettings();return;}
+        if(e.getKeyCode()==KeyEvent.VK_ENTER){releaseVoice();openChat(LanChat.Channel.LOCAL);return;}
         if(e.getKeyCode()==KeyEvent.VK_F2){openChat(LanChat.Channel.RADIO);return;}
         if(e.getKeyCode()==KeyEvent.VK_ESCAPE && casefileOpen){
             casefileOpen=false;repaint();return;
@@ -610,8 +657,14 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     }
     public LanCase.Tool selectedTool(){return selected;}
     public String caseFeedback(){return feedback;}
-    @Override public void keyReleased(KeyEvent e){keys.remove(e.getKeyCode());}
+    @Override public void keyReleased(KeyEvent e){
+        keys.remove(e.getKeyCode());
+        if(e.getKeyCode()==KeyEvent.VK_F3&&heldVoice==LanChat.Channel.LOCAL)releaseVoice();
+        if(e.getKeyCode()==KeyEvent.VK_F4&&heldVoice==LanChat.Channel.RADIO)releaseVoice();
+    }
     @Override public void keyTyped(KeyEvent e){}
     @Override public void focusGained(FocusEvent e){}
-    @Override public void focusLost(FocusEvent e){keys.clear();mouseLook.release();}
+    @Override public void focusLost(FocusEvent e){
+        keys.clear();releaseVoice();mouseLook.release();
+    }
 }
