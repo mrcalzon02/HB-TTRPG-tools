@@ -47,11 +47,11 @@ public final class LanVoiceHostIntegrationTest {
         final long hi,lo;
         final int seat,port;
         final InetAddress host=InetAddress.getLoopbackAddress();
-        AudioPeer(Peer control,int destinationPort)throws Exception{
+        AudioPeer(Peer control)throws Exception{
             String offer=control.await("VOICEKEY|");
             var fields=LanProtocol.parts(offer);
             port=LanProtocol.integer(fields.get(1),1,65535);
-            ok(port==destinationPort,"UDP uses game host's numeric port");
+            ok(port>0&&port<=65535,"UDP voice port is host-assigned and sent in VOICEKEY");
             long[] key=LanVoicePacket.parseToken(fields.get(2));hi=key[0];lo=key[1];
             seat=control.seat.equals("GHOST")?255:Integer.parseInt(control.seat.substring(1))-1;
             udp.setSoTimeout(600);
@@ -89,9 +89,9 @@ public final class LanVoiceHostIntegrationTest {
                 house.await("ACCEPT|MOVE|"+room);
             }
             van.send("VIEW3D");house.send("VIEW3D");ghost.send("GVIEW3D");
-            try(AudioPeer distant=new AudioPeer(van,host.port());
-                AudioPeer speaker=new AudioPeer(house,host.port());
-                AudioPeer spectral=new AudioPeer(ghost,host.port())){
+            try(AudioPeer distant=new AudioPeer(van);
+                AudioPeer speaker=new AudioPeer(house);
+                AudioPeer spectral=new AudioPeer(ghost)){
                 byte[] tone=new byte[LanVoicePacket.SAMPLES];
                 java.util.Arrays.fill(tone,(byte)0x9d);
                 distant.emit(LanVoicePacket.AUDIO,1,LanChat.Channel.LOCAL,tone);

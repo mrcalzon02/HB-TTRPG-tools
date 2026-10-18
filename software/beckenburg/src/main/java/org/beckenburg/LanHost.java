@@ -89,7 +89,10 @@ public final class LanHost implements AutoCloseable {
         bindAddress=Objects.requireNonNull(ip);
         listener=new ServerSocket();listener.setReuseAddress(true);
         listener.bind(new InetSocketAddress(InetAddress.getByName(ip),port),8);
-        try{voice=new LanVoiceRelay(listener.getInetAddress(),listener.getLocalPort(),this::routeVoice);}
+        // TCP and UDP use distinct transport namespaces. Binding voice to the TCP
+        // ephemeral port can collide with an unrelated occupied Windows UDP port.
+        // Bind UDP port zero and advertise its real allocation in VOICEKEY.
+        try{voice=new LanVoiceRelay(listener.getInetAddress(),0,this::routeVoice);}
         catch(SocketException failure){listener.close();throw failure;}
         workers.execute(this::acceptLoop);
         clock.scheduleAtFixedRate(this::tickSafely,100,100,TimeUnit.MILLISECONDS);
