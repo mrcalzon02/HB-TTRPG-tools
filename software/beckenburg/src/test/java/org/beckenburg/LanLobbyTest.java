@@ -37,7 +37,8 @@ public final class LanLobbyTest {
             check(host.connected()==4,"all four real sockets accepted");
             try{new LanClient("127.0.0.1",host.port(),true,"Fifth",s->{});throw new AssertionError("fifth ghost seat allowed");}
             catch(java.io.IOException expected){}
-            h2.client.start();check(h2.waitPrefix("REJECT|",2).contains("host hunter"),"non-host cannot start");
+            h2.client.start();check(h2.waitPrefix("REJECT|",2).contains("only verified hosting player may start"),
+                "server rejects non-owner START even if client forges the command");
             h1.client.start();check(h1.waitPrefix("REJECT|",2).contains("hunter party must be ready"),"start gate");
             h1.client.ready();h2.client.ready();h3.client.ready();g.client.ready();
             h1.waitPrefix("LOBBY|3|HUMAN|4|WAITING",3);
