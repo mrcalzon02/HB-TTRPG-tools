@@ -35,27 +35,27 @@ public final class LanCaseFileIntegrationTest {
             h.await("LOBBY|3|HUMAN|4|WAITING");
             h.client.start();h.await("INFO|mission started");
             h.client.scan(LanCase.Tool.EMF);
-            h.await("ACCEPT|SCAN|INCONCLUSIVE");
+            h.await("ACCEPT|SCAN|READING");
             var first=LanEvidenceJournal.Entry.decode(o.await("CASEFILE|"));
             ok(first.seat()==0&&first.room()==HouseMap.EXTRACTION_ROOM
-                    &&first.finding()==LanEvidenceJournal.Finding.INCONCLUSIVE,"teammate receives weak reading");
+                    &&first.finding()==LanEvidenceJournal.Finding.OBSERVED,"teammate receives weak reading");
             // Every hunter receives this first casefile packet. Consume it for D too;
             // otherwise the next assertion mistakenly reads the earlier weak clue.
             ok(LanEvidenceJournal.Entry.decode(d.await("CASEFILE|")).finding()
-                    ==LanEvidenceJournal.Finding.INCONCLUSIVE,"third hunter receives weak reading");
+                    ==LanEvidenceJournal.Finding.OBSERVED,"third hunter receives weak reading");
             for(int room:new int[]{11,8,5,4}){
                 h.client.move(room);h.await("ACCEPT|MOVE|"+room);
             }
             h.client.scan(LanCase.Tool.THERMOMETER);
-            h.await("ACCEPT|SCAN|CONFIRMED");
+            h.await("ACCEPT|SCAN|READING");
             var strong=LanEvidenceJournal.Entry.decode(d.await("CASEFILE|"));
-            ok(strong.room()==4&&strong.finding()==LanEvidenceJournal.Finding.CONFIRMED,"confirmed anchor source");
+            ok(strong.room()==4&&strong.finding()==LanEvidenceJournal.Finding.OBSERVED,"recorded instrument sample");
             o.client.journal();
             o.await("CASEFILE|RESET");
             ok(LanEvidenceJournal.Entry.decode(o.await("CASEFILE|")).finding()
-                    ==LanEvidenceJournal.Finding.INCONCLUSIVE,"weak clue replay");
+                    ==LanEvidenceJournal.Finding.OBSERVED,"weak clue replay");
             ok(LanEvidenceJournal.Entry.decode(o.await("CASEFILE|")).finding()
-                    ==LanEvidenceJournal.Finding.CONFIRMED,"strong clue replay");
+                    ==LanEvidenceJournal.Finding.OBSERVED,"strong clue replay");
             o.await("ACCEPT|JOURNAL");
             g.client.journal();
             ok(g.await("REJECT|").contains("active hunter"),"ghost cannot request casefile");
