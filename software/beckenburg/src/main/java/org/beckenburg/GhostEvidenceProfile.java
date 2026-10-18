@@ -22,11 +22,14 @@ public final class GhostEvidenceProfile {
     public static boolean emfSuppressed(GhostIdentity.Type type){
         return SILENT.contains(Objects.requireNonNull(type));
     }
+    // Thermal tendencies define an extreme a species CAN generate, not a
+    // mandatory value on each scan. All species show ordinary room fluctuations.
     private static final EnumSet<GhostIdentity.Type> COLD=types(
-        GhostIdentity.Type.POSSESSIVE,GhostIdentity.Type.BANSHEE,
-        GhostIdentity.Type.WRAITH,GhostIdentity.Type.SHADE,
-        GhostIdentity.Type.SPECTER,GhostIdentity.Type.SPIRIT,
-        GhostIdentity.Type.HANTU);
+        GhostIdentity.Type.BANSHEE,GhostIdentity.Type.SHADE,
+        GhostIdentity.Type.SPIRIT,GhostIdentity.Type.HANTU);
+    private static final EnumSet<GhostIdentity.Type> HOT=types(
+        GhostIdentity.Type.POLTERGEIST,GhostIdentity.Type.DEMON,
+        GhostIdentity.Type.DEVIL,GhostIdentity.Type.MIMIC);
     private static final EnumSet<GhostIdentity.Type> CHILD=types(
         GhostIdentity.Type.POSSESSIVE,GhostIdentity.Type.SPIRIT,
         GhostIdentity.Type.MIMIC);
@@ -42,7 +45,8 @@ public final class GhostEvidenceProfile {
     /** Shared between the simulated heat/cold generator and manual ghost guide. */
     public static EvidenceSignals.Polarity thermal(GhostIdentity.Type type){
         Objects.requireNonNull(type);
-        return COLD.contains(type)?EvidenceSignals.Polarity.COLD:EvidenceSignals.Polarity.HOT;
+        return COLD.contains(type)?EvidenceSignals.Polarity.COLD:
+               HOT.contains(type)?EvidenceSignals.Polarity.HOT:EvidenceSignals.Polarity.NONE;
     }
     /** Writing is not universal: YOKAI, BANSHEE, HANTU and TWINS
      * use other evidence producers. Multiple writers share each subtype.
