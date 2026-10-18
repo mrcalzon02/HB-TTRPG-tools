@@ -11,18 +11,21 @@ public final class GhostFieldGuide {
     private GhostFieldGuide(){}
     public enum Category { EMF, TEMPERATURE, SPIRIT_BOX, PHYSICAL, CAMERA, BEHAVIOR }
     public enum Clue {
-        EMF_SURGE(Category.EMF,"EMF / pulsing field surge",true),
-        EMF_TETHER(Category.EMF,"EMF / object tether resonance",true),
-        EMF_KINETIC(Category.EMF,"EMF / clustered kinetic spikes",true),
-        EMF_INTERFERENCE(Category.EMF,"EMF / patterned interference",true),
-        COLD_ANCHOR(Category.TEMPERATURE,"Cold / anchor chill",true),
-        COLD_POCKET(Category.TEMPERATURE,"Cold / isolated pocket",true),
-        COLD_SHEAR(Category.TEMPERATURE,"Cold / thermal shear",true),
-        COLD_DRAFT(Category.TEMPERATURE,"Cold / wall draft",true),
-        VOICE_DIRECT(Category.SPIRIT_BOX,"Voice / clear direct reply",true),
-        VOICE_ECHO(Category.SPIRIT_BOX,"Voice / double echo",true),
-        VOICE_FRAGMENT(Category.SPIRIT_BOX,"Voice / fragmented syllables",true),
-        VOICE_DISPLACED(Category.SPIRIT_BOX,"Voice / wrong-direction reply",true),
+        EMF_OVER_SIX(Category.EMF,"EMF / event reading greater than 6",false),
+        EXTREME_COLD(Category.TEMPERATURE,"Thermal / below 0°C (paranormal)",false),
+        EXTREME_HEAT(Category.TEMPERATURE,"Thermal / at least 90°F (paranormal)",false),
+        EMF_SURGE(Category.EMF,"EMF / pulsing field surge",false),
+        EMF_TETHER(Category.EMF,"EMF / object tether resonance",false),
+        EMF_KINETIC(Category.EMF,"EMF / clustered kinetic spikes",false),
+        EMF_INTERFERENCE(Category.EMF,"EMF / patterned interference",false),
+        COLD_ANCHOR(Category.TEMPERATURE,"Cold / anchor chill",false),
+        COLD_POCKET(Category.TEMPERATURE,"Cold / isolated pocket",false),
+        COLD_SHEAR(Category.TEMPERATURE,"Cold / thermal shear",false),
+        COLD_DRAFT(Category.TEMPERATURE,"Cold / wall draft",false),
+        VOICE_DIRECT(Category.SPIRIT_BOX,"Voice / clear direct reply",false),
+        VOICE_ECHO(Category.SPIRIT_BOX,"Voice / double echo",false),
+        VOICE_FRAGMENT(Category.SPIRIT_BOX,"Voice / fragmented syllables",false),
+        VOICE_DISPLACED(Category.SPIRIT_BOX,"Voice / wrong-direction reply",false),
         FOOTPRINTS(Category.PHYSICAL,"Salt / actual footprints",true),
         FLOATING(Category.PHYSICAL,"Movement / seen floating",true),
         PHASE_WALL(Category.PHYSICAL,"Movement / passes solid wall",true),
@@ -39,6 +42,21 @@ public final class GhostFieldGuide {
         public final String label;
         public final boolean exclusionSafe;
         Clue(Category category,String label,boolean exclusionSafe){this.category=category;this.label=label;this.exclusionSafe=exclusionSafe;}
+    }
+    /** Old EMF/temperature/voice subtype identifiers remain for save compatibility,
+     * but are NOT actual evidence types and must not appear as active clues.
+     */
+    private static boolean retired(Clue clue){
+        return switch(clue){
+            case EMF_SURGE,EMF_TETHER,EMF_KINETIC,EMF_INTERFERENCE,
+                 COLD_ANCHOR,COLD_POCKET,COLD_SHEAR,COLD_DRAFT,
+                 VOICE_DIRECT,VOICE_ECHO,VOICE_FRAGMENT,VOICE_DISPLACED->true;
+            default->false;
+        };
+    }
+    public static Clue[] activeClues(){
+        return java.util.Arrays.stream(Clue.values()).filter(c->!retired(c))
+            .toArray(Clue[]::new);
     }
     private static final EnumMap<GhostIdentity.Type,String> HINTS=new EnumMap<>(GhostIdentity.Type.class);
     static {
@@ -62,7 +80,8 @@ public final class GhostFieldGuide {
         Objects.requireNonNull(type);
         GhostTraits.Profile p=GhostTraits.of(type);
         return type.name().replace('_',' ') + "  /  " + type.rite().name()+"\n"
-            +"EMF "+type.emf()+" | COLD "+type.thermal()+" | VOICE "+type.voice()+"\n"
+            +"REAL SIGNALS: EMF >6 / COLD <0°C / HOT >=90°F\n"
+            +"WIDER EVIDENCE MATRIX: UNDER DEVELOPMENT\n"
             +(p.locomotion()==GhostTraits.Locomotion.FLOAT?"FLOATING":"WALKING")
             +" / "+(p.canPhase()?"WALL PHASING":"DOOR TRAVEL")
             +" / SALT "+(p.grounded()?"REACTIVE":"IMMUNE")+"\n"
@@ -76,18 +95,12 @@ public final class GhostFieldGuide {
         Objects.requireNonNull(type);Objects.requireNonNull(clue);
         GhostTraits.Profile p=GhostTraits.of(type);
         return switch(clue){
-            case EMF_SURGE->type.emf()==GhostIdentity.Emf.FIELD_SURGE;
-            case EMF_TETHER->type.emf()==GhostIdentity.Emf.TETHER;
-            case EMF_KINETIC->type.emf()==GhostIdentity.Emf.KINETIC;
-            case EMF_INTERFERENCE->type.emf()==GhostIdentity.Emf.INTERFERENCE;
-            case COLD_ANCHOR->type.thermal()==GhostIdentity.Thermal.ANCHOR_CHILL;
-            case COLD_POCKET->type.thermal()==GhostIdentity.Thermal.COLD_SPOT;
-            case COLD_SHEAR->type.thermal()==GhostIdentity.Thermal.SHEAR;
-            case COLD_DRAFT->type.thermal()==GhostIdentity.Thermal.WALL_DRAFT;
-            case VOICE_DIRECT->type.voice()==GhostIdentity.Voice.DIRECT;
-            case VOICE_ECHO->type.voice()==GhostIdentity.Voice.ECHO;
-            case VOICE_FRAGMENT->type.voice()==GhostIdentity.Voice.FRAGMENT;
-            case VOICE_DISPLACED->type.voice()==GhostIdentity.Voice.DISPLACED;
+            // Measurement categories no longer encode a specific ghost species.
+            // Archive enum members only survive for old journal notes.
+            case EMF_OVER_SIX,EXTREME_COLD,EXTREME_HEAT,
+                 EMF_SURGE,EMF_TETHER,EMF_KINETIC,EMF_INTERFERENCE,
+                 COLD_ANCHOR,COLD_POCKET,COLD_SHEAR,COLD_DRAFT,
+                 VOICE_DIRECT,VOICE_ECHO,VOICE_FRAGMENT,VOICE_DISPLACED->true;
             case FOOTPRINTS->p.grounded();
             case FLOATING->p.locomotion()==GhostTraits.Locomotion.FLOAT;
             case PHASE_WALL->p.canPhase();
