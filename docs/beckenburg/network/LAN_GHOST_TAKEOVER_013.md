@@ -1,6 +1,6 @@
 # Beckenburg Alpha 2.0 — Human-ghost disconnect continuity
 
-A disconnected human ghost yields control to the existing host AI without resetting ghost room, pose, resources, legal action cooldowns, active manifestations or pending attacks. Connected hunters continue the current case. The host transmits a clear takeover notice and updated AI lobby label. Hunter disconnect still terminates this experimental LAN match; reconnect and Windows LAN acceptance remain unsatisfied.
+A disconnected human ghost yields control to the existing host AI without resetting ghost room, pose, resources, legal action cooldowns, active manifestations or pending attacks. Connected hunters continue the current case. The host transmits a clear takeover notice and updated AI lobby label. An explicit guest hunter departure leaves the other hunters' match running; losing the H1 listen-host seat ends that session. Source integration 019 adds temporary reservations and resumed ghost/hunter sessions, but full Java/Windows acceptance is not yet verified. See [LAN Session Recovery 019](LAN_SESSION_RESUME_IMPLEMENTATION_019.md).
 
 The host owns a single monotonic GhostDomain command sequence spanning both human and AI controllers. Per-peer input sequence checks remain in place, so client replay and impersonation are still rejected. This prevents post-takeover AI power rejection caused by incompatible controller-local sequence numbers.
 
