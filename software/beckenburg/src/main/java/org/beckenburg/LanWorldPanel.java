@@ -49,6 +49,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private int heldUseUntilTick;
     private String caseResult="";
     private final List<LanEvidenceJournal.Entry> casefile=new ArrayList<>();
+    private final java.util.EnumMap<LanCase.Tool,String> lastMeasurement=
+        new java.util.EnumMap<>(LanCase.Tool.class);
+    private int casefileScroll;
     private boolean casefileOpen;
     private final FieldJournal fieldNotes=new FieldJournal();
     private int journalPage,guideCursor,guideGhostIndex;
@@ -277,11 +280,13 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(p.get(0).equals("NOTE")){
                 fieldNotes.accept(FieldJournal.Note.decode(frame));
             }else if(p.get(0).equals("CASEFILE")){
-                if(p.size()==2&&p.get(1).equals("RESET"))casefile.clear();
+                if(p.size()==2&&p.get(1).equals("RESET")){casefile.clear();casefileScroll=0;}
                 else {
                     LanEvidenceJournal.Entry entry=LanEvidenceJournal.Entry.decode(frame);
                     casefile.add(entry);
+                    if(casefileScroll>0)casefileScroll++;
                     if(casefile.size()>LanEvidenceJournal.CAPACITY)casefile.remove(0);
+                    casefileScroll=Math.min(casefileScroll,Math.max(0,casefile.size()-1));
                 }
             }else if(p.get(0).equals("SOUND")){
                 LanSound.CueEvent cue=LanSound.decode(frame);
@@ -304,6 +309,15 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(frame.startsWith("RESULT|")){
                 caseResult=frame.substring(7);feedback="CASE CLOSED: "+caseResult;
                 keys.clear();
+            }else if(frame.startsWith("BOOK|")){
+                feedback="WRITING BOOK: "+frame.substring(5);
+            }else if(frame.startsWith("ACCEPT|SCAN|")){
+                String value=frame.substring(12);
+                for(LanCase.Tool tool:LanCase.Tool.values())
+                    if(value.contains(" "+tool.name()+" ")){
+                        lastMeasurement.put(tool,value);break;
+                    }
+                feedback=frame;
             }else if(frame.startsWith("ACCEPT|")||frame.startsWith("REJECT|")||frame.startsWith("EVIDENCE|")||frame.startsWith("RITUAL|")) {
                 feedback=frame;
             }
@@ -395,7 +409,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g.drawImage(renderer.image(),0,0,getWidth(),h,null);
             HeldToolView.draw(g,getWidth(),h,selected.name(),tick,tick<=heldUseUntilTick,
-                renderer.lamp);
+                renderer.lamp,lastMeasurement.get(selected));
             drawHunterNameplates(g,h);
             g.setFont(new Font(Font.MONOSPACED,Font.BOLD,Math.max(12,getHeight()/46)));
             g.setColor(new Color(234,222,189));
@@ -449,12 +463,12 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 g.setColor(new Color(10,14,23,232));g.fillRoundRect(20,top,width,height,10,10);
                 g.setColor(new Color(190,172,131));g.drawRoundRect(20,top,width,height,10,10);
                 g.setFont(new Font(Font.MONOSPACED,Font.BOLD,15));
-                g.drawString("SHARED CASEFILE / "+casefile.size()+" READINGS / J TO CLOSE",33,top+23);
+                g.drawString("SHARED CASEFILE / "+casefile.size()+" READINGS / UP-DOWN SCROLL",33,top+23);
                 g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,13));
                 g.setColor(new Color(217,218,209));
                 if(casefile.isEmpty())g.drawString("No readings. Select a tool, then press R to scan.",33,top+48);
                 for(int i=0;i<rows;i++){
-                    LanEvidenceJournal.Entry entry=casefile.get(casefile.size()-rows+i);
+                    LanEvidenceJournal.Entry entry=casefile.get(casefile.size()-rows-casefileScroll+i);
                     String line=String.format("T%05d  H%d  %s  /  %s  /  %s",entry.tick(),
                             entry.seat()+1,map.roomName(entry.room()),entry.tool(),entry.finding());
                     int max=Math.max(12,(width-36)/8),y=top+48+i*37;
@@ -621,6 +635,15 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             else journalPage=(journalPage+1)%3;
             e.consume();repaint();return;
         }
+        if(casefileOpen&&journalPage==0){
+            int rows=Math.min(casefile.size(),Math.min(8,Math.max(1,(Math.max(160,getHeight()-82)-135)/37)));
+            if(e.getKeyCode()==KeyEvent.VK_UP){
+                casefileScroll=Math.min(Math.max(0,casefile.size()-rows),casefileScroll+1);repaint();return;
+            }
+            if(e.getKeyCode()==KeyEvent.VK_DOWN){
+                casefileScroll=Math.max(0,casefileScroll-1);repaint();return;
+            }
+        }
         if(casefileOpen&&journalPage==1){
             if(e.getKeyCode()==KeyEvent.VK_UP){guideCursor=(guideCursor+GhostFieldGuide.activeClues().length-1)%GhostFieldGuide.activeClues().length;repaint();return;}
             if(e.getKeyCode()==KeyEvent.VK_DOWN){guideCursor=(guideCursor+1)%GhostFieldGuide.activeClues().length;repaint();return;}
@@ -656,6 +679,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_G -> sendAction("thrown ward",()->client.deploy(HunterCounters.Kind.WARD));
             case KeyEvent.VK_H -> sendAction("salt",()->client.deploy(HunterCounters.Kind.SALT));
             case KeyEvent.VK_U -> sendAction("UV",()->client.scanUv());
+            case KeyEvent.VK_F8 -> sendAction("deploy writing book",()->client.placeBook());
+            case KeyEvent.VK_F9 -> sendAction("inspect writing book",()->client.readBook());
+            case KeyEvent.VK_F10 -> sendAction("retrieve writing book",()->client.takeBook());
             case KeyEvent.VK_L -> sendAction("hide",()->client.hide());
             case KeyEvent.VK_M -> feedback=insideVan()?"MONITOR ALWAYS VISIBLE ON RIGHT":"VAN TELEMETRY ONLY INSIDE THE VAN";
             case KeyEvent.VK_K -> showSupplyStore();
