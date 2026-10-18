@@ -129,6 +129,8 @@ public final class LanLobbyWindow extends JFrame {
             if(saved.isEmpty())return;
             LanResumeStore.Saved last=saved.get();
             resumeAddress=last.address();resumePort=last.port();
+            ip.setText(resumeAddress);port.setText(Integer.toString(resumePort));
+            role.setSelectedIndex("GHOST".equals(last.seat())?1:0);
             resumeTicket=new LanClient.ResumeTicket(last.seat(),last.token(),last.sequence());
             reconnect.setEnabled(true);
             status.setText("Previous LAN seat may be recoverable — Reconnect");
@@ -288,6 +290,7 @@ public final class LanLobbyWindow extends JFrame {
                     connection=restored;resumeTicket=null;busy=false;
                     saveResume(restored); // The old resume capability was rotated by the host.
                     missionRunning=true;worldMode=false;
+                    role.setSelectedIndex("GHOST".equals(restored.seat())?1:0);
                     role.setEnabled(false);reconnect.setEnabled(false);
                     roomPassword.setEnabled(false);lobbyLock.setEnabled(false);hostInfo.setEnabled(false);
                     status.setText("Seat "+restored.seat()+" restored - enter 3D world");
