@@ -1,5 +1,11 @@
 # The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
 
+## LAN networking hardening 023 — source committed, full acceptance pending
+
+The 3D hunter view now restores its host-owned hiding state after reopening or reconnecting; if the ghost is already winding up a strike in that room, it replays **only the remaining warning ticks**, without restarting the attack. Outgoing TCP game frames go through a bounded per-client FIFO writer so one stalled socket cannot perform blocking writes while the authoritative 10 Hz simulation lock is held. Overflow closes that slow client's transport and uses the existing bounded same-seat reconnect process; it does not silently discard critical evidence/transactions. An every-five-second host heartbeat detects unresponsive links after 20 seconds and records server-measured RTT for the Java client. Trusted LAN only: these packets and the voice path remain **unencrypted**.
+
+Source and tests committed: `LanOutboundQueueTest`, `LanNetworkLatencyTest` (injected 0/50/150 ms heartbeat-response delays and a missing response), extended `LanSessionResumeIntegrationTest`, and both build drivers. These sources were remotely read back, **but a complete Java 17 build, running socket regressions, true OS-level impairment testing, and physical Windows two-machine multiplayer have not yet been verified**. See [network 023 quality gate](../../docs/beckenburg/QUALITY_GATES.md#tcp-isolation-heartbeat-and-view-recovery-source-gate-023-2026-10-18). This is not a packaged stable multiplayer release.
+
 ## Bounded crash-safe LAN reconnect token rotation (022)
 
 Resuming a reserved seat now retains one temporary previous token until the client atomically stores the replacement and acknowledges it with RESUMEACK. Unacknowledged retries retain the original grace expiry, not unlimited session extension. Server-owned Start Match permission is enforced for GUI-hosted sessions even when a guest obtains H1, and hunter body/room snapshots continue while a disconnected seat is reserved. See [recovery implementation 022](../../docs/beckenburg/network/LAN_RECONNECT_DURABLE_ROTATION_022.md). Source committed and regressions registered; complete Java and Windows multiplayer tests still unverified.
