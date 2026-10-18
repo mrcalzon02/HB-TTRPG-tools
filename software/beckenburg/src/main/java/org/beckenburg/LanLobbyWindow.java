@@ -339,8 +339,9 @@ public final class LanLobbyWindow extends JFrame {
             }
         });
         worldFrame.setVisible(true);active.requestFocusInWindow();
-        if(!ghost)action(()->connection.journal()); // Replay existing evidence after the viewport is ready.
-        // The host sends an immediate snapshot after VIEW3D. Subsequent frames update this viewport.
+        // The host itself now replays the role-filtered casefile, notes, equipment,
+        // progress and 3D world on VIEW3D; do not race or duplicate a second journal reset.
+        // Subsequent frames update this viewport.
     }
     private void receive(String event){
         if(event.equals("INFO|network connection ended")){
