@@ -108,6 +108,45 @@ public final class ProfileStore {
         try{save();}catch(IOException ex){currency=oldMoney;experience=oldXp;awarded.remove(session.missionId());throw ex;}
         return true;
     }
+    /**
+     * Import a user-owned local progression file without changing the machine's
+     * installation identity. Validate the staged bytes before replacing the
+     * active profile; leave a versioned backup of the prior save.
+     */
+    public void importFrom(Path source) throws IOException {
+        if (blocked) throw new IOException("Active profile is blocked after failed load");
+        if (source == null) throw new IOException("No imported save selected");
+        Path target = file.toAbsolutePath().normalize();
+        Path selected = source.toAbsolutePath().normalize();
+        if (selected.equals(target)) throw new IOException("Selected file is already the active save");
+        if (!Files.isRegularFile(selected) || Files.size(selected) > 262144)
+            throw new IOException("Imported file must be a readable Beckenburg save under 256 KiB");
+        Path parent = target.getParent();
+        if (parent == null) throw new IOException("Missing save directory");
+        Files.createDirectories(parent);
+        Path staged = Files.createTempFile(parent, "profile-import-", ".tmp");
+        try {
+            Files.copy(selected, staged, StandardCopyOption.REPLACE_EXISTING);
+            ProfileStore candidate = new ProfileStore(staged);
+            candidate.load(); // validate the actual staged bytes before touching the active save
+            if (Files.exists(target)) {
+                Path backup = parent.resolve("profile-before-import-" + java.util.UUID.randomUUID() + ".properties");
+                Files.copy(target, backup);
+            }
+            try { Files.move(staged, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE); }
+            catch (java.nio.file.AtomicMoveNotSupportedException e) {
+                Files.move(staged, target, StandardCopyOption.REPLACE_EXISTING);
+            }
+            // Candidate was already validated, so in-memory state can be updated without reopening.
+            currency = candidate.currency;
+            experience = candidate.experience;
+            awarded.clear(); awarded.addAll(candidate.awarded);
+            purchasedEquipment.clear(); purchasedEquipment.addAll(candidate.purchasedEquipment);
+            for (int k = 0; k < medicines.length; k++)
+                System.arraycopy(candidate.medicines[k], 0, medicines[k], 0, medicines[k].length);
+        } finally { Files.deleteIfExists(staged); }
+    }
+
     public void save() throws IOException {
         if(blocked) throw new IOException("Previous profile load failed; save blocked to preserve existing data.");
         Path parent=file.toAbsolutePath().getParent();
