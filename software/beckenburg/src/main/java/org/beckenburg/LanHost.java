@@ -143,6 +143,12 @@ public final class LanHost implements AutoCloseable {
         byte[] bytes=new byte[24];RESUME_RANDOM.nextBytes(bytes);
         return HexFormat.of().formatHex(bytes);
     }
+    private static boolean resumeTokenMatches(String expected,String submitted){
+        return expected!=null && submitted!=null && submitted.matches("[0-9a-f]{48}")
+            && java.security.MessageDigest.isEqual(
+                expected.getBytes(java.nio.charset.StandardCharsets.US_ASCII),
+                submitted.getBytes(java.nio.charset.StandardCharsets.US_ASCII));
+    }
     private static int parseSeat(String label){
         if("GHOST".equals(label))return GHOST_SEAT;
         if(label.matches("H[1-6]"))return Integer.parseInt(label.substring(1))-1;
@@ -177,14 +183,18 @@ public final class LanHost implements AutoCloseable {
                     Reservation waiting=slot>=0?reserved[slot]:null;
                     if(!running||waiting==null||seats[slot]!=null
                             ||System.nanoTime()-waiting.expiresNanos>=0
-                            ||!java.security.MessageDigest.isEqual(
-                                waiting.token.getBytes(java.nio.charset.StandardCharsets.US_ASCII),
-                                hello.get(3).getBytes(java.nio.charset.StandardCharsets.US_ASCII))){
+                            ||!resumeTokenMatches(waiting.token,hello.get(3))
+                                &&!resumeTokenMatches(waiting.previousToken,hello.get(3))){
                         LanProtocol.write(out,"REJECT|reconnect seat expired or unavailable");return;
                     }
                     peer=new Peer(socket,in,out,slot,waiting.name);
                     peer.lastGhostActionSequence=waiting.lastActionSequence;
                     peer.lastGhostPoseSequence=waiting.lastPoseSequence;
+                    // Until the replacement token has been durably saved and
+                    // acknowledged, the previous recovery capability remains valid
+                    // ONLY for a disconnected reserved seat, never a live controller.
+                    peer.previousResumeToken=waiting.previousToken==null
+                            ?waiting.token:waiting.previousToken;
                     // The old reservation must survive a failed WELCOME write.
                     // Never consume a seat until its new credentials are sent.
                     LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken+"|"+seatSequenceHighWater(peer));
@@ -319,6 +329,15 @@ public final class LanHost implements AutoCloseable {
                     if(p.size()!=1)throw new IllegalArgumentException("invalid departure");
                     peer.intentionalLeave=true;
                     try{peer.socket.close();}catch(IOException ignored){}
+                }
+                case "RESUMEACK" -> {
+                    // This message is a post-persistence confirmation, not an
+                    // elevation of privileges. It is bound to this socket's seat.
+                    if(p.size()!=2||peer.previousResumeToken==null
+                            ||!resumeTokenMatches(peer.resumeToken,p.get(1)))
+                        throw new IllegalArgumentException("invalid recovery acknowledgement");
+                    peer.previousResumeToken=null;
+                    reply(peer,"ACCEPT|RESUMEACK");
                 }
                 case "LOBBYCHAT" -> {
                     if(running||p.size()!=2)throw new IllegalArgumentException("lobby chat only before match");
@@ -1008,11 +1027,12 @@ public final class LanHost implements AutoCloseable {
         clock.shutdownNow();workers.shutdownNow();
     }
     private static final class Reservation {
-        final String name,token;
+        final String name,token,previousToken;
         final long expiresNanos,lastActionSequence,lastPoseSequence;
         final boolean worldMode;
         Reservation(Peer p,long expires){
-            name=p.name;token=p.resumeToken;expiresNanos=expires;
+            name=p.name;token=p.resumeToken;previousToken=p.previousResumeToken;
+            expiresNanos=expires;
             lastActionSequence=p.lastGhostActionSequence;
             lastPoseSequence=p.lastGhostPoseSequence;
             worldMode=p.worldMode;
@@ -1021,6 +1041,7 @@ public final class LanHost implements AutoCloseable {
     private static final class Peer{
         final Socket socket;final Reader input;final Writer output;final int slot;final String name;
         final String resumeToken=newResumeToken();
+        String previousResumeToken; // erased after client confirms durable replacement
         boolean ready,worldMode,ghostWorldMode,intentionalLeave;
         long lastGhostPoseSequence=-1,lastGhostActionSequence=-1;
         int lastMonitorTick=-100000,lastChatTick=-100000,lastLightTick=-100000;
