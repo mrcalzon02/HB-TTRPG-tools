@@ -25,6 +25,8 @@ public final class InvestigationSession {
     private Outcome outcome = Outcome.ACTIVE;
     private int ticks, health = 100, stress, wards, payouts;
     private final GhostDomain ghost;
+    private RoomLighting roomLights;
+    public void connectLighting(RoomLighting roomLights){this.roomLights=roomLights;}
     private final HunterCounters counters=new HunterCounters();
     private final GhostDomain.AiController ghostAi;
     private boolean prepared, haunted, rewarded;
@@ -123,6 +125,16 @@ public final class InvestigationSession {
         if(command!=null) {
             GhostDomain.Resolution result=ghost.dispatch(command);
             if(result.applied()) {
+                if(roomLights!=null && result.room()<HouseMap.INDOOR_ROOMS){
+                    RoomLighting.Interference effect=switch(result.action()){
+                        case WHISPER->RoomLighting.Interference.MINOR;
+                        case DISTURB,MANIFEST->RoomLighting.Interference.MODERATE;
+                        case STRIKE->RoomLighting.Interference.DANGEROUS;
+                        case SIGNATURE->RoomLighting.Interference.SIGNATURE;
+                        default->null;
+                    };
+                    if(effect!=null)roomLights.pulse(result.room(),effect,ticks);
+                }
                 if(result.fear()>0) stress=Math.min(100,stress+result.fear());
                 // Only present events a hunter could plausibly hear in their current room.
                 if(playerRoom==result.room() && result.action()==GhostDomain.Action.WHISPER)

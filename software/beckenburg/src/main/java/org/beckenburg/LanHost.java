@@ -20,6 +20,7 @@ public final class LanHost implements AutoCloseable {
     private final int[] hunterRooms=new int[HUNTERS];
     private final long[] hunterSequences=new long[HUNTERS];
     private final HouseMap map=new HouseMap();
+    private final RoomLighting lights=new RoomLighting();
     private final LanWorld world=new LanWorld(map);
     private final LanGhostSpatial ghostPose=new LanGhostSpatial(map,4);
     private final GhostDomain ghost;
@@ -220,6 +221,7 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,supplies[peer.slot].frame());
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
                     reply(peer,"HIDECONFIG|"+contract.hidingSpots());
+                    reply(peer,"LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
                     reply(peer,"VOICEKEY|"+voice.port()+"|"+voice.register(peer.slot,peer.socket.getInetAddress()));
                     for(LanChat.Entry line:radioHistory)reply(peer,line.frame());
                 }
@@ -264,6 +266,32 @@ public final class LanHost implements AutoCloseable {
                     int heading=LanProtocol.integer(p.get(1),0,359);
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
                     world.turn(peer.slot,heading);broadcastWorld();
+                }
+                case "LIGHT" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
+                        throw new IllegalArgumentException("hunter 3D light interaction required");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    ensureActiveHunter(peer);
+                    LanWorld.Body body=world.body(peer.slot);
+                    int at=lights.aimed(map,body.x(),body.z(),Math.toRadians(body.heading()));
+                    if(at<0)throw new IllegalArgumentException("look toward a nearby wall switch");
+                    if(tick-peer.lastLightTick<5)throw new IllegalArgumentException("switch cooling down");
+                    peer.lastLightTick=tick;
+                    boolean on=lights.toggle(at);
+                    notifyHunters("LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
+                    reply(peer,"ACCEPT|LIGHT|"+at+"|"+(on?"ON":"OFF"));
+                }
+                case "POWER" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
+                        throw new IllegalArgumentException("hunter 3D breaker required");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    ensureActiveHunter(peer);
+                    LanWorld.Body body=world.body(peer.slot);
+                    if(body.room()!=11||Math.hypot(body.x()-map.centerX(11),
+                        body.z()-map.centerZ(11))>1.5)throw new IllegalArgumentException("breaker out of reach");
+                    lights.setBreaker(!lights.breaker());
+                    notifyHunters("LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
+                    reply(peer,"ACCEPT|POWER|"+(lights.breaker()?"ON":"OFF"));
                 }
                 case "DOOR" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)throw new IllegalArgumentException("door command unavailable");
@@ -628,6 +656,20 @@ public final class LanHost implements AutoCloseable {
     private void resolveGhostAction(GhostDomain.Resolution result){
         if(!result.applied())return;
         if(result.action()==GhostDomain.Action.MANIFEST)animation.manifested(tick);
+        RoomLighting.Interference disruption=switch(result.action()){
+            case WHISPER->RoomLighting.Interference.MINOR;
+            case DISTURB->RoomLighting.Interference.MODERATE;
+            case MANIFEST->RoomLighting.Interference.MODERATE;
+            case STRIKE->RoomLighting.Interference.DANGEROUS;
+            case SIGNATURE->RoomLighting.Interference.SIGNATURE;
+            default->null;
+        };
+        if(disruption!=null && result.room()<HouseMap.INDOOR_ROOMS){
+            lights.pulse(result.room(),disruption,tick);
+            int expires=tick+switch(disruption){
+                case MINOR->22;case MODERATE->42;case DANGEROUS->70;case SIGNATURE->100;};
+            notifyHunters("LIGHTFX|"+result.room()+"|"+disruption+"|"+tick+"|"+expires);
+        }
         if(result.action()==GhostDomain.Action.SIGNATURE)
             for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&hunterRooms[i]==result.room())
                 reply(seats[i],"TELL|"+GhostTraits.of(ghostType).clue());
@@ -809,7 +851,7 @@ public final class LanHost implements AutoCloseable {
     private static final class Peer{
         final Socket socket;final Reader input;final Writer output;final int slot;final String name;boolean ready,worldMode,ghostWorldMode;
         long lastGhostPoseSequence=-1,lastGhostActionSequence=-1;
-        int lastMonitorTick=-100000,lastChatTick=-100000;
+        int lastMonitorTick=-100000,lastChatTick=-100000,lastLightTick=-100000;
         long lastLobbyChatNanos;
         Peer(Socket s,Reader in,Writer out,int slot,String name){socket=s;input=in;output=out;this.slot=slot;this.name=name;}
     }

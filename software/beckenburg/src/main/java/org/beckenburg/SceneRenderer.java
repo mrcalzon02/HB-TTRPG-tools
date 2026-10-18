@@ -23,6 +23,8 @@ public final class SceneRenderer {
     /** Solo environment presets; default multipliers retain legacy LAN lighting. */
     public double environmentLight=1.0,fogDensity=1.0;
     public boolean environmentPowerOn=true;
+    public RoomLighting roomLights;
+    public int roomLightTick;
     public int hidingDensity;
     /** The solo profile supplies purchased gear; LAN host inventory will populate later. */
     public java.util.Set<EquipmentLoadout.Item> rackStock=java.util.EnumSet.allOf(EquipmentLoadout.Item.class);
@@ -254,6 +256,20 @@ public final class SceneRenderer {
                 }
             }
         }
+        // Every investigation room has a discoverable physical rocker and ceiling fixture.
+        for(int r=0;r<HouseMap.INDOOR_ROOMS;r++){
+            RoomLighting.Switch sw=RoomLighting.location(r);
+            if(Math.hypot(sw.x()-x,sw.z()-z)>14)continue;
+            double px=sw.x(),pz=sw.z();
+            box(out,px-.095,1.17,pz-.13,.10,.30,.26,0xc8c1af); // stone switch plate
+            boolean lit=roomLights==null||roomLights.on(r);
+            box(out,px+.007,lit?1.34:1.21,pz-.038,.075,.09,.075,lit?0xdac67c:0x50505a);
+            double cx=map.centerX(r),cz=map.centerZ(r);
+            box(out,cx-.40,2.54,cz-.30,.8,.14,.6,0x5f625e);
+            double energy=roomLights==null?1:roomLights.brightness(r,roomLightTick);
+            box(out,cx-.26,2.50,cz-.20,.52,.06,.40,
+                energy>.45?0xffe4a4:energy>.13?0x9c7b62:0x343c46);
+        }
         for(int r=0;r<map.roomCount();r++) if(Math.hypot(map.centerX(r)-x,map.centerZ(r)-z)<14) furniture(out,r,map);
         for(int r=0;r<HouseMap.INDOOR_ROOMS;r++){
             var pocket=map.hidingSpot(r,hidingDensity);
@@ -475,7 +491,11 @@ public final class SceneRenderer {
         for(Face face:scene(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock,others,apparition,markers)){
             List<Vertex> pts=clip(new Vertex(camera(face.a),face.au,face.av),
                 new Vertex(camera(face.b),face.bu,face.bv),new Vertex(camera(face.c),face.cu,face.cv));
-            for(int i=1;i<pts.size()-1;i++)triangle(pts.get(0),pts.get(i),pts.get(i+1),face.color,face.material);
+            int room=map.roomAt((face.a.x+face.b.x+face.c.x)/3,
+                (face.a.z+face.b.z+face.c.z)/3);
+            double lighting=roomLights==null?1:roomLights.brightness(room,roomLightTick);
+            for(int i=1;i<pts.size()-1;i++)triangle(pts.get(0),pts.get(i),pts.get(i+1),
+                face.color,face.material,lighting);
         }
         renderCharacterSprites(map,ghostRoom,visibleGhost,hunterRoom,clock,others,apparition);
     }
@@ -566,6 +586,9 @@ public final class SceneRenderer {
             }
     }
     private void triangle(Vertex va,Vertex vb,Vertex vc,int tint,int material){
+        triangle(va,vb,vc,tint,material,1);
+    }
+    private void triangle(Vertex va,Vertex vb,Vertex vc,int tint,int material,double roomLevel){
         Point a=va.p,b=vb.p,c=vc.p;
         int color=tint;
         double x0=W*.5+a.x/a.z*FOCAL,y0=H*.5-a.y/a.z*FOCAL;
@@ -596,7 +619,10 @@ public final class SceneRenderer {
                     ((tg*((tint>>8)&255)/255)<<8) |
                      (tb*(tint&255)/255);
             }
-            double light=(lamp?1.22:.55)*environmentLight*Math.max(.22,1-d/26.0);
+            // Flashlight is a bounded near-field additive beam; turning room lights off
+            // genuinely darkens distant geometry instead of only tinting a HUD icon.
+            double beam=lamp?.72*Math.max(0,1-d/7.5):0;
+            double light=(.075+.98*roomLevel+beam)*environmentLight*Math.max(.22,1-d/26.0);
             light=Math.max(.1,Math.min(1.45,light+(BAYER[(px&3)+((py&3)<<2)]-7.5)/140.0));
             int red=(int)(((color>>16)&255)*light),green=(int)(((color>>8)&255)*light),blue=(int)((color&255)*light);
             double fog=Math.min(.92,Math.max(0,(d-5)/15)*fogDensity);

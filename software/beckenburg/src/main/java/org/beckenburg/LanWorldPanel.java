@@ -12,6 +12,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final LanClient client;
     private final int seat;
     private final HouseMap map=new HouseMap();
+    private final RoomLighting lights=new RoomLighting();
     private final SceneRenderer renderer=new SceneRenderer();
     private final Map<Integer,SceneRenderer.RemoteBody> peers=new HashMap<>();
     private final Map<Integer,String> hunterNames=new HashMap<>();
@@ -72,6 +73,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         add(chatInput);
         setPreferredSize(new Dimension(850,555));
         renderer.yaw=-Math.PI/2;renderer.pitch=-.08;
+        renderer.roomLights=lights;
         mouseLook=new MouseLook(this,(dx,dy)->MouseLook.rotate(renderer,dx,dy));
         addKeyListener(this);addMouseListener(mouseLook);addMouseMotionListener(mouseLook);
         addFocusListener(mouseLook);addFocusListener(this);
@@ -207,6 +209,14 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                             motion.phase(),motion.heading(),motion.progress(),orbForm);
                     lastMotionTick=motion.tick();
                 }
+            }else if(p.size()==3&&p.get(0).equals("LIGHTS")){
+                lights.acceptSnapshot(p.get(1));
+                lights.setBreaker(LanProtocol.integer(p.get(2),0,1)==1);
+            }else if(p.size()==5&&p.get(0).equals("LIGHTFX")){
+                lights.pulseUntil(LanProtocol.integer(p.get(1),0,HouseMap.INDOOR_ROOMS-1),
+                    RoomLighting.Interference.valueOf(p.get(2)),
+                    LanProtocol.integer(p.get(3),0,99999999),
+                    LanProtocol.integer(p.get(4),0,99999999));
             }else if(p.size()==2&&p.get(0).equals("DOORS")){
                 map.applyDoorSnapshot(p.get(1));
             }else if(p.size()==7&&p.get(0).equals("STATE")){
@@ -374,6 +384,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             int heading=Math.floorMod((int)Math.round(Math.toDegrees(renderer.yaw)),360);
             if(heading!=lastTurn){client.turn(heading);lastTurn=heading;}
         }catch(IOException e){feedback="LAN disconnected: "+e.getMessage();close();}
+        renderer.roomLightTick=tick;
         renderer.drawNetwork(map,new ArrayList<>(peers.values()),apparition,tick*.1,List.copyOf(counterMarks));
         repaint();
     }
@@ -392,6 +403,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString(map.roomName(renderer.x,renderer.z)+" | TEAM "+(peers.size()+1)+" / 6 | HP "+health+
                 " | SANITY "+sanity+" | CLUES "+evidence+"/3",13,46);
             g.drawString("+",getWidth()/2,h/2);
+            int switchTarget=lights.aimed(map,renderer.x,renderer.z,renderer.yaw);
+            if(switchTarget>=0){
+                g.setColor(new Color(251,220,152));
+                g.drawString("E / WALL SWITCH "+(lights.on(switchTarget)?"ON":"OFF"),13,h-33);
+            }
             g.setColor(new Color(214,195,151));
             g.drawString("IDENTIFY: "+selectedGuess+"  [I NEXT / P SUBMIT]",13,91);
             if(health==0){
@@ -623,7 +639,14 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }
         switch(e.getKeyCode()){
             case KeyEvent.VK_ESCAPE -> {Window window=SwingUtilities.getWindowAncestor(this);if(window!=null)window.dispose();}
-            case KeyEvent.VK_E -> sendAction("door",()->client.door());
+            case KeyEvent.VK_E -> {
+                int aimed=lights.aimed(map,renderer.x,renderer.z,renderer.yaw);
+                if(aimed>=0)sendAction("light switch",()->client.light());
+                else if(map.roomAt(renderer.x,renderer.z)==11 &&
+                        Math.hypot(renderer.x-map.centerX(11),renderer.z-map.centerZ(11))<1.5)
+                    sendAction("power breaker",()->client.power());
+                else sendAction("door",()->client.door());
+            }
             case KeyEvent.VK_1 -> selected=LanCase.Tool.EMF;
             case KeyEvent.VK_2 -> selected=LanCase.Tool.THERMOMETER;
             case KeyEvent.VK_3 -> selected=LanCase.Tool.SPIRIT_BOX;

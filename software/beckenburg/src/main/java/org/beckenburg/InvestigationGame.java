@@ -148,6 +148,7 @@ public final class InvestigationGame {
         private final Set<Integer> down=new HashSet<>();
         private final HouseMap map=new HouseMap();
         private final SceneRenderer scene=new SceneRenderer();
+        private final RoomLighting lights=new RoomLighting();
         private final InvestigationSession session;
         private final javax.swing.Timer timer;
         private final EquipmentLoadout loadout=new EquipmentLoadout();
@@ -184,6 +185,9 @@ public final class InvestigationGame {
             addFocusListener(mouseLook);addFocusListener(this);
             // Reproducible case seed, varies by session, no silent random site conversion.
             session=new InvestigationSession(map,role,20261015L+ordinal);
+            session.connectLighting(lights);
+            scene.roomLights=lights;
+            scene.roomLightTick=0;
             scene.rackStock=profile.equipment();
             scene.draw(map,session,0);
             timer=new javax.swing.Timer(33,e->frame());timer.start();
@@ -193,6 +197,7 @@ public final class InvestigationGame {
             scene.environmentLight=conditions.lightMultiplier()*(powerOn?1.0:.48);
             scene.fogDensity=conditions.fogMultiplier();
             scene.environmentPowerOn=powerOn;
+            lights.setBreaker(powerOn);
         }
         private boolean nearBreaker(){
             return map.roomAt(scene.x,scene.z)==11
@@ -273,6 +278,7 @@ public final class InvestigationGame {
                 }
                 accumulator-=.1;
             }
+            scene.roomLightTick=session.ticks();
             scene.draw(map,session,frameCount++/30.0);repaint();
             if(session.outcome()==InvestigationSession.Outcome.LOST){
                 timer.stop();endCase("You were overcome. The case remains open.");
@@ -325,8 +331,13 @@ public final class InvestigationGame {
                     powerOn=!powerOn;syncEnvironment();
                     showVanNotice(powerOn?"Utility power restored.":"Utility breaker switched off.");
                 }
+                else if(lights.aimed(map,scene.x,scene.z,scene.yaw)>=0){
+                    int room=lights.aimed(map,scene.x,scene.z,scene.yaw);
+                    boolean lit=lights.toggle(room);
+                    showVanNotice(map.roomName(room)+" LIGHTS "+(lit?"ON":"OFF"));
+                }
                 else if(!map.toggleNearestDoor(scene.x,scene.z))
-                    showVanNotice("No usable door or station nearby.");
+                    showVanNotice("No usable door, light switch or station nearby.");
                 }
             }
             if(key==KeyEvent.VK_R){
@@ -417,6 +428,11 @@ public final class InvestigationGame {
                     slots+=(i==0?"":"   ")+(i+1)+":"+
                         loadout.at(i).label.toUpperCase()+(i==loadout.activeSlot()?"*":"");
                 g.drawString(slots,16,stageH-17);
+                int targetedSwitch=lights.aimed(map,scene.x,scene.z,scene.yaw);
+                if(targetedSwitch>=0){
+                    g.setColor(new Color(255,225,156));
+                    g.drawString("E / ROOM LIGHT SWITCH : "+(lights.on(targetedSwitch)?"ON":"OFF"),16,stageH-36);
+                }
                 if(nearBreaker()){
                     g.setColor(new Color(255,212,137));
                     g.drawString("E / UTILITY BREAKER: "+(powerOn?"ON":"OFF"),16,stageH-36);
