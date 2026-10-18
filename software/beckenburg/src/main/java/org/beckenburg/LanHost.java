@@ -393,6 +393,12 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
                     reply(peer,"HIDECONFIG|"+contract.hidingSpots());
                     reply(peer,"LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
+                    // Recover only this investigator's current hiding and imminent threat.
+                    // Never reset the pending strike's original authoritative impact tick.
+                    reply(peer,"HIDING|"+(world.hidden(peer.slot)?1:0));
+                    if(pendingStrike!=null && pendingStrike.impactTick()>tick
+                            && hunterRooms[peer.slot]==pendingStrike.room())
+                        reply(peer,"THREAT|START|"+(pendingStrike.impactTick()-tick)+"|"+pendingStrike.targetSeat());
                     // Re-entering a view (including after socket recovery) must supply
                     // the current personal progression and all authorized case notes.
                     if(mission.identificationRequired())reply(peer,"SITES|9|6|10");
