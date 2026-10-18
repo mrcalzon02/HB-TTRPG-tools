@@ -4,7 +4,7 @@ public final class EmfSilenceTest {
     static void ok(boolean state,String why){if(!state)throw new AssertionError(why);}
     public static void main(String[] args){
         var meter=EvidenceSignals.emf(5,20,4,4,10,true);
-        ok(meter.level()==0&&meter.suppressed()&&!meter.positiveEvidence(),
+        ok(meter.level()==0&&meter.suppressed()&&!meter.highEvent(),
             "suppression is not high EMF evidence");
         ok(EvidenceSignals.emf(5,20,4,7,10,true).level()>0,
             "no zero report from remote ghost action");
@@ -22,7 +22,7 @@ public final class EmfSilenceTest {
         var other=new LanCase(4);
         other.configure(GhostIdentity.Type.SPIRIT,true);
         ok(other.scanMeasured(0,LanCase.Tool.EMF,4,4,25,4,10,false)
-                .message().matches(".*EMF (?:[7-9]|10)/10.*"),"strong event can yield a high EMF reading");
+                .message().matches(".*EMF (?:8|9|10)/10.*"),"strong event can yield a high EMF reading");
         System.out.println("PASS: Shade-authorized zero EMF versus ordinary high signal");
     }
 }
