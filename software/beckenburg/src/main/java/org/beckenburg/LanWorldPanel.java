@@ -127,15 +127,30 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         if(voice==null){feedback="VOICE LINK UNAVAILABLE";return;}
         releaseVoice();keys.clear();mouseLook.release();
         JCheckBox mute=new JCheckBox("Mute microphone",voice.muted());
+        var devices=LanVoiceClientAudio.microphones();
+        JComboBox<String> input=new JComboBox<>();
+        input.addItem("System default");
+        int selectedDevice=0;
+        for(int i=0;i<devices.size();i++){
+            var device=devices.get(i);
+            input.addItem(device.getName()+" / "+device.getDescription());
+            if(device.equals(voice.selectedMicrophone()))selectedDevice=i+1;
+        }
+        input.setSelectedIndex(selectedDevice);
         JSlider volume=new JSlider(0,100,voice.playbackVolume());
         volume.setMajorTickSpacing(25);volume.setPaintTicks(true);
         JPanel panel=new JPanel(new GridLayout(0,1,4,4));
         panel.add(new JLabel("F3 local / F4 radio — hold to speak"));
-        panel.add(mute);panel.add(new JLabel("Incoming voice volume"));panel.add(volume);
+        panel.add(mute);
+        panel.add(new JLabel("Microphone"));
+        panel.add(input);
+        panel.add(new JLabel("Incoming voice volume"));panel.add(volume);
         int answer=JOptionPane.showConfirmDialog(this,panel,"VOICE / LOCAL LAN",
             JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
         if(answer==JOptionPane.OK_OPTION){
             voice.setMuted(mute.isSelected());
+            voice.selectMicrophone(input.getSelectedIndex()==0?null:
+                devices.get(input.getSelectedIndex()-1));
             voice.setPlaybackVolume(volume.getValue());
         }
         requestFocusInWindow();

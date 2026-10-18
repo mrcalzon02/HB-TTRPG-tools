@@ -27,6 +27,23 @@ public final class LanVoiceClientAudio implements AutoCloseable {
     private volatile LanChat.Channel transmit;
     private volatile boolean closed,connected,muted;
     private volatile int playbackVolume=80;
+    private volatile Mixer.Info selectedMicrophone;
+    public static java.util.List<Mixer.Info> microphones(){
+        var compatible=new java.util.ArrayList<Mixer.Info>();
+        DataLine.Info requirement=new DataLine.Info(TargetDataLine.class,FORMAT);
+        for(Mixer.Info device:AudioSystem.getMixerInfo()){
+            try{if(AudioSystem.getMixer(device).isLineSupported(requirement))
+                compatible.add(device);}
+            catch(IllegalArgumentException|SecurityException ignored){/* Device disappeared. */}
+        }
+        return java.util.List.copyOf(compatible);
+    }
+    public void selectMicrophone(Mixer.Info device){
+        if(device!=null&&!microphones().contains(device))
+            throw new IllegalArgumentException("microphone no longer available");
+        selectedMicrophone=device;
+    }
+    public Mixer.Info selectedMicrophone(){return selectedMicrophone;}
     private volatile TargetDataLine microphone;
     private volatile SourceDataLine speaker;
     private long lastHelloNanos;
@@ -128,7 +145,9 @@ public final class LanVoiceClientAudio implements AutoCloseable {
             }
             TargetDataLine line=null;
             try{
-                line=AudioSystem.getTargetDataLine(FORMAT);
+                Mixer.Info configured=selectedMicrophone;
+                line=configured==null?AudioSystem.getTargetDataLine(FORMAT):
+                    AudioSystem.getTargetDataLine(FORMAT,configured);
                 line.open(FORMAT,LanVoicePacket.SAMPLES*2*6);
                 microphone=line;
                 line.start();
@@ -146,7 +165,7 @@ public final class LanVoiceClientAudio implements AutoCloseable {
                     send(new LanVoicePacket.Frame(LanVoicePacket.AUDIO,seat,mode,
                         seq,hi,lo,100,LanVoiceCodec.encodePcm(pcm)));
                 }
-            }catch(LineUnavailableException|IllegalArgumentException missing){
+            }catch(LineUnavailableException|IllegalArgumentException|SecurityException missing){
                 status.accept("VOICE MICROPHONE UNAVAILABLE: "+missing.getMessage());
                 setPushToTalk(null);
             }catch(IOException io){
@@ -183,7 +202,7 @@ public final class LanVoiceClientAudio implements AutoCloseable {
                 }
                 output.write(mixed,0,mixed.length);
             }
-        }catch(LineUnavailableException|IllegalArgumentException missing){
+        }catch(LineUnavailableException|IllegalArgumentException|SecurityException missing){
             if(!closed)status.accept("VOICE SPEAKER UNAVAILABLE: "+missing.getMessage());
         }finally{
             speaker=null;
