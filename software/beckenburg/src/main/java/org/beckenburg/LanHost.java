@@ -26,6 +26,8 @@ public final class LanHost implements AutoCloseable {
     private final FieldJournal fieldNotes=new FieldJournal();
     private final LanGhostPursuit ai;
     private final GhostIdentity.Type ghostType;
+    private final boolean ghostMayStart; 
+    private LobbyGhostAvatar.Look ghostLobbyLook;
     private final LanGhostAnimation animation=new LanGhostAnimation();
     private final HunterCounters counters=new HunterCounters();
     private final CustomContract contract;
@@ -41,19 +43,26 @@ public final class LanHost implements AutoCloseable {
     private final String bindAddress;
 
     public LanHost(String ip,int port)throws IOException{
-        this(ip,port,GhostIdentity.Type.SPIRIT,false,CustomContract.standard(3));
+        this(ip,port,GhostIdentity.Type.SPIRIT,false,CustomContract.standard(3),false);
     }
     /** Legacy three-hunter host is retained for existing integration tests. */
     public LanHost(String ip,int port,GhostIdentity.Type type)throws IOException{
-        this(ip,port,type,true,CustomContract.standard(3));
+        this(ip,port,type,true,CustomContract.standard(3),false);
     }
     public LanHost(String ip,int port,GhostIdentity.Type type,CustomContract config)throws IOException{
-        this(ip,port,type,true,config);
+        this(ip,port,type,true,config,false);
     }
-    private LanHost(String ip,int port,GhostIdentity.Type type,boolean identityMode,CustomContract config)throws IOException {
+    /** Hosting as a ghost is possible only when the local host explicitly selected it. */
+    public LanHost(String ip,int port,GhostIdentity.Type type,CustomContract config,
+            boolean hostAsGhost)throws IOException{
+        this(ip,port,type,true,config,hostAsGhost);
+    }
+    private LanHost(String ip,int port,GhostIdentity.Type type,boolean identityMode,
+            CustomContract config,boolean hostAsGhost)throws IOException {
         if(port<0||port>65535)throw new IllegalArgumentException("invalid port");
         ghostType=Objects.requireNonNull(type);
         contract=Objects.requireNonNull(config);
+        ghostMayStart=hostAsGhost;
         Arrays.fill(hunterRooms,HouseMap.EXTRACTION_ROOM);
         Arrays.fill(hunterSequences,-1);
         Arrays.fill(lastGhostFootstepCueTick,-10000);
@@ -67,9 +76,9 @@ public final class LanHost implements AutoCloseable {
         mission.setStartingSanity(contract.startingSanity());
         mission.configureSanityDrain(contract.sanityDrain());
         ghost.configureRecovery(contract.energyRecovery());
-        ai.configureFrequency(contract.eventFrequency());
         if(identityMode)mission.configure(type,true);
         ai=new LanGhostPursuit(map,20261016L,type);
+        ai.configureFrequency(contract.eventFrequency());
         bindAddress=Objects.requireNonNull(ip);
         listener=new ServerSocket();listener.setReuseAddress(true);
         listener.bind(new InetSocketAddress(InetAddress.getByName(ip),port),8);
@@ -104,6 +113,8 @@ public final class LanHost implements AutoCloseable {
                 int slot=wantsGhost?GHOST_SEAT:firstVacantHunter();
                 if(slot<0||seats[slot]!=null){LanProtocol.write(out,"REJECT|seat unavailable");return;}
                 peer=new Peer(socket,in,out,slot,nickname);seats[slot]=peer;
+                if(wantsGhost)ghostLobbyLook=LobbyGhostAvatar.random(
+                    java.util.concurrent.ThreadLocalRandom.current());
                 LanProtocol.write(out,"WELCOME|"+(slot==GHOST_SEAT?"GHOST":"H"+(slot+1))+"|"+LanProtocol.VERSION);
                 broadcastLobby();
             }
@@ -116,6 +127,7 @@ public final class LanHost implements AutoCloseable {
             if(peer!=null) synchronized(mutex){
                 if(seats[peer.slot]==peer){
                     seats[peer.slot]=null;
+                    if(peer.slot==GHOST_SEAT)ghostLobbyLook=null;
                     if(running){
                         if(peer.slot==GHOST_SEAT){
                             // No world reset: the AI inherits the same room, energy, cooldowns,
@@ -153,7 +165,8 @@ public final class LanHost implements AutoCloseable {
                     peer.ready=!peer.ready;broadcastLobby();
                 }
                 case "START" -> {
-                    if(p.size()!=1||peer.slot!=0)throw new IllegalArgumentException("host hunter must start");
+                    if(p.size()!=1||(peer.slot!=0&&!(ghostMayStart&&peer.slot==GHOST_SEAT)))
+                        throw new IllegalArgumentException("host hunter or hosting ghost must start");
                     if(running||everStarted)throw new IllegalArgumentException("fresh host required for another match");
                     for(int i=0;i<contract.hunters();i++)
                         if(seats[i]==null||!seats[i].ready)
@@ -679,6 +692,8 @@ public final class LanHost implements AutoCloseable {
     private void broadcastLobby(){
         int hunters=0,ready=0;for(int i=0;i<seats.length;i++)if(seats[i]!=null){if(i<HUNTERS)hunters++;if(seats[i].ready)ready++;}
         notifyAllPeers("LOBBY|"+hunters+"|"+(seats[GHOST_SEAT]==null?"AI":"HUMAN")+"|"+ready+"|"+(running?"RUNNING":"WAITING"));
+        // Everyone may see a cosmetic selection. It does not encode the actual ghost species.
+        notifyAllPeers(ghostLobbyLook==null?"LOBBYAVATAR|NONE":ghostLobbyLook.frame());
     }
     private void notifyAllPeers(String event){for(Peer peer:seats)if(peer!=null)reply(peer,event);}
     private static void reply(Peer peer,String event){try{LanProtocol.write(peer.output,event);}catch(IOException ex){try{peer.socket.close();}catch(IOException ignored){}}}
