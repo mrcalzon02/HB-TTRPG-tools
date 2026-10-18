@@ -117,7 +117,11 @@ public final class LanClient implements AutoCloseable {
                 String line=LanProtocol.read(in);
                 if(line==null)break; // Clean remote EOF still ends the connection.
                 LanProtocol.parts(line);
-                if(line.startsWith("VOICEKEY|"))setupVoice(line);
+                if(line.startsWith("VOICEKEY|")){
+                    // The UDP key is secret protocol control data, never a UI/log packet.
+                    setupVoice(line);
+                    continue;
+                }
                 observer.accept(line);
             }
         }catch(Exception ex){
