@@ -477,6 +477,10 @@ public final class SceneRenderer {
             box(castle,px-.43,.92,pz-.25,.86,.62,.20,finish);
             box(castle,px-.12,1.53,pz-.15,.24,.15,.13,0xc1ad80);
         }
+        // Purchased source-backed fixtures occupy authored locations and match hub collision.
+        for(CastleHubMap.Furnishing item:CastleHubMap.furnishings())
+            if(Math.hypot(item.x()-x,item.z()-z)<16)
+                imported(castle,item.mesh(),item.x(),0,item.z(),item.scale(),item.yaw());
         // Castle entrance arch; courtyard remains open to the procedural sky.
         box(castle,12.75,0,11.20,.40,3.0,.38,0x625c60);
         box(castle,14.10,0,11.20,.40,3.0,.38,0x625c60);

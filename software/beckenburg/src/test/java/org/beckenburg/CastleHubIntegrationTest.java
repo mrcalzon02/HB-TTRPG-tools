@@ -10,12 +10,30 @@ public final class CastleHubIntegrationTest {
         CastleHubMap map=new CastleHubMap();
         double sx=13.5,sz=19.3;
         ok(map.traversable(sx,sz),"castle spawn on floor");
+        ok(CastleHubMap.furnishings().size()==4,"four authored GLB furnishings");
+        for(CastleHubMap.Furnishing item:CastleHubMap.furnishings()){
+            ok(GlbProps.model(item.mesh()).triangles().size()>20,
+                "real source triangles for castle "+item.mesh());
+            ok(!map.traversable(item.x(),item.z()),"furniture solid and cannot be walked through");
+            ok(map.traversable(item.x()+item.halfWidth()+.45,item.z()),
+                "room to navigate around furniture "+item.mesh());
+        }
+        // Station sockets must remain approach-able despite collision-aware furniture.
+        for(CastleHubMap.Station s:CastleHubMap.Station.values()){
+            boolean approach=false;
+            for(int i=0;i<8;i++){
+                double a=i*Math.PI/4,px=s.x+Math.sin(a)*1.5,pz=s.z+Math.cos(a)*1.5;
+                double bearing=Math.atan2(s.x-px,s.z-pz);
+                if(map.traversable(px,pz)&&map.aimed(px,pz,bearing)==s)approach=true;
+            }
+            ok(approach,"purchasing / staging station remains physically usable: "+s);
+        }
         // Breadth-first every accessible castle cell; the shop and contract areas must connect.
         boolean[][] visited=new boolean[CastleHubMap.HEIGHT][CastleHubMap.WIDTH];
         ArrayDeque<int[]> q=new ArrayDeque<>();q.add(new int[]{(int)sx,(int)sz});
         while(!q.isEmpty()){
             int[] cell=q.removeFirst();int x=cell[0],z=cell[1];
-            if(x<0||x>=CastleHubMap.WIDTH||z<0||z>=CastleHubMap.HEIGHT||visited[z][x]||map.solid(x,z))continue;
+            if(x<0||x>=CastleHubMap.WIDTH||z<0||z>=CastleHubMap.HEIGHT||visited[z][x]||!map.traversable(x+.5,z+.5))continue;
             visited[z][x]=true;
             q.add(new int[]{x-1,z});q.add(new int[]{x+1,z});q.add(new int[]{x,z-1});q.add(new int[]{x,z+1});
         }
@@ -49,7 +67,7 @@ public final class CastleHubIntegrationTest {
             double bearing=Math.atan2(kit.x()-spawn.x(),kit.z()-spawn.z());
             ok(VanEquipmentRack.aimed(van,spawn.x(),spawn.z(),bearing,saved.equipment())==
                 EquipmentLoadout.Item.UV_LAMP,"purchased gear present in selectable rack");
-            System.out.println("PASS castle navigation, live textured scene and persisted armory gear");
+            System.out.println("PASS collision-aware GLB castle furniture, usable stations, live scene and purchases");
         }finally{
             try(var listing=Files.list(dir)){for(Path f:listing.toList())Files.deleteIfExists(f);}
             Files.deleteIfExists(dir);

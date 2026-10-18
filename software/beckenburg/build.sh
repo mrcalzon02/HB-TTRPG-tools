@@ -16,6 +16,7 @@ for name in light_switch_1 ceiling_lamp_1_off door_1_loose shelf_mp_6 chair_mp_5
     cp "assets/runtime/models/${name}.glb" "build/classes/org/beckenburg/models/${name}.glb"
 done
 javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java/org/beckenburg/*.java
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.CastleHubIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.HeldMeshViewTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GlbPropsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostBehaviorTest
