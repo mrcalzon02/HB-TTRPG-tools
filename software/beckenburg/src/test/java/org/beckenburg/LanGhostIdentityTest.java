@@ -1,6 +1,6 @@
 package org.beckenburg;
 import java.util.*;
-/** Legacy three-tool fixture: ritual gates survive until expanded evidence devices are ready. */
+/** Ghost behaviors, raw tool measurements and ritual sites without an auto-confirmation gate. */
 public final class LanGhostIdentityTest {
  static void ok(boolean v,String why){if(!v)throw new AssertionError(why);}
  public static void main(String[] args){
@@ -9,15 +9,14 @@ public final class LanGhostIdentityTest {
   Set<GhostIdentity.Behavior> behaviors=new HashSet<>();
   Set<GhostIdentity.Rite> rites=EnumSet.noneOf(GhostIdentity.Rite.class);
   for(var type:GhostIdentity.Type.values()){
-   ok(type.signatureCount()>=3,"historical three-tool fixture "+type);
    ok(behaviors.add(type.behavior()),"distinct assigned behavior "+type);
    rites.add(type.rite());
    var mission=new LanCase(4);mission.configure(type,true);
    for(var tool:LanCase.Tool.values()){
-    ok(mission.scan(0,tool,3,0).message().startsWith("INCONCLUSIVE"),"outside anchor negative");
-    ok(mission.scan(0,tool,4,0).message().startsWith("CONFIRMED"),"anchor positive "+type+" "+tool);
+    ok(mission.scan(0,tool,3,0).message().startsWith("READING "),"ordinary room reading");
+    ok(mission.scan(0,tool,4,0).message().startsWith("READING "),"sample recorded "+type+" "+tool);
    }
-   ok(mission.evidenceCount()==3&&mission.testedCount()==3,"positive evidence count "+type);
+   ok(mission.evidenceCount()==0&&mission.testedCount()==0,"measurements never automatically award evidence");
    ok(!mission.cleanse(0,4).accepted(),"identify first "+type);
    var wrong=type==GhostIdentity.Type.SPIRIT?GhostIdentity.Type.WRAITH:GhostIdentity.Type.SPIRIT;
    ok(!mission.identify(0,wrong,1).accepted(),"wrong guess");
@@ -43,6 +42,6 @@ public final class LanGhostIdentityTest {
   var legacy=new LanCase(4);
   for(var tool:LanCase.Tool.values())legacy.scan(0,tool,4,0);
   ok(legacy.ward(0,4).accepted()&&legacy.cleanse(0,4).accepted(),"legacy compatibility");
-  System.out.println("PASS: legacy 13-ghost fixture, three ritual sites and correct rite gates (old subtype claims retired)");
+  System.out.println("PASS: 13 ghost profiles, raw measurements, no confirmation gate, ritual paths");
  }
 }
