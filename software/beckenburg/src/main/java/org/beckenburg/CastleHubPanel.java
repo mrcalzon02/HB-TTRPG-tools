@@ -1,0 +1,118 @@
+package org.beckenburg;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.HashSet;
+import java.util.Set;
+
+/** Walkable castle preparation lobby; service desks and purchases exist as world interactions. */
+public final class CastleHubPanel extends JPanel implements KeyListener,FocusListener {
+    public interface Actions {
+        void begin();void network();void spectral();void menu();
+        void cycleRole();void cycleWeather();String role();String weather();
+    }
+    private final CastleHubMap map=new CastleHubMap();
+    private final SceneRenderer renderer=new SceneRenderer();
+    private final ProfileStore profile;
+    private final Actions actions;
+    private final MouseLook look;
+    private final Set<Integer> down=new HashSet<>();
+    private final javax.swing.Timer timer;
+    private long last=System.nanoTime();
+    private double clock;
+    private String notice="Welcome to Beckenburg Castle. The equipment is real; look and press E.";
+    private int noticeTicks=100;
+    public CastleHubPanel(ProfileStore profile,Actions actions){
+        this.profile=java.util.Objects.requireNonNull(profile);
+        this.actions=java.util.Objects.requireNonNull(actions);
+        setFocusable(true);setBackground(new Color(11,12,17));
+        renderer.x=13.5;renderer.z=19.3;renderer.yaw=Math.PI;renderer.pitch=-.07;
+        look=new MouseLook(this,(dx,dy)->MouseLook.rotate(renderer,dx,dy));
+        addKeyListener(this);addFocusListener(this);addFocusListener(look);
+        addMouseListener(look);addMouseMotionListener(look);
+        renderer.drawCastle(map,0);
+        timer=new javax.swing.Timer(33,e->frame());timer.start();
+    }
+    public void close(){timer.stop();down.clear();look.close();}
+    private void frame(){
+        if(!isShowing()){last=System.nanoTime();return;}
+        long now=System.nanoTime();double dt=Math.min(.07,Math.max(0,(now-last)/1e9));last=now;
+        if(down.contains(KeyEvent.VK_LEFT))renderer.yaw-=dt*1.65;
+        if(down.contains(KeyEvent.VK_RIGHT))renderer.yaw+=dt*1.65;
+        if(down.contains(KeyEvent.VK_UP))renderer.pitch=Math.min(1.05,renderer.pitch+dt);
+        if(down.contains(KeyEvent.VK_DOWN))renderer.pitch=Math.max(-1.05,renderer.pitch-dt);
+        double forward=(down.contains(KeyEvent.VK_W)?1:0)-(down.contains(KeyEvent.VK_S)?1:0);
+        double strafe=(down.contains(KeyEvent.VK_D)?1:0)-(down.contains(KeyEvent.VK_A)?1:0);
+        double norm=Math.hypot(forward,strafe);
+        if(norm>0){
+            double speed=(down.contains(KeyEvent.VK_SHIFT)?3.9:2.6)*dt/norm;
+            double dx=(Math.sin(renderer.yaw)*forward+Math.cos(renderer.yaw)*strafe)*speed;
+            double dz=(Math.cos(renderer.yaw)*forward-Math.sin(renderer.yaw)*strafe)*speed;
+            if(map.traversable(renderer.x+dx,renderer.z))renderer.x+=dx;
+            if(map.traversable(renderer.x,renderer.z+dz))renderer.z+=dz;
+        }
+        clock+=dt;
+        renderer.drawCastle(map,clock);
+        if(noticeTicks>0)noticeTicks--;
+        repaint();
+    }
+    private void use(CastleHubMap.Station station){
+        if(station==null){notice="Look at a castle workstation before pressing E.";noticeTicks=75;return;}
+        try{
+            switch(station){
+                case ARMORY_UV,ARMORY_SALT -> {
+                    EquipmentLoadout.Item item=station==CastleHubMap.Station.ARMORY_UV?
+                        EquipmentLoadout.Item.UV_LAMP:EquipmentLoadout.Item.SALT;
+                    if(profile.ownsEquipment(item))notice=item.label+" already owned / appears in van rack.";
+                    else notice=profile.purchaseEquipment(item)?
+                        "Purchased "+item.label+". Now stocked in your expedition van.":
+                        "Need £"+ProfileStore.equipmentPrice(item)+" to purchase "+item.label;
+                }
+                case ROLE -> {actions.cycleRole();notice="Hunter discipline: "+actions.role();}
+                case CONTRACT -> {actions.cycleWeather();notice="Selected weather: "+actions.weather();}
+                case EXPEDITION -> {actions.begin();return;}
+                case MULTIPLAYER -> {actions.network();return;}
+                case SPECTRAL -> {actions.spectral();return;}
+            }
+        }catch(java.io.IOException e){notice="Purchase not saved: "+e.getMessage();}
+        noticeTicks=110;
+    }
+    @Override public void keyPressed(KeyEvent e){
+        if(!isShowing())return;
+        int key=e.getKeyCode();if(down.contains(key))return;
+        if(key==KeyEvent.VK_ESCAPE){actions.menu();return;}
+        if(key==KeyEvent.VK_E)use(map.aimed(renderer.x,renderer.z,renderer.yaw));
+        if(key==KeyEvent.VK_F)renderer.lamp=!renderer.lamp;
+        down.add(key);
+    }
+    @Override public void keyReleased(KeyEvent e){down.remove(e.getKeyCode());}
+    @Override public void keyTyped(KeyEvent e){}
+    @Override public void focusGained(FocusEvent e){last=System.nanoTime();}
+    @Override public void focusLost(FocusEvent e){down.clear();look.release();}
+    @Override protected void paintComponent(Graphics src){
+        super.paintComponent(src);
+        Graphics2D g=(Graphics2D)src.create();
+        try{
+            int w=getWidth(),h=getHeight();
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            g.drawImage(renderer.image(),0,0,w,h,null);
+            g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));
+            g.setColor(new Color(243,223,179));
+            g.drawString("BECKENBURG CASTLE   /   £"+profile.currency()+"   /   "+actions.role(),15,25);
+            g.drawString("+",w/2-4,h/2+4);
+            CastleHubMap.Station station=map.aimed(renderer.x,renderer.z,renderer.yaw);
+            if(station!=null){
+                int labelWidth=Math.min(w-24,Math.max(250,g.getFontMetrics().stringWidth(station.label)+33));
+                int left=(w-labelWidth)/2;
+                g.setColor(new Color(11,16,21,208));g.fillRoundRect(left,h-88,labelWidth,36,8,8);
+                g.setColor(new Color(247,211,153));g.drawString("E / "+station.label,left+12,h-65);
+            }
+            if(noticeTicks>0){g.setColor(new Color(162,223,193));
+                String text=notice.length()>90?notice.substring(0,87)+"...":notice;
+                g.drawString(text,15,h-40);}
+            g.setColor(new Color(200,199,182));
+            g.drawString("WASD MOVE / SHIFT RUN / MOUSE LOOK / E INTERACT / F LANTERN / ESC CLASSIC MENU",15,h-16);
+        }finally{g.dispose();}
+    }
+}

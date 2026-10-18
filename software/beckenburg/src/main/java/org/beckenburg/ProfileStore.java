@@ -18,6 +18,27 @@ public final class ProfileStore {
     private final Set<String> awarded=new HashSet<>();
     private boolean blocked;
     private final int[][] medicines=new int[2][3];
+    // Legacy starter instruments are issued; optional instruments must be purchased.
+    private final java.util.EnumSet<EquipmentLoadout.Item> purchasedEquipment=
+        java.util.EnumSet.of(EquipmentLoadout.Item.EMF,EquipmentLoadout.Item.THERMOMETER,
+            EquipmentLoadout.Item.SPIRIT_BOX,EquipmentLoadout.Item.PHOTO_CAMERA);
+    public boolean ownsEquipment(EquipmentLoadout.Item item){return purchasedEquipment.contains(item);}
+    public java.util.Set<EquipmentLoadout.Item> equipment(){return java.util.Set.copyOf(purchasedEquipment);}
+    public static int equipmentPrice(EquipmentLoadout.Item item){
+        return switch(item){
+            case EMF,THERMOMETER,SPIRIT_BOX,PHOTO_CAMERA->0;
+            case UV_LAMP->150;case SALT->80;
+        };
+    }
+    public boolean purchaseEquipment(EquipmentLoadout.Item item)throws IOException{
+        if(blocked)throw new IOException("Profile cannot be modified after failed load");
+        if(item==null||purchasedEquipment.contains(item))return false;
+        int cost=equipmentPrice(item);
+        if(cost<=0||currency<cost)return false;
+        currency-=cost;purchasedEquipment.add(item);
+        try{save();}catch(IOException e){currency+=cost;purchasedEquipment.remove(item);throw e;}
+        return true;
+    }
     public int supplyCount(FieldSupplies.Kind kind,FieldSupplies.Tier tier){
         return medicines[kind.ordinal()][tier.ordinal()];
     }
@@ -64,6 +85,9 @@ public final class ProfileStore {
                     if(count<0||count>4)throw new NumberFormatException("invalid medicine stock");
                     medicines[kind.ordinal()][tier.ordinal()]=count;
                 }
+            for(EquipmentLoadout.Item item:EquipmentLoadout.Item.values())
+                if(equipmentPrice(item)>0 && Boolean.parseBoolean(p.getProperty("equipment."+item,"false")))
+                    purchasedEquipment.add(item);
             String receipts=p.getProperty("awarded","");
             for(String receipt:receipts.split(",")) if(!receipt.isBlank()) {
                 if(!receipt.matches("[0-9a-f\\-]{36}"))throw new NumberFormatException("invalid receipt");
@@ -94,6 +118,9 @@ public final class ProfileStore {
             Properties p=new Properties();p.setProperty("schema","1");
             p.setProperty("currency",Integer.toString(currency));p.setProperty("experience",Integer.toString(experience));
             p.setProperty("awarded",String.join(",",new ArrayList<>(awarded)));
+            for(EquipmentLoadout.Item item:EquipmentLoadout.Item.values())
+                if(equipmentPrice(item)>0)
+                    p.setProperty("equipment."+item,Boolean.toString(ownsEquipment(item)));
             for(FieldSupplies.Kind kind:FieldSupplies.Kind.values())
                 for(FieldSupplies.Tier tier:FieldSupplies.Tier.values())
                     p.setProperty("supply."+kind+"."+tier,

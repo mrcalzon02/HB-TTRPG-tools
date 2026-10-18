@@ -24,6 +24,8 @@ public final class SceneRenderer {
     public double environmentLight=1.0,fogDensity=1.0;
     public boolean environmentPowerOn=true;
     public int hidingDensity;
+    /** The solo profile supplies purchased gear; LAN host inventory will populate later. */
+    public java.util.Set<EquipmentLoadout.Item> rackStock=java.util.EnumSet.allOf(EquipmentLoadout.Item.class);
     public BufferedImage image(){return frame;}
     public int[] pixels(){return pixels;}
     public double[] depths(){return depths;}
@@ -138,7 +140,7 @@ public final class SceneRenderer {
         texturedQuad(faces,p4,p5,p6,p7,material,0,0,sx,0,sx,sz,0,sz,0xffffff);
         texturedQuad(faces,p3,p2,p1,p0,material,0,0,sx,0,sx,sz,0,sz,0xbebebe);
     }
-    private static void vanModel(List<Face> faces,VanStaging van){
+    private static void vanModel(List<Face> faces,VanStaging van,java.util.Set<EquipmentLoadout.Item> stock){
         double w=VanStaging.HALF_WIDTH,f=VanStaging.FRONT,r=VanStaging.REAR;
         // Three obstructing wall segments surround a traversable open cargo entrance.
         vanBox(faces,van,-w,0,f,.16,2.27,r-f,MaterialAtlas.IRON);
@@ -157,6 +159,7 @@ public final class SceneRenderer {
         vanBox(faces,van,1.76,.58,-1.88,.10,1.14,3.30,MaterialAtlas.AGED_WOOD);
         vanBox(faces,van,1.35,.53,-1.88,.53,.085,3.30,MaterialAtlas.IRON);
         for(EquipmentLoadout.Item item:EquipmentLoadout.Item.values()){
+            if(!stock.contains(item))continue;
             double lz=-1.58+item.ordinal()*.52;
             int finish=switch(item){
                 case EMF->0x517d73; case THERMOMETER->0xaaa99b;
@@ -272,7 +275,7 @@ public final class SceneRenderer {
             box(out,bx+.64,1.31,bz-.57,.15,.18,.045,
                 environmentPowerOn?0x70c592:0xc66b62);
         }
-        if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14) vanModel(out,map.van());
+        if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14) vanModel(out,map.van(),rackStock);
         // Character bodies are rendered as directional alpha-masked sprites after geometry.
         if(wardRoom>=0){
             int r=wardRoom;double wx=map.centerX(r),wz=map.centerZ(r);
@@ -381,6 +384,64 @@ public final class SceneRenderer {
                     ||progress<0||progress>100)throw new IllegalArgumentException("invalid apparition");
         }
     }
+    /** Castle hub renders with the same perspective, clipping and textured depth buffer as missions. */
+    public void drawCastle(CastleHubMap map,double clock){
+        paintSky(map.outside(x,z));
+        Arrays.fill(depths,Double.POSITIVE_INFINITY);
+        List<Face> castle=new ArrayList<>();
+        for(int zz=1;zz<CastleHubMap.HEIGHT-1;zz++)for(int xx=1;xx<CastleHubMap.WIDTH-1;xx++){
+            if(map.solid(xx,zz)||Math.hypot(xx+.5-x,zz+.5-z)>16)continue;
+            int stone=map.outside(xx+.5,zz+.5)?MaterialAtlas.STONE:MaterialAtlas.CARPET;
+            texturedQuad(castle,new Point(xx,0,zz),new Point(xx+1,0,zz),
+                new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),stone,
+                xx,zz,xx+1,zz,xx+1,zz+1,xx,zz+1,0xffffff);
+            if(!map.outside(xx+.5,zz+.5))texturedQuad(castle,
+                new Point(xx,3.4,zz+1),new Point(xx+1,3.4,zz+1),
+                new Point(xx+1,3.4,zz),new Point(xx,3.4,zz),
+                MaterialAtlas.CEILING,xx,zz+1,xx+1,zz+1,xx+1,zz,xx,zz,0xe0d8c8);
+            if(map.solid(xx-1,zz))texturedQuad(castle,new Point(xx,0,zz+1),new Point(xx,0,zz),
+                new Point(xx,3.4,zz),new Point(xx,3.4,zz+1),MaterialAtlas.STONE,
+                zz+1,0,zz,0,zz,3.4,zz+1,3.4,0xbdb2b0);
+            if(map.solid(xx+1,zz))texturedQuad(castle,new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),
+                new Point(xx+1,3.4,zz+1),new Point(xx+1,3.4,zz),MaterialAtlas.STONE,
+                zz,0,zz+1,0,zz+1,3.4,zz,3.4,0xd4c5ba);
+            if(map.solid(xx,zz-1))texturedQuad(castle,new Point(xx,0,zz),new Point(xx+1,0,zz),
+                new Point(xx+1,3.4,zz),new Point(xx,3.4,zz),MaterialAtlas.STONE,
+                xx,0,xx+1,0,xx+1,3.4,xx,3.4,0xd5c4ba);
+            if(map.solid(xx,zz+1))texturedQuad(castle,new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),
+                new Point(xx,3.4,zz+1),new Point(xx+1,3.4,zz+1),MaterialAtlas.STONE,
+                xx+1,0,xx,0,xx,3.4,xx+1,3.4,0xc8b4ab);
+        }
+        // Lit brass sconces serve as landmarks rather than flat screen decorations.
+        for(int xx:new int[]{3,13,24})for(int zz:new int[]{2,10,14,20}){
+            if(Math.hypot(xx-x,zz-z)>16)continue;
+            box(castle,xx-.12,1.3,zz-.12,.24,.63,.24,0x947954);
+            box(castle,xx-.09,1.92,zz-.09,.18,.37,.18,0xe4b667);
+        }
+        for(CastleHubMap.Station station:CastleHubMap.Station.values()){
+            if(Math.hypot(station.x-x,station.z-z)>16)continue;
+            double px=station.x,pz=station.z;
+            int finish=switch(station){
+                case ARMORY_UV->0x8c6eaf;case ARMORY_SALT->0xc5b78e;
+                case ROLE->0x64545f;case CONTRACT->0x977049;
+                case EXPEDITION->0x758d77;case MULTIPLAYER->0x5f8da4;
+                case SPECTRAL->0x8266a1;
+            };
+            box(castle,px-.58,.06,pz-.40,1.16,.74,.80,0x473d37);
+            box(castle,px-.60,.80,pz-.42,1.20,.10,.84,0x9b8160);
+            box(castle,px-.43,.92,pz-.25,.86,.62,.20,finish);
+            box(castle,px-.12,1.53,pz-.15,.24,.15,.13,0xc1ad80);
+        }
+        // Castle entrance arch; courtyard remains open to the procedural sky.
+        box(castle,12.75,0,11.20,.40,3.0,.38,0x625c60);
+        box(castle,14.10,0,11.20,.40,3.0,.38,0x625c60);
+        box(castle,12.75,2.9,11.20,1.75,.36,.38,0xa69178);
+        for(Face face:castle){
+            List<Vertex> points=clip(new Vertex(camera(face.a),face.au,face.av),
+                new Vertex(camera(face.b),face.bu,face.bv),new Vertex(camera(face.c),face.cu,face.cv));
+            for(int i=1;i<points.size()-1;i++)triangle(points.get(0),points.get(i),points.get(i+1),face.color,face.material);
+        }
+    }
     /** Keep the legacy room-mode signature for old render regression tests. */
     public void drawNetwork(HouseMap map,List<RemoteBody> others,int visibleGhostRoom,double clock){
         render(map,visibleGhostRoom,visibleGhostRoom>=0,-1,-1,clock,others);
@@ -419,10 +480,9 @@ public final class SceneRenderer {
         renderCharacterSprites(map,ghostRoom,visibleGhost,hunterRoom,clock,others,apparition);
     }
     /** Procedural sky gradient, distant hills and moving moon; only rendered through outdoor openings. */
-    private void paintSky(HouseMap map){
-        final double eye=1.62;
+    private void paintSky(HouseMap map){paintSky(map.outside(map.roomAt(x,z)));}
+    private void paintSky(boolean outside){
         final int horizon=(int)Math.round(H*.51+Math.tan(pitch)*153);
-        boolean outside=map.outside(map.roomAt(x,z));
         for(int sy=0;sy<H;sy++){
             double t=Math.max(0,Math.min(1,sy/(double)H));
             boolean upper=sy<horizon;

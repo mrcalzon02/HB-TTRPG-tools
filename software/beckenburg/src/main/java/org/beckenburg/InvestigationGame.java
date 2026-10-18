@@ -19,6 +19,7 @@ public final class InvestigationGame {
     private JComboBox<SiteCatalog.Conditions> conditionsPicker;
     private GamePanel game;
     private GhostPracticePanel ghostPractice;
+    private CastleHubPanel castle;
     private int caseNumber;
 
     private InvestigationGame(){
@@ -26,7 +27,20 @@ public final class InvestigationGame {
             "Profile could not be loaded. Existing file was not overwritten: "+ex.getMessage(),
             "Profile error",JOptionPane.WARNING_MESSAGE);}
         buildMenu();
-        cards.add(menu,"menu");window.setContentPane(cards);
+        cards.add(menu,"menu");
+        castle=new CastleHubPanel(profile,new CastleHubPanel.Actions(){
+            @Override public void begin(){InvestigationGame.this.begin();}
+            @Override public void network(){new LanLobbyWindow().setVisible(true);}
+            @Override public void spectral(){InvestigationGame.this.beginGhost();}
+            @Override public void menu(){((CardLayout)cards.getLayout()).show(cards,"menu");}
+            @Override public void cycleRole(){rolePicker.setSelectedIndex((rolePicker.getSelectedIndex()+1)%rolePicker.getItemCount());}
+            @Override public void cycleWeather(){conditionsPicker.setSelectedIndex((conditionsPicker.getSelectedIndex()+1)%conditionsPicker.getItemCount());}
+            @Override public String role(){return rolePicker.getSelectedItem().toString();}
+            @Override public String weather(){return conditionsPicker.getSelectedItem().toString();}
+        });
+        cards.add(castle,"castle");
+        window.setContentPane(cards);
+        ((CardLayout)cards.getLayout()).show(cards,"castle");
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setSize(1060,725);window.setMinimumSize(new Dimension(760,510));
         window.setLocationRelativeTo(null);window.setVisible(true);
@@ -56,6 +70,7 @@ public final class InvestigationGame {
         selectors.add(conditionsLabel);selectors.add(conditionsPicker);
         selectors.setMaximumSize(new Dimension(410,75));
         JButton begin=button("BEGIN SOLO INVESTIGATION");
+        JButton enterCastle=button("ENTER CASTLE STAGING HALL");
         locationPicker.addActionListener(e->{
             boolean available=((SiteCatalog.Location)locationPicker.getSelectedItem()).playable();
             begin.setEnabled(available);conditionsPicker.setEnabled(available);
@@ -72,12 +87,13 @@ public final class InvestigationGame {
         inner.add(Box.createVerticalStrut(15));inner.add(status);inner.add(Box.createVerticalStrut(18));
         inner.add(selected);inner.add(Box.createVerticalStrut(6));inner.add(rolePicker);
         inner.add(Box.createVerticalStrut(10));inner.add(selectors);
-        for(JButton b:new JButton[]{begin,ghost,lan,guide,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
+        for(JButton b:new JButton[]{enterCastle,begin,ghost,lan,guide,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
         inner.add(Box.createVerticalStrut(20));inner.add(account);
         JLabel limitation=new JLabel("LAN shared house navigation is available; complete 3v1 simulation is still in development.",SwingConstants.CENTER);
         limitation.setForeground(new Color(147,154,165));inner.add(Box.createVerticalStrut(12));inner.add(limitation);
         for(Component c:inner.getComponents())if(c instanceof JComponent jc)jc.setAlignmentX(Component.CENTER_ALIGNMENT);
         menu.add(inner);
+        enterCastle.addActionListener(e->{((CardLayout)cards.getLayout()).show(cards,"castle");castle.requestFocusInWindow();});
         begin.addActionListener(e->begin());ghost.addActionListener(e->beginGhost());lan.addActionListener(e->new LanLobbyWindow().setVisible(true));guide.addActionListener(e->JOptionPane.showMessageDialog(window,
             "WASD move • Shift sprint • Click to capture mouse-look / arrows • F flashlight • E doors\n"+
             "1–4 select carried gear • R use • E at van rack to change loadout/restock\n"+
@@ -125,7 +141,8 @@ public final class InvestigationGame {
         if(game!=null){game.close();cards.remove(game);game=null;}
         if(ghostPractice!=null){ghostPractice.close();cards.remove(ghostPractice);ghostPractice=null;}
         refreshAccount();
-        ((CardLayout)cards.getLayout()).show(cards,"menu");
+        ((CardLayout)cards.getLayout()).show(cards,"castle");
+        castle.requestFocusInWindow();
     }
     private final class GamePanel extends JPanel implements KeyListener,FocusListener {
         private final Set<Integer> down=new HashSet<>();
@@ -166,6 +183,7 @@ public final class InvestigationGame {
             addFocusListener(mouseLook);addFocusListener(this);
             // Reproducible case seed, varies by session, no silent random site conversion.
             session=new InvestigationSession(map,role,20261015L+ordinal);
+            scene.rackStock=profile.equipment();
             scene.draw(map,session,0);
             timer=new javax.swing.Timer(33,e->frame());timer.start();
         }
@@ -215,7 +233,7 @@ public final class InvestigationGame {
         }
         /** The E key picks up a physically visible instrument; no loadout popup. */
         private void takeRackItem(){
-            EquipmentLoadout.Item aimed=VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw);
+            EquipmentLoadout.Item aimed=VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw,profile.equipment());
             if(aimed==null){showVanNotice("Look directly at an instrument on the van rack, then press E.");return;}
             loadout.pickup(aimed);
             showVanNotice("PICKED UP: "+aimed.label+".  Current slot "+(loadout.activeSlot()+1));
@@ -296,7 +314,7 @@ public final class InvestigationGame {
             if(key>=KeyEvent.VK_1&&key<=KeyEvent.VK_4)loadout.select(key-KeyEvent.VK_1);
             if(key==KeyEvent.VK_F)scene.lamp=!scene.lamp;
             if(key==KeyEvent.VK_E){
-                var aimed=VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw);
+                var aimed=VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw,profile.equipment());
                 if(aimed!=null){takeRackItem();}
                 else {
                 VanStaging.Station service=map.van().stationAt(scene.x,scene.z);
@@ -401,7 +419,7 @@ public final class InvestigationGame {
                     g.setColor(new Color(255,212,137));
                     g.drawString("E / UTILITY BREAKER: "+(powerOn?"ON":"OFF"),16,stageH-36);
                 }
-                EquipmentLoadout.Item rackAim=VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw);
+                EquipmentLoadout.Item rackAim=VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw,profile.equipment());
                 if(rackAim!=null){
                     g.setColor(new Color(255,212,137));
                     g.drawString("E PICK UP / "+rackAim.label.toUpperCase(),16,stageH-37);

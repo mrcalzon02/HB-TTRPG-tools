@@ -11,11 +11,16 @@ public final class VanEquipmentRack {
         return new Socket(item,pos.x(),pos.z());
     }
     public static EquipmentLoadout.Item aimed(VanStaging van,double playerX,double playerZ,double yaw){
+        return aimed(van,playerX,playerZ,yaw,java.util.EnumSet.allOf(EquipmentLoadout.Item.class));
+    }
+    public static EquipmentLoadout.Item aimed(VanStaging van,double playerX,double playerZ,double yaw,
+            java.util.Set<EquipmentLoadout.Item> available){
         if(van==null||!Double.isFinite(yaw))return null;
         var local=van.local(playerX,playerZ);
         if(Math.abs(local.x())>=VanStaging.HALF_WIDTH-.17||local.z()<VanStaging.FRONT-.2||local.z()>VanStaging.REAR-.17)return null;
         double best=.80;EquipmentLoadout.Item found=null;
         for(EquipmentLoadout.Item item:EquipmentLoadout.Item.values()){
+            if(!available.contains(item))continue;
             Socket socket=socket(van,item);
             double dx=socket.x-playerX,dz=socket.z-playerZ;
             double distance=Math.hypot(dx,dz);
