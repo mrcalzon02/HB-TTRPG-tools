@@ -11,13 +11,15 @@ public final class GhostFieldGuide {
     private GhostFieldGuide(){}
     public enum Category { EMF, TEMPERATURE, SPIRIT_BOX, WRITING, PHYSICAL, CAMERA, BEHAVIOR }
     public enum Clue {
-        EMF_OVER_SIX(Category.EMF,"EMF over 6",true),
+        EMF_OVER_SIX(Category.EMF,"High EMF / 8–10",true),
+        EMF_NORMAL(Category.EMF,"Ordinary EMF / 2–7",false),
         EMF_SUPPRESSION(Category.EMF,"EMF zero / suppressed field",true),
         WRITING_CHILD(Category.WRITING,"Childlike drawings",true),
         WRITING_SCRAWL(Category.WRITING,"Frantic scrawls",true),
         WRITING_RITUAL(Category.WRITING,"Ritual circles",true),
         EXTREME_COLD(Category.TEMPERATURE,"Freezing / below 0°C",true),
         EXTREME_HEAT(Category.TEMPERATURE,"Extreme heat / 90°F+",true),
+        TEMPERATURE_NORMAL(Category.TEMPERATURE,"Variable ordinary temperature",false),
         SPIRIT_REPLY(Category.SPIRIT_BOX,"Spirit-box response",true),
         GHOST_WRITING(Category.WRITING,"Ghost writing",true),
         DOTS_PATTERN(Category.CAMERA,"D.O.T.S. projection (planned)",true),
@@ -87,8 +89,12 @@ public final class GhostFieldGuide {
         Objects.requireNonNull(type);
         GhostTraits.Profile p=GhostTraits.of(type);
         return type.name().replace('_',' ') + "  /  " + type.rite().name()+"\n"
-            +"EMF: "+(GhostEvidenceProfile.compatible(type,Clue.EMF_OVER_SIX)?"HIGH 7–10":"SILENCE 0")
-            +" | "+(GhostEvidenceProfile.thermal(type)==EvidenceSignals.Polarity.COLD?"FREEZING":"HEAT 90F+")+"\n"
+            +"EMF: "+(GhostEvidenceProfile.compatible(type,Clue.EMF_OVER_SIX)?"2–7 / HIGH 8–10":"2–7 / SUPPRESSION 0")
+            +" | TEMP: "+switch(GhostEvidenceProfile.thermal(type)){
+                case COLD->"FREEZING CAPABLE";
+                case HOT->"EXTREME HEAT CAPABLE";
+                case NONE->"VARIABLE ONLY";
+            }+"\n"
             +"WRITING: "+java.util.Arrays.toString(GhostEvidenceProfile.availableWriting(type))+"\n"
             +"PROJECTION GEAR STILL IN DEVELOPMENT\n"
             +(p.locomotion()==GhostTraits.Locomotion.FLOAT?"FLOATING":"WALKING")
@@ -106,7 +112,8 @@ public final class GhostFieldGuide {
         return switch(clue){
             // Measurement categories no longer encode a specific ghost species.
             // Archive enum members only survive for old journal notes.
-            case EMF_OVER_SIX,EMF_SUPPRESSION,EXTREME_COLD,EXTREME_HEAT,
+            case EMF_OVER_SIX,EMF_NORMAL,EMF_SUPPRESSION,
+                 EXTREME_COLD,EXTREME_HEAT,TEMPERATURE_NORMAL,
                  WRITING_CHILD,WRITING_SCRAWL,WRITING_RITUAL,
                  SPIRIT_REPLY,GHOST_WRITING,DOTS_PATTERN->GhostEvidenceProfile.compatible(type,clue);
             case EMF_SURGE,EMF_TETHER,EMF_KINETIC,EMF_INTERFERENCE,
