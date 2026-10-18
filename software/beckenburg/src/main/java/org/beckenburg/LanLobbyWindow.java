@@ -8,6 +8,8 @@ import java.io.IOException;
 public final class LanLobbyWindow extends JFrame {
     private final JTextField ip=new JTextField("127.0.0.1",13),port=new JTextField("27717",5),name=new JTextField("Investigator",11);
     private final JComboBox<String> role=new JComboBox<>(new String[]{"Hunter","Ghost"});
+    private final JPasswordField roomPassword=new JPasswordField(9);
+    private final JToggleButton lobbyLock=new JToggleButton("Lock joins");
     private final LobbyGhostAvatar.Preview avatar=new LobbyGhostAvatar.Preview();
     private LobbyGhostAvatar.Look localLook=LobbyGhostAvatar.random(
         java.util.concurrent.ThreadLocalRandom.current());
@@ -47,9 +49,11 @@ public final class LanLobbyWindow extends JFrame {
         JPanel controls=new JPanel(new FlowLayout(FlowLayout.LEFT,5,5));
         controls.add(new JLabel("IP"));controls.add(ip);controls.add(new JLabel("Port"));controls.add(port);
         controls.add(new JLabel("Name"));controls.add(name);controls.add(role);
+        controls.add(new JLabel("Room password"));controls.add(roomPassword);
         JButton host=new JButton("Host LAN"),join=new JButton("Join IP");
         controls.add(new JLabel("Hunters"));controls.add(partySize);
         controls.add(tuneContract);controls.add(host);controls.add(join);controls.add(reconnect);
+        controls.add(lobbyLock);lobbyLock.setEnabled(false);
         JPanel commands=new JPanel(new FlowLayout(FlowLayout.LEFT,6,4));
         commands.add(ready);commands.add(start);commands.add(new JLabel("Room"));commands.add(target);
         commands.add(move);commands.add(instrument);commands.add(scan);commands.add(ward);
@@ -76,6 +80,12 @@ public final class LanLobbyWindow extends JFrame {
             }else avatar.showHunter();
         });
         host.addActionListener(e->connect(true));join.addActionListener(e->connect(false));
+        lobbyLock.addActionListener(e->{
+            if(hosted==null){lobbyLock.setSelected(false);return;}
+            hosted.setLobbyLocked(lobbyLock.isSelected());
+            log.append(lobbyLock.isSelected()?"Lobby locked to new joins (existing reservations may reconnect).\n":
+                "Lobby open to eligible LAN joins.\n");
+        });
         reconnect.addActionListener(e->reconnect());
         reconnect.setEnabled(false);
         sendLobbyChat.addActionListener(e->sendLobbyMessage());
@@ -160,6 +170,7 @@ public final class LanLobbyWindow extends JFrame {
         long generation=++connectionGeneration;
         status.setText("Connecting...");
         String hostname=ip.getText().trim(),nickname=name.getText();String p=port.getText().trim();
+        String requestedPassword=new String(roomPassword.getPassword());
         boolean ghost=role.getSelectedIndex()==1;
         // Capture the GUI state before the background socket connection begins.
         CustomContract request=new CustomContract((int)partySize.getValue(),
@@ -175,8 +186,9 @@ public final class LanLobbyWindow extends JFrame {
                     var types=GhostIdentity.Type.values();
                     var chosen=types[java.util.concurrent.ThreadLocalRandom.current().nextInt(types.length)];
                     newHost=new LanHost("0.0.0.0",portNumber,chosen,request,ghost);
+                    newHost.setLobbyPassword(requestedPassword);
                 }
-                LanClient client=new LanClient(localHost?"127.0.0.1":hostname,portNumber,ghost,nickname,
+                LanClient client=new LanClient(localHost?"127.0.0.1":hostname,portNumber,ghost,nickname,requestedPassword,
                     frame->SwingUtilities.invokeLater(()->{
                         if(generation==connectionGeneration)receive(frame);
                     }));
@@ -189,6 +201,8 @@ public final class LanLobbyWindow extends JFrame {
                     }
                     hosted=own;connection=client;busy=false;
                     resumeTicket=null;reconnect.setEnabled(false);
+                    roomPassword.setEnabled(false);
+                    lobbyLock.setEnabled(hosted!=null);
                     role.setEnabled(false);
                     status.setText("Seat "+client.seat()+" — room case + shared house");
                     if("GHOST".equals(client.seat()))avatar.showGhost(
@@ -225,6 +239,7 @@ public final class LanLobbyWindow extends JFrame {
                     connection=restored;resumeTicket=null;busy=false;
                     missionRunning=true;worldMode=false;
                     role.setEnabled(false);reconnect.setEnabled(false);
+                    roomPassword.setEnabled(false);lobbyLock.setEnabled(false);
                     status.setText("Seat "+restored.seat()+" restored - enter 3D world");
                     caseStatus.setText("Case: mission resumed");
                     setCommandEnabled(true);
@@ -288,6 +303,7 @@ public final class LanLobbyWindow extends JFrame {
             if(hosted!=null){hosted.close();hosted=null;}
             myRoom=HouseMap.EXTRACTION_ROOM;
             role.setEnabled(true);ghostJoined=false;remoteLook=null;
+            roomPassword.setEnabled(true);lobbyLock.setEnabled(false);lobbyLock.setSelected(false);
             if(role.getSelectedIndex()==1)avatar.showGhost(localLook,false);
             else avatar.showHunter();
             status.setText("Disconnected — host or server connection lost");
