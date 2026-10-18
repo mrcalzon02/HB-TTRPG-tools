@@ -9,13 +9,19 @@ import java.util.Locale;
 public final class LanVoicePacket {
     public static final int MAGIC=0x424b5651, VERSION=1;
     public static final int HELLO=0, AUDIO=1, ACK=2, ANONYMOUS=255;
+    /** Ghost-only opaque speaker aliases: cannot be used as an incoming hunter seat. */
+    public static final int GHOST_STREAM_MIN=128,GHOST_STREAM_MAX=133;
+    public static boolean ghostStream(int id){
+        return id>=GHOST_STREAM_MIN&&id<=GHOST_STREAM_MAX;
+    }
     public static final int SAMPLE_RATE=8000, SAMPLES=160, HEADER=31;
     public static final int MAX_BYTES=HEADER+SAMPLES;
     private LanVoicePacket(){ }
     public record Frame(int kind,int seat,LanChat.Channel channel,int sequence,
                         long tokenHi,long tokenLo,int gain,byte[] samples) {
         public Frame {
-            if(kind<HELLO||kind>ACK||seat<0||(seat>5&&seat!=ANONYMOUS)
+            if(kind<HELLO||kind>ACK||seat<0||
+                (seat>5&&seat!=ANONYMOUS&&!ghostStream(seat))
                 ||channel==null||sequence<0||gain<0||gain>100
                 ||samples==null||samples.length!=(kind==AUDIO?SAMPLES:0))
                 throw new IllegalArgumentException("invalid voice datagram");

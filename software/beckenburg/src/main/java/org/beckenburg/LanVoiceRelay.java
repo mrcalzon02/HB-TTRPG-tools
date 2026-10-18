@@ -23,6 +23,8 @@ public final class LanVoiceRelay implements AutoCloseable {
     private final DatagramSocket udp;
     private final ConcurrentHashMap<Integer,Session> sessions=new ConcurrentHashMap<>();
     private final SecureRandom random=new SecureRandom();
+    /** Shuffled per playable ghost connection; no stable H1-H6 mapping crosses UDP. */
+    private volatile int[] spectralStreams={128,129,130,131,132,133};
     private final Router router;
     private final Thread worker;
     private volatile boolean closed;
@@ -39,6 +41,14 @@ public final class LanVoiceRelay implements AutoCloseable {
     public String register(int seat,InetAddress ip){
         if(seat<0||seat>6)throw new IllegalArgumentException("invalid voice participant");
         long hi=random.nextLong(),lo=random.nextLong();
+        if(seat==6){
+            int[] aliases={128,129,130,131,132,133};
+            for(int i=aliases.length-1;i>0;i--){
+                int j=random.nextInt(i+1),temp=aliases[i];
+                aliases[i]=aliases[j];aliases[j]=temp;
+            }
+            spectralStreams=aliases;
+        }
         sessions.put(seat,new Session(Objects.requireNonNull(ip),hi,lo));
         return LanVoicePacket.token(hi,lo);
     }
@@ -92,7 +102,7 @@ public final class LanVoiceRelay implements AutoCloseable {
             throw new IllegalArgumentException("invalid voice forwarding");
         Session target=sessions.get(destination);
         if(target==null||target.endpoint==null)return;
-        int label=destination==6?LanVoicePacket.ANONYMOUS:source;
+        int label=destination==6?spectralStreams[source]:source;
         var frame=new LanVoicePacket.Frame(LanVoicePacket.AUDIO,label,voice.channel(),
             voice.sequence(),target.hi,target.lo,gain,voice.samples());
         try{send(target.endpoint,frame);}catch(IOException e){/* Closed UDP endpoint: discard frame. */}
