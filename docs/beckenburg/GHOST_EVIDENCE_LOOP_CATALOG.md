@@ -4,11 +4,11 @@
 
 ## Intended common loop
 
-Locate disturbances; determine an actual haunted area through multiple environmental measurements; observe genuine server-authored events; collect **at least three distinct, mechanically obtainable positive evidence families** from a multi-device pool; compare physical behaviors and recordings; submit a deduction; prepare the haunting anchor; carry out the ghost's correct **banishment, cleansing or absolution** at the map's authored site; defend the ritual against interference, or withdraw.
+Locate disturbances; determine an actual haunted area through multiple environmental measurements; observe genuine server-authored events; take whatever instrument readings are useful and let each measurement enter the journal automatically; the available evidence pool offers at least three distinct possible observations per ghost, but no mandatory confirmation sequence exists; compare physical behaviors and recordings; submit a deduction; prepare the haunting anchor; carry out the ghost's correct **banishment, cleansing or absolution** at the map's authored site; defend the ritual against interference, or withdraw.
 
 **EMF** measures fluctuating event intensity from **1–10** and is positive at **7–10**, during real local paranormal activity. **Temperature** uses shared weather/season/day/night, room insulation, heat and local ghost anomalies; paranormal **below 0°C / 32°F** or **at least 90°F / 32.22°C** are candidate positives. Fahrenheit/Celsius presentation is a user choice, not different mechanics. Ordinary weather-driven extremes are not ghost evidence. Other positives must include functional UV, writing, orbs/video, structured light, recordings and original Beckenburg sampling/sensor systems.
 
-**Present transition state:** `EvidenceSignals` implements the numeric environmental model. The host-side `LanCase.scanMeasured` and live `LanHost` measurement pathway use it; event strength comes from authorized ghost actions. Solo also uses the numeric environmental signal model; the LAN and solo equipment selectors still expose only the legacy three mandatory instrument categories. Full 14-family acquisition, ghost-specific evidence assignments, UI, physical devices, finished video and per-player °C/°F settings are **not complete**. The game must not be advertised as possessing them until end-to-end verification. An obsolete `LanCase.scan` remains for legacy fixtures; its subtype strings must not be treated as approved design.
+**Present transition state:** `EvidenceSignals` implements the numeric environmental model. The host-side `LanCase.scanMeasured` and live `LanHost` measurement pathway use it, and now return raw readings rather than confirmed/inconclusive labels; event strength comes from authorized ghost actions. Solo also uses the numeric environmental signal model; the LAN and solo equipment selectors currently expose only the legacy three principal instruments, **but using all three is no longer a gate**. Full 14-family acquisition, ghost-specific evidence assignments, UI, physical devices, finished video and per-player °C/°F settings are **not complete**. The game must not be advertised as possessing them until end-to-end verification. The room-only `LanCase.scan` compatibility entry point also returns ordinary readings, not fabricated species subtypes.
 
 ## 13 ghost identities: actual mechanical behavior and resolution
 
@@ -56,10 +56,10 @@ The host retains correct-species deduction, anchor ward, correct ritual, site pr
 
 ## Completion criteria (per ghost; all 13)
 
-1. At least three **different authentic positive types** assigned from the expanded evidence families, each with a host-authored producer, equipment detector, world interaction, timeout/decay and reproducible timing test.
+1. At least three **different observable evidence opportunities** designed for each ghost, each with a world-authored source and usable instrument; no requirement for the investigator to collect or 'confirm' all three.
 2. Signal reliability verified through false positives: weather, ordinary electronics, normal movement, human-caused heat, camera limitations, player voices and non-ghost events must not silently satisfy a ghost proof.
 3. Enough clues and behavioral differentiators to identify the species without hidden data leaks; a third proof should matter and no universal two-instrument species shortcut should exist.
-4. Complete solo + 1–6 hunter LAN + human-ghost acquisition path. The same true event may create multiple instrument reactions, but it must not turn into automatically confirmed independent evidence by repeated polling.
+4. Complete solo + 1–6 hunter LAN + human-ghost observation path. The same event can produce multiple readings; each is logged without granting automatic proof or deducing the species.
 5. All three ritual types reachable and completion defended; hostile ghost control must use identical authorized world event rules as AI; reconnect preserves installed sensors and private case history.
 6. Java 17 headless/GUI, Windows and multiplayer acceptance logged in existing quality gates, not inferred from a successful text commit. No additional GitHub Actions.
 
