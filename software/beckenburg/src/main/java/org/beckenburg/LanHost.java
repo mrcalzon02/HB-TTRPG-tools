@@ -190,7 +190,7 @@ public final class LanHost implements AutoCloseable {
                 if(seats[peer.slot]==peer){
                     seats[peer.slot]=null;
                     voice.unregister(peer.slot);
-                    if(peer.slot==GHOST_SEAT)ghostLobbyLook=null;
+                    if(peer.slot==GHOST_SEAT&&(peer.intentionalLeave||!running))ghostLobbyLook=null;
                     if(running){
                         if(!peer.intentionalLeave && peer.slot!=0){
                             // An unexpected TCP loss is not a player decision to abandon the match.
