@@ -64,7 +64,7 @@ public final class LanClient implements AutoCloseable {
             var parts=LanProtocol.parts(response);
             if((parts.size()!=3&&parts.size()!=4&&parts.size()!=5)||!parts.get(0).equals("WELCOME"))
                 throw new IOException("join failed: "+response);
-            if(parts.size()==4){
+            if(parts.size()>=4){
                 if(!parts.get(3).matches("[0-9a-f]{48}"))throw new IOException("invalid session credential");
                 resumeKey=parts.get(3); // Never send this secret to the UI event log.
                 if(parts.size()==5)hostSequence=LanProtocol.sequence(parts.get(4));
