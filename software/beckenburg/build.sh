@@ -68,6 +68,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.La
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanVoiceCodecTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanVoiceRelayTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanVoiceHostIntegrationTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanVoiceClientHandshakeTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanGhostLobbySecrecyTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanSixHunterVanTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostActiveBehaviorTest
