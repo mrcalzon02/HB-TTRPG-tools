@@ -190,6 +190,7 @@ public final class LanHost implements AutoCloseable {
                         LanProtocol.write(out,"REJECT|reconnect seat expired or unavailable");return;
                     }
                     peer=new Peer(socket,in,out,slot,waiting.name);
+                    peer.lastPongTick=tick;
                     peer.lastGhostActionSequence=waiting.lastActionSequence;
                     peer.lastGhostPoseSequence=waiting.lastPoseSequence;
                     // Until the replacement token has been durably saved and
@@ -240,7 +241,7 @@ public final class LanHost implements AutoCloseable {
                     if(running){LanProtocol.write(out,"REJECT|match already running - reconnect needed");return;}
                     int slot=wantsGhost?GHOST_SEAT:firstVacantHunter(ownerClaim);
                     if(slot<0||seats[slot]!=null){LanProtocol.write(out,"REJECT|seat unavailable");return;}
-                    peer=new Peer(socket,in,out,slot,nickname);seats[slot]=peer;
+                    peer=new Peer(socket,in,out,slot,nickname);peer.lastPongTick=tick;seats[slot]=peer;
                     if(wantsGhost)ghostLobbyLook=LobbyGhostAvatar.random(
                         java.util.concurrent.ThreadLocalRandom.current());
                     LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken+"|"+seatSequenceHighWater(peer));
@@ -340,6 +341,19 @@ public final class LanHost implements AutoCloseable {
                     if(p.size()!=1)throw new IllegalArgumentException("invalid departure");
                     peer.intentionalLeave=true;
                     try{peer.socket.close();}catch(IOException ignored){}
+                }
+                case "PONG" -> {
+                    if(p.size()!=2)throw new IllegalArgumentException("invalid heartbeat");
+                    int acknowledged=LanProtocol.integer(p.get(1),0,99999999);
+                    if(peer.expectedPongTick==acknowledged){
+                        peer.expectedPongTick=-1;
+                        peer.lastPongTick=tick;
+                        long elapsed=System.nanoTime()-peer.pingSentNanos;
+                        int latency=(int)Math.min(60000,Math.max(0,
+                                TimeUnit.NANOSECONDS.toMillis(elapsed)));
+                        reply(peer,"NETSTATS|"+latency);
+                    }
+                    // A late response to an older ping is not a new authorization.
                 }
                 case "RESUMEACK" -> {
                     // This message is a post-persistence confirmation, not an
@@ -989,9 +1003,24 @@ public final class LanHost implements AutoCloseable {
             if(tick%2==0)broadcastCounters();
             if(tick%5==0){broadcastState();broadcastApparitions();broadcastProgress();broadcastWorld();
                 if(seats[GHOST_SEAT]!=null&&seats[GHOST_SEAT].ghostWorldMode)reply(seats[GHOST_SEAT],ghostPose.frame(tick));}
+            maintainPeerHealth();
             finishIfComplete();
         }catch(RuntimeException ex){running=false;notifyAllPeers("INFO|host simulation stopped");System.err.println("LAN tick failure: "+ex.getMessage());}
     }}
+    /** 5-second heartbeat and 20-second stale-link cutoff; never trust player clocks.
+     * A dead TCP peer enters the normal bounded seat-recovery flow when serve() exits.
+     */
+    private void maintainPeerHealth(){
+        for(Peer peer:seats)if(peer!=null){
+            if(tick-peer.lastPongTick>200){
+                peer.outbound.stop();
+            }else if(tick%50==0){
+                peer.expectedPongTick=tick;
+                peer.pingSentNanos=System.nanoTime();
+                reply(peer,"PING|"+tick);
+            }
+        }
+    }
     /** Every 3D investigator receives only their own host-validated line-of-sight projection.
      * An explicit HIDDEN packet also clears stale manifestations after a move or expiry.
      * This is never sent to the ghost seat or used for ghost AI decisions.
@@ -1070,6 +1099,8 @@ public final class LanHost implements AutoCloseable {
         long unconfirmedResumeDeadlineNanos; // no unlimited grace via failed reconnect loop
         boolean ready,worldMode,ghostWorldMode,intentionalLeave;
         long lastGhostPoseSequence=-1,lastGhostActionSequence=-1;
+        long pingSentNanos;
+        int expectedPongTick=-1,lastPongTick;
         int lastMonitorTick=-100000,lastChatTick=-100000,lastLightTick=-100000;
         long lastLobbyChatNanos;
         Peer(Socket s,Reader in,Writer out,int slot,String name){
