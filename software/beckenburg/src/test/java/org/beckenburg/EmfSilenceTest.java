@@ -11,14 +11,14 @@ public final class EmfSilenceTest {
         LanCase shade=new LanCase(4);
         shade.configure(GhostIdentity.Type.SHADE,true);
         ok(shade.scanMeasured(0,LanCase.Tool.EMF,4,4,20,-1,0,true)
-                .message().startsWith("INCONCLUSIVE"),"quiet room without event is not proof");
+                .message().startsWith("READING EMF")&&shade.evidenceCount()==0,"ordinary quiet observation is recorded");
         ok(shade.scanMeasured(0,LanCase.Tool.EMF,4,4,25,4,10,true)
-                .message().startsWith("INCONCLUSIVE"),"one zero read not proof");
+                .message().contains("EMF 0/10"),"one suppressed reading is recorded directly");
         ok(shade.scanMeasured(0,LanCase.Tool.EMF,4,4,30,4,10,true)
-                .message().startsWith("INCONCLUSIVE"),"two zeros insufficient");
+                .message().contains("EMF 0/10"),"second zero is an independent reading");
         ok(shade.scanMeasured(0,LanCase.Tool.EMF,4,4,35,4,10,true)
-                .message().startsWith("CONFIRMED"),"three separated zero events confirm");
-        ok(shade.evidenceCount()==1,"zero EMF adds only one measurement family");
+                .message().contains("EMF 0/10"),"third observation has no special unlock");
+        ok(shade.evidenceCount()==0,"taking readings does not automatically award evidence");
         var other=new LanCase(4);
         other.configure(GhostIdentity.Type.SPIRIT,true);
         ok(other.scanMeasured(0,LanCase.Tool.EMF,4,4,25,4,10,false)
