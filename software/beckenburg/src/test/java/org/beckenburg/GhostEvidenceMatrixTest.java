@@ -11,7 +11,7 @@ public final class GhostEvidenceMatrixTest {
         var rows=GhostEvidenceMatrix.all();
         ok(rows.size()==GhostIdentity.Type.values().length,"all thirteen source ghosts represented");
         Set<GhostIdentity.Type> unique=EnumSet.noneOf(GhostIdentity.Type.class);
-        int suppressed=0,freezing=0,writers=0,uv=0,orbs=0,camera=0;
+        int suppressed=0,freezing=0,hot=0,normal=0,writers=0,uv=0,orbs=0,camera=0;
         for(var row:rows){
             ok(unique.add(row.type()),"one catalog row per ghost");
             ok(row.rite()==row.type().rite()&&row.behavior()==row.type().behavior(),
@@ -25,6 +25,7 @@ public final class GhostEvidenceMatrixTest {
             ok((GhostEvidenceProfile.thermal(row.type())==EvidenceSignals.Polarity.COLD)
                ==(row.temperature()==GhostFieldGuide.Clue.EXTREME_COLD),
                "temperature evidence matches actual thermal producer");
+            ok(row.future().size()>=2,"varied extra devices for "+row.type());
             ok(row.uv()==GhostTraits.of(row.type()).leavesUv(),
                "UV entries match live trait producer");
             ok(row.optical()==GhostTraits.of(row.type()).sight(),
@@ -50,12 +51,15 @@ public final class GhostEvidenceMatrixTest {
                "no ghost is limited to the two environmental instruments");
             if(row.emf()==GhostFieldGuide.Clue.EMF_SUPPRESSION)suppressed++;
             if(row.temperature()==GhostFieldGuide.Clue.EXTREME_COLD)freezing++;
+            if(row.temperature()==GhostFieldGuide.Clue.EXTREME_HEAT)hot++;
+            if(row.temperature()==GhostFieldGuide.Clue.TEMPERATURE_NORMAL)normal++;
             if(!row.writing().isEmpty())writers++;
             if(row.uv())uv++;
             if(row.optical()==GhostTraits.Sight.ORBS)orbs++;
             if(row.optical()==GhostTraits.Sight.CAMERA_ONLY)camera++;
         }
-        ok(suppressed==3&&freezing==7&&writers==9&&uv==8&&orbs==3&&camera==2,
+        ok(suppressed==3&&freezing==4&&hot==4&&normal==5
+            &&writers==9&&uv==8&&orbs==3&&camera==2,
             "source demographic counts remain stable");
         ok(GhostEvidenceMatrix.forGhost(GhostIdentity.Type.SHADE).emf()
             ==GhostFieldGuide.Clue.EMF_SUPPRESSION,"Shade provides zero field");
