@@ -596,6 +596,45 @@ public final class LanHost implements AutoCloseable {
                     recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
                     broadcastCounters();
                 }
+                case "PLACEBOOK" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
+                        throw new IllegalArgumentException("physical hunter required");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    ensureActiveHunter(peer);
+                    int room=world.body(peer.slot).room();
+                    if(room<0||room>=HouseMap.INDOOR_ROOMS||writingBook.placed())
+                        throw new IllegalArgumentException("book unavailable or already deployed");
+                    writingBook.place(peer.slot,room,tick);
+                    reply(peer,"ACCEPT|PLACEBOOK|"+room);
+                    notifyHunters("BOOK|DEPLOYED|"+room);
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                }
+                case "READBOOK" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
+                        throw new IllegalArgumentException("physical hunter required");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    ensureActiveHunter(peer);
+                    int room=world.body(peer.slot).room();
+                    GhostWriting.Page page=writingBook.page();
+                    boolean found=page!=null&&page.room()==room;
+                    String words=writingBook.inspect(room);
+                    reply(peer,"ACCEPT|READBOOK|"+words);
+                    notifyHunters(casefile.recordDevice(tick,peer.slot,room,"GHOST_WRITING_BOOK",
+                        found?LanEvidenceJournal.Finding.CONFIRMED:LanEvidenceJournal.Finding.INCONCLUSIVE,
+                        "Book inspection - "+words));
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                }
+                case "TAKEBOOK" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
+                        throw new IllegalArgumentException("physical hunter required");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    ensureActiveHunter(peer);
+                    int room=world.body(peer.slot).room();
+                    if(!writingBook.remove(peer.slot,room))
+                        throw new IllegalArgumentException("no book to retrieve here");
+                    notifyHunters("BOOK|REMOVED|"+room);
+                    reply(peer,"ACCEPT|TAKEBOOK|"+room);
+                }
                 case "UVSCAN" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
                         throw new IllegalArgumentException("physical hunter view required");
