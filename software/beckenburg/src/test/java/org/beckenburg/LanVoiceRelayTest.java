@@ -57,6 +57,11 @@ public final class LanVoiceRelayTest {
             var anonymized=read(ghost);
             ok(LanVoicePacket.ghostStream(anonymized.seat())&&anonymized.gain()==48,
                 "spectral receiver gets pseudonymous audio, not real hunter seat");
+            host.forward(6,1,valid,41);
+            var secondVoice=read(ghost);
+            ok(LanVoicePacket.ghostStream(secondVoice.seat())
+                &&secondVoice.seat()!=anonymized.seat(),
+                "two investigators use distinct anonymous mixer streams");
             send(speaker,host.port(),frame(LanVoicePacket.AUDIO,0,first,2,audio));
             ok(inbound.poll(200,TimeUnit.MILLISECONDS)==null,"sequence replay rejected");
             send(ghost,host.port(),frame(LanVoicePacket.AUDIO,255,spectral,1,audio));
