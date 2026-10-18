@@ -84,8 +84,6 @@ public final class LanCase {
         java.util.Objects.requireNonNull(guess);
         if(outcome!=Outcome.ACTIVE||!alive(seat))return new Report(false,"identification unavailable");
         if(!identificationRequired)return new Report(false,"identity dossier not enabled");
-        if(tested.size()!=Tool.values().length||evidence.size()<3)
-            return new Report(false,"confirm three positive evidence states at the true haunting anchor");
         if(identified!=null)return new Report(false,"entity already identified");
         if(tick<0||tick-lastGuessTick<30)return new Report(false,"allow the entity to settle before another deduction");
         lastGuessTick=tick;
@@ -190,7 +188,6 @@ public final class LanCase {
         evidenceThermal=java.util.Objects.requireNonNull(thermalPolarity);
         evidenceHour=hour;evidenceHeating=heating;
     }
-    private final EvidenceSignals.QuietFieldTracker[] quietField = java.util.stream.IntStream.range(0,6).mapToObj(i->new EvidenceSignals.QuietFieldTracker()).toArray(EvidenceSignals.QuietFieldTracker[]::new);
     public Report scanMeasured(int seat,Tool tool,int room,int ghostRoom,
             int tick,int eventRoom,int eventStrength){
         return scanMeasured(seat,tool,room,ghostRoom,tick,eventRoom,eventStrength,false);
@@ -209,11 +206,9 @@ public final class LanCase {
             case EMF -> {
                 EvidenceSignals.Electromagnetic sample=EvidenceSignals.emf(
                     0xB3CC3BL,tick,room,eventRoom,eventStrength,emfSilence);
-                int quiet=quietField[seat].observe(tick,room,sample);
-                positive=sample.positiveEvidence()||quiet==3;
                 reading="EMF "+sample.level()+"/10"
-                    +(sample.suppressed()?" - paranormal silence "+quiet+"/3":
-                       positive?" - event threshold exceeded":" - fluctuating activity");
+                    +(sample.suppressed()?" - field suppressed":" - live field activity");
+                positive=sample.positiveEvidence();
             }
             case THERMOMETER -> {
                 boolean inside=room<HouseMap.INDOOR_ROOMS;
@@ -233,12 +228,9 @@ public final class LanCase {
             }
             default -> throw new AssertionError(tool);
         }
-        if(positive){
-            tested.add(tool);
-            boolean fresh=evidence.add(tool);
-            return new Report(true,(fresh?"CONFIRMED ":"REPEAT ")+tool+" in "+room+" - "+reading);
-        }
-        return new Report(true,"INCONCLUSIVE "+tool+" in "+room+" - "+reading);
+        // Instrument measurements are raw observations, not automatic proof or an
+        // unlock condition. Hunter deductions live in the manual field journal.
+        return new Report(true,"READING "+tool+" in "+room+" - "+reading);
     }
     public Report scanSpatialMeasured(int seat,Tool tool,LanWorld.Body body,
             int ghostRoom,HouseMap map,int tick,int eventRoom,int eventStrength){
@@ -256,7 +248,7 @@ public final class LanCase {
         int room=body.room();
         if(Math.hypot(body.x()-map.centerX(room),body.z()-map.centerZ(room))
                 >tool.sensingRadius())
-            return new Report(true,"INCONCLUSIVE "+tool+" - move closer for reliable measurement");
+            return new Report(true,"READING "+tool+" in "+room+" - OUT OF RANGE");
         return scanMeasured(seat,tool,room,ghostRoom,tick,eventRoom,eventStrength,emfSilence);
     }
 
@@ -276,7 +268,6 @@ public final class LanCase {
     public Report performRite(int seat,GhostIdentity.Rite rite,int room,boolean nearSite){
         hunter(seat);java.util.Objects.requireNonNull(rite);
         if(outcome!=Outcome.ACTIVE||!alive(seat))return new Report(false,"cannot perform rite");
-        if(evidence.size()<3)return new Report(false,"three confirmed evidence states required");
         if(identificationRequired&&identified!=archetype)
             return new Report(false,"identify the ghost before choosing its rite");
         if(identificationRequired){
