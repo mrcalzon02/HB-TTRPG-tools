@@ -55,6 +55,13 @@ public final class LanSessionResumeIntegrationTest {
                 begin(a,b,c);
                 b.client.move(11);b.await("ACCEPT|MOVE|11");
                 b.client.view3D();b.await("ACCEPT|VIEW3D");
+                // Inject a host-owned concealed state to verify recovery from a lost
+                // viewport without inventing a client-side hiding command.
+                var worldField=LanHost.class.getDeclaredField("world");worldField.setAccessible(true);
+                LanWorld actualWorld=(LanWorld)worldField.get(host);
+                var hiddenField=LanWorld.class.getDeclaredField("hiding");hiddenField.setAccessible(true);
+                ((boolean[])hiddenField.get(actualWorld))[1]=true;
+                check(actualWorld.hidden(1),"host owns concealed state before disconnection");
                 b.client.note(GhostFieldGuide.Clue.FOOTPRINTS,FieldJournal.Status.SEEN);
                 b.await("ACCEPT|NOTE|FOOTPRINTS");
                 var original=b.client.resumeTicket();
@@ -73,6 +80,9 @@ public final class LanSessionResumeIntegrationTest {
                     check("H2".equals(restored.client.seat()),"old seat restored, no new hunter");
                     restored.await("INFO|mission resumed");
                     restored.client.view3D();restored.await("ACCEPT|VIEW3D");
+                    check("HIDING|1".equals(restored.await("HIDING|")),
+                        "rejoined hunter recovers host-owned concealed state");
+                    check(actualWorld.hidden(1),"view recovery does not alter host concealment");
                     restored.await("PROGRESS|"); // Immediate host-owned state, not next periodic tick.
                     restored.await("CASEFILE|RESET"); // Auto-replay, no UI journal request.
                     restored.await("NOTES|RESET");
