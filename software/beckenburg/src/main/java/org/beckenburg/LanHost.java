@@ -236,7 +236,7 @@ public final class LanHost implements AutoCloseable {
             Reservation seat=reserved[i];
             if(seat==null||now-seat.expiresNanos<0)continue;
             reserved[i]=null;
-            if(i==GHOST_SEAT)continue;
+            if(i==GHOST_SEAT){ghostLobbyLook=null;broadcastLobby();continue;}
             mission.depart(i);
             notifyHunters("PEER|LEFT|"+i);
             notifyHunters("INFO|hunter "+(i+1)+" reconnect expired - "+mission.remainingHunters()+" investigator(s) remaining");
