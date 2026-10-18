@@ -13,6 +13,12 @@ public final class FieldSupplies {
     private int credits=400;
     private final int[][] owned=new int[Kind.values().length][Tier.values().length];
     public int credits(){return credits;}
+    /** Shares the SAME credits balance with tiered field equipment. */
+    public boolean spend(int cost){
+        if(cost<0||cost>100000)throw new IllegalArgumentException("bad field equipment price");
+        if(credits<cost)return false;
+        credits-=cost;return true;
+    }
     public int stock(Kind kind,Tier tier){return owned[Objects.requireNonNull(kind).ordinal()][Objects.requireNonNull(tier).ordinal()];}
     public void reward(int amount){if(amount<0||amount>100000)throw new IllegalArgumentException("bad payout");credits=Math.min(100000,credits+amount);}
     public boolean purchase(Kind kind,Tier tier){
