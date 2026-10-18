@@ -10,6 +10,7 @@ public final class LanLobbyWindow extends JFrame {
     private final JComboBox<String> role=new JComboBox<>(new String[]{"Hunter","Ghost"});
     private final JPasswordField roomPassword=new JPasswordField(9);
     private final JToggleButton lobbyLock=new JToggleButton("Lock joins");
+    private final JButton hostInfo=new JButton("Host info");
     private final LobbyGhostAvatar.Preview avatar=new LobbyGhostAvatar.Preview();
     private LobbyGhostAvatar.Look localLook=LobbyGhostAvatar.random(
         java.util.concurrent.ThreadLocalRandom.current());
@@ -54,6 +55,7 @@ public final class LanLobbyWindow extends JFrame {
         controls.add(new JLabel("Hunters"));controls.add(partySize);
         controls.add(tuneContract);controls.add(host);controls.add(join);controls.add(reconnect);
         controls.add(lobbyLock);lobbyLock.setEnabled(false);
+        controls.add(hostInfo);hostInfo.setEnabled(false);
         JPanel commands=new JPanel(new FlowLayout(FlowLayout.LEFT,6,4));
         commands.add(ready);commands.add(start);commands.add(new JLabel("Room"));commands.add(target);
         commands.add(move);commands.add(instrument);commands.add(scan);commands.add(ward);
@@ -80,6 +82,14 @@ public final class LanLobbyWindow extends JFrame {
             }else avatar.showHunter();
         });
         host.addActionListener(e->connect(true));join.addActionListener(e->connect(false));
+        hostInfo.addActionListener(e->{
+            if(hosted==null)return;
+            JTextArea diagnostic=new JTextArea(LanNetworkDiagnostics.hostInfo(hosted),11,60);
+            diagnostic.setEditable(false);diagnostic.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
+            diagnostic.setCaretPosition(0);
+            JOptionPane.showMessageDialog(this,new JScrollPane(diagnostic),
+                "LAN host connectivity — local addresses, not public reachability",JOptionPane.INFORMATION_MESSAGE);
+        });
         lobbyLock.addActionListener(e->{
             if(hosted==null){lobbyLock.setSelected(false);return;}
             hosted.setLobbyLocked(lobbyLock.isSelected());
@@ -202,7 +212,7 @@ public final class LanLobbyWindow extends JFrame {
                     hosted=own;connection=client;busy=false;
                     resumeTicket=null;reconnect.setEnabled(false);
                     roomPassword.setEnabled(false);
-                    lobbyLock.setEnabled(hosted!=null);
+                    lobbyLock.setEnabled(hosted!=null);hostInfo.setEnabled(hosted!=null);
                     role.setEnabled(false);
                     status.setText("Seat "+client.seat()+" — room case + shared house");
                     if("GHOST".equals(client.seat()))avatar.showGhost(
@@ -217,7 +227,7 @@ public final class LanLobbyWindow extends JFrame {
                 SwingUtilities.invokeLater(()->{
                     if(generation!=connectionGeneration)return;
                     busy=false;status.setText("Connection failed");
-                    log.append("Error: "+msg+"\n");
+                    log.append(LanNetworkDiagnostics.explain(ex)+"\nDetail: "+msg+"\n");
                 });
             }
         },"beckenburg-connect");task.setDaemon(true);task.start();
@@ -239,7 +249,7 @@ public final class LanLobbyWindow extends JFrame {
                     connection=restored;resumeTicket=null;busy=false;
                     missionRunning=true;worldMode=false;
                     role.setEnabled(false);reconnect.setEnabled(false);
-                    roomPassword.setEnabled(false);lobbyLock.setEnabled(false);
+                    roomPassword.setEnabled(false);lobbyLock.setEnabled(false);hostInfo.setEnabled(false);
                     status.setText("Seat "+restored.seat()+" restored - enter 3D world");
                     caseStatus.setText("Case: mission resumed");
                     setCommandEnabled(true);
@@ -304,6 +314,7 @@ public final class LanLobbyWindow extends JFrame {
             myRoom=HouseMap.EXTRACTION_ROOM;
             role.setEnabled(true);ghostJoined=false;remoteLook=null;
             roomPassword.setEnabled(true);lobbyLock.setEnabled(false);lobbyLock.setSelected(false);
+            hostInfo.setEnabled(false);
             if(role.getSelectedIndex()==1)avatar.showGhost(localLook,false);
             else avatar.showHunter();
             status.setText("Disconnected — host or server connection lost");
