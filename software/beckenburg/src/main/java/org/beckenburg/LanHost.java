@@ -114,7 +114,7 @@ public final class LanHost implements AutoCloseable {
         };
         mission.configureEvidenceClimate(season,EvidenceSignals.Weather.CLEAR,
             climateClock.getHour(),true,
-            (RESUME_RANDOM.nextBoolean()?EvidenceSignals.Polarity.COLD:EvidenceSignals.Polarity.HOT));
+            GhostEvidenceProfile.thermal(ghostType));
         ai=new LanGhostPursuit(map,20261016L,type);
         ai.configureFrequency(contract.eventFrequency());
         bindAddress=Objects.requireNonNull(ip);
@@ -932,7 +932,7 @@ public final class LanHost implements AutoCloseable {
             case STRIKE,SIGNATURE->10;case DRIFT->0;
         };
         if(eventPower>0){
-            writingBook.witness(20261018L,tick,result);
+            writingBook.witness(20261018L,tick,result,ghostType);
             lastEvidenceEventTick=tick;
             lastEvidenceEventRoom=result.room();
             lastEvidenceEventPower=eventPower;
