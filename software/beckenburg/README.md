@@ -1,5 +1,9 @@
 # The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
 
+## Bounded crash-safe LAN reconnect token rotation (022)
+
+Resuming a reserved seat now retains one temporary previous token until the client atomically stores the replacement and acknowledges it with RESUMEACK. Unacknowledged retries retain the original grace expiry, not unlimited session extension. Server-owned Start Match permission is enforced for GUI-hosted sessions even when a guest obtains H1, and hunter body/room snapshots continue while a disconnected seat is reserved. See [recovery implementation 022](../../docs/beckenburg/network/LAN_RECONNECT_DURABLE_ROTATION_022.md). Source committed and regressions registered; complete Java and Windows multiplayer tests still unverified.
+
 ## LAN recovery and local-host integrity fixes (021)
 
 A five-field server WELCOME now actually supplies the rotating reconnect credential and authoritative replay watermark to the Java client. Local hosting protects the real host player's H1/ghost slot with a loopback-issued random proof, rather than granting the owner role to whoever connects first. A temporary owner-client transport failure can recover when the authoritative server lives; explicit owner Leave still ends its listen-hosted case. The diagnostic view displays the real gameplay TCP port and separately allocated voice UDP port. See [021 details](../../docs/beckenburg/network/LAN_HOSTING_RECOVERY_HARDENING_021.md). All new tests are in both build drivers; complete Java/Windows acceptance is **not yet claimed**.
