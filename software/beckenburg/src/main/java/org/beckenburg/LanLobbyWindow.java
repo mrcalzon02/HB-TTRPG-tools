@@ -139,15 +139,17 @@ public final class LanLobbyWindow extends JFrame {
             log.append("Stored reconnect ticket could not be read; original file was preserved: "+ex.getMessage()+"\n");
         }
     }
-    private void saveResume(LanClient client){
-        if(hosted!=null)return; // Local host can never restore its own lost server process.
+    private boolean saveResume(LanClient client){
+        if(hosted!=null)return false; // Destroyed local host cannot be recovered.
         LanClient.ResumeTicket ticket=client.resumeTicket();
-        if(ticket==null)return;
+        if(ticket==null)return false;
         try {
             LanResumeStore.save(LanResumeStore.defaultPath(),client.address(),client.port(),
                     ticket.seat(),ticket.token(),ticket.nextSequence());
+            return true;
         }catch(IOException ex){
             log.append("Session recovery file unavailable: "+ex.getMessage()+"\n");
+            return false;
         }
     }
     private void clearSavedResume(){
@@ -291,7 +293,16 @@ public final class LanLobbyWindow extends JFrame {
                 SwingUtilities.invokeLater(()->{
                     if(generation!=connectionGeneration){restored.close();return;}
                     connection=restored;resumeTicket=null;busy=false;
-                    saveResume(restored); // The old resume capability was rotated by the host.
+                    if(saveResume(restored)){
+                        // Only retire the old host capability AFTER the replacement
+                        // has been durably persisted for process-restart recovery.
+                        try{restored.acknowledgeStoredResume();}
+                        catch(IOException ex){
+                            log.append("Recovery acknowledgement unavailable: "+ex.getMessage()+"\n");
+                        }
+                    }else{
+                        log.append("Old recovery token remains valid during this match if the connection drops again.\n");
+                    }
                     missionRunning=true;worldMode=false;
                     role.setSelectedIndex("GHOST".equals(restored.seat())?1:0);
                     role.setEnabled(false);reconnect.setEnabled(false);
