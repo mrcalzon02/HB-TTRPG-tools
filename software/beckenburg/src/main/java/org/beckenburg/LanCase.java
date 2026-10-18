@@ -190,8 +190,13 @@ public final class LanCase {
         evidenceThermal=java.util.Objects.requireNonNull(thermalPolarity);
         evidenceHour=hour;evidenceHeating=heating;
     }
+    private final EvidenceSignals.QuietFieldTracker[] quietField = java.util.stream.IntStream.range(0,6).mapToObj(i->new EvidenceSignals.QuietFieldTracker()).toArray(EvidenceSignals.QuietFieldTracker[]::new);
     public Report scanMeasured(int seat,Tool tool,int room,int ghostRoom,
             int tick,int eventRoom,int eventStrength){
+        return scanMeasured(seat,tool,room,ghostRoom,tick,eventRoom,eventStrength,false);
+    }
+    public Report scanMeasured(int seat,Tool tool,int room,int ghostRoom,
+            int tick,int eventRoom,int eventStrength,boolean emfSilence){
         hunter(seat);
         if(outcome!=Outcome.ACTIVE||!alive(seat))
             return new Report(false,"investigation unavailable");
@@ -203,10 +208,12 @@ public final class LanCase {
         switch(tool){
             case EMF -> {
                 EvidenceSignals.Electromagnetic sample=EvidenceSignals.emf(
-                    0xB3CC3BL,tick,room,eventRoom,eventStrength);
-                positive=sample.positiveEvidence();
+                    0xB3CC3BL,tick,room,eventRoom,eventStrength,emfSilence);
+                int quiet=quietField[seat].observe(tick,room,sample);
+                positive=sample.positiveEvidence()||quiet==3;
                 reading="EMF "+sample.level()+"/10"
-                    +(positive?" - event threshold exceeded":" - fluctuating activity");
+                    +(sample.suppressed()?" - paranormal silence "+quiet+"/3":
+                       positive?" - event threshold exceeded":" - fluctuating activity");
             }
             case THERMOMETER -> {
                 boolean inside=room<HouseMap.INDOOR_ROOMS;
@@ -235,6 +242,10 @@ public final class LanCase {
     }
     public Report scanSpatialMeasured(int seat,Tool tool,LanWorld.Body body,
             int ghostRoom,HouseMap map,int tick,int eventRoom,int eventStrength){
+        return scanSpatialMeasured(seat,tool,body,ghostRoom,map,tick,eventRoom,eventStrength,false);
+    }
+    public Report scanSpatialMeasured(int seat,Tool tool,LanWorld.Body body,
+            int ghostRoom,HouseMap map,int tick,int eventRoom,int eventStrength,boolean emfSilence){
         hunter(seat);
         if(outcome!=Outcome.ACTIVE||!alive(seat))
             return new Report(false,"investigation unavailable");
@@ -246,7 +257,7 @@ public final class LanCase {
         if(Math.hypot(body.x()-map.centerX(room),body.z()-map.centerZ(room))
                 >tool.sensingRadius())
             return new Report(true,"INCONCLUSIVE "+tool+" - move closer for reliable measurement");
-        return scanMeasured(seat,tool,room,ghostRoom,tick,eventRoom,eventStrength);
+        return scanMeasured(seat,tool,room,ghostRoom,tick,eventRoom,eventStrength,emfSilence);
     }
 
     public Report ward(int seat,int room) {
