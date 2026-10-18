@@ -297,7 +297,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.setColor(new Color(17,19,25));g.fillRect(0,h,getWidth(),getHeight()-h);
             g.setColor(new Color(216,215,202));
             g.drawString(health==0?"ARROWS / MOUSE LOOK - OBSERVE ONLY - ESC EXIT":
-                    "WASD MOVE  •  CLICK TO CAPTURE MOUSE / ARROWS LOOK  •  E DOOR",13,h+23);
+                    "WASD MOVE / SHIFT SPRINT / L HIDE / M VAN / E DOOR / ARROWS LOOK",13,h+23);
             g.drawString(health==0?"NO MOVEMENT OR EQUIPMENT WHILE INCAPACITATED":
                     "1-3 "+selected+" R SCAN  Z CROSS("+crosses+")  G WARD("+throwWards+
                     ") H SALT("+saltPouches+") K SHOP  T HP  Y SAN  M VAN",13,h+42);

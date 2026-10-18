@@ -30,7 +30,7 @@ The option catalog below is derived from the current [Phasmophobia custom diffic
 | Contract | Setup protection period | Pending | Domain strike window fixed |
 | Contract | Weather | Partial | Solo conditions normal/blackout/fog; LAN variants pending |
 | Contract | Initial open doors | Pending | Current doors default closed |
-| Contract | Hiding spot density | Pending | No validated physical hiding action yet |
+| Contract | Hiding spot density | Active | 0–100% controls generated cupboard sockets; L hides, movement exposes |
 | Contract | Sanity monitor operational | Active | Host-enforced van setting |
 | Contract | Activity monitor operational | Active | Host-enforced van setting |
 | Contract | Starting breaker state | Partial | Solo utility breaker implemented; LAN config pending |
