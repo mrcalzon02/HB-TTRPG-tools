@@ -21,6 +21,9 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     private int room=-1,energy,tick,choice,lastTurn=-1;
     private boolean audible,finished;
     private String legal="[]",feedback="Awaiting private spectral pose";
+    private int actionDueTick=-1;
+    private List<GhostDomain.Action> offered=List.of();
+    private String lastAutomaticAction="";
     private LanGhostHearing.Event hearing;
     private int lastHearingTick=-1;
     private String ghostSpecies="UNKNOWN",behaviorName="RESTLESS";
@@ -79,6 +82,27 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                     };
                     audio.play(new LanSound.CueEvent(sound,pan,volume,cue.tick()));
                 }
+            }else if(p.size()>=4&&p.size()<=7&&p.get(0).equals("GPROMPT")){
+                int sampleTick=LanProtocol.integer(p.get(1),0,99999999);
+                int due=LanProtocol.integer(p.get(2),0,99999999);
+                LanProtocol.integer(p.get(3),0,HouseMap.EXTRACTION_ROOM-1);
+                List<GhostDomain.Action> options=new ArrayList<>();
+                for(int i=4;i<p.size();i++){
+                    GhostDomain.Action candidate=GhostDomain.Action.valueOf(p.get(i));
+                    if(candidate==GhostDomain.Action.DRIFT||options.contains(candidate))
+                        throw new IllegalArgumentException("invalid haunt menu");
+                    options.add(candidate);
+                }
+                if(sampleTick>=tick-8){
+                    actionDueTick=due;
+                    offered=List.copyOf(options);
+                }
+            }else if(p.size()==4&&p.get(0).equals("GFORCED")){
+                GhostDomain.Action action=GhostDomain.Action.valueOf(p.get(1));
+                int place=LanProtocol.integer(p.get(2),0,HouseMap.EXTRACTION_ROOM-1);
+                LanProtocol.integer(p.get(3),0,99999999);
+                lastAutomaticAction=action+" in "+map.roomName(place);
+                feedback="DEADLINE EXPIRED: "+lastAutomaticAction;
             }else if(packet.startsWith("RESULT|")){finished=true;feedback=packet;keys.clear();}
             else if(packet.startsWith("ACCEPT|")||packet.startsWith("REJECT|"))feedback=packet;
         }catch(IllegalArgumentException ex){feedback="Invalid spectral snapshot rejected";}
@@ -102,6 +126,10 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
         repaint();
     }
     private List<Integer> exits(){return room<0?List.of():map.ghostExits(room);}
+    private void chosen(int index){
+        if(index>=0&&index<offered.size())ability(offered.get(index));
+        else feedback="NO LEGAL ACTION IN THAT SLOT";
+    }
     private void ability(GhostDomain.Action action){
         if(finished||room<0)return;
         List<Integer> exits=exits();
@@ -113,6 +141,9 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     public int energy(){return energy;}
     public String ghostSpecies(){return ghostSpecies;}
     public String feedback(){return feedback;}
+    public int actionDeadline(){return actionDueTick;}
+    public List<GhostDomain.Action> offeredActions(){return offered;}
+    public String automaticAction(){return lastAutomaticAction;}
     public boolean isCaptured(){return mouseLook.captured();}
     public String currentHearing(){
         return !finished&&hearing!=null&&tick<=hearing.tick()+18?hearing.caption():"";
@@ -123,9 +154,9 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_OPEN_BRACKET -> choice--;
             case KeyEvent.VK_CLOSE_BRACKET -> choice++;
             case KeyEvent.VK_SPACE,KeyEvent.VK_ENTER -> ability(GhostDomain.Action.DRIFT);
-            case KeyEvent.VK_1 -> ability(GhostDomain.Action.WHISPER);
-            case KeyEvent.VK_2 -> ability(GhostDomain.Action.DISTURB);
-            case KeyEvent.VK_3 -> ability(GhostDomain.Action.MANIFEST);
+            case KeyEvent.VK_1 -> chosen(0);
+            case KeyEvent.VK_2 -> chosen(1);
+            case KeyEvent.VK_3 -> chosen(2);
             case KeyEvent.VK_4 -> ability(GhostDomain.Action.STRIKE);
             case KeyEvent.VK_5 -> ability(GhostDomain.Action.SIGNATURE);
             case KeyEvent.VK_LEFT -> camera.yaw-=.1;
@@ -163,9 +194,17 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
             List<Integer> exits=exits();
             g.drawString("WASD SPECTRAL VIEW  CLICK TO CAPTURE / ARROWS LOOK  ESC EXIT",12,h+22);
             g.drawString("[ ] SELECT ROOM  SPACE DRIFT -> "+(exits.isEmpty()?"NONE":map.roomName(exits.get(Math.floorMod(choice,exits.size())))),12,h+42);
-            g.drawString("1 WHISPER  2 DISTURB  3 MANIFEST  4 STRIKE  5 SIGNATURE  READY "+legal,12,h+64);
+            StringBuilder menu=new StringBuilder("HAUNT ");
+            for(int i=0;i<offered.size();i++)menu.append(i+1).append(" ")
+                .append(offered.get(i)).append("  ");
+            if(offered.isEmpty())menu.append("RECHARGING / WAIT FOR HOST");
+            int remaining=actionDueTick<0?-1:Math.max(0,(actionDueTick-tick+9)/10);
+            g.drawString(menu.substring(0,Math.min(menu.length(),85)),12,h+63);
+            g.setColor(remaining<=3&&remaining>=0?new Color(255,170,157):new Color(210,200,237));
+            g.drawString("NEXT MANDATORY EVENT: "+(remaining<0?"WAITING":remaining+"s")
+                +"  /  MISS = AUTOMATIC REAL GHOST ACTION",12,h+82);
             g.setColor(new Color(144,206,189));
-            g.drawString(feedback.substring(0,Math.min(feedback.length(),108)),12,h+86);
+            g.drawString(feedback.substring(0,Math.min(feedback.length(),108)),12,h+101);
         }finally{g.dispose();}
     }
 }
