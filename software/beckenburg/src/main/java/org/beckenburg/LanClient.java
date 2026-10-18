@@ -16,25 +16,59 @@ public final class LanClient implements AutoCloseable {
     private volatile boolean closed;
     private volatile LanVoiceClientAudio voice;
     private long sequence;
+    private final String connectAddress;
+    private final int connectPort;
+    private volatile String resumeKey;
+
+    /** A reconnect capability, not an identity or proof of ownership outside this match. */
+    public record ResumeTicket(String seat,String token,long nextSequence) { }
+
+    public ResumeTicket resumeTicket() {
+        String key=resumeKey;
+        return key==null?null:new ResumeTicket(seat,key,sequence);
+    }
+    public String address() {return connectAddress;}
+    public int port() {return connectPort;}
 
     public LanClient(String address,int port,boolean ghost,String nickname,Consumer<String> observer)throws IOException {
+        this(address,port,ghost,nickname,null,observer);
+    }
+    public LanClient(String address,int port,ResumeTicket ticket,Consumer<String> observer)throws IOException {
+        this(address,port,"GHOST".equals(Objects.requireNonNull(ticket).seat()),"",ticket,observer);
+    }
+    private LanClient(String address,int port,boolean ghost,String nickname,ResumeTicket ticket,Consumer<String> observer)throws IOException {
         this.observer=Objects.requireNonNull(observer);
+        this.connectAddress=Objects.requireNonNull(address);
+        this.connectPort=port;
         if(port<1||port>65535)throw new IllegalArgumentException("port out of bounds");
-        LanProtocol.cleanName(nickname);
+        if(ticket==null)LanProtocol.cleanName(nickname);
+        else if(!ticket.seat().matches("GHOST|H[1-6]") || !ticket.token().matches("[0-9a-f]{48}")
+                || ticket.nextSequence()<0)
+            throw new IllegalArgumentException("invalid reconnect ticket");
         Reader input=null;Writer output=null;String assigned=null;
         try{
             socket.connect(new InetSocketAddress(address,port),3000);
             socket.setTcpNoDelay(true);socket.setSoTimeout(5000);
             input=LanProtocol.reader(socket.getInputStream());output=LanProtocol.writer(socket.getOutputStream());
-            LanProtocol.write(output,"JOIN|1|"+(ghost?"GHOST":"HUNTER")+"|"+nickname);
+            LanProtocol.write(output,ticket==null
+                    ?"JOIN|1|"+(ghost?"GHOST":"HUNTER")+"|"+nickname
+                    :"RESUME|1|"+ticket.seat()+"|"+ticket.token());
             String response=LanProtocol.read(input);
             var parts=LanProtocol.parts(response);
-            if(parts.size()!=3||!parts.get(0).equals("WELCOME"))throw new IOException("join failed: "+response);
+            if((parts.size()!=3&&parts.size()!=4)||!parts.get(0).equals("WELCOME"))
+                throw new IOException("join failed: "+response);
+            if(parts.size()==4){
+                if(!parts.get(3).matches("[0-9a-f]{48}"))throw new IOException("invalid session credential");
+                resumeKey=parts.get(3); // Never send this secret to the UI event log.
+            }
             assigned=parts.get(1);
             if(!(assigned.equals("GHOST")||assigned.matches("H[1-6]")))throw new IOException("invalid host seat");
+            if(ticket!=null&&!assigned.equals(ticket.seat()))throw new IOException("reconnect seat mismatch");
+            if(ticket!=null&&resumeKey==null)throw new IOException("server did not accept reconnect credentials");
             socket.setSoTimeout(0);
         }catch(Exception error){try{socket.close();}catch(IOException ignored){}if(error instanceof IOException ioe)throw ioe;throw new IOException("invalid join response",error);}
         in=input;out=output;seat=assigned;
+        sequence=ticket==null?0:ticket.nextSequence();
         reader=new Thread(this::readLoop,"beckenburg-client-events");reader.setDaemon(true);reader.start();
     }
     public String seat(){return seat;}
@@ -133,11 +167,16 @@ public final class LanClient implements AutoCloseable {
                 try{observer.accept("INFO|network connection ended");}
                 catch(RuntimeException ignored){ /* A failing UI callback cannot prevent socket cleanup. */ }
             }
-            close();
+            cleanup(false);
         }
     }
-    @Override public void close(){
-        if(closed)return;closed=true;
+    @Override public void close(){cleanup(true);}
+    private synchronized void cleanup(boolean intentional){
+        if(closed)return;
+        // A normal UI Exit is different from an unexpected EOF: deliberate departure
+        // frees the seat; network failure leaves a time-limited host reservation.
+        if(intentional)try{LanProtocol.write(out,"LEAVE");}catch(IOException ignored){}
+        closed=true;
         LanVoiceClientAudio media=voice;voice=null;
         if(media!=null)media.close();
         try{socket.close();}catch(IOException ignored){}
