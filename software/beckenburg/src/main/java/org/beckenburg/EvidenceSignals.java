@@ -47,24 +47,6 @@ public final class EvidenceSignals {
             this(level,positiveEvidence,false);
         }
     }
-    /** A zero reading is abnormal only if a live, powered meter observes a genuine
-     * suppression event. Absence of high EMF is NOT evidence of spectral silence.
-     */
-    public static final class QuietFieldTracker {
-        private int lastTick=-1,firstTick=-1,room=-1,count;
-        public int observe(int tick,int observedRoom,Electromagnetic sample){
-            if(tick<0||observedRoom<0||sample==null)
-                throw new IllegalArgumentException("invalid quiet-field observation");
-            if(!sample.suppressed()){
-                room=-1;count=0;lastTick=-1;firstTick=-1;return 0;
-            }
-            if(room!=observedRoom||tick-lastTick>40){
-                room=observedRoom;firstTick=tick;lastTick=tick;count=1;return 1;
-            }
-            if(tick-lastTick>=5){lastTick=tick;count=Math.min(3,count+1);}
-            return count>=3&&tick-firstTick>=10?3:count;
-        }
-    }
     public static double cToF(double c){return c*9.0/5.0+32.0;}
     public static double fToC(double f){return (f-32.0)*5.0/9.0;}
     private static int hash(long seed,int room,int window){
