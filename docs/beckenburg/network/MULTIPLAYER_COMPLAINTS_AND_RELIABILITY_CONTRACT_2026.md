@@ -34,7 +34,7 @@ Phasmophobia's 2026 shared teammate evidence/deduction feature was positively re
 - Java 17 LanHost is already the match authority with real seat-bound input commands, host-side ghost effects and AI ghost control.
 - Java 17 LanClient/LanProtocol use **bounded ASCII TCP** messages for game and lobby (protocol version 1, 512-character maximum frame); host simulation schedule currently ticks at **100 ms**. This is prototype status, not an accepted final responsiveness target.
 - LAN voice is a separate **unencrypted UDP G.711 μ-law** media path with bounded packets and seat-based tokens. This is *not* safe to advertise as encrypted Internet play.
-- [LAN_GHOST_TAKEOVER_013.md](LAN_GHOST_TAKEOVER_013.md) confirms human-ghost disconnect transfers to host AI preserving the ghost state, but **hunter disconnect still terminates the experimental match**, and no mid-match reconnect or physical Windows acceptance is claimed.
+- [LAN_GHOST_TAKEOVER_013.md](LAN_GHOST_TAKEOVER_013.md) confirms human-ghost-to-AI continuity. A guest hunter's explicit departure already allowed the investigation to continue; losing the host-owned H1 seat ended the match. [Source integration 019](LAN_SESSION_RESUME_IMPLEMENTATION_019.md) adds provisional unexpected-loss reservations, in-process same-seat reconnect and LAN access controls, still awaiting end-to-end Java/Windows verification.
 - These findings add requirements to existing production stages and the single stage ledger; they do not create a parallel implementation.
 
 ## A. Session integrity and mid-game reconnect
