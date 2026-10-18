@@ -25,6 +25,11 @@ public final class LanGhostPursuit {
     private Echo memory;
     private Search search;
     private long sequence;
+    private int eventFrequency=100;
+    public void configureFrequency(int percent){
+        if(percent<50||percent>200)throw new IllegalArgumentException("invalid event rate");
+        eventFrequency=percent;
+    }
 
     public LanGhostPursuit(HouseMap map,long seed){this(map,seed,GhostIdentity.Type.SPIRIT);}
     public LanGhostPursuit(HouseMap map,long seed,GhostIdentity.Type type) {
@@ -96,7 +101,8 @@ public final class LanGhostPursuit {
         // Species bias uses only filtered host observations; never private hunter positions.
         GhostBehavior.Profile bias=GhostBehavior.profile(archetype);
         if(action==null && bias.favored()!=GhostDomain.Action.DRIFT
-                && seen.tick()%bias.aiPeriod()==0 && legal.contains(bias.favored()))
+                && seen.tick()%Math.max(6,bias.aiPeriod()*100/eventFrequency)==0
+                && legal.contains(bias.favored()))
             action=bias.favored();
         if(action==null && seen.tick()%29==0 && legal.contains(GhostDomain.Action.WHISPER))
             action=GhostDomain.Action.WHISPER;

@@ -59,10 +59,14 @@ public final class LanHost implements AutoCloseable {
         Arrays.fill(lastGhostFootstepCueTick,-10000);
         for(int i=0;i<HUNTERS;i++)supplies[i]=new FieldSupplies();
         world.configure(contract);
+        ghostPose.configureSpeed(contract.ghostSpeed());
         ghost=new GhostDomain(map,4,type);
         mission=new LanCase(4);
         mission.configureHunters(contract.hunters());
         mission.setStartingSanity(contract.startingSanity());
+        mission.configureSanityDrain(contract.sanityDrain());
+        ghost.configureRecovery(contract.energyRecovery());
+        ai.configureFrequency(contract.eventFrequency());
         if(identityMode)mission.configure(type,true);
         ai=new LanGhostPursuit(map,20261016L,type);
         bindAddress=Objects.requireNonNull(ip);

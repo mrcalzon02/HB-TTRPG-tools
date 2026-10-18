@@ -30,6 +30,12 @@ public final class LanCase {
     private int lastGuessTick=-1000;
     private final int[] health={100,100,100,100,100,100},stress=new int[6],wards={2,2,2,2,2,2};
     private final boolean[] active={true,true,true,false,false,false};
+    private int sanityDrainRate=100;
+    private final int[] drainRemainder=new int[6];
+    public void configureSanityDrain(int percentage){
+        if(percentage<0||percentage>200)throw new IllegalArgumentException("invalid sanity loss");
+        sanityDrainRate=percentage;
+    }
     /** Called before a hosted match. Tests using the legacy three-seat case remain unchanged. */
     public void configureHunters(int count){
         if(count<1||count>6||outcome!=Outcome.ACTIVE)throw new IllegalArgumentException("1-6 hunters required");
@@ -97,7 +103,11 @@ public final class LanCase {
         hunter(seat);
         if(amount<0||amount>3)throw new IllegalArgumentException("invalid sanity drain");
         if(outcome!=Outcome.ACTIVE||!alive(seat)||amount==0)return false;
-        stress[seat]=Math.min(100,stress[seat]+amount);
+        drainRemainder[seat]+=amount*sanityDrainRate;
+        int actual=drainRemainder[seat]/100;
+        drainRemainder[seat]%=100;
+        if(actual==0)return false;
+        stress[seat]=Math.min(100,stress[seat]+actual);
         return true;
     }
     public int wards(int seat){hunter(seat);return wards[seat];}
@@ -201,7 +211,9 @@ public final class LanCase {
             throw new IllegalArgumentException("matched 3 or 6 hunter positions required");
         if(outcome!=Outcome.ACTIVE||!effect.applied())return;
         for(int i=0;i<hunterRooms.length;i++)if(active[i]&&affected[i]&&hunterRooms[i]==room && health[i]>0){
-            stress[i]=Math.min(100,stress[i]+effect.fear());
+            drainRemainder[i]+=effect.fear()*sanityDrainRate;
+            stress[i]=Math.min(100,stress[i]+drainRemainder[i]/100);
+            drainRemainder[i]%=100;
             if(effect.harm()>0)health[i]=Math.max(0,health[i]-Math.max(1,wardRoom==room?Math.min(4,effect.harm()):effect.harm()));
         }
         if(ritualProgress>=0 && room==ritualRoom

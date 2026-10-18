@@ -38,6 +38,11 @@ public final class GhostDomain {
     private final GhostIdentity.Type archetype;
     private final int[] lastActionTick = new int[Action.values().length];
     private int room, tick, energy = 100, manifestUntil, occupants;
+    private int energyRecovery=100,energyRemainder;
+    public void configureRecovery(int rate){
+        if(rate<50||rate>200)throw new IllegalArgumentException("invalid energy recovery");
+        energyRecovery=rate;
+    }
     private int suppressedUntil=-1,slowedUntil=-1;
     private boolean hearsHunter;
     private long lastSequence = -1;
@@ -84,7 +89,9 @@ public final class GhostDomain {
         if(occupants<0||occupants>3)throw new IllegalArgumentException("invalid occupancy");
         tick=nextTick;this.occupants=occupants;
         hearsHunter = hunterRoom >= 0 && hunterRoom == room;
-        energy=Math.min(100,energy+GhostTraits.gained(archetype,tick,occupants));
+        energyRemainder+=GhostTraits.gained(archetype,tick,occupants)*energyRecovery;
+        energy=Math.min(100,energy+energyRemainder/100);
+        energyRemainder%=100;
     }
     private List<Integer> exits(int current) {
         return map.ghostExits(current);
