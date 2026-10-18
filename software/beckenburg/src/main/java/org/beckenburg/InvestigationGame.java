@@ -44,6 +44,7 @@ public final class InvestigationGame {
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setSize(1060,725);window.setMinimumSize(new Dimension(760,510));
         window.setLocationRelativeTo(null);window.setVisible(true);
+        BeckenburgUpdatesUI.checkOnStartup(window);
     }
     private void buildMenu(){
         menu.setBackground(new Color(19,21,28));
@@ -80,6 +81,7 @@ public final class InvestigationGame {
         JButton ghost=button("GHOST PRACTICE / LOCAL");
         JButton lan=button("LAN HOST / JOIN (3D HOUSE ALPHA)");
         JButton guide=button("FIELD MANUAL / CONTROLS");
+        JButton updates=button("UPDATES");
         JButton quit=button("EXIT");
         account.setForeground(new Color(172,204,183));
         account.setHorizontalAlignment(SwingConstants.CENTER);
@@ -87,7 +89,7 @@ public final class InvestigationGame {
         inner.add(Box.createVerticalStrut(15));inner.add(status);inner.add(Box.createVerticalStrut(18));
         inner.add(selected);inner.add(Box.createVerticalStrut(6));inner.add(rolePicker);
         inner.add(Box.createVerticalStrut(10));inner.add(selectors);
-        for(JButton b:new JButton[]{enterCastle,begin,ghost,lan,guide,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
+        for(JButton b:new JButton[]{enterCastle,begin,ghost,lan,guide,updates,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
         inner.add(Box.createVerticalStrut(20));inner.add(account);
         JLabel limitation=new JLabel("LAN shared house navigation is available; complete 3v1 simulation is still in development.",SwingConstants.CENTER);
         limitation.setForeground(new Color(147,154,165));inner.add(Box.createVerticalStrut(12));inner.add(limitation);
@@ -111,6 +113,7 @@ public final class InvestigationGame {
             "LAN ROOM TEST: 3 hunter seats + ghost/AI, ready/start, room moves and ghost actions.\n"+
             "LAN first-person hunter movement and doors work; full 3v1 integration remains unfinished.",
             "Field Manual",JOptionPane.INFORMATION_MESSAGE));
+        updates.addActionListener(e->BeckenburgUpdatesUI.open(window));
         quit.addActionListener(e->window.dispose());refreshAccount();
     }
     private static JButton button(String s){

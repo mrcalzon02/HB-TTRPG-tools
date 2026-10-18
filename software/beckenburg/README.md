@@ -108,6 +108,10 @@ Three hunters and one human ghost can now enter their own rendered first-person 
 
 **Limits:** Ghost pose is a view-only within-room camera, not positional attack authority; attacks, sensing and evidence still resolve at room level. The ghost never receives exact hunter positions or private evidence. This does not yet make the entire competitive 3v1 encounter spatial. Java 17 target; Windows real-machine build/install and multi-PC tests remain unverified.
 
+## Product-specific GitHub Windows releases and update channel
+
+Beckenburg has a dedicated [Windows release workflow](../../.github/workflows/beckenburg-release.yml), self-contained EXE/MSI installers, a portable Windows ZIP, and SHA-256 verified in-game **UPDATES**. The updater checks **only** `beckenburg-v*` tags, never another HB-TTRPG-tools product or `/releases/latest`. Automatic patch bumps occur for Beckenburg source changes; manual patch/minor/major bumps use workflow dispatch. The installer is unsigned and the game remains an early test build. See [RELEASES.md](RELEASES.md) for packaging, upgrade identity, privacy, and verification gates.
+
 ## Run on Windows
 
 Install a **Java 17 or newer JDK** to build (`javac`, `java`, `jar` on PATH). From this directory run `build.cmd`, then `build.cmd run`; or run `java -jar build\beckenburg-game.jar` after building. Requires a graphical desktop. The produced JAR is a development build and **does not yet bundle a JRE, installer, code signature or tested Windows native GPU driver path**.
