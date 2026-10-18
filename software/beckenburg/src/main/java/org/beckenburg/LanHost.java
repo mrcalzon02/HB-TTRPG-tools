@@ -745,7 +745,7 @@ public final class LanHost implements AutoCloseable {
         for(int i=0;i<HUNTERS;i++)wasAlive[i]=(seats[i]!=null||reserved[i]!=null)&&mission.alive(i);
         mission.applyGhostEffect(result.room(),hunterRooms,result,affected);
         if(result.fear()>0||result.harm()>0)
-            for(int i=0;i<HUNTERS;i++)if(wasAlive[i]&&affected[i]&&hunterRooms[i]==result.room())
+            for(int i=0;i<HUNTERS;i++)if(wasAlive[i]&&affected[i]&&hunterRooms[i]==result.room()&&seats[i]!=null)
                 reply(seats[i],"EFFECT|"+result.action()+"|"+result.fear()+"|"+result.harm());
         // Announce only actual living-to-downed transitions to the hunter team.
         // Human ghosts never receive health, incapacitation or team-state telemetry.
@@ -792,7 +792,8 @@ public final class LanHost implements AutoCloseable {
         boolean[] acquired=strikeVictims(),immediate=new boolean[HUNTERS];
         int target=-1;
         for(int i=0;i<HUNTERS;i++)if(acquired[i]){
-            if(seats[i]!=null&&seats[i].worldMode)target=i;
+            if((seats[i]!=null&&seats[i].worldMode)
+                    ||(reserved[i]!=null&&reserved[i].worldMode))target=i;
             else immediate[i]=true; // Preserve room-only clients' existing hit semantics.
         }
         if(LanSpatialCombat.any(immediate))distributeEffect(result,immediate);
@@ -809,11 +810,12 @@ public final class LanHost implements AutoCloseable {
         pendingStrike=null;
         animation.impact(tick);
         boolean[] connected=new boolean[HUNTERS],spatial=new boolean[HUNTERS];
-        for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&mission.alive(i)){
-            connected[i]=true;spatial[i]=seats[i].worldMode;
+        for(int i=0;i<HUNTERS;i++)if(mission.alive(i)){
+            if(seats[i]!=null){connected[i]=true;spatial[i]=seats[i].worldMode;}
+            else if(reserved[i]!=null){connected[i]=true;spatial[i]=reserved[i].worldMode;}
         }
         int near=0;
-        for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&mission.alive(i)&&hunterRooms[i]==pending.room())near++;
+        for(int i=0;i<HUNTERS;i++)if(connected[i]&&hunterRooms[i]==pending.room())near++;
         boolean soloAllowed=!GhostTraits.of(ghostType).huntsSolitary()||near==1;
         boolean hit=soloAllowed&&pending.hits(map,world,ghostPose.pose(),hunterRooms,connected,spatial)
             &&!counters.wardsAt(world.body(pending.targetSeat()).x(),
@@ -838,13 +840,13 @@ public final class LanHost implements AutoCloseable {
             expireDisconnectedSeats();
             if(!running)return;
             int audible=-1,occupants=0;
-            for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&mission.alive(i)
+            for(int i=0;i<HUNTERS;i++)if((seats[i]!=null||reserved[i]!=null)&&mission.alive(i)
                     &&hunterRooms[i]==ghost.room()){audible=hunterRooms[i];occupants++;}
             ghost.advance(tick,audible,occupants);
             if(tick%12==0)monitor.sample(tick,ghost.energy());
             int drain=GhostTraits.passiveFear(ghostType,tick,occupants);
-            if(drain>0)for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&hunterRooms[i]==ghost.room()
-                    &&mission.drainSanity(i,drain))reply(seats[i],"FEED|SANITY DRAIN");
+            if(drain>0)for(int i=0;i<HUNTERS;i++)if((seats[i]!=null||reserved[i]!=null)&&hunterRooms[i]==ghost.room()
+                    &&mission.drainSanity(i,drain)&&seats[i]!=null)reply(seats[i],"FEED|SANITY DRAIN");
             HunterCounters.Impact impact=counters.advance(map,ghostType,ghost,ghostPose.pose(),tick);
             if(impact.saltTrack()){
                 ghostPose.slowFor(tick,28);
