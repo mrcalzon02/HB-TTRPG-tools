@@ -1,5 +1,9 @@
 # The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
 
+## LAN recovery and local-host integrity fixes (021)
+
+A five-field server WELCOME now actually supplies the rotating reconnect credential and authoritative replay watermark to the Java client. Local hosting protects the real host player's H1/ghost slot with a loopback-issued random proof, rather than granting the owner role to whoever connects first. A temporary owner-client transport failure can recover when the authoritative server lives; explicit owner Leave still ends its listen-hosted case. The diagnostic view displays the real gameplay TCP port and separately allocated voice UDP port. See [021 details](../../docs/beckenburg/network/LAN_HOSTING_RECOVERY_HARDENING_021.md). All new tests are in both build drivers; complete Java/Windows acceptance is **not yet claimed**.
+
 ## Restart-safe LAN recovery and hunter-view synchronization (020)
 
 A guest's temporary host-issued seat token is now saved separately from progression and local install identity, can be recovered by reopening the LAN window after a client crash, and is rotated on successful reconnect. The host welcome includes its accepted command sequence high-water mark so a stale client file cannot replay the last input. Re-entering a hunter 3D view now automatically receives private progress, casefile, notes and scene/device state without a second journal request. A Java 17-isolated local ticket-store test passed; physical Windows socket/player/voice regression evidence remains outstanding. See [source integration 020](../../docs/beckenburg/network/LAN_RESTART_RECOVERY_AND_SNAPSHOT_020.md).
