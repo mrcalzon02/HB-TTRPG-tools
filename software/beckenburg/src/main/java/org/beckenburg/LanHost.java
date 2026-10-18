@@ -201,6 +201,7 @@ public final class LanHost implements AutoCloseable {
                     // The old reservation must survive a failed WELCOME write.
                     // Never consume a seat until its new credentials are sent.
                     LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken+"|"+seatSequenceHighWater(peer));
+                    peer.outbound.start(workers);
                     reserved[slot]=null;seats[slot]=peer;
                     reply(peer,"INFO|mission resumed - reopen 3D view");
                     if(slot!=GHOST_SEAT){
@@ -243,6 +244,7 @@ public final class LanHost implements AutoCloseable {
                     if(wantsGhost)ghostLobbyLook=LobbyGhostAvatar.random(
                         java.util.concurrent.ThreadLocalRandom.current());
                     LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken+"|"+seatSequenceHighWater(peer));
+                    peer.outbound.start(workers);
                     if(slot!=GHOST_SEAT){
                         for(int i=0;i<HUNTERS;i++)if(i!=slot&&seats[i]!=null)
                             reply(peer,"PLAYERNAME|"+i+"|"+seats[i].name);
@@ -257,6 +259,7 @@ public final class LanHost implements AutoCloseable {
             }
         }catch(Exception e){if(!closed&&peer!=null){synchronized(mutex){reply(peer,"REJECT|connection terminated");}}}
         finally {
+            if(peer!=null)peer.outbound.stop();
             if(peer!=null) synchronized(mutex){
                 if(seats[peer.slot]==peer){
                     seats[peer.slot]=null;
@@ -1042,7 +1045,7 @@ public final class LanHost implements AutoCloseable {
         notifyAllPeers(ghostLobbyLook==null?"LOBBYAVATAR|NONE":ghostLobbyLook.frame());
     }
     private void notifyAllPeers(String event){for(Peer peer:seats)if(peer!=null)reply(peer,event);}
-    private static void reply(Peer peer,String event){try{LanProtocol.write(peer.output,event);}catch(IOException ex){try{peer.socket.close();}catch(IOException ignored){}}}
+    private static void reply(Peer peer,String event){peer.outbound.offer(event);}
     @Override public void close(){closed=true;voice.close();try{listener.close();}catch(IOException ignored){}
         synchronized(mutex){for(Peer peer:seats)if(peer!=null){try{peer.socket.close();}catch(IOException ignored){}}}
         clock.shutdownNow();workers.shutdownNow();
@@ -1061,6 +1064,7 @@ public final class LanHost implements AutoCloseable {
     }
     private static final class Peer{
         final Socket socket;final Reader input;final Writer output;final int slot;final String name;
+        final LanOutboundQueue outbound;
         final String resumeToken=newResumeToken();
         String previousResumeToken; // erased after client confirms durable replacement
         long unconfirmedResumeDeadlineNanos; // no unlimited grace via failed reconnect loop
@@ -1068,6 +1072,11 @@ public final class LanHost implements AutoCloseable {
         long lastGhostPoseSequence=-1,lastGhostActionSequence=-1;
         int lastMonitorTick=-100000,lastChatTick=-100000,lastLightTick=-100000;
         long lastLobbyChatNanos;
-        Peer(Socket s,Reader in,Writer out,int slot,String name){socket=s;input=in;output=out;this.slot=slot;this.name=name;}
+        Peer(Socket s,Reader in,Writer out,int slot,String name){
+            socket=s;input=in;output=out;this.slot=slot;this.name=name;
+            outbound=new LanOutboundQueue(out,()->{
+                try{s.close();}catch(IOException ignored){}
+            });
+        }
     }
 }
