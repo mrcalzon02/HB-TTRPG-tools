@@ -63,6 +63,7 @@ public final class LanHost implements AutoCloseable {
         ghost=new GhostDomain(map,4,type);
         mission=new LanCase(4);
         mission.configureHunters(contract.hunters());
+        mission.configurePartyThreat(contract.partyDifficulty());
         mission.setStartingSanity(contract.startingSanity());
         mission.configureSanityDrain(contract.sanityDrain());
         ghost.configureRecovery(contract.energyRecovery());

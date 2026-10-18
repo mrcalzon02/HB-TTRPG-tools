@@ -30,7 +30,11 @@ public final class LanCase {
     private int lastGuessTick=-1000;
     private final int[] health={100,100,100,100,100,100},stress=new int[6],wards={2,2,2,2,2,2};
     private final boolean[] active={true,true,true,false,false,false};
-    private int sanityDrainRate=100;
+    private int sanityDrainRate=100,partyThreat;
+    public void configurePartyThreat(int bonus){
+        if(bonus<1||bonus>6)throw new IllegalArgumentException("party difficulty must be +1..+6");
+        partyThreat=bonus;
+    }
     private final int[] drainRemainder=new int[6];
     public void configureSanityDrain(int percentage){
         if(percentage<0||percentage>200)throw new IllegalArgumentException("invalid sanity loss");
@@ -103,9 +107,9 @@ public final class LanCase {
         hunter(seat);
         if(amount<0||amount>3)throw new IllegalArgumentException("invalid sanity drain");
         if(outcome!=Outcome.ACTIVE||!alive(seat)||amount==0)return false;
-        drainRemainder[seat]+=amount*sanityDrainRate;
-        int actual=drainRemainder[seat]/100;
-        drainRemainder[seat]%=100;
+        drainRemainder[seat]+=amount*sanityDrainRate*(100+partyThreat*10);
+        int actual=drainRemainder[seat]/10000;
+        drainRemainder[seat]%=10000;
         if(actual==0)return false;
         stress[seat]=Math.min(100,stress[seat]+actual);
         return true;
@@ -211,10 +215,12 @@ public final class LanCase {
             throw new IllegalArgumentException("matched 3 or 6 hunter positions required");
         if(outcome!=Outcome.ACTIVE||!effect.applied())return;
         for(int i=0;i<hunterRooms.length;i++)if(active[i]&&affected[i]&&hunterRooms[i]==room && health[i]>0){
-            drainRemainder[i]+=effect.fear()*sanityDrainRate;
-            stress[i]=Math.min(100,stress[i]+drainRemainder[i]/100);
-            drainRemainder[i]%=100;
-            if(effect.harm()>0)health[i]=Math.max(0,health[i]-Math.max(1,wardRoom==room?Math.min(4,effect.harm()):effect.harm()));
+            drainRemainder[i]+=effect.fear()*sanityDrainRate*(100+partyThreat*10);
+            stress[i]=Math.min(100,stress[i]+drainRemainder[i]/10000);
+            drainRemainder[i]%=10000;
+            int physical=effect.harm()*(100+partyThreat*10)/100;
+            if(physical>0)health[i]=Math.max(0,health[i]-
+                Math.max(1,wardRoom==room?Math.min(4,physical):physical));
         }
         if(ritualProgress>=0 && room==ritualRoom
                 &&(effect.action()==GhostDomain.Action.DISTURB
