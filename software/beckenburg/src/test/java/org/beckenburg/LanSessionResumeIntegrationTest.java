@@ -25,7 +25,9 @@ public final class LanSessionResumeIntegrationTest {
                 // Regression: a ghost is never given hunter-only world or journal data.
                 if("GHOST".equals(client.seat()) && (message.startsWith("BODY|")
                     ||message.startsWith("PROGRESS|") ||message.startsWith("TEAMMAP|")
-                    ||message.startsWith("EVIDENCE|") ||message.startsWith("DOORS|")))
+                    ||message.startsWith("EVIDENCE|") ||message.startsWith("DOORS|")
+                    ||message.startsWith("CASEFILE|") ||message.startsWith("NOTES|")
+                    ||message.startsWith("NOTE|")))
                     throw new AssertionError("private hunter state leaked to ghost: "+message);
                 if(message.startsWith(prefix))return message;
             }
@@ -65,6 +67,9 @@ public final class LanSessionResumeIntegrationTest {
                     check("H2".equals(restored.client.seat()),"old seat restored, no new hunter");
                     restored.await("INFO|mission resumed");
                     restored.client.view3D();restored.await("ACCEPT|VIEW3D");
+                    restored.await("PROGRESS|"); // Immediate host-owned state, not next periodic tick.
+                    restored.await("CASEFILE|RESET"); // Auto-replay, no UI journal request.
+                    restored.await("NOTES|RESET");
                     restored.client.step(0,1);restored.await("ACCEPT|STEP");
                     check(host.reservedSeats()==0&&host.connected()==3,"same mission/connected party recovered");
                     check(restored.client.resumeTicket()!=null
