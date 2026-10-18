@@ -6,17 +6,17 @@
 
 ## Corrections to the evidence definition
 
-**EMF is a numeric local signal from 1 to 10, not an identity-specific subtype.** Readings fluctuate with actual events, strength, location and background variation. **Only a reading above 6** during a host-authorized local ghost event counts as high EMF evidence; ordinary EMF spikes and unrelated disturbances may register smaller numbers. Repeated reads in one observation window cannot generate additional ghost actions or reroll a desirable result.
+**EMF is a numeric local signal from 1 to 10, not an identity-specific subtype.** Readings fluctuate with actual events, strength, location and background variation. **Readings above 6** during a local ghost event are high-EMF clues; a ghost-caused suppressed field can read **0**, which is also a logged observation; ordinary EMF spikes and unrelated disturbances may register smaller numbers. Repeated reads in one observation window cannot generate additional ghost actions or reroll a desirable result.
 
-**Temperature is a world/environment variable, not a four-label ghost code.** Season, weather, time of day, building insulation/heating, room-specific offsets, and paranormal heating/cooling influence measured room and outdoor temperatures. **Below 0°C / 32°F** qualifies as a cold extreme *when the anomaly is paranormal*; **90°F or higher (32.22°C)** qualifies as a hot extreme *when paranormal*. Outdoor freezing in winter or ordinary hot weather must not be sufficient to confirm ghost evidence. Dynamic readings should remain consistent across players and stable in the same measurement window. Fahrenheit or Celsius is a player display preference; the host stores and evaluates canonical temperatures in Celsius. Current LAN source reports both units; per-player selection/setting is still needed.
+**Temperature is a world/environment variable, not a four-label ghost code.** Season, weather, time of day, building insulation/heating, room-specific offsets, and paranormal heating/cooling influence measured room and outdoor temperatures. **Below 0°C / 32°F** qualifies as a cold extreme *when the anomaly is paranormal*; **90°F or higher (32.22°C)** qualifies as a hot extreme *when paranormal*. Outdoor freezing or hot weather are environmental readings, never automatically certified as ghost evidence. Dynamic readings should remain consistent across players and stable in the same measurement window. Fahrenheit or Celsius is a player display preference; the host stores and evaluates canonical temperatures in Celsius. Current LAN source reports both units; per-player selection/setting is still needed.
 
-**Three positive evidence states minimum per ghost** remains the design rule. It must eventually mean three genuinely obtainable, varied evidence *families* from a broader pool, rather than all ghosts producing the same three tools. Behaviors, counter-tests, photos, recordings and auxiliary instruments must contribute useful deductive context; not every equipment interaction is automatically a qualifying positive. No ghost gets a promised evidence family until its producer, detector, journal, difficulty variations, host validation and acquisition tests actually exist.
+**At least three distinctive evidence states can occur for each ghost** remains the design rule; this is a content-availability requirement, **not** a mandatory count of readings a player must obtain to identify or perform a rite. The simulation will provide varied evidence families from the wider equipment pool. Behaviors, counter-tests, photos, recordings and auxiliary instruments must contribute useful deductive context; not every equipment interaction is automatically a qualifying positive. No ghost gets a promised evidence family until its producer, detector, journal, difficulty variations, host validation and acquisition tests actually exist.
 
 ## Evidence families
 
 | Family | Qualifying observation | Instruments | Gate |
 | --- | --- | --- | --- |
-| High EMF | Local ghost-event strength produces EMF 7–10 | EMF reader, synchronized array | numeric LAN source slice |
+| High EMF | Local ghost event can produce EMF 7–10 | EMF reader, synchronized array | numeric LAN source slice |\n| Suppressed EMF | A ghost-caused electromagnetic cancellation reads 0; each sample is immediately logged | EMF reader | numeric LAN source slice |
 | Freezing | Paranormal sub-zero room reading below 0°C | thermometer, thermal beacons | numeric LAN source slice |
 | Extreme heat | Paranormal temperature at least 90°F | thermometer, thermal beacons | numeric LAN source slice |
 | Direct spirit reply | Valid reply to actual question/interaction near ghost | spirit box, recording system | legacy partial; question handling needed |
@@ -108,7 +108,7 @@
 - **Lidar displacement grid:** Structured beam volume; interruptions follow real ghost geometry and line-of-sight rather than random HUD popups.
 - **Deployable EMF array:** Place three synchronized nodes to triangulate actual EMF events; every node receives delayed/noisy samples.
 - **Remote thermal probe array:** Deploy remote temperature loggers; season, room insulation, heating and anomaly movement affect all readings.
-- **Ritual anchor meter:** Find a ward's affinity with the verified haunting anchor; does not bypass the identity/evidence gate.
+- **Ritual anchor meter:** Find a ward's affinity with the haunting anchor; does not reveal the hidden species or bypass the ritual's physical requirements.
 - **Ward stability probe:** Measure the defended rite's remaining stability and ghost interference in real time.
 - **Anomalous object imprint kit:** Scan claimed objects for residual imprint after genuine interactions; false positives from human use are possible.
 - **Chalk and portable sigils:** Lay portable defensive lines with materials/time cost; never a free substitute for a map's ritual installation.
@@ -118,14 +118,14 @@
 
 The case retains all 13 established ghost identities and their three ritual categories. Existing behavioral traits and required rites remain distinct from evidence types. The authored true evidence matrix must be created only after each chosen evidence producer exists; do not resurrect `FIELD_SURGE/TETHER/KINETIC/INTERFERENCE` or `ANCHOR_CHILL/COLD_SPOT/SHEAR/WALL_DRAFT` as required ghost evidence. Those old enums are internal compatibility metadata, not intended instrument outcomes.
 
-All equipment effects and evidence confirmations originate on the server: spatial measurements use host-owned positions and line-of-sight; placeable sensors have host-owned placement, physics, lifetime, batteries, clocks and event association; hunters share journal records with origin/tick/room; a ghost client must not see casefile/secret species-inference or hunter location; AI/human ghost produce the same event signals. Reconnect must replay the *state* of sensors and their bounded historical readings without manufacturing new confirmations.
+All physical events and recorded instrument values originate on the server, **without any automatic evidence confirmation**: spatial measurements use host-owned positions and line-of-sight; placeable sensors have host-owned placement, physics, lifetime, batteries, clocks and event association; hunters share journal records with origin/tick/room; a ghost client must not see casefile/secret species-inference or hunter location; AI/human ghost produce the same event signals. Reconnect must replay sensor states and bounded historical observations without manufacturing new instrument events.
 
 ## Implementation gates and ownership
 
 1. **Slice E-01 — sourced/partial:** register all 42 candidate tools and status; add `EvidenceSignals` for 1–10 EMF, true events and seasonal hot/cold thermals; connect both live LAN and solo scans to it; retire fake identity-coded field-guide clues. Source/test entries committed. Fresh Java runtime acceptance not yet established.
 2. **E-02 — next:** consolidate the currently separate solo/LAN climate settings, implement hosted weather/heating controls, support saved per-player temperature units; durable event intensity/falloff; fix remaining legacy helper methods and tests, prove event evidence does not appear from mere anchor proximity.
 3. **E-03:** build 7 reference evidence families *end to end* (writing, D.O.T.S.-equivalent, UV, cameras/orbs and current instruments), with matching world props, meaningful audio/visual cues and isolated host tests.
-4. **E-04:** connect own evidence categories from the original kits; design a balanced 13-ghost three-evidence matrix, verify each type has three reachable positives and no trivially deterministic two-instrument species code.
+4. **E-04:** connect own evidence categories from the original kits; design a balanced 13-ghost three-evidence matrix, ensure each type can generate at least three distinguishable clues without requiring the player to tick them off; avoid trivial one-to-one instrument codes.
 5. **E-05:** shop, loadout, inventory stock, upgrades/tiers, consumables, user-readable equipment interfaces, batteries and physical interactions. Make all 8 starter, 13 optional and 7 van categories genuinely selectable/usable where relevant.
 6. **E-06:** repeatable LAN 1–6 hunter + ghost-controller runs; event timelines, power cuts, weather, death/reconnect, edge cases, interference and photo/video/audio evidence, host privacy and accessibility acceptance. Record pass/fail results in the project's existing stage ledger. Do not create GitHub Actions unless explicitly directed.
 
