@@ -172,6 +172,7 @@ public final class LanHost implements AutoCloseable {
                     broadcastWorld();broadcastApparitions();broadcastCounters();sendCounterAmmo(peer);
                     reply(peer,supplies[peer.slot].frame());
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
+                    reply(peer,"HIDECONFIG|"+contract.hidingSpots());
                 }
                 case "GVIEW3D" -> {
                     if(!running||peer.slot!=GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("ghost view requires active ghost seat");
@@ -234,6 +235,14 @@ public final class LanHost implements AutoCloseable {
                         throw new IllegalArgumentException("room not adjacent");
                     // Room-level topology proof only; physical door and body collision still need synced transform validation.
                     hunterRooms[peer.slot]=target;world.setRoom(peer.slot,target);recordSound(peer.slot,LanGhostPursuit.Sound.FOOTSTEP);reply(peer,"ACCEPT|MOVE|"+target);broadcastState();broadcastWorld();
+                }
+                case "HIDE" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
+                        throw new IllegalArgumentException("hunter hiding requires world view");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    ensureActiveHunter(peer);
+                    boolean concealed=world.toggleHide(peer.slot);
+                    reply(peer,"HIDING|"+(concealed?1:0));
                 }
                 case "VANMON" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)

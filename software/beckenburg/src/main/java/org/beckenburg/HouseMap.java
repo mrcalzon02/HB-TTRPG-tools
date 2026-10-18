@@ -48,6 +48,13 @@ public final class HouseMap {
         }
         openDoors.clear();openDoors.addAll(result);
     }
+    /** Deterministic interior hiding sockets. Density changes which locations physically exist. */
+    public VanStaging.Position hidingSpot(int room,int density){
+        if(density<0||density>100)throw new IllegalArgumentException("hiding density 0-100");
+        if(room<0||room>=INDOOR_ROOMS)return null;
+        if(Math.floorMod(room*37+17,100)>=density)return null;
+        return new VanStaging.Position(centerX(room)+.65,centerZ(room)+.70);
+    }
     public int width(){return WIDTH;}
     public int height(){return HEIGHT;}
     public int roomCount(){return ROOM_COUNT;}

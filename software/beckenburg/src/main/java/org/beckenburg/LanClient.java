@@ -49,6 +49,7 @@ public final class LanClient implements AutoCloseable {
         send("STEP|"+dx+"|"+dz+"|"+(running?1:0)+"|"+(++sequence));
     }
     public synchronized void vanMonitor()throws IOException {send("VANMON|"+(++sequence));}
+    public synchronized void hide()throws IOException {send("HIDE|"+(++sequence));}
     public synchronized void purchaseSupply(FieldSupplies.Kind kind,FieldSupplies.Tier tier)throws IOException{
         Objects.requireNonNull(kind);Objects.requireNonNull(tier);
         send("BUY|"+kind+"|"+tier+"|"+(++sequence));

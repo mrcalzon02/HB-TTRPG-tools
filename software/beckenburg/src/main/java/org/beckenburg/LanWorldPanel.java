@@ -23,7 +23,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final int[] medicine=new int[6];
     private VanTelemetry.Display meters;
     private final java.util.ArrayDeque<Integer> activityHistory=new java.util.ArrayDeque<>();
-    private boolean vanDisplay;
+    private boolean vanDisplay,concealed;
     private int lastVanPoll=-100000;
     private final List<SceneRenderer.WorldMark> counterMarks=new ArrayList<>();
     private SceneRenderer.Apparition apparition;
@@ -130,6 +130,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     LanProtocol.integer(p.get(6),0,300);
                     counterMarks.add(new SceneRenderer.WorldMark(xx,zz,yy,kind));
                 }else throw new IllegalArgumentException("bad counter snapshot");
+            }else if(p.size()==2&&p.get(0).equals("HIDECONFIG")){
+                renderer.hidingDensity=LanProtocol.integer(p.get(1),0,100);
+            }else if(p.size()==2&&p.get(0).equals("HIDING")){
+                concealed=LanProtocol.integer(p.get(1),0,1)==1;
+                feedback=concealed?"HIDDEN: do not move or you will become exposed":"LEFT HIDING PLACE";
             }else if(p.size()==3&&p.get(0).equals("PARTY")){
                 partySize=LanProtocol.integer(p.get(1),1,6);
                 partyDifficulty=LanProtocol.integer(p.get(2),1,30);
@@ -247,7 +252,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 double dz=Math.cos(renderer.yaw)*forward-Math.sin(renderer.yaw)*right;
                 double len=Math.hypot(dx,dz);
                 int mx=(int)Math.round(dx/len*100),mz=(int)Math.round(dz/len*100);
-                if(mx!=0||mz!=0)client.step(mx,mz,keys.contains(KeyEvent.VK_SHIFT));
+                if(mx!=0||mz!=0){
+                    concealed=false;
+                    client.step(mx,mz,keys.contains(KeyEvent.VK_SHIFT));
+                }
             }
             int heading=Math.floorMod((int)Math.round(Math.toDegrees(renderer.yaw)),360);
             if(heading!=lastTurn){client.turn(heading);lastTurn=heading;}
@@ -451,6 +459,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_G -> sendAction("thrown ward",()->client.deploy(HunterCounters.Kind.WARD));
             case KeyEvent.VK_H -> sendAction("salt",()->client.deploy(HunterCounters.Kind.SALT));
             case KeyEvent.VK_U -> sendAction("UV",()->client.scanUv());
+            case KeyEvent.VK_L -> sendAction("hide",()->client.hide());
             case KeyEvent.VK_M -> {
                 if(vanDisplay)vanDisplay=false;
                 else if(insideVan()){

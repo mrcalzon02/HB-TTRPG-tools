@@ -78,6 +78,7 @@ public final class LanLobbyWindow extends JFrame {
         var sanity=spin(custom.startingSanity(),0,100,25);
         var drain=spin(custom.sanityDrain(),0,200,25);
         var events=spin(custom.eventFrequency(),50,200,25);
+        var hiding=spin(custom.hidingSpots(),0,100,10);
         var sprint=new JComboBox<>(CustomContract.Sprint.values());
         sprint.setSelectedItem(custom.sprint());
         var sanMonitor=new JCheckBox("Sanity display",custom.sanityMonitor());
@@ -91,6 +92,7 @@ public final class LanLobbyWindow extends JFrame {
             new Object[]{"Starting sanity %",sanity},
             new Object[]{"Sanity loss rate %",drain},
             new Object[]{"Ghost events frequency %",events},
+            new Object[]{"Available hiding places %",hiding},
             new Object[]{"Van sanity display",sanMonitor},
             new Object[]{"Van activity display",actMonitor}
         );
@@ -105,7 +107,7 @@ public final class LanLobbyWindow extends JFrame {
                 (int)walk.getValue(),(int)run.getValue(),(int)ghost.getValue(),
                 (int)recharge.getValue(),(int)drain.getValue(),(int)sanity.getValue(),
                 (int)events.getValue(),(CustomContract.Sprint)sprint.getSelectedItem(),
-                custom.hidingSpots(),sanMonitor.isSelected(),actMonitor.isSelected());
+                (int)hiding.getValue(),sanMonitor.isSelected(),actMonitor.isSelected());
             log.append("Custom settings armed for next hosted case, "+custom.hunters()+
                 " hunters / difficulty +"+custom.partyDifficulty()+".\n");
         }

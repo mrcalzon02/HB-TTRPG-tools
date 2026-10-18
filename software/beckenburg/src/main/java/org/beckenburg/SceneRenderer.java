@@ -23,6 +23,7 @@ public final class SceneRenderer {
     /** Solo environment presets; default multipliers retain legacy LAN lighting. */
     public double environmentLight=1.0,fogDensity=1.0;
     public boolean environmentPowerOn=true;
+    public int hidingDensity;
     public BufferedImage image(){return frame;}
     public int[] pixels(){return pixels;}
     public double[] depths(){return depths;}
@@ -219,6 +220,16 @@ public final class SceneRenderer {
             }
         }
         for(int r=0;r<map.roomCount();r++) if(Math.hypot(map.centerX(r)-x,map.centerZ(r)-z)<14) furniture(out,r,map);
+        for(int r=0;r<HouseMap.INDOOR_ROOMS;r++){
+            var pocket=map.hidingSpot(r,hidingDensity);
+            if(pocket==null||Math.hypot(pocket.x()-x,pocket.z()-z)>14)continue;
+            double px=pocket.x(),pz=pocket.z();
+            // Original, small cupboard silhouette. Only enabled positions are drawn.
+            box(out,px-.47,0,pz-.20,.94,1.68,.20,0x40444d);
+            box(out,px-.47,0,pz-.20,.14,1.68,.67,0x555964);
+            box(out,px+.33,0,pz-.20,.14,1.68,.67,0x555964);
+            box(out,px-.47,1.55,pz-.20,.94,.13,.67,0x6c7278);
+        }
         for(RitualSites.Site site:RitualSites.all(map))
             if(Math.hypot(site.x()-x,site.z()-z)<14)ritualInstallation(out,site);
         // A visible power breaker at the correct utility-room interaction socket.

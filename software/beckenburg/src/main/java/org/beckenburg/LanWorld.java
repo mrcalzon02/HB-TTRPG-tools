@@ -12,10 +12,22 @@ public final class LanWorld {
     private final int[] lastTick={-1,-1,-1,-1,-1,-1};
     private final int[] lastDoorTick={-3,-3,-3,-3,-3,-3};
     private double playerSpeed=1.0,sprintSpeed=1.5;
+    private int hidingDensity=70;
+    private final boolean[] hiding=new boolean[6];
+    public boolean hidden(int seat){seat(seat);return hiding[seat];}
+    public boolean toggleHide(int seat){
+        seat(seat);
+        if(hiding[seat]){hiding[seat]=false;return false;}
+        var pocket=map.hidingSpot(body(seat).room(),hidingDensity);
+        if(pocket==null||Math.hypot(xs[seat]-pocket.x(),zs[seat]-pocket.z())>.84)
+            throw new IllegalArgumentException("no hiding place within reach");
+        hiding[seat]=true;return true;
+    }
     private CustomContract.Sprint sprint=CustomContract.Sprint.LIMITED;
     private final int[] stamina={40,40,40,40,40,40};
     public void configure(CustomContract c){
         playerSpeed=c.playerSpeed()/100.0;sprintSpeed=c.sprintSpeed()/100.0;sprint=c.sprint();
+        hidingDensity=c.hidingSpots();
     }
     public LanWorld(HouseMap map){
         this.map=java.util.Objects.requireNonNull(map);
@@ -30,7 +42,7 @@ public final class LanWorld {
     public void setRoom(int seat,int room){
         seat(seat);
         if(room<0||room>=HouseMap.ROOM_COUNT)throw new IllegalArgumentException("invalid room");
-        xs[seat]=map.centerX(room);zs[seat]=map.centerZ(room);
+        xs[seat]=map.centerX(room);zs[seat]=map.centerZ(room);hiding[seat]=false;
     }
     public Body body(int seat){seat(seat);return new Body(xs[seat],zs[seat],headings[seat],map.roomAt(xs[seat],zs[seat]));}
     public boolean move(int seat,int dx,int dz,int tick){return move(seat,dx,dz,tick,false);}
@@ -49,7 +61,7 @@ public final class LanWorld {
         // Forbid diagonal corner cutting; each axis must independently clear the collision radius.
         if(!map.traversable(x,z)||!map.traversable(x,zs[seat])||!map.traversable(xs[seat],z))
             throw new IllegalArgumentException("blocked by world collision");
-        xs[seat]=x;zs[seat]=z;return true;
+        xs[seat]=x;zs[seat]=z;hiding[seat]=false;return true;
     }
     public void turn(int seat,int heading){seat(seat);if(heading<0||heading>=360)throw new IllegalArgumentException("invalid heading");headings[seat]=heading;}
     public boolean door(int seat,int tick){

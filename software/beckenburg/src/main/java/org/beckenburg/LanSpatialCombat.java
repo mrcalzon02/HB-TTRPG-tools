@@ -20,7 +20,7 @@ public final class LanSpatialCombat {
         double best=STRIKE_RANGE*STRIKE_RANGE;
         int closest=-1;
         for(int i=0;i<hunterRooms.length;i++) {
-            if(!connected[i]||hunterRooms[i]!=ghost.room())continue;
+            if(!connected[i]||hunterRooms[i]!=ghost.room()||world.hidden(i))continue;
             if(!spatial[i]) { selected[i]=true; continue; } // Existing room-level compatibility.
             LanWorld.Body body=world.body(i);
             if(!canStrike(map,world,ghost,i))continue;
@@ -36,7 +36,7 @@ public final class LanSpatialCombat {
     /** Host-only recheck for a LOCKED seat; never retarget to a different hunter at impact. */
     public static boolean canStrike(HouseMap map,LanWorld world,LanGhostSpatial.Pose ghost,int seat){
         LanWorld.Body body=world.body(seat);
-        if(body.room()!=ghost.room())return false;
+        if(world.hidden(seat)||body.room()!=ghost.room())return false;
         double dx=body.x()-ghost.x(), dz=body.z()-ghost.z();
         double d2=dx*dx+dz*dz;
         return Double.isFinite(d2)&&d2<=STRIKE_RANGE*STRIKE_RANGE
