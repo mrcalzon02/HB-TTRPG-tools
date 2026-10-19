@@ -104,7 +104,7 @@ public final class CastleHubDecor {
         sconce(10.30,18.3,Math.PI/2),
         sconce(20.70,18.0,-Math.PI/2),
         sconce(28.70,23.0,-Math.PI/2),
-        sconce(36.0,17.70,Math.PI));
+        sconce(39.0,17.70,Math.PI));
     public record Switch(double x,double y,double z,double yaw){}
     public static final List<Switch> SWITCHES=List.of(
         new Switch(10.30,1.45,8.75,Math.PI/2),
