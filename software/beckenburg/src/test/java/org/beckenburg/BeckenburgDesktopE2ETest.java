@@ -59,7 +59,6 @@ public final class BeckenburgDesktopE2ETest {
     private static <T> T waitFor(java.util.concurrent.Callable<T> check,long seconds)throws Exception{
         long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(seconds);
         while(System.nanoTime()<deadline){
-            @SuppressWarnings("unchecked") T[] result=(T[])new Object[1];
             // The game is a real Swing event loop. Inspect components on the EDT.
             final Object[] slot=new Object[1];
             SwingUtilities.invokeAndWait(()->{
