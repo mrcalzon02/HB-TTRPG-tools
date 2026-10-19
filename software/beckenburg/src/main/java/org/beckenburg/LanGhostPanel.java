@@ -18,6 +18,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     private final Set<Integer> keys=new HashSet<>();
     private final javax.swing.Timer timer;
     private final LanAudio audio=new LanAudio();
+    private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
     private int room=-1,energy,tick,choice,lastTurn=-1;
     private boolean audible,finished;
     private String legal="[]",feedback="Awaiting private spectral pose";
@@ -38,7 +39,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
         addFocusListener(this);addFocusListener(mouseLook);
         timer=new javax.swing.Timer(110,e->frame());timer.start();
     }
-    public void close(){timer.stop();keys.clear();mouseLook.close();audio.close();}
+    public void close(){timer.stop();keys.clear();mouseLook.close();audio.close();atmosphere.close();}
     /** Accept only frames addressed to ghost; never interpret BODY/TEAMMAP/PROGRESS. */
     public void onEvent(String packet){
         if(!SwingUtilities.isEventDispatchThread())throw new IllegalStateException("ghost UI update must be on EDT");
@@ -103,12 +104,20 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                 LanProtocol.integer(p.get(3),0,99999999);
                 lastAutomaticAction=action+" in "+map.roomName(place);
                 feedback="DEADLINE EXPIRED: "+lastAutomaticAction;
-            }else if(packet.startsWith("RESULT|")){finished=true;feedback=packet;keys.clear();}
+            }else if(p.size()==3&&p.get(0).equals("HUNT")&&p.get(1).equals("START")){
+                LanProtocol.integer(p.get(2),1,120);atmosphere.setHunt(true);
+            }else if(p.size()==2&&p.get(0).equals("HUNT")&&p.get(1).equals("END")){
+                atmosphere.setHunt(false);
+            }else if(packet.startsWith("RESULT|")){
+                finished=true;feedback=packet;keys.clear();
+                atmosphere.setHunt(false);atmosphere.setRitual(false);
+            }
             else if(packet.startsWith("ACCEPT|")||packet.startsWith("REJECT|"))feedback=packet;
         }catch(IllegalArgumentException ex){feedback="Invalid spectral snapshot rejected";}
         repaint();
     }
     private void frame(){
+        atmosphere.setActive(isShowing()&&!finished);
         if(!isDisplayable()||finished){repaint();return;}
         try{
             int f=(keys.contains(KeyEvent.VK_W)?1:0)-(keys.contains(KeyEvent.VK_S)?1:0);
