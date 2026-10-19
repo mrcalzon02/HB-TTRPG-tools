@@ -12,6 +12,12 @@ Owner requirement: **Every reduced-polygon derivative must be uploaded beside it
 
 This gate is additive: the shared Drive stores source + reusable GLB LOD side by side. Game repos contain only specifically selected runtime-usable assets. Do not dump paid asset packs, change a high-resolution original, use proxy primitives masquerading as imported art, or delete rigging source.
 
+## Mandatory visual acceptance before upload
+
+A file that opens in a viewer or passes a triangle-count/format check is **not** a usable low-poly asset. Compare original and proposed GLB in an independent 3D renderer under **identical cameras and lighting** (front, both sides, back, close-up face/critical details). Record actual upright source axes, source-to-game transforms, original texture image linkage and UVs, proper winding/normals, disconnected components, original and derivative boundary edges, bounds and surface silhouette differences. Keep triangulation contiguous and avoid vertex-coordinate clustering that discards most source faces; use controlled topology-preserving edge collapse with UV preservation and explicit visual inspection. Reject and quarantine failures rather than claiming they are approved. **No Drive LOD upload or runtime asset promotion may precede this gate.** For character meshes, retain separate skin/rig source, don't declare a static GLB animated, and validate expressive face and hands.
+
+The 2026-10-18 first-generation four portable LODs FAILED this visual gate despite correct file headers and uploads. The two civilian character GLBs are quarantined, their original files remain in place and unchanged, and the failed Red Ledger runtime patron assets were withdrawn. The boat and APC LODs also remain visually unapproved; earlier acceptance wording is superseded by the registry's `qa_status` field. The next character is being treated as an offline *candidate only* until independent render comparisons and gameplay acceptance are complete.
+
 ## Completed provenance-backed registrations
 
 `owned-models-lod-registry.json` records the confirmed 2026-10-18 side-by-side uploads:
