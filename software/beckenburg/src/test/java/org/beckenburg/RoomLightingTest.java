@@ -21,7 +21,7 @@ public final class RoomLightingTest {
         check(map.valid(),"all house thresholds still traversable");
         check(master.snapshot().equals("111111111111"),"all room circuits start in a known state");
         for(int room=0;room<HouseMap.INDOOR_ROOMS;room++){
-            var plate=RoomLighting.location(room);
+            var plate=RoomLighting.location(map,room);
             check(map.roomAt(plate.x(),plate.z())==room,"switch positioned in its own room "+room);
             double playerX=plate.x()+.73, playerZ=plate.z();
             check(map.traversable(playerX,playerZ),"player can stand near switch "+room);

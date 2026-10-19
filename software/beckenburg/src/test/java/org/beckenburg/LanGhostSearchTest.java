@@ -12,7 +12,7 @@ public final class LanGhostSearchTest {
     }
     public static void main(String[] args) {
         HouseMap map=new HouseMap();LanGhostPursuit brain=new LanGhostPursuit(map,182);
-        brain.heard(4,5,20.4,9.1,LanGhostPursuit.Sound.EQUIPMENT,2);
+        brain.heard(4,5,map.centerX(5),map.centerZ(5),LanGhostPursuit.Sound.EQUIPMENT,2);
         LanGhostPursuit.Echo fresh=brain.memory(2);
         check(fresh!=null,"sound noticed");
         int expired=fresh.expiryTick();
@@ -37,7 +37,7 @@ public final class LanGhostSearchTest {
         check(brain.search(expired+24)==null,"search expires, no persistent hunter trail");
         check(brain.approach(observation(expired+25,5,map,true),pose.pose())==null,
                 "search stops when the trace ends");
-        brain.heard(4,5,20.4,9.1,LanGhostPursuit.Sound.EQUIPMENT,expired+25);
+        brain.heard(4,5,map.centerX(5),map.centerZ(5),LanGhostPursuit.Sound.EQUIPMENT,expired+25);
         check(brain.memory(expired+25)!=null && brain.search(expired+25)==null,
                 "a new event overrides stale searching");
         brain.forget();

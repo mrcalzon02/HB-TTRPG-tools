@@ -52,6 +52,61 @@ public final class InvestigationSites {
     private static Prop prop(int room,String mesh,double x,double z,double scale,double yaw){
         return new Prop(room,mesh,x,0,z,scale,yaw);
     }
+    private static final List<Prop> HOUSE=List.of(
+        // Ground-floor WC: domestic cabinets, not a discoverable investigation device.
+        prop(0,"display_cabinet_mp_2",-4.6,-1.40,.74,Math.PI/2),
+        // Victorian drawing room: deliberately composed seating group and bookcase.
+        prop(1,"sofa_1",-2.70,-2.35,.83,0),
+        prop(1,"armchair_1",2.45,-2.15,.87,Math.PI/2),
+        prop(1,"armchair_1",3.80,2.15,.87,Math.PI),
+        prop(1,"dinner_table_1",-1.10,1.85,.62,0),
+        prop(1,"display_cabinet_mp_2",-5.15,3.55,.87,Math.PI/2),
+        // Breakfast room: natural central table, sideboard and facing chairs.
+        prop(2,"dinner_table_1",-1.25,-1.65,.96,0),
+        prop(2,"chair_mp_5",2.35,-1.35,1.0,Math.PI/2),
+        prop(2,"chair_mp_5",-2.60,1.85,1.0,Math.PI),
+        prop(2,"display_cabinet_mp_2",5.0,3.0,.82,Math.PI/2),
+        // Parlour: informal family seating and historical shelving.
+        prop(3,"sofa_1",-3.15,-2.45,.84,0),
+        prop(3,"armchair_1",2.85,-2.05,.87,Math.PI),
+        prop(3,"dinner_table_1",.40,2.85,.67,0),
+        prop(3,"shelf_mp_6",-5.20,2.75,1.55,Math.PI/2),
+        // Stair hall: circulation spine kept open, fixtures at its edges.
+        prop(4,"display_cabinet_mp_2",-3.15,-13.8,.78,Math.PI/2),
+        prop(4,"kenney_detail_bench",3.0,12.5,1.21,0),
+        // Working kitchen: heavy fitted household furniture.
+        prop(5,"dinner_table_1",-1.80,-2.0,.88,0),
+        prop(5,"chair_mp_5",1.55,1.50,.96,Math.PI/2),
+        prop(5,"display_cabinet_mp_2",4.45,-3.25,.91,Math.PI/2),
+        prop(5,"shelf_mp_6",-5.0,3.35,1.55,Math.PI/2),
+        // Library: full-sided shelving and a private reading arrangement.
+        prop(6,"shelf_mp_6",-5.0,-3.55,1.90,Math.PI/2),
+        prop(6,"shelf_mp_6",-5.0,3.30,1.90,Math.PI/2),
+        prop(6,"shelf_mp_6",4.85,-3.50,1.90,Math.PI/2),
+        prop(6,"armchair_1",2.45,2.65,.88,Math.PI),
+        // Formal dining: prominent central table and surrounding chairs.
+        prop(7,"dinner_table_1",-1.0,-1.60,1.05,0),
+        prop(7,"chair_mp_5",-3.1,-2.80,1.0,0),
+        prop(7,"chair_mp_5",2.50,-2.80,1.0,Math.PI/2),
+        prop(7,"chair_mp_5",-3.1,2.05,1.0,Math.PI),
+        prop(7,"chair_mp_5",2.55,2.0,1.0,Math.PI),
+        prop(7,"display_cabinet_mp_2",5.05,3.0,.88,Math.PI/2),
+        // Writing study: substantial desk, reader's chair and archive.
+        prop(8,"dinner_table_1",-2.05,-1.90,.82,0),
+        prop(8,"chair_mp_5",1.20,-1.80,1.0,0),
+        prop(8,"shelf_mp_6",4.85,-3.3,1.70,Math.PI/2),
+        prop(8,"display_cabinet_mp_2",4.90,3.10,.81,Math.PI/2),
+        // Cellar stair vestibule and scullery are sparse functional spaces.
+        prop(9,"shelf_mp_6",-4.0,-1.05,1.50,Math.PI/2),
+        prop(10,"display_cabinet_mp_2",-3.0,4.05,.80,Math.PI/2),
+        prop(10,"kenney_detail_bench",3.0,-4.0,1.20,0),
+        prop(11,"shelf_mp_6",-5.10,-2.70,1.65,Math.PI/2),
+        prop(11,"shelf_mp_6",4.90,2.95,1.65,Math.PI/2),
+        prop(11,"display_cabinet_mp_2",4.95,-2.75,.80,Math.PI/2),
+        // Architectural outdoor amenities; no purchased survey instruments.
+        prop(12,"kenney_detail_bench",-3.1,-1.10,1.48,0),
+        prop(13,"kenney_detail_bench",-2.15,.85,1.15,Math.PI/2)
+    );
     private static final List<Prop> FARM=List.of(
         prop(0,"display_cabinet_mp_2",-2.35,-1.1,.78,0),
         prop(1,"wardrobe_mp_1",2.2,-1.1,.92,Math.PI/2),
@@ -134,8 +189,11 @@ public final class InvestigationSites {
         Objects.requireNonNull(site);
         if(room<0||room>=HouseMap.ROOM_COUNT)
             throw new IllegalArgumentException("invalid room");
-        if(site==HouseMap.Site.HOUSE)return List.of();
-        List<Prop> source=site==HouseMap.Site.FARMHOUSE?FARM:SCHOOL;
+        List<Prop> source=switch(site){
+            case HOUSE->HOUSE;
+            case FARMHOUSE->FARM;
+            case SCHOOL->SCHOOL;
+        };
         List<Prop> found=new ArrayList<>();
         for(Prop item:source)if(item.room()==room)found.add(item);
         return List.copyOf(found);

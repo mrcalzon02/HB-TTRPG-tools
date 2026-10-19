@@ -10,16 +10,19 @@ public final class GameplaySmokeTest {
     private static void ok(boolean condition,String reason){if(!condition)throw new AssertionError(reason);}
     public static void main(String[] args) throws Exception {
         HouseMap map=new HouseMap();
-        ok(map.width()==25&&map.height()==31&&map.valid(),"valid fifteen-zone map");
+        ok(map.width()==48&&map.height()==84&&map.valid(),
+            "Victorian domestic building has connected real geometry");
         for(int r=0;r<map.roomCount();r++)ok(map.roomAt(map.centerX(r),map.centerZ(r))==r,"zone "+r);
-        ok(map.traversable(20.5,27.5),"valid spawn");
+        var vanSpawn=map.van().spawn();
+        ok(map.traversable(vanSpawn.x(),vanSpawn.z()),"valid expedition van spawn");
         ok(!map.traversable(.3,.3),"no wall clipping");
-        ok(!map.traversable(16.5,21.5),"closed door blocks");
-        ok(map.toggleNearestDoor(15.5,21.5),"open door");
-        ok(map.traversable(16.5,21.5),"open door passable");
-        ok(map.toggleNearestDoor(15.5,21.5),"close door");
-        ok(!map.traversable(16.5,21.5),"door reclosed");
-        ok(!map.toggleNearestDoor(20.5,27.5),"distant door rejected");
+        ok(!map.traversable(29.5,30.5),"closed kitchen threshold blocks");
+        ok(map.toggleNearestDoor(28.7,30.5),"open physically nearby door");
+        ok(map.traversable(29.5,30.5),"open doorway passable");
+        ok(map.toggleNearestDoor(28.7,30.5),"close door");
+        ok(!map.traversable(29.5,30.5),"door reclosed");
+        ok(!map.toggleNearestDoor(vanSpawn.x(),vanSpawn.z()),
+            "distant door rejected from expedition van");
         InvestigationSession spirit=new InvestigationSession(map,InvestigationSession.Role.OBSERVER,734L);
         SceneRenderer renderer=new SceneRenderer();
         renderer.draw(map,spirit,0);
@@ -30,7 +33,7 @@ public final class GameplaySmokeTest {
         int ar=spirit.anchorRoom();double ax=map.centerX(ar),az=map.centerZ(ar);
         ok(!spirit.cleanse(ax,az),"cannot cleanse without a prepared ward");
         int before=spirit.journal().size();
-        ok(spirit.scan(InvestigationSession.Instrument.EMF,20.5,27.5),
+        ok(spirit.scan(InvestigationSession.Instrument.EMF,vanSpawn.x(),vanSpawn.z()),
             "the meter measures ordinary fields in the van without a ghost event");
         ok(spirit.message().matches(".*EMF [2-7]/10")&&spirit.journal().size()==before+1,
             "ordinary numeric measurement is recorded without fabricated paranormal strength");
@@ -42,7 +45,7 @@ public final class GameplaySmokeTest {
         ok(spirit.wards()==1&&spirit.wardPrepared(),"ward has material cost");
         ok(spirit.cleanse(ax,az),"cleansing succeeds at correct anchor");
         ok(spirit.outcome()==InvestigationSession.Outcome.CLEANSED,"complete state");
-        ok(spirit.extract(20.5,27.5),"cleansed case can extract");
+        ok(spirit.extract(vanSpawn.x(),vanSpawn.z()),"cleansed case can extract");
         ok(spirit.payout()>200,"cleanse compensation");
         Path temp=Files.createTempDirectory("beckenburg-profile-");
         try{
@@ -59,7 +62,7 @@ public final class GameplaySmokeTest {
         }finally{try(var files=Files.list(temp)){files.forEach(p->{try{Files.delete(p);}catch(IOException e){throw new RuntimeException(e);}});}Files.delete(temp);}
         for(var role:InvestigationSession.Role.values()){
             InvestigationSession game=new InvestigationSession(map,role,11);
-            for(int i=0;i<800;i++) game.tick(20.5,27.5);
+            for(int i=0;i<800;i++) game.tick(vanSpawn.x(),vanSpawn.z());
             ok(game.health()>0,"spawn-zone not unfairly lethal for "+role);
             double gx=map.centerX(game.anchorRoom()), gz=map.centerZ(game.anchorRoom());
             for(var item:InvestigationSession.Instrument.values())ok(game.scan(item,gx,gz),"role can scan "+item);

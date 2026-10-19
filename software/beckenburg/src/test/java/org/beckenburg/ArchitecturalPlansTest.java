@@ -10,10 +10,9 @@ public final class ArchitecturalPlansTest {
     }
     public static void main(String[] args){
         HouseMap old=new HouseMap();
-        ok(old.width()==25&&old.height()==31&&old.valid(),
-            "original residential level preserved");
-        for(HouseMap.Site site:new HouseMap.Site[]{
-                HouseMap.Site.FARMHOUSE,HouseMap.Site.SCHOOL}){
+        ok(old.width()==48&&old.height()==84&&old.valid(),
+            "Victorian house has functional authored ground-floor architecture");
+        for(HouseMap.Site site:HouseMap.Site.values()){
             HouseMap map=new HouseMap(site);
             ArchitecturalPlans.Plan plan=ArchitecturalPlans.build(site);
             ok(map.authoredArchitecture()&&map.valid()&&RitualSites.valid(map),
@@ -30,7 +29,8 @@ public final class ArchitecturalPlansTest {
                         "real window panel is solid for human movement");
                 }
             }
-            ok(floorCells>(site==HouseMap.Site.SCHOOL?3500:2300),
+            ok(floorCells>(site==HouseMap.Site.SCHOOL?3500:
+                    site==HouseMap.Site.FARMHOUSE?2300:2000),
                 "large building contains extensive interior, service and exterior space");
             ok(wallCells>600,"building has actual partitions and articulated boundaries");
             ok(windows>(site==HouseMap.Site.SCHOOL?35:12),
@@ -60,12 +60,13 @@ public final class ArchitecturalPlansTest {
                 ok(map.adjacentRooms(door.a()).contains(door.b()),
                     "door connects the two authored rooms");
             }
-            int before=LanAcoustics.edgeCost(map,4,site==HouseMap.Site.FARMHOUSE?1:3);
-            int[] socket=map.doorBetweenRooms(4,site==HouseMap.Site.FARMHOUSE?1:3);
+            int neighbor=site==HouseMap.Site.FARMHOUSE?1:3;
+            int before=LanAcoustics.edgeCost(map,4,neighbor);
+            int[] socket=map.doorBetweenRooms(4,neighbor);
             ok(before==3&&socket!=null,"closed architectural door muffles sound");
-            ok(map.openDoorBetweenRooms(4,site==HouseMap.Site.FARMHOUSE?1:3),
+            ok(map.openDoorBetweenRooms(4,neighbor),
                 "ghost may open a real doorway");
-            ok(LanAcoustics.edgeCost(map,4,site==HouseMap.Site.FARMHOUSE?1:3)==1,
+            ok(LanAcoustics.edgeCost(map,4,neighbor)==1,
                 "open architectural door transmits sound");
             HouseMap other=new HouseMap(site);
             other.applyDoorSnapshot(map.doorSnapshot());

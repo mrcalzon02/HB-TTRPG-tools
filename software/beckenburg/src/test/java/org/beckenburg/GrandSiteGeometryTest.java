@@ -5,8 +5,8 @@ public final class GrandSiteGeometryTest {
     private static void ok(boolean b,String why){if(!b)throw new AssertionError(why);}
     public static void main(String[] args){
         HouseMap small=new HouseMap();
-        ok(small.width()==25&&small.height()==31&&small.ceilingHeight()==2.7,
-            "existing residential investigation is not rescaled");
+        ok(small.width()==48&&small.height()==84&&small.ceilingHeight()==3.35,
+            "Victorian residential architecture has a true larger footprint");
         for(HouseMap.Site site:new HouseMap.Site[]{HouseMap.Site.FARMHOUSE,HouseMap.Site.SCHOOL}){
             HouseMap m=new HouseMap(site);
             ok(m.width()==(site==HouseMap.Site.FARMHOUSE?56:70)

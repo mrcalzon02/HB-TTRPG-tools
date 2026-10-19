@@ -155,78 +155,14 @@ public final class SceneRenderer {
                 vv[2].u(),vv[2].v()));
         }
     }
+    /** All investigation locations use placed, licensed scenery GLBs with
+     * matching host-side collision. No purchasable tools occur in map furnishings.
+     */
     private static void furniture(List<Face> out,int room,HouseMap map){
         double cx=map.centerX(room),cz=map.centerZ(room);
-        if(map.site()!=HouseMap.Site.HOUSE){
-            // Authored placements are all imported, indexed source GLBs; decorative
-            // meshes never substitute for the host's tile/door collision geometry.
-            for(InvestigationSites.Prop prop:InvestigationSites.props(map.site(),room)){
-                imported(out,prop.mesh(),cx+prop.dx(),prop.y(),cz+prop.dz(),
-                    prop.scale(),prop.yaw());
-            }
-            return;
-        }
-        // Props deliberately have actual 3D volumes and distinctive silhouettes.
-        switch(room) {
-            case 0 -> { // bathroom: bath basin, sink, mirror
-                box(out,cx-1.65,0,cz-1.45,2.2,.55,.85,0xb1a9a1);
-                box(out,cx-1.42,.55,cz-1.25,1.77,.09,.48,0x5b6d76);
-                box(out,cx+1.7,0,cz-.9,.6,.93,.6,0xa5a5a5);
-                box(out,cx+1.7,.92,cz-.9,.6,.10,.6,0xe2d4bc);
-                box(out,cx+1.71,1.2,cz-.86,.05,.68,.5,0x6d8b98);
-            }
-            case 1 -> { // master bedroom: bed and chest
-                box(out,cx-1.7,0,cz-1.6,2.55,.53,1.65,0x594031);
-                box(out,cx-1.6,.54,cz-1.5,2.35,.16,1.48,0x8c7671);
-                box(out,cx-1.7,.66,cz-1.5,2.35,.42,.14,0x614336);
-                box(out,cx+1.65,0,cz+1.15,.75,1.5,.6,0x544437);
-            }
-            case 2 -> {box(out,cx-1.7,0,cz-1.7,2,.6,1.1,0x5b4140);
-                box(out,cx-1.65,.62,cz-1.66,1.9,.18,.96,0x82736b);
-                box(out,cx+1.6,0,cz+1.1,.6,1.25,.6,0x76593a);}
-            case 3 -> { // living room: couch and low coffee table
-                box(out,cx-1.75,0,cz-1.55,3.1,.55,.86,0x52413d);
-                box(out,cx-1.75,.52,cz-1.55,3.1,.59,.22,0x6b5351);
-                box(out,cx-.95,0,cz+1.0,1.75,.45,.8,0x694c38);
-                box(out,cx+1.9,0,cz-.8,.66,1.5,.55,0x4e463f);
-            }
-            case 4 -> {box(out,cx-1.0,0,cz-1.25,2,.7,1.3,0x584333);
-                box(out,cx-1.02,.7,cz-1.25,2.05,.09,1.35,0x8e6247);
-                box(out,cx+.45,.79,cz-.8,.2,.27,.2,0xd3a865);}
-            case 5 -> { // kitchen: counters, sink and stove
-                box(out,cx-2.5,0,cz-1.45,2.45,.95,.7,0x66615d);
-                box(out,cx-2.46,.96,cz-1.4,2.4,.1,.63,0xa7a09a);
-                box(out,cx+1.5,0,cz-.85,1.0,1.18,.7,0x454b51);
-                box(out,cx+1.6,1.18,cz-.79,.79,.05,.54,0xaaa59d);
-                box(out,cx+1.53,1.26,cz-.75,.08,.18,.08,0xc7bca0);
-            }
-            case 6 -> { // real licensed wood shelf and reader's table
-                imported(out,"shelf_mp_6",cx-2.20,0,cz-.45,2.15,Math.PI/2);
-                imported(out,"shelf_mp_6",cx-2.20,0,cz+.75,2.15,Math.PI/2);
-                box(out,cx-.2,0,cz+1.0,1.7,.82,.85,0x5e4938);
-            }
-            case 7 -> { // dining room: table and four seats
-                box(out,cx-1.1,0,cz-.7,2.15,.74,1.35,0x574337);
-                box(out,cx-1.15,.76,cz-.72,2.25,.09,1.41,0x97734e);
-                imported(out,"chair_mp_5",cx-1.1,0,cz-1.54,1.0,0);
-                imported(out,"chair_mp_5",cx+.71,0,cz+1.22,1.0,Math.PI);
-            }
-            case 8 -> {box(out,cx-1.45,0,cz-1.1,2.4,.82,1.1,0x6a5140);
-                box(out,cx+1.7,0,cz-.85,.65,1.5,1.25,0x473d3b);
-                box(out,cx-1.2,.88,cz-.95,.63,.1,.53,0x8e7757);}
-            case 9 -> {box(out,cx-1.3,0,cz-.9,2,.75,1.1,0x4e3e36);box(out,cx+1.7,0,cz-1.6,.7,1.9,1.1,0x5d605d);}
-            case 10 -> {box(out,cx-1.5,0,cz-.9,1.8,.88,.65,0x70513c);box(out,cx+1.8,0,cz+.4,.8,1.6,.7,0x564c42);}
-            case 11 -> {box(out,cx-1.4,0,cz-1.5,1.2,1.8,.8,0x58615b);box(out,cx+1.7,0,cz+.8,1,.8,.9,0x5c4a39);}
-            case 12 -> { // rear garden: fence, garden bench and planting bed
-                box(out,cx-2,0,cz-1.5,.2,1.25,.2,0x554f3c);
-                box(out,cx+2,0,cz-1.5,.2,1.25,.2,0x554f3c);
-                box(out,cx-.8,0,cz+.8,1.6,.43,.35,0x6a5643);
-                box(out,cx+1.7,.01,cz+.3,.65,.16,1.2,0x59664d);
-            }
-            case 13 -> {box(out,cx+1.3,0,cz-1,.85,1,.85,0x64503e);}
-            case 14 -> { /* Full operational van is instanced once from VanStaging below. */ }
-            default -> { }
-        }
+        for(InvestigationSites.Prop prop:InvestigationSites.props(map.site(),room))
+            imported(out,prop.mesh(),cx+prop.dx(),prop.y(),cz+prop.dz(),
+                prop.scale(),prop.yaw());
     }
     /** Standard van shell and service fixtures. Reused unchanged on every location. */
     private static void vanBox(List<Face> faces,VanStaging van,
@@ -479,7 +415,19 @@ public final class SceneRenderer {
     private void siteRoof(List<Face> out,HouseMap map){
         if(!map.authoredArchitecture())return;
         double y=map.ceilingHeight();
-        if(map.site()==HouseMap.Site.FARMHOUSE){
+        if(map.site()==HouseMap.Site.HOUSE){
+            // Asymmetric Victorian slate gables follow the real three-part
+            // footprint. Roof planes are high enough not to block the ground
+            // camera, and remain strictly environmental architecture.
+            if(Math.hypot(x-11,z-38)<43)
+                pitchedRoof(out,3,18,11,69,y,2.35,MaterialAtlas.STONE);
+            if(Math.hypot(x-37,z-38)<43)
+                pitchedRoof(out,29,45,11,69,y,2.45,MaterialAtlas.STONE);
+            if(Math.hypot(x-23,z-38)<43)
+                pitchedRoof(out,18,29,11,66,y,2.95,MaterialAtlas.AGED_WOOD);
+            if(Math.hypot(x-23,z-69)<14)
+                pitchedRoof(out,19,28,65,72,y-.35,1.55,MaterialAtlas.STONE);
+        }else if(map.site()==HouseMap.Site.FARMHOUSE){
             if(Math.hypot(x-11,z-31)<46)
                 pitchedRoof(out,2,20,2,57,y,2.1,MaterialAtlas.AGED_WOOD);
             if(Math.hypot(x-43,z-31)<46)

@@ -1,8 +1,9 @@
 # Beckenburg investigation-map expansion (first playable slice)
 
-Implementation commits: the original HOUSE layout remains the default. Two additional
-host-authored, single-floor investigation sites are selectable in the solo prep menu
-and the LAN lobby: FARMHOUSE (Abandoned Farmhouse) and SCHOOL (Ravenshade School).
+The residential house, abandoned farmhouse, and Ravenshade School have three
+separate host-authored ground-floor architectural layouts, selectable in solo
+preparation and the LAN lobby. The original grid of domestic rooms is obsolete;
+the house now follows a dedicated Victorian plan, not a visual texture swap.
 
 ## Design and scope
 
@@ -12,9 +13,15 @@ assignments, furnishing compositions, and themed ritual markers. The farmhouse n
 doorways and twenty-two glazed facade bays. Ravenshade School uses a
 70 × 84 footprint with fourteen doorways and sixty-four glazed bays.
 Both have bays, structural returns, a true circulation spine, separate wings,
-and functionally distinct service rooms. The original house remains 25 × 31,
-with site-specific 3.6 / 4.6 high ceilings for the two larger properties. Every site uses the
-same host-side door collision, ghost traversal constraints, six-hunter van staging,
+and functionally distinct service rooms. The residential house uses a
+48 × 84 footprint, 3.35-unit ground-floor ceilings, twenty doors, and
+twenty-six physical window bays. Its deliberately articulated ground plan has
+a central stair hall, drawing room, parlour, breakfast room, formal dining room,
+library, study, kitchen, scullery, cellar stair vestibule, WC, front portico and
+rear garden. The courtyard-facing portico connects to a dedicated van area, where
+all six hunters still spawn and can walk out of the rear cargo opening.
+Every site uses the same host-side door collision, ghost traversal constraints,
+six-hunter van staging,
 room lighting, weather, equipment, event and ritual simulation.
 
 This is now the **first physically authored architectural ground-floor pass**.
@@ -28,11 +35,13 @@ room-to-room traversal, and host/client door replication uses the exact same
 floor tiles as the renderer. `LanAcoustics` consults the same door locations
 for true closed-door attenuation.
 
-The three-floor architectural reference sheets are **design targets**. The upper
-floors, cellars, and stair-linked vertical player/ghost state have **not** yet been
-implemented. Previously named cellar/boiler rooms remain on the playable ground
-plane until vertical room IDs, stairs and authority are integrated. Neither the
-illustrations nor their floor labels are evidence that vertical navigation ships.
+The multi-floor architectural reference sheets are **design targets**. Upper
+bedrooms, basement/cellar floors, and stair-linked vertical player and ghost state
+have **not** yet been implemented. The residential house's former 'storage cellar'
+has become the honestly labeled ground-floor 'cellar stair vestibule'; the
+farmhouse root cellar and school boiler room still occupy the ground plane until
+separate vertical levels and authority are implemented. Concept art does not
+constitute playable floor geometry.
 
 ## Imported asset provenance and roles
 
@@ -78,8 +87,10 @@ of free equipment in investigation maps.
 - `SceneRenderer.furniture` instantiates authored runtime meshes by room; material
   and ritual rendering follow selected-site context.
 - `InvestigationSitesTest` checks map topology, ritual sockets and source mesh
-  geometry; `ArchitecturalPlansTest` checks authored non-grid circulation, doors,
-  acoustics, collision and safe extraction; `LanSiteSelectionIntegrationTest`
+  geometry; `ArchitecturalPlansTest` checks all three non-grid layouts; 
+  `VictorianHouseArchitectureTest` confirms all 20 doorways, facade glazing,
+  42 approved GLB furnishing placements, full capsule-safe connected navigation
+  from the van, and replicated door state. `LanSiteSelectionIntegrationTest`
   checks genuine TCP map selection and reconnect state.
 - Both standard platform build scripts must execute these tests. A real Java 17
   full build and graphical walk-through are still required before release acceptance.

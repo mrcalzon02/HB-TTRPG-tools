@@ -158,9 +158,43 @@ final class ArchitecturalPlans {
         private static boolean inside(int id){return id>=0&&id<HouseMap.INDOOR_ROOMS;}
     }
     static Plan build(HouseMap.Site kind){
+        if(kind==HouseMap.Site.HOUSE)return house();
         if(kind==HouseMap.Site.FARMHOUSE)return farmhouse();
         if(kind==HouseMap.Site.SCHOOL)return school();
-        throw new IllegalArgumentException("historic compact house uses its own preserved layout");
+        throw new IllegalArgumentException("unsupported authored investigation location");
+    }
+    /** Late-Victorian domestic plan: central stair-hall and entrance vestibule,
+     * offset parlour and kitchen wings, rear garden, a separate scullery and WC,
+     * front portico, and an isolated safe expedition van outside the property.
+     * Bedroom and actual cellar floors require vertical simulation; they are not
+     * misrepresented as ground-floor rooms.
+     */
+    private static Plan house(){
+        Builder b=new Builder(48,84);
+        b.room(1,4,12,17,23).room(2,30,12,43,23)
+         .room(3,4,25,17,36).room(5,30,25,43,36)
+         .room(6,4,38,17,49).room(8,30,38,43,49)
+         .room(7,4,51,17,61).room(11,30,51,43,61)
+         .room(9,4,63,17,68).room(0,30,63,43,68)
+         .room(4,19,12,28,49).room(10,19,51,28,65)
+         .room(12,4,2,17,10).room(13,20,67,27,71)
+         .room(14,15,73,30,81)
+         // Asymmetric projecting bay windows give the Victorian exterior its
+         // distinctive silhouette rather than a monolithic rectangular facade.
+         .room(1,2,15,4,19).room(3,2,27,4,33)
+         .room(7,2,54,4,58).room(8,43,40,45,46)
+         .room(5,43,27,45,33);
+        b.door(18,16,1,4).door(29,16,2,4)
+         .door(18,30,3,4).door(29,30,5,4)
+         .door(18,43,6,4).door(29,43,8,4)
+         .door(18,56,7,10).door(29,56,11,10)
+         .door(10,24,1,3).door(10,37,3,6)
+         .door(10,50,6,7).door(10,62,7,9)
+         .door(36,24,2,5).door(36,37,5,8)
+         .door(36,50,8,11).door(36,62,11,0)
+         .door(23,50,4,10).door(23,66,10,13)
+         .door(23,72,13,14).door(10,11,12,1);
+        return b.finish();
     }
     private static Plan farmhouse(){
         // A central stair passage, asymmetric domestic wings, service rooms, bay

@@ -14,10 +14,10 @@ public final class LanApparitionTest {
         ok(LanApparition.frame(map,viewer,false,ghost.pose(),true,91).contains("HIDDEN"),"room-only mode sees no 3D position");
         world.setRoom(0,HouseMap.EXTRACTION_ROOM);
         ok(LanApparition.frame(map,world.body(0),true,ghost.pose(),true,92).contains("HIDDEN"),"distant hunter sees no position");
-        ok(!LanApparition.lineOfSight(map,7.5,3.5,8.5,3.5),"closed door occludes ghost");
-        ok(map.toggleNearestDoor(7.5,3.5),"test door opens");
-        ok(LanApparition.lineOfSight(map,7.5,3.5,8.5,3.5),"open doorway reveals apparition");
-        ok(!LanApparition.lineOfSight(map,2.0,3.5,18.0,3.5),"distant ghost not revealed");
+        ok(!LanApparition.lineOfSight(map,17.5,16.5,19.5,16.5),"closed door occludes ghost");
+        ok(map.toggleNearestDoor(17.5,16.5),"test door opens");
+        ok(LanApparition.lineOfSight(map,17.5,16.5,19.5,16.5),"open doorway reveals apparition");
+        ok(!LanApparition.lineOfSight(map,4.5,16.5,21.0,16.5),"distant ghost not revealed");
         ok(!LanApparition.lineOfSight(map,Double.NaN,1,2,1),"nonfinite positions rejected");
         try{LanApparition.frame(map,viewer,true,ghost.pose(),true,-1);throw new AssertionError("negative tick permitted");}
         catch(IllegalArgumentException expected){}

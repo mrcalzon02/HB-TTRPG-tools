@@ -26,25 +26,27 @@ public final class InvestigationSitesTest {
         ok(new SceneRenderer().rackStock.isEmpty(),
             "a fresh renderer must not display nonexistent van inventory");
         HouseMap house=new HouseMap();
-        ok(house.site()==HouseMap.Site.HOUSE&&house.roomName(4).equals("MAIN HALL"),
-            "legacy map contract is unchanged");
-        for(HouseMap.Site site:new HouseMap.Site[]{HouseMap.Site.FARMHOUSE,
-                HouseMap.Site.SCHOOL}){
+        ok(house.site()==HouseMap.Site.HOUSE&&house.roomName(4).equals("STAIR HALL")
+                &&house.width()==48&&house.height()==84,
+            "residential house now has an actual Victorian circulation plan");
+        for(HouseMap.Site site:HouseMap.Site.values()){
             HouseMap layout=new HouseMap(site);
             ok(layout.valid(),"all rooms and exterior staging reachable on "+site);
             ok(RitualSites.valid(layout),"three reachable ritual anchors on "+site);
-            ok(layout.width()==(site==HouseMap.Site.FARMHOUSE?56:70)
+            ok(layout.width()==(site==HouseMap.Site.HOUSE?48:
+                            site==HouseMap.Site.FARMHOUSE?56:70)
                     &&layout.height()==(site==HouseMap.Site.FARMHOUSE?74:84),
                 "real authored building footprints replace 3x5 cubes");
-            ok(layout.ceilingHeight()>house.ceilingHeight(),
-                "grand rooms have more overhead volume");
-            ok(layout.van().placement().x()>house.van().placement().x(),
-                "van moves to actual perimeter of the grand location");
+            ok(layout.ceilingHeight()>=house.ceilingHeight(),
+                "authored rooms have at least the residential reception ceiling height");
+            ok(layout.van().placement().x()>=house.van().placement().x(),
+                "van staging is located outside the real footprint");
             ok(layout.roomAt(layout.van().placement().x(),
                 layout.van().placement().z())==HouseMap.EXTRACTION_ROOM,
                 "larger map retains functional extraction staging");
-            ok(!layout.roomName(4).equals(house.roomName(4)),
-                "new locations provide different room purposes");
+            if(site!=HouseMap.Site.HOUSE)
+                ok(!layout.roomName(4).equals(house.roomName(4)),
+                    "new locations provide different room purposes");
             Set<String> meshes=new HashSet<>();
             int placed=0;
             for(int room=0;room<HouseMap.ROOM_COUNT;room++){
@@ -64,7 +66,8 @@ public final class InvestigationSitesTest {
             for(int room=0;room<HouseMap.ROOM_COUNT;room++)
                 ok(layout.traversable(layout.centerX(room),layout.centerZ(room)),
                     "authored furnishing never blocks room center / ritual socket");
-            int furnished=site==HouseMap.Site.SCHOOL?1:3;
+            int furnished=site==HouseMap.Site.SCHOOL?1:
+                site==HouseMap.Site.HOUSE?1:3;
             InvestigationSites.Prop first=InvestigationSites.props(site,furnished).get(0);
             ok(!layout.traversable(layout.centerX(furnished)+first.dx(),
                     layout.centerZ(furnished)+first.dz()),

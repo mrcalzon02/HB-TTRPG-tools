@@ -26,7 +26,7 @@ public final class LanGhostHearingTest {
         double nx=map.centerX(5),nz=map.centerZ(5);
         ok(LanGhostHearing.project(map,ghost,5,nx,nz,LanGhostPursuit.Sound.FOOTSTEP,10)==null,
             "closed door attenuates a footstep");
-        ok(map.toggleNearestDoor(16.5,9.5),"door can be opened");
+        ok(map.toggleNearestDoor(28.7,30.5),"door can be opened");
         ok(LanGhostHearing.project(map,ghost,5,nx,nz,LanGhostPursuit.Sound.FOOTSTEP,11)!=null,
             "open threshold permits faint footstep");
         ok(LanGhostHearing.project(map,ghost,HouseMap.EXTRACTION_ROOM,
