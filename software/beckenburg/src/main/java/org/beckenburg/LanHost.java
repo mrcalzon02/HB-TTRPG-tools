@@ -66,6 +66,8 @@ public final class LanHost implements AutoCloseable {
     private LanTelegraphedStrike.Pending pendingStrike;
     private final GhostFrenzy frenzy;
     private int lastHumanFrenzyAttackTick=-10000;
+    private int lastHorrorStingTick=-10000;
+    private final int[] lastSealedDoorRattleTick={-10000,-10000,-10000,-10000,-10000,-10000};
     private final String bindAddress;
 
     public LanHost(String ip,int port)throws IOException{
@@ -501,7 +503,13 @@ public final class LanHost implements AutoCloseable {
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(p.size()-1)));
                     ensureActiveHunter(peer);
                     boolean runningFast=p.size()==5&&LanProtocol.integer(p.get(3),0,1)==1;
-                    world.move(peer.slot,dx,dz,tick,runningFast);
+                    try{
+                        world.move(peer.slot,dx,dz,tick,runningFast);
+                    }catch(IllegalArgumentException movementBlocked){
+                        if("frenzy sealed the van extraction threshold".equals(movementBlocked.getMessage()))
+                            sealedDoorRattle(peer);
+                        throw movementBlocked;
+                    }
                     hunterRooms[peer.slot]=world.body(peer.slot).room();
                     recordSound(peer.slot,LanGhostPursuit.Sound.FOOTSTEP);
                     reply(peer,"ACCEPT|STEP");broadcastWorld();broadcastState();
@@ -586,8 +594,10 @@ public final class LanHost implements AutoCloseable {
                     if(target==at||Math.abs(target/HouseMap.COLS-at/HouseMap.COLS)+Math.abs(target%HouseMap.COLS-at%HouseMap.COLS)!=1)
                         throw new IllegalArgumentException("room not adjacent");
                     if(frenzy.sealed()&&target==HouseMap.EXTRACTION_ROOM
-                            &&at!=HouseMap.EXTRACTION_ROOM)
+                            &&at!=HouseMap.EXTRACTION_ROOM){
+                        sealedDoorRattle(peer);
                         throw new IllegalArgumentException("frenzy sealed the extraction threshold");
+                    }
                     // Room-level topology proof only; physical door and body collision still need synced transform validation.
                     hunterRooms[peer.slot]=target;world.setRoom(peer.slot,target);recordSound(peer.slot,LanGhostPursuit.Sound.FOOTSTEP);reply(peer,"ACCEPT|MOVE|"+target);broadcastState();broadcastWorld();
                 }
@@ -1188,6 +1198,11 @@ public final class LanHost implements AutoCloseable {
         }
     }
     private void recordSound(int seat,LanGhostPursuit.Sound type){recordSound(seat,type,null);}
+    private void sealedDoorRattle(Peer peer){
+        if(peer.slot<0||peer.slot>=HUNTERS||tick-lastSealedDoorRattleTick[peer.slot]<18)return;
+        lastSealedDoorRattleTick[peer.slot]=tick;
+        actorCue(peer.slot,LanSound.Cue.LOCKED_DOOR_RATTLE);
+    }
     private void actorCue(int seat,LanSound.Cue cue){
         Peer actor=seats[seat];
         if(actor!=null&&actor.worldMode)
@@ -1410,6 +1425,20 @@ public final class LanHost implements AutoCloseable {
             default->null;
         };
         if(cue!=null)broadcastGhostSound(cue);
+        // These are explicitly sound-only variants of *real* accepted haunts:
+        // no fabricated evidence packets, no fake footsteps, no guessed ghost coordinates.
+        if((result.action()==GhostDomain.Action.DISTURB
+                ||result.action()==GhostDomain.Action.MANIFEST
+                ||result.action()==GhostDomain.Action.SIGNATURE)
+                &&tick-lastHorrorStingTick>=115
+                &&(result.action()==GhostDomain.Action.SIGNATURE
+                    ||Math.floorMod(tick*11+result.room()*7+ghostType.ordinal(),4)==0)){
+            lastHorrorStingTick=tick;
+            LanSound.Cue[] stings={LanSound.Cue.HORROR_STING_A,
+                LanSound.Cue.HORROR_STING_B,LanSound.Cue.HORROR_STING_C};
+            int pick=Math.floorMod(tick+result.room()*17+ghostType.ordinal()*29,stings.length);
+            broadcastGhostSound(stings[pick]);
+        }
         if(result.action()!=GhostDomain.Action.STRIKE){distributeEffect(result);return;}
         // An ordinary telegraphed strike is not a Frenzy and never seals the exits.
         boolean[] acquired=strikeVictims(),immediate=new boolean[HUNTERS];
@@ -1505,6 +1534,7 @@ public final class LanHost implements AutoCloseable {
     private void onFrenzyTransition(){
         world.setExitSealed(frenzy.sealed());
         notifyAllPeers(frenzyFrame());
+        if(frenzy.warning())broadcastGhostSound(LanSound.Cue.TENSION_BUILD);
         if(frenzy.raging()){
             ghost.reveal(30);
             broadcastGhostSound(LanSound.Cue.MANIFEST);
