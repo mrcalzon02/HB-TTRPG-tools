@@ -9,7 +9,14 @@ public final class RitualSites {
  public static Site site(HouseMap map,GhostIdentity.Rite rite){
   Objects.requireNonNull(map);Objects.requireNonNull(rite);
   int room=switch(rite){case BANISHMENT->9;case CLEANSING->6;case ABSOLUTION->10;};
-  String name=switch(rite){case BANISHMENT->"Sealed Iron Circle";case CLEANSING->"Purification Font";case ABSOLUTION->"Memorial Lectern";};
+  String name=switch(map.site()){
+   case HOUSE->switch(rite){case BANISHMENT->"Sealed Iron Circle";
+     case CLEANSING->"Purification Font";case ABSOLUTION->"Memorial Lectern";};
+   case FARMHOUSE->switch(rite){case BANISHMENT->"Cellar Iron Seal";
+     case CLEANSING->"Pantry Wash Basin";case ABSOLUTION->"Mudroom Family Memorial";};
+   case SCHOOL->switch(rite){case BANISHMENT->"Boiler-Room Seal";
+     case CLEANSING->"Library Cleansing Desk";case ABSOLUTION->"Vestry Memorial";};
+  };
   return new Site(rite,room,name,map.centerX(room),map.centerZ(room));
  }
  public static List<Site> all(HouseMap map){return Arrays.stream(GhostIdentity.Rite.values()).map(x->site(map,x)).toList();}

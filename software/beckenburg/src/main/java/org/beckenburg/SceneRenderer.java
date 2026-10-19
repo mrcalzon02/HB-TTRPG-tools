@@ -155,6 +155,15 @@ public final class SceneRenderer {
     }
     private static void furniture(List<Face> out,int room,HouseMap map){
         double cx=map.centerX(room),cz=map.centerZ(room);
+        if(map.site()!=HouseMap.Site.HOUSE){
+            // Authored placements are all imported, indexed source GLBs; decorative
+            // meshes never substitute for the host's tile/door collision geometry.
+            for(InvestigationSites.Prop prop:InvestigationSites.props(map.site(),room)){
+                imported(out,prop.mesh(),cx+prop.dx(),prop.y(),cz+prop.dz(),
+                    prop.scale(),prop.yaw());
+            }
+            return;
+        }
         // Props deliberately have actual 3D volumes and distinctive silhouettes.
         switch(room) {
             case 0 -> { // bathroom: bath basin, sink, mirror
@@ -437,7 +446,8 @@ public final class SceneRenderer {
             // Far geometry may be skipped only when beyond near/far fog; clipping handles visibility.
             if(Math.hypot(mx-x,mz-z)>14)continue;
             int n=map.roomAt(mx,mz);
-            int floor=MaterialAtlas.floor(n),wall=MaterialAtlas.wall(n);
+            int floor=MaterialAtlas.floor(map.site(),n),
+                wall=MaterialAtlas.wall(map.site(),n);
             texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),
                 floor,xx,zz,xx+1,zz,xx+1,zz+1,xx,zz+1,0xffffff);
             if(!map.outside(n))texturedQuad(out,new Point(xx,2.7,zz+1),new Point(xx+1,2.7,zz+1),new Point(xx+1,2.7,zz),new Point(xx,2.7,zz),

@@ -75,6 +75,24 @@ public final class MaterialAtlas {
         out.setRGB(0,0,SIZE,SIZE,DATA,0,SIZE);
         return out;
     }
+    public static int floor(HouseMap.Site site,int room){
+        if(site==HouseMap.Site.HOUSE)return floor(room);
+        if(room>=HouseMap.INDOOR_ROOMS)return room==12?FOLIAGE:room==13?AGED_WOOD:SOIL;
+        if(site==HouseMap.Site.SCHOOL)
+            return switch(room){case 0,5,9,11->CERAMIC;case 4,10->CONCRETE;
+                case 1,2,7,8->PARQUET;default->AGED_WOOD;};
+        return switch(room){case 0,5->CERAMIC;case 9,11->STONE;case 4,10->AGED_WOOD;
+            case 1,2,3,7->PARQUET;default->CONCRETE;};
+    }
+    public static int wall(HouseMap.Site site,int room){
+        if(site==HouseMap.Site.HOUSE)return wall(room);
+        if(room>=HouseMap.INDOOR_ROOMS)return AGED_WOOD;
+        if(site==HouseMap.Site.SCHOOL)
+            return switch(room){case 0,5,9,11->CERAMIC;case 4,10->BRICK;
+                default->PLASTER;};
+        return switch(room){case 0,5->CERAMIC;case 9,11->STONE;
+            case 3,4,6,8,10->AGED_WOOD;default->WALLPAPER;};
+    }
     public static int floor(int room) { return switch(room) {
         case 0,5 -> CERAMIC;
         case 1,2,7 -> CARPET;

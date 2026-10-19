@@ -6,10 +6,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/** Authored, one-floor playable house blockout: twelve interior and three exterior zones. */
+/** Authored investigation layouts: twelve physically navigable interiors and three exterior zones.
+ * Original house remains the default; site variants are deterministic and replicated. */
 public final class HouseMap {
     public static final int COLS=3, ROWS=5, INDOOR_ROOMS=12, ROOM_COUNT=15;
     public static final int WIDTH=25, HEIGHT=31, EXTRACTION_ROOM=14;
+    public enum Site {
+        HOUSE("Residential House"),
+        FARMHOUSE("Abandoned Farmhouse"),
+        SCHOOL("Ravenshade School");
+        private final String label;
+        Site(String label){this.label=label;}
+        @Override public String toString(){return label;}
+    }
+    private final Site site;
+    public Site site(){return site;}
     private static final String[] NAMES={
         "BATHROOM", "MASTER BEDROOM", "NURSERY",
         "LIVING ROOM", "MAIN HALL", "KITCHEN",
@@ -17,12 +28,28 @@ public final class HouseMap {
         "STORAGE CELLAR", "FOYER", "UTILITY ROOM",
         "REAR GARDEN", "FRONT PORCH", "VAN STAGING"
     };
+    private static final String[] FARM_NAMES={
+        "SCULLERY","PARENTS' ROOM","CHILDREN'S ROOM",
+        "FARM PARLOR","CENTRAL PASSAGE","FARM KITCHEN",
+        "PANTRY","FAMILY DINING","FARM OFFICE",
+        "ROOT CELLAR","MUDROOM","GENERATOR ROOM",
+        "ORCHARD","BARNYARD","VAN STAGING"
+    };
+    private static final String[] SCHOOL_NAMES={
+        "WASHROOM","CLASSROOM A","CLASSROOM B",
+        "FACULTY LOUNGE","MAIN CORRIDOR","SCIENCE LAB",
+        "SCHOOL LIBRARY","ASSEMBLY ROOM","HEADMASTER'S OFFICE",
+        "BOILER ROOM","FRONT VESTIBULE","ELECTRICAL ROOM",
+        "PLAYGROUND","SCHOOL STEPS","VAN STAGING"
+    };
     private final char[][] tiles=new char[HEIGHT][WIDTH];
     private final Set<Integer> openDoors=new HashSet<>();
     private final VanStaging van=new VanStaging(new VanStaging.Placement(20.5,27.5,-Math.PI/2));
     public VanStaging van(){return van;}
 
-    public HouseMap(){
+    public HouseMap(){this(Site.HOUSE);}
+    public HouseMap(Site variant){
+        site=java.util.Objects.requireNonNull(variant);
         for(int z=0;z<HEIGHT;z++)for(int x=0;x<WIDTH;x++){
             // Outdoor cells have no internal partitions; outer walls stand in for
             // hedge/fence at this early geometry stage, not an interior room.
@@ -30,9 +57,40 @@ public final class HouseMap {
             boolean divider=(z<24 && (x==8||x==16)) || z==6||z==12||z==18||z==24;
             tiles[z][x]=boundary||divider?'#': z>24?'o':'.';
         }
-        for(int z:new int[]{3,9,15,21})for(int x:new int[]{8,16})tiles[z][x]='D';
-        for(int z:new int[]{6,12,18,24})for(int x:new int[]{4,12,20})tiles[z][x]='D';
-        // Side paths stay open for the back garden, porch and van staging.
+        // Every site retains the safe van and 20 accessible physical doors, but
+        // door locations, interior subdivisions and room purposes are authored per site.
+        int[] west=switch(site){
+            case HOUSE->new int[]{3,9,15,21};
+            case FARMHOUSE->new int[]{2,8,16,22};
+            case SCHOOL->new int[]{4,10,14,20};
+        };
+        int[] east=switch(site){
+            case HOUSE->new int[]{3,9,15,21};
+            case FARMHOUSE->new int[]{4,10,14,20};
+            case SCHOOL->new int[]{2,8,16,22};
+        };
+        for(int z:west)tiles[z][8]='D';
+        for(int z:east)tiles[z][16]='D';
+        int[][] north=switch(site){
+            case HOUSE->new int[][]{{4,12,20},{4,12,20},{4,12,20},{4,12,20}};
+            case FARMHOUSE->new int[][]{{3,13,21},{5,11,19},{4,14,20},{3,12,21}};
+            case SCHOOL->new int[][]{{5,11,20},{3,13,21},{5,12,19},{4,11,20}};
+        };
+        for(int row=0;row<4;row++)for(int x:north[row])tiles[6*(row+1)][x]='D';
+        if(site==Site.SCHOOL){
+            // Divided classroom alcoves and administrative archive partitions.
+            for(int room:new int[]{1,2,5,7,8}){
+                int bx=(room%COLS)*8, bz=(room/COLS)*6;
+                tiles[bz+2][bx+6]='#';tiles[bz+3][bx+6]='#';
+            }
+        }else if(site==Site.FARMHOUSE){
+            // Farm service cubbies and short original masonry returns.
+            for(int room:new int[]{1,2,3,5,8}){
+                int bx=(room%COLS)*8,bz=(room/COLS)*6;
+                tiles[bz+1][bx+5]='#';tiles[bz+2][bx+5]='#';
+            }
+        }
+        // Exterior staging remains navigable for all locations.
     }
     /** Sorted fixed tile IDs allow clients to reproduce the server's physical doors. */
     public String doorSnapshot(){
@@ -103,11 +161,16 @@ public final class HouseMap {
             ||Math.abs(from/COLS-to/COLS)+Math.abs(from%COLS-to%COLS)!=1)
             throw new IllegalArgumentException("adjacent room IDs required");
         int row=Math.min(from/COLS,to/COLS),col=Math.min(from%COLS,to%COLS);
-        int xx,zz;
-        if(from/COLS==to/COLS){xx=8+col*8;zz=3+row*6;}
-        else {xx=4+col*8;zz=6+row*6;}
-        if(tile(xx,zz)!='D')return false;
-        return openDoors.add(doorId(xx,zz));
+        if(from/COLS==to/COLS){
+            int xx=8+col*8;
+            for(int zz=row*6+1;zz<row*6+6;zz++)
+                if(tile(xx,zz)=='D')return openDoors.add(doorId(xx,zz));
+        }else{
+            int zz=(row+1)*6;
+            for(int xx=col*8+1;xx<col*8+8;xx++)
+                if(tile(xx,zz)=='D')return openDoors.add(doorId(xx,zz));
+        }
+        return false;
     }
     public int roomAt(double x,double z){
         if(!Double.isFinite(x)||!Double.isFinite(z))return -1;
@@ -117,7 +180,14 @@ public final class HouseMap {
         int row=zz<6?0:zz<12?1:zz<18?2:zz<24?3:4;
         return row*COLS+col;
     }
-    public String roomName(int room){return room<0||room>=ROOM_COUNT?"OUTSIDE":NAMES[room];}
+    public String roomName(int room){
+        if(room<0||room>=ROOM_COUNT)return "OUTSIDE";
+        return switch(site){
+            case HOUSE->NAMES[room];
+            case FARMHOUSE->FARM_NAMES[room];
+            case SCHOOL->SCHOOL_NAMES[room];
+        };
+    }
     public String roomName(double x,double z){return roomName(roomAt(x,z));}
     public double centerX(int room){checkRoom(room);return 4.5+(room%COLS)*8;}
     public double centerZ(int room){checkRoom(room);return 3.5+(room/COLS)*6;}
