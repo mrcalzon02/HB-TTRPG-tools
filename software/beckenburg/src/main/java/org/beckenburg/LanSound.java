@@ -47,7 +47,9 @@ public final class LanSound {
         LOCKED_DOOR_RATTLE(6, 76, "SEALED THRESHOLD RATTLES"),
         HORROR_STING_A(7, 81, "AN UNNATURAL NOISE"),
         HORROR_STING_B(7, 77, "A SUDDEN HAUNTING SOUND"),
-        HORROR_STING_C(7, 85, "PARANORMAL DISTURBANCE");
+        HORROR_STING_C(7, 85, "PARANORMAL DISTURBANCE"),
+        DROP(4, 52, "ITEM SET DOWN"),
+        ELECTRIC_HUM(5, 53, "ELECTRICAL SYSTEM HUM");
         final int acousticBudget, baseGain;
         final String caption;
         Cue(int budget, int gain, String caption) { acousticBudget=budget;baseGain=gain;this.caption=caption; }
@@ -56,7 +58,7 @@ public final class LanSound {
             case FOOTFALL,DOOR,EQUIPMENT,RITUAL,STEP,SWITCH,BREAKER,VAN_DOOR,
                     UI_CLICK,UI_BACK,PICKUP,SELECT,DEVICE_ON,DEVICE_OFF,SCANNER,
                     CAMERA,BOOK,POTION,DOTS_MOTOR,DOTS_STOP,SPARK,
-                    INCENSE_BURN,FIRELIGHT_IGNITE,FIRELIGHT_OUT->Tier.AMBIENT;
+                    INCENSE_BURN,FIRELIGHT_IGNITE,FIRELIGHT_OUT,DROP,ELECTRIC_HUM->Tier.AMBIENT;
             case WHISPER->Tier.MINOR;
             case DISTURB,MANIFEST,GHOST_DRIFT,WARD,HORROR_STING_A,
                     HORROR_STING_B,HORROR_STING_C,LOCKED_DOOR_RATTLE->Tier.MODERATE;
