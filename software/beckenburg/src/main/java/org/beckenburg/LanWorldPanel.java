@@ -48,6 +48,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final LanAudio audio=new LanAudio();
     private final RecorderAudio recorderAudio=new RecorderAudio();
     private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
+    private boolean ritualMusic,huntMusic;
     private String soundCaption="";
     private int soundUntilTick=-1;
     private LanCase.Tool selected=LanCase.Tool.EMF; // compatibility with legacy tests
@@ -362,7 +363,18 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     threatOutcome=p.get(1).equals("HIT")?"SPECTRAL STRIKE CONNECTED":"STRIKE EVADED — KEEP MOVING";
                     feedback=threatOutcome;
                 }else throw new IllegalArgumentException("invalid threat packet");
+            }else if(p.size()==3&&p.get(0).equals("RITUAL")&&p.get(1).equals("STARTED")){
+                ritualMusic=true;atmosphere.setRitual(true);feedback="RITUAL COMMENCED";
+            }else if(p.size()==2&&p.get(0).equals("RITUAL")&&p.get(1).equals("BROKEN")){
+                ritualMusic=false;atmosphere.setRitual(false);feedback="RITUAL INTERRUPTED";
+            }else if(p.size()==3&&p.get(0).equals("HUNT")&&p.get(1).equals("START")){
+                LanProtocol.integer(p.get(2),1,120);
+                huntMusic=true;atmosphere.setHunt(true);
+            }else if(p.size()==2&&p.get(0).equals("HUNT")&&p.get(1).equals("END")){
+                huntMusic=false;atmosphere.setHunt(false);
             }else if(frame.startsWith("RESULT|")){
+                ritualMusic=false;huntMusic=false;
+                atmosphere.setRitual(false);atmosphere.setHunt(false);
                 caseResult=frame.substring(7);feedback="CASE CLOSED: "+caseResult;
                 keys.clear();
             }else if(p.get(0).equals("CAMERA")){
