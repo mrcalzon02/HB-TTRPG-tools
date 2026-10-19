@@ -308,6 +308,30 @@ public final class SceneRenderer {
         box(faces,handle.x()-.045,.96,handle.z()-.04,.09,.13,.08,0xd8c9a1);
     }
 
+    /** Low-poly vehicle tyres are outside the cargo shell, never visible
+     * through the internal equipment and computer walls.
+     */
+    private static void vanWheel(List<Face> out,VanStaging van,
+                                 double x,double z){
+        int sides=12;
+        int tyre=0x25282b,hub=0x959895;
+        for(int i=0;i<sides;i++){
+            double a=i*Math.PI*2/sides,b=(i+1)*Math.PI*2/sides;
+            var ca=van.world(x,z);
+            var pa=van.world(x,z+.47*Math.cos(a));
+            var pb=van.world(x,z+.47*Math.cos(b));
+            var ha=van.world(x+(x<0?-.018:.018),z+.22*Math.cos(a));
+            var hb=van.world(x+(x<0?-.018:.018),z+.22*Math.cos(b));
+            Point center=new Point(ca.x(),.54,ca.z());
+            Point outerA=new Point(pa.x(),.54+.47*Math.sin(a),pa.z());
+            Point outerB=new Point(pb.x(),.54+.47*Math.sin(b),pb.z());
+            Point hubCenter=new Point(ca.x()+(x<0?-.021:.021),.54,ca.z());
+            Point hubA=new Point(ha.x(),.54+.22*Math.sin(a),ha.z());
+            Point hubB=new Point(hb.x(),.54+.22*Math.sin(b),hb.z());
+            out.add(new Face(center,outerA,outerB,tyre,-1,0,0,0,0,0,0));
+            out.add(new Face(hubCenter,hubA,hubB,hub,-1,0,0,0,0,0,0));
+        }
+    }
     /** One complete reusable VAN, shared by solo and network world renderers.
      * Architectural shell, floor, supports and socket data are all local to
      * this module. No Car08 wheel/grille triangles remain inside the cargo.
@@ -359,6 +383,21 @@ public final class SceneRenderer {
         vanBox(faces,van,-w-.025,h-.02,f-.05,w*2+.05,.15,r-f+.10,MaterialAtlas.IRON);
         vanBox(faces,van,-w+.22,h-.11,f+.14,w*2-.44,.035,r-f-.28,
             MaterialAtlas.CEILING);
+        // A separate physically sized driver cab and front fascia, not a
+        // stretched four-metre car texture pasted onto a seven-metre box.
+        vanBox(faces,van,-1.67,.20,r-.02,3.34,1.46,1.20,MaterialAtlas.IRON);
+        vanBox(faces,van,-1.69,1.68,r+.09,3.38,.85,.16,MaterialAtlas.WINDOW);
+        vanBox(faces,van,-1.71,.17,r+1.12,3.42,1.12,.20,MaterialAtlas.IRON);
+        vanBox(faces,van,-1.08,.92,r+1.32,2.16,.35,.052,MaterialAtlas.CONCRETE);
+        for(double side:new double[]{-1.39,1.20}){
+            vanBox(faces,van,side,1.05,r+1.33,.19,.16,.06,MaterialAtlas.WINDOW);
+        }
+        // Real exterior axles and side skirting, mounted outside the liner.
+        for(double side:new double[]{-w-.07,w+.07})
+            for(double axle:new double[]{f+1.02,r-.91})
+                vanWheel(faces,van,side,axle);
+        for(double side:new double[]{-w-.045,w-.045})
+            vanBox(faces,van,side,.19,f+.20,.09,.22,r-f-.40,MaterialAtlas.IRON);
         // Sidewall trim, tie-down channels and crossmembers are attached to
         // the surface, not free-standing equipment placed in arbitrary cells.
         for(double tz=f+.47;tz<r-.40;tz+=.87){
