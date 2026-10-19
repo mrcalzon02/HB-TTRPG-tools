@@ -24,11 +24,12 @@ public final class ImportedEquipmentModelsTest {
                 }
             }
         }
+        java.util.Set<String> emfModels=new java.util.HashSet<>();
         for(EquipmentTiers.Tier tier:EquipmentTiers.Tier.values()){
             String source=HeldInstrumentMesh.source("EMF",tier);
-            ok(source.equals(switch(tier){
-                case I->"exploration_emf_detector";case II->"dosimeter_2";case III->"dosimeter_4";
-            }),"all EMF tiers use actual distinct imported measuring instruments");
+            ok(source.equals(EquipmentModelCatalog.model("EMF_READER",tier))
+                && emfModels.add(source),
+                "all EMF tiers use distinct, approved, actually packaged measuring instruments");
             for(String kind:new String[]{"EMF","SPIRIT_BOX","THERMOMETER","GHOST_WRITING_BOOK"}){
                 BufferedImage image=HeldInstrumentMesh.image(kind,tier);
                 int opaque=0;
@@ -44,7 +45,9 @@ public final class ImportedEquipmentModelsTest {
             }
         }
         ok(HeldInstrumentMesh.source("DOTS_PROJECTOR",EquipmentTiers.Tier.I)
-            .equals("vape_mp_1"),"Tier I projector uses requested vape GLB");
+            .equals("blender_dots_projector_1")
+            && EquipmentModelCatalog.approved("blender_dots_projector_1"),
+            "Tier I projector uses approved authored housing derived from the requested vape GLB");
         System.out.println("PASS: 12 imported PSX meshes, original textures and tier-dependent held models");
     }
 }
