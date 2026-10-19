@@ -17,10 +17,10 @@ public final class VanStaging {
     }
     public record Position(double x, double z) { }
     public enum Station {
-        BRIEFING("Contract / daily task boards", .70, 2.56),
+        BRIEFING("Contract / daily task boards", .45, 2.13),
         EQUIPMENT("Equipment rack", -1.12, -1.35),
         RELAY("Sanity / activity monitors", 1.05, .55),
-        EXTRACTION("Extraction console", .95, 2.50);
+        EXTRACTION("Extraction console", 1.17, 2.13);
         public final String label;
         final double dx, dz;
         Station(String label, double dx, double dz) {
