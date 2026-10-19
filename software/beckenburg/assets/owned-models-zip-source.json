@@ -13,26 +13,24 @@
     "original_policy": "Keep full archive in private Beckenburg Drive; select individual production assets, not a raw-pack dump."
   },
   "inspection": {
-    "date": "2026-10-18 local",
-    "status": "local-archive-indexed",
-    "provider_limit_bytes": 268435456,
-    "actual_file_bytes": 1262869330,
-    "known_member_count": 448,
-    "known_formats": {
-      ".blend": 33,
-      ".fbx": 63,
-      ".obj": 2,
-      ".glb": 312
-    },
-    "unverified_members": [],
-    "scanner": "software/beckenburg/assets/tools/index_owned_models_zip.py",
-    "instructions": "Local Models.zip has been indexed read-only. Review private local inventory before selecting game assets; raw bounds are not transformed or renderer acceptance.",
-    "verified_model_geometry_count": 0,
-    "prior_connector_error": "Connected Google Drive download action rejected 1262869330 bytes: file exceeds 268435456-byte limit.",
-    "local_archive_sha256": "6dd59b169156206f41f45ee80e1fdd910febd8caa9466bd132a884d7ddd01a83",
-    "raw_gltf_descriptors_inspected": 312,
-    "descriptor_error_count": 0,
-    "local_inventory": "build/models-zip-inventory.json (private, not tracked)"
+    "date": "2026-10-18",
+    "status": "extracted-drive-directory-indexed",
+    "extracted_root_id": "12qjt1ySgKH4gESqY7wVrp0lx36GyIeDk",
+    "inventory": "software/beckenburg/assets/owned-models-drive-inventory.json",
+    "directory_count": 13,
+    "listed_entry_count": 460,
+    "individual_files": 448,
+    "glb_count": 312,
+    "fbx_count": 63,
+    "blend_count": 33,
+    "blend_backups": 29,
+    "formats": "Drive members scanned by metadata, selected game-relevant GLBs opened separately",
+    "original_zip_download_limit": 268435456,
+    "original_zip_size": 1262869330,
+    "selected_binary_analysis": "software/beckenburg/assets/owned-models-geometry-audit.json",
+    "verified_model_geometry_count": 15,
+    "rights": "Owner-attested ownership; archive stays in shared Drive",
+    "last_action": "All 448 individual file metadata records indexed on GitHub; selected actual geometry parsed, measured and assigned"
   },
   "candidate_games": [
     "breakwater-battery",
@@ -57,5 +55,29 @@
     "converted": "Real member transformed to game-accepted runtime format with source SHA/provenance",
     "live": "Runtime actually reads and draws/uses the selected asset",
     "device_verified": "Build and target device controls/rendering validated"
-  }
+  },
+  "active_imports": [
+    {
+      "source_path": "Models/boat.glb",
+      "source_drive_id": "1nS62iNJsOG0mLBOFvJ_74GG72VRiOOu7",
+      "project": "ReverieVR Breakwater",
+      "role": "close-range Rowboat",
+      "runtime_asset": "app/src/main/assets/native/breakwater/beckenburg/owner_boat_rowboat.bwm",
+      "runtime_blob": "089a616c268188f5f37ea68c5cdd3fe6689b3889",
+      "source_triangles": 9358,
+      "runtime_triangles": 1180,
+      "status": "committed and read-back verified; not APK/device accepted"
+    },
+    {
+      "source_path": "Models/APC.obj",
+      "source_drive_id": "1e_kUjwv6wp8EaDgbNdtKwqxcbrYP0apD",
+      "project": "ReverieVR Breakwater",
+      "role": "disembarked armored vehicles",
+      "runtime_asset": "app/src/main/assets/native/breakwater/beckenburg/owner_apc_armor.bwm",
+      "runtime_blob": "f74706ae039f4567615f27eb2633e7fdbc4b4a1d",
+      "source_triangles": 8816,
+      "runtime_triangles": 1944,
+      "status": "committed and read-back verified; not APK/device accepted"
+    }
+  ]
 }
