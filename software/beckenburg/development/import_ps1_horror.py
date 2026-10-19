@@ -6,8 +6,7 @@ local-only test assets outside shipped runtime; --release explicitly requires
 --rights-confirmed and is NEVER run automatically by Beckenburg builds.
 
 From the owner's identification: #1 = buildup, #5 = locked door being pulled
-without opening, #2-4 = preliminary generic sting candidates. Other numbered
-clips remain unassigned, not discarded.
+without opening, #2-4 and #6-20 = eighteen generic stings in three six-clip variant banks.
 """
 from __future__ import annotations
 import argparse
@@ -21,9 +20,16 @@ import zipfile
 ASSIGNMENTS = {
     "tension_build": 1,
     "locked_door_rattle": 5,
-    "horror_sting_a": 2,
-    "horror_sting_b": 3,
-    "horror_sting_c": 4,
+    # These eighteen are all generic; none may be substituted for physical Foley.
+    "horror_sting_a_0": 2,  "horror_sting_a_1": 6,
+    "horror_sting_a_2": 9,  "horror_sting_a_3": 12,
+    "horror_sting_a_4": 15, "horror_sting_a_5": 18,
+    "horror_sting_b_0": 3,  "horror_sting_b_1": 7,
+    "horror_sting_b_2": 10, "horror_sting_b_3": 13,
+    "horror_sting_b_4": 16, "horror_sting_b_5": 19,
+    "horror_sting_c_0": 4,  "horror_sting_c_1": 8,
+    "horror_sting_c_2": 11, "horror_sting_c_3": 14,
+    "horror_sting_c_4": 17, "horror_sting_c_5": 20,
 }
 ENTRY_RE = re.compile(r"PS1_Horror_SFX\s*\((\d+)\)\.wav", re.IGNORECASE)
 MAX_SOURCE_BYTES = 25 * 1024 * 1024
