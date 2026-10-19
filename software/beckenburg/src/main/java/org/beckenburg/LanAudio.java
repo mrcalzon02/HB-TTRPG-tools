@@ -7,12 +7,19 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.prefs.Preferences;
 
 /** Short synthesized PS-era paranormal effects, no proprietary sound files required.
  * Runs off the Swing EDT; bounded queue, clean shutdown, silent hardware fallback.
  */
 public final class LanAudio implements AutoCloseable {
     static final int SAMPLE_RATE=16000;
+    private static final Preferences PREFS=Preferences.userNodeForPackage(LanAudio.class);
+    public static int effectsVolume(){return Math.max(0,Math.min(100,PREFS.getInt("effects_volume",80)));}
+    public static void effectsVolume(int value){
+        if(value<0||value>100)throw new IllegalArgumentException("Effects volume 0-100");
+        PREFS.putInt("effects_volume",value);
+    }
     private static final AudioFormat FORMAT=new AudioFormat(SAMPLE_RATE,16,2,true,false);
     private record Playback(LanSound.CueEvent cue,byte[] pcm) { }
     private final BlockingQueue<Playback> queue=new ArrayBlockingQueue<>(8);
@@ -76,11 +83,17 @@ public final class LanAudio implements AutoCloseable {
             case STRIKE->3800; case FOOTFALL->2400;
             case DOOR->3400; case EQUIPMENT->3000; case RITUAL->7300;
             case SIGNATURE->18000;
+            case STEP->2100; case SWITCH,SELECT,UI_CLICK,UI_BACK->1250;
+            case BREAKER,VAN_DOOR->6800; case PICKUP,BOOK->3900;
+            case DEVICE_ON,DEVICE_OFF,SCANNER->4500;
+            case CAMERA->2600; case WARD->9500; case POTION->5100;
+            case RITUAL_START,RITUAL_END->12000;case IMPACT->7500;
+            case GHOST_DRIFT->9300;
         };
         byte[] output=new byte[samples*4];
         double pan=event.pan()/100.0;
         double left=Math.sqrt((1-pan)/2.0),right=Math.sqrt((1+pan)/2.0);
-        double gain=event.volume()/100.0;
+        double gain=event.volume()/100.0*effectsVolume()/100.0;
         int hash=0x51b07 + 37*event.cue().ordinal();
         for(int i=0;i<samples;i++){
             double t=i/(double)SAMPLE_RATE;
@@ -99,6 +112,26 @@ public final class LanAudio implements AutoCloseable {
                 case SIGNATURE->.30*Math.sin(2*Math.PI*(67+160*t*t)*t)
                     +.29*Math.sin(2*Math.PI*(97+22*Math.sin(t*21))*t)
                     +.23*noise*Math.sin(2*Math.PI*31*t);
+                // Intentionally different mechanical envelopes and spectra for every action.
+                case STEP->.38*noise*Math.exp(-t*35)+.49*Math.sin(2*Math.PI*(73-36*t)*t)*Math.exp(-t*28);
+                case SWITCH->.73*noise*Math.exp(-t*90)+.18*Math.sin(2*Math.PI*480*t)*Math.exp(-t*45);
+                case BREAKER->.6*noise*Math.exp(-t*31)+.42*Math.sin(2*Math.PI*75*t)*Math.exp(-t*12);
+                case VAN_DOOR->.38*Math.sin(2*Math.PI*(81+28*t)*t)+.23*noise*Math.sin(2*Math.PI*28*t);
+                case UI_CLICK->.30*Math.sin(2*Math.PI*890*t)*Math.exp(-t*48)+.22*noise*Math.exp(-t*95);
+                case UI_BACK->.25*Math.sin(2*Math.PI*(560-290*t)*t)*Math.exp(-t*34);
+                case PICKUP->.3*Math.sin(2*Math.PI*(390+200*t)*t)*Math.exp(-t*20)+.2*noise*Math.exp(-t*35);
+                case SELECT->.23*Math.sin(2*Math.PI*540*t)*Math.exp(-t*44)+.17*Math.sin(2*Math.PI*730*t)*Math.exp(-t*37);
+                case DEVICE_ON->.42*Math.sin(2*Math.PI*(280+250*t)*t)*Math.exp(-t*10)+.2*noise*Math.exp(-t*22);
+                case DEVICE_OFF->.35*Math.sin(2*Math.PI*(510-320*t)*t)*Math.exp(-t*14);
+                case SCANNER->.35*Math.sin(2*Math.PI*(750+Math.sin(t*47)*145)*t)+.1*noise;
+                case CAMERA->.72*noise*Math.exp(-t*105)+.25*Math.sin(2*Math.PI*140*t)*Math.exp(-t*37);
+                case BOOK->.52*noise*Math.exp(-t*12)*Math.sin(2*Math.PI*35*t);
+                case WARD->.42*Math.sin(2*Math.PI*(170+580*t)*t)*Math.exp(-t*6)+.18*noise*Math.sin(2*Math.PI*29*t);
+                case POTION->.25*Math.sin(2*Math.PI*160*t)*Math.exp(-t*12)+.34*noise*Math.exp(-t*22);
+                case RITUAL_START->.36*Math.sin(2*Math.PI*(70+210*t)*t)+.19*Math.sin(2*Math.PI*111*t)+.15*noise;
+                case RITUAL_END->.3*Math.sin(2*Math.PI*(240-180*t)*t)+.25*Math.sin(2*Math.PI*70*t)+.12*noise;
+                case IMPACT->.62*noise*Math.exp(-t*30)+.49*Math.sin(2*Math.PI*(102-83*t)*t)*Math.exp(-t*8);
+                case GHOST_DRIFT->.39*Math.sin(2*Math.PI*(67+160*t)*t)+.22*noise*Math.sin(2*Math.PI*23*t);
             };
             double value=Math.max(-.85,Math.min(.85,wave*env*gain));
             short lv=(short)Math.round(value*left*22000),rv=(short)Math.round(value*right*22000);
