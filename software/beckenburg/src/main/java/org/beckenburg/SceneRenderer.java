@@ -611,7 +611,9 @@ public final class SceneRenderer {
         }
     }
     /** Castle hub renders with the same perspective, clipping and textured depth buffer as missions. */
-    public void drawCastle(CastleHubMap map,double clock){
+    public void drawCastle(CastleHubMap map,double clock){drawCastle(map,clock,true);}
+    public void drawCastle(CastleHubMap map,double clock,boolean lightsOn){
+        environmentLight=lightsOn?1.0:.40;
         paintSky(map.outside(x,z));
         Arrays.fill(depths,Double.POSITIVE_INFINITY);
         List<Face> castle=new ArrayList<>();
@@ -638,12 +640,13 @@ public final class SceneRenderer {
                 new Point(xx,3.4,zz+1),new Point(xx+1,3.4,zz+1),MaterialAtlas.STONE,
                 xx+1,0,xx,0,xx,3.4,xx+1,3.4,0xc8b4ab);
         }
-        // Lit brass sconces serve as landmarks rather than flat screen decorations.
-        for(int xx:new int[]{3,13,24})for(int zz:new int[]{2,10,14,20}){
-            if(Math.hypot(xx-x,zz-z)>16)continue;
-            box(castle,xx-.12,1.3,zz-.12,.24,.63,.24,0x947954);
-            box(castle,xx-.09,1.92,zz-.09,.18,.37,.18,0xe4b667);
-        }
+        for(CastleHubDecor.Light fixture:CastleHubDecor.LIGHTS)
+            if(Math.hypot(fixture.x()-x,fixture.z()-z)<14)
+                imported(castle,lightsOn?fixture.on():fixture.off(),
+                    fixture.x(),fixture.y(),fixture.z(),fixture.scale(),fixture.yaw());
+        for(CastleHubDecor.Switch sw:CastleHubDecor.SWITCHES)
+            if(Math.hypot(sw.x()-x,sw.z()-z)<14)
+                imported(castle,"light_switch_1",sw.x(),sw.y(),sw.z(),1,sw.yaw());
         for(CastleHubMap.Station station:CastleHubMap.Station.values()){
             if(Math.hypot(station.x-x,station.z-z)>16)continue;
             double px=station.x,pz=station.z;
@@ -655,13 +658,23 @@ public final class SceneRenderer {
             };
             box(castle,px-.58,.06,pz-.40,1.16,.74,.80,0x473d37);
             box(castle,px-.60,.80,pz-.42,1.20,.10,.84,0x9b8160);
-            box(castle,px-.43,.92,pz-.25,.86,.62,.20,finish);
-            box(castle,px-.12,1.53,pz-.15,.24,.15,.13,0xc1ad80);
+            switch(station){
+                case ARMORY_UV -> imported(castle,"blender_uv_light_1",px,.92,pz,.62,0);
+                case ARMORY_SALT -> imported(castle,"blender_salt_1",px,.92,pz,.75,0);
+                case ROLE -> imported(castle,"book_mp_1",px,.92,pz,.75,0);
+                case CONTRACT -> imported(castle,"open_book_mp_1",px,.92,pz,.75,0);
+                case EXPEDITION -> imported(castle,"handheld_tablet_1",px,.92,pz,.8,0);
+                case MULTIPLAYER -> imported(castle,"pc_mp_1",px,.92,pz,.85,0);
+                case SPECTRAL -> imported(castle,"cross_mp_2",px,.92,pz,.9,0);
+            }
         }
         // Purchased source-backed fixtures occupy authored locations and match hub collision.
         for(CastleHubMap.Furnishing item:CastleHubMap.furnishings())
             if(Math.hypot(item.x()-x,item.z()-z)<16)
                 imported(castle,item.mesh(),item.x(),0,item.z(),item.scale(),item.yaw());
+        for(CastleHubDecor.Accent a:CastleHubDecor.ACCENTS)
+            if(Math.hypot(a.x()-x,a.z()-z)<12)
+                imported(castle,a.mesh(),a.x(),a.y(),a.z(),a.scale(),a.yaw());
         // Castle entrance arch; courtyard remains open to the procedural sky.
         box(castle,12.75,0,11.20,.40,3.0,.38,0x625c60);
         box(castle,14.10,0,11.20,.40,3.0,.38,0x625c60);

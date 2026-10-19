@@ -22,6 +22,7 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
     private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.CASTLE);
     private long last=System.nanoTime();
     private double clock;
+    private boolean castleLightsOn=true;
     private String notice="Welcome to Beckenburg Castle. The equipment is real; look and press E.";
     private int noticeTicks=100;
     public CastleHubPanel(ProfileStore profile,Actions actions){
@@ -55,12 +56,19 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
             if(map.traversable(renderer.x,renderer.z+dz))renderer.z+=dz;
         }
         clock+=dt;
-        renderer.drawCastle(map,clock);
+        renderer.drawCastle(map,clock,castleLightsOn);
         if(noticeTicks>0)noticeTicks--;
         repaint();
     }
     private void use(CastleHubMap.Station station){
-        if(station==null){notice="Look at a castle workstation before pressing E.";noticeTicks=75;return;}
+        if(station==null){
+            if(CastleHubDecor.aimed(map,renderer.x,renderer.z,renderer.yaw)!=null){
+                castleLightsOn=!castleLightsOn;
+                notice="Castle lights "+(castleLightsOn?"on.":"off.");
+                noticeTicks=80;return;
+            }
+            notice="Look at a station or light switch.";noticeTicks=75;return;
+        }
         try{
             switch(station){
                 case ARMORY_UV,ARMORY_SALT -> {
@@ -84,8 +92,10 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
         if(!isShowing())return;
         int key=e.getKeyCode();if(down.contains(key))return;
         if(key==KeyEvent.VK_ESCAPE){actions.menu();return;}
-        if(key==KeyEvent.VK_E)use(map.aimed(renderer.x,renderer.z,renderer.yaw));
+        if(key==KeyEvent.VK_E)use(CastleHubDecor.aimed(map,renderer.x,renderer.z,renderer.yaw)!=null?
+            null:map.aimed(renderer.x,renderer.z,renderer.yaw));
         if(key==KeyEvent.VK_F)renderer.lamp=!renderer.lamp;
+        if(key==KeyEvent.VK_L)castleLightsOn=!castleLightsOn;
         down.add(key);
     }
     @Override public void keyReleased(KeyEvent e){down.remove(e.getKeyCode());}
@@ -111,11 +121,13 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
             g.setColor(new Color(230,215,174));
             g.drawString("+",w/2-4,h/2+4);
             CastleHubMap.Station station=map.aimed(renderer.x,renderer.z,renderer.yaw);
-            if(station!=null){
-                int labelWidth=Math.min(w-24,Math.max(250,g.getFontMetrics().stringWidth(station.label)+50));
+            boolean atSwitch=CastleHubDecor.aimed(map,renderer.x,renderer.z,renderer.yaw)!=null;
+            if(station!=null||atSwitch){
+                String label=atSwitch?"CASTLE LIGHT SWITCH":station.label;
+                int labelWidth=Math.min(w-24,Math.max(250,g.getFontMetrics().stringWidth(label)+50));
                 int left=(w-labelWidth)/2;
                 g.setColor(new Color(11,16,21,220));g.fillRoundRect(left,h-75,labelWidth,36,8,8);
-                g.setColor(new Color(247,211,153));g.drawString("[ E ]  "+station.label,left+12,h-52);
+                g.setColor(new Color(247,211,153));g.drawString("[ E ]  "+label,left+12,h-52);
             }
             // Only context prompts and transient notices overlay the scene; controls
             // belong to the dedicated menu, not a permanent bottom-screen ticker.

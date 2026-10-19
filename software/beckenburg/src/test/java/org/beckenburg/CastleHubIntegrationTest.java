@@ -10,7 +10,16 @@ public final class CastleHubIntegrationTest {
         CastleHubMap map=new CastleHubMap();
         double sx=13.5,sz=19.3;
         ok(map.traversable(sx,sz),"castle spawn on floor");
-        ok(CastleHubMap.furnishings().size()==4,"four authored GLB furnishings");
+        ok(CastleHubMap.furnishings().size()>=20,"source-backed castle furniture");
+        ok(CastleHubDecor.ACCENTS.size()>=7,"working offices with actual interior props");
+        ok(CastleHubDecor.LIGHTS.size()>=8,"distinct on/off GLB lamps");
+        for(CastleHubDecor.Accent a:CastleHubDecor.ACCENTS)
+            ok(GlbProps.model(a.mesh()).triangles().size()>2,"decor mesh "+a.mesh());
+        for(CastleHubDecor.Light l:CastleHubDecor.LIGHTS){
+            ok(!l.on().equals(l.off()),"two lamp states");
+            ok(GlbProps.model(l.on()).triangles().size()>2,"lit lamp mesh");
+            ok(GlbProps.model(l.off()).triangles().size()>2,"unlit lamp mesh");
+        }
         for(CastleHubMap.Furnishing item:CastleHubMap.furnishings()){
             ok(GlbProps.model(item.mesh()).triangles().size()>20,
                 "real source triangles for castle "+item.mesh());
@@ -45,6 +54,10 @@ public final class CastleHubIntegrationTest {
         ok(map.aimed(px,pz,Math.PI)==dest,"look-to-use targets contract");
         ok(map.aimed(px,pz,0)!=dest,"cannot interact while looking away");
         SceneRenderer scene=new SceneRenderer();scene.x=sx;scene.z=sz;scene.yaw=Math.PI;
+        scene.drawCastle(map,1.2);
+        int[] onPixels=scene.pixels().clone();
+        scene.drawCastle(map,1.2,false);
+        ok(!Arrays.equals(onPixels,scene.pixels()),"lights toggle rendered image");
         scene.drawCastle(map,1.2);
         int[] pixels=scene.pixels();Set<Integer> shades=new HashSet<>();
         for(int i=0;i<pixels.length;i+=37)shades.add(pixels[i]);

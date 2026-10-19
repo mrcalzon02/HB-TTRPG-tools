@@ -18,12 +18,7 @@ public final class CastleHubMap {
     /** Small, authored real GLB furnishings with matching walkable collision footprints. */
     public record Furnishing(String mesh,double x,double z,double scale,double yaw,
                              double halfWidth,double halfDepth) { }
-    private static final java.util.List<Furnishing> FURNISHINGS=java.util.List.of(
-        new Furnishing("shelf_mp_6",2.4,3.5,1.70,0,.76,.26),
-        new Furnishing("shelf_mp_6",2.4,8.4,1.70,0,.76,.26),
-        new Furnishing("chair_mp_5",15.9,3.7,1.12,Math.PI/2,.35,.39),
-        new Furnishing("chair_mp_5",24.1,17.7,1.12,0,.35,.39)
-    );
+    private static final java.util.List<Furnishing> FURNISHINGS=CastleHubDecor.furnishings();
     public static java.util.List<Furnishing> furnishings(){return FURNISHINGS;}
     public CastleHubMap(){
         for(int z=0;z<HEIGHT;z++)for(int x=0;x<WIDTH;x++)
