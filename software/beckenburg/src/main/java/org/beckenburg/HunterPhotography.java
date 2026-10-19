@@ -25,6 +25,10 @@ public final class HunterPhotography {
         try{g.drawImage(view,0,0,null);}finally{g.dispose();}
         return image;
     }
+    /** Distinct instant/standard/professional photo output from the actual frame. */
+    public static BufferedImage snapshot(BufferedImage view,EquipmentTiers.Tier tier){
+        return EquipmentOptics.photograph(view,tier);
+    }
     public static Path save(BufferedImage shot,Path directory,int hunter,int exposure)
             throws IOException{
         if(shot==null||directory==null||hunter<0||hunter>=6||exposure<1)
