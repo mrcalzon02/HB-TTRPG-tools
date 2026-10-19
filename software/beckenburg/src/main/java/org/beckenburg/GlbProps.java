@@ -228,7 +228,7 @@ public final class GlbProps {
                     double u=component(bb,binStart,binLength,views,uv,i,0,2),
                            v=component(bb,binStart,binLength,views,uv,i,1,2);
                     if(!Double.isFinite(rx+ry+rz+u+v))throw new IOException("Nonfinite mesh");
-                    vertices[i]=new Vertex(rx+t[0],ry+t[1],rz+t[2],u,v);
+                    vertices[i]=new Vertex(rx,ry,rz,u,v);
                 }
                 int componentType=get(indices,"componentType",-1);
                 if(componentType!=5121&&componentType!=5123&&componentType!=5125)
