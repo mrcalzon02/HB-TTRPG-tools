@@ -25,6 +25,10 @@ public final class SceneRenderer {
     public boolean environmentPowerOn=true;
     /** Authoritative book-deployment signal; all investigator views share its room. */
     public int placedWritingBookRoom=-1;
+    public final java.util.Map<Integer,LanDotsProjectors.Placement> dotsPositions=
+        new java.util.HashMap<>();
+    public int dotsPassRoom=-1,dotsPassUntil=-1;
+    public double dotsPassX,dotsPassZ;
     public RoomLighting roomLights;
     public int roomLightTick;
     public int hidingDensity;
@@ -355,6 +359,30 @@ public final class SceneRenderer {
         }
         if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14)
             vanModel(out,map.van(),rackStock);
+        // Actual mounted PSX Tier I shell emits a visible grid. Empty projected
+        // dots are normal equipment light; only host-authored PASS creates a ghost silhouette.
+        for(LanDotsProjectors.Placement placement:dotsPositions.values()){
+            if(Math.hypot(placement.x()-x,placement.z()-z)>13.5)continue;
+            imported(out,"vape_mp_1",placement.x(),.10,placement.z(),2.0,0);
+            double radius=Math.min(2.35,EquipmentTiers.stage(
+                "DOTS_PROJECTOR",placement.tier()).reachCm()/100.0);
+            for(int gx=-4;gx<=4;gx++)for(int gz=-4;gz<=4;gz++){
+                double px=placement.x()+gx*radius/4.6,
+                    pz=placement.z()+gz*radius/4.6;
+                if(map.roomAt(px,pz)!=placement.room())continue;
+                box(out,px-.028,.048,pz-.028,.056,.015,.056,0x76de9c);
+            }
+        }
+        if(dotsPassRoom>=0&&dotsPassUntil>=roomLightTick
+                &&Math.hypot(dotsPassX-x,dotsPassZ-z)<13.5){
+            for(int layer=0;layer<10;layer++){
+                double y=.19+layer*.135;
+                double span=.14+Math.sin(Math.PI*layer/10.0)*.17;
+                for(int dot=-2;dot<=2;dot++)
+                    box(out,dotsPassX+dot*span/3-.02,y,dotsPassZ-.03,
+                        .04,.028,.04,0x98edbb);
+            }
+        }
         if(placedWritingBookRoom>=0&&placedWritingBookRoom<HouseMap.INDOOR_ROOMS){
             double bx=map.centerX(placedWritingBookRoom),bz=map.centerZ(placedWritingBookRoom);
             if(Math.hypot(bx-x,bz-z)<14)
