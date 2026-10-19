@@ -17,25 +17,14 @@ public final class HeldInstrumentMesh {
     private static final Map<String,BufferedImage> cache=new HashMap<>();
     public static String source(String kind,EquipmentTiers.Tier tier){
         if(kind==null||tier==null)return null;
-        return switch(kind){
-            case "EMF" -> switch(tier){
-                case I->"exploration_emf_detector";
-                case II->"dosimeter_2";
-                case III->"dosimeter_4";
-            };
-            case "SPIRIT_BOX"->tier==EquipmentTiers.Tier.I
-                ?"exploration_spirit_box":"walkie_talkie_2";
-            case "THERMOMETER"->tier==EquipmentTiers.Tier.I
-                ?"exploration_thermometer":"handheld_tablet_1";
-            case "THERMAL_CAMERA"->"exploration_thermal_camera";
-            case "SOUND_RECORDER"->"exploration_voice_recorder";
-            case "PHOTO_CAMERA"->"exploration_photo_camera";
-            case "FLASHLIGHT"->tier==EquipmentTiers.Tier.I
-                ?"exploration_flashlight_poquet":"exploration_flashlight";
-            case "GHOST_WRITING_BOOK"->"book_mp_1";
-            case "DOTS_PROJECTOR"->"vape_mp_1";
-            default->null;
-        };
+        String id=kind.equals("EMF")?"EMF_READER":kind;
+        // Every cataloged device has an authored model per tier. Unknown legacy
+        // labels still use their older non-GLB fallback without source invention.
+        try{
+            return EquipmentTierVisuals.prefab(id,tier).modelName();
+        }catch(IllegalArgumentException unknown){
+            return null;
+        }
     }
     public static synchronized BufferedImage image(String kind,EquipmentTiers.Tier tier){
         String name=source(kind,tier);
