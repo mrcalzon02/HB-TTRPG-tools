@@ -130,9 +130,9 @@ public final class InvestigationGame {
         navigation.add(Box.createVerticalStrut(20));
         JLabel utilities=menuLabel("SUPPORT",11);utilities.setAlignmentX(Component.LEFT_ALIGNMENT);
         navigation.add(utilities);
-        JPanel utilityRow=transparentPanel(new GridLayout(1,3,6,0));
-        JButton options=button("OPTIONS"),guide=button("CONTROLS"),updates=button("UPDATES");
-        utilityRow.add(options);utilityRow.add(guide);utilityRow.add(updates);
+        JPanel utilityRow=transparentPanel(new GridLayout(1,4,6,0));
+        JButton options=button("OPTIONS"),guide=button("CONTROLS"),updates=button("UPDATES"),credits=button("CREDITS");
+        utilityRow.add(options);utilityRow.add(guide);utilityRow.add(updates);utilityRow.add(credits);
         utilityRow.setMaximumSize(new Dimension(390,37));utilityRow.setAlignmentX(Component.LEFT_ALIGNMENT);
         navigation.add(Box.createVerticalStrut(7));navigation.add(utilityRow);
 
@@ -142,6 +142,8 @@ public final class InvestigationGame {
             BorderFactory.createLineBorder(new Color(100,91,71),1),
             BorderFactory.createEmptyBorder(18,20,20,20)));
         JLabel prepTitle=menuLabel("PREPARE AN INVESTIGATION",18);
+        prepTitle.setIcon(new ImageIcon(PsxHorrorUi.image("icons/flashlight.png")));
+        prepTitle.setIconTextGap(9);
         prepTitle.setFont(prepTitle.getFont().deriveFont(Font.BOLD));
         preparation.add(prepTitle,BorderLayout.NORTH);
         JPanel selectorGrid=transparentPanel(new GridLayout(0,2,10,12));
@@ -192,6 +194,9 @@ public final class InvestigationGame {
         lan.addActionListener(e->openLan());
         options.addActionListener(e->openOptions());
         guide.addActionListener(e->showControls());
+        credits.addActionListener(e->JOptionPane.showMessageDialog(window,
+            "PSX Horror UI Free by heyheythere\nhttps://heyheythere.itch.io/psx-horror-ui-free\nLicensed CC BY 4.0\nOriginal texture assets adapted for Beckenburg's Java interface.",
+            "Third-party credits",JOptionPane.INFORMATION_MESSAGE));
         importSave.addActionListener(e->importLocalSave());
         updates.addActionListener(e->BeckenburgUpdatesUI.open(window));
         quit.addActionListener(e->window.dispose());
