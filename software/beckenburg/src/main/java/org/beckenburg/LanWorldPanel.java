@@ -53,7 +53,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final java.util.Map<String,String> deviceReading=new java.util.HashMap<>();
     private int activeGearSlot;
     private int heldUseUntilTick;
-    private boolean nightVision;
+    private boolean nightVision,flashlightOn,firelightOn;
+    private int igniterFlashUntil;
     private java.awt.image.BufferedImage pendingPhoto;
     private java.awt.image.BufferedImage lastPhoto;
     private java.nio.file.Path lastPhotoPath;
@@ -89,6 +90,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         setPreferredSize(new Dimension(850,555));
         renderer.yaw=-Math.PI/2;renderer.pitch=-.08;
         renderer.roomLights=lights;
+        renderer.lamp=false; // a real torch begins OFF until the player switches it on
         mouseLook=new MouseLook(this,(dx,dy)->MouseLook.rotate(renderer,dx,dy),
             ()->!casefileOpen);
         addKeyListener(this);addMouseListener(mouseLook);addMouseMotionListener(mouseLook);
@@ -404,19 +406,19 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 else if(p.size()==3&&p.get(1).equals("REMOVED"))
                     renderer.placedWritingBookRoom=-1;
                 feedback="WRITING BOOK: "+frame.substring(5);
-            }else if(p.size()==5&&p.get(0).equals("GEARFX")){
-                int owner=LanProtocol.integer(p.get(1),0,5);
-                String item=p.get(2);
-                boolean on=LanProtocol.integer(p.get(3),0,1)==1;
-                // Some earlier implementations send compact three-component FX;
-                // future effects also carry positional data in separate BURN packets.
-                if(owner==seat&&item.equals("FLASHLIGHT"))renderer.lamp=on;
-                if(owner==seat&&item.equals("HEAD_GEAR"))nightVision=on;
             }else if(p.size()==4&&p.get(0).equals("GEARFX")){
                 int owner=LanProtocol.integer(p.get(1),0,5);
-                boolean on=LanProtocol.integer(p.get(3),0,1)==1;
-                if(owner==seat&&p.get(2).equals("FLASHLIGHT"))renderer.lamp=on;
-                if(owner==seat&&p.get(2).equals("HEAD_GEAR"))nightVision=on;
+                if(owner==seat){
+                    boolean on=LanProtocol.integer(p.get(3),0,1)==1;
+                    switch(p.get(2)){
+                        case "FLASHLIGHT" -> flashlightOn=on;
+                        case "HEAD_GEAR" -> nightVision=on;
+                        case "FIRELIGHT" -> firelightOn=on;
+                        case "IGNITER" -> igniterFlashUntil=tick+5;
+                        default -> throw new IllegalArgumentException("unknown physical effect");
+                    }
+                    renderer.lamp=flashlightOn||firelightOn;
+                }
             }else if(p.size()==6&&p.get(0).equals("BURN")
                     &&p.get(1).equals("INCENSE")){
                 int room=LanProtocol.integer(p.get(2),0,HouseMap.ROOM_COUNT-1);
@@ -620,6 +622,16 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 g.setColor(Color.DARK_GRAY);
                 g.fillRect(px-3,48,photoW+6,photoH+6);
                 g.drawImage(lastPhoto,px,51,photoW,photoH,null);
+            }
+            if(firelightOn){
+                g.setColor(new Color(251,162,65,205));
+                int bx=Math.max(60,getWidth()-110),by=h-112;
+                g.fillOval(bx,by,18,35);
+                g.setColor(new Color(255,225,136,225));g.fillOval(bx+5,by+9,8,19);
+            }
+            if(tick<=igniterFlashUntil){
+                g.setColor(new Color(255,194,108));
+                g.fillOval(getWidth()-95,h-91,13,21);
             }
             String held=equippedGear[activeGearSlot];
             String visual=held.equals("EMF_READER")?"EMF":held;
