@@ -155,6 +155,49 @@ public final class SceneRenderer {
                 vv[2].u(),vv[2].v()));
         }
     }
+    /** Original mesh triangles retain source UVs and material indices. Their
+     * source pivots are NOT assumed to be at the wall/ceiling attachment point.
+     * Anchoring to measured source bounds prevents half-embedded floating GLBs.
+     */
+    private static void mountedLamp(List<Face> out,CastleHubDecor.Light fixture,boolean on){
+        String mesh=on?fixture.on():fixture.off();
+        GlbProps.Model model=GlbProps.model(mesh);
+        double minX=Double.POSITIVE_INFINITY,minY=minX,minZ=minX;
+        double maxX=Double.NEGATIVE_INFINITY,maxY=maxX,maxZ=maxX;
+        for(GlbProps.Triangle t:model.triangles())for(GlbProps.Vertex v:
+                new GlbProps.Vertex[]{t.a(),t.b(),t.c()}){
+            minX=Math.min(minX,v.x());maxX=Math.max(maxX,v.x());
+            minY=Math.min(minY,v.y());maxY=Math.max(maxY,v.y());
+            minZ=Math.min(minZ,v.z());maxZ=Math.max(maxZ,v.z());
+        }
+        double ox=(minX+maxX)*.5,oz=(minZ+maxZ)*.5;
+        double oy=fixture.mount()==CastleHubDecor.Mount.CEILING?maxY:(minY+maxY)*.5;
+        double s=fixture.scale(),cy=Math.cos(fixture.yaw()),sy=Math.sin(fixture.yaw());
+        // Wall sconces receive a visible real mounting plate against the wall
+        // face, never a free-floating pole in the centre of the room.
+        if(fixture.mount()==CastleHubDecor.Mount.WALL){
+            if(Math.abs(sy)>.5)
+                box(out,fixture.x()-.055,fixture.y()-.20,fixture.z()-.15,
+                    .11,.40,.30,0x635447);
+            else
+                box(out,fixture.x()-.15,fixture.y()-.20,fixture.z()-.055,
+                    .30,.40,.11,0x635447);
+        }
+        for(GlbProps.Triangle t:model.triangles()){
+            GlbProps.Vertex[] vv={t.a(),t.b(),t.c()};
+            Point[] pp=new Point[3];
+            for(int i=0;i<3;i++){
+                GlbProps.Vertex v=vv[i];
+                double xx=(v.x()-ox)*s,zz=(v.z()-oz)*s;
+                pp[i]=new Point(fixture.x()+xx*cy-zz*sy,
+                    fixture.y()+(v.y()-oy)*s,
+                    fixture.z()+xx*sy+zz*cy);
+            }
+            out.add(new Face(pp[0],pp[1],pp[2],0xffffff,t.material(),
+                vv[0].u(),vv[0].v(),vv[1].u(),vv[1].v(),
+                vv[2].u(),vv[2].v()));
+        }
+    }
     /** All investigation locations use placed, licensed scenery GLBs with
      * matching host-side collision. No purchasable tools occur in map furnishings.
      */
@@ -750,7 +793,7 @@ public final class SceneRenderer {
         List<Face> castle=new ArrayList<>();
         for(int zz=1;zz<CastleHubMap.HEIGHT-1;zz++)for(int xx=1;xx<CastleHubMap.WIDTH-1;xx++){
             if(map.solid(xx,zz)||Math.hypot(xx+.5-x,zz+.5-z)>16)continue;
-            int stone=map.outside(xx+.5,zz+.5)?MaterialAtlas.STONE:MaterialAtlas.CARPET;
+            int stone=map.floorMaterial(xx+.5,zz+.5);
             texturedQuad(castle,new Point(xx,0,zz),new Point(xx+1,0,zz),
                 new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),stone,
                 xx,zz,xx+1,zz,xx+1,zz+1,xx,zz+1,0xffffff);
@@ -770,8 +813,7 @@ public final class SceneRenderer {
         }
         for(CastleHubDecor.Light fixture:CastleHubDecor.LIGHTS)
             if(Math.hypot(fixture.x()-x,fixture.z()-z)<14)
-                imported(castle,lightsOn?fixture.on():fixture.off(),
-                    fixture.x(),fixture.y(),fixture.z(),fixture.scale(),fixture.yaw());
+                mountedLamp(castle,fixture,lightsOn);
         for(CastleHubDecor.Switch sw:CastleHubDecor.SWITCHES)
             if(Math.hypot(sw.x()-x,sw.z()-z)<14)
                 imported(castle,"light_switch_1",sw.x(),sw.y(),sw.z(),1,sw.yaw());
@@ -792,7 +834,18 @@ public final class SceneRenderer {
                 case ROLE -> imported(castle,"book_mp_1",px,.92,pz,.75,0);
                 case CONTRACT -> imported(castle,"open_book_mp_1",px,.92,pz,.75,0);
                 case EXPEDITION -> imported(castle,"handheld_tablet_1",px,.92,pz,.8,0);
-                case MULTIPLAYER -> imported(castle,"pc_mp_1",px,.92,pz,.85,0);
+                case MULTIPLAYER -> {
+                    // One complete visible terminal, assembled from three
+                    // separate approved GLBs at the existing multiplayer socket.
+                    imported(castle,"pc_mp_1",px-.38,.92,pz-.16,.66,0);
+                    imported(castle,"monitoring_screen_mp_1",px+.20,.94,pz-.19,.64,0);
+                    imported(castle,"pc_keyboard_mp_1",px,.915,pz+.25,.48,0);
+                    // The indexed asset pack has no individual mouse mesh yet.
+                    // A small correctly placed shell is preferable to silently
+                    // omitting the mouse from the physical input workstation.
+                    box(castle,px+.41,.915,pz+.26,.14,.062,.19,0x373942);
+                    box(castle,px+.475,.97,pz+.27,.009,.012,.07,0x807f7b);
+                }
                 case SPECTRAL -> imported(castle,"cross_mp_2",px,.92,pz,.9,0);
             }
         }
