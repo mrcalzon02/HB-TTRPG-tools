@@ -1,0 +1,286 @@
+{
+  "schema": 1,
+  "source": "Google Drive Beckenburg Models folder (private owner archive)",
+  "root_id": "12qjt1ySgKH4gESqY7wVrp0lx36GyIeDk",
+  "inventory": "software/beckenburg/assets/owned-models-drive-inventory.json",
+  "method": "Actual GLB parse using trimesh scene geometry, embedded material texture dimensions and glTF skin/animation declarations; source OBJ read as faces and vertices",
+  "measured_at": "2026-10-18",
+  "source_dimensions_note": "Most GLBs were already normalized to approximately one asset unit along the longest dimension. These are not meter measurements; assign physical scale per game before collision or gameplay use.",
+  "surface_note": "Inspected GLBs embed 1024x1024 base-color textures (one military character 2048x2048), too large for blind 312-model bundling.",
+  "rig_note": "All 15 measured GLBs declare zero embedded skins and zero animations. Separate FBX/Blender rigging and animations require independent review; do not label these GLBs animated.",
+  "samples": [
+    {
+      "path": "Models/boat.glb",
+      "drive_id": "1nS62iNJsOG0mLBOFvJ_74GG72VRiOOu7",
+      "triangles": 9358,
+      "vertices": 6797,
+      "raw_bounds_size": [
+        1.0002,
+        0.4147,
+        0.5205
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "breakwater-battery: rowboat",
+      "converted_triangles": 1180,
+      "accepted_in_game": "code-and-content-committed; headset acceptance pending"
+    },
+    {
+      "path": "Models/basic bunker.glb",
+      "drive_id": "1wQW2HV7YcF6vpyH3ITuDxDk64r0lStdm",
+      "triangles": 20470,
+      "vertices": 13689,
+      "raw_bounds_size": [
+        1.0002,
+        0.4804,
+        0.9952
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "breakwater-battery: coastal terrain and emplacements",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/Crate.glb",
+      "drive_id": "1t3odpfQydjgWBIPrCvsN1grL_F7iozlm",
+      "triangles": 6450,
+      "vertices": 4175,
+      "raw_bounds_size": [
+        0.4953,
+        0.3882,
+        0.4868
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "between-deliveries-red-ledger: storeroom decoration",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/tree.glb",
+      "drive_id": "1ntmxXb_HIpyWryiEpffwyp-5gheO0xvv",
+      "triangles": 35756,
+      "vertices": 29143,
+      "raw_bounds_size": [
+        0.7496,
+        1.0013,
+        0.7268
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "breakwater-battery: rear treeline (LOD required)",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/military character 3d model.glb",
+      "drive_id": "15hKe9Gg89fm92luWFkB__uVLMBYJgh7S",
+      "triangles": 670564,
+      "vertices": 346736,
+      "raw_bounds_size": [
+        0.2775,
+        0.8722,
+        0.9998
+      ],
+      "texture_px": 2048,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "breakwater-battery: infantry (not directly viable)",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/working2/tank med.glb",
+      "drive_id": "1zXt9_lmUwmffL8qs_SoYvjCM2Tr1KQDP",
+      "triangles": 21137,
+      "vertices": 17243,
+      "raw_bounds_size": [
+        0.9999,
+        0.3297,
+        0.7573
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "omega-front: tactical tank silhouette (bake overhead)",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/Deliverydoor.glb",
+      "drive_id": "1LDGz7zqAM98882mx1tTVlEbEkiA5xKBr",
+      "triangles": 11478,
+      "vertices": 6056,
+      "raw_bounds_size": [
+        1.0005,
+        0.7799,
+        0.0443
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "between-deliveries-red-ledger: delivery entrance",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/working2/sov build long 3doors.glb",
+      "drive_id": "1YD78uYLIj3sQtAVlLqnJ6VkJcXzmVIYa",
+      "triangles": 6550,
+      "vertices": 4318,
+      "raw_bounds_size": [
+        1.0012,
+        0.2331,
+        0.2888
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "omega-front: tactical building",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/working2/bunkerb.glb",
+      "drive_id": "1l1Jz5I0tr1nzqj3ks621N4EGydiwgrM6",
+      "triangles": 30172,
+      "vertices": 19041,
+      "raw_bounds_size": [
+        1.0004,
+        0.5072,
+        0.6611
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "breakwater-battery: fortification (LOD required)",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/resize/bar-1.glb",
+      "drive_id": "12gWgwbv3ymSkw83E-hQaVqW73RZf0OVI",
+      "triangles": 7220,
+      "vertices": 4506,
+      "raw_bounds_size": [
+        1.0006,
+        0.3031,
+        0.2605
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "between-deliveries-red-ledger: bar furnishing",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/working2/Emplacement.glb",
+      "drive_id": "1P6y2nylbQ5iuSms5eiElYZv0u4RhS--s",
+      "triangles": 11596,
+      "vertices": 8117,
+      "raw_bounds_size": [
+        0.9336,
+        0.3682,
+        0.9992
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "breakwater-battery: defensive emplacement",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/working2/workbench.glb",
+      "drive_id": "1-FUN4kOfGIxswoiBUS-vz_ZafvT4iRN_",
+      "triangles": 11482,
+      "vertices": 9408,
+      "raw_bounds_size": [
+        1.0005,
+        0.4876,
+        0.2067
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "between-deliveries-red-ledger: workshop",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/working2/treeclsueter.glb",
+      "drive_id": "13uBES4T42_LVYxic1ndWz7HOhBwxAaJY",
+      "triangles": 24148,
+      "vertices": 20364,
+      "raw_bounds_size": [
+        0.9964,
+        0.4706,
+        1.0001
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "breakwater-battery: distant greenery (LOD required)",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/rug.glb",
+      "drive_id": "1pKZjjfs-jFj_ouj2DQWjlnYVbJ5w0hMP",
+      "triangles": 8226,
+      "vertices": 6562,
+      "raw_bounds_size": [
+        1.0006,
+        0.0173,
+        0.6533
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "between-deliveries-red-ledger: interior flooring",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/working2/transport.glb",
+      "drive_id": "1I5N5o7Zp0PeeCi5tXx5xbdWug8Mhhyyn",
+      "triangles": 17424,
+      "vertices": 13799,
+      "raw_bounds_size": [
+        0.9984,
+        0.4886,
+        0.415
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "omega-front: transport silhouette or mobile truck",
+      "converted_triangles": null,
+      "accepted_in_game": "not imported"
+    },
+    {
+      "path": "Models/APC.obj",
+      "drive_id": "1e_kUjwv6wp8EaDgbNdtKwqxcbrYP0apD",
+      "triangles": 8816,
+      "vertices": 4454,
+      "raw_bounds_size": [
+        6.2842,
+        2.738,
+        2.9033
+      ],
+      "texture_px": 1024,
+      "skins": 0,
+      "animations": 0,
+      "candidate_use": "breakwater-battery: armored shore vehicle",
+      "converted_triangles": 1944,
+      "accepted_in_game": "code-and-content-committed; headset acceptance pending"
+    }
+  ],
+  "game_release_gate": "Use optimized/selected derivatives only, verify collision, visual fit, LOD, S9 performance, APK installation and playable interactions. Never redistribute bulk owner archive."
+}
