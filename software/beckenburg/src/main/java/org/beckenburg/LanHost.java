@@ -1382,7 +1382,8 @@ public final class LanHost implements AutoCloseable {
                 for(String drained:equipment[seat].advancePower(tick)){
                     if(seats[seat]!=null)
                         reply(seats[seat],"GEARPOWER|"+drained+"|0|0");
-                    if(drained.equals("FLASHLIGHT")||drained.equals("HEAD_GEAR"))
+                    if(drained.equals("FLASHLIGHT")||drained.equals("HEAD_GEAR")
+                            ||drained.equals("FIRELIGHT"))
                         notifyHunters("GEARFX|"+seat+"|"+drained+"|0");
                     if(drained.equals("VIDEO_CAMERA"))
                         notifyHunters("CAMERA|POWER|"+seat+"|0");
