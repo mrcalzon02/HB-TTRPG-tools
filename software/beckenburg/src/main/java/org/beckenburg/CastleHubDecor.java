@@ -73,12 +73,10 @@ public final class CastleHubDecor {
     public record Light(String on,String off,double x,double y,double z,
                         double scale,double yaw,Mount mount){
         public boolean attached(CastleHubMap map){
-            if(map.solid((int)Math.floor(x),(int)Math.floor(z))||map.outside(x,z))
-                return false;
-            if(mount==Mount.CEILING)return Math.abs(y-3.37)<.16;
-            double dx=Math.sin(yaw),dz=Math.cos(yaw);
-            return map.solid((int)Math.floor(x+dx*.48),(int)Math.floor(z+dz*.48))
-                &&!map.solid((int)Math.floor(x-dx*.35),(int)Math.floor(z-dz*.35));
+            if(mount==Mount.CEILING)
+                return !map.solid((int)Math.floor(x),(int)Math.floor(z))
+                    &&!map.outside(x,z)&&Math.abs(y-3.38)<.08;
+            return CastleHubArchitecturalPlan.mountingWall(x,y,z,yaw);
         }
     }
     private static Light ceiling(String family,double x,double z,double scale){
@@ -97,21 +95,21 @@ public final class CastleHubDecor {
         ceiling("ceiling_lamp_4",35.0,10.0,.64),
         ceiling("ceiling_lamp_1",35.0,25.0,.85),
         // Actual bracketed sconces on existing collision-map masonry.
-        sconce(9.76,5.0,Math.PI/2),
-        sconce(11.18,8.8,-Math.PI/2),
-        sconce(18.76,8.0,Math.PI/2),
-        sconce(20.18,4.2,-Math.PI/2),
-        sconce(13.5,10.75,0),
-        sconce(3.0,12.20,Math.PI),
-        sconce(9.73,18.3,Math.PI/2),
-        sconce(21.22,18.0,-Math.PI/2),
-        sconce(29.24,23.0,-Math.PI/2),
-        sconce(36.0,18.24,Math.PI));
+        sconce(10.30,5.0,Math.PI/2),
+        sconce(10.70,8.8,-Math.PI/2),
+        sconce(19.30,8.0,Math.PI/2),
+        sconce(19.70,4.2,-Math.PI/2),
+        sconce(15.5,11.30,0),
+        sconce(3.0,11.70,Math.PI),
+        sconce(10.30,18.3,Math.PI/2),
+        sconce(20.70,18.0,-Math.PI/2),
+        sconce(28.70,23.0,-Math.PI/2),
+        sconce(36.0,17.70,Math.PI));
     public record Switch(double x,double y,double z,double yaw){}
     public static final List<Switch> SWITCHES=List.of(
-        new Switch(8.25,1.45,6.1,Math.PI/2),
-        new Switch(17.25,1.45,6.1,Math.PI/2),
-        new Switch(24.7,1.45,13,0));
+        new Switch(10.30,1.45,8.75,Math.PI/2),
+        new Switch(10.70,1.45,8.75,-Math.PI/2),
+        new Switch(20.70,1.45,14.0,-Math.PI/2));
     /** Players must stand on traversable ground and actually look at a switch. */
     public static Switch aimed(CastleHubMap map,double x,double z,double yaw){
         if(!map.traversable(x,z)||!Double.isFinite(yaw))return null;
