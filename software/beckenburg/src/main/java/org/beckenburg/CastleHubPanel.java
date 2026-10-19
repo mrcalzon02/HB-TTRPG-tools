@@ -49,11 +49,14 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
         double strafe=(down.contains(KeyEvent.VK_D)?1:0)-(down.contains(KeyEvent.VK_A)?1:0);
         double norm=Math.hypot(forward,strafe);
         if(norm>0){
+            double priorX=renderer.x,priorZ=renderer.z;
             double speed=(down.contains(KeyEvent.VK_SHIFT)?3.9:2.6)*dt/norm;
             double dx=(Math.sin(renderer.yaw)*forward+Math.cos(renderer.yaw)*strafe)*speed;
             double dz=(Math.cos(renderer.yaw)*forward-Math.sin(renderer.yaw)*strafe)*speed;
             if(map.traversable(renderer.x+dx,renderer.z))renderer.x+=dx;
             if(map.traversable(renderer.x,renderer.z+dz))renderer.z+=dz;
+            if(Math.hypot(renderer.x-priorX,renderer.z-priorZ)>.0001)
+                GameSfx.play(LanSound.Cue.STEP);
         }
         clock+=dt;
         GraphicsOptions.current().configure(renderer,getWidth(),getHeight(),true);
@@ -65,6 +68,7 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
         if(station==null){
             if(CastleHubDecor.aimed(map,renderer.x,renderer.z,renderer.yaw)!=null){
                 castleLightsOn=!castleLightsOn;
+                GameSfx.play(LanSound.Cue.SWITCH);
                 notice="Castle lights "+(castleLightsOn?"on.":"off.");
                 noticeTicks=80;return;
             }
@@ -76,12 +80,15 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
                     EquipmentLoadout.Item item=station==CastleHubMap.Station.ARMORY_UV?
                         EquipmentLoadout.Item.UV_LAMP:EquipmentLoadout.Item.SALT;
                     if(profile.ownsEquipment(item))notice=item.label+" already owned / appears in van rack.";
-                    else notice=profile.purchaseEquipment(item)?
-                        "Purchased "+item.label+". Now stocked in your expedition van.":
-                        "Need £"+ProfileStore.equipmentPrice(item)+" to purchase "+item.label;
+                    else {
+                        boolean bought=profile.purchaseEquipment(item);
+                        if(bought)GameSfx.play(LanSound.Cue.PICKUP);
+                        notice=bought?"Purchased "+item.label+". Now stocked in your expedition van.":
+                            "Need £"+ProfileStore.equipmentPrice(item)+" to purchase "+item.label;
+                    }
                 }
-                case ROLE -> {actions.cycleRole();notice="Hunter discipline: "+actions.role();}
-                case CONTRACT -> {actions.cycleWeather();notice="Selected weather: "+actions.weather();}
+                case ROLE -> {actions.cycleRole();GameSfx.play(LanSound.Cue.SELECT);notice="Hunter discipline: "+actions.role();}
+                case CONTRACT -> {actions.cycleWeather();GameSfx.play(LanSound.Cue.SELECT);notice="Selected weather: "+actions.weather();}
                 case EXPEDITION -> {actions.begin();return;}
                 case MULTIPLAYER -> {actions.network();return;}
                 case SPECTRAL -> {actions.spectral();return;}
@@ -96,7 +103,7 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
         if(key==KeyEvent.VK_E)use(CastleHubDecor.aimed(map,renderer.x,renderer.z,renderer.yaw)!=null?
             null:map.aimed(renderer.x,renderer.z,renderer.yaw));
         if(key==KeyEvent.VK_F)renderer.lamp=!renderer.lamp;
-        if(key==KeyEvent.VK_L)castleLightsOn=!castleLightsOn;
+        if(key==KeyEvent.VK_L){castleLightsOn=!castleLightsOn;GameSfx.play(LanSound.Cue.SWITCH);}
         down.add(key);
     }
     @Override public void keyReleased(KeyEvent e){down.remove(e.getKeyCode());}
