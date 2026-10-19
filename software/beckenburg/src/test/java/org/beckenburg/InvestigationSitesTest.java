@@ -15,8 +15,16 @@ public final class InvestigationSitesTest {
             HouseMap layout=new HouseMap(site);
             ok(layout.valid(),"all rooms and exterior staging reachable on "+site);
             ok(RitualSites.valid(layout),"three reachable ritual anchors on "+site);
-            ok(layout.van().placement().x()==house.van().placement().x(),
-                "van retains authoritative staging/socket geometry");
+            ok(layout.width()==HouseMap.GRAND_WIDTH
+                    &&layout.height()==HouseMap.GRAND_HEIGHT,
+                "grand locations occupy genuinely larger playable footprints");
+            ok(layout.ceilingHeight()>house.ceilingHeight(),
+                "grand rooms have more overhead volume");
+            ok(layout.van().placement().x()>house.van().placement().x(),
+                "van moves to actual perimeter of the grand location");
+            ok(layout.roomAt(layout.van().placement().x(),
+                layout.van().placement().z())==HouseMap.EXTRACTION_ROOM,
+                "larger map retains functional extraction staging");
             ok(!layout.roomName(4).equals(house.roomName(4)),
                 "new locations provide different room purposes");
             Set<String> meshes=new HashSet<>();
@@ -48,9 +56,9 @@ public final class InvestigationSitesTest {
             ok(layout.doorSnapshot().split(",").length>=17,
                 "all internal room connections have actual doors");
         }
-        ok(new HouseMap(HouseMap.Site.FARMHOUSE).tile(8,2)=='D'
-            &&new HouseMap(HouseMap.Site.SCHOOL).tile(8,2)!='D',
-            "layout changes actual door geometry");
+        ok(new HouseMap(HouseMap.Site.FARMHOUSE).tile(12,3)=='D'
+            &&new HouseMap(HouseMap.Site.SCHOOL).tile(12,3)!='D',
+            "grand sites have distinct real doorway geometry");
         System.out.println("PASS: authored farm and school maps, source GLBs, doors, rituals");
     }
 }

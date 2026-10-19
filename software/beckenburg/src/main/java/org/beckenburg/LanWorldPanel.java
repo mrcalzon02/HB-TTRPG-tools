@@ -204,6 +204,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             List<String> p=LanProtocol.parts(frame);
             if(p.size()==2&&p.get(0).equals("SITE")){
                 map=new HouseMap(HouseMap.Site.valueOf(p.get(1)));
+                renderer.x=map.van().placement().x();
+                renderer.z=map.van().placement().z();
                 feedback="INVESTIGATION: "+map.site();
             }else if(p.get(0).equals("CHAT")){
                 LanChat.Entry line=LanChat.Entry.decode(frame);
@@ -244,8 +246,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 if(hunter!=seat)hunterNames.put(hunter,nickname);
             }else if(p.size()==6&&p.get(0).equals("BODY")){
                 int who=LanProtocol.integer(p.get(1),0,5);
-                double x=LanProtocol.integer(p.get(2),0,HouseMap.WIDTH*1000)/1000.0;
-                double z=LanProtocol.integer(p.get(3),0,HouseMap.HEIGHT*1000)/1000.0;
+                double x=LanProtocol.integer(p.get(2),0,map.width()*1000)/1000.0;
+                double z=LanProtocol.integer(p.get(3),0,map.height()*1000)/1000.0;
                 int heading=LanProtocol.integer(p.get(4),0,359);
                 tick=LanProtocol.integer(p.get(5),0,99999999);
                 if(who==seat){renderer.x=x;renderer.z=z;feedback="HOST SYNC ACTIVE — movement and doors server controlled";}
@@ -265,8 +267,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     apparition=null;
                     lastMotionTick=-1;
                 }else if(p.size()==5 && p.get(1).equals("VISIBLE")){
-                    double gx=LanProtocol.integer(p.get(2),0,HouseMap.WIDTH*1000)/1000.0;
-                    double gz=LanProtocol.integer(p.get(3),0,HouseMap.HEIGHT*1000)/1000.0;
+                    double gx=LanProtocol.integer(p.get(2),0,map.width()*1000)/1000.0;
+                    double gz=LanProtocol.integer(p.get(3),0,map.height()*1000)/1000.0;
                     int eventTick=LanProtocol.integer(p.get(4),0,99999999);
                     if(apparition==null)apparitionWarningTick=eventTick;
                     apparition=apparition==null?
@@ -314,8 +316,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 else if(p.size()==7){
                     LanProtocol.integer(p.get(1),1,10000000);
                     HunterCounters.Kind kind=HunterCounters.Kind.valueOf(p.get(2));
-                    double xx=LanProtocol.integer(p.get(3),0,HouseMap.WIDTH*1000)/1000.0;
-                    double zz=LanProtocol.integer(p.get(4),0,HouseMap.HEIGHT*1000)/1000.0;
+                    double xx=LanProtocol.integer(p.get(3),0,map.width()*1000)/1000.0;
+                    double zz=LanProtocol.integer(p.get(4),0,map.height()*1000)/1000.0;
                     double yy=LanProtocol.integer(p.get(5),0,3000)/1000.0;
                     LanProtocol.integer(p.get(6),0,300);
                     counterMarks.add(new SceneRenderer.WorldMark(xx,zz,yy,kind));
@@ -450,8 +452,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 }else if(p.size()==8&&p.get(1).equals("PLACE")){
                     int owner=LanProtocol.integer(p.get(2),0,5);
                     int room=LanProtocol.integer(p.get(3),0,HouseMap.ROOM_COUNT-1);
-                    double x=LanProtocol.integer(p.get(4),0,HouseMap.WIDTH*1000)/1000.0;
-                    double z=LanProtocol.integer(p.get(5),0,HouseMap.HEIGHT*1000)/1000.0;
+                    double x=LanProtocol.integer(p.get(4),0,map.width()*1000)/1000.0;
+                    double z=LanProtocol.integer(p.get(5),0,map.height()*1000)/1000.0;
                     int heading=LanProtocol.integer(p.get(6),0,359);
                     EquipmentTiers.Tier tier=EquipmentTiers.Tier.valueOf(p.get(7));
                     LanVideoCameras.Camera camera=
@@ -470,8 +472,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 }else if(p.size()==7&&p.get(1).equals("PLACE")){
                     int owner=LanProtocol.integer(p.get(2),0,5);
                     int room=LanProtocol.integer(p.get(3),0,HouseMap.INDOOR_ROOMS-1);
-                    double x=LanProtocol.integer(p.get(4),0,HouseMap.WIDTH*1000)/1000.0;
-                    double z=LanProtocol.integer(p.get(5),0,HouseMap.HEIGHT*1000)/1000.0;
+                    double x=LanProtocol.integer(p.get(4),0,map.width()*1000)/1000.0;
+                    double z=LanProtocol.integer(p.get(5),0,map.height()*1000)/1000.0;
                     EquipmentTiers.Tier gear=EquipmentTiers.Tier.valueOf(p.get(6));
                     renderer.dotsPositions.put(owner,
                         new LanDotsProjectors.Placement(owner,room,x,z,gear));
@@ -479,8 +481,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 }else if(p.size()==6&&p.get(1).equals("ILLUMINATE")){
                     int room=LanProtocol.integer(p.get(2),0,HouseMap.INDOOR_ROOMS-1);
                     int eventTick=LanProtocol.integer(p.get(3),0,99999999);
-                    double x=LanProtocol.integer(p.get(4),0,HouseMap.WIDTH*1000)/1000.0;
-                    double z=LanProtocol.integer(p.get(5),0,HouseMap.HEIGHT*1000)/1000.0;
+                    double x=LanProtocol.integer(p.get(4),0,map.width()*1000)/1000.0;
+                    double z=LanProtocol.integer(p.get(5),0,map.height()*1000)/1000.0;
                     renderer.dotsPassRoom=room;
                     renderer.dotsPassX=x;renderer.dotsPassZ=z;
                     renderer.dotsPassUntil=eventTick+3; // optical persistence only
@@ -523,8 +525,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(p.size()==6&&p.get(0).equals("BURN")
                     &&p.get(1).equals("INCENSE")){
                 int room=LanProtocol.integer(p.get(2),0,HouseMap.ROOM_COUNT-1);
-                double x=LanProtocol.integer(p.get(3),0,HouseMap.WIDTH*1000)/1000.0;
-                double z=LanProtocol.integer(p.get(4),0,HouseMap.HEIGHT*1000)/1000.0;
+                double x=LanProtocol.integer(p.get(3),0,map.width()*1000)/1000.0;
+                double z=LanProtocol.integer(p.get(4),0,map.height()*1000)/1000.0;
                 int until=LanProtocol.integer(p.get(5),0,99999999);
                 renderer.incense.add(new SceneRenderer.IncenseSmoke(room,x,z,until));
             }else if(p.size()==4&&p.get(0).equals("ACCEPT")

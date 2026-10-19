@@ -453,6 +453,7 @@ public final class InvestigationGame {
             map=new HouseMap(SiteCatalog.mapFor(site));
             callouts=new TeamCallout.Board(map);
             location=site;conditions=java.util.Objects.requireNonNull(mode);
+            scene.x=map.van().placement().x();scene.z=map.van().placement().z();
             powerOn=conditions.initiallyPowered();
             syncEnvironment();
             setFocusable(true);

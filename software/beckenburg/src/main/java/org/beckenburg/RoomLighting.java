@@ -23,12 +23,19 @@ public final class RoomLighting {
         valid(room);
         return new Switch(room,room%HouseMap.COLS*8+1.22,room/HouseMap.COLS*6+2.70);
     }
+    /** Same real wall offset at any physical room scale. */
+    public static Switch location(HouseMap map,int room){
+        if(map==null)throw new IllegalArgumentException("map required");
+        valid(room);
+        return new Switch(room,room%HouseMap.COLS*map.cellWidth()+1.22,
+            room/HouseMap.COLS*map.cellHeight()+2.70);
+    }
     /** Physical aim and line-of-sight: no remote switch activation from a different room. */
     public int aimed(HouseMap map,double x,double z,double yaw){
         if(map==null||!Double.isFinite(x)||!Double.isFinite(z)||!Double.isFinite(yaw))return -1;
         int room=map.roomAt(x,z);
         if(room<0||room>=HouseMap.INDOOR_ROOMS)return -1;
-        Switch sw=location(room);
+        Switch sw=location(map,room);
         double dx=sw.x-x,dz=sw.z-z,d=Math.hypot(dx,dz);
         if(d<.25||d>1.85)return -1;
         double facing=(dx*Math.sin(yaw)+dz*Math.cos(yaw))/d;

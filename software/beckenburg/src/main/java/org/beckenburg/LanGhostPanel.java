@@ -56,8 +56,8 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                 feedback="SPECTRAL TERRITORY: "+map.site();
             }else if(p.size()==6&&p.get(0).equals("GPOSE")){
                 int next=LanProtocol.integer(p.get(1),0,HouseMap.EXTRACTION_ROOM-1);
-                double x=LanProtocol.integer(p.get(2),0,HouseMap.WIDTH*1000)/1000.0;
-                double z=LanProtocol.integer(p.get(3),0,HouseMap.HEIGHT*1000)/1000.0;
+                double x=LanProtocol.integer(p.get(2),0,map.width()*1000)/1000.0;
+                double z=LanProtocol.integer(p.get(3),0,map.height()*1000)/1000.0;
                 LanProtocol.integer(p.get(4),0,359);
                 tick=LanProtocol.integer(p.get(5),0,99999999);
                 if(map.roomAt(x,z)!=next)throw new IllegalArgumentException("inconsistent spectral coordinates");

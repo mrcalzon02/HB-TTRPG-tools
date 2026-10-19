@@ -360,19 +360,20 @@ public final class SceneRenderer {
      * noninteractive scenery never becomes a ghost evidence source.
      */
     private static void roadsideModels(List<Face> out,HouseMap map){
-        // Road runs east/west across the open south edge; leave the van's access clear.
+        // Road and parked traffic translate with the actual site van.
+        double dx=map.van().placement().x()-20.5,dz=map.van().placement().z()-27.5;
         for(int i=0;i<5;i++){
             double mx=3.1+i*4.6;
             imported(out,i==2?"kenney_road_asphalt_damaged":
-                "kenney_road_asphalt_straight",mx,.012,28.1,
+                "kenney_road_asphalt_straight",mx+dx,.012,28.1+dz,
                 i==2?4.35:2.30,Math.PI/2);
         }
-        imported(out,"ggbot_car01",5.1,.08,28.1,1,Math.PI/2);
-        imported(out,"ggbot_car07",12.2,.08,28.1,1,-Math.PI/2);
-        imported(out,"kenney_detail_light_single",3.2,.08,24.9,2.25,0);
-        imported(out,"kenney_detail_dumpster_closed",14.2,.06,24.7,1.65,0);
-        imported(out,"kenney_detail_bench",9.1,.07,25.1,1.75,Math.PI/2);
-        imported(out,"kenney_detail_barrier_type_a",7.8,.06,26.0,1.3,0);
+        imported(out,"ggbot_car01",5.1+dx,.08,28.1+dz,1,Math.PI/2);
+        imported(out,"ggbot_car07",12.2+dx,.08,28.1+dz,1,-Math.PI/2);
+        imported(out,"kenney_detail_light_single",3.2+dx,.08,24.9+dz,2.25,0);
+        imported(out,"kenney_detail_dumpster_closed",14.2+dx,.06,24.7+dz,1.65,0);
+        imported(out,"kenney_detail_bench",9.1+dx,.07,25.1+dz,1.75,Math.PI/2);
+        imported(out,"kenney_detail_barrier_type_a",7.8+dx,.06,26.0+dz,1.3,0);
     }
 
     /** Three visually distinct small PS-era rite installations at fixed room sockets. */
@@ -440,6 +441,7 @@ public final class SceneRenderer {
     private List<Face> scene(HouseMap map,int ghostRoom,boolean ghostVisible,int wardRoom,int hunterRoom,
             double clock,List<RemoteBody> others,Apparition apparition,List<WorldMark> marks) {
         List<Face> out=new ArrayList<>(2000);
+        double ceiling=map.ceilingHeight();
         for(int zz=1;zz<map.height()-1;zz++)for(int xx=1;xx<map.width()-1;xx++) {
             if(map.tile(xx,zz)=='#') continue;
             double mx=xx+.5,mz=zz+.5;
@@ -450,19 +452,20 @@ public final class SceneRenderer {
                 wall=MaterialAtlas.wall(map.site(),n);
             texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),
                 floor,xx,zz,xx+1,zz,xx+1,zz+1,xx,zz+1,0xffffff);
-            if(!map.outside(n))texturedQuad(out,new Point(xx,2.7,zz+1),new Point(xx+1,2.7,zz+1),new Point(xx+1,2.7,zz),new Point(xx,2.7,zz),
+            if(!map.outside(n))texturedQuad(out,new Point(xx,ceiling,zz+1),new Point(xx+1,ceiling,zz+1),
+                new Point(xx+1,ceiling,zz),new Point(xx,ceiling,zz),
                 MaterialAtlas.CEILING,xx,zz+1,xx+1,zz+1,xx+1,zz,xx,zz,0xffffff);
-            if(map.solid(xx-1,zz)&&map.tile(xx-1,zz)!='D')texturedQuad(out,new Point(xx,0,zz+1),new Point(xx,0,zz),new Point(xx,2.7,zz),new Point(xx,2.7,zz+1),
+            if(map.solid(xx-1,zz)&&map.tile(xx-1,zz)!='D')texturedQuad(out,new Point(xx,0,zz+1),new Point(xx,0,zz),new Point(xx,ceiling,zz),new Point(xx,ceiling,zz+1),
                 wall,zz+1,0,zz,0,zz,2.7,zz+1,2.7,0xd0d0d0);
-            if(map.solid(xx+1,zz)&&map.tile(xx+1,zz)!='D')texturedQuad(out,new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx+1,2.7,zz+1),new Point(xx+1,2.7,zz),
+            if(map.solid(xx+1,zz)&&map.tile(xx+1,zz)!='D')texturedQuad(out,new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx+1,ceiling,zz+1),new Point(xx+1,ceiling,zz),
                 wall,zz,0,zz+1,0,zz+1,2.7,zz,2.7,0xfafafa);
-            if(map.solid(xx,zz-1)&&map.tile(xx,zz-1)!='D')texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,2.7,zz),new Point(xx,2.7,zz),
+            if(map.solid(xx,zz-1)&&map.tile(xx,zz-1)!='D')texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,ceiling,zz),new Point(xx,ceiling,zz),
                 wall,xx,0,xx+1,0,xx+1,2.7,xx,2.7,0xe0e0e0);
-            if(map.solid(xx,zz+1)&&map.tile(xx,zz+1)!='D')texturedQuad(out,new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),new Point(xx,2.7,zz+1),new Point(xx+1,2.7,zz+1),
+            if(map.solid(xx,zz+1)&&map.tile(xx,zz+1)!='D')texturedQuad(out,new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),new Point(xx,ceiling,zz+1),new Point(xx+1,ceiling,zz+1),
                 wall,xx+1,0,xx,0,xx,2.7,xx+1,2.7,0xebebeb);
             if(map.tile(xx,zz)=='D'){
                 // Door geometry must occupy the opening, not sit behind wallpaper faces.
-                boolean eastWest=xx==8||xx==16;
+                boolean eastWest=xx==map.cellWidth()||xx==map.cellWidth()*2;
                 if(eastWest){
                     box(out,xx+.18,0,zz+.02,.64,2.45,.10,0x8f805e);
                     box(out,xx+.18,0,zz+.88,.64,2.45,.10,0x8f805e);
@@ -478,11 +481,14 @@ public final class SceneRenderer {
                         imported(out,"door_1_loose",xx+.97,0,zz+.50,1.05,0);
                     }
                 }
+                if(ceiling>2.7)
+                    box(out,xx,2.50,zz,1,ceiling-2.50,1,
+                        map.site()==HouseMap.Site.SCHOOL?0x817c72:0x65564b);
             }
         }
         // Every investigation room has a discoverable physical rocker and ceiling fixture.
         for(int r=0;r<HouseMap.INDOOR_ROOMS;r++){
-            RoomLighting.Switch sw=RoomLighting.location(r);
+            RoomLighting.Switch sw=RoomLighting.location(map,r);
             if(Math.hypot(sw.x()-x,sw.z()-z)>14)continue;
             double px=sw.x(),pz=sw.z();
             imported(out,"light_switch_1",px,1.30,pz,2.0,0);
@@ -494,8 +500,8 @@ public final class SceneRenderer {
             if(Math.hypot(cx-x,cz-z)<=7.5) {
                 double energy=roomLights==null?1:roomLights.brightness(r,roomLightTick);
                 imported(out,energy>.45?"ceiling_lamp_1_on":"ceiling_lamp_1_off",
-                    cx,2.58,cz,.76,0);
-                box(out,cx-.19,2.49,cz-.17,.38,.024,.34,
+                    cx,ceiling-.12,cz,.76,0);
+                box(out,cx-.19,ceiling-.21,cz-.17,.38,.024,.34,
                     energy>.45?0xffe4a4:energy>.13?0x9c7b62:0x343c46);
             }
         }
@@ -539,7 +545,8 @@ public final class SceneRenderer {
             vanModel(out,map.van(),rackStock);
         // Road and traffic props are exterior-only. Nearby rooms never instantiate
         // a second duplicate set of these global world objects.
-        if(z>20.0&&z<31.0)roadsideModels(out,map);
+        if(Math.hypot(x-map.van().placement().x(),z-map.van().placement().z())<20)
+            roadsideModels(out,map);
         // Video cameras are actual mounted viewports; their footage is rendered
         // from this replicated camera location in the hunter's van monitor.
         for(LanVideoCameras.Camera camera:videoCameras.values())
