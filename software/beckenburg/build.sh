@@ -12,6 +12,11 @@ cp assets/runtime/directional-sprites.zip build/classes/org/beckenburg/direction
 # Bundle the verified CC BY 4.0 PSX UI source ZIP with the actual runtime classes.
 test -s assets/runtime/ui/psx-horror-ui-free-assets.zip || { echo 'Missing PSX Horror UI runtime archive'; exit 1; }
 cp assets/runtime/ui/psx-horror-ui-free-assets.zip build/classes/org/beckenburg/psx-horror-ui-free-assets.zip
+mkdir -p build/classes/org/beckenburg/music
+for track in "ambient-cold-unresolved-drone.zip" "ambient-sombra-profunda.zip" "castle-candlelit-shadows.zip" "hunt-final-surge.zip" "ritual-final-strike.zip.0" "ritual-final-strike.zip.1" "ritual-of-ash.zip.0" "ritual-of-ash.zip.1"; do
+  test -s "assets/runtime/music/$track" || { echo "Missing authored soundtrack $track"; exit 1; }
+  cp "assets/runtime/music/$track" "build/classes/org/beckenburg/music/$track"
+done
 # Licensed in-game subset, not the upstream paid PSX asset archive.
 mkdir -p build/classes/org/beckenburg/models
 for name in light_switch_1 ceiling_lamp_1_off door_1_loose shelf_mp_6 chair_mp_5 ceiling_lamp_1_on cross_mp_2 flashlight_mp_1 armchair_1 sofa_1 dinner_table_1 wardrobe_mp_1 display_cabinet_mp_2 tv_mp_1 tv_table_1_4 lamp_3_on lamp_3_off ceiling_lamp_4_on ceiling_lamp_4_off pc_keyboard_mp_1 vape_mp_1 dosimeter_1 dosimeter_2 walkie_talkie_2 handheld_tablet_1 monitoring_screen_mp_1 pc_mp_1 button_12 book_mp_1 open_book_mp_1 dosimeter_4 walkie_talkie_1 exploration_emf_detector exploration_flashlight exploration_flashlight_poquet exploration_photo_camera exploration_spirit_box exploration_thermal_camera exploration_thermometer exploration_voice_recorder ggbot_car08_van_shell ggbot_car01 ggbot_car05 ggbot_car07 kenney_road_asphalt_straight kenney_road_asphalt_side kenney_road_asphalt_damaged kenney_detail_light_single kenney_detail_dumpster_closed kenney_detail_bench kenney_detail_barrier_type_a blender_sound_recorder_1 blender_sound_recorder_2 blender_sound_recorder_3; do
@@ -31,6 +36,7 @@ java -Djava.awt.headless=true -cp build/classes org.beckenburg.TierModelForge bu
 java -Djava.awt.headless=true -cp build/classes org.beckenburg.KenneyMedievalAssets assets/source/kenney_retro-medieval-kit.zip build/classes/org/beckenburg/models
 javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java/org/beckenburg/*.java
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.PsxHorrorUiTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.SoundtrackAudioTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.CastleHubIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.BeckenburgUpdatesTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.HeldMeshViewTest
