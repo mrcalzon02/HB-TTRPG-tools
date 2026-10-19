@@ -25,6 +25,8 @@ public final class SceneRenderer {
     private final BufferedImage frame = new BufferedImage(W,H,BufferedImage.TYPE_INT_RGB);
     private final int[] pixels=((DataBufferInt)frame.getRaster().getDataBuffer()).getData();
     private final double[] depths=new double[W*H];
+    private static final List<CastleHubArchitecture.Piece> CASTLE_ARCHITECTURE=
+        CastleHubArchitecture.create(new CastleHubMap());
     public double x=20.5,z=27.5,yaw=-Math.PI/2,pitch=-.09;
     public boolean lamp=true;
     public double lampReach=7.5,lampIntensity=.72;
@@ -100,14 +102,19 @@ public final class SceneRenderer {
     // albedo PNGs. No primitive substitution or image-card stand-ins.
     private static void imported(List<Face> out,String id,
             double x,double y,double z,double scale,double yaw){
+        imported(out,id,x,y,z,scale,scale,scale,yaw);
+    }
+    /** Source triangles with independent axis scales for medieval wall modules. */
+    private static void imported(List<Face> out,String id,
+            double x,double y,double z,double sx,double sy,double sz,double yaw){
         final double cos=Math.cos(yaw),sin=Math.sin(yaw);
         for(GlbProps.Triangle t:GlbProps.model(id).triangles()){
             GlbProps.Vertex[] vv={t.a(),t.b(),t.c()};
             Point[] pp=new Point[3];
             for(int i=0;i<3;i++){
                 GlbProps.Vertex v=vv[i];
-                pp[i]=new Point(x+scale*(v.x()*cos-v.z()*sin),
-                    y+scale*v.y(),z+scale*(v.x()*sin+v.z()*cos));
+                pp[i]=new Point(x+sx*v.x()*cos-sz*v.z()*sin,
+                    y+sy*v.y(),z+sx*v.x()*sin+sz*v.z()*cos);
             }
             out.add(new Face(pp[0],pp[1],pp[2],0xffffff,t.material(),
                 vv[0].u(),vv[0].v(),vv[1].u(),vv[1].v(),
@@ -627,18 +634,15 @@ public final class SceneRenderer {
                 new Point(xx,3.4,zz+1),new Point(xx+1,3.4,zz+1),
                 new Point(xx+1,3.4,zz),new Point(xx,3.4,zz),
                 MaterialAtlas.CEILING,xx,zz+1,xx+1,zz+1,xx+1,zz,xx,zz,0xe0d8c8);
-            if(map.solid(xx-1,zz))texturedQuad(castle,new Point(xx,0,zz+1),new Point(xx,0,zz),
-                new Point(xx,3.4,zz),new Point(xx,3.4,zz+1),MaterialAtlas.STONE,
-                zz+1,0,zz,0,zz,3.4,zz+1,3.4,0xbdb2b0);
-            if(map.solid(xx+1,zz))texturedQuad(castle,new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),
-                new Point(xx+1,3.4,zz+1),new Point(xx+1,3.4,zz),MaterialAtlas.STONE,
-                zz,0,zz+1,0,zz+1,3.4,zz,3.4,0xd4c5ba);
-            if(map.solid(xx,zz-1))texturedQuad(castle,new Point(xx,0,zz),new Point(xx+1,0,zz),
-                new Point(xx+1,3.4,zz),new Point(xx,3.4,zz),MaterialAtlas.STONE,
-                xx,0,xx+1,0,xx+1,3.4,xx,3.4,0xd5c4ba);
-            if(map.solid(xx,zz+1))texturedQuad(castle,new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),
-                new Point(xx,3.4,zz+1),new Point(xx+1,3.4,zz+1),MaterialAtlas.STONE,
-                xx+1,0,xx,0,xx,3.4,xx+1,3.4,0xc8b4ab);
+            // The solid tile modules now supply textured wall and window geometry.
+            // Primitive quads would falsely close the real windows and gate openings.
+        }
+        for(CastleHubArchitecture.Piece piece:CASTLE_ARCHITECTURE){
+            double dx=piece.x()-x,dz=piece.z()-z,d=Math.hypot(dx,dz);
+            if(d>17.5)continue;
+            if(d>4.0&&(dx*Math.sin(yaw)+dz*Math.cos(yaw)) < -d*.35)continue;
+            imported(castle,piece.model(),piece.x(),piece.y(),piece.z(),
+                piece.scaleX(),piece.scaleY(),piece.scaleZ(),piece.yaw());
         }
         for(CastleHubDecor.Light fixture:CastleHubDecor.LIGHTS)
             if(Math.hypot(fixture.x()-x,fixture.z()-z)<14)

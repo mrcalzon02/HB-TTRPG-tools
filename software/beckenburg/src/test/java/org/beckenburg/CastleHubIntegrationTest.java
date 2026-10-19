@@ -11,6 +11,18 @@ public final class CastleHubIntegrationTest {
         double sx=13.5,sz=19.3;
         ok(map.traversable(sx,sz),"castle spawn on floor");
         ok(CastleHubMap.furnishings().size()>=20,"source-backed castle furniture");
+        var stonework=CastleHubArchitecture.create(map);
+        ok(stonework.size()>=175,"authored medieval stonework surrounds the lobby");
+        var uniqueStonework=new java.util.HashSet<String>();
+        for(var piece:stonework){
+            ok(Double.isFinite(piece.scaleX()+piece.scaleY()+piece.scaleZ()),
+                "finite medieval geometry transform");
+            if(uniqueStonework.add(piece.model()))
+                ok(GlbProps.model(piece.model()).triangles().size()>20,
+                    "licensed castle GLB triangle content: "+piece.model());
+        }
+        for(int gate:new int[]{5,13,22})
+            ok(map.traversable(gate+.5,11.5),"medieval gate passage remains physically open");
         ok(CastleHubDecor.ACCENTS.size()>=7,"working offices with actual interior props");
         ok(CastleHubDecor.LIGHTS.size()>=8,"distinct on/off GLB lamps");
         for(CastleHubDecor.Accent a:CastleHubDecor.ACCENTS)

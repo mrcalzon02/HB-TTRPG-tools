@@ -31,6 +31,8 @@ for %%M in (assets\\runtime\\models\\blender_*.glb) do (
 )
 rem Author all 126 tiered PSX GLBs and embedded low-resolution texture atlases.
 java -Djava.awt.headless=true -cp build\classes org.beckenburg.TierModelForge build\classes\org\beckenburg\models || exit /b 1
+rem Extract only the curated CC0 castle GLBs with embedded original texture PNGs.
+java -Djava.awt.headless=true -cp build\classes org.beckenburg.KenneyMedievalAssets assets\source\kenney_retro-medieval-kit.zip build\classes\org\beckenburg\models || exit /b 1
 javac --release 17 -encoding UTF-8 -cp build\classes -d build\test @build\sources-tests.txt || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.PsxHorrorUiTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.CastleHubIntegrationTest || exit /b 1

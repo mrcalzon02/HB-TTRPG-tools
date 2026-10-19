@@ -27,6 +27,8 @@ done
 # Manufacture missing tier housings and PSX texture atlases as actual GLBs.
 # Deterministic Java 17 authoring; no Python/Blender dependency on Windows.
 java -Djava.awt.headless=true -cp build/classes org.beckenburg.TierModelForge build/classes/org/beckenburg/models
+# Keep the CC0 source in assets/source; ship only its 15 texture-embedded meshes.
+java -Djava.awt.headless=true -cp build/classes org.beckenburg.KenneyMedievalAssets assets/source/kenney_retro-medieval-kit.zip build/classes/org/beckenburg/models
 javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java/org/beckenburg/*.java
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.PsxHorrorUiTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.CastleHubIntegrationTest

@@ -28,6 +28,7 @@ public final class GlbProps {
         "blender_sound_recorder_1","blender_sound_recorder_2","blender_sound_recorder_3",
         "light_switch_1","ceiling_lamp_1_off","door_1_loose","shelf_mp_6",
         "chair_mp_5","ceiling_lamp_1_on","cross_mp_2","flashlight_mp_1",
+        "kenney_medieval_wall_fortified","kenney_medieval_wall_fortified_window","kenney_medieval_wall_fortified_gate","kenney_medieval_wall_pane_wood_window","kenney_medieval_tower","kenney_medieval_tower_top","kenney_medieval_tower_base","kenney_medieval_battlement","kenney_medieval_battlement_corner_outer","kenney_medieval_column","kenney_medieval_column_damaged","kenney_medieval_structure_wall","kenney_medieval_stairs_stone","kenney_medieval_detail_crate","kenney_medieval_detail_barrel",
         "armchair_1","sofa_1","dinner_table_1","wardrobe_mp_1",
         "display_cabinet_mp_2","tv_mp_1","tv_table_1_4",
         "lamp_3_on","lamp_3_off","ceiling_lamp_4_on","ceiling_lamp_4_off",
