@@ -43,6 +43,7 @@ public final class GlbProps {
     public record Model(List<Triangle> triangles) { }
     private static final Map<String,Model> cache=new HashMap<>();
     private static final List<BufferedImage> textures=new ArrayList<>();
+    private static final List<double[]> diffuseFactors=new ArrayList<>();
     private static int vanCrtMaterial=-1;
     private static BufferedImage vanCrtImage=blankCrt();
     private static BufferedImage blankCrt(){
@@ -106,7 +107,15 @@ public final class GlbProps {
         // glTF UV V=0 originates at the bottom of a PNG image.
         int y=Math.min(image.getHeight()-1,
             (int)((1.0-(v-Math.floor(v)))*image.getHeight()));
-        return image.getRGB(x,y)&0xffffff;
+        int rgb=image.getRGB(x,y)&0xffffff;
+        // GLB material baseColorFactor is part of the original material.
+        // Previously ignored, washing out the 128px van shell's deliberate
+        // graphite-gray diffuse factor and misrepresenting its authored paint.
+        double[] factor=diffuseFactors.get(index);
+        int red=Math.max(0,Math.min(255,(int)Math.round(((rgb>>16)&255)*factor[0])));
+        int green=Math.max(0,Math.min(255,(int)Math.round(((rgb>>8)&255)*factor[1])));
+        int blue=Math.max(0,Math.min(255,(int)Math.round((rgb&255)*factor[2])));
+        return (red<<16)|(green<<8)|blue;
     }
     @SuppressWarnings("unchecked")
     private static Map<String,Object> obj(Object value){return (Map<String,Object>)value;}
@@ -174,6 +183,8 @@ public final class GlbProps {
                 throw new IOException("Invalid embedded PNG");
             materialIds[i]=TEXTURE_BASE+textures.size();
             textures.add(picture);
+            double[] color=vec(pbr.get("baseColorFactor"),1,1,1,1);
+            diffuseFactors.add(color);
             // The owner's CRT screen uses a distinct original material/UV
             // region; replace only that surface at runtime with real van data.
             if("monitoring_screen_mp_1".equals(resourceName)
