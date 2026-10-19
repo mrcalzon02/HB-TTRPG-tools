@@ -39,6 +39,7 @@ java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.In
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TieredMediaAndPowerTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TieredUvAndFirelightTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ImportedEquipmentModelsTest || exit /b 1
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TierModelForgeTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanCargoDoorTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanDotsProjectorsTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.OptionalEvidenceReadingsTest || exit /b 1
