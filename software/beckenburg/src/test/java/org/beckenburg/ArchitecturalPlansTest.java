@@ -20,13 +20,21 @@ public final class ArchitecturalPlansTest {
                 "authored rooms and ritual sockets load "+site);
             ok(map.width()==plan.width&&map.height()==plan.height,
                 "render and host share actual level bounds");
-            int floorCells=0,wallCells=0;
+            int floorCells=0,wallCells=0,windows=0;
             for(int z=1;z<map.height()-1;z++)for(int x=1;x<map.width()-1;x++){
-                if(map.tile(x,z)=='#')wallCells++;else floorCells++;
+                char material=map.tile(x,z);
+                if(material=='#'||material=='W')wallCells++;else floorCells++;
+                if(material=='W'){
+                    windows++;
+                    ok(map.solid(x,z)&&!map.traversable(x+.5,z+.5),
+                        "real window panel is solid for human movement");
+                }
             }
             ok(floorCells>(site==HouseMap.Site.SCHOOL?3500:2300),
                 "large building contains extensive interior, service and exterior space");
             ok(wallCells>600,"building has actual partitions and articulated boundaries");
+            ok(windows>(site==HouseMap.Site.SCHOOL?35:12),
+                "exterior walls have substantial authored glazed openings");
             for(int room=0;room<HouseMap.ROOM_COUNT;room++){
                 ok(map.roomAt(map.centerX(room),map.centerZ(room))==room,
                     "each room has physical geometry and a named center");

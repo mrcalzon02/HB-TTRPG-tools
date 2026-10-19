@@ -142,7 +142,10 @@ public final class HouseMap {
     }
     private int doorId(int x,int z){return z*width()+x;}
     public boolean doorOpen(int x,int z){return tile(x,z)=='D'&&openDoors.contains(doorId(x,z));}
-    public boolean solid(int x,int z){char t=tile(x,z);return t=='#'||(t=='D'&&!doorOpen(x,z));}
+    public boolean solid(int x,int z){
+        char t=tile(x,z);
+        return t=='#'||t=='W'||(t=='D'&&!doorOpen(x,z));
+    }
     /** Collision-aware level ray for camera shots, including real open/closed doors. */
     public boolean clearLineOfSight(double ax,double az,double bx,double bz){
         if(!Double.isFinite(ax)||!Double.isFinite(az)||!Double.isFinite(bx)||!Double.isFinite(bz))return false;

@@ -91,7 +91,8 @@ final class ArchitecturalPlans {
             q.add(new int[]{(int)cx[14],(int)cz[14]});
             while(!q.isEmpty()){
                 int[] pos=q.removeFirst();int x=pos[0],z=pos[1];
-                if(x<0||z<0||x>=width||z>=height||visited[z][x]||tile[z][x]=='#')continue;
+                if(x<0||z<0||x>=width||z>=height||visited[z][x]
+                        ||tile[z][x]=='#'||tile[z][x]=='W')continue;
                 visited[z][x]=true;
                 q.add(new int[]{x+1,z});q.add(new int[]{x-1,z});
                 q.add(new int[]{x,z+1});q.add(new int[]{x,z-1});
@@ -132,10 +133,29 @@ final class ArchitecturalPlans {
             portals.add(new Portal(x,z,a,b));
             return this;
         }
-        Plan finish(){Plan p=new Plan(w,h,grid,owner,portals);
+        Plan finish(){
+            // External window bays belong to the wall itself. They are neither
+            // traversable space nor survey equipment. Do not cut through
+            // partition walls or undermine a door jamb.
+            for(int z=2;z<h-2;z++)for(int x=2;x<w-2;x++){
+                if(grid[z][x]!='#'||Math.floorMod(x*3+z*5,11)>1)continue;
+                boolean exposedEastWest=
+                    inside(owner[z][x-1])&&owner[z][x+1]==-1
+                    ||inside(owner[z][x+1])&&owner[z][x-1]==-1;
+                boolean exposedNorthSouth=
+                    inside(owner[z-1][x])&&owner[z+1][x]==-1
+                    ||inside(owner[z+1][x])&&owner[z-1][x]==-1;
+                if(exposedEastWest==exposedNorthSouth)continue;
+                boolean nearDoor=false;
+                for(int dz=-2;dz<=2;dz++)for(int dx=-2;dx<=2;dx++)
+                    if(grid[z+dz][x+dx]=='D')nearDoor=true;
+                if(!nearDoor)grid[z][x]='W';
+            }
+            Plan p=new Plan(w,h,grid,owner,portals);
             if(!p.connected())throw new IllegalStateException("disconnected architectural wing");
             return p;
         }
+        private static boolean inside(int id){return id>=0&&id<HouseMap.INDOOR_ROOMS;}
     }
     static Plan build(HouseMap.Site kind){
         if(kind==HouseMap.Site.FARMHOUSE)return farmhouse();

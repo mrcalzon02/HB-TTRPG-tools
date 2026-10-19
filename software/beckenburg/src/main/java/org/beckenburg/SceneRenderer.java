@@ -431,12 +431,76 @@ public final class SceneRenderer {
             }
         }
     }
+    /** Exterior glazing stays collision-solid. The window's thickness and
+     * sash are actual PSX geometry, not imported investigative equipment.
+     */
+    private static void architecturalWindow(List<Face> out,int xx,int zz,
+            int side,double ceiling){
+        final double sill=1.02,head=Math.min(2.24,ceiling-.45);
+        int masonry=0x82766d,sash=0x514339;
+        if(side<=1){
+            double wallX=side==0?xx-.055:xx+.99;
+            box(out,wallX,0,zz,.06,sill,1.0,masonry);
+            box(out,wallX,head,zz,.06,ceiling-head,1.0,masonry);
+            box(out,wallX,sill,zz,.06,head-sill,.10,sash);
+            box(out,wallX,sill,zz+.90,.06,head-sill,.10,sash);
+            box(out,wallX,sill,zz+.10,.06,head-sill,.80,0x42647a);
+            box(out,wallX+.008,sill+.57,zz+.10,.045,.055,.80,sash);
+            box(out,wallX+.008,sill,zz+.47,.045,head-sill,.055,sash);
+        }else{
+            double wallZ=side==2?zz-.055:zz+.99;
+            box(out,xx,0,wallZ,1.0,sill,.06,masonry);
+            box(out,xx,head,wallZ,1.0,ceiling-head,.06,masonry);
+            box(out,xx,sill,wallZ,.10,head-sill,.06,sash);
+            box(out,xx+.90,sill,wallZ,.10,head-sill,.06,sash);
+            box(out,xx+.10,sill,wallZ,.80,head-sill,.06,0x42647a);
+            box(out,xx+.10,sill+.57,wallZ,.80,.055,.05,sash);
+            box(out,xx+.47,sill,wallZ,.055,head-sill,.05,sash);
+        }
+    }
+    /** Overhead masonry and timberwork: actual pitched roof planes create
+     * recognisable gables and wings, not a fake outline on the HUD.
+     */
+    private static void pitchedRoof(List<Face> out,double x0,double x1,
+            double z0,double z1,double wallTop,double ridgeRise,int material){
+        double middle=(x0+x1)/2.0,edge=wallTop+.12,ridge=edge+ridgeRise;
+        texturedQuad(out,new Point(x0,edge,z0),new Point(middle,ridge,z0),
+            new Point(middle,ridge,z1),new Point(x0,edge,z1),
+            material,0,0,x1-x0,0,x1-x0,z1-z0,0,z1-z0,0x9b9794);
+        texturedQuad(out,new Point(middle,ridge,z0),new Point(x1,edge,z0),
+            new Point(x1,edge,z1),new Point(middle,ridge,z1),
+            material,0,0,x1-x0,0,x1-x0,z1-z0,0,z1-z0,0x8c8583);
+        // Closed triangular gable faces preserve a substantial exterior silhouette.
+        Point a=new Point(x0,edge,z0),b=new Point(middle,ridge,z0),c=new Point(x1,edge,z0);
+        out.add(new Face(a,b,c,0x544b49,material,0,0,1,0,2,0));
+        a=new Point(x1,edge,z1);b=new Point(middle,ridge,z1);c=new Point(x0,edge,z1);
+        out.add(new Face(a,b,c,0x544b49,material,0,0,1,0,2,0));
+    }
+    private void siteRoof(List<Face> out,HouseMap map){
+        if(!map.authoredArchitecture())return;
+        double y=map.ceilingHeight();
+        if(map.site()==HouseMap.Site.FARMHOUSE){
+            if(Math.hypot(x-11,z-31)<46)
+                pitchedRoof(out,2,20,2,57,y,2.1,MaterialAtlas.AGED_WOOD);
+            if(Math.hypot(x-43,z-31)<46)
+                pitchedRoof(out,34,54,2,57,y,2.1,MaterialAtlas.AGED_WOOD);
+            if(Math.hypot(x-27,z-30)<46)
+                pitchedRoof(out,20,34,2,60,y,2.7,MaterialAtlas.STONE);
+        }else if(map.site()==HouseMap.Site.SCHOOL){
+            if(Math.hypot(x-14,z-38)<51)
+                pitchedRoof(out,2,27,3,69,y,2.4,MaterialAtlas.STONE);
+            if(Math.hypot(x-55,z-38)<51)
+                pitchedRoof(out,42,68,3,69,y,2.4,MaterialAtlas.STONE);
+            if(Math.hypot(x-34,z-35)<52)
+                pitchedRoof(out,27,43,1,70,y,3.6,MaterialAtlas.STONE);
+        }
+    }
     private List<Face> scene(HouseMap map,int ghostRoom,boolean ghostVisible,int wardRoom,int hunterRoom,
             double clock,List<RemoteBody> others,Apparition apparition,List<WorldMark> marks) {
         List<Face> out=new ArrayList<>(2000);
         double ceiling=map.ceilingHeight();
         for(int zz=1;zz<map.height()-1;zz++)for(int xx=1;xx<map.width()-1;xx++) {
-            if(map.tile(xx,zz)=='#') continue;
+            if(map.tile(xx,zz)=='#'||map.tile(xx,zz)=='W')continue;
             double mx=xx+.5,mz=zz+.5;
             // Far geometry may be skipped only when beyond near/far fog; clipping handles visibility.
             if(Math.hypot(mx-x,mz-z)>14)continue;
@@ -448,13 +512,17 @@ public final class SceneRenderer {
             if(!map.outside(n))texturedQuad(out,new Point(xx,ceiling,zz+1),new Point(xx+1,ceiling,zz+1),
                 new Point(xx+1,ceiling,zz),new Point(xx,ceiling,zz),
                 MaterialAtlas.CEILING,xx,zz+1,xx+1,zz+1,xx+1,zz,xx,zz,0xffffff);
-            if(map.solid(xx-1,zz)&&map.tile(xx-1,zz)!='D')texturedQuad(out,new Point(xx,0,zz+1),new Point(xx,0,zz),new Point(xx,ceiling,zz),new Point(xx,ceiling,zz+1),
+            if(map.tile(xx-1,zz)=='W')architecturalWindow(out,xx,zz,0,ceiling);
+            else if(map.solid(xx-1,zz)&&map.tile(xx-1,zz)!='D')texturedQuad(out,new Point(xx,0,zz+1),new Point(xx,0,zz),new Point(xx,ceiling,zz),new Point(xx,ceiling,zz+1),
                 wall,zz+1,0,zz,0,zz,2.7,zz+1,2.7,0xd0d0d0);
-            if(map.solid(xx+1,zz)&&map.tile(xx+1,zz)!='D')texturedQuad(out,new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx+1,ceiling,zz+1),new Point(xx+1,ceiling,zz),
+            if(map.tile(xx+1,zz)=='W')architecturalWindow(out,xx,zz,1,ceiling);
+            else if(map.solid(xx+1,zz)&&map.tile(xx+1,zz)!='D')texturedQuad(out,new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx+1,ceiling,zz+1),new Point(xx+1,ceiling,zz),
                 wall,zz,0,zz+1,0,zz+1,2.7,zz,2.7,0xfafafa);
-            if(map.solid(xx,zz-1)&&map.tile(xx,zz-1)!='D')texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,ceiling,zz),new Point(xx,ceiling,zz),
+            if(map.tile(xx,zz-1)=='W')architecturalWindow(out,xx,zz,2,ceiling);
+            else if(map.solid(xx,zz-1)&&map.tile(xx,zz-1)!='D')texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,ceiling,zz),new Point(xx,ceiling,zz),
                 wall,xx,0,xx+1,0,xx+1,2.7,xx,2.7,0xe0e0e0);
-            if(map.solid(xx,zz+1)&&map.tile(xx,zz+1)!='D')texturedQuad(out,new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),new Point(xx,ceiling,zz+1),new Point(xx+1,ceiling,zz+1),
+            if(map.tile(xx,zz+1)=='W')architecturalWindow(out,xx,zz,3,ceiling);
+            else if(map.solid(xx,zz+1)&&map.tile(xx,zz+1)!='D')texturedQuad(out,new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),new Point(xx,ceiling,zz+1),new Point(xx+1,ceiling,zz+1),
                 wall,xx+1,0,xx,0,xx,2.7,xx+1,2.7,0xebebeb);
             if(map.tile(xx,zz)=='D'){
                 // Door geometry must occupy the opening, not sit behind wallpaper faces.
@@ -479,6 +547,7 @@ public final class SceneRenderer {
                         map.site()==HouseMap.Site.SCHOOL?0x817c72:0x65564b);
             }
         }
+        siteRoof(out,map);
         // Every investigation room has a discoverable physical rocker and ceiling fixture.
         for(int r=0;r<HouseMap.INDOOR_ROOMS;r++){
             RoomLighting.Switch sw=RoomLighting.location(map,r);

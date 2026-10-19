@@ -9,7 +9,8 @@ and the LAN lobby: FARMHOUSE (Abandoned Farmhouse) and SCHOOL (Ravenshade School
 Both sites have twelve named indoor zones and three exterior/staging zones. They have
 different physical door sockets and corner-room subdivisions, environment-material
 assignments, furnishing compositions, and themed ritual markers. The farmhouse now occupies a 56 × 74 footprint with eighteen physically authored
-doorways. Ravenshade School uses a 70 × 84 footprint with fourteen doorways.
+doorways and twenty-two glazed facade bays. Ravenshade School uses a
+70 × 84 footprint with fourteen doorways and sixty-four glazed bays.
 Both have bays, structural returns, a true circulation spine, separate wings,
 and functionally distinct service rooms. The original house remains 25 × 31,
 with site-specific 3.6 / 4.6 high ceilings for the two larger properties. Every site uses the
@@ -19,7 +20,9 @@ room lighting, weather, equipment, event and ritual simulation.
 This is now the **first physically authored architectural ground-floor pass**.
 `ArchitecturalPlans` constructs explicit walls, asymmetrical bays, room-owned
 walkable geometry, a connected hallway, a foyer/mudroom, service wings, real
-thresholds, and exterior staging. These are not a 3-by-5 arrangement of boxes:
+thresholds, pitched gable roof surfaces, sash-framed windows and exterior
+staging. Window cells remain physical movement blockers and door jambs are preserved.
+These are not a 3-by-5 arrangement of boxes:
 `HouseMap` uses the authored room map to resolve positions, collisions, and
 room-to-room traversal, and host/client door replication uses the exact same
 floor tiles as the renderer. `LanAcoustics` consults the same door locations
