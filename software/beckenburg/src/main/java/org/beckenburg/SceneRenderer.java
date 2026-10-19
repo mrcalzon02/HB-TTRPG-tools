@@ -909,36 +909,43 @@ public final class SceneRenderer {
                 mountedLamp(castle,new CastleHubDecor.Light("light_switch_1",
                     "light_switch_1",sw.x(),sw.y(),sw.z(),.85,sw.yaw(),
                     CastleHubDecor.Mount.WALL),true);
+        // Each station is a distinct source-backed room fixture, NOT a
+        // uniformly duplicated, untextured beige box. Their source mesh sizes
+        // and height offsets match the authored physical interaction sockets.
         for(CastleHubMap.Station station:CastleHubMap.Station.values()){
             if(Math.hypot(station.x-x,station.z-z)>16)continue;
             double px=station.x,pz=station.z;
-            int finish=switch(station){
-                case ARMORY_UV->0x8c6eaf;case ARMORY_SALT->0xc5b78e;
-                case ROLE->0x64545f;case CONTRACT->0x977049;
-                case EXPEDITION->0x758d77;case MULTIPLAYER->0x5f8da4;
-                case SPECTRAL->0x8266a1;
-            };
-            box(castle,px-.58,.06,pz-.40,1.16,.74,.80,0x473d37);
-            box(castle,px-.60,.80,pz-.42,1.20,.10,.84,0x9b8160);
             switch(station){
-                case ARMORY_UV -> imported(castle,"blender_uv_light_1",px,.92,pz,.62,0);
-                case ARMORY_SALT -> imported(castle,"blender_salt_1",px,.92,pz,.75,0);
-                case ROLE -> imported(castle,"book_mp_1",px,.92,pz,.75,0);
-                case CONTRACT -> imported(castle,"open_book_mp_1",px,.92,pz,.75,0);
-                case EXPEDITION -> imported(castle,"handheld_tablet_1",px,.92,pz,.8,0);
-                case MULTIPLAYER -> {
-                    // One complete visible terminal, assembled from three
-                    // separate approved GLBs at the existing multiplayer socket.
-                    imported(castle,"pc_mp_1",px-.38,.92,pz-.16,.66,0);
-                    imported(castle,"monitoring_screen_mp_1",px+.20,.94,pz-.19,.64,0);
-                    imported(castle,"pc_keyboard_mp_1",px,.915,pz+.25,.48,0);
-                    // The indexed asset pack has no individual mouse mesh yet.
-                    // A small correctly placed shell is preferable to silently
-                    // omitting the mouse from the physical input workstation.
-                    box(castle,px+.41,.915,pz+.26,.14,.062,.19,0x373942);
-                    box(castle,px+.475,.97,pz+.27,.009,.012,.07,0x807f7b);
+                case ARMORY_UV -> {
+                    imported(castle,"display_cabinet_mp_2",px,0,pz,.72,0);
+                    imported(castle,"blender_uv_light_1",px,1.03,pz,.53,0);
                 }
-                case SPECTRAL -> imported(castle,"cross_mp_2",px,.92,pz,.9,0);
+                case ARMORY_SALT -> {
+                    imported(castle,"display_cabinet_mp_2",px,0,pz,.72,0);
+                    imported(castle,"blender_salt_1",px,1.03,pz,.53,0);
+                }
+                case ROLE -> imported(castle,"wardrobe_mp_1",px,0,pz,.9,Math.PI);
+                case CONTRACT -> {
+                    imported(castle,"dinner_table_1",px,0,pz,.74,0);
+                    imported(castle,"open_book_mp_1",px,.67,pz,.48,0);
+                }
+                case EXPEDITION -> {
+                    imported(castle,"tv_table_1_4",px,0,pz,.82,0);
+                    imported(castle,"handheld_tablet_1",px,.62,pz,.60,0);
+                }
+                case MULTIPLAYER -> {
+                    // A properly dimensioned desk supports all visible
+                    // peripherals; the computer tower rests on the floor.
+                    imported(castle,"tv_table_1_4",px,0,pz,.83,0);
+                    imported(castle,"pc_mp_1",px-.55,.02,pz-.16,.80,0);
+                    imported(castle,"monitoring_screen_mp_1",px+.14,.82,pz-.10,.70,0);
+                    imported(castle,"pc_keyboard_mp_1",px-.06,.615,pz+.18,.58,0);
+                    box(castle,px+.42,.62,pz+.23,.10,.052,.16,0x373942);
+                }
+                case SPECTRAL -> {
+                    imported(castle,"display_cabinet_mp_2",px,0,pz,.78,0);
+                    imported(castle,"cross_mp_2",px,1.06,pz,.65,0);
+                }
             }
         }
         // Purchased source-backed fixtures occupy authored locations and match hub collision.
