@@ -211,11 +211,12 @@ public final class SceneRenderer {
 
     private static void vanModel(List<Face> faces,VanStaging van,java.util.Set<EquipmentLoadout.Item> stock){
         double w=VanStaging.HALF_WIDTH,f=VanStaging.FRONT,r=VanStaging.REAR;
-        // Three obstructing wall segments surround a traversable open cargo entrance.
-        vanBox(faces,van,-w,0,f,.16,2.27,r-f,MaterialAtlas.IRON);
-        vanBox(faces,van,w-.16,0,f,.16,2.27,r-f,MaterialAtlas.IRON);
+        // CC0 GGBot Car 08 is the physical van body. Its integrated rear closure
+        // was removed from the converted mesh, leaving the actual cargo opening.
+        // Interior collision, stations and hinged doors remain VanStaging-owned.
+        imported(faces,"ggbot_car08_van_shell",van.placement().x(),.005,
+            van.placement().z(),1.0,van.placement().yaw());
         vanBox(faces,van,-w,0,r-.16,w*2,2.27,.16,MaterialAtlas.AGED_WOOD);
-        vanBox(faces,van,-w,2.27,f,w*2,.17,r-f,MaterialAtlas.IRON);
         vanBox(faces,van,-w,.015,f,w*2,.04,r-f,MaterialAtlas.CONCRETE);
         // Side-mounted lockers, distinct coloured monitor/briefing boards and ramps.
         vanBox(faces,van,-1.90,.20,-1.25,.30,1.45,1.00,MaterialAtlas.AGED_WOOD);
@@ -257,9 +258,11 @@ public final class SceneRenderer {
             };
             VanStaging.Position v=van.world(1.48,lz);
             String source=switch(item){
-                case EMF->"dosimeter_1";
-                case THERMOMETER->"handheld_tablet_1";
-                case SPIRIT_BOX->"walkie_talkie_2";
+                case EMF->"exploration_emf_detector";
+                case THERMOMETER->"exploration_thermometer";
+                case SPIRIT_BOX->"exploration_spirit_box";
+                case UV_LAMP->"exploration_flashlight_poquet";
+                case PHOTO_CAMERA->"exploration_photo_camera";
                 default->null;
             };
             if(source!=null)
@@ -275,6 +278,25 @@ public final class SceneRenderer {
         // only appear in the world when a working deployed sensor is activated.
         VanStaging.Position projector=van.world(.87,-1.4);
         imported(faces,"vape_mp_1",projector.x(),.89,projector.z(),1.9,van.placement().yaw());
+    }
+
+    /** Minimal real CC0 streetscape. Geometry is deliberately deterministic:
+     * noninteractive scenery never becomes a ghost evidence source.
+     */
+    private static void roadsideModels(List<Face> out,HouseMap map){
+        // Road runs east/west across the open south edge; leave the van's access clear.
+        for(int i=0;i<5;i++){
+            double mx=3.1+i*4.6;
+            imported(out,i==2?"kenney_road_asphalt_damaged":
+                "kenney_road_asphalt_straight",mx,.012,28.1,
+                i==2?4.35:2.30,Math.PI/2);
+        }
+        imported(out,"ggbot_car01",5.1,.08,28.1,1,Math.PI/2);
+        imported(out,"ggbot_car07",12.2,.08,28.1,1,-Math.PI/2);
+        imported(out,"kenney_detail_light_single",3.2,.08,24.9,2.25,0);
+        imported(out,"kenney_detail_dumpster_closed",14.2,.06,24.7,1.65,0);
+        imported(out,"kenney_detail_bench",9.1,.07,25.1,1.75,Math.PI/2);
+        imported(out,"kenney_detail_barrier_type_a",7.8,.06,26.0,1.3,0);
     }
 
     /** Three visually distinct small PS-era rite installations at fixed room sockets. */
@@ -398,6 +420,9 @@ public final class SceneRenderer {
         }
         if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14)
             vanModel(out,map.van(),rackStock);
+        // Road and traffic props are exterior-only. Nearby rooms never instantiate
+        // a second duplicate set of these global world objects.
+        if(z>20.0&&z<31.0)roadsideModels(out,map);
         // Actual mounted PSX Tier I shell emits a visible grid. Empty projected
         // dots are normal equipment light; only host-authored PASS creates a ghost silhouette.
         for(LanDotsProjectors.Placement placement:dotsPositions.values()){
