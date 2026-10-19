@@ -34,19 +34,21 @@ public final class CastleHubMap {
         carve(10,12,20,33);// broad open court / departure platforms
         carve(21,12,27,33);// eastern operations and network wing
         carve(29,18,42,33);// north-east workshop and service extension
-        for(int z=1;z<=10;z++)if(z!=6){grid[z][10]='#';grid[z][19]='#';}
-        for(int x=1;x<=27;x++)if(x!=5&&x!=13&&x!=22)grid[11][x]='#';
-        for(int x:new int[]{5,13,22})grid[11][x]='.';
-        for(int z=12;z<=32;z++)if(z!=16&&z!=25){
+        // Collision raster only. The independent architectural plan owns all
+        // visible surfaces, portal widths, floors and mounting coordinates.
+        for(int z=1;z<=10;z++)if(z<5||z>7){grid[z][10]='#';grid[z][19]='#';}
+        for(int x=1;x<=27;x++)grid[11][x]='#';
+        for(int xx:new int[]{5,13,22})
+            for(int dx=-1;dx<=1;dx++)grid[11][xx+dx]='.';
+        for(int z=12;z<=32;z++)if(z<15||z>17&&z<24||z>26){
             grid[z][10]='#';grid[z][20]='#';
         }
-        // Two physical service passages, not decorative unreachable side rooms.
         for(int z=4;z<=10;z++)grid[z][28]='#';
-        grid[7][28]='.';
+        for(int z=6;z<=8;z++)grid[z][28]='.';
         for(int z=18;z<=33;z++)grid[z][28]='#';
-        grid[24][28]='.';
+        for(int z=23;z<=25;z++)grid[z][28]='.';
         for(int x=29;x<=42;x++)grid[17][x]='#';
-        grid[17][35]='.';
+        for(int x=34;x<=36;x++)grid[17][x]='.';
     }
     private void carve(int x0,int z0,int x1,int z1){
         for(int z=z0;z<=z1;z++)for(int x=x0;x<=x1;x++)grid[z][x]='.';
@@ -108,6 +110,13 @@ public final class CastleHubMap {
             if(Math.abs(x-item.x())<item.halfWidth()+r &&
                Math.abs(z-item.z())<item.halfDepth()+r)return false;
         return true;
+    }
+    /** True three-dimensional walk path: landings and upper corridors ignore
+     * solid ground-wall cells only when physically above their lintels. */
+    public boolean traversable(double x,double z,double elevation){
+        if(!Double.isFinite(elevation)||elevation<0)return false;
+        if(elevation>2.0&&CastleHubArchitecturalPlan.upperWalkable(x,z))return true;
+        return traversable(x,z);
     }
     /** Interaction uses actual position and camera orientation, not a free-floating button. */
     public Station aimed(double playerX,double playerZ,double yaw){
