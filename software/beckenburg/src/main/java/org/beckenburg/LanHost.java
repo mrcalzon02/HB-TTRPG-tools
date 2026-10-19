@@ -64,6 +64,7 @@ public final class LanHost implements AutoCloseable {
     private final int[] lastGhostFootstepCueTick=new int[HUNTERS];
     private final int[] lastVoiceCueTick=new int[HUNTERS];
     private LanTelegraphedStrike.Pending pendingStrike;
+    private int huntUntilTick=-1;
     private final String bindAddress;
 
     public LanHost(String ip,int port)throws IOException{
@@ -447,6 +448,9 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,supplies[peer.slot].frame());
                     sendEquipmentState(peer);
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
+                    if(mission.ritualProgress()>=0&&mission.activeRite()!=null)
+                        reply(peer,"RITUAL|STARTED|"+mission.activeRite());
+                    if(huntUntilTick>tick)reply(peer,"HUNT|START|"+(huntUntilTick-tick));
                     reply(peer,"HIDECONFIG|"+contract.hidingSpots());
                     reply(peer,"LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
                     // Recover only this investigator's current hiding and imminent threat.
@@ -1313,6 +1317,9 @@ public final class LanHost implements AutoCloseable {
         };
         if(cue!=null)broadcastGhostSound(cue);
         if(result.action()!=GhostDomain.Action.STRIKE){distributeEffect(result);return;}
+        // Actual accepted hostile action begins/extends the host-owned hunt window.
+        huntUntilTick=Math.max(huntUntilTick,tick+70);
+        notifyAllPeers("HUNT|START|70");
         boolean[] acquired=strikeVictims(),immediate=new boolean[HUNTERS];
         int target=-1;
         for(int i=0;i<HUNTERS;i++)if(acquired[i]){
@@ -1395,6 +1402,12 @@ public final class LanHost implements AutoCloseable {
         try{tick++;
             expireDisconnectedSeats();
             if(!running)return;
+            if(huntUntilTick>=0&&tick>=huntUntilTick){
+                huntUntilTick=-1;notifyAllPeers("HUNT|END");
+            }else if(huntUntilTick>tick&&tick%10==0){
+                // Re-synchronize recently entered 3D clients, bounded to 1 packet/second.
+                notifyAllPeers("HUNT|START|"+(huntUntilTick-tick));
+            }
             int audible=-1,occupants=0;
             for(int i=0;i<HUNTERS;i++)if((seats[i]!=null||reserved[i]!=null)&&mission.alive(i)
                     &&hunterRooms[i]==ghost.room()){audible=hunterRooms[i];occupants++;}
