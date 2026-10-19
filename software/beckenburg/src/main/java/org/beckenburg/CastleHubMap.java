@@ -122,7 +122,13 @@ public final class CastleHubMap {
      * solid ground-wall cells only when physically above their lintels. */
     public boolean traversable(double x,double z,double elevation){
         if(!Double.isFinite(elevation)||elevation<0)return false;
-        if(elevation>2.0&&CastleHubArchitecturalPlan.upperWalkable(x,z))return true;
+        if(elevation>2.0&&CastleHubArchitecturalPlan.upperWalkable(x,z)){
+            double radius=.21;
+            for(Furnishing item:CastleHubDecor.UPPER_FURNISHINGS)
+                if(Math.abs(x-item.x())<item.halfWidth()+radius&&
+                    Math.abs(z-item.z())<item.halfDepth()+radius)return false;
+            return true;
+        }
         return traversable(x,z);
     }
     /** Interaction uses actual position and camera orientation, not a free-floating button. */
