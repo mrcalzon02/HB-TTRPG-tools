@@ -706,8 +706,11 @@ public final class SceneRenderer {
             }
         return depthVisible?new Nameplate((int)Math.round(labelX),(int)Math.round(labelY)):null;
     }
-    public record Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress,boolean orb,boolean greenTint) {
-        public Apparition(double x,double z){this(x,z,LanGhostAnimation.Phase.LURK,0,0,false,false);}
+    public record Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress,boolean orb,boolean greenTint,String appearance) {
+        public Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress,boolean orb,boolean greenTint){
+            this(x,z,phase,heading,progress,orb,greenTint,"banshee");
+        }
+        public Apparition(double x,double z){this(x,z,LanGhostAnimation.Phase.LURK,0,0,false,false,"banshee");}
         public Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress){
             this(x,z,phase,heading,progress,false,false);
         }
@@ -716,7 +719,9 @@ public final class SceneRenderer {
         }
         public Apparition {
             if(!Double.isFinite(x)||!Double.isFinite(z)||phase==null||heading<0||heading>=360
-                    ||progress<0||progress>100)throw new IllegalArgumentException("invalid apparition");
+                    ||progress<0||progress>100||appearance==null
+                    ||!appearance.matches("[a-z_]{3,32}"))
+                throw new IllegalArgumentException("invalid apparition");
         }
     }
     /** Castle hub renders with the same perspective, clipping and textured depth buffer as missions. */
@@ -934,9 +939,11 @@ public final class SceneRenderer {
                 renderSpiritOrb(gx,gz,.98+.18*Math.sin(clock*4),clock,apparition.greenTint());
             }else{
                 DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,gx,gz,
-                    apparition==null?0:apparition.heading(),"banshee",1.95*stature,1.16,
+                    apparition==null?0:apparition.heading(),
+                    apparition==null?"banshee":apparition.appearance(),1.95*stature,1.16,
                     .09*Math.sin(clock*3)+lift,alpha,lamp,renderWidth,renderHeight,focal,
-                     apparition!=null&&apparition.greenTint());
+                    apparition!=null&&apparition.greenTint(),phase,
+                    Math.floorMod((int)Math.floor(clock*10),4));
             }
         }
         if(hunterRoom>=0){
