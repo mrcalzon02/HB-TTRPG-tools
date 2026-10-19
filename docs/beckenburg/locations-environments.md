@@ -43,7 +43,9 @@ Rooms: front approach and van staging, foyer, hallway, living room, kitchen, bat
 
 **Churches:** naves, crypts, towers, vestry, graveyard and consecration/ritual contrasts; role-sensitive but not Cleric-exclusive success.
 
-## The Beckenburg Castle headquarters
+## Castle Beckenburg — headquarters and player lobby
+**Canonical setting name:** **Castle Beckenburg**. The working game title, **The Beckenburg Project**, is named after this castle. Castle Beckenburg is the persistent player lobby and supernatural investigation headquarters: a relatively peaceful refuge between dangerous expeditions. Use **Castle Beckenburg** for the location in player-facing text, maps, lore and future environment work; use **The Beckenburg Project** for the game/project identity. This is a naming and worldbuilding clarification, not a claim that all castle features are implemented.
+
 A persistent navigable medieval castle adapted with present-day expedition technology: great hall briefing, map/assignment office, equipment armory, machine and chemistry workshop, archive and ghost-lore study, chapel/sanctuary, infirmary, captured relic vault, radio/network operation room and restoration gallery. The castle visually progresses as reclaimed sites provide materials, staff and reputation. Castle interactions must not block fast mission matchmaking; players may interact with short functional menus. Host owns authoritative campaign state for LAN and exposes mission eligibility.
 
 ## 3D art and environment quality targets
