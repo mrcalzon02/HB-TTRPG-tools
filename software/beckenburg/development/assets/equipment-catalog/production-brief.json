@@ -1,0 +1,903 @@
+{
+  "items": [
+    {
+      "id": "DOTS_PROJECTOR",
+      "label": "Pattern projector",
+      "source": "vape_mp_1",
+      "source_sha256": "fea628ab07a439881b6b9b0c85ec3cd10aec3612b6d97ad57062bd35cab24003",
+      "atlas": "development/assets/equipment-catalog/textures/dots_projector.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "EMF_READER",
+      "label": "EMF reader (0\u00e2\u20ac\u201c10; zero for suppression)",
+      "source": "exploration_emf_detector",
+      "source_sha256": "dede8e0acdd36f11c9e71d16681ae6f0867c675bfc54a190867150e063a984de",
+      "atlas": "development/assets/equipment-catalog/textures/emf_reader.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": "exploration_emf_detector"
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "FLASHLIGHT",
+      "label": "Flashlight",
+      "source": "exploration_flashlight",
+      "source_sha256": "b5e66a349601d196e3bfef0e079db04d1f8a0607f2821e3704b80cb9750f2872",
+      "atlas": "development/assets/equipment-catalog/textures/flashlight.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": "exploration_flashlight_poquet"
+        },
+        {
+          "tier": 2,
+          "reuse": "exploration_flashlight"
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "GHOST_WRITING_BOOK",
+      "label": "Ghost writing book",
+      "source": null,
+      "source_sha256": null,
+      "atlas": "development/assets/equipment-catalog/textures/ghost_writing_book.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": "book_mp_1"
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "SPIRIT_BOX",
+      "label": "Spirit box",
+      "source": "exploration_spirit_box",
+      "source_sha256": "6723a25dd5326cbe7d03ef399e8bafebb62b9a6bbb5a9353d5fe26d1b5056d6f",
+      "atlas": "development/assets/equipment-catalog/textures/spirit_box.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": "exploration_spirit_box"
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "THERMOMETER",
+      "label": "Thermometer (\u00c2\u00b0C/\u00c2\u00b0F)",
+      "source": "exploration_thermometer",
+      "source_sha256": "cb5d99b92c069de398b59cb4babb8562de6040cef30a41445276dc47b90ef5cf",
+      "atlas": "development/assets/equipment-catalog/textures/thermometer.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": "exploration_thermometer"
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "UV_LIGHT",
+      "label": "UV light",
+      "source": "exploration_flashlight_poquet",
+      "source_sha256": "27ba9bbb761edacac6b4385046b28dabd044b9331a5584ddc2a40aebfb9e4e8e",
+      "atlas": "development/assets/equipment-catalog/textures/uv_light.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "VIDEO_CAMERA",
+      "label": "Video camera / remote feed",
+      "source": "exploration_thermal_camera",
+      "source_sha256": "3cfe62a955819771de0bc4df11fc5a6a9d4239afe8170a29f5979b3c4ccc3f56",
+      "atlas": "development/assets/equipment-catalog/textures/video_camera.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "CRUCIFIX",
+      "label": "Protective cross",
+      "source": null,
+      "source_sha256": null,
+      "atlas": "development/assets/equipment-catalog/textures/crucifix.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": "cross_mp_2"
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "FIRELIGHT",
+      "label": "Firelight / candle",
+      "source": null,
+      "source_sha256": null,
+      "atlas": "development/assets/equipment-catalog/textures/firelight.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "HEAD_GEAR",
+      "label": "Head camera / helmet light",
+      "source": "exploration_thermal_camera",
+      "source_sha256": "3cfe62a955819771de0bc4df11fc5a6a9d4239afe8170a29f5979b3c4ccc3f56",
+      "atlas": "development/assets/equipment-catalog/textures/head_gear.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "IGNITER",
+      "label": "Igniter",
+      "source": null,
+      "source_sha256": null,
+      "atlas": "development/assets/equipment-catalog/textures/igniter.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "INCENSE",
+      "label": "Incense / smoke dispersal",
+      "source": null,
+      "source_sha256": null,
+      "atlas": "development/assets/equipment-catalog/textures/incense.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "MOTION_SENSOR",
+      "label": "Motion sensor",
+      "source": "exploration_emf_detector",
+      "source_sha256": "dede8e0acdd36f11c9e71d16681ae6f0867c675bfc54a190867150e063a984de",
+      "atlas": "development/assets/equipment-catalog/textures/motion_sensor.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "PARABOLIC_MICROPHONE",
+      "label": "Parabolic microphone",
+      "source": "exploration_voice_recorder",
+      "source_sha256": "65fced393741c66dc304a0b6d51c02da2bcd92da7939e1d86b3d96be2a9a2ebe",
+      "atlas": "development/assets/equipment-catalog/textures/parabolic_microphone.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "PHOTO_CAMERA",
+      "label": "Photo camera",
+      "source": "exploration_photo_camera",
+      "source_sha256": "09640b60f2f79c7dcdbfd9a9c2a821f3af9d2b01b268c1575bcf7a1c42208281",
+      "atlas": "development/assets/equipment-catalog/textures/photo_camera.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": "exploration_photo_camera"
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "SALT",
+      "label": "Salt",
+      "source": null,
+      "source_sha256": null,
+      "atlas": "development/assets/equipment-catalog/textures/salt.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "SANITY_MEDICATION",
+      "label": "Sanity treatment",
+      "source": null,
+      "source_sha256": null,
+      "atlas": "development/assets/equipment-catalog/textures/sanity_medication.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "SOUND_RECORDER",
+      "label": "Sound recorder",
+      "source": null,
+      "atlas": null,
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": "blender_sound_recorder_1"
+        },
+        {
+          "tier": 2,
+          "reuse": "blender_sound_recorder_2"
+        },
+        {
+          "tier": 3,
+          "reuse": "blender_sound_recorder_3"
+        }
+      ]
+    },
+    {
+      "id": "SOUND_SENSOR",
+      "label": "Sound sensor",
+      "source": "exploration_voice_recorder",
+      "source_sha256": "65fced393741c66dc304a0b6d51c02da2bcd92da7939e1d86b3d96be2a9a2ebe",
+      "atlas": "development/assets/equipment-catalog/textures/sound_sensor.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "TRIPOD",
+      "label": "Tripod / camera mount",
+      "source": null,
+      "source_sha256": null,
+      "atlas": "development/assets/equipment-catalog/textures/tripod.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "CLIPBOARDS",
+      "label": "Task clipboards",
+      "source": "exploration_thermal_camera",
+      "source_sha256": "3cfe62a955819771de0bc4df11fc5a6a9d4239afe8170a29f5979b3c4ccc3f56",
+      "atlas": "development/assets/equipment-catalog/textures/clipboards.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "COMPUTER",
+      "label": "Camera console",
+      "source": "exploration_thermal_camera",
+      "source_sha256": "3cfe62a955819771de0bc4df11fc5a6a9d4239afe8170a29f5979b3c4ccc3f56",
+      "atlas": "development/assets/equipment-catalog/textures/computer.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": "pc_mp_1"
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "OBJECTIVE_BOARD",
+      "label": "Objective board",
+      "source": null,
+      "source_sha256": null,
+      "atlas": "development/assets/equipment-catalog/textures/objective_board.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "SANITY_MONITOR",
+      "label": "Sanity monitor",
+      "source": "exploration_thermal_camera",
+      "source_sha256": "3cfe62a955819771de0bc4df11fc5a6a9d4239afe8170a29f5979b3c4ccc3f56",
+      "atlas": "development/assets/equipment-catalog/textures/sanity_monitor.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": "monitoring_screen_mp_1"
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "SITE_ACTIVITY_MONITOR",
+      "label": "Site activity monitor",
+      "source": "exploration_thermal_camera",
+      "source_sha256": "3cfe62a955819771de0bc4df11fc5a6a9d4239afe8170a29f5979b3c4ccc3f56",
+      "atlas": "development/assets/equipment-catalog/textures/site_activity_monitor.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": "monitoring_screen_mp_1"
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "SITE_MAP",
+      "label": "Location map",
+      "source": "exploration_thermal_camera",
+      "source_sha256": "3cfe62a955819771de0bc4df11fc5a6a9d4239afe8170a29f5979b3c4ccc3f56",
+      "atlas": "development/assets/equipment-catalog/textures/site_map.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "SOUND_MONITOR",
+      "label": "Sound monitor",
+      "source": "exploration_voice_recorder",
+      "source_sha256": "65fced393741c66dc304a0b6d51c02da2bcd92da7939e1d86b3d96be2a9a2ebe",
+      "atlas": "development/assets/equipment-catalog/textures/sound_monitor.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "ANCHOR_TRIANGULATOR",
+      "label": "Anchor triangulator",
+      "source": "exploration_emf_detector",
+      "source_sha256": "dede8e0acdd36f11c9e71d16681ae6f0867c675bfc54a190867150e063a984de",
+      "atlas": "development/assets/equipment-catalog/textures/anchor_triangulator.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "ECTOPLASM_SAMPLER",
+      "label": "Ectoplasm swab and assay",
+      "source": null,
+      "source_sha256": null,
+      "atlas": "development/assets/equipment-catalog/textures/ectoplasm_sampler.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "RESONANCE_TUNER",
+      "label": "Resonance tuning forks",
+      "source": "exploration_voice_recorder",
+      "source_sha256": "65fced393741c66dc304a0b6d51c02da2bcd92da7939e1d86b3d96be2a9a2ebe",
+      "atlas": "development/assets/equipment-catalog/textures/resonance_tuner.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "BAROMETRIC_PROBE",
+      "label": "Barometric anomaly probe",
+      "source": "exploration_emf_detector",
+      "source_sha256": "dede8e0acdd36f11c9e71d16681ae6f0867c675bfc54a190867150e063a984de",
+      "atlas": "development/assets/equipment-catalog/textures/barometric_probe.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "SEISMIC_RECORDER",
+      "label": "Seismic floor recorder",
+      "source": "exploration_voice_recorder",
+      "source_sha256": "65fced393741c66dc304a0b6d51c02da2bcd92da7939e1d86b3d96be2a9a2ebe",
+      "atlas": "development/assets/equipment-catalog/textures/seismic_recorder.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "SPECTRAL_PRISM",
+      "label": "Spectral prism filter",
+      "source": null,
+      "source_sha256": null,
+      "atlas": "development/assets/equipment-catalog/textures/spectral_prism.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "LASER_GRID",
+      "label": "Lidar displacement grid",
+      "source": "exploration_thermal_camera",
+      "source_sha256": "3cfe62a955819771de0bc4df11fc5a6a9d4239afe8170a29f5979b3c4ccc3f56",
+      "atlas": "development/assets/equipment-catalog/textures/laser_grid.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "EMF_ARRAY",
+      "label": "Deployable EMF array",
+      "source": "exploration_emf_detector",
+      "source_sha256": "dede8e0acdd36f11c9e71d16681ae6f0867c675bfc54a190867150e063a984de",
+      "atlas": "development/assets/equipment-catalog/textures/emf_array.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "THERMAL_BEACON",
+      "label": "Remote thermal probe array",
+      "source": "exploration_thermometer",
+      "source_sha256": "cb5d99b92c069de398b59cb4babb8562de6040cef30a41445276dc47b90ef5cf",
+      "atlas": "development/assets/equipment-catalog/textures/thermal_beacon.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "RITUAL_ANCHOR_METER",
+      "label": "Ritual anchor meter",
+      "source": "exploration_emf_detector",
+      "source_sha256": "dede8e0acdd36f11c9e71d16681ae6f0867c675bfc54a190867150e063a984de",
+      "atlas": "development/assets/equipment-catalog/textures/ritual_anchor_meter.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "WARD_STABILITY_PROBE",
+      "label": "Ward stability probe",
+      "source": "exploration_emf_detector",
+      "source_sha256": "dede8e0acdd36f11c9e71d16681ae6f0867c675bfc54a190867150e063a984de",
+      "atlas": "development/assets/equipment-catalog/textures/ward_stability_probe.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "OBJECT_IMPRINT_SCANNER",
+      "label": "Anomalous object imprint kit",
+      "source": "exploration_thermal_camera",
+      "source_sha256": "3cfe62a955819771de0bc4df11fc5a6a9d4239afe8170a29f5979b3c4ccc3f56",
+      "atlas": "development/assets/equipment-catalog/textures/object_imprint_scanner.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "CHALK_SIGIL_KIT",
+      "label": "Chalk and portable sigils",
+      "source": null,
+      "source_sha256": null,
+      "atlas": "development/assets/equipment-catalog/textures/chalk_sigil_kit.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    },
+    {
+      "id": "SPECTRAL_FREQUENCY_ANALYZER",
+      "label": "Spectral frequency analyzer",
+      "source": "exploration_voice_recorder",
+      "source_sha256": "65fced393741c66dc304a0b6d51c02da2bcd92da7939e1d86b3d96be2a9a2ebe",
+      "atlas": "development/assets/equipment-catalog/textures/spectral_frequency_analyzer.png",
+      "stages": [
+        {
+          "tier": 1,
+          "reuse": null
+        },
+        {
+          "tier": 2,
+          "reuse": null
+        },
+        {
+          "tier": 3,
+          "reuse": null
+        }
+      ]
+    }
+  ],
+  "palette": [
+    "#252c30",
+    "#495253",
+    "#aab4ac",
+    "#131c20",
+    "#79bba5",
+    "#a34438",
+    "#c6ae70",
+    "#ded4b5",
+    "#5c4d39",
+    "#76583e",
+    "#668896",
+    "#5f477f",
+    "#ddd9cc",
+    "#34393b",
+    "#c9c0a0",
+    "#90c2d1"
+  ]
+}
