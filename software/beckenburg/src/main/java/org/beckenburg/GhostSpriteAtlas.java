@@ -67,12 +67,15 @@ final class GhostSpriteAtlas {
                 try{
                     sheet=ImageIO.read(new ByteArrayInputStream(PNGS.get(path)));
                 }catch(IOException e){throw new IllegalStateException("Cannot decode sprite: "+path,e);}
-                if(sheet==null||sheet.getWidth()!=CELL_W*COLS||sheet.getHeight()!=CELL_H*ROWS
+                if(sheet==null
+                        ||!(sheet.getWidth()==CELL_W*COLS&&sheet.getHeight()==CELL_H*ROWS
+                            ||sheet.getWidth()==256&&sheet.getHeight()==896)
                         ||!sheet.getColorModel().hasAlpha())
                     throw new IllegalStateException("Invalid atlas geometry/alpha: "+path);
                 CACHE.put(path,sheet);
             }
-            return sheet.getSubimage(step*CELL_W,row*CELL_H,CELL_W,CELL_H);
+            int width=sheet.getWidth()/COLS,height=sheet.getHeight()/ROWS;
+            return sheet.getSubimage(step*width,row*height,width,height);
         }
     }
     private static String key(String character,int facing){
