@@ -24,6 +24,19 @@ public final class SoundCoverageTest {
             byte[] pan=LanAudio.synthesize(new LanSound.CueEvent(cue,100,80,1));
             if(pan.length!=pcm.length)throw new AssertionError("Pan changed duration "+cue);
         }
+        // The two provenance-checked NOX clips are real packaged source recordings,
+        // not the synthetic importer fixture; build scripts MUST stage both.
+        for(LanSound.Cue cue:new LanSound.Cue[]{LanSound.Cue.PICKUP,LanSound.Cue.DEVICE_ON}){
+            if(!RecordedSfx.isPackaged(cue))
+                throw new AssertionError("Required decoded NOX recording missing: "+cue);
+            byte[] real=RecordedSfx.render(new LanSound.CueEvent(cue,0,75,2),80);
+            if(real==null||real.length<800||real.length>16000*4
+                    ||real.length%4!=0)
+                throw new AssertionError("Invalid short recorded NOX clip "+cue);
+            boolean nonzero=false;
+            for(byte sample:real)if(sample!=0){nonzero=true;break;}
+            if(!nonzero)throw new AssertionError("Silent NOX recording "+cue);
+        }
         JButton button=new JButton("PLAY");
         GameSfx.button(button);
         GameSfx.button(button);
