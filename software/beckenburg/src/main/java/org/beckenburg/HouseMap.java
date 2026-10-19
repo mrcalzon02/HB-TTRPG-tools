@@ -137,11 +137,21 @@ public final class HouseMap {
     public boolean traversable(double x,double z){
         if(!Double.isFinite(x)||!Double.isFinite(z))return false;
         double r=.19;
-        return !van.collides(x,z,r)
-            && !solid((int)Math.floor(x-r),(int)Math.floor(z-r))
-            && !solid((int)Math.floor(x+r),(int)Math.floor(z-r))
-            && !solid((int)Math.floor(x-r),(int)Math.floor(z+r))
-            && !solid((int)Math.floor(x+r),(int)Math.floor(z+r));
+        if(van.collides(x,z,r)
+            ||solid((int)Math.floor(x-r),(int)Math.floor(z-r))
+            ||solid((int)Math.floor(x+r),(int)Math.floor(z-r))
+            ||solid((int)Math.floor(x-r),(int)Math.floor(z+r))
+            ||solid((int)Math.floor(x+r),(int)Math.floor(z+r)))return false;
+        if(site!=Site.HOUSE){
+            int room=roomAt(x,z);
+            if(room>=0&&room<ROOM_COUNT)for(InvestigationSites.Prop prop:
+                    InvestigationSites.props(site,room)){
+                double cx=centerX(room)+prop.dx(),cz=centerZ(room)+prop.dz();
+                if(Math.hypot(x-cx,z-cz)<InvestigationSites.radius(prop)+r)
+                    return false;
+            }
+        }
+        return true;
     }
     public boolean toggleNearestDoor(double x,double z){
         if(!Double.isFinite(x)||!Double.isFinite(z))return false;

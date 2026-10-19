@@ -32,6 +32,14 @@ public final class InvestigationSitesTest {
                 }
             }
             ok(placed>=20&&meshes.size()>=6,"map uses substantial diverse 3D prop assets");
+            for(int room=0;room<HouseMap.ROOM_COUNT;room++)
+                ok(layout.traversable(layout.centerX(room),layout.centerZ(room)),
+                    "authored furnishing never blocks room center / ritual socket");
+            int furnished=site==HouseMap.Site.SCHOOL?1:3;
+            InvestigationSites.Prop first=InvestigationSites.props(site,furnished).get(0);
+            ok(!layout.traversable(layout.centerX(furnished)+first.dx(),
+                    layout.centerZ(furnished)+first.dz()),
+                "real furniture has matching host collision, not a visual-only prop");
             ok(!layout.doorSnapshot().equals("0"),"door snapshots valid");
             for(int room=0;room<HouseMap.INDOOR_ROOMS;room++)
                 for(int adjacent:layout.ghostExits(room))

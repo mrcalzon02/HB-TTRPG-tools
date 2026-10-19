@@ -18,6 +18,23 @@ public final class InvestigationSites {
                 throw new IllegalArgumentException("invalid site mesh placement");
         }
     }
+    /** Conservative physical radius relative to the imported model's authored scale.
+     * Host-side collision shares the same placement as render; no false invisible props.
+     */
+    public static double radius(Prop prop){
+        double base=switch(prop.mesh()){
+            case "dinner_table_1"->.82;
+            case "sofa_1"->1.13;
+            case "shelf_mp_6"->.42;
+            case "wardrobe_mp_1"->.64;
+            case "display_cabinet_mp_2"->.54;
+            case "kenney_detail_bench"->.50;
+            case "chair_mp_5"->.38;
+            case "armchair_1"->.53;
+            default->.30;
+        };
+        return base*prop.scale();
+    }
     private static Prop prop(int room,String mesh,double x,double z,double scale,double yaw){
         return new Prop(room,mesh,x,0,z,scale,yaw);
     }

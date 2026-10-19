@@ -49,7 +49,8 @@ public final class LanLobbyWindow extends JFrame {
     private final JButton ready=new JButton("Ready / Unready"),start=new JButton("Start Match"),move=new JButton("Move Room"),use=new JButton("Ghost Action");
 
     public LanLobbyWindow(){
-        super("Beckenburg — LAN House Alpha 1.1");setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        super("Castle Beckenburg — Investigation Contracts");
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         // The standard lobby gets the same original-asset skin as the main menu.
         for(JButton button:new JButton[]{hostInfo,tuneContract,sendLobbyChat,reconnect,enter3D,ready,start,
@@ -495,6 +496,7 @@ public final class LanLobbyWindow extends JFrame {
             myRoom=HouseMap.EXTRACTION_ROOM;
             role.setEnabled(!localHostSurvives);ghostJoined=false;remoteLook=null;
             roomPassword.setEnabled(hosted==null);
+            siteChoice.setEnabled(hosted==null);
             lobbyLock.setEnabled(localHostSurvives);
             lobbyLock.setSelected(localHostSurvives&&hosted.lobbyLocked());
             hostInfo.setEnabled(localHostSurvives);
