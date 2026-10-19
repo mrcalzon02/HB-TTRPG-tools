@@ -720,8 +720,11 @@ public final class LanHost implements AutoCloseable {
                                 notifyHunters(placed.frame());
                             }
                         }
-                        case "UV_LIGHT" -> reading=counters.recentUv(room,tick)
-                            ?"UV light / recent physical surface trace":"UV light / no visible trace";
+                        case "UV_LIGHT" -> {
+                            int persistence=90+gear.owned(id).ordinal()*35;
+                            reading=counters.recentUv(room,tick,persistence)
+                                ?"UV light / genuine surface trace":"UV light / no visible trace";
+                        }
                         case "FLASHLIGHT","HEAD_GEAR","FIRELIGHT" -> {
                             boolean enabled=gear.toggle(id);
                             reading=switch(id){
