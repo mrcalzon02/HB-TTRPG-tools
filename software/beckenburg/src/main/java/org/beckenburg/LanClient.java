@@ -148,6 +148,9 @@ public final class LanClient implements AutoCloseable {
     }
     /** Private equipment rack transactions; the host alone owns stock/tier and funds. */
     public synchronized void equipmentState()throws IOException{send("GEARSTATE");}
+    public synchronized void serviceEquipment()throws IOException{
+        send("GEARREFILL|"+(++sequence));
+    }
     public synchronized void buyEquipment(String id,EquipmentTiers.Tier tier)throws IOException{
         EquipmentRegistry.get(id);Objects.requireNonNull(tier);
         send("GEARBUY|"+id+"|"+tier+"|"+(++sequence));
