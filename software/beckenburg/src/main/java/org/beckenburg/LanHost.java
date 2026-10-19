@@ -867,12 +867,20 @@ public final class LanHost implements AutoCloseable {
                     int eventAge=tick-lastEvidenceEventTick;
                     int eventPower=eventAge>=0&&eventAge<=40
                         ?Math.max(0,lastEvidenceEventPower-eventAge/7):0;
+                    // A nearby ghost isn't itself a talking radio. Only a real
+                    // WHISPER/SIGNATURE with remaining strength can yield a reply.
+                    boolean actualVoice=lastEvidenceEventAction==GhostDomain.Action.WHISPER
+                        ||lastEvidenceEventAction==GhostDomain.Action.SIGNATURE;
+                    int scanEventRoom=tool==LanCase.Tool.SPIRIT_BOX&&!actualVoice
+                        ?-1:lastEvidenceEventRoom;
+                    int scanEventPower=tool==LanCase.Tool.SPIRIT_BOX&&!actualVoice
+                        ?0:eventPower;
                     LanCase.Report result=peer.worldMode
                         ?mission.scanSpatialMeasured(peer.slot,tool,world.body(peer.slot),
-                            ghost.room(),map,tick,lastEvidenceEventRoom,eventPower,
+                            ghost.room(),map,tick,scanEventRoom,scanEventPower,
                             GhostEvidenceProfile.emfSuppressed(ghostType))
                         :mission.scanMeasured(peer.slot,tool,hunterRooms[peer.slot],
-                            ghost.room(),tick,lastEvidenceEventRoom,eventPower,
+                            ghost.room(),tick,scanEventRoom,scanEventPower,
                             GhostEvidenceProfile.emfSuppressed(ghostType));
                     answerHunter(peer,"SCAN",result);
                     if(result.accepted()){
