@@ -75,7 +75,8 @@ public final class GlbProps {
     }
 
     public static synchronized Model model(String name){
-        if(!Arrays.asList(NAMES).contains(name))throw new IllegalArgumentException("Unapproved model "+name);
+        if(!Arrays.asList(NAMES).contains(name)&&!TierModelForge.generatedName(name))
+            throw new IllegalArgumentException("Unapproved model "+name);
         Model m=cache.get(name);
         if(m!=null)return m;
         String resource="/org/beckenburg/models/"+name+".glb";
