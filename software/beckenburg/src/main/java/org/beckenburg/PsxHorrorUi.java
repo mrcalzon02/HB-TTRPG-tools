@@ -81,6 +81,7 @@ public final class PsxHorrorUi {
     }
     public static JButton button(String label){JButton b=new JButton(label);styleButton(b);return b;}
     public static void styleButton(AbstractButton b){
+        GameSfx.button(b);
         b.setUI(new BasicButtonUI(){
             @Override public void paint(Graphics g,JComponent c){
                 AbstractButton button=(AbstractButton)c;
@@ -110,6 +111,7 @@ public final class PsxHorrorUi {
         @Override public boolean isBorderOpaque(){return false;}
     }
     public static void styleTabs(JTabbedPane tabs){
+        GameSfx.tabs(tabs);
         tabs.setForeground(new Color(227,221,209));tabs.setBackground(new Color(31,35,43));
         tabs.setUI(new BasicTabbedPaneUI(){
             @Override protected void paintTabBackground(Graphics g,int placement,int index,int x,int y,int w,int h,boolean selected){
