@@ -13,7 +13,8 @@ public final class OptionalEvidenceReadingsTest {
         for(GhostIdentity.Type type:GhostIdentity.Type.values()){
             var targets=OptionalEvidenceReadings.planned(type);
             var planned=GhostEvidenceMatrix.forGhost(type).future();
-            ok(targets.size()==2&&planned.size()==2,"two optional families for "+type);
+            ok(targets.size()==planned.size() && targets.size()==(type.ancient()?3:2),
+                "authored detector families for "+type);
             var seen=EnumSet.noneOf(EquipmentRegistry.Evidence.class);
             for(int i=0;i<targets.size();i++){
                 var signal=targets.get(i);
@@ -29,7 +30,7 @@ public final class OptionalEvidenceReadingsTest {
                 count++;
             }
         }
-        ok(count==26,"all 26 extra instrument readings are fully specified");
-        System.out.println("PASS: 13 types x 2 different proposed device readouts with 3-tier instruments");
+        ok(count==56,"all 56 original and Ancient instrument readings are fully specified");
+        System.out.println("PASS: 13 original x 2 and 10 Ancient x 3 event-bound detector readouts");
     }
 }
