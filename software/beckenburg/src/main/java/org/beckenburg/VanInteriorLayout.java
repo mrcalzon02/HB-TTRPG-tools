@@ -25,11 +25,11 @@ public final class VanInteriorLayout {
                     Math.PI/2,Mount.BULKHEAD,"telemetry monitor"),
         // Proper terminal. Real furniture, tower, keyboard and monitor each
         // have specific support heights; no giant bare rectangular podium.
-        new Fixture("tv_table_1_4",-1.22,0,-.95,.92,
+        new Fixture("tv_table_1_4",-1.55,0,-.95,.92,
                     Math.PI/2,Mount.FLOOR,"computer table"),
         new Fixture("pc_mp_1",-1.74,.02,-1.33,.93,
                     Math.PI/2,Mount.FLOOR,"computer tower"),
-        new Fixture("pc_keyboard_mp_1",-1.10,.705,-.94,.83,
+        new Fixture("pc_keyboard_mp_1",-1.52,.685,-.94,.83,
                     0,Mount.FURNITURE,"input keyboard"),
         // Three shallow shelves follow the right-side shell. Every stock
         // socket in VanEquipmentRack is reachable from the central aisle.
@@ -47,6 +47,25 @@ public final class VanInteriorLayout {
             &&p.localZ()>VanStaging.FRONT+.10&&p.localZ()<VanStaging.REAR-.10
             &&p.y()>=0&&p.y()<2.32;
     }
+    /** Physical furniture volumes are measured independently of the old tile
+     * grid, and remain active for both solo and multiplayer movement.
+     */
+    public record Clearance(double x0,double x1,double z0,double z1){}
+    private static final List<Clearance> SOLIDS=List.of(
+        new Clearance(-1.83,-1.27,-1.73,-.17), // wall-facing computer desk
+        new Clearance(1.60,1.94,-1.83,-.85),   // three real equipment shelves
+        new Clearance(1.60,1.94,-.48,.48),
+        new Clearance(1.60,1.94,.78,1.78)
+    );
+    public static boolean collides(double x,double z,double radius){
+        for(Clearance c:SOLIDS){
+            double nearX=Math.max(c.x0(),Math.min(x,c.x1()));
+            double nearZ=Math.max(c.z0(),Math.min(z,c.z1()));
+            if(Math.hypot(x-nearX,z-nearZ)<=radius)return true;
+        }
+        return false;
+    }
+    public static List<Clearance> collisionVolumes(){return SOLIDS;}
     public static double clearAisleHalfWidth(){return .68;}
     public static boolean openAisle(double x,double z){
         return Math.abs(x)<clearAisleHalfWidth()&&
