@@ -105,7 +105,7 @@ public final class InvestigationSession {
     public Outcome outcome() { return outcome; }
     public String message() { return message; }
     public List<String> journal() { return Collections.unmodifiableList(journal); }
-    public String statusLine() { return "INJURY " + (100-health) + "  FEAR " + stress + "  CLUES " + evidence.size() + "/3  WARDS " + wards; }
+    public String statusLine() { return "INJURY " + (100-health) + "  FEAR " + stress + "  MEASURED TOOLS " + measuredTools.size() + "  WARDS " + wards; }
     private void log(String text) {
         message = text;
         journal.add(String.format("%02d:%02d  %s",ticks/600,(ticks/10)%60,text));
