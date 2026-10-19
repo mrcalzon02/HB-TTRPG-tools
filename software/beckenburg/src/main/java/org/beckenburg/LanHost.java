@@ -1391,6 +1391,12 @@ public final class LanHost implements AutoCloseable {
                         notifyHunters("CAMERA|POWER|"+seat+"|0");
                 }
             }
+            // Powered device gauges receive real host charge updates once per second.
+            if(tick%10==0)for(int seat=0;seat<HUNTERS;seat++)if(seats[seat]!=null)
+                for(String id:FieldEquipment.workingTools())
+                    if(equipment[seat].powered(id))
+                        reply(seats[seat],"GEARPOWER|"+id+"|"+
+                            equipment[seat].batterySecondsLeft(id)+"|1");
             if(tick%2==0)broadcastCounters();
             if(tick%5==0){broadcastState();broadcastApparitions();broadcastProgress();broadcastWorld();
                 if(seats[GHOST_SEAT]!=null&&seats[GHOST_SEAT].ghostWorldMode){
