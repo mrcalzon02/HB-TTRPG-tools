@@ -532,7 +532,9 @@ public final class LanHost implements AutoCloseable {
                     int dx=LanProtocol.integer(p.get(1),-100,100),dz=LanProtocol.integer(p.get(2),-100,100);
                     boolean bursting=p.size()==5&&LanProtocol.integer(p.get(3),0,1)==1;
                     acceptGhostPoseSequence(peer,LanProtocol.sequence(p.get(p.size()-1)));
+                    int staminaBefore=ghostPose.stamina();
                     ghostPose.step(dx,dz,tick,bursting);
+                    animation.moved(tick,ghostPose.stamina()<staminaBefore);
                     reply(peer,"ACCEPT|GSTEP");reply(peer,ghostPose.frame(tick));broadcastApparitions();
                     if(ghost.manifested()&&tick%5==0)broadcastGhostSound(LanSound.Cue.FOOTFALL);
                 }
@@ -1567,6 +1569,7 @@ public final class LanHost implements AutoCloseable {
         }
         if(result.action()==GhostDomain.Action.DRIFT)broadcastGhostSound(LanSound.Cue.GHOST_DRIFT);
         if(result.action()==GhostDomain.Action.MANIFEST)animation.manifested(tick);
+        if(result.action()==GhostDomain.Action.SIGNATURE)animation.signature(tick);
         RoomLighting.Interference disruption=switch(result.action()){
             case WHISPER->RoomLighting.Interference.MINOR;
             case DISTURB->RoomLighting.Interference.MODERATE;
@@ -1909,7 +1912,9 @@ public final class LanHost implements AutoCloseable {
                 if(impulse==null)impulse=ai.approach(seen,ghostPose.pose());
                 if(impulse!=null){try{
                     boolean burst=frenzy.raging()||ai.memory(tick)!=null;
+                    int staminaBefore=ghostPose.stamina();
                     ghostPose.step(impulse.dx(),impulse.dz(),tick,burst);
+                    animation.moved(tick,ghostPose.stamina()<staminaBefore);
                     broadcastApparitions();
                     if(ghost.manifested()&&tick%5==0)broadcastGhostSound(LanSound.Cue.FOOTFALL);}
                     catch(IllegalArgumentException blocked){ /* Same physical rejection as a human ghost. */ }}
