@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "archive": {
+    "name": "Models.zip",
+    "drive_id": "1WNdSqT0wtxvYy6HZ2OCU3vWHUt-uFZw8",
+    "drive_url": "https://drive.google.com/file/d/1WNdSqT0wtxvYy6HZ2OCU3vWHUt-uFZw8/view",
+    "parent_folder_id": "1IW8c_FO1YkkLkVWQyRqhKmRBd1S5Ql8R",
+    "mime_type": "application/x-zip-compressed",
+    "size_bytes": 1262869330,
+    "created_time": "2026-10-19T03:03:33.799Z",
+    "modified_time": "2026-10-19T02:50:43.285Z",
+    "rights": "Owner confirms full rights to hand-authored and generated material; redistribution scope must follow game-specific selections.",
+    "original_policy": "Keep full archive in private Beckenburg Drive; select individual production assets, not a raw-pack dump."
+  },
+  "inspection": {
+    "date": "2026-10-18 local",
+    "status": "blocked-on-full-archive-transfer",
+    "provider_limit_bytes": 268435456,
+    "actual_file_bytes": 1262869330,
+    "known_member_count": null,
+    "known_formats": null,
+    "unverified_members": [],
+    "error": "Connected Google Drive download action rejected 1262869330 bytes: file exceeds 268435456-byte limit.",
+    "scanner": "software/beckenburg/assets/tools/index_owned_models_zip.py",
+    "instructions": "After local Google Drive download: python3 software/beckenburg/assets/tools/index_owned_models_zip.py /path/to/Models.zip --output /path/to/models-zip-inventory.json. Review output before selecting game assets.",
+    "verified_model_geometry_count": 0
+  },
+  "candidate_games": [
+    "breakwater-battery",
+    "between-deliveries-red-ledger",
+    "omega-front",
+    "beckenburg",
+    "gumball-armada",
+    "ministry-lantern-desk"
+  ],
+  "game_import_policy": {
+    "check_units_and_orientation": true,
+    "rig_skeleton_and_animations_where_applicable": true,
+    "inspect_texture_license_and_ATLAS": true,
+    "check_triangle_budget_and_performance": true,
+    "verify_collision_and_interactions": true,
+    "read_back_runtime_game_asset": true,
+    "deny_fake_replacement_models": true
+  },
+  "status_legend": {
+    "drive_listed": "Drive metadata confirmed; archive bytes unavailable to current connector",
+    "member_indexed": "Member path read from actual ZIP directory and recorded",
+    "converted": "Real member transformed to game-accepted runtime format with source SHA/provenance",
+    "live": "Runtime actually reads and draws/uses the selected asset",
+    "device_verified": "Build and target device controls/rendering validated"
+  }
+}
