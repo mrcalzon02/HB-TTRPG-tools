@@ -1,0 +1,447 @@
+{
+  "schema": "beckenburg.public_psx_asset_gap_index.v1",
+  "date": "2026-10-18",
+  "scope": "Public asset candidates for Beckenburg's shared reference library, Red Ledger / Between Deliveries, ReverieVR native games, and Gumball Armada",
+  "authority": "https://docs.google.com/document/d/18G144Qd0-L5rL7NdqxMykqkXaBHtu8-ytr_yYPol6rI/edit",
+  "status": "RESEARCH_ONLY_NOT_DOWNLOADED_OR_INTEGRATED",
+  "inventory_caveat": "Comparison against named Drive root sources plus current Beckenburg equipment/asset docs only. Inner contents of newly supplied archives, paid PSX mega pack and independent ReverieVR holdings have not been exhaustively hash-checked. 'Gap' means missing or unverified capability; do not assert zero existing equivalent meshes.",
+  "prohibited_shortcuts": [
+    "Never replace approved hunter/ghost concept art with unrelated thumbnails/meshes.",
+    "Never relabel not-downloaded files as archived, staged or integrated.",
+    "External packs do not inherit purchased PSX Mega Pack license.",
+    "No wholesale insertion into Java or Galaxy S9 release builds; curate, provenance-track, convert and test selected source files.",
+    "No GitHub Actions for this catalogue."
+  ],
+  "priority_definitions": {
+    "P1": "clear novel capability or immediately relevant missing module",
+    "P2": "likely useful after confirmed location/module scope",
+    "P3": "overlap or purchase risk; defer pending inventory"
+  },
+  "registered_candidates": [
+    {
+      "priority": "P1",
+      "id": "PG-001",
+      "name": "PSX First Person Arms",
+      "url": "https://drillimpact.itch.io/psx-first-person-arms-free",
+      "source": "Drillimpact",
+      "type": "native_PSX",
+      "price": "name-your-own-price/free",
+      "license": "CC0",
+      "formats": [
+        "FBX",
+        "GLB",
+        "BLEND"
+      ],
+      "inventory_count": "animated arms/hand rig, 2 texture variants, multiple first-person clips",
+      "projects": [
+        "Beckenburg",
+        "ReverieVR native first-person modules"
+      ],
+      "specific_gap": "Animated hands with grab/push/idle/viewmodel sockets; model source bases exist but finished hand animation is not verified",
+      "overlap_risk": "Existing male/female bases and source hunter rigs are not substitutes for this first-person animator",
+      "caveat": "Retarget hand sockets and tool motion; keep approved hunter art; CPU Java GLB skeleton playback must be implemented separately"
+    },
+    {
+      "priority": "P1",
+      "id": "PG-002",
+      "name": "Graveyard Kit",
+      "url": "https://kenney.nl/assets/graveyard-kit",
+      "source": "Kenney",
+      "type": "retro_compatible_lowpoly",
+      "price": "free",
+      "license": "CC0",
+      "formats": [
+        "3D packaged source; unpack and inspect"
+      ],
+      "inventory_count": "90 listed files; animations",
+      "projects": [
+        "Beckenburg"
+      ],
+      "specific_gap": "Full cemetery and churchyard dressing / graves / environmental scatter, not identified as a supplied pack",
+      "overlap_risk": "Existing environmental church concept boards are references, not this mesh kit",
+      "caveat": "Not inherently PSX-textured; adapt materials to existing atlas and verify mesh counts"
+    },
+    {
+      "priority": "P1",
+      "id": "PG-003",
+      "name": "PSX Cemetery Kit Free — Churchyard Sampler",
+      "url": "https://heyheythere.itch.io/psx-cemetery-kit-free",
+      "source": "heyheythere",
+      "type": "native_PSX",
+      "price": "free",
+      "license": "CC BY 4.0 (credit required)",
+      "formats": [
+        "GLB",
+        "FBX",
+        "OBJ",
+        "BLEND"
+      ],
+      "inventory_count": "15 modular pieces on 2 m grid, two moving components",
+      "projects": [
+        "Beckenburg"
+      ],
+      "specific_gap": "Interactive cemetery gate, headstone/tomb setup; usable church map outdoor prototype",
+      "overlap_risk": "Kenney graveyard can furnish general props; this sampler adds authored modular PSX scale and moving parts",
+      "caveat": "AI-assisted source disclosed; inspect geometry, art provenance, quality and credit before inclusion"
+    },
+    {
+      "priority": "P1",
+      "id": "PG-004",
+      "name": "PSX Asylum Kit Free — Padded Cell Sampler",
+      "url": "https://heyheythere.itch.io/psx-asylum-kit-free",
+      "source": "heyheythere",
+      "type": "native_PSX",
+      "price": "free",
+      "license": "CC BY 4.0 (credit required)",
+      "formats": [
+        "GLB",
+        "FBX",
+        "OBJ",
+        "BLEND"
+      ],
+      "inventory_count": "15 modular padded-cell pieces, moving door",
+      "projects": [
+        "Beckenburg"
+      ],
+      "specific_gap": "Asylum / institutional map architecture (doors/restraints/cage bed) distinct from household furniture",
+      "overlap_risk": "Victorian Study owned but not a demonstrated padded-cell kit",
+      "caveat": "AI-assisted source disclosed; room placement, collision and hinges must be rebuilt for Beckenburg"
+    },
+    {
+      "priority": "P1",
+      "id": "PG-005",
+      "name": "PSX Horror Props II Free — Occult Props Sampler",
+      "url": "https://heyheythere.itch.io/psx-horror-props-2-free",
+      "source": "heyheythere",
+      "type": "native_PSX",
+      "price": "free",
+      "license": "CC BY 4.0 (credit required)",
+      "formats": [
+        "GLB",
+        "FBX",
+        "OBJ",
+        "BLEND"
+      ],
+      "inventory_count": "12 occult props incl. doll/grimoire/ritual circle; 3 moving",
+      "projects": [
+        "Beckenburg"
+      ],
+      "specific_gap": "Ritual environment dressing and interactive occult props; no completed bank of 3 ritual-family scene decorations verified",
+      "overlap_risk": "PSX Mega Pack contains crosses/book meshes, not necessarily ritual apparatus",
+      "caveat": "Keep original Beckenburg banishment/cleansing/absolution iconography and host rites; source is AI-assisted"
+    },
+    {
+      "priority": "P1",
+      "id": "PG-006",
+      "name": "PSX Horror Props Free — Survival Items Sampler",
+      "url": "https://heyheythere.itch.io/psx-horror-props-free",
+      "source": "heyheythere",
+      "type": "native_PSX",
+      "price": "free",
+      "license": "CC BY 4.0 (credit required)",
+      "formats": [
+        "GLB",
+        "FBX",
+        "OBJ",
+        "BLEND"
+      ],
+      "inventory_count": "12 props: animated padlock, fuse box, lantern plus inventory icons",
+      "projects": [
+        "Beckenburg",
+        "Red Ledger"
+      ],
+      "specific_gap": "Source-ready animated mechanism meshes for puzzle/door/electrical scenes",
+      "overlap_risk": "Existing PSX lights, button, doors and Classic64 panels have some functional coverage; choose only novel meshes",
+      "caveat": "Imported animation and interaction are independent work; AI-assisted source disclosed"
+    },
+    {
+      "priority": "P1",
+      "id": "PG-007",
+      "name": "PSX Retro Props Pack",
+      "url": "https://lewie-kowalski.itch.io/psx-retro-props-pack",
+      "source": "Lewie",
+      "type": "native_PSX",
+      "price": "free",
+      "license": "CC0",
+      "formats": [
+        "FBX",
+        "OBJ",
+        "BLEND",
+        "PNG"
+      ],
+      "inventory_count": "86 props with 256 x 256 PNG textures",
+      "projects": [
+        "Beckenburg",
+        "Red Ledger"
+      ],
+      "specific_gap": "Fire safety fittings, vending machines, plumbing, electrical hardware, industrial/detail props",
+      "overlap_risk": "Very high overlap with existing 592 purchased GLBs/Classic64 furniture; select only uncovered prop classes",
+      "caveat": "Check actual visual meshes and pivot/UV data rather than importing all 86"
+    },
+    {
+      "priority": "P1",
+      "id": "PG-008",
+      "name": "Food Kit",
+      "url": "https://kenney.nl/assets/food-kit",
+      "source": "Kenney",
+      "type": "retro_compatible_lowpoly",
+      "price": "free",
+      "license": "CC0",
+      "formats": [
+        "3D packaged source; unpack and inspect"
+      ],
+      "inventory_count": "200 listed files",
+      "projects": [
+        "Red Ledger",
+        "ReverieVR native games"
+      ],
+      "specific_gap": "Food/product models for physical stocked merchandise, dining and inventory displays",
+      "overlap_risk": "Existing 24 Red Ledger retail SKUs are authoritative and must not be replaced; fill non-SKU scene food/backgrounds only",
+      "caveat": "Convert to private RLBP/GLES2 for S9; do not replace actual branded SKU geometry"
+    },
+    {
+      "priority": "P1",
+      "id": "PG-009",
+      "name": "PSX Kitchen and Food Free — Food Props Sampler",
+      "url": "https://heyheythere.itch.io/psx-kitchen-and-food-free",
+      "source": "heyheythere",
+      "type": "native_PSX",
+      "price": "free",
+      "license": "CC BY 4.0 (credit required)",
+      "formats": [
+        "GLB",
+        "FBX",
+        "OBJ",
+        "BLEND"
+      ],
+      "inventory_count": "15 props, 7 moving including range/microwave",
+      "projects": [
+        "Red Ledger",
+        "Beckenburg"
+      ],
+      "specific_gap": "Diner/bar backroom, food handling appliances and rotten food dressing",
+      "overlap_risk": "Existing household kitchen props may overlap; choose interactive appliance variants only",
+      "caveat": "Animation, collision and engine port still required; AI-assisted source disclosed"
+    },
+    {
+      "priority": "P1",
+      "id": "PG-010",
+      "name": "PSX People Free — Rigged Animated Characters Sampler",
+      "url": "https://heyheythere.itch.io/psx-people-free",
+      "source": "heyheythere",
+      "type": "native_PSX",
+      "price": "free",
+      "license": "CC BY 4.0 (credit required)",
+      "formats": [
+        "GLB",
+        "FBX",
+        "OBJ",
+        "BLEND"
+      ],
+      "inventory_count": "2 rigged people, 10 movement/interaction/emote types each",
+      "projects": [
+        "Red Ledger",
+        "Beckenburg background NPCs"
+      ],
+      "specific_gap": "Customer, worker and civilian animation source, seated/talking loops",
+      "overlap_risk": "Characters_psx_1.2 archive and gendered meshes already owned; original approved hunter/ghost art remains authoritative",
+      "caveat": "Only background NPC/animation-reference use after art approval; AI-assisted geometry/animations disclosed"
+    },
+    {
+      "priority": "P2",
+      "id": "PG-011",
+      "name": "PSX Sea Horror Props Free Sampler",
+      "url": "https://bitkiln.itch.io/psx-sea-horror-props-free-sampler",
+      "source": "bitkiln",
+      "type": "native_PSX",
+      "price": "free",
+      "license": "Free commercial game use; no standalone asset redistribution",
+      "formats": [
+        "GLB",
+        "OBJ",
+        "PNG"
+      ],
+      "inventory_count": "10 maritime/harbor props incl. bollard, trap, buoy, diving helmet",
+      "projects": [
+        "Beckenburg potential coastal maps",
+        "Red Ledger possible exterior harbor scenes"
+      ],
+      "specific_gap": "Coastal/maritime-specific mesh dressing absent as named library pack",
+      "overlap_risk": "No current coastal map confirmed in the Beckenburg planned nine; hold until planned location needs it",
+      "caveat": "AI-assisted source; selection only; paid full library separate"
+    },
+    {
+      "priority": "P2",
+      "id": "PG-012",
+      "name": "PSX Sea Horror Texture Pack — Free Sampler",
+      "url": "https://bitkiln.itch.io/psx-sea-horror-texture-pack-free-sampler",
+      "source": "bitkiln",
+      "type": "native_PSX",
+      "price": "free",
+      "license": "Free commercial game use; no standalone asset redistribution",
+      "formats": [
+        "PNG"
+      ],
+      "inventory_count": "23 harbor/ship textures in 256/128/64 px plus normals",
+      "projects": [
+        "Beckenburg potential coastal maps",
+        "Red Ledger possible exterior harbor scenes"
+      ],
+      "specific_gap": "Sea-weathered walls, rope/ship/harbor tileable texture motifs",
+      "overlap_risk": "General texture megapack not yet fully enumerated; compare hashes/coverage before intake",
+      "caveat": "AI-assisted source disclosed; 2D source only, not new mesh"
+    },
+    {
+      "priority": "P2",
+      "id": "PG-013",
+      "name": "Factory Kit",
+      "url": "https://kenney.nl/assets/factory-kit",
+      "source": "Kenney",
+      "type": "retro_compatible_lowpoly",
+      "price": "free",
+      "license": "CC0",
+      "formats": [
+        "3D packaged source; unpack and inspect"
+      ],
+      "inventory_count": "140 listed files, variations and animations",
+      "projects": [
+        "Beckenburg",
+        "Red Ledger industrial/storage rooms",
+        "ReverieVR reusable world kits"
+      ],
+      "specific_gap": "Modular warehouse mechanisms, conveyors and workshop/factory detail",
+      "overlap_risk": "Classic64 warehouse props and urban assets exist; acquire only missing machine/interaction modules",
+      "caveat": "Style likely cleaner than PSX horror, weather/dither/retexture before integration"
+    },
+    {
+      "priority": "P2",
+      "id": "PG-014",
+      "name": "Ultimate Space Kit",
+      "url": "https://quaternius.com/packs/ultimatespacekit.html",
+      "source": "Quaternius",
+      "type": "retro_compatible_lowpoly",
+      "price": "free",
+      "license": "CC0",
+      "formats": [
+        "FBX",
+        "OBJ",
+        "Blend",
+        "glTF"
+      ],
+      "inventory_count": "92 models, includes animated characters/enemies and planets/vegetation",
+      "projects": [
+        "Gumball Armada",
+        "ReverieVR space games"
+      ],
+      "specific_gap": "Varied spacecraft, planets, sci-fi environment and generic combat NPC base forms",
+      "overlap_risk": "Not found as a named pack in Beckenburg root; ReverieVR may have other space assets not inventoried here",
+      "caveat": "Do not claim candy-space visual style: candy ship bodies/materials and enemies still need original design"
+    },
+    {
+      "priority": "P2",
+      "id": "PG-015",
+      "name": "Space Kit",
+      "url": "https://kenney.nl/assets/space-kit",
+      "source": "Kenney",
+      "type": "retro_compatible_lowpoly",
+      "price": "free",
+      "license": "CC0",
+      "formats": [
+        "3D packaged source; unpack and inspect"
+      ],
+      "inventory_count": "150 listed files",
+      "projects": [
+        "Gumball Armada",
+        "ReverieVR"
+      ],
+      "specific_gap": "Small modular spacecraft, planets and science-fiction set decoration",
+      "overlap_risk": "Compare with Quaternius before downloading both; no need for redundant ships",
+      "caveat": "Generic silhouettes are not approved Candy Armada original spaceships"
+    },
+    {
+      "priority": "P2",
+      "id": "PG-016",
+      "name": "Modular Space Kit",
+      "url": "https://kenney.nl/assets/modular-space-kit",
+      "source": "Kenney",
+      "type": "retro_compatible_lowpoly",
+      "price": "free",
+      "license": "CC0",
+      "formats": [
+        "3D packaged source; unpack and inspect"
+      ],
+      "inventory_count": "40 files with animation / variation",
+      "projects": [
+        "ReverieVR",
+        "Gumball Armada"
+      ],
+      "specific_gap": "Reusable space-station interior walls, bays and sci-fi corridors for native module scenes",
+      "overlap_risk": "Possible overlap with purchased PSX modular structures; those are predominantly horror-scale interiors",
+      "caveat": "No direct Galaxy S9 rendering guarantee; curate, simplify and convert to GLES2 format"
+    },
+    {
+      "priority": "P2",
+      "id": "PG-017",
+      "name": "PSX Horror UI Free",
+      "url": "https://heyheythere.itch.io/psx-horror-ui-free",
+      "source": "heyheythere",
+      "type": "native_PSX",
+      "price": "free",
+      "license": "CC BY 4.0 (credit required)",
+      "formats": [
+        "PNG 9-slice",
+        "Godot Theme",
+        "Unity package"
+      ],
+      "inventory_count": "survival horror panels, file/map UI and 9 icons",
+      "projects": [
+        "Beckenburg"
+      ],
+      "specific_gap": "Retro inventory/map/paper UI styling reference; not necessary for functionality",
+      "overlap_risk": "Current custom compact menus are authoritative; do not replace functional navigation with a decorative template",
+      "caveat": "PNG elements only suitable for direct Java usage; Godot/Unity components not plug-and-play; AI-assisted"
+    },
+    {
+      "priority": "P3",
+      "id": "PG-018",
+      "name": "PSX Horror Modular Kit — Free Backrooms Sampler",
+      "url": "https://bitkiln.itch.io/psx-horror-modular-kit-free-sampler",
+      "source": "bitkiln",
+      "type": "native_PSX",
+      "price": "free sampler; full paid pack optional",
+      "license": "Free commercial game use; no standalone asset redistribution",
+      "formats": [
+        "GLB",
+        "OBJ"
+      ],
+      "inventory_count": "10 free modular pieces; separately sold full kit has 142 pieces/5 themes",
+      "projects": [
+        "Beckenburg"
+      ],
+      "specific_gap": "Backrooms/liminal/small modular test layouts plus possible future hospital/basement/sewer",
+      "overlap_risk": "PSX mega pack modular structures 108 and supplied URBAN.zip/house concepts may already cover basic walls",
+      "caveat": "Lower priority until source inventory indicates a real modular gap; AI-assisted"
+    },
+    {
+      "priority": "P3",
+      "id": "PG-019",
+      "name": "PSX Hospital Pack",
+      "url": "https://wildenza.itch.io/psx-hospital-pack",
+      "source": "Wildenza",
+      "type": "native_PSX",
+      "price": "paid; listed $5.99 standard at time checked",
+      "license": "CC0 stated by creator; purchase needed for files",
+      "formats": [
+        "FBX",
+        "GLB variant"
+      ],
+      "inventory_count": "90 designs / 140 incl variants",
+      "projects": [
+        "Beckenburg"
+      ],
+      "specific_gap": "Hospital/medical equipment, institutional surfaces and ward-specific props",
+      "overlap_risk": "Check URBAN, Victorian Study, Classic64 and existing megpack first; may already cover hospital basics",
+      "caveat": "Not acquired; don't purchase until hospital map is active and exact asset subset justified"
+    }
+  ]
+}
