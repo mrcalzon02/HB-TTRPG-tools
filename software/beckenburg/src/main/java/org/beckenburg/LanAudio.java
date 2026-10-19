@@ -57,7 +57,11 @@ public final class LanAudio implements AutoCloseable {
             try{
                 Playback sound=queue.take();
                 if(closed||hardwareUnavailable)continue;
-                byte[] samples=sound.pcm()!=null?sound.pcm():synthesize(sound.cue());
+                byte[] samples=sound.pcm();
+                if(samples==null){
+                    samples=RecordedSfx.render(sound.cue(),effectsVolume());
+                    if(samples==null)samples=synthesize(sound.cue());
+                }
                 SourceDataLine line=null;
                 try{
                     line=(SourceDataLine)AudioSystem.getLine(new DataLine.Info(SourceDataLine.class,FORMAT));
