@@ -56,17 +56,17 @@ public final class VanInteriorLayout {
         new Fixture("monitoring_screen_mp_1",.12,1.07,3.22,1.36,
                     0,Mount.BULKHEAD,"main command monitor"),
         // Right bulkhead carries three actual monitoring fixtures.
-        new Fixture("blender_sanity_monitor_1",1.70,1.87,-1.71,.94,
+        new Fixture("monitoring_screen_mp_1",1.70,1.87,-1.71,.94,
                     -Math.PI/2,Mount.WALL,"sanity telemetry"),
-        new Fixture("blender_site_activity_monitor_1",1.70,1.87,-.21,.94,
+        new Fixture("monitoring_screen_mp_1",1.70,1.87,-.21,.94,
                     -Math.PI/2,Mount.WALL,"haunting activity"),
-        new Fixture("blender_sound_monitor_1",1.70,1.87,1.29,.94,
+        new Fixture("monitoring_screen_mp_1",1.70,1.87,1.29,.94,
                     -Math.PI/2,Mount.WALL,"sound telemetry"),
-        new Fixture("blender_site_map_1",1.70,1.03,-1.71,.79,
+        new Fixture("blender_site_map_fixed",1.70,1.03,-1.71,.79,
                     -Math.PI/2,Mount.WALL,"site map"),
         // Distinct contract and daily task boards, mounted rather than
         // stored as unlabelled blocks in the middle of the walkway.
-        new Fixture("blender_objective_board_1",1.70,1.07,-.21,.81,
+        new Fixture("blender_objective_board_fixed",1.70,1.07,-.21,.81,
                     -Math.PI/2,Mount.WALL,"contract objective board"),
         new Fixture("blender_clipboards_fixed",1.70,1.06,1.29,.68,
                     -Math.PI/2,Mount.WALL,"daily assignment board")
