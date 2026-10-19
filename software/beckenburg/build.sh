@@ -9,6 +9,15 @@ javac --release 17 -encoding UTF-8 -d build/classes src/main/java/org/beckenburg
 test -s assets/runtime/directional-sprites.zip
 mkdir -p build/classes/org/beckenburg
 cp assets/runtime/directional-sprites.zip build/classes/org/beckenburg/directional-sprites.zip
+# Compact v3 ghost sprite archive is committed as nine GitHub-safe binary parts.
+# Reassemble deterministically for both tests and the distributable JAR.
+# Missing parts are a build failure, not a silent Banshee placeholder.
+for n in 00 01 02 03 04 05 06 07 08; do
+  test -s "assets/runtime/ghost-sprite-parts/ghost-sprite-expansion-v3.zip.part$n" || {
+    echo "Missing ghost sprite part $n"; exit 1;
+  }
+done
+cat assets/runtime/ghost-sprite-parts/ghost-sprite-expansion-v3.zip.part0[0-8] > build/classes/org/beckenburg/ghost-sprite-expansion-v3.zip
 # Bundle the verified CC BY 4.0 PSX UI source ZIP with the actual runtime classes.
 test -s assets/runtime/ui/psx-horror-ui-free-assets.zip || { echo 'Missing PSX Horror UI runtime archive'; exit 1; }
 cp assets/runtime/ui/psx-horror-ui-free-assets.zip build/classes/org/beckenburg/psx-horror-ui-free-assets.zip
@@ -126,6 +135,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.La
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanTelegraphedStrikeIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanTelegraphedHudTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanApparitionTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostSpriteAtlasIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.DirectionalSpritesIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanApparitionRenderTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanApparitionIntegrationTest
