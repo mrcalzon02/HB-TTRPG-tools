@@ -19,11 +19,19 @@ public final class HeldInstrumentMesh {
         if(kind==null||tier==null)return null;
         return switch(kind){
             case "EMF" -> switch(tier){
-                case I->"dosimeter_1";case II->"dosimeter_2";case III->"dosimeter_4";
+                case I->"exploration_emf_detector";
+                case II->"dosimeter_2";
+                case III->"dosimeter_4";
             };
             case "SPIRIT_BOX"->tier==EquipmentTiers.Tier.I
-                ?"walkie_talkie_1":"walkie_talkie_2";
-            case "THERMOMETER"->"handheld_tablet_1";
+                ?"exploration_spirit_box":"walkie_talkie_2";
+            case "THERMOMETER"->tier==EquipmentTiers.Tier.I
+                ?"exploration_thermometer":"handheld_tablet_1";
+            case "THERMAL_CAMERA"->"exploration_thermal_camera";
+            case "SOUND_RECORDER"->"exploration_voice_recorder";
+            case "PHOTO_CAMERA"->"exploration_photo_camera";
+            case "FLASHLIGHT"->tier==EquipmentTiers.Tier.I
+                ?"exploration_flashlight_poquet":"exploration_flashlight";
             case "GHOST_WRITING_BOOK"->"book_mp_1";
             case "DOTS_PROJECTOR"->"vape_mp_1";
             default->null;
