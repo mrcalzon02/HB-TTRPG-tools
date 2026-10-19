@@ -11,7 +11,8 @@ import java.util.Set;
 public final class InvestigationGame {
     private final JFrame window=new JFrame("The Beckenburg Project — Expedition Alpha");
     private final JPanel cards=new JPanel(new CardLayout());
-    private final JPanel menu=new JPanel(new GridBagLayout());
+    private final JPanel menu=new JPanel(new BorderLayout());
+    private final java.util.prefs.Preferences displayPrefs=java.util.prefs.Preferences.userNodeForPackage(InvestigationGame.class);
     private final ProfileStore profile=new ProfileStore(ProfileStore.defaultPath());
     private BeckenburgInstallIdentity.Identity installation;
     private final JLabel account=new JLabel();
@@ -23,110 +24,214 @@ public final class InvestigationGame {
     private CastleHubPanel castle;
     private int caseNumber;
 
+
     private InvestigationGame(){
-        try{installation=BeckenburgInstallIdentity.loadOrCreate(ProfileStore.defaultPath().getParent());}
-        catch(IOException ex){JOptionPane.showMessageDialog(null,
-            "Local installation ID could not be loaded. Existing identity was not replaced: "+ex.getMessage(),
-            "Installation identity",JOptionPane.WARNING_MESSAGE);}
-        try{profile.load();if(!java.nio.file.Files.exists(ProfileStore.defaultPath()))profile.save();}
-        catch(IOException ex){JOptionPane.showMessageDialog(null,
-            "Profile could not be loaded. Existing file was not overwritten: "+ex.getMessage(),
-            "Profile error",JOptionPane.WARNING_MESSAGE);}
-        buildMenu();
-        cards.add(menu,"menu");
-        castle=new CastleHubPanel(profile,new CastleHubPanel.Actions(){
-            @Override public void begin(){InvestigationGame.this.begin();}
-            @Override public void network(){new LanLobbyWindow().setVisible(true);}
-            @Override public void spectral(){InvestigationGame.this.beginGhost();}
-            @Override public void menu(){((CardLayout)cards.getLayout()).show(cards,"menu");}
-            @Override public void cycleRole(){rolePicker.setSelectedIndex((rolePicker.getSelectedIndex()+1)%rolePicker.getItemCount());}
-            @Override public void cycleWeather(){conditionsPicker.setSelectedIndex((conditionsPicker.getSelectedIndex()+1)%conditionsPicker.getItemCount());}
-            @Override public String role(){return rolePicker.getSelectedItem().toString();}
-            @Override public String weather(){return conditionsPicker.getSelectedItem().toString();}
-        });
-        cards.add(castle,"castle");
-        window.setContentPane(cards);
-        ((CardLayout)cards.getLayout()).show(cards,"castle");
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        window.setSize(1060,725);window.setMinimumSize(new Dimension(760,510));
-        window.setLocationRelativeTo(null);window.setVisible(true);
-        BeckenburgUpdatesUI.checkOnStartup(window);
+        window.setSize(1060,725);
+        window.setMinimumSize(new Dimension(760,510));
+        if(displayPrefs.getBoolean("maximized",false))window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        window.setLocationRelativeTo(null);
+        window.setContentPane(loadingScreen());
+        window.setVisible(true);
+        // Do local disk I/O away from the event dispatch thread. The splash reports actual
+        // initialization work; it is never a simulated progress bar or forced delay.
+        new SwingWorker<String,Void>(){
+            @Override protected String doInBackground(){
+                StringBuilder warnings=new StringBuilder();
+                try{installation=BeckenburgInstallIdentity.loadOrCreate(ProfileStore.defaultPath().getParent());}
+                catch(IOException ex){warnings.append("Installation identity: ").append(ex.getMessage()).append("\n");}
+                try{profile.load();if(!java.nio.file.Files.exists(ProfileStore.defaultPath()))profile.save();}
+                catch(IOException ex){warnings.append("Local profile: ").append(ex.getMessage()).append("\n");}
+                return warnings.toString();
+            }
+            @Override protected void done(){
+                try{
+                    String warnings=get();
+                    buildMenu();
+                    cards.add(menu,"menu");
+                    castle=new CastleHubPanel(profile,new CastleHubPanel.Actions(){
+                        @Override public void begin(){InvestigationGame.this.begin();}
+                        @Override public void network(){openLan();}
+                        @Override public void spectral(){InvestigationGame.this.beginGhost();}
+                        @Override public void menu(){showMenu();}
+                        @Override public void cycleRole(){rolePicker.setSelectedIndex((rolePicker.getSelectedIndex()+1)%rolePicker.getItemCount());}
+                        @Override public void cycleWeather(){conditionsPicker.setSelectedIndex((conditionsPicker.getSelectedIndex()+1)%conditionsPicker.getItemCount());}
+                        @Override public String role(){return rolePicker.getSelectedItem().toString();}
+                        @Override public String weather(){return conditionsPicker.getSelectedItem().toString();}
+                    });
+                    cards.add(castle,"castle");
+                    window.setContentPane(cards);
+                    showMenu();
+                    if(!warnings.isBlank())JOptionPane.showMessageDialog(window,
+                        warnings+"Existing files were preserved.", "Local startup warnings",JOptionPane.WARNING_MESSAGE);
+                    BeckenburgUpdatesUI.checkOnStartup(window);
+                }catch(Exception ex){
+                    JOptionPane.showMessageDialog(window,"Unable to initialize Beckenburg: "+ex.getMessage(),
+                        "Startup failed",JOptionPane.ERROR_MESSAGE);
+                    window.dispose();
+                }
+            }
+        }.execute();
     }
+    private static JPanel loadingScreen(){
+        JPanel surface=new JPanel(new GridBagLayout()){
+            @Override protected void paintComponent(Graphics g){
+                super.paintComponent(g);
+                Graphics2D a=(Graphics2D)g.create();
+                a.setPaint(new GradientPaint(0,0,new Color(10,15,22),getWidth(),getHeight(),
+                    new Color(46,39,34)));
+                a.fillRect(0,0,getWidth(),getHeight());
+                a.setColor(new Color(156,128,90));a.fillRect(getWidth()/2-95,getHeight()/2+52,190,2);
+                a.dispose();
+            }
+        };
+        JLabel text=new JLabel("<html><div style='text-align:center'><span style='font-size:36px'>THE BECKENBURG PROJECT</span><br><br>"+
+            "<span style='font-size:13px'>Preparing the castle and reading local expedition records...</span></div></html>",
+            SwingConstants.CENTER);
+        text.setForeground(new Color(238,220,183));surface.add(text);
+        return surface;
+    }
+    private void showMenu(){
+        refreshAccount();
+        ((CardLayout)cards.getLayout()).show(cards,"menu");
+    }
+    private void openLan(){new LanLobbyWindow().setVisible(true);}
+    private Color ink(){return displayPrefs.getBoolean("highContrast",false)?Color.WHITE:new Color(223,210,183);}
+    private int menuFont(int base){return base+(displayPrefs.getBoolean("largeMenuText",false)?3:0);}
+    private JLabel menuLabel(String text,int size){
+        JLabel l=new JLabel(text);l.setForeground(ink());
+        l.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,menuFont(size)));return l;
+    }
+    private static JPanel transparentPanel(LayoutManager layout){JPanel p=new JPanel(layout);p.setOpaque(false);return p;}
     private void buildMenu(){
-        menu.setBackground(new Color(19,21,28));
-        JPanel inner=new JPanel();inner.setLayout(new BoxLayout(inner,BoxLayout.Y_AXIS));
-        inner.setBackground(new Color(28,31,39));inner.setBorder(BorderFactory.createEmptyBorder(25,40,25,40));
-        JLabel title=new JLabel("THE BECKENBURG PROJECT",SwingConstants.CENTER);
-        title.setFont(new Font(Font.SERIF,Font.BOLD,34));title.setForeground(new Color(223,201,151));
-        JLabel tagline=new JLabel("THREE HUNTERS. ONE HAUNTING. RECLAIM THE LOST.",SwingConstants.CENTER);
-        tagline.setForeground(new Color(169,177,196));tagline.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
-        JLabel status=new JLabel("LOCAL SOLO ALPHA   ·   JAVA 17   ·   PLAYSTATION-ERA 3D",SwingConstants.CENTER);
-        status.setForeground(new Color(170,145,120));
+        menu.removeAll();
+        menu.setBackground(new Color(13,17,24));
+        menu.setBorder(BorderFactory.createEmptyBorder(25,30,19,30));
+        JPanel header=transparentPanel(new BorderLayout(8,4));
+        JLabel title=new JLabel("THE BECKENBURG PROJECT");
+        title.setFont(new Font(Font.SERIF,Font.BOLD,menuFont(35)));
+        title.setForeground(ink());header.add(title,BorderLayout.NORTH);
+        JLabel subtitle=menuLabel("CASTLE OPERATIONS  /  EXPEDITION DESK",12);
+        subtitle.setForeground(new Color(167,182,185));header.add(subtitle,BorderLayout.SOUTH);
+        menu.add(header,BorderLayout.NORTH);
+
+        JPanel columns=transparentPanel(new GridBagLayout());
+        JPanel navigation=transparentPanel();
+        navigation.setLayout(new BoxLayout(navigation,BoxLayout.Y_AXIS));
+        JButton enterCastle=button("ENTER CASTLE");
+        JButton begin=button("START SOLO INVESTIGATION");
+        JButton lan=button("HOST / JOIN MULTIPLAYER");
+        JButton ghost=button("GHOST PRACTICE");
+        for(JButton b:new JButton[]{enterCastle,begin,lan,ghost}){
+            b.setAlignmentX(Component.LEFT_ALIGNMENT);
+            navigation.add(Box.createVerticalStrut(9));navigation.add(b);
+        }
+        navigation.add(Box.createVerticalStrut(20));
+        JLabel utilities=menuLabel("SUPPORT",11);utilities.setAlignmentX(Component.LEFT_ALIGNMENT);
+        navigation.add(utilities);
+        JPanel utilityRow=transparentPanel(new GridLayout(1,3,6,0));
+        JButton options=button("OPTIONS"),guide=button("CONTROLS"),updates=button("UPDATES");
+        utilityRow.add(options);utilityRow.add(guide);utilityRow.add(updates);
+        utilityRow.setMaximumSize(new Dimension(390,37));utilityRow.setAlignmentX(Component.LEFT_ALIGNMENT);
+        navigation.add(Box.createVerticalStrut(7));navigation.add(utilityRow);
+
+        JPanel preparation=new JPanel(new BorderLayout(10,16));
+        preparation.setBackground(displayPrefs.getBoolean("highContrast",false)?new Color(0,0,0):new Color(29,35,43));
+        preparation.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(100,91,71),1),
+            BorderFactory.createEmptyBorder(18,20,20,20)));
+        JLabel prepTitle=menuLabel("PREPARE AN INVESTIGATION",18);
+        prepTitle.setFont(prepTitle.getFont().deriveFont(Font.BOLD));
+        preparation.add(prepTitle,BorderLayout.NORTH);
+        JPanel selectorGrid=transparentPanel(new GridLayout(0,2,10,12));
         rolePicker=new JComboBox<>(InvestigationSession.Role.values());
-        rolePicker.setMaximumSize(new Dimension(330,35));
-        JLabel selected=new JLabel("Investigator discipline",SwingConstants.CENTER);
-        selected.setForeground(new Color(225,226,230));
         locationPicker=new JComboBox<>(SiteCatalog.Location.values());
         conditionsPicker=new JComboBox<>(SiteCatalog.Conditions.values());
-        JPanel selectors=new JPanel(new GridLayout(2,2,7,5));
-        selectors.setBackground(new Color(28,31,39));
-        JLabel siteLabel=new JLabel("Site"),conditionsLabel=new JLabel("Conditions");
-        siteLabel.setForeground(new Color(216,215,202));
-        conditionsLabel.setForeground(new Color(216,215,202));
-        selectors.add(siteLabel);selectors.add(locationPicker);
-        selectors.add(conditionsLabel);selectors.add(conditionsPicker);
-        selectors.setMaximumSize(new Dimension(410,75));
-        JButton begin=button("BEGIN SOLO INVESTIGATION");
-        JButton enterCastle=button("ENTER CASTLE STAGING HALL");
+        selectorGrid.add(menuLabel("Discipline",13));selectorGrid.add(rolePicker);
+        selectorGrid.add(menuLabel("Location",13));selectorGrid.add(locationPicker);
+        selectorGrid.add(menuLabel("Conditions",13));selectorGrid.add(conditionsPicker);
+        preparation.add(selectorGrid,BorderLayout.CENTER);
+        JLabel status=menuLabel("SELECT AN AVAILABLE LOCATION",12);
+        status.setForeground(new Color(188,202,177));
+        preparation.add(status,BorderLayout.SOUTH);
         locationPicker.addActionListener(e->{
-            boolean available=((SiteCatalog.Location)locationPicker.getSelectedItem()).playable();
-            begin.setEnabled(available);conditionsPicker.setEnabled(available);
-            status.setText(available?"LOCAL SOLO ALPHA   /   HOUSE SITE READY"
-                    :"SITE NOT PLAYABLE - LEVEL GEOMETRY STILL IN PRODUCTION");
+            SiteCatalog.Location site=(SiteCatalog.Location)locationPicker.getSelectedItem();
+            boolean playable=site!=null&&site.playable();
+            begin.setEnabled(playable);conditionsPicker.setEnabled(playable);
+            status.setText(playable?"SOLO EXPEDITION READY":"LOCATION IN PRODUCTION");
         });
-        JButton ghost=button("GHOST PRACTICE / LOCAL");
-        JButton lan=button("LAN HOST / JOIN (3D HOUSE ALPHA)");
-        JButton guide=button("FIELD MANUAL / CONTROLS");
-        JButton updates=button("UPDATES");
-        JButton importSave=button("IMPORT LOCAL SAVE");
-        JButton quit=button("EXIT");
-        account.setForeground(new Color(172,204,183));
-        account.setHorizontalAlignment(SwingConstants.CENTER);
-        inner.add(title);inner.add(Box.createVerticalStrut(8));inner.add(tagline);
-        inner.add(Box.createVerticalStrut(15));inner.add(status);inner.add(Box.createVerticalStrut(18));
-        inner.add(selected);inner.add(Box.createVerticalStrut(6));inner.add(rolePicker);
-        inner.add(Box.createVerticalStrut(10));inner.add(selectors);
-        for(JButton b:new JButton[]{enterCastle,begin,ghost,lan,guide,importSave,updates,quit}){inner.add(Box.createVerticalStrut(9));inner.add(b);}
-        inner.add(Box.createVerticalStrut(20));inner.add(account);
-        JLabel limitation=new JLabel("LAN shared house navigation is available; complete 3v1 simulation is still in development.",SwingConstants.CENTER);
-        limitation.setForeground(new Color(147,154,165));inner.add(Box.createVerticalStrut(12));inner.add(limitation);
-        for(Component c:inner.getComponents())if(c instanceof JComponent jc)jc.setAlignmentX(Component.CENTER_ALIGNMENT);
-        menu.add(inner);
+        locationPicker.setSelectedIndex(0);
+        GridBagConstraints c=new GridBagConstraints();
+        c.gridy=0;c.insets=new Insets(12,0,12,18);
+        c.weightx=.42;c.weighty=1;c.fill=GridBagConstraints.HORIZONTAL;c.anchor=GridBagConstraints.NORTHWEST;
+        columns.add(navigation,c);
+        c.gridx=1;c.weightx=.58;c.insets=new Insets(12,0,12,0);
+        columns.add(preparation,c);
+        JScrollPane scroller=new JScrollPane(columns,
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scroller.setOpaque(false);scroller.getViewport().setOpaque(false);scroller.setBorder(null);
+        menu.add(scroller,BorderLayout.CENTER);
+
+        JPanel footer=transparentPanel(new BorderLayout(8,6));
+        account.setFont(new Font(Font.MONOSPACED,Font.PLAIN,menuFont(12)));
+        account.setForeground(new Color(170,211,182));account.setHorizontalAlignment(SwingConstants.LEFT);
+        footer.add(account,BorderLayout.CENTER);
+        JPanel footerActions=transparentPanel(new FlowLayout(FlowLayout.RIGHT,7,0));
+        JButton importSave=button("IMPORT SAVE"),quit=button("EXIT");
+        footerActions.add(importSave);footerActions.add(quit);
+        footer.add(footerActions,BorderLayout.EAST);
+        menu.add(footer,BorderLayout.SOUTH);
+
         enterCastle.addActionListener(e->{((CardLayout)cards.getLayout()).show(cards,"castle");castle.requestFocusInWindow();});
-        begin.addActionListener(e->begin());ghost.addActionListener(e->beginGhost());lan.addActionListener(e->new LanLobbyWindow().setVisible(true));guide.addActionListener(e->JOptionPane.showMessageDialog(window,
-            "WASD move • Shift sprint • Click to capture mouse-look / arrows • F flashlight • E doors\n"+
-            "1–4 select carried gear • R use • E at van rack to change loadout/restock\n"+
-            "C defensive or ritual ward (2 per case)  •  B cleanse anchor\n"+
-            "Hold Q, move mouse, release Q for contextual callouts and world pings.\n"+
-            "J toggle evidence journal • M floor map • X extract • E at utility breaker toggles power\n"+
-            "Escape pauses and offers return to castle.\n\n"+
-            "Search every room: readings strengthen near the Spirit's anchor.\n"+
-            "Record three types of evidence, place a ward in the anchor room, cleanse,\n"+
-            "then return to VAN STAGING to extract. You can retreat earlier.\n"+
-            "An AI Spirit can roam, manifest and inflict incremental damage.\n\n"+
-            "GHOST PRACTICE: [ / ] select room, SPACE drift, 1 whisper, 2 disturb,\n"+
-            "3 manifest, 4 strike, mouse-look or arrows, ESC return.\n"+
-            "A simulated investigator is present; this is not a LAN match.\n"+
-            "LAN ROOM TEST: 3 hunter seats + ghost/AI, ready/start, room moves and ghost actions.\n"+
-            "LAN first-person hunter movement and doors work; full 3v1 integration remains unfinished.",
-            "Field Manual",JOptionPane.INFORMATION_MESSAGE));
+        begin.addActionListener(e->begin());ghost.addActionListener(e->beginGhost());
+        lan.addActionListener(e->openLan());
+        options.addActionListener(e->openOptions());
+        guide.addActionListener(e->showControls());
         importSave.addActionListener(e->importLocalSave());
         updates.addActionListener(e->BeckenburgUpdatesUI.open(window));
-        quit.addActionListener(e->window.dispose());refreshAccount();
+        quit.addActionListener(e->window.dispose());
+        refreshAccount();
     }
-    private static JButton button(String s){
-        JButton b=new JButton(s);b.setMaximumSize(new Dimension(330,38));
-        b.setFocusPainted(true);return b;
+    private void openOptions(){
+        JCheckBox large=new JCheckBox("Large menu text",displayPrefs.getBoolean("largeMenuText",false));
+        JCheckBox contrast=new JCheckBox("High-contrast menu",displayPrefs.getBoolean("highContrast",false));
+        JCheckBox maximize=new JCheckBox("Maximize game window",displayPrefs.getBoolean("maximized",false));
+        JPanel fields=new JPanel(new GridLayout(0,1,6,10));
+        fields.setBorder(BorderFactory.createEmptyBorder(12,14,12,14));
+        fields.add(large);fields.add(contrast);fields.add(maximize);
+        int answer=JOptionPane.showConfirmDialog(window,fields,"Display & accessibility",
+            JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
+        if(answer!=JOptionPane.OK_OPTION)return;
+        displayPrefs.putBoolean("largeMenuText",large.isSelected());
+        displayPrefs.putBoolean("highContrast",contrast.isSelected());
+        displayPrefs.putBoolean("maximized",maximize.isSelected());
+        window.setExtendedState(maximize.isSelected()?JFrame.MAXIMIZED_BOTH:JFrame.NORMAL);
+        buildMenu();menu.revalidate();menu.repaint();
+        // Rendering effects, audio levels and in-world text need their own runtime bindings.
+    }
+    private void showControls(){
+        JTextArea help=new JTextArea(
+            "CASTLE / SOLO\nWASD move  |  Shift sprint  |  Click mouse-look  |  F light  |  E interact\n"+
+            "1–4 select gear  |  R use  |  C ward  |  B ritual  |  J journal  |  M map\n"+
+            "Q (hold) callouts  |  X extract  |  Escape pause or return to menu\n\n"+
+            "GHOST PRACTICE\n[ / ] change room  |  Space drift  |  1–4 ghost actions\n\n"+
+            "MULTIPLAYER\nHost or join by IP, ready up, then use Enter 3D World when the case starts.\n"+
+            "The Field Controls tab contains alpha simulation tools, not ordinary lobby controls.");
+        help.setEditable(false);help.setLineWrap(true);help.setWrapStyleWord(true);
+        help.setFont(new Font(Font.MONOSPACED,Font.PLAIN,13));
+        help.setMargin(new Insets(12,12,12,12));
+        JOptionPane.showMessageDialog(window,new JScrollPane(help),"Field controls",JOptionPane.INFORMATION_MESSAGE);
+    }
+    private JButton button(String s){
+        JButton b=new JButton(s);
+        b.setFont(new Font(Font.SANS_SERIF,Font.BOLD,menuFont(13)));
+        b.setForeground(ink());b.setBackground(new Color(48,58,66));
+        b.setFocusPainted(true);
+        b.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(104,100,79)),
+            BorderFactory.createEmptyBorder(8,12,8,12)));
+        b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        b.setMaximumSize(new Dimension(390,44));
+        return b;
     }
     private void refreshAccount(){account.setText("CASTLE LEDGER  £"+profile.currency()+"   XP "+profile.experience()
             +(installation==null?"":"   PLAYER "+installation.shortPlayerId()));}
