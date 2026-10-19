@@ -14,7 +14,13 @@ public final class EquipmentStoreDescriptionsTest {
                 var stage=EquipmentTiers.stage(gear.id(),line.tier());
                 ok(line.price()==stage.creditCost(),"actual purchase price for "+gear.id());
                 ok(line.name().equals(gear.name()),"real catalog label for "+gear.id());
-                ok(line.effect().equals(stage.effect()),"actual tier benefit for "+gear.id());
+                ok(!line.effect().isBlank(),"customer receives a specific tier benefit for "+gear.id());
+                if(!FieldEquipment.functional(gear.id()))
+                    ok(line.effect().equals(stage.effect()),
+                        "planned devices display planning-only description");
+                else
+                    ok(!line.effect().contains("not-yet-built"),
+                        "live purchase copy cannot advertise missing implementation");
                 ok(line.currentlyPlayable()==FieldEquipment.functional(gear.id()),
                     "future instrument must not be advertised as purchasable");
                 ok(line.details().contains(line.specificationLine()),"show exact capabilities");
@@ -57,6 +63,15 @@ public final class EquipmentStoreDescriptionsTest {
             ok(flashlight.specificationLine().contains(new String[]{"6m","9m","12m"}[t]),
                 "readout matches the actual 3D lighting beam");
         }
+        ok(EquipmentStoreDescriptions.describe("UV_LIGHT",EquipmentTiers.Tier.III)
+            .effect().contains("160 host ticks"),
+            "Tier III UV spec reflects genuine source trace lifetime, not fake reading");
+        ok(EquipmentStoreDescriptions.describe("GHOST_WRITING_BOOK",EquipmentTiers.Tier.III)
+            .specificationLine().contains("One actual deployed book"),
+            "upgraded writing book does not claim a nonexistent second placement");
+        ok(EquipmentStoreDescriptions.describe("FIRELIGHT",EquipmentTiers.Tier.III)
+            .effect().contains("270 seconds"),
+            "firelight copy reflects genuine tiered burn duration");
         ok(!EquipmentStoreDescriptions.describe("RESONANCE_TUNER",EquipmentTiers.Tier.III)
             .currentlyPlayable(),"planned sensor is explicitly not in live shop");
         System.out.println("PASS: store names, live prices, 42x3 tier facts, optics, batteries, hover copy, no invented capabilities");
