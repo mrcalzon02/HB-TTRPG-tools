@@ -523,6 +523,7 @@ public final class LanHost implements AutoCloseable {
                     boolean on=lights.toggle(at);
                     notifyHunters("LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
                     reply(peer,"ACCEPT|LIGHT|"+at+"|"+(on?"ON":"OFF"));
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.SWITCH);
                 }
                 case "POWER" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
@@ -535,6 +536,7 @@ public final class LanHost implements AutoCloseable {
                     lights.setBreaker(!lights.breaker());
                     notifyHunters("LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
                     reply(peer,"ACCEPT|POWER|"+(lights.breaker()?"ON":"OFF"));
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.BREAKER);
                 }
                 case "VANDOOR" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
@@ -561,7 +563,7 @@ public final class LanHost implements AutoCloseable {
                     peer.lastLightTick=tick;
                     notifyHunters("VANDOOR|"+(closed?1:0));
                     reply(peer,"ACCEPT|VANDOOR|"+(closed?"CLOSED":"OPEN"));
-                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.VAN_DOOR);
                 }
                 case "DOOR" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)throw new IllegalArgumentException("door command unavailable");
@@ -625,6 +627,7 @@ public final class LanHost implements AutoCloseable {
                     if(recorders[peer.slot].recording())stopRecording(peer.slot);
                     equipment[peer.slot].rechargeAtVan();
                     reply(peer,"ACCEPT|GEARREFILL|FILM AND BATTERIES RESTORED");
+                    actorCue(peer.slot,LanSound.Cue.DEVICE_ON);
                     sendEquipmentState(peer);
                 }
                 case "GEARBUY" -> {
@@ -644,6 +647,7 @@ public final class LanHost implements AutoCloseable {
                         throw new IllegalArgumentException("insufficient credits for instrument");
                     equipment[peer.slot].upgrade(id,tier);
                     reply(peer,"ACCEPT|GEARBUY|"+id+"|"+tier);
+                    actorCue(peer.slot,LanSound.Cue.PICKUP);
                     reply(peer,supplies[peer.slot].frame());
                     sendEquipmentState(peer);
                 }
@@ -659,6 +663,7 @@ public final class LanHost implements AutoCloseable {
                         throw new IllegalArgumentException("change field equipment at the van rack");
                     equipment[peer.slot].equip(slot,id);
                     reply(peer,"ACCEPT|GEAREQUIP|"+slot+"|"+id);
+                    actorCue(peer.slot,LanSound.Cue.PICKUP);
                     sendEquipmentState(peer);
                 }
                 case "GEARSLOT" -> {
@@ -668,6 +673,7 @@ public final class LanHost implements AutoCloseable {
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
                     ensureActiveHunter(peer);
                     equipment[peer.slot].selectSlot(slot);
+                    actorCue(peer.slot,LanSound.Cue.SELECT);
                     sendEquipmentState(peer);
                 }
                 case "RECPLAY" -> {
@@ -688,6 +694,7 @@ public final class LanHost implements AutoCloseable {
                     equipment[peer.slot].sampled("SOUND_RECORDER",tick);
                     for(String packet:clip.frames())reply(peer,packet);
                     reply(peer,"ACCEPT|RECPLAY|"+clip.samples().size()+" recorded sounds");
+                    actorCue(peer.slot,LanSound.Cue.DEVICE_ON);
                 }
                 case "GEARUSE" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
@@ -829,7 +836,18 @@ public final class LanHost implements AutoCloseable {
                     notifyHunters(casefile.recordDevice(tick,peer.slot,room,id,
                         LanEvidenceJournal.Finding.OBSERVED,reading));
                     reply(peer,"ACCEPT|GEARUSE|"+id+"|"+reading);
-                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                    LanSound.Cue deviceCue=switch(id){
+                        case "PHOTO_CAMERA"->LanSound.Cue.CAMERA;
+                        case "GHOST_WRITING_BOOK"->LanSound.Cue.BOOK;
+                        case "EMF_READER","THERMOMETER","SPIRIT_BOX","UV_LIGHT",
+                                "SOUND_RECORDER"->LanSound.Cue.SCANNER;
+                        case "FLASHLIGHT","FIRELIGHT","HEAD_GEAR","DOTS_PROJECTOR",
+                                "VIDEO_CAMERA"->gear.powered(id)
+                                    ?LanSound.Cue.DEVICE_ON:LanSound.Cue.DEVICE_OFF;
+                        case "INCENSE"->LanSound.Cue.WARD;
+                        default->LanSound.Cue.EQUIPMENT;
+                    };
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,deviceCue);
                 }
                 case "BUY" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=4)
@@ -861,6 +879,7 @@ public final class LanHost implements AutoCloseable {
                     if(!used)throw new IllegalArgumentException("already at full health or sanity");
                     supplies[peer.slot].consume(kind,tier);
                     reply(peer,"ACCEPT|USESUPPLY|"+kind+"|"+tier);
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.POTION);
                     reply(peer,supplies[peer.slot].frame());
                     broadcastProgress();
                 }
@@ -873,7 +892,7 @@ public final class LanHost implements AutoCloseable {
                     counters.launch(peer.slot,kind,world.body(peer.slot),map,tick);
                     reply(peer,"ACCEPT|DEPLOY|"+kind);
                     sendCounterAmmo(peer);
-                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.WARD);
                     broadcastCounters();
                 }
                 case "PLACEBOOK" -> {
@@ -887,7 +906,7 @@ public final class LanHost implements AutoCloseable {
                     writingBook.place(peer.slot,room,tick);
                     reply(peer,"ACCEPT|PLACEBOOK|"+room);
                     notifyHunters("BOOK|DEPLOYED|"+room);
-                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.BOOK);
                 }
                 case "READBOOK" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
@@ -902,7 +921,7 @@ public final class LanHost implements AutoCloseable {
                     notifyHunters(casefile.recordDevice(tick,peer.slot,room,"GHOST_WRITING_BOOK",
                         LanEvidenceJournal.Finding.OBSERVED,
                         "Book inspection - "+words));
-                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.BOOK);
                 }
                 case "TAKEBOOK" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
@@ -914,6 +933,7 @@ public final class LanHost implements AutoCloseable {
                         throw new IllegalArgumentException("no book to retrieve here");
                     notifyHunters("BOOK|REMOVED|"+room);
                     reply(peer,"ACCEPT|TAKEBOOK|"+room);
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.BOOK);
                 }
                 case "UVSCAN" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
@@ -927,7 +947,7 @@ public final class LanHost implements AutoCloseable {
                         LanEvidenceJournal.Finding.OBSERVED,
                         trace?"UV lamp - fresh surface trace":"UV lamp - no recent trace");
                     notifyHunters(uvNote);
-                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.SCANNER);
                 }
                 case "SCAN" -> {
                     if(!running||peer.slot==GHOST_SEAT||p.size()!=3)throw new IllegalArgumentException("hunter action unavailable");
@@ -953,7 +973,7 @@ public final class LanHost implements AutoCloseable {
                             GhostEvidenceProfile.emfSuppressed(ghostType));
                     answerHunter(peer,"SCAN",result);
                     if(result.accepted()){
-                        recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                        recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.SCANNER);
                         String note=casefile.record(tick,peer.slot,hunterRooms[peer.slot],tool,result);
                         if(note!=null)notifyHunters(note);
                     }
@@ -1032,7 +1052,9 @@ public final class LanHost implements AutoCloseable {
                         default -> throw new AssertionError();
                     };
                     answerHunter(peer,p.get(0),result);
-                    if(result.accepted()&&!p.get(0).equals("EXTRACT"))recordSound(peer.slot,LanGhostPursuit.Sound.RITUAL);
+                    if(result.accepted()&&!p.get(0).equals("EXTRACT"))
+                        recordSound(peer.slot,LanGhostPursuit.Sound.RITUAL,
+                            p.get(0).equals("WARD")?LanSound.Cue.WARD:LanSound.Cue.RITUAL_START);
                     if(result.accepted()&&(p.get(0).equals("CLEANSE")||p.get(0).equals("BANISH")||p.get(0).equals("ABSOLVE")))
                         notifyHunters("RITUAL|STARTED|"+mission.activeRite());
                     broadcastProgress();finishIfComplete();
@@ -1126,15 +1148,22 @@ public final class LanHost implements AutoCloseable {
             }
         }
     }
-    private void recordSound(int seat,LanGhostPursuit.Sound type){
+    private void recordSound(int seat,LanGhostPursuit.Sound type){recordSound(seat,type,null);}
+    private void actorCue(int seat,LanSound.Cue cue){
+        Peer actor=seats[seat];
+        if(actor!=null&&actor.worldMode)
+            reply(actor,new LanSound.CueEvent(cue,0,Math.min(100,cue.baseGain),tick).frame());
+    }
+    /** Host owns the sound source and ghost hearing stimulus; cue picks only its texture. */
+    private void recordSound(int seat,LanGhostPursuit.Sound type,LanSound.Cue selectedCue){
         LanWorld.Body body=world.body(seat);
         // These are the same real synthesized game sounds played by listeners.
         // Raw voice packets use their own media path and are not replaced with invented speech.
         if(type!=LanGhostPursuit.Sound.VOICE&&(type!=LanGhostPursuit.Sound.FOOTSTEP
                 ||tick-lastHunterSound[seat]>=4)){
             lastHunterSound[seat]=tick;
-            LanSound.Cue cue=switch(type){
-                case FOOTSTEP->LanSound.Cue.FOOTFALL;
+            LanSound.Cue cue=selectedCue!=null?selectedCue:switch(type){
+                case FOOTSTEP->LanSound.Cue.STEP;
                 case DOOR->LanSound.Cue.DOOR;
                 case RITUAL->LanSound.Cue.RITUAL;
                 default->LanSound.Cue.EQUIPMENT;
@@ -1147,6 +1176,8 @@ public final class LanHost implements AutoCloseable {
                 recorders[listener].capture(sound,Math.hypot(body.x()-world.body(listener).x(),
                     body.z()-world.body(listener).z()));
             }
+            if(body.room()==HouseMap.EXTRACTION_ROOM&&type!=LanGhostPursuit.Sound.VOICE)
+                actorCue(seat,cue);
         }
         if(LanAcoustics.audible(map,ghost.room(),hunterRooms[seat],type))lastGhostSoundTick=tick;
         if(seats[GHOST_SEAT]==null){
