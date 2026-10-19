@@ -46,6 +46,15 @@ public final class FieldEquipmentTest {
             "reconnect snapshot contains carried tiered state");
         ok(!gear.inventoryFrame().contains("RESONANCE_TUNER"),
             "planned devices not represented as owned");
+        int inventoryEntries=0;
+        for(String frame:gear.inventoryFrames()){
+            var fields=LanProtocol.parts(frame);
+            ok(fields.get(0).equals("GEAROWNED")&&fields.size()<=10,
+                "every reconnect catalog chunk fits bounded network protocol");
+            inventoryEntries+=fields.size()-1;
+        }
+        ok(inventoryEntries==FieldEquipment.workingTools().size(),
+            "all held-capable tools survive chunked reconnect replay");
         System.out.println("PASS: working tiered inventory, shared credits, range, cooldown and duplicate-slot rejection");
     }
 }
