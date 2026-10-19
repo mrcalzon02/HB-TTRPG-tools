@@ -17,24 +17,29 @@ public final class VanStaging {
     }
     public record Position(double x, double z) { }
     public enum Station {
-        BRIEFING("Case board", -1.0, -.8),
-        EQUIPMENT("Equipment rack", 1.0, -.8),
-        RELAY("Sanity / activity monitors", -1.0, .75),
-        EXTRACTION("Extraction console", .9, .65);
+        BRIEFING("Contract / daily task boards", .70, 2.56),
+        EQUIPMENT("Equipment rack", -1.12, -1.35),
+        RELAY("Sanity / activity monitors", 1.05, .55),
+        EXTRACTION("Extraction console", .95, 2.50);
         public final String label;
         final double dx, dz;
         Station(String label, double dx, double dz) {
             this.label=label;this.dx=dx;this.dz=dz;
         }
     }
-    public static final double HALF_WIDTH=2.1, FRONT=-2.1, REAR=2.05;
-    public static final double WALL_THICKNESS=.16, USE_RANGE=.85;
+    /** Internal van cargo envelope, in metres. 7.30m long, 4.10m wide,
+     * with 3.05m usable headroom. Original Car08 was an undersized square
+     * body (4.14m by 4.14m), not suitable for 28 real instruments.
+     * Cargo doorway is at FRONT (negative local Z), bulkhead at REAR.
+     */
+    public static final double HALF_WIDTH=2.05, FRONT=-3.65, REAR=3.65;
+    public static final double INTERIOR_HEIGHT=3.05, WALL_THICKNESS=.13, USE_RANGE=1.15;
     /** Host-owned cargo shutter: initially open so newly spawned hunters can leave. */
     private boolean cargoDoorClosed;
     public boolean cargoDoorClosed(){return cargoDoorClosed;}
     public void setCargoDoorClosed(boolean closed){cargoDoorClosed=closed;}
     /** Exact physical button location beside the van's cargo entrance. */
-    public Position doorButton(){return world(-1.68,FRONT+.47);}
+    public Position doorButton(){return world(-1.77,FRONT+.57);}
     public boolean nearDoorButton(double x,double z){
         if(!Double.isFinite(x)||!Double.isFinite(z))return false;
         Position p=doorButton();
