@@ -23,7 +23,7 @@ permissions:
 
 concurrency:
   group: beckenburg-windows-release
-  cancel-in-progress: false
+  # Superseded pre-release builds must not hold the only Windows release slot.\n  cancel-in-progress: true
 
 jobs:
   release-windows:
