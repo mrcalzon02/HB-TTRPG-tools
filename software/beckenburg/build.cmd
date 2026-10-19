@@ -110,6 +110,7 @@ java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.Fi
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ManualEvidenceJournalTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostEvidenceMatrixTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentTiersTest || exit /b 1
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentStoreDescriptionsTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.FieldEquipmentTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.InstrumentActivationTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TieredMediaAndPowerTest || exit /b 1
