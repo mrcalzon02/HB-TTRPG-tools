@@ -63,9 +63,12 @@ public final class DirectionalSprites {
      */
     public static BufferedImage frame(String character,int facing,LanGhostAnimation.Phase phase,int animationFrame){
         if(facing<0||facing>=8||phase==null)throw new IllegalArgumentException("invalid facing/phase");
-        BufferedImage expanded=GhostSpriteAtlas.frame(character,facing,GhostSpriteAtlas.state(phase),animationFrame);
+        // Ancient sprites reuse the exact same approved parent art on every facing.
+        // Green tint is applied in draw(), never a separate species atlas.
+        String spriteSource=character.startsWith("ancient_")?character.substring("ancient_".length()):character;
+        BufferedImage expanded=GhostSpriteAtlas.frame(spriteSource,facing,GhostSpriteAtlas.state(phase),animationFrame);
         if(expanded!=null)return expanded;
-        return frame(IMAGES.containsKey(character+"/front")?character:"banshee",facing);
+        return frame(IMAGES.containsKey(spriteSource+"/front")?spriteSource:"banshee",facing);
     }
     /** Entity heading zero looks +Z; facing zero when camera looks at its face. */
     public static int facing(int heading,double entityX,double entityZ,double camX,double camZ){
@@ -150,7 +153,7 @@ public final class DirectionalSprites {
                 red=(int)(Math.min(255,red)*(1-fog)+18*fog);
                 green=(int)(Math.min(255,green)*(1-fog)+21*fog);
                 blue=(int)(Math.min(255,blue)*(1-fog)+30*fog);
-                if(ancientTint&&!(character.startsWith("ancient_")&&GhostSpriteAtlas.supports(character))){
+                if(ancientTint){
                     red=(int)(red*.33);
                     green=Math.min(255,(int)(green*.80+53));
                     blue=(int)(blue*.35);

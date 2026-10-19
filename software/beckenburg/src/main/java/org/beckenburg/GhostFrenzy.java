@@ -55,6 +55,7 @@ public final class GhostFrenzy {
             case MIMIC       ->new Profile(72,72,230,25,195,340,8,12,14,32,9,19,32);
             case TWINS       ->new Profile(69,67,220,28,220,345,9,12,12,31,8,19,33);
             case SPIRIT      ->new Profile(78,60,250,28,210,390,9,18,13,33,10,16,40);
+            default->throw new AssertionError("Unexpected base ghost: "+type);
         };
     }
     private final GhostIdentity.Type type;

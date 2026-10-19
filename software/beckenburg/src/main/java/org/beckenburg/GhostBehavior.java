@@ -27,6 +27,7 @@ public final class GhostBehavior {
    case DEVIL->new Profile(GhostDomain.Action.WHISPER,3,12,4,0,0,37,"A soft voice offers an unsettling promise");
    case MIMIC->new Profile(GhostDomain.Action.WHISPER,1,8,2,0,0,41,"The last call repeats with a slight delay");
    case TWINS->new Profile(GhostDomain.Action.DRIFT,1,13,1,0,0,25,"Two knocks answer from neighboring rooms");
+   default->throw new AssertionError("Unexpected base ghost: "+type);
   };
  }
  public static int cost(GhostIdentity.Type type,GhostDomain.Action action,int base){

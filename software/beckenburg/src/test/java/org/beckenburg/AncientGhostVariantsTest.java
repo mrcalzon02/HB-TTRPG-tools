@@ -68,6 +68,25 @@ public final class AncientGhostVariantsTest {
         ok(ancient.x()==normal.x()&&ancient.z()==normal.z(),
             "Tint reuses parent's identical physical apparition geometry");
 
+        // Ancient sprite selection must return the parent's actual art, frame
+        // for frame, even with the expanded atlas installed. Only rendering tints it.
+        for(GhostIdentity.Type species:roster)if(species.ancient()){
+            String parent=species.baseType().name().toLowerCase(java.util.Locale.ROOT);
+            String ancientName=species.name().toLowerCase(java.util.Locale.ROOT);
+            for(int facing=0;facing<8;facing++){
+                var parentFrame=DirectionalSprites.frame(parent,facing,
+                    LanGhostAnimation.Phase.LURK,0);
+                var ancientFrame=DirectionalSprites.frame(ancientName,facing,
+                    LanGhostAnimation.Phase.LURK,0);
+                ok(java.util.Arrays.equals(
+                        parentFrame.getRGB(0,0,parentFrame.getWidth(),parentFrame.getHeight(),
+                            null,0,parentFrame.getWidth()),
+                        ancientFrame.getRGB(0,0,ancientFrame.getWidth(),ancientFrame.getHeight(),
+                            null,0,ancientFrame.getWidth())),
+                    "Ancient must reuse parent's actual directional art: "+species+
+                        " facing "+facing);
+            }
+        }
         // Use the actual shipped directional alpha sprite to check rendering,
         // not a hand-drawn test shape or an additional Ancient texture file.
         int[] plain=new int[SceneRenderer.W*SceneRenderer.H];
@@ -78,7 +97,7 @@ public final class AncientGhostVariantsTest {
         DirectionalSprites.draw(plain,plainDepth,0,0,0,0,0,4,0,
             "banshee",1.95,1.16,0,255,true,SceneRenderer.W,SceneRenderer.H,153.0,false);
         DirectionalSprites.draw(green,greenDepth,0,0,0,0,0,4,0,
-            "banshee",1.95,1.16,0,255,true,SceneRenderer.W,SceneRenderer.H,153.0,true);
+            "ancient_banshee",1.95,1.16,0,255,true,SceneRenderer.W,SceneRenderer.H,153.0,true);
         long plainRed=0,greenRed=0,plainGreen=0,greenGreen=0;
         int opaque=0;
         for(int i=0;i<plain.length;i++)if(plainDepth[i]<Double.POSITIVE_INFINITY){

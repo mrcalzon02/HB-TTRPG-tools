@@ -37,6 +37,7 @@ public final class GhostTraits {
             case DEVIL -> new Profile(Locomotion.WALK,Passage.DOORS,Sight.VISIBLE,Charge.PRESENCE,2,185,90,true,true,"Feeds on a lone investigator's sanity");
             case MIMIC -> new Profile(Locomotion.WALK,Passage.DOORS,Sight.VISIBLE,Charge.PRESENCE,4,135,75,false,true,"Repeats voices and gains strength from nearby listeners");
             case TWINS -> new Profile(Locomotion.FLOAT,Passage.DOORS,Sight.ORBS,Charge.AMBIENT,2,135,65,false,false,"Twin orbs and paired knocks, never wall-phases");
+            default -> throw new AssertionError("Unexpected base ghost: "+type);
         };
     }
     /** Periodic energy only if the species has the conditions it needs. */
@@ -70,6 +71,7 @@ public final class GhostTraits {
             case DEVIL->108;case POSSESSIVE->104;
             case SPIRIT->100;case MIMIC->100;case TWINS->99;
             case SPECTER->92;case SHADE->82;
+            default->throw new AssertionError("Unexpected base ghost: "+type);
         };
     }
     /** Physical tracks and slowing salt affect walkers only, never floating species. */
