@@ -642,12 +642,14 @@ public final class LanHost implements AutoCloseable {
                         throw new IllegalArgumentException("monitors disabled by contract");
                     if(!insideVan(peer.slot))throw new IllegalArgumentException("van monitors are only usable in the van");
                     if(tick-peer.lastMonitorTick<5)throw new IllegalArgumentException("monitor update cooldown");
+                    boolean monitorActivation=tick-peer.lastMonitorTick>100;
                     peer.lastMonitorTick=tick;
                     int[] sane=new int[HUNTERS];
                     for(int i=0;i<HUNTERS;i++)
                         sane[i]=contract.sanityMonitor()&&seats[i]!=null?100-mission.stress(i):-1;
                     int activity=contract.activityMonitor()?monitor.sample(tick,ghost.energy()):0;
                     reply(peer,new VanTelemetry.Display(tick,activity,sane).frame());
+                    if(monitorActivation)actorCue(peer.slot,LanSound.Cue.MONITOR_HUM);
                 }
                 case "GEARSTATE" -> {
                     if(!running||peer.slot==GHOST_SEAT||p.size()!=1)
