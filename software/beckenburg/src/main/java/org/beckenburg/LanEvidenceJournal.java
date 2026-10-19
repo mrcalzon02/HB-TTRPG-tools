@@ -17,6 +17,12 @@ public final class LanEvidenceJournal {
                 throw new IllegalArgumentException("invalid equipment identifier");
             Objects.requireNonNull(finding);
             Objects.requireNonNull(reading);
+            // Old network packet enums can still decode, but the current journal
+            // does not certify the meaning of any instrument observation.
+            finding=Finding.OBSERVED;
+            if(reading.startsWith("CONFIRMED ")||reading.startsWith("REPEAT ")
+                    ||reading.startsWith("INCONCLUSIVE "))
+                reading="READING "+reading.substring(reading.indexOf(' ')+1);
             if(reading.isBlank()||reading.length()>160||reading.indexOf('|')>=0
                     ||reading.indexOf('\n')>=0||reading.indexOf('\r')>=0)
                 throw new IllegalArgumentException("invalid evidence text");
@@ -42,12 +48,10 @@ public final class LanEvidenceJournal {
         Objects.requireNonNull(report);
         if(!report.accepted())throw new IllegalArgumentException("rejected scan cannot create evidence");
         String reading=report.message();
-        Finding finding=reading.startsWith("READING ")?Finding.OBSERVED:
-                reading.startsWith("CONFIRMED ")?Finding.CONFIRMED:
-                reading.startsWith("REPEAT ")?Finding.REPEAT:
-                reading.startsWith("INCONCLUSIVE ")?Finding.INCONCLUSIVE:null;
-        if(finding==null)throw new IllegalArgumentException("unrecognized reading");
-        return recordDevice(tick,seat,room,tool.name(),finding,reading);
+        if(!(reading.startsWith("READING ")||reading.startsWith("CONFIRMED ")
+                ||reading.startsWith("REPEAT ")||reading.startsWith("INCONCLUSIVE ")))
+            throw new IllegalArgumentException("unrecognized reading");
+        return recordDevice(tick,seat,room,tool.name(),Finding.OBSERVED,reading);
     }
     /** Every accepted sample, including inconclusive and repeated measurements,
      * is logged. Non-legacy instruments share the same replay protocol.

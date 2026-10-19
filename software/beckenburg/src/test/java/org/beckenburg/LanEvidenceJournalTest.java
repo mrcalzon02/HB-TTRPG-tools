@@ -34,6 +34,17 @@ public final class LanEvidenceJournalTest {
                     new LanCase.Report(true,"READING SPIRIT_BOX scan "+i));
         ok(journal.snapshot().size()==LanEvidenceJournal.CAPACITY,"ring bounded");
         ok(LanEvidenceJournal.Entry.decode(journal.snapshot().get(0)).tick()==24+12*12,"oldest notes evicted");
+        var oldPacket=LanEvidenceJournal.Entry.decode(
+            "CASEFILE|401|1|4|EMF|CONFIRMED|CONFIRMED EMF 8");
+        ok(oldPacket.finding()==LanEvidenceJournal.Finding.OBSERVED
+                &&oldPacket.reading().equals("READING EMF 8"),
+            "Legacy confirmation stamps never reach the investigator as verdicts");
+        var oldScan=journal.record(402,1,4,LanCase.Tool.EMF,
+            new LanCase.Report(true,"CONFIRMED EMF in 4 - EMF 8/10"));
+        ok(LanEvidenceJournal.Entry.decode(oldScan).finding()
+                ==LanEvidenceJournal.Finding.OBSERVED
+                &&!oldScan.contains("CONFIRMED"),
+            "Even legacy strong readings serialize only as observations");
         System.out.println("PASS: bounded casefile provenance and protocol");
     }
 }
