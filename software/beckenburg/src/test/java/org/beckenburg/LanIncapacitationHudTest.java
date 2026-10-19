@@ -24,7 +24,7 @@ public final class LanIncapacitationHudTest {
                     press(p,KeyEvent.VK_E);
                     ok(p.caseFeedback().contains("INCAPACITATED"),"door input suppressed when down");
                     press(p,KeyEvent.VK_R);
-                    ok(p.caseFeedback().contains("CANNOT SCAN"),"scanner hotkey suppressed");
+                    ok(p.caseFeedback().contains("CANNOT DEVICE READING"),"scanner hotkey suppressed");
                     press(p,KeyEvent.VK_W);
                     BufferedImage image=new BufferedImage(850,555,BufferedImage.TYPE_INT_RGB);
                     var g=image.createGraphics();p.paint(g);g.dispose();
