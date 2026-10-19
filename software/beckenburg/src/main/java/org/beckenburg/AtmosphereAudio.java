@@ -9,16 +9,13 @@ public final class AtmosphereAudio implements AutoCloseable {
     public enum Scene { CASTLE, FIELD }
     private static final int RATE=16000;
     private static final AudioFormat FORMAT=new AudioFormat(RATE,16,2,true,false);
-    private final Scene scene;
-    private final Thread worker;
-    private volatile boolean stopped,active;
-    private volatile SourceDataLine output;
-    public void setActive(boolean visible){active=visible&&!stopped;}
+    private final SoundtrackAudio soundtrack;
     public AtmosphereAudio(Scene scene){
-        this.scene=java.util.Objects.requireNonNull(scene);
-        worker=new Thread(this::play,"beckenburg-atmosphere-"+scene);
-        worker.setDaemon(true);worker.start();
+        soundtrack=new SoundtrackAudio(java.util.Objects.requireNonNull(scene)==Scene.CASTLE);
     }
+    public void setActive(boolean visible){soundtrack.setActive(visible);}
+    public void setHunt(boolean value){soundtrack.setHunt(value);}
+    public void setRitual(boolean value){soundtrack.setRitual(value);}
     /** Pure sample function is regression-testable without opening a sound device. */
     public static short sample(Scene scene,long index){
         if(scene==null||index<0)throw new IllegalArgumentException("invalid atmosphere position");
@@ -44,29 +41,5 @@ public final class AtmosphereAudio implements AutoCloseable {
         return (short)Math.max(Short.MIN_VALUE,Math.min(Short.MAX_VALUE,
             Math.round((sum+distantBell+hiss)*gain*32767)));
     }
-    private void play(){
-        if(Boolean.getBoolean("beckenburg.audio.mute"))return;
-        SourceDataLine line=null;
-        try{
-            line=AudioSystem.getSourceDataLine(FORMAT);
-            line.open(FORMAT,4096);line.start();output=line;
-            byte[] data=new byte[4096];long pos=0;
-            while(!stopped){
-                if(!active){try{Thread.sleep(70);}catch(InterruptedException ignored){}
-                    continue;}
-                for(int i=0;i<data.length;i+=4){
-                    short sample=sample(scene,pos++);
-                    data[i]=(byte)sample;data[i+1]=(byte)(sample>>>8);
-                    data[i+2]=(byte)sample;data[i+3]=(byte)(sample>>>8);
-                }
-                if(line.write(data,0,data.length)<=0)break;
-            }
-        }catch(LineUnavailableException|IllegalArgumentException|SecurityException ignored){
-            // No device or permission => silent, captioned gameplay remains fully playable.
-        }finally{output=null;if(line!=null){line.stop();line.close();}}
-    }
-    @Override public void close(){
-        stopped=true;SourceDataLine line=output;
-        if(line!=null){line.stop();line.close();}worker.interrupt();
-    }
+    @Override public void close(){soundtrack.close();}
 }
