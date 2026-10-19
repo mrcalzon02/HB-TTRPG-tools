@@ -35,6 +35,7 @@ public final class BeckenburgDiagnostics {
         .withZone(ZoneOffset.UTC);
     private static final Path DIR=Path.of(System.getProperty("user.home","."),".beckenburg","diagnostics");
     private static final AtomicBoolean INSTALLED=new AtomicBoolean();
+    private static final AtomicBoolean UI_FAILURE_SHOWN=new AtomicBoolean();
     private static volatile String stage="entry";
     private static volatile Path log;
     private static volatile String lastReport="";
@@ -79,7 +80,8 @@ public final class BeckenburgDiagnostics {
                     try{super.dispatchEvent(event);}
                     catch(Throwable failure){
                         fail("Swing event dispatch at "+stage,failure);
-                        failureScreen(null,"UI event failed",failure);
+                        if(UI_FAILURE_SHOWN.compareAndSet(false,true))
+                            failureScreen(null,"UI event failed",failure);
                     }
                 }
             });}
@@ -228,12 +230,51 @@ public final class BeckenburgDiagnostics {
             JButton copy=new JButton("Copy report");
             copy.addActionListener(e->copyReport());
             JPanel actions=new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT,6,0));
-            actions.add(open);actions.add(copy);root.add(actions,java.awt.BorderLayout.SOUTH);
+            JButton export=new JButton("Export support ZIP");
+            export.addActionListener(e->exportUI());
+            actions.add(open);actions.add(copy);actions.add(export);root.add(actions,java.awt.BorderLayout.SOUTH);
             root.setPreferredSize(new java.awt.Dimension(580,230));
             JOptionPane.showMessageDialog(parent,root,"Beckenburg diagnostics",JOptionPane.ERROR_MESSAGE);
         }catch(Throwable impossible){
             System.err.println("Failed to show diagnostic UI: "+impossible);
         }
+    }
+    /**
+     * Self-contained support archive. Includes diagnostic text only, never
+     * profiles, save files, installer binaries or private source packs.
+     */
+    public static Path exportBundle()throws IOException{
+        Files.createDirectories(DIR);
+        Path bundle=DIR.resolve("beckenburg-support-"+NAME.format(Instant.now())+".zip");
+        try(var output=new java.util.zip.ZipOutputStream(Files.newOutputStream(bundle,
+                StandardOpenOption.CREATE_NEW));var files=Files.list(DIR)){
+            output.putNextEntry(new java.util.zip.ZipEntry("README.txt"));
+            output.write(("Local Beckenburg diagnostic evidence only. No upload occurred.\\n"+
+                "Version: "+version()+"\\nSource: "+sourceRevision()+"\\nPhase: "+stage+"\\n")
+                .replace("\\n","\n").getBytes(StandardCharsets.UTF_8));
+            output.closeEntry();
+            var snapshots=files.filter(p->{
+                String name=p.getFileName().toString();
+                return name.startsWith("session-")&&name.endsWith(".log") ||
+                    name.startsWith("crash-")&&name.endsWith(".txt");
+            }).sorted(Comparator.comparing(Path::getFileName).reversed()).limit(6).toList();
+            for(Path file:snapshots){
+                output.putNextEntry(new java.util.zip.ZipEntry(file.getFileName().toString()));
+                // Text redaction before export. Diagnostic files remain local.
+                output.write(redact(Files.readString(file,StandardCharsets.UTF_8))
+                    .getBytes(StandardCharsets.UTF_8));
+                output.closeEntry();
+            }
+        }
+        record("DIAGNOSTICS exported support archive: "+bundle.getFileName());
+        return bundle;
+    }
+    private static void exportUI(){
+        try{
+            Path path=exportBundle();
+            JOptionPane.showMessageDialog(null,"Support bundle saved to:\n"+path,
+                "Beckenburg diagnostics",JOptionPane.INFORMATION_MESSAGE);
+        }catch(Exception error){fail("Support ZIP export",error);}
     }
     public static void show(java.awt.Component parent){
         if(GraphicsEnvironment.isHeadless())return;
@@ -257,7 +298,9 @@ public final class BeckenburgDiagnostics {
             JButton copy=new JButton("Copy report");copy.addActionListener(e->copyReport());
             JButton capture=new JButton("Capture thread report");
             capture.addActionListener(e->{fail("Manual diagnostic capture",null);show(parent);});
-            actions.add(open);actions.add(copy);actions.add(capture);
+            JButton export=new JButton("Export support ZIP");
+            export.addActionListener(e->exportUI());
+            actions.add(open);actions.add(copy);actions.add(capture);actions.add(export);
             root.add(actions,java.awt.BorderLayout.SOUTH);
             JOptionPane.showMessageDialog(parent,root,"Beckenburg diagnostics",JOptionPane.PLAIN_MESSAGE);
         }catch(Throwable failure){fail("Diagnostics window",failure);}
