@@ -267,66 +267,65 @@ public final class SceneRenderer {
         box(faces,handle.x()-.045,.96,handle.z()-.04,.09,.13,.08,0xd8c9a1);
     }
 
-    private static void vanModel(List<Face> faces,VanStaging van,java.util.Set<EquipmentLoadout.Item> stock){
+    private static void vanModel(List<Face> faces,VanStaging van,
+                                 java.util.Set<EquipmentLoadout.Item> stock){
         double w=VanStaging.HALF_WIDTH,f=VanStaging.FRONT,r=VanStaging.REAR;
-        // CC0 GGBot Car 08 is the physical van body. Its integrated rear closure
-        // was removed from the converted mesh, leaving the actual cargo opening.
-        // Interior collision, stations and hinged doors remain VanStaging-owned.
+        // Original source: x[-2.07,2.07], z[-2.10,2.04], y[0,2.32].
+        // Preserve UVs, nested transforms and baseColorFactor. No invented
+        // exterior body panels are painted over the licensed vehicle shell.
         imported(faces,"ggbot_car08_van_shell",van.placement().x(),.005,
             van.placement().z(),1.0,van.placement().yaw());
-        vanBox(faces,van,-w,0,r-.16,w*2,2.27,.16,MaterialAtlas.AGED_WOOD);
-        vanBox(faces,van,-w,.015,f,w*2,.04,r-f,MaterialAtlas.CONCRETE);
-        // Side-mounted lockers, distinct coloured monitor/briefing boards and ramps.
-        vanBox(faces,van,-1.90,.20,-1.25,.30,1.45,1.00,MaterialAtlas.AGED_WOOD);
-        vanBox(faces,van,1.60,.20,-1.25,.28,1.45,1.00,MaterialAtlas.IRON);
-        vanBox(faces,van,-1.90,.68,.28,.32,.95,1.0,MaterialAtlas.WINDOW);
-        vanBox(faces,van,1.55,.7,.28,.36,.9,.95,MaterialAtlas.RITUAL);
-        vanBox(faces,van,-.55,.10,r-.28,1.1,.5,.18,MaterialAtlas.AGED_WOOD);
-        vanBox(faces,van,-w+.1,.05,f-.3,w*2-.2,.08,.3,MaterialAtlas.IRON);
-        // Actual owner-supplied display and physical computer assemblies replace
-        // arbitrary color slabs; the panel face is independently authorable.
-        VanStaging.Position console=van.world(-1.68,.62);
-        imported(faces,"monitoring_screen_mp_1",console.x(),1.24,console.z(),
-            2.0,van.placement().yaw()+Math.PI/2);
-        VanStaging.Position computer=van.world(-1.36,-.9);
-        imported(faces,"pc_mp_1",computer.x(),.83,computer.z(),
-            1.35,van.placement().yaw());
-        VanStaging.Position button=van.doorButton();
-        imported(faces,"button_12",button.x(),1.15,button.z(),
-            .48,van.placement().yaw());
-        cargoDoorLeaf(faces,van,true);
-        cargoDoorLeaf(faces,van,false);
-        // Visible equipment shelf: six distinct physical sockets. Items can be aimed at and taken.
-        for(double lz : new double[]{-1.18,.18}) {
-            VanStaging.Position p=van.world(1.50,lz);
-            VanStaging.Position right=van.world(2.50,lz);
-            double yaw=Math.atan2(right.z()-p.z(),right.x()-p.x());
-            imported(faces,"shelf_mp_6",p.x(),.36,p.z(),1.35,yaw);
+
+        // Measured cargo liner, centre aisle, and driver bulkhead. These are
+        // interior surfaces, not a second duplicate solid box painted as a van.
+        vanBox(faces,van,-w+.16,.015,f+.16,w*2-.32,.035,r-f-.32,
+            MaterialAtlas.CONCRETE);
+        vanBox(faces,van,-.69,.055,f+.20,1.38,.013,r-f-.40,
+            MaterialAtlas.IRON);
+        vanBox(faces,van,-w+.15,.09,r-.16,w*2-.30,1.82,.10,
+            MaterialAtlas.AGED_WOOD);
+        // Trim acts as an actual mechanical threshold, not a floating slab.
+        vanBox(faces,van,-w+.20,.035,f-.08,w*2-.4,.045,.14,
+            MaterialAtlas.IRON);
+
+        for(var fixture:VanInteriorLayout.FIXTURES){
+            if(!VanInteriorLayout.insideShell(fixture))
+                throw new IllegalStateException("Van asset outside vehicle: "+fixture.purpose());
+            var p=van.world(fixture.localX(),fixture.localZ());
+            imported(faces,fixture.mesh(),p.x(),fixture.y(),p.z(),
+                fixture.scale(),van.placement().yaw()+fixture.yaw());
         }
+        // Physical monitor mount: the original GLB arm terminates at a real
+        // bracket on the left shell. Its nested node positions are now correct.
+        VanStaging.Position bracket=van.world(-1.97,.79);
+        vanBox(faces,van,-2.035,1.36,.61,.17,.37,.36,MaterialAtlas.IRON);
+        // Wall-facing console button remains at the actual gameplay socket.
+        VanStaging.Position doorControl=van.doorButton();
+        imported(faces,"button_12",doorControl.x(),1.16,doorControl.z(),
+            .44,van.placement().yaw()+Math.PI/2);
+
+        // All rack items follow the same authoritative socket coordinates
+        // used by pickup targeting. No free equipment appears in mission maps.
         for(EquipmentLoadout.Item item:EquipmentLoadout.Item.values()){
             if(!stock.contains(item))continue;
-            double lz=-1.58+item.ordinal()*.52;
-            int finish=switch(item){
-                case EMF->0x517d73; case THERMOMETER->0xaaa99b;
-                case SPIRIT_BOX->0x49535f;case UV_LAMP->0x8a70b1;
-                case PHOTO_CAMERA->0x3b4553;case SALT->0xd1c49d;
-            };
-            VanStaging.Position v=van.world(1.48,lz);
-            String source=switch(item){
+            var socket=VanEquipmentRack.socket(van,item);
+            String model=switch(item){
                 case EMF->"exploration_emf_detector";
                 case THERMOMETER->"exploration_thermometer";
                 case SPIRIT_BOX->"exploration_spirit_box";
                 case UV_LAMP->"exploration_flashlight_poquet";
                 case PHOTO_CAMERA->"exploration_photo_camera";
-                default->null;
+                case SALT->"blender_salt_1";
             };
-            if(source!=null)
-                imported(faces,source,v.x(),.85,v.z(),1.65,van.placement().yaw());
-            else {
-                box(faces,v.x()-.11,.65,v.z()-.09,.21,.50,.18,finish);
-                box(faces,v.x()-.09,1.12,v.z()-.07,.17,.08,.14,0xa1aab4);
-            }
+            imported(faces,model,socket.x(),.84,socket.z(),
+                .90,van.placement().yaw()+Math.PI/2);
         }
+
+        // Door leaves remain hinged and follow the authoritative server-
+        // owned cargo closure state. The original shell's rear polygon was
+        // removed for the actual usable opening.
+        cargoDoorLeaf(faces,van,true);
+        cargoDoorLeaf(faces,van,false);
     }
 
     /** Minimal real CC0 streetscape. Geometry is deliberately deterministic:
