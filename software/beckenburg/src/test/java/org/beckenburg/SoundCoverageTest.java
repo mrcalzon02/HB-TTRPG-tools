@@ -38,14 +38,14 @@ public final class SoundCoverageTest {
             for(byte sample:real)if(sample!=0){nonzero=true;break;}
             if(!nonzero)throw new AssertionError("Silent NOX recording "+cue);
         }
-        byte[] a=new byte[2048],b=new byte[2048];
+        byte[] a=new byte[2048],second=new byte[2048];
         for(int at=0;at<a.length;at+=4){
             a[at]=(byte)0x70;a[at+1]=(byte)0x17;
             a[at+2]=(byte)0x70;a[at+3]=(byte)0x17; // +6000 per channel
-            b[at]=(byte)0x70;b[at+1]=(byte)0x17;
-            b[at+2]=(byte)0x70;b[at+3]=(byte)0x17;
+            second[at]=(byte)0x70;second[at+1]=(byte)0x17;
+            second[at+2]=(byte)0x70;second[at+3]=(byte)0x17;
         }
-        byte[] overlapped=LanAudio.mixForTest(a,b);
+        byte[] overlapped=LanAudio.mixForTest(a,second);
         int mixed=(short)((overlapped[0]&255)|(overlapped[1]<<8));
         if(mixed!=12000||overlapped.length!=2048)
             throw new AssertionError("Mixer did not sum concurrent audio streams: "+mixed);
