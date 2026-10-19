@@ -26,7 +26,8 @@ public final class SoundCoverageTest {
         }
         // The two provenance-checked NOX clips are real packaged source recordings,
         // not the synthetic importer fixture; build scripts MUST stage both.
-        for(LanSound.Cue cue:new LanSound.Cue[]{LanSound.Cue.PICKUP,LanSound.Cue.DEVICE_ON}){
+        for(LanSound.Cue cue:new LanSound.Cue[]{LanSound.Cue.PICKUP,LanSound.Cue.DEVICE_ON,
+                LanSound.Cue.DROP,LanSound.Cue.SCANNER,LanSound.Cue.ELECTRIC_HUM}){
             if(!RecordedSfx.isPackaged(cue))
                 throw new AssertionError("Required decoded NOX recording missing: "+cue);
             byte[] real=RecordedSfx.render(new LanSound.CueEvent(cue,0,75,2),80);
