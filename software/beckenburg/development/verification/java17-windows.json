@@ -1,0 +1,766 @@
+{
+  "baseline_commit": "cf2b497a9b9caef905605bead34d10a8b399f803",
+  "java": "17.0.12",
+  "blender": "5.0.0",
+  "native_host": "Windows",
+  "regression_count": 123,
+  "regression_failures": 0,
+  "tests": [
+    {
+      "test": "CastleHubIntegrationTest",
+      "exit_code": 0,
+      "seconds": 0.23,
+      "output": "PASS collision-aware GLB castle furniture, usable stations, live scene and purchases\n"
+    },
+    {
+      "test": "BeckenburgUpdatesTest",
+      "exit_code": 0,
+      "seconds": 0.7,
+      "output": "PASS independent Beckenburg updates, version sorting, exact asset path and hostile URL rejection\n"
+    },
+    {
+      "test": "HeldMeshViewTest",
+      "exit_code": 0,
+      "seconds": 0.22,
+      "output": "Purchased flashlight foreground: 5878 mesh pixels, 492 colors\n"
+    },
+    {
+      "test": "GlbPropsTest",
+      "exit_code": 0,
+      "seconds": 0.34,
+      "output": "Eight real Beckenburg GLB meshes, UVs and PNG materials validated\n"
+    },
+    {
+      "test": "EvidenceSignalsTest",
+      "exit_code": 0,
+      "seconds": 0.05,
+      "output": "PASS: ordinary EMF 2-7, high 8-10, neutral thermal variation, extremes and F/C\n"
+    },
+    {
+      "test": "EmfSilenceTest",
+      "exit_code": 0,
+      "seconds": 0.05,
+      "output": "PASS: Shade-authorized zero EMF versus ordinary high signal\n"
+    },
+    {
+      "test": "GhostWritingTest",
+      "exit_code": 0,
+      "seconds": 0.05,
+      "output": "PASS: genuine room-authored writing and all three readable variants\n"
+    },
+    {
+      "test": "EquipmentRegistryTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: 42 equipment entries, status separation, and evidence families\n"
+    },
+    {
+      "test": "EquipmentTiersTest",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "output": "PASS: 42 devices, 126 tier stages, reach, response, clarity and capacity\n"
+    },
+    {
+      "test": "EquipmentStoreDescriptionsTest",
+      "exit_code": 0,
+      "seconds": 0.12,
+      "output": "PASS: store names, live prices, 42x3 tier facts, optics, batteries, hover copy, no invented capabilities\n"
+    },
+    {
+      "test": "FieldEquipmentTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: working tiered inventory, shared credits, range, cooldown and duplicate-slot rejection\n"
+    },
+    {
+      "test": "InstrumentActivationTest",
+      "exit_code": 0,
+      "seconds": 0.17,
+      "output": "PASS: physical exposures, saved photos, switches, night vision, consumables and video stations\n"
+    },
+    {
+      "test": "TieredMediaAndPowerTest",
+      "exit_code": 0,
+      "seconds": 0.11,
+      "output": "PASS: Polaroid 1, cameras 6/12, photo output quality, video lens width, tiered beams, battery discharge/recharge\n"
+    },
+    {
+      "test": "TieredUvAndFirelightTest",
+      "exit_code": 0,
+      "seconds": 0.05,
+      "output": "PASS: three-tier true UV sensitivity and finite 120/180/270s firelight\n"
+    },
+    {
+      "test": "ImportedEquipmentModelsTest",
+      "exit_code": 0,
+      "seconds": 0.33,
+      "output": "PASS: 12 imported PSX meshes, original textures and tier-dependent held models\n"
+    },
+    {
+      "test": "PackagedSourceModelsTest",
+      "exit_code": 0,
+      "seconds": 0.38,
+      "output": "PASS: 42 packaged source GLBs, real triangles and embedded textures\n"
+    },
+    {
+      "test": "FieldSoundRecorderTest",
+      "exit_code": 0,
+      "seconds": 0.17,
+      "output": "PASS: all three recorder tiers, real timed audio, mono/stereo WAV, silence, range, storage, memory and power\n"
+    },
+    {
+      "test": "LanSoundRecorderIntegrationTest",
+      "exit_code": 0,
+      "seconds": 6.14,
+      "output": "PASS: real rack input, paid upgrades, authored audio, private playback, service authority and reconnect continuity\n"
+    },
+    {
+      "test": "RecorderModelsTest",
+      "exit_code": 0,
+      "seconds": 0.3,
+      "output": "PASS: three Blender recorder GLBs load/rasterize in Java, bounded triangles, live physical LCD previews\n"
+    },
+    {
+      "test": "TierModelForgeTest",
+      "exit_code": 0,
+      "seconds": 0.86,
+      "output": "PASS: 126 real textured tier GLBs / 111 synthesized prefab selections / 15 preserved original source props\n"
+    },
+    {
+      "test": "VanCargoDoorTest",
+      "exit_code": 0,
+      "seconds": 0.36,
+      "output": "PASS: switchable server-driven van door changes collision and rendered scene\n"
+    },
+    {
+      "test": "LanDotsProjectorsTest",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "output": "PASS: true Tier I D.O.T.S., authored manifestations, no false events and physical retrieval\n"
+    },
+    {
+      "test": "OptionalEvidenceReadingsTest",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "output": "PASS: 13 types x 2 different proposed device readouts with 3-tier instruments\n"
+    },
+    {
+      "test": "GhostEvidenceMatrixTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: 13 ghost evidence rows match live producers; future gear not called implemented\n"
+    },
+    {
+      "test": "LanFieldEquipmentIntegrationTest",
+      "exit_code": 0,
+      "seconds": 0.25,
+      "output": "PASS: real sockets, multi-slot gear readings, team journal and ghost privacy\n"
+    },
+    {
+      "test": "LanMeasuredEvidenceTest",
+      "exit_code": 0,
+      "seconds": 0.09,
+      "output": "PASS: measured event EMF, dynamic winter heat, ghost presence, repeats\n"
+    },
+    {
+      "test": "SoloEnvironmentalEvidenceTest",
+      "exit_code": 0,
+      "seconds": 0.14,
+      "output": "PASS: solo seasonal hot/cold, real ghost-event EMF gate\n"
+    },
+    {
+      "test": "GhostBehaviorTest",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "output": "PASS: 13 authored behavior patterns, host energy/cooldowns and AI-human action parity\n"
+    },
+    {
+      "test": "LanGhostIdentityTest",
+      "exit_code": 0,
+      "seconds": 0.09,
+      "output": "PASS: 13 ghost profiles, raw measurements, no confirmation gate, ritual paths\n"
+    },
+    {
+      "test": "LanRiteNetworkTest",
+      "exit_code": 0,
+      "seconds": 5.7,
+      "output": "PASS: 4 real sockets, raw measurements, hunter deduction, correct site/banishment, human-ghost privacy\n"
+    },
+    {
+      "test": "LanGhostPursuitTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: bounded ghost hearing, coarse memory, route choice, physical pursuit, parity and expiry\n"
+    },
+    {
+      "test": "LanGhostHearingTest",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "output": "PASS: door-sensitive human ghost hearing, direction, privacy, codec and audio\n"
+    },
+    {
+      "test": "LanGhostHearingIntegrationTest",
+      "exit_code": 0,
+      "seconds": 0.23,
+      "output": "PASS: four-socket ghost sound cues, no private telemetry or forged sound authority\n"
+    },
+    {
+      "test": "LanGhostTakeoverIntegrationTest",
+      "exit_code": 0,
+      "seconds": 3.03,
+      "output": "PASS: human to AI ghost continuity, sequence monotonicity and hunter exit\n"
+    },
+    {
+      "test": "LanCaseDepartureTest",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "output": "PASS: guest departure, disabled seat actions, solo survival, victory and defeat\n"
+    },
+    {
+      "test": "LanIncapacitationTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: incapacitation, disallowed field actions, ghost victim filtering, last living survivor exit\n"
+    },
+    {
+      "test": "LanEvidenceJournalTest",
+      "exit_code": 0,
+      "seconds": 0.09,
+      "output": "PASS: bounded casefile provenance and protocol\n"
+    },
+    {
+      "test": "LanCaseFileIntegrationTest",
+      "exit_code": 0,
+      "seconds": 0.22,
+      "output": "PASS: four-seat LAN casefile delivery, replay and ghost privacy\n"
+    },
+    {
+      "test": "LanSpatialEvidenceTest",
+      "exit_code": 0,
+      "seconds": 0.09,
+      "output": "PASS: real 3D instrument ranges, no remote evidence, body validation and room-mode compatibility\n"
+    },
+    {
+      "test": "LanSpatialEvidenceIntegrationTest",
+      "exit_code": 0,
+      "seconds": 7.42,
+      "output": "PASS: four-peer spatial tool range, in-range proof, ghost privacy and defended resolution\n"
+    },
+    {
+      "test": "LanIncapacitationHudTest",
+      "exit_code": 0,
+      "seconds": 1.41,
+      "output": "PASS: downed first-person view refuses doors, scanner and movement inputs\n"
+    },
+    {
+      "test": "LanGuestDepartureIntegrationTest",
+      "exit_code": 0,
+      "seconds": 5.95,
+      "output": "PASS: guest exit preserves case and cleanse; host departure ends match\n"
+    },
+    {
+      "test": "LanResumeStoreTest",
+      "exit_code": 0,
+      "seconds": 0.12,
+      "output": "PASS: LAN resume file, rotation, expiry, corruption preservation and profile isolation\n"
+    },
+    {
+      "test": "LanClientWelcomeTest",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "output": "PASS: five-field resume, rotated secret, host replay watermark, four- and three-field compatibility\n"
+    },
+    {
+      "test": "LanHostOwnerRecoveryTest",
+      "exit_code": 0,
+      "seconds": 0.25,
+      "output": "PASS: ghost-host guest H1 continuity, recovering owner sockets and explicit owner-exit semantics\n"
+    },
+    {
+      "test": "LanSecureOwnerAdmissionTest",
+      "exit_code": 0,
+      "seconds": 0.2,
+      "output": "PASS: local owner role protected before join, false owner denied, ghost-owner reservation\n"
+    },
+    {
+      "test": "LanHostAuthorizationRegressionTest",
+      "exit_code": 0,
+      "seconds": 0.2,
+      "output": "PASS: ghost-host room rejects guest H1 administrative START while owner may start\n"
+    },
+    {
+      "test": "LanSessionResumeIntegrationTest",
+      "exit_code": 0,
+      "seconds": 1.3,
+      "output": "PASS: unexpected loss, real rejoin/token rotation, expiry, ghost AI continuity and role privacy\n"
+    },
+    {
+      "test": "LanOutboundQueueTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: ordered nonblocking TCP delivery, bounded backlog, slow-peer isolation\n"
+    },
+    {
+      "test": "LanNetworkLatencyTest",
+      "exit_code": 0,
+      "seconds": 25.12,
+      "output": "PASS: TCP heartbeat RTT 0/50/150ms, one lost PONG, recovery and host continuity\n"
+    },
+    {
+      "test": "LanHostAccessIntegrationTest",
+      "exit_code": 0,
+      "seconds": 0.17,
+      "output": "PASS: password admission, denied guests, locked lobby, legacy join and local-only host controls\n"
+    },
+    {
+      "test": "LanNetworkDiagnosticsTest",
+      "exit_code": 0,
+      "seconds": 0.28,
+      "output": "PASS: LAN address reporting, error explanations, secure-boundary disclosure\n"
+    },
+    {
+      "test": "LanRitualDefenseTest",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "output": "PASS: host ritual defense, pause, finite abandonment, explicit restart and guarded cleansing\n"
+    },
+    {
+      "test": "LanRitualDefenseIntegrationTest",
+      "exit_code": 0,
+      "seconds": 6.72,
+      "output": "PASS: four-socket abandoned rite fails and guarded restarted rite cleanses\n"
+    },
+    {
+      "test": "LanGhostHearingHudTest",
+      "exit_code": 0,
+      "seconds": 1.39,
+      "output": "PASS: mute-safe spectral sound overlay, EDT and stale-event expiry\n"
+    },
+    {
+      "test": "LanGhostAnimationTest",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "output": "PASS: bounded phase timing, hidden-source privacy, phase codec and malformed frame rejection\n"
+    },
+    {
+      "test": "LanGhostAnimationIntegrationTest",
+      "exit_code": 0,
+      "seconds": 17.94,
+      "output": "PASS: four-seat host-only manifestation, windup, recovery and ghost privacy\n"
+    },
+    {
+      "test": "LanSoundTest",
+      "exit_code": 0,
+      "seconds": 0.09,
+      "output": "PASS: listener-relative host sound projection, ghost privacy, bounded frames, stereo PCM and mute amplitude\n"
+    },
+    {
+      "test": "LanSoundIntegrationTest",
+      "exit_code": 0,
+      "seconds": 0.88,
+      "output": "PASS: four-socket host-only paranormal audio projection, van isolation, no ghost pose leak\n"
+    },
+    {
+      "test": "LanCaseFileHudTest",
+      "exit_code": 0,
+      "seconds": 1.45,
+      "output": "PASS: shared casefile HUD renders and toggles, authenticated replay clears stale notes\n"
+    },
+    {
+      "test": "LanSoundHudTest",
+      "exit_code": 0,
+      "seconds": 1.44,
+      "output": "PASS: silent-device accessibility audio caption, directional label and expiry\n"
+    },
+    {
+      "test": "LanAcousticsTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: door-dependent, masonry and exterior acoustic attenuation\n"
+    },
+    {
+      "test": "LanGhostSearchTest",
+      "exit_code": 0,
+      "seconds": 0.05,
+      "output": "PASS: bounded ghost last-sound search and no omniscient attacks\n"
+    },
+    {
+      "test": "LanGhostLegacyHearingIntegrationTest",
+      "exit_code": 0,
+      "seconds": 2.62,
+      "output": "PASS: four-socket ghost sound privacy, expiry and private hunter state exclusion\n"
+    },
+    {
+      "test": "LanGhostSpatialTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: spectral pose bounded to room, fixed tick, safe van denied, drift resets pose\n"
+    },
+    {
+      "test": "LanSpatialCombatTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: spatial ghost strike range, single-target damage, door LOS, legacy compatibility\n"
+    },
+    {
+      "test": "LanTelegraphedStrikeTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: eight-tick host wind-up, locked target, movement evasion and disconnect/room validation\n"
+    },
+    {
+      "test": "LanTelegraphedStrikeIntegrationTest",
+      "exit_code": 0,
+      "seconds": 18.12,
+      "output": "PASS: four sockets, 800ms warning, host target lock, delayed damage, ghost privacy\n"
+    },
+    {
+      "test": "LanTelegraphedHudTest",
+      "exit_code": 0,
+      "seconds": 1.42,
+      "output": "PASS: on-screen red strike wind-up and evasion feedback render in the LAN HUD\n"
+    },
+    {
+      "test": "LanApparitionTest",
+      "exit_code": 0,
+      "seconds": 0.05,
+      "output": "PASS: exact-position LAN apparition, room privacy, occlusion, range, despawn\n"
+    },
+    {
+      "test": "DirectionalSpritesIntegrationTest",
+      "exit_code": 0,
+      "seconds": 0.45,
+      "output": "PASS: 12 sprites, 8 facings, depth occlusion and real LAN ghost renderer\n"
+    },
+    {
+      "test": "LanApparitionRenderTest",
+      "exit_code": 0,
+      "seconds": 0.39,
+      "output": "PASS: network renderer places moving specter at spatial host pose and clears hidden ghost\n"
+    },
+    {
+      "test": "LanApparitionIntegrationTest",
+      "exit_code": 0,
+      "seconds": 8.64,
+      "output": "PASS: four-client manifested ghost sight projection, distant privacy and authoritative despawn\n"
+    },
+    {
+      "test": "LanGhostIntegrationTest",
+      "exit_code": 0,
+      "seconds": 0.62,
+      "output": "PASS: 4-socket LAN ghost spatial camera, legal DRIFT, privacy and anti-replay\n"
+    },
+    {
+      "test": "MouseLookTest",
+      "exit_code": 0,
+      "seconds": 1.22,
+      "output": "PASS: mouse-look directions, clamps, uncaptured safety and focus release\n"
+    },
+    {
+      "test": "LanWorldControlsTest",
+      "exit_code": 0,
+      "seconds": 1.41,
+      "output": "PASS: LAN 3D hotkeys dispatch real host-owned scan, ward, cleanse and extraction\n"
+    },
+    {
+      "test": "EquipmentSelectionTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: four-slot selection, distinct rack swaps, consumables and resupply\n"
+    },
+    {
+      "test": "SiteSelectionTest",
+      "exit_code": 0,
+      "seconds": 0.05,
+      "output": "PASS: location readiness and playable environmental variations\n"
+    },
+    {
+      "test": "SoloEquipmentUseTest",
+      "exit_code": 0,
+      "seconds": 0.12,
+      "output": "PASS: in-game equipment usage affects the actual solo case and expendables\n"
+    },
+    {
+      "test": "CameraAimTest",
+      "exit_code": 0,
+      "seconds": 0.05,
+      "output": "PASS: actual photograph requires camera facing and range\n"
+    },
+    {
+      "test": "EquipmentSightTest",
+      "exit_code": 0,
+      "seconds": 0.05,
+      "output": "PASS: playable house geometry occludes camera evidence\n"
+    },
+    {
+      "test": "BeckenburgInstallIdentityTest",
+      "exit_code": 0,
+      "seconds": 0.14,
+      "output": "PASS: stable install/profile identity, random uniqueness, save independence, corrupt-data preservation\n"
+    },
+    {
+      "test": "BeckenburgProfileImportTest",
+      "exit_code": 0,
+      "seconds": 0.19,
+      "output": "PASS: canonical and legacy equipment keys, valid imports, backups, identity and corrupt-save recovery\n"
+    },
+    {
+      "test": "GameplaySmokeTest",
+      "exit_code": 0,
+      "seconds": 0.45,
+      "output": "PASS: fifteen zones, door/collision, 3D render/depth, instruments, wards, cleansing, extraction, economy save and all role baseline safety\n"
+    },
+    {
+      "test": "LanFieldJournalIntegrationTest",
+      "exit_code": 0,
+      "seconds": 0.2,
+      "output": "PASS: four-socket private field journal, replay, provenance and ghost isolation\n"
+    },
+    {
+      "test": "VanHidingTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: 0%-100% hiding spots, concealed ghost avoidance and movement exposure\n"
+    },
+    {
+      "test": "VanTelemetryTest",
+      "exit_code": 0,
+      "seconds": 0.05,
+      "output": "PASS van monitor: noisy activity and true private sanity\n"
+    },
+    {
+      "test": "FieldSuppliesTest",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "output": "PASS progressive purchased health and sanity items\n"
+    },
+    {
+      "test": "CustomContractTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS 1-6 hunters and minimum +6 full-party rating\n"
+    },
+    {
+      "test": "LobbyGhostAvatarTest",
+      "exit_code": 0,
+      "seconds": 0.23,
+      "output": "PASS: independent cosmetic lobby ghost, valid art, no species disclosure\n"
+    },
+    {
+      "test": "LanHunterNameplateTest",
+      "exit_code": 0,
+      "seconds": 0.38,
+      "output": "PASS: teammate name anchors obey camera frustum, depth and doors\n"
+    },
+    {
+      "test": "LanPrivateHunterNamesTest",
+      "exit_code": 0,
+      "seconds": 0.22,
+      "output": "PASS: hunter-only world labels and anonymous ghost lobby appearance\n"
+    },
+    {
+      "test": "LanChatTest",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "output": "PASS: chat validation, radio framing, local wall/distance routing\n"
+    },
+    {
+      "test": "LanChatIntegrationTest",
+      "exit_code": 0,
+      "seconds": 1.31,
+      "output": "PASS: two hunters, ghost, local distance, radio and transcript privacy\n"
+    },
+    {
+      "test": "LanVoiceCodecTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: G.711 audio, bounded UDP frames, tokens and parser rejection\n"
+    },
+    {
+      "test": "LanVoiceRelayTest",
+      "exit_code": 0,
+      "seconds": 0.67,
+      "output": "PASS: real UDP handshake, spoof/replay protection and ghost anonymity\n"
+    },
+    {
+      "test": "LanVoiceHostIntegrationTest",
+      "exit_code": 0,
+      "seconds": 3.25,
+      "output": "PASS: actual game host, local/van/radio routing, anonymous ghost audio\n"
+    },
+    {
+      "test": "LanVoiceClientHandshakeTest",
+      "exit_code": 0,
+      "seconds": 0.16,
+      "output": "PASS: real voice client UDP handshake, mute, volume and spectral TX lock\n"
+    },
+    {
+      "test": "LanGhostLobbySecrecyTest",
+      "exit_code": 0,
+      "seconds": 0.31,
+      "output": "PASS: cosmetic lobby ghost visible to party; real species withheld until play\n"
+    },
+    {
+      "test": "LanSixHunterVanTest",
+      "exit_code": 0,
+      "seconds": 1.14,
+      "output": "PASS: 6+1 sockets, +6 threat, private van telemetry, seventh hunter denied\nPASS: six simultaneous ghost-room occupants on authoritative room topology\n"
+    },
+    {
+      "test": "GhostActiveBehaviorTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: actual signature actions, isolated prey, sanity-only species, and suppression\n"
+    },
+    {
+      "test": "FieldJournalTest",
+      "exit_code": 0,
+      "seconds": 0.08,
+      "output": "PASS: 13 casebook profiles, hard exclusions, behavioral ranking and shared note frames\n"
+    },
+    {
+      "test": "ManualEvidenceJournalTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: manually ticked evidence greys ghost names; undo/contradiction never verifies\n"
+    },
+    {
+      "test": "VanDiegeticCrtTest",
+      "exit_code": 0,
+      "seconds": 0.2,
+      "output": "PASS: original 3D CRT material displays live replicated activity/sanity\n"
+    },
+    {
+      "test": "ManualEvidenceHudTest",
+      "exit_code": 0,
+      "seconds": 1.45,
+      "output": "PASS: notebook checkboxes, greying/undo, ghost choice and actual HUD paint\n"
+    },
+    {
+      "test": "GhostTraitsTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: 13 species profiles, energy feeding, salt mobility and damage identities\n"
+    },
+    {
+      "test": "HunterCountersTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: finite throws, ward persistence, salt grounding and cooldown enforcement\n"
+    },
+    {
+      "test": "GhostDomainTest",
+      "exit_code": 0,
+      "seconds": 0.11,
+      "output": "PASS: ghost AI/human command parity, reachability, action energy/cooldowns, observation filtering, escalating strike safety, replay protection\n"
+    },
+    {
+      "test": "MaterialAtlasTest",
+      "exit_code": 0,
+      "seconds": 0.39,
+      "output": "PASS: 16 reproducible tiles, 128px atlas, world UV wrapping, room materials, view variants, lamp and near-plane clipping\n"
+    },
+    {
+      "test": "TeamCalloutTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: callout sectors, world-space ray, LOS, finite/range/cooldown checks, expiry\n"
+    },
+    {
+      "test": "VanStagingTest",
+      "exit_code": 0,
+      "seconds": 0.44,
+      "output": "PASS: one reusable van, site transforms, colliding cargo shell, stations, extraction and 3D geometry\n"
+    },
+    {
+      "test": "VanNavigationVisualTest",
+      "exit_code": 0,
+      "seconds": 0.22,
+      "output": "PASS van exit lane, 6 seats, physical aim/pickup and visible held tool\n"
+    },
+    {
+      "test": "GhostPracticeTest",
+      "exit_code": 0,
+      "seconds": 0.09,
+      "output": "PASS: local human-ghost practice, no hunter-information leak, shared action gates and two incremental strikes\n"
+    },
+    {
+      "test": "LanProtocolTest",
+      "exit_code": 0,
+      "seconds": 0.05,
+      "output": "PASS: bounded LAN line protocol, input validation, error and EOF handling\n"
+    },
+    {
+      "test": "LanClientDisconnectTest",
+      "exit_code": 0,
+      "seconds": 0.59,
+      "output": "PASS: genuine TCP EOF emits exactly one disconnect; local close stays silent\n"
+    },
+    {
+      "test": "LanGracefulLeaveTest",
+      "exit_code": 0,
+      "seconds": 0.11,
+      "output": "PASS: 12 TCP exits deliver LEAVE and EOF despite unread incoming updates\n"
+    },
+    {
+      "test": "LanCaseTest",
+      "exit_code": 0,
+      "seconds": 0.09,
+      "output": "PASS: LAN case role boundaries, three instruments, shared evidence, ward, harm, contested cleansing and retreat\n"
+    },
+    {
+      "test": "LanCaseIntegrationTest",
+      "exit_code": 0,
+      "seconds": 4.64,
+      "output": "PASS: 4-socket team evidence, anti-spoof, ritual, private projection and synchronized resolution\n"
+    },
+    {
+      "test": "LanWorldTest",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "output": "PASS: host 3D world movement, collision, door snapshots, speed and invalid state gates\n"
+    },
+    {
+      "test": "LanWorldIntegrationTest",
+      "exit_code": 0,
+      "seconds": 0.77,
+      "output": "PASS: 4-socket authoritative world stepping, snapshot privacy, door range, legacy-mode isolation\n"
+    },
+    {
+      "test": "LanWorldRenderTest",
+      "exit_code": 0,
+      "seconds": 0.44,
+      "output": "PASS: network first-person rendering includes 3D teammates, disclosed ghost and synced physical doors\n"
+    },
+    {
+      "test": "LanLobbyTest",
+      "exit_code": 0,
+      "seconds": 17.66,
+      "output": "PASS: four TCP clients, seats/readiness/start, host-validated moves, ghost parity, damage, authority, replay and private projection\nPASS: 3-hunter LAN sessions use AI ghost fallback without extra seat\n"
+    },
+    {
+      "test": "SmokeTest",
+      "exit_code": 0,
+      "seconds": 0.12,
+      "output": "PASS: map geometry, collision, door interaction, 3D raster, look pitch, alternate lighting\n"
+    }
+  ],
+  "post_suite_checks": [
+    "Recompiled all Java 17 sources after recorder registry status update",
+    "EquipmentRegistryTest passed",
+    "EquipmentStoreDescriptionsTest passed"
+  ],
+  "packaging": {
+    "jar": "build/beckenburg-game.jar",
+    "sha256": "b167ca844ac6d029a57fa2988f6174e6df00d1498308745475af3bb106abba21",
+    "models": 168,
+    "blender_recorder_models": 3,
+    "classes_target_major_version": 61,
+    "windows_unix_model_and_test_set_parity": true,
+    "unix_script_syntax_pass": true,
+    "native_unix_execution": false
+  },
+  "completion_gate_met": false,
+  "legacy_solo_recorder": false,
+  "interactive_audio_device_acceptance": false
+}

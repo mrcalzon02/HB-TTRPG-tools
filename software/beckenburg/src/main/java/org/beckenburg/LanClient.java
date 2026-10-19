@@ -14,6 +14,7 @@ public final class LanClient implements AutoCloseable {
     private final Thread reader;
     private final String seat;
     private volatile boolean closed;
+    private volatile boolean leaving;
     private volatile LanVoiceClientAudio voice;
     private volatile long sequence;
     private final String connectAddress;
@@ -167,6 +168,9 @@ public final class LanClient implements AutoCloseable {
     public synchronized void useHeldEquipment()throws IOException{
         send("GEARUSE|"+(++sequence));
     }
+    public synchronized void playRecording()throws IOException{
+        send("RECPLAY|"+(++sequence));
+    }
     public synchronized void journal()throws IOException {send("JOURNAL");}
     public synchronized void say(LanChat.Channel channel,String message)throws IOException{
         Objects.requireNonNull(channel);
@@ -196,19 +200,20 @@ public final class LanClient implements AutoCloseable {
         Objects.requireNonNull(action);send("GHOST|"+action+"|"+room+"|"+(++sequence));
     }
     public synchronized void send(String message)throws IOException {
-        if(closed)throw new IOException("LAN connection closed");LanProtocol.write(out,message);
+        if(closed||leaving)throw new IOException("LAN connection closed");LanProtocol.write(out,message);
     }
     private void readLoop(){
         try{
             while(!closed){
                 String line=LanProtocol.read(in);
                 if(line==null)break; // Clean remote EOF still ends the connection.
+                if(leaving)continue; // Drain pending host bytes until its acknowledged TCP EOF.
                 LanProtocol.parts(line);
                 if(line.startsWith("PING|")){
                     var fields=LanProtocol.parts(line);
                     if(fields.size()!=2)throw new IOException("invalid host heartbeat");
                     int challenge=LanProtocol.integer(fields.get(1),0,99999999);
-                    synchronized(this){send("PONG|"+challenge);}
+                    synchronized(this){if(!leaving)send("PONG|"+challenge);}
                     continue;
                 }
                 if(line.startsWith("NETSTATS|")){
@@ -227,7 +232,7 @@ public final class LanClient implements AutoCloseable {
         }catch(Exception ex){
             // Truncated, malformed or interrupted input shares the same terminal event.
         }finally{
-            if(!closed){
+            if(!closed&&!leaving){
                 try{observer.accept("INFO|network connection ended");}
                 catch(RuntimeException ignored){ /* A failing UI callback cannot prevent socket cleanup. */ }
             }
@@ -239,7 +244,21 @@ public final class LanClient implements AutoCloseable {
         if(closed)return;
         // A normal UI Exit is different from an unexpected EOF: deliberate departure
         // frees the seat; network failure leaves a time-limited host reservation.
-        if(intentional)try{LanProtocol.write(out,"LEAVE");}catch(IOException ignored){}
+        if(intentional){
+            if(leaving)return;
+            leaving=true;
+            try{
+                LanProtocol.write(out,"LEAVE");
+                socket.shutdownOutput();
+                LanVoiceClientAudio media=voice;voice=null;
+                if(media!=null)media.close();
+                // The reader drains unread updates so Windows cannot reset the
+                // connection and discard LEAVE. Unresponsive hosts are bounded.
+                java.util.concurrent.CompletableFuture.delayedExecutor(1,
+                    java.util.concurrent.TimeUnit.SECONDS).execute(()->cleanup(false));
+                return;
+            }catch(IOException ignored){ /* Broken transports still close immediately. */ }
+        }
         closed=true;
         LanVoiceClientAudio media=voice;voice=null;
         if(media!=null)media.close();

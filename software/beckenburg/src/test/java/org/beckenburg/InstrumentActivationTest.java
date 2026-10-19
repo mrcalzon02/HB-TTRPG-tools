@@ -50,8 +50,12 @@ public final class InstrumentActivationTest {
             "shutter captures actual pixels at time of exposure");
         var temp=Files.createTempDirectory("beckenburg-photo-");
         var file=HunterPhotography.save(shot,temp,0,1);
-        check(Files.isRegularFile(file)&&Files.size(file)>100,
+        check(Files.isRegularFile(file)&&Files.size(file)>0,
             "empty-room photo is actually saved as a PNG file");
+        var decoded=javax.imageio.ImageIO.read(file.toFile());
+        check(decoded!=null&&decoded.getWidth()==48&&decoded.getHeight()==32
+                &&(decoded.getRGB(7,9)&0xffffff)==0x28425a,
+            "saved PNG decodes to the original shutter pixels and dimensions");
         check((NightVisionFilter.apply(shot).getRGB(7,9)&255)<100,
             "night vision transforms actual photons, not ghost identity");
         Files.delete(file);Files.delete(temp);

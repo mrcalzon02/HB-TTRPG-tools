@@ -20,6 +20,12 @@ public final class HunterCountersTest {
   try{throwables.launch(0,HunterCounters.Kind.CROSS,hunter,map,21);throw new AssertionError("cooldown ignored");}
   catch(IllegalArgumentException expected){}
   traps.leaveUv(4,14);ok(traps.recentUv(4,15),"fresh UV trace");
+  for(int seat=0;seat<6;seat++){
+   HunterCounters six=new HunterCounters();
+   six.launch(seat,HunterCounters.Kind.SALT,hunter,map,12);
+   ok(six.charges(seat,HunterCounters.Kind.SALT)==2,"every hunter owns independent salt stock");
+   six.replenish(seat);ok(six.charges(seat,HunterCounters.Kind.SALT)==3,"every hunter can resupply");
+  }
   ok(!traps.recentUv(4,111),"old UV expires");
   System.out.println("PASS: finite throws, ward persistence, salt grounding and cooldown enforcement");
  }

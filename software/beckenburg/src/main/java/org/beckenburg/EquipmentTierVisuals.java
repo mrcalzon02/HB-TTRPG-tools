@@ -67,12 +67,11 @@ public final class EquipmentTierVisuals {
             case "COMPUTER"->tier==EquipmentTiers.Tier.I?"pc_mp_1":null;
             case "SANITY_MONITOR","SITE_ACTIVITY_MONITOR"->tier==EquipmentTiers.Tier.I
                 ?"monitoring_screen_mp_1":null;
-            case "SOUND_RECORDER"->tier==EquipmentTiers.Tier.I
-                ?"exploration_voice_recorder":null;
+            case "SOUND_RECORDER"->"blender_sound_recorder_"+(tier.ordinal()+1);
             default->null;
         };
-        boolean synth=original==null;
-        return new Prefab(id,tier,synth?TierModelForge.name(id,tier):original,
+        boolean synth=original==null||id.equals("SOUND_RECORDER");
+        return new Prefab(id,tier,original==null?TierModelForge.name(id,tier):original,
             synth,shelf(plan));
     }
     public static GlbProps.Model model(String id,EquipmentTiers.Tier tier){

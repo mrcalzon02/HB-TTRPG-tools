@@ -50,6 +50,9 @@ public final class LanHost implements AutoCloseable {
     private final VanTelemetry monitor=new VanTelemetry(20261017L);
     private final FieldSupplies[] supplies=new FieldSupplies[HUNTERS];
     private final FieldEquipment[] equipment=new FieldEquipment[HUNTERS];
+    private final FieldSoundRecorder[] recorders=new FieldSoundRecorder[HUNTERS];
+    private final int[] lastRecordingPlayback={-10000,-10000,-10000,-10000,-10000,-10000};
+    private final int[] lastHunterSound={-10000,-10000,-10000,-10000,-10000,-10000};
     private volatile boolean closed;
     private boolean running,everStarted;
     private long hostGhostActionSequence=-1;
@@ -100,6 +103,7 @@ public final class LanHost implements AutoCloseable {
         for(int i=0;i<HUNTERS;i++){
             supplies[i]=new FieldSupplies();
             equipment[i]=new FieldEquipment();
+            recorders[i]=new FieldSoundRecorder();
         }
         world.configure(contract);
         ghostPose.configureSpeed(contract.ghostSpeed());
@@ -614,6 +618,7 @@ public final class LanHost implements AutoCloseable {
                         throw new IllegalArgumentException("recharge at the actual van equipment rack");
                     if(cameras.at(peer.slot)!=null)
                         throw new IllegalArgumentException("retrieve deployed camera before recharging");
+                    if(recorders[peer.slot].recording())stopRecording(peer.slot);
                     equipment[peer.slot].rechargeAtVan();
                     reply(peer,"ACCEPT|GEARREFILL|FILM AND BATTERIES RESTORED");
                     sendEquipmentState(peer);
@@ -628,6 +633,8 @@ public final class LanHost implements AutoCloseable {
                     if(map.van().stationAt(world.body(peer.slot).x(),world.body(peer.slot).z())
                             !=VanStaging.Station.EQUIPMENT)
                         throw new IllegalArgumentException("purchase upgrades at the equipment rack");
+                    if(id.equals("SOUND_RECORDER")&&recorders[peer.slot].recording())
+                        throw new IllegalArgumentException("stop recording before upgrading hardware");
                     int cost=equipment[peer.slot].upgradePrice(id,tier);
                     if(!supplies[peer.slot].spend(cost))
                         throw new IllegalArgumentException("insufficient credits for instrument");
@@ -658,6 +665,25 @@ public final class LanHost implements AutoCloseable {
                     ensureActiveHunter(peer);
                     equipment[peer.slot].selectSlot(slot);
                     sendEquipmentState(peer);
+                }
+                case "RECPLAY" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
+                        throw new IllegalArgumentException("hunter recorder playback only");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    ensureActiveHunter(peer);
+                    if(!equipment[peer.slot].active().equals("SOUND_RECORDER"))
+                        throw new IllegalArgumentException("hold the sound recorder");
+                    if(recorders[peer.slot].recording())
+                        throw new IllegalArgumentException("stop recording before playback");
+                    if(tick-lastRecordingPlayback[peer.slot]<20)
+                        throw new IllegalArgumentException("recorder playback refreshing");
+                    var clip=recorders[peer.slot].latest();
+                    if(!equipment[peer.slot].ready("SOUND_RECORDER",tick))
+                        throw new IllegalArgumentException("recorder refreshing or battery empty");
+                    lastRecordingPlayback[peer.slot]=tick;
+                    equipment[peer.slot].sampled("SOUND_RECORDER",tick);
+                    for(String packet:clip.frames())reply(peer,packet);
+                    reply(peer,"ACCEPT|RECPLAY|"+clip.samples().size()+" recorded sounds");
                 }
                 case "GEARUSE" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
@@ -707,6 +733,15 @@ public final class LanHost implements AutoCloseable {
                                     <=stage.reachCm()/100.0;
                             reading=voiceEvent?"Voice response / spectral vocal event detected":
                                 "No direct vocal response";
+                        }
+                        case "SOUND_RECORDER" -> {
+                            if(recorders[peer.slot].recording()){
+                                stopRecording(peer.slot);
+                            }else{
+                                recorders[peer.slot].start(gear.owned(id),tick);
+                                gear.setPower(id,true);
+                            }
+                            reading=recorders[peer.slot].status(tick);
                         }
                         case "DOTS_PROJECTOR" -> {
                             if(room>=HouseMap.INDOOR_ROOMS)
@@ -1089,6 +1124,26 @@ public final class LanHost implements AutoCloseable {
     }
     private void recordSound(int seat,LanGhostPursuit.Sound type){
         LanWorld.Body body=world.body(seat);
+        // These are the same real synthesized game sounds played by listeners.
+        // Raw voice packets use their own media path and are not replaced with invented speech.
+        if(type!=LanGhostPursuit.Sound.VOICE&&(type!=LanGhostPursuit.Sound.FOOTSTEP
+                ||tick-lastHunterSound[seat]>=4)){
+            lastHunterSound[seat]=tick;
+            LanSound.Cue cue=switch(type){
+                case FOOTSTEP->LanSound.Cue.FOOTFALL;
+                case DOOR->LanSound.Cue.DOOR;
+                case RITUAL->LanSound.Cue.RITUAL;
+                default->LanSound.Cue.EQUIPMENT;
+            };
+            for(int listener=0;listener<HUNTERS;listener++){
+                LanSound.CueEvent sound=LanSound.project(map,world.body(listener),body.room(),
+                    body.x(),body.z(),cue,tick);
+                if(sound==null)continue;
+                if(seats[listener]!=null&&seats[listener].worldMode)reply(seats[listener],sound.frame());
+                recorders[listener].capture(sound,Math.hypot(body.x()-world.body(listener).x(),
+                    body.z()-world.body(listener).z()));
+            }
+        }
         if(LanAcoustics.audible(map,ghost.room(),hunterRooms[seat],type))lastGhostSoundTick=tick;
         if(seats[GHOST_SEAT]==null){
             ai.heard(ghost.room(),hunterRooms[seat],body.x(),body.z(),type,tick);
@@ -1118,6 +1173,18 @@ public final class LanHost implements AutoCloseable {
                 reply(peer,"GEARPOWER|"+id+"|"+
                     equipment[peer.slot].batterySecondsLeft(id)+"|"+
                     (equipment[peer.slot].powered(id)?1:0));
+        sendRecorderState(peer.slot);
+    }
+    private void sendRecorderState(int seat){
+        if(seats[seat]!=null)reply(seats[seat],"RECORDER|STATE|"+recorders[seat].status(tick));
+    }
+    private void stopRecording(int seat){
+        var clip=recorders[seat].stop(tick);
+        equipment[seat].setPower("SOUND_RECORDER",false);
+        notifyHunters(casefile.recordDevice(tick,seat,world.body(seat).room(),"SOUND_RECORDER",
+            LanEvidenceJournal.Finding.OBSERVED,"Recorded "+clip.duration()/10.0+"s / "+
+                clip.samples().size()+" sound events"));
+        sendRecorderState(seat);
     }
     private void sendCounterAmmo(Peer peer){
         reply(peer,"COUNTERAMMO|"+counters.charges(peer.slot,HunterCounters.Kind.CROSS)+"|"
@@ -1161,9 +1228,14 @@ public final class LanHost implements AutoCloseable {
     private void broadcastGhostSound(LanSound.Cue cue){
         LanGhostSpatial.Pose pose=ghostPose.pose();
         for(int i=0;i<HUNTERS;i++){
-            if(seats[i]==null||!seats[i].worldMode)continue;
+            if((seats[i]==null||!seats[i].worldMode)
+                    &&(reserved[i]==null||!reserved[i].worldMode))continue;
             LanSound.CueEvent sound=LanSound.project(map,world.body(i),pose.room(),pose.x(),pose.z(),cue,tick);
-            if(sound!=null)reply(seats[i],sound.frame());
+            if(sound!=null){
+                if(seats[i]!=null)reply(seats[i],sound.frame());
+                recorders[i].capture(sound,Math.hypot(pose.x()-world.body(i).x(),
+                    pose.z()-world.body(i).z()));
+            }
         }
     }
     private void distributeEffect(GhostDomain.Resolution result){
@@ -1389,7 +1461,11 @@ public final class LanHost implements AutoCloseable {
                         notifyHunters("GEARFX|"+seat+"|"+drained+"|0");
                     if(drained.equals("VIDEO_CAMERA"))
                         notifyHunters("CAMERA|POWER|"+seat+"|0");
+                    if(drained.equals("SOUND_RECORDER")&&recorders[seat].recording())
+                        stopRecording(seat);
                 }
+                if(recorders[seat].due(tick))stopRecording(seat);
+                if(tick%10==0&&recorders[seat].recording())sendRecorderState(seat);
             }
             // Powered device gauges receive real host charge updates once per second.
             if(tick%10==0)for(int seat=0;seat<HUNTERS;seat++)if(seats[seat]!=null)

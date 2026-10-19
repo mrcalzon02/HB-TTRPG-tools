@@ -1,0 +1,77 @@
+{
+  "blender": "5.0.0",
+  "models": [
+    {
+      "tier": 1,
+      "model": "assets/runtime/models/blender_sound_recorder_1.glb",
+      "editable": "development/assets/blender/sound-recorder-t1.blend",
+      "sha256": "c47ec8dc2f00187d17037690fc866b1483b8268e151f58efca6abe9285ed1ffe",
+      "triangles": 302,
+      "dimensions_blender_z_up": [
+        0.0949999988079071,
+        0.05649999901652336,
+        0.2449999898672104
+      ],
+      "material_count": 1,
+      "texture_size": [
+        256,
+        128
+      ],
+      "source_glb": "assets/runtime/models/exploration_voice_recorder.glb",
+      "source_sha256": "65fced393741c66dc304a0b6d51c02da2bcd92da7939e1d86b3d96be2a9a2ebe",
+      "source_archive": "Exploration objects.rar / Exploration objects/Voice_Recorder/Voice_Recorder.fbx",
+      "license_status": "CC0; creator declaration verified 2026-10-18",
+      "reopened_in_blender": true,
+      "java_renderer_verified": true,
+      "license_source": "https://elbolilloduro.itch.io/exploration-objects"
+    },
+    {
+      "tier": 2,
+      "model": "assets/runtime/models/blender_sound_recorder_2.glb",
+      "editable": "development/assets/blender/sound-recorder-t2.blend",
+      "sha256": "d267082957404c3bd337b4d5565c5a72fde429ee21b9c7a5fc8795f3839e17c1",
+      "triangles": 366,
+      "dimensions_blender_z_up": [
+        0.10899999737739563,
+        0.0625,
+        0.26100000739097595
+      ],
+      "material_count": 1,
+      "texture_size": [
+        256,
+        128
+      ],
+      "source_glb": "assets/runtime/models/exploration_voice_recorder.glb",
+      "source_sha256": "65fced393741c66dc304a0b6d51c02da2bcd92da7939e1d86b3d96be2a9a2ebe",
+      "source_archive": "Exploration objects.rar / Exploration objects/Voice_Recorder/Voice_Recorder.fbx",
+      "license_status": "CC0; creator declaration verified 2026-10-18",
+      "reopened_in_blender": true,
+      "java_renderer_verified": true,
+      "license_source": "https://elbolilloduro.itch.io/exploration-objects"
+    },
+    {
+      "tier": 3,
+      "model": "assets/runtime/models/blender_sound_recorder_3.glb",
+      "editable": "development/assets/blender/sound-recorder-t3.blend",
+      "sha256": "023c25d3f7c6aa5f0b04e54b569481bf6ad7f256edf7df1ecb45cf78a7f3d8a2",
+      "triangles": 406,
+      "dimensions_blender_z_up": [
+        0.1420000046491623,
+        0.06849999725818634,
+        0.2770000100135803
+      ],
+      "material_count": 1,
+      "texture_size": [
+        256,
+        128
+      ],
+      "source_glb": "assets/runtime/models/exploration_voice_recorder.glb",
+      "source_sha256": "65fced393741c66dc304a0b6d51c02da2bcd92da7939e1d86b3d96be2a9a2ebe",
+      "source_archive": "Exploration objects.rar / Exploration objects/Voice_Recorder/Voice_Recorder.fbx",
+      "license_status": "CC0; creator declaration verified 2026-10-18",
+      "reopened_in_blender": true,
+      "java_renderer_verified": true,
+      "license_source": "https://elbolilloduro.itch.io/exploration-objects"
+    }
+  ]
+}

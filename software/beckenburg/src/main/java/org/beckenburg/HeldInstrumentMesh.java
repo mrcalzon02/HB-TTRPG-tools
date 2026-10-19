@@ -43,6 +43,8 @@ public final class HeldInstrumentMesh {
     }
     private static BufferedImage raster(String name){
         var triangles=GlbProps.model(name).triangles();
+        if(name.startsWith("blender_sound_recorder_"))triangles=triangles.stream()
+            .map(t->new GlbProps.Triangle(recorderView(t.a()),recorderView(t.b()),recorderView(t.c()),t.material())).toList();
         BufferedImage out=new BufferedImage(W,H,BufferedImage.TYPE_INT_ARGB);
         int[] pixels=((DataBufferInt)out.getRaster().getDataBuffer()).getData();
         double[] zBuffer=new double[W*H];Arrays.fill(zBuffer,Double.NEGATIVE_INFINITY);
@@ -88,5 +90,61 @@ public final class HeldInstrumentMesh {
         int count=0;for(int pixel:pixels)if((pixel>>>24)!=0)count++;
         if(count<35)throw new IllegalStateException("Original asset did not render: "+name);
         return out;
+    }
+    private static GlbProps.Vertex recorderView(GlbProps.Vertex p){
+        return new GlbProps.Vertex(p.x(),p.z(),p.y(),p.u(),p.v());
+    }
+    /** Project the actual Blender LCD corners through the same camera used for its mesh. */
+    public static void drawRecorderDisplay(Graphics2D graphics,int screenWidth,int screenHeight,
+            EquipmentTiers.Tier tier,String status){
+        if(screenWidth<180||screenHeight<140)return;
+        var triangles=GlbProps.model(source("SOUND_RECORDER",tier)).triangles();
+        double[] low={Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY};
+        double[] high={Double.NEGATIVE_INFINITY,Double.NEGATIVE_INFINITY,Double.NEGATIVE_INFINITY};
+        for(var t:triangles)for(var point:new GlbProps.Vertex[]{t.a(),t.b(),t.c()}){
+            var p=recorderView(point);double[] xyz={p.x(),p.y(),p.z()};
+            for(int i=0;i<3;i++){low[i]=Math.min(low[i],xyz[i]);high[i]=Math.max(high[i],xyz[i]);}
+        }
+        double span=Math.max(.04,Math.max(high[0]-low[0],Math.max(high[2]-low[2],(high[1]-low[1])*.65)));
+        double scale=135/span,cx=(low[0]+high[0])/2,cy=(low[1]+high[1])/2,cz=(low[2]+high[2])/2;
+        int level=tier.ordinal(),number=level+1;
+        double half=(.095+.014*level)*.72/2;
+        double faceDepth=(.035+.006*level)/2+.006;
+        double top=.025+(.058+.012*number)/2,bottom=.025-(.058+.012*number)/2;
+        double[][] corners={{-half,faceDepth,top},{half,faceDepth,top},{-half,faceDepth,bottom}};
+        for(double[] p:corners){
+            double x=p[0]-cx,y=p[1]-cy,z=p[2]-cz;
+            p[0]=W*.5+(x*.86+z*.26)*scale;
+            p[1]=H*.53-(z*.80+y*.56-x*.11)*scale;
+        }
+        BufferedImage lcd=new BufferedImage(80,100,BufferedImage.TYPE_INT_RGB);
+        Graphics2D face=lcd.createGraphics();
+        try{
+            face.setColor(new java.awt.Color(8,24,20));face.fillRect(0,0,80,100);
+            face.setColor(new java.awt.Color(124,232,180));
+            face.setFont(new java.awt.Font(java.awt.Font.MONOSPACED,java.awt.Font.BOLD,23));
+            boolean rec=status!=null&&status.startsWith("REC ");
+            face.drawString(rec?"REC":"STOP",4,26);
+            String time="0.0s",peak="PK0";
+            if(rec){
+                var m=java.util.regex.Pattern.compile("REC ([0-9.]+s) / PEAK (\\d+)").matcher(status);
+                if(m.find()){time=m.group(1);peak="PK"+m.group(2);}
+            }else if(status!=null){
+                var m=java.util.regex.Pattern.compile("STOP / (\\d+) clips").matcher(status);
+                if(m.find())time=m.group(1)+"CLP";
+            }
+            face.setFont(new java.awt.Font(java.awt.Font.MONOSPACED,java.awt.Font.BOLD,20));
+            face.drawString(time,3,58);face.drawString(rec?peak:"PLAY",3,89);
+        }finally{face.dispose();}
+        double factor=Math.max(.5,Math.min(1.85,Math.min(screenWidth/850.0,screenHeight/480.0)))*(1+.085*level);
+        int w=(int)Math.round(W*factor),h=(int)Math.round(H*factor);
+        Graphics2D g=(Graphics2D)graphics.create();
+        try{
+            g.translate(screenWidth-w-18,screenHeight-h+7);g.scale(w/(double)W,h/(double)H);
+            var a=corners[0];var b=corners[1];var c=corners[2];
+            g.transform(new java.awt.geom.AffineTransform((b[0]-a[0])/80,(b[1]-a[1])/80,
+                (c[0]-a[0])/100,(c[1]-a[1])/100,a[0],a[1]));
+            g.drawImage(lcd,0,0,null);
+        }finally{g.dispose();}
     }
 }

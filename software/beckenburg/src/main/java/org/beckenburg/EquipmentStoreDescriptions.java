@@ -50,6 +50,9 @@ public final class EquipmentStoreDescriptions {
             case "EMF_READER"->"Handheld field strength 0–10; tiered sensing reach and response rate";
             case "THERMOMETER"->"Actual ambient air temperature; tiered sensing reach and response rate";
             case "SPIRIT_BOX"->"Physical voice receiver; tiered pickup reach and faster sampling";
+            case "SOUND_RECORDER"->FieldSoundRecorder.durationTicks(tier)/10+
+                "s clips; "+stage.capacity()+" stored clips; "+
+                (tier==EquipmentTiers.Tier.I?"mono":"stereo")+" playback and WAV export";
             case "UV_LIGHT"->"Brighter UV pickup of genuine fading traces, up to "+
                 new int[]{90,125,160}[at]+" host ticks after they were left";
             case "DOTS_PROJECTOR"->"Physical projected grid, coverage radius "+
@@ -134,6 +137,7 @@ public final class EquipmentStoreDescriptions {
             case "EMF_READER"->"Reads actual 0–10 EMF; 2–7 usual, 8–10 strong, 0 possible suppression. Faster sampling never generates a signal";
             case "THERMOMETER"->"Reads actual room air in °C/°F; ordinary variation remains measurable regardless of ghost";
             case "SPIRIT_BOX"->"Listens for real nearby vocal events; silence is an ordinary result";
+            case "SOUND_RECORDER"->"R records/stops actual game sound cues; P replays and saves the last clip. Silent rooms record silence";
             case "UV_LIGHT"->"Inspects surfaces for real existing UV traces; no mark is invented";
             case "PHOTO_CAMERA"->"Every shutter press saves the scene, whether empty or haunted; film is finite";
             case "VIDEO_CAMERA"->"Relays the actual scene from the placed camera; no evidence or identity verdict";

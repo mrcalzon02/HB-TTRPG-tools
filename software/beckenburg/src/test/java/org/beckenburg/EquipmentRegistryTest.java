@@ -30,6 +30,9 @@ public final class EquipmentRegistryTest {
             "original ectoplasm sample tool exists in data registry");
         ok(EquipmentRegistry.get("VIDEO_CAMERA").lan()==EquipmentRegistry.State.ABSENT,
             "reference-only video must not be mislabeled implemented");
+        ok(EquipmentRegistry.get("SOUND_RECORDER").lan()==EquipmentRegistry.State.PARTIAL_SOURCE
+            &&EquipmentRegistry.get("SOUND_RECORDER").solo()==EquipmentRegistry.State.ABSENT,
+            "LAN recorder source is integrated; legacy solo is not claimed complete");
         System.out.println("PASS: 42 equipment entries, status separation, and evidence families");
     }
 }

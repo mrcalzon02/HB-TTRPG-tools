@@ -1,0 +1,416 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "cf2b497a9b9caef905605bead34d10a8b399f803",
+  "completion_gate_met": false,
+  "equipment_count": 42,
+  "tier_stage_count": 126,
+  "lan_rack_enabled_count": 14,
+  "fully_verified_complete_count": 0,
+  "phases_b_c_d_started": false,
+  "entries": [
+    {
+      "id": "DOTS_PROJECTOR",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "EMF_READER",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "FLASHLIGHT",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "GHOST_WRITING_BOOK",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "SPIRIT_BOX",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "THERMOMETER",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "UV_LIGHT",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "VIDEO_CAMERA",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "CRUCIFIX",
+      "status": "partial",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Unify existing separate gameplay backend with tiered field equipment and verify physical tiers"
+      ]
+    },
+    {
+      "id": "FIRELIGHT",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "HEAD_GEAR",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "IGNITER",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "INCENSE",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "MOTION_SENSOR",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "PARABOLIC_MICROPHONE",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "PHOTO_CAMERA",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Full per-device audit against current user completion gates; enabled does not mean complete",
+        "Verify all three physical/host behaviors and legacy solo parity"
+      ]
+    },
+    {
+      "id": "SALT",
+      "status": "partial",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Unify existing separate gameplay backend with tiered field equipment and verify physical tiers"
+      ]
+    },
+    {
+      "id": "SANITY_MEDICATION",
+      "status": "partial",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Unify existing separate gameplay backend with tiered field equipment and verify physical tiers"
+      ]
+    },
+    {
+      "id": "SOUND_RECORDER",
+      "status": "partial",
+      "lan_rack_enabled": true,
+      "all_completion_gates_verified": false,
+      "lan_three_tiers": "implemented and locally regression-tested",
+      "models": "three Blender derivatives; one mesh/material each; 302/366/406 triangles",
+      "verified_tests": [
+        "FieldSoundRecorderTest",
+        "LanSoundRecorderIntegrationTest",
+        "RecorderModelsTest",
+        "PackagedSourceModelsTest"
+      ],
+      "remaining": [
+        "legacy solo equipment integration",
+        "native audio-device/manual gameplay acceptance"
+      ],
+      "limitations": [
+        "Records synthesized game cues, not player microphone/voice chat",
+        "Latest stored clip is replayed/exported with P; R starts/stops; finite ring storage"
+      ]
+    },
+    {
+      "id": "SOUND_SENSOR",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "TRIPOD",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "CLIPBOARDS",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "COMPUTER",
+      "status": "partial",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Unify existing separate gameplay backend with tiered field equipment and verify physical tiers"
+      ]
+    },
+    {
+      "id": "OBJECTIVE_BOARD",
+      "status": "partial",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Unify existing separate gameplay backend with tiered field equipment and verify physical tiers"
+      ]
+    },
+    {
+      "id": "SANITY_MONITOR",
+      "status": "partial",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Unify existing separate gameplay backend with tiered field equipment and verify physical tiers"
+      ]
+    },
+    {
+      "id": "SITE_ACTIVITY_MONITOR",
+      "status": "partial",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Unify existing separate gameplay backend with tiered field equipment and verify physical tiers"
+      ]
+    },
+    {
+      "id": "SITE_MAP",
+      "status": "partial",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Unify existing separate gameplay backend with tiered field equipment and verify physical tiers"
+      ]
+    },
+    {
+      "id": "SOUND_MONITOR",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "ANCHOR_TRIANGULATOR",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "ECTOPLASM_SAMPLER",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "RESONANCE_TUNER",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "BAROMETRIC_PROBE",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "SEISMIC_RECORDER",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "SPECTRAL_PRISM",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "LASER_GRID",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "EMF_ARRAY",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "THERMAL_BEACON",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "RITUAL_ANCHOR_METER",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "WARD_STABILITY_PROBE",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "OBJECT_IMPRINT_SCANNER",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "CHALK_SIGIL_KIT",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    },
+    {
+      "id": "SPECTRAL_FREQUENCY_ANALYZER",
+      "status": "unstarted",
+      "lan_rack_enabled": false,
+      "all_completion_gates_verified": false,
+      "remaining": [
+        "Implement real backend, three physical tiers, input, authority, purchase/service, logs and regression coverage"
+      ]
+    }
+  ]
+}

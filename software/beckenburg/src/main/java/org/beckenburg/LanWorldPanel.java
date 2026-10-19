@@ -46,6 +46,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private String threatOutcome="";
     private final MouseLook mouseLook;
     private final LanAudio audio=new LanAudio();
+    private final RecorderAudio recorderAudio=new RecorderAudio();
     private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
     private String soundCaption="";
     private int soundUntilTick=-1;
@@ -138,7 +139,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }
     }
     public void close(){
-        releaseVoice();timer.stop();keys.clear();mouseLook.close();audio.close();atmosphere.close();
+        releaseVoice();timer.stop();keys.clear();mouseLook.close();recorderAudio.close();audio.close();atmosphere.close();
     }
     private void beginVoice(LanChat.Channel channel){
         if(health<=0||!caseResult.isEmpty()||chatInput.isVisible())return;
@@ -331,6 +332,18 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     if(casefileScroll>0)casefileScroll++;
                     if(casefile.size()>LanEvidenceJournal.CAPACITY)casefile.remove(0);
                     casefileScroll=Math.min(casefileScroll,Math.max(0,casefile.size()-1));
+                }
+            }else if(p.size()==3&&p.get(0).equals("RECORDER")&&p.get(1).equals("STATE")){
+                deviceReading.put("SOUND_RECORDER",p.get(2));
+            }else if(p.get(0).equals("RECAUDIO")){
+                var clip=recorderAudio.accept(frame);
+                if(clip!=null){
+                    recorderAudio.play(clip,audio);
+                    try{
+                        var path=RecorderAudio.save(clip,java.nio.file.Path.of(
+                            System.getProperty("user.home"),"Beckenburg","Recordings"));
+                        feedback="PLAY / "+clip.samples().size()+" sounds / "+path.getFileName();
+                    }catch(java.io.IOException error){feedback="Recording save error: "+error.getMessage();}
                 }
             }else if(p.get(0).equals("SOUND")){
                 LanSound.CueEvent cue=LanSound.decode(frame);
@@ -954,6 +967,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         if(e.getKeyCode()==KeyEvent.VK_ESCAPE && casefileOpen){
             casefileOpen=false;repaint();return;
         }
+        if(e.getKeyCode()==KeyEvent.VK_J){
+            casefileOpen=!casefileOpen;
+            if(casefileOpen){journalPage=0;mouseLook.release();keys.clear();}
+            repaint();return;
+        }
         if(e.getKeyCode()==KeyEvent.VK_TAB){
             if(!casefileOpen){casefileOpen=true;journalPage=1;mouseLook.release();keys.clear();}
             else journalPage=(journalPage+1)%3;
@@ -1035,12 +1053,13 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_F6 -> showEquipmentRack();
             case KeyEvent.VK_T -> consumeMedicine(FieldSupplies.Kind.HEALTH);
             case KeyEvent.VK_Y -> consumeMedicine(FieldSupplies.Kind.SANITY);
-            case KeyEvent.VK_J -> {casefileOpen=!casefileOpen;
-                if(casefileOpen){journalPage=0;mouseLook.release();keys.clear();}
-            }
             case KeyEvent.VK_I -> selectedGuess=GhostIdentity.Type.values()[
                     (selectedGuess.ordinal()+1)%GhostIdentity.Type.values().length];
-            case KeyEvent.VK_P -> sendAction("identify",()->client.identify(selectedGuess));
+            case KeyEvent.VK_P -> {
+                if(equippedGear[activeGearSlot].equals("SOUND_RECORDER"))
+                    sendAction("play recording",()->client.playRecording());
+                else sendAction("identify",()->client.identify(selectedGuess));
+            }
             case KeyEvent.VK_C -> sendAction("ward",()->client.ward());
             case KeyEvent.VK_B -> sendAction("cleansing",()->client.cleanse());
             case KeyEvent.VK_N -> sendAction("banishment",()->client.banish());

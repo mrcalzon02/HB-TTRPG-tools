@@ -14,7 +14,8 @@ import java.util.concurrent.BlockingQueue;
 public final class LanAudio implements AutoCloseable {
     static final int SAMPLE_RATE=16000;
     private static final AudioFormat FORMAT=new AudioFormat(SAMPLE_RATE,16,2,true,false);
-    private final BlockingQueue<LanSound.CueEvent> queue=new ArrayBlockingQueue<>(8);
+    private record Playback(LanSound.CueEvent cue,byte[] pcm) { }
+    private final BlockingQueue<Playback> queue=new ArrayBlockingQueue<>(8);
     private final Thread worker;
     private volatile boolean closed;
     private boolean hardwareUnavailable;
@@ -26,14 +27,30 @@ public final class LanAudio implements AutoCloseable {
     public void play(LanSound.CueEvent cue){
         if(cue==null||closed||Boolean.getBoolean("beckenburg.audio.mute"))return;
         // Never grow an unbounded backlog of stale paranormal noises.
-        if(!queue.offer(cue)){queue.poll();queue.offer(cue);}
+        Playback sound=new Playback(cue,null);
+        if(!queue.offer(sound)){queue.poll();queue.offer(sound);}
+    }
+    /** Recorded silence and overlapping source events retain their exact PCM timing. */
+    public void playRecording(FieldSoundRecorder.Clip clip){
+        if(clip==null||closed||Boolean.getBoolean("beckenburg.audio.mute"))return;
+        byte[] pcm=RecorderAudio.pcm(clip);
+        if(clip.tier()==EquipmentTiers.Tier.I){
+            byte[] stereo=new byte[pcm.length*2];
+            for(int i=0;i<pcm.length;i+=2){
+                stereo[i*2]=pcm[i];stereo[i*2+1]=pcm[i+1];
+                stereo[i*2+2]=pcm[i];stereo[i*2+3]=pcm[i+1];
+            }
+            pcm=stereo;
+        }
+        Playback sound=new Playback(null,pcm);
+        if(!queue.offer(sound)){queue.poll();queue.offer(sound);}
     }
     private void run(){
         while(!closed){
             try{
-                LanSound.CueEvent cue=queue.take();
+                Playback sound=queue.take();
                 if(closed||hardwareUnavailable)continue;
-                byte[] samples=synthesize(cue);
+                byte[] samples=sound.pcm()!=null?sound.pcm():synthesize(sound.cue());
                 SourceDataLine line=null;
                 try{
                     line=(SourceDataLine)AudioSystem.getLine(new DataLine.Info(SourceDataLine.class,FORMAT));

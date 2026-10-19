@@ -1,0 +1,139 @@
+{
+  "source_archive": "E:\\ARCHIVE\\PSX assets\\kenney_retro-urban-kit.zip",
+  "license": "CC0; archive License.txt",
+  "models": [
+    {
+      "model": "kenney_detail_barrier_type_a.glb",
+      "original_sha256": "8ad30f159654cccd2cb176b84852275c375a2d4cb868b6969b184474d3d765ef",
+      "runtime_sha256": "2adb04e8b47b07cf26cf0fcd07cf5f92943160ee1ab3cc0227c1233b278bf6dd",
+      "embedded": [
+        {
+          "member": "Models/GLB format/Textures/metal.png",
+          "sha256": "3893724d52a5788341345e16319fb8f5f7182d588b5d5b2babf577176ca3d701"
+        },
+        {
+          "member": "Models/GLB format/Textures/signs.png",
+          "sha256": "050cfc96da08cd2af9575c66c3c75f0cbb1f888bb72533d70aaaaf14f99bb08c"
+        }
+      ],
+      "converted_extensions": [
+        "KHR_materials_unlit",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "model": "kenney_detail_bench.glb",
+      "original_sha256": "ccf6f0a95b04db1720c9a7040404ca0d676a0f850815aee90de5edc33b96c47c",
+      "runtime_sha256": "f05da8012bf94efe55071d2eea8483bddc935ddad756d40dde93418b1cf20385",
+      "embedded": [
+        {
+          "member": "Models/GLB format/Textures/metal.png",
+          "sha256": "3893724d52a5788341345e16319fb8f5f7182d588b5d5b2babf577176ca3d701"
+        },
+        {
+          "member": "Models/GLB format/Textures/planks.png",
+          "sha256": "1da26c7f5094b1164b22b7b8c63baf1a824ef9845ab0f6bef0ee6d59f31a6a0f"
+        }
+      ],
+      "converted_extensions": [
+        "KHR_materials_unlit",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "model": "kenney_detail_dumpster_closed.glb",
+      "original_sha256": "c2b54e446c95fa413929793f3d89cb0176077fa29e4a449dc03cada558bd07d9",
+      "runtime_sha256": "095755420af5491bef40e878e51798dfbc80ef16d13e8745fd6ad52752bffb8d",
+      "embedded": [
+        {
+          "member": "Models/GLB format/Textures/metal_wall.png",
+          "sha256": "2700c58f6063520dd447ea6addc9477898bf4e0924b2ab6eb63b4340f36526c5"
+        },
+        {
+          "member": "Models/GLB format/Textures/wall.png",
+          "sha256": "18dc996f37c4ac4510d09e6cb505c1decbd249d15108d0bfe6efdbd489425690"
+        },
+        {
+          "member": "Models/GLB format/Textures/roof.png",
+          "sha256": "50a09bac9a57a1732af6b6e4de0192efaba3627a997e0b1dc5fc1c1c6369acd6"
+        }
+      ],
+      "converted_extensions": [
+        "KHR_materials_unlit",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "model": "kenney_detail_light_single.glb",
+      "original_sha256": "aac24987fa7651f8e892f4e661b3bb67c6866edb726e0ab092e9c747f0a69151",
+      "runtime_sha256": "27febf136ffc3ee996fda3cffef4f6d6b11d5426fddbac48898d114ef134d69a",
+      "embedded": [
+        {
+          "member": "Models/GLB format/Textures/metal.png",
+          "sha256": "3893724d52a5788341345e16319fb8f5f7182d588b5d5b2babf577176ca3d701"
+        }
+      ],
+      "converted_extensions": [
+        "KHR_materials_unlit",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "model": "kenney_road_asphalt_damaged.glb",
+      "original_sha256": "e23a7e7728430bd245c6da47078b04e49bd955d0fde2c5199f25f6d3291c6f09",
+      "runtime_sha256": "f8c07f221a724090cf2f6e12476f8644e2c226c21bdd1c5ec5ed314e0ccf885b",
+      "embedded": [
+        {
+          "member": "Models/GLB format/Textures/tiles.png",
+          "sha256": "6bb08a68e1bc92d9bb4ad6427e71dcd4abb71bdf10f1add5f8c47e25c7f8b313"
+        },
+        {
+          "member": "Models/GLB format/Textures/asphalt.png",
+          "sha256": "911dec63cacab6252ab5ae2a02ee9b9fa62f980faaa815e0b6abb8ec61d16925"
+        }
+      ],
+      "converted_extensions": [
+        "KHR_materials_unlit",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "model": "kenney_road_asphalt_side.glb",
+      "original_sha256": "09aed7752daa81adc76e074ff9c45a53db373801f18ada581bf1d4705ba00bb4",
+      "runtime_sha256": "6b8fd657be0baf2f7c04d939a8237a96979081cd6832c81073c5b1dbd42fa1b3",
+      "embedded": [
+        {
+          "member": "Models/GLB format/Textures/asphalt.png",
+          "sha256": "911dec63cacab6252ab5ae2a02ee9b9fa62f980faaa815e0b6abb8ec61d16925"
+        },
+        {
+          "member": "Models/GLB format/Textures/tiles.png",
+          "sha256": "6bb08a68e1bc92d9bb4ad6427e71dcd4abb71bdf10f1add5f8c47e25c7f8b313"
+        }
+      ],
+      "converted_extensions": [
+        "KHR_materials_unlit",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "model": "kenney_road_asphalt_straight.glb",
+      "original_sha256": "33d5a25df63fdbfd696564972326de0dc7bdcf100649b8beb7bcd4dffec19c4e",
+      "runtime_sha256": "7561e17c3ed49cbee243ae5fed2ae67e752ccd36af89518c3ad7297ddf8c444e",
+      "embedded": [
+        {
+          "member": "Models/GLB format/Textures/tiles.png",
+          "sha256": "6bb08a68e1bc92d9bb4ad6427e71dcd4abb71bdf10f1add5f8c47e25c7f8b313"
+        },
+        {
+          "member": "Models/GLB format/Textures/asphalt.png",
+          "sha256": "911dec63cacab6252ab5ae2a02ee9b9fa62f980faaa815e0b6abb8ec61d16925"
+        }
+      ],
+      "converted_extensions": [
+        "KHR_materials_unlit",
+        "KHR_texture_transform"
+      ]
+    }
+  ]
+}

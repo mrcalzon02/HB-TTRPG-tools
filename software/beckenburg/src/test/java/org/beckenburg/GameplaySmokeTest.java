@@ -28,11 +28,15 @@ public final class GameplaySmokeTest {
         renderer.yaw=1.1;renderer.pitch=.3;renderer.lamp=false;renderer.draw(map,spirit,1);
         ok(Arrays.stream(renderer.pixels()).distinct().count()>20,"alternate orientation and lamp renders");
         int ar=spirit.anchorRoom();double ax=map.centerX(ar),az=map.centerZ(ar);
-        ok(!spirit.cleanse(ax,az),"cannot cleanse without evidence");
-        ok(!spirit.scan(InvestigationSession.Instrument.EMF,20.5,27.5)||ar==11,"remote baseline not guaranteed positive");
+        ok(!spirit.cleanse(ax,az),"cannot cleanse without a prepared ward");
+        int before=spirit.journal().size();
+        ok(spirit.scan(InvestigationSession.Instrument.EMF,20.5,27.5),
+            "the meter measures ordinary fields in the van without a ghost event");
+        ok(spirit.message().matches(".*EMF [2-7]/10")&&spirit.journal().size()==before+1,
+            "ordinary numeric measurement is recorded without fabricated paranormal strength");
         for(InvestigationSession.Instrument i:InvestigationSession.Instrument.values())
-            ok(spirit.scan(i,ax,az),"signature evidence for "+i);
-        ok(spirit.evidenceCount()==3,"all evidence families recorded once");
+            ok(spirit.scan(i,ax,az),"actual environmental measurement from "+i);
+        ok(spirit.evidenceCount()==3,"distinct instrument use is recorded once, without confirming evidence");
         ok(!spirit.cleanse(ax,az),"ward required");
         ok(spirit.placeWard(ax,az),"ward placed");
         ok(spirit.wards()==1&&spirit.wardPrepared(),"ward has material cost");

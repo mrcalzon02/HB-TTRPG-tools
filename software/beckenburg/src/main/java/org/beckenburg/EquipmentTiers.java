@@ -60,7 +60,7 @@ public final class EquipmentTiers {
         p("PHOTO_CAMERA",Role.OPTICAL,45,450,0,1,0,"One-exposure Polaroid; low-resolution square print","Six-shot camera; full-frame clearer images","Twelve-shot camera; large high-clarity images and improved framing"),
         p("SALT",Role.DEPLOYABLE,20,140,0,3,0,"Three small piles","More salt per pouch and larger floor coverage","Greater capacity and high-visibility footprint contrast"),
         p("SANITY_MEDICATION",Role.CONSUMABLE,50,0,0,1,0,"Basic sanity restoration (18)","Improved sanity restoration (36)","Advanced sanity restoration (65)"),
-        p("SOUND_RECORDER",Role.AUDIO,60,400,12,2,240,"Short mono audio clips","Longer recording and stereo peaks","Multi-channel waveform history and export"),
+        p("SOUND_RECORDER",Role.AUDIO,60,400,12,2,240,"8-second mono clips; 2 clip memory","16-second stereo clips; 3 clip memory","32-second stereo clips; 4 clip memory and greater pickup range"),
         p("SOUND_SENSOR",Role.DEPLOYABLE,65,500,12,1,240,"Single room sound pickup","Longer range and louder event annunciator","Multi-zone pickup with timed history"),
         p("TRIPOD",Role.DEPLOYABLE,30,0,0,1,0,"Fixed-height camera stand","Adjustable height and pan","Motorized pan/tilt with fine aiming"),
         p("CLIPBOARDS",Role.MONITOR,20,0,0,1,0,"Paper assignment list","Editable clear task slate","Shared synchronized assignment board"),

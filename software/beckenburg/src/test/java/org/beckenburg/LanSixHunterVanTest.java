@@ -95,6 +95,13 @@ public final class LanSixHunterVanTest {
                 }
                 Thread.sleep(350);
                 check(host.running(),"six actual room-mode occupants share the ghost room");
+                for(Peer peer:hunters){
+                    peer.client.view3D();peer.expect("ACCEPT|VIEW3D");
+                    peer.expect("COUNTERAMMO|");
+                    check(peer.expect("GEARSTATE|").contains("EMF_READER:I"),
+                        "every one of six hunters receives physical equipment state");
+                    peer.client.useHeldEquipment();peer.expect("ACCEPT|GEARUSE|EMF_READER|");
+                }
                 System.out.println("PASS: six simultaneous ghost-room occupants on authoritative room topology");
             }finally{
                 for(Peer peer:hunters)peer.close();

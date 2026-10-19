@@ -30,6 +30,10 @@ public final class HeldToolView {
         // physical instrument face, not a ghost-confirmation HUD.
         if(HeldInstrumentMesh.source(kind,tier)!=null){
             HeldInstrumentMesh.draw(graphics,width,height,kind,tier);
+            if(kind.equals("SOUND_RECORDER")){
+                HeldInstrumentMesh.drawRecorderDisplay(graphics,width,height,tier,measurement);
+                return;
+            }
             if(measurement!=null&&!measurement.isBlank()
                     &&!kind.equals("GHOST_WRITING_BOOK")
                     &&!kind.equals("DOTS_PROJECTOR")){

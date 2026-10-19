@@ -53,7 +53,7 @@ public final class EquipmentRegistry {
         entry("PHOTO_CAMERA","Photo camera",Origin.OPTIONAL,Purpose.SURVEY,State.PARTIAL_SOURCE,State.ABSENT,Evidence.SPECTRAL_SHADOW),
         entry("SALT","Salt",Origin.OPTIONAL,Purpose.SURVEY,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.UV_MARKS),
         entry("SANITY_MEDICATION","Sanity treatment",Origin.OPTIONAL,Purpose.CONSUMABLE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE),
-        entry("SOUND_RECORDER","Sound recorder",Origin.OPTIONAL,Purpose.SURVEY,State.ABSENT,State.ABSENT,Evidence.SPIRIT_REPLY),
+        entry("SOUND_RECORDER","Sound recorder",Origin.OPTIONAL,Purpose.SURVEY,State.ABSENT,State.PARTIAL_SOURCE,Evidence.SPIRIT_REPLY),
         entry("SOUND_SENSOR","Sound sensor",Origin.OPTIONAL,Purpose.SURVEY,State.ABSENT,State.ABSENT),
         entry("TRIPOD","Tripod / camera mount",Origin.OPTIONAL,Purpose.SURVEY,State.ABSENT,State.ABSENT),
         entry("CLIPBOARDS","Task clipboards",Origin.TRUCK,Purpose.MONITOR,State.ABSENT,State.ABSENT),

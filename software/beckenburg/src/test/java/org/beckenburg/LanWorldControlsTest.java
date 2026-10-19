@@ -42,9 +42,14 @@ public final class LanWorldControlsTest {
             LanWorldPanel panel=instance[0];
             try{
                 press(panel,KeyEvent.VK_2);check(panel.selectedTool()==LanCase.Tool.THERMOMETER,"hotkey 2 selects thermometer");
-                press(panel,KeyEvent.VK_R);check(a.await("ACCEPT|SCAN").contains("INCONCLUSIVE"),"scan is host-validated");
+                press(panel,KeyEvent.VK_R);
+                String measurement=a.await("ACCEPT|GEARUSE|THERMOMETER|");
+                check(measurement.contains("Air ")&&!measurement.contains("INCONCLUSIVE"),
+                    "held thermometer returns host-measured air temperature without an evidence verdict");
                 press(panel,KeyEvent.VK_C);check(a.await("ACCEPT|WARD").contains("DEFENSIVE"),"ward updates host state");
-                press(panel,KeyEvent.VK_B);check(a.await("REJECT|CLEANSE").contains("evidence"),"ritual checks evidence");
+                press(panel,KeyEvent.VK_B);
+                check(a.await("REJECT|CLEANSE").contains("haunting anchor"),
+                    "legacy host rejects a ritual from the van rather than the physical anchor");
                 press(panel,KeyEvent.VK_3);check(panel.selectedTool()==LanCase.Tool.SPIRIT_BOX,"hotkey 3 selects spirit box");
                 press(panel,KeyEvent.VK_X);check(a.await("ACCEPT|EXTRACT").contains("TEAM WITHDREW"),"3D viewport can extract from van");
                 check(a.await("RESULT|RETREATED").contains("RETREATED"),"outcome synchronized");

@@ -22,12 +22,12 @@ public final class HunterCounters {
         }
         double height(){return airborne?Math.max(.12,1.32-.095*steps):.045;}
     }
-    private final int[][] charges={{2,2,3},{2,2,3},{2,2,3}};
-    private final int[] lastThrow={-1000,-1000,-1000};
+    private final int[][] charges={{2,2,3},{2,2,3},{2,2,3},{2,2,3},{2,2,3},{2,2,3}};
+    private final int[] lastThrow={-1000,-1000,-1000,-1000,-1000,-1000};
     private final List<Instance> active=new ArrayList<>();
     private int nextId=1;
     public int charges(int seat,Kind kind){validateSeat(seat);return charges[seat][kind.ordinal()];}
-    private static void validateSeat(int seat){if(seat<0||seat>2)throw new IllegalArgumentException("hunter seat required");}
+    private static void validateSeat(int seat){if(seat<0||seat>=6)throw new IllegalArgumentException("hunter seat required");}
     public void replenish(int seat){validateSeat(seat);charges[seat]=new int[]{2,2,3};}
     public Marker deploy(int seat,Kind kind,LanWorld.Body body,HouseMap map,int tick){
         validateSeat(seat);Objects.requireNonNull(kind);Objects.requireNonNull(body);Objects.requireNonNull(map);

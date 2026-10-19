@@ -36,7 +36,9 @@ public final class EquipmentStoreDescriptionsTest {
             if(FieldEquipment.functional(gear.id()))working++;
         }
         ok(ids.size()==42&&stages==126,"all forty-two devices and 126 stages documented");
-        ok(working==13,"the 29 unimplemented items remain labelled not purchasable");
+        ok(working==14,"the 28 unimplemented items remain labelled not purchasable");
+        ok(EquipmentStoreDescriptions.describe("SOUND_RECORDER",EquipmentTiers.Tier.III)
+            .effect().contains("32s clips"),"recorder shop copy uses actual recording duration");
 
         var instant=EquipmentStoreDescriptions.describe("PHOTO_CAMERA",EquipmentTiers.Tier.I);
         var standard=EquipmentStoreDescriptions.describe("PHOTO_CAMERA",EquipmentTiers.Tier.II);
