@@ -22,6 +22,7 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
     private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.CASTLE);
     private long last=System.nanoTime();
     private double clock;
+    private double elevation;
     private boolean castleLightsOn=true;
     private String notice="Welcome to Beckenburg Castle. The equipment is real; look and press E.";
     private int noticeTicks=100;
@@ -53,12 +54,20 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
             double speed=(down.contains(KeyEvent.VK_SHIFT)?3.9:2.6)*dt/norm;
             double dx=(Math.sin(renderer.yaw)*forward+Math.cos(renderer.yaw)*strafe)*speed;
             double dz=(Math.cos(renderer.yaw)*forward-Math.sin(renderer.yaw)*strafe)*speed;
-            if(map.traversable(renderer.x+dx,renderer.z))renderer.x+=dx;
-            if(map.traversable(renderer.x,renderer.z+dz))renderer.z+=dz;
+            double targetX=renderer.x+dx,targetZ=renderer.z+dz;
+            double nextX=CastleHubArchitecturalPlan.elevation(targetX,renderer.z,elevation);
+            if(map.traversable(targetX,renderer.z,nextX)){
+                renderer.x=targetX;elevation=nextX;
+            }
+            double nextZ=CastleHubArchitecturalPlan.elevation(renderer.x,targetZ,elevation);
+            if(map.traversable(renderer.x,targetZ,nextZ)){
+                renderer.z=targetZ;elevation=nextZ;
+            }
             if(Math.hypot(renderer.x-priorX,renderer.z-priorZ)>.0001)
-                GameSfx.play(map.footstep(renderer.x,renderer.z));
+                GameSfx.play(map.footstep(renderer.x,renderer.z,elevation));
         }
         clock+=dt;
+        renderer.eyeHeight=1.62+elevation;
         GraphicsOptions.current().configure(renderer,getWidth(),getHeight(),true);
         renderer.drawCastle(map,clock,castleLightsOn);
         if(noticeTicks>0)noticeTicks--;
@@ -100,8 +109,11 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
         if(!isShowing())return;
         int key=e.getKeyCode();if(down.contains(key))return;
         if(key==KeyEvent.VK_ESCAPE){actions.menu();return;}
-        if(key==KeyEvent.VK_E)use(CastleHubDecor.aimed(map,renderer.x,renderer.z,renderer.yaw)!=null?
-            null:map.aimed(renderer.x,renderer.z,renderer.yaw));
+        if(key==KeyEvent.VK_E){
+            if(elevation>1.8){notice="Return to the ground floor to use workstations.";noticeTicks=90;}
+            else use(CastleHubDecor.aimed(map,renderer.x,renderer.z,renderer.yaw)!=null?
+                null:map.aimed(renderer.x,renderer.z,renderer.yaw));
+        }
         if(key==KeyEvent.VK_F)renderer.lamp=!renderer.lamp;
         if(key==KeyEvent.VK_L){castleLightsOn=!castleLightsOn;GameSfx.play(LanSound.Cue.SWITCH);}
         down.add(key);
@@ -124,11 +136,13 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
             g.drawString("BECKENBURG CASTLE",25,29);
             g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
             g.setColor(new Color(186,215,202));
-            g.drawString("£"+profile.currency()+"   /   "+actions.role(),25,44);
+            g.drawString("£"+profile.currency()+"   /   "+actions.role()+
+                (elevation>2.0?"   /   UPPER GALLERY":""),25,44);
             g.setColor(new Color(230,215,174));
             g.drawString("+",w/2-4,h/2+4);
-            CastleHubMap.Station station=map.aimed(renderer.x,renderer.z,renderer.yaw);
-            boolean atSwitch=CastleHubDecor.aimed(map,renderer.x,renderer.z,renderer.yaw)!=null;
+            CastleHubMap.Station station=elevation>1.8?null:map.aimed(renderer.x,renderer.z,renderer.yaw);
+            boolean atSwitch=elevation<=1.8&&
+                CastleHubDecor.aimed(map,renderer.x,renderer.z,renderer.yaw)!=null;
             if(station!=null||atSwitch){
                 String label=atSwitch?"CASTLE LIGHT SWITCH":station.label;
                 int labelWidth=Math.min(w-24,Math.max(250,g.getFontMetrics().stringWidth(label)+50));
