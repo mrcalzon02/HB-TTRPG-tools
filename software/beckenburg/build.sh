@@ -15,6 +15,9 @@ for name in light_switch_1 ceiling_lamp_1_off door_1_loose shelf_mp_6 chair_mp_5
     test -s "assets/runtime/models/${name}.glb"
     cp "assets/runtime/models/${name}.glb" "build/classes/org/beckenburg/models/${name}.glb"
 done
+# Manufacture missing tier housings and PSX texture atlases as actual GLBs.
+# Deterministic Java 17 authoring; no Python/Blender dependency on Windows.
+java -Djava.awt.headless=true -cp build/classes org.beckenburg.TierModelForge build/classes/org/beckenburg/models
 javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java/org/beckenburg/*.java
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.CastleHubIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.BeckenburgUpdatesTest
