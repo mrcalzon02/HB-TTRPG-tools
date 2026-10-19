@@ -138,7 +138,9 @@ public final class GhostFieldGuide {
             case REMOTE_EMPTY->p.sight()==GhostTraits.Sight.CAMERA_ONLY;
             case SPIRIT_ORBS->p.sight()==GhostTraits.Sight.ORBS;
             case SOLO_ATTACK->p.huntsSolitary();
-            case SAME_TARGET->type==GhostIdentity.Type.BANSHEE || type==GhostIdentity.Type.POSSESSIVE || type==GhostIdentity.Type.DEVIL;
+            case SAME_TARGET->type.baseType()==GhostIdentity.Type.BANSHEE
+                    ||type.baseType()==GhostIdentity.Type.POSSESSIVE
+                    ||type.baseType()==GhostIdentity.Type.DEVIL;
             case PASSIVE_DRAIN->p.charge()==GhostTraits.Charge.PRESENCE;
             case GROUP_ATTACK->!p.huntsSolitary();
         };
