@@ -69,7 +69,8 @@ public final class VanStaging {
         return overlaps(p.x(),p.z(),radius,-w,-w+t,f,r) ||
             overlaps(p.x(),p.z(),radius,w-t,w,f,r) ||
             overlaps(p.x(),p.z(),radius,-w,w,r-t,r) ||
-            (cargoDoorClosed&&overlaps(p.x(),p.z(),radius,-w,w,f,f+t));
+            (cargoDoorClosed&&overlaps(p.x(),p.z(),radius,-w,w,f,f+t)) ||
+            VanInteriorLayout.collides(p.x(),p.z(),radius);
     }
     private static boolean overlaps(double x,double z,double radius,
             double minX,double maxX,double minZ,double maxZ) {
