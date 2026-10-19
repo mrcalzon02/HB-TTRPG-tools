@@ -181,13 +181,11 @@ public final class GlbProps {
                 vanCrtMaterial=materialIds[i];
         }
         List<Triangle> result=new ArrayList<>();
-        for(Object n:nodes){
-            Map<String,Object> node=obj(n);
-            if(!node.containsKey("mesh"))continue;
-            double[] t=vec(node.get("translation"),0,0,0),
-                     scale=vec(node.get("scale"),1,1,1),
-                     q=vec(node.get("rotation"),0,0,0,1);
-            double qx=q[0],qy=q[1],qz=q[2],qw=q[3];
+        double[][] nodeWorld=sceneTransforms(root,nodes);
+        for(int nodeIndex=0;nodeIndex<nodes.size();nodeIndex++){
+            Map<String,Object> node=obj(nodes.get(nodeIndex));
+            if(!node.containsKey("mesh")||nodeWorld[nodeIndex]==null)continue;
+            double[] world=nodeWorld[nodeIndex];
             List<Object> prims=arr(obj(meshes.get(integer(node.get("mesh")))).get("primitives"));
             for(Object pr:prims){
                 Map<String,Object> primitive=obj(pr);
@@ -211,11 +209,11 @@ public final class GlbProps {
                     double xx=component(bb,binStart,binLength,views,pos,i,0,3),
                            yy=component(bb,binStart,binLength,views,pos,i,1,3),
                            zz=component(bb,binStart,binLength,views,pos,i,2,3);
-                    // glTF node TRS, proper quaternion rotation then translation.
-                    xx*=scale[0];yy*=scale[1];zz*=scale[2];
-                    double rx=xx+2*(-(qy*qy+qz*qz)*xx+(qx*qy-qz*qw)*yy+(qx*qz+qy*qw)*zz);
-                    double ry=yy+2*((qx*qy+qz*qw)*xx-(qx*qx+qz*qz)*yy+(qy*qz-qx*qw)*zz);
-                    double rz=zz+2*((qx*qz-qy*qw)*xx+(qy*qz+qx*qw)*yy-(qx*qx+qy*qy)*zz);
+                    // Global transform includes every ancestor's TRS,
+                    // preserving the source object's original assembly.
+                    double rx=world[0]*xx+world[1]*yy+world[2]*zz+world[3];
+                    double ry=world[4]*xx+world[5]*yy+world[6]*zz+world[7];
+                    double rz=world[8]*xx+world[9]*yy+world[10]*zz+world[11];
                     double u=component(bb,binStart,binLength,views,uv,i,0,2),
                            v=component(bb,binStart,binLength,views,uv,i,1,2);
                     if(!Double.isFinite(rx+ry+rz+u+v))throw new IOException("Nonfinite mesh");
@@ -235,6 +233,56 @@ public final class GlbProps {
         }
         if(result.isEmpty()||result.size()>50000)throw new IOException("No drawable triangles");
         return new Model(List.copyOf(result));
+    }
+    /** glTF node TRS is LOCAL to its parent. Imported monitor arms and vehicle
+     * assemblies must use the complete scene-graph transform, not merely each
+     * mesh node's local translation (the old loader discarded its ancestors).
+     */
+    private static double[] matrix(Map<String,Object> node){
+        double[] t=vec(node.get("translation"),0,0,0),
+            s=vec(node.get("scale"),1,1,1),
+            q=vec(node.get("rotation"),0,0,0,1);
+        double x=q[0],y=q[1],z=q[2],w=q[3];
+        return new double[]{
+            (1-2*(y*y+z*z))*s[0], 2*(x*y-z*w)*s[1], 2*(x*z+y*w)*s[2],t[0],
+            2*(x*y+z*w)*s[0],(1-2*(x*x+z*z))*s[1],2*(y*z-x*w)*s[2],t[1],
+            2*(x*z-y*w)*s[0],2*(y*z+x*w)*s[1],(1-2*(x*x+y*y))*s[2],t[2],
+            0,0,0,1};
+    }
+    private static double[] combine(double[] a,double[] b){
+        double[] c=new double[16];
+        for(int r=0;r<4;r++)for(int col=0;col<4;col++)
+            for(int k=0;k<4;k++)c[r*4+col]+=a[r*4+k]*b[k*4+col];
+        return c;
+    }
+    private static final double[] IDENTITY={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
+    private static void tree(List<Object> nodes,int index,double[] parent,
+                             double[][] matrices,boolean[] active,int depth)throws IOException{
+        if(index<0||index>=nodes.size()||depth>nodes.size()||active[index]
+                ||matrices[index]!=null)
+            throw new IOException("Invalid glTF node hierarchy");
+        active[index]=true;
+        Map<String,Object> node=obj(nodes.get(index));
+        double[] world=combine(parent,matrix(node));
+        matrices[index]=world;
+        if(node.containsKey("children"))for(Object child:arr(node.get("children")))
+            tree(nodes,integer(child),world,matrices,active,depth+1);
+        active[index]=false;
+    }
+    private static double[][] sceneTransforms(Map<String,Object> root,
+                                               List<Object> nodes)throws IOException{
+        double[][] result=new double[nodes.size()][];
+        boolean[] active=new boolean[nodes.size()];
+        Object scenesValue=root.get("scenes");
+        if(scenesValue==null)throw new IOException("glTF missing scene");
+        List<Object> scenes=arr(scenesValue);
+        int chosen=get(root,"scene",0);
+        if(chosen<0||chosen>=scenes.size())throw new IOException("Invalid glTF scene");
+        Map<String,Object> scene=obj(scenes.get(chosen));
+        if(scene.get("nodes")==null)throw new IOException("glTF scene missing root nodes");
+        for(Object n:arr(scene.get("nodes")))
+            tree(nodes,integer(n),IDENTITY,result,active,0);
+        return result;
     }
     private static int index(ByteBuffer b,int start,int bytes,List<Object> views,
                               Map<String,Object> accessor,int n,int component)throws IOException{
