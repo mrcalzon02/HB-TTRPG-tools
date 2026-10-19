@@ -7,6 +7,24 @@ import java.util.Set;
 public final class InvestigationSitesTest {
     private static void ok(boolean condition,String why){if(!condition)throw new AssertionError(why);}
     public static void main(String[] args){
+        // No purchasable instrument, however visually attractive, belongs in authored scenery.
+        String[] forbidden={
+            "exploration_emf_detector","exploration_flashlight","exploration_thermometer",
+            "exploration_photo_camera","exploration_spirit_box","vape_mp_1",
+            "flashlight_mp_1","book_mp_1","open_book_mp_1","cross_mp_2",
+            "blender_dots_projector_1","blender_incense_1","blender_laser_grid_1",
+            "blender_sanity_medication_1","blender_video_camera_1"
+        };
+        for(String tool:forbidden){
+            ok(!InvestigationSites.permittedScenery(tool),
+                "purchasable equipment cannot decorate any investigation map: "+tool);
+            boolean rejected=false;
+            try{new InvestigationSites.Prop(3,tool,0,0,0,1,0);}
+            catch(IllegalArgumentException expected){rejected=true;}
+            ok(rejected,"equipment placement must fail at authoring time");
+        }
+        ok(new SceneRenderer().rackStock.isEmpty(),
+            "a fresh renderer must not display nonexistent van inventory");
         HouseMap house=new HouseMap();
         ok(house.site()==HouseMap.Site.HOUSE&&house.roomName(4).equals("MAIN HALL"),
             "legacy map contract is unchanged");
@@ -33,6 +51,8 @@ public final class InvestigationSitesTest {
                 ok(layout.roomAt(layout.centerX(room),layout.centerZ(room))==room,
                     "site room centers remain valid");
                 for(InvestigationSites.Prop prop:InvestigationSites.props(site,room)){
+                    ok(InvestigationSites.permittedScenery(prop.mesh()),
+                        "map meshes are real building furnishings, never survey equipment");
                     meshes.add(prop.mesh());placed++;
                     // Reuse already imported GLB geometry, not fabricated IDs.
                     ok(!GlbProps.model(prop.mesh()).triangles().isEmpty(),

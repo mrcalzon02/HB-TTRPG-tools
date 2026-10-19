@@ -94,8 +94,10 @@ public final class SceneRenderer {
     public RoomLighting roomLights;
     public int roomLightTick;
     public int hidingDensity;
-    /** The solo profile supplies purchased gear; LAN host inventory will populate later. */
-    public java.util.Set<EquipmentLoadout.Item> rackStock=java.util.EnumSet.allOf(EquipmentLoadout.Item.class);
+    /** Empty until an authoritative loadout/profile explicitly supplies owned gear.
+     * Never implicitly manufacture free tools as map scenery.
+     */
+    public java.util.Set<EquipmentLoadout.Item> rackStock=java.util.Set.of();
     public BufferedImage image(){return frame;}
     public int[] pixels(){return pixels;}
     public double[] depths(){return depths;}
@@ -314,9 +316,6 @@ public final class SceneRenderer {
             .48,van.placement().yaw());
         cargoDoorLeaf(faces,van,true);
         cargoDoorLeaf(faces,van,false);
-        // Built-in flashlight rests on a real van shelf; F switches the carried lamp.
-        VanStaging.Position torch=van.world(-1.52,-1.53);
-        imported(faces,"flashlight_mp_1",torch.x(),.83,torch.z(),2.2,van.placement().yaw());
         // Visible equipment shelf: six distinct physical sockets. Items can be aimed at and taken.
         for(double lz : new double[]{-1.18,.18}) {
             VanStaging.Position p=van.world(1.50,lz);
@@ -348,12 +347,6 @@ public final class SceneRenderer {
                 box(faces,v.x()-.09,1.12,v.z()-.07,.17,.08,.14,0xa1aab4);
             }
         }
-        VanStaging.Position book=van.world(1.48,1.05);
-        imported(faces,"book_mp_1",book.x(),1.00,book.z(),2.1,van.placement().yaw());
-        // A D.O.T.S. Tier I shell is present in the kit; actual projected dots
-        // only appear in the world when a working deployed sensor is activated.
-        VanStaging.Position projector=van.world(.87,-1.4);
-        imported(faces,"vape_mp_1",projector.x(),.89,projector.z(),1.9,van.placement().yaw());
     }
 
     /** Minimal real CC0 streetscape. Geometry is deliberately deterministic:
@@ -572,8 +565,8 @@ public final class SceneRenderer {
                     i%2==0?0x6e8888:0x8f9d96);
             }
         }
-        // Actual mounted PSX Tier I shell emits a visible grid. Empty projected
-        // dots are normal equipment light; only host-authored PASS creates a ghost silhouette.
+        // This device exists ONLY after an owner physically deploys it.
+        // Projected light is a physical effect, not an evidence qualification check.
         for(LanDotsProjectors.Placement placement:dotsPositions.values()){
             if(Math.hypot(placement.x()-x,placement.z()-z)>13.5)continue;
             imported(out,"vape_mp_1",placement.x(),.10,placement.z(),2.0,0);
