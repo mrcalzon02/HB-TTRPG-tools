@@ -98,6 +98,7 @@ public final class LanAudio implements AutoCloseable {
             case FIRELIGHT_IGNITE->3400;case FIRELIGHT_OUT->2600;
             case TENSION_BUILD->24000;case LOCKED_DOOR_RATTLE->12400;
             case HORROR_STING_A,HORROR_STING_B,HORROR_STING_C->14800;
+            case DROP->3300;case ELECTRIC_HUM->9600;
         };
         byte[] output=new byte[samples*4];
         double pan=event.pan()/100.0;
@@ -167,6 +168,8 @@ public final class LanAudio implements AutoCloseable {
                     +.24*Math.sin(2*Math.PI*70*t)+.19*noise;
                 case HORROR_STING_C->.40*Math.sin(2*Math.PI*(67+190*t*t)*t)
                     +.29*noise*Math.sin(2*Math.PI*19*t);
+                case DROP->.43*noise*Math.exp(-t*22)+.33*Math.sin(2*Math.PI*(110-75*t)*t)*Math.exp(-t*16);
+                case ELECTRIC_HUM->.24*Math.sin(2*Math.PI*60*t)+.19*Math.sin(2*Math.PI*120*t)+.12*noise;
             };
             double value=Math.max(-.85,Math.min(.85,wave*env*gain));
             short lv=(short)Math.round(value*left*22000),rv=(short)Math.round(value*right*22000);
