@@ -49,17 +49,6 @@ public final class InvestigationGame {
                     String warnings=get();
                     buildMenu();
                     cards.add(menu,"menu");
-                    castle=new CastleHubPanel(profile,new CastleHubPanel.Actions(){
-                        @Override public void begin(){InvestigationGame.this.begin();}
-                        @Override public void network(){openLan();}
-                        @Override public void spectral(){InvestigationGame.this.beginGhost();}
-                        @Override public void menu(){showMenu();}
-                        @Override public void cycleRole(){rolePicker.setSelectedIndex((rolePicker.getSelectedIndex()+1)%rolePicker.getItemCount());}
-                        @Override public void cycleWeather(){conditionsPicker.setSelectedIndex((conditionsPicker.getSelectedIndex()+1)%conditionsPicker.getItemCount());}
-                        @Override public String role(){return rolePicker.getSelectedItem().toString();}
-                        @Override public String weather(){return conditionsPicker.getSelectedItem().toString();}
-                    });
-                    cards.add(castle,"castle");
                     window.setContentPane(cards);
                     showMenu();
                     if(!warnings.isBlank())JOptionPane.showMessageDialog(window,
@@ -95,6 +84,30 @@ public final class InvestigationGame {
         loadingRow.add(loading,BorderLayout.CENTER);
         surface.add(loadingRow,BorderLayout.SOUTH);
         return surface;
+    }
+    private void showCastle(){
+        try{
+            if(castle==null){
+            castle=new CastleHubPanel(profile,new CastleHubPanel.Actions(){
+                @Override public void begin(){InvestigationGame.this.begin();}
+                @Override public void network(){openLan();}
+                @Override public void spectral(){InvestigationGame.this.beginGhost();}
+                @Override public void menu(){showMenu();}
+                @Override public void cycleRole(){rolePicker.setSelectedIndex((rolePicker.getSelectedIndex()+1)%rolePicker.getItemCount());}
+                @Override public void cycleWeather(){conditionsPicker.setSelectedIndex((conditionsPicker.getSelectedIndex()+1)%conditionsPicker.getItemCount());}
+                @Override public String role(){return rolePicker.getSelectedItem().toString();}
+                @Override public String weather(){return conditionsPicker.getSelectedItem().toString();}
+            });
+                cards.add(castle,"castle");
+            }
+            ((CardLayout)cards.getLayout()).show(cards,"castle");
+            SwingUtilities.invokeLater(castle::requestFocusInWindow);
+        }catch(RuntimeException ex){
+            // Castle art must not prevent access to settings, multiplayer or the main menu.
+            showMenu();
+            JOptionPane.showMessageDialog(window,"Castle assets could not be loaded: "+ex.getMessage(),
+                "Castle unavailable",JOptionPane.WARNING_MESSAGE);
+        }
     }
     private void showMenu(){
         refreshAccount();
@@ -194,7 +207,7 @@ public final class InvestigationGame {
         footer.add(footerActions,BorderLayout.EAST);
         menu.add(footer,BorderLayout.SOUTH);
 
-        enterCastle.addActionListener(e->{((CardLayout)cards.getLayout()).show(cards,"castle");castle.requestFocusInWindow();});
+        enterCastle.addActionListener(e->showCastle());
         begin.addActionListener(e->begin());ghost.addActionListener(e->beginGhost());
         lan.addActionListener(e->openLan());
         options.addActionListener(e->openOptions());
@@ -261,7 +274,7 @@ public final class InvestigationGame {
         if(answer!=JOptionPane.OK_OPTION)return;
         try{
             profile.importFrom(chooser.getSelectedFile().toPath());
-            refreshAccount();castle.repaint();
+            refreshAccount();if(castle!=null)castle.repaint();
             JOptionPane.showMessageDialog(window,"Local progress imported. The previous save was backed up; installation identity is unchanged.",
                 "Save imported",JOptionPane.INFORMATION_MESSAGE);
         }catch(IOException ex){JOptionPane.showMessageDialog(window,
@@ -291,8 +304,7 @@ public final class InvestigationGame {
         if(game!=null){game.close();cards.remove(game);game=null;}
         if(ghostPractice!=null){ghostPractice.close();cards.remove(ghostPractice);ghostPractice=null;}
         refreshAccount();
-        ((CardLayout)cards.getLayout()).show(cards,"castle");
-        castle.requestFocusInWindow();
+        showMenu();
     }
     private final class GamePanel extends JPanel implements KeyListener,FocusListener {
         private final Set<Integer> down=new HashSet<>();
