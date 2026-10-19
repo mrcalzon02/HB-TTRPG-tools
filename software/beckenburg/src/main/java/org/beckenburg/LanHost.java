@@ -34,6 +34,7 @@ public final class LanHost implements AutoCloseable {
     private final LanEvidenceJournal casefile=new LanEvidenceJournal();
     private final GhostWriting writingBook=new GhostWriting();
     private final LanDotsProjectors dots=new LanDotsProjectors();
+    private final LanVideoCameras cameras=new LanVideoCameras();
     private final FieldJournal fieldNotes=new FieldJournal();
     // Radio history is bounded and investigator-only. Local speech has no global replay.
     private final java.util.ArrayDeque<LanChat.Entry> radioHistory=new java.util.ArrayDeque<>();
@@ -430,6 +431,8 @@ public final class LanHost implements AutoCloseable {
                         if(i!=peer.slot&&seats[i]!=null)
                             reply(peer,"PLAYERNAME|"+i+"|"+seats[i].name);
                     broadcastWorld();broadcastApparitions();broadcastCounters();sendCounterAmmo(peer);
+                    reply(peer,"CAMERA|RESET");
+                    for(LanVideoCameras.Camera station:cameras.all())reply(peer,station.frame());
                     reply(peer,"DOTS|RESET");
                     for(LanDotsProjectors.Placement placed:dots.all())reply(peer,placed.frame());
                     if(writingBook.placed())reply(peer,"BOOK|DEPLOYED|"+writingBook.room());
@@ -709,6 +712,17 @@ public final class LanHost implements AutoCloseable {
                                 default -> "Firelight "+(enabled?"lit":"extinguished");
                             };
                             notifyHunters("GEARFX|"+peer.slot+"|"+id+"|"+(enabled?1:0));
+                        }
+                        case "VIDEO_CAMERA" -> {
+                            LanVideoCameras.Camera station=cameras.placeOrRetrieve(
+                                peer.slot,world.body(peer.slot),gear.owned(id));
+                            if(station==null){
+                                reading="Video camera retrieved / feed ended";
+                                notifyHunters("CAMERA|CLEAR|"+peer.slot);
+                            }else{
+                                reading="Video camera recording / live feed available in van";
+                                notifyHunters(station.frame());
+                            }
                         }
                         case "PHOTO_CAMERA" -> {
                             int remaining=gear.expend(id);
