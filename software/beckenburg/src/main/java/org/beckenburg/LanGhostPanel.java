@@ -111,8 +111,19 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
             }else if(packet.startsWith("RESULT|")){
                 finished=true;feedback=packet;keys.clear();
                 atmosphere.setHunt(false);atmosphere.setRitual(false);
-            }
-            else if(packet.startsWith("ACCEPT|")||packet.startsWith("REJECT|"))feedback=packet;
+            }else if(p.size()>=3&&p.get(0).equals("ACCEPT")&&p.get(1).equals("GHOST")){
+                GhostDomain.Action applied=GhostDomain.Action.valueOf(p.get(2));
+                LanSound.Cue result=switch(applied){
+                    case WHISPER->LanSound.Cue.WHISPER;
+                    case DISTURB->LanSound.Cue.DISTURB;
+                    case MANIFEST->LanSound.Cue.MANIFEST;
+                    case STRIKE->LanSound.Cue.STRIKE;
+                    case SIGNATURE->LanSound.Cue.SIGNATURE;
+                    case DRIFT->LanSound.Cue.GHOST_DRIFT;
+                };
+                audio.play(new LanSound.CueEvent(result,0,65,tick));
+                feedback=packet;
+            }else if(packet.startsWith("ACCEPT|")||packet.startsWith("REJECT|"))feedback=packet;
         }catch(IllegalArgumentException ex){feedback="Invalid spectral snapshot rejected";}
         repaint();
     }
