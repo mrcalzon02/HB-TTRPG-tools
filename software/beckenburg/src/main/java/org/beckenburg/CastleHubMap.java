@@ -72,6 +72,13 @@ public final class CastleHubMap {
         return x>=21?MaterialAtlas.PARQUET:MaterialAtlas.STONE;
     }
     public LanSound.Cue footstep(double x,double z){
+        return footstep(x,z,0);
+    }
+    public LanSound.Cue footstep(double x,double z,double elevation){
+        if(elevation>2.0&&CastleHubArchitecturalPlan.upperWalkable(x,z))
+            return z<=10.7?LanSound.Cue.STEP_WOOD:LanSound.Cue.STEP_STONE;
+        if(CastleHubArchitecturalPlan.onStairs(x,z))
+            return LanSound.Cue.STEP_STONE;
         return switch(floorMaterial(x,z)){
             case MaterialAtlas.CARPET->LanSound.Cue.STEP_CARPET;
             case MaterialAtlas.PARQUET,MaterialAtlas.AGED_WOOD->LanSound.Cue.STEP_WOOD;
