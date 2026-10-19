@@ -48,6 +48,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.Ps
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.PsxHorrorUiTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.SoundtrackAudioTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.SoundCoverageTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.HorrorAudioRoutingTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.CastleHubIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.BeckenburgUpdatesTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.HeldMeshViewTest
