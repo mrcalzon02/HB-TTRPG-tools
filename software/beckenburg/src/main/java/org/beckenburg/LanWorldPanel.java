@@ -680,6 +680,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         renderer.setLampHardware(
             equipmentTier.getOrDefault("FLASHLIGHT",EquipmentTiers.Tier.I),
             firelightOn&&!flashlightOn);
+        renderer.rackToolTiers=java.util.Map.copyOf(equipmentTier);
         renderer.drawNetwork(map,new ArrayList<>(peers.values()),apparition,tick*.1,List.copyOf(counterMarks));
         // Van receiver renders the *same live world* from the physical camera's
         // position. No canned image, inferred spectral object or proof overlay.
@@ -1133,7 +1134,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }
         if(casefileOpen)return; // An open journal never triggers world equipment or movement.
         switch(e.getKeyCode()){
-            case KeyEvent.VK_ESCAPE -> {Window window=SwingUtilities.getWindowAncestor(this);if(window!=null)window.dispose();}
+            case KeyEvent.VK_ESCAPE -> {keys.clear();releaseVoice();mouseLook.release();InGamePauseMenu.execute(this);}
             case KeyEvent.VK_E -> {
                 int aimed=lights.aimed(map,renderer.x,renderer.z,renderer.yaw);
                 if(map.van().nearDoorButton(renderer.x,renderer.z))
