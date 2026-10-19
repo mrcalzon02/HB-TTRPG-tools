@@ -7,7 +7,9 @@ public final class VanEquipmentRack {
     public static Socket socket(VanStaging van,EquipmentLoadout.Item item){
         if(van==null||item==null)throw new IllegalArgumentException("rack socket");
         int index=item.ordinal();
-        VanStaging.Position pos=van.world(1.48,-1.58+index*.52);
+        // Six real instrument hooks along the enlarged left equipment wall.
+        // This is the solo-game subset; LAN racks use the complete tier catalog.
+        VanStaging.Position pos=van.world(-1.60,-2.72+index*1.05);
         return new Socket(item,pos.x(),pos.z());
     }
     public static EquipmentLoadout.Item aimed(VanStaging van,double playerX,double playerZ,double yaw){
