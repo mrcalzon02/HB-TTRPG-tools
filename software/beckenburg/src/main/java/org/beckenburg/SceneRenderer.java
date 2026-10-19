@@ -282,8 +282,23 @@ public final class SceneRenderer {
             MaterialAtlas.CONCRETE);
         vanBox(faces,van,-.69,.055,f+.20,1.38,.013,r-f-.40,
             MaterialAtlas.IRON);
-        vanBox(faces,van,-w+.15,.09,r-.16,w*2-.30,1.82,.10,
+        // The purchased body is an OUTER car shell. Without a purpose-built
+        // interior skin the car's wheels and exterior grille are visible from
+        // inside the cargo bay. These measured liners lie inside its 2.07m
+        // exterior bounds and conceal all external-facing UV islands.
+        for(double lx:new double[]{-1.96,1.91}){
+            vanBox(faces,van,lx,.06,f+.16,.052,1.24,r-f-.32,
+                MaterialAtlas.AGED_WOOD);
+            vanBox(faces,van,lx,1.30,f+.16,.052,.83,r-f-.32,
+                MaterialAtlas.IRON);
+        }
+        vanBox(faces,van,-w+.15,.06,r-.17,w*2-.30,2.10,.10,
             MaterialAtlas.AGED_WOOD);
+        // Interior stringers make panels read as fixed cargo construction.
+        for(double lz:new double[]{-1.70,-.70,.30,1.30}){
+            vanBox(faces,van,-1.96,.12,lz,.10,1.96,.055,MaterialAtlas.IRON);
+            vanBox(faces,van,1.88,.12,lz,.10,1.96,.055,MaterialAtlas.IRON);
+        }
         // Trim acts as an actual mechanical threshold, not a floating slab.
         vanBox(faces,van,-w+.20,.035,f-.08,w*2-.4,.045,.14,
             MaterialAtlas.IRON);
