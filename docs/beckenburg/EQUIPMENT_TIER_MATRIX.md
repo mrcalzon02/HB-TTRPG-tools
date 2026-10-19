@@ -1,6 +1,6 @@
 # Beckenburg — complete three-tier equipment progression matrix
 
-**Status:** authoritative source design, created 2026-10-18 from the 42 indexed source equipment types and the new `EquipmentTiers.java` registry. Each tool has Tier I, II and III = **126 specified upgrade stages**. The tier registry provides planning data for all 42 items; **thirteen devices now have LAN equipment actions (including the cameras, switches and incense), with tier capabilities being implemented and tested**, with purchased owner GLBs used by the EMF reader, spirit box, tablet thermometer, writing book and D.O.T.S. source. The remaining **29 tools still lack functional LAN equipment backends**; new playable source paths still require clean Java and multiplayer acceptance. The existing host-shop medicine prices are already implemented. The other prices below are proposed balancing amounts, not live purchases.
+**Status:** 42 indexed equipment types and **126 distinct tier specifications** in `EquipmentTiers.java`. **Thirteen** devices have host-controlled LAN actions, physical gear/inventory interactions and tier progression; **29 catalog devices are planned, not usable or sold**. `EquipmentStoreDescriptions.java` derives display text and prices from the same tier source as the hardware and `EquipmentRackDialog.java` presents a compact scrollable shop with all-tier comparisons, hover tooltips, upgrade/equip/recharge controls. The solo-mode store is not migrated. These are source implementations, **not a claim that the full Windows test suite currently passes**.
 
 **Four upgrade goals:** a larger or more informative physical readout; quicker response to **actual** ghost events; better field reach or coverage; and higher capacity/energy efficiency. Higher tiers do **not** increase the strength of a ghost event, fake an instrument anomaly, validate an evidence checkbox or reveal species. A Tier III EMF meter might sample faster, but it still reads ordinary **2–7** or true high **8–10** / suppression **0** using the same host value as a Tier I meter. Better thermometers sample air sooner and show trends; they do not force freezing or extreme heat into a ghost that cannot cause it.
 
@@ -10,12 +10,12 @@
 |---|---:|---:|---:|
 | Relative physical detection reach | 100% | 135% | 175% |
 | Sampling/refresh interval (lower = quicker) | 100% | 75% | 50% |
-| Consumable charge or stored sample capacity | 100% | 150% | 220% |
+| Generic consumable charge / sample capacity | 100% | 150% | 220% |
 | Battery/runtime duration | 100% | 150% | 225% |
 | Diegetic readout size/legibility | Base | 125% | 150% |
-| Draft equipment credit price | 1× | 2× | 4× |
+| Tier equipment store pricing | 1× | 2× | 4× |
 
-Zero/unlimited fields stay zero/unlimited. Protective gear and consumables increase their area, useful charges or efficacy rather than acquiring meaningless electric screens. Van consoles gain live feed/graph channels and overview capabilities. **Sanity medication is already priced at 50 / 115 / 230 in `FieldSupplies.java`; these actual host prices override generic proposal multipliers.** No ghost-dependent threshold or evidence family is locked behind a higher tier; all tiers can theoretically find their assigned evidence.
+Photo cameras are the exception to generic capacity scaling: **1 / 6 / 12 actual photos**. Zero/unlimited fields stay zero/unlimited. Protective gear and consumables increase their area, useful charges or efficacy rather than acquiring meaningless electric screens. Van consoles gain live feed/graph channels and overview capabilities. **Sanity medication is already priced at 50 / 115 / 230 in `FieldSupplies.java`; these actual host prices override generic proposal multipliers.** No ghost-dependent threshold or evidence family is locked behind a higher tier; all tiers can theoretically find their assigned evidence.
 
 ## Starter investigation equipment (8)
 
@@ -104,8 +104,8 @@ Measurements below are **planned hardware capabilities** derived from the source
 
 ## Upgrade economy and implementation gates
 
-The LAN hunter now has a four-slot tiered inventory and van-rack reloading/charging; the standalone solo mode has not yet been migrated to this system. The production implementation needs a tier-owned inventory entry, validated van purchases, player-carry serialization, real sensor props with tier-appropriate model/screen/display, cooldowns, consumable stock, replicated host measurements and reconnect. Add tier pricing/unlocks at the authoritative van rack, not a client-only selector. Use the existing medicine shop transaction and four equipment slots as integration reference without pretending all gear is in that system already.
+The LAN hunter has a four-slot host-owned equipment inventory, three-stage purchasing for the 13 working devices, van-only recharge/film service, equipment state replication and real on/off, photo/video, and some world-placement operations. `EquipmentRackDialog` lists only implemented devices: select equipment in one scrollable list to see the **current owned capability, exact next-tier credit price, all three tier specifications and hover description**. Use **Upgrade**, **Equip** (with an explicit numbered slot), or **Recharge**. Purchases are checked by the host at the actual equipment station. Standalone solo mode, the remaining 29 device backends, production UI/renderer polish, multiplayer persistence, and full Windows acceptance remain open. Do not characterize the wider equipment catalog as purchasable.
 
 A standard instrument event should follow **real ghost action → real room/surface event → tier-limited detection reach/refresher → device display reading → automatic raw logbook entry → optional manually checked journal clue**. Lower tiers may have shorter practical range and slower response; **they must never produce bogus haunted-room numbers**. Higher tiers can show charts, bearings or subtypes, but never identify the ghost automatically or force the player's checkbox selection.
 
-**Verification:** `EquipmentTiersTest` covers every cataloged device and all 126 stages, monotonic reach/response/charge/runtime/readability targets, specific equipment benefits, and unchanged existing sanity-treatment costs. `OptionalEvidenceReadingsTest` confirms every proposed ghost-specific extra instrument also has three planned tiers. GitHub source/test commits are not the same as completed in-game tiered purchasing or a passing Windows build.
+**Verification:** `EquipmentTiersTest` covers all 126 stages and unchanged medicine pricing. `EquipmentStoreDescriptionsTest` cross-checks all 42×3 store listings against hardware data and explicitly excludes the 29 planned devices from live sales; `TieredMediaAndPowerTest` tests true 1/6/12 film, distinct photo sizes, 65°/93°/120° video optics, beam length and 280s/420s/630s battery exhaustion/refill. Both build scripts register them. Windows workflow completion remains a separate gate.
