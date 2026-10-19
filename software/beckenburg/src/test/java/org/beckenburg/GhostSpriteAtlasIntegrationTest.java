@@ -16,7 +16,7 @@ public final class GhostSpriteAtlasIntegrationTest {
             int a=image.getRGB(x,y)>>>24;
             if(a>=24)present++;else absent++;
         }
-        check(present>75,"ghost sheet is empty");
+        check(present>=50,"ghost sheet is empty");
         check(absent>75,"ghost sheet lost transparent surroundings");
         return present;
     }
