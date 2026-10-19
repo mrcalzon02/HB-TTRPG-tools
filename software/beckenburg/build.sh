@@ -104,6 +104,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.Fi
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.ManualEvidenceJournalTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostEvidenceMatrixTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.EquipmentTiersTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.EquipmentStoreDescriptionsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.FieldEquipmentTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.InstrumentActivationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.TieredMediaAndPowerTest
