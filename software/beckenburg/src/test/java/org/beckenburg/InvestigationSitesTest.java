@@ -51,8 +51,9 @@ public final class InvestigationSitesTest {
                 ok(layout.roomAt(layout.centerX(room),layout.centerZ(room))==room,
                     "site room centers remain valid");
                 for(InvestigationSites.Prop prop:InvestigationSites.props(site,room)){
-                    ok(InvestigationSites.permittedScenery(prop.mesh()),
-                        "map meshes are real building furnishings, never survey equipment");
+                    ok(InvestigationSites.permittedScenery(prop.mesh())
+                            &&!EquipmentModelCatalog.approved(prop.mesh()),
+                        "map meshes are building furnishings, not any registered equipment tier");
                     meshes.add(prop.mesh());placed++;
                     // Reuse already imported GLB geometry, not fabricated IDs.
                     ok(!GlbProps.model(prop.mesh()).triangles().isEmpty(),

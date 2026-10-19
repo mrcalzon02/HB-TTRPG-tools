@@ -21,7 +21,8 @@ public final class InvestigationSites {
         "kenney_detail_dumpster_closed","kenney_detail_barrier_type_a"
     );
     public static boolean permittedScenery(String mesh){
-        return mesh!=null&&SCENERY_MESHES.contains(mesh);
+        return mesh!=null&&SCENERY_MESHES.contains(mesh)
+            &&!EquipmentModelCatalog.approved(mesh);
     }
     public record Prop(int room,String mesh,double dx,double y,double dz,double scale,double yaw){
         public Prop{
