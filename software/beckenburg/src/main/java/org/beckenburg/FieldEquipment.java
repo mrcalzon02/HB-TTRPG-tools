@@ -15,7 +15,8 @@ public final class FieldEquipment {
     private static final String[] START={"EMF_READER","THERMOMETER",
         "SPIRIT_BOX","UV_LIGHT"};
     private static final java.util.Set<String> ENABLED=java.util.Set.of(
-        "EMF_READER","THERMOMETER","SPIRIT_BOX","UV_LIGHT","GHOST_WRITING_BOOK");
+        "EMF_READER","THERMOMETER","SPIRIT_BOX","UV_LIGHT",
+        "GHOST_WRITING_BOOK","DOTS_PROJECTOR");
     private final Map<String,EquipmentTiers.Tier> owned=new HashMap<>();
     private final String[] slots=START.clone();
     private int current;
