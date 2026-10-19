@@ -74,21 +74,26 @@ public final class InvestigationGame {
         }.execute();
     }
     private static JPanel loadingScreen(){
-        JPanel surface=new JPanel(new GridBagLayout()){
-            @Override protected void paintComponent(Graphics g){
-                super.paintComponent(g);
-                Graphics2D a=(Graphics2D)g.create();
-                a.setPaint(new GradientPaint(0,0,new Color(10,15,22),getWidth(),getHeight(),
-                    new Color(46,39,34)));
-                a.fillRect(0,0,getWidth(),getHeight());
-                a.setColor(new Color(156,128,90));a.fillRect(getWidth()/2-95,getHeight()/2+52,190,2);
-                a.dispose();
-            }
-        };
-        JLabel text=new JLabel("<html><div style='text-align:center'><span style='font-size:36px'>THE BECKENBURG PROJECT</span><br><br>"+
-            "<span style='font-size:13px'>Preparing the castle and reading local expedition records...</span></div></html>",
-            SwingConstants.CENTER);
-        text.setForeground(new Color(238,220,183));surface.add(text);
+        JPanel surface=PsxHorrorUi.surface(new BorderLayout());
+        surface.setBackground(new Color(9,13,18));
+        JPanel center=new JPanel(new GridBagLayout());
+        center.setOpaque(false);
+        JLabel text=new JLabel("<html><div style='text-align:center'>"+
+            "<span style='font-size:34px;color:#e5d4b1'>THE BECKENBURG PROJECT</span><br><br>"+
+            "<span style='font-size:13px;color:#bcc2bb'>Reading local records and preparing expedition services</span>"+
+            "</div></html>",SwingConstants.CENTER);
+        center.add(text);
+        surface.add(center,BorderLayout.CENTER);
+        JProgressBar loading=new JProgressBar();
+        loading.setIndeterminate(true);
+        loading.setBorder(BorderFactory.createEmptyBorder(4,0,4,0));
+        loading.setForeground(new Color(158,185,160));
+        loading.setBackground(new Color(28,34,40));
+        JPanel loadingRow=new JPanel(new BorderLayout());
+        loadingRow.setOpaque(false);
+        loadingRow.setBorder(BorderFactory.createEmptyBorder(0,70,65,70));
+        loadingRow.add(loading,BorderLayout.CENTER);
+        surface.add(loadingRow,BorderLayout.SOUTH);
         return surface;
     }
     private void showMenu(){
