@@ -98,15 +98,15 @@ public final class CastleHubDecor {
         ceiling("ceiling_lamp_1",35.0,25.0,.85),
         // Actual bracketed sconces on existing collision-map masonry.
         sconce(9.76,5.0,Math.PI/2),
-        sconce(10.24,8.8,-Math.PI/2),
+        sconce(11.18,8.8,-Math.PI/2),
         sconce(18.76,8.0,Math.PI/2),
-        sconce(19.23,4.2,-Math.PI/2),
+        sconce(20.18,4.2,-Math.PI/2),
         sconce(13.5,10.75,0),
-        sconce(3.0,11.25,Math.PI),
+        sconce(3.0,12.20,Math.PI),
         sconce(9.73,18.3,Math.PI/2),
-        sconce(20.27,18.0,-Math.PI/2),
+        sconce(21.22,18.0,-Math.PI/2),
         sconce(29.24,23.0,-Math.PI/2),
-        sconce(35.0,17.23,Math.PI));
+        sconce(36.0,18.24,Math.PI));
     public record Switch(double x,double y,double z,double yaw){}
     public static final List<Switch> SWITCHES=List.of(
         new Switch(8.25,1.45,6.1,Math.PI/2),
