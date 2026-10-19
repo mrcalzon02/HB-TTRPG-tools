@@ -103,6 +103,7 @@ public final class InvestigationGame {
         l.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,menuFont(size)));return l;
     }
     private static JPanel transparentPanel(LayoutManager layout){JPanel p=new JPanel(layout);p.setOpaque(false);return p;}
+    private static JPanel transparentPanel(){JPanel p=new JPanel();p.setOpaque(false);return p;}
     private void buildMenu(){
         menu.removeAll();
         menu.setBackground(new Color(13,17,24));
@@ -161,6 +162,10 @@ public final class InvestigationGame {
             status.setText(playable?"SOLO EXPEDITION READY":"LOCATION IN PRODUCTION");
         });
         locationPicker.setSelectedIndex(0);
+        SiteCatalog.Location initial=(SiteCatalog.Location)locationPicker.getSelectedItem();
+        boolean playable=initial!=null&&initial.playable();
+        begin.setEnabled(playable);conditionsPicker.setEnabled(playable);
+        status.setText(playable?"SOLO EXPEDITION READY":"LOCATION IN PRODUCTION");
         GridBagConstraints c=new GridBagConstraints();
         c.gridy=0;c.insets=new Insets(12,0,12,18);
         c.weightx=.42;c.weighty=1;c.fill=GridBagConstraints.HORIZONTAL;c.anchor=GridBagConstraints.NORTHWEST;
