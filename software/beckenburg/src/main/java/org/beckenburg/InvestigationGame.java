@@ -50,6 +50,7 @@ public final class InvestigationGame {
                     buildMenu();
                     cards.add(menu,"menu");
                     window.setContentPane(cards);
+                    window.revalidate();window.repaint();
                     showMenu();
                     if(!warnings.isBlank())JOptionPane.showMessageDialog(window,
                         warnings+"Existing files were preserved.", "Local startup warnings",JOptionPane.WARNING_MESSAGE);
@@ -149,7 +150,7 @@ public final class InvestigationGame {
         JLabel utilities=menuLabel("SUPPORT",11);utilities.setAlignmentX(Component.LEFT_ALIGNMENT);
         navigation.add(utilities);
         JPanel utilityRow=transparentPanel(new GridLayout(1,4,6,0));
-        JButton options=button("OPTIONS"),guide=button("CONTROLS"),updates=button("UPDATES"),credits=button("CREDITS");
+        JButton options=button("OPTIONS"),guide=button("HELP"),updates=button("UPDATES"),credits=button("CREDITS");
         utilityRow.add(options);utilityRow.add(guide);utilityRow.add(updates);utilityRow.add(credits);
         utilityRow.setMaximumSize(new Dimension(390,37));utilityRow.setAlignmentX(Component.LEFT_ALIGNMENT);
         navigation.add(Box.createVerticalStrut(7));navigation.add(utilityRow);
@@ -168,6 +169,11 @@ public final class InvestigationGame {
         rolePicker=new JComboBox<>(InvestigationSession.Role.values());
         locationPicker=new JComboBox<>(SiteCatalog.Location.values());
         conditionsPicker=new JComboBox<>(SiteCatalog.Conditions.values());
+        for(JComboBox<?> picker:new JComboBox<?>[]{rolePicker,locationPicker,conditionsPicker}){
+            picker.setBackground(new Color(35,39,46));
+            picker.setForeground(new Color(237,225,201));
+            picker.setFont(new Font(Font.MONOSPACED,Font.BOLD,menuFont(13)));
+        }
         selectorGrid.add(menuLabel("Discipline",13));selectorGrid.add(rolePicker);
         selectorGrid.add(menuLabel("Location",13));selectorGrid.add(locationPicker);
         selectorGrid.add(menuLabel("Conditions",13));selectorGrid.add(conditionsPicker);
