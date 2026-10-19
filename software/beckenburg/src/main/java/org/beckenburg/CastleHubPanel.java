@@ -99,22 +99,34 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
             int w=getWidth(),h=getHeight();
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g.drawImage(renderer.image(),0,0,w,h,null);
+
             g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));
+            g.setColor(new Color(11,17,23,214));
+            g.fillRoundRect(12,10,Math.min(w-24,450),42,8,8);
             g.setColor(new Color(243,223,179));
-            g.drawString("BECKENBURG CASTLE   /   £"+profile.currency()+"   /   "+actions.role(),15,25);
+            g.drawString("BECKENBURG CASTLE",25,29);
+            g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
+            g.setColor(new Color(186,215,202));
+            g.drawString("£"+profile.currency()+"   /   "+actions.role(),25,44);
+            g.setColor(new Color(230,215,174));
             g.drawString("+",w/2-4,h/2+4);
             CastleHubMap.Station station=map.aimed(renderer.x,renderer.z,renderer.yaw);
             if(station!=null){
-                int labelWidth=Math.min(w-24,Math.max(250,g.getFontMetrics().stringWidth(station.label)+33));
+                int labelWidth=Math.min(w-24,Math.max(250,g.getFontMetrics().stringWidth(station.label)+50));
                 int left=(w-labelWidth)/2;
-                g.setColor(new Color(11,16,21,208));g.fillRoundRect(left,h-88,labelWidth,36,8,8);
-                g.setColor(new Color(247,211,153));g.drawString("E / "+station.label,left+12,h-65);
+                g.setColor(new Color(11,16,21,220));g.fillRoundRect(left,h-75,labelWidth,36,8,8);
+                g.setColor(new Color(247,211,153));g.drawString("[ E ]  "+station.label,left+12,h-52);
             }
-            if(noticeTicks>0){g.setColor(new Color(162,223,193));
-                String text=notice.length()>90?notice.substring(0,87)+"...":notice;
-                g.drawString(text,15,h-40);}
-            g.setColor(new Color(200,199,182));
-            g.drawString("WASD MOVE / SHIFT RUN / MOUSE LOOK / E INTERACT / F LANTERN / ESC CLASSIC MENU",15,h-16);
+            // Only context prompts and transient notices overlay the scene; controls
+            // belong to the dedicated menu, not a permanent bottom-screen ticker.
+            if(noticeTicks>0){
+                String text=notice.length()>70?notice.substring(0,67)+"...":notice;
+                int boxWidth=Math.min(w-24,Math.max(290,g.getFontMetrics().stringWidth(text)+24));
+                g.setColor(new Color(12,24,27,220));g.fillRoundRect(12,60,boxWidth,35,8,8);
+                g.setColor(new Color(162,223,193));g.drawString(text,24,82);
+            }
+            g.setColor(new Color(11,17,23,212));g.fillRoundRect(Math.max(12,w-172),12,160,30,8,8);
+            g.setColor(new Color(216,220,212));g.drawString("ESC  /  MAIN MENU",Math.max(20,w-162),32);
         }finally{g.dispose();}
     }
 }
