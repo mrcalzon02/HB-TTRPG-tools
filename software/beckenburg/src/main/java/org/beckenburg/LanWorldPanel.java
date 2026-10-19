@@ -41,6 +41,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final List<SceneRenderer.WorldMark> counterMarks=new ArrayList<>();
     private SceneRenderer.Apparition apparition;
     private boolean orbForm,greenGhostForm;
+    private String ghostAppearance="banshee";
     private int apparitionWarningTick=-1;
     private int lastMotionTick=-1;
     private int threatUntilTick=-1;
@@ -256,31 +257,43 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 int gone=LanProtocol.integer(p.get(2),0,5);
                 if(gone!=seat){peers.remove(gone);hunterNames.remove(gone);}
                 feedback="INVESTIGATOR "+(gone+1)+" DISCONNECTED - CASE CONTINUES";
-            }else if((p.size()==2||p.size()==3)&&p.get(0).equals("FORM")){
+            }else if((p.size()==2||p.size()==3||p.size()==4)&&p.get(0).equals("FORM")){
                 if(!p.get(1).equals("ORBS")&&!p.get(1).equals("FIGURE")
-                        ||p.size()==3&&!p.get(2).equals("GREEN"))
+                        ||p.size()==3&&!p.get(2).equals("GREEN")
+                        ||p.size()==4&&(!p.get(1).equals("FIGURE")
+                            ||(!p.get(2).equals("GREEN")&&!p.get(2).equals("BASE"))))
                     throw new IllegalArgumentException("invalid ghost form");
                 orbForm=p.get(1).equals("ORBS");
-                greenGhostForm=p.size()==3;
+                greenGhostForm=p.size()==3||p.size()==4&&p.get(2).equals("GREEN");
+                if(p.size()==4){
+                    GhostIdentity.Type visual=GhostIdentity.Type.valueOf(p.get(3));
+                    if(visual.ancient()!=greenGhostForm)
+                        throw new IllegalArgumentException("inconsistent ghost form tint");
+                    ghostAppearance=visual.name().toLowerCase(java.util.Locale.ROOT);
+                }else ghostAppearance="banshee";
             }else if(p.get(0).equals("APPARITION")){
                 if(p.size()==3 && p.get(1).equals("HIDDEN")){
                     apparition=null;
                     lastMotionTick=-1;
+                    ghostAppearance="banshee";
+                    orbForm=false;
+                    greenGhostForm=false;
                 }else if(p.size()==5 && p.get(1).equals("VISIBLE")){
                     double gx=LanProtocol.integer(p.get(2),0,map.width()*1000)/1000.0;
                     double gz=LanProtocol.integer(p.get(3),0,map.height()*1000)/1000.0;
                     int eventTick=LanProtocol.integer(p.get(4),0,99999999);
                     if(apparition==null)apparitionWarningTick=eventTick;
                     apparition=apparition==null?
-                            new SceneRenderer.Apparition(gx,gz,LanGhostAnimation.Phase.LURK,0,0,orbForm,greenGhostForm)
+                            new SceneRenderer.Apparition(gx,gz,LanGhostAnimation.Phase.LURK,0,0,
+                                    orbForm,greenGhostForm,ghostAppearance)
                             :new SceneRenderer.Apparition(gx,gz,apparition.phase(),
-                                apparition.heading(),apparition.progress(),orbForm,greenGhostForm);
+                                apparition.heading(),apparition.progress(),orbForm,greenGhostForm,ghostAppearance);
                 }else throw new IllegalArgumentException("malformed apparition");
             }else if(p.get(0).equals("MOTION")){
                 LanGhostAnimation.Motion motion=LanGhostAnimation.decode(frame);
                 if(apparition!=null && motion.tick()>=lastMotionTick){
                     apparition=new SceneRenderer.Apparition(apparition.x(),apparition.z(),
-                            motion.phase(),motion.heading(),motion.progress(),orbForm,greenGhostForm);
+                            motion.phase(),motion.heading(),motion.progress(),orbForm,greenGhostForm,ghostAppearance);
                     lastMotionTick=motion.tick();
                 }
             }else if(p.size()==3&&p.get(0).equals("LIGHTS")){
