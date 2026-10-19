@@ -42,7 +42,12 @@ public final class LanSound {
         SPARK(5, 69, "IGNITER SPARK"),
         INCENSE_BURN(5, 51, "INCENSE IGNITES"),
         FIRELIGHT_IGNITE(5, 61, "FIRELIGHT LIT"),
-        FIRELIGHT_OUT(4, 48, "FIRELIGHT EXTINGUISHED");
+        FIRELIGHT_OUT(4, 48, "FIRELIGHT EXTINGUISHED"),
+        TENSION_BUILD(9, 75, "SUPERNATURAL PRESSURE RISING"),
+        LOCKED_DOOR_RATTLE(6, 76, "SEALED THRESHOLD RATTLES"),
+        HORROR_STING_A(7, 81, "AN UNNATURAL NOISE"),
+        HORROR_STING_B(7, 77, "A SUDDEN HAUNTING SOUND"),
+        HORROR_STING_C(7, 85, "PARANORMAL DISTURBANCE");
         final int acousticBudget, baseGain;
         final String caption;
         Cue(int budget, int gain, String caption) { acousticBudget=budget;baseGain=gain;this.caption=caption; }
@@ -53,8 +58,9 @@ public final class LanSound {
                     CAMERA,BOOK,POTION,DOTS_MOTOR,DOTS_STOP,SPARK,
                     INCENSE_BURN,FIRELIGHT_IGNITE,FIRELIGHT_OUT->Tier.AMBIENT;
             case WHISPER->Tier.MINOR;
-            case DISTURB,MANIFEST,GHOST_DRIFT,WARD->Tier.MODERATE;
-            case STRIKE,IMPACT,RITUAL_START,RITUAL_END->Tier.DANGEROUS;
+            case DISTURB,MANIFEST,GHOST_DRIFT,WARD,HORROR_STING_A,
+                    HORROR_STING_B,HORROR_STING_C,LOCKED_DOOR_RATTLE->Tier.MODERATE;
+            case STRIKE,IMPACT,RITUAL_START,RITUAL_END,TENSION_BUILD->Tier.DANGEROUS;
             case SIGNATURE->Tier.SIGNATURE;
         };}
     }
