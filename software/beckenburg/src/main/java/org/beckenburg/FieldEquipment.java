@@ -16,14 +16,19 @@ public final class FieldEquipment {
         "SPIRIT_BOX","UV_LIGHT"};
     private static final java.util.Set<String> ENABLED=java.util.Set.of(
         "EMF_READER","THERMOMETER","SPIRIT_BOX","UV_LIGHT",
-        "GHOST_WRITING_BOOK","DOTS_PROJECTOR");
+        "GHOST_WRITING_BOOK","DOTS_PROJECTOR","FLASHLIGHT","PHOTO_CAMERA",
+        "VIDEO_CAMERA","HEAD_GEAR","FIRELIGHT","IGNITER","INCENSE");
     private final Map<String,EquipmentTiers.Tier> owned=new HashMap<>();
     private final String[] slots=START.clone();
     private int current;
     private final Map<String,Integer> lastSampleTick=new HashMap<>();
+    private final Map<String,Boolean> powered=new HashMap<>();
+    private final Map<String,Integer> remaining=new HashMap<>();
 
     public FieldEquipment(){
         for(String id:ENABLED)owned.put(id,EquipmentTiers.Tier.I);
+        for(String id:ENABLED)if(EquipmentTiers.stage(id,EquipmentTiers.Tier.I).capacity()>0)
+            remaining.put(id,EquipmentTiers.stage(id,EquipmentTiers.Tier.I).capacity());
     }
     public static boolean functional(String id){
         return id!=null&&ENABLED.contains(id);
@@ -70,6 +75,35 @@ public final class FieldEquipment {
         upgradePrice(id,tier);
         owned.put(id,tier);
         lastSampleTick.remove(id);
+        if(stage(id).capacity()>0){
+            int previously=remaining.getOrDefault(id,0);
+            remaining.put(id,Math.max(previously,stage(id).capacity()));
+        }
+    }
+    /** On/off has no clue validity semantics and does not consume a sensor sample. */
+    public boolean toggle(String id){
+        if(!id.equals(active())||!ENABLED.contains(id))
+            throw new IllegalArgumentException("switch must be held");
+        if(!java.util.Set.of("FLASHLIGHT","VIDEO_CAMERA","HEAD_GEAR","FIRELIGHT")
+                .contains(id))
+            throw new IllegalArgumentException("item has no on/off switch");
+        boolean next=!powered.getOrDefault(id,false);
+        powered.put(id,next);
+        return next;
+    }
+    public boolean powered(String id){return powered.getOrDefault(id,false);}
+    /** Real shutter/supply charge; never evaluated against the ghost identity. */
+    public int expend(String id){
+        if(!id.equals(active())||!ENABLED.contains(id))
+            throw new IllegalArgumentException("item must be held");
+        if(stage(id).capacity()<=0)throw new IllegalArgumentException("not a consumable");
+        int count=remaining.getOrDefault(id,0);
+        if(count<=0)throw new IllegalArgumentException("out of physical charges");
+        remaining.put(id,count-1);
+        return count-1;
+    }
+    public int remaining(String id){
+        return stage(id).capacity()<=0?-1:remaining.getOrDefault(id,0);
     }
     /** Response time is tied to the equipped hardware; failures do not consume it. */
     public boolean ready(String id,int tick){
