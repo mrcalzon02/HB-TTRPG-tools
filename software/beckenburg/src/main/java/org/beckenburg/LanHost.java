@@ -571,6 +571,7 @@ public final class LanHost implements AutoCloseable {
                     notifyHunters("LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
                     reply(peer,"ACCEPT|POWER|"+(lights.breaker()?"ON":"OFF"));
                     recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.BREAKER);
+                    if(lights.breaker())actorCue(peer.slot,LanSound.Cue.ELECTRIC_HUM);
                 }
                 case "VANDOOR" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
@@ -883,7 +884,8 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"ACCEPT|GEARUSE|"+id+"|"+reading);
                     LanSound.Cue deviceCue=switch(id){
                         case "PHOTO_CAMERA"->LanSound.Cue.CAMERA;
-                        case "GHOST_WRITING_BOOK"->LanSound.Cue.BOOK;
+                        case "GHOST_WRITING_BOOK"->reading.startsWith("Writing book placed")
+                            ?LanSound.Cue.DROP:LanSound.Cue.BOOK;
                         case "EMF_READER","THERMOMETER","SPIRIT_BOX","UV_LIGHT",
                                 "SOUND_RECORDER"->LanSound.Cue.SCANNER;
                         case "DOTS_PROJECTOR"->dots.at(peer.slot)==null
@@ -955,7 +957,7 @@ public final class LanHost implements AutoCloseable {
                     writingBook.place(peer.slot,room,tick);
                     reply(peer,"ACCEPT|PLACEBOOK|"+room);
                     notifyHunters("BOOK|DEPLOYED|"+room);
-                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.BOOK);
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.DROP);
                 }
                 case "READBOOK" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
