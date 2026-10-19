@@ -75,6 +75,8 @@ public final class VanStaging {
             overlaps(p.x(),p.z(),radius,w-t,w,f,r) ||
             overlaps(p.x(),p.z(),radius,-w,w,r-t,r) ||
             (cargoDoorClosed&&overlaps(p.x(),p.z(),radius,-w,w,f,f+t)) ||
+            // Fully modeled driver's cab is not a walk-through prop either.
+            overlaps(p.x(),p.z(),radius,-1.69,1.69,r,r+1.33) ||
             VanInteriorLayout.collides(p.x(),p.z(),radius);
     }
     private static boolean overlaps(double x,double z,double radius,
