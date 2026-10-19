@@ -102,6 +102,25 @@ public final class ProfileStore {
             blocked=false;
         }catch(NumberFormatException ex){throw new IOException("Invalid profile values",ex);}
     }
+    /** Network case receipt is settled by the authoritative host, saved locally once.
+     * Keep the same receipt set as solo payouts, using the host's UUID.
+     */
+    public boolean addNetworkPayout(java.util.UUID caseId,int credits,int xp)throws IOException {
+        java.util.Objects.requireNonNull(caseId);
+        if(credits<0||credits>100000||xp<0||xp>10000)
+            throw new IllegalArgumentException("invalid network payout");
+        if(blocked)throw new IOException("Profile load failed; payouts blocked.");
+        String receipt=caseId.toString();
+        if(awarded.contains(receipt))return false;
+        int previousCredits=currency,previousExperience=experience;
+        currency=Math.addExact(currency,credits);
+        experience=Math.addExact(experience,xp);
+        awarded.add(receipt);
+        try{save();}catch(IOException ex){
+            currency=previousCredits;experience=previousExperience;awarded.remove(receipt);throw ex;
+        }
+        return true;
+    }
     public boolean addPayout(InvestigationSession session) throws IOException {
         // Caller issues one award per unique mission instance; this is a local solo prototype.
         if(session.outcome()==InvestigationSession.Outcome.ACTIVE)throw new IllegalStateException("mission unresolved");

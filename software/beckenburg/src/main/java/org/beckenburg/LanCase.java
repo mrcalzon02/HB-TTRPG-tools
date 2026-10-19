@@ -26,6 +26,18 @@ public final class LanCase {
     private final int anchor;
     private final EnumSet<Tool> evidence=EnumSet.noneOf(Tool.class), tested=EnumSet.noneOf(Tool.class);
     private GhostIdentity.Type archetype=GhostIdentity.Type.SPIRIT, identified;
+    private HardEvidenceQuota hardEvidence=new HardEvidenceQuota(
+        GhostIdentity.Type.SPIRIT,HardEvidenceQuota.Level.EASY,0);
+    /** Host-selected evidence scarcity applies to producers, not benign readings. */
+    public void configureHardEvidence(HardEvidenceQuota.Level difficulty,long caseSeed){
+        if(outcome!=Outcome.ACTIVE||ritualProgress>=0)
+            throw new IllegalStateException("active case cannot change evidence quota");
+        hardEvidence=new HardEvidenceQuota(archetype,difficulty,caseSeed);
+    }
+    public boolean allowsEvidence(HardEvidenceQuota.Family type){
+        return hardEvidence.permits(type);
+    }
+    public HardEvidenceQuota.Level evidenceDifficulty(){return hardEvidence.level();}
     private boolean identificationRequired;
     private int lastGuessTick=-1000;
     private final int[] health={100,100,100,100,100,100},stress=new int[6],wards={2,2,2,2,2,2};
@@ -71,6 +83,7 @@ public final class LanCase {
     public int testedCount(){return tested.size();}
     public GhostIdentity.Type type(){return archetype;}
     public GhostIdentity.Type identified(){return identified;}
+    public boolean correctlyIdentified(){return identified==archetype;}
     /** Call only before a session; selection belongs to the host, not remote scan packets. */
     public void configure(GhostIdentity.Type type,boolean requireIdentification){
         if(outcome!=Outcome.ACTIVE||!evidence.isEmpty()||!tested.isEmpty()||ritualProgress>=0)
@@ -84,9 +97,16 @@ public final class LanCase {
         java.util.Objects.requireNonNull(guess);
         if(outcome!=Outcome.ACTIVE||!alive(seat))return new Report(false,"identification unavailable");
         if(!identificationRequired)return new Report(false,"identity dossier not enabled");
-        if(identified!=null)return new Report(false,"entity already identified");
+        if(identified!=null&&hardEvidence.level()!=HardEvidenceQuota.Level.DEATH_WISH)
+            return new Report(false,"entity already identified");
         if(tick<0||tick-lastGuessTick<30)return new Report(false,"allow the entity to settle before another deduction");
         lastGuessTick=tick;
+        // Death Wish records an unverified hypothesis rather than offering
+        // an oracle for testing all thirteen ghosts via rejected guesses.
+        if(hardEvidence.level()==HardEvidenceQuota.Level.DEATH_WISH){
+            identified=guess;
+            return new Report(true,"ENTITY HYPOTHESIS RECORDED "+guess);
+        }
         if(guess!=archetype){
             stress[seat]=Math.min(100,stress[seat]+15);
             return new Report(false,"evidence contradicts that entity; investigator fear increases");
@@ -191,8 +211,10 @@ public final class LanCase {
         String reading;
         switch(tool){
             case EMF -> {
+                boolean spectral=allowsEvidence(HardEvidenceQuota.Family.EMF);
                 EvidenceSignals.Electromagnetic sample=EvidenceSignals.emf(
-                    0xB3CC3BL,tick,room,eventRoom,eventStrength,emfSilence,
+                    0xB3CC3BL,tick,room,spectral?eventRoom:-1,
+                    spectral?eventStrength:0,spectral&&emfSilence,
                     evidenceWeather,evidenceWeatherIntensity);
                 reading="EMF "+sample.level()+"/10";
             }
@@ -200,14 +222,16 @@ public final class LanCase {
                 boolean inside=room<HouseMap.INDOOR_ROOMS;
                 EvidenceSignals.Location place=new EvidenceSignals.Location(
                     evidenceSeason,evidenceWeather,evidenceHour,room,inside,evidenceHeating);
+                boolean spectral=allowsEvidence(HardEvidenceQuota.Family.TEMPERATURE);
                 EvidenceSignals.Temperature sample=EvidenceSignals.temperature(
-                    0xA11CE5L,tick,place,evidenceThermal,room==anchor,eventStrength,
+                    0xA11CE5L,tick,place,spectral?evidenceThermal:EvidenceSignals.Polarity.NONE,
+                    spectral&&room==anchor,spectral?eventStrength:0,
                     evidenceWeatherIntensity);
                 reading="Air "+sample.displayText(EvidenceSignals.Unit.CELSIUS)
                     +" / "+sample.displayText(EvidenceSignals.Unit.FAHRENHEIT);
             }
-            case SPIRIT_BOX -> reading=room==ghostRoom
-                    &&room==eventRoom&&eventStrength>0
+            case SPIRIT_BOX -> reading=allowsEvidence(HardEvidenceQuota.Family.SPIRIT_BOX)
+                    &&room==ghostRoom&&room==eventRoom&&eventStrength>0
                 ?"Voice response detected":"No response detected";
             default -> throw new AssertionError(tool);
         }
@@ -255,7 +279,9 @@ public final class LanCase {
         hunter(seat);java.util.Objects.requireNonNull(rite);
         if(outcome!=Outcome.ACTIVE||!alive(seat))return new Report(false,"cannot perform rite");
         if(identificationRequired&&identified!=archetype)
-            return new Report(false,"identify the ghost before choosing its rite");
+            return new Report(false,hardEvidence.level()==HardEvidenceQuota.Level.DEATH_WISH
+                ?"ritual cannot proceed with an uncertain hypothesis"
+                :"identify the ghost before choosing its rite");
         if(identificationRequired){
             if(rite!=archetype.rite())return new Report(false,"incorrect rite for this ghost");
             var site=RitualSites.site(new HouseMap(),rite);

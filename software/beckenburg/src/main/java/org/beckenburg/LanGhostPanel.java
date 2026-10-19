@@ -130,7 +130,13 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                 lastAutomaticAction=action+" in "+map.roomName(place);
                 feedback="DEADLINE EXPIRED: "+lastAutomaticAction;
             }else if(packet.startsWith("RESULT|")){
-                finished=true;feedback=packet;keys.clear();
+                finished=true;
+                boolean victory=packet.equals("RESULT|CLEANSED")
+                    ||packet.equals("RESULT|BANISHED")
+                    ||packet.equals("RESULT|ABSOLVED");
+                feedback=victory?"INVESTIGATORS COMPLETED THE RITUAL":
+                    "THE ENTITY PREVAILS - RITUAL UNFINISHED";
+                keys.clear();
                 atmosphere.setHunt(false);atmosphere.setRitual(false);
             }else if(p.size()>=3&&p.get(0).equals("ACCEPT")&&p.get(1).equals("GHOST")){
                 GhostDomain.Action applied=GhostDomain.Action.valueOf(p.get(2));

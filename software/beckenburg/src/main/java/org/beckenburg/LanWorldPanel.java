@@ -53,6 +53,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final RecorderAudio recorderAudio=new RecorderAudio();
     private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
     private MissionWeather.State currentWeather;
+    private HardEvidenceQuota.Level hardEvidenceLevel=HardEvidenceQuota.Level.EASY;
+    private String dailyBrief="";
+    private final java.util.EnumSet<ContractRewards.Task> completedTasks=
+        java.util.EnumSet.noneOf(ContractRewards.Task.class);
+    private ContractRewards.Settlement settlement;
     private boolean ritualMusic,huntMusic;
     private String soundCaption="";
     private int soundUntilTick=-1;
@@ -202,6 +207,25 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 chatHistory.addLast(line);
                 if(chatHistory.size()>28)chatHistory.removeFirst();
                 chatVisibleUntil=tick+75;
+            }else if(p.size()==2&&p.get(0).equals("EVIDENCELEVEL")){
+                hardEvidenceLevel=HardEvidenceQuota.Level.valueOf(p.get(1));
+            }else if(p.size()==3&&p.get(0).equals("OBJECTIVES")){
+                java.time.LocalDate.parse(p.get(1));
+                StringBuilder text=new StringBuilder("DAILY: ");
+                for(String raw:p.get(2).split(",")){
+                    ContractRewards.Task task=ContractRewards.Task.valueOf(raw);
+                    if(text.length()>7)text.append(" / ");
+                    text.append(task.label);
+                }
+                dailyBrief=text.toString();
+            }else if(p.size()==3&&p.get(0).equals("TASK")&&p.get(1).equals("DONE")){
+                ContractRewards.Task task=ContractRewards.Task.valueOf(p.get(2));
+                completedTasks.add(task);
+                feedback="OBJECTIVE DONE: "+task.label;
+            }else if(p.get(0).equals("PAYOUT")){
+                settlement=ContractRewards.Settlement.decode(frame);
+                feedback=(settlement.victory()?"RITUAL VICTORY":"CASE UNRESOLVED")+
+                    " / PAYMENT £"+settlement.credits()+" / XP "+settlement.xp();
             }else if(p.get(0).equals("WEATHER")){
                 MissionWeather.State incoming=MissionWeather.State.parse(frame);
                 if(currentWeather==null||incoming.revision()>=currentWeather.revision()){
@@ -743,7 +767,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString("HP "+health+"   SANITY "+sanity+"   PARTY "+(peers.size()+1)+"/"+partySize+
                 "   DIFFICULTY +"+partyDifficulty,24,49);
             g.setColor(new Color(216,201,165));
-            g.drawString("CASE "+casefile.size()+" READINGS  /  GUESS "+selectedGuess,24,66);
+            g.drawString("CASE "+casefile.size()+" READINGS / "+hardEvidenceLevel.name()+
+                " / GUESS "+selectedGuess,24,66);
             g.setColor(new Color(225,212,178));g.drawString("+",width/2,h/2);
             int switchTarget=lights.aimed(map,renderer.x,renderer.z,renderer.yaw);
             if(switchTarget>=0){

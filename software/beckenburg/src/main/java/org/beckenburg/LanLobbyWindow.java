@@ -235,6 +235,8 @@ public final class LanLobbyWindow extends JFrame {
         var drain=spin(custom.sanityDrain(),0,200,25);
         var events=spin(custom.eventFrequency(),50,200,25);
         var hiding=spin(custom.hidingSpots(),0,100,10);
+        var hardEvidence=new JComboBox<>(HardEvidenceQuota.Level.values());
+        hardEvidence.setSelectedItem(custom.evidenceLevel());
         var weatherMode=new JComboBox<>(MissionWeather.Mode.values());
         weatherMode.setSelectedItem(custom.weatherMode());
         var weatherChoice=new JComboBox<>(EvidenceSignals.Weather.values());
@@ -256,6 +258,7 @@ public final class LanLobbyWindow extends JFrame {
             new Object[]{"Sanity loss rate %",drain},
             new Object[]{"Ghost events frequency %",events},
             new Object[]{"Available hiding places %",hiding},
+            new Object[]{"Hard evidence",hardEvidence},
             new Object[]{"Weather scheduling",weatherMode},
             new Object[]{"Starting / fixed weather",weatherChoice},
             new Object[]{"Weather severity (1-3)",weatherIntensity},
@@ -277,9 +280,11 @@ public final class LanLobbyWindow extends JFrame {
                 (MissionWeather.Mode)weatherMode.getSelectedItem(),
                 (EvidenceSignals.Weather)weatherChoice.getSelectedItem(),
                 (int)weatherIntensity.getValue(),
-                (int)hunterEndurance.getValue(),(int)ghostEndurance.getValue());
+                (int)hunterEndurance.getValue(),(int)ghostEndurance.getValue(),
+                (HardEvidenceQuota.Level)hardEvidence.getSelectedItem());
             log.append("Custom settings armed for next hosted case, "+custom.hunters()+
                 " hunters / difficulty +"+custom.partyDifficulty()+
+                " / evidence "+custom.evidenceLevel()+
                 " / weather "+custom.weatherMode()+" "+custom.fixedWeather()+
                 " intensity "+custom.weatherIntensity()+".\n");
         }
@@ -315,7 +320,8 @@ public final class LanLobbyWindow extends JFrame {
             custom.eventFrequency(),custom.sprint(),custom.hidingSpots(),
             custom.sanityMonitor(),custom.activityMonitor(),
             custom.weatherMode(),custom.fixedWeather(),custom.weatherIntensity(),
-            custom.hunterSprintSeconds(),custom.ghostSprintSeconds());
+            custom.hunterSprintSeconds(),custom.ghostSprintSeconds(),
+            custom.evidenceLevel());
         Thread task=new Thread(()->{
             LanHost newHost=null;
             try{
@@ -497,6 +503,33 @@ public final class LanLobbyWindow extends JFrame {
         if(worldFrame!=null&&worldFrame.isDisplayable()){
             if(worldView!=null)worldView.onEvent(event);
             if(ghostView!=null)ghostView.onEvent(event);
+        }
+        if(event.startsWith("PAYOUT|")){
+            try{
+                ContractRewards.Settlement settlement=ContractRewards.Settlement.decode(event);
+                if(connection!=null&&!"GHOST".equals(connection.seat())){
+                    ProfileStore wallet=new ProfileStore(ProfileStore.defaultPath());
+                    wallet.load();
+                    boolean applied=wallet.addNetworkPayout(settlement.id(),
+                        settlement.credits(),settlement.xp());
+                    log.append("CASE SETTLEMENT / "+
+                        (settlement.victory()?"RITUAL VICTORY":"ENTITY UNRESOLVED")+
+                        " / "+(settlement.identified()?"IDENTIFIED":"UNIDENTIFIED")+
+                        " / "+(applied?"PAID":"ALREADY RECORDED")+
+                        " £"+settlement.credits()+" +"+settlement.xp()+" XP"+
+                        " / OPTIONAL "+settlement.optionalDone()+
+                        " / DAILY "+settlement.dailyDone()+"\n");
+                }
+            }catch(IOException|IllegalArgumentException|ArithmeticException ex){
+                log.append("Payout could not be saved locally: "+ex.getMessage()+"\n");
+            }
+            log.setCaretPosition(log.getDocument().getLength());
+            return;
+        }
+        if(event.startsWith("OBJECTIVES|")||event.startsWith("TASK|DONE|")
+                ||event.startsWith("EVIDENCELEVEL|")){
+            log.append(event.replace('|',' ')+"\n");
+            return;
         }
         if(event.startsWith("HUNT|"))return; // Forwarded to active 3D view; suppress 1Hz lobby log spam.
         if(event.startsWith("LOBBYCHAT|")){

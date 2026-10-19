@@ -49,6 +49,7 @@ public final class LanHost implements AutoCloseable {
     private final HunterCounters counters=new HunterCounters();
     private final CustomContract contract;
     private final MissionWeather weather;
+    private final ContractRewards rewards;
     private final VanTelemetry monitor=new VanTelemetry(20261017L);
     private final FieldSupplies[] supplies=new FieldSupplies[HUNTERS];
     private final FieldEquipment[] equipment=new FieldEquipment[HUNTERS];
@@ -124,6 +125,10 @@ public final class LanHost implements AutoCloseable {
         mission.configureSanityDrain(contract.sanityDrain());
         ghost.configureRecovery(contract.energyRecovery());
         if(identityMode)mission.configure(type,true);
+        mission.configureHardEvidence(contract.evidenceLevel(),
+            java.util.concurrent.ThreadLocalRandom.current().nextLong());
+        rewards=new ContractRewards(java.util.UUID.randomUUID(),
+            java.time.LocalDate.now(java.time.ZoneOffset.UTC));
         // One host-owned climate snapshot per session: all rooms share the season
         // and weather while their indoor heating and local anomalies still vary.
         java.time.LocalDateTime climateClock=java.time.LocalDateTime.now();
@@ -432,6 +437,8 @@ public final class LanHost implements AutoCloseable {
                     running=true;everStarted=true;tick=0;
                     notifyAllPeers("INFO|mission started with "+(seats[GHOST_SEAT]==null?"AI":"human")+" ghost");
                     notifyAllPeers(weather.state().packet());
+                    notifyHunters(rewards.objectivesPacket());
+                    notifyHunters("EVIDENCELEVEL|"+contract.evidenceLevel().name());
                     if(seats[GHOST_SEAT]!=null)sendGhostPrompt();
                     if(mission.identificationRequired())notifyHunters("SITES|9|6|10");
                     broadcastState();broadcastProgress();broadcastWorld();
@@ -443,6 +450,8 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"ACCEPT|VIEW3D");
                     reply(peer,world.staminaFrame(peer.slot,tick));
                     reply(peer,weather.state().packet());
+                    reply(peer,rewards.objectivesPacket());
+                    reply(peer,"EVIDENCELEVEL|"+contract.evidenceLevel().name());
                     // Replay real investigator nicknames to newly opened hunter windows.
                     // Ghost seats cannot enter VIEW3D and are never name recipients.
                     for(int i=0;i<HUNTERS;i++)
@@ -758,6 +767,7 @@ public final class LanHost implements AutoCloseable {
                                 room,ghost.room(),tick,origin,inReach?eventPower:0,
                                 GhostEvidenceProfile.emfSuppressed(ghostType));
                             if(!measure.accepted())throw new IllegalArgumentException("instrument unavailable");
+                            taskDone(thermal?ContractRewards.Task.THERMAL_SAMPLE:ContractRewards.Task.EMF_SAMPLE);
                             reading=measure.message().substring(measure.message().indexOf(" - ")+3)
                                 .replace("°","deg ");
                             // Never append a supernatural validity assessment.
@@ -766,11 +776,13 @@ public final class LanHost implements AutoCloseable {
                             boolean voiceEvent=room==lastEvidenceEventRoom
                                 &&tick-lastEvidenceEventTick<=45
                                 &&tick>=lastEvidenceEventTick
+                                &&mission.allowsEvidence(HardEvidenceQuota.Family.SPIRIT_BOX)
                                 &&(lastEvidenceEventAction==GhostDomain.Action.WHISPER
                                     ||lastEvidenceEventAction==GhostDomain.Action.SIGNATURE)
                                 &&Math.hypot(world.body(peer.slot).x()-ghostPose.pose().x(),
                                      world.body(peer.slot).z()-ghostPose.pose().z())
                                     <=stage.reachCm()/100.0;
+                            taskDone(ContractRewards.Task.SPIRIT_SAMPLE);
                             reading=voiceEvent?"Voice response / spectral vocal event detected":
                                 "No direct vocal response";
                         }
@@ -828,6 +840,8 @@ public final class LanHost implements AutoCloseable {
                         }
                         case "PHOTO_CAMERA" -> {
                             int remaining=gear.expend(id);
+                            if(ghost.manifested()&&room==ghost.room())
+                                taskDone(ContractRewards.Task.PHOTO_EVENT);
                             reading="Exposure captured / "+remaining+" frames remaining";
                             // The client captures its *actual rendered frame* on receipt.
                             // No image-recognition or ghost-presence check exists.
@@ -948,6 +962,7 @@ public final class LanHost implements AutoCloseable {
                     int room=world.body(peer.slot).room();
                     GhostWriting.Page page=writingBook.page();
                     boolean found=page!=null&&page.room()==room;
+                    if(found)taskDone(ContractRewards.Task.WRITING_EVENT);
                     String words=writingBook.inspect(room);
                     reply(peer,"ACCEPT|READBOOK|"+words);
                     notifyHunters(casefile.recordDevice(tick,peer.slot,room,"GHOST_WRITING_BOOK",
@@ -1006,6 +1021,11 @@ public final class LanHost implements AutoCloseable {
                             GhostEvidenceProfile.emfSuppressed(ghostType));
                     answerHunter(peer,"SCAN",result);
                     if(result.accepted()){
+                        taskDone(switch(tool){
+                            case EMF->ContractRewards.Task.EMF_SAMPLE;
+                            case THERMOMETER->ContractRewards.Task.THERMAL_SAMPLE;
+                            case SPIRIT_BOX->ContractRewards.Task.SPIRIT_SAMPLE;
+                        });
                         recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.SCANNER);
                         String note=casefile.record(tick,peer.slot,hunterRooms[peer.slot],tool,result);
                         if(note!=null)notifyHunters(note);
@@ -1085,6 +1105,8 @@ public final class LanHost implements AutoCloseable {
                         default -> throw new AssertionError();
                     };
                     answerHunter(peer,p.get(0),result);
+                    if(result.accepted()&&p.get(0).equals("WARD"))
+                        taskDone(ContractRewards.Task.WARD_SITE);
                     if(result.accepted()&&!p.get(0).equals("EXTRACT"))
                         recordSound(peer.slot,LanGhostPursuit.Sound.RITUAL,
                             p.get(0).equals("WARD")?LanSound.Cue.WARD:LanSound.Cue.RITUAL_START);
@@ -1384,6 +1406,7 @@ public final class LanHost implements AutoCloseable {
     }
     /** Laser-space contact follows position, never a permission or evidence check. */
     private void illuminateDots(){
+        if(!mission.allowsEvidence(HardEvidenceQuota.Family.DOTS))return;
         for(LanDotsProjectors.Passage light:dots.illuminate(ghostPose.pose(),tick))
             for(int i=0;i<HUNTERS;i++){
                 Peer hunter=seats[i];
@@ -1406,7 +1429,8 @@ public final class LanHost implements AutoCloseable {
             case STRIKE,SIGNATURE->10;case DRIFT->0;
         };
         if(eventPower>0){
-            writingBook.witness(20261018L,tick,result,ghostType);
+            if(mission.allowsEvidence(HardEvidenceQuota.Family.WRITING))
+                writingBook.witness(20261018L,tick,result,ghostType);
             lastEvidenceEventTick=tick;
             lastEvidenceEventRoom=result.room();
             lastEvidenceEventPower=eventPower;
@@ -1561,8 +1585,10 @@ public final class LanHost implements AutoCloseable {
             broadcastGhostSound(LanSound.Cue.MANIFEST);
             broadcastApparitions();
         }
-        if(frenzy.phase()==GhostFrenzy.Phase.RECOVERY)
+        if(frenzy.phase()==GhostFrenzy.Phase.RECOVERY){
+            if(anyHunterInSite())taskDone(ContractRewards.Task.SURVIVE_FRENZY);
             notifyHunters("FIELD|GHOST FRENZY ENDED - EXITS UNSEALED");
+        }
     }
     private boolean startFrenzy(GhostFrenzy.Cause cause){
         if(!frenzy.begin(tick,ghost,anyHunterInSite(),cause))return false;
@@ -1655,11 +1681,28 @@ public final class LanHost implements AutoCloseable {
         }
         if(!anyHunterInSite()&&frenzy.repel(tick))onFrenzyTransition();
     }
+    /** Reward tasks arise only from host-validated gameplay events. */
+    private void taskDone(ContractRewards.Task task){
+        if(rewards.completed().contains(task))return;
+        rewards.mark(task);
+        notifyHunters("TASK|DONE|"+task);
+    }
     private void finishIfComplete(){
-        if(mission.outcome()==LanCase.Outcome.ACTIVE)return;
+        if(mission.outcome()==LanCase.Outcome.ACTIVE||!running)return;
         running=false;
         world.setExitSealed(false);
         notifyAllPeers("RESULT|"+mission.outcome());
+        boolean won=mission.outcome()==LanCase.Outcome.CLEANSED
+                ||mission.outcome()==LanCase.Outcome.BANISHED
+                ||mission.outcome()==LanCase.Outcome.ABSOLVED;
+        boolean correct=mission.correctlyIdentified()||!mission.identificationRequired()&&won;
+        ContractRewards.Settlement payout=rewards.settle(mission.outcome(),correct,
+            contract.evidenceLevel(),weather.state().challenge());
+        for(int i=0;i<HUNTERS;i++)if(seats[i]!=null){
+            supplies[i].reward(payout.credits());
+            reply(seats[i],payout.packet());
+            reply(seats[i],supplies[i].frame());
+        }
         broadcastProgress();
     }
     private static String safeReason(String s){return s==null?"invalid command":s.replaceAll("[^A-Za-z0-9 ._-]","").substring(0,Math.min(85,s.replaceAll("[^A-Za-z0-9 ._-]","").length()));}
