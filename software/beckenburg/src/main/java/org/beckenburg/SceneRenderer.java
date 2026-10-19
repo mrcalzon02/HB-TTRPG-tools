@@ -25,6 +25,11 @@ public final class SceneRenderer {
     private final BufferedImage frame = new BufferedImage(W,H,BufferedImage.TYPE_INT_RGB);
     private final int[] pixels=((DataBufferInt)frame.getRaster().getDataBuffer()).getData();
     private final double[] depths=new double[W*H];
+    private PsxPipeline.Preset psxPreset=PsxPipeline.selected();
+    public PsxPipeline.Preset psxPreset(){return psxPreset;}
+    public void setPsxPreset(PsxPipeline.Preset preset){
+        psxPreset=java.util.Objects.requireNonNull(preset,"PSX preset");
+    }
     private static final List<CastleHubArchitecture.Piece> CASTLE_ARCHITECTURE=
         CastleHubArchitecture.create(new CastleHubMap());
     public double x=20.5,z=27.5,yaw=-Math.PI/2,pitch=-.09;
@@ -621,7 +626,7 @@ public final class SceneRenderer {
     public void drawCastle(CastleHubMap map,double clock){drawCastle(map,clock,true);}
     public void drawCastle(CastleHubMap map,double clock,boolean lightsOn){
         environmentLight=lightsOn?1.0:.40;
-        paintSky(map.outside(x,z));
+        paintSky(clock);
         Arrays.fill(depths,Double.POSITIVE_INFINITY);
         List<Face> castle=new ArrayList<>();
         for(int zz=1;zz<CastleHubMap.HEIGHT-1;zz++)for(int xx=1;xx<CastleHubMap.WIDTH-1;xx++){
@@ -688,6 +693,7 @@ public final class SceneRenderer {
                 new Vertex(camera(face.b),face.bu,face.bv),new Vertex(camera(face.c),face.cu,face.cv));
             for(int i=1;i<points.size()-1;i++)triangle(points.get(0),points.get(i),points.get(i+1),face.color,face.material);
         }
+        PsxPipeline.finishFrame(pixels,W,H,psxPreset);
     }
     /** Keep the legacy room-mode signature for old render regression tests. */
     public void drawNetwork(HouseMap map,List<RemoteBody> others,int visibleGhostRoom,double clock){
@@ -717,7 +723,7 @@ public final class SceneRenderer {
     }
     private void render(HouseMap map,int ghostRoom,boolean visibleGhost,int wardRoom,int hunterRoom,
             double clock,List<RemoteBody> others,Apparition apparition,List<WorldMark> markers){
-        paintSky(map);
+        paintSky(clock);
         Arrays.fill(depths,Double.POSITIVE_INFINITY);
         for(Face face:scene(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock,others,apparition,markers)){
             List<Vertex> pts=clip(new Vertex(camera(face.a),face.au,face.av),
@@ -729,33 +735,53 @@ public final class SceneRenderer {
                 face.color,face.material,lighting);
         }
         renderCharacterSprites(map,ghostRoom,visibleGhost,hunterRoom,clock,others,apparition);
+        PsxPipeline.finishFrame(pixels,W,H,psxPreset);
     }
-    /** Procedural sky gradient, distant hills and moving moon; only rendered through outdoor openings. */
-    private void paintSky(HouseMap map){paintSky(map.outside(map.roomAt(x,z)));}
-    private void paintSky(boolean outside){
-        final int horizon=(int)Math.round(H*.51+Math.tan(pitch)*153);
+    /** Paint the world-fixed night panorama behind all world geometry, even indoors.
+     * Real window apertures and depth-tested castle stonework occlude the background.
+     * The sky never writes depth, and has no copyright-dependent source images.
+     */
+    void paintSky(double clock){
+        final int horizon=(int)Math.round(H*.51+Math.tan(pitch)*focal);
         for(int sy=0;sy<H;sy++){
-            double t=Math.max(0,Math.min(1,sy/(double)H));
+            double t=sy/(double)H;
             boolean upper=sy<horizon;
             int red=upper?(int)(13+18*t):(int)(18+18*t);
             int green=upper?(int)(23+18*t):(int)(27+19*t);
             int blue=upper?(int)(41+31*t):(int)(32+16*t);
-            int packed=(red<<16)|(green<<8)|blue;
-            Arrays.fill(pixels,sy*W,(sy+1)*W,packed);
+            Arrays.fill(pixels,sy*W,(sy+1)*W,(red<<16)|(green<<8)|blue);
         }
-        if(!outside)return; // Interiors are covered by physical walls/ceilings.
-        // World-fixed silhouette panorama with no repeated bitmap / no proprietary assets.
+        // Dim cloud bands drift across world bearings, visible through castle windows.
         for(int sx=0;sx<W;sx++){
-            double bearing=yaw+Math.atan2(sx-W*.5,153.0);
+            double bearing=yaw+Math.atan2(sx-W*.5,focal);
+            int top=horizon-38+(int)(7*Math.sin(bearing*2.7+clock*.012)
+                +3*Math.sin(bearing*7.4-clock*.008));
+            for(int j=0;j<5;j++){
+                int sy=top+j;
+                if(sy<0||sy>=H)continue;
+                int k=sy*W+sx,c=pixels[k];
+                int r=Math.min(255,((c>>16)&255)+3),g=Math.min(255,((c>>8)&255)+4),
+                    bl=Math.min(255,(c&255)+7);
+                pixels[k]=(r<<16)|(g<<8)|bl;
+            }
+        }
+        for(int star=0;star<110;star++){
+            double bearing=-Math.PI+(star*2.399963229728653)%(2*Math.PI);
+            double diff=Math.atan2(Math.sin(bearing-yaw),Math.cos(bearing-yaw));
+            if(Math.abs(diff)>1.1)continue;
+            int sx=(int)Math.round(W*.5+Math.tan(diff)*focal);
+            int sy=horizon-19-(star*37%54);
+            if(sx>=0&&sx<W&&sy>=0&&sy<H)pixels[sy*W+sx]=0x8096ac;
+        }
+        for(int sx=0;sx<W;sx++){
+            double bearing=yaw+Math.atan2(sx-W*.5,focal);
             int hills=horizon+(int)(13*Math.sin(bearing*2.1)+8*Math.sin(bearing*5.7)
                     +5*Math.sin(bearing*13.2));
             for(int sy=Math.max(0,hills);sy<H;sy++)pixels[sy*W+sx]=0x18202a;
         }
-        // No artificial moon inside the house; the exterior sky provides a navigation anchor.
-        double moonBearing=-1.2;
-        double diff=Math.atan2(Math.sin(moonBearing-yaw),Math.cos(moonBearing-yaw));
-        int mx=(int)Math.round(W*.5+Math.tan(diff)*153),my=Math.max(13,horizon-43);
-        if(Math.abs(diff)<.8)for(int dy=-5;dy<=5;dy++)for(int dx=-5;dx<=5;dx++){
+        double diff=Math.atan2(Math.sin(-1.2-yaw),Math.cos(-1.2-yaw));
+        int mx=(int)Math.round(W*.5+Math.tan(diff)*focal),my=horizon-43;
+        if(Math.abs(diff)<1.1)for(int dy=-5;dy<=5;dy++)for(int dx=-5;dx<=5;dx++){
             int px=mx+dx,py=my+dy;
             if(px>=0&&px<W&&py>=0&&py<H&&dx*dx+dy*dy<25)pixels[py*W+px]=0xb8c8d5;
         }
@@ -822,9 +848,9 @@ public final class SceneRenderer {
     private void triangle(Vertex va,Vertex vb,Vertex vc,int tint,int material,double roomLevel){
         Point a=va.p,b=vb.p,c=vc.p;
         int color=tint;
-        double x0=W*.5+a.x/a.z*focal,y0=H*.5-a.y/a.z*focal;
-        double x1=W*.5+b.x/b.z*focal,y1=H*.5-b.y/b.z*focal;
-        double x2=W*.5+c.x/c.z*focal,y2=H*.5-c.y/c.z*focal;
+        double x0=PsxPipeline.snap(W*.5+a.x/a.z*focal,psxPreset),y0=PsxPipeline.snap(H*.5-a.y/a.z*focal,psxPreset);
+        double x1=PsxPipeline.snap(W*.5+b.x/b.z*focal,psxPreset),y1=PsxPipeline.snap(H*.5-b.y/b.z*focal,psxPreset);
+        double x2=PsxPipeline.snap(W*.5+c.x/c.z*focal,psxPreset),y2=PsxPipeline.snap(H*.5-c.y/c.z*focal,psxPreset);
         double denom=(y1-y2)*(x0-x2)+(x2-x1)*(y0-y2);
         if(Math.abs(denom)<1e-8)return;
         int lowX=Math.max(0,(int)Math.floor(Math.min(x0,Math.min(x1,x2))));
@@ -842,8 +868,10 @@ public final class SceneRenderer {
             if(material>=0) {
                 // Perspective-correct material lookup. Screen-space UV interpolation
                 // distorts strongly at PS-era FOV and is unsuitable for room walls.
-                double uu=(u*va.u/a.z + v*vb.u/b.z + w*vc.u/c.z)/inv;
-                double vv=(u*va.v/a.z + v*vb.v/b.z + w*vc.v/c.z)/inv;
+                double uu=PsxPipeline.uv((u*va.u/a.z + v*vb.u/b.z + w*vc.u/c.z)/inv,
+                    u*va.u+v*vb.u+w*vc.u,psxPreset);
+                double vv=PsxPipeline.uv((u*va.v/a.z + v*vb.v/b.z + w*vc.v/c.z)/inv,
+                    u*va.v+v*vb.v+w*vc.v,psxPreset);
                 int texel=material>=GlbProps.TEXTURE_BASE
                     ?GlbProps.sample(material,uu,vv)
                     :MaterialAtlas.sample(material,uu,vv);
@@ -856,7 +884,9 @@ public final class SceneRenderer {
             // genuinely darkens distant geometry instead of only tinting a HUD icon.
             double beam=lamp?lampIntensity*Math.max(0,1-d/lampReach):0;
             double light=(.075+.98*roomLevel+beam)*environmentLight*Math.max(.22,1-d/26.0);
-            light=Math.max(.1,Math.min(1.45,light+(BAYER[(px&3)+((py&3)<<2)]-7.5)/140.0));
+            double lightingDither=psxPreset==PsxPipeline.Preset.OFF?0:
+                (BAYER[(px&3)+((py&3)<<2)]-7.5)/140.0;
+            light=Math.max(.1,Math.min(1.45,light+lightingDither));
             int red=(int)(((color>>16)&255)*light),green=(int)(((color>>8)&255)*light),blue=(int)((color&255)*light);
             double fog=Math.min(.92,Math.max(0,(d-5)/15)*fogDensity);
             red=(int)(red*(1-fog)+18*fog);green=(int)(green*(1-fog)+21*fog);blue=(int)(blue*(1-fog)+30*fog);

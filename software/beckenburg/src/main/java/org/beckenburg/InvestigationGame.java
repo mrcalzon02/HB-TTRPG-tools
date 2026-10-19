@@ -237,6 +237,10 @@ public final class InvestigationGame {
         fields.setBorder(BorderFactory.createEmptyBorder(12,14,12,14));
         fields.add(large);fields.add(contrast);fields.add(maximize);
         fields.add(musicLabel);fields.add(musicVolume);
+        JComboBox<PsxPipeline.Preset> psxSetting=new JComboBox<>(PsxPipeline.Preset.values());
+        psxSetting.setSelectedItem(PsxPipeline.selected());
+        fields.add(new JLabel("3D PSX rendering (castle, solo, LAN)"));
+        fields.add(psxSetting);
         int answer=JOptionPane.showConfirmDialog(window,fields,"Display & accessibility",
             JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
         if(answer!=JOptionPane.OK_OPTION)return;
@@ -244,9 +248,10 @@ public final class InvestigationGame {
         displayPrefs.putBoolean("highContrast",contrast.isSelected());
         displayPrefs.putBoolean("maximized",maximize.isSelected());
         SoundtrackAudio.volume(musicVolume.getValue());
+        PsxPipeline.choose((PsxPipeline.Preset)psxSetting.getSelectedItem());
         window.setExtendedState(maximize.isSelected()?JFrame.MAXIMIZED_BOTH:JFrame.NORMAL);
         buildMenu();menu.revalidate();menu.repaint();
-        // Rendering effects, audio levels and in-world text need their own runtime bindings.
+        // PSX scene effects are active in the next 3D viewport; Swing text remains sharp.
     }
     private void showControls(){
         JTextArea help=new JTextArea(
