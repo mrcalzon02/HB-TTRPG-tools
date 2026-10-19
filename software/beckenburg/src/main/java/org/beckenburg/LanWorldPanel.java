@@ -16,6 +16,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final SceneRenderer renderer=new SceneRenderer();
     private final SceneRenderer videoRenderer=new SceneRenderer();
     private final java.util.Map<Integer,LanVideoCameras.Camera> videoCameras=new HashMap<>();
+    private final java.util.Map<Integer,Boolean> videoPowered=new HashMap<>();
+    private final java.util.Map<String,Integer> batterySeconds=new HashMap<>();
     private final Map<Integer,SceneRenderer.RemoteBody> peers=new HashMap<>();
     private final Map<Integer,String> hunterNames=new HashMap<>();
     private final java.util.ArrayDeque<LanChat.Entry> chatHistory=new java.util.ArrayDeque<>();
@@ -354,10 +356,15 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(p.get(0).equals("CAMERA")){
                 if(p.size()==2&&p.get(1).equals("RESET")){
                     videoCameras.clear();
+                    videoPowered.clear();
                     renderer.videoCameras.clear();
                 }else if(p.size()==3&&p.get(1).equals("CLEAR")){
                     int owner=LanProtocol.integer(p.get(2),0,5);
                     videoCameras.remove(owner);renderer.videoCameras.remove(owner);
+                    videoPowered.remove(owner);
+                }else if(p.size()==4&&p.get(1).equals("POWER")){
+                    int owner=LanProtocol.integer(p.get(2),0,5);
+                    videoPowered.put(owner,LanProtocol.integer(p.get(3),0,1)==1);
                 }else if(p.size()==8&&p.get(1).equals("PLACE")){
                     int owner=LanProtocol.integer(p.get(2),0,5);
                     int room=LanProtocol.integer(p.get(3),0,HouseMap.ROOM_COUNT-1);
@@ -368,6 +375,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     LanVideoCameras.Camera camera=
                         new LanVideoCameras.Camera(owner,room,x,z,heading,tier);
                     videoCameras.put(owner,camera);
+                    videoPowered.put(owner,true);
                     renderer.videoCameras.put(owner,camera);
                 }else throw new IllegalArgumentException("invalid video station");
             }else if(p.get(0).equals("DOTS")){
@@ -406,6 +414,13 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 else if(p.size()==3&&p.get(1).equals("REMOVED"))
                     renderer.placedWritingBookRoom=-1;
                 feedback="WRITING BOOK: "+frame.substring(5);
+            }else if(p.size()==4&&p.get(0).equals("GEARPOWER")){
+                String device=p.get(1);
+                if(FieldEquipment.functional(device)){
+                    batterySeconds.put(device,LanProtocol.integer(p.get(2),0,100000));
+                    // On/off status is replicated separately as real GEARFX.
+                    LanProtocol.integer(p.get(3),0,1);
+                }
             }else if(p.size()==4&&p.get(0).equals("GEARFX")){
                 int owner=LanProtocol.integer(p.get(1),0,5);
                 if(owner==seat){
@@ -434,8 +449,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 if(p.get(2).equals("PHOTO_CAMERA")){
                     // Every authorized shutter press is saved, empty room or not.
                     try{
+                        EquipmentTiers.Tier photoTier=equipmentTier.getOrDefault(
+                            "PHOTO_CAMERA",EquipmentTiers.Tier.I);
                         lastPhoto=pendingPhoto!=null?pendingPhoto:
-                            HunterPhotography.snapshot(renderer.image());
+                            HunterPhotography.snapshot(renderer.image(),photoTier);
                         lastPhotoPath=HunterPhotography.save(lastPhoto,
                             HunterPhotography.defaultFolder(),seat,++photoExposure);
                         lastPhotoUntil=tick+35;
@@ -509,6 +526,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         mouseLook.release();keys.clear();
         java.util.List<String> options=new java.util.ArrayList<>();
         java.util.List<Runnable> actions=new java.util.ArrayList<>();
+        options.add("RELOAD FILM / CHARGE BATTERIES AT VAN");
+        actions.add(()->sendAction("equipment service",()->client.serviceEquipment()));
         for(String id:FieldEquipment.workingTools()){
             EquipmentTiers.Tier tier=equipmentTier.getOrDefault(id,EquipmentTiers.Tier.I);
             if(tier!=EquipmentTiers.Tier.III){
@@ -576,11 +595,17 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         renderer.drawNetwork(map,new ArrayList<>(peers.values()),apparition,tick*.1,List.copyOf(counterMarks));
         // Van receiver renders the *same live world* from the physical camera's
         // position. No canned image, inferred spectral object or proof overlay.
-        if(vanDisplay&&!videoCameras.isEmpty()){
-            LanVideoCameras.Camera camera=videoCameras.values().iterator().next();
+        if(vanDisplay&&!videoCameras.isEmpty()
+                &&videoCameras.values().stream().anyMatch(c->
+                    videoPowered.getOrDefault(c.owner(),false))){
+            LanVideoCameras.Camera camera=videoCameras.values().stream()
+                .filter(c->videoPowered.getOrDefault(c.owner(),false))
+                .findFirst().orElseThrow();
             videoRenderer.x=camera.x();videoRenderer.z=camera.z();
             videoRenderer.yaw=Math.toRadians(camera.heading());
             videoRenderer.pitch=-.035;
+            videoRenderer.setFieldOfView(
+                EquipmentOptics.forTier(camera.tier()).videoFieldOfView());
             videoRenderer.roomLights=lights;
             videoRenderer.roomLightTick=tick;
             videoRenderer.lamp=false;
@@ -601,15 +626,27 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g.drawImage(nightVision?NightVisionFilter.apply(renderer.image()):renderer.image(),
                 0,0,getWidth(),h,null);
-            if(vanDisplay&&!videoCameras.isEmpty()&&!casefileOpen){
-                LanVideoCameras.Camera camera=videoCameras.values().iterator().next();
-                int vw=Math.min(260,Math.max(160,getWidth()/3)),vh=Math.max(90,vw*3/5);
+            if(vanDisplay&&!videoCameras.isEmpty()&&!casefileOpen
+                    &&videoCameras.values().stream().anyMatch(c->
+                        videoPowered.getOrDefault(c.owner(),false))){
+                LanVideoCameras.Camera camera=videoCameras.values().stream()
+                    .filter(c->videoPowered.getOrDefault(c.owner(),false))
+                    .findFirst().orElseThrow();
+                int vw=Math.min(EquipmentOptics.forTier(camera.tier()).monitorWidth(),
+                    Math.max(100,getWidth()/3)),vh=Math.max(80,vw*3/5);
                 int vx=getWidth()-vw-14,vy=83;
                 g.setColor(new Color(7,14,17));
                 g.fillRect(vx-3,vy-3,vw+6,vh+23);
+                Object oldInterpolation=g.getRenderingHint(RenderingHints.KEY_INTERPOLATION);
+                g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                    camera.tier()==EquipmentTiers.Tier.III
+                        ?RenderingHints.VALUE_INTERPOLATION_BILINEAR
+                        :RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                 g.drawImage(camera.tier()==EquipmentTiers.Tier.III
                     ?NightVisionFilter.apply(videoRenderer.image()):videoRenderer.image(),
                     vx,vy,vw,vh,null);
+                if(oldInterpolation!=null)
+                    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,oldInterpolation);
                 g.setColor(new Color(190,229,208));
                 g.setFont(new Font(Font.MONOSPACED,Font.BOLD,10));
                 g.drawString("LIVE CAMERA H"+(camera.owner()+1)+" / ROOM "+
@@ -675,7 +712,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     "WASD / SHIFT RUN / ENTER TEXT / F2 TEXT RADIO / F3 VOICE / F4 RADIO VOICE",13,h+23);
             g.drawString(health==0?"NO MOVEMENT OR EQUIPMENT WHILE INCAPACITATED":
                     "1-4 GEAR "+equippedGear[activeGearSlot]+" / "+equipmentTier.getOrDefault(equippedGear[activeGearSlot],EquipmentTiers.Tier.I)
-                    +"  R USE  F6 GEAR RACK  K MEDICINE  Z CROSS  G WARD  H SALT",13,h+42);
+                    +"  R USE  F6 GEAR RACK  K MEDICINE  Z CROSS  G WARD  H SALT"+
+                    (batterySeconds.containsKey(equippedGear[activeGearSlot])
+                        ?"  BAT "+batterySeconds.get(equippedGear[activeGearSlot])+"s":""),
+                    13,h+42);
             g.setColor(new Color(145,204,175));
             LanVoiceClientAudio voice=client.voice();
             String mic=voice==null?"VOICE: OFF":voice.muted()?"VOICE: MUTED":
@@ -994,7 +1034,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_R -> {
                 heldUseUntilTick=tick+4;
                 if(equippedGear[activeGearSlot].equals("PHOTO_CAMERA"))
-                    pendingPhoto=HunterPhotography.snapshot(renderer.image());
+                    pendingPhoto=HunterPhotography.snapshot(renderer.image(),
+                        equipmentTier.getOrDefault("PHOTO_CAMERA",EquipmentTiers.Tier.I));
                 sendAction("use device",()->client.useHeldEquipment());
             }
             case KeyEvent.VK_Z -> sendAction("cross",()->client.deploy(HunterCounters.Kind.CROSS));
