@@ -21,19 +21,19 @@ public final class VanInteriorLayout {
     public static final double FLOOR_Y=.10, ROOF_Y=VanStaging.INTERIOR_HEIGHT;
     public static final double INNER_WALL=VanStaging.HALF_WIDTH-.18;
     public static final double AISLE_HALF_WIDTH=.79;
-    public static final int TOOL_COLUMNS=7,TOOL_ROWS=4,TOOL_CAPACITY=TOOL_COLUMNS*TOOL_ROWS;
+    public static final int TOOL_COLUMNS=7,TOOL_ROWS=6,TOOL_CAPACITY=TOOL_COLUMNS*TOOL_ROWS;
     public static final double TOOL_COLUMN_PITCH=.91;
     public record ToolSocket(String equipment,double x,double y,double z,int row,int column){}
     private static final List<ToolSocket> TOOLS=buildToolSockets();
     private static List<ToolSocket> buildToolSockets(){
-        List<String> catalog=FieldEquipment.workingTools();
+        List<String> catalog=EquipmentTiers.all().stream().map(EquipmentTiers.Plan::id).sorted().toList();
         if(catalog.size()>TOOL_CAPACITY)
             throw new ExceptionInInitializerError("VAN equipment rack exceeded "+TOOL_CAPACITY+" real sockets");
         List<ToolSocket> slots=new ArrayList<>();
         for(int i=0;i<catalog.size();i++){
             int row=i/TOOL_COLUMNS,col=i%TOOL_COLUMNS;
             slots.add(new ToolSocket(catalog.get(i),-INNER_WALL+.14,
-                .49+row*.60,-2.76+col*TOOL_COLUMN_PITCH,row,col));
+                .38+row*.45,-2.76+col*TOOL_COLUMN_PITCH,row,col));
         }
         return List.copyOf(slots);
     }
