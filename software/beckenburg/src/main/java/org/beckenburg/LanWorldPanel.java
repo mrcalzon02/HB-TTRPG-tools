@@ -358,16 +358,20 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     int ticks=LanProtocol.integer(p.get(2),1,LanTelegraphedStrike.WINDUP_TICKS);
                     threatTarget=LanProtocol.integer(p.get(3),0,5);
                     threatUntilTick=tick+ticks;
+                    renderer.strikeUntilTick=threatUntilTick;
                     threatOutcome="";
                 }else if(p.size()==3&&(p.get(1).equals("EVADED")||p.get(1).equals("HIT"))){
                     threatTarget=LanProtocol.integer(p.get(2),0,5);
                     threatUntilTick=-1;
+                    renderer.strikeUntilTick=-1;
                     threatOutcome=p.get(1).equals("HIT")?"SPECTRAL STRIKE CONNECTED":"STRIKE EVADED — KEEP MOVING";
                     feedback=threatOutcome;
                 }else throw new IllegalArgumentException("invalid threat packet");
             }else if(p.size()==3&&p.get(0).equals("RITUAL")&&p.get(1).equals("STARTED")){
+                renderer.activeRite=GhostIdentity.Rite.valueOf(p.get(2));
                 ritualMusic=true;atmosphere.setRitual(true);feedback="RITUAL COMMENCED";
             }else if(p.size()==2&&p.get(0).equals("RITUAL")&&p.get(1).equals("BROKEN")){
+                renderer.activeRite=null;
                 ritualMusic=false;atmosphere.setRitual(false);feedback="RITUAL INTERRUPTED";
             }else if(p.size()==4&&p.get(0).equals("FRENZY")){
                 GhostFrenzy.Phase phase=GhostFrenzy.Phase.valueOf(p.get(1));
@@ -386,6 +390,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 atmosphere.setHunt(huntMusic);
             }else if(frame.startsWith("RESULT|")){
                 ritualMusic=false;huntMusic=false;
+                renderer.activeRite=null;renderer.strikeUntilTick=-1;
                 atmosphere.setRitual(false);atmosphere.setHunt(false);
                 caseResult=frame.substring(7);feedback="CASE CLOSED: "+caseResult;
                 keys.clear();
@@ -633,6 +638,14 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             videoRenderer.placedWritingBookRoom=renderer.placedWritingBookRoom;
             videoRenderer.dotsPositions.clear();
             videoRenderer.dotsPositions.putAll(renderer.dotsPositions);
+            videoRenderer.dotsPassRoom=renderer.dotsPassRoom;
+            videoRenderer.dotsPassX=renderer.dotsPassX;
+            videoRenderer.dotsPassZ=renderer.dotsPassZ;
+            videoRenderer.dotsPassUntil=renderer.dotsPassUntil;
+            videoRenderer.incense.clear();
+            videoRenderer.incense.addAll(renderer.incense);
+            videoRenderer.activeRite=renderer.activeRite;
+            videoRenderer.strikeUntilTick=renderer.strikeUntilTick;
             videoRenderer.videoCameras.clear();
             videoRenderer.videoCameras.putAll(videoCameras);
             videoRenderer.drawNetwork(map,new ArrayList<>(peers.values()),

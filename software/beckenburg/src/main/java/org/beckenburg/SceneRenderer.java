@@ -51,9 +51,14 @@ public final class SceneRenderer {
     public double x=20.5,z=27.5,yaw=-Math.PI/2,pitch=-.09;
     public boolean lamp=true;
     public double lampReach=7.5,lampIntensity=.72;
+    public boolean flameLamp;
+    /** Cosmetic effects follow received authority, never determine paranormal evidence. */
+    public GhostIdentity.Rite activeRite;
+    public int strikeUntilTick=-1;
     /** Real tier optics controls actual in-world illumination, not a HUD indicator. */
     public void setLampHardware(EquipmentTiers.Tier tier,boolean flameOnly){
         if(tier==null)throw new IllegalArgumentException("flashlight tier required");
+        flameLamp=flameOnly;
         lampReach=flameOnly?3.5:switch(tier){
             case I->6.0;case II->9.0;case III->12.0;
         };
@@ -356,7 +361,8 @@ public final class SceneRenderer {
     }
 
     /** Three visually distinct small PS-era rite installations at fixed room sockets. */
-    private static void ritualInstallation(List<Face> out,RitualSites.Site site){
+    private static void ritualInstallation(List<Face> out,RitualSites.Site site,
+                                            double clock,boolean energized){
         double x=site.x(),z=site.z();
         int trim=switch(site.rite()){
             case BANISHMENT->0x965d50;case CLEANSING->0x73a9ac;case ABSOLUTION->0xc0a66b;
@@ -389,6 +395,30 @@ public final class SceneRenderer {
                 box(out,x-.24,1.28,z-.20,.48,.08,.08,0xd9bf8e);
                 box(out,x-.70,.95,z-.16,.1,.36,.1,0xefdfae);
                 box(out,x+.60,.95,z-.16,.1,.36,.1,0xefdfae);
+            }
+        }
+        if(energized){
+            // The authentic rite lights its physical seal; inactive sites stay inert.
+            int glow=switch(site.rite()){
+                case BANISHMENT->0xef8f71;
+                case CLEANSING->0x8ae6dd;
+                case ABSOLUTION->0xffdd8a;
+            };
+            for(int k=0;k<12;k++){
+                double a=k*Math.PI/6+clock*.42;
+                double r=.66+.09*Math.sin(clock*2+k);
+                double elevation=.20+.24*(1+Math.sin(clock*2.2+k*.8));
+                box(out,x+Math.cos(a)*r-.035,elevation,
+                    z+Math.sin(a)*r-.035,.07,.09,.07,glow);
+            }
+            for(int k=0;k<4;k++)
+                box(out,x-.026,.16+k*.34,z-.026,.052,.08,.052,glow);
+            if(site.rite()==GhostIdentity.Rite.ABSOLUTION){
+                for(double offset:new double[]{-.65,.65}){
+                    double flicker=.12+.045*Math.sin(clock*13+offset*3);
+                    box(out,x+offset-.035,1.30,z-.195,.07,flicker,.07,0xffb84a);
+                    box(out,x+offset-.016,1.33,z-.175,.032,flicker*.65,.032,0xffedb1);
+                }
             }
         }
     }
@@ -465,7 +495,22 @@ public final class SceneRenderer {
             box(out,px-.47,1.55,pz-.20,.94,.13,.67,0x6c7278);
         }
         for(RitualSites.Site site:RitualSites.all(map))
-            if(Math.hypot(site.x()-x,site.z()-z)<14)ritualInstallation(out,site);
+            if(Math.hypot(site.x()-x,site.z()-z)<14)
+                ritualInstallation(out,site,clock,activeRite==site.rite());
+        if(apparition!=null&&strikeUntilTick>=roomLightTick
+                &&Math.hypot(apparition.x()-x,apparition.z()-z)<14){
+            // Telegraph only at a host-disclosed apparition; do not expose invisible ghost positions.
+            double age=Math.max(0,Math.min(1,
+                1-(strikeUntilTick-roomLightTick)/(double)LanTelegraphedStrike.WINDUP_TICKS));
+            for(int k=0;k<12;k++){
+                double a=k*Math.PI/6+clock*3.8;
+                double r=.40+.45*age;
+                box(out,apparition.x()+Math.cos(a)*r-.032,
+                    .14+.22*(1+Math.sin(clock*9+k)),
+                    apparition.z()+Math.sin(a)*r-.032,
+                    .065,.11,.065,k%2==0?0xea5e69:0xffb782);
+            }
+        }
         // A visible power breaker at the correct utility-room interaction socket.
         if(Math.hypot(map.centerX(11)-x,map.centerZ(11)-z)<14){
             double bx=map.centerX(11),bz=map.centerZ(11);
@@ -493,11 +538,14 @@ public final class SceneRenderer {
             if(Math.hypot(burn.x()-x,burn.z()-z)>13.5)continue;
             box(out,burn.x()-.06,.04,burn.z()-.06,.12,.07,.12,0xa88f72);
             double phase=clock*1.7+burn.x();
-            for(int i=0;i<8;i++){
+            // Last embers dissipate instead of cutting a full column off instantly.
+            int density=Math.max(1,Math.min(8,(burn.untilTick()-roomLightTick+1)/2));
+            for(int i=0;i<density;i++){
                 double rise=.2+i*.22;
                 double sway=Math.sin(phase+i*.8)*(.04+rise*.07);
                 double px=burn.x()+sway,pz=burn.z()+Math.cos(phase+i*.45)*.07;
-                box(out,px-.035,rise,pz-.032,.07,.046,.064,
+                double spread=.05+i*.009;
+                box(out,px-spread*.5,rise,pz-spread*.5,spread,.04+i*.004,spread,
                     i%2==0?0x6e8888:0x8f9d96);
             }
         }
@@ -508,11 +556,25 @@ public final class SceneRenderer {
             imported(out,"vape_mp_1",placement.x(),.10,placement.z(),2.0,0);
             double radius=EquipmentTiers.stage(
                 "DOTS_PROJECTOR",placement.tier()).reachCm()/100.0;
-            for(int gx=-4;gx<=4;gx++)for(int gz=-4;gz<=4;gz++){
-                double px=placement.x()+gx*radius/4.6,
-                    pz=placement.z()+gz*radius/4.6;
-                if(map.roomAt(px,pz)!=placement.room())continue;
-                box(out,px-.028,.048,pz-.028,.056,.015,.056,0x76de9c);
+            // Tier I: narrow sparse volume; Tier II: broad static array;
+            // Tier III: wide motorized sweep. Beams alone never count as evidence.
+            int limit=placement.tier()==EquipmentTiers.Tier.I?3:5;
+            for(int gx=-limit;gx<=limit;gx+=2)for(int gz=-limit;gz<=limit;gz+=2){
+                double px=placement.x()+gx*radius/(limit+1.0),
+                    pz=placement.z()+gz*radius/(limit+1.0);
+                if(Math.hypot(px-placement.x(),pz-placement.z())>radius
+                        ||map.roomAt(px,pz)!=placement.room())continue;
+                if(placement.tier()==EquipmentTiers.Tier.III){
+                    double angle=Math.atan2(pz-placement.z(),px-placement.x());
+                    double center=Math.sin(clock*1.4)*1.25;
+                    if(Math.abs(Math.atan2(Math.sin(angle-center),Math.cos(angle-center)))>1.05)
+                        continue;
+                }
+                int layers=placement.tier()==EquipmentTiers.Tier.I?2:3;
+                for(int layer=0;layer<layers;layer++){
+                    double yy=.08+layer*.67;
+                    box(out,px-.025,yy,pz-.025,.05,.035,.05,0x73d99e);
+                }
             }
         }
         if(dotsPassRoom>=0&&dotsPassUntil>=roomLightTick
@@ -900,7 +962,11 @@ public final class SceneRenderer {
             }
             // Flashlight is a bounded near-field additive beam; turning room lights off
             // genuinely darkens distant geometry instead of only tinting a HUD icon.
-            double beam=lamp?lampIntensity*Math.max(0,1-d/lampReach):0;
+            // Flashlight illuminates a forward-facing cone; flames instead spill locally.
+            double aim=Math.hypot((px+.5-renderWidth*.5)/focal,
+                                  (py+.5-renderHeight*.5)/focal);
+            double cone=flameLamp?1.0:Math.max(0,1-aim/.44);
+            double beam=lamp?lampIntensity*Math.max(0,1-d/lampReach)*cone:0;
             double light=(.075+.98*roomLevel+beam)*environmentLight*Math.max(.22,1-d/26.0);
             double lightingDither=psxPreset==PsxPipeline.Preset.OFF?0:
                 (BAYER[(px&3)+((py&3)<<2)]-7.5)/140.0;
