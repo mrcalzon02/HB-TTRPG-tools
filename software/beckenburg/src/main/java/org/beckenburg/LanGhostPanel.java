@@ -212,7 +212,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     }
     @Override public void keyPressed(KeyEvent e){
         switch(e.getKeyCode()){
-            case KeyEvent.VK_ESCAPE -> {Window w=SwingUtilities.getWindowAncestor(this);if(w!=null)w.dispose();}
+            case KeyEvent.VK_ESCAPE -> {keys.clear();mouseLook.release();InGamePauseMenu.execute(this);}
             case KeyEvent.VK_OPEN_BRACKET -> choice--;
             case KeyEvent.VK_CLOSE_BRACKET -> choice++;
             case KeyEvent.VK_SPACE,KeyEvent.VK_ENTER -> ability(GhostDomain.Action.DRIFT);
