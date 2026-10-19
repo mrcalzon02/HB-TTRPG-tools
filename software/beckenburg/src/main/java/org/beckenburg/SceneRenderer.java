@@ -25,6 +25,8 @@ public final class SceneRenderer {
     public boolean environmentPowerOn=true;
     /** Authoritative book-deployment signal; all investigator views share its room. */
     public int placedWritingBookRoom=-1;
+    public final java.util.Map<Integer,LanVideoCameras.Camera> videoCameras=
+        new java.util.HashMap<>();
     public final java.util.Map<Integer,LanDotsProjectors.Placement> dotsPositions=
         new java.util.HashMap<>();
     public record IncenseSmoke(int room,double x,double z,int untilTick){
@@ -431,6 +433,13 @@ public final class SceneRenderer {
         // Road and traffic props are exterior-only. Nearby rooms never instantiate
         // a second duplicate set of these global world objects.
         if(z>20.0&&z<31.0)roadsideModels(out,map);
+        // Video cameras are actual mounted viewports; their footage is rendered
+        // from this replicated camera location in the hunter's van monitor.
+        for(LanVideoCameras.Camera camera:videoCameras.values())
+            if(Math.hypot(camera.x()-x,camera.z()-z)<13.5)
+                imported(out,"exploration_photo_camera",
+                    camera.x(),.14,camera.z(),1.05,
+                    Math.toRadians(camera.heading()));
         // An ignited incense bundle stays physically present for its burn duration.
         // These wisps are light/smoke only and never fabricate spectral evidence.
         incense.removeIf(b->b.untilTick()<roomLightTick);
