@@ -15,6 +15,12 @@ for name in light_switch_1 ceiling_lamp_1_off door_1_loose shelf_mp_6 chair_mp_5
     test -s "assets/runtime/models/${name}.glb"
     cp "assets/runtime/models/${name}.glb" "build/classes/org/beckenburg/models/${name}.glb"
 done
+# Deliver all curated Blender equipment housings and their physical state meshes.
+# The package acceptance test validates every resource and its real embedded texture.
+for model in assets/runtime/models/blender_*.glb; do
+    test -s "$model"
+    cp "$model" "build/classes/org/beckenburg/models/$(basename "$model")"
+done
 # Manufacture missing tier housings and PSX texture atlases as actual GLBs.
 # Deterministic Java 17 authoring; no Python/Blender dependency on Windows.
 java -Djava.awt.headless=true -cp build/classes org.beckenburg.TierModelForge build/classes/org/beckenburg/models
@@ -35,6 +41,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.Ti
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.TieredUvAndFirelightTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.ImportedEquipmentModelsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.PackagedSourceModelsTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.EquipmentModelCatalogTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.FieldSoundRecorderTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanSoundRecorderIntegrationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.RecorderModelsTest

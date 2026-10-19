@@ -37,42 +37,11 @@ public final class EquipmentTierVisuals {
     public static Prefab prefab(String id,EquipmentTiers.Tier tier){
         EquipmentTiers.Plan plan=EquipmentTiers.get(id);
         Objects.requireNonNull(tier);
-        // Only match a real supplied model to a compatible role. Additional
-        // quality tiers get a newly authored housing instead of scaled copies.
-        String original=switch(id){
-            case "EMF_READER" -> switch(tier){
-                case I->"exploration_emf_detector";
-                case II->"dosimeter_2";
-                case III->"dosimeter_4";
-            };
-            case "SPIRIT_BOX"->switch(tier){
-                case I->"exploration_spirit_box";
-                case II->"walkie_talkie_2";
-                case III->null;
-            };
-            case "THERMOMETER"->switch(tier){
-                case I->"exploration_thermometer";
-                case II->"handheld_tablet_1";
-                case III->null;
-            };
-            case "FLASHLIGHT"->switch(tier){
-                case I->"exploration_flashlight_poquet";
-                case II->"exploration_flashlight";
-                case III->null;
-            };
-            case "PHOTO_CAMERA"->tier==EquipmentTiers.Tier.I
-                ?"exploration_photo_camera":null;
-            case "GHOST_WRITING_BOOK"->tier==EquipmentTiers.Tier.I?"book_mp_1":null;
-            case "DOTS_PROJECTOR"->tier==EquipmentTiers.Tier.I?"vape_mp_1":null;
-            case "COMPUTER"->tier==EquipmentTiers.Tier.I?"pc_mp_1":null;
-            case "SANITY_MONITOR","SITE_ACTIVITY_MONITOR"->tier==EquipmentTiers.Tier.I
-                ?"monitoring_screen_mp_1":null;
-            case "SOUND_RECORDER"->"blender_sound_recorder_"+(tier.ordinal()+1);
-            default->null;
-        };
-        boolean synth=original==null||id.equals("SOUND_RECORDER");
-        return new Prefab(id,tier,original==null?TierModelForge.name(id,tier):original,
-            synth,shelf(plan));
+        // The vetted source inventory owns each tier's default physical mesh.
+        // Never silently substitute the older generalized synthesized housing.
+        String selected=EquipmentModelCatalog.model(id,tier);
+        return new Prefab(id,tier,selected,
+            !EquipmentModelCatalog.original(id,tier),shelf(plan));
     }
     public static GlbProps.Model model(String id,EquipmentTiers.Tier tier){
         return GlbProps.model(prefab(id,tier).modelName());

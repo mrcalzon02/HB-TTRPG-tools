@@ -21,6 +21,12 @@ for %%M in (light_switch_1 ceiling_lamp_1_off door_1_loose shelf_mp_6 chair_mp_5
   if not exist assets\runtime\models\%%M.glb (echo ERROR: required licensed model %%M missing & exit /b 1)
   copy /Y assets\runtime\models\%%M.glb build\classes\org\beckenburg\models\%%M.glb >nul || exit /b 1
 )
+rem Include the 150 individually curated Blender equipment models and state forms.
+rem PackagedSourceModelsTest checks that every one is approved, loaded and textured.
+for %%M in (assets\\runtime\\models\\blender_*.glb) do (
+  if not exist "%%M" (echo ERROR: required authored equipment model %%M missing & exit /b 1)
+  copy /Y "%%M" "build\\classes\\org\\beckenburg\\models\\%%~nxM" >nul || exit /b 1
+)
 rem Author all 126 tiered PSX GLBs and embedded low-resolution texture atlases.
 java -Djava.awt.headless=true -cp build\classes org.beckenburg.TierModelForge build\classes\org\beckenburg\models || exit /b 1
 javac --release 17 -encoding UTF-8 -cp build\classes -d build\test @build\sources-tests.txt || exit /b 1
@@ -40,6 +46,7 @@ java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.Ti
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TieredUvAndFirelightTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ImportedEquipmentModelsTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.PackagedSourceModelsTest || exit /b 1
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentModelCatalogTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.FieldSoundRecorderTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSoundRecorderIntegrationTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.RecorderModelsTest || exit /b 1

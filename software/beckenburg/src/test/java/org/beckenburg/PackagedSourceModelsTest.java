@@ -15,7 +15,16 @@ public final class PackagedSourceModelsTest {
                 count++;
             }
         }
-        if(count<39)throw new AssertionError("missing original source models");
+        if(count<189)throw new AssertionError("missing original/Blender source models: "+count);
+        if(EquipmentModelCatalog.stageCount()!=126 ||
+                EquipmentModelCatalog.variantCount()!=36)
+            throw new AssertionError("incomplete physical equipment model map");
+        for(EquipmentTiers.Plan plan:EquipmentTiers.all())
+            for(EquipmentTiers.Tier tier:EquipmentTiers.Tier.values()){
+                var prefab=EquipmentTierVisuals.prefab(plan.id(),tier);
+                if(!EquipmentModelCatalog.approved(prefab.modelName()))
+                    throw new AssertionError("missing approved default: "+prefab);
+            }
         System.out.println("PASS: "+count+" packaged source GLBs, real triangles and embedded textures");
     }
 }
