@@ -14,6 +14,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final HouseMap map=new HouseMap();
     private final RoomLighting lights=new RoomLighting();
     private final SceneRenderer renderer=new SceneRenderer();
+    private final SceneRenderer videoRenderer=new SceneRenderer();
+    private final java.util.Map<Integer,LanVideoCameras.Camera> videoCameras=new HashMap<>();
     private final Map<Integer,SceneRenderer.RemoteBody> peers=new HashMap<>();
     private final Map<Integer,String> hunterNames=new HashMap<>();
     private final java.util.ArrayDeque<LanChat.Entry> chatHistory=new java.util.ArrayDeque<>();
@@ -347,6 +349,25 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(frame.startsWith("RESULT|")){
                 caseResult=frame.substring(7);feedback="CASE CLOSED: "+caseResult;
                 keys.clear();
+            }else if(p.get(0).equals("CAMERA")){
+                if(p.size()==2&&p.get(1).equals("RESET")){
+                    videoCameras.clear();
+                    renderer.videoCameras.clear();
+                }else if(p.size()==3&&p.get(1).equals("CLEAR")){
+                    int owner=LanProtocol.integer(p.get(2),0,5);
+                    videoCameras.remove(owner);renderer.videoCameras.remove(owner);
+                }else if(p.size()==8&&p.get(1).equals("PLACE")){
+                    int owner=LanProtocol.integer(p.get(2),0,5);
+                    int room=LanProtocol.integer(p.get(3),0,HouseMap.ROOM_COUNT-1);
+                    double x=LanProtocol.integer(p.get(4),0,HouseMap.WIDTH*1000)/1000.0;
+                    double z=LanProtocol.integer(p.get(5),0,HouseMap.HEIGHT*1000)/1000.0;
+                    int heading=LanProtocol.integer(p.get(6),0,359);
+                    EquipmentTiers.Tier tier=EquipmentTiers.Tier.valueOf(p.get(7));
+                    LanVideoCameras.Camera camera=
+                        new LanVideoCameras.Camera(owner,room,x,z,heading,tier);
+                    videoCameras.put(owner,camera);
+                    renderer.videoCameras.put(owner,camera);
+                }else throw new IllegalArgumentException("invalid video station");
             }else if(p.get(0).equals("DOTS")){
                 if(p.size()==2&&p.get(1).equals("RESET")){
                     renderer.dotsPositions.clear();
@@ -551,6 +572,24 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }catch(IOException e){feedback="LAN disconnected: "+e.getMessage();close();}
         renderer.roomLightTick=tick;
         renderer.drawNetwork(map,new ArrayList<>(peers.values()),apparition,tick*.1,List.copyOf(counterMarks));
+        // Van receiver renders the *same live world* from the physical camera's
+        // position. No canned image, inferred spectral object or proof overlay.
+        if(vanDisplay&&!videoCameras.isEmpty()){
+            LanVideoCameras.Camera camera=videoCameras.values().iterator().next();
+            videoRenderer.x=camera.x();videoRenderer.z=camera.z();
+            videoRenderer.yaw=Math.toRadians(camera.heading());
+            videoRenderer.pitch=-.035;
+            videoRenderer.roomLights=lights;
+            videoRenderer.roomLightTick=tick;
+            videoRenderer.lamp=false;
+            videoRenderer.placedWritingBookRoom=renderer.placedWritingBookRoom;
+            videoRenderer.dotsPositions.clear();
+            videoRenderer.dotsPositions.putAll(renderer.dotsPositions);
+            videoRenderer.videoCameras.clear();
+            videoRenderer.videoCameras.putAll(videoCameras);
+            videoRenderer.drawNetwork(map,new ArrayList<>(peers.values()),
+                apparition,tick*.1,List.copyOf(counterMarks));
+        }
         repaint();
     }
     @Override protected void paintComponent(Graphics original){
@@ -560,6 +599,20 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g.drawImage(nightVision?NightVisionFilter.apply(renderer.image()):renderer.image(),
                 0,0,getWidth(),h,null);
+            if(vanDisplay&&!videoCameras.isEmpty()&&!casefileOpen){
+                LanVideoCameras.Camera camera=videoCameras.values().iterator().next();
+                int vw=Math.min(260,Math.max(160,getWidth()/3)),vh=Math.max(90,vw*3/5);
+                int vx=getWidth()-vw-14,vy=83;
+                g.setColor(new Color(7,14,17));
+                g.fillRect(vx-3,vy-3,vw+6,vh+23);
+                g.drawImage(camera.tier()==EquipmentTiers.Tier.III
+                    ?NightVisionFilter.apply(videoRenderer.image()):videoRenderer.image(),
+                    vx,vy,vw,vh,null);
+                g.setColor(new Color(190,229,208));
+                g.setFont(new Font(Font.MONOSPACED,Font.BOLD,10));
+                g.drawString("LIVE CAMERA H"+(camera.owner()+1)+" / ROOM "+
+                    camera.room(),vx+5,vy+vh+14);
+            }
             if(lastPhoto!=null&&tick<=lastPhotoUntil){
                 int photoW=Math.min(180,getWidth()/4);
                 int photoH=Math.max(85,photoW*lastPhoto.getHeight()/lastPhoto.getWidth());
