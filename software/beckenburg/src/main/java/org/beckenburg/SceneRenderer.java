@@ -27,6 +27,17 @@ public final class SceneRenderer {
     private final double[] depths=new double[W*H];
     public double x=20.5,z=27.5,yaw=-Math.PI/2,pitch=-.09;
     public boolean lamp=true;
+    public double lampReach=7.5,lampIntensity=.72;
+    /** Real tier optics controls actual in-world illumination, not a HUD indicator. */
+    public void setLampHardware(EquipmentTiers.Tier tier,boolean flameOnly){
+        if(tier==null)throw new IllegalArgumentException("flashlight tier required");
+        lampReach=flameOnly?3.5:switch(tier){
+            case I->6.0;case II->9.0;case III->12.0;
+        };
+        lampIntensity=flameOnly?.30:switch(tier){
+            case I->.58;case II->.76;case III->.94;
+        };
+    }
     /** Solo environment presets; default multipliers retain legacy LAN lighting. */
     public double environmentLight=1.0,fogDensity=1.0;
     public boolean environmentPowerOn=true;
@@ -826,7 +837,7 @@ public final class SceneRenderer {
             }
             // Flashlight is a bounded near-field additive beam; turning room lights off
             // genuinely darkens distant geometry instead of only tinting a HUD icon.
-            double beam=lamp?.72*Math.max(0,1-d/7.5):0;
+            double beam=lamp?lampIntensity*Math.max(0,1-d/lampReach):0;
             double light=(.075+.98*roomLevel+beam)*environmentLight*Math.max(.22,1-d/26.0);
             light=Math.max(.1,Math.min(1.45,light+(BAYER[(px&3)+((py&3)<<2)]-7.5)/140.0));
             int red=(int)(((color>>16)&255)*light),green=(int)(((color>>8)&255)*light),blue=(int)((color&255)*light);
