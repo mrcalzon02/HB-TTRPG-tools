@@ -12,7 +12,8 @@ import java.util.EnumMap;
 final class RecordedSfx {
     private static final AudioFormat FORMAT=new AudioFormat(16000f,16,2,true,false);
     private static final EnumMap<LanSound.Cue,byte[]> CACHE=new EnumMap<>(LanSound.Cue.class);
-    private static final int MAX_PCM_BYTES=16000*4*12;
+    // Short Foley clips must not monopolize the single effects line behind critical attack cues.
+    private static final int MAX_PCM_BYTES=16000*4*4;
     private RecordedSfx(){}
 
     private static synchronized byte[] original(LanSound.Cue cue){
