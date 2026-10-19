@@ -24,9 +24,9 @@ public final class SoundCoverageTest {
             byte[] pan=LanAudio.synthesize(new LanSound.CueEvent(cue,100,80,1));
             if(pan.length!=pcm.length)throw new AssertionError("Pan changed duration "+cue);
         }
-        // The two provenance-checked NOX clips are real packaged source recordings,
+        // The provenance-checked NOX clips are real packaged source recordings,
         // not the synthetic importer fixture; build scripts MUST stage both.
-        for(LanSound.Cue cue:new LanSound.Cue[]{LanSound.Cue.PICKUP,LanSound.Cue.DEVICE_ON,
+        for(LanSound.Cue cue:new LanSound.Cue[]{LanSound.Cue.PICKUP,LanSound.Cue.DEVICE_ON,LanSound.Cue.DEVICE_OFF,
                 LanSound.Cue.DROP,LanSound.Cue.SCANNER,LanSound.Cue.ELECTRIC_HUM,
                 LanSound.Cue.EQUIPMENT,LanSound.Cue.DOTS_MOTOR,LanSound.Cue.MONITOR_HUM}){
             if(!RecordedSfx.isPackaged(cue))
@@ -39,6 +39,12 @@ public final class SoundCoverageTest {
             for(byte sample:real)if(sample!=0){nonzero=true;break;}
             if(!nonzero)throw new AssertionError("Silent NOX recording "+cue);
         }
+        byte[] activated=RecordedSfx.render(
+            new LanSound.CueEvent(LanSound.Cue.DEVICE_ON,0,75,2),80);
+        byte[] deactivated=RecordedSfx.render(
+            new LanSound.CueEvent(LanSound.Cue.DEVICE_OFF,0,75,2),80);
+        if(Arrays.equals(activated,deactivated))
+            throw new AssertionError("Device off must use later NOX transition");
         byte[] a=new byte[2048],second=new byte[2048];
         for(int at=0;at<a.length;at+=4){
             a[at]=(byte)0x70;a[at+1]=(byte)0x17;

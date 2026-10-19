@@ -65,6 +65,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.He
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GlbPropsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.EvidenceSignalsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.MissionWeatherTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.RecordedWeatherTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.HardEvidenceQuotaTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.AncientGhostVariantsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.AdditionalEvidenceTest

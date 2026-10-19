@@ -12,6 +12,55 @@ public final class WeatherSoundscape implements AutoCloseable {
     private volatile boolean outside,active,closed;
     private final Thread worker;
     private volatile SourceDataLine line;
+    // Short optimized loops derived from the original CC0 NOX captures in Beckenburg Drive.
+    // They are bundled in-game; no Google Drive connection is used by players.
+    private static final short[] RAIN=loadLoop("ambient_rain.wav");
+    private static final short[] WIND=loadLoop("ambient_wind.wav");
+
+    private static short[] loadLoop(String filename){
+        try(java.io.InputStream resource=WeatherSoundscape.class.getResourceAsStream(
+                "/org/beckenburg/sfx/"+filename)){
+            if(resource==null)return null;
+            try(AudioInputStream wave=AudioSystem.getAudioInputStream(
+                    new java.io.BufferedInputStream(resource))){
+                AudioFormat format=wave.getFormat();
+                if(format.getChannels()!=1||format.getSampleRate()!=RATE
+                        ||format.getSampleSizeInBits()!=16||format.isBigEndian()
+                        ||format.getEncoding()!=AudioFormat.Encoding.PCM_SIGNED)
+                    throw new UnsupportedAudioFileException("Wrong NOX weather loop format: "+filename);
+                byte[] bytes=wave.readNBytes(RATE*2*12+1);
+                if(bytes.length<2*RATE||bytes.length>RATE*2*12||bytes.length%2!=0)
+                    throw new java.io.IOException("Invalid NOX weather loop length: "+filename);
+                short[] frames=new short[bytes.length/2];
+                for(int i=0;i<frames.length;i++)
+                    frames[i]=(short)((bytes[2*i]&255)|(bytes[2*i+1]<<8));
+                return frames;
+            }
+        }catch(Exception invalid){
+            System.err.println("Beckenburg weather recording fallback: "+invalid.getMessage());
+            return null;
+        }
+    }
+    static boolean hasRecordedLoop(EvidenceSignals.Weather weather){
+        return switch(weather){
+            case RAIN,THUNDERSTORM->RAIN!=null;
+            case WIND->WIND!=null;
+            default->false;
+        };
+    }
+    /** Real weather is mixed independently from ghosts and preserves storm thunder. */
+    static short playbackSample(EvidenceSignals.Weather weather,int intensity,
+            boolean outside,long index){
+        short procedural=sample(weather,intensity,outside,index);
+        short[] bed=weather==EvidenceSignals.Weather.WIND?WIND:
+            weather==EvidenceSignals.Weather.RAIN||weather==EvidenceSignals.Weather.THUNDERSTORM?RAIN:null;
+        if(bed==null)return procedural;
+        double weatherGain=(outside?1:.23)*(.6+intensity*.35);
+        int captured=bed[(int)(index%bed.length)];
+        double synthGain=weather==EvidenceSignals.Weather.THUNDERSTORM?1:.18;
+        int sound=(int)Math.round(captured*weatherGain+procedural*synthGain);
+        return (short)Math.max(Short.MIN_VALUE,Math.min(Short.MAX_VALUE,sound));
+    }
     public WeatherSoundscape(){
         worker=new Thread(this::run,"beckenburg-weather-bed");
         worker.setDaemon(true);worker.start();
@@ -67,7 +116,7 @@ public final class WeatherSoundscape implements AutoCloseable {
                 int volume=LanAudio.effectsVolume();
                 boolean exposed=outside;
                 for(int i=0;i<block.length;i+=2){
-                    short value=sample(w.weather(),w.intensity(),exposed,offset++);
+                    short value=playbackSample(w.weather(),w.intensity(),exposed,offset++);
                     value=(short)(value*volume/100);
                     block[i]=(byte)value;block[i+1]=(byte)(value>>8);
                 }

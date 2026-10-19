@@ -45,10 +45,21 @@ final class RecordedSfx {
                         // remainder of the source recording in a shipping build.
                         int ceiling=filename.equals("pickup.wav")||filename.equals("device_on.wav")
                             ||filename.equals("drop.wav")||filename.equals("scanner.wav")
+                            ||filename.equals("device_off.wav")
                             ||filename.equals("electric_hum.wav")
                             ||filename.equals("equipment.wav")||filename.equals("dots_motor.wav")
                             ||filename.equals("monitor_hum.wav")
                             ?SHORT_MECHANICAL_BYTES:MAX_PCM_BYTES;
+                        // The original NOX Smartphone On&Off capture contains both actions.
+                        // Device-off plays the later transition instead of duplicating the on click.
+                        if(filename.equals("device_off.wav")){
+                            long remaining=16000L*4*4; // skip the first four seconds of stereo PCM
+                            while(remaining>0){
+                                long skipped=converted.skip(remaining);
+                                if(skipped<=0)throw new EOFException("Missing off transition: "+resource);
+                                remaining-=skipped;
+                            }
+                        }
                         byte[] candidate=converted.readNBytes(ceiling);
                         if(candidate.length>0&&candidate.length<=ceiling
                                 &&candidate.length%4==0)pcm=candidate;
