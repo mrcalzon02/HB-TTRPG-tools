@@ -44,12 +44,12 @@ public final class EquipmentTiers {
     private static final List<Plan> PLANS=List.of(
         p("DOTS_PROJECTOR",Role.PROJECTOR,75,220,14,0,180,"Fixed sparse dot field","Wider fan and faster refresh","Full-room adjustable structured-light volume"),
         p("EMF_READER",Role.SENSOR,50,260,12,0,240,"Small segmented 0–10 scale","Larger numbered scale; faster polling","Backlit large digits and event-history strip"),
-        p("FLASHLIGHT",Role.UTILITY,30,800,0,0,280,"Narrow beam with small switch","Adjustable focused beam and stronger LED","Wide/focused modes and long-life battery"),
+        p("FLASHLIGHT",Role.UTILITY,30,800,0,0,280,"Narrow beam; charge 280 seconds","Wider brighter beam; charge 420 seconds","Broad efficient beam; charge 630 seconds"),
         p("GHOST_WRITING_BOOK",Role.DEPLOYABLE,45,120,0,1,0,"Small paper book; one writable surface","Wider pages and clearer ink visibility","Oversized high-contrast pages and angleable stand"),
         p("SPIRIT_BOX",Role.AUDIO,55,210,12,0,180,"Simple radio dial","Larger response display, quieter speaker","Broadband receiver, waveform and directional headset"),
         p("THERMOMETER",Role.SENSOR,40,340,13,0,280,"Slow handheld analog temperature","Responsive digital probe with unit switch","Large backlit readout, temperature trend history"),
         p("UV_LIGHT",Role.OPTICAL,35,280,0,0,200,"Narrow UV inspection cone","Stronger UV beam and broader coverage","Wide UV flood with visible trace contrast"),
-        p("VIDEO_CAMERA",Role.OPTICAL,80,500,0,0,240,"Low-resolution single lens","Wider optics, recording monitor","Wide-angle night imaging with larger clear display"),
+        p("VIDEO_CAMERA",Role.OPTICAL,80,500,0,0,240,"Narrow 65-degree live camera; grainy small CRT feed","93-degree wider view with clearer feed","120-degree wide-angle lens, large monitor and night video"),
         p("CRUCIFIX",Role.DEFENSE,70,180,0,2,0,"Short-range simple cross","Larger protective reach and durability","Extended defense coverage and clear charge indicators"),
         p("FIRELIGHT",Role.UTILITY,15,120,0,2,120,"Small flame in lantern","Wind-shielded broad lantern","Long-burn adjustable brightness lantern"),
         p("HEAD_GEAR",Role.OPTICAL,75,450,0,0,240,"Simple strapped lamp","Hands-free camera and tilt mount","Lightweight wide-angle sensor and clear recorder status"),
@@ -57,7 +57,7 @@ public final class EquipmentTiers {
         p("INCENSE",Role.DEFENSE,60,200,0,2,25,"Brief localized smoke","Longer burn and larger protective cloud","Adjustable dispersal with clear depletion indicator"),
         p("MOTION_SENSOR",Role.DEPLOYABLE,55,400,8,1,220,"Single narrow detection beam","Wider sweep and visible indicator","Multi-zone detector with positional log"),
         p("PARABOLIC_MICROPHONE",Role.AUDIO,60,600,14,0,220,"Single directional audio pickup","Better aiming cone and gain dial","Large spectrogram and precise directional controls"),
-        p("PHOTO_CAMERA",Role.OPTICAL,45,450,0,6,160,"Small viewfinder and six shots","Wider viewfinder and longer film supply","Large framed preview and rapid capture"),
+        p("PHOTO_CAMERA",Role.OPTICAL,45,450,0,1,0,"One-exposure Polaroid; low-resolution square print","Six-shot camera; full-frame clearer images","Twelve-shot camera; large high-clarity images and improved framing"),
         p("SALT",Role.DEPLOYABLE,20,140,0,3,0,"Three small piles","More salt per pouch and larger floor coverage","Greater capacity and high-visibility footprint contrast"),
         p("SANITY_MEDICATION",Role.CONSUMABLE,50,0,0,1,0,"Basic sanity restoration (18)","Improved sanity restoration (36)","Advanced sanity restoration (65)"),
         p("SOUND_RECORDER",Role.AUDIO,60,400,12,2,240,"Short mono audio clips","Longer recording and stereo peaks","Multi-channel waveform history and export"),
@@ -114,6 +114,9 @@ public final class EquipmentTiers {
             Math.max(2,(plan.intervalTicks()*new int[]{100,75,50}[at]+50)/100);
         int capacity=plan.capacity()==0?0:
             (plan.capacity()*new int[]{100,150,220}[at]+50)/100;
+        // Film magazine hardware is not a generic +50% consumable scaling:
+        // Polaroid 1, mid-range 6, professional 12 actual exposures.
+        if(id.equals("PHOTO_CAMERA"))capacity=new int[]{1,6,12}[at];
         int duration=plan.batterySeconds()==0?0:
             (plan.batterySeconds()*new int[]{100,150,225}[at]+50)/100;
         String effect=switch(tier){
