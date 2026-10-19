@@ -83,7 +83,7 @@ final class GhostSpriteAtlas {
     }
     private static Map<String,byte[]> load(){
         Map<String,byte[]> all=new HashMap<>();
-        try(var resource=GhostSpriteAtlas.class.getResourceAsStream("ghost-sprite-expansion-v2.zip")){
+        try(var resource=GhostSpriteAtlas.class.getResourceAsStream("ghost-sprite-expansion-v3.zip")){
             if(resource==null)return Map.of();
             try(var zip=new ZipInputStream(resource)){
                 ZipEntry entry;
