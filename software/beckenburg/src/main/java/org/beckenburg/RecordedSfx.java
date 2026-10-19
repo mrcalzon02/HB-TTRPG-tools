@@ -44,6 +44,8 @@ final class RecordedSfx {
                         // second of an ordinary mechanical cue; never buffer the
                         // remainder of the source recording in a shipping build.
                         int ceiling=filename.equals("pickup.wav")||filename.equals("device_on.wav")
+                            ||filename.equals("drop.wav")||filename.equals("scanner.wav")
+                            ||filename.equals("electric_hum.wav")
                             ?SHORT_MECHANICAL_BYTES:MAX_PCM_BYTES;
                         byte[] candidate=converted.readNBytes(ceiling);
                         if(candidate.length>0&&candidate.length<=ceiling
