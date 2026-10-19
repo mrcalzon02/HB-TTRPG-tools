@@ -46,6 +46,8 @@ final class RecordedSfx {
                         int ceiling=filename.equals("pickup.wav")||filename.equals("device_on.wav")
                             ||filename.equals("drop.wav")||filename.equals("scanner.wav")
                             ||filename.equals("electric_hum.wav")
+                            ||filename.equals("equipment.wav")||filename.equals("dots_motor.wav")
+                            ||filename.equals("monitor_hum.wav")
                             ?SHORT_MECHANICAL_BYTES:MAX_PCM_BYTES;
                         byte[] candidate=converted.readNBytes(ceiling);
                         if(candidate.length>0&&candidate.length<=ceiling
