@@ -118,8 +118,9 @@ public final class BeckenburgFullRoundE2ETest {
                 "three independently admitted LAN sockets with correct roles");
             check(host.connected()==3,"host sees connected client seats");
             stage("Host listening; hunter owner, remote hunter and human ghost joined");
+            int premature=guest.position();
             guest.client.start();
-            check(guest.await("REJECT|",guest.position()-1,deadline)
+            check(guest.await("REJECT|",premature,deadline)
                 .contains("only verified hosting player"),"guest must not start owner's match");
             owner.client.ready();guest.client.ready();ghost.client.ready();
             owner.await("LOBBY|2|HUMAN|3|WAITING",0,deadline);
@@ -203,7 +204,9 @@ public final class BeckenburgFullRoundE2ETest {
         }catch(Throwable failure){
             STEPS.add(Instant.now()+" FAIL "+failure);
             save("FAIL");
-            throw failure;
+            if(failure instanceof Exception exception)throw exception;
+            if(failure instanceof Error error)throw error;
+            throw new AssertionError(failure);
         }
     }
 }
