@@ -33,6 +33,9 @@ public final class FieldEquipment {
     public static boolean functional(String id){
         return id!=null&&ENABLED.contains(id);
     }
+    public static java.util.List<String> workingTools(){
+        return ENABLED.stream().sorted().toList();
+    }
     public int activeSlot(){return current;}
     public void selectSlot(int slot){
         if(slot<0||slot>=SLOTS)throw new IllegalArgumentException("invalid gear slot");
