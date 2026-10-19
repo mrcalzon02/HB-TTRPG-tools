@@ -27,8 +27,8 @@ public final class ImportedEquipmentModelsTest {
         for(EquipmentTiers.Tier tier:EquipmentTiers.Tier.values()){
             String source=HeldInstrumentMesh.source("EMF",tier);
             ok(source.equals(switch(tier){
-                case I->"dosimeter_1";case II->"dosimeter_2";case III->"dosimeter_4";
-            }),"all EMF tiers use actual separate dosimeter meshes");
+                case I->"exploration_emf_detector";case II->"dosimeter_2";case III->"dosimeter_4";
+            }),"all EMF tiers use actual distinct imported measuring instruments");
             for(String kind:new String[]{"EMF","SPIRIT_BOX","THERMOMETER","GHOST_WRITING_BOOK"}){
                 BufferedImage image=HeldInstrumentMesh.image(kind,tier);
                 int opaque=0;
