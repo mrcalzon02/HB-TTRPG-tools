@@ -23,11 +23,14 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     private boolean audible,finished;
     private String legal="[]",feedback="Awaiting private spectral pose";
     private int actionDueTick=-1;
+    private GhostFrenzy.Phase frenzyPhase=GhostFrenzy.Phase.CALM;
+    private int frenzyTicks;
     private List<GhostDomain.Action> offered=List.of();
     private String lastAutomaticAction="";
     private LanGhostHearing.Event hearing;
     private int lastHearingTick=-1;
     private String ghostSpecies="UNKNOWN",behaviorName="RESTLESS";
+    private GhostIdentity.Type revealedType;
 
     public LanGhostPanel(LanClient client){
         this.client=Objects.requireNonNull(client);
@@ -62,7 +65,8 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                 // The host's ROOM state always wins if a GPOSE packet is delayed.
                 if(room!=-1&&reportedRoom!=room)feedback="Room transition pending host pose";
             }else if(p.size()==3&&p.get(0).equals("GTYPE")){
-                ghostSpecies=GhostIdentity.Type.valueOf(p.get(1)).name();
+                revealedType=GhostIdentity.Type.valueOf(p.get(1));
+                ghostSpecies=revealedType.name();
                 behaviorName=GhostIdentity.Behavior.valueOf(p.get(2)).name();
             }else if(p.get(0).equals("GHEAR")){
                 LanGhostHearing.Event cue=LanGhostHearing.decode(packet);
@@ -83,6 +87,12 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                     };
                     audio.play(new LanSound.CueEvent(sound,pan,volume,cue.tick()));
                 }
+            }else if(p.size()==4&&p.get(0).equals("FRENZY")){
+                frenzyPhase=GhostFrenzy.Phase.valueOf(p.get(1));
+                frenzyTicks=LanProtocol.integer(p.get(2),0,10000);
+                GhostFrenzy.Cause.valueOf(p.get(3));
+                atmosphere.setHunt(frenzyPhase==GhostFrenzy.Phase.WARNING
+                    ||frenzyPhase==GhostFrenzy.Phase.RAGING);
             }else if(p.size()>=4&&p.size()<=7&&p.get(0).equals("GPROMPT")){
                 int sampleTick=LanProtocol.integer(p.get(1),0,99999999);
                 int due=LanProtocol.integer(p.get(2),0,99999999);
@@ -104,10 +114,6 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                 LanProtocol.integer(p.get(3),0,99999999);
                 lastAutomaticAction=action+" in "+map.roomName(place);
                 feedback="DEADLINE EXPIRED: "+lastAutomaticAction;
-            }else if(p.size()==3&&p.get(0).equals("HUNT")&&p.get(1).equals("START")){
-                LanProtocol.integer(p.get(2),1,120);atmosphere.setHunt(true);
-            }else if(p.size()==2&&p.get(0).equals("HUNT")&&p.get(1).equals("END")){
-                atmosphere.setHunt(false);
             }else if(packet.startsWith("RESULT|")){
                 finished=true;feedback=packet;keys.clear();
                 atmosphere.setHunt(false);atmosphere.setRitual(false);
@@ -157,6 +163,16 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
         try{client.ghost(action,dest);feedback="Awaiting host "+action+" validation";}
         catch(IOException ex){feedback="Ghost command failed: "+ex.getMessage();}
     }
+    private void frenzyAttack(GhostFrenzy.Attack attack){
+        if(frenzyPhase!=GhostFrenzy.Phase.RAGING){
+            feedback="FRENZY ATTACKS REQUIRE THE RAGING PHASE";return;
+        }
+        if(revealedType!=null&&!GhostFrenzy.profile(revealedType).permits(attack)){
+            feedback="THIS SPECIES CANNOT USE "+attack+" DURING FRENZY";return;
+        }
+        try{client.frenzyAttack(attack);feedback="Host validating frenzy "+attack;}
+        catch(IOException error){feedback="Frenzy attack failed: "+error.getMessage();}
+    }
     public int ghostRoom(){return room;}
     public int energy(){return energy;}
     public String ghostSpecies(){return ghostSpecies;}
@@ -179,6 +195,12 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_3 -> chosen(2);
             case KeyEvent.VK_4 -> ability(GhostDomain.Action.STRIKE);
             case KeyEvent.VK_5 -> ability(GhostDomain.Action.SIGNATURE);
+            case KeyEvent.VK_6 -> {
+                try{client.frenzy();feedback="Requesting MAJOR ACTION: GHOST FRENZY";}
+                catch(IOException failure){feedback="Frenzy request failed: "+failure.getMessage();}
+            }
+            case KeyEvent.VK_7 -> frenzyAttack(GhostFrenzy.Attack.CLAW);
+            case KeyEvent.VK_8 -> frenzyAttack(GhostFrenzy.Attack.DREAD);
             case KeyEvent.VK_LEFT -> camera.yaw-=.1;
             case KeyEvent.VK_RIGHT -> camera.yaw+=.1;
             case KeyEvent.VK_UP -> camera.pitch=Math.min(1.05,camera.pitch+.06);
@@ -231,7 +253,17 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                 "   SPACE DRIFT",24,panelY+62);
             int remaining=actionDueTick<0?-1:Math.max(0,(actionDueTick-tick+9)/10);
             g.setColor(remaining>=0&&remaining<=3?new Color(255,174,166):new Color(194,207,217));
-            g.drawString("NEXT EVENT "+(remaining<0?"WAITING":remaining+"s")+"  /  ESC EXIT",24,panelY+82);
+            GhostFrenzy.Profile costs=revealedType==null?null:GhostFrenzy.profile(revealedType);
+            String abilityCosts=costs==null?"6 FRENZY / 7 CLAW / 8 DREAD"
+                :"6 FRENZY "+costs.energyCost()+"E / 7 CLAW "+
+                    (costs.permits(GhostFrenzy.Attack.CLAW)?costs.clawCost()+"E":"N/A")+
+                    " / 8 DREAD "+costs.dreadCost()+"E";
+            g.drawString("NEXT EVENT "+(remaining<0?"WAITING":remaining+"s")+" / "+abilityCosts,
+                24,panelY+82);
+            if(frenzyPhase!=GhostFrenzy.Phase.CALM){
+                g.setColor(new Color(255,166,156));
+                g.drawString("FRENZY "+frenzyPhase+" / "+(frenzyTicks/10)+"s",24,panelY-12);
+            }
             if(!feedback.isBlank()){
                 String note=feedback.length()>76?feedback.substring(0,73)+"...":feedback;
                 g.setColor(new Color(190,235,206));g.drawString(note,24,panelY-10);

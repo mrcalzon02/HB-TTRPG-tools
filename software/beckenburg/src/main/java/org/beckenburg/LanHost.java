@@ -64,7 +64,8 @@ public final class LanHost implements AutoCloseable {
     private final int[] lastGhostFootstepCueTick=new int[HUNTERS];
     private final int[] lastVoiceCueTick=new int[HUNTERS];
     private LanTelegraphedStrike.Pending pendingStrike;
-    private int huntUntilTick=-1;
+    private final GhostFrenzy frenzy;
+    private int lastHumanFrenzyAttackTick=-10000;
     private final String bindAddress;
 
     public LanHost(String ip,int port)throws IOException{
@@ -109,6 +110,7 @@ public final class LanHost implements AutoCloseable {
         world.configure(contract);
         ghostPose.configureSpeed(contract.ghostSpeed());
         ghost=new GhostDomain(map,4,type);
+        frenzy=new GhostFrenzy(type);
         actionCadence=new GhostActionCadence(type);
         mission=new LanCase(4);
         mission.configureHunters(contract.hunters());
@@ -450,7 +452,7 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
                     if(mission.ritualProgress()>=0&&mission.activeRite()!=null)
                         reply(peer,"RITUAL|STARTED|"+mission.activeRite());
-                    if(huntUntilTick>tick)reply(peer,"HUNT|START|"+(huntUntilTick-tick));
+                    reply(peer,frenzyFrame());
                     reply(peer,"HIDECONFIG|"+contract.hidingSpots());
                     reply(peer,"LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
                     // Recover only this investigator's current hiding and imminent threat.
@@ -473,8 +475,8 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"ACCEPT|GVIEW3D");
                     reply(peer,"VOICEKEY|"+voice.port()+"|"+voice.register(peer.slot,peer.socket.getInetAddress()));
                     reply(peer,"GTYPE|"+ghostType+"|"+ghostType.behavior());
-                    reply(peer,ghostPose.frame(tick));broadcastState();
-                    sendGhostPrompt();
+                    reply(peer,ghostPose.frame(tick));reply(peer,frenzyFrame());
+                    broadcastState();sendGhostPrompt();
                 }
                 case "GSTEP" -> {
                     if(!running||peer.slot!=GHOST_SEAT||!peer.ghostWorldMode||p.size()!=4)
@@ -583,6 +585,9 @@ public final class LanHost implements AutoCloseable {
                     int at=hunterRooms[peer.slot];
                     if(target==at||Math.abs(target/HouseMap.COLS-at/HouseMap.COLS)+Math.abs(target%HouseMap.COLS-at%HouseMap.COLS)!=1)
                         throw new IllegalArgumentException("room not adjacent");
+                    if(frenzy.sealed()&&target==HouseMap.EXTRACTION_ROOM
+                            &&at!=HouseMap.EXTRACTION_ROOM)
+                        throw new IllegalArgumentException("frenzy sealed the extraction threshold");
                     // Room-level topology proof only; physical door and body collision still need synced transform validation.
                     hunterRooms[peer.slot]=target;world.setRoom(peer.slot,target);recordSound(peer.slot,LanGhostPursuit.Sound.FOOTSTEP);reply(peer,"ACCEPT|MOVE|"+target);broadcastState();broadcastWorld();
                 }
@@ -1055,9 +1060,37 @@ public final class LanHost implements AutoCloseable {
                     if(result.accepted()&&!p.get(0).equals("EXTRACT"))
                         recordSound(peer.slot,LanGhostPursuit.Sound.RITUAL,
                             p.get(0).equals("WARD")?LanSound.Cue.WARD:LanSound.Cue.RITUAL_START);
-                    if(result.accepted()&&(p.get(0).equals("CLEANSE")||p.get(0).equals("BANISH")||p.get(0).equals("ABSOLVE")))
+                    if(result.accepted()&&(p.get(0).equals("CLEANSE")||p.get(0).equals("BANISH")||p.get(0).equals("ABSOLVE"))){
+                        frenzy.provoke(32);
                         notifyHunters("RITUAL|STARTED|"+mission.activeRite());
+                    }
                     broadcastProgress();finishIfComplete();
+                }
+                case "FATTACK" -> {
+                    if(!running||peer.slot!=GHOST_SEAT||p.size()!=3)
+                        throw new IllegalArgumentException("spectral seat required");
+                    GhostFrenzy.Attack attack=GhostFrenzy.Attack.valueOf(p.get(1));
+                    long seq=LanProtocol.sequence(p.get(2));
+                    if(seq<=peer.lastGhostActionSequence)
+                        throw new IllegalArgumentException("stale frenzy attack sequence");
+                    peer.lastGhostActionSequence=seq;
+                    if(!performFrenzyAttack(attack))
+                        throw new IllegalArgumentException("frenzy attack unavailable, out of energy or target concealed");
+                    lastHumanFrenzyAttackTick=tick;
+                    reply(peer,"ACCEPT|FATTACK|"+attack+"|"+ghost.energy());
+                    broadcastProgress();
+                }
+                case "FRENZY" -> {
+                    if(!running||peer.slot!=GHOST_SEAT||p.size()!=2)
+                        throw new IllegalArgumentException("spectral seat required");
+                    long seq=LanProtocol.sequence(p.get(1));
+                    if(seq<=peer.lastGhostActionSequence)
+                        throw new IllegalArgumentException("stale frenzy sequence");
+                    peer.lastGhostActionSequence=seq;
+                    if(!startFrenzy(GhostFrenzy.Cause.GHOST_PLAYER))
+                        throw new IllegalArgumentException("frenzy requires sufficient energy, living hunters and no recovery");
+                    reply(peer,"ACCEPT|FRENZY");
+                    broadcastState();
                 }
                 case "GHOST" -> {
                     if(!running||peer.slot!=GHOST_SEAT||p.size()!=4)throw new IllegalArgumentException("ghost seat required");
@@ -1068,6 +1101,9 @@ public final class LanHost implements AutoCloseable {
                     if(seq<=peer.lastGhostActionSequence)throw new IllegalArgumentException("stale ghost action sequence");
                     peer.lastGhostActionSequence=seq;
                     // Spatial reach is checked by the host BEFORE consuming the ability's energy.
+                    if(frenzy.phase()!=GhostFrenzy.Phase.CALM
+                            && action!=GhostDomain.Action.DRIFT)
+                        throw new IllegalArgumentException("use frenzy abilities while the major state is active");
                     if(action==GhostDomain.Action.STRIKE && ghost.observe().legalActions().contains(action)
                             && !LanSpatialCombat.any(strikeVictims()))
                         throw new IllegalArgumentException("no hunter within striking reach");
@@ -1179,7 +1215,18 @@ public final class LanHost implements AutoCloseable {
             if(body.room()==HouseMap.EXTRACTION_ROOM&&type!=LanGhostPursuit.Sound.VOICE)
                 actorCue(seat,cue);
         }
-        if(LanAcoustics.audible(map,ghost.room(),hunterRooms[seat],type))lastGhostSoundTick=tick;
+        if(LanAcoustics.audible(map,ghost.room(),hunterRooms[seat],type)){
+            lastGhostSoundTick=tick;
+            if(!frenzy.active()&&frenzy.phase()==GhostFrenzy.Phase.CALM){
+                switch(type){
+                    case RITUAL -> frenzy.provoke(18);
+                    case VOICE -> frenzy.provoke(6);
+                    case EQUIPMENT -> frenzy.provoke(3);
+                    case DOOR -> frenzy.provoke(2);
+                    case FOOTSTEP -> { /* ordinary movement is not a guaranteed provocation */ }
+                }
+            }
+        }
         if(seats[GHOST_SEAT]==null){
             ai.heard(ghost.room(),hunterRooms[seat],body.x(),body.z(),type,tick);
         }else if(seats[GHOST_SEAT].ghostWorldMode){
@@ -1353,9 +1400,7 @@ public final class LanHost implements AutoCloseable {
         };
         if(cue!=null)broadcastGhostSound(cue);
         if(result.action()!=GhostDomain.Action.STRIKE){distributeEffect(result);return;}
-        // Actual accepted hostile action begins/extends the host-owned hunt window.
-        huntUntilTick=Math.max(huntUntilTick,tick+70);
-        notifyAllPeers("HUNT|START|70");
+        // An ordinary telegraphed strike is not a Frenzy and never seals the exits.
         boolean[] acquired=strikeVictims(),immediate=new boolean[HUNTERS];
         int target=-1;
         for(int i=0;i<HUNTERS;i++)if(acquired[i]){
@@ -1374,8 +1419,11 @@ public final class LanHost implements AutoCloseable {
     /** Small private action menu, never copied to the hunter journal. */
     private void sendGhostPrompt(){
         Peer player=seats[GHOST_SEAT];
-        if(player!=null&&running&&player.ghostWorldMode)
-            reply(player,actionCadence.prompt(ghost.observe()));
+        if(player!=null&&running&&player.ghostWorldMode){
+            if(frenzy.phase()!=GhostFrenzy.Phase.CALM)
+                reply(player,"GPROMPT|"+tick+"|"+actionCadence.dueTick()+"|"+ghost.room());
+            else reply(player,actionCadence.prompt(ghost.observe()));
+        }
     }
     /**
      * A human ghost cannot veto every encounter by remaining idle. At a missed
@@ -1383,7 +1431,7 @@ public final class LanHost implements AutoCloseable {
      * Wards/cooldowns/energy still win; if nothing is legal, retry on future ticks.
      */
     private void enforceGhostDeadline(){
-        if(!actionCadence.due(tick))return;
+        if(frenzy.phase()!=GhostFrenzy.Phase.CALM||!actionCadence.due(tick))return;
         GhostDomain.Observation state=ghost.observe();
         GhostDomain.Action action=actionCadence.fallback(state,
             LanSpatialCombat.any(strikeVictims()));
@@ -1426,9 +1474,129 @@ public final class LanHost implements AutoCloseable {
         for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&hunterRooms[i]==pending.room())
             reply(seats[i],"THREAT|"+(hit?"HIT":"EVADED")+"|"+pending.targetSeat());
     }
+    private boolean anyHunterInSite(){
+        for(int i=0;i<HUNTERS;i++)
+            if((seats[i]!=null||reserved[i]!=null)&&mission.alive(i)
+                    &&hunterRooms[i]<HouseMap.EXTRACTION_ROOM)return true;
+        return false;
+    }
+    private int averageSanity(){
+        int sum=0,count=0;
+        for(int i=0;i<HUNTERS;i++)
+            if((seats[i]!=null||reserved[i]!=null)&&mission.alive(i)){
+                sum+=100-mission.stress(i);count++;
+            }
+        return count==0?100:sum/count;
+    }
+    private String frenzyFrame(){
+        return "FRENZY|"+frenzy.phase()+"|"+frenzy.remaining(tick)+"|"+frenzy.cause();
+    }
+    private void onFrenzyTransition(){
+        world.setExitSealed(frenzy.sealed());
+        notifyAllPeers(frenzyFrame());
+        if(frenzy.raging()){
+            ghost.reveal(30);
+            broadcastGhostSound(LanSound.Cue.MANIFEST);
+            broadcastApparitions();
+        }
+        if(frenzy.phase()==GhostFrenzy.Phase.RECOVERY)
+            notifyHunters("FIELD|GHOST FRENZY ENDED - EXITS UNSEALED");
+    }
+    private boolean startFrenzy(GhostFrenzy.Cause cause){
+        if(!frenzy.begin(tick,ghost,anyHunterInSite(),cause))return false;
+        lastHumanFrenzyAttackTick=tick;
+        if(pendingStrike!=null){
+            notifyHunters("THREAT|EVADED|"+pendingStrike.targetSeat());
+            pendingStrike=null;
+        }
+        onFrenzyTransition();
+        return true;
+    }
+    /** The AI hunts only host-visible targets, never a leaked client coordinate feed. */
+    private LanGhostPursuit.Impulse frenzyChaseImpulse(){
+        LanGhostSpatial.Pose pos=ghostPose.pose();
+        int closest=-1;double best=Double.POSITIVE_INFINITY;
+        for(int i=0;i<HUNTERS;i++){
+            if((seats[i]==null&&reserved[i]==null)||!mission.alive(i)||world.hidden(i)
+                    ||hunterRooms[i]!=pos.room())continue;
+            LanWorld.Body body=world.body(i);
+            double d=Math.hypot(body.x()-pos.x(),body.z()-pos.z());
+            if(d<best&&d<12&&map.clearLineOfSight(pos.x(),pos.z(),body.x(),body.z())){
+                best=d;closest=i;
+            }
+        }
+        if(closest<0)return null;
+        LanWorld.Body seen=world.body(closest);
+        double dx=seen.x()-pos.x(),dz=seen.z()-pos.z();
+        if(Math.hypot(dx,dz)<.30)return null;
+        return new LanGhostPursuit.Impulse((int)Math.round(
+            Math.max(-100,Math.min(100,dx*100))),
+            (int)Math.round(Math.max(-100,Math.min(100,dz*100))));
+    }
+    /** Host-authorized contact requires an actual spatial body, sight and reach. */
+    /** Selects one host-observed 3D target; hiding, wards and walls win.
+     * The client only submits the attack enum, never victim coordinates/seat. */
+    private int frenzyTarget(GhostFrenzy.Attack attack){
+        LanGhostSpatial.Pose pose=ghostPose.pose();
+        int bestSeat=-1;double best=Double.POSITIVE_INFINITY;
+        double range=attack==GhostFrenzy.Attack.CLAW?LanSpatialCombat.STRIKE_RANGE:5.0;
+        for(int i=0;i<HUNTERS;i++){
+            if((seats[i]==null&&reserved[i]==null)||!mission.alive(i)||world.hidden(i)
+                    ||hunterRooms[i]!=pose.room())continue;
+            boolean spatial=seats[i]!=null?seats[i].worldMode:reserved[i].worldMode;
+            if(!spatial)continue;
+            LanWorld.Body body=world.body(i);
+            if(counters.wardsAt(body.x(),body.z(),tick))continue;
+            double distance=Math.hypot(body.x()-pose.x(),body.z()-pose.z());
+            if(distance>range||distance>=best)continue;
+            boolean reachable=attack==GhostFrenzy.Attack.CLAW
+                ?LanSpatialCombat.canStrike(map,world,pose,i)
+                :map.clearLineOfSight(pose.x(),pose.z(),body.x(),body.z());
+            if(!reachable)continue;
+            best=distance;bestSeat=i;
+        }
+        return bestSeat;
+    }
+    /** Species-specific attacks spend energy only after a host-confirmed target. */
+    private boolean performFrenzyAttack(GhostFrenzy.Attack attack){
+        if(!frenzy.available(attack,tick,ghost))return false;
+        int seat=frenzyTarget(attack);
+        if(seat<0)return false;
+        GhostDomain.Resolution effect=frenzy.attack(attack,tick,seat,ghost.room(),ghost);
+        if(effect==null)return false;
+        boolean[] one=new boolean[HUNTERS];one[seat]=true;
+        distributeEffect(effect,one);
+        broadcastGhostSound(attack==GhostFrenzy.Attack.CLAW
+            ?LanSound.Cue.STRIKE:LanSound.Cue.WHISPER);
+        if(seats[seat]!=null)reply(seats[seat],"FIELD|"+
+            (attack==GhostFrenzy.Attack.CLAW
+                ?"FRENZY: VIOLENT IMPACT - EVADE":"FRENZY: SUPERNATURAL DREAD - FIND SHELTER"));
+        return true;
+    }
+    private void applyFrenzyContacts(){
+        if(!frenzy.raging())return;
+        // The AI is bound by exactly the same reach, price and attack cooldowns
+        // as the human ghost. Connected ghost players must choose their attacks.
+        if(seats[GHOST_SEAT]==null){
+            if(!performFrenzyAttack(GhostFrenzy.Attack.CLAW))
+                performFrenzyAttack(GhostFrenzy.Attack.DREAD);
+        }else if(tick-lastHumanFrenzyAttackTick>=45){
+            // A human ghost cannot start a Frenzy and then freeze the encounter.
+            // Real host reach, sight, wards, cooldown and energy still apply.
+            boolean forced=performFrenzyAttack(GhostFrenzy.Attack.CLAW)
+                ||performFrenzyAttack(GhostFrenzy.Attack.DREAD);
+            if(forced){
+                lastHumanFrenzyAttackTick=tick;
+                if(seats[GHOST_SEAT].ghostWorldMode)
+                    reply(seats[GHOST_SEAT],"FIELD|FRENZY INSTINCT FORCED AN ATTACK");
+            }
+        }
+        if(!anyHunterInSite()&&frenzy.repel(tick))onFrenzyTransition();
+    }
     private void finishIfComplete(){
         if(mission.outcome()==LanCase.Outcome.ACTIVE)return;
         running=false;
+        world.setExitSealed(false);
         notifyAllPeers("RESULT|"+mission.outcome());
         broadcastProgress();
     }
@@ -1438,16 +1606,24 @@ public final class LanHost implements AutoCloseable {
         try{tick++;
             expireDisconnectedSeats();
             if(!running)return;
-            if(huntUntilTick>=0&&tick>=huntUntilTick){
-                huntUntilTick=-1;notifyAllPeers("HUNT|END");
-            }else if(huntUntilTick>tick&&tick%10==0){
-                // Re-synchronize recently entered 3D clients, bounded to 1 packet/second.
-                notifyAllPeers("HUNT|START|"+(huntUntilTick-tick));
+            if(frenzy.advance(tick)){
+                onFrenzyTransition();
             }
+            if(frenzy.active()&&tick%10==0)notifyAllPeers(frenzyFrame());
             int audible=-1,occupants=0;
             for(int i=0;i<HUNTERS;i++)if((seats[i]!=null||reserved[i]!=null)&&mission.alive(i)
                     &&hunterRooms[i]==ghost.room()){audible=hunterRooms[i];occupants++;}
             ghost.advance(tick,audible,occupants);
+            if(frenzy.raging()){
+                ghost.reveal(12);
+                if(tick%10==0&&ghost.room()<HouseMap.INDOOR_ROOMS){
+                    // Pulses are the genuine shared room-lighting system, not a HUD-only flag.
+                    lights.pulse(ghost.room(),RoomLighting.Interference.DANGEROUS,tick);
+                    notifyHunters("LIGHTFX|"+ghost.room()+"|DANGEROUS|"+tick+"|"+(tick+22));
+                }
+            }
+            if(frenzy.phase()==GhostFrenzy.Phase.CALM && frenzy.consider(
+                    tick,ghost,anyHunterInSite(),averageSanity()))onFrenzyTransition();
             if(tick%12==0)monitor.sample(tick,ghost.energy());
             int drain=GhostTraits.passiveFear(ghostType,tick,occupants);
             if(drain>0)for(int i=0;i<HUNTERS;i++)if((seats[i]!=null||reserved[i]!=null)&&hunterRooms[i]==ghost.room()
@@ -1464,15 +1640,20 @@ public final class LanHost implements AutoCloseable {
                     int target=pendingStrike.targetSeat();pendingStrike=null;animation.impact(tick);
                     notifyHunters("THREAT|EVADED|"+target);
                 }
+                if(frenzy.repel(tick))onFrenzyTransition();
                 notifyHunters("FIELD|CROSS REPELLED THE ENTITY");
                 broadcastApparitions();
             }
             if(seats[GHOST_SEAT]==null){GhostDomain.Observation seen=ghost.observe();
-                LanGhostPursuit.Impulse impulse=ai.approach(seen,ghostPose.pose());
+                LanGhostPursuit.Impulse impulse=frenzy.raging()?frenzyChaseImpulse():null;
+                if(impulse==null)impulse=ai.approach(seen,ghostPose.pose());
                 if(impulse!=null){try{ghostPose.step(impulse.dx(),impulse.dz(),tick);broadcastApparitions();
                     if(ghost.manifested()&&tick%5==0)broadcastGhostSound(LanSound.Cue.FOOTFALL);}
                     catch(IllegalArgumentException blocked){ /* Same physical rejection as a human ghost. */ }}
-                GhostDomain.Command choice=ai.decide(seen,LanSpatialCombat.any(strikeVictims()));if(choice!=null){
+                GhostDomain.Command choice=ai.decide(seen,LanSpatialCombat.any(strikeVictims()));
+                if(frenzy.phase()!=GhostFrenzy.Phase.CALM && choice!=null
+                        &&choice.action()!=GhostDomain.Action.DRIFT)choice=null;
+                if(choice!=null){
                 // AI and human strikes use the same host-owned spatial reach gate.
                 if(choice.action()!=GhostDomain.Action.STRIKE||LanSpatialCombat.any(strikeVictims())){
                     // The incoming AI sequence belongs to its controller only. The host's
@@ -1493,6 +1674,7 @@ public final class LanHost implements AutoCloseable {
             // safety floor beneath AI's normal behavior scheduler.
             enforceGhostDeadline();
             resolvePendingStrike();
+            applyFrenzyContacts();
             LanCase.RitualAdvance ritual=mission.advance(hunterRooms);
             if(ritual==LanCase.RitualAdvance.CLEANSED)
                 for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&seats[i].worldMode)

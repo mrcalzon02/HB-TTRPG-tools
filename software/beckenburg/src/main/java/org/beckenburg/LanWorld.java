@@ -14,6 +14,10 @@ public final class LanWorld {
     private double playerSpeed=1.0,sprintSpeed=1.5;
     private int hidingDensity=70;
     private final boolean[] hiding=new boolean[6];
+    private boolean exitSealed;
+    /** The investigation/van boundary is sealed only while a true Frenzy is active. */
+    public void setExitSealed(boolean sealed){exitSealed=sealed;}
+    public boolean exitSealed(){return exitSealed;}
     public boolean hidden(int seat){seat(seat);return hiding[seat];}
     public boolean toggleHide(int seat){
         seat(seat);
@@ -58,6 +62,9 @@ public final class LanWorld {
         if(running&&sprint==CustomContract.Sprint.LIMITED)stamina[seat]--;
         else if(!running&&tick%2==0)stamina[seat]=Math.min(40,stamina[seat]+1);
         double x=xs[seat]+speed*dx/magnitude,z=zs[seat]+speed*dz/magnitude;
+        if(exitSealed && map.roomAt(xs[seat],zs[seat])!=HouseMap.EXTRACTION_ROOM
+                &&map.roomAt(x,z)==HouseMap.EXTRACTION_ROOM)
+            throw new IllegalArgumentException("frenzy sealed the van extraction threshold");
         // Forbid diagonal corner cutting; each axis must independently clear the collision radius.
         if(!map.traversable(x,z)||!map.traversable(x,zs[seat])||!map.traversable(xs[seat],z))
             throw new IllegalArgumentException("blocked by world collision");

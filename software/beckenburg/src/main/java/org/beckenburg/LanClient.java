@@ -196,6 +196,11 @@ public final class LanClient implements AutoCloseable {
     public synchronized void ward()throws IOException {send("WARD|"+(++sequence));}
     public synchronized void cleanse()throws IOException {send("CLEANSE|"+(++sequence));}
     public synchronized void extract()throws IOException {send("EXTRACT|"+(++sequence));}
+    /** Human spectral controller requests only a major action; host decides eligibility. */
+    public synchronized void frenzy()throws IOException {send("FRENZY|"+(++sequence));}
+    public synchronized void frenzyAttack(GhostFrenzy.Attack attack)throws IOException {
+        Objects.requireNonNull(attack);send("FATTACK|"+attack+"|"+(++sequence));
+    }
     public synchronized void ghost(GhostDomain.Action action,int room)throws IOException {
         Objects.requireNonNull(action);send("GHOST|"+action+"|"+room+"|"+(++sequence));
     }

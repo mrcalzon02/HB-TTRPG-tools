@@ -60,6 +60,13 @@ public final class GhostDomain {
     public int room() { return room; }
     public GhostIdentity.Type type(){return archetype;}
     public int energy() { return energy; }
+    /** Host-only major action: reserves accumulated energy without reusing STRIKE. */
+    public boolean spendFrenzyEnergy(int amount){
+        if(amount<1||amount>100||tick<1||tick<suppressedUntil||energy<amount)return false;
+        energy-=amount;
+        return true;
+    }
+    public boolean suppressed(){return tick<suppressedUntil;}
     public int tickCount() { return tick; }
     public boolean manifested() { return tick > 0 && tick <= manifestUntil; }
     public void reveal(int duration){

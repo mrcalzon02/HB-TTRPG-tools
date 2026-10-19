@@ -42,6 +42,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private int apparitionWarningTick=-1;
     private int lastMotionTick=-1;
     private int threatUntilTick=-1;
+    private GhostFrenzy.Phase frenzyPhase=GhostFrenzy.Phase.CALM;
+    private int frenzyTicks;
     private int threatTarget=-1;
     private String threatOutcome="";
     private final MouseLook mouseLook;
@@ -367,11 +369,21 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 ritualMusic=true;atmosphere.setRitual(true);feedback="RITUAL COMMENCED";
             }else if(p.size()==2&&p.get(0).equals("RITUAL")&&p.get(1).equals("BROKEN")){
                 ritualMusic=false;atmosphere.setRitual(false);feedback="RITUAL INTERRUPTED";
-            }else if(p.size()==3&&p.get(0).equals("HUNT")&&p.get(1).equals("START")){
-                LanProtocol.integer(p.get(2),1,120);
-                huntMusic=true;atmosphere.setHunt(true);
-            }else if(p.size()==2&&p.get(0).equals("HUNT")&&p.get(1).equals("END")){
-                huntMusic=false;atmosphere.setHunt(false);
+            }else if(p.size()==4&&p.get(0).equals("FRENZY")){
+                GhostFrenzy.Phase phase=GhostFrenzy.Phase.valueOf(p.get(1));
+                frenzyTicks=LanProtocol.integer(p.get(2),0,10000);
+                GhostFrenzy.Cause.valueOf(p.get(3));
+                if(frenzyPhase!=phase){
+                    feedback=switch(phase){
+                        case WARNING->"GHOST FRENZY BUILDING - FIND SHELTER";
+                        case RAGING->"GHOST FRENZY ACTIVE - BREAK SIGHT";
+                        case RECOVERY->"FRENZY ENDED - EXITS OPEN";
+                        case CALM->"THE LOCATION HAS SETTLED";
+                    };
+                }
+                frenzyPhase=phase;
+                huntMusic=phase==GhostFrenzy.Phase.WARNING||phase==GhostFrenzy.Phase.RAGING;
+                atmosphere.setHunt(huntMusic);
             }else if(frame.startsWith("RESULT|")){
                 ritualMusic=false;huntMusic=false;
                 atmosphere.setRitual(false);atmosphere.setHunt(false);
@@ -707,7 +719,13 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }
             String alert=null;Color alertColor=new Color(216,196,216);
             if(health==0){alert="INCAPACITATED / SPECTATE UNTIL RESULT";alertColor=new Color(245,154,159);}
-            else if(threatUntilTick>=tick && threatTarget>=0){
+            else if(frenzyPhase==GhostFrenzy.Phase.WARNING){
+                alert="GHOST FRENZY INCOMING / "+(frenzyTicks/10)+"s TO REACT";
+                alertColor=new Color(255,181,125);
+            }else if(frenzyPhase==GhostFrenzy.Phase.RAGING){
+                alert="GHOST FRENZY / "+(frenzyTicks/10)+"s / HIDE OR BREAK SIGHT";
+                alertColor=new Color(255,141,137);
+            }else if(threatUntilTick>=tick && threatTarget>=0){
                 alert="STRIKE WIND-UP / EVADE OR BREAK SIGHT ("+(threatUntilTick-tick)+")";
                 alertColor=new Color(255,172,145);
             }else if(apparition!=null){
