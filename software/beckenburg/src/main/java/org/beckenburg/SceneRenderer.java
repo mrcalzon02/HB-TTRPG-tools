@@ -312,8 +312,32 @@ public final class SceneRenderer {
      * Architectural shell, floor, supports and socket data are all local to
      * this module. No Car08 wheel/grille triangles remain inside the cargo.
      */
+    private VanStaging cachedVan;
+    private boolean cachedVanDoors;
+    private java.util.Set<EquipmentLoadout.Item> cachedVanStock=java.util.Set.of();
+    private java.util.Map<String,EquipmentTiers.Tier> cachedVanTiers=java.util.Map.of();
+    private List<Face> cachedVanFaces=List.of();
     private void vanModel(List<Face> faces,VanStaging van,
                           java.util.Set<EquipmentLoadout.Item> stock){
+        // The 42-position geometry is expensive to decode and transform.
+        // Reuse the actual built mesh until the authoritative cargo doors,
+        // purchased stock or upgraded LAN equipment changes.
+        if(cachedVan==van&&cachedVanDoors==van.cargoDoorClosed()&&
+                cachedVanStock.equals(stock)&&cachedVanTiers.equals(rackToolTiers)){
+            faces.addAll(cachedVanFaces);
+            return;
+        }
+        List<Face> constructed=new ArrayList<>();
+        buildVanModel(constructed,van,stock);
+        cachedVan=van;
+        cachedVanDoors=van.cargoDoorClosed();
+        cachedVanStock=java.util.Set.copyOf(stock);
+        cachedVanTiers=java.util.Map.copyOf(rackToolTiers);
+        cachedVanFaces=List.copyOf(constructed);
+        faces.addAll(cachedVanFaces);
+    }
+    private void buildVanModel(List<Face> faces,VanStaging van,
+                               java.util.Set<EquipmentLoadout.Item> stock){
         double w=VanStaging.HALF_WIDTH,f=VanStaging.FRONT,r=VanStaging.REAR;
         double h=VanStaging.INTERIOR_HEIGHT;
 
