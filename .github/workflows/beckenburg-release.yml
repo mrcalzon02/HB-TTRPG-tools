@@ -97,15 +97,123 @@ jobs:
         shell: pwsh
         env:
           VERSION: ${{ steps.version.outputs.version }}
+          SOURCE_SHA: ${{ github.sha }}
         run: |
           $ErrorActionPreference='Stop'
           $game=Join-Path $env:GITHUB_WORKSPACE 'software\beckenburg'
           $classes=Join-Path $game 'build\classes'
           $res=Join-Path $classes 'org\beckenburg\release.properties'
-          "version=$env:VERSION" | Set-Content -LiteralPath $res -Encoding ascii
+          "version=$env:VERSION`nsource_sha=$env:SOURCE_SHA" | Set-Content -LiteralPath $res -Encoding ascii
           $jar=Join-Path $game 'build\beckenburg-game.jar'
           & jar --update --file $jar -C $classes org/beckenburg/release.properties
           if ($LASTEXITCODE -ne 0) { throw 'Failed to embed installed release version into JAR' }
+          # Inspect the actual payload, not merely source files at checkout.
+          $entries=@(& jar --list --file $jar)
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect packaged game JAR' }
+          foreach($required in @('org/beckenburg/BeckenburgDiagnostics.class',
+                                  'org/beckenburg/CastleHubArchitecture.class',
+                                  'org/beckenburg/CastleHubDecor.class',
+                                  'org/beckenburg/psx-horror-ui-free-assets.zip',
+                                  'org/beckenburg/release.properties')) {
+            if ($entries -notcontains $required) { throw "Installer JAR missing: $required" }
+          }
+          if (@($entries | Where-Object { $_ -match '^org/beckenburg/models/kenney_medieval_.*\.glb
+          $dest=Join-Path $game 'build\release'
+          $payload=Join-Path $game 'build\package-input'
+          New-Item -ItemType Directory -Force -Path $dest,$payload | Out-Null
+          # Never use build/ as jpackage input: that also contains build/release/,
+          # compiled test classes and eventually its own generated app image.
+          # Package only the verified gameplay JAR, not recursively generated installers.
+          Copy-Item -LiteralPath $jar -Destination (Join-Path $payload 'beckenburg-game.jar') -Force
+          $args=@('--name','Beckenburg','--app-version',$env:VERSION,
+                  '--input',$payload,
+                  '--main-jar','beckenburg-game.jar',
+                  '--main-class','org.beckenburg.InvestigationGame',
+                  '--dest',$dest,'--vendor','Beckenburg Project')
+          & jpackage @args --type app-image
+          if ($LASTEXITCODE -ne 0) { throw 'Native portable image failed' }
+          $upgrade='0125411a-f8be-4cdd-9910-1d886ca4ce13'
+          & jpackage @args --type exe --win-shortcut --win-menu --win-per-user-install --win-upgrade-uuid $upgrade
+          if ($LASTEXITCODE -ne 0) { throw 'Windows EXE installer creation failed' }
+          & jpackage @args --type msi --win-shortcut --win-menu --win-per-user-install --win-upgrade-uuid $upgrade
+          if ($LASTEXITCODE -ne 0) { throw 'Windows MSI installer creation failed' }
+          $installer=Get-ChildItem -LiteralPath $dest -Filter '*.exe' -File | Select-Object -First 1
+          $msi=Get-ChildItem -LiteralPath $dest -Filter '*.msi' -File | Select-Object -First 1
+          if (-not $installer -or -not $msi) { throw 'Native installers missing' }
+          $exeName="Beckenburg-$env:VERSION-Windows-x64.exe"
+          $msiName="Beckenburg-$env:VERSION-Windows-x64.msi"
+          Rename-Item -LiteralPath $installer.FullName -NewName $exeName
+          Rename-Item -LiteralPath $msi.FullName -NewName $msiName
+          $image=Join-Path $dest 'Beckenburg'
+          if (-not (Test-Path (Join-Path $image 'Beckenburg.exe'))) {
+            throw 'Self-contained game image missing executable'
+          }
+          $portable=Join-Path $dest "Beckenburg-$env:VERSION-Windows-x64.zip"
+          Compress-Archive -LiteralPath $image -DestinationPath $portable -CompressionLevel Optimal
+          $files=@($exeName,$msiName,(Split-Path $portable -Leaf))
+          $sums=foreach ($name in $files) {
+            $p=Join-Path $dest $name
+            $file=Get-Item -LiteralPath $p
+            if ($file.Length -lt 32768) { throw "Empty release artifact: $name" }
+            '{0}  {1}' -f (Get-FileHash -Algorithm SHA256 -LiteralPath $p).Hash.ToLowerInvariant(),$name
+          }
+          $sums | Set-Content -LiteralPath (Join-Path $dest 'SHA256SUMS.txt') -Encoding ascii
+          "artifact_dir=$dest" >> $env:GITHUB_OUTPUT
+          "exe_name=$exeName" >> $env:GITHUB_OUTPUT
+          "msi_name=$msiName" >> $env:GITHUB_OUTPUT
+          "zip_name=$(Split-Path $portable -Leaf)" >> $env:GITHUB_OUTPUT
+
+      - name: Publish draft, verify all assets, then publish independent release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ steps.version.outputs.tag }}
+          VERSION: ${{ steps.version.outputs.version }}
+          ARTIFACT_DIR: ${{ steps.artifacts.outputs.artifact_dir }}
+          EXE: ${{ steps.artifacts.outputs.exe_name }}
+          MSI: ${{ steps.artifacts.outputs.msi_name }}
+          PORTABLE: ${{ steps.artifacts.outputs.zip_name }}
+        run: |
+          $ErrorActionPreference='Stop'
+          $names=@($env:EXE,$env:MSI,$env:PORTABLE,'SHA256SUMS.txt')
+          $files=@($names | ForEach-Object { Join-Path $env:ARTIFACT_DIR $_ })
+          $notes="Beckenburg $env:VERSION - Java 17 asymmetric ghost-hunting development build.`n`n" +
+                 "Windows x64 EXE installer, MSI installer and self-contained portable ZIP (no Java installation required).`n" +
+                 "Use the in-game Updates control to check only beckenburg-v* releases. Installers are unsigned; Windows may display a warning.`n" +
+                 "This is an early playable build, not a finished release-ready game."
+          $notePath=Join-Path $env:ARTIFACT_DIR 'RELEASE_NOTES.txt'
+          $notes | Set-Content -LiteralPath $notePath -Encoding utf8
+          $existing=$null
+          try { $existing=gh release view $env:TAG --json isDraft,tagName,assets | ConvertFrom-Json }
+          catch { $existing=$null }
+          if ($existing -and -not $existing.isDraft) { throw "Refusing to overwrite published release $env:TAG" }
+          if (-not $existing) {
+            gh release create $env:TAG --target $env:GITHUB_SHA --title "Beckenburg $env:VERSION" --notes-file $notePath --draft --latest=false
+            if ($LASTEXITCODE -ne 0) { throw 'Could not create draft release' }
+          }
+          for($attempt=1;$attempt -le 4;$attempt++) {
+            gh release upload $env:TAG @files --clobber
+            if ($LASTEXITCODE -eq 0) { break }
+            if ($attempt -eq 4) { throw 'Release asset upload failed after retries; draft preserved' }
+            Start-Sleep -Seconds ([Math]::Min(20,3*$attempt))
+          }
+          $release=gh release view $env:TAG --json isDraft,tagName,assets | ConvertFrom-Json
+          if (-not $release.isDraft -or $release.tagName -ne $env:TAG) { throw 'Unexpected draft state' }
+          foreach($name in $names) {
+            $asset=@($release.assets | Where-Object { $_.name -eq $name })
+            if ($asset.Count -ne 1 -or $asset[0].size -le 0) { throw "Release asset readback failed: $name" }
+            Write-Host "Verified remotely: $name ($($asset[0].size) bytes)"
+          }
+          gh release edit $env:TAG --draft=false --latest=false
+          if ($LASTEXITCODE -ne 0) { throw 'Release publish failed; verify draft on GitHub' }
+          $verified=gh release view $env:TAG --json isDraft,tagName,assets | ConvertFrom-Json
+          if ($verified.isDraft -or $verified.tagName -ne $env:TAG) { throw 'Published release readback failed' }
+          Write-Host "PUBLISHED: https://github.com/$env:GH_REPO/releases/tag/$env:TAG"
+ }).Count -lt 15) {
+            throw 'Installer JAR missing castle medieval geometry assets'
+          }
+          Write-Host "Verified current castle and diagnostic payload for revision $env:SOURCE_SHA"
           $dest=Join-Path $game 'build\release'
           $payload=Join-Path $game 'build\package-input'
           New-Item -ItemType Directory -Force -Path $dest,$payload | Out-Null
