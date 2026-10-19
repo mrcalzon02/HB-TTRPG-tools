@@ -24,7 +24,7 @@
 
 ¹ Additional devices and readout variants are **proposed functionality** from `OptionalEvidenceReadings.java`, not yet implemented as physical sensors. Each has a real-world event producer and a defined observable output target, rather than an instant ghost identifier. Full display formats, required physical triggers and all three upgrade stages per device are in the [three-tier equipment matrix](EQUIPMENT_TIER_MATRIX.md) and `OptionalEvidenceReadings.java`.
 
-D.O.T.S. is **still planned**, with candidate visibility for Yokai, Wraith, Shade, Specter, Hantu and Twins. No absent projector should be described as working equipment. The existing confirmed source traits for salt, UV and optical forms are unchanged, and our original three rites remain species-specific.
+D.O.T.S. is **partially implemented in LAN source**: the owner-supplied `vape_mp_1` acts as the Tier I emitter, physical placement projects a real grid, and only genuine host-authorized MANIFEST/SIGNATURE events inside its range can produce a recorded ghost passage. Candidate species remain Yokai, Wraith, Shade, Specter, Hantu and Twins. Full Java compilation, playtesting, model visuals and camera acceptance are still pending. The existing confirmed source traits for salt, UV and optical forms are unchanged, and our original three rites remain species-specific.
 
 ## Core rules governing the table
 
