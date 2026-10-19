@@ -40,7 +40,7 @@ public final class LanGuestDepartureIntegrationTest {
             a.await("LOBBY|2|AI|2|RUNNING");
             ok(host.connected()==2&&host.running(),"remaining team still playing");
             for(LanCase.Tool tool:LanCase.Tool.values()){
-                a.client.scan(tool);a.await("ACCEPT|SCAN|CONFIRMED ");
+                a.client.scan(tool);a.await("ACCEPT|SCAN|READING ");
             }
             a.client.ward();a.await("ACCEPT|WARD|ANCHOR WARD PREPARED");
             a.client.cleanse();a.await("ACCEPT|CLEANSE|RITUAL STARTED");
