@@ -21,6 +21,11 @@ public final class CastleHubArchitecture {
         List<Piece> pieces=new ArrayList<>();
         for(int z=0;z<CastleHubMap.HEIGHT;z++)for(int x=0;x<CastleHubMap.WIDTH;x++){
             if(!map.solid(x,z))continue;
+            // Use modular Kenney masonry only for visible wall perimeters.
+            // Empty landscape outside the articulated wings must not create
+            // thousands of invisible solid GLBs or crush the software renderer.
+            if(map.solid(x-1,z)&&map.solid(x+1,z)
+                    &&map.solid(x,z-1)&&map.solid(x,z+1))continue;
             if(pillar(x,z)){
                 pieces.add(new Piece("kenney_medieval_column",x+.5,0,z+.5,4.6,3.4,4.6,0));
             }else{

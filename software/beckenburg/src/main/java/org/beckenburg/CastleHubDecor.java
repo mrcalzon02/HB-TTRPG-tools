@@ -20,7 +20,7 @@ public final class CastleHubDecor {
         // Contract and reading room
         f("dinner_table_1",13.5,3.4,1.0,0,.86,.56),
         f("chair_mp_5",15.9,3.7,1.12,Math.PI/2,.35,.39),
-        f("chair_mp_5",11.75,3.4,1.12,0,.35,.39),
+        f("chair_mp_5",11.5,5.0,1.12,0,.35,.39),
         f("armchair_1",10.95,9.2,.82,0,.62,.44),
         f("sofa_1",16.0,9.0,.75,Math.PI/2,.48,1.0),
         // Dressing suite: wardrobes and TV lounge
@@ -39,7 +39,22 @@ public final class CastleHubDecor {
         f("chair_mp_5",24.1,17.7,1.12,0,.35,.39),
         f("tv_table_1_4",25.15,20.0,.82,Math.PI/2,.29,.69),
         f("armchair_1",20.4,20.0,.77,0,.57,.42),
-        f("wardrobe_mp_1",25.8,13.7,.75,Math.PI/2,.27,.52)
+        f("wardrobe_mp_1",25.8,13.7,.75,Math.PI/2,.27,.52),
+        // East archive and service wings - furniture, never free field equipment.
+        f("shelf_mp_6",31.3,5.4,1.58,Math.PI/2,.32,.78),
+        f("shelf_mp_6",40.2,6.0,1.58,Math.PI/2,.32,.78),
+        f("display_cabinet_mp_2",32.1,13.1,.92,0,.57,.31),
+        f("dinner_table_1",36.0,11.8,.87,0,.81,.53),
+        f("chair_mp_5",33.0,13.5,.94,Math.PI,.35,.38),
+        f("chair_mp_5",38.0,12.5,.94,0,.35,.38),
+        f("shelf_mp_6",31.3,21.3,1.60,Math.PI/2,.32,.78),
+        f("shelf_mp_6",39.5,21.3,1.60,Math.PI/2,.32,.78),
+        f("dinner_table_1",35.5,25.2,.9,0,.85,.56),
+        f("armchair_1",33.0,27.7,.78,Math.PI,.61,.45),
+        f("armchair_1",39.0,27.7,.78,0,.61,.45),
+        f("display_cabinet_mp_2",40.5,30.5,.92,Math.PI/2,.32,.72),
+        f("sofa_1",5.5,27.8,.77,0,1.05,.48),
+        f("dinner_table_1",5.1,24.9,.70,0,.58,.40)
     );
     /** Small furniture-top detail is decorative; no invisible solid boxes. */
     public record Accent(String mesh,double x,double y,double z,double scale,double yaw){}
@@ -62,7 +77,10 @@ public final class CastleHubDecor {
         new Light("lamp_3_on","lamp_3_off",19.55,2.25,7.7,1,Math.PI/2),
         new Light("lamp_3_on","lamp_3_off",3,2.25,14.2,1,0),
         new Light("lamp_3_on","lamp_3_off",24.7,2.25,14,1,0),
-        new Light("lamp_3_on","lamp_3_off",12.1,2.25,19.5,1,0));
+        new Light("lamp_3_on","lamp_3_off",12.1,2.25,19.5,1,0),
+        new Light("ceiling_lamp_4_on","ceiling_lamp_4_off",36,3.31,10,1,0),
+        new Light("ceiling_lamp_4_on","ceiling_lamp_4_off",36,3.31,25,1,0),
+        new Light("lamp_3_on","lamp_3_off",5,2.25,27.0,1,0));
     public record Switch(double x,double y,double z,double yaw){}
     public static final List<Switch> SWITCHES=List.of(
         new Switch(8.25,1.45,6.1,Math.PI/2),

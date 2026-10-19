@@ -8,6 +8,13 @@ public final class CastleHubIntegrationTest {
     static void ok(boolean passed,String label){if(!passed)throw new AssertionError(label);}
     public static void main(String[] args)throws Exception{
         CastleHubMap map=new CastleHubMap();
+        ok(CastleHubMap.WIDTH==44&&CastleHubMap.HEIGHT==36,
+            "expanded playable castle has substantial grounds and service wings");
+        ok(map.valid(),"all enclosed halls, courtyard and wings physically connect");
+        ok(map.traversable(35.5,8.5)&&map.traversable(35.5,24.5),
+            "north and south archive / workshop wings exist as walkable geometry");
+        ok(!map.outside(35.5,24.5)&&map.outside(13.5,19.3),
+            "service wings have roofs; the central courtyard is exposed");
         double sx=13.5,sz=19.3;
         ok(map.traversable(sx,sz),"castle spawn on floor");
         ok(CastleHubMap.furnishings().size()>=20,"source-backed castle furniture");
