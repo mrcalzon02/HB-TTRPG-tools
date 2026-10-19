@@ -28,13 +28,13 @@ public final class LanCaseIntegrationTest {
             g.c.send("SCAN|EMF|1");check(g.waitFor("REJECT|").contains("hunter"),"ghost may not forge evidence");
             check(a.waitFor("TEAMMAP|").startsWith("TEAMMAP|"),"hunter gets team positions");
             a.c.scan(LanCase.Tool.EMF);
-            check(a.waitFor("ACCEPT|SCAN").contains("INCONCLUSIVE"),"false scan is not evidence");
+            check(a.waitFor("ACCEPT|SCAN").contains("READING"),"ordinary scan always returns a measured value");
             // Walk through the host room topology to the anchor, without client-supplied world positions.
             for(int room:new int[]{11,8,5,4}){a.c.move(room);a.waitFor("ACCEPT|MOVE|"+room);}
-            a.c.cleanse();check(a.waitFor("REJECT|CLEANSE").contains("evidence"),"premature rite must fail");
+            a.c.cleanse();check(a.waitFor("REJECT|CLEANSE").contains("ward"),"rite requires actual preparation, not a scan quota");
             for(LanCase.Tool t:LanCase.Tool.values()) {
-                a.c.scan(t);check(a.waitFor("ACCEPT|SCAN").contains("CONFIRMED"),"real anchor evidence "+t);
-                check(b.waitFor("EVIDENCE|"+t).startsWith("EVIDENCE"),"team evidence broadcast");
+                a.c.scan(t);check(a.waitFor("ACCEPT|SCAN").contains("READING"),"real environmental reading "+t);
+                check(b.waitFor("CASEFILE|").contains(t.name()),"raw team log contains actual measurement");
             }
             a.c.send("SCAN|EMF|5");check(a.waitFor("REJECT|").contains("stale"),"global hunter sequence replay blocked across command types");
             b.c.cleanse();check(b.waitFor("REJECT|CLEANSE").contains("anchor"),"other room cannot cleanse");
@@ -42,7 +42,7 @@ public final class LanCaseIntegrationTest {
             a.c.cleanse();check(a.waitFor("ACCEPT|CLEANSE").contains("RITUAL STARTED"),"human starts rite");
             check(b.waitFor("RITUAL|STARTED").startsWith("RITUAL"),"team knows ritual started");
             check(g.c.seat().equals("GHOST"),"real opponent present");
-            check(g.q.stream().noneMatch(x->x.startsWith("PROGRESS|")||x.startsWith("EVIDENCE|")||x.startsWith("RITUAL|")||x.startsWith("TEAMMAP|")),"ghost private intel remains hidden");
+            check(g.q.stream().noneMatch(x->x.startsWith("PROGRESS|")||x.startsWith("CASEFILE|")||x.startsWith("RITUAL|")||x.startsWith("TEAMMAP|")),"ghost private intel remains hidden");
             check(a.waitFor("RESULT|CLEANSED").equals("RESULT|CLEANSED"),"host finishes rite after timed window");
             check(b.waitFor("RESULT|CLEANSED").equals("RESULT|CLEANSED"),"match result broadcast to team");
             check(g.waitFor("RESULT|CLEANSED").equals("RESULT|CLEANSED"),"ghost receives result only");
