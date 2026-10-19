@@ -33,10 +33,14 @@ public final class BeckenburgUpdatesUI {
         Thread worker=new Thread(()->{
             try{
                 var release=BeckenburgUpdates.check(BeckenburgUpdates.installedVersion());
-                if(release!=null)SwingUtilities.invokeLater(()->{
+                if(release!=null){
+                    BeckenburgDiagnostics.record("UPDATES found "+release.version()+" from "+release.tag());
+                    SwingUtilities.invokeLater(()->{
                     if(parent.isDisplayable())new Dialog(parent,release).setVisible(true);
-                });
-            }catch(Exception ignored){ // Offline updates must not interrupt a playable game.
+                    });
+                }
+            }catch(Exception offline){ // Offline updates must not interrupt a playable game.
+                BeckenburgDiagnostics.record("UPDATES automatic check unavailable: "+offline);
             }
         },"Beckenburg-update-check");worker.setDaemon(true);worker.start();
     }
@@ -93,6 +97,7 @@ public final class BeckenburgUpdatesUI {
             progress.setValue(0);
             Thread worker=new Thread(()->{
                 try{
+                    BeckenburgDiagnostics.record("UPDATES manual check requested");
                     var newest=BeckenburgUpdates.check(BeckenburgUpdates.installedVersion());
                     SwingUtilities.invokeLater(()->{
                         if(!isDisplayable())return;
@@ -100,6 +105,7 @@ public final class BeckenburgUpdatesUI {
                         state(false);
                     });
                 }catch(Exception failure){
+                    BeckenburgDiagnostics.record("UPDATES manual check failed: "+failure);
                     SwingUtilities.invokeLater(()->{
                         if(!isDisplayable())return;
                         status.setText("Update check unavailable: "+failure.getMessage());state(false);
@@ -118,10 +124,13 @@ public final class BeckenburgUpdatesUI {
                     "Install Beckenburg update",JOptionPane.YES_NO_OPTION);
                 if(consent!=JOptionPane.YES_OPTION)return;
                 try{
+                    BeckenburgDiagnostics.record("UPDATES handoff to SHA-256 verified installer "+offered.tag()
+                        +" file="+staged.getFileName()+" (user confirmed)");
                     new ProcessBuilder(staged.toAbsolutePath().toString()).start();
                     dispose(); // Installer runs separately after app process exits.
                     System.exit(0);
                 }catch(Exception failure){
+                    BeckenburgDiagnostics.fail("Installer process handoff",failure);
                     status.setText("Installer could not start: "+failure.getMessage());
                 }
                 return;
@@ -130,14 +139,19 @@ public final class BeckenburgUpdatesUI {
             state(true);status.setText("Downloading and verifying installer…");
             Thread worker=new Thread(()->{
                 try{
+                    BeckenburgDiagnostics.record("UPDATES downloading "+chosen.tag()+
+                        " expected SHA-256 "+chosen.digest());
                     Path verified=BeckenburgUpdates.stage(chosen,BeckenburgUpdates.updateDirectory(),
                         percent->SwingUtilities.invokeLater(()->progress.setValue(percent)));
+                    BeckenburgDiagnostics.record("UPDATES verified installer "+chosen.tag()+
+                        " path="+verified.getFileName());
                     SwingUtilities.invokeLater(()->{
                         if(!isDisplayable())return;
                         staged=verified;state(false);action.setText("Install and restart");
                         status.setText("SHA-256 verified. Installation requires another click.");
                     });
                 }catch(Exception failure){
+                    BeckenburgDiagnostics.fail("Update download / SHA-256 verification",failure);
                     SwingUtilities.invokeLater(()->{
                         if(!isDisplayable())return;
                         state(false);status.setText("Download failed, game unchanged: "+failure.getMessage());
