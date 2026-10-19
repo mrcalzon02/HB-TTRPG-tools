@@ -7,7 +7,8 @@ import java.util.Map;
 
 /**
  * Optional real-world Foley clips. Curated CC0 NOX files are loaded as packaged
- * 16-kHz signed stereo WAVs; missing clips fall back to LanAudio's synthesized cues.
+ * WAV sources (including original 24-bit 48/96-kHz recordings); JavaSound resamples
+ * to 16-kHz signed stereo PCM. Missing clips fall back to synthesized cues.
  * A source pack or Drive connection is never required on an installed player's PC.
  */
 final class RecordedSfx {
@@ -16,6 +17,7 @@ final class RecordedSfx {
     private static final int STING_VARIANTS=6;
     // Short Foley clips must not monopolize the single effects line behind critical attack cues.
     private static final int MAX_PCM_BYTES=16000*4*4;
+    private static final int SHORT_MECHANICAL_BYTES=16000*4;
     private RecordedSfx(){}
 
     private static boolean isSting(LanSound.Cue cue){
@@ -37,10 +39,16 @@ final class RecordedSfx {
                     if(!AudioSystem.isConversionSupported(FORMAT,file.getFormat()))
                         throw new UnsupportedAudioFileException("Unsupported curated clip: "+resource);
                     try(AudioInputStream converted=AudioSystem.getAudioInputStream(FORMAT,file)){
-                        byte[] candidate=converted.readNBytes(MAX_PCM_BYTES+4);
-                        if(candidate.length>0&&candidate.length<=MAX_PCM_BYTES
+                        // Prevent long source captures from serially starving urgent
+                        // attack/interaction effects. Keep only the first relevant
+                        // second of an ordinary mechanical cue; never buffer the
+                        // remainder of the source recording in a shipping build.
+                        int ceiling=filename.equals("pickup.wav")||filename.equals("device_on.wav")
+                            ?SHORT_MECHANICAL_BYTES:MAX_PCM_BYTES;
+                        byte[] candidate=converted.readNBytes(ceiling);
+                        if(candidate.length>0&&candidate.length<=ceiling
                                 &&candidate.length%4==0)pcm=candidate;
-                        else throw new IOException("Curated clip too long or invalid: "+resource);
+                        else throw new IOException("Curated clip invalid: "+resource);
                     }
                 }
             }
