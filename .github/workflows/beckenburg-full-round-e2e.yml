@@ -1,0 +1,126 @@
+name: Beckenburg Full Multiplayer Acceptance
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'software/beckenburg/**'
+      - '.github/workflows/beckenburg-full-round-e2e.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: beckenburg-full-round-e2e
+  cancel-in-progress: true
+
+jobs:
+  packaged-multiplayer-round:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exactly the revision being verified
+        uses: actions/checkout@v4
+      - name: Install Java 17 with jpackage
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Assemble all game resources and run actual TCP multiplayer round
+        shell: cmd
+        working-directory: software/beckenburg
+        run: build.cmd e2e
+
+      - name: Launch packaged JAR, verify splash to live menu to multiplayer UI
+        shell: pwsh
+        working-directory: software/beckenburg
+        run: |
+          $ErrorActionPreference='Stop'
+          & java '-Djava.awt.headless=false' -ea -cp 'build\beckenburg-game.jar;build\test' org.beckenburg.BeckenburgDesktopE2ETest
+          if ($LASTEXITCODE -ne 0) { throw "Packaged desktop/UI acceptance failed: exit $LASTEXITCODE" }
+
+      - name: Build Windows portable app-image from the verified JAR
+        shell: pwsh
+        working-directory: software/beckenburg
+        run: |
+          $ErrorActionPreference='Stop'
+          New-Item -ItemType Directory -Force 'build\e2e\package-input','build\e2e\app' | Out-Null
+          Copy-Item -LiteralPath 'build\beckenburg-game.jar' -Destination 'build\e2e\package-input\beckenburg-game.jar' -Force
+          & jpackage --type app-image --name Beckenburg --input 'build\e2e\package-input' --main-jar beckenburg-game.jar --main-class org.beckenburg.InvestigationGame --dest 'build\e2e\app' --vendor 'Beckenburg Project'
+          if ($LASTEXITCODE -ne 0) { throw "Windows native app-image could not be produced" }
+          if (-not (Test-Path 'build\e2e\app\Beckenburg\Beckenburg.exe')) {
+            throw 'Native Beckenburg.exe absent from app-image'
+          }
+
+      - name: Launch the actual Windows executable and require menu-ready diagnostics
+        shell: pwsh
+        working-directory: software/beckenburg
+        run: |
+          $ErrorActionPreference='Stop'
+          $exe=(Resolve-Path 'build\e2e\app\Beckenburg\Beckenburg.exe').Path
+          $diag=Join-Path $env:USERPROFILE '.beckenburg\diagnostics'
+          $began=Get-Date
+          $proc=$null
+          $ready=$false
+          try {
+            $proc=Start-Process -FilePath $exe -PassThru
+            $deadline=(Get-Date).AddSeconds(45)
+            while ((Get-Date) -lt $deadline) {
+              if ($proc.HasExited) { throw "Beckenburg.exe exited before menu initialization: $($proc.ExitCode)" }
+              if (Test-Path $diag) {
+                $logs=@(Get-ChildItem $diag -Filter 'session-*.log' -File |
+                        Where-Object { $_.LastWriteTime -ge $began.AddSeconds(-1) } |
+                        Sort-Object LastWriteTime -Descending)
+                foreach ($file in $logs) {
+                  $body=Get-Content -LiteralPath $file.FullName -Raw
+                  if ($body.Contains('PHASE ready') -and $body.Contains('PHASE Menu available')) {
+                    $ready=$true
+                    break
+                  }
+                }
+              }
+              if ($ready) { break }
+              Start-Sleep -Milliseconds 350
+            }
+            if (-not $ready) { throw 'Native executable never reached PHASE ready / Menu available; inspect diagnostic logs' }
+            'PASS: native Windows app-image reached fully initialized menu' |
+                Set-Content -LiteralPath 'build\e2e\native-executable-load.txt' -Encoding utf8
+            Write-Host 'PASS Native Windows executable loaded to the menu; not just a running splash'
+          } finally {
+            if ($null -ne $proc -and -not $proc.HasExited) {
+              Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+            }
+          }
+
+      - name: Preserve test evidence and crash diagnostics even on failure
+        if: always()
+        shell: pwsh
+        working-directory: software/beckenburg
+        run: |
+          New-Item -ItemType Directory -Force 'build\e2e\diagnostics' | Out-Null
+          $folder=Join-Path $env:USERPROFILE '.beckenburg\diagnostics'
+          if (Test-Path $folder) {
+            Get-ChildItem $folder -File |
+              Where-Object { $_.Name -match '^(session-|crash-)' } |
+              Sort-Object LastWriteTime -Descending |
+              Select-Object -First 6 |
+              ForEach-Object {
+                $content=Get-Content $_.FullName -Raw -ErrorAction SilentlyContinue
+                if ($null -ne $content) {
+                  $content=$content.Replace($env:USERPROFILE,'<USER_HOME>')
+                  Set-Content -LiteralPath (Join-Path 'build\e2e\diagnostics' $_.Name) -Value $content -Encoding utf8
+                }
+              }
+          }
+          "revision=$env:GITHUB_SHA" | Set-Content 'build\e2e\revision.txt' -Encoding ascii
+
+      - name: Attach round transcript, menu screenshots and startup logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beckenburg-e2e-${{ github.run_id }}
+          path: software/beckenburg/build/e2e/**
+          if-no-files-found: warn
+          retention-days: 14
