@@ -51,6 +51,12 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final java.util.Map<String,String> deviceReading=new java.util.HashMap<>();
     private int activeGearSlot;
     private int heldUseUntilTick;
+    private boolean nightVision;
+    private java.awt.image.BufferedImage pendingPhoto;
+    private java.awt.image.BufferedImage lastPhoto;
+    private java.nio.file.Path lastPhotoPath;
+    private int lastPhotoUntil;
+    private int photoExposure;
     private String caseResult="";
     private final List<LanEvidenceJournal.Entry> casefile=new ArrayList<>();
     private final java.util.EnumMap<LanCase.Tool,String> lastMeasurement=
@@ -377,11 +383,43 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 else if(p.size()==3&&p.get(1).equals("REMOVED"))
                     renderer.placedWritingBookRoom=-1;
                 feedback="WRITING BOOK: "+frame.substring(5);
+            }else if(p.size()==5&&p.get(0).equals("GEARFX")){
+                int owner=LanProtocol.integer(p.get(1),0,5);
+                String item=p.get(2);
+                boolean on=LanProtocol.integer(p.get(3),0,1)==1;
+                // Some earlier implementations send compact three-component FX;
+                // future effects also carry positional data in separate BURN packets.
+                if(owner==seat&&item.equals("FLASHLIGHT"))renderer.lamp=on;
+                if(owner==seat&&item.equals("HEAD_GEAR"))nightVision=on;
+            }else if(p.size()==4&&p.get(0).equals("GEARFX")){
+                int owner=LanProtocol.integer(p.get(1),0,5);
+                boolean on=LanProtocol.integer(p.get(3),0,1)==1;
+                if(owner==seat&&p.get(2).equals("FLASHLIGHT"))renderer.lamp=on;
+                if(owner==seat&&p.get(2).equals("HEAD_GEAR"))nightVision=on;
+            }else if(p.size()==6&&p.get(0).equals("BURN")
+                    &&p.get(1).equals("INCENSE")){
+                int room=LanProtocol.integer(p.get(2),0,HouseMap.ROOM_COUNT-1);
+                double x=LanProtocol.integer(p.get(3),0,HouseMap.WIDTH*1000)/1000.0;
+                double z=LanProtocol.integer(p.get(4),0,HouseMap.HEIGHT*1000)/1000.0;
+                int until=LanProtocol.integer(p.get(5),0,99999999);
+                renderer.incense.add(new SceneRenderer.IncenseSmoke(room,x,z,until));
             }else if(p.size()==4&&p.get(0).equals("ACCEPT")
                     &&p.get(1).equals("GEARUSE")){
                 if(!FieldEquipment.functional(p.get(2)))
                     throw new IllegalArgumentException("unknown gear result");
                 deviceReading.put(p.get(2),p.get(3));
+                if(p.get(2).equals("PHOTO_CAMERA")){
+                    // Every authorized shutter press is saved, empty room or not.
+                    try{
+                        lastPhoto=pendingPhoto!=null?pendingPhoto:
+                            HunterPhotography.snapshot(renderer.image());
+                        lastPhotoPath=HunterPhotography.save(lastPhoto,
+                            HunterPhotography.defaultFolder(),seat,++photoExposure);
+                        lastPhotoUntil=tick+35;
+                    }catch(java.io.IOException ex){
+                        feedback="PHOTO SAVE ERROR: "+ex.getMessage();
+                    }finally{pendingPhoto=null;}
+                }
                 if(p.get(2).equals("EMF_READER"))lastMeasurement.put(LanCase.Tool.EMF,p.get(3));
                 if(p.get(2).equals("THERMOMETER"))lastMeasurement.put(LanCase.Tool.THERMOMETER,p.get(3));
                 if(p.get(2).equals("SPIRIT_BOX"))lastMeasurement.put(LanCase.Tool.SPIRIT_BOX,p.get(3));
@@ -448,8 +486,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         mouseLook.release();keys.clear();
         java.util.List<String> options=new java.util.ArrayList<>();
         java.util.List<Runnable> actions=new java.util.ArrayList<>();
-        for(String id:java.util.List.of("EMF_READER","THERMOMETER","SPIRIT_BOX",
-                "UV_LIGHT","GHOST_WRITING_BOOK","DOTS_PROJECTOR")){
+        for(String id:FieldEquipment.workingTools()){
             EquipmentTiers.Tier tier=equipmentTier.getOrDefault(id,EquipmentTiers.Tier.I);
             if(tier!=EquipmentTiers.Tier.III){
                 EquipmentTiers.Tier next=EquipmentTiers.Tier.values()[tier.ordinal()+1];
@@ -521,7 +558,16 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         try{
             int h=Math.max(160,getHeight()-82);
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-            g.drawImage(renderer.image(),0,0,getWidth(),h,null);
+            g.drawImage(nightVision?NightVisionFilter.apply(renderer.image()):renderer.image(),
+                0,0,getWidth(),h,null);
+            if(lastPhoto!=null&&tick<=lastPhotoUntil){
+                int photoW=Math.min(180,getWidth()/4);
+                int photoH=Math.max(85,photoW*lastPhoto.getHeight()/lastPhoto.getWidth());
+                int px=getWidth()-photoW-13;
+                g.setColor(Color.DARK_GRAY);
+                g.fillRect(px-3,48,photoW+6,photoH+6);
+                g.drawImage(lastPhoto,px,51,photoW,photoH,null);
+            }
             String held=equippedGear[activeGearSlot];
             String visual=held.equals("EMF_READER")?"EMF":held;
             HeldToolView.draw(g,getWidth(),h,visual,tick,tick<=heldUseUntilTick,
@@ -880,8 +926,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 
                 sendAction("select gear",()->client.selectGearSlot(3));
             }
-            case KeyEvent.VK_R -> {heldUseUntilTick=tick+4;
-                sendAction("device reading",()->client.useHeldEquipment());
+            case KeyEvent.VK_R -> {
+                heldUseUntilTick=tick+4;
+                if(equippedGear[activeGearSlot].equals("PHOTO_CAMERA"))
+                    pendingPhoto=HunterPhotography.snapshot(renderer.image());
+                sendAction("use device",()->client.useHeldEquipment());
             }
             case KeyEvent.VK_Z -> sendAction("cross",()->client.deploy(HunterCounters.Kind.CROSS));
             case KeyEvent.VK_G -> sendAction("thrown ward",()->client.deploy(HunterCounters.Kind.WARD));
