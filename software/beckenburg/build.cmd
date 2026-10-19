@@ -62,6 +62,7 @@ exit /b 0
 :e2e
 rem Separate smoke/acceptance track: does NOT publish and does NOT replace release tests.
 if not exist build\e2e mkdir build\e2e
+java -Djava.awt.headless=true -ea -cp build\beckenburg-game.jar;build\test org.beckenburg.CastleHubMaterialAuditTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\beckenburg-game.jar;build\test org.beckenburg.BeckenburgDiagnosticsTest || exit /b 1
 java -Djava.awt.headless=true -ea -cp build\beckenburg-game.jar;build\test org.beckenburg.BeckenburgFullRoundE2ETest || exit /b 1
 echo Verified packaged jar through independent TCP multiplayer end-to-end case
