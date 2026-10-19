@@ -53,9 +53,20 @@ public final class GhostPracticePanel extends JPanel implements KeyListener,Focu
         if(action==GhostDomain.Action.DRIFT){
             List<Integer> paths=exits();
             if(paths.isEmpty())return;
-            practice.act(action,paths.get(Math.floorMod(choice,paths.size())));
+            GhostDomain.Resolution played=practice.act(action,paths.get(Math.floorMod(choice,paths.size())));
+            if(played!=null&&played.applied())GameSfx.play(LanSound.Cue.GHOST_DRIFT);
             choice=0;
-        } else practice.act(action,practice.ghostRoom());
+        } else {
+            GhostDomain.Resolution played=practice.act(action,practice.ghostRoom());
+            if(played!=null&&played.applied())GameSfx.play(switch(action){
+                case WHISPER->LanSound.Cue.WHISPER;
+                case DISTURB->LanSound.Cue.DISTURB;
+                case MANIFEST->LanSound.Cue.MANIFEST;
+                case STRIKE->LanSound.Cue.STRIKE;
+                case SIGNATURE->LanSound.Cue.SIGNATURE;
+                case DRIFT->LanSound.Cue.GHOST_DRIFT;
+            });
+        }
         syncCamera();repaint();
     }
     @Override public void keyPressed(KeyEvent e){
