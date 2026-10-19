@@ -32,7 +32,9 @@ public final class HardEvidenceQuotaTest {
             var emf=casefile.scanMeasured(0,LanCase.Tool.EMF,4,4,tick,4,10);
             ok(emf.accepted()&&emf.message().contains("EMF "), "weather measurements remain accessible");
             String reading=emf.message();
-            int value=Integer.parseInt(reading.split("EMF ")[1].split("/")[0]);
+            int marker=reading.lastIndexOf("EMF ");
+            int value=Integer.parseInt(reading.substring(marker+4,
+                reading.indexOf("/10",marker)));
             if(!casefile.allowsEvidence(HardEvidenceQuota.Family.EMF))
                 ok(value>=2&&value<=7,"unsanctioned ghost EMF cannot appear");
             else ok(value>=2&&value<=10,"permitted actual EMF remains measurable");
