@@ -178,9 +178,25 @@ public final class FieldEquipment {
         for(String id:slots)b.append('|').append(id).append(':').append(owned(id));
         return b.toString();
     }
+    /** Every outbound packet must honor LanProtocol's ten-field limit. */
+    public java.util.List<String> inventoryFrames(){
+        java.util.List<String> frames=new java.util.ArrayList<>();
+        StringBuilder frame=new StringBuilder("GEAROWNED");
+        int entries=0;
+        for(String id:workingTools()){
+            if(entries==7){
+                frames.add(frame.toString());
+                frame=new StringBuilder("GEAROWNED");
+                entries=0;
+            }
+            frame.append('|').append(id).append(':').append(owned(id));
+            entries++;
+        }
+        if(entries>0)frames.add(frame.toString());
+        return java.util.List.copyOf(frames);
+    }
+    /** Legacy in-process catalog representation; do not send over LAN unchunked. */
     public String inventoryFrame(){
-        StringBuilder b=new StringBuilder("GEAROWNED");
-        for(String id:ENABLED)b.append('|').append(id).append(':').append(owned(id));
-        return b.toString();
+        return String.join("\n",inventoryFrames());
     }
 }
