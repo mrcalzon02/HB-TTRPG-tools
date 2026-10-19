@@ -150,7 +150,7 @@ public final class DirectionalSprites {
                 red=(int)(Math.min(255,red)*(1-fog)+18*fog);
                 green=(int)(Math.min(255,green)*(1-fog)+21*fog);
                 blue=(int)(Math.min(255,blue)*(1-fog)+30*fog);
-                if(ancientTint&&!GhostSpriteAtlas.supports(character)){
+                if(ancientTint&&!(character.startsWith("ancient_")&&GhostSpriteAtlas.supports(character))){
                     red=(int)(red*.33);
                     green=Math.min(255,(int)(green*.80+53));
                     blue=(int)(blue*.35);
