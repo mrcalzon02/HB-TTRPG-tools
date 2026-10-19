@@ -1,6 +1,9 @@
 package org.beckenburg;
 
 import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Font;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +36,42 @@ public final class GlbProps {
     public record Model(List<Triangle> triangles) { }
     private static final Map<String,Model> cache=new HashMap<>();
     private static final List<BufferedImage> textures=new ArrayList<>();
+    private static int vanCrtMaterial=-1;
+    private static BufferedImage vanCrtImage=blankCrt();
+    private static BufferedImage blankCrt(){
+        BufferedImage image=new BufferedImage(256,256,BufferedImage.TYPE_INT_RGB);
+        Graphics2D g=image.createGraphics();
+        g.setColor(new Color(7,17,22));g.fillRect(0,0,256,256);
+        g.setColor(new Color(119,211,174));
+        g.setFont(new Font(Font.MONOSPACED,Font.BOLD,17));
+        g.drawString("BECKENBURG",20,48);
+        g.drawString("VAN TELEMETRY",20,78);
+        g.dispose();return image;
+    }
+    /** Changes only the owner's CRT screen material, never its real GLB casing. */
+    public static synchronized void updateVanCrt(VanTelemetry.Display telemetry){
+        if(telemetry==null)return;
+        BufferedImage image=blankCrt();
+        Graphics2D g=image.createGraphics();
+        try{
+            g.setColor(new Color(7,17,22));g.fillRect(0,0,256,256);
+            g.setColor(new Color(142,229,183));
+            g.setFont(new Font(Font.MONOSPACED,Font.BOLD,17));
+            g.drawString("FIELD TELEMETRY",15,27);
+            g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,15));
+            g.drawString("ACTIVITY "+telemetry.activity()+"/10",15,55);
+            int[] people=telemetry.sanity();
+            for(int i=0;i<Math.min(6,people.length);i++){
+                int number=people[i];
+                g.setColor(number<0?new Color(87,119,119):
+                    number<30?new Color(245,148,126):new Color(144,224,188));
+                g.drawString("H"+(i+1)+" "+(number<0?"OFFLINE":number+"% SAN"),15,80+i*25);
+            }
+            g.setColor(new Color(83,135,122));
+            g.drawString("TICK "+telemetry.tick(),15,244);
+        }finally{g.dispose();}
+        vanCrtImage=image;
+    }
 
     public static synchronized Model model(String name){
         if(!Arrays.asList(NAMES).contains(name))throw new IllegalArgumentException("Unapproved model "+name);
@@ -43,7 +82,7 @@ public final class GlbProps {
             if(in==null)throw new IOException("Missing packaged licensed mesh "+resource);
             byte[] bytes=in.readNBytes(4_000_001);
             if(bytes.length>4_000_000)throw new IOException("GLB resource over budget");
-            m=decode(bytes);
+            m=decode(bytes,name);
             cache.put(name,m);
             return m;
         }catch(IOException failure){throw new IllegalStateException("Model unavailable: "+name,failure);}
@@ -53,7 +92,7 @@ public final class GlbProps {
         int index=material-TEXTURE_BASE;
         if(index<0||index>=textures.size()||!Double.isFinite(u)||!Double.isFinite(v))
             throw new IllegalArgumentException("Invalid imported texture");
-        BufferedImage image=textures.get(index);
+        BufferedImage image=material==vanCrtMaterial?vanCrtImage:textures.get(index);
         int x=Math.min(image.getWidth()-1,(int)((u-Math.floor(u))*image.getWidth()));
         // glTF UV V=0 originates at the bottom of a PNG image.
         int y=Math.min(image.getHeight()-1,
@@ -78,6 +117,9 @@ public final class GlbProps {
         return v;
     }
     public static synchronized Model decode(byte[] bytes)throws IOException{
+        return decode(bytes,null);
+    }
+    private static synchronized Model decode(byte[] bytes,String resourceName)throws IOException{
         if(bytes.length<28||bytes.length>4_000_000)throw new IOException("GLB size");
         ByteBuffer bb=ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN);
         if(bb.getInt(0)!=0x46546c67||bb.getInt(4)!=2||bb.getInt(8)!=bytes.length)
@@ -123,6 +165,11 @@ public final class GlbProps {
                 throw new IOException("Invalid embedded PNG");
             materialIds[i]=TEXTURE_BASE+textures.size();
             textures.add(picture);
+            // The owner's CRT screen uses a distinct original material/UV
+            // region; replace only that surface at runtime with real van data.
+            if("monitoring_screen_mp_1".equals(resourceName)
+                    &&"crt_screen_mp_2".equals(obj(materials.get(i)).get("name")))
+                vanCrtMaterial=materialIds[i];
         }
         List<Triangle> result=new ArrayList<>();
         for(Object n:nodes){
