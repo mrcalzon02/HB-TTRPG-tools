@@ -112,6 +112,7 @@ public final class OptionalEvidenceReadings {
                 t(EquipmentRegistry.Evidence.RESONANCE,"RESONANCE_TUNER",
                   "Copied voice: recorded waveform correlation and delay",
                   "Ghost audibly imitates an actually captured voice"));
+            case ANCIENT_POSSESSIVE, ANCIENT_POLTERGEIST, ANCIENT_DEMON, ANCIENT_YOKAI, ANCIENT_BANSHEE, ANCIENT_WRAITH, ANCIENT_SHADE, ANCIENT_SPECTER, ANCIENT_HANTU, ANCIENT_TWINS -> ancientPlan(ghost);
             case TWINS -> List.of(
                 t(EquipmentRegistry.Evidence.SEISMIC_IMPACT,"SEISMIC_RECORDER",
                   "Paired knocks: peaks in mm/s and inter-event gap in ms",
@@ -121,4 +122,90 @@ public final class OptionalEvidenceReadings {
                   "Paired real spectral vocal signals occur"));
         };
     }
+    /**
+     * Ancient variants retain their parent's authored detector physics wherever
+     * their new evidence matrix selects that family. Variant-only families must
+     * still describe a concrete observable event, never an invented reading.
+     */
+    private static List<Target> ancientPlan(GhostIdentity.Type ghost){
+        List<Target> inherited=planned(ghost.baseType());
+        return GhostEvidenceMatrix.forGhost(ghost).future().stream().map(family->
+            inherited.stream().filter(existing->existing.family()==family)
+                .findFirst().orElseGet(()->ancientExtra(ghost,family))).toList();
+    }
+    private static Target ancientExtra(GhostIdentity.Type ghost,EquipmentRegistry.Evidence family){
+        return switch(ghost){
+            case ANCIENT_POSSESSIVE -> switch(family){
+                case SPECTRAL_SHADOW -> t(family,"SPECTRAL_PRISM",
+                    "Keepsake silhouette: spectral area and persistence time",
+                    "Ancient possessive manifests a camera-visible silhouette at its claimed object");
+                default -> throw new IllegalArgumentException("Unspecified ancient possessive detector: "+family);
+            };
+            case ANCIENT_POLTERGEIST -> switch(family){
+                case STRUCTURED_LIGHT -> t(family,"LASER_GRID",
+                    "Disrupted beam pattern: occlusions and crossing speed",
+                    "Ancient poltergeist moves a real thrown object across the active grid");
+                case RESONANCE -> t(family,"RESONANCE_TUNER",
+                    "Impact harmonics: frequency peaks and decay time",
+                    "Ancient poltergeist's actual object barrage excites resonant room surfaces");
+                default -> throw new IllegalArgumentException("Unspecified ancient poltergeist detector: "+family);
+            };
+            case ANCIENT_DEMON -> switch(family){
+                case ECTOPLASM -> t(family,"ECTOPLASM_SAMPLER",
+                    "Aggression deposit: recovered mass in mg and decay time",
+                    "Ancient demon leaves physical residue at a genuine attack manifestation");
+                default -> throw new IllegalArgumentException("Unspecified ancient demon detector: "+family);
+            };
+            case ANCIENT_YOKAI -> switch(family){
+                case OBJECT_IMPRINT -> t(family,"OBJECT_IMPRINT_SCANNER",
+                    "Voice-reaction imprint: affected surface and contact strength",
+                    "Ancient yokai touches an actual door or object in response to hunter speech");
+                default -> throw new IllegalArgumentException("Unspecified ancient yokai detector: "+family);
+            };
+            case ANCIENT_BANSHEE -> switch(family){
+                case ATMOSPHERIC_REVERSAL -> t(family,"BAROMETRIC_PROBE",
+                    "Wail pressure front: differential hPa and duration",
+                    "Ancient banshee emits an actual wail that displaces air near the probe");
+                case SPECTRAL_SHADOW -> t(family,"SPECTRAL_PRISM",
+                    "Wailing apparition: camera silhouette area and visible seconds",
+                    "Ancient banshee manifests visibly to a camera during an actual wail");
+                default -> throw new IllegalArgumentException("Unspecified ancient banshee detector: "+family);
+            };
+            case ANCIENT_WRAITH -> switch(family){
+                case SPECTRAL_SHADOW -> t(family,"SPECTRAL_PRISM",
+                    "Partition silhouette: camera occlusion and persistence",
+                    "Ancient wraith visibly phases through a real room partition");
+                default -> throw new IllegalArgumentException("Unspecified ancient wraith detector: "+family);
+            };
+            case ANCIENT_SHADE -> switch(family){
+                case OBJECT_IMPRINT -> t(family,"OBJECT_IMPRINT_SCANNER",
+                    "Quiet contact mark: location and lingering strength",
+                    "Ancient shade touches a real object during its lurking event");
+                case ECTOPLASM -> t(family,"ECTOPLASM_SAMPLER",
+                    "Lurking deposit: collected mass and sample lifetime",
+                    "Ancient shade leaves a physical deposit at its stationary manifestation");
+                default -> throw new IllegalArgumentException("Unspecified ancient shade detector: "+family);
+            };
+            case ANCIENT_SPECTER -> switch(family){
+                case STRUCTURED_LIGHT -> t(family,"LASER_GRID",
+                    "Afterimage crossing: interrupted rays and duration",
+                    "Ancient specter's genuine moving apparition crosses an active laser grid");
+                default -> throw new IllegalArgumentException("Unspecified ancient specter detector: "+family);
+            };
+            case ANCIENT_HANTU -> switch(family){
+                case SEISMIC_IMPACT -> t(family,"SEISMIC_RECORDER",
+                    "Cold-room footfall: measured velocity and impact timing",
+                    "Ancient hantu actually walks across a floor within recorder range");
+                default -> throw new IllegalArgumentException("Unspecified ancient hantu detector: "+family);
+            };
+            case ANCIENT_TWINS -> switch(family){
+                case OBJECT_IMPRINT -> t(family,"OBJECT_IMPRINT_SCANNER",
+                    "Paired marks: separate contact points and relative strengths",
+                    "Ancient twins disturb two real objects during a paired ghost event");
+                default -> throw new IllegalArgumentException("Unspecified ancient twins detector: "+family);
+            };
+            default -> throw new IllegalArgumentException("Not an ancient variant: "+ghost);
+        };
+    }
+
 }
