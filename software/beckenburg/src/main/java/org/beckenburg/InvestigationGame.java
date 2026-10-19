@@ -618,7 +618,7 @@ public final class InvestigationGame {
         }
         private void pause(){
             timer.stop();down.clear();mouseLook.release();wheelOpen=false;briefingShown=false;
-            Object[] choices={"Resume", "Retreat & return", "Controls"};
+            Object[] choices={"Resume", "Retreat & return", "Controls", "Exit Game"};
             int choice=JOptionPane.showOptionDialog(window,"Expedition paused", "Field Pause",
                 JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,choices,choices[0]);
             if(choice==1){session.extract(scene.x,scene.z); // extraction location still validated
@@ -628,6 +628,11 @@ public final class InvestigationGame {
                 }else{endCase("Expedition ended.");return;}
             }
             if(choice==2) JOptionPane.showMessageDialog(window,"WASD / click to mouse-look • 1/2/3 gear • R scan • C ward • B ritual • E door • Q hold communication wheel • M map • J journal • X extract","Controls",JOptionPane.INFORMATION_MESSAGE);
+            if(choice==3&&InGamePauseMenu.confirmExit(window)){
+                close(); // never reward an abandoned investigation
+                System.exit(0);
+                return;
+            }
             last=System.nanoTime();timer.start();requestFocusInWindow();
         }
         @Override public void keyPressed(KeyEvent e){
