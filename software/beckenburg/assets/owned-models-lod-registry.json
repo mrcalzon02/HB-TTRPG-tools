@@ -129,5 +129,27 @@
       "animated": false,
       "headset_tested": false
     }
-  ]
+  ],
+  "head_proportion_review": {
+    "status": "REVIEW ONLY—not game eligible or human approved",
+    "base_mesh_drive_id": "1ULRYMCYr_EKQ8nKsPF7qehwkOgEUKXaH",
+    "original_character_drive_id": "1LG8sk3hAnSxzNGzIhtXRM5jQlygdGCv9",
+    "filename": "Gopnik_existing_base_640tris_HEAD_PROPORTIONS_REVIEW.glb",
+    "drive_file_id": "1eE2_WbIST0KNj9Trr5nSWNL_0GZnWuBA",
+    "drive_folder_id": "12qjt1ySgKH4gESqY7wVrp0lx36GyIeDk",
+    "bytes": 478796,
+    "sha256": "7874be4da4a53debb54b6564405cc628fd05e26e34d61fe3fb2890f368b32e58",
+    "triangle_count": 640,
+    "original_male_base_faces_retained": true,
+    "uv_material": "1024x1024 RGB baked from Gopnik original",
+    "review_sheet_file_id": "1xAakPpqaJ8yUthvQaPvOiN3cGXYSN1UH",
+    "head_detail_file_id": "13CwuSIpsjYafkoguczrpxYAQnejB5MMu",
+    "sidecar_file_id": "1cUDThJEkCZ5OU8fWhCl-JZbJNE8dR-0L",
+    "quality_checks": "independent multi-angle offline image render, triangle winding/normals and nondegenerate faces, valid glTF textured UVs; original body mesh unaffected in this head-only revision",
+    "status_detail": "proportions revised; segmented shoulders/joints and face likeness still need owner's visual assessment; VR runtime and animation not tested",
+    "approved_for_use": false,
+    "device_verified": false,
+    "rigged": false,
+    "animated": false
+  }
 }
