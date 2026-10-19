@@ -39,13 +39,13 @@ public final class LanAudio implements AutoCloseable {
     }
     private static int priority(Playback sound){
         if(sound.cue()==null)return 2;
-        return switch(sound.cue().tier()){
+        return switch(sound.cue().cue().tier()){
             case SIGNATURE->5;
             case DANGEROUS->4;
             case MODERATE->3;
             case MINOR->2;
-            case AMBIENT->sound.cue()==LanSound.Cue.STEP
-                    ||sound.cue()==LanSound.Cue.FOOTFALL?0:1;
+            case AMBIENT->sound.cue().cue()==LanSound.Cue.STEP
+                    ||sound.cue().cue()==LanSound.Cue.FOOTFALL?0:1;
         };
     }
     /** Bounded priority queue: a footstep never displaces a ghost attack. */
