@@ -1107,7 +1107,7 @@ public final class LanHost implements AutoCloseable {
     private void sendEquipmentState(Peer peer){
         if(peer.slot==GHOST_SEAT)throw new IllegalArgumentException("ghost cannot access equipment");
         reply(peer,equipment[peer.slot].frame(supplies[peer.slot].credits()));
-        reply(peer,equipment[peer.slot].inventoryFrame());
+        for(String packet:equipment[peer.slot].inventoryFrames())reply(peer,packet);
         for(String id:FieldEquipment.workingTools())
             if(equipment[peer.slot].batterySecondsLeft(id)>=0)
                 reply(peer,"GEARPOWER|"+id+"|"+
