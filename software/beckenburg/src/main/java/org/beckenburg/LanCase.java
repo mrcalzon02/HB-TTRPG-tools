@@ -197,6 +197,7 @@ public final class LanCase {
                     +" / "+sample.displayText(EvidenceSignals.Unit.FAHRENHEIT);
             }
             case SPIRIT_BOX -> reading=room==ghostRoom
+                    &&room==eventRoom&&eventStrength>0
                 ?"Voice response detected":"No response detected";
             default -> throw new AssertionError(tool);
         }
