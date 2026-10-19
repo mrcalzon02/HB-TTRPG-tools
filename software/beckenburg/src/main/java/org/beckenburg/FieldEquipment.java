@@ -165,12 +165,21 @@ public final class FieldEquipment {
         if(!functional(id)||!id.equals(active())||tick<0)
             throw new IllegalArgumentException("tool not held");
         int interval=stage(id).intervalTicks();
+        if(BATTERY_TOOLS.contains(id)&&batteryTicks.getOrDefault(id,0)==0)
+            return false;
         int previous=lastSampleTick.getOrDefault(id,-100000);
         return tick-previous>=interval;
     }
     public void sampled(String id,int tick){
-        if(!ready(id,tick))throw new IllegalArgumentException("device is refreshing");
+        if(!ready(id,tick))throw new IllegalArgumentException(
+            batterySecondsLeft(id)==0?"battery empty, recharge at van":"device refreshing");
         lastSampleTick.put(id,tick);
+        // A handheld reading consumes actual charged sampling energy. Devices
+        // with an active on/off switch instead drain continuously in advancePower.
+        if(BATTERY_TOOLS.contains(id)&&!powered(id)){
+            int used=Math.max(1,stage(id).intervalTicks());
+            batteryTicks.put(id,Math.max(0,batteryTicks.getOrDefault(id,0)-used));
+        }
     }
     public String frame(int credits){
         StringBuilder b=new StringBuilder("GEARSTATE|").append(credits)
