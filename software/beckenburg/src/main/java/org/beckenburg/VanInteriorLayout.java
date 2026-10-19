@@ -26,7 +26,9 @@ public final class VanInteriorLayout {
     public record ToolSocket(String equipment,double x,double y,double z,int row,int column){}
     private static final List<ToolSocket> TOOLS=buildToolSockets();
     private static List<ToolSocket> buildToolSockets(){
-        List<String> catalog=EquipmentTiers.all().stream().map(EquipmentTiers.Plan::id).sorted().toList();
+        List<String> catalog=new ArrayList<>(FieldEquipment.workingTools());
+        if(!catalog.contains("SALT"))catalog.add("SALT");
+        catalog.sort(String::compareTo);
         if(catalog.size()>TOOL_CAPACITY)
             throw new ExceptionInInitializerError("VAN equipment rack exceeded "+TOOL_CAPACITY+" real sockets");
         List<ToolSocket> slots=new ArrayList<>();
