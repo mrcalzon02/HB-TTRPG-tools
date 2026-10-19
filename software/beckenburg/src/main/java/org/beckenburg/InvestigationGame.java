@@ -422,7 +422,7 @@ public final class InvestigationGame {
     }
     private final class GamePanel extends JPanel implements KeyListener,FocusListener {
         private final Set<Integer> down=new HashSet<>();
-        private final HouseMap map=new HouseMap();
+        private final HouseMap map;
         private final SceneRenderer scene=new SceneRenderer();
         private final RoomLighting lights=new RoomLighting();
         private final InvestigationSession session;
@@ -433,7 +433,7 @@ public final class InvestigationGame {
         private boolean powerOn;
         private boolean mapShown,journalShown,claimSaved,wheelOpen,helpVisible;
         private final MouseLook mouseLook;
-        private final TeamCallout.Board callouts=new TeamCallout.Board(map);
+        private final TeamCallout.Board callouts;
         private double wheelDx,wheelDy;
         private TeamCallout.Ping lastPing;
         private String vanNotice="";
@@ -450,6 +450,8 @@ public final class InvestigationGame {
                 SiteCatalog.Conditions mode,MissionWeather.Mode weatherMode,
                 EvidenceSignals.Weather selectedWeather,int severity){
             SiteCatalog.requirePlayable(site);
+            map=new HouseMap(SiteCatalog.mapFor(site));
+            callouts=new TeamCallout.Board(map);
             location=site;conditions=java.util.Objects.requireNonNull(mode);
             powerOn=conditions.initiallyPowered();
             syncEnvironment();

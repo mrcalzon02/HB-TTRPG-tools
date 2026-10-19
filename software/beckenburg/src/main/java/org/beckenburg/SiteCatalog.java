@@ -2,12 +2,12 @@ package org.beckenburg;
 
 import java.util.Objects;
 
-/** Exactly one authored navigable level is currently present; never substitute its geometry for locked sites. */
+/** Select only shipped authored levels. Unimplemented families remain visibly locked. */
 public final class SiteCatalog {
     private SiteCatalog(){}
     public enum Location {
         HOUSE("House",true), MANSION("Mansion",false), PRISON("Prison",false),
-        ASYLUM("Asylum",false), SCHOOL("School",false), FARMHOUSE("Farmhouse",false),
+        ASYLUM("Asylum",false), SCHOOL("Ravenshade School",true), FARMHOUSE("Abandoned Farmhouse",true),
         ACADEMY("Academy",false), COLLEGE("College",false), CHURCH("Church",false);
         public final String label;
         private final boolean playable;
@@ -31,6 +31,16 @@ public final class SiteCatalog {
         @Override public String toString(){return label;}
     }
     public static void requirePlayable(Location chosen){
-        if(!Objects.requireNonNull(chosen).playable())throw new IllegalArgumentException(chosen.label+" has no shipped level geometry");
+        if(!Objects.requireNonNull(chosen).playable())
+            throw new IllegalArgumentException(chosen.label+" has no shipped level geometry");
+    }
+    public static HouseMap.Site mapFor(Location chosen){
+        requirePlayable(chosen);
+        return switch(chosen){
+            case HOUSE->HouseMap.Site.HOUSE;
+            case FARMHOUSE->HouseMap.Site.FARMHOUSE;
+            case SCHOOL->HouseMap.Site.SCHOOL;
+            default->throw new IllegalArgumentException("location is not yet built");
+        };
     }
 }
