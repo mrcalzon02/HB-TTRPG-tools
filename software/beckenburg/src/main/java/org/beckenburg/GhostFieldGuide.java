@@ -22,7 +22,7 @@ public final class GhostFieldGuide {
         TEMPERATURE_NORMAL(Category.TEMPERATURE,"Variable ordinary temperature",false),
         SPIRIT_REPLY(Category.SPIRIT_BOX,"Spirit-box response",true),
         GHOST_WRITING(Category.WRITING,"Ghost writing",true),
-        DOTS_PATTERN(Category.CAMERA,"D.O.T.S. projection (planned)",true),
+        DOTS_PATTERN(Category.CAMERA,"D.O.T.S. light distortion",false),
         EMF_SURGE(Category.EMF,"EMF / pulsing field surge",false),
         EMF_TETHER(Category.EMF,"EMF / object tether resonance",false),
         EMF_KINETIC(Category.EMF,"EMF / clustered kinetic spikes",false),

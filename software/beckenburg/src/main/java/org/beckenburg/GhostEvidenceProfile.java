@@ -76,8 +76,7 @@ public final class GhostEvidenceProfile {
             case WRITING_RITUAL->writing(type,GhostWriting.Style.RITUAL_CIRCLES);
             case GHOST_WRITING->availableWriting(type).length>0;
             case SPIRIT_REPLY->true; // all current spirits can reply if actually nearby
-            case DOTS_PATTERN->GhostTraits.of(type).canPhase()
-                    ||GhostTraits.of(type).sight()==GhostTraits.Sight.ORBS;
+            case DOTS_PATTERN->true; // projected light can interact with every ghost
             default->true; // physical and behavioral traits are evaluated by the field guide
         };
     }

@@ -435,15 +435,14 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     renderer.dotsPositions.put(owner,
                         new LanDotsProjectors.Placement(owner,room,x,z,gear));
                     feedback="D.O.T.S. PROJECTOR ACTIVE IN "+map.roomName(room);
-                }else if(p.size()==6&&p.get(1).equals("PASS")){
+                }else if(p.size()==6&&p.get(1).equals("ILLUMINATE")){
                     int room=LanProtocol.integer(p.get(2),0,HouseMap.INDOOR_ROOMS-1);
                     int eventTick=LanProtocol.integer(p.get(3),0,99999999);
                     double x=LanProtocol.integer(p.get(4),0,HouseMap.WIDTH*1000)/1000.0;
                     double z=LanProtocol.integer(p.get(5),0,HouseMap.HEIGHT*1000)/1000.0;
                     renderer.dotsPassRoom=room;
                     renderer.dotsPassX=x;renderer.dotsPassZ=z;
-                    renderer.dotsPassUntil=eventTick+28;
-                    feedback="REAL D.O.T.S. PASSAGE / MEASUREMENT RECORDED";
+                    renderer.dotsPassUntil=eventTick+3; // optical persistence only
                 }else throw new IllegalArgumentException("invalid D.O.T.S. state");
             }else if(p.size()==2&&p.get(0).equals("VANDOOR")){
                 map.van().setCargoDoorClosed(LanProtocol.integer(p.get(1),0,1)==1);

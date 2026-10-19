@@ -3,9 +3,8 @@ package org.beckenburg;
 import java.util.ArrayList;
 import java.util.List;
 
-/** One actual host-placed, ghost-event-based D.O.T.S. unit per investigator.
- * Light-grid presence is observable but never evidence by itself. A PASS
- * requires a genuine authorized ghost manifestation inside the projected field.
+/** Physical D.O.T.S. light: ghost presence distorts projected light regardless of
+ * species, evidence table or prior ability use. Interpretation belongs to players.
  */
 public final class LanDotsProjectors {
     public record Placement(int seat,int room,double x,double z,
@@ -21,7 +20,7 @@ public final class LanDotsProjectors {
         }
     }
     public record Passage(Placement placement,int tick,double x,double z){
-        public String frame(){return "DOTS|PASS|"+placement.room()+"|"+tick
+        public String frame(){return "DOTS|ILLUMINATE|"+placement.room()+"|"+tick
             +"|"+Math.round(x*1000)+"|"+Math.round(z*1000);}
     }
     private final Placement[] positions=new Placement[6];
@@ -37,10 +36,12 @@ public final class LanDotsProjectors {
             if(Math.hypot(x-positions[seat].x(),z-positions[seat].z())>1.6)
                 throw new IllegalArgumentException("retrieve projector at its physical location");
             positions[seat]=null;
+            lastPass[seat]=-100000;
             return null;
         }
         Placement placed=new Placement(seat,room,x,z,tier);
         positions[seat]=placed;
+        lastPass[seat]=-100000;
         return placed;
     }
     public List<Placement> all(){
@@ -48,19 +49,14 @@ public final class LanDotsProjectors {
         for(Placement placement:positions)if(placement!=null)out.add(placement);
         return List.copyOf(out);
     }
-    /** No false-positive projector silhouettes: the projector illuminates empty
-     * space normally, but a distinctive passage only comes from a real ghost.
-     */
-    public List<Passage> passages(GhostIdentity.Type species,GhostDomain.Resolution event,
-                                  LanGhostSpatial.Pose pose,int tick){
-        if(species==null||event==null||pose==null||!event.applied()
-            ||!(event.action()==GhostDomain.Action.MANIFEST
-                ||event.action()==GhostDomain.Action.SIGNATURE)
-            ||!GhostEvidenceProfile.compatible(species,GhostFieldGuide.Clue.DOTS_PATTERN))
+    /** Actual laser-space intersection sampled at 10 Hz; nothing is classified. */
+    public List<Passage> illuminate(LanGhostSpatial.Pose pose,int tick){
+        if(pose==null||tick<0||pose.room()<0||pose.room()>=HouseMap.INDOOR_ROOMS
+                ||!Double.isFinite(pose.x())||!Double.isFinite(pose.z()))
             return List.of();
         List<Passage> hits=new ArrayList<>();
         for(Placement p:positions){
-            if(p==null||p.room()!=event.room()||tick-lastPass[p.seat()]<12)continue;
+            if(p==null||p.room()!=pose.room()||tick-lastPass[p.seat()]<2)continue;
             double radius=EquipmentTiers.stage("DOTS_PROJECTOR",p.tier()).reachCm()/100.0;
             if(Math.hypot(pose.x()-p.x(),pose.z()-p.z())>radius)continue;
             lastPass[p.seat()]=tick;

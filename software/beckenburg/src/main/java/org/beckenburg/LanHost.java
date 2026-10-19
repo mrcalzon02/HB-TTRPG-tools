@@ -1346,6 +1346,22 @@ public final class LanHost implements AutoCloseable {
         for(int i=0;i<HUNTERS;i++)if(wasAlive[i]&&!mission.alive(i))
             notifyHunters("HUNTER|DOWN|"+i);
     }
+    /** Laser-space contact follows position, never a permission or evidence check. */
+    private void illuminateDots(){
+        for(LanDotsProjectors.Passage light:dots.illuminate(ghostPose.pose(),tick))
+            for(int i=0;i<HUNTERS;i++){
+                Peer hunter=seats[i];
+                if(hunter==null||!hunter.worldMode)continue;
+                LanWorld.Body body=world.body(i);
+                boolean visible=LanApparition.lineOfSight(map,body.x(),body.z(),
+                    light.x(),light.z());
+                if(!visible)for(LanVideoCameras.Camera camera:cameras.all())
+                    if(equipment[camera.owner()].powered("VIDEO_CAMERA")
+                            &&LanApparition.lineOfSight(map,camera.x(),camera.z(),
+                                light.x(),light.z())){visible=true;break;}
+                if(visible)reply(hunter,light.frame());
+            }
+    }
     /** AI and human origins both enter this exact damage/telegraph pipeline. */
     private void resolveGhostAction(GhostDomain.Resolution result){
         if(!result.applied())return;
@@ -1359,14 +1375,6 @@ public final class LanHost implements AutoCloseable {
             lastEvidenceEventRoom=result.room();
             lastEvidenceEventPower=eventPower;
             lastEvidenceEventAction=result.action();
-            for(LanDotsProjectors.Passage passing:dots.passages(
-                    ghostType,result,ghostPose.pose(),tick)){
-                notifyHunters(casefile.recordDevice(tick,passing.placement().seat(),
-                    passing.placement().room(),"DOTS_PROJECTOR",
-                    LanEvidenceJournal.Finding.OBSERVED,
-                    "D.O.T.S. / real spectral passage during "+result.action()));
-                notifyHunters(passing.frame());
-            }
         }
         if(result.action()==GhostDomain.Action.DRIFT)broadcastGhostSound(LanSound.Cue.GHOST_DRIFT);
         if(result.action()==GhostDomain.Action.MANIFEST)animation.manifested(tick);
@@ -1689,6 +1697,7 @@ public final class LanHost implements AutoCloseable {
                 broadcastProgress();
             }
             if(animation.animating(tick)||pendingStrike!=null)broadcastApparitions();
+            illuminateDots();
             for(int seat=0;seat<HUNTERS;seat++){
                 for(String drained:equipment[seat].advancePower(tick)){
                     if(seats[seat]!=null)
