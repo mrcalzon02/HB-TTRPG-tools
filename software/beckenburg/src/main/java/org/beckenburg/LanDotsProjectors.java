@@ -20,8 +20,9 @@ public final class LanDotsProjectors {
                 +"|"+Math.round(z*1000)+"|"+tier;
         }
     }
-    public record Passage(Placement placement,int tick){
-        public String frame(){return "DOTS|PASS|"+placement.room()+"|"+tick;}
+    public record Passage(Placement placement,int tick,double x,double z){
+        public String frame(){return "DOTS|PASS|"+placement.room()+"|"+tick
+            +"|"+Math.round(x*1000)+"|"+Math.round(z*1000);}
     }
     private final Placement[] positions=new Placement[6];
     private final int[] lastPass=new int[6];
@@ -63,7 +64,7 @@ public final class LanDotsProjectors {
             double radius=EquipmentTiers.stage("DOTS_PROJECTOR",p.tier()).reachCm()/100.0;
             if(Math.hypot(pose.x()-p.x(),pose.z()-p.z())>radius)continue;
             lastPass[p.seat()]=tick;
-            hits.add(new Passage(p,tick));
+            hits.add(new Passage(p,tick,pose.x(),pose.z()));
         }
         return List.copyOf(hits);
     }
