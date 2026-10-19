@@ -61,8 +61,10 @@ public final class CastleAndVanVisualAcceptanceTest {
         view.yaw=Math.PI;view.pitch=-.04;
         view.drawCastle(map,2);
         render(view,"castle-real-staircase");
-        view.x=17.5;view.z=7.6;view.eyeHeight=5.02;
-        view.yaw=Math.PI/2;view.pitch=-.08;
+        // View across the whole upper library instead of staring into its
+        // adjacent east wall; a visual audit must expose furniture and doors.
+        view.x=14.5;view.z=8.9;view.eyeHeight=5.02;
+        view.yaw=Math.PI;view.pitch=-.08;
         view.drawCastle(map,2);
         render(view,"castle-upper-library");
 
