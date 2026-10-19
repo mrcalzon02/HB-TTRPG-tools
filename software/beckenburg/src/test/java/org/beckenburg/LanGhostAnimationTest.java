@@ -27,6 +27,23 @@ public final class LanGhostAnimationTest {
         animation.impact(43);
         for (int t=43;t<50;t++)check(animation.project(true, false, 270, t).phase() == LanGhostAnimation.Phase.RECOVER, "recovery");
         check(animation.project(true, false, 270, 50).phase() == LanGhostAnimation.Phase.LURK, "recovery ends");
+        animation.moved(51,false);
+        check(animation.project(true,false,270,51).phase()==LanGhostAnimation.Phase.WALK,
+                "accepted ghost movement displays walk atlas");
+        check(animation.project(true,false,270,54).phase()==LanGhostAnimation.Phase.WALK,
+                "walk window persists between authoritative movement ticks");
+        check(animation.project(true,false,270,55).phase()==LanGhostAnimation.Phase.LURK,
+                "walk window expires; no indefinite sprint animation");
+        animation.moved(60,true);
+        check(animation.project(true,false,270,60).phase()==LanGhostAnimation.Phase.SPRINT,
+                "authoritative burst is a sprint");
+        check(animation.project(false,false,270,60)==null,
+                "hidden sprint never discloses a motion packet");
+        animation.signature(65);
+        check(animation.project(true,false,270,65).phase()==LanGhostAnimation.Phase.SIGNATURE,
+                "real accepted species action displays signature animation");
+        check(animation.project(true,false,270,75).phase()==LanGhostAnimation.Phase.LURK,
+                "signature animation expires");
         for (String invalid : new String[]{"MOTION|WINDUP|360|0|2", "MOTION|WINDUP|40|-1|2",
             "MOTION|GHOST|0|0|2", "MOTION|LURK|0|0|0|private", "MOTION|LURK|0|0|-1",
             "MOTION|LURK|0|0|1\nBODY|0|1"}) reject(invalid);
