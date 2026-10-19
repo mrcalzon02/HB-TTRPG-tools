@@ -696,10 +696,13 @@ public final class SceneRenderer {
             }
         return depthVisible?new Nameplate((int)Math.round(labelX),(int)Math.round(labelY)):null;
     }
-    public record Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress,boolean orb) {
-        public Apparition(double x,double z){this(x,z,LanGhostAnimation.Phase.LURK,0,0,false);}
+    public record Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress,boolean orb,boolean greenTint) {
+        public Apparition(double x,double z){this(x,z,LanGhostAnimation.Phase.LURK,0,0,false,false);}
         public Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress){
-            this(x,z,phase,heading,progress,false);
+            this(x,z,phase,heading,progress,false,false);
+        }
+        public Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress,boolean orb){
+            this(x,z,phase,heading,progress,orb,false);
         }
         public Apparition {
             if(!Double.isFinite(x)||!Double.isFinite(z)||phase==null||heading<0||heading>=360
@@ -918,11 +921,12 @@ public final class SceneRenderer {
                     ?Math.max(45,(int)(255*progress/(double)LanGhostAnimation.MATERIALIZE_TICKS))
                     :phase==LanGhostAnimation.Phase.RECOVER?205:255;
             if(apparition!=null&&apparition.orb()){
-                renderSpiritOrb(gx,gz,.98+.18*Math.sin(clock*4),clock);
+                renderSpiritOrb(gx,gz,.98+.18*Math.sin(clock*4),clock,apparition.greenTint());
             }else{
                 DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,gx,gz,
                     apparition==null?0:apparition.heading(),"banshee",1.95*stature,1.16,
-                    .09*Math.sin(clock*3)+lift,alpha,lamp,renderWidth,renderHeight,focal);
+                    .09*Math.sin(clock*3)+lift,alpha,lamp,renderWidth,renderHeight,focal,
+                     apparition!=null&&apparition.greenTint());
             }
         }
         if(hunterRoom>=0){
@@ -938,7 +942,7 @@ public final class SceneRenderer {
         }
     }
     /** A real luminous orb in perspective, occluded by walls and the existing Z-buffer. */
-    private void renderSpiritOrb(double gx,double gz,double bob,double clock){
+    private void renderSpiritOrb(double gx,double gz,double bob,double clock,boolean greenTint){
         Point p=camera(new Point(gx,bob,gz));
         if(p.z<NEAR||p.z>17)return;
         int cx=(int)Math.round(renderWidth*.5+p.x/p.z*focal),cy=(int)Math.round(renderHeight*.5-p.y/p.z*focal);
@@ -950,8 +954,9 @@ public final class SceneRenderer {
                 int at=sy*renderWidth+sx;
                 if(p.z>=depths[at])continue;
                 double glow=(1-distance*distance)*(.85+.15*Math.sin(clock*7));
-                int red=(int)(65+90*glow),green=(int)(85+160*glow),
-                    blue=(int)(115+140*glow);
+                int red=(int)(greenTint?18+44*glow:65+90*glow),
+                    green=(int)(greenTint?110+144*glow:85+160*glow),
+                    blue=(int)(greenTint?24+44*glow:115+140*glow);
                 pixels[at]=(Math.min(255,red)<<16)|(Math.min(255,green)<<8)|Math.min(255,blue);
                 depths[at]=p.z;
             }

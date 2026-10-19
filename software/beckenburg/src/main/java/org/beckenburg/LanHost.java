@@ -1996,7 +1996,8 @@ public final class LanHost implements AutoCloseable {
                     ghost.manifested()&&form!=GhostTraits.Sight.CAMERA_ONLY
                         &&(form!=GhostTraits.Sight.ORBS||orbAllowed),tick);
                 if(sight.startsWith("APPARITION|VISIBLE|"))
-                    reply(hunter,"FORM|"+(form==GhostTraits.Sight.ORBS?"ORBS":"FIGURE"));
+                    reply(hunter,"FORM|"+(form==GhostTraits.Sight.ORBS?"ORBS":"FIGURE")+
+                         (ghostType.ancient()?"|GREEN":""));
                 reply(hunter,sight);
                 if(sight.startsWith("APPARITION|VISIBLE|")) {
                     LanGhostAnimation.Motion motion=animation.project(true,pendingStrike!=null,pose.heading(),tick);

@@ -78,6 +78,16 @@ public final class DirectionalSprites {
             double yaw,double pitch,double entityX,double entityZ,int heading,
             String character,double height,double width,double elevation,int opacity,boolean lamp,
             int renderWidth,int renderHeight,double focal){
+        draw(pixels,depth,cameraX,cameraZ,yaw,pitch,entityX,entityZ,heading,
+            character,height,width,elevation,opacity,lamp,renderWidth,renderHeight,focal,false);
+    }
+    /** Ancient forms reuse their parent's alpha-masked directional artwork.
+     * Green tint is applied per rendered pixel, without copying sprite assets.
+     */
+    public static void draw(int[] pixels,double[] depth,double cameraX,double cameraZ,
+            double yaw,double pitch,double entityX,double entityZ,int heading,
+            String character,double height,double width,double elevation,int opacity,boolean lamp,
+            int renderWidth,int renderHeight,double focal,boolean ancientTint){
         if(pixels.length!=renderWidth*renderHeight||depth.length!=renderWidth*renderHeight
                 ||opacity<=0||height<=0)return;
         if(!Double.isFinite(entityX)||!Double.isFinite(entityZ))return;
@@ -119,6 +129,11 @@ public final class DirectionalSprites {
                 red=(int)(Math.min(255,red)*(1-fog)+18*fog);
                 green=(int)(Math.min(255,green)*(1-fog)+21*fog);
                 blue=(int)(Math.min(255,blue)*(1-fog)+30*fog);
+                if(ancientTint){
+                    red=(int)(red*.33);
+                    green=Math.min(255,(int)(green*.80+53));
+                    blue=(int)(blue*.35);
+                }
                 int bg=pixels[k];
                 if(alpha<255){
                     red=(red*alpha+((bg>>>16)&255)*(255-alpha))/255;

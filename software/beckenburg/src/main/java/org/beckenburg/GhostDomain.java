@@ -146,8 +146,8 @@ public final class GhostDomain {
             case DRIFT -> room = command.targetRoom();
             case WHISPER -> fear = hearsHunter ? 2 : 0;
             case DISTURB -> {fear = hearsHunter ? 3 : 0;
-                harm = hearsHunter && (archetype==GhostIdentity.Type.POLTERGEIST
-                    ||archetype==GhostIdentity.Type.DEMON) ? 3 : 0;}
+                harm = hearsHunter && (archetype.baseType()==GhostIdentity.Type.POLTERGEIST
+                    ||archetype.baseType()==GhostIdentity.Type.DEMON) ? 3 : 0;}
             case MANIFEST -> {manifestUntil = tick + 49 + GhostBehavior.profile(archetype).manifestTicks();
                 fear=hearsHunter?5:0;}
             case STRIKE -> { harm = 12; fear = 6; manifestUntil = tick + 9; }

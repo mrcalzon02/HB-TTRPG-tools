@@ -24,7 +24,7 @@ public final class HardEvidenceQuota {
     /**
      * One distinct, guaranteed three-evidence combination per ghost. These
      * combinations are the Medium contract's three actual hard-positive
-     * producers. Every combination is unique across the current 13 species and now includes
+     * producers. Every combination is unique across the full roster of 23 species and now includes
      * physically observable results from the additional authored instruments;
      * D.O.T.S. remains reserved for Wraith, Shade and Specter.
      */
@@ -43,6 +43,16 @@ public final class HardEvidenceQuota {
             case DEVIL       ->EnumSet.of(Family.TEMPERATURE,Family.WRITING,Family.RESONANCE);
             case MIMIC       ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.IMPRINT);
             case TWINS       ->EnumSet.of(Family.SPIRIT_BOX,Family.WRITING,Family.SEISMIC);
+            case ANCIENT_POSSESSIVE ->EnumSet.of(Family.ECTOPLASM,Family.SHADOW,Family.SPIRIT_BOX);
+            case ANCIENT_POLTERGEIST ->EnumSet.of(Family.SEISMIC,Family.LASER,Family.EMF);
+            case ANCIENT_DEMON ->EnumSet.of(Family.RESONANCE,Family.ATMOSPHERIC,Family.EMF);
+            case ANCIENT_YOKAI ->EnumSet.of(Family.RESONANCE,Family.IMPRINT,Family.SPIRIT_BOX);
+            case ANCIENT_BANSHEE ->EnumSet.of(Family.ECTOPLASM,Family.ATMOSPHERIC,Family.TEMPERATURE);
+            case ANCIENT_WRAITH ->EnumSet.of(Family.LASER,Family.SHADOW,Family.EMF);
+            case ANCIENT_SHADE ->EnumSet.of(Family.SHADOW,Family.IMPRINT,Family.TEMPERATURE);
+            case ANCIENT_SPECTER ->EnumSet.of(Family.SHADOW,Family.RESONANCE,Family.SPIRIT_BOX);
+            case ANCIENT_HANTU ->EnumSet.of(Family.ATMOSPHERIC,Family.ECTOPLASM,Family.TEMPERATURE);
+            case ANCIENT_TWINS ->EnumSet.of(Family.SEISMIC,Family.IMPRINT,Family.SPIRIT_BOX);
         };
     }
     private final Level level;

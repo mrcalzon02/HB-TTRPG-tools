@@ -41,7 +41,7 @@ public final class GhostFrenzy {
      * Shade/Specter: cannot apply physical damage in Frenzy, only DREAD.
      */
     public static Profile profile(GhostIdentity.Type type){
-        return switch(Objects.requireNonNull(type)){
+        return switch(Objects.requireNonNull(type).baseType()){
             case DEMON       ->new Profile(38,95,130,22,190,150,5,14,8,24,8,12,35);
             case DEVIL       ->new Profile(58,78,180,27,210,270,8,11,14,33,7,25,28);
             case POLTERGEIST ->new Profile(64,68,230,25,210,330,10,16,9,30,8,17,30);

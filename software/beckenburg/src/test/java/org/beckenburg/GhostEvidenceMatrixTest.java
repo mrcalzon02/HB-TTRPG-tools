@@ -9,7 +9,7 @@ public final class GhostEvidenceMatrixTest {
     static void ok(boolean condition,String why){if(!condition)throw new AssertionError(why);}
     public static void main(String[] args){
         var rows=GhostEvidenceMatrix.all();
-        ok(rows.size()==GhostIdentity.Type.values().length,"all thirteen source ghosts represented");
+        ok(rows.size()==GhostIdentity.Type.values().length,"all 23 roster entries represented");
         Set<GhostIdentity.Type> unique=EnumSet.noneOf(GhostIdentity.Type.class);
         int high=0,low=0,suppressed=0,dots=0,freezing=0,hot=0,normal=0,writers=0,uv=0,orbs=0,camera=0;
         for(var row:rows){
@@ -63,6 +63,7 @@ public final class GhostEvidenceMatrixTest {
                ||row.optical()==GhostTraits.Sight.CAMERA_ONLY
                ||!row.future().isEmpty(),
                "no ghost is limited to the two environmental instruments");
+            if(row.type().ancient())continue; // demographics below measure original thirteen only
             if(row.emf()==GhostFieldGuide.Clue.EMF_SUPPRESSION)suppressed++;
             if(row.emf()==GhostFieldGuide.Clue.EMF_LOW_MID)low++;
             if(row.emf()==GhostFieldGuide.Clue.EMF_OVER_SIX)high++;
@@ -85,6 +86,6 @@ public final class GhostEvidenceMatrixTest {
             ==GhostTraits.Sight.ORBS,"Hantu produces optical orbs");
         ok(GhostEvidenceMatrix.forGhost(GhostIdentity.Type.DEMON).writing().contains(
             GhostWriting.Style.RITUAL_CIRCLES),"Demon can draw actual ritual circles");
-        System.out.println("PASS: 13 ghost evidence rows match live producers and added sensor families");
+        System.out.println("PASS: 23 ghost evidence rows match live producers and added sensor families");
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Player-facing evidence matrix for the thirteen original Beckenburg ghosts.
+ * Player-facing evidence matrix for the all 23 Beckenburg ghosts, including ten Ancient variants.
  *
  * Reads live EMF/thermal/writing/UV/visibility rules. The seven additional
  * equipment phenomena are now available to the LAN host as observed outputs.
@@ -61,6 +61,36 @@ public final class GhostEvidenceMatrix {
             case MIMIC -> List.of(EquipmentRegistry.Evidence.OBJECT_IMPRINT,
                 EquipmentRegistry.Evidence.RESONANCE);
             case TWINS -> List.of(EquipmentRegistry.Evidence.SEISMIC_IMPACT,
+                EquipmentRegistry.Evidence.RESONANCE);
+            case ANCIENT_POSSESSIVE -> List.of(EquipmentRegistry.Evidence.ECTOPLASM,
+                EquipmentRegistry.Evidence.SPECTRAL_SHADOW,
+                EquipmentRegistry.Evidence.OBJECT_IMPRINT);
+            case ANCIENT_POLTERGEIST -> List.of(EquipmentRegistry.Evidence.SEISMIC_IMPACT,
+                EquipmentRegistry.Evidence.STRUCTURED_LIGHT,
+                EquipmentRegistry.Evidence.RESONANCE);
+            case ANCIENT_DEMON -> List.of(EquipmentRegistry.Evidence.RESONANCE,
+                EquipmentRegistry.Evidence.ATMOSPHERIC_REVERSAL,
+                EquipmentRegistry.Evidence.ECTOPLASM);
+            case ANCIENT_YOKAI -> List.of(EquipmentRegistry.Evidence.RESONANCE,
+                EquipmentRegistry.Evidence.OBJECT_IMPRINT,
+                EquipmentRegistry.Evidence.SEISMIC_IMPACT);
+            case ANCIENT_BANSHEE -> List.of(EquipmentRegistry.Evidence.ECTOPLASM,
+                EquipmentRegistry.Evidence.ATMOSPHERIC_REVERSAL,
+                EquipmentRegistry.Evidence.SPECTRAL_SHADOW);
+            case ANCIENT_WRAITH -> List.of(EquipmentRegistry.Evidence.STRUCTURED_LIGHT,
+                EquipmentRegistry.Evidence.SPECTRAL_SHADOW,
+                EquipmentRegistry.Evidence.ATMOSPHERIC_REVERSAL);
+            case ANCIENT_SHADE -> List.of(EquipmentRegistry.Evidence.SPECTRAL_SHADOW,
+                EquipmentRegistry.Evidence.OBJECT_IMPRINT,
+                EquipmentRegistry.Evidence.ECTOPLASM);
+            case ANCIENT_SPECTER -> List.of(EquipmentRegistry.Evidence.SPECTRAL_SHADOW,
+                EquipmentRegistry.Evidence.RESONANCE,
+                EquipmentRegistry.Evidence.STRUCTURED_LIGHT);
+            case ANCIENT_HANTU -> List.of(EquipmentRegistry.Evidence.ATMOSPHERIC_REVERSAL,
+                EquipmentRegistry.Evidence.ECTOPLASM,
+                EquipmentRegistry.Evidence.SEISMIC_IMPACT);
+            case ANCIENT_TWINS -> List.of(EquipmentRegistry.Evidence.SEISMIC_IMPACT,
+                EquipmentRegistry.Evidence.OBJECT_IMPRINT,
                 EquipmentRegistry.Evidence.RESONANCE);
         };
     }

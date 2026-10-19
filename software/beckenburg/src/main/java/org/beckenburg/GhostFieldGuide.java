@@ -83,6 +83,10 @@ public final class GhostFieldGuide {
         HINTS.put(GhostIdentity.Type.DEVIL,"Persuasive voices and high threat; health damage may dominate.");
         HINTS.put(GhostIdentity.Type.MIMIC,"Delayed repetition of calls; cross-check its voice signature.");
         HINTS.put(GhostIdentity.Type.TWINS,"Answered knocks from neighboring rooms; paired signs can mislead.");
+        for(GhostIdentity.Type variant:GhostIdentity.Type.values())
+            if(variant.ancient())
+                HINTS.put(variant,HINTS.get(variant.baseType())+
+                    " Older manifestation; green apparitions and an extended ritual.");
         if(HINTS.size()!=GhostIdentity.Type.values().length)throw new AssertionError("missing ghost guide entry");
     }
     public static String hint(GhostIdentity.Type type){return HINTS.get(Objects.requireNonNull(type));}
@@ -102,7 +106,7 @@ public final class GhostFieldGuide {
             }+"\n"
             +"WRITING: "+java.util.Arrays.toString(GhostEvidenceProfile.availableWriting(type))+
             " | DOTS: "+(GhostEvidenceProfile.dotsVisible(type)?"YES":"NO")+"\n"
-            +"PROJECTION GEAR STILL IN DEVELOPMENT\n"
+            +"ADDITIONAL INSTRUMENTS: "+GhostEvidenceMatrix.forGhost(type).future()+"\n"
             +(p.locomotion()==GhostTraits.Locomotion.FLOAT?"FLOATING":"WALKING")
             +" / "+(p.canPhase()?"WALL PHASING":"DOOR TRAVEL")
             +" / SALT "+(p.grounded()?"REACTIVE":"IMMUNE")+"\n"

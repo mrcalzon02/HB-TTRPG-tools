@@ -13,7 +13,7 @@ public final class GhostBehavior {
   }
  }
  public static Profile profile(GhostIdentity.Type type){
-  return switch(Objects.requireNonNull(type)){
+  return switch(Objects.requireNonNull(type).baseType()){
    case POSSESSIVE ->new Profile(GhostDomain.Action.DISTURB,3,11,1,0,0,31,"Small keepsakes shift toward a single object");
    case POLTERGEIST->new Profile(GhostDomain.Action.DISTURB,5,18,2,0,0,17,"Several unsecured objects rattle in sequence");
    case DEMON->new Profile(GhostDomain.Action.STRIKE,4,13,2,4,0,24,"An aggressive impact shakes the nearest threshold");

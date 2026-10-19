@@ -23,7 +23,7 @@ public final class GhostTraits {
         public boolean canPhase(){return passage==Passage.WALLS;}
     }
     public static Profile of(GhostIdentity.Type type) {
-        return switch(Objects.requireNonNull(type)) {
+        return switch(Objects.requireNonNull(type).baseType()) {
             case POSSESSIVE -> new Profile(Locomotion.WALK,Passage.DOORS,Sight.VISIBLE,Charge.ISOLATION,4,115,60,true,true,"Moves objects near its attachment; waits for isolation");
             case POLTERGEIST -> new Profile(Locomotion.WALK,Passage.DOORS,Sight.VISIBLE,Charge.PRESENCE,3,90,125,false,true,"Violent object storms and ordinary door passage");
             case DEMON -> new Profile(Locomotion.WALK,Passage.DOORS,Sight.VISIBLE,Charge.AMBIENT,2,90,160,false,false,"Hard strikes; relatively little fear for the harm");
@@ -64,7 +64,7 @@ public final class GhostTraits {
      * Fast ghosts briefly outrun default sprinting hunters only while bursting.
      */
     public static int movementPercent(GhostIdentity.Type type){
-        return switch(java.util.Objects.requireNonNull(type)){
+        return switch(java.util.Objects.requireNonNull(type).baseType()){
             case BANSHEE->116;case DEMON->112;case WRAITH->114;
             case HANTU->109;case YOKAI->104;case POLTERGEIST->103;
             case DEVIL->108;case POSSESSIVE->104;

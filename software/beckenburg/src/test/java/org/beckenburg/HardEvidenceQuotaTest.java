@@ -42,6 +42,7 @@ public final class HardEvidenceQuotaTest {
             "Every ghost must have its own uniquely identifying three-evidence combination");
         int dotsSpecies=0,high=0,low=0,none=0;
         for(var species:GhostIdentity.Type.values()){
+            if(species.ancient())continue; // original EMF demographics remain 5/5/3
             if(GhostEvidenceProfile.dotsVisible(species))dotsSpecies++;
             switch(GhostEvidenceProfile.emfBand(species)){
                 case HIGH->high++;
@@ -85,6 +86,6 @@ public final class HardEvidenceQuotaTest {
         ok(casefile.correctlyIdentified(),"host compares private archetype only for settlement/rite");
         ok(CustomContract.standard(3).evidenceLevel()==HardEvidenceQuota.Level.EASY,
             "older clients retain all-compatible evidence by default");
-        System.out.println("PASS Easy>=4 Medium=3 DeathWish=1 all species, weather integrity and hypothesis");
+        System.out.println("PASS 23 ghosts Easy>=4 Medium=3 DeathWish=1, weather integrity and hypothesis");
     }
 }

@@ -15,13 +15,14 @@ public final class LanCase {
     public record Report(boolean accepted, String message) { }
     private static final int RITUAL_TICKS = 45, ABANDON_GRACE_TICKS = 20;
     private int riteTicks(){
-        if(!identificationRequired)return RITUAL_TICKS;
-        return switch(selectedRite){
+        int normal=!identificationRequired?RITUAL_TICKS:switch(selectedRite==null?archetype.rite():selectedRite){
             case BANISHMENT->55;
             case CLEANSING->45;
             case ABSOLUTION->60;
         };
+        return archetype.ancient()?normal*2:normal;
     }
+    public int requiredRitualTicks(){return riteTicks();}
     public enum RitualAdvance { NONE, PAUSED, RESUMED, BROKEN, CLEANSED }
     private final int anchor;
     private final EnumSet<Tool> evidence=EnumSet.noneOf(Tool.class), tested=EnumSet.noneOf(Tool.class);

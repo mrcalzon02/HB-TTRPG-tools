@@ -40,7 +40,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private int lastVanPoll=-100000;
     private final List<SceneRenderer.WorldMark> counterMarks=new ArrayList<>();
     private SceneRenderer.Apparition apparition;
-    private boolean orbForm;
+    private boolean orbForm,greenGhostForm;
     private int apparitionWarningTick=-1;
     private int lastMotionTick=-1;
     private int threatUntilTick=-1;
@@ -251,10 +251,12 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 int gone=LanProtocol.integer(p.get(2),0,5);
                 if(gone!=seat){peers.remove(gone);hunterNames.remove(gone);}
                 feedback="INVESTIGATOR "+(gone+1)+" DISCONNECTED - CASE CONTINUES";
-            }else if(p.size()==2&&p.get(0).equals("FORM")){
-                if(!p.get(1).equals("ORBS")&&!p.get(1).equals("FIGURE"))
+            }else if((p.size()==2||p.size()==3)&&p.get(0).equals("FORM")){
+                if(!p.get(1).equals("ORBS")&&!p.get(1).equals("FIGURE")
+                        ||p.size()==3&&!p.get(2).equals("GREEN"))
                     throw new IllegalArgumentException("invalid ghost form");
                 orbForm=p.get(1).equals("ORBS");
+                greenGhostForm=p.size()==3;
             }else if(p.get(0).equals("APPARITION")){
                 if(p.size()==3 && p.get(1).equals("HIDDEN")){
                     apparition=null;
@@ -265,15 +267,15 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     int eventTick=LanProtocol.integer(p.get(4),0,99999999);
                     if(apparition==null)apparitionWarningTick=eventTick;
                     apparition=apparition==null?
-                            new SceneRenderer.Apparition(gx,gz,LanGhostAnimation.Phase.LURK,0,0,orbForm)
+                            new SceneRenderer.Apparition(gx,gz,LanGhostAnimation.Phase.LURK,0,0,orbForm,greenGhostForm)
                             :new SceneRenderer.Apparition(gx,gz,apparition.phase(),
-                                apparition.heading(),apparition.progress(),orbForm);
+                                apparition.heading(),apparition.progress(),orbForm,greenGhostForm);
                 }else throw new IllegalArgumentException("malformed apparition");
             }else if(p.get(0).equals("MOTION")){
                 LanGhostAnimation.Motion motion=LanGhostAnimation.decode(frame);
                 if(apparition!=null && motion.tick()>=lastMotionTick){
                     apparition=new SceneRenderer.Apparition(apparition.x(),apparition.z(),
-                            motion.phase(),motion.heading(),motion.progress(),orbForm);
+                            motion.phase(),motion.heading(),motion.progress(),orbForm,greenGhostForm);
                     lastMotionTick=motion.tick();
                 }
             }else if(p.size()==3&&p.get(0).equals("LIGHTS")){

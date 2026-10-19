@@ -27,8 +27,9 @@ public final class GhostEvidenceProfile {
         GhostIdentity.Type.WRAITH,GhostIdentity.Type.SHADE,GhostIdentity.Type.SPECTER);
     public static EmfBand emfBand(GhostIdentity.Type type){
         Objects.requireNonNull(type);
-        return NONE_EMF.contains(type)?EmfBand.NONE:
-            LOW_MID_EMF.contains(type)?EmfBand.LOW_MID:EmfBand.HIGH;
+        GhostIdentity.Type base=type.baseType();
+        return NONE_EMF.contains(base)?EmfBand.NONE:
+            LOW_MID_EMF.contains(base)?EmfBand.LOW_MID:EmfBand.HIGH;
     }
     public static boolean emfSuppressed(GhostIdentity.Type type){
         return emfBand(type)==EmfBand.NONE;
@@ -59,8 +60,9 @@ public final class GhostEvidenceProfile {
     /** Shared between the simulated heat/cold generator and manual ghost guide. */
     public static EvidenceSignals.Polarity thermal(GhostIdentity.Type type){
         Objects.requireNonNull(type);
-        return COLD.contains(type)?EvidenceSignals.Polarity.COLD:
-               HOT.contains(type)?EvidenceSignals.Polarity.HOT:EvidenceSignals.Polarity.NONE;
+        GhostIdentity.Type base=type.baseType();
+        return COLD.contains(base)?EvidenceSignals.Polarity.COLD:
+               HOT.contains(base)?EvidenceSignals.Polarity.HOT:EvidenceSignals.Polarity.NONE;
     }
     /** Hantu remains non-writing; Yokai ritual circles, Banshee frantic
      * scrawls, and Twins child drawings are now additional authored producers.
@@ -68,10 +70,11 @@ public final class GhostEvidenceProfile {
      */
     public static boolean writing(GhostIdentity.Type type,GhostWriting.Style style){
         Objects.requireNonNull(type);Objects.requireNonNull(style);
+        GhostIdentity.Type base=type.baseType();
         return switch(style){
-            case CHILD_DRAWINGS->CHILD.contains(type);
-            case FRANTIC_SCRAWLS->SCRAWL.contains(type);
-            case RITUAL_CIRCLES->CIRCLE.contains(type);
+            case CHILD_DRAWINGS->CHILD.contains(base);
+            case FRANTIC_SCRAWLS->SCRAWL.contains(base);
+            case RITUAL_CIRCLES->CIRCLE.contains(base);
         };
     }
     public static GhostWriting.Style[] availableWriting(GhostIdentity.Type type){
