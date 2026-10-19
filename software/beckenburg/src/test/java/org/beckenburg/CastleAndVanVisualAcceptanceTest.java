@@ -78,13 +78,23 @@ public final class CastleAndVanVisualAcceptanceTest {
         var site=new HouseMap();
         var van=site.van();
         vanRender.setRenderSize(640,400);
-        var spawn=van.spawn();
-        vanRender.x=spawn.x();vanRender.z=spawn.z();
-        vanRender.yaw=van.placement().yaw()+Math.PI/2;
+        // Visual inspection must look down the actual length of the cargo
+        // bay from its open rear doors, not sideways through exterior panels.
+        var rear=van.world(0,VanStaging.FRONT+.48);
+        vanRender.x=rear.x();vanRender.z=rear.z();
+        vanRender.yaw=van.placement().yaw();
         vanRender.rackStock=java.util.EnumSet.allOf(EquipmentLoadout.Item.class);
         var session=new InvestigationSession(site,InvestigationSession.Role.OBSERVER,17);
         vanRender.draw(site,session,2);
         render(vanRender,"van-complete-cargo-bay");
+        var interior=van.world(.24,1.25);
+        vanRender.x=interior.x();vanRender.z=interior.z();
+        vanRender.yaw=van.placement().yaw()+Math.PI/2;
+        vanRender.draw(site,session,2);
+        render(vanRender,"van-fitted-monitor-wall");
+        vanRender.yaw=van.placement().yaw()-Math.PI/2;
+        vanRender.draw(site,session,2);
+        render(vanRender,"van-equipment-pegboard");
         Files.writeString(DIR.resolve("architecture-audit.txt"),
             "PASS measured door openings, real staircase, upstairs navigation, fixtures "+
             "and purchased-tool van source meshes\n");
