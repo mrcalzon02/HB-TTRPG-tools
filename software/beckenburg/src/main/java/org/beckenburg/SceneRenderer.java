@@ -167,6 +167,48 @@ public final class SceneRenderer {
         texturedQuad(faces,p4,p5,p6,p7,material,0,0,sx,0,sx,sz,0,sz,0xffffff);
         texturedQuad(faces,p3,p2,p1,p0,material,0,0,sx,0,sx,sz,0,sz,0xbebebe);
     }
+    /** Two independent cargo leaves pivot around the outer rear jambs.
+     * Host collision remains authoritative in VanStaging: shut leaves seal
+     * the doorway and opened leaves swing beyond the rear cargo entrance.
+     */
+    private static void cargoDoorLeaf(List<Face> faces,VanStaging van,boolean left){
+        double w=VanStaging.HALF_WIDTH,front=VanStaging.FRONT;
+        double hingeX=left?-w+.09:w-.09;
+        double inward=left?1:-1;
+        double span=w-.09;
+        // A proper pair of outward-opening rear doors, not an opaque sliding block.
+        double swing=van.cargoDoorClosed()?0:(left?-Math.toRadians(99):Math.toRadians(99));
+        double endX=hingeX+inward*span*Math.cos(swing);
+        double endZ=front+inward*span*Math.sin(swing);
+        // Two parallel surfaces make the door visible both inside and outside.
+        double nx=-(endZ-front)/span*.035,nz=(endX-hingeX)/span*.035;
+        VanStaging.Position a=van.world(hingeX+nx,front+nz);
+        VanStaging.Position b=van.world(endX+nx,endZ+nz);
+        VanStaging.Position c=van.world(endX-nx,endZ-nz);
+        VanStaging.Position d=van.world(hingeX-nx,front-nz);
+        Point a0=new Point(a.x(),.07,a.z()),a1=new Point(a.x(),2.19,a.z());
+        Point b0=new Point(b.x(),.07,b.z()),b1=new Point(b.x(),2.19,b.z());
+        Point c0=new Point(c.x(),.07,c.z()),c1=new Point(c.x(),2.19,c.z());
+        Point d0=new Point(d.x(),.07,d.z()),d1=new Point(d.x(),2.19,d.z());
+        quad(faces,a0,b0,b1,a1,left?0x78838b:0x707b83);
+        quad(faces,c0,d0,d1,c1,0x596770);
+        quad(faces,a0,d0,d1,a1,0x48565d);
+        quad(faces,b0,c0,c1,b1,0x616e77);
+        quad(faces,a1,b1,c1,d1,0x9ca3a5);
+        // A visible inset window is mounted in each door's upper half.
+        double u0=.20,u1=.83;
+        VanStaging.Position p=van.world(hingeX+(endX-hingeX)*u0+nx*.15,
+                                      front+(endZ-front)*u0+nz*.15);
+        VanStaging.Position q=van.world(hingeX+(endX-hingeX)*u1+nx*.15,
+                                      front+(endZ-front)*u1+nz*.15);
+        quad(faces,new Point(p.x(),1.53,p.z()),new Point(q.x(),1.53,q.z()),
+             new Point(q.x(),1.96,q.z()),new Point(p.x(),1.96,p.z()),0x344856);
+        // Door handles remain readable when shut or fully open.
+        VanStaging.Position handle=van.world(hingeX+(endX-hingeX)*.88,
+                                             front+(endZ-front)*.88);
+        box(faces,handle.x()-.045,.96,handle.z()-.04,.09,.13,.08,0xd8c9a1);
+    }
+
     private static void vanModel(List<Face> faces,VanStaging van,java.util.Set<EquipmentLoadout.Item> stock){
         double w=VanStaging.HALF_WIDTH,f=VanStaging.FRONT,r=VanStaging.REAR;
         // Three obstructing wall segments surround a traversable open cargo entrance.
@@ -193,11 +235,8 @@ public final class SceneRenderer {
         VanStaging.Position button=van.doorButton();
         imported(faces,"button_12",button.x(),1.15,button.z(),
             .48,van.placement().yaw());
-        if(van.cargoDoorClosed()){
-            vanBox(faces,van,-w,0,f,w*2,2.16,.12,MaterialAtlas.IRON);
-            VanStaging.Position shutter=van.world(0,f);
-            box(faces,shutter.x()-.13,.58,shutter.z()-.12,.26,.88,.24,0x626d74);
-        }
+        cargoDoorLeaf(faces,van,true);
+        cargoDoorLeaf(faces,van,false);
         // Built-in flashlight rests on a real van shelf; F switches the carried lamp.
         VanStaging.Position torch=van.world(-1.52,-1.53);
         imported(faces,"flashlight_mp_1",torch.x(),.83,torch.z(),2.2,van.placement().yaw());
