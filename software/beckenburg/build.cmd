@@ -51,9 +51,18 @@ java -Djava.awt.headless=true -cp build\classes org.beckenburg.TierModelForge bu
 rem Extract only the curated CC0 castle GLBs with embedded original texture PNGs.
 java -Djava.awt.headless=true -cp build\classes org.beckenburg.KenneyMedievalAssets assets\source\kenney_retro-medieval-kit.zip build\classes\org\beckenburg\models || exit /b 1
 javac --release 17 -encoding UTF-8 -cp build\classes -d build\test @build\sources-tests.txt || exit /b 1
-rem Run the complete static regression manifest with an explicit timeout per test.
-rem Any error or hang fails the release, without publishing a partial game.
-java -Djava.awt.headless=true -ea -cp build\classes org.beckenburg.BeckenburgRegressionSuite || exit /b 1
+rem Both release and E2E verify the same freshly assembled jar payload.
 jar --create --file build\beckenburg-game.jar --main-class org.beckenburg.InvestigationGame -C build\classes org\beckenburg || exit /b 1
+if /I "%~1"=="e2e" goto e2e
+rem Release mode never skips any tests in regression-tests.txt.
+java -Djava.awt.headless=true -ea -cp build\classes org.beckenburg.BeckenburgRegressionSuite || exit /b 1
 echo Built build\beckenburg-game.jar
 if /I "%~1"=="run" java -jar build\beckenburg-game.jar
+exit /b 0
+:e2e
+rem Separate smoke/acceptance track: does NOT publish and does NOT replace release tests.
+if not exist build\e2e mkdir build\e2e
+java -Djava.awt.headless=true -ea -cp build\beckenburg-game.jar;build\test org.beckenburg.BeckenburgDiagnosticsTest || exit /b 1
+java -Djava.awt.headless=true -ea -cp build\beckenburg-game.jar;build\test org.beckenburg.BeckenburgFullRoundE2ETest || exit /b 1
+echo Verified packaged jar through independent TCP multiplayer end-to-end case
+exit /b 0
