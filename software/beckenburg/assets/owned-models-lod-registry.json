@@ -1,6 +1,6 @@
 {
   "schema": "beckenburg.lod_sibling_registry.v1",
-  "reviewed_at": "2026-10-18 22:04 Alaska",
+  "reviewed_at": "2026-10-19",
   "folder_id": "12qjt1ySgKH4gESqY7wVrp0lx36GyIeDk",
   "folder_url": "https://drive.google.com/drive/folders/12qjt1ySgKH4gESqY7wVrp0lx36GyIeDk",
   "storage_rule": "Publish a portable low-poly .glb directly as a sibling of the exact owner-authoritative source file, not in an unrelated staging folder. Never overwrite or move the original. Accompany every LOD with a provenance sidecar and verify source+LOD have identical parent folder ID before claiming uploaded.",
@@ -102,5 +102,32 @@
     }
   ],
   "visual_qa_gate": "A portable GLB passes only after side-by-side multi-angle actual renderer images show correct axes, visible textured materials, continuous silhouettes, and no new gaps. File format and triangle count alone never qualify.",
-  "rejected_folder_id": "16kflSYq4VUnXDKEvY4sUY85U8CoQHbaI"
+  "rejected_folder_id": "16kflSYq4VUnXDKEvY4sUY85U8CoQHbaI",
+  "review_candidates": [
+    {
+      "state": "HUMAN_REVIEW_REQUIRED__NOT_PACKAGED",
+      "name": "Gopnik_existing_base_640tris_REVIEW.glb",
+      "lod_id": "1sd08vLmY4RP0vdrcSUCJbtWoVjkyASwK",
+      "provenance_id": "1XxX-SwcxfCIxSOGQ9nDvsfARLbZq5PIp",
+      "visual_comparison_id": "1UqSznbmVY5AkklxBqGZ1WzbW1QoI25UC",
+      "authored_mesh_source": "Male lowpoly Mesh.7z/Male Lowpoly Mesh.blend",
+      "authored_mesh_archive_id": "1ULRYMCYr_EKQ8nKsPF7qehwkOgEUKXaH",
+      "authored_mesh_vertices": 354,
+      "authored_mesh_triangles": 640,
+      "texture_source": "gopnickboss character 3d model.glb",
+      "texture_source_id": "1LG8sk3hAnSxzNGzIhtXRM5jQlygdGCv9",
+      "textures": "embedded 1024px source-derived 3D front/back/side projection atlas",
+      "remapping_note": "Blender base UVs were collapsed to single points. New nonoverlapping face-level UV islands baked using original Gopnik embedded diffuse image.",
+      "visual_qa": "Independent front/back/left/right source comparison rendered; face, costume and black suit recognizable. Still visibly stylized with mannequin's 15 intentional separate limb/torso components.",
+      "geometry_validation": "Original 640 authored faces retained with exact per-source-vertex positional consistency (deviation 0), 0 degenerate faces and 0 degenerate UV islands.",
+      "sha256": "f349e747cc1c2b05d1701262cabca153ad301faf50291c3a98bf5db4b527bb89",
+      "bytes": 502708,
+      "same_parent_id": "12qjt1ySgKH4gESqY7wVrp0lx36GyIeDk",
+      "originals_modified": false,
+      "approved_for_game": false,
+      "rigged": false,
+      "animated": false,
+      "headset_tested": false
+    }
+  ]
 }
