@@ -518,39 +518,20 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }
         requestFocusInWindow();
     }
-    /** One compact van rack list for actual working devices, never inert catalog props. */
+    /** One scrollable rack, clear source-derived product comparisons, direct controls. */
     private void showEquipmentRack(){
         if(map.van().stationAt(renderer.x,renderer.z)!=VanStaging.Station.EQUIPMENT){
             feedback="RETURN TO VAN EQUIPMENT RACK";return;
         }
         mouseLook.release();keys.clear();
-        java.util.List<String> options=new java.util.ArrayList<>();
-        java.util.List<Runnable> actions=new java.util.ArrayList<>();
-        options.add("RELOAD FILM / CHARGE BATTERIES AT VAN");
-        actions.add(()->sendAction("equipment service",()->client.serviceEquipment()));
-        for(String id:FieldEquipment.workingTools()){
-            EquipmentTiers.Tier tier=equipmentTier.getOrDefault(id,EquipmentTiers.Tier.I);
-            if(tier!=EquipmentTiers.Tier.III){
-                EquipmentTiers.Tier next=EquipmentTiers.Tier.values()[tier.ordinal()+1];
-                EquipmentTiers.Stage stage=EquipmentTiers.stage(id,next);
-                options.add("UPGRADE "+id+" → "+next+" / £"+stage.creditCost()
-                    +" / "+stage.effect());
-                actions.add(()->sendAction("upgrade",()->client.buyEquipment(id,next)));
-            }
-            for(int slot=0;slot<FieldEquipment.SLOTS;slot++){
-                final int selectedSlot=slot;
-                if(!equippedGear[slot].equals(id)){
-                    options.add("EQUIP "+id+" / SLOT "+(slot+1));
-                    actions.add(()->sendAction("equip",()->client.equipAt(selectedSlot,id)));
-                }
-            }
-        }
-        Object choice=JOptionPane.showInputDialog(this,
-            "CREDITS £"+fieldCredits+" / CURRENT "+equippedGear[activeGearSlot]+" / "+equipmentTier.get(equippedGear[activeGearSlot]),
-            "FIELD EQUIPMENT",JOptionPane.PLAIN_MESSAGE,null,options.toArray(),
-            options.get(0));
-        if(choice!=null)for(int i=0;i<options.size();i++)if(options.get(i).equals(choice)){
-            actions.get(i).run();break;
+        var decision=EquipmentRackDialog.choose(this,fieldCredits,equippedGear,
+            activeGearSlot,equipmentTier);
+        if(decision!=null)switch(decision.action()){
+            case UPGRADE -> sendAction("upgrade "+decision.id(),
+                ()->client.buyEquipment(decision.id(),decision.next()));
+            case EQUIP -> sendAction("equip "+decision.id(),
+                ()->client.equipAt(decision.slot(),decision.id()));
+            case RECHARGE -> sendAction("recharge equipment",client::serviceEquipment);
         }
         requestFocusInWindow();
     }
