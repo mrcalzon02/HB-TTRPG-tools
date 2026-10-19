@@ -13,7 +13,7 @@ The real GLBs are committed under `software/beckenburg/assets/runtime/models/`, 
 | `walkie_talkie_1.glb` | `292145f3edd230ba` | Tier I spirit box | Packaged, held renderer; actual vocal event scan |
 | `walkie_talkie_2.glb` | `cd8b549f7209f975` | Upgraded spirit box, with improved readout/response | Packaged, held renderer and van |
 | `handheld_tablet_1.glb` | `079192aed33c5f15` | Multi-purpose numerical thermometer/advanced sensor shell | Packaged, held renderer and van |
-| `monitoring_screen_mp_1.glb` | `5027390e7d005b5a` | Van monitoring system, separately authored display component | Packaged and visible in van; **live display UV texture still outstanding** |
+| `monitoring_screen_mp_1.glb` | `5027390e7d005b5a` | Van monitoring system, separately authored display component | Packaged and displayed in van; dedicated CRT material receives live host sanity/activity readings (new regression test, Java run pending) |
 | `pc_mp_1.glb` | `ff42beeb03ed78db` | Van command/sensor computer | Packaged and visible; **interactive monitor surface still outstanding** |
 | `button_12.glb` | `5b1b74c3c82f9aea` | Van door actuator | Packaged and positioned at real physical button; E action toggles host-owned door collision |
 | `book_mp_1.glb` | `77d525437c8a825c` | Closed, carried/van writing book | Packaged and rendered |
@@ -37,6 +37,6 @@ The original owner-supplied `- Classic 64 Asset Pack 0.6.zip` was opened for an 
 
 ## Acceptance and regression gates
 
-Two additional tests have been registered in both `build.sh` and `build.cmd`: `ImportedEquipmentModelsTest` (12 real meshes, visible raster output and actual tier variant selection) and `VanCargoDoorTest` (door button reach, rotated installations, real movement collision and rendered shutter). `LanDotsProjectorsTest` checks genuine ghost-only projection and retrieval. `FieldEquipmentTest` and `LanFieldEquipmentIntegrationTest` cover tier ownership, purchases, shared wallet, slot use, instrument measurement/logbook, and ghost-seat privacy. All live new readings are observations only; no false paranormal indications, no automatic proof, no journal auto-tick.
+The following new tests have been registered in both `build.sh` and `build.cmd`: `ImportedEquipmentModelsTest` (12 real meshes, visible raster output and actual tier variant selection) and `VanCargoDoorTest` (door button reach, rotated installations, real movement collision and rendered shutter). `LanDotsProjectorsTest` checks genuine ghost-only projection and retrieval. `VanDiegeticCrtTest` checks real host telemetry changes the GLB screen material. `FieldEquipmentTest` and `LanFieldEquipmentIntegrationTest` cover tier ownership, purchases, shared wallet, slot use, instrument measurement/logbook, and ghost-seat privacy. All live new readings are observations only; no false paranormal indications, no automatic proof, no journal auto-tick.
 
 **Read-back of committed source and binary blobs succeeded. Fresh Java compilation, execution of tests on a clean checkout, Windows graphic inspection, UV authoring, full multiplayer acceptance and a release build are still unverified.** Do not mark all 42 items complete: the other 36 need real event producers, model/display work, interactions, stock, replication and tests before the equipment expansion or doubling ghost roster becomes a production stage.
