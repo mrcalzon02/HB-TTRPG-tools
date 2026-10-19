@@ -13,6 +13,16 @@ public final class LanCaseIntegrationTest {
             while(System.nanoTime()<limit){String line=q.poll(150,TimeUnit.MILLISECONDS);if(line!=null&&line.startsWith(prefix))return line;}
             throw new AssertionError(c.seat()+" did not receive "+prefix);
         }
+        String waitForReading(LanCase.Tool tool)throws Exception{
+            long until=System.nanoTime()+TimeUnit.SECONDS.toNanos(8);
+            while(System.nanoTime()<until){
+                String line=q.poll(150,TimeUnit.MILLISECONDS);
+                if(line==null||!line.startsWith("CASEFILE|"))continue;
+                LanEvidenceJournal.Entry entry=LanEvidenceJournal.Entry.decode(line);
+                if(entry.tool().equals(tool.name()))return line;
+            }
+            throw new AssertionError(c.seat()+" missing team log for "+tool);
+        }
         @Override public void close(){c.close();}
     }
     private static void check(boolean yes,String label){if(!yes)throw new AssertionError(label);}
@@ -34,7 +44,7 @@ public final class LanCaseIntegrationTest {
             a.c.cleanse();check(a.waitFor("REJECT|CLEANSE").contains("ward"),"rite requires actual preparation, not a scan quota");
             for(LanCase.Tool t:LanCase.Tool.values()) {
                 a.c.scan(t);check(a.waitFor("ACCEPT|SCAN").contains("READING"),"real environmental reading "+t);
-                check(b.waitFor("CASEFILE|").contains(t.name()),"raw team log contains actual measurement");
+                check(b.waitForReading(t).startsWith("CASEFILE|"),"raw team log contains actual measurement");
             }
             a.c.send("SCAN|EMF|5");check(a.waitFor("REJECT|").contains("stale"),"global hunter sequence replay blocked across command types");
             b.c.cleanse();check(b.waitFor("REJECT|CLEANSE").contains("anchor"),"other room cannot cleanse");
