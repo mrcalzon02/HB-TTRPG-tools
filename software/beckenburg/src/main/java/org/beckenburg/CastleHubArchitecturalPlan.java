@@ -111,6 +111,30 @@ public final class CastleHubArchitecturalPlan {
             horizontal?b:fixed,horizontal?fixed:b,y0,y1,material,
             Double.NaN,0));
     }
+    /** Exact continuous wall-surface test for switches and candle brackets.
+     * Validates vertical range, segment endpoints and facing, so an apparent
+     * floating object cannot pass merely because a solid grid cell is nearby.
+     */
+    public static boolean mountingWall(double x,double y,double z,double yaw){
+        if(!Double.isFinite(x+y+z+yaw))return false;
+        double fx=Math.sin(yaw),fz=Math.cos(yaw);
+        for(Wall wall:WALLS){
+            if(wall.hasDoor()||y<wall.bottom()+.04||y>wall.top()-.04)continue;
+            double wx,wz;
+            if(wall.horizontal()){
+                wx=Math.max(Math.min(x,wall.x1()),wall.x0());
+                wz=wall.z0();
+            }else{
+                wx=wall.x0();
+                wz=Math.max(Math.min(z,wall.z1()),wall.z0());
+            }
+            double vx=wx-x,vz=wz-z;
+            double distance=Math.hypot(vx,vz);
+            if(distance>=.08&&distance<=.28&&vx*fx+vz*fz>distance*.65)
+                return true;
+        }
+        return false;
+    }
     public static List<Wall> walls(){return WALLS;}
     public static List<Deck> decks(){return DECKS;}
     public static List<Trim> trims(){return TRIMS;}
