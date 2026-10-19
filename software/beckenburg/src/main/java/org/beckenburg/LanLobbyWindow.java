@@ -47,32 +47,82 @@ public final class LanLobbyWindow extends JFrame {
 
     public LanLobbyWindow(){
         super("Beckenburg — LAN House Alpha 1.1");setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        JPanel controls=new JPanel(new FlowLayout(FlowLayout.LEFT,5,5));
-        controls.add(new JLabel("IP"));controls.add(ip);controls.add(new JLabel("Port"));controls.add(port);
-        controls.add(new JLabel("Name"));controls.add(name);controls.add(role);
-        controls.add(new JLabel("Room password"));controls.add(roomPassword);
-        JButton host=new JButton("Host LAN"),join=new JButton("Join IP");
-        controls.add(new JLabel("Hunters"));controls.add(partySize);
-        controls.add(tuneContract);controls.add(host);controls.add(join);controls.add(reconnect);
-        controls.add(lobbyLock);lobbyLock.setEnabled(false);
-        controls.add(hostInfo);hostInfo.setEnabled(false);
-        JPanel commands=new JPanel(new FlowLayout(FlowLayout.LEFT,6,4));
-        commands.add(ready);commands.add(start);commands.add(new JLabel("Room"));commands.add(target);
-        commands.add(move);commands.add(instrument);commands.add(scan);commands.add(ward);
-        commands.add(cleanse);commands.add(banish);commands.add(absolve);commands.add(extract);
-        commands.add(hypothesis);commands.add(identify);commands.add(action);commands.add(use);commands.add(enter3D);
+
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(new Color(15,19,25));
+        JPanel connectionFields=new JPanel(new GridLayout(2,6,8,5));
+        connectionFields.setBorder(BorderFactory.createEmptyBorder(10,12,6,12));
+        for(String label:new String[]{"Server address","Port","Player name","Seat","Hunters","Room password"})
+            connectionFields.add(new JLabel(label));
+        connectionFields.add(ip);connectionFields.add(port);connectionFields.add(name);
+        connectionFields.add(role);connectionFields.add(partySize);connectionFields.add(roomPassword);
+        JButton host=new JButton("Host LAN"),join=new JButton("Join by IP");
+        JPanel connectActions=new JPanel(new FlowLayout(FlowLayout.LEFT,7,4));
+        for(JButton button:new JButton[]{host,join,reconnect,tuneContract,hostInfo})connectActions.add(button);
+        connectActions.add(lobbyLock);
+        lobbyLock.setEnabled(false);hostInfo.setEnabled(false);
+        JPanel info=new JPanel(new GridLayout(3,1,0,4));
+        info.setBorder(BorderFactory.createEmptyBorder(7,12,10,12));
+        status.setFont(status.getFont().deriveFont(Font.BOLD));
+        info.add(status);info.add(caseStatus);info.add(teamStatus);
+        JPanel connectionTop=new JPanel(new BorderLayout(5,0));
+        connectionTop.add(connectionFields,BorderLayout.NORTH);
+        connectionTop.add(connectActions,BorderLayout.CENTER);
+        connectionTop.add(info,BorderLayout.SOUTH);
+
         log.setEditable(false);log.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
         log.setLineWrap(true);log.setWrapStyleWord(true);
-        JPanel info=new JPanel(new GridLayout(3,1));info.add(status);info.add(caseStatus);info.add(teamStatus);
-        JPanel top=new JPanel(new BorderLayout());top.add(controls,BorderLayout.NORTH);top.add(info,BorderLayout.SOUTH);
-        JPanel chatRow=new JPanel(new BorderLayout(5,0));
-        chatRow.add(lobbyChat,BorderLayout.CENTER);
-        chatRow.add(sendLobbyChat,BorderLayout.EAST);
-        JPanel bottom=new JPanel(new BorderLayout(0,3));
-        bottom.add(commands,BorderLayout.NORTH);
-        bottom.add(chatRow,BorderLayout.SOUTH);
-        add(top,BorderLayout.NORTH);add(new JScrollPane(log),BorderLayout.CENTER);
-        add(avatar,BorderLayout.EAST);add(bottom,BorderLayout.SOUTH);
+        log.setMargin(new Insets(12,12,12,12));
+        JPanel lobbyCenter=new JPanel(new BorderLayout(12,0));
+        lobbyCenter.setBorder(BorderFactory.createEmptyBorder(0,12,0,12));
+        lobbyCenter.add(new JScrollPane(log),BorderLayout.CENTER);
+        lobbyCenter.add(avatar,BorderLayout.EAST);
+        JPanel launchActions=new JPanel(new FlowLayout(FlowLayout.LEFT,8,4));
+        launchActions.add(ready);launchActions.add(start);launchActions.add(enter3D);
+        enter3D.setToolTipText("Available when a connected match has started");
+        JPanel chatRow=new JPanel(new BorderLayout(6,0));
+        chatRow.add(lobbyChat,BorderLayout.CENTER);chatRow.add(sendLobbyChat,BorderLayout.EAST);
+        JPanel lobbyBottom=new JPanel(new BorderLayout(5,5));
+        lobbyBottom.setBorder(BorderFactory.createEmptyBorder(8,12,12,12));
+        lobbyBottom.add(launchActions,BorderLayout.NORTH);
+        lobbyBottom.add(chatRow,BorderLayout.SOUTH);
+        JPanel lobbyPage=new JPanel(new BorderLayout(0,7));
+        lobbyPage.add(connectionTop,BorderLayout.NORTH);
+        lobbyPage.add(lobbyCenter,BorderLayout.CENTER);
+        lobbyPage.add(lobbyBottom,BorderLayout.SOUTH);
+
+        // The advanced command console is not the ordinary multiplayer lobby.
+        // Keep every existing command listener, but present the test tools where
+        // they can be found without crowding hosting, readiness, and chat.
+        JPanel hunterTools=new JPanel(new BorderLayout(0,9));
+        hunterTools.setBorder(BorderFactory.createTitledBorder("Investigator commands"));
+        JPanel hunterGrid=new JPanel(new GridLayout(0,2,9,9));
+        hunterGrid.add(new JLabel("Instrument"));hunterGrid.add(instrument);
+        for(JButton button:new JButton[]{scan,ward,cleanse,banish,absolve,extract})
+            hunterGrid.add(button);
+        hunterGrid.add(new JLabel("Ghost hypothesis"));hunterGrid.add(hypothesis);
+        hunterGrid.add(identify);
+        hunterTools.add(hunterGrid,BorderLayout.NORTH);
+        JPanel ghostTools=new JPanel(new BorderLayout(0,9));
+        ghostTools.setBorder(BorderFactory.createTitledBorder("Spatial & spectral commands"));
+        JPanel ghostGrid=new JPanel(new GridLayout(0,2,9,9));
+        ghostGrid.add(new JLabel("Target room"));ghostGrid.add(target);
+        ghostGrid.add(move);ghostGrid.add(new JLabel("Move hunter (test)"));
+        ghostGrid.add(new JLabel("Ghost ability"));ghostGrid.add(action);
+        ghostGrid.add(use);ghostGrid.add(new JLabel("Ghost seat only"));
+        ghostTools.add(ghostGrid,BorderLayout.NORTH);
+        JPanel toolColumns=new JPanel(new GridLayout(1,2,14,0));
+        toolColumns.setBorder(BorderFactory.createEmptyBorder(10,12,10,12));
+        toolColumns.add(hunterTools);toolColumns.add(ghostTools);
+        JPanel fieldPage=new JPanel(new BorderLayout());
+        JLabel toolNote=new JLabel("ALPHA FIELD CONSOLE  /  Network simulation commands; enter the 3D world from the Lobby tab.");
+        toolNote.setBorder(BorderFactory.createEmptyBorder(12,12,3,12));
+        fieldPage.add(toolNote,BorderLayout.NORTH);
+        fieldPage.add(new JScrollPane(toolColumns),BorderLayout.CENTER);
+        JTabbedPane pages=new JTabbedPane(JTabbedPane.TOP);
+        pages.addTab("Lobby & connection",lobbyPage);
+        pages.addTab("Field controls (alpha)",fieldPage);
+        add(pages,BorderLayout.CENTER);
         avatar.showHunter();
         role.addActionListener(e->{
             if(connection!=null)return; // Seat/role is fixed once the handshake succeeds.
@@ -112,7 +162,7 @@ public final class LanLobbyWindow extends JFrame {
         identify.addActionListener(e->action(() -> connection.identify((GhostIdentity.Type)hypothesis.getSelectedItem())));
         extract.addActionListener(e->action(() -> connection.extract()));
         enter3D.addActionListener(e->open3D());
-        setCommandEnabled(false);pack();setMinimumSize(new Dimension(810,370));setLocationRelativeTo(null);
+        setCommandEnabled(false);setMinimumSize(new Dimension(820,560));setSize(1020,680);setLocationRelativeTo(null);
         restoreLocalResumeOffer();
         addWindowListener(new java.awt.event.WindowAdapter(){@Override public void windowClosed(java.awt.event.WindowEvent e){
             if(worldFrame!=null)worldFrame.dispose();
