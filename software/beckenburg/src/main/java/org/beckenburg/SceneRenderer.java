@@ -46,9 +46,10 @@ public final class SceneRenderer {
     public void setPsxPreset(PsxPipeline.Preset preset){
         psxPreset=java.util.Objects.requireNonNull(preset,"PSX preset");
     }
-    private static final List<CastleHubArchitecture.Piece> CASTLE_ARCHITECTURE=
-        CastleHubArchitecture.create(new CastleHubMap());
+    /** The architectural plan is authored in world metres, independent of the tile renderer. */
     public double x=20.5,z=27.5,yaw=-Math.PI/2,pitch=-.09;
+    /** Actual current eye elevation in world space; supports real stair ascent. */
+    public double eyeHeight=1.62;
     public boolean lamp=true;
     public double lampReach=7.5,lampIntensity=.72;
     public boolean flameLamp;
@@ -700,7 +701,7 @@ public final class SceneRenderer {
         return out;
     }
     private Point camera(Point p){
-        double dx=p.x-x,dy=p.y-1.62,dz=p.z-z;
+        double dx=p.x-x,dy=p.y-eyeHeight,dz=p.z-z;
         double cy=Math.cos(yaw),sy=Math.sin(yaw),xc=dx*cy-dz*sy,zc=dx*sy+dz*cy;
         double cp=Math.cos(pitch),sp=Math.sin(pitch);
         return new Point(xc,dy*cp-zc*sp,dy*sp+zc*cp);
@@ -784,6 +785,73 @@ public final class SceneRenderer {
                 throw new IllegalArgumentException("invalid apparition");
         }
     }
+    private static void architecturalWall(List<Face> out,CastleHubArchitecturalPlan.Wall wall){
+        if(wall.hasDoor())return; // opening is intentional absence of geometry
+        double x0=wall.x0(),x1=wall.x1(),z0=wall.z0(),z1=wall.z1();
+        double y0=wall.bottom(),y1=wall.top();
+        double length=wall.length(),height=y1-y0;
+        texturedQuad(out,new Point(x0,y0,z0),new Point(x1,y0,z1),
+            new Point(x1,y1,z1),new Point(x0,y1,z0),wall.material(),
+            0,y0,length,y0,length,y1,0,y1,0xffffff);
+        // Reverse surface prevents invisible reverse sides when renderer
+        // evolves toward one-sided rasterization.
+        texturedQuad(out,new Point(x1,y0,z1),new Point(x0,y0,z0),
+            new Point(x0,y1,z0),new Point(x1,y1,z1),wall.material(),
+            0,y0,length,y0,length,y1,0,y1,0xc8c2ba);
+    }
+    private void castleShell(List<Face> out){
+        for(CastleHubArchitecturalPlan.Wall wall:CastleHubArchitecturalPlan.walls()){
+            double cx=(wall.x0()+wall.x1())*.5,cz=(wall.z0()+wall.z1())*.5;
+            // A long wall's midpoint can be out of reach while its end is
+            // adjacent; keep all authored walls for correct distant occlusion.
+            architecturalWall(out,wall);
+        }
+        for(var deck:CastleHubArchitecturalPlan.decks()){
+            texturedQuad(out,
+                new Point(deck.x0(),deck.height(),deck.z0()),
+                new Point(deck.x1(),deck.height(),deck.z0()),
+                new Point(deck.x1(),deck.height(),deck.z1()),
+                new Point(deck.x0(),deck.height(),deck.z1()),
+                deck.material(),deck.x0(),deck.z0(),deck.x1(),deck.z0(),
+                deck.x1(),deck.z1(),deck.x0(),deck.z1(),0xffffff);
+        }
+        // Real 10m stair ascent to a 3.4m upper landing; never an
+        // interaction-only teleport or a staircase prop with no floor.
+        for(int step=0;step<20;step++){
+            double south=32-step*.5,north=south-.5;
+            double top=(step+1)*CastleHubArchitecturalPlan.GROUND_CEILING/20.0;
+            texturedQuad(out,new Point(16.0,top,north),
+                new Point(19.0,top,north),new Point(19.0,top,south),
+                new Point(16.0,top,south),MaterialAtlas.STONE,
+                16,north,19,north,19,south,16,south,0xffffff);
+            texturedQuad(out,new Point(16.0,0,north),
+                new Point(19.0,0,north),new Point(19.0,top,north),
+                new Point(16.0,top,north),MaterialAtlas.STONE,
+                16,0,19,0,19,top,16,top,0xddd4cb);
+        }
+        // Railings follow both stair and balcony edges, with a real
+        // continuous parapet over the courtyard underpass.
+        for(int side=0;side<2;side++){
+            double edge=side==0?16.0:19.0;
+            for(int step=0;step<10;step++){
+                double za=32-step,zb=za-1;
+                double ha=step*.34+.14,hb=(step+1)*.34+.14;
+                texturedQuad(out,new Point(edge,ha,za),
+                    new Point(edge,hb,zb),new Point(edge,hb+.83,zb),
+                    new Point(edge,ha+.83,za),MaterialAtlas.AGED_WOOD,
+                    0,0,1,0,1,1,0,1,0xffffff);
+            }
+            texturedQuad(out,new Point(edge,3.42,10.8),
+                new Point(edge,3.42,22.0),new Point(edge,4.39,22.0),
+                new Point(edge,4.39,10.8),MaterialAtlas.AGED_WOOD,
+                0,0,11.2,0,11.2,.97,0,.97,0xffffff);
+        }
+        for(var trim:CastleHubArchitecturalPlan.trims()){
+            if(Math.hypot(trim.x()-x,trim.z()-z)>18.0)continue;
+            imported(out,trim.mesh(),trim.x(),trim.y(),trim.z(),
+                trim.sx(),trim.sy(),trim.sz(),trim.yaw());
+        }
+    }
     /** Castle hub renders with the same perspective, clipping and textured depth buffer as missions. */
     public void drawCastle(CastleHubMap map,double clock){drawCastle(map,clock,true);}
     public void drawCastle(CastleHubMap map,double clock,boolean lightsOn){
@@ -804,13 +872,9 @@ public final class SceneRenderer {
             // The solid tile modules now supply textured wall and window geometry.
             // Primitive quads would falsely close the real windows and gate openings.
         }
-        for(CastleHubArchitecture.Piece piece:CASTLE_ARCHITECTURE){
-            double dx=piece.x()-x,dz=piece.z()-z,d=Math.hypot(dx,dz);
-            if(d>17.5)continue;
-            if(d>4.0&&(dx*Math.sin(yaw)+dz*Math.cos(yaw)) < -d*.35)continue;
-            imported(castle,piece.model(),piece.x(),piece.y(),piece.z(),
-                piece.scaleX(),piece.scaleY(),piece.scaleZ(),piece.yaw());
-        }
+        // The real continuous, authored stonework and second floor replace
+        // per-cell fortress blocks. Doors have full-width jambs and lintels.
+        castleShell(castle);
         for(CastleHubDecor.Light fixture:CastleHubDecor.LIGHTS)
             if(Math.hypot(fixture.x()-x,fixture.z()-z)<14)
                 mountedLamp(castle,fixture,lightsOn);
