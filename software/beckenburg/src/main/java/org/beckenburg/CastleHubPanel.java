@@ -56,7 +56,7 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
             if(map.traversable(renderer.x+dx,renderer.z))renderer.x+=dx;
             if(map.traversable(renderer.x,renderer.z+dz))renderer.z+=dz;
             if(Math.hypot(renderer.x-priorX,renderer.z-priorZ)>.0001)
-                GameSfx.play(LanSound.Cue.STEP);
+                GameSfx.play(map.footstep(renderer.x,renderer.z));
         }
         clock+=dt;
         GraphicsOptions.current().configure(renderer,getWidth(),getHeight(),true);
