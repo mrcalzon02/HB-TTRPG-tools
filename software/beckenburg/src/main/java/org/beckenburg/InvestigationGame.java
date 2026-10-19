@@ -276,6 +276,8 @@ public final class InvestigationGame {
         JCheckBox highContrast=new JCheckBox("High contrast menu",displayPrefs.getBoolean("highContrast",false));
         JSlider musicVolume=new JSlider(0,100,SoundtrackAudio.volume());
         musicVolume.setMajorTickSpacing(25);musicVolume.setPaintTicks(true);
+        JSlider effectsVolume=new JSlider(0,100,LanAudio.effectsVolume());
+        effectsVolume.setMajorTickSpacing(25);effectsVolume.setPaintTicks(true);
         JPanel grid=new JPanel(new GridLayout(0,2,7,7));
         grid.setBorder(BorderFactory.createEmptyBorder(9,9,9,9));
         setting(grid,"Display mode",mode);
@@ -292,7 +294,8 @@ public final class InvestigationGame {
         grid.add(scanlines);grid.add(vignette);
         grid.add(grain);grid.add(chromatic);
         grid.add(large);grid.add(highContrast);
-        setting(grid,"Music volume (effects separate)",musicVolume);
+        setting(grid,"Music volume",musicVolume);
+        setting(grid,"Effects volume (voice separate)",effectsVolume);
         JScrollPane scroll=new JScrollPane(grid,
             ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setPreferredSize(new Dimension(610,Math.min(540,grid.getPreferredSize().height+18)));
@@ -332,6 +335,7 @@ public final class InvestigationGame {
         displayPrefs.putBoolean("largeMenuText",large.isSelected());
         displayPrefs.putBoolean("highContrast",highContrast.isSelected());
         SoundtrackAudio.volume(musicVolume.getValue());
+        LanAudio.effectsVolume(effectsVolume.getValue());
         buildMenu();menu.revalidate();menu.repaint();
     }
     private void showControls(){
@@ -492,6 +496,7 @@ public final class InvestigationGame {
             try{
                 if(profile.consume(kind,tier)){
                     session.useMedicine(kind,tier.restore(kind));
+                    GameSfx.play(LanSound.Cue.POTION);
                     showVanNotice(kind+" "+tier+" used. Supplies deducted from the saved inventory.");
                 }
             }catch(IOException error){showVanNotice("TREATMENT FAILED: "+error.getMessage());}
@@ -501,6 +506,7 @@ public final class InvestigationGame {
             EquipmentLoadout.Item aimed=VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw,profile.equipment());
             if(aimed==null){showVanNotice("Look directly at an instrument on the van rack, then press E.");return;}
             loadout.pickup(aimed);
+            GameSfx.play(LanSound.Cue.PICKUP);
             showVanNotice("PICKED UP: "+aimed.label+".  Current slot "+(loadout.activeSlot()+1));
         }
         private boolean insideVan(){
@@ -520,12 +526,15 @@ public final class InvestigationGame {
             if(!wheelOpen && down.contains(KeyEvent.VK_DOWN))scene.pitch=Math.max(-1.05,scene.pitch-dt*.9);
             double length=Math.hypot(forward,strafe);
             if(length>0 && (session.outcome()==InvestigationSession.Outcome.ACTIVE || session.outcome()==InvestigationSession.Outcome.CLEANSED)){
+                double priorX=scene.x,priorZ=scene.z;
                 forward/=length;strafe/=length;
                 double speed=down.contains(KeyEvent.VK_SHIFT)?3.6:2.4;
                 double dx=(Math.sin(scene.yaw)*forward+Math.cos(scene.yaw)*strafe)*dt*speed;
                 double dz=(Math.cos(scene.yaw)*forward-Math.sin(scene.yaw)*strafe)*dt*speed;
                 if(map.traversable(scene.x+dx,scene.z))scene.x+=dx;
                 if(map.traversable(scene.x,scene.z+dz))scene.z+=dz;
+                if(Math.hypot(scene.x-priorX,scene.z-priorZ)>.0001)
+                    GameSfx.play(LanSound.Cue.STEP);
             }
             accumulator+=dt;
             while(accumulator>=.1){
@@ -585,8 +594,14 @@ public final class InvestigationGame {
                 if(key==KeyEvent.VK_DOWN)wheelDy=75;
                 down.add(key);repaint();return;
             }
-            if(key>=KeyEvent.VK_1&&key<=KeyEvent.VK_4)loadout.select(key-KeyEvent.VK_1);
-            if(key==KeyEvent.VK_F)scene.lamp=!scene.lamp;
+            if(key>=KeyEvent.VK_1&&key<=KeyEvent.VK_4){
+                loadout.select(key-KeyEvent.VK_1);
+                GameSfx.play(LanSound.Cue.SELECT);
+            }
+            if(key==KeyEvent.VK_F){
+                scene.lamp=!scene.lamp;
+                GameSfx.play(scene.lamp?LanSound.Cue.DEVICE_ON:LanSound.Cue.DEVICE_OFF);
+            }
             if(key==KeyEvent.VK_E){
                 var aimed=VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw,profile.equipment());
                 if(aimed!=null){takeRackItem();}
@@ -595,30 +610,38 @@ public final class InvestigationGame {
                 if(service!=null)useVan(service);
                 else if(nearBreaker()){
                     powerOn=!powerOn;syncEnvironment();
+                    GameSfx.play(LanSound.Cue.BREAKER);
                     showVanNotice(powerOn?"Utility power restored.":"Utility breaker switched off.");
                 }
                 else if(lights.aimed(map,scene.x,scene.z,scene.yaw)>=0){
                     int room=lights.aimed(map,scene.x,scene.z,scene.yaw);
                     boolean lit=lights.toggle(room);
+                    GameSfx.play(LanSound.Cue.SWITCH);
                     showVanNotice(map.roomName(room)+" LIGHTS "+(lit?"ON":"OFF"));
                 }
                 else if(!map.toggleNearestDoor(scene.x,scene.z))
                     showVanNotice("No usable door, light switch or station nearby.");
+                else GameSfx.play(LanSound.Cue.DOOR);
                 }
             }
             if(key==KeyEvent.VK_R){
                 useHeldUntilTick=session.ticks()+4;
                 session.useEquipment(loadout,scene.x,scene.z,scene.yaw);
+                GameSfx.play(loadout.equipped()==EquipmentLoadout.Item.PHOTO_CAMERA
+                    ?LanSound.Cue.CAMERA:LanSound.Cue.SCANNER);
             }
-            if(key==KeyEvent.VK_C)session.placeWard(scene.x,scene.z);
+            if(key==KeyEvent.VK_C){
+                session.placeWard(scene.x,scene.z);
+                GameSfx.play(LanSound.Cue.WARD);
+            }
             if(key==KeyEvent.VK_Z)session.deployCounter(HunterCounters.Kind.CROSS,scene.x,scene.z,scene.yaw);
             if(key==KeyEvent.VK_G)session.deployCounter(HunterCounters.Kind.WARD,scene.x,scene.z,scene.yaw);
             if(key==KeyEvent.VK_H)session.deployCounter(HunterCounters.Kind.SALT,scene.x,scene.z,scene.yaw);
             if(key==KeyEvent.VK_B)session.cleanse(scene.x,scene.z);
             if(key==KeyEvent.VK_T)useMedicine(FieldSupplies.Kind.HEALTH);
             if(key==KeyEvent.VK_Y)useMedicine(FieldSupplies.Kind.SANITY);
-            if(key==KeyEvent.VK_J)journalShown=!journalShown;
-            if(key==KeyEvent.VK_M)mapShown=!mapShown;
+            if(key==KeyEvent.VK_J){journalShown=!journalShown;GameSfx.play(LanSound.Cue.BOOK);}
+            if(key==KeyEvent.VK_M){mapShown=!mapShown;GameSfx.play(LanSound.Cue.BOOK);}
             if(key==KeyEvent.VK_X && session.extract(scene.x,scene.z)) {timer.stop();endCase("Extraction processed.");return;}
             down.add(key);repaint();
         }
