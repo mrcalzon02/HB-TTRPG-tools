@@ -96,6 +96,8 @@ public final class LanAudio implements AutoCloseable {
             case DOTS_MOTOR->6800;case DOTS_STOP->2400;
             case SPARK->1600;case INCENSE_BURN->5500;
             case FIRELIGHT_IGNITE->3400;case FIRELIGHT_OUT->2600;
+            case TENSION_BUILD->24000;case LOCKED_DOOR_RATTLE->12400;
+            case HORROR_STING_A,HORROR_STING_B,HORROR_STING_C->14800;
         };
         byte[] output=new byte[samples*4];
         double pan=event.pan()/100.0;
@@ -151,6 +153,20 @@ public final class LanAudio implements AutoCloseable {
                     +.22*Math.sin(2*Math.PI*(89+24*t)*t);
                 case FIRELIGHT_OUT->.42*noise*Math.exp(-t*19)
                     +.22*Math.sin(2*Math.PI*(135-62*t)*t);
+                case TENSION_BUILD->.30*Math.sin(2*Math.PI*(67+34*t)*t)
+                    +.27*Math.sin(2*Math.PI*(91+56*t)*t)
+                    +.18*noise*(.3+Math.min(1,t*4));
+                // A repeated mechanical handle strike, never played for ordinary openable doors.
+                case LOCKED_DOOR_RATTLE->.72*noise*
+                    (Math.exp(-25*Math.abs(t-.10))+Math.exp(-28*Math.abs(t-.27))
+                    +Math.exp(-30*Math.abs(t-.44)))*.55
+                    +.33*Math.sin(2*Math.PI*116*t)*Math.exp(-t*4);
+                case HORROR_STING_A->.34*Math.sin(2*Math.PI*(120-45*t)*t)
+                    +.30*noise*Math.exp(-t*4);
+                case HORROR_STING_B->.32*Math.sin(2*Math.PI*(201+55*t)*t)
+                    +.24*Math.sin(2*Math.PI*70*t)+.19*noise;
+                case HORROR_STING_C->.40*Math.sin(2*Math.PI*(67+190*t*t)*t)
+                    +.29*noise*Math.sin(2*Math.PI*19*t);
             };
             double value=Math.max(-.85,Math.min(.85,wave*env*gain));
             short lv=(short)Math.round(value*left*22000),rv=(short)Math.round(value*right*22000);
