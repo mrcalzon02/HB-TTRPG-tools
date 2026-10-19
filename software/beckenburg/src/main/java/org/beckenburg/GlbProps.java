@@ -29,7 +29,8 @@ public final class GlbProps {
         "chair_mp_5","ceiling_lamp_1_on","cross_mp_2","flashlight_mp_1",
         "vape_mp_1","dosimeter_1","dosimeter_2","walkie_talkie_2",
         "handheld_tablet_1","monitoring_screen_mp_1","pc_mp_1",
-        "button_12","book_mp_1","open_book_mp_1","dosimeter_4","walkie_talkie_1"
+        "button_12","book_mp_1","open_book_mp_1","dosimeter_4","walkie_talkie_1",
+        "exploration_emf_detector","exploration_flashlight","exploration_flashlight_poquet","exploration_photo_camera","exploration_spirit_box","exploration_thermal_camera","exploration_thermometer","exploration_voice_recorder","ggbot_car08_van_shell","ggbot_car01","ggbot_car05","ggbot_car07","kenney_road_asphalt_straight","kenney_road_asphalt_side","kenney_road_asphalt_damaged","kenney_detail_light_single","kenney_detail_dumpster_closed","kenney_detail_bench","kenney_detail_barrier_type_a"
     };
     public record Vertex(double x,double y,double z,double u,double v) { }
     public record Triangle(Vertex a,Vertex b,Vertex c,int material) { }
