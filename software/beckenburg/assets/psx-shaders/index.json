@@ -1,0 +1,185 @@
+{
+  "schema": "beckenburg.psx_shader_reference_index.v1",
+  "updated_on": "2026-10-18",
+  "owner": "Beckenburg shared asset catalogue",
+  "source_of_truth": "https://docs.google.com/document/d/18G144Qd0-L5rL7NdqxMykqkXaBHtu8-ytr_yYPol6rI/edit",
+  "game_renderer_now": "Java 17 Swing/software rasterizer: NO shader backend/API for Godot, Unity or GLSL",
+  "record_status_legend": {
+    "INDEXED_REFERENCE_NOT_IMPORTED": "Upstream source and license examined; no code or shader bytes copied",
+    "REFERENCE_ONLY_ATTRIBUTION_REQUIRED": "Credit required to reuse code",
+    "REFERENCE_ONLY_SHAREALIKE_REVIEW_REQUIRED": "Share-alike implications require explicit review before reusing code",
+    "CANDIDATE_SOURCE_ARCHIVE_NOT_INSPECTED": "Metadata only; source archive not examined",
+    "CANDIDATE_LICENSE_SOURCE_CHECK_PENDING": "License claimed by listing, not cross-checked against upstream complete source"
+  },
+  "pack_license_separation": "The purchased PSX Mega Pack mesh/texture license does not automatically cover any external shader source. Every external shader retains its own license.",
+  "entries": [
+    {
+      "id": "PSX-S001",
+      "name": "PS1 / PSX Visuals",
+      "upstream": "https://github.com/snotbane/psx_visuals",
+      "license": "Unlicense",
+      "license_url": "https://github.com/snotbane/psx_visuals/blob/main/LICENSE",
+      "license_checked": "2026-10-18",
+      "native_engine": "Godot 4",
+      "features": [
+        "vertex snapping",
+        "affine texture warping",
+        "Gouraud-style shading",
+        "vertex fog",
+        "5-bit color channels",
+        "ordered dithering"
+      ],
+      "fit": "Best public-domain functional reference for Beckenburg software-renderer equivalents",
+      "status": "INDEXED_REFERENCE_NOT_IMPORTED",
+      "decision": "derive independent Java implementation; no direct Godot inclusion"
+    },
+    {
+      "id": "PSX-S002",
+      "name": "Godot PSX Visuals",
+      "upstream": "https://github.com/Rytelier/Godot-PSX-Visuals",
+      "license": "MIT",
+      "license_url": "https://github.com/Rytelier/Godot-PSX-Visuals/blob/main/LICENSE",
+      "license_checked": "2026-10-18",
+      "native_engine": "Godot >=4.4",
+      "features": [
+        "pixel/vertex snap",
+        "affine mapping",
+        "fake subdivision",
+        "vertex fog",
+        "triangle culling",
+        "transparency modes",
+        "color reduction"
+      ],
+      "fit": "Feature and environmental material reference, fog, culling and object variants",
+      "status": "INDEXED_REFERENCE_NOT_IMPORTED",
+      "decision": "cite/adapt only with MIT notice if copying code"
+    },
+    {
+      "id": "PSX-S003",
+      "name": "Godot PSX Style Demo",
+      "upstream": "https://github.com/MenacingMecha/godot-psx-style-demo",
+      "license": "MIT",
+      "license_url": "https://github.com/MenacingMecha/godot-psx-style-demo/blob/master/LICENSE",
+      "license_checked": "2026-10-18",
+      "native_engine": "Godot 4",
+      "features": [
+        "vertex snap",
+        "affine warping",
+        "bit depth",
+        "dithering",
+        "chrome material",
+        "billboard sprites",
+        "distance fog"
+      ],
+      "fit": "Compact baseline for materials and billboard/prop treatment",
+      "status": "INDEXED_REFERENCE_NOT_IMPORTED",
+      "decision": "adapt ideas; preserve MIT notice if incorporating source"
+    },
+    {
+      "id": "PSX-S004",
+      "name": "GodotPSX",
+      "upstream": "https://github.com/AnalogFeelings/godot-psx",
+      "license": "MIT",
+      "license_url": "https://github.com/AnalogFeelings/godot-psx/blob/master/LICENSE",
+      "license_checked": "2026-10-18",
+      "native_engine": "Godot 4",
+      "features": [
+        "lit/unlit PS1 materials",
+        "quantization and dither",
+        "fade postprocess"
+      ],
+      "fit": "Readable material/postprocess reference; upstream archived",
+      "status": "INDEXED_REFERENCE_NOT_IMPORTED",
+      "decision": "reference only unless maintained/tested adaptation is justified"
+    },
+    {
+      "id": "PSX-S005",
+      "name": "Godot-PSX",
+      "upstream": "https://github.com/TotesNotJosh/Godot-PSX",
+      "license": "CC0-1.0",
+      "license_url": "https://github.com/TotesNotJosh/Godot-PSX/blob/main/LICENSE",
+      "license_checked": "2026-10-18",
+      "native_engine": "Godot 4.4+",
+      "features": [
+        "postprocess dithering",
+        "15-bit quantization",
+        "low-resolution render guidance"
+      ],
+      "fit": "Simple public-domain 4x4-color/output comparison",
+      "status": "INDEXED_REFERENCE_NOT_IMPORTED",
+      "decision": "potential reference for native Java raster/postprocessing; object shader marked coming soon"
+    },
+    {
+      "id": "PSX-S006",
+      "name": "PS1-3D-Shader",
+      "upstream": "https://github.com/TotesNotJosh/PS1-3D-Shader",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/TotesNotJosh/PS1-3D-Shader",
+      "license_checked": "2026-10-18",
+      "native_engine": "Unity",
+      "features": [
+        "PS1 vertex-lit and unlit materials",
+        "alpha cutout/transparency"
+      ],
+      "fit": "Illustrative Unity comparator only",
+      "status": "REFERENCE_ONLY_ATTRIBUTION_REQUIRED",
+      "decision": "do not copy unless attribution is bundled and code is ported/tested"
+    },
+    {
+      "id": "PSX-S007",
+      "name": "PsxShader for libGDX",
+      "upstream": "https://github.com/davidbrowne17/PsxShader",
+      "license": "CC-BY-SA-3.0 (repository LICENSE.txt)",
+      "license_url": "https://github.com/davidbrowne17/PsxShader/blob/main/LICENSE.txt",
+      "license_checked": "2026-10-18",
+      "native_engine": "libGDX / Kotlin / GLSL",
+      "features": [
+        "GLSL vertex shader",
+        "GLSL fragment shader",
+        "libGDX shader provider"
+      ],
+      "fit": "Closest JVM/OpenGL usage example, NOT plug-and-play with existing Swing/software renderer",
+      "status": "REFERENCE_ONLY_SHAREALIKE_REVIEW_REQUIRED",
+      "decision": "no code vendoring without deliberate share-alike/attribution review"
+    },
+    {
+      "id": "PSX-S008",
+      "name": "PSX - Godot Shader",
+      "upstream": "https://store.godotengine.org/asset/fcidade/psx-godot-shader/",
+      "license": "CC0-1.0 (store listing)",
+      "license_url": "https://store.godotengine.org/asset/fcidade/psx-godot-shader/",
+      "license_checked": "2026-10-18",
+      "native_engine": "Godot 4.6",
+      "features": [
+        "vertex snap",
+        "affine UV",
+        "dither",
+        "matcap",
+        "billboards",
+        "screen downscale"
+      ],
+      "fit": "Modern CC0 cross-check for complete effect set; upstream listing marks unstable",
+      "status": "CANDIDATE_SOURCE_ARCHIVE_NOT_INSPECTED",
+      "decision": "validate source archive and functionality before adopting code"
+    },
+    {
+      "id": "PSX-S009",
+      "name": "PS1 / PSX Visuals - GD4 Port",
+      "upstream": "https://github.com/scolastico/psx_visuals_gd4",
+      "license": "MIT (Godot Asset Library listing)",
+      "license_url": "https://godotengine.org/asset-library/asset/4687",
+      "license_checked": "2026-10-18",
+      "native_engine": "Godot 4.x",
+      "features": [
+        "vertex snap",
+        "affine warping",
+        "fog",
+        "dither",
+        "material autoconversion"
+      ],
+      "fit": "Future GPU backend UI/authoring reference, not active Java library",
+      "status": "CANDIDATE_LICENSE_SOURCE_CHECK_PENDING",
+      "decision": "confirm upstream bundled licenses/dependencies before any inclusion"
+    }
+  ]
+}
