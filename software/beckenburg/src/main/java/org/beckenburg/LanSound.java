@@ -17,16 +17,37 @@ public final class LanSound {
         FOOTFALL(3, 53, "SOMETHING IS MOVING"),
         DOOR(6, 80, "DOOR MOVEMENT"),
         EQUIPMENT(5, 70, "ELECTRONIC DEVICE"),
-        RITUAL(9, 93, "RITUAL ACTIVITY");
+        RITUAL(9, 93, "RITUAL ACTIVITY"),
+        STEP(3, 42, "INVESTIGATOR FOOTSTEPS"),
+        SWITCH(4, 48, "LIGHT SWITCH CLICK"),
+        BREAKER(6, 79, "POWER BREAKER THROWS"),
+        VAN_DOOR(6, 76, "CARGO DOOR MOTOR"),
+        UI_CLICK(0, 34, "MENU SELECTION"),
+        UI_BACK(0, 30, "MENU BACK"),
+        PICKUP(4, 49, "ITEM PICKED UP"),
+        SELECT(0, 28, "EQUIPMENT SELECTED"),
+        DEVICE_ON(5, 55, "DEVICE ACTIVATED"),
+        DEVICE_OFF(5, 42, "DEVICE SWITCHED OFF"),
+        SCANNER(5, 60, "INSTRUMENT SCAN"),
+        CAMERA(5, 83, "CAMERA SHUTTER"),
+        BOOK(4, 48, "BOOK HANDLING"),
+        WARD(7, 83, "DEFENSIVE WARD DEPLOYED"),
+        POTION(3, 44, "MEDICINE USED"),
+        RITUAL_START(9, 96, "RITUAL BEGINS"),
+        RITUAL_END(9, 94, "RITUAL COMPLETED"),
+        IMPACT(8, 97, "GHOST STRIKE IMPACT"),
+        GHOST_DRIFT(6, 64, "SPECTRAL MOVEMENT");
         final int acousticBudget, baseGain;
         final String caption;
         Cue(int budget, int gain, String caption) { acousticBudget=budget;baseGain=gain;this.caption=caption; }
         public String caption(){return caption;}
         public Tier tier(){return switch(this){
-            case FOOTFALL,DOOR,EQUIPMENT,RITUAL->Tier.AMBIENT;
+            case FOOTFALL,DOOR,EQUIPMENT,RITUAL,STEP,SWITCH,BREAKER,VAN_DOOR,
+                    UI_CLICK,UI_BACK,PICKUP,SELECT,DEVICE_ON,DEVICE_OFF,SCANNER,
+                    CAMERA,BOOK,POTION->Tier.AMBIENT;
             case WHISPER->Tier.MINOR;
-            case DISTURB,MANIFEST->Tier.MODERATE;
-            case STRIKE->Tier.DANGEROUS;
+            case DISTURB,MANIFEST,GHOST_DRIFT,WARD->Tier.MODERATE;
+            case STRIKE,IMPACT,RITUAL_START,RITUAL_END->Tier.DANGEROUS;
             case SIGNATURE->Tier.SIGNATURE;
         };}
     }
