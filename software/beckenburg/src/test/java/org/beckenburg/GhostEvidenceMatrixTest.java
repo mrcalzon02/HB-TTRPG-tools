@@ -49,7 +49,9 @@ public final class GhostEvidenceMatrixTest {
                    "every listed writing style can actually be authored");
             for(var proposed:row.future()){
                 ok(!EquipmentRegistry.couldDetect(proposed).isEmpty(),
-                   "each future phenomenon has an indexed detector");
+                   "each additional phenomenon has an indexed detector");
+                ok(hard.contains(AdditionalEvidence.family(proposed)),
+                   "each assigned observed phenomenon has an active evidence family");
                 ok(!proposed.equals(EquipmentRegistry.Evidence.HIGH_EMF)
                    &&!proposed.equals(EquipmentRegistry.Evidence.FREEZING),
                    "no invented duplicate thermometer or EMF codes");
@@ -83,6 +85,6 @@ public final class GhostEvidenceMatrixTest {
             ==GhostTraits.Sight.ORBS,"Hantu produces optical orbs");
         ok(GhostEvidenceMatrix.forGhost(GhostIdentity.Type.DEMON).writing().contains(
             GhostWriting.Style.RITUAL_CIRCLES),"Demon can draw actual ritual circles");
-        System.out.println("PASS: 13 ghost evidence rows match live producers; future gear not called implemented");
+        System.out.println("PASS: 13 ghost evidence rows match live producers and added sensor families");
     }
 }

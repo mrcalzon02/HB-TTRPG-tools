@@ -41,6 +41,8 @@ public final class LanCase {
     }
     public HardEvidenceQuota.Level evidenceDifficulty(){return hardEvidence.level();}
     public int guaranteedEvidenceCount(){return hardEvidence.allowance();}
+    /** Host-only selector; never serialized to a client or a casefile frame. */
+    public HardEvidenceQuota hardEvidenceQuota(){return hardEvidence;}
     private boolean identificationRequired;
     private int lastGuessTick=-1000;
     private final int[] health={100,100,100,100,100,100},stress=new int[6],wards={2,2,2,2,2,2};

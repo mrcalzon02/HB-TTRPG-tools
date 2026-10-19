@@ -19,28 +19,30 @@ public final class HardEvidenceQuota {
         public double rewardMultiplier(){return multiplier;}
         @Override public String toString(){return label;}
     }
-    public enum Family { EMF, TEMPERATURE, SPIRIT_BOX, WRITING, DOTS, UV, ORBS }
+    public enum Family { EMF, TEMPERATURE, SPIRIT_BOX, WRITING, DOTS, UV, ORBS,
+        ECTOPLASM, RESONANCE, SEISMIC, ATMOSPHERIC, SHADOW, IMPRINT, LASER }
     /**
      * One distinct, guaranteed three-evidence combination per ghost. These
      * combinations are the Medium contract's three actual hard-positive
-     * producers. Every combination is unique across the current 13 species;
+     * producers. Every combination is unique across the current 13 species and now includes
+     * physically observable results from the additional authored instruments;
      * D.O.T.S. remains reserved for Wraith, Shade and Specter.
      */
     public static EnumSet<Family> signature(GhostIdentity.Type ghost){
         return switch(Objects.requireNonNull(ghost)){
-            case POSSESSIVE  ->EnumSet.of(Family.EMF,Family.SPIRIT_BOX,Family.UV);
-            case POLTERGEIST ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.UV);
-            case DEMON       ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.WRITING);
-            case YOKAI       ->EnumSet.of(Family.EMF,Family.WRITING,Family.ORBS);
-            case BANSHEE     ->EnumSet.of(Family.TEMPERATURE,Family.SPIRIT_BOX,Family.WRITING);
-            case WRAITH      ->EnumSet.of(Family.EMF,Family.SPIRIT_BOX,Family.DOTS);
-            case SHADE       ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.DOTS);
-            case SPECTER     ->EnumSet.of(Family.EMF,Family.WRITING,Family.DOTS);
-            case SPIRIT      ->EnumSet.of(Family.TEMPERATURE,Family.SPIRIT_BOX,Family.UV);
-            case HANTU       ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.ORBS);
-            case DEVIL       ->EnumSet.of(Family.TEMPERATURE,Family.WRITING,Family.UV);
-            case MIMIC       ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.SPIRIT_BOX);
-            case TWINS       ->EnumSet.of(Family.SPIRIT_BOX,Family.WRITING,Family.ORBS);
+            case POSSESSIVE  ->EnumSet.of(Family.EMF,Family.SPIRIT_BOX,Family.IMPRINT);
+            case POLTERGEIST ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.SEISMIC);
+            case DEMON       ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.RESONANCE);
+            case YOKAI       ->EnumSet.of(Family.EMF,Family.WRITING,Family.RESONANCE);
+            case BANSHEE     ->EnumSet.of(Family.TEMPERATURE,Family.SPIRIT_BOX,Family.ECTOPLASM);
+            case WRAITH      ->EnumSet.of(Family.EMF,Family.DOTS,Family.LASER);
+            case SHADE       ->EnumSet.of(Family.TEMPERATURE,Family.DOTS,Family.SHADOW);
+            case SPECTER     ->EnumSet.of(Family.WRITING,Family.DOTS,Family.SHADOW);
+            case SPIRIT      ->EnumSet.of(Family.TEMPERATURE,Family.SPIRIT_BOX,Family.IMPRINT);
+            case HANTU       ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.ATMOSPHERIC);
+            case DEVIL       ->EnumSet.of(Family.TEMPERATURE,Family.WRITING,Family.RESONANCE);
+            case MIMIC       ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.IMPRINT);
+            case TWINS       ->EnumSet.of(Family.SPIRIT_BOX,Family.WRITING,Family.SEISMIC);
         };
     }
     private final Level level;
@@ -59,6 +61,8 @@ public final class HardEvidenceQuota {
         GhostTraits.Profile physiology=GhostTraits.of(ghost);
         if(physiology.leavesUv())capable.add(Family.UV);
         if(physiology.sight()==GhostTraits.Sight.ORBS)capable.add(Family.ORBS);
+        for(EquipmentRegistry.Evidence phenomenon:GhostEvidenceMatrix.forGhost(ghost).future())
+            capable.add(AdditionalEvidence.family(phenomenon));
         // Every ghost must have at least four real producers available on Easy.
         if(capable.size()<4)throw new IllegalStateException(
             "Ghost "+ghost+" has only "+capable.size()+" hard evidence producers");

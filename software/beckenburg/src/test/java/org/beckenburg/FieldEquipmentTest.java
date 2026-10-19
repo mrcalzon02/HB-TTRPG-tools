@@ -11,8 +11,11 @@ public final class FieldEquipmentTest {
             "all four default slots contain actual functional tools");
         ok(gear.owned("GHOST_WRITING_BOOK")==EquipmentTiers.Tier.I,
             "writing book is issued but not carried until equipped");
-        ok(!FieldEquipment.functional("RESONANCE_TUNER"),
-            "planned, non-playable instruments cannot silently be purchased");
+        ok(FieldEquipment.functional("RESONANCE_TUNER"),
+            "Original resonance instrument can be equipped");
+        ok(FieldEquipment.functional("ECTOPLASM_SAMPLER")
+            &&FieldEquipment.functional("OBJECT_IMPRINT_SCANNER"),
+            "Additional sampling tools must be working loadout options");
         boolean denied=false;
         try{gear.upgradePrice("EMF_READER",EquipmentTiers.Tier.III);}
         catch(IllegalArgumentException expected){denied=true;}
@@ -44,8 +47,13 @@ public final class FieldEquipmentTest {
         ok(gear.active().equals("GHOST_WRITING_BOOK"),"real writing equipment is held");
         ok(gear.frame(wallet.credits()).startsWith("GEARSTATE|"),
             "reconnect snapshot contains carried tiered state");
-        ok(!gear.inventoryFrame().contains("RESONANCE_TUNER"),
-            "planned devices not represented as owned");
+        ok(gear.inventoryFrame().contains("RESONANCE_TUNER"),
+            "Resonance instrument survives private reconnect snapshots");
+        gear.equip(1,"RESONANCE_TUNER");
+        ok(gear.active().equals("RESONANCE_TUNER"),"Can equip new evidence device");
+        ok(gear.ready("RESONANCE_TUNER",25),"New instrument has a real sampling clock");
+        gear.sampled("RESONANCE_TUNER",25);
+        ok(!gear.ready("RESONANCE_TUNER",26),"New tool respects tier refresh");
         int inventoryEntries=0;
         for(String frame:gear.inventoryFrames()){
             var fields=LanProtocol.parts(frame);

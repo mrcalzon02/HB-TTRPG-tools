@@ -7,9 +7,9 @@ import java.util.Objects;
 /**
  * Player-facing evidence matrix for the thirteen original Beckenburg ghosts.
  *
- * Reads live EMF/thermal/writing/UV/visibility rules rather than duplicating
- * them. Proposed instruments are catalog targets, NOT playable ghost events.
- * The matrix is a deduction reference; it NEVER verifies a player reading.
+ * Reads live EMF/thermal/writing/UV/visibility rules. The seven additional
+ * equipment phenomena are now available to the LAN host as observed outputs.
+ * The matrix is a deduction reference: it NEVER certifies player readings.
  */
 public final class GhostEvidenceMatrix {
     private GhostEvidenceMatrix() { }
@@ -31,8 +31,8 @@ public final class GhostEvidenceMatrix {
             future=List.copyOf(future);
         }
     }
-    /** Planned additional equipment must correspond to an actual authored world
-     * event when implemented. These entries NEVER generate measurements by themselves.
+    /** Eligible species for each extra observation. A sensor returns readings
+     * only for a recent real host ghost event in its detection footprint.
      */
     private static List<EquipmentRegistry.Evidence> future(GhostIdentity.Type ghost) {
         return switch(ghost) {
@@ -81,9 +81,8 @@ public final class GhostEvidenceMatrix {
             Arrays.asList(GhostEvidenceProfile.availableWriting(type)),
             trait.leavesUv(),trait.sight(),future(type),type.rite(),type.behavior());
     }
-    /** Complete live hard-evidence matrix, from the same host quota source
-     * that chooses Easy/Medium/Death Wish slots. Seed is irrelevant on Easy.
-     * Inactive or proposed future devices are deliberately excluded.
+    /** All possible hard-evidence families, including the seven extra sensor
+     * families. The actual contract may enable a subset. Seed is irrelevant on Easy.
      */
     public static java.util.EnumSet<HardEvidenceQuota.Family> hardEvidenceFor(
             GhostIdentity.Type type){

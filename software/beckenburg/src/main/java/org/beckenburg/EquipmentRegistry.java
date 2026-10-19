@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-/** Complete reference equipment baseline plus original Beckenburg candidates.
- * Registry is authoritative for planning/status, not evidence award or player inventory.
- * PARTIAL_SOURCE means code exists, NOT a verified playable implementation.
+/** Equipment catalog for tiered Beckenburg hardware.
+ * PARTIAL_SOURCE means host-side use is coded, not necessarily runtime playtested.
+ * Evidence awards are always validated by host simulation, never the catalog.
  */
 public final class EquipmentRegistry {
     private EquipmentRegistry() { }
@@ -63,20 +63,20 @@ public final class EquipmentRegistry {
         entry("SITE_ACTIVITY_MONITOR","Site activity monitor",Origin.TRUCK,Purpose.MONITOR,State.ABSENT,State.PARTIAL_SOURCE),
         entry("SITE_MAP","Location map",Origin.TRUCK,Purpose.MONITOR,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE),
         entry("SOUND_MONITOR","Sound monitor",Origin.TRUCK,Purpose.MONITOR,State.ABSENT,State.ABSENT),
-        entry("ANCHOR_TRIANGULATOR","Anchor triangulator",Origin.ORIGINAL,Purpose.SURVEY,State.ABSENT,State.ABSENT),
-        entry("ECTOPLASM_SAMPLER","Ectoplasm swab and assay",Origin.ORIGINAL,Purpose.EVIDENCE,State.ABSENT,State.ABSENT,Evidence.ECTOPLASM),
-        entry("RESONANCE_TUNER","Resonance tuning forks",Origin.ORIGINAL,Purpose.EVIDENCE,State.ABSENT,State.ABSENT,Evidence.RESONANCE),
-        entry("BAROMETRIC_PROBE","Barometric anomaly probe",Origin.ORIGINAL,Purpose.EVIDENCE,State.ABSENT,State.ABSENT,Evidence.ATMOSPHERIC_REVERSAL),
-        entry("SEISMIC_RECORDER","Seismic floor recorder",Origin.ORIGINAL,Purpose.EVIDENCE,State.ABSENT,State.ABSENT,Evidence.SEISMIC_IMPACT),
-        entry("SPECTRAL_PRISM","Spectral prism filter",Origin.ORIGINAL,Purpose.EVIDENCE,State.ABSENT,State.ABSENT,Evidence.SPECTRAL_SHADOW),
-        entry("LASER_GRID","Lidar displacement grid",Origin.ORIGINAL,Purpose.EVIDENCE,State.ABSENT,State.ABSENT,Evidence.STRUCTURED_LIGHT),
-        entry("EMF_ARRAY","Deployable EMF array",Origin.ORIGINAL,Purpose.SURVEY,State.ABSENT,State.ABSENT,Evidence.HIGH_EMF),
-        entry("THERMAL_BEACON","Remote thermal probe array",Origin.ORIGINAL,Purpose.SURVEY,State.ABSENT,State.ABSENT,Evidence.FREEZING,Evidence.EXTREME_HEAT),
-        entry("RITUAL_ANCHOR_METER","Ritual anchor meter",Origin.ORIGINAL,Purpose.RITUAL,State.ABSENT,State.ABSENT),
-        entry("WARD_STABILITY_PROBE","Ward stability probe",Origin.ORIGINAL,Purpose.RITUAL,State.ABSENT,State.ABSENT),
-        entry("OBJECT_IMPRINT_SCANNER","Anomalous object imprint kit",Origin.ORIGINAL,Purpose.EVIDENCE,State.ABSENT,State.ABSENT,Evidence.OBJECT_IMPRINT),
-        entry("CHALK_SIGIL_KIT","Chalk and portable sigils",Origin.ORIGINAL,Purpose.RITUAL,State.ABSENT,State.ABSENT),
-        entry("SPECTRAL_FREQUENCY_ANALYZER","Spectral frequency analyzer",Origin.ORIGINAL,Purpose.SURVEY,State.ABSENT,State.ABSENT,Evidence.RESONANCE)
+        entry("ANCHOR_TRIANGULATOR","Anchor triangulator",Origin.ORIGINAL,Purpose.SURVEY,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE),
+        entry("ECTOPLASM_SAMPLER","Ectoplasm swab and assay",Origin.ORIGINAL,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.ECTOPLASM),
+        entry("RESONANCE_TUNER","Resonance tuning forks",Origin.ORIGINAL,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.RESONANCE),
+        entry("BAROMETRIC_PROBE","Barometric anomaly probe",Origin.ORIGINAL,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.ATMOSPHERIC_REVERSAL),
+        entry("SEISMIC_RECORDER","Seismic floor recorder",Origin.ORIGINAL,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.SEISMIC_IMPACT),
+        entry("SPECTRAL_PRISM","Spectral prism filter",Origin.ORIGINAL,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.SPECTRAL_SHADOW),
+        entry("LASER_GRID","Lidar displacement grid",Origin.ORIGINAL,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.STRUCTURED_LIGHT),
+        entry("EMF_ARRAY","Deployable EMF array",Origin.ORIGINAL,Purpose.SURVEY,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.HIGH_EMF),
+        entry("THERMAL_BEACON","Remote thermal probe array",Origin.ORIGINAL,Purpose.SURVEY,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.FREEZING,Evidence.EXTREME_HEAT),
+        entry("RITUAL_ANCHOR_METER","Ritual anchor meter",Origin.ORIGINAL,Purpose.RITUAL,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE),
+        entry("WARD_STABILITY_PROBE","Ward stability probe",Origin.ORIGINAL,Purpose.RITUAL,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE),
+        entry("OBJECT_IMPRINT_SCANNER","Anomalous object imprint kit",Origin.ORIGINAL,Purpose.EVIDENCE,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.OBJECT_IMPRINT),
+        entry("CHALK_SIGIL_KIT","Chalk and portable sigils",Origin.ORIGINAL,Purpose.RITUAL,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE),
+        entry("SPECTRAL_FREQUENCY_ANALYZER","Spectral frequency analyzer",Origin.ORIGINAL,Purpose.SURVEY,State.PARTIAL_SOURCE,State.PARTIAL_SOURCE,Evidence.RESONANCE)
     );
     static {
         Set<String> ids=new HashSet<>();

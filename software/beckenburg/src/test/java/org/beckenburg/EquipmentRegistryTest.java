@@ -28,6 +28,9 @@ public final class EquipmentRegistryTest {
             "thermometer supports both cold and hot evidence");
         ok(!EquipmentRegistry.couldDetect(EquipmentRegistry.Evidence.ECTOPLASM).isEmpty(),
             "original ectoplasm sample tool exists in data registry");
+        for(var original:EquipmentRegistry.byOrigin(EquipmentRegistry.Origin.ORIGINAL))
+            ok(original.lan()==EquipmentRegistry.State.PARTIAL_SOURCE,
+                "original modeled device has source-side LAN handler: "+original.id());
         ok(EquipmentRegistry.get("VIDEO_CAMERA").lan()==EquipmentRegistry.State.ABSENT,
             "reference-only video must not be mislabeled implemented");
         ok(EquipmentRegistry.get("SOUND_RECORDER").lan()==EquipmentRegistry.State.PARTIAL_SOURCE

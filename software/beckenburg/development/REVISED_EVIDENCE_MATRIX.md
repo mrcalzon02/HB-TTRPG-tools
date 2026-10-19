@@ -12,10 +12,12 @@ a visible D.O.T.S. silhouette for those three ghosts and only when that evidence
 family is enabled for the current contract.
 
 **Contract guarantees:** Easy ≥4, Medium exactly 3, Death Wish exactly 1.
-Easy exposes all available species-compatible evidence families. Each
-ghost has one **unique three-family hard-yes signature** reserved for Medium;
-Death Wish permits exactly one case-seeded family from that signature.
-Weather cannot create a species-specific EMF event or override its group.
+The instrument result is never an automatic ghost-identity confirmation:
+a player sees a reading or no reading. The journal records `OBSERVED`.
+Easy exposes all species-compatible families. Each ghost's unique three
+Medium families now include an original Beckenburg instrument; Death Wish
+permits one of those three. Weather does not create a ghost-specific event.
+See `development/ADDITIONAL_EVIDENCE_INSTRUMENTS.md`.
 
 Legend: H = high ghost EMF (8–10); L/M = low/mid ghost EMF (2–7);
 0 = no EMF during a strong local spectral event (natural ambient may differ);
@@ -49,19 +51,19 @@ pool; Death Wish grants exactly one of these three families.
 
 | Ghost | Unique three-evidence signature |
 |---|---|
-| Possessive | EMF + Spirit Box + UV |
-| Poltergeist | EMF + Temperature + UV |
-| Demon | EMF + Temperature + Writing |
-| Yokai | EMF + Writing + Orbs |
-| Banshee | Temperature + Spirit Box + Writing |
-| Wraith | EMF + Spirit Box + D.O.T.S. |
-| Shade | EMF + Temperature + D.O.T.S. |
-| Specter | EMF + Writing + D.O.T.S. |
-| Spirit | Temperature + Spirit Box + UV |
-| Hantu | EMF + Temperature + Orbs |
-| Devil | Temperature + Writing + UV |
-| Mimic | EMF + Temperature + Spirit Box |
-| Twins | Spirit Box + Writing + Orbs |
+| Possessive | EMF + Spirit Box + Object Imprint |
+| Poltergeist | EMF + Temperature + Seismic |
+| Demon | EMF + Temperature + Resonance |
+| Yokai | EMF + Writing + Resonance |
+| Banshee | Temperature + Spirit Box + Ectoplasm |
+| Wraith | EMF + D.O.T.S. + Laser Grid |
+| Shade | Temperature + D.O.T.S. + Spectral Shadow |
+| Specter | Writing + D.O.T.S. + Spectral Shadow |
+| Spirit | Temperature + Spirit Box + Object Imprint |
+| Hantu | EMF + Temperature + Atmospheric Reversal |
+| Devil | Temperature + Writing + Resonance |
+| Mimic | EMF + Temperature + Object Imprint |
+| Twins | Spirit Box + Writing + Seismic |
 
 The ghost doesn't need exclusive ownership of any one instrument or clue.
 The **combination** is what uniquely identifies its type. On Easy, additional
@@ -78,6 +80,15 @@ With 13 assigned now, up to **10 additional species** are combinatorially
 possible without new evidence families or expanding D.O.T.S. eligibility.
 This is an upper bound, not a guarantee that every available triple makes a
 well-balanced, physically detectable ghost.
+
+## Extra instruments now in active evidence production
+
+Every existing ghost has two additional candidate phenomena from
+`GhostEvidenceMatrix` and an authored device capable of reading them.
+These are available in Easy and selected where present in Medium/Death Wish.
+The detector shows observed measurements only, never "confirmed evidence"
+or the correct identity. Read `ADDITIONAL_EVIDENCE_INSTRUMENTS.md` for
+the complete seven-detector and seven-support-tool implementation status.
 
 ## Rules and distinction
 

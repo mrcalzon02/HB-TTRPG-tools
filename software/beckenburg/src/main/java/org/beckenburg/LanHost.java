@@ -34,6 +34,9 @@ public final class LanHost implements AutoCloseable {
     private final LanCase mission;
     private final LanEvidenceJournal casefile=new LanEvidenceJournal();
     private final GhostWriting writingBook=new GhostWriting();
+    /** Persistent placement from real hunter coordinates, never supplied by clients. */
+    private record SensorStation(String id,int room,double x,double z){}
+    private final Map<Integer,SensorStation> sensorStations=new HashMap<>();
     private final LanDotsProjectors dots=new LanDotsProjectors();
     private final LanVideoCameras cameras=new LanVideoCameras();
     private final FieldJournal fieldNotes=new FieldJournal();
@@ -865,6 +868,104 @@ public final class LanHost implements AutoCloseable {
                             notifyHunters("BURN|INCENSE|"+room+"|"+
                                 Math.round(body.x()*1000)+"|"+Math.round(body.z()*1000)+
                                 "|"+(tick+Math.max(10,duration)));
+                        }
+                        case "ECTOPLASM_SAMPLER","RESONANCE_TUNER",
+                                "BAROMETRIC_PROBE","SEISMIC_RECORDER","SPECTRAL_PRISM",
+                                "LASER_GRID","OBJECT_IMPRINT_SCANNER",
+                                "SPECTRAL_FREQUENCY_ANALYZER" -> {
+                            LanWorld.Body body=world.body(peer.slot);
+                            boolean stationary=id.equals("SEISMIC_RECORDER")
+                                ||id.equals("LASER_GRID");
+                            SensorStation station=sensorStations.get(peer.slot);
+                            if(stationary&&(station==null||!station.id().equals(id))){
+                                if(room>=HouseMap.INDOOR_ROOMS)
+                                    throw new IllegalArgumentException("place the sensor indoors");
+                                station=new SensorStation(id,room,body.x(),body.z());
+                                sensorStations.put(peer.slot,station);
+                                notifyHunters("FIELD|"+id+" PLACED IN "+map.roomName(body.x(),body.z()));
+                            }
+                            double originX=stationary?station.x():body.x();
+                            double originZ=stationary?station.z():body.z();
+                            int sourceRoom=stationary?station.room():room;
+                            double range=Math.hypot(originX-ghostPose.pose().x(),
+                                originZ-ghostPose.pose().z());
+                            if((id.equals("ECTOPLASM_SAMPLER")
+                                    ||id.equals("OBJECT_IMPRINT_SCANNER"))
+                                    &&gear.remaining(id)<1)
+                                throw new IllegalArgumentException("collection kit empty");
+                            AdditionalEvidence.Sample sample=AdditionalEvidence.measure(id,ghostType,
+                                mission.hardEvidenceQuota(),tick,lastEvidenceEventTick,
+                                lastEvidenceEventPower,lastEvidenceEventAction,
+                                sourceRoom==lastEvidenceEventRoom,range,stage);
+                            reading=sample.reading();
+                            // Swabs/plates consume a charge when a physical trace
+                            // was actually collected; the UI never certifies its meaning.
+                            if(sample.detected()&&(id.equals("ECTOPLASM_SAMPLER")
+                                    ||id.equals("OBJECT_IMPRINT_SCANNER")))
+                                gear.expend(id);
+                        }
+                        case "EMF_ARRAY","THERMAL_BEACON" -> {
+                            LanWorld.Body body=world.body(peer.slot);
+                            SensorStation station=sensorStations.get(peer.slot);
+                            if(station==null||!station.id().equals(id)){
+                                if(room>=HouseMap.INDOOR_ROOMS)
+                                    throw new IllegalArgumentException("deploy the sensor inside");
+                                station=new SensorStation(id,room,body.x(),body.z());
+                                sensorStations.put(peer.slot,station);
+                                notifyHunters("FIELD|"+id+" STATION DEPLOYED");
+                            }
+                            int age=tick-lastEvidenceEventTick;
+                            int power=age>=0&&age<=40
+                                ?Math.max(0,lastEvidenceEventPower-age/7):0;
+                            double distance=Math.hypot(station.x()-ghostPose.pose().x(),
+                                station.z()-ghostPose.pose().z());
+                            boolean nearby=distance<=stage.reachCm()/100.0;
+                            mission.setEvidenceHeating(lights.breaker());
+                            LanCase.Report report=mission.scanMeasured(peer.slot,
+                                id.equals("EMF_ARRAY")?LanCase.Tool.EMF:LanCase.Tool.THERMOMETER,
+                                station.room(),ghost.room(),tick,
+                                nearby?lastEvidenceEventRoom:-1,nearby?power:0,
+                                GhostEvidenceProfile.emfSuppressed(ghostType));
+                            if(!report.accepted())throw new IllegalArgumentException(report.message());
+                            reading="Deployed station / "+report.message().replace("°","deg ");
+                        }
+                        case "ANCHOR_TRIANGULATOR" -> {
+                            LanWorld.Body body=world.body(peer.slot);
+                            if(lastEvidenceEventRoom<0||tick-lastEvidenceEventTick>80
+                                    ||lastEvidenceEventRoom!=room)
+                                reading="No recent source bearing / sweep another room";
+                            else{
+                                double bearing=Math.toDegrees(Math.atan2(
+                                    ghostPose.pose().z()-body.z(),ghostPose.pose().x()-body.x()));
+                                // Bearing is coarse because this is a survey aid,
+                                // not a forbidden exact ghost-coordinate client feed.
+                                int compass=Math.floorMod((int)Math.round(bearing/45.0),8);
+                                reading="Recent source bearing sector "+compass+"/8";
+                            }
+                        }
+                        case "RITUAL_ANCHOR_METER" -> {
+                            boolean nearAnchor=room==mission.ritualRoom()
+                                &&mission.ritualProgress()>=0;
+                            reading=nearAnchor?"Anchor needle "+mission.ritualProgress()+
+                                "% / "+(mission.activeRite()==null?"no pattern":
+                                mission.activeRite().name()):"No local anchor oscillation";
+                        }
+                        case "WARD_STABILITY_PROBE" -> {
+                            LanWorld.Body body=world.body(peer.slot);
+                            reading=counters.wardsAt(body.x(),body.z(),tick)
+                                ?"Ward field stable / local barrier active":
+                                "No active ward field detected";
+                        }
+                        case "CHALK_SIGIL_KIT" -> {
+                            if(gear.remaining(id)<1)
+                                throw new IllegalArgumentException("no chalk charges left");
+                            if(counters.charges(peer.slot,HunterCounters.Kind.WARD)<1)
+                                throw new IllegalArgumentException("no ward capacity remaining");
+                            HunterCounters.Marker marker=counters.deploy(peer.slot,
+                                HunterCounters.Kind.WARD,world.body(peer.slot),map,tick);
+                            int remaining=gear.expend(id);
+                            notifyHunters(marker.frame());
+                            reading="Chalk ward drawn / "+remaining+" chalk charges left";
                         }
                         case "GHOST_WRITING_BOOK" -> {
                             if(room>=HouseMap.INDOOR_ROOMS)

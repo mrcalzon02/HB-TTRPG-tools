@@ -17,7 +17,12 @@ public final class FieldEquipment {
     private static final java.util.Set<String> ENABLED=java.util.Set.of(
         "EMF_READER","THERMOMETER","SPIRIT_BOX","UV_LIGHT",
         "GHOST_WRITING_BOOK","DOTS_PROJECTOR","FLASHLIGHT","PHOTO_CAMERA",
-        "VIDEO_CAMERA","HEAD_GEAR","FIRELIGHT","IGNITER","INCENSE","SOUND_RECORDER");
+        "VIDEO_CAMERA","HEAD_GEAR","FIRELIGHT","IGNITER","INCENSE","SOUND_RECORDER",
+        "ANCHOR_TRIANGULATOR","ECTOPLASM_SAMPLER","RESONANCE_TUNER",
+        "BAROMETRIC_PROBE","SEISMIC_RECORDER","SPECTRAL_PRISM","LASER_GRID",
+        "EMF_ARRAY","THERMAL_BEACON","RITUAL_ANCHOR_METER",
+        "WARD_STABILITY_PROBE","OBJECT_IMPRINT_SCANNER","CHALK_SIGIL_KIT",
+        "SPECTRAL_FREQUENCY_ANALYZER");
     private final Map<String,EquipmentTiers.Tier> owned=new HashMap<>();
     private final String[] slots=START.clone();
     private int current;
@@ -29,7 +34,11 @@ public final class FieldEquipment {
     /** Battery-draining equipment uses tick-based, host-owned power. */
     private static final java.util.Set<String> BATTERY_TOOLS=java.util.Set.of(
         "FLASHLIGHT","HEAD_GEAR","VIDEO_CAMERA","EMF_READER",
-        "THERMOMETER","SPIRIT_BOX","UV_LIGHT","DOTS_PROJECTOR","FIRELIGHT","SOUND_RECORDER");
+        "THERMOMETER","SPIRIT_BOX","UV_LIGHT","DOTS_PROJECTOR","FIRELIGHT","SOUND_RECORDER",
+        "ANCHOR_TRIANGULATOR","RESONANCE_TUNER","BAROMETRIC_PROBE",
+        "SEISMIC_RECORDER","SPECTRAL_PRISM","LASER_GRID","EMF_ARRAY",
+        "THERMAL_BEACON","RITUAL_ANCHOR_METER","WARD_STABILITY_PROBE",
+        "OBJECT_IMPRINT_SCANNER","SPECTRAL_FREQUENCY_ANALYZER");
 
     public FieldEquipment(){
         for(String id:ENABLED)owned.put(id,EquipmentTiers.Tier.I);

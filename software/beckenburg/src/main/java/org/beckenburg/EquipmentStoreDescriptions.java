@@ -75,6 +75,23 @@ public final class EquipmentStoreDescriptions {
             case "IGNITER"->stage.capacity()+" real sparks; each activation uses one charge";
             case "INCENSE"->stage.capacity()+" incense bundles; each produces "+
                 stage.batterySeconds()+" seconds of visible smoke";
+            case "ECTOPLASM_SAMPLER","OBJECT_IMPRINT_SCANNER" ->
+                stage.capacity()+" collection charges; "+stage.reachCm()/100.0+
+                "m sample reach; read a surface trace or a clear swab";
+            case "RESONANCE_TUNER","BAROMETRIC_PROBE","SEISMIC_RECORDER",
+                    "SPECTRAL_PRISM","LASER_GRID","SPECTRAL_FREQUENCY_ANALYZER" ->
+                "Local sensor, "+stage.reachCm()/100.0+
+                "m detection reach; "+stage.intervalTicks()+" tick sample interval";
+            case "EMF_ARRAY","THERMAL_BEACON" ->
+                "Deployable local station with a real field or air reading";
+            case "ANCHOR_TRIANGULATOR" ->
+                "Coarse direction sector from recent local activity";
+            case "RITUAL_ANCHOR_METER" ->
+                "Reads a nearby ritual anchor needle";
+            case "WARD_STABILITY_PROBE" ->
+                "Tests whether an actual ward is active at your location";
+            case "CHALK_SIGIL_KIT" ->
+                "Draws a physical protective ward from finite chalk charges";
             default->stage.effect();
         };
     }
@@ -146,6 +163,19 @@ public final class EquipmentStoreDescriptions {
             case "DOTS_PROJECTOR"->"Projects actual light; only genuine moving ghost events produce silhouettes";
             case "GHOST_WRITING_BOOK"->"Placed physical book; ghost writing happens only after a real ghost interaction";
             case "INCENSE"->"Ignited physical incense cloud with an actual burn duration";
+            case "ECTOPLASM_SAMPLER"->"Swab a nearby surface; observe residue or a clean swab";
+            case "RESONANCE_TUNER","SPECTRAL_FREQUENCY_ANALYZER"->"Measure spectral frequency peaks or ordinary background noise";
+            case "BAROMETRIC_PROBE"->"Read differential air pressure after nearby activity";
+            case "SEISMIC_RECORDER"->"Place a station and observe its floor-motion needle";
+            case "SPECTRAL_PRISM"->"Examine the field through the prism for a silhouette";
+            case "LASER_GRID"->"Place the laser grid and observe displaced or aligned beams";
+            case "OBJECT_IMPRINT_SCANNER"->"Inspect a contact plate for a visible surface imprint";
+            case "EMF_ARRAY"->"Place a local array and read its field strength";
+            case "THERMAL_BEACON"->"Place a thermal station and read its air temperature";
+            case "ANCHOR_TRIANGULATOR"->"Recent local events may produce a direction sector";
+            case "RITUAL_ANCHOR_METER"->"Read the needle near a running ritual";
+            case "WARD_STABILITY_PROBE"->"Read the status of nearby deployed ward fields";
+            case "CHALK_SIGIL_KIT"->"Deploy a protective ward using one chalk charge";
             case "FIRELIGHT"->"Switchable open flame; does not certify evidence";
             case "IGNITER"->"Creates a flame using a finite supply; never queries ghost identity";
             default->"Catalog design only; effect and numeric values are proposals until an event backend exists";
