@@ -29,7 +29,7 @@ public final class FieldEquipment {
     /** Battery-draining equipment uses tick-based, host-owned power. */
     private static final java.util.Set<String> BATTERY_TOOLS=java.util.Set.of(
         "FLASHLIGHT","HEAD_GEAR","VIDEO_CAMERA","EMF_READER",
-        "THERMOMETER","SPIRIT_BOX","UV_LIGHT","DOTS_PROJECTOR");
+        "THERMOMETER","SPIRIT_BOX","UV_LIGHT","DOTS_PROJECTOR","FIRELIGHT");
 
     public FieldEquipment(){
         for(String id:ENABLED)owned.put(id,EquipmentTiers.Tier.I);
