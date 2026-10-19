@@ -478,6 +478,7 @@ public final class LanLobbyWindow extends JFrame {
             if(worldView!=null)worldView.onEvent(event);
             if(ghostView!=null)ghostView.onEvent(event);
         }
+        if(event.startsWith("HUNT|"))return; // Forwarded to active 3D view; suppress 1Hz lobby log spam.
         if(event.startsWith("LOBBYCHAT|")){
             var line=LanProtocol.parts(event);
             if(line.size()==4){
