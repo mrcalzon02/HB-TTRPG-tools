@@ -652,9 +652,12 @@ public final class LanHost implements AutoCloseable {
                     String reading;
                     switch(id){
                         case "EMF_READER", "THERMOMETER" -> {
+                            // The probe ALWAYS measures the current air/field.
+                            // Its reach limits whether it receives a *distant ghost event*,
+                            // not whether ordinary environmental readings exist.
                             double distance=Math.hypot(
-                                world.body(peer.slot).x()-map.centerX(room),
-                                world.body(peer.slot).z()-map.centerZ(room));
+                                world.body(peer.slot).x()-ghostPose.pose().x(),
+                                world.body(peer.slot).z()-ghostPose.pose().z());
                             int eventAge=tick-lastEvidenceEventTick;
                             int eventPower=eventAge>=0&&eventAge<=40
                                 ?Math.max(0,lastEvidenceEventPower-eventAge/7):0;
@@ -668,7 +671,7 @@ public final class LanHost implements AutoCloseable {
                             if(!measure.accepted())throw new IllegalArgumentException("instrument unavailable");
                             reading=measure.message().substring(measure.message().indexOf(" - ")+3)
                                 .replace("°","deg ");
-                            if(!inReach)reading+=" / beyond haunting-signal range";
+                            // Never append a supernatural validity assessment.
                         }
                         case "SPIRIT_BOX" -> {
                             boolean voiceEvent=room==lastEvidenceEventRoom
@@ -698,6 +701,36 @@ public final class LanHost implements AutoCloseable {
                         }
                         case "UV_LIGHT" -> reading=counters.recentUv(room,tick)
                             ?"UV light / recent physical surface trace":"UV light / no visible trace";
+                        case "FLASHLIGHT","HEAD_GEAR","FIRELIGHT" -> {
+                            boolean enabled=gear.toggle(id);
+                            reading=switch(id){
+                                case "FLASHLIGHT" -> "Flashlight "+(enabled?"on":"off");
+                                case "HEAD_GEAR" -> "Night vision "+(enabled?"on":"off");
+                                default -> "Firelight "+(enabled?"lit":"extinguished");
+                            };
+                            notifyHunters("GEARFX|"+peer.slot+"|"+id+"|"+(enabled?1:0));
+                        }
+                        case "PHOTO_CAMERA" -> {
+                            int remaining=gear.expend(id);
+                            reading="Exposure captured / "+remaining+" frames remaining";
+                            // The client captures its *actual rendered frame* on receipt.
+                            // No image-recognition or ghost-presence check exists.
+                        }
+                        case "IGNITER" -> {
+                            int remaining=gear.expend(id);
+                            reading="Igniter sparked / "+remaining+" uses remaining";
+                            notifyHunters("GEARFX|"+peer.slot+"|IGNITER|1");
+                        }
+                        case "INCENSE" -> {
+                            int remaining=gear.expend(id);
+                            reading="Incense burning / "+remaining+" bundles remaining";
+                            LanWorld.Body body=world.body(peer.slot);
+                            int duration=EquipmentTiers.stage(id,gear.owned(id)).batterySeconds()*10;
+                            notifyHunters("BURN|INCENSE|"+room+"|"+
+                                Math.round(body.x()*1000)+"|"+Math.round(body.z()*1000)+
+                                "|"+(tick+Math.max(10,duration)));
+                            recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
+                        }
                         case "GHOST_WRITING_BOOK" -> {
                             if(room>=HouseMap.INDOOR_ROOMS)
                                 throw new IllegalArgumentException("writing book requires an interior room");
