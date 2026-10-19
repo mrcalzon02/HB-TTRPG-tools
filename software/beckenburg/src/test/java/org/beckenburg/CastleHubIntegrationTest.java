@@ -19,7 +19,13 @@ public final class CastleHubIntegrationTest {
         ok(map.traversable(sx,sz),"castle spawn on floor");
         ok(CastleHubMap.furnishings().size()>=20,"source-backed castle furniture");
         var stonework=CastleHubArchitecture.create(map);
-        ok(stonework.size()>=175,"authored medieval stonework surrounds the lobby");
+        ok(stonework.size()>=10,"source-backed stone columns and tower trim");
+        ok(CastleHubArchitecturalPlan.walls().stream()
+                .filter(CastleHubArchitecturalPlan.Wall::hasDoor).count()>=13,
+            "wide authored doors rather than grid-generated block holes");
+        ok(CastleHubArchitecturalPlan.decks().stream()
+                .anyMatch(deck->deck.height()==CastleHubArchitecturalPlan.GROUND_CEILING),
+            "visible and traversable upper gallery deck");
         var uniqueStonework=new java.util.HashSet<String>();
         for(var piece:stonework){
             ok(Double.isFinite(piece.scaleX()+piece.scaleY()+piece.scaleZ()),
