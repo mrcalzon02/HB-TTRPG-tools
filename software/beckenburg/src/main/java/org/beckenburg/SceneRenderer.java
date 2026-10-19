@@ -27,6 +27,14 @@ public final class SceneRenderer {
     public int placedWritingBookRoom=-1;
     public final java.util.Map<Integer,LanDotsProjectors.Placement> dotsPositions=
         new java.util.HashMap<>();
+    public record IncenseSmoke(int room,double x,double z,int untilTick){
+        public IncenseSmoke{
+            if(room<0||room>=HouseMap.ROOM_COUNT||!Double.isFinite(x)
+                    ||!Double.isFinite(z)||untilTick<0)
+                throw new IllegalArgumentException("invalid burning item");
+        }
+    }
+    public final java.util.List<IncenseSmoke> incense=new java.util.ArrayList<>();
     public int dotsPassRoom=-1,dotsPassUntil=-1;
     public double dotsPassX,dotsPassZ;
     public RoomLighting roomLights;
@@ -423,6 +431,21 @@ public final class SceneRenderer {
         // Road and traffic props are exterior-only. Nearby rooms never instantiate
         // a second duplicate set of these global world objects.
         if(z>20.0&&z<31.0)roadsideModels(out,map);
+        // An ignited incense bundle stays physically present for its burn duration.
+        // These wisps are light/smoke only and never fabricate spectral evidence.
+        incense.removeIf(b->b.untilTick()<roomLightTick);
+        for(IncenseSmoke burn:incense){
+            if(Math.hypot(burn.x()-x,burn.z()-z)>13.5)continue;
+            box(out,burn.x()-.06,.04,burn.z()-.06,.12,.07,.12,0xa88f72);
+            double phase=clock*1.7+burn.x();
+            for(int i=0;i<8;i++){
+                double rise=.2+i*.22;
+                double sway=Math.sin(phase+i*.8)*(.04+rise*.07);
+                double px=burn.x()+sway,pz=burn.z()+Math.cos(phase+i*.45)*.07;
+                box(out,px-.035,rise,pz-.032,.07,.046,.064,
+                    i%2==0?0x6e8888:0x8f9d96);
+            }
+        }
         // Actual mounted PSX Tier I shell emits a visible grid. Empty projected
         // dots are normal equipment light; only host-authored PASS creates a ghost silhouette.
         for(LanDotsProjectors.Placement placement:dotsPositions.values()){
