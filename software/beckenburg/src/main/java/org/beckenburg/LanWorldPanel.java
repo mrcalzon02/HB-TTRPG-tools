@@ -279,6 +279,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     if(activityHistory.size()>32)activityHistory.removeFirst();
                 }
                 meters=next;
+                GlbProps.updateVanCrt(next);
             }else if(p.size()==8&&p.get(0).equals("SUPPLY")){
                 fieldCredits=LanProtocol.integer(p.get(1),0,100000);
                 for(int i=0;i<6;i++)medicine[i]=LanProtocol.integer(p.get(i+2),0,4);
