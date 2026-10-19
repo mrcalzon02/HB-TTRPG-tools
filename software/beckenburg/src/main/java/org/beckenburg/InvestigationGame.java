@@ -305,7 +305,7 @@ public final class InvestigationGame {
         private final SiteCatalog.Location location;
         private final SiteCatalog.Conditions conditions;
         private boolean powerOn;
-        private boolean mapShown,journalShown,claimSaved,wheelOpen;
+        private boolean mapShown,journalShown,claimSaved,wheelOpen,helpVisible;
         private final MouseLook mouseLook;
         private final TeamCallout.Board callouts=new TeamCallout.Board(map);
         private double wheelDx,wheelDy;
@@ -457,6 +457,12 @@ public final class InvestigationGame {
         }
         @Override public void keyPressed(KeyEvent e){
             int key=e.getKeyCode();if(down.contains(key))return;
+            if(key==KeyEvent.VK_F1){
+                helpVisible=!helpVisible;
+                if(helpVisible){down.clear();mouseLook.release();wheelOpen=false;}
+                repaint();return;
+            }
+            if(helpVisible){if(key==KeyEvent.VK_ESCAPE){helpVisible=false;repaint();}return;}
             if(key==KeyEvent.VK_ESCAPE){if(wheelOpen){wheelOpen=false;down.remove(KeyEvent.VK_Q);repaint();}else pause();return;}
             if(key==KeyEvent.VK_Q){
                 wheelOpen=true;wheelDx=0;wheelDy=0;
@@ -547,59 +553,68 @@ public final class InvestigationGame {
             Graphics2D g=(Graphics2D)graphics.create();
             try{
                 g.setColor(Color.BLACK);g.fillRect(0,0,getWidth(),getHeight());
-                int stageH=Math.max(250,getHeight()-106);
+                int stageH=getHeight(),width=getWidth();
                 g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                g.drawImage(scene.image(),0,0,getWidth(),stageH,null);
-                HeldToolView.draw(g,getWidth(),stageH,loadout.equipped().name(),session.ticks(),
+                g.drawImage(scene.image(),0,0,width,stageH,null);
+                HeldToolView.draw(g,width,stageH,loadout.equipped().name(),session.ticks(),
                     session.ticks()<=useHeldUntilTick,scene.lamp);
-                g.setFont(new Font(Font.MONOSPACED,Font.BOLD,Math.max(12,getHeight()/52)));
+                g.setFont(new Font(Font.MONOSPACED,Font.BOLD,13));
+                g.setColor(new Color(14,19,25,222));
+                g.fillRoundRect(12,10,Math.min(width-24,590),71,9,9);
                 g.setColor(new Color(242,212,156));
-                g.drawString("BECKENBURG / "+location.label.toUpperCase()+" / "+conditions.label.toUpperCase()+" / "+session.role(),16,25);
-                g.drawString(map.roomName(scene.x,scene.z),16,46);
-                g.drawString("+",getWidth()/2-5,stageH/2+5);
-                g.setColor(new Color(21,23,30));g.fillRect(0,stageH,getWidth(),getHeight()-stageH);
-                g.setColor(new Color(221,214,194));
-                g.drawString(session.statusLine()+"   HELD "+loadout.equipped().label.toUpperCase()+
-                    (loadout.usesLeft(loadout.equipped())<0?"":" ("+loadout.usesLeft(loadout.equipped())+" LEFT)"),16,stageH+23);
-                g.setColor(new Color(180,196,203));
+                g.drawString("BECKENBURG / "+location.label.toUpperCase()+" / "+session.role(),24,30);
+                g.setColor(new Color(207,220,216));
+                g.drawString(map.roomName(scene.x,scene.z)+" / "+conditions.label.toUpperCase(),24,48);
+                String status=session.statusLine();
+                if(status.length()>76)status=status.substring(0,73)+"...";
+                g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
+                g.drawString(status,24,66);
+                g.setColor(new Color(232,225,195));g.drawString("+",width/2-4,stageH/2+4);
                 String msg=session.message();
-                g.drawString(msg.length()>120?msg.substring(0,117)+"...":msg,16,stageH+45);
-                g.setColor(new Color(194,171,139));
-                g.drawString("1-4 GEAR / R USE  Z CROSS("+session.counterCharges(HunterCounters.Kind.CROSS)+
-                    ")  G WARD("+session.counterCharges(HunterCounters.Kind.WARD)+
-                    ")  H SALT("+session.counterCharges(HunterCounters.Kind.SALT)+
-                    ")  C RITUAL WARD  B RITE  E INTERACT",16,stageH+72);
+                if(!msg.isBlank()){
+                    if(msg.length()>75)msg=msg.substring(0,72)+"...";
+                    g.setColor(new Color(14,19,25,228));
+                    g.fillRoundRect(12,88,Math.min(width-24,610),30,7,7);
+                    g.setColor(new Color(182,218,205));g.drawString(msg,23,108);
+                }
                 if(lastPing!=null && callouts.visible(session.ticks()).contains(lastPing)){
                     g.setColor(new Color(238,196,109));
-                    g.drawString("CALLOUT: "+lastPing.phrase().spoken+"   ["+map.roomName(lastPing.zone())+"]",16,stageH+88);
+                    g.drawString("CALLOUT: "+lastPing.phrase().spoken+" ["+map.roomName(lastPing.zone())+"]",23,139);
                 }
-                g.setColor(new Color(175,208,199));
-                String slots="";for(int i=0;i<EquipmentLoadout.SLOTS;i++)
-                    slots+=(i==0?"":"   ")+(i+1)+":"+
-                        loadout.at(i).label.toUpperCase()+(i==loadout.activeSlot()?"*":"");
-                g.drawString(slots,16,stageH-17);
+                int gearY=stageH-112;
+                g.setColor(new Color(13,20,27,222));g.fillRoundRect(12,gearY,346,100,9,9);
+                g.setColor(new Color(236,206,155));
+                g.drawString("EQUIPMENT / 1-4 SELECT / R USE / F1 HELP",23,gearY+20);
+                for(int i=0;i<EquipmentLoadout.SLOTS;i++){
+                    String item=loadout.at(i).label.toUpperCase();
+                    if(item.length()>17)item=item.substring(0,14)+"...";
+                    g.setColor(i==loadout.activeSlot()?new Color(166,238,194):new Color(194,207,211));
+                    g.drawString((i+1)+"  "+item,23+(i%2)*167,gearY+45+(i/2)*27);
+                }
+                g.setColor(new Color(13,19,25,215));g.fillRoundRect(Math.max(12,width-126),12,114,30,8,8);
+                g.setColor(new Color(225,219,200));g.drawString("ESC PAUSE",Math.max(23,width-116),32);
                 int targetedSwitch=lights.aimed(map,scene.x,scene.z,scene.yaw);
                 if(targetedSwitch>=0){
                     g.setColor(new Color(255,225,156));
-                    g.drawString("E / ROOM LIGHT SWITCH : "+(lights.on(targetedSwitch)?"ON":"OFF"),16,stageH-36);
+                    g.drawString("E / ROOM LIGHT SWITCH : "+(lights.on(targetedSwitch)?"ON":"OFF"),Math.max(24,width/2-155),stageH-59);
                 }
                 if(nearBreaker()){
                     g.setColor(new Color(255,212,137));
-                    g.drawString("E / UTILITY BREAKER: "+(powerOn?"ON":"OFF"),16,stageH-36);
+                    g.drawString("E / UTILITY BREAKER: "+(powerOn?"ON":"OFF"),Math.max(24,width/2-155),stageH-59);
                 }
                 EquipmentLoadout.Item rackAim=VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw,profile.equipment());
                 if(rackAim!=null){
                     g.setColor(new Color(255,212,137));
-                    g.drawString("E PICK UP / "+rackAim.label.toUpperCase(),16,stageH-37);
+                    g.drawString("E PICK UP / "+rackAim.label.toUpperCase(),Math.max(24,width/2-155),stageH-59);
                 }
                 else if(map.van().stationAt(scene.x,scene.z)!=null){
                     VanStaging.Station service=map.van().stationAt(scene.x,scene.z);
                     g.setColor(new Color(255,212,137));
-                    g.drawString("E  /  "+service.label,16,stageH-37);
+                    g.drawString("E  /  "+service.label,Math.max(24,width/2-155),stageH-59);
                 }
                 if(vanNoticeExpires>session.ticks()){
                     g.setColor(new Color(160,218,216));
-                    g.drawString(vanNotice.substring(0,Math.min(vanNotice.length(),94)),16,stageH-57);
+                    g.drawString(vanNotice.substring(0,Math.min(vanNotice.length(),78)),24,Math.max(146,stageH-155));
                 }
                 // Always-on instrument sidebar while physically inside the van.
                 if(insideVan())drawVanMeters(g);
@@ -607,6 +622,23 @@ public final class InvestigationGame {
                 if(wheelOpen) drawCalloutWheel(g,stageH);
                 if(mapShown)drawMap(g);
                 if(journalShown)drawJournal(g);
+                if(helpVisible){
+                    int pw=Math.min(width-36,570),ph=245,x=(width-pw)/2,y=(stageH-ph)/2;
+                    g.setColor(new Color(12,17,27,248));g.fillRoundRect(x,y,pw,ph,12,12);
+                    g.setColor(new Color(228,206,161));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));
+                    g.drawString("BECKENBURG / FIELD CONTROLS",x+18,y+29);
+                    g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
+                    String[] hints={
+                        "WASD move / SHIFT sprint / CLICK mouse-look",
+                        "E interact / F flashlight / 1-4 select gear / R use",
+                        "C ritual ward / B rite / Z cross / G ward / H salt",
+                        "T health medicine / Y sanity medicine",
+                        "J journal / M map / Q hold team callout wheel",
+                        "X extract at van / ESC pause / F1 close help"
+                    };
+                    int iy=y+60;g.setColor(new Color(225,228,221));
+                    for(String hint:hints){g.drawString(hint,x+18,iy);iy+=27;}
+                }
             }finally{g.dispose();}
         }
         private void drawMap(Graphics2D g){
