@@ -50,6 +50,9 @@ final class GhostSpriteAtlas {
             case MATERIALIZE -> "manifest";
             case WINDUP -> "attack";
             case RECOVER -> "recover";
+            case WALK -> "walk";
+            case SPRINT -> "sprint";
+            case SIGNATURE -> "signature";
             default -> "idle";
         };
     }
