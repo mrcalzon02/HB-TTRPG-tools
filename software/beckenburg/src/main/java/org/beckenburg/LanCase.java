@@ -216,10 +216,15 @@ public final class LanCase {
                 ||map.roomAt(body.x(),body.z())!=body.room())
             return new Report(false,"invalid instrument or host body");
         int room=body.room();
-        if(Math.hypot(body.x()-map.centerX(room),body.z()-map.centerZ(room))
-                >tool.sensingRadius())
-            return new Report(true,"READING "+tool+" in "+room+" - OUT OF RANGE");
-        return scanMeasured(seat,tool,room,ghostRoom,tick,eventRoom,eventStrength,emfSilence);
+        // All probes continue reading the room's ordinary physical environment.
+        // Reach only controls pickup of a *distant* ghost event: it must never
+        // suppress an ordinary measurement or announce evidence validity.
+        boolean ghostEventNearby=eventRoom==room&&
+            Math.hypot(body.x()-map.centerX(eventRoom),
+                       body.z()-map.centerZ(eventRoom))<=tool.sensingRadius();
+        return scanMeasured(seat,tool,room,ghostRoom,tick,
+            ghostEventNearby?eventRoom:-1,
+            ghostEventNearby?eventStrength:0,emfSilence);
     }
 
     public Report ward(int seat,int room) {
