@@ -800,10 +800,22 @@ public final class SceneRenderer {
     }
     private void castleShell(List<Face> out){
         for(CastleHubArchitecturalPlan.Wall wall:CastleHubArchitecturalPlan.walls()){
-            double cx=(wall.x0()+wall.x1())*.5,cz=(wall.z0()+wall.z1())*.5;
-            // A long wall's midpoint can be out of reach while its end is
-            // adjacent; keep all authored walls for correct distant occlusion.
-            architecturalWall(out,wall);
+            if(wall.hasDoor()){
+                // Full-height 2.7m portals, 2.5m clear spans, real jambs and
+                // stone lintels at the architecturally authored wall plane.
+                double left=wall.horizontal()?wall.x0():wall.z0();
+                double right=wall.horizontal()?wall.x1():wall.z1();
+                double y0=wall.bottom(),y1=y0+CastleHubArchitecturalPlan.DOOR_HEIGHT;
+                if(wall.horizontal()){
+                    box(out,left-.085,y0,wall.z0()-.16,.17,y1-y0,.32,0x786c5b);
+                    box(out,right-.085,y0,wall.z0()-.16,.17,y1-y0,.32,0x786c5b);
+                    box(out,left-.12,y1-.13,wall.z0()-.18,right-left+.24,.19,.36,0x9b8970);
+                }else{
+                    box(out,wall.x0()-.16,y0,left-.085,.32,y1-y0,.17,0x786c5b);
+                    box(out,wall.x0()-.16,y0,right-.085,.32,y1-y0,.17,0x786c5b);
+                    box(out,wall.x0()-.18,y1-.13,left-.12,.36,.19,right-left+.24,0x9b8970);
+                }
+            }else architecturalWall(out,wall);
         }
         for(var deck:CastleHubArchitecturalPlan.decks()){
             texturedQuad(out,
@@ -879,7 +891,9 @@ public final class SceneRenderer {
                 mountedLamp(castle,fixture,lightsOn);
         for(CastleHubDecor.Switch sw:CastleHubDecor.SWITCHES)
             if(Math.hypot(sw.x()-x,sw.z()-z)<14)
-                imported(castle,"light_switch_1",sw.x(),sw.y(),sw.z(),1,sw.yaw());
+                mountedLamp(castle,new CastleHubDecor.Light("light_switch_1",
+                    "light_switch_1",sw.x(),sw.y(),sw.z(),.85,sw.yaw(),
+                    CastleHubDecor.Mount.WALL),true);
         for(CastleHubMap.Station station:CastleHubMap.Station.values()){
             if(Math.hypot(station.x-x,station.z-z)>16)continue;
             double px=station.x,pz=station.z;
@@ -916,6 +930,11 @@ public final class SceneRenderer {
         for(CastleHubMap.Furnishing item:CastleHubMap.furnishings())
             if(Math.hypot(item.x()-x,item.z()-z)<16)
                 imported(castle,item.mesh(),item.x(),0,item.z(),item.scale(),item.yaw());
+        for(CastleHubMap.Furnishing item:CastleHubDecor.UPPER_FURNISHINGS)
+            if(Math.hypot(item.x()-x,item.z()-z)<16)
+                imported(castle,item.mesh(),item.x(),
+                    CastleHubArchitecturalPlan.GROUND_CEILING,item.z(),
+                    item.scale(),item.yaw());
         for(CastleHubDecor.Accent a:CastleHubDecor.ACCENTS)
             if(Math.hypot(a.x()-x,a.z()-z)<12)
                 imported(castle,a.mesh(),a.x(),a.y(),a.z(),a.scale(),a.yaw());
