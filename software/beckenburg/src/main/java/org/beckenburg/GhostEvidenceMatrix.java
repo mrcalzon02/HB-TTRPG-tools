@@ -68,8 +68,11 @@ public final class GhostEvidenceMatrix {
         Objects.requireNonNull(type);
         GhostTraits.Profile trait=GhostTraits.of(type);
         return new Row(type,
-            GhostEvidenceProfile.emfSuppressed(type)
-                ?GhostFieldGuide.Clue.EMF_SUPPRESSION:GhostFieldGuide.Clue.EMF_OVER_SIX,
+            switch(GhostEvidenceProfile.emfBand(type)){
+                case HIGH->GhostFieldGuide.Clue.EMF_OVER_SIX;
+                case LOW_MID->GhostFieldGuide.Clue.EMF_LOW_MID;
+                case NONE->GhostFieldGuide.Clue.EMF_SUPPRESSION;
+            },
             switch(GhostEvidenceProfile.thermal(type)){
                 case COLD->GhostFieldGuide.Clue.EXTREME_COLD;
                 case HOT->GhostFieldGuide.Clue.EXTREME_HEAT;

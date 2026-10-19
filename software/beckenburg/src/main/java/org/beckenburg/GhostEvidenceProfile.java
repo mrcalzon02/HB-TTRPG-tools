@@ -16,11 +16,25 @@ public final class GhostEvidenceProfile {
         for(var choice:choices)set.add(choice);
         return set;
     }
-    private static final EnumSet<GhostIdentity.Type> SILENT=types(
-        GhostIdentity.Type.SHADE,GhostIdentity.Type.SPECTER,
-        GhostIdentity.Type.HANTU);
+    /** Species EMF signature, separate from baseline/weather EMF fluctuation. */
+    public enum EmfBand { HIGH, LOW_MID, NONE }
+    private static final EnumSet<GhostIdentity.Type> NONE_EMF=types(
+        GhostIdentity.Type.SHADE,GhostIdentity.Type.SPECTER,GhostIdentity.Type.HANTU);
+    private static final EnumSet<GhostIdentity.Type> LOW_MID_EMF=types(
+        GhostIdentity.Type.POSSESSIVE,GhostIdentity.Type.YOKAI,
+        GhostIdentity.Type.BANSHEE,GhostIdentity.Type.WRAITH,GhostIdentity.Type.SPIRIT);
+    private static final EnumSet<GhostIdentity.Type> DOTS_GHOSTS=types(
+        GhostIdentity.Type.WRAITH,GhostIdentity.Type.SHADE,GhostIdentity.Type.SPECTER);
+    public static EmfBand emfBand(GhostIdentity.Type type){
+        Objects.requireNonNull(type);
+        return NONE_EMF.contains(type)?EmfBand.NONE:
+            LOW_MID_EMF.contains(type)?EmfBand.LOW_MID:EmfBand.HIGH;
+    }
     public static boolean emfSuppressed(GhostIdentity.Type type){
-        return SILENT.contains(Objects.requireNonNull(type));
+        return emfBand(type)==EmfBand.NONE;
+    }
+    public static boolean dotsVisible(GhostIdentity.Type type){
+        return DOTS_GHOSTS.contains(Objects.requireNonNull(type));
     }
     // Thermal tendencies define an extreme a species CAN generate, not a
     // mandatory value on each scan. All species show ordinary room fluctuations.
@@ -67,8 +81,9 @@ public final class GhostEvidenceProfile {
     public static boolean compatible(GhostIdentity.Type type,GhostFieldGuide.Clue clue){
         Objects.requireNonNull(type);Objects.requireNonNull(clue);
         return switch(clue){
-            case EMF_OVER_SIX->!emfSuppressed(type);
-            case EMF_SUPPRESSION->emfSuppressed(type);
+            case EMF_OVER_SIX->emfBand(type)==EmfBand.HIGH;
+            case EMF_LOW_MID->emfBand(type)==EmfBand.LOW_MID;
+            case EMF_SUPPRESSION->emfBand(type)==EmfBand.NONE;
             case EXTREME_COLD->thermal(type)==EvidenceSignals.Polarity.COLD;
             case EXTREME_HEAT->thermal(type)==EvidenceSignals.Polarity.HOT;
             case WRITING_CHILD->writing(type,GhostWriting.Style.CHILD_DRAWINGS);
@@ -76,7 +91,7 @@ public final class GhostEvidenceProfile {
             case WRITING_RITUAL->writing(type,GhostWriting.Style.RITUAL_CIRCLES);
             case GHOST_WRITING->availableWriting(type).length>0;
             case SPIRIT_REPLY->true; // all current spirits can reply if actually nearby
-            case DOTS_PATTERN->true; // projected light can interact with every ghost
+            case DOTS_PATTERN->dotsVisible(type); // only three ghost species manifest in D.O.T.S.
             default->true; // physical and behavioral traits are evaluated by the field guide
         };
     }

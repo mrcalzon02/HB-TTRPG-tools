@@ -124,7 +124,7 @@ public final class LanHost implements AutoCloseable {
         mission.setStartingSanity(contract.startingSanity());
         mission.configureSanityDrain(contract.sanityDrain());
         ghost.configureRecovery(contract.energyRecovery());
-        if(identityMode)mission.configure(type,true);
+        mission.configure(type,identityMode);
         mission.configureHardEvidence(contract.evidenceLevel(),
             java.util.concurrent.ThreadLocalRandom.current().nextLong());
         rewards=new ContractRewards(java.util.UUID.randomUUID(),

@@ -3,8 +3,10 @@ package org.beckenburg;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Physical D.O.T.S. light: ghost presence distorts projected light regardless of
- * species, evidence table or prior ability use. Interpretation belongs to players.
+/** Physical D.O.T.S. light: a projector can be placed for any mission,
+ * but only Wraith, Shade and Specter can generate host-approved apparition passages.
+ * The host checks species compatibility and contracted evidence quota before
+ * calling illuminate(); clients cannot manufacture D.O.T.S. proof.
  */
 public final class LanDotsProjectors {
     public record Placement(int seat,int room,double x,double z,

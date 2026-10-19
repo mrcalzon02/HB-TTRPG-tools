@@ -11,7 +11,8 @@ public final class GhostFieldGuide {
     private GhostFieldGuide(){}
     public enum Category { EMF, TEMPERATURE, SPIRIT_BOX, WRITING, PHYSICAL, CAMERA, BEHAVIOR }
     public enum Clue {
-        EMF_OVER_SIX(Category.EMF,"High EMF / 8–10",true),
+        EMF_OVER_SIX(Category.EMF,"Ghost high EMF / 8–10",true),
+        EMF_LOW_MID(Category.EMF,"Ghost low/mid EMF / 2–7",true),
         EMF_NORMAL(Category.EMF,"Ordinary EMF / 2–7",false),
         EMF_SUPPRESSION(Category.EMF,"EMF zero / suppressed field",true),
         WRITING_CHILD(Category.WRITING,"Childlike drawings",true),
@@ -89,13 +90,18 @@ public final class GhostFieldGuide {
         Objects.requireNonNull(type);
         GhostTraits.Profile p=GhostTraits.of(type);
         return type.name().replace('_',' ') + "  /  " + type.rite().name()+"\n"
-            +"EMF: "+(GhostEvidenceProfile.compatible(type,Clue.EMF_OVER_SIX)?"2–7 / HIGH 8–10":"2–7 / SUPPRESSION 0")
+            +"EMF: "+switch(GhostEvidenceProfile.emfBand(type)){
+                case HIGH->"HIGH (8–10)";
+                case LOW_MID->"LOW/MID (2–7 ghost events)";
+                case NONE->"NO EMF (0 at ghost events)";
+            }
             +" | TEMP: "+switch(GhostEvidenceProfile.thermal(type)){
                 case COLD->"FREEZING CAPABLE";
                 case HOT->"EXTREME HEAT CAPABLE";
                 case NONE->"VARIABLE ONLY";
             }+"\n"
-            +"WRITING: "+java.util.Arrays.toString(GhostEvidenceProfile.availableWriting(type))+"\n"
+            +"WRITING: "+java.util.Arrays.toString(GhostEvidenceProfile.availableWriting(type))+
+            " | DOTS: "+(GhostEvidenceProfile.dotsVisible(type)?"YES":"NO")+"\n"
             +"PROJECTION GEAR STILL IN DEVELOPMENT\n"
             +(p.locomotion()==GhostTraits.Locomotion.FLOAT?"FLOATING":"WALKING")
             +" / "+(p.canPhase()?"WALL PHASING":"DOOR TRAVEL")
@@ -112,7 +118,7 @@ public final class GhostFieldGuide {
         return switch(clue){
             // Measurement categories no longer encode a specific ghost species.
             // Archive enum members only survive for old journal notes.
-            case EMF_OVER_SIX,EMF_NORMAL,EMF_SUPPRESSION,
+            case EMF_OVER_SIX,EMF_LOW_MID,EMF_NORMAL,EMF_SUPPRESSION,
                  EXTREME_COLD,EXTREME_HEAT,TEMPERATURE_NORMAL,
                  WRITING_CHILD,WRITING_SCRAWL,WRITING_RITUAL,
                  SPIRIT_REPLY,GHOST_WRITING,DOTS_PATTERN->GhostEvidenceProfile.compatible(type,clue);

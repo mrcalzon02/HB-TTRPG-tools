@@ -11,7 +11,10 @@ scaling, sanity and ghost action frequency.
 - **Death Wish:** exactly **one guaranteed** hard-evidence family. Never zero.
   EMF baselines, natural temperature and no-response readings still work
   independently of the selected supernatural family, as do ordinary ghost
-  behavior and physical observation. Unselected supernatural EMF signatures,
+  behavior and physical observation. The EMF family has three ghost-specific
+  signatures (high, low/mid, zero); each counts as exactly one slot.
+  D.O.T.S. is restricted to Wraith, Shade and Specter.
+  Unselected supernatural EMF signatures,
   ghost-caused temperature extremes, spirit replies, authored writing,
   distinctive D.O.T.S. interactions, UV traces and orbs are withheld.
   The host selects once per case from families the ghost can actually produce.

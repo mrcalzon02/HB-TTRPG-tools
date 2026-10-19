@@ -1,70 +1,67 @@
-# Project Beckenburg — revised ghost evidence matrix
-_Sourced from GhostEvidenceProfile, GhostTraits, GhostIdentity, GhostEvidenceMatrix and HardEvidenceQuota (LAN simulation)._
+# Project Beckenburg — corrected ghost evidence matrix
 
-## Contract guarantee
+**EMF has three ghost signatures:** High (8–10), Low/Mid (2–7), or No EMF
+(0 during the ghost's strong nearby action). All three are valid species-specific
+EMF evidence, and each occupies **one** evidence family, never multiple.
+Ambient/weather readings may still fluctuate 2–7 independently of ghost
+signatures, including around a no-EMF ghost between events.
 
-**Easy:** at least **3** hard-evidence families; currently all compatible sources,
-usually 4–6. **Medium:** exactly **2**, chosen from the species' compatible sources.
-**Death Wish:** exactly **1**, chosen from the same compatible sources.
-Medium and Death Wish select a fixed, host-owned, case-seeded subset. Do not
-publish that per-case subset in the hunter journal: the table is **what the ghost
-*can* produce**, not a report of which sources were selected in a particular match.
+**D.O.T.S. evidence belongs to only three ghosts: Wraith, Shade and Specter.**
+The projector can be deployed for any ghost, but the host only permits
+a visible D.O.T.S. silhouette for those three ghosts and only when that evidence
+family is enabled for the current contract.
 
-The seven implemented hard-evidence families are high EMF **8–10**, paranormal
-**temperature extreme**, positive **spirit-box** response, authored **writing**,
-genuine **D.O.T.S.** interaction, positive **UV trace**, and **spirit orbs**.
-Ordinary EMF **2–7**, seasonal freezing/heat, no-response spirit-box scans and
-behavioral sightings are still possible outside the hard-evidence quota.
-**EMF suppression** on Shade, Specter and Hantu is diagnostically useful, but
-cannot consume one of the guaranteed positive-evidence slots.
+**Contract guarantees:** Easy ≥3, Medium exactly 2, Death Wish exactly 1.
+Easy currently exposes all available species-compatible evidence families.
+Medium/Death Wish pick 2/1 host-seeded families at the beginning of a case.
+Weather cannot create a species-specific EMF event or override its group.
+
+Legend: H = high ghost EMF (8–10); L/M = low/mid ghost EMF (2–7);
+0 = no EMF during a strong local spectral event (natural ambient may differ);
+C = ghost-induced cold; Ht = ghost-induced heat; Ch = child drawings;
+Sc = frantic scrawls; Ci = ritual circles; ✓ = positive evidence possible.
+Writing styles count as one writing family.
 
 ## Ghost by ghost
 
-Legend: **✓** potential positive hard evidence; **—** unavailable;
-**Supp.** high EMF suppressed (diagnostic trait only); **C** paranormal cold;
-**H** paranormal heat. Writing styles: **Ch** child drawings, **Sc** frantic
-scrawls, **Ci** ritual circles. The **Easy pool** counts families, not writing
-subtypes.
-
-| Ghost | EMF 8–10 | Temp | Spirit box | Writing | D.O.T.S. | UV | Orbs | Easy pool | Required rite |
+| Ghost | EMF | Temperature | Spirit box | Writing | D.O.T.S. | UV | Orbs | Easy pool | Required rite |
 |---|---|---|---|---|---|---|---|---:|---|
-| Possessive | ✓ | — | ✓ | Ch, Ci | ✓ | ✓ | — | 5 | Absolution |
-| Poltergeist | ✓ | H | ✓ | Sc | ✓ | ✓ | — | 6 | Banishment |
-| Demon | ✓ | H | ✓ | Sc, Ci | ✓ | — | — | 5 | Banishment |
-| Yokai | ✓ | — | ✓ | — | ✓ | — | ✓ | 4 | Absolution |
-| Banshee | ✓ | C | ✓ | — | ✓ | — | — | 4 | Absolution |
-| Wraith | ✓ | — | ✓ | Sc, Ci | ✓ | ✓ | — | 5 | Banishment |
-| Shade | Supp. | C | ✓ | Ci | ✓ | ✓ | — | 5 | Cleansing |
-| Specter | Supp. | — | ✓ | Ci | ✓ | ✓ | — | 4 | Cleansing |
-| Spirit | ✓ | C | ✓ | Ch | ✓ | ✓ | — | 6 | Absolution |
-| Hantu | Supp. | C | ✓ | — | ✓ | — | ✓ | 4 | Cleansing |
-| Devil | ✓ | H | ✓ | Sc, Ci | ✓ | ✓ | — | 6 | Banishment |
-| Mimic | ✓ | H | ✓ | Ch, Sc | ✓ | ✓ | — | 6 | Cleansing |
-| Twins | ✓ | — | ✓ | — | ✓ | — | ✓ | 4 | Absolution |
+| Possessive | L/M | — | ✓ | Ch, Ci | — | ✓ | — | 4 | Absolution |
+| Poltergeist | H | Ht | ✓ | Sc | — | ✓ | — | 5 | Banishment |
+| Demon | H | Ht | ✓ | Sc, Ci | — | — | — | 4 | Banishment |
+| Yokai | L/M | — | ✓ | — | — | — | ✓ | 3 | Absolution |
+| Banshee | L/M | C | ✓ | — | — | — | — | 3 | Absolution |
+| Wraith | L/M | — | ✓ | Sc, Ci | ✓ | ✓ | — | 5 | Banishment |
+| Shade | 0 | C | ✓ | Ci | ✓ | ✓ | — | 5 | Cleansing |
+| Specter | 0 | — | ✓ | Ci | ✓ | ✓ | — | 4 | Cleansing |
+| Spirit | L/M | C | ✓ | Ch | — | ✓ | — | 5 | Absolution |
+| Hantu | 0 | C | ✓ | — | — | — | ✓ | 4 | Cleansing |
+| Devil | H | Ht | ✓ | Sc, Ci | — | ✓ | — | 5 | Banishment |
+| Mimic | H | Ht | ✓ | Ch, Sc | — | ✓ | — | 5 | Cleansing |
+| Twins | H | — | ✓ | — | — | — | ✓ | 3 | Absolution |
 
-## Interpretation and design limits
+## Rules and distinction
 
-- All 13 species have possible **spirit-box** and **D.O.T.S.** events; these are
-  not necessarily active in a Medium or Death Wish contract.
-- Ghost writing counts as **one** evidence family, even if the species can
-  produce multiple writing styles.
-- Camera-only apparition, passage through walls, characteristic aggression,
-  target selection, audible wails, footsteps and other behavioral clues remain
-  available as deduction aids. They are **not** extra quota slots.
-- Weather influences ambient electromagnetic and thermal noise but does not
-  change the number of permitted hard-evidence families.
-- Proposed ectoplasm, resonance, seismic, object-imprint and related
-  expansion devices are **not yet producers in this seven-family matrix**.
-- Slot availability does not guarantee instantaneous appearance: the ghost must
-  perform the relevant event, and a player must detect it with functioning
-  equipment. A playtest must verify that each selected family can generate a
-  positive observation over a reasonable mission time.
-- **Ritual completion is investigator victory**; a correct identification and
-  retreat may earn partial pay but is not victory.
+- EMF **High**, **Low/Mid** and **No EMF** are mutually exclusive ghost identities.
+  Ambient low/mid EMF by itself is not proof; it must correlate with a real local
+  ghost event. A strong local event from a no-EMF ghost drives the field to zero.
+- Only **Wraith, Shade and Specter** produce D.O.T.S. evidence; no other ghost does.
+- Writing styles are appearance variants, not extra quota slots.
+- The seven hard-evidence **families** remain EMF, Temperature, Spirit Box,
+  Writing, D.O.T.S., UV and Orbs. A ghost's EMF category is a **subtype** of EMF.
+- Ghost behavior, movement, attacks, target choices and ordinary weather signals
+  can aid deduction but don't add hard-evidence slots.
+- Proposed future devices (ectoplasm, resonance, seismic, object imprints, etc.)
+  remain separate and do not enter the current implemented evidence quota.
+- Contract guarantee means **available to produce and detect**, not that
+  the ghost automatically emits all its evidence during the first few minutes.
+  Timing and tier-specific detection still require real playtesting.
+- The investigators only **win** when they finish the correct ritual;
+  verified identification followed by withdrawal earns partial compensation.
 
-Authoritative sources:
-- `src/main/java/org/beckenburg/HardEvidenceQuota.java`
-- `src/main/java/org/beckenburg/GhostEvidenceProfile.java`
-- `src/main/java/org/beckenburg/GhostTraits.java`
-- `src/main/java/org/beckenburg/GhostEvidenceMatrix.java`
-- `src/main/java/org/beckenburg/GhostIdentity.java`
+### Source of truth
+
+`GhostEvidenceProfile.emfBand()` and `dotsVisible()` own the species
+assignments. `EvidenceSignals.emf()` implements three real EMF outcomes;
+`HardEvidenceQuota` selects families; `LanCase` and `LanHost` enforce them.
+`GhostEvidenceMatrix` and `GhostFieldGuide` consume those same traits.

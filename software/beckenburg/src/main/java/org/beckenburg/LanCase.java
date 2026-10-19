@@ -26,6 +26,8 @@ public final class LanCase {
     private final int anchor;
     private final EnumSet<Tool> evidence=EnumSet.noneOf(Tool.class), tested=EnumSet.noneOf(Tool.class);
     private GhostIdentity.Type archetype=GhostIdentity.Type.SPIRIT, identified;
+    private GhostEvidenceProfile.EmfBand evidenceEmfBand=
+        GhostEvidenceProfile.emfBand(GhostIdentity.Type.SPIRIT);
     private HardEvidenceQuota hardEvidence=new HardEvidenceQuota(
         GhostIdentity.Type.SPIRIT,HardEvidenceQuota.Level.EASY,0);
     /** Host-selected evidence scarcity applies to producers, not benign readings. */
@@ -90,6 +92,7 @@ public final class LanCase {
         if(outcome!=Outcome.ACTIVE||!evidence.isEmpty()||!tested.isEmpty()||ritualProgress>=0)
             throw new IllegalStateException("cannot change an active investigation");
         archetype=java.util.Objects.requireNonNull(type);
+        evidenceEmfBand=GhostEvidenceProfile.emfBand(archetype);
         hardEvidence=new HardEvidenceQuota(archetype,HardEvidenceQuota.Level.EASY,0);
         identificationRequired=requireIdentification;
         identified=null;
@@ -216,7 +219,7 @@ public final class LanCase {
                 boolean spectral=allowsEvidence(HardEvidenceQuota.Family.EMF);
                 EvidenceSignals.Electromagnetic sample=EvidenceSignals.emf(
                     0xB3CC3BL,tick,room,spectral?eventRoom:-1,
-                    spectral?eventStrength:0,spectral&&emfSilence,
+                    spectral?eventStrength:0,evidenceEmfBand,
                     evidenceWeather,evidenceWeatherIntensity);
                 reading="EMF "+sample.level()+"/10";
             }

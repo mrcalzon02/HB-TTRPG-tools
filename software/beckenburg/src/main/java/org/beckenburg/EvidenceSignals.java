@@ -76,6 +76,17 @@ public final class EvidenceSignals {
      */
     public static Electromagnetic emf(long seed,int tick,int room,
                 int eventRoom,int eventStrength,boolean suppression,Weather weather,int intensity){
+        return emf(seed,tick,room,eventRoom,eventStrength,
+            suppression?GhostEvidenceProfile.EmfBand.NONE:GhostEvidenceProfile.EmfBand.HIGH,
+            weather,intensity);
+    }
+    /** The EMF family has three *species* outcomes: 8–10, 2–7 or 0.
+     * Weather may alter ordinary 2–7 background, never the ghost's signature.
+     */
+    public static Electromagnetic emf(long seed,int tick,int room,
+                int eventRoom,int eventStrength,GhostEvidenceProfile.EmfBand band,
+                Weather weather,int intensity){
+        Objects.requireNonNull(band);
         Objects.requireNonNull(weather);
         if(intensity<1||intensity>3)throw new IllegalArgumentException("EMF weather intensity");
         if(tick<0||room<0||eventStrength<0||eventStrength>10)
@@ -87,10 +98,13 @@ public final class EvidenceSignals {
         else if(weather==Weather.WIND)ambient=Math.min(7,ambient+1);
         boolean local=room==eventRoom&&eventStrength>0;
         boolean strong=local&&eventStrength>=8;
-        // A suppression-capable ghost only cancels fields on powerful actions:
-        // its ordinary lesser hauntings still display useful EMF 2..7.
-        if(strong&&suppression)return new Electromagnetic(0,false,true);
-        if(strong)return new Electromagnetic(8+hash(seed^0x5317L,room,tick/5)%3,true,false);
+        // Ghost event signatures override weather noise only for confirmed host events.
+        if(local&&band==GhostEvidenceProfile.EmfBand.NONE)
+            return new Electromagnetic(0,false,true);
+        if(strong&&band==GhostEvidenceProfile.EmfBand.HIGH)
+            return new Electromagnetic(8+hash(seed^0x5317L,room,tick/5)%3,true,false);
+        if(strong&&band==GhostEvidenceProfile.EmfBand.LOW_MID)
+            return new Electromagnetic(4+hash(seed^0x5317L,room,tick/5)%4,false,false);
         int level=Math.min(7,ambient+(local?Math.min(3,(eventStrength+1)/2):0));
         return new Electromagnetic(level,false,false);
     }

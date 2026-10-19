@@ -45,6 +45,28 @@ public final class EvidenceSignalsTest {
             ok(normal.level()>=2&&normal.level()<=7&&!normal.highEvent(),
                 "weak/mid ghost events give ordinary 2-7 EMF");
         }
+        for(int tick=0;tick<100;tick++){
+            var high=EvidenceSignals.emf(19,tick,4,4,10,
+                GhostEvidenceProfile.EmfBand.HIGH,EvidenceSignals.Weather.THUNDERSTORM,3);
+            var low=EvidenceSignals.emf(19,tick,4,4,10,
+                GhostEvidenceProfile.EmfBand.LOW_MID,EvidenceSignals.Weather.THUNDERSTORM,3);
+            var none=EvidenceSignals.emf(19,tick,4,4,10,
+                GhostEvidenceProfile.EmfBand.NONE,EvidenceSignals.Weather.THUNDERSTORM,3);
+            ok(high.level()>=8&&high.level()<=10&&high.highEvent(),
+                "HIGH ghosts yield 8-10 on strong local events");
+            ok(low.level()>=2&&low.level()<=7&&!low.highEvent(),
+                "LOW_MID ghosts never yield high EMF even in thunderstorms");
+            ok(none.level()==0&&none.suppressed(),
+                "NONE ghosts suppress a genuine local event to zero, even in thunder");
+            var weakNone=EvidenceSignals.emf(19,tick,4,4,3,
+                GhostEvidenceProfile.EmfBand.NONE,EvidenceSignals.Weather.RAIN,2);
+            ok(weakNone.level()==0&&weakNone.suppressed(),
+                "No-EMF species suppress weak paranormal events as well");
+            var ambient=EvidenceSignals.emf(19,tick,4,-1,0,
+                GhostEvidenceProfile.EmfBand.NONE,EvidenceSignals.Weather.THUNDERSTORM,3);
+            ok(ambient.level()>=2&&ambient.level()<=7&&!ambient.highEvent(),
+                "No-EMF ghost cannot eliminate external weather background");
+        }
         var neutral=EvidenceSignals.temperature(7,40,winterInside,
             EvidenceSignals.Polarity.NONE,true,10);
         ok(!neutral.paranormalExtreme(),"neutral ghost cannot generate thermal extreme");

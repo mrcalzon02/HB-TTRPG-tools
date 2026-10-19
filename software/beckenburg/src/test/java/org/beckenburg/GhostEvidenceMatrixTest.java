@@ -11,7 +11,7 @@ public final class GhostEvidenceMatrixTest {
         var rows=GhostEvidenceMatrix.all();
         ok(rows.size()==GhostIdentity.Type.values().length,"all thirteen source ghosts represented");
         Set<GhostIdentity.Type> unique=EnumSet.noneOf(GhostIdentity.Type.class);
-        int suppressed=0,freezing=0,hot=0,normal=0,writers=0,uv=0,orbs=0,camera=0;
+        int high=0,low=0,suppressed=0,dots=0,freezing=0,hot=0,normal=0,writers=0,uv=0,orbs=0,camera=0;
         for(var row:rows){
             ok(unique.add(row.type()),"one catalog row per ghost");
             var hard=GhostEvidenceMatrix.hardEvidenceFor(row.type());
@@ -19,9 +19,11 @@ public final class GhostEvidenceMatrixTest {
             ok(hard.equals(new HardEvidenceQuota(row.type(),
                 HardEvidenceQuota.Level.EASY,0).families()),
                 "published hard-evidence row equals authoritative host selection");
-            if(GhostEvidenceProfile.emfSuppressed(row.type()))
-                ok(!hard.contains(HardEvidenceQuota.Family.EMF),
-                    "EMF suppression is not a positive guaranteed evidence slot");
+            ok(hard.contains(HardEvidenceQuota.Family.EMF),
+                "Every species EMF signature (HIGH/LOW_MID/NONE) can fill one slot");
+            ok(hard.contains(HardEvidenceQuota.Family.DOTS)
+                ==GhostEvidenceProfile.dotsVisible(row.type()),
+                "Only actual D.O.T.S. species can receive D.O.T.S. evidence");
             ok(row.rite()==row.type().rite()&&row.behavior()==row.type().behavior(),
                 "ritual and behavioral identity retained for "+row.type());
             ok(GhostFieldGuide.possible(row.type(),row.emf())
@@ -58,6 +60,9 @@ public final class GhostEvidenceMatrixTest {
                ||!row.future().isEmpty(),
                "no ghost is limited to the two environmental instruments");
             if(row.emf()==GhostFieldGuide.Clue.EMF_SUPPRESSION)suppressed++;
+            if(row.emf()==GhostFieldGuide.Clue.EMF_LOW_MID)low++;
+            if(row.emf()==GhostFieldGuide.Clue.EMF_OVER_SIX)high++;
+            if(GhostEvidenceProfile.dotsVisible(row.type()))dots++;
             if(row.temperature()==GhostFieldGuide.Clue.EXTREME_COLD)freezing++;
             if(row.temperature()==GhostFieldGuide.Clue.EXTREME_HEAT)hot++;
             if(row.temperature()==GhostFieldGuide.Clue.TEMPERATURE_NORMAL)normal++;
@@ -66,7 +71,8 @@ public final class GhostEvidenceMatrixTest {
             if(row.optical()==GhostTraits.Sight.ORBS)orbs++;
             if(row.optical()==GhostTraits.Sight.CAMERA_ONLY)camera++;
         }
-        ok(suppressed==3&&freezing==4&&hot==4&&normal==5
+        ok(high==5&&low==5&&suppressed==3&&dots==3
+            &&freezing==4&&hot==4&&normal==5
             &&writers==9&&uv==8&&orbs==3&&camera==2,
             "source demographic counts remain stable");
         ok(GhostEvidenceMatrix.forGhost(GhostIdentity.Type.SHADE).emf()
