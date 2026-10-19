@@ -38,7 +38,7 @@ public final class LanRitualDefenseIntegrationTest {
             a.await("LOBBY|3|HUMAN|4|WAITING");a.client.start();a.await("INFO|mission started");
             for(int room:new int[]{11,8,5,4})a.move(room);
             for(LanCase.Tool tool:LanCase.Tool.values()){
-                a.client.scan(tool);a.await("ACCEPT|SCAN|CONFIRMED ");
+                a.client.scan(tool);a.await("ACCEPT|SCAN|READING ");
             }
             a.client.ward();a.await("ACCEPT|WARD|ANCHOR WARD PREPARED");
             a.client.cleanse();a.await("ACCEPT|CLEANSE|RITUAL STARTED");
