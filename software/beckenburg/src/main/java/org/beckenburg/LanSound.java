@@ -36,7 +36,13 @@ public final class LanSound {
         RITUAL_START(9, 96, "RITUAL BEGINS"),
         RITUAL_END(9, 94, "RITUAL COMPLETED"),
         IMPACT(8, 97, "GHOST STRIKE IMPACT"),
-        GHOST_DRIFT(6, 64, "SPECTRAL MOVEMENT");
+        GHOST_DRIFT(6, 64, "SPECTRAL MOVEMENT"),
+        DOTS_MOTOR(5, 57, "D.O.T.S. PROJECTOR STARTS"),
+        DOTS_STOP(4, 47, "D.O.T.S. PROJECTOR STOPS"),
+        SPARK(5, 69, "IGNITER SPARK"),
+        INCENSE_BURN(5, 51, "INCENSE IGNITES"),
+        FIRELIGHT_IGNITE(5, 61, "FIRELIGHT LIT"),
+        FIRELIGHT_OUT(4, 48, "FIRELIGHT EXTINGUISHED");
         final int acousticBudget, baseGain;
         final String caption;
         Cue(int budget, int gain, String caption) { acousticBudget=budget;baseGain=gain;this.caption=caption; }
@@ -44,7 +50,8 @@ public final class LanSound {
         public Tier tier(){return switch(this){
             case FOOTFALL,DOOR,EQUIPMENT,RITUAL,STEP,SWITCH,BREAKER,VAN_DOOR,
                     UI_CLICK,UI_BACK,PICKUP,SELECT,DEVICE_ON,DEVICE_OFF,SCANNER,
-                    CAMERA,BOOK,POTION->Tier.AMBIENT;
+                    CAMERA,BOOK,POTION,DOTS_MOTOR,DOTS_STOP,SPARK,
+                    INCENSE_BURN,FIRELIGHT_IGNITE,FIRELIGHT_OUT->Tier.AMBIENT;
             case WHISPER->Tier.MINOR;
             case DISTURB,MANIFEST,GHOST_DRIFT,WARD->Tier.MODERATE;
             case STRIKE,IMPACT,RITUAL_START,RITUAL_END->Tier.DANGEROUS;

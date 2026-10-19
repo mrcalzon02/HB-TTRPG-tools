@@ -821,7 +821,6 @@ public final class LanHost implements AutoCloseable {
                             notifyHunters("BURN|INCENSE|"+room+"|"+
                                 Math.round(body.x()*1000)+"|"+Math.round(body.z()*1000)+
                                 "|"+(tick+Math.max(10,duration)));
-                            recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT);
                         }
                         case "GHOST_WRITING_BOOK" -> {
                             if(room>=HouseMap.INDOOR_ROOMS)
@@ -846,10 +845,14 @@ public final class LanHost implements AutoCloseable {
                         case "GHOST_WRITING_BOOK"->LanSound.Cue.BOOK;
                         case "EMF_READER","THERMOMETER","SPIRIT_BOX","UV_LIGHT",
                                 "SOUND_RECORDER"->LanSound.Cue.SCANNER;
-                        case "FLASHLIGHT","FIRELIGHT","HEAD_GEAR","DOTS_PROJECTOR",
-                                "VIDEO_CAMERA"->gear.powered(id)
+                        case "DOTS_PROJECTOR"->dots.at(peer.slot)==null
+                                    ?LanSound.Cue.DOTS_STOP:LanSound.Cue.DOTS_MOTOR;
+                        case "FIRELIGHT"->gear.powered(id)
+                                    ?LanSound.Cue.FIRELIGHT_IGNITE:LanSound.Cue.FIRELIGHT_OUT;
+                        case "FLASHLIGHT","HEAD_GEAR","VIDEO_CAMERA"->gear.powered(id)
                                     ?LanSound.Cue.DEVICE_ON:LanSound.Cue.DEVICE_OFF;
-                        case "INCENSE"->LanSound.Cue.WARD;
+                        case "IGNITER"->LanSound.Cue.SPARK;
+                        case "INCENSE"->LanSound.Cue.INCENSE_BURN;
                         default->LanSound.Cue.EQUIPMENT;
                     };
                     recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,deviceCue);
