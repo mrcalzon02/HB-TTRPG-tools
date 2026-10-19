@@ -24,11 +24,11 @@ public final class LanHost implements AutoCloseable {
     private boolean lobbyLocked;
     private final int[] hunterRooms=new int[HUNTERS];
     private final long[] hunterSequences=new long[HUNTERS];
-    private final HouseMap map=new HouseMap();
+    private final HouseMap map;
     private final RoomLighting lights=new RoomLighting();
     private final AmbientSanity ambientSanity=new AmbientSanity();
-    private final LanWorld world=new LanWorld(map);
-    private final LanGhostSpatial ghostPose=new LanGhostSpatial(map,4);
+    private final LanWorld world;
+    private final LanGhostSpatial ghostPose;
     private final GhostDomain ghost;
     private final GhostActionCadence actionCadence;
     private final LanCase mission;
@@ -96,9 +96,24 @@ public final class LanHost implements AutoCloseable {
             boolean hostAsGhost,boolean secureLocalOwner)throws IOException {
         this(ip,port,type,true,config,hostAsGhost,secureLocalOwner);
     }
+    /** Explicit site selection is host-only; all clients receive a named layout snapshot. */
+    public LanHost(String ip,int port,GhostIdentity.Type type,CustomContract config,
+            boolean hostAsGhost,boolean secureLocalOwner,HouseMap.Site site)throws IOException{
+        this(ip,port,type,true,config,hostAsGhost,secureLocalOwner,site);
+    }
     private LanHost(String ip,int port,GhostIdentity.Type type,boolean identityMode,
-            CustomContract config,boolean hostAsGhost,boolean secureLocalOwner)throws IOException {
+            CustomContract config,boolean hostAsGhost,boolean secureLocalOwner)throws IOException{
+        this(ip,port,type,identityMode,config,hostAsGhost,secureLocalOwner,HouseMap.Site.HOUSE);
+    }
+    private LanHost(String ip,int port,GhostIdentity.Type type,boolean identityMode,
+            CustomContract config,boolean hostAsGhost,boolean secureLocalOwner,
+            HouseMap.Site site)throws IOException {
         if(port<0||port>65535)throw new IllegalArgumentException("invalid port");
+        map=new HouseMap(Objects.requireNonNull(site));
+        world=new LanWorld(map);
+        ghostPose=new LanGhostSpatial(map,4);
+        if(!map.valid()||!RitualSites.valid(map))
+            throw new IllegalArgumentException("unplayable authored investigation site");
         ghostType=Objects.requireNonNull(type);
         contract=Objects.requireNonNull(config);
         ghostMayStart=hostAsGhost;
@@ -251,6 +266,7 @@ public final class LanHost implements AutoCloseable {
                     LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken+"|"+seatSequenceHighWater(peer));
                     peer.outbound.start(workers);
                     reserved[slot]=null;seats[slot]=peer;
+                    reply(peer,"SITE|"+map.site().name());
                     reply(peer,"INFO|mission resumed - reopen 3D view");
                     if(slot!=GHOST_SEAT){
                         for(int i=0;i<HUNTERS;i++)if(i!=slot&&seats[i]!=null)
@@ -293,6 +309,7 @@ public final class LanHost implements AutoCloseable {
                         java.util.concurrent.ThreadLocalRandom.current());
                     LanProtocol.write(out,"WELCOME|"+seatName(slot)+"|"+LanProtocol.VERSION+"|"+peer.resumeToken+"|"+seatSequenceHighWater(peer));
                     peer.outbound.start(workers);
+                    reply(peer,"SITE|"+map.site().name());
                     if(slot!=GHOST_SEAT){
                         for(int i=0;i<HUNTERS;i++)if(i!=slot&&seats[i]!=null)
                             reply(peer,"PLAYERNAME|"+i+"|"+seats[i].name);
@@ -438,6 +455,7 @@ public final class LanHost implements AutoCloseable {
                             throw new IllegalArgumentException("configured hunter party must be ready");
                     if(seats[GHOST_SEAT]!=null&&!seats[GHOST_SEAT].ready)throw new IllegalArgumentException("ghost must be ready");
                     running=true;everStarted=true;tick=0;
+                    notifyAllPeers("SITE|"+map.site().name());
                     notifyAllPeers("INFO|mission started with "+(seats[GHOST_SEAT]==null?"AI":"human")+" ghost");
                     notifyAllPeers(weather.state().packet());
                     notifyHunters(rewards.objectivesPacket());
@@ -452,6 +470,7 @@ public final class LanHost implements AutoCloseable {
                     if(!running||peer.slot==GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("3D view requires active hunter");
                     peer.worldMode=true;
                     reply(peer,"ACCEPT|VIEW3D");
+                    reply(peer,"SITE|"+map.site().name());
                     reply(peer,world.staminaFrame(peer.slot,tick));
                     reply(peer,weather.state().packet());
                     reply(peer,rewards.objectivesPacket());
@@ -498,6 +517,7 @@ public final class LanHost implements AutoCloseable {
                     if(!running||peer.slot!=GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("ghost view requires active ghost seat");
                     peer.ghostWorldMode=true;
                     reply(peer,"ACCEPT|GVIEW3D");
+                    reply(peer,"SITE|"+map.site().name());
                     reply(peer,ghostPose.staminaFrame(tick));
                     reply(peer,weather.state().packet());
                     reply(peer,"VOICEKEY|"+voice.port()+"|"+voice.register(peer.slot,peer.socket.getInetAddress()));

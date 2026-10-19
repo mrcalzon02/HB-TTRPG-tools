@@ -17,6 +17,9 @@ public final class LanLobbyWindow extends JFrame {
     private LobbyGhostAvatar.Look remoteLook;
     private boolean ghostJoined;
     private final JSpinner partySize=new JSpinner(new SpinnerNumberModel(3,1,6,1));
+    private final JComboBox<HouseMap.Site> siteChoice=
+        new JComboBox<>(HouseMap.Site.values());
+    private HouseMap.Site selectedSite=HouseMap.Site.HOUSE;
     private final JButton tuneContract=new JButton("Contract options");
     private CustomContract custom=CustomContract.standard(3);
     private final JTextArea log=new JTextArea(12,52);
@@ -66,6 +69,9 @@ public final class LanLobbyWindow extends JFrame {
         JPanel connectActions=new JPanel(new FlowLayout(FlowLayout.LEFT,7,4));
         for(JButton button:new JButton[]{host,join,reconnect,tuneContract,hostInfo})connectActions.add(button);
         connectActions.add(lobbyLock);
+        connectActions.add(new JLabel("Investigation location"));
+        connectActions.add(siteChoice);
+        siteChoice.setToolTipText("The LAN host chooses the actual shared investigation map");
         lobbyLock.setEnabled(false);hostInfo.setEnabled(false);
         JPanel info=new JPanel(new GridLayout(3,1,0,4));
         info.setBorder(BorderFactory.createEmptyBorder(7,12,10,12));
@@ -313,6 +319,7 @@ public final class LanLobbyWindow extends JFrame {
         String hostname=ip.getText().trim(),nickname=name.getText();String p=port.getText().trim();
         String requestedPassword=new String(roomPassword.getPassword());
         boolean ghost=role.getSelectedIndex()==1;
+        HouseMap.Site requestedSite=(HouseMap.Site)siteChoice.getSelectedItem();
         // Capture the GUI state before the background socket connection begins.
         CustomContract request=new CustomContract((int)partySize.getValue(),
             custom.playerSpeed(),custom.sprintSpeed(),custom.ghostSpeed(),
@@ -329,7 +336,8 @@ public final class LanLobbyWindow extends JFrame {
                 if(localHost){
                     var types=GhostIdentity.Type.values();
                     var chosen=types[java.util.concurrent.ThreadLocalRandom.current().nextInt(types.length)];
-                    newHost=new LanHost("0.0.0.0",portNumber,chosen,request,ghost,true);
+                    newHost=new LanHost("0.0.0.0",portNumber,chosen,request,ghost,true,
+                        requestedSite);
                     newHost.setLobbyPassword(requestedPassword);
                 }
                 // A remote guest cannot race the local player to H1 or ghost-owner seat.
@@ -351,9 +359,10 @@ public final class LanLobbyWindow extends JFrame {
                     if(hosted!=null)clearSavedResume();
                     else saveResume(client);
                     roomPassword.setEnabled(false);
+                    siteChoice.setEnabled(false);
                     lobbyLock.setEnabled(hosted!=null);hostInfo.setEnabled(hosted!=null);
                     role.setEnabled(false);
-                    status.setText("Seat "+client.seat()+" — room case + shared house");
+                    status.setText("Seat "+client.seat()+" / "+selectedSite);
                     if("GHOST".equals(client.seat()))avatar.showGhost(
                         remoteLook!=null?remoteLook:localLook,remoteLook!=null);
                     else if(ghostJoined&&remoteLook!=null)avatar.showGhost(remoteLook,true);
@@ -445,7 +454,8 @@ public final class LanLobbyWindow extends JFrame {
         JComponent active;
         if(ghost){ghostView=new LanGhostPanel(connection);active=ghostView;}
         else {worldView=new LanWorldPanel(connection);active=worldView;}
-        worldFrame=new JFrame(ghost?"Beckenburg — LAN Spectral Ghost":"Beckenburg — Shared LAN House");
+        worldFrame=new JFrame("Beckenburg — "+selectedSite+
+            (ghost?" / Spectral Ghost":" / Investigation"));
         worldFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         worldFrame.setContentPane(active);
         worldFrame.pack();worldFrame.setLocationRelativeTo(this);
@@ -504,6 +514,19 @@ public final class LanLobbyWindow extends JFrame {
             if(worldView!=null)worldView.onEvent(event);
             if(ghostView!=null)ghostView.onEvent(event);
         }
+        if(event.startsWith("SITE|")){
+            var parts=LanProtocol.parts(event);
+            if(parts.size()==2){
+                try{
+                    selectedSite=HouseMap.Site.valueOf(parts.get(1));
+                    siteChoice.setSelectedItem(selectedSite);
+                    if(worldFrame!=null)worldFrame.setTitle("Beckenburg / "+selectedSite);
+                }catch(IllegalArgumentException rejected){
+                    log.append("Unsupported location version received.\n");
+                }
+            }
+            return;
+        }
         if(event.startsWith("PAYOUT|")){
             try{
                 ContractRewards.Settlement settlement=ContractRewards.Settlement.decode(event);
@@ -555,11 +578,12 @@ public final class LanLobbyWindow extends JFrame {
             }
         }else if(event.startsWith("STATE|")){
             var p=LanProtocol.parts(event);if(p.size()>=4)try{myRoom=Integer.parseInt(p.get(2));}catch(NumberFormatException ignored){}
-            status.setText("Room: "+new HouseMap().roomName(myRoom)+"  |  tick "+p.get(1)+"  |  energy "+p.get(4));
+            status.setText("Room: "+new HouseMap(selectedSite).roomName(myRoom)+
+                "  |  tick "+p.get(1)+"  |  energy "+p.get(4));
         }else if(event.startsWith("TEAMMAP|")){
             var parts=LanProtocol.parts(event);
             if(parts.size()==7){
-                HouseMap layout=new HouseMap();
+                HouseMap layout=new HouseMap(selectedSite);
                 StringBuilder summary=new StringBuilder("Hunters");
                 for(int i=1;i<=6;i++)summary.append(" H").append(i).append(':')
                         .append(teamRoom(layout,parts.get(i)));

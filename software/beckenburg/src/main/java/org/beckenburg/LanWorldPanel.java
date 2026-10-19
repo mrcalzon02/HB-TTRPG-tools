@@ -11,7 +11,7 @@ import java.util.List;
 public final class LanWorldPanel extends JPanel implements KeyListener, FocusListener {
     private final LanClient client;
     private final int seat;
-    private final HouseMap map=new HouseMap();
+    private HouseMap map=new HouseMap();
     private final RoomLighting lights=new RoomLighting();
     private final SceneRenderer renderer=new SceneRenderer();
     private final SceneRenderer videoRenderer=new SceneRenderer();
@@ -202,7 +202,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         if(!SwingUtilities.isEventDispatchThread())throw new IllegalStateException("network view must update on EDT");
         try{
             List<String> p=LanProtocol.parts(frame);
-            if(p.get(0).equals("CHAT")){
+            if(p.size()==2&&p.get(0).equals("SITE")){
+                map=new HouseMap(HouseMap.Site.valueOf(p.get(1)));
+                feedback="INVESTIGATION: "+map.site();
+            }else if(p.get(0).equals("CHAT")){
                 LanChat.Entry line=LanChat.Entry.decode(frame);
                 chatHistory.addLast(line);
                 if(chatHistory.size()>28)chatHistory.removeFirst();

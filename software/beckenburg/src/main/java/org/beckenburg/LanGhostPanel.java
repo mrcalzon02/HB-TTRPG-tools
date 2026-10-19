@@ -12,7 +12,7 @@ import java.util.List;
  */
 public final class LanGhostPanel extends JPanel implements KeyListener, FocusListener {
     private final LanClient client;
-    private final HouseMap map=new HouseMap();
+    private HouseMap map=new HouseMap();
     private final SceneRenderer camera=new SceneRenderer();
     private final MouseLook mouseLook;
     private final Set<Integer> keys=new HashSet<>();
@@ -51,7 +51,10 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
         if(!SwingUtilities.isEventDispatchThread())throw new IllegalStateException("ghost UI update must be on EDT");
         try{
             List<String> p=LanProtocol.parts(packet);
-            if(p.size()==6&&p.get(0).equals("GPOSE")){
+            if(p.size()==2&&p.get(0).equals("SITE")){
+                map=new HouseMap(HouseMap.Site.valueOf(p.get(1)));
+                feedback="SPECTRAL TERRITORY: "+map.site();
+            }else if(p.size()==6&&p.get(0).equals("GPOSE")){
                 int next=LanProtocol.integer(p.get(1),0,HouseMap.EXTRACTION_ROOM-1);
                 double x=LanProtocol.integer(p.get(2),0,HouseMap.WIDTH*1000)/1000.0;
                 double z=LanProtocol.integer(p.get(3),0,HouseMap.HEIGHT*1000)/1000.0;
