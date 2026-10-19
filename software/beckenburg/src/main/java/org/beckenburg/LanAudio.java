@@ -22,22 +22,45 @@ public final class LanAudio implements AutoCloseable {
     }
     private static final AudioFormat FORMAT=new AudioFormat(SAMPLE_RATE,16,2,true,false);
     private record Playback(LanSound.CueEvent cue,byte[] pcm) { }
-    private final BlockingQueue<Playback> queue=new ArrayBlockingQueue<>(8);
+    private static final int BLOCK_FRAMES=512,MAX_VOICES=12;
+    private final BlockingQueue<Playback> queue=new ArrayBlockingQueue<>(32);
     private final Thread worker;
     private volatile boolean closed;
-    private boolean hardwareUnavailable;
 
+    private static final class Voice {
+        final byte[] pcm;
+        final int priority;
+        int position;
+        Voice(byte[] pcm,int priority){this.pcm=pcm;this.priority=priority;}
+    }
     public LanAudio(){
         worker=new Thread(this::run,"beckenburg-positional-audio");
         worker.setDaemon(true);worker.start();
     }
-    public void play(LanSound.CueEvent cue){
-        if(cue==null||closed||Boolean.getBoolean("beckenburg.audio.mute"))return;
-        // Never grow an unbounded backlog of stale paranormal noises.
-        Playback sound=new Playback(cue,null);
-        if(!queue.offer(sound)){queue.poll();queue.offer(sound);}
+    private static int priority(Playback sound){
+        if(sound.cue()==null)return 2;
+        return switch(sound.cue().tier()){
+            case SIGNATURE->5;
+            case DANGEROUS->4;
+            case MODERATE->3;
+            case MINOR->2;
+            case AMBIENT->sound.cue()==LanSound.Cue.STEP
+                    ||sound.cue()==LanSound.Cue.FOOTFALL?0:1;
+        };
     }
-    /** Recorded silence and overlapping source events retain their exact PCM timing. */
+    /** Bounded priority queue: a footstep never displaces a ghost attack. */
+    private void enqueue(Playback sound){
+        if(closed||Boolean.getBoolean("beckenburg.audio.mute"))return;
+        if(queue.offer(sound))return;
+        Playback weakest=null;
+        for(Playback queued:queue)
+            if(weakest==null||priority(queued)<priority(weakest))weakest=queued;
+        if(weakest!=null&&priority(weakest)<priority(sound)&&queue.remove(weakest))
+            queue.offer(sound);
+    }
+    public void play(LanSound.CueEvent cue){
+        if(cue!=null)enqueue(new Playback(cue,null));
+    }
     public void playRecording(FieldSoundRecorder.Clip clip){
         if(clip==null||closed||Boolean.getBoolean("beckenburg.audio.mute"))return;
         byte[] pcm=RecorderAudio.pcm(clip);
@@ -49,35 +72,87 @@ public final class LanAudio implements AutoCloseable {
             }
             pcm=stereo;
         }
-        Playback sound=new Playback(null,pcm);
-        if(!queue.offer(sound)){queue.poll();queue.offer(sound);}
+        enqueue(new Playback(null,pcm));
+    }
+    private static Voice render(Playback pending){
+        byte[] pcm=pending.pcm();
+        if(pcm==null){
+            pcm=RecordedSfx.render(pending.cue(),effectsVolume());
+            if(pcm==null)pcm=synthesize(pending.cue());
+        }
+        return new Voice(pcm,priority(pending));
+    }
+    private static void admit(java.util.List<Voice> voices,Voice newcomer){
+        if(newcomer.pcm.length<4)return;
+        if(voices.size()<MAX_VOICES){voices.add(newcomer);return;}
+        Voice weakest=null;
+        for(Voice existing:voices)
+            if(weakest==null||existing.priority<weakest.priority)weakest=existing;
+        if(weakest!=null&&weakest.priority<newcomer.priority){
+            voices.remove(weakest);voices.add(newcomer);
+        }
+    }
+    /** Blend signed stereo PCM at a shared 16-kHz clock, clipping only after summation.
+     * Does not depend on a hardware mixer; overlapping events remain audible.
+     */
+    private static byte[] mix(java.util.List<Voice> voices){
+        byte[] output=new byte[BLOCK_FRAMES*4];
+        for(int frame=0;frame<BLOCK_FRAMES;frame++){
+            long left=0,right=0;
+            for(Voice v:voices){
+                if(v.position+3>=v.pcm.length)continue;
+                int p=v.position;
+                left+=(short)((v.pcm[p]&255)|(v.pcm[p+1]<<8));
+                right+=(short)((v.pcm[p+2]&255)|(v.pcm[p+3]<<8));
+                v.position+=4;
+            }
+            int l=(int)Math.max(Short.MIN_VALUE,Math.min(Short.MAX_VALUE,left));
+            int r=(int)Math.max(Short.MIN_VALUE,Math.min(Short.MAX_VALUE,right));
+            int p=frame*4;
+            output[p]=(byte)l;output[p+1]=(byte)(l>>8);
+            output[p+2]=(byte)r;output[p+3]=(byte)(r>>8);
+        }
+        voices.removeIf(v->v.position+3>=v.pcm.length);
+        return output;
+    }
+    /** Headless regression of the exact same overlap math used by the audio thread. */
+    public static byte[] mixForTest(byte[] first,byte[] second){
+        if(first==null||second==null||first.length%4!=0||second.length%4!=0
+                ||first.length<4||second.length<4)
+            throw new IllegalArgumentException("Stereo 16-bit PCM required");
+        java.util.List<Voice> voices=new java.util.ArrayList<>();
+        admit(voices,new Voice(first,1));admit(voices,new Voice(second,4));
+        return mix(voices);
     }
     private void run(){
-        while(!closed){
-            try{
-                Playback sound=queue.take();
-                if(closed||hardwareUnavailable)continue;
-                byte[] samples=sound.pcm();
-                if(samples==null){
-                    samples=RecordedSfx.render(sound.cue(),effectsVolume());
-                    if(samples==null)samples=synthesize(sound.cue());
+        java.util.List<Voice> voices=new java.util.ArrayList<>();
+        SourceDataLine line=null;
+        try{
+            while(!closed){
+                if(voices.isEmpty()){
+                    Playback first=queue.take();
+                    if(closed)break;
+                    admit(voices,render(first));
                 }
-                SourceDataLine line=null;
-                try{
+                Playback next;
+                while((next=queue.poll())!=null)admit(voices,render(next));
+                if(voices.isEmpty())continue;
+                if(line==null){
                     line=(SourceDataLine)AudioSystem.getLine(new DataLine.Info(SourceDataLine.class,FORMAT));
-                    line.open(FORMAT);line.start();
-                    int pos=0;
-                    while(pos<samples.length&&!closed){
-                        int count=line.write(samples,pos,Math.min(2048,samples.length-pos));
-                        if(count<=0)break;
-                        pos+=count;
-                    }
-                    if(!closed)line.drain();
-                }catch(LineUnavailableException|IllegalArgumentException|SecurityException missing){
-                    hardwareUnavailable=true; // caption-only fallback; no repeated attempts to open a broken device
-                }finally{if(line!=null){line.stop();line.close();}}
-            }catch(InterruptedException stop){Thread.currentThread().interrupt();break;}
-        }
+                    line.open(FORMAT,4096);
+                    line.start();
+                }
+                byte[] block=mix(voices);
+                for(int offset=0;offset<block.length&&!closed;){
+                    int written=line.write(block,offset,block.length-offset);
+                    if(written<=0)break;
+                    offset+=written;
+                }
+            }
+        }catch(LineUnavailableException|IllegalArgumentException|SecurityException unavailable){
+            // UI captions remain available on a machine without audio output.
+        }catch(InterruptedException stop){Thread.currentThread().interrupt();}
+        finally{if(line!=null){line.stop();line.flush();line.close();}}
     }
     /** Pure deterministic stereo 16-bit PCM. Useful for audio quality and pan regression tests. */
     public static byte[] synthesize(LanSound.CueEvent event){
