@@ -60,6 +60,18 @@ public final class GhostTraits {
     public static int harm(GhostIdentity.Type type,int baseline){
         return Math.max(0,(baseline*of(type).harmPercent()+50)/100);
     }
+    /** Host-authoritative traversal variation, separate from supernatural attack energy.
+     * Fast ghosts briefly outrun default sprinting hunters only while bursting.
+     */
+    public static int movementPercent(GhostIdentity.Type type){
+        return switch(java.util.Objects.requireNonNull(type)){
+            case BANSHEE->116;case DEMON->112;case WRAITH->114;
+            case HANTU->109;case YOKAI->104;case POLTERGEIST->103;
+            case DEVIL->108;case POSSESSIVE->104;
+            case SPIRIT->100;case MIMIC->100;case TWINS->99;
+            case SPECTER->92;case SHADE->82;
+        };
+    }
     /** Physical tracks and slowing salt affect walkers only, never floating species. */
     public static boolean saltAffects(GhostIdentity.Type type){return of(type).grounded();}
 }

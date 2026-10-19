@@ -21,6 +21,8 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
     private MissionWeather.State currentWeather;
     private int room=-1,energy,tick,choice,lastTurn=-1;
+    private int burstRemaining=30,burstMax=30;
+    private boolean bursting;
     private boolean audible,finished;
     private String legal="[]",feedback="Awaiting private spectral pose";
     private int actionDueTick=-1;
@@ -58,6 +60,11 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                 if(map.roomAt(x,z)!=next)throw new IllegalArgumentException("inconsistent spectral coordinates");
                 room=next;camera.x=x;camera.z=z;
                 feedback="HOST SPECTRAL POSE SYNCHRONIZED";
+            }else if(p.size()==4&&p.get(0).equals("STAMINA")){
+                burstRemaining=LanProtocol.integer(p.get(1),0,300);
+                burstMax=LanProtocol.integer(p.get(2),0,300);
+                bursting=LanProtocol.integer(p.get(3),0,1)==1;
+                if(burstRemaining>burstMax)throw new IllegalArgumentException("invalid stamina");
             }else if(p.size()==7&&p.get(0).equals("STATE")){
                 int reportedRoom=LanProtocol.integer(p.get(2),0,HouseMap.EXTRACTION_ROOM-1);
                 energy=LanProtocol.integer(p.get(4),0,100);
@@ -152,7 +159,8 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                 double dx=Math.sin(camera.yaw)*f+Math.cos(camera.yaw)*r;
                 double dz=Math.cos(camera.yaw)*f-Math.sin(camera.yaw)*r;
                 double length=Math.hypot(dx,dz);
-                client.ghostStep((int)Math.round(dx/length*100),(int)Math.round(dz/length*100));
+                client.ghostStep((int)Math.round(dx/length*100),
+                    (int)Math.round(dz/length*100),keys.contains(KeyEvent.VK_SHIFT));
             }
             int heading=Math.floorMod((int)Math.round(Math.toDegrees(camera.yaw)),360);
             if(room>=0&&lastTurn!=heading){client.ghostTurn(heading);lastTurn=heading;}
@@ -240,6 +248,8 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
             g.setColor(audible?new Color(238,166,151):new Color(192,167,210));
             g.drawString(audible?"SOUND DETECTED":"QUIET",23,66);
             g.setColor(new Color(233,210,248));g.drawString("+",w/2,h/2);
+            SprintHud.draw(g,12,h-163,Math.min(255,w-24),
+                "GHOST BURST / SHIFT",burstRemaining,burstMax,bursting);
             if(!currentHearing().isEmpty()){
                 String heard=currentHearing();
                 if(heard.length()>70)heard=heard.substring(0,67)+"...";

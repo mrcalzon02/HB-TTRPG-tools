@@ -29,8 +29,13 @@ public final class LanWorld {
     }
     private CustomContract.Sprint sprint=CustomContract.Sprint.LIMITED;
     private final int[] stamina={40,40,40,40,40,40};
+    private final int[] lastSprintTick={-1000,-1000,-1000,-1000,-1000,-1000};
+    private int maxStamina=40;
     public void configure(CustomContract c){
         playerSpeed=c.playerSpeed()/100.0;sprintSpeed=c.sprintSpeed()/100.0;sprint=c.sprint();
+        maxStamina=c.sprint()==CustomContract.Sprint.DISABLED?0:c.hunterSprintSeconds()*10;
+        java.util.Arrays.fill(stamina,maxStamina);
+        java.util.Arrays.fill(lastSprintTick,-1000);
         hidingDensity=c.hidingSpots();
     }
     public LanWorld(HouseMap map){
@@ -49,6 +54,21 @@ public final class LanWorld {
         xs[seat]=map.centerX(room);zs[seat]=map.centerZ(room);hiding[seat]=false;
     }
     public Body body(int seat){seat(seat);return new Body(xs[seat],zs[seat],headings[seat],map.roomAt(xs[seat],zs[seat]));}
+    /** A stationary player recharges on the same host 10 Hz clock as movement. */
+    public void advanceStamina(int tick){
+        if(tick<0)throw new IllegalArgumentException("invalid tick");
+        if(sprint!=CustomContract.Sprint.LIMITED)return;
+        for(int i=0;i<6;i++)
+            if(tick-lastSprintTick[i]>3&&tick%2==0)
+                stamina[i]=Math.min(maxStamina,stamina[i]+1);
+    }
+    public int stamina(int seat){seat(seat);return stamina[seat];}
+    public int staminaCapacity(){return maxStamina;}
+    public String staminaFrame(int seat,int tick){
+        seat(seat);
+        return "STAMINA|"+stamina[seat]+"|"+maxStamina+"|"
+            +(tick==lastSprintTick[seat]?1:0);
+    }
     public boolean move(int seat,int dx,int dz,int tick){return move(seat,dx,dz,tick,false);}
     public boolean move(int seat,int dx,int dz,int tick,boolean wantsSprint){
         seat(seat);
@@ -59,8 +79,6 @@ public final class LanWorld {
         boolean running=wantsSprint&&sprint!=CustomContract.Sprint.DISABLED
             &&(sprint==CustomContract.Sprint.UNLIMITED||stamina[seat]>0);
         double speed=SPEED*playerSpeed*(running?sprintSpeed:1);
-        if(running&&sprint==CustomContract.Sprint.LIMITED)stamina[seat]--;
-        else if(!running&&tick%2==0)stamina[seat]=Math.min(40,stamina[seat]+1);
         double x=xs[seat]+speed*dx/magnitude,z=zs[seat]+speed*dz/magnitude;
         if(exitSealed && map.roomAt(xs[seat],zs[seat])!=HouseMap.EXTRACTION_ROOM
                 &&map.roomAt(x,z)==HouseMap.EXTRACTION_ROOM)
@@ -68,7 +86,12 @@ public final class LanWorld {
         // Forbid diagonal corner cutting; each axis must independently clear the collision radius.
         if(!map.traversable(x,z)||!map.traversable(x,zs[seat])||!map.traversable(xs[seat],z))
             throw new IllegalArgumentException("blocked by world collision");
-        xs[seat]=x;zs[seat]=z;hiding[seat]=false;return true;
+        xs[seat]=x;zs[seat]=z;hiding[seat]=false;
+        if(running){
+            lastSprintTick[seat]=tick;
+            if(sprint==CustomContract.Sprint.LIMITED)stamina[seat]--;
+        }
+        return true;
     }
     public void turn(int seat,int heading){seat(seat);if(heading<0||heading>=360)throw new IllegalArgumentException("invalid heading");headings[seat]=heading;}
     public boolean door(int seat,int tick){

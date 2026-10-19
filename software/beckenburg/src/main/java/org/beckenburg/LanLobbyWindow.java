@@ -228,6 +228,8 @@ public final class LanLobbyWindow extends JFrame {
         var walk=spin(custom.playerSpeed(),50,150,25);
         var run=spin(custom.sprintSpeed(),100,200,25);
         var ghost=spin(custom.ghostSpeed(),50,150,25);
+        var hunterEndurance=spin(custom.hunterSprintSeconds(),1,30,1);
+        var ghostEndurance=spin(custom.ghostSprintSeconds(),1,20,1);
         var recharge=spin(custom.energyRecovery(),50,200,25);
         var sanity=spin(custom.startingSanity(),0,100,25);
         var drain=spin(custom.sanityDrain(),0,200,25);
@@ -246,6 +248,8 @@ public final class LanLobbyWindow extends JFrame {
             new Object[]{"Walking speed %",walk},
             new Object[]{"Sprint multiplier %",run},
             new Object[]{"Sprinting",sprint},
+            new Object[]{"Hunter sprint endurance (sec)",hunterEndurance},
+            new Object[]{"Ghost burst endurance (sec)",ghostEndurance},
             new Object[]{"Ghost speed %",ghost},
             new Object[]{"Ghost energy recharge %",recharge},
             new Object[]{"Starting sanity %",sanity},
@@ -272,7 +276,8 @@ public final class LanLobbyWindow extends JFrame {
                 (int)hiding.getValue(),sanMonitor.isSelected(),actMonitor.isSelected(),
                 (MissionWeather.Mode)weatherMode.getSelectedItem(),
                 (EvidenceSignals.Weather)weatherChoice.getSelectedItem(),
-                (int)weatherIntensity.getValue());
+                (int)weatherIntensity.getValue(),
+                (int)hunterEndurance.getValue(),(int)ghostEndurance.getValue());
             log.append("Custom settings armed for next hosted case, "+custom.hunters()+
                 " hunters / difficulty +"+custom.partyDifficulty()+
                 " / weather "+custom.weatherMode()+" "+custom.fixedWeather()+
@@ -309,7 +314,8 @@ public final class LanLobbyWindow extends JFrame {
             custom.energyRecovery(),custom.sanityDrain(),custom.startingSanity(),
             custom.eventFrequency(),custom.sprint(),custom.hidingSpots(),
             custom.sanityMonitor(),custom.activityMonitor(),
-            custom.weatherMode(),custom.fixedWeather(),custom.weatherIntensity());
+            custom.weatherMode(),custom.fixedWeather(),custom.weatherIntensity(),
+            custom.hunterSprintSeconds(),custom.ghostSprintSeconds());
         Thread task=new Thread(()->{
             LanHost newHost=null;
             try{

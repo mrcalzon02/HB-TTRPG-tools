@@ -123,7 +123,10 @@ public final class LanClient implements AutoCloseable {
     public synchronized void move(int room)throws IOException {send("MOVE|"+room+"|"+(++sequence));}
     public synchronized void view3D()throws IOException {send("VIEW3D");}
     public synchronized void viewGhost3D()throws IOException {send("GVIEW3D");}
-    public synchronized void ghostStep(int dx,int dz)throws IOException {send("GSTEP|"+dx+"|"+dz+"|"+(++sequence));}
+    public synchronized void ghostStep(int dx,int dz)throws IOException {ghostStep(dx,dz,false);}
+    public synchronized void ghostStep(int dx,int dz,boolean bursting)throws IOException {
+        send("GSTEP|"+dx+"|"+dz+"|"+(bursting?1:0)+"|"+(++sequence));
+    }
     public synchronized void ghostTurn(int degrees)throws IOException {send("GTURN|"+degrees+"|"+(++sequence));}
     public synchronized void step(int dx,int dz)throws IOException {step(dx,dz,false);}
     public synchronized void step(int dx,int dz,boolean running)throws IOException {

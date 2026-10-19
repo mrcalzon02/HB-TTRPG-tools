@@ -112,6 +112,7 @@ public final class LanHost implements AutoCloseable {
         }
         world.configure(contract);
         ghostPose.configureSpeed(contract.ghostSpeed());
+        ghostPose.configureBurst(ghostType,contract.ghostSprintSeconds());
         ghost=new GhostDomain(map,4,type);
         frenzy=new GhostFrenzy(type);
         actionCadence=new GhostActionCadence(type);
@@ -439,6 +440,7 @@ public final class LanHost implements AutoCloseable {
                     if(!running||peer.slot==GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("3D view requires active hunter");
                     peer.worldMode=true;
                     reply(peer,"ACCEPT|VIEW3D");
+                    reply(peer,world.staminaFrame(peer.slot,tick));
                     reply(peer,weather.state().packet());
                     // Replay real investigator nicknames to newly opened hunter windows.
                     // Ghost seats cannot enter VIEW3D and are never name recipients.
@@ -481,6 +483,7 @@ public final class LanHost implements AutoCloseable {
                     if(!running||peer.slot!=GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("ghost view requires active ghost seat");
                     peer.ghostWorldMode=true;
                     reply(peer,"ACCEPT|GVIEW3D");
+                    reply(peer,ghostPose.staminaFrame(tick));
                     reply(peer,weather.state().packet());
                     reply(peer,"VOICEKEY|"+voice.port()+"|"+voice.register(peer.slot,peer.socket.getInetAddress()));
                     reply(peer,"GTYPE|"+ghostType+"|"+ghostType.behavior());
@@ -488,11 +491,13 @@ public final class LanHost implements AutoCloseable {
                     broadcastState();sendGhostPrompt();
                 }
                 case "GSTEP" -> {
-                    if(!running||peer.slot!=GHOST_SEAT||!peer.ghostWorldMode||p.size()!=4)
+                    if(!running||peer.slot!=GHOST_SEAT||!peer.ghostWorldMode
+                            ||(p.size()!=4&&p.size()!=5))
                         throw new IllegalArgumentException("spectral movement requires ghost view");
                     int dx=LanProtocol.integer(p.get(1),-100,100),dz=LanProtocol.integer(p.get(2),-100,100);
-                    acceptGhostPoseSequence(peer,LanProtocol.sequence(p.get(3)));
-                    ghostPose.step(dx,dz,tick);
+                    boolean bursting=p.size()==5&&LanProtocol.integer(p.get(3),0,1)==1;
+                    acceptGhostPoseSequence(peer,LanProtocol.sequence(p.get(p.size()-1)));
+                    ghostPose.step(dx,dz,tick,bursting);
                     reply(peer,"ACCEPT|GSTEP");reply(peer,ghostPose.frame(tick));broadcastApparitions();
                     if(ghost.manifested()&&tick%5==0)broadcastGhostSound(LanSound.Cue.FOOTFALL);
                 }
@@ -1666,6 +1671,8 @@ public final class LanHost implements AutoCloseable {
             }
             expireDisconnectedSeats();
             if(!running)return;
+            world.advanceStamina(tick);
+            ghostPose.advanceStamina(tick);
             if(frenzy.advance(tick)){
                 onFrenzyTransition();
             }
@@ -1707,7 +1714,10 @@ public final class LanHost implements AutoCloseable {
             if(seats[GHOST_SEAT]==null){GhostDomain.Observation seen=ghost.observe();
                 LanGhostPursuit.Impulse impulse=frenzy.raging()?frenzyChaseImpulse():null;
                 if(impulse==null)impulse=ai.approach(seen,ghostPose.pose());
-                if(impulse!=null){try{ghostPose.step(impulse.dx(),impulse.dz(),tick);broadcastApparitions();
+                if(impulse!=null){try{
+                    boolean burst=frenzy.raging()||ai.memory(tick)!=null;
+                    ghostPose.step(impulse.dx(),impulse.dz(),tick,burst);
+                    broadcastApparitions();
                     if(ghost.manifested()&&tick%5==0)broadcastGhostSound(LanSound.Cue.FOOTFALL);}
                     catch(IllegalArgumentException blocked){ /* Same physical rejection as a human ghost. */ }}
                 GhostDomain.Command choice=ai.decide(seen,LanSpatialCombat.any(strikeVictims()));
@@ -1768,7 +1778,13 @@ public final class LanHost implements AutoCloseable {
                     if(equipment[seat].powered(id))
                         reply(seats[seat],"GEARPOWER|"+id+"|"+
                             equipment[seat].batterySecondsLeft(id)+"|1");
-            if(tick%2==0)broadcastCounters();
+            if(tick%2==0){
+                broadcastCounters();
+                for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&seats[i].worldMode)
+                    reply(seats[i],world.staminaFrame(i,tick));
+                if(seats[GHOST_SEAT]!=null&&seats[GHOST_SEAT].ghostWorldMode)
+                    reply(seats[GHOST_SEAT],ghostPose.staminaFrame(tick));
+            }
             if(tick%5==0){broadcastState();broadcastApparitions();broadcastProgress();broadcastWorld();
                 if(seats[GHOST_SEAT]!=null&&seats[GHOST_SEAT].ghostWorldMode){
                     reply(seats[GHOST_SEAT],ghostPose.frame(tick));

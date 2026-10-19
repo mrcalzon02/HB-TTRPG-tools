@@ -31,6 +31,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private int lastTurn=-1,tick,visibleGhost=-1,health=100,sanity=100,evidence;
     private int crosses=2,throwWards=2,saltPouches=3;
     private int partySize=3,partyDifficulty=3,fieldCredits=400;
+    private int sprintRemaining=40,sprintMax=40;
+    private boolean sprinting;
     private final int[] medicine=new int[6];
     private VanTelemetry.Display meters;
     private final java.util.ArrayDeque<Integer> activityHistory=new java.util.ArrayDeque<>();
@@ -464,6 +466,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 else if(p.size()==3&&p.get(1).equals("REMOVED"))
                     renderer.placedWritingBookRoom=-1;
                 feedback="WRITING BOOK: "+frame.substring(5);
+            }else if(p.size()==4&&p.get(0).equals("STAMINA")){
+                sprintRemaining=LanProtocol.integer(p.get(1),0,300);
+                sprintMax=LanProtocol.integer(p.get(2),0,300);
+                sprinting=LanProtocol.integer(p.get(3),0,1)==1;
+                if(sprintRemaining>sprintMax)throw new IllegalArgumentException("invalid stamina");
             }else if(p.size()==4&&p.get(0).equals("GEARPOWER")){
                 String device=p.get(1);
                 if(FieldEquipment.functional(device)){
@@ -720,6 +727,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 renderer.lamp,deviceReading.get(held),
                 equipmentTier.getOrDefault(held,EquipmentTiers.Tier.I));
             drawHunterNameplates(g,h);
+            SprintHud.draw(g,12,h-76,Math.min(248,getWidth()-24),
+                "SPRINT",sprintRemaining,sprintMax,sprinting);
 
             int width=getWidth();
             int cardW=Math.min(width-24,615);
