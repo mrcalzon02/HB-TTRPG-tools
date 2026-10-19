@@ -48,8 +48,8 @@ public final class LanSpatialEvidenceIntegrationTest {
             ok(hunter.await("ACCEPT|SCAN|READING").contains("EMF"),"event-driven EMF >6");
             for(int i=0;i<10;i++)hunter.step(100);
             hunter.client.scan(LanCase.Tool.SPIRIT_BOX);
-            ok(hunter.await("ACCEPT|SCAN|READING").contains("OUT OF RANGE"),
-                "out-of-range spirit box returns a real distance status, never invented paranormal evidence");
+            ok(hunter.await("ACCEPT|SCAN|READING").contains("No response"),
+                "spirit box remains operational and reads silence away from the source");
             hunter.client.scan(LanCase.Tool.THERMOMETER);
             ok(hunter.await("ACCEPT|SCAN|READING").contains("THERMOMETER"),
                 "thermometer reports within its practical range");
