@@ -51,150 +51,152 @@ java -Djava.awt.headless=true -cp build\classes org.beckenburg.TierModelForge bu
 rem Extract only the curated CC0 castle GLBs with embedded original texture PNGs.
 java -Djava.awt.headless=true -cp build\classes org.beckenburg.KenneyMedievalAssets assets\source\kenney_retro-medieval-kit.zip build\classes\org\beckenburg\models || exit /b 1
 javac --release 17 -encoding UTF-8 -cp build\classes -d build\test @build\sources-tests.txt || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GraphicsOptionsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.PsxPipelineTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.PsxHorrorUiTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.SoundtrackAudioTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.SoundCoverageTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.HorrorAudioRoutingTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.HorrorAudioRoutingTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.CastleHubIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.BeckenburgUpdatesTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.HeldMeshViewTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GlbPropsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EvidenceSignalsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.MissionWeatherTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.RecordedWeatherTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.HardEvidenceQuotaTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.AncientGhostVariantsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.AdditionalEvidenceTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ContractRewardsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EmfSilenceTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostWritingTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentRegistryTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentTiersTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentStoreDescriptionsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.FieldEquipmentTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.InstrumentActivationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TieredMediaAndPowerTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TieredUvAndFirelightTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ImportedEquipmentModelsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.PackagedSourceModelsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentModelCatalogTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.FieldSoundRecorderTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSoundRecorderIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.RecorderModelsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TierModelForgeTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanCargoDoorTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanDotsProjectorsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.OptionalEvidenceReadingsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostEvidenceMatrixTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanFieldEquipmentIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanMeasuredEvidenceTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.SoloEnvironmentalEvidenceTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostBehaviorTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostIdentityTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanRiteNetworkTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostPursuitTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostHearingTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostHearingIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostTakeoverIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanCaseDepartureTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanIncapacitationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanEvidenceJournalTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanCaseFileIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSpatialEvidenceTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSpatialEvidenceIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanIncapacitationHudTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGuestDepartureIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanResumeStoreTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanClientWelcomeTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanHostOwnerRecoveryTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSecureOwnerAdmissionTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanHostAuthorizationRegressionTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSessionResumeIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanOutboundQueueTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanNetworkLatencyTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanHostAccessIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanNetworkDiagnosticsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanRitualDefenseTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanRitualDefenseIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostHearingHudTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostAnimationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostAnimationIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSoundTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSoundIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanCaseFileHudTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSoundHudTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanAcousticsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostSearchTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostLegacyHearingIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostSpatialTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSpatialCombatTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanTelegraphedStrikeTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanTelegraphedStrikeIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanTelegraphedHudTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanApparitionTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostSpriteAtlasIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.DirectionalSpritesIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanApparitionRenderTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanApparitionIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.MouseLookTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanWorldControlsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentSelectionTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.SiteSelectionTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.InvestigationSitesTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GrandSiteGeometryTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ArchitecturalPlansTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VictorianHouseArchitectureTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSiteSelectionIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.SoloEquipmentUseTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.CameraAimTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentSightTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.BeckenburgInstallIdentityTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.BeckenburgProfileImportTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GameplaySmokeTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanFieldJournalIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanHidingTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanTelemetryTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.FieldSuppliesTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.CustomContractTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LobbyGhostAvatarTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanHunterNameplateTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanPrivateHunterNamesTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanChatTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanChatIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanVoiceCodecTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanVoiceRelayTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanVoiceHostIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanVoiceClientHandshakeTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostLobbySecrecyTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSixHunterVanTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostActiveBehaviorTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.FieldJournalTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ManualEvidenceJournalTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanDiegeticCrtTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ManualEvidenceHudTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostTraitsTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.HunterCountersTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostDomainTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostFrenzyTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.MaterialAtlasTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TeamCalloutTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanStagingTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanNavigationVisualTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostPracticeTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanProtocolTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanClientDisconnectTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGracefulLeaveTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanCaseTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanCaseIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanWorldTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanWorldIntegrationTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanWorldRenderTest || exit /b 1
-java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanLobbyTest || exit /b 1
-if exist src\test\java\org\beckenburg\SmokeTest.java java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.SmokeTest || exit /b 1
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GraphicsOptionsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.PsxPipelineTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.PsxHorrorUiTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.SoundtrackAudioTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.SoundCoverageTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.HorrorAudioRoutingTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.HorrorAudioRoutingTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.CastleHubIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.BeckenburgUpdatesTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.HeldMeshViewTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GlbPropsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EvidenceSignalsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.MissionWeatherTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.RecordedWeatherTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.HardEvidenceQuotaTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.AncientGhostVariantsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.AdditionalEvidenceTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ContractRewardsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EmfSilenceTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostWritingTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentRegistryTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentTiersTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentStoreDescriptionsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.FieldEquipmentTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.InstrumentActivationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TieredMediaAndPowerTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TieredUvAndFirelightTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ImportedEquipmentModelsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.PackagedSourceModelsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentModelCatalogTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.FieldSoundRecorderTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSoundRecorderIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.RecorderModelsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TierModelForgeTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanCargoDoorTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanDotsProjectorsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.OptionalEvidenceReadingsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostEvidenceMatrixTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanFieldEquipmentIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanMeasuredEvidenceTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.SoloEnvironmentalEvidenceTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostBehaviorTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostIdentityTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanRiteNetworkTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostPursuitTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostHearingTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostHearingIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostTakeoverIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanCaseDepartureTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanIncapacitationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanEvidenceJournalTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanCaseFileIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSpatialEvidenceTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSpatialEvidenceIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanIncapacitationHudTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGuestDepartureIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanResumeStoreTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanClientWelcomeTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanHostOwnerRecoveryTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSecureOwnerAdmissionTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanHostAuthorizationRegressionTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSessionResumeIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanOutboundQueueTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanNetworkLatencyTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanHostAccessIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanNetworkDiagnosticsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanRitualDefenseTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanRitualDefenseIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostHearingHudTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostAnimationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostAnimationIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSoundTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSoundIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanCaseFileHudTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSoundHudTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanAcousticsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostSearchTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostLegacyHearingIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostSpatialTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSpatialCombatTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanTelegraphedStrikeTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanTelegraphedStrikeIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanTelegraphedHudTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanApparitionTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostSpriteAtlasIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.DirectionalSpritesIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanApparitionRenderTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanApparitionIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.MouseLookTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanWorldControlsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentSelectionTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.SiteSelectionTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.InvestigationSitesTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GrandSiteGeometryTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ArchitecturalPlansTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VictorianHouseArchitectureTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSiteSelectionIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.SoloEquipmentUseTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.CameraAimTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.EquipmentSightTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.BeckenburgInstallIdentityTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.BeckenburgProfileImportTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GameplaySmokeTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanFieldJournalIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanHidingTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanTelemetryTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.FieldSuppliesTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.CustomContractTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LobbyGhostAvatarTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanHunterNameplateTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanPrivateHunterNamesTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanChatTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanChatIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanVoiceCodecTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanVoiceRelayTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanVoiceHostIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanVoiceClientHandshakeTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGhostLobbySecrecyTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanSixHunterVanTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostActiveBehaviorTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.FieldJournalTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ManualEvidenceJournalTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanDiegeticCrtTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.ManualEvidenceHudTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostTraitsTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.HunterCountersTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostDomainTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostFrenzyTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.MaterialAtlasTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.TeamCalloutTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanStagingTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.VanNavigationVisualTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.GhostPracticeTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanProtocolTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanClientDisconnectTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanGracefulLeaveTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanCaseTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanCaseIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanWorldTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanWorldIntegrationTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanWorldRenderTest || set "TESTS_FAILED=1"
+java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.LanLobbyTest || set "TESTS_FAILED=1"
+if exist src\test\java\org\beckenburg\SmokeTest.java java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.SmokeTest || set "TESTS_FAILED=1"
+rem Execute every regression, but NEVER package when any test fails.
+if defined TESTS_FAILED (echo ERROR: one or more Beckenburg regression tests failed & exit /b 1)
 jar --create --file build\beckenburg-game.jar --main-class org.beckenburg.InvestigationGame -C build\classes org\beckenburg || exit /b 1
 echo Built build\beckenburg-game.jar
 if /I "%~1"=="run" java -jar build\beckenburg-game.jar
