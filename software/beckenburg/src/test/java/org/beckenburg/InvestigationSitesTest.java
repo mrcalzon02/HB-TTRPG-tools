@@ -36,9 +36,9 @@ public final class InvestigationSitesTest {
             for(int room=0;room<HouseMap.INDOOR_ROOMS;room++)
                 for(int adjacent:layout.ghostExits(room))
                     if(adjacent<HouseMap.INDOOR_ROOMS)
-                        ok(layout.openDoorBetweenRooms(room,adjacent)
-                            ||layout.openDoorBetweenRooms(room,adjacent)==false,
-                            "interior door helper accepts site topology");
+                        layout.openDoorBetweenRooms(room,adjacent);
+            ok(layout.doorSnapshot().split(",").length>=17,
+                "all internal room connections have actual doors");
         }
         ok(new HouseMap(HouseMap.Site.FARMHOUSE).tile(8,2)=='D'
             &&new HouseMap(HouseMap.Site.SCHOOL).tile(8,2)!='D',

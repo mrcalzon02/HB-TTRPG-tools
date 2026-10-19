@@ -85,7 +85,7 @@ public final class HouseMap {
             }
         }else if(site==Site.FARMHOUSE){
             // Farm service cubbies and short original masonry returns.
-            for(int room:new int[]{1,2,3,5,8}){
+            for(int room:new int[]{1,2,3,8}){
                 int bx=(room%COLS)*8,bz=(room/COLS)*6;
                 tiles[bz+1][bx+5]='#';tiles[bz+2][bx+5]='#';
             }
