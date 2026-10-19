@@ -9,7 +9,14 @@ import java.util.List;
 /** True perspective-triangle software rasterizer, depth tested at a period-appropriate 320x200. */
 public final class SceneRenderer {
     public static final int W=320,H=200;
-    private static final double NEAR=.065,FOCAL=153; // ~93 degree horizontal first-person FOV
+    private static final double NEAR=.065;
+    private double focal=153; // player default ~93deg; video lens is hardware-specific
+    public void setFieldOfView(double degrees){
+        if(!Double.isFinite(degrees)||degrees<35||degrees>135)
+            throw new IllegalArgumentException("unsupported optical field of view");
+        focal=(W*.5)/Math.tan(Math.toRadians(degrees/2));
+    }
+    public double fieldOfView(){return Math.toDegrees(2*Math.atan((W*.5)/focal));}
     private static final int[] BAYER={0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5};
     private record Point(double x,double y,double z) { }
     private record Vertex(Point p,double u,double v) { }
@@ -563,10 +570,10 @@ public final class SceneRenderer {
         Point torso=camera(new Point(teammate.x(),1.35,teammate.z()));
         Point head=camera(new Point(teammate.x(),1.95,teammate.z()));
         if(torso.z<NEAR||torso.z>14.0||head.z<NEAR)return null;
-        double cx=W*.5+torso.x/torso.z*FOCAL;
-        double cy=H*.5-torso.y/torso.z*FOCAL;
-        double labelX=W*.5+head.x/head.z*FOCAL;
-        double labelY=H*.5-head.y/head.z*FOCAL-5;
+        double cx=W*.5+torso.x/torso.z*focal;
+        double cy=H*.5-torso.y/torso.z*focal;
+        double labelX=W*.5+head.x/head.z*focal;
+        double labelY=H*.5-head.y/head.z*focal-5;
         if(!Double.isFinite(cx)||!Double.isFinite(cy)||
             !Double.isFinite(labelX)||!Double.isFinite(labelY))return null;
         int px=(int)Math.round(cx),py=(int)Math.round(cy);
@@ -766,8 +773,8 @@ public final class SceneRenderer {
     private void renderSpiritOrb(double gx,double gz,double bob,double clock){
         Point p=camera(new Point(gx,bob,gz));
         if(p.z<NEAR||p.z>17)return;
-        int cx=(int)Math.round(W*.5+p.x/p.z*FOCAL),cy=(int)Math.round(H*.5-p.y/p.z*FOCAL);
-        int radius=Math.min(29,Math.max(2,(int)Math.round(FOCAL*.19/p.z)));
+        int cx=(int)Math.round(W*.5+p.x/p.z*focal),cy=(int)Math.round(H*.5-p.y/p.z*focal);
+        int radius=Math.min(29,Math.max(2,(int)Math.round(focal*.19/p.z)));
         for(int sy=Math.max(0,cy-radius);sy<=Math.min(H-1,cy+radius);sy++)
             for(int sx=Math.max(0,cx-radius);sx<=Math.min(W-1,cx+radius);sx++){
                 double distance=Math.hypot(sx-cx,sy-cy)/(double)radius;
@@ -787,9 +794,9 @@ public final class SceneRenderer {
     private void triangle(Vertex va,Vertex vb,Vertex vc,int tint,int material,double roomLevel){
         Point a=va.p,b=vb.p,c=vc.p;
         int color=tint;
-        double x0=W*.5+a.x/a.z*FOCAL,y0=H*.5-a.y/a.z*FOCAL;
-        double x1=W*.5+b.x/b.z*FOCAL,y1=H*.5-b.y/b.z*FOCAL;
-        double x2=W*.5+c.x/c.z*FOCAL,y2=H*.5-c.y/c.z*FOCAL;
+        double x0=W*.5+a.x/a.z*focal,y0=H*.5-a.y/a.z*focal;
+        double x1=W*.5+b.x/b.z*focal,y1=H*.5-b.y/b.z*focal;
+        double x2=W*.5+c.x/c.z*focal,y2=H*.5-c.y/c.z*focal;
         double denom=(y1-y2)*(x0-x2)+(x2-x1)*(y0-y2);
         if(Math.abs(denom)<1e-8)return;
         int lowX=Math.max(0,(int)Math.floor(Math.min(x0,Math.min(x1,x2))));
