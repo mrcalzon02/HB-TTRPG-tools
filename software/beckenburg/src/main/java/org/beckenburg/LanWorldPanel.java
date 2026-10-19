@@ -743,9 +743,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             if(casefileOpen && journalPage!=0)drawFieldJournal(g,h);
             if(casefileOpen && journalPage==0){
                 int rows=Math.min(casefile.size(),Math.min(8,Math.max(1,(h-135)/37)));
-                int width=Math.max(260,getWidth()-48),height=52+rows*37,top=83;
-                g.setColor(new Color(10,14,23,232));g.fillRoundRect(20,top,width,height,10,10);
-                g.setColor(new Color(190,172,131));g.drawRoundRect(20,top,width,height,10,10);
+                int caseWidth=Math.max(260,getWidth()-48),height=52+rows*37,top=83;
+                g.setColor(new Color(10,14,23,232));g.fillRoundRect(20,top,caseWidth,height,10,10);
+                g.setColor(new Color(190,172,131));g.drawRoundRect(20,top,caseWidth,height,10,10);
                 g.setFont(new Font(Font.MONOSPACED,Font.BOLD,15));
                 g.drawString("SHARED CASEFILE / "+casefile.size()+" READINGS / UP-DOWN SCROLL",33,top+23);
                 g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,13));
@@ -755,7 +755,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     LanEvidenceJournal.Entry entry=casefile.get(casefile.size()-rows-casefileScroll+i);
                     String line=String.format("T%05d  H%d  %s  /  %s  /  %s",entry.tick(),
                             entry.seat()+1,map.roomName(entry.room()),entry.tool(),entry.finding());
-                    int max=Math.max(12,(width-36)/8),y=top+48+i*37;
+                    int max=Math.max(12,(caseWidth-36)/8),y=top+48+i*37;
                     g.setColor(new Color(221,207,167));
                     g.drawString(line.length()>max?line.substring(0,max-3)+"...":line,33,y);
                     g.setColor(new Color(217,218,209));
