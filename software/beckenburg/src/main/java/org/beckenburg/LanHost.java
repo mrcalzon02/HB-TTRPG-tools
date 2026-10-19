@@ -667,7 +667,9 @@ public final class LanHost implements AutoCloseable {
                     FieldEquipment gear=equipment[peer.slot];
                     String id=gear.active();
                     if(!gear.ready(id,tick))
-                        throw new IllegalArgumentException("instrument refreshing");
+                        throw new IllegalArgumentException(
+                            gear.batterySecondsLeft(id)==0?
+                                "battery empty - recharge at van":"instrument refreshing");
                     int room=world.body(peer.slot).room();
                     EquipmentTiers.Stage stage=gear.stage(id);
                     String reading;
