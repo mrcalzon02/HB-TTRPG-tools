@@ -68,7 +68,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final java.util.EnumMap<LanCase.Tool,String> lastMeasurement=
         new java.util.EnumMap<>(LanCase.Tool.class);
     private int casefileScroll;
-    private boolean casefileOpen;
+    private boolean casefileOpen,helpVisible;
     private final FieldJournal fieldNotes=new FieldJournal();
     private int journalPage,guideCursor,guideGhostIndex;
     private GhostIdentity.Type selectedGuess=GhostIdentity.Type.SPIRIT;
@@ -110,8 +110,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     }
     @Override public void doLayout(){
         super.doLayout();
-        int viewH=Math.max(160,getHeight()-82);
-        chatInput.setBounds(14,Math.max(40,viewH-32),Math.max(145,getWidth()-28),26);
+        chatInput.setBounds(14,Math.max(40,getHeight()-34),Math.min(420,Math.max(145,getWidth()-28)),26);
     }
     private void openChat(LanChat.Channel channel){
         if(health==0||!caseResult.isEmpty())return;
@@ -619,7 +618,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     @Override protected void paintComponent(Graphics original){
         super.paintComponent(original);Graphics2D g=(Graphics2D)original.create();
         try{
-            int h=Math.max(160,getHeight()-82);
+            int h=getHeight();
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g.drawImage(nightVision?NightVisionFilter.apply(renderer.image()):renderer.image(),
                 0,0,getWidth(),h,null);
@@ -673,52 +672,72 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 renderer.lamp,deviceReading.get(held),
                 equipmentTier.getOrDefault(held,EquipmentTiers.Tier.I));
             drawHunterNameplates(g,h);
-            g.setFont(new Font(Font.MONOSPACED,Font.BOLD,Math.max(12,getHeight()/46)));
+
+            int width=getWidth();
+            int cardW=Math.min(width-24,615);
+            g.setColor(new Color(10,17,25,225));g.fillRoundRect(12,10,cardW,69,9,9);
+            g.setFont(new Font(Font.MONOSPACED,Font.BOLD,13));
             g.setColor(new Color(234,222,189));
-            g.drawString("BECKENBURG / LAN HOUSE — HUNTER "+(seat+1)+
-                "   PARTY "+partySize+"  DIFFICULTY +"+partyDifficulty,13,26);
-            g.drawString(map.roomName(renderer.x,renderer.z)+" | TEAM "+(peers.size()+1)+" / 6 | HP "+health+
-                " | SANITY "+sanity+" | LOG "+casefile.size(),13,46);
-            g.drawString("+",getWidth()/2,h/2);
+            g.drawString("HUNTER "+(seat+1)+"  /  "+map.roomName(renderer.x,renderer.z),24,31);
+            g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
+            g.setColor(health<35?new Color(246,151,144):new Color(177,223,195));
+            g.drawString("HP "+health+"   SANITY "+sanity+"   PARTY "+(peers.size()+1)+"/"+partySize+
+                "   DIFFICULTY +"+partyDifficulty,24,49);
+            g.setColor(new Color(216,201,165));
+            g.drawString("CASE "+casefile.size()+" READINGS  /  GUESS "+selectedGuess,24,66);
+            g.setColor(new Color(225,212,178));g.drawString("+",width/2,h/2);
             int switchTarget=lights.aimed(map,renderer.x,renderer.z,renderer.yaw);
             if(switchTarget>=0){
+                g.setColor(new Color(14,24,25,225));g.fillRoundRect(Math.max(12,width/2-140),h-129,280,30,8,8);
                 g.setColor(new Color(251,220,152));
-                g.drawString("E / WALL SWITCH "+(lights.on(switchTarget)?"ON":"OFF"),13,h-33);
+                g.drawString("[ E ] WALL SWITCH "+(lights.on(switchTarget)?"ON":"OFF"),
+                    Math.max(24,width/2-128),h-108);
             }
-            g.setColor(new Color(214,195,151));
-            g.drawString("IDENTIFY: "+selectedGuess+"  [I NEXT / P SUBMIT]",13,91);
-            if(health==0){
-                g.setColor(new Color(235,154,159));
-                g.drawString("INCAPACITATED - VIEW ONLY / AWAIT CASE RESULT",13,68);
-            }else if(threatUntilTick>=tick && threatTarget>=0){
-                g.setColor(new Color(240,149,124));
-                int remaining=threatUntilTick-tick;
-                g.drawString("GHOST STRIKE WIND-UP — EVADE OR BREAK SIGHT"+(threatTarget==seat?" / TARGETED":"")+" ("+remaining+")",13,68);
+            String alert=null;Color alertColor=new Color(216,196,216);
+            if(health==0){alert="INCAPACITATED / SPECTATE UNTIL RESULT";alertColor=new Color(245,154,159);}
+            else if(threatUntilTick>=tick && threatTarget>=0){
+                alert="STRIKE WIND-UP / EVADE OR BREAK SIGHT ("+(threatUntilTick-tick)+")";
+                alertColor=new Color(255,172,145);
             }else if(apparition!=null){
-                g.setColor(new Color(228,158,177));
-                String state=apparition.phase()==LanGhostAnimation.Phase.MATERIALIZE?"MATERIALIZING"
-                        :apparition.phase()==LanGhostAnimation.Phase.RECOVER?"RECOVERING":"MANIFESTED";
-                g.drawString("ENTITY "+state+" — KEEP DISTANCE / USE WARDS",13,68);
+                String phase=apparition.phase()==LanGhostAnimation.Phase.MATERIALIZE?"MATERIALIZING"
+                    :apparition.phase()==LanGhostAnimation.Phase.RECOVER?"RECOVERING":"MANIFESTED";
+                alert="ENTITY "+phase+" / USE WARDS";alertColor=new Color(226,156,195);
             }else if(!activeSoundCaption().isEmpty()){
-                g.setColor(new Color(204,188,231));
-                g.drawString("HEARD: "+activeSoundCaption(),13,68);
+                alert="HEARD: "+activeSoundCaption();alertColor=new Color(210,194,237);
             }
-            g.setColor(new Color(17,19,25));g.fillRect(0,h,getWidth(),getHeight()-h);
-            g.setColor(new Color(216,215,202));
-            g.drawString(health==0?"ARROWS / MOUSE LOOK - OBSERVE ONLY - ESC EXIT":
-                    "WASD / SHIFT RUN / ENTER TEXT / F2 TEXT RADIO / F3 VOICE / F4 RADIO VOICE",13,h+23);
-            g.drawString(health==0?"NO MOVEMENT OR EQUIPMENT WHILE INCAPACITATED":
-                    "1-4 GEAR "+equippedGear[activeGearSlot]+" / "+equipmentTier.getOrDefault(equippedGear[activeGearSlot],EquipmentTiers.Tier.I)
-                    +"  R USE  F6 GEAR RACK  K MEDICINE  Z CROSS  G WARD  H SALT"+
-                    (batterySeconds.containsKey(equippedGear[activeGearSlot])
-                        ?"  BAT "+batterySeconds.get(equippedGear[activeGearSlot])+"s":""),
-                    13,h+42);
-            g.setColor(new Color(145,204,175));
+            if(alert!=null){
+                int aw=Math.min(width-24,Math.max(330,g.getFontMetrics().stringWidth(alert)+22));
+                g.setColor(new Color(27,17,27,229));g.fillRoundRect(12,87,aw,32,7,7);
+                g.setColor(alertColor);g.drawString(alert,23,108);
+            }
+            int quickWidth=Math.min(width-24,380),quickX=width-quickWidth-12;
+            int quickY=h-91;
+            g.setColor(new Color(11,19,27,230));g.fillRoundRect(quickX,quickY,quickWidth,79,9,9);
+            g.setColor(new Color(233,211,165));
+            String heldName=equippedGear[activeGearSlot];
+            String batt=batterySeconds.containsKey(heldName)?"  /  BAT "+batterySeconds.get(heldName)+"s":"";
+            g.drawString("["+(activeGearSlot+1)+"] "+heldName+" / "+
+                equipmentTier.getOrDefault(heldName,EquipmentTiers.Tier.I)+batt,quickX+11,quickY+22);
+            g.setColor(new Color(206,217,218));
+            g.drawString(health==0?"OBSERVATION ONLY":"R USE  /  F6 RACK  /  K MEDICINE",quickX+11,quickY+42);
             LanVoiceClientAudio voice=client.voice();
-            String mic=voice==null?"VOICE: OFF":voice.muted()?"VOICE: MUTED":
-                voice.transmitting()?"MIC: "+heldVoice:voice.connected()?"VOICE: READY":"VOICE: LINKING";
-            g.drawString((mouseLook.captured()?"MOUSE LOCKED | ":"CLICK TO LOCK LOOK | ")+
-                mic+" | "+feedback,13,h+62);
+            String mic=voice==null?"OFF":voice.muted()?"MUTED":
+                voice.transmitting()?"TRANSMITTING":voice.connected()?"READY":"LINKING";
+            g.setColor(new Color(153,213,190));
+            g.drawString("VOICE "+mic+"  /  F1 CONTROLS",quickX+11,quickY+61);
+            if(helpVisible){
+                int hw=Math.min(width-36,510),hx=(width-hw)/2,hy=Math.max(90,(h-210)/2);
+                g.setColor(new Color(13,19,27,245));g.fillRoundRect(hx,hy,hw,210,10,10);
+                g.setColor(new Color(236,207,157));g.drawString("HUNTER CONTROLS  /  F1 CLOSE",hx+18,hy+29);
+                g.setColor(new Color(218,225,221));
+                String[] hints={"WASD move  /  SHIFT sprint  /  CLICK mouse-look",
+                    "1-4 equip  /  R use  /  E interact  /  F6 gear rack",
+                    "Z cross  /  G ward  /  H salt  /  K medicine",
+                    "J casefile  /  TAB journal  /  I guess  /  P submit",
+                    "ENTER chat  /  F2 radio  /  F3-F4 voice  /  F7 voice options",
+                    "ESC exit world  /  F1 close this help"};
+                int yy=hy+55;for(String hint:hints){g.drawString(hint,hx+18,yy);yy+=25;}
+            }
             drawChat(g,h);
             if(vanDisplay)drawVanMeters(g,h);
             if(casefileOpen && journalPage!=0)drawFieldJournal(g,h);
@@ -752,7 +771,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         if(!chatInput.isVisible()&&tick>chatVisibleUntil)return;
         int rows=chatInput.isVisible()?6:3;
         int start=Math.max(0,chatHistory.size()-rows),index=0;
-        int x=14,y=viewHeight-56-rows*20,w=Math.min(getWidth()-28,590);
+        int x=14,y=viewHeight-56-rows*20,w=Math.min(getWidth()-28,420);
         g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
         g.setColor(new Color(11,17,23,203));
         g.fillRoundRect(x,y-19,w,rows*20+24,7,7);
@@ -955,6 +974,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     }
     @Override public void keyPressed(KeyEvent e){
         if(chatInput.isVisible())return;
+        if(e.getKeyCode()==KeyEvent.VK_F1){helpVisible=!helpVisible;repaint();return;}
         if(e.getKeyCode()==KeyEvent.VK_F3){
             beginVoice(LanChat.Channel.LOCAL);return;
         }
