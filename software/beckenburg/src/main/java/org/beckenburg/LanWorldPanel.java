@@ -340,6 +340,32 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }else if(frame.startsWith("RESULT|")){
                 caseResult=frame.substring(7);feedback="CASE CLOSED: "+caseResult;
                 keys.clear();
+            }else if(p.get(0).equals("DOTS")){
+                if(p.size()==2&&p.get(1).equals("RESET")){
+                    renderer.dotsPositions.clear();
+                    renderer.dotsPassRoom=-1;
+                }else if(p.size()==3&&p.get(1).equals("CLEAR")){
+                    int owner=LanProtocol.integer(p.get(2),0,5);
+                    renderer.dotsPositions.remove(owner);
+                }else if(p.size()==7&&p.get(1).equals("PLACE")){
+                    int owner=LanProtocol.integer(p.get(2),0,5);
+                    int room=LanProtocol.integer(p.get(3),0,HouseMap.INDOOR_ROOMS-1);
+                    double x=LanProtocol.integer(p.get(4),0,HouseMap.WIDTH*1000)/1000.0;
+                    double z=LanProtocol.integer(p.get(5),0,HouseMap.HEIGHT*1000)/1000.0;
+                    EquipmentTiers.Tier gear=EquipmentTiers.Tier.valueOf(p.get(6));
+                    renderer.dotsPositions.put(owner,
+                        new LanDotsProjectors.Placement(owner,room,x,z,gear));
+                    feedback="D.O.T.S. PROJECTOR ACTIVE IN "+map.roomName(room);
+                }else if(p.size()==6&&p.get(1).equals("PASS")){
+                    int room=LanProtocol.integer(p.get(2),0,HouseMap.INDOOR_ROOMS-1);
+                    int eventTick=LanProtocol.integer(p.get(3),0,99999999);
+                    double x=LanProtocol.integer(p.get(4),0,HouseMap.WIDTH*1000)/1000.0;
+                    double z=LanProtocol.integer(p.get(5),0,HouseMap.HEIGHT*1000)/1000.0;
+                    renderer.dotsPassRoom=room;
+                    renderer.dotsPassX=x;renderer.dotsPassZ=z;
+                    renderer.dotsPassUntil=eventTick+28;
+                    feedback="REAL D.O.T.S. PASSAGE / MEASUREMENT RECORDED";
+                }else throw new IllegalArgumentException("invalid D.O.T.S. state");
             }else if(p.size()==2&&p.get(0).equals("VANDOOR")){
                 map.van().setCargoDoorClosed(LanProtocol.integer(p.get(1),0,1)==1);
                 feedback=map.van().cargoDoorClosed()
@@ -422,7 +448,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         java.util.List<String> options=new java.util.ArrayList<>();
         java.util.List<Runnable> actions=new java.util.ArrayList<>();
         for(String id:java.util.List.of("EMF_READER","THERMOMETER","SPIRIT_BOX",
-                "UV_LIGHT","GHOST_WRITING_BOOK")){
+                "UV_LIGHT","GHOST_WRITING_BOOK","DOTS_PROJECTOR")){
             EquipmentTiers.Tier tier=equipmentTier.getOrDefault(id,EquipmentTiers.Tier.I);
             if(tier!=EquipmentTiers.Tier.III){
                 EquipmentTiers.Tier next=EquipmentTiers.Tier.values()[tier.ordinal()+1];
