@@ -64,23 +64,49 @@ public final class CastleHubDecor {
         new Accent("tv_mp_1",25.15,.62,20.0,.67,Math.PI/2),
         new Accent("book_mp_1",11.3,1.40,13.3,.42,0),
         new Accent("handheld_tablet_1",16.0,1.40,13.3,.43,0),
-        new Accent("book_mp_1",5.65,.56,18.2,.36,0),
-        new Accent("pc_keyboard_mp_1",22.5,.95,16.9,.55,0));
-    /** Lamps use distinct authored on/off geometry. */
-    public record Light(String on,String off,double x,double y,double z,double scale,double yaw){}
+        new Accent("book_mp_1",5.65,.56,18.2,.36,0));
+    /** Licensed fixture families are explicitly assigned to real building mounts.
+     * A fixture cannot be authored in the sky, over the courtyard, or behind
+     * an imaginary wall. Placement, rendering and verification use this list.
+     */
+    public enum Mount { CEILING, WALL }
+    public record Light(String on,String off,double x,double y,double z,
+                        double scale,double yaw,Mount mount){
+        public boolean attached(CastleHubMap map){
+            if(map.solid((int)Math.floor(x),(int)Math.floor(z))||map.outside(x,z))
+                return false;
+            if(mount==Mount.CEILING)return Math.abs(y-3.37)<.16;
+            double dx=Math.sin(yaw),dz=Math.cos(yaw);
+            return map.solid((int)Math.floor(x+dx*.48),(int)Math.floor(z+dz*.48))
+                &&!map.solid((int)Math.floor(x-dx*.35),(int)Math.floor(z-dz*.35));
+        }
+    }
+    private static Light ceiling(String family,double x,double z,double scale){
+        return new Light(family+"_on",family+"_off",x,3.38,z,scale,0,Mount.CEILING);
+    }
+    private static Light sconce(double x,double z,double yaw){
+        return new Light("lamp_3_on","lamp_3_off",x,2.24,z,.72,yaw,Mount.WALL);
+    }
     public static final List<Light> LIGHTS=List.of(
-        new Light("ceiling_lamp_4_on","ceiling_lamp_4_off",5,3.31,5.5,1,0),
-        new Light("ceiling_lamp_4_on","ceiling_lamp_4_off",13.5,3.31,5.2,1,0),
-        new Light("ceiling_lamp_4_on","ceiling_lamp_4_off",23,3.31,5.2,1,0),
-        new Light("lamp_3_on","lamp_3_off",8.42,2.25,5,1,Math.PI/2),
-        new Light("lamp_3_on","lamp_3_off",17.42,2.25,8.7,1,Math.PI/2),
-        new Light("lamp_3_on","lamp_3_off",19.55,2.25,7.7,1,Math.PI/2),
-        new Light("lamp_3_on","lamp_3_off",3,2.25,14.2,1,0),
-        new Light("lamp_3_on","lamp_3_off",24.7,2.25,14,1,0),
-        new Light("lamp_3_on","lamp_3_off",12.1,2.25,19.5,1,0),
-        new Light("ceiling_lamp_4_on","ceiling_lamp_4_off",36,3.31,10,1,0),
-        new Light("ceiling_lamp_4_on","ceiling_lamp_4_off",36,3.31,25,1,0),
-        new Light("lamp_3_on","lamp_3_off",5,2.25,27.0,1,0));
+        // Different historical lamp families, fitted flush to stone-vault ceilings.
+        ceiling("ceiling_lamp_1",5.0,5.5,.90),
+        ceiling("ceiling_lamp_4",13.5,5.2,.67),
+        ceiling("ceiling_lamp_1",23.0,5.2,.90),
+        ceiling("ceiling_lamp_4",5.0,17.5,.67),
+        ceiling("ceiling_lamp_1",24.0,17.5,.85),
+        ceiling("ceiling_lamp_4",35.0,10.0,.64),
+        ceiling("ceiling_lamp_1",35.0,25.0,.85),
+        // Actual bracketed sconces on existing collision-map masonry.
+        sconce(9.76,5.0,Math.PI/2),
+        sconce(10.24,8.8,-Math.PI/2),
+        sconce(18.76,8.0,Math.PI/2),
+        sconce(19.23,4.2,-Math.PI/2),
+        sconce(13.5,10.75,0),
+        sconce(3.0,11.25,Math.PI),
+        sconce(9.73,18.3,Math.PI/2),
+        sconce(20.27,18.0,-Math.PI/2),
+        sconce(29.24,23.0,-Math.PI/2),
+        sconce(35.0,17.23,Math.PI));
     public record Switch(double x,double y,double z,double yaw){}
     public static final List<Switch> SWITCHES=List.of(
         new Switch(8.25,1.45,6.1,Math.PI/2),
