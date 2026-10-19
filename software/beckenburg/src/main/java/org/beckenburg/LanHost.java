@@ -26,6 +26,7 @@ public final class LanHost implements AutoCloseable {
     private final long[] hunterSequences=new long[HUNTERS];
     private final HouseMap map=new HouseMap();
     private final RoomLighting lights=new RoomLighting();
+    private final AmbientSanity ambientSanity=new AmbientSanity();
     private final LanWorld world=new LanWorld(map);
     private final LanGhostSpatial ghostPose=new LanGhostSpatial(map,4);
     private final GhostDomain ghost;
@@ -1692,6 +1693,26 @@ public final class LanHost implements AutoCloseable {
             if(frenzy.phase()==GhostFrenzy.Phase.CALM && frenzy.consider(
                     tick,ghost,anyHunterInSite(),averageSanity()))onFrenzyTransition();
             if(tick%12==0)monitor.sample(tick,ghost.energy());
+            // Cumulative room psychology is deliberately slower than active ghost attacks.
+            // A flashlight/firelight offsets darkness without pretending the room circuit is on.
+            int[] present=new int[HouseMap.ROOM_COUNT];
+            for(int i=0;i<HUNTERS;i++)
+                if((seats[i]!=null||reserved[i]!=null)&&mission.alive(i)
+                        &&hunterRooms[i]>=0&&hunterRooms[i]<HouseMap.ROOM_COUNT)
+                    present[hunterRooms[i]]++;
+            for(int i=0;i<HUNTERS;i++){
+                if((seats[i]==null&&reserved[i]==null)||!mission.alive(i)){
+                    ambientSanity.reset(i);continue;
+                }
+                int room=hunterRooms[i];
+                boolean indoor=room>=0&&room<HouseMap.INDOOR_ROOMS;
+                boolean hasLight=indoor&&(lights.brightness(room,tick)>.32
+                    ||equipment[i].powered("FLASHLIGHT")
+                    ||equipment[i].powered("FIRELIGHT"));
+                int amount=ambientSanity.advance(i,indoor,present[room],hasLight,
+                    room==ghost.room(),GhostTraits.of(ghostType).charge());
+                if(amount>0)mission.drainSanity(i,amount);
+            }
             int drain=GhostTraits.passiveFear(ghostType,tick,occupants);
             if(drain>0)for(int i=0;i<HUNTERS;i++)if((seats[i]!=null||reserved[i]!=null)&&hunterRooms[i]==ghost.room()
                     &&mission.drainSanity(i,drain)&&seats[i]!=null)reply(seats[i],"FEED|SANITY DRAIN");

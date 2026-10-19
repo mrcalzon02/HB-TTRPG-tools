@@ -557,7 +557,7 @@ public final class InvestigationGame {
             }
             accumulator+=dt;
             while(accumulator>=.1){
-                session.tick(scene.x,scene.z);
+                session.tick(scene.x,scene.z,scene.lamp);
                 int activity=monitor.sample(session.ticks(),session.ghostEnergy());
                 if(session.ticks()%12==0){
                     activityHistory.addLast(activity);

@@ -39,6 +39,7 @@ public final class InvestigationSession {
     private RoomLighting roomLights;
     public void connectLighting(RoomLighting roomLights){this.roomLights=roomLights;}
     private final HunterCounters counters=new HunterCounters();
+    private final AmbientSanity ambientSanity=new AmbientSanity();
     private final GhostDomain.AiController ghostAi;
     private boolean prepared, haunted, rewarded;
     private String message = "Inspect the haunting, record instrument measurements, prepare a ward, and attempt the rite.";
@@ -121,6 +122,9 @@ public final class InvestigationSession {
         if(journal.size()>64) journal.remove(2);
     }
     public void tick(double playerX, double playerZ) {
+        tick(playerX,playerZ,false);
+    }
+    public void tick(double playerX,double playerZ,boolean carriedLight) {
         if(outcome!=Outcome.ACTIVE) return;
         ticks++;
         missionWeather.advance(ticks);
@@ -128,6 +132,12 @@ public final class InvestigationSession {
         // Ghost observation has only room-local presence, never the hunter's global position or notebook.
         int playerRoom=map.roomAt(playerX,playerZ);
         ghost.advance(ticks,playerRoom,playerRoom==ghost.room()?1:0);
+        boolean indoor=playerRoom>=0&&playerRoom<HouseMap.INDOOR_ROOMS;
+        boolean light=carriedLight||(indoor&&(roomLights==null
+            ||roomLights.brightness(playerRoom,ticks)>.32));
+        int stressFromRoom=ambientSanity.advance(0,indoor,1,light,
+            playerRoom==ghost.room(),GhostTraits.of(ghost.type()).charge());
+        if(stressFromRoom>0)stress=Math.min(100,stress+stressFromRoom);
         int feed=GhostTraits.passiveFear(ghost.type(),ticks,playerRoom==ghost.room()?1:0);
         if(feed>0){
             stress=Math.min(100,stress+feed);
