@@ -14,16 +14,25 @@
   },
   "inspection": {
     "date": "2026-10-18 local",
-    "status": "blocked-on-full-archive-transfer",
+    "status": "local-archive-indexed",
     "provider_limit_bytes": 268435456,
     "actual_file_bytes": 1262869330,
-    "known_member_count": null,
-    "known_formats": null,
+    "known_member_count": 448,
+    "known_formats": {
+      ".blend": 33,
+      ".fbx": 63,
+      ".obj": 2,
+      ".glb": 312
+    },
     "unverified_members": [],
-    "error": "Connected Google Drive download action rejected 1262869330 bytes: file exceeds 268435456-byte limit.",
     "scanner": "software/beckenburg/assets/tools/index_owned_models_zip.py",
-    "instructions": "After local Google Drive download: python3 software/beckenburg/assets/tools/index_owned_models_zip.py /path/to/Models.zip --output /path/to/models-zip-inventory.json. Review output before selecting game assets.",
-    "verified_model_geometry_count": 0
+    "instructions": "Local Models.zip has been indexed read-only. Review private local inventory before selecting game assets; raw bounds are not transformed or renderer acceptance.",
+    "verified_model_geometry_count": 0,
+    "prior_connector_error": "Connected Google Drive download action rejected 1262869330 bytes: file exceeds 268435456-byte limit.",
+    "local_archive_sha256": "6dd59b169156206f41f45ee80e1fdd910febd8caa9466bd132a884d7ddd01a83",
+    "raw_gltf_descriptors_inspected": 312,
+    "descriptor_error_count": 0,
+    "local_inventory": "build/models-zip-inventory.json (private, not tracked)"
   },
   "candidate_games": [
     "breakwater-battery",
