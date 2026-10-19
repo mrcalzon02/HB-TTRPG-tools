@@ -73,6 +73,48 @@
       "bytes": 2313414,
       "sha256": "eededdeb474df249af86abca0ac03694cd26dc53c2ff131eba9e134afe0cf513",
       "gitBlobSha1": "5ebd33c2f0fc042a3d6281a5833ea19e0b4ad20d"
+    },
+    {
+      "path": "assets/beckenburg/concept-art/v001/03-ghosts/elder-blade-demon-master-concept.png",
+      "title": "Elder Blade Demon — master concept",
+      "bytes": 2524265,
+      "sha256": "440f5086f2e8173872d36a33eaebe2002e4ca589ce082a0105fc05f151038105",
+      "gitBlobSha1": "672f3ae08bd8042d5d4b3d29a5dfc5d6b2327159",
+      "width": 1536,
+      "height": 1024,
+      "projectId": "beckenburg",
+      "sourceFileId": "19rv8ajdclhTnOv3YPiyAhTw8l_-2UTJn",
+      "approvalStatus": "approved",
+      "creationBatch": "elder-master-concepts-2026-10-19",
+      "intendedModelId": "ELDER_BLADE_DEMON"
+    },
+    {
+      "path": "assets/beckenburg/concept-art/v001/03-ghosts/elder-plague-demon-master-concept.png",
+      "title": "Elder Plague Demon — master concept",
+      "bytes": 2595161,
+      "sha256": "326e2e1f8b6c3e3170003b2d0d99008df2f61eb4d8599d7ab0caa63521620ee7",
+      "gitBlobSha1": "0d939683e31e92c0c87e33c914ac319fa5e73013",
+      "width": 1536,
+      "height": 1024,
+      "projectId": "beckenburg",
+      "sourceFileId": "1kKe-Dts_1zCURpVfaMSAKHfNjF1hK5EV",
+      "approvalStatus": "approved",
+      "creationBatch": "elder-master-concepts-2026-10-19",
+      "intendedModelId": "ELDER_PLAGUE_DEMON"
+    },
+    {
+      "path": "assets/beckenburg/concept-art/v001/03-ghosts/elder-nothic-master-concept.png",
+      "title": "Elder Nothic — master concept",
+      "bytes": 2381524,
+      "sha256": "1be6296beb19f71829ee7dd74db057d4fee3307d335cc978a4392e3413275c1c",
+      "gitBlobSha1": "71ce0ba67e66cd17c89967883043648446ea368f",
+      "width": 1536,
+      "height": 1024,
+      "projectId": "beckenburg",
+      "sourceFileId": "1JOgdDz1DOxIe7rgS1ciIx_G8SKvlAeEU",
+      "approvalStatus": "approved",
+      "creationBatch": "elder-master-concepts-2026-10-19",
+      "intendedModelId": "ELDER_NOTHIC"
     }
   ]
 }
