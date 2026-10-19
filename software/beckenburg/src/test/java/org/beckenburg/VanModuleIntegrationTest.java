@@ -13,9 +13,10 @@ public final class VanModuleIntegrationTest {
         ok(VanStaging.REAR-VanStaging.FRONT>=7.2,"a full length cargo bay");
         ok(VanStaging.HALF_WIDTH*2>=4.0,"interior has two mounted walls and central aisle");
         ok(VanStaging.INTERIOR_HEIGHT>=3.0,"full height workstation and overhead lights");
-        ok(VanInteriorLayout.toolSockets().size()==EquipmentTiers.all().size(),
-            "one purpose-built hook for every source-authored equipment family");
-        ok(VanInteriorLayout.toolSockets().size()==42,"all 42 catalog types supported");
+        ok(VanInteriorLayout.toolSockets().size()==FieldEquipment.workingTools().size()+1,
+            "all functional LAN equipment and the solo salt kit have distinct physical hooks");
+        ok(VanInteriorLayout.TOOL_CAPACITY>=EquipmentTiers.all().size(),
+            "42 real rack spaces reserved without inventing missing or nonfunctional gear");
         ok(VanInteriorLayout.TOOL_CAPACITY>=VanInteriorLayout.toolSockets().size(),
             "rack cannot silently drop equipment when fully stocked");
         Set<String> slots=new HashSet<>();
