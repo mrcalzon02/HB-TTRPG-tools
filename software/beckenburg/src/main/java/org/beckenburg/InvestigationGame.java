@@ -230,15 +230,20 @@ public final class InvestigationGame {
         JCheckBox large=new JCheckBox("Large menu text",displayPrefs.getBoolean("largeMenuText",false));
         JCheckBox contrast=new JCheckBox("High-contrast menu",displayPrefs.getBoolean("highContrast",false));
         JCheckBox maximize=new JCheckBox("Maximize game window",displayPrefs.getBoolean("maximized",false));
+        JSlider musicVolume=new JSlider(0,100,SoundtrackAudio.volume());
+        musicVolume.setMajorTickSpacing(25);musicVolume.setPaintTicks(true);
+        JLabel musicLabel=new JLabel("Music volume (0 = silent, effects separate)");
         JPanel fields=new JPanel(new GridLayout(0,1,6,10));
         fields.setBorder(BorderFactory.createEmptyBorder(12,14,12,14));
         fields.add(large);fields.add(contrast);fields.add(maximize);
+        fields.add(musicLabel);fields.add(musicVolume);
         int answer=JOptionPane.showConfirmDialog(window,fields,"Display & accessibility",
             JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
         if(answer!=JOptionPane.OK_OPTION)return;
         displayPrefs.putBoolean("largeMenuText",large.isSelected());
         displayPrefs.putBoolean("highContrast",contrast.isSelected());
         displayPrefs.putBoolean("maximized",maximize.isSelected());
+        SoundtrackAudio.volume(musicVolume.getValue());
         window.setExtendedState(maximize.isSelected()?JFrame.MAXIMIZED_BOTH:JFrame.NORMAL);
         buildMenu();menu.revalidate();menu.repaint();
         // Rendering effects, audio levels and in-world text need their own runtime bindings.
