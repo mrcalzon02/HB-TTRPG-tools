@@ -58,6 +58,15 @@ public final class DirectionalSprites {
         if(image==null)throw new IllegalArgumentException("Unknown character sprite: "+character);
         return image;
     }
+    /** Expansion v2 supplies a different appearance for each original/Ancient ghost.
+     * Legacy observer/banshee facings remain the graceful fallback when not packaged.
+     */
+    public static BufferedImage frame(String character,int facing,LanGhostAnimation.Phase phase,int animationFrame){
+        if(facing<0||facing>=8||phase==null)throw new IllegalArgumentException("invalid facing/phase");
+        BufferedImage expanded=GhostSpriteAtlas.frame(character,facing,GhostSpriteAtlas.state(phase),animationFrame);
+        if(expanded!=null)return expanded;
+        return frame(IMAGES.containsKey(character+"/front")?character:"banshee",facing);
+    }
     /** Entity heading zero looks +Z; facing zero when camera looks at its face. */
     public static int facing(int heading,double entityX,double entityZ,double camX,double camZ){
         if(heading<0||heading>=360||!Double.isFinite(entityX)||!Double.isFinite(entityZ)
@@ -88,6 +97,18 @@ public final class DirectionalSprites {
             double yaw,double pitch,double entityX,double entityZ,int heading,
             String character,double height,double width,double elevation,int opacity,boolean lamp,
             int renderWidth,int renderHeight,double focal,boolean ancientTint){
+        draw(pixels,depth,cameraX,cameraZ,yaw,pitch,entityX,entityZ,heading,
+            character,height,width,elevation,opacity,lamp,renderWidth,renderHeight,focal,
+            ancientTint,LanGhostAnimation.Phase.LURK,0);
+    }
+    /** Pose is selected only from a host-authorized visible apparition.
+     * A v2 Ancient atlas is already green, so never apply the legacy tint twice.
+     */
+    public static void draw(int[] pixels,double[] depth,double cameraX,double cameraZ,
+            double yaw,double pitch,double entityX,double entityZ,int heading,
+            String character,double height,double width,double elevation,int opacity,boolean lamp,
+            int renderWidth,int renderHeight,double focal,boolean ancientTint,
+            LanGhostAnimation.Phase phase,int animationFrame){
         if(pixels.length!=renderWidth*renderHeight||depth.length!=renderWidth*renderHeight
                 ||opacity<=0||height<=0)return;
         if(!Double.isFinite(entityX)||!Double.isFinite(entityZ))return;
@@ -108,7 +129,7 @@ public final class DirectionalSprites {
         int x0=Math.max(0,(int)Math.floor(cx-halfW)),x1=Math.min(renderWidth-1,(int)Math.ceil(cx+halfW));
         int y0=Math.max(0,(int)Math.floor(head)),y1=Math.min(renderHeight-1,(int)Math.ceil(foot));
         if(x0>x1||y0>y1)return;
-        BufferedImage sprite=frame(character,facing(heading,entityX,entityZ,cameraX,cameraZ));
+        BufferedImage sprite=frame(character,facing(heading,entityX,entityZ,cameraX,cameraZ),phase,animationFrame);
         int sw=sprite.getWidth(),sh=sprite.getHeight();
         double screenWidth=halfW*2,screenHeight=foot-head;
         double fog=Math.min(.75,Math.max(0,(anchorDepth-5)/15));
@@ -129,7 +150,7 @@ public final class DirectionalSprites {
                 red=(int)(Math.min(255,red)*(1-fog)+18*fog);
                 green=(int)(Math.min(255,green)*(1-fog)+21*fog);
                 blue=(int)(Math.min(255,blue)*(1-fog)+30*fog);
-                if(ancientTint){
+                if(ancientTint&&!GhostSpriteAtlas.supports(character)){
                     red=(int)(red*.33);
                     green=Math.min(255,(int)(green*.80+53));
                     blue=(int)(blue*.35);
