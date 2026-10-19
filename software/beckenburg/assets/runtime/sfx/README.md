@@ -27,3 +27,20 @@
 
 ## Verified regression boundary
 Current complete 99-class application source compiled on Java 21 with `javac --release 17`. `SoundCoverageTest` passed all **34 cues**, codec determinism, captions, panning, effects volume and nonduplicating button/tab listeners. An actual sample 16-kHz PCM WAV probe passed recorded decoding, volume and pan; the selective Python importer passed `py_compile` plus fixture scan/transcoding. The synthetic fixture is only a test and **not** a real NOX source recording. No full installer, full integration-suite acceptance, acoustical listening evaluation or approval of upstream NOX file choices has occurred in this slice.
+
+## Source-owner horror classification and trigger routing
+
+The owner's clarification overrides generic filename guessing:
+
+| PS1 source WAV | Sound role | Gameplay trigger |
+|---|---|---|
+| #1 | `TENSION_BUILD` | Host transitions Ghost Frenzy into WARNING, once per accepted start |
+| #5 | `LOCKED_DOOR_RATTLE` | A living hunter actually attempts to cross a *currently sealed* Frenzy extraction threshold; cooldown 18 authoritative ticks per seat |
+| #2, #3, #4 | `HORROR_STING_A/B/C` | Bounded rotating variations of real accepted DISTURB / MANIFEST / SIGNATURE actions, not fabricated evidence |
+| #6–20 | Unassigned generic supernatural stings | Keep in source archive for subsequent audition, categorization and variants |
+
+Do not use #5 for normal opening/closing doors: it sounds like a physically obstructed door being repeatedly attempted, not a regular door latch. Normal room doors and van cargo mechanisms remain DOOR/VAN_DOOR; ordinary Foley should come from verified NOX clips. Do not play a scary sting as evidence for a ghost type or disclose an unmanifested ghost's exact location. All world stings are projected using the existing quantized host sound packets and distance attenuation. Tension/stings also have deterministic PSX-style synth fallbacks when no recording is shipped.
+
+**Local-only PS1 audition:** `python development/import_ps1_horror.py /path/to/PS1_Horror_SFX_Vol1.zip.zip --scan`, then invoke without `--scan` to prepare short 16-kHz WAV previews in `build/ps1-sfx-preview`. Source ZIP is not modified, exact numbered members and CRC are verified, and the SHA-256 provenance file records each selection. The importer deliberately prevents directing previews into `assets/runtime/sfx`. Shipping the user-supplied recordings requires explicit distribution-rights confirmation before enabling the importer release switches. The build continues using its complete synthesized fallback until then.
+
+**Sound cue verification:** the full `SoundCoverageTest` enumerates the cue vocabulary, generates deterministic stereo PCM, checks captions and panning, verifies FX volume and listener idempotence. New horror cues are ordinary `LanSound.Cue` entries, so they are automatically included in this test; no UI-only fake playback is accepted as a test of network authority.
