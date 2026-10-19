@@ -1,10 +1,10 @@
 {
   "schema": "beckenburg.lod_sibling_registry.v1",
-  "reviewed_at": "2026-10-18",
+  "reviewed_at": "2026-10-18 22:04 Alaska",
   "folder_id": "12qjt1ySgKH4gESqY7wVrp0lx36GyIeDk",
   "folder_url": "https://drive.google.com/drive/folders/12qjt1ySgKH4gESqY7wVrp0lx36GyIeDk",
   "storage_rule": "Publish a portable low-poly .glb directly as a sibling of the exact owner-authoritative source file, not in an unrelated staging folder. Never overwrite or move the original. Accompany every LOD with a provenance sidecar and verify source+LOD have identical parent folder ID before claiming uploaded.",
-  "status": "four portable GLB companions uploaded and enumerated beside original files in connected Google Drive",
+  "status": "REVOKED: all four early portable LOD exports failed independent visual QA; two character LODs quarantined; originals preserved.",
   "links": [
     {
       "original": "boat.glb",
@@ -21,7 +21,12 @@
       "consumer_game": "breakwater-battery",
       "verified_same_folder": true,
       "rig_state": "static reduced geometry only (no retained skin or animations)",
-      "device_verified": false
+      "device_verified": false,
+      "qa_status": "REJECTED—visible geometry/material damage; no game acceptance",
+      "approved_for_use": false,
+      "replacement_eligible": false,
+      "review_source": "User viewer screenshot and independent prior offscreen audit",
+      "runtime_has_visual_defects": true
     },
     {
       "original": "APC.obj",
@@ -38,7 +43,12 @@
       "consumer_game": "breakwater-battery",
       "verified_same_folder": true,
       "rig_state": "static reduced geometry only (no retained skin or animations)",
-      "device_verified": false
+      "device_verified": false,
+      "qa_status": "REJECTED—visible geometry/material damage; no game acceptance",
+      "approved_for_use": false,
+      "replacement_eligible": false,
+      "review_source": "User viewer screenshot and independent prior offscreen audit",
+      "runtime_has_visual_defects": true
     },
     {
       "original": "gopnickboss character 3d model.glb",
@@ -53,9 +63,17 @@
       "sidecar_drive_id": "163FrXfmGj3Ikw9toHSIJ3Hz6-YYqhUY2",
       "runtime_asset": "patron_gopnick.rlprop",
       "consumer_game": "between-deliveries-red-ledger",
-      "verified_same_folder": true,
+      "verified_same_folder": false,
       "rig_state": "static reduced geometry only (no retained skin or animations)",
-      "device_verified": false
+      "device_verified": false,
+      "qa_status": "REJECTED—unusable; sideways, black, gaps",
+      "approved_for_use": false,
+      "replacement_eligible": false,
+      "review_source": "User viewer screenshot and independent prior offscreen audit",
+      "quarantined_file_id": "1L00Ld9wjGz11ifPAQERMs3zdzCkVvnhh",
+      "quarantine_parent_id": "16kflSYq4VUnXDKEvY4sUY85U8CoQHbaI",
+      "sidecar_deleted": true,
+      "runtime_removed_from_main": true
     },
     {
       "original": "woman in pink dress 3d model.glb",
@@ -70,9 +88,19 @@
       "sidecar_drive_id": "1puhQh8z4VMKRiOlQzktLlbgHYRYrbQT8",
       "runtime_asset": "patron_pink_dress.rlprop",
       "consumer_game": "between-deliveries-red-ledger",
-      "verified_same_folder": true,
+      "verified_same_folder": false,
       "rig_state": "static reduced geometry only (no retained skin or animations)",
-      "device_verified": false
+      "device_verified": false,
+      "qa_status": "REJECTED—unusable; sideways, black, gaps",
+      "approved_for_use": false,
+      "replacement_eligible": false,
+      "review_source": "User viewer screenshot and independent prior offscreen audit",
+      "quarantined_file_id": "1n_YXNoGaCXSH7uJV7ilWdPf08tD1KOKF",
+      "quarantine_parent_id": "16kflSYq4VUnXDKEvY4sUY85U8CoQHbaI",
+      "sidecar_deleted": true,
+      "runtime_removed_from_main": true
     }
-  ]
+  ],
+  "visual_qa_gate": "A portable GLB passes only after side-by-side multi-angle actual renderer images show correct axes, visible textured materials, continuous silhouettes, and no new gaps. File format and triangle count alone never qualify.",
+  "rejected_folder_id": "16kflSYq4VUnXDKEvY4sUY85U8CoQHbaI"
 }
