@@ -50,6 +50,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final LanAudio audio=new LanAudio();
     private final RecorderAudio recorderAudio=new RecorderAudio();
     private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
+    private MissionWeather.State currentWeather;
     private boolean ritualMusic,huntMusic;
     private String soundCaption="";
     private int soundUntilTick=-1;
@@ -199,6 +200,15 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 chatHistory.addLast(line);
                 if(chatHistory.size()>28)chatHistory.removeFirst();
                 chatVisibleUntil=tick+75;
+            }else if(p.get(0).equals("WEATHER")){
+                MissionWeather.State incoming=MissionWeather.State.parse(frame);
+                if(currentWeather==null||incoming.revision()>=currentWeather.revision()){
+                    currentWeather=incoming;
+                    atmosphere.setWeather(incoming);
+                    renderer.setWeather(incoming);
+                    videoRenderer.setWeather(incoming);
+                    feedback="WEATHER "+incoming.caption();
+                }
             }else if(p.size()==3&&p.get(0).equals("PLAYERNAME")){
                 int hunter=LanProtocol.integer(p.get(1),0,5);
                 String nickname=LanProtocol.cleanName(p.get(2));
@@ -585,6 +595,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     }
     private void frame(){
         atmosphere.setActive(isShowing());
+        int outdoorRoom=map.roomAt(renderer.x,renderer.z);
+        atmosphere.setOutside(outdoorRoom>=0&&map.outside(outdoorRoom));
         if(!isDisplayable()||!caseResult.isEmpty()){repaint();return;}
         if(chatInput.isVisible()){
             keys.clear();
@@ -714,7 +726,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.setColor(new Color(10,17,25,225));g.fillRoundRect(12,10,cardW,69,9,9);
             g.setFont(new Font(Font.MONOSPACED,Font.BOLD,13));
             g.setColor(new Color(234,222,189));
-            g.drawString("HUNTER "+(seat+1)+"  /  "+map.roomName(renderer.x,renderer.z),24,31);
+            g.drawString("HUNTER "+(seat+1)+" / "+map.roomName(renderer.x,renderer.z)+
+                (currentWeather==null?"":" / "+currentWeather.weather()+" "+
+                    currentWeather.intensity()),24,31);
             g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
             g.setColor(health<35?new Color(246,151,144):new Color(177,223,195));
             g.drawString("HP "+health+"   SANITY "+sanity+"   PARTY "+(peers.size()+1)+"/"+partySize+

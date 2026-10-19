@@ -10,10 +10,21 @@ public final class AtmosphereAudio implements AutoCloseable {
     private static final int RATE=16000;
     private static final AudioFormat FORMAT=new AudioFormat(RATE,16,2,true,false);
     private final SoundtrackAudio soundtrack;
+    private final WeatherSoundscape weatherBed;
     public AtmosphereAudio(Scene scene){
         soundtrack=new SoundtrackAudio(java.util.Objects.requireNonNull(scene)==Scene.CASTLE);
+        weatherBed=scene==Scene.FIELD?new WeatherSoundscape():null;
     }
-    public void setActive(boolean visible){soundtrack.setActive(visible);}
+    public void setActive(boolean visible){
+        soundtrack.setActive(visible);
+        if(weatherBed!=null)weatherBed.setActive(visible);
+    }
+    public void setWeather(MissionWeather.State weather){
+        if(weatherBed!=null)weatherBed.setWeather(weather);
+    }
+    public void setOutside(boolean outside){
+        if(weatherBed!=null)weatherBed.setOutside(outside);
+    }
     public void setHunt(boolean value){soundtrack.setHunt(value);}
     public void setRitual(boolean value){soundtrack.setRitual(value);}
     /** Pure sample function is regression-testable without opening a sound device. */
@@ -41,5 +52,8 @@ public final class AtmosphereAudio implements AutoCloseable {
         return (short)Math.max(Short.MIN_VALUE,Math.min(Short.MAX_VALUE,
             Math.round((sum+distantBell+hiss)*gain*32767)));
     }
-    @Override public void close(){soundtrack.close();}
+    @Override public void close(){
+        soundtrack.close();
+        if(weatherBed!=null)weatherBed.close();
+    }
 }

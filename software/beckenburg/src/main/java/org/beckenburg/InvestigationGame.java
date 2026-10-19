@@ -19,6 +19,9 @@ public final class InvestigationGame {
     private JComboBox<InvestigationSession.Role> rolePicker;
     private JComboBox<SiteCatalog.Location> locationPicker;
     private JComboBox<SiteCatalog.Conditions> conditionsPicker;
+    private JComboBox<MissionWeather.Mode> weatherModePicker;
+    private JComboBox<EvidenceSignals.Weather> weatherPicker;
+    private JComboBox<Integer> weatherSeverityPicker;
     private GamePanel game;
     private GhostPracticePanel ghostPractice;
     private CastleHubPanel castle;
@@ -176,7 +179,11 @@ public final class InvestigationGame {
         rolePicker=new JComboBox<>(InvestigationSession.Role.values());
         locationPicker=new JComboBox<>(SiteCatalog.Location.values());
         conditionsPicker=new JComboBox<>(SiteCatalog.Conditions.values());
-        for(JComboBox<?> picker:new JComboBox<?>[]{rolePicker,locationPicker,conditionsPicker}){
+        weatherModePicker=new JComboBox<>(MissionWeather.Mode.values());
+        weatherPicker=new JComboBox<>(EvidenceSignals.Weather.values());
+        weatherSeverityPicker=new JComboBox<>(new Integer[]{1,2,3});
+        for(JComboBox<?> picker:new JComboBox<?>[]{rolePicker,locationPicker,conditionsPicker,
+                weatherModePicker,weatherPicker,weatherSeverityPicker}){
             picker.setBackground(new Color(35,39,46));
             picker.setForeground(new Color(237,225,201));
             picker.setFont(new Font(Font.MONOSPACED,Font.BOLD,menuFont(13)));
@@ -184,6 +191,9 @@ public final class InvestigationGame {
         selectorGrid.add(menuLabel("Discipline",13));selectorGrid.add(rolePicker);
         selectorGrid.add(menuLabel("Location",13));selectorGrid.add(locationPicker);
         selectorGrid.add(menuLabel("Conditions",13));selectorGrid.add(conditionsPicker);
+        selectorGrid.add(menuLabel("Weather schedule",13));selectorGrid.add(weatherModePicker);
+        selectorGrid.add(menuLabel("Starting weather",13));selectorGrid.add(weatherPicker);
+        selectorGrid.add(menuLabel("Weather severity",13));selectorGrid.add(weatherSeverityPicker);
         preparation.add(selectorGrid,BorderLayout.CENTER);
         JLabel status=menuLabel("SELECT AN AVAILABLE LOCATION",12);
         status.setForeground(new Color(188,202,177));
@@ -389,7 +399,10 @@ public final class InvestigationGame {
         SiteCatalog.Location location=(SiteCatalog.Location)locationPicker.getSelectedItem();
         SiteCatalog.requirePlayable(location);
         game=new GamePanel((InvestigationSession.Role)rolePicker.getSelectedItem(),caseNumber,
-            location,(SiteCatalog.Conditions)conditionsPicker.getSelectedItem());
+            location,(SiteCatalog.Conditions)conditionsPicker.getSelectedItem(),
+            (MissionWeather.Mode)weatherModePicker.getSelectedItem(),
+            (EvidenceSignals.Weather)weatherPicker.getSelectedItem(),
+            (Integer)weatherSeverityPicker.getSelectedItem());
         cards.add(game,"play");((CardLayout)cards.getLayout()).show(cards,"play");
         SwingUtilities.invokeLater(game::requestFocusInWindow);
     }
@@ -434,7 +447,8 @@ public final class InvestigationGame {
         private long last=System.nanoTime();
         private double accumulator;
         GamePanel(InvestigationSession.Role role,int ordinal,SiteCatalog.Location site,
-                SiteCatalog.Conditions mode){
+                SiteCatalog.Conditions mode,MissionWeather.Mode weatherMode,
+                EvidenceSignals.Weather selectedWeather,int severity){
             SiteCatalog.requirePlayable(site);
             location=site;conditions=java.util.Objects.requireNonNull(mode);
             powerOn=conditions.initiallyPowered();
@@ -448,7 +462,10 @@ public final class InvestigationGame {
             addFocusListener(mouseLook);addFocusListener(this);
             // Reproducible case seed, varies by session, no silent random site conversion.
             session=new InvestigationSession(map,role,20261015L+ordinal);
+            session.configureWeather(weatherMode,selectedWeather,severity);
             session.connectLighting(lights);
+            scene.setWeather(session.weather());
+            atmosphere.setWeather(session.weather());
             scene.roomLights=lights;
             scene.roomLightTick=0;
             scene.rackStock=profile.equipment();
@@ -517,6 +534,8 @@ public final class InvestigationGame {
         }
         private void frame(){
             atmosphere.setActive(isShowing());
+            int outdoorRoom=map.roomAt(scene.x,scene.z);
+            atmosphere.setOutside(outdoorRoom>=0&&map.outside(outdoorRoom));
             long now=System.nanoTime();double dt=Math.max(0,Math.min(.075,(now-last)/1e9));last=now;
             double forward=wheelOpen?0:(down.contains(KeyEvent.VK_W)?1:0)-(down.contains(KeyEvent.VK_S)?1:0);
             double strafe=wheelOpen?0:(down.contains(KeyEvent.VK_D)?1:0)-(down.contains(KeyEvent.VK_A)?1:0);
@@ -547,6 +566,8 @@ public final class InvestigationGame {
                 accumulator-=.1;
             }
             scene.roomLightTick=session.ticks();
+            scene.setWeather(session.weather());
+            atmosphere.setWeather(session.weather());
             GraphicsOptions.current().configure(scene,getWidth(),getHeight(),true);
             scene.draw(map,session,frameCount++/30.0);repaint();
             if(session.outcome()==InvestigationSession.Outcome.LOST){

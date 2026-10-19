@@ -47,6 +47,7 @@ public final class LanHost implements AutoCloseable {
     private final LanGhostAnimation animation=new LanGhostAnimation();
     private final HunterCounters counters=new HunterCounters();
     private final CustomContract contract;
+    private final MissionWeather weather;
     private final VanTelemetry monitor=new VanTelemetry(20261017L);
     private final FieldSupplies[] supplies=new FieldSupplies[HUNTERS];
     private final FieldEquipment[] equipment=new FieldEquipment[HUNTERS];
@@ -130,9 +131,12 @@ public final class LanHost implements AutoCloseable {
             case 6,7,8->EvidenceSignals.Season.SUMMER;
             default->EvidenceSignals.Season.AUTUMN;
         };
-        mission.configureEvidenceClimate(season,EvidenceSignals.Weather.CLEAR,
-            climateClock.getHour(),true,
-            GhostEvidenceProfile.thermal(ghostType));
+        // Contract-selected host weather: fixed, evolving or random-at-start.
+        weather=new MissionWeather(season,contract.weatherMode(),contract.fixedWeather(),
+            contract.weatherIntensity(),java.util.concurrent.ThreadLocalRandom.current().nextLong());
+        mission.configureEvidenceClimate(season,weather.state().weather(),
+            climateClock.getHour(),true,GhostEvidenceProfile.thermal(ghostType));
+        mission.updateEvidenceWeather(weather.state().weather(),weather.state().intensity());
         ai=new LanGhostPursuit(map,20261016L,type);
         ai.configureFrequency(contract.eventFrequency());
         bindAddress=Objects.requireNonNull(ip);
@@ -425,6 +429,7 @@ public final class LanHost implements AutoCloseable {
                     if(seats[GHOST_SEAT]!=null&&!seats[GHOST_SEAT].ready)throw new IllegalArgumentException("ghost must be ready");
                     running=true;everStarted=true;tick=0;
                     notifyAllPeers("INFO|mission started with "+(seats[GHOST_SEAT]==null?"AI":"human")+" ghost");
+                    notifyAllPeers(weather.state().packet());
                     if(seats[GHOST_SEAT]!=null)sendGhostPrompt();
                     if(mission.identificationRequired())notifyHunters("SITES|9|6|10");
                     broadcastState();broadcastProgress();broadcastWorld();
@@ -434,6 +439,7 @@ public final class LanHost implements AutoCloseable {
                     if(!running||peer.slot==GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("3D view requires active hunter");
                     peer.worldMode=true;
                     reply(peer,"ACCEPT|VIEW3D");
+                    reply(peer,weather.state().packet());
                     // Replay real investigator nicknames to newly opened hunter windows.
                     // Ghost seats cannot enter VIEW3D and are never name recipients.
                     for(int i=0;i<HUNTERS;i++)
@@ -475,6 +481,7 @@ public final class LanHost implements AutoCloseable {
                     if(!running||peer.slot!=GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("ghost view requires active ghost seat");
                     peer.ghostWorldMode=true;
                     reply(peer,"ACCEPT|GVIEW3D");
+                    reply(peer,weather.state().packet());
                     reply(peer,"VOICEKEY|"+voice.port()+"|"+voice.register(peer.slot,peer.socket.getInetAddress()));
                     reply(peer,"GTYPE|"+ghostType+"|"+ghostType.behavior());
                     reply(peer,ghostPose.frame(tick));reply(peer,frenzyFrame());
@@ -739,6 +746,7 @@ public final class LanHost implements AutoCloseable {
                             boolean inReach=distance<=stage.reachCm()/100.0;
                             int origin=inReach?lastEvidenceEventRoom:-1;
                             boolean thermal=id.equals("THERMOMETER");
+                            mission.setEvidenceHeating(lights.breaker());
                             LanCase.Report measure=mission.scanMeasured(peer.slot,
                                 thermal?LanCase.Tool.THERMOMETER:LanCase.Tool.EMF,
                                 room,ghost.room(),tick,origin,inReach?eventPower:0,
@@ -982,6 +990,7 @@ public final class LanHost implements AutoCloseable {
                         ?-1:lastEvidenceEventRoom;
                     int scanEventPower=tool==LanCase.Tool.SPIRIT_BOX&&!actualVoice
                         ?0:eventPower;
+                    mission.setEvidenceHeating(lights.breaker());
                     LanCase.Report result=peer.worldMode
                         ?mission.scanSpatialMeasured(peer.slot,tool,world.body(peer.slot),
                             ghost.room(),map,tick,scanEventRoom,scanEventPower,
@@ -1225,6 +1234,8 @@ public final class LanHost implements AutoCloseable {
             for(int listener=0;listener<HUNTERS;listener++){
                 LanSound.CueEvent sound=LanSound.project(map,world.body(listener),body.room(),
                     body.x(),body.z(),cue,tick);
+                sound=LanSound.weatherMask(sound,weather.state(),
+                    map.outside(world.body(listener).room())||map.outside(body.room()));
                 if(sound==null)continue;
                 if(seats[listener]!=null&&seats[listener].worldMode)reply(seats[listener],sound.frame());
                 recorders[listener].capture(sound,Math.hypot(body.x()-world.body(listener).x(),
@@ -1233,7 +1244,9 @@ public final class LanHost implements AutoCloseable {
             if(body.room()==HouseMap.EXTRACTION_ROOM&&type!=LanGhostPursuit.Sound.VOICE)
                 actorCue(seat,cue);
         }
-        if(LanAcoustics.audible(map,ghost.room(),hunterRooms[seat],type)){
+        boolean heard=LanAcoustics.audible(map,ghost.room(),hunterRooms[seat],type,
+            weather.state());
+        if(heard){
             lastGhostSoundTick=tick;
             if(!frenzy.active()&&frenzy.phase()==GhostFrenzy.Phase.CALM){
                 switch(type){
@@ -1245,9 +1258,9 @@ public final class LanHost implements AutoCloseable {
                 }
             }
         }
-        if(seats[GHOST_SEAT]==null){
+        if(heard&&seats[GHOST_SEAT]==null){
             ai.heard(ghost.room(),hunterRooms[seat],body.x(),body.z(),type,tick);
-        }else if(seats[GHOST_SEAT].ghostWorldMode){
+        }else if(heard&&seats[GHOST_SEAT]!=null&&seats[GHOST_SEAT].ghostWorldMode){
             LanGhostHearing.Event cue=LanGhostHearing.project(map,ghostPose.pose(),
                     hunterRooms[seat],body.x(),body.z(),type,tick);
             if(cue!=null&&(type!=LanGhostPursuit.Sound.FOOTSTEP
@@ -1331,6 +1344,8 @@ public final class LanHost implements AutoCloseable {
             if((seats[i]==null||!seats[i].worldMode)
                     &&(reserved[i]==null||!reserved[i].worldMode))continue;
             LanSound.CueEvent sound=LanSound.project(map,world.body(i),pose.room(),pose.x(),pose.z(),cue,tick);
+            sound=LanSound.weatherMask(sound,weather.state(),
+                map.outside(world.body(i).room())||map.outside(pose.room()));
             if(sound!=null){
                 if(seats[i]!=null)reply(seats[i],sound.frame());
                 recorders[i].capture(sound,Math.hypot(pose.x()-world.body(i).x(),
@@ -1645,6 +1660,10 @@ public final class LanHost implements AutoCloseable {
     private void tickSafely(){if(closed)return; synchronized(mutex){
         if(!running)return;
         try{tick++;
+            if(weather.advance(tick)){
+                mission.updateEvidenceWeather(weather.state().weather(),weather.state().intensity());
+                notifyAllPeers(weather.state().packet());
+            }
             expireDisconnectedSeats();
             if(!running)return;
             if(frenzy.advance(tick)){

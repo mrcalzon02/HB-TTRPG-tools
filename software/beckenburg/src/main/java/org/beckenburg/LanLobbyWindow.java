@@ -233,6 +233,11 @@ public final class LanLobbyWindow extends JFrame {
         var drain=spin(custom.sanityDrain(),0,200,25);
         var events=spin(custom.eventFrequency(),50,200,25);
         var hiding=spin(custom.hidingSpots(),0,100,10);
+        var weatherMode=new JComboBox<>(MissionWeather.Mode.values());
+        weatherMode.setSelectedItem(custom.weatherMode());
+        var weatherChoice=new JComboBox<>(EvidenceSignals.Weather.values());
+        weatherChoice.setSelectedItem(custom.fixedWeather());
+        var weatherIntensity=spin(custom.weatherIntensity(),1,3,1);
         var sprint=new JComboBox<>(CustomContract.Sprint.values());
         sprint.setSelectedItem(custom.sprint());
         var sanMonitor=new JCheckBox("Sanity display",custom.sanityMonitor());
@@ -247,6 +252,9 @@ public final class LanLobbyWindow extends JFrame {
             new Object[]{"Sanity loss rate %",drain},
             new Object[]{"Ghost events frequency %",events},
             new Object[]{"Available hiding places %",hiding},
+            new Object[]{"Weather scheduling",weatherMode},
+            new Object[]{"Starting / fixed weather",weatherChoice},
+            new Object[]{"Weather severity (1-3)",weatherIntensity},
             new Object[]{"Van sanity display",sanMonitor},
             new Object[]{"Van activity display",actMonitor}
         );
@@ -261,9 +269,14 @@ public final class LanLobbyWindow extends JFrame {
                 (int)walk.getValue(),(int)run.getValue(),(int)ghost.getValue(),
                 (int)recharge.getValue(),(int)drain.getValue(),(int)sanity.getValue(),
                 (int)events.getValue(),(CustomContract.Sprint)sprint.getSelectedItem(),
-                (int)hiding.getValue(),sanMonitor.isSelected(),actMonitor.isSelected());
+                (int)hiding.getValue(),sanMonitor.isSelected(),actMonitor.isSelected(),
+                (MissionWeather.Mode)weatherMode.getSelectedItem(),
+                (EvidenceSignals.Weather)weatherChoice.getSelectedItem(),
+                (int)weatherIntensity.getValue());
             log.append("Custom settings armed for next hosted case, "+custom.hunters()+
-                " hunters / difficulty +"+custom.partyDifficulty()+".\n");
+                " hunters / difficulty +"+custom.partyDifficulty()+
+                " / weather "+custom.weatherMode()+" "+custom.fixedWeather()+
+                " intensity "+custom.weatherIntensity()+".\n");
         }
     }
     private void sendLobbyMessage(){
@@ -295,7 +308,8 @@ public final class LanLobbyWindow extends JFrame {
             custom.playerSpeed(),custom.sprintSpeed(),custom.ghostSpeed(),
             custom.energyRecovery(),custom.sanityDrain(),custom.startingSanity(),
             custom.eventFrequency(),custom.sprint(),custom.hidingSpots(),
-            custom.sanityMonitor(),custom.activityMonitor());
+            custom.sanityMonitor(),custom.activityMonitor(),
+            custom.weatherMode(),custom.fixedWeather(),custom.weatherIntensity());
         Thread task=new Thread(()->{
             LanHost newHost=null;
             try{

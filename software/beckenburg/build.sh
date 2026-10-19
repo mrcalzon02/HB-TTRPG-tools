@@ -53,6 +53,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.Be
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.HeldMeshViewTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GlbPropsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.EvidenceSignalsTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.MissionWeatherTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.EmfSilenceTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostWritingTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.EquipmentRegistryTest

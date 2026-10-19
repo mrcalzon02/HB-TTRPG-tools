@@ -27,6 +27,13 @@ public final class InvestigationSession {
     private final long evidenceSeed;
     private final EvidenceSignals.Polarity thermalPolarity;
     private final EvidenceSignals.Season season;
+    private MissionWeather missionWeather;
+    public void configureWeather(MissionWeather.Mode mode,EvidenceSignals.Weather selected,
+            int intensity){
+        if(ticks>0)throw new IllegalStateException("weather cannot be changed mid-session");
+        missionWeather=new MissionWeather(season,mode,selected,intensity,evidenceSeed^0x57454154484552L);
+    }
+    public MissionWeather.State weather(){return missionWeather.state();}
     private int lastEvidenceTick=-10000,lastEvidenceRoom=-1,lastEvidenceStrength;
     private final GhostDomain ghost;
     private RoomLighting roomLights;
@@ -47,6 +54,8 @@ public final class InvestigationSession {
             case 6,7,8->EvidenceSignals.Season.SUMMER;
             default->EvidenceSignals.Season.AUTUMN;
         };
+        missionWeather=new MissionWeather(season,MissionWeather.Mode.FIXED,
+            EvidenceSignals.Weather.CLEAR,1,seed);
         java.util.Arrays.fill(spectralTrace,-100000);
         this.wards=role==Role.CLERIC?3:2;
         this.anchorRoom=random.nextInt(map.interiorRoomCount());
@@ -114,6 +123,7 @@ public final class InvestigationSession {
     public void tick(double playerX, double playerZ) {
         if(outcome!=Outcome.ACTIVE) return;
         ticks++;
+        missionWeather.advance(ticks);
         // Every supernatural action, including AI behavior, follows the same host-style dispatcher.
         // Ghost observation has only room-local presence, never the hunter's global position or notebook.
         int playerRoom=map.roomAt(playerX,playerZ);
@@ -233,16 +243,17 @@ public final class InvestigationSession {
         String reading;
         switch(tool){
             case EMF -> {
-                var measured=EvidenceSignals.emf(evidenceSeed,ticks,room,lastEvidenceRoom,eventPower);
+                var measured=EvidenceSignals.emf(evidenceSeed,ticks,room,lastEvidenceRoom,eventPower,false,
+                    missionWeather.state().weather(),missionWeather.state().intensity());
                 reading="EMF "+measured.level()+"/10";
             }
             case THERMOMETER -> {
                 boolean indoor=room<HouseMap.INDOOR_ROOMS;
                 boolean heated=roomLights==null||roomLights.breaker();
-                var location=new EvidenceSignals.Location(season,EvidenceSignals.Weather.CLEAR,
+                var location=new EvidenceSignals.Location(season,missionWeather.state().weather(),
                     14,room,indoor,heated);
                 var measured=EvidenceSignals.temperature(evidenceSeed,ticks,location,
-                    thermalPolarity,room==anchorRoom,eventPower);
+                    thermalPolarity,room==anchorRoom,eventPower,missionWeather.state().intensity());
                 reading="Air "+measured.displayText(EvidenceSignals.Unit.CELSIUS)
                     +" / "+measured.displayText(EvidenceSignals.Unit.FAHRENHEIT);
             }

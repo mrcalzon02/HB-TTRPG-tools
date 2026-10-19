@@ -12,7 +12,7 @@ import java.util.Objects;
 public final class EvidenceSignals {
     private EvidenceSignals() { }
     public enum Season { WINTER, SPRING, SUMMER, AUTUMN }
-    public enum Weather { CLEAR, RAIN, SNOW, HEATWAVE }
+    public enum Weather { CLEAR, RAIN, SNOW, HEATWAVE, THUNDERSTORM, WIND, FOG }
     public enum Polarity { NONE, COLD, HOT }
     public enum Unit { CELSIUS, FAHRENHEIT }
     public record Location(Season season, Weather weather, int hour, int room,
@@ -69,9 +69,22 @@ public final class EvidenceSignals {
     }
     public static Electromagnetic emf(long seed,int tick,int room,
                                     int eventRoom,int eventStrength,boolean suppression){
+        return emf(seed,tick,room,eventRoom,eventStrength,suppression,Weather.CLEAR,1);
+    }
+    /** Weather changes *ordinary* field noise but cannot create false ghost-event EMF 8-10.
+     * Snow suppresses background activity; electrical storms elevate it to 5-7.
+     */
+    public static Electromagnetic emf(long seed,int tick,int room,
+                int eventRoom,int eventStrength,boolean suppression,Weather weather,int intensity){
+        Objects.requireNonNull(weather);
+        if(intensity<1||intensity>3)throw new IllegalArgumentException("EMF weather intensity");
         if(tick<0||room<0||eventStrength<0||eventStrength>10)
             throw new IllegalArgumentException("invalid EMF context");
         int ambient=2+hash(seed,room,tick/5)%3;
+        if(weather==Weather.THUNDERSTORM)ambient= Math.min(7,ambient+1+intensity);
+        else if(weather==Weather.SNOW)ambient=Math.max(2,ambient-intensity);
+        else if(weather==Weather.RAIN)ambient=Math.min(7,ambient+intensity/2);
+        else if(weather==Weather.WIND)ambient=Math.min(7,ambient+1);
         boolean local=room==eventRoom&&eventStrength>0;
         boolean strong=local&&eventStrength>=8;
         // A suppression-capable ghost only cancels fields on powerful actions:
@@ -82,13 +95,21 @@ public final class EvidenceSignals {
         return new Electromagnetic(level,false,false);
     }
     /** Seasonal/weather/time baseline, applied to both outside and indoor air. */
-    public static double ambientC(Location place){
+    public static double ambientC(Location place){return ambientC(place,1);}
+    public static double ambientC(Location place,int intensity){
         Objects.requireNonNull(place);
+        if(intensity<1||intensity>3)throw new IllegalArgumentException("thermal weather intensity");
         double outside=switch(place.season()){
             case WINTER->-8.0;case SPRING->10.0;case SUMMER->24.0;case AUTUMN->11.0;
         };
         outside+=switch(place.weather()){
-            case CLEAR->0.0;case RAIN->-3.0;case SNOW->-5.0;case HEATWAVE->9.0;
+            case CLEAR->0.0;
+            case RAIN->-2.0-intensity;
+            case SNOW->-4.0-2.0*intensity;
+            case HEATWAVE->6.0+3.0*intensity;
+            case THUNDERSTORM->-2.0-1.5*intensity;
+            case WIND->-1.0-intensity;
+            case FOG->-1.0-0.7*intensity;
         };
         outside+=place.hour()>=11&&place.hour()<=17?3.0:
                  place.hour()<=5||place.hour()>=21?-4.0:0.0;
@@ -105,10 +126,14 @@ public final class EvidenceSignals {
      */
     public static Temperature temperature(long seed,int tick,Location place,
             Polarity polarity,boolean hauntedRoom,int eventStrength){
+        return temperature(seed,tick,place,polarity,hauntedRoom,eventStrength,1);
+    }
+    public static Temperature temperature(long seed,int tick,Location place,
+            Polarity polarity,boolean hauntedRoom,int eventStrength,int intensity){
         if(tick<0||eventStrength<0||eventStrength>10)
             throw new IllegalArgumentException("invalid thermal context");
         Objects.requireNonNull(polarity);
-        double ambient=ambientC(place);
+        double ambient=ambientC(place,intensity);
         double drift=(hash(seed,place.room(),tick/20)%27-13)*0.12;
         double actual=ambient+drift;
         if(hauntedRoom){

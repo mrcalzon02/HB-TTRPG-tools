@@ -19,6 +19,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     private final javax.swing.Timer timer;
     private final LanAudio audio=new LanAudio();
     private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
+    private MissionWeather.State currentWeather;
     private int room=-1,energy,tick,choice,lastTurn=-1;
     private boolean audible,finished;
     private String legal="[]",feedback="Awaiting private spectral pose";
@@ -87,6 +88,13 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                     };
                     audio.play(new LanSound.CueEvent(sound,pan,volume,cue.tick()));
                 }
+            }else if(p.get(0).equals("WEATHER")){
+                MissionWeather.State current=MissionWeather.State.parse(packet);
+                if(currentWeather==null||current.revision()>=currentWeather.revision()){
+                    currentWeather=current;
+                    atmosphere.setWeather(current);
+                    camera.setWeather(current);
+                }
             }else if(p.size()==4&&p.get(0).equals("FRENZY")){
                 frenzyPhase=GhostFrenzy.Phase.valueOf(p.get(1));
                 frenzyTicks=LanProtocol.integer(p.get(2),0,10000);
@@ -135,6 +143,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     }
     private void frame(){
         atmosphere.setActive(isShowing()&&!finished);
+        atmosphere.setOutside(room>=0&&map.outside(room));
         if(!isDisplayable()||finished){repaint();return;}
         try{
             int f=(keys.contains(KeyEvent.VK_W)?1:0)-(keys.contains(KeyEvent.VK_S)?1:0);

@@ -155,6 +155,7 @@ public final class LanCase {
      */
     private EvidenceSignals.Season evidenceSeason=EvidenceSignals.Season.AUTUMN;
     private EvidenceSignals.Weather evidenceWeather=EvidenceSignals.Weather.CLEAR;
+    private int evidenceWeatherIntensity=1;
     private EvidenceSignals.Polarity evidenceThermal=EvidenceSignals.Polarity.COLD;
     private int evidenceHour=14;
     private boolean evidenceHeating=true;
@@ -167,6 +168,13 @@ public final class LanCase {
         evidenceWeather=java.util.Objects.requireNonNull(weather);
         evidenceThermal=java.util.Objects.requireNonNull(thermalPolarity);
         evidenceHour=hour;evidenceHeating=heating;
+    }
+    /** Host updates conditions between readings without resetting case evidence. */
+    public void setEvidenceHeating(boolean heating){evidenceHeating=heating;}
+    public void updateEvidenceWeather(EvidenceSignals.Weather weather,int intensity){
+        if(intensity<1||intensity>3)throw new IllegalArgumentException("weather intensity");
+        evidenceWeather=java.util.Objects.requireNonNull(weather);
+        evidenceWeatherIntensity=intensity;
     }
     public Report scanMeasured(int seat,Tool tool,int room,int ghostRoom,
             int tick,int eventRoom,int eventStrength){
@@ -184,7 +192,8 @@ public final class LanCase {
         switch(tool){
             case EMF -> {
                 EvidenceSignals.Electromagnetic sample=EvidenceSignals.emf(
-                    0xB3CC3BL,tick,room,eventRoom,eventStrength,emfSilence);
+                    0xB3CC3BL,tick,room,eventRoom,eventStrength,emfSilence,
+                    evidenceWeather,evidenceWeatherIntensity);
                 reading="EMF "+sample.level()+"/10";
             }
             case THERMOMETER -> {
@@ -192,7 +201,8 @@ public final class LanCase {
                 EvidenceSignals.Location place=new EvidenceSignals.Location(
                     evidenceSeason,evidenceWeather,evidenceHour,room,inside,evidenceHeating);
                 EvidenceSignals.Temperature sample=EvidenceSignals.temperature(
-                    0xA11CE5L,tick,place,evidenceThermal,room==anchor,eventStrength);
+                    0xA11CE5L,tick,place,evidenceThermal,room==anchor,eventStrength,
+                    evidenceWeatherIntensity);
                 reading="Air "+sample.displayText(EvidenceSignals.Unit.CELSIUS)
                     +" / "+sample.displayText(EvidenceSignals.Unit.FAHRENHEIT);
             }

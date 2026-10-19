@@ -68,6 +68,12 @@ public final class SceneRenderer {
     }
     /** Solo environment presets; default multipliers retain legacy LAN lighting. */
     public double environmentLight=1.0,fogDensity=1.0;
+    private EvidenceSignals.Weather weatherKind=EvidenceSignals.Weather.CLEAR;
+    private int weatherIntensity=1;
+    public void setWeather(MissionWeather.State state){
+        if(state==null)throw new IllegalArgumentException("weather state");
+        weatherKind=state.weather();weatherIntensity=state.intensity();
+    }
     public boolean environmentPowerOn=true;
     /** Authoritative book-deployment signal; all investigator views share its room. */
     public int placedWritingBookRoom=-1;
@@ -829,6 +835,13 @@ public final class SceneRenderer {
             int red=upper?(int)(13+18*t):(int)(18+18*t);
             int green=upper?(int)(23+18*t):(int)(27+19*t);
             int blue=upper?(int)(41+31*t):(int)(32+16*t);
+            int cloud=weatherKind==EvidenceSignals.Weather.THUNDERSTORM?weatherIntensity*5:
+                      weatherKind==EvidenceSignals.Weather.FOG?weatherIntensity*3:
+                      weatherKind==EvidenceSignals.Weather.RAIN
+                          ||weatherKind==EvidenceSignals.Weather.SNOW?weatherIntensity*2:0;
+            red=Math.max(4,red-cloud);
+            green=Math.max(9,green-cloud/2);
+            blue=Math.max(16,blue-cloud/2);
             Arrays.fill(pixels,sy*renderWidth,(sy+1)*renderWidth,(red<<16)|(green<<8)|blue);
         }
         // Dim cloud bands drift across world bearings, visible through castle windows.
@@ -845,7 +858,11 @@ public final class SceneRenderer {
                 pixels[k]=(r<<16)|(g<<8)|bl;
             }
         }
-        for(int star=0;star<110;star++){
+        boolean overcast=weatherKind==EvidenceSignals.Weather.THUNDERSTORM
+            ||weatherKind==EvidenceSignals.Weather.RAIN
+            ||weatherKind==EvidenceSignals.Weather.SNOW
+            ||weatherKind==EvidenceSignals.Weather.FOG;
+        for(int star=0;star<(overcast?0:110);star++){
             double bearing=-Math.PI+(star*2.399963229728653)%(2*Math.PI);
             double diff=Math.atan2(Math.sin(bearing-yaw),Math.cos(bearing-yaw));
             if(Math.abs(diff)>1.1)continue;
@@ -861,9 +878,26 @@ public final class SceneRenderer {
         }
         double diff=Math.atan2(Math.sin(-1.2-yaw),Math.cos(-1.2-yaw));
         int mx=(int)Math.round(renderWidth*.5+Math.tan(diff)*focal),my=horizon-43;
-        if(Math.abs(diff)<1.1)for(int dy=-5;dy<=5;dy++)for(int dx=-5;dx<=5;dx++){
+        if(!overcast&&Math.abs(diff)<1.1)for(int dy=-5;dy<=5;dy++)for(int dx=-5;dx<=5;dx++){
             int px=mx+dx,py=my+dy;
             if(px>=0&&px<renderWidth&&py>=0&&py<renderHeight&&dx*dx+dy*dy<25)pixels[py*renderWidth+px]=0xb8c8d5;
+        }
+        // Precipitation is a low-cost background layer; masonry/windows occlude it.
+        if(weatherKind==EvidenceSignals.Weather.RAIN
+                ||weatherKind==EvidenceSignals.Weather.THUNDERSTORM
+                ||weatherKind==EvidenceSignals.Weather.SNOW){
+            boolean snow=weatherKind==EvidenceSignals.Weather.SNOW;
+            int drops=weatherIntensity*(snow?90:165);
+            long phase=(long)(clock*(snow?8:25));
+            for(int i=0;i<drops;i++){
+                int sx=Math.floorMod(i*6173+(int)(phase*(snow?2:5)),renderWidth);
+                int sy=Math.floorMod(i*3781+(int)(phase*(snow?2:8)),renderHeight);
+                int count=snow?1:2+weatherIntensity;
+                for(int j=0;j<count&&sy+j<renderHeight;j++){
+                    int k=(sy+j)*renderWidth+sx;
+                    pixels[k]=snow?0x8c99a8:0x56657b;
+                }
+            }
         }
     }
     /** Billboards share the world Z-buffer, so room walls correctly hide hunter and ghost bodies.

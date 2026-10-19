@@ -81,6 +81,12 @@ public final class LanSound {
         return new CueEvent(Cue.valueOf(parts.get(1)),LanProtocol.integer(parts.get(2),-100,100),
                 LanProtocol.integer(parts.get(3),1,100),LanProtocol.integer(parts.get(4),0,99999999));
     }
+    /** Real outdoor wind and precipitation mask audible spatial sounds, not ghost evidence. */
+    public static CueEvent weatherMask(CueEvent cue,MissionWeather.State weather,boolean outside){
+        if(cue==null||weather==null)return cue;
+        int volume=cue.volume()-weather.noiseMask()*(outside?3:1);
+        return volume<12?null:new CueEvent(cue.cue(),cue.pan(),volume,cue.tick());
+    }
     /** Null means the source is inaudible or invalid. Map geometry and doors are server-owned. */
     public static CueEvent project(HouseMap map, LanWorld.Body listener, int sourceRoom,
                                    double sourceX, double sourceZ, Cue cue, int tick) {

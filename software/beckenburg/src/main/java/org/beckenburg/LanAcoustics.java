@@ -59,6 +59,14 @@ public final class LanAcoustics {
         }
         return Integer.MAX_VALUE;
     }
+    /** Outdoor storms mask footsteps, speech and equipment, including ghost AI hearing. */
+    public static boolean audible(HouseMap map,int from,int to,LanGhostPursuit.Sound sound,
+            MissionWeather.State weather){
+        if(sound==null||weather==null)return false;
+        int masking=weather.noiseMask()/4;
+        if(map.outside(from)||map.outside(to))masking*=2;
+        return cost(map,from,to)<=Math.max(0,sound.budget-masking);
+    }
     public static boolean audible(HouseMap map, int from, int to, LanGhostPursuit.Sound sound) {
         return sound != null && cost(map, from, to) <= sound.budget;
     }
