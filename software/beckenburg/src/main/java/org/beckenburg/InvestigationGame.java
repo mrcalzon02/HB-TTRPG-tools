@@ -26,15 +26,31 @@ public final class InvestigationGame {
     private GhostPracticePanel ghostPractice;
     private CastleHubPanel castle;
     private int caseNumber;
+    private JLabel startupStatus;
 
+    private void bootPhase(String message){
+        BeckenburgDiagnostics.phase(message);
+        if(startupStatus!=null)SwingUtilities.invokeLater(()->startupStatus.setText(message));
+    }
+    private void startupFailure(Throwable reason){
+        Throwable cause=reason instanceof java.util.concurrent.ExecutionException
+            &&reason.getCause()!=null?reason.getCause():reason;
+        BeckenburgDiagnostics.fail("Loading screen / "+BeckenburgDiagnostics.stageName(),cause);
+        if(startupStatus!=null)startupStatus.setText("STARTUP FAILED — open Diagnostics for the crash report.");
+        BeckenburgDiagnostics.failureScreen(window,"Unable to initialize Beckenburg",cause);
+        // Keep the loading window and Diagnostics button available instead of
+        // disposing the only route to the failure evidence.
+    }
 
     private InvestigationGame(){
+        bootPhase("Opening game window");
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setSize(1060,725);
         window.setMinimumSize(new Dimension(760,510));
         window.setLocationRelativeTo(null);
         window.setContentPane(loadingScreen());
         window.setVisible(true);
+        bootPhase("Applying display preferences");
         GraphicsOptions.current().applyWindow(window);
         window.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
             KeyStroke.getKeyStroke(KeyEvent.VK_F11,0),"toggleFullscreen");
@@ -48,8 +64,10 @@ public final class InvestigationGame {
         new SwingWorker<String,Void>(){
             @Override protected String doInBackground(){
                 StringBuilder warnings=new StringBuilder();
+                bootPhase("Reading installation identity");
                 try{installation=BeckenburgInstallIdentity.loadOrCreate(ProfileStore.defaultPath().getParent());}
                 catch(IOException ex){warnings.append("Installation identity: ").append(ex.getMessage()).append("\n");}
+                bootPhase("Loading local profile");
                 try{profile.load();if(!java.nio.file.Files.exists(ProfileStore.defaultPath()))profile.save();}
                 catch(IOException ex){warnings.append("Local profile: ").append(ex.getMessage()).append("\n");}
                 return warnings.toString();
@@ -57,24 +75,28 @@ public final class InvestigationGame {
             @Override protected void done(){
                 try{
                     String warnings=get();
+                    bootPhase("Building investigation menu and PSX UI");
                     buildMenu();
                     cards.add(menu,"menu");
                     window.setContentPane(cards);
                     window.revalidate();window.repaint();
                     showMenu();
+                    BeckenburgDiagnostics.ready();
                     if(!warnings.isBlank())JOptionPane.showMessageDialog(window,
                         warnings+"Existing files were preserved.", "Local startup warnings",JOptionPane.WARNING_MESSAGE);
+                    BeckenburgDiagnostics.phase("Checking update channel");
                     BeckenburgUpdatesUI.checkOnStartup(window);
-                }catch(Exception ex){
-                    JOptionPane.showMessageDialog(window,"Unable to initialize Beckenburg: "+ex.getMessage(),
-                        "Startup failed",JOptionPane.ERROR_MESSAGE);
-                    window.dispose();
+                    BeckenburgDiagnostics.phase("Menu available");
+                }catch(Throwable ex){
+                    startupFailure(ex);
                 }
             }
         }.execute();
     }
-    private static JPanel loadingScreen(){
-        JPanel surface=PsxHorrorUi.surface(new BorderLayout());
+    private JPanel loadingScreen(){
+        // Deliberately plain Swing: diagnostics must work even if the PSX UI
+        // archive, its decoding, or its custom paint components are broken.
+        JPanel surface=new JPanel(new BorderLayout());
         surface.setBackground(new Color(9,13,18));
         JPanel center=new JPanel(new GridBagLayout());
         center.setOpaque(false);
@@ -84,6 +106,9 @@ public final class InvestigationGame {
             "</div></html>",SwingConstants.CENTER);
         center.add(text);
         surface.add(center,BorderLayout.CENTER);
+        startupStatus=new JLabel("Preparing local records",SwingConstants.CENTER);
+        startupStatus.setForeground(new Color(208,214,201));
+        startupStatus.setFont(new Font(Font.MONOSPACED,Font.PLAIN,13));
         JProgressBar loading=new JProgressBar();
         loading.setIndeterminate(true);
         loading.setBorder(BorderFactory.createEmptyBorder(4,0,4,0));
@@ -92,11 +117,16 @@ public final class InvestigationGame {
         JPanel loadingRow=new JPanel(new BorderLayout());
         loadingRow.setOpaque(false);
         loadingRow.setBorder(BorderFactory.createEmptyBorder(0,70,65,70));
+        loadingRow.add(startupStatus,BorderLayout.NORTH);
         loadingRow.add(loading,BorderLayout.CENTER);
+        JButton diagnostics=new JButton("DIAGNOSTICS");
+        diagnostics.addActionListener(e->BeckenburgDiagnostics.show(window));
+        loadingRow.add(diagnostics,BorderLayout.SOUTH);
         surface.add(loadingRow,BorderLayout.SOUTH);
         return surface;
     }
     private void showCastle(){
+        BeckenburgDiagnostics.phase("Entering Castle Beckenburg");
         try{
             if(castle==null){
             castle=new CastleHubPanel(profile,new CastleHubPanel.Actions(){
@@ -114,6 +144,7 @@ public final class InvestigationGame {
             ((CardLayout)cards.getLayout()).show(cards,"castle");
             SwingUtilities.invokeLater(castle::requestFocusInWindow);
         }catch(RuntimeException ex){
+            BeckenburgDiagnostics.fail("Castle construction / rendering",ex);
             // Castle art must not prevent access to settings, multiplayer or the main menu.
             showMenu();
             JOptionPane.showMessageDialog(window,"Castle assets could not be loaded: "+ex.getMessage(),
@@ -225,8 +256,8 @@ public final class InvestigationGame {
         account.setForeground(new Color(170,211,182));account.setHorizontalAlignment(SwingConstants.LEFT);
         footer.add(account,BorderLayout.CENTER);
         JPanel footerActions=transparentPanel(new FlowLayout(FlowLayout.RIGHT,7,0));
-        JButton importSave=button("IMPORT SAVE"),quit=button("EXIT");
-        footerActions.add(importSave);footerActions.add(quit);
+        JButton importSave=button("IMPORT SAVE"),diagnostics=button("DIAGNOSTICS"),quit=button("EXIT");
+        footerActions.add(importSave);footerActions.add(diagnostics);footerActions.add(quit);
         footer.add(footerActions,BorderLayout.EAST);
         menu.add(footer,BorderLayout.SOUTH);
 
@@ -239,6 +270,7 @@ public final class InvestigationGame {
             "PSX Horror UI Free by heyheythere\nhttps://heyheythere.itch.io/psx-horror-ui-free\nLicensed CC BY 4.0\nOriginal texture assets adapted for Beckenburg's Java interface.",
             "Third-party credits",JOptionPane.INFORMATION_MESSAGE));
         importSave.addActionListener(e->importLocalSave());
+        diagnostics.addActionListener(e->BeckenburgDiagnostics.show(window));
         updates.addActionListener(e->BeckenburgUpdatesUI.open(window));
         quit.addActionListener(e->window.dispose());
         refreshAccount();
@@ -891,10 +923,22 @@ public final class InvestigationGame {
         }
     }
     public static void main(String[] args){
+        BeckenburgDiagnostics.install();
         if(GraphicsEnvironment.isHeadless()){
-            System.err.println("A graphical Windows/Linux desktop is required for the Swing client. Run GameplaySmokeTest in headless mode.");
+            BeckenburgDiagnostics.record("Headless runtime; GUI unavailable");
+            System.err.println("A graphical Windows/Linux desktop is required for the Swing client.");
             return;
         }
-        SwingUtilities.invokeLater(InvestigationGame::new);
+        if(java.util.Arrays.asList(args).contains("--diagnostics")){
+            SwingUtilities.invokeLater(()->BeckenburgDiagnostics.show(null));
+            return;
+        }
+        SwingUtilities.invokeLater(()->{
+            try{new InvestigationGame();}
+            catch(Throwable failure){
+                BeckenburgDiagnostics.fail("Game initialization before loading screen",failure);
+                BeckenburgDiagnostics.failureScreen(null,"Beckenburg startup failed",failure);
+            }
+        });
     }
 }
