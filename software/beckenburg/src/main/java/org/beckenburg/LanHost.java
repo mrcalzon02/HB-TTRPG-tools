@@ -1286,7 +1286,11 @@ public final class LanHost implements AutoCloseable {
         mission.applyGhostEffect(result.room(),hunterRooms,result,affected);
         if(result.fear()>0||result.harm()>0)
             for(int i=0;i<HUNTERS;i++)if(wasAlive[i]&&affected[i]&&hunterRooms[i]==result.room()&&seats[i]!=null)
-                reply(seats[i],"EFFECT|"+result.action()+"|"+result.fear()+"|"+result.harm());
+                {
+                    reply(seats[i],"EFFECT|"+result.action()+"|"+result.fear()+"|"+result.harm());
+                    if(result.harm()>0)reply(seats[i],
+                        new LanSound.CueEvent(LanSound.Cue.IMPACT,0,92,tick).frame());
+                }
         // Announce only actual living-to-downed transitions to the hunter team.
         // Human ghosts never receive health, incapacitation or team-state telemetry.
         for(int i=0;i<HUNTERS;i++)if(wasAlive[i]&&!mission.alive(i))
@@ -1314,6 +1318,7 @@ public final class LanHost implements AutoCloseable {
                 notifyHunters(passing.frame());
             }
         }
+        if(result.action()==GhostDomain.Action.DRIFT)broadcastGhostSound(LanSound.Cue.GHOST_DRIFT);
         if(result.action()==GhostDomain.Action.MANIFEST)animation.manifested(tick);
         RoomLighting.Interference disruption=switch(result.action()){
             case WHISPER->RoomLighting.Interference.MINOR;
@@ -1489,6 +1494,9 @@ public final class LanHost implements AutoCloseable {
             enforceGhostDeadline();
             resolvePendingStrike();
             LanCase.RitualAdvance ritual=mission.advance(hunterRooms);
+            if(ritual==LanCase.RitualAdvance.CLEANSED)
+                for(int i=0;i<HUNTERS;i++)if(seats[i]!=null&&seats[i].worldMode)
+                    reply(seats[i],new LanSound.CueEvent(LanSound.Cue.RITUAL_END,0,85,tick).frame());
             if(ritual==LanCase.RitualAdvance.PAUSED
                     ||ritual==LanCase.RitualAdvance.RESUMED
                     ||ritual==LanCase.RitualAdvance.BROKEN){
