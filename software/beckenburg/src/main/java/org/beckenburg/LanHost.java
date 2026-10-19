@@ -2015,9 +2015,15 @@ public final class LanHost implements AutoCloseable {
                 String sight=LanApparition.frame(map,world.body(i),true,pose,
                     ghost.manifested()&&form!=GhostTraits.Sight.CAMERA_ONLY
                         &&(form!=GhostTraits.Sight.ORBS||orbAllowed),tick);
-                if(sight.startsWith("APPARITION|VISIBLE|"))
-                    reply(hunter,"FORM|"+(form==GhostTraits.Sight.ORBS?"ORBS":"FIGURE")+
-                         (ghostType.ancient()?"|GREEN":""));
+                if(sight.startsWith("APPARITION|VISIBLE|")) {
+                    // Artwork is a visible cosmetic manifestation, never an evidence verdict.
+                    // No identity/appearance packet is sent before actual line-of-sight disclosure.
+                    if(form==GhostTraits.Sight.ORBS)
+                        reply(hunter,"FORM|ORBS"+(ghostType.ancient()?"|GREEN":""));
+                    else
+                        reply(hunter,"FORM|FIGURE|"+(ghostType.ancient()?"GREEN":"BASE")
+                                +"|"+ghostType.name());
+                }
                 reply(hunter,sight);
                 if(sight.startsWith("APPARITION|VISIBLE|")) {
                     LanGhostAnimation.Motion motion=animation.project(true,pendingStrike!=null,pose.heading(),tick);
