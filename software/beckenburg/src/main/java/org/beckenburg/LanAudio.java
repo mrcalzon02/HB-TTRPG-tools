@@ -45,6 +45,9 @@ public final class LanAudio implements AutoCloseable {
             case MODERATE->3;
             case MINOR->2;
             case AMBIENT->sound.cue().cue()==LanSound.Cue.STEP
+                    ||sound.cue().cue()==LanSound.Cue.STEP_STONE
+                    ||sound.cue().cue()==LanSound.Cue.STEP_CARPET
+                    ||sound.cue().cue()==LanSound.Cue.STEP_WOOD
                     ||sound.cue().cue()==LanSound.Cue.FOOTFALL?0:1;
         };
     }
@@ -162,7 +165,7 @@ public final class LanAudio implements AutoCloseable {
             case STRIKE->3800; case FOOTFALL->2400;
             case DOOR->3400; case EQUIPMENT->3000; case RITUAL->7300;
             case SIGNATURE->18000;
-            case STEP->2100; case SWITCH,SELECT,UI_CLICK,UI_BACK->1250;
+            case STEP,STEP_STONE,STEP_CARPET,STEP_WOOD->2100; case SWITCH,SELECT,UI_CLICK,UI_BACK->1250;
             case BREAKER,VAN_DOOR->6800; case PICKUP,BOOK->3900;
             case DEVICE_ON,DEVICE_OFF,SCANNER->4500;
             case CAMERA->2600; case WARD->9500; case POTION->5100;
@@ -199,6 +202,9 @@ public final class LanAudio implements AutoCloseable {
                     +.23*noise*Math.sin(2*Math.PI*31*t);
                 // Intentionally different mechanical envelopes and spectra for every action.
                 case STEP->.38*noise*Math.exp(-t*35)+.49*Math.sin(2*Math.PI*(73-36*t)*t)*Math.exp(-t*28);
+                case STEP_STONE->.60*noise*Math.exp(-t*44)+.36*Math.sin(2*Math.PI*(132-90*t)*t)*Math.exp(-t*30);
+                case STEP_CARPET->.18*noise*Math.exp(-t*28)+.20*Math.sin(2*Math.PI*(55-18*t)*t)*Math.exp(-t*29);
+                case STEP_WOOD->.44*noise*Math.exp(-t*41)+.43*Math.sin(2*Math.PI*(185-120*t)*t)*Math.exp(-t*22);
                 case SWITCH->.73*noise*Math.exp(-t*90)+.18*Math.sin(2*Math.PI*480*t)*Math.exp(-t*45);
                 case BREAKER->.6*noise*Math.exp(-t*31)+.42*Math.sin(2*Math.PI*75*t)*Math.exp(-t*12);
                 case VAN_DOOR->.38*Math.sin(2*Math.PI*(81+28*t)*t)+.23*noise*Math.sin(2*Math.PI*28*t);
