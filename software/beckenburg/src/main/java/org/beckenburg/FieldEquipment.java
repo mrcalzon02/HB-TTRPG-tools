@@ -24,11 +24,19 @@ public final class FieldEquipment {
     private final Map<String,Integer> lastSampleTick=new HashMap<>();
     private final Map<String,Boolean> powered=new HashMap<>();
     private final Map<String,Integer> remaining=new HashMap<>();
+    private final Map<String,Integer> batteryTicks=new HashMap<>();
+    private int lastBatteryTick=-1;
+    /** Battery-draining equipment uses tick-based, host-owned power. */
+    private static final java.util.Set<String> BATTERY_TOOLS=java.util.Set.of(
+        "FLASHLIGHT","HEAD_GEAR","VIDEO_CAMERA","EMF_READER",
+        "THERMOMETER","SPIRIT_BOX","UV_LIGHT","DOTS_PROJECTOR");
 
     public FieldEquipment(){
         for(String id:ENABLED)owned.put(id,EquipmentTiers.Tier.I);
         for(String id:ENABLED)if(EquipmentTiers.stage(id,EquipmentTiers.Tier.I).capacity()>0)
             remaining.put(id,EquipmentTiers.stage(id,EquipmentTiers.Tier.I).capacity());
+        for(String id:BATTERY_TOOLS)
+            batteryTicks.put(id,stage(id).batterySeconds()*10);
     }
     public static boolean functional(String id){
         return id!=null&&ENABLED.contains(id);
@@ -82,6 +90,9 @@ public final class FieldEquipment {
             int previously=remaining.getOrDefault(id,0);
             remaining.put(id,Math.max(previously,stage(id).capacity()));
         }
+        if(BATTERY_TOOLS.contains(id))
+            batteryTicks.put(id,Math.max(batteryTicks.getOrDefault(id,0),
+                stage(id).batterySeconds()*10));
     }
     /** On/off has no clue validity semantics and does not consume a sensor sample. */
     public boolean toggle(String id){
@@ -91,10 +102,51 @@ public final class FieldEquipment {
                 .contains(id))
             throw new IllegalArgumentException("item has no on/off switch");
         boolean next=!powered.getOrDefault(id,false);
+        if(next&&BATTERY_TOOLS.contains(id)&&batteryTicks.getOrDefault(id,0)==0)
+            throw new IllegalArgumentException("battery empty, recharge at the van");
         powered.put(id,next);
         return next;
     }
     public boolean powered(String id){return powered.getOrDefault(id,false);}
+    public void setPower(String id,boolean enabled){
+        if(!BATTERY_TOOLS.contains(id))throw new IllegalArgumentException("not powered equipment");
+        if(enabled&&batteryTicks.getOrDefault(id,0)==0)
+            throw new IllegalArgumentException("battery empty, recharge at the van");
+        powered.put(id,enabled);
+    }
+    public int batterySecondsLeft(String id){
+        if(!BATTERY_TOOLS.contains(id))return -1;
+        return (batteryTicks.getOrDefault(id,0)+9)/10;
+    }
+    /**
+     * Advances real powered device runtime at the host's 10Hz game tick.
+     * Switches turn themselves off when drained, never when evidence is absent.
+     * Tick gaps cannot recharge a battery.
+     */
+    public java.util.List<String> advancePower(int tick){
+        if(tick<0)throw new IllegalArgumentException("invalid host tick");
+        if(lastBatteryTick<0){lastBatteryTick=tick;return java.util.List.of();}
+        int elapsed=Math.max(0,tick-lastBatteryTick);
+        lastBatteryTick=tick;
+        if(elapsed==0)return java.util.List.of();
+        java.util.List<String> ended=new java.util.ArrayList<>();
+        for(String id:BATTERY_TOOLS)if(powered(id)){
+            int left=Math.max(0,batteryTicks.getOrDefault(id,0)-elapsed);
+            batteryTicks.put(id,left);
+            if(left==0){powered.put(id,false);ended.add(id);}
+        }
+        return java.util.List.copyOf(ended);
+    }
+    /**
+     * Accessible only through host-authenticated van rack action. Polaroid
+     * receives exactly one fresh sheet; Tier II/III get their actual magazines.
+     */
+    public void rechargeAtVan(){
+        for(String id:BATTERY_TOOLS){
+            batteryTicks.put(id,stage(id).batterySeconds()*10);
+        }
+        remaining.put("PHOTO_CAMERA",stage("PHOTO_CAMERA").capacity());
+    }
     /** Real shutter/supply charge; never evaluated against the ghost identity. */
     public int expend(String id){
         if(!id.equals(active())||!ENABLED.contains(id))
