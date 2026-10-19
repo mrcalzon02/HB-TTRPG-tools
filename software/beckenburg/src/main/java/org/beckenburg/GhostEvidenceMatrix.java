@@ -78,6 +78,14 @@ public final class GhostEvidenceMatrix {
             Arrays.asList(GhostEvidenceProfile.availableWriting(type)),
             trait.leavesUv(),trait.sight(),future(type),type.rite(),type.behavior());
     }
+    /** Complete live hard-evidence matrix, from the same host quota source
+     * that chooses Easy/Medium/Death Wish slots. Seed is irrelevant on Easy.
+     * Inactive or proposed future devices are deliberately excluded.
+     */
+    public static java.util.EnumSet<HardEvidenceQuota.Family> hardEvidenceFor(
+            GhostIdentity.Type type){
+        return new HardEvidenceQuota(type,HardEvidenceQuota.Level.EASY,0).families();
+    }
     public static List<Row> all(){
         return Arrays.stream(GhostIdentity.Type.values())
             .map(GhostEvidenceMatrix::forGhost).toList();

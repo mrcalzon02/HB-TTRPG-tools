@@ -14,6 +14,14 @@ public final class GhostEvidenceMatrixTest {
         int suppressed=0,freezing=0,hot=0,normal=0,writers=0,uv=0,orbs=0,camera=0;
         for(var row:rows){
             ok(unique.add(row.type()),"one catalog row per ghost");
+            var hard=GhostEvidenceMatrix.hardEvidenceFor(row.type());
+            ok(hard.size()>=3,"all species have 3+ compatible hard evidence producers");
+            ok(hard.equals(new HardEvidenceQuota(row.type(),
+                HardEvidenceQuota.Level.EASY,0).families()),
+                "published hard-evidence row equals authoritative host selection");
+            if(GhostEvidenceProfile.emfSuppressed(row.type()))
+                ok(!hard.contains(HardEvidenceQuota.Family.EMF),
+                    "EMF suppression is not a positive guaranteed evidence slot");
             ok(row.rite()==row.type().rite()&&row.behavior()==row.type().behavior(),
                 "ritual and behavioral identity retained for "+row.type());
             ok(GhostFieldGuide.possible(row.type(),row.emf())

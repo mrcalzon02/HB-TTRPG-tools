@@ -23,7 +23,10 @@ public final class HardEvidenceQuota {
     private final EnumSet<Family> allowed;
     public HardEvidenceQuota(GhostIdentity.Type ghost,Level level,long seed){
         Objects.requireNonNull(ghost);this.level=Objects.requireNonNull(level);
-        EnumSet<Family> capable=EnumSet.of(Family.EMF,Family.SPIRIT_BOX);
+        // Suppressed high EMF is a valuable diagnostic clue, but it is not a
+        // positive paranormal reading and cannot fulfill a guaranteed slot.
+        EnumSet<Family> capable=EnumSet.of(Family.SPIRIT_BOX);
+        if(!GhostEvidenceProfile.emfSuppressed(ghost))capable.add(Family.EMF);
         if(GhostEvidenceProfile.thermal(ghost)!=EvidenceSignals.Polarity.NONE)
             capable.add(Family.TEMPERATURE);
         if(GhostEvidenceProfile.availableWriting(ghost).length>0)

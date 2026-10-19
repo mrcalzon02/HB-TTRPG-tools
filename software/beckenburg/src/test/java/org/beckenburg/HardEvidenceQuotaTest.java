@@ -13,6 +13,9 @@ public final class HardEvidenceQuotaTest {
             ok(easy.families().containsAll(medium.families()),"medium subset "+type);
             ok(death.allowance()==1,"Death Wish guarantees exactly one hard evidence family "+type);
             ok(easy.families().containsAll(death.families()),"Death Wish is species-compatible "+type);
+            ok(easy.permits(HardEvidenceQuota.Family.EMF)
+                ==!GhostEvidenceProfile.emfSuppressed(type),
+                "EMF suppression is diagnostic but cannot occupy a guaranteed hard-evidence slot "+type);
             ok(easy.permits(HardEvidenceQuota.Family.UV)==GhostTraits.of(type).leavesUv(),
                 "UV must have a real producing trait "+type);
             ok(easy.permits(HardEvidenceQuota.Family.ORBS)
