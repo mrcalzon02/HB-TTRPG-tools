@@ -48,6 +48,12 @@ public final class LanLobbyWindow extends JFrame {
     public LanLobbyWindow(){
         super("Beckenburg — LAN House Alpha 1.1");setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+        // The standard lobby gets the same original-asset skin as the main menu.
+        for(JButton button:new JButton[]{hostInfo,tuneContract,sendLobbyChat,reconnect,enter3D,ready,start,
+                move,use,identify,banish,absolve,scan,ward,cleanse,extract})
+            PsxHorrorUi.styleButton(button);
+        for(JTextField field:new JTextField[]{ip,port,name,roomPassword,lobbyChat})
+            PsxHorrorUi.styleTextField(field);
         setLayout(new BorderLayout());
         getContentPane().setBackground(new Color(15,19,25));
         JPanel connectionFields=new JPanel(new GridLayout(2,6,8,5));
@@ -56,7 +62,7 @@ public final class LanLobbyWindow extends JFrame {
             connectionFields.add(new JLabel(label));
         connectionFields.add(ip);connectionFields.add(port);connectionFields.add(name);
         connectionFields.add(role);connectionFields.add(partySize);connectionFields.add(roomPassword);
-        JButton host=new JButton("Host LAN"),join=new JButton("Join by IP");
+        JButton host=PsxHorrorUi.button("Host LAN"),join=PsxHorrorUi.button("Join by IP");
         JPanel connectActions=new JPanel(new FlowLayout(FlowLayout.LEFT,7,4));
         for(JButton button:new JButton[]{host,join,reconnect,tuneContract,hostInfo})connectActions.add(button);
         connectActions.add(lobbyLock);
@@ -86,7 +92,7 @@ public final class LanLobbyWindow extends JFrame {
         lobbyBottom.setBorder(BorderFactory.createEmptyBorder(8,12,12,12));
         lobbyBottom.add(launchActions,BorderLayout.NORTH);
         lobbyBottom.add(chatRow,BorderLayout.SOUTH);
-        JPanel lobbyPage=new JPanel(new BorderLayout(0,7));
+        JPanel lobbyPage=PsxHorrorUi.panel(new BorderLayout(0,7));
         lobbyPage.add(connectionTop,BorderLayout.NORTH);
         lobbyPage.add(lobbyCenter,BorderLayout.CENTER);
         lobbyPage.add(lobbyBottom,BorderLayout.SOUTH);
@@ -114,7 +120,7 @@ public final class LanLobbyWindow extends JFrame {
         JPanel toolColumns=new JPanel(new GridLayout(1,2,14,0));
         toolColumns.setBorder(BorderFactory.createEmptyBorder(10,12,10,12));
         toolColumns.add(hunterTools);toolColumns.add(ghostTools);
-        JPanel fieldPage=new JPanel(new BorderLayout());
+        JPanel fieldPage=PsxHorrorUi.panel(new BorderLayout());
         JLabel toolNote=new JLabel("ALPHA FIELD CONSOLE  /  Network simulation commands; enter the 3D world from the Lobby tab.");
         toolNote.setBorder(BorderFactory.createEmptyBorder(12,12,3,12));
         fieldPage.add(toolNote,BorderLayout.NORTH);
@@ -122,6 +128,7 @@ public final class LanLobbyWindow extends JFrame {
         JTabbedPane pages=new JTabbedPane(JTabbedPane.TOP);
         pages.addTab("Lobby & connection",lobbyPage);
         pages.addTab("Field controls (alpha)",fieldPage);
+        PsxHorrorUi.styleTabs(pages);
         add(pages,BorderLayout.CENTER);
         avatar.showHunter();
         role.addActionListener(e->{
