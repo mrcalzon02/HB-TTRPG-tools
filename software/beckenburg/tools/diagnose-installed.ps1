@@ -74,7 +74,7 @@ try {
 $summaryText=($summary -join [Environment]::NewLine).Replace($env:USERPROFILE,'<USER_HOME>')
 Set-Content -LiteralPath (Join-Path $folder 'diagnostics-summary.txt') -Value $summaryText -Encoding UTF8
 $bundle=$folder+'.zip'
-Compress-Archive -LiteralPath (Join-Path $folder '*') -DestinationPath $bundle -CompressionLevel Optimal -Force
+Compress-Archive -Path (Join-Path $folder '*') -DestinationPath $bundle -CompressionLevel Optimal -Force
 Write-Host $summaryText
 Write-Host ('Local diagnostics archive: '+$bundle)
 Write-Host 'No files were uploaded and no save data was modified.'
