@@ -12,11 +12,11 @@ public final class CastleHubDecor {
     public static List<CastleHubMap.Furnishing> furnishings(){return FURNISHINGS;}
     private static final List<CastleHubMap.Furnishing> FURNISHINGS=List.of(
         // Armoury: storage, display and evidence cabinets
-        f("shelf_mp_6",2.4,3.5,1.70,0,.76,.26),
-        f("shelf_mp_6",2.4,6.1,1.70,0,.76,.26),
-        f("shelf_mp_6",2.4,8.4,1.70,0,.76,.26),
-        f("display_cabinet_mp_2",7.7,2.3,1.0,Math.PI/2,.34,.70),
-        f("display_cabinet_mp_2",7.7,9.2,1.0,Math.PI/2,.34,.70),
+        f("shelf_mp_6",1.35,3.5,1.30,Math.PI/2,.27,.60),
+        f("shelf_mp_6",1.35,6.1,1.30,Math.PI/2,.27,.60),
+        f("shelf_mp_6",1.35,8.4,1.30,Math.PI/2,.27,.60),
+        f("display_cabinet_mp_2",7.7,1.48,.95,0,.65,.30),
+        f("display_cabinet_mp_2",7.7,10.65,.95,Math.PI,.65,.30),
         // Contract and reading room
         f("dinner_table_1",13.5,3.4,1.0,0,.86,.56),
         f("chair_mp_5",15.9,3.7,1.12,Math.PI/2,.35,.39),
@@ -41,20 +41,32 @@ public final class CastleHubDecor {
         f("armchair_1",20.4,20.0,.77,0,.57,.42),
         f("wardrobe_mp_1",25.8,13.7,.75,Math.PI/2,.27,.52),
         // East archive and service wings - furniture, never free field equipment.
-        f("shelf_mp_6",31.3,5.4,1.58,Math.PI/2,.32,.78),
-        f("shelf_mp_6",40.2,6.0,1.58,Math.PI/2,.32,.78),
+        f("shelf_mp_6",29.20,5.4,1.30,Math.PI/2,.27,.60),
+        f("shelf_mp_6",42.35,6.0,1.30,Math.PI/2,.27,.60),
         f("display_cabinet_mp_2",32.1,13.1,.92,0,.57,.31),
         f("dinner_table_1",36.0,11.8,.87,0,.81,.53),
         f("chair_mp_5",33.0,13.5,.94,Math.PI,.35,.38),
         f("chair_mp_5",38.0,12.5,.94,0,.35,.38),
-        f("shelf_mp_6",31.3,21.3,1.60,Math.PI/2,.32,.78),
-        f("shelf_mp_6",39.5,21.3,1.60,Math.PI/2,.32,.78),
+        f("shelf_mp_6",29.20,21.3,1.30,Math.PI/2,.27,.60),
+        f("shelf_mp_6",42.35,21.3,1.30,Math.PI/2,.27,.60),
         f("dinner_table_1",35.5,25.2,.9,0,.85,.56),
         f("armchair_1",33.0,27.7,.78,Math.PI,.61,.45),
         f("armchair_1",39.0,27.7,.78,0,.61,.45),
         f("display_cabinet_mp_2",40.5,30.5,.92,Math.PI/2,.32,.72),
         f("sofa_1",5.5,27.8,.77,0,1.05,.48),
         f("dinner_table_1",5.1,24.9,.70,0,.58,.40)
+    );
+    /** Measured second-storey library furnishings. They sit on the real
+     * 3.4m upper deck and share a height-aware collision registry.
+     */
+    public static final List<CastleHubMap.Furnishing> UPPER_FURNISHINGS=List.of(
+        f("shelf_mp_6",11.5,3.8,1.25,Math.PI/2,.28,.57),
+        f("shelf_mp_6",18.3,3.8,1.25,Math.PI/2,.28,.57),
+        f("shelf_mp_6",11.5,8.1,1.25,Math.PI/2,.28,.57),
+        f("dinner_table_1",14.6,5.6,.85,0,.73,.47),
+        f("chair_mp_5",13.1,7.2,.90,0,.33,.35),
+        f("chair_mp_5",16.1,7.2,.90,0,.33,.35),
+        f("sofa_1",14.8,2.25,.73,0,.90,.46)
     );
     /** Small furniture-top detail is decorative; no invisible solid boxes. */
     public record Accent(String mesh,double x,double y,double z,double scale,double yaw){}
