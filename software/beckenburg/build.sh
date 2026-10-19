@@ -29,6 +29,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.Eq
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.FieldEquipmentTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.InstrumentActivationTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.TieredMediaAndPowerTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.TieredUvAndFirelightTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.ImportedEquipmentModelsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.VanCargoDoorTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanDotsProjectorsTest
