@@ -596,6 +596,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             int heading=Math.floorMod((int)Math.round(Math.toDegrees(renderer.yaw)),360);
             if(heading!=lastTurn){client.turn(heading);lastTurn=heading;}
         }catch(IOException e){feedback="LAN disconnected: "+e.getMessage();close();}
+        GraphicsOptions.current().configure(renderer,getWidth(),getHeight(),true);
         renderer.roomLightTick=tick;
         renderer.setLampHardware(
             equipmentTier.getOrDefault("FLASHLIGHT",EquipmentTiers.Tier.I),
@@ -631,9 +632,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         super.paintComponent(original);Graphics2D g=(Graphics2D)original.create();
         try{
             int h=getHeight();
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-            g.drawImage(nightVision?NightVisionFilter.apply(renderer.image()):renderer.image(),
-                0,0,getWidth(),h,null);
+            GraphicsOptions.current().draw(g,
+                nightVision?NightVisionFilter.apply(renderer.image()):renderer.image(),getWidth(),h);
             if(vanDisplay&&!videoCameras.isEmpty()&&!casefileOpen
                     &&videoCameras.values().stream().anyMatch(c->
                         videoPowered.getOrDefault(c.owner(),false))){
@@ -814,8 +814,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             if(label==null||label.isBlank())continue;
             SceneRenderer.Nameplate anchor=renderer.teammateNameplate(map,entry.getValue());
             if(anchor==null)continue;
-            int px=(int)Math.round(anchor.x()*getWidth()/(double)SceneRenderer.W);
-            int py=(int)Math.round(anchor.y()*viewHeight/(double)SceneRenderer.H);
+            GraphicsOptions.Viewport area=GraphicsOptions.current().viewport(getWidth(),viewHeight);
+            int px=area.x()+(int)Math.round(anchor.x()*area.width()/(double)renderer.width());
+            int py=area.y()+(int)Math.round(anchor.y()*area.height()/(double)renderer.height());
             int width=metrics.stringWidth(label)+12;
             int left=Math.max(4,Math.min(getWidth()-width-4,px-width/2));
             if(py<metrics.getHeight()+4||py>viewHeight-6||width>=getWidth()-8)continue;

@@ -71,7 +71,15 @@ public final class DirectionalSprites {
     public static void draw(int[] pixels,double[] depth,double cameraX,double cameraZ,
             double yaw,double pitch,double entityX,double entityZ,int heading,
             String character,double height,double width,double elevation,int opacity,boolean lamp){
-        if(pixels.length!=W*H||depth.length!=W*H||opacity<=0||height<=0)return;
+        draw(pixels,depth,cameraX,cameraZ,yaw,pitch,entityX,entityZ,heading,
+            character,height,width,elevation,opacity,lamp,W,H,FOCAL);
+    }
+    public static void draw(int[] pixels,double[] depth,double cameraX,double cameraZ,
+            double yaw,double pitch,double entityX,double entityZ,int heading,
+            String character,double height,double width,double elevation,int opacity,boolean lamp,
+            int renderWidth,int renderHeight,double focal){
+        if(pixels.length!=renderWidth*renderHeight||depth.length!=renderWidth*renderHeight
+                ||opacity<=0||height<=0)return;
         if(!Double.isFinite(entityX)||!Double.isFinite(entityZ))return;
         double dx=entityX-cameraX,dz=entityZ-cameraZ;
         double right=dx*Math.cos(yaw)-dz*Math.sin(yaw);
@@ -81,14 +89,14 @@ public final class DirectionalSprites {
         double baseY=elevation-1.62,topY=elevation+height-1.62;
         double nearBottom=baseY*sy+ahead*cy,nearTop=topY*sy+ahead*cy;
         if(nearBottom<NEAR||nearTop<NEAR)return;
-        double foot=H/2.0-(baseY*cy-ahead*sy)/nearBottom*FOCAL;
-        double head=H/2.0-(topY*cy-ahead*sy)/nearTop*FOCAL;
+        double foot=renderHeight/2.0-(baseY*cy-ahead*sy)/nearBottom*focal;
+        double head=renderHeight/2.0-(topY*cy-ahead*sy)/nearTop*focal;
         if(head>=foot)return;
         double anchorDepth=(nearBottom+nearTop)/2;
-        double cx=W/2.0+right/anchorDepth*FOCAL;
-        double halfW=FOCAL*width/(2*anchorDepth);
-        int x0=Math.max(0,(int)Math.floor(cx-halfW)),x1=Math.min(W-1,(int)Math.ceil(cx+halfW));
-        int y0=Math.max(0,(int)Math.floor(head)),y1=Math.min(H-1,(int)Math.ceil(foot));
+        double cx=renderWidth/2.0+right/anchorDepth*focal;
+        double halfW=focal*width/(2*anchorDepth);
+        int x0=Math.max(0,(int)Math.floor(cx-halfW)),x1=Math.min(renderWidth-1,(int)Math.ceil(cx+halfW));
+        int y0=Math.max(0,(int)Math.floor(head)),y1=Math.min(renderHeight-1,(int)Math.ceil(foot));
         if(x0>x1||y0>y1)return;
         BufferedImage sprite=frame(character,facing(heading,entityX,entityZ,cameraX,cameraZ));
         int sw=sprite.getWidth(),sh=sprite.getHeight();
@@ -103,7 +111,7 @@ public final class DirectionalSprites {
                 if(u<0||u>=sw)continue;
                 int argb=sprite.getRGB(u,v),alpha=(argb>>>24)*Math.min(255,opacity)/255;
                 if(alpha<24)continue;
-                int k=py*W+px;
+                int k=py*renderWidth+px;
                 if(anchorDepth>=depth[k])continue;
                 int red=(int)(((argb>>>16)&255)*illumination),
                     green=(int)(((argb>>>8)&255)*illumination),

@@ -10,21 +10,37 @@ import java.util.List;
 public final class SceneRenderer {
     public static final int W=320,H=200;
     private static final double NEAR=.065;
-    private double focal=153; // player default ~93deg; video lens is hardware-specific
+    private int renderWidth=W,renderHeight=H;
+    private double nativeFocal=153; // fixed vertical lens; widescreen adds peripheral geometry
+    private double focal=nativeFocal;
     public void setFieldOfView(double degrees){
         if(!Double.isFinite(degrees)||degrees<35||degrees>135)
             throw new IllegalArgumentException("unsupported optical field of view");
-        focal=(W*.5)/Math.tan(Math.toRadians(degrees/2));
+        nativeFocal=(W*.5)/Math.tan(Math.toRadians(degrees/2));
+        focal=nativeFocal*renderHeight/H;
     }
-    public double fieldOfView(){return Math.toDegrees(2*Math.atan((W*.5)/focal));}
+    public double fieldOfView(){return Math.toDegrees(2*Math.atan((W*.5)/nativeFocal));}
+    public int width(){return renderWidth;}
+    public int height(){return renderHeight;}
+    /** Real render-target resizing, with bounded CPU/memory cost. */
+    public void setRenderSize(int width,int height){
+        if(width<160||height<120||width>1920||height>1080||(long)width*height>1500000)
+            throw new IllegalArgumentException("software render size out of range");
+        if(width==renderWidth&&height==renderHeight)return;
+        renderWidth=width;renderHeight=height;
+        frame=new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+        pixels=((DataBufferInt)frame.getRaster().getDataBuffer()).getData();
+        depths=new double[width*height];
+        focal=nativeFocal*height/H;
+    }
     private static final int[] BAYER={0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5};
     private record Point(double x,double y,double z) { }
     private record Vertex(Point p,double u,double v) { }
     private record Face(Point a,Point b,Point c,int color,int material,
                         double au,double av,double bu,double bv,double cu,double cv) { }
-    private final BufferedImage frame = new BufferedImage(W,H,BufferedImage.TYPE_INT_RGB);
-    private final int[] pixels=((DataBufferInt)frame.getRaster().getDataBuffer()).getData();
-    private final double[] depths=new double[W*H];
+    private BufferedImage frame = new BufferedImage(W,H,BufferedImage.TYPE_INT_RGB);
+    private int[] pixels=((DataBufferInt)frame.getRaster().getDataBuffer()).getData();
+    private double[] depths=new double[W*H];
     private PsxPipeline.Preset psxPreset=PsxPipeline.selected();
     public PsxPipeline.Preset psxPreset(){return psxPreset;}
     public void setPsxPreset(PsxPipeline.Preset preset){
@@ -593,21 +609,21 @@ public final class SceneRenderer {
         Point torso=camera(new Point(teammate.x(),1.35,teammate.z()));
         Point head=camera(new Point(teammate.x(),1.95,teammate.z()));
         if(torso.z<NEAR||torso.z>14.0||head.z<NEAR)return null;
-        double cx=W*.5+torso.x/torso.z*focal;
-        double cy=H*.5-torso.y/torso.z*focal;
-        double labelX=W*.5+head.x/head.z*focal;
-        double labelY=H*.5-head.y/head.z*focal-5;
+        double cx=renderWidth*.5+torso.x/torso.z*focal;
+        double cy=renderHeight*.5-torso.y/torso.z*focal;
+        double labelX=renderWidth*.5+head.x/head.z*focal;
+        double labelY=renderHeight*.5-head.y/head.z*focal-5;
         if(!Double.isFinite(cx)||!Double.isFinite(cy)||
             !Double.isFinite(labelX)||!Double.isFinite(labelY))return null;
         int px=(int)Math.round(cx),py=(int)Math.round(cy);
-        if(px<3||px>=W-3||py<3||py>=H-3||
-            labelX<8||labelX>=W-8||labelY<4||labelY>=H-5)return null;
+        if(px<3||px>=renderWidth-3||py<3||py>=renderHeight-3||
+            labelX<8||labelX>=renderWidth-8||labelY<4||labelY>=renderHeight-5)return null;
         // The teammate must occupy at least one nearby torso Z pixel. Nearby
         // foreground geometry or another sprite covering them hides the label.
         boolean depthVisible=false;
         for(int dy=-2;dy<=2&&!depthVisible;dy++)
             for(int dx=-2;dx<=2&&!depthVisible;dx++){
-                double d=depths[(py+dy)*W+px+dx];
+                double d=depths[(py+dy)*renderWidth+px+dx];
                 if(d>=torso.z-.45&&d<=torso.z+.55)depthVisible=true;
             }
         return depthVisible?new Nameplate((int)Math.round(labelX),(int)Math.round(labelY)):null;
@@ -693,7 +709,8 @@ public final class SceneRenderer {
                 new Vertex(camera(face.b),face.bu,face.bv),new Vertex(camera(face.c),face.cu,face.cv));
             for(int i=1;i<points.size()-1;i++)triangle(points.get(0),points.get(i),points.get(i+1),face.color,face.material);
         }
-        PsxPipeline.finishFrame(pixels,W,H,psxPreset);
+        PsxPipeline.finishFrame(pixels,renderWidth,renderHeight,psxPreset);
+        GraphicsEffects.apply(pixels,renderWidth,renderHeight,GraphicsOptions.current(),clock);
     }
     /** Keep the legacy room-mode signature for old render regression tests. */
     public void drawNetwork(HouseMap map,List<RemoteBody> others,int visibleGhostRoom,double clock){
@@ -735,31 +752,32 @@ public final class SceneRenderer {
                 face.color,face.material,lighting);
         }
         renderCharacterSprites(map,ghostRoom,visibleGhost,hunterRoom,clock,others,apparition);
-        PsxPipeline.finishFrame(pixels,W,H,psxPreset);
+        PsxPipeline.finishFrame(pixels,renderWidth,renderHeight,psxPreset);
+        GraphicsEffects.apply(pixels,renderWidth,renderHeight,GraphicsOptions.current(),clock);
     }
     /** Paint the world-fixed night panorama behind all world geometry, even indoors.
      * Real window apertures and depth-tested castle stonework occlude the background.
      * The sky never writes depth, and has no copyright-dependent source images.
      */
     void paintSky(double clock){
-        final int horizon=(int)Math.round(H*.51+Math.tan(pitch)*focal);
-        for(int sy=0;sy<H;sy++){
-            double t=sy/(double)H;
+        final int horizon=(int)Math.round(renderHeight*.51+Math.tan(pitch)*focal);
+        for(int sy=0;sy<renderHeight;sy++){
+            double t=sy/(double)renderHeight;
             boolean upper=sy<horizon;
             int red=upper?(int)(13+18*t):(int)(18+18*t);
             int green=upper?(int)(23+18*t):(int)(27+19*t);
             int blue=upper?(int)(41+31*t):(int)(32+16*t);
-            Arrays.fill(pixels,sy*W,(sy+1)*W,(red<<16)|(green<<8)|blue);
+            Arrays.fill(pixels,sy*renderWidth,(sy+1)*renderWidth,(red<<16)|(green<<8)|blue);
         }
         // Dim cloud bands drift across world bearings, visible through castle windows.
-        for(int sx=0;sx<W;sx++){
-            double bearing=yaw+Math.atan2(sx-W*.5,focal);
+        for(int sx=0;sx<renderWidth;sx++){
+            double bearing=yaw+Math.atan2(sx-renderWidth*.5,focal);
             int top=horizon-38+(int)(7*Math.sin(bearing*2.7+clock*.012)
                 +3*Math.sin(bearing*7.4-clock*.008));
             for(int j=0;j<5;j++){
                 int sy=top+j;
-                if(sy<0||sy>=H)continue;
-                int k=sy*W+sx,c=pixels[k];
+                if(sy<0||sy>=renderHeight)continue;
+                int k=sy*renderWidth+sx,c=pixels[k];
                 int r=Math.min(255,((c>>16)&255)+3),g=Math.min(255,((c>>8)&255)+4),
                     bl=Math.min(255,(c&255)+7);
                 pixels[k]=(r<<16)|(g<<8)|bl;
@@ -769,21 +787,21 @@ public final class SceneRenderer {
             double bearing=-Math.PI+(star*2.399963229728653)%(2*Math.PI);
             double diff=Math.atan2(Math.sin(bearing-yaw),Math.cos(bearing-yaw));
             if(Math.abs(diff)>1.1)continue;
-            int sx=(int)Math.round(W*.5+Math.tan(diff)*focal);
+            int sx=(int)Math.round(renderWidth*.5+Math.tan(diff)*focal);
             int sy=horizon-19-(star*37%54);
-            if(sx>=0&&sx<W&&sy>=0&&sy<H)pixels[sy*W+sx]=0x8096ac;
+            if(sx>=0&&sx<renderWidth&&sy>=0&&sy<renderHeight)pixels[sy*renderWidth+sx]=0x8096ac;
         }
-        for(int sx=0;sx<W;sx++){
-            double bearing=yaw+Math.atan2(sx-W*.5,focal);
+        for(int sx=0;sx<renderWidth;sx++){
+            double bearing=yaw+Math.atan2(sx-renderWidth*.5,focal);
             int hills=horizon+(int)(13*Math.sin(bearing*2.1)+8*Math.sin(bearing*5.7)
                     +5*Math.sin(bearing*13.2));
-            for(int sy=Math.max(0,hills);sy<H;sy++)pixels[sy*W+sx]=0x18202a;
+            for(int sy=Math.max(0,hills);sy<renderHeight;sy++)pixels[sy*renderWidth+sx]=0x18202a;
         }
         double diff=Math.atan2(Math.sin(-1.2-yaw),Math.cos(-1.2-yaw));
-        int mx=(int)Math.round(W*.5+Math.tan(diff)*focal),my=horizon-43;
+        int mx=(int)Math.round(renderWidth*.5+Math.tan(diff)*focal),my=horizon-43;
         if(Math.abs(diff)<1.1)for(int dy=-5;dy<=5;dy++)for(int dx=-5;dx<=5;dx++){
             int px=mx+dx,py=my+dy;
-            if(px>=0&&px<W&&py>=0&&py<H&&dx*dx+dy*dy<25)pixels[py*W+px]=0xb8c8d5;
+            if(px>=0&&px<renderWidth&&py>=0&&py<renderHeight&&dx*dx+dy*dy<25)pixels[py*renderWidth+px]=0xb8c8d5;
         }
     }
     /** Billboards share the world Z-buffer, so room walls correctly hide hunter and ghost bodies.
@@ -808,32 +826,32 @@ public final class SceneRenderer {
             }else{
                 DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,gx,gz,
                     apparition==null?0:apparition.heading(),"banshee",1.95*stature,1.16,
-                    .09*Math.sin(clock*3)+lift,alpha,lamp);
+                    .09*Math.sin(clock*3)+lift,alpha,lamp,renderWidth,renderHeight,focal);
             }
         }
         if(hunterRoom>=0){
             DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,
                 map.centerX(hunterRoom)-1.25,map.centerZ(hunterRoom)+2.0,
-                0,"observer",1.75,1.04,0,255,lamp);
+                0,"observer",1.75,1.04,0,255,lamp,renderWidth,renderHeight,focal);
         }
         for(RemoteBody person:others){
             double distance=Math.hypot(person.x()-x,person.z()-z);
             if(distance>14||distance<1.35)continue;
             DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,person.x(),person.z(),
-                person.heading(),"observer",1.75,1.04,0,255,lamp);
+                person.heading(),"observer",1.75,1.04,0,255,lamp,renderWidth,renderHeight,focal);
         }
     }
     /** A real luminous orb in perspective, occluded by walls and the existing Z-buffer. */
     private void renderSpiritOrb(double gx,double gz,double bob,double clock){
         Point p=camera(new Point(gx,bob,gz));
         if(p.z<NEAR||p.z>17)return;
-        int cx=(int)Math.round(W*.5+p.x/p.z*focal),cy=(int)Math.round(H*.5-p.y/p.z*focal);
+        int cx=(int)Math.round(renderWidth*.5+p.x/p.z*focal),cy=(int)Math.round(renderHeight*.5-p.y/p.z*focal);
         int radius=Math.min(29,Math.max(2,(int)Math.round(focal*.19/p.z)));
-        for(int sy=Math.max(0,cy-radius);sy<=Math.min(H-1,cy+radius);sy++)
-            for(int sx=Math.max(0,cx-radius);sx<=Math.min(W-1,cx+radius);sx++){
+        for(int sy=Math.max(0,cy-radius);sy<=Math.min(renderHeight-1,cy+radius);sy++)
+            for(int sx=Math.max(0,cx-radius);sx<=Math.min(renderWidth-1,cx+radius);sx++){
                 double distance=Math.hypot(sx-cx,sy-cy)/(double)radius;
                 if(distance>1)continue;
-                int at=sy*W+sx;
+                int at=sy*renderWidth+sx;
                 if(p.z>=depths[at])continue;
                 double glow=(1-distance*distance)*(.85+.15*Math.sin(clock*7));
                 int red=(int)(65+90*glow),green=(int)(85+160*glow),
@@ -848,21 +866,21 @@ public final class SceneRenderer {
     private void triangle(Vertex va,Vertex vb,Vertex vc,int tint,int material,double roomLevel){
         Point a=va.p,b=vb.p,c=vc.p;
         int color=tint;
-        double x0=PsxPipeline.snap(W*.5+a.x/a.z*focal,psxPreset),y0=PsxPipeline.snap(H*.5-a.y/a.z*focal,psxPreset);
-        double x1=PsxPipeline.snap(W*.5+b.x/b.z*focal,psxPreset),y1=PsxPipeline.snap(H*.5-b.y/b.z*focal,psxPreset);
-        double x2=PsxPipeline.snap(W*.5+c.x/c.z*focal,psxPreset),y2=PsxPipeline.snap(H*.5-c.y/c.z*focal,psxPreset);
+        double x0=PsxPipeline.snap(renderWidth*.5+a.x/a.z*focal,psxPreset),y0=PsxPipeline.snap(renderHeight*.5-a.y/a.z*focal,psxPreset);
+        double x1=PsxPipeline.snap(renderWidth*.5+b.x/b.z*focal,psxPreset),y1=PsxPipeline.snap(renderHeight*.5-b.y/b.z*focal,psxPreset);
+        double x2=PsxPipeline.snap(renderWidth*.5+c.x/c.z*focal,psxPreset),y2=PsxPipeline.snap(renderHeight*.5-c.y/c.z*focal,psxPreset);
         double denom=(y1-y2)*(x0-x2)+(x2-x1)*(y0-y2);
         if(Math.abs(denom)<1e-8)return;
         int lowX=Math.max(0,(int)Math.floor(Math.min(x0,Math.min(x1,x2))));
-        int highX=Math.min(W-1,(int)Math.ceil(Math.max(x0,Math.max(x1,x2))));
+        int highX=Math.min(renderWidth-1,(int)Math.ceil(Math.max(x0,Math.max(x1,x2))));
         int lowY=Math.max(0,(int)Math.floor(Math.min(y0,Math.min(y1,y2))));
-        int highY=Math.min(H-1,(int)Math.ceil(Math.max(y0,Math.max(y1,y2))));
+        int highY=Math.min(renderHeight-1,(int)Math.ceil(Math.max(y0,Math.max(y1,y2))));
         for(int py=lowY;py<=highY;py++)for(int px=lowX;px<=highX;px++){
             double xx=px+.5,yy=py+.5;
             double u=((y1-y2)*(xx-x2)+(x2-x1)*(yy-y2))/denom;
             double v=((y2-y0)*(xx-x2)+(x0-x2)*(yy-y2))/denom,w=1-u-v;
             if(u<0||v<0||w<0)continue;
-            double inv=u/a.z+v/b.z+w/c.z,d=1/inv;int k=py*W+px;
+            double inv=u/a.z+v/b.z+w/c.z,d=1/inv;int k=py*renderWidth+px;
             if(d>=depths[k])continue;
             depths[k]=d;
             if(material>=0) {

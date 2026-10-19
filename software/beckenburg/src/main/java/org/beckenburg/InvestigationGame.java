@@ -29,10 +29,17 @@ public final class InvestigationGame {
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setSize(1060,725);
         window.setMinimumSize(new Dimension(760,510));
-        if(displayPrefs.getBoolean("maximized",false))window.setExtendedState(JFrame.MAXIMIZED_BOTH);
         window.setLocationRelativeTo(null);
         window.setContentPane(loadingScreen());
         window.setVisible(true);
+        GraphicsOptions.current().applyWindow(window);
+        window.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+            KeyStroke.getKeyStroke(KeyEvent.VK_F11,0),"toggleFullscreen");
+        window.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+            KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,InputEvent.ALT_DOWN_MASK),"toggleFullscreen");
+        window.getRootPane().getActionMap().put("toggleFullscreen",new AbstractAction(){
+            @Override public void actionPerformed(ActionEvent event){toggleFullscreen();}
+        });
         // Do local disk I/O away from the event dispatch thread. The splash reports actual
         // initialization work; it is never a simulated progress bar or forced delay.
         new SwingWorker<String,Void>(){
@@ -226,32 +233,106 @@ public final class InvestigationGame {
         quit.addActionListener(e->window.dispose());
         refreshAccount();
     }
+    /** F11 / Alt+Enter: guaranteed windowed escape even after a failed fullscreen choice. */
+    private void toggleFullscreen(){
+        GraphicsOptions old=GraphicsOptions.current();
+        GraphicsOptions.Mode mode=old.mode()==GraphicsOptions.Mode.WINDOWED
+            ?GraphicsOptions.Mode.BORDERLESS_FULLSCREEN:GraphicsOptions.Mode.WINDOWED;
+        GraphicsOptions alternate=new GraphicsOptions(mode,old.display(),old.detail(),
+            old.aspect(),old.upscale(),old.antialias(),old.fieldOfView(),
+            old.brightness(),old.contrast(),old.scanlines(),old.vignette(),
+            old.grain(),old.chromatic());
+        try{alternate.applyWindow(window);alternate.save();}
+        catch(RuntimeException failure){
+            try{old.applyWindow(window);}catch(RuntimeException ignored){}
+            JOptionPane.showMessageDialog(window,failure.getMessage(),
+                "Display change failed",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private static <T> JComboBox<T> select(T[] items,T selected){
+        JComboBox<T> combo=new JComboBox<>(items);combo.setSelectedItem(selected);return combo;
+    }
+    private static void setting(JPanel grid,String text,JComponent control){
+        JLabel label=new JLabel(text);label.setHorizontalAlignment(SwingConstants.RIGHT);
+        grid.add(label);grid.add(control);
+    }
     private void openOptions(){
-        JCheckBox large=new JCheckBox("Large menu text",displayPrefs.getBoolean("largeMenuText",false));
-        JCheckBox contrast=new JCheckBox("High-contrast menu",displayPrefs.getBoolean("highContrast",false));
-        JCheckBox maximize=new JCheckBox("Maximize game window",displayPrefs.getBoolean("maximized",false));
+        GraphicsOptions old=GraphicsOptions.current();
+        JComboBox<GraphicsOptions.Mode> mode=select(GraphicsOptions.Mode.values(),old.mode());
+        JComboBox<GraphicsOptions.DisplaySize> desktop=select(GraphicsOptions.DisplaySize.values(),old.display());
+        JComboBox<GraphicsOptions.Detail> detail=select(GraphicsOptions.Detail.values(),old.detail());
+        JComboBox<GraphicsOptions.Aspect> aspect=select(GraphicsOptions.Aspect.values(),old.aspect());
+        JComboBox<GraphicsOptions.Upscale> upscale=select(GraphicsOptions.Upscale.values(),old.upscale());
+        JComboBox<GraphicsOptions.Antialias> aa=select(GraphicsOptions.Antialias.values(),old.antialias());
+        JComboBox<PsxPipeline.Preset> psx=select(PsxPipeline.Preset.values(),PsxPipeline.selected());
+        JSpinner fov=new JSpinner(new SpinnerNumberModel(old.fieldOfView(),50,120,1));
+        JSpinner brightness=new JSpinner(new SpinnerNumberModel(old.brightness(),-40,40,1));
+        JSpinner contrast=new JSpinner(new SpinnerNumberModel(old.contrast(),-40,40,1));
+        JCheckBox scanlines=new JCheckBox("Scanlines",old.scanlines());
+        JCheckBox vignette=new JCheckBox("Vignette",old.vignette());
+        JCheckBox grain=new JCheckBox("Film grain",old.grain());
+        JCheckBox chromatic=new JCheckBox("Chromatic aberration",old.chromatic());
+        JCheckBox large=new JCheckBox("Larger menu text",displayPrefs.getBoolean("largeMenuText",false));
+        JCheckBox highContrast=new JCheckBox("High contrast menu",displayPrefs.getBoolean("highContrast",false));
         JSlider musicVolume=new JSlider(0,100,SoundtrackAudio.volume());
         musicVolume.setMajorTickSpacing(25);musicVolume.setPaintTicks(true);
-        JLabel musicLabel=new JLabel("Music volume (0 = silent, effects separate)");
-        JPanel fields=new JPanel(new GridLayout(0,1,6,10));
-        fields.setBorder(BorderFactory.createEmptyBorder(12,14,12,14));
-        fields.add(large);fields.add(contrast);fields.add(maximize);
-        fields.add(musicLabel);fields.add(musicVolume);
-        JComboBox<PsxPipeline.Preset> psxSetting=new JComboBox<>(PsxPipeline.Preset.values());
-        psxSetting.setSelectedItem(PsxPipeline.selected());
-        fields.add(new JLabel("3D PSX rendering (castle, solo, LAN)"));
-        fields.add(psxSetting);
-        int answer=JOptionPane.showConfirmDialog(window,fields,"Display & accessibility",
+        JPanel grid=new JPanel(new GridLayout(0,2,7,7));
+        grid.setBorder(BorderFactory.createEmptyBorder(9,9,9,9));
+        setting(grid,"Display mode",mode);
+        setting(grid,"Window size (fullscreen uses native)",desktop);
+        setting(grid,"Real 3D rendering height",detail);
+        setting(grid,"Aspect ratio",aspect);
+        setting(grid,"Upscaling filter",upscale);
+        setting(grid,"Anti-aliasing",aa);
+        setting(grid,"PSX shader treatment",psx);
+        setting(grid,"Field of view (degrees)",fov);
+        setting(grid,"Brightness",brightness);
+        setting(grid,"Contrast",contrast);
+        setting(grid,"Atmospheric effects",new JLabel("Optional CPU post-processing"));
+        grid.add(scanlines);grid.add(vignette);
+        grid.add(grain);grid.add(chromatic);
+        grid.add(large);grid.add(highContrast);
+        setting(grid,"Music volume (effects separate)",musicVolume);
+        JScrollPane scroll=new JScrollPane(grid,
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.setPreferredSize(new Dimension(610,Math.min(540,grid.getPreferredSize().height+18)));
+        int answer=JOptionPane.showConfirmDialog(window,scroll,"Video, PSX & accessibility",
             JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
         if(answer!=JOptionPane.OK_OPTION)return;
+        GraphicsOptions chosen=new GraphicsOptions(
+            (GraphicsOptions.Mode)mode.getSelectedItem(),
+            (GraphicsOptions.DisplaySize)desktop.getSelectedItem(),
+            (GraphicsOptions.Detail)detail.getSelectedItem(),
+            (GraphicsOptions.Aspect)aspect.getSelectedItem(),
+            (GraphicsOptions.Upscale)upscale.getSelectedItem(),
+            (GraphicsOptions.Antialias)aa.getSelectedItem(),
+            (Integer)fov.getValue(),(Integer)brightness.getValue(),(Integer)contrast.getValue(),
+            scanlines.isSelected(),vignette.isSelected(),grain.isSelected(),chromatic.isSelected());
+        boolean windowChanged=old.mode()!=chosen.mode()||old.display()!=chosen.display();
+        if(windowChanged){
+            try{chosen.applyWindow(window);}
+            catch(RuntimeException failure){
+                try{old.applyWindow(window);}catch(RuntimeException ignored){}
+                JOptionPane.showMessageDialog(window,
+                    "Display mode could not be applied: "+failure.getMessage(),
+                    "Graphics settings",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            JOptionPane confirmation=new JOptionPane("Keep this display mode? Reverts after 15 seconds.",
+                JOptionPane.QUESTION_MESSAGE,JOptionPane.YES_NO_OPTION);
+            JDialog dialog=confirmation.createDialog(window,"Confirm display mode");
+            javax.swing.Timer revert=new javax.swing.Timer(15000,event->dialog.dispose());
+            revert.setRepeats(false);revert.start();dialog.setVisible(true);revert.stop();
+            if(!Integer.valueOf(JOptionPane.YES_OPTION).equals(confirmation.getValue())){
+                old.applyWindow(window);return;
+            }
+        }
+        chosen.save();
+        PsxPipeline.choose((PsxPipeline.Preset)psx.getSelectedItem());
         displayPrefs.putBoolean("largeMenuText",large.isSelected());
-        displayPrefs.putBoolean("highContrast",contrast.isSelected());
-        displayPrefs.putBoolean("maximized",maximize.isSelected());
+        displayPrefs.putBoolean("highContrast",highContrast.isSelected());
         SoundtrackAudio.volume(musicVolume.getValue());
-        PsxPipeline.choose((PsxPipeline.Preset)psxSetting.getSelectedItem());
-        window.setExtendedState(maximize.isSelected()?JFrame.MAXIMIZED_BOTH:JFrame.NORMAL);
         buildMenu();menu.revalidate();menu.repaint();
-        // PSX scene effects are active in the next 3D viewport; Swing text remains sharp.
     }
     private void showControls(){
         JTextArea help=new JTextArea(
@@ -457,6 +538,7 @@ public final class InvestigationGame {
                 accumulator-=.1;
             }
             scene.roomLightTick=session.ticks();
+            GraphicsOptions.current().configure(scene,getWidth(),getHeight(),true);
             scene.draw(map,session,frameCount++/30.0);repaint();
             if(session.outcome()==InvestigationSession.Outcome.LOST){
                 timer.stop();endCase("You were overcome. The case remains open.");
@@ -582,8 +664,7 @@ public final class InvestigationGame {
             try{
                 g.setColor(Color.BLACK);g.fillRect(0,0,getWidth(),getHeight());
                 int stageH=getHeight(),width=getWidth();
-                g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                g.drawImage(scene.image(),0,0,width,stageH,null);
+                GraphicsOptions.current().draw(g,scene.image(),width,stageH);
                 HeldToolView.draw(g,width,stageH,loadout.equipped().name(),session.ticks(),
                     session.ticks()<=useHeldUntilTick,scene.lamp);
                 g.setFont(new Font(Font.MONOSPACED,Font.BOLD,13));

@@ -56,6 +56,7 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
             if(map.traversable(renderer.x,renderer.z+dz))renderer.z+=dz;
         }
         clock+=dt;
+        GraphicsOptions.current().configure(renderer,getWidth(),getHeight(),true);
         renderer.drawCastle(map,clock,castleLightsOn);
         if(noticeTicks>0)noticeTicks--;
         repaint();
@@ -107,8 +108,7 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
         Graphics2D g=(Graphics2D)src.create();
         try{
             int w=getWidth(),h=getHeight();
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-            g.drawImage(renderer.image(),0,0,w,h,null);
+            GraphicsOptions.current().draw(g,renderer.image(),w,h);
 
             g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));
             g.setColor(new Color(11,17,23,214));
