@@ -4,10 +4,11 @@ The contract editor now controls **Hard evidence** independently of the
 weather **Fixed / Dynamic / Random** setting, weather severity, party
 scaling, sanity and ghost action frequency.
 
-- **Easy:** at least **three guaranteed** hard-evidence families, and more
-  if the species has more genuinely compatible producers.
-- **Medium:** exactly **two** compatible hard-evidence families, selected
-  once per host session and never re-rolled during instrument sampling.
+- **Easy:** at least **four guaranteed** hard-evidence families, including
+  the species' three-evidence identity signature and at least one more.
+- **Medium:** exactly **three** compatible hard-evidence families: the
+  unique three-evidence identity signature for that ghost. Not randomly
+  rerolled on each scan; every species has a different triple.
 - **Death Wish:** exactly **one guaranteed** hard-evidence family. Never zero.
   EMF baselines, natural temperature and no-response readings still work
   independently of the selected supernatural family, as do ordinary ghost
@@ -17,7 +18,7 @@ scaling, sanity and ghost action frequency.
   Unselected supernatural EMF signatures,
   ghost-caused temperature extremes, spirit replies, authored writing,
   distinctive D.O.T.S. interactions, UV traces and orbs are withheld.
-  The host selects once per case from families the ghost can actually produce.
+  The host selects one of the ghost's three authored signature families at case creation.
   The private selected family is never transmitted to the human ghost or hunters;
   the difficulty and guarantee count are visible in the contract.
 
@@ -52,7 +53,7 @@ solo. They also update the session's host-authoritative field wallet.
 The asymmetrical ghost seat sees the outcome, not private rewards.
 
 `HardEvidenceQuotaTest` and `ContractRewardsTest` cover all 13 ghost species,
-Easy >=3 / Medium =2 / Death Wish =1, real instrument masking, unverified
+Easy >=4 / Medium =3 / Death Wish =1, real instrument masking, unverified
 Death Wish guesses, ritual/retreat/death outcomes and persistent payout
 deduplication.
 

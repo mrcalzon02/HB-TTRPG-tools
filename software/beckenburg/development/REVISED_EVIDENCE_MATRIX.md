@@ -11,9 +11,10 @@ The projector can be deployed for any ghost, but the host only permits
 a visible D.O.T.S. silhouette for those three ghosts and only when that evidence
 family is enabled for the current contract.
 
-**Contract guarantees:** Easy ≥3, Medium exactly 2, Death Wish exactly 1.
-Easy currently exposes all available species-compatible evidence families.
-Medium/Death Wish pick 2/1 host-seeded families at the beginning of a case.
+**Contract guarantees:** Easy ≥4, Medium exactly 3, Death Wish exactly 1.
+Easy exposes all available species-compatible evidence families. Each
+ghost has one **unique three-family hard-yes signature** reserved for Medium;
+Death Wish permits exactly one case-seeded family from that signature.
 Weather cannot create a species-specific EMF event or override its group.
 
 Legend: H = high ghost EMF (8–10); L/M = low/mid ghost EMF (2–7);
@@ -29,8 +30,8 @@ Writing styles count as one writing family.
 | Possessive | L/M | — | ✓ | Ch, Ci | — | ✓ | — | 4 | Absolution |
 | Poltergeist | H | Ht | ✓ | Sc | — | ✓ | — | 5 | Banishment |
 | Demon | H | Ht | ✓ | Sc, Ci | — | — | — | 4 | Banishment |
-| Yokai | L/M | — | ✓ | — | — | — | ✓ | 3 | Absolution |
-| Banshee | L/M | C | ✓ | — | — | — | — | 3 | Absolution |
+| Yokai | L/M | — | ✓ | Ci | — | — | ✓ | 4 | Absolution |
+| Banshee | L/M | C | ✓ | Sc | — | — | — | 4 | Absolution |
 | Wraith | L/M | — | ✓ | Sc, Ci | ✓ | ✓ | — | 5 | Banishment |
 | Shade | 0 | C | ✓ | Ci | ✓ | ✓ | — | 5 | Cleansing |
 | Specter | 0 | — | ✓ | Ci | ✓ | ✓ | — | 4 | Cleansing |
@@ -38,7 +39,45 @@ Writing styles count as one writing family.
 | Hantu | 0 | C | ✓ | — | — | — | ✓ | 4 | Cleansing |
 | Devil | H | Ht | ✓ | Sc, Ci | — | ✓ | — | 5 | Banishment |
 | Mimic | H | Ht | ✓ | Ch, Sc | — | ✓ | — | 5 | Cleansing |
-| Twins | H | — | ✓ | — | — | — | ✓ | 3 | Absolution |
+| Twins | H | — | ✓ | Ch | — | — | ✓ | 4 | Absolution |
+
+## Three-evidence identity signatures (Medium contracts)
+
+Every row has **exactly three** positive, authored evidence families.
+No two ghosts share the same triple. All three exist in the ghost's Easy
+pool; Death Wish grants exactly one of these three families.
+
+| Ghost | Unique three-evidence signature |
+|---|---|
+| Possessive | EMF + Spirit Box + UV |
+| Poltergeist | EMF + Temperature + UV |
+| Demon | EMF + Temperature + Writing |
+| Yokai | EMF + Writing + Orbs |
+| Banshee | Temperature + Spirit Box + Writing |
+| Wraith | EMF + Spirit Box + D.O.T.S. |
+| Shade | EMF + Temperature + D.O.T.S. |
+| Specter | EMF + Writing + D.O.T.S. |
+| Spirit | Temperature + Spirit Box + UV |
+| Hantu | EMF + Temperature + Orbs |
+| Devil | Temperature + Writing + UV |
+| Mimic | EMF + Temperature + Spirit Box |
+| Twins | Spirit Box + Writing + Orbs |
+
+The ghost doesn't need exclusive ownership of any one instrument or clue.
+The **combination** is what uniquely identifies its type. On Easy, additional
+compatible evidence can be produced; these are still real signatures and
+can corroborate or distinguish a diagnosis.
+
+### Future ghost capacity
+
+Seven evidence families yield C(7,3) = **35** mathematical triples.
+Because only three current ghosts can produce D.O.T.S., preserving that
+restriction means at most C(6,3) = **20** non-D.O.T.S. signatures plus
+the three existing D.O.T.S. signatures = **23** ghost signatures.
+With 13 assigned now, up to **10 additional species** are combinatorially
+possible without new evidence families or expanding D.O.T.S. eligibility.
+This is an upper bound, not a guarantee that every available triple makes a
+well-balanced, physically detectable ghost.
 
 ## Rules and distinction
 

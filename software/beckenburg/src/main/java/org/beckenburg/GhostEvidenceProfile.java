@@ -46,15 +46,15 @@ public final class GhostEvidenceProfile {
         GhostIdentity.Type.DEVIL,GhostIdentity.Type.MIMIC);
     private static final EnumSet<GhostIdentity.Type> CHILD=types(
         GhostIdentity.Type.POSSESSIVE,GhostIdentity.Type.SPIRIT,
-        GhostIdentity.Type.MIMIC);
+        GhostIdentity.Type.MIMIC,GhostIdentity.Type.TWINS);
     private static final EnumSet<GhostIdentity.Type> SCRAWL=types(
         GhostIdentity.Type.POLTERGEIST,GhostIdentity.Type.DEMON,
         GhostIdentity.Type.WRAITH,GhostIdentity.Type.DEVIL,
-        GhostIdentity.Type.MIMIC);
+        GhostIdentity.Type.MIMIC,GhostIdentity.Type.BANSHEE);
     private static final EnumSet<GhostIdentity.Type> CIRCLE=types(
         GhostIdentity.Type.POSSESSIVE,GhostIdentity.Type.DEMON,
         GhostIdentity.Type.SHADE,GhostIdentity.Type.SPECTER,
-        GhostIdentity.Type.DEVIL,GhostIdentity.Type.WRAITH);
+        GhostIdentity.Type.DEVIL,GhostIdentity.Type.WRAITH,GhostIdentity.Type.YOKAI);
 
     /** Shared between the simulated heat/cold generator and manual ghost guide. */
     public static EvidenceSignals.Polarity thermal(GhostIdentity.Type type){
@@ -62,8 +62,9 @@ public final class GhostEvidenceProfile {
         return COLD.contains(type)?EvidenceSignals.Polarity.COLD:
                HOT.contains(type)?EvidenceSignals.Polarity.HOT:EvidenceSignals.Polarity.NONE;
     }
-    /** Writing is not universal: YOKAI, BANSHEE, HANTU and TWINS
-     * use other evidence producers. Multiple writers share each subtype.
+    /** Hantu remains non-writing; Yokai ritual circles, Banshee frantic
+     * scrawls, and Twins child drawings are now additional authored producers.
+     * Writing styles remain one family, not separate quota slots.
      */
     public static boolean writing(GhostIdentity.Type type,GhostWriting.Style style){
         Objects.requireNonNull(type);Objects.requireNonNull(style);

@@ -3,14 +3,15 @@ package org.beckenburg;
 import java.util.EnumSet;
 import java.util.Objects;
 
-/** Per-species, case-seeded allowance for actual hard-evidence producers.
- * Natural environmental values and non-exclusive behaviors remain visible.
- * Host never sends this private set to clients.
+/** Per-species evidence scarcity: Easy >=4, Medium unique 3, Death Wish 1.
+ * All permitted families have real ghost-specific producers. Ambient/weather
+ * readings and non-exclusive behavioral clues do not use quota slots.
+ * Never send the case's chosen private evidence set to clients.
  */
 public final class HardEvidenceQuota {
     public enum Level {
-        EASY("Easy — at least 3 hard evidence types",1.00),
-        MEDIUM("Medium — exactly 2 hard evidence types",1.50),
+        EASY("Easy — at least 4 hard evidence types",1.00),
+        MEDIUM("Medium — exactly 3 hard evidence types",1.50),
         DEATH_WISH("Death Wish — exactly 1 hard evidence type",2.40);
         private final String label;
         private final double multiplier;
@@ -19,6 +20,29 @@ public final class HardEvidenceQuota {
         @Override public String toString(){return label;}
     }
     public enum Family { EMF, TEMPERATURE, SPIRIT_BOX, WRITING, DOTS, UV, ORBS }
+    /**
+     * One distinct, guaranteed three-evidence combination per ghost. These
+     * combinations are the Medium contract's three actual hard-positive
+     * producers. Every combination is unique across the current 13 species;
+     * D.O.T.S. remains reserved for Wraith, Shade and Specter.
+     */
+    public static EnumSet<Family> signature(GhostIdentity.Type ghost){
+        return switch(Objects.requireNonNull(ghost)){
+            case POSSESSIVE  ->EnumSet.of(Family.EMF,Family.SPIRIT_BOX,Family.UV);
+            case POLTERGEIST ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.UV);
+            case DEMON       ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.WRITING);
+            case YOKAI       ->EnumSet.of(Family.EMF,Family.WRITING,Family.ORBS);
+            case BANSHEE     ->EnumSet.of(Family.TEMPERATURE,Family.SPIRIT_BOX,Family.WRITING);
+            case WRAITH      ->EnumSet.of(Family.EMF,Family.SPIRIT_BOX,Family.DOTS);
+            case SHADE       ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.DOTS);
+            case SPECTER     ->EnumSet.of(Family.EMF,Family.WRITING,Family.DOTS);
+            case SPIRIT      ->EnumSet.of(Family.TEMPERATURE,Family.SPIRIT_BOX,Family.UV);
+            case HANTU       ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.ORBS);
+            case DEVIL       ->EnumSet.of(Family.TEMPERATURE,Family.WRITING,Family.UV);
+            case MIMIC       ->EnumSet.of(Family.EMF,Family.TEMPERATURE,Family.SPIRIT_BOX);
+            case TWINS       ->EnumSet.of(Family.SPIRIT_BOX,Family.WRITING,Family.ORBS);
+        };
+    }
     private final Level level;
     private final EnumSet<Family> allowed;
     public HardEvidenceQuota(GhostIdentity.Type ghost,Level level,long seed){
@@ -35,18 +59,23 @@ public final class HardEvidenceQuota {
         GhostTraits.Profile physiology=GhostTraits.of(ghost);
         if(physiology.leavesUv())capable.add(Family.UV);
         if(physiology.sight()==GhostTraits.Sight.ORBS)capable.add(Family.ORBS);
-        // Every ghost must have at least three real producers available on Easy.
-        if(capable.size()<3)throw new IllegalStateException(
+        // Every ghost must have at least four real producers available on Easy.
+        if(capable.size()<4)throw new IllegalStateException(
             "Ghost "+ghost+" has only "+capable.size()+" hard evidence producers");
+        EnumSet<Family> three=signature(ghost);
+        if(three.size()!=3||!capable.containsAll(three))
+            throw new IllegalStateException("Ghost "+ghost+
+                " must genuinely produce its distinct three-evidence signature "+three);
         allowed=EnumSet.noneOf(Family.class);
         if(level==Level.EASY)allowed.addAll(capable);
+        else if(level==Level.MEDIUM)allowed.addAll(three);
         else {
-            Family[] options=capable.toArray(new Family[0]);
-            int start=Math.floorMod(Long.hashCode(seed^((long)ghost.ordinal()*0x9e3779b97f4a7c15L)),options.length);
-            int required=level==Level.MEDIUM?2:1;
-            for(int i=0;i<required;i++)allowed.add(options[(start+i)%options.length]);
+            Family[] possible=three.toArray(new Family[0]);
+            int index=Math.floorMod(Long.hashCode(seed^
+                ((long)ghost.ordinal()*0x9e3779b97f4a7c15L)),possible.length);
+            allowed.add(possible[index]);
         }
-        int minimum=level==Level.EASY?3:level==Level.MEDIUM?2:1;
+        int minimum=level==Level.EASY?4:level==Level.MEDIUM?3:1;
         if((level==Level.EASY&&allowed.size()<minimum)
                 ||(level!=Level.EASY&&allowed.size()!=minimum))
             throw new IllegalStateException("Hard-evidence quota violated");

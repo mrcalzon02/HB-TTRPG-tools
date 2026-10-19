@@ -15,7 +15,9 @@ public final class GhostEvidenceMatrixTest {
         for(var row:rows){
             ok(unique.add(row.type()),"one catalog row per ghost");
             var hard=GhostEvidenceMatrix.hardEvidenceFor(row.type());
-            ok(hard.size()>=3,"all species have 3+ compatible hard evidence producers");
+            ok(hard.size()>=4,"all species have 4+ compatible hard evidence producers");
+            ok(hard.containsAll(HardEvidenceQuota.signature(row.type())),
+                "published species row includes its uniquely identifying three-evidence signature");
             ok(hard.equals(new HardEvidenceQuota(row.type(),
                 HardEvidenceQuota.Level.EASY,0).families()),
                 "published hard-evidence row equals authoritative host selection");
@@ -73,7 +75,7 @@ public final class GhostEvidenceMatrixTest {
         }
         ok(high==5&&low==5&&suppressed==3&&dots==3
             &&freezing==4&&hot==4&&normal==5
-            &&writers==9&&uv==8&&orbs==3&&camera==2,
+            &&writers==12&&uv==8&&orbs==3&&camera==2,
             "source demographic counts remain stable");
         ok(GhostEvidenceMatrix.forGhost(GhostIdentity.Type.SHADE).emf()
             ==GhostFieldGuide.Clue.EMF_SUPPRESSION,"Shade provides zero field");

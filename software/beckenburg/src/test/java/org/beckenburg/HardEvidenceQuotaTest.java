@@ -4,13 +4,19 @@ package org.beckenburg;
 public final class HardEvidenceQuotaTest {
     static void ok(boolean value,String message){if(!value)throw new AssertionError(message);}
     public static void main(String[] args){
+        java.util.Set<java.util.Set<HardEvidenceQuota.Family>> seenSignatures=new java.util.HashSet<>();
         for(GhostIdentity.Type type:GhostIdentity.Type.values()){
             HardEvidenceQuota easy=new HardEvidenceQuota(type,HardEvidenceQuota.Level.EASY,17);
             HardEvidenceQuota medium=new HardEvidenceQuota(type,HardEvidenceQuota.Level.MEDIUM,17);
             HardEvidenceQuota death=new HardEvidenceQuota(type,HardEvidenceQuota.Level.DEATH_WISH,17);
-            ok(easy.allowance()>=3,"Easy guarantees at least three actual producers "+type);
-            ok(medium.allowance()==2,"medium exactly two permitted families "+type);
+            ok(easy.allowance()>=4,"Easy guarantees at least four actual producers "+type);
+            ok(medium.allowance()==3,"Medium guarantees exactly three permitted families "+type);
+            ok(medium.families().equals(HardEvidenceQuota.signature(type)),
+                "Medium must emit the canonical three hard-yes signals "+type);
+            ok(seenSignatures.add(HardEvidenceQuota.signature(type)),
+                "Two ghosts share the same three-evidence signature "+type);
             ok(easy.families().containsAll(medium.families()),"medium subset "+type);
+            ok(easy.allowance()>=medium.allowance(),"Easy must have at least Medium amount "+type);
             ok(death.allowance()==1,"Death Wish guarantees exactly one hard evidence family "+type);
             ok(easy.families().containsAll(death.families()),"Death Wish is species-compatible "+type);
             ok(easy.permits(HardEvidenceQuota.Family.EMF),
@@ -24,7 +30,16 @@ public final class HardEvidenceQuotaTest {
                 "Orb evidence must have a real visual producer "+type);
             ok(medium.families().equals(new HardEvidenceQuota(type,
                 HardEvidenceQuota.Level.MEDIUM,17).families()),"contract seed deterministic "+type);
+            ok(death.families().equals(new HardEvidenceQuota(type,
+                HardEvidenceQuota.Level.DEATH_WISH,17).families()),"Death Wish seed deterministic "+type);
         }
+        for(var ghost:new GhostIdentity.Type[]{
+                GhostIdentity.Type.YOKAI,GhostIdentity.Type.BANSHEE,GhostIdentity.Type.TWINS}){
+            ok(GhostEvidenceProfile.availableWriting(ghost).length>0,
+                "Newly required fourth evidence has a live authored writing producer: "+ghost);
+        }
+        ok(seenSignatures.size()==GhostIdentity.Type.values().length,
+            "Every ghost must have its own uniquely identifying three-evidence combination");
         int dotsSpecies=0,high=0,low=0,none=0;
         for(var species:GhostIdentity.Type.values()){
             if(GhostEvidenceProfile.dotsVisible(species))dotsSpecies++;
@@ -70,6 +85,6 @@ public final class HardEvidenceQuotaTest {
         ok(casefile.correctlyIdentified(),"host compares private archetype only for settlement/rite");
         ok(CustomContract.standard(3).evidenceLevel()==HardEvidenceQuota.Level.EASY,
             "older clients retain all-compatible evidence by default");
-        System.out.println("PASS Easy>=3 Medium=2 DeathWish=1 species evidence, weather integrity and hypothesis");
+        System.out.println("PASS Easy>=4 Medium=3 DeathWish=1 all species, weather integrity and hypothesis");
     }
 }
