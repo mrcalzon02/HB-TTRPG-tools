@@ -15,14 +15,25 @@ public final class GameSfx {
         if(cue==null||Boolean.getBoolean("beckenburg.audio.mute"))return;
         long now=System.nanoTime();
         synchronized(LAST){
-            long interval=cue==LanSound.Cue.STEP?310_000_000L:
+            boolean footstep=cue==LanSound.Cue.STEP||cue==LanSound.Cue.STEP_STONE
+                ||cue==LanSound.Cue.STEP_CARPET||cue==LanSound.Cue.STEP_WOOD;
+            long interval=footstep?310_000_000L:
                 cue==LanSound.Cue.UI_CLICK||cue==LanSound.Cue.SELECT?55_000_000L:75_000_000L;
-            Long last=LAST.get(cue);
+            Long last=footstep?LAST.get(LanSound.Cue.STEP):LAST.get(cue);
             if(last!=null&&now-last<interval)return;
-            LAST.put(cue,now);
+            LAST.put(footstep?LanSound.Cue.STEP:cue,now);
         }
         Player.AUDIO.play(new LanSound.CueEvent(cue,0,
-            cue==LanSound.Cue.STEP?48:cue==LanSound.Cue.UI_CLICK?35:70,0));
+            footstepVolume(cue),0));
+    }
+    private static int footstepVolume(LanSound.Cue cue){
+        return switch(cue){
+            case STEP,STEP_STONE->48;
+            case STEP_CARPET->29;
+            case STEP_WOOD->42;
+            case UI_CLICK->35;
+            default->70;
+        };
     }
     /** Safe to call twice: a styled button receives exactly one click action. */
     public static void button(AbstractButton button){
