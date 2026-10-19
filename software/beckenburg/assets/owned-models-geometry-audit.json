@@ -27,7 +27,7 @@
       "accepted_in_game": "code-and-content-committed; headset acceptance pending"
     },
     {
-      "path": "Models/basic bunker.glb",
+      "path": "Models/working2/basic bunker.glb",
       "drive_id": "1wQW2HV7YcF6vpyH3ITuDxDk64r0lStdm",
       "triangles": 20470,
       "vertices": 13689,
@@ -61,7 +61,7 @@
       "accepted_in_game": "not imported"
     },
     {
-      "path": "Models/tree.glb",
+      "path": "Models/working2/tree.glb",
       "drive_id": "1ntmxXb_HIpyWryiEpffwyp-5gheO0xvv",
       "triangles": 35756,
       "vertices": 29143,
