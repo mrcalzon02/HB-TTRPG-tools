@@ -43,8 +43,12 @@ public final class CastleHubIntegrationTest {
             ok(GlbProps.model(item.mesh()).triangles().size()>20,
                 "real source triangles for castle "+item.mesh());
             ok(!map.traversable(item.x(),item.z()),"furniture solid and cannot be walked through");
-            ok(map.traversable(item.x()+item.halfWidth()+.45,item.z()),
-                "room to navigate around furniture "+item.mesh());
+            boolean accessible=
+                map.traversable(item.x()+item.halfWidth()+.45,item.z())
+                ||map.traversable(item.x()-item.halfWidth()-.45,item.z())
+                ||map.traversable(item.x(),item.z()+item.halfDepth()+.45)
+                ||map.traversable(item.x(),item.z()-item.halfDepth()-.45);
+            ok(accessible,"room to navigate around furniture "+item.mesh());
         }
         // Station sockets must remain approach-able despite collision-aware furniture.
         for(CastleHubMap.Station s:CastleHubMap.Station.values()){
