@@ -19,6 +19,9 @@ public final class LanSound {
         EQUIPMENT(5, 70, "ELECTRONIC DEVICE"),
         RITUAL(9, 93, "RITUAL ACTIVITY"),
         STEP(3, 42, "INVESTIGATOR FOOTSTEPS"),
+        STEP_STONE(3, 46, "STONE FOOTSTEPS"),
+        STEP_CARPET(2, 35, "CARPET FOOTSTEPS"),
+        STEP_WOOD(3, 42, "TIMBER FOOTSTEPS"),
         SWITCH(4, 48, "LIGHT SWITCH CLICK"),
         BREAKER(6, 79, "POWER BREAKER THROWS"),
         VAN_DOOR(6, 76, "CARGO DOOR MOTOR"),
@@ -56,7 +59,8 @@ public final class LanSound {
         Cue(int budget, int gain, String caption) { acousticBudget=budget;baseGain=gain;this.caption=caption; }
         public String caption(){return caption;}
         public Tier tier(){return switch(this){
-            case FOOTFALL,DOOR,EQUIPMENT,RITUAL,STEP,SWITCH,BREAKER,VAN_DOOR,
+            case FOOTFALL,DOOR,EQUIPMENT,RITUAL,STEP,STEP_STONE,STEP_CARPET,STEP_WOOD,
+                    SWITCH,BREAKER,VAN_DOOR,
                     UI_CLICK,UI_BACK,PICKUP,SELECT,DEVICE_ON,DEVICE_OFF,SCANNER,
                     CAMERA,BOOK,POTION,DOTS_MOTOR,DOTS_STOP,SPARK,
                     INCENSE_BURN,FIRELIGHT_IGNITE,FIRELIGHT_OUT,DROP,ELECTRIC_HUM,MONITOR_HUM->Tier.AMBIENT;
