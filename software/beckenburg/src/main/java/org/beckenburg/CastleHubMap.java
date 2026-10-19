@@ -55,6 +55,28 @@ public final class CastleHubMap {
     public boolean outside(double x,double z){
         return z>=12&&x>=10&&x<=20;
     }
+    /** One source of truth for displayed flooring and physical footfall Foley. */
+    public int floorMaterial(double x,double z){
+        if(!Double.isFinite(x)||!Double.isFinite(z)||
+                solid((int)Math.floor(x),(int)Math.floor(z)))
+            throw new IllegalArgumentException("floor location must be navigable");
+        if(outside(x,z))return MaterialAtlas.STONE;
+        // Ground-floor halls are flagstone, furnished salons are carpeted and
+        // records/working offices have genuine timber floors.
+        if(z<11)return x<10?MaterialAtlas.PARQUET:
+                x<19?MaterialAtlas.CARPET:MaterialAtlas.PARQUET;
+        if(x<10)return z<24?MaterialAtlas.STONE:MaterialAtlas.CARPET;
+        if(x>=29)return z<18?MaterialAtlas.PARQUET:MaterialAtlas.STONE;
+        return x>=21?MaterialAtlas.PARQUET:MaterialAtlas.STONE;
+    }
+    public LanSound.Cue footstep(double x,double z){
+        return switch(floorMaterial(x,z)){
+            case MaterialAtlas.CARPET->LanSound.Cue.STEP_CARPET;
+            case MaterialAtlas.PARQUET,MaterialAtlas.AGED_WOOD->LanSound.Cue.STEP_WOOD;
+            default->LanSound.Cue.STEP_STONE;
+        };
+    }
+
     public boolean valid(){
         java.util.HashSet<Integer> seen=new java.util.HashSet<>();
         java.util.ArrayDeque<int[]> queue=new java.util.ArrayDeque<>();
