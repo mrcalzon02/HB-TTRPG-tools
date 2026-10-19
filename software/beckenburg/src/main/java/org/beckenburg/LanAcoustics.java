@@ -17,21 +17,9 @@ public final class LanAcoustics {
         if (map == null || from < 0 || to < 0 || from >= HouseMap.EXTRACTION_ROOM
                 || to >= HouseMap.EXTRACTION_ROOM || !map.ghostExits(from).contains(to))
             return Integer.MAX_VALUE;
-        int aRow = from / HouseMap.COLS, bRow = to / HouseMap.COLS;
-        int x, z;
-        if (aRow == bRow) { // East/west partition at x=8 or 16.
-            x = Math.max(from % HouseMap.COLS, to % HouseMap.COLS) * 8;
-            z = aRow * 6 + 3;
-        } else { // North/south partition at z=6,12,18,24.
-            x = (from % HouseMap.COLS) * 8 + 4;
-            z = Math.max(aRow, bRow) * 6;
-        }
-        char threshold = map.tile(x, z);
-        int cost = switch (threshold) {
-            case 'D' -> map.doorOpen(x, z) ? 1 : 3;
-            case 'o', '.' -> 1; // An actual open passage, especially outside.
-            default -> 5; // A solid partition can transmit muffled sound, never an open-door bonus.
-        };
+        int[] threshold=map.doorBetweenRooms(from,to);
+        int cost=threshold==null?1:
+            map.doorOpen(threshold[0],threshold[1])?1:3;
         if ((from >= 9 && from <= 11) || (to >= 9 && to <= 11)) cost++;
         if (map.outside(from) != map.outside(to)) cost++; // wind / environmental masking
         return cost;

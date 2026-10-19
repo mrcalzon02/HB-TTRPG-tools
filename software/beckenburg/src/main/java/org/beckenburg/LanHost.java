@@ -641,7 +641,7 @@ public final class LanHost implements AutoCloseable {
                     acceptHunterSequence(peer,seq);
                     ensureActiveHunter(peer);
                     int at=hunterRooms[peer.slot];
-                    if(target==at||Math.abs(target/HouseMap.COLS-at/HouseMap.COLS)+Math.abs(target%HouseMap.COLS-at%HouseMap.COLS)!=1)
+                    if(target==at||!map.adjacentRooms(at).contains(target))
                         throw new IllegalArgumentException("room not adjacent");
                     if(frenzy.sealed()&&target==HouseMap.EXTRACTION_ROOM
                             &&at!=HouseMap.EXTRACTION_ROOM){

@@ -9,7 +9,9 @@ public final class GrandSiteGeometryTest {
             "existing residential investigation is not rescaled");
         for(HouseMap.Site site:new HouseMap.Site[]{HouseMap.Site.FARMHOUSE,HouseMap.Site.SCHOOL}){
             HouseMap m=new HouseMap(site);
-            ok(m.width()==37&&m.height()==46,"expanded real map geometry "+site);
+            ok(m.width()==(site==HouseMap.Site.FARMHOUSE?56:70)
+                    &&m.height()==(site==HouseMap.Site.FARMHOUSE?74:84),
+                "actual articulated map bounds "+site);
             ok(m.valid()&&RitualSites.valid(m),"navigable site and reachable rituals");
             ok(m.ceilingHeight()>=3.6,"upper room volume is genuinely taller");
             ok(m.roomAt(m.van().placement().x(),m.van().placement().z())
@@ -27,7 +29,8 @@ public final class GrandSiteGeometryTest {
             int doors=0;
             for(int z=0;z<m.height();z++)for(int x=0;x<m.width();x++)
                 if(m.tile(x,z)=='D')doors++;
-            ok(doors==20,"all twenty doors remain spatially authored");
+            ok(doors==(site==HouseMap.Site.FARMHOUSE?18:14),
+                "architectural doors correspond to real room adjacencies");
             for(int r=0;r<HouseMap.INDOOR_ROOMS;r++)
                 for(int to:m.ghostExits(r))
                     if(to<HouseMap.ROOM_COUNT)

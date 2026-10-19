@@ -12,7 +12,7 @@ public final class HouseMap {
     public static final int COLS=3, ROWS=5, INDOOR_ROOMS=12, ROOM_COUNT=15;
     public static final int WIDTH=25, HEIGHT=31, EXTRACTION_ROOM=14;
     /** The compact house is unchanged; grand sites use larger physical floor plans. */
-    public static final int GRAND_WIDTH=37, GRAND_HEIGHT=46;
+    public static final int GRAND_WIDTH=70, GRAND_HEIGHT=84;
     public enum Site {
         HOUSE("Residential House"),
         FARMHOUSE("Abandoned Farmhouse"),
@@ -22,7 +22,9 @@ public final class HouseMap {
         @Override public String toString(){return label;}
     }
     private final Site site;
+    private final ArchitecturalPlans.Plan architecture;
     public Site site(){return site;}
+    public boolean authoredArchitecture(){return architecture!=null;}
     private static final String[] NAMES={
         "BATHROOM", "MASTER BEDROOM", "NURSERY",
         "LIVING ROOM", "MAIN HALL", "KITCHEN",
@@ -58,9 +60,11 @@ public final class HouseMap {
     public HouseMap(){this(Site.HOUSE);}
     public HouseMap(Site variant){
         site=java.util.Objects.requireNonNull(variant);
+        architecture=site==Site.HOUSE?null:ArchitecturalPlans.build(site);
         van=new VanStaging(new VanStaging.Placement(
             site==Site.HOUSE?20.5:centerX(EXTRACTION_ROOM),
             site==Site.HOUSE?27.5:centerZ(EXTRACTION_ROOM),-Math.PI/2));
+        if(architecture!=null)return;
         for(int z=0;z<height();z++)for(int x=0;x<width();x++){
             // Outdoor cells have no internal partitions; outer walls stand in for
             // hedge/fence at this early geometry stage, not an interior room.
@@ -127,12 +131,13 @@ public final class HouseMap {
         if(Math.floorMod(room*37+17,100)>=density)return null;
         return new VanStaging.Position(centerX(room)+.65,centerZ(room)+.70);
     }
-    public int width(){return site==Site.HOUSE?WIDTH:GRAND_WIDTH;}
-    public int height(){return site==Site.HOUSE?HEIGHT:GRAND_HEIGHT;}
+    public int width(){return architecture==null?WIDTH:architecture.width;}
+    public int height(){return architecture==null?HEIGHT:architecture.height;}
     public int roomCount(){return ROOM_COUNT;}
     public int interiorRoomCount(){return INDOOR_ROOMS;}
     public boolean outside(int room){return room>=INDOOR_ROOMS && room<ROOM_COUNT;}
     public char tile(int x,int z){
+        if(architecture!=null)return architecture.tile(x,z);
         return x<0||z<0||x>=width()||z>=height()?'#':tiles[z][x];
     }
     private int doorId(int x,int z){return z*width()+x;}
@@ -183,6 +188,11 @@ public final class HouseMap {
     }
     /** A non-phasing ghost physically opens an authored door between adjacent rooms. */
     public boolean openDoorBetweenRooms(int from,int to){
+        if(architecture!=null){
+            checkRoom(from);checkRoom(to);
+            ArchitecturalPlans.Portal p=architecture.portal(from,to);
+            return p!=null&&openDoors.add(doorId(p.x(),p.z()));
+        }
         if(from<0||to<0||from>=ROOM_COUNT||to>=ROOM_COUNT
             ||Math.abs(from/COLS-to/COLS)+Math.abs(from%COLS-to%COLS)!=1)
             throw new IllegalArgumentException("adjacent room IDs required");
@@ -200,6 +210,7 @@ public final class HouseMap {
     }
     public int roomAt(double x,double z){
         if(!Double.isFinite(x)||!Double.isFinite(z))return -1;
+        if(architecture!=null)return architecture.roomAt(x,z);
         int xx=(int)Math.floor(x),zz=(int)Math.floor(z);
         if(xx<=0||zz<=0||xx>=width()-1||zz>=height()-1)return -1;
         int col=xx<cellWidth()?0:xx<cellWidth()*2?1:2;
@@ -217,35 +228,69 @@ public final class HouseMap {
     }
     public String roomName(double x,double z){return roomName(roomAt(x,z));}
     public double centerX(int room){checkRoom(room);
-        return cellWidth()/2.0+.5+(room%COLS)*cellWidth();
+        return architecture==null?cellWidth()/2.0+.5+(room%COLS)*cellWidth():
+            architecture.cx[room];
     }
     public double centerZ(int room){checkRoom(room);
-        return cellHeight()/2.0+.5+(room/COLS)*cellHeight();
+        return architecture==null?cellHeight()/2.0+.5+(room/COLS)*cellHeight():
+            architecture.cz[room];
     }
     private static void checkRoom(int room){if(room<0||room>=ROOM_COUNT)throw new IllegalArgumentException("invalid room "+room);}
-    /** Potential spectral adjacency; the staging van is deliberately a hunter-only safe zone. */
-    public List<Integer> ghostExits(int room){
+    /** Real physical room graph: no fabricated 3x5 grid adjacency. */
+    public List<Integer> adjacentRooms(int room){
         checkRoom(room);
-        if(room==EXTRACTION_ROOM)return List.of();
+        if(architecture!=null)return architecture.exits(room);
         int row=room/COLS,col=room%COLS;
         List<Integer> out=new ArrayList<>(4);
         if(row>0)out.add(room-COLS);
-        if(row<ROWS-1&&room+COLS!=EXTRACTION_ROOM)out.add(room+COLS);
+        if(row<ROWS-1)out.add(room+COLS);
         if(col>0)out.add(room-1);
-        if(col<COLS-1&&room+1!=EXTRACTION_ROOM)out.add(room+1);
+        if(col<COLS-1)out.add(room+1);
         return List.copyOf(out);
+    }
+    public List<Integer> ghostExits(int room){
+        checkRoom(room);
+        if(room==EXTRACTION_ROOM)return List.of();
+        return adjacentRooms(room).stream().filter(r->r!=EXTRACTION_ROOM).toList();
+    }
+    /** Physical doorway; null means a genuinely open, unobstructed outdoor join. */
+    public int[] doorBetweenRooms(int from,int to){
+        checkRoom(from);checkRoom(to);
+        if(architecture!=null){
+            ArchitecturalPlans.Portal p=architecture.portal(from,to);
+            return p==null?null:new int[]{p.x(),p.z()};
+        }
+        if(!adjacentRooms(from).contains(to))return null;
+        int row=Math.min(from/COLS,to/COLS),col=Math.min(from%COLS,to%COLS);
+        if(from/COLS==to/COLS){
+            int x=(col+1)*cellWidth();
+            for(int z=row*cellHeight()+1;z<(row+1)*cellHeight();z++)
+                if(tile(x,z)=='D')return new int[]{x,z};
+        }else{
+            int z=(row+1)*cellHeight();
+            for(int x=col*cellWidth()+1;x<(col+1)*cellWidth();x++)
+                if(tile(x,z)=='D')return new int[]{x,z};
+        }
+        return null;
+    }
+    public boolean doorwayAlongX(int x,int z){
+        return architecture==null?x==cellWidth()||x==2*cellWidth():
+            architecture.doorwayAlongX(x,z);
     }
     /** Validate door topology and full connected hunter navigation with all doors opened. */
     public boolean valid(){
         if(NAMES.length!=ROOM_COUNT)return false;
         int count=0;
-        for(int z=0;z<height();z++)for(int x=0;x<width();x++)if(tiles[z][x]=='D'){
+        for(int z=0;z<height();z++)for(int x=0;x<width();x++)if(tile(x,z)=='D'){
             count++;
             boolean ns=tile(x,z-1)!='#'&&tile(x,z+1)!='#';
             boolean ew=tile(x-1,z)!='#'&&tile(x+1,z)!='#';
             if(ns==ew)return false; // A proper threshold has just one usable axis.
         }
-        if(count!=20)return false;
+        if(architecture!=null){
+            if(count!=architecture.portals.size()||count<12||!architecture.connected())
+                return false;
+        }else if(count!=20)return false;
         Set<Integer> saved=new HashSet<>(openDoors);
         try{
             for(int z=0;z<height();z++)for(int x=0;x<width();x++)

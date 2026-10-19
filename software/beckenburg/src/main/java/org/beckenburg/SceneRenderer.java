@@ -458,7 +458,7 @@ public final class SceneRenderer {
                 wall,xx+1,0,xx,0,xx,2.7,xx+1,2.7,0xebebeb);
             if(map.tile(xx,zz)=='D'){
                 // Door geometry must occupy the opening, not sit behind wallpaper faces.
-                boolean eastWest=xx==map.cellWidth()||xx==map.cellWidth()*2;
+                boolean eastWest=map.doorwayAlongX(xx,zz);
                 if(eastWest){
                     box(out,xx+.18,0,zz+.02,.64,2.45,.10,0x8f805e);
                     box(out,xx+.18,0,zz+.88,.64,2.45,.10,0x8f805e);

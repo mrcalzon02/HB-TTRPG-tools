@@ -27,6 +27,8 @@ public final class RoomLighting {
     public static Switch location(HouseMap map,int room){
         if(map==null)throw new IllegalArgumentException("map required");
         valid(room);
+        if(map.authoredArchitecture())
+            return new Switch(room,map.centerX(room)-1.35,map.centerZ(room)-1.20);
         return new Switch(room,room%HouseMap.COLS*map.cellWidth()+1.22,
             room/HouseMap.COLS*map.cellHeight()+2.70);
     }

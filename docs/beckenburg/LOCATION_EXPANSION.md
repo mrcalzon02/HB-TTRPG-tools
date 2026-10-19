@@ -8,18 +8,28 @@ and the LAN lobby: FARMHOUSE (Abandoned Farmhouse) and SCHOOL (Ravenshade School
 
 Both sites have twelve named indoor zones and three exterior/staging zones. They have
 different physical door sockets and corner-room subdivisions, environment-material
-assignments, furnishing compositions, and themed ritual markers. The farmhouse and
-school now use a 37 × 46 physical footprint, compared with 25 × 31 for the original
-house, and site-specific 3.6 / 4.6 high ceilings respectively. Every site uses the
+assignments, furnishing compositions, and themed ritual markers. The farmhouse now occupies a 56 × 74 footprint with eighteen physically authored
+doorways. Ravenshade School uses a 70 × 84 footprint with fourteen doorways.
+Both have bays, structural returns, a true circulation spine, separate wings,
+and functionally distinct service rooms. The original house remains 25 × 31,
+with site-specific 3.6 / 4.6 high ceilings for the two larger properties. Every site uses the
 same host-side door collision, ghost traversal constraints, six-hunter van staging,
 room lighting, weather, equipment, event and ritual simulation.
 
-This is a functional **first authored-location pass**, not a claim that the farmhouse
-or school already has a unique freeform foundation, multiple floors, a roof mesh, or
-complete bespoke assets. Their larger 37 × 46 footprints preserve the same 15-zone
-schema but have separate physical coordinates and staging areas, synchronized
-through the site selection protocol. A future map-schema upgrade should add
-independent footprints, floors, windows and terrain without changing the original house.
+This is now the **first physically authored architectural ground-floor pass**.
+`ArchitecturalPlans` constructs explicit walls, asymmetrical bays, room-owned
+walkable geometry, a connected hallway, a foyer/mudroom, service wings, real
+thresholds, and exterior staging. These are not a 3-by-5 arrangement of boxes:
+`HouseMap` uses the authored room map to resolve positions, collisions, and
+room-to-room traversal, and host/client door replication uses the exact same
+floor tiles as the renderer. `LanAcoustics` consults the same door locations
+for true closed-door attenuation.
+
+The three-floor architectural reference sheets are **design targets**. The upper
+floors, cellars, and stair-linked vertical player/ghost state have **not** yet been
+implemented. Previously named cellar/boiler rooms remain on the playable ground
+plane until vertical room IDs, stairs and authority are integrated. Neither the
+illustrations nor their floor labels are evidence that vertical navigation ships.
 
 ## Imported asset provenance and roles
 
@@ -65,13 +75,15 @@ of free equipment in investigation maps.
 - `SceneRenderer.furniture` instantiates authored runtime meshes by room; material
   and ritual rendering follow selected-site context.
 - `InvestigationSitesTest` checks map topology, ritual sockets and source mesh
-  geometry; `LanSiteSelectionIntegrationTest` checks real TCP site selection.
+  geometry; `ArchitecturalPlansTest` checks authored non-grid circulation, doors,
+  acoustics, collision and safe extraction; `LanSiteSelectionIntegrationTest`
+  checks genuine TCP map selection and reconnect state.
 - Both standard platform build scripts must execute these tests. A real Java 17
   full build and graphical walk-through are still required before release acceptance.
 
 ## Next authoring pass
 
-Move to per-location room footprints, 2+ floors where appropriate, exterior forest
-terrain, structural window modules, integrated colliders for furniture, level-specific
-ambience, acoustics and spawn locations, and curated user-owned GLB model ingestion
-after triangle-count, transform, scale, and licensing validation.
+Build true upper and basement floors with a multi-level room-address schema,
+stair portals, per-floor ghost navigation, visibility, team and camera telemetry;
+then construct roofs, usable windows, exterior terrain, and area-specific acoustics.
+Keep all equipment purchased and deployed; never place map-loot devices.
