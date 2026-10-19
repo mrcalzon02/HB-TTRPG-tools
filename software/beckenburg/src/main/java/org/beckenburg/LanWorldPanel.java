@@ -592,6 +592,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             if(heading!=lastTurn){client.turn(heading);lastTurn=heading;}
         }catch(IOException e){feedback="LAN disconnected: "+e.getMessage();close();}
         renderer.roomLightTick=tick;
+        renderer.setLampHardware(
+            equipmentTier.getOrDefault("FLASHLIGHT",EquipmentTiers.Tier.I),
+            firelightOn&&!flashlightOn);
         renderer.drawNetwork(map,new ArrayList<>(peers.values()),apparition,tick*.1,List.copyOf(counterMarks));
         // Van receiver renders the *same live world* from the physical camera's
         // position. No canned image, inferred spectral object or proof overlay.
