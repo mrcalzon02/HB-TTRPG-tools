@@ -1,6 +1,6 @@
 # Beckenburg — complete three-tier equipment progression matrix
 
-**Status:** authoritative source design, created 2026-10-18 from the 42 indexed source equipment types and the new `EquipmentTiers.java` registry. Each tool has Tier I, II and III = **126 specified upgrade stages**. The tier registry provides planning data for all 42 items; **six devices currently have working source-level LAN inventory and measurement/projector paths across Tiers I–III**, with purchased owner GLBs used by the EMF reader, spirit box, tablet thermometer, writing book and D.O.T.S. source. The remaining **36 tools are not yet purchasable as functioning instruments**; new playable source paths still require clean Java and multiplayer acceptance. The existing host-shop medicine prices are already implemented. The other prices below are proposed balancing amounts, not live purchases.
+**Status:** authoritative source design, created 2026-10-18 from the 42 indexed source equipment types and the new `EquipmentTiers.java` registry. Each tool has Tier I, II and III = **126 specified upgrade stages**. The tier registry provides planning data for all 42 items; **thirteen devices now have LAN equipment actions (including the cameras, switches and incense), with tier capabilities being implemented and tested**, with purchased owner GLBs used by the EMF reader, spirit box, tablet thermometer, writing book and D.O.T.S. source. The remaining **29 tools still lack functional LAN equipment backends**; new playable source paths still require clean Java and multiplayer acceptance. The existing host-shop medicine prices are already implemented. The other prices below are proposed balancing amounts, not live purchases.
 
 **Four upgrade goals:** a larger or more informative physical readout; quicker response to **actual** ghost events; better field reach or coverage; and higher capacity/energy efficiency. Higher tiers do **not** increase the strength of a ghost event, fake an instrument anomaly, validate an evidence checkbox or reveal species. A Tier III EMF meter might sample faster, but it still reads ordinary **2–7** or true high **8–10** / suppression **0** using the same host value as a Tier I meter. Better thermometers sample air sooner and show trends; they do not force freezing or extreme heat into a ghost that cannot cause it.
 
@@ -23,12 +23,12 @@ Zero/unlimited fields stay zero/unlimited. Protective gear and consumables incre
 |---|---|---|---|
 | **Pattern projector** | Fixed sparse dot field | Wider fan and faster refresh | Full-room adjustable structured-light volume |
 | **EMF reader (0–10; zero for suppression)** | Small segmented 0–10 scale | Larger numbered scale; faster polling | Backlit large digits and event-history strip |
-| **Flashlight** | Narrow beam with small switch | Adjustable focused beam and stronger LED | Wide/focused modes and long-life battery |
+| **Flashlight** | Narrow 6m beam; 280s charge | Brighter 9m beam; 420s charge | Broad 12m beam; 630s charge |
 | **Ghost writing book** | Small paper book; one writable surface | Wider pages and clearer ink visibility | Oversized high-contrast pages and angleable stand |
 | **Spirit box** | Simple radio dial | Larger response display, quieter speaker | Broadband receiver, waveform and directional headset |
 | **Thermometer (°C/°F)** | Slow handheld analog temperature | Responsive digital probe with unit switch | Large backlit readout, temperature trend history |
 | **UV light** | Narrow UV inspection cone | Stronger UV beam and broader coverage | Wide UV flood with visible trace contrast |
-| **Video camera / remote feed** | Low-resolution single lens | Wider optics, recording monitor | Wide-angle night imaging with larger clear display |
+| **Video camera / remote feed** | 65° view, 155px CRT | 93° view, 210px display | 120° view, 280px night video |
 
 ## Optional field equipment (13)
 
@@ -41,7 +41,7 @@ Zero/unlimited fields stay zero/unlimited. Protective gear and consumables incre
 | **Incense / smoke dispersal** | Brief localized smoke | Longer burn and larger protective cloud | Adjustable dispersal with clear depletion indicator |
 | **Motion sensor** | Single narrow detection beam | Wider sweep and visible indicator | Multi-zone detector with positional log |
 | **Parabolic microphone** | Single directional audio pickup | Better aiming cone and gain dial | Large spectrogram and precise directional controls |
-| **Photo camera** | Small viewfinder and six shots | Wider viewfinder and longer film supply | Large framed preview and rapid capture |
+| **Photo camera** | One-shot Polaroid; 160×160 square image | Six-shot; 320×200 image | Twelve-shot; 640×400 bicubic upscaled image |
 | **Salt** | Three small piles | More salt per pouch and larger floor coverage | Greater capacity and high-visibility footprint contrast |
 | **Sanity treatment** | Basic sanity restoration (18) | Improved sanity restoration (36) | Advanced sanity restoration (65) |
 | **Sound recorder** | Short mono audio clips | Longer recording and stereo peaks | Multi-channel waveform history and export |
@@ -90,7 +90,7 @@ Measurements below are **planned hardware capabilities** derived from the source
 | Spirit box | 2.1m / 1.2s / — / 3m | 2.8m / 0.9s / — / 5m | 3.7m / 0.6s / — / 7m |
 | UV light | 2.8m / — / — / 3m | 3.8m / — / — / 5m | 4.9m / — / — / 8m |
 | Ghost writing book | 1.2m / — / 1 / — | 1.6m / — / 2 / — | 2.1m / — / 2 / — |
-| Photo camera | 4.5m / — / 6 / 3m | 6.1m / — / 9 / 4m | 7.9m / — / 13 / 6m |
+| Photo camera | 4.5m / — / 1 / — | 6.1m / — / 6 / — | 7.9m / — / 12 / — |
 | Sound sensor | 5.0m / 1.2s / 1 / 4m | 6.8m / 0.9s / 2 / 6m | 8.8m / 0.6s / 2 / 9m |
 | Salt | 1.4m / — / 3 / — | 1.9m / — / 5 / — | 2.5m / — / 7 / — |
 | Motion sensor | 4.0m / 0.8s / 1 / 4m | 5.4m / 0.6s / 2 / 6m | 7.0m / 0.4s / 2 / 8m |
@@ -104,7 +104,7 @@ Measurements below are **planned hardware capabilities** derived from the source
 
 ## Upgrade economy and implementation gates
 
-The current four-slot solo loadout and three-instrument LAN scan selector do **not** yet equip independent device tiers. The production implementation needs a tier-owned inventory entry, validated van purchases, player-carry serialization, real sensor props with tier-appropriate model/screen/display, cooldowns, consumable stock, replicated host measurements and reconnect. Add tier pricing/unlocks at the authoritative van rack, not a client-only selector. Use the existing medicine shop transaction and four equipment slots as integration reference without pretending all gear is in that system already.
+The LAN hunter now has a four-slot tiered inventory and van-rack reloading/charging; the standalone solo mode has not yet been migrated to this system. The production implementation needs a tier-owned inventory entry, validated van purchases, player-carry serialization, real sensor props with tier-appropriate model/screen/display, cooldowns, consumable stock, replicated host measurements and reconnect. Add tier pricing/unlocks at the authoritative van rack, not a client-only selector. Use the existing medicine shop transaction and four equipment slots as integration reference without pretending all gear is in that system already.
 
 A standard instrument event should follow **real ghost action → real room/surface event → tier-limited detection reach/refresher → device display reading → automatic raw logbook entry → optional manually checked journal clue**. Lower tiers may have shorter practical range and slower response; **they must never produce bogus haunted-room numbers**. Higher tiers can show charts, bearings or subtypes, but never identify the ghost automatically or force the player's checkbox selection.
 
