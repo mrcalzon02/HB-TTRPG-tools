@@ -11,7 +11,7 @@ import java.util.Set;
 public final class InvestigationGame {
     private final JFrame window=new JFrame("The Beckenburg Project — Expedition Alpha");
     private final JPanel cards=new JPanel(new CardLayout());
-    private final JPanel menu=new JPanel(new BorderLayout());
+    private final JPanel menu=PsxHorrorUi.surface(new BorderLayout());
     private final java.util.prefs.Preferences displayPrefs=java.util.prefs.Preferences.userNodeForPackage(InvestigationGame.class);
     private final ProfileStore profile=new ProfileStore(ProfileStore.defaultPath());
     private BeckenburgInstallIdentity.Identity installation;
@@ -136,7 +136,7 @@ public final class InvestigationGame {
         utilityRow.setMaximumSize(new Dimension(390,37));utilityRow.setAlignmentX(Component.LEFT_ALIGNMENT);
         navigation.add(Box.createVerticalStrut(7));navigation.add(utilityRow);
 
-        JPanel preparation=new JPanel(new BorderLayout(10,16));
+        JPanel preparation=PsxHorrorUi.panel(new BorderLayout(10,16));
         preparation.setBackground(displayPrefs.getBoolean("highContrast",false)?new Color(0,0,0):new Color(29,35,43));
         preparation.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(100,91,71),1),
@@ -228,7 +228,7 @@ public final class InvestigationGame {
         JOptionPane.showMessageDialog(window,new JScrollPane(help),"Field controls",JOptionPane.INFORMATION_MESSAGE);
     }
     private JButton button(String s){
-        JButton b=new JButton(s);
+        JButton b=PsxHorrorUi.button(s);
         b.setFont(new Font(Font.SANS_SERIF,Font.BOLD,menuFont(13)));
         b.setForeground(ink());b.setBackground(new Color(48,58,66));
         b.setFocusPainted(true);
