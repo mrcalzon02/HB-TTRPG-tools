@@ -438,7 +438,8 @@ public final class LanHost implements AutoCloseable {
                     notifyAllPeers("INFO|mission started with "+(seats[GHOST_SEAT]==null?"AI":"human")+" ghost");
                     notifyAllPeers(weather.state().packet());
                     notifyHunters(rewards.objectivesPacket());
-                    notifyHunters("EVIDENCELEVEL|"+contract.evidenceLevel().name());
+                    notifyHunters("EVIDENCELEVEL|"+contract.evidenceLevel().name()+
+                        "|"+mission.guaranteedEvidenceCount());
                     if(seats[GHOST_SEAT]!=null)sendGhostPrompt();
                     if(mission.identificationRequired())notifyHunters("SITES|9|6|10");
                     broadcastState();broadcastProgress();broadcastWorld();
@@ -451,7 +452,8 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,world.staminaFrame(peer.slot,tick));
                     reply(peer,weather.state().packet());
                     reply(peer,rewards.objectivesPacket());
-                    reply(peer,"EVIDENCELEVEL|"+contract.evidenceLevel().name());
+                    reply(peer,"EVIDENCELEVEL|"+contract.evidenceLevel().name()+
+                        "|"+mission.guaranteedEvidenceCount());
                     // Replay real investigator nicknames to newly opened hunter windows.
                     // Ghost seats cannot enter VIEW3D and are never name recipients.
                     for(int i=0;i<HUNTERS;i++)
@@ -811,7 +813,8 @@ public final class LanHost implements AutoCloseable {
                         }
                         case "UV_LIGHT" -> {
                             int persistence=90+gear.owned(id).ordinal()*35;
-                            reading=counters.recentUv(room,tick,persistence)
+                            reading=mission.allowsEvidence(HardEvidenceQuota.Family.UV)
+                                &&counters.recentUv(room,tick,persistence)
                                 ?"UV light / genuine surface trace":"UV light / no visible trace";
                         }
                         case "FLASHLIGHT","HEAD_GEAR","FIRELIGHT" -> {
@@ -988,7 +991,8 @@ public final class LanHost implements AutoCloseable {
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
                     ensureActiveHunter(peer);
                     int room=world.body(peer.slot).room();
-                    boolean trace=counters.recentUv(room,tick);
+                    boolean trace=mission.allowsEvidence(HardEvidenceQuota.Family.UV)
+                        &&counters.recentUv(room,tick);
                     reply(peer,"ACCEPT|UVSCAN|"+(trace?"FRESH SURFACE TRACE":"NO RECENT TRACE"));
                     String uvNote=casefile.recordDevice(tick,peer.slot,room,"UV_LAMP",
                         LanEvidenceJournal.Finding.OBSERVED,
@@ -1882,8 +1886,10 @@ public final class LanHost implements AutoCloseable {
             Peer hunter=seats[i];
             if(hunter!=null && hunter.worldMode) {
                 GhostTraits.Sight form=GhostTraits.of(ghostType).sight();
+                boolean orbAllowed=mission.allowsEvidence(HardEvidenceQuota.Family.ORBS);
                 String sight=LanApparition.frame(map,world.body(i),true,pose,
-                    ghost.manifested()&&form!=GhostTraits.Sight.CAMERA_ONLY,tick);
+                    ghost.manifested()&&form!=GhostTraits.Sight.CAMERA_ONLY
+                        &&(form!=GhostTraits.Sight.ORBS||orbAllowed),tick);
                 if(sight.startsWith("APPARITION|VISIBLE|"))
                     reply(hunter,"FORM|"+(form==GhostTraits.Sight.ORBS?"ORBS":"FIGURE"));
                 reply(hunter,sight);

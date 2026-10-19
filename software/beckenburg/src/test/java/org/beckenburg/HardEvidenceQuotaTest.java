@@ -8,10 +8,16 @@ public final class HardEvidenceQuotaTest {
             HardEvidenceQuota easy=new HardEvidenceQuota(type,HardEvidenceQuota.Level.EASY,17);
             HardEvidenceQuota medium=new HardEvidenceQuota(type,HardEvidenceQuota.Level.MEDIUM,17);
             HardEvidenceQuota death=new HardEvidenceQuota(type,HardEvidenceQuota.Level.DEATH_WISH,17);
-            ok(easy.allowance()>=2,"every species has instrument opportunities "+type);
+            ok(easy.allowance()>=3,"Easy guarantees at least three actual producers "+type);
             ok(medium.allowance()==2,"medium exactly two permitted families "+type);
             ok(easy.families().containsAll(medium.families()),"medium subset "+type);
-            ok(death.allowance()==0,"death wish forbids hard proofs "+type);
+            ok(death.allowance()==1,"Death Wish guarantees exactly one hard evidence family "+type);
+            ok(easy.families().containsAll(death.families()),"Death Wish is species-compatible "+type);
+            ok(easy.permits(HardEvidenceQuota.Family.UV)==GhostTraits.of(type).leavesUv(),
+                "UV must have a real producing trait "+type);
+            ok(easy.permits(HardEvidenceQuota.Family.ORBS)
+                ==(GhostTraits.of(type).sight()==GhostTraits.Sight.ORBS),
+                "Orb evidence must have a real visual producer "+type);
             ok(medium.families().equals(new HardEvidenceQuota(type,
                 HardEvidenceQuota.Level.MEDIUM,17).families()),"contract seed deterministic "+type);
         }
@@ -27,11 +33,15 @@ public final class HardEvidenceQuotaTest {
             ok(emf.accepted()&&emf.message().contains("EMF "), "weather measurements remain accessible");
             String reading=emf.message();
             int value=Integer.parseInt(reading.split("EMF ")[1].split("/")[0]);
-            ok(value>=2&&value<=7,"no paranormal high EMF on Death Wish");
+            if(!casefile.allowsEvidence(HardEvidenceQuota.Family.EMF))
+                ok(value>=2&&value<=7,"unsanctioned ghost EMF cannot appear");
+            else ok(value>=2&&value<=10,"permitted actual EMF remains measurable");
             var temp=casefile.scanMeasured(0,LanCase.Tool.THERMOMETER,4,4,tick,4,10);
             ok(temp.accepted()&&temp.message().contains("Air "),"natural air still measured");
             var spirit=casefile.scanMeasured(0,LanCase.Tool.SPIRIT_BOX,4,4,tick,4,10);
-            ok(!spirit.message().contains("Voice response detected"),"no hard spirit reply");
+            if(!casefile.allowsEvidence(HardEvidenceQuota.Family.SPIRIT_BOX))
+                ok(!spirit.message().contains("Voice response detected"),
+                    "non-selected voice producer cannot produce hard proof");
         }
         var wrong=casefile.identify(0,GhostIdentity.Type.SHADE,100);
         ok(wrong.accepted()&&wrong.message().contains("HYPOTHESIS"),"Death Wish guess is unverified");
@@ -43,6 +53,6 @@ public final class HardEvidenceQuotaTest {
         ok(casefile.correctlyIdentified(),"host compares private archetype only for settlement/rite");
         ok(CustomContract.standard(3).evidenceLevel()==HardEvidenceQuota.Level.EASY,
             "older clients retain all-compatible evidence by default");
-        System.out.println("PASS easy/medium/death-wish quota, ghost silence, observable weather and unverified hypothesis");
+        System.out.println("PASS Easy>=3 Medium=2 DeathWish=1 species evidence, weather integrity and hypothesis");
     }
 }

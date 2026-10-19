@@ -38,6 +38,7 @@ public final class LanCase {
         return hardEvidence.permits(type);
     }
     public HardEvidenceQuota.Level evidenceDifficulty(){return hardEvidence.level();}
+    public int guaranteedEvidenceCount(){return hardEvidence.allowance();}
     private boolean identificationRequired;
     private int lastGuessTick=-1000;
     private final int[] health={100,100,100,100,100,100},stress=new int[6],wards={2,2,2,2,2,2};
@@ -89,6 +90,7 @@ public final class LanCase {
         if(outcome!=Outcome.ACTIVE||!evidence.isEmpty()||!tested.isEmpty()||ritualProgress>=0)
             throw new IllegalStateException("cannot change an active investigation");
         archetype=java.util.Objects.requireNonNull(type);
+        hardEvidence=new HardEvidenceQuota(archetype,HardEvidenceQuota.Level.EASY,0);
         identificationRequired=requireIdentification;
         identified=null;
     }

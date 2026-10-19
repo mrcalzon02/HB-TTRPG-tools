@@ -4,15 +4,19 @@ The contract editor now controls **Hard evidence** independently of the
 weather **Fixed / Dynamic / Random** setting, weather severity, party
 scaling, sanity and ghost action frequency.
 
-- **Easy:** all evidence families genuinely compatible with the species.
+- **Easy:** at least **three guaranteed** hard-evidence families, and more
+  if the species has more genuinely compatible producers.
 - **Medium:** exactly **two** compatible hard-evidence families, selected
   once per host session and never re-rolled during instrument sampling.
-- **Death Wish:** **zero guaranteed hard instrument families**.
-  EMF baselines, natural temperature and no-response readings still work,
-  as do ordinary ghost behavior and physical observation. Strong EMF 8–10,
-  ghost-caused temperature extremes, spirit replies, authored book writing,
-  and distinctive D.O.T.S. figure encounters cannot appear as hard proof.
-  The hidden quota is never broadcast to the human ghost or hunter clients.
+- **Death Wish:** exactly **one guaranteed** hard-evidence family. Never zero.
+  EMF baselines, natural temperature and no-response readings still work
+  independently of the selected supernatural family, as do ordinary ghost
+  behavior and physical observation. Unselected supernatural EMF signatures,
+  ghost-caused temperature extremes, spirit replies, authored writing,
+  distinctive D.O.T.S. interactions, UV traces and orbs are withheld.
+  The host selects once per case from families the ghost can actually produce.
+  The private selected family is never transmitted to the human ghost or hunters;
+  the difficulty and guarantee count are visible in the contract.
 
 A Death Wish identification is an **unverified hypothesis**. The host
 records the guess without revealing whether it is correct. Only a correct
@@ -44,9 +48,10 @@ currency/experience save using the same UUID-based duplicate guard as
 solo. They also update the session's host-authoritative field wallet.
 The asymmetrical ghost seat sees the outcome, not private rewards.
 
-`HardEvidenceQuotaTest` and `ContractRewardsTest` cover species
-compatibility, real instrument masking, unverified Death Wish guesses,
-ritual/retreat/death outcomes and persistent payout deduplication.
+`HardEvidenceQuotaTest` and `ContractRewardsTest` cover all 13 ghost species,
+Easy >=3 / Medium =2 / Death Wish =1, real instrument masking, unverified
+Death Wish guesses, ritual/retreat/death outcomes and persistent payout
+deduplication.
 
 **Known limitations:** Solo currently retains the original evidence
 count and payout model; this extended controller governs LAN contracts.
