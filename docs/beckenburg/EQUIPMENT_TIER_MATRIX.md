@@ -21,13 +21,13 @@ Photo cameras are the exception to generic capacity scaling: **1 / 6 / 12 actual
 
 | Equipment | Tier I | Tier II | Tier III |
 |---|---|---|---|
-| **Pattern projector** | Fixed sparse dot field | Wider fan and faster refresh | Full-room adjustable structured-light volume |
-| **EMF reader (0–10; zero for suppression)** | Small segmented 0–10 scale | Larger numbered scale; faster polling | Backlit large digits and event-history strip |
+| **Pattern projector** | Live grid 2.20m radius | Live grid 2.97m radius | Live grid 3.85m radius; actual ghost-only passages |
+| **EMF reader (0–10; zero for suppression)** | 2.60m event pickup, 1.2s sampling | 3.51m pickup, 0.9s sampling | 4.55m pickup, 0.6s sampling; larger on-device display |
 | **Flashlight** | Narrow 6m beam; 280s charge | Brighter 9m beam; 420s charge | Broad 12m beam; 630s charge |
-| **Ghost writing book** | Small paper book; one writable surface | Wider pages and clearer ink visibility | Oversized high-contrast pages and angleable stand |
-| **Spirit box** | Simple radio dial | Larger response display, quieter speaker | Broadband receiver, waveform and directional headset |
-| **Thermometer (°C/°F)** | Slow handheld analog temperature | Responsive digital probe with unit switch | Large backlit readout, temperature trend history |
-| **UV light** | Narrow UV inspection cone | Stronger UV beam and broader coverage | Wide UV flood with visible trace contrast |
+| **Ghost writing book** | One physical book, smaller held view | One physical book, larger held view | One physical book, largest held view; writing behavior unchanged |
+| **Spirit box** | 2.10m pickup, 1.2s response interval | 2.84m pickup, 0.9s response | 3.68m pickup, 0.6s response; larger readout |
+| **Thermometer (°C/°F)** | 3.40m event pickup, 1.3s response | 4.59m pickup, 1.0s response | 5.95m pickup, 0.7s response; larger device |
+| **UV light** | Genuine recent traces up to 9s | Genuine fading traces up to 12.5s | Genuine fading traces up to 16s; never invents UV marks |
 | **Video camera / remote feed** | 65° view, 155px CRT | 93° view, 210px display | 120° view, 280px night video |
 
 ## Optional field equipment (13)
@@ -35,10 +35,10 @@ Photo cameras are the exception to generic capacity scaling: **1 / 6 / 12 actual
 | Equipment | Tier I | Tier II | Tier III |
 |---|---|---|---|
 | **Protective cross** | Short-range simple cross | Larger protective reach and durability | Extended defense coverage and clear charge indicators |
-| **Firelight / candle** | Small flame in lantern | Wind-shielded broad lantern | Long-burn adjustable brightness lantern |
-| **Head camera / helmet light** | Simple strapped lamp | Hands-free camera and tilt mount | Lightweight wide-angle sensor and clear recorder status |
-| **Igniter** | Disposable lighter | Refillable lighter with status window | Stormproof ignition with abundant uses |
-| **Incense / smoke dispersal** | Brief localized smoke | Longer burn and larger protective cloud | Adjustable dispersal with clear depletion indicator |
+| **Firelight / candle** | Lit flame for 120s | Lit flame for 180s | Lit flame for 270s, then automatically extinguishes |
+| **Head camera / helmet light** | Switchable night vision; 240s battery | Switchable night vision; 360s battery | Switchable night vision; 540s battery |
+| **Igniter** | Eight real sparks | Twelve real sparks | Eighteen real sparks; each consumes one charge |
+| **Incense / smoke dispersal** | Two 25s smoke bundles | Three 38s smoke bundles | Four 56s smoke bundles; ghost-repelling effects not yet wired |
 | **Motion sensor** | Single narrow detection beam | Wider sweep and visible indicator | Multi-zone detector with positional log |
 | **Parabolic microphone** | Single directional audio pickup | Better aiming cone and gain dial | Large spectrogram and precise directional controls |
 | **Photo camera** | One-shot Polaroid; 160×160 square image | Six-shot; 320×200 image | Twelve-shot; 640×400 bicubic upscaled image |
@@ -101,6 +101,8 @@ Measurements below are **planned hardware capabilities** derived from the source
 | Deployable EMF array | 3.2m / 1.2s / 2 / 4m | 4.3m / 0.9s / 3 / 6m | 5.6m / 0.6s / 4 / 9m |
 | Remote thermal probe array | 3.7m / 1.2s / 2 / 4m | 5.0m / 0.9s / 3 / 6m | 6.5m / 0.6s / 4 / 9m |
 | Video camera / remote feed | 5.0m / — / — / 4m | 6.8m / — / — / 6m | 8.8m / — / — / 9m |
+
+**Shop accuracy rule:** the master plan can describe proposed later variants, but the live rack (`EquipmentStoreDescriptions`) displays only implemented behavior. In particular, the upgraded UV lamp detects older **real** traces rather than new spectral marks; the writing-book upgrade does **not** create extra simultaneous books; high-end photo images are enlarged/resampled and not falsely described as native high-resolution scene rendering; and incense's visible smoke is implemented even though a full supernatural repelling effect is not. Sample-powered handheld tools use host-owned charge, while sustained lamps/night vision drain per game tick. Higher tiers never validate journal evidence.
 
 ## Upgrade economy and implementation gates
 
