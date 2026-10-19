@@ -174,37 +174,48 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
         super.paintComponent(base);
         Graphics2D g=(Graphics2D)base.create();
         try{
-            int h=Math.max(170,getHeight()-109);
-            g.setColor(Color.BLACK);g.fillRect(0,0,getWidth(),getHeight());
+
+            int w=getWidth(),h=getHeight();
+            g.setColor(Color.BLACK);g.fillRect(0,0,w,h);
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-            if(room>=0)g.drawImage(camera.image(),0,0,getWidth(),h,null);
-            // Translucent purple visual language, independent of hunter-only data.
-            g.setColor(new Color(76,26,100,36));g.fillRect(0,0,getWidth(),h);
-            g.setColor(new Color(223,194,249));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));
-            g.drawString("BECKENBURG / "+ghostSpecies+" / "+behaviorName,14,25);
-            g.drawString("ROOM "+map.roomName(room)+"   ENERGY "+energy+"/100   "+(audible?"NOISE DETECTED":"SILENT"),14,47);
+            if(room>=0)g.drawImage(camera.image(),0,0,w,h,null);
+            g.setColor(new Color(76,26,100,36));g.fillRect(0,0,w,h);
+            g.setFont(new Font(Font.MONOSPACED,Font.BOLD,13));
+            int identityWidth=Math.min(w-24,480);
+            g.setColor(new Color(22,13,31,219));g.fillRoundRect(12,10,identityWidth,65,9,9);
+            g.setColor(new Color(232,208,247));
+            g.drawString("SPECTRAL / "+ghostSpecies+" / "+behaviorName,23,30);
+            g.drawString(map.roomName(room)+"  |  ENERGY "+energy+"/100",23,50);
+            g.setColor(audible?new Color(238,166,151):new Color(192,167,210));
+            g.drawString(audible?"SOUND DETECTED":"QUIET",23,66);
+            g.setColor(new Color(233,210,248));g.drawString("+",w/2,h/2);
             if(!currentHearing().isEmpty()){
-                g.setColor(new Color(194,165,236));
-                g.drawString("HEARD: "+currentHearing(),14,69);
-                g.setColor(new Color(223,194,249));
+                String heard=currentHearing();
+                if(heard.length()>70)heard=heard.substring(0,67)+"...";
+                g.setColor(new Color(28,14,39,220));g.fillRoundRect(12,84,
+                    Math.min(w-24,Math.max(240,g.getFontMetrics().stringWidth(heard)+24)),31,8,8);
+                g.setColor(new Color(199,170,239));g.drawString("HEARD: "+heard,22,105);
             }
-            g.drawString("+",getWidth()/2,h/2);
-            g.setColor(new Color(17,16,25));g.fillRect(0,h,getWidth(),getHeight()-h);
-            g.setColor(new Color(219,196,242));
             List<Integer> exits=exits();
-            g.drawString("WASD SPECTRAL VIEW  CLICK TO CAPTURE / ARROWS LOOK  ESC EXIT",12,h+22);
-            g.drawString("[ ] SELECT ROOM  SPACE DRIFT -> "+(exits.isEmpty()?"NONE":map.roomName(exits.get(Math.floorMod(choice,exits.size())))),12,h+42);
-            StringBuilder menu=new StringBuilder("HAUNT ");
-            for(int i=0;i<offered.size();i++)menu.append(i+1).append(" ")
-                .append(offered.get(i)).append("  ");
-            if(offered.isEmpty())menu.append("RECHARGING / WAIT FOR HOST");
+            int width=Math.min(w-24,620),panelY=h-117;
+            g.setColor(new Color(23,14,32,225));g.fillRoundRect(12,panelY,width,105,8,8);
+            g.setColor(new Color(235,206,244));g.drawString("SPECTRAL ACTIONS",24,panelY+22);
+            g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
+            StringBuilder actions=new StringBuilder();
+            for(int i=0;i<offered.size();i++)actions.append(i+1).append(": ").append(offered.get(i)).append("   ");
+            if(offered.isEmpty())actions.append("RECHARGING");
+            String abilities=actions.toString();
+            if(abilities.length()>66)abilities=abilities.substring(0,63)+"...";
+            g.drawString(abilities,24,panelY+42);
+            g.drawString("[ / ] EXIT: "+(exits.isEmpty()?"NONE":map.roomName(exits.get(Math.floorMod(choice,exits.size()))))+
+                "   SPACE DRIFT",24,panelY+62);
             int remaining=actionDueTick<0?-1:Math.max(0,(actionDueTick-tick+9)/10);
-            g.drawString(menu.substring(0,Math.min(menu.length(),85)),12,h+63);
-            g.setColor(remaining<=3&&remaining>=0?new Color(255,170,157):new Color(210,200,237));
-            g.drawString("NEXT MANDATORY EVENT: "+(remaining<0?"WAITING":remaining+"s")
-                +"  /  MISS = AUTOMATIC REAL GHOST ACTION",12,h+82);
-            g.setColor(new Color(144,206,189));
-            g.drawString(feedback.substring(0,Math.min(feedback.length(),108)),12,h+101);
+            g.setColor(remaining>=0&&remaining<=3?new Color(255,174,166):new Color(194,207,217));
+            g.drawString("NEXT EVENT "+(remaining<0?"WAITING":remaining+"s")+"  /  ESC EXIT",24,panelY+82);
+            if(!feedback.isBlank()){
+                String note=feedback.length()>76?feedback.substring(0,73)+"...":feedback;
+                g.setColor(new Color(190,235,206));g.drawString(note,24,panelY-10);
+            }
         }finally{g.dispose();}
     }
 }
