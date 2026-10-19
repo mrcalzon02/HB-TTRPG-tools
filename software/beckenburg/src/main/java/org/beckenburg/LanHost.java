@@ -33,6 +33,7 @@ public final class LanHost implements AutoCloseable {
     private final LanCase mission;
     private final LanEvidenceJournal casefile=new LanEvidenceJournal();
     private final GhostWriting writingBook=new GhostWriting();
+    private final LanDotsProjectors dots=new LanDotsProjectors();
     private final FieldJournal fieldNotes=new FieldJournal();
     // Radio history is bounded and investigator-only. Local speech has no global replay.
     private final java.util.ArrayDeque<LanChat.Entry> radioHistory=new java.util.ArrayDeque<>();
@@ -429,6 +430,9 @@ public final class LanHost implements AutoCloseable {
                         if(i!=peer.slot&&seats[i]!=null)
                             reply(peer,"PLAYERNAME|"+i+"|"+seats[i].name);
                     broadcastWorld();broadcastApparitions();broadcastCounters();sendCounterAmmo(peer);
+                    reply(peer,"DOTS|RESET");
+                    for(LanDotsProjectors.Placement placed:dots.all())reply(peer,placed.frame());
+                    if(writingBook.placed())reply(peer,"BOOK|DEPLOYED|"+writingBook.room());
                     reply(peer,supplies[peer.slot].frame());
                     sendEquipmentState(peer);
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
@@ -677,6 +681,20 @@ public final class LanHost implements AutoCloseable {
                                     <=stage.reachCm()/100.0;
                             reading=voiceEvent?"Voice response / spectral vocal event detected":
                                 "No direct vocal response";
+                        }
+                        case "DOTS_PROJECTOR" -> {
+                            if(room>=HouseMap.INDOOR_ROOMS)
+                                throw new IllegalArgumentException("D.O.T.S. projection requires a room");
+                            LanDotsProjectors.Placement placed=dots.placeOrRemove(peer.slot,room,
+                                world.body(peer.slot).x(),world.body(peer.slot).z(),
+                                gear.owned(id));
+                            if(placed==null){
+                                reading="Projector retrieved / emission ended";
+                                notifyHunters("DOTS|CLEAR|"+peer.slot);
+                            }else{
+                                reading="Projector placed / projected field active";
+                                notifyHunters(placed.frame());
+                            }
                         }
                         case "UV_LIGHT" -> reading=counters.recentUv(room,tick)
                             ?"UV light / recent physical surface trace":"UV light / no visible trace";
@@ -1090,6 +1108,14 @@ public final class LanHost implements AutoCloseable {
             lastEvidenceEventRoom=result.room();
             lastEvidenceEventPower=eventPower;
             lastEvidenceEventAction=result.action();
+            for(LanDotsProjectors.Passage passing:dots.passages(
+                    ghostType,result,ghostPose.pose(),tick)){
+                notifyHunters(casefile.recordDevice(tick,passing.placement().seat(),
+                    passing.placement().room(),"DOTS_PROJECTOR",
+                    LanEvidenceJournal.Finding.OBSERVED,
+                    "D.O.T.S. / real spectral passage during "+result.action()));
+                notifyHunters(passing.frame());
+            }
         }
         if(result.action()==GhostDomain.Action.MANIFEST)animation.manifested(tick);
         RoomLighting.Interference disruption=switch(result.action()){
