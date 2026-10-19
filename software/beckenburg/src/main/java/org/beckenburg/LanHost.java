@@ -432,7 +432,11 @@ public final class LanHost implements AutoCloseable {
                             reply(peer,"PLAYERNAME|"+i+"|"+seats[i].name);
                     broadcastWorld();broadcastApparitions();broadcastCounters();sendCounterAmmo(peer);
                     reply(peer,"CAMERA|RESET");
-                    for(LanVideoCameras.Camera station:cameras.all())reply(peer,station.frame());
+                    for(LanVideoCameras.Camera station:cameras.all()){
+                        reply(peer,station.frame());
+                        reply(peer,"CAMERA|POWER|"+station.owner()+"|"+
+                            (equipment[station.owner()].powered("VIDEO_CAMERA")?1:0));
+                    }
                     reply(peer,"DOTS|RESET");
                     for(LanDotsProjectors.Placement placed:dots.all())reply(peer,placed.frame());
                     if(writingBook.placed())reply(peer,"BOOK|DEPLOYED|"+writingBook.room());
@@ -600,6 +604,20 @@ public final class LanHost implements AutoCloseable {
                         throw new IllegalArgumentException("hunter rack state only");
                     sendEquipmentState(peer);
                 }
+                case "GEARREFILL" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
+                        throw new IllegalArgumentException("hunter equipment service only");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    ensureActiveHunter(peer);
+                    if(map.van().stationAt(world.body(peer.slot).x(),world.body(peer.slot).z())
+                            !=VanStaging.Station.EQUIPMENT)
+                        throw new IllegalArgumentException("recharge at the actual van equipment rack");
+                    if(cameras.at(peer.slot)!=null)
+                        throw new IllegalArgumentException("retrieve deployed camera before recharging");
+                    equipment[peer.slot].rechargeAtVan();
+                    reply(peer,"ACCEPT|GEARREFILL|FILM AND BATTERIES RESTORED");
+                    sendEquipmentState(peer);
+                }
                 case "GEARBUY" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=4)
                         throw new IllegalArgumentException("hunter equipment purchase only");
@@ -714,14 +732,18 @@ public final class LanHost implements AutoCloseable {
                             notifyHunters("GEARFX|"+peer.slot+"|"+id+"|"+(enabled?1:0));
                         }
                         case "VIDEO_CAMERA" -> {
+                            if(cameras.at(peer.slot)==null&&gear.batterySecondsLeft(id)==0)
+                                throw new IllegalArgumentException("camera battery empty: return to van");
                             LanVideoCameras.Camera station=cameras.placeOrRetrieve(
                                 peer.slot,world.body(peer.slot),gear.owned(id));
+                            gear.setPower(id,station!=null);
                             if(station==null){
                                 reading="Video camera retrieved / feed ended";
                                 notifyHunters("CAMERA|CLEAR|"+peer.slot);
                             }else{
                                 reading="Video camera recording / live feed available in van";
                                 notifyHunters(station.frame());
+                                notifyHunters("CAMERA|POWER|"+peer.slot+"|1");
                             }
                         }
                         case "PHOTO_CAMERA" -> {
@@ -757,6 +779,9 @@ public final class LanHost implements AutoCloseable {
                         default -> throw new IllegalArgumentException("device has no working backend");
                     }
                     gear.sampled(id,tick);
+                    if(gear.batterySecondsLeft(id)>=0)
+                        reply(peer,"GEARPOWER|"+id+"|"+gear.batterySecondsLeft(id)+
+                            "|"+(gear.powered(id)?1:0));
                     notifyHunters(casefile.recordDevice(tick,peer.slot,room,id,
                         LanEvidenceJournal.Finding.OBSERVED,reading));
                     reply(peer,"ACCEPT|GEARUSE|"+id+"|"+reading);
@@ -1083,6 +1108,11 @@ public final class LanHost implements AutoCloseable {
         if(peer.slot==GHOST_SEAT)throw new IllegalArgumentException("ghost cannot access equipment");
         reply(peer,equipment[peer.slot].frame(supplies[peer.slot].credits()));
         reply(peer,equipment[peer.slot].inventoryFrame());
+        for(String id:FieldEquipment.workingTools())
+            if(equipment[peer.slot].batterySecondsLeft(id)>=0)
+                reply(peer,"GEARPOWER|"+id+"|"+
+                    equipment[peer.slot].batterySecondsLeft(id)+"|"+
+                    (equipment[peer.slot].powered(id)?1:0));
     }
     private void sendCounterAmmo(Peer peer){
         reply(peer,"COUNTERAMMO|"+counters.charges(peer.slot,HunterCounters.Kind.CROSS)+"|"
@@ -1345,6 +1375,16 @@ public final class LanHost implements AutoCloseable {
                 broadcastProgress();
             }
             if(animation.animating(tick)||pendingStrike!=null)broadcastApparitions();
+            for(int seat=0;seat<HUNTERS;seat++){
+                for(String drained:equipment[seat].advancePower(tick)){
+                    if(seats[seat]!=null)
+                        reply(seats[seat],"GEARPOWER|"+drained+"|0|0");
+                    if(drained.equals("FLASHLIGHT")||drained.equals("HEAD_GEAR"))
+                        notifyHunters("GEARFX|"+seat+"|"+drained+"|0");
+                    if(drained.equals("VIDEO_CAMERA"))
+                        notifyHunters("CAMERA|POWER|"+seat+"|0");
+                }
+            }
             if(tick%2==0)broadcastCounters();
             if(tick%5==0){broadcastState();broadcastApparitions();broadcastProgress();broadcastWorld();
                 if(seats[GHOST_SEAT]!=null&&seats[GHOST_SEAT].ghostWorldMode){
