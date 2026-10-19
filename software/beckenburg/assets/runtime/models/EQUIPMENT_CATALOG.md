@@ -1,52 +1,56 @@
-# Equipment models — asset-only handoff
+# Equipment asset handoff
 
-The missing equipment geometry is authored and committed as real `.glb` files in
-this directory. There are **112 new canonical tier models and 35 additional
-physical-state models**. Existing matching props and the three recorder models
-remain unchanged. The complete asset map covers **42 equipment categories × 3
-tiers**; repeated references reuse the same physical file rather than duplicate it.
+Use the exact assignments in `development/assets/equipment-catalog/equipment-assets.json`.
+Do not derive filenames from equipment IDs or tier numbers.
 
-- Asset map, dimensions, hashes, source/license references, display-surface
-  corners and mounting/optical/contact points:
-  `development/assets/equipment-catalog/equipment-assets.json`
-- Compact category/tier filename index:
-  `development/assets/equipment-catalog/ASSET_INDEX.md`
-- Editable Blender scenes, one per new equipment family:
-  `development/assets/equipment-catalog/blender/`
-- Compact texture atlases and model reference images:
-  `development/assets/equipment-catalog/textures/` and `previews/`
-- Full-catalog visual overview:
-  `development/assets/equipment-catalog/equipment-overview.jpg`
+The computer, sanity screen, activity screen, sound screen, site map, assignment
+clipboard and objective board are **fixed van fixtures with no upgrades**. Their
+three compatibility slots alias one physical asset. The computer uses the supplied
+tower, CRT, keyboard and mouse with the original UVs and textures.
 
-New files use `blender_<equipment_id>_<tier>.glb`, with lowercase IDs and tiers
-`1`, `2`, `3`. Extra forms use `_open`, `_lit`, `_burning`, `_deployed`, `_folded`
-or `_node`. The JSON map is authoritative for reused models and available forms.
+`HEALTH_SUPPLIES` separately maps to `FieldSupplies.Kind.HEALTH`: Basic bandage,
+Improved dressing pouch and Advanced first-aid kit, with existing restoration
+amounts 20/40/70 HP. Pouches are closed when carried and have separate open forms.
+`SANITY_MEDICATION` separately maps to 18/36/65 sanity. Health items contain
+bandages, gauze and scissors rather than sanity medicine.
 
-New models use metres, glTF +Y up, front +Z. Their lowest physical point sits at
-Y=0. Blender source scenes use +Z up/front -Y and arrange the tiers side by side.
-Original reused assets retain their original transforms. Source objects are
-joined for compact exports; component names remain as vertex groups in the
-editable Blender scenes. Display corners and named sockets are provided in
-glTF coordinates. Flame/ember forms include emissive surfaces; lantern windows
-and spectral prisms use alpha materials. Actual projected light, smoke, camera
-images and live measurements must come from the game.
+All protective crosses have identical bounds: 180 x 20 x 280 mm. Materials and
+construction change across tiers. Spirit boxes are radios. The resonance striker
+is retained in a body-mounted dock. The incense bundle sits in the brazier's herb
+bed. Writing leaves are blank.
 
-New electronics reuse modified Exploration Objects shells and texture UVs
-(CC0, creator: https://elbolilloduro.itch.io/exploration-objects). D.O.T.S. uses
-the owner's approved PSX Mega Pack vape shell, with new emitter and mount
-geometry; retain that pack's game-use license. Other new shapes are original
-procedural geometry. The asset map records every source model and SHA-256.
-Original archives and existing runtime models have not been replaced.
+For consumable material deposits, use the deployed model **instead of** the
+carried model. Deployed salt is a continuous raised line, approximately 1 m long,
+11 cm wide and 5 cm high. It contains no sack, shaker or dispenser. Deployed chalk
+contains only markings, with no sticks, compass or stencil. Persistent instruments
+such as projectors and sensor nodes retain their working hardware when placed.
+
+## Review and production sources
+
+- `development/assets/equipment-catalog/REVIEW.html`: searchable image gallery.
+- `development/assets/equipment-catalog/previews/`: rendered GLB captures and
+  available open, burning, lit, deployed and profile views.
+- `development/assets/equipment-catalog/blender/`: editable packed Blender scenes.
+- `development/assets/equipment-catalog/ASSET_INDEX.md`: compact filename index.
+- `development/assets/equipment-catalog/REBUILD_PROVENANCE.json` and `rebuild-*.json`:
+  selected original sources, hashes, materials and authored geometry.
+
+Original archives remain unchanged. Matching source meshes retain original UVs
+and texture artwork. New diffuse maps are packed into GLBs and Blender files.
+Purchased packs are not redistributed as source collections. The prior sound
+recorder asset family remains intact.
 
 ## Online integration
 
-Java source, build scripts and game tests are unchanged by this delivery.
-Register the new names in `GlbProps`, select them from `EquipmentTierVisuals`,
-and package the map's GLBs in the Windows/Unix build scripts. Preserve runtime
-display overlays and alpha/emissive materials where appropriate. Keep the
-existing procedural `TierModelForge` from overwriting the selected Blender
-assets during packaging. Gameplay implementation is a separate online task;
-these files do not claim completed equipment behavior.
+Register the JSON's exact paths in the renderer and packaging online. Fixed van
+fixtures must not acquire store upgrades. Resolve health through `FieldSupplies`,
+independently of the general equipment registry. Display corners and sockets are
+included where authored; named source components and original screen materials
+support the remaining integration. Live readings, writing, camera footage,
+light, smoke, footprints and depletion remain runtime content.
 
-Production sources: `development/assets/prepare_equipment_catalog.py`,
-`build_equipment_catalog.py`, and `finish_equipment_catalog.py`.
+Keep `TierModelForge` from overwriting selected assets. The rejected flat-swatch
+generator and unused atlases have been retired. Reproduce the new asset pipeline
+with `development/assets/rebuild_equipment_assets.py --blender PATH_TO_BLENDER`,
+using Python with Pillow and the original local archive. This delivery includes
+no local game build or game test.

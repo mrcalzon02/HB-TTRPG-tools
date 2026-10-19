@@ -1,0 +1,217 @@
+{
+  "sources": [
+    {
+      "name": "pc_monitor_mp_1.glb",
+      "sha256": "21fd036a47bcf07482babe41f309a1ddf9b1776f9f814cd93fa01ea28d78f914",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Electronics & Misc\\pc_monitor_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "pc_mp_1.glb",
+      "sha256": "ff42beeb03ed78dbdf9637ccae1afa2f0ee9333c85cee7467af326b38e152b2b",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\pc_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "pc_keyboard_mp_1.glb",
+      "sha256": "d9ea7943815cff4c899bc9a3874bdaf8d811ae7649f4fabc80712b623a457fa6",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Electronics & Misc\\pc_keyboard_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "pc_mouse_mp_1.glb",
+      "sha256": "dd9fe2dafc39c425c7db9fb45289ac8c1d7830a5f11b8a01d883af5eefe39f78",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Electronics & Misc\\pc_mouse_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "monitoring_screen_mp_1.glb",
+      "sha256": "5027390e7d005b5a9767b24618a38a30bab6aa535fd1319ac67ae5d109a89097",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\monitoring_screen_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "bandage_mp_1.glb",
+      "sha256": "f267db3a554c54a684bb14c7b046603c0451330f0e19e94e710f8d18d2758e0c",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\bandage_mp_1.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\bandage_mp_1.glb"
+    },
+    {
+      "name": "bandage_mp_2.glb",
+      "sha256": "4fea9907cb779e60d149c19aebc94ac357ac86da79a6d5d8c4952b8d915b2a8b",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\bandage_mp_2.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\bandage_mp_2.glb"
+    },
+    {
+      "name": "pills_packet_1.glb",
+      "sha256": "e5d168a8f3a5a8304dd63de914355db4b8d427d62b715e22c0c952ed87cea04e",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\pills_packet_1.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\pills_packet_1.glb"
+    },
+    {
+      "name": "pills_bottle_1.glb",
+      "sha256": "c834b23a160d9d2d8290977301aaa4d7694aaaed9c51a4461f12c1c824ed8480",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\pills_bottle_1.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\pills_bottle_1.glb"
+    },
+    {
+      "name": "syringe_mp_1.glb",
+      "sha256": "f54501290f6c4eb8ec49ae943fbb78e7e2fedc5e3e0d5c212ef4f3eb7f424f89",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\syringe_mp_1.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\syringe_mp_1.glb"
+    },
+    {
+      "name": "cross_mp_2.glb",
+      "sha256": "942dd459969257c99c7b64c482ff8b7a0cbcdb5981e97bdb0d8a2a510ed55e96",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\cross_mp_2.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\cross_mp_2.glb"
+    },
+    {
+      "name": "cross_1.glb",
+      "sha256": "a57fd024a9aa9a3c7fce8aa29b7bc7c2d20dc4989661693bb85cbcc5c5b39f8f",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\cross_1.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\cross_1.glb"
+    },
+    {
+      "name": "book_mp_1.glb",
+      "sha256": "77d525437c8a825c46088daf19ee15cb77aea880bcf791691bb0e8493ab857d9",
+      "source": "E:/ARCHIVE/PSX assets/PSX Mega Pack v3.2.1/PSX Mega Pack/Models/GLB (recommended)/Small Props/book_mp_1.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:/ARCHIVE/PSX assets/PSX Mega Pack v3.2.1/PSX Mega Pack/Models/GLB (recommended)/Small Props/book_mp_1.glb"
+    },
+    {
+      "name": "open_book_mp_1.glb",
+      "sha256": "1b7199f26c1313f661f025dff618535752ae40ddb9626f083b7f449cf8aa5795",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\open_book_mp_1.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\open_book_mp_1.glb"
+    },
+    {
+      "name": "book_mp_2.glb",
+      "sha256": "fb8d4f4115ae583a24c07971df34367992d1983d19842e4be5194495fde5449f",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\book_mp_2.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\book_mp_2.glb"
+    },
+    {
+      "name": "book_mp_4.glb",
+      "sha256": "2a14130aaae790bf48ef272ef2792e5f58ed3104b4a388855d58f935ffb99b46",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\book_mp_4.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\book_mp_4.glb"
+    },
+    {
+      "name": "matchbox_1.glb",
+      "sha256": "366b5e78e2d590a6ec4754b91116678720f14689ec1dff8fb47743d3b9d9ed89",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\matchbox_1.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\matchbox_1.glb"
+    },
+    {
+      "name": "lighter_mp_1.glb",
+      "sha256": "39abb7523b2ad54eed24ac7d8b18a9c53e224eab5bca216f5cc340dc539834fa",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\lighter_mp_1.glb",
+      "policy": "Owner-provided PSX Mega Pack original, uniformly scaled with original UVs and materials preserved",
+      "working_copy": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\lighter_mp_1.glb"
+    },
+    {
+      "name": "exploration_emf_detector.glb",
+      "sha256": "dede8e0acdd36f11c9e71d16681ae6f0867c675bfc54a190867150e063a984de",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\exploration_emf_detector.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "dosimeter_4.glb",
+      "sha256": "e4cbe5842520c7a947e3d7134003ac62a08681f8c7d086a1d06b4cfe33e9941f",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\dosimeter_4.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "dosimeter_2.glb",
+      "sha256": "e284911ff0d03a939efbfdf1ba610fe818bdde94d1db03e10dbe430c138517cf",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\dosimeter_2.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "exploration_thermometer.glb",
+      "sha256": "cb5d99b92c069de398b59cb4babb8562de6040cef30a41445276dc47b90ef5cf",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\exploration_thermometer.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "exploration_thermal_camera.glb",
+      "sha256": "3cfe62a955819771de0bc4df11fc5a6a9d4239afe8170a29f5979b3c4ccc3f56",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\exploration_thermal_camera.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "walkie_talkie_1.glb",
+      "sha256": "292145f3edd230ba98d364070380519266e55f5982f746dd4c7b67e42ee92165",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\walkie_talkie_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "walkie_talkie_2.glb",
+      "sha256": "cd8b549f7209f975ff15104e2bc520844b397abad67e76946cf3f885d5992ef6",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\walkie_talkie_2.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "exploration_flashlight.glb",
+      "sha256": "b5e66a349601d196e3bfef0e079db04d1f8a0607f2821e3704b80cb9750f2872",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\exploration_flashlight.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "flashlight_mp_1.glb",
+      "sha256": "104931f467a207d86c451e511adee68adccaec6cf3beb7e6d04325986fc2b75e",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\flashlight_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "exploration_photo_camera.glb",
+      "sha256": "09640b60f2f79c7dcdbfd9a9c2a821f3af9d2b01b268c1575bcf7a1c42208281",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\exploration_photo_camera.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "vape_mp_1.glb",
+      "sha256": "fea628ab07a439881b6b9b0c85ec3cd10aec3612b6d97ad57062bd35cab24003",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\vape_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    }
+  ],
+  "retired_models": [
+    "assets/runtime/models/blender_chalk_sigil_kit_2_deployed.glb",
+    "assets/runtime/models/blender_chalk_sigil_kit_3_deployed.glb",
+    "assets/runtime/models/blender_clipboards_1.glb",
+    "assets/runtime/models/blender_clipboards_2.glb",
+    "assets/runtime/models/blender_clipboards_3.glb",
+    "assets/runtime/models/blender_computer_2.glb",
+    "assets/runtime/models/blender_computer_3.glb",
+    "assets/runtime/models/blender_objective_board_1.glb",
+    "assets/runtime/models/blender_objective_board_2.glb",
+    "assets/runtime/models/blender_objective_board_3.glb",
+    "assets/runtime/models/blender_salt_2_deployed.glb",
+    "assets/runtime/models/blender_salt_3_deployed.glb",
+    "assets/runtime/models/blender_sanity_monitor_2.glb",
+    "assets/runtime/models/blender_sanity_monitor_3.glb",
+    "assets/runtime/models/blender_site_activity_monitor_2.glb",
+    "assets/runtime/models/blender_site_activity_monitor_3.glb",
+    "assets/runtime/models/blender_site_map_1.glb",
+    "assets/runtime/models/blender_site_map_2.glb",
+    "assets/runtime/models/blender_site_map_3.glb",
+    "assets/runtime/models/blender_sound_monitor_1.glb",
+    "assets/runtime/models/blender_sound_monitor_2.glb",
+    "assets/runtime/models/blender_sound_monitor_3.glb"
+  ],
+  "original_archive_policy": "Purchased source archives are unchanged. Only selected game assets are exported; no source-pack redistribution.",
+  "preserved_sound_recorders": "See development/assets/recorder-models.json and exploration-provenance.json"
+}

@@ -1,0 +1,1059 @@
+{
+  "items": [
+    {
+      "id": "COMPUTER",
+      "label": "Camera console",
+      "fixed_fixture": true,
+      "tier_upgrade": false,
+      "stage_policy": "All compatibility stage slots reference one identical physical fixture; no upgrades",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_computer_fixed.glb",
+          "sha256": "aa94bef4f05c69a9d9f96fb2cdee583d1d4de47eaaa7a9c0f16781c0388624f0",
+          "triangles": 733,
+          "dimensions_blender_z_up": [
+            0.7532674074172974,
+            0.656363844871521,
+            0.5
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "pc_monitor_mp_1",
+              "size": [
+                512,
+                256
+              ]
+            },
+            {
+              "name": "display_mp_1_emission",
+              "size": [
+                340,
+                280
+              ]
+            },
+            {
+              "name": "crt_screen_mp_2",
+              "size": [
+                85,
+                70
+              ]
+            },
+            {
+              "name": "pc_mp_1",
+              "size": [
+                409,
+                443
+              ]
+            },
+            {
+              "name": "pc_accessories_mp_1",
+              "size": [
+                564,
+                516
+              ]
+            },
+            {
+              "name": "pc_accessories_mp_1.001",
+              "size": [
+                564,
+                516
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "pc_monitor_mp_1",
+            "pc_monitor_mp_1_screen",
+            "pc_mp_1",
+            "pc_keyboard_mp_1",
+            "pc_mouse_mp_1"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Original matched PSX computer, CRT, keyboard and mouse; original material maps and UVs retained",
+            "One complete computer workstation; fixed physical asset"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/computer.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_computer_fixed.glb",
+          "sha256": "aa94bef4f05c69a9d9f96fb2cdee583d1d4de47eaaa7a9c0f16781c0388624f0",
+          "triangles": 733,
+          "dimensions_blender_z_up": [
+            0.7532674074172974,
+            0.656363844871521,
+            0.5
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "pc_monitor_mp_1",
+              "size": [
+                512,
+                256
+              ]
+            },
+            {
+              "name": "display_mp_1_emission",
+              "size": [
+                340,
+                280
+              ]
+            },
+            {
+              "name": "crt_screen_mp_2",
+              "size": [
+                85,
+                70
+              ]
+            },
+            {
+              "name": "pc_mp_1",
+              "size": [
+                409,
+                443
+              ]
+            },
+            {
+              "name": "pc_accessories_mp_1",
+              "size": [
+                564,
+                516
+              ]
+            },
+            {
+              "name": "pc_accessories_mp_1.001",
+              "size": [
+                564,
+                516
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "pc_monitor_mp_1",
+            "pc_monitor_mp_1_screen",
+            "pc_mp_1",
+            "pc_keyboard_mp_1",
+            "pc_mouse_mp_1"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Original matched PSX computer, CRT, keyboard and mouse; original material maps and UVs retained",
+            "One complete computer workstation; fixed physical asset"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/computer.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_computer_fixed.glb",
+          "sha256": "aa94bef4f05c69a9d9f96fb2cdee583d1d4de47eaaa7a9c0f16781c0388624f0",
+          "triangles": 733,
+          "dimensions_blender_z_up": [
+            0.7532674074172974,
+            0.656363844871521,
+            0.5
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "pc_monitor_mp_1",
+              "size": [
+                512,
+                256
+              ]
+            },
+            {
+              "name": "display_mp_1_emission",
+              "size": [
+                340,
+                280
+              ]
+            },
+            {
+              "name": "crt_screen_mp_2",
+              "size": [
+                85,
+                70
+              ]
+            },
+            {
+              "name": "pc_mp_1",
+              "size": [
+                409,
+                443
+              ]
+            },
+            {
+              "name": "pc_accessories_mp_1",
+              "size": [
+                564,
+                516
+              ]
+            },
+            {
+              "name": "pc_accessories_mp_1.001",
+              "size": [
+                564,
+                516
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "pc_monitor_mp_1",
+            "pc_monitor_mp_1_screen",
+            "pc_mp_1",
+            "pc_keyboard_mp_1",
+            "pc_mouse_mp_1"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Original matched PSX computer, CRT, keyboard and mouse; original material maps and UVs retained",
+            "One complete computer workstation; fixed physical asset"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/computer.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        }
+      ]
+    },
+    {
+      "id": "SANITY_MONITOR",
+      "label": "Sanity monitor",
+      "fixed_fixture": true,
+      "tier_upgrade": false,
+      "stage_policy": "All compatibility stage slots reference one identical physical fixture; no upgrades",
+      "stages": [
+        {
+          "tier": 1,
+          "model": "assets/runtime/models/monitoring_screen_mp_1.glb",
+          "sha256": "5027390e7d005b5a9767b24618a38a30bab6aa535fd1319ac67ae5d109a89097",
+          "existing_unchanged": true,
+          "triangles": 494,
+          "variants": {},
+          "source_model": "monitoring_screen_mp_1",
+          "features": [
+            "Original textured owner-provided monitoring screen retained",
+            "Dedicated live display content supplied during online integration",
+            "Fixed van fixture; no physical tiers"
+          ],
+          "editable": "development/assets/equipment-catalog/blender/sanity_monitor.blend",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 2,
+          "model": "assets/runtime/models/monitoring_screen_mp_1.glb",
+          "sha256": "5027390e7d005b5a9767b24618a38a30bab6aa535fd1319ac67ae5d109a89097",
+          "existing_unchanged": true,
+          "triangles": 494,
+          "variants": {},
+          "source_model": "monitoring_screen_mp_1",
+          "features": [
+            "Original textured owner-provided monitoring screen retained",
+            "Dedicated live display content supplied during online integration",
+            "Fixed van fixture; no physical tiers"
+          ],
+          "editable": "development/assets/equipment-catalog/blender/sanity_monitor.blend",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 3,
+          "model": "assets/runtime/models/monitoring_screen_mp_1.glb",
+          "sha256": "5027390e7d005b5a9767b24618a38a30bab6aa535fd1319ac67ae5d109a89097",
+          "existing_unchanged": true,
+          "triangles": 494,
+          "variants": {},
+          "source_model": "monitoring_screen_mp_1",
+          "features": [
+            "Original textured owner-provided monitoring screen retained",
+            "Dedicated live display content supplied during online integration",
+            "Fixed van fixture; no physical tiers"
+          ],
+          "editable": "development/assets/equipment-catalog/blender/sanity_monitor.blend",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        }
+      ]
+    },
+    {
+      "id": "SITE_ACTIVITY_MONITOR",
+      "label": "Site activity monitor",
+      "fixed_fixture": true,
+      "tier_upgrade": false,
+      "stage_policy": "All compatibility stage slots reference one identical physical fixture; no upgrades",
+      "stages": [
+        {
+          "tier": 1,
+          "model": "assets/runtime/models/monitoring_screen_mp_1.glb",
+          "sha256": "5027390e7d005b5a9767b24618a38a30bab6aa535fd1319ac67ae5d109a89097",
+          "existing_unchanged": true,
+          "triangles": 494,
+          "variants": {},
+          "source_model": "monitoring_screen_mp_1",
+          "features": [
+            "Original textured owner-provided monitoring screen retained",
+            "Dedicated live display content supplied during online integration",
+            "Fixed van fixture; no physical tiers"
+          ],
+          "editable": "development/assets/equipment-catalog/blender/site_activity_monitor.blend",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 2,
+          "model": "assets/runtime/models/monitoring_screen_mp_1.glb",
+          "sha256": "5027390e7d005b5a9767b24618a38a30bab6aa535fd1319ac67ae5d109a89097",
+          "existing_unchanged": true,
+          "triangles": 494,
+          "variants": {},
+          "source_model": "monitoring_screen_mp_1",
+          "features": [
+            "Original textured owner-provided monitoring screen retained",
+            "Dedicated live display content supplied during online integration",
+            "Fixed van fixture; no physical tiers"
+          ],
+          "editable": "development/assets/equipment-catalog/blender/site_activity_monitor.blend",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 3,
+          "model": "assets/runtime/models/monitoring_screen_mp_1.glb",
+          "sha256": "5027390e7d005b5a9767b24618a38a30bab6aa535fd1319ac67ae5d109a89097",
+          "existing_unchanged": true,
+          "triangles": 494,
+          "variants": {},
+          "source_model": "monitoring_screen_mp_1",
+          "features": [
+            "Original textured owner-provided monitoring screen retained",
+            "Dedicated live display content supplied during online integration",
+            "Fixed van fixture; no physical tiers"
+          ],
+          "editable": "development/assets/equipment-catalog/blender/site_activity_monitor.blend",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        }
+      ]
+    },
+    {
+      "id": "SOUND_MONITOR",
+      "label": "Sound monitor",
+      "fixed_fixture": true,
+      "tier_upgrade": false,
+      "stage_policy": "All compatibility stage slots reference one identical physical fixture; no upgrades",
+      "stages": [
+        {
+          "tier": 1,
+          "model": "assets/runtime/models/monitoring_screen_mp_1.glb",
+          "sha256": "5027390e7d005b5a9767b24618a38a30bab6aa535fd1319ac67ae5d109a89097",
+          "existing_unchanged": true,
+          "triangles": 494,
+          "variants": {},
+          "source_model": "monitoring_screen_mp_1",
+          "features": [
+            "Original textured owner-provided monitoring screen retained",
+            "Dedicated live display content supplied during online integration",
+            "Fixed van fixture; no physical tiers"
+          ],
+          "editable": "development/assets/equipment-catalog/blender/sound_monitor.blend",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 2,
+          "model": "assets/runtime/models/monitoring_screen_mp_1.glb",
+          "sha256": "5027390e7d005b5a9767b24618a38a30bab6aa535fd1319ac67ae5d109a89097",
+          "existing_unchanged": true,
+          "triangles": 494,
+          "variants": {},
+          "source_model": "monitoring_screen_mp_1",
+          "features": [
+            "Original textured owner-provided monitoring screen retained",
+            "Dedicated live display content supplied during online integration",
+            "Fixed van fixture; no physical tiers"
+          ],
+          "editable": "development/assets/equipment-catalog/blender/sound_monitor.blend",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 3,
+          "model": "assets/runtime/models/monitoring_screen_mp_1.glb",
+          "sha256": "5027390e7d005b5a9767b24618a38a30bab6aa535fd1319ac67ae5d109a89097",
+          "existing_unchanged": true,
+          "triangles": 494,
+          "variants": {},
+          "source_model": "monitoring_screen_mp_1",
+          "features": [
+            "Original textured owner-provided monitoring screen retained",
+            "Dedicated live display content supplied during online integration",
+            "Fixed van fixture; no physical tiers"
+          ],
+          "editable": "development/assets/equipment-catalog/blender/sound_monitor.blend",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        }
+      ]
+    },
+    {
+      "id": "CLIPBOARDS",
+      "label": "Assignment clipboard",
+      "fixed_fixture": true,
+      "tier_upgrade": false,
+      "stage_policy": "All compatibility stage slots reference one identical physical fixture; no upgrades",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_clipboards_fixed.glb",
+          "sha256": "02b51286ae40674ccb8730ac859a67caf7ad834df30490bc17e6ac244319b39f",
+          "triangles": 204,
+          "dimensions_blender_z_up": [
+            0.23000000417232513,
+            0.02800000086426735,
+            0.3199999928474426
+          ],
+          "materials": 3,
+          "texture_images": [
+            {
+              "name": "Dark clipboard fibreboard diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Unwritten assignment paper diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Clipboard galvanized clip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "Thin rounded clipboard",
+            "Replaceable blank task sheet",
+            "Spring hinge",
+            "Arched spring clamp",
+            "Paper gripping jaw"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Thin fibreboard and spring-loaded metal clip",
+            "Blank paper for live assignment content",
+            "Fixed task list; no upgrade variants"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/clipboards.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_clipboards_fixed.glb",
+          "sha256": "02b51286ae40674ccb8730ac859a67caf7ad834df30490bc17e6ac244319b39f",
+          "triangles": 204,
+          "dimensions_blender_z_up": [
+            0.23000000417232513,
+            0.02800000086426735,
+            0.3199999928474426
+          ],
+          "materials": 3,
+          "texture_images": [
+            {
+              "name": "Dark clipboard fibreboard diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Unwritten assignment paper diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Clipboard galvanized clip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "Thin rounded clipboard",
+            "Replaceable blank task sheet",
+            "Spring hinge",
+            "Arched spring clamp",
+            "Paper gripping jaw"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Thin fibreboard and spring-loaded metal clip",
+            "Blank paper for live assignment content",
+            "Fixed task list; no upgrade variants"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/clipboards.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_clipboards_fixed.glb",
+          "sha256": "02b51286ae40674ccb8730ac859a67caf7ad834df30490bc17e6ac244319b39f",
+          "triangles": 204,
+          "dimensions_blender_z_up": [
+            0.23000000417232513,
+            0.02800000086426735,
+            0.3199999928474426
+          ],
+          "materials": 3,
+          "texture_images": [
+            {
+              "name": "Dark clipboard fibreboard diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Unwritten assignment paper diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Clipboard galvanized clip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "Thin rounded clipboard",
+            "Replaceable blank task sheet",
+            "Spring hinge",
+            "Arched spring clamp",
+            "Paper gripping jaw"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Thin fibreboard and spring-loaded metal clip",
+            "Blank paper for live assignment content",
+            "Fixed task list; no upgrade variants"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/clipboards.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        }
+      ]
+    },
+    {
+      "id": "SITE_MAP",
+      "label": "Site map",
+      "fixed_fixture": true,
+      "tier_upgrade": false,
+      "stage_policy": "All compatibility stage slots reference one identical physical fixture; no upgrades",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_site_map_fixed.glb",
+          "sha256": "c9a4336f183274ffda32539ac76ecf25bb9c9e66c3fd675f50b396aaf6f5485c",
+          "triangles": 344,
+          "dimensions_blender_z_up": [
+            0.7249999642372131,
+            0.046000003814697266,
+            0.5299999713897705
+          ],
+          "materials": 4,
+          "texture_images": [
+            {
+              "name": "Noticeboard cork diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Worn oak board frame diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Map sheet diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Board brass pins diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "Noticeboard backing",
+            "Oak vertical frame",
+            "Oak vertical frame.001",
+            "Oak horizontal frame",
+            "Oak horizontal frame.001",
+            "Site specific map surface",
+            "Map retaining pin",
+            "Map retaining pin.001",
+            "Map retaining pin.002",
+            "Map retaining pin.003"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Fixed van board; no tier upgrades",
+            "Blank replaceable paper surfaces for actual map/objective content; no fictional readings baked in",
+            "Textured oak, cork and paper with correctly proportioned thin frame"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/site_map.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_site_map_fixed.glb",
+          "sha256": "c9a4336f183274ffda32539ac76ecf25bb9c9e66c3fd675f50b396aaf6f5485c",
+          "triangles": 344,
+          "dimensions_blender_z_up": [
+            0.7249999642372131,
+            0.046000003814697266,
+            0.5299999713897705
+          ],
+          "materials": 4,
+          "texture_images": [
+            {
+              "name": "Noticeboard cork diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Worn oak board frame diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Map sheet diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Board brass pins diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "Noticeboard backing",
+            "Oak vertical frame",
+            "Oak vertical frame.001",
+            "Oak horizontal frame",
+            "Oak horizontal frame.001",
+            "Site specific map surface",
+            "Map retaining pin",
+            "Map retaining pin.001",
+            "Map retaining pin.002",
+            "Map retaining pin.003"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Fixed van board; no tier upgrades",
+            "Blank replaceable paper surfaces for actual map/objective content; no fictional readings baked in",
+            "Textured oak, cork and paper with correctly proportioned thin frame"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/site_map.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_site_map_fixed.glb",
+          "sha256": "c9a4336f183274ffda32539ac76ecf25bb9c9e66c3fd675f50b396aaf6f5485c",
+          "triangles": 344,
+          "dimensions_blender_z_up": [
+            0.7249999642372131,
+            0.046000003814697266,
+            0.5299999713897705
+          ],
+          "materials": 4,
+          "texture_images": [
+            {
+              "name": "Noticeboard cork diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Worn oak board frame diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Map sheet diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Board brass pins diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "Noticeboard backing",
+            "Oak vertical frame",
+            "Oak vertical frame.001",
+            "Oak horizontal frame",
+            "Oak horizontal frame.001",
+            "Site specific map surface",
+            "Map retaining pin",
+            "Map retaining pin.001",
+            "Map retaining pin.002",
+            "Map retaining pin.003"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Fixed van board; no tier upgrades",
+            "Blank replaceable paper surfaces for actual map/objective content; no fictional readings baked in",
+            "Textured oak, cork and paper with correctly proportioned thin frame"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/site_map.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        }
+      ]
+    },
+    {
+      "id": "OBJECTIVE_BOARD",
+      "label": "Objective board",
+      "fixed_fixture": true,
+      "tier_upgrade": false,
+      "stage_policy": "All compatibility stage slots reference one identical physical fixture; no upgrades",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_objective_board_fixed.glb",
+          "sha256": "c5fe6e5e07ccc9d005f6d6aaa1fc95012cec4e03bea77aed7bc64a0dc5b1e3e5",
+          "triangles": 412,
+          "dimensions_blender_z_up": [
+            0.875,
+            0.046000003814697266,
+            0.6100000143051147
+          ],
+          "materials": 4,
+          "texture_images": [
+            {
+              "name": "Noticeboard cork diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Worn oak board frame diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Objective paper diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Board brass pins diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "Noticeboard backing",
+            "Oak vertical frame",
+            "Oak vertical frame.001",
+            "Oak horizontal frame",
+            "Oak horizontal frame.001",
+            "Pinned objective sheet",
+            "Brass paper pin",
+            "Pinned objective sheet.001",
+            "Brass paper pin.001",
+            "Pinned objective sheet.002",
+            "Brass paper pin.002"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Fixed van board; no tier upgrades",
+            "Blank replaceable paper surfaces for actual map/objective content; no fictional readings baked in",
+            "Textured oak, cork and paper with correctly proportioned thin frame"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/objective_board.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_objective_board_fixed.glb",
+          "sha256": "c5fe6e5e07ccc9d005f6d6aaa1fc95012cec4e03bea77aed7bc64a0dc5b1e3e5",
+          "triangles": 412,
+          "dimensions_blender_z_up": [
+            0.875,
+            0.046000003814697266,
+            0.6100000143051147
+          ],
+          "materials": 4,
+          "texture_images": [
+            {
+              "name": "Noticeboard cork diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Worn oak board frame diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Objective paper diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Board brass pins diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "Noticeboard backing",
+            "Oak vertical frame",
+            "Oak vertical frame.001",
+            "Oak horizontal frame",
+            "Oak horizontal frame.001",
+            "Pinned objective sheet",
+            "Brass paper pin",
+            "Pinned objective sheet.001",
+            "Brass paper pin.001",
+            "Pinned objective sheet.002",
+            "Brass paper pin.002"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Fixed van board; no tier upgrades",
+            "Blank replaceable paper surfaces for actual map/objective content; no fictional readings baked in",
+            "Textured oak, cork and paper with correctly proportioned thin frame"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/objective_board.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_objective_board_fixed.glb",
+          "sha256": "c5fe6e5e07ccc9d005f6d6aaa1fc95012cec4e03bea77aed7bc64a0dc5b1e3e5",
+          "triangles": 412,
+          "dimensions_blender_z_up": [
+            0.875,
+            0.046000003814697266,
+            0.6100000143051147
+          ],
+          "materials": 4,
+          "texture_images": [
+            {
+              "name": "Noticeboard cork diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Worn oak board frame diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Objective paper diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Board brass pins diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "Noticeboard backing",
+            "Oak vertical frame",
+            "Oak vertical frame.001",
+            "Oak horizontal frame",
+            "Oak horizontal frame.001",
+            "Pinned objective sheet",
+            "Brass paper pin",
+            "Pinned objective sheet.001",
+            "Brass paper pin.001",
+            "Pinned objective sheet.002",
+            "Brass paper pin.002"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Fixed van board; no tier upgrades",
+            "Blank replaceable paper surfaces for actual map/objective content; no fictional readings baked in",
+            "Textured oak, cork and paper with correctly proportioned thin frame"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/objective_board.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration",
+          "fixed_fixture": true,
+          "tier_upgrade": false
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "name": "pc_monitor_mp_1.glb",
+      "sha256": "21fd036a47bcf07482babe41f309a1ddf9b1776f9f814cd93fa01ea28d78f914",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Electronics & Misc\\pc_monitor_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "pc_mp_1.glb",
+      "sha256": "ff42beeb03ed78dbdf9637ccae1afa2f0ee9333c85cee7467af326b38e152b2b",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\pc_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "pc_keyboard_mp_1.glb",
+      "sha256": "d9ea7943815cff4c899bc9a3874bdaf8d811ae7649f4fabc80712b623a457fa6",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Electronics & Misc\\pc_keyboard_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "pc_mouse_mp_1.glb",
+      "sha256": "dd9fe2dafc39c425c7db9fb45289ac8c1d7830a5f11b8a01d883af5eefe39f78",
+      "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Electronics & Misc\\pc_mouse_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "monitoring_screen_mp_1.glb",
+      "sha256": "5027390e7d005b5a9767b24618a38a30bab6aa535fd1319ac67ae5d109a89097",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\monitoring_screen_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    }
+  ]
+}

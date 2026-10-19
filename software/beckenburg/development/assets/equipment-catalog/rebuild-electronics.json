@@ -1,0 +1,2974 @@
+{
+  "items": [
+    {
+      "id": "EMF_READER",
+      "label": "EMF reader (0\u00e2\u20ac\u201c10; zero for suppression)",
+      "stages": [
+        {
+          "tier": 1,
+          "model": "assets/runtime/models/exploration_emf_detector.glb",
+          "existing_unchanged": true,
+          "sha256": "dede8e0acdd36f11c9e71d16681ae6f0867c675bfc54a190867150e063a984de",
+          "triangles": 58,
+          "dimensions_blender_z_up": [
+            0.09535053372383118,
+            0.0302442479878664,
+            0.23999999463558197
+          ],
+          "source_model": "exploration_emf_detector",
+          "license": "CC0 \u2014 Exploration Objects",
+          "variants": {},
+          "online_integration_status": "not changed by this asset-only delivery",
+          "features": [
+            "Matching original source retained byte-for-byte, including full texture and UV layout"
+          ],
+          "preview_rotation_blender": [
+            1.5707963267948966,
+            0,
+            0
+          ]
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_emf_reader_2.glb",
+          "sha256": "22986c53eb91f4f4ee5b225d8fbc801fcdf417d736fa1c14847fc2b6b9c52359",
+          "triangles": 343,
+          "dimensions_blender_z_up": [
+            0.11625542491674423,
+            0.03482452780008316,
+            0.20499999821186066
+          ],
+          "materials": 1,
+          "texture_images": [
+            {
+              "name": "dosimeter_3",
+              "size": [
+                128,
+                95
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "dosimeter_4"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Source analog field meter retained at its original proportions with full dial artwork and switches",
+            "Unwarped shell, original material and UV coordinates"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/emf_reader.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_emf_reader_3.glb",
+          "sha256": "3e290637ccd7abea0309c71ed511f334b4e834741b941b1a779593878d2463d1",
+          "triangles": 559,
+          "dimensions_blender_z_up": [
+            0.2200000137090683,
+            0.04659713804721832,
+            0.10364746302366257
+          ],
+          "materials": 1,
+          "texture_images": [
+            {
+              "name": "dosimeter_2",
+              "size": [
+                128,
+                156
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "dosimeter_2"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Source analog field meter retained at its original proportions with full dial artwork and switches",
+            "Unwarped shell, original material and UV coordinates"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/emf_reader.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    },
+    {
+      "id": "THERMOMETER",
+      "label": "Thermometer (\u00c2\u00b0C/\u00c2\u00b0F)",
+      "stages": [
+        {
+          "tier": 1,
+          "model": "assets/runtime/models/exploration_thermometer.glb",
+          "existing_unchanged": true,
+          "sha256": "cb5d99b92c069de398b59cb4babb8562de6040cef30a41445276dc47b90ef5cf",
+          "triangles": 195,
+          "dimensions_blender_z_up": [
+            0.049733810126781464,
+            0.1496991366147995,
+            0.23999999463558197
+          ],
+          "source_model": "exploration_thermometer",
+          "license": "CC0 \u2014 Exploration Objects",
+          "variants": {},
+          "online_integration_status": "not changed by this asset-only delivery",
+          "features": [
+            "Matching original source retained byte-for-byte, including full texture and UV layout"
+          ],
+          "preview_rotation_blender": null
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_thermometer_2.glb",
+          "sha256": "f726fde4f9a2b88d0fd32f1416383b1ff07df4337d41887e51ff6b9b9c00c5b3",
+          "triangles": 298,
+          "dimensions_blender_z_up": [
+            0.054999999701976776,
+            0.03849999979138374,
+            0.23499999940395355
+          ],
+          "materials": 6,
+          "texture_images": [
+            {
+              "name": "ivory instrument diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Display contact temperature LCD",
+              "size": [
+                128,
+                64
+              ]
+            },
+            {
+              "name": "brushed alloy diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "red control diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "tapered contact thermometer",
+            "rear rubber overmould",
+            "recessed display trim",
+            "contact temperature LCD",
+            "stainless immersion probe",
+            "probe seating collar",
+            "sealed thermometer key",
+            "sealed thermometer key.001",
+            "sealed thermometer key.002"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Tapered rubber-protected contact thermometer with stainless immersion probe",
+            "Inset temperature LCD and three sealed physical keys"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/thermometer.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_thermometer_3.glb",
+          "sha256": "b7dd5db979a4f91a409c202e6cee1ed880f9243de24af6351a9b7595a84f45d1",
+          "triangles": 232,
+          "dimensions_blender_z_up": [
+            0.15774975717067719,
+            0.1008971631526947,
+            0.23499999940395355
+          ],
+          "materials": 1,
+          "texture_images": [
+            {
+              "name": "Image_0.001",
+              "size": [
+                256,
+                256
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "geometry_0",
+            "exploration_thermal_camera"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Purpose-matched thermal measurement pistol with original textured screen, sensor and grip; no camera repurposing"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/thermometer.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    },
+    {
+      "id": "SPIRIT_BOX",
+      "label": "Spirit box",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_spirit_box_1.glb",
+          "sha256": "a3cff419e496e86c0225b59a456212003698870bb53014afc80a3c72076af572",
+          "triangles": 247,
+          "dimensions_blender_z_up": [
+            0.07875744253396988,
+            0.0363660603761673,
+            0.26999998092651367
+          ],
+          "materials": 1,
+          "texture_images": [
+            {
+              "name": "walkie_talkie_1",
+              "size": [
+                128,
+                134
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "walkie_talkie_1"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Original textured radio shell, speaker grille, keyed controls and aerial retained",
+            "Receiver tiers use complete radio forms; charcoal III has a knurled tuning control"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/spirit_box.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_spirit_box_2.glb",
+          "sha256": "0f6f0a901af6e0a2d46cfc242b5fb3da2a085cb68340bc6f5afc2760298c2d10",
+          "triangles": 238,
+          "dimensions_blender_z_up": [
+            0.0847756415605545,
+            0.03421881049871445,
+            0.2800000011920929
+          ],
+          "materials": 1,
+          "texture_images": [
+            {
+              "name": "walkie_talkie_2",
+              "size": [
+                128,
+                134
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "walkie_talkie_2"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Original textured radio shell, speaker grille, keyed controls and aerial retained",
+            "Receiver tiers use complete radio forms; charcoal III has a knurled tuning control"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/spirit_box.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_spirit_box_3.glb",
+          "sha256": "f65dcd5ccd6617d38c085285ea44258acf6d3612590a4a2f1d29a58faf7aa510",
+          "triangles": 326,
+          "dimensions_blender_z_up": [
+            0.0847756415605545,
+            0.03810940310359001,
+            0.2800000011920929
+          ],
+          "materials": 3,
+          "texture_images": [
+            {
+              "name": "walkie_talkie_2.002 charcoal",
+              "size": [
+                128,
+                134
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "red control diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "walkie_talkie_2",
+            "knurled receiver volume",
+            "scan control"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Original textured radio shell, speaker grille, keyed controls and aerial retained",
+            "Receiver tiers use complete radio forms; charcoal III has a knurled tuning control"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/spirit_box.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    },
+    {
+      "id": "FLASHLIGHT",
+      "label": "Flashlight",
+      "stages": [
+        {
+          "tier": 1,
+          "model": "assets/runtime/models/exploration_flashlight.glb",
+          "existing_unchanged": true,
+          "sha256": "b5e66a349601d196e3bfef0e079db04d1f8a0607f2821e3704b80cb9750f2872",
+          "triangles": 104,
+          "dimensions_blender_z_up": [
+            0.07967487722635269,
+            0.28999999165534973,
+            0.06900046765804291
+          ],
+          "source_model": "exploration_flashlight",
+          "license": "CC0 \u2014 Exploration Objects",
+          "variants": {},
+          "online_integration_status": "not changed by this asset-only delivery",
+          "features": [
+            "Matching original source retained byte-for-byte, including full texture and UV layout"
+          ],
+          "preview_rotation_blender": [
+            0,
+            0,
+            3.141592653589793
+          ]
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_flashlight_2.glb",
+          "sha256": "c80407cc8abe9ac1bde3400b286150ce9719e5f09e651a5bf44d8e9f376d0fb7",
+          "triangles": 284,
+          "dimensions_blender_z_up": [
+            0.08353163301944733,
+            0.25,
+            0.08719827234745026
+          ],
+          "materials": 1,
+          "texture_images": [
+            {
+              "name": "flashlight_1_emission",
+              "size": [
+                128,
+                64
+              ]
+            },
+            {
+              "name": "flashlight_1",
+              "size": [
+                128,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "flashlight_mp_1"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Complete original textured lamp with battery barrel, switch, flared reflector and collar",
+            "Original source materials and UVs retained"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/flashlight.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_flashlight_3.glb",
+          "sha256": "369c04116ce40d7005ce03ce885d92952c5ec36e1b920e72dcf55c9801ed97b2",
+          "triangles": 932,
+          "dimensions_blender_z_up": [
+            0.07360000163316727,
+            0.2395000010728836,
+            0.07360000163316727
+          ],
+          "materials": 4,
+          "texture_images": [
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Faceted reflector with central LED radial optical map",
+              "size": [
+                128,
+                128
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "continuous torch body",
+            "torch metal bezel",
+            "reflector glass",
+            "grip groove",
+            "grip groove.001",
+            "grip groove.002",
+            "grip groove.003",
+            "grip groove.004",
+            "rubber thumb switch"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Faceted battery tube, tapered lamp head, recessed single reflector and textured grip rings",
+            "Black duty flashlight with machined reflector collar"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/flashlight.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    },
+    {
+      "id": "UV_LIGHT",
+      "label": "UV light",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_uv_light_1.glb",
+          "sha256": "713f365bd9c204f3255776fc5c1b3d169dce4f6635085a10a16049dcedd43f7c",
+          "triangles": 932,
+          "dimensions_blender_z_up": [
+            0.04479999840259552,
+            0.16949999332427979,
+            0.04480000212788582
+          ],
+          "materials": 4,
+          "texture_images": [
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Violet optical filter radial optical map",
+              "size": [
+                128,
+                128
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "continuous torch body",
+            "torch metal bezel",
+            "UV filter",
+            "grip groove",
+            "grip groove.001",
+            "grip groove.002",
+            "grip groove.003",
+            "grip groove.004",
+            "rubber thumb switch"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Faceted battery tube, tapered lamp head, recessed single reflector and textured grip rings",
+            "Violet filtered pocket UV lamp"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/uv_light.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_uv_light_2.glb",
+          "sha256": "5c4e3be455c7a900d30a6a8d20a803f8eea10f7b61101ae683a2389c9aa5363f",
+          "triangles": 328,
+          "dimensions_blender_z_up": [
+            0.08353163301944733,
+            0.2524999976158142,
+            0.08719827234745026
+          ],
+          "materials": 2,
+          "texture_images": [
+            {
+              "name": "flashlight_1_emission.001 charcoal",
+              "size": [
+                128,
+                64
+              ]
+            },
+            {
+              "name": "flashlight_1.001 charcoal",
+              "size": [
+                128,
+                64
+              ]
+            },
+            {
+              "name": "Violet optical filter radial optical map",
+              "size": [
+                128,
+                128
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "flashlight_mp_1",
+            "UV optical filter"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Complete original textured lamp with battery barrel, switch, flared reflector and collar",
+            "Violet optical filter over reflector"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/uv_light.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_uv_light_3.glb",
+          "sha256": "a04c8ebc00afe4aca63bbb45504dbec9f5db732c446d83b84a83741636847252",
+          "triangles": 356,
+          "dimensions_blender_z_up": [
+            0.0689999982714653,
+            0.04699999839067459,
+            0.32100000977516174
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Violet optical filter radial optical map",
+              "size": [
+                128,
+                128
+              ]
+            },
+            {
+              "name": "brushed alloy diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "red control diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "inspection lamp grip",
+            "lower lamp shoe",
+            "upper lamp cap",
+            "violet fluorescent tube",
+            "curved aluminum UV reflector",
+            "protective inspection guard",
+            "protective inspection guard.001",
+            "inspection power key",
+            "hanging eye"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Fluorescent UV inspection lamp with exposed tube, curved reflector, guard rails and shaped handgrip",
+            "One coherent lamp assembly; hanging eye and sealed switch"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/uv_light.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    },
+    {
+      "id": "PHOTO_CAMERA",
+      "label": "Photo camera",
+      "stages": [
+        {
+          "tier": 1,
+          "model": "assets/runtime/models/exploration_photo_camera.glb",
+          "existing_unchanged": true,
+          "sha256": "09640b60f2f79c7dcdbfd9a9c2a821f3af9d2b01b268c1575bcf7a1c42208281",
+          "triangles": 98,
+          "dimensions_blender_z_up": [
+            0.14499999582767487,
+            0.06650902330875397,
+            0.08131814002990723
+          ],
+          "source_model": "exploration_photo_camera",
+          "license": "CC0 \u2014 Exploration Objects",
+          "variants": {},
+          "online_integration_status": "not changed by this asset-only delivery",
+          "features": [
+            "Matching original source retained byte-for-byte, including full texture and UV layout"
+          ],
+          "preview_rotation_blender": null
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_photo_camera_2.glb",
+          "sha256": "c10cf568ae15220e41888ab408acb71ea12e8e69a1630505d4ab9c64b787c736",
+          "triangles": 170,
+          "dimensions_blender_z_up": [
+            0.14499999582767487,
+            0.06650902330875397,
+            0.08457086235284805
+          ],
+          "materials": 3,
+          "texture_images": [
+            {
+              "name": "Image_0.001",
+              "size": [
+                512,
+                512
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "geometry_0",
+            "exploration_photo_camera.001",
+            "integrated camera handgrip",
+            "top mode dial"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Original compact camera shell, telescope lens and full source face texture retained",
+            "Integrated grip, real shutter/mode control and optical viewfinder",
+            "Tier III adds a sloping pentaprism and one lens hood"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/photo_camera.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_photo_camera_3.glb",
+          "sha256": "71a8a8aa4bf65c761d2799dfb31a82e953b797e5022a17bf90e7d21370d4f6a2",
+          "triangles": 354,
+          "dimensions_blender_z_up": [
+            0.15800000727176666,
+            0.08747190237045288,
+            0.10694439709186554
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "Image_0.002",
+              "size": [
+                512,
+                512
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "brushed alloy diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "geometry_0",
+            "exploration_photo_camera.001",
+            "integrated camera handgrip",
+            "top mode dial",
+            "sloping pentaprism housing",
+            "flared single lens hood",
+            "hotshoe contacts"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Original compact camera shell, telescope lens and full source face texture retained",
+            "Integrated grip, real shutter/mode control and optical viewfinder",
+            "Tier III adds a sloping pentaprism and one lens hood"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/photo_camera.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    },
+    {
+      "id": "VIDEO_CAMERA",
+      "label": "Video camera / remote feed",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_video_camera_1.glb",
+          "sha256": "ac3b2640868b8a5edc8e53abfca24ee39ae7659d80d673d9ab5151009a3158c9",
+          "triangles": 1098,
+          "dimensions_blender_z_up": [
+            0.09049999713897705,
+            0.17800000309944153,
+            0.0828000009059906
+          ],
+          "materials": 6,
+          "texture_images": [
+            {
+              "name": "ivory instrument diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Coated blue optics radial optical map",
+              "size": [
+                128,
+                128
+              ]
+            },
+            {
+              "name": "canvas strap diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "red control diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "camcorder integrated chassis",
+            "ribbed tape door",
+            "upper camera shoulder",
+            "stepped optical barrel",
+            "recessed lens bezel",
+            "coated optical lens",
+            "lens focus knurl",
+            "lens focus knurl.001",
+            "lens focus knurl.002",
+            "rear camcorder battery",
+            "zoom rocker",
+            "padded camcorder hand strap",
+            "viewfinder eyecup",
+            "record key",
+            "camcorder cooling slit",
+            "camcorder cooling slit.001",
+            "camcorder cooling slit.002",
+            "camcorder cooling slit.003"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Purpose-built proportioned camcorder body, single lens, tape door, eyecup and woven hand strap",
+            "Tier II fold-out LCD; Tier III shoulder, carry handle and directional microphone"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/video_camera.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_video_camera_2.glb",
+          "sha256": "3c8cc6d9526b981853ac787c837beb46084cadec2fbecece4e8ab9532da006a8",
+          "triangles": 1156,
+          "dimensions_blender_z_up": [
+            0.14067000150680542,
+            0.17800000309944153,
+            0.0828000009059906
+          ],
+          "materials": 7,
+          "texture_images": [
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Coated blue optics radial optical map",
+              "size": [
+                128,
+                128
+              ]
+            },
+            {
+              "name": "canvas strap diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "red control diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Display camcorder monitor",
+              "size": [
+                128,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "camcorder integrated chassis",
+            "ribbed tape door",
+            "upper camera shoulder",
+            "stepped optical barrel",
+            "recessed lens bezel",
+            "coated optical lens",
+            "lens focus knurl",
+            "lens focus knurl.001",
+            "lens focus knurl.002",
+            "rear camcorder battery",
+            "zoom rocker",
+            "padded camcorder hand strap",
+            "viewfinder eyecup",
+            "record key",
+            "hinged LCD monitor",
+            "camcorder monitor",
+            "screen hinge",
+            "camcorder cooling slit",
+            "camcorder cooling slit.001",
+            "camcorder cooling slit.002",
+            "camcorder cooling slit.003"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Purpose-built proportioned camcorder body, single lens, tape door, eyecup and woven hand strap",
+            "Tier II fold-out LCD; Tier III shoulder, carry handle and directional microphone"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/video_camera.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_video_camera_3.glb",
+          "sha256": "e874069d9233b735c5bdb2662e1eaf1024072bbea6f816c9d52c6e5bac1ea32c",
+          "triangles": 1332,
+          "dimensions_blender_z_up": [
+            0.1535699963569641,
+            0.22100000083446503,
+            0.12618999183177948
+          ],
+          "materials": 7,
+          "texture_images": [
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Coated blue optics radial optical map",
+              "size": [
+                128,
+                128
+              ]
+            },
+            {
+              "name": "canvas strap diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "red control diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Display camcorder monitor",
+              "size": [
+                128,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "camcorder integrated chassis",
+            "ribbed tape door",
+            "upper camera shoulder",
+            "stepped optical barrel",
+            "recessed lens bezel",
+            "coated optical lens",
+            "lens focus knurl",
+            "lens focus knurl.001",
+            "lens focus knurl.002",
+            "rear camcorder battery",
+            "zoom rocker",
+            "padded camcorder hand strap",
+            "viewfinder eyecup",
+            "record key",
+            "hinged LCD monitor",
+            "camcorder monitor",
+            "screen hinge",
+            "handle saddle",
+            "handle saddle.001",
+            "carrying handle",
+            "directional microphone",
+            "microphone suspension pedestal",
+            "microphone suspension pedestal.001",
+            "camcorder cooling slit",
+            "camcorder cooling slit.001",
+            "camcorder cooling slit.002",
+            "camcorder cooling slit.003"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Purpose-built proportioned camcorder body, single lens, tape door, eyecup and woven hand strap",
+            "Tier II fold-out LCD; Tier III shoulder, carry handle and directional microphone"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/video_camera.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    },
+    {
+      "id": "DOTS_PROJECTOR",
+      "label": "Pattern projector",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_dots_projector_1.glb",
+          "sha256": "246c23482d35d020e09671cf9717396d41443cdfc94fd6df443e969c18265771",
+          "triangles": 306,
+          "dimensions_blender_z_up": [
+            0.03550000116229057,
+            0.16449999809265137,
+            0.03400000184774399
+          ],
+          "materials": 3,
+          "texture_images": [
+            {
+              "name": "misc_mp_1.001 charcoal",
+              "size": [
+                192,
+                192
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "green signal diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "vape_mp_1",
+            "projector focus collar",
+            "single laser aperture",
+            "projector pocket clip"
+          ],
+          "existing_unchanged": false,
+          "variants": {
+            "deployed": {
+              "tier": 1,
+              "state": "deployed",
+              "model": "assets/runtime/models/blender_dots_projector_1_deployed.glb",
+              "sha256": "0602ed6ab2b189cf72bf1b6e262b7423277af579ab7ec78cc56ef51553e87862",
+              "triangles": 306,
+              "dimensions_blender_z_up": [
+                0.03550000116229057,
+                0.16449999809265137,
+                0.03400000184774399
+              ],
+              "materials": 3,
+              "texture_images": [
+                {
+                  "name": "misc_mp_1.002 charcoal",
+                  "size": [
+                    192,
+                    192
+                  ]
+                },
+                {
+                  "name": "dark anodized diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "green signal diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                }
+              ],
+              "component_vertex_groups": [
+                "vape_mp_1",
+                "projector focus collar",
+                "single laser aperture",
+                "projector pocket clip"
+              ],
+              "existing_unchanged": false,
+              "variants": {},
+              "features": [
+                "Original cylindrical PSX source shell kept in proportion, with one focus collar and laser aperture",
+                "Pocket projector with mechanical clip; runtime supplies the projected dots"
+              ],
+              "sockets_gltf_y_up": {},
+              "editable": "development/assets/equipment-catalog/blender/dots_projector.blend",
+              "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+              "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+            }
+          },
+          "features": [
+            "Original cylindrical PSX source shell kept in proportion, with one focus collar and laser aperture",
+            "Pocket projector with mechanical clip; runtime supplies the projected dots"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/dots_projector.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_dots_projector_2.glb",
+          "sha256": "88f54d3ec31021450b9d795cd6e57defc53a0ede3b295dfc9d87f13aa227abbc",
+          "triangles": 712,
+          "dimensions_blender_z_up": [
+            0.10779999941587448,
+            0.11800000071525574,
+            0.07150000333786011
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Coated blue optics radial optical map",
+              "size": [
+                128,
+                128
+              ]
+            },
+            {
+              "name": "green signal diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "sloping projector chassis",
+            "stepped optical barrel",
+            "recessed lens bezel",
+            "coated optical lens",
+            "green projection optic",
+            "projector ventilation groove",
+            "projector ventilation groove.001",
+            "projector ventilation groove.002",
+            "projector ventilation groove.003",
+            "projector ventilation groove.004",
+            "focus wheel",
+            "power status",
+            "projector underside rail"
+          ],
+          "existing_unchanged": false,
+          "variants": {
+            "deployed": {
+              "tier": 2,
+              "state": "deployed",
+              "model": "assets/runtime/models/blender_dots_projector_2_deployed.glb",
+              "sha256": "638937da7ba88e9aa43110f35396c38dedde660450b72423d8a7ee4b91be5822",
+              "triangles": 1272,
+              "dimensions_blender_z_up": [
+                0.10779999941587448,
+                0.2034972906112671,
+                0.14759638905525208
+              ],
+              "materials": 6,
+              "texture_images": [
+                {
+                  "name": "charcoal chassis diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "dark anodized diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "Coated blue optics radial optical map",
+                  "size": [
+                    128,
+                    128
+                  ]
+                },
+                {
+                  "name": "green signal diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "rubber grip diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "brushed alloy diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                }
+              ],
+              "component_vertex_groups": [
+                "sloping projector chassis",
+                "stepped optical barrel",
+                "recessed lens bezel",
+                "coated optical lens",
+                "green projection optic",
+                "projector ventilation groove",
+                "projector ventilation groove.001",
+                "projector ventilation groove.002",
+                "projector ventilation groove.003",
+                "projector ventilation groove.004",
+                "focus wheel",
+                "power status",
+                "telescopic center column",
+                "leg spider",
+                "camera quick-release plate",
+                "tripod tilt head",
+                "pan handle",
+                "pan handle grip",
+                "upper tripod leg",
+                "lower telescoping leg",
+                "clamping collar",
+                "rubber tripod foot",
+                "leg spreader",
+                "upper tripod leg.001",
+                "lower telescoping leg.001",
+                "clamping collar.001",
+                "rubber tripod foot.001",
+                "leg spreader.001",
+                "upper tripod leg.002",
+                "lower telescoping leg.002",
+                "clamping collar.002",
+                "rubber tripod foot.002",
+                "leg spreader.002"
+              ],
+              "existing_unchanged": false,
+              "variants": {},
+              "features": [
+                "Compact projector with sloping case, single focused optical aperture, cooling vents and adjustment dial",
+                "Deployed form has a mechanical tabletop support"
+              ],
+              "sockets_gltf_y_up": {},
+              "editable": "development/assets/equipment-catalog/blender/dots_projector.blend",
+              "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+              "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+            }
+          },
+          "features": [
+            "Compact projector with sloping case, single focused optical aperture, cooling vents and adjustment dial",
+            "Deployed form has a mechanical tabletop support"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/dots_projector.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_dots_projector_3.glb",
+          "sha256": "d1ad4ac71d206d939d92266adc9b8c8255f8ba2c0b02033843c8298e711784f5",
+          "triangles": 712,
+          "dimensions_blender_z_up": [
+            0.13580000400543213,
+            0.1379999965429306,
+            0.08579999953508377
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Coated blue optics radial optical map",
+              "size": [
+                128,
+                128
+              ]
+            },
+            {
+              "name": "green signal diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "sloping projector chassis",
+            "stepped optical barrel",
+            "recessed lens bezel",
+            "coated optical lens",
+            "green projection optic",
+            "projector ventilation groove",
+            "projector ventilation groove.001",
+            "projector ventilation groove.002",
+            "projector ventilation groove.003",
+            "projector ventilation groove.004",
+            "focus wheel",
+            "power status",
+            "projector underside rail"
+          ],
+          "existing_unchanged": false,
+          "variants": {
+            "deployed": {
+              "tier": 3,
+              "state": "deployed",
+              "model": "assets/runtime/models/blender_dots_projector_3_deployed.glb",
+              "sha256": "d5b572c55f35fc342bf79ba6772fa83d121df8a2293c667ec3e3b0e6938d4189",
+              "triangles": 1272,
+              "dimensions_blender_z_up": [
+                0.13580000400543213,
+                0.21349728107452393,
+                0.16189639270305634
+              ],
+              "materials": 6,
+              "texture_images": [
+                {
+                  "name": "charcoal chassis diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "dark anodized diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "Coated blue optics radial optical map",
+                  "size": [
+                    128,
+                    128
+                  ]
+                },
+                {
+                  "name": "green signal diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "rubber grip diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "brushed alloy diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                }
+              ],
+              "component_vertex_groups": [
+                "sloping projector chassis",
+                "stepped optical barrel",
+                "recessed lens bezel",
+                "coated optical lens",
+                "green projection optic",
+                "projector ventilation groove",
+                "projector ventilation groove.001",
+                "projector ventilation groove.002",
+                "projector ventilation groove.003",
+                "projector ventilation groove.004",
+                "focus wheel",
+                "power status",
+                "telescopic center column",
+                "leg spider",
+                "camera quick-release plate",
+                "tripod tilt head",
+                "pan handle",
+                "pan handle grip",
+                "upper tripod leg",
+                "lower telescoping leg",
+                "clamping collar",
+                "rubber tripod foot",
+                "leg spreader",
+                "upper tripod leg.001",
+                "lower telescoping leg.001",
+                "clamping collar.001",
+                "rubber tripod foot.001",
+                "leg spreader.001",
+                "upper tripod leg.002",
+                "lower telescoping leg.002",
+                "clamping collar.002",
+                "rubber tripod foot.002",
+                "leg spreader.002"
+              ],
+              "existing_unchanged": false,
+              "variants": {},
+              "features": [
+                "Compact projector with sloping case, single focused optical aperture, cooling vents and adjustment dial",
+                "Deployed form has a mechanical tabletop support"
+              ],
+              "sockets_gltf_y_up": {},
+              "editable": "development/assets/equipment-catalog/blender/dots_projector.blend",
+              "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+              "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+            }
+          },
+          "features": [
+            "Compact projector with sloping case, single focused optical aperture, cooling vents and adjustment dial",
+            "Deployed form has a mechanical tabletop support"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/dots_projector.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    },
+    {
+      "id": "HEAD_GEAR",
+      "label": "Head camera / helmet light",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_head_gear_1.glb",
+          "sha256": "0fb66ce2352316beb789890f772d65899391f5bf663ce172778fd1d52fb2c9d3",
+          "triangles": 576,
+          "dimensions_blender_z_up": [
+            0.17599999904632568,
+            0.23800000548362732,
+            0.08799999952316284
+          ],
+          "materials": 4,
+          "texture_images": [
+            {
+              "name": "canvas strap diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Faceted reflector with central LED radial optical map",
+              "size": [
+                128,
+                128
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "woven adjustable head band",
+            "rear strap adjuster",
+            "crown webbing",
+            "front mounting cradle",
+            "stepped optical barrel",
+            "recessed lens bezel",
+            "coated optical lens"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Wearable cloth headband, adjustable rear buckle, crown strap and metal mounting cradle",
+            "One front lamp, compact camera or monocular optic, with believable wearable proportions"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/head_gear.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_head_gear_2.glb",
+          "sha256": "a2f814bbd34913b01ce2c2c3801880ab22edeb89c7315f994848f0779d128db8",
+          "triangles": 604,
+          "dimensions_blender_z_up": [
+            0.17599999904632568,
+            0.2639999985694885,
+            0.08799999952316284
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "canvas strap diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Coated blue optics radial optical map",
+              "size": [
+                128,
+                128
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "woven adjustable head band",
+            "rear strap adjuster",
+            "crown webbing",
+            "front mounting cradle",
+            "head camera tapered housing",
+            "stepped optical barrel",
+            "recessed lens bezel",
+            "coated optical lens"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Wearable cloth headband, adjustable rear buckle, crown strap and metal mounting cradle",
+            "One front lamp, compact camera or monocular optic, with believable wearable proportions"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/head_gear.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_head_gear_3.glb",
+          "sha256": "7e025d60621f10a4432a3537a57a39555bc29381a5728b0ea22b7be2afbb8ecc",
+          "triangles": 604,
+          "dimensions_blender_z_up": [
+            0.17599999904632568,
+            0.3154999911785126,
+            0.09699999541044235
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "canvas strap diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Coated blue optics radial optical map",
+              "size": [
+                128,
+                128
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "woven adjustable head band",
+            "rear strap adjuster",
+            "crown webbing",
+            "front mounting cradle",
+            "monocular night scope",
+            "night scope focus ring",
+            "night scope objective",
+            "counterweight battery"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Wearable cloth headband, adjustable rear buckle, crown strap and metal mounting cradle",
+            "One front lamp, compact camera or monocular optic, with believable wearable proportions"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/head_gear.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    },
+    {
+      "id": "MOTION_SENSOR",
+      "label": "Motion sensor",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_motion_sensor_1.glb",
+          "sha256": "951fcad7c856b1859aba21fa8cccb439a079394ec781073a6e79082d87bf8ed9",
+          "triangles": 280,
+          "dimensions_blender_z_up": [
+            0.04800000041723251,
+            0.05400000140070915,
+            0.09099999815225601
+          ],
+          "materials": 4,
+          "texture_images": [
+            {
+              "name": "ivory instrument diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "white fresnel diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "red control diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "tapered PIR alarm case",
+            "fresnel detection window",
+            "alarm indicator",
+            "wall mounting plate",
+            "fresnel lens ribs",
+            "fresnel lens ribs.001",
+            "fresnel lens ribs.002",
+            "fresnel lens ribs.003",
+            "fresnel lens ribs.004"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Recognizable wall-mounted PIR sensor with tapered alarm case and segmented convex Fresnel lens",
+            "Sealed case seam, status LED and mechanical wall mount"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/motion_sensor.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_motion_sensor_2.glb",
+          "sha256": "da3edd13fcb2c9d5c6ccfaabcaada7d0478fcf508a63597c770b938688c32acd",
+          "triangles": 368,
+          "dimensions_blender_z_up": [
+            0.054999999701976776,
+            0.05400000140070915,
+            0.10199999809265137
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "ivory instrument diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "white fresnel diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "red control diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "tapered PIR alarm case",
+            "fresnel detection window",
+            "alarm indicator",
+            "wall mounting plate",
+            "fresnel lens ribs",
+            "fresnel lens ribs.001",
+            "fresnel lens ribs.002",
+            "fresnel lens ribs.003",
+            "fresnel lens ribs.004",
+            "sensitivity trim",
+            "sealed rubber case seam"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Recognizable wall-mounted PIR sensor with tapered alarm case and segmented convex Fresnel lens",
+            "Sealed case seam, status LED and mechanical wall mount"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/motion_sensor.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_motion_sensor_3.glb",
+          "sha256": "181d1f99288b6301a638f63dfd807bfd4b1e183040b2dff5a97c50e7c70842a4",
+          "triangles": 396,
+          "dimensions_blender_z_up": [
+            0.06199999898672104,
+            0.07699999958276749,
+            0.11299999803304672
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "white fresnel diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "red control diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "tapered PIR alarm case",
+            "fresnel detection window",
+            "alarm indicator",
+            "wall mounting plate",
+            "fresnel lens ribs",
+            "fresnel lens ribs.001",
+            "fresnel lens ribs.002",
+            "fresnel lens ribs.003",
+            "fresnel lens ribs.004",
+            "sensitivity trim",
+            "sealed rubber case seam",
+            "swivel mounting neck"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Recognizable wall-mounted PIR sensor with tapered alarm case and segmented convex Fresnel lens",
+            "Sealed case seam, status LED and mechanical wall mount"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/motion_sensor.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    },
+    {
+      "id": "SOUND_SENSOR",
+      "label": "Sound sensor",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_sound_sensor_1.glb",
+          "sha256": "215627af0d08684ce8c3963e27f96cc136f80b615745ee1bd09348c660aa58b0",
+          "triangles": 1140,
+          "dimensions_blender_z_up": [
+            0.052000001072883606,
+            0.050999999046325684,
+            0.11275000125169754
+          ],
+          "materials": 4,
+          "texture_images": [
+            {
+              "name": "olive instrument diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "green signal diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "sound receiver lower case",
+            "microphone preamp stem",
+            "acoustic microphone head",
+            "wall receiver mounting shoe",
+            "receiver live indicator",
+            "microphone grille band",
+            "microphone grille band.001",
+            "microphone grille band.002",
+            "microphone grille band.003",
+            "microphone grille band.004"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Dedicated acoustic monitoring instrument with preamplifier neck, vented microphone head and wall shoe",
+            "Screen and radio receiver appear only on higher tiers"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/sound_sensor.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_sound_sensor_2.glb",
+          "sha256": "0737550f8fe49a8b48ff36687702a1fe5704995232a4541c5f8b78110a83fa3f",
+          "triangles": 1142,
+          "dimensions_blender_z_up": [
+            0.052000001072883606,
+            0.050999999046325684,
+            0.13529999554157257
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "green signal diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Display sound pressure LCD",
+              "size": [
+                128,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "sound receiver lower case",
+            "microphone preamp stem",
+            "acoustic microphone head",
+            "wall receiver mounting shoe",
+            "receiver live indicator",
+            "microphone grille band",
+            "microphone grille band.001",
+            "microphone grille band.002",
+            "microphone grille band.003",
+            "microphone grille band.004",
+            "sound pressure LCD"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Dedicated acoustic monitoring instrument with preamplifier neck, vented microphone head and wall shoe",
+            "Screen and radio receiver appear only on higher tiers"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/sound_sensor.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_sound_sensor_3.glb",
+          "sha256": "9d6a2469461e8cc8d9a41e2f3b63890779cc11e9ab86d12cca5299bb01fd4b4b",
+          "triangles": 1170,
+          "dimensions_blender_z_up": [
+            0.052000001072883606,
+            0.050999999046325684,
+            0.1732499897480011
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "green signal diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Display sound pressure LCD",
+              "size": [
+                128,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "sound receiver lower case",
+            "microphone preamp stem",
+            "acoustic microphone head",
+            "wall receiver mounting shoe",
+            "receiver live indicator",
+            "microphone grille band",
+            "microphone grille band.001",
+            "microphone grille band.002",
+            "microphone grille band.003",
+            "microphone grille band.004",
+            "sound pressure LCD",
+            "receiver stub antenna"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "Dedicated acoustic monitoring instrument with preamplifier neck, vented microphone head and wall shoe",
+            "Screen and radio receiver appear only on higher tiers"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/sound_sensor.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    },
+    {
+      "id": "PARABOLIC_MICROPHONE",
+      "label": "Parabolic microphone",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_parabolic_microphone_1.glb",
+          "sha256": "a1fee48a89976922ec836a51e8647a6adf31434562d3af2328a30a4e118e73bc",
+          "triangles": 662,
+          "dimensions_blender_z_up": [
+            0.21400000154972076,
+            0.1550000011920929,
+            0.2995000183582306
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "dish smoked acrylic diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "olive instrument diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Display parabolic receiver level",
+              "size": [
+                128,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "concave parabolic reflector",
+            "rolled dish rim",
+            "dish receiver handgrip",
+            "receiver electronics bridge",
+            "central microphone pickup",
+            "dish focal pickup strut",
+            "dish focal pickup strut.001",
+            "dish focal pickup strut.002",
+            "dish backbone mounting stem",
+            "parabolic receiver level",
+            "gain control mounting spindle",
+            "receiver gain"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "True concave dish profile with rolled rim, focal pickup and three thin supporting struts",
+            "Integrated pistol receiver, textured grip and gain control; measured tier dimensions"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/parabolic_microphone.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_parabolic_microphone_2.glb",
+          "sha256": "09999f7de0c572e62d2c8a6c28d85f5f288f97239d21ac469c4fb63b2725a592",
+          "triangles": 662,
+          "dimensions_blender_z_up": [
+            0.24400000274181366,
+            0.1550000011920929,
+            0.3264999985694885
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "dish smoked acrylic diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Display parabolic receiver level",
+              "size": [
+                128,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "concave parabolic reflector",
+            "rolled dish rim",
+            "dish receiver handgrip",
+            "receiver electronics bridge",
+            "central microphone pickup",
+            "dish focal pickup strut",
+            "dish focal pickup strut.001",
+            "dish focal pickup strut.002",
+            "dish backbone mounting stem",
+            "parabolic receiver level",
+            "gain control mounting spindle",
+            "receiver gain"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "True concave dish profile with rolled rim, focal pickup and three thin supporting struts",
+            "Integrated pistol receiver, textured grip and gain control; measured tier dimensions"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/parabolic_microphone.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_parabolic_microphone_3.glb",
+          "sha256": "5dbe50910d7223bba7839866c76cc356f952fce3ba59aaf222052153ec927885",
+          "triangles": 690,
+          "dimensions_blender_z_up": [
+            0.27399998903274536,
+            0.15800000727176666,
+            0.35350000858306885
+          ],
+          "materials": 5,
+          "texture_images": [
+            {
+              "name": "dish smoked acrylic diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "Display parabolic receiver level",
+              "size": [
+                128,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "concave parabolic reflector",
+            "rolled dish rim",
+            "dish receiver handgrip",
+            "receiver electronics bridge",
+            "central microphone pickup",
+            "dish focal pickup strut",
+            "dish focal pickup strut.001",
+            "dish focal pickup strut.002",
+            "dish backbone mounting stem",
+            "parabolic receiver level",
+            "gain control mounting spindle",
+            "receiver gain",
+            "support wrist rail"
+          ],
+          "existing_unchanged": false,
+          "variants": {},
+          "features": [
+            "True concave dish profile with rolled rim, focal pickup and three thin supporting struts",
+            "Integrated pistol receiver, textured grip and gain control; measured tier dimensions"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/parabolic_microphone.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    },
+    {
+      "id": "TRIPOD",
+      "label": "Tripod / camera mount",
+      "stages": [
+        {
+          "tier": 1,
+          "state": "default",
+          "model": "assets/runtime/models/blender_tripod_1.glb",
+          "sha256": "f5cb535189055a61bf153702777d6269fc44ba6fb4aecba9bf9efd7413782d38",
+          "triangles": 604,
+          "dimensions_blender_z_up": [
+            0.36000001430511475,
+            0.41290760040283203,
+            0.608975887298584
+          ],
+          "materials": 4,
+          "texture_images": [
+            {
+              "name": "brushed alloy diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "telescopic center column",
+            "leg spider",
+            "camera quick-release plate",
+            "tripod tilt head",
+            "pan handle",
+            "pan handle grip",
+            "upper tripod leg",
+            "lower telescoping leg",
+            "clamping collar",
+            "rubber tripod foot",
+            "leg spreader",
+            "upper tripod leg.001",
+            "lower telescoping leg.001",
+            "clamping collar.001",
+            "rubber tripod foot.001",
+            "leg spreader.001",
+            "upper tripod leg.002",
+            "lower telescoping leg.002",
+            "clamping collar.002",
+            "rubber tripod foot.002",
+            "leg spreader.002"
+          ],
+          "existing_unchanged": false,
+          "variants": {
+            "folded": {
+              "tier": 1,
+              "state": "folded",
+              "model": "assets/runtime/models/blender_tripod_1_folded.glb",
+              "sha256": "dbec10dddeb95e35f5e1520b1c2bae3e1e06319677693c052e9c5eec2c34d70e",
+              "triangles": 544,
+              "dimensions_blender_z_up": [
+                0.07150000333786011,
+                0.17480817437171936,
+                0.6062053442001343
+              ],
+              "materials": 4,
+              "texture_images": [
+                {
+                  "name": "brushed alloy diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "charcoal chassis diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "rubber grip diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "dark anodized diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                }
+              ],
+              "component_vertex_groups": [
+                "telescopic center column",
+                "leg spider",
+                "camera quick-release plate",
+                "tripod tilt head",
+                "pan handle",
+                "pan handle grip",
+                "upper tripod leg",
+                "lower telescoping leg",
+                "clamping collar",
+                "rubber tripod foot",
+                "upper tripod leg.001",
+                "lower telescoping leg.001",
+                "clamping collar.001",
+                "rubber tripod foot.001",
+                "upper tripod leg.002",
+                "lower telescoping leg.002",
+                "clamping collar.002",
+                "rubber tripod foot.002"
+              ],
+              "existing_unchanged": false,
+              "variants": {},
+              "features": [
+                "Physical telescoping camera tripod, spreader braces, tilt head, quick release and pan handle",
+                "Separate folded leg state for carrying"
+              ],
+              "sockets_gltf_y_up": {},
+              "editable": "development/assets/equipment-catalog/blender/tripod.blend",
+              "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+              "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+            }
+          },
+          "features": [
+            "Physical telescoping camera tripod, spreader braces, tilt head, quick release and pan handle",
+            "Separate folded leg state for carrying"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/tripod.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 2,
+          "state": "default",
+          "model": "assets/runtime/models/blender_tripod_2.glb",
+          "sha256": "72e9661d43702cecf3e6466557ac024574ec25d2e1bb2b3c24c99d4d1159927a",
+          "triangles": 604,
+          "dimensions_blender_z_up": [
+            0.4854000210762024,
+            0.5577070116996765,
+            0.8289980888366699
+          ],
+          "materials": 3,
+          "texture_images": [
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "telescopic center column",
+            "leg spider",
+            "camera quick-release plate",
+            "tripod tilt head",
+            "pan handle",
+            "pan handle grip",
+            "upper tripod leg",
+            "lower telescoping leg",
+            "clamping collar",
+            "rubber tripod foot",
+            "leg spreader",
+            "upper tripod leg.001",
+            "lower telescoping leg.001",
+            "clamping collar.001",
+            "rubber tripod foot.001",
+            "leg spreader.001",
+            "upper tripod leg.002",
+            "lower telescoping leg.002",
+            "clamping collar.002",
+            "rubber tripod foot.002",
+            "leg spreader.002"
+          ],
+          "existing_unchanged": false,
+          "variants": {
+            "folded": {
+              "tier": 2,
+              "state": "folded",
+              "model": "assets/runtime/models/blender_tripod_2_folded.glb",
+              "sha256": "90ef8b266554cf02e184a0d23c92b270dec61fb055b480b703b36039bda20b12",
+              "triangles": 544,
+              "dimensions_blender_z_up": [
+                0.07150000333786011,
+                0.17480817437171936,
+                0.8261070847511292
+              ],
+              "materials": 3,
+              "texture_images": [
+                {
+                  "name": "dark anodized diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "charcoal chassis diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "rubber grip diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                }
+              ],
+              "component_vertex_groups": [
+                "telescopic center column",
+                "leg spider",
+                "camera quick-release plate",
+                "tripod tilt head",
+                "pan handle",
+                "pan handle grip",
+                "upper tripod leg",
+                "lower telescoping leg",
+                "clamping collar",
+                "rubber tripod foot",
+                "upper tripod leg.001",
+                "lower telescoping leg.001",
+                "clamping collar.001",
+                "rubber tripod foot.001",
+                "upper tripod leg.002",
+                "lower telescoping leg.002",
+                "clamping collar.002",
+                "rubber tripod foot.002"
+              ],
+              "existing_unchanged": false,
+              "variants": {},
+              "features": [
+                "Physical telescoping camera tripod, spreader braces, tilt head, quick release and pan handle",
+                "Separate folded leg state for carrying"
+              ],
+              "sockets_gltf_y_up": {},
+              "editable": "development/assets/equipment-catalog/blender/tripod.blend",
+              "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+              "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+            }
+          },
+          "features": [
+            "Physical telescoping camera tripod, spreader braces, tilt head, quick release and pan handle",
+            "Separate folded leg state for carrying"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/tripod.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        },
+        {
+          "tier": 3,
+          "state": "default",
+          "model": "assets/runtime/models/blender_tripod_3.glb",
+          "sha256": "d82a10fca96862733bd6fb69da2a28c9542ce33516e0b68fb02c3258c4f7a718",
+          "triangles": 604,
+          "dimensions_blender_z_up": [
+            0.61080002784729,
+            0.7025064826011658,
+            1.0490107536315918
+          ],
+          "materials": 3,
+          "texture_images": [
+            {
+              "name": "dark anodized diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "charcoal chassis diffuse",
+              "size": [
+                64,
+                64
+              ]
+            },
+            {
+              "name": "rubber grip diffuse",
+              "size": [
+                64,
+                64
+              ]
+            }
+          ],
+          "component_vertex_groups": [
+            "telescopic center column",
+            "leg spider",
+            "camera quick-release plate",
+            "tripod tilt head",
+            "pan handle",
+            "pan handle grip",
+            "upper tripod leg",
+            "lower telescoping leg",
+            "clamping collar",
+            "rubber tripod foot",
+            "leg spreader",
+            "upper tripod leg.001",
+            "lower telescoping leg.001",
+            "clamping collar.001",
+            "rubber tripod foot.001",
+            "leg spreader.001",
+            "upper tripod leg.002",
+            "lower telescoping leg.002",
+            "clamping collar.002",
+            "rubber tripod foot.002",
+            "leg spreader.002"
+          ],
+          "existing_unchanged": false,
+          "variants": {
+            "folded": {
+              "tier": 3,
+              "state": "folded",
+              "model": "assets/runtime/models/blender_tripod_3_folded.glb",
+              "sha256": "243753667d565d6ab4a558c2473f991225289b0a9c9c075bf3c7f178d7b074a3",
+              "triangles": 544,
+              "dimensions_blender_z_up": [
+                0.07150000333786011,
+                0.17480817437171936,
+                1.046051025390625
+              ],
+              "materials": 3,
+              "texture_images": [
+                {
+                  "name": "dark anodized diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "charcoal chassis diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                },
+                {
+                  "name": "rubber grip diffuse",
+                  "size": [
+                    64,
+                    64
+                  ]
+                }
+              ],
+              "component_vertex_groups": [
+                "telescopic center column",
+                "leg spider",
+                "camera quick-release plate",
+                "tripod tilt head",
+                "pan handle",
+                "pan handle grip",
+                "upper tripod leg",
+                "lower telescoping leg",
+                "clamping collar",
+                "rubber tripod foot",
+                "upper tripod leg.001",
+                "lower telescoping leg.001",
+                "clamping collar.001",
+                "rubber tripod foot.001",
+                "upper tripod leg.002",
+                "lower telescoping leg.002",
+                "clamping collar.002",
+                "rubber tripod foot.002"
+              ],
+              "existing_unchanged": false,
+              "variants": {},
+              "features": [
+                "Physical telescoping camera tripod, spreader braces, tilt head, quick release and pan handle",
+                "Separate folded leg state for carrying"
+              ],
+              "sockets_gltf_y_up": {},
+              "editable": "development/assets/equipment-catalog/blender/tripod.blend",
+              "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+              "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+            }
+          },
+          "features": [
+            "Physical telescoping camera tripod, spreader braces, tilt head, quick release and pan handle",
+            "Separate folded leg state for carrying"
+          ],
+          "sockets_gltf_y_up": {},
+          "editable": "development/assets/equipment-catalog/blender/tripod.blend",
+          "license": "Owner-provided original game-use subset and original authored geometry; individual sources recorded in rebuild provenance",
+          "online_integration_status": "Asset delivery; gameplay/packaging left for online integration"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "name": "exploration_emf_detector.glb",
+      "sha256": "dede8e0acdd36f11c9e71d16681ae6f0867c675bfc54a190867150e063a984de",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\exploration_emf_detector.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "dosimeter_4.glb",
+      "sha256": "e4cbe5842520c7a947e3d7134003ac62a08681f8c7d086a1d06b4cfe33e9941f",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\dosimeter_4.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "dosimeter_2.glb",
+      "sha256": "e284911ff0d03a939efbfdf1ba610fe818bdde94d1db03e10dbe430c138517cf",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\dosimeter_2.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "exploration_thermometer.glb",
+      "sha256": "cb5d99b92c069de398b59cb4babb8562de6040cef30a41445276dc47b90ef5cf",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\exploration_thermometer.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "exploration_thermal_camera.glb",
+      "sha256": "3cfe62a955819771de0bc4df11fc5a6a9d4239afe8170a29f5979b3c4ccc3f56",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\exploration_thermal_camera.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "walkie_talkie_1.glb",
+      "sha256": "292145f3edd230ba98d364070380519266e55f5982f746dd4c7b67e42ee92165",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\walkie_talkie_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "walkie_talkie_2.glb",
+      "sha256": "cd8b549f7209f975ff15104e2bc520844b397abad67e76946cf3f885d5992ef6",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\walkie_talkie_2.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "exploration_flashlight.glb",
+      "sha256": "b5e66a349601d196e3bfef0e079db04d1f8a0607f2821e3704b80cb9750f2872",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\exploration_flashlight.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "flashlight_mp_1.glb",
+      "sha256": "104931f467a207d86c451e511adee68adccaec6cf3beb7e6d04325986fc2b75e",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\flashlight_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "exploration_photo_camera.glb",
+      "sha256": "09640b60f2f79c7dcdbfd9a9c2a821f3af9d2b01b268c1575bcf7a1c42208281",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\exploration_photo_camera.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    },
+    {
+      "name": "vape_mp_1.glb",
+      "sha256": "fea628ab07a439881b6b9b0c85ec3cd10aec3612b6d97ad57062bd35cab24003",
+      "source": "C:\\Users\\Admin\\Documents\\ChatGPT\\Phasmaphobia alike\\HB-TTRPG-tools\\software\\beckenburg\\assets\\runtime\\models\\vape_mp_1.glb",
+      "policy": "Owner-provided original game asset; preserve source materials and UVs"
+    }
+  ]
+}
