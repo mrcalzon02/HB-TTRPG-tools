@@ -42,6 +42,39 @@ public final class EquipmentStoreDescriptions {
         return text.replace("&","&amp;").replace("<","&lt;")
             .replace(">","&gt;").replace("\"","&quot;");
     }
+    /** Never sell an aspiration as a functioning tier upgrade. */
+    private static String actualBenefit(String id,EquipmentTiers.Tier tier,
+                                         EquipmentTiers.Stage stage){
+        int at=tier.ordinal();
+        return switch(id){
+            case "EMF_READER"->"Handheld field strength 0–10; tiered sensing reach and response rate";
+            case "THERMOMETER"->"Actual ambient air temperature; tiered sensing reach and response rate";
+            case "SPIRIT_BOX"->"Physical voice receiver; tiered pickup reach and faster sampling";
+            case "UV_LIGHT"->"Brighter UV pickup of genuine fading traces, up to "+
+                new int[]{90,125,160}[at]+" host ticks after they were left";
+            case "DOTS_PROJECTOR"->"Physical projected grid, coverage radius "+
+                String.format(java.util.Locale.ROOT,"%.2f",stage.reachCm()/100.0)+
+                "m; passage only on real ghost action";
+            case "GHOST_WRITING_BOOK"->"Larger tiered handheld book visual; one real open book per placement";
+            case "FLASHLIGHT"->"Actual brighter/wider beam and "+
+                stage.batterySeconds()+" seconds charge before van recharge";
+            case "PHOTO_CAMERA"->new int[]{1,6,12}[at]+
+                " real shutter exposure(s); original scene recorded to a "+
+                EquipmentOptics.forTier(tier).photoWidth()+"×"+
+                EquipmentOptics.forTier(tier).photoHeight()+" PNG";
+            case "VIDEO_CAMERA"->"Live remote scene video with "+
+                (int)EquipmentOptics.forTier(tier).videoFieldOfView()+
+                "° optical FOV and tiered battery life";
+            case "HEAD_GEAR"->"Switchable true-scene night-vision filter; "+
+                stage.batterySeconds()+" seconds battery life";
+            case "FIRELIGHT"->"Switchable flame; "+stage.batterySeconds()+
+                " seconds burn before automatic extinguishing";
+            case "IGNITER"->stage.capacity()+" real sparks; each activation uses one charge";
+            case "INCENSE"->stage.capacity()+" incense bundles; each produces "+
+                stage.batterySeconds()+" seconds of visible smoke";
+            default->stage.effect();
+        };
+    }
     public static Listing describe(String id,EquipmentTiers.Tier tier){
         Objects.requireNonNull(id);Objects.requireNonNull(tier);
         EquipmentRegistry.Tool tool=EquipmentRegistry.get(id);
@@ -68,6 +101,20 @@ public final class EquipmentStoreDescriptions {
                 specs="Illuminated beam "+reach[tier.ordinal()]+"m; battery "+
                     stage.batterySeconds()+"s; recharge at the van";
             }
+            case "UV_LIGHT" -> specs="Genuine trace visibility "+
+                new int[]{90,125,160}[tier.ordinal()]+" ticks; sample battery "+
+                stage.batterySeconds()+"s";
+            case "DOTS_PROJECTOR" -> specs=String.format(java.util.Locale.ROOT,
+                "Actual grid coverage %.2fm; real ghost passages only",
+                stage.reachCm()/100.0);
+            case "GHOST_WRITING_BOOK" -> specs="One actual deployed book; "+
+                "larger held illustration at T"+(tier.ordinal()+1);
+            case "HEAD_GEAR","FIRELIGHT" -> specs="Real on/off operation; "+
+                "charge/fuel duration "+stage.batterySeconds()+"s";
+            case "IGNITER" -> specs="Actual spark count "+stage.capacity();
+            case "INCENSE" -> specs=stage.capacity()+" bundles; "+
+                stage.batterySeconds()+"s visible smoke per bundle; "+
+                "no invented paranormal evidence";
             default -> {
                 var pieces=new java.util.ArrayList<String>();
                 if(stage.reachCm()>0)
@@ -100,7 +147,9 @@ public final class EquipmentStoreDescriptions {
             default->"Catalog design only; effect and numeric values are proposals until an event backend exists";
         };
         return new Listing(id,tool.name(),tier,FieldEquipment.functional(id),
-            stage.creditCost(),stage.effect(),line,specs);
+            stage.creditCost(),
+            FieldEquipment.functional(id)?actualBenefit(id,tier,stage):stage.effect(),
+            line,specs);
     }
     public static List<Listing> tiers(String id){
         EquipmentRegistry.get(id);
