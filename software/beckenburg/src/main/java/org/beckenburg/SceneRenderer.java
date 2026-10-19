@@ -478,8 +478,8 @@ public final class SceneRenderer {
         for(LanDotsProjectors.Placement placement:dotsPositions.values()){
             if(Math.hypot(placement.x()-x,placement.z()-z)>13.5)continue;
             imported(out,"vape_mp_1",placement.x(),.10,placement.z(),2.0,0);
-            double radius=Math.min(2.35,EquipmentTiers.stage(
-                "DOTS_PROJECTOR",placement.tier()).reachCm()/100.0);
+            double radius=EquipmentTiers.stage(
+                "DOTS_PROJECTOR",placement.tier()).reachCm()/100.0;
             for(int gx=-4;gx<=4;gx++)for(int gz=-4;gz<=4;gz++){
                 double px=placement.x()+gx*radius/4.6,
                     pz=placement.z()+gz*radius/4.6;
