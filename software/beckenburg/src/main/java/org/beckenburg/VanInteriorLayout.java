@@ -27,9 +27,9 @@ public final class VanInteriorLayout {
         // have specific support heights; no giant bare rectangular podium.
         new Fixture("tv_table_1_4",-1.22,0,-.95,.92,
                     Math.PI/2,Mount.FLOOR,"computer table"),
-        new Fixture("pc_mp_1",-1.74,.33,-1.33,.93,
-                    Math.PI/2,Mount.FURNITURE,"computer tower"),
-        new Fixture("pc_keyboard_mp_1",-1.10,.80,-.94,.83,
+        new Fixture("pc_mp_1",-1.74,.02,-1.33,.93,
+                    Math.PI/2,Mount.FLOOR,"computer tower"),
+        new Fixture("pc_keyboard_mp_1",-1.10,.705,-.94,.83,
                     0,Mount.FURNITURE,"input keyboard"),
         // Three shallow shelves follow the right-side shell. Every stock
         // socket in VanEquipmentRack is reachable from the central aisle.
