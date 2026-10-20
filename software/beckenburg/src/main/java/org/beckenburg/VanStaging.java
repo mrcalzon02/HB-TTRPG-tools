@@ -18,9 +18,9 @@ public final class VanStaging {
     public record Position(double x, double z) { }
     public enum Station {
         BRIEFING("Contract / daily task boards", .45, 2.13),
-        EQUIPMENT("Equipment rack", -1.12, -1.35),
+        EQUIPMENT("Equipment rack", -.86, -1.35),
         RELAY("Sanity / activity monitors", 1.05, .55),
-        EXTRACTION("Extraction console", 1.17, 2.13);
+        EXTRACTION("Extraction console", .78, 2.13);
         public final String label;
         final double dx, dz;
         Station(String label, double dx, double dz) {
@@ -42,7 +42,7 @@ public final class VanStaging {
     public boolean cargoDoorClosed(){return cargoDoorClosed;}
     public void setCargoDoorClosed(boolean closed){cargoDoorClosed=closed;}
     /** Exact physical button location beside the van's cargo entrance. */
-    public Position doorButton(){return world(-INTERIOR_HALF_WIDTH+.13,FRONT+.57);}
+    public Position doorButton(){return world(-INTERIOR_HALF_WIDTH+.43,FRONT+.25);}
     public boolean nearDoorButton(double x,double z){
         if(!Double.isFinite(x)||!Double.isFinite(z))return false;
         Position p=doorButton();
