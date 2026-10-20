@@ -82,19 +82,45 @@ public final class CastleAndVanVisualAcceptanceTest {
         // bay from its open rear doors, not sideways through exterior panels.
         var rear=van.world(0,VanStaging.FRONT+.48);
         vanRender.x=rear.x();vanRender.z=rear.z();
-        vanRender.yaw=van.placement().yaw();
+        // VanStaging's world transform rotates local +Z by -yaw.
+        // SceneRenderer's view rotates local forward by +yaw; negate the
+        // van placement yaw for a genuine rear-to-front interior view.
+        vanRender.yaw=-van.placement().yaw();
         vanRender.rackStock=java.util.EnumSet.allOf(EquipmentLoadout.Item.class);
         var session=new InvestigationSession(site,InvestigationSession.Role.OBSERVER,17);
         vanRender.draw(site,session,2);
         render(vanRender,"van-complete-cargo-bay");
         var interior=van.world(.24,1.25);
         vanRender.x=interior.x();vanRender.z=interior.z();
-        vanRender.yaw=van.placement().yaw()+Math.PI/2;
+        vanRender.yaw=Math.PI/2-van.placement().yaw();
         vanRender.draw(site,session,2);
         render(vanRender,"van-fitted-monitor-wall");
-        vanRender.yaw=van.placement().yaw()-Math.PI/2;
+        vanRender.yaw=-Math.PI/2-van.placement().yaw();
         vanRender.draw(site,session,2);
         render(vanRender,"van-equipment-pegboard");
+
+        // Actual in-game view outward through the open rear cargo doors.
+        var doors=van.world(0,VanStaging.FRONT+.9);
+        vanRender.x=doors.x();vanRender.z=doors.z();
+        vanRender.yaw=Math.PI-van.placement().yaw();
+        vanRender.draw(site,session,2);
+        render(vanRender,"van-rear-doors-to-street");
+
+        // The opposite direction: road, empty egress lane, actual exterior
+        // back of the van, and curbside traffic on both sides.
+        var approach=van.world(0,VanArrivalStreet.ROAD_START-7.0);
+        vanRender.x=approach.x();vanRender.z=approach.z();
+        vanRender.yaw=-van.placement().yaw();
+        vanRender.draw(site,session,2);
+        render(vanRender,"van-street-facing-van");
+
+        // A second street view down the road from the shoulder makes
+        // parked-car placement and continuity inspectable at player eye height.
+        var shoulder=van.world(-2.0,VanArrivalStreet.ROAD_START-1.2);
+        vanRender.x=shoulder.x();vanRender.z=shoulder.z();
+        vanRender.yaw=Math.PI-van.placement().yaw();
+        vanRender.draw(site,session,2);
+        render(vanRender,"van-approach-road-and-parked-cars");
         Files.writeString(DIR.resolve("architecture-audit.txt"),
             "PASS measured door openings, real staircase, upstairs navigation, fixtures "+
             "and purchased-tool van source meshes\n");
