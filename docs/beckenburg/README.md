@@ -1,6 +1,10 @@
 # The Beckenburg Project — Master Game Design Document
 Version: 0.2, updated 2026-10-15. **Solo gameplay alpha source implemented and committed**: nine-zone Java 17-targeted Swing/software-3D case with an AI Spirit, field tools, wards, cleansing, extraction and local rewards. Source implementation commit: [`0a1f8a0`](https://github.com/mrcalzon02/HB-TTRPG-tools/commit/0a1f8a0dd3ae56f233d50f70a0d6a0fccd237f0f); headless and Linux virtual-display tests passed locally. This is **not** a finished Windows release, 3v1 LAN game or human/AI parity implementation. The approved concept PNGs remain independently archived locally but **not verified as GitHub image blobs or visible gallery assets**; see [artwork archive status](art/ASSET_ARCHIVAL_STATUS.md).
 
+## Future wilderness and campaign design proposals
+
+The [named wilderness and remote site roster](environments/WILDERNESS_AND_REMOTE_SITE_ROSTER.md) outlines thirteen candidate sites, their regional identities, environmental challenges and stories. The [solo investigator / AI allies / ghost campaign design](CAMPAIGN_AND_ALLIED_INVESTIGATORS_DESIGN.md) records proposed campaign loops and shared simulation requirements. **Both documents are design only:** no location or campaign mode is declared shipped, and the binding release plan and single stage ledger remain authoritative.
+
 ## Source-derived player wiki
 
 Browse the [Beckenburg Player & Design Wiki](wiki/README.md) for current rules, equipment, evidence, manual journal, prices, ghosts and planned locations, with direct links to source. Pages distinguish playable implementation from roadmap features.

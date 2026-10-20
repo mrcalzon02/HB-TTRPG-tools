@@ -43,6 +43,10 @@ Rooms: front approach and van staging, foyer, hallway, living room, kitchen, bat
 
 **Churches:** naves, crypts, towers, vestry, graveyard and consecration/ritual contrasts; role-sensitive but not Cleric-exclusive success.
 
+## Proposed remote and wilderness expansion
+
+See [Wilderness and Remote Investigation Roster](environments/WILDERNESS_AND_REMOTE_SITE_ROSTER.md) for thirteen **unimplemented** named sites, including log cabins and a logging camp, a lakeside campground, a fictional ancestral canyon cave complex, a mine, a fire lookout, isolated coastal facilities and more. Distinct histories do not prescribe ghost identity or evidence. Campaign and companion reuse is covered in [Solo Campaign, Allies and Ghost Campaign](CAMPAIGN_AND_ALLIED_INVESTIGATORS_DESIGN.md). These proposals do not displace the nine initial-release site families.
+
 ## Castle Beckenburg — headquarters and player lobby
 **Canonical setting name:** **Castle Beckenburg**. The working game title, **The Beckenburg Project**, is named after this castle. Castle Beckenburg is the persistent player lobby and supernatural investigation headquarters: a relatively peaceful refuge between dangerous expeditions. Use **Castle Beckenburg** for the location in player-facing text, maps, lore and future environment work; use **The Beckenburg Project** for the game/project identity. This is a naming and worldbuilding clarification, not a claim that all castle features are implemented.
 
