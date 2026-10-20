@@ -332,6 +332,23 @@ public final class SceneRenderer {
             out.add(new Face(hubCenter,hubA,hubB,hub,-1,0,0,0,0,0,0));
         }
     }
+    /** A real sloped roof section in the van's local coordinate system.
+     * The inner roof loses 10% of its horizontal span as it rises from the
+     * shoulder line; the outer sheet-metal shell sits beyond that surface.
+     */
+    private static void vanSlope(List<Face> out,VanStaging van,
+                                 double xBottom,double yBottom,
+                                 double xTop,double yTop,
+                                 double zFront,double zRear,int material){
+        var a=van.world(xBottom,zFront);var b=van.world(xBottom,zRear);
+        var cc=van.world(xTop,zRear);var d=van.world(xTop,zFront);
+        double len=zRear-zFront;
+        texturedQuad(out,new Point(a.x(),yBottom,a.z()),
+            new Point(b.x(),yBottom,b.z()),
+            new Point(cc.x(),yTop,cc.z()),
+            new Point(d.x(),yTop,d.z()),material,
+            0,0,len,0,len,yTop-yBottom,0,yTop-yBottom,0xffffff);
+    }
     /** One complete reusable VAN, shared by solo and network world renderers.
      * Architectural shell, floor, supports and socket data are all local to
      * this module. No Car08 wheel/grille triangles remain inside the cargo.
@@ -372,17 +389,27 @@ public final class SceneRenderer {
             vanBox(faces,van,-.86,.144,tz,1.72,.018,.055,MaterialAtlas.IRON);
         vanBox(faces,van,-w,.04,f-.18,w*2,.08,.19,MaterialAtlas.IRON);
 
-        // Load-bearing van side panels and headliner have physical thickness.
-        // Inner lining is offset from exterior skin, preventing see-through
-        // wheels and exterior diffuse textures from leaking into cargo space.
-        vanBox(faces,van,-w,.10,f,.15,h-.02,r-f,MaterialAtlas.IRON);
-        vanBox(faces,van,w-.15,.10,f,.15,h-.02,r-f,MaterialAtlas.IRON);
-        vanBox(faces,van,-w+.15,.17,f+.12,.07,h-.29,r-f-.24,MaterialAtlas.AGED_WOOD);
-        vanBox(faces,van,w-.22,.17,f+.12,.07,h-.29,r-f-.24,MaterialAtlas.AGED_WOOD);
-        vanBox(faces,van,-w,.10,r-.17,w*2,h-.02,.17,MaterialAtlas.IRON);
-        vanBox(faces,van,-w-.025,h-.02,f-.05,w*2+.05,.15,r-f+.10,MaterialAtlas.IRON);
-        vanBox(faces,van,-w+.22,h-.11,f+.14,w*2-.44,.035,r-f-.28,
-            MaterialAtlas.CEILING);
+        // Exterior remains 4.10 metres wide. True interior lining is 15%
+        // narrower; the tapered ceiling is a further 10% smaller across.
+        // This is an enclosed shell, not a rescaled rectangular room.
+        double iw=VanStaging.INTERIOR_HALF_WIDTH;
+        double ir=VanStaging.INTERIOR_ROOF_HALF_WIDTH;
+        double shoulder=VanStaging.ROOF_SHOULDER_Y;
+        vanBox(faces,van,-w,.10,f,w-iw,shoulder-.10,r-f,MaterialAtlas.IRON);
+        vanBox(faces,van,iw,.10,f,w-iw,shoulder-.10,r-f,MaterialAtlas.IRON);
+        vanBox(faces,van,-iw,.17,f+.12,.08,shoulder-.19,r-f-.24,MaterialAtlas.AGED_WOOD);
+        vanBox(faces,van,iw-.08,.17,f+.12,.08,shoulder-.19,r-f-.24,MaterialAtlas.AGED_WOOD);
+        double exteriorRoof=ir+.17;
+        vanSlope(faces,van,-w,shoulder,-exteriorRoof,h,f,r,MaterialAtlas.IRON);
+        vanSlope(faces,van,w,shoulder,exteriorRoof,h,f,r,MaterialAtlas.IRON);
+        vanSlope(faces,van,-iw,shoulder,-ir,h-.085,f+.12,r-.12,MaterialAtlas.CEILING);
+        vanSlope(faces,van,iw,shoulder,ir,h-.085,f+.12,r-.12,MaterialAtlas.CEILING);
+        vanBox(faces,van,-exteriorRoof,h-.04,f,
+            exteriorRoof*2,.11,r-f,MaterialAtlas.IRON);
+        vanBox(faces,van,-ir,h-.095,f+.12,
+            ir*2,.045,r-f-.24,MaterialAtlas.CEILING);
+        vanBox(faces,van,-w,.10,r-.17,w*2,shoulder-.02,.17,MaterialAtlas.IRON);
+        vanBox(faces,van,-w,.04,f-.18,w*2,.08,.19,MaterialAtlas.IRON);
         // A separate physically sized driver cab and front fascia, not a
         // stretched four-metre car texture pasted onto a seven-metre box.
         vanBox(faces,van,-1.67,.20,r-.02,3.34,1.46,1.20,MaterialAtlas.IRON);
@@ -401,34 +428,34 @@ public final class SceneRenderer {
         // Sidewall trim, tie-down channels and crossmembers are attached to
         // the surface, not free-standing equipment placed in arbitrary cells.
         for(double tz=f+.47;tz<r-.40;tz+=.87){
-            for(double wallX:new double[]{-w+.12,w-.20}){
-                vanBox(faces,van,wallX,.19,tz,.075,h-.34,.055,MaterialAtlas.IRON);
+            for(double wallX:new double[]{-iw+.08,iw-.15}){
+                vanBox(faces,van,wallX,.19,tz,.075,shoulder-.29,.055,MaterialAtlas.IRON);
                 vanBox(faces,van,wallX,.30,tz-.10,.10,.11,.18,MaterialAtlas.IRON);
             }
-            vanBox(faces,van,-w+.18,h-.15,tz,w*2-.36,.035,.055,MaterialAtlas.IRON);
+            vanBox(faces,van,-ir,h-.14,tz,ir*2,.035,.055,MaterialAtlas.IRON);
         }
         // Left pegboard: a complete seven-column/six-row instrument storage
         // system. Brackets have a load-bearing backing and a visible rail.
-        vanBox(faces,van,-w+.22,.21,f+.43,.085,2.72,r-f-.93,MaterialAtlas.IRON);
+        vanBox(faces,van,-iw+.08,.21,f+.43,.085,shoulder-.22,r-f-.93,MaterialAtlas.IRON);
         for(int row=0;row<VanInteriorLayout.TOOL_ROWS;row++){
             double yy=.27+row*.45;
-            vanBox(faces,van,-w+.29,yy,f+.59,.32,.042,r-f-1.19,
+            vanBox(faces,van,-iw+.14,yy,f+.59,.23,.042,r-f-1.19,
                 MaterialAtlas.AGED_WOOD);
             for(int col=0;col<VanInteriorLayout.TOOL_COLUMNS;col++){
                 double zz=-2.76+col*VanInteriorLayout.TOOL_COLUMN_PITCH;
-                vanBox(faces,van,-w+.30,yy+.07,zz-.09,.29,.065,.17,
+                vanBox(faces,van,-iw+.15,yy+.07,zz-.09,.21,.065,.17,
                     MaterialAtlas.IRON);
             }
         }
         // Right-hand mounted monitor rail, real workstation power shelf,
         // map and assignment boards; side installation leaves a clear aisle.
-        vanBox(faces,van,w-.38,.78,-2.57,.22,.12,4.72,MaterialAtlas.AGED_WOOD);
+        vanBox(faces,van,iw-.27,.78,-2.57,.19,.12,4.72,MaterialAtlas.AGED_WOOD);
         for(double zz:new double[]{-1.71,-.21,1.29}){
-            vanBox(faces,van,w-.35,1.45,zz-.53,.11,.95,1.06,MaterialAtlas.IRON);
-            vanBox(faces,van,w-.39,1.26,zz-.53,.20,.08,1.06,MaterialAtlas.IRON);
+            vanBox(faces,van,iw-.24,1.45,zz-.53,.10,.68,1.06,MaterialAtlas.IRON);
+            vanBox(faces,van,iw-.29,1.26,zz-.53,.18,.08,1.06,MaterialAtlas.IRON);
         }
         // Driver bulkhead and floor-supported command table.
-        vanBox(faces,van,-1.60,.42,r-.32,3.10,1.88,.08,MaterialAtlas.AGED_WOOD);
+        vanBox(faces,van,-iw+.09,.42,r-.32,iw*2-.18,1.78,.08,MaterialAtlas.AGED_WOOD);
         for(VanInteriorLayout.Fixture fixture:VanInteriorLayout.FIXTURES){
             if(!VanInteriorLayout.insideShell(fixture))
                 throw new IllegalStateException("VAN furniture outside cabin: "+fixture.purpose());
@@ -441,8 +468,8 @@ public final class SceneRenderer {
         // Ceiling lighting flush to headliner with explicit metal carriers.
         for(double zz:new double[]{-2.40,-.72,.98,2.64}){
             vanBox(faces,van,-.12,h-.15,zz-.18,.24,.095,.40,MaterialAtlas.WINDOW);
-            vanBox(faces,van,-1.67,h-.13,zz-.22,.18,.085,.45,MaterialAtlas.WINDOW);
-            vanBox(faces,van,1.49,h-.13,zz-.22,.18,.085,.45,MaterialAtlas.WINDOW);
+            vanBox(faces,van,-ir+.14,h-.13,zz-.22,.17,.068,.42,MaterialAtlas.WINDOW);
+            vanBox(faces,van,ir-.31,h-.13,zz-.22,.17,.068,.42,MaterialAtlas.WINDOW);
         }
         var doorControl=van.doorButton();
         imported(faces,"button_12",doorControl.x(),1.22,doorControl.z(),
