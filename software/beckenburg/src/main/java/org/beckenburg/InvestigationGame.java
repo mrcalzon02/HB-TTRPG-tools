@@ -25,6 +25,7 @@ public final class InvestigationGame {
     private GamePanel game;
     private GhostPracticePanel ghostPractice;
     private CastleHubPanel castle;
+    private CampaignBoardPanel campaign;
     private int caseNumber;
     private JLabel startupStatus;
 
@@ -134,6 +135,7 @@ public final class InvestigationGame {
                 @Override public void network(){openLan();}
                 @Override public void spectral(){InvestigationGame.this.beginGhost();}
                 @Override public void menu(){showMenu();}
+                @Override public void campaign(){showCampaign();}
                 @Override public void cycleRole(){rolePicker.setSelectedIndex((rolePicker.getSelectedIndex()+1)%rolePicker.getItemCount());}
                 @Override public void cycleWeather(){conditionsPicker.setSelectedIndex((conditionsPicker.getSelectedIndex()+1)%conditionsPicker.getItemCount());}
                 @Override public String role(){return rolePicker.getSelectedItem().toString();}
@@ -150,6 +152,25 @@ public final class InvestigationGame {
             JOptionPane.showMessageDialog(window,"Castle assets could not be loaded: "+ex.getMessage(),
                 "Castle unavailable",JOptionPane.WARNING_MESSAGE);
         }
+    }
+    private void showCampaign(){
+        if(campaign!=null){cards.remove(campaign);campaign=null;}
+        campaign=new CampaignBoardPanel(profile,new CampaignBoardPanel.Actions(){
+            @Override public void deploy(SiteCatalog.Location location){
+                SiteCatalog.requirePlayable(location);
+                locationPicker.setSelectedItem(location);
+                begin();
+            }
+            @Override public void castle(){showCastle();}
+            @Override public void tutorial(){showCastleOrientation();}
+        });
+        cards.add(campaign,"campaign");
+        ((CardLayout)cards.getLayout()).show(cards,"campaign");
+        SwingUtilities.invokeLater(campaign::requestFocusInWindow);
+    }
+    private void showCastleOrientation(){
+        showCastle();
+        if(castle!=null&&castle.isShowing())castle.startOrientation();
     }
     private void showMenu(){
         refreshAccount();
@@ -180,10 +201,11 @@ public final class InvestigationGame {
         JPanel navigation=transparentPanel();
         navigation.setLayout(new BoxLayout(navigation,BoxLayout.Y_AXIS));
         JButton enterCastle=button("ENTER CASTLE");
+        JButton campaignButton=button("CAMPAIGN BOARD");
         JButton begin=button("START SOLO INVESTIGATION");
         JButton lan=button("HOST / JOIN MULTIPLAYER");
         JButton ghost=button("GHOST PRACTICE");
-        for(JButton b:new JButton[]{enterCastle,begin,lan,ghost}){
+        for(JButton b:new JButton[]{enterCastle,campaignButton,begin,lan,ghost}){
             b.setAlignmentX(Component.LEFT_ALIGNMENT);
             navigation.add(Box.createVerticalStrut(9));navigation.add(b);
         }
@@ -262,6 +284,7 @@ public final class InvestigationGame {
         menu.add(footer,BorderLayout.SOUTH);
 
         enterCastle.addActionListener(e->showCastle());
+        campaignButton.addActionListener(e->showCampaign());
         begin.addActionListener(e->begin());ghost.addActionListener(e->beginGhost());
         lan.addActionListener(e->openLan());
         options.addActionListener(e->openOptions());
