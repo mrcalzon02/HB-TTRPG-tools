@@ -475,24 +475,50 @@ public final class SceneRenderer {
         cargoDoorLeaf(faces,van,false);
     }
 
-    /** Minimal real CC0 streetscape. Geometry is deliberately deterministic:
-     * noninteractive scenery never becomes a ghost evidence source.
+    /** One continuous local-coordinate street with side pavement, correctly
+     * sized Kenney asphalt tiles and separately parked GGBot vehicles.
+     * Cache by authored van placement, not by camera/world tile. The van can
+     * be re-used unchanged at every site with its own position and yaw.
      */
-    private static void roadsideModels(List<Face> out,HouseMap map){
-        // Road and parked traffic translate with the actual site van.
-        double dx=map.van().placement().x()-20.5,dz=map.van().placement().z()-27.5;
-        for(int i=0;i<5;i++){
-            double mx=3.1+i*4.6;
-            imported(out,i==2?"kenney_road_asphalt_damaged":
-                "kenney_road_asphalt_straight",mx+dx,.012,28.1+dz,
-                i==2?4.35:2.30,Math.PI/2);
+    private VanStaging cachedRoadSite;
+    private List<Face> cachedRoadFaces=List.of();
+    private void roadsideModels(List<Face> out,HouseMap map){
+        VanStaging van=map.van();
+        if(cachedRoadSite==van){
+            out.addAll(cachedRoadFaces);
+            return;
         }
-        imported(out,"ggbot_car01",5.1+dx,.08,28.1+dz,1,Math.PI/2);
-        imported(out,"ggbot_car07",12.2+dx,.08,28.1+dz,1,-Math.PI/2);
-        imported(out,"kenney_detail_light_single",3.2+dx,.08,24.9+dz,2.25,0);
-        imported(out,"kenney_detail_dumpster_closed",14.2+dx,.06,24.7+dz,1.65,0);
-        imported(out,"kenney_detail_bench",9.1+dx,.07,25.1+dz,1.75,Math.PI/2);
-        imported(out,"kenney_detail_barrier_type_a",7.8+dx,.06,26.0+dz,1.3,0);
+        List<Face> road=new ArrayList<>();
+        for(VanArrivalStreet.RoadTile tile:VanArrivalStreet.tiles()){
+            VanStaging.Position world=van.world(tile.x(),tile.z());
+            imported(road,tile.mesh(),world.x(),.008,world.z(),
+                tile.scaleX(),1.0,tile.scaleZ(),van.placement().yaw());
+        }
+        for(int side:new int[]{-1,1}){
+            double curb=side<0?-VanArrivalStreet.ROAD_HALF_WIDTH-.09:
+                VanArrivalStreet.ROAD_HALF_WIDTH;
+            vanBox(road,van,curb,.025,VanArrivalStreet.ROAD_END,
+                .09,.145,VanArrivalStreet.ROAD_START-VanArrivalStreet.ROAD_END,
+                MaterialAtlas.CONCRETE);
+        }
+        // Clear centre line and a real accessible rear-door apron:
+        // there are no cars, bins or arbitrary cubes in the egress corridor.
+        for(double centre=-6.5;centre>=-18.5;centre-=4)
+            vanBox(road,van,-.045,.063,centre-.52,.09,.017,1.04,
+                MaterialAtlas.CERAMIC);
+        vanBox(road,van,-1.15,.03,VanArrivalStreet.ROAD_START,
+            2.30,.050,VanStaging.FRONT-VanArrivalStreet.ROAD_START,
+            MaterialAtlas.CONCRETE);
+        // Parked traffic has its own actual mesh, with original UVs, surface
+        // atlas and material tint, and cannot obstruct the van's rear doors.
+        for(VanArrivalStreet.RoadObject vehicle:VanArrivalStreet.parkedVehicles()){
+            VanStaging.Position pos=van.world(vehicle.x(),vehicle.z());
+            imported(road,vehicle.mesh(),pos.x(),.06,pos.z(),vehicle.scale(),
+                van.placement().yaw()+vehicle.yaw());
+        }
+        cachedRoadSite=van;
+        cachedRoadFaces=List.copyOf(road);
+        out.addAll(cachedRoadFaces);
     }
 
     /** Three visually distinct small PS-era rite installations at fixed room sockets. */
