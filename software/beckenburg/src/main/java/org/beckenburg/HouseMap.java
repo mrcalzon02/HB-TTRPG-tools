@@ -10,6 +10,8 @@ public final class HouseMap {
     public enum Site { HOUSE,FARMHOUSE,SCHOOL,MANSION,PRISON,ASYLUM,ACADEMY,COLLEGE,CHURCH }
     private final Site site;
     private final LevelDefinition level;
+    private LooseClutter clutter;
+    public synchronized LooseClutter clutter(){if(clutter==null)clutter=new LooseClutter(this);return clutter;}
     private final List<Guard> guards;
     private int hidingDensity=70;
     private List<Collider> closetColliders=List.of();
@@ -201,6 +203,26 @@ public final class HouseMap {
             Double y=supportNear(nx,nz,at.y());if(y==null||!traversable(nx,y,nz))return null;at=new Vec(nx,y,nz);
         }
         return at;
+    }
+    /** Small-body sweep, including its radius, ceiling and furnishing contact. */
+    public boolean clearObjectPath(double ax,double ay,double az,double bx,double by,double bz,double radius,double half){
+        if(!finite(ax,ay,az,bx,by,bz,radius,half)||radius<0||radius>.3||half<0||half>.4)return false;
+        int steps=Math.max(1,(int)Math.ceil(Math.sqrt((bx-ax)*(bx-ax)+(by-ay)*(by-ay)+(bz-az)*(bz-az))/.025));
+        for(int n=1;n<=steps;n++){
+            double t=n/(double)steps,x=ax+(bx-ax)*t,y=ay+(by-ay)*t,z=az+(bz-az)*t;
+            if(wallBlocked(x,y+half*.5,z,radius,true))return false;
+            boolean volume=false;for(Room r:level.rooms())if(r.contains(x,y,z)){volume=true;break;}
+            if(!volume)for(Portal p:level.portals())if(y>=p.y()&&y<p.y()+2.4&&inPortal(p,x,z,radius))volume=true;
+            if(!volume)return false;
+            for(Room r:level.rooms())if(!r.outside()&&x>r.x0()&&x<r.x1()&&z>r.z0()&&z<r.z1()){
+                double ceiling=r.y()+r.height();if(ay<ceiling&&y+half>ceiling&&!level.floorVoid(x,ceiling,z))return false;
+            }
+            for(Collider c:level.colliders())if(y+half>c.y()+.003&&y-half<c.y()+c.height()-.003
+                    &&boxHit(x,y-1,z,radius,c.x(),c.y(),c.z(),c.halfX(),c.halfZ(),c.height(),c.yaw()))return false;
+            for(Collider c:closetColliders)if(y+half>c.y()&&y-half<c.y()+c.height()
+                    &&boxHit(x,y-1,z,radius,c.x(),c.y(),c.z(),c.halfX(),c.halfZ(),c.height(),c.yaw()))return false;
+            for(Guard g:guards)if(y+half>g.y()&&y-half<g.y()+1&&boxHit(x,y-1,z,radius,(g.x0()+g.x1())/2,g.y(),(g.z0()+g.z1())/2,Math.max(.035,Math.abs(g.x1()-g.x0())/2),Math.max(.035,Math.abs(g.z1()-g.z0())/2),1,0))return false;
+        }return true;
     }
     public boolean clearLineOfSight(double ax,double ay,double az,double bx,double by,double bz){
         if(!finite(ax,ay,az,bx,by,bz))return false;

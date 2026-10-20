@@ -527,6 +527,406 @@
       "family": "level_lived_linen_press"
     },
     {
+      "id": "level_loose_mug",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "eb28ec1631c5aec8553cc7cf8d26ab33cb49f8694fa7c8c3871be3a019199769",
+      "bytes": 24856,
+      "triangles": 300,
+      "bounds": [
+        [
+          -0.05000000074505806,
+          0.0,
+          -0.05000000074505806
+        ],
+        [
+          0.09494179487228394,
+          0.1120000034570694,
+          0.05000000074505806
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_mug.blend",
+      "variant": "clean",
+      "family": "level_loose_mug"
+    },
+    {
+      "id": "level_loose_bottle",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "98f2be3b4a36e9b77bc944c8dd0d96401504c3b1746151b7f8e5217feb5e7fff",
+      "bytes": 35492,
+      "triangles": 244,
+      "bounds": [
+        [
+          -0.04800000041723251,
+          0.0,
+          -0.04800000041723251
+        ],
+        [
+          0.04800000041723251,
+          0.2800000011920929,
+          0.0494999997317791
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_bottle.blend",
+      "variant": "clean",
+      "family": "level_loose_bottle"
+    },
+    {
+      "id": "level_loose_book",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "3973cb1a0d6fbb60f27ee91028a6d926bae3a4617c9c3378e1bf747dc6c549ae",
+      "bytes": 34300,
+      "triangles": 200,
+      "bounds": [
+        [
+          -0.08500000089406967,
+          0.0,
+          -0.11400000005960464
+        ],
+        [
+          0.07699999958276749,
+          0.04100000113248825,
+          0.11400000005960464
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_book.blend",
+      "variant": "clean",
+      "family": "level_loose_book"
+    },
+    {
+      "id": "level_loose_tin",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "72626d17b393c786f921dd8decf48ad23960930316996edf5277acf195c4510d",
+      "bytes": 32464,
+      "triangles": 204,
+      "bounds": [
+        [
+          -0.06199999898672104,
+          0.0,
+          -0.06199999898672104
+        ],
+        [
+          0.06199999898672104,
+          0.17000000178813934,
+          0.06199999898672104
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_tin.blend",
+      "variant": "clean",
+      "family": "level_loose_tin"
+    },
+    {
+      "id": "level_loose_bowl",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "bdfba868a614a561537da8c6d8d80a28bf451491e00ff134ffefd69609c22bc3",
+      "bytes": 27908,
+      "triangles": 316,
+      "bounds": [
+        [
+          -0.10000000149011612,
+          0.0,
+          -0.10000000149011612
+        ],
+        [
+          0.10000000149011612,
+          0.08100000023841858,
+          0.10000000149011612
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_bowl.blend",
+      "variant": "clean",
+      "family": "level_loose_bowl"
+    },
+    {
+      "id": "level_loose_toy",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "d7ac84f76c6233252d40b23897c17e7092712139c904abba90571fc4114e2dbf",
+      "bytes": 38512,
+      "triangles": 292,
+      "bounds": [
+        [
+          -0.05999999865889549,
+          0.0,
+          -0.0949999988079071
+        ],
+        [
+          0.05999999865889549,
+          0.1599999964237213,
+          0.09000000357627869
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_toy.blend",
+      "variant": "clean",
+      "family": "level_loose_toy"
+    },
+    {
+      "id": "level_loose_frame",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "ad3da69c6df33a5219ca8ba3ea91ca3dba10fe007af0ee9d6930f4e844f9d58b",
+      "bytes": 27216,
+      "triangles": 208,
+      "bounds": [
+        [
+          -0.08300000429153442,
+          -0.0020000040531158447,
+          -0.08715269714593887
+        ],
+        [
+          0.08300000429153442,
+          0.22200000286102295,
+          0.017500000074505806
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_frame.blend",
+      "variant": "clean",
+      "family": "level_loose_frame"
+    },
+    {
+      "id": "level_loose_candlestick",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "66e8527e26039632d22d8ac6b2a222147e00bc48612761bc0c702cc40d1d94ec",
+      "bytes": 38644,
+      "triangles": 304,
+      "bounds": [
+        [
+          -0.06499999761581421,
+          0.0,
+          -0.06499999761581421
+        ],
+        [
+          0.06499999761581421,
+          0.33000001311302185,
+          0.06499999761581421
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_candlestick.blend",
+      "variant": "clean",
+      "family": "level_loose_candlestick"
+    },
+    {
+      "id": "level_loose_mug_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "449cdc544ed7304630ad63a128acabb03d8fb3b85182abdb04d7b50c90d3320a",
+      "bytes": 25004,
+      "triangles": 300,
+      "bounds": [
+        [
+          -0.05000000074505806,
+          0.0,
+          -0.05000000074505806
+        ],
+        [
+          0.09494179487228394,
+          0.1120000034570694,
+          0.05000000074505806
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_mug_worn.blend",
+      "variant": "worn",
+      "family": "level_loose_mug"
+    },
+    {
+      "id": "level_loose_bottle_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "32eeea775d1972c0e58ed60352152a2023c476730519e931c29e3987151a8571",
+      "bytes": 37736,
+      "triangles": 244,
+      "bounds": [
+        [
+          -0.04800000041723251,
+          0.0,
+          -0.04800000041723251
+        ],
+        [
+          0.04800000041723251,
+          0.2800000011920929,
+          0.0494999997317791
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_bottle_worn.blend",
+      "variant": "worn",
+      "family": "level_loose_bottle"
+    },
+    {
+      "id": "level_loose_book_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "cbeb20e3f7d0575e196cc3c14c6b16607a2c9d1623cb22301b62f523126a3bc8",
+      "bytes": 37524,
+      "triangles": 200,
+      "bounds": [
+        [
+          -0.08500000089406967,
+          0.0,
+          -0.11400000005960464
+        ],
+        [
+          0.07699999958276749,
+          0.04100000113248825,
+          0.11400000005960464
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_book_worn.blend",
+      "variant": "worn",
+      "family": "level_loose_book"
+    },
+    {
+      "id": "level_loose_tin_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "fef263a52b924f87a3aaccc1a4cbf7064de1f77abe278c8478080f83c682a40e",
+      "bytes": 35672,
+      "triangles": 204,
+      "bounds": [
+        [
+          -0.06199999898672104,
+          0.0,
+          -0.06199999898672104
+        ],
+        [
+          0.06199999898672104,
+          0.17000000178813934,
+          0.06199999898672104
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_tin_worn.blend",
+      "variant": "worn",
+      "family": "level_loose_tin"
+    },
+    {
+      "id": "level_loose_bowl_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "de51ea6ee547f9d47ee5a4160c6f638da896ea02f0231d132face0e455aa6e83",
+      "bytes": 29120,
+      "triangles": 316,
+      "bounds": [
+        [
+          -0.10000000149011612,
+          0.0,
+          -0.10000000149011612
+        ],
+        [
+          0.10000000149011612,
+          0.08100000023841858,
+          0.10000000149011612
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_bowl_worn.blend",
+      "variant": "worn",
+      "family": "level_loose_bowl"
+    },
+    {
+      "id": "level_loose_toy_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "6ebdcb6f865de6112704ed46f18f6782667ee8601389a93a8cd4f77f6db3aed5",
+      "bytes": 40908,
+      "triangles": 292,
+      "bounds": [
+        [
+          -0.05999999865889549,
+          0.0,
+          -0.0949999988079071
+        ],
+        [
+          0.05999999865889549,
+          0.1599999964237213,
+          0.09000000357627869
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_toy_worn.blend",
+      "variant": "worn",
+      "family": "level_loose_toy"
+    },
+    {
+      "id": "level_loose_frame_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "357a93db52d3a358de614b56c91c1467b2de982538fa9718cf7188a431918ba6",
+      "bytes": 28692,
+      "triangles": 208,
+      "bounds": [
+        [
+          -0.08300000429153442,
+          -0.0020000040531158447,
+          -0.08715269714593887
+        ],
+        [
+          0.08300000429153442,
+          0.22200000286102295,
+          0.017500000074505806
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_frame_worn.blend",
+      "variant": "worn",
+      "family": "level_loose_frame"
+    },
+    {
+      "id": "level_loose_candlestick_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "efdfb52216d5d3f28c614624154c29c4ab4a32a4bd5b239aa0f1674c03362134",
+      "bytes": 40652,
+      "triangles": 304,
+      "bounds": [
+        [
+          -0.06499999761581421,
+          0.0,
+          -0.06499999761581421
+        ],
+        [
+          0.06499999761581421,
+          0.33000001311302185,
+          0.06499999761581421
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_loose_candlestick_worn.blend",
+      "variant": "worn",
+      "family": "level_loose_candlestick"
+    },
+    {
       "id": "level_boiler_coal_worn",
       "library": "industrial",
       "license": "CC0-1.0",
@@ -1157,6 +1557,46 @@
       "glb": "44aff6476554aa54b8c017ad66f8fabe3cf927dd4333089a025630149c913af4",
       "blend": "8beb0bac7c2492bd4805f814c067e78ecfb98ef1a473dcda9e6e40c76b28652f",
       "preview": "708ca929c1577087aaf56d514e12de44d93bdf3371c5eea495e5a0b0b2c8c5a5"
+    },
+    "level_loose_mug": {
+      "glb": "eb28ec1631c5aec8553cc7cf8d26ab33cb49f8694fa7c8c3871be3a019199769",
+      "blend": "f18ed6afae5b03dad1682801d0146cea8bf347638607fafdf56b0662d8c3ebd4",
+      "preview": "1ac1351640d37e6feb4b9b3f0bc2a69cbb5c7d8cc0fdce30af985c61823208bf"
+    },
+    "level_loose_bottle": {
+      "glb": "98f2be3b4a36e9b77bc944c8dd0d96401504c3b1746151b7f8e5217feb5e7fff",
+      "blend": "9d46ed53f7af85a1cce5ff08ecfb7092dcc7da2b2f646dc02a634ee26ca0c4c1",
+      "preview": "fcd7f5d17a53865d56affa9076b5aefcb669b36ccbb59e053cb264d1d4ca23cd"
+    },
+    "level_loose_book": {
+      "glb": "3973cb1a0d6fbb60f27ee91028a6d926bae3a4617c9c3378e1bf747dc6c549ae",
+      "blend": "aa1a88be325e945ae729eaca59618fe7c9a51f27379ef51a350c2be76230414d",
+      "preview": "fadea33362ae073481eaf9ead2ceba4034767ee10869045dd95d0eca3d16d57a"
+    },
+    "level_loose_tin": {
+      "glb": "72626d17b393c786f921dd8decf48ad23960930316996edf5277acf195c4510d",
+      "blend": "586ccd5f6fe1559cc22cb68a73053b1151f6a7f9b6891efe26d24937ab1cd7b7",
+      "preview": "d8897eee72076759d2f8e93f7f350eb4b3e922604a3a79b3dcea9cd448fa55ca"
+    },
+    "level_loose_bowl": {
+      "glb": "bdfba868a614a561537da8c6d8d80a28bf451491e00ff134ffefd69609c22bc3",
+      "blend": "362d86211571c8f02ba044a7d265ddca66736b6cbad164fa0fa983b99458dd47",
+      "preview": "c793f022158fa94f424d49dd08f5544424953dbb10a9014bdfb2441c19c6bb86"
+    },
+    "level_loose_toy": {
+      "glb": "d7ac84f76c6233252d40b23897c17e7092712139c904abba90571fc4114e2dbf",
+      "blend": "1b14c9922773c05b057a9dead7871d60f15491e43ba7af1ca73c78fa5366cf0e",
+      "preview": "31c3adf6a9cb95220cf5580a5d546557adddc0b04fa1c79b1385e78cd7aa3553"
+    },
+    "level_loose_frame": {
+      "glb": "ad3da69c6df33a5219ca8ba3ea91ca3dba10fe007af0ee9d6930f4e844f9d58b",
+      "blend": "cacf9a7a4231ae91af0fdfd29f4912f5556823cc6b2bf294669bd8ccecfb0c03",
+      "preview": "e83e705693e30f28d11910b3e6051aa4a24826c225151a0119add3daac24fefc"
+    },
+    "level_loose_candlestick": {
+      "glb": "66e8527e26039632d22d8ac6b2a222147e00bc48612761bc0c702cc40d1d94ec",
+      "blend": "5cb83437f355acf3278fc40cda4ac8036489e268c2865ba5b6ff9090c8c55ef3",
+      "preview": "7f4f7f33889a4d2a4d198c107aac3dde6714df2f9a15e4cc0466cbcdc8f2a0ec"
     }
   }
 }

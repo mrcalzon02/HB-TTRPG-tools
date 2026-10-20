@@ -637,6 +637,15 @@ public final class LanHost implements AutoCloseable {
                     recordSound(peer.slot,LanGhostPursuit.Sound.DOOR);
                     reply(peer,"ACCEPT|WINDOW");broadcastWorld();
                 }
+                case "OBJECT" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=5)throw new IllegalArgumentException("physical object command unavailable");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(4)));ensureActiveHunter(peer);
+                    if(world.hidden(peer.slot))throw new IllegalArgumentException("emerge before handling objects");
+                    var body=world.body(peer.slot);
+                    var observer=new LooseClutter.Observer(peer.slot,body.x(),body.y(),body.z(),Math.toRadians(body.heading()),LanProtocol.integer(p.get(3),-1400,1400)/1000.0,true);
+                    map.clutter().action(p.get(1),LanProtocol.integer(p.get(2),1,500),observer,tick);
+                    reply(peer,"ACCEPT|OBJECT");broadcastClutter();
+                }
                 case "DOOR" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)throw new IllegalArgumentException("door command unavailable");
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
@@ -1567,6 +1576,10 @@ public final class LanHost implements AutoCloseable {
     /** AI and human origins both enter this exact damage/telegraph pipeline. */
     private void resolveGhostAction(GhostDomain.Resolution result){
         if(!result.applied())return;
+        if(result.action()==GhostDomain.Action.DISTURB&&ghostType.baseType()==GhostIdentity.Type.POLTERGEIST){
+            map.clutter().barrage(result.room(),clutterObservers());
+            result=new GhostDomain.Resolution(true,result.reason(),result.action(),result.room(),result.energy(),result.fear(),0,result.manifested());
+        }
         int eventPower=switch(result.action()){
             case WHISPER->3;case DISTURB->8;case MANIFEST->9;
             case STRIKE,SIGNATURE->10;case DRIFT->0;
@@ -1859,6 +1872,18 @@ public final class LanHost implements AutoCloseable {
             expireDisconnectedSeats();
             if(!running)return;
             world.advanceStamina(tick);
+            for(var hit:map.clutter().advance(clutterObservers())){
+                var body=world.body(hit.seat());boolean[] affected=new boolean[HUNTERS];affected[hit.seat()]=true;
+                distributeEffect(new GhostDomain.Resolution(true,"physical clutter impact",GhostDomain.Action.DISTURB,body.room(),ghost.energy(),1,hit.damage(),ghost.manifested()),affected);
+            }
+            for(var noise:map.clutter().drainNoises()){
+                int room=map.roomAt(noise.x(),noise.y(),noise.z());if(room<0)continue;
+                for(int seat=0;seat<HUNTERS;seat++)if(seats[seat]!=null&&seats[seat].worldMode){
+                    var cue=LanSound.project(map,world.body(seat),room,noise.x(),noise.y(),noise.z(),LanSound.Cue.IMPACT,tick);
+                    if(cue!=null)reply(seats[seat],cue.frame());
+                }
+            }
+            broadcastClutter();
             ghostPose.advanceStamina(tick);
             if(frenzy.advance(tick)){
                 onFrenzyTransition();
@@ -2055,7 +2080,25 @@ public final class LanHost implements AutoCloseable {
             +RitualSites.site(map,GhostIdentity.Rite.CLEANSING).room()+"|"
             +RitualSites.site(map,GhostIdentity.Rite.ABSOLUTION).room();
     }
+    private java.util.List<LooseClutter.Observer> clutterObservers(){
+        var result=new java.util.ArrayList<LooseClutter.Observer>();
+        for(int i=0;i<HUNTERS;i++)if((seats[i]!=null||reserved[i]!=null)&&mission.alive(i)){
+            var b=world.body(i);result.add(new LooseClutter.Observer(i,b.x(),b.y(),b.z(),Math.toRadians(b.heading()),0,!world.hidden(i)));
+        }return result;
+    }
+    private final Map<Peer,String> clutterSent=new WeakHashMap<>();
+    private void broadcastClutter(){
+        String hunter=map.clutter().snapshot(false),spectral=map.clutter().snapshot(true);
+        for(Peer p:seats)if(p!=null&&(p.worldMode||p.ghostWorldMode)){
+            String frame=p.ghostWorldMode?spectral:hunter;
+            if(!frame.equals(clutterSent.get(p))){
+                for(String row:frame.substring(8).split(";"))if(!row.isEmpty())reply(p,"CLUTTER|"+row);
+                clutterSent.put(p,frame);
+            }
+        }
+    }
     private void broadcastWorld(){
+        broadcastClutter();
         String doors="DOORS|"+map.doorSnapshot();
         notifyAllPeers(doors);
         notifyAllPeers("WINDOWS|"+map.windowSnapshot());

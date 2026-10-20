@@ -166,5 +166,69 @@
     "all_diffuse_images_replaced": true,
     "clean_glb_sha256": "44aff6476554aa54b8c017ad66f8fabe3cf927dd4333089a025630149c913af4",
     "worn_glb_sha256": "0423b74fbd766023dbf207e3ba7aeb51bf7282b52dc9dca020da6ada1fbc10c4"
+  },
+  {
+    "family": "level_loose_mug",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "eb28ec1631c5aec8553cc7cf8d26ab33cb49f8694fa7c8c3871be3a019199769",
+    "worn_glb_sha256": "449cdc544ed7304630ad63a128acabb03d8fb3b85182abdb04d7b50c90d3320a"
+  },
+  {
+    "family": "level_loose_bottle",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "98f2be3b4a36e9b77bc944c8dd0d96401504c3b1746151b7f8e5217feb5e7fff",
+    "worn_glb_sha256": "32eeea775d1972c0e58ed60352152a2023c476730519e931c29e3987151a8571"
+  },
+  {
+    "family": "level_loose_book",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "3973cb1a0d6fbb60f27ee91028a6d926bae3a4617c9c3378e1bf747dc6c549ae",
+    "worn_glb_sha256": "cbeb20e3f7d0575e196cc3c14c6b16607a2c9d1623cb22301b62f523126a3bc8"
+  },
+  {
+    "family": "level_loose_tin",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "72626d17b393c786f921dd8decf48ad23960930316996edf5277acf195c4510d",
+    "worn_glb_sha256": "fef263a52b924f87a3aaccc1a4cbf7064de1f77abe278c8478080f83c682a40e"
+  },
+  {
+    "family": "level_loose_bowl",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "bdfba868a614a561537da8c6d8d80a28bf451491e00ff134ffefd69609c22bc3",
+    "worn_glb_sha256": "de51ea6ee547f9d47ee5a4160c6f638da896ea02f0231d132face0e455aa6e83"
+  },
+  {
+    "family": "level_loose_toy",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "d7ac84f76c6233252d40b23897c17e7092712139c904abba90571fc4114e2dbf",
+    "worn_glb_sha256": "6ebdcb6f865de6112704ed46f18f6782667ee8601389a93a8cd4f77f6db3aed5"
+  },
+  {
+    "family": "level_loose_frame",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "ad3da69c6df33a5219ca8ba3ea91ca3dba10fe007af0ee9d6930f4e844f9d58b",
+    "worn_glb_sha256": "357a93db52d3a358de614b56c91c1467b2de982538fa9718cf7188a431918ba6"
+  },
+  {
+    "family": "level_loose_candlestick",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "66e8527e26039632d22d8ac6b2a222147e00bc48612761bc0c702cc40d1d94ec",
+    "worn_glb_sha256": "efdfb52216d5d3f28c614624154c29c4ab4a32a4bd5b239aa0f1674c03362134"
   }
 ]

@@ -214,6 +214,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 renderer.x=map.van().placement().x();
                 renderer.z=map.van().placement().z();
                 feedback="INVESTIGATION: "+map.site();
+            }else if(p.size()==2&&p.get(0).equals("CLUTTER")){
+                map.clutter().acceptOne(p.get(1));
             }else if(p.get(0).equals("CHAT")){
                 LanChat.Entry line=LanChat.Entry.decode(frame);
                 chatHistory.addLast(line);
@@ -783,10 +785,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }
             String held=equippedGear[activeGearSlot];
             String visual=held.equals("EMF_READER")?"EMF":held;
-            HeldToolView.draw(g,getWidth(),h,visual,tick,tick<=heldUseUntilTick,
+            if(map.clutter().held(seat)<0)HeldToolView.draw(g,getWidth(),h,visual,tick,tick<=heldUseUntilTick,
                 renderer.lamp,deviceReading.get(held),
                 equipmentTier.getOrDefault(held,EquipmentTiers.Tier.I));
             drawHunterNameplates(g,h);
+            g.setColor(new Color(224,218,197));g.drawString(map.clutter().hint(new LooseClutter.Observer(seat,renderer.x,renderer.eyeHeight-1.62,renderer.z,renderer.yaw,renderer.pitch,true)),12,h-96);
             SprintHud.draw(g,12,h-76,Math.min(248,getWidth()-24),
                 "SPRINT",sprintRemaining,sprintMax,sprinting);
 
@@ -1154,6 +1157,13 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }
         if(casefileOpen)return; // An open journal never triggers world equipment or movement.
         switch(e.getKeyCode()){
+            case KeyEvent.VK_F5,KeyEvent.VK_F12,KeyEvent.VK_CLOSE_BRACKET -> {
+                var o=new LooseClutter.Observer(seat,renderer.x,renderer.eyeHeight-1.62,renderer.z,renderer.yaw,renderer.pitch,true);
+                int id=map.clutter().held(seat);var aimed=map.clutter().aimed(o);
+                if(id<0&&aimed!=null)id=aimed.id();
+                if(id>0){int chosen=id;String action=e.getKeyCode()==KeyEvent.VK_F12?"THROW":e.getKeyCode()==KeyEvent.VK_CLOSE_BRACKET?"ROTATE":map.clutter().held(seat)>=0?"DROP":"TAKE";
+                    sendAction("object",()->client.clutter(action,chosen,renderer.pitch));}
+            }
             case KeyEvent.VK_ESCAPE -> {keys.clear();releaseVoice();mouseLook.release();InGamePauseMenu.execute(this);}
             case KeyEvent.VK_E -> {
                 int aimed=lights.aimed(map,renderer.x,renderer.eyeHeight-1.62,renderer.z,renderer.yaw);

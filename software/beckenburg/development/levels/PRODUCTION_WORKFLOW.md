@@ -60,6 +60,8 @@ After fixes, repeat only the checks affected by the changes. Keep new map unlock
 
 ## 6. Dress, age and publish reusable original libraries
 
+Independent pickup objects follow the detailed [loose-object production recipe](LOOSE_OBJECTS_WORKFLOW.md), including native dimensions, supported scatter, physical simulation, networking privacy, examination controls and gated checkpoints. Fixed decorative kits and movable objects have different contracts; record which one is being authored.
+
 Record a room-specific clutter plan before building. Measure actual source bounds before placing cabinets or small objects. Reserve cupboard interiors and entrances before furniture; reserve door/stair approaches, spawns and windows. Place major furniture first, then supported small groups. The school plant is measured from the room's southwest corner: retired plant at Z16.5, oil plant at Z23, modern plant at Z32.5, with the service assembly origin at X10/Y−3/Z12. Never add one giant collision box around a network of overhead pipes.
 
 `build_lived_assets.py` creates the original clean CC0 models, editable sources and actual mesh previews. Once approved, keep clean sources intact. `build_worn_assets.py` opens those sources and saves separate `_worn` meshes and Blender files, replacing only procedural diffuse pixels and roughness. `validate_worn_assets.py` checks the original clean GLB/Blender/preview hashes and exact clean/worn vertex, normal, UV, index and transform equality. Inspect the aged skins in rooms; a studio render alone cannot show whether the surface fits the world. `build_wear_review.py` creates a labeled comparison from the actual renders.

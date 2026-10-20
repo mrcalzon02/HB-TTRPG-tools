@@ -385,6 +385,7 @@ public final class InvestigationGame {
             "CASTLE / SOLO\nWASD move  |  Shift sprint  |  Click mouse-look  |  F light  |  E interact\n"+
             "1–4 select gear  |  R use  |  C ward  |  B ritual  |  J journal  |  M map\n"+
             "Q (hold) callouts  |  L hide in cupboard / emerge  |  X extract  |  Escape pause or return to menu\n\n"+
+            "LOOSE OBJECTS (solo and LAN)\nF5 pick up/drop within 2m | ] turn in hand | F12 throw along your view\nDescriptions appear while examining; poltergeist projectiles injure on contact.\n\n"+
             "GHOST PRACTICE\n[ / ] change room  |  Space drift  |  1–4 ghost actions\n\n"+
             "MULTIPLAYER\nHost or join by IP, ready up, then use Enter 3D World when the case starts.\n"+
             "The Field Controls tab contains alpha simulation tools, not ordinary lobby controls.");
@@ -606,7 +607,9 @@ public final class InvestigationGame {
             }
             accumulator+=dt;
             while(accumulator>=.1){
+                session.clutterLook(scene.yaw,scene.pitch);
                 session.tick(scene.x,feetY(),scene.z,scene.lamp);
+                if(!map.clutter().drainNoises().isEmpty())GameSfx.play(LanSound.Cue.IMPACT);
                 int activity=monitor.sample(session.ticks(),session.ghostEnergy());
                 if(session.ticks()%12==0){
                     activityHistory.addLast(activity);
@@ -678,6 +681,12 @@ public final class InvestigationGame {
                 GameSfx.play(scene.lamp?LanSound.Cue.DEVICE_ON:LanSound.Cue.DEVICE_OFF);
             }
             if(key==KeyEvent.VK_L)session.toggleHide(scene.x,feetY(),scene.z);
+            if(key==KeyEvent.VK_F5||key==KeyEvent.VK_F12||key==KeyEvent.VK_CLOSE_BRACKET){
+                var o=new LooseClutter.Observer(0,scene.x,feetY(),scene.z,scene.yaw,scene.pitch,true);
+                int id=map.clutter().held(0);var aimed=map.clutter().aimed(o);if(id<0&&aimed!=null)id=aimed.id();
+                if(id>0)try{session.clutterLook(scene.yaw,scene.pitch);session.clutterAction(key==KeyEvent.VK_F12?"THROW":key==KeyEvent.VK_CLOSE_BRACKET?"ROTATE":map.clutter().held(0)>=0?"DROP":"TAKE",id,scene.x,feetY(),scene.z);}
+                catch(IllegalArgumentException ex){showVanNotice(ex.getMessage());}
+            }
             if(key==KeyEvent.VK_E){
                 var aimed=aimedRack();
                 if(aimed!=null){takeRackItem();}
@@ -765,9 +774,10 @@ public final class InvestigationGame {
                 g.setColor(Color.BLACK);g.fillRect(0,0,getWidth(),getHeight());
                 int stageH=getHeight(),width=getWidth();
                 GraphicsOptions.current().draw(g,scene.image(),width,stageH);
-                HeldToolView.draw(g,width,stageH,loadout.equipped().name(),session.ticks(),
+                if(map.clutter().held(0)<0)HeldToolView.draw(g,width,stageH,loadout.equipped().name(),session.ticks(),
                     session.ticks()<=useHeldUntilTick,scene.lamp);
                 g.setFont(new Font(Font.MONOSPACED,Font.BOLD,13));
+                g.setColor(new Color(224,218,197));g.drawString(map.clutter().hint(new LooseClutter.Observer(0,scene.x,feetY(),scene.z,scene.yaw,scene.pitch,true)),12,stageH-95);
                 g.setColor(new Color(14,19,25,222));
                 g.fillRoundRect(12,10,Math.min(width-24,590),71,9,9);
                 g.setColor(new Color(242,212,156));

@@ -36,6 +36,13 @@ public final class InvestigationSession {
     public MissionWeather.State weather(){return missionWeather.state();}
     private int lastEvidenceTick=-10000,lastEvidenceRoom=-1,lastEvidenceStrength;
     private final GhostDomain ghost;
+    private double clutterYaw,clutterPitch;
+    public void clutterLook(double yaw,double pitch){clutterYaw=yaw;clutterPitch=pitch;}
+    public void clutterAction(String action,int id,double x,double y,double z){
+        if(outcome!=Outcome.ACTIVE)throw new IllegalArgumentException("case is not active");
+        map.clutter().action(action,id,new LooseClutter.Observer(0,x,y,z,clutterYaw,clutterPitch,!hidden&&health>0),ticks);
+        log(map.clutter().hint(new LooseClutter.Observer(0,x,y,z,clutterYaw,clutterPitch,true)));
+    }
     private RoomLighting roomLights;
     public void connectLighting(RoomLighting roomLights){this.roomLights=roomLights;}
     private final HunterCounters counters=new HunterCounters();
@@ -150,6 +157,8 @@ public final class InvestigationSession {
         // Every supernatural action, including AI behavior, follows the same host-style dispatcher.
         // Ghost observation has only room-local presence, never the hunter's global position or notebook.
         int playerRoom=map.roomAt(playerX,playerY,playerZ);
+        var clutterObserver=new LooseClutter.Observer(0,playerX,playerY,playerZ,clutterYaw,clutterPitch,!hidden&&health>0);
+        for(var hit:map.clutter().advance(List.of(clutterObserver))){health=Math.max(0,health-hit.damage());log("Struck by a flying object! -"+hit.damage()+" health.");if(health==0){finish(Outcome.LOST);return;}}
         if(hidden&&(hidingAt==null||Math.hypot(playerX-hidingAt.x(),playerZ-hidingAt.z())>.02
                 ||Math.abs(playerY-hidingAt.y())>.1||!LevelClosets.available(map.level(),playerRoom,map.hidingDensity())))leaveHiding();
         ghost.advance(ticks,playerRoom,playerRoom==ghost.room()&&!hidden?1:0);
@@ -205,7 +214,9 @@ public final class InvestigationSession {
                     log("An indistinct whisper moves through "+map.roomName(playerRoom)+".");
                 if(playerRoom==result.room() && result.action()==GhostDomain.Action.DISTURB)
                     log("Loose objects shudder in "+map.roomName(playerRoom)+".");
-                if(result.harm()>0&&!hidden) {
+                if(result.action()==GhostDomain.Action.DISTURB&&ghost.type().baseType()==GhostIdentity.Type.POLTERGEIST)
+                    map.clutter().barrage(result.room(),List.of(clutterObserver));
+                if(result.harm()>0&&!hidden&&!(result.action()==GhostDomain.Action.DISTURB&&ghost.type().baseType()==GhostIdentity.Type.POLTERGEIST)) {
                     int wound=prepared?Math.min(result.harm(),4):role==Role.CLERIC?Math.min(result.harm(),8):result.harm();
                     health=Math.max(0,health-wound);
                     log("A spectral strike! -"+wound+" health. Retreat, or use protective wards.");

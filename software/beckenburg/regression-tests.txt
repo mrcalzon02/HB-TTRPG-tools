@@ -156,3 +156,4 @@ LevelRenderAcceptanceTest
 WorldViewHandednessTest
 LevelSurfaceIntegrityTest
 LivedLevelDressingTest
+LooseClutterTest

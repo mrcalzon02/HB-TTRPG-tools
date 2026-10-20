@@ -140,6 +140,19 @@ public final class SceneRenderer {
 
     // Meshes supplied by the owner: true indexed 3D geometry with embedded
     // albedo PNGs. No primitive substitution or image-card stand-ins.
+    private static void looseClutter(List<Face> out,HouseMap map){
+        for(var item:map.clutter().states()){
+            if(item.holder()==-2)continue;
+            double cy=Math.cos(item.yaw()),sy=Math.sin(item.yaw()),cr=Math.cos(item.roll()),sr=Math.sin(item.roll());
+            for(var t:GlbProps.model(item.kind().mesh()).triangles()){
+                var vertices=new GlbProps.Vertex[]{t.a(),t.b(),t.c()};Point[] points=new Point[3];
+                for(int i=0;i<3;i++){var v=vertices[i];double vx=v.x(),vy=v.y()-item.kind().half;
+                    double rx=vx*cr-vy*sr,ry=vx*sr+vy*cr;
+                    points[i]=new Point(item.x()+rx*cy-v.z()*sy,item.y()+ry,item.z()+rx*sy+v.z()*cy);}
+                out.add(new Face(points[0],points[1],points[2],0xffffff,t.material(),t.a().u(),t.a().v(),t.b().u(),t.b().v(),t.c().u(),t.c().v()));
+            }
+        }
+    }
     private static void imported(List<Face> out,String id,
             double x,double y,double z,double scale,double yaw){
         imported(out,id,x,y,z,scale,scale,scale,yaw);
@@ -762,6 +775,7 @@ public final class SceneRenderer {
             double clock,List<RemoteBody> others,Apparition apparition,List<WorldMark> marks) {
         List<Face> out=new ArrayList<>(2000);
         levelArchitecture(out,map);
+        looseClutter(out,map);
         for(RitualSites.Site site:RitualSites.all(map))
             if(Math.hypot(site.x()-x,site.z()-z)<14)
                 ritualInstallation(out,site,clock,activeRite==site.rite());
