@@ -214,6 +214,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 renderer.x=map.van().placement().x();
                 renderer.z=map.van().placement().z();
                 feedback="INVESTIGATION: "+map.site();
+            }else if(p.size()==6&&p.get(0).equals("FIXTURE")){
+                map.fixtures().accept(p);
             }else if(p.size()==2&&p.get(0).equals("CLUTTER")){
                 map.clutter().acceptOne(p.get(1));
             }else if(p.get(0).equals("CHAT")){
@@ -1166,6 +1168,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }
             case KeyEvent.VK_ESCAPE -> {keys.clear();releaseVoice();mouseLook.release();InGamePauseMenu.execute(this);}
             case KeyEvent.VK_E -> {
+                var device=map.fixtures().aimed(renderer.x,renderer.eyeHeight-1.62,renderer.z,renderer.yaw,renderer.pitch);
+                if(device!=null){sendAction("device",()->client.fixture(device.id(),renderer.pitch));break;}
                 int aimed=lights.aimed(map,renderer.x,renderer.eyeHeight-1.62,renderer.z,renderer.yaw);
                 if(e.isShiftDown()||map.nearestWindow(renderer.x,renderer.eyeHeight-1.62,renderer.z)!=null)
                     sendAction("window",()->client.window());

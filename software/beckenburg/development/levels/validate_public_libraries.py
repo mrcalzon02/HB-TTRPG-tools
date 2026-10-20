@@ -13,6 +13,9 @@ for library in index['libraries']:
         assert {'LICENSE.txt','README.txt','manifest.json','asset-library.blend','blender_assets.cats.txt'}<=set(z.namelist())
         assert 'CC0 1.0 Universal' in z.read('LICENSE.txt').decode()
         assert len([name for name in z.namelist() if name.endswith('.glb')])==library['count']
+        for extra in manifest.get('extras',[]):
+            data=(SITE/extra['path']).read_bytes();assert extra['license']=='CC0-1.0' and hashlib.sha256(data).hexdigest()==extra['sha256']
+            assert data==z.read(extra['archive_path'])
         for asset in manifest['assets']:
             path=SITE/asset['files']['models'];data=path.read_bytes();size=struct.unpack_from('<I',data,12)[0];glb=json.loads(data[20:20+size])
             assert asset['license']=='CC0-1.0' and asset['source']=='original geometry and procedural textures'

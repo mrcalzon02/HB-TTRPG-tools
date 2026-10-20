@@ -158,3 +158,4 @@ LevelSurfaceIntegrityTest
 LivedLevelDressingTest
 LooseClutterTest
 LooseClutterNetworkTest
+HauntedFixturesTest

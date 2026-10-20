@@ -354,7 +354,7 @@ public final class LevelPlans {
             // Choose the aged skin after placement/support/collision are finalized.
             // Clean library assets remain available without changing any geometry.
             props.replaceAll(p->new Prop(LivedAssets.worn(p.mesh()),p.room(),p.x(),p.y(),p.z(),p.scale(),p.yaw(),p.halfX(),p.halfZ(),p.height(),LivedAssets.worn(p.support())));
-            Room van=rooms.get(14);return new LevelDefinition(id,"production-2026-10-20-lived-worn",title,rooms,portals,stairs,voids,props,sockets,colliders,new Dock(van.cx(),0,van.cz(),-Math.PI/2),ambience);
+            Room van=rooms.get(14);return new LevelDefinition(id,"production-2026-10-20-physical-events-v1",title,rooms,portals,stairs,voids,props,sockets,colliders,new Dock(van.cx(),0,van.cz(),-Math.PI/2),ambience);
         }
         boolean circulation(Prop p,double x,double z){
             Room r=rooms.get(p.room());double hx=Math.abs(Math.cos(p.yaw()))*p.halfX()+Math.abs(Math.sin(p.yaw()))*p.halfZ();
@@ -411,7 +411,7 @@ public final class LevelPlans {
             case "tv_table_1_4"->-.05*p.scale();case "level_blackboard"->.11*p.scale();
             case "level_lockers"->.045*p.scale();default->0;};}
 
-        private void installSwitch(int ri){
+        void installSwitch(int ri){
             Room r=rooms.get(ri);double best=-1;double[] selected=null;
             // The foyer jamb is reached below the upper flight (2.86m head clearance).
             if(id.equals("house")&&ri==4){socket("switch",ri,22.2,1.2,20.975,Math.PI,"wall-rocker");return;}

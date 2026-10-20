@@ -53,7 +53,9 @@ public final class LanSound {
         HORROR_STING_C(7, 85, "PARANORMAL DISTURBANCE"),
         DROP(4, 52, "ITEM SET DOWN"),
         ELECTRIC_HUM(5, 53, "ELECTRICAL SYSTEM HUM"),
-        MONITOR_HUM(0, 34, "VAN MONITOR ACTIVATED");
+        MONITOR_HUM(0, 34, "VAN MONITOR ACTIVATED"),
+        PHONE_RING(7,76,"A TELEPHONE RINGS"),ALARM_BELL(6,73,"AN ALARM CLOCK RINGS"),
+        FIRE_BELL(10,88,"A FIRE ALARM SOUNDS"),RADIO_PLAY(7,66,"A RADIO PLAYS"),RUNNING_WATER(5,58,"WATER IS RUNNING");
         final int acousticBudget, baseGain;
         final String caption;
         Cue(int budget, int gain, String caption) { acousticBudget=budget;baseGain=gain;this.caption=caption; }
@@ -63,7 +65,8 @@ public final class LanSound {
                     SWITCH,BREAKER,VAN_DOOR,
                     UI_CLICK,UI_BACK,PICKUP,SELECT,DEVICE_ON,DEVICE_OFF,SCANNER,
                     CAMERA,BOOK,POTION,DOTS_MOTOR,DOTS_STOP,SPARK,
-                    INCENSE_BURN,FIRELIGHT_IGNITE,FIRELIGHT_OUT,DROP,ELECTRIC_HUM,MONITOR_HUM->Tier.AMBIENT;
+                    INCENSE_BURN,FIRELIGHT_IGNITE,FIRELIGHT_OUT,DROP,ELECTRIC_HUM,MONITOR_HUM,
+                    PHONE_RING,ALARM_BELL,FIRE_BELL,RADIO_PLAY,RUNNING_WATER->Tier.AMBIENT;
             case WHISPER->Tier.MINOR;
             case DISTURB,MANIFEST,GHOST_DRIFT,WARD,HORROR_STING_A,
                     HORROR_STING_B,HORROR_STING_C,LOCKED_DOOR_RATTLE->Tier.MODERATE;

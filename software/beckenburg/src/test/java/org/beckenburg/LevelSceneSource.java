@@ -34,6 +34,7 @@ public final class LevelSceneSource {
         List<Object> faces=new ArrayList<>();assemble.invoke(scene,faces,map);
         Files.writeString(out.resolve("definition.json"),json(map.level()));
         Files.writeString(out.resolve("loose-objects.json"),json(map.clutter().states().stream().map(s->new LooseSource(s,s.kind().half,s.kind().radius,s.kind().mass)).toList()));
+        Files.writeString(out.resolve("event-fixtures.json"),json(map.fixtures().states()));
         Files.writeString(out.resolve("scene-settings.json"),"{\"hidingDensity\":100}");
         Files.writeString(out.resolve("geometry.json"),json(faces));
         Set<Integer> mats=new TreeSet<>();for(Object f:faces)mats.add((Integer)read(f,"material"));

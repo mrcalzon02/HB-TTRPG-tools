@@ -27,6 +27,7 @@ for library in index['libraries']:
     assert manifest['license']=='CC0-1.0' and set(manifest['variants'])=={'clean','worn'}
     assert 'CC0 1.0 Universal' in get(f'assets/beckenburg/libraries/{library["id"]}/LICENSE.txt').decode()
     for asset in manifest['assets']:jobs.append((asset['files']['models'],asset['sha256'],'GLB'))
+    for extra in manifest.get('extras',[]):jobs.append((extra['path'],extra['sha256'],'EXTRA'))
     jobs.append((library['download'],library['sha256'],'ZIP'))
     libraries.append(dict(id=library['id'],variants=library['count'],license=manifest['license']))
 def check(job):
@@ -39,4 +40,4 @@ report=dict(verified_at=datetime.now(timezone.utc).isoformat(),published_commit=
     page=BASE+'beckenburg-asset-libraries.html',libraries=libraries,downloads=downloads)
 out=ROOT/'development/levels/verification/live-libraries-results.json'
 out.write_text(json.dumps(report,indent=2)+'\n')
-print('PASS live CC0 page, 3 manifests/licenses,',len(downloads)-3,'individual GLBs and 3 library ZIP hashes',flush=True)
+print('PASS live CC0 page,',len(libraries),'manifests/licenses,',sum(d['kind']=='GLB' for d in downloads),'individual GLBs,',sum(d['kind']=='EXTRA' for d in downloads),'extra sound/data files and',len(libraries),'library ZIP hashes',flush=True)

@@ -1,9 +1,12 @@
 """Create native Blender Asset Browser libraries of original CC0 assets only."""
-import bpy,json,uuid
+import bpy,json,uuid,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];SITE=ROOT.parents[1]
 rows=json.loads((ROOT/'development/levels/lived-assets.json').read_text())['assets']
-for library in ['industrial','household','hiding']:
+selected=set(sys.argv[sys.argv.index('--')+1:]) if '--' in sys.argv else set()
+for library in ['industrial','household','hiding','events']:
+    if selected and library not in selected:continue
+    if not any(r['library']==library for r in rows):continue
     bpy.ops.wm.read_factory_settings(use_empty=True);bpy.context.preferences.filepaths.save_version=0
     folder=SITE/f'assets/beckenburg/libraries/{library}';folder.mkdir(parents=True,exist_ok=True)
     catalog=str(uuid.uuid5(uuid.NAMESPACE_URL,'https://mrcalzon02.github.io/HB-TTRPG-tools/beckenburg-assets/'+library))

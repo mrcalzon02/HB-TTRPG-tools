@@ -385,7 +385,7 @@ public final class InvestigationGame {
             "CASTLE / SOLO\nWASD move  |  Shift sprint  |  Click mouse-look  |  F light  |  E interact\n"+
             "1–4 select gear  |  R use  |  C ward  |  B ritual  |  J journal  |  M map\n"+
             "Q (hold) callouts  |  L hide in cupboard / emerge  |  X extract  |  Escape pause or return to menu\n\n"+
-            "LOOSE OBJECTS (solo and LAN)\nF5 pick up/drop within 2m | ] turn in hand | F12 throw along your view\nDescriptions appear while examining; poltergeist projectiles injure on contact.\n\n"+
+            "LOOSE OBJECTS (solo and LAN)\nF5 pick up/drop within 2m | ] turn in hand | F12 throw along your view\nDescriptions appear while examining; poltergeist projectiles injure on contact. E toggles aimed phones, alarms, radios and taps.\n\n"+
             "GHOST PRACTICE\n[ / ] change room  |  Space drift  |  1–4 ghost actions\n\n"+
             "MULTIPLAYER\nHost or join by IP, ready up, then use Enter 3D World when the case starts.\n"+
             "The Field Controls tab contains alpha simulation tools, not ordinary lobby controls.");
@@ -688,6 +688,8 @@ public final class InvestigationGame {
                 catch(IllegalArgumentException ex){showVanNotice(ex.getMessage());}
             }
             if(key==KeyEvent.VK_E){
+                var fixture=map.fixtures().aimed(scene.x,feetY(),scene.z,scene.yaw,scene.pitch);
+                if(fixture!=null){try{map.fixtures().toggle(fixture.id(),new LooseClutter.Observer(0,scene.x,feetY(),scene.z,scene.yaw,scene.pitch,!session.hidden()),session.ticks());showVanNotice(fixture.kind()+" "+(map.fixtures().state(fixture.id()).active()?"ON":"OFF"));}catch(IllegalArgumentException ex){showVanNotice(ex.getMessage());}return;}
                 var aimed=aimedRack();
                 if(aimed!=null){takeRackItem();}
                 else {

@@ -1,0 +1,17 @@
+{
+  "license": "CC0-1.0",
+  "authorship": "Original Beckenburg activation example data and synthesized device audio",
+  "tick_seconds": 0.1,
+  "event_duration_ticks": 200,
+  "ghost_trigger_actions": ["DISTURB", "MANIFEST", "SIGNATURE"],
+  "requires_accepted_authoritative_event": true,
+  "player_controls": {"interact": "toggle within reach and sight", "ghost_interact": "request normal costed disturbance"},
+  "devices": [
+    {"kind": "PHONE", "model_family": "level_event_phone", "sound": "audio/phone_ring.wav", "repeat_ticks": 10},
+    {"kind": "ALARM_CLOCK", "model_family": "level_event_alarm_clock", "sound": "audio/alarm_bell.wav", "repeat_ticks": 8},
+    {"kind": "FIRE_ALARM", "model_family": "level_event_fire_alarm", "sound": "audio/fire_bell.wav", "repeat_ticks": 10, "strobe_period_ticks": 8},
+    {"kind": "RADIO", "model_family": "level_event_radio", "sound": "audio/radio_play.wav", "repeat_ticks": 6},
+    {"kind": "BOOM_BOX", "model_family": "level_event_boom_box", "sound": "audio/radio_play.wav", "repeat_ticks": 6},
+    {"kind": "SINK", "sound": "audio/running_water.wav", "repeat_ticks": 6, "fill_per_tick": 6, "drain_per_tick": 10, "maximum_level": 1000, "surface": "inset below the existing basin rim"}
+  ]
+}

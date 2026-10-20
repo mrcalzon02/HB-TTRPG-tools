@@ -32,8 +32,23 @@ public final class LooseClutterNetworkTest {
             Thread.sleep(140);a.client.clutter("THROW",1,0);a.await("ACCEPT|OBJECT");
             LooseClutterTest.check(map.clutter().held(0)==-1,"host releases physical projectile");
             a.client.clutter("TAKE",999,0);a.await("REJECT|");
+            var domain=(GhostDomain)field(host,"ghost");
+            var fixture=map.fixtures().states().stream().filter(f->f.room()==domain.room()).findFirst().orElseThrow();
+            var operator=HauntedFixturesTest.operator(map,fixture);var pose=(LanGhostSpatial)field(host,"ghostPose");
+            synchronized(field(host,"mutex")){
+                for(String name:new String[]{"x","y","z"}){var value=LanGhostSpatial.class.getDeclaredField(name);value.setAccessible(true);value.setDouble(pose,name.equals("x")?operator.x():name.equals("y")?operator.y():operator.z());}
+            }
+            g.client.ghostFixture(fixture.id());g.await("ACCEPT|GDEVICE");
+            a.await("FIXTURE|"+fixture.id()+"|1|");LooseClutterTest.check(map.fixtures().state(fixture.id()).active(),"real ghost socket activates placed fixture");
+            synchronized(field(host,"mutex")){world.setRoom(0,14);}
+            a.client.fixture(fixture.id(),0);a.await("REJECT|");
+            synchronized(field(host,"mutex")){
+                AuthoredTestSupport.place(map,world,0,new Vec(operator.x(),operator.y(),operator.z()));world.turn(0,Math.floorMod((int)Math.round(Math.toDegrees(operator.yaw())),360));
+            }
+            a.client.fixture(fixture.id(),operator.pitch());a.await("ACCEPT|DEVICE");
+            LooseClutterTest.check(!map.fixtures().state(fixture.id()).active(),"real reachable hunter switches fixture off");
             LooseClutterTest.check(host.running(),"malformed intent must not terminate host");
-            System.out.println("PASS real sockets: authoritative pickup/throw, exclusive ownership, invalid IDs, ghost command rejection and held-position privacy");
+            System.out.println("PASS real sockets: pickup/throw/ownership/privacy, ghost fixture activation/replay, rejected remote switching and reachable player deactivation");
         }
     }
 }

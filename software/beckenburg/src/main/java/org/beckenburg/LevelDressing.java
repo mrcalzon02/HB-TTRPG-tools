@@ -70,6 +70,18 @@ final class LevelDressing {
         int[] closets=switch(b.id){case "house"->new int[]{1,3,6,7,11};case "farmhouse"->new int[]{0,1,5,6,7,9,11};default->new int[]{2,4,5,8,9,11};};
         for(int room:closets)closet(room);
         if(b.id.equals("school"))school();else domestic();
+        int[] deviceRooms=b.id.equals("school")?new int[]{0,2,4,8}:new int[]{0,1,3};
+        for(int i=0;i<deviceRooms.length;i++){
+            int room=deviceRooms[i];var r=b.rooms.get(room);
+            // Reserve the already valid switch operating position before adding a stand.
+            b.installSwitch(room);var sw=b.sockets.remove(b.sockets.size()-1);
+            double ox=sw.x(),oz=sw.z();
+            if(Math.abs(ox-r.x0())<.2)ox+=.8;else if(Math.abs(ox-r.x1())<.2)ox-=.8;
+            else if(Math.abs(oz-r.z0())<.2)oz+=.8;else oz-=.8;
+            reserved.add(prop("switch-approach",room,ox,r.y(),oz,0,.45,.45,2.3,"reservation"));
+            Prop stand=wall("level_event_side_table",room,r.x0()+1,r.z0()+.3,.24,.21,.76);
+            if(stand!=null)b.socket("device",room,stand.x(),stand.y()+.759,stand.z(),stand.yaw(),i==0?"PHONE":i==2?"BOOM_BOX":"RADIO");
+        }
         // Use every actual table surface after large furniture has found its final position.
         for(Prop p:List.copyOf(b.props)){
             if(p.mesh().equals("dinner_table_1")){

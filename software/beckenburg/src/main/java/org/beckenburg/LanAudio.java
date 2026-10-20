@@ -177,6 +177,7 @@ public final class LanAudio implements AutoCloseable {
             case TENSION_BUILD->24000;case LOCKED_DOOR_RATTLE->12400;
             case HORROR_STING_A,HORROR_STING_B,HORROR_STING_C->14800;
             case DROP->3300;case ELECTRIC_HUM->9600;case MONITOR_HUM->6200;
+            case PHONE_RING,ALARM_BELL,FIRE_BELL,RADIO_PLAY,RUNNING_WATER->9600;
         };
         byte[] output=new byte[samples*4];
         double pan=event.pan()/100.0;
@@ -252,6 +253,11 @@ public final class LanAudio implements AutoCloseable {
                 case DROP->.43*noise*Math.exp(-t*22)+.33*Math.sin(2*Math.PI*(110-75*t)*t)*Math.exp(-t*16);
                 case ELECTRIC_HUM->.24*Math.sin(2*Math.PI*60*t)+.19*Math.sin(2*Math.PI*120*t)+.12*noise;
                 case MONITOR_HUM->.20*Math.sin(2*Math.PI*220*t)+.12*Math.sin(2*Math.PI*440*t)+.08*noise;
+                case PHONE_RING->(.36*Math.sin(2*Math.PI*440*t)+.28*Math.sin(2*Math.PI*480*t))*(Math.sin(t*60)>-.3?1:.18);
+                case ALARM_BELL->(.40*Math.sin(2*Math.PI*1700*t)+.22*Math.sin(2*Math.PI*2317*t))*Math.exp(-Math.floorMod(i,1800)/850.0);
+                case FIRE_BELL->.55*Math.sin(2*Math.PI*1250*t)*Math.exp(-Math.floorMod(i,3000)/1400.0)+.20*Math.sin(2*Math.PI*1823*t);
+                case RADIO_PLAY->.17*noise+.28*Math.sin(2*Math.PI*(switch((int)(t*8)%4){case 0->220;case 1->261.63;case 2->329.63;default->293.66;})*t)+.12*Math.sin(2*Math.PI*110*t);
+                case RUNNING_WATER->.50*noise*(.65+.35*Math.sin(t*71))+.12*Math.sin(2*Math.PI*(820+260*Math.sin(t*19))*t);
             };
             double value=Math.max(-.85,Math.min(.85,wave*env*gain));
             short lv=(short)Math.round(value*left*22000),rv=(short)Math.round(value*right*22000);

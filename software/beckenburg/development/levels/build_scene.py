@@ -59,6 +59,19 @@ if loose_path.exists():
         obj.location=(state['x'],-state['z'],state['y']);obj.rotation_euler=(0,-state['roll'],-state['yaw'])
         obj['loose_object_id']=state['id'];obj['mass_kg']=entry['mass'];obj['collision_radius_m']=entry['radius'];obj['collision_half_height_m']=entry['half']
         obj['interaction']='F5 pick up/drop; ] examine rotation; F12 throw; host authoritative'
+fixture_path=SRC/'event-fixtures.json'
+if fixture_path.exists():
+    fixtures_collection=collection('EVENT fixtures — individual activation and water anchors')
+    for state in json.loads(fixture_path.read_text()):
+        if state['kind'].startswith('SINK'):
+            obj=bpy.data.objects.new('Event '+str(state['id'])+' '+state['kind'],None)
+        else:
+            asset='level_event_'+state['kind'].lower()+'_worn'
+            with bpy.data.libraries.load(str(ROOT/f'development/levels/blender/{asset}.blend'),link=False) as (incoming,outgoing):outgoing.objects=[asset]
+            obj=outgoing.objects[0];obj.name='Event '+str(state['id'])+' '+state['kind']
+        fixtures_collection.objects.link(obj);obj.location=(state['x'],-state['z'],state['y']);obj.rotation_euler.z=-state['yaw']
+        obj['event_fixture_id']=state['id'];obj['event_kind']=state['kind'];obj['room']=state['room'];obj['active']=state['active'];obj['water_level_0_1000']=state['water']
+        obj['interaction']='Hunter E toggles; ghost F5 requests a normal costed DISTURB event; state is host-owned'
 metadata=collection('AUTHORING sockets, portals, stair support and collision')
 def empty(label,p,data,display='PLAIN_AXES',size=.18):
     obj=bpy.data.objects.new(label,None);metadata.objects.link(obj);obj.location=p;obj.empty_display_type=display;obj.empty_display_size=size

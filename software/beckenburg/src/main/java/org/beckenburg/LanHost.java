@@ -637,6 +637,12 @@ public final class LanHost implements AutoCloseable {
                     recordSound(peer.slot,LanGhostPursuit.Sound.DOOR);
                     reply(peer,"ACCEPT|WINDOW");broadcastWorld();
                 }
+                case "DEVICE" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=4)throw new IllegalArgumentException("device use unavailable");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(3)));ensureActiveHunter(peer);
+                    var b=world.body(peer.slot);map.fixtures().toggle(LanProtocol.integer(p.get(1),1,100),new LooseClutter.Observer(peer.slot,b.x(),b.y(),b.z(),Math.toRadians(b.heading()),LanProtocol.integer(p.get(2),-1400,1400)/1000.0,!world.hidden(peer.slot)),tick);
+                    reply(peer,"ACCEPT|DEVICE");broadcastFixtures();
+                }
                 case "OBJECT" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=5)throw new IllegalArgumentException("physical object command unavailable");
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(4)));ensureActiveHunter(peer);
@@ -1294,6 +1300,15 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"ACCEPT|FRENZY");
                     broadcastState();
                 }
+                case "GDEVICE" -> {
+                    if(!running||peer.slot!=GHOST_SEAT||!peer.ghostWorldMode||p.size()!=3)throw new IllegalArgumentException("spectral device use unavailable");
+                    long seq=LanProtocol.sequence(p.get(2));if(seq<=peer.lastGhostActionSequence)throw new IllegalArgumentException("stale spectral device request");peer.lastGhostActionSequence=seq;
+                    int id=LanProtocol.integer(p.get(1),1,100);var f=map.fixtures().state(id);var pose=ghostPose.pose();
+                    if(f.room()!=ghost.room()||Math.hypot(f.x()-pose.x(),f.z()-pose.z())>8||!map.clearLineOfSight(pose.x(),pose.y()+1.3,pose.z(),f.x(),f.y()+.1,f.z())||frenzy.phase()!=GhostFrenzy.Phase.CALM)throw new IllegalArgumentException("fixture outside spectral reach");
+                    var result=ghost.dispatch(new GhostDomain.Command(GhostDomain.Action.DISTURB,ghost.room(),++hostGhostActionSequence,GhostDomain.Source.HUMAN));
+                    if(!result.applied())throw new IllegalArgumentException(result.reason());
+                    actionCadence.completed(tick,result);resolveGhostAction(result,id);reply(peer,"ACCEPT|GDEVICE");broadcastState();broadcastFixtures();
+                }
                 case "GHOST" -> {
                     if(!running||peer.slot!=GHOST_SEAT||p.size()!=4)throw new IllegalArgumentException("ghost seat required");
                     GhostDomain.Action action=GhostDomain.Action.valueOf(p.get(1));
@@ -1575,7 +1590,11 @@ public final class LanHost implements AutoCloseable {
     }
     /** AI and human origins both enter this exact damage/telegraph pipeline. */
     private void resolveGhostAction(GhostDomain.Resolution result){
+        resolveGhostAction(result,-1);
+    }
+    private void resolveGhostAction(GhostDomain.Resolution result,int requestedDevice){
         if(!result.applied())return;
+        map.fixtures().witness(result,tick,requestedDevice);
         if(result.action()==GhostDomain.Action.DISTURB&&ghostType.baseType()==GhostIdentity.Type.POLTERGEIST){
             map.clutter().barrage(result.room(),clutterObservers());
             result=new GhostDomain.Resolution(true,result.reason(),result.action(),result.room(),result.energy(),result.fear(),0,result.manifested());
@@ -1872,6 +1891,13 @@ public final class LanHost implements AutoCloseable {
             expireDisconnectedSeats();
             if(!running)return;
             world.advanceStamina(tick);
+            for(var sound:map.fixtures().advance(tick)){
+                var f=sound.source();for(int seat=0;seat<HUNTERS;seat++)if(seats[seat]!=null&&seats[seat].worldMode){
+                    var cue=LanSound.project(map,world.body(seat),f.room(),f.x(),f.y(),f.z(),sound.cue(),tick);if(cue!=null)reply(seats[seat],cue.frame());
+                }
+                Peer spirit=seats[GHOST_SEAT];if(spirit!=null&&spirit.ghostWorldMode){var pose=ghostPose.pose();var cue=LanSound.project(map,new LanWorld.Body(pose.x(),pose.y(),pose.z(),0,pose.room()),f.room(),f.x(),f.y(),f.z(),sound.cue(),tick);if(cue!=null)reply(spirit,"DEVICE_SOUND|"+f.id()+"|"+cue.pan()+"|"+cue.volume()+"|"+tick);}
+            }
+            broadcastFixtures();
             for(var hit:map.clutter().advance(clutterObservers())){
                 var body=world.body(hit.seat());boolean[] affected=new boolean[HUNTERS];affected[hit.seat()]=true;
                 distributeEffect(new GhostDomain.Resolution(true,"physical clutter impact",GhostDomain.Action.DISTURB,body.room(),ghost.energy(),1,hit.damage(),ghost.manifested()),affected);
@@ -2087,6 +2113,11 @@ public final class LanHost implements AutoCloseable {
         }return result;
     }
     private final Map<Peer,String> clutterSent=new WeakHashMap<>();
+    private final Map<Peer,String> fixturesSent=new WeakHashMap<>();
+    private void broadcastFixtures(){
+        var frames=map.fixtures().frames();String key=String.join(";",frames);
+        for(Peer p:seats)if(p!=null&&(p.worldMode||p.ghostWorldMode)&&!key.equals(fixturesSent.get(p))){for(String frame:frames)reply(p,frame);fixturesSent.put(p,key);}
+    }
     private void broadcastClutter(){
         String hunter=map.clutter().snapshot(false),spectral=map.clutter().snapshot(true);
         for(Peer p:seats)if(p!=null&&(p.worldMode||p.ghostWorldMode)){
@@ -2098,6 +2129,7 @@ public final class LanHost implements AutoCloseable {
         }
     }
     private void broadcastWorld(){
+        broadcastFixtures();
         broadcastClutter();
         String doors="DOORS|"+map.doorSnapshot();
         notifyAllPeers(doors);

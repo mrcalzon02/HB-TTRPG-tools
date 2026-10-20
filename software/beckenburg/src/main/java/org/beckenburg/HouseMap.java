@@ -11,6 +11,8 @@ public final class HouseMap {
     private final Site site;
     private final LevelDefinition level;
     private LooseClutter clutter;
+    private HauntedFixtures fixtures;
+    public synchronized HauntedFixtures fixtures(){if(fixtures==null)fixtures=new HauntedFixtures(this);return fixtures;}
     public synchronized LooseClutter clutter(){if(clutter==null)clutter=new LooseClutter(this);return clutter;}
     private final List<Guard> guards;
     private int hidingDensity=70;
@@ -26,7 +28,9 @@ public final class HouseMap {
     public HouseMap(Site site){
         this.site=Objects.requireNonNull(site);level=LevelPlans.build(site);guards=level.guards();
         Dock d=level.dock();van=new VanStaging(new VanStaging.Placement(d.x(),d.z(),d.yaw()));
-        configureHiding(70);
+        // Fixture anchors must be fixed before door state or difficulty can change.
+        // Author access against every potential cupboard, then restore the default.
+        configureHiding(100);fixtures=new HauntedFixtures(this);configureHiding(70);
     }
     public Site site(){return site;}
     public LevelDefinition level(){return level;}

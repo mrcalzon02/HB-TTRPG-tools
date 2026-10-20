@@ -157,6 +157,10 @@ public final class InvestigationSession {
         // Every supernatural action, including AI behavior, follows the same host-style dispatcher.
         // Ghost observation has only room-local presence, never the hunter's global position or notebook.
         int playerRoom=map.roomAt(playerX,playerY,playerZ);
+        for(var sound:map.fixtures().advance(ticks)){
+            var f=sound.source();var cue=LanSound.project(map,new LanWorld.Body(playerX,playerY,playerZ,0,playerRoom),f.room(),f.x(),f.y(),f.z(),sound.cue(),ticks);
+            if(cue!=null)GameSfx.play(sound.cue());
+        }
         var clutterObserver=new LooseClutter.Observer(0,playerX,playerY,playerZ,clutterYaw,clutterPitch,!hidden&&health>0);
         for(var hit:map.clutter().advance(List.of(clutterObserver))){health=Math.max(0,health-hit.damage());log("Struck by a flying object! -"+hit.damage()+" health.");if(health==0){finish(Outcome.LOST);return;}}
         if(hidden&&(hidingAt==null||Math.hypot(playerX-hidingAt.x(),playerZ-hidingAt.z())>.02
@@ -189,6 +193,7 @@ public final class InvestigationSession {
         if(command!=null) {
             GhostDomain.Resolution result=ghost.dispatch(command);
             if(result.applied()) {
+                map.fixtures().witness(result,ticks,-1);
                 int power=switch(result.action()){
                     case WHISPER->3;case DISTURB->8;case MANIFEST->9;
                     case STRIKE,SIGNATURE->10;case DRIFT->0;

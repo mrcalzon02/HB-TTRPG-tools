@@ -230,5 +230,53 @@
     "all_diffuse_images_replaced": true,
     "clean_glb_sha256": "66e8527e26039632d22d8ac6b2a222147e00bc48612761bc0c702cc40d1d94ec",
     "worn_glb_sha256": "efdfb52216d5d3f28c614624154c29c4ab4a32a4bd5b239aa0f1674c03362134"
+  },
+  {
+    "family": "level_event_phone",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "57ac8c72887fc004696fcd4322fec2766239092d80fa5fcdeb9fc097e91962f0",
+    "worn_glb_sha256": "fd208f1a804faa2f8ef7999eff59cfec5485d7e5d85fb07d006050b70d033cd6"
+  },
+  {
+    "family": "level_event_alarm_clock",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "2e3e0c5973bfdffc5d0fc50d1541100d2842b9bd02182a3735684bd71d1efec8",
+    "worn_glb_sha256": "7bc018478504df531537f43308083a65d60ad6e7e299e717754497b169e699da"
+  },
+  {
+    "family": "level_event_fire_alarm",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "c9cca7e17d5abc40bf6ccd39c725968020f9aa6a643473f366ce4a885d4c0d3f",
+    "worn_glb_sha256": "f655d768c8f2638f8516194b7e8cfb2147798e61fdd37f1994bb5a42c93763bb"
+  },
+  {
+    "family": "level_event_radio",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "c81e6e6e1cbc1b7d05a0b7d1aa7482d4190b6389c5a5427c05a175feefe1c00c",
+    "worn_glb_sha256": "faf827c0cedc0239c0f276e61f35f99b9cea92204b0b562f6dce0d79bb389627"
+  },
+  {
+    "family": "level_event_boom_box",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "b3d2f335453c7b69927f03754965094f0617720e6b69c13b55fa0ebd44353377",
+    "worn_glb_sha256": "741006a30e850f06e35eb0a33b6ca71eb4f5a9a0fee6c46669f6d6895471ca01"
+  },
+  {
+    "family": "level_event_side_table",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "a7b3daa835dbd35b7e281cb40ea0d618ec212714cc4edc4a1710a3d4ba6101d3",
+    "worn_glb_sha256": "6a81b4430a905d8a261d63cba0b6c85cfe09a5d756222579b133d59a842a86f4"
   }
 ]

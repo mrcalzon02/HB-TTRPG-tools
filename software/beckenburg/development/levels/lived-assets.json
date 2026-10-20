@@ -727,6 +727,306 @@
       "family": "level_loose_candlestick"
     },
     {
+      "id": "level_event_phone",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "57ac8c72887fc004696fcd4322fec2766239092d80fa5fcdeb9fc097e91962f0",
+      "bytes": 97516,
+      "triangles": 1332,
+      "bounds": [
+        [
+          -0.1420000046491623,
+          0.0,
+          -0.10999999940395355
+        ],
+        [
+          0.1420000046491623,
+          0.16711902618408203,
+          0.10999999940395355
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_phone.blend",
+      "variant": "clean",
+      "family": "level_event_phone"
+    },
+    {
+      "id": "level_event_alarm_clock",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "2e3e0c5973bfdffc5d0fc50d1541100d2842b9bd02182a3735684bd71d1efec8",
+      "bytes": 73904,
+      "triangles": 676,
+      "bounds": [
+        [
+          -0.09200000017881393,
+          -0.0021370775066316128,
+          -0.03700000047683716
+        ],
+        [
+          0.09200000017881393,
+          0.20499999821186066,
+          0.03700000047683716
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_alarm_clock.blend",
+      "variant": "clean",
+      "family": "level_event_alarm_clock"
+    },
+    {
+      "id": "level_event_fire_alarm",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "c9cca7e17d5abc40bf6ccd39c725968020f9aa6a643473f366ce4a885d4c0d3f",
+      "bytes": 47980,
+      "triangles": 252,
+      "bounds": [
+        [
+          -0.11500000208616257,
+          0.0,
+          -0.017500000074505806
+        ],
+        [
+          0.11500000208616257,
+          0.29750001430511475,
+          0.07249999791383743
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_fire_alarm.blend",
+      "variant": "clean",
+      "family": "level_event_fire_alarm"
+    },
+    {
+      "id": "level_event_radio",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "c81e6e6e1cbc1b7d05a0b7d1aa7482d4190b6389c5a5427c05a175feefe1c00c",
+      "bytes": 98868,
+      "triangles": 860,
+      "bounds": [
+        [
+          -0.16856543719768524,
+          0.0,
+          -0.06499999761581421
+        ],
+        [
+          0.15000000596046448,
+          0.4504104554653168,
+          0.08299999684095383
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_radio.blend",
+      "variant": "clean",
+      "family": "level_event_radio"
+    },
+    {
+      "id": "level_event_boom_box",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "b3d2f335453c7b69927f03754965094f0617720e6b69c13b55fa0ebd44353377",
+      "bytes": 138708,
+      "triangles": 1560,
+      "bounds": [
+        [
+          -0.23576544225215912,
+          0.0,
+          -0.06499999761581421
+        ],
+        [
+          0.23000000417232513,
+          0.4904104769229889,
+          0.08299999684095383
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_boom_box.blend",
+      "variant": "clean",
+      "family": "level_event_boom_box"
+    },
+    {
+      "id": "level_event_side_table",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "a7b3daa835dbd35b7e281cb40ea0d618ec212714cc4edc4a1710a3d4ba6101d3",
+      "bytes": 51464,
+      "triangles": 500,
+      "bounds": [
+        [
+          -0.23000000417232513,
+          0.0,
+          -0.20000000298023224
+        ],
+        [
+          0.23000000417232513,
+          0.7549999952316284,
+          0.20000000298023224
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_side_table.blend",
+      "variant": "clean",
+      "family": "level_event_side_table"
+    },
+    {
+      "id": "level_event_phone_worn",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "fd208f1a804faa2f8ef7999eff59cfec5485d7e5d85fb07d006050b70d033cd6",
+      "bytes": 99436,
+      "triangles": 1332,
+      "bounds": [
+        [
+          -0.1420000046491623,
+          0.0,
+          -0.10999999940395355
+        ],
+        [
+          0.1420000046491623,
+          0.16711902618408203,
+          0.10999999940395355
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_phone_worn.blend",
+      "variant": "worn",
+      "family": "level_event_phone"
+    },
+    {
+      "id": "level_event_alarm_clock_worn",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "7bc018478504df531537f43308083a65d60ad6e7e299e717754497b169e699da",
+      "bytes": 77524,
+      "triangles": 676,
+      "bounds": [
+        [
+          -0.09200000017881393,
+          -0.0021370775066316128,
+          -0.03700000047683716
+        ],
+        [
+          0.09200000017881393,
+          0.20499999821186066,
+          0.03700000047683716
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_alarm_clock_worn.blend",
+      "variant": "worn",
+      "family": "level_event_alarm_clock"
+    },
+    {
+      "id": "level_event_fire_alarm_worn",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "f655d768c8f2638f8516194b7e8cfb2147798e61fdd37f1994bb5a42c93763bb",
+      "bytes": 51600,
+      "triangles": 252,
+      "bounds": [
+        [
+          -0.11500000208616257,
+          0.0,
+          -0.017500000074505806
+        ],
+        [
+          0.11500000208616257,
+          0.29750001430511475,
+          0.07249999791383743
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_fire_alarm_worn.blend",
+      "variant": "worn",
+      "family": "level_event_fire_alarm"
+    },
+    {
+      "id": "level_event_radio_worn",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "faf827c0cedc0239c0f276e61f35f99b9cea92204b0b562f6dce0d79bb389627",
+      "bytes": 103016,
+      "triangles": 860,
+      "bounds": [
+        [
+          -0.16856543719768524,
+          0.0,
+          -0.06499999761581421
+        ],
+        [
+          0.15000000596046448,
+          0.4504104554653168,
+          0.08299999684095383
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_radio_worn.blend",
+      "variant": "worn",
+      "family": "level_event_radio"
+    },
+    {
+      "id": "level_event_boom_box_worn",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "741006a30e850f06e35eb0a33b6ca71eb4f5a9a0fee6c46669f6d6895471ca01",
+      "bytes": 142748,
+      "triangles": 1560,
+      "bounds": [
+        [
+          -0.23576544225215912,
+          0.0,
+          -0.06499999761581421
+        ],
+        [
+          0.23000000417232513,
+          0.4904104769229889,
+          0.08299999684095383
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_boom_box_worn.blend",
+      "variant": "worn",
+      "family": "level_event_boom_box"
+    },
+    {
+      "id": "level_event_side_table_worn",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "6a81b4430a905d8a261d63cba0b6c85cfe09a5d756222579b133d59a842a86f4",
+      "bytes": 52844,
+      "triangles": 500,
+      "bounds": [
+        [
+          -0.23000000417232513,
+          0.0,
+          -0.20000000298023224
+        ],
+        [
+          0.23000000417232513,
+          0.7549999952316284,
+          0.20000000298023224
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_side_table_worn.blend",
+      "variant": "worn",
+      "family": "level_event_side_table"
+    },
+    {
       "id": "level_loose_mug_worn",
       "library": "household",
       "license": "CC0-1.0",
@@ -1597,6 +1897,36 @@
       "glb": "66e8527e26039632d22d8ac6b2a222147e00bc48612761bc0c702cc40d1d94ec",
       "blend": "5cb83437f355acf3278fc40cda4ac8036489e268c2865ba5b6ff9090c8c55ef3",
       "preview": "7f4f7f33889a4d2a4d198c107aac3dde6714df2f9a15e4cc0466cbcdc8f2a0ec"
+    },
+    "level_event_phone": {
+      "glb": "57ac8c72887fc004696fcd4322fec2766239092d80fa5fcdeb9fc097e91962f0",
+      "blend": "deed48143fe8b4a1fe5ec6aa45214c3708492cf7711a5dcdb810e77632a28338",
+      "preview": "f8b89314066ce4df02b0e0283c873541a3b6dc8d7f15ee49c0cc86034b687ee9"
+    },
+    "level_event_alarm_clock": {
+      "glb": "2e3e0c5973bfdffc5d0fc50d1541100d2842b9bd02182a3735684bd71d1efec8",
+      "blend": "fdc557f5fad4a19e920038853405a05dd36c5e593455d9f3b25ee851d78c5976",
+      "preview": "f4a7b8539462aae6be32b9cd039eb62b3325ae4c234bb56eb480821205791757"
+    },
+    "level_event_fire_alarm": {
+      "glb": "c9cca7e17d5abc40bf6ccd39c725968020f9aa6a643473f366ce4a885d4c0d3f",
+      "blend": "f257d65f013d81ce2c2a817d23d6d189df3c97c1ee885cbcf2989d562d995ba9",
+      "preview": "ecf1707a8ef06734ca7a822a58353ad5d4abf7b4f933e252ecc4b48c847b0c52"
+    },
+    "level_event_radio": {
+      "glb": "c81e6e6e1cbc1b7d05a0b7d1aa7482d4190b6389c5a5427c05a175feefe1c00c",
+      "blend": "31eda9b4d442a64839d93f7d53f6088f994a9b42e6e76d315bf3d910317dd447",
+      "preview": "3078a41f4d41bbcbf4d0a242079c2b85008cee6c5dab8e41d59ad0a77c7dfe86"
+    },
+    "level_event_boom_box": {
+      "glb": "b3d2f335453c7b69927f03754965094f0617720e6b69c13b55fa0ebd44353377",
+      "blend": "11df421dd5de0e4bd01e04f5fddbce58bd2f192dea11d7fa94dc89c0e125f350",
+      "preview": "acca69f2ea66537ea5d2c5ca156fe384d8ed8984b396063d622c5318f122a268"
+    },
+    "level_event_side_table": {
+      "glb": "a7b3daa835dbd35b7e281cb40ea0d618ec212714cc4edc4a1710a3d4ba6101d3",
+      "blend": "3b2083db3b70112e82e73354e97716cc8bf080cb9dc2958b2a624a79b44e0ab8",
+      "preview": "cd5dcb8fda996ac85e122dfc5b224f20f6ff6fc76204ab4cd1aaab20a30b64b4"
     }
   }
 }

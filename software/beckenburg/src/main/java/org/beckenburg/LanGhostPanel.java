@@ -59,6 +59,10 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
                 if(!map.level().revision().equals(p.get(2)))throw new IllegalArgumentException("incompatible level revision");
                 buildingAudio.setMap(map);
                 feedback="SPECTRAL TERRITORY: "+map.site();
+            }else if(p.size()==5&&p.get(0).equals("DEVICE_SOUND")){
+                var device=map.fixtures().state(LanProtocol.integer(p.get(1),1,100));audio.play(new LanSound.CueEvent(device.kind().cue(),LanProtocol.integer(p.get(2),-100,100),LanProtocol.integer(p.get(3),0,100),LanProtocol.integer(p.get(4),0,99999999)));
+            }else if(p.size()==6&&p.get(0).equals("FIXTURE")){
+                map.fixtures().accept(p);
             }else if(p.size()==2&&p.get(0).equals("CLUTTER")){
                 map.clutter().acceptOne(p.get(1));
             }else if(p.size()==2&&p.get(0).equals("HIDECONFIG")){
@@ -230,6 +234,10 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     }
     @Override public void keyPressed(KeyEvent e){
         switch(e.getKeyCode()){
+            case KeyEvent.VK_F5 -> {
+                var device=map.fixtures().aimed(camera.x,camera.eyeHeight-1.62,camera.z,camera.yaw,camera.pitch);
+                if(device!=null)try{client.ghostFixture(device.id());feedback="Requesting fixture haunting: "+device.kind();}catch(java.io.IOException failure){feedback="Fixture request failed: "+failure.getMessage();}
+            }
             case KeyEvent.VK_ESCAPE -> {keys.clear();mouseLook.release();InGamePauseMenu.execute(this);}
             case KeyEvent.VK_OPEN_BRACKET -> choice--;
             case KeyEvent.VK_CLOSE_BRACKET -> choice++;
@@ -287,7 +295,7 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
             List<Integer> exits=exits();
             int width=Math.min(w-24,620),panelY=h-117;
             g.setColor(new Color(23,14,32,225));g.fillRoundRect(12,panelY,width,105,8,8);
-            g.setColor(new Color(235,206,244));g.drawString("SPECTRAL ACTIONS",24,panelY+22);
+            g.setColor(new Color(235,206,244));g.drawString("SPECTRAL ACTIONS / F5 ACTIVATE AIMED FIXTURE",24,panelY+22);
             g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
             StringBuilder actions=new StringBuilder();
             for(int i=0;i<offered.size();i++)actions.append(i+1).append(": ").append(offered.get(i)).append("   ");

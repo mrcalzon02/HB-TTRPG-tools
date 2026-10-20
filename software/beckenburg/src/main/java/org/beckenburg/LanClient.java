@@ -135,6 +135,8 @@ public final class LanClient implements AutoCloseable {
     }
     public synchronized void vanMonitor()throws IOException {send("VANMON|"+(++sequence));}
     public synchronized void hide()throws IOException {send("HIDE|"+(++sequence));}
+    public synchronized void fixture(int id,double pitch)throws IOException {send("DEVICE|"+id+"|"+Math.round(pitch*1000)+"|"+(++sequence));}
+    public synchronized void ghostFixture(int id)throws IOException {send("GDEVICE|"+id+"|"+(++sequence));}
     public synchronized void clutter(String action,int id,double pitch)throws IOException {send("OBJECT|"+action+"|"+id+"|"+Math.round(pitch*1000)+"|"+(++sequence));}
     public synchronized void purchaseSupply(FieldSupplies.Kind kind,FieldSupplies.Tier tier)throws IOException{
         Objects.requireNonNull(kind);Objects.requireNonNull(tier);

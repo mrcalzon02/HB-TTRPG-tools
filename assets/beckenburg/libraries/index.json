@@ -8,7 +8,7 @@
       "count": 18,
       "manifest": "assets/beckenburg/libraries/industrial/manifest.json",
       "download": "assets/beckenburg/libraries/industrial/beckenburg-industrial-cc0.zip",
-      "sha256": "8006ade8a656fe0aa5c456d0e97ff58329b4ae1a9ddf3578663f1d8703795b46"
+      "sha256": "7e6b29c8d83913119699fd3a3079b2e38bc089ac0c85a30c4775348c1b2174c8"
     },
     {
       "id": "household",
@@ -17,7 +17,7 @@
       "count": 38,
       "manifest": "assets/beckenburg/libraries/household/manifest.json",
       "download": "assets/beckenburg/libraries/household/beckenburg-household-cc0.zip",
-      "sha256": "a3c9564cde5b7a1c8df1c1095708369d05485e037ccca1eda4384c904f169589"
+      "sha256": "22e85a356548e80ae59dfd2b0a43047cbe0bc7d429fc79be51ddce7f3d94541c"
     },
     {
       "id": "hiding",
@@ -26,7 +26,16 @@
       "count": 2,
       "manifest": "assets/beckenburg/libraries/hiding/manifest.json",
       "download": "assets/beckenburg/libraries/hiding/beckenburg-hiding-cc0.zip",
-      "sha256": "858be5f5c1d616c2890a1165ddb948bd24acc2cc4672367553711b389a4e69a4"
+      "sha256": "105044f3292d5668350751aaf43348281cb908bf3bf80a390717c4755084c179"
+    },
+    {
+      "id": "events",
+      "title": "Ghost event fixtures",
+      "license": "CC0-1.0",
+      "count": 12,
+      "manifest": "assets/beckenburg/libraries/events/manifest.json",
+      "download": "assets/beckenburg/libraries/events/beckenburg-events-cc0.zip",
+      "sha256": "e52d90bead5f592a280f75d94d3384bf8746887705de1ba362211d78a0678e67"
     }
   ]
 }

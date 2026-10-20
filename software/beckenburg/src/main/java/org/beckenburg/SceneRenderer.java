@@ -153,6 +153,29 @@ public final class SceneRenderer {
             }
         }
     }
+    private static Point fixturePoint(HauntedFixtures.State f,double x,double y,double z){return new Point(f.x()+x*Math.cos(f.yaw())-z*Math.sin(f.yaw()),f.y()+y,f.z()+x*Math.sin(f.yaw())+z*Math.cos(f.yaw()));}
+    private void eventFixtures(List<Face> out,HouseMap map){
+        for(var f:map.fixtures().states()){
+            String mesh=f.kind().mesh();
+            if(mesh!=null)imported(out,mesh,f.x(),f.y(),f.z(),1,f.yaw()+(f.active()&&f.kind()==HauntedFixtures.Kind.ALARM_CLOCK?Math.sin(roomLightTick*2)*.018:0));
+            if(f.active()&&(f.kind()==HauntedFixtures.Kind.FIRE_ALARM||f.kind()==HauntedFixtures.Kind.RADIO||f.kind()==HauntedFixtures.Kind.BOOM_BOX)){
+                double y=f.kind()==HauntedFixtures.Kind.FIRE_ALARM?.27:f.kind()==HauntedFixtures.Kind.RADIO?.164:.197;
+                int color=f.kind()==HauntedFixtures.Kind.FIRE_ALARM&&roomLightTick%8<4?0xffefd0:0xc29f4c;
+                quad(out,fixturePoint(f,-.038,y-.010,.088),fixturePoint(f,.038,y-.010,.088),fixturePoint(f,.038,y+.010,.088),fixturePoint(f,-.038,y+.010,.088),color);
+            }
+            if(f.water()>0){
+                double rx=f.kind()==HauntedFixtures.Kind.SINK_KITCHEN?.32:.175,rz=f.kind()==HauntedFixtures.Kind.SINK_KITCHEN?.145:.13;
+                double y=-.20+.155*f.water()/1000.0;Point center=fixturePoint(f,0,y,0);
+                for(int n=0;n<24;n++){double a=n*Math.PI/12,b=(n+1)*Math.PI/12;
+                    Point p=fixturePoint(f,Math.cos(a)*rx,y,Math.sin(a)*rz),q=fixturePoint(f,Math.cos(b)*rx,y,Math.sin(b)*rz);
+                    out.add(new Face(center,q,p,n%3==0?0x55757b:0x45656b,-1,0,0,0,0,0,0,f.room()));}
+                if(f.active()){
+                    Point top=fixturePoint(f,0,.11,-.03),bottom=fixturePoint(f,0,y,-.03);
+                    box(out,top.x-.004,bottom.y,top.z-.004,.008,top.y-bottom.y,.008,0x72969d);
+                }
+            }
+        }
+    }
     private static void imported(List<Face> out,String id,
             double x,double y,double z,double scale,double yaw){
         imported(out,id,x,y,z,scale,scale,scale,yaw);
@@ -776,6 +799,7 @@ public final class SceneRenderer {
         List<Face> out=new ArrayList<>(2000);
         levelArchitecture(out,map);
         looseClutter(out,map);
+        eventFixtures(out,map);
         for(RitualSites.Site site:RitualSites.all(map))
             if(Math.hypot(site.x()-x,site.z()-z)<14)
                 ritualInstallation(out,site,clock,activeRite==site.rite());

@@ -1,7 +1,8 @@
 Beckenburg original scenery — CC0 1.0 Universal
 
 The rights holder dedicates these original models, their embedded procedural
-textures, editable Blender assets and preview renders to the public domain
+textures, editable Blender assets, preview renders, original synthesized fixture
+audio and activation example data to the public domain
 under CC0 1.0 Universal, to the extent permitted by law.
 
 License: https://creativecommons.org/publicdomain/zero/1.0/

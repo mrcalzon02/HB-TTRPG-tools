@@ -1,0 +1,416 @@
+{
+  "id": "events",
+  "title": "Ghost event fixtures",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "variants": [
+    "clean",
+    "worn"
+  ],
+  "assets": [
+    {
+      "id": "level_event_phone",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "57ac8c72887fc004696fcd4322fec2766239092d80fa5fcdeb9fc097e91962f0",
+      "bytes": 97516,
+      "triangles": 1332,
+      "bounds": [
+        [
+          -0.1420000046491623,
+          0.0,
+          -0.10999999940395355
+        ],
+        [
+          0.1420000046491623,
+          0.16711902618408203,
+          0.10999999940395355
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_phone.blend",
+      "variant": "clean",
+      "family": "level_event_phone",
+      "files": {
+        "models": "assets/beckenburg/libraries/events/models/level_event_phone.glb",
+        "source": "assets/beckenburg/libraries/events/source/level_event_phone.blend",
+        "previews": "assets/beckenburg/libraries/events/previews/level_event_phone.png"
+      }
+    },
+    {
+      "id": "level_event_alarm_clock",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "2e3e0c5973bfdffc5d0fc50d1541100d2842b9bd02182a3735684bd71d1efec8",
+      "bytes": 73904,
+      "triangles": 676,
+      "bounds": [
+        [
+          -0.09200000017881393,
+          -0.0021370775066316128,
+          -0.03700000047683716
+        ],
+        [
+          0.09200000017881393,
+          0.20499999821186066,
+          0.03700000047683716
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_alarm_clock.blend",
+      "variant": "clean",
+      "family": "level_event_alarm_clock",
+      "files": {
+        "models": "assets/beckenburg/libraries/events/models/level_event_alarm_clock.glb",
+        "source": "assets/beckenburg/libraries/events/source/level_event_alarm_clock.blend",
+        "previews": "assets/beckenburg/libraries/events/previews/level_event_alarm_clock.png"
+      }
+    },
+    {
+      "id": "level_event_fire_alarm",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "c9cca7e17d5abc40bf6ccd39c725968020f9aa6a643473f366ce4a885d4c0d3f",
+      "bytes": 47980,
+      "triangles": 252,
+      "bounds": [
+        [
+          -0.11500000208616257,
+          0.0,
+          -0.017500000074505806
+        ],
+        [
+          0.11500000208616257,
+          0.29750001430511475,
+          0.07249999791383743
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_fire_alarm.blend",
+      "variant": "clean",
+      "family": "level_event_fire_alarm",
+      "files": {
+        "models": "assets/beckenburg/libraries/events/models/level_event_fire_alarm.glb",
+        "source": "assets/beckenburg/libraries/events/source/level_event_fire_alarm.blend",
+        "previews": "assets/beckenburg/libraries/events/previews/level_event_fire_alarm.png"
+      }
+    },
+    {
+      "id": "level_event_radio",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "c81e6e6e1cbc1b7d05a0b7d1aa7482d4190b6389c5a5427c05a175feefe1c00c",
+      "bytes": 98868,
+      "triangles": 860,
+      "bounds": [
+        [
+          -0.16856543719768524,
+          0.0,
+          -0.06499999761581421
+        ],
+        [
+          0.15000000596046448,
+          0.4504104554653168,
+          0.08299999684095383
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_radio.blend",
+      "variant": "clean",
+      "family": "level_event_radio",
+      "files": {
+        "models": "assets/beckenburg/libraries/events/models/level_event_radio.glb",
+        "source": "assets/beckenburg/libraries/events/source/level_event_radio.blend",
+        "previews": "assets/beckenburg/libraries/events/previews/level_event_radio.png"
+      }
+    },
+    {
+      "id": "level_event_boom_box",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "b3d2f335453c7b69927f03754965094f0617720e6b69c13b55fa0ebd44353377",
+      "bytes": 138708,
+      "triangles": 1560,
+      "bounds": [
+        [
+          -0.23576544225215912,
+          0.0,
+          -0.06499999761581421
+        ],
+        [
+          0.23000000417232513,
+          0.4904104769229889,
+          0.08299999684095383
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_boom_box.blend",
+      "variant": "clean",
+      "family": "level_event_boom_box",
+      "files": {
+        "models": "assets/beckenburg/libraries/events/models/level_event_boom_box.glb",
+        "source": "assets/beckenburg/libraries/events/source/level_event_boom_box.blend",
+        "previews": "assets/beckenburg/libraries/events/previews/level_event_boom_box.png"
+      }
+    },
+    {
+      "id": "level_event_side_table",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "a7b3daa835dbd35b7e281cb40ea0d618ec212714cc4edc4a1710a3d4ba6101d3",
+      "bytes": 51464,
+      "triangles": 500,
+      "bounds": [
+        [
+          -0.23000000417232513,
+          0.0,
+          -0.20000000298023224
+        ],
+        [
+          0.23000000417232513,
+          0.7549999952316284,
+          0.20000000298023224
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_side_table.blend",
+      "variant": "clean",
+      "family": "level_event_side_table",
+      "files": {
+        "models": "assets/beckenburg/libraries/events/models/level_event_side_table.glb",
+        "source": "assets/beckenburg/libraries/events/source/level_event_side_table.blend",
+        "previews": "assets/beckenburg/libraries/events/previews/level_event_side_table.png"
+      }
+    },
+    {
+      "id": "level_event_phone_worn",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "fd208f1a804faa2f8ef7999eff59cfec5485d7e5d85fb07d006050b70d033cd6",
+      "bytes": 99436,
+      "triangles": 1332,
+      "bounds": [
+        [
+          -0.1420000046491623,
+          0.0,
+          -0.10999999940395355
+        ],
+        [
+          0.1420000046491623,
+          0.16711902618408203,
+          0.10999999940395355
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_phone_worn.blend",
+      "variant": "worn",
+      "family": "level_event_phone",
+      "files": {
+        "models": "assets/beckenburg/libraries/events/models/level_event_phone_worn.glb",
+        "source": "assets/beckenburg/libraries/events/source/level_event_phone_worn.blend",
+        "previews": "assets/beckenburg/libraries/events/previews/level_event_phone_worn.png"
+      }
+    },
+    {
+      "id": "level_event_alarm_clock_worn",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "7bc018478504df531537f43308083a65d60ad6e7e299e717754497b169e699da",
+      "bytes": 77524,
+      "triangles": 676,
+      "bounds": [
+        [
+          -0.09200000017881393,
+          -0.0021370775066316128,
+          -0.03700000047683716
+        ],
+        [
+          0.09200000017881393,
+          0.20499999821186066,
+          0.03700000047683716
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_alarm_clock_worn.blend",
+      "variant": "worn",
+      "family": "level_event_alarm_clock",
+      "files": {
+        "models": "assets/beckenburg/libraries/events/models/level_event_alarm_clock_worn.glb",
+        "source": "assets/beckenburg/libraries/events/source/level_event_alarm_clock_worn.blend",
+        "previews": "assets/beckenburg/libraries/events/previews/level_event_alarm_clock_worn.png"
+      }
+    },
+    {
+      "id": "level_event_fire_alarm_worn",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "f655d768c8f2638f8516194b7e8cfb2147798e61fdd37f1994bb5a42c93763bb",
+      "bytes": 51600,
+      "triangles": 252,
+      "bounds": [
+        [
+          -0.11500000208616257,
+          0.0,
+          -0.017500000074505806
+        ],
+        [
+          0.11500000208616257,
+          0.29750001430511475,
+          0.07249999791383743
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_fire_alarm_worn.blend",
+      "variant": "worn",
+      "family": "level_event_fire_alarm",
+      "files": {
+        "models": "assets/beckenburg/libraries/events/models/level_event_fire_alarm_worn.glb",
+        "source": "assets/beckenburg/libraries/events/source/level_event_fire_alarm_worn.blend",
+        "previews": "assets/beckenburg/libraries/events/previews/level_event_fire_alarm_worn.png"
+      }
+    },
+    {
+      "id": "level_event_radio_worn",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "faf827c0cedc0239c0f276e61f35f99b9cea92204b0b562f6dce0d79bb389627",
+      "bytes": 103016,
+      "triangles": 860,
+      "bounds": [
+        [
+          -0.16856543719768524,
+          0.0,
+          -0.06499999761581421
+        ],
+        [
+          0.15000000596046448,
+          0.4504104554653168,
+          0.08299999684095383
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_radio_worn.blend",
+      "variant": "worn",
+      "family": "level_event_radio",
+      "files": {
+        "models": "assets/beckenburg/libraries/events/models/level_event_radio_worn.glb",
+        "source": "assets/beckenburg/libraries/events/source/level_event_radio_worn.blend",
+        "previews": "assets/beckenburg/libraries/events/previews/level_event_radio_worn.png"
+      }
+    },
+    {
+      "id": "level_event_boom_box_worn",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "741006a30e850f06e35eb0a33b6ca71eb4f5a9a0fee6c46669f6d6895471ca01",
+      "bytes": 142748,
+      "triangles": 1560,
+      "bounds": [
+        [
+          -0.23576544225215912,
+          0.0,
+          -0.06499999761581421
+        ],
+        [
+          0.23000000417232513,
+          0.4904104769229889,
+          0.08299999684095383
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_boom_box_worn.blend",
+      "variant": "worn",
+      "family": "level_event_boom_box",
+      "files": {
+        "models": "assets/beckenburg/libraries/events/models/level_event_boom_box_worn.glb",
+        "source": "assets/beckenburg/libraries/events/source/level_event_boom_box_worn.blend",
+        "previews": "assets/beckenburg/libraries/events/previews/level_event_boom_box_worn.png"
+      }
+    },
+    {
+      "id": "level_event_side_table_worn",
+      "library": "events",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "6a81b4430a905d8a261d63cba0b6c85cfe09a5d756222579b133d59a842a86f4",
+      "bytes": 52844,
+      "triangles": 500,
+      "bounds": [
+        [
+          -0.23000000417232513,
+          0.0,
+          -0.20000000298023224
+        ],
+        [
+          0.23000000417232513,
+          0.7549999952316284,
+          0.20000000298023224
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_event_side_table_worn.blend",
+      "variant": "worn",
+      "family": "level_event_side_table",
+      "files": {
+        "models": "assets/beckenburg/libraries/events/models/level_event_side_table_worn.glb",
+        "source": "assets/beckenburg/libraries/events/source/level_event_side_table_worn.blend",
+        "previews": "assets/beckenburg/libraries/events/previews/level_event_side_table_worn.png"
+      }
+    }
+  ],
+  "extras": [
+    {
+      "path": "assets/beckenburg/libraries/events/audio/alarm_bell.wav",
+      "archive_path": "audio/alarm_bell.wav",
+      "license": "CC0-1.0",
+      "sha256": "22c13c75ba5a1b31f11c319ff7e4dd9b15db77230df4337cdb5d7c7a55ea5fac"
+    },
+    {
+      "path": "assets/beckenburg/libraries/events/audio/fire_bell.wav",
+      "archive_path": "audio/fire_bell.wav",
+      "license": "CC0-1.0",
+      "sha256": "209d9371b4f9f14a3a90bd2906a570bc928291ffb62aeeb9625d3f39064cd204"
+    },
+    {
+      "path": "assets/beckenburg/libraries/events/audio/phone_ring.wav",
+      "archive_path": "audio/phone_ring.wav",
+      "license": "CC0-1.0",
+      "sha256": "9700b6057b1db8ca85f2c349c95d19b270cbbe5dbd0f411f211e346256618202"
+    },
+    {
+      "path": "assets/beckenburg/libraries/events/audio/radio_play.wav",
+      "archive_path": "audio/radio_play.wav",
+      "license": "CC0-1.0",
+      "sha256": "07585658f34f8980589a60360e40a628c9025001ab137de25fea9d2d52bcc03f"
+    },
+    {
+      "path": "assets/beckenburg/libraries/events/audio/running_water.wav",
+      "archive_path": "audio/running_water.wav",
+      "license": "CC0-1.0",
+      "sha256": "f98bfddd42f38a9d366b016a70bb26ffed874d7be443bb43ac1a35fd6d51bb59"
+    },
+    {
+      "path": "assets/beckenburg/libraries/events/INTERACTION.md",
+      "archive_path": "INTERACTION.md",
+      "license": "CC0-1.0",
+      "sha256": "fe431838a82f1d9e05be92bb80ffda5f5f1718b713360ac753c95e4548936ae4"
+    },
+    {
+      "path": "assets/beckenburg/libraries/events/activation-examples.json",
+      "archive_path": "activation-examples.json",
+      "license": "CC0-1.0",
+      "sha256": "2cc484cf06aaa5f73f3188c4a1faa796a72b1e1e12ac89bcf8896e57dd19bca4"
+    }
+  ]
+}
