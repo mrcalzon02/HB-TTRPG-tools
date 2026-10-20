@@ -1,0 +1,29 @@
+[
+  {
+    "site": "house",
+    "sha256": "37c993c06277cce5ab3eeeeff1574f312ffd7f06353f871814cecbe42dfc913f",
+    "revision": "production-2026-10-20-physical-events-v2-403475a8ed0b4609",
+    "runtime_architecture_triangles": 161306,
+    "editable_loose_objects": 27,
+    "editable_event_fixtures": 19,
+    "all_diffuse_images_packed": true
+  },
+  {
+    "site": "farmhouse",
+    "sha256": "c574a2e7189d2a5881efbe40cfbff9fe9ce9171cc58a2a46180a57554f8120b4",
+    "revision": "production-2026-10-20-physical-events-v2-8ccb7328dedbe495",
+    "runtime_architecture_triangles": 162608,
+    "editable_loose_objects": 46,
+    "editable_event_fixtures": 19,
+    "all_diffuse_images_packed": true
+  },
+  {
+    "site": "school",
+    "sha256": "1213a95123596134c8ac1f88d16e04500e258fd147bac2cb25dff5342b99a143",
+    "revision": "production-2026-10-20-physical-events-v2-d575d161c03705eb",
+    "runtime_architecture_triangles": 202580,
+    "editable_loose_objects": 56,
+    "editable_event_fixtures": 17,
+    "all_diffuse_images_packed": true
+  }
+]

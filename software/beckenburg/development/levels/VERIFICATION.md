@@ -1,18 +1,28 @@
 # Level revision verification — 2026-10-20
 
-The lived-in dressing, physical hiding cupboards and clean/worn asset revision passes 15 focused level checks and 27 affected compatibility checks against the integrated Java 17 package. Actual outputs are preserved under `verification/`. Runtime views were visually inspected after rebuilding; the gallery contains 48 original game-camera captures with CRT/grain effects disabled for inspection only.
+The lived-in dressing, physical hiding cupboards and clean/worn asset revision passes 18/18 focused level checks and 30/32 expanded compatibility checks. The two retained failures are GhostDomainTest's old flat-map adjacency expectation and AncientGhostVariantsTest's duplicate ANCIENT_HANTU evidence signature; both were already present in the recorded audit. All checks used the integrated Java 17 package. Actual outputs are preserved under `verification/`. Runtime views were visually inspected after rebuilding; the gallery contains 56 original game-camera captures with CRT/grain effects disabled for inspection only.
 
 ## Current asset and dressing delivery
 
 - The school plant contains three retired riveted coal boilers at the back, two later oil-fired sectional boilers and three modern condensing units toward the front. Flues, separated retired steam lines and paired active headers, circulation pumps, expansion vessel, suspended ventilation, electrical switchgear, coal/ash handling, service workbench and spares use measured room coordinates. Stair and breaker approaches remain usable.
 - House and farm have room-specific furniture and supported belongings: inherited displays, sideboards, card-table corner, ottoman, trunk, linens, toys, pantry and root-cellar stores, barn/workshop furniture and native source cabinets. The room placement helper retains wall support, source bounds, windows and door/stair clearance.
 - Eighteen walk-in cupboards are scattered across the three sites (house 5, farm 7, school 6). Their actual geometry and hollow collision follow the same deterministic hiding-density setting. A 0% cupboard disappears completely; 100% makes all potential cupboards present. Hiding requires physically entering the correct-floor interior. Solo movement exposes the player; LAN host/client and ghost views share presence without disclosing hunter hiding state.
-- Twenty-one original asset families have two separate diffuse-texture versions, 42 GLBs total. The clean GLBs, Blender files and previews are preserved byte-for-byte. Worn models keep exactly the same vertices, normals, UVs, index buffers and pivots; every diffuse image is changed. Runtime uses the worn set. The texture pass reduces saturation and adds soft ingrained dirt, fine chips, oxidation, water tracks, faded cloth, handled timber and foxed paper. Oversized binary noise patches were removed after inspecting them in rooms. `verification/worn-assets-results.json` records actual family-by-family verification.
-- Three original CC0 libraries provide individual GLBs, editable Blender sources, real preview renders and native Blender Asset Browser libraries, in clean and worn versions. Every entry, model metadata, native asset and ZIP license explicitly states CC0 1.0 Universal. The 27 unchanged archive props used as additional game scenery retain their separate source licensing and are excluded from these CC0 downloads. Public-file, embedded-image, ZIP/hash, local-link and native embedded-preview validators were run against the generated libraries.
+- 35 original asset families have two separate diffuse-texture versions, 70 GLBs total. The clean GLBs, Blender files and previews are preserved byte-for-byte. Worn models keep exactly the same vertices, normals, UVs, index buffers and pivots; every diffuse image is changed. Runtime uses the worn set. The texture pass reduces saturation and adds soft ingrained dirt, fine chips, oxidation, water tracks, faded cloth, handled timber and foxed paper. Oversized binary noise patches were removed after inspecting them in rooms. `verification/worn-assets-results.json` records actual family-by-family verification.
+- 4 original CC0 libraries provide individual GLBs, editable Blender sources, real preview renders and native Blender Asset Browser libraries, in clean and worn versions. Every entry, model metadata, native asset and ZIP license explicitly states CC0 1.0 Universal. The 27 unchanged archive props used as additional game scenery retain their separate source licensing and are excluded from these CC0 downloads. Public-file, embedded-image, ZIP/hash, local-link and native embedded-preview validators were run against the generated libraries.
 - Editable complete levels show all potential cupboards for authoring (100%); runtime still follows the selected contract. Their geometry comes directly from the runtime export, including the worn materials. The clean/worn comparison uses actual Blender model renders with identical studio lighting.
 
+## Independent physical objects
 
-Live publication was read back at 2026-10-20T19:09:40.101340+00:00: the public CC0 page, all three manifests/licenses, all 42 individual GLBs and all three ZIPs matched the validated local publication. Actual downloaded-byte SHA-256 values are preserved in `verification/live-libraries-results.json`. The published asset checkpoint is `df31bff5829a6bc8e3ee9d158570ce2e138d1fae`.
+The house has 27 independent objects, the farm 46 and the school 56. All eight original loose-object families have clean/worn versions. F5 picks up/drops, ] rotates for examination and F12 throws along the view. Host-owned gravity, swept collision, support, inelastic bounce, mass and body contact determine motion. Every ghost species can fling up to three existing, unheld objects during accepted sanity events; frenzy DREAD also scatters objects. These environmental flings have no player targeting or collision damage. Only poltergeist DISTURB events launch aimed, armed projectiles; damage requires actual contact, while a dodge or missing object causes no projectile damage. Held coordinates/owners are redacted from ghost snapshots. Initial placements are retained as separate editable meshes in each Blender level, with IDs and collision/mass metadata. The detailed recipe and practical limits are in `LOOSE_OBJECTS_WORKFLOW.md`.
+
+## Activated ghost-event fixtures
+
+The sites contain 19, 19 and 17 individually controlled devices/anchors respectively. Phones ring, bedside alarms and room fire bells sound, radios/boom boxes play, and taps fill/drain the existing hollow basins. Each site has twelve individually mounted room alarms. Player E toggles an aimed fixture; ghost F5 submits a host-validated ordinary disturbance. Accepted AI/human events share costs, cooldowns, room/range/LOS validation and state replay. Five original synthesized sounds and portable activation examples accompany the separate CC0 Events archive. Water stays below the basin rim; overflow/flooding and separate phone receivers are outside this implementation. The full recipe is in `EVENT_FIXTURES_WORKFLOW.md`.
+
+The final visual review caught an interaction angle error concealed by shared test helpers. Pickup/held-object/throw and fixture aim now match the visible camera's positive-sine horizontal X direction. The actual +X socket fixture changed from 270 to 90 degrees; the network test was recompiled and rerun. Initial failed and corrected review attempts are documented in the workflows. Six corrected active/idle device captures and two held-mug captures are included in the gallery.
+
+
+Live publication was read back at 2026-10-20T23:02:42.866594+00:00: the public CC0 page, all 4 manifests/licenses, all 70 individual GLBs and all 4 ZIPs and all seven original event sound/data extras matched the validated local publication. Actual downloaded-byte SHA-256 values are preserved in `verification/live-libraries-results.json`. The published asset checkpoint is `e70088d6`.
 
 ## Retained architectural corrections
 
@@ -31,7 +41,7 @@ These checks establish the reported geometry and gameplay contracts; they do not
 
 ## Broader regression audit
 
-The last complete sweep, before final fixture/schema migrations and the latest van integration, passed 103/155 checks. Of its 52 failures, 20 have subsequently been rechecked and now pass. The remaining 32 failed in that sweep and have not been rerun after the final changes; 32 of them also failed on baseline `b89e3bbc`. This is an audit trail, not a claim that the complete suite is green. The raw baseline comparison includes outputs and source hashes.
+The last complete sweep, before final fixture/schema migrations and the latest van integration, passed 103/155 checks. Of its 52 failures, 20 have subsequently been rechecked and now pass. The remaining 32 failed in that sweep and remain unresolved; the two expanded-audit failures were rerun and still fail, while the others have not been rerun after these final changes; 32 of them also failed on baseline `b89e3bbc`. This is an audit trail, not a claim that the complete suite is green. The raw baseline comparison includes outputs and source hashes.
 
 Fixtures were migrated from old flat-map coordinates to authored XYZ positions; packet expectations now include map revisions/elevation. Public door state supports both player cameras; private hunter bodies, maps and journal state remain rejected by ghost privacy checks. Rack aiming is tested from an actual reachable operating position rather than beyond pickup range. No collision or privacy gate was disabled to pass these checks.
 
@@ -39,48 +49,56 @@ Fixtures were migrated from old flat-map coordinates to authored XYZ positions; 
 
 | Check | Result | Time |
 |---|---|---|
-| AuthoredLevelPhysicsTest | pass | 0.328s |
-| AuthoredLevelReachabilityTest | pass | 7.016s |
-| AuthoredLevelStateTest | pass | 0.265s |
-| AuthoredLevelNetworkTest | pass | 3.704s |
-| AuthoredLevelRitualCaseTest | pass | 0.218s |
-| WorldViewHandednessTest | pass | 0.188s |
-| MouseLookTest | pass | 1.203s |
-| AuthoredUtilitiesTest | pass | 0.297s |
-| SoloElevationTest | pass | 0.265s |
+| AuthoredLevelPhysicsTest | pass | 0.422s |
+| AuthoredLevelReachabilityTest | pass | 6.859s |
+| AuthoredLevelStateTest | pass | 0.422s |
+| AuthoredLevelNetworkTest | pass | 3.844s |
+| AuthoredLevelRitualCaseTest | pass | 0.343s |
+| WorldViewHandednessTest | pass | 0.235s |
+| MouseLookTest | pass | 1.234s |
+| AuthoredUtilitiesTest | pass | 0.422s |
+| SoloElevationTest | pass | 0.453s |
 | EquipmentAssetAssignmentsTest | pass | 0.141s |
-| EquipmentModelCatalogTest | pass | 1.500s |
-| PackagedSourceModelsTest | pass | 2.672s |
-| LevelRenderAcceptanceTest | pass | 4.766s |
-| LevelSurfaceIntegrityTest | pass | 0.734s |
-| LivedLevelDressingTest | pass | 1.219s |
-| HorrorAudioRoutingTest | pass | 0.188s |
-| InvestigationSitesTest | pass | 0.984s |
-| ArchitecturalPlansTest | pass | 0.281s |
-| VictorianHouseArchitectureTest | pass | 1.594s |
-| GrandSiteGeometryTest | pass | 0.250s |
-| LanSiteSelectionIntegrationTest | pass | 0.360s |
-| SoloEnvironmentalEvidenceTest | pass | 0.265s |
-| LanClientDisconnectTest | pass | 0.610s |
+| EquipmentModelCatalogTest | pass | 1.547s |
+| PackagedSourceModelsTest | pass | 2.828s |
+| LevelRenderAcceptanceTest | pass | 5.203s |
+| LevelSurfaceIntegrityTest | pass | 0.797s |
+| LivedLevelDressingTest | pass | 1.562s |
+| LooseClutterTest | pass | 1.063s |
+| LooseClutterNetworkTest | pass | 0.562s |
+| HauntedFixturesTest | pass | 0.656s |
+| GhostDomainTest | pre-existing failure | 0.250s |
+| GhostFrenzyTest | pass | 0.282s |
+| GhostBehaviorTest | pass | 0.625s |
+| GhostTraitsTest | pass | 0.062s |
+| AncientGhostVariantsTest | pre-existing failure | 0.469s |
+| HorrorAudioRoutingTest | pass | 0.234s |
+| InvestigationSitesTest | pass | 1.016s |
+| ArchitecturalPlansTest | pass | 0.406s |
+| VictorianHouseArchitectureTest | pass | 1.375s |
+| GrandSiteGeometryTest | pass | 0.453s |
+| LanSiteSelectionIntegrationTest | pass | 0.687s |
+| SoloEnvironmentalEvidenceTest | pass | 0.344s |
+| LanClientDisconnectTest | pass | 0.609s |
 | LanGracefulLeaveTest | pass | 0.125s |
-| LanWorldRenderTest | pass | 1.656s |
-| LanSoundTest | pass | 0.187s |
-| LanGhostHearingTest | pass | 0.203s |
-| VanStagingTest | pass | 1.063s |
-| VanArrivalStreetTest | pass | 0.343s |
-| VanStreetAndCabinProportionsTest | pass | 0.219s |
-| VanModuleIntegrationTest | pass | 0.703s |
-| VanNavigationVisualTest | pass | 0.360s |
-| GameplaySmokeTest | pass | 1.203s |
-| LanAcousticsTest | pass | 0.187s |
-| LanApparitionTest | pass | 0.188s |
-| LanGhostIdentityTest | pass | 0.375s |
-| LanGhostIntegrationTest | pass | 0.781s |
-| LanSpatialCombatTest | pass | 0.219s |
-| LanSpatialEvidenceTest | pass | 0.234s |
-| LanWorldIntegrationTest | pass | 0.953s |
-| LanWorldTest | pass | 0.203s |
-| VanHidingTest | pass | 0.187s |
+| LanWorldRenderTest | pass | 1.719s |
+| LanSoundTest | pass | 0.219s |
+| LanGhostHearingTest | pass | 0.234s |
+| VanStagingTest | pass | 1.219s |
+| VanArrivalStreetTest | pass | 0.484s |
+| VanStreetAndCabinProportionsTest | pass | 0.344s |
+| VanModuleIntegrationTest | pass | 0.766s |
+| VanNavigationVisualTest | pass | 0.359s |
+| GameplaySmokeTest | pass | 5.125s |
+| LanAcousticsTest | pass | 0.219s |
+| LanApparitionTest | pass | 0.219s |
+| LanGhostIdentityTest | pass | 0.593s |
+| LanGhostIntegrationTest | pass | 0.813s |
+| LanSpatialCombatTest | pass | 0.250s |
+| LanSpatialEvidenceTest | pass | 0.281s |
+| LanWorldIntegrationTest | pass | 0.984s |
+| LanWorldTest | pass | 0.250s |
+| VanHidingTest | pass | 0.219s |
 
 ## Unresolved broader-suite failures
 
@@ -119,4 +137,4 @@ Fixtures were migrated from old flat-map coordinates to authored XYZ positions; 
 
 ## Repeat
 
-Use `verify_levels.py --java-home <JDK17> --vehicle-archive <original August2023 GGBot ZIP>`, then `verify_compatibility.py --java-home <JDK17>`. Both use the isolated ignored `build/level-release` package. `--full-regression` runs the historical gate as well. Use `LevelVisualCapture`, `LevelDressingCapture`, `LevelSceneSource`, `build_scene.py`, `build_wear_review.py`, `build_review.py`, then this script to regenerate the review artifacts and record actual outputs. `validate_worn_assets.py` and both public-library validators read the final asset files. The final softening pass changed only diffuse image pixels; the already-passing gameplay/geometry package was refreshed for final captures. No test binary is published with these source commits.
+Use `verify_levels.py --java-home <JDK17> --vehicle-archive <original August2023 GGBot ZIP>`, then `verify_compatibility.py --java-home <JDK17>`. Both use the isolated ignored `build/level-release` package. `--full-regression` runs the historical gate as well. Use `LevelVisualCapture`, `LevelDressingCapture`, `LevelSceneSource`, `build_scene.py`, `build_wear_review.py`, `build_review.py`, then this script to regenerate the review artifacts and record actual outputs. `validate_worn_assets.py` and both public-library validators read the final asset files. Original clean/worn diffuse and geometry checks remain recorded separately. The latest packaged gameplay code was used for corrected first-person interaction captures. `validate_level_scenes.py` reopens every complete Blender level and checks the exported interactive objects, fixture anchors and exact architecture counts. No test binary is published with these source commits.

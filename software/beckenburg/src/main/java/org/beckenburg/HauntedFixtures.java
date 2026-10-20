@@ -18,7 +18,7 @@ public final class HauntedFixtures {
         for(var s:map.level().sockets())if(s.type().equals("device"))add(Kind.valueOf(s.style()),s.room(),s.x(),s.y(),s.z(),s.yaw());
         for(var p:map.level().props()){
             if(p.mesh().equals("bedside_table_1")){
-                double x=p.x()+Math.cos(p.yaw())*.24+Math.sin(p.yaw())*.25,z=p.z()+Math.sin(p.yaw())*.24-Math.cos(p.yaw())*.25;
+                double x=p.x()+Math.cos(p.yaw())*.22-Math.sin(p.yaw())*.20,z=p.z()+Math.sin(p.yaw())*.22+Math.cos(p.yaw())*.20;
                 add(Kind.ALARM_CLOCK,p.room(),x,p.y()+.644,z,p.yaw());
             }
             if(p.mesh().equals("level_bath_basin"))add(Kind.SINK_BATH,p.room(),p.x(),p.y()+.86,p.z(),p.yaw());

@@ -1,50 +1,80 @@
 [
   {
+    "test": "GhostDomainTest",
+    "exit_code": 1,
+    "seconds": 0.25,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: no diagonal teleport\n\tat org.beckenburg.GhostDomainTest.ok(GhostDomainTest.java:7)\n\tat org.beckenburg.GhostDomainTest.main(GhostDomainTest.java:19)\n"
+  },
+  {
+    "test": "GhostFrenzyTest",
+    "exit_code": 0,
+    "seconds": 0.282,
+    "output": "PASS species-priced Demon Frenzy, phased attacks, sanity-only entities, provocation and cooldowns\n"
+  },
+  {
+    "test": "GhostBehaviorTest",
+    "exit_code": 0,
+    "seconds": 0.625,
+    "output": "PASS: 13 original behavior patterns shared by 23 ghosts, host energy/cooldowns and AI-human action parity\n"
+  },
+  {
+    "test": "GhostTraitsTest",
+    "exit_code": 0,
+    "seconds": 0.062,
+    "output": "PASS: 13 species profiles, energy feeding, salt mobility and damage identities\n"
+  },
+  {
+    "test": "AncientGhostVariantsTest",
+    "exit_code": 1,
+    "seconds": 0.469,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: Distinct three-evidence signature ANCIENT_HANTU\n\tat org.beckenburg.AncientGhostVariantsTest.ok(AncientGhostVariantsTest.java:13)\n\tat org.beckenburg.AncientGhostVariantsTest.main(AncientGhostVariantsTest.java:23)\n"
+  },
+  {
     "test": "HorrorAudioRoutingTest",
     "exit_code": 0,
-    "seconds": 0.188,
+    "seconds": 0.234,
     "output": "PASS HorrorAudioRoutingTest / 18 unique generic variants + authentic sealed door state\n"
   },
   {
     "test": "InvestigationSitesTest",
     "exit_code": 0,
-    "seconds": 0.984,
+    "seconds": 1.016,
     "output": "PASS production house/farm/school source furnishings, gear exclusion, owned spawns and ritual sockets\n"
   },
   {
     "test": "ArchitecturalPlansTest",
     "exit_code": 0,
-    "seconds": 0.281,
+    "seconds": 0.406,
     "output": "PASS authored rooms, real threshold collision/acoustics, glazing exclusion and peer replay\n"
   },
   {
     "test": "VictorianHouseArchitectureTest",
     "exit_code": 0,
-    "seconds": 1.594,
-    "output": "HOUSE reached elevations -3.0..3.0\nPASS HOUSE: swept van route reaches all15 zones and all functional sockets, 71397 positions\nPASS compact concept house, three storeys, source furnishings, swept van routes and peer doors\n"
+    "seconds": 1.375,
+    "output": "HOUSE reached elevations -3.0..3.0\nPASS HOUSE: swept van route reaches all15 zones and all functional sockets, 71351 positions\nPASS compact concept house, three storeys, source furnishings, swept van routes and peer doors\n"
   },
   {
     "test": "GrandSiteGeometryTest",
     "exit_code": 0,
-    "seconds": 0.25,
+    "seconds": 0.453,
     "output": "PASS measured multilevel volumes, floor-aware sockets, six van bodies and portal-ID replication\n"
   },
   {
     "test": "LanSiteSelectionIntegrationTest",
     "exit_code": 0,
-    "seconds": 0.36,
+    "seconds": 0.687,
     "output": "PASS: two authored locations transmitted over genuine LAN sockets\n"
   },
   {
     "test": "SoloEnvironmentalEvidenceTest",
     "exit_code": 0,
-    "seconds": 0.265,
+    "seconds": 0.344,
     "output": "PASS: solo seasonal hot/cold, real ghost-event EMF gate\n"
   },
   {
     "test": "LanClientDisconnectTest",
     "exit_code": 0,
-    "seconds": 0.61,
+    "seconds": 0.609,
     "output": "PASS: genuine TCP EOF emits exactly one disconnect; local close stays silent\n"
   },
   {
@@ -56,109 +86,109 @@
   {
     "test": "LanWorldRenderTest",
     "exit_code": 0,
-    "seconds": 1.656,
+    "seconds": 1.719,
     "output": "PASS: network first-person rendering includes 3D teammates, disclosed ghost and synced physical doors\n"
   },
   {
     "test": "LanSoundTest",
     "exit_code": 0,
-    "seconds": 0.187,
+    "seconds": 0.219,
     "output": "PASS: listener-relative host sound projection, ghost privacy, bounded frames, stereo PCM and mute amplitude\n"
   },
   {
     "test": "LanGhostHearingTest",
     "exit_code": 0,
-    "seconds": 0.203,
+    "seconds": 0.234,
     "output": "PASS: door-sensitive human ghost hearing, direction, privacy, codec and audio\n"
   },
   {
     "test": "VanStagingTest",
     "exit_code": 0,
-    "seconds": 1.063,
+    "seconds": 1.219,
     "output": "PASS: one reusable van, site transforms, colliding cargo shell, stations, extraction and 3D geometry\n"
   },
   {
     "test": "VanArrivalStreetTest",
     "exit_code": 0,
-    "seconds": 0.343,
+    "seconds": 0.484,
     "output": "PASS actual Kenney street surfaces, unobstructed VAN access, original GGBot materials and site rotation\n"
   },
   {
     "test": "VanStreetAndCabinProportionsTest",
     "exit_code": 0,
-    "seconds": 0.219,
+    "seconds": 0.344,
     "output": "PASS VAN interior -15%, inward roof taper -10%, 42 rack brackets, unobstructed stations and six architecturally fitted Kenney roadside fa\u00e7ades\n"
   },
   {
     "test": "VanModuleIntegrationTest",
     "exit_code": 0,
-    "seconds": 0.703,
+    "seconds": 0.766,
     "output": "PASS VAN interior sizes, complete tier catalog, purchased tool mounts, four functional boards/screens, walkable stations at all locations and Exit Game menu\n"
   },
   {
     "test": "VanNavigationVisualTest",
     "exit_code": 0,
-    "seconds": 0.36,
+    "seconds": 0.359,
     "output": "PASS van exit lane, 6 seats, physical aim/pickup and visible held tool\n"
   },
   {
     "test": "GameplaySmokeTest",
     "exit_code": 0,
-    "seconds": 1.203,
+    "seconds": 5.125,
     "output": "PASS: fifteen zones, door/collision, 3D render/depth, instruments, wards, cleansing, extraction, economy save and all role baseline safety\n"
   },
   {
     "test": "LanAcousticsTest",
     "exit_code": 0,
-    "seconds": 0.187,
+    "seconds": 0.219,
     "output": "PASS: door-dependent, masonry and exterior acoustic attenuation\n"
   },
   {
     "test": "LanApparitionTest",
     "exit_code": 0,
-    "seconds": 0.188,
+    "seconds": 0.219,
     "output": "PASS: exact-position LAN apparition, room privacy, occlusion, range, despawn\n"
   },
   {
     "test": "LanGhostIdentityTest",
     "exit_code": 0,
-    "seconds": 0.375,
+    "seconds": 0.593,
     "output": "PASS: 23 ghost profiles, raw measurements, no confirmation gate, ritual paths\n"
   },
   {
     "test": "LanGhostIntegrationTest",
     "exit_code": 0,
-    "seconds": 0.781,
+    "seconds": 0.813,
     "output": "PASS: 4-socket LAN ghost spatial camera, legal DRIFT, privacy and anti-replay\n"
   },
   {
     "test": "LanSpatialCombatTest",
     "exit_code": 0,
-    "seconds": 0.219,
+    "seconds": 0.25,
     "output": "PASS: spatial ghost strike range, single-target damage, door LOS, legacy compatibility\n"
   },
   {
     "test": "LanSpatialEvidenceTest",
     "exit_code": 0,
-    "seconds": 0.234,
+    "seconds": 0.281,
     "output": "PASS: real 3D instrument ranges, no remote evidence, body validation and room-mode compatibility\n"
   },
   {
     "test": "LanWorldIntegrationTest",
     "exit_code": 0,
-    "seconds": 0.953,
+    "seconds": 0.984,
     "output": "PASS: 4-socket authoritative world stepping, snapshot privacy, door range, legacy-mode isolation\n"
   },
   {
     "test": "LanWorldTest",
     "exit_code": 0,
-    "seconds": 0.203,
+    "seconds": 0.25,
     "output": "PASS: host 3D world movement, collision, door snapshots, speed and invalid state gates\n"
   },
   {
     "test": "VanHidingTest",
     "exit_code": 0,
-    "seconds": 0.187,
+    "seconds": 0.219,
     "output": "PASS: 0%-100% hiding spots, concealed ghost avoidance and movement exposure\n"
   }
 ]
