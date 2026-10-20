@@ -114,6 +114,7 @@ public final class HouseMap {
         if(!Double.isFinite(x)||!Double.isFinite(z))return false;
         double r=.19;
         if(van.collides(x,z,r)
+            ||VanArrivalStreet.collision(van,x,z,r)
             ||solid((int)Math.floor(x-r),(int)Math.floor(z-r))
             ||solid((int)Math.floor(x+r),(int)Math.floor(z-r))
             ||solid((int)Math.floor(x-r),(int)Math.floor(z+r))
