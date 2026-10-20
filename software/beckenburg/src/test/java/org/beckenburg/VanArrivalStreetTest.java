@@ -54,10 +54,14 @@ public final class VanArrivalStreetTest {
                 ok(VanArrivalStreet.collision(van,point.x(),point.z(),.15),
                     "parked car has real collision at "+site);
             }
-            for(double z=VanStaging.FRONT-.02;z>VanArrivalStreet.ROAD_END+.1;z-=.33){
+            var map=new HouseMap(site);
+            for(double z=VanStaging.FRONT-.40;z>VanArrivalStreet.ROAD_END+.55;z-=.33){
                 var point=van.world(0,z);
                 ok(!VanArrivalStreet.collision(van,point.x(),point.z(),.19),
-                    "clear walking approach at "+site+" "+z);
+                    "clear parked-car approach at "+site+" "+z);
+                ok(map.traversable(point.x(),point.z()),
+                    "road must be real traversable architecture, not painted behind solid walls at "+
+                    site+" / "+z);
             }
         }
         System.out.println("PASS actual Kenney street surfaces, unobstructed VAN access, original GGBot materials and site rotation");
