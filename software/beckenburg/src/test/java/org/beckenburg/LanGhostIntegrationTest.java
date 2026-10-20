@@ -11,7 +11,8 @@ public final class LanGhostIntegrationTest {
         String expect(String prefix)throws Exception{
             long end=System.nanoTime()+TimeUnit.SECONDS.toNanos(8);
             while(System.nanoTime()<end){String s=inbox.poll(90,TimeUnit.MILLISECONDS);if(s!=null){
-                if(client.seat().equals("GHOST")&& (s.startsWith("BODY|")||s.startsWith("DOORS|")||s.startsWith("TEAMMAP|")||s.startsWith("PROGRESS|")))
+                // Door state is public physical architecture for both cameras.
+                if(client.seat().equals("GHOST")&& (s.startsWith("BODY|")||s.startsWith("TEAMMAP|")||s.startsWith("PROGRESS|")))
                     throw new AssertionError("ghost received private hunter telemetry: "+s);
                 if(s.startsWith(prefix))return s;
             }}throw new AssertionError("missing "+prefix+" for "+client.seat());

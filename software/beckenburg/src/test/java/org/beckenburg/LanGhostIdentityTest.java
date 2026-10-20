@@ -35,7 +35,7 @@ public final class LanGhostIdentityTest {
    var site=RitualSites.site(map,type.rite());
    var other=type.rite()==GhostIdentity.Rite.BANISHMENT?GhostIdentity.Rite.CLEANSING:GhostIdentity.Rite.BANISHMENT;
    ok(!mission.performRite(0,other,site.room(),true).accepted(),"wrong rite denied");
-   ok(!mission.performRite(0,type.rite(),4,true).accepted(),"wrong site denied");
+   ok(!mission.performRite(0,type.rite(),(site.room()+1)%12,true).accepted(),"wrong site denied");
    ok(!mission.performRite(0,type.rite(),site.room(),false).accepted(),"outside circle denied");
    ok(mission.performRite(0,type.rite(),site.room(),true).accepted(),"right rite at correct site");
    int[] guard={site.room(),14,14};

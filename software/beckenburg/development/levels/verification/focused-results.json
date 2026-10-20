@@ -1,0 +1,86 @@
+[
+  {
+    "test": "AuthoredLevelPhysicsTest",
+    "exit_code": 0,
+    "seconds": 0.25,
+    "output": "HOUSE XYZ geometry checked\nFARMHOUSE XYZ geometry checked\nSCHOOL XYZ geometry checked\n"
+  },
+  {
+    "test": "AuthoredLevelReachabilityTest",
+    "exit_code": 0,
+    "seconds": 4.937,
+    "output": "HOUSE reached elevations -3.0..3.0\nPASS HOUSE: swept van route reaches all15 zones and all functional sockets, 74762 positions\nFARMHOUSE reached elevations -3.0..3.0\nPASS FARMHOUSE: swept van route reaches all15 zones and all functional sockets, 144310 positions\nSCHOOL reached elevations -3.0..3.6\nPASS SCHOOL: swept van route reaches all15 zones and all functional sockets, 222470 positions\n"
+  },
+  {
+    "test": "AuthoredLevelStateTest",
+    "exit_code": 0,
+    "seconds": 0.219,
+    "output": "PASS HOUSE: door/window state, XYZ reach, intact sills, slab occlusion and synchronized reconstruction\nPASS FARMHOUSE: door/window state, XYZ reach, intact sills, slab occlusion and synchronized reconstruction\nPASS SCHOOL: door/window state, XYZ reach, intact sills, slab occlusion and synchronized reconstruction\n"
+  },
+  {
+    "test": "AuthoredLevelNetworkTest",
+    "exit_code": 0,
+    "seconds": 3.656,
+    "output": "PASS HOUSE: real host/client XYZ, map revision, door/window resync and ghost privacy\nPASS FARMHOUSE: real host/client XYZ, map revision, door/window resync and ghost privacy\nPASS SCHOOL: real host/client XYZ, map revision, door/window resync and ghost privacy\n"
+  },
+  {
+    "test": "AuthoredLevelRitualCaseTest",
+    "exit_code": 0,
+    "seconds": 0.188,
+    "output": "PASS HOUSE: selected-site rituals accept correct sockets and reject wrong room/storey/proximity\nPASS FARMHOUSE: selected-site rituals accept correct sockets and reject wrong room/storey/proximity\nPASS SCHOOL: selected-site rituals accept correct sockets and reject wrong room/storey/proximity\n"
+  },
+  {
+    "test": "WorldViewHandednessTest",
+    "exit_code": 0,
+    "seconds": 0.172,
+    "output": "PASS original model handedness, readable front faces, mouse direction and matching spatial audio\n"
+  },
+  {
+    "test": "MouseLookTest",
+    "exit_code": 0,
+    "seconds": 1.218,
+    "output": "PASS: mouse-look directions, clamps, uncaptured safety and focus release\n"
+  },
+  {
+    "test": "AuthoredUtilitiesTest",
+    "exit_code": 0,
+    "seconds": 0.266,
+    "output": "PASS authored utilities: 36 reachable wall switches, 43 door acoustic links, 7 vertical stair links, source elevation and ambience\n"
+  },
+  {
+    "test": "SoloElevationTest",
+    "exit_code": 0,
+    "seconds": 0.25,
+    "output": "PASS solo elevation: 36 room measurements/callouts/deployments; upstairs rites and extraction\n"
+  },
+  {
+    "test": "EquipmentAssetAssignmentsTest",
+    "exit_code": 0,
+    "seconds": 0.125,
+    "output": "PASS runtime assignments match manifest: 43 families, 129 stage aliases, 44 states, 153 unique resources\n"
+  },
+  {
+    "test": "EquipmentModelCatalogTest",
+    "exit_code": 0,
+    "seconds": 1.344,
+    "output": "PASS: 126 equipment slots +3 health slots, 44 state aliases /40 meshes, 7 fixed fixtures, 153-file allowlist\n"
+  },
+  {
+    "test": "PackagedSourceModelsTest",
+    "exit_code": 0,
+    "seconds": 2.078,
+    "output": "PASS: 239 packaged source GLBs, real triangles and embedded textures\n"
+  },
+  {
+    "test": "LevelRenderAcceptanceTest",
+    "exit_code": 0,
+    "seconds": 3.562,
+    "output": "PASS HOUSE: 24 lit/unlit views; hinged window; 1755ms total at320x200\nPASS FARMHOUSE: 24 lit/unlit views; hinged window; 657ms total at320x200\nPASS SCHOOL: 24 lit/unlit views; hinged window; 698ms total at320x200\nPASS all curated environment meshes have textured runtime triangles\n"
+  },
+  {
+    "test": "LevelSurfaceIntegrityTest",
+    "exit_code": 0,
+    "seconds": 0.703,
+    "output": "PASS HOUSE: disjoint wall finishes, exact deck apertures, distinct floor materials and physical/rendered guards\nPASS FARMHOUSE: disjoint wall finishes, exact deck apertures, distinct floor materials and physical/rendered guards\nPASS SCHOOL: disjoint wall finishes, exact deck apertures, distinct floor materials and physical/rendered guards\n"
+  }
+]

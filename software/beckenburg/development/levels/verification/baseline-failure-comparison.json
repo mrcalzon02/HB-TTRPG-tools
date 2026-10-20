@@ -1,0 +1,1039 @@
+[
+  {
+    "test": "HorrorAudioRoutingTest",
+    "current": {
+      "test": "HorrorAudioRoutingTest",
+      "exit_code": 1,
+      "seconds": 0.094,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: the portico-to-van extraction doorway must exist\n\tat org.beckenburg.HorrorAudioRoutingTest.check(HorrorAudioRoutingTest.java:9)\n\tat org.beckenburg.HorrorAudioRoutingTest.main(HorrorAudioRoutingTest.java:40)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.328,
+      "output": "PASS HorrorAudioRoutingTest / 18 unique generic variants + authentic sealed door state\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "ff19f805018012316bfea5ae3d4c115fa1228ecd5e1baed128e2950d8f1ea929",
+    "current_source_sha256": "ff19f805018012316bfea5ae3d4c115fa1228ecd5e1baed128e2950d8f1ea929"
+  },
+  {
+    "test": "CastleHubIntegrationTest",
+    "current": {
+      "test": "CastleHubIntegrationTest",
+      "exit_code": 1,
+      "seconds": 0.187,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: working offices with actual interior props\n\tat org.beckenburg.CastleHubIntegrationTest.ok(CastleHubIntegrationTest.java:8)\n\tat org.beckenburg.CastleHubIntegrationTest.main(CastleHubIntegrationTest.java:39)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.391,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: working offices with actual interior props\n\tat org.beckenburg.CastleHubIntegrationTest.ok(CastleHubIntegrationTest.java:8)\n\tat org.beckenburg.CastleHubIntegrationTest.main(CastleHubIntegrationTest.java:39)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "a91df2167306034502aedf9ca3a6ae2d8d3db7d2e22e4db2a194d89fd96c0fc4",
+    "current_source_sha256": "a91df2167306034502aedf9ca3a6ae2d8d3db7d2e22e4db2a194d89fd96c0fc4"
+  },
+  {
+    "test": "HardEvidenceQuotaTest",
+    "current": {
+      "test": "HardEvidenceQuotaTest",
+      "exit_code": 1,
+      "seconds": 0.063,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: Two ghosts share the same three-evidence signature ANCIENT_HANTU\n\tat org.beckenburg.HardEvidenceQuotaTest.ok(HardEvidenceQuotaTest.java:5)\n\tat org.beckenburg.HardEvidenceQuotaTest.main(HardEvidenceQuotaTest.java:16)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.078,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: Two ghosts share the same three-evidence signature ANCIENT_HANTU\n\tat org.beckenburg.HardEvidenceQuotaTest.ok(HardEvidenceQuotaTest.java:5)\n\tat org.beckenburg.HardEvidenceQuotaTest.main(HardEvidenceQuotaTest.java:16)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "23cbea87dce636cd410419c621ab858c43852c186958885cba2f3c52e3a59684",
+    "current_source_sha256": "23cbea87dce636cd410419c621ab858c43852c186958885cba2f3c52e3a59684"
+  },
+  {
+    "test": "AncientGhostVariantsTest",
+    "current": {
+      "test": "AncientGhostVariantsTest",
+      "exit_code": 1,
+      "seconds": 0.109,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: Distinct three-evidence signature ANCIENT_HANTU\n\tat org.beckenburg.AncientGhostVariantsTest.ok(AncientGhostVariantsTest.java:13)\n\tat org.beckenburg.AncientGhostVariantsTest.main(AncientGhostVariantsTest.java:23)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.125,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: Distinct three-evidence signature ANCIENT_HANTU\n\tat org.beckenburg.AncientGhostVariantsTest.ok(AncientGhostVariantsTest.java:13)\n\tat org.beckenburg.AncientGhostVariantsTest.main(AncientGhostVariantsTest.java:23)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "2e06a6f48d20fd20c13d95788a1d4434a19080a704fac7d1d873c4a596075f4d",
+    "current_source_sha256": "2e06a6f48d20fd20c13d95788a1d4434a19080a704fac7d1d873c4a596075f4d"
+  },
+  {
+    "test": "AdditionalEvidenceTest",
+    "current": {
+      "test": "AdditionalEvidenceTest",
+      "exit_code": 1,
+      "seconds": 0.094,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: Unique evidence triple for ANCIENT_HANTU\n\tat org.beckenburg.AdditionalEvidenceTest.ok(AdditionalEvidenceTest.java:14)\n\tat org.beckenburg.AdditionalEvidenceTest.main(AdditionalEvidenceTest.java:81)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.25,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: Unique evidence triple for ANCIENT_HANTU\n\tat org.beckenburg.AdditionalEvidenceTest.ok(AdditionalEvidenceTest.java:14)\n\tat org.beckenburg.AdditionalEvidenceTest.main(AdditionalEvidenceTest.java:81)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "09b35587769603d666d58973058c02f475ecb8f4d9b50f025f144b10d382d2bd",
+    "current_source_sha256": "09b35587769603d666d58973058c02f475ecb8f4d9b50f025f144b10d382d2bd"
+  },
+  {
+    "test": "EmfSilenceTest",
+    "current": {
+      "test": "EmfSilenceTest",
+      "exit_code": 1,
+      "seconds": 0.063,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: strong event can yield a high EMF reading\n\tat org.beckenburg.EmfSilenceTest.ok(EmfSilenceTest.java:4)\n\tat org.beckenburg.EmfSilenceTest.main(EmfSilenceTest.java:24)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.235,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: strong event can yield a high EMF reading\n\tat org.beckenburg.EmfSilenceTest.ok(EmfSilenceTest.java:4)\n\tat org.beckenburg.EmfSilenceTest.main(EmfSilenceTest.java:24)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "b6c49238a97b443610d403f683838c214df622d7737a2850740fa7d3b8c6172a",
+    "current_source_sha256": "b6c49238a97b443610d403f683838c214df622d7737a2850740fa7d3b8c6172a"
+  },
+  {
+    "test": "EquipmentStoreDescriptionsTest",
+    "current": {
+      "test": "EquipmentStoreDescriptionsTest",
+      "exit_code": 1,
+      "seconds": 0.11,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: the 28 unimplemented items remain labelled not purchasable\n\tat org.beckenburg.EquipmentStoreDescriptionsTest.ok(EquipmentStoreDescriptionsTest.java:7)\n\tat org.beckenburg.EquipmentStoreDescriptionsTest.main(EquipmentStoreDescriptionsTest.java:39)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.343,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: the 28 unimplemented items remain labelled not purchasable\n\tat org.beckenburg.EquipmentStoreDescriptionsTest.ok(EquipmentStoreDescriptionsTest.java:7)\n\tat org.beckenburg.EquipmentStoreDescriptionsTest.main(EquipmentStoreDescriptionsTest.java:39)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "2fa06d3a4c32a69ebd9ceb8b3b91b9699b958fd72eac9853ee2d776c1b0ca74a",
+    "current_source_sha256": "2fa06d3a4c32a69ebd9ceb8b3b91b9699b958fd72eac9853ee2d776c1b0ca74a"
+  },
+  {
+    "test": "LanSoundRecorderIntegrationTest",
+    "current": {
+      "test": "LanSoundRecorderIntegrationTest",
+      "exit_code": 1,
+      "seconds": 0.735,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: REJECT|blocked by world collision waiting for ACCEPT|STEP\n\tat org.beckenburg.LanSoundRecorderIntegrationTest$Peer.await(LanSoundRecorderIntegrationTest.java:22)\n\tat org.beckenburg.LanSoundRecorderIntegrationTest.main(LanSoundRecorderIntegrationTest.java:61)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 6.594,
+      "output": "PASS: real rack input, paid upgrades, authored audio, private playback, service authority and reconnect continuity\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "106be19285cbee55c1306f8197d35f3795860dd3c143eef9a209eac5fb3c85c6",
+    "current_source_sha256": "106be19285cbee55c1306f8197d35f3795860dd3c143eef9a209eac5fb3c85c6"
+  },
+  {
+    "test": "LanDotsProjectorsTest",
+    "current": {
+      "test": "LanDotsProjectorsTest",
+      "exit_code": 1,
+      "seconds": 0.094,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: no species qualification gate\n\tat org.beckenburg.LanDotsProjectorsTest.ok(LanDotsProjectorsTest.java:3)\n\tat org.beckenburg.LanDotsProjectorsTest.main(LanDotsProjectorsTest.java:22)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.188,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: no species qualification gate\n\tat org.beckenburg.LanDotsProjectorsTest.ok(LanDotsProjectorsTest.java:3)\n\tat org.beckenburg.LanDotsProjectorsTest.main(LanDotsProjectorsTest.java:22)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "a7f11e1dc2f5348431702c0782d8ff28b116f8fe1dd564b89c247aec913d1ca1",
+    "current_source_sha256": "a7f11e1dc2f5348431702c0782d8ff28b116f8fe1dd564b89c247aec913d1ca1"
+  },
+  {
+    "test": "LanFieldEquipmentIntegrationTest",
+    "current": {
+      "test": "LanFieldEquipmentIntegrationTest",
+      "exit_code": 1,
+      "seconds": 9.297,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: H1 missing REJECT|\n\tat org.beckenburg.LanFieldEquipmentIntegrationTest$Seat.await(LanFieldEquipmentIntegrationTest.java:24)\n\tat org.beckenburg.LanFieldEquipmentIntegrationTest.main(LanFieldEquipmentIntegrationTest.java:61)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 9.921,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: H1 missing REJECT|\n\tat org.beckenburg.LanFieldEquipmentIntegrationTest$Seat.await(LanFieldEquipmentIntegrationTest.java:24)\n\tat org.beckenburg.LanFieldEquipmentIntegrationTest.main(LanFieldEquipmentIntegrationTest.java:61)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "2598792cddb98858f2763ecec1a3c80bfd533e2fba9a148bfa5fa995539e6258",
+    "current_source_sha256": "2598792cddb98858f2763ecec1a3c80bfd533e2fba9a148bfa5fa995539e6258"
+  },
+  {
+    "test": "SoloEnvironmentalEvidenceTest",
+    "current": {
+      "test": "SoloEnvironmentalEvidenceTest",
+      "exit_code": 1,
+      "seconds": 0.172,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: every functioning instrument returns a logged measurement\n\tat org.beckenburg.SoloEnvironmentalEvidenceTest.ok(SoloEnvironmentalEvidenceTest.java:5)\n\tat org.beckenburg.SoloEnvironmentalEvidenceTest.main(SoloEnvironmentalEvidenceTest.java:13)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.188,
+      "output": "PASS: solo seasonal hot/cold, real ghost-event EMF gate\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "74c742cf1a00f315afb6f97689d8b0b9cba3a47b292d63c1a665601ef943772d",
+    "current_source_sha256": "74c742cf1a00f315afb6f97689d8b0b9cba3a47b292d63c1a665601ef943772d"
+  },
+  {
+    "test": "LanGhostIdentityTest",
+    "current": {
+      "test": "LanGhostIdentityTest",
+      "exit_code": 1,
+      "seconds": 0.156,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: wrong site denied\n\tat org.beckenburg.LanGhostIdentityTest.ok(LanGhostIdentityTest.java:5)\n\tat org.beckenburg.LanGhostIdentityTest.main(LanGhostIdentityTest.java:38)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.171,
+      "output": "PASS: 23 ghost profiles, raw measurements, no confirmation gate, ritual paths\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "395b27be96a2b9319e9c2e373a2c0dc85dd4a8b503566664483baa199ae58f77",
+    "current_source_sha256": "395b27be96a2b9319e9c2e373a2c0dc85dd4a8b503566664483baa199ae58f77"
+  },
+  {
+    "test": "LanRiteNetworkTest",
+    "current": {
+      "test": "LanRiteNetworkTest",
+      "exit_code": 1,
+      "seconds": 11.312,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: timed out on ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanRiteNetworkTest$Peer.until(LanRiteNetworkTest.java:24)\n\tat org.beckenburg.LanRiteNetworkTest$Peer.move(LanRiteNetworkTest.java:26)\n\tat org.beckenburg.LanRiteNetworkTest.main(LanRiteNetworkTest.java:42)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 11.313,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: timed out on ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanRiteNetworkTest$Peer.until(LanRiteNetworkTest.java:24)\n\tat org.beckenburg.LanRiteNetworkTest$Peer.move(LanRiteNetworkTest.java:26)\n\tat org.beckenburg.LanRiteNetworkTest.main(LanRiteNetworkTest.java:42)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "5da45f627cec5389b2c5ea8aa4ec35c9d638d58ee72f92a01e02a8a3715f4561",
+    "current_source_sha256": "5da45f627cec5389b2c5ea8aa4ec35c9d638d58ee72f92a01e02a8a3715f4561"
+  },
+  {
+    "test": "LanGhostPursuitTest",
+    "current": {
+      "test": "LanGhostPursuitTest",
+      "exit_code": 1,
+      "seconds": 0.094,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: heard signal provides coarse area, not exact body coordinates\n\tat org.beckenburg.LanGhostPursuitTest.ok(LanGhostPursuitTest.java:5)\n\tat org.beckenburg.LanGhostPursuitTest.main(LanGhostPursuitTest.java:18)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.078,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: heard signal provides coarse area, not exact body coordinates\n\tat org.beckenburg.LanGhostPursuitTest.ok(LanGhostPursuitTest.java:5)\n\tat org.beckenburg.LanGhostPursuitTest.main(LanGhostPursuitTest.java:18)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "98427d42b21e1b498cb09d317f9750768d1cc9b6ab76b69bd01aff8fb6134969",
+    "current_source_sha256": "98427d42b21e1b498cb09d317f9750768d1cc9b6ab76b69bd01aff8fb6134969"
+  },
+  {
+    "test": "LanGhostHearingTest",
+    "current": {
+      "test": "LanGhostHearingTest",
+      "exit_code": 1,
+      "seconds": 0.156,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: door can be opened\n\tat org.beckenburg.LanGhostHearingTest.ok(LanGhostHearingTest.java:5)\n\tat org.beckenburg.LanGhostHearingTest.main(LanGhostHearingTest.java:29)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.11,
+      "output": "PASS: door-sensitive human ghost hearing, direction, privacy, codec and audio\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "719d17e793fe245725c92515a0b892190f2248e2ce5453ebabd4775d571add8c",
+    "current_source_sha256": "719d17e793fe245725c92515a0b892190f2248e2ce5453ebabd4775d571add8c"
+  },
+  {
+    "test": "LanGhostHearingIntegrationTest",
+    "current": {
+      "test": "LanGhostHearingIntegrationTest",
+      "exit_code": 1,
+      "seconds": 0.235,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: hunter private state leaked to ghost: DOORS|\n\tat org.beckenburg.LanGhostHearingIntegrationTest$Peer.await(LanGhostHearingIntegrationTest.java:24)\n\tat org.beckenburg.LanGhostHearingIntegrationTest.main(LanGhostHearingIntegrationTest.java:39)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 10.328,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanGhostHearingIntegrationTest$Peer.await(LanGhostHearingIntegrationTest.java:27)\n\tat org.beckenburg.LanGhostHearingIntegrationTest.main(LanGhostHearingIntegrationTest.java:40)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "c7990f22d207ddcf86931a40e1bf26435391dd313ba231798cd8f026e6e25a5d",
+    "current_source_sha256": "c7990f22d207ddcf86931a40e1bf26435391dd313ba231798cd8f026e6e25a5d"
+  },
+  {
+    "test": "LanGhostTakeoverIntegrationTest",
+    "current": {
+      "test": "LanGhostTakeoverIntegrationTest",
+      "exit_code": 1,
+      "seconds": 10.328,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanGhostTakeoverIntegrationTest$Peer.expect(LanGhostTakeoverIntegrationTest.java:26)\n\tat org.beckenburg.LanGhostTakeoverIntegrationTest.main(LanGhostTakeoverIntegrationTest.java:38)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 10.297,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanGhostTakeoverIntegrationTest$Peer.expect(LanGhostTakeoverIntegrationTest.java:26)\n\tat org.beckenburg.LanGhostTakeoverIntegrationTest.main(LanGhostTakeoverIntegrationTest.java:38)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "2bb9947300105e06b0f1374358332b1006dea1e3a7ef936002ff84149acf7692",
+    "current_source_sha256": "2bb9947300105e06b0f1374358332b1006dea1e3a7ef936002ff84149acf7692"
+  },
+  {
+    "test": "LanCaseFileIntegrationTest",
+    "current": {
+      "test": "LanCaseFileIntegrationTest",
+      "exit_code": 1,
+      "seconds": 8.297,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 on H1\n\tat org.beckenburg.LanCaseFileIntegrationTest$Seat.await(LanCaseFileIntegrationTest.java:24)\n\tat org.beckenburg.LanCaseFileIntegrationTest.main(LanCaseFileIntegrationTest.java:47)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 8.328,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 on H1\n\tat org.beckenburg.LanCaseFileIntegrationTest$Seat.await(LanCaseFileIntegrationTest.java:24)\n\tat org.beckenburg.LanCaseFileIntegrationTest.main(LanCaseFileIntegrationTest.java:47)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "7d8674fcc71d9113614993a1e4514ac7cb3376d83efb0d1ff8bd0f2a0be2ad5a",
+    "current_source_sha256": "7d8674fcc71d9113614993a1e4514ac7cb3376d83efb0d1ff8bd0f2a0be2ad5a"
+  },
+  {
+    "test": "LanSpatialEvidenceTest",
+    "current": {
+      "test": "LanSpatialEvidenceTest",
+      "exit_code": 1,
+      "seconds": 0.094,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: outside rooms give observations, never auto proof\n\tat org.beckenburg.LanSpatialEvidenceTest.ok(LanSpatialEvidenceTest.java:5)\n\tat org.beckenburg.LanSpatialEvidenceTest.main(LanSpatialEvidenceTest.java:35)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.125,
+      "output": "PASS: real 3D instrument ranges, no remote evidence, body validation and room-mode compatibility\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "dc1351af8718e6a7c57ebcae94e24d8e059ee02af6d3fbff2a2c39cb4cdfa7cf",
+    "current_source_sha256": "dc1351af8718e6a7c57ebcae94e24d8e059ee02af6d3fbff2a2c39cb4cdfa7cf"
+  },
+  {
+    "test": "LanSpatialEvidenceIntegrationTest",
+    "current": {
+      "test": "LanSpatialEvidenceIntegrationTest",
+      "exit_code": 1,
+      "seconds": 10.281,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 on H1\n\tat org.beckenburg.LanSpatialEvidenceIntegrationTest$Peer.await(LanSpatialEvidenceIntegrationTest.java:25)\n\tat org.beckenburg.LanSpatialEvidenceIntegrationTest$Peer.room(LanSpatialEvidenceIntegrationTest.java:27)\n\tat org.beckenburg.LanSpatialEvidenceIntegrationTest.main(LanSpatialEvidenceIntegrationTest.java:42)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 10.297,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 on H1\n\tat org.beckenburg.LanSpatialEvidenceIntegrationTest$Peer.await(LanSpatialEvidenceIntegrationTest.java:25)\n\tat org.beckenburg.LanSpatialEvidenceIntegrationTest$Peer.room(LanSpatialEvidenceIntegrationTest.java:27)\n\tat org.beckenburg.LanSpatialEvidenceIntegrationTest.main(LanSpatialEvidenceIntegrationTest.java:42)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "c440f14e45eeeab5dc9ae7e22cc861f1bca0c637e0786ca1727e1c66947a8514",
+    "current_source_sha256": "c440f14e45eeeab5dc9ae7e22cc861f1bca0c637e0786ca1727e1c66947a8514"
+  },
+  {
+    "test": "LanGuestDepartureIntegrationTest",
+    "current": {
+      "test": "LanGuestDepartureIntegrationTest",
+      "exit_code": 1,
+      "seconds": 12.313,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanGuestDepartureIntegrationTest$Peer.await(LanGuestDepartureIntegrationTest.java:20)\n\tat org.beckenburg.LanGuestDepartureIntegrationTest$Peer.move(LanGuestDepartureIntegrationTest.java:23)\n\tat org.beckenburg.LanGuestDepartureIntegrationTest.main(LanGuestDepartureIntegrationTest.java:34)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 12.297,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanGuestDepartureIntegrationTest$Peer.await(LanGuestDepartureIntegrationTest.java:20)\n\tat org.beckenburg.LanGuestDepartureIntegrationTest$Peer.move(LanGuestDepartureIntegrationTest.java:23)\n\tat org.beckenburg.LanGuestDepartureIntegrationTest.main(LanGuestDepartureIntegrationTest.java:34)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "8870d2eb5df28085f1c59d315cb62c8cc92372b70b3c448c2c7dfd5f97cf121e",
+    "current_source_sha256": "8870d2eb5df28085f1c59d315cb62c8cc92372b70b3c448c2c7dfd5f97cf121e"
+  },
+  {
+    "test": "LanClientWelcomeTest",
+    "current": {
+      "test": "LanClientWelcomeTest",
+      "exit_code": 1,
+      "seconds": 0.078,
+      "output": "Exception in thread \"main\" java.io.IOException: incompatible spatial protocol\n\tat org.beckenburg.LanClient.<init>(LanClient.java:91)\n\tat org.beckenburg.LanClient.<init>(LanClient.java:57)\n\tat org.beckenburg.LanClientWelcomeTest.scenario(LanClientWelcomeTest.java:29)\n\tat org.beckenburg.LanClientWelcomeTest.main(LanClientWelcomeTest.java:48)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.079,
+      "output": "PASS: five-field resume, rotated secret, host replay watermark, four- and three-field compatibility\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "c59da104726700654158c81e99006b12750368fdc3b6584751e816a0804571c4",
+    "current_source_sha256": "c59da104726700654158c81e99006b12750368fdc3b6584751e816a0804571c4"
+  },
+  {
+    "test": "LanSessionResumeIntegrationTest",
+    "current": {
+      "test": "LanSessionResumeIntegrationTest",
+      "exit_code": 1,
+      "seconds": 9.266,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: Missing ACCEPT|MOVE|11 on H2\n\tat org.beckenburg.LanSessionResumeIntegrationTest$Peer.await(LanSessionResumeIntegrationTest.java:34)\n\tat org.beckenburg.LanSessionResumeIntegrationTest.hunterRejoin(LanSessionResumeIntegrationTest.java:56)\n\tat org.beckenburg.LanSessionResumeIntegrationTest.main(LanSessionResumeIntegrationTest.java:215)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 9.296,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: Missing ACCEPT|MOVE|11 on H2\n\tat org.beckenburg.LanSessionResumeIntegrationTest$Peer.await(LanSessionResumeIntegrationTest.java:34)\n\tat org.beckenburg.LanSessionResumeIntegrationTest.hunterRejoin(LanSessionResumeIntegrationTest.java:56)\n\tat org.beckenburg.LanSessionResumeIntegrationTest.main(LanSessionResumeIntegrationTest.java:215)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "d882c10a38405516537a689b53fc8894226210c8cc648ddb8982dd3488263018",
+    "current_source_sha256": "d882c10a38405516537a689b53fc8894226210c8cc648ddb8982dd3488263018"
+  },
+  {
+    "test": "LanNetworkLatencyTest",
+    "current": {
+      "test": "LanNetworkLatencyTest",
+      "exit_code": 1,
+      "seconds": 0.172,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: peer closed before WELCOME|\n\tat org.beckenburg.LanNetworkLatencyTest.until(LanNetworkLatencyTest.java:21)\n\tat org.beckenburg.LanNetworkLatencyTest.main(LanNetworkLatencyTest.java:43)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 25.219,
+      "output": "PASS: TCP heartbeat RTT 0/50/150ms, one lost PONG, recovery and host continuity\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "673f76ba9d199de547c907fe91fdbe800d4ad6e90e73fa8b5de19ecb39b0e6af",
+    "current_source_sha256": "673f76ba9d199de547c907fe91fdbe800d4ad6e90e73fa8b5de19ecb39b0e6af"
+  },
+  {
+    "test": "LanRitualDefenseIntegrationTest",
+    "current": {
+      "test": "LanRitualDefenseIntegrationTest",
+      "exit_code": 1,
+      "seconds": 12.282,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanRitualDefenseIntegrationTest$Peer.await(LanRitualDefenseIntegrationTest.java:26)\n\tat org.beckenburg.LanRitualDefenseIntegrationTest$Peer.move(LanRitualDefenseIntegrationTest.java:28)\n\tat org.beckenburg.LanRitualDefenseIntegrationTest.main(LanRitualDefenseIntegrationTest.java:39)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 12.312,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanRitualDefenseIntegrationTest$Peer.await(LanRitualDefenseIntegrationTest.java:26)\n\tat org.beckenburg.LanRitualDefenseIntegrationTest$Peer.move(LanRitualDefenseIntegrationTest.java:28)\n\tat org.beckenburg.LanRitualDefenseIntegrationTest.main(LanRitualDefenseIntegrationTest.java:39)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "8619f7a4dcdebb35f13df92f83f37ef58b6e98e3c04a86bdd4d045c045c957fd",
+    "current_source_sha256": "8619f7a4dcdebb35f13df92f83f37ef58b6e98e3c04a86bdd4d045c045c957fd"
+  },
+  {
+    "test": "LanGhostHearingHudTest",
+    "current": {
+      "test": "LanGhostHearingHudTest",
+      "exit_code": 1,
+      "seconds": 1.422,
+      "output": "Beckenburg soundtrack unavailable: sleep interrupted\nException in thread \"main\" java.lang.reflect.InvocationTargetException\n\tat java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1369)\n\tat java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1344)\n\tat java.desktop/javax.swing.SwingUtilities.invokeAndWait(SwingUtilities.java:1480)\n\tat org.beckenburg.LanGhostHearingHudTest.main(LanGhostHearingHudTest.java:13)\nCaused by: java.lang.AssertionError: cue expired\n\tat org.beckenburg.LanGhostHearingHudTest.ok(LanGhostHearingHudTest.java:8)\n\tat org.beckenburg.LanGhostHearingHudTest.lambda$main$1(LanGhostHearingHudTest.java:23)\n\tat java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:308)\n\tat java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:771)\n\tat java.desktop/java.awt.EventQueue$4.run(EventQueue.java:722)\n\tat java.desktop/java.awt.EventQueue$4.run(EventQueue.java:716)\n\tat java.base/java.security.AccessController.doPrivileged(AccessController.java:399)\n\tat java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)\n\tat java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:741)\n\tat java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)\n\tat java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 1.437,
+      "output": "PASS: mute-safe spectral sound overlay, EDT and stale-event expiry\nBeckenburg soundtrack unavailable: sleep interrupted\n"
+    },
+    "source_same": false,
+    "baseline_source_sha256": "30ff1ce86eff995dac8f1068c4187dd71280b955ea57c84b9403d4f1c05d21d2",
+    "current_source_sha256": "38af3c1f9b081bb1e5fd5735e0eae4aceb28e1244d8036f46a65726fbf5dfd4f"
+  },
+  {
+    "test": "LanGhostAnimationIntegrationTest",
+    "current": {
+      "test": "LanGhostAnimationIntegrationTest",
+      "exit_code": 1,
+      "seconds": 16.281,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing event ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanGhostAnimationIntegrationTest$Peer.await(LanGhostAnimationIntegrationTest.java:24)\n\tat org.beckenburg.LanGhostAnimationIntegrationTest.main(LanGhostAnimationIntegrationTest.java:37)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 16.313,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing event ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanGhostAnimationIntegrationTest$Peer.await(LanGhostAnimationIntegrationTest.java:24)\n\tat org.beckenburg.LanGhostAnimationIntegrationTest.main(LanGhostAnimationIntegrationTest.java:37)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "56d2da970fbbee41633d109eeaee2c4300e23c2997d249d442fa684fd35d3767",
+    "current_source_sha256": "56d2da970fbbee41633d109eeaee2c4300e23c2997d249d442fa684fd35d3767"
+  },
+  {
+    "test": "LanSoundIntegrationTest",
+    "current": {
+      "test": "LanSoundIntegrationTest",
+      "exit_code": 1,
+      "seconds": 5.25,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 on H1\n\tat org.beckenburg.LanSoundIntegrationTest$Peer.await(LanSoundIntegrationTest.java:23)\n\tat org.beckenburg.LanSoundIntegrationTest.main(LanSoundIntegrationTest.java:43)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 5.312,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 on H1\n\tat org.beckenburg.LanSoundIntegrationTest$Peer.await(LanSoundIntegrationTest.java:23)\n\tat org.beckenburg.LanSoundIntegrationTest.main(LanSoundIntegrationTest.java:43)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "e7796840ee4d5e8584ec63163af31da7fcbb6e95d5e18cf410a0f82f971fffb0",
+    "current_source_sha256": "e7796840ee4d5e8584ec63163af31da7fcbb6e95d5e18cf410a0f82f971fffb0"
+  },
+  {
+    "test": "LanAcousticsTest",
+    "current": {
+      "test": "LanAcousticsTest",
+      "exit_code": 1,
+      "seconds": 0.093,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: closed partition must attenuate sound\n\tat org.beckenburg.LanAcousticsTest.check(LanAcousticsTest.java:5)\n\tat org.beckenburg.LanAcousticsTest.main(LanAcousticsTest.java:9)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.219,
+      "output": "PASS: door-dependent, masonry and exterior acoustic attenuation\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "5209b9f5056585d06d3a5a938162d9970e89c91b69c27cce48e35b3d5b8a2ac6",
+    "current_source_sha256": "5209b9f5056585d06d3a5a938162d9970e89c91b69c27cce48e35b3d5b8a2ac6"
+  },
+  {
+    "test": "LanSpatialCombatTest",
+    "current": {
+      "test": "LanSpatialCombatTest",
+      "exit_code": 1,
+      "seconds": 0.234,
+      "output": "Exception in thread \"main\" java.lang.IllegalArgumentException: blocked by world collision\n\tat org.beckenburg.LanWorld.move(LanWorld.java:86)\n\tat org.beckenburg.LanWorld.move(LanWorld.java:74)\n\tat org.beckenburg.LanSpatialCombatTest.main(LanSpatialCombatTest.java:15)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.406,
+      "output": "PASS: spatial ghost strike range, single-target damage, door LOS, legacy compatibility\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "7e4203eda6b06bd43756c58a9a76d4e47df3fe50ba50c9fa0f48fa9d70878a2a",
+    "current_source_sha256": "7e4203eda6b06bd43756c58a9a76d4e47df3fe50ba50c9fa0f48fa9d70878a2a"
+  },
+  {
+    "test": "LanGhostLegacyHearingIntegrationTest",
+    "current": {
+      "test": "LanGhostLegacyHearingIntegrationTest",
+      "exit_code": 1,
+      "seconds": 0.375,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: private data leaked to ghost: DOORS|\n\tat org.beckenburg.LanGhostLegacyHearingIntegrationTest$Peer.await(LanGhostLegacyHearingIntegrationTest.java:21)\n\tat org.beckenburg.LanGhostLegacyHearingIntegrationTest$Peer.stateAfter(LanGhostLegacyHearingIntegrationTest.java:29)\n\tat org.beckenburg.LanGhostLegacyHearingIntegrationTest.main(LanGhostLegacyHearingIntegrationTest.java:46)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 8.313,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanGhostLegacyHearingIntegrationTest$Peer.await(LanGhostLegacyHearingIntegrationTest.java:24)\n\tat org.beckenburg.LanGhostLegacyHearingIntegrationTest.main(LanGhostLegacyHearingIntegrationTest.java:49)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "04097acd62b11a0e31b741a8bcecb34a21fd9cd9f4194a35a18cc018ee61a1dd",
+    "current_source_sha256": "04097acd62b11a0e31b741a8bcecb34a21fd9cd9f4194a35a18cc018ee61a1dd"
+  },
+  {
+    "test": "LanTelegraphedHudTest",
+    "current": {
+      "test": "LanTelegraphedHudTest",
+      "exit_code": 1,
+      "seconds": 1.484,
+      "output": "Beckenburg soundtrack unavailable: sleep interrupted\nException in thread \"main\" java.lang.AssertionError: warning text must visibly change HUD colors: 0 0\n\tat org.beckenburg.LanTelegraphedHudTest.ok(LanTelegraphedHudTest.java:12)\n\tat org.beckenburg.LanTelegraphedHudTest.main(LanTelegraphedHudTest.java:43)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 1.547,
+      "output": "Beckenburg soundtrack unavailable: sleep interrupted\nException in thread \"main\" java.lang.AssertionError: warning text must visibly change HUD colors: 0 0\n\tat org.beckenburg.LanTelegraphedHudTest.ok(LanTelegraphedHudTest.java:12)\n\tat org.beckenburg.LanTelegraphedHudTest.main(LanTelegraphedHudTest.java:43)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "1680683b1b9d3de882a586dbdb722fd275b6e1253561e76c399068f1fa250ecb",
+    "current_source_sha256": "1680683b1b9d3de882a586dbdb722fd275b6e1253561e76c399068f1fa250ecb"
+  },
+  {
+    "test": "LanApparitionTest",
+    "current": {
+      "test": "LanApparitionTest",
+      "exit_code": 1,
+      "seconds": 0.078,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: exact host pose disclosed only in line of sight\n\tat org.beckenburg.LanApparitionTest.ok(LanApparitionTest.java:5)\n\tat org.beckenburg.LanApparitionTest.main(LanApparitionTest.java:12)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.094,
+      "output": "PASS: exact-position LAN apparition, room privacy, occlusion, range, despawn\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "7682fa1e6e72caf7a8c3861b2edd7d75b2cde4c90f6b3c85938c168348cf8824",
+    "current_source_sha256": "7682fa1e6e72caf7a8c3861b2edd7d75b2cde4c90f6b3c85938c168348cf8824"
+  },
+  {
+    "test": "LanApparitionIntegrationTest",
+    "current": {
+      "test": "LanApparitionIntegrationTest",
+      "exit_code": 1,
+      "seconds": 13.297,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: timed out waiting for ACCEPT|MOVE|11 in H1\n\tat org.beckenburg.LanApparitionIntegrationTest$Peer.expect(LanApparitionIntegrationTest.java:22)\n\tat org.beckenburg.LanApparitionIntegrationTest.main(LanApparitionIntegrationTest.java:35)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 13.344,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: timed out waiting for ACCEPT|MOVE|11 in H1\n\tat org.beckenburg.LanApparitionIntegrationTest$Peer.expect(LanApparitionIntegrationTest.java:22)\n\tat org.beckenburg.LanApparitionIntegrationTest.main(LanApparitionIntegrationTest.java:35)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "9c8562f30c0e7a933bfd4a860fd400030ed5719431b87ad85ba02a98aced6af0",
+    "current_source_sha256": "9c8562f30c0e7a933bfd4a860fd400030ed5719431b87ad85ba02a98aced6af0"
+  },
+  {
+    "test": "LanGhostIntegrationTest",
+    "current": {
+      "test": "LanGhostIntegrationTest",
+      "exit_code": 1,
+      "seconds": 0.234,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: ghost received private hunter telemetry: DOORS|\n\tat org.beckenburg.LanGhostIntegrationTest$Peer.expect(LanGhostIntegrationTest.java:15)\n\tat org.beckenburg.LanGhostIntegrationTest.main(LanGhostIntegrationTest.java:30)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.734,
+      "output": "PASS: 4-socket LAN ghost spatial camera, legal DRIFT, privacy and anti-replay\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "d5077dde282756e7092c281365f7dd136f8cb026d14d1451f1a3790da21585c3",
+    "current_source_sha256": "d5077dde282756e7092c281365f7dd136f8cb026d14d1451f1a3790da21585c3"
+  },
+  {
+    "test": "InvestigationSitesTest",
+    "current": {
+      "test": "InvestigationSitesTest",
+      "exit_code": 1,
+      "seconds": 0.109,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: residential house now has an actual Victorian circulation plan\n\tat org.beckenburg.InvestigationSitesTest.ok(InvestigationSitesTest.java:8)\n\tat org.beckenburg.InvestigationSitesTest.main(InvestigationSitesTest.java:29)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.344,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: all necessary authored room thresholds can be physically opened\n\tat org.beckenburg.InvestigationSitesTest.ok(InvestigationSitesTest.java:8)\n\tat org.beckenburg.InvestigationSitesTest.main(InvestigationSitesTest.java:80)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "e560addfe66a100a1e8f8c73ccafac474fe04856e42a20cd8366f5cf320c2348",
+    "current_source_sha256": "e560addfe66a100a1e8f8c73ccafac474fe04856e42a20cd8366f5cf320c2348"
+  },
+  {
+    "test": "GrandSiteGeometryTest",
+    "current": {
+      "test": "GrandSiteGeometryTest",
+      "exit_code": 1,
+      "seconds": 0.079,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: Victorian residential architecture has a true larger footprint\n\tat org.beckenburg.GrandSiteGeometryTest.ok(GrandSiteGeometryTest.java:5)\n\tat org.beckenburg.GrandSiteGeometryTest.main(GrandSiteGeometryTest.java:8)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.094,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: physical switch remains within its enlarged room\n\tat org.beckenburg.GrandSiteGeometryTest.ok(GrandSiteGeometryTest.java:5)\n\tat org.beckenburg.GrandSiteGeometryTest.main(GrandSiteGeometryTest.java:24)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "ef2387b3606b37c89ace4c8abe69c4d2ba3aaabca45d0eadfe5fcaf5f4dc1fb6",
+    "current_source_sha256": "ef2387b3606b37c89ace4c8abe69c4d2ba3aaabca45d0eadfe5fcaf5f4dc1fb6"
+  },
+  {
+    "test": "LanTelegraphedStrikeIntegrationTest",
+    "current": {
+      "test": "LanTelegraphedStrikeIntegrationTest",
+      "exit_code": 1,
+      "seconds": 23.75,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanTelegraphedStrikeIntegrationTest$Peer.expect(LanTelegraphedStrikeIntegrationTest.java:23)\n\tat org.beckenburg.LanTelegraphedStrikeIntegrationTest.main(LanTelegraphedStrikeIntegrationTest.java:41)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 23.859,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanTelegraphedStrikeIntegrationTest$Peer.expect(LanTelegraphedStrikeIntegrationTest.java:23)\n\tat org.beckenburg.LanTelegraphedStrikeIntegrationTest.main(LanTelegraphedStrikeIntegrationTest.java:41)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "86aa00c87bd1ad47373851bb198557ad2644c6a7ea4f25eb81e7c4b9b81e487a",
+    "current_source_sha256": "86aa00c87bd1ad47373851bb198557ad2644c6a7ea4f25eb81e7c4b9b81e487a"
+  },
+  {
+    "test": "ArchitecturalPlansTest",
+    "current": {
+      "test": "ArchitecturalPlansTest",
+      "exit_code": 1,
+      "seconds": 0.078,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: Victorian house has functional authored ground-floor architecture\n\tat org.beckenburg.ArchitecturalPlansTest.ok(ArchitecturalPlansTest.java:9)\n\tat org.beckenburg.ArchitecturalPlansTest.main(ArchitecturalPlansTest.java:13)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.125,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: building has actual partitions and articulated boundaries\n\tat org.beckenburg.ArchitecturalPlansTest.ok(ArchitecturalPlansTest.java:9)\n\tat org.beckenburg.ArchitecturalPlansTest.main(ArchitecturalPlansTest.java:35)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "d7f79b7802590fcfadb9009f9c0f8cacaba94576a8c6fa51d669450fbd857bef",
+    "current_source_sha256": "d7f79b7802590fcfadb9009f9c0f8cacaba94576a8c6fa51d669450fbd857bef"
+  },
+  {
+    "test": "VictorianHouseArchitectureTest",
+    "current": {
+      "test": "VictorianHouseArchitectureTest",
+      "exit_code": 1,
+      "seconds": 0.078,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: the residential house has a large authored Victorian footprint\n\tat org.beckenburg.VictorianHouseArchitectureTest.ok(VictorianHouseArchitectureTest.java:10)\n\tat org.beckenburg.VictorianHouseArchitectureTest.main(VictorianHouseArchitectureTest.java:14)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.109,
+      "output": "PASS: Victorian architecture, room assignment, collision, portals, GLBs, van and peer synchronization\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "95e27a66302f55b9f5b07532ed479c3a5f59cb21ae6414c0823d65e261856284",
+    "current_source_sha256": "95e27a66302f55b9f5b07532ed479c3a5f59cb21ae6414c0823d65e261856284"
+  },
+  {
+    "test": "EquipmentSightTest",
+    "current": {
+      "test": "EquipmentSightTest",
+      "exit_code": 1,
+      "seconds": 0.079,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: door is actually operable\n\tat org.beckenburg.EquipmentSightTest.ok(EquipmentSightTest.java:5)\n\tat org.beckenburg.EquipmentSightTest.main(EquipmentSightTest.java:11)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.063,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: door is actually operable\n\tat org.beckenburg.EquipmentSightTest.ok(EquipmentSightTest.java:5)\n\tat org.beckenburg.EquipmentSightTest.main(EquipmentSightTest.java:11)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "be5360d9e420e8571fd2555aa4e51e9dda915783e611f27084eef2dcc381e0d9",
+    "current_source_sha256": "be5360d9e420e8571fd2555aa4e51e9dda915783e611f27084eef2dcc381e0d9"
+  },
+  {
+    "test": "LanSiteSelectionIntegrationTest",
+    "current": {
+      "test": "LanSiteSelectionIntegrationTest",
+      "exit_code": 1,
+      "seconds": 0.187,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: remote hunter receives selected layout during admission\n\tat org.beckenburg.LanSiteSelectionIntegrationTest.ok(LanSiteSelectionIntegrationTest.java:8)\n\tat org.beckenburg.LanSiteSelectionIntegrationTest.main(LanSiteSelectionIntegrationTest.java:25)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.265,
+      "output": "PASS: two authored locations transmitted over genuine LAN sockets\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "f753c93f73ce13609ad565f2577870db9b7a2723388990c2ddceeacb4a2c5dd0",
+    "current_source_sha256": "f753c93f73ce13609ad565f2577870db9b7a2723388990c2ddceeacb4a2c5dd0"
+  },
+  {
+    "test": "VanHidingTest",
+    "current": {
+      "test": "VanHidingTest",
+      "exit_code": 1,
+      "seconds": 0.078,
+      "output": "Exception in thread \"main\" java.lang.IllegalArgumentException: no hiding place within reach\n\tat org.beckenburg.LanWorld.toggleHide(LanWorld.java:29)\n\tat org.beckenburg.VanHidingTest.main(VanHidingTest.java:13)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.094,
+      "output": "PASS: 0%-100% hiding spots, concealed ghost avoidance and movement exposure\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "420d3542a00a6c8be18f68b0c8637bd130c61a0a2bdf36182b06eb266c9ddaed",
+    "current_source_sha256": "420d3542a00a6c8be18f68b0c8637bd130c61a0a2bdf36182b06eb266c9ddaed"
+  },
+  {
+    "test": "GameplaySmokeTest",
+    "current": {
+      "test": "GameplaySmokeTest",
+      "exit_code": 1,
+      "seconds": 0.079,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: Victorian domestic building has connected real geometry\n\tat org.beckenburg.GameplaySmokeTest.ok(GameplaySmokeTest.java:10)\n\tat org.beckenburg.GameplaySmokeTest.main(GameplaySmokeTest.java:13)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.703,
+      "output": "PASS: fifteen zones, door/collision, 3D render/depth, instruments, wards, cleansing, extraction, economy save and all role baseline safety\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "0f41cd3b18d93604405b6ec934da67c142cb26ad9eee9a08cb4f119fdcbf448b",
+    "current_source_sha256": "0f41cd3b18d93604405b6ec934da67c142cb26ad9eee9a08cb4f119fdcbf448b"
+  },
+  {
+    "test": "LanChatIntegrationTest",
+    "current": {
+      "test": "LanChatIntegrationTest",
+      "exit_code": 1,
+      "seconds": 8.281,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: timeout awaiting ACCEPT|MOVE|11 for H2\n\tat org.beckenburg.LanChatIntegrationTest$Peer.await(LanChatIntegrationTest.java:25)\n\tat org.beckenburg.LanChatIntegrationTest.main(LanChatIntegrationTest.java:46)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 8.343,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: timeout awaiting ACCEPT|MOVE|11 for H2\n\tat org.beckenburg.LanChatIntegrationTest$Peer.await(LanChatIntegrationTest.java:25)\n\tat org.beckenburg.LanChatIntegrationTest.main(LanChatIntegrationTest.java:46)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "ddee1d885294315f3e2b8441c5bd6d7b7cabe708ec76977cf07b87c6c1bac416",
+    "current_source_sha256": "ddee1d885294315f3e2b8441c5bd6d7b7cabe708ec76977cf07b87c6c1bac416"
+  },
+  {
+    "test": "LanVoiceHostIntegrationTest",
+    "current": {
+      "test": "LanVoiceHostIntegrationTest",
+      "exit_code": 1,
+      "seconds": 0.156,
+      "output": "Exception in thread \"main\" java.io.IOException: REJECT|protocol version or handshake\n\tat org.beckenburg.LanVoiceHostIntegrationTest$Peer.<init>(LanVoiceHostIntegrationTest.java:25)\n\tat org.beckenburg.LanVoiceHostIntegrationTest.main(LanVoiceHostIntegrationTest.java:81)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 8.312,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: H2 missed ACCEPT|MOVE|11\n\tat org.beckenburg.LanVoiceHostIntegrationTest$Peer.await(LanVoiceHostIntegrationTest.java:41)\n\tat org.beckenburg.LanVoiceHostIntegrationTest.main(LanVoiceHostIntegrationTest.java:89)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "f4d2a4fbd44c3b47968c44d24d1af9a9f9d4862ccc2dfa39f2262d0e5665e179",
+    "current_source_sha256": "f4d2a4fbd44c3b47968c44d24d1af9a9f9d4862ccc2dfa39f2262d0e5665e179"
+  },
+  {
+    "test": "FieldJournalTest",
+    "current": {
+      "test": "FieldJournalTest",
+      "exit_code": 1,
+      "seconds": 0.062,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: all types initially possible\n\tat org.beckenburg.FieldJournalTest.check(FieldJournalTest.java:5)\n\tat org.beckenburg.FieldJournalTest.main(FieldJournalTest.java:8)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.079,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: all types initially possible\n\tat org.beckenburg.FieldJournalTest.check(FieldJournalTest.java:5)\n\tat org.beckenburg.FieldJournalTest.main(FieldJournalTest.java:8)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "a06e0cdf9bfa821e188780af66f285028e948d2efe3d470850018e5f3831a279",
+    "current_source_sha256": "a06e0cdf9bfa821e188780af66f285028e948d2efe3d470850018e5f3831a279"
+  },
+  {
+    "test": "ManualEvidenceJournalTest",
+    "current": {
+      "test": "ManualEvidenceJournalTest",
+      "exit_code": 1,
+      "seconds": 0.063,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: all 13 ghost names initially possible\n\tat org.beckenburg.ManualEvidenceJournalTest.ok(ManualEvidenceJournalTest.java:7)\n\tat org.beckenburg.ManualEvidenceJournalTest.main(ManualEvidenceJournalTest.java:10)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.062,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: all 13 ghost names initially possible\n\tat org.beckenburg.ManualEvidenceJournalTest.ok(ManualEvidenceJournalTest.java:7)\n\tat org.beckenburg.ManualEvidenceJournalTest.main(ManualEvidenceJournalTest.java:10)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "ac2af9e85d9eadca7eca10286cd8925231401f5f648bb6ec60da2bf51b174a31",
+    "current_source_sha256": "ac2af9e85d9eadca7eca10286cd8925231401f5f648bb6ec60da2bf51b174a31"
+  },
+  {
+    "test": "LanSixHunterVanTest",
+    "current": {
+      "test": "LanSixHunterVanTest",
+      "exit_code": 1,
+      "seconds": 8.406,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H2\n\tat org.beckenburg.LanSixHunterVanTest$Peer.expect(LanSixHunterVanTest.java:20)\n\tat org.beckenburg.LanSixHunterVanTest.main(LanSixHunterVanTest.java:67)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 8.406,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H2\n\tat org.beckenburg.LanSixHunterVanTest$Peer.expect(LanSixHunterVanTest.java:20)\n\tat org.beckenburg.LanSixHunterVanTest.main(LanSixHunterVanTest.java:67)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "a106c0063160ad5c46b4d6ce80980a06768f081be9292c82f109e9486316fd65",
+    "current_source_sha256": "a106c0063160ad5c46b4d6ce80980a06768f081be9292c82f109e9486316fd65"
+  },
+  {
+    "test": "HunterCountersTest",
+    "current": {
+      "test": "HunterCountersTest",
+      "exit_code": 1,
+      "seconds": 0.079,
+      "output": "Exception in thread \"main\" java.lang.IllegalArgumentException: invalid physical deployment\n\tat org.beckenburg.HunterCounters.deploy(HunterCounters.java:35)\n\tat org.beckenburg.HunterCounters.launch(HunterCounters.java:102)\n\tat org.beckenburg.HunterCountersTest.main(HunterCountersTest.java:10)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.062,
+      "output": "Exception in thread \"main\" java.lang.IllegalArgumentException: invalid physical deployment\n\tat org.beckenburg.HunterCounters.deploy(HunterCounters.java:35)\n\tat org.beckenburg.HunterCounters.launch(HunterCounters.java:102)\n\tat org.beckenburg.HunterCountersTest.main(HunterCountersTest.java:10)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "d159631f838c55c5887a0a8fbc74152256d25b32787f16c07a1d87902df4e42c",
+    "current_source_sha256": "d159631f838c55c5887a0a8fbc74152256d25b32787f16c07a1d87902df4e42c"
+  },
+  {
+    "test": "GhostDomainTest",
+    "current": {
+      "test": "GhostDomainTest",
+      "exit_code": 1,
+      "seconds": 0.125,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: no diagonal teleport\n\tat org.beckenburg.GhostDomainTest.ok(GhostDomainTest.java:7)\n\tat org.beckenburg.GhostDomainTest.main(GhostDomainTest.java:19)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.125,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: adjacency as authored\n\tat org.beckenburg.GhostDomainTest.ok(GhostDomainTest.java:7)\n\tat org.beckenburg.GhostDomainTest.main(GhostDomainTest.java:29)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "b6b9aebf014f2f128a9675efa58e61d61c3006f438b189d0172e520ea972ccf1",
+    "current_source_sha256": "b6b9aebf014f2f128a9675efa58e61d61c3006f438b189d0172e520ea972ccf1"
+  },
+  {
+    "test": "VanNavigationVisualTest",
+    "current": {
+      "test": "VanNavigationVisualTest",
+      "exit_code": 1,
+      "seconds": 0.094,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: rack item selected by line of sight\n\tat org.beckenburg.VanNavigationVisualTest.yes(VanNavigationVisualTest.java:8)\n\tat org.beckenburg.VanNavigationVisualTest.main(VanNavigationVisualTest.java:25)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 0.094,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: rack item selected by line of sight\n\tat org.beckenburg.VanNavigationVisualTest.yes(VanNavigationVisualTest.java:8)\n\tat org.beckenburg.VanNavigationVisualTest.main(VanNavigationVisualTest.java:25)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "bcada11a7c6c919610852a51230a8807b7d1b9be19c98c4110cb1dbcff55e668",
+    "current_source_sha256": "bcada11a7c6c919610852a51230a8807b7d1b9be19c98c4110cb1dbcff55e668"
+  },
+  {
+    "test": "LanClientDisconnectTest",
+    "current": {
+      "test": "LanClientDisconnectTest",
+      "exit_code": 1,
+      "seconds": 0.078,
+      "output": "Exception in thread \"main\" java.io.IOException: incompatible spatial protocol\n\tat org.beckenburg.LanClient.<init>(LanClient.java:91)\n\tat org.beckenburg.LanClient.<init>(LanClient.java:45)\n\tat org.beckenburg.LanClientDisconnectTest.main(LanClientDisconnectTest.java:28)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.578,
+      "output": "PASS: genuine TCP EOF emits exactly one disconnect; local close stays silent\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "119c9001435acc685121c5d1bfba4bc850407f7a5d86a047f75139157ef8b29a",
+    "current_source_sha256": "119c9001435acc685121c5d1bfba4bc850407f7a5d86a047f75139157ef8b29a"
+  },
+  {
+    "test": "LanGracefulLeaveTest",
+    "current": {
+      "test": "LanGracefulLeaveTest",
+      "exit_code": 1,
+      "seconds": 0.078,
+      "output": "Exception in thread \"main\" java.io.IOException: incompatible spatial protocol\n\tat org.beckenburg.LanClient.<init>(LanClient.java:91)\n\tat org.beckenburg.LanClient.<init>(LanClient.java:45)\n\tat org.beckenburg.LanGracefulLeaveTest.main(LanGracefulLeaveTest.java:29)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.125,
+      "output": "PASS: 12 TCP exits deliver LEAVE and EOF despite unread incoming updates\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "fec9a0f8bdd5a3b246218f165d20deed15591a6c29293c0c51be2a26422c960f",
+    "current_source_sha256": "fec9a0f8bdd5a3b246218f165d20deed15591a6c29293c0c51be2a26422c960f"
+  },
+  {
+    "test": "LanSoundHudTest",
+    "current": {
+      "test": "LanSoundHudTest",
+      "exit_code": 124,
+      "seconds": 60.016,
+      "output": "\nException in thread \"main\" java.lang.reflect.InvocationTargetException\n\tat java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1369)\n\tat java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1344)\n\tat java.desktop/javax.swing.SwingUtilities.invokeAndWait(SwingUtilities.java:1480)\n\tat org.beckenburg.LanSoundHudTest.main(LanSoundHudTest.java:15)\nCaused by: java.lang.AssertionError: on-screen audio caption actually paints\n\tat org.beckenburg.LanSoundHudTest.ok(LanSoundHudTest.java:9)\n\tat org.beckenburg.LanSoundHudTest.lambda$main$1(LanSoundHudTest.java:29)\n\tat java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:308)\n\tat java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:771)\n\tat java.desktop/java.awt.EventQueue$4.run(EventQueue.java:722)\n\tat java.desktop/java.awt.EventQueue$4.run(EventQueue.java:716)\n\tat java.base/java.security.AccessController.doPrivileged(AccessController.java:399)\n\tat java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)\n\tat java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:741)\n\tat java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)\n\tat java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)\n\nTimed out at60seconds"
+    },
+    "baseline": {
+      "exit_code": 124,
+      "seconds": 45.016,
+      "output": "Exception in thread \"main\" java.lang.reflect.InvocationTargetException\n\tat java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1369)\n\tat java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1344)\n\tat java.desktop/javax.swing.SwingUtilities.invokeAndWait(SwingUtilities.java:1480)\n\tat org.beckenburg.LanSoundHudTest.main(LanSoundHudTest.java:15)\nCaused by: java.lang.AssertionError: on-screen audio caption actually paints\n\tat org.beckenburg.LanSoundHudTest.ok(LanSoundHudTest.java:9)\n\tat org.beckenburg.LanSoundHudTest.lambda$main$1(LanSoundHudTest.java:29)\n\tat java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:308)\n\tat java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:771)\n\tat java.desktop/java.awt.EventQueue$4.run(EventQueue.java:722)\n\tat java.desktop/java.awt.EventQueue$4.run(EventQueue.java:716)\n\tat java.base/java.security.AccessController.doPrivileged(AccessController.java:399)\n\tat java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)\n\tat java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:741)\n\tat java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)\n\tat java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)\n\nTIMEOUT 45s"
+    },
+    "source_same": false,
+    "baseline_source_sha256": "21285287136ac9093297891bae4e733cf947af613f912634c571a57ad7a41d8a",
+    "current_source_sha256": "deb9235c9efe6ac86b9bed26f0e0d4434e5b1874aa7ec664df0c3410b775f865"
+  },
+  {
+    "test": "LanWorldTest",
+    "current": {
+      "test": "LanWorldTest",
+      "exit_code": 1,
+      "seconds": 0.11,
+      "output": "Exception in thread \"main\" java.lang.IllegalArgumentException: blocked by world collision\n\tat org.beckenburg.LanWorld.move(LanWorld.java:86)\n\tat org.beckenburg.LanWorld.move(LanWorld.java:74)\n\tat org.beckenburg.LanWorldTest.main(LanWorldTest.java:20)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.094,
+      "output": "PASS: host 3D world movement, collision, door snapshots, speed and invalid state gates\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "4198449d7ed6d2ba05d008c5452560c469015f30567ff72b67445c48850052ed",
+    "current_source_sha256": "4198449d7ed6d2ba05d008c5452560c469015f30567ff72b67445c48850052ed"
+  },
+  {
+    "test": "LanWorldIntegrationTest",
+    "current": {
+      "test": "LanWorldIntegrationTest",
+      "exit_code": 1,
+      "seconds": 0.687,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: ghost saw private hunter state\n\tat org.beckenburg.LanWorldIntegrationTest$Peer.noBodies(LanWorldIntegrationTest.java:16)\n\tat org.beckenburg.LanWorldIntegrationTest.main(LanWorldIntegrationTest.java:30)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.875,
+      "output": "PASS: 4-socket authoritative world stepping, snapshot privacy, door range, legacy-mode isolation\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "f8faa735e475d95f8e1becb8303f5c0d105cbcecde1502a195dc65c80705ef15",
+    "current_source_sha256": "f8faa735e475d95f8e1becb8303f5c0d105cbcecde1502a195dc65c80705ef15"
+  },
+  {
+    "test": "LanWorldRenderTest",
+    "current": {
+      "test": "LanWorldRenderTest",
+      "exit_code": 1,
+      "seconds": 1.344,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: remote door state appears at architectural socket\n\tat org.beckenburg.LanWorldRenderTest.ok(LanWorldRenderTest.java:8)\n\tat org.beckenburg.LanWorldRenderTest.main(LanWorldRenderTest.java:30)\n"
+    },
+    "baseline": {
+      "exit_code": 0,
+      "seconds": 0.672,
+      "output": "PASS: network first-person rendering includes 3D teammates, disclosed ghost and synced physical doors\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "92b0d76921b6316513d2df0f81f400efc12b00648f8641db7b70e05e4b0f1372",
+    "current_source_sha256": "92b0d76921b6316513d2df0f81f400efc12b00648f8641db7b70e05e4b0f1372"
+  },
+  {
+    "test": "LanLobbyTest",
+    "current": {
+      "test": "LanLobbyTest",
+      "exit_code": 1,
+      "seconds": 2.375,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: timed out waiting for ACCEPT|MOVE|11 on H1\n\tat org.beckenburg.LanLobbyTest$Wire.waitPrefix(LanLobbyTest.java:19)\n\tat org.beckenburg.LanLobbyTest.main(LanLobbyTest.java:53)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 2.438,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: timed out waiting for ACCEPT|MOVE|11 on H1\n\tat org.beckenburg.LanLobbyTest$Wire.waitPrefix(LanLobbyTest.java:19)\n\tat org.beckenburg.LanLobbyTest.main(LanLobbyTest.java:53)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "ec25e22435bb589ca4613f96017ecc27dfcd46366dd86a32e646c78c3c0b2bd8",
+    "current_source_sha256": "ec25e22435bb589ca4613f96017ecc27dfcd46366dd86a32e646c78c3c0b2bd8"
+  },
+  {
+    "test": "LanCaseIntegrationTest",
+    "current": {
+      "test": "LanCaseIntegrationTest",
+      "exit_code": 1,
+      "seconds": 8.328,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: H1 did not receive ACCEPT|MOVE|11\n\tat org.beckenburg.LanCaseIntegrationTest$Wire.waitFor(LanCaseIntegrationTest.java:14)\n\tat org.beckenburg.LanCaseIntegrationTest.main(LanCaseIntegrationTest.java:43)\n"
+    },
+    "baseline": {
+      "exit_code": 1,
+      "seconds": 8.406,
+      "output": "Exception in thread \"main\" java.lang.AssertionError: H1 did not receive ACCEPT|MOVE|11\n\tat org.beckenburg.LanCaseIntegrationTest$Wire.waitFor(LanCaseIntegrationTest.java:14)\n\tat org.beckenburg.LanCaseIntegrationTest.main(LanCaseIntegrationTest.java:43)\n"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "f88b3ad194785df1c8e13d67eafdd854082e250e041be37f0a38d4c73f774a1a",
+    "current_source_sha256": "f88b3ad194785df1c8e13d67eafdd854082e250e041be37f0a38d4c73f774a1a"
+  },
+  {
+    "test": "ManualEvidenceHudTest",
+    "current": {
+      "test": "ManualEvidenceHudTest",
+      "exit_code": 124,
+      "seconds": 60.016,
+      "output": "\nException in thread \"main\" java.lang.reflect.InvocationTargetException\n\tat java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1369)\n\tat java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1344)\n\tat java.desktop/javax.swing.SwingUtilities.invokeAndWait(SwingUtilities.java:1480)\n\tat org.beckenburg.ManualEvidenceHudTest.main(ManualEvidenceHudTest.java:15)\nCaused by: java.lang.AssertionError: valid ghosts remain visible\n\tat org.beckenburg.ManualEvidenceHudTest.ok(ManualEvidenceHudTest.java:10)\n\tat org.beckenburg.ManualEvidenceHudTest.lambda$main$1(ManualEvidenceHudTest.java:24)\n\tat java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:308)\n\tat java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:771)\n\tat java.desktop/java.awt.EventQueue$4.run(EventQueue.java:722)\n\tat java.desktop/java.awt.EventQueue$4.run(EventQueue.java:716)\n\tat java.base/java.security.AccessController.doPrivileged(AccessController.java:399)\n\tat java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)\n\tat java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:741)\n\tat java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)\n\tat java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)\n\nTimed out at60seconds"
+    },
+    "baseline": {
+      "exit_code": 124,
+      "seconds": 45.0,
+      "output": "Exception in thread \"main\" java.lang.reflect.InvocationTargetException\n\tat java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1369)\n\tat java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1344)\n\tat java.desktop/javax.swing.SwingUtilities.invokeAndWait(SwingUtilities.java:1480)\n\tat org.beckenburg.ManualEvidenceHudTest.main(ManualEvidenceHudTest.java:15)\nCaused by: java.lang.AssertionError: valid ghosts remain visible\n\tat org.beckenburg.ManualEvidenceHudTest.ok(ManualEvidenceHudTest.java:10)\n\tat org.beckenburg.ManualEvidenceHudTest.lambda$main$1(ManualEvidenceHudTest.java:24)\n\tat java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:308)\n\tat java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:771)\n\tat java.desktop/java.awt.EventQueue$4.run(EventQueue.java:722)\n\tat java.desktop/java.awt.EventQueue$4.run(EventQueue.java:716)\n\tat java.base/java.security.AccessController.doPrivileged(AccessController.java:399)\n\tat java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)\n\tat java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:741)\n\tat java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)\n\tat java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)\n\nTIMEOUT 45s"
+    },
+    "source_same": true,
+    "baseline_source_sha256": "d4e7199529f5d9324c64dd8ea78e3ecf78c0d9aaa06979f627391dd9659f4a82",
+    "current_source_sha256": "d4e7199529f5d9324c64dd8ea78e3ecf78c0d9aaa06979f627391dd9659f4a82"
+  }
+]

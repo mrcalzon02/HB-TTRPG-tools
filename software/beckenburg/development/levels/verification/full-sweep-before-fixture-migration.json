@@ -1,0 +1,932 @@
+[
+  {
+    "test": "BeckenburgDiagnosticsTest",
+    "exit_code": 0,
+    "seconds": 0.734,
+    "output": "PASS Beckenburg startup diagnostics, local redaction and thread snapshot\n"
+  },
+  {
+    "test": "GraphicsOptionsTest",
+    "exit_code": 0,
+    "seconds": 0.093,
+    "output": "PASS real render resolution, widescreen, pillarbox, safe dimensions and CPU graphics effects\n"
+  },
+  {
+    "test": "PsxPipelineTest",
+    "exit_code": 0,
+    "seconds": 0.063,
+    "output": "PASS PSX vertex snap, affine UVs, dithering, presets\n"
+  },
+  {
+    "test": "PsxHorrorUiTest",
+    "exit_code": 0,
+    "seconds": 1.547,
+    "output": "PASS PSX Horror UI / 85 images / 3 scales / Swing controls\n"
+  },
+  {
+    "test": "SoundtrackAudioTest",
+    "exit_code": 0,
+    "seconds": 0.281,
+    "output": "PASS six recorded tracks, U-law decoder, and music-state precedence\n"
+  },
+  {
+    "test": "SoundCoverageTest",
+    "exit_code": 0,
+    "seconds": 1.375,
+    "output": "PASS SoundCoverageTest / 45 event cues, captions, stable PCM, panning, FX volume and UI idempotence\n"
+  },
+  {
+    "test": "HorrorAudioRoutingTest",
+    "exit_code": 1,
+    "seconds": 0.156,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: the portico-to-van extraction doorway must exist\n\tat org.beckenburg.HorrorAudioRoutingTest.check(HorrorAudioRoutingTest.java:9)\n\tat org.beckenburg.HorrorAudioRoutingTest.main(HorrorAudioRoutingTest.java:40)\n"
+  },
+  {
+    "test": "CastleHubIntegrationTest",
+    "exit_code": 1,
+    "seconds": 0.188,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: working offices with actual interior props\n\tat org.beckenburg.CastleHubIntegrationTest.ok(CastleHubIntegrationTest.java:8)\n\tat org.beckenburg.CastleHubIntegrationTest.main(CastleHubIntegrationTest.java:39)\n"
+  },
+  {
+    "test": "BeckenburgUpdatesTest",
+    "exit_code": 0,
+    "seconds": 0.719,
+    "output": "PASS independent Beckenburg updates, version sorting, exact asset path and hostile URL rejection\n"
+  },
+  {
+    "test": "HeldMeshViewTest",
+    "exit_code": 0,
+    "seconds": 0.203,
+    "output": "Purchased flashlight foreground: 5878 mesh pixels, 492 colors\n"
+  },
+  {
+    "test": "GlbPropsTest",
+    "exit_code": 0,
+    "seconds": 0.281,
+    "output": "Eight real Beckenburg GLB meshes, UVs and PNG materials validated\n"
+  },
+  {
+    "test": "EvidenceSignalsTest",
+    "exit_code": 0,
+    "seconds": 0.062,
+    "output": "PASS: ordinary EMF 2-7, high 8-10, neutral thermal variation, extremes and F/C\n"
+  },
+  {
+    "test": "MissionWeatherTest",
+    "exit_code": 0,
+    "seconds": 0.11,
+    "output": "PASS fixed dynamic random weather, thunder EMF, freezing temperature and soundscape\n"
+  },
+  {
+    "test": "RecordedWeatherTest",
+    "exit_code": 0,
+    "seconds": 0.094,
+    "output": "PASS RecordedWeatherTest / NOX rain and wind loops, thunder preservation, indoor shelter\n"
+  },
+  {
+    "test": "HardEvidenceQuotaTest",
+    "exit_code": 1,
+    "seconds": 0.062,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: Two ghosts share the same three-evidence signature ANCIENT_HANTU\n\tat org.beckenburg.HardEvidenceQuotaTest.ok(HardEvidenceQuotaTest.java:5)\n\tat org.beckenburg.HardEvidenceQuotaTest.main(HardEvidenceQuotaTest.java:16)\n"
+  },
+  {
+    "test": "AncientGhostVariantsTest",
+    "exit_code": 1,
+    "seconds": 0.203,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: Distinct three-evidence signature ANCIENT_HANTU\n\tat org.beckenburg.AncientGhostVariantsTest.ok(AncientGhostVariantsTest.java:13)\n\tat org.beckenburg.AncientGhostVariantsTest.main(AncientGhostVariantsTest.java:23)\n"
+  },
+  {
+    "test": "AdditionalEvidenceTest",
+    "exit_code": 1,
+    "seconds": 0.094,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: Unique evidence triple for ANCIENT_HANTU\n\tat org.beckenburg.AdditionalEvidenceTest.ok(AdditionalEvidenceTest.java:14)\n\tat org.beckenburg.AdditionalEvidenceTest.main(AdditionalEvidenceTest.java:81)\n"
+  },
+  {
+    "test": "ContractRewardsTest",
+    "exit_code": 0,
+    "seconds": 0.141,
+    "output": "PASS ritual-only victory, partial retreat, death loss, daily bonuses and durable payout receipts\n"
+  },
+  {
+    "test": "EmfSilenceTest",
+    "exit_code": 1,
+    "seconds": 0.171,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: strong event can yield a high EMF reading\n\tat org.beckenburg.EmfSilenceTest.ok(EmfSilenceTest.java:4)\n\tat org.beckenburg.EmfSilenceTest.main(EmfSilenceTest.java:24)\n"
+  },
+  {
+    "test": "GhostWritingTest",
+    "exit_code": 0,
+    "seconds": 0.047,
+    "output": "PASS: genuine room-authored writing and all three readable variants\n"
+  },
+  {
+    "test": "EquipmentRegistryTest",
+    "exit_code": 0,
+    "seconds": 0.063,
+    "output": "PASS: 42 equipment entries, status separation, and evidence families\n"
+  },
+  {
+    "test": "EquipmentTiersTest",
+    "exit_code": 0,
+    "seconds": 0.094,
+    "output": "PASS: 42 devices, 126 tier stages, reach, response, clarity and capacity\n"
+  },
+  {
+    "test": "EquipmentStoreDescriptionsTest",
+    "exit_code": 1,
+    "seconds": 0.156,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: the 28 unimplemented items remain labelled not purchasable\n\tat org.beckenburg.EquipmentStoreDescriptionsTest.ok(EquipmentStoreDescriptionsTest.java:7)\n\tat org.beckenburg.EquipmentStoreDescriptionsTest.main(EquipmentStoreDescriptionsTest.java:39)\n"
+  },
+  {
+    "test": "FieldEquipmentTest",
+    "exit_code": 0,
+    "seconds": 0.062,
+    "output": "PASS: working tiered inventory, shared credits, range, cooldown and duplicate-slot rejection\n"
+  },
+  {
+    "test": "InstrumentActivationTest",
+    "exit_code": 0,
+    "seconds": 0.235,
+    "output": "PASS: physical exposures, saved photos, switches, night vision, consumables and video stations\n"
+  },
+  {
+    "test": "TieredMediaAndPowerTest",
+    "exit_code": 0,
+    "seconds": 0.109,
+    "output": "PASS: Polaroid 1, cameras 6/12, photo output quality, video lens width, tiered beams, battery discharge/recharge\n"
+  },
+  {
+    "test": "TieredUvAndFirelightTest",
+    "exit_code": 0,
+    "seconds": 0.078,
+    "output": "PASS: three-tier true UV sensitivity and finite 120/180/270s firelight\n"
+  },
+  {
+    "test": "ImportedEquipmentModelsTest",
+    "exit_code": 0,
+    "seconds": 0.328,
+    "output": "PASS: 12 imported PSX meshes, original textures and tier-dependent held models\n"
+  },
+  {
+    "test": "PackagedSourceModelsTest",
+    "exit_code": 0,
+    "seconds": 2.11,
+    "output": "PASS: 239 packaged source GLBs, real triangles and embedded textures\n"
+  },
+  {
+    "test": "EquipmentModelCatalogTest",
+    "exit_code": 0,
+    "seconds": 1.562,
+    "output": "PASS: 126 equipment slots +3 health slots, 44 state aliases /40 meshes, 7 fixed fixtures, 153-file allowlist\n"
+  },
+  {
+    "test": "FieldSoundRecorderTest",
+    "exit_code": 0,
+    "seconds": 0.203,
+    "output": "PASS: all three recorder tiers, real timed audio, mono/stereo WAV, silence, range, storage, memory and power\n"
+  },
+  {
+    "test": "LanSoundRecorderIntegrationTest",
+    "exit_code": 0,
+    "seconds": 6.266,
+    "output": "PASS: real rack input, paid upgrades, authored audio, private playback, service authority and reconnect continuity\n"
+  },
+  {
+    "test": "RecorderModelsTest",
+    "exit_code": 0,
+    "seconds": 0.312,
+    "output": "PASS: three Blender recorder GLBs load/rasterize in Java, bounded triangles, live physical LCD previews\n"
+  },
+  {
+    "test": "TierModelForgeTest",
+    "exit_code": 0,
+    "seconds": 1.641,
+    "output": "PASS: 126 real textured tier GLBs / 109 synthesized prefab selections / 17 preserved original source props\n"
+  },
+  {
+    "test": "VanCargoDoorTest",
+    "exit_code": 0,
+    "seconds": 0.828,
+    "output": "PASS: switchable server-driven van door changes collision and rendered scene\n"
+  },
+  {
+    "test": "LanDotsProjectorsTest",
+    "exit_code": 1,
+    "seconds": 0.156,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: no species qualification gate\n\tat org.beckenburg.LanDotsProjectorsTest.ok(LanDotsProjectorsTest.java:3)\n\tat org.beckenburg.LanDotsProjectorsTest.main(LanDotsProjectorsTest.java:22)\n"
+  },
+  {
+    "test": "OptionalEvidenceReadingsTest",
+    "exit_code": 0,
+    "seconds": 0.094,
+    "output": "PASS: 13 original x 2 and 10 Ancient x 3 event-bound detector readouts\n"
+  },
+  {
+    "test": "GhostEvidenceMatrixTest",
+    "exit_code": 0,
+    "seconds": 0.062,
+    "output": "PASS: 23 ghost evidence rows match live producers and added sensor families\n"
+  },
+  {
+    "test": "LanFieldEquipmentIntegrationTest",
+    "exit_code": 1,
+    "seconds": 9.328,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: H1 missing REJECT|\n\tat org.beckenburg.LanFieldEquipmentIntegrationTest$Seat.await(LanFieldEquipmentIntegrationTest.java:24)\n\tat org.beckenburg.LanFieldEquipmentIntegrationTest.main(LanFieldEquipmentIntegrationTest.java:61)\n"
+  },
+  {
+    "test": "LanMeasuredEvidenceTest",
+    "exit_code": 0,
+    "seconds": 0.188,
+    "output": "PASS: measured event EMF, dynamic winter heat, ghost presence, repeats\n"
+  },
+  {
+    "test": "SoloEnvironmentalEvidenceTest",
+    "exit_code": 1,
+    "seconds": 0.219,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: every functioning instrument returns a logged measurement\n\tat org.beckenburg.SoloEnvironmentalEvidenceTest.ok(SoloEnvironmentalEvidenceTest.java:5)\n\tat org.beckenburg.SoloEnvironmentalEvidenceTest.main(SoloEnvironmentalEvidenceTest.java:13)\n"
+  },
+  {
+    "test": "GhostBehaviorTest",
+    "exit_code": 0,
+    "seconds": 0.25,
+    "output": "PASS: 13 original behavior patterns shared by 23 ghosts, host energy/cooldowns and AI-human action parity\n"
+  },
+  {
+    "test": "LanGhostIdentityTest",
+    "exit_code": 1,
+    "seconds": 0.203,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: wrong site denied\n\tat org.beckenburg.LanGhostIdentityTest.ok(LanGhostIdentityTest.java:5)\n\tat org.beckenburg.LanGhostIdentityTest.main(LanGhostIdentityTest.java:38)\n"
+  },
+  {
+    "test": "LanRiteNetworkTest",
+    "exit_code": 1,
+    "seconds": 11.359,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: timed out on ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanRiteNetworkTest$Peer.until(LanRiteNetworkTest.java:24)\n\tat org.beckenburg.LanRiteNetworkTest$Peer.move(LanRiteNetworkTest.java:26)\n\tat org.beckenburg.LanRiteNetworkTest.main(LanRiteNetworkTest.java:42)\n"
+  },
+  {
+    "test": "LanGhostPursuitTest",
+    "exit_code": 1,
+    "seconds": 0.156,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: heard signal provides coarse area, not exact body coordinates\n\tat org.beckenburg.LanGhostPursuitTest.ok(LanGhostPursuitTest.java:5)\n\tat org.beckenburg.LanGhostPursuitTest.main(LanGhostPursuitTest.java:18)\n"
+  },
+  {
+    "test": "LanGhostHearingTest",
+    "exit_code": 1,
+    "seconds": 0.172,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: door can be opened\n\tat org.beckenburg.LanGhostHearingTest.ok(LanGhostHearingTest.java:5)\n\tat org.beckenburg.LanGhostHearingTest.main(LanGhostHearingTest.java:29)\n"
+  },
+  {
+    "test": "LanGhostHearingIntegrationTest",
+    "exit_code": 0,
+    "seconds": 0.313,
+    "output": "PASS: four-socket ghost sound cues, no private telemetry or forged sound authority\n"
+  },
+  {
+    "test": "LanGhostTakeoverIntegrationTest",
+    "exit_code": 1,
+    "seconds": 10.328,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanGhostTakeoverIntegrationTest$Peer.expect(LanGhostTakeoverIntegrationTest.java:26)\n\tat org.beckenburg.LanGhostTakeoverIntegrationTest.main(LanGhostTakeoverIntegrationTest.java:38)\n"
+  },
+  {
+    "test": "LanCaseDepartureTest",
+    "exit_code": 0,
+    "seconds": 0.172,
+    "output": "PASS: guest departure, disabled seat actions, solo survival, victory and defeat\n"
+  },
+  {
+    "test": "LanIncapacitationTest",
+    "exit_code": 0,
+    "seconds": 0.187,
+    "output": "PASS: incapacitation, disallowed field actions, ghost victim filtering, last living survivor exit\n"
+  },
+  {
+    "test": "LanEvidenceJournalTest",
+    "exit_code": 0,
+    "seconds": 0.11,
+    "output": "PASS: bounded casefile provenance and protocol\n"
+  },
+  {
+    "test": "LanCaseFileIntegrationTest",
+    "exit_code": 1,
+    "seconds": 8.343,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 on H1\n\tat org.beckenburg.LanCaseFileIntegrationTest$Seat.await(LanCaseFileIntegrationTest.java:24)\n\tat org.beckenburg.LanCaseFileIntegrationTest.main(LanCaseFileIntegrationTest.java:47)\n"
+  },
+  {
+    "test": "LanSpatialEvidenceTest",
+    "exit_code": 1,
+    "seconds": 0.188,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: outside rooms give observations, never auto proof\n\tat org.beckenburg.LanSpatialEvidenceTest.ok(LanSpatialEvidenceTest.java:5)\n\tat org.beckenburg.LanSpatialEvidenceTest.main(LanSpatialEvidenceTest.java:35)\n"
+  },
+  {
+    "test": "LanSpatialEvidenceIntegrationTest",
+    "exit_code": 1,
+    "seconds": 10.344,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 on H1\n\tat org.beckenburg.LanSpatialEvidenceIntegrationTest$Peer.await(LanSpatialEvidenceIntegrationTest.java:25)\n\tat org.beckenburg.LanSpatialEvidenceIntegrationTest$Peer.room(LanSpatialEvidenceIntegrationTest.java:27)\n\tat org.beckenburg.LanSpatialEvidenceIntegrationTest.main(LanSpatialEvidenceIntegrationTest.java:42)\n"
+  },
+  {
+    "test": "LanIncapacitationHudTest",
+    "exit_code": 0,
+    "seconds": 1.515,
+    "output": "PASS: downed first-person view refuses doors, scanner and movement inputs\nBeckenburg soundtrack unavailable: sleep interrupted\n"
+  },
+  {
+    "test": "LanGuestDepartureIntegrationTest",
+    "exit_code": 1,
+    "seconds": 12.328,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanGuestDepartureIntegrationTest$Peer.await(LanGuestDepartureIntegrationTest.java:20)\n\tat org.beckenburg.LanGuestDepartureIntegrationTest$Peer.move(LanGuestDepartureIntegrationTest.java:23)\n\tat org.beckenburg.LanGuestDepartureIntegrationTest.main(LanGuestDepartureIntegrationTest.java:34)\n"
+  },
+  {
+    "test": "LanResumeStoreTest",
+    "exit_code": 0,
+    "seconds": 0.125,
+    "output": "PASS: LAN resume file, rotation, expiry, corruption preservation and profile isolation\n"
+  },
+  {
+    "test": "LanClientWelcomeTest",
+    "exit_code": 0,
+    "seconds": 0.078,
+    "output": "PASS: five-field resume, rotated secret, host replay watermark, four- and three-field compatibility\n"
+  },
+  {
+    "test": "LanHostOwnerRecoveryTest",
+    "exit_code": 0,
+    "seconds": 0.328,
+    "output": "PASS: ghost-host guest H1 continuity, recovering owner sockets and explicit owner-exit semantics\n"
+  },
+  {
+    "test": "LanSecureOwnerAdmissionTest",
+    "exit_code": 0,
+    "seconds": 0.282,
+    "output": "PASS: local owner role protected before join, false owner denied, ghost-owner reservation\n"
+  },
+  {
+    "test": "LanHostAuthorizationRegressionTest",
+    "exit_code": 0,
+    "seconds": 0.265,
+    "output": "PASS: ghost-host room rejects guest H1 administrative START while owner may start\n"
+  },
+  {
+    "test": "LanSessionResumeIntegrationTest",
+    "exit_code": 1,
+    "seconds": 9.344,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: Missing ACCEPT|MOVE|11 on H2\n\tat org.beckenburg.LanSessionResumeIntegrationTest$Peer.await(LanSessionResumeIntegrationTest.java:34)\n\tat org.beckenburg.LanSessionResumeIntegrationTest.hunterRejoin(LanSessionResumeIntegrationTest.java:56)\n\tat org.beckenburg.LanSessionResumeIntegrationTest.main(LanSessionResumeIntegrationTest.java:215)\n"
+  },
+  {
+    "test": "LanOutboundQueueTest",
+    "exit_code": 0,
+    "seconds": 0.062,
+    "output": "PASS: ordered nonblocking TCP delivery, bounded backlog, slow-peer isolation\n"
+  },
+  {
+    "test": "LanNetworkLatencyTest",
+    "exit_code": 0,
+    "seconds": 25.235,
+    "output": "PASS: TCP heartbeat RTT 0/50/150ms, one lost PONG, recovery and host continuity\n"
+  },
+  {
+    "test": "LanHostAccessIntegrationTest",
+    "exit_code": 0,
+    "seconds": 0.265,
+    "output": "PASS: password admission, denied guests, locked lobby, legacy join and local-only host controls\n"
+  },
+  {
+    "test": "LanNetworkDiagnosticsTest",
+    "exit_code": 0,
+    "seconds": 0.36,
+    "output": "PASS: LAN address reporting, error explanations, secure-boundary disclosure\n"
+  },
+  {
+    "test": "LanRitualDefenseTest",
+    "exit_code": 0,
+    "seconds": 0.172,
+    "output": "PASS: host ritual defense, pause, finite abandonment, explicit restart and guarded cleansing\n"
+  },
+  {
+    "test": "LanRitualDefenseIntegrationTest",
+    "exit_code": 1,
+    "seconds": 12.328,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanRitualDefenseIntegrationTest$Peer.await(LanRitualDefenseIntegrationTest.java:26)\n\tat org.beckenburg.LanRitualDefenseIntegrationTest$Peer.move(LanRitualDefenseIntegrationTest.java:28)\n\tat org.beckenburg.LanRitualDefenseIntegrationTest.main(LanRitualDefenseIntegrationTest.java:39)\n"
+  },
+  {
+    "test": "LanGhostHearingHudTest",
+    "exit_code": 0,
+    "seconds": 1.484,
+    "output": "PASS: mute-safe spectral sound overlay, EDT and stale-event expiry\nBeckenburg soundtrack unavailable: sleep interrupted\n"
+  },
+  {
+    "test": "LanGhostAnimationTest",
+    "exit_code": 0,
+    "seconds": 0.078,
+    "output": "PASS: bounded phase timing, hidden-source privacy, phase codec and malformed frame rejection\n"
+  },
+  {
+    "test": "LanGhostAnimationIntegrationTest",
+    "exit_code": 1,
+    "seconds": 16.328,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: missing event ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanGhostAnimationIntegrationTest$Peer.await(LanGhostAnimationIntegrationTest.java:24)\n\tat org.beckenburg.LanGhostAnimationIntegrationTest.main(LanGhostAnimationIntegrationTest.java:37)\n"
+  },
+  {
+    "test": "LanSoundTest",
+    "exit_code": 0,
+    "seconds": 0.157,
+    "output": "PASS: listener-relative host sound projection, ghost privacy, bounded frames, stereo PCM and mute amplitude\n"
+  },
+  {
+    "test": "LanSoundIntegrationTest",
+    "exit_code": 1,
+    "seconds": 5.281,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 on H1\n\tat org.beckenburg.LanSoundIntegrationTest$Peer.await(LanSoundIntegrationTest.java:23)\n\tat org.beckenburg.LanSoundIntegrationTest.main(LanSoundIntegrationTest.java:43)\n"
+  },
+  {
+    "test": "LanCaseFileHudTest",
+    "exit_code": 0,
+    "seconds": 1.484,
+    "output": "PASS: shared casefile HUD renders and toggles, authenticated replay clears stale notes\nBeckenburg soundtrack unavailable: sleep interrupted\n"
+  },
+  {
+    "test": "LanSoundHudTest",
+    "exit_code": 0,
+    "seconds": 1.532,
+    "output": "PASS: silent-device accessibility audio caption, directional label and expiry\nBeckenburg soundtrack unavailable: sleep interrupted\n"
+  },
+  {
+    "test": "LanAcousticsTest",
+    "exit_code": 1,
+    "seconds": 0.156,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: closed partition must attenuate sound\n\tat org.beckenburg.LanAcousticsTest.check(LanAcousticsTest.java:5)\n\tat org.beckenburg.LanAcousticsTest.main(LanAcousticsTest.java:9)\n"
+  },
+  {
+    "test": "LanGhostSearchTest",
+    "exit_code": 0,
+    "seconds": 0.156,
+    "output": "PASS: bounded ghost last-sound search and no omniscient attacks\n"
+  },
+  {
+    "test": "LanGhostLegacyHearingIntegrationTest",
+    "exit_code": 1,
+    "seconds": 0.266,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: private data leaked to ghost: DOORS|\n\tat org.beckenburg.LanGhostLegacyHearingIntegrationTest$Peer.await(LanGhostLegacyHearingIntegrationTest.java:21)\n\tat org.beckenburg.LanGhostLegacyHearingIntegrationTest$Peer.stateAfter(LanGhostLegacyHearingIntegrationTest.java:29)\n\tat org.beckenburg.LanGhostLegacyHearingIntegrationTest.main(LanGhostLegacyHearingIntegrationTest.java:46)\n"
+  },
+  {
+    "test": "LanGhostSpatialTest",
+    "exit_code": 0,
+    "seconds": 0.156,
+    "output": "PASS: spectral pose bounded to room, fixed tick, safe van denied, drift resets pose\n"
+  },
+  {
+    "test": "LanSpatialCombatTest",
+    "exit_code": 1,
+    "seconds": 0.172,
+    "output": "Exception in thread \"main\" java.lang.IllegalArgumentException: blocked by world collision\n\tat org.beckenburg.LanWorld.move(LanWorld.java:86)\n\tat org.beckenburg.LanWorld.move(LanWorld.java:74)\n\tat org.beckenburg.LanSpatialCombatTest.main(LanSpatialCombatTest.java:15)\n"
+  },
+  {
+    "test": "LanTelegraphedStrikeTest",
+    "exit_code": 0,
+    "seconds": 0.156,
+    "output": "PASS: eight-tick host wind-up, locked target, movement evasion and disconnect/room validation\n"
+  },
+  {
+    "test": "LanTelegraphedStrikeIntegrationTest",
+    "exit_code": 1,
+    "seconds": 23.391,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H1\n\tat org.beckenburg.LanTelegraphedStrikeIntegrationTest$Peer.expect(LanTelegraphedStrikeIntegrationTest.java:23)\n\tat org.beckenburg.LanTelegraphedStrikeIntegrationTest.main(LanTelegraphedStrikeIntegrationTest.java:41)\n"
+  },
+  {
+    "test": "LanTelegraphedHudTest",
+    "exit_code": 0,
+    "seconds": 1.531,
+    "output": "PASS: on-screen red strike wind-up and evasion feedback render in the LAN HUD\nBeckenburg soundtrack unavailable: sleep interrupted\n"
+  },
+  {
+    "test": "LanApparitionTest",
+    "exit_code": 1,
+    "seconds": 0.156,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: exact host pose disclosed only in line of sight\n\tat org.beckenburg.LanApparitionTest.ok(LanApparitionTest.java:5)\n\tat org.beckenburg.LanApparitionTest.main(LanApparitionTest.java:12)\n"
+  },
+  {
+    "test": "GhostSpriteAtlasIntegrationTest",
+    "exit_code": 0,
+    "seconds": 0.672,
+    "output": "PASS: verified 6.9MB archived bytes, 23 ghosts, 184 facing atlases, 8 states x 4 frames, preserved alpha/legacy bodies\n"
+  },
+  {
+    "test": "DirectionalSpritesIntegrationTest",
+    "exit_code": 0,
+    "seconds": 0.969,
+    "output": "PASS: 12 sprites, 8 facings, depth occlusion and real LAN ghost renderer\n"
+  },
+  {
+    "test": "LanApparitionRenderTest",
+    "exit_code": 0,
+    "seconds": 1.14,
+    "output": "PASS: network renderer places moving specter at spatial host pose and clears hidden ghost\n"
+  },
+  {
+    "test": "LanApparitionIntegrationTest",
+    "exit_code": 1,
+    "seconds": 13.329,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: timed out waiting for ACCEPT|MOVE|11 in H1\n\tat org.beckenburg.LanApparitionIntegrationTest$Peer.expect(LanApparitionIntegrationTest.java:22)\n\tat org.beckenburg.LanApparitionIntegrationTest.main(LanApparitionIntegrationTest.java:35)\n"
+  },
+  {
+    "test": "LanGhostIntegrationTest",
+    "exit_code": 1,
+    "seconds": 0.281,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: ghost received private hunter telemetry: DOORS|\n\tat org.beckenburg.LanGhostIntegrationTest$Peer.expect(LanGhostIntegrationTest.java:15)\n\tat org.beckenburg.LanGhostIntegrationTest.main(LanGhostIntegrationTest.java:30)\n"
+  },
+  {
+    "test": "MouseLookTest",
+    "exit_code": 0,
+    "seconds": 1.219,
+    "output": "PASS: mouse-look directions, clamps, uncaptured safety and focus release\n"
+  },
+  {
+    "test": "LanWorldControlsTest",
+    "exit_code": 0,
+    "seconds": 1.5,
+    "output": "PASS: LAN 3D hotkeys dispatch real host-owned scan, ward, cleanse and extraction\nBeckenburg soundtrack unavailable: sleep interrupted\n"
+  },
+  {
+    "test": "EquipmentSelectionTest",
+    "exit_code": 0,
+    "seconds": 0.062,
+    "output": "PASS: four-slot selection, distinct rack swaps, consumables and resupply\n"
+  },
+  {
+    "test": "SiteSelectionTest",
+    "exit_code": 0,
+    "seconds": 1.063,
+    "output": "PASS: three playable investigations with headless rendering\n"
+  },
+  {
+    "test": "InvestigationSitesTest",
+    "exit_code": 1,
+    "seconds": 0.265,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: no free equipment in scenery book_mp_1\n\tat org.beckenburg.AuthoredTestSupport.check(AuthoredTestSupport.java:25)\n\tat org.beckenburg.InvestigationSitesTest.main(InvestigationSitesTest.java:16)\n"
+  },
+  {
+    "test": "GrandSiteGeometryTest",
+    "exit_code": 0,
+    "seconds": 0.203,
+    "output": "PASS measured multilevel volumes, floor-aware sockets, six van bodies and portal-ID replication\n"
+  },
+  {
+    "test": "ArchitecturalPlansTest",
+    "exit_code": 1,
+    "seconds": 0.172,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: closed door collision 16\n\tat org.beckenburg.AuthoredTestSupport.check(AuthoredTestSupport.java:25)\n\tat org.beckenburg.ArchitecturalPlansTest.main(ArchitecturalPlansTest.java:18)\n"
+  },
+  {
+    "test": "VictorianHouseArchitectureTest",
+    "exit_code": 0,
+    "seconds": 1.172,
+    "output": "HOUSE reached elevations -3.0..3.0\nPASS HOUSE: swept van route reaches all15 zones and all functional sockets, 73020 positions\nPASS compact concept house, three storeys, source furnishings, swept van routes and peer doors\n"
+  },
+  {
+    "test": "LanSiteSelectionIntegrationTest",
+    "exit_code": 1,
+    "seconds": 0.25,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: remote hunter receives selected layout during admission\n\tat org.beckenburg.LanSiteSelectionIntegrationTest.ok(LanSiteSelectionIntegrationTest.java:8)\n\tat org.beckenburg.LanSiteSelectionIntegrationTest.main(LanSiteSelectionIntegrationTest.java:25)\n"
+  },
+  {
+    "test": "SoloEquipmentUseTest",
+    "exit_code": 0,
+    "seconds": 0.203,
+    "output": "PASS: in-game equipment usage affects the actual solo case and expendables\n"
+  },
+  {
+    "test": "CameraAimTest",
+    "exit_code": 0,
+    "seconds": 0.062,
+    "output": "PASS: actual photograph requires camera facing and range\n"
+  },
+  {
+    "test": "EquipmentSightTest",
+    "exit_code": 1,
+    "seconds": 0.157,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: door is actually operable\n\tat org.beckenburg.EquipmentSightTest.ok(EquipmentSightTest.java:5)\n\tat org.beckenburg.EquipmentSightTest.main(EquipmentSightTest.java:11)\n"
+  },
+  {
+    "test": "BeckenburgInstallIdentityTest",
+    "exit_code": 0,
+    "seconds": 0.14,
+    "output": "PASS: stable install/profile identity, random uniqueness, save independence, corrupt-data preservation\n"
+  },
+  {
+    "test": "BeckenburgProfileImportTest",
+    "exit_code": 0,
+    "seconds": 0.156,
+    "output": "PASS: canonical and legacy equipment keys, valid imports, backups, identity and corrupt-save recovery\n"
+  },
+  {
+    "test": "GameplaySmokeTest",
+    "exit_code": 1,
+    "seconds": 0.141,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: Victorian domestic building has connected real geometry\n\tat org.beckenburg.GameplaySmokeTest.ok(GameplaySmokeTest.java:10)\n\tat org.beckenburg.GameplaySmokeTest.main(GameplaySmokeTest.java:13)\n"
+  },
+  {
+    "test": "LanFieldJournalIntegrationTest",
+    "exit_code": 0,
+    "seconds": 0.281,
+    "output": "PASS: four-socket private field journal, replay, provenance and ghost isolation\n"
+  },
+  {
+    "test": "VanHidingTest",
+    "exit_code": 1,
+    "seconds": 0.156,
+    "output": "Exception in thread \"main\" java.lang.IllegalArgumentException: no hiding place within reach\n\tat org.beckenburg.LanWorld.toggleHide(LanWorld.java:29)\n\tat org.beckenburg.VanHidingTest.main(VanHidingTest.java:13)\n"
+  },
+  {
+    "test": "VanTelemetryTest",
+    "exit_code": 0,
+    "seconds": 0.063,
+    "output": "PASS van monitor: noisy activity and true private sanity\n"
+  },
+  {
+    "test": "FieldSuppliesTest",
+    "exit_code": 0,
+    "seconds": 0.047,
+    "output": "PASS progressive purchased health and sanity items\n"
+  },
+  {
+    "test": "CustomContractTest",
+    "exit_code": 0,
+    "seconds": 0.078,
+    "output": "PASS 1-6 hunters and minimum +6 full-party rating\n"
+  },
+  {
+    "test": "LobbyGhostAvatarTest",
+    "exit_code": 0,
+    "seconds": 0.234,
+    "output": "PASS: independent cosmetic lobby ghost, valid art, no species disclosure\n"
+  },
+  {
+    "test": "LanHunterNameplateTest",
+    "exit_code": 0,
+    "seconds": 0.969,
+    "output": "PASS: teammate name anchors obey camera frustum, depth and doors\n"
+  },
+  {
+    "test": "LanPrivateHunterNamesTest",
+    "exit_code": 0,
+    "seconds": 0.265,
+    "output": "PASS: hunter-only world labels and anonymous ghost lobby appearance\n"
+  },
+  {
+    "test": "LanChatTest",
+    "exit_code": 0,
+    "seconds": 0.172,
+    "output": "PASS: chat validation, radio framing, local wall/distance routing\n"
+  },
+  {
+    "test": "LanChatIntegrationTest",
+    "exit_code": 1,
+    "seconds": 8.328,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: timeout awaiting ACCEPT|MOVE|11 for H2\n\tat org.beckenburg.LanChatIntegrationTest$Peer.await(LanChatIntegrationTest.java:25)\n\tat org.beckenburg.LanChatIntegrationTest.main(LanChatIntegrationTest.java:46)\n"
+  },
+  {
+    "test": "LanVoiceCodecTest",
+    "exit_code": 0,
+    "seconds": 0.079,
+    "output": "PASS: G.711 audio, bounded UDP frames, tokens and parser rejection\n"
+  },
+  {
+    "test": "LanVoiceRelayTest",
+    "exit_code": 0,
+    "seconds": 0.703,
+    "output": "PASS: real UDP handshake, spoof/replay protection and ghost anonymity\n"
+  },
+  {
+    "test": "LanVoiceHostIntegrationTest",
+    "exit_code": 1,
+    "seconds": 0.234,
+    "output": "Exception in thread \"main\" java.io.IOException: REJECT|protocol version or handshake\n\tat org.beckenburg.LanVoiceHostIntegrationTest$Peer.<init>(LanVoiceHostIntegrationTest.java:25)\n\tat org.beckenburg.LanVoiceHostIntegrationTest.main(LanVoiceHostIntegrationTest.java:81)\n"
+  },
+  {
+    "test": "LanVoiceClientHandshakeTest",
+    "exit_code": 0,
+    "seconds": 0.141,
+    "output": "PASS: real voice client UDP handshake, mute, volume and spectral TX lock\n"
+  },
+  {
+    "test": "LanGhostLobbySecrecyTest",
+    "exit_code": 0,
+    "seconds": 0.39,
+    "output": "PASS: cosmetic lobby ghost visible to party; real species withheld until play\n"
+  },
+  {
+    "test": "LanSixHunterVanTest",
+    "exit_code": 1,
+    "seconds": 8.407,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: missing ACCEPT|MOVE|11 for H2\n\tat org.beckenburg.LanSixHunterVanTest$Peer.expect(LanSixHunterVanTest.java:20)\n\tat org.beckenburg.LanSixHunterVanTest.main(LanSixHunterVanTest.java:67)\n"
+  },
+  {
+    "test": "GhostActiveBehaviorTest",
+    "exit_code": 0,
+    "seconds": 0.156,
+    "output": "PASS: actual signature actions, isolated prey, sanity-only species, and suppression\n"
+  },
+  {
+    "test": "FieldJournalTest",
+    "exit_code": 1,
+    "seconds": 0.062,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: all types initially possible\n\tat org.beckenburg.FieldJournalTest.check(FieldJournalTest.java:5)\n\tat org.beckenburg.FieldJournalTest.main(FieldJournalTest.java:8)\n"
+  },
+  {
+    "test": "ManualEvidenceJournalTest",
+    "exit_code": 1,
+    "seconds": 0.063,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: all 13 ghost names initially possible\n\tat org.beckenburg.ManualEvidenceJournalTest.ok(ManualEvidenceJournalTest.java:7)\n\tat org.beckenburg.ManualEvidenceJournalTest.main(ManualEvidenceJournalTest.java:10)\n"
+  },
+  {
+    "test": "VanDiegeticCrtTest",
+    "exit_code": 0,
+    "seconds": 0.219,
+    "output": "PASS: original 3D CRT material displays live replicated activity/sanity\n"
+  },
+  {
+    "test": "ManualEvidenceHudTest",
+    "exit_code": 124,
+    "seconds": 60.031,
+    "output": "\nException in thread \"main\" java.lang.reflect.InvocationTargetException\n\tat java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1369)\n\tat java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1344)\n\tat java.desktop/javax.swing.SwingUtilities.invokeAndWait(SwingUtilities.java:1480)\n\tat org.beckenburg.ManualEvidenceHudTest.main(ManualEvidenceHudTest.java:15)\nCaused by: java.lang.AssertionError: valid ghosts remain visible\n\tat org.beckenburg.ManualEvidenceHudTest.ok(ManualEvidenceHudTest.java:10)\n\tat org.beckenburg.ManualEvidenceHudTest.lambda$main$1(ManualEvidenceHudTest.java:24)\n\tat java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:308)\n\tat java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:771)\n\tat java.desktop/java.awt.EventQueue$4.run(EventQueue.java:722)\n\tat java.desktop/java.awt.EventQueue$4.run(EventQueue.java:716)\n\tat java.base/java.security.AccessController.doPrivileged(AccessController.java:399)\n\tat java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)\n\tat java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:741)\n\tat java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)\n\tat java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)\n\tat java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)\n\nTimed out at60seconds"
+  },
+  {
+    "test": "GhostTraitsTest",
+    "exit_code": 0,
+    "seconds": 0.047,
+    "output": "PASS: 13 species profiles, energy feeding, salt mobility and damage identities\n"
+  },
+  {
+    "test": "HunterCountersTest",
+    "exit_code": 1,
+    "seconds": 0.156,
+    "output": "Exception in thread \"main\" java.lang.IllegalArgumentException: invalid physical deployment\n\tat org.beckenburg.HunterCounters.deploy(HunterCounters.java:35)\n\tat org.beckenburg.HunterCounters.launch(HunterCounters.java:102)\n\tat org.beckenburg.HunterCountersTest.main(HunterCountersTest.java:10)\n"
+  },
+  {
+    "test": "GhostDomainTest",
+    "exit_code": 1,
+    "seconds": 0.187,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: no diagonal teleport\n\tat org.beckenburg.GhostDomainTest.ok(GhostDomainTest.java:7)\n\tat org.beckenburg.GhostDomainTest.main(GhostDomainTest.java:19)\n"
+  },
+  {
+    "test": "GhostFrenzyTest",
+    "exit_code": 0,
+    "seconds": 0.157,
+    "output": "PASS species-priced Demon Frenzy, phased attacks, sanity-only entities, provocation and cooldowns\n"
+  },
+  {
+    "test": "MaterialAtlasTest",
+    "exit_code": 0,
+    "seconds": 0.891,
+    "output": "PASS: 16 reproducible tiles, 128px atlas, world UV wrapping, room materials, view variants, lamp and near-plane clipping\n"
+  },
+  {
+    "test": "TeamCalloutTest",
+    "exit_code": 0,
+    "seconds": 0.156,
+    "output": "PASS: callout sectors, world-space ray, LOS, finite/range/cooldown checks, expiry\n"
+  },
+  {
+    "test": "VanStagingTest",
+    "exit_code": 0,
+    "seconds": 0.828,
+    "output": "PASS: one reusable van, site transforms, colliding cargo shell, stations, extraction and 3D geometry\n"
+  },
+  {
+    "test": "VanNavigationVisualTest",
+    "exit_code": 1,
+    "seconds": 0.172,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: rack item selected by line of sight\n\tat org.beckenburg.VanNavigationVisualTest.yes(VanNavigationVisualTest.java:8)\n\tat org.beckenburg.VanNavigationVisualTest.main(VanNavigationVisualTest.java:25)\n"
+  },
+  {
+    "test": "GhostPracticeTest",
+    "exit_code": 0,
+    "seconds": 0.172,
+    "output": "PASS: local human-ghost practice, no hunter-information leak, shared action gates and two incremental strikes\n"
+  },
+  {
+    "test": "LanProtocolTest",
+    "exit_code": 0,
+    "seconds": 0.078,
+    "output": "PASS: bounded LAN line protocol, input validation, error and EOF handling\n"
+  },
+  {
+    "test": "LanClientDisconnectTest",
+    "exit_code": 1,
+    "seconds": 0.078,
+    "output": "Exception in thread \"main\" java.io.IOException: incompatible spatial protocol\n\tat org.beckenburg.LanClient.<init>(LanClient.java:91)\n\tat org.beckenburg.LanClient.<init>(LanClient.java:45)\n\tat org.beckenburg.LanClientDisconnectTest.main(LanClientDisconnectTest.java:28)\n"
+  },
+  {
+    "test": "LanGracefulLeaveTest",
+    "exit_code": 1,
+    "seconds": 0.094,
+    "output": "Exception in thread \"main\" java.io.IOException: incompatible spatial protocol\n\tat org.beckenburg.LanClient.<init>(LanClient.java:91)\n\tat org.beckenburg.LanClient.<init>(LanClient.java:45)\n\tat org.beckenburg.LanGracefulLeaveTest.main(LanGracefulLeaveTest.java:29)\n"
+  },
+  {
+    "test": "LanCaseTest",
+    "exit_code": 0,
+    "seconds": 0.172,
+    "output": "PASS: LAN case role boundaries, three instruments, shared evidence, ward, harm, contested cleansing and retreat\n"
+  },
+  {
+    "test": "LanCaseIntegrationTest",
+    "exit_code": 1,
+    "seconds": 8.391,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: H1 did not receive ACCEPT|MOVE|11\n\tat org.beckenburg.LanCaseIntegrationTest$Wire.waitFor(LanCaseIntegrationTest.java:14)\n\tat org.beckenburg.LanCaseIntegrationTest.main(LanCaseIntegrationTest.java:43)\n"
+  },
+  {
+    "test": "LanWorldTest",
+    "exit_code": 1,
+    "seconds": 0.156,
+    "output": "Exception in thread \"main\" java.lang.IllegalArgumentException: blocked by world collision\n\tat org.beckenburg.LanWorld.move(LanWorld.java:86)\n\tat org.beckenburg.LanWorld.move(LanWorld.java:74)\n\tat org.beckenburg.LanWorldTest.main(LanWorldTest.java:20)\n"
+  },
+  {
+    "test": "LanWorldIntegrationTest",
+    "exit_code": 1,
+    "seconds": 0.734,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: ghost saw private hunter state\n\tat org.beckenburg.LanWorldIntegrationTest$Peer.noBodies(LanWorldIntegrationTest.java:16)\n\tat org.beckenburg.LanWorldIntegrationTest.main(LanWorldIntegrationTest.java:30)\n"
+  },
+  {
+    "test": "LanWorldRenderTest",
+    "exit_code": 1,
+    "seconds": 1.328,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: remote door state appears at architectural socket\n\tat org.beckenburg.LanWorldRenderTest.ok(LanWorldRenderTest.java:8)\n\tat org.beckenburg.LanWorldRenderTest.main(LanWorldRenderTest.java:30)\n"
+  },
+  {
+    "test": "LanLobbyTest",
+    "exit_code": 1,
+    "seconds": 2.422,
+    "output": "Exception in thread \"main\" java.lang.AssertionError: timed out waiting for ACCEPT|MOVE|11 on H1\n\tat org.beckenburg.LanLobbyTest$Wire.waitPrefix(LanLobbyTest.java:19)\n\tat org.beckenburg.LanLobbyTest.main(LanLobbyTest.java:53)\n"
+  },
+  {
+    "test": "SmokeTest",
+    "exit_code": 0,
+    "seconds": 0.125,
+    "output": "PASS: map geometry, collision, door interaction, 3D raster, look pitch, alternate lighting\n"
+  },
+  {
+    "test": "AuthoredLevelPhysicsTest",
+    "exit_code": 0,
+    "seconds": 0.266,
+    "output": "HOUSE XYZ geometry checked\nFARMHOUSE XYZ geometry checked\nSCHOOL XYZ geometry checked\n"
+  },
+  {
+    "test": "AuthoredLevelReachabilityTest",
+    "exit_code": 0,
+    "seconds": 5.156,
+    "output": "HOUSE reached elevations -3.0..3.0\nPASS HOUSE: swept van route reaches all15 zones and all functional sockets, 73020 positions\nFARMHOUSE reached elevations -3.0..3.0\nPASS FARMHOUSE: swept van route reaches all15 zones and all functional sockets, 144488 positions\nSCHOOL reached elevations -3.0..3.6\nPASS SCHOOL: swept van route reaches all15 zones and all functional sockets, 222648 positions\n"
+  },
+  {
+    "test": "AuthoredLevelStateTest",
+    "exit_code": 0,
+    "seconds": 0.203,
+    "output": "PASS HOUSE: door/window state, XYZ reach, intact sills, slab occlusion and synchronized reconstruction\nPASS FARMHOUSE: door/window state, XYZ reach, intact sills, slab occlusion and synchronized reconstruction\nPASS SCHOOL: door/window state, XYZ reach, intact sills, slab occlusion and synchronized reconstruction\n"
+  },
+  {
+    "test": "AuthoredLevelNetworkTest",
+    "exit_code": 0,
+    "seconds": 3.656,
+    "output": "PASS HOUSE: real host/client XYZ, map revision, door/window resync and ghost privacy\nPASS FARMHOUSE: real host/client XYZ, map revision, door/window resync and ghost privacy\nPASS SCHOOL: real host/client XYZ, map revision, door/window resync and ghost privacy\n"
+  },
+  {
+    "test": "AuthoredLevelRitualCaseTest",
+    "exit_code": 0,
+    "seconds": 0.188,
+    "output": "PASS HOUSE: selected-site rituals accept correct sockets and reject wrong room/storey/proximity\nPASS FARMHOUSE: selected-site rituals accept correct sockets and reject wrong room/storey/proximity\nPASS SCHOOL: selected-site rituals accept correct sockets and reject wrong room/storey/proximity\n"
+  },
+  {
+    "test": "AuthoredUtilitiesTest",
+    "exit_code": 0,
+    "seconds": 0.266,
+    "output": "PASS authored utilities: 36 reachable wall switches, 43 door acoustic links, 7 vertical stair links, source elevation and ambience\n"
+  },
+  {
+    "test": "SoloElevationTest",
+    "exit_code": 0,
+    "seconds": 0.25,
+    "output": "PASS solo elevation: 36 room measurements/callouts/deployments; upstairs rites and extraction\n"
+  },
+  {
+    "test": "EquipmentAssetAssignmentsTest",
+    "exit_code": 0,
+    "seconds": 0.109,
+    "output": "PASS runtime assignments match manifest: 43 families, 129 stage aliases, 44 states, 153 unique resources\n"
+  },
+  {
+    "test": "LevelRenderAcceptanceTest",
+    "exit_code": 0,
+    "seconds": 3.391,
+    "output": "PASS HOUSE: 24 lit/unlit views; hinged window; 1673ms total at320x200\nPASS FARMHOUSE: 24 lit/unlit views; hinged window; 602ms total at320x200\nPASS SCHOOL: 24 lit/unlit views; hinged window; 651ms total at320x200\nPASS all curated environment meshes have textured runtime triangles\n"
+  },
+  {
+    "test": "WorldViewHandednessTest",
+    "exit_code": 0,
+    "seconds": 0.078,
+    "output": "PASS original model handedness, readable front faces and consistent mouse direction\n"
+  },
+  {
+    "test": "LevelSurfaceIntegrityTest",
+    "exit_code": 0,
+    "seconds": 0.625,
+    "output": "PASS HOUSE: disjoint wall finishes, exact deck apertures, distinct floor materials and physical/rendered guards\nPASS FARMHOUSE: disjoint wall finishes, exact deck apertures, distinct floor materials and physical/rendered guards\nPASS SCHOOL: disjoint wall finishes, exact deck apertures, distinct floor materials and physical/rendered guards\n"
+  }
+]

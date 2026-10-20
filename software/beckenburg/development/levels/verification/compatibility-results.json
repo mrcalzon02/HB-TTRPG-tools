@@ -1,0 +1,164 @@
+[
+  {
+    "test": "HorrorAudioRoutingTest",
+    "exit_code": 0,
+    "seconds": 0.156,
+    "output": "PASS HorrorAudioRoutingTest / 18 unique generic variants + authentic sealed door state\n"
+  },
+  {
+    "test": "InvestigationSitesTest",
+    "exit_code": 0,
+    "seconds": 0.64,
+    "output": "PASS production house/farm/school source furnishings, gear exclusion, owned spawns and ritual sockets\n"
+  },
+  {
+    "test": "ArchitecturalPlansTest",
+    "exit_code": 0,
+    "seconds": 0.219,
+    "output": "PASS authored rooms, real threshold collision/acoustics, glazing exclusion and peer replay\n"
+  },
+  {
+    "test": "VictorianHouseArchitectureTest",
+    "exit_code": 0,
+    "seconds": 1.25,
+    "output": "HOUSE reached elevations -3.0..3.0\nPASS HOUSE: swept van route reaches all15 zones and all functional sockets, 74762 positions\nPASS compact concept house, three storeys, source furnishings, swept van routes and peer doors\n"
+  },
+  {
+    "test": "GrandSiteGeometryTest",
+    "exit_code": 0,
+    "seconds": 0.203,
+    "output": "PASS measured multilevel volumes, floor-aware sockets, six van bodies and portal-ID replication\n"
+  },
+  {
+    "test": "LanSiteSelectionIntegrationTest",
+    "exit_code": 0,
+    "seconds": 0.328,
+    "output": "PASS: two authored locations transmitted over genuine LAN sockets\n"
+  },
+  {
+    "test": "SoloEnvironmentalEvidenceTest",
+    "exit_code": 0,
+    "seconds": 0.219,
+    "output": "PASS: solo seasonal hot/cold, real ghost-event EMF gate\n"
+  },
+  {
+    "test": "LanClientDisconnectTest",
+    "exit_code": 0,
+    "seconds": 0.61,
+    "output": "PASS: genuine TCP EOF emits exactly one disconnect; local close stays silent\n"
+  },
+  {
+    "test": "LanGracefulLeaveTest",
+    "exit_code": 0,
+    "seconds": 0.109,
+    "output": "PASS: 12 TCP exits deliver LEAVE and EOF despite unread incoming updates\n"
+  },
+  {
+    "test": "LanWorldRenderTest",
+    "exit_code": 0,
+    "seconds": 1.297,
+    "output": "PASS: network first-person rendering includes 3D teammates, disclosed ghost and synced physical doors\n"
+  },
+  {
+    "test": "LanSoundTest",
+    "exit_code": 0,
+    "seconds": 0.172,
+    "output": "PASS: listener-relative host sound projection, ghost privacy, bounded frames, stereo PCM and mute amplitude\n"
+  },
+  {
+    "test": "LanGhostHearingTest",
+    "exit_code": 0,
+    "seconds": 0.156,
+    "output": "PASS: door-sensitive human ghost hearing, direction, privacy, codec and audio\n"
+  },
+  {
+    "test": "VanStagingTest",
+    "exit_code": 0,
+    "seconds": 0.891,
+    "output": "PASS: one reusable van, site transforms, colliding cargo shell, stations, extraction and 3D geometry\n"
+  },
+  {
+    "test": "VanArrivalStreetTest",
+    "exit_code": 0,
+    "seconds": 0.312,
+    "output": "PASS actual Kenney street surfaces, unobstructed VAN access, original GGBot materials and site rotation\n"
+  },
+  {
+    "test": "VanStreetAndCabinProportionsTest",
+    "exit_code": 0,
+    "seconds": 0.156,
+    "output": "PASS VAN interior -15%, inward roof taper -10%, 42 rack brackets, unobstructed stations and six architecturally fitted Kenney roadside fa\u00e7ades\n"
+  },
+  {
+    "test": "VanModuleIntegrationTest",
+    "exit_code": 0,
+    "seconds": 0.578,
+    "output": "PASS VAN interior sizes, complete tier catalog, purchased tool mounts, four functional boards/screens, walkable stations at all locations and Exit Game menu\n"
+  },
+  {
+    "test": "VanNavigationVisualTest",
+    "exit_code": 0,
+    "seconds": 0.297,
+    "output": "PASS van exit lane, 6 seats, physical aim/pickup and visible held tool\n"
+  },
+  {
+    "test": "GameplaySmokeTest",
+    "exit_code": 0,
+    "seconds": 0.922,
+    "output": "PASS: fifteen zones, door/collision, 3D render/depth, instruments, wards, cleansing, extraction, economy save and all role baseline safety\n"
+  },
+  {
+    "test": "LanAcousticsTest",
+    "exit_code": 0,
+    "seconds": 0.156,
+    "output": "PASS: door-dependent, masonry and exterior acoustic attenuation\n"
+  },
+  {
+    "test": "LanApparitionTest",
+    "exit_code": 0,
+    "seconds": 0.156,
+    "output": "PASS: exact-position LAN apparition, room privacy, occlusion, range, despawn\n"
+  },
+  {
+    "test": "LanGhostIdentityTest",
+    "exit_code": 0,
+    "seconds": 0.266,
+    "output": "PASS: 23 ghost profiles, raw measurements, no confirmation gate, ritual paths\n"
+  },
+  {
+    "test": "LanGhostIntegrationTest",
+    "exit_code": 0,
+    "seconds": 0.75,
+    "output": "PASS: 4-socket LAN ghost spatial camera, legal DRIFT, privacy and anti-replay\n"
+  },
+  {
+    "test": "LanSpatialCombatTest",
+    "exit_code": 0,
+    "seconds": 0.172,
+    "output": "PASS: spatial ghost strike range, single-target damage, door LOS, legacy compatibility\n"
+  },
+  {
+    "test": "LanSpatialEvidenceTest",
+    "exit_code": 0,
+    "seconds": 0.187,
+    "output": "PASS: real 3D instrument ranges, no remote evidence, body validation and room-mode compatibility\n"
+  },
+  {
+    "test": "LanWorldIntegrationTest",
+    "exit_code": 0,
+    "seconds": 0.891,
+    "output": "PASS: 4-socket authoritative world stepping, snapshot privacy, door range, legacy-mode isolation\n"
+  },
+  {
+    "test": "LanWorldTest",
+    "exit_code": 0,
+    "seconds": 0.187,
+    "output": "PASS: host 3D world movement, collision, door snapshots, speed and invalid state gates\n"
+  },
+  {
+    "test": "VanHidingTest",
+    "exit_code": 0,
+    "seconds": 0.172,
+    "output": "PASS: 0%-100% hiding spots, concealed ghost avoidance and movement exposure\n"
+  }
+]

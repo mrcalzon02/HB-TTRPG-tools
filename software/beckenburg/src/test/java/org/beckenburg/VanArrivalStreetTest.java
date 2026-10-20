@@ -62,7 +62,7 @@ public final class VanArrivalStreetTest {
             ok(model.triangles().stream().anyMatch(t->t.material()>=GlbProps.TEXTURE_BASE),
                 "parked vehicle uses authored texture atlas");
         }
-        for(HouseMap.Site site:HouseMap.Site.values()){
+        for(HouseMap.Site site:AuthoredTestSupport.SITES){
             var van=new HouseMap(site).van();
             // Rotate all traffic with the site's actual van orientation.
             for(var vehicle:VanArrivalStreet.parkedVehicles()){

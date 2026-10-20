@@ -41,7 +41,7 @@ public final class VanStreetAndCabinProportionsTest {
         }
         ok(VanStreetHouses.TERMINUS.centreZ()<VanArrivalStreet.ROAD_END,
             "street-end architecture lives behind roadway instead of obstructing it");
-        for(HouseMap.Site site:HouseMap.Site.values()){
+        for(HouseMap.Site site:AuthoredTestSupport.SITES){
             HouseMap map=new HouseMap(site);
             var van=map.van();
             for(var station:VanStaging.Station.values()){

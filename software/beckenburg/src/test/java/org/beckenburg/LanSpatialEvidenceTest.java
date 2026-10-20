@@ -32,7 +32,7 @@ public final class LanSpatialEvidenceTest {
         LanCase legacy=new LanCase(4);
         ok(legacy.scan(0,LanCase.Tool.EMF,4,4).message().startsWith("READING "),
                 "room-only callers receive a measurement");
-        ok(legacy.scanSpatial(0,LanCase.Tool.EMF,new LanWorld.Body(map.centerX(5),map.centerZ(5),0,5),4,map)
+        ok(legacy.scanSpatial(0,LanCase.Tool.EMF,AuthoredTestSupport.body(map,5),4,map)
                 .message().startsWith("READING "),"outside rooms give observations, never auto proof");
         System.out.println("PASS: real 3D instrument ranges, no remote evidence, body validation and room-mode compatibility");
     }

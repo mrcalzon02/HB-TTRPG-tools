@@ -7,7 +7,7 @@ ROOT=pathlib.Path(__file__).resolve().parents[2]
 CHECKS=['AuthoredLevelPhysicsTest','AuthoredLevelReachabilityTest','AuthoredLevelStateTest','AuthoredLevelNetworkTest','AuthoredLevelRitualCaseTest','WorldViewHandednessTest','MouseLookTest','AuthoredUtilitiesTest','SoloElevationTest','EquipmentAssetAssignmentsTest','EquipmentModelCatalogTest','PackagedSourceModelsTest','LevelRenderAcceptanceTest','LevelSurfaceIntegrityTest']
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--java-home',type=pathlib.Path,required=True);ap.add_argument('--full-regression',action='store_true');ap.add_argument('--package-only',action='store_true');args=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('--java-home',type=pathlib.Path,required=True);ap.add_argument('--vehicle-archive',type=pathlib.Path);ap.add_argument('--full-regression',action='store_true');ap.add_argument('--package-only',action='store_true');args=ap.parse_args()
     stage=ROOT/'build/level-release';classes=stage/'classes';tests=stage/'test';classes.mkdir(parents=True,exist_ok=True);tests.mkdir(exist_ok=True)
     java=args.java_home/'bin'/('java.exe' if os.name=='nt' else 'java');javac=java.with_name('javac.exe' if os.name=='nt' else 'javac');jar=java.with_name('jar.exe' if os.name=='nt' else 'jar')
     def run(command):subprocess.run([str(x) for x in command],cwd=ROOT,check=True)
@@ -24,6 +24,11 @@ def main():
         for part in sorted((ROOT/'assets/runtime/ghost-sprite-parts').glob('ghost-sprite-expansion-v3.zip.part*')):
             with part.open('rb') as incoming:shutil.copyfileobj(incoming,out)
     run([java,'-Djava.awt.headless=true','-cp',classes,'org.beckenburg.KenneyMedievalAssets',ROOT/'assets/source/kenney_retro-medieval-kit.zip',resource/'models'])
+    # Match the online Windows/Linux packaging contract: original vehicle atlases.
+    archive=args.vehicle_archive or ROOT/'build/source/ggbot-original.zip'
+    if not archive.exists():archive=ROOT/'assets/source/psx_style_cars_by_ggbot_august2023.zip'
+    if not archive.exists():raise FileNotFoundError('Supply --vehicle-archive with the original checksum-pinned August 2023 GGBot ZIP')
+    run([java,'-Djava.awt.headless=true','-cp',classes,'org.beckenburg.GgBotVehicleTextures',archive,ROOT/'assets/runtime/models',resource/'models'])
     # Legacy synth resources remain solely for the existing forge regression contract.
     # Current runtime prefab selections resolve the approved Blender/source catalog.
     run([java,'-Djava.awt.headless=true','-cp',classes,'org.beckenburg.TierModelForge',resource/'models'])

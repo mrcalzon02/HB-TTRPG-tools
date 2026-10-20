@@ -1,0 +1,184 @@
+{
+  "date": "2026-10-20",
+  "focused_passes": 14,
+  "compatibility_passes": 27,
+  "sites": [
+    {
+      "id": "house",
+      "revision": "production-2026-10-19-bc68dd1d5d9bb3ef",
+      "rooms": 15,
+      "stairs": 2,
+      "triangles": 51636,
+      "blender_source": "development/levels/blender/house-complete.blend",
+      "blender_sha256": "e851db561bd359912f22e600a2d02d10bc8954c36b3459346153bdb7c4acc4b6",
+      "runtime_views": [
+        {
+          "path": "development/levels/previews/runtime/house-01-exterior.png",
+          "sha256": "a72909188554212b36c4f2fdfc298d823fc72a19585371effad16cf4e066d042"
+        },
+        {
+          "path": "development/levels/previews/runtime/house-02-foyer.png",
+          "sha256": "24088de73c686d47fec8528cf6b44c2f7efd0521870b4d0262daf7a2c79f9d2a"
+        },
+        {
+          "path": "development/levels/previews/runtime/house-03-living.png",
+          "sha256": "3e8c353eba8bb9892d7c3431022928417fc09a2be5a3b08a25188549badb78a8"
+        },
+        {
+          "path": "development/levels/previews/runtime/house-04-kitchen.png",
+          "sha256": "b7c2019096f94eedf545c443dc5d9dbaed9ea1cd6c5f963fa9fd2bd357d09c5e"
+        },
+        {
+          "path": "development/levels/previews/runtime/house-05-dining.png",
+          "sha256": "50e667749076e78494acc18ef4deb72a739f966167790339086327fb0c68a81d"
+        },
+        {
+          "path": "development/levels/previews/runtime/house-06-upper-landing.png",
+          "sha256": "08c4fd9927592c14d8c3473b39018ea61e2eaae451dec593b83963b38fd70800"
+        },
+        {
+          "path": "development/levels/previews/runtime/house-07-master.png",
+          "sha256": "68f359afe7aaae1af94977e354ea777816441c837833674df61b0ebc401e0ac5"
+        },
+        {
+          "path": "development/levels/previews/runtime/house-08-bathroom.png",
+          "sha256": "ff3b9cfb2a298ec6b9780ff041bff122e7229ca55ed07f26edf44dbf0ee36fe9"
+        },
+        {
+          "path": "development/levels/previews/runtime/house-09-cellar.png",
+          "sha256": "c258d33f6bfd8bb0728fdc5a96953781960e9421fa73547841912908b9866294"
+        },
+        {
+          "path": "development/levels/previews/runtime/house-10-main-stair.png",
+          "sha256": "3487d81cf2558412a680483c14a6afa8640233a6c78ab03e760fd6f502daf786"
+        },
+        {
+          "path": "development/levels/previews/runtime/house-11-cellar-stair.png",
+          "sha256": "be2ea938f62908f46f5dcf1d4eb3f8aa3d7e0d021465717ad758c85565aee8d9"
+        },
+        {
+          "path": "development/levels/previews/runtime/house-12-child-bedroom.png",
+          "sha256": "5ecad1e4cff798bc6c71fcfe6a1e8807f5a51053f55e71d9d792eeae5b65c469"
+        }
+      ]
+    },
+    {
+      "id": "farmhouse",
+      "revision": "production-2026-10-19-65e28fc6fb4a5c2f",
+      "rooms": 15,
+      "stairs": 3,
+      "triangles": 54650,
+      "blender_source": "development/levels/blender/farmhouse-complete.blend",
+      "blender_sha256": "36984e36a5615ce6bfedceb6423eb3cf3535c612e758bf5b50086abf2c8ce723",
+      "runtime_views": [
+        {
+          "path": "development/levels/previews/runtime/farmhouse-00-mudroom.png",
+          "sha256": "68adce0aaf52cab82a2d09ab6056db099afa2a2716464f34ccebe61379929996"
+        },
+        {
+          "path": "development/levels/previews/runtime/farmhouse-01-farm-parlour.png",
+          "sha256": "ef256050becbf2917d4d402b5b12d4624684531dbf3f9cf5f9a3ff9e2c81043b"
+        },
+        {
+          "path": "development/levels/previews/runtime/farmhouse-02-farm-kitchen.png",
+          "sha256": "3f8dba205c7965aef8beba4be3928008a7272fc0e45ac48cba1f715226bfbe69"
+        },
+        {
+          "path": "development/levels/previews/runtime/farmhouse-03-family-dining-room.png",
+          "sha256": "cc843be348cb3d7c1647c05a0c02ade94c879a3324cd1571161d8902b13ebc22"
+        },
+        {
+          "path": "development/levels/previews/runtime/farmhouse-04-central-stair-passage.png",
+          "sha256": "c52790e19ea9330706b030f1f87ef78c7c499db621f04ba09cf4f84c081d5cdb"
+        },
+        {
+          "path": "development/levels/previews/runtime/farmhouse-05-upper-farm-landing.png",
+          "sha256": "29a5dd69a3e1716968183728c9415aa385fffc179b3374194d1348c64cad2e10"
+        },
+        {
+          "path": "development/levels/previews/runtime/farmhouse-06-parents-bedroom.png",
+          "sha256": "9386139838ff05687755b8025e3645173f76097f99faf38536788708efb47283"
+        },
+        {
+          "path": "development/levels/previews/runtime/farmhouse-07-child-bedroom.png",
+          "sha256": "b21530bf824c6cc0ac6bd4da611a000e21550de9ebd47262c0d3c9e64170dc47"
+        },
+        {
+          "path": "development/levels/previews/runtime/farmhouse-08-barn-hayloft.png",
+          "sha256": "82a02711ff7d24d18fe4b7119c91176a25b1cda025b9c42def7fd63af61d66f1"
+        },
+        {
+          "path": "development/levels/previews/runtime/farmhouse-09-root-cellar.png",
+          "sha256": "eaab33349f6245f20caa7ee93dbe6dff38454a07dfddd902ecae4bb29fb0d756"
+        },
+        {
+          "path": "development/levels/previews/runtime/farmhouse-10-barn-interior.png",
+          "sha256": "5d045dcd1596d2b75b30476b3de3cbf040167217f9198c1e5126e5659aa421d9"
+        },
+        {
+          "path": "development/levels/previews/runtime/farmhouse-11-tool-shed.png",
+          "sha256": "25aaba523ab3e07cd71bc322a03b255eceefc84fcd7ff1ae55e7a990a29eeb28"
+        }
+      ]
+    },
+    {
+      "id": "school",
+      "revision": "production-2026-10-19-709160b6f586829f",
+      "rooms": 15,
+      "stairs": 2,
+      "triangles": 90128,
+      "blender_source": "development/levels/blender/school-complete.blend",
+      "blender_sha256": "2287958c86e2f642f11b001f089a41e93d753184ff9d1f1db45ac9973bf79c43",
+      "runtime_views": [
+        {
+          "path": "development/levels/previews/runtime/school-00-front-office-and-foyer.png",
+          "sha256": "6c8b9773257dd01e94e1b52f72222719843d55fae13ae06240ce3154908a77e5"
+        },
+        {
+          "path": "development/levels/previews/runtime/school-01-main-school-corridor.png",
+          "sha256": "25b358d54c5d924265aeaf2e09a0a2a28126a8e21a8e569570728e33667cd9e9"
+        },
+        {
+          "path": "development/levels/previews/runtime/school-02-classroom-a.png",
+          "sha256": "40b3cb435ef2b735716a12a19eaf9b743183cccec9231629063e8228b2210ef9"
+        },
+        {
+          "path": "development/levels/previews/runtime/school-03-science-classroom.png",
+          "sha256": "a2e21d28c0ce2468d87511260b3ee72b461ece8c47f1201149e543f4ba60a487"
+        },
+        {
+          "path": "development/levels/previews/runtime/school-04-cafeteria.png",
+          "sha256": "b2f7d079081ba074f6334f133d824dd218ce3909da9c6a29df11973ee8eb676e"
+        },
+        {
+          "path": "development/levels/previews/runtime/school-05-nurse-office.png",
+          "sha256": "b1e30bacbcaadf1fada5fcb41b9152dde8337d5c493a3df851aa695cf334c4d8"
+        },
+        {
+          "path": "development/levels/previews/runtime/school-06-gymnasium.png",
+          "sha256": "27c4fc61744bcdf31ec6ec897f6c8731e806e7d6f90f118de4b4264539d38b8e"
+        },
+        {
+          "path": "development/levels/previews/runtime/school-07-upper-locker-corridor.png",
+          "sha256": "ced33971c31f9d00c09792550f368098300c2946e233f23ff52f72d78b74f6dd"
+        },
+        {
+          "path": "development/levels/previews/runtime/school-08-school-library.png",
+          "sha256": "7757ff7d2dfb7bc51f570c9a44733fbee68db5d44473d6849130a7066ec8c79c"
+        },
+        {
+          "path": "development/levels/previews/runtime/school-09-classroom-b.png",
+          "sha256": "dde984156d0b5673b1f8618c4c634f0644e219682583cc0d54a11b430ad51626"
+        },
+        {
+          "path": "development/levels/previews/runtime/school-10-assembly-hall.png",
+          "sha256": "1c0781c7d19359a6062030a18c78bb1adafd063a275642931464867ec9bc0221"
+        },
+        {
+          "path": "development/levels/previews/runtime/school-11-boiler-and-electrical-room.png",
+          "sha256": "a9fa0d7d9d7c5c1028788643668867cb676a009f8def55ab63a460c1ce5d6bf4"
+        }
+      ]
+    }
+  ]
+}

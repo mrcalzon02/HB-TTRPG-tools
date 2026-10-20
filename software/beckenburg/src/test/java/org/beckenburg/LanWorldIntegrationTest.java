@@ -13,7 +13,7 @@ public final class LanWorldIntegrationTest {
             while(System.nanoTime()<until){String f=events.poll(120,TimeUnit.MILLISECONDS);if(f!=null&&f.startsWith(prefix))return f;}
             throw new AssertionError(c.seat()+" missing "+prefix);
         }
-        void noBodies(){if(events.stream().anyMatch(x->x.startsWith("BODY|")||x.startsWith("DOORS|")||x.startsWith("TEAMMAP|")||x.startsWith("PROGRESS|")))throw new AssertionError("ghost saw private hunter state");}
+        void noBodies(){if(events.stream().anyMatch(x->x.startsWith("BODY|")||x.startsWith("TEAMMAP|")||x.startsWith("PROGRESS|")))throw new AssertionError("ghost saw private hunter state");}
         @Override public void close(){c.close();}
     }
     private static void ok(boolean v,String msg){if(!v)throw new AssertionError(msg);}
@@ -25,7 +25,8 @@ public final class LanWorldIntegrationTest {
             Peer ghost=new Peer(host.port(),true,"Haunt")){
             a.c.ready();b.c.ready();c.c.ready();ghost.c.ready();
             a.waitFor("LOBBY|3|HUMAN|4|WAITING");a.c.start();a.waitFor("INFO|mission started");
-            ok(b.waitFor("BODY|0|").startsWith("BODY|0|"),"host broadcasts hunter bodies");
+            String initialBody=b.waitFor("BODY|0|");
+            ok(initialBody.startsWith("BODY|0|"),"host broadcasts hunter bodies");
             ok(b.waitFor("DOORS|").startsWith("DOORS|"),"hunter world receives shared physical doors");
             ghost.noBodies();
             ghost.c.send("VIEW3D");ok(ghost.waitFor("REJECT|").contains("hunter"),"ghost cannot enter hunter view");
@@ -38,9 +39,10 @@ public final class LanWorldIntegrationTest {
             String body=null;
             long end=System.nanoTime()+TimeUnit.SECONDS.toNanos(5);
             while(System.nanoTime()<end){String next=b.waitFor("BODY|0|");
-                if(!next.contains("|27500|")){body=next;break;}
+                String[] before=initialBody.split("\\|"),after=next.split("\\|");
+                if(!before[2].equals(after[2])||!before[4].equals(after[4])){body=next;break;}
             }
-            ok(body!=null&&body.split("\\|").length==6,"replicated movement changed 3D position");
+            ok(body!=null&&body.split("\\|").length==7,"replicated movement changed explicit XYZ position");
             a.c.send("STEP|100|0|1");ok(a.waitFor("REJECT|").contains("stale"),"replayed motion rejected");
             a.c.send("DOOR|999");ok(a.waitFor("REJECT|").contains("reachable"),"far door denied");
             ghost.noBodies();

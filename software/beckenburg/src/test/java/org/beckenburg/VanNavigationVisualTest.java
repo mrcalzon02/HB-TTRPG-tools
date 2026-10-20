@@ -19,8 +19,10 @@ public final class VanNavigationVisualTest {
         LanWorld team=new LanWorld(map);
         for(int i=0;i<6;i++)yes(map.traversable(team.body(i).x(),team.body(i).z()),
             "team spawn accessible "+i);
-        double midX=spawn.x(),midZ=spawn.z();
         var targeted=VanEquipmentRack.socket(van,EquipmentLoadout.Item.EMF);
+        var standing=van.world(-.5,van.local(targeted.x(),targeted.z()).z());
+        yes(map.traversable(standing.x(),standing.z()),"clear standing position alongside selected rack socket");
+        double midX=standing.x(),midZ=standing.z();
         double yaw=Math.atan2(targeted.x()-midX,targeted.z()-midZ);
         yes(VanEquipmentRack.aimed(van,midX,midZ,yaw)==EquipmentLoadout.Item.EMF,
             "rack item selected by line of sight");

@@ -255,10 +255,10 @@ public final class LevelPlans {
             // The shared road extends twenty metres behind the cargo sill.
             // Ground support is exterior approach, not the van's ghost-safe interior.
             r(entry,Math.min(x0,vanX-21),front,x1,Math.max(end,apron+13.4),0,12,"stone",(x0+x1)/2,(front+apron)/2);
-            r("Van cargo interior",vanX+VanStaging.FRONT,apron+6-VanStaging.HALF_WIDTH,
-                vanX+VanStaging.REAR,apron+6+VanStaging.HALF_WIDTH,0,VanStaging.INTERIOR_HEIGHT,"asphalt",vanX,apron+6);
+            r("Van cargo interior",vanX+VanStaging.FRONT,apron+6-VanStaging.INTERIOR_HALF_WIDTH,
+                vanX+VanStaging.REAR,apron+6+VanStaging.INTERIOR_HALF_WIDTH,0,VanStaging.INTERIOR_HEIGHT,"asphalt",vanX,apron+6);
             portal(12,13,x0+2,0,front,3,true,"open");
-            portal(13,14,vanX+VanStaging.FRONT,0,apron+6,VanStaging.HALF_WIDTH*2-.3,false,"open");
+            portal(13,14,vanX+VanStaging.FRONT,0,apron+6,VanStaging.INTERIOR_HALF_WIDTH*2-.3,false,"open");
         }
         void portal(int a,int b,double x,double y,double z,double w,boolean alongX,String kind){
             portals.add(new Portal(portals.size(),a,b,x,y,z,w,alongX,kind,kind.equals("window")?3:kind.equals("stair")?1.2:1));
