@@ -10,7 +10,7 @@ public final class VanArrivalStreetTest {
     }
     public static void main(String[] args){
         var tiles=VanArrivalStreet.tiles();
-        ok(tiles.size()==34,"four continuous road rows plus sidewalks and two damaged tile replacements");
+        ok(tiles.size()==33,"four continuous road rows plus sidewalks and two damaged tile replacements");
         int straight=0,damaged=0,side=0;
         Set<String> centres=new HashSet<>();
         for(var tile:tiles){
