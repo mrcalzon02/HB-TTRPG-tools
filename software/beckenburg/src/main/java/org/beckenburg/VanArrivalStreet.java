@@ -56,31 +56,36 @@ public final class VanArrivalStreet {
     );
     private static List<RoadTile> createTiles(){
         ArrayList<RoadTile> tiles=new ArrayList<>();
-        // Kenney straight asphalt: source footprint 1 x 2m. A 2.1 x 4m
-        // fitted tile makes a true 8.4m road with no gaps or overlap.
+        // Kenney's *whole* straight-road mesh is an intersection of three
+        // different surfaces: raised pale concrete at both ends and lowered
+        // dark asphalt in its centre. Repeating the full model caused the
+        // enormous white/black stripes visible in Windows captures.
+        //
+        // Tiles below specify actual world-size surfaces rather than source
+        // mesh scaling: 16 contiguous asphalt panels (2.1 x 4.0 metres)
+        // and 16 separately raised sidewalk panels (2.1 x 2.0 metres).
+        // SceneRenderer uses the appropriate original Kenney GLB MATERIAL
+        // on a continuous plane, never its mixed-height source geometry.
         for(int row=0;row<4;row++){
             double centreZ=ROAD_START-2.0-row*4.0;
             for(int col=0;col<4;col++){
                 double centreX=-ROAD_HALF_WIDTH+1.05+col*2.10;
-                if(row==2&&col==1){
-                    // The damaged 1 x 1m Kenney source is two 2.1 x 2m
-                    // tiles, replacing—not z-fighting—the intact section.
-                    tiles.add(new RoadTile("kenney_road_asphalt_damaged",
-                        centreX,centreZ-1.0,2.10,2.0));
-                    tiles.add(new RoadTile("kenney_road_asphalt_damaged",
-                        centreX,centreZ+1.0,2.10,2.0));
-                }else tiles.add(new RoadTile("kenney_road_asphalt_straight",
-                    centreX,centreZ,2.10,2.0));
+                tiles.add(new RoadTile("kenney_road_asphalt_straight",
+                    centreX,centreZ,2.10,4.0));
             }
         }
-        // Separate continuous sidewalk shoulder on both sides of the
-        // carriageway. Side tile is originally 1 x 1m.
         for(int side:new int[]{-1,1})
             for(int section=0;section<8;section++)
                 tiles.add(new RoadTile("kenney_road_asphalt_side",
                     side*(ROAD_HALF_WIDTH+1.05),
                     ROAD_START-1.0-section*2.0,2.10,2.0));
         return List.copyOf(tiles);
+    }
+    /** Everything below is a true road surface or a raised footpath,
+     * not a stretched copy of the mixed-material Kenney junction mesh.
+     */
+    public static boolean sidewalk(RoadTile tile){
+        return tile.mesh().equals("kenney_road_asphalt_side");
     }
     public static List<RoadTile> tiles(){return TILES;}
     public static List<RoadObject> parkedVehicles(){return PARKED;}
