@@ -475,13 +475,33 @@ public final class SceneRenderer {
         cargoDoorLeaf(faces,van,false);
     }
 
-    /** One continuous local-coordinate street with side pavement, correctly
-     * sized Kenney asphalt tiles and separately parked GGBot vehicles.
-     * Cache by authored van placement, not by camera/world tile. The van can
-     * be re-used unchanged at every site with its own position and yaw.
+    /** Actual measured outdoor street built from original Kenney diffuse
+     * materials rather than the mixed-height prefabs. Those prefabs include
+     * wide white concrete endcaps and a single asphalt centre panel, and when
+     * stretched they produced the awful bright-dark striped checkerboard.
      */
     private VanStaging cachedRoadSite;
     private List<Face> cachedRoadFaces=List.of();
+    private static void roadSurface(List<Face> out,VanStaging van,
+                                    VanArrivalStreet.RoadTile tile,
+                                    int sourceMaterial){
+        double halfX=tile.scaleX()*.5,halfZ=tile.scaleZ()*.5;
+        double xa=tile.x()-halfX,xb=tile.x()+halfX;
+        double za=tile.z()-halfZ,zb=tile.z()+halfZ;
+        boolean sidewalk=VanArrivalStreet.sidewalk(tile);
+        double height=sidewalk?.119:.049;
+        VanStaging.Position a=van.world(xa,za),b=van.world(xb,za),
+            cc=van.world(xb,zb),d=van.world(xa,zb);
+        // Continuity in UV space is defined by physical metres, not every
+        // prefab's independent UV origin. Both source albedos repeat at the
+        // same density across adjacent faces.
+        double u0=xa*.48,v0=za*.48,u1=xb*.48,v1=zb*.48;
+        texturedQuad(out,new Point(a.x(),height,a.z()),
+            new Point(b.x(),height,b.z()),
+            new Point(cc.x(),height,cc.z()),
+            new Point(d.x(),height,d.z()),sourceMaterial,
+            u0,v0,u1,v0,u1,v1,u0,v1,sidewalk?0xd8d2cb:0xe0e0e0);
+    }
     private void roadsideModels(List<Face> out,HouseMap map){
         VanStaging van=map.van();
         if(cachedRoadSite==van){
@@ -489,31 +509,56 @@ public final class SceneRenderer {
             return;
         }
         List<Face> road=new ArrayList<>();
-        for(VanArrivalStreet.RoadTile tile:VanArrivalStreet.tiles()){
-            VanStaging.Position world=van.world(tile.x(),tile.z());
-            imported(road,tile.mesh(),world.x(),.008,world.z(),
-                tile.scaleX(),1.0,tile.scaleZ(),van.placement().yaw());
-        }
+        int asphalt=VanArrivalStreet.surfaceMaterial(false),
+            pavement=VanArrivalStreet.surfaceMaterial(true);
+        if(asphalt==pavement)
+            throw new IllegalStateException("Mixed Kenney road surface materials not separated");
+        for(VanArrivalStreet.RoadTile tile:VanArrivalStreet.tiles())
+            roadSurface(road,van,tile,
+                VanArrivalStreet.sidewalk(tile)?pavement:asphalt);
+
+        // True upstanding kerbs separate the road from pedestrian pavement.
+        // Strip top and outward vertical faces stay entirely beside the
+        // carriageway, instead of being stretched across the road.
         for(int side:new int[]{-1,1}){
-            double curb=side<0?-VanArrivalStreet.ROAD_HALF_WIDTH-.09:
-                VanArrivalStreet.ROAD_HALF_WIDTH;
-            vanBox(road,van,curb,.025,VanArrivalStreet.ROAD_END,
-                .09,.145,VanArrivalStreet.ROAD_START-VanArrivalStreet.ROAD_END,
+            double curb=side<0?-VanArrivalStreet.ROAD_HALF_WIDTH-.13:
+                VanArrivalStreet.ROAD_HALF_WIDTH+.02;
+            vanBox(road,van,curb,.049,VanArrivalStreet.ROAD_END,
+                .11,.071,VanArrivalStreet.ROAD_START-VanArrivalStreet.ROAD_END,
                 MaterialAtlas.CONCRETE);
-        }
-        // Clear centre line and a real accessible rear-door apron:
-        // there are no cars, bins or arbitrary cubes in the egress corridor.
-        for(double centre=-6.5;centre>=-18.5;centre-=4)
-            vanBox(road,van,-.045,.063,centre-.52,.09,.017,1.04,
+            // Faint road-edge white line, parallel with travel direction.
+            double edge=side<0?-VanArrivalStreet.ROAD_HALF_WIDTH+.20:
+                VanArrivalStreet.ROAD_HALF_WIDTH-.27;
+            vanBox(road,van,edge,.052,VanArrivalStreet.ROAD_END+.20,
+                .07,.006,VanArrivalStreet.ROAD_START-VanArrivalStreet.ROAD_END-.4,
                 MaterialAtlas.CERAMIC);
-        vanBox(road,van,-1.15,.03,VanArrivalStreet.ROAD_START,
-            2.30,.050,VanStaging.FRONT-VanArrivalStreet.ROAD_START,
+        }
+        // Real sidewalk slab joints, every two metres. They do not cross
+        // asphalt, and can be checked independently of road texture seams.
+        for(int step=1;step<8;step++){
+            double zz=VanArrivalStreet.ROAD_START-step*2.0;
+            for(int side:new int[]{-1,1}){
+                double left=side<0?-VanArrivalStreet.ROAD_HALF_WIDTH-2.05:
+                    VanArrivalStreet.ROAD_HALF_WIDTH+.13;
+                vanBox(road,van,left,.120,zz-.023,1.96,.004,.046,
+                    MaterialAtlas.CONCRETE);
+            }
+        }
+        // Narrow road paint is recessed to asphalt scale. Dashed centre
+        // markings recur at realistic intervals; no huge cream slabs.
+        for(double centre=VanArrivalStreet.ROAD_START-1.8;
+                centre>VanArrivalStreet.ROAD_END+1;centre-=4.0)
+            vanBox(road,van,-.052,.051,centre-.80,.104,.007,1.60,
+                MaterialAtlas.CERAMIC);
+        vanBox(road,van,-1.15,.048,VanArrivalStreet.ROAD_START,
+            2.30,.025,VanStaging.FRONT-VanArrivalStreet.ROAD_START,
             MaterialAtlas.CONCRETE);
-        // Parked traffic has its own actual mesh, with original UVs, surface
-        // atlas and material tint, and cannot obstruct the van's rear doors.
+
+        // Separate original GGBot vehicles, kept completely out of the
+        // open pedestrian approach behind the VAN. Not a fake road surface.
         for(VanArrivalStreet.RoadObject vehicle:VanArrivalStreet.parkedVehicles()){
-            VanStaging.Position pos=van.world(vehicle.x(),vehicle.z());
-            imported(road,vehicle.mesh(),pos.x(),.06,pos.z(),vehicle.scale(),
+            VanStaging.Position p=van.world(vehicle.x(),vehicle.z());
+            imported(road,vehicle.mesh(),p.x(),.065,p.z(),vehicle.scale(),
                 van.placement().yaw()+vehicle.yaw());
         }
         cachedRoadSite=van;
