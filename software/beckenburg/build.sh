@@ -51,6 +51,19 @@ done
 java -Djava.awt.headless=true -cp build/classes org.beckenburg.TierModelForge build/classes/org/beckenburg/models
 # Keep the CC0 source in assets/source; ship only its 15 texture-embedded meshes.
 java -Djava.awt.headless=true -cp build/classes org.beckenburg.KenneyMedievalAssets assets/source/kenney_retro-medieval-kit.zip build/classes/org/beckenburg/models
+
+# Preserve offline owner archive support; pin the public CC0 source on first build.
+mkdir -p build/source
+if [[ -s assets/source/psx_style_cars_by_ggbot_august2023.zip ]]; then
+    cp assets/source/psx_style_cars_by_ggbot_august2023.zip build/source/ggbot-original.zip
+fi
+if [[ ! -s build/source/ggbot-original.zip ]]; then
+    curl --fail --location --retry 3 --max-time 50 \
+        -o build/source/ggbot-original.zip \
+        https://opengameart.org/sites/default/files/psx_style_cars_by_ggbot_august2023.zip
+fi
+java -Djava.awt.headless=true -cp build/classes org.beckenburg.GgBotVehicleTextures \
+    build/source/ggbot-original.zip assets/runtime/models build/classes/org/beckenburg/models
 javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java/org/beckenburg/*.java
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GraphicsOptionsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.PsxPipelineTest
