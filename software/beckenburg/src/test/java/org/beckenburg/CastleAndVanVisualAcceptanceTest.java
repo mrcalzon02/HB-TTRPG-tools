@@ -121,6 +121,30 @@ public final class CastleAndVanVisualAcceptanceTest {
         vanRender.yaw=Math.PI-van.placement().yaw();
         vanRender.draw(site,session,2);
         render(vanRender,"van-approach-road-and-parked-cars");
+        // Judge real body-to-cabin proportions from outside. Two three-quarter
+        // views show roof taper, cargo length and external wheel clearance.
+        var bodyTarget=van.world(0,-.20);
+        for(int side:new int[]{-1,1}){
+            var outside=van.world(side*8.1,VanStaging.FRONT-2.5);
+            vanRender.x=outside.x();vanRender.z=outside.z();
+            vanRender.eyeHeight=1.72;
+            vanRender.pitch=-.06;
+            vanRender.yaw=Math.atan2(bodyTarget.x()-outside.x(),
+                bodyTarget.z()-outside.z());
+            vanRender.draw(site,session,2);
+            render(vanRender,side<0?"van-exterior-west-three-quarter":
+                "van-exterior-east-three-quarter");
+        }
+        // Houses on both pavements and the terminating building must read
+        // as a coherent street instead of an empty asphalt stage.
+        var streetPoint=van.world(-.35,VanArrivalStreet.ROAD_START-9.0);
+        var towardEnd=van.world(0,VanArrivalStreet.ROAD_END-3.0);
+        vanRender.x=streetPoint.x();vanRender.z=streetPoint.z();
+        vanRender.yaw=Math.atan2(towardEnd.x()-streetPoint.x(),
+            towardEnd.z()-streetPoint.z());
+        vanRender.pitch=-.03;
+        vanRender.draw(site,session,2);
+        render(vanRender,"van-street-kenney-residential-block");
         Files.writeString(DIR.resolve("architecture-audit.txt"),
             "PASS measured door openings, real staircase, upstairs navigation, fixtures "+
             "and purchased-tool van source meshes\n");
