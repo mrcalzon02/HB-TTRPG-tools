@@ -502,6 +502,67 @@ public final class SceneRenderer {
         cargoDoorLeaf(faces,van,false);
     }
 
+    /** Actual masonry, pitched roof and recessed window details from curated
+     * Kenney meshes. Each home is a single measured architectural parcel.
+     */
+    private static void streetResidence(List<Face> out,VanStaging van,
+                                        VanStreetHouses.House home){
+        double start=home.buildingStartX(),end=home.buildingEndX();
+        double z0=home.frontageStartZ(),z1=home.frontageEndZ();
+        double height=home.wallHeight();
+        vanBox(out,van,start,.04,z0,end-start,height,home.frontage(),home.masonry());
+        double centreX=(start+end)*.5;
+        vanSlope(out,van,start-.12,height,centreX,height+home.roofRise(),
+            z0-.18,z1+.18,home.roof());
+        vanSlope(out,van,end+.12,height,centreX,height+home.roofRise(),
+            z0-.18,z1+.18,home.roof());
+        // Physical eaves face the road, while the corner uprights hide wall
+        // joints. Windows and doors are mounted a little in front of masonry.
+        double face=home.streetFace(),direction=-home.side();
+        for(double zz:new double[]{home.frontageZ()-1.25,
+                                    home.frontageZ()+1.25}){
+            var window=van.world(face+direction*.14,zz);
+            imported(out,"kenney_medieval_wall_pane_wood_window",
+                window.x(),1.30,window.z(),.73,
+                van.placement().yaw()+home.side()*Math.PI/2);
+            var upstairs=van.world(face+direction*.14,zz);
+            imported(out,"kenney_medieval_wall_pane_wood_window",
+                upstairs.x(),height-1.15,upstairs.z(),.62,
+                van.placement().yaw()+home.side()*Math.PI/2);
+        }
+        var door=van.world(face+direction*.17,home.frontageZ());
+        imported(out,"door_1_loose",door.x(),.05,door.z(),1.08,
+            van.placement().yaw()+home.side()*Math.PI/2);
+        for(double zz:new double[]{z0+.24,z1-.24}){
+            vanBox(out,van,home.side()>0?start:start+.03,.05,zz,
+                .13,height-.08,.13,MaterialAtlas.AGED_WOOD);
+        }
+        var light=van.world(face+direction*.23,home.frontageZ()+.7);
+        imported(out,"kenney_detail_light_single",light.x(),2.42,light.z(),
+            .54,van.placement().yaw()+home.side()*Math.PI/2);
+    }
+    private static void streetTerminus(List<Face> out,VanStaging van){
+        var terminal=VanStreetHouses.TERMINUS;
+        double start=-terminal.width()*.5,z=terminal.centreZ();
+        vanBox(out,van,start,.04,z-terminal.depth()*.5,terminal.width(),
+            terminal.height(),terminal.depth(),MaterialAtlas.STONE);
+        double half=terminal.width()*.5;
+        // Paired gables raise a credible skyline at the closed street end.
+        vanSlope(out,van,-half-.15,terminal.height(),0,terminal.height()+1.35,
+            z-terminal.depth()*.5-.2,z+terminal.depth()*.5+.2,MaterialAtlas.AGED_WOOD);
+        vanSlope(out,van,half+.15,terminal.height(),0,terminal.height()+1.35,
+            z-terminal.depth()*.5-.2,z+terminal.depth()*.5+.2,MaterialAtlas.AGED_WOOD);
+        for(double xx:new double[]{-3.65,-1.25,1.25,3.65}){
+            var point=van.world(xx,z+terminal.depth()*.5+.14);
+            imported(out,"kenney_medieval_wall_pane_wood_window",point.x(),
+                2.25,point.z(),.77,van.placement().yaw());
+            imported(out,"kenney_medieval_wall_pane_wood_window",point.x(),
+                4.10,point.z(),.77,van.placement().yaw());
+        }
+        var doorway=van.world(0,z+terminal.depth()*.5+.17);
+        imported(out,"door_1_loose",doorway.x(),0,doorway.z(),1.08,
+            van.placement().yaw());
+    }
     /** Actual measured outdoor street built from original Kenney diffuse
      * materials rather than the mixed-height prefabs. Those prefabs include
      * wide white concrete endcaps and a single asphalt centre panel, and when
@@ -581,8 +642,13 @@ public final class SceneRenderer {
             2.30,.025,VanStaging.FRONT-VanArrivalStreet.ROAD_START,
             MaterialAtlas.CONCRETE);
 
-        // Separate original GGBot vehicles, kept completely out of the
-        // open pedestrian approach behind the VAN. Not a fake road surface.
+        // The roadway sits inside a real block of homes, not an infinite
+        // void or a random solid boundary. Medieval Kenney window elements
+        // are used only as dimensioned facade details.
+        for(VanStreetHouses.House home:VanStreetHouses.HOMES)
+            streetResidence(road,van,home);
+        streetTerminus(road,van);
+        // Original GGBot parked cars, all clear of the rear-door walking path.
         for(VanArrivalStreet.RoadObject vehicle:VanArrivalStreet.parkedVehicles()){
             VanStaging.Position p=van.world(vehicle.x(),vehicle.z());
             imported(road,vehicle.mesh(),p.x(),.065,p.z(),vehicle.scale(),
