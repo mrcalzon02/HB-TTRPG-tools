@@ -29,12 +29,13 @@ public final class VanArrivalStreetTest {
         ok(VanArrivalStreet.ROAD_END==-20.0,"16m continuous road approach");
         for(double z=VanArrivalStreet.ROAD_START-.1;
                 z>VanArrivalStreet.ROAD_END;z-=.15){
+            final double atZ=z;
             ok(VanArrivalStreet.onStreet(0,z),"street pavement has no missing central segments "+z);
             ok(VanArrivalStreet.inOpenApproach(0,z),"rear cargo access remains clear "+z);
             ok(tiles.stream().anyMatch(t->{
                 if(Math.abs(t.x())>VanArrivalStreet.ROAD_HALF_WIDTH)return false;
                 double halfLength=t.mesh().endsWith("straight")?t.scaleZ():t.scaleZ()*.5;
-                return Math.abs(z-t.z())<halfLength+.01 && Math.abs(t.x())<t.scaleX()*.5+.01;
+                return Math.abs(atZ-t.z())<halfLength+.01 && Math.abs(t.x())<t.scaleX()*.5+.01;
             }),"real Kenney texture tile under each approach sample "+z);
         }
         ok(VanArrivalStreet.parkedVehicles().size()==2,"intentional side parking only");
