@@ -23,7 +23,7 @@ Eight original CC0 families now have standalone meshes: hollow mug, corked stone
 
 ## Gate checkpoint
 
-The initial implementation passed the 16 focused checks, including `LooseClutterTest`, and the separate real-socket `LooseClutterNetworkTest`. Remaining closeout work is final visual inspection, compatibility checks, public-library refresh and recorded live read-back. This note is updated at the next completed milestone.
+Implementation checkpoint `e3e0c132` is pushed. All 17 focused checks (including both physical-object gates) and 27 affected compatibility checks pass. Scatter counts are house 27, farm 46, school 56. The actual picked-up and rotated mug views, 29 clean/worn-family integrity check, 58 local CC0 downloads and all three native Asset Browser libraries passed inspection/validation. Editable levels retain separate interactive meshes and measured body metadata. Live publication read-back is recorded after the updated library deploys.
 
 ## Practical limits
 

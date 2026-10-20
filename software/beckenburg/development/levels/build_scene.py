@@ -43,6 +43,22 @@ for (room,mid,color),group in groups.items():
     obj=bpy.data.objects.new(f'Runtime room {room} material {mid}',mesh);rooms.get(room,rooms[13]).objects.link(obj);mesh.materials.append(materials[key])
     obj['source']='Exact runtime SceneRenderer triangles, original UV and material';obj['zone']=room
 
+loose_path=SRC/'loose-objects.json'
+if loose_path.exists():
+    loose_collection=collection('INTERACTIVE loose objects — independent meshes and measured bodies')
+    templates={}
+    for entry in json.loads(loose_path.read_text()):
+        state=entry['state'];asset='level_loose_'+state['kind'].lower()+'_worn'
+        if asset not in templates:
+            with bpy.data.libraries.load(str(ROOT/f'development/levels/blender/{asset}.blend'),link=False) as (incoming,outgoing):outgoing.objects=[asset]
+            template=outgoing.objects[0]
+            for vertex in template.data.vertices:vertex.co.z-=entry['half']
+            templates[asset]=template
+        obj=templates[asset].copy();loose_collection.objects.link(obj)
+        obj.name=f'Loose {state["id"]:03d} {state["kind"]}'
+        obj.location=(state['x'],-state['z'],state['y']);obj.rotation_euler=(0,-state['roll'],-state['yaw'])
+        obj['loose_object_id']=state['id'];obj['mass_kg']=entry['mass'];obj['collision_radius_m']=entry['radius'];obj['collision_half_height_m']=entry['half']
+        obj['interaction']='F5 pick up/drop; ] examine rotation; F12 throw; host authoritative'
 metadata=collection('AUTHORING sockets, portals, stair support and collision')
 def empty(label,p,data,display='PLAIN_AXES',size=.18):
     obj=bpy.data.objects.new(label,None);metadata.objects.link(obj);obj.location=p;obj.empty_display_type=display;obj.empty_display_size=size

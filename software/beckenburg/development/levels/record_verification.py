@@ -19,6 +19,7 @@ def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 assets=json.loads((OUT/'lived-assets.json').read_text())
 live_path=reports/'live-libraries-results.json'
 live=json.loads(live_path.read_text()) if live_path.exists() else None
+if live and sum(d['kind']=='GLB' for d in live['downloads'])!=len(assets['assets']):live=None
 manifest={'date':'2026-10-20','focused_passes':len(focused),'compatibility_passes':len(compat),
     'original_asset_families':len(assets['clean_preservation']),'asset_variants':len(assets['assets']),
     'runtime_texture_variant':'worn','public_libraries':'https://mrcalzon02.github.io/HB-TTRPG-tools/beckenburg-asset-libraries.html','sites':[]}
@@ -27,7 +28,7 @@ for site in ['house','farmhouse','school']:
     source=ROOT/f'build/level-verification/scenes/{site}';definition=json.loads((source/'definition.json').read_text())
     blend=OUT/f'blender/{site}-complete.blend';views=sorted((OUT/'previews/runtime').glob(site+'-*.png'))
     manifest['sites'].append(dict(id=site,revision=definition['revision'],rooms=len(definition['rooms']),stairs=len(definition['stairs']),
-        triangles=len(json.loads((source/'geometry.json').read_text())),hiding_cupboards=sum(s['type']=='hide' for s in definition['sockets']),
+        triangles=len(json.loads((source/'geometry.json').read_text())),loose_objects=len(json.loads((source/'loose-objects.json').read_text())) if (source/'loose-objects.json').exists() else 0,hiding_cupboards=sum(s['type']=='hide' for s in definition['sockets']),
         worn_prop_groups=sum(p['mesh'].endswith('_worn') for p in definition['props']),
         blender_source=blend.relative_to(ROOT).as_posix(),blender_sha256=digest(blend),
         runtime_views=[dict(path=p.relative_to(ROOT).as_posix(),sha256=digest(p)) for p in views]))
@@ -43,9 +44,13 @@ The lived-in dressing, physical hiding cupboards and clean/worn asset revision p
 - The school plant contains three retired riveted coal boilers at the back, two later oil-fired sectional boilers and three modern condensing units toward the front. Flues, separated retired steam lines and paired active headers, circulation pumps, expansion vessel, suspended ventilation, electrical switchgear, coal/ash handling, service workbench and spares use measured room coordinates. Stair and breaker approaches remain usable.
 - House and farm have room-specific furniture and supported belongings: inherited displays, sideboards, card-table corner, ottoman, trunk, linens, toys, pantry and root-cellar stores, barn/workshop furniture and native source cabinets. The room placement helper retains wall support, source bounds, windows and door/stair clearance.
 - Eighteen walk-in cupboards are scattered across the three sites (house 5, farm 7, school 6). Their actual geometry and hollow collision follow the same deterministic hiding-density setting. A 0% cupboard disappears completely; 100% makes all potential cupboards present. Hiding requires physically entering the correct-floor interior. Solo movement exposes the player; LAN host/client and ghost views share presence without disclosing hunter hiding state.
-- Twenty-one original asset families have two separate diffuse-texture versions, 42 GLBs total. The clean GLBs, Blender files and previews are preserved byte-for-byte. Worn models keep exactly the same vertices, normals, UVs, index buffers and pivots; every diffuse image is changed. Runtime uses the worn set. The texture pass reduces saturation and adds soft ingrained dirt, fine chips, oxidation, water tracks, faded cloth, handled timber and foxed paper. Oversized binary noise patches were removed after inspecting them in rooms. `verification/worn-assets-results.json` records actual family-by-family verification.
+- {len(assets['clean_preservation'])} original asset families have two separate diffuse-texture versions, {len(assets['assets'])} GLBs total. The clean GLBs, Blender files and previews are preserved byte-for-byte. Worn models keep exactly the same vertices, normals, UVs, index buffers and pivots; every diffuse image is changed. Runtime uses the worn set. The texture pass reduces saturation and adds soft ingrained dirt, fine chips, oxidation, water tracks, faded cloth, handled timber and foxed paper. Oversized binary noise patches were removed after inspecting them in rooms. `verification/worn-assets-results.json` records actual family-by-family verification.
 - Three original CC0 libraries provide individual GLBs, editable Blender sources, real preview renders and native Blender Asset Browser libraries, in clean and worn versions. Every entry, model metadata, native asset and ZIP license explicitly states CC0 1.0 Universal. The 27 unchanged archive props used as additional game scenery retain their separate source licensing and are excluded from these CC0 downloads. Public-file, embedded-image, ZIP/hash, local-link and native embedded-preview validators were run against the generated libraries.
 - Editable complete levels show all potential cupboards for authoring (100%); runtime still follows the selected contract. Their geometry comes directly from the runtime export, including the worn materials. The clean/worn comparison uses actual Blender model renders with identical studio lighting.
+
+## Independent physical objects
+
+The house has 27 independent objects, the farm 46 and the school 56. All eight original loose-object families have clean/worn versions. F5 picks up/drops, ] rotates for examination and F12 throws along the view. Host-owned gravity, swept collision, support, inelastic bounce, mass and body contact determine motion. Accepted human/AI poltergeist disturbances launch at most three existing, unheld objects; damage requires actual contact, while a dodge or missing object causes no projectile damage. Held coordinates/owners are redacted from ghost snapshots. Initial placements are retained as separate editable meshes in each Blender level, with IDs and collision/mass metadata. The detailed recipe and practical limits are in `LOOSE_OBJECTS_WORKFLOW.md`.
 
 ## Retained architectural corrections
 
@@ -83,7 +88,7 @@ Fixtures were migrated from old flat-map coordinates to authored XYZ positions; 
 Use `verify_levels.py --java-home <JDK17> --vehicle-archive <original August2023 GGBot ZIP>`, then `verify_compatibility.py --java-home <JDK17>`. Both use the isolated ignored `build/level-release` package. `--full-regression` runs the historical gate as well. Use `LevelVisualCapture`, `LevelDressingCapture`, `LevelSceneSource`, `build_scene.py`, `build_wear_review.py`, `build_review.py`, then this script to regenerate the review artifacts and record actual outputs. `validate_worn_assets.py` and both public-library validators read the final asset files. The final softening pass changed only diffuse image pixels; the already-passing gameplay/geometry package was refreshed for final captures. No test binary is published with these source commits.
 '''
 if live:
-    publication=f"\nLive publication was read back at {live['verified_at']}: the public CC0 page, all three manifests/licenses, all 42 individual GLBs and all three ZIPs matched the validated local publication. Actual downloaded-byte SHA-256 values are preserved in `verification/live-libraries-results.json`. The published asset checkpoint is `{live['published_commit']}`.\n"
+    publication=f"\nLive publication was read back at {live['verified_at']}: the public CC0 page, all three manifests/licenses, all {len(assets['assets'])} individual GLBs and all three ZIPs matched the validated local publication. Actual downloaded-byte SHA-256 values are preserved in `verification/live-libraries-results.json`. The published asset checkpoint is `{live['published_commit']}`.\n"
     text=text.replace('## Retained architectural corrections',publication+'\n## Retained architectural corrections')
 (OUT/'VERIFICATION.md').write_text(text,encoding='utf-8')
 print(f'Recorded {len(focused)+len(compat)} passing checks; {len(remaining)} historical failures remain documented')

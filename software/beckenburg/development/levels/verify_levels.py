@@ -4,7 +4,7 @@ Uses an isolated output directory and never recursively deletes the user's build
 import argparse,json,os,pathlib,shutil,subprocess,time
 
 ROOT=pathlib.Path(__file__).resolve().parents[2]
-CHECKS=['AuthoredLevelPhysicsTest','AuthoredLevelReachabilityTest','AuthoredLevelStateTest','AuthoredLevelNetworkTest','AuthoredLevelRitualCaseTest','WorldViewHandednessTest','MouseLookTest','AuthoredUtilitiesTest','SoloElevationTest','EquipmentAssetAssignmentsTest','EquipmentModelCatalogTest','PackagedSourceModelsTest','LevelRenderAcceptanceTest','LevelSurfaceIntegrityTest','LivedLevelDressingTest','LooseClutterTest']
+CHECKS=['AuthoredLevelPhysicsTest','AuthoredLevelReachabilityTest','AuthoredLevelStateTest','AuthoredLevelNetworkTest','AuthoredLevelRitualCaseTest','WorldViewHandednessTest','MouseLookTest','AuthoredUtilitiesTest','SoloElevationTest','EquipmentAssetAssignmentsTest','EquipmentModelCatalogTest','PackagedSourceModelsTest','LevelRenderAcceptanceTest','LevelSurfaceIntegrityTest','LivedLevelDressingTest','LooseClutterTest','LooseClutterNetworkTest']
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--java-home',type=pathlib.Path,required=True);ap.add_argument('--vehicle-archive',type=pathlib.Path);ap.add_argument('--full-regression',action='store_true');ap.add_argument('--package-only',action='store_true');args=ap.parse_args()

@@ -8,11 +8,13 @@ import javax.imageio.ImageIO;
 
 /** Exports the exact runtime triangles, UVs, textures and authored sockets for Blender. */
 public final class LevelSceneSource {
+    record LooseSource(LooseClutter.State state,double half,double radius,double mass){}
     static Object read(Object value,String field)throws Exception{
         Method m=value.getClass().getDeclaredMethod(field);m.setAccessible(true);return m.invoke(value);
     }
     static String json(Object v)throws Exception{
         if(v==null)return "null";
+        if(v instanceof Enum<?> e)return json(e.name());
         if(v instanceof String s)return "\""+s.replace("\\","\\\\").replace("\"","\\\"").replace("\n","\\n")+"\"";
         if(v instanceof Number||v instanceof Boolean)return v.toString();
         if(v instanceof Collection<?> list){StringJoiner j=new StringJoiner(",","[","]");for(Object x:list)j.add(json(x));return j.toString();}
@@ -31,6 +33,7 @@ public final class LevelSceneSource {
         Method assemble=SceneRenderer.class.getDeclaredMethod("levelArchitecture",List.class,HouseMap.class);assemble.setAccessible(true);
         List<Object> faces=new ArrayList<>();assemble.invoke(scene,faces,map);
         Files.writeString(out.resolve("definition.json"),json(map.level()));
+        Files.writeString(out.resolve("loose-objects.json"),json(map.clutter().states().stream().map(s->new LooseSource(s,s.kind().half,s.kind().radius,s.kind().mass)).toList()));
         Files.writeString(out.resolve("scene-settings.json"),"{\"hidingDensity\":100}");
         Files.writeString(out.resolve("geometry.json"),json(faces));
         Set<Integer> mats=new TreeSet<>();for(Object f:faces)mats.add((Integer)read(f,"material"));
