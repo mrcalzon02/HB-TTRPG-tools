@@ -19,7 +19,7 @@ public final class VanInteriorLayout {
         }
     }
     public static final double FLOOR_Y=.10, ROOF_Y=VanStaging.INTERIOR_HEIGHT;
-    public static final double INNER_WALL=VanStaging.HALF_WIDTH-.18;
+    public static final double INNER_WALL=VanStaging.INTERIOR_HALF_WIDTH-.18;
     public static final double AISLE_HALF_WIDTH=.79;
     public static final int TOOL_COLUMNS=7,TOOL_ROWS=6,TOOL_CAPACITY=TOOL_COLUMNS*TOOL_ROWS;
     public static final double TOOL_COLUMN_PITCH=.91;
@@ -56,19 +56,19 @@ public final class VanInteriorLayout {
         new Fixture("monitoring_screen_mp_1",.12,1.07,3.22,1.36,
                     0,Mount.BULKHEAD,"main command monitor"),
         // Right bulkhead carries three actual monitoring fixtures.
-        new Fixture("monitoring_screen_mp_1",1.70,1.87,-1.71,.94,
+        new Fixture("monitoring_screen_mp_1",1.44,1.87,-1.71,.77,
                     -Math.PI/2,Mount.WALL,"sanity telemetry"),
-        new Fixture("monitoring_screen_mp_1",1.70,1.87,-.21,.94,
+        new Fixture("monitoring_screen_mp_1",1.44,1.87,-.21,.77,
                     -Math.PI/2,Mount.WALL,"haunting activity"),
-        new Fixture("monitoring_screen_mp_1",1.70,1.87,1.29,.94,
+        new Fixture("monitoring_screen_mp_1",1.44,1.87,1.29,.77,
                     -Math.PI/2,Mount.WALL,"sound telemetry"),
-        new Fixture("blender_site_map_fixed",1.70,1.03,-1.71,.79,
+        new Fixture("blender_site_map_fixed",1.44,1.03,-1.71,.69,
                     -Math.PI/2,Mount.WALL,"site map"),
         // Distinct contract and daily task boards, mounted rather than
         // stored as unlabelled blocks in the middle of the walkway.
-        new Fixture("blender_objective_board_fixed",1.70,1.07,-.21,.81,
+        new Fixture("blender_objective_board_fixed",1.44,1.07,-.21,.69,
                     -Math.PI/2,Mount.WALL,"contract objective board"),
-        new Fixture("blender_clipboards_fixed",1.70,1.06,1.29,.68,
+        new Fixture("blender_clipboards_fixed",1.44,1.06,1.29,.61,
                     -Math.PI/2,Mount.WALL,"daily assignment board")
     );
     /** These are the volumes occupied by fitted real furniture and racks;
@@ -77,8 +77,8 @@ public final class VanInteriorLayout {
     public record Clearance(double x0,double x1,double z0,double z1){}
     private static final List<Clearance> SOLIDS=List.of(
         new Clearance(-1.53,1.00,2.39,3.47), // front workstation and bulkhead
-        new Clearance(-1.96,-1.38,-3.10,3.05), // fitted equipment rack
-        new Clearance(1.40,1.96,-2.72,2.05) // monitoring wall and storage
+        new Clearance(-1.66,-1.21,-3.10,3.05), // fitted equipment rack
+        new Clearance(1.21,1.66,-2.72,2.05) // monitoring wall and storage
     );
     public static List<Clearance> collisionVolumes(){return SOLIDS;}
     public static boolean collides(double x,double z,double radius){
@@ -90,10 +90,17 @@ public final class VanInteriorLayout {
         return false;
     }
     public static boolean insideShell(Fixture p){
-        return Math.abs(p.localX())<VanStaging.HALF_WIDTH-.10
-            &&p.localZ()>VanStaging.FRONT+.12
-            &&p.localZ()<VanStaging.REAR-.11
-            &&p.y()>=0&&p.y()<ROOF_Y;
+        if(p.localZ()<=VanStaging.FRONT+.12||
+            p.localZ()>=VanStaging.REAR-.11||
+            p.y()<0||p.y()>=ROOF_Y)return false;
+        double maxX=VanStaging.INTERIOR_HALF_WIDTH;
+        if(p.y()>VanStaging.ROOF_SHOULDER_Y){
+            double t=(p.y()-VanStaging.ROOF_SHOULDER_Y)/
+                (ROOF_Y-VanStaging.ROOF_SHOULDER_Y);
+            maxX-=t*(VanStaging.INTERIOR_HALF_WIDTH-
+                VanStaging.INTERIOR_ROOF_HALF_WIDTH);
+        }
+        return Math.abs(p.localX())<maxX-.045;
     }
     public static double clearAisleHalfWidth(){return AISLE_HALF_WIDTH;}
     public static boolean openAisle(double x,double z){
