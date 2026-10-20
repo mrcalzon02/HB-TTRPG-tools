@@ -155,3 +155,4 @@ EquipmentAssetAssignmentsTest
 LevelRenderAcceptanceTest
 WorldViewHandednessTest
 LevelSurfaceIntegrityTest
+LivedLevelDressingTest

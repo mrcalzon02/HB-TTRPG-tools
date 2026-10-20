@@ -1,0 +1,32 @@
+{
+  "license": "CC0-1.0",
+  "libraries": [
+    {
+      "id": "industrial",
+      "title": "Boilers, heating and service machinery",
+      "license": "CC0-1.0",
+      "count": 18,
+      "manifest": "assets/beckenburg/libraries/industrial/manifest.json",
+      "download": "assets/beckenburg/libraries/industrial/beckenburg-industrial-cc0.zip",
+      "sha256": "454a2ff6911402bae2c25342403679bb682142251c9b2663dc72350d5bc6ba57"
+    },
+    {
+      "id": "household",
+      "title": "Inherited furniture and household curiosities",
+      "license": "CC0-1.0",
+      "count": 22,
+      "manifest": "assets/beckenburg/libraries/household/manifest.json",
+      "download": "assets/beckenburg/libraries/household/beckenburg-household-cc0.zip",
+      "sha256": "465b18dfc62ecd48c4e261a9f70e71f07a1f41184d08d7d9dc6f00ab038bb4a3"
+    },
+    {
+      "id": "hiding",
+      "title": "Walk-in hiding cupboard",
+      "license": "CC0-1.0",
+      "count": 2,
+      "manifest": "assets/beckenburg/libraries/hiding/manifest.json",
+      "download": "assets/beckenburg/libraries/hiding/beckenburg-hiding-cc0.zip",
+      "sha256": "bd79c4bda76e414168ec4b34e8485fadf1e90b9e23b00fd9a692573f55eb513d"
+    }
+  ]
+}

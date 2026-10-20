@@ -56,6 +56,11 @@ for model in assets/runtime/models/level_*.glb; do
     cp "$model" "build/classes/org/beckenburg/models/$(basename "$model")"
 done
 mkdir -p build/classes/org/beckenburg/level-textures
+while IFS= read -r name || [ -n "$name" ]; do
+    name="${name%$'\r'}"
+    test -s "assets/runtime/models/${name}.glb"
+    cp "assets/runtime/models/${name}.glb" "build/classes/org/beckenburg/models/${name}.glb"
+done < assets/runtime/level-clutter-models.txt
 cp assets/runtime/level-textures/*.png build/classes/org/beckenburg/level-textures/
 # Manufacture missing tier housings and PSX texture atlases as actual GLBs.
 # Deterministic Java 17 authoring; no Python/Blender dependency on Windows.
@@ -77,7 +82,7 @@ java -Djava.awt.headless=true -cp build/classes org.beckenburg.GgBotVehicleTextu
     build/source/ggbot-original.zip assets/runtime/models build/classes/org/beckenburg/models
 javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java/org/beckenburg/*.java
 # Verify authored multi-storey levels and actual packaged scenery.
-for check in AuthoredLevelPhysicsTest AuthoredLevelReachabilityTest AuthoredLevelStateTest AuthoredLevelNetworkTest AuthoredLevelRitualCaseTest AuthoredUtilitiesTest SoloElevationTest EquipmentAssetAssignmentsTest LevelRenderAcceptanceTest WorldViewHandednessTest LevelSurfaceIntegrityTest; do
+for check in AuthoredLevelPhysicsTest AuthoredLevelReachabilityTest AuthoredLevelStateTest AuthoredLevelNetworkTest AuthoredLevelRitualCaseTest AuthoredUtilitiesTest SoloElevationTest EquipmentAssetAssignmentsTest LevelRenderAcceptanceTest WorldViewHandednessTest LevelSurfaceIntegrityTest LivedLevelDressingTest; do
     java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg."$check"
 done
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GraphicsOptionsTest

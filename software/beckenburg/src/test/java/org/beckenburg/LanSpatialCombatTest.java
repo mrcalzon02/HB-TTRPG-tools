@@ -13,7 +13,16 @@ public final class LanSpatialCombatTest {
         check(hit[0]&&!hit[1]&&!hit[2],"3D contact selects a single deterministic victim");
 
         var origin=map.spawn(3);
-        AuthoredTestSupport.place(map,world,0,new LevelDefinition.Vec(origin.x()+2.5,origin.y(),origin.z()));
+        // Dressing can occupy old fixture coordinates; choose a real clear
+        // position outside strike range without changing the range rule.
+        LevelDefinition.Vec distant=null;var room=map.level().room(3);
+        for(double x=room.x0()+.4;x<room.x1()-.3&&distant==null;x+=.2)
+            for(double z=room.z0()+.4;z<room.z1()-.3;z+=.2)
+                if(Math.hypot(x-origin.x(),z-origin.z())>2.4&&map.traversable(x,origin.y(),z)){
+                    distant=new LevelDefinition.Vec(x,origin.y(),z);break;
+                }
+        check(distant!=null,"authored room needs a clear position beyond contact reach");
+        AuthoredTestSupport.place(map,world,0,distant);
         hit=LanSpatialCombat.victims(map,world,pose.pose(),rooms,connected,spatial);
         check(!hit[0]&&hit[1]&&!hit[2],"hunter outside reach is not damaged");
         world.setRoom(1,HouseMap.EXTRACTION_ROOM);rooms[1]=HouseMap.EXTRACTION_ROOM;

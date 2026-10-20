@@ -52,6 +52,7 @@ for %%M in (bed_4 bed_5 bed_1 bed_2 bedside_table_1 toilet_mp_1 carpet_mp_1 phot
   copy /Y assets\runtime\models\%%M.glb build\classes\org\beckenburg\models\%%M.glb >nul || exit /b 1
 )
 for %%M in (assets\runtime\models\level_*.glb) do copy /Y "%%M" "build\classes\org\beckenburg\models\%%~nxM" >nul || exit /b 1
+for /f "usebackq delims=" %%M in ("assets\runtime\level-clutter-models.txt") do copy /Y "assets\runtime\models\%%M.glb" "build\classes\org\beckenburg\models\%%M.glb" >nul || exit /b 1
 if not exist build\classes\org\beckenburg\level-textures mkdir build\classes\org\beckenburg\level-textures
 copy /Y assets\runtime\level-textures\*.png build\classes\org\beckenburg\level-textures\ >nul || exit /b 1
 rem Author all 126 tiered PSX GLBs and embedded low-resolution texture atlases.
@@ -71,7 +72,7 @@ java -Djava.awt.headless=true -cp build\classes org.beckenburg.GgBotVehicleTextu
 
 javac --release 17 -encoding UTF-8 -cp build\classes -d build\test @build\sources-tests.txt || exit /b 1
 rem Verify authored multi-storey levels before the historical release suite.
-for %%T in (AuthoredLevelPhysicsTest AuthoredLevelReachabilityTest AuthoredLevelStateTest AuthoredLevelNetworkTest AuthoredLevelRitualCaseTest AuthoredUtilitiesTest SoloElevationTest EquipmentAssetAssignmentsTest LevelRenderAcceptanceTest WorldViewHandednessTest LevelSurfaceIntegrityTest) do java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.%%T || exit /b 1
+for %%T in (AuthoredLevelPhysicsTest AuthoredLevelReachabilityTest AuthoredLevelStateTest AuthoredLevelNetworkTest AuthoredLevelRitualCaseTest AuthoredUtilitiesTest SoloElevationTest EquipmentAssetAssignmentsTest LevelRenderAcceptanceTest WorldViewHandednessTest LevelSurfaceIntegrityTest LivedLevelDressingTest) do java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.%%T || exit /b 1
 rem Both release and E2E verify the same freshly assembled jar payload.
 jar --create --file build\beckenburg-game.jar --main-class org.beckenburg.InvestigationGame -C build\classes org\beckenburg || exit /b 1
 if /I "%~1"=="e2e" goto e2e

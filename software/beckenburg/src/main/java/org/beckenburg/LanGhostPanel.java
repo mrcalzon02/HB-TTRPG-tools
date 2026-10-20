@@ -55,9 +55,12 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
             List<String> p=LanProtocol.parts(packet);
             if(p.size()==3&&p.get(0).equals("SITE")){
                 map=new HouseMap(HouseMap.Site.valueOf(p.get(1)));
+                map.configureHiding(camera.hidingDensity);
                 if(!map.level().revision().equals(p.get(2)))throw new IllegalArgumentException("incompatible level revision");
                 buildingAudio.setMap(map);
                 feedback="SPECTRAL TERRITORY: "+map.site();
+            }else if(p.size()==2&&p.get(0).equals("HIDECONFIG")){
+                camera.hidingDensity=LanProtocol.integer(p.get(1),0,100);map.configureHiding(camera.hidingDensity);
             }else if(p.size()==3&&p.get(0).equals("LIGHTS")){
                 lights.acceptSnapshot(p.get(1));lights.setBreaker(LanProtocol.integer(p.get(2),0,1)==1);
             }else if(p.size()==2&&p.get(0).equals("DOORS")){

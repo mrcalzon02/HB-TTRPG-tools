@@ -1,0 +1,737 @@
+[
+  {
+    "id": "coffee_table_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Furniture\\coffee_table_1.glb",
+    "sha256": "45ca5f3d1a2ff6e621d514b34ec1f2f476bedaa5c125482eae0f3f60886d675c",
+    "bytes": 89120,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.8099983930587769,
+          1.8531864043325186e-08,
+          -0.31000015139579773
+        ],
+        "max": [
+          0.8100026249885559,
+          0.6600000262260437,
+          0.30999991297721863
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "display_cabinet_mp_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Furniture\\display_cabinet_mp_1.glb",
+    "sha256": "e651a1d5292a4da7b96fba35676fd3bf3b20d03b2925163b8014a874b565cfde",
+    "bytes": 254780,
+    "local_position_bounds": [
+      {
+        "min": [
+          -2.7418136596679688e-06,
+          0.002000299282371998,
+          -1.5701995437211735e-07
+        ],
+        "max": [
+          0.5980023145675659,
+          1.8800002336502075,
+          0.020000571385025978
+        ]
+      },
+      {
+        "min": [
+          0.10000336170196533,
+          0.10200028121471405,
+          0.009000063873827457
+        ],
+        "max": [
+          0.4980047345161438,
+          1.7800002098083496,
+          0.011000747792422771
+        ]
+      },
+      {
+        "min": [
+          0.5303346514701843,
+          0.6967313885688782,
+          0.020002193748950958
+        ],
+        "max": [
+          0.5679561495780945,
+          0.8832724690437317,
+          0.0582917183637619
+        ]
+      },
+      {
+        "min": [
+          -0.3700052499771118,
+          -2.0770274034020986e-07,
+          -0.27000096440315247
+        ],
+        "max": [
+          0.37000370025634766,
+          2.1000003814697266,
+          0.269999235868454
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "display_cabinet_mp_2_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Furniture\\display_cabinet_mp_2_1.glb",
+    "sha256": "58b653afe0e9adb327b43a120b63aaf96eee4c3eb30df028ca67d707d080f834",
+    "bytes": 321260,
+    "local_position_bounds": [
+      {
+        "min": [
+          -2.7418136596679688e-06,
+          0.0020003055687993765,
+          -1.681064532021992e-07
+        ],
+        "max": [
+          0.5980023145675659,
+          1.7100002765655518,
+          0.02000032179057598
+        ]
+      },
+      {
+        "min": [
+          0.10000336170196533,
+          0.10200028121471405,
+          0.00900004431605339
+        ],
+        "max": [
+          0.4980047345161438,
+          1.6100002527236938,
+          0.011000508442521095
+        ]
+      },
+      {
+        "min": [
+          0.5303346514701843,
+          0.5267313718795776,
+          0.020002061501145363
+        ],
+        "max": [
+          0.5679561495780945,
+          0.7132724523544312,
+          0.05829159915447235
+        ]
+      },
+      {
+        "min": [
+          -0.5980023145675659,
+          0.0020003055687993765,
+          -1.681064532021992e-07
+        ],
+        "max": [
+          2.7418136596679688e-06,
+          1.7100002765655518,
+          0.02000032179057598
+        ]
+      },
+      {
+        "min": [
+          -0.4980047345161438,
+          0.10200028121471405,
+          0.00900004431605339
+        ],
+        "max": [
+          -0.10000336170196533,
+          1.6100002527236938,
+          0.011000508442521095
+        ]
+      },
+      {
+        "min": [
+          -0.5679561495780945,
+          0.5267313718795776,
+          0.020002061501145363
+        ],
+        "max": [
+          -0.5303346514701843,
+          0.7132724523544312,
+          0.05829159915447235
+        ]
+      },
+      {
+        "min": [
+          -0.6000001430511475,
+          -0.08999975770711899,
+          -0.42000022530555725
+        ],
+        "max": [
+          0.6000012159347534,
+          0.08000028878450394,
+          -1.73143916981644e-07
+        ]
+      },
+      {
+        "min": [
+          -0.09327652305364609,
+          -0.019664734601974487,
+          1.3253065844764933e-06
+        ],
+        "max": [
+          0.09326454997062683,
+          0.017956800758838654,
+          0.038290876895189285
+        ]
+      },
+      {
+        "min": [
+          -0.6700044870376587,
+          -2.0770272612935514e-07,
+          -0.32000017166137695
+        ],
+        "max": [
+          0.6700044870376587,
+          2.1000003814697266,
+          0.3199999928474426
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "shelf_mp_4",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Furniture\\shelf_mp_4.glb",
+    "sha256": "9d172dfd390f7d1c6360875fe475860041580fe920b27101f384fbf0fe9c8b6c",
+    "bytes": 86312,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.6100039482116699,
+          -5.042526751708465e-08,
+          -0.10999951511621475
+        ],
+        "max": [
+          0.6099989414215088,
+          2.190000295639038,
+          0.11000057309865952
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "table_large_2",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Furniture\\table_large_2.glb",
+    "sha256": "4752307917e8b5e6532aff42c779ddb99c967527f9bb7ff111d5be60dd23b279",
+    "bytes": 88276,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.849998414516449,
+          1.8531864043325186e-08,
+          -0.4500020444393158
+        ],
+        "max": [
+          0.850002646446228,
+          0.9600000381469727,
+          0.44999799132347107
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "cardboard_box_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Large Props\\cardboard_box_1.glb",
+    "sha256": "8206078734b56d22bae660f8c72ae434f2050fdb29ea0fb0a89b4f6c86f74a9a",
+    "bytes": 50032,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.36386242508888245,
+          0,
+          -0.36000001430511475
+        ],
+        "max": [
+          0.3630309998989105,
+          0.36700206995010376,
+          0.36000001430511475
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "cardboard_box_2",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Large Props\\cardboard_box_2.glb",
+    "sha256": "fc7f8c50523574b5bb59c6d67e859ee6cf41b70f115a6aa88b9d04927556a5c3",
+    "bytes": 72532,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.36720001697540283,
+          0,
+          -0.36000001430511475
+        ],
+        "max": [
+          0.3624992370605469,
+          0.7261874079704285,
+          0.3654000163078308
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "wooden_crate_2",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Large Props\\wooden_crate_2.glb",
+    "sha256": "7aced022a10a02202825496ef0e584ce745c4d9e42d39373d1e3afcaa900e2c4",
+    "bytes": 93796,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.5491612553596497,
+          -6.437302602080308e-08,
+          -0.5423206686973572
+        ],
+        "max": [
+          0.5400001406669617,
+          1.0821212530136108,
+          0.5400001406669617
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "metal_barrel_mp_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Large Props\\metal_barrel_mp_1.glb",
+    "sha256": "14dca0a1e5200298540dafaf06f636aef3fbd26e4a2db9c7d19b82bfe3832a18",
+    "bytes": 230816,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.37439998984336853,
+          0,
+          -0.37439998984336853
+        ],
+        "max": [
+          0.37439998984336853,
+          1.0800000429153442,
+          0.3744000196456909
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "book_mp_3",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\book_mp_3.glb",
+    "sha256": "1fe6236bd9bd3055c0788cff2f801b2a7fc7e57ea221f23962fc55d1df4141d7",
+    "bytes": 106516,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.0900001972913742,
+          3.298356887171394e-06,
+          -0.1350010186433792
+        ],
+        "max": [
+          0.09001278877258301,
+          0.06800331175327301,
+          0.13499896228313446
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "book_mp_4",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\book_mp_4.glb",
+    "sha256": "2a14130aaae790bf48ef272ef2792e5f58ed3104b4a388855d58f935ffb99b46",
+    "bytes": 106520,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.0900001972913742,
+          3.298356887171394e-06,
+          -0.1350010186433792
+        ],
+        "max": [
+          0.09001278877258301,
+          0.048003312200307846,
+          0.13499896228313446
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "book_mp_5",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\book_mp_5.glb",
+    "sha256": "f270d28f26ac489803f1bfb31840567a417579008aa4cf962b45593c581714d5",
+    "bytes": 106520,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.0900001972913742,
+          3.298356887171394e-06,
+          -0.1350010186433792
+        ],
+        "max": [
+          0.09001278877258301,
+          0.048003312200307846,
+          0.13499896228313446
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "notebook_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\notebook_1.glb",
+    "sha256": "cf525ed51652cfee8b1e74756d04b73532b54bfb11267d404794ce2a2a5e5ac6",
+    "bytes": 508800,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.0737004205584526,
+          0.001280349213629961,
+          -0.1001708135008812
+        ],
+        "max": [
+          0.07370074093341827,
+          0.022798355668783188,
+          0.10253222286701202
+        ]
+      },
+      {
+        "min": [
+          -0.059729546308517456,
+          0.0009949617087841034,
+          -0.11244838684797287
+        ],
+        "max": [
+          0.05972866714000702,
+          0.027005096897482872,
+          -0.08755461871623993
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "pencil_mp_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\pencil_mp_1.glb",
+    "sha256": "5ec2eaa87cd37d2f309c5f69fef1523eff83b83dce23aa071a124062670d80d4",
+    "bytes": 57148,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.006482516415417194,
+          7.502313223994861e-07,
+          -0.1221003457903862
+        ],
+        "max": [
+          0.006464731879532337,
+          0.012947998940944672,
+          0.11406827718019485
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "photo_frame_mp_2",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\photo_frame_mp_2.glb",
+    "sha256": "9316f6959bf6c21f19b278538f4774e3fd0fb494322a1ff82cf806ba2a1b5e7b",
+    "bytes": 100832,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.12499237060546875,
+          -1.097843050956726e-05,
+          -0.10602127015590668
+        ],
+        "max": [
+          0.12500764429569244,
+          0.18402127921581268,
+          0.009848088026046753
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "clock_2",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\clock_2.glb",
+    "sha256": "b891bf8f9dd13f8ac03f40c4b3665cc87cd6366e5cd53d41a172287d6cde3680",
+    "bytes": 77376,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.003971370402723551,
+          -0.06295309960842133,
+          -2.010085609072121e-08
+        ],
+        "max": [
+          0.003990896977484226,
+          0.029703401029109955,
+          0.001259995042346418
+        ]
+      },
+      {
+        "min": [
+          -0.003871450200676918,
+          -0.08996184915304184,
+          -1.268617211280798e-08
+        ],
+        "max": [
+          0.004133855924010277,
+          0.03294185549020767,
+          0.0014000098453834653
+        ]
+      },
+      {
+        "min": [
+          -0.14081111550331116,
+          -0.13999995589256287,
+          -0.021000022068619728
+        ],
+        "max": [
+          0.14080604910850525,
+          0.14000001549720764,
+          2.0009487400329817e-08
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "tv_remote_mp_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\tv_remote_mp_1.glb",
+    "sha256": "f230dd091a3eb32e68e1a1a05cb5cf2746d7b6b3ca04fcf8e2483373f565cad4",
+    "bytes": 15140,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.03399999812245369,
+          6.070086655540763e-10,
+          -0.1534268707036972
+        ],
+        "max": [
+          0.03999882936477661,
+          0.020000001415610313,
+          0.13272935152053833
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "planter_pot_mp_1_full",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\planter_pot_mp_1_full.glb",
+    "sha256": "e5a43e18457ace61e7bdd427291855b359b34b7ed1311d122aa98404931669c2",
+    "bytes": 114228,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.11440000683069229,
+          -7.748604424762107e-09,
+          -0.11440001428127289
+        ],
+        "max": [
+          0.11440000683069229,
+          0.20800000429153442,
+          0.11440001428127289
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "potted_cactus_mp_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\potted_cactus_mp_1.glb",
+    "sha256": "c9920496c7a5b33beed28944c688b635a30febae11706643e95f78a68693f6d9",
+    "bytes": 118588,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.08800000697374344,
+          -5.9604645663569045e-09,
+          -0.08800000697374344
+        ],
+        "max": [
+          0.08800000697374344,
+          0.26834842562675476,
+          0.08800000697374344
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "toy_brick_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\toy_brick_1.glb",
+    "sha256": "1a37506977a702a8e1b3c52a999295ce81164a4e461cdad607cb225668947f05",
+    "bytes": 34904,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.014999243430793285,
+          0,
+          -0.03000068850815296
+        ],
+        "max": [
+          0.014999539591372013,
+          0.025000009685754776,
+          0.03000068850815296
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "toy_brick_1_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\toy_brick_1_1.glb",
+    "sha256": "bfdaa986d9446767e43a4cc4b499dfddf7947b2e3b43ef0dd038ccb9475fad7a",
+    "bytes": 34908,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.014999243430793285,
+          0,
+          -0.03000068850815296
+        ],
+        "max": [
+          0.014999539591372013,
+          0.025000009685754776,
+          0.03000068850815296
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "toy_brick_1_2",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\toy_brick_1_2.glb",
+    "sha256": "a90e5a280d29b7f6fbadf5e9d45417d25d91527b34daa62ca0533666cac45b8c",
+    "bytes": 34908,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.014999243430793285,
+          0,
+          -0.03000068850815296
+        ],
+        "max": [
+          0.014999539591372013,
+          0.025000009685754776,
+          0.03000068850815296
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "vhs_tape_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\vhs_tape_1.glb",
+    "sha256": "39cd58a15a855c2305a43a83382f767b4ac6afa98192a5be766851e11a3b3834",
+    "bytes": 12924,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.07999972999095917,
+          -3.725290742551124e-09,
+          -0.15000008046627045
+        ],
+        "max": [
+          0.08800026029348373,
+          0.044999998062849045,
+          0.14999990165233612
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "tin_can_mp_1_rusty",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\tin_can_mp_1_rusty.glb",
+    "sha256": "c10d9b8532d6d88fa4eb260c660e37ee8264051469bec8441a7a3eb66e82f418",
+    "bytes": 125356,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.0560000017285347,
+          -1.2006553973265e-08,
+          -0.12730948626995087
+        ],
+        "max": [
+          0.0560000017285347,
+          0.22561638057231903,
+          0.05600004270672798
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "jerrycan_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\jerrycan_1.glb",
+    "sha256": "b8b266c3d48d8976d1e390414cd6e196f590f32fcd5129d7049421a309ad95b7",
+    "bytes": 203620,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.16817660629749298,
+          2.1066075106546123e-08,
+          -0.25234270095825195
+        ],
+        "max": [
+          0.16817665100097656,
+          0.5024715662002563,
+          0.1674194633960724
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "canned_food_mp_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\canned_food_mp_1.glb",
+    "sha256": "fbaeeb84ef303737511620fb9dfc6637ffe87bb4655fb29d84750b2829db188e",
+    "bytes": 116836,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.055000003427267075,
+          -5.122274160385132e-09,
+          -0.055000003427267075
+        ],
+        "max": [
+          0.055000003427267075,
+          0.1680000126361847,
+          0.055000003427267075
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  },
+  {
+    "id": "canned_food_mp_2",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Items & Weapons\\canned_food_mp_2.glb",
+    "sha256": "a04c5a65bcc4470795207c98c39771031d10b5e055a5baa163513292f557fe93",
+    "bytes": 116836,
+    "local_position_bounds": [
+      {
+        "min": [
+          -0.055000003427267075,
+          -5.122274160385132e-09,
+          -0.055000003427267075
+        ],
+        "max": [
+          0.055000003427267075,
+          0.1680000126361847,
+          0.055000003427267075
+        ]
+      }
+    ],
+    "modification": "none; original GLB hierarchy, images and UVs preserved"
+  }
+]

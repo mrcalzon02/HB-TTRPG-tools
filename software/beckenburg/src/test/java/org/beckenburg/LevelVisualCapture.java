@@ -5,7 +5,7 @@ import javax.imageio.ImageIO;
 
 /** Actual software-renderer acceptance views; no concept-image substitutions. */
 public final class LevelVisualCapture {
-    public static void main(String[] args)throws Exception{
+    static void inspection()throws Exception{
         // Inspection captures must not inherit the user's CRT/grain preferences.
         // Change this process only; never save over their preferences.
         var preferences=GraphicsOptions.current();
@@ -13,6 +13,9 @@ public final class LevelVisualCapture {
         active.set(null,new GraphicsOptions(preferences.mode(),preferences.display(),preferences.detail(),
             preferences.aspect(),preferences.upscale(),GraphicsOptions.Antialias.OFF,preferences.fieldOfView(),
             0,0,false,false,false,false));
+    }
+    public static void main(String[] args)throws Exception{
+        inspection();
         Path out=Path.of(args.length>0?args[0]:"development/levels/previews/runtime");Files.createDirectories(out);
         HouseMap map=new HouseMap(args.length>1?HouseMap.Site.valueOf(args[1]):HouseMap.Site.HOUSE);
         SceneRenderer scene=new SceneRenderer();scene.setRenderSize(960,600);scene.setPsxPreset(PsxPipeline.Preset.OFF);
@@ -39,7 +42,14 @@ public final class LevelVisualCapture {
         }
         System.out.println("Runtime views saved to "+out.toAbsolutePath());
     }
-    private static void capture(SceneRenderer s,HouseMap map,Path out,String name,double x,double feet,double z,double tx,double ty,double tz)throws Exception{
+    static void capture(SceneRenderer s,HouseMap map,Path out,String name,double x,double feet,double z,double tx,double ty,double tz)throws Exception{
+        int room=map.roomAt(x,feet,z);
+        var cupboard=map.level().socket("hide",room);
+        boolean insideCupboard=cupboard!=null&&LevelClosets.available(map.level(),room,map.hidingDensity())
+            &&Math.hypot(x-cupboard.x(),z-cupboard.z())<1.6;
+        if(room>=0&&(!map.traversable(x,feet,z)||insideCupboard)){
+            var clear=map.spawn(room);x=clear.x();z=clear.z();feet=clear.y();
+        }
         s.x=x;s.z=z;s.eyeHeight=feet+1.62;s.yaw=Math.atan2(tx-x,tz-z);
         s.pitch=Math.atan2(ty-s.eyeHeight,Math.hypot(tx-x,tz-z));s.lamp=true;
         long start=System.nanoTime();s.drawNetwork(map,java.util.List.of(),-1,0);

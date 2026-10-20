@@ -238,7 +238,7 @@ public final class LevelPlans {
         b.window(10,12,10,6,30,false);b.furnish();return b.finish(11,0);
     }
 
-    private static final class B {
+    static final class B {
         final String id,title,ambience;
         final List<Room> rooms=new ArrayList<>(); final List<Portal> portals=new ArrayList<>();
         final List<Stair> stairs=new ArrayList<>(); final List<LevelDefinition.Void> voids=new ArrayList<>();
@@ -337,6 +337,7 @@ public final class LevelPlans {
         }
         LevelDefinition finish(int breaker,int main){
             clearCirculation();
+            if(id.equals("house")||id.equals("farmhouse")||id.equals("school"))LevelDressing.populate(this);
             List<Prop> furnishingOverlays=new ArrayList<>();
             for(Prop p:props){
                 if(p.mesh().equals("bed_4")||p.mesh().equals("bed_5"))
@@ -350,9 +351,12 @@ public final class LevelPlans {
             int[] ritualRooms={main,(main+3)%12,12};String[] rites={"banishment","cleansing","absolution"};
             for(int i=0;i<3;i++){Room r=rooms.get(ritualRooms[i]);socket("ritual",r.id(),r.cx(),r.y(),r.cz(),0,rites[i]);}
             for(Prop p:props)if(p.halfX()>0&&p.halfZ()>0){double off=originOffsetZ(p);colliders.add(new Collider(p.x()-Math.sin(p.yaw())*off,p.y(),p.z()+Math.cos(p.yaw())*off,p.halfX(),p.halfZ(),p.height(),p.yaw()));}
-            Room van=rooms.get(14);return new LevelDefinition(id,"production-2026-10-19",title,rooms,portals,stairs,voids,props,sockets,colliders,new Dock(van.cx(),0,van.cz(),-Math.PI/2),ambience);
+            // Choose the aged skin after placement/support/collision are finalized.
+            // Clean library assets remain available without changing any geometry.
+            props.replaceAll(p->new Prop(LivedAssets.worn(p.mesh()),p.room(),p.x(),p.y(),p.z(),p.scale(),p.yaw(),p.halfX(),p.halfZ(),p.height(),LivedAssets.worn(p.support())));
+            Room van=rooms.get(14);return new LevelDefinition(id,"production-2026-10-20-lived-worn",title,rooms,portals,stairs,voids,props,sockets,colliders,new Dock(van.cx(),0,van.cz(),-Math.PI/2),ambience);
         }
-        private boolean circulation(Prop p,double x,double z){
+        boolean circulation(Prop p,double x,double z){
             Room r=rooms.get(p.room());double hx=Math.abs(Math.cos(p.yaw()))*p.halfX()+Math.abs(Math.sin(p.yaw()))*p.halfZ();
             double hz=Math.abs(Math.sin(p.yaw()))*p.halfX()+Math.abs(Math.cos(p.yaw()))*p.halfZ();
             x-=Math.sin(p.yaw())*originOffsetZ(p);z+=Math.cos(p.yaw())*originOffsetZ(p);
@@ -395,7 +399,7 @@ public final class LevelPlans {
                 result.stream().noneMatch(q->q.room()==p.room()&&q.mesh().equals(p.support())));
             props.clear();props.addAll(result);
         }
-        private boolean overlap(Prop p,List<Prop> placed){
+        boolean overlap(Prop p,List<Prop> placed){
             double hx=Math.abs(Math.cos(p.yaw()))*p.halfX()+Math.abs(Math.sin(p.yaw()))*p.halfZ(),hz=Math.abs(Math.sin(p.yaw()))*p.halfX()+Math.abs(Math.cos(p.yaw()))*p.halfZ();
             for(Prop q:placed)if(q.halfX()>0&&Math.abs(q.y()-p.y())<.3){
                 double qx=Math.abs(Math.cos(q.yaw()))*q.halfX()+Math.abs(Math.sin(q.yaw()))*q.halfZ(),qz=Math.abs(Math.sin(q.yaw()))*q.halfX()+Math.abs(Math.cos(q.yaw()))*q.halfZ();

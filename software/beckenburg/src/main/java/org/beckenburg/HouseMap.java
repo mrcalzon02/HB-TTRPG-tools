@@ -11,12 +11,20 @@ public final class HouseMap {
     private final Site site;
     private final LevelDefinition level;
     private final List<Guard> guards;
+    private int hidingDensity=70;
+    private List<Collider> closetColliders=List.of();
+    public int hidingDensity(){return hidingDensity;}
+    public void configureHiding(int density){
+        if(density<0||density>100)throw new IllegalArgumentException("hiding density");
+        hidingDensity=density;closetColliders=LevelClosets.colliders(level,density);
+    }
     private final Set<Integer> openDoors=new HashSet<>(),openWindows=new HashSet<>();
     private final VanStaging van;
     public HouseMap(){this(Site.HOUSE);}
     public HouseMap(Site site){
         this.site=Objects.requireNonNull(site);level=LevelPlans.build(site);guards=level.guards();
         Dock d=level.dock();van=new VanStaging(new VanStaging.Placement(d.x(),d.z(),d.yaw()));
+        configureHiding(70);
     }
     public Site site(){return site;}
     public LevelDefinition level(){return level;}
@@ -111,7 +119,7 @@ public final class HouseMap {
     public boolean doorwayAlongX(int x,int z){return level.portals().stream().anyMatch(p->(int)p.x()==x&&(int)p.z()==z&&!p.alongX());}
     public VanStaging.Position hidingSpot(int room,int density){
         if(density<0||density>100)throw new IllegalArgumentException("hiding density");
-        if(room<0||room>=12||Math.floorMod(room*37+17,100)>=density)return null;
+        if(!LevelClosets.available(level,room,density))return null;
         Socket s=level.socket("hide",room);return s==null?null:new VanStaging.Position(s.x(),s.z());
     }
     private boolean supported(double x,double y,double z,double radius){
@@ -165,6 +173,7 @@ public final class HouseMap {
             if(!supported(x+d[0],y,z+d[1],0))return false;
         for(Portal p:level.portals())if(p.door()&&!doorOpen(p.id())&&boxHit(x,y,z,radius,p.x(),p.y(),p.z(),p.alongX()?p.width()/2:.10,p.alongX()?.10:p.width()/2,2.4,0))return false;
         for(Collider p:level.colliders())if(boxHit(x,y,z,radius,p.x(),p.y(),p.z(),p.halfX(),p.halfZ(),p.height(),p.yaw()))return false;
+        for(Collider p:closetColliders)if(boxHit(x,y,z,radius,p.x(),p.y(),p.z(),p.halfX(),p.halfZ(),p.height(),p.yaw()))return false;
         for(Guard g:guards)if(boxHit(x,y,z,radius,(g.x0()+g.x1())/2,g.y(),(g.z0()+g.z1())/2,
             Math.max(.035,Math.abs(g.x1()-g.x0())/2),Math.max(.035,Math.abs(g.z1()-g.z0())/2),1.0,0))return false;
         if(Math.abs(y-level.dock().y())<1.5&&(van.collides(x,z,radius)||VanArrivalStreet.collision(van,x,z,radius)))return false;
@@ -205,6 +214,7 @@ public final class HouseMap {
             if(!inside||wallBlocked(x,y,z,.015,true))return false;
             for(Room r:level.rooms())if(Math.abs(y-r.y())<.06&&x>=r.x0()&&x<=r.x1()&&z>=r.z0()&&z<=r.z1()&&!level.floorVoid(x,r.y(),z))return false;
             for(Collider p:level.colliders())if(y>p.y()&&y<p.y()+p.height()&&boxHit(x,y-1,z,0,p.x(),p.y(),p.z(),p.halfX(),p.halfZ(),p.height(),p.yaw()))return false;
+            for(Collider p:closetColliders)if(y>p.y()&&y<p.y()+p.height()&&boxHit(x,y-1,z,0,p.x(),p.y(),p.z(),p.halfX(),p.halfZ(),p.height(),p.yaw()))return false;
         }
         return true;
     }

@@ -1,0 +1,672 @@
+{
+  "id": "household",
+  "title": "Inherited furniture and household curiosities",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "variants": [
+    "clean",
+    "worn"
+  ],
+  "assets": [
+    {
+      "id": "level_lived_shelf",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "991908b343bd5ebcbb0b32e6af8e84fd2c644f8672b376ee64f46b30065ca8ff",
+      "bytes": 301708,
+      "triangles": 3680,
+      "bounds": [
+        [
+          -0.6674999594688416,
+          0.0,
+          -0.22499999403953552
+        ],
+        [
+          0.6675000190734863,
+          1.8624999523162842,
+          0.22499999403953552
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_shelf.blend",
+      "variant": "clean",
+      "family": "level_lived_shelf",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_shelf.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_shelf.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_shelf.png"
+      }
+    },
+    {
+      "id": "level_lived_pantry",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "10d0c73e671892f8f9aedcae6f52852981c06ba041af461a1d7059ea827fef5d",
+      "bytes": 275624,
+      "triangles": 3760,
+      "bounds": [
+        [
+          -0.6674999594688416,
+          0.0,
+          -0.22499999403953552
+        ],
+        [
+          0.6675000190734863,
+          1.8624999523162842,
+          0.22499999403953552
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_pantry.blend",
+      "variant": "clean",
+      "family": "level_lived_pantry",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_pantry.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_pantry.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_pantry.png"
+      }
+    },
+    {
+      "id": "level_lived_curio",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "67547069ecf925e8638107bd67dbf77584d3b975215e2d1cf30f4022edf0e2bf",
+      "bytes": 221316,
+      "triangles": 2580,
+      "bounds": [
+        [
+          -0.7250000238418579,
+          0.0,
+          -0.25
+        ],
+        [
+          0.7250000238418579,
+          1.9600000381469727,
+          0.25999999046325684
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_curio.blend",
+      "variant": "clean",
+      "family": "level_lived_curio",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_curio.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_curio.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_curio.png"
+      }
+    },
+    {
+      "id": "level_lived_sideboard",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "484d210a286489cfdae40212f32414159e4a55ebd52d9b82775217ca78b187f7",
+      "bytes": 112068,
+      "triangles": 1008,
+      "bounds": [
+        [
+          -0.7649999856948853,
+          0.0,
+          -0.26499998569488525
+        ],
+        [
+          0.7649999856948853,
+          1.1399999856948853,
+          0.2919999957084656
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_sideboard.blend",
+      "variant": "clean",
+      "family": "level_lived_sideboard",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_sideboard.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_sideboard.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_sideboard.png"
+      }
+    },
+    {
+      "id": "level_lived_card_table",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "b9baf86f5fa30393424eb212013539b5bb44cee5c3aebc193d2b3895cac94009",
+      "bytes": 83940,
+      "triangles": 600,
+      "bounds": [
+        [
+          -0.5099999904632568,
+          -0.017804384231567383,
+          -0.5099999904632568
+        ],
+        [
+          0.5099999904632568,
+          0.8899999856948853,
+          0.5099999904632568
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_card_table.blend",
+      "variant": "clean",
+      "family": "level_lived_card_table",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_card_table.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_card_table.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_card_table.png"
+      }
+    },
+    {
+      "id": "level_lived_ottoman",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "ccb94eec2ceba3232694d533873dccec67e92875570e7887fe341b3e27c67730",
+      "bytes": 46060,
+      "triangles": 396,
+      "bounds": [
+        [
+          -0.4350000023841858,
+          0.0,
+          -0.3149999976158142
+        ],
+        [
+          0.4350000023841858,
+          0.5199999809265137,
+          0.3149999976158142
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_ottoman.blend",
+      "variant": "clean",
+      "family": "level_lived_ottoman",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_ottoman.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_ottoman.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_ottoman.png"
+      }
+    },
+    {
+      "id": "level_lived_trunk",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "85c700a2b096053ec0380683b2b56009fcd1a4fd9d3ad79e469fdba9e9629f02",
+      "bytes": 68224,
+      "triangles": 344,
+      "bounds": [
+        [
+          -0.49000000953674316,
+          0.02000001072883606,
+          -0.29499998688697815
+        ],
+        [
+          0.49000000953674316,
+          0.7365000247955322,
+          0.31449997425079346
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_trunk.blend",
+      "variant": "clean",
+      "family": "level_lived_trunk",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_trunk.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_trunk.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_trunk.png"
+      }
+    },
+    {
+      "id": "level_lived_desk_clutter",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "425a8311053ccad06a2ebd7142d19f4e5d23ea36bf5523bf36bdeabfabd2d4be",
+      "bytes": 45304,
+      "triangles": 300,
+      "bounds": [
+        [
+          -0.3050000071525574,
+          -4.656612873077393e-10,
+          -0.1850000023841858
+        ],
+        [
+          0.29499998688697815,
+          0.125,
+          0.1539568156003952
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_desk_clutter.blend",
+      "variant": "clean",
+      "family": "level_lived_desk_clutter",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_desk_clutter.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_desk_clutter.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_desk_clutter.png"
+      }
+    },
+    {
+      "id": "level_lived_kitchenware",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "9026dd8b71b0d74af795e042ad88d5316116f6fb015e2167e84d191c186fb69d",
+      "bytes": 61416,
+      "triangles": 752,
+      "bounds": [
+        [
+          -0.32499998807907104,
+          0.0,
+          -0.23999999463558197
+        ],
+        [
+          0.3312702775001526,
+          0.2710679769515991,
+          0.22499999403953552
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_kitchenware.blend",
+      "variant": "clean",
+      "family": "level_lived_kitchenware",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_kitchenware.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_kitchenware.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_kitchenware.png"
+      }
+    },
+    {
+      "id": "level_lived_toy_basket",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "05b6c44f38e9d8d6ccfa8bd8c58c7935816cea1f8bf401c3e4b87d5c1fe4340a",
+      "bytes": 84444,
+      "triangles": 776,
+      "bounds": [
+        [
+          -0.3601522445678711,
+          0.0,
+          -0.36172279715538025
+        ],
+        [
+          0.3601522445678711,
+          0.5199999809265137,
+          0.36172279715538025
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_toy_basket.blend",
+      "variant": "clean",
+      "family": "level_lived_toy_basket",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_toy_basket.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_toy_basket.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_toy_basket.png"
+      }
+    },
+    {
+      "id": "level_lived_linen_press",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "44aff6476554aa54b8c017ad66f8fabe3cf927dd4333089a025630149c913af4",
+      "bytes": 36288,
+      "triangles": 276,
+      "bounds": [
+        [
+          -0.550000011920929,
+          0.0,
+          -0.25999999046325684
+        ],
+        [
+          0.550000011920929,
+          2.0399999618530273,
+          0.35199999809265137
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_linen_press.blend",
+      "variant": "clean",
+      "family": "level_lived_linen_press",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_linen_press.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_linen_press.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_linen_press.png"
+      }
+    },
+    {
+      "id": "level_lived_shelf_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "e51cce57a52da8633bb240b99d64c5f84f71913361fe510d04f6137c58da6d03",
+      "bytes": 306012,
+      "triangles": 3680,
+      "bounds": [
+        [
+          -0.6674999594688416,
+          0.0,
+          -0.22499999403953552
+        ],
+        [
+          0.6675000190734863,
+          1.8624999523162842,
+          0.22499999403953552
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_shelf_worn.blend",
+      "variant": "worn",
+      "family": "level_lived_shelf",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_shelf_worn.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_shelf_worn.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_shelf_worn.png"
+      }
+    },
+    {
+      "id": "level_lived_pantry_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "941273b6a4c428fac053bc9659d03bd15b1827239a32b1c36ae45a08439a672b",
+      "bytes": 279012,
+      "triangles": 3760,
+      "bounds": [
+        [
+          -0.6674999594688416,
+          0.0,
+          -0.22499999403953552
+        ],
+        [
+          0.6675000190734863,
+          1.8624999523162842,
+          0.22499999403953552
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_pantry_worn.blend",
+      "variant": "worn",
+      "family": "level_lived_pantry",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_pantry_worn.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_pantry_worn.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_pantry_worn.png"
+      }
+    },
+    {
+      "id": "level_lived_curio_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "820a79187b1a7a7d0a2d1fa8dd8756308597305bcf56a080bcf9e414eac53117",
+      "bytes": 226040,
+      "triangles": 2580,
+      "bounds": [
+        [
+          -0.7250000238418579,
+          0.0,
+          -0.25
+        ],
+        [
+          0.7250000238418579,
+          1.9600000381469727,
+          0.25999999046325684
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_curio_worn.blend",
+      "variant": "worn",
+      "family": "level_lived_curio",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_curio_worn.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_curio_worn.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_curio_worn.png"
+      }
+    },
+    {
+      "id": "level_lived_sideboard_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "e8b8c49566cf79f525007920b043668f31bc0ea7a1e25753200401adc2560a4f",
+      "bytes": 116800,
+      "triangles": 1008,
+      "bounds": [
+        [
+          -0.7649999856948853,
+          0.0,
+          -0.26499998569488525
+        ],
+        [
+          0.7649999856948853,
+          1.1399999856948853,
+          0.2919999957084656
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_sideboard_worn.blend",
+      "variant": "worn",
+      "family": "level_lived_sideboard",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_sideboard_worn.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_sideboard_worn.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_sideboard_worn.png"
+      }
+    },
+    {
+      "id": "level_lived_card_table_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "e6efc6d94cf9dd1c7bef3f20244efdff42c1be19d96d5f8d679a9abd76dd1590",
+      "bytes": 88860,
+      "triangles": 600,
+      "bounds": [
+        [
+          -0.5099999904632568,
+          -0.017804384231567383,
+          -0.5099999904632568
+        ],
+        [
+          0.5099999904632568,
+          0.8899999856948853,
+          0.5099999904632568
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_card_table_worn.blend",
+      "variant": "worn",
+      "family": "level_lived_card_table",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_card_table_worn.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_card_table_worn.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_card_table_worn.png"
+      }
+    },
+    {
+      "id": "level_lived_ottoman_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "0b7ec645c5a4c69aee46e509b746c13c17a0c4fdf6ed22de767e9483bdee8797",
+      "bytes": 47492,
+      "triangles": 396,
+      "bounds": [
+        [
+          -0.4350000023841858,
+          0.0,
+          -0.3149999976158142
+        ],
+        [
+          0.4350000023841858,
+          0.5199999809265137,
+          0.3149999976158142
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_ottoman_worn.blend",
+      "variant": "worn",
+      "family": "level_lived_ottoman",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_ottoman_worn.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_ottoman_worn.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_ottoman_worn.png"
+      }
+    },
+    {
+      "id": "level_lived_trunk_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "4b28dd2536f2a23f7ed65d691a4c506c145e2bf88bdce04fd1a29610fba61544",
+      "bytes": 72680,
+      "triangles": 344,
+      "bounds": [
+        [
+          -0.49000000953674316,
+          0.02000001072883606,
+          -0.29499998688697815
+        ],
+        [
+          0.49000000953674316,
+          0.7365000247955322,
+          0.31449997425079346
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_trunk_worn.blend",
+      "variant": "worn",
+      "family": "level_lived_trunk",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_trunk_worn.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_trunk_worn.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_trunk_worn.png"
+      }
+    },
+    {
+      "id": "level_lived_desk_clutter_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "747cca078d2ecfeb3d44646798994ea6aca93294285693c6fd8708d169f58e76",
+      "bytes": 47744,
+      "triangles": 300,
+      "bounds": [
+        [
+          -0.3050000071525574,
+          -4.656612873077393e-10,
+          -0.1850000023841858
+        ],
+        [
+          0.29499998688697815,
+          0.125,
+          0.1539568156003952
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_desk_clutter_worn.blend",
+      "variant": "worn",
+      "family": "level_lived_desk_clutter",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_desk_clutter_worn.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_desk_clutter_worn.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_desk_clutter_worn.png"
+      }
+    },
+    {
+      "id": "level_lived_kitchenware_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "8f31cfcee5d4dad028013c8d3bef0d480dd2a0055ece30b3e8dc4771fde650a7",
+      "bytes": 61736,
+      "triangles": 752,
+      "bounds": [
+        [
+          -0.32499998807907104,
+          0.0,
+          -0.23999999463558197
+        ],
+        [
+          0.3312702775001526,
+          0.2710679769515991,
+          0.22499999403953552
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_kitchenware_worn.blend",
+      "variant": "worn",
+      "family": "level_lived_kitchenware",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_kitchenware_worn.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_kitchenware_worn.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_kitchenware_worn.png"
+      }
+    },
+    {
+      "id": "level_lived_toy_basket_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "5aa5a80809a31c5610686b34b628507a8237266b25c8a16474faafda01210e95",
+      "bytes": 87448,
+      "triangles": 776,
+      "bounds": [
+        [
+          -0.3601522445678711,
+          0.0,
+          -0.36172279715538025
+        ],
+        [
+          0.3601522445678711,
+          0.5199999809265137,
+          0.36172279715538025
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_toy_basket_worn.blend",
+      "variant": "worn",
+      "family": "level_lived_toy_basket",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_toy_basket_worn.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_toy_basket_worn.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_toy_basket_worn.png"
+      }
+    },
+    {
+      "id": "level_lived_linen_press_worn",
+      "library": "household",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "0423b74fbd766023dbf207e3ba7aeb51bf7282b52dc9dca020da6ada1fbc10c4",
+      "bytes": 37672,
+      "triangles": 276,
+      "bounds": [
+        [
+          -0.550000011920929,
+          0.0,
+          -0.25999999046325684
+        ],
+        [
+          0.550000011920929,
+          2.0399999618530273,
+          0.35199999809265137
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_lived_linen_press_worn.blend",
+      "variant": "worn",
+      "family": "level_lived_linen_press",
+      "files": {
+        "models": "assets/beckenburg/libraries/household/models/level_lived_linen_press_worn.glb",
+        "source": "assets/beckenburg/libraries/household/source/level_lived_linen_press_worn.blend",
+        "previews": "assets/beckenburg/libraries/household/previews/level_lived_linen_press_worn.png"
+      }
+    }
+  ]
+}

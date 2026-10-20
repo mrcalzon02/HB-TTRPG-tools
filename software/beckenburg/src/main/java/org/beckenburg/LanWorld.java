@@ -25,7 +25,7 @@ public final class LanWorld {
         seat(seat);
         if(hiding[seat]){hiding[seat]=false;return false;}
         var pocket=map.hidingSpot(body(seat).room(),hidingDensity);
-        if(pocket==null||Math.hypot(xs[seat]-pocket.x(),zs[seat]-pocket.z())>.84)
+        if(pocket==null||!LevelClosets.inside(map.level().socket("hide",body(seat).room()),xs[seat],ys[seat],zs[seat]))
             throw new IllegalArgumentException("no hiding place within reach");
         hiding[seat]=true;return true;
     }
@@ -39,6 +39,7 @@ public final class LanWorld {
         java.util.Arrays.fill(stamina,maxStamina);
         java.util.Arrays.fill(lastSprintTick,-1000);
         hidingDensity=c.hidingSpots();
+        map.configureHiding(hidingDensity);
     }
     public LanWorld(HouseMap map){
         this.map=java.util.Objects.requireNonNull(map);

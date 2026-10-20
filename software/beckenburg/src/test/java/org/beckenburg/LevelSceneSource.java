@@ -24,12 +24,14 @@ public final class LevelSceneSource {
     @SuppressWarnings("unchecked")
     public static void main(String[] args)throws Exception{
         HouseMap map=new HouseMap(args.length>0?HouseMap.Site.valueOf(args[0]):HouseMap.Site.HOUSE);
+        map.configureHiding(100); // Editable authoring source includes every potential cupboard.
         Path out=Path.of("build/level-verification/scenes",map.level().id());Files.createDirectories(out.resolve("textures"));
         SceneRenderer scene=new SceneRenderer();scene.x=21;scene.z=22;
         Field all=SceneRenderer.class.getDeclaredField("exportFullLevel");all.setAccessible(true);all.setBoolean(scene,true);
         Method assemble=SceneRenderer.class.getDeclaredMethod("levelArchitecture",List.class,HouseMap.class);assemble.setAccessible(true);
         List<Object> faces=new ArrayList<>();assemble.invoke(scene,faces,map);
         Files.writeString(out.resolve("definition.json"),json(map.level()));
+        Files.writeString(out.resolve("scene-settings.json"),"{\"hidingDensity\":100}");
         Files.writeString(out.resolve("geometry.json"),json(faces));
         Set<Integer> mats=new TreeSet<>();for(Object f:faces)mats.add((Integer)read(f,"material"));
         Field tex=GlbProps.class.getDeclaredField("textures");tex.setAccessible(true);

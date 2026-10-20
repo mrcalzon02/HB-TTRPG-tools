@@ -97,7 +97,7 @@ public final class SceneRenderer {
     public double dotsPassX,dotsPassZ;
     public RoomLighting roomLights;
     public int roomLightTick;
-    public int hidingDensity;
+    public int hidingDensity=70;
     /** Empty until an authoritative loadout/profile explicitly supplies owned gear.
      * Never implicitly manufacture free tools as map scenery.
      */
@@ -1066,6 +1066,9 @@ public final class SceneRenderer {
         for(Face f:levelShells.computeIfAbsent(map.site(),s->buildLevelShell(map))){
             double cx=(f.a.x+f.b.x+f.c.x)/3,cz=(f.a.z+f.b.z+f.c.z)/3;
             out.add(f); // Opaque distant architecture must still occlude the night sky.
+        }
+        for(var s:map.level().sockets())if(s.type().equals("hide")&&LevelClosets.available(map.level(),s.room(),map.hidingDensity())){
+            List<Face> closet=new ArrayList<>();imported(closet,"level_hiding_cupboard_worn",s.x(),s.y(),s.z(),1,s.yaw());own(out,closet,s.room());
         }
         for(var p:map.level().portals()){
             if(!exportFullLevel&&Math.hypot(p.x()-x,p.z()-z)>24)continue;

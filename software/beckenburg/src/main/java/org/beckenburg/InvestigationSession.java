@@ -42,6 +42,19 @@ public final class InvestigationSession {
     private final AmbientSanity ambientSanity=new AmbientSanity();
     private final GhostDomain.AiController ghostAi;
     private boolean prepared, haunted, rewarded;
+    private boolean hidden;
+    private LevelDefinition.Vec hidingAt;
+    public boolean hidden(){return hidden;}
+    public void leaveHiding(){if(hidden){hidden=false;hidingAt=null;log("You left the cupboard's concealment.");}}
+    public boolean toggleHide(double x,double y,double z){
+        if(hidden){leaveHiding();return true;}
+        int room=map.roomAt(x,y,z);
+        if(outcome!=Outcome.ACTIVE||!LevelClosets.available(map.level(),room,map.hidingDensity())
+                ||!LevelClosets.inside(map.level().socket("hide",room),x,y,z)||!map.traversable(x,y,z)){
+            log("Step inside an available hiding cupboard first.");return false;
+        }
+        hidden=true;hidingAt=new LevelDefinition.Vec(x,y,z);log("HIDDEN IN CUPBOARD / L to emerge. Moving exposes you.");return true;
+    }
     private String message = "Inspect the haunting, record instrument measurements, prepare a ward, and attempt the rite.";
 
     public InvestigationSession(HouseMap map, Role role, long seed) {
@@ -118,7 +131,7 @@ public final class InvestigationSession {
     public Outcome outcome() { return outcome; }
     public String message() { return message; }
     public List<String> journal() { return Collections.unmodifiableList(journal); }
-    public String statusLine() { return "INJURY " + (100-health) + "  FEAR " + stress + "  MEASURED TOOLS " + measuredTools.size() + "  WARDS " + wards; }
+    public String statusLine() { return (hidden?"HIDDEN  ":"")+"INJURY " + (100-health) + "  FEAR " + stress + "  MEASURED TOOLS " + measuredTools.size() + "  WARDS " + wards; }
     private void log(String text) {
         message = text;
         journal.add(String.format("%02d:%02d  %s",ticks/600,(ticks/10)%60,text));
@@ -137,7 +150,9 @@ public final class InvestigationSession {
         // Every supernatural action, including AI behavior, follows the same host-style dispatcher.
         // Ghost observation has only room-local presence, never the hunter's global position or notebook.
         int playerRoom=map.roomAt(playerX,playerY,playerZ);
-        ghost.advance(ticks,playerRoom,playerRoom==ghost.room()?1:0);
+        if(hidden&&(hidingAt==null||Math.hypot(playerX-hidingAt.x(),playerZ-hidingAt.z())>.02
+                ||Math.abs(playerY-hidingAt.y())>.1||!LevelClosets.available(map.level(),playerRoom,map.hidingDensity())))leaveHiding();
+        ghost.advance(ticks,playerRoom,playerRoom==ghost.room()&&!hidden?1:0);
         boolean indoor=playerRoom>=0&&playerRoom<HouseMap.INDOOR_ROOMS;
         boolean light=carriedLight||(indoor&&(roomLights==null
             ||roomLights.brightness(playerRoom,ticks)>.32));
@@ -190,7 +205,7 @@ public final class InvestigationSession {
                     log("An indistinct whisper moves through "+map.roomName(playerRoom)+".");
                 if(playerRoom==result.room() && result.action()==GhostDomain.Action.DISTURB)
                     log("Loose objects shudder in "+map.roomName(playerRoom)+".");
-                if(result.harm()>0) {
+                if(result.harm()>0&&!hidden) {
                     int wound=prepared?Math.min(result.harm(),4):role==Role.CLERIC?Math.min(result.harm(),8):result.harm();
                     health=Math.max(0,health-wound);
                     log("A spectral strike! -"+wound+" health. Retreat, or use protective wards.");

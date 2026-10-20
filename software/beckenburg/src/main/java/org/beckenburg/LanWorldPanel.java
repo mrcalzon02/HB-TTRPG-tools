@@ -206,6 +206,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             List<String> p=LanProtocol.parts(frame);
             if(p.size()==3&&p.get(0).equals("SITE")){
                 map=new HouseMap(HouseMap.Site.valueOf(p.get(1)));
+                map.configureHiding(renderer.hidingDensity);
                 if(!map.level().revision().equals(p.get(2)))throw new IllegalArgumentException("incompatible level revision");
                 renderer.eyeHeight=map.level().dock().y()+1.62;
                 buildingAudio.setMap(map);
@@ -344,6 +345,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 }else throw new IllegalArgumentException("bad counter snapshot");
             }else if(p.size()==2&&p.get(0).equals("HIDECONFIG")){
                 renderer.hidingDensity=LanProtocol.integer(p.get(1),0,100);
+                map.configureHiding(renderer.hidingDensity);
             }else if(p.size()==2&&p.get(0).equals("HIDING")){
                 concealed=LanProtocol.integer(p.get(1),0,1)==1;
                 feedback=concealed?"HIDDEN: do not move or you will become exposed":"LEFT HIDING PLACE";

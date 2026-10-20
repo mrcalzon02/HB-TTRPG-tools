@@ -35,6 +35,7 @@ public final class AuthoredLevelNetworkTest {
     a.client.scan(LanCase.Tool.EMF);a.await("ACCEPT|SCAN");
     a.client.journal();a.await("ACCEPT|JOURNAL");
     ghost.client.viewGhost3D();ghost.await("ACCEPT|GVIEW3D");ghost.await("SITE|");
+    check(ghost.await("HIDECONFIG|").equals("HIDECONFIG|"+CustomContract.standard(3).hidingSpots()),"ghost sees the same physical hiding-cupboard layout");
     String pose=ghost.await("GPOSE|");check(LanProtocol.parts(pose).size()==7,"XYZ ghost pose");
     ghost.client.journal();ghost.await("REJECT|");
     for(String message:ghost.inbox)assertPublic(message);

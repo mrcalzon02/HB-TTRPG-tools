@@ -1,0 +1,170 @@
+[
+  {
+    "family": "level_boiler_coal",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "14cafe688d111e5696ea01e828e871ba1afa945ddfdc4d90df1e802cbd64c4fd",
+    "worn_glb_sha256": "4b810182d3e3f990d98cf9b9ca098977309c395f3b2b57b5dbda8b85e9c8bc82"
+  },
+  {
+    "family": "level_boiler_oil",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "be3c4e46ada3eef5b07bb4d3a479dd7ed6fd887cdcea61621cce214349126ac6",
+    "worn_glb_sha256": "b99b96ea3dade713dc4a235c54119c89f64ef153436e2c2021fe800c157385da"
+  },
+  {
+    "family": "level_boiler_modern",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "6be8ac8bf1a2db12acb36d5354721da40f5281924ec58a3d6b91ec9ba5740fd1",
+    "worn_glb_sha256": "20ee5d6959c9940f9ede3206189534ef905581f262655cba85dddfed16197d7a"
+  },
+  {
+    "family": "level_expansion_vessel",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "09718e1e0e1d21d396776a2656bd4f93b148a679a73ae2b48fcd1af0168191c4",
+    "worn_glb_sha256": "640c49f626d26dc763c95daa46dc2c3ad6089d869fcbe86b66fbce5a00a6de8f"
+  },
+  {
+    "family": "level_school_pipework",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "5a96fc5dc9f832776196d34186baf20d66c43ba995dc257f8bd2fe6dfe2b3efa",
+    "worn_glb_sha256": "e382082904843eb85845f429e494a28abd69e13c6ce4686effcf1900927a3bea"
+  },
+  {
+    "family": "level_electrical_bank",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "e6262da171dda006543663b2c23f0b80bc0744130192f13c4fd50bf80f1d7cb3",
+    "worn_glb_sha256": "385bd50c39a063e415a68aeb995cfccd88ee4a8f19234aeb7b9798a0316432ab"
+  },
+  {
+    "family": "level_workbench",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "ff58b646de7af142a2d17a2de6d30af4c87fc570a0fbc39fe41f56d1073197c3",
+    "worn_glb_sha256": "559f445c412bdc73d16412f67aaee4ef8acccd4fbc14980102935935a82bed94"
+  },
+  {
+    "family": "level_radiator",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "27a3d61a3c0fa643e07dc5f39af1321131ee7f32dac2b686b6a79f219afe499a",
+    "worn_glb_sha256": "8afc8241a755210b11e0eb009c057b64dbc10fcd2803534eba98f3e9be818a63"
+  },
+  {
+    "family": "level_hiding_cupboard",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "72f1c1d2d709455f1832f9641fc770f5e04b7dd320f64aefaa5b60fe7024dd90",
+    "worn_glb_sha256": "c1c06f55f691387fa937c9f96c1bf06d7c28e9f37f75e181664f1594ae936097"
+  },
+  {
+    "family": "level_coal_bunker",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "764c16aa8e392084126f12258851f2bbd0b6a0546b5c11891e3f252cc29953cd",
+    "worn_glb_sha256": "ec3aabb2cfc436e5e261b7c170c0f5f2abd5800268352025e6ce85037b5d89fa"
+  },
+  {
+    "family": "level_lived_shelf",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "991908b343bd5ebcbb0b32e6af8e84fd2c644f8672b376ee64f46b30065ca8ff",
+    "worn_glb_sha256": "e51cce57a52da8633bb240b99d64c5f84f71913361fe510d04f6137c58da6d03"
+  },
+  {
+    "family": "level_lived_pantry",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "10d0c73e671892f8f9aedcae6f52852981c06ba041af461a1d7059ea827fef5d",
+    "worn_glb_sha256": "941273b6a4c428fac053bc9659d03bd15b1827239a32b1c36ae45a08439a672b"
+  },
+  {
+    "family": "level_lived_curio",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "67547069ecf925e8638107bd67dbf77584d3b975215e2d1cf30f4022edf0e2bf",
+    "worn_glb_sha256": "820a79187b1a7a7d0a2d1fa8dd8756308597305bcf56a080bcf9e414eac53117"
+  },
+  {
+    "family": "level_lived_sideboard",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "484d210a286489cfdae40212f32414159e4a55ebd52d9b82775217ca78b187f7",
+    "worn_glb_sha256": "e8b8c49566cf79f525007920b043668f31bc0ea7a1e25753200401adc2560a4f"
+  },
+  {
+    "family": "level_lived_card_table",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "b9baf86f5fa30393424eb212013539b5bb44cee5c3aebc193d2b3895cac94009",
+    "worn_glb_sha256": "e6efc6d94cf9dd1c7bef3f20244efdff42c1be19d96d5f8d679a9abd76dd1590"
+  },
+  {
+    "family": "level_lived_ottoman",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "ccb94eec2ceba3232694d533873dccec67e92875570e7887fe341b3e27c67730",
+    "worn_glb_sha256": "0b7ec645c5a4c69aee46e509b746c13c17a0c4fdf6ed22de767e9483bdee8797"
+  },
+  {
+    "family": "level_lived_trunk",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "85c700a2b096053ec0380683b2b56009fcd1a4fd9d3ad79e469fdba9e9629f02",
+    "worn_glb_sha256": "4b28dd2536f2a23f7ed65d691a4c506c145e2bf88bdce04fd1a29610fba61544"
+  },
+  {
+    "family": "level_lived_desk_clutter",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "425a8311053ccad06a2ebd7142d19f4e5d23ea36bf5523bf36bdeabfabd2d4be",
+    "worn_glb_sha256": "747cca078d2ecfeb3d44646798994ea6aca93294285693c6fd8708d169f58e76"
+  },
+  {
+    "family": "level_lived_kitchenware",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "9026dd8b71b0d74af795e042ad88d5316116f6fb015e2167e84d191c186fb69d",
+    "worn_glb_sha256": "8f31cfcee5d4dad028013c8d3bef0d480dd2a0055ece30b3e8dc4771fde650a7"
+  },
+  {
+    "family": "level_lived_toy_basket",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "05b6c44f38e9d8d6ccfa8bd8c58c7935816cea1f8bf401c3e4b87d5c1fe4340a",
+    "worn_glb_sha256": "5aa5a80809a31c5610686b34b628507a8237266b25c8a16474faafda01210e95"
+  },
+  {
+    "family": "level_lived_linen_press",
+    "clean_sources_unchanged": true,
+    "geometry_uv_indices_transforms_identical": true,
+    "all_diffuse_images_replaced": true,
+    "clean_glb_sha256": "44aff6476554aa54b8c017ad66f8fabe3cf927dd4333089a025630149c913af4",
+    "worn_glb_sha256": "0423b74fbd766023dbf207e3ba7aeb51bf7282b52dc9dca020da6ada1fbc10c4"
+  }
+]

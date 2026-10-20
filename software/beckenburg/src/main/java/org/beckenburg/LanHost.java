@@ -518,6 +518,7 @@ public final class LanHost implements AutoCloseable {
                     peer.ghostWorldMode=true;
                     reply(peer,"ACCEPT|GVIEW3D");
                     reply(peer,"SITE|"+map.site().name()+"|"+map.level().revision());
+                    reply(peer,"HIDECONFIG|"+contract.hidingSpots());
                     reply(peer,"LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));
                     reply(peer,"DOORS|"+map.doorSnapshot());
                     reply(peer,"WINDOWS|"+map.windowSnapshot());

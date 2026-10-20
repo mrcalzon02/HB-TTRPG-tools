@@ -1,6 +1,7 @@
 # Beckenburg production rules
 
 - Closeout means finalize the requested implementation, commit it, push it to the authorized remote branch, and verify that the remote contains the commit. A plan or local-only change is not a completed delivery. Never force-push over concurrent work.
+- Preserve workflow continuity with regular, scoped commits at completed implementation, asset-generation and review milestones. Push recoverable checkpoints after reconciling concurrent work; do not defer every commit until the final closeout. Record completed checks and the next unfinished step in the level workflow notes.
 - Environment work must follow the approved location concepts and measured architectural references. Complete and inspect the house before expanding the approach to the other locations.
 - Geometry, navigation collision, room volumes, electrical sockets, portals, acoustic mapping, spawns, and the van dock must share authored coordinates. Upper floors require authoritative elevation and continuous stairs with floor openings.
 - Mount fixtures on their actual supporting surfaces. Preserve original mesh pivots and UV materials. Furniture must leave usable circulation space; source-library quality is the minimum visual standard.

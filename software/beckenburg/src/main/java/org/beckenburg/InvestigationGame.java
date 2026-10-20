@@ -384,7 +384,7 @@ public final class InvestigationGame {
         JTextArea help=new JTextArea(
             "CASTLE / SOLO\nWASD move  |  Shift sprint  |  Click mouse-look  |  F light  |  E interact\n"+
             "1–4 select gear  |  R use  |  C ward  |  B ritual  |  J journal  |  M map\n"+
-            "Q (hold) callouts  |  X extract  |  Escape pause or return to menu\n\n"+
+            "Q (hold) callouts  |  L hide in cupboard / emerge  |  X extract  |  Escape pause or return to menu\n\n"+
             "GHOST PRACTICE\n[ / ] change room  |  Space drift  |  1–4 ghost actions\n\n"+
             "MULTIPLAYER\nHost or join by IP, ready up, then use Enter 3D World when the case starts.\n"+
             "The Field Controls tab contains alpha simulation tools, not ordinary lobby controls.");
@@ -600,7 +600,7 @@ public final class InvestigationGame {
                     moved=map.resolveMove(new LevelDefinition.Vec(scene.x,feetY(),scene.z),scene.x+dx,scene.z);
                     if(moved==null)moved=map.resolveMove(new LevelDefinition.Vec(scene.x,feetY(),scene.z),scene.x,scene.z+dz);
                 }
-                if(moved!=null){scene.x=moved.x();scene.z=moved.z();scene.eyeHeight=moved.y()+1.62;}
+                if(moved!=null){session.leaveHiding();scene.x=moved.x();scene.z=moved.z();scene.eyeHeight=moved.y()+1.62;}
                 if(Math.hypot(scene.x-priorX,scene.z-priorZ)>.0001)
                     GameSfx.play(LanSound.stepCue(map,currentRoom()));
             }
@@ -677,6 +677,7 @@ public final class InvestigationGame {
                 scene.lamp=!scene.lamp;
                 GameSfx.play(scene.lamp?LanSound.Cue.DEVICE_ON:LanSound.Cue.DEVICE_OFF);
             }
+            if(key==KeyEvent.VK_L)session.toggleHide(scene.x,feetY(),scene.z);
             if(key==KeyEvent.VK_E){
                 var aimed=aimedRack();
                 if(aimed!=null){takeRackItem();}

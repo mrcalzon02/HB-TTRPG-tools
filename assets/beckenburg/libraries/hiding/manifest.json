@@ -1,0 +1,72 @@
+{
+  "id": "hiding",
+  "title": "Walk-in hiding cupboard",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "variants": [
+    "clean",
+    "worn"
+  ],
+  "assets": [
+    {
+      "id": "level_hiding_cupboard",
+      "library": "hiding",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "72f1c1d2d709455f1832f9641fc770f5e04b7dd320f64aefaa5b60fe7024dd90",
+      "bytes": 185812,
+      "triangles": 2072,
+      "bounds": [
+        [
+          -0.8500000238418579,
+          0.0,
+          -0.6000000238418579
+        ],
+        [
+          0.8500000834465027,
+          2.309999942779541,
+          0.7020000219345093
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_hiding_cupboard.blend",
+      "variant": "clean",
+      "family": "level_hiding_cupboard",
+      "files": {
+        "models": "assets/beckenburg/libraries/hiding/models/level_hiding_cupboard.glb",
+        "source": "assets/beckenburg/libraries/hiding/source/level_hiding_cupboard.blend",
+        "previews": "assets/beckenburg/libraries/hiding/previews/level_hiding_cupboard.png"
+      }
+    },
+    {
+      "id": "level_hiding_cupboard_worn",
+      "library": "hiding",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "c1c06f55f691387fa937c9f96c1bf06d7c28e9f37f75e181664f1594ae936097",
+      "bytes": 188520,
+      "triangles": 2072,
+      "bounds": [
+        [
+          -0.8500000238418579,
+          0.0,
+          -0.6000000238418579
+        ],
+        [
+          0.8500000834465027,
+          2.309999942779541,
+          0.7020000219345093
+        ]
+      ],
+      "source": "original geometry and procedural textures",
+      "editable": "development/levels/blender/level_hiding_cupboard_worn.blend",
+      "variant": "worn",
+      "family": "level_hiding_cupboard",
+      "files": {
+        "models": "assets/beckenburg/libraries/hiding/models/level_hiding_cupboard_worn.glb",
+        "source": "assets/beckenburg/libraries/hiding/source/level_hiding_cupboard_worn.blend",
+        "previews": "assets/beckenburg/libraries/hiding/previews/level_hiding_cupboard_worn.png"
+      }
+    }
+  ]
+}
