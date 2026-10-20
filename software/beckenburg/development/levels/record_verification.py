@@ -17,9 +17,12 @@ previous={row['test'] for row in baseline if row['baseline']['exit_code']}
 remaining=sorted(red-rechecked)
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 assets=json.loads((OUT/'lived-assets.json').read_text())
+live_path=reports/'live-libraries-results.json'
+live=json.loads(live_path.read_text()) if live_path.exists() else None
 manifest={'date':'2026-10-20','focused_passes':len(focused),'compatibility_passes':len(compat),
     'original_asset_families':len(assets['clean_preservation']),'asset_variants':len(assets['assets']),
     'runtime_texture_variant':'worn','public_libraries':'https://mrcalzon02.github.io/HB-TTRPG-tools/beckenburg-asset-libraries.html','sites':[]}
+if live:manifest['live_publication_verified_at']=live['verified_at'];manifest['live_downloads_verified']=len(live['downloads'])
 for site in ['house','farmhouse','school']:
     source=ROOT/f'build/level-verification/scenes/{site}';definition=json.loads((source/'definition.json').read_text())
     blend=OUT/f'blender/{site}-complete.blend';views=sorted((OUT/'previews/runtime').glob(site+'-*.png'))
@@ -79,5 +82,8 @@ Fixtures were migrated from old flat-map coordinates to authored XYZ positions; 
 
 Use `verify_levels.py --java-home <JDK17> --vehicle-archive <original August2023 GGBot ZIP>`, then `verify_compatibility.py --java-home <JDK17>`. Both use the isolated ignored `build/level-release` package. `--full-regression` runs the historical gate as well. Use `LevelVisualCapture`, `LevelDressingCapture`, `LevelSceneSource`, `build_scene.py`, `build_wear_review.py`, `build_review.py`, then this script to regenerate the review artifacts and record actual outputs. `validate_worn_assets.py` and both public-library validators read the final asset files. The final softening pass changed only diffuse image pixels; the already-passing gameplay/geometry package was refreshed for final captures. No test binary is published with these source commits.
 '''
+if live:
+    publication=f"\nLive publication was read back at {live['verified_at']}: the public CC0 page, all three manifests/licenses, all 42 individual GLBs and all three ZIPs matched the validated local publication. Actual downloaded-byte SHA-256 values are preserved in `verification/live-libraries-results.json`. The published asset checkpoint is `{live['published_commit']}`.\n"
+    text=text.replace('## Retained architectural corrections',publication+'\n## Retained architectural corrections')
 (OUT/'VERIFICATION.md').write_text(text,encoding='utf-8')
 print(f'Recorded {len(focused)+len(compat)} passing checks; {len(remaining)} historical failures remain documented')

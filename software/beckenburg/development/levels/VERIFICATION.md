@@ -11,6 +11,9 @@ The lived-in dressing, physical hiding cupboards and clean/worn asset revision p
 - Three original CC0 libraries provide individual GLBs, editable Blender sources, real preview renders and native Blender Asset Browser libraries, in clean and worn versions. Every entry, model metadata, native asset and ZIP license explicitly states CC0 1.0 Universal. The 27 unchanged archive props used as additional game scenery retain their separate source licensing and are excluded from these CC0 downloads. Public-file, embedded-image, ZIP/hash, local-link and native embedded-preview validators were run against the generated libraries.
 - Editable complete levels show all potential cupboards for authoring (100%); runtime still follows the selected contract. Their geometry comes directly from the runtime export, including the worn materials. The clean/worn comparison uses actual Blender model renders with identical studio lighting.
 
+
+Live publication was read back at 2026-10-20T19:09:40.101340+00:00: the public CC0 page, all three manifests/licenses, all 42 individual GLBs and all three ZIPs matched the validated local publication. Actual downloaded-byte SHA-256 values are preserved in `verification/live-libraries-results.json`. The published asset checkpoint is `df31bff5829a6bc8e3ee9d158570ce2e138d1fae`.
+
 ## Retained architectural corrections
 
 - Opposing rooms previously shared a wall plane; full plaster faces also remained behind lower timber panels. Walls now have 160mm sections and mutually exclusive finish bands. Frames are authored once per opening. A farmhouse bedroom door was moved away from its wall corner after the surface check caught a frame overlap.
