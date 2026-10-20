@@ -25,6 +25,7 @@ public final class LanCase {
     public int requiredRitualTicks(){return riteTicks();}
     public enum RitualAdvance { NONE, PAUSED, RESUMED, BROKEN, CLEANSED }
     private final int anchor;
+    private final HouseMap missionMap;
     private final EnumSet<Tool> evidence=EnumSet.noneOf(Tool.class), tested=EnumSet.noneOf(Tool.class);
     private GhostIdentity.Type archetype=GhostIdentity.Type.SPIRIT, identified;
     private GhostEvidenceProfile.EmfBand evidenceEmfBand=
@@ -79,7 +80,9 @@ public final class LanCase {
     private GhostIdentity.Rite selectedRite;
     private Outcome outcome=Outcome.ACTIVE;
 
-    public LanCase(int anchor) {
+    public LanCase(int anchor) {this(anchor,new HouseMap());}
+    public LanCase(int anchor,HouseMap map) {
+        missionMap=java.util.Objects.requireNonNull(map);
         if(anchor<0||anchor>=HouseMap.INDOOR_ROOMS)throw new IllegalArgumentException("invalid anchor");
         this.anchor=anchor;
     }
@@ -256,7 +259,7 @@ public final class LanCase {
             return new Report(false,"investigation unavailable");
         if(tool==null||body==null||map==null
                 ||!Double.isFinite(body.x())||!Double.isFinite(body.z())
-                ||map.roomAt(body.x(),body.z())!=body.room())
+                ||map.roomAt(body.x(),body.y(),body.z())!=body.room())
             return new Report(false,"invalid instrument or host body");
         int room=body.room();
         // All probes continue reading the room's ordinary physical environment.
@@ -292,7 +295,7 @@ public final class LanCase {
                 :"identify the ghost before choosing its rite");
         if(identificationRequired){
             if(rite!=archetype.rite())return new Report(false,"incorrect rite for this ghost");
-            var site=RitualSites.site(new HouseMap(),rite);
+            var site=RitualSites.site(missionMap,rite);
             if(room!=site.room()||!nearSite)return new Report(false,"go to the correct ritual installation");
         }else if(rite!=GhostIdentity.Rite.CLEANSING||room!=anchor)
             return new Report(false,"legacy rite requires the haunting anchor");

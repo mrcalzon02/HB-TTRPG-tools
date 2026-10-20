@@ -18,7 +18,8 @@ public final class LanLobbyWindow extends JFrame {
     private boolean ghostJoined;
     private final JSpinner partySize=new JSpinner(new SpinnerNumberModel(3,1,6,1));
     private final JComboBox<HouseMap.Site> siteChoice=
-        new JComboBox<>(HouseMap.Site.values());
+        new JComboBox<>(java.util.Arrays.stream(HouseMap.Site.values())
+            .filter(s->SiteCatalog.Location.valueOf(s.name()).playable()).toArray(HouseMap.Site[]::new));
     private HouseMap.Site selectedSite=HouseMap.Site.HOUSE;
     private final JButton tuneContract=new JButton("Contract options");
     private CustomContract custom=CustomContract.standard(3);
@@ -518,9 +519,10 @@ public final class LanLobbyWindow extends JFrame {
         }
         if(event.startsWith("SITE|")){
             var parts=LanProtocol.parts(event);
-            if(parts.size()==2){
+            if(parts.size()==3){
                 try{
                     selectedSite=HouseMap.Site.valueOf(parts.get(1));
+                    if(!new HouseMap(selectedSite).level().revision().equals(parts.get(2)))throw new IllegalArgumentException("incompatible level revision");
                     siteChoice.setSelectedItem(selectedSite);
                     if(worldFrame!=null)worldFrame.setTitle("Beckenburg / "+selectedSite);
                 }catch(IllegalArgumentException rejected){

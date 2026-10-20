@@ -1,0 +1,334 @@
+{
+  "wall_1": {
+    "images": [
+      {
+        "file": "wall_1_0.png",
+        "name": "wall_3",
+        "sha256": "e0ce550f916abbf5ec14c9af64b2a2e5fe24e0264412390170527b0a7c151d35"
+      },
+      {
+        "file": "wall_1_1.png",
+        "name": "door_frame_wood_1",
+        "sha256": "31c7dae38d0e9b29c6c5eeeb97932dcff87725f1034637eeb89a39a7f20e1a60"
+      }
+    ],
+    "materials": [
+      {
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "wall_3",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicFactor": 0
+        }
+      },
+      {
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "wall_3_rear",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 1
+          },
+          "metallicFactor": 0
+        }
+      },
+      {
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "door_frame_wood_1",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 2
+          },
+          "metallicFactor": 0
+        }
+      }
+    ]
+  },
+  "floor_ceiling_1": {
+    "images": [
+      {
+        "file": "floor_ceiling_1_0.png",
+        "name": "floor_1",
+        "sha256": "e1435306ebbda9c166cd7146472e81ba6162fa3a9ca6ea8f2b03612f2553ab84"
+      },
+      {
+        "file": "floor_ceiling_1_1.png",
+        "name": "concrete_1",
+        "sha256": "401c36ff49ef121090919044a6009970c422216fd373f09313b8cf81d35f7dae"
+      }
+    ],
+    "materials": [
+      {
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "floor_1",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicFactor": 0
+        }
+      },
+      {
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "concrete_1",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 1
+          },
+          "metallicFactor": 0
+        }
+      }
+    ]
+  },
+  "floor_ceiling_2": {
+    "images": [
+      {
+        "file": "floor_ceiling_2_0.png",
+        "name": "tiles_floor_1",
+        "sha256": "1098e3637f23ff2dc9ccd8b16367dcc790654b261b8ad807a598c95785a8870d"
+      },
+      {
+        "file": "floor_ceiling_2_1.png",
+        "name": "concrete_1",
+        "sha256": "401c36ff49ef121090919044a6009970c422216fd373f09313b8cf81d35f7dae"
+      }
+    ],
+    "materials": [
+      {
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "tiles_floor_1",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicFactor": 0
+        }
+      },
+      {
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "concrete_1",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 1
+          },
+          "metallicFactor": 0
+        }
+      }
+    ]
+  },
+  "floor_ceiling_3": {
+    "images": [
+      {
+        "file": "floor_ceiling_3_0.png",
+        "name": "floor_2",
+        "sha256": "c3a1b23d2b6b1395195388413648343cec28690b112387357879799e9fa44232"
+      },
+      {
+        "file": "floor_ceiling_3_1.png",
+        "name": "concrete_1",
+        "sha256": "401c36ff49ef121090919044a6009970c422216fd373f09313b8cf81d35f7dae"
+      }
+    ],
+    "materials": [
+      {
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "floor_2",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicFactor": 0
+        }
+      },
+      {
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "concrete_1",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 1
+          },
+          "metallicFactor": 0
+        }
+      }
+    ]
+  },
+  "wall_1_plain": {
+    "images": [
+      {
+        "file": "wall_1_plain_0.png",
+        "name": "wall_mp_1",
+        "sha256": "652b6184bf8b0a54883d2660a6afa88e90218d65692e636a9a1c8f7bb35e6416"
+      }
+    ],
+    "materials": [
+      {
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "wall_mp_1",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicFactor": 0
+        }
+      },
+      {
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "wall_mp_1_rear",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 1
+          },
+          "metallicFactor": 0
+        }
+      }
+    ]
+  },
+  "carpet_mp_1": {
+    "images": [
+      {
+        "file": "carpet_mp_1_0.png",
+        "name": "carpet_mp_1",
+        "sha256": "db34ee3fc19bcb3a1112add4588a8e36bd85ac211cf3eba10b44a171c3556a05"
+      }
+    ],
+    "materials": [
+      {
+        "alphaMode": "BLEND",
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "carpet_mp_1",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicFactor": 0
+        }
+      }
+    ]
+  },
+  "wooden_crate_1": {
+    "images": [
+      {
+        "file": "wooden_crate_1_0.png",
+        "name": "wooden_crate_1",
+        "sha256": "d489367c91eb2a8a2a7ec1f92ae89d5388981e23cefb72af699be2cdd1f1d93e"
+      }
+    ],
+    "materials": [
+      {
+        "doubleSided": true,
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "wooden_crate_1",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicFactor": 0
+        }
+      }
+    ]
+  }
+}

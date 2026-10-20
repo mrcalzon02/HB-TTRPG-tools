@@ -1,0 +1,266 @@
+[
+  {
+    "id": "level_hay_bale",
+    "triangles": 980,
+    "bytes": 88844,
+    "sha256": "f5e62e630477eae7d27d51c70876b87eb055512b67af99d3c075b85d70582fd2",
+    "mount": "floor-centre Y0",
+    "bounds_blender_z_up": [
+      [
+        -0.6000000238418579,
+        -0.3880000114440918,
+        0.0
+      ],
+      [
+        0.6000000238418579,
+        0.3880000114440918,
+        0.6899999976158142
+      ]
+    ],
+    "bounds_gltf_y_up": [
+      [
+        -0.6000000238418579,
+        0.0,
+        -0.3880000114440918
+      ],
+      [
+        0.6000000238418579,
+        0.6899999976158142,
+        0.3880000114440918
+      ]
+    ],
+    "texture_sources": [],
+    "editable": "development/levels/blender/level_hay_bale.blend"
+  },
+  {
+    "id": "level_stall",
+    "triangles": 476,
+    "bytes": 183080,
+    "sha256": "810f48e1ac30dcb4f86afa219396848112c2a8a2894fac0f7b64248a3d6afd77",
+    "mount": "floor-centre Y0",
+    "bounds_blender_z_up": [
+      [
+        -1.415000081062317,
+        -0.0949999988079071,
+        0.0
+      ],
+      [
+        1.415000081062317,
+        0.0949999988079071,
+        1.3199999332427979
+      ]
+    ],
+    "bounds_gltf_y_up": [
+      [
+        -1.415000081062317,
+        0.0,
+        -0.0949999988079071
+      ],
+      [
+        1.415000081062317,
+        1.3199999332427979,
+        0.0949999988079071
+      ]
+    ],
+    "texture_sources": [
+      {
+        "image": "assets\\runtime\\level-textures\\wooden_crate_1_0.png",
+        "sha256": "d489367c91eb2a8a2a7ec1f92ae89d5388981e23cefb72af699be2cdd1f1d93e"
+      },
+      {
+        "image": "assets\\runtime\\level-textures\\wall_1_1.png",
+        "sha256": "31c7dae38d0e9b29c6c5eeeb97932dcff87725f1034637eeb89a39a7f20e1a60"
+      }
+    ],
+    "editable": "development/levels/blender/level_stall.blend"
+  },
+  {
+    "id": "level_corn",
+    "triangles": 1392,
+    "bytes": 119904,
+    "sha256": "c73b8c5ead0064b248a533815ed044a782917a2df5720d84607aa08d9338540b",
+    "mount": "floor-centre Y0",
+    "bounds_blender_z_up": [
+      [
+        -0.8199300765991211,
+        -0.7399972677230835,
+        0.0
+      ],
+      [
+        0.7921352386474609,
+        0.7923493385314941,
+        2.2424368858337402
+      ]
+    ],
+    "bounds_gltf_y_up": [
+      [
+        -0.8199300765991211,
+        0.0,
+        -0.7923493385314941
+      ],
+      [
+        0.7921352386474609,
+        2.2424368858337402,
+        0.7399972677230835
+      ]
+    ],
+    "texture_sources": [],
+    "editable": "development/levels/blender/level_corn.blend"
+  },
+  {
+    "id": "level_blackboard",
+    "triangles": 784,
+    "bytes": 155352,
+    "sha256": "92617c56dec819cd513061e5e3de86ad9c86d530b1f008ae74e8f1c66e8d480a",
+    "mount": "lower-back mount; glTF Z0, front +Z",
+    "bounds_blender_z_up": [
+      [
+        -1.2575000524520874,
+        -0.2199999988079071,
+        -0.007499992847442627
+      ],
+      [
+        1.2575000524520874,
+        0.0,
+        1.3475000858306885
+      ]
+    ],
+    "bounds_gltf_y_up": [
+      [
+        -1.2575000524520874,
+        -0.007499992847442627,
+        -0.0
+      ],
+      [
+        1.2575000524520874,
+        1.3475000858306885,
+        0.2199999988079071
+      ]
+    ],
+    "texture_sources": [
+      {
+        "image": "assets\\runtime\\level-textures\\wall_1_1.png",
+        "sha256": "31c7dae38d0e9b29c6c5eeeb97932dcff87725f1034637eeb89a39a7f20e1a60"
+      }
+    ],
+    "editable": "development/levels/blender/level_blackboard.blend"
+  },
+  {
+    "id": "level_student_desk",
+    "triangles": 388,
+    "bytes": 176164,
+    "sha256": "5bfe0085ab7c72f3f1a8d1c277454853e3beb0bd6ec7517225c9758817ff60e1",
+    "mount": "floor-centre Y0",
+    "bounds_blender_z_up": [
+      [
+        -0.550000011920929,
+        -0.32499998807907104,
+        0.0
+      ],
+      [
+        0.550000011920929,
+        0.32499998807907104,
+        0.7400000095367432
+      ]
+    ],
+    "bounds_gltf_y_up": [
+      [
+        -0.550000011920929,
+        0.0,
+        -0.32499998807907104
+      ],
+      [
+        0.550000011920929,
+        0.7400000095367432,
+        0.32499998807907104
+      ]
+    ],
+    "texture_sources": [
+      {
+        "image": "assets\\runtime\\level-textures\\wall_1_1.png",
+        "sha256": "31c7dae38d0e9b29c6c5eeeb97932dcff87725f1034637eeb89a39a7f20e1a60"
+      },
+      {
+        "image": "assets\\runtime\\level-textures\\wooden_crate_1_0.png",
+        "sha256": "d489367c91eb2a8a2a7ec1f92ae89d5388981e23cefb72af699be2cdd1f1d93e"
+      }
+    ],
+    "editable": "development/levels/blender/level_student_desk.blend"
+  },
+  {
+    "id": "level_lockers",
+    "triangles": 3376,
+    "bytes": 726784,
+    "sha256": "ac2bc291264a2be64cfbcbfe0a53c0771243eb08ef3918197501554e956d9df7",
+    "mount": "floor-centre Y0",
+    "bounds_blender_z_up": [
+      [
+        -1.2130000591278076,
+        -0.32899999618530273,
+        0.0
+      ],
+      [
+        1.2130000591278076,
+        0.23999999463558197,
+        1.8675000667572021
+      ]
+    ],
+    "bounds_gltf_y_up": [
+      [
+        -1.2130000591278076,
+        0.0,
+        -0.23999999463558197
+      ],
+      [
+        1.2130000591278076,
+        1.8675000667572021,
+        0.32899999618530273
+      ]
+    ],
+    "texture_sources": [
+      {
+        "image": "assets\\runtime\\level-textures\\floor_ceiling_3_0.png",
+        "sha256": "c3a1b23d2b6b1395195388413648343cec28690b112387357879799e9fa44232"
+      }
+    ],
+    "editable": "development/levels/blender/level_lockers.blend"
+  },
+  {
+    "id": "level_basketball_hoop",
+    "triangles": 1440,
+    "bytes": 579972,
+    "sha256": "b527ce6b43fedcf16bb7c1d570c4dc9eb04e26f282c9a3c8a63c8be7996e2894",
+    "mount": "wall back Z0; board centre Y0, rim centre Y-.35",
+    "bounds_blender_z_up": [
+      [
+        -0.8999999761581421,
+        -0.8868545889854431,
+        -0.7744999527931213
+      ],
+      [
+        0.8999999761581421,
+        0.0,
+        0.5249999761581421
+      ]
+    ],
+    "bounds_gltf_y_up": [
+      [
+        -0.8999999761581421,
+        -0.7744999527931213,
+        -0.0
+      ],
+      [
+        0.8999999761581421,
+        0.5249999761581421,
+        0.8868545889854431
+      ]
+    ],
+    "texture_sources": [
+      {
+        "image": "assets\\runtime\\level-textures\\floor_ceiling_3_0.png",
+        "sha256": "c3a1b23d2b6b1395195388413648343cec28690b112387357879799e9fa44232"
+      }
+    ],
+    "editable": "development/levels/blender/level_basketball_hoop.blend"
+  }
+]

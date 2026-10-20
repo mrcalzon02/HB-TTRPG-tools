@@ -97,22 +97,50 @@ public final class LanSound {
     /** Null means the source is inaudible or invalid. Map geometry and doors are server-owned. */
     public static CueEvent project(HouseMap map, LanWorld.Body listener, int sourceRoom,
                                    double sourceX, double sourceZ, Cue cue, int tick) {
+        if(map==null||sourceRoom<0||sourceRoom>=map.roomCount())return null;
+        return project(map,listener,sourceRoom,sourceX,map.floorY(sourceRoom),sourceZ,cue,tick);
+    }
+    /** Source and listener elevations are authoritative standing surfaces. */
+    public static CueEvent project(HouseMap map,LanWorld.Body listener,int sourceRoom,
+            double sourceX,double sourceY,double sourceZ,Cue cue,int tick){
         if(map==null||listener==null||cue==null||tick<0||sourceRoom<0
-                ||sourceRoom>=HouseMap.EXTRACTION_ROOM||listener.room()==HouseMap.EXTRACTION_ROOM
-                ||!Double.isFinite(sourceX)||!Double.isFinite(sourceZ)
-                ||map.roomAt(sourceX,sourceZ)!=sourceRoom)return null;
-        int absorption=LanAcoustics.cost(map,listener.room(),sourceRoom);
+                ||sourceRoom>=map.roomCount()||!Double.isFinite(sourceX)
+                ||!Double.isFinite(sourceY)||!Double.isFinite(sourceZ)
+                ||map.roomAt(sourceX,sourceY,sourceZ)!=sourceRoom)return null;
+        boolean ghost=ghostSource(cue);
+        if(ghost&&(sourceRoom==HouseMap.EXTRACTION_ROOM
+                ||listener.room()==HouseMap.EXTRACTION_ROOM))return null;
+        int absorption=ghost?LanAcoustics.cost(map,listener.room(),sourceRoom)
+            :LanAcoustics.physicalCost(map,listener.room(),sourceRoom);
         if(absorption>cue.acousticBudget)return null;
-        double dx=sourceX-listener.x(), dz=sourceZ-listener.z();
-        double distance=Math.hypot(dx,dz);
+        double dx=sourceX-listener.x(),dy=sourceY-listener.y(),dz=sourceZ-listener.z();
+        double horizontal=Math.hypot(dx,dz),distance=Math.sqrt(dx*dx+dy*dy+dz*dz);
         // Nearby sounds remain useful; distance and material both lower their perceptibility.
         int gain=(int)Math.round(cue.baseGain-absorption*11-Math.max(0,distance-2)*2.0);
         if(gain<12)return null;
         gain=Math.min(100,gain);
         double angle=Math.toRadians(listener.heading());
         double right=dx*Math.cos(angle)-dz*Math.sin(angle);
-        int pan=distance<.01?0:(int)Math.round(4*right/distance)*25;
+        int pan=horizontal<.01?0:(int)Math.round(4*right/horizontal)*25;
         pan=Math.max(-100,Math.min(100,pan));
         return new CueEvent(cue,pan,gain,tick);
+    }
+    private static boolean ghostSource(Cue cue){
+        return switch(cue){
+            case WHISPER,DISTURB,MANIFEST,STRIKE,SIGNATURE,FOOTFALL,IMPACT,GHOST_DRIFT,
+                TENSION_BUILD,LOCKED_DOOR_RATTLE,HORROR_STING_A,HORROR_STING_B,HORROR_STING_C->true;
+            default->false;
+        };
+    }
+    /** Footfall material belongs to the floor finish, never the room number. */
+    public static Cue stepCue(HouseMap map,int room){
+        if(map==null||room<0||room>=map.roomCount())return Cue.STEP;
+        String material=(map.level().room(room).finish()+" "+map.level().room(room).acoustic())
+            .toLowerCase(java.util.Locale.ROOT);
+        if(material.contains("carpet")||material.contains("soft"))return Cue.STEP_CARPET;
+        if(material.contains("wood")||material.contains("timber")||material.contains("parquet"))return Cue.STEP_WOOD;
+        if(material.contains("stone")||material.contains("tile")||material.contains("concrete")
+            ||material.contains("brick")||material.contains("crypt"))return Cue.STEP_STONE;
+        return Cue.STEP;
     }
 }

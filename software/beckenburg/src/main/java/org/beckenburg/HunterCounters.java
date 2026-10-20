@@ -14,13 +14,13 @@ public final class HunterCounters {
     }
     public record Impact(boolean repelled, boolean saltTrack, boolean wardContact) { }
     private static final class Instance {
-        final int id,owner,born;final Kind kind;double x,z;int steps,expires;
+        final int id,owner,born;final Kind kind;double x,z;final double feetY;int steps,expires;
         boolean airborne,used;
-        Instance(int id,int owner,Kind kind,double x,double z,int born){
-            this.id=id;this.owner=owner;this.kind=kind;this.x=x;this.z=z;this.born=born;
+        Instance(int id,int owner,Kind kind,double x,double feetY,double z,int born){
+            this.id=id;this.owner=owner;this.kind=kind;this.x=x;this.z=z;this.feetY=feetY;this.born=born;
             airborne=kind!=Kind.SALT;expires=born+(kind==Kind.SALT?220:125);
         }
-        double height(){return airborne?Math.max(.12,1.32-.095*steps):.045;}
+        double height(){return feetY+(airborne?Math.max(.12,1.32-.095*steps):.045);}
     }
     private final int[][] charges={{2,2,3},{2,2,3},{2,2,3},{2,2,3},{2,2,3},{2,2,3}};
     private final int[] lastThrow={-1000,-1000,-1000,-1000,-1000,-1000};
@@ -31,14 +31,14 @@ public final class HunterCounters {
     public void replenish(int seat){validateSeat(seat);charges[seat]=new int[]{2,2,3};}
     public Marker deploy(int seat,Kind kind,LanWorld.Body body,HouseMap map,int tick){
         validateSeat(seat);Objects.requireNonNull(kind);Objects.requireNonNull(body);Objects.requireNonNull(map);
-        if(tick<0||body.room()!=map.roomAt(body.x(),body.z())||!map.traversable(body.x(),body.z()))
+        if(tick<0||body.room()!=map.roomAt(body.x(),body.y(),body.z())||!map.traversable(body.x(),body.y(),body.z()))
             throw new IllegalArgumentException("invalid physical deployment");
         if(body.room()==HouseMap.EXTRACTION_ROOM||body.room()<0)
             throw new IllegalArgumentException("use protective tools inside the investigation site");
         if(tick-lastThrow[seat]<6)throw new IllegalArgumentException("throw cooling down");
         if(charges[seat][kind.ordinal()]<=0)throw new IllegalArgumentException("no charges remaining");
         lastThrow[seat]=tick;charges[seat][kind.ordinal()]--;
-        Instance item=new Instance(nextId++,seat,kind,body.x(),body.z(),tick);
+        Instance item=new Instance(nextId++,seat,kind,body.x(),body.y(),body.z(),tick);
         active.add(item);
         return new Marker(item.id,item.kind,item.x,item.z,item.height(),item.expires-tick);
     }
@@ -53,12 +53,12 @@ public final class HunterCounters {
             if(tick>=item.expires){trajectories.remove(item.id);it.remove();continue;}
             if(item.airborne){
                 double nx=item.x+itemDirectionX(item.id),nz=item.z+itemDirectionZ(item.id);
-                if(item.steps>=9||map.solid((int)Math.floor(nx),(int)Math.floor(nz))){item.airborne=false;}
+                if(item.steps>=9||!map.traversable(nx,item.feetY,nz)){item.airborne=false;}
                 else {item.x=nx;item.z=nz;item.steps++;if(item.steps>=9)item.airborne=false;}
             }
             if(item.used)continue;
             double d=Math.hypot(item.x-pose.x(),item.z-pose.z());
-            if(pose.room()!=map.roomAt(item.x,item.z))continue;
+            if(pose.room()!=map.roomAt(item.x,item.feetY,item.z))continue;
             switch(item.kind){
                 case CROSS -> {
                     if(d<=1.25&&ghost.manifested()){
@@ -105,9 +105,10 @@ public final class HunterCounters {
         return result;
     }
     /** Active wards, not ritual seals, can briefly shelter nearby hunters during a strike. */
-    public boolean wardsAt(double x,double z,int tick){
+    public boolean wardsAt(double x,double z,int tick){return wardsAt(x,0,z,tick);}
+    public boolean wardsAt(double x,double y,double z,int tick){
         for(Instance item:active)if(item.kind==Kind.WARD&&!item.airborne&&!item.used
-                &&tick<item.expires&&Math.hypot(item.x-x,item.z-z)<=1.45)return true;
+                &&Math.abs(item.feetY-y)<.6&&tick<item.expires&&Math.hypot(item.x-x,item.z-z)<=1.45)return true;
         return false;
     }
     public List<Marker> snapshot(int tick){

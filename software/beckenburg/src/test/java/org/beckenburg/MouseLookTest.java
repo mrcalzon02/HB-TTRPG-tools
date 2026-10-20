@@ -12,7 +12,7 @@ public final class MouseLookTest {
         SceneRenderer camera=new SceneRenderer();
         double oldYaw=camera.yaw;
         MouseLook.rotate(camera,100,-100);
-        check(Math.abs(camera.yaw-(oldYaw+.4))<.0001,"horizontal mouse sensitivity");
+        check(Math.abs(camera.yaw-(oldYaw-.4))<.0001,"horizontal mouse sensitivity");
         check(camera.pitch>0,"moving mouse up raises gaze");
         MouseLook.rotate(camera,0,-1000);
         check(camera.pitch==1.05,"upper pitch clamp");

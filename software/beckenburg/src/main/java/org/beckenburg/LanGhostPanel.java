@@ -14,10 +14,12 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     private final LanClient client;
     private HouseMap map=new HouseMap();
     private final SceneRenderer camera=new SceneRenderer();
+    private final RoomLighting lights=new RoomLighting();
     private final MouseLook mouseLook;
     private final Set<Integer> keys=new HashSet<>();
     private final javax.swing.Timer timer;
     private final LanAudio audio=new LanAudio();
+    private final LevelSoundscape buildingAudio=new LevelSoundscape(map);
     private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
     private MissionWeather.State currentWeather;
     private int room=-1,energy,tick,choice,lastTurn=-1;
@@ -39,29 +41,38 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
         this.client=Objects.requireNonNull(client);
         if(!"GHOST".equals(client.seat()))throw new IllegalArgumentException("ghost seat required");
         setFocusable(true);setBackground(Color.BLACK);setPreferredSize(new Dimension(850,555));
-        camera.yaw=.55;camera.pitch=-.14;
+        camera.yaw=.55;camera.pitch=-.14;camera.roomLights=lights;
         mouseLook=new MouseLook(this,(dx,dy)->MouseLook.rotate(camera,dx,dy));
         addKeyListener(this);addMouseListener(mouseLook);addMouseMotionListener(mouseLook);
         addFocusListener(this);addFocusListener(mouseLook);
         timer=new javax.swing.Timer(110,e->frame());timer.start();
     }
-    public void close(){timer.stop();keys.clear();mouseLook.close();audio.close();atmosphere.close();}
+    public void close(){timer.stop();keys.clear();mouseLook.close();audio.close();atmosphere.close();buildingAudio.close();}
     /** Accept only frames addressed to ghost; never interpret BODY/TEAMMAP/PROGRESS. */
     public void onEvent(String packet){
         if(!SwingUtilities.isEventDispatchThread())throw new IllegalStateException("ghost UI update must be on EDT");
         try{
             List<String> p=LanProtocol.parts(packet);
-            if(p.size()==2&&p.get(0).equals("SITE")){
+            if(p.size()==3&&p.get(0).equals("SITE")){
                 map=new HouseMap(HouseMap.Site.valueOf(p.get(1)));
+                if(!map.level().revision().equals(p.get(2)))throw new IllegalArgumentException("incompatible level revision");
+                buildingAudio.setMap(map);
                 feedback="SPECTRAL TERRITORY: "+map.site();
-            }else if(p.size()==6&&p.get(0).equals("GPOSE")){
+            }else if(p.size()==3&&p.get(0).equals("LIGHTS")){
+                lights.acceptSnapshot(p.get(1));lights.setBreaker(LanProtocol.integer(p.get(2),0,1)==1);
+            }else if(p.size()==2&&p.get(0).equals("DOORS")){
+                map.applyDoorSnapshot(p.get(1));
+            }else if(p.size()==2&&p.get(0).equals("WINDOWS")){
+                map.applyWindowSnapshot(p.get(1));
+            }else if(p.size()==7&&p.get(0).equals("GPOSE")){
                 int next=LanProtocol.integer(p.get(1),0,HouseMap.EXTRACTION_ROOM-1);
                 double x=LanProtocol.integer(p.get(2),0,map.width()*1000)/1000.0;
-                double z=LanProtocol.integer(p.get(3),0,map.height()*1000)/1000.0;
-                LanProtocol.integer(p.get(4),0,359);
-                tick=LanProtocol.integer(p.get(5),0,99999999);
-                if(map.roomAt(x,z)!=next)throw new IllegalArgumentException("inconsistent spectral coordinates");
-                room=next;camera.x=x;camera.z=z;
+                double y=LanProtocol.integer(p.get(3),-50000,50000)/1000.0;
+                double z=LanProtocol.integer(p.get(4),0,map.height()*1000)/1000.0;
+                LanProtocol.integer(p.get(5),0,359);
+                tick=LanProtocol.integer(p.get(6),0,99999999);
+                if(map.roomAt(x,y,z)!=next)throw new IllegalArgumentException("inconsistent spectral coordinates");
+                room=next;camera.x=x;camera.z=z;camera.eyeHeight=y+1.62;
                 feedback="HOST SPECTRAL POSE SYNCHRONIZED";
             }else if(p.size()==4&&p.get(0).equals("STAMINA")){
                 burstRemaining=LanProtocol.integer(p.get(1),0,300);
@@ -159,14 +170,16 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
     }
     private void frame(){
         atmosphere.setActive(isShowing()&&!finished);
+        buildingAudio.setActive(isShowing()&&!finished);
+        buildingAudio.setContext(room,lights.breaker());camera.roomLightTick=tick;
         atmosphere.setOutside(room>=0&&map.outside(room));
         if(!isDisplayable()||finished){repaint();return;}
         try{
             int f=(keys.contains(KeyEvent.VK_W)?1:0)-(keys.contains(KeyEvent.VK_S)?1:0);
             int r=(keys.contains(KeyEvent.VK_D)?1:0)-(keys.contains(KeyEvent.VK_A)?1:0);
             if(room>=0&&(f!=0||r!=0)){
-                double dx=Math.sin(camera.yaw)*f+Math.cos(camera.yaw)*r;
-                double dz=Math.cos(camera.yaw)*f-Math.sin(camera.yaw)*r;
+                double dx=Math.sin(camera.yaw)*f-Math.cos(camera.yaw)*r;
+                double dz=Math.cos(camera.yaw)*f+Math.sin(camera.yaw)*r;
                 double length=Math.hypot(dx,dz);
                 client.ghostStep((int)Math.round(dx/length*100),
                     (int)Math.round(dz/length*100),keys.contains(KeyEvent.VK_SHIFT));
@@ -227,8 +240,8 @@ public final class LanGhostPanel extends JPanel implements KeyListener, FocusLis
             }
             case KeyEvent.VK_7 -> frenzyAttack(GhostFrenzy.Attack.CLAW);
             case KeyEvent.VK_8 -> frenzyAttack(GhostFrenzy.Attack.DREAD);
-            case KeyEvent.VK_LEFT -> camera.yaw-=.1;
-            case KeyEvent.VK_RIGHT -> camera.yaw+=.1;
+            case KeyEvent.VK_LEFT -> camera.yaw+=.1;
+            case KeyEvent.VK_RIGHT -> camera.yaw-=.1;
             case KeyEvent.VK_UP -> camera.pitch=Math.min(1.05,camera.pitch+.06);
             case KeyEvent.VK_DOWN -> camera.pitch=Math.max(-1.05,camera.pitch-.06);
             default -> keys.add(e.getKeyCode());

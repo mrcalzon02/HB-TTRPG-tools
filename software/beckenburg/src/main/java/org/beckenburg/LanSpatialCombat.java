@@ -25,7 +25,8 @@ public final class LanSpatialCombat {
             LanWorld.Body body=world.body(i);
             if(!canStrike(map,world,ghost,i))continue;
             double dx=body.x()-ghost.x(), dz=body.z()-ghost.z();
-            double d2=dx*dx+dz*dz;
+            double dy=body.y()-ghost.y();
+            double d2=dx*dx+dy*dy+dz*dz;
             if(closest<0||d2<best-1.0e-9){best=d2;closest=i;}
         }
         if(closest>=0)selected[closest]=true;
@@ -38,9 +39,10 @@ public final class LanSpatialCombat {
         LanWorld.Body body=world.body(seat);
         if(world.hidden(seat)||body.room()!=ghost.room())return false;
         double dx=body.x()-ghost.x(), dz=body.z()-ghost.z();
-        double d2=dx*dx+dz*dz;
+        double dy=body.y()-ghost.y();
+            double d2=dx*dx+dy*dy+dz*dz;
         return Double.isFinite(d2)&&d2<=STRIKE_RANGE*STRIKE_RANGE
-                &&lineOfSight(map,ghost.x(),ghost.z(),body.x(),body.z());
+                &&map.clearLineOfSight(ghost.x(),ghost.y()+1.3,ghost.z(),body.x(),body.y()+1.3,body.z());
     }
 
     /** Check fixed geometry and closed doors with short ray samples; no client coordinates involved. */

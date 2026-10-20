@@ -39,7 +39,7 @@ public final class LanNetworkLatencyTest {
             Writer output=LanProtocol.writer(delayed.getOutputStream());
             // Connect the raw lag-probe first so it owns H1 and can control
             // its application-level PONG timing independently of the client.
-            LanProtocol.write(output,"JOIN|1|HUNTER|LagProbe");
+            LanProtocol.write(output,"JOIN|"+LanProtocol.VERSION+"|HUNTER|LagProbe");
             check(until(input,"WELCOME|").startsWith("WELCOME|H1|"),"raw probe owns H1");
             var secondEvents=new LinkedBlockingQueue<String>();
             try(LanClient b=new LanClient("127.0.0.1",host.port(),false,"Cleric",secondEvents::offer);

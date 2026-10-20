@@ -13,13 +13,13 @@ public final class LanGhostHearingHudTest {
             SwingUtilities.invokeAndWait(()->{
                 LanGhostPanel panel=new LanGhostPanel(ghost);panel.setSize(850,555);
                 try{
-                    panel.onEvent("GPOSE|4|12500|9500|180|17");
+                    panel.onEvent(new LanGhostSpatial(new HouseMap(),4).frame(17));
                     panel.onEvent("GHEAR|DOOR|LEFT|NEAR|17");
                     ok(panel.currentHearing().contains("DOOR MOVEMENT")
                        &&panel.currentHearing().contains("LEFT"),"directional sound is visible");
                     BufferedImage image=new BufferedImage(850,555,BufferedImage.TYPE_INT_RGB);
                     var graphics=image.createGraphics();panel.paint(graphics);graphics.dispose();
-                    panel.onEvent("GPOSE|4|12500|9500|180|40");
+                    panel.onEvent(new LanGhostSpatial(new HouseMap(),4).frame(40));
                     ok(panel.currentHearing().isEmpty(),"cue expired");
                     panel.onEvent("GHEAR|DOOR|LEFT|NEAR|17");
                     ok(panel.currentHearing().isEmpty(),"old delayed cue ignored");

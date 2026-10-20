@@ -5,9 +5,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Bounded version-1 LAN frames, intentionally not Java object deserialization. */
+/** Bounded version-2 XYZ LAN frames, intentionally not Java object deserialization. */
 public final class LanProtocol {
-    public static final int VERSION=1, DEFAULT_PORT=27717, MAX_FRAME=512;
+    public static final int VERSION=2, DEFAULT_PORT=27717, MAX_FRAME=512;
     private LanProtocol() { }
     public static List<String> parts(String frame) {
         if (frame==null || frame.length()>MAX_FRAME || frame.indexOf('\r')>=0 || frame.indexOf('\n')>=0)

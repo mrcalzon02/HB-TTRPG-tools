@@ -42,8 +42,8 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
         atmosphere.setActive(isShowing());
         if(!isShowing()){last=System.nanoTime();return;}
         long now=System.nanoTime();double dt=Math.min(.07,Math.max(0,(now-last)/1e9));last=now;
-        if(down.contains(KeyEvent.VK_LEFT))renderer.yaw-=dt*1.65;
-        if(down.contains(KeyEvent.VK_RIGHT))renderer.yaw+=dt*1.65;
+        if(down.contains(KeyEvent.VK_LEFT))renderer.yaw+=dt*1.65;
+        if(down.contains(KeyEvent.VK_RIGHT))renderer.yaw-=dt*1.65;
         if(down.contains(KeyEvent.VK_UP))renderer.pitch=Math.min(1.05,renderer.pitch+dt);
         if(down.contains(KeyEvent.VK_DOWN))renderer.pitch=Math.max(-1.05,renderer.pitch-dt);
         double forward=(down.contains(KeyEvent.VK_W)?1:0)-(down.contains(KeyEvent.VK_S)?1:0);
@@ -52,8 +52,8 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
         if(norm>0){
             double priorX=renderer.x,priorZ=renderer.z;
             double speed=(down.contains(KeyEvent.VK_SHIFT)?3.9:2.6)*dt/norm;
-            double dx=(Math.sin(renderer.yaw)*forward+Math.cos(renderer.yaw)*strafe)*speed;
-            double dz=(Math.cos(renderer.yaw)*forward-Math.sin(renderer.yaw)*strafe)*speed;
+            double dx=(Math.sin(renderer.yaw)*forward-Math.cos(renderer.yaw)*strafe)*speed;
+            double dz=(Math.cos(renderer.yaw)*forward+Math.sin(renderer.yaw)*strafe)*speed;
             double targetX=renderer.x+dx,targetZ=renderer.z+dz;
             double nextX=CastleHubArchitecturalPlan.elevation(targetX,renderer.z,elevation);
             if(map.traversable(targetX,renderer.z,nextX)){

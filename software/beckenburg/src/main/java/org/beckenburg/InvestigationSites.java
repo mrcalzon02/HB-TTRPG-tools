@@ -193,6 +193,7 @@ public final class InvestigationSites {
             case HOUSE->HOUSE;
             case FARMHOUSE->FARM;
             case SCHOOL->SCHOOL;
+            default->List.of();
         };
         List<Prop> found=new ArrayList<>();
         for(Prop item:source)if(item.room()==room)found.add(item);

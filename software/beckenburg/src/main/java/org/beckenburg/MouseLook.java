@@ -102,7 +102,7 @@ public final class MouseLook extends MouseAdapter implements FocusListener {
     /** The same pitch and sensitivity math is used by the solo, ghost and LAN views. */
     public static void rotate(SceneRenderer camera,int dx,int dy){
         Objects.requireNonNull(camera);
-        camera.yaw+=dx*.004;
+        camera.yaw-=dx*.004;
         camera.pitch=Math.max(-1.05,Math.min(1.05,camera.pitch-dy*.004));
     }
 }

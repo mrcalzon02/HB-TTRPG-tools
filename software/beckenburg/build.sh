@@ -46,6 +46,17 @@ for model in assets/runtime/models/blender_*.glb; do
     test -s "$model"
     cp "$model" "build/classes/org/beckenburg/models/$(basename "$model")"
 done
+# Authored environment models and unchanged source texture images.
+for name in bed_4 bed_5 bed_1 bed_2 bedside_table_1 toilet_mp_1 carpet_mp_1 photo_frame_mp_1 painting_1 clock_1 wooden_crate_1 pipe_1 book_mp_2 plate_mp_1 lamp_1_on lamp_1_off lamp_2_on lamp_2_off lamp_5_on lamp_5_off ceiling_lamp_2_on ceiling_lamp_2_off ceiling_lamp_mp_1_on ceiling_lamp_mp_1_off; do
+    test -s "assets/runtime/models/${name}.glb"
+    cp "assets/runtime/models/${name}.glb" "build/classes/org/beckenburg/models/${name}.glb"
+done
+for model in assets/runtime/models/level_*.glb; do
+    test -s "$model"
+    cp "$model" "build/classes/org/beckenburg/models/$(basename "$model")"
+done
+mkdir -p build/classes/org/beckenburg/level-textures
+cp assets/runtime/level-textures/*.png build/classes/org/beckenburg/level-textures/
 # Manufacture missing tier housings and PSX texture atlases as actual GLBs.
 # Deterministic Java 17 authoring; no Python/Blender dependency on Windows.
 java -Djava.awt.headless=true -cp build/classes org.beckenburg.TierModelForge build/classes/org/beckenburg/models
@@ -65,6 +76,10 @@ fi
 java -Djava.awt.headless=true -cp build/classes org.beckenburg.GgBotVehicleTextures \
     build/source/ggbot-original.zip assets/runtime/models build/classes/org/beckenburg/models
 javac --release 17 -encoding UTF-8 -cp build/classes -d build/test src/test/java/org/beckenburg/*.java
+# Verify authored multi-storey levels and actual packaged scenery.
+for check in AuthoredLevelPhysicsTest AuthoredLevelReachabilityTest AuthoredLevelStateTest AuthoredLevelNetworkTest AuthoredLevelRitualCaseTest AuthoredUtilitiesTest SoloElevationTest EquipmentAssetAssignmentsTest LevelRenderAcceptanceTest WorldViewHandednessTest; do
+    java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg."$check"
+done
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GraphicsOptionsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.PsxPipelineTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.PsxHorrorUiTest

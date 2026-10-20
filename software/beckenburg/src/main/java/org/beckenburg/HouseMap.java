@@ -1,218 +1,221 @@
 package org.beckenburg;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import org.beckenburg.LevelDefinition.*;
 
-/** Authoritative investigation architecture shared by solo, host and network clients.
- * All three sites now own real non-grid room geometry and door positions. */
+/** Authored metre-based mission geometry and authoritative physical queries. */
 public final class HouseMap {
-    public static final int COLS=3, ROWS=5, INDOOR_ROOMS=12, ROOM_COUNT=15;
-    public static final int WIDTH=48, HEIGHT=84, EXTRACTION_ROOM=14;
-    /** The school remains the largest institutional investigation footprint. */
-    public static final int GRAND_WIDTH=70, GRAND_HEIGHT=84;
-    public enum Site {
-        HOUSE("Residential House"),
-        FARMHOUSE("Abandoned Farmhouse"),
-        SCHOOL("Ravenshade School");
-        private final String label;
-        Site(String label){this.label=label;}
-        @Override public String toString(){return label;}
-    }
+    public static final int COLS=3,ROWS=5,INDOOR_ROOMS=12,ROOM_COUNT=15;
+    public static final int WIDTH=128,HEIGHT=128,GRAND_WIDTH=128,GRAND_HEIGHT=128,EXTRACTION_ROOM=14;
+    public enum Site { HOUSE,FARMHOUSE,SCHOOL,MANSION,PRISON,ASYLUM,ACADEMY,COLLEGE,CHURCH }
     private final Site site;
-    private final ArchitecturalPlans.Plan architecture;
-    public Site site(){return site;}
-    public boolean authoredArchitecture(){return architecture!=null;}
-    private static final String[] NAMES={
-        "GROUND-FLOOR WC", "DRAWING ROOM", "BREAKFAST ROOM",
-        "FRONT PARLOUR", "STAIR HALL", "FAMILY KITCHEN",
-        "LIBRARY", "FORMAL DINING", "WRITING STUDY",
-        "CELLAR STAIR VESTIBULE", "ENTRANCE HALL", "SCULLERY",
-        "REAR GARDEN", "FRONT PORTICO", "VAN STAGING"
-    };
-    private static final String[] FARM_NAMES={
-        "SCULLERY","PARENTS' ROOM","CHILDREN'S ROOM",
-        "FARM PARLOR","CENTRAL PASSAGE","FARM KITCHEN",
-        "PANTRY","FAMILY DINING","FARM OFFICE",
-        "ROOT CELLAR","MUDROOM","GENERATOR ROOM",
-        "ORCHARD","BARNYARD","VAN STAGING"
-    };
-    private static final String[] SCHOOL_NAMES={
-        "WASHROOM","CLASSROOM A","CLASSROOM B",
-        "FACULTY LOUNGE","MAIN CORRIDOR","SCIENCE LAB",
-        "SCHOOL LIBRARY","ASSEMBLY ROOM","HEADMASTER'S OFFICE",
-        "BOILER ROOM","FRONT VESTIBULE","ELECTRICAL ROOM",
-        "PLAYGROUND","SCHOOL STEPS","VAN STAGING"
-    };
-    private final Set<Integer> openDoors=new HashSet<>();
+    private final LevelDefinition level;
+    private final Set<Integer> openDoors=new HashSet<>(),openWindows=new HashSet<>();
     private final VanStaging van;
-    public int cellWidth(){return site==Site.HOUSE?8:12;}
-    public int cellHeight(){return site==Site.HOUSE?6:9;}
-    /** Room volumes are real, with a higher Victorian reception floor. */
-    public double ceilingHeight(){return switch(site){
-        case HOUSE->3.35;case FARMHOUSE->3.6;case SCHOOL->4.6;
-    };}
-    public VanStaging van(){return van;}
-
     public HouseMap(){this(Site.HOUSE);}
-    public HouseMap(Site variant){
-        site=java.util.Objects.requireNonNull(variant);
-        architecture=ArchitecturalPlans.build(site);
-        van=new VanStaging(new VanStaging.Placement(
-            centerX(EXTRACTION_ROOM),centerZ(EXTRACTION_ROOM),-Math.PI/2));
+    public HouseMap(Site site){
+        this.site=Objects.requireNonNull(site);level=LevelPlans.build(site);
+        Dock d=level.dock();van=new VanStaging(new VanStaging.Placement(d.x(),d.z(),d.yaw()));
     }
-    /** Sorted fixed tile IDs allow clients to reproduce the server's physical doors. */
-    public String doorSnapshot(){
-        return openDoors.stream().sorted().map(String::valueOf).collect(java.util.stream.Collectors.joining(","));
-    }
-    public void applyDoorSnapshot(String encoded){
-        if(encoded==null||encoded.length()>100)throw new IllegalArgumentException("invalid doors");
-        Set<Integer> result=new HashSet<>();
-        if(!encoded.isEmpty())for(String token:encoded.split(",",-1)){
-            if(!token.matches("[0-9]{1,4}"))throw new IllegalArgumentException("invalid door id");
-            int id=Integer.parseInt(token),dx=id%width(),dz=id/width();
-            if(dz>=height()||tile(dx,dz)!='D'||!result.add(id))throw new IllegalArgumentException("invalid door list");
-        }
-        openDoors.clear();openDoors.addAll(result);
-    }
-    /** Deterministic interior hiding sockets. Density changes which locations physically exist. */
-    public VanStaging.Position hidingSpot(int room,int density){
-        if(density<0||density>100)throw new IllegalArgumentException("hiding density 0-100");
-        if(room<0||room>=INDOOR_ROOMS)return null;
-        if(Math.floorMod(room*37+17,100)>=density)return null;
-        return new VanStaging.Position(centerX(room)+.65,centerZ(room)+.70);
-    }
-    public int width(){return architecture.width;}
-    public int height(){return architecture.height;}
+    public Site site(){return site;}
+    public LevelDefinition level(){return level;}
+    public boolean authoredArchitecture(){return true;}
+    public VanStaging van(){return van;}
+    public int width(){return (int)Math.ceil(level.rooms().stream().mapToDouble(Room::x1).max().orElse(100))+3;}
+    public int height(){return (int)Math.ceil(level.rooms().stream().mapToDouble(Room::z1).max().orElse(100))+3;}
+    public int cellWidth(){return 8;}
+    public int cellHeight(){return 6;}
+    public double ceilingHeight(){return level.room(0).height();}
     public int roomCount(){return ROOM_COUNT;}
     public int interiorRoomCount(){return INDOOR_ROOMS;}
-    public boolean outside(int room){return room>=INDOOR_ROOMS && room<ROOM_COUNT;}
-    public char tile(int x,int z){
-        return architecture.tile(x,z);
-    }
-    private int doorId(int x,int z){return z*width()+x;}
-    public boolean doorOpen(int x,int z){return tile(x,z)=='D'&&openDoors.contains(doorId(x,z));}
-    public boolean solid(int x,int z){
-        char t=tile(x,z);
-        return t=='#'||t=='W'||(t=='D'&&!doorOpen(x,z));
-    }
-    /** Collision-aware level ray for camera shots, including real open/closed doors. */
-    public boolean clearLineOfSight(double ax,double az,double bx,double bz){
-        if(!Double.isFinite(ax)||!Double.isFinite(az)||!Double.isFinite(bx)||!Double.isFinite(bz))return false;
-        double distance=Math.hypot(bx-ax,bz-az);
-        if(distance<.01||distance>20)return false;
-        int steps=Math.max(2,(int)Math.ceil(distance/.10));
-        for(int i=1;i<steps;i++){
-            double t=i/(double)steps;
-            if(solid((int)Math.floor(ax+(bx-ax)*t),(int)Math.floor(az+(bz-az)*t)))return false;
-        }
-        return true;
-    }
-    public boolean traversable(double x,double z){
-        if(!Double.isFinite(x)||!Double.isFinite(z))return false;
-        double r=.19;
-        if(van.collides(x,z,r)
-            ||VanArrivalStreet.collision(van,x,z,r)
-            ||solid((int)Math.floor(x-r),(int)Math.floor(z-r))
-            ||solid((int)Math.floor(x+r),(int)Math.floor(z-r))
-            ||solid((int)Math.floor(x-r),(int)Math.floor(z+r))
-            ||solid((int)Math.floor(x+r),(int)Math.floor(z+r)))return false;
-        int room=roomAt(x,z);
-        if(room>=0&&room<ROOM_COUNT)for(InvestigationSites.Prop prop:
-                InvestigationSites.props(site,room)){
-            double cx=centerX(room)+prop.dx(),cz=centerZ(room)+prop.dz();
-            if(Math.hypot(x-cx,z-cz)<InvestigationSites.radius(prop)+r)
-                return false;
-        }
-        return true;
-    }
-    public boolean toggleNearestDoor(double x,double z){
-        if(!Double.isFinite(x)||!Double.isFinite(z))return false;
-        double best=1.40;int candidate=-1;
-        for(int zz=1;zz<height()-1;zz++)for(int xx=1;xx<width()-1;xx++){
-            if(tile(xx,zz)!='D')continue;
-            double d=Math.hypot(xx+.5-x,zz+.5-z);
-            if(d<best){best=d;candidate=doorId(xx,zz);}
-        }
-        if(candidate<0)return false;
-        if(!openDoors.add(candidate))openDoors.remove(candidate);
-        return true;
-    }
-    /** A non-phasing ghost physically opens an authored door between adjacent rooms. */
-    public boolean openDoorBetweenRooms(int from,int to){
-        checkRoom(from);checkRoom(to);
-        ArchitecturalPlans.Portal p=architecture.portal(from,to);
-        return p!=null&&openDoors.add(doorId(p.x(),p.z()));
-    }
-    public int roomAt(double x,double z){
-        if(!Double.isFinite(x)||!Double.isFinite(z))return -1;
-        return architecture.roomAt(x,z);
-    }
-    public String roomName(int room){
-        if(room<0||room>=ROOM_COUNT)return "OUTSIDE";
-        return switch(site){
-            case HOUSE->NAMES[room];
-            case FARMHOUSE->FARM_NAMES[room];
-            case SCHOOL->SCHOOL_NAMES[room];
-        };
-    }
+    public boolean outside(int room){return room>=12&&room<15;}
+    public double floorY(int room){checkRoom(room);return level.floorY(room);}
+    public Vec spawn(int room){checkRoom(room);return level.room(room).spawn();}
+    public double centerX(int room){return spawn(room).x();}
+    public double centerZ(int room){return spawn(room).z();}
+    public String roomName(int room){return room<0||room>=15?"OUTSIDE":level.room(room).name();}
     public String roomName(double x,double z){return roomName(roomAt(x,z));}
-    public double centerX(int room){checkRoom(room);
-        return architecture.cx[room];
+    public int roomAt(double x,double y,double z){
+        if(!finite(x,y,z))return -1;
+        for(Stair s:level.stairs())if(s.contains(x,z,0)&&Math.abs(y-s.yAt(x,z))<.25)
+            return s.t(x,z)<.5?s.a():s.b();
+        Room owner=null;
+        for(Room r:level.rooms())if(r.contains(x,y,z)&&(owner==null||r.y()>owner.y()+.01||Math.abs(r.y()-owner.y())<.01&&(r.x1()-r.x0())*(r.z1()-r.z0())<(owner.x1()-owner.x0())*(owner.z1()-owner.z0())))owner=r;
+        if(owner!=null)return owner.id();
+        for(Portal p:level.portals())if(!p.kind().equals("stair")&&Math.abs(y-p.y())<.25&&inPortal(p,x,z,0))return p.a();
+        return -1;
     }
-    public double centerZ(int room){checkRoom(room);
-        return architecture.cz[room];
+    /** Legacy ground-plane adapter; authoritative callers must supply feet Y. */
+    public int roomAt(double x,double z){
+        int room=roomAt(x,0,z);if(room>=0)return room;
+        for(Room r:level.rooms())if(r.contains(x,r.y(),z))return r.id();return -1;
     }
-    private static void checkRoom(int room){if(room<0||room>=ROOM_COUNT)throw new IllegalArgumentException("invalid room "+room);}
-    /** Real physical room graph: no fabricated 3x5 grid adjacency. */
-    public List<Integer> adjacentRooms(int room){
-        checkRoom(room);
-        return architecture.exits(room);
+    private static void checkRoom(int room){if(room<0||room>=15)throw new IllegalArgumentException("invalid room");}
+    private static boolean finite(double... values){for(double v:values)if(!Double.isFinite(v))return false;return true;}
+    private boolean inPortal(Portal p,double x,double z,double radius){
+        Room a=level.room(p.a()),b=level.room(p.b());
+        if(p.alongX())return Math.abs(x-p.x())<=p.width()/2-radius
+            &&z>=Math.min(a.z1(),b.z1())-.20&&z<=Math.max(a.z0(),b.z0())+.20;
+        return Math.abs(z-p.z())<=p.width()/2-radius
+            &&x>=Math.min(a.x1(),b.x1())-.20&&x<=Math.max(a.x0(),b.x0())+.20;
     }
-    public List<Integer> ghostExits(int room){
-        checkRoom(room);
-        if(room==EXTRACTION_ROOM)return List.of();
-        return adjacentRooms(room).stream().filter(r->r!=EXTRACTION_ROOM).toList();
-    }
-    /** Physical doorway; null means a genuinely open, unobstructed outdoor join. */
-    public int[] doorBetweenRooms(int from,int to){
-        checkRoom(from);checkRoom(to);
-        ArchitecturalPlans.Portal p=architecture.portal(from,to);
-        return p==null?null:new int[]{p.x(),p.z()};
-    }
-    public boolean doorwayAlongX(int x,int z){
-        return architecture.doorwayAlongX(x,z);
-    }
-    /** Validate door topology and full connected hunter navigation with all doors opened. */
-    public boolean valid(){
-        if(NAMES.length!=ROOM_COUNT)return false;
-        int count=0;
-        for(int z=0;z<height();z++)for(int x=0;x<width();x++)if(tile(x,z)=='D'){
-            count++;
-            boolean ns=tile(x,z-1)!='#'&&tile(x,z+1)!='#';
-            boolean ew=tile(x-1,z)!='#'&&tile(x+1,z)!='#';
-            if(ns==ew)return false; // A proper threshold has just one usable axis.
+    public boolean doorOpen(int id){return openDoors.contains(id);}
+    public boolean doorOpen(int x,int z){return level.portals().stream().anyMatch(p->(int)p.x()==x&&(int)p.z()==z&&doorOpen(p.id()));}
+    public String doorSnapshot(){return openDoors.stream().sorted().map(String::valueOf).collect(java.util.stream.Collectors.joining(","));}
+    public void applyDoorSnapshot(String encoded){
+        if(encoded==null||encoded.length()>4096)throw new IllegalArgumentException("invalid doors");
+        Set<Integer> ids=new HashSet<>();
+        if(!encoded.isEmpty())for(String token:encoded.split(",",-1)){
+            if(!token.matches("[0-9]{1,6}"))throw new IllegalArgumentException("invalid door id");
+            int id=Integer.parseInt(token);
+            if(level.portals().stream().noneMatch(p->p.id()==id&&p.door())||!ids.add(id))throw new IllegalArgumentException("invalid door id");
         }
-        if(count!=architecture.portals.size()||count<12||!architecture.connected())
-            return false;
-        Set<Integer> saved=new HashSet<>(openDoors);
-        try{
-            for(int z=0;z<height();z++)for(int x=0;x<width();x++)
-                if(tile(x,z)=='D')openDoors.add(doorId(x,z));
-            boolean[][] seen=new boolean[height()][width()];
-            ArrayDeque<int[]> queue=new ArrayDeque<>();
-            queue.add(new int[]{(int)centerX(EXTRACTION_ROOM),(int)centerZ(EXTRACTION_ROOM)});
-            while(!queue.isEmpty()){
-                int[] pos=queue.removeFirst();int x=pos[0],z=pos[1];
-                if(x<0||z<0||x>=width()||z>=height()||seen[z][x]||solid(x,z))continue;
-                seen[z][x]=true;
-                queue.addLast(new int[]{x+1,z});queue.addLast(new int[]{x-1,z});
-                queue.addLast(new int[]{x,z+1});queue.addLast(new int[]{x,z-1});
+        openDoors.clear();openDoors.addAll(ids);
+    }
+    public boolean windowOpen(int id){return openWindows.contains(id);}
+    public String windowSnapshot(){return openWindows.stream().sorted().map(String::valueOf).collect(java.util.stream.Collectors.joining(","));}
+    public void applyWindowSnapshot(String encoded){
+        if(encoded==null||encoded.length()>4096)throw new IllegalArgumentException("invalid windows");
+        Set<Integer> next=new HashSet<>();
+        if(!encoded.isEmpty())for(String token:encoded.split(",",-1)){
+            if(!token.matches("[0-9]{1,6}"))throw new IllegalArgumentException("invalid window id");
+            int id=Integer.parseInt(token);
+            if(level.portals().stream().noneMatch(p->p.id()==id&&p.kind().equals("window"))||!next.add(id))throw new IllegalArgumentException("invalid window id");
+        }
+        openWindows.clear();openWindows.addAll(next);
+    }
+    public Portal nearestWindow(double x,double y,double z){
+        if(!finite(x,y,z))return null;Portal best=null;double distance=1.85;
+        for(Portal p:level.portals())if(p.kind().equals("window")&&Math.abs(p.y()-y)<.65){
+            double d=Math.hypot(x-p.x(),z-p.z());if(d<distance){best=p;distance=d;}
+        }
+        return best;
+    }
+    public boolean toggleNearestWindow(double x,double y,double z){
+        Portal p=nearestWindow(x,y,z);if(p==null)return false;
+        if(!openWindows.add(p.id()))openWindows.remove(p.id());return true;
+    }
+    public boolean toggleNearestDoor(double x,double y,double z){
+        Portal best=null;double distance=1.65;
+        for(Portal p:level.portals())if(p.door()&&Math.abs(p.y()-y)<.65){double d=Math.hypot(x-p.x(),z-p.z());if(d<distance){best=p;distance=d;}}
+        if(best==null)return false;if(!openDoors.add(best.id()))openDoors.remove(best.id());return true;
+    }
+    public boolean toggleNearestDoor(double x,double z){int r=roomAt(x,z);return r>=0&&toggleNearestDoor(x,floorY(r),z);}
+    public boolean openDoorBetweenRooms(int from,int to){
+        for(Portal p:level.portals())if(p.joins(from,to)&&p.door())return openDoors.add(p.id());return false;
+    }
+    public List<Integer> adjacentRooms(int room){checkRoom(room);return level.portalsFrom(room).stream().filter(p->!p.kind().equals("window")).map(p->p.a()==room?p.b():p.a()).distinct().toList();}
+    public List<Integer> ghostExits(int room){return room==14?List.of():adjacentRooms(room).stream().filter(r->r!=14).toList();}
+    public int[] doorBetweenRooms(int a,int b){for(Portal p:level.portals())if(p.joins(a,b)&&p.door())return new int[]{(int)p.x(),(int)p.z()};return null;}
+    public boolean doorwayAlongX(int x,int z){return level.portals().stream().anyMatch(p->(int)p.x()==x&&(int)p.z()==z&&!p.alongX());}
+    public VanStaging.Position hidingSpot(int room,int density){
+        if(density<0||density>100)throw new IllegalArgumentException("hiding density");
+        if(room<0||room>=12||Math.floorMod(room*37+17,100)>=density)return null;
+        Socket s=level.socket("hide",room);return s==null?null:new VanStaging.Position(s.x(),s.z());
+    }
+    private boolean supported(double x,double y,double z,double radius){
+        for(Stair s:level.stairs())if(s.contains(x,z,radius)&&Math.abs(y-s.yAt(x,z))<.24)return true;
+        for(Room r:level.rooms())if(Math.abs(y-r.y())<.06&&x>=r.x0()&&x<=r.x1()&&z>=r.z0()&&z<=r.z1()&&!level.floorVoid(x,r.y(),z))return true;
+        for(Portal p:level.portals())if(!p.kind().equals("stair")&&!p.kind().equals("window")&&Math.abs(y-p.y())<.06&&inPortal(p,x,z,radius))return true;
+        return false;
+    }
+    private static boolean boxHit(double x,double y,double z,double radius,double bx,double by,double bz,double hx,double hz,double height,double yaw){
+        if(y+1.78<=by+.02||y>=by+height-.02)return false;
+        double dx=x-bx,dz=z-bz,c=Math.cos(yaw),s=Math.sin(yaw);
+        return Math.abs(dx*c+dz*s)<hx+radius&&Math.abs(-dx*s+dz*c)<hz+radius;
+    }
+    private boolean wallOpening(Room room,boolean edgeAlongX,double normal,double tangent,double y,double radius,boolean ray){
+        for(Portal p:level.portalsFrom(room.id())){
+            if(p.kind().equals("stair"))continue;
+            if(p.alongX()!=edgeAlongX)continue;
+            double plane=edgeAlongX?p.z():p.x(),mid=edgeAlongX?p.x():p.z();
+            if(Math.abs(plane-normal)>.55||Math.abs(tangent-mid)>p.width()/2-radius)continue;
+            if(p.kind().equals("window")){
+                if(ray&&y>p.y()+1.0&&y<p.y()+2.35)return true;
+            }else if(y>=p.y()-.10&&y+(ray?0:1.78)<=p.y()+2.45
+                    &&(!p.door()||doorOpen(p.id())))return true;
+        }
+        for(Stair stair:level.stairs())if((stair.a()==room.id()||stair.b()==room.id())
+                &&stair.contains(edgeAlongX?tangent:normal,edgeAlongX?normal:tangent,radius)
+                &&y>=stair.yAt(edgeAlongX?tangent:normal,edgeAlongX?normal:tangent)-.12
+                &&y<=stair.yAt(edgeAlongX?tangent:normal,edgeAlongX?normal:tangent)+2.4)return true;
+        return false;
+    }
+    /** Every indoor perimeter remains solid even when exterior support overlaps it. */
+    private boolean wallBlocked(double x,double y,double z,double radius,boolean ray){
+        for(Room r:level.rooms()){
+            if(r.outside()||y+(ray?0:1.78)<=r.y()+.03||y>=r.y()+r.height())continue;
+            if(x>=r.x0()-radius&&x<=r.x1()+radius){
+                if(Math.abs(z-r.z0())<radius+.035&&!wallOpening(r,true,r.z0(),x,y,radius,ray))return true;
+                if(Math.abs(z-r.z1())<radius+.035&&!wallOpening(r,true,r.z1(),x,y,radius,ray))return true;
             }
-            for(int r=0;r<ROOM_COUNT;r++)if(!seen[(int)centerZ(r)][(int)centerX(r)])return false;
-            return true;
-        } finally {openDoors.clear();openDoors.addAll(saved);}
+            if(z>=r.z0()-radius&&z<=r.z1()+radius){
+                if(Math.abs(x-r.x0())<radius+.035&&!wallOpening(r,false,r.x0(),z,y,radius,ray))return true;
+                if(Math.abs(x-r.x1())<radius+.035&&!wallOpening(r,false,r.x1(),z,y,radius,ray))return true;
+            }
+        }
+        return false;
+    }
+    public boolean traversable(double x,double y,double z){
+        if(!finite(x,y,z))return false;double radius=.22;
+        if(!supported(x,y,z,radius)||wallBlocked(x,y,z,radius,false))return false;
+        for(double[] d:new double[][]{{-radius,0},{radius,0},{0,-radius},{0,radius}})
+            if(!supported(x+d[0],y,z+d[1],0))return false;
+        for(Portal p:level.portals())if(p.door()&&!doorOpen(p.id())&&boxHit(x,y,z,radius,p.x(),p.y(),p.z(),p.alongX()?p.width()/2:.10,p.alongX()?.10:p.width()/2,2.4,0))return false;
+        for(Collider p:level.colliders())if(boxHit(x,y,z,radius,p.x(),p.y(),p.z(),p.halfX(),p.halfZ(),p.height(),p.yaw()))return false;
+        if(Math.abs(y-level.dock().y())<1.5&&(van.collides(x,z,radius)||VanArrivalStreet.collision(van,x,z,radius)))return false;
+        // A higher deck is a solid ceiling unless its authored stair opening removes it.
+        for(Room r:level.rooms())if(r.y()>y+.12&&r.y()<y+1.82&&x>r.x0()-radius&&x<r.x1()+radius&&z>r.z0()-radius&&z<r.z1()+radius&&!level.floorVoid(x,r.y(),z))return false;
+        return true;
+    }
+    public boolean traversable(double x,double z){int r=roomAt(x,z);return r>=0&&traversable(x,floorY(r),z);}
+    private Double supportNear(double x,double z,double previousY){
+        Double best=null;double delta=.251;
+        for(Stair s:level.stairs())if(s.contains(x,z,.22)){double sy=s.yAt(x,z),d=Math.abs(sy-previousY);if(d<delta){best=sy;delta=d;}}
+        // A ramp owns its deck opening; prefer it over the overlapping lower room.
+        if(best!=null)return best;
+        for(Room r:level.rooms())if(x>=r.x0()&&x<=r.x1()&&z>=r.z0()&&z<=r.z1()&&!level.floorVoid(x,r.y(),z)){double d=Math.abs(r.y()-previousY);if(d<delta){best=r.y();delta=d;}}
+        for(Portal p:level.portals())if(!p.kind().equals("stair")&&!p.kind().equals("window")&&inPortal(p,x,z,.22)){double d=Math.abs(p.y()-previousY);if(d<delta){best=p.y();delta=d;}}
+        return best;
+    }
+    /** Swept horizontal input; elevation comes solely from contiguous authored support. */
+    public Vec resolveMove(Vec from,double x,double z){
+        if(from==null||!finite(from.x(),from.y(),from.z(),x,z))return null;
+        double distance=Math.hypot(x-from.x(),z-from.z());if(distance>2)return null;
+        int steps=Math.max(1,(int)Math.ceil(distance/.055));Vec at=from;
+        for(int i=1;i<=steps;i++){
+            double nx=from.x()+(x-from.x())*i/steps,nz=from.z()+(z-from.z())*i/steps;
+            Double y=supportNear(nx,nz,at.y());if(y==null||!traversable(nx,y,nz))return null;at=new Vec(nx,y,nz);
+        }
+        return at;
+    }
+    public boolean clearLineOfSight(double ax,double ay,double az,double bx,double by,double bz){
+        if(!finite(ax,ay,az,bx,by,bz))return false;
+        double distance=Math.sqrt((bx-ax)*(bx-ax)+(by-ay)*(by-ay)+(bz-az)*(bz-az));if(distance>40)return false;if(distance<.01)return true;
+        int steps=(int)Math.ceil(distance/.075);
+        for(int i=1;i<steps;i++){
+            double t=i/(double)steps,x=ax+(bx-ax)*t,y=ay+(by-ay)*t,z=az+(bz-az)*t;
+            boolean inside=false;
+            for(Room r:level.rooms())if(r.contains(x,y,z)){inside=true;break;}
+            for(Portal p:level.portals())if(!p.kind().equals("stair")&&y>=p.y()&&y<p.y()+2.4&&inPortal(p,x,z,0)){inside=true;if(p.door()&&!doorOpen(p.id()))return false;}
+            if(!inside||wallBlocked(x,y,z,.015,true))return false;
+            for(Room r:level.rooms())if(Math.abs(y-r.y())<.06&&x>=r.x0()&&x<=r.x1()&&z>=r.z0()&&z<=r.z1()&&!level.floorVoid(x,r.y(),z))return false;
+            for(Collider p:level.colliders())if(y>p.y()&&y<p.y()+p.height()&&boxHit(x,y-1,z,0,p.x(),p.y(),p.z(),p.halfX(),p.halfZ(),p.height(),p.yaw()))return false;
+        }
+        return true;
+    }
+    public boolean clearLineOfSight(double ax,double az,double bx,double bz){int a=roomAt(ax,az),b=roomAt(bx,bz);return a>=0&&b>=0&&clearLineOfSight(ax,floorY(a)+1.3,az,bx,floorY(b)+1.3,bz);}
+    /** Legacy map-overlay sampling; production rendering reads level surfaces directly. */
+    public char tile(int x,int z){
+        for(Portal p:level.portals())if(p.door()&&(int)p.x()==x&&(int)p.z()==z)return 'D';
+        int room=roomAt(x+.5,0,z+.5);return room<0?'#':outside(room)?'o':'.';
+    }
+    public boolean solid(int x,int z){char t=tile(x,z);return t=='#'||t=='D'&&!doorOpen(x,z);}
+    public boolean valid(){
+        Set<Integer> seen=new HashSet<>();ArrayDeque<Integer> queue=new ArrayDeque<>();queue.add(14);
+        while(!queue.isEmpty()){int r=queue.remove();if(seen.add(r))queue.addAll(adjacentRooms(r));}
+        if(seen.size()!=15)return false;
+        for(Room r:level.rooms())if(!traversable(r.spawn().x(),r.spawn().y(),r.spawn().z()))return false;
+        return true;
     }
 }

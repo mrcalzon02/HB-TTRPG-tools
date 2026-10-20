@@ -2,7 +2,7 @@ package org.beckenburg;
 
 import java.util.concurrent.*;
 
-/** Four socket clients prove the host projects accepted sounds and rejects forged events. */
+/** Four sockets: public architecture is shared; hunter tools, evidence, bodies and sound telemetry remain private. */
 public final class LanGhostHearingIntegrationTest {
     static void ok(boolean b,String label){if(!b)throw new AssertionError(label);}
     static final class Peer implements AutoCloseable {
@@ -18,7 +18,7 @@ public final class LanGhostHearingIntegrationTest {
                 if(s==null)continue;
                 if("GHOST".equals(client.seat())&&(s.startsWith("BODY|")
                     ||s.startsWith("TEAMMAP|")||s.startsWith("PROGRESS|")
-                    ||s.startsWith("EVIDENCE|")||s.startsWith("DOORS|")
+                    ||s.startsWith("EVIDENCE|")
                     ||s.startsWith("APPARITION|")||s.startsWith("MOTION|")
                     ||s.startsWith("SOUND|")))
                     throw new AssertionError("hunter private state leaked to ghost: "+s);
@@ -37,7 +37,7 @@ public final class LanGhostHearingIntegrationTest {
             a.client.ready();b.client.ready();c.client.ready();g.client.ready();
             a.await("LOBBY|3|HUMAN|4|WAITING");a.client.start();a.await("INFO|mission started");
             g.client.viewGhost3D();g.await("ACCEPT|GVIEW3D");g.await("GPOSE|");
-            for(int r:new int[]{11,8,5,4}){a.client.move(r);a.await("ACCEPT|MOVE|"+r);}
+            for(int r:AuthoredLevelNetworkTest.path(new HouseMap(),14,4)){a.client.move(r);a.await("ACCEPT|MOVE|"+r);}
             LanGhostHearing.Event step=LanGhostHearing.decode(g.await("GHEAR|FOOTSTEP|"));
             ok(step.source()==LanGhostPursuit.Sound.FOOTSTEP,"validated movement made sound");
             ok(step.frame().split("\\|").length==5,"ghost cannot see exact room or coordinates");

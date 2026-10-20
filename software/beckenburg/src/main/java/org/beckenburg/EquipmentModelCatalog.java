@@ -10,6 +10,9 @@ import java.util.Set;
 /** Strict code-side counterpart to the checked-in equipment-assets.json.
  * Source model filenames, physical tiers, and additional states are explicit;
  * no directory wildcard or unreviewed glTF file becomes runtime-approved.
+ * 129 stage slots (42 equipment families plus health), 44 state slots,
+ * 113 canonical meshes and 40 unique state meshes resolve to 153 approved files.
+ * Fixed van fixtures alias one model at every legacy tier.
  */
 final class EquipmentModelCatalog {
     private EquipmentModelCatalog() { }
@@ -22,13 +25,13 @@ final class EquipmentModelCatalog {
         new Stage("EMF_READER", EquipmentTiers.Tier.I, "exploration_emf_detector", true),
         new Stage("EMF_READER", EquipmentTiers.Tier.II, "blender_emf_reader_2", false),
         new Stage("EMF_READER", EquipmentTiers.Tier.III, "blender_emf_reader_3", false),
-        new Stage("FLASHLIGHT", EquipmentTiers.Tier.I, "exploration_flashlight_poquet", true),
-        new Stage("FLASHLIGHT", EquipmentTiers.Tier.II, "exploration_flashlight", true),
+        new Stage("FLASHLIGHT", EquipmentTiers.Tier.I, "exploration_flashlight", true),
+        new Stage("FLASHLIGHT", EquipmentTiers.Tier.II, "blender_flashlight_2", false),
         new Stage("FLASHLIGHT", EquipmentTiers.Tier.III, "blender_flashlight_3", false),
         new Stage("GHOST_WRITING_BOOK", EquipmentTiers.Tier.I, "book_mp_1", true),
         new Stage("GHOST_WRITING_BOOK", EquipmentTiers.Tier.II, "blender_ghost_writing_book_2", false),
         new Stage("GHOST_WRITING_BOOK", EquipmentTiers.Tier.III, "blender_ghost_writing_book_3", false),
-        new Stage("SPIRIT_BOX", EquipmentTiers.Tier.I, "exploration_spirit_box", true),
+        new Stage("SPIRIT_BOX", EquipmentTiers.Tier.I, "blender_spirit_box_1", false),
         new Stage("SPIRIT_BOX", EquipmentTiers.Tier.II, "blender_spirit_box_2", false),
         new Stage("SPIRIT_BOX", EquipmentTiers.Tier.III, "blender_spirit_box_3", false),
         new Stage("THERMOMETER", EquipmentTiers.Tier.I, "exploration_thermometer", true),
@@ -40,7 +43,7 @@ final class EquipmentModelCatalog {
         new Stage("VIDEO_CAMERA", EquipmentTiers.Tier.I, "blender_video_camera_1", false),
         new Stage("VIDEO_CAMERA", EquipmentTiers.Tier.II, "blender_video_camera_2", false),
         new Stage("VIDEO_CAMERA", EquipmentTiers.Tier.III, "blender_video_camera_3", false),
-        new Stage("CRUCIFIX", EquipmentTiers.Tier.I, "cross_mp_2", true),
+        new Stage("CRUCIFIX", EquipmentTiers.Tier.I, "blender_crucifix_1", false),
         new Stage("CRUCIFIX", EquipmentTiers.Tier.II, "blender_crucifix_2", false),
         new Stage("CRUCIFIX", EquipmentTiers.Tier.III, "blender_crucifix_3", false),
         new Stage("FIRELIGHT", EquipmentTiers.Tier.I, "blender_firelight_1", false),
@@ -79,27 +82,27 @@ final class EquipmentModelCatalog {
         new Stage("TRIPOD", EquipmentTiers.Tier.I, "blender_tripod_1", false),
         new Stage("TRIPOD", EquipmentTiers.Tier.II, "blender_tripod_2", false),
         new Stage("TRIPOD", EquipmentTiers.Tier.III, "blender_tripod_3", false),
-        new Stage("CLIPBOARDS", EquipmentTiers.Tier.I, "blender_clipboards_1", false),
-        new Stage("CLIPBOARDS", EquipmentTiers.Tier.II, "blender_clipboards_2", false),
-        new Stage("CLIPBOARDS", EquipmentTiers.Tier.III, "blender_clipboards_3", false),
-        new Stage("COMPUTER", EquipmentTiers.Tier.I, "pc_mp_1", true),
-        new Stage("COMPUTER", EquipmentTiers.Tier.II, "blender_computer_2", false),
-        new Stage("COMPUTER", EquipmentTiers.Tier.III, "blender_computer_3", false),
-        new Stage("OBJECTIVE_BOARD", EquipmentTiers.Tier.I, "blender_objective_board_1", false),
-        new Stage("OBJECTIVE_BOARD", EquipmentTiers.Tier.II, "blender_objective_board_2", false),
-        new Stage("OBJECTIVE_BOARD", EquipmentTiers.Tier.III, "blender_objective_board_3", false),
+        new Stage("CLIPBOARDS", EquipmentTiers.Tier.I, "blender_clipboards_fixed", false),
+        new Stage("CLIPBOARDS", EquipmentTiers.Tier.II, "blender_clipboards_fixed", false),
+        new Stage("CLIPBOARDS", EquipmentTiers.Tier.III, "blender_clipboards_fixed", false),
+        new Stage("COMPUTER", EquipmentTiers.Tier.I, "blender_computer_fixed", false),
+        new Stage("COMPUTER", EquipmentTiers.Tier.II, "blender_computer_fixed", false),
+        new Stage("COMPUTER", EquipmentTiers.Tier.III, "blender_computer_fixed", false),
+        new Stage("OBJECTIVE_BOARD", EquipmentTiers.Tier.I, "blender_objective_board_fixed", false),
+        new Stage("OBJECTIVE_BOARD", EquipmentTiers.Tier.II, "blender_objective_board_fixed", false),
+        new Stage("OBJECTIVE_BOARD", EquipmentTiers.Tier.III, "blender_objective_board_fixed", false),
         new Stage("SANITY_MONITOR", EquipmentTiers.Tier.I, "monitoring_screen_mp_1", true),
-        new Stage("SANITY_MONITOR", EquipmentTiers.Tier.II, "blender_sanity_monitor_2", false),
-        new Stage("SANITY_MONITOR", EquipmentTiers.Tier.III, "blender_sanity_monitor_3", false),
+        new Stage("SANITY_MONITOR", EquipmentTiers.Tier.II, "monitoring_screen_mp_1", true),
+        new Stage("SANITY_MONITOR", EquipmentTiers.Tier.III, "monitoring_screen_mp_1", true),
         new Stage("SITE_ACTIVITY_MONITOR", EquipmentTiers.Tier.I, "monitoring_screen_mp_1", true),
-        new Stage("SITE_ACTIVITY_MONITOR", EquipmentTiers.Tier.II, "blender_site_activity_monitor_2", false),
-        new Stage("SITE_ACTIVITY_MONITOR", EquipmentTiers.Tier.III, "blender_site_activity_monitor_3", false),
-        new Stage("SITE_MAP", EquipmentTiers.Tier.I, "blender_site_map_1", false),
-        new Stage("SITE_MAP", EquipmentTiers.Tier.II, "blender_site_map_2", false),
-        new Stage("SITE_MAP", EquipmentTiers.Tier.III, "blender_site_map_3", false),
-        new Stage("SOUND_MONITOR", EquipmentTiers.Tier.I, "blender_sound_monitor_1", false),
-        new Stage("SOUND_MONITOR", EquipmentTiers.Tier.II, "blender_sound_monitor_2", false),
-        new Stage("SOUND_MONITOR", EquipmentTiers.Tier.III, "blender_sound_monitor_3", false),
+        new Stage("SITE_ACTIVITY_MONITOR", EquipmentTiers.Tier.II, "monitoring_screen_mp_1", true),
+        new Stage("SITE_ACTIVITY_MONITOR", EquipmentTiers.Tier.III, "monitoring_screen_mp_1", true),
+        new Stage("SITE_MAP", EquipmentTiers.Tier.I, "blender_site_map_fixed", false),
+        new Stage("SITE_MAP", EquipmentTiers.Tier.II, "blender_site_map_fixed", false),
+        new Stage("SITE_MAP", EquipmentTiers.Tier.III, "blender_site_map_fixed", false),
+        new Stage("SOUND_MONITOR", EquipmentTiers.Tier.I, "monitoring_screen_mp_1", true),
+        new Stage("SOUND_MONITOR", EquipmentTiers.Tier.II, "monitoring_screen_mp_1", true),
+        new Stage("SOUND_MONITOR", EquipmentTiers.Tier.III, "monitoring_screen_mp_1", true),
         new Stage("ANCHOR_TRIANGULATOR", EquipmentTiers.Tier.I, "blender_anchor_triangulator_1", false),
         new Stage("ANCHOR_TRIANGULATOR", EquipmentTiers.Tier.II, "blender_anchor_triangulator_2", false),
         new Stage("ANCHOR_TRIANGULATOR", EquipmentTiers.Tier.III, "blender_anchor_triangulator_3", false),
@@ -141,13 +144,16 @@ final class EquipmentModelCatalog {
         new Stage("CHALK_SIGIL_KIT", EquipmentTiers.Tier.III, "blender_chalk_sigil_kit_3", false),
         new Stage("SPECTRAL_FREQUENCY_ANALYZER", EquipmentTiers.Tier.I, "blender_spectral_frequency_analyzer_1", false),
         new Stage("SPECTRAL_FREQUENCY_ANALYZER", EquipmentTiers.Tier.II, "blender_spectral_frequency_analyzer_2", false),
-        new Stage("SPECTRAL_FREQUENCY_ANALYZER", EquipmentTiers.Tier.III, "blender_spectral_frequency_analyzer_3", false)
+        new Stage("SPECTRAL_FREQUENCY_ANALYZER", EquipmentTiers.Tier.III, "blender_spectral_frequency_analyzer_3", false),
+        new Stage("HEALTH_SUPPLIES", EquipmentTiers.Tier.I, "blender_health_supplies_1", false),
+        new Stage("HEALTH_SUPPLIES", EquipmentTiers.Tier.II, "blender_health_supplies_2", false),
+        new Stage("HEALTH_SUPPLIES", EquipmentTiers.Tier.III, "blender_health_supplies_3", false)
     };
     private static final Variant[] SOURCE_VARIANTS = {
         new Variant("DOTS_PROJECTOR", EquipmentTiers.Tier.I, "deployed", "blender_dots_projector_1_deployed"),
         new Variant("DOTS_PROJECTOR", EquipmentTiers.Tier.II, "deployed", "blender_dots_projector_2_deployed"),
         new Variant("DOTS_PROJECTOR", EquipmentTiers.Tier.III, "deployed", "blender_dots_projector_3_deployed"),
-        new Variant("GHOST_WRITING_BOOK", EquipmentTiers.Tier.I, "open", "open_book_mp_1"),
+        new Variant("GHOST_WRITING_BOOK", EquipmentTiers.Tier.I, "open", "blender_ghost_writing_book_1_open"),
         new Variant("GHOST_WRITING_BOOK", EquipmentTiers.Tier.II, "open", "blender_ghost_writing_book_2_open"),
         new Variant("GHOST_WRITING_BOOK", EquipmentTiers.Tier.III, "open", "blender_ghost_writing_book_3_open"),
         new Variant("FIRELIGHT", EquipmentTiers.Tier.I, "lit", "blender_firelight_1_lit"),
@@ -160,8 +166,8 @@ final class EquipmentModelCatalog {
         new Variant("INCENSE", EquipmentTiers.Tier.II, "burning", "blender_incense_2_burning"),
         new Variant("INCENSE", EquipmentTiers.Tier.III, "burning", "blender_incense_3_burning"),
         new Variant("SALT", EquipmentTiers.Tier.I, "deployed", "blender_salt_1_deployed"),
-        new Variant("SALT", EquipmentTiers.Tier.II, "deployed", "blender_salt_2_deployed"),
-        new Variant("SALT", EquipmentTiers.Tier.III, "deployed", "blender_salt_3_deployed"),
+        new Variant("SALT", EquipmentTiers.Tier.II, "deployed", "blender_salt_1_deployed"),
+        new Variant("SALT", EquipmentTiers.Tier.III, "deployed", "blender_salt_1_deployed"),
         new Variant("TRIPOD", EquipmentTiers.Tier.I, "folded", "blender_tripod_1_folded"),
         new Variant("TRIPOD", EquipmentTiers.Tier.II, "folded", "blender_tripod_2_folded"),
         new Variant("TRIPOD", EquipmentTiers.Tier.III, "folded", "blender_tripod_3_folded"),
@@ -172,14 +178,22 @@ final class EquipmentModelCatalog {
         new Variant("LASER_GRID", EquipmentTiers.Tier.II, "deployed", "blender_laser_grid_2_deployed"),
         new Variant("LASER_GRID", EquipmentTiers.Tier.III, "deployed", "blender_laser_grid_3_deployed"),
         new Variant("EMF_ARRAY", EquipmentTiers.Tier.I, "node", "blender_emf_array_1_node"),
+        new Variant("EMF_ARRAY", EquipmentTiers.Tier.I, "deployed", "blender_emf_array_1_deployed"),
         new Variant("EMF_ARRAY", EquipmentTiers.Tier.II, "node", "blender_emf_array_2_node"),
+        new Variant("EMF_ARRAY", EquipmentTiers.Tier.II, "deployed", "blender_emf_array_2_deployed"),
         new Variant("EMF_ARRAY", EquipmentTiers.Tier.III, "node", "blender_emf_array_3_node"),
+        new Variant("EMF_ARRAY", EquipmentTiers.Tier.III, "deployed", "blender_emf_array_3_deployed"),
         new Variant("THERMAL_BEACON", EquipmentTiers.Tier.I, "node", "blender_thermal_beacon_1_node"),
+        new Variant("THERMAL_BEACON", EquipmentTiers.Tier.I, "deployed", "blender_thermal_beacon_1_deployed"),
         new Variant("THERMAL_BEACON", EquipmentTiers.Tier.II, "node", "blender_thermal_beacon_2_node"),
+        new Variant("THERMAL_BEACON", EquipmentTiers.Tier.II, "deployed", "blender_thermal_beacon_2_deployed"),
         new Variant("THERMAL_BEACON", EquipmentTiers.Tier.III, "node", "blender_thermal_beacon_3_node"),
+        new Variant("THERMAL_BEACON", EquipmentTiers.Tier.III, "deployed", "blender_thermal_beacon_3_deployed"),
         new Variant("CHALK_SIGIL_KIT", EquipmentTiers.Tier.I, "deployed", "blender_chalk_sigil_kit_1_deployed"),
-        new Variant("CHALK_SIGIL_KIT", EquipmentTiers.Tier.II, "deployed", "blender_chalk_sigil_kit_2_deployed"),
-        new Variant("CHALK_SIGIL_KIT", EquipmentTiers.Tier.III, "deployed", "blender_chalk_sigil_kit_3_deployed")
+        new Variant("CHALK_SIGIL_KIT", EquipmentTiers.Tier.II, "deployed", "blender_chalk_sigil_kit_1_deployed"),
+        new Variant("CHALK_SIGIL_KIT", EquipmentTiers.Tier.III, "deployed", "blender_chalk_sigil_kit_1_deployed"),
+        new Variant("HEALTH_SUPPLIES", EquipmentTiers.Tier.II, "open", "blender_health_supplies_2_open"),
+        new Variant("HEALTH_SUPPLIES", EquipmentTiers.Tier.III, "open", "blender_health_supplies_3_open")
     };
     private static final Map<String,Stage> STAGES;
     private static final Map<String,String> VARIANTS;
@@ -192,7 +206,9 @@ final class EquipmentModelCatalog {
         Map<String,String> variants = new HashMap<>();
         Set<String> names = new HashSet<>();
         for (Stage stage : SOURCE_STAGES) {
-            EquipmentTiers.get(stage.id());
+            // Medical health supplies have their own FieldSupplies progression;
+            // they are never registered as sanity medicine or a new evidence tool.
+            if(!stage.id().equals("HEALTH_SUPPLIES"))EquipmentTiers.get(stage.id());
             if (stages.putIfAbsent(key(stage.id(),stage.tier()),stage)!=null)
                 throw new ExceptionInInitializerError("Duplicate tiered model: "+stage.id());
             names.add(stage.model());
@@ -208,7 +224,10 @@ final class EquipmentModelCatalog {
             for (EquipmentTiers.Tier tier : EquipmentTiers.Tier.values())
                 if (!stages.containsKey(key(plan.id(),tier)))
                     throw new ExceptionInInitializerError("Missing equipment tier: "+plan.id()+"/"+tier);
-        if (stages.size()!=126 || variants.size()!=36)
+        for(EquipmentTiers.Tier tier:EquipmentTiers.Tier.values())
+            if(!stages.containsKey(key("HEALTH_SUPPLIES",tier)))
+                throw new ExceptionInInitializerError("Missing health supply tier "+tier);
+        if (stages.size()!=129 || variants.size()!=44 || names.size()!=153)
             throw new ExceptionInInitializerError("Incomplete source equipment model inventory");
         STAGES = Collections.unmodifiableMap(stages);
         VARIANTS = Collections.unmodifiableMap(variants);
@@ -232,6 +251,16 @@ final class EquipmentModelCatalog {
         return name;
     }
     static boolean approved(String name) { return ALLOWED.contains(name); }
+    static Set<String> approvedModels(){return ALLOWED;}
+    static String supplyModel(FieldSupplies.Kind kind,FieldSupplies.Tier tier){
+        Objects.requireNonNull(kind);Objects.requireNonNull(tier);
+        return model(kind==FieldSupplies.Kind.HEALTH?"HEALTH_SUPPLIES":"SANITY_MEDICATION",
+            EquipmentTiers.Tier.values()[tier.ordinal()]);
+    }
+    /** Counts addressable slots, including fixed-fixture aliases and separate health tiers. */
     static int stageCount() { return STAGES.size(); }
+    /** Counts state lookup slots; common salt/chalk states intentionally share a mesh. */
     static int variantCount() { return VARIANTS.size(); }
+    static int canonicalModelCount(){return (int)STAGES.values().stream().map(Stage::model).distinct().count();}
+    static int variantModelCount(){return (int)VARIANTS.values().stream().distinct().count();}
 }

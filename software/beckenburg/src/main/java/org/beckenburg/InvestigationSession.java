@@ -78,10 +78,13 @@ public final class InvestigationSession {
     }
     public int counterCharges(HunterCounters.Kind kind){return counters.charges(0,kind);}
     public boolean deployCounter(HunterCounters.Kind kind,double x,double z,double yaw){
+        return deployCounter(kind,x,standingY(x,z),z,yaw);
+    }
+    public boolean deployCounter(HunterCounters.Kind kind,double x,double y,double z,double yaw){
         if(outcome!=Outcome.ACTIVE)return false;
         try{
             int heading=Math.floorMod((int)Math.round(Math.toDegrees(yaw)),360);
-            counters.launch(0,kind,new LanWorld.Body(x,z,heading,map.roomAt(x,z)),map,ticks);
+            counters.launch(0,kind,new LanWorld.Body(x,y,z,heading,map.roomAt(x,y,z)),map,ticks);
             log(switch(kind){case CROSS->"Cross thrown: try to interrupt a manifested strike.";
                 case WARD->"Ward thrown: temporary shelter where it lands.";
                 case SALT->"Salt deployed: slows and reveals grounded spirits only.";});
@@ -125,12 +128,15 @@ public final class InvestigationSession {
         tick(playerX,playerZ,false);
     }
     public void tick(double playerX,double playerZ,boolean carriedLight) {
+        tick(playerX,standingY(playerX,playerZ),playerZ,carriedLight);
+    }
+    public void tick(double playerX,double playerY,double playerZ,boolean carriedLight) {
         if(outcome!=Outcome.ACTIVE) return;
         ticks++;
         missionWeather.advance(ticks);
         // Every supernatural action, including AI behavior, follows the same host-style dispatcher.
         // Ghost observation has only room-local presence, never the hunter's global position or notebook.
-        int playerRoom=map.roomAt(playerX,playerZ);
+        int playerRoom=map.roomAt(playerX,playerY,playerZ);
         ghost.advance(ticks,playerRoom,playerRoom==ghost.room()?1:0);
         boolean indoor=playerRoom>=0&&playerRoom<HouseMap.INDOOR_ROOMS;
         boolean light=carriedLight||(indoor&&(roomLights==null
@@ -152,7 +158,7 @@ public final class InvestigationSession {
             }
         }
         HunterCounters.Impact counter=counters.advance(map,ghost.type(),ghost,
-            new LanGhostSpatial.Pose(ghost.room(),map.centerX(ghost.room()),map.centerZ(ghost.room()),0),ticks);
+            new LanGhostSpatial.Pose(ghost.room(),map.centerX(ghost.room()),map.floorY(ghost.room()),map.centerZ(ghost.room()),0),ticks);
         if(counter.saltTrack())log("Salt tracks: the grounded ghost is visible and slowed.");
         if(counter.repelled())log("Cross struck the manifestation: attack interrupted.");
         GhostDomain.Command command=ghostAi.decide(ghost.observe());
@@ -202,17 +208,20 @@ public final class InvestigationSession {
         return useEquipment(loadout,x,z,0);
     }
     public boolean useEquipment(EquipmentLoadout loadout,double x,double z,double yaw){
+        return useEquipment(loadout,x,standingY(x,z),z,yaw);
+    }
+    public boolean useEquipment(EquipmentLoadout loadout,double x,double y,double z,double yaw){
         java.util.Objects.requireNonNull(loadout);
-        if(outcome!=Outcome.ACTIVE||!map.traversable(x,z)){
+        if(outcome!=Outcome.ACTIVE||!map.traversable(x,y,z)){
             log("Cannot operate equipment here.");return false;
         }
         EquipmentLoadout.Item item=loadout.equipped();
         return switch(item){
-            case EMF->scan(Instrument.EMF,x,z);
-            case THERMOMETER->scan(Instrument.THERMOMETER,x,z);
-            case SPIRIT_BOX->scan(Instrument.SPIRIT_BOX,x,z);
+            case EMF->scan(Instrument.EMF,x,y,z);
+            case THERMOMETER->scan(Instrument.THERMOMETER,x,y,z);
+            case SPIRIT_BOX->scan(Instrument.SPIRIT_BOX,x,y,z);
             case UV_LAMP->{
-                int room=map.roomAt(x,z);
+                int room=map.roomAt(x,y,z);
                 boolean residue=room>=0&&ticks-spectralTrace[room]<=100;
                 log(residue?"UV: transient spectral residue detected in "+map.roomName(room)+"."
                     :"UV: no fresh traces in "+map.roomName(room)+".");
@@ -220,10 +229,11 @@ public final class InvestigationSession {
             }
             case PHOTO_CAMERA->{
                 if(!loadout.consume(item)){log("Camera empty. Reload at the van equipment rack.");yield false;}
-                int room=map.roomAt(x,z);
+                int room=map.roomAt(x,y,z);
                 boolean visible=haunted&&room==ghost.room()
                     &&CameraAim.onTarget(x,z,yaw,map.centerX(ghost.room()),map.centerZ(ghost.room()))
-                    &&map.clearLineOfSight(x,z,map.centerX(ghost.room()),map.centerZ(ghost.room()));
+                    &&map.clearLineOfSight(x,y+1.62,z,map.centerX(ghost.room()),
+                        map.floorY(ghost.room())+1.2,map.centerZ(ghost.room()));
                 if(visible&&!apparitionPhotographed){
                     apparitionPhotographed=true;
                     log("APPARITION PHOTOGRAPHED. The developed image will count in your case payout.");
@@ -231,7 +241,7 @@ public final class InvestigationSession {
                 yield visible;
             }
             case SALT->{
-                int room=map.roomAt(x,z);
+                int room=map.roomAt(x,y,z);
                 if(room<0||map.outside(room)){log("Salt must be placed in a traversable interior.");yield false;}
                 if(!loadout.consume(item)){log("No salt left. Refill at the van equipment rack.");yield false;}
                 saltRoom=room;saltTick=ticks;
@@ -244,8 +254,12 @@ public final class InvestigationSession {
     /** Environmental measurements mirror the LAN's numeric evidence model. */
     /** A valid scan ALWAYS produces a measurement and a journal entry. */
     public boolean scan(Instrument tool, double x, double z) {
+        return scan(tool,x,standingY(x,z),z);
+    }
+    public boolean scan(Instrument tool,double x,double y,double z){
         if(outcome!=Outcome.ACTIVE||tool==null)return false;
-        int room=map.roomAt(x,z);
+        if(!map.traversable(x,y,z))return false;
+        int room=map.roomAt(x,y,z);
         if(room<0)return false;
         int age=ticks-lastEvidenceTick;
         int eventPower=age>=0&&age<=40
@@ -276,30 +290,44 @@ public final class InvestigationSession {
         return true;
     }
     public boolean placeWard(double x,double z) {
+        return placeWard(x,standingY(x,z),z);
+    }
+    public boolean placeWard(double x,double y,double z){
         if(outcome!=Outcome.ACTIVE || wards<=0) return false;
-        if(!map.traversable(x,z)) return false;
+        if(!map.traversable(x,y,z)) return false;
         wards--;
-        prepared=map.roomAt(x,z)==anchorRoom;
+        prepared=map.roomAt(x,y,z)==anchorRoom;
         stress=Math.max(0,stress-(role==Role.CLERIC?35:17));
         log(prepared?"Ward established at the attachment locus; the circle is ready.":"Defensive ward established; fear reduced. The primary anchor lies elsewhere.");
         return true;
     }
     public boolean cleanse(double x,double z) {
+        return cleanse(x,standingY(x,z),z);
+    }
+    public boolean cleanse(double x,double y,double z){
         if(outcome!=Outcome.ACTIVE) return false;
-        if(map.roomAt(x,z)!=anchorRoom) { log("Ritual failed: no true attachment anchor in this room.");stress=Math.min(100,stress+5);return false; }
+        if(!map.traversable(x,y,z))return false;
+        if(map.roomAt(x,y,z)!=anchorRoom) { log("Ritual failed: no true attachment anchor in this room.");stress=Math.min(100,stress+5);return false; }
         if(!prepared) { log("The anchor needs a prepared ward before the banishment rite.");return false; }
         finish(Outcome.CLEANSED);
         log("Anchor broken. Spirit banished. Return to the extraction point to secure the site.");
         return true;
     }
     public boolean extract(double x,double z) {
-        if(map.roomAt(x,z)!=HouseMap.EXTRACTION_ROOM ||
-                Math.hypot(x-map.centerX(HouseMap.EXTRACTION_ROOM),z-map.centerZ(HouseMap.EXTRACTION_ROOM))>1.65) {
-            log("Extraction is at the VAN STAGING area beyond the front porch.");return false; }
+        return extract(x,standingY(x,z),z);
+    }
+    public boolean extract(double x,double y,double z){
+        var local=map.van().local(x,z);
+        if(Math.abs(y-map.level().dock().y())>.25
+                ||map.roomAt(x,y,z)!=HouseMap.EXTRACTION_ROOM
+                ||Math.abs(local.x())>=VanStaging.HALF_WIDTH-VanStaging.WALL_THICKNESS
+                ||local.z()<VanStaging.FRONT||local.z()>=VanStaging.REAR-VanStaging.WALL_THICKNESS) {
+            log("Return inside the expedition van to extract.");return false; }
         if(outcome==Outcome.ACTIVE) { finish(Outcome.RETREATED);log("Team withdrew with partial evidence. The haunting remains."); }
         else if(outcome==Outcome.CLEANSED) log("Site secured. Beckenburg case closed.");
         return outcome!=Outcome.LOST;
     }
+    private double standingY(double x,double z){int room=map.roomAt(x,z);return room<0?0:map.floorY(room);}
     private void finish(Outcome result) {
         if(rewarded)return;
         outcome=result;rewarded=true;

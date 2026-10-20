@@ -6,7 +6,9 @@ import java.util.Objects;
  * GhostDomain remains sole authority for changing rooms, energy, manifestations and attacks.
  */
 public final class LanGhostSpatial {
-    public record Pose(int room,double x,double z,int heading) { }
+    public record Pose(int room,double x,double y,double z,int heading) {
+        public Pose(int room,double x,double z,int heading){this(room,x,0,z,heading);}
+    }
     private final HouseMap map;
     private int room,heading=180,lastStepTick=-1,slowedUntil=-1;
     private double ghostSpeed=1,speciesSpeed=1;
@@ -36,16 +38,16 @@ public final class LanGhostSpatial {
         if(currentTick<0||duration<1||duration>100)throw new IllegalArgumentException("invalid slow period");
         slowedUntil=Math.max(slowedUntil,currentTick+duration);
     }
-    private double x,z;
+    private double x,y,z;
 
     public LanGhostSpatial(HouseMap map,int startingRoom){
         this.map=Objects.requireNonNull(map);
         syncRoom(startingRoom);
     }
-    public Pose pose(){return new Pose(room,x,z,heading);}
+    public Pose pose(){return new Pose(room,x,y,z,heading);}
     public void syncRoom(int newRoom){
         if(newRoom<0||newRoom>=HouseMap.EXTRACTION_ROOM)throw new IllegalArgumentException("ghost cannot occupy safe van");
-        if(newRoom!=room||x==0&&z==0){room=newRoom;x=map.centerX(room);z=map.centerZ(room);}
+        if(newRoom!=room||x==0&&z==0){room=newRoom;var spawn=map.spawn(room);x=spawn.x();y=spawn.y();z=spawn.z();}
     }
     public boolean step(int dx,int dz,int tick){return step(dx,dz,tick,false);}
     public boolean step(int dx,int dz,int tick,boolean wantsBurst){
@@ -57,7 +59,7 @@ public final class LanGhostSpatial {
         double speed=(tick<slowedUntil?.105:.31)*ghostSpeed*speciesSpeed*(burst?1.50:1.0);
         double nx=x+speed*dx/length,nz=z+speed*dz/length;
         // Move around furnishings; crossing room boundaries is a paid, cooldown-gated DRIFT only.
-        if(map.roomAt(nx,nz)!=room||map.tile((int)nx,(int)nz)=='#')
+        if(map.roomAt(nx,y,nz)!=room||!map.traversable(nx,y,nz))
             throw new IllegalArgumentException("spectral room boundary; use DRIFT");
         x=nx;z=nz;
         if(burst){burstStamina--;lastBurstTick=tick;}
@@ -68,6 +70,6 @@ public final class LanGhostSpatial {
         heading=degrees;
     }
     public String frame(int tick){
-        return "GPOSE|"+room+"|"+Math.round(x*1000)+"|"+Math.round(z*1000)+"|"+heading+"|"+tick;
+        return "GPOSE|"+room+"|"+Math.round(x*1000)+"|"+Math.round(y*1000)+"|"+Math.round(z*1000)+"|"+heading+"|"+tick;
     }
 }

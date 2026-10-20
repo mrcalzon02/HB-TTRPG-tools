@@ -14,24 +14,18 @@ public final class LanApparition {
         Objects.requireNonNull(map); Objects.requireNonNull(viewer); Objects.requireNonNull(ghost);
         if (tick < 0) throw new IllegalArgumentException("invalid simulation tick");
         if (!worldMode || !manifested || viewer.room() != ghost.room()
-                || !lineOfSight(map, viewer.x(), viewer.z(), ghost.x(), ghost.z()))
+                || Math.hypot(Math.hypot(viewer.x()-ghost.x(),viewer.z()-ghost.z()),viewer.y()-ghost.y())>VIEW_RANGE
+                || Math.abs(viewer.y()-ghost.y())>1.8
+                || !map.clearLineOfSight(viewer.x(),viewer.y()+1.3,viewer.z(),ghost.x(),ghost.y()+1.3,ghost.z()))
             return "APPARITION|HIDDEN|" + tick;
         return "APPARITION|VISIBLE|" + Math.round(ghost.x() * 1000)
-                + "|" + Math.round(ghost.z() * 1000) + "|" + tick;
+                + "|" + Math.round(ghost.y()*1000) + "|" + Math.round(ghost.z() * 1000) + "|" + tick;
     }
 
     /** Physical walls and closed doors occlude the apparition, not just room membership. */
     static boolean lineOfSight(HouseMap map, double x0, double z0, double x1, double z1) {
         if (!Double.isFinite(x0) || !Double.isFinite(z0)
                 || !Double.isFinite(x1) || !Double.isFinite(z1)) return false;
-        double d = Math.hypot(x1 - x0, z1 - z0);
-        if (d > VIEW_RANGE) return false;
-        int steps = Math.max(1, (int)Math.ceil(d / .10));
-        for (int n = 1; n < steps; n++) {
-            double k = (double)n / steps;
-            if (map.solid((int)Math.floor(x0 + (x1-x0)*k),
-                          (int)Math.floor(z0 + (z1-z0)*k))) return false;
-        }
-        return true;
+        return Math.hypot(x1-x0,z1-z0)<=VIEW_RANGE&&map.clearLineOfSight(x0,z0,x1,z1);
     }
 }

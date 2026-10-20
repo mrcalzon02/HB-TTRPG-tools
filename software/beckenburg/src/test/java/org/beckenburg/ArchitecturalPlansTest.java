@@ -1,82 +1,29 @@
 package org.beckenburg;
-
-import java.util.HashSet;
-import java.util.Set;
-
-/** Floorplans must affect collision, room ownership, door acoustics and traversal. */
+import java.util.*;
+/** Authored topology drives collision, ownership, door acoustics and peer state. */
 public final class ArchitecturalPlansTest {
-    private static void ok(boolean pass,String reason){
-        if(!pass)throw new AssertionError(reason);
-    }
-    public static void main(String[] args){
-        HouseMap old=new HouseMap();
-        ok(old.width()==48&&old.height()==84&&old.valid(),
-            "Victorian house has functional authored ground-floor architecture");
-        for(HouseMap.Site site:HouseMap.Site.values()){
-            HouseMap map=new HouseMap(site);
-            ArchitecturalPlans.Plan plan=ArchitecturalPlans.build(site);
-            ok(map.authoredArchitecture()&&map.valid()&&RitualSites.valid(map),
-                "authored rooms and ritual sockets load "+site);
-            ok(map.width()==plan.width&&map.height()==plan.height,
-                "render and host share actual level bounds");
-            int floorCells=0,wallCells=0,windows=0;
-            for(int z=1;z<map.height()-1;z++)for(int x=1;x<map.width()-1;x++){
-                char material=map.tile(x,z);
-                if(material=='#'||material=='W')wallCells++;else floorCells++;
-                if(material=='W'){
-                    windows++;
-                    ok(map.solid(x,z)&&!map.traversable(x+.5,z+.5),
-                        "real window panel is solid for human movement");
-                }
-            }
-            ok(floorCells>(site==HouseMap.Site.SCHOOL?3500:
-                    site==HouseMap.Site.FARMHOUSE?2300:2000),
-                "large building contains extensive interior, service and exterior space");
-            ok(wallCells>600,"building has actual partitions and articulated boundaries");
-            ok(windows>(site==HouseMap.Site.SCHOOL?35:12),
-                "exterior walls have substantial authored glazed openings");
-            for(int room=0;room<HouseMap.ROOM_COUNT;room++){
-                ok(map.roomAt(map.centerX(room),map.centerZ(room))==room,
-                    "each room has physical geometry and a named center");
-                ok(map.traversable(map.centerX(room),map.centerZ(room)),
-                    "no architectural dead-end or furnishing obstructs center");
-            }
-            ok(!map.ghostExits(14).iterator().hasNext(),"van is ghost-free");
-            for(int room=0;room<14;room++)
-                ok(!map.ghostExits(room).contains(14),
-                    "no unauthorized ghost edge into safe van");
-            Set<Integer> reachable=new HashSet<>();
-            java.util.ArrayDeque<Integer> queue=new java.util.ArrayDeque<>();
-            reachable.add(14);queue.add(14);
-            while(!queue.isEmpty())for(int neighbor:map.adjacentRooms(queue.removeFirst()))
-                if(reachable.add(neighbor))queue.addLast(neighbor);
-            ok(reachable.size()==HouseMap.ROOM_COUNT,
-                "actual authored room and outdoor graph is entirely connected");
-            for(ArchitecturalPlans.Portal door:plan.portals){
-                ok(map.tile(door.x(),door.z())=='D',"door is a physical threshold");
-                int[] socket=map.doorBetweenRooms(door.a(),door.b());
-                ok(socket!=null&&socket[0]==door.x()&&socket[1]==door.z(),
-                    "acoustic system and ghost movement use same physical doorway");
-                ok(map.adjacentRooms(door.a()).contains(door.b()),
-                    "door connects the two authored rooms");
-            }
-            int neighbor=site==HouseMap.Site.FARMHOUSE?1:3;
-            int before=LanAcoustics.edgeCost(map,4,neighbor);
-            int[] socket=map.doorBetweenRooms(4,neighbor);
-            ok(before==3&&socket!=null,"closed architectural door muffles sound");
-            ok(map.openDoorBetweenRooms(4,neighbor),
-                "ghost may open a real doorway");
-            ok(LanAcoustics.edgeCost(map,4,neighbor)==1,
-                "open architectural door transmits sound");
-            HouseMap other=new HouseMap(site);
-            other.applyDoorSnapshot(map.doorSnapshot());
-            ok(other.doorOpen(socket[0],socket[1]),
-                "door state replays at correct authored coordinates");
-            ok(!map.traversable(.5,.5),"outside building bounds remain solid");
-            ok(InvestigationSites.props(site,4).stream().noneMatch(p->
-                    EquipmentModelCatalog.approved(p.mesh())),
-                "no free investigative equipment inserted into architectural geometry");
-        }
-        System.out.println("PASS: authored non-grid rooms, physical doors, host collision, acoustics and LAN replay");
-    }
+ public static void main(String[] args){
+  for(var site:AuthoredTestSupport.SITES){
+   HouseMap map=new HouseMap(site);AuthoredTestSupport.check(map.authoredArchitecture()&&map.valid()&&RitualSites.valid(map),"complete authored geometry "+site);
+   Set<Integer> seen=new HashSet<>();ArrayDeque<Integer> pending=new ArrayDeque<>();pending.add(14);
+   while(!pending.isEmpty()){int room=pending.remove();if(seen.add(room))pending.addAll(map.adjacentRooms(room));}
+   AuthoredTestSupport.check(seen.size()==15,"all room/outdoor graph nodes connected");
+   AuthoredTestSupport.check(map.ghostExits(14).isEmpty(),"ghost-safe van");
+   for(int room=0;room<14;room++)AuthoredTestSupport.check(!map.ghostExits(room).contains(14),"no ghost edge into van");
+   int doors=0,windows=0;
+   for(var p:map.level().portals()){
+    if(p.kind().equals("window")){windows++;AuthoredTestSupport.check(!map.adjacentRooms(p.a()).contains(p.b())||map.level().portals().stream().anyMatch(q->q.joins(p.a(),p.b())&&!q.kind().equals("window")),"glazing alone is not a walk edge");}
+    if(!p.door())continue;doors++;
+    var a=AuthoredTestSupport.side(map,p,p.a(),.6);var b=AuthoredTestSupport.side(map,p,p.b(),.6);
+    AuthoredTestSupport.check(map.resolveMove(a,b.x(),b.z())==null,"closed door collision "+p.id());
+    int closed=LanAcoustics.physicalEdgeCost(map,p.a(),p.b());map.openDoorBetweenRooms(p.a(),p.b());
+    AuthoredTestSupport.check(map.resolveMove(a,b.x(),b.z())!=null,"open door traversal "+p.id());
+    AuthoredTestSupport.check(LanAcoustics.physicalEdgeCost(map,p.a(),p.b())<=closed-2,"real door changes acoustic loss "+p.id());
+   }
+   AuthoredTestSupport.check(doors>=10&&windows>=4,"authored doors and glazed apertures");
+   HouseMap peer=new HouseMap(site);peer.applyDoorSnapshot(map.doorSnapshot());AuthoredTestSupport.check(peer.doorSnapshot().equals(map.doorSnapshot()),"shared physical portal state");
+   AuthoredTestSupport.check(!map.traversable(.5,0,.5),"outside map support rejected");
+  }
+  System.out.println("PASS authored rooms, real threshold collision/acoustics, glazing exclusion and peer replay");
+ }
 }

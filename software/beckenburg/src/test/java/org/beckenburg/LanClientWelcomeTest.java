@@ -38,16 +38,16 @@ public final class LanClientWelcomeTest {
             server.join(3500);
             ok(!server.isAlive(),"fake server closes after request");
             if(failure.get()!=null)throw new AssertionError("server socket error",failure.get());
-            ok(hello.get().startsWith(reconnect?"RESUME|1|H2|":"JOIN|1|HUNTER|"),
+            ok(hello.get().startsWith(reconnect?"RESUME|"+LanProtocol.VERSION+"|H2|":"JOIN|"+LanProtocol.VERSION+"|HUNTER|"),
                 "expected host admission handshake");
             ok(action.get().equals("NOTE|FOOTPRINTS|SEEN|"+expectedNext),
                 "host accepted command watermark; got "+action.get());
         }
     }
     public static void main(String[] args)throws Exception{
-        scenario("WELCOME|H2|1|"+ROTATED+"|41",true,42);
-        scenario("WELCOME|H1|1|"+TOKEN,false,1);
-        scenario("WELCOME|H1|1",false,1);
+        scenario("WELCOME|H2|"+LanProtocol.VERSION+"|"+ROTATED+"|41",true,42);
+        scenario("WELCOME|H1|"+LanProtocol.VERSION+"|"+TOKEN,false,1);
+        scenario("WELCOME|H1|"+LanProtocol.VERSION,false,1);
         System.out.println("PASS: five-field resume, rotated secret, host replay watermark, four- and three-field compatibility");
     }
 }

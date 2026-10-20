@@ -79,8 +79,8 @@ public final class GhostPracticePanel extends JPanel implements KeyListener,Focu
             case KeyEvent.VK_2 -> invoke(GhostDomain.Action.DISTURB);
             case KeyEvent.VK_3 -> invoke(GhostDomain.Action.MANIFEST);
             case KeyEvent.VK_4 -> invoke(GhostDomain.Action.STRIKE);
-            case KeyEvent.VK_LEFT -> renderer.yaw-=.12;
-            case KeyEvent.VK_RIGHT -> renderer.yaw+=.12;
+            case KeyEvent.VK_LEFT -> renderer.yaw+=.12;
+            case KeyEvent.VK_RIGHT -> renderer.yaw-=.12;
             case KeyEvent.VK_UP -> renderer.pitch=Math.min(1.05,renderer.pitch+.08);
             case KeyEvent.VK_DOWN -> renderer.pitch=Math.max(-1.05,renderer.pitch-.08);
             default -> { }

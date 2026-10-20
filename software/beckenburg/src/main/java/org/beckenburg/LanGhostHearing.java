@@ -41,9 +41,9 @@ public final class LanGhostHearing {
             ||sourceRoom<0||sourceRoom>=HouseMap.EXTRACTION_ROOM
             ||ghost.heading()<0||ghost.heading()>359
             ||!Double.isFinite(ghost.x())||!Double.isFinite(ghost.z())
-            ||map.roomAt(ghost.x(),ghost.z())!=ghost.room()
+            ||map.roomAt(ghost.x(),ghost.y(),ghost.z())!=ghost.room()
             ||!Double.isFinite(sourceX)||!Double.isFinite(sourceZ)
-            ||map.roomAt(sourceX,sourceZ)!=sourceRoom)return null;
+            ||map.roomAt(sourceX,map.floorY(sourceRoom),sourceZ)!=sourceRoom)return null;
         int absorption=LanAcoustics.cost(map,ghost.room(),sourceRoom);
         if(absorption>kind.budget)return null;
         double dx=sourceX-ghost.x(),dz=sourceZ-ghost.z();

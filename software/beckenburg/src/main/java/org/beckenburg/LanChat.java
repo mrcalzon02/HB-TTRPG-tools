@@ -27,13 +27,13 @@ public final class LanChat {
     /** Validate room topology AND physical distance, not hunter-provided recipient lists. */
     public static boolean localVisible(HouseMap map,LanWorld.Body from,LanWorld.Body to){
         Objects.requireNonNull(map);Objects.requireNonNull(from);Objects.requireNonNull(to);
-        double distance=Math.hypot(from.x()-to.x(),from.z()-to.z());
+        double distance=Math.hypot(Math.hypot(from.x()-to.x(),from.z()-to.z()),from.y()-to.y());
         if(!Double.isFinite(distance)||distance>10.0)return false;
         if(from.room()==to.room())return true;
         // Sound travels through open doors most efficiently. Closed doors can still
         // transmit nearby voices, but the budget is smaller than an entire building.
         if(from.room()==HouseMap.EXTRACTION_ROOM||to.room()==HouseMap.EXTRACTION_ROOM)
-            return distance<=4.0 && map.clearLineOfSight(from.x(),from.z(),to.x(),to.z());
+            return distance<=4.0 && map.clearLineOfSight(from.x(),from.y()+1.3,from.z(),to.x(),to.y()+1.3,to.z());
         return LanAcoustics.cost(map,from.room(),to.room())<=3
             &&distance<=6.0;
     }

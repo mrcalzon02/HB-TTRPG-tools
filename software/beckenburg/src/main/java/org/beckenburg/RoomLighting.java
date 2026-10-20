@@ -5,7 +5,10 @@ import java.util.Arrays;
 /** Authoritative per-room light circuits and time-bounded supernatural interference. */
 public final class RoomLighting {
     public enum Interference { MINOR, MODERATE, DANGEROUS, SIGNATURE }
-    public record Switch(int room,double x,double z) { }
+    /** Centre of a plate on its supporting wall. Y is the plate height, not the floor. */
+    public record Switch(int room,double x,double y,double z,double yaw) {
+        public Switch(int room,double x,double z){this(room,x,1.20,z,Math.PI/2);}
+    }
     private final boolean[] on=new boolean[HouseMap.INDOOR_ROOMS];
     private final int[] start=new int[HouseMap.INDOOR_ROOMS],until=new int[HouseMap.INDOOR_ROOMS];
     private final Interference[] disruption=new Interference[HouseMap.INDOOR_ROOMS];
@@ -18,30 +21,54 @@ public final class RoomLighting {
     private static void valid(int room){
         if(room<0||room>=HouseMap.INDOOR_ROOMS)throw new IllegalArgumentException("interior room required");
     }
-    /** Wall-mounted plates are well inside playable floor space, never inside a threshold. */
+    /** Compatibility adapter for callers that select the default house. */
     public static Switch location(int room){
         valid(room);
-        return new Switch(room,room%HouseMap.COLS*8+1.22,room/HouseMap.COLS*6+2.70);
+        return location(new HouseMap(),room);
     }
-    /** Same real wall offset at any physical room scale. */
+    /** Architectural sockets preserve the actual wall plane on every storey. */
     public static Switch location(HouseMap map,int room){
         if(map==null)throw new IllegalArgumentException("map required");
         valid(room);
-        if(map.authoredArchitecture())
-            return new Switch(room,map.centerX(room)-1.35,map.centerZ(room)-1.20);
-        return new Switch(room,room%HouseMap.COLS*map.cellWidth()+1.22,
-            room/HouseMap.COLS*map.cellHeight()+2.70);
+        LevelDefinition.Socket socket=map.level().socket("switch",room);
+        if(socket==null)throw new IllegalStateException("Missing switch socket for room "+room);
+        return new Switch(room,socket.x(),socket.y(),socket.z(),socket.yaw());
+    }
+    /** The single service-panel socket is authored alongside the room circuits. */
+    public static LevelDefinition.Socket breaker(HouseMap map){
+        if(map==null)throw new IllegalArgumentException("map required");
+        return map.level().sockets().stream().filter(s->s.type().equals("breaker")).findFirst()
+            .orElseThrow(()->new IllegalStateException("Missing breaker socket"));
     }
     /** Physical aim and line-of-sight: no remote switch activation from a different room. */
     public int aimed(HouseMap map,double x,double z,double yaw){
-        if(map==null||!Double.isFinite(x)||!Double.isFinite(z)||!Double.isFinite(yaw))return -1;
+        if(map==null)return -1;
         int room=map.roomAt(x,z);
+        return room<0?-1:aimed(map,x,map.floorY(room),z,yaw);
+    }
+    public int aimed(HouseMap map,double x,double feetY,double z,double yaw){
+        if(map==null||!Double.isFinite(x)||!Double.isFinite(feetY)
+                ||!Double.isFinite(z)||!Double.isFinite(yaw))return -1;
+        int room=map.roomAt(x,feetY,z);
         if(room<0||room>=HouseMap.INDOOR_ROOMS)return -1;
         Switch sw=location(map,room);
-        double dx=sw.x-x,dz=sw.z-z,d=Math.hypot(dx,dz);
-        if(d<.25||d>1.85)return -1;
+        return reachable(map,x,feetY,z,yaw,sw.x(),sw.y(),sw.z())?room:-1;
+    }
+    public static boolean breakerAimed(HouseMap map,double x,double feetY,double z,double yaw){
+        if(map==null||!Double.isFinite(x)||!Double.isFinite(feetY)
+                ||!Double.isFinite(z)||!Double.isFinite(yaw))return false;
+        LevelDefinition.Socket panel=breaker(map);
+        return map.roomAt(x,feetY,z)==panel.room()
+            &&reachable(map,x,feetY,z,yaw,panel.x(),panel.y(),panel.z());
+    }
+    private static boolean reachable(HouseMap map,double x,double y,double z,double yaw,
+            double targetX,double targetY,double targetZ){
+        double dx=targetX-x,dz=targetZ-z,d=Math.hypot(dx,dz);
+        if(d<.18||d>1.85||Math.abs(targetY-(y+1.20))>.85)return false;
         double facing=(dx*Math.sin(yaw)+dz*Math.cos(yaw))/d;
-        return facing>=.55&&map.clearLineOfSight(x,z,sw.x,sw.z)?room:-1;
+        // Stop slightly in front of the plate so its supporting wall is not an obstruction.
+        return facing>=.55&&map.clearLineOfSight(x,y+1.30,z,
+            targetX-dx/d*.035,targetY,targetZ-dz/d*.035);
     }
     /** Snapshot is only 12 state bits plus breaker; never includes hidden ghost details. */
     public String snapshot(){

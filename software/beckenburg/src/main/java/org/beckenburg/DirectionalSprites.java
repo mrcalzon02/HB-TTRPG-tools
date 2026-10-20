@@ -116,7 +116,7 @@ public final class DirectionalSprites {
                 ||opacity<=0||height<=0)return;
         if(!Double.isFinite(entityX)||!Double.isFinite(entityZ))return;
         double dx=entityX-cameraX,dz=entityZ-cameraZ;
-        double right=dx*Math.cos(yaw)-dz*Math.sin(yaw);
+        double right=-dx*Math.cos(yaw)+dz*Math.sin(yaw);
         double ahead=dx*Math.sin(yaw)+dz*Math.cos(yaw);
         if(ahead<NEAR||ahead>24)return;
         double cy=Math.cos(pitch),sy=Math.sin(pitch);

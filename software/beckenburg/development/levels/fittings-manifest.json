@@ -1,0 +1,101 @@
+[
+  {
+    "id": "level_kitchen_counter",
+    "triangles": 1710,
+    "dimensions": [
+      2.4000000953674316,
+      0.6970000267028809,
+      1.1959999799728394
+    ],
+    "mount": "floor standing plane Z=0; centre XY",
+    "bytes": 730156
+  },
+  {
+    "id": "level_bath_basin",
+    "triangles": 618,
+    "dimensions": [
+      0.6600000262260437,
+      0.5,
+      1.1360000371932983
+    ],
+    "mount": "floor standing plane Z=0; centre XY",
+    "bytes": 53112
+  },
+  {
+    "id": "level_bathtub",
+    "triangles": 566,
+    "dimensions": [
+      1.600000023841858,
+      0.75,
+      0.8610000014305115
+    ],
+    "mount": "floor standing plane Z=0; centre XY",
+    "bytes": 48972
+  },
+  {
+    "id": "level_domestic_light",
+    "triangles": 312,
+    "dimensions": [
+      0.5400000214576721,
+      0.5400000214576721,
+      0.23000000417232513
+    ],
+    "mount": "ceiling plane Z=0; extends downward",
+    "bytes": 32032
+  },
+  {
+    "id": "level_utility_light",
+    "triangles": 176,
+    "dimensions": [
+      1.159999966621399,
+      0.25,
+      0.15599998831748962
+    ],
+    "mount": "ceiling plane Z=0; extends downward",
+    "bytes": 30104
+  },
+  {
+    "id": "level_wall_sconce",
+    "triangles": 336,
+    "dimensions": [
+      0.25999999046325684,
+      0.3695000112056732,
+      0.4053117036819458
+    ],
+    "mount": "floor standing plane Z=0; centre XY",
+    "bytes": 33584
+  },
+  {
+    "id": "level_bedding_double",
+    "triangles": 1408,
+    "dimensions": [
+      2.4000000953674316,
+      2.119999885559082,
+      0.39841312170028687
+    ],
+    "mount": "floor standing plane Z=0; centre XY",
+    "bytes": 655128
+  },
+  {
+    "id": "level_bedding_single",
+    "triangles": 1184,
+    "dimensions": [
+      2.4000000953674316,
+      1.3200000524520874,
+      0.4352579414844513
+    ],
+    "mount": "floor standing plane Z=0; centre XY",
+    "bytes": 638420
+  },
+  {
+    "id": "level_table_lamp",
+    "triangles": 396,
+    "dimensions": [
+      0.46000000834465027,
+      0.46000000834465027,
+      0.4950000047683716
+    ],
+    "mount": "floor standing plane Z=0; centre XY",
+    "bytes": 39252
+  }
+]

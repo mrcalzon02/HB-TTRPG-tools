@@ -4,10 +4,12 @@ package org.beckenburg;
  * Peers submit direction impulses; only this class owns collision and transforms.
  */
 public final class LanWorld {
-    public record Body(double x,double z,int heading,int room) { }
+    public record Body(double x,double y,double z,int heading,int room) {
+        public Body(double x,double z,int heading,int room){this(x,0,z,heading,room);}
+    }
     private static final double SPEED=.31;
     private final HouseMap map;
-    private final double[] xs=new double[6],zs=new double[6];
+    private final double[] xs=new double[6],ys=new double[6],zs=new double[6];
     private final int[] headings={270,270,270,270,270,270};
     private final int[] lastTick={-1,-1,-1,-1,-1,-1};
     private final int[] lastDoorTick={-3,-3,-3,-3,-3,-3};
@@ -43,7 +45,7 @@ public final class LanWorld {
         for(int i=0;i<6;i++){
             setRoom(i,HouseMap.EXTRACTION_ROOM);
             xs[i]+=(i-2.5)*.54; // Distinct van spawn pads prevent cameras overlapping a teammate's head.
-            if(!map.traversable(xs[i],zs[i]))throw new IllegalStateException("invalid van spawn pad");
+            if(!map.traversable(xs[i],ys[i],zs[i]))throw new IllegalStateException("invalid van spawn pad");
         }
     }
     private static void seat(int id){if(id<0||id>=6)throw new IllegalArgumentException("hunter seat required");}
@@ -51,9 +53,9 @@ public final class LanWorld {
     public void setRoom(int seat,int room){
         seat(seat);
         if(room<0||room>=HouseMap.ROOM_COUNT)throw new IllegalArgumentException("invalid room");
-        xs[seat]=map.centerX(room);zs[seat]=map.centerZ(room);hiding[seat]=false;
+        var spawn=map.spawn(room);xs[seat]=spawn.x();ys[seat]=spawn.y();zs[seat]=spawn.z();hiding[seat]=false;
     }
-    public Body body(int seat){seat(seat);return new Body(xs[seat],zs[seat],headings[seat],map.roomAt(xs[seat],zs[seat]));}
+    public Body body(int seat){seat(seat);return new Body(xs[seat],ys[seat],zs[seat],headings[seat],map.roomAt(xs[seat],ys[seat],zs[seat]));}
     /** A stationary player recharges on the same host 10 Hz clock as movement. */
     public void advanceStamina(int tick){
         if(tick<0)throw new IllegalArgumentException("invalid tick");
@@ -80,13 +82,16 @@ public final class LanWorld {
             &&(sprint==CustomContract.Sprint.UNLIMITED||stamina[seat]>0);
         double speed=SPEED*playerSpeed*(running?sprintSpeed:1);
         double x=xs[seat]+speed*dx/magnitude,z=zs[seat]+speed*dz/magnitude;
-        if(exitSealed && map.roomAt(xs[seat],zs[seat])!=HouseMap.EXTRACTION_ROOM
-                &&map.roomAt(x,z)==HouseMap.EXTRACTION_ROOM)
+        var destination=map.resolveMove(new LevelDefinition.Vec(xs[seat],ys[seat],zs[seat]),x,z);
+        if(destination==null)throw new IllegalArgumentException("blocked by world collision");
+        if(exitSealed && body(seat).room()!=HouseMap.EXTRACTION_ROOM
+                &&map.roomAt(destination.x(),destination.y(),destination.z())==HouseMap.EXTRACTION_ROOM)
             throw new IllegalArgumentException("frenzy sealed the van extraction threshold");
         // Forbid diagonal corner cutting; each axis must independently clear the collision radius.
-        if(!map.traversable(x,z)||!map.traversable(x,zs[seat])||!map.traversable(xs[seat],z))
+        if(map.resolveMove(new LevelDefinition.Vec(xs[seat],ys[seat],zs[seat]),x,zs[seat])==null
+            ||map.resolveMove(new LevelDefinition.Vec(xs[seat],ys[seat],zs[seat]),xs[seat],z)==null)
             throw new IllegalArgumentException("blocked by world collision");
-        xs[seat]=x;zs[seat]=z;hiding[seat]=false;
+        xs[seat]=destination.x();ys[seat]=destination.y();zs[seat]=destination.z();hiding[seat]=false;
         if(running){
             lastSprintTick[seat]=tick;
             if(sprint==CustomContract.Sprint.LIMITED)stamina[seat]--;
@@ -97,16 +102,22 @@ public final class LanWorld {
     public boolean door(int seat,int tick){
         seat(seat);
         if(tick-lastDoorTick[seat]<3)throw new IllegalArgumentException("door interaction cooling down");
-        if(!map.toggleNearestDoor(xs[seat],zs[seat]))return false;
-        for(int i=0;i<6;i++)if(!map.traversable(xs[i],zs[i])){
+        if(!map.toggleNearestDoor(xs[seat],ys[seat],zs[seat]))return false;
+        for(int i=0;i<6;i++)if(!map.traversable(xs[i],ys[i],zs[i])){
             // Never close the door through a player's physical capsule.
-            map.toggleNearestDoor(xs[seat],zs[seat]);
+            map.toggleNearestDoor(xs[seat],ys[seat],zs[seat]);
             throw new IllegalArgumentException("door occupied");
         }
         lastDoorTick[seat]=tick;return true;
     }
+    public boolean window(int seat,int tick){
+        seat(seat);
+        if(tick-lastDoorTick[seat]<3)throw new IllegalArgumentException("window interaction cooling down");
+        if(!map.toggleNearestWindow(xs[seat],ys[seat],zs[seat]))return false;
+        lastDoorTick[seat]=tick;return true;
+    }
     public String bodyFrame(int seat,int tick){
         Body b=body(seat);
-        return "BODY|"+seat+"|"+Math.round(b.x()*1000)+"|"+Math.round(b.z()*1000)+"|"+b.heading()+"|"+tick;
+        return "BODY|"+seat+"|"+Math.round(b.x()*1000)+"|"+Math.round(b.y()*1000)+"|"+Math.round(b.z()*1000)+"|"+b.heading()+"|"+tick;
     }
 }

@@ -16,8 +16,8 @@ public final class PackagedSourceModelsTest {
             }
         }
         if(count<189)throw new AssertionError("missing original/Blender source models: "+count);
-        if(EquipmentModelCatalog.stageCount()!=126 ||
-                EquipmentModelCatalog.variantCount()!=36)
+        if(EquipmentModelCatalog.stageCount()!=129 ||
+                EquipmentModelCatalog.variantCount()!=44)
             throw new AssertionError("incomplete physical equipment model map");
         for(EquipmentTiers.Plan plan:EquipmentTiers.all())
             for(EquipmentTiers.Tier tier:EquipmentTiers.Tier.values()){

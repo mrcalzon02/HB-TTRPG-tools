@@ -1,0 +1,170 @@
+[
+  {
+    "id": "bed_4",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Furniture\\bed_4.glb",
+    "bytes": 652372,
+    "sha256": "94f268d58290ff7500d44ab2dcfc49684607db9546f6c519fc46aa90e549ab82",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "bed_5",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Furniture\\bed_5.glb",
+    "bytes": 643096,
+    "sha256": "402cd296a440fd6b6e0320acba190c1f6773f1fc3c4622c2a524725d1278652c",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "bed_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Furniture\\bed_1.glb",
+    "bytes": 999732,
+    "sha256": "918234304315bcebc61bc94627919381f1f630d9a2b89472befebf1e557f9333",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "bed_2",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Furniture\\bed_2.glb",
+    "bytes": 1151664,
+    "sha256": "172f585a011bb7e88a1706c59638fd45dcd548d1bd9a77ed2ad21b7951c51fe7",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "bedside_table_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Furniture\\bedside_table_1.glb",
+    "bytes": 168820,
+    "sha256": "89f2a871791cd9388fd04035ea35ef6197978a96d840cf00eeb4ce254e55bc80",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "toilet_mp_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Large Props\\toilet_mp_1.glb",
+    "bytes": 411156,
+    "sha256": "4fe48e46a8a10acf35167ddc6cc62aaaba645c9996b5325bb505d164d9512f3e",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "carpet_mp_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Large Props\\carpet_mp_1.glb",
+    "bytes": 548444,
+    "sha256": "4b64e70d6b68ad34adb65e85a6766a6729eaeabd06e1b7ba1fad461363f90f28",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "photo_frame_mp_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\photo_frame_mp_1.glb",
+    "bytes": 100768,
+    "sha256": "315244f68a7016769dd15247565ed74a1e9598df4667e927bcceeb906b60ed25",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "painting_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\painting_1.glb",
+    "bytes": 139000,
+    "sha256": "98b2bb08b77934d8e243bbe6568f48919572998cf831c4790e75b6ea8b4506b3",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "clock_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\clock_1.glb",
+    "bytes": 122728,
+    "sha256": "28d5d663b03a746b0dedb0c2367cc9fbc8d8a5f2f9bc76cc8854cfcbd60d0b22",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "wooden_crate_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Large Props\\wooden_crate_1.glb",
+    "bytes": 54932,
+    "sha256": "29532c345664c083f7db82e8410b9115111ac6a16a55b0b239381fac17bc9b9c",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "pipe_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Large Props\\pipe_1.glb",
+    "bytes": 178508,
+    "sha256": "6fdd4c7b466372753bcf26f5c256758abb8973ab72777138087cf777f470bf22",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "book_mp_2",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\book_mp_2.glb",
+    "bytes": 106520,
+    "sha256": "fb8d4f4115ae583a24c07971df34367992d1983d19842e4be5194495fde5449f",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "plate_mp_1",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Small Props\\plate_mp_1.glb",
+    "bytes": 45852,
+    "sha256": "8b3e364243ac25a2bea9d64abb611f92634e4167a7bde1621fbd7a005e87e9e1",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "lamp_1_on",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Lighting\\lamp_1_on.glb",
+    "bytes": 1006180,
+    "sha256": "9e12ac87ea26608ff2f1e87be27d7ca38ef36f335c7f0a214908565ecc339de6",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "lamp_1_off",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Lighting\\lamp_1_off.glb",
+    "bytes": 1006036,
+    "sha256": "cfcbd2caf65ff3d33cbf55c2b41e4fa130684d54d4e8cc5bd45b0cd14481a3ca",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "lamp_2_on",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Lighting\\lamp_2_on.glb",
+    "bytes": 995420,
+    "sha256": "6c2a45155dd54965f405672778f3bccbcf0f0632d3f6b40258bae05ae66d8546",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "lamp_2_off",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Lighting\\lamp_2_off.glb",
+    "bytes": 995272,
+    "sha256": "255d53bcae2f47cb808483924b788492a0987d32dcd0bfc39332ecfd8be9fb6c",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "lamp_5_on",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Lighting\\lamp_5_on.glb",
+    "bytes": 557412,
+    "sha256": "8c6400da896b055a83f58c086088a71417d76713ee89dc99dbeaa038680c8914",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "lamp_5_off",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Lighting\\lamp_5_off.glb",
+    "bytes": 557268,
+    "sha256": "dd880d598e73f08544769556a01c921a17bc5fa091c0b5993d6ab6203fb7e38e",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "ceiling_lamp_2_on",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Lighting\\ceiling_lamp_2_on.glb",
+    "bytes": 1038272,
+    "sha256": "638c71859b2c03da559894f52ba58af6e6268780b3f1d882a1d6f4616dae95b1",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "ceiling_lamp_2_off",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Lighting\\ceiling_lamp_2_off.glb",
+    "bytes": 973372,
+    "sha256": "c9330aca5c1dda2b8130ff29259d3793d74555ece45cbbe406acf5d5b1731288",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "ceiling_lamp_mp_1_on",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Lighting\\ceiling_lamp_mp_1_on.glb",
+    "bytes": 584832,
+    "sha256": "e967573a6630adca0b1195e5706f366524e2f3ce5e4e1fcc7b5518c1d2acb0e4",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  },
+  {
+    "id": "ceiling_lamp_mp_1_off",
+    "source": "E:\\ARCHIVE\\PSX assets\\PSX Mega Pack v3.2.1\\PSX Mega Pack\\Models\\GLB (recommended)\\Lighting\\ceiling_lamp_mp_1_off.glb",
+    "bytes": 584688,
+    "sha256": "10d79d31fd368cf2173e534e39323f7964fcbc033fe683cef1df475c3129aaac",
+    "modification": "none; native hierarchy/pivot/UVs retained"
+  }
+]

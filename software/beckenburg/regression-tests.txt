@@ -144,3 +144,13 @@ LanWorldIntegrationTest
 LanWorldRenderTest
 LanLobbyTest
 SmokeTest
+AuthoredLevelPhysicsTest
+AuthoredLevelReachabilityTest
+AuthoredLevelStateTest
+AuthoredLevelNetworkTest
+AuthoredLevelRitualCaseTest
+AuthoredUtilitiesTest
+SoloElevationTest
+EquipmentAssetAssignmentsTest
+LevelRenderAcceptanceTest
+WorldViewHandednessTest

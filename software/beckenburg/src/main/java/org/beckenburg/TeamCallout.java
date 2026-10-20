@@ -31,40 +31,51 @@ public final class TeamCallout {
             return List.copyOf(live);
         }
         public Ping submit(Request request) {
+            if(request==null)return null;
+            int origin=map.roomAt(request.originX(),request.originZ());
+            int target=map.roomAt(request.targetX(),request.targetZ());
+            return origin<0||target<0?null:submit(request,map.floorY(origin),map.floorY(target));
+        }
+        public Ping submit(Request request,double originFeetY,double targetFeetY){
             if(request==null || request.sender()<0 || request.phrase()==null || request.tick()<0) return null;
             if(!Double.isFinite(request.originX())||!Double.isFinite(request.originZ())||
                !Double.isFinite(request.targetX())||!Double.isFinite(request.targetZ()))return null;
-            if(!map.traversable(request.originX(),request.originZ()) ||
-               !map.traversable(request.targetX(),request.targetZ()))return null;
-            if(Math.hypot(request.originX()-request.targetX(),request.originZ()-request.targetZ())>RANGE)return null;
-            if(!lineClear(map,request.originX(),request.originZ(),request.targetX(),request.targetZ()))return null;
+            if(!Double.isFinite(originFeetY)||!Double.isFinite(targetFeetY)
+                    ||!map.traversable(request.originX(),originFeetY,request.originZ())
+                    ||!map.traversable(request.targetX(),targetFeetY,request.targetZ()))return null;
+            if(Math.hypot(Math.hypot(request.originX()-request.targetX(),request.originZ()-request.targetZ()),originFeetY-targetFeetY)>RANGE)return null;
+            if(!lineClear(map,request.originX(),originFeetY,request.originZ(),request.targetX(),targetFeetY,request.targetZ()))return null;
             int prev=lastTick.getOrDefault(request.sender(),-COOLDOWN_TICKS);
             if(request.tick()<prev || request.tick()-prev<COOLDOWN_TICKS)return null;
             lastTick.put(request.sender(),request.tick());
             visible(request.tick());
             Ping ping=new Ping(nextId++,request.sender(),request.phrase(),request.targetX(),request.targetZ(),
-                map.roomAt(request.targetX(),request.targetZ()),request.tick()+TTL_TICKS);
+                map.roomAt(request.targetX(),targetFeetY,request.targetZ()),request.tick()+TTL_TICKS);
             live.add(ping);
             if(live.size()>16)live.remove(0);
             return ping;
         }
     }
     public static boolean lineClear(HouseMap map,double ox,double oz,double tx,double tz) {
+        int from=map.roomAt(ox,oz),to=map.roomAt(tx,tz);
+        return from>=0&&to>=0&&lineClear(map,ox,map.floorY(from),oz,tx,map.floorY(to),tz);
+    }
+    public static boolean lineClear(HouseMap map,double ox,double oy,double oz,double tx,double ty,double tz){
         double distance=Math.hypot(tx-ox,tz-oz);
-        int steps=Math.max(1,(int)Math.ceil(distance/.12));
-        for(int i=0;i<=steps;i++) {
-            double a=(double)i/steps;
-            if(!map.traversable(ox+(tx-ox)*a,oz+(tz-oz)*a))return false;
-        }
-        return true;
+        if(distance<.01)return Math.abs(oy-ty)<.1;
+        return map.clearLineOfSight(ox,oy+1.3,oz,tx,ty+1.3,tz);
     }
     /** Ray stops before the first solid tile, so an investigator cannot tag a hidden room through walls. */
     public static double[] aim(HouseMap map,double x,double z,double yaw,double range) {
-        if(!Double.isFinite(yaw)||!Double.isFinite(range)||range<0||!map.traversable(x,z))return new double[]{x,z};
+        int room=map.roomAt(x,z);
+        return room<0?new double[]{x,z}:aim(map,x,map.floorY(room),z,yaw,range);
+    }
+    public static double[] aim(HouseMap map,double x,double feetY,double z,double yaw,double range){
+        if(!Double.isFinite(yaw)||!Double.isFinite(range)||range<0||!map.traversable(x,feetY,z))return new double[]{x,z};
         double dx=Math.sin(yaw),dz=Math.cos(yaw),bestX=x,bestZ=z;
         for(double d=.12;d<=Math.min(18,range);d+=.12) {
             double nextX=x+dx*d,nextZ=z+dz*d;
-            if(!map.traversable(nextX,nextZ))break;
+            if(!map.traversable(nextX,feetY,nextZ))break;
             bestX=nextX;bestZ=nextZ;
         }
         return new double[]{bestX,bestZ};

@@ -46,6 +46,14 @@ for %%M in (assets\\runtime\\models\\blender_*.glb) do (
   if not exist "%%M" (echo ERROR: required authored equipment model %%M missing & exit /b 1)
   copy /Y "%%M" "build\\classes\\org\\beckenburg\\models\\%%~nxM" >nul || exit /b 1
 )
+rem Authored level scenery and original native-resolution wall/floor images.
+for %%M in (bed_4 bed_5 bed_1 bed_2 bedside_table_1 toilet_mp_1 carpet_mp_1 photo_frame_mp_1 painting_1 clock_1 wooden_crate_1 pipe_1 book_mp_2 plate_mp_1 lamp_1_on lamp_1_off lamp_2_on lamp_2_off lamp_5_on lamp_5_off ceiling_lamp_2_on ceiling_lamp_2_off ceiling_lamp_mp_1_on ceiling_lamp_mp_1_off) do (
+  if not exist assets\runtime\models\%%M.glb (echo ERROR: missing level scenery %%M & exit /b 1)
+  copy /Y assets\runtime\models\%%M.glb build\classes\org\beckenburg\models\%%M.glb >nul || exit /b 1
+)
+for %%M in (assets\runtime\models\level_*.glb) do copy /Y "%%M" "build\classes\org\beckenburg\models\%%~nxM" >nul || exit /b 1
+if not exist build\classes\org\beckenburg\level-textures mkdir build\classes\org\beckenburg\level-textures
+copy /Y assets\runtime\level-textures\*.png build\classes\org\beckenburg\level-textures\ >nul || exit /b 1
 rem Author all 126 tiered PSX GLBs and embedded low-resolution texture atlases.
 java -Djava.awt.headless=true -cp build\classes org.beckenburg.TierModelForge build\classes\org\beckenburg\models || exit /b 1
 rem Extract only the curated CC0 castle GLBs with embedded original texture PNGs.
@@ -62,6 +70,8 @@ if not exist build\source\ggbot-original.zip (
 java -Djava.awt.headless=true -cp build\classes org.beckenburg.GgBotVehicleTextures build\source\ggbot-original.zip assets\runtime\models build\classes\org\beckenburg\models || exit /b 1
 
 javac --release 17 -encoding UTF-8 -cp build\classes -d build\test @build\sources-tests.txt || exit /b 1
+rem Verify authored multi-storey levels before the historical release suite.
+for %%T in (AuthoredLevelPhysicsTest AuthoredLevelReachabilityTest AuthoredLevelStateTest AuthoredLevelNetworkTest AuthoredLevelRitualCaseTest AuthoredUtilitiesTest SoloElevationTest EquipmentAssetAssignmentsTest LevelRenderAcceptanceTest WorldViewHandednessTest) do java -Djava.awt.headless=true -ea -cp build\classes;build\test org.beckenburg.%%T || exit /b 1
 rem Both release and E2E verify the same freshly assembled jar payload.
 jar --create --file build\beckenburg-game.jar --main-class org.beckenburg.InvestigationGame -C build\classes org\beckenburg || exit /b 1
 if /I "%~1"=="e2e" goto e2e

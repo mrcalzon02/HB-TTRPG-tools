@@ -1,0 +1,16 @@
+{
+  "source_archive": "E:/ARCHIVE/PSX assets/Victorian Study.zip",
+  "models": [
+    "fireplace_Base.fbx",
+    "fireplace_Wall.fbx"
+  ],
+  "uniform_scale": 0.45440492066820437,
+  "dimensions": [
+    1.5499999523162842,
+    0.9417449831962585,
+    2.8800370693206787
+  ],
+  "triangles": 1572,
+  "bytes": 2569396,
+  "texture_policy": "original diffuse preserved; maximum1024px to fit documented runtime budget"
+}

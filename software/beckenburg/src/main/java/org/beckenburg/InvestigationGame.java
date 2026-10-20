@@ -474,6 +474,7 @@ public final class InvestigationGame {
         private int useHeldUntilTick;
         private final VanTelemetry monitor=new VanTelemetry(20261017L);
         private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
+        private final LevelSoundscape buildingSoundscape;
         private final java.util.ArrayDeque<Integer> activityHistory=new java.util.ArrayDeque<>();
         private int frameCount;
         private long last=System.nanoTime();
@@ -483,9 +484,11 @@ public final class InvestigationGame {
                 EvidenceSignals.Weather selectedWeather,int severity){
             SiteCatalog.requirePlayable(site);
             map=new HouseMap(SiteCatalog.mapFor(site));
+            buildingSoundscape=new LevelSoundscape(map);
             callouts=new TeamCallout.Board(map);
             location=site;conditions=java.util.Objects.requireNonNull(mode);
             scene.x=map.van().placement().x();scene.z=map.van().placement().z();
+            scene.eyeHeight=map.level().dock().y()+1.62;
             powerOn=conditions.initiallyPowered();
             syncEnvironment();
             setFocusable(true);
@@ -507,7 +510,13 @@ public final class InvestigationGame {
             scene.draw(map,session,0);
             timer=new javax.swing.Timer(33,e->frame());timer.start();
         }
-        void close(){timer.stop();down.clear();wheelOpen=false;mouseLook.close();atmosphere.close();}
+        void close(){timer.stop();down.clear();wheelOpen=false;mouseLook.close();atmosphere.close();buildingSoundscape.close();}
+        private double feetY(){return scene.eyeHeight-1.62;}
+        private int currentRoom(){return map.roomAt(scene.x,feetY(),scene.z);}
+        private boolean atVanFloor(){return Math.abs(feetY()-map.level().dock().y())<.25;}
+        private EquipmentLoadout.Item aimedRack(){return atVanFloor()
+            ?VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw,profile.equipment()):null;}
+        private VanStaging.Station aimedStation(){return atVanFloor()?map.van().stationAt(scene.x,scene.z):null;}
         private void syncEnvironment(){
             scene.environmentLight=conditions.lightMultiplier()*(powerOn?1.0:.48);
             scene.fogDensity=conditions.fogMultiplier();
@@ -515,8 +524,7 @@ public final class InvestigationGame {
             lights.setBreaker(powerOn);
         }
         private boolean nearBreaker(){
-            return map.roomAt(scene.x,scene.z)==11
-                &&Math.hypot(scene.x-map.centerX(11),scene.z-map.centerZ(11))<1.5;
+            return RoomLighting.breakerAimed(map,scene.x,feetY(),scene.z,scene.yaw);
         }
         private void buyMedicine(){
             timer.stop();down.clear();mouseLook.release();
@@ -555,7 +563,7 @@ public final class InvestigationGame {
         }
         /** The E key picks up a physically visible instrument; no loadout popup. */
         private void takeRackItem(){
-            EquipmentLoadout.Item aimed=VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw,profile.equipment());
+            EquipmentLoadout.Item aimed=aimedRack();
             if(aimed==null){showVanNotice("Look directly at an instrument on the van rack, then press E.");return;}
             loadout.pickup(aimed);
             GameSfx.play(LanSound.Cue.PICKUP);
@@ -563,19 +571,21 @@ public final class InvestigationGame {
         }
         private boolean insideVan(){
             var p=map.van().local(scene.x,scene.z);
-            return map.roomAt(scene.x,scene.z)==HouseMap.EXTRACTION_ROOM &&
+            return currentRoom()==HouseMap.EXTRACTION_ROOM &&
                 Math.abs(p.x())<VanStaging.HALF_WIDTH-.20 &&
                 p.z()>=VanStaging.FRONT && p.z()<VanStaging.REAR-.2;
         }
         private void frame(){
             atmosphere.setActive(isShowing());
-            int outdoorRoom=map.roomAt(scene.x,scene.z);
+            buildingSoundscape.setActive(isShowing());
+            int outdoorRoom=currentRoom();
+            buildingSoundscape.setContext(outdoorRoom,lights.breaker());
             atmosphere.setOutside(outdoorRoom>=0&&map.outside(outdoorRoom));
             long now=System.nanoTime();double dt=Math.max(0,Math.min(.075,(now-last)/1e9));last=now;
             double forward=wheelOpen?0:(down.contains(KeyEvent.VK_W)?1:0)-(down.contains(KeyEvent.VK_S)?1:0);
             double strafe=wheelOpen?0:(down.contains(KeyEvent.VK_D)?1:0)-(down.contains(KeyEvent.VK_A)?1:0);
-            if(!wheelOpen && down.contains(KeyEvent.VK_LEFT))scene.yaw-=dt*1.8;
-            if(!wheelOpen && down.contains(KeyEvent.VK_RIGHT))scene.yaw+=dt*1.8;
+            if(!wheelOpen && down.contains(KeyEvent.VK_LEFT))scene.yaw+=dt*1.8;
+            if(!wheelOpen && down.contains(KeyEvent.VK_RIGHT))scene.yaw-=dt*1.8;
             if(!wheelOpen && down.contains(KeyEvent.VK_UP))scene.pitch=Math.min(1.05,scene.pitch+dt*.9);
             if(!wheelOpen && down.contains(KeyEvent.VK_DOWN))scene.pitch=Math.max(-1.05,scene.pitch-dt*.9);
             double length=Math.hypot(forward,strafe);
@@ -583,16 +593,20 @@ public final class InvestigationGame {
                 double priorX=scene.x,priorZ=scene.z;
                 forward/=length;strafe/=length;
                 double speed=down.contains(KeyEvent.VK_SHIFT)?3.6:2.4;
-                double dx=(Math.sin(scene.yaw)*forward+Math.cos(scene.yaw)*strafe)*dt*speed;
-                double dz=(Math.cos(scene.yaw)*forward-Math.sin(scene.yaw)*strafe)*dt*speed;
-                if(map.traversable(scene.x+dx,scene.z))scene.x+=dx;
-                if(map.traversable(scene.x,scene.z+dz))scene.z+=dz;
+                double dx=(Math.sin(scene.yaw)*forward-Math.cos(scene.yaw)*strafe)*dt*speed;
+                double dz=(Math.cos(scene.yaw)*forward+Math.sin(scene.yaw)*strafe)*dt*speed;
+                var moved=map.resolveMove(new LevelDefinition.Vec(scene.x,feetY(),scene.z),scene.x+dx,scene.z+dz);
+                if(moved==null){
+                    moved=map.resolveMove(new LevelDefinition.Vec(scene.x,feetY(),scene.z),scene.x+dx,scene.z);
+                    if(moved==null)moved=map.resolveMove(new LevelDefinition.Vec(scene.x,feetY(),scene.z),scene.x,scene.z+dz);
+                }
+                if(moved!=null){scene.x=moved.x();scene.z=moved.z();scene.eyeHeight=moved.y()+1.62;}
                 if(Math.hypot(scene.x-priorX,scene.z-priorZ)>.0001)
-                    GameSfx.play(LanSound.Cue.STEP);
+                    GameSfx.play(LanSound.stepCue(map,currentRoom()));
             }
             accumulator+=dt;
             while(accumulator>=.1){
-                session.tick(scene.x,scene.z,scene.lamp);
+                session.tick(scene.x,feetY(),scene.z,scene.lamp);
                 int activity=monitor.sample(session.ticks(),session.ghostEnergy());
                 if(session.ticks()%12==0){
                     activityHistory.addLast(activity);
@@ -621,7 +635,7 @@ public final class InvestigationGame {
             Object[] choices={"Resume", "Retreat & return", "Controls", "Exit Game"};
             int choice=JOptionPane.showOptionDialog(window,"Expedition paused", "Field Pause",
                 JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,choices,choices[0]);
-            if(choice==1){session.extract(scene.x,scene.z); // extraction location still validated
+            if(choice==1){session.extract(scene.x,feetY(),scene.z); // extraction location still validated
                 if(session.outcome()==InvestigationSession.Outcome.ACTIVE){
                     // Leaving a running mission from elsewhere is a failed withdrawal, not a free payout.
                     JOptionPane.showMessageDialog(window,"Return to the entry marker to extract safely.","Not at extraction",JOptionPane.INFORMATION_MESSAGE);
@@ -664,46 +678,47 @@ public final class InvestigationGame {
                 GameSfx.play(scene.lamp?LanSound.Cue.DEVICE_ON:LanSound.Cue.DEVICE_OFF);
             }
             if(key==KeyEvent.VK_E){
-                var aimed=VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw,profile.equipment());
+                var aimed=aimedRack();
                 if(aimed!=null){takeRackItem();}
                 else {
-                VanStaging.Station service=map.van().stationAt(scene.x,scene.z);
+                VanStaging.Station service=aimedStation();
                 if(service!=null)useVan(service);
                 else if(nearBreaker()){
                     powerOn=!powerOn;syncEnvironment();
                     GameSfx.play(LanSound.Cue.BREAKER);
                     showVanNotice(powerOn?"Utility power restored.":"Utility breaker switched off.");
                 }
-                else if(lights.aimed(map,scene.x,scene.z,scene.yaw)>=0){
-                    int room=lights.aimed(map,scene.x,scene.z,scene.yaw);
+                else if(lights.aimed(map,scene.x,feetY(),scene.z,scene.yaw)>=0){
+                    int room=lights.aimed(map,scene.x,feetY(),scene.z,scene.yaw);
                     boolean lit=lights.toggle(room);
                     GameSfx.play(LanSound.Cue.SWITCH);
                     showVanNotice(map.roomName(room)+" LIGHTS "+(lit?"ON":"OFF"));
                 }
-                else if(!map.toggleNearestDoor(scene.x,scene.z))
-                    showVanNotice("No usable door, light switch or station nearby.");
+                else if(!map.toggleNearestDoor(scene.x,feetY(),scene.z)
+                        &&!map.toggleNearestWindow(scene.x,feetY(),scene.z))
+                    showVanNotice("No usable door, window, light switch or station nearby.");
                 else GameSfx.play(LanSound.Cue.DOOR);
                 }
             }
             if(key==KeyEvent.VK_R){
                 useHeldUntilTick=session.ticks()+4;
-                session.useEquipment(loadout,scene.x,scene.z,scene.yaw);
+                session.useEquipment(loadout,scene.x,feetY(),scene.z,scene.yaw);
                 GameSfx.play(loadout.equipped()==EquipmentLoadout.Item.PHOTO_CAMERA
                     ?LanSound.Cue.CAMERA:LanSound.Cue.SCANNER);
             }
             if(key==KeyEvent.VK_C){
-                session.placeWard(scene.x,scene.z);
+                session.placeWard(scene.x,feetY(),scene.z);
                 GameSfx.play(LanSound.Cue.WARD);
             }
-            if(key==KeyEvent.VK_Z)session.deployCounter(HunterCounters.Kind.CROSS,scene.x,scene.z,scene.yaw);
-            if(key==KeyEvent.VK_G)session.deployCounter(HunterCounters.Kind.WARD,scene.x,scene.z,scene.yaw);
-            if(key==KeyEvent.VK_H)session.deployCounter(HunterCounters.Kind.SALT,scene.x,scene.z,scene.yaw);
-            if(key==KeyEvent.VK_B)session.cleanse(scene.x,scene.z);
+            if(key==KeyEvent.VK_Z)session.deployCounter(HunterCounters.Kind.CROSS,scene.x,feetY(),scene.z,scene.yaw);
+            if(key==KeyEvent.VK_G)session.deployCounter(HunterCounters.Kind.WARD,scene.x,feetY(),scene.z,scene.yaw);
+            if(key==KeyEvent.VK_H)session.deployCounter(HunterCounters.Kind.SALT,scene.x,feetY(),scene.z,scene.yaw);
+            if(key==KeyEvent.VK_B)session.cleanse(scene.x,feetY(),scene.z);
             if(key==KeyEvent.VK_T)useMedicine(FieldSupplies.Kind.HEALTH);
             if(key==KeyEvent.VK_Y)useMedicine(FieldSupplies.Kind.SANITY);
             if(key==KeyEvent.VK_J){journalShown=!journalShown;GameSfx.play(LanSound.Cue.BOOK);}
             if(key==KeyEvent.VK_M){mapShown=!mapShown;GameSfx.play(LanSound.Cue.BOOK);}
-            if(key==KeyEvent.VK_X && session.extract(scene.x,scene.z)) {timer.stop();endCase("Extraction processed.");return;}
+            if(key==KeyEvent.VK_X && session.extract(scene.x,feetY(),scene.z)) {timer.stop();endCase("Extraction processed.");return;}
             down.add(key);repaint();
         }
         private void showVanNotice(String text){vanNotice=text;vanNoticeExpires=session.ticks()+85;}
@@ -716,7 +731,7 @@ public final class InvestigationGame {
                 case EQUIPMENT -> takeRackItem();
                 case RELAY -> showVanNotice("The monitor stays visible at the right while you are in the van.");
                 case EXTRACTION -> {
-                    if(session.extract(scene.x,scene.z)){timer.stop();endCase("Van extraction confirmed.");}
+                    if(session.extract(scene.x,feetY(),scene.z)){timer.stop();endCase("Van extraction confirmed.");}
                     else showVanNotice("Move to the extraction marker inside the van.");
                 }
             }
@@ -729,8 +744,8 @@ public final class InvestigationGame {
                 if(choice!=null){
                     double[] where=choice==TeamCallout.Phrase.HERE || choice==TeamCallout.Phrase.FOLLOW ||
                         choice==TeamCallout.Phrase.HELP || choice==TeamCallout.Phrase.HOLD ?
-                        new double[]{scene.x,scene.z} : TeamCallout.aim(map,scene.x,scene.z,scene.yaw,12);
-                    lastPing=callouts.submit(new TeamCallout.Request(0,choice,scene.x,scene.z,where[0],where[1],session.ticks()));
+                        new double[]{scene.x,scene.z} : TeamCallout.aim(map,scene.x,feetY(),scene.z,scene.yaw,12);
+                    lastPing=callouts.submit(new TeamCallout.Request(0,choice,scene.x,scene.z,where[0],where[1],session.ticks()),feetY(),feetY());
                 }
                 repaint();
             }
@@ -757,7 +772,7 @@ public final class InvestigationGame {
                 g.setColor(new Color(242,212,156));
                 g.drawString("BECKENBURG / "+location.label.toUpperCase()+" / "+session.role(),24,30);
                 g.setColor(new Color(207,220,216));
-                g.drawString(map.roomName(scene.x,scene.z)+" / "+conditions.label.toUpperCase(),24,48);
+                g.drawString(map.roomName(currentRoom())+" / "+conditions.label.toUpperCase(),24,48);
                 String status=session.statusLine();
                 if(status.length()>76)status=status.substring(0,73)+"...";
                 g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
@@ -786,7 +801,7 @@ public final class InvestigationGame {
                 }
                 g.setColor(new Color(13,19,25,215));g.fillRoundRect(Math.max(12,width-126),12,114,30,8,8);
                 g.setColor(new Color(225,219,200));g.drawString("ESC PAUSE",Math.max(23,width-116),32);
-                int targetedSwitch=lights.aimed(map,scene.x,scene.z,scene.yaw);
+                int targetedSwitch=lights.aimed(map,scene.x,feetY(),scene.z,scene.yaw);
                 if(targetedSwitch>=0){
                     g.setColor(new Color(255,225,156));
                     g.drawString("E / ROOM LIGHT SWITCH : "+(lights.on(targetedSwitch)?"ON":"OFF"),Math.max(24,width/2-155),stageH-59);
@@ -795,13 +810,13 @@ public final class InvestigationGame {
                     g.setColor(new Color(255,212,137));
                     g.drawString("E / UTILITY BREAKER: "+(powerOn?"ON":"OFF"),Math.max(24,width/2-155),stageH-59);
                 }
-                EquipmentLoadout.Item rackAim=VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw,profile.equipment());
+                EquipmentLoadout.Item rackAim=aimedRack();
                 if(rackAim!=null){
                     g.setColor(new Color(255,212,137));
                     g.drawString("E PICK UP / "+rackAim.label.toUpperCase(),Math.max(24,width/2-155),stageH-59);
                 }
-                else if(map.van().stationAt(scene.x,scene.z)!=null){
-                    VanStaging.Station service=map.van().stationAt(scene.x,scene.z);
+                else if(aimedStation()!=null){
+                    VanStaging.Station service=aimedStation();
                     g.setColor(new Color(255,212,137));
                     g.drawString("E  /  "+service.label,Math.max(24,width/2-155),stageH-59);
                 }
@@ -835,25 +850,46 @@ public final class InvestigationGame {
             }finally{g.dispose();}
         }
         private void drawMap(Graphics2D g){
-            int tile=12,ox=20,oy=77,bw=map.width()*tile,bh=map.height()*tile;
-            g.setColor(new Color(15,18,26,239));g.fillRoundRect(ox-7,oy-24,bw+14,bh+37,8,8);
-            g.setColor(new Color(232,203,149));g.drawString("FIELD MAP / 12 rooms + 3 exterior",ox,oy-7);
-            for(int z=0;z<map.height();z++)for(int x=0;x<map.width();x++){
-                char cell=map.tile(x,z);
-                g.setColor(cell=='#'?new Color(105,105,119):cell=='D'?(map.doorOpen(x,z)?new Color(91,131,112):new Color(163,103,64)):new Color(49,56,64));
-                g.fillRect(ox+x*tile,oy+z*tile,tile-1,tile-1);
+            int ox=24,oy=112;
+            double tile=Math.min(Math.max(1,getWidth()-70)/(double)map.width(),
+                Math.max(1,getHeight()-170)/(double)map.height());
+            int bw=(int)(map.width()*tile),bh=(int)(map.height()*tile);
+            int here=currentRoom();double floor=here<0?feetY():map.floorY(here);
+            g.setColor(new Color(15,18,26,245));g.fillRoundRect(ox-8,oy-30,bw+16,bh+44,8,8);
+            g.setColor(new Color(232,203,149));
+            g.drawString("FIELD PLAN / "+(floor<-.2?"CELLAR":floor>.2?"UPPER FLOOR":"GROUND FLOOR"),ox,oy-12);
+            g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,10));
+            for(var room:map.level().rooms().stream().sorted(
+                    java.util.Comparator.comparing(LevelDefinition.Room::outside).reversed()).toList()){
+                if(Math.abs(room.y()-floor)>.15)continue;
+                int x=ox+(int)(room.x0()*tile),z=oy+(int)(room.z0()*tile);
+                int w=(int)((room.x1()-room.x0())*tile),h=(int)((room.z1()-room.z0())*tile);
+                g.setColor(room.outside()?new Color(31,48,40):new Color(53,59,68));g.fillRect(x,z,w,h);
+                g.setColor(new Color(164,158,139));g.drawRect(x,z,w,h);
+                if(!room.outside()){
+                    g.setColor(new Color(215,221,222));
+                    int chars=Math.max(3,(w-6)/6);
+                    String label=room.name();if(label.length()>chars)label=label.substring(0,Math.max(1,chars-1))+"…";
+                    g.drawString(label,x+3,z+13);
+                }
             }
-            g.setColor(new Color(236,219,125));g.fillOval(ox+(int)(scene.x*tile)-5,oy+(int)(scene.z*tile)-5,10,10);
+            for(var portal:map.level().portals()){
+                if(Math.abs(portal.y()-floor)>.15||portal.kind().equals("stair"))continue;
+                int x=ox+(int)(portal.x()*tile),z=oy+(int)(portal.z()*tile),half=Math.max(2,(int)(portal.width()*tile/2));
+                g.setColor(portal.kind().equals("window")?new Color(111,168,184)
+                    :portal.door()&&!map.doorOpen(portal.id())?new Color(183,123,75):new Color(114,185,138));
+                if(portal.alongX())g.fillRect(x-half,z-2,half*2,4);else g.fillRect(x-2,z-half,4,half*2);
+            }
+            for(var stair:map.level().stairs())if(Math.abs(stair.y0()-floor)<.15||Math.abs(stair.y1()-floor)<.15){
+                g.setColor(new Color(181,168,113));
+                g.drawLine(ox+(int)(stair.x0()*tile),oy+(int)(stair.z0()*tile),ox+(int)(stair.x1()*tile),oy+(int)(stair.z1()*tile));
+            }
+            g.setColor(new Color(236,219,125));g.fillOval(ox+(int)(scene.x*tile)-4,oy+(int)(scene.z*tile)-4,8,8);
             for(var ping:callouts.visible(session.ticks())){
+                if(Math.abs(map.floorY(ping.zone())-floor)>.15)continue;
                 g.setColor(new Color(245,172,84));
                 int px=ox+(int)(ping.x()*tile),pz=oy+(int)(ping.z()*tile);
                 g.drawOval(px-6,pz-6,12,12);g.drawLine(px-8,pz,px+8,pz);g.drawLine(px,pz-8,px,pz+8);
-            }
-            g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,10));
-            for(int i=0;i<map.roomCount();i++){
-                int col=i%3,row=i/3;
-                g.setColor(new Color(215,221,222));
-                String s=map.roomName(i);g.drawString(s.substring(0,Math.min(9,s.length())),ox+col*8*tile+6,oy+row*6*tile+20);
             }
         }
         private void drawCalloutWheel(Graphics2D g,int stageH){

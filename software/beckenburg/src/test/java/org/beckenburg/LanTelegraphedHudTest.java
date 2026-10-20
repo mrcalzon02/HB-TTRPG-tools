@@ -12,7 +12,7 @@ public final class LanTelegraphedHudTest {
     static void ok(boolean v,String s){if(!v)throw new AssertionError(s);}
     static int warningPixels(BufferedImage image){
         int count=0;
-        for(int y=52;y<77;y++)for(int x=10;x<720;x++){
+        for(int y=87;y<119;y++)for(int x=10;x<720;x++){
             int c=image.getRGB(x,y);int r=(c>>16)&255,g=(c>>8)&255,b=c&255;
             if(r>215&&r>g+45&&g>b+10)count++;
         }
@@ -25,7 +25,7 @@ public final class LanTelegraphedHudTest {
             SwingUtilities.invokeAndWait(()->{
                 panel[0]=new LanWorldPanel(hunter);
                 panel[0].setSize(850,555);
-                panel[0].onEvent("BODY|0|12500|9500|0|170");
+                panel[0].onEvent(new LanWorld(new HouseMap()).bodyFrame(0,170));
             });
             try{
                 int[] pixels=new int[2];

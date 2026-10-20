@@ -51,7 +51,7 @@ public final class LanSoundRecorderIntegrationTest {
             h.await("LOBBY|3|HUMAN|4|WAITING");h.client.start();h.await("INFO|mission started");
             h.client.view3D();h.await("ACCEPT|VIEW3D");
             String[] pose=h.await("BODY|0|").split("\\|");
-            double x=Integer.parseInt(pose[2])/1000.0,z=Integer.parseInt(pose[3])/1000.0;
+            double x=Integer.parseInt(pose[2])/1000.0,z=Integer.parseInt(pose[4])/1000.0;
             var rack=new HouseMap().van().location(VanStaging.Station.EQUIPMENT);
             for(int step=0;Math.hypot(x-rack.x(),z-rack.z())>.55;step++){
                 check(step<20,"physical rack reachable from actual spawn");
@@ -59,7 +59,7 @@ public final class LanSoundRecorderIntegrationTest {
                 double distance=Math.hypot(rack.x()-x,rack.z()-z);
                 h.client.step((int)Math.round((rack.x()-x)*100/distance),(int)Math.round((rack.z()-z)*100/distance));
                 h.await("ACCEPT|STEP");pose=h.await("BODY|0|").split("\\|");
-                x=Integer.parseInt(pose[2])/1000.0;z=Integer.parseInt(pose[3])/1000.0;
+                x=Integer.parseInt(pose[2])/1000.0;z=Integer.parseInt(pose[4])/1000.0;
             }
             h.client.equipAt(3,"SOUND_RECORDER");h.await("ACCEPT|GEAREQUIP|3|SOUND_RECORDER");
             h.client.buyEquipment("SOUND_RECORDER",EquipmentTiers.Tier.II);h.await("ACCEPT|GEARBUY|SOUND_RECORDER|II");

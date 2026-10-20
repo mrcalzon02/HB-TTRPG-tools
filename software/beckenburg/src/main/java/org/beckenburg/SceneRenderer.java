@@ -37,7 +37,10 @@ public final class SceneRenderer {
     private record Point(double x,double y,double z) { }
     private record Vertex(Point p,double u,double v) { }
     private record Face(Point a,Point b,Point c,int color,int material,
-                        double au,double av,double bu,double bv,double cu,double cv) { }
+                        double au,double av,double bu,double bv,double cu,double cv,int room) {
+        Face(Point a,Point b,Point c,int color,int material,double au,double av,double bu,double bv,double cu,double cv){this(a,b,c,color,material,au,av,bu,bv,cu,cv,-1);}
+        Face owned(int id){return new Face(a,b,c,color,material,au,av,bu,bv,cu,cv,id);}
+    }
     private BufferedImage frame = new BufferedImage(W,H,BufferedImage.TYPE_INT_RGB);
     private int[] pixels=((DataBufferInt)frame.getRaster().getDataBuffer()).getData();
     private double[] depths=new double[W*H];
@@ -662,65 +665,23 @@ public final class SceneRenderer {
     /** Three visually distinct small PS-era rite installations at fixed room sockets. */
     private static void ritualInstallation(List<Face> out,RitualSites.Site site,
                                             double clock,boolean energized){
-        double x=site.x(),z=site.z();
-        int trim=switch(site.rite()){
-            case BANISHMENT->0x965d50;case CLEANSING->0x73a9ac;case ABSOLUTION->0xc0a66b;
-        };
-        // Square floor seals: simple triangles rather than high-polygon circles.
-        box(out,x-1.05,.025,z-.9,2.1,.04,.12,trim);
-        box(out,x-1.05,.025,z+.78,2.1,.04,.12,trim);
-        box(out,x-1.05,.025,z-.78,.12,.04,1.56,trim);
-        box(out,x+.93,.025,z-.78,.12,.04,1.56,trim);
-        switch(site.rite()){
-            case BANISHMENT->{
-                // Iron containment seal: low altar, metal pylons and an unlit central spike.
-                box(out,x-.42,.045,z-.4,.84,.16,.8,0x444448);
-                for(int sx:new int[]{-1,1})for(int sz:new int[]{-1,1})
-                    box(out,x+sx*.79-.08,.05,z+sz*.63-.08,.16,.6,.16,0x665b5a);
-                box(out,x-.07,.22,z-.07,.14,.48,.14,0xd18165);
-            }
-            case CLEANSING->{
-                // A shallow water font: obvious basin, blue-green interior and lip.
-                box(out,x-.52,.05,z-.42,1.04,.75,.84,0x796e62);
-                box(out,x-.45,.81,z-.35,.90,.055,.70,0x70a7ac);
-                box(out,x-.57,.83,z-.46,1.14,.09,.10,0xe0c9a6);
-                box(out,x-.57,.83,z+.36,1.14,.09,.10,0xe0c9a6);
-            }
-            case ABSOLUTION->{
-                // Memorial lectern with a warm amber relief and paired candles.
-                box(out,x-.45,.06,z-.3,.90,.96,.60,0x655247);
-                box(out,x-.50,1.02,z-.35,1.00,.12,.70,0xb09873);
-                box(out,x-.08,1.14,z-.20,.16,.38,.08,0xd9bf8e);
-                box(out,x-.24,1.28,z-.20,.48,.08,.08,0xd9bf8e);
-                box(out,x-.70,.95,z-.16,.1,.36,.1,0xefdfae);
-                box(out,x+.60,.95,z-.16,.1,.36,.1,0xefdfae);
-            }
+        double x=site.x(),y=site.y()+.012,z=site.z();
+        int color=energized?0xc3b99b:0x786c57;
+        // Faded, physically laid floor markings identify a rite socket without
+        // inventing furniture or blocking the room's circulation route.
+        for(int k=0;k<20;k++){
+            double a=k*Math.PI/10,b=(k+1)*Math.PI/10,r=.72;
+            quad(out,new Point(x+Math.cos(a)*r,y,z+Math.sin(a)*r),new Point(x+Math.cos(b)*r,y,z+Math.sin(b)*r),
+                new Point(x+Math.cos(b)*(r-.018),y,z+Math.sin(b)*(r-.018)),new Point(x+Math.cos(a)*(r-.018),y,z+Math.sin(a)*(r-.018)),color);
         }
-        if(energized){
-            // The authentic rite lights its physical seal; inactive sites stay inert.
-            int glow=switch(site.rite()){
-                case BANISHMENT->0xef8f71;
-                case CLEANSING->0x8ae6dd;
-                case ABSOLUTION->0xffdd8a;
-            };
-            for(int k=0;k<12;k++){
-                double a=k*Math.PI/6+clock*.42;
-                double r=.66+.09*Math.sin(clock*2+k);
-                double elevation=.20+.24*(1+Math.sin(clock*2.2+k*.8));
-                box(out,x+Math.cos(a)*r-.035,elevation,
-                    z+Math.sin(a)*r-.035,.07,.09,.07,glow);
-            }
-            for(int k=0;k<4;k++)
-                box(out,x-.026,.16+k*.34,z-.026,.052,.08,.052,glow);
-            if(site.rite()==GhostIdentity.Rite.ABSOLUTION){
-                for(double offset:new double[]{-.65,.65}){
-                    double flicker=.12+.045*Math.sin(clock*13+offset*3);
-                    box(out,x+offset-.035,1.30,z-.195,.07,flicker,.07,0xffb84a);
-                    box(out,x+offset-.016,1.33,z-.175,.032,flicker*.65,.032,0xffedb1);
-                }
-            }
+        int strokes=site.rite().ordinal()+3;
+        for(int k=0;k<strokes;k++){
+            double a=k*Math.PI*2/strokes;
+            quad(out,new Point(x+Math.cos(a)*.36,y,z+Math.sin(a)*.36),new Point(x+Math.cos(a+.05)*.36,y,z+Math.sin(a+.05)*.36),
+                new Point(x+Math.cos(a+.05)*.61,y,z+Math.sin(a+.05)*.61),new Point(x+Math.cos(a)*.61,y,z+Math.sin(a)*.61),color);
         }
     }
+
     /** Exterior glazing stays collision-solid. The window's thickness and
      * sash are actual PSX geometry, not imported investigative equipment.
      */
@@ -800,86 +761,7 @@ public final class SceneRenderer {
     private List<Face> scene(HouseMap map,int ghostRoom,boolean ghostVisible,int wardRoom,int hunterRoom,
             double clock,List<RemoteBody> others,Apparition apparition,List<WorldMark> marks) {
         List<Face> out=new ArrayList<>(2000);
-        double ceiling=map.ceilingHeight();
-        for(int zz=1;zz<map.height()-1;zz++)for(int xx=1;xx<map.width()-1;xx++) {
-            if(map.tile(xx,zz)=='#'||map.tile(xx,zz)=='W')continue;
-            double mx=xx+.5,mz=zz+.5;
-            // Far geometry may be skipped only when beyond near/far fog; clipping handles visibility.
-            if(Math.hypot(mx-x,mz-z)>14)continue;
-            int n=map.roomAt(mx,mz);
-            int floor=MaterialAtlas.floor(map.site(),n),
-                wall=MaterialAtlas.wall(map.site(),n);
-            texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),
-                floor,xx,zz,xx+1,zz,xx+1,zz+1,xx,zz+1,0xffffff);
-            if(!map.outside(n))texturedQuad(out,new Point(xx,ceiling,zz+1),new Point(xx+1,ceiling,zz+1),
-                new Point(xx+1,ceiling,zz),new Point(xx,ceiling,zz),
-                MaterialAtlas.CEILING,xx,zz+1,xx+1,zz+1,xx+1,zz,xx,zz,0xffffff);
-            if(map.tile(xx-1,zz)=='W')architecturalWindow(out,xx,zz,0,ceiling);
-            else if(map.solid(xx-1,zz)&&map.tile(xx-1,zz)!='D')texturedQuad(out,new Point(xx,0,zz+1),new Point(xx,0,zz),new Point(xx,ceiling,zz),new Point(xx,ceiling,zz+1),
-                wall,zz+1,0,zz,0,zz,2.7,zz+1,2.7,0xd0d0d0);
-            if(map.tile(xx+1,zz)=='W')architecturalWindow(out,xx,zz,1,ceiling);
-            else if(map.solid(xx+1,zz)&&map.tile(xx+1,zz)!='D')texturedQuad(out,new Point(xx+1,0,zz),new Point(xx+1,0,zz+1),new Point(xx+1,ceiling,zz+1),new Point(xx+1,ceiling,zz),
-                wall,zz,0,zz+1,0,zz+1,2.7,zz,2.7,0xfafafa);
-            if(map.tile(xx,zz-1)=='W')architecturalWindow(out,xx,zz,2,ceiling);
-            else if(map.solid(xx,zz-1)&&map.tile(xx,zz-1)!='D')texturedQuad(out,new Point(xx,0,zz),new Point(xx+1,0,zz),new Point(xx+1,ceiling,zz),new Point(xx,ceiling,zz),
-                wall,xx,0,xx+1,0,xx+1,2.7,xx,2.7,0xe0e0e0);
-            if(map.tile(xx,zz+1)=='W')architecturalWindow(out,xx,zz,3,ceiling);
-            else if(map.solid(xx,zz+1)&&map.tile(xx,zz+1)!='D')texturedQuad(out,new Point(xx+1,0,zz+1),new Point(xx,0,zz+1),new Point(xx,ceiling,zz+1),new Point(xx+1,ceiling,zz+1),
-                wall,xx+1,0,xx,0,xx,2.7,xx+1,2.7,0xebebeb);
-            if(map.tile(xx,zz)=='D'){
-                // Door geometry must occupy the opening, not sit behind wallpaper faces.
-                boolean eastWest=map.doorwayAlongX(xx,zz);
-                if(eastWest){
-                    box(out,xx+.18,0,zz+.02,.64,2.45,.10,0x8f805e);
-                    box(out,xx+.18,0,zz+.88,.64,2.45,.10,0x8f805e);
-                    box(out,xx+.18,2.35,zz,.64,.11,1.0,0x8f805e);
-                    if(!map.doorOpen(xx,zz)){
-                        imported(out,"door_1_loose",xx+.50,0,zz+.90,1.05,Math.PI/2);
-                    }
-                }else{
-                    box(out,xx+.02,0,zz+.18,.10,2.45,.64,0x8f805e);
-                    box(out,xx+.88,0,zz+.18,.10,2.45,.64,0x8f805e);
-                    box(out,xx,2.35,zz+.18,1,.11,.64,0x8f805e);
-                    if(!map.doorOpen(xx,zz)){
-                        imported(out,"door_1_loose",xx+.97,0,zz+.50,1.05,0);
-                    }
-                }
-                if(ceiling>2.7)
-                    box(out,xx,2.50,zz,1,ceiling-2.50,1,
-                        map.site()==HouseMap.Site.SCHOOL?0x817c72:0x65564b);
-            }
-        }
-        siteRoof(out,map);
-        // Every investigation room has a discoverable physical rocker and ceiling fixture.
-        for(int r=0;r<HouseMap.INDOOR_ROOMS;r++){
-            RoomLighting.Switch sw=RoomLighting.location(map,r);
-            if(Math.hypot(sw.x()-x,sw.z()-z)>14)continue;
-            double px=sw.x(),pz=sw.z();
-            imported(out,"light_switch_1",px,1.30,pz,2.0,0);
-            boolean lit=roomLights==null||roomLights.on(r);
-            // A tiny functional state indicator stays connected to RoomLighting.
-            box(out,px+.033,lit?1.34:1.25,pz+.023,.025,.055,.025,
-                lit?0xdac67c:0x50505a);
-            double cx=map.centerX(r),cz=map.centerZ(r);
-            if(Math.hypot(cx-x,cz-z)<=7.5) {
-                double energy=roomLights==null?1:roomLights.brightness(r,roomLightTick);
-                imported(out,energy>.45?"ceiling_lamp_1_on":"ceiling_lamp_1_off",
-                    cx,ceiling-.12,cz,.76,0);
-                box(out,cx-.19,ceiling-.21,cz-.17,.38,.024,.34,
-                    energy>.45?0xffe4a4:energy>.13?0x9c7b62:0x343c46);
-            }
-        }
-        for(int r=0;r<map.roomCount();r++) if(Math.hypot(map.centerX(r)-x,map.centerZ(r)-z)<14) furniture(out,r,map);
-        for(int r=0;r<HouseMap.INDOOR_ROOMS;r++){
-            var pocket=map.hidingSpot(r,hidingDensity);
-            if(pocket==null||Math.hypot(pocket.x()-x,pocket.z()-z)>14)continue;
-            double px=pocket.x(),pz=pocket.z();
-            // Original, small cupboard silhouette. Only enabled positions are drawn.
-            box(out,px-.47,0,pz-.20,.94,1.68,.20,0x40444d);
-            box(out,px-.47,0,pz-.20,.14,1.68,.67,0x555964);
-            box(out,px+.33,0,pz-.20,.14,1.68,.67,0x555964);
-            box(out,px-.47,1.55,pz-.20,.94,.13,.67,0x6c7278);
-        }
+        levelArchitecture(out,map);
         for(RitualSites.Site site:RitualSites.all(map))
             if(Math.hypot(site.x()-x,site.z()-z)<14)
                 ritualInstallation(out,site,clock,activeRite==site.rite());
@@ -897,14 +779,6 @@ public final class SceneRenderer {
                     .065,.11,.065,k%2==0?0xea5e69:0xffb782);
             }
         }
-        // A visible power breaker at the correct utility-room interaction socket.
-        if(Math.hypot(map.centerX(11)-x,map.centerZ(11)-z)<14){
-            double bx=map.centerX(11),bz=map.centerZ(11);
-            box(out,bx+.47,0,bz-.85,.53,1.20,.36,0x4d5359);
-            box(out,bx+.55,1.20,bz-.79,.37,.45,.21,0x343945);
-            box(out,bx+.64,1.31,bz-.57,.15,.18,.045,
-                environmentPowerOn?0x70c592:0xc66b62);
-        }
         if(Math.hypot(map.van().placement().x()-x,map.van().placement().z()-z)<14)
             vanModel(out,map.van(),rackStock);
         // Road and traffic props are exterior-only. Nearby rooms never instantiate
@@ -916,7 +790,7 @@ public final class SceneRenderer {
         for(LanVideoCameras.Camera camera:videoCameras.values())
             if(Math.hypot(camera.x()-x,camera.z()-z)<13.5)
                 imported(out,"exploration_photo_camera",
-                    camera.x(),.14,camera.z(),1.05,
+                    camera.x(),camera.y()+.14,camera.z(),1.05,
                     Math.toRadians(camera.heading()));
         // An ignited incense bundle stays physically present for its burn duration.
         // These wisps are light/smoke only and never fabricate spectral evidence.
@@ -940,7 +814,7 @@ public final class SceneRenderer {
         // Projected light is a physical effect, not an evidence qualification check.
         for(LanDotsProjectors.Placement placement:dotsPositions.values()){
             if(Math.hypot(placement.x()-x,placement.z()-z)>13.5)continue;
-            imported(out,"vape_mp_1",placement.x(),.10,placement.z(),2.0,0);
+            imported(out,"vape_mp_1",placement.x(),placement.y()+.10,placement.z(),2.0,0);
             double radius=EquipmentTiers.stage(
                 "DOTS_PROJECTOR",placement.tier()).reachCm()/100.0;
             // Tier I: narrow sparse volume; Tier II: broad static array;
@@ -950,7 +824,7 @@ public final class SceneRenderer {
                 double px=placement.x()+gx*radius/(limit+1.0),
                     pz=placement.z()+gz*radius/(limit+1.0);
                 if(Math.hypot(px-placement.x(),pz-placement.z())>radius
-                        ||map.roomAt(px,pz)!=placement.room())continue;
+                        ||map.roomAt(px,placement.y(),pz)!=placement.room())continue;
                 if(placement.tier()==EquipmentTiers.Tier.III){
                     double angle=Math.atan2(pz-placement.z(),px-placement.x());
                     double center=Math.sin(clock*1.4)*1.25;
@@ -959,7 +833,7 @@ public final class SceneRenderer {
                 }
                 int layers=placement.tier()==EquipmentTiers.Tier.I?2:3;
                 for(int layer=0;layer<layers;layer++){
-                    double yy=.08+layer*.67;
+                    double yy=placement.y()+.08+layer*.67;
                     box(out,px-.025,yy,pz-.025,.05,.035,.05,0x73d99e);
                 }
             }
@@ -967,7 +841,7 @@ public final class SceneRenderer {
         if(dotsPassRoom>=0&&dotsPassUntil>=roomLightTick
                 &&Math.hypot(dotsPassX-x,dotsPassZ-z)<13.5){
             for(int layer=0;layer<10;layer++){
-                double y=.19+layer*.135;
+                double y=map.floorY(dotsPassRoom)+.19+layer*.135;
                 double span=.14+Math.sin(Math.PI*layer/10.0)*.17;
                 for(int dot=-2;dot<=2;dot++)
                     box(out,dotsPassX+dot*span/3-.02,y,dotsPassZ-.03,
@@ -977,7 +851,7 @@ public final class SceneRenderer {
         if(placedWritingBookRoom>=0&&placedWritingBookRoom<HouseMap.INDOOR_ROOMS){
             double bx=map.centerX(placedWritingBookRoom),bz=map.centerZ(placedWritingBookRoom);
             if(Math.hypot(bx-x,bz-z)<14)
-                imported(out,"open_book_mp_1",bx-.5,.075,bz-.35,1.65,0);
+                imported(out,"open_book_mp_1",bx-.5,map.floorY(placedWritingBookRoom)+.075,bz-.35,1.65,0);
         }
         // Character bodies are rendered as directional alpha-masked sprites after geometry.
         if(wardRoom>=0){
@@ -1010,10 +884,246 @@ public final class SceneRenderer {
         }
         return out;
     }
+    private final java.util.Map<HouseMap.Site,List<Face>> levelShells=new java.util.EnumMap<>(HouseMap.Site.class);
+    private boolean exportFullLevel;
+
+    private static void own(List<Face> out,List<Face> faces,int room){for(Face f:faces)out.add(f.owned(room));}
+    private static boolean nearPlane(double a,double b){return Math.abs(a-b)<.12;}
+    private static void levelWallPatch(List<Face> out,LevelDefinition.Room r,boolean alongX,double plane,
+            double from,double to,double bottom,double top,int material){
+        if(to-from<.005||top-bottom<.005)return;
+        double x0=alongX?from:plane,z0=alongX?plane:from,x1=alongX?to:plane,z1=alongX?plane:to;
+        texturedQuad(out,new Point(x0,bottom,z0),new Point(x1,bottom,z1),new Point(x1,top,z1),new Point(x0,top,z0),
+            material,from/4,(bottom-r.y())/r.height(),to/4,(bottom-r.y())/r.height(),to/4,(top-r.y())/r.height(),from/4,(top-r.y())/r.height(),0xffffff);
+        // Skirting, chair rail and cornice have actual projection from plaster.
+        if(bottom<=r.y()+.01){
+            double length=to-from,xx=alongX?from:plane-.025,zz=alongX?plane-.025:from;
+            texturedBox(out,xx,r.y()+.02,zz,alongX?length:.05,.13,alongX?.05:length,LevelMaterials.WOOD);
+            if(!r.finish().contains("tile")&&!r.finish().contains("concrete")){
+                levelWallPatchPlain(out,alongX,plane,from,to,r.y()+.15,Math.min(top,r.y()+.88),LevelMaterials.WOOD);
+                texturedBox(out,xx,r.y()+.88,zz,alongX?length:.06,.045,alongX?.06:length,LevelMaterials.WOOD);
+                for(double t=from+.15;t<to-.10;t+=.62){
+                    double x=alongX?t:plane-.03,z=alongX?plane-.03:t;
+                    texturedBox(out,x,r.y()+.16,z,alongX?.035:.06,.70,alongX?.06:.035,LevelMaterials.WOOD);
+                }
+            }
+        }
+        if(top>=r.y()+r.height()-.05){
+            double len=to-from;
+            texturedBox(out,alongX?from:plane-.045,top-.12,alongX?plane-.045:from,
+                alongX?len:.09,.09,alongX?.09:len,LevelMaterials.WOOD);
+        }
+    }
+    private static void levelWallPatchPlain(List<Face> out,boolean ax,double plane,double a,double b,double y0,double y1,int mat){
+        if(y1<=y0)return;
+        texturedQuad(out,new Point(ax?a:plane,y0,ax?plane:a),new Point(ax?b:plane,y0,ax?plane:b),
+            new Point(ax?b:plane,y1,ax?plane:b),new Point(ax?a:plane,y1,ax?plane:a),mat,
+            a/2,0,b/2,0,b/2,(y1-y0),a/2,(y1-y0),0xffffff);
+    }
+    private static void levelWall(List<Face> out,LevelDefinition level,LevelDefinition.Room r,boolean alongX,double plane,double from,double to){
+        var openings=level.portals().stream().filter(p->!p.kind().equals("stair")&&p.alongX()==alongX
+            &&(p.a()==r.id()||p.b()==r.id())&&nearPlane(p.y(),r.y())
+            &&nearPlane(alongX?p.z():p.x(),plane)).sorted(java.util.Comparator.comparingDouble(p->alongX?p.x():p.z())).toList();
+        double at=from;int mat=LevelMaterials.wall(r);
+        for(var p:openings){
+            double mid=alongX?p.x():p.z(),lo=Math.max(from,mid-p.width()/2),hi=Math.min(to,mid+p.width()/2);
+            if(hi<=from||lo>=to)continue;
+            levelWallPatch(out,r,alongX,plane,at,lo,r.y(),r.y()+r.height()-.04,mat);
+            boolean window=p.kind().equals("window");double sill=window?r.y()+1.0:r.y();double head=window?r.y()+2.35:r.y()+2.32;
+            if(window)levelWallPatch(out,r,alongX,plane,lo,hi,r.y(),sill,mat);
+            levelWallPatch(out,r,alongX,plane,lo,hi,head,r.y()+r.height()-.04,mat);
+            double xx=alongX?lo-.055:plane-.065,zz=alongX?plane-.065:lo-.055;
+            texturedBox(out,xx,sill,zz,alongX?.07:.13,head-sill,alongX?.13:.07,LevelMaterials.WOOD);
+            texturedBox(out,alongX?hi-.015:plane-.065,sill,alongX?plane-.065:hi-.015,
+                alongX?.07:.13,head-sill,alongX?.13:.07,LevelMaterials.WOOD);
+            texturedBox(out,xx,head-.045,zz,alongX?hi-lo+.11:.13,.09,alongX?.13:hi-lo+.11,LevelMaterials.WOOD);
+            if(window)texturedBox(out,xx,sill-.045,zz,alongX?hi-lo+.11:.22,.07,alongX?.22:hi-lo+.11,LevelMaterials.WOOD);
+            at=Math.max(at,hi);
+        }
+        levelWallPatch(out,r,alongX,plane,at,to,r.y(),r.y()+r.height()-.04,mat);
+    }
+    private static void levelRail(List<Face> out,double x0,double y0,double z0,double x1,double y1,double z1){
+        double length=Math.hypot(x1-x0,z1-z0);int count=Math.max(1,(int)Math.ceil(length/.24));
+        for(int i=0;i<=count;i++){
+            double t=i/(double)count,xx=x0+(x1-x0)*t,zz=z0+(z1-z0)*t,yy=y0+(y1-y0)*t;
+            texturedBox(out,xx-.022,yy,zz-.022,.044,.92,.044,LevelMaterials.WOOD);
+        }
+        double dx=x1-x0,dz=z1-z0,ex=-dz/length*.045,ez=dx/length*.045;
+        quad(out,new Point(x0+ex,y0+.96,z0+ez),new Point(x1+ex,y1+.96,z1+ez),new Point(x1-ex,y1+.96,z1-ez),new Point(x0-ex,y0+.96,z0-ez),0x96764e);
+        quad(out,new Point(x0+ex,y0+.90,z0+ez),new Point(x1+ex,y1+.90,z1+ez),new Point(x1+ex,y1+.96,z1+ez),new Point(x0+ex,y0+.96,z0+ez),0x685035);
+    }
+    private static List<Face> buildLevelShell(HouseMap map){
+        LevelDefinition level=map.level();List<Face> out=new ArrayList<>();
+        for(var r:level.rooms()){
+            List<Face> part=new ArrayList<>();
+            for(double zz=r.z0();zz<r.z1()-.01;zz+=1)for(double xx=r.x0();xx<r.x1()-.01;xx+=1){
+                double x1=Math.min(xx+1,r.x1()),z1=Math.min(zz+1,r.z1()),mx=(xx+x1)/2,mz=(zz+z1)/2;
+                boolean covered=r.outside()&&level.rooms().stream().anyMatch(in->!in.outside()&&mx>in.x0()&&mx<in.x1()&&mz>in.z0()&&mz<in.z1()&&Math.abs(in.y()-r.y())<.05);
+                if(!covered&&!level.floorVoid(mx,r.y(),mz))texturedQuad(part,new Point(xx,r.y(),zz),new Point(x1,r.y(),zz),new Point(x1,r.y(),z1),new Point(xx,r.y(),z1),LevelMaterials.floor(r),xx/4,zz/4,x1/4,zz/4,x1/4,z1/4,xx/4,z1/4,0xffffff);
+                double deck=r.y()+r.height();
+                if(!r.outside()&&!level.floorVoid(mx,deck,mz))texturedQuad(part,new Point(xx,deck-.04,z1),new Point(x1,deck-.04,z1),new Point(x1,deck-.04,zz),new Point(xx,deck-.04,zz),LevelMaterials.CONCRETE,xx/4,z1/4,x1/4,z1/4,x1/4,zz/4,xx/4,zz/4,0xc4bca8);
+            }
+            if(!r.outside()){
+                levelWall(part,level,r,true,r.z0(),r.x0(),r.x1());
+                levelWall(part,level,r,true,r.z1(),r.x0(),r.x1());
+                levelWall(part,level,r,false,r.x0(),r.z0(),r.z1());
+                levelWall(part,level,r,false,r.x1(),r.z0(),r.z1());
+            }
+            own(out,part,r.id());
+        }
+        for(var p:level.props()){
+            List<Face> part=new ArrayList<>();imported(part,p.mesh(),p.x(),p.y(),p.z(),p.scale(),p.yaw());own(out,part,p.room());
+        }
+        for(var s:level.stairs()){
+            List<Face> part=new ArrayList<>();double dx=(s.x1()-s.x0())/s.steps(),dz=(s.z1()-s.z0())/s.steps(),rise=(s.y1()-s.y0())/s.steps();
+            for(int i=0;i<s.steps();i++){
+                double xx=s.x0()+dx*i,zz=s.z0()+dz*i,yy=s.y0()+rise*(i+1);
+                texturedBox(part,Math.min(xx,xx+dx)-(Math.abs(dz)>.001?s.width()/2:0),yy-rise,
+                    Math.min(zz,zz+dz)-(Math.abs(dx)>.001?s.width()/2:0),
+                    Math.abs(dx)>.001?Math.abs(dx):s.width(),rise,Math.abs(dz)>.001?Math.abs(dz):s.width(),LevelMaterials.WOOD);
+            }
+            double length=Math.hypot(s.x1()-s.x0(),s.z1()-s.z0()),ox=-(s.z1()-s.z0())/length*s.width()/2,oz=(s.x1()-s.x0())/length*s.width()/2;
+            levelRail(part,s.x0()+ox,s.y0(),s.z0()+oz,s.x1()+ox,s.y1(),s.z1()+oz);
+            levelRail(part,s.x0()-ox,s.y0(),s.z0()-oz,s.x1()-ox,s.y1(),s.z1()-oz);
+            own(out,part,s.a());
+        }
+        if(map.site()==HouseMap.Site.HOUSE)houseExterior(out,level);
+        else {
+        // Roofs follow the actual upper footprint; pitched planes meet at a ridge.
+        for(var r:level.rooms())if(!r.outside()&&r.y()>=0&&level.rooms().stream().noneMatch(up->!up.outside()&&up.y()>r.y()&&up.x0()<r.x1()&&up.x1()>r.x0()&&up.z0()<r.z1()&&up.z1()>r.z0())){
+            double yy=r.y()+r.height(),mid=(r.x0()+r.x1())/2,peak=yy+Math.min(2,(r.x1()-r.x0())*.30);
+            List<Face> roof=new ArrayList<>();
+            texturedQuad(roof,new Point(r.x0()-.28,yy,r.z0()-.3),new Point(mid,peak,r.z0()-.3),new Point(mid,peak,r.z1()+.3),new Point(r.x0()-.28,yy,r.z1()+.3),LevelMaterials.WOOD,0,0,1,0,1,3,0,3,0x9b9990);
+            texturedQuad(roof,new Point(mid,peak,r.z0()-.3),new Point(r.x1()+.28,yy,r.z0()-.3),new Point(r.x1()+.28,yy,r.z1()+.3),new Point(mid,peak,r.z1()+.3),LevelMaterials.WOOD,0,0,1,0,1,3,0,3,0x797e86);
+            quad(roof,new Point(r.x0(),yy,r.z0()),new Point(mid,peak,r.z0()),new Point(r.x1(),yy,r.z0()),new Point(r.x1(),yy,r.z0()),0x67645c);
+            quad(roof,new Point(r.x1(),yy,r.z1()),new Point(mid,peak,r.z1()),new Point(r.x0(),yy,r.z1()),new Point(r.x0(),yy,r.z1()),0x67645c);
+            own(out,roof,r.id());
+        }
+        }
+        return List.copyOf(out);
+    }
+    private void levelArchitecture(List<Face> out,HouseMap map){
+        for(Face f:levelShells.computeIfAbsent(map.site(),s->buildLevelShell(map))){
+            double cx=(f.a.x+f.b.x+f.c.x)/3,cz=(f.a.z+f.b.z+f.c.z)/3;
+            out.add(f); // Opaque distant architecture must still occlude the night sky.
+        }
+        for(var p:map.level().portals()){
+            if(!exportFullLevel&&Math.hypot(p.x()-x,p.z()-z)>24)continue;
+            List<Face> part=new ArrayList<>();
+            if(p.door()){
+                double angle=p.alongX()?0:Math.PI/2;
+                double hx=p.x()+(p.alongX()?p.width()/2:0),hz=p.z()+(p.alongX()?0:p.width()/2);
+                double leaf=p.width()>1.5?p.width()/2:p.width();
+                imported(part,"door_1_loose",hx,p.y(),hz,leaf,2.28/2.1,1,angle+(map.doorOpen(p.id())?Math.PI/2:0));
+                if(p.width()>1.5)imported(part,"door_1_loose",p.x()-(p.alongX()?p.width()/2:0),p.y(),p.z()-(p.alongX()?0:p.width()/2),leaf,2.28/2.1,1,angle+Math.PI-(map.doorOpen(p.id())?Math.PI/2:0));
+                if(p.kind().equals("gate"))for(double t=-p.width()/2;t<=p.width()/2;t+=.15)
+                    box(part,p.x()+(p.alongX()?t:0)-.015,p.y(),p.z()+(p.alongX()?0:t)-.015,.03,2.3,.03,0x77797a);
+            }else if(p.kind().equals("window")){
+                double a=p.width()/2,dx=p.alongX()?a:0,dz=p.alongX()?0:a;
+                // Hinged sash opens into the room; clear aperture exposes the actual night exterior.
+                double angle=map.windowOpen(p.id())?.95:0,c=Math.cos(angle),sn=Math.sin(angle);
+                double x0=p.x()-dx,z0=p.z()-dz,x1=x0+(2*dx*c-2*dz*sn),z1=z0+(2*dx*sn+2*dz*c);
+                levelRailWindow(part,x0,z0,x1,z1,p.y()+1.02,p.y()+2.33);
+            }
+            own(out,part,p.a());
+        }
+        for(var s:map.level().sockets()){
+            if(!exportFullLevel&&Math.hypot(s.x()-x,s.z()-z)>20)continue;
+            List<Face> part=new ArrayList<>();
+            if(s.type().equals("switch"))imported(part,"light_switch_1",s.x(),s.y(),s.z(),1,-s.yaw());
+            if(s.type().equals("light")){
+                String mesh=s.style().contains("utility")||s.style().contains("industrial")?"level_utility_light":s.style().contains("sconce")||s.style().contains("porch")?"level_wall_sconce":"level_domestic_light";
+                imported(part,mesh,s.x(),s.y(),s.z(),1,-s.yaw());
+            }
+            if(s.type().equals("breaker")){
+                List<Face> local=new ArrayList<>();
+                box(local,-.24,-.38,0,.48,.76,.12,0x63676a);
+                box(local,-.19,-.32,.121,.38,.63,.025,0x353b40);
+                for(int i=0;i<6;i++)box(local,-.12+(i%2)*.15,-.22+(i/2)*.16,.15,.075,.065,.04,environmentPowerOn?0x9fba9b:0xa87369);
+                for(Face f:local)part.add(new Face(mountPoint(f.a,s),mountPoint(f.b,s),mountPoint(f.c,s),f.color,f.material,f.au,f.av,f.bu,f.bv,f.cu,f.cv));
+            }
+            own(out,part,s.room());
+        }
+    }
+    private static Point mountPoint(Point p,LevelDefinition.Socket s){
+        double c=Math.cos(-s.yaw()),sn=Math.sin(-s.yaw());
+        return new Point(s.x()+p.x*c-p.z*sn,s.y()+p.y,s.z()+p.x*sn+p.z*c);
+    }
+    private static void houseExterior(List<Face> out,LevelDefinition level){
+        List<Face> skin=new ArrayList<>();
+        // Individual overlapping weatherboards on the outer wall, with holes
+        // cut from the same doors/windows used by collision and interaction.
+        for(boolean alongX:new boolean[]{true,false})for(double plane:alongX?new double[]{10,24}:new double[]{12,24}){
+            double from=alongX?12:10,to=24,offset=(plane==(alongX?10:12)?-.045:.045);
+            for(double y=0;y<6-.01;y+=.18){
+                double bottom=y,top=Math.min(6,y+.18),at=from;
+                var cuts=level.portals().stream().filter(p->!p.kind().equals("stair")&&p.alongX()==alongX
+                    &&nearPlane(alongX?p.z():p.x(),plane)&&p.y()<top&&p.y()+2.35>bottom
+                    &&(!p.kind().equals("window")||p.y()+1<top)).sorted(java.util.Comparator.comparingDouble(p->alongX?p.x():p.z())).toList();
+                for(var p:cuts){double mid=alongX?p.x():p.z(),lo=mid-p.width()/2,hi=mid+p.width()/2;
+                    levelWallPatchPlain(skin,alongX,plane+offset,at,lo,y,top,LevelMaterials.CLADDING);at=Math.max(at,hi);}
+                levelWallPatchPlain(skin,alongX,plane+offset,at,to,y,top,LevelMaterials.CLADDING);
+                // Thin lap edge is visible geometry, avoiding painted fake board joints.
+                double length=to-from;
+                // Edges respect the aperture spans as well.
+                at=from;
+                for(var p:cuts){double mid=alongX?p.x():p.z();clapEdge(skin,alongX,plane+offset,at,mid-p.width()/2,y);at=mid+p.width()/2;}
+                clapEdge(skin,alongX,plane+offset,at,to,y);
+            }
+        }
+        for(double xx:new double[]{11.96,23.96})for(double zz:new double[]{9.96,23.96})
+            texturedBox(skin,xx,0,zz,.09,6,.09,LevelMaterials.CLADDING);
+        for(double zz:new double[]{9.92,23.99})texturedBox(skin,11.92,-.18,zz,12.16,.30,.09,LevelMaterials.STONE);
+        for(double xx:new double[]{11.92,24.00})texturedBox(skin,xx,-.18,9.92,.08,.30,14.16,LevelMaterials.STONE);
+        // One roof with a continuous ridge rather than one gable per room.
+        double eave=6.05,peak=8.25,mid=18;
+        texturedQuad(skin,new Point(11.65,eave,9.65),new Point(mid,peak,9.65),new Point(mid,peak,24.4),new Point(11.65,eave,24.4),LevelMaterials.STONE,0,0,2,0,2,5,0,5,0x555b65);
+        texturedQuad(skin,new Point(mid,peak,9.65),new Point(24.35,eave,9.65),new Point(24.35,eave,24.4),new Point(mid,peak,24.4),LevelMaterials.STONE,0,0,2,0,2,5,0,5,0x6b6b6b);
+        for(double zz:new double[]{9.98,24.02}){
+            texturedQuad(skin,new Point(12,6,zz),new Point(18,peak,zz),new Point(24,6,zz),new Point(24,6,zz),LevelMaterials.CLADDING,0,0,1,1,2,0,2,0,0xffffff);
+            texturedBox(skin,11.7,5.9,zz-.08,12.6,.15,.16,LevelMaterials.WOOD);
+        }
+        texturedBox(skin,13.4,6.5,13.7,.72,2.05,.72,LevelMaterials.STONE);
+        texturedBox(skin,13.32,8.5,13.62,.88,.13,.88,LevelMaterials.STONE);
+        // Covered porch: deck, real corner posts, beam and shallow roof.
+        texturedBox(skin,18.0,-.10,24.03,6,.12,2.8,LevelMaterials.FLOOR);
+        for(double xx:new double[]{18.25,23.75}){
+            texturedBox(skin,xx-.08,0,26.55,.16,2.60,.16,LevelMaterials.WOOD);
+            texturedBox(skin,xx-.13,0,26.50,.26,.16,.26,LevelMaterials.CLADDING);
+            texturedBox(skin,xx-.13,2.44,26.50,.26,.16,.26,LevelMaterials.CLADDING);
+        }
+        texturedBox(skin,18.1,2.55,26.48,5.8,.18,.27,LevelMaterials.WOOD);
+        texturedQuad(skin,new Point(17.9,2.70,26.95),new Point(24.1,2.70,26.95),new Point(24.1,3.15,23.98),new Point(17.9,3.15,23.98),LevelMaterials.STONE,0,0,2,0,2,1,0,1,0x7c7770);
+        // Rear patio, walk, low boundary fencing, and gate opening align with navigation.
+        texturedBox(skin,13.4,-.04,6.6,3.2,.06,3.3,LevelMaterials.STONE);
+        texturedBox(skin,20.35,-.015,26.8,1.3,.035,3.2,LevelMaterials.STONE);
+        for(double xx=7;xx<=29;xx+=.40)if(xx<19.8||xx>22.2){
+            texturedBox(skin,xx-.035,0,29.5,.07,.85,.055,LevelMaterials.CLADDING);
+        }
+        for(double zz:new double[]{29.48})for(double yy:new double[]{.22,.62}){
+            texturedBox(skin,7,yy,zz,12.8,.06,.055,LevelMaterials.WOOD);
+            texturedBox(skin,22.2,yy,zz,6.8,.06,.055,LevelMaterials.WOOD);
+        }
+        own(out,skin,13);
+    }
+    private static void clapEdge(List<Face> out,boolean ax,double plane,double from,double to,double y){
+        if(to<=from)return;
+        texturedBox(out,ax?from:plane-.008,y,ax?plane-.008:from,ax?to-from:.016,.009,ax?.016:to-from,LevelMaterials.WOOD);
+    }
+    private static void levelRailWindow(List<Face> out,double x0,double z0,double x1,double z1,double y0,double y1){
+        for(double t:new double[]{0,.5,1}){double xx=x0+(x1-x0)*t,zz=z0+(z1-z0)*t;box(out,xx-.018,y0,zz-.018,.036,y1-y0,.036,0x8b806a);}
+        for(double y:new double[]{y0,(y0+y1)/2,y1})quad(out,new Point(x0,y-.018,z0),new Point(x1,y-.018,z1),new Point(x1,y+.018,z1),new Point(x0,y+.018,z0),0x8b806a);
+    }
+
+    private double cachedViewYaw=Double.NaN,cachedViewPitch=Double.NaN,viewCosYaw,viewSinYaw,viewCosPitch,viewSinPitch;
     private Point camera(Point p){
+        if(cachedViewYaw!=yaw||cachedViewPitch!=pitch){
+            cachedViewYaw=yaw;cachedViewPitch=pitch;viewCosYaw=Math.cos(yaw);viewSinYaw=Math.sin(yaw);
+            viewCosPitch=Math.cos(pitch);viewSinPitch=Math.sin(pitch);
+        }
         double dx=p.x-x,dy=p.y-eyeHeight,dz=p.z-z;
-        double cy=Math.cos(yaw),sy=Math.sin(yaw),xc=dx*cy-dz*sy,zc=dx*sy+dz*cy;
-        double cp=Math.cos(pitch),sp=Math.sin(pitch);
+        double cy=viewCosYaw,sy=viewSinYaw,xc=-dx*cy+dz*sy,zc=dx*sy+dz*cy;
+        double cp=viewCosPitch,sp=viewSinPitch;
         return new Point(xc,dy*cp-zc*sp,dy*sp+zc*cp);
     }
     private static List<Vertex> clip(Vertex a,Vertex b,Vertex c){
@@ -1040,10 +1150,11 @@ public final class SceneRenderer {
         }
     }
     /** First-person network rendering with low-poly teammate models and host-managed doors. */
-    public record RemoteBody(double x,double z,int slot,int heading) {
+    public record RemoteBody(double x,double y,double z,int slot,int heading) {
+        public RemoteBody(double x,double z,int slot,int heading){this(x,0,z,slot,heading);}
         public RemoteBody(double x,double z,int slot){this(x,z,slot,0);}
         public RemoteBody {
-            if(!Double.isFinite(x)||!Double.isFinite(z)||slot<0||slot>=6||heading<0||heading>=360)
+            if(!Double.isFinite(x)||!Double.isFinite(y)||!Double.isFinite(z)||slot<0||slot>=6||heading<0||heading>=360)
                 throw new IllegalArgumentException("invalid remote body");
         }
     }
@@ -1054,9 +1165,9 @@ public final class SceneRenderer {
         double distance=Math.hypot(teammate.x()-x,teammate.z()-z);
         if(distance<1.35||distance>14.0)return null;
         // Closed doors and solid walls suppress labels even before the raster check.
-        if(!map.clearLineOfSight(x,z,teammate.x(),teammate.z()))return null;
-        Point torso=camera(new Point(teammate.x(),1.35,teammate.z()));
-        Point head=camera(new Point(teammate.x(),1.95,teammate.z()));
+        if(!map.clearLineOfSight(x,eyeHeight,z,teammate.x(),teammate.y()+1.35,teammate.z()))return null;
+        Point torso=camera(new Point(teammate.x(),teammate.y()+1.35,teammate.z()));
+        Point head=camera(new Point(teammate.x(),teammate.y()+1.95,teammate.z()));
         if(torso.z<NEAR||torso.z>14.0||head.z<NEAR)return null;
         double cx=renderWidth*.5+torso.x/torso.z*focal;
         double cy=renderHeight*.5-torso.y/torso.z*focal;
@@ -1077,7 +1188,8 @@ public final class SceneRenderer {
             }
         return depthVisible?new Nameplate((int)Math.round(labelX),(int)Math.round(labelY)):null;
     }
-    public record Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress,boolean orb,boolean greenTint,String appearance) {
+    public record Apparition(double x,double y,double z,LanGhostAnimation.Phase phase,int heading,int progress,boolean orb,boolean greenTint,String appearance) {
+        public Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress,boolean orb,boolean greenTint,String appearance){this(x,0,z,phase,heading,progress,orb,greenTint,appearance);}
         public Apparition(double x,double z,LanGhostAnimation.Phase phase,int heading,int progress,boolean orb,boolean greenTint){
             this(x,z,phase,heading,progress,orb,greenTint,"banshee");
         }
@@ -1089,7 +1201,7 @@ public final class SceneRenderer {
             this(x,z,phase,heading,progress,orb,false);
         }
         public Apparition {
-            if(!Double.isFinite(x)||!Double.isFinite(z)||phase==null||heading<0||heading>=360
+            if(!Double.isFinite(x)||!Double.isFinite(y)||!Double.isFinite(z)||phase==null||heading<0||heading>=360
                     ||progress<0||progress>100||appearance==null
                     ||!appearance.matches("[a-z_]{3,32}"))
                 throw new IllegalArgumentException("invalid apparition");
@@ -1301,8 +1413,8 @@ public final class SceneRenderer {
         for(Face face:scene(map,ghostRoom,visibleGhost,wardRoom,hunterRoom,clock,others,apparition,markers)){
             List<Vertex> pts=clip(new Vertex(camera(face.a),face.au,face.av),
                 new Vertex(camera(face.b),face.bu,face.bv),new Vertex(camera(face.c),face.cu,face.cv));
-            int room=map.roomAt((face.a.x+face.b.x+face.c.x)/3,
-                (face.a.z+face.b.z+face.c.z)/3);
+            int room=face.room>=0?face.room:map.roomAt((face.a.x+face.b.x+face.c.x)/3,
+                (face.a.y+face.b.y+face.c.y)/3,(face.a.z+face.b.z+face.c.z)/3);
             double lighting=roomLights==null?1:roomLights.brightness(room,roomLightTick);
             for(int i=1;i<pts.size()-1;i++)triangle(pts.get(0),pts.get(i),pts.get(i+1),
                 face.color,face.material,lighting);
@@ -1334,7 +1446,7 @@ public final class SceneRenderer {
         }
         // Dim cloud bands drift across world bearings, visible through castle windows.
         for(int sx=0;sx<renderWidth;sx++){
-            double bearing=yaw+Math.atan2(sx-renderWidth*.5,focal);
+            double bearing=yaw-Math.atan2(sx-renderWidth*.5,focal);
             int top=horizon-38+(int)(7*Math.sin(bearing*2.7+clock*.012)
                 +3*Math.sin(bearing*7.4-clock*.008));
             for(int j=0;j<5;j++){
@@ -1354,18 +1466,18 @@ public final class SceneRenderer {
             double bearing=-Math.PI+(star*2.399963229728653)%(2*Math.PI);
             double diff=Math.atan2(Math.sin(bearing-yaw),Math.cos(bearing-yaw));
             if(Math.abs(diff)>1.1)continue;
-            int sx=(int)Math.round(renderWidth*.5+Math.tan(diff)*focal);
+            int sx=(int)Math.round(renderWidth*.5-Math.tan(diff)*focal);
             int sy=horizon-19-(star*37%54);
             if(sx>=0&&sx<renderWidth&&sy>=0&&sy<renderHeight)pixels[sy*renderWidth+sx]=0x8096ac;
         }
         for(int sx=0;sx<renderWidth;sx++){
-            double bearing=yaw+Math.atan2(sx-renderWidth*.5,focal);
+            double bearing=yaw-Math.atan2(sx-renderWidth*.5,focal);
             int hills=horizon+(int)(13*Math.sin(bearing*2.1)+8*Math.sin(bearing*5.7)
                     +5*Math.sin(bearing*13.2));
             for(int sy=Math.max(0,hills);sy<renderHeight;sy++)pixels[sy*renderWidth+sx]=0x18202a;
         }
         double diff=Math.atan2(Math.sin(-1.2-yaw),Math.cos(-1.2-yaw));
-        int mx=(int)Math.round(renderWidth*.5+Math.tan(diff)*focal),my=horizon-43;
+        int mx=(int)Math.round(renderWidth*.5-Math.tan(diff)*focal),my=horizon-43;
         if(!overcast&&Math.abs(diff)<1.1)for(int dy=-5;dy<=5;dy++)for(int dx=-5;dx<=5;dx++){
             int px=mx+dx,py=my+dy;
             if(px>=0&&px<renderWidth&&py>=0&&py<renderHeight&&dx*dx+dy*dy<25)pixels[py*renderWidth+px]=0xb8c8d5;
@@ -1406,12 +1518,12 @@ public final class SceneRenderer {
                     ?Math.max(45,(int)(255*progress/(double)LanGhostAnimation.MATERIALIZE_TICKS))
                     :phase==LanGhostAnimation.Phase.RECOVER?205:255;
             if(apparition!=null&&apparition.orb()){
-                renderSpiritOrb(gx,gz,.98+.18*Math.sin(clock*4),clock,apparition.greenTint());
+                renderSpiritOrb(gx,gz,(apparition==null?map.floorY(ghostRoom):apparition.y())+.98+.18*Math.sin(clock*4),clock,apparition.greenTint());
             }else{
                 DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,gx,gz,
                     apparition==null?0:apparition.heading(),
                     apparition==null?"banshee":apparition.appearance(),1.95*stature,1.16,
-                    .09*Math.sin(clock*3)+lift,alpha,lamp,renderWidth,renderHeight,focal,
+                    (apparition==null?map.floorY(ghostRoom):apparition.y())-(eyeHeight-1.62)+.09*Math.sin(clock*3)+lift,alpha,lamp,renderWidth,renderHeight,focal,
                     apparition!=null&&apparition.greenTint(),phase,
                     Math.floorMod((int)Math.floor(clock*10),4));
             }
@@ -1419,13 +1531,13 @@ public final class SceneRenderer {
         if(hunterRoom>=0){
             DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,
                 map.centerX(hunterRoom)-1.25,map.centerZ(hunterRoom)+2.0,
-                0,"observer",1.75,1.04,0,255,lamp,renderWidth,renderHeight,focal);
+                0,"observer",1.75,1.04,map.floorY(hunterRoom)-(eyeHeight-1.62),255,lamp,renderWidth,renderHeight,focal);
         }
         for(RemoteBody person:others){
             double distance=Math.hypot(person.x()-x,person.z()-z);
             if(distance>14||distance<1.35)continue;
             DirectionalSprites.draw(pixels,depths,x,z,yaw,pitch,person.x(),person.z(),
-                person.heading(),"observer",1.75,1.04,0,255,lamp,renderWidth,renderHeight,focal);
+                person.heading(),"observer",1.75,1.04,person.y()-(eyeHeight-1.62),255,lamp,renderWidth,renderHeight,focal);
         }
     }
     /** A real luminous orb in perspective, occluded by walls and the existing Z-buffer. */
@@ -1480,7 +1592,7 @@ public final class SceneRenderer {
                     u*va.v+v*vb.v+w*vc.v,psxPreset);
                 int texel=material>=GlbProps.TEXTURE_BASE
                     ?GlbProps.sample(material,uu,vv)
-                    :MaterialAtlas.sample(material,uu,vv);
+                    :material>=LevelMaterials.BASE?LevelMaterials.sample(material,uu,vv):MaterialAtlas.sample(material,uu,vv);
                 int tr=(texel>>16)&255,tg=(texel>>8)&255,tb=texel&255;
                 color=((tr*((tint>>16)&255)/255)<<16) |
                     ((tg*((tint>>8)&255)/255)<<8) |

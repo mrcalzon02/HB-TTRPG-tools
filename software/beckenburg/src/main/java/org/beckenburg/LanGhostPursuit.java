@@ -44,7 +44,7 @@ public final class LanGhostPursuit {
         if(ghostRoom<0||ghostRoom>=HouseMap.EXTRACTION_ROOM
                 ||sourceRoom<0||sourceRoom>=HouseMap.EXTRACTION_ROOM
                 ||!Double.isFinite(x)||!Double.isFinite(z)||tick<0
-                ||map.roomAt(x,z)!=sourceRoom)return;
+                ||map.roomAt(x,map.floorY(sourceRoom),z)!=sourceRoom)return;
         int attenuation = LanAcoustics.cost(map,ghostRoom,sourceRoom);
         if(attenuation > kind.budget)return;
         // Doors, masonry and wind shorten each finite-lived acoustic clue.
