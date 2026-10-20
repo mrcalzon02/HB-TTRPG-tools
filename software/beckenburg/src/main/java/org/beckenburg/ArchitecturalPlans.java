@@ -152,8 +152,31 @@ final class ArchitecturalPlans {
                 if(!nearDoor)grid[z][x]='W';
             }
             Plan p=new Plan(w,h,grid,owner,portals);
+            // Calculate all established room centers BEFORE extending the
+            // outdoor driveway. The new access road must not move the van,
+            // teleport any room center or replace authored interior rooms.
+            extendVanStreet(p);
             if(!p.connected())throw new IllegalStateException("disconnected architectural wing");
             return p;
+        }
+        /** Outdoor infrastructure is part of the physical site footprint.
+         * The former extraction parking bay ended at solid '#' masonry and
+         * the new road was being drawn BEHIND that wall. Carve only unused
+         * exterior map cells, preserving every house and classroom partition.
+         */
+        private void extendVanStreet(Plan plan){
+            VanStaging position=new VanStaging(new VanStaging.Placement(
+                plan.cx[HouseMap.EXTRACTION_ROOM],plan.cz[HouseMap.EXTRACTION_ROOM],
+                -Math.PI/2));
+            for(int z=1;z<h-1;z++)for(int x=1;x<w-1;x++){
+                if(owner[z][x]!=-1||grid[z][x]!='#')continue;
+                VanStaging.Position local=position.local(x+.5,z+.5);
+                if(Math.abs(local.x())>VanArrivalStreet.ROAD_HALF_WIDTH+1.04||
+                   local.z()<VanArrivalStreet.ROAD_END||
+                   local.z()>VanArrivalStreet.ROAD_START)continue;
+                grid[z][x]='o';
+                owner[z][x]=HouseMap.EXTRACTION_ROOM;
+            }
         }
         private static boolean inside(int id){return id>=0&&id<HouseMap.INDOOR_ROOMS;}
     }
