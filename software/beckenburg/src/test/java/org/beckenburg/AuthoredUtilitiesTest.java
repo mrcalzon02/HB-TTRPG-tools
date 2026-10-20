@@ -16,8 +16,9 @@ public final class AuthoredUtilitiesTest {
                 check(plate.y()-map.floorY(room)>.9&&plate.y()-map.floorY(room)<1.5,
                     site+" reachable plate height "+room);
                 var space=map.level().room(room);
-                check(Math.min(Math.min(Math.abs(plate.x()-space.x0()),Math.abs(plate.x()-space.x1())),
-                    Math.min(Math.abs(plate.z()-space.z0()),Math.abs(plate.z()-space.z1())))<.06,
+                double wallDistance=Math.min(Math.min(Math.abs(plate.x()-space.x0()),Math.abs(plate.x()-space.x1())),
+                    Math.min(Math.abs(plate.z()-space.z0()),Math.abs(plate.z()-space.z1())));
+                check(Math.abs(wallDistance-(LevelDefinition.WALL_HALF_THICKNESS+.005))<.001,
                     site+" switch attaches to room wall "+room);
                 for(var portal:map.level().portals())if(!portal.kind().equals("stair")&&Math.abs(portal.y()-space.y())<.1){
                     double normal=portal.alongX()?Math.abs(plate.z()-portal.z()):Math.abs(plate.x()-portal.x());

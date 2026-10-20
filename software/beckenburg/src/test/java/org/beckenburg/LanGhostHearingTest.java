@@ -16,18 +16,21 @@ public final class LanGhostHearingTest {
             &&event.strength()==LanGhostHearing.Strength.LOUD,"forward loud footsteps");
         ok(LanGhostHearing.decode(event.frame()).equals(event),"bounded codec roundtrip");
         ok(LanGhostHearing.project(map,ghost,4,x+2,z,LanGhostPursuit.Sound.DOOR,11)
-            .direction()==LanGhostHearing.Direction.RIGHT,"right");
-        ok(LanGhostHearing.project(map,ghost,4,x-2,z,LanGhostPursuit.Sound.DOOR,11)
             .direction()==LanGhostHearing.Direction.LEFT,"left");
+        ok(LanGhostHearing.project(map,ghost,4,x-2,z,LanGhostPursuit.Sound.DOOR,11)
+            .direction()==LanGhostHearing.Direction.RIGHT,"right");
         ok(LanGhostHearing.project(map,ghost,4,x,z-2,LanGhostPursuit.Sound.DOOR,11)
             .direction()==LanGhostHearing.Direction.BEHIND,"behind");
         ok(LanGhostHearing.project(map,new LanGhostSpatial.Pose(4,x,z,90),4,x,z+2,
-            LanGhostPursuit.Sound.DOOR,11).direction()==LanGhostHearing.Direction.LEFT,"rotated listener");
-        double nx=map.centerX(5),nz=map.centerZ(5);
-        ok(LanGhostHearing.project(map,ghost,5,nx,nz,LanGhostPursuit.Sound.FOOTSTEP,10)==null,
+            LanGhostPursuit.Sound.DOOR,11).direction()==LanGhostHearing.Direction.RIGHT,"rotated listener");
+        var door=AuthoredTestSupport.door(map,4,3);
+        var listener=AuthoredTestSupport.side(map,door,4,.8);var source=AuthoredTestSupport.side(map,door,3,.8);
+        var atDoor=new LanGhostSpatial.Pose(4,listener.x(),listener.y(),listener.z(),0);
+        double nx=source.x(),nz=source.z();
+        ok(LanGhostHearing.project(map,atDoor,3,nx,nz,LanGhostPursuit.Sound.FOOTSTEP,10)==null,
             "closed door attenuates a footstep");
-        ok(map.toggleNearestDoor(28.7,30.5),"door can be opened");
-        ok(LanGhostHearing.project(map,ghost,5,nx,nz,LanGhostPursuit.Sound.FOOTSTEP,11)!=null,
+        ok(map.toggleNearestDoor(listener.x(),listener.y(),listener.z()),"door can be opened");
+        ok(LanGhostHearing.project(map,atDoor,3,nx,nz,LanGhostPursuit.Sound.FOOTSTEP,11)!=null,
             "open threshold permits faint footstep");
         ok(LanGhostHearing.project(map,ghost,HouseMap.EXTRACTION_ROOM,
             map.centerX(HouseMap.EXTRACTION_ROOM),map.centerZ(HouseMap.EXTRACTION_ROOM),

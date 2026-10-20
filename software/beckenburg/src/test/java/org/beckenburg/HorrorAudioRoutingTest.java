@@ -34,15 +34,13 @@ public final class HorrorAudioRoutingTest {
         // rejects movement. Ordinary traversable room boundaries stay silent.
         HouseMap map=new HouseMap();
         LanWorld world=new LanWorld(map);
-        world.setRoom(0,13); // front portico, north of van staging (room 14)
-        // Authoritative house plans place the portal to the south, behind a
-        // physical door. Open that real door before testing the Frenzy seal.
-        check(map.openDoorBetweenRooms(13,14),
-            "the portico-to-van extraction doorway must exist");
+        var approach=map.van().world(0,VanStaging.FRONT-.8);
+        AuthoredTestSupport.place(map,world,0,new LevelDefinition.Vec(approach.x(),0,approach.z()));
+        check(world.body(0).room()==13,"street outside cargo sill is exterior approach");
         world.setExitSealed(true);
         int blockedTick=-1;
         for(int t=1;t<40;t++){
-            try{world.move(0,0,100,t);}
+            try{world.move(0,100,0,t);}
             catch(IllegalArgumentException e){
                 check("frenzy sealed the van extraction threshold".equals(e.getMessage()),
                     "Unexpected collision while approaching sealed threshold: "+e.getMessage());
@@ -52,7 +50,7 @@ public final class HorrorAudioRoutingTest {
         check(blockedTick>0&&world.body(0).room()==13,
             "sealed boundary must reject movement before an audio rattle is valid");
         world.setExitSealed(false);
-        check(world.move(0,0,100,blockedTick+1)&&world.body(0).room()==14,
+        check(world.move(0,100,0,blockedTick+1)&&world.body(0).room()==14,
             "an unsealed threshold must remain a normal silent crossing");
         System.out.println("PASS HorrorAudioRoutingTest / 18 unique generic variants + authentic sealed door state");
     }

@@ -7,7 +7,10 @@ final class AuthoredTestSupport {
         .filter(p->p.door()&&p.joins(a,b)).findFirst().orElseThrow();}
     static LevelDefinition.Vec side(HouseMap map,LevelDefinition.Portal p,int room,double distance){
         var r=map.level().room(room);
-        double sign=p.alongX()?Math.signum((r.z0()+r.z1())/2-p.z()):Math.signum((r.x0()+r.x1())/2-p.x());
+        // Exterior support rectangles may underlie the house. Their rectangle
+        // centre cannot determine which side of an exterior doorway is outdoors.
+        var inside=r.outside()?map.level().room(p.a()==room?p.b():p.a()):r;
+        double sign=(p.alongX()?Math.signum((inside.z0()+inside.z1())/2-p.z()):Math.signum((inside.x0()+inside.x1())/2-p.x()))*(r.outside()?-1:1);
         return new LevelDefinition.Vec(p.x()+(p.alongX()?0:sign*distance),p.y(),p.z()+(p.alongX()?sign*distance:0));
     }
     /** Deliberate unit-test fixture placement; movement under test still uses host authority. */

@@ -49,7 +49,7 @@ public final class LanGhostHearing {
         double dx=sourceX-ghost.x(),dz=sourceZ-ghost.z();
         double distance=Math.hypot(dx,dz),heading=Math.toRadians(ghost.heading());
         double forward=dx*Math.sin(heading)+dz*Math.cos(heading);
-        double right=dx*Math.cos(heading)-dz*Math.sin(heading);
+        double right=-dx*Math.cos(heading)+dz*Math.sin(heading);
         Direction bearing=distance<.5?Direction.HERE
             :Math.abs(forward)>=Math.abs(right)
                 ?(forward>=0?Direction.AHEAD:Direction.BEHIND)

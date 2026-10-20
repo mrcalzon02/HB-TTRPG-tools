@@ -10,6 +10,7 @@ public record LevelDefinition(String id, String revision, String title,
         List<Room> rooms, List<Portal> portals, List<Stair> stairs,
         List<Void> voids, List<Prop> props, List<Socket> sockets,
         List<Collider> colliders, Dock dock, String ambience) {
+    public static final double WALL_HALF_THICKNESS=.08;
     public LevelDefinition {
         rooms=List.copyOf(rooms);portals=List.copyOf(portals);stairs=List.copyOf(stairs);
         voids=List.copyOf(voids);props=List.copyOf(props);sockets=List.copyOf(sockets);
@@ -19,7 +20,7 @@ public record LevelDefinition(String id, String revision, String title,
         // The handshake follows actual authored data, so two binaries with
         // different stair/prop/socket coordinates cannot silently share a map.
         try{
-            String data=id+rooms+portals+stairs+voids+props+sockets+colliders+dock+ambience;
+            String data="wall-shell-v2"+id+rooms+portals+stairs+voids+props+sockets+colliders+dock+ambience+guardSegments(stairs,voids);
             byte[] hash=java.security.MessageDigest.getInstance("SHA-256").digest(data.getBytes(java.nio.charset.StandardCharsets.UTF_8));
             revision=revision+"-"+java.util.HexFormat.of().formatHex(hash,0,8);
         }catch(java.security.NoSuchAlgorithmException impossible){throw new AssertionError(impossible);}
@@ -57,10 +58,33 @@ public record LevelDefinition(String id, String revision, String title,
     public record Socket(String id,String type,int room,double x,double y,double z,
             double yaw,String style) { }
     public record Collider(double x,double y,double z,double halfX,double halfZ,double height,double yaw) { }
+    /** Fixed guard at the edge of an upper deck void. The top landing stays open. */
+    public record Guard(double x0,double z0,double x1,double z1,double y) { }
     public record Dock(double x,double y,double z,double yaw) { }
     public Room room(int id){return rooms.get(id);}
     public double floorY(int room){return room(room).y();}
     public List<Portal> portalsFrom(int room){return portals.stream().filter(p->p.a()==room||p.b()==room).toList();}
     public Socket socket(String type,int room){return sockets.stream().filter(s->s.type().equals(type)&&s.room()==room).findFirst().orElse(null);}
     public boolean floorVoid(double x,double y,double z){return voids.stream().anyMatch(v->Math.abs(v.y()-y)<.05&&v.contains(x,z));}
+    public List<Guard> guards(){return guardSegments(stairs,voids);}
+    private static List<Guard> guardSegments(List<Stair> stairs,List<Void> voids){
+        java.util.ArrayList<Guard> result=new java.util.ArrayList<>();
+        for(Void v:voids){
+            Stair stair=stairs.stream().filter(s->Math.abs(s.y1()-v.y())<.02
+                &&s.contains((v.x0()+v.x1())/2,(v.z0()+v.z1())/2,-.2)).findFirst().orElse(null);
+            if(stair==null)continue;
+            if(Math.abs(stair.z1()-stair.z0())>Math.abs(stair.x1()-stair.x0())){
+                result.add(new Guard(v.x0(),v.z0(),v.x0(),v.z1(),v.y()));
+                result.add(new Guard(v.x1(),v.z0(),v.x1(),v.z1(),v.y()));
+                double end=stair.z1()>stair.z0()?v.z0():v.z1();
+                result.add(new Guard(v.x0(),end,v.x1(),end,v.y()));
+            }else{
+                result.add(new Guard(v.x0(),v.z0(),v.x1(),v.z0(),v.y()));
+                result.add(new Guard(v.x0(),v.z1(),v.x1(),v.z1(),v.y()));
+                double end=stair.x1()>stair.x0()?v.x0():v.x1();
+                result.add(new Guard(end,v.z0(),end,v.z1(),v.y()));
+            }
+        }
+        return List.copyOf(result);
+    }
 }

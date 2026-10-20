@@ -154,3 +154,4 @@ SoloElevationTest
 EquipmentAssetAssignmentsTest
 LevelRenderAcceptanceTest
 WorldViewHandednessTest
+LevelSurfaceIntegrityTest

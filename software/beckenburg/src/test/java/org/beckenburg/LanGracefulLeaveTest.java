@@ -16,7 +16,7 @@ public final class LanGracefulLeaveTest {
                         socket.setSoTimeout(3000);
                         var reader=LanProtocol.reader(socket.getInputStream());
                         var writer=LanProtocol.writer(socket.getOutputStream());
-                        LanProtocol.read(reader);LanProtocol.write(writer,"WELCOME|H1|1");
+                        LanProtocol.read(reader);LanProtocol.write(writer,"WELCOME|H1|"+LanProtocol.VERSION);
                         LanProtocol.write(writer,"INFO|first queued update");
                         for(int i=0;i<200;i++)LanProtocol.write(writer,"INFO|pending update "+i);
                         if(!"LEAVE".equals(LanProtocol.read(reader)))throw new AssertionError("intentional leave was lost");

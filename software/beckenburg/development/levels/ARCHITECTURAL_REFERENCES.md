@@ -14,7 +14,7 @@ House: covered porch, weathered two-storey exterior, amber practical light again
 - [NPS parlor, with 1914 and 2014 photographs](https://www.nps.gov/long/learn/historyculture/parlor.htm). Read the documented arrangement and original/reproduction furnishing context. Applied principle: a fireplace, seating, small tables, portraits and a clock form a furnished room with circulation around them, rather than unrelated objects scattered across a floor.
 - [Library of Congress HABS Salubria: center-hall stair surround and wall section](https://www.loc.gov/pictures/item/va2094.sheet.00004a/). Opened the drawing record. Used as a construction reference for the relationship of wall trim, stair enclosure and floor section, not as a traced game plan.
 
-Current house footprint is 12m × 14m, X12–24/Z10–24. Surfaces are Y−3/0/3m. Two separate 1.5m-wide, 4.8m-run stair footprints avoid the ambiguous overlapping ascent/descent previously detected by movement QA. A 1.5m centre aisle lies between flights. Ground-floor doors form a living → kitchen → dining → hall → foyer loop. The porch and garden form an exterior retreat route.
+Current house footprint is 12m × 14m, X12–24/Z10–24. Surfaces are Y−3/0/3m. Two separate 1.5m-wide, 4.8m-run stair footprints avoid the ambiguous overlapping ascent/descent previously detected by movement QA. The basement stair centre is X19.8; the upper flight centre is X22.5. Their deck guards leave a .98m clear centre aisle, verified with the .44m player capsule. Ground-floor doors form a living → kitchen → dining → hall → foyer loop. The porch and garden form an exterior retreat route.
 
 ## Farm: separate functions, yard and hayloft
 
@@ -30,8 +30,14 @@ Current farmhouse main block is X12–26/Z12–27. Barn is X31–43/Z9–24, 6m 
 
 Current school has a central entrance/corridor, western classroom/library wing, eastern cafeteria/nurse wing and an offset 12m × 16m gym at X34–46/Z8–24 with a 7.2m ceiling. An assembly hall occupies an upper wing rather than being another narrow classroom. Upper floor is Y3.6m; service basement is Y−3m. The gym's game dimensions and arrangement are authored; they are not represented as the Yonkers building's measured dimensions.
 
-## Reference inspection limits
+## Photographs visually inspected
 
-The NPS page text, linked image descriptions and LOC report were successfully read. Direct photo requests, and LOC report screenshot requests, returned the web tool's cache-miss errors. No connected browser was available to inspect those remote images visually. Do not label those photo pixels as visually verified. Their links and credited photograph descriptions are retained for the next visual reference pass. Approved local concept boards and original local PSX texture/preview images were visually inspected directly.
+The first text/reference pass could not retrieve the linked photographs through the web cache. A subsequent browser inspection successfully displayed these primary photographs:
+
+- [NPS Spring Hill ranch-house kitchen](https://www.nps.gov/tapr/learn/photosmultimedia/virtual-tour-ranch-house-kitchen-area.htm): the historic 1935 kitchen photograph shows a steep utility stair against a wall, a real ceiling opening and attached overhead pipes. Used to review physical stair/ceiling relationships.
+- [NPS Spring Hill ranch-house parlors](https://home.nps.gov/tapr/learn/photosmultimedia/virtual-tour-ranch-house-parlors.htm): inspected the exterior/foyer and 2024 North/South Parlor photographs. Seating stays around the perimeter, the central table/rug grouping leaves circulation, and wall fixtures, cornice and entry newel have physical supports.
+- [NPS Toms Brook School](https://home.nps.gov/articles/toms-brook-school-va.htm): inspected the damaged classroom photograph showing a large framed blackboard/tray, timber flooring and tall window bays. Used for classroom furnishing and surface distinction.
+
+The earlier LOC report screenshot requests still failed; those report pages are text-inspected only. Approved local concept boards and original local PSX texture/preview images were also visually inspected directly.
 
 No external reference photo has been copied into game textures. Original purchased-pack UV textures remain associated with their actual source meshes; external historical references guide building logic and furnishing choices only.

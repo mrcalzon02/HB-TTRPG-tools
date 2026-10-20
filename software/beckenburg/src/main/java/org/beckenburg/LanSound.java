@@ -120,7 +120,7 @@ public final class LanSound {
         if(gain<12)return null;
         gain=Math.min(100,gain);
         double angle=Math.toRadians(listener.heading());
-        double right=dx*Math.cos(angle)-dz*Math.sin(angle);
+        double right=-dx*Math.cos(angle)+dz*Math.sin(angle);
         int pan=horizontal<.01?0:(int)Math.round(4*right/horizontal)*25;
         pan=Math.max(-100,Math.min(100,pan));
         return new CueEvent(cue,pan,gain,tick);

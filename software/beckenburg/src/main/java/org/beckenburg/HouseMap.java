@@ -10,11 +10,12 @@ public final class HouseMap {
     public enum Site { HOUSE,FARMHOUSE,SCHOOL,MANSION,PRISON,ASYLUM,ACADEMY,COLLEGE,CHURCH }
     private final Site site;
     private final LevelDefinition level;
+    private final List<Guard> guards;
     private final Set<Integer> openDoors=new HashSet<>(),openWindows=new HashSet<>();
     private final VanStaging van;
     public HouseMap(){this(Site.HOUSE);}
     public HouseMap(Site site){
-        this.site=Objects.requireNonNull(site);level=LevelPlans.build(site);
+        this.site=Objects.requireNonNull(site);level=LevelPlans.build(site);guards=level.guards();
         Dock d=level.dock();van=new VanStaging(new VanStaging.Placement(d.x(),d.z(),d.yaw()));
     }
     public Site site(){return site;}
@@ -145,13 +146,14 @@ public final class HouseMap {
     private boolean wallBlocked(double x,double y,double z,double radius,boolean ray){
         for(Room r:level.rooms()){
             if(r.outside()||y+(ray?0:1.78)<=r.y()+.03||y>=r.y()+r.height())continue;
+            if(r.name().toLowerCase().contains("loft")&&y>=r.y()+1.0)continue;
             if(x>=r.x0()-radius&&x<=r.x1()+radius){
-                if(Math.abs(z-r.z0())<radius+.035&&!wallOpening(r,true,r.z0(),x,y,radius,ray))return true;
-                if(Math.abs(z-r.z1())<radius+.035&&!wallOpening(r,true,r.z1(),x,y,radius,ray))return true;
+                if(Math.abs(z-r.z0())<radius+LevelDefinition.WALL_HALF_THICKNESS+.005&&!wallOpening(r,true,r.z0(),x,y,radius,ray))return true;
+                if(Math.abs(z-r.z1())<radius+LevelDefinition.WALL_HALF_THICKNESS+.005&&!wallOpening(r,true,r.z1(),x,y,radius,ray))return true;
             }
             if(z>=r.z0()-radius&&z<=r.z1()+radius){
-                if(Math.abs(x-r.x0())<radius+.035&&!wallOpening(r,false,r.x0(),z,y,radius,ray))return true;
-                if(Math.abs(x-r.x1())<radius+.035&&!wallOpening(r,false,r.x1(),z,y,radius,ray))return true;
+                if(Math.abs(x-r.x0())<radius+LevelDefinition.WALL_HALF_THICKNESS+.005&&!wallOpening(r,false,r.x0(),z,y,radius,ray))return true;
+                if(Math.abs(x-r.x1())<radius+LevelDefinition.WALL_HALF_THICKNESS+.005&&!wallOpening(r,false,r.x1(),z,y,radius,ray))return true;
             }
         }
         return false;
@@ -163,6 +165,8 @@ public final class HouseMap {
             if(!supported(x+d[0],y,z+d[1],0))return false;
         for(Portal p:level.portals())if(p.door()&&!doorOpen(p.id())&&boxHit(x,y,z,radius,p.x(),p.y(),p.z(),p.alongX()?p.width()/2:.10,p.alongX()?.10:p.width()/2,2.4,0))return false;
         for(Collider p:level.colliders())if(boxHit(x,y,z,radius,p.x(),p.y(),p.z(),p.halfX(),p.halfZ(),p.height(),p.yaw()))return false;
+        for(Guard g:guards)if(boxHit(x,y,z,radius,(g.x0()+g.x1())/2,g.y(),(g.z0()+g.z1())/2,
+            Math.max(.035,Math.abs(g.x1()-g.x0())/2),Math.max(.035,Math.abs(g.z1()-g.z0())/2),1.0,0))return false;
         if(Math.abs(y-level.dock().y())<1.5&&(van.collides(x,z,radius)||VanArrivalStreet.collision(van,x,z,radius)))return false;
         // A higher deck is a solid ceiling unless its authored stair opening removes it.
         for(Room r:level.rooms())if(r.y()>y+.12&&r.y()<y+1.82&&x>r.x0()-radius&&x<r.x1()+radius&&z>r.z0()-radius&&z<r.z1()+radius&&!level.floorVoid(x,r.y(),z))return false;

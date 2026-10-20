@@ -7,6 +7,9 @@ public final class AuthoredLevelPhysicsTest {
   for(HouseMap.Site site:new HouseMap.Site[]{HouseMap.Site.HOUSE,HouseMap.Site.FARMHOUSE,HouseMap.Site.SCHOOL}){
    HouseMap map=new HouseMap(site);
    LanWorld world=new LanWorld(map);
+   var outsideCargo=map.van().world(0,VanStaging.FRONT-.5);
+   check(map.roomAt(outsideCargo.x(),0,outsideCargo.z())==13,site+" road must not inherit van protection");
+   check(map.traversable(outsideCargo.x(),0,outsideCargo.z()),site+" supported cargo approach");
    for(int seat=0;seat<6;seat++){
     var body=world.body(seat);var local=map.van().local(body.x(),body.z());
     check(body.room()==14&&Math.abs(local.x())<VanStaging.HALF_WIDTH-.22&&local.z()>VanStaging.FRONT+.22&&local.z()<VanStaging.REAR-.22,site+" van spawn pad "+seat);

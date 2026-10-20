@@ -14,6 +14,10 @@ Record standing-surface Y separately from eye height. Every boundary opening mus
 
 Stairs require lower/upper room IDs, exact endpoints, continuous supporting ramp, measured treads, head clearance, a matching upper deck void and a cut in any lower ceiling that would otherwise intersect the flight. Separate stacked flights laterally where shared footprints would make direction ambiguous. Test entry and exit at both ends, not only points in the middle of a ramp.
 
+Use a physical wall section: the nominal partition centre has an 80mm interior offset on each side. Adjacent rooms never paint two finishes on the same plane. Timber panels replace the corresponding plaster band; do not overlay a complete plaster wall with a second complete panel face. Project trim visibly from the surface. Project wall sockets and supported flat props onto the finished face, not the nominal centreline.
+
+Split decks at exact aperture bounds, including non-integer coordinates; centre-testing metre tiles leaves false floor strips across stair openings. Clip the last tread to the opening so it cannot overlap the landing. Derive three-sided landing guards from the same void, leave the upper stair end open, and include those guards in collision. Render the stair from below and above before accepting it. Do not use a passing path graph as evidence of a safe or convincing stairwell.
+
 ## 3. Reuse real meshes without changing their identity
 
 Select actual source GLBs from the owner archive. Record source name/hash, source axis, native bounds, pivot, material/UV images and the intended physical use. Keep original archives read-only. Import only the used subset into runtime assets. `development/assets/rebuild_support.py` may import and uniformly scale loose props; its centre/floor normalization must not be used blindly for hinges, architectural bays or ceiling/wall fixtures.
@@ -47,5 +51,9 @@ Switch sockets use approximately floor+1.2m and require a real reachable operati
 Compile the integrated Java sources and run the targeted architecture checks. `AuthoredLevelPhysicsTest` checks physical door closure/opening and continuous ascent/descent. Real swept navigation must start at the van and reach every room and required socket; graph connectivity alone is insufficient. `AuthoredUtilitiesTest` checks actual wall mounting and operating positions. Multiplayer checks must reproduce floor selection and door/window state from host data.
 
 Then render actual first-person views from the runtime renderer: approach, entry, each floor, living/family room, kitchen, bathroom/wash facilities, cellar, stairs looking both ways, rear exit and every outbuilding. Inspect native material appearance, collision/visual agreement, ceilings, aperture framing, fixture backs, wall normals, floor support and readable low-light silhouettes. Render images are evidence of geometry; they do not by themselves establish native Windows interactive acceptance or performance.
+
+`LevelSurfaceIntegrityTest` checks generated wall faces for conflicting coplanar materials, exact deck area and aperture cuts, distinct wall/floor materials, and physical/rendered landing guards. The check caught a farmhouse frame crossing the child-bedroom corner and prompted a real doorway relocation. `LevelVisualCapture` disables CRT/grain effects in its own process without saving preferences, making texture joins easier to inspect.
+
+After packaging, export each site with `LevelSceneSource` and rebuild its editable scene using `build_scene.py`. These sources contain the runtime triangles and original UVs, rather than a separately maintained show model. Rebuild the review gallery with `build_review.py`; every gallery image is an actual runtime capture, with Blender overviews identified separately.
 
 After fixes, repeat only the checks affected by the changes. Keep new map unlocks behind completed distinctive geometry and these checks. Record remaining missing fittings, visual problems and external-reference limitations explicitly; never substitute a passing count or renamed template for a completed level.

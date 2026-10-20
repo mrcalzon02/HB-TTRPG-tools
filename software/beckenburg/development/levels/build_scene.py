@@ -63,8 +63,12 @@ for s in definition['sockets']:
     lamp=bpy.context.object;lamp.name=s['id']+' circuit '+str(s['room']);lamp.data.energy=65 if s['style']=='utility' else 95
     lamp.data.color=(.95,.81,.54) if s['style']!='utility' else (.72,.80,.87);lamp.data.shadow_soft_size=.23
 bpy.ops.object.light_add(type='SUN',location=(15,-15,20));bpy.context.object.rotation_euler=(.38,-.55,-.9);bpy.context.object.data.energy=.7;bpy.context.object.data.color=(.40,.55,.85)
-bpy.ops.object.camera_add(location=(28,-34,3.8));cam=bpy.context.object
-target=Vector((19,-19,3.0));cam.rotation_euler=(target-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.lens=30;scene.camera=cam
+camera_poses={'house':((28,-34,3.8),(19,-19,3.0)),
+              'farmhouse':((55,-48,15),(27,-20,2.8)),
+              'school':((58,-57,17),(28,-24,3.5))}
+position,look_at=camera_poses[name]
+bpy.ops.object.camera_add(location=position);cam=bpy.context.object
+target=Vector(look_at);cam.rotation_euler=(target-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.lens=30;scene.camera=cam
 scene.render.engine='CYCLES';scene.cycles.samples=24;scene.cycles.use_denoising=True
 scene.render.resolution_x=1280;scene.render.resolution_y=800;scene.render.resolution_percentage=100
 scene.view_settings.view_transform='Standard';scene.view_settings.look='None';scene.view_settings.exposure=.6

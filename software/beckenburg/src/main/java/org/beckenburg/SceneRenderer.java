@@ -892,15 +892,17 @@ public final class SceneRenderer {
     private static void levelWallPatch(List<Face> out,LevelDefinition.Room r,boolean alongX,double plane,
             double from,double to,double bottom,double top,int material){
         if(to-from<.005||top-bottom<.005)return;
-        double x0=alongX?from:plane,z0=alongX?plane:from,x1=alongX?to:plane,z1=alongX?plane:to;
-        texturedQuad(out,new Point(x0,bottom,z0),new Point(x1,bottom,z1),new Point(x1,top,z1),new Point(x0,top,z0),
-            material,from/4,(bottom-r.y())/r.height(),to/4,(bottom-r.y())/r.height(),to/4,(top-r.y())/r.height(),from/4,(top-r.y())/r.height(),0xffffff);
-        // Skirting, chair rail and cornice have actual projection from plaster.
+        // Each height band owns its surface. Timber never overlays a plaster face.
+        if(LevelMaterials.panelled(r)){
+            levelWallPatchPlain(out,alongX,plane,from,to,Math.max(bottom,r.y()),Math.min(top,r.y()+.15),LevelMaterials.WOOD);
+            levelWallPatchPlain(out,alongX,plane,from,to,Math.max(bottom,r.y()+.15),Math.min(top,r.y()+.88),LevelMaterials.WOOD);
+            levelWallPatchPlain(out,alongX,plane,from,to,Math.max(bottom,r.y()+.88),Math.min(top,r.y()+.925),LevelMaterials.WOOD);
+            levelWallPatchPlain(out,alongX,plane,from,to,Math.max(bottom,r.y()+.925),top,material);
+        }else levelWallPatchPlain(out,alongX,plane,from,to,bottom,top,material);
         if(bottom<=r.y()+.01){
             double length=to-from,xx=alongX?from:plane-.025,zz=alongX?plane-.025:from;
             texturedBox(out,xx,r.y()+.02,zz,alongX?length:.05,.13,alongX?.05:length,LevelMaterials.WOOD);
-            if(!r.finish().contains("tile")&&!r.finish().contains("concrete")){
-                levelWallPatchPlain(out,alongX,plane,from,to,r.y()+.15,Math.min(top,r.y()+.88),LevelMaterials.WOOD);
+            if(LevelMaterials.panelled(r)){
                 texturedBox(out,xx,r.y()+.88,zz,alongX?length:.06,.045,alongX?.06:length,LevelMaterials.WOOD);
                 for(double t=from+.15;t<to-.10;t+=.62){
                     double x=alongX?t:plane-.03,z=alongX?plane-.03:t;
@@ -908,8 +910,7 @@ public final class SceneRenderer {
                 }
             }
         }
-        if(top>=r.y()+r.height()-.05){
-            double len=to-from;
+        if(top>=r.y()+r.height()-.05){double len=to-from;
             texturedBox(out,alongX?from:plane-.045,top-.12,alongX?plane-.045:from,
                 alongX?len:.09,.09,alongX?.09:len,LevelMaterials.WOOD);
         }
@@ -921,26 +922,41 @@ public final class SceneRenderer {
             a/2,0,b/2,0,b/2,(y1-y0),a/2,(y1-y0),0xffffff);
     }
     private static void levelWall(List<Face> out,LevelDefinition level,LevelDefinition.Room r,boolean alongX,double plane,double from,double to){
+        // An open hayloft is a deck inside the barn volume, not another set
+        // of coplanar enclosing walls painted over the barn's existing walls.
+        if(r.name().toLowerCase().contains("loft")){
+            var parent=level.rooms().stream().filter(p->!p.outside()&&p.id()!=r.id()&&p.y()<r.y()
+                &&p.y()+p.height()>=r.y()+r.height()-.05&&p.x0()<=r.x0()&&p.x1()>=r.x1()&&p.z0()<=r.z0()&&p.z1()>=r.z1()).findFirst().orElse(null);
+            if(parent!=null){
+                boolean perimeter=alongX?(nearPlane(plane,parent.z0())||nearPlane(plane,parent.z1())):(nearPlane(plane,parent.x0())||nearPlane(plane,parent.x1()));
+                if(!perimeter)levelRail(out,alongX?from:plane,r.y(),alongX?plane:from,alongX?to:plane,r.y(),alongX?plane:to);
+                return;
+            }
+        }
         var openings=level.portals().stream().filter(p->!p.kind().equals("stair")&&p.alongX()==alongX
             &&(p.a()==r.id()||p.b()==r.id())&&nearPlane(p.y(),r.y())
             &&nearPlane(alongX?p.z():p.x(),plane)).sorted(java.util.Comparator.comparingDouble(p->alongX?p.x():p.z())).toList();
+        double direction=nearPlane(plane,alongX?r.z0():r.x0())?1:-1;
+        double facePlane=plane+direction*LevelDefinition.WALL_HALF_THICKNESS;
         double at=from;int mat=LevelMaterials.wall(r);
         for(var p:openings){
             double mid=alongX?p.x():p.z(),lo=Math.max(from,mid-p.width()/2),hi=Math.min(to,mid+p.width()/2);
             if(hi<=from||lo>=to)continue;
-            levelWallPatch(out,r,alongX,plane,at,lo,r.y(),r.y()+r.height()-.04,mat);
+            levelWallPatch(out,r,alongX,facePlane,at,lo,r.y(),r.y()+r.height()-.04,mat);
             boolean window=p.kind().equals("window");double sill=window?r.y()+1.0:r.y();double head=window?r.y()+2.35:r.y()+2.32;
-            if(window)levelWallPatch(out,r,alongX,plane,lo,hi,r.y(),sill,mat);
-            levelWallPatch(out,r,alongX,plane,lo,hi,head,r.y()+r.height()-.04,mat);
-            double xx=alongX?lo-.055:plane-.065,zz=alongX?plane-.065:lo-.055;
-            texturedBox(out,xx,sill,zz,alongX?.07:.13,head-sill,alongX?.13:.07,LevelMaterials.WOOD);
-            texturedBox(out,alongX?hi-.015:plane-.065,sill,alongX?plane-.065:hi-.015,
-                alongX?.07:.13,head-sill,alongX?.13:.07,LevelMaterials.WOOD);
-            texturedBox(out,xx,head-.045,zz,alongX?hi-lo+.11:.13,.09,alongX?.13:hi-lo+.11,LevelMaterials.WOOD);
+            if(window)levelWallPatch(out,r,alongX,facePlane,lo,hi,r.y(),sill,mat);
+            levelWallPatch(out,r,alongX,facePlane,lo,hi,head,r.y()+r.height()-.04,mat);
+            if(p.a()==r.id()){
+            double xx=alongX?lo-.055:plane-.11,zz=alongX?plane-.11:lo-.055;
+            texturedBox(out,xx,sill,zz,alongX?.07:.22,head-sill,alongX?.22:.07,LevelMaterials.WOOD);
+            texturedBox(out,alongX?hi-.015:plane-.11,sill,alongX?plane-.11:hi-.015,
+                alongX?.07:.22,head-sill,alongX?.22:.07,LevelMaterials.WOOD);
+            texturedBox(out,xx,head-.045,zz,alongX?hi-lo+.11:.22,.09,alongX?.22:hi-lo+.11,LevelMaterials.WOOD);
             if(window)texturedBox(out,xx,sill-.045,zz,alongX?hi-lo+.11:.22,.07,alongX?.22:hi-lo+.11,LevelMaterials.WOOD);
+            }
             at=Math.max(at,hi);
         }
-        levelWallPatch(out,r,alongX,plane,at,to,r.y(),r.y()+r.height()-.04,mat);
+        levelWallPatch(out,r,alongX,facePlane,at,to,r.y(),r.y()+r.height()-.04,mat);
     }
     private static void levelRail(List<Face> out,double x0,double y0,double z0,double x1,double y1,double z1){
         double length=Math.hypot(x1-x0,z1-z0);int count=Math.max(1,(int)Math.ceil(length/.24));
@@ -952,17 +968,41 @@ public final class SceneRenderer {
         quad(out,new Point(x0+ex,y0+.96,z0+ez),new Point(x1+ex,y1+.96,z1+ez),new Point(x1-ex,y1+.96,z1-ez),new Point(x0-ex,y0+.96,z0-ez),0x96764e);
         quad(out,new Point(x0+ex,y0+.90,z0+ez),new Point(x1+ex,y1+.90,z1+ez),new Point(x1+ex,y1+.96,z1+ez),new Point(x0+ex,y0+.96,z0+ez),0x685035);
     }
+    private static void levelDeck(List<Face> out,LevelDefinition level,LevelDefinition.Room r,boolean ceiling){
+        double deck=ceiling?r.y()+r.height():r.y(),surface=ceiling?deck-.04:deck;
+        java.util.TreeSet<Double> xs=new java.util.TreeSet<>(),zs=new java.util.TreeSet<>();
+        xs.add(r.x0());xs.add(r.x1());zs.add(r.z0());zs.add(r.z1());
+        for(double x=Math.ceil(r.x0()/2)*2;x<r.x1();x+=2)xs.add(x);
+        for(double z=Math.ceil(r.z0()/2)*2;z<r.z1();z+=2)zs.add(z);
+        for(var v:level.voids())if(Math.abs(v.y()-deck)<.05){
+            if(v.x0()>r.x0()&&v.x0()<r.x1())xs.add(v.x0());if(v.x1()>r.x0()&&v.x1()<r.x1())xs.add(v.x1());
+            if(v.z0()>r.z0()&&v.z0()<r.z1())zs.add(v.z0());if(v.z1()>r.z0()&&v.z1()<r.z1())zs.add(v.z1());
+        }
+        if(r.outside())for(var indoor:level.rooms())if(indoor.id()!=r.id()&&Math.abs(indoor.y()-deck)<.05&&(!indoor.outside()
+                ||(indoor.x1()-indoor.x0())*(indoor.z1()-indoor.z0())<(r.x1()-r.x0())*(r.z1()-r.z0()))){
+            if(indoor.x0()>r.x0()&&indoor.x0()<r.x1())xs.add(indoor.x0());if(indoor.x1()>r.x0()&&indoor.x1()<r.x1())xs.add(indoor.x1());
+            if(indoor.z0()>r.z0()&&indoor.z0()<r.z1())zs.add(indoor.z0());if(indoor.z1()>r.z0()&&indoor.z1()<r.z1())zs.add(indoor.z1());
+        }
+        var xx=new ArrayList<>(xs);var zz=new ArrayList<>(zs);
+        for(int i=0;i<xx.size()-1;i++)for(int j=0;j<zz.size()-1;j++){
+            double x0=xx.get(i),x1=xx.get(i+1),z0=zz.get(j),z1=zz.get(j+1),mx=(x0+x1)/2,mz=(z0+z1)/2;
+            if(level.floorVoid(mx,deck,mz))continue;
+            if(r.outside()&&level.rooms().stream().anyMatch(in->in.id()!=r.id()&&Math.abs(in.y()-deck)<.05&&mx>in.x0()&&mx<in.x1()&&mz>in.z0()&&mz<in.z1()
+                &&(!in.outside()||(in.x1()-in.x0())*(in.z1()-in.z0())<(r.x1()-r.x0())*(r.z1()-r.z0()))))continue;
+            if(ceiling&&level.rooms().stream().anyMatch(in->!in.outside()&&in.id()!=r.id()&&Math.abs(in.y()+in.height()-deck)<.05
+                &&in.x0()<=r.x0()&&in.x1()>=r.x1()&&in.z0()<=r.z0()&&in.z1()>=r.z1()
+                &&((in.x1()-in.x0())*(in.z1()-in.z0())>(r.x1()-r.x0())*(r.z1()-r.z0())+.01||in.id()<r.id())))continue;
+            int mat=ceiling?LevelMaterials.CEILING:LevelMaterials.floor(r);
+            if(ceiling)texturedQuad(out,new Point(x0,surface,z0),new Point(x1,surface,z0),new Point(x1,surface,z1),new Point(x0,surface,z1),mat,x0/4,z0/4,x1/4,z0/4,x1/4,z1/4,x0/4,z1/4,0xffffff);
+            else texturedQuad(out,new Point(x0,surface,z1),new Point(x1,surface,z1),new Point(x1,surface,z0),new Point(x0,surface,z0),mat,x0/4,z1/4,x1/4,z1/4,x1/4,z0/4,x0/4,z0/4,0xffffff);
+        }
+    }
     private static List<Face> buildLevelShell(HouseMap map){
         LevelDefinition level=map.level();List<Face> out=new ArrayList<>();
         for(var r:level.rooms()){
             List<Face> part=new ArrayList<>();
-            for(double zz=r.z0();zz<r.z1()-.01;zz+=1)for(double xx=r.x0();xx<r.x1()-.01;xx+=1){
-                double x1=Math.min(xx+1,r.x1()),z1=Math.min(zz+1,r.z1()),mx=(xx+x1)/2,mz=(zz+z1)/2;
-                boolean covered=r.outside()&&level.rooms().stream().anyMatch(in->!in.outside()&&mx>in.x0()&&mx<in.x1()&&mz>in.z0()&&mz<in.z1()&&Math.abs(in.y()-r.y())<.05);
-                if(!covered&&!level.floorVoid(mx,r.y(),mz))texturedQuad(part,new Point(xx,r.y(),zz),new Point(x1,r.y(),zz),new Point(x1,r.y(),z1),new Point(xx,r.y(),z1),LevelMaterials.floor(r),xx/4,zz/4,x1/4,zz/4,x1/4,z1/4,xx/4,z1/4,0xffffff);
-                double deck=r.y()+r.height();
-                if(!r.outside()&&!level.floorVoid(mx,deck,mz))texturedQuad(part,new Point(xx,deck-.04,z1),new Point(x1,deck-.04,z1),new Point(x1,deck-.04,zz),new Point(xx,deck-.04,zz),LevelMaterials.CONCRETE,xx/4,z1/4,x1/4,z1/4,x1/4,zz/4,xx/4,zz/4,0xc4bca8);
-            }
+            levelDeck(part,level,r,false);
+            if(!r.outside())levelDeck(part,level,r,true);
             if(!r.outside()){
                 levelWall(part,level,r,true,r.z0(),r.x0(),r.x1());
                 levelWall(part,level,r,true,r.z1(),r.x0(),r.x1());
@@ -978,29 +1018,49 @@ public final class SceneRenderer {
             List<Face> part=new ArrayList<>();double dx=(s.x1()-s.x0())/s.steps(),dz=(s.z1()-s.z0())/s.steps(),rise=(s.y1()-s.y0())/s.steps();
             for(int i=0;i<s.steps();i++){
                 double xx=s.x0()+dx*i,zz=s.z0()+dz*i,yy=s.y0()+rise*(i+1);
-                texturedBox(part,Math.min(xx,xx+dx)-(Math.abs(dz)>.001?s.width()/2:0),yy-rise,
-                    Math.min(zz,zz+dz)-(Math.abs(dx)>.001?s.width()/2:0),
-                    Math.abs(dx)>.001?Math.abs(dx):s.width(),rise,Math.abs(dz)>.001?Math.abs(dz):s.width(),LevelMaterials.WOOD);
+                double x0=Math.min(xx,xx+dx)-(Math.abs(dz)>.001?s.width()/2:0),z0=Math.min(zz,zz+dz)-(Math.abs(dx)>.001?s.width()/2:0);
+                double x1=x0+(Math.abs(dx)>.001?Math.abs(dx):s.width()),z1=z0+(Math.abs(dz)>.001?Math.abs(dz):s.width());
+                if(i==s.steps()-1)for(var hole:level.voids())if(Math.abs(hole.y()-s.y1())<.02&&hole.contains((x0+x1)/2,(z0+z1)/2)){
+                    x0=Math.max(x0,hole.x0());x1=Math.min(x1,hole.x1());z0=Math.max(z0,hole.z0());z1=Math.min(z1,hole.z1());
+                }
+                if(x1>x0&&z1>z0)texturedBox(part,x0,yy-rise,z0,x1-x0,rise,z1-z0,LevelMaterials.WOOD);
             }
             double length=Math.hypot(s.x1()-s.x0(),s.z1()-s.z0()),ox=-(s.z1()-s.z0())/length*s.width()/2,oz=(s.x1()-s.x0())/length*s.width()/2;
             levelRail(part,s.x0()+ox,s.y0(),s.z0()+oz,s.x1()+ox,s.y1(),s.z1()+oz);
             levelRail(part,s.x0()-ox,s.y0(),s.z0()-oz,s.x1()-ox,s.y1(),s.z1()-oz);
             own(out,part,s.a());
         }
+        for(var guard:level.guards()){
+            List<Face> part=new ArrayList<>();
+            levelRail(part,guard.x0(),guard.y(),guard.z0(),guard.x1(),guard.y(),guard.z1());
+            int owner=map.roomAt((guard.x0()+guard.x1())/2,guard.y(),(guard.z0()+guard.z1())/2);
+            own(out,part,owner<0?4:owner);
+        }
         if(map.site()==HouseMap.Site.HOUSE)houseExterior(out,level);
         else {
         // Roofs follow the actual upper footprint; pitched planes meet at a ridge.
-        for(var r:level.rooms())if(!r.outside()&&r.y()>=0&&level.rooms().stream().noneMatch(up->!up.outside()&&up.y()>r.y()&&up.x0()<r.x1()&&up.x1()>r.x0()&&up.z0()<r.z1()&&up.z1()>r.z0())){
+        for(var r:level.rooms())if(!r.outside()&&r.y()>=0&&level.rooms().stream().noneMatch(up->!up.outside()&&up.y()>r.y()
+                &&up.y()+up.height()>r.y()+r.height()+.05&&up.x0()<r.x1()&&up.x1()>r.x0()&&up.z0()<r.z1()&&up.z1()>r.z0())
+                &&level.rooms().stream().noneMatch(parent->!parent.outside()&&parent.id()!=r.id()&&parent.y()<r.y()
+                    &&parent.y()+parent.height()>=r.y()+r.height()-.05&&parent.x0()<=r.x0()&&parent.x1()>=r.x1()&&parent.z0()<=r.z0()&&parent.z1()>=r.z1())){
             double yy=r.y()+r.height(),mid=(r.x0()+r.x1())/2,peak=yy+Math.min(2,(r.x1()-r.x0())*.30);
+            // Eaves end at a taller adjoining volume, never through its interior wall.
+            double x0=r.x0()-(roofNeighbour(level,r,false,r.x0(),yy)?0:.28),x1=r.x1()+(roofNeighbour(level,r,false,r.x1(),yy)?0:.28);
+            double z0=r.z0()-(roofNeighbour(level,r,true,r.z0(),yy)?0:.3),z1=r.z1()+(roofNeighbour(level,r,true,r.z1(),yy)?0:.3);
             List<Face> roof=new ArrayList<>();
-            texturedQuad(roof,new Point(r.x0()-.28,yy,r.z0()-.3),new Point(mid,peak,r.z0()-.3),new Point(mid,peak,r.z1()+.3),new Point(r.x0()-.28,yy,r.z1()+.3),LevelMaterials.WOOD,0,0,1,0,1,3,0,3,0x9b9990);
-            texturedQuad(roof,new Point(mid,peak,r.z0()-.3),new Point(r.x1()+.28,yy,r.z0()-.3),new Point(r.x1()+.28,yy,r.z1()+.3),new Point(mid,peak,r.z1()+.3),LevelMaterials.WOOD,0,0,1,0,1,3,0,3,0x797e86);
+            texturedQuad(roof,new Point(x0,yy,z0),new Point(mid,peak,z0),new Point(mid,peak,z1),new Point(x0,yy,z1),LevelMaterials.WOOD,0,0,1,0,1,3,0,3,0x9b9990);
+            texturedQuad(roof,new Point(mid,peak,z0),new Point(x1,yy,z0),new Point(x1,yy,z1),new Point(mid,peak,z1),LevelMaterials.WOOD,0,0,1,0,1,3,0,3,0x797e86);
             quad(roof,new Point(r.x0(),yy,r.z0()),new Point(mid,peak,r.z0()),new Point(r.x1(),yy,r.z0()),new Point(r.x1(),yy,r.z0()),0x67645c);
             quad(roof,new Point(r.x1(),yy,r.z1()),new Point(mid,peak,r.z1()),new Point(r.x0(),yy,r.z1()),new Point(r.x0(),yy,r.z1()),0x67645c);
             own(out,roof,r.id());
         }
         }
         return List.copyOf(out);
+    }
+    private static boolean roofNeighbour(LevelDefinition level,LevelDefinition.Room r,boolean alongX,double plane,double y){
+        return level.rooms().stream().anyMatch(n->!n.outside()&&n.id()!=r.id()&&n.y()<y+.01&&n.y()+n.height()>y+.05
+            &&(alongX?((nearPlane(n.z0(),plane)||nearPlane(n.z1(),plane))&&n.x0()<r.x1()&&n.x1()>r.x0()):
+                ((nearPlane(n.x0(),plane)||nearPlane(n.x1(),plane))&&n.z0()<r.z1()&&n.z1()>r.z0())));
     }
     private void levelArchitecture(List<Face> out,HouseMap map){
         for(Face f:levelShells.computeIfAbsent(map.site(),s->buildLevelShell(map))){

@@ -21,8 +21,8 @@ public final class LanSoundTest {
         LanWorld.Body facingNorth=new LanWorld.Body(cx,cz,0,room);
         LanSound.CueEvent ahead=LanSound.project(map,facingNorth,room,cx,cz+1.5,LanSound.Cue.WHISPER,15);
         ok(ahead!=null&&ahead.pan()==0,"source ahead centered");
-        LanSound.CueEvent right=LanSound.project(map,facingNorth,room,cx+2,cz,LanSound.Cue.DISTURB,15);
-        LanSound.CueEvent left=LanSound.project(map,facingNorth,room,cx-2,cz,LanSound.Cue.DISTURB,15);
+        LanSound.CueEvent right=LanSound.project(map,facingNorth,room,cx-2,cz,LanSound.Cue.DISTURB,15);
+        LanSound.CueEvent left=LanSound.project(map,facingNorth,room,cx+2,cz,LanSound.Cue.DISTURB,15);
         ok(right!=null&&right.pan()==100&&left!=null&&left.pan()==-100,"listener-relative stereo pan");
         ok(map.roomAt(cx,cz)==room,"valid origin");
         ok(LanSound.project(map,facingNorth,HouseMap.EXTRACTION_ROOM,cx,cz,LanSound.Cue.WHISPER,0)==null,"safe van not valid ghost source");

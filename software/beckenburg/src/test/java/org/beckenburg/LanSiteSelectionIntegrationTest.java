@@ -22,13 +22,14 @@ public final class LanSiteSelectionIntegrationTest {
                 var frames=new LinkedBlockingQueue<String>();
                 try(LanClient client=new LanClient("127.0.0.1",host.port(),
                         false,"Map tester",frames::offer)){
-                    ok(waitFor(frames,"SITE|").equals("SITE|"+site.name()),
+                    String expected="SITE|"+site.name()+"|"+new HouseMap(site).level().revision();
+                    ok(waitFor(frames,"SITE|").equals(expected),
                         "remote hunter receives selected layout during admission");
                     client.ready();
                     client.start();
                     waitFor(frames,"INFO|mission started");
                     client.view3D();
-                    ok(waitFor(frames,"SITE|").equals("SITE|"+site.name()),
+                    ok(waitFor(frames,"SITE|").equals(expected),
                         "view activation replays the site for renderer and reconnect");
                     ok(new HouseMap(site).valid(),"host runs connected traversable site");
                 }

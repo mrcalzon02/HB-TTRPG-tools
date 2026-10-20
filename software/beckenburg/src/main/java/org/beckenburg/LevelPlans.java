@@ -51,7 +51,8 @@ public final class LevelPlans {
         b.door(10,11,18,-3,12.5,1.05,false);
         b.door(0,13,21,0,24,1.2,true); b.door(2,12,15,0,10,1.1,true);
         b.flight(4,5,22.5,15.6,22.5,20.4,0,3);
-        b.flight(9,4,19.5,20.4,19.5,15.6,-3,0);
+        // Keep the basement guard clear of the living-room door's approach.
+        b.flight(9,4,19.8,20.4,19.8,15.6,-3,0);
         b.window(1,12,12,0,20,false); b.window(2,12,12,0,13,false);
         b.window(3,12,21,0,10,true); b.window(0,13,23,0,24,true);
         b.window(6,12,12,3,20,false); b.window(7,12,15,3,10,true);
@@ -129,7 +130,7 @@ public final class LevelPlans {
         b.door(0,1,20,0,24,1.1,false);b.door(1,2,16,0,19,1.1,true);
         b.door(2,3,20,0,13.5,1.1,false);b.door(3,4,21.5,0,15,1.1,true);
         b.door(4,0,21.5,0,22,1.25,true);b.door(5,6,20,3,23,1.05,false);
-        b.door(5,7,20,3,18.5,1.05,false);
+        b.door(5,7,20,3,18.2,1.05,false);
         b.door(0,12,23,0,27,1.2,true);b.door(2,12,16,0,12,1.1,true);
         b.door(10,12,31,0,16,2.4,false);b.door(11,12,31,0,27,1.3,false);
         b.flight(4,5,24.5,16.1,24.5,20.9,0,3);
@@ -197,8 +198,8 @@ public final class LevelPlans {
             b.floorProp("chair_mp_5",3,x+.76,z,1,Math.PI/2,.258,.281,1.01);
         }
         b.prop("level_blackboard",3,10.015,.8,21,1,-Math.PI/2,1.26,.11,1.35,"wall");
-        for(double z:new double[]{23,26.3,34.6})b.floorProp("level_lockers",7,20.25,z,1,-Math.PI/2,1.213,.285,1.868);
-        for(double z:new double[]{16,22,35})b.floorProp("level_lockers",7,27.75,z,1,Math.PI/2,1.213,.285,1.868);
+        for(double z:new double[]{23,26.3,34.6})b.floorProp("level_lockers",7,20.33,z,1,-Math.PI/2,1.213,.285,1.868);
+        for(double z:new double[]{16,22,35})b.floorProp("level_lockers",7,27.67,z,1,Math.PI/2,1.213,.285,1.868);
         b.prop("level_basketball_hoop",6,45.985,3.4,16,1,Math.PI/2,0,0,1.295,"wall");
         b.colliders.add(new Collider(45.535,2.63,16,.9,.45,1.295,Math.PI/2));
         for(int row=0;row<3;row++)for(int col=0;col<4;col++)
@@ -250,9 +251,14 @@ public final class LevelPlans {
         }
         void outdoors(double x0,double z0,double x1,double front,double apron,double end,String rear,String entry){
             r(rear,x0,z0,x1,front,0,12,"earth",x0+2,z0+3);
-            r(entry,x0,front,x1,apron,0,12,"stone",(x0+x1)/2,(front+apron)/2);
-            r("Van staging",x0,apron,x1,end,0,12,"asphalt",(x0+x1)/2,apron+6);
-            portal(12,13,x0+2,0,front,3,true,"open");portal(13,14,(x0+x1)/2,0,apron,5,true,"open");
+            double vanX=Math.max(22,(x0+x1)/2);
+            // The shared road extends twenty metres behind the cargo sill.
+            // Ground support is exterior approach, not the van's ghost-safe interior.
+            r(entry,Math.min(x0,vanX-21),front,x1,Math.max(end,apron+13.4),0,12,"stone",(x0+x1)/2,(front+apron)/2);
+            r("Van cargo interior",vanX+VanStaging.FRONT,apron+6-VanStaging.HALF_WIDTH,
+                vanX+VanStaging.REAR,apron+6+VanStaging.HALF_WIDTH,0,VanStaging.INTERIOR_HEIGHT,"asphalt",vanX,apron+6);
+            portal(12,13,x0+2,0,front,3,true,"open");
+            portal(13,14,vanX+VanStaging.FRONT,0,apron+6,VanStaging.HALF_WIDTH*2-.3,false,"open");
         }
         void portal(int a,int b,double x,double y,double z,double w,boolean alongX,String kind){
             portals.add(new Portal(portals.size(),a,b,x,y,z,w,alongX,kind,kind.equals("window")?3:kind.equals("stair")?1.2:1));
@@ -265,8 +271,22 @@ public final class LevelPlans {
             voids.add(new LevelDefinition.Void(y1,Math.min(x0,x1)-ex,Math.min(z0,z1)+ez,Math.max(x0,x1)+ex,Math.max(z0,z1)-ez));
             portal(a,b,x0,y0,z0,1.5,Math.abs(x1-x0)<.01,"stair");
         }
-        void socket(String type,int room,double x,double y,double z,double yaw,String style){sockets.add(new Socket(id+"-"+type+"-"+room+"-"+sockets.size(),type,room,x,y,z,yaw,style));}
+        void socket(String type,int room,double x,double y,double z,double yaw,String style){
+            if(type.equals("switch")||type.equals("breaker")){
+                Room r=rooms.get(room);double inset=LevelDefinition.WALL_HALF_THICKNESS+.005;
+                if(Math.abs(x-r.x0())<.15)x=r.x0()+inset;else if(Math.abs(x-r.x1())<.15)x=r.x1()-inset;
+                if(Math.abs(z-r.z0())<.15)z=r.z0()+inset;else if(Math.abs(z-r.z1())<.15)z=r.z1()-inset;
+            }
+            if(style.equals("porch")&&id.equals("house"))z=24.12;
+            sockets.add(new Socket(id+"-"+type+"-"+room+"-"+sockets.size(),type,room,x,y,z,yaw,style));
+        }
         void prop(String mesh,int r,double x,double y,double z,double s,double yaw,double hx,double hz,double h,String support){
+            if(support.equals("wall")){
+                Room wall=rooms.get(r);double inset=LevelDefinition.WALL_HALF_THICKNESS+.005;
+                if(Math.abs(x-wall.x0())<.15)x=wall.x0()+inset;else if(Math.abs(x-wall.x1())<.15)x=wall.x1()-inset;
+                if(Math.abs(z-wall.z0())<.15)z=wall.z0()+inset;else if(Math.abs(z-wall.z1())<.15)z=wall.z1()-inset;
+            }
+            if(mesh.equals("carpet_mp_1"))y+=.008;
             props.add(new Prop(mesh,r,x,y,z,s,yaw,hx,hz,h,support));
         }
         void floorProp(String mesh,int ri,double x,double z,double s,double yaw,double hx,double hz,double h){prop(mesh,ri,x,rooms.get(ri).y(),z,s,yaw,hx,hz,h,"floor");}
@@ -302,7 +322,7 @@ public final class LevelPlans {
                 }else{
                     floorProp("dinner_table_1",i,x+.5,z+.5,1,0,.85,.55,.86);
                     floorProp("chair_mp_5",i,x+.5,z+1.5,1,0,.32,.34,.95);
-                    prop("book_mp_1",i,x+.5,y+.87,z+.5,1,0,0,0,.1,"dinner_table_1");
+                    prop("book_mp_2",i,x+.5,y+.87,z+.5,1,0,0,0,.1,"dinner_table_1");
                     if(n.contains("library")||n.contains("archive")||n.contains("stacks")||n.contains("office"))
                         floorProp("shelf_mp_6",i,r.x1()-1.5,r.z0()+.16,1,0,.41,.11,1.29);
                 }
@@ -330,7 +350,7 @@ public final class LevelPlans {
             int[] ritualRooms={main,(main+3)%12,12};String[] rites={"banishment","cleansing","absolution"};
             for(int i=0;i<3;i++){Room r=rooms.get(ritualRooms[i]);socket("ritual",r.id(),r.cx(),r.y(),r.cz(),0,rites[i]);}
             for(Prop p:props)if(p.halfX()>0&&p.halfZ()>0){double off=originOffsetZ(p);colliders.add(new Collider(p.x()-Math.sin(p.yaw())*off,p.y(),p.z()+Math.cos(p.yaw())*off,p.halfX(),p.halfZ(),p.height(),p.yaw()));}
-            Room van=rooms.get(14);return new LevelDefinition(id,"production-2026-10-19",title,rooms,portals,stairs,voids,props,sockets,colliders,new Dock(van.cx(),0,van.z0()+6,-Math.PI/2),ambience);
+            Room van=rooms.get(14);return new LevelDefinition(id,"production-2026-10-19",title,rooms,portals,stairs,voids,props,sockets,colliders,new Dock(van.cx(),0,van.cz(),-Math.PI/2),ambience);
         }
         private boolean circulation(Prop p,double x,double z){
             Room r=rooms.get(p.room());double hx=Math.abs(Math.cos(p.yaw()))*p.halfX()+Math.abs(Math.sin(p.yaw()))*p.halfZ();
@@ -354,7 +374,7 @@ public final class LevelPlans {
             List<Prop> result=new ArrayList<>();
             for(Prop p:props){
                 if(p.support().equals("wall")){result.add(p);continue;} // Authored back mounting plane stays flush.
-                if(p.halfX()==0||p.halfZ()==0){result.add(p);continue;}
+                if(p.support().equals("wall")||p.halfX()==0||p.halfZ()==0){result.add(p);continue;}
                 Prop chosen=p;
                 if(!circulation(p,p.x(),p.z())||overlap(p,result)){
                     Room r=rooms.get(p.room());double distance=Double.MAX_VALUE;Prop candidate=null;
@@ -382,7 +402,11 @@ public final class LevelPlans {
                 if(Math.abs(q.x()-Math.sin(q.yaw())*originOffsetZ(q)-p.x()+Math.sin(p.yaw())*originOffsetZ(p))<hx+qx+.12&&Math.abs(q.z()+Math.cos(q.yaw())*originOffsetZ(q)-p.z()-Math.cos(p.yaw())*originOffsetZ(p))<hz+qz+.12)return true;
             }return false;
         }
-        private double originOffsetZ(Prop p){return switch(p.mesh()){case "sofa_1"->.4975*p.scale();case "armchair_1"->.495*p.scale();case "tv_table_1_4"->-.05*p.scale();case "level_lockers"->.045*p.scale();case "level_blackboard"->.11*p.scale();default->0;};}
+        private double originOffsetZ(Prop p){return switch(p.mesh()){
+            case "sofa_1"->.4975*p.scale();case "armchair_1"->.495*p.scale();
+            case "tv_table_1_4"->-.05*p.scale();case "level_blackboard"->.11*p.scale();
+            case "level_lockers"->.045*p.scale();default->0;};}
+
         private void installSwitch(int ri){
             Room r=rooms.get(ri);double best=-1;double[] selected=null;
             // The foyer jamb is reached below the upper flight (2.86m head clearance).

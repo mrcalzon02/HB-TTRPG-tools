@@ -27,7 +27,7 @@ public final class LanWorldRenderTest {
         ok(map.openDoorBetweenRooms(4,3),"host opens real parlour doorway");
         HouseMap remote=new HouseMap();
         remote.applyDoorSnapshot(map.doorSnapshot());
-        ok(remote.doorOpen(18,30),"remote door state appears at architectural socket");
+        ok(remote.doorOpen(AuthoredTestSupport.door(remote,4,3).id()),"remote door state appears at architectural socket");
         System.out.println("PASS: network first-person rendering includes 3D teammates, disclosed ghost and synced physical doors");
     }
 }

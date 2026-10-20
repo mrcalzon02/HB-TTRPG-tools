@@ -19,7 +19,7 @@ public final class LanClientDisconnectTest {
             Thread server=new Thread(()->{
                 try(Socket accepted=listener.accept()){
                     LanProtocol.read(LanProtocol.reader(accepted.getInputStream()));
-                    LanProtocol.write(LanProtocol.writer(accepted.getOutputStream()),"WELCOME|H1|1");
+                    LanProtocol.write(LanProtocol.writer(accepted.getOutputStream()),"WELCOME|H1|"+LanProtocol.VERSION);
                     // Closing the stream without malformed bytes is a clean EOF.
                 }catch(Throwable failure){problem.set(failure);}
             },"beckenburg-eof-test-server");
@@ -38,7 +38,7 @@ public final class LanClientDisconnectTest {
             Thread server=new Thread(()->{
                 try(Socket accepted=listener.accept()){
                     LanProtocol.read(LanProtocol.reader(accepted.getInputStream()));
-                    LanProtocol.write(LanProtocol.writer(accepted.getOutputStream()),"WELCOME|H1|1");
+                    LanProtocol.write(LanProtocol.writer(accepted.getOutputStream()),"WELCOME|H1|"+LanProtocol.VERSION);
                     release.await(3,TimeUnit.SECONDS);
                 }catch(Throwable failure){problem.set(failure);}
             },"beckenburg-local-close-test-server");
