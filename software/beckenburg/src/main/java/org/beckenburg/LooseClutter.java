@@ -75,7 +75,7 @@ public final class LooseClutter {
         double best=2.0;State result=null;
         for(Item i:items)if(i.holder==-1){
             double dx=i.x-o.x,dy=i.y-o.y-1.62,dz=i.z-o.z,d=Math.sqrt(dx*dx+dy*dy+dz*dz);
-            double dot=dx*(-Math.sin(o.yaw)*Math.cos(o.pitch))+dy*Math.sin(o.pitch)+dz*Math.cos(o.yaw)*Math.cos(o.pitch);
+            double dot=dx*(Math.sin(o.yaw)*Math.cos(o.pitch))+dy*Math.sin(o.pitch)+dz*Math.cos(o.yaw)*Math.cos(o.pitch);
             if(d<best&&dot>0&&dot/d>.91&&map.clearLineOfSight(o.x,o.y+1.62,o.z,i.x,i.y,i.z)){best=d;result=i.state();}
         }return result;
     }
@@ -92,18 +92,39 @@ public final class LooseClutter {
             else if(action.equals("DROP")||action.equals("THROW")){
                 carry(i,o);i.holder=-1;i.thrower=o.seat;i.immunity=5;i.armed=false;
                 double speed=action.equals("THROW")?6:0;
-                i.vx=-Math.sin(o.yaw)*Math.cos(o.pitch)*speed;i.vz=Math.cos(o.yaw)*Math.cos(o.pitch)*speed;i.vy=Math.sin(o.pitch)*speed;
+                i.vx=Math.sin(o.yaw)*Math.cos(o.pitch)*speed;i.vz=Math.cos(o.yaw)*Math.cos(o.pitch)*speed;i.vy=Math.sin(o.pitch)*speed;
                 i.spin=action.equals("THROW")?4:0;
             }else throw new IllegalArgumentException("invalid clutter action");
         }last[o.seat]=tick;
     }
     private void carry(Item i,Observer o){
-        double x=o.x-Math.sin(o.yaw)*.62,z=o.z+Math.cos(o.yaw)*.62,y=o.y+1.35;
+        double x=o.x+Math.sin(o.yaw)*.62,z=o.z+Math.cos(o.yaw)*.62,y=o.y+1.35;
         if(map.clearLineOfSight(o.x,o.y+1.35,o.z,x,y,z)){i.x=x;i.y=y;i.z=z;}
         else{i.x=o.x;i.y=y;i.z=o.z;}
     }
-    /** Accepted DISTURB only. Held possessions are never stolen; no object means no projectile. */
-    public synchronized int barrage(int room,List<Observer> observers){
+    /** Shared solo/host rule: sanity events fling props; only a poltergeist DISTURB aims armed throws. */
+    public synchronized int haunt(GhostIdentity.Type type,GhostDomain.Resolution event,List<Observer> observers,int tick){
+        Objects.requireNonNull(type);Objects.requireNonNull(event);
+        if(!event.applied())return 0;
+        return switch(event.action()){
+            case DISTURB -> type.baseType()==GhostIdentity.Type.POLTERGEIST
+                ?barrage(event.room(),observers):sanityScatter(event.room(),tick);
+            case MANIFEST,SIGNATURE -> sanityScatter(event.room(),tick);
+            default -> 0;
+        };
+    }
+    /** Environmental sanity flings never acquire a player or arm collision damage, including DREAD. */
+    public synchronized int sanityScatter(int room,int tick){
+        Random random=new Random(0x53414e495459L+31L*tick+997L*room);int count=0;
+        for(Item i:items)if(i.holder==-1&&!i.armed&&map.roomAt(i.x,i.y-i.extent(),i.z)==room){
+            double angle=random.nextDouble()*Math.PI*2,speed=2.8+random.nextDouble()*2;
+            i.vx=Math.cos(angle)*speed;i.vz=Math.sin(angle)*speed;i.vy=2.4+random.nextDouble()*1.4;
+            i.armed=false;i.thrower=-1;i.immunity=0;i.spin=3+random.nextDouble()*3;
+            if(++count==3)break;
+        }return count;
+    }
+    /** Only haunt's species-checked path can arm props. Held possessions are never stolen. */
+    private int barrage(int room,List<Observer> observers){
         int count=0;
         for(Item i:items)if(i.holder==-1&&!i.armed&&map.roomAt(i.x,i.y-i.extent(),i.z)==room){
             Observer target=null;double distance=Double.POSITIVE_INFINITY;

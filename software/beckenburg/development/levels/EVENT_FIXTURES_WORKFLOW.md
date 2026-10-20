@@ -23,3 +23,13 @@ Six original CC0 model families: rotary telephone with attached handset/coil cor
 ## Current implementation and limits
 
 Both fixture and physical-object gates pass, including actual socket requests. These are functional room events with mounted models, state, audio and player controls. The sink has a bounded fill/drain surface; overflow, plumbing simulation and flooding are outside this implementation. Phone receivers, clock bells and cassette lids are not separate pickup parts. Further interactive Windows playthrough and target-resolution performance remain distinct from automated checks and inspection captures. The full installer regression gate has separately documented historical failures.
+
+## Sanity-event object rule and preview lesson
+
+All ghost species may fling loose objects for sanity events. Those flings never acquire a player or arm contact damage; only poltergeist disturbances use targeted, damaging projectiles. Frenzy DREAD also produces harmless scatter. Generic disturbance room damage was removed, so a demon cannot bypass the physical rule. Both controller origins use the same path.
+
+Review actual game-camera images before accepting captures. A view-yaw sign mismatch initially faced away from the devices despite shared-helper tests passing. Fixture aim and loose-object forward vectors now match positive-sine camera X. Capture from a reachable position facing each model's authored front, then inspect the resulting image. Mesh yaw and view yaw have separate conventions.
+
+## Final behavior checkpoint
+
+18/18 focused checks pass, including harmless body contact for every ghost variant and real socket pickup/device use. Expanded compatibility: 30/32 pass; the two failures are previously audited GhostDomainTest (old adjacency expectation) and AncientGhostVariantsTest (duplicate evidence signature), outside this environment change. Their actual current outputs are retained. Four public CC0 libraries, 70 individual GLBs, four ZIPs and seven sound/data extras were downloaded and hash-checked from the live site at asset checkpoint `e70088d6`. Remaining closeout: record final scene/image hashes, commit the reviewed Blender sources/gallery and verify the final remote checkpoint.

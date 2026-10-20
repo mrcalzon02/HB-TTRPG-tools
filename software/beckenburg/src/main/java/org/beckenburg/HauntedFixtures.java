@@ -53,7 +53,7 @@ public final class HauntedFixtures {
     public synchronized State aimed(double x,double y,double z,double yaw,double pitch){
         State result=null;double best=1.9;
         for(var f:fixtures){double dx=f.x-x,dz=f.z-z,dy=f.y+.10-y-1.62,d=Math.sqrt(dx*dx+dy*dy+dz*dz);
-            double dot=dx*(-Math.sin(yaw)*Math.cos(pitch))+dy*Math.sin(pitch)+dz*Math.cos(yaw)*Math.cos(pitch);
+            double dot=dx*(Math.sin(yaw)*Math.cos(pitch))+dy*Math.sin(pitch)+dz*Math.cos(yaw)*Math.cos(pitch);
             if(d<best&&dot>0&&dot/d>.88&&map.clearLineOfSight(x,y+1.62,z,f.x,f.y+.10,f.z)){result=f.state();best=d;}}
         return result;
     }

@@ -17,7 +17,7 @@ public final class LooseClutterNetworkTest {
                 if(map.traversable(x,room.y(),z)&&map.clearObjectPath(x,room.y()+1.1,z,x+.8,room.y()+1.1,z,.1,.06)){at=new Vec(x,room.y(),z);break outer;}
             LooseClutterTest.check(at!=null,"reachable wire fixture");
             synchronized(field(host,"mutex")){
-                AuthoredTestSupport.place(map,world,0,at);AuthoredTestSupport.place(map,world,1,at);world.turn(0,270);world.turn(1,270);
+                AuthoredTestSupport.place(map,world,0,at);AuthoredTestSupport.place(map,world,1,at);world.turn(0,90);world.turn(1,90);
                 ((int[])field(host,"hunterRooms"))[0]=3;((int[])field(host,"hunterRooms"))[1]=3;
                 map.clutter().accept(LooseClutterTest.row(1,LooseClutter.Kind.MUG,at.x()+.7,at.y()+1.1,at.z()));
             }

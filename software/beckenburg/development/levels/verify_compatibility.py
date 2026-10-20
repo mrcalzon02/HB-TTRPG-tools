@@ -3,7 +3,7 @@ Run verify_levels.py first. This does not replace the complete game release gate
 """
 import argparse,json,os,pathlib,subprocess,time
 ROOT=pathlib.Path(__file__).resolve().parents[2]
-CHECKS=['HorrorAudioRoutingTest','InvestigationSitesTest','ArchitecturalPlansTest',
+CHECKS=['GhostDomainTest','GhostFrenzyTest','GhostBehaviorTest','GhostTraitsTest','AncientGhostVariantsTest','HorrorAudioRoutingTest','InvestigationSitesTest','ArchitecturalPlansTest',
         'VictorianHouseArchitectureTest','GrandSiteGeometryTest','LanSiteSelectionIntegrationTest',
         'SoloEnvironmentalEvidenceTest','LanClientDisconnectTest','LanGracefulLeaveTest',
         'LanWorldRenderTest','LanSoundTest','LanGhostHearingTest','VanStagingTest',

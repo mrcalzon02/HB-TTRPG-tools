@@ -4,11 +4,11 @@ import java.util.*;
 public final class HauntedFixturesTest {
     static LooseClutter.Observer operator(HouseMap map,HauntedFixtures.State f){
         var r=map.level().room(f.room());
-        for(double d:new double[]{.7,1,1.4})for(int n=0;n<24;n++){
+        for(double d:new double[]{1,1.4,.7})for(int n=0;n<24;n++){
             double x=f.x()+Math.cos(n*Math.PI/12)*d,z=f.z()+Math.sin(n*Math.PI/12)*d;
             if(map.roomAt(x,r.y(),z)!=r.id()||!map.traversable(x,r.y(),z))continue;
             double dx=f.x()-x,dz=f.z()-z;
-            var o=new LooseClutter.Observer(0,x,r.y(),z,Math.atan2(-dx,dz),Math.atan2(f.y()+.1-r.y()-1.62,Math.hypot(dx,dz)),true);
+            var o=new LooseClutter.Observer(0,x,r.y(),z,Math.atan2(dx,dz),Math.atan2(f.y()+.1-r.y()-1.62,Math.hypot(dx,dz)),true);
             var aimed=map.fixtures().aimed(x,r.y(),z,o.yaw(),o.pitch());if(aimed!=null&&aimed.id()==f.id())return o;
         }throw new AssertionError("No real reachable operating point: "+map.site()+" "+f.kind()+" room "+r.name());
     }

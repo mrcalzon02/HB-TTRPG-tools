@@ -1595,10 +1595,7 @@ public final class LanHost implements AutoCloseable {
     private void resolveGhostAction(GhostDomain.Resolution result,int requestedDevice){
         if(!result.applied())return;
         map.fixtures().witness(result,tick,requestedDevice);
-        if(result.action()==GhostDomain.Action.DISTURB&&ghostType.baseType()==GhostIdentity.Type.POLTERGEIST){
-            map.clutter().barrage(result.room(),clutterObservers());
-            result=new GhostDomain.Resolution(true,result.reason(),result.action(),result.room(),result.energy(),result.fear(),0,result.manifested());
-        }
+        map.clutter().haunt(ghostType,result,clutterObservers(),tick);
         int eventPower=switch(result.action()){
             case WHISPER->3;case DISTURB->8;case MANIFEST->9;
             case STRIKE,SIGNATURE->10;case DRIFT->0;
@@ -1827,6 +1824,7 @@ public final class LanHost implements AutoCloseable {
         if(seat<0)return false;
         GhostDomain.Resolution effect=frenzy.attack(attack,tick,seat,ghost.room(),ghost);
         if(effect==null)return false;
+        if(attack==GhostFrenzy.Attack.DREAD)map.clutter().sanityScatter(effect.room(),tick);
         boolean[] one=new boolean[HUNTERS];one[seat]=true;
         distributeEffect(effect,one);
         broadcastGhostSound(attack==GhostFrenzy.Attack.CLAW

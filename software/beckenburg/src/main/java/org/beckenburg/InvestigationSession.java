@@ -219,9 +219,8 @@ public final class InvestigationSession {
                     log("An indistinct whisper moves through "+map.roomName(playerRoom)+".");
                 if(playerRoom==result.room() && result.action()==GhostDomain.Action.DISTURB)
                     log("Loose objects shudder in "+map.roomName(playerRoom)+".");
-                if(result.action()==GhostDomain.Action.DISTURB&&ghost.type().baseType()==GhostIdentity.Type.POLTERGEIST)
-                    map.clutter().barrage(result.room(),List.of(clutterObserver));
-                if(result.harm()>0&&!hidden&&!(result.action()==GhostDomain.Action.DISTURB&&ghost.type().baseType()==GhostIdentity.Type.POLTERGEIST)) {
+                map.clutter().haunt(ghost.type(),result,List.of(clutterObserver),ticks);
+                if(result.harm()>0&&!hidden) {
                     int wound=prepared?Math.min(result.harm(),4):role==Role.CLERIC?Math.min(result.harm(),8):result.harm();
                     health=Math.max(0,health-wound);
                     log("A spectral strike! -"+wound+" health. Retreat, or use protective wards.");
