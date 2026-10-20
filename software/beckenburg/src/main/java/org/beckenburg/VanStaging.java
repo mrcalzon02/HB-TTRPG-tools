@@ -19,7 +19,7 @@ public final class VanStaging {
     public enum Station {
         BRIEFING("Contract / daily task boards", .45, 2.13),
         EQUIPMENT("Equipment rack", -.86, -1.35),
-        RELAY("Sanity / activity monitors", 1.05, .55),
+        RELAY("Sanity / activity monitors", .81, .55),
         EXTRACTION("Extraction console", .78, 2.13);
         public final String label;
         final double dx, dz;
