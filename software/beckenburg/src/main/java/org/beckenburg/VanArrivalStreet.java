@@ -87,6 +87,25 @@ public final class VanArrivalStreet {
     public static boolean sidewalk(RoadTile tile){
         return tile.mesh().equals("kenney_road_asphalt_side");
     }
+    /** Return the ACTUAL original Kenney source material for the requested
+     * physical surface. The mixed-height mesh is deliberately not instanced:
+     * otherwise raised sidewalk endcaps repeat every few metres across the
+     * carriageway. Material indices preserve original embedded albedo and UVs.
+     */
+    public static int surfaceMaterial(boolean sidewalk){
+        for(GlbProps.Triangle tri:GlbProps.model("kenney_road_asphalt_straight").triangles()){
+            double expected=sidewalk?.05:0;
+            if(Math.abs(tri.a().y()-expected)>.001 ||
+                Math.abs(tri.b().y()-expected)>.001 ||
+                Math.abs(tri.c().y()-expected)>.001)continue;
+            if(!sidewalk && (Math.abs(tri.a().z())>.501 ||
+                Math.abs(tri.b().z())>.501 ||
+                Math.abs(tri.c().z())>.501))continue;
+            if(tri.material()>=GlbProps.TEXTURE_BASE)return tri.material();
+        }
+        throw new IllegalStateException("Kenney original road "+(sidewalk?"concrete":"asphalt")+
+            " material not found; do not substitute a solid-color box");
+    }
     public static List<RoadTile> tiles(){return TILES;}
     public static List<RoadObject> parkedVehicles(){return PARKED;}
     public static boolean onStreet(double localX,double localZ){
