@@ -33,8 +33,9 @@ public final class SoloElevationTest {
             check(!ritual.cleanse(anchor.x(),0,anchor.z()),site+" ritual cannot hit upstairs anchor through floor");
             check(ritual.placeWard(anchor.x(),anchor.y(),anchor.z())&&ritual.wardPrepared(),site+" upstairs ward attaches to upstairs anchor");
             check(ritual.cleanse(anchor.x(),anchor.y(),anchor.z()),site+" upstairs rite can complete");
-            var van=map.van().spawn();double dockY=map.level().dock().y();
+            var van=map.van().spawn();double dockY=map.floorY(HouseMap.EXTRACTION_ROOM);
             check(!ritual.extract(van.x(),dockY+3,van.z()),site+" extraction rejects another storey");
+            check(!ritual.extract(van.x(),0,van.z()),site+" extraction rejects ground beneath raised deck");
             check(ritual.extract(van.x(),dockY,van.z()),site+" correct extraction remains usable");
             var console=map.van().location(VanStaging.Station.EXTRACTION);
             check(ritual.extract(console.x(),dockY,console.z()),site+" physical console works at actual van dock");

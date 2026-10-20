@@ -18,7 +18,7 @@ public final class InvestigationSitesTest {
    }
    AuthoredTestSupport.check(map.level().props().size()>=20&&meshes.size()>=6,"diverse source furnishings "+site);
    for(var room:map.level().rooms()){var p=room.spawn();AuthoredTestSupport.check(map.roomAt(p.x(),p.y(),p.z())==room.id()&&map.traversable(p.x(),p.y(),p.z()),"clear owned spawn "+site+"/"+room.name());}
-   var van=map.level().dock();AuthoredTestSupport.check(map.roomAt(van.x(),van.y(),van.z())==14,"site-specific extraction dock");
+   var van=map.level().dock();AuthoredTestSupport.check(map.roomAt(van.x(),map.floorY(14),van.z())==14,"site-specific extraction dock");
    AuthoredTestSupport.check(revisions.add(map.level().revision()),"distinct authored locations");
   }
   System.out.println("PASS production house/farm/school source furnishings, gear exclusion, owned spawns and ritual sockets");

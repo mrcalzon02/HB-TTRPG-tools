@@ -41,3 +41,7 @@ The first text/reference pass could not retrieve the linked photographs through 
 The earlier LOC report screenshot requests still failed; those report pages are text-inspected only. Approved local concept boards and original local PSX texture/preview images were also visually inspected directly.
 
 No external reference photo has been copied into game textures. Original purchased-pack UV textures remain associated with their actual source meshes; external historical references guide building logic and furnishing choices only.
+
+## Investigation van scale reference
+
+[Ford Transit manufacturer dimensions](https://www.ford.co.uk/content/dam/guxeu/uk/documents/brochures/cars/BRO-transit_van_25.5MY.pdf) were read for the L4/H3 load-space dimensional table: 4.256m cargo length and 1.784m maximum load width. They guide the original game van's real-metre envelope and human reach/clearance. No manufacturer artwork or photographs are included in the game. See `VAN_REFIT_WORKFLOW.md` for the measured layout and validation process.

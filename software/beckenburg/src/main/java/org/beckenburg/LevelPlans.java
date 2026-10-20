@@ -256,7 +256,7 @@ public final class LevelPlans {
             // Ground support is exterior approach, not the van's ghost-safe interior.
             r(entry,Math.min(x0,vanX-21),front,x1,Math.max(end,apron+13.4),0,12,"stone",(x0+x1)/2,(front+apron)/2);
             r("Van cargo interior",vanX+VanStaging.FRONT,apron+6-VanStaging.INTERIOR_HALF_WIDTH,
-                vanX+VanStaging.REAR,apron+6+VanStaging.INTERIOR_HALF_WIDTH,0,VanStaging.INTERIOR_HEIGHT,"asphalt",vanX,apron+6);
+                vanX+VanStaging.REAR,apron+6+VanStaging.INTERIOR_HALF_WIDTH,VanStaging.FLOOR_Y,VanStaging.INTERIOR_HEIGHT,"asphalt",vanX,apron+6);
             portal(12,13,x0+2,0,front,3,true,"open");
             portal(13,14,vanX+VanStaging.FRONT,0,apron+6,VanStaging.INTERIOR_HALF_WIDTH*2-.3,false,"open");
         }
@@ -354,7 +354,7 @@ public final class LevelPlans {
             // Choose the aged skin after placement/support/collision are finalized.
             // Clean library assets remain available without changing any geometry.
             props.replaceAll(p->new Prop(LivedAssets.worn(p.mesh()),p.room(),p.x(),p.y(),p.z(),p.scale(),p.yaw(),p.halfX(),p.halfZ(),p.height(),LivedAssets.worn(p.support())));
-            Room van=rooms.get(14);return new LevelDefinition(id,"production-2026-10-20-physical-events-v2",title,rooms,portals,stairs,voids,props,sockets,colliders,new Dock(van.cx(),0,van.cz(),-Math.PI/2),ambience);
+            Room van=rooms.get(14);return new LevelDefinition(id,"production-2026-10-20-van-human-scale-v1",title,rooms,portals,stairs,voids,props,sockets,colliders,new Dock(van.cx(),0,van.cz(),-Math.PI/2),ambience);
         }
         boolean circulation(Prop p,double x,double z){
             Room r=rooms.get(p.room());double hx=Math.abs(Math.cos(p.yaw()))*p.halfX()+Math.abs(Math.sin(p.yaw()))*p.halfZ();

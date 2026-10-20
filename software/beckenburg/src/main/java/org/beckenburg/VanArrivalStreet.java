@@ -66,19 +66,19 @@ public final class VanArrivalStreet {
         // and 16 separately raised sidewalk panels (2.1 x 2.0 metres).
         // SceneRenderer uses the appropriate original Kenney GLB MATERIAL
         // on a continuous plane, never its mixed-height source geometry.
-        for(int row=0;row<4;row++){
-            double centreZ=ROAD_START-2.0-row*4.0;
+        for(double end=ROAD_START;end>ROAD_END+.001;end-=4){
+            double length=Math.min(4,end-ROAD_END),centreZ=end-length/2;
             for(int col=0;col<4;col++){
                 double centreX=-ROAD_HALF_WIDTH+1.05+col*2.10;
                 tiles.add(new RoadTile("kenney_road_asphalt_straight",
-                    centreX,centreZ,2.10,4.0));
+                    centreX,centreZ,2.10,length));
             }
         }
         for(int side:new int[]{-1,1})
-            for(int section=0;section<8;section++)
+            for(double end=ROAD_START;end>ROAD_END+.001;end-=2)
                 tiles.add(new RoadTile("kenney_road_asphalt_side",
                     side*(ROAD_HALF_WIDTH+1.05),
-                    ROAD_START-1.0-section*2.0,2.10,2.0));
+                    end-Math.min(2,end-ROAD_END)/2,2.10,Math.min(2,end-ROAD_END)));
         return List.copyOf(tiles);
     }
     /** Everything below is a true road surface or a raised footpath,

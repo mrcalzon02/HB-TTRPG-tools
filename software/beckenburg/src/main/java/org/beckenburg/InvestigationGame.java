@@ -489,7 +489,7 @@ public final class InvestigationGame {
             callouts=new TeamCallout.Board(map);
             location=site;conditions=java.util.Objects.requireNonNull(mode);
             scene.x=map.van().placement().x();scene.z=map.van().placement().z();
-            scene.eyeHeight=map.level().dock().y()+1.62;
+            scene.eyeHeight=map.floorY(HouseMap.EXTRACTION_ROOM)+1.62;
             powerOn=conditions.initiallyPowered();
             syncEnvironment();
             setFocusable(true);
@@ -508,13 +508,14 @@ public final class InvestigationGame {
             scene.roomLights=lights;
             scene.roomLightTick=0;
             scene.rackStock=profile.equipment();
+            scene.rackInventory=VanRackStock.solo(profile,loadout);
             scene.draw(map,session,0);
             timer=new javax.swing.Timer(33,e->frame());timer.start();
         }
         void close(){timer.stop();down.clear();wheelOpen=false;mouseLook.close();atmosphere.close();buildingSoundscape.close();}
         private double feetY(){return scene.eyeHeight-1.62;}
         private int currentRoom(){return map.roomAt(scene.x,feetY(),scene.z);}
-        private boolean atVanFloor(){return Math.abs(feetY()-map.level().dock().y())<.25;}
+        private boolean atVanFloor(){return Math.abs(feetY()-map.floorY(HouseMap.EXTRACTION_ROOM))<.25;}
         private EquipmentLoadout.Item aimedRack(){return atVanFloor()
             ?VanEquipmentRack.aimed(map.van(),scene.x,scene.z,scene.yaw,profile.equipment()):null;}
         private VanStaging.Station aimedStation(){return atVanFloor()?map.van().stationAt(scene.x,scene.z):null;}
@@ -621,6 +622,7 @@ public final class InvestigationGame {
             scene.setWeather(session.weather());
             atmosphere.setWeather(session.weather());
             GraphicsOptions.current().configure(scene,getWidth(),getHeight(),true);
+            scene.rackInventory=VanRackStock.solo(profile,loadout);
             scene.draw(map,session,frameCount++/30.0);repaint();
             if(session.outcome()==InvestigationSession.Outcome.LOST){
                 timer.stop();endCase("You were overcome. The case remains open.");

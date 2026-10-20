@@ -45,7 +45,7 @@ public final class LanWorld {
         this.map=java.util.Objects.requireNonNull(map);
         for(int i=0;i<6;i++){
             setRoom(i,HouseMap.EXTRACTION_ROOM);
-            xs[i]+=(i-2.5)*.54; // Distinct van spawn pads prevent cameras overlapping a teammate's head.
+            var pad=map.van().spawn(i);xs[i]=pad.x();zs[i]=pad.z(); // Two columns, three rows, in the van's local frame.
             if(!map.traversable(xs[i],ys[i],zs[i]))throw new IllegalStateException("invalid van spawn pad");
         }
     }

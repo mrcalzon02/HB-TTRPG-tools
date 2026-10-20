@@ -10,9 +10,9 @@ public final class VanModuleIntegrationTest {
         if(!yes)throw new AssertionError(label);
     }
     public static void main(String[] args){
-        ok(VanStaging.REAR-VanStaging.FRONT>=7.2,"a full length cargo bay");
-        ok(VanStaging.HALF_WIDTH*2>=4.0,"interior has two mounted walls and central aisle");
-        ok(VanStaging.INTERIOR_HEIGHT>=3.0,"full height workstation and overhead lights");
+        ok(Math.abs(VanStaging.REAR-VanStaging.FRONT-4.256)<.001,"manufacturer-sized long cargo bay");
+        ok(Math.abs(VanStaging.HALF_WIDTH*2-2.059)<.001,"road-vehicle body width");
+        ok(VanStaging.INTERIOR_HEIGHT>=2.10,"full height workstation and overhead lights");
         ok(VanInteriorLayout.toolSockets().size()==FieldEquipment.workingTools().size()+1,
             "all functional LAN equipment and the solo salt kit have distinct physical hooks");
         ok(VanInteriorLayout.TOOL_CAPACITY>=EquipmentTiers.all().size(),
@@ -22,11 +22,11 @@ public final class VanModuleIntegrationTest {
         Set<String> slots=new HashSet<>();
         for(var entry:VanInteriorLayout.toolSockets()){
             ok(slots.add(entry.equipment()),"no duplicate bracket: "+entry.equipment());
-            ok(entry.x()<-1.4 && entry.x()>-VanStaging.HALF_WIDTH,
+            ok(entry.x()<-.5 && entry.x()>-VanStaging.HALF_WIDTH,
                 "equipment fixed to left wall, not floating in aisle");
             ok(entry.z()>VanStaging.FRONT+.25&&entry.z()<VanStaging.REAR-.25,
                 "tool socket inside the rear opening and bulkhead");
-            ok(entry.y()>.15&&entry.y()<VanStaging.INTERIOR_HEIGHT-.15,
+            ok(entry.y()>.15&&entry.y()<VanStaging.FLOOR_Y+VanStaging.INTERIOR_HEIGHT-.05,
                 "hook at plausible standing reach height");
             ok(GlbProps.model(EquipmentModelCatalog.model(entry.equipment(),
                 EquipmentTiers.Tier.I)).triangles().size()>1,
@@ -45,7 +45,7 @@ public final class VanModuleIntegrationTest {
                 "sound telemetry","site map"})
             ok(purposes.contains(critical),"essential station missing: "+critical);
         ok(VanInteriorLayout.openAisle(0,0),"straight aisle is not obstructed");
-        for(double z=VanStaging.FRONT+.34;z<=2.10;z+=.15)
+        for(double z=VanStaging.FRONT+.34;z<=1.10;z+=.15)
             ok(VanInteriorLayout.openAisle(0,z),"centre walkway blocked at "+z);
         for(HouseMap.Site site:HouseMap.Site.values()){
             var map=new HouseMap(site);

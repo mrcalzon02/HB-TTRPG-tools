@@ -469,6 +469,7 @@ public final class LanHost implements AutoCloseable {
                 case "VIEW3D" -> {
                     if(!running||peer.slot==GHOST_SEAT||p.size()!=1)throw new IllegalArgumentException("3D view requires active hunter");
                     peer.worldMode=true;
+                    rackSent.remove(peer);
                     reply(peer,"ACCEPT|VIEW3D");
                     reply(peer,"SITE|"+map.site().name()+"|"+map.level().revision());
                     reply(peer,world.staminaFrame(peer.slot,tick));
@@ -2126,7 +2127,16 @@ public final class LanHost implements AutoCloseable {
             }
         }
     }
+    private final Map<Peer,String> rackSent=new WeakHashMap<>();
+    private void broadcastRack(){
+        boolean[] present=new boolean[HUNTERS];for(int i=0;i<HUNTERS;i++)present[i]=seats[i]!=null||reserved[i]!=null;
+        var stock=VanRackStock.aggregate(equipment,supplies,counters,present);String key=stock.toString();
+        for(int i=0;i<HUNTERS;i++){Peer peer=seats[i];if(peer!=null&&peer.worldMode&&!key.equals(rackSent.get(peer))){
+            for(String frame:VanRackStock.frames(stock,tick))reply(peer,frame);rackSent.put(peer,key);
+        }}
+    }
     private void broadcastWorld(){
+        broadcastRack();
         broadcastFixtures();
         broadcastClutter();
         String doors="DOORS|"+map.doorSnapshot();

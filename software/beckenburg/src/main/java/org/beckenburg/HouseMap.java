@@ -62,6 +62,7 @@ public final class HouseMap {
     }
     /** Legacy ground-plane adapter; authoritative callers must supply feet Y. */
     public int roomAt(double x,double z){
+        var cargo=van.local(x,z);if(Math.abs(cargo.x())<VanStaging.INTERIOR_HALF_WIDTH&&cargo.z()>=VanStaging.FRONT&&cargo.z()<VanStaging.REAR)return 14;
         int room=roomAt(x,0,z);if(room>=0)return room;
         for(Room r:level.rooms())if(r.contains(x,r.y(),z))return r.id();return -1;
     }
@@ -129,6 +130,7 @@ public final class HouseMap {
         Socket s=level.socket("hide",room);return s==null?null:new VanStaging.Position(s.x(),s.z());
     }
     private boolean supported(double x,double y,double z,double radius){
+        Double vanY=van.supportHeight(x,z);if(vanY!=null)return Math.abs(y-vanY)<.10;
         for(Stair s:level.stairs())if(s.contains(x,z,radius)&&Math.abs(y-s.yAt(x,z))<.24)return true;
         for(Room r:level.rooms())if(Math.abs(y-r.y())<.06&&x>=r.x0()&&x<=r.x1()&&z>=r.z0()&&z<=r.z1()&&!level.floorVoid(x,r.y(),z))return true;
         for(Portal p:level.portals())if(!p.kind().equals("stair")&&!p.kind().equals("window")&&Math.abs(y-p.y())<.06&&inPortal(p,x,z,radius))return true;
@@ -187,8 +189,9 @@ public final class HouseMap {
         for(Room r:level.rooms())if(r.y()>y+.12&&r.y()<y+1.82&&x>r.x0()-radius&&x<r.x1()+radius&&z>r.z0()-radius&&z<r.z1()+radius&&!level.floorVoid(x,r.y(),z))return false;
         return true;
     }
-    public boolean traversable(double x,double z){int r=roomAt(x,z);return r>=0&&traversable(x,floorY(r),z);}
+    public boolean traversable(double x,double z){Double deck=van.supportHeight(x,z);int r=roomAt(x,z);return r>=0&&traversable(x,deck==null?floorY(r):deck,z);}
     private Double supportNear(double x,double z,double previousY){
+        Double vanY=van.supportHeight(x,z);if(vanY!=null)return Math.abs(vanY-previousY)<.251?vanY:null;
         Double best=null;double delta=.251;
         for(Stair s:level.stairs())if(s.contains(x,z,.22)){double sy=s.yAt(x,z),d=Math.abs(sy-previousY);if(d<delta){best=sy;delta=d;}}
         // A ramp owns its deck opening; prefer it over the overlapping lower room.

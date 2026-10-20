@@ -17,32 +17,46 @@ public final class VanStaging {
     }
     public record Position(double x, double z) { }
     public enum Station {
-        BRIEFING("Contract / daily task boards", .45, 2.13),
-        EQUIPMENT("Equipment rack", -.86, -1.35),
-        RELAY("Sanity / activity monitors", .81, .55),
-        EXTRACTION("Extraction console", .78, 2.13);
+        BRIEFING("Contract / daily task boards", .20, .40),
+        EQUIPMENT("Equipment rack", -.23, -.90),
+        RELAY("Sanity / activity monitors", .23, -.90),
+        EXTRACTION("Extraction console", 0, 1.10);
         public final String label;
         final double dx, dz;
         Station(String label, double dx, double dz) {
             this.label=label;this.dx=dx;this.dz=dz;
         }
     }
-    /** Full-size exterior body is 4.10m wide; the physically usable interior
-     * is 15% narrower (3.485m). The upper interior shoulders taper another
-     * 10% inward, giving 3.1365m between the roof-side mounting rails.
-     * Vehicle length and the original, reusable location placement are fixed.
+    /** Long high-roof panel van, measured in metres. Ford L4/H3 is the dimensional reference.
+     * Body 2.059m wide, cargo 4.256 x 1.784 x 2.125m; deck 0.50m above ground.
+     * The same dimensions drive render, support, collision, equipment and player spawns.
      */
-    public static final double HALF_WIDTH=2.05, FRONT=-3.65, REAR=3.65;
-    public static final double INTERIOR_HALF_WIDTH=HALF_WIDTH*.85;
-    public static final double INTERIOR_ROOF_HALF_WIDTH=INTERIOR_HALF_WIDTH*.90;
-    public static final double INTERIOR_HEIGHT=3.05, ROOF_SHOULDER_Y=2.21;
-    public static final double WALL_THICKNESS=.13, USE_RANGE=1.15;
+    public static final double HALF_WIDTH=1.0295, FRONT=-2.128, REAR=2.128;
+    public static final double INTERIOR_HALF_WIDTH=.892, INTERIOR_ROOF_HALF_WIDTH=.81;
+    public static final double FLOOR_Y=.50, INTERIOR_HEIGHT=2.125;
+    public static final double ROOF_Y=FLOOR_Y+INTERIOR_HEIGHT+.095, ROOF_SHOULDER_Y=FLOOR_Y+1.65;
+    public static final double WALL_THICKNESS=.08, USE_RANGE=1.15;
+    public static final double RAMP_LENGTH=1.5, RAMP_HALF_WIDTH=.66, CAB_LENGTH=2.268;
+    /** Real wall-mounted button, separate from the clear operating position. */
     /** Host-owned cargo shutter: initially open so newly spawned hunters can leave. */
     private boolean cargoDoorClosed;
     public boolean cargoDoorClosed(){return cargoDoorClosed;}
     public void setCargoDoorClosed(boolean closed){cargoDoorClosed=closed;}
     /** Exact physical button location beside the van's cargo entrance. */
-    public Position doorButton(){return world(-INTERIOR_HALF_WIDTH+.43,FRONT+.25);}
+    public Position doorButton(){return world(-INTERIOR_HALF_WIDTH+.04,FRONT+.14);}
+    public Position doorOperatingPoint(){return world(-.23,FRONT+.16);}
+    public Position spawn(int seat){
+        if(seat<0||seat>=6)throw new IllegalArgumentException("hunter seat");
+        return world(seat%2==0?-.25:.25,-1.10+(seat/2)*.75);
+    }
+    /** Continuous, ground-supported fold-out ramp and raised cargo deck. */
+    public Double supportHeight(double x,double z){
+        Position p=local(x,z);
+        if(Math.abs(p.x())<=INTERIOR_HALF_WIDTH&&p.z()>=FRONT&&p.z()<=REAR)return FLOOR_Y;
+        if(Math.abs(p.x())<=RAMP_HALF_WIDTH&&p.z()>=FRONT-RAMP_LENGTH-.25&&p.z()<FRONT)
+            return FLOOR_Y*Math.max(0,p.z()-(FRONT-RAMP_LENGTH))/RAMP_LENGTH;
+        return null;
+    }
     public boolean nearDoorButton(double x,double z){
         if(!Double.isFinite(x)||!Double.isFinite(z))return false;
         Position p=doorButton();
@@ -79,7 +93,7 @@ public final class VanStaging {
             overlaps(p.x(),p.z(),radius,-w,w,r-t,r) ||
             (cargoDoorClosed&&overlaps(p.x(),p.z(),radius,-w,w,f,f+t)) ||
             // Fully modeled driver's cab is not a walk-through prop either.
-            overlaps(p.x(),p.z(),radius,-1.69,1.69,r,r+1.33) ||
+            overlaps(p.x(),p.z(),radius,-HALF_WIDTH,HALF_WIDTH,r,r+CAB_LENGTH) ||
             VanInteriorLayout.collides(p.x(),p.z(),radius);
     }
     private static boolean overlaps(double x,double z,double radius,

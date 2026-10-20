@@ -159,3 +159,7 @@ LivedLevelDressingTest
 LooseClutterTest
 LooseClutterNetworkTest
 HauntedFixturesTest
+
+VanHumanScaleTest
+VanRackStockTest
+VanRackNetworkTest

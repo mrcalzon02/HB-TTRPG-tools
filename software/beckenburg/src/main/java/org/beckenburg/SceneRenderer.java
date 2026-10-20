@@ -104,6 +104,7 @@ public final class SceneRenderer {
     public java.util.Set<EquipmentLoadout.Item> rackStock=java.util.Set.of();
     /** Host-issued inventory only: do not spawn unpurchased instruments. */
     public java.util.Map<String,EquipmentTiers.Tier> rackToolTiers=java.util.Map.of();
+    public java.util.List<VanRackStock.Entry> rackInventory;
     public BufferedImage image(){return frame;}
     public int[] pixels(){return pixels;}
     public double[] depths(){return depths;}
@@ -197,45 +198,6 @@ public final class SceneRenderer {
                 vv[2].u(),vv[2].v()));
         }
     }
-    /** Fit an approved GLB into an actually mounted tool holder. Position is
-     * the centre of the bracket, not the source GLB's inconsistent origin.
-     * Uniform fitting preserves original shape and source material/UV data.
-     */
-    private static void vanMountedTool(List<Face> out,String mesh,VanStaging van,
-                                       double localX,double y,double localZ,
-                                       double maximumWidth,double maximumHeight,
-                                       double maximumDepth){
-        GlbProps.Model model=GlbProps.model(mesh);
-        double minX=Double.POSITIVE_INFINITY,minY=minX,minZ=minX;
-        double maxX=Double.NEGATIVE_INFINITY,maxY=maxX,maxZ=maxX;
-        for(GlbProps.Triangle t:model.triangles())
-            for(GlbProps.Vertex v:new GlbProps.Vertex[]{t.a(),t.b(),t.c()}){
-                minX=Math.min(minX,v.x());maxX=Math.max(maxX,v.x());
-                minY=Math.min(minY,v.y());maxY=Math.max(maxY,v.y());
-                minZ=Math.min(minZ,v.z());maxZ=Math.max(maxZ,v.z());
-            }
-        double s=Math.min(1.8,Math.min(maximumWidth/Math.max(.001,maxX-minX),
-            Math.min(maximumHeight/Math.max(.001,maxY-minY),
-                maximumDepth/Math.max(.001,maxZ-minZ))));
-        double ox=(minX+maxX)*.5,oy=(minY+maxY)*.5,oz=(minZ+maxZ)*.5;
-        // Source X is horizontal along the shelving; source Z points outward.
-        double angle=van.placement().yaw()+Math.PI/2;
-        double ca=Math.cos(angle),sa=Math.sin(angle);
-        VanStaging.Position base=van.world(localX,localZ);
-        for(GlbProps.Triangle t:model.triangles()){
-            GlbProps.Vertex[] vv={t.a(),t.b(),t.c()};
-            Point[] p=new Point[3];
-            for(int k=0;k<3;k++){
-                GlbProps.Vertex v=vv[k];
-                double xx=(v.x()-ox)*s,zz=(v.z()-oz)*s;
-                p[k]=new Point(base.x()+xx*ca-zz*sa,
-                    y+(v.y()-oy)*s,base.z()+xx*sa+zz*ca);
-            }
-            out.add(new Face(p[0],p[1],p[2],0xffffff,t.material(),
-                vv[0].u(),vv[0].v(),vv[1].u(),vv[1].v(),
-                vv[2].u(),vv[2].v()));
-        }
-    }
     /** Original mesh triangles retain source UVs and material indices. Their
      * source pivots are NOT assumed to be at the wall/ceiling attachment point.
      * Anchoring to measured source bounds prevents half-embedded floating GLBs.
@@ -324,10 +286,10 @@ public final class SceneRenderer {
         VanStaging.Position b=van.world(endX+nx,endZ+nz);
         VanStaging.Position c=van.world(endX-nx,endZ-nz);
         VanStaging.Position d=van.world(hingeX-nx,front-nz);
-        Point a0=new Point(a.x(),.10,a.z()),a1=new Point(a.x(),2.91,a.z());
-        Point b0=new Point(b.x(),.10,b.z()),b1=new Point(b.x(),2.91,b.z());
-        Point c0=new Point(c.x(),.10,c.z()),c1=new Point(c.x(),2.91,c.z());
-        Point d0=new Point(d.x(),.10,d.z()),d1=new Point(d.x(),2.91,d.z());
+        Point a0=new Point(a.x(),VanStaging.FLOOR_Y,a.z()),a1=new Point(a.x(),VanStaging.ROOF_Y-.12,a.z());
+        Point b0=new Point(b.x(),VanStaging.FLOOR_Y,b.z()),b1=new Point(b.x(),VanStaging.ROOF_Y-.12,b.z());
+        Point c0=new Point(c.x(),VanStaging.FLOOR_Y,c.z()),c1=new Point(c.x(),VanStaging.ROOF_Y-.12,c.z());
+        Point d0=new Point(d.x(),VanStaging.FLOOR_Y,d.z()),d1=new Point(d.x(),VanStaging.ROOF_Y-.12,d.z());
         quad(faces,a0,b0,b1,a1,left?0x78838b:0x707b83);
         quad(faces,c0,d0,d1,c1,0x596770);
         quad(faces,a0,d0,d1,a1,0x48565d);
@@ -339,8 +301,8 @@ public final class SceneRenderer {
                                       front+(endZ-front)*u0+nz*.15);
         VanStaging.Position q=van.world(hingeX+(endX-hingeX)*u1+nx*.15,
                                       front+(endZ-front)*u1+nz*.15);
-        quad(faces,new Point(p.x(),2.18,p.z()),new Point(q.x(),2.18,q.z()),
-             new Point(q.x(),2.68,q.z()),new Point(p.x(),2.68,p.z()),0x344856);
+        quad(faces,new Point(p.x(),1.68,p.z()),new Point(q.x(),1.68,q.z()),
+             new Point(q.x(),2.28,q.z()),new Point(p.x(),2.28,p.z()),0x344856);
         // Door handles remain readable when shut or fully open.
         VanStaging.Position handle=van.world(hingeX+(endX-hingeX)*.88,
                                              front+(endZ-front)*.88);
@@ -357,16 +319,16 @@ public final class SceneRenderer {
         for(int i=0;i<sides;i++){
             double a=i*Math.PI*2/sides,b=(i+1)*Math.PI*2/sides;
             var ca=van.world(x,z);
-            var pa=van.world(x,z+.47*Math.cos(a));
-            var pb=van.world(x,z+.47*Math.cos(b));
-            var ha=van.world(x+(x<0?-.018:.018),z+.22*Math.cos(a));
-            var hb=van.world(x+(x<0?-.018:.018),z+.22*Math.cos(b));
-            Point center=new Point(ca.x(),.54,ca.z());
-            Point outerA=new Point(pa.x(),.54+.47*Math.sin(a),pa.z());
-            Point outerB=new Point(pb.x(),.54+.47*Math.sin(b),pb.z());
-            Point hubCenter=new Point(ca.x()+(x<0?-.021:.021),.54,ca.z());
-            Point hubA=new Point(ha.x(),.54+.22*Math.sin(a),ha.z());
-            Point hubB=new Point(hb.x(),.54+.22*Math.sin(b),hb.z());
+            var pa=van.world(x,z+.34*Math.cos(a));
+            var pb=van.world(x,z+.34*Math.cos(b));
+            var ha=van.world(x+(x<0?-.018:.018),z+.15*Math.cos(a));
+            var hb=van.world(x+(x<0?-.018:.018),z+.15*Math.cos(b));
+            Point center=new Point(ca.x(),.36,ca.z());
+            Point outerA=new Point(pa.x(),.36+.34*Math.sin(a),pa.z());
+            Point outerB=new Point(pb.x(),.36+.34*Math.sin(b),pb.z());
+            Point hubCenter=new Point(ca.x()+(x<0?-.021:.021),.36,ca.z());
+            Point hubA=new Point(ha.x(),.36+.15*Math.sin(a),ha.z());
+            Point hubB=new Point(hb.x(),.36+.15*Math.sin(b),hb.z());
             out.add(new Face(center,outerA,outerB,tyre,-1,0,0,0,0,0,0));
             out.add(new Face(hubCenter,hubA,hubB,hub,-1,0,0,0,0,0,0));
         }
@@ -397,13 +359,14 @@ public final class SceneRenderer {
     private java.util.Set<EquipmentLoadout.Item> cachedVanStock=java.util.Set.of();
     private java.util.Map<String,EquipmentTiers.Tier> cachedVanTiers=java.util.Map.of();
     private List<Face> cachedVanFaces=List.of();
+    private java.util.List<VanRackStock.Entry> cachedVanInventory;
     private void vanModel(List<Face> faces,VanStaging van,
                           java.util.Set<EquipmentLoadout.Item> stock){
         // The 42-position geometry is expensive to decode and transform.
         // Reuse the actual built mesh until the authoritative cargo doors,
         // purchased stock or upgraded LAN equipment changes.
         if(cachedVan==van&&cachedVanDoors==van.cargoDoorClosed()&&
-                cachedVanStock.equals(stock)&&cachedVanTiers.equals(rackToolTiers)){
+                cachedVanStock.equals(stock)&&cachedVanTiers.equals(rackToolTiers)&&java.util.Objects.equals(cachedVanInventory,rackInventory)){
             faces.addAll(cachedVanFaces);
             return;
         }
@@ -413,132 +376,103 @@ public final class SceneRenderer {
         cachedVanDoors=van.cargoDoorClosed();
         cachedVanStock=java.util.Set.copyOf(stock);
         cachedVanTiers=java.util.Map.copyOf(rackToolTiers);
+        cachedVanInventory=rackInventory==null?null:java.util.List.copyOf(rackInventory);
         cachedVanFaces=List.copyOf(constructed);
         faces.addAll(cachedVanFaces);
     }
     private void buildVanModel(List<Face> faces,VanStaging van,
                                java.util.Set<EquipmentLoadout.Item> stock){
         double w=VanStaging.HALF_WIDTH,f=VanStaging.FRONT,r=VanStaging.REAR;
-        double h=VanStaging.INTERIOR_HEIGHT;
-
-        // True cargo floor plus an anti-slip centre aisle and an exterior sill.
-        vanBox(faces,van,-w,.00,f,w*2,.12,r-f,MaterialAtlas.CONCRETE);
-        vanBox(faces,van,-.85,.125,f+.18,1.70,.018,r-f-.45,MaterialAtlas.IRON);
-        for(double tz=f+.46;tz<r-.50;tz+=.90)
-            vanBox(faces,van,-.86,.144,tz,1.72,.018,.055,MaterialAtlas.IRON);
-        vanBox(faces,van,-w,.04,f-.18,w*2,.08,.19,MaterialAtlas.IRON);
-
-        // Exterior remains 4.10 metres wide. True interior lining is 15%
-        // narrower; the tapered ceiling is a further 10% smaller across.
-        // This is an enclosed shell, not a rescaled rectangular room.
-        double iw=VanStaging.INTERIOR_HALF_WIDTH;
-        double ir=VanStaging.INTERIOR_ROOF_HALF_WIDTH;
-        double shoulder=VanStaging.ROOF_SHOULDER_Y;
-        vanBox(faces,van,-w,.10,f,w-iw,shoulder-.10,r-f,MaterialAtlas.IRON);
-        vanBox(faces,van,iw,.10,f,w-iw,shoulder-.10,r-f,MaterialAtlas.IRON);
-        vanBox(faces,van,-iw,.17,f+.12,.08,shoulder-.19,r-f-.24,MaterialAtlas.AGED_WOOD);
-        vanBox(faces,van,iw-.08,.17,f+.12,.08,shoulder-.19,r-f-.24,MaterialAtlas.AGED_WOOD);
-        double exteriorRoof=ir+.17;
-        vanSlope(faces,van,-w,shoulder,-exteriorRoof,h,f,r,MaterialAtlas.IRON);
-        vanSlope(faces,van,w,shoulder,exteriorRoof,h,f,r,MaterialAtlas.IRON);
-        vanSlope(faces,van,-iw,shoulder,-ir,h-.085,f+.12,r-.12,MaterialAtlas.CEILING);
-        vanSlope(faces,van,iw,shoulder,ir,h-.085,f+.12,r-.12,MaterialAtlas.CEILING);
-        vanBox(faces,van,-exteriorRoof,h-.04,f,
-            exteriorRoof*2,.11,r-f,MaterialAtlas.IRON);
-        vanBox(faces,van,-ir,h-.095,f+.12,
-            ir*2,.045,r-f-.24,MaterialAtlas.CEILING);
-        vanBox(faces,van,-w,.10,r-.17,w*2,shoulder-.02,.17,MaterialAtlas.IRON);
-        vanBox(faces,van,-w,.04,f-.18,w*2,.08,.19,MaterialAtlas.IRON);
-        // A separate physically sized driver cab and front fascia, not a
-        // stretched four-metre car texture pasted onto a seven-metre box.
-        vanBox(faces,van,-1.67,.20,r-.02,3.34,1.46,1.20,MaterialAtlas.IRON);
-        vanBox(faces,van,-1.69,1.68,r+.09,3.38,.85,.16,MaterialAtlas.WINDOW);
-        vanBox(faces,van,-1.71,.17,r+1.12,3.42,1.12,.20,MaterialAtlas.IRON);
-        vanBox(faces,van,-1.08,.92,r+1.32,2.16,.35,.052,MaterialAtlas.CONCRETE);
-        for(double side:new double[]{-1.39,1.20}){
-            vanBox(faces,van,side,1.05,r+1.33,.19,.16,.06,MaterialAtlas.WINDOW);
+        double floor=VanStaging.FLOOR_Y,h=VanStaging.ROOF_Y,iw=VanStaging.INTERIOR_HALF_WIDTH;
+        double ir=VanStaging.INTERIOR_ROOF_HALF_WIDTH,shoulder=VanStaging.ROOF_SHOULDER_Y;
+        // Raised van deck and a supported fold-out loading ramp share the movement surface.
+        vanBox(faces,van,-w,floor-.13,f,w*2,.13,r-f,MaterialAtlas.IRON);
+        vanBox(faces,van,-.50,floor+.001,f+.08,1,.012,r-f-.20,MaterialAtlas.IRON);
+        for(double z=f+.3;z<r-.2;z+=.35)vanBox(faces,van,-.49,floor+.014,z,.98,.006,.018,MaterialAtlas.IRON);
+        var ra=van.world(-VanStaging.RAMP_HALF_WIDTH,f-VanStaging.RAMP_LENGTH);
+        var rb=van.world(VanStaging.RAMP_HALF_WIDTH,f-VanStaging.RAMP_LENGTH);
+        VanStaging.Position rc=van.world(VanStaging.RAMP_HALF_WIDTH,f),rd=van.world(-VanStaging.RAMP_HALF_WIDTH,f);
+        texturedQuad(faces,new Point(ra.x(),0,ra.z()),new Point(rd.x(),floor,rd.z()),new Point(rc.x(),floor,rc.z()),new Point(rb.x(),0,rb.z()),MaterialAtlas.IRON,0,0,0,1.5,1.32,1.5,1.32,0,0xffffff);
+        for(int n=1;n<10;n++){double z=f-VanStaging.RAMP_LENGTH+n*VanStaging.RAMP_LENGTH/10;
+            vanBox(faces,van,-.65,floor*n/10+.006,z,1.30,.012,.025,MaterialAtlas.IRON);}
+        // Original online body profile is retained with measured wall thickness and roof shoulders.
+        vanBox(faces,van,-w,floor,f,w-iw,shoulder-floor,r-f,MaterialAtlas.IRON);
+        vanBox(faces,van,iw,floor,f,w-iw,shoulder-floor,r-f,MaterialAtlas.IRON);
+        vanBox(faces,van,-iw,floor+.02,f+.08,.025,shoulder-floor-.03,r-f-.16,MaterialAtlas.AGED_WOOD);
+        vanBox(faces,van,iw-.025,floor+.02,f+.08,.025,shoulder-floor-.03,r-f-.16,MaterialAtlas.AGED_WOOD);
+        vanSlope(faces,van,-w,shoulder,-ir-.10,h,f,r,MaterialAtlas.IRON);
+        vanSlope(faces,van,w,shoulder,ir+.10,h,f,r,MaterialAtlas.IRON);
+        vanSlope(faces,van,-iw+.025,shoulder,-ir,h-.095,f+.08,r-.08,MaterialAtlas.CEILING);
+        vanSlope(faces,van,iw-.025,shoulder,ir,h-.095,f+.08,r-.08,MaterialAtlas.CEILING);
+        vanBox(faces,van,-ir-.10,h-.04,f,(ir+.10)*2,.11,r-f,MaterialAtlas.IRON);
+        vanBox(faces,van,-ir,h-.095,f+.08,ir*2,.025,r-f-.16,MaterialAtlas.CEILING);
+        vanBox(faces,van,-w,floor,r-.08,w*2,h-floor,.08,MaterialAtlas.IRON);
+        // Cab, sloped windscreen, bonnet, lamps and mirrors are at road-vehicle scale.
+        double nose=r+VanStaging.CAB_LENGTH;
+        vanBox(faces,van,-w+.04,.40,r,w*2-.08,1.02,VanStaging.CAB_LENGTH-.16,MaterialAtlas.IRON);
+        vanBox(faces,van,-w+.04,1.43,r,w*2-.08,.83,.85,MaterialAtlas.IRON);
+        VanStaging.Position wa=van.world(-w+.08,r+.85),wb=van.world(w-.08,r+.85);
+        VanStaging.Position wc=van.world(w-.08,r+1.64),wd=van.world(-w+.08,r+1.64);
+        quad(faces,new Point(wa.x(),2.27,wa.z()),new Point(wb.x(),2.27,wb.z()),new Point(wc.x(),1.44,wc.z()),new Point(wd.x(),1.44,wd.z()),0x344856);
+        // Side glazing is inset on both cab doors.
+        for(double side:new double[]{-w-.006,w+.006}){
+            VanStaging.Position a=van.world(side,r+.15),bb=van.world(side,r+.77),c=van.world(side,r+1.27);
+            quad(faces,new Point(a.x(),1.52,a.z()),new Point(bb.x(),1.52,bb.z()),new Point(bb.x(),2.13,bb.z()),new Point(a.x(),2.13,a.z()),0x344856);
+            quad(faces,new Point(bb.x(),1.52,bb.z()),new Point(c.x(),1.52,c.z()),new Point(bb.x(),2.13,bb.z()),new Point(bb.x(),1.52,bb.z()),0x344856);
+            vanBox(faces,van,side-.015,1.02,r+.32,.03,.06,.17,MaterialAtlas.IRON);
+            vanBox(faces,van,side<0?-1.235:1.095,1.38,r+.76,.14,.24,.10,MaterialAtlas.IRON);
+            vanBox(faces,van,side<0?-1.10:w,1.48,r+.81,.09,.025,.04,MaterialAtlas.IRON);
         }
-        // Real exterior axles and side skirting, mounted outside the liner.
-        for(double side:new double[]{-w-.07,w+.07})
-            for(double axle:new double[]{f+1.02,r-.91})
-                vanWheel(faces,van,side,axle);
-        for(double side:new double[]{-w-.045,w-.045})
-            vanBox(faces,van,side,.19,f+.20,.09,.22,r-f-.40,MaterialAtlas.IRON);
-        // Sidewall trim, tie-down channels and crossmembers are attached to
-        // the surface, not free-standing equipment placed in arbitrary cells.
-        for(double tz=f+.47;tz<r-.40;tz+=.87){
-            for(double wallX:new double[]{-iw+.08,iw-.15}){
-                vanBox(faces,van,wallX,.19,tz,.075,shoulder-.29,.055,MaterialAtlas.IRON);
-                vanBox(faces,van,wallX,.30,tz-.10,.10,.11,.18,MaterialAtlas.IRON);
-            }
-            vanBox(faces,van,-ir,h-.14,tz,ir*2,.035,.055,MaterialAtlas.IRON);
+        vanBox(faces,van,-w-.02,.35,nose-.16,w*2+.04,.22,.16,MaterialAtlas.IRON);
+        vanBox(faces,van,-.55,.62,nose+.002,1.10,.25,.025,MaterialAtlas.CONCRETE);
+        for(double side:new double[]{-.88,.65})vanBox(faces,van,side,.96,nose-.15,.23,.18,.035,MaterialAtlas.WINDOW);
+        for(double side:new double[]{-w-.035,w+.035})for(double axle:new double[]{f+1.05,r+1.28})vanWheel(faces,van,side,axle);
+        // Rear wheel housings are inside the fitted wall volumes, leaving the aisle clear.
+        for(double x:new double[]{-iw,iw-.19})vanBox(faces,van,x,floor,f+.65,.19,.25,.84,MaterialAtlas.IRON);
+        for(double side:new double[]{-w-.01,w-.015})vanBox(faces,van,side,.32,f+.10,.025,.10,r-f-.2,MaterialAtlas.IRON);
+        for(double z=f+.35;z<r-.15;z+=.65){
+            for(double x:new double[]{-iw+.025,iw-.055})vanBox(faces,van,x,floor+.03,z,.03,shoulder-floor-.05,.035,MaterialAtlas.IRON);
+            vanBox(faces,van,-ir,h-.13,z,ir*2,.025,.035,MaterialAtlas.IRON);
         }
-        // Left pegboard: a complete seven-column/six-row instrument storage
-        // system. Brackets have a load-bearing backing and a visible rail.
-        vanBox(faces,van,-iw+.08,.21,f+.43,.085,shoulder-.22,r-f-.93,MaterialAtlas.IRON);
-        for(int row=0;row<VanInteriorLayout.TOOL_ROWS;row++){
-            double yy=.27+row*.45;
-            vanBox(faces,van,-iw+.14,yy,f+.59,.23,.042,r-f-1.19,
-                MaterialAtlas.AGED_WOOD);
-            for(int col=0;col<VanInteriorLayout.TOOL_COLUMNS;col++){
-                double zz=-2.76+col*VanInteriorLayout.TOOL_COLUMN_PITCH;
-                vanBox(faces,van,-iw+.15,yy+.07,zz-.09,.21,.065,.17,
-                    MaterialAtlas.IRON);
-            }
+        vanBox(faces,van,-iw+.03,floor+.05,-1.91,.035,1.93,3.45,MaterialAtlas.IRON);
+        for(int row=0;row<6;row++){
+            double y=floor+.14+row*.33,top=y+.315;
+            double t=Math.max(0,(top-VanStaging.ROOF_SHOULDER_Y)/(VanInteriorLayout.ROOF_Y-VanStaging.ROOF_SHOULDER_Y));
+            double back=-iw+t*(iw-ir)+.025;
+            vanBox(faces,van,back,y-.025,-1.94,-.51-back,.025,3.48,MaterialAtlas.AGED_WOOD);
         }
-        // Right-hand mounted monitor rail, real workstation power shelf,
-        // map and assignment boards; side installation leaves a clear aisle.
-        vanBox(faces,van,iw-.27,.78,-2.57,.19,.12,4.72,MaterialAtlas.AGED_WOOD);
-        for(double zz:new double[]{-1.71,-.21,1.29}){
-            vanBox(faces,van,iw-.24,1.45,zz-.53,.10,.68,1.06,MaterialAtlas.IRON);
-            vanBox(faces,van,iw-.29,1.26,zz-.53,.18,.08,1.06,MaterialAtlas.IRON);
-        }
-        // Driver bulkhead and floor-supported command table.
-        vanBox(faces,van,-iw+.09,.42,r-.32,iw*2-.18,1.78,.08,MaterialAtlas.AGED_WOOD);
+        for(double z:new double[]{-1.2,-.2,.8})
+            vanBox(faces,van,.85,floor+1.36,z-.10,.04,.14,.20,MaterialAtlas.IRON);
         for(VanInteriorLayout.Fixture fixture:VanInteriorLayout.FIXTURES){
-            if(!VanInteriorLayout.insideShell(fixture))
-                throw new IllegalStateException("VAN furniture outside cabin: "+fixture.purpose());
-            VanStaging.Position p=van.world(fixture.localX(),fixture.localZ());
-            imported(faces,fixture.mesh(),p.x(),fixture.y(),p.z(),
-                fixture.scale(),van.placement().yaw()+fixture.yaw());
+            if(!VanInteriorLayout.insideShell(fixture))throw new IllegalStateException("VAN furniture outside cabin: "+fixture.purpose());
+            var p=van.world(fixture.localX(),fixture.localZ());
+            if(fixture.mesh().equals("monitoring_screen_mp_1")){
+                double angle=van.placement().yaw()+fixture.yaw();
+                for(var t:GlbProps.model(fixture.mesh()).triangles()){
+                    Point[] pp=new Point[3];var vv=new GlbProps.Vertex[]{t.a(),t.b(),t.c()};
+                    for(int i=0;i<3;i++){var v=VanInteriorLayout.vertex(fixture.mesh(),vv[i]);pp[i]=new Point(p.x()+fixture.scale()*(v.x()*Math.cos(angle)-v.z()*Math.sin(angle)),fixture.y()+v.y()*fixture.scale(),p.z()+fixture.scale()*(v.x()*Math.sin(angle)+v.z()*Math.cos(angle)));}
+                    boolean screen=t.material()==VanInteriorLayout.screenMaterial();
+                    faces.add(new Face(pp[0],pp[1],pp[2],0xffffff,t.material(),t.a().u(),screen?1-t.a().v():t.a().v(),t.b().u(),screen?1-t.b().v():t.b().v(),t.c().u(),screen?1-t.c().v():t.c().v()));
+                }
+            }else imported(faces,fixture.mesh(),p.x(),fixture.y(),p.z(),fixture.scale(),van.placement().yaw()+fixture.yaw());
         }
-        // Visible command desk keyboard and physical mouse, not a text-only UI.
-        vanBox(faces,van,.52,.775,2.66,.12,.052,.17,MaterialAtlas.IRON);
-        // Ceiling lighting flush to headliner with explicit metal carriers.
-        for(double zz:new double[]{-2.40,-.72,.98,2.64}){
-            vanBox(faces,van,-.12,h-.15,zz-.18,.24,.095,.40,MaterialAtlas.WINDOW);
-            vanBox(faces,van,-ir+.14,h-.13,zz-.22,.17,.068,.42,MaterialAtlas.WINDOW);
-            vanBox(faces,van,ir-.31,h-.13,zz-.22,.17,.068,.42,MaterialAtlas.WINDOW);
+        vanBox(faces,van,.40,floor+.742,1.47,.07,.035,.11,MaterialAtlas.IRON);
+        for(double z:new double[]{-1.48,-.10,1.16})vanBox(faces,van,-.10,h-.13,z,.20,.035,.30,MaterialAtlas.WINDOW);
+        var button=van.doorButton();imported(faces,"button_12",button.x(),floor+1.2,button.z(),.30,van.placement().yaw()+Math.PI/2);
+        java.util.List<VanRackStock.Entry> inventory=rackInventory;
+        if(inventory==null){
+            inventory=new ArrayList<>();
+            if(!rackToolTiers.isEmpty())for(var entry:new java.util.TreeMap<>(rackToolTiers).entrySet())inventory.add(new VanRackStock.Entry(entry.getKey(),entry.getValue(),1));
+            else for(var item:stock){String id=switch(item){case EMF->"EMF_READER";case THERMOMETER->"THERMOMETER";case SPIRIT_BOX->"SPIRIT_BOX";case UV_LAMP->"UV_LIGHT";case PHOTO_CAMERA->"PHOTO_CAMERA";case SALT->"SALT";};inventory.add(new VanRackStock.Entry(id,EquipmentTiers.Tier.I,1));}
         }
-        var doorControl=van.doorButton();
-        imported(faces,"button_12",doorControl.x(),1.22,doorControl.z(),
-            .48,van.placement().yaw()+Math.PI/2);
-
-        // LAN: 28 genuinely functional types (and reserved mounting sockets
-        // for all 42 catalog families), using host-issued owned tiers.
-        // Solo: render only the six items purchased by this player's profile.
-        if(!rackToolTiers.isEmpty()){
-            for(var socket:VanInteriorLayout.toolSockets()){
-                EquipmentTiers.Tier tier=rackToolTiers.get(socket.equipment());
-                if(tier==null)continue;
-                vanMountedTool(faces,EquipmentModelCatalog.model(socket.equipment(),tier),
-                    van,socket.x(),socket.y(),socket.z(),.34,.31,.28);
-            }
-        }else{
-            for(EquipmentLoadout.Item item:stock){
-                String id=switch(item){
-                    case EMF->"EMF_READER";case THERMOMETER->"THERMOMETER";
-                    case SPIRIT_BOX->"SPIRIT_BOX";case UV_LAMP->"UV_LIGHT";
-                    case PHOTO_CAMERA->"PHOTO_CAMERA";case SALT->"SALT";
-                };
-                var socket=VanEquipmentRack.socket(van,item);
-                var local=van.local(socket.x(),socket.z());
-                vanMountedTool(faces,EquipmentModelCatalog.model(id,EquipmentTiers.Tier.I),
-                    van,local.x(),1.10,local.z(),.39,.43,.33);
+        for(var item:VanRackStock.place(inventory)){
+            for(var triangle:GlbProps.model(item.entry().model()).triangles()){
+                var vv=new GlbProps.Vertex[]{triangle.a(),triangle.b(),triangle.c()};Point[] pp=new Point[3];
+                for(int n=0;n<3;n++){var v=item.vertex(vv[n]);var position=van.world(v.x(),v.z());pp[n]=new Point(position.x(),v.y(),position.z());}
+                faces.add(new Face(pp[0],pp[1],pp[2],0xffffff,triangle.material(),triangle.a().u(),triangle.a().v(),triangle.b().u(),triangle.b().v(),triangle.c().u(),triangle.c().v()));
             }
         }
-        cargoDoorLeaf(faces,van,true);
-        cargoDoorLeaf(faces,van,false);
+        cargoDoorLeaf(faces,van,true);cargoDoorLeaf(faces,van,false);
     }
 
     /** Actual masonry, pitched roof and recessed window details from curated

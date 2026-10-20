@@ -47,7 +47,7 @@ public final class GameplaySmokeTest {
         ok(spirit.cleanse(ax,ay,az),"cleansing succeeds at correct anchor");
         ok(spirit.outcome()==InvestigationSession.Outcome.CLEANSED,"complete state");
         var console=map.van().location(VanStaging.Station.EXTRACTION);
-        ok(spirit.extract(console.x(),0,console.z()),"cleansed case can extract at physical console");
+        ok(spirit.extract(console.x(),map.floorY(14),console.z()),"cleansed case can extract at physical console");
         ok(spirit.payout()>200,"cleanse compensation");
         Path temp=Files.createTempDirectory("beckenburg-profile-");
         try{

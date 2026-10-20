@@ -208,12 +208,15 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 map=new HouseMap(HouseMap.Site.valueOf(p.get(1)));
                 map.configureHiding(renderer.hidingDensity);
                 if(!map.level().revision().equals(p.get(2)))throw new IllegalArgumentException("incompatible level revision");
-                renderer.eyeHeight=map.level().dock().y()+1.62;
+                renderer.eyeHeight=map.floorY(HouseMap.EXTRACTION_ROOM)+1.62;
+                rackSnapshot.reset();
                 buildingAudio.setMap(map);
                 peers.clear();videoCameras.clear();renderer.videoCameras.clear();renderer.dotsPositions.clear();apparition=null;
                 renderer.x=map.van().placement().x();
                 renderer.z=map.van().placement().z();
                 feedback="INVESTIGATION: "+map.site();
+            }else if(rackSnapshot.accept(p)){
+                // Atomic host-owned remaining stock, shared by all hunter views.
             }else if(p.size()==6&&p.get(0).equals("FIXTURE")){
                 map.fixtures().accept(p);
             }else if(p.size()==2&&p.get(0).equals("CLUTTER")){
@@ -609,6 +612,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     boolean journalAllows(GhostIdentity.Type type){
         return GhostFieldGuide.remainsPossible(type,fieldNotes);
     }
+    private final VanRackStock.Receiver rackSnapshot=new VanRackStock.Receiver();
     private boolean insideVan(){
         var local=map.van().local(renderer.x,renderer.z);
         return map.roomAt(renderer.x,renderer.eyeHeight-1.62,renderer.z)==HouseMap.EXTRACTION_ROOM
@@ -699,7 +703,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         renderer.setLampHardware(
             equipmentTier.getOrDefault("FLASHLIGHT",EquipmentTiers.Tier.I),
             firelightOn&&!flashlightOn);
-        renderer.rackToolTiers=java.util.Map.copyOf(equipmentTier);
+        renderer.rackToolTiers=java.util.Map.of();
+        renderer.rackInventory=rackSnapshot.stock();
         renderer.drawNetwork(map,new ArrayList<>(peers.values()),apparition,tick*.1,List.copyOf(counterMarks));
         // Van receiver renders the *same live world* from the physical camera's
         // position. No canned image, inferred spectral object or proof overlay.

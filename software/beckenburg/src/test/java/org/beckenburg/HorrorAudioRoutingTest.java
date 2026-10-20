@@ -35,7 +35,7 @@ public final class HorrorAudioRoutingTest {
         HouseMap map=new HouseMap();
         LanWorld world=new LanWorld(map);
         var approach=map.van().world(0,VanStaging.FRONT-.8);
-        AuthoredTestSupport.place(map,world,0,new LevelDefinition.Vec(approach.x(),0,approach.z()));
+        AuthoredTestSupport.place(map,world,0,new LevelDefinition.Vec(approach.x(),map.van().supportHeight(approach.x(),approach.z()),approach.z()));
         check(world.body(0).room()==13,"street outside cargo sill is exterior approach");
         world.setExitSealed(true);
         int blockedTick=-1;

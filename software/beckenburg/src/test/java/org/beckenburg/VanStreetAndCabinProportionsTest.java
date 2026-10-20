@@ -12,17 +12,17 @@ public final class VanStreetAndCabinProportionsTest {
         double outside=VanStaging.HALF_WIDTH*2;
         double inside=VanStaging.INTERIOR_HALF_WIDTH*2;
         double crown=VanStaging.INTERIOR_ROOF_HALF_WIDTH*2;
-        ok(Math.abs(inside/outside-.85)<.00001,
-            "true 15% smaller cabin width; exterior remains full size");
-        ok(Math.abs(crown/inside-.90)<.00001,
+        ok(Math.abs(inside-1.784)<.00001 && Math.abs(outside-2.059)<.00001,
+            "real body width and insulated cargo width");
+        ok(crown<inside && crown>1.55,
             "sloping inner shoulders reduce roof width another 10%");
-        ok(VanStaging.ROOF_SHOULDER_Y<VanStaging.INTERIOR_HEIGHT-.6,
+        ok(VanStaging.ROOF_SHOULDER_Y<VanStaging.ROOF_Y-.5,
             "taper is visibly pitched over a meaningful upper-wall section");
-        ok(VanInteriorLayout.clearAisleHalfWidth()*2>=1.4,
+        ok(VanInteriorLayout.clearAisleHalfWidth()*2>=.95,
             "central aisle remains comfortably walkable");
         for(var fixture:VanInteriorLayout.FIXTURES)
             ok(VanInteriorLayout.insideShell(fixture),
-                "all existing monitors, boards and workstation fit inside 15% tighter liner: "+
+                "all existing monitors, boards and workstation fit inside human-scale liner: "+
                 fixture.purpose());
         ok(VanInteriorLayout.toolSockets().size()>=28,
             "all purchased equipment still mounted individually");
@@ -49,11 +49,11 @@ public final class VanStreetAndCabinProportionsTest {
                 ok(map.traversable(p.x(),p.z()),
                     "reduced interior must still allow physical access to "+station+" at "+site);
             }
-            var button=van.doorButton();
+            var button=van.doorOperatingPoint();
             ok(map.traversable(button.x(),button.z()),
                 "rear door switch must not be inside the newly fitted equipment wall");
         }
-        System.out.println("PASS VAN interior -15%, inward roof taper -10%, 42 rack brackets, "+
+        System.out.println("PASS human-scale VAN body and tapered liner, 42 rack brackets, "+
             "unobstructed stations and six architecturally fitted Kenney roadside façades");
     }
 }

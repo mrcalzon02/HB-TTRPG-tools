@@ -20,7 +20,7 @@ public final class VanNavigationVisualTest {
         for(int i=0;i<6;i++)yes(map.traversable(team.body(i).x(),team.body(i).z()),
             "team spawn accessible "+i);
         var targeted=VanEquipmentRack.socket(van,EquipmentLoadout.Item.EMF);
-        var standing=van.world(-.5,van.local(targeted.x(),targeted.z()).z());
+        var standing=van.world(0,van.local(targeted.x(),targeted.z()).z());
         yes(map.traversable(standing.x(),standing.z()),"clear standing position alongside selected rack socket");
         double midX=standing.x(),midZ=standing.z();
         double yaw=Math.atan2(targeted.x()-midX,targeted.z()-midZ);

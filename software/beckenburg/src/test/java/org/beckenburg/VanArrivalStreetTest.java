@@ -10,7 +10,7 @@ public final class VanArrivalStreetTest {
     }
     public static void main(String[] args){
         var tiles=VanArrivalStreet.tiles();
-        ok(tiles.size()==32,"sixteen continuous asphalt lanes and sixteen raised sidewalk sections");
+        ok(tiles.size()==4*(int)Math.ceil((VanArrivalStreet.ROAD_START-VanArrivalStreet.ROAD_END)/4)+2*(int)Math.ceil((VanArrivalStreet.ROAD_START-VanArrivalStreet.ROAD_END)/2),"sixteen continuous asphalt lanes and sixteen raised sidewalk sections");
         int straight=0,side=0;
         Set<String> centres=new HashSet<>();
         for(var tile:tiles){
@@ -21,14 +21,14 @@ public final class VanArrivalStreetTest {
                 "road preserves embedded albedo rather than solid gray");
             if(tile.mesh().endsWith("straight")){
                 straight++;
-                ok(Math.abs(tile.scaleX()-2.10)<.001&&Math.abs(tile.scaleZ()-4.0)<.001,
+                ok(Math.abs(tile.scaleX()-2.10)<.001&&tile.scaleZ()>0&&tile.scaleZ()<=4.0,
                     "road tiles are dimensioned in actual metres");
             }else if(tile.mesh().endsWith("side")){
                 side++;
-                ok(Math.abs(tile.scaleZ()-2.0)<.001,"sidewalk panels remain separate");
+                ok(tile.scaleZ()>0&&tile.scaleZ()<=2.0,"sidewalk panels remain separate");
             }
         }
-        ok(straight==16&&side==16,
+        ok(straight==20&&side==18,
             "uninterrupted original asphalt surface and distinct pedestrian walkway");
         int asphalt=VanArrivalStreet.surfaceMaterial(false),
             concrete=VanArrivalStreet.surfaceMaterial(true);

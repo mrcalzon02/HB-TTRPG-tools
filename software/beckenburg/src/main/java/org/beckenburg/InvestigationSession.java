@@ -348,7 +348,7 @@ public final class InvestigationSession {
     }
     public boolean extract(double x,double y,double z){
         var local=map.van().local(x,z);
-        if(Math.abs(y-map.level().dock().y())>.25
+        if(Math.abs(y-map.floorY(HouseMap.EXTRACTION_ROOM))>.25
                 ||map.roomAt(x,y,z)!=HouseMap.EXTRACTION_ROOM
                 ||Math.abs(local.x())>=VanStaging.HALF_WIDTH-VanStaging.WALL_THICKNESS
                 ||local.z()<VanStaging.FRONT||local.z()>=VanStaging.REAR-VanStaging.WALL_THICKNESS) {

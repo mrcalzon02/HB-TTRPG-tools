@@ -9,7 +9,7 @@ public final class VanEquipmentRack {
         int index=item.ordinal();
         // Six real instrument hooks along the enlarged left equipment wall.
         // This is the solo-game subset; LAN racks use the complete tier catalog.
-        VanStaging.Position pos=van.world(-1.60,-2.72+index*1.05);
+        VanStaging.Position pos=van.world(-.70,VanInteriorLayout.TOOL_FIRST_Z+index*.50);
         return new Socket(item,pos.x(),pos.z());
     }
     public static EquipmentLoadout.Item aimed(VanStaging van,double playerX,double playerZ,double yaw){
@@ -26,7 +26,7 @@ public final class VanEquipmentRack {
             Socket socket=socket(van,item);
             double dx=socket.x-playerX,dz=socket.z-playerZ;
             double distance=Math.hypot(dx,dz);
-            if(distance>.60&&distance<=2.45){
+            if(distance>.25&&distance<=2.45){
                 double forward=(dx*Math.sin(yaw)+dz*Math.cos(yaw))/distance;
                 if(forward>Math.cos(Math.toRadians(14)) && forward>best){
                     best=forward;found=item;
