@@ -27,19 +27,22 @@ public final class VanStaging {
             this.label=label;this.dx=dx;this.dz=dz;
         }
     }
-    /** Internal van cargo envelope, in metres. 7.30m long, 4.10m wide,
-     * with 3.05m usable headroom. Original Car08 was an undersized square
-     * body (4.14m by 4.14m), not suitable for 28 real instruments.
-     * Cargo doorway is at FRONT (negative local Z), bulkhead at REAR.
+    /** Full-size exterior body is 4.10m wide; the physically usable interior
+     * is 15% narrower (3.485m). The upper interior shoulders taper another
+     * 10% inward, giving 3.1365m between the roof-side mounting rails.
+     * Vehicle length and the original, reusable location placement are fixed.
      */
     public static final double HALF_WIDTH=2.05, FRONT=-3.65, REAR=3.65;
-    public static final double INTERIOR_HEIGHT=3.05, WALL_THICKNESS=.13, USE_RANGE=1.15;
+    public static final double INTERIOR_HALF_WIDTH=HALF_WIDTH*.85;
+    public static final double INTERIOR_ROOF_HALF_WIDTH=INTERIOR_HALF_WIDTH*.90;
+    public static final double INTERIOR_HEIGHT=3.05, ROOF_SHOULDER_Y=2.21;
+    public static final double WALL_THICKNESS=.13, USE_RANGE=1.15;
     /** Host-owned cargo shutter: initially open so newly spawned hunters can leave. */
     private boolean cargoDoorClosed;
     public boolean cargoDoorClosed(){return cargoDoorClosed;}
     public void setCargoDoorClosed(boolean closed){cargoDoorClosed=closed;}
     /** Exact physical button location beside the van's cargo entrance. */
-    public Position doorButton(){return world(-1.77,FRONT+.57);}
+    public Position doorButton(){return world(-INTERIOR_HALF_WIDTH+.13,FRONT+.57);}
     public boolean nearDoorButton(double x,double z){
         if(!Double.isFinite(x)||!Double.isFinite(z))return false;
         Position p=doorButton();
@@ -71,8 +74,8 @@ public final class VanStaging {
         if(!Double.isFinite(x)||!Double.isFinite(z)||!Double.isFinite(radius)||radius<0)return true;
         Position p=local(x,z);
         double w=HALF_WIDTH,f=FRONT,r=REAR,t=WALL_THICKNESS;
-        return overlaps(p.x(),p.z(),radius,-w,-w+t,f,r) ||
-            overlaps(p.x(),p.z(),radius,w-t,w,f,r) ||
+        return overlaps(p.x(),p.z(),radius,-w,-INTERIOR_HALF_WIDTH,f,r) ||
+            overlaps(p.x(),p.z(),radius,INTERIOR_HALF_WIDTH,w,f,r) ||
             overlaps(p.x(),p.z(),radius,-w,w,r-t,r) ||
             (cargoDoorClosed&&overlaps(p.x(),p.z(),radius,-w,w,f,f+t)) ||
             // Fully modeled driver's cab is not a walk-through prop either.
@@ -90,7 +93,7 @@ public final class VanStaging {
         if(!Double.isFinite(x)||!Double.isFinite(z))return null;
         // Prevent remote activation and access from outside the cargo bay.
         Position p=local(x,z);
-        if(Math.abs(p.x)>=HALF_WIDTH-WALL_THICKNESS || p.z<FRONT || p.z>=REAR-WALL_THICKNESS) return null;
+        if(Math.abs(p.x)>=INTERIOR_HALF_WIDTH || p.z<FRONT || p.z>=REAR-WALL_THICKNESS) return null;
         Station nearest=null;double distance=USE_RANGE;
         for(Station station:Station.values()) {
             Position target=location(station);
