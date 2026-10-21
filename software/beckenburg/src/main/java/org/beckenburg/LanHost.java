@@ -37,6 +37,8 @@ public final class LanHost implements AutoCloseable {
     /** Persistent placement from real hunter coordinates, never supplied by clients. */
     private record SensorStation(String id,int room,double x,double z){}
     private final Map<Integer,SensorStation> sensorStations=new HashMap<>();
+    private final VanSensorStations vanSensors=new VanSensorStations();
+    private final Map<Integer,String> latestSensorReadings=new HashMap<>();
     private final LanDotsProjectors dots=new LanDotsProjectors();
     private final LanVideoCameras cameras=new LanVideoCameras();
     private final FieldJournal fieldNotes=new FieldJournal();
@@ -491,6 +493,8 @@ public final class LanHost implements AutoCloseable {
                     }
                     reply(peer,"DOTS|RESET");
                     for(LanDotsProjectors.Placement placed:dots.all())reply(peer,placed.frame());
+                    for(String frame:vanSensors.snapshot())reply(peer,frame);
+                    for(String frame:latestSensorReadings.values())reply(peer,frame);
                     if(writingBook.placed())reply(peer,"BOOK|DEPLOYED|"+writingBook.room());
                     reply(peer,supplies[peer.slot].frame());
                     sendEquipmentState(peer);
@@ -1008,28 +1012,23 @@ public final class LanHost implements AutoCloseable {
                         }
                         case "EMF_ARRAY","THERMAL_BEACON" -> {
                             LanWorld.Body body=world.body(peer.slot);
-                            SensorStation station=sensorStations.get(peer.slot);
-                            if(station==null||!station.id().equals(id)){
-                                if(room>=HouseMap.INDOOR_ROOMS)
-                                    throw new IllegalArgumentException("deploy the sensor inside");
-                                station=new SensorStation(id,room,body.x(),body.z());
-                                sensorStations.put(peer.slot,station);
-                                notifyHunters("FIELD|"+id+" STATION DEPLOYED");
+                            if(room>=HouseMap.INDOOR_ROOMS)
+                                throw new IllegalArgumentException("deploy the probe inside");
+                            VanSensorStations.Change change=vanSensors.placeOrRetrieve(
+                                peer.slot,id,room,body.x(),body.z(),gear.owned(id));
+                            if(change.removed()!=null){
+                                int removed=change.removed().id();
+                                latestSensorReadings.remove(removed);
+                                notifyHunters("SENSOR|CLEAR|"+removed);
+                                reading="Node "+removed+" retrieved / "+
+                                    vanSensors.count(peer.slot,id)+" stations active";
+                            }else{
+                                notifyHunters(change.placed().frame());
+                                reading="Node "+change.placed().id()+" placed in "+
+                                    map.roomName(room)+" / "+vanSensors.count(peer.slot,id)+
+                                    " of "+VanSensorStations.capacity(id,gear.owned(id));
                             }
-                            int age=tick-lastEvidenceEventTick;
-                            int power=age>=0&&age<=40
-                                ?Math.max(0,lastEvidenceEventPower-age/7):0;
-                            double distance=Math.hypot(station.x()-ghostPose.pose().x(),
-                                station.z()-ghostPose.pose().z());
-                            boolean nearby=distance<=stage.reachCm()/100.0;
-                            mission.setEvidenceHeating(lights.breaker());
-                            LanCase.Report report=mission.scanMeasured(peer.slot,
-                                id.equals("EMF_ARRAY")?LanCase.Tool.EMF:LanCase.Tool.THERMOMETER,
-                                station.room(),ghost.room(),tick,
-                                nearby?lastEvidenceEventRoom:-1,nearby?power:0,
-                                GhostEvidenceProfile.emfSuppressed(ghostType));
-                            if(!report.accepted())throw new IllegalArgumentException(report.message());
-                            reading="Deployed station / "+report.message().replace("°","deg ");
+                            gear.setPower(id,vanSensors.count(peer.slot,id)>0);
                         }
                         case "ANCHOR_TRIANGULATOR" -> {
                             LanWorld.Body body=world.body(peer.slot);
@@ -2096,6 +2095,7 @@ public final class LanHost implements AutoCloseable {
                 if(seats[GHOST_SEAT]!=null&&seats[GHOST_SEAT].ghostWorldMode)
                     reply(seats[GHOST_SEAT],ghostPose.staminaFrame(tick));
             }
+            if(tick%10==0)broadcastSensorReadings();
             if(tick%5==0){broadcastState();broadcastApparitions();broadcastProgress();broadcastWorld();
                 if(seats[GHOST_SEAT]!=null&&seats[GHOST_SEAT].ghostWorldMode){
                     reply(seats[GHOST_SEAT],ghostPose.frame(tick));
@@ -2186,6 +2186,38 @@ public final class LanHost implements AutoCloseable {
         for(int i=0;i<HUNTERS;i++){Peer peer=seats[i];if(peer!=null&&peer.worldMode&&!key.equals(rackSent.get(peer))){
             for(String frame:VanRackStock.frames(stock,tick))reply(peer,frame);rackSent.put(peer,key);
         }}
+    }
+    /** Live remote station values are sent only to hunters, including those in the van.
+     * A stationary sensor samples its own room without using a dead owner's gear slot.
+     */
+    private void broadcastSensorReadings(){
+        mission.setEvidenceHeating(lights.breaker());
+        for(VanSensorStations.Station station:vanSensors.all()){
+            String reading;
+            if(equipment[station.owner()].batterySecondsLeft(station.tool())<=0
+                    ||!equipment[station.owner()].powered(station.tool())){
+                reading="OFFLINE / battery empty or switched off";
+            }else{
+                int age=tick-lastEvidenceEventTick;
+                int power=age>=0&&age<=40
+                    ?Math.max(0,lastEvidenceEventPower-age/7):0;
+                double distance=Math.hypot(station.x()-ghostPose.pose().x(),
+                    station.z()-ghostPose.pose().z());
+                boolean inRange=distance<=EquipmentTiers.stage(
+                    station.tool(),station.tier()).reachCm()/100.0;
+                LanCase.Report report=mission.stationMeasured(
+                    station.tool().equals("EMF_ARRAY")?LanCase.Tool.EMF:LanCase.Tool.THERMOMETER,
+                    station.room(),ghost.room(),tick,
+                    inRange?lastEvidenceEventRoom:-1,inRange?power:0);
+                reading=report.accepted()
+                    ?report.message().substring(report.message().indexOf(" - ")+3)
+                    :"No environmental sample";
+            }
+            String packet="SENSOR|READ|"+station.id()+"|"+tick+"|"+
+                reading.replace("°","deg ");
+            latestSensorReadings.put(station.id(),packet);
+            notifyHunters(packet);
+        }
     }
     private void broadcastWorld(){
         broadcastRack();

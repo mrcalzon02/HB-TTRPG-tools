@@ -109,6 +109,8 @@ GameplaySmokeTest
 LanFieldJournalIntegrationTest
 VanHidingTest
 VanTelemetryTest
+VanSensorStationsTest
+VanSiteMapScreenTest
 FieldSuppliesTest
 CustomContractTest
 LobbyGhostAvatarTest

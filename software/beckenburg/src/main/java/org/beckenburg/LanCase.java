@@ -219,6 +219,19 @@ public final class LanCase {
         if(tool==null||room<0||room>=HouseMap.ROOM_COUNT||tick<0
                 ||eventStrength<0||eventStrength>10)
             return new Report(false,"invalid environmental scan context");
+        return stationMeasured(tool,room,ghostRoom,tick,eventRoom,eventStrength);
+    }
+    /**
+     * Environment sampling for already-deployed host-owned probes.
+     * No living investigator or held instrument is required to keep a station reporting.
+     */
+    public Report stationMeasured(Tool tool,int room,int ghostRoom,int tick,
+                                  int eventRoom,int eventStrength){
+        if(outcome!=Outcome.ACTIVE||tool==null||room<0||room>=HouseMap.ROOM_COUNT
+                ||tick<0||eventStrength<0||eventStrength>10)
+            return new Report(false,"invalid deployed station reading");
+        if(tool==Tool.SPIRIT_BOX)
+            return new Report(false,"station cannot sample speech");
         String reading;
         switch(tool){
             case EMF -> {

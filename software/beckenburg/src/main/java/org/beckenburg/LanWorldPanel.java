@@ -37,7 +37,10 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private VanTelemetry.Display meters;
     private final java.util.ArrayDeque<Integer> activityHistory=new java.util.ArrayDeque<>();
     private boolean vanDisplay,concealed;
-    private int lastVanPoll=-100000;
+    private int vanMapScroll;
+    private final Map<Integer,VanSensorStations.Station> sensorNodes=new HashMap<>();
+    private final Map<Integer,VanSiteMapScreen.Reading> sensorReadings=new HashMap<>();
+    private int lastVanPoll=-100000,lastMapTextureTick=-100000;
     private final List<SceneRenderer.WorldMark> counterMarks=new ArrayList<>();
     private SceneRenderer.Apparition apparition;
     private boolean orbForm,greenGhostForm;
@@ -524,6 +527,33 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     renderer.dotsPassX=x;renderer.dotsPassZ=z;
                     renderer.dotsPassUntil=eventTick+3; // optical persistence only
                 }else throw new IllegalArgumentException("invalid D.O.T.S. state");
+            }else if(p.get(0).equals("SENSOR")){
+                if(p.size()==2&&p.get(1).equals("RESET")){
+                    sensorNodes.clear();sensorReadings.clear();
+                    renderer.sensorPositions.clear();
+                }else if(p.size()==9&&p.get(1).equals("PLACE")){
+                    int nodeId=LanProtocol.integer(p.get(2),1,999999999);
+                    int owner=LanProtocol.integer(p.get(3),0,5);
+                    String tool=p.get(4);
+                    int room=LanProtocol.integer(p.get(5),0,HouseMap.INDOOR_ROOMS-1);
+                    double xx=LanProtocol.integer(p.get(6),0,map.width()*1000)/1000.0;
+                    double zz=LanProtocol.integer(p.get(7),0,map.height()*1000)/1000.0;
+                    EquipmentTiers.Tier tier=EquipmentTiers.Tier.valueOf(p.get(8));
+                    var node=new VanSensorStations.Station(
+                        nodeId,owner,tool,room,xx,zz,tier);
+                    sensorNodes.put(nodeId,node);
+                    renderer.sensorPositions.put(nodeId,node);
+                }else if(p.size()==3&&p.get(1).equals("CLEAR")){
+                    int nodeId=LanProtocol.integer(p.get(2),1,999999999);
+                    sensorNodes.remove(nodeId);
+                    renderer.sensorPositions.remove(nodeId);
+                    sensorReadings.remove(nodeId);
+                }else if(p.size()==5&&p.get(1).equals("READ")){
+                    int nodeId=LanProtocol.integer(p.get(2),1,999999999);
+                    if(sensorNodes.containsKey(nodeId))
+                        sensorReadings.put(nodeId,new VanSiteMapScreen.Reading(
+                            LanProtocol.integer(p.get(3),0,99999999),p.get(4)));
+                }else throw new IllegalArgumentException("invalid sensor station update");
             }else if(p.size()==2&&p.get(0).equals("WINDOWS")){
                 map.applyWindowSnapshot(p.get(1));
             }else if(p.size()==2&&p.get(0).equals("VANDOOR")){
@@ -683,7 +713,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             releaseVoice();
         }
         vanDisplay=insideVan();
-        if(!vanDisplay){meters=null;}
+        if(!vanDisplay){meters=null;if(interfaceOpen.equals("MAP"))interfaceOpen="";}
         if(vanDisplay&&tick-lastVanPoll>=11){
             try{client.vanMonitor();lastVanPoll=tick;}
             catch(IOException e){feedback="Van display disconnected: "+e.getMessage();vanDisplay=false;}
@@ -709,6 +739,20 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         renderer.setLampHardware(
             equipmentTier.getOrDefault("FLASHLIGHT",EquipmentTiers.Tier.I),
             firelightOn&&!flashlightOn);
+        // The bulkhead's real CRT displays the live architectural map, not a
+        // disconnected prop or a generic global activity meter.
+        if(vanDisplay&&tick-lastMapTextureTick>=10){
+            java.awt.image.BufferedImage mapImage=new java.awt.image.BufferedImage(
+                768,512,java.awt.image.BufferedImage.TYPE_INT_RGB);
+            Graphics2D monitor=mapImage.createGraphics();
+            try{
+                VanSiteMapScreen.draw(monitor,768,512,map,
+                    new ArrayList<>(sensorNodes.values()),sensorReadings,
+                    vanMapFloor,vanMapScroll,tick);
+            }finally{monitor.dispose();}
+            GlbProps.updateVanMap(mapImage);
+            lastMapTextureTick=tick;
+        }
         renderer.rackToolTiers=java.util.Map.of();
         renderer.rackInventory=rackSnapshot.stock();
         renderer.drawNetwork(map,new ArrayList<>(peers.values()),apparition,tick*.1,List.copyOf(counterMarks));
@@ -731,6 +775,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             videoRenderer.placedWritingBookRoom=renderer.placedWritingBookRoom;
             videoRenderer.dotsPositions.clear();
             videoRenderer.dotsPositions.putAll(renderer.dotsPositions);
+            videoRenderer.sensorPositions.clear();
+            videoRenderer.sensorPositions.putAll(renderer.sensorPositions);
             videoRenderer.dotsPassRoom=renderer.dotsPassRoom;
             videoRenderer.dotsPassX=renderer.dotsPassX;
             videoRenderer.dotsPassZ=renderer.dotsPassZ;
@@ -868,13 +914,14 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 g.setColor(new Color(218,225,221));
                 String[] hints={"WASD move  /  SHIFT sprint  /  CLICK mouse-look",
                     "1-4 equip  /  R use  /  E interact  /  F6 gear rack",
-                    "Z cross  /  G ward  /  H salt  /  K medicine",
+                    "Z cross / G ward / H salt / K medicine / M large van map",
                     "J casefile  /  TAB journal  /  I guess  /  P submit",
                     "ENTER chat  /  F2 radio  /  F3-F4 voice  /  F7 voice options",
                     "ESC exit world  /  F1 close this help"};
                 int yy=hy+55;for(String hint:hints){g.drawString(hint,hx+18,yy);yy+=25;}
             }
-            if(interfaceOpen.equals("MAP"))SiteMapView.draw(g,getWidth(),h,map,mapFloor,renderer.x,renderer.eyeHeight-1.62,renderer.z);
+            if(interfaceOpen.equals("MAP"))VanSiteMapScreen.draw(g,getWidth(),h,map,
+                new ArrayList<>(sensorNodes.values()),sensorReadings,mapFloor,vanMapScroll,tick);
             if(interfaceOpen.equals("BRIEFING")){
                 int x=30,y=125;g.setColor(new Color(10,17,23,248));g.fillRoundRect(18,88,getWidth()-36,Math.min(h-110,345),12,12);g.setColor(new Color(231,212,171));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));g.drawString("CONTRACT BOARD / ESC CLOSE",x,112);
                 g.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,14));
@@ -1118,10 +1165,19 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     }
     @Override public void keyPressed(KeyEvent e){
         if(chatInput.isVisible())return;
+        if(e.getKeyCode()==KeyEvent.VK_M&&insideVan()&&!casefileOpen){
+            if(interfaceOpen.equals("MAP"))interfaceOpen="";
+            else{interfaceOpen="MAP";vanMapScroll=0;keys.clear();mouseLook.release();}
+            repaint();return;
+        }
         if(!interfaceOpen.isEmpty()){
             if(e.getKeyCode()==KeyEvent.VK_ESCAPE||e.getKeyCode()==KeyEvent.VK_E)interfaceOpen="";
-            else if(e.getKeyCode()==KeyEvent.VK_PAGE_UP)mapFloor++;
-            else if(e.getKeyCode()==KeyEvent.VK_PAGE_DOWN)mapFloor--;
+            else if(e.getKeyCode()==KeyEvent.VK_PAGE_UP||e.getKeyCode()==KeyEvent.VK_RIGHT){
+                mapFloor++;vanMapScroll=0;
+            }else if(e.getKeyCode()==KeyEvent.VK_PAGE_DOWN||e.getKeyCode()==KeyEvent.VK_LEFT){
+                mapFloor--;vanMapScroll=0;
+            }else if(e.getKeyCode()==KeyEvent.VK_UP)vanMapScroll=Math.max(0,vanMapScroll-1);
+            else if(e.getKeyCode()==KeyEvent.VK_DOWN)vanMapScroll++;
             repaint();return;
         }
         if(e.getKeyCode()==KeyEvent.VK_F1){helpVisible=!helpVisible;keys.clear();mouseLook.release();repaint();return;}
@@ -1219,7 +1275,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_F9 -> sendAction("inspect writing book",()->client.readBook());
             case KeyEvent.VK_F10 -> sendAction("retrieve writing book",()->client.takeBook());
             case KeyEvent.VK_L -> sendAction("hide",()->client.hide());
-            case KeyEvent.VK_M -> feedback=insideVan()?"MONITOR ALWAYS VISIBLE ON RIGHT":"VAN TELEMETRY ONLY INSIDE THE VAN";
+            // M opens the full-size van map before ordinary world hotkeys.
             case KeyEvent.VK_K -> showSupplyStore();
             case KeyEvent.VK_F6 -> showEquipmentRack();
             case KeyEvent.VK_T -> consumeMedicine(FieldSupplies.Kind.HEALTH);

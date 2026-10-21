@@ -55,7 +55,7 @@ public final class VanInteriorLayout {
         new Fixture("monitoring_screen_mp_1",.85,FLOOR_Y+1.25,-1.2,1,Math.PI/2,Mount.WALL,"sanity telemetry"),
         new Fixture("monitoring_screen_mp_1",.85,FLOOR_Y+1.25,-.2,1,Math.PI/2,Mount.WALL,"haunting activity"),
         new Fixture("monitoring_screen_mp_1",.85,FLOOR_Y+1.25,.8,1,Math.PI/2,Mount.WALL,"sound telemetry"),
-        new Fixture("blender_site_map_fixed",.83,FLOOR_Y+.75,-1.2,.70,-Math.PI/2,Mount.WALL,"site map"),
+        new Fixture("blender_site_map_fixed",.83,FLOOR_Y+.75,-1.2,.78,-Math.PI/2,Mount.WALL,"site map"),
         new Fixture("blender_objective_board_fixed",.83,FLOOR_Y+.75,-.2,.65,-Math.PI/2,Mount.WALL,"contract objective board"),
         new Fixture("blender_clipboards_fixed",.83,FLOOR_Y+.75,.8,1,-Math.PI/2,Mount.WALL,"daily assignment board")
     );

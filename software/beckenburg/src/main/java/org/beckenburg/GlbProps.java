@@ -24,6 +24,8 @@ import javax.imageio.ImageIO;
 public final class GlbProps {
     private GlbProps() { }
     public static final int TEXTURE_BASE=256;
+    /** Dedicated live-map screen, independent of the other van CRT materials. */
+    public static final int VAN_MAP_MATERIAL=Integer.MAX_VALUE-2;
     private static final String[] NAMES={
         "blender_site_map_fixed","blender_objective_board_fixed","blender_clipboards_fixed","blender_computer_fixed",
         "blender_sound_recorder_1","blender_sound_recorder_2","blender_sound_recorder_3",
@@ -49,6 +51,13 @@ public final class GlbProps {
     private static final List<double[]> diffuseFactors=new ArrayList<>();
     private static int vanCrtMaterial=-1;
     private static BufferedImage vanCrtImage=blankCrt();
+    private static BufferedImage vanMapImage=blankCrt();
+    public static synchronized void updateVanMap(BufferedImage image){
+        if(image==null||image.getWidth()<256||image.getHeight()<256
+                ||image.getWidth()>1024||image.getHeight()>1024)
+            throw new IllegalArgumentException("invalid map monitor texture");
+        vanMapImage=image;
+    }
     private static BufferedImage blankCrt(){
         BufferedImage image=new BufferedImage(256,256,BufferedImage.TYPE_INT_RGB);
         Graphics2D g=image.createGraphics();
@@ -102,6 +111,15 @@ public final class GlbProps {
     }
     /** Model triangle list is immutable and cannot mutate runtime source geometry. */
     public static synchronized int sample(int material,double u,double v){
+        if(material==VAN_MAP_MATERIAL){
+            if(!Double.isFinite(u)||!Double.isFinite(v))
+                throw new IllegalArgumentException("invalid van map UV");
+            BufferedImage image=vanMapImage;
+            int xx=Math.min(image.getWidth()-1,(int)((u-Math.floor(u))*image.getWidth()));
+            int yy=Math.min(image.getHeight()-1,
+                (int)((1.0-(v-Math.floor(v)))*image.getHeight()));
+            return image.getRGB(xx,yy)&0xffffff;
+        }
         int index=material-TEXTURE_BASE;
         if(index<0||index>=textures.size()||!Double.isFinite(u)||!Double.isFinite(v))
             throw new IllegalArgumentException("Invalid imported texture");

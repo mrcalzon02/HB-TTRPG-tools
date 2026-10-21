@@ -83,6 +83,8 @@ public final class SceneRenderer {
     public int placedWritingBookRoom=-1;
     public final java.util.Map<Integer,LanVideoCameras.Camera> videoCameras=
         new java.util.HashMap<>();
+    public final java.util.Map<Integer,VanSensorStations.Station> sensorPositions=
+        new java.util.HashMap<>();
     public final java.util.Map<Integer,LanDotsProjectors.Placement> dotsPositions=
         new java.util.HashMap<>();
     public record IncenseSmoke(int room,double x,double z,int untilTick){
@@ -452,7 +454,9 @@ public final class SceneRenderer {
                     Point[] pp=new Point[3];var vv=new GlbProps.Vertex[]{t.a(),t.b(),t.c()};
                     for(int i=0;i<3;i++){var v=VanInteriorLayout.vertex(fixture.mesh(),vv[i]);pp[i]=new Point(p.x()+fixture.scale()*(v.x()*Math.cos(angle)-v.z()*Math.sin(angle)),fixture.y()+v.y()*fixture.scale(),p.z()+fixture.scale()*(v.x()*Math.sin(angle)+v.z()*Math.cos(angle)));}
                     boolean screen=t.material()==VanInteriorLayout.screenMaterial();
-                    faces.add(new Face(pp[0],pp[1],pp[2],0xffffff,t.material(),t.a().u(),screen?1-t.a().v():t.a().v(),t.b().u(),screen?1-t.b().v():t.b().v(),t.c().u(),screen?1-t.c().v():t.c().v()));
+                    int material=screen&&fixture.purpose().equals("main command monitor")
+                        ?GlbProps.VAN_MAP_MATERIAL:t.material();
+                    faces.add(new Face(pp[0],pp[1],pp[2],0xffffff,material,t.a().u(),screen?1-t.a().v():t.a().v(),t.b().u(),screen?1-t.b().v():t.b().v(),t.c().u(),screen?1-t.c().v():t.c().v()));
                 }
             }else imported(faces,fixture.mesh(),p.x(),fixture.y(),p.z(),fixture.scale(),van.placement().yaw()+fixture.yaw());
         }
@@ -781,6 +785,12 @@ public final class SceneRenderer {
                 box(out,px-spread*.5,rise,pz-spread*.5,spread,.04+i*.004,spread,
                     i%2==0?0x6e8888:0x8f9d96);
             }
+        }
+        // Physical array models appear only for host-authorized placed nodes.
+        for(VanSensorStations.Station node:sensorPositions.values()){
+            if(Math.hypot(node.x()-x,node.z()-z)>13.5)continue;
+            imported(out,node.model(),node.x(),map.floorY(node.room())+.04,
+                node.z(),1.0,0);
         }
         // This device exists ONLY after an owner physically deploys it.
         // Projected light is a physical effect, not an evidence qualification check.
