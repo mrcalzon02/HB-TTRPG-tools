@@ -1,5 +1,8 @@
 # The Beckenburg Project — Playable Solo Investigation Prototype (Java 17)
 
+> **ARCHIVED — DEVELOPMENT MOVED.** This is the frozen Beckenburg source retained in HB-TTRPG-tools for historical provenance and migration recovery. All new game development, testing and independent releases belong to [The-Beckenburg-Project](https://github.com/mrcalzon02/The-Beckenburg-Project). Do not develop against this old copy.
+
+
 ## Thirteen-ghost evidence matrix and manually ticked journal (2026-10-18)
 
 The LAN hunter field journal now implements a **clickable evidence checklist** alongside the **complete 13-ghost roster**, keeping incompatible names visible but greyed out. Every tick is an **investigator's own assumption**, not a reading that the host confirms. Unticking restores matches, contradictory ticks are permitted, and clicking even an excluded ghost selects a guess without submitting it. Ghost writing has child-drawing, frantic-scrawl, and ritual-circle subtypes; compatible reading/writing, Shade's suppressive EMF behavior, and temperature profiles use the same rules as the journal. Equipment data is never automatically ticked; the actual measurements remain in the separate timestamped logbook. Current hunter marks are team-shared via private LAN notes.
