@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** Host-owned, physically placed EMF and thermal stations. Never sends ghost identity. */
+/** Host-owned, physically placed field monitoring stations. No ghost identity packets. */
 public final class VanSensorStations {
     public record Station(int id,int owner,String tool,int room,double x,double z,
                           EquipmentTiers.Tier tier) {
@@ -21,8 +21,9 @@ public final class VanSensorStations {
                 +Math.round(x*1000)+"|"+Math.round(z*1000)+"|"+tier;
         }
         public String model(){
-            return "blender_"+(tool.equals("EMF_ARRAY")?"emf_array_":"thermal_beacon_")
-                +(tier.ordinal()+1)+"_node";
+            if(tool.equals("EMF_ARRAY")||tool.equals("THERMAL_BEACON"))
+                return EquipmentModelCatalog.variant(tool,tier,"node");
+            return EquipmentModelCatalog.model(tool,tier);
         }
     }
     public record Change(Station placed,Station removed){
@@ -35,13 +36,18 @@ public final class VanSensorStations {
     private int nextId=1;
 
     public static boolean supported(String tool){
-        return "EMF_ARRAY".equals(tool)||"THERMAL_BEACON".equals(tool);
+        return "EMF_ARRAY".equals(tool)||"THERMAL_BEACON".equals(tool)
+            ||"MOTION_SENSOR".equals(tool)||"SOUND_SENSOR".equals(tool);
     }
     public static int capacity(String tool,EquipmentTiers.Tier tier){
         if(!supported(tool)||tier==null)throw new IllegalArgumentException("unknown array");
-        return "EMF_ARRAY".equals(tool)
-            ?switch(tier){case I->2;case II->3;case III->5;}
-            :switch(tier){case I->2;case II->4;case III->6;};
+        return switch(tool){
+            case "EMF_ARRAY" -> switch(tier){case I->2;case II->3;case III->5;};
+            case "THERMAL_BEACON" -> switch(tier){case I->2;case II->4;case III->6;};
+            case "MOTION_SENSOR","SOUND_SENSOR" ->
+                switch(tier){case I->1;case II->2;case III->3;};
+            default -> throw new IllegalArgumentException("unknown station");
+        };
     }
     public Change placeOrRetrieve(int owner,String tool,int room,double x,double z,
                                   EquipmentTiers.Tier tier){

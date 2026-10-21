@@ -12,6 +12,40 @@ import java.util.Map;
 /** Large, readable, floor-accurate van map. The host supplies every station and reading. */
 public final class VanSiteMapScreen {
     private VanSiteMapScreen(){}
+    // Authoritative footprints are stable between placements/door changes.
+    // Cache their tested screen cells instead of repeating thousands of raycasts
+    // on every Swing repaint or CRT update.
+    private static final java.util.Map<String,List<java.awt.Point>> MASKS=
+        new java.util.LinkedHashMap<>(48,.75f,true){
+            @Override protected boolean removeEldestEntry(
+                    java.util.Map.Entry<String,List<java.awt.Point>> eldest){
+                return size()>48;
+            }
+        };
+    private static synchronized List<java.awt.Point> footprint(
+            HouseMap map,VanSensorStations.Station station,
+            int dx,int dz,double minX,double minZ,double scale){
+        String key=map.level().revision()+":"+map.doorSnapshot()+":"+
+            station.id()+":"+station.tool()+":"+station.tier()+":"+
+            station.x()+":"+station.z()+":"+dx+":"+dz+":"+
+            minX+":"+minZ+":"+scale;
+        List<java.awt.Point> cached=MASKS.get(key);
+        if(cached!=null)return cached;
+        int radius=(int)Math.ceil(SensorCoverage.radius(station)*scale);
+        int cx=dx+(int)Math.round((station.x()-minX)*scale);
+        int cy=dz+(int)Math.round((station.z()-minZ)*scale);
+        java.util.ArrayList<java.awt.Point> points=new java.util.ArrayList<>();
+        int step=4;
+        for(int sy=Math.max(dz,cy-radius);sy<=cy+radius;sy+=step)
+            for(int sx=Math.max(dx,cx-radius);sx<=cx+radius;sx+=step){
+                double wx=minX+(sx-dx+step/2d)/scale;
+                double wz=minZ+(sy-dz+step/2d)/scale;
+                if(SensorCoverage.contains(map,station,station.room(),wx,wz))
+                    points.add(new java.awt.Point(sx,sy));
+            }
+        cached=List.copyOf(points);MASKS.put(key,cached);
+        return cached;
+    }
     public record Reading(int tick,String text){
         public Reading {
             if(tick<0||text==null||text.isBlank()||text.length()>150
@@ -32,6 +66,14 @@ public final class VanSiteMapScreen {
     }
     public static void draw(Graphics2D g,int width,int height,HouseMap map,
             List<VanSensorStations.Station> source,Map<Integer,Reading> readings,
+            int requestedFloor,int requestedScroll,int tick){
+        draw(g,width,height,map,source,readings,Map.of(),List.of(),Map.of(),
+            requestedFloor,requestedScroll,tick);
+    }
+    public static void draw(Graphics2D g,int width,int height,HouseMap map,
+            List<VanSensorStations.Station> source,Map<Integer,Reading> readings,
+            Map<Integer,FieldSensorDetection.Pulse> alerts,
+            List<LanVideoCameras.Camera> cameras,Map<Integer,Boolean> cameraPower,
             int requestedFloor,int requestedScroll,int tick){
         List<Double> levels=floors(map);
         if(levels.isEmpty())return;
@@ -72,6 +114,23 @@ public final class VanSiteMapScreen {
             String name=fit(g.getFontMetrics(),room.name(),Math.max(10,rw-8));
             if(rw>35&&rh>17)g.drawString(name,px+4,pz+14);
         }
+        // Coverage is sampled through the identical room/LOS query used by the
+        // host. A circle near a corner cannot bleed through walls, across floors,
+        // or into neighboring rooms. Four-pixel cells preserve PSX readability.
+        for(var station:source){
+            if(!station.tool().equals("MOTION_SENSOR")
+                    &&!station.tool().equals("SOUND_SENSOR"))continue;
+            if(rooms.stream().noneMatch(r->r.id()==station.room()))continue;
+            boolean motion=station.tool().equals("MOTION_SENSOR");
+            var alert=alerts.get(station.id());
+            boolean flashing=alert!=null&&tick>=alert.tick()&&tick-alert.tick()<=20
+                &&(tick/3)%2==0;
+            Color fill=motion?new Color(120,219,154,flashing?105:47)
+                :new Color(119,176,237,flashing?107:48);
+            g.setColor(fill);
+            for(java.awt.Point pixel:footprint(map,station,dx,dz,minX,minZ,scale))
+                g.fillRect(pixel.x,pixel.y,4,4);
+        }
         // Show the actual authored door/window portals so this is a navigable floor
         // plan, not a box of room names. Do not infer missing architectural openings.
         for(var portal:map.level().portals()){
@@ -91,26 +150,48 @@ public final class VanSiteMapScreen {
             int px=dx+(int)Math.round((s.x()-minX)*scale);
             int py=dz+(int)Math.round((s.z()-minZ)*scale);
             boolean thermal=s.tool().equals("THERMAL_BEACON");
-            g.setColor(thermal?new Color(249,180,111):new Color(122,223,182));
+            boolean motion=s.tool().equals("MOTION_SENSOR");
+            boolean microphone=s.tool().equals("SOUND_SENSOR");
+            var last=alerts.get(s.id());
+            boolean blink=last!=null&&tick>=last.tick()&&tick-last.tick()<=20
+                &&(tick/3)%2==0;
+            g.setColor(blink?new Color(255,241,141):
+                thermal?new Color(249,180,111):
+                microphone?new Color(118,184,240):
+                motion?new Color(164,243,157):new Color(122,223,182));
             g.fillOval(px-6,py-6,12,12);
             g.setColor(Color.BLACK);g.drawOval(px-6,py-6,12,12);
             g.setColor(new Color(244,244,232));
-            g.drawString((thermal?"T":"E")+s.id(),px+8,py-5);
+            g.drawString((thermal?"T":motion?"M":microphone?"S":"E")+s.id(),px+8,py-5);
+        }
+        for(var camera:cameras){
+            if(rooms.stream().noneMatch(r->r.id()==camera.room()))continue;
+            int px=dx+(int)Math.round((camera.x()-minX)*scale);
+            int py=dz+(int)Math.round((camera.z()-minZ)*scale);
+            g.setColor(cameraPower.getOrDefault(camera.owner(),false)
+                ?new Color(243,208,132):new Color(114,124,129));
+            g.fillRect(px-5,py-5,10,10);
+            g.drawString("C"+(camera.owner()+1),px+8,py-6);
         }
         int right=plotLeft+plotWidth+12;
         g.setColor(new Color(126,168,165));g.drawLine(right-6,plotTop,right-6,y+h-15);
         g.setColor(new Color(214,225,217));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,12));
         g.drawString("DEPLOYED / FLOOR "+(floor+1),right,plotTop+10);
         g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
-        int maxRows=Math.max(1,(h-114)/46);
+        int maxRows=Math.max(1,(h-114-(cameras.isEmpty()?0:44))/46);
         int start=Math.max(0,Math.min(requestedScroll,Math.max(0,stations.size()-maxRows)));
         if(stations.isEmpty())g.drawString("No probes on this floor",right,plotTop+38);
         for(int i=start;i<Math.min(stations.size(),start+maxRows);i++){
             var s=stations.get(i);Reading reading=readings.get(s.id());
             int yy=plotTop+37+(i-start)*46;
-            g.setColor(s.tool().equals("THERMAL_BEACON")
-                ?new Color(248,186,116):new Color(124,224,176));
-            g.drawString((s.tool().equals("THERMAL_BEACON")?"T":"E")+s.id()
+            g.setColor(s.tool().equals("THERMAL_BEACON")?new Color(248,186,116)
+                :s.tool().equals("SOUND_SENSOR")?new Color(128,188,240)
+                :new Color(124,224,176));
+            String prefix=switch(s.tool()){
+                case "THERMAL_BEACON"->"T";case "MOTION_SENSOR"->"M";
+                case "SOUND_SENSOR"->"S";default->"E";
+            };
+            g.drawString(prefix+s.id()
                 +"  "+fit(g.getFontMetrics(),map.roomName(s.room()),sidebar-70),right,yy);
             g.setColor(new Color(218,227,219));
             String value=reading==null?"Awaiting first sample"
@@ -118,6 +199,10 @@ public final class VanSiteMapScreen {
             g.drawString(fit(g.getFontMetrics(),value,sidebar-12),right,yy+17);
         }
         g.setColor(new Color(142,173,171));
-        g.drawString(stations.size()+" node(s) on selected floor",right,y+h-16);
+        if(!cameras.isEmpty()){
+            long connected=cameras.stream().filter(c->cameraPower.getOrDefault(c.owner(),false)).count();
+            g.drawString("CAMERAS "+connected+"/"+cameras.size()+" LIVE / C cycle",right,y+h-35);
+        }
+        g.drawString(stations.size()+" probes on floor",right,y+h-16);
     }
 }

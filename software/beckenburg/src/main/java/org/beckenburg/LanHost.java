@@ -38,6 +38,7 @@ public final class LanHost implements AutoCloseable {
     private record SensorStation(String id,int room,double x,double z){}
     private final Map<Integer,SensorStation> sensorStations=new HashMap<>();
     private final VanSensorStations vanSensors=new VanSensorStations();
+    private final FieldSensorDetection fieldDetectors=new FieldSensorDetection();
     private final Map<Integer,String> latestSensorReadings=new HashMap<>();
     private final VanTripods tripods=new VanTripods();
     private final LanPortableLights portableLights=new LanPortableLights();
@@ -1049,7 +1050,7 @@ public final class LanHost implements AutoCloseable {
                                     ||id.equals("OBJECT_IMPRINT_SCANNER")))
                                 gear.expend(id);
                         }
-                        case "EMF_ARRAY","THERMAL_BEACON" -> {
+                        case "EMF_ARRAY","THERMAL_BEACON","MOTION_SENSOR","SOUND_SENSOR" -> {
                             LanWorld.Body body=world.body(peer.slot);
                             if(room>=HouseMap.INDOOR_ROOMS)
                                 throw new IllegalArgumentException("deploy the probe inside");
@@ -1058,6 +1059,7 @@ public final class LanHost implements AutoCloseable {
                             if(change.removed()!=null){
                                 int removed=change.removed().id();
                                 latestSensorReadings.remove(removed);
+                                fieldDetectors.removed(removed);
                                 notifyHunters("SENSOR|CLEAR|"+removed);
                                 reading="Node "+removed+" retrieved / "+
                                     vanSensors.count(peer.slot,id)+" stations active";
@@ -1548,6 +1550,7 @@ public final class LanHost implements AutoCloseable {
                 case RITUAL->LanSound.Cue.RITUAL;
                 default->LanSound.Cue.EQUIPMENT;
             };
+            sensorSound(body.room(),body.x(),body.z(),Math.max(1,cue.baseGain/10));
             for(int listener=0;listener<HUNTERS;listener++){
                 LanSound.CueEvent sound=LanSound.project(map,world.body(listener),body.room(),
                     body.x(),body.y(),body.z(),cue,tick);
@@ -1657,6 +1660,7 @@ public final class LanHost implements AutoCloseable {
     /** Hunter-only positional acoustic projection; never a ghost pose or private team feed. */
     private void broadcastGhostSound(LanSound.Cue cue){
         LanGhostSpatial.Pose pose=ghostPose.pose();
+        sensorSound(pose.room(),pose.x(),pose.z(),Math.max(1,cue.baseGain/10));
         for(int i=0;i<HUNTERS;i++){
             if((seats[i]==null||!seats[i].worldMode)
                     &&(reserved[i]==null||!reserved[i].worldMode))continue;
@@ -2012,7 +2016,7 @@ public final class LanHost implements AutoCloseable {
             if(!running)return;
             world.advanceStamina(tick);
             for(var sound:map.fixtures().advance(tick)){
-                var f=sound.source();for(int seat=0;seat<HUNTERS;seat++)if(seats[seat]!=null&&seats[seat].worldMode){
+                var f=sound.source();sensorSound(f.room(),f.x(),f.z(),Math.max(1,sound.cue().baseGain/10));for(int seat=0;seat<HUNTERS;seat++)if(seats[seat]!=null&&seats[seat].worldMode){
                     var cue=LanSound.project(map,world.body(seat),f.room(),f.x(),f.y(),f.z(),sound.cue(),tick);if(cue!=null)reply(seats[seat],cue.frame());
                 }
                 Peer spirit=seats[GHOST_SEAT];if(spirit!=null&&spirit.ghostWorldMode){var pose=ghostPose.pose();var cue=LanSound.project(map,new LanWorld.Body(pose.x(),pose.y(),pose.z(),0,pose.room()),f.room(),f.x(),f.y(),f.z(),sound.cue(),tick);if(cue!=null)reply(spirit,"DEVICE_SOUND|"+f.id()+"|"+cue.pan()+"|"+cue.volume()+"|"+tick);}
@@ -2024,6 +2028,7 @@ public final class LanHost implements AutoCloseable {
             }
             for(var noise:map.clutter().drainNoises()){
                 int room=map.roomAt(noise.x(),noise.y(),noise.z());if(room<0)continue;
+                sensorSound(room,noise.x(),noise.z(),9);
                 for(int seat=0;seat<HUNTERS;seat++)if(seats[seat]!=null&&seats[seat].worldMode){
                     var cue=LanSound.project(map,world.body(seat),room,noise.x(),noise.y(),noise.z(),LanSound.Cue.IMPACT,tick);
                     if(cue!=null)reply(seats[seat],cue.frame());
@@ -2039,6 +2044,7 @@ public final class LanHost implements AutoCloseable {
             for(int i=0;i<HUNTERS;i++)if((seats[i]!=null||reserved[i]!=null)&&mission.alive(i)
                     &&hunterRooms[i]==ghost.room()){audible=hunterRooms[i];occupants++;}
             ghost.advance(tick,audible,occupants);
+            sampleMotionDetectors();
             if(frenzy.raging()){
                 ghost.reveal(12);
                 if(tick%10==0&&ghost.room()<HouseMap.INDOOR_ROOMS){
@@ -2265,6 +2271,36 @@ public final class LanHost implements AutoCloseable {
     /** Live remote station values are sent only to hunters, including those in the van.
      * A stationary sensor samples its own room without using a dead owner's gear slot.
      */
+    private java.util.List<VanSensorStations.Station> activeFieldDetectors(String tool){
+        return vanSensors.all().stream().filter(s->s.tool().equals(tool)
+            &&equipment[s.owner()].powered(tool)
+            &&equipment[s.owner()].batterySecondsLeft(tool)>0).toList();
+    }
+    private void emitSensorAlerts(java.util.List<FieldSensorDetection.Pulse> events){
+        for(var event:events)notifyHunters(event.frame());
+    }
+    private void sensorSound(int room,double x,double z,int volume){
+        if(room<0||room>=HouseMap.INDOOR_ROOMS)return;
+        int loudness=RoomAcousticPresets.microphoneLevel(
+            map.level(),room,Math.max(1,Math.min(10,volume)));
+        emitSensorAlerts(fieldDetectors.sound(room,x,z,loudness,
+            tick,map,activeFieldDetectors("SOUND_SENSOR")));
+    }
+    private void sampleMotionDetectors(){
+        var stations=activeFieldDetectors("MOTION_SENSOR");
+        if(stations.isEmpty())return;
+        LanGhostSpatial.Pose pose=ghostPose.pose();
+        if(pose.room()>=0&&pose.room()<HouseMap.INDOOR_ROOMS)
+            emitSensorAlerts(fieldDetectors.movement("G",pose.room(),pose.x(),pose.z(),
+                tick,map,stations));
+        for(int seat=0;seat<HUNTERS;seat++)
+            if((seats[seat]!=null||reserved[seat]!=null)&&mission.alive(seat)){
+                LanWorld.Body body=world.body(seat);
+                if(body.room()>=0&&body.room()<HouseMap.INDOOR_ROOMS)
+                    emitSensorAlerts(fieldDetectors.movement("H"+seat,body.room(),
+                        body.x(),body.z(),tick,map,stations));
+            }
+    }
     private void broadcastSensorReadings(){
         mission.setEvidenceHeating(lights.breaker());
         for(VanSensorStations.Station station:vanSensors.all()){
@@ -2272,6 +2308,15 @@ public final class LanHost implements AutoCloseable {
             if(equipment[station.owner()].batterySecondsLeft(station.tool())<=0
                     ||!equipment[station.owner()].powered(station.tool())){
                 reading="OFFLINE / battery empty or switched off";
+            }else if(station.tool().equals("MOTION_SENSOR")
+                    ||station.tool().equals("SOUND_SENSOR")){
+                FieldSensorDetection.Pulse pulse=fieldDetectors.recent(station.id(),tick,18);
+                reading=pulse==null
+                    ?station.tool().equals("SOUND_SENSOR")
+                        ?"Ambient "+RoomAcousticPresets.noiseFloor(map.level(),
+                            station.room(),lights.breaker())+"/10 / monitoring"
+                        :"No movement / monitoring"
+                    :pulse.kind()+" "+pulse.strength()+"/10 / activity detected";
             }else{
                 int age=tick-lastEvidenceEventTick;
                 int power=age>=0&&age<=40

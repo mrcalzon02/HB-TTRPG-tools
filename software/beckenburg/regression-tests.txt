@@ -114,6 +114,10 @@ VanSiteMapScreenTest
 VanTripodsTest
 GhostWritingSpatialTest
 LanPortableLightsTest
+FieldSensorDetectionTest
+VanSensorMapVisualTest
+RoomAcousticPresetsTest
+LanFieldSensorNetworkTest
 FieldSuppliesTest
 CustomContractTest
 LobbyGhostAvatarTest

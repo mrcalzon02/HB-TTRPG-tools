@@ -41,37 +41,32 @@ public final class LevelSoundscape implements AutoCloseable {
         if(level==null||room<0||room>=level.rooms().size()||frame<0)return 0;
         LevelDefinition.Room space=level.room(room);
         if(space.outside())return 0; // the exterior weather bed already owns these zones
-        String site=level.id().toLowerCase(java.util.Locale.ROOT);
-        String acoustic=space.acoustic().toLowerCase(java.util.Locale.ROOT);
-        double t=frame/(double)RATE;
+        RoomAcousticPresets.Type preset=RoomAcousticPresets.forRoom(level,room);
+        double time=frame/(double)RATE;
         int seed=level.id().hashCode()+room*197;
-        boolean institutional=site.contains("prison")||site.contains("asylum")
-            ||site.contains("school")||site.contains("college");
-        boolean monumental=site.contains("church")||site.contains("academy");
-        boolean soft=acoustic.contains("carpet")||acoustic.contains("soft");
-        double base=powered?electrical(frame+Math.floorMod(seed,13000))
-            *(institutional?.035:.012):0;
-        // Unpowered buildings retain only their natural structural/pipe sounds.
-        double period=monumental?31:institutional?23:37;
-        double phase=(t+Math.floorMod(seed,1700)/100d)%period;
-        double event=0;
+        double electrical=powered
+            ?electrical(frame+Math.floorMod(seed,13000))*preset.powerGain:0;
+        // Site-wide packaged beds remain independent. Room beds only use the
+        // mapped acoustic template and natural, deterministic building sounds.
+        double machine=preset.frequency>0&&powered
+            ?Math.sin(2*Math.PI*preset.frequency*time+.32*seed)
+                *preset.powerGain*.050:0;
+        double phase=(time+Math.floorMod(seed,1200)/100d)%preset.period;
+        double movement=0;
         if(phase<1.8){
-            if(institutional){
-                double impact=Math.exp(-phase*8);
-                event=(Math.sin(2*Math.PI*173*phase)+.35*Math.sin(2*Math.PI*311*phase))
-                    *impact*.016;
-                if(phase>.36)event+=Math.sin(2*Math.PI*173*(phase-.36))
-                    *Math.exp(-(phase-.36)*9)*.005;
-            }else if(monumental){
-                event=noise(frame/7+seed)*Math.sin(Math.PI*phase/1.8)*.007;
-            }else{
-                double bend=55+13*Math.sin(phase*3.4);
-                event=(Math.sin(2*Math.PI*bend*phase)*.006
-                    +noise(frame+seed)*.002)*Math.pow(Math.sin(Math.PI*phase/1.8),2);
-            }
+            double envelope=Math.exp(-phase*(preset==RoomAcousticPresets.Type.STONE_HALL
+                ||preset==RoomAcousticPresets.Type.CORRIDOR?2.0:5.7));
+            double tap=Math.sin(2*Math.PI*(42+preset.frequency*.55)*phase);
+            movement=(tap*.011+noise(frame/13+seed)*.005)
+                *envelope*preset.transientGain;
         }
-        double roomGain=soft?.55:acoustic.contains("stone")||acoustic.contains("tile")?1.1:1;
-        return (short)Math.round(Math.max(-.06,Math.min(.06,(base+event)*roomGain))*32767);
+        double dropPhase=(time+Math.floorMod(seed,500)/100d)%11.1;
+        double droplets=dropPhase<.23
+            ?preset.drip*Math.sin(2*Math.PI*890*dropPhase)
+                *Math.exp(-dropPhase*24)*.017:0;
+        double fabric=noise(frame/9+seed)*.0018*preset.gain;
+        double output=(electrical+machine+movement+droplets+fabric)*preset.gain;
+        return (short)Math.round(Math.max(-.06,Math.min(.06,output))*32767);
     }
     private void run(){
         long frame=0;double fade=0;

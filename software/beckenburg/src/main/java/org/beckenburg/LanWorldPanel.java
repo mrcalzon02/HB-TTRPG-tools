@@ -40,6 +40,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private int vanMapScroll;
     private final Map<Integer,VanSensorStations.Station> sensorNodes=new HashMap<>();
     private final Map<Integer,VanSiteMapScreen.Reading> sensorReadings=new HashMap<>();
+    private final Map<Integer,FieldSensorDetection.Pulse> sensorAlerts=new HashMap<>();
+    private int selectedCameraOwner=-1;
     private int lastVanPoll=-100000,lastMapTextureTick=-100000;
     private final List<SceneRenderer.WorldMark> counterMarks=new ArrayList<>();
     private SceneRenderer.Apparition apparition;
@@ -530,7 +532,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 }else throw new IllegalArgumentException("invalid D.O.T.S. state");
             }else if(p.get(0).equals("SENSOR")){
                 if(p.size()==2&&p.get(1).equals("RESET")){
-                    sensorNodes.clear();sensorReadings.clear();
+                    sensorNodes.clear();sensorReadings.clear();sensorAlerts.clear();
                     renderer.sensorPositions.clear();
                 }else if(p.size()==9&&p.get(1).equals("PLACE")){
                     int nodeId=LanProtocol.integer(p.get(2),1,999999999);
@@ -548,7 +550,25 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     int nodeId=LanProtocol.integer(p.get(2),1,999999999);
                     sensorNodes.remove(nodeId);
                     renderer.sensorPositions.remove(nodeId);
-                    sensorReadings.remove(nodeId);
+                    sensorReadings.remove(nodeId);sensorAlerts.remove(nodeId);
+                }else if(p.size()==6&&p.get(1).equals("ALERT")){
+                    int nodeId=LanProtocol.integer(p.get(2),1,999999999);
+                    int eventTick=LanProtocol.integer(p.get(3),0,99999999);
+                    String kind=p.get(4);
+                    int strength=LanProtocol.integer(p.get(5),1,10);
+                    VanSensorStations.Station node=sensorNodes.get(nodeId);
+                    if(node!=null
+                            &&((node.tool().equals("MOTION_SENSOR")&&kind.equals("MOTION"))
+                             ||(node.tool().equals("SOUND_SENSOR")&&kind.equals("SOUND")))){
+                        sensorAlerts.put(nodeId,new FieldSensorDetection.Pulse(
+                            nodeId,eventTick,kind,strength));
+                        if(insideVan()){
+                            audio.play(new LanSound.CueEvent(LanSound.Cue.SCANNER,0,56,eventTick));
+                            soundCaption=kind+" DETECTED / "+map.roomName(node.room())
+                                +" / SENSOR "+nodeId;
+                            soundUntilTick=eventTick+20;
+                        }
+                    }
                 }else if(p.size()==5&&p.get(1).equals("READ")){
                     int nodeId=LanProtocol.integer(p.get(2),1,999999999);
                     if(sensorNodes.containsKey(nodeId))
@@ -749,6 +769,24 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }
         feedback="NO PURCHASED "+kind+" MEDICINE";
     }
+    private LanVideoCameras.Camera selectedVanCamera(){
+        var available=videoCameras.values().stream()
+            .filter(c->videoPowered.getOrDefault(c.owner(),false))
+            .sorted(java.util.Comparator.comparingInt(LanVideoCameras.Camera::owner)).toList();
+        if(available.isEmpty())return null;
+        return available.stream().filter(c->c.owner()==selectedCameraOwner)
+            .findFirst().orElse(available.get(0));
+    }
+    private void cycleVanCamera(){
+        var available=videoCameras.values().stream()
+            .filter(c->videoPowered.getOrDefault(c.owner(),false))
+            .sorted(java.util.Comparator.comparingInt(LanVideoCameras.Camera::owner)).toList();
+        if(available.isEmpty()){selectedCameraOwner=-1;return;}
+        int index=-1;
+        for(int i=0;i<available.size();i++)
+            if(available.get(i).owner()==selectedVanCamera().owner())index=i;
+        selectedCameraOwner=available.get((index+1)%available.size()).owner();
+    }
     private void frame(){
         atmosphere.setActive(isShowing());
         int outdoorRoom=map.roomAt(renderer.x,renderer.eyeHeight-1.62,renderer.z);
@@ -798,8 +836,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             Graphics2D monitor=mapImage.createGraphics();
             try{
                 VanSiteMapScreen.draw(monitor,768,512,map,
-                    new ArrayList<>(sensorNodes.values()),sensorReadings,
-                    vanMapFloor,vanMapScroll,tick);
+                    new ArrayList<>(sensorNodes.values()),sensorReadings,sensorAlerts,
+                    new ArrayList<>(videoCameras.values()),videoPowered,
+                    mapFloor,vanMapScroll,tick);
             }finally{monitor.dispose();}
             GlbProps.updateVanMap(mapImage);
             lastMapTextureTick=tick;
@@ -812,9 +851,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         if(vanDisplay&&!videoCameras.isEmpty()
                 &&videoCameras.values().stream().anyMatch(c->
                     videoPowered.getOrDefault(c.owner(),false))){
-            LanVideoCameras.Camera camera=videoCameras.values().stream()
-                .filter(c->videoPowered.getOrDefault(c.owner(),false))
-                .findFirst().orElseThrow();
+            LanVideoCameras.Camera camera=selectedVanCamera();
             videoRenderer.x=camera.x();videoRenderer.z=camera.z();videoRenderer.eyeHeight=camera.y()+1.62;
             videoRenderer.yaw=Math.toRadians(camera.heading());
             videoRenderer.pitch=-.035;
@@ -861,9 +898,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             if(vanDisplay&&!videoCameras.isEmpty()&&!casefileOpen
                     &&videoCameras.values().stream().anyMatch(c->
                         videoPowered.getOrDefault(c.owner(),false))){
-                LanVideoCameras.Camera camera=videoCameras.values().stream()
-                    .filter(c->videoPowered.getOrDefault(c.owner(),false))
-                    .findFirst().orElseThrow();
+                LanVideoCameras.Camera camera=selectedVanCamera();
                 int vw=Math.min(EquipmentOptics.forTier(camera.tier()).monitorWidth(),
                     Math.max(100,getWidth()/3)),vh=Math.max(80,vw*3/5);
                 int vx=getWidth()-vw-14,vy=83;
@@ -981,8 +1016,23 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     "ESC exit world  /  F1 close this help"};
                 int yy=hy+55;for(String hint:hints){g.drawString(hint,hx+18,yy);yy+=25;}
             }
-            if(interfaceOpen.equals("MAP"))VanSiteMapScreen.draw(g,getWidth(),h,map,
-                new ArrayList<>(sensorNodes.values()),sensorReadings,mapFloor,vanMapScroll,tick);
+            if(interfaceOpen.equals("MAP")){
+                VanSiteMapScreen.draw(g,getWidth(),h,map,
+                    new ArrayList<>(sensorNodes.values()),sensorReadings,sensorAlerts,
+                    new ArrayList<>(videoCameras.values()),videoPowered,
+                    mapFloor,vanMapScroll,tick);
+                LanVideoCameras.Camera chosen=selectedVanCamera();
+                if(chosen!=null){
+                    int vw=Math.min(234,Math.max(140,getWidth()/3));
+                    int vh=Math.max(82,vw*3/5);
+                    int vx=getWidth()-vw-32,vy=h-vh-90;
+                    g.setColor(new Color(7,17,21));g.fillRect(vx-3,vy-3,vw+6,vh+22);
+                    g.drawImage(videoRenderer.image(),vx,vy,vw,vh,null);
+                    g.setColor(new Color(223,230,204));
+                    g.setFont(new Font(Font.MONOSPACED,Font.BOLD,11));
+                    g.drawString("CAM "+(chosen.owner()+1)+" LIVE / C NEXT",vx+4,vy+vh+15);
+                }
+            }
             if(interfaceOpen.equals("BRIEFING")){
                 int x=30,y=125;g.setColor(new Color(10,17,23,248));g.fillRoundRect(18,88,getWidth()-36,Math.min(h-110,345),12,12);g.setColor(new Color(231,212,171));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));g.drawString("CONTRACT BOARD / ESC CLOSE",x,112);
                 g.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,14));
@@ -1228,6 +1278,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             repaint();return;
         }
         if(!interfaceOpen.isEmpty()){
+            if(interfaceOpen.equals("MAP")&&e.getKeyCode()==KeyEvent.VK_C){
+                cycleVanCamera();repaint();return;
+            }
             if(e.getKeyCode()==KeyEvent.VK_ESCAPE||e.getKeyCode()==KeyEvent.VK_E)interfaceOpen="";
             else if(e.getKeyCode()==KeyEvent.VK_PAGE_UP||e.getKeyCode()==KeyEvent.VK_RIGHT){
                 mapFloor++;vanMapScroll=0;

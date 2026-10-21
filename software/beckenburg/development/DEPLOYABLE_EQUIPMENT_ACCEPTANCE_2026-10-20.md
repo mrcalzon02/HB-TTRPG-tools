@@ -34,4 +34,15 @@ All actual placed sensors must appear on the correct floor/room of the van map; 
 - Java 17 full build, model import, Windows rendering, true connected LAN case and visual placement/retrieval screenshots are **not verified** here.
 - Do not mark the overall deployable equipment roster as complete before those gates are exercised.
 
-Priority after sensor/book/tripod/portable-light source: test real Windows rendering, then complete the sound/motion sensors, Tier II/III incense and salt cases, and physical object-imprint targeting. Older model-backed equipment remains unverified until world-view QA. Preserve the existing D.O.T.S. and camera producer rules rather than substituting cosmetic placeholders.
+## Sound and motion monitoring source pass
+
+- Motion and sound probes now share physical deployment, retrieval, per-owner tier capacities and host-owned battery drain with the existing EMF/thermal arrays.
+- The host evaluates *actual actor movement* and *actual emitted sound events* against each sensor's radius, room membership and true wall occlusion; a neighboring room, teleport, or unpowered probe cannot generate a detection. Movement includes investigators, so a beep is not an automatic ghost verdict.
+- A deployed motion sensor draws a muted green local coverage footprint; a sound probe draws a blue one. Both are clipped by the same `SensorCoverage` physical query that the host uses, with a timed bright blink and audible scanner/beep cue on the van map when an event occurs.
+- Sensor readouts contain current state, anonymous intensity and stale/offline behavior. Van map camera markers distinguish online/offline feeds and C cycles real deployed camera streams in a picture-in-picture feed; the receiver does not fabricate a camera frame.
+- `RoomAcousticPresets` assigns reusable environments to every authored room based on source name/material, with explicit stable per-site overrides for important rooms. `LevelSoundscape` consumes the presets for deterministic local ambience; the microphone background floor and its alert gain are derived from that same preset. Outdoors remain owned by the separate weather bed.
+- New regression sources: `FieldSensorDetectionTest`, `VanSensorMapVisualTest`, `RoomAcousticPresetsTest`, `LanFieldSensorNetworkTest`. They are registered for both build scripts through `regression-tests.txt`.
+
+**Acceptance still required:** Java 17 compilation, bundled model and sound verification, Windows Swing screenshot of each floor with corner-mounted coverage, two-client live room activity, camera stream cycling and audible alarms, and a real reconnect/battery-depletion case. Code and test registrations do not imply these checks have run.
+
+Next after runtime verification: Tier II/III consumables, positional object-imprint scanning and richer room audio assets. Do not replace real room acoustic geometry or native sound-event sources with fake alarm readings. Older model-backed equipment remains unverified until world-view QA. Preserve the existing D.O.T.S. and camera producer rules rather than substituting cosmetic placeholders.
