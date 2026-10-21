@@ -14,7 +14,7 @@ public final class AncientGhostVariantsTest {
     }
     public static void main(String[] args){
         var roster=GhostIdentity.Type.values();
-        ok(roster.length==23,"13 originals plus 10 Ancient variants");
+        ok(roster.length==26,"13 originals, ten Ancient variants, three Elders");
         ok(Arrays.stream(roster).filter(GhostIdentity.Type::ancient).count()==10,
             "Exactly ten ancients must exist");
         var unique=new HashSet<Set<HardEvidenceQuota.Family>>();
@@ -30,7 +30,7 @@ public final class AncientGhostVariantsTest {
             ok(easy.families().containsAll(triple),"Every selected signal is producible");
             if(species.ancient()){
                 var parent=species.baseType();
-                ok(!parent.ancient(),"Ancient variant must have an original parent");
+                ok(!parent.ancient()&&!parent.elder(),"Ancient variant must have an original parent");
                 ok(species.rite()==parent.rite()&&species.behavior()==parent.behavior(),
                     "Ancient shares parent's ritual and behavior identity");
                 ok(GhostTraits.of(species).equals(GhostTraits.of(parent)),
@@ -55,7 +55,7 @@ public final class AncientGhostVariantsTest {
                     "Ancient ritual takes exactly twice as many host ticks");
             }
         }
-        ok(unique.size()==23,"All ghost triples globally distinct");
+        ok(unique.size()==26,"All 26 ghost triples globally distinct");
         ok(Arrays.stream(roster).filter(GhostEvidenceProfile::dotsVisible).count()==3,
             "Wraith, Shade and Specter remain the only D.O.T.S. ghosts");
 
@@ -110,6 +110,6 @@ public final class AncientGhostVariantsTest {
         ok(opaque>100,"Both forms draw the existing directional sprite");
         ok(greenRed<plainRed&&greenGreen>plainGreen,
             "Ancient sprite is visually green-tinted rather than duplicated");
-        System.out.println("PASS 23 ghosts, 10 inherited Ancients, green sprites, unique triples and 2x rituals");
+        System.out.println("PASS 26 ghosts, 10 inherited Ancients, 3 Elders, green sprites, unique triples and 2x rituals");
     }
 }

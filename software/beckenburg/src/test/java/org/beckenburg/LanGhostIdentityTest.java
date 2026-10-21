@@ -5,12 +5,12 @@ public final class LanGhostIdentityTest {
  static void ok(boolean v,String why){if(!v)throw new AssertionError(why);}
  public static void main(String[] args){
   var map=new HouseMap();ok(RitualSites.valid(map),"all 3 ritual sites reachable");
-  ok(GhostIdentity.Type.values().length==23,"13 originals and 10 Ancient variants");
+  ok(GhostIdentity.Type.values().length==26,"13 originals, 10 Ancient, 3 Elder");
   Set<GhostIdentity.Behavior> behaviors=new HashSet<>();
   Set<GhostIdentity.Rite> rites=EnumSet.noneOf(GhostIdentity.Rite.class);
   for(var type:GhostIdentity.Type.values()){
-   if(!type.ancient())ok(behaviors.add(type.behavior()),"distinct original behavior "+type);
-   else ok(type.behavior()==type.baseType().behavior(),
+   if(!type.ancient()&&!type.elder())ok(behaviors.add(type.behavior()),"distinct original behavior "+type);
+   else if(type.ancient())ok(type.behavior()==type.baseType().behavior(),
        "Ancient behavior must match its parent "+type);
    rites.add(type.rite());
    // Ghost identity and ritual readiness are investigator choices, not scan quotas.
@@ -40,7 +40,7 @@ public final class LanGhostIdentityTest {
    ok(mission.performRite(0,type.rite(),site.room(),true).accepted(),"right rite at correct site");
    int[] guard={site.room(),14,14};
    int required=(type.rite()==GhostIdentity.Rite.BANISHMENT?55:
-       type.rite()==GhostIdentity.Rite.ABSOLUTION?60:45)*(type.ancient()?2:1);
+       type.rite()==GhostIdentity.Rite.ABSOLUTION?60:45)*(type.elder()?4:type.ancient()?2:1);
    ok(mission.requiredRitualTicks()==required,"Ancient rituals take exactly twice as long "+type);
    for(int i=0;i<required-1;i++)mission.advance(guard);
    ok(mission.outcome()==LanCase.Outcome.ACTIVE,"cannot auto-complete early");
@@ -53,6 +53,6 @@ public final class LanGhostIdentityTest {
   var legacy=new LanCase(4);
   for(var tool:LanCase.Tool.values())legacy.scan(0,tool,4,0);
   ok(legacy.ward(0,4).accepted()&&legacy.cleanse(0,4).accepted(),"legacy compatibility");
-  System.out.println("PASS: 23 ghost profiles, raw measurements, no confirmation gate, ritual paths");
+  System.out.println("PASS: 26 ghost profiles, raw measurements, no confirmation gate, ritual paths");
  }
 }

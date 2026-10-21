@@ -7,7 +7,7 @@ public final class GhostBehaviorTest {
   var profiles=new HashSet<String>();
   for(var type:GhostIdentity.Type.values()){
    var p=GhostBehavior.profile(type);
-   if(!type.ancient())ok(profiles.add(p.toString()),"duplicate original pattern "+type);
+   if(!type.ancient())ok(profiles.add(p.toString()),"duplicate ordinary/Elder pattern "+type);
    else ok(p.equals(GhostBehavior.profile(type.baseType())),
        "Ancient behavior must inherit original action/energy/cooldown profile");
    var human=new GhostDomain(new HouseMap(),4,type);
@@ -24,7 +24,7 @@ public final class GhostBehaviorTest {
    }
    ok(human.energy()==ai.energy(),"identical final energy "+type);
   }
-  ok(profiles.size()==13,"all thirteen behavioral mechanics profiles unique");
-  System.out.println("PASS: 13 original behavior patterns shared by 23 ghosts, host energy/cooldowns and AI-human action parity");
+  ok(profiles.size()==16,"thirteen originals plus three Elder profiles unique");
+  System.out.println("PASS: 16 original/Elder behavior patterns shared by 26 ghosts, host energy/cooldowns and AI-human action parity");
  }
 }

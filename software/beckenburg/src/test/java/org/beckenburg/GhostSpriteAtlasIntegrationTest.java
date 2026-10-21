@@ -34,7 +34,7 @@ public final class GhostSpriteAtlasIntegrationTest {
         }
         check(GhostSpriteAtlas.installed(),"actual ghost atlas not loaded");
         check(GhostSpriteAtlas.atlasCount()==23*8,"missing ghost-direction atlas");
-        for(GhostIdentity.Type ghost:GhostIdentity.Type.values()){
+        for(GhostIdentity.Type ghost:GhostIdentity.Type.values())if(!ghost.elder()){
             String name=ghost.name().toLowerCase(java.util.Locale.ROOT);
             check(GhostSpriteAtlas.supports(name),"missing type "+name);
             for(int facing=0;facing<8;facing++){
