@@ -19,10 +19,12 @@ public final class GhostEvidenceProfile {
     /** Species EMF signature, separate from baseline/weather EMF fluctuation. */
     public enum EmfBand { HIGH, LOW_MID, NONE }
     private static final EnumSet<GhostIdentity.Type> NONE_EMF=types(
-        GhostIdentity.Type.SHADE,GhostIdentity.Type.SPECTER,GhostIdentity.Type.HANTU);
+        GhostIdentity.Type.SHADE,GhostIdentity.Type.SPECTER,GhostIdentity.Type.HANTU,
+        GhostIdentity.Type.ELDER_PLAGUE_DEMON);
     private static final EnumSet<GhostIdentity.Type> LOW_MID_EMF=types(
         GhostIdentity.Type.POSSESSIVE,GhostIdentity.Type.YOKAI,
-        GhostIdentity.Type.BANSHEE,GhostIdentity.Type.WRAITH,GhostIdentity.Type.SPIRIT);
+        GhostIdentity.Type.BANSHEE,GhostIdentity.Type.WRAITH,GhostIdentity.Type.SPIRIT,
+        GhostIdentity.Type.ELDER_NOTHIC);
     private static final EnumSet<GhostIdentity.Type> DOTS_GHOSTS=types(
         GhostIdentity.Type.WRAITH,GhostIdentity.Type.SHADE,GhostIdentity.Type.SPECTER);
     public static EmfBand emfBand(GhostIdentity.Type type){
@@ -41,21 +43,25 @@ public final class GhostEvidenceProfile {
     // mandatory value on each scan. All species show ordinary room fluctuations.
     private static final EnumSet<GhostIdentity.Type> COLD=types(
         GhostIdentity.Type.BANSHEE,GhostIdentity.Type.SHADE,
-        GhostIdentity.Type.SPIRIT,GhostIdentity.Type.HANTU);
+        GhostIdentity.Type.SPIRIT,GhostIdentity.Type.HANTU,
+        GhostIdentity.Type.ELDER_PLAGUE_DEMON);
     private static final EnumSet<GhostIdentity.Type> HOT=types(
         GhostIdentity.Type.POLTERGEIST,GhostIdentity.Type.DEMON,
-        GhostIdentity.Type.DEVIL,GhostIdentity.Type.MIMIC);
+        GhostIdentity.Type.DEVIL,GhostIdentity.Type.MIMIC,
+        GhostIdentity.Type.ELDER_BLADE_DEMON);
     private static final EnumSet<GhostIdentity.Type> CHILD=types(
         GhostIdentity.Type.POSSESSIVE,GhostIdentity.Type.SPIRIT,
         GhostIdentity.Type.MIMIC,GhostIdentity.Type.TWINS);
     private static final EnumSet<GhostIdentity.Type> SCRAWL=types(
         GhostIdentity.Type.POLTERGEIST,GhostIdentity.Type.DEMON,
         GhostIdentity.Type.WRAITH,GhostIdentity.Type.DEVIL,
-        GhostIdentity.Type.MIMIC,GhostIdentity.Type.BANSHEE);
+        GhostIdentity.Type.MIMIC,GhostIdentity.Type.BANSHEE,
+        GhostIdentity.Type.ELDER_BLADE_DEMON);
     private static final EnumSet<GhostIdentity.Type> CIRCLE=types(
         GhostIdentity.Type.POSSESSIVE,GhostIdentity.Type.DEMON,
         GhostIdentity.Type.SHADE,GhostIdentity.Type.SPECTER,
-        GhostIdentity.Type.DEVIL,GhostIdentity.Type.WRAITH,GhostIdentity.Type.YOKAI);
+        GhostIdentity.Type.DEVIL,GhostIdentity.Type.WRAITH,GhostIdentity.Type.YOKAI,
+        GhostIdentity.Type.ELDER_NOTHIC);
 
     /** Shared between the simulated heat/cold generator and manual ghost guide. */
     public static EvidenceSignals.Polarity thermal(GhostIdentity.Type type){

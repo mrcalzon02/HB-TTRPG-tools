@@ -31,7 +31,12 @@ public final class GhostIdentity {
   ANCIENT_SHADE(Emf.INTERFERENCE,Thermal.ANCHOR_CHILL,Voice.ECHO,Rite.CLEANSING,Behavior.LURK),
   ANCIENT_SPECTER(Emf.FIELD_SURGE,Thermal.SHEAR,Voice.ECHO,Rite.CLEANSING,Behavior.APPARITION),
   ANCIENT_HANTU(Emf.TETHER,Thermal.WALL_DRAFT,Voice.FRAGMENT,Rite.CLEANSING,Behavior.COLD_FEED),
-  ANCIENT_TWINS(Emf.FIELD_SURGE,Thermal.WALL_DRAFT,Voice.ECHO,Rite.ABSOLUTION,Behavior.PAIRED_ECHO);
+  ANCIENT_TWINS(Emf.FIELD_SURGE,Thermal.WALL_DRAFT,Voice.ECHO,Rite.ABSOLUTION,Behavior.PAIRED_ECHO),
+  // Approved separate Elder boss concepts (Drive MASTER-GHOST-LIST.md).
+  // Append-only: save files and protocol code may depend on legacy ordinals.
+  ELDER_BLADE_DEMON(Emf.KINETIC,Thermal.WALL_DRAFT,Voice.DISPLACED,Rite.BANISHMENT,Behavior.AGGRESSION),
+  ELDER_PLAGUE_DEMON(Emf.INTERFERENCE,Thermal.ANCHOR_CHILL,Voice.FRAGMENT,Rite.CLEANSING,Behavior.COLD_FEED),
+  ELDER_NOTHIC(Emf.TETHER,Thermal.SHEAR,Voice.ECHO,Rite.ABSOLUTION,Behavior.OBJECT_CLAIM);
   private final Emf emf;private final Thermal thermal;private final Voice voice;
   private final Rite rite;private final Behavior behavior;
   Type(Emf e,Thermal t,Voice v,Rite r,Behavior b){emf=e;thermal=t;voice=v;rite=r;behavior=b;}
@@ -54,6 +59,9 @@ public final class GhostIdentity {
     };
   }
   public boolean ancient(){return baseType()!=this;}
+  public boolean elder(){
+    return this==ELDER_BLADE_DEMON||this==ELDER_PLAGUE_DEMON||this==ELDER_NOTHIC;
+  }
   public boolean signature(LanCase.Tool tool){return tool!=null;}
   public int signatureCount(){return 3;}
   public String signatureKey(){return emf+"/"+thermal+"/"+voice;}

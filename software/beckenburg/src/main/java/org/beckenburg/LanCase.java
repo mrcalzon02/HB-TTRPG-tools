@@ -20,7 +20,7 @@ public final class LanCase {
             case CLEANSING->45;
             case ABSOLUTION->60;
         };
-        return archetype.ancient()?normal*2:normal;
+        return normal*(archetype.elder()?4:archetype.ancient()?2:1);
     }
     public int requiredRitualTicks(){return riteTicks();}
     public enum RitualAdvance { NONE, PAUSED, RESUMED, BROKEN, CLEANSED }

@@ -37,6 +37,9 @@ public final class GhostTraits {
             case DEVIL -> new Profile(Locomotion.WALK,Passage.DOORS,Sight.VISIBLE,Charge.PRESENCE,2,185,90,true,true,"Feeds on a lone investigator's sanity");
             case MIMIC -> new Profile(Locomotion.WALK,Passage.DOORS,Sight.VISIBLE,Charge.PRESENCE,4,135,75,false,true,"Repeats voices and gains strength from nearby listeners");
             case TWINS -> new Profile(Locomotion.FLOAT,Passage.DOORS,Sight.ORBS,Charge.AMBIENT,2,135,65,false,false,"Twin orbs and paired knocks, never wall-phases");
+            case ELDER_BLADE_DEMON -> new Profile(Locomotion.WALK,Passage.DOORS,Sight.VISIBLE,Charge.AMBIENT,2,110,185,false,true,"Colossal bladed hunter; heavy footfalls precede its executioner rush");
+            case ELDER_PLAGUE_DEMON -> new Profile(Locomotion.WALK,Passage.DOORS,Sight.VISIBLE,Charge.PRESENCE,3,170,95,false,true,"Miasma blooms around the bell-bearing elder; linger at your peril");
+            case ELDER_NOTHIC -> new Profile(Locomotion.WALK,Passage.DOORS,Sight.VISIBLE,Charge.ISOLATION,3,160,150,true,false,"Territorial elder braces for a crushing, seismically loud ground slam");
             default -> throw new AssertionError("Unexpected base ghost: "+type);
         };
     }
@@ -71,6 +74,9 @@ public final class GhostTraits {
             case DEVIL->108;case POSSESSIVE->104;
             case SPIRIT->100;case MIMIC->100;case TWINS->99;
             case SPECTER->92;case SHADE->82;
+            case ELDER_BLADE_DEMON->112;
+            case ELDER_PLAGUE_DEMON->85;
+            case ELDER_NOTHIC->105;
             default->throw new AssertionError("Unexpected base ghost: "+type);
         };
     }

@@ -92,6 +92,15 @@ public final class GhostEvidenceMatrix {
             case ANCIENT_TWINS -> List.of(EquipmentRegistry.Evidence.SEISMIC_IMPACT,
                 EquipmentRegistry.Evidence.OBJECT_IMPRINT,
                 EquipmentRegistry.Evidence.RESONANCE);
+            case ELDER_BLADE_DEMON -> List.of(EquipmentRegistry.Evidence.STRUCTURED_LIGHT,
+                EquipmentRegistry.Evidence.OBJECT_IMPRINT,
+                EquipmentRegistry.Evidence.SEISMIC_IMPACT);
+            case ELDER_PLAGUE_DEMON -> List.of(EquipmentRegistry.Evidence.ATMOSPHERIC_REVERSAL,
+                EquipmentRegistry.Evidence.ECTOPLASM,
+                EquipmentRegistry.Evidence.RESONANCE);
+            case ELDER_NOTHIC -> List.of(EquipmentRegistry.Evidence.SEISMIC_IMPACT,
+                EquipmentRegistry.Evidence.SPECTRAL_SHADOW,
+                EquipmentRegistry.Evidence.STRUCTURED_LIGHT);
         };
     }
     public static Row forGhost(GhostIdentity.Type type){

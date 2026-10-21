@@ -27,6 +27,9 @@ public final class GhostBehavior {
    case DEVIL->new Profile(GhostDomain.Action.WHISPER,3,12,4,0,0,37,"A soft voice offers an unsettling promise");
    case MIMIC->new Profile(GhostDomain.Action.WHISPER,1,8,2,0,0,41,"The last call repeats with a slight delay");
    case TWINS->new Profile(GhostDomain.Action.DRIFT,1,13,1,0,0,25,"Two knocks answer from neighboring rooms");
+   case ELDER_BLADE_DEMON->new Profile(GhostDomain.Action.STRIKE,5,18,3,8,0,17,"A dragging metal blade rises before a charging sweep");
+   case ELDER_PLAGUE_DEMON->new Profile(GhostDomain.Action.MANIFEST,4,17,7,0,32,23,"A noxious haze rolls from its hanging bell");
+   case ELDER_NOTHIC->new Profile(GhostDomain.Action.DISTURB,5,22,5,4,0,19,"Heavy footsteps end in a reverberating stone slam");
    default->throw new AssertionError("Unexpected base ghost: "+type);
   };
  }

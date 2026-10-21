@@ -55,6 +55,9 @@ public final class GhostFrenzy {
             case MIMIC       ->new Profile(72,72,230,25,195,340,8,12,14,32,9,19,32);
             case TWINS       ->new Profile(69,67,220,28,220,345,9,12,12,31,8,19,33);
             case SPIRIT      ->new Profile(78,60,250,28,210,390,9,18,13,33,10,16,40);
+            case ELDER_BLADE_DEMON ->new Profile(44,84,160,27,205,230,9,23,10,28,9,15,38);
+            case ELDER_PLAGUE_DEMON ->new Profile(69,70,195,36,245,290,7,10,15,38,8,29,29);
+            case ELDER_NOTHIC ->new Profile(57,72,185,32,220,300,12,21,17,33,9,21,35);
             default->throw new AssertionError("Unexpected base ghost: "+type);
         };
     }

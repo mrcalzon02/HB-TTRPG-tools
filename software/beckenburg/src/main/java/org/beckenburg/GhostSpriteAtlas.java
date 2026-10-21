@@ -29,7 +29,11 @@ final class GhostSpriteAtlas {
     private static final String[] STATES={
         "idle","walk","sprint","attack","signature","manifest","recover","dissipate"
     };
+    // The packed v3 atlas contains the 23 accepted original/Ancient appearances.
+    // Newly added Elder identities have individual masters, but not directional
+    // runtime atlases; changing this count would invalidate the existing archive.
     private static final Set<String> ALLOWED=java.util.Arrays.stream(GhostIdentity.Type.values())
+        .filter(t->!t.elder())
         .map(t->t.name().toLowerCase(java.util.Locale.ROOT))
         .collect(java.util.stream.Collectors.toUnmodifiableSet());
     private static final Map<String,byte[]> PNGS=load();

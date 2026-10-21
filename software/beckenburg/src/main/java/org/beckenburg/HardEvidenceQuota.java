@@ -53,6 +53,9 @@ public final class HardEvidenceQuota {
             case ANCIENT_SPECTER ->EnumSet.of(Family.SHADOW,Family.RESONANCE,Family.SPIRIT_BOX);
             case ANCIENT_HANTU ->EnumSet.of(Family.ATMOSPHERIC,Family.ECTOPLASM,Family.TEMPERATURE);
             case ANCIENT_TWINS ->EnumSet.of(Family.SEISMIC,Family.IMPRINT,Family.SPIRIT_BOX);
+            case ELDER_BLADE_DEMON ->EnumSet.of(Family.EMF,Family.LASER,Family.IMPRINT);
+            case ELDER_PLAGUE_DEMON ->EnumSet.of(Family.ATMOSPHERIC,Family.ECTOPLASM,Family.RESONANCE);
+            case ELDER_NOTHIC ->EnumSet.of(Family.SHADOW,Family.SEISMIC,Family.LASER);
         };
     }
     private final Level level;
