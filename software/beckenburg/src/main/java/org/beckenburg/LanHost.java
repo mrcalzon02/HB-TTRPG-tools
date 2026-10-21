@@ -496,13 +496,13 @@ public final class LanHost implements AutoCloseable {
                     }
                     reply(peer,"DOTS|RESET");
                     for(LanDotsProjectors.Placement placed:dots.all())reply(peer,placed.frame());
-                    for(String frame:vanSensors.snapshot())reply(peer,frame);
-                    for(String frame:latestSensorReadings.values())reply(peer,frame);
+                    for(String sensorPacket:vanSensors.snapshot())reply(peer,sensorPacket);
+                    for(String readingPacket:latestSensorReadings.values())reply(peer,readingPacket);
                     if(writingBook.placed())reply(peer,writingBook.physicallyPlaced()
                         ?writingBook.deploymentFrame():"BOOK|DEPLOYED|"+writingBook.room());
                     reply(peer,"TRIPOD|RESET");
                     for(VanTripods.Stand stand:tripods.all())reply(peer,stand.frame());
-                    for(String frame:portableLights.snapshot())reply(peer,frame);
+                    for(String portablePacket:portableLights.snapshot())reply(peer,portablePacket);
                     reply(peer,supplies[peer.slot].frame());
                     sendEquipmentState(peer);
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
