@@ -31,3 +31,7 @@ Keep the bottom equipment bar clear of the held device. Retain case-log readings
 5. Inspect the preview page, record the result, commit the functional milestone, fetch/reconcile concurrent development, push and verify remote HEAD. Only rerun changed checks or a required broader gate after further edits.
 
 At the first completed focused checkpoint, 24/24 passed. The earlier wider compatibility run remained 30/32, with the two already documented unrelated GhostDomainTest/AncientGhostVariantsTest failures. The full game release gate is not claimed green. The van implementation was already uploaded in 22ca2988/8cc7ff4d; online documentation commit 6634645b was merged normally. Saved complete Blender sources from the preceding scene checkpoint still need the separately recorded van regeneration/review step; this UI commit does not mislabel those older scene hashes as new exports.
+
+## Final synchronization checkpoint
+
+The UI checkpoint f88065e9 was reconciled with online campaign/castle commits 7edaea3a, 3fa96500 and de68a225 in merge d03b7854. The combined package passed 24/24 focused checks. The final E key press guard suppresses key auto-repeat and input through help/modal panels. The expanded real-socket check also picks a native shelf unit, verifies the exact equipped tool and decrements its count by one. The final packaged socket check and both new online campaign/castle checks passed; their actual output is saved in verification/interaction-ui-merged-results.json. No force push or replacement of concurrent work was used.

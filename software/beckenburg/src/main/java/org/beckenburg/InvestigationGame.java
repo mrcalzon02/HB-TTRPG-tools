@@ -494,7 +494,7 @@ public final class InvestigationGame {
         private TeamCallout.Ping lastPing;
         private String vanNotice="";
         private int vanNoticeExpires;
-        private boolean briefingShown;private int mapFloor;
+        private boolean briefingShown,interactionHeld;private int mapFloor;
         private int useHeldUntilTick;
         private final VanTelemetry monitor=new VanTelemetry(20261017L);
         private final AtmosphereAudio atmosphere=new AtmosphereAudio(AtmosphereAudio.Scene.FIELD);
@@ -678,6 +678,7 @@ public final class InvestigationGame {
             last=System.nanoTime();timer.start();requestFocusInWindow();
         }
         @Override public void keyPressed(KeyEvent e){
+            if(e.getKeyCode()==KeyEvent.VK_E){if(interactionHeld)return;interactionHeld=true;}
             int key=e.getKeyCode();if(down.contains(key))return;
             if(key==KeyEvent.VK_F1){
                 helpVisible=!helpVisible;
@@ -788,6 +789,7 @@ public final class InvestigationGame {
             }
         }
         @Override public void keyReleased(KeyEvent e){
+            if(e.getKeyCode()==KeyEvent.VK_E)interactionHeld=false;
             down.remove(e.getKeyCode());
             if(e.getKeyCode()==KeyEvent.VK_Q && wheelOpen){
                 wheelOpen=false;
@@ -808,7 +810,7 @@ public final class InvestigationGame {
             repaint();
         }
         @Override public void focusGained(FocusEvent e){last=System.nanoTime();}
-        @Override public void focusLost(FocusEvent e){down.clear();mouseLook.release();wheelOpen=false;}
+        @Override public void focusLost(FocusEvent e){interactionHeld=false;down.clear();mouseLook.release();wheelOpen=false;}
         @Override protected void paintComponent(Graphics graphics){super.paintComponent(graphics);
             Graphics2D g=(Graphics2D)graphics.create();
             try{

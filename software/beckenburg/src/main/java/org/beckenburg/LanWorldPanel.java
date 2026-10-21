@@ -82,7 +82,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private final java.util.EnumMap<LanCase.Tool,String> lastMeasurement=
         new java.util.EnumMap<>(LanCase.Tool.class);
     private int casefileScroll;
-    private boolean casefileOpen,helpVisible;
+    private boolean casefileOpen,helpVisible,interactionHeld;
     private String interfaceOpen="";private int mapFloor;
     private final FieldJournal fieldNotes=new FieldJournal();
     private int journalPage,guideCursor,guideGhostIndex;
@@ -101,6 +101,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         chatInput.addActionListener(e->submitChat());
         chatInput.addKeyListener(new KeyAdapter(){
             @Override public void keyPressed(KeyEvent e){
+            if(e.getKeyCode()==KeyEvent.VK_E){if(interactionHeld)return;interactionHeld=true;}
                 if(e.getKeyCode()==KeyEvent.VK_ESCAPE){closeChat();e.consume();}
             }
         });
@@ -1123,7 +1124,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             else if(e.getKeyCode()==KeyEvent.VK_PAGE_DOWN)mapFloor--;
             repaint();return;
         }
-        if(e.getKeyCode()==KeyEvent.VK_F1){helpVisible=!helpVisible;repaint();return;}
+        if(e.getKeyCode()==KeyEvent.VK_F1){helpVisible=!helpVisible;keys.clear();mouseLook.release();repaint();return;}
+        if(helpVisible){if(e.getKeyCode()==KeyEvent.VK_ESCAPE)helpVisible=false;repaint();return;}
         if(e.getKeyCode()==KeyEvent.VK_F3){
             beginVoice(LanChat.Channel.LOCAL);return;
         }
@@ -1254,13 +1256,14 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     public LanCase.Tool selectedTool(){return selected;}
     public String caseFeedback(){return feedback;}
     @Override public void keyReleased(KeyEvent e){
+            if(e.getKeyCode()==KeyEvent.VK_E)interactionHeld=false;
         keys.remove(e.getKeyCode());
         if(e.getKeyCode()==KeyEvent.VK_F3&&heldVoice==LanChat.Channel.LOCAL)releaseVoice();
         if(e.getKeyCode()==KeyEvent.VK_F4&&heldVoice==LanChat.Channel.RADIO)releaseVoice();
     }
     @Override public void keyTyped(KeyEvent e){}
     @Override public void focusGained(FocusEvent e){}
-    @Override public void focusLost(FocusEvent e){
+    @Override public void focusLost(FocusEvent e){interactionHeld=false;
         keys.clear();releaseVoice();mouseLook.release();
     }
 }

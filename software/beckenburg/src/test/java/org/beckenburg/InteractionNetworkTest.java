@@ -22,8 +22,21 @@ public final class InteractionNetworkTest {
    a.client.interact(target,observer.yaw(),observer.pitch());a.await("ACCEPT|INTERACT|");
    InteractionFocusTest.check(map.clutter().held(0)==Integer.parseInt(target.id()),"E picked another nearby prop");
    Thread.sleep(350);a.client.interact(target,observer.yaw(),observer.pitch());a.await("REJECT|");
+   a.client.clutter("DROP",Integer.parseInt(target.id()),observer.pitch());a.await("ACCEPT|OBJECT");
+   var equipment=(FieldEquipment[])LooseClutterNetworkTest.field(host,"equipment");var supplies=(FieldSupplies[])LooseClutterNetworkTest.field(host,"supplies");var counters=(HunterCounters)LooseClutterNetworkTest.field(host,"counters");
+   var stock=VanRackStock.aggregate(equipment,supplies,counters,new boolean[]{true,true,true,false,false,false});
+   target=null;
+   for(var unit:VanRackStock.place(stock))if(FieldEquipment.functional(unit.entry().id())&&!java.util.Set.of("EMF_READER","THERMOMETER","SPIRIT_BOX","UV_LIGHT").contains(unit.entry().id())){
+    var position=map.van().world(unit.x(),unit.z());observer=InteractionFocusTest.find(map,position.x(),unit.y(),position.z(),InteractionFocus.Kind.RACK,unit.entry().id()+":"+unit.entry().tier()+":"+unit.unit(),stock);
+    if(observer!=null){target=InteractionFocus.pick(map,observer,stock);break;}
+   }
+   InteractionFocusTest.check(target!=null,"no native shelf pickup target");
+   synchronized(LooseClutterNetworkTest.field(host,"mutex")){AuthoredTestSupport.place(map,world,0,new LevelDefinition.Vec(observer.x(),observer.y(),observer.z()));}
+   a.client.interact(target,observer.yaw(),observer.pitch());a.await("ACCEPT|INTERACT|");
+   String id=target.id().split(":")[0];InteractionFocusTest.check(equipment[0].active().equals(id),"E did not equip the exact shelf instrument");
+   var after=VanRackStock.aggregate(equipment,supplies,counters,new boolean[]{true,true,true,false,false,false});InteractionFocusTest.check(VanRackStockTest.count(after,id)==VanRackStockTest.count(stock,id)-1,"E pickup did not remove one physical shelf unit");
    ghost.client.send("INTERACT|CLUTTER|1|0|0|1");ghost.await("REJECT|");
-   System.out.println("PASS real-socket centre-ray pickup, forged/stale target rejection and hunter-only interaction");
+   System.out.println("PASS real-socket centre-ray clutter and shelf pickups, exact stock decrement, forged/stale target rejection and hunter-only interaction");
   }
  }
 }

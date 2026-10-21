@@ -1,0 +1,20 @@
+[
+  {
+    "test": "InteractionNetworkTest",
+    "exit_code": 0,
+    "seconds": 1.25,
+    "output": "PASS real-socket centre-ray clutter and shelf pickups, exact stock decrement, forged/stale target rejection and hunter-only interaction\n"
+  },
+  {
+    "test": "CampaignBoardPanelTest",
+    "exit_code": 0,
+    "seconds": 1.594,
+    "output": "PASS campaign board locked concepts and working deployment callback\n"
+  },
+  {
+    "test": "CastleOrientationTest",
+    "exit_code": 0,
+    "seconds": 0.062,
+    "output": "PASS castle orientation step progression\n"
+  }
+]
