@@ -1,3 +1,7 @@
+## Repository migration — mandatory source freeze
+
+This directory is **archived** as of 2026-10-20. **Do not implement, edit, build, package, publish, or perform further Beckenburg development in HB-TTRPG-tools.** The authoritative project is https://github.com/mrcalzon02/The-Beckenburg-Project . Only explicitly authorized migration bridge/recovery changes may touch this legacy copy. Existing rules below are historical guidance, not permission to continue development here.
+
 # Beckenburg production rules
 
 - Closeout means finalize the requested implementation, commit it, push it to the authorized remote branch, and verify that the remote contains the commit. A plan or local-only change is not a completed delivery. Never force-push over concurrent work.
