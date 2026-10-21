@@ -223,6 +223,7 @@ java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.Va
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.VanSiteMapScreenTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.VanTripodsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostWritingSpatialTest
+java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanPortableLightsTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.VanNavigationVisualTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.GhostPracticeTest
 java -Djava.awt.headless=true -ea -cp build/classes:build/test org.beckenburg.LanProtocolTest

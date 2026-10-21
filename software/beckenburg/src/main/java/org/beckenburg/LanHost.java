@@ -40,6 +40,7 @@ public final class LanHost implements AutoCloseable {
     private final VanSensorStations vanSensors=new VanSensorStations();
     private final Map<Integer,String> latestSensorReadings=new HashMap<>();
     private final VanTripods tripods=new VanTripods();
+    private final LanPortableLights portableLights=new LanPortableLights();
     private final LanDotsProjectors dots=new LanDotsProjectors();
     private final LanVideoCameras cameras=new LanVideoCameras();
     private final FieldJournal fieldNotes=new FieldJournal();
@@ -500,6 +501,7 @@ public final class LanHost implements AutoCloseable {
                         ?writingBook.deploymentFrame():"BOOK|DEPLOYED|"+writingBook.room());
                     reply(peer,"TRIPOD|RESET");
                     for(VanTripods.Stand stand:tripods.all())reply(peer,stand.frame());
+                    for(String frame:portableLights.snapshot())reply(peer,frame);
                     reply(peer,supplies[peer.slot].frame());
                     sendEquipmentState(peer);
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
@@ -851,6 +853,29 @@ public final class LanHost implements AutoCloseable {
                     reply(peer,"ACCEPT|RECPLAY|"+clip.samples().size()+" recorded sounds");
                     actorCue(peer.slot,LanSound.Cue.DEVICE_ON);
                 }
+                case "GEARPLACE" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
+                        throw new IllegalArgumentException("physical hunter required");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
+                    ensureActiveHunter(peer);
+                    FieldEquipment gear=equipment[peer.slot];
+                    String tool=gear.active();
+                    if(!tool.equals("FIRELIGHT")&&!tool.equals("FLASHLIGHT"))
+                        throw new IllegalArgumentException("held tool is not a portable ground light");
+                    LanWorld.Body body=world.body(peer.slot);
+                    if(body.room()>=HouseMap.INDOOR_ROOMS)
+                        throw new IllegalArgumentException("portable light requires an indoor floor");
+                    LanPortableLights.Light installed=portableLights.placeOrRetrieve(
+                        peer.slot,tool,body,gear.owned(tool),gear.powered(tool));
+                    if(installed==null){
+                        notifyHunters("PORTABLE|CLEAR|"+peer.slot+"|"+tool);
+                        reply(peer,"ACCEPT|GEARPLACE|RETRIEVED");
+                    }else{
+                        notifyHunters(installed.frame());
+                        reply(peer,"ACCEPT|GEARPLACE|PLACED");
+                    }
+                    actorCue(peer.slot,LanSound.Cue.DROP);
+                }
                 case "GEARUSE" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
                         throw new IllegalArgumentException("hunter instrument required");
@@ -934,7 +959,15 @@ public final class LanHost implements AutoCloseable {
                                 ?"UV light / genuine surface trace":"UV light / no visible trace";
                         }
                         case "FLASHLIGHT","HEAD_GEAR","FIRELIGHT" -> {
+                            LanPortableLights.Light placed=portableLights.at(peer.slot,id);
+                            LanWorld.Body holder=world.body(peer.slot);
+                            if(placed!=null&&(placed.room()!=holder.room()
+                                    ||Math.hypot(placed.x()-holder.x(),placed.z()-holder.z())>1.5))
+                                throw new IllegalArgumentException("toggle placed light at its location");
                             boolean enabled=gear.toggle(id);
+                            LanPortableLights.Light changed=portableLights.powered(
+                                peer.slot,id,enabled);
+                            if(changed!=null)notifyHunters(changed.frame());
                             reading=switch(id){
                                 case "FLASHLIGHT" -> "Flashlight "+(enabled?"on":"off");
                                 case "HEAD_GEAR" -> "Night vision "+(enabled?"on":"off");
@@ -2032,7 +2065,10 @@ public final class LanHost implements AutoCloseable {
                 boolean indoor=room>=0&&room<HouseMap.INDOOR_ROOMS;
                 boolean hasLight=indoor&&(lights.brightness(room,tick)>.32
                     ||equipment[i].powered("FLASHLIGHT")
-                    ||equipment[i].powered("FIRELIGHT"));
+                        &&portableLights.at(i,"FLASHLIGHT")==null
+                    ||equipment[i].powered("FIRELIGHT")
+                        &&portableLights.at(i,"FIRELIGHT")==null
+                    ||portableLights.illuminates(room));
                 int amount=ambientSanity.advance(i,indoor,present[room],hasLight,
                     room==ghost.room(),GhostTraits.of(ghostType).charge());
                 if(amount>0)mission.drainSanity(i,amount);
@@ -2113,6 +2149,8 @@ public final class LanHost implements AutoCloseable {
                         notifyHunters("GEARFX|"+seat+"|"+drained+"|0");
                     if(drained.equals("VIDEO_CAMERA"))
                         notifyHunters("CAMERA|POWER|"+seat+"|0");
+                    LanPortableLights.Light dark=portableLights.powered(seat,drained,false);
+                    if(dark!=null)notifyHunters(dark.frame());
                     if(drained.equals("SOUND_RECORDER")&&recorders[seat].recording())
                         stopRecording(seat);
                 }

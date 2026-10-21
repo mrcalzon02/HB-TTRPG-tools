@@ -182,6 +182,10 @@ public final class LanClient implements AutoCloseable {
     public synchronized void useHeldEquipment()throws IOException{
         send("GEARUSE|"+(++sequence));
     }
+    /** Deploy or retrieve a portable ground light at the real hunter position. */
+    public synchronized void placeHeldEquipment()throws IOException{
+        send("GEARPLACE|"+(++sequence));
+    }
     public synchronized void playRecording()throws IOException{
         send("RECPLAY|"+(++sequence));
     }

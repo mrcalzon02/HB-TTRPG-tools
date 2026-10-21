@@ -14,8 +14,8 @@ Status: **source integration underway, runtime acceptance outstanding**. This do
 | Ghost writing book | Physical coordinates, inspect/retrieve reach checks, actual ghost-authored page | Model/page material and placement pickup across LAN reconnect; no magical room-centre books |
 | Salt | Host-owned ground marker and effect/counter logic; approved deployed salt mesh now rendered at the actual floor | Visual tier/capacity, ghost tracks and depletion test |
 | Incense | Consumed bundle emits replicated smoke; approved Tier I burning mesh now occupies the correct floor elevation | Complete Tier II/III geometry, reconnect smoke lifetime and ghost-effect checks |
-| Firelight | Held/active toggle, not independently placed | Real lantern/candle deployment, sustained room lighting, retrieval, wind/energy and shared sanity/light influence |
-| Flashlight/headgear | Equipped hand/worn light toggles | Intentional dropped flashlight world instance and retrieval, no remote headgear ownership |
+| Firelight | Host-owned ground placement, retrieval, power state, room lighting/sanity effect and lit/unlit approved meshes | Complete multi-client visual, battery, wind/interference and persistence tests |
+| Flashlight/headgear | Flashlight has both held mode and deliberate ground placement with retrieval; headgear remains worn only | Light falloff and pickup/drop visual tests; no remote headgear ownership |
 | Motion and sound sensors | Catalogued; not functioning in the playable field inventory | Host-owned probes, shared outputs, van-side history, purchases and UI tests |
 | Chalk/sigils/wards/crosses | Host has consumable deploy/counter logic | Approved placed meshes, finite charges, passage/collision and persistence tests |
 | Ectoplasm and object-imprint kit | Host event-gated scan source | Genuine physical interaction points/samples rather than scanning the nearby ghost by proximity |
@@ -34,4 +34,4 @@ All actual placed sensors must appear on the correct floor/room of the van map; 
 - Java 17 full build, model import, Windows rendering, true connected LAN case and visual placement/retrieval screenshots are **not verified** here.
 - Do not mark the overall deployable equipment roster as complete before those gates are exercised.
 
-Priority after spatial book/tripod and the Tier I salt/incense render correction: persistent firelight and portable lights, then sound/motion instruments. Older model-backed equipment remains unverified until world-view QA. Preserve the existing D.O.T.S. and camera producer rules rather than substituting cosmetic placeholders.
+Priority after sensor/book/tripod/portable-light source: test real Windows rendering, then complete the sound/motion sensors, Tier II/III incense and salt cases, and physical object-imprint targeting. Older model-backed equipment remains unverified until world-view QA. Preserve the existing D.O.T.S. and camera producer rules rather than substituting cosmetic placeholders.

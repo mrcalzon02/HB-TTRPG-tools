@@ -85,6 +85,7 @@ public final class SceneRenderer {
     public boolean writingBookHasPosition;
     public EquipmentTiers.Tier writingBookTier=EquipmentTiers.Tier.I;
     public final java.util.Map<Integer,VanTripods.Stand> tripods=new java.util.HashMap<>();
+    public final java.util.Map<String,LanPortableLights.Light> portablePositions=new java.util.HashMap<>();
     public final java.util.Map<Integer,LanVideoCameras.Camera> videoCameras=
         new java.util.HashMap<>();
     public final java.util.Map<Integer,VanSensorStations.Station> sensorPositions=
@@ -765,6 +766,11 @@ public final class SceneRenderer {
         // a second duplicate set of these global world objects.
         if(Math.hypot(x-map.van().placement().x(),z-map.van().placement().z())<20)
             roadsideModels(out,map);
+        // Portable lights exist only when host-owned inventory was physically
+        // deployed; lit housings and stationary illumination follow their position.
+        for(LanPortableLights.Light light:portablePositions.values())
+            if(Math.hypot(light.x()-x,light.z()-z)<13.5)
+                imported(out,light.mesh(),light.x(),light.y()+.035,light.z(),1.0,0);
         // Tripods are real placed supports, never decor dropped by the map loader.
         for(VanTripods.Stand stand:tripods.values())
             if(Math.hypot(stand.x()-x,stand.z()-z)<13.5)
@@ -1478,6 +1484,16 @@ public final class SceneRenderer {
             int room=face.room>=0?face.room:map.roomAt((face.a.x+face.b.x+face.c.x)/3,
                 (face.a.y+face.b.y+face.c.y)/3,(face.a.z+face.b.z+face.c.z)/3);
             double lighting=roomLights==null?1:roomLights.brightness(room,roomLightTick);
+            double fx=(face.a.x+face.b.x+face.c.x)/3;
+            double fz=(face.a.z+face.b.z+face.c.z)/3;
+            for(LanPortableLights.Light source:portablePositions.values())
+                if(source.on()&&source.room()==room){
+                    double radius=source.tool().equals("FIRELIGHT")?4.8:3.2;
+                    double distance=Math.hypot(source.x()-fx,source.z()-fz);
+                    lighting=Math.min(1.0,lighting+
+                        Math.max(0,1-distance/radius)*
+                        (source.tool().equals("FIRELIGHT")?.38:.22));
+                }
             for(int i=1;i<pts.size()-1;i++)triangle(pts.get(0),pts.get(i),pts.get(i+1),
                 face.color,face.material,lighting);
         }

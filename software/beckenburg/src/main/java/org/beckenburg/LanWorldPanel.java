@@ -570,6 +570,27 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     renderer.tripods.put(owner,new VanTripods.Stand(
                         owner,room,px,py,pz,tier));
                 }else throw new IllegalArgumentException("invalid tripod packet");
+            }else if(p.get(0).equals("PORTABLE")){
+                if(p.size()==2&&p.get(1).equals("RESET")){
+                    renderer.portablePositions.clear();
+                }else if(p.size()==4&&p.get(1).equals("CLEAR")){
+                    int owner=LanProtocol.integer(p.get(2),0,5);
+                    String tool=p.get(3);
+                    if(!tool.equals("FIRELIGHT")&&!tool.equals("FLASHLIGHT"))
+                        throw new IllegalArgumentException("unknown portable tool");
+                    renderer.portablePositions.remove(owner+":"+tool);
+                }else if(p.size()==10&&p.get(1).equals("PLACE")){
+                    int owner=LanProtocol.integer(p.get(2),0,5);
+                    String tool=p.get(3);
+                    int room=LanProtocol.integer(p.get(4),0,HouseMap.INDOOR_ROOMS-1);
+                    double xx=LanProtocol.integer(p.get(5),0,map.width()*1000)/1000.0;
+                    double yy=LanProtocol.integer(p.get(6),-50000,50000)/1000.0;
+                    double zz=LanProtocol.integer(p.get(7),0,map.height()*1000)/1000.0;
+                    EquipmentTiers.Tier tier=EquipmentTiers.Tier.valueOf(p.get(8));
+                    boolean on=LanProtocol.integer(p.get(9),0,1)==1;
+                    renderer.portablePositions.put(owner+":"+tool,
+                        new LanPortableLights.Light(owner,tool,room,xx,yy,zz,tier,on));
+                }else throw new IllegalArgumentException("invalid portable light packet");
             }else if(p.size()==2&&p.get(0).equals("WINDOWS")){
                 map.applyWindowSnapshot(p.get(1));
             }else if(p.size()==2&&p.get(0).equals("VANDOOR")){
@@ -762,9 +783,12 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         }catch(IOException e){feedback="LAN disconnected: "+e.getMessage();close();}
         GraphicsOptions.current().configure(renderer,getWidth(),getHeight(),true);
         renderer.roomLightTick=tick;
+        boolean portableFlash=renderer.portablePositions.containsKey(seat+":FLASHLIGHT");
+        boolean portableFire=renderer.portablePositions.containsKey(seat+":FIRELIGHT");
+        renderer.lamp=(flashlightOn&&!portableFlash)||(firelightOn&&!portableFire);
         renderer.setLampHardware(
             equipmentTier.getOrDefault("FLASHLIGHT",EquipmentTiers.Tier.I),
-            firelightOn&&!flashlightOn);
+            firelightOn&&!portableFire&&!flashlightOn);
         // The bulkhead's real CRT displays the live architectural map, not a
         // disconnected prop or a generic global activity meter.
         if(vanDisplay&&tick-lastMapTextureTick>=10){
@@ -803,6 +827,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             videoRenderer.dotsPositions.putAll(renderer.dotsPositions);
             videoRenderer.tripods.clear();
             videoRenderer.tripods.putAll(renderer.tripods);
+            videoRenderer.portablePositions.clear();
+            videoRenderer.portablePositions.putAll(renderer.portablePositions);
             videoRenderer.writingBookX=renderer.writingBookX;
             videoRenderer.writingBookY=renderer.writingBookY;
             videoRenderer.writingBookZ=renderer.writingBookZ;
@@ -865,7 +891,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 g.fillRect(px-3,48,photoW+6,photoH+6);
                 g.drawImage(lastPhoto,px,51,photoW,photoH,null);
             }
-            if(firelightOn){
+            if(firelightOn&&!renderer.portablePositions.containsKey(seat+":FIRELIGHT")){
                 g.setColor(new Color(251,162,65,205));
                 int bx=Math.max(60,getWidth()-110),by=h-112;
                 g.fillOval(bx,by,18,35);
@@ -877,7 +903,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }
             String held=equippedGear[activeGearSlot];
             String visual=held.equals("EMF_READER")?"EMF":held;
-            if(map.clutter().held(seat)<0)HeldToolView.draw(g,getWidth(),h,visual,tick,tick<=heldUseUntilTick,
+            boolean placedPortable=renderer.portablePositions.containsKey(seat+":"+held);
+            if(map.clutter().held(seat)<0&&!placedPortable)HeldToolView.draw(g,getWidth(),h,visual,tick,tick<=heldUseUntilTick,
                 renderer.lamp,deviceReading.get(held),
                 equipmentTier.getOrDefault(held,EquipmentTiers.Tier.I));
             drawHunterNameplates(g,h);
@@ -946,7 +973,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 g.setColor(new Color(236,207,157));g.drawString("HUNTER CONTROLS  /  F1 CLOSE",hx+18,hy+29);
                 g.setColor(new Color(218,225,221));
                 String[] hints={"WASD move  /  SHIFT sprint  /  CLICK mouse-look",
-                    "1-4 equip  /  R use  /  E interact  /  F6 gear rack",
+                    "1-4 equip / R use / F place light / E interact / F6 rack",
                     "Z cross / G ward / H salt / K medicine / M large van map",
                     "J casefile  /  TAB journal  /  I guess  /  P submit",
                     "ENTER chat  /  F2 radio  /  F3-F4 voice  /  F7 voice options",
@@ -1293,6 +1320,8 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 
                 sendAction("select gear",()->client.selectGearSlot(3));
             }
+            case KeyEvent.VK_F -> sendAction("place/retrieve ground light",
+                ()->client.placeHeldEquipment());
             case KeyEvent.VK_R -> {
                 heldUseUntilTick=tick+4;
                 if(equippedGear[activeGearSlot].equals("PHOTO_CAMERA"))
