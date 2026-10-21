@@ -1,0 +1,146 @@
+[
+  {
+    "test": "AuthoredLevelPhysicsTest",
+    "exit_code": 0,
+    "seconds": 0.375,
+    "output": "HOUSE XYZ geometry checked\nFARMHOUSE XYZ geometry checked\nSCHOOL XYZ geometry checked\n"
+  },
+  {
+    "test": "AuthoredLevelReachabilityTest",
+    "exit_code": 0,
+    "seconds": 7.235,
+    "output": "HOUSE reached elevations -3.0..3.0\nPASS HOUSE: swept van route reaches all15 zones and all functional sockets, 72209 positions\nFARMHOUSE reached elevations -3.0..3.0\nPASS FARMHOUSE: swept van route reaches all15 zones and all functional sockets, 140862 positions\nSCHOOL reached elevations -3.0..3.6\nPASS SCHOOL: swept van route reaches all15 zones and all functional sockets, 214153 positions\n"
+  },
+  {
+    "test": "AuthoredLevelStateTest",
+    "exit_code": 0,
+    "seconds": 0.422,
+    "output": "PASS HOUSE: door/window state, XYZ reach, intact sills, slab occlusion and synchronized reconstruction\nPASS FARMHOUSE: door/window state, XYZ reach, intact sills, slab occlusion and synchronized reconstruction\nPASS SCHOOL: door/window state, XYZ reach, intact sills, slab occlusion and synchronized reconstruction\n"
+  },
+  {
+    "test": "AuthoredLevelNetworkTest",
+    "exit_code": 0,
+    "seconds": 3.828,
+    "output": "PASS HOUSE: real host/client XYZ, map revision, door/window resync and ghost privacy\nPASS FARMHOUSE: real host/client XYZ, map revision, door/window resync and ghost privacy\nPASS SCHOOL: real host/client XYZ, map revision, door/window resync and ghost privacy\n"
+  },
+  {
+    "test": "AuthoredLevelRitualCaseTest",
+    "exit_code": 0,
+    "seconds": 0.328,
+    "output": "PASS HOUSE: selected-site rituals accept correct sockets and reject wrong room/storey/proximity\nPASS FARMHOUSE: selected-site rituals accept correct sockets and reject wrong room/storey/proximity\nPASS SCHOOL: selected-site rituals accept correct sockets and reject wrong room/storey/proximity\n"
+  },
+  {
+    "test": "WorldViewHandednessTest",
+    "exit_code": 0,
+    "seconds": 0.25,
+    "output": "PASS original model handedness, readable front faces, mouse direction and matching spatial audio\n"
+  },
+  {
+    "test": "MouseLookTest",
+    "exit_code": 0,
+    "seconds": 1.203,
+    "output": "PASS: mouse-look directions, clamps, uncaptured safety and focus release\n"
+  },
+  {
+    "test": "AuthoredUtilitiesTest",
+    "exit_code": 0,
+    "seconds": 0.406,
+    "output": "PASS authored utilities: 36 reachable wall switches, 43 door acoustic links, 7 vertical stair links, source elevation and ambience\n"
+  },
+  {
+    "test": "SoloElevationTest",
+    "exit_code": 0,
+    "seconds": 0.406,
+    "output": "PASS solo elevation: 36 room measurements/callouts/deployments; upstairs rites and extraction\n"
+  },
+  {
+    "test": "EquipmentAssetAssignmentsTest",
+    "exit_code": 0,
+    "seconds": 0.125,
+    "output": "PASS runtime assignments match manifest: 43 families, 129 stage aliases, 44 states, 153 unique resources\n"
+  },
+  {
+    "test": "EquipmentModelCatalogTest",
+    "exit_code": 0,
+    "seconds": 1.5,
+    "output": "PASS: 126 equipment slots +3 health slots, 44 state aliases /40 meshes, 7 fixed fixtures, 153-file allowlist\n"
+  },
+  {
+    "test": "PackagedSourceModelsTest",
+    "exit_code": 0,
+    "seconds": 2.735,
+    "output": "PASS: 336 packaged source GLBs, real triangles and embedded textures\n"
+  },
+  {
+    "test": "LevelRenderAcceptanceTest",
+    "exit_code": 0,
+    "seconds": 5.062,
+    "output": "PASS HOUSE: 24 lit/unlit views; hinged window; 2275ms total at320x200\nPASS FARMHOUSE: 24 lit/unlit views; hinged window; 960ms total at320x200\nPASS SCHOOL: 24 lit/unlit views; hinged window; 1242ms total at320x200\nPASS all curated environment meshes have textured runtime triangles\n"
+  },
+  {
+    "test": "LevelSurfaceIntegrityTest",
+    "exit_code": 0,
+    "seconds": 0.735,
+    "output": "PASS HOUSE: disjoint wall finishes, exact deck apertures, distinct floor materials and physical/rendered guards\nPASS FARMHOUSE: disjoint wall finishes, exact deck apertures, distinct floor materials and physical/rendered guards\nPASS SCHOOL: disjoint wall finishes, exact deck apertures, distinct floor materials and physical/rendered guards\n"
+  },
+  {
+    "test": "LivedLevelDressingTest",
+    "exit_code": 0,
+    "seconds": 1.453,
+    "output": "PASS HOUSE: 51 furnishing groups; 5 physically enterable difficulty-controlled cupboards; supported small objects\nPASS FARMHOUSE: 49 furnishing groups; 7 physically enterable difficulty-controlled cupboards; supported small objects\nPASS SCHOOL: 50 furnishing groups; 6 physically enterable difficulty-controlled cupboards; supported small objects\n"
+  },
+  {
+    "test": "LooseClutterTest",
+    "exit_code": 0,
+    "seconds": 1.14,
+    "output": "PASS HOUSE scattered 27 independent full-mesh objects\nPASS FARMHOUSE scattered 46 independent full-mesh objects\nPASS SCHOOL scattered 56 independent full-mesh objects\nPASS pickup/examination/ownership, throw/drop/gravity, impact sound, swept walls/ceilings, upper floors, physical poltergeist hits/misses, ghost privacy and bounded replication\n"
+  },
+  {
+    "test": "LooseClutterNetworkTest",
+    "exit_code": 0,
+    "seconds": 0.579,
+    "output": "PASS real sockets: pickup/throw/ownership/privacy, ghost fixture activation/replay, rejected remote switching and reachable player deactivation\n"
+  },
+  {
+    "test": "HauntedFixturesTest",
+    "exit_code": 0,
+    "seconds": 0.562,
+    "output": "PASS HOUSE: 19 physically mounted and reachable devices, including 12 room alarms\nPASS FARMHOUSE: 19 physically mounted and reachable devices, including 12 room alarms\nPASS SCHOOL: 17 physically mounted and reachable devices, including 12 room alarms\nPASS authorized AI/human activation, manual switches, rejected events/reach, timed ringing, water filling/draining, bounded replication and five distinct soundscapes\n"
+  },
+  {
+    "test": "VanHumanScaleTest",
+    "exit_code": 0,
+    "seconds": 1.516,
+    "output": "PASS HOUSE: six distinct deck pads, all station routes, outdoor ramp descent/return and cargo seal\nPASS FARMHOUSE: six distinct deck pads, all station routes, outdoor ramp descent/return and cargo seal\nPASS SCHOOL: six distinct deck pads, all station routes, outdoor ramp descent/return and cargo seal\nPASS human-scale body, actual furniture bounds and native-sized full-tier tool bays\n"
+  },
+  {
+    "test": "VanRackStockTest",
+    "exit_code": 0,
+    "seconds": 1.031,
+    "output": "PASS native-sized shelf packing: 62 independently visible inventory units\nPASS native-sized shelf packing: 64 independently visible inventory units\nPASS native-sized shelf packing: 330 independently visible inventory units\nPASS native-sized shelf packing: 330 independently visible inventory units\nPASS native-sized shelf packing: 330 independently visible inventory units\nPASS real stock arithmetic, equip/return, medicine consumption, atomic quantities and upright front-facing CRT geometry\n"
+  },
+  {
+    "test": "VanRackNetworkTest",
+    "exit_code": 0,
+    "seconds": 0.984,
+    "output": "PASS shared real-socket stock counts, equip/return synchronization, late-entry replay, bounded intents and ghost privacy\n"
+  },
+  {
+    "test": "InteractionFocusTest",
+    "exit_code": 0,
+    "seconds": 1.75,
+    "output": "PASS HOUSE exact door/window meshes: 15 doors, 9 windows\nPASS HOUSE exact visible meshes: 27 clutter, 17 fixtures, 12 switches\nPASS FARMHOUSE exact door/window meshes: 11 doors, 4 windows\nPASS FARMHOUSE exact visible meshes: 46 clutter, 17 fixtures, 12 switches\nPASS SCHOOL exact door/window meshes: 17 doors, 8 windows\nPASS SCHOOL exact visible meshes: 56 clutter, 17 fixtures, 12 switches\nPASS rack units individually targeted\n"
+  },
+  {
+    "test": "InteractionNetworkTest",
+    "exit_code": 0,
+    "seconds": 1.266,
+    "output": "PASS real-socket centre-ray pickup, forged/stale target rejection and hunter-only interaction\n"
+  },
+  {
+    "test": "HeldDeviceReadoutTest",
+    "exit_code": 0,
+    "seconds": 0.5,
+    "output": "PASS EMF I actual display changes 231 pixels\nPASS EMF II actual display changes 70 pixels\nPASS EMF III actual display changes 42 pixels\nPASS THERMOMETER I actual display changes 19 pixels\nPASS THERMOMETER II actual display changes 25 pixels\nPASS THERMOMETER III actual display changes 52 pixels\nPASS SOUND_RECORDER I actual display changes 24 pixels\nPASS SOUND_RECORDER II actual display changes 31 pixels\nPASS SOUND_RECORDER III actual display changes 36 pixels\nPASS rigid forward poses and retained real solo measurement\n"
+  }
+]

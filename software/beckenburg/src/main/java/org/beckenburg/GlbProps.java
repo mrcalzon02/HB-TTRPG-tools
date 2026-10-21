@@ -43,6 +43,8 @@ public final class GlbProps {
     public record Triangle(Vertex a,Vertex b,Vertex c,int material) { }
     public record Model(List<Triangle> triangles) { }
     private static final Map<String,Model> cache=new HashMap<>();
+    private static final List<String> materialNames=new ArrayList<>();
+    public static synchronized String materialName(int material){int i=material-TEXTURE_BASE;return i>=0&&i<materialNames.size()?materialNames.get(i):"";}
     private static final List<BufferedImage> textures=new ArrayList<>();
     private static final List<double[]> diffuseFactors=new ArrayList<>();
     private static int vanCrtMaterial=-1;
@@ -184,6 +186,7 @@ public final class GlbProps {
                 throw new IOException("Invalid embedded PNG");
             materialIds[i]=TEXTURE_BASE+textures.size();
             textures.add(picture);
+            materialNames.add(String.valueOf(obj(materials.get(i)).getOrDefault("name","")));
             double[] color=vec(pbr.get("baseColorFactor"),1,1,1,1);
             diffuseFactors.add(color);
             // The owner's CRT screen uses a distinct original material/UV

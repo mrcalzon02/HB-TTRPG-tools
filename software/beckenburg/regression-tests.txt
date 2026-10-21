@@ -163,3 +163,7 @@ HauntedFixturesTest
 VanHumanScaleTest
 VanRackStockTest
 VanRackNetworkTest
+
+InteractionFocusTest
+InteractionNetworkTest
+HeldDeviceReadoutTest

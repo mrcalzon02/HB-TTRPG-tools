@@ -79,6 +79,13 @@ public final class LooseClutter {
             if(d<best&&dot>0&&dot/d>.91&&map.clearLineOfSight(o.x,o.y+1.62,o.z,i.x,i.y,i.z)){best=d;result=i.state();}
         }return result;
     }
+    /** E pickup uses the same exact visible mesh as its prompt, including an object's edge. */
+    public synchronized void takeFocused(int id,Observer o,int tick){
+        if(o.seat<0||o.seat>=6||!o.exposed||!Double.isFinite(o.pitch)||Math.abs(o.pitch)>1.4||tick<=last[o.seat])throw new IllegalArgumentException("cannot handle clutter now");
+        var target=InteractionFocus.pick(map,o,List.of());
+        if(held(o.seat)>=0||target==null||target.kind()!=InteractionFocus.Kind.CLUTTER||!target.id().equals(""+id))throw new IllegalArgumentException("look directly at an unheld object");
+        Item i=item(id);i.holder=o.seat;i.armed=false;i.vx=i.vy=i.vz=i.spin=0;carry(i,o);last[o.seat]=tick;
+    }
     public synchronized void action(String action,int id,Observer o,int tick){
         if(o.seat<0||o.seat>=6||!o.exposed||!Double.isFinite(o.pitch)||Math.abs(o.pitch)>1.4)throw new IllegalArgumentException("cannot handle clutter now");
         if(tick<=last[o.seat])throw new IllegalArgumentException("object action cooling down");

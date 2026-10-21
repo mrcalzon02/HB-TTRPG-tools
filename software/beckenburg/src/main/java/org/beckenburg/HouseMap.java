@@ -107,6 +107,15 @@ public final class HouseMap {
         }
         return best;
     }
+    /** Exact portal selected by the centre ray; no second nearest-object search. */
+    public void toggleDoor(int id){
+        if(level.portals().stream().noneMatch(p->p.id()==id&&p.door()))throw new IllegalArgumentException("invalid door");
+        if(!openDoors.add(id))openDoors.remove(id);
+    }
+    public void toggleWindow(int id){
+        if(level.portals().stream().noneMatch(p->p.id()==id&&p.kind().equals("window")))throw new IllegalArgumentException("invalid window");
+        if(!openWindows.add(id))openWindows.remove(id);
+    }
     public boolean toggleNearestWindow(double x,double y,double z){
         Portal p=nearestWindow(x,y,z);if(p==null)return false;
         if(!openWindows.add(p.id()))openWindows.remove(p.id());return true;
@@ -141,7 +150,7 @@ public final class HouseMap {
         double dx=x-bx,dz=z-bz,c=Math.cos(yaw),s=Math.sin(yaw);
         return Math.abs(dx*c+dz*s)<hx+radius&&Math.abs(-dx*s+dz*c)<hz+radius;
     }
-    private boolean wallOpening(Room room,boolean edgeAlongX,double normal,double tangent,double y,double radius,boolean ray){
+    private boolean wallOpening(Room room,boolean edgeAlongX,double normal,double tangent,double y,double radius,boolean ray,int selectedPortal){
         for(Portal p:level.portalsFrom(room.id())){
             if(p.kind().equals("stair"))continue;
             if(p.alongX()!=edgeAlongX)continue;
@@ -150,7 +159,7 @@ public final class HouseMap {
             if(p.kind().equals("window")){
                 if(ray&&y>p.y()+1.0&&y<p.y()+2.35)return true;
             }else if(y>=p.y()-.10&&y+(ray?0:1.78)<=p.y()+2.45
-                    &&(!p.door()||doorOpen(p.id())))return true;
+                    &&(!p.door()||doorOpen(p.id())||p.id()==selectedPortal))return true;
         }
         for(Stair stair:level.stairs())if((stair.a()==room.id()||stair.b()==room.id())
                 &&stair.contains(edgeAlongX?tangent:normal,edgeAlongX?normal:tangent,radius)
@@ -159,17 +168,18 @@ public final class HouseMap {
         return false;
     }
     /** Every indoor perimeter remains solid even when exterior support overlaps it. */
-    private boolean wallBlocked(double x,double y,double z,double radius,boolean ray){
+    private boolean wallBlocked(double x,double y,double z,double radius,boolean ray){return wallBlocked(x,y,z,radius,ray,-1);}
+    private boolean wallBlocked(double x,double y,double z,double radius,boolean ray,int selectedPortal){
         for(Room r:level.rooms()){
             if(r.outside()||y+(ray?0:1.78)<=r.y()+.03||y>=r.y()+r.height())continue;
             if(r.name().toLowerCase().contains("loft")&&y>=r.y()+1.0)continue;
             if(x>=r.x0()-radius&&x<=r.x1()+radius){
-                if(Math.abs(z-r.z0())<radius+LevelDefinition.WALL_HALF_THICKNESS+.005&&!wallOpening(r,true,r.z0(),x,y,radius,ray))return true;
-                if(Math.abs(z-r.z1())<radius+LevelDefinition.WALL_HALF_THICKNESS+.005&&!wallOpening(r,true,r.z1(),x,y,radius,ray))return true;
+                if(Math.abs(z-r.z0())<radius+LevelDefinition.WALL_HALF_THICKNESS+.005&&!wallOpening(r,true,r.z0(),x,y,radius,ray,selectedPortal))return true;
+                if(Math.abs(z-r.z1())<radius+LevelDefinition.WALL_HALF_THICKNESS+.005&&!wallOpening(r,true,r.z1(),x,y,radius,ray,selectedPortal))return true;
             }
             if(z>=r.z0()-radius&&z<=r.z1()+radius){
-                if(Math.abs(x-r.x0())<radius+LevelDefinition.WALL_HALF_THICKNESS+.005&&!wallOpening(r,false,r.x0(),z,y,radius,ray))return true;
-                if(Math.abs(x-r.x1())<radius+LevelDefinition.WALL_HALF_THICKNESS+.005&&!wallOpening(r,false,r.x1(),z,y,radius,ray))return true;
+                if(Math.abs(x-r.x0())<radius+LevelDefinition.WALL_HALF_THICKNESS+.005&&!wallOpening(r,false,r.x0(),z,y,radius,ray,selectedPortal))return true;
+                if(Math.abs(x-r.x1())<radius+LevelDefinition.WALL_HALF_THICKNESS+.005&&!wallOpening(r,false,r.x1(),z,y,radius,ray,selectedPortal))return true;
             }
         }
         return false;
@@ -231,7 +241,10 @@ public final class HouseMap {
             for(Guard g:guards)if(y+half>g.y()&&y-half<g.y()+1&&boxHit(x,y-1,z,radius,(g.x0()+g.x1())/2,g.y(),(g.z0()+g.z1())/2,Math.max(.035,Math.abs(g.x1()-g.x0())/2),Math.max(.035,Math.abs(g.z1()-g.z0())/2),1,0))return false;
         }return true;
     }
-    public boolean clearLineOfSight(double ax,double ay,double az,double bx,double by,double bz){
+    public boolean clearLineOfSight(double ax,double ay,double az,double bx,double by,double bz){return clearInteractionSight(ax,ay,az,bx,by,bz,-1);}
+    /** A door face can be reached through its own conservative collision thickness.
+     * All other doors, walls, storeys and furnishing still occlude the interaction ray. */
+    public boolean clearInteractionSight(double ax,double ay,double az,double bx,double by,double bz,int selectedPortal){
         if(!finite(ax,ay,az,bx,by,bz))return false;
         double distance=Math.sqrt((bx-ax)*(bx-ax)+(by-ay)*(by-ay)+(bz-az)*(bz-az));if(distance>40)return false;if(distance<.01)return true;
         int steps=(int)Math.ceil(distance/.075);
@@ -239,8 +252,8 @@ public final class HouseMap {
             double t=i/(double)steps,x=ax+(bx-ax)*t,y=ay+(by-ay)*t,z=az+(bz-az)*t;
             boolean inside=false;
             for(Room r:level.rooms())if(r.contains(x,y,z)){inside=true;break;}
-            for(Portal p:level.portals())if(!p.kind().equals("stair")&&y>=p.y()&&y<p.y()+2.4&&inPortal(p,x,z,0)){inside=true;if(p.door()&&!doorOpen(p.id()))return false;}
-            if(!inside||wallBlocked(x,y,z,.015,true))return false;
+            for(Portal p:level.portals())if(!p.kind().equals("stair")&&y>=p.y()&&y<p.y()+2.4&&inPortal(p,x,z,0)){inside=true;if(p.door()&&!doorOpen(p.id())&&p.id()!=selectedPortal)return false;}
+            if(!inside||wallBlocked(x,y,z,.015,true,selectedPortal))return false;
             for(Room r:level.rooms())if(Math.abs(y-r.y())<.06&&x>=r.x0()&&x<=r.x1()&&z>=r.z0()&&z<=r.z1()&&!level.floorVoid(x,r.y(),z))return false;
             for(Collider p:level.colliders())if(y>p.y()&&y<p.y()+p.height()&&boxHit(x,y-1,z,0,p.x(),p.y(),p.z(),p.halfX(),p.halfZ(),p.height(),p.yaw()))return false;
             for(Collider p:closetColliders)if(y>p.y()&&y<p.y()+p.height()&&boxHit(x,y-1,z,0,p.x(),p.y(),p.z(),p.halfX(),p.halfZ(),p.height(),p.yaw()))return false;

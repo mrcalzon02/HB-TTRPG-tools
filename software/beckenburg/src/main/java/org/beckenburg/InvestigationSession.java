@@ -21,6 +21,8 @@ public final class InvestigationSession {
     private int saltRoom=-1,saltTick=-1;
     private boolean apparitionPhotographed;
     private final EnumSet<Instrument> measuredTools = EnumSet.noneOf(Instrument.class);
+    private final java.util.Map<Instrument,String> lastReadings=new java.util.EnumMap<>(Instrument.class);
+    public String deviceReading(String kind){try{return lastReadings.get(Instrument.valueOf(kind));}catch(IllegalArgumentException ignored){return null;}}
     private final ArrayList<String> journal = new ArrayList<>();
     private Outcome outcome = Outcome.ACTIVE;
     private int ticks, health = 100, stress, wards, payouts;
@@ -315,6 +317,7 @@ public final class InvestigationSession {
                 ?"Voice response detected":"No response detected";
             default -> throw new AssertionError(tool);
         }
+        lastReadings.put(tool,reading);
         measuredTools.add(tool);
         log("T"+ticks+" / "+map.roomName(room)+" / "+tool+" / "+reading);
         return true;

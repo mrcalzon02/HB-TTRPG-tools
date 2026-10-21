@@ -57,6 +57,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     private MissionWeather.State currentWeather;
     private HardEvidenceQuota.Level hardEvidenceLevel=HardEvidenceQuota.Level.EASY;
     private String dailyBrief="";
+    private final java.util.EnumSet<ContractRewards.Task> dailyTasks=java.util.EnumSet.noneOf(ContractRewards.Task.class);
     private final java.util.EnumSet<ContractRewards.Task> completedTasks=
         java.util.EnumSet.noneOf(ContractRewards.Task.class);
     private ContractRewards.Settlement settlement;
@@ -82,6 +83,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         new java.util.EnumMap<>(LanCase.Tool.class);
     private int casefileScroll;
     private boolean casefileOpen,helpVisible;
+    private String interfaceOpen="";private int mapFloor;
     private final FieldJournal fieldNotes=new FieldJournal();
     private int journalPage,guideCursor,guideGhostIndex;
     private GhostIdentity.Type selectedGuess=GhostIdentity.Type.SPIRIT;
@@ -108,7 +110,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         renderer.roomLights=lights;
         renderer.lamp=false; // a real torch begins OFF until the player switches it on
         mouseLook=new MouseLook(this,(dx,dy)->MouseLook.rotate(renderer,dx,dy),
-            ()->!casefileOpen);
+            ()->!casefileOpen&&interfaceOpen.isEmpty());
         addKeyListener(this);addMouseListener(mouseLook);addMouseMotionListener(mouseLook);
         addMouseListener(new MouseAdapter(){
             @Override public void mousePressed(MouseEvent e){
@@ -230,9 +232,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 hardEvidenceLevel=HardEvidenceQuota.Level.valueOf(p.get(1));
             }else if(p.size()==3&&p.get(0).equals("OBJECTIVES")){
                 java.time.LocalDate.parse(p.get(1));
-                StringBuilder text=new StringBuilder("DAILY: ");
+                dailyTasks.clear();StringBuilder text=new StringBuilder("DAILY: ");
                 for(String raw:p.get(2).split(",")){
-                    ContractRewards.Task task=ContractRewards.Task.valueOf(raw);
+                    ContractRewards.Task task=ContractRewards.Task.valueOf(raw);dailyTasks.add(task);
                     if(text.length()>7)text.append(" / ");
                     text.append(task.label);
                 }
@@ -311,6 +313,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                             motion.phase(),motion.heading(),motion.progress(),orbForm,greenGhostForm,ghostAppearance);
                     lastMotionTick=motion.tick();
                 }
+            }else if(p.size()==3&&p.get(0).equals("INTERACTED")&&p.get(1).equals("INTERFACE")){
+                if(p.get(2).equals("COMPUTER")){casefileOpen=true;journalPage=0;}else interfaceOpen=p.get(2);keys.clear();mouseLook.release();
+                feedback="Opened "+p.get(2).toLowerCase(java.util.Locale.ROOT);
             }else if(p.size()==3&&p.get(0).equals("LIGHTS")){
                 lights.acceptSnapshot(p.get(1));
                 lights.setBreaker(LanProtocol.integer(p.get(2),0,1)==1);
@@ -796,7 +801,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 renderer.lamp,deviceReading.get(held),
                 equipmentTier.getOrDefault(held,EquipmentTiers.Tier.I));
             drawHunterNameplates(g,h);
-            g.setColor(new Color(224,218,197));g.drawString(map.clutter().hint(new LooseClutter.Observer(seat,renderer.x,renderer.eyeHeight-1.62,renderer.z,renderer.yaw,renderer.pitch,true)),12,h-96);
+            g.setColor(new Color(224,218,197));g.drawString(map.clutter().held(seat)>=0?"F5 DROP / F12 THROW / ] EXAMINE":"",12,h-96);
             SprintHud.draw(g,12,h-76,Math.min(248,getWidth()-24),
                 "SPRINT",sprintRemaining,sprintMax,sprinting);
 
@@ -816,18 +821,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.drawString("CASE "+casefile.size()+" READINGS / "+hardEvidenceLevel.name()+
                 " / GUESS "+selectedGuess,24,66);
             g.setColor(new Color(225,212,178));g.drawString("+",width/2,h/2);
-            int switchTarget=lights.aimed(map,renderer.x,renderer.eyeHeight-1.62,renderer.z,renderer.yaw);
-            var windowTarget=map.nearestWindow(renderer.x,renderer.eyeHeight-1.62,renderer.z);
-            if(windowTarget!=null){
-                g.setColor(new Color(14,24,25,225));g.fillRoundRect(Math.max(12,width/2-140),h-129,280,30,8,8);
-                g.setColor(new Color(251,220,152));
-                g.drawString("[ E ] WINDOW "+(map.windowOpen(windowTarget.id())?"OPEN":"CLOSED"),Math.max(24,width/2-128),h-108);
-            }else if(switchTarget>=0){
-                g.setColor(new Color(14,24,25,225));g.fillRoundRect(Math.max(12,width/2-140),h-129,280,30,8,8);
-                g.setColor(new Color(251,220,152));
-                g.drawString("[ E ] WALL SWITCH "+(lights.on(switchTarget)?"ON":"OFF"),
-                    Math.max(24,width/2-128),h-108);
-            }
+            if(!casefileOpen&&interfaceOpen.isEmpty()&&!helpVisible)InteractionFocus.draw(g,width,h,focusTarget());
             String alert=null;Color alertColor=new Color(216,196,216);
             if(health==0){alert="INCAPACITATED / SPECTATE UNTIL RESULT";alertColor=new Color(245,154,159);}
             else if(frenzyPhase==GhostFrenzy.Phase.WARNING){
@@ -879,8 +873,15 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                     "ESC exit world  /  F1 close this help"};
                 int yy=hy+55;for(String hint:hints){g.drawString(hint,hx+18,yy);yy+=25;}
             }
+            if(interfaceOpen.equals("MAP"))SiteMapView.draw(g,getWidth(),h,map,mapFloor,renderer.x,renderer.eyeHeight-1.62,renderer.z);
+            if(interfaceOpen.equals("BRIEFING")){
+                int x=30,y=125;g.setColor(new Color(10,17,23,248));g.fillRoundRect(18,88,getWidth()-36,Math.min(h-110,345),12,12);g.setColor(new Color(231,212,171));g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));g.drawString("CONTRACT BOARD / ESC CLOSE",x,112);
+                g.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,14));
+                for(String line:dailyBrief.split(" / |;")){g.drawString(line.substring(0,Math.min(line.length(),95)),x,y+=24);}
+                for(var task:dailyTasks)if(y<h-60){g.setColor(completedTasks.contains(task)?new Color(149,217,164):new Color(205,201,180));g.drawString((completedTasks.contains(task)?"[DONE] ":"[    ] ")+task.label,x,y+=24);}
+            }
             drawChat(g,h);
-            if(vanDisplay)drawVanMeters(g,h);
+            if(vanDisplay&&(interfaceOpen.isEmpty()||interfaceOpen.equals("RELAY")))drawVanMeters(g,h);
             if(casefileOpen && journalPage!=0)drawFieldJournal(g,h);
             if(casefileOpen && journalPage==0){
                 int rows=Math.min(casefile.size(),Math.min(8,Math.max(1,(h-135)/37)));
@@ -1116,6 +1117,12 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
     }
     @Override public void keyPressed(KeyEvent e){
         if(chatInput.isVisible())return;
+        if(!interfaceOpen.isEmpty()){
+            if(e.getKeyCode()==KeyEvent.VK_ESCAPE||e.getKeyCode()==KeyEvent.VK_E)interfaceOpen="";
+            else if(e.getKeyCode()==KeyEvent.VK_PAGE_UP)mapFloor++;
+            else if(e.getKeyCode()==KeyEvent.VK_PAGE_DOWN)mapFloor--;
+            repaint();return;
+        }
         if(e.getKeyCode()==KeyEvent.VK_F1){helpVisible=!helpVisible;repaint();return;}
         if(e.getKeyCode()==KeyEvent.VK_F3){
             beginVoice(LanChat.Channel.LOCAL);return;
@@ -1173,17 +1180,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             }
             case KeyEvent.VK_ESCAPE -> {keys.clear();releaseVoice();mouseLook.release();InGamePauseMenu.execute(this);}
             case KeyEvent.VK_E -> {
-                var device=map.fixtures().aimed(renderer.x,renderer.eyeHeight-1.62,renderer.z,renderer.yaw,renderer.pitch);
-                if(device!=null){sendAction("device",()->client.fixture(device.id(),renderer.pitch));break;}
-                int aimed=lights.aimed(map,renderer.x,renderer.eyeHeight-1.62,renderer.z,renderer.yaw);
-                if(e.isShiftDown()||map.nearestWindow(renderer.x,renderer.eyeHeight-1.62,renderer.z)!=null)
-                    sendAction("window",()->client.window());
-                else if(map.van().nearDoorButton(renderer.x,renderer.z))
-                    sendAction("van cargo door",()->client.vanDoor());
-                else if(aimed>=0)sendAction("light switch",()->client.light());
-                else if(RoomLighting.breakerAimed(map,renderer.x,renderer.eyeHeight-1.62,renderer.z,renderer.yaw))
-                    sendAction("power breaker",()->client.power());
-                else sendAction("door",()->client.door());
+                var target=focusTarget();if(target!=null)sendAction("interaction",()->client.interact(target,renderer.yaw,renderer.pitch));
             }
             case KeyEvent.VK_1 -> {
                 activeGearSlot=0;
@@ -1243,6 +1240,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             case KeyEvent.VK_DOWN -> renderer.pitch=Math.max(-1.05,renderer.pitch-.06);
             default -> {if(health>0)keys.add(e.getKeyCode());}
         }
+    }
+    private InteractionFocus.Target focusTarget(){
+        return InteractionFocus.pick(map,new LooseClutter.Observer(seat,renderer.x,renderer.eyeHeight-1.62,renderer.z,renderer.yaw,renderer.pitch,health>0&&!concealed),rackSnapshot.stock());
     }
     @FunctionalInterface private interface NetworkAction {void run()throws IOException;}
     private void sendAction(String verb,NetworkAction action){

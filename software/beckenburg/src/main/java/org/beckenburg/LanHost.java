@@ -574,6 +574,58 @@ public final class LanHost implements AutoCloseable {
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(2)));
                     world.turn(peer.slot,heading);broadcastWorld();
                 }
+                case "INTERACT" -> {
+                    if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=6)
+                        throw new IllegalArgumentException("hunter interaction required");
+                    acceptHunterSequence(peer,LanProtocol.sequence(p.get(5)));ensureActiveHunter(peer);
+                    if(tick-peer.lastLightTick<3)throw new IllegalArgumentException("interaction refreshing");
+                    double yaw=LanProtocol.integer(p.get(3),-3142,3142)/1000.0,pitch=LanProtocol.integer(p.get(4),-1400,1400)/1000.0;
+                    var b=world.body(peer.slot);
+                    if(Math.abs(Math.atan2(Math.sin(yaw-Math.toRadians(b.heading())),Math.cos(yaw-Math.toRadians(b.heading()))))>.025)
+                        throw new IllegalArgumentException("interaction heading changed");
+                    var observer=new LooseClutter.Observer(peer.slot,b.x(),b.y(),b.z(),yaw,pitch,!world.hidden(peer.slot));
+                    boolean[] present=new boolean[HUNTERS];for(int n=0;n<HUNTERS;n++)present[n]=seats[n]!=null||reserved[n]!=null;
+                    var target=InteractionFocus.pick(map,observer,VanRackStock.aggregate(equipment,supplies,counters,present));
+                    if(target==null||!target.kind().name().equals(p.get(1))||!target.id().equals(p.get(2)))
+                        throw new IllegalArgumentException("look directly at the visible object within reach");
+                    switch(target.kind()){
+                        case CLUTTER -> map.clutter().takeFocused(Integer.parseInt(target.id()),observer,tick);
+                        case FIXTURE -> map.fixtures().toggleFocused(Integer.parseInt(target.id()),observer,tick);
+                        case RACK -> {
+                            String[] unit=target.id().split(":");String id=unit[0];var tier=EquipmentTiers.Tier.valueOf(unit[1]);
+                            if(FieldEquipment.functional(id)){
+                                if(equipment[peer.slot].owned(id)!=tier)throw new IllegalArgumentException("this tier belongs to another investigator");
+                                equipment[peer.slot].equip(equipment[peer.slot].activeSlot(),id);sendEquipmentState(peer);
+                            }else if(id.equals("HEALTH_SUPPLIES")||id.equals("SANITY_MEDICATION")){
+                                var kind=id.equals("HEALTH_SUPPLIES")?FieldSupplies.Kind.HEALTH:FieldSupplies.Kind.SANITY;
+                                var medicine=FieldSupplies.Tier.values()[tier.ordinal()];
+                                if(supplies[peer.slot].stock(kind,medicine)==0)throw new IllegalArgumentException("medicine belongs to another investigator");
+                                boolean used=kind==FieldSupplies.Kind.HEALTH?mission.heal(peer.slot,medicine.restore(kind)):mission.calm(peer.slot,medicine.restore(kind));
+                                if(!used)throw new IllegalArgumentException("no treatment necessary");
+                                supplies[peer.slot].consume(kind,medicine);reply(peer,supplies[peer.slot].frame());broadcastProgress();
+                            }else throw new IllegalArgumentException("salt is deployed with H");
+                        }
+                        case INTERFACE -> reply(peer,"INTERACTED|INTERFACE|"+target.id());
+                        case SWITCH -> {lights.toggle(Integer.parseInt(target.id()));notifyAllPeers("LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));}
+                        case BREAKER -> {lights.setBreaker(!lights.breaker());notifyAllPeers("LIGHTS|"+lights.snapshot()+"|"+(lights.breaker()?1:0));}
+                        case WINDOW -> map.toggleWindow(Integer.parseInt(target.id()));
+                        case DOOR -> {
+                            int id=Integer.parseInt(target.id());map.toggleDoor(id);
+                            for(int n=0;n<HUNTERS;n++)if((seats[n]!=null||reserved[n]!=null)&&!map.traversable(world.body(n).x(),world.body(n).y(),world.body(n).z())){
+                                map.toggleDoor(id);throw new IllegalArgumentException("doorway occupied");
+                            }
+                        }
+                        case VAN_DOOR -> {
+                            boolean closed=map.van().toggleCargoDoor();
+                            if(closed)for(int n=0;n<HUNTERS;n++)if((seats[n]!=null||reserved[n]!=null)&&!map.traversable(world.body(n).x(),world.body(n).y(),world.body(n).z())){
+                                map.van().toggleCargoDoor();throw new IllegalArgumentException("van doorway occupied");
+                            }
+                        }
+                    }
+                    peer.lastLightTick=tick;reply(peer,"ACCEPT|INTERACT|"+target.name());
+                    recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,target.kind()==InteractionFocus.Kind.CLUTTER||target.kind()==InteractionFocus.Kind.RACK?LanSound.Cue.PICKUP:LanSound.Cue.SWITCH);
+                    broadcastWorld();
+                }
                 case "LIGHT" -> {
                     if(!running||peer.slot==GHOST_SEAT||!peer.worldMode||p.size()!=2)
                         throw new IllegalArgumentException("hunter 3D light interaction required");

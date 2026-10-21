@@ -135,6 +135,12 @@ public final class LanClient implements AutoCloseable {
     }
     public synchronized void vanMonitor()throws IOException {send("VANMON|"+(++sequence));}
     public synchronized void hide()throws IOException {send("HIDE|"+(++sequence));}
+    public synchronized void interact(InteractionFocus.Target target,double yaw,double pitch)throws IOException {
+        int heading=Math.floorMod((int)Math.round(Math.toDegrees(yaw)),360);
+        turn(heading);
+        double normalized=Math.atan2(Math.sin(yaw),Math.cos(yaw));
+        send("INTERACT|"+target.kind()+"|"+target.id()+"|"+Math.round(normalized*1000)+"|"+Math.round(pitch*1000)+"|"+(++sequence));
+    }
     public synchronized void fixture(int id,double pitch)throws IOException {send("DEVICE|"+id+"|"+Math.round(pitch*1000)+"|"+(++sequence));}
     public synchronized void ghostFixture(int id)throws IOException {send("GDEVICE|"+id+"|"+(++sequence));}
     public synchronized void clutter(String action,int id,double pitch)throws IOException {send("OBJECT|"+action+"|"+id+"|"+Math.round(pitch*1000)+"|"+(++sequence));}

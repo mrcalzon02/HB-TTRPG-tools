@@ -75,3 +75,5 @@ Build native public libraries with `build_public_libraries.py`, then run `publis
 After every final scene export, run Blender with `validate_level_scenes.py`. It reopens each saved delivery, compares architecture triangle counts and independently editable loose-object/fixture IDs, transforms and collision metadata against runtime exports, and verifies packed diffuse textures. Run `record_verification.py` only after this report and the final captures are current; scene hashes must match before the delivery manifest can be recorded.
 
 Van size, layout, source-screen alignment and actual inventory quantities follow [the van refit workflow](VAN_REFIT_WORKFLOW.md). Native-size physical stock replaces catalog decorations; the deck, loading ramp, six local spawn pads and every station require swept movement checks.
+
+World targeting, physical device displays and interface controls follow [the interaction UI workflow](INTERACTION_UI_WORKFLOW.md). Use the exact same visible target for both the prompt and the authoritative action; proximity-only fallback is not the E interaction contract.

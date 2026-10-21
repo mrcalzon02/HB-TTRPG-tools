@@ -57,6 +57,11 @@ public final class HauntedFixtures {
             if(d<best&&dot>0&&dot/d>.88&&map.clearLineOfSight(x,y+1.62,z,f.x,f.y+.10,f.z)){result=f.state();best=d;}}
         return result;
     }
+    public synchronized void toggleFocused(int id,LooseClutter.Observer o,int tick){
+        var target=InteractionFocus.pick(map,o,List.of());
+        if(!o.exposed()||target==null||target.kind()!=InteractionFocus.Kind.FIXTURE||!target.id().equals(""+id))throw new IllegalArgumentException("look directly at the fixture");
+        Fixture f=get(id);f.active=!f.active;f.until=f.active?tick+200:0;f.revision++;
+    }
     public synchronized void toggle(int id,LooseClutter.Observer o,int tick){
         if(!o.exposed())throw new IllegalArgumentException("cannot use fixture now");
         var aimed=aimed(o.x(),o.y(),o.z(),o.yaw(),o.pitch());if(aimed==null||aimed.id!=id)throw new IllegalArgumentException("aim at fixture within reach");
