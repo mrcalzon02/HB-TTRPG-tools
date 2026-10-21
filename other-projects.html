@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Other Projects | Calzon's Foundry</title>
+<meta name="description" content="Original GitHub projects by mrcalzon02: descriptions, latest code activity, releases and downloads. Forks excluded.">
+<meta name="robots" content="index,follow"><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/other-projects.html">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="workspace-landing.css">
+<style>
+.other-shell{max-width:1150px;margin:0 auto;padding:18px 18px 70px}
+.other-shell p{margin:7px 0}.other-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:18px 0 8px}
+.other-controls input[type=search]{flex:1 1 230px;min-width:0;padding:10px;border-radius:7px;border:1px solid #75839c;background:#142338;color:#fff}
+.other-controls select,.other-controls button{padding:9px;border:1px solid #75839c;border-radius:7px;background:#1a304a;color:#fff;cursor:pointer}
+.other-controls label{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+#other-count{font-size:.86rem;margin-left:auto}#other-message{min-height:1.5em;opacity:.83;font-size:.87rem}
+.other-list{display:grid;gap:8px;margin-top:10px}
+.other-item{padding:12px 14px;border:1px solid #51627a;border-radius:8px;background:rgba(40,57,75,.4)}
+.other-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.other-head h2{margin:0;font-size:1.1rem}.other-tag{opacity:.85;font-size:.83rem}
+.other-purpose{font-size:.97rem}.other-desc,.other-meta{font-size:.87rem;opacity:.87}
+.other-meta{display:flex;gap:6px 17px;flex-wrap:wrap}
+.other-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.other-actions a{padding:6px 10px;border:1px solid #74839b;border-radius:6px;color:inherit;text-decoration:none}
+.other-actions a:hover,.other-actions a:focus-visible{background:rgba(139,178,217,.23)}
+.other-downloads{margin-top:8px;font-size:.88rem}.other-downloads summary{cursor:pointer}
+.other-downloads ul{margin:7px 0;padding-left:22px}.other-downloads li{margin:3px 0}
+.other-item a{overflow-wrap:anywhere}
+.other-shell :focus-visible{outline:2px solid #afdaff;outline-offset:2px}
+@media(max-width:550px){#other-count{margin-left:0}}
+</style></head>
+<body class="workspace-landing-body">
+<header class="site-header"><div><p class="eyebrow">Foundry / GitHub</p><h1>Other Projects</h1><p class="subtitle">Original games, software, mods and experiments. Repositories and releases, without forks.</p></div>
+<nav class="top-nav" aria-label="Primary"><a class="nav-button" href="index.html">Foundry Home</a><a class="nav-button" href="software.html">Software</a><a class="nav-button active" aria-current="page" href="other-projects.html">Other Projects</a><a class="nav-button" href="site-map.html">Site Map</a><a class="nav-button" href="https://github.com/mrcalzon02" target="_blank" rel="noopener noreferrer">GitHub</a></nav></header>
+<main class="other-shell"><p>Browse projects owned by <a href="https://github.com/mrcalzon02">mrcalzon02</a>. Source activity is not the same as a release or a playable build; experimental releases are explicitly marked.</p>
+<div class="other-controls" role="search" aria-label="Project search">
+<input id="other-search" type="search" autocomplete="off" placeholder="Search projects, descriptions or languages" aria-label="Search projects">
+<select id="other-sort" aria-label="Sort projects"><option value="recent">Recently updated</option><option value="name">Name</option><option value="release">Most recent release</option></select>
+<label><input type="checkbox" id="other-has-release"> Releases only</label><button type="button" id="other-refresh">Refresh</button><span id="other-count" role="status"></span>
+</div><p id="other-message" role="status" aria-live="polite">Verified metadata snapshot: October 20, 2026.</p>
+<div class="other-list" id="other-list"></div>
+<noscript><p>Enable JavaScript to browse the project list. Alternatively, <a href="https://github.com/mrcalzon02?tab=repositories">browse GitHub repositories</a>.</p></noscript>
+<p class="other-desc">Excludes this website's own repository, GitHub-marked forks, and the separately labeled Tanks-for-bob-Fork. Metadata is refreshed from the public GitHub API where possible; the verified snapshot remains available when requests fail. “Latest release” means the most recently published non-draft GitHub release, including prereleases.</p>
+</main>
+<script>
+(function(){
+"use strict";
+const OWNER="mrcalzon02",SNAPSHOT="Oct 20, 2026";
+const initial=[["Tech-Priests","Factorio mod for machine care, blessings, and the Tech Priests responsible for them.","A factorio mod about keeping your machines blessed and your Tech Priests happy.","Lua","2026-10-20T23:33:49Z","v0.1.674-rc.3","Tech Priests v0.1.674 Repair Candidate RC3","2026-06-30T22:05:14Z",1],["ReverieVR","Android Daydream VR hub with native games, classic-game integrations, and modular downloadable content.","","Java","2026-10-20T06:38:45Z","phone-test-1066-1","ReverieVR Phone Test #1066","2026-10-18T07:18:29Z",1],["TheMechanist","Java-based hive simulation game with persistent characters, populations, and world systems.","Java based Hive simulation game","Java","2026-10-19T01:00:47Z","0.9.10iz-alpha.5","The Mechanist 0.9.10iz Alpha 5","2026-07-24T17:56:40Z",1],["Continuity-Works","Minecraft structure generation, reconstruction, validation, and terrain-integration tooling.","AI-assisted Minecraft structure generation, reconstruction, validation, and fitness auditing.","Python","2026-10-18T06:41:54Z","v0.3.0-rc.2","Continuity Works Forge 1.20.1 — 0.3.0-rc.2","2026-09-02T21:12:06Z",1],["Alfheim-Reclaimed","Minecraft modpack centered on rebuilding the elven homeland and Botania progression.","Minecraft Mod Pack","Python","2026-10-18T16:11:41Z"],["Magenheim","Valheim mod with crystal shaping, elemental equipment improvements, enemies and dungeons.","","C#","2026-10-16T23:35:27Z"],["Infinite-Domain","Minecraft wasteland survival modpack focused on demanding era-based progression.","Mod Pack DEV","Python","2026-10-15T03:12:10Z"],["powerpong","Desktop Pong game featuring an AI opponent.","power pong program, play verus ai.","Java","2026-07-18T04:24:20Z","powerpong-desktop-latest","PowerPong Desktop Builds","2026-07-18T04:24:20Z",0],["ImperialERA","Imperial-themed mod development; refer to repository source for its detailed scope.","Imperial Mod","","2026-07-02T04:10:38Z"],["Fleet-designer","Deep-space industry and fleet strategy, with modular ship component development and manufacturing.","A deep-space industrial strategy game where you research, manufacture, and market modular spaceship components to dominate the intergalactic fleet industry.","JavaScript","2026-06-09T03:49:27Z"],["mechanicist-factorio","Factorio mechanical retheming and overhaul project.","mechanicist-factorio Retheming/overhaul project","Lua","2026-05-03T22:05:26Z"],["Depth-Detective","Barotrauma-themed detective adventure made with Adventure Game Studio."," AGS Barotrauma Themed Detective game","AGS Script","2025-10-11T04:56:39Z"],["Pirates-of-the-western-Rim-WIP-","Work-in-progress repository; no published description or detailed purpose.","","","2021-05-23T21:33:19Z"],["DFWW2","Repository without a published project description; purpose not documented.","","","2019-09-28T04:58:22Z"]];
+const purposes=new Map(initial.map(v=>[v[0].toLowerCase(),v[1]]));
+const projects=new Map(initial.map(v=>[v[0],{name:v[0],purpose:v[1],description:v[2],language:v[3],pushed_at:v[4],branch:"main",release:v[5]?{tag_name:v[5],name:v[6],published_at:v[7],prerelease:!!v[8],assets:[]}:null,releaseChecked:false,archived:false}]));
+const $=id=>document.getElementById(id),list=$("other-list"),search=$("other-search"),sort=$("other-sort"),only=$("other-has-release"),message=$("other-message"),count=$("other-count"),refresh=$("other-refresh");
+let busy=false,liveRepos=false;
+const repoURL=name=>"https://github.com/"+OWNER+"/"+encodeURIComponent(name);
+const node=(tag,cls,value)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(value!==undefined)n.textContent=value;return n;};
+const external=(value,url)=>{const a=node("a",null,value);a.href=url;a.target="_blank";a.rel="noopener noreferrer";return a;};
+const formatted=s=>{if(!s)return "Not available";const d=new Date(s);return Number.isNaN(d.getTime())?"Not available":d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric",timeZone:"UTC"});};
+function render(){
+ const query=search.value.trim().toLowerCase(),releaseOnly=only.checked;
+ const rows=[...projects.values()].filter(p=>(!releaseOnly||p.release)&&(!query||[p.name,p.purpose,p.description,p.language,p.release?.tag_name||""].join(" ").toLowerCase().includes(query)));
+ rows.sort((a,b)=>sort.value==="name"?a.name.localeCompare(b.name):sort.value==="release"?(Date.parse(b.release?.published_at||0)-Date.parse(a.release?.published_at||0)):Date.parse(b.pushed_at||0)-Date.parse(a.pushed_at||0));
+ const fragment=document.createDocumentFragment();
+ for(const p of rows){
+  const item=node("article","other-item"),head=node("div","other-head"),title=node("h2");
+  title.append(external(p.name,repoURL(p.name)));head.append(title,node("span","other-tag",p.archived?"Archived":p.release?(p.release.prerelease?"Prerelease available":"Release available"):"Source repository"));item.append(head);
+  item.append(node("p","other-purpose",p.purpose));
+  if(p.description&&p.description.trim()!==p.purpose.trim())item.append(node("p","other-desc","GitHub: "+p.description.trim()));
+  const meta=node("div","other-meta");
+  meta.append(node("span",null,"Last source push: "+formatted(p.pushed_at)),node("span",null,"Language: "+(p.language||"Unspecified")));
+  meta.append(node("span",null,p.release?"Latest release: "+(p.release.name||p.release.tag_name)+" ("+formatted(p.release.published_at)+")":p.releaseChecked?"No published releases":"No published release in "+SNAPSHOT+" snapshot"));
+  item.append(meta);
+  const actions=node("div","other-actions");
+  actions.append(external("GitHub repository",repoURL(p.name)));
+  if(p.release)actions.append(external("Release & downloads",repoURL(p.name)+"/releases/tag/"+encodeURIComponent(p.release.tag_name)));
+  item.append(actions);
+  if(p.release?.assets?.length){
+   const detail=node("details","other-downloads"),summary=node("summary",null,"Download files ("+p.release.assets.length+")"),ul=node("ul");
+   for(const a of p.release.assets){
+    if(!a.browser_download_url?.startsWith(repoURL(p.name)+"/releases/download/"))continue;
+    const li=node("li");li.append(external(a.name,a.browser_download_url));
+    if(a.size)li.append(node("span","other-desc"," · "+(a.size/1048576).toFixed(1)+" MB"));ul.append(li);
+   }
+   if(ul.childElementCount){detail.append(summary,ul);item.append(detail);}
+  }
+  fragment.append(item);
+ }
+ list.replaceChildren(fragment);
+ if(!rows.length)list.append(node("p",null,"No matching projects."));
+ count.textContent=rows.length+" / "+projects.size+" projects";
+}
+async function api(url){const response=await fetch(url,{headers:{Accept:"application/vnd.github+json"},cache:"no-store"});if(!response.ok)throw Error("GitHub HTTP "+response.status);return response.json();}
+async function refreshRepos(){
+ const found=[];
+ for(let page=1;page<=5;page++){
+  const batch=await api("https://api.github.com/users/"+OWNER+"/repos?per_page=100&type=owner&sort=pushed&page="+page);
+  if(!Array.isArray(batch))throw Error("Invalid GitHub repository response");
+  found.push(...batch);if(batch.length<100)break;
+ }
+ const keep=new Set();
+ for(const r of found){
+  if(r.owner?.login?.toLowerCase()!==OWNER||r.fork||r.name==="HB-TTRPG-tools"||/-fork$/i.test(r.name))continue;
+  keep.add(r.name);
+  const p=projects.get(r.name)||{name:r.name,release:null,releaseChecked:false};
+  Object.assign(p,{description:r.description||"",purpose:purposes.get(r.name.toLowerCase())||r.description||"No published description.",language:r.language||"",pushed_at:r.pushed_at,branch:r.default_branch||"main",archived:!!r.archived});
+  projects.set(r.name,p);
+ }
+ for(const name of [...projects.keys()])if(!keep.has(name))projects.delete(name);
+ liveRepos=true;render();
+}
+async function refreshOne(p){
+ const releases=await api("https://api.github.com/repos/"+OWNER+"/"+encodeURIComponent(p.name)+"/releases?per_page=100");
+ if(!Array.isArray(releases))throw Error("Invalid releases");
+ const latest=releases.filter(r=>!r.draft&&r.published_at&&r.tag_name).sort((a,b)=>Date.parse(b.published_at)-Date.parse(a.published_at))[0]||null;
+ const current=projects.get(p.name);if(!current)return;
+ current.release=latest;current.releaseChecked=true;render();
+}
+async function sync(){
+ if(busy)return;busy=true;refresh.disabled=true;
+ message.textContent="Checking GitHub repositories and published releases…";
+ let failed=0,repoError=false;
+ try{await refreshRepos();}catch(e){repoError=true;}
+ const queue=[...projects.values()];let next=0;
+ await Promise.all(Array.from({length:Math.min(4,queue.length)},async()=>{while(next<queue.length){const p=queue[next++];try{await refreshOne(p);}catch(e){failed++;}}}));
+ message.textContent=(liveRepos?"GitHub repositories checked. ":"Verified "+SNAPSHOT+" repository snapshot. ")+(failed||repoError?"Some GitHub checks failed; unavailable details are from the verified snapshot.":"Published release information refreshed.");
+ busy=false;refresh.disabled=false;render();
+}
+[search,sort,only].forEach(control=>control.addEventListener(control===search?"input":"change",render));
+refresh.addEventListener("click",sync);render();sync();
+})();
+</script></body></html>
