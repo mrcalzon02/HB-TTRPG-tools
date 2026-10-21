@@ -118,8 +118,9 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         addKeyListener(this);addMouseListener(mouseLook);addMouseMotionListener(mouseLook);
         addMouseListener(new MouseAdapter(){
             @Override public void mousePressed(MouseEvent e){
-                if(casefileOpen&&journalPage==1&&handleJournalClick(e.getX(),e.getY(),
-                        SwingUtilities.isRightMouseButton(e))){
+                if(casefileOpen&&((journalPage==1&&handleJournalClick(e.getX(),e.getY(),
+                        SwingUtilities.isRightMouseButton(e)))
+                        ||(journalPage==2&&handleArchiveClick(e.getX(),e.getY())))){
                     e.consume();mouseLook.release();requestFocusInWindow();repaint();
                 }
             }
@@ -1126,11 +1127,11 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             sendAction("mark evidence",()->client.note(clue,next));
             return true;
         }
-        int spacing=Math.max(140,(NOTE_LEFT+width-right-18)/2);
-        if(x>=right&&x<right+spacing*2
-                &&y>=NOTE_TOP+86&&y<NOTE_TOP+86+7*NOTE_ROW_HEIGHT){
+        int spacing=Math.max(132,(NOTE_LEFT+width-right-18)/3);
+        if(x>=right&&x<right+spacing*3
+                &&y>=NOTE_TOP+86&&y<NOTE_TOP+86+9*NOTE_ROW_HEIGHT){
             int column=(x-right)/spacing,row=(y-(NOTE_TOP+86))/NOTE_ROW_HEIGHT;
-            int index=column*7+row;
+            int index=column*9+row;
             GhostIdentity.Type[] all=GhostIdentity.Type.values();
             if(index<all.length){
                 selectedGuess=all[index];
@@ -1146,7 +1147,7 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
         g.setColor(new Color(15,18,26,244));g.fillRoundRect(left,top,width,height,7,7);
         g.setColor(new Color(218,200,158));g.drawRoundRect(left,top,width,height,7,7);
         g.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));
-        g.drawString(journalPage==1?"EVIDENCE / PLAYER NOTES":"GHOST REFERENCE / TAB: LOG",
+        g.drawString(journalPage==1?"EVIDENCE / PLAYER NOTES":"GHOST ARCHIVE / TAB: LOG",
             left+13,top+24);
         if(journalPage==1){
             GhostFieldGuide.Clue[] clues=GhostFieldGuide.activeClues();
@@ -1180,12 +1181,12 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             g.setColor(new Color(188,190,181));
             g.drawString(remaining+"/"+GhostIdentity.Type.values().length
                 +" match YOUR notes",right,top+65);
-            int spacing=Math.max(140,(left+width-right-18)/2);
+            int spacing=Math.max(132,(left+width-right-18)/3);
             GhostIdentity.Type[] all=GhostIdentity.Type.values();
             for(int i=0;i<all.length;i++){
                 GhostIdentity.Type type=all[i];
                 boolean possible=GhostFieldGuide.remainsPossible(type,fieldNotes);
-                int x=right+(i/7)*spacing,y=top+98+(i%7)*NOTE_ROW_HEIGHT;
+                int x=right+(i/9)*spacing,y=top+98+(i%9)*NOTE_ROW_HEIGHT;
                 if(type==selectedGuess){
                     g.setColor(new Color(165,169,156,70));
                     g.fillRoundRect(x-3,y-14,spacing-8,19,4,4);
@@ -1206,22 +1207,18 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 left+13,top+height-14);
             g.drawString("Ghost names select a GUESS; nothing is verified",right,top+height-32);
         }else{
-            GhostIdentity.Type type=GhostIdentity.Type.values()[guideGhostIndex];
-            int y=top+50;
-            g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
-            for(String line:GhostFieldGuide.reference(type).split("\\n")){
-                String text=line.length()>Math.max(20,(width-25)/8)?
-                    line.substring(0,Math.max(17,(width-35)/8))+"...":line;
-                g.drawString(text,left+13,y);y+=26;
-            }
-            y+=10;
-            for(String line:GhostFieldGuide.hint(type).split("\\n")){
-                g.drawString(line,left+13,y);y+=22;
-            }
-            g.setColor(new Color(175,194,210));
-            g.drawString("LEFT/RIGHT browse species   TAB log   J close",
-                left+13,top+height-12);
+            GhostArchiveScreen.draw(g,left,top,width,height,guideGhostIndex);
         }
+    }
+    /** Archive navigation is local to the reference; no host deduction packet. */
+    boolean handleArchiveClick(int x,int y){
+        if(!casefileOpen||journalPage!=2)return false;
+        int height=Math.max(175,Math.min(getHeight()-100,390));
+        int direction=GhostArchiveScreen.pageDirection(
+            x,y,NOTE_LEFT,NOTE_TOP,noteWidth(),height);
+        if(direction==0)return false;
+        guideGhostIndex=Math.floorMod(guideGhostIndex+direction,GhostIdentity.Type.values().length);
+        return true;
     }
     @Override public void keyPressed(KeyEvent e){
         if(chatInput.isVisible())return;
