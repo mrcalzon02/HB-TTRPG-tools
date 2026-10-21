@@ -554,6 +554,22 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                         sensorReadings.put(nodeId,new VanSiteMapScreen.Reading(
                             LanProtocol.integer(p.get(3),0,99999999),p.get(4)));
                 }else throw new IllegalArgumentException("invalid sensor station update");
+            }else if(p.get(0).equals("TRIPOD")){
+                if(p.size()==2&&p.get(1).equals("RESET")){
+                    renderer.tripods.clear();
+                }else if(p.size()==3&&p.get(1).equals("CLEAR")){
+                    int owner=LanProtocol.integer(p.get(2),0,5);
+                    renderer.tripods.remove(owner);
+                }else if(p.size()==8&&p.get(1).equals("PLACE")){
+                    int owner=LanProtocol.integer(p.get(2),0,5);
+                    int room=LanProtocol.integer(p.get(3),0,HouseMap.INDOOR_ROOMS-1);
+                    double px=LanProtocol.integer(p.get(4),0,map.width()*1000)/1000.0;
+                    double py=LanProtocol.integer(p.get(5),-50000,50000)/1000.0;
+                    double pz=LanProtocol.integer(p.get(6),0,map.height()*1000)/1000.0;
+                    EquipmentTiers.Tier tier=EquipmentTiers.Tier.valueOf(p.get(7));
+                    renderer.tripods.put(owner,new VanTripods.Stand(
+                        owner,room,px,py,pz,tier));
+                }else throw new IllegalArgumentException("invalid tripod packet");
             }else if(p.size()==2&&p.get(0).equals("WINDOWS")){
                 map.applyWindowSnapshot(p.get(1));
             }else if(p.size()==2&&p.get(0).equals("VANDOOR")){
@@ -561,10 +577,20 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
                 feedback=map.van().cargoDoorClosed()
                     ?"VAN CARGO DOOR CLOSED":"VAN CARGO DOOR OPEN";
             }else if(frame.startsWith("BOOK|")){
-                if(p.size()==3&&p.get(1).equals("DEPLOYED"))
+                if(p.size()==7&&p.get(1).equals("DEPLOYED")){
                     renderer.placedWritingBookRoom=LanProtocol.integer(p.get(2),0,HouseMap.INDOOR_ROOMS-1);
-                else if(p.size()==3&&p.get(1).equals("REMOVED"))
+                    renderer.writingBookX=LanProtocol.integer(p.get(3),0,map.width()*1000)/1000.0;
+                    renderer.writingBookY=LanProtocol.integer(p.get(4),-50000,50000)/1000.0;
+                    renderer.writingBookZ=LanProtocol.integer(p.get(5),0,map.height()*1000)/1000.0;
+                    renderer.writingBookTier=EquipmentTiers.Tier.valueOf(p.get(6));
+                    renderer.writingBookHasPosition=true;
+                }else if(p.size()==3&&p.get(1).equals("DEPLOYED")){
+                    renderer.placedWritingBookRoom=LanProtocol.integer(p.get(2),0,HouseMap.INDOOR_ROOMS-1);
+                    renderer.writingBookHasPosition=false;
+                }else if(p.size()==3&&p.get(1).equals("REMOVED")){
                     renderer.placedWritingBookRoom=-1;
+                    renderer.writingBookHasPosition=false;
+                }
                 feedback="WRITING BOOK: "+frame.substring(5);
             }else if(p.size()==4&&p.get(0).equals("STAMINA")){
                 sprintRemaining=LanProtocol.integer(p.get(1),0,300);
@@ -775,6 +801,13 @@ public final class LanWorldPanel extends JPanel implements KeyListener, FocusLis
             videoRenderer.placedWritingBookRoom=renderer.placedWritingBookRoom;
             videoRenderer.dotsPositions.clear();
             videoRenderer.dotsPositions.putAll(renderer.dotsPositions);
+            videoRenderer.tripods.clear();
+            videoRenderer.tripods.putAll(renderer.tripods);
+            videoRenderer.writingBookX=renderer.writingBookX;
+            videoRenderer.writingBookY=renderer.writingBookY;
+            videoRenderer.writingBookZ=renderer.writingBookZ;
+            videoRenderer.writingBookHasPosition=renderer.writingBookHasPosition;
+            videoRenderer.writingBookTier=renderer.writingBookTier;
             videoRenderer.sensorPositions.clear();
             videoRenderer.sensorPositions.putAll(renderer.sensorPositions);
             videoRenderer.dotsPassRoom=renderer.dotsPassRoom;

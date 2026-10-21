@@ -39,6 +39,7 @@ public final class LanHost implements AutoCloseable {
     private final Map<Integer,SensorStation> sensorStations=new HashMap<>();
     private final VanSensorStations vanSensors=new VanSensorStations();
     private final Map<Integer,String> latestSensorReadings=new HashMap<>();
+    private final VanTripods tripods=new VanTripods();
     private final LanDotsProjectors dots=new LanDotsProjectors();
     private final LanVideoCameras cameras=new LanVideoCameras();
     private final FieldJournal fieldNotes=new FieldJournal();
@@ -495,7 +496,10 @@ public final class LanHost implements AutoCloseable {
                     for(LanDotsProjectors.Placement placed:dots.all())reply(peer,placed.frame());
                     for(String frame:vanSensors.snapshot())reply(peer,frame);
                     for(String frame:latestSensorReadings.values())reply(peer,frame);
-                    if(writingBook.placed())reply(peer,"BOOK|DEPLOYED|"+writingBook.room());
+                    if(writingBook.placed())reply(peer,writingBook.physicallyPlaced()
+                        ?writingBook.deploymentFrame():"BOOK|DEPLOYED|"+writingBook.room());
+                    reply(peer,"TRIPOD|RESET");
+                    for(VanTripods.Stand stand:tripods.all())reply(peer,stand.frame());
                     reply(peer,supplies[peer.slot].frame());
                     sendEquipmentState(peer);
                     reply(peer,"PARTY|"+contract.hunters()+"|"+contract.partyDifficulty());
@@ -941,8 +945,10 @@ public final class LanHost implements AutoCloseable {
                         case "VIDEO_CAMERA" -> {
                             if(cameras.at(peer.slot)==null&&gear.batterySecondsLeft(id)==0)
                                 throw new IllegalArgumentException("camera battery empty: return to van");
+                            LanWorld.Body cameraBody=world.body(peer.slot);
                             LanVideoCameras.Camera station=cameras.placeOrRetrieve(
-                                peer.slot,world.body(peer.slot),gear.owned(id));
+                                peer.slot,cameraBody,gear.owned(id),
+                                tripods.near(cameraBody,.9));
                             gear.setPower(id,station!=null);
                             if(station==null){
                                 reading="Video camera retrieved / feed ended";
@@ -1068,14 +1074,41 @@ public final class LanHost implements AutoCloseable {
                             notifyHunters(marker.frame());
                             reading="Chalk ward drawn / "+remaining+" chalk charges left";
                         }
+                        case "TRIPOD" -> {
+                            LanWorld.Body body=world.body(peer.slot);
+                            if(room>=HouseMap.INDOOR_ROOMS)
+                                throw new IllegalArgumentException("tripod requires an indoor room");
+                            VanTripods.Stand existing=tripods.at(peer.slot);
+                            if(existing!=null&&existing.room()==body.room()
+                                    &&Math.hypot(existing.x()-body.x(),existing.z()-body.z())<=1.5)
+                                for(LanVideoCameras.Camera camera:cameras.all())
+                                    if(camera.room()==existing.room()
+                                            &&Math.hypot(camera.x()-existing.x(),
+                                                camera.z()-existing.z())<=.25)
+                                        throw new IllegalArgumentException(
+                                            "retrieve mounted camera before tripod");
+                            VanTripods.Stand stand=tripods.placeOrRetrieve(
+                                peer.slot,body,gear.owned(id));
+                            if(stand==null){
+                                reading="Camera stand folded and retrieved";
+                                notifyHunters("TRIPOD|CLEAR|"+peer.slot);
+                            }else{
+                                reading="Camera tripod planted in "+map.roomName(stand.room());
+                                notifyHunters(stand.frame());
+                            }
+                        }
                         case "GHOST_WRITING_BOOK" -> {
                             if(room>=HouseMap.INDOOR_ROOMS)
                                 throw new IllegalArgumentException("writing book requires an interior room");
+                            LanWorld.Body body=world.body(peer.slot);
                             if(!writingBook.placed()){
-                                writingBook.place(peer.slot,room,tick);
-                                notifyHunters("BOOK|DEPLOYED|"+room);
-                                reading="Writing book placed / page blank";
-                            }else reading="Writing book / "+writingBook.inspect(room);
+                                writingBook.place(peer.slot,room,tick,body.x(),body.y(),body.z(),
+                                    gear.owned(id));
+                                notifyHunters(writingBook.deploymentFrame());
+                                reading="Writing book placed at physical location / page blank";
+                            }else if(writingBook.reachable(body,1.6)){
+                                reading="Writing book / "+writingBook.inspect(room);
+                            }else reading="No writing book within reach";
                         }
                         default -> throw new IllegalArgumentException("device has no working backend");
                     }
@@ -1158,9 +1191,11 @@ public final class LanHost implements AutoCloseable {
                     int room=world.body(peer.slot).room();
                     if(room<0||room>=HouseMap.INDOOR_ROOMS||writingBook.placed())
                         throw new IllegalArgumentException("book unavailable or already deployed");
-                    writingBook.place(peer.slot,room,tick);
+                    LanWorld.Body bookBody=world.body(peer.slot);
+                    writingBook.place(peer.slot,room,tick,bookBody.x(),bookBody.y(),
+                        bookBody.z(),equipment[peer.slot].owned("GHOST_WRITING_BOOK"));
                     reply(peer,"ACCEPT|PLACEBOOK|"+room);
-                    notifyHunters("BOOK|DEPLOYED|"+room);
+                    notifyHunters(writingBook.deploymentFrame());
                     recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.DROP);
                 }
                 case "READBOOK" -> {
@@ -1170,9 +1205,11 @@ public final class LanHost implements AutoCloseable {
                     ensureActiveHunter(peer);
                     int room=world.body(peer.slot).room();
                     GhostWriting.Page page=writingBook.page();
-                    boolean found=page!=null&&page.room()==room;
+                    boolean found=page!=null&&page.room()==room
+                        &&writingBook.reachable(world.body(peer.slot),1.6);
                     if(found)taskDone(ContractRewards.Task.WRITING_EVENT);
-                    String words=writingBook.inspect(room);
+                    String words=writingBook.reachable(world.body(peer.slot),1.6)
+                        ?writingBook.inspect(room):"Writing book not within reach";
                     reply(peer,"ACCEPT|READBOOK|"+words);
                     notifyHunters(casefile.recordDevice(tick,peer.slot,room,"GHOST_WRITING_BOOK",
                         LanEvidenceJournal.Finding.OBSERVED,
@@ -1185,8 +1222,8 @@ public final class LanHost implements AutoCloseable {
                     acceptHunterSequence(peer,LanProtocol.sequence(p.get(1)));
                     ensureActiveHunter(peer);
                     int room=world.body(peer.slot).room();
-                    if(!writingBook.remove(peer.slot,room))
-                        throw new IllegalArgumentException("no book to retrieve here");
+                    if(!writingBook.removeNear(peer.slot,world.body(peer.slot)))
+                        throw new IllegalArgumentException("writing book not within reach");
                     notifyHunters("BOOK|REMOVED|"+room);
                     reply(peer,"ACCEPT|TAKEBOOK|"+room);
                     recordSound(peer.slot,LanGhostPursuit.Sound.EQUIPMENT,LanSound.Cue.BOOK);

@@ -81,6 +81,10 @@ public final class SceneRenderer {
     public boolean environmentPowerOn=true;
     /** Authoritative book-deployment signal; all investigator views share its room. */
     public int placedWritingBookRoom=-1;
+    public double writingBookX,writingBookY,writingBookZ;
+    public boolean writingBookHasPosition;
+    public EquipmentTiers.Tier writingBookTier=EquipmentTiers.Tier.I;
+    public final java.util.Map<Integer,VanTripods.Stand> tripods=new java.util.HashMap<>();
     public final java.util.Map<Integer,LanVideoCameras.Camera> videoCameras=
         new java.util.HashMap<>();
     public final java.util.Map<Integer,VanSensorStations.Station> sensorPositions=
@@ -761,6 +765,10 @@ public final class SceneRenderer {
         // a second duplicate set of these global world objects.
         if(Math.hypot(x-map.van().placement().x(),z-map.van().placement().z())<20)
             roadsideModels(out,map);
+        // Tripods are real placed supports, never decor dropped by the map loader.
+        for(VanTripods.Stand stand:tripods.values())
+            if(Math.hypot(stand.x()-x,stand.z()-z)<13.5)
+                imported(out,stand.mesh(),stand.x(),stand.y(),stand.z(),1.0,0);
         // Video cameras are actual mounted viewports; their footage is rendered
         // from this replicated camera location in the hunter's van monitor.
         for(LanVideoCameras.Camera camera:videoCameras.values())
@@ -773,7 +781,10 @@ public final class SceneRenderer {
         incense.removeIf(b->b.untilTick()<roomLightTick);
         for(IncenseSmoke burn:incense){
             if(Math.hypot(burn.x()-x,burn.z()-z)>13.5)continue;
-            box(out,burn.x()-.06,.04,burn.z()-.06,.12,.07,.12,0xa88f72);
+            double floor=map.floorY(burn.room());
+            imported(out,EquipmentModelCatalog.variant("INCENSE",
+                EquipmentTiers.Tier.I,"burning"),burn.x(),floor+.045,
+                burn.z(),.7,0);
             double phase=clock*1.7+burn.x();
             // Last embers dissipate instead of cutting a full column off instantly.
             int density=Math.max(1,Math.min(8,(burn.untilTick()-roomLightTick+1)/2));
@@ -782,7 +793,7 @@ public final class SceneRenderer {
                 double sway=Math.sin(phase+i*.8)*(.04+rise*.07);
                 double px=burn.x()+sway,pz=burn.z()+Math.cos(phase+i*.45)*.07;
                 double spread=.05+i*.009;
-                box(out,px-spread*.5,rise,pz-spread*.5,spread,.04+i*.004,spread,
+                box(out,px-spread*.5,floor+rise,pz-spread*.5,spread,.04+i*.004,spread,
                     i%2==0?0x6e8888:0x8f9d96);
             }
         }
@@ -831,9 +842,13 @@ public final class SceneRenderer {
             }
         }
         if(placedWritingBookRoom>=0&&placedWritingBookRoom<HouseMap.INDOOR_ROOMS){
-            double bx=map.centerX(placedWritingBookRoom),bz=map.centerZ(placedWritingBookRoom);
+            double bx=writingBookHasPosition?writingBookX:map.centerX(placedWritingBookRoom)-.5;
+            double bz=writingBookHasPosition?writingBookZ:map.centerZ(placedWritingBookRoom)-.35;
+            double by=writingBookHasPosition?writingBookY+.075:map.floorY(placedWritingBookRoom)+.075;
             if(Math.hypot(bx-x,bz-z)<14)
-                imported(out,"open_book_mp_1",bx-.5,map.floorY(placedWritingBookRoom)+.075,bz-.35,1.65,0);
+                imported(out,writingBookHasPosition
+                    ?EquipmentModelCatalog.variant("GHOST_WRITING_BOOK",writingBookTier,"open")
+                    :"open_book_mp_1",bx,by,bz,writingBookHasPosition?1.0:1.65,0);
         }
         // Character bodies are rendered as directional alpha-masked sprites after geometry.
         if(wardRoom>=0){
@@ -859,8 +874,10 @@ public final class SceneRenderer {
                     if(yy>.10)box(out,mx-.09,yy,mz-.09,.18,.20,.18,0x9bede0);
                 }
                 case SALT -> {
-                    box(out,mx-.47,.042,mz-.42,.94,.035,.09,0xe0d9bd);
-                    box(out,mx-.47,.042,mz+.33,.94,.035,.09,0xc7c3ad);
+                    // A purchased and actually deployed salt pouch receives its
+                    // approved ground-state mesh at the host's real floor height.
+                    imported(out,EquipmentModelCatalog.variant("SALT",
+                        EquipmentTiers.Tier.I,"deployed"),mx,yy,mz,1.0,0);
                 }
             }
         }

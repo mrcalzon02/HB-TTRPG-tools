@@ -15,18 +15,53 @@ public final class GhostWriting {
         }
     }
     private int room=-1,placedBy=-1,placedTick=-1;
+    private boolean physicallyPlaced;
+    private double placedX,placedY,placedZ;
+    private EquipmentTiers.Tier tier=EquipmentTiers.Tier.I;
     private Page page;
     public boolean placed(){return room>=0;}
     public int room(){return room;}
     public Page page(){return page;}
+    public boolean physicallyPlaced(){return placed()&&physicallyPlaced;}
+    public double x(){return placedX;}
+    public double y(){return placedY;}
+    public double z(){return placedZ;}
+    public EquipmentTiers.Tier tier(){return tier;}
+    public boolean reachable(LanWorld.Body body,double distance){
+        if(body==null||body.room()!=room||!placed())return false;
+        return !physicallyPlaced
+            ||Math.abs(body.y()-placedY)<=.8
+              &&Math.hypot(body.x()-placedX,body.z()-placedZ)<=distance;
+    }
+    public String deploymentFrame(){
+        if(!physicallyPlaced())throw new IllegalStateException("no physical book deployed");
+        return "BOOK|DEPLOYED|"+room+"|"+Math.round(placedX*1000)+"|"
+            +Math.round(placedY*1000)+"|"+Math.round(placedZ*1000)+"|"+tier;
+    }
+    public void place(int seat,int room,int tick,double x,double y,double z,
+                      EquipmentTiers.Tier tier){
+        if(!Double.isFinite(x)||!Double.isFinite(y)||!Double.isFinite(z)
+                ||x<0||z<0||tier==null)
+            throw new IllegalArgumentException("invalid book position");
+        place(seat,room,tick);
+        this.physicallyPlaced=true;
+        this.placedX=x;this.placedY=y;this.placedZ=z;this.tier=tier;
+    }
     public void place(int seat,int room,int tick){
         if(seat<0||seat>5||room<0||tick<0)
             throw new IllegalArgumentException("invalid placement");
         this.room=room;placedBy=seat;placedTick=tick;page=null;
+        physicallyPlaced=false;placedX=0;placedY=0;placedZ=0;
+        tier=EquipmentTiers.Tier.I;
+    }
+    public boolean removeNear(int seat,LanWorld.Body body){
+        if(!reachable(body,1.6))return false;
+        return remove(seat,body.room());
     }
     public boolean remove(int seat,int room){
         if(seat<0||seat>5||this.room!=room)return false;
         this.room=-1;this.placedBy=-1;this.placedTick=-1;page=null;
+        physicallyPlaced=false;placedX=0;placedY=0;placedZ=0;
         return true;
     }
     /**

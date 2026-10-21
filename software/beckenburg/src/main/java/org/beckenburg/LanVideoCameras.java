@@ -29,6 +29,10 @@ public final class LanVideoCameras {
         return stations[owner];
     }
     public Camera placeOrRetrieve(int owner,LanWorld.Body body,EquipmentTiers.Tier tier) {
+        return placeOrRetrieve(owner,body,tier,null);
+    }
+    public Camera placeOrRetrieve(int owner,LanWorld.Body body,EquipmentTiers.Tier tier,
+                                  VanTripods.Stand mount) {
         if(body==null||tier==null||body.room()<0||body.room()>=HouseMap.ROOM_COUNT)
             throw new IllegalArgumentException("camera needs physical location");
         Camera old=at(owner);
@@ -38,7 +42,16 @@ public final class LanVideoCameras {
             stations[owner]=null;
             return null;
         }
-        Camera placed=new Camera(owner,body.room(),body.x(),body.y(),body.z(),body.heading(),tier);
+        // The stand fixes the camera position. The lens elevation is reflected
+        // in the actual camera pose used by the remote van receiver.
+        if(mount!=null&&(mount.room()!=body.room()
+                ||Math.abs(mount.y()-body.y())>.5
+                ||Math.hypot(mount.x()-body.x(),mount.z()-body.z())>.9))
+            throw new IllegalArgumentException("tripod mount out of reach");
+        Camera placed=mount==null
+            ?new Camera(owner,body.room(),body.x(),body.y(),body.z(),body.heading(),tier)
+            :new Camera(owner,mount.room(),mount.x(),mount.y()+.45,
+                mount.z(),body.heading(),tier);
         stations[owner]=placed;
         return placed;
     }

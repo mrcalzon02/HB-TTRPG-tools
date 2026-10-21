@@ -111,6 +111,8 @@ VanHidingTest
 VanTelemetryTest
 VanSensorStationsTest
 VanSiteMapScreenTest
+VanTripodsTest
+GhostWritingSpatialTest
 FieldSuppliesTest
 CustomContractTest
 LobbyGhostAvatarTest
