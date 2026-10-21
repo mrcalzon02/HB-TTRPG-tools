@@ -1,5 +1,8 @@
 # Beckenburg — Windows installers and independent updates
 
+> **HISTORICAL RELEASE CHANNEL — ARCHIVED.** Beckenburg development has moved to [The-Beckenburg-Project](https://github.com/mrcalzon02/The-Beckenburg-Project). Published legacy releases remain available; this repository is not the source for future game updates except an explicitly verified migration-only update bridge.
+
+
 Beckenburg is a separate product inside `mrcalzon02/HB-TTRPG-tools`, with its own GitHub Release tag namespace: **`beckenburg-vMAJOR.MINOR.PATCH`**. Do **not** use `/releases/latest`, because the same repository publishes Sound Manager and other products. Release downloads are at [Beckenburg release listings](https://github.com/mrcalzon02/HB-TTRPG-tools/releases?q=beckenburg-v).
 
 ## Dedicated GitHub Actions release job
