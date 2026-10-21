@@ -1,12 +1,7 @@
-name: Beckenburg Full Multiplayer Acceptance
+name: Beckenburg Legacy Multiplayer Acceptance (Manual Only)
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'software/beckenburg/**'
-      - '.github/workflows/beckenburg-full-round-e2e.yml'
 
 permissions:
   contents: read
