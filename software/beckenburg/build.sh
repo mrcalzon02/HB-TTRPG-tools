@@ -9,6 +9,12 @@ javac --release 17 -encoding UTF-8 -d build/classes src/main/java/org/beckenburg
 test -s assets/runtime/directional-sprites.zip
 mkdir -p build/classes/org/beckenburg
 cp assets/runtime/directional-sprites.zip build/classes/org/beckenburg/directional-sprites.zip
+# Accepted Elder master art for the illustrated ghost logbook.
+mkdir -p build/classes/org/beckenburg/elder-masters
+for elder in elder-blade-demon elder-plague-demon elder-nothic; do
+  test -s "assets/runtime/elder-masters/$elder.png" || { echo "Missing accepted Elder master $elder"; exit 1; }
+  cp "assets/runtime/elder-masters/$elder.png" "build/classes/org/beckenburg/elder-masters/$elder.png"
+done
 # Compact v3 ghost sprite archive is committed as nine GitHub-safe binary parts.
 # Reassemble deterministically for both tests and the distributable JAR.
 # Missing parts are a build failure, not a silent Banshee placeholder.

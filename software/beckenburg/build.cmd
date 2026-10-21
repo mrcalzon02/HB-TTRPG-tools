@@ -16,6 +16,11 @@ javac --release 17 -encoding UTF-8 -d build\classes @build\sources-main.txt || e
 if not exist assets\runtime\directional-sprites.zip (echo ERROR: required in-game sprite assets missing & exit /b 1)
 if not exist build\classes\org\beckenburg mkdir build\classes\org\beckenburg
 copy /Y assets\runtime\directional-sprites.zip build\classes\org\beckenburg\directional-sprites.zip >nul || exit /b 1
+if not exist build\classes\org\beckenburg\elder-masters mkdir build\classes\org\beckenburg\elder-masters
+for %%G in (elder-blade-demon elder-plague-demon elder-nothic) do (
+ if not exist "assets\runtime\elder-masters\%%G.png" (echo ERROR missing Elder master %%G & exit /b 1)
+ copy /Y "assets\runtime\elder-masters\%%G.png" "build\classes\org\beckenburg\elder-masters\%%G.png" >nul || exit /b 1
+)
 rem Reassemble the nine verified sprite payload parts, preserving binary bytes.
 for %%N in (00 01 02 03 04 05 06 07 08) do (
   if not exist "assets\runtime\ghost-sprite-parts\ghost-sprite-expansion-v3.zip.part%%N" (echo ERROR: missing ghost sprite part %%N & exit /b 1)

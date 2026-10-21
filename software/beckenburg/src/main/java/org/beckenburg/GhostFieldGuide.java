@@ -83,6 +83,9 @@ public final class GhostFieldGuide {
         HINTS.put(GhostIdentity.Type.DEVIL,"Persuasive voices and high threat; health damage may dominate.");
         HINTS.put(GhostIdentity.Type.MIMIC,"Delayed repetition of calls; cross-check its voice signature.");
         HINTS.put(GhostIdentity.Type.TWINS,"Answered knocks from neighboring rooms; paired signs can mislead.");
+        HINTS.put(GhostIdentity.Type.ELDER_BLADE_DEMON,"Dragging steel, heavy footfalls, a telegraphed executioner rush and sweeping weapon strikes.");
+        HINTS.put(GhostIdentity.Type.ELDER_PLAGUE_DEMON,"A bell-bearing giant whose miasma, residue and pressure build around investigators.");
+        HINTS.put(GhostIdentity.Type.ELDER_NOTHIC,"A territorial colossus whose charges end in shattering ground slams.");
         for(GhostIdentity.Type variant:GhostIdentity.Type.values())
             if(variant.ancient())
                 HINTS.put(variant,HINTS.get(variant.baseType())+
