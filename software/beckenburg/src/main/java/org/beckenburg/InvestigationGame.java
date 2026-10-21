@@ -487,7 +487,8 @@ public final class InvestigationGame {
         private final SiteCatalog.Location location;
         private final SiteCatalog.Conditions conditions;
         private boolean powerOn;
-        private boolean mapShown,journalShown,claimSaved,wheelOpen,helpVisible;
+        private boolean mapShown,journalShown,archiveShown,claimSaved,wheelOpen,helpVisible;
+        private int soloArchiveIndex;
         private final MouseLook mouseLook;
         private final TeamCallout.Board callouts;
         private double wheelDx,wheelDy;
@@ -692,7 +693,15 @@ public final class InvestigationGame {
                 if(key==KeyEvent.VK_PAGE_UP)mapFloor++;else if(key==KeyEvent.VK_PAGE_DOWN)mapFloor--;else if(key==KeyEvent.VK_M||key==KeyEvent.VK_E)mapShown=false;
                 down.clear();repaint();return;
             }
-            if(journalShown){if(key==KeyEvent.VK_J||key==KeyEvent.VK_E)journalShown=false;down.clear();repaint();return;}
+            if(journalShown){
+                if(key==KeyEvent.VK_TAB){archiveShown=!archiveShown;down.clear();repaint();return;}
+                if(archiveShown&&key==KeyEvent.VK_LEFT){
+                    soloArchiveIndex=Math.floorMod(soloArchiveIndex-1,GhostIdentity.Type.values().length);
+                }else if(archiveShown&&key==KeyEvent.VK_RIGHT){
+                    soloArchiveIndex=(soloArchiveIndex+1)%GhostIdentity.Type.values().length;
+                }else if(key==KeyEvent.VK_J||key==KeyEvent.VK_E)journalShown=false;
+                down.clear();repaint();return;
+            }
             if(key==KeyEvent.VK_Q){
                 wheelOpen=true;wheelDx=0;wheelDy=0;
                 down.add(key);repaint();return;
@@ -944,7 +953,13 @@ public final class InvestigationGame {
         private void drawJournal(Graphics2D g){
             int boxW=Math.min(490,getWidth()-50),x=getWidth()-boxW-18,y=70,boxH=Math.min(getHeight()-165,395);
             g.setColor(new Color(18,21,29,240));g.fillRoundRect(x,y,boxW,boxH,10,10);
-            g.setColor(new Color(223,201,156));g.drawString("CASE JOURNAL / "+session.evidenceCount()+" VERIFIED",x+15,y+27);
+            g.setColor(new Color(223,201,156));
+            if(archiveShown){
+                g.drawString("GHOST ARCHIVE / TAB: CASE NOTES",x+15,y+27);
+                GhostArchiveScreen.draw(g,x,y,boxW,boxH,soloArchiveIndex);
+                return;
+            }
+            g.drawString("CASE JOURNAL / "+session.evidenceCount()+" VERIFIED / TAB: ARCHIVE",x+15,y+27);
             g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));
             for(InvestigationSession.Instrument t:InvestigationSession.Instrument.values()){
                 y+=22;g.setColor(session.hasEvidence(t)?new Color(127,220,172):new Color(194,173,135));
