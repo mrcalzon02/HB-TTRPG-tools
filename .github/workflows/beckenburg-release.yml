@@ -1,4 +1,4 @@
-name: Beckenburg Windows Installer and Release
+name: Beckenburg Legacy Bridge (Manual Only)
 
 on:
   workflow_dispatch:
@@ -12,11 +12,6 @@ on:
           - patch
           - minor
           - major
-  push:
-    branches: [main]
-    paths:
-      - 'software/beckenburg/**'
-      - '.github/workflows/beckenburg-release.yml'
 
 permissions:
   contents: write
