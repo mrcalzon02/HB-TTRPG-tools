@@ -8,6 +8,8 @@ SoundCoverageTest
 HorrorAudioRoutingTest
 HorrorAudioRoutingTest
 CastleHubIntegrationTest
+CampaignBoardPanelTest
+CastleOrientationTest
 BeckenburgUpdatesTest
 HeldMeshViewTest
 GlbPropsTest

@@ -9,10 +9,11 @@ import java.util.Set;
 /** Walkable castle preparation lobby; service desks and purchases exist as world interactions. */
 public final class CastleHubPanel extends JPanel implements KeyListener,FocusListener {
     public interface Actions {
-        void begin();void network();void spectral();void menu();
+        void begin();void network();void spectral();void menu();void campaign();
         void cycleRole();void cycleWeather();String role();String weather();
     }
     private final CastleHubMap map=new CastleHubMap();
+    private final CastleOrientation orientation=new CastleOrientation();
     private final SceneRenderer renderer=new SceneRenderer();
     private final ProfileStore profile;
     private final Actions actions;
@@ -36,6 +37,11 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
         addMouseListener(look);addMouseMotionListener(look);
         renderer.drawCastle(map,0);
         timer=new javax.swing.Timer(33,e->frame());timer.start();
+    }
+    public void startOrientation(){
+        orientation.start();
+        notice=orientation.objective();noticeTicks=260;
+        requestFocusInWindow();
     }
     public void close(){timer.stop();down.clear();look.close();atmosphere.close();}
     private void frame(){
@@ -79,9 +85,17 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
                 castleLightsOn=!castleLightsOn;
                 GameSfx.play(LanSound.Cue.SWITCH);
                 notice="Castle lights "+(castleLightsOn?"on.":"off.");
-                noticeTicks=80;return;
+                if(orientation.lights())notice="Orientation complete. Contract board is ready.";
+                noticeTicks=160;return;
             }
             notice="Look at a station or light switch.";noticeTicks=75;return;
+        }
+        if(orientation.active()){
+            boolean moved=orientation.visit(station);
+            if(moved&&station==CastleHubMap.Station.ROLE)actions.cycleRole();
+            notice=(moved?"Training: ":"Find the marked station. ")+orientation.objective();
+            noticeTicks=220;
+            return;
         }
         try{
             switch(station){
@@ -97,7 +111,7 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
                     }
                 }
                 case ROLE -> {actions.cycleRole();GameSfx.play(LanSound.Cue.SELECT);notice="Hunter discipline: "+actions.role();}
-                case CONTRACT -> {actions.cycleWeather();GameSfx.play(LanSound.Cue.SELECT);notice="Selected weather: "+actions.weather();}
+                case CONTRACT -> {actions.campaign();return;}
                 case EXPEDITION -> {actions.begin();return;}
                 case MULTIPLAYER -> {actions.network();return;}
                 case SPECTRAL -> {actions.spectral();return;}
@@ -115,7 +129,10 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
                 null:map.aimed(renderer.x,renderer.z,renderer.yaw));
         }
         if(key==KeyEvent.VK_F)renderer.lamp=!renderer.lamp;
-        if(key==KeyEvent.VK_L){castleLightsOn=!castleLightsOn;GameSfx.play(LanSound.Cue.SWITCH);}
+        if(key==KeyEvent.VK_L){
+            castleLightsOn=!castleLightsOn;GameSfx.play(LanSound.Cue.SWITCH);
+            if(orientation.lights()){notice="Orientation complete. Use the contract board to select a case.";noticeTicks=220;}
+        }
         down.add(key);
     }
     @Override public void keyReleased(KeyEvent e){down.remove(e.getKeyCode());}
@@ -149,6 +166,13 @@ public final class CastleHubPanel extends JPanel implements KeyListener,FocusLis
                 int left=(w-labelWidth)/2;
                 g.setColor(new Color(11,16,21,220));g.fillRoundRect(left,h-75,labelWidth,36,8,8);
                 g.setColor(new Color(247,211,153));g.drawString("[ E ]  "+label,left+12,h-52);
+            }
+            if(orientation.active()){
+                g.setColor(new Color(11,17,23,223));
+                g.fillRoundRect(12,103,Math.max(230,Math.min(w-24,650)),46,8,8);
+                g.setColor(new Color(247,211,153));
+                g.drawString("ORIENTATION  "+(orientation.progress()+1)+"/5",24,121);
+                g.setColor(new Color(186,215,202));g.drawString(orientation.objective(),24,139);
             }
             // Only context prompts and transient notices overlay the scene; controls
             // belong to the dedicated menu, not a permanent bottom-screen ticker.
