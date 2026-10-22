@@ -37,6 +37,16 @@ const fallbackFiles=[
   {name:'29-WHO-SENT-PELLISAR.md',path:'docs/beneath-dappled-oaks/chapters/29-WHO-SENT-PELLISAR.md',size:23369,type:'file'},
   {name:'30-WHAT-LAWFUL-REMEDIES-COULD-NOT-DO.md',path:'docs/beneath-dappled-oaks/chapters/30-WHAT-LAWFUL-REMEDIES-COULD-NOT-DO.md',size:29572,type:'file'}
 ];
+const characterStudies=Object.freeze([
+  Object.freeze({name:"Mireth Vael-Aesryn",order:"Green Covenant",src:'assets/beneath-dappled-oaks/character-studies/mireth.webp'}),
+  Object.freeze({name:"Caelen Avariel-Caith",order:"Royal Martial Fellowship",src:'assets/beneath-dappled-oaks/character-studies/caelen.webp'}),
+  Object.freeze({name:"Thessa Eris-Vey",order:"Western Wardens",src:'assets/beneath-dappled-oaks/character-studies/thessa.webp'}),
+  Object.freeze({name:"Lyrion",order:"Silver Bough diplomacy",src:'assets/beneath-dappled-oaks/character-studies/lyrion.webp'}),
+  Object.freeze({name:"Damaris Caladren-Ilyra",order:"River Ledger",src:'assets/beneath-dappled-oaks/character-studies/damaris.webp'}),
+  Object.freeze({name:"Rhyl Orthell-Faen",order:"Red Hart wilderness vigil",src:'assets/beneath-dappled-oaks/character-studies/rhyl.webp'}),
+  Object.freeze({name:"Ilyan Valeric",order:"Truth Beyond the Veil",src:'assets/beneath-dappled-oaks/character-studies/ilyan.webp'}),
+  Object.freeze({name:"Daysha",order:"Guest character study — not a member of the Last Seven",src:'assets/beneath-dappled-oaks/character-studies/daysha.webp'})
+]);
 let released=[];
 
 function byId(id){return document.getElementById(id)}
@@ -234,13 +244,41 @@ function renderStream(chapters,ui){
 
     const header=document.createElement('header');
     header.className='chapter-reading-header';
-    header.innerHTML=
+    // Chapter dividers rotate through all eight approved character studies.
+    // Illustration order is decorative, not a claim of chapter POV or appearance.
+    const ordinal=Math.max(1,Math.floor(Number(chapter.number)||1));
+    const study=characterStudies[(ordinal-1)%characterStudies.length];
+    const figure=document.createElement('figure');
+    figure.className='chapter-divider-figure';
+    const artwork=document.createElement('a');
+    artwork.href=study.src;
+    artwork.target='_blank';
+    artwork.rel='noopener';
+    artwork.setAttribute('aria-label','Open the full '+study.name+' character study');
+    const portrait=document.createElement('img');
+    portrait.src=study.src;
+    portrait.alt='Illustrated character study of '+study.name;
+    portrait.width=720;
+    portrait.height=900;
+    portrait.loading=ordinal<=2?'eager':'lazy';
+    portrait.decoding='async';
+    portrait.addEventListener('error',()=>{
+      figure.hidden=true;
+      header.classList.add('chapter-reading-header--no-art');
+    });
+    artwork.append(portrait);
+    const caption=document.createElement('figcaption');
+    caption.textContent='Character study: '+study.name;
+    figure.append(artwork,caption);
+    const heading=document.createElement('div');
+    heading.className='chapter-reading-heading';
+    heading.innerHTML=
       '<p class="eyebrow">Chapter '+chapter.number+'</p>'+
       '<h2>'+esc(chapter.title)+'</h2>'+
       '<div class="chapter-reader-meta">'+metaChips(chapter.meta)+'</div>';
-
     const download=buildDownloadMenu(chapter,section);
-    header.append(download);
+    heading.append(download);
+    header.append(figure,heading);
 
     const prose=document.createElement('article');
     prose.className='chapter-reader-prose';

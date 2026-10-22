@@ -293,3 +293,41 @@ html{scroll-behavior:smooth}
   #chapter-index .chapter-archive-layout{display:block}
   #chapter-index .chapter-reading-entry{break-after:page}
 }
+/* Illustrated chapter dividers: the eight approved character studies. */
+#chapter-index .chapter-reading-header{
+  display:grid;
+  grid-template-columns:minmax(140px,215px) minmax(0,1fr);
+  align-items:center;
+  column-gap:clamp(.85rem,2.2vw,1.6rem);
+}
+#chapter-index .chapter-reading-header--no-art{grid-template-columns:1fr}
+#chapter-index .chapter-divider-figure{
+  width:100%;
+  max-width:215px;
+  margin:0;
+}
+#chapter-index .chapter-divider-figure a{display:block}
+#chapter-index .chapter-divider-figure img{
+  display:block;
+  width:100%;
+  height:auto;
+  border:1px solid rgba(127,127,127,.25);
+  border-radius:9px;
+  background:rgba(127,127,127,.06);
+}
+#chapter-index .chapter-divider-figure figcaption{
+  margin:.32rem 0 0;
+  color:inherit;
+  opacity:.72;
+  font:600 .73rem/1.3 system-ui,sans-serif;
+  text-align:center;
+}
+#chapter-index .chapter-reading-heading{min-width:0}
+@media(max-width:510px){
+  #chapter-index .chapter-reading-header{grid-template-columns:minmax(0,1fr);row-gap:.85rem}
+  #chapter-index .chapter-divider-figure{max-width:min(210px,65%);margin:0 auto}
+}
+@media print{
+  #chapter-index .chapter-divider-figure{max-width:155px}
+  #chapter-index .chapter-reading-header{grid-template-columns:155px 1fr}
+}
