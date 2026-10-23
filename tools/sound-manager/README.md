@@ -52,11 +52,11 @@ Version 0.6.1 restores always-visible Output delay, Monitor delay, exact millise
 
 Open **Updates** in the window, or **Check for updates** in the tray. Optional startup checking is enabled by default and runs at most once per day. Disable it in Updates for fully offline operation. Checks read the public `mrcalzon02/HB-TTRPG-tools` GitHub Releases list and filter stable `simple-sound-manager-vMAJOR.MINOR.PATCH` tags. Other Foundry tools, drafts, and prereleases are ignored. No account or token is needed.
 
-A newer release offers **Update / Not now** and release notes. Update downloads while audio continues and verifies the GitHub SHA-256 asset digest or published SHA256SUMS.txt, advertised size, and ZIP paths. **Install and restart** is a separate explicit action. It restores owned audio defaults, closes streams, and starts a helper that waits for the process to exit before running the per-user installer and reopening the app. Settings and prior Windows releases are retained. Updates do not install audio drivers or enable login startup. Failed checks/downloads leave audio and the installed version intact. Installer logs are in the settings folder under `updates/install.log`.
+A newer release offers **Update / Not now** and release notes. Windows prefers the verified conventional Setup.exe for new releases and keeps ZIP validation/installation for older releases; Linux still downloads source ZIPs. Update downloads while audio continues and verifies the GitHub SHA-256 asset digest or published SHA256SUMS.txt and advertised size, plus ZIP paths when applicable. **Install and restart** is a separate explicit action. It restores owned audio defaults, closes streams, and starts a helper that waits for the process to exit before running the per-user installer and reopening the app. Settings and prior Windows releases are retained. Updates do not install audio drivers or enable login startup. Failed checks/downloads leave audio and the installed version intact. Installer logs are in the settings folder under `updates/install.log`.
 
 Linux receives the source ZIP and uses its regular user installer, including dependency downloads; the same Python/Qt/Pulse prerequisites apply. Live Linux handoff still needs hardware validation. Windows packages are not Authenticode signed; hashes verify correspondence to the trusted GitHub release, not an independent publisher certificate.
 
-Maintainers: build with build.ps1, run `python prepare-release.py`, and publish both ZIPs plus SHA256SUMS.txt as an actual GitHub Release under the product-specific tag. Use `--latest=false` so other tools using `/releases/latest` retain their existing download. Update the Foundry page and tools/sound-manager/release.json to match. This tag convention allows independent tools to have separate release series in the same repository.
+Maintainers: build with build.ps1, install Inno Setup 6 (ISCC.exe), run `python prepare-release.py`, and publish Setup.exe, both ZIPs and SHA256SUMS.txt as a GitHub Release under the product-specific tag. Use `--latest=false` so other tools using `/releases/latest` retain their existing download. Update the Foundry page and tools/sound-manager/release.json to match. This tag convention allows independent tools to have separate release series in the same repository.
 
 ## Routing and device controls
 
@@ -97,7 +97,7 @@ Each device card displays a rolling three-second waveform of its processed strea
 
 ## Windows installation
 
-Run `Install.cmd` from the source folder, or run `install-windows.ps1`. It builds the app if necessary, installs it under your user account, adds a Start Menu shortcut, and opens it. Python 3.11 or newer is needed to build from source. A previously built `dist/SimpleSoundManager` folder can be installed without Python.
+Use the published `SimpleSoundManager-VERSION-Setup.exe` for a conventional per-user Windows installer, Start Menu shortcut, optional desktop shortcut, and Windows Installed Apps uninstaller. It doesn't need admin rights or Python. The old `Install.cmd` / `install-windows.ps1` remain for source installs and compatibility with older release ZIPs. Building from source requires Python 3.11 or newer.
 
 Updates install in a separate release folder. If the manager is already running, installation leaves its playback untouched and updates the Start Menu shortcut for your next launch. Quit the old version through its tray menu before opening the update.
 
@@ -119,7 +119,7 @@ GNOME desktops without a tray extension keep the window visible; closing it stop
 
 ## Build / check
 
-Windows: `powershell -ExecutionPolicy Bypass -File build.ps1`.
+Windows: `powershell -ExecutionPolicy Bypass -File build.ps1`. This compiles the stable launcher using the Windows .NET Framework 4.x C# compiler rather than PyInstaller `--onefile`. To generate Setup.exe and release archives, install Inno Setup 6 and run `python prepare-release.py`.
 
 Development: install `requirements.txt` in a virtual environment, run `python run.py`, and run `python -m unittest discover -s tests -v`.
 
@@ -135,4 +135,4 @@ The routing engine processes PCM at 48 kHz and adapts named channels to each out
 
 Settings live in `%LOCALAPPDATA%/SimpleSoundManager` on Windows and `$XDG_CONFIG_HOME/SimpleSoundManager` (usually `~/.config/SimpleSoundManager`) on Linux. The `SOUND_MANAGER_DATA` environment variable overrides that location for isolated checks.
 
-Uninstall the Windows app by deleting its `Programs/SimpleSoundManager` directory and Start Menu shortcut after quitting. Uninstall VB-CABLE separately using its official setup program (administrator rights and a reboot required). Linux: quit, then remove the app's user-local directory, launcher, and desktop entry. Saved settings can be kept or deleted separately.
+For the new installer use Windows Installed Apps to uninstall. Old script-only installations can still be removed by deleting their `Programs/SimpleSoundManager` directory and Start Menu shortcut after quitting. Settings in `%LOCALAPPDATA%/SimpleSoundManager` remain intact. Uninstall VB-CABLE separately using its official setup program (administrator rights and a reboot required). Linux: quit, then remove the app's user-local directory, launcher, and desktop entry. Saved settings can be kept or deleted separately.

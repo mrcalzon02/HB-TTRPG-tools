@@ -1,3 +1,7 @@
+# Packaging revision — October 23, 2026 (Windows verification pending)
+
+New source replaces the PyInstaller `--onefile` launcher with a .NET Framework C# launcher, adds a versioned Inno Setup installer, and stages/installs verified Setup.exe for Windows updates while retaining legacy ZIP fallback. Test coverage now includes setup selection, checksum failures and a Windows-only compiled-launcher subprocess smoke test. A real Windows compile, Inno install/uninstall, updater round trip and AV retest have not run here; no new release is verified or published by this source change. Older 0.10.0 validation below does not certify this revision.
+
 # Validation — October 6, 2026
 
 Version 0.10.0: 127 checks pass. New coverage includes phase-consistent bounded synchronization pulses; solo/release without reopening players; preserved selections and panic mute; hidden devices retaining routing; saved ordering and clamped timing nudges; favorite output cycling respecting mute; portable visibility/order remapping; hotkey validation before replacing registrations; desktop action requests reaching the existing process without opening a window; grouped Linux session controls; bounded failed-route history; waiting for the manager bus; capture/offline-device diagnostics; offline Help searching/wrapping and missing-file reporting. The compact main window and management dialogs were rendered and visually inspected.

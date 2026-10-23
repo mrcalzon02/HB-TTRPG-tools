@@ -25,6 +25,28 @@ def package_bytes(version='0.6.1', extra=None):
     return output.getvalue()
 
 class UpdateTests(unittest.TestCase):
+    def test_conventional_windows_installer_takes_priority(self):
+        fixture = release('0.10.1')
+        name = 'SimpleSoundManager-0.10.1-Setup.exe'
+        tag = updates.TAG_PREFIX + '0.10.1'
+        content = b'installer fixture'
+        fixture['assets'].append(dict(name=name, state='uploaded', size=len(content),
+            digest='sha256:'+hashlib.sha256(content).hexdigest(),
+            browser_download_url=f'https://github.com/{updates.REPOSITORY}/releases/download/{tag}/{name}'))
+        selected = updates.select_release([fixture], '0.10.0', 'win32')
+        self.assertEqual(selected.name, name)
+        with tempfile.TemporaryDirectory() as folder, patch.object(updates, 'open_url', return_value=io.BytesIO(content)), patch.object(updates, 'extract_package') as extract, patch.object(updates.subprocess, 'Popen') as execute:
+            staged = updates.download(selected, folder, platform='win32')
+            self.assertEqual(staged.read_bytes(), content)
+            extract.assert_not_called()
+            execute.assert_not_called()
+        fixture['assets'][1]['digest'] = 'sha256:'+'0'*64
+        selected = updates.select_release([fixture], '0.10.0', 'win32')
+        with tempfile.TemporaryDirectory() as folder, patch.object(updates, 'open_url', return_value=io.BytesIO(content)), self.assertRaisesRegex(ValueError, 'verification failed'):
+            updates.download(selected, folder, platform='win32')
+            self.assertFalse(list(Path(folder).rglob('*.exe')))
+
+
     def test_numeric_order_filters_other_tools_previews_and_drafts(self):
         feed = [release('0.9.0'), release('0.10.0'), release('99.0.0', prerelease=True), release('90.0.0', draft=True), release('0.12.0', tag_name='barotrauma-v0.12.0')]
         self.assertEqual(updates.select_release(feed, '0.6.1', 'win32').version, '0.10.0')

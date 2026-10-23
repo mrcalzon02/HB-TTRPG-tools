@@ -64,10 +64,15 @@ def select_release(releases, current, platform=None):
     _, release = max(candidates, key=lambda item: item[0])
     tag = release['tag_name']
     version = tag[len(TAG_PREFIX):]
-    suffix = 'Windows-x64.zip' if (platform or sys.platform) == 'win32' else 'Source.zip'
-    name = f'SimpleSoundManager-{version}-{suffix}'
     assets = release.get('assets', [])
-    asset = next((a for a in assets if a.get('name') == name and a.get('state') == 'uploaded'), None)
+    if (platform or sys.platform) == 'win32':
+        # Prefer a conventional installer; legacy ZIP-only versions still work.
+        names = (f'SimpleSoundManager-{version}-Setup.exe',
+                 f'SimpleSoundManager-{version}-Windows-x64.zip')
+    else:
+        names = (f'SimpleSoundManager-{version}-Source.zip',)
+    asset = next((a for name in names for a in assets if a.get('name') == name and a.get('state') == 'uploaded'), None)
+    name = asset['name'] if asset else names[0]
     if not asset:
         raise ValueError(f'Sound Manager {version} is published but its download is not ready. Try again later.')
     size = asset.get('size')
@@ -161,6 +166,7 @@ def download(release, updates_dir, progress=lambda value: None, cancelled=lambda
     folder = Path(tempfile.mkdtemp(prefix=release.version+'-', dir=updates_dir))
     archive = folder/release.name
     digest, received = hashlib.sha256(), 0
+    keep_archive = False
     try:
         with open_url(release.url) as response, archive.open('wb') as output:
             while True:
@@ -179,17 +185,26 @@ def download(release, updates_dir, progress=lambda value: None, cancelled=lambda
             raise ValueError('Update package verification failed; nothing was installed')
         if cancelled():
             raise InterruptedError('Update download cancelled')
+        if (platform or sys.platform) == 'win32' and release.name.endswith('-Setup.exe'):
+            # Verified and staged, but not executed until Install and restart is clicked.
+            keep_archive = True
+            return archive
         root = extract_package(archive, folder/'unpacked', platform)
         if (platform or sys.platform) == 'win32' and (root/'dist/SimpleSoundManager/version.txt').read_text().strip() != release.version:
             raise ValueError('Downloaded application version does not match the release')
         return root
     finally:
-        archive.unlink(missing_ok=True)
+        if not keep_archive:
+            archive.unlink(missing_ok=True)
 
 def handoff(root, log):
     """Launch trusted local helper; it waits for this process to finish cleanup."""
     helper_dir = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parent.parent))
     if sys.platform == 'win32':
-        command = [str(Path(os.environ['SystemRoot'])/'System32/WindowsPowerShell/v1.0/powershell.exe'), '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', str(helper_dir/'update-handoff.ps1'), '-AppProcessId', str(os.getpid()), '-PackageRoot', str(root), '-LogPath', str(log)]
+        command = [str(Path(os.environ['SystemRoot'])/'System32/WindowsPowerShell/v1.0/powershell.exe'), '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', str(helper_dir/'update-handoff.ps1'), '-AppProcessId', str(os.getpid()), '-LogPath', str(log)]
+        if Path(root).is_file() and str(root).endswith('-Setup.exe'):
+            command += ['-InstallerPath', str(root)]
+        else:
+            command += ['-PackageRoot', str(root)]
         return subprocess.Popen(command, creationflags=subprocess.CREATE_NO_WINDOW, close_fds=True)
     return subprocess.Popen(['bash', str(helper_dir/'update-handoff.sh'), str(os.getpid()), str(root), str(log)], start_new_session=True, close_fds=True)

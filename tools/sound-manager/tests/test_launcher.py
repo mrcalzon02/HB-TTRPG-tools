@@ -1,5 +1,10 @@
 from pathlib import Path
+import os
+import shutil
+import subprocess
+import sys
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 from launcher import resolve_release
@@ -43,3 +48,22 @@ class LauncherTests(unittest.TestCase):
             release = self.make_release(root, '0.6.0')
             with patch.object(startup.sys, 'frozen', True, create=True), patch.object(startup.sys, 'executable', str(release)):
                 self.assertEqual(startup.launch_args(), [str(canonical), '--tray'])
+
+    @unittest.skipUnless(sys.platform == 'win32', 'Windows launcher integration')
+    def test_compiled_launcher_selects_release_and_forwards_commands(self):
+        binary = Path(__file__).resolve().parent.parent/'dist'/'launcher'/'SimpleSoundManagerLauncher.exe'
+        if not binary.is_file():
+            self.skipTest('Native launcher must be compiled first')
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            shutil.copy2(binary, root/'SimpleSoundManager.exe')
+            target = root/'releases'/'0.10.1'/'SimpleSoundManager.exe'
+            target.parent.mkdir(parents=True)
+            shutil.copy2(Path(os.environ['WINDIR'])/'System32'/'cmd.exe', target)
+            (root/'current_release.txt').write_text('0.10.1')
+            subprocess.run([str(root/'SimpleSoundManager.exe'), '/c', 'echo native-launch-ok>forwarded.txt'], check=True, timeout=10)
+            output = target.parent/'forwarded.txt'
+            deadline = time.monotonic()+10
+            while not output.exists() and time.monotonic()<deadline:
+                time.sleep(.1)
+            self.assertEqual(output.read_text().strip(), 'native-launch-ok')

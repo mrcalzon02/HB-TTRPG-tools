@@ -86,7 +86,7 @@ Customize Ctrl/Alt/Shift plus one letter/digit; unique combinations required. Co
 
 **Export setup** captures current mix, scenes/profiles, labels/favorites, waveform/display, hidden/order and safe preferences. **Load backup** validates and previews mappings: choose current same-kind devices, keep offline IDs or skip. **Restore reviewed setup** saves a pre-restore safety copy before applying. **Open pre-restore copy** loads it for review. Restoring microphone capture switches requires explicit opt-in. Operational recovery/updater/login state and app routes are excluded.
 
-**Updates** checks product-scoped GitHub tags, shows notes and offers Update/Not now. Downloaded assets are staged and SHA-256 checked against the published manifest before clean-stop installer handoff. Cancellation retains the current app; other tools' releases are filtered. Windows installs versioned folders behind the stable launcher; Linux uses source installation. Live Linux updater installation remains unverified.
+**Updates** checks product-scoped GitHub tags, shows notes and offers Update/Not now. Downloaded assets are staged and SHA-256 checked against the published manifest before clean-stop installer handoff. Cancellation retains the current app; other tools' releases are filtered. Windows installs versioned folders behind a conventional C# launcher, prefers a checksum-verified Inno Setup installer for new releases, and retains ZIP installation for older releases; Linux uses source installation. Live Linux updater installation remains unverified.
 
 Tray Open/Start/Stop/mute/device-selection/scenes/previous-mix/backup/health/app-mixer/hotkey/update actions call the same controls. **Quit** stops/releases audio; closing the window retains the tray process.
 
@@ -114,8 +114,14 @@ Tray Open/Start/Stop/mute/device-selection/scenes/previous-mix/backup/health/app
 | scenes.py/scenes_ui.py, backups.py/backups_ui.py | Validated audio snapshots/previous mix and portable remapping/preview/pre-restore copies. |
 | startup.py | Per-user login registration and canonical installed launcher resolution. |
 | updates.py, update_ui.py | Release filtering/download/verification/cancellation and installer handoff. |
-| windows_identity.py, launcher.py | Shared Windows identity, current-release resolution and clean child DLL search state. |
-| build.ps1, package.py, prepare-release.py | Verify/build binaries, collect source/help/licenses/replaceable libraries, remove mismatched ICU libraries, create release archives/checksums. |
+| windows_identity.py, launcher-win.cs | Shared Windows identity, current-release resolution, forwarded commands and clean child DLL search state. The Windows launcher uses the .NET Framework 4.x compiler, not PyInstaller one-file. launcher.py remains a developer reference tested against the same version rules. |
+| build.ps1, installer.iss, package.py, prepare-release.py | Verify/build binaries, collect source/help/licenses/replaceable libraries, remove mismatched ICU libraries, create a per-user conventional Windows installer and release archives/checksums. |
+
+## Windows installer and updates
+
+The published Windows **Setup.exe** uses Inno Setup to install an ordinary launcher at `%LOCALAPPDATA%\Programs\SimpleSoundManager\SimpleSoundManager.exe` and the full audio app under a version-numbered `releases` folder. It adds an Installed Apps uninstaller and Start Menu shortcut (desktop shortcut optional). The root launcher reads `current_release.txt`, resolves the installed version, forwards arguments, and keeps Windows taskbar identity stable. It is compiled from launcher-win.cs with the built-in .NET Framework 4.x C# compiler rather than the self-extracting PyInstaller one-file format. The actual audio app remains PyInstaller onedir.
+
+After clicking **Install and restart**, audio is restored/stopped before a separate handoff waits for Sound Manager to exit and runs the verified Setup.exe in silent mode. No installer runs during downloading. Legacy ZIP updates retain the old installer script. Installing/uninstalling Sound Manager does not install or remove VB-CABLE. Saved settings under `%LOCALAPPDATA%\SimpleSoundManager` remain untouched. To build Setup.exe, install Inno Setup 6 and run `build.ps1` followed by `python prepare-release.py`. The result is still unsigned; a standard installer does not guarantee antivirus acceptance.
 
 ## Persistence, privacy and troubleshooting
 

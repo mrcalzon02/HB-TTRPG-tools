@@ -35,7 +35,7 @@ for dist in distributions():
 with zipfile.ZipFile(target/'source.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
     for name in ('HELP.md','CONTRIBUTING.md','AGENTS.md'):
         archive.write(root/name,'sound-manager/'+name)
-    for name in ('run.py', 'launcher.py', 'app.ico', 'app-icon.svg', 'make-icon.py', 'requirements.txt', 'build.ps1', 'install-windows.ps1', 'shortcut-identity.ps1', 'windows-audio-setup.ps1', 'update-handoff.ps1', 'update-handoff.sh', 'Install.cmd', 'install-linux.sh', 'package.py', 'prepare-release.py', 'check_live_audio.py', 'check_bluetooth.py', 'check_multichannel.py', 'VALIDATION.md', 'FEATURE_BACKLOG.md', 'README.md', 'LICENSE', 'THIRD-PARTY-NOTICES.md'):
+    for name in ('run.py', 'launcher.py', 'launcher-win.cs', 'installer.iss', 'app.ico', 'app-icon.svg', 'make-icon.py', 'requirements.txt', 'build.ps1', 'install-windows.ps1', 'shortcut-identity.ps1', 'windows-audio-setup.ps1', 'update-handoff.ps1', 'update-handoff.sh', 'Install.cmd', 'install-linux.sh', 'package.py', 'prepare-release.py', 'check_live_audio.py', 'check_bluetooth.py', 'check_multichannel.py', 'VALIDATION.md', 'FEATURE_BACKLOG.md', 'README.md', 'LICENSE', 'THIRD-PARTY-NOTICES.md'):
         archive.write(root/name, 'sound-manager/'+name)
     for folder in ('sound_manager', 'tests'):
         for file in (root/folder).glob('*.py'):

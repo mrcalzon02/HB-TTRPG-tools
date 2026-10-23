@@ -250,7 +250,7 @@ P0 = reliability and missing core paths. P1 = daily convenience. P2 = richer pro
 | U01 | P1 | Compact mixer mode | Keep basic controls fast and move advanced options out of the way. |
 | U02 | P1 | Full keyboard navigation | Operate all controls without a mouse. |
 | U03 | P1 | Accessible labels and scaling | Support screen readers, large text, and high-contrast presentation. |
-| U04 | P1 | Portable build and clean uninstall | Make configuration location and installed dependencies clear. |
+| U04 | P1 | Portable build and clean uninstall | Conventional Windows per-user installer/uninstall implemented in source; actual Windows install/uninstall and antivirus validation still needed. Portable Linux configuration/uninstall remain open. |
 | U05 | P1 | Setup/driver health check | Explain missing requirements and verify the installed audio route. |
 | U06 | P2 | Routing graph / patchbay | Offer a visual alternative to lists for complex connections. |
 | U07 | P2 | Custom channel mapping | Add editable matrices, per-channel trim/mute/polarity, and channel swaps beyond the existing layouts. |

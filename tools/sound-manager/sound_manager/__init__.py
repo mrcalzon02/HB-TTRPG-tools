@@ -1,2 +1,2 @@
 """Simple Sound Manager: local audio controls and multi-output equalization."""
-__version__ = "0.10.0"
+__version__ = "0.10.1"
