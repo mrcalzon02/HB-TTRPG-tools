@@ -1,4 +1,4 @@
-# Simple Sound Manager help — 0.10.0
+# Simple Sound Manager help — 0.10.1
 
 This is the shipped reference displayed by Manage → Help and tray Help. The initial offline search/viewer uses this file; complete function-by-function reference, contextual links and further navigation are planned in H01–H10. Historical milestone descriptions in README.md/VALIDATION.md describe earlier versions.
 

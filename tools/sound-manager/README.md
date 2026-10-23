@@ -4,6 +4,10 @@ A local desktop app for Windows 10/11 and Linux. No subscription, account, brows
 
 ## Controls
 
+## Version 0.10.1 — Windows launcher and installer (pending validation)
+
+An Avast scan quarantined the `SimpleSoundManagerLauncher.exe` bundled with PyInstaller `--onefile` as `Win64:MalwareX-gen [Trj]`. This was the packaged **launcher**, not evidence that the Python updater ran or that the file was confirmed malicious. Because one-file Python packaging can trigger heuristic detections, the Windows launcher now builds as a conventional C#/.NET Framework executable and Windows releases gain a normal Inno Setup installer/uninstaller. The existing checksum-verified update mechanism remains, with new releases preferring Setup.exe and older ZIP releases remaining compatible. **Windows builds, install/update tests and Avast re-scanning of the new package remain outstanding.** See [0.10.1 update notes](RELEASE_NOTES.md).
+
 Open **Manage → Help** or tray **Help** for the offline searchable [HELP.md](HELP.md) reference and code map. [CONTRIBUTING.md](CONTRIBUTING.md) requires help updates with every behavior change, including correcting/removing obsolete information. Further navigation, contextual help and the complete function-level reference remain tracked as H01–H10.
 
 The compact interface keeps Start/Stop, mute, EQ bypass, Auto sync, test clicks, search, layout and App mixer visible. Device timing and nudges share one row. **Manage** groups Scenes, Health/devices, backups, Help, Hotkeys and Updates, with submenus for startup/reconnect and recovery/resets. Each device's **...** menu holds Pin/Rename/default/Hide. Smaller buttons and spacing make more devices visible; existing audio settings are retained.
@@ -56,7 +60,7 @@ A newer release offers **Update / Not now** and release notes. Windows prefers t
 
 Linux receives the source ZIP and uses its regular user installer, including dependency downloads; the same Python/Qt/Pulse prerequisites apply. Live Linux handoff still needs hardware validation. Windows packages are not Authenticode signed; hashes verify correspondence to the trusted GitHub release, not an independent publisher certificate.
 
-Maintainers: build with build.ps1, install Inno Setup 6 (ISCC.exe), run `python prepare-release.py`, and publish Setup.exe, both ZIPs and SHA256SUMS.txt as a GitHub Release under the product-specific tag. Use `--latest=false` so other tools using `/releases/latest` retain their existing download. Update the Foundry page and tools/sound-manager/release.json to match. This tag convention allows independent tools to have separate release series in the same repository.
+Maintainers: build with build.ps1, install Inno Setup 6 (ISCC.exe), run `python prepare-release.py`, and publish Setup.exe, both ZIPs and SHA256SUMS.txt as a GitHub Release under the product-specific tag. Use the generated `build/release-VERSION/RELEASE_NOTES.md` as the release description, updating its validation status with verified results. Use `--latest=false` so other tools using `/releases/latest` retain their existing download. Update the Foundry page and tools/sound-manager/release.json to match. This tag convention allows independent tools to have separate release series in the same repository.
 
 ## Routing and device controls
 
