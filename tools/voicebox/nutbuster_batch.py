@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import os
 import re
 import subprocess
 import tempfile
@@ -137,7 +138,7 @@ def server_start(source, log):
     if server_ready():
         print("Reusing local Voicebox service")
         return None,None
-    interpreter=source/"backend/venv/bin/python"
+    interpreter=source/("backend/venv/Scripts/python.exe" if os.name == "nt" else "backend/venv/bin/python")
     if not interpreter.is_file():
         raise RuntimeError("Voicebox backend venv absent; run just setup: "+str(interpreter))
     handle=log.open("ab")
