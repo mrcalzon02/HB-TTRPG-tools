@@ -49,6 +49,11 @@ jobs:
           command -v ffmpeg
           command -v ffprobe
           python3 tools/voicebox/nutbuster_batch.py --nutbuster voice-input/nutbuster --references "$PRIVATE_REFS" --dry-run
+      - name: Test the composition pipeline (synthetic samples only)
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tools/voicebox/tests -p 'test_*.py' -v
+
       - name: Create or reuse authorized voice profile and render
         shell: bash
         env:
@@ -61,11 +66,6 @@ jobs:
             --references "$PRIVATE_REFS" --voicebox-source "$VOICEBOX_ROOT" \
             --scope "${{ inputs.scope }}" --engine "${{ inputs.engine }}" \
             --output "$VOICEBOX_OUTPUT_DIR/$GITHUB_RUN_ID"
-      - name: Test the composition pipeline (synthetic samples only)
-        shell: bash
-        run: |
-          python3 -m unittest discover -s tools/voicebox/tests -p 'test_*.py' -v
-
       - name: Compose private voice pack and audition reel
         shell: bash
         env:
