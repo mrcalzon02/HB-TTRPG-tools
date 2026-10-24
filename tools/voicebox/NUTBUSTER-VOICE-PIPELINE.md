@@ -27,3 +27,23 @@ Run this in a checkout of HB-TTRPG-tools, with a checkout of NUTBUSTER-R next to
 This validates the exact 74-script / 19-recording inputs and 3 private WAVs without running the clone model. A real end-to-end synthesis run, hardware timing, Whisper transcript quality, audio quality and actual game integration remain separate acceptance gates.
 
 Upstream: https://github.com/jamiepine/voicebox
+
+## Composition stage: per-clip normalization, audition reel and validation
+
+The manually dispatched workflow runs composition tests using generated test tones, then invokes [compose_nutbuster.py](compose_nutbuster.py) after Voicebox finishes the selected six-line preview or all 74 Original-announcer additions. This is a separate authoring/review stage, NOT an automatic NUTBUSTER-R game update.
+
+The composer re-reads the 74-line Original script, enforces exact event IDs and text for the chosen scope, verifies every rendering against its source manifest SHA-256 and size, rejects unexpected/extra/missing keys and audio that cannot be decoded, then transcodes each selected take to 44.1 kHz mono MP3 at 128 kbps with a target of -17 LUFS and -2 dBTP. Its output is written to a separate private directory and existing takes are never overwritten.
+
+Private runner output: VOICEBOX_OUTPUT_DIR/<run-id>-composed/clips/<event-key>.mp3, an ordered audition.mp3 separated by brief silence, and composition.json containing original/rendered hashes, output hashes, encoding details, script text, engine, and status needs-auditory-review. It does not export the uploaded WAV or cloned voice profile, publish GitHub artifacts, replace the game's original 19 MP3s, or mark outputs as approved.
+
+After listening to the audition reel, approve the playable event clips individually, test clarity against music on a real device, and create a SEPARATE NUTBUSTER-R change to connect the 74 still-unwired events. Use the established event keys rather than adding a substitute text-to-speech player to the game.
+
+Developer test command (uses synthetic audio; no owner recording):
+
+    python3 -m unittest discover -s tools/voicebox/tests -p 'test_*.py' -v
+
+Manual composition of a completed private render folder:
+
+    python3 tools/voicebox/compose_nutbuster.py --nutbuster ../NUTBUSTER-R --rendered /private/renders/<run-id> --output /private/renders/<run-id>-composed --scope preview
+
+The original uploaded audio remains private. Actual model quality, source transcription fidelity and Android playback are still real-world acceptance gates.

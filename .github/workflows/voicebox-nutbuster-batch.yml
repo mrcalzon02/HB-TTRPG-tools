@@ -61,7 +61,22 @@ jobs:
             --references "$PRIVATE_REFS" --voicebox-source "$VOICEBOX_ROOT" \
             --scope "${{ inputs.scope }}" --engine "${{ inputs.engine }}" \
             --output "$VOICEBOX_OUTPUT_DIR/$GITHUB_RUN_ID"
+      - name: Test the composition pipeline (synthetic samples only)
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tools/voicebox/tests -p 'test_*.py' -v
+
+      - name: Compose private voice pack and audition reel
+        shell: bash
+        env:
+          VOICEBOX_OUTPUT_DIR: ${{ vars.VOICEBOX_OUTPUT_DIR }}
+        run: |
+          python3 tools/voicebox/compose_nutbuster.py \
+            --nutbuster voice-input/nutbuster \
+            --rendered "$VOICEBOX_OUTPUT_DIR/$GITHUB_RUN_ID" \
+            --output "$VOICEBOX_OUTPUT_DIR/$GITHUB_RUN_ID-composed" \
+            --scope "${{ inputs.scope }}"
       - name: Display local destination
         if: success()
         shell: bash
-        run: echo "Generated MP3s retained in private persistent VOICEBOX_OUTPUT_DIR, under run directory $GITHUB_RUN_ID. No audio uploaded as GitHub artifacts."
+        run: echo "Unapproved composition clips, audition.mp3 and composition.json retained in private persistent VOICEBOX_OUTPUT_DIR/$GITHUB_RUN_ID-composed. No audio uploaded."

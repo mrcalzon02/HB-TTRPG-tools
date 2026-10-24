@@ -95,3 +95,5 @@ Machine-readable allocation: [`capability.json`](capability.json). This is **not
 ## NUTBUSTER owner voice batch
 
 The owner explicitly authorized voice cloning from their own 82-second WAV, augmented by the 19 existing Original-announcer recordings. The [private self-hosted runner guide](NUTBUSTER-VOICE-PIPELINE.md), [batch program](nutbuster_batch.py) and manually triggered Actions workflow stage six preview recordings or all 74 authored Original lines. No private voice recordings are committed to the public repository. No voice model execution has been verified yet.
+
+The [composition program](compose_nutbuster.py) validates output manifests, normalizes event-key MP3s, creates an audition reel, and records a review-required composition receipt in private runner storage. [Its tests](tests/test_compose_nutbuster.py) use synthetic sounds rather than the owner's private speech. See the [NUTBUSTER workflow guide](NUTBUSTER-VOICE-PIPELINE.md).
