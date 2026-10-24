@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "foundry.external.voicebox",
+  "displayName": "Voicebox local speech engine",
+  "status": "documented-not-installed",
+  "category": "local-external-developer-tool",
+  "upstream": {
+    "repository": "https://github.com/jamiepine/voicebox",
+    "download": "https://github.com/jamiepine/voicebox/releases",
+    "softwareLicense": "MIT",
+    "licenseFile": "https://github.com/jamiepine/voicebox/blob/main/LICENSE",
+    "modelLicenses": "independent-review-required"
+  },
+  "execution": {
+    "websiteRuntime": "not-supported",
+    "host": "user-local-process",
+    "apiBaseUrl": "http://127.0.0.1:17493",
+    "mcpUrl": "http://127.0.0.1:17493/mcp",
+    "requiresInstallation": true
+  },
+  "setup": {
+    "windowsInstallerHelper": "tools/voicebox/download-windows.ps1",
+    "windowsSourceHelper": "tools/voicebox/start-source.ps1",
+    "instructions": "tools/voicebox/README.md",
+    "externalDataDirectory": "user-local-not-in-repo"
+  },
+  "supportedIntents": [
+    "authorized voice cloning",
+    "local text to speech",
+    "game dialogue and narration",
+    "local speech transcription",
+    "optional agent speech through MCP"
+  ],
+  "usageRestrictions": [
+    "self-owned or consented voices only",
+    "do not commit voice profiles or model weights",
+    "no public exposing of loopback service",
+    "no live capability claim before runtime verification"
+  ]
+}

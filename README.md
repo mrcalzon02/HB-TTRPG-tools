@@ -21,6 +21,10 @@ The profile and engram describe Charles's presentation and response logic. Speci
 
 The [Software section](software.html) groups [Simple Sound Manager](simple-sound-manager.html), [CubeChat](cubechat.html) and the new [Beckenburg planning page](beckenburg.html). The game's authoritative planning sources are under [docs/beckenburg](docs/beckenburg/README.md), with production stages, ghost/hunter systems, maps, Java/Swing/3D/LAN architecture and test gates. A Java 17 Swing/software-3D test-house prototype, an early-PlayStation-style [visual direction](software/beckenburg/art/VISUAL_DIRECTION.md), the [Cleric model sheet](software/beckenburg/art/profiles/cleric-01.svg), and the [first equipment study](software/beckenburg/art/profiles/equipment-01.svg) now exist as early development sources in [software/beckenburg](software/beckenburg/README.md). They do not constitute a playable game or finished S1 milestone.
 
+## Local AI voice production — Voicebox
+
+Voicebox is allocated as an **optional external, locally run** voice-cloning, narration, transcription, and AI-agent speech tool. Its download helper, developer-shell quickstart, upstream references, and integration boundary are documented at [`tools/voicebox/`](tools/voicebox/README.md). It is **not bundled with GitHub Pages**, not preinstalled, and has not yet been wired into the live Foundry runtime. Only use voices belonging to you or speakers who authorize their use; upstream Voicebox software is **MIT licensed, not CC0**, and voice-model licenses must be checked separately.
+
 ## Current structure
 
 - `index.html` — main menu page, character sheet utility, Kaysender module dashboard, and script loading.
