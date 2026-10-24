@@ -1,0 +1,65 @@
+name: Voicebox NUTBUSTER Owner Voice
+
+on:
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: Preview six new lines or render all 74 original-announcer additions
+        type: choice
+        required: true
+        default: preview
+        options: [preview, all]
+      engine:
+        description: Compatible speech model already installed on the private runner
+        type: choice
+        required: true
+        default: luxtts
+        options: [luxtts, qwen, chatterbox_turbo]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: voicebox-nutbuster-owner
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: [self-hosted, voicebox]
+    timeout-minutes: 180
+    steps:
+      - name: Checkout Foundry source
+        uses: actions/checkout@v4
+      - name: Checkout NUTBUSTER scripts and original clips
+        uses: actions/checkout@v4
+        with:
+          repository: mrcalzon02/NUTBUSTER-R
+          ref: main
+          path: voice-input/nutbuster
+          persist-credentials: false
+      - name: Validate private inputs without public upload
+        shell: bash
+        env:
+          PRIVATE_REFS: ${{ vars.VOICEBOX_REFERENCE_DIR }}
+          VOICEBOX_ROOT: ${{ vars.VOICEBOX_SOURCE_DIR }}
+        run: |
+          test -n "$PRIVATE_REFS" && test -d "$PRIVATE_REFS" || { echo "VOICEBOX_REFERENCE_DIR is absent"; exit 2; }
+          test -n "$VOICEBOX_ROOT" && test -f "$VOICEBOX_ROOT/backend/venv/bin/python" || { echo "VOICEBOX_SOURCE_DIR is not a ready source install"; exit 2; }
+          command -v python3
+          command -v ffmpeg
+          command -v ffprobe
+          python3 tools/voicebox/nutbuster_batch.py --nutbuster voice-input/nutbuster --references "$PRIVATE_REFS" --dry-run
+      - name: Create or reuse authorized voice profile and render
+        shell: bash
+        env:
+          PRIVATE_REFS: ${{ vars.VOICEBOX_REFERENCE_DIR }}
+          VOICEBOX_ROOT: ${{ vars.VOICEBOX_SOURCE_DIR }}
+        run: |
+          python3 tools/voicebox/nutbuster_batch.py --nutbuster voice-input/nutbuster \
+            --references "$PRIVATE_REFS" --voicebox-source "$VOICEBOX_ROOT" \
+            --scope "${{ inputs.scope }}" --engine "${{ inputs.engine }}" \
+            --output "$RUNNER_TEMP/voicebox-owner/$GITHUB_RUN_ID"
+      - name: Display local destination
+        if: success()
+        shell: bash
+        run: echo "Generated MP3s retained only on the trusted runner in $RUNNER_TEMP/voicebox-owner/$GITHUB_RUN_ID; no audio uploaded as GitHub artifacts."

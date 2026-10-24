@@ -91,3 +91,7 @@ The REST and MCP server are an **optional future integration** for local authori
 - Only then design a separate opt-in Foundry adapter; preserve the static site's compatibility, consent boundaries, graceful offline behavior, and the "mirrored calls, not mirrored logic" rule.
 
 Machine-readable allocation: [`capability.json`](capability.json). This is **not** a claim that `api/foundry-capabilities.json` has an active voice operation registered.
+
+## NUTBUSTER owner voice batch
+
+The owner explicitly authorized voice cloning from their own 82-second WAV, augmented by the 19 existing Original-announcer recordings. The [private self-hosted runner guide](NUTBUSTER-VOICE-PIPELINE.md), [batch program](nutbuster_batch.py) and manually triggered Actions workflow stage six preview recordings or all 74 authored Original lines. No private voice recordings are committed to the public repository. No voice model execution has been verified yet.
