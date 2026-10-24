@@ -177,7 +177,12 @@ try {
             Write-Host 'If prompted, sign into the Google account that owns the NUTBUSTER Drive folder.'
             Invoke-Checked $rclone @('config','create',$DriveRemote,'drive','scope','drive','root_folder_id',$DriveFolderId)
         }
-        Invoke-Checked $rclone @('lsd',($DriveRemote + ':'),'--drive-root-folder-id',$DriveFolderId)
+        & $rclone lsd ($DriveRemote + ':') --drive-root-folder-id $DriveFolderId
+        if ($LASTEXITCODE -ne 0) {
+            Stage 'The Google Drive remote is not yet authorized for this folder. Opening interactive rclone configuration for sign-in/repair.'
+            Invoke-Checked $rclone @('config')
+            Invoke-Checked $rclone @('lsd',($DriveRemote + ':'),'--drive-root-folder-id',$DriveFolderId)
+        }
     }
 
     Stage 'Preparing Voicebox and NUTBUSTER source repositories outside the public checkout'
