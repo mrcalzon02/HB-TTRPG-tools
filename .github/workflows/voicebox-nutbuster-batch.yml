@@ -54,12 +54,14 @@ jobs:
         env:
           PRIVATE_REFS: ${{ vars.VOICEBOX_REFERENCE_DIR }}
           VOICEBOX_ROOT: ${{ vars.VOICEBOX_SOURCE_DIR }}
+          VOICEBOX_OUTPUT_DIR: ${{ vars.VOICEBOX_OUTPUT_DIR }}
         run: |
+          test -n "$VOICEBOX_OUTPUT_DIR" && test -d "$VOICEBOX_OUTPUT_DIR" || { echo "Set VOICEBOX_OUTPUT_DIR to a private persistent runner directory"; exit 2; }
           python3 tools/voicebox/nutbuster_batch.py --nutbuster voice-input/nutbuster \
             --references "$PRIVATE_REFS" --voicebox-source "$VOICEBOX_ROOT" \
             --scope "${{ inputs.scope }}" --engine "${{ inputs.engine }}" \
-            --output "$RUNNER_TEMP/voicebox-owner/$GITHUB_RUN_ID"
+            --output "$VOICEBOX_OUTPUT_DIR/$GITHUB_RUN_ID"
       - name: Display local destination
         if: success()
         shell: bash
-        run: echo "Generated MP3s retained only on the trusted runner in $RUNNER_TEMP/voicebox-owner/$GITHUB_RUN_ID; no audio uploaded as GitHub artifacts."
+        run: echo "Generated MP3s retained in private persistent VOICEBOX_OUTPUT_DIR, under run directory $GITHUB_RUN_ID. No audio uploaded as GitHub artifacts."
