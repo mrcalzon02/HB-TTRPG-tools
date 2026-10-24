@@ -168,6 +168,9 @@ try {
     $samples = @(Get-ChildItem -LiteralPath $references -File -Filter 'owner-primary-*.wav')
     if ($samples.Count -ne 3) { throw 'Private voice reference preparation failed: expected three WAV segments.' }
 
+    Stage 'Running deterministic audio-composition tests before model installation'
+    Invoke-Checked $python312 @('-m','unittest','discover','-s',(Join-Path $repo 'tools\voicebox\tests'),'-p','test_*.py','-v')
+
     if (-not $SkipDriveUpload) {
         Stage 'Checking Google Drive OAuth access before expensive voice generation'
         $remotes = @(& $rclone listremotes)
