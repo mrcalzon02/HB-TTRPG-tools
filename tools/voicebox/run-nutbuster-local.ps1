@@ -86,6 +86,58 @@ function Get-Python312 {
     }
     return $null
 }
+function Setup-Voicebox-PythonBackend([string]$root, [string]$python312) {
+    # Equivalent to upstream Voicebox justfile's setup-python recipe for Windows,
+    # without downloading the optional Just command-runner binary.
+    $venvDir = Join-Path $root 'backend\venv'
+    $venvPy = Join-Path $venvDir 'Scripts\python.exe'
+    $isHealthy = $false
+    if (Test-Path -LiteralPath $venvPy) {
+        & $venvPy -c "import sys, pip; sys.exit(sys.version_info[:2] != (3,12))"
+        $isHealthy = ($LASTEXITCODE -eq 0)
+    }
+    if ((Test-Path -LiteralPath $venvDir) -and -not $isHealthy) {
+        $backup = $venvDir + '.incomplete-' + (Get-Date -Format 'yyyyMMdd-HHmmss')
+        if (Test-Path -LiteralPath $backup) { throw ('Cannot preserve incomplete Python environment: ' + $backup) }
+        Stage ('Preserving incomplete venv as ' + $backup)
+        Rename-Item -LiteralPath $venvDir -NewName (Split-Path $backup -Leaf) -ErrorAction Stop
+    }
+    if (-not $isHealthy) {
+        Stage 'Creating Python 3.12 virtualenv directly'
+        Invoke-Checked $python312 @('-m','venv',$venvDir)
+    }
+    if (-not (Test-Path -LiteralPath $venvPy)) { throw ('Python venv was not created: ' + $venvPy) }
+    Stage 'Updating pip in isolated Voicebox runtime'
+    Invoke-Checked $venvPy @('-m','pip','install','--upgrade','pip','-q')
+
+    $gpus = @()
+    try {
+        $gpus = @(Get-CimInstance Win32_VideoController -ErrorAction Stop | ForEach-Object { $_.Name })
+    } catch { Stage 'GPU name detection not available; using default Python dependencies' }
+    if (@($gpus | Where-Object { $_ -match 'NVIDIA' }).Count -gt 0) {
+        Stage 'Installing NVIDIA CUDA PyTorch as upstream Windows setup requires'
+        Invoke-Checked $venvPy @('-m','pip','install','torch','torchvision','torchaudio',
+            '--index-url','https://download.pytorch.org/whl/cu128')
+    } elseif (@($gpus | Where-Object { $_ -match 'Arc' }).Count -gt 0) {
+        Stage 'Installing Intel Arc PyTorch/XPU as upstream Windows setup requires'
+        Invoke-Checked $venvPy @('-m','pip','install','torch','torchvision','torchaudio',
+            '--index-url','https://download.pytorch.org/whl/xpu')
+        Invoke-Checked $venvPy @('-m','pip','install','intel-extension-for-pytorch',
+            '--index-url','https://download.pytorch.org/whl/xpu')
+    } else { Stage 'Using standard PyTorch dependency (CPU/other GPU)' }
+    $requirements = Join-Path $root 'backend\requirements.txt'
+    if (-not (Test-Path -LiteralPath $requirements)) { throw ('Missing upstream requirements: ' + $requirements) }
+    Stage 'Installing upstream Voicebox Python dependencies'
+    Invoke-Checked $venvPy @('-m','pip','install','-r',$requirements)
+    Invoke-Checked $venvPy @('-m','pip','install','--no-deps','chatterbox-tts')
+    Invoke-Checked $venvPy @('-m','pip','install','--no-deps','hume-tada')
+    Invoke-Checked $venvPy @('-m','pip','install','--no-deps','omnivoice')
+    Invoke-Checked $venvPy @('-m','pip','install','git+https://github.com/QwenLM/Qwen3-TTS.git')
+    Invoke-Checked $venvPy @('-m','pip','install','pyinstaller','ruff','pytest','pytest-asyncio','openai','-q')
+    Stage 'Checking upstream Voicebox API and speech inference modules'
+    Invoke-Checked $venvPy @('-c','import uvicorn, fastapi, torch, sqlalchemy, zipvoice')
+}
+
 function Find-VoiceSource([string]$value,[string]$filename) {
     if ($value) {
         if (-not (Test-Path -LiteralPath $value -PathType Leaf)) { throw ('Specified voice source missing: ' + $value) }
@@ -179,7 +231,6 @@ try {
     $git = Ensure-Tool 'git' 'Git.Git'
     $ffmpeg = Ensure-Tool 'ffmpeg' 'Gyan.FFmpeg'
     $ffprobe = Ensure-Tool 'ffprobe' 'Gyan.FFmpeg'
-    $just = Ensure-Tool 'just' 'Casey.Just'
     if (-not $SkipDriveUpload) { $rclone = Ensure-Tool 'rclone' 'Rclone.Rclone' }
 
     $python312 = Get-Python312
@@ -254,10 +305,8 @@ try {
         $backendOkay = ($LASTEXITCODE -eq 0)
     }
     if (-not $backendOkay) {
-        Stage 'Installing the Voicebox Python 3.12 backend using upstream just setup-python'
-        Push-Location $voicebox
-        try { Invoke-Checked $just @('setup-python') }
-        finally { Pop-Location }
+        Stage 'Provisioning the Voicebox Python 3.12 backend without Just'
+        Setup-Voicebox-PythonBackend $voicebox $python312
     }
     if (-not (Test-Path $backendPy)) { throw ('Voicebox virtualenv did not produce ' + $backendPy) }
     Stage 'Compiling and checking Voicebox backend Python modules'
