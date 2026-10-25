@@ -206,8 +206,23 @@ def generate_verified_take(model, encoded, key, text, out, retry_round=0):
         salt = int.from_bytes(hashlib.sha256(key.encode()).digest()[:4], "big")
         torch.manual_seed((104729 + attempt * 7919 + salt +
                            retry_round * 1000003) % 2147483647)
-        variant = ("Okay. " + prompt) if retry_round >= 4 else (
-                  prompt if attempt % 2 else prompt.rstrip("!?.") + ".")
+        if retry_round >= 5:
+            opening = prompt.split("!", 1)
+            if len(opening) == 2 and opening[0].strip().lower() == "a fish":
+                phrasing = [
+                    "A fish. A beautiful, wonderful fish.",
+                    "A fish! A beautiful wonderful fish.",
+                    "A fish; a beautiful, wonderful fish.",
+                    "A fish! A beautiful, wonderful fish!",
+                    "A fish - a beautiful wonderful fish.",
+                    "A fish... a beautiful wonderful fish!"
+                ]
+                variant = phrasing[(attempt-1) % len(phrasing)]
+            else:
+                variant = prompt
+        else:
+            variant = ("Okay. " + prompt) if retry_round == 4 else (
+                      prompt if attempt % 2 else prompt.rstrip("!?.") + ".")
         generated = model.generate_speech(variant, encoded,
                                            num_steps=steps, speed=speed)
         audio = (generated.detach().cpu().numpy()
@@ -233,7 +248,7 @@ def generate_verified_take(model, encoded, key, text, out, retry_round=0):
         seconds = len(audio) / 48000
         passed, match = score_transcript(text, heard, seconds)
         if not passed:
-            adjusted = (trim_intro_marker(audio, text, result) if retry_round >= 4
+            adjusted = (trim_intro_marker(audio, text, result) if retry_round == 4
                         else strip_verified_extra_opening(audio, text, result))
             if adjusted is not None:
                 corrected_audio, trimmed_seconds = adjusted
