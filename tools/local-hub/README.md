@@ -63,3 +63,12 @@ The shortcut points to the same local checkout from which it was installed. Movi
 ## Recent local crash recovery
 
 The optional Voicebox backend can fail without taking down the archive. When Python inference dependencies are incomplete, the local site still opens and the Narration Studio explains the engine problem. Voicebox startup logs are local under the private workspace; the NUTBUSTER setup now preserves verbose pip dependency logs in the private diagnostics folder to identify the package responsible for the earlier pyproject wheel-build failure. Its exact upstream dependency is not yet verified.
+
+## Repairing incomplete Voicebox dependencies
+
+If the Narration Studio reports `uvicorn` missing, the archive is working but Voicebox's Python environment is incomplete. From the checkout root:
+
+    git pull --ff-only
+    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\voicebox\repair-local-backend.ps1
+
+The helper reuses the existing Python 3.12 venv, Torch installation and cached models. It installs missing HTTP dependencies, checks the **actual** Voicebox backend import, and resumes the upstream requirement installation only if necessary. Detailed pip build reports stay in `%LOCALAPPDATA%\HB-TTRPG-tools\voicebox-production\private\diagnostics\`. No audio, credentials or model files are uploaded. When repair succeeds, close and relaunch the workbench; `-DiagnoseOnly` checks without installing.

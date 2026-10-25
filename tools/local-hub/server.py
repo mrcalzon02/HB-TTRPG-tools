@@ -76,6 +76,30 @@ class HubState:
         if not interpreter.is_file() or not (self.voicebox / "backend/main.py").is_file():
             self.backend_start_error = "Voicebox is not installed; archive browsing remains available."
             return
+        # A missing API module is a repairable install problem, not a crash.
+        # Use the already-created interpreter; never install from the web UI.
+        try:
+            probe = subprocess.run(
+                [str(interpreter), "-c",
+                 "import importlib.util,sys; names=('uvicorn','fastapi','sqlalchemy','torch','zipvoice'); "
+                 "missing=[n for n in names if importlib.util.find_spec(n) is None]; "
+                 "print(', '.join(missing)); sys.exit(bool(missing))"],
+                cwd=self.voicebox, capture_output=True, text=True, timeout=20,
+            )
+            if probe.returncode:
+                missing = probe.stdout.strip() or probe.stderr.strip() or "unknown module"
+                self.backend_start_error = (
+                    "Voicebox Python dependencies are incomplete: %s. "
+                    "Run tools/voicebox/repair-local-backend.ps1 from the repository, "
+                    "then restart the local workbench." % missing
+                )
+                return
+        except (OSError, subprocess.TimeoutExpired) as error:
+            self.backend_start_error = (
+                "Cannot check local Voicebox dependencies: %s. "
+                "The archive remains available." % error
+            )
+            return
         try:
             self.backend_log = (self.private / "voicebox-backend.log").open("ab")
             self.backend_process = subprocess.Popen(

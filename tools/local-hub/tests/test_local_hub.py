@@ -165,8 +165,9 @@ class ServerTests(unittest.TestCase):
         (root / "backend" / "main.py").write_text("mock only")
         self.state.voicebox = root
         with mock.patch.object(self.state, "backend_ready", return_value=False):
-            with mock.patch.object(hub.subprocess, "Popen", side_effect=OSError("engine unavailable")):
-                self.state.start_backend_if_installed()
+            with mock.patch.object(hub.subprocess, "run", return_value=hub.subprocess.CompletedProcess(["python"], 0, stdout="", stderr="")):
+                with mock.patch.object(hub.subprocess, "Popen", side_effect=OSError("engine unavailable")):
+                    self.state.start_backend_if_installed()
         self.assertIn("engine unavailable", self.state.backend_start_error)
         status, body = self.request("/__local/")
         self.assertEqual(status, 200)
@@ -175,6 +176,27 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(status, 503)
         self.assertIn(b"engine unavailable", body)
 
+
+    def test_missing_uvicorn_reports_repair_and_preserves_archive(self):
+        import os
+        root = Path(self.tmp.name) / "incomplete-voicebox"
+        exe = root / "backend" / "venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+        exe.parent.mkdir(parents=True)
+        exe.write_text("placeholder")
+        (root / "backend" / "main.py").write_text("placeholder")
+        self.state.voicebox = root
+        with mock.patch.object(self.state, "backend_ready", return_value=False):
+            with mock.patch.object(hub.subprocess, "run",
+                                   return_value=hub.subprocess.CompletedProcess(
+                                       ["python"], 1, stdout="uvicorn", stderr="")):
+                with mock.patch.object(hub.subprocess, "Popen") as process:
+                    self.state.start_backend_if_installed()
+                    process.assert_not_called()
+        self.assertIn("uvicorn", self.state.backend_start_error)
+        self.assertIn("repair-local-backend.ps1", self.state.backend_start_error)
+        status, body = self.request("/__local/")
+        self.assertEqual(status, 200)
+        self.assertIn(b"Narration studio", body)
 
 if __name__ == "__main__":
     unittest.main()

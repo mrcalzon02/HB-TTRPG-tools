@@ -44,8 +44,8 @@ try {
     New-Item -ItemType Directory -Force -Path $private | Out-Null
     $log = Join-Path $private ('voicebox-repair-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.log')
     Status ('Reusing existing environment: ' + $python)
-    Run-Python @('-m','pip','--version') 'Confirm existing pip'
-    Run-Python @('-c','import sys; assert sys.version_info[:2] == (3,12), "Voicebox requires Python 3.12"') 'Validate Python version'
+    Run-Python -Arguments @('-m','pip','--version') -Step 'Confirm existing pip'
+    Run-Python -Arguments @('-c','import sys; assert sys.version_info[:2] == (3,12), "Voicebox requires Python 3.12"') -Step 'Validate Python version'
 
     $core = @('uvicorn','fastapi','sqlalchemy')
     $probe = "import importlib.util,sys; names = ['uvicorn','fastapi','sqlalchemy']; missing = [x for x in names if importlib.util.find_spec(x) is None]; print('Missing HTTP dependencies:', ', '.join(missing) if missing else 'none'); sys.exit(bool(missing))"
@@ -54,7 +54,9 @@ try {
     $coreMissing = ($LASTEXITCODE -ne 0)
     if ($DiagnoseOnly) {
         Status 'DiagnoseOnly selected: no packages will be installed.'
-        Run-Python @('-c','from backend.main import app; print("Voicebox backend import succeeded")') 'Full backend import check'
+        Push-Location $source
+        try { Run-Python -Arguments @('-c','from backend.main import app; print("Voicebox backend import succeeded")') -Step 'Full backend import check' }
+        finally { Pop-Location }
         exit 0
     }
     if ($coreMissing) {
@@ -79,8 +81,12 @@ try {
                 throw ('Upstream requirements failed to build; inspect ' + $log + '. Do not delete the venv or reinstall Torch without identifying the failing package.')
             }
         }
-        Run-Python @('-c','from backend.main import app; print("Voicebox backend imported successfully")') 'Verify full backend import'
-        Run-Python @('-m','pip','check') 'Check Python dependency compatibility'
+        Run-Python -Arguments @('-c','from backend.main import app; print("Voicebox backend imported successfully")') -Step 'Verify full backend import'
+        Status 'Checking installed dependency metadata'
+        & $python -m pip check
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning 'pip check reported a dependency conflict. Voicebox imports, but verify package compatibility before production synthesis.'
+        }
     } finally { Pop-Location }
     Write-Host 'Voicebox dependencies are importable. Restart the HB-TTRPG Local Workbench, then Refresh Voices.' -ForegroundColor Green
     Write-Host 'No audio or credentials were uploaded; model weights and previous output remain local.' -ForegroundColor Green

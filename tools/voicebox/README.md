@@ -113,3 +113,7 @@ Find generated clips, an audition reel, and the review manifest under `%LOCALAPP
 ### Windows Just/antivirus installation note
 
 A user test found that WinGet returned 0x80070003 (path not found) while installing Casey.Just; AVG also raised an alert, although the available log does not establish a causal link. The repaired one-command launcher skips installing Just altogether and provisions Voicebox's Python backend directly. **Keep AVG protection enabled**. If antivirus quarantines a different dependency, review the actual detection and official publisher before proceeding; this workflow must never change antivirus exclusions or bypass security software. The script is committed but has **not** been run end-to-end on the user's Windows computer, so downloaded model compatibility and Drive OAuth still require real-world verification.
+
+## Repair partially installed Voicebox without redownloading Torch
+
+To repair `ModuleNotFoundError: No module named 'uvicorn'`, run `powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\voicebox\repair-local-backend.ps1` from your local checkout. The script preserves the existing venv and model files, installs missing API-server dependencies, checks real backend imports and logs failed upstream wheel builds privately. It never uploads anything. If the upstream `pyproject.toml` build still fails, inspect the detailed pip log to identify the offending dependency rather than repeatedly reinstalling packages.
