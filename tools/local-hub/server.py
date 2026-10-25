@@ -146,6 +146,9 @@ class HubState:
             name, body = files["document"]
             script = script + "\n" + document(name, body)
         takes = parse_voice_lines(script)
+        project = fields.get("project", "narration").strip()
+        # Reject invalid project IDs before a new Voicebox profile is created.
+        validate_manifest({"project": project, "voice": "preparing-voice", "engine": "luxtts", "lines": takes})
         existing_id = fields.get("voice", "").strip()
         name = fields.get("profile_name", "My Voice").strip()
         if not existing_id and (not name or len(name) > 100):
@@ -162,12 +165,12 @@ class HubState:
         job_id = secrets.token_hex(10)
         with self.lock:
             self.jobs[job_id] = {"id": job_id, "status": "queued", "finished": 0,
-                "total": len(takes), "project": fields.get("project", "narration"),
+                "total": len(takes), "project": project,
                 "error": None}
         request = {"voice": existing_id, "profile_name": name, "takes": takes,
                    "source": source, "audio": files.get("audio"),
                    "reference_text": fields.get("reference_text", ""),
-                   "project": fields.get("project", "narration")}
+                   "project": project}
         self.executor.submit(self._run_intake, job_id, request)
         return {"id": job_id, "status": "queued"}
 
