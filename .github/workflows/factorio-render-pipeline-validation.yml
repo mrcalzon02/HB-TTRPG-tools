@@ -1,0 +1,46 @@
+name: Factorio render pipeline procedure validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'ai-tools.html'
+      - 'tools/factorio-render-pipeline/**'
+      - '.github/workflows/factorio-render-pipeline-validation.yml'
+  pull_request:
+    paths:
+      - 'ai-tools.html'
+      - 'tools/factorio-render-pipeline/**'
+      - '.github/workflows/factorio-render-pipeline-validation.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-source-procedures:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint local setup script
+        run: bash -n tools/factorio-render-pipeline/setup-codex-linux.sh
+      - name: Test spec validation contract
+        run: python3 -m unittest discover -s tools/factorio-render-pipeline -p 'test_*.py' -v
+      - name: Draft manifest accepted
+        run: python3 tools/factorio-render-pipeline/validate_spec.py tools/factorio-render-pipeline/spec-template.json
+      - name: Uncalibrated manifest must fail production gate
+        run: |
+          if python3 tools/factorio-render-pipeline/validate_spec.py tools/factorio-render-pipeline/spec-template.json --strict; then
+            echo "ERROR: uncalibrated manifest was accepted" >&2
+            exit 1
+          fi
+      - name: Validate navigation document and module links
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          root = Path('.')
+          page = (root / 'ai-tools.html').read_text()
+          index = (root / 'index.html').read_text()
+          assert 'id="factorio-render-pipeline"' in page
+          assert 'href="ai-tools.html#factorio-render-pipeline"' in index
+          for name in ('README.md', 'CODEX_WORK_ORDER.md', 'setup-codex-linux.sh', 'spec-template.json'):
+              assert (root / 'tools/factorio-render-pipeline' / name).exists(), name
+          print('AI Tools render pipeline module navigation and sources present')
+          PY
