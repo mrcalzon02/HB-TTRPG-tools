@@ -17,7 +17,7 @@ def multipart(content_type,body):
     fields,files={},{}
     for part in email.iter_parts():
         key=part.get_param("name",header="content-disposition")
-        if key not in {"lines","profile_name","voice","source","consent","reference_text","audio","document"} or key in fields or key in files:
+        if key not in {"lines","profile_name","voice","source","consent","reference_text","audio","document","project"} or key in fields or key in files:
             raise ValueError("Unknown or repeated field")
         content=part.get_payload(decode=True)
         if content is None: raise ValueError("Empty form payload")
@@ -96,6 +96,16 @@ def convert_sample(filename,data,directory):
     if not 2<=seconds<=30: raise ValueError("Voicebox sample conversion failed")
     raw.unlink()
     return dest
+def load_luxtts():
+    # Only the requested English voice-cloning engine; never load Qwen/Kokoro.
+    req=urllib.request.Request(BASE+"/models/load", data=json.dumps({"model_name":"luxtts"}).encode(),
+        method="POST", headers={"Content-Type":"application/json"})
+    try:
+        with urllib.request.urlopen(req,timeout=900) as resp:
+            return json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        raise RuntimeError("LuxTTS model could not load (%s): %s"%(e.code,e.read(500).decode("utf-8","replace"))) from e
+
 def profile(name,samples,reference_text=""):
     found=[p for p in api("/profiles") if p.get("name")==name]
     if len(found)>1: raise ValueError("Ambiguous local voice profile")

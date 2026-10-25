@@ -21,7 +21,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "voicebox"))
 from narration_batch import render, validate_manifest
-from voice_intake import multipart, document, lines as parse_voice_lines, convert_sample, profile as register_voice_profile
+from voice_intake import multipart, document, lines as parse_voice_lines, convert_sample, profile as register_voice_profile, load_luxtts
 
 BASE = "/__local"
 BLOCKED = {".git", ".github", ".venv", "venv", "node_modules", "__pycache__", "private",
@@ -193,6 +193,8 @@ class HubState:
                     update(status="creating-profile")
                     pid = register_voice_profile(request["profile_name"], samples,
                                                  request["reference_text"])
+                update(status="loading-luxtts", voice=pid)
+                load_luxtts()
                 update(status="generating", voice=pid)
                 manifest = render(
                     {"project": request["project"], "voice": pid,
