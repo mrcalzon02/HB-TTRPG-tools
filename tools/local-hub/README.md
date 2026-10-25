@@ -78,3 +78,31 @@ The helper reuses the existing Python 3.12 venv, Torch installation and cached m
 The shared Voicebox installer now uses **Misaki English only** instead of installing Japanese or Chinese pronunciation modules. This removes the `pyopenjtalk` build requirement causing the recent Windows error. It uses a private generated requirements file and keeps the original Voicebox Git checkout, PyTorch, model cache and narration files unchanged. After pulling the latest commit, rerun `tools/voicebox/repair-local-backend.ps1` to resume without a full reinstall.
 
 The workbench remains usable if the optional speech engine has not yet passed backend import checks.
+
+## Drop files directly into the Narration Studio
+
+In the installed localhost workbench, select **Narration studio**. Drop a WAV,
+MP3, M4A, FLAC or OGG owner-authorized voice sample into the first panel, then
+a TXT, Markdown, CSV or DOCX script into the second. Alternatively type/paste
+up to 300 narration lines. The preferred line syntax is
+event-key | words to speak; ordinary lines receive automatic identifiers.
+You may also choose a previously prepared private reference or an existing
+Voicebox profile. No transcription is required for LuxTTS: the model encodes
+and transcribes its reference audio itself. If provided, a manual reference
+transcription should reflect the actual recording.
+
+**Click Create voice and generate locally.** The server creates the profile
+if absent, imports a short 24-kHz mono reference (automatically trimming long
+recordings to approximately 20 seconds), loads only LuxTTS, and queues the
+speech generation sequentially. Production history shows the job status and,
+after completion, a manual download of the review ZIP, composed audition WAV,
+individual WAV clips and manifest. The actual audio stays in the private
+LOCALAPPDATA production directory. No cloud uploads, no extra GUI framework,
+no foreign voice samples and no repository audio commits.
+
+The browser sends files only to the server bound to 127.0.0.1. A consent
+checkbox is required before creating or using a cloned profile. Scripts have
+an 8 MB upload limit, voice samples 45 MB, the whole request 52 MB. Other
+document formats can first be exported to TXT, CSV or DOCX. A real synthesis
+run still requires compatible model weights, which LuxTTS downloads locally
+on initial load if absent.
