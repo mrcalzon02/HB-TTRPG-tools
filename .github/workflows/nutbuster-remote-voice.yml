@@ -14,6 +14,7 @@ on:
       - tools/voicebox/tests/test_partial_production.py
       - tools/voicebox/retry_failed_nutbuster.py
       - tools/voicebox/tests/test_retry_failed_nutbuster.py
+      - tools/voicebox/tests/test_intro_marker.py
   workflow_dispatch:
     inputs:
       scope:
@@ -47,7 +48,7 @@ jobs:
           ref: main
           path: input/nutbuster
           persist-credentials: false
-      - name: Verify 68 approved and 6 rejected for retry
+      - name: Verify 71 approved and 3 rejected for retry
         shell: bash
         run: |
           python3 -m unittest discover -s tools/voicebox/tests -p 'test_retry_failed_nutbuster.py' -v
@@ -115,10 +116,16 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p "$RUNNER_TEMP/base-artifact"
-          gh run download 40175726895 --repo "$GITHUB_REPOSITORY" \
-            --name NUTBUSTER-74-Retry16-Merged-WAVs --dir "$RUNNER_TEMP/base-artifact"
+          gh run download 40176422111 --repo "$GITHUB_REPOSITORY" \
+            --name NUTBUSTER-74-Retry6-Merged-WAVs --dir "$RUNNER_TEMP/base-artifact"
           test -s "$RUNNER_TEMP/base-artifact/nutbuster-voice-review.zip"
-      - name: Generate ONLY 6 rejected cues and preserve 68 approved
+      - name: Verify word-timed setup phrase removal
+        shell: bash
+        env:
+          PYTHONPATH: ${{ runner.temp }}/luxtts
+        run: |
+          python -m unittest discover -s tools/voicebox/tests -p 'test_intro_marker.py' -v
+      - name: Generate ONLY 3 rejected cues and preserve 71 approved
         shell: bash
         env:
           PYTHONPATH: ${{ runner.temp }}/luxtts
@@ -151,7 +158,7 @@ jobs:
       - name: Publish sound files as downloadable GitHub artifact
         uses: actions/upload-artifact@v4
         with:
-          name: NUTBUSTER-74-Retry6-Merged-WAVs
+          name: NUTBUSTER-74-Retry3-Merged-WAVs
           path: ${{ runner.temp }}/nutbuster-voice-review.zip
           if-no-files-found: error
           retention-days: 30

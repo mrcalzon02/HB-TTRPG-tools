@@ -11,9 +11,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from remote_luxtts_nutbuster import (lines, sha, package, generate_verified_take,
                                     TakeRejected)
 
-BASE_RUN=40175726895
-BASE_COUNT=68
-FAILED_COUNT=6
+BASE_RUN=40176422111
+BASE_COUNT=71
+FAILED_COUNT=3
 
 def restore_previous(archive, output, expected):
     """Fail closed if prior artifact, SHA-256 hashes or coverage are inconsistent."""
@@ -27,7 +27,7 @@ def restore_previous(archive, output, expected):
             manifest.get("verifiedCount") != BASE_COUNT or
             manifest.get("failedCount") != FAILED_COUNT or
             len(good) != BASE_COUNT or len(bad) != FAILED_COUNT):
-            raise ValueError("Expected EXACTLY 68 approved and 6 failed cues in the base artifact")
+            raise ValueError("Expected EXACTLY 71 approved and 3 failed cues in the base artifact")
         good_ids=[c["key"] for c in good]
         bad_ids=[c["key"] for c in bad]
         if len(set(good_ids+bad_ids)) != len(expected) or set(good_ids+bad_ids) != set(expected):
@@ -65,7 +65,7 @@ def retry(archive, repo, reference, output):
         print("RETRY %d/%d: %s"%(i,len(rejected),cue),flush=True)
         try:
             file,chosen,attempts=generate_verified_take(voice,prompt,cue,expected[cue],
-                                                        output,retry_round=3)
+                                                        output,retry_round=4)
         except TakeRejected as error:
             failures.append({"key":cue,"expectedText":expected[cue],
                              "reason":"Still failed speech QA after independent retry",
@@ -95,7 +95,7 @@ def retry(archive, repo, reference, output):
     with zipfile.ZipFile(package_path,"w",compression=zipfile.ZIP_DEFLATED) as archive_file:
         for item in sorted(output.iterdir()):
             if item.is_file():archive_file.write(item,item.name)
-    print("RETRY RESULT: restored 68 original WAVs, recovered %d of 6; still rejected %d" %
+    print("RETRY RESULT: restored 71 original WAVs, recovered %d of 3; still rejected %d" %
           (manifest["recoveredThisRun"],manifest["failedCount"]),flush=True)
     return manifest
 

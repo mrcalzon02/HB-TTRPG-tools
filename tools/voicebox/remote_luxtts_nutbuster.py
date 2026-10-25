@@ -150,6 +150,45 @@ class TakeRejected(RuntimeError):
         self.diagnostics = diagnostics
 
 
+
+def trim_intro_marker(audio, expected, recognition, sample_rate=48000):
+    """Use ASR timestamps to remove the intentional 'Okay' setup phrase.
+
+    The remaining recorded speech must pass the normal content check again.
+    """
+    import numpy as np
+    if not isinstance(recognition, dict):
+        return None
+    words=normalized_words(recognition.get("text",""))
+    target=normalized_words(expected)
+    if "okay" not in words[:4]:
+        return None
+    remainder=words[words.index("okay")+1:]
+    if not score_transcript(expected," ".join(remainder),len(audio)/sample_rate)[0]:
+        return None
+    seen=False
+    start=None
+    for chunk in recognition.get("chunks",[]):
+        parts=normalized_words(chunk.get("text",""))
+        if "okay" in parts:
+            seen=True
+            continue
+        if seen and parts and target and difflib.SequenceMatcher(
+                None,target[0],parts[0]).ratio()>=.75:
+            stamp=chunk.get("timestamp")
+            if isinstance(stamp,(tuple,list)) and stamp and isinstance(stamp[0],(int,float)):
+                start=float(stamp[0])
+                break
+    if start is None:
+        return None
+    offset=round(max(0,start-.22-.045)*sample_rate)
+    if not int(.06*sample_rate)<=offset<=int(3*sample_rate):
+        return None
+    remaining=np.asarray(audio)[offset:]
+    if len(remaining)<.75*sample_rate:
+        return None
+    return remaining.copy(),round(offset/sample_rate,4)
+
 def generate_verified_take(model, encoded, key, text, out, retry_round=0):
     import numpy as np
     import soundfile as sf
@@ -167,7 +206,8 @@ def generate_verified_take(model, encoded, key, text, out, retry_round=0):
         salt = int.from_bytes(hashlib.sha256(key.encode()).digest()[:4], "big")
         torch.manual_seed((104729 + attempt * 7919 + salt +
                            retry_round * 1000003) % 2147483647)
-        variant = prompt if attempt % 2 else prompt.rstrip("!?.") + "."
+        variant = ("Okay. " + prompt) if retry_round >= 4 else (
+                  prompt if attempt % 2 else prompt.rstrip("!?.") + ".")
         generated = model.generate_speech(variant, encoded,
                                            num_steps=steps, speed=speed)
         audio = (generated.detach().cpu().numpy()
@@ -193,7 +233,8 @@ def generate_verified_take(model, encoded, key, text, out, retry_round=0):
         seconds = len(audio) / 48000
         passed, match = score_transcript(text, heard, seconds)
         if not passed:
-            adjusted = strip_verified_extra_opening(audio, text, result)
+            adjusted = (trim_intro_marker(audio, text, result) if retry_round >= 4
+                        else strip_verified_extra_opening(audio, text, result))
             if adjusted is not None:
                 corrected_audio, trimmed_seconds = adjusted
                 sf.write(str(candidate), playback_safe_waveform(corrected_audio),

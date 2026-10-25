@@ -7,7 +7,7 @@ import remote_luxtts_nutbuster as base
 import retry_failed_nutbuster as retrier
 
 class ResumeTests(unittest.TestCase):
- def test_recovery_verifies_68_and_targets_only_6(self):
+ def test_recovery_verifies_71_and_targets_only_3(self):
   with tempfile.TemporaryDirectory() as folder:
    root=Path(folder); wav=io.BytesIO()
    with wave.open(wav,"wb") as p:
@@ -17,18 +17,18 @@ class ResumeTests(unittest.TestCase):
    digest=__import__("hashlib").sha256(data).hexdigest()
    expected={f"cue-{i:02d}":f"Test cue number {i}" for i in range(74)}
    good=[{"key":key,"file":key+".wav","text":expected[key],
-          "bytes":len(data),"sha256":digest,"asrVerified":True} for key in list(expected)[:68]]
-   bad=[{"key":key} for key in list(expected)[68:]]
+          "bytes":len(data),"sha256":digest,"asrVerified":True} for key in list(expected)[:71]]
+   bad=[{"key":key} for key in list(expected)[71:]]
    prior=root/"old.zip"
    with zipfile.ZipFile(prior,"w") as archive:
     archive.writestr("manifest.json",json.dumps({"requestedLineCount":74,
-       "verifiedCount":68,"failedCount":6,"clips":good,"failedTakes":bad}))
+       "verifiedCount":71,"failedCount":3,"clips":good,"failedTakes":bad}))
     for c in good:archive.writestr(c["file"],data)
    approved,rejected=retrier.restore_previous(prior,root/"new",expected)
-   self.assertEqual(len(approved),68)
-   self.assertEqual(rejected,list(expected)[68:])
+   self.assertEqual(len(approved),71)
+   self.assertEqual(rejected,list(expected)[71:])
    self.assertEqual((root/"new"/good[0]["file"]).read_bytes(),data)
-   self.assertEqual(len(list((root/"new").glob("*.wav"))),68)
+   self.assertEqual(len(list((root/"new").glob("*.wav"))),71)
  def test_corrupt_prior_rejected(self):
   with tempfile.TemporaryDirectory() as folder:
    root=Path(folder);p=root/"broken.zip"
