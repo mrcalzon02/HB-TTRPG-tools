@@ -10,6 +10,7 @@ on:
       - tools/voicebox/tests/test_playback_boundaries.py
       - tools/voicebox/tests/test_missing_phonemes.py
       - tools/voicebox/tests/test_spurious_prefix.py
+      - tools/voicebox/tests/test_spoken_numbers.py
   workflow_dispatch:
     inputs:
       scope:
@@ -90,6 +91,12 @@ jobs:
           PYTHONPATH: ${{ runner.temp }}/luxtts
         run: |
           python -m unittest discover -s tools/voicebox/tests -p 'test_spurious_prefix.py' -v
+      - name: Verify spoken-digit equivalent checks
+        shell: bash
+        env:
+          PYTHONPATH: ${{ runner.temp }}/luxtts
+        run: |
+          python -m unittest discover -s tools/voicebox/tests -p 'test_spoken_numbers.py' -v
       - name: Generate all 74 verified narration takes
         shell: bash
         env:
