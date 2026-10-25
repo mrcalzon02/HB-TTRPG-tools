@@ -8,6 +8,7 @@ on:
       - tools/voicebox/references/Sphinx-of-Black-Quartz-Judge-my-Vow.mp3
       - tools/voicebox/remote_luxtts_nutbuster.py
       - tools/voicebox/tests/test_playback_boundaries.py
+      - tools/voicebox/tests/test_missing_phonemes.py
   workflow_dispatch:
     inputs:
       scope:
@@ -76,7 +77,13 @@ jobs:
           PYTHONPATH: ${{ runner.temp }}/luxtts
         run: |
           python -m unittest discover -s tools/voicebox/tests -p 'test_playback_boundaries.py' -v
-      - name: Generate original-announcer voice lines
+      - name: Verify missing-word recognition and QA gates
+        shell: bash
+        env:
+          PYTHONPATH: ${{ runner.temp }}/luxtts
+        run: |
+          python -m unittest discover -s tools/voicebox/tests -p 'test_missing_phonemes.py' -v
+      - name: Generate rod-worn diagnostic take with content QA
         shell: bash
         env:
           PYTHONPATH: ${{ runner.temp }}/luxtts
@@ -84,12 +91,12 @@ jobs:
         run: |
           python tools/voicebox/remote_luxtts_nutbuster.py \
             --nutbuster input/nutbuster --reference "$RUNNER_TEMP/reference.wav" \
-            --out "$RUNNER_TEMP/rendered" --scope "$SCOPE"
+            --out "$RUNNER_TEMP/rendered" --scope "$SCOPE" --only rod-worn
           test -s "$RUNNER_TEMP/nutbuster-voice-review.zip"
       - name: Publish sound files as downloadable GitHub artifact
         uses: actions/upload-artifact@v4
         with:
-          name: NUTBUSTER-Voice-Sound-Files
+          name: NUTBUSTER-Rod-Worn-Diagnostic
           path: ${{ runner.temp }}/nutbuster-voice-review.zip
           if-no-files-found: error
           retention-days: 30
