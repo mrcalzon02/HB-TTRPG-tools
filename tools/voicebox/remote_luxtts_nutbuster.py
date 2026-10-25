@@ -51,6 +51,7 @@ def playback_safe_waveform(audio, sample_rate=48000, lead_ms=220, tail_ms=380):
 def normalized_words(text):
     """Normalize pronunciation-equivalent spelling without hiding dropped words."""
     clean = text.lower().replace("'", "")
+    clean = re.sub(r"\beuglorious\b", "you glorious", clean)
     number_names = ("zero one two three four five six seven eight nine ten eleven twelve "
                     "thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty").split()
     def say_number(match):

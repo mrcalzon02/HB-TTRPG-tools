@@ -47,7 +47,7 @@ jobs:
           ref: main
           path: input/nutbuster
           persist-credentials: false
-      - name: Test existing artifact preservation and exactly-16 retry selection
+      - name: Verify 68 approved and 6 rejected for retry
         shell: bash
         run: |
           python3 -m unittest discover -s tools/voicebox/tests -p 'test_retry_failed_nutbuster.py' -v
@@ -115,10 +115,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p "$RUNNER_TEMP/base-artifact"
-          gh run download 40173559594 --repo "$GITHUB_REPOSITORY" \
-            --name NUTBUSTER-Narration-QA-Results --dir "$RUNNER_TEMP/base-artifact"
+          gh run download 40175726895 --repo "$GITHUB_REPOSITORY" \
+            --name NUTBUSTER-74-Retry16-Merged-WAVs --dir "$RUNNER_TEMP/base-artifact"
           test -s "$RUNNER_TEMP/base-artifact/nutbuster-voice-review.zip"
-      - name: Generate ONLY previously rejected 16 cues and preserve the 58 approved
+      - name: Generate ONLY 6 rejected cues and preserve 68 approved
         shell: bash
         env:
           PYTHONPATH: ${{ runner.temp }}/luxtts
@@ -151,7 +151,7 @@ jobs:
       - name: Publish sound files as downloadable GitHub artifact
         uses: actions/upload-artifact@v4
         with:
-          name: NUTBUSTER-74-Retry16-Merged-WAVs
+          name: NUTBUSTER-74-Retry6-Merged-WAVs
           path: ${{ runner.temp }}/nutbuster-voice-review.zip
           if-no-files-found: error
           retention-days: 30
