@@ -12,6 +12,8 @@ on:
       - tools/voicebox/tests/test_spurious_prefix.py
       - tools/voicebox/tests/test_spoken_numbers.py
       - tools/voicebox/tests/test_partial_production.py
+      - tools/voicebox/retry_failed_nutbuster.py
+      - tools/voicebox/tests/test_retry_failed_nutbuster.py
   workflow_dispatch:
     inputs:
       scope:
@@ -23,6 +25,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: nutbuster-remote-owner-voice
@@ -44,6 +47,10 @@ jobs:
           ref: main
           path: input/nutbuster
           persist-credentials: false
+      - name: Test existing artifact preservation and exactly-16 retry selection
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tools/voicebox/tests -p 'test_retry_failed_nutbuster.py' -v
       - name: Verify rejected cues cannot discard successful recordings
         shell: bash
         run: |
@@ -102,15 +109,25 @@ jobs:
           PYTHONPATH: ${{ runner.temp }}/luxtts
         run: |
           python -m unittest discover -s tools/voicebox/tests -p 'test_spoken_numbers.py' -v
-      - name: Generate all narration takes while preserving verified audio and failed IDs
+      - name: Retrieve previous approved audio and rejected IDs from run 40173559594
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/base-artifact"
+          gh run download 40173559594 --repo "$GITHUB_REPOSITORY" \
+            --name NUTBUSTER-Narration-QA-Results --dir "$RUNNER_TEMP/base-artifact"
+          test -s "$RUNNER_TEMP/base-artifact/nutbuster-voice-review.zip"
+      - name: Generate ONLY previously rejected 16 cues and preserve the 58 approved
         shell: bash
         env:
           PYTHONPATH: ${{ runner.temp }}/luxtts
           SCOPE: ${{ inputs.scope || 'all' }}
         run: |
-          python tools/voicebox/remote_luxtts_nutbuster.py \
+          python tools/voicebox/retry_failed_nutbuster.py \
+            --base-archive "$RUNNER_TEMP/base-artifact/nutbuster-voice-review.zip" \
             --nutbuster input/nutbuster --reference "$RUNNER_TEMP/reference.wav" \
-            --out "$RUNNER_TEMP/rendered" --scope "$SCOPE"
+            --out "$RUNNER_TEMP/rendered"
           test -s "$RUNNER_TEMP/nutbuster-voice-review.zip"
       - name: Summarize verified recordings and lines requiring retry
         shell: bash
@@ -134,7 +151,7 @@ jobs:
       - name: Publish sound files as downloadable GitHub artifact
         uses: actions/upload-artifact@v4
         with:
-          name: NUTBUSTER-Narration-QA-Results
+          name: NUTBUSTER-74-Retry16-Merged-WAVs
           path: ${{ runner.temp }}/nutbuster-voice-review.zip
           if-no-files-found: error
           retention-days: 30
@@ -143,4 +160,5 @@ jobs:
         shell: bash
         run: |
           rm -rf "$RUNNER_TEMP/reference.wav" "$RUNNER_TEMP/rendered" \
-            "$RUNNER_TEMP/nutbuster-voice-review.zip" "$RUNNER_TEMP/luxtts"
+            "$RUNNER_TEMP/nutbuster-voice-review.zip" "$RUNNER_TEMP/base-artifact" \
+            "$RUNNER_TEMP/luxtts"

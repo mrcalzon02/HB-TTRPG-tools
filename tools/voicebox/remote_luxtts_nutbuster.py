@@ -51,10 +51,16 @@ def playback_safe_waveform(audio, sample_rate=48000, lead_ms=220, tail_ms=380):
 def normalized_words(text):
     """Normalize pronunciation-equivalent spelling without hiding dropped words."""
     clean = text.lower().replace("'", "")
-    clean = re.sub(r"\b(0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20)\b",
-        lambda m: ("zero one two three four five six seven eight nine ten eleven twelve "
-                   "thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty"
-                   ).split()[int(m.group(1))], clean)
+    number_names = ("zero one two three four five six seven eight nine ten eleven twelve "
+                    "thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty").split()
+    def say_number(match):
+        value = int(match.group(0))
+        if value <= 20:
+            return number_names[value]
+        if value in (100,200,300,400,500,600,700,800,900):
+            return number_names[value//100] + " hundred"
+        return str(value)
+    clean = re.sub(r"\b\d+\b", say_number, clean)
     # Whisper writes these spoken words either joined or split.
     for fragment,joined in (("nut buster","nutbuster"),("nut dex","nutdex"),
                             ("nut tastic","nuttastic"),("in coming","incoming")):
@@ -100,7 +106,7 @@ def strip_verified_extra_opening(audio, expected, recognition, sample_rate=48000
         return None
     actual = normalized_words(recognition.get("text", ""))
     target = normalized_words(expected)
-    if len(actual) < len(target) + 1 or actual[0] not in ("if", "uh", "um", "a"):
+    if len(actual) < len(target) + 1 or actual[0] not in ("if", "ive", "uh", "um", "a", "of", "have", "ever", "at", "without"):
         return None
     matched, _ = score_transcript(expected, " ".join(actual[1:]),
                                   len(audio) / sample_rate)
@@ -143,7 +149,7 @@ class TakeRejected(RuntimeError):
         self.diagnostics = diagnostics
 
 
-def generate_verified_take(model, encoded, key, text, out):
+def generate_verified_take(model, encoded, key, text, out, retry_round=0):
     import numpy as np
     import soundfile as sf
     import torch
@@ -151,11 +157,17 @@ def generate_verified_take(model, encoded, key, text, out):
     # CPU internal speed is multiplied by 1.3 upstream. Slow down the model,
     # keep a natural-case text prompt, and retry only if verification fails.
     prompt = spoken_text(text)
-    presets = [(0.76, 6), (0.62, 7), (0.52, 8), (0.88, 8)]
+    presets = ([(0.92,8), (1.0,10), (0.80,9), (0.94,12), (1.08,8), (0.73,10)]
+               if retry_round else [(0.76,6), (0.62,7), (0.52,8), (0.88,8)])
     diagnostics = []
     for attempt, (speed, steps) in enumerate(presets, 1):
-        torch.manual_seed(104729 + attempt * 7919)
-        generated = model.generate_speech(prompt, encoded,
+        # Deterministic per-line, per-attempt seeds. Previous runs used the
+        # same seed for every line, reproducing the same unwanted prefixes.
+        salt = int.from_bytes(hashlib.sha256(key.encode()).digest()[:4], "big")
+        torch.manual_seed((104729 + attempt * 7919 + salt +
+                           retry_round * 1000003) % 2147483647)
+        variant = prompt if attempt % 2 else prompt.rstrip("!?.") + "."
+        generated = model.generate_speech(variant, encoded,
                                            num_steps=steps, speed=speed)
         audio = (generated.detach().cpu().numpy()
                  if hasattr(generated, "detach") else np.asarray(generated)).squeeze()
