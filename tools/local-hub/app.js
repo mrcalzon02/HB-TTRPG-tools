@@ -148,7 +148,22 @@ async function loadJobs() {
       const heading = document.createElement("strong");
       heading.textContent = job.project + " · " + job.status;
       const status = document.createElement("p");
-      status.textContent = job.finished + "/" + job.total + " completed" + (job.error ? " · " + job.error : "");
+      const phase = {
+        "queued": "Waiting for the local production worker",
+        "preparing-reference": "Converting the uploaded voice recording",
+        "creating-profile": "Registering your reference sample with Voicebox",
+        "loading-luxtts": "Loading LuxTTS (first use may download model weights)",
+        "generating": "Synthesizing narration takes",
+        "running": "Synthesizing narration takes",
+        "completed": "All recordings and review files are ready",
+        "failed": "Production stopped with an error"
+      }[job.status] || job.status;
+      const secs = Number.isFinite(job.statusSince)
+        ? Math.max(0, Math.round(Date.now() / 1000 - job.statusSince)) : null;
+      const since = secs === null ? "" : " · current stage: " +
+        Math.floor(secs / 60) + "m " + (secs % 60) + "s";
+      status.textContent = phase + " · " + job.finished + "/" + job.total +
+        " takes completed" + since + (job.error ? " · ERROR: " + job.error : "");
       container.append(heading, status);
       if (job.download) {
         const link = document.createElement("a");
@@ -167,4 +182,4 @@ async function loadJobs() {
 el("refresh-jobs").addEventListener("click", loadJobs);
 setInterval(() => {
   if (!el("panel-jobs").classList.contains("hidden")) void loadJobs();
-}, 2500);
+}, 5000);

@@ -10,6 +10,7 @@ import secrets
 import subprocess
 import sys
 import threading
+import time
 import tempfile
 import urllib.error
 import urllib.parse
@@ -164,9 +165,10 @@ class HubState:
             raise ValueError("Voice reference must be WAV, MP3, M4A, FLAC or OGG")
         job_id = secrets.token_hex(10)
         with self.lock:
+            now = time.time()
             self.jobs[job_id] = {"id": job_id, "status": "queued", "finished": 0,
-                "total": len(takes), "project": project,
-                "error": None}
+                "total": len(takes), "project": project, "error": None,
+                "createdAt": now, "statusSince": now, "updatedAt": now}
         request = {"voice": existing_id, "profile_name": name, "takes": takes,
                    "source": source, "audio": files.get("audio"),
                    "reference_text": fields.get("reference_text", ""),
@@ -177,7 +179,12 @@ class HubState:
     def _run_intake(self, job_id, request):
         def update(**changes):
             with self.lock:
-                self.jobs[job_id].update(changes)
+                record = self.jobs[job_id]
+                now = time.time()
+                if "status" in changes and changes["status"] != record["status"]:
+                    record["statusSince"] = now
+                record.update(changes)
+                record["updatedAt"] = now
         def progress(done, total):
             update(finished=done)
         try:
@@ -213,8 +220,10 @@ class HubState:
         data = validate_manifest(source)  # Caller cannot submit arbitrary filesystem paths.
         job_id = secrets.token_hex(10)
         with self.lock:
+            now = time.time()
             self.jobs[job_id] = {"id": job_id, "status": "queued", "finished": 0,
-                                 "total": len(data["lines"]), "project": data["project"], "error": None}
+                                 "total": len(data["lines"]), "project": data["project"], "error": None,
+                                 "createdAt": now, "statusSince": now, "updatedAt": now}
         self.executor.submit(self._run_job, job_id, data)
         return {"id": job_id, "status": "queued"}
 
@@ -364,6 +373,12 @@ def handler_factory(state: HubState):
             return self.send_json(202, outcome)
 
         def log_message(self, fmt, *args):
+            # Polling is expected; only suppress successful status fetches,
+            # never warnings, failed requests or actual generation progress.
+            if (self.command == "GET"
+                    and urllib.parse.urlsplit(self.path).path == BASE + "/api/jobs"
+                    and len(args) >= 2 and str(args[1]) == "200"):
+                return
             sys.stderr.write("[local-hub] " + (fmt % args) + "\n")
     return Handler
 

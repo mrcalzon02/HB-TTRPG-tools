@@ -177,6 +177,23 @@ class ServerTests(unittest.TestCase):
         self.assertIn(b"engine unavailable", body)
 
 
+    def test_status_poll_is_successful_and_exposes_job_phase_time(self):
+        status, body = self.request("/__local/api/jobs")
+        self.assertEqual(status, 200)
+        self.assertEqual(json.loads(body)["jobs"], [])
+        payload = {"project": "narration", "voice": "mine", "lines": [{"id": "a", "text": "Hello."}]}
+        # Pausing the worker lets us inspect the queued record without inference.
+        with mock.patch.object(self.state.executor, "submit") as submit:
+            status, body = self.request("/__local/api/jobs", data=payload)
+            self.assertEqual(status, 202)
+            submit.assert_called_once()
+        status, body = self.request("/__local/api/jobs")
+        self.assertEqual(status, 200)
+        job = json.loads(body)["jobs"][0]
+        self.assertEqual(job["status"], "queued")
+        self.assertIn("createdAt", job)
+        self.assertIn("statusSince", job)
+
     def test_missing_uvicorn_reports_repair_and_preserves_archive(self):
         import os
         root = Path(self.tmp.name) / "incomplete-voicebox"
