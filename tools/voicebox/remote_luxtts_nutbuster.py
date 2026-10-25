@@ -135,6 +135,14 @@ def strip_verified_extra_opening(audio, expected, recognition, sample_rate=48000
     return remaining.copy(), round(frames / sample_rate, 4)
 
 
+class TakeRejected(RuntimeError):
+    """Content verification failed; keep other verified takes and retry only this ID."""
+    def __init__(self, key, diagnostics):
+        super().__init__("Speech content QA rejected " + key)
+        self.key = key
+        self.diagnostics = diagnostics
+
+
 def generate_verified_take(model, encoded, key, text, out):
     import numpy as np
     import soundfile as sf
@@ -200,45 +208,77 @@ def generate_verified_take(model, encoded, key, text, out):
                             "matchScore": match, "accepted": passed,
                             "removedExtraPrefixSeconds": removed_prefix_seconds})
         print("  QA %s attempt %d: heard %r; expected %r; duration %.2fs; match %.2f; %s" %
-              (key, attempt, heard, text, seconds, match, "PASS" if passed else "RETRY"),
+              (key, attempt, heard[:180], text, seconds, match, "PASS" if passed else "RETRY"),
               flush=True)
         if passed:
             final = out / (key + ".wav")
             candidate.rename(final)
             return final, diagnostics[-1], diagnostics
         candidate.unlink(missing_ok=True)
-    print("QA FAILED for %s: %s" % (key, json.dumps(diagnostics)), flush=True)
-    raise RuntimeError("Speech QA failed for %s: model keeps omitting or mispronouncing words; "
-                       "refusing to publish that take." % key)
+    print("QA REJECTED for %s after %d attempts; preserving earlier verified audio" %
+          (key, len(diagnostics)), flush=True)
+    raise TakeRejected(key, diagnostics)
 
-def package(directory,events,outfile):
-    audit=directory/"audition.wav"
-    with wave.open(str(audit),"wb") as joined:
-        fmt=None
-        for i,event in enumerate(events):
-            with wave.open(str(directory/event["file"]),"rb") as wav:
-                props=(wav.getnchannels(),wav.getsampwidth(),wav.getframerate())
-                if fmt is None:
-                    fmt=props
-                    joined.setnchannels(props[0]);joined.setsampwidth(props[1]);joined.setframerate(props[2])
-                if props!=fmt or wav.getnframes()<1: raise RuntimeError("Invalid audio format for "+event["file"])
-                while data:=wav.readframes(48000): joined.writeframesraw(data)
-                if i+1<len(events):
-                    joined.writeframesraw(b"\0"*int(props[2]*0.25)*props[0]*props[1])
-    info={"schema":1,"source":"mrcalzon02/NUTBUSTER-R",
-          "engine":"LuxTTS CPU","status":"UNREVIEWED","voiceSource":"owner-authorized",
-          "playbackBoundaryProtection":{"leadMs":220,"tailMs":380,"fadeMs":6,
-              "limitation":"Silence margins cannot reconstruct missing synthesized phonemes"},
-          "cloudUploadPlaintext":False,"lineCount":len(events),
-          "verification":{"method":"Whisper tiny ASR, first/last token check, duration gate",
-              "passed":len(events),"allPassed":all(x.get("asrVerified") for x in events)},
-          "clips":events,
-          "audition":{"file":"audition.wav","sha256":sha(audit)}}
-    (directory/"manifest.json").write_text(json.dumps(info,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
-    with zipfile.ZipFile(outfile,"w",compression=zipfile.ZIP_DEFLATED) as archive:
+def package(directory, events, outfile, failures=None, requested=None):
+    """Always preserve verified audio even when one or more lines fail QA.
+
+    The manifest labels partial results clearly. A missing audition reel means
+    no voice takes passed, rather than pretending a zero-length reel is useful.
+    """
+    failures = list(failures or [])
+    requested = requested if requested is not None else len(events) + len(failures)
+    if requested != len(events) + len(failures):
+        raise ValueError("Expected one verification outcome per requested narration cue")
+    if not events and not failures:
+        raise ValueError("Cannot package an empty production request")
+    reel = None
+    if events:
+        audition = directory / "audition.wav"
+        with wave.open(str(audition), "wb") as joined:
+            fmt = None
+            for i, event in enumerate(events):
+                with wave.open(str(directory / event["file"]), "rb") as wav:
+                    props = (wav.getnchannels(), wav.getsampwidth(), wav.getframerate())
+                    if fmt is None:
+                        fmt = props
+                        joined.setnchannels(props[0])
+                        joined.setsampwidth(props[1])
+                        joined.setframerate(props[2])
+                    if props != fmt or wav.getnframes() < 1:
+                        raise RuntimeError("Invalid audio format for " + event["file"])
+                    while block := wav.readframes(48000):
+                        joined.writeframesraw(block)
+                    if i + 1 < len(events):
+                        joined.writeframesraw(b"\0" * int(props[2] * .25) * props[0] * props[1])
+        reel = {"file": "audition.wav", "sha256": sha(audition)}
+    status = ("ALL_VERIFIED" if not failures else
+              "PARTIAL_VERIFIED" if events else "NONE_VERIFIED")
+    info = {
+        "schema": 2, "source": "mrcalzon02/NUTBUSTER-R",
+        "engine": "LuxTTS CPU", "status": status, "voiceSource": "owner-authorized",
+        "playbackBoundaryProtection": {"leadMs": 220, "tailMs": 380, "fadeMs": 6,
+            "limitation": "Silence cannot restore missing synthesized phonemes"},
+        "requestedLineCount": requested, "lineCount": len(events),
+        "verifiedCount": len(events), "failedCount": len(failures),
+        "verification": {"method": "Whisper tiny ASR with first/last word and duration check",
+                         "passed": len(events), "allPassed": not failures},
+        "cloudUploadPlaintext": False,
+        "clips": events, "failedTakes": failures, "audition": reel,
+    }
+    (directory / "manifest.json").write_text(json.dumps(info, indent=2, ensure_ascii=False) + "\n",
+                                              encoding="utf-8")
+    (directory / "failed-takes.json").write_text(json.dumps(failures, indent=2, ensure_ascii=False) + "\n",
+                                                  encoding="utf-8")
+    (directory / "retry-ids.txt").write_text("".join(f["key"] + "\n" for f in failures),
+                                              encoding="utf-8")
+    outfile.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(outfile, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         for p in sorted(directory.rglob("*")):
-            if p.is_file():archive.write(p,p.relative_to(directory).as_posix())
-    return outfile
+            if p.is_file():
+                archive.write(p, p.relative_to(directory).as_posix())
+    print("PRODUCTION RESULT: %d/%d verified, %d failed content QA; %s" %
+          (len(events), requested, len(failures), status), flush=True)
+    return info
 
 def render(repo,reference,out,scope,only=None):
     texts=lines(repo,scope)
@@ -258,24 +298,36 @@ def render(repo,reference,out,scope,only=None):
     print("Loading LuxTTS CPU on the GitHub-hosted runner",flush=True)
     model=LuxTTS("YatharthS/LuxTTS",device="cpu",threads=2)
     encoded=model.encode_prompt(str(reference),rms=0.01)
-    events=[]
-    for i,(key,text) in enumerate(texts.items(),1):
-        print("Generating %d/%d %s"%(i,len(texts),key),flush=True)
-        path, chosen, attempts = generate_verified_take(model, encoded, key, text, out)
-        with wave.open(str(path),"rb") as wav:
-            duration = wav.getnframes()/wav.getframerate()
-        events.append({"key":key,"text":text,"file":path.name,
-                       "sha256":sha(path),"bytes":path.stat().st_size,
-                       "durationSeconds":round(duration,3),
-                       "speechDurationSeconds":chosen["speechSeconds"],
-                       "boundaryLeadMs":220,"boundaryTailMs":380,
-                       "asrTranscript":chosen["heard"],
-                       "asrMatchScore":chosen["matchScore"],
-                       "asrVerified":True,
-                       "synthesis":{k:chosen[k] for k in ("speed","numSteps","attempt")}})
-    output=out.parent/"nutbuster-voice-review.zip"
-    package(out,events,output)
-    print("Synthesized %d clips; review ZIP ready for encryption"%len(events),flush=True)
+    events, failures = [], []
+    for i, (key, text) in enumerate(texts.items(), 1):
+        print("Generating %d/%d %s" % (i, len(texts), key), flush=True)
+        try:
+            path, chosen, attempts = generate_verified_take(model, encoded, key, text, out)
+        except TakeRejected as error:
+            failures.append({
+                "key": key, "expectedText": text,
+                "reason": "Speech recognition did not verify the complete line",
+                "attemptCount": len(error.diagnostics),
+                "attempts": [{**a, "heard": a.get("heard", "")[:200]} for a in error.diagnostics],
+            })
+            print("  Saved %d verified WAVs; flagged %s for later retry. Continuing." %
+                  (len(events), key), flush=True)
+            continue
+        with wave.open(str(path), "rb") as wav:
+            duration = wav.getnframes() / wav.getframerate()
+        events.append({
+            "key": key, "text": text, "file": path.name,
+            "sha256": sha(path), "bytes": path.stat().st_size,
+            "durationSeconds": round(duration, 3),
+            "speechDurationSeconds": chosen["speechSeconds"],
+            "boundaryLeadMs": 220, "boundaryTailMs": 380,
+            "asrTranscript": chosen["heard"],
+            "asrMatchScore": chosen["matchScore"],
+            "asrVerified": True,
+            "synthesis": {k: chosen[k] for k in ("speed", "numSteps", "attempt")},
+        })
+    output = out.parent / "nutbuster-voice-review.zip"
+    return package(out, events, output, failures=failures, requested=len(texts))
 
 def main():
     ap=argparse.ArgumentParser()
