@@ -49,8 +49,17 @@ def playback_safe_waveform(audio, sample_rate=48000, lead_ms=220, tail_ms=380):
 
 
 def normalized_words(text):
-    """Normalize capitalization, possessives and punctuation for phrase comparison."""
-    return re.findall(r"[a-z0-9]+", text.lower().replace("'", ""))
+    """Normalize pronunciation-equivalent spelling without hiding dropped words."""
+    clean = text.lower().replace("'", "")
+    clean = re.sub(r"\\b(0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20)\\b",
+        lambda m: ("zero one two three four five six seven eight nine ten eleven twelve "
+                   "thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty"
+                   ).split()[int(m.group(1))], clean)
+    # Whisper writes these spoken words either joined or split.
+    for fragment,joined in (("nut buster","nutbuster"),("nut dex","nutdex"),
+                            ("nut tastic","nuttastic"),("in coming","incoming")):
+        clean = re.sub(r"\\b" + fragment.replace(" ", r"\\s+") + r"\\b", joined, clean)
+    return re.findall(r"[a-z0-9]+", clean)
 
 def spoken_text(text):
     """Stop sending all-caps game announcer keys as screaming TTS prompts."""
@@ -91,7 +100,7 @@ def strip_verified_extra_opening(audio, expected, recognition, sample_rate=48000
         return None
     actual = normalized_words(recognition.get("text", ""))
     target = normalized_words(expected)
-    if len(actual) < len(target) + 1 or actual[0] not in ("if", "uh", "um"):
+    if len(actual) < len(target) + 1 or actual[0] not in ("if", "uh", "um", "a"):
         return None
     matched, _ = score_transcript(expected, " ".join(actual[1:]),
                                   len(audio) / sample_rate)
