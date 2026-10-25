@@ -98,6 +98,43 @@ function Find-VoiceSource([string]$value,[string]$filename) {
     return $null
 }
 
+
+function Select-VoiceSource {
+    # A ChatGPT attachment is not automatically stored in the user's Windows filesystem.
+    # A standard Windows file dialog lets the owner choose the source without renaming,
+    # copying into a special directory, or editing a hard-coded local path.
+    Write-Host 'Select your own WAV recording or the prepared voice-reference ZIP from wherever you saved it.' -ForegroundColor Yellow
+    $dialog = $null
+    try {
+        Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
+        $dialog = New-Object System.Windows.Forms.OpenFileDialog
+        $dialog.Title = 'Locate your voice WAV or prepared Voicebox reference ZIP'
+        $dialog.Filter = 'Voice recording or reference pack (*.wav;*.zip)|*.wav;*.zip|WAV recordings (*.wav)|*.wav|Reference ZIP files (*.zip)|*.zip'
+        $dialog.CheckFileExists = $true
+        $dialog.Multiselect = $false
+        $downloads = Join-Path $env:USERPROFILE 'Downloads'
+        if (Test-Path -LiteralPath $downloads) { $dialog.InitialDirectory = $downloads }
+        $choice = $dialog.ShowDialog()
+        if ($choice -eq [System.Windows.Forms.DialogResult]::OK -and (Test-Path -LiteralPath $dialog.FileName -PathType Leaf)) {
+            return $dialog.FileName
+        }
+        throw 'No voice source was selected in the file picker.'
+    } catch {
+        Write-Host ('File picker unavailable or cancelled: ' + $_.Exception.Message) -ForegroundColor Yellow
+        $manual = Read-Host 'Paste the full path to your own .wav or the reference .zip (or press Enter to cancel)'
+        if ($manual) {
+            $manual = $manual.Trim().Trim('"')
+            if ((Test-Path -LiteralPath $manual -PathType Leaf) -and [IO.Path]::GetExtension($manual).ToLowerInvariant() -in @('.wav','.zip')) {
+                return (Resolve-Path -LiteralPath $manual).Path
+            }
+            throw ('Selected voice-reference path is not an existing WAV or ZIP: ' + $manual)
+        }
+        return $null
+    } finally {
+        if ($null -ne $dialog) { $dialog.Dispose() }
+    }
+}
+
 try {
     $repo = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
     $batch = Join-Path $repo 'tools\voicebox\nutbuster_batch.py'
@@ -126,7 +163,16 @@ try {
     $zip = Find-VoiceSource $ReferenceZip 'owner-voicebox-reference-segments.zip'
     $samples = @(Get-ChildItem -LiteralPath $references -Filter 'owner-primary-*.wav' -File -ErrorAction SilentlyContinue)
     if (-not $wav -and -not $zip -and $samples.Count -ne 3) {
-        throw 'Voice reference not found. Download "For those not yet born.wav" or "owner-voicebox-reference-segments.zip" from this ChatGPT conversation into Windows Downloads, then rerun the SAME command. No source voice is stored in public GitHub.'
+        Stage 'No reference found automatically; opening the Windows file picker'
+        $chosen = Select-VoiceSource
+        if (-not $chosen) {
+            throw 'Voice reference is still unavailable. Download your own WAV or the reference ZIP from ChatGPT onto this PC, then select it using the file picker. The original recording remains private.'
+        }
+        switch ([IO.Path]::GetExtension($chosen).ToLowerInvariant()) {
+            '.wav' { $wav = $chosen }
+            '.zip' { $zip = $chosen }
+            default { throw ('Select a .wav voice recording or the prepared .zip reference package: ' + $chosen) }
+        }
     }
     Stage 'Checking command-line tools'
     Refresh-Path
