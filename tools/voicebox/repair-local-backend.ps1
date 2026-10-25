@@ -73,12 +73,14 @@ try {
         Status 'Checking the actual Voicebox backend import, not just module presence'
         & $python -c 'from backend.main import app; print("Voicebox app import OK")'
         if ($LASTEXITCODE -ne 0) {
-            Status 'Other backend imports are incomplete. Resuming upstream official requirements with a private pip log.'
-            # pip will reuse cached downloads and already-satisfied PyTorch packages.
-            & $python -m pip --log $log install --verbose -r $requirements
+            Status 'Other backend imports are incomplete. Reinstalling upstream dependencies via the supported Windows wheel path.'
+            $wheelInstaller = Join-Path $PSScriptRoot 'install-windows-requirements.ps1'
+            if (-not (Test-Path -LiteralPath $wheelInstaller -PathType Leaf)) {
+                throw ('Missing shared Windows dependency installer: ' + $wheelInstaller)
+            }
+            & $wheelInstaller -Python $python -Requirements $requirements
             if ($LASTEXITCODE -ne 0) {
-                Show-LogTail $log
-                throw ('Upstream requirements failed to build; inspect ' + $log + '. Do not delete the venv or reinstall Torch without identifying the failing package.')
+                throw 'Supported Windows wheel installation failed. Review the private dependency transcript.'
             }
         }
         Run-Python -Arguments @('-c','from backend.main import app; print("Voicebox backend imported successfully")') -Step 'Verify full backend import'

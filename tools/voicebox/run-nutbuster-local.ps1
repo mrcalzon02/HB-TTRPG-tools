@@ -124,21 +124,14 @@ function Setup-Voicebox-PythonBackend([string]$root, [string]$python312) {
     } else { Stage 'Using standard PyTorch dependency (CPU/other GPU)' }
     $requirements = Join-Path $root 'backend\requirements.txt'
     if (-not (Test-Path -LiteralPath $requirements)) { throw ('Missing upstream requirements: ' + $requirements) }
-    Stage 'Installing upstream Voicebox Python dependencies'
-    # Persist a full private pip log so wheel/pyproject build failures identify
-    # their source package instead of reporting only a generic subprocess error.
-    $diagDir = Join-Path $env:LOCALAPPDATA 'HB-TTRPG-tools\voicebox-production\private\diagnostics'
-    New-Item -ItemType Directory -Path $diagDir -Force | Out-Null
-    $pipLog = Join-Path $diagDir ('voicebox-pip-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.log')
-    Stage ('Verbose pip build report: ' + $pipLog)
-    & $venvPy -m pip --log $pipLog install --verbose -r $requirements
+    Stage 'Installing upstream Voicebox dependencies using Windows wheel-backed Japanese G2P'
+    $wheelInstaller = Join-Path $PSScriptRoot 'install-windows-requirements.ps1'
+    if (-not (Test-Path -LiteralPath $wheelInstaller -PathType Leaf)) {
+        throw ('Missing shared dependency installer: ' + $wheelInstaller)
+    }
+    & $wheelInstaller -Python $venvPy -Requirements $requirements
     if ($LASTEXITCODE -ne 0) {
-        Write-Host ('Build failure. Detailed private pip log: ' + $pipLog) -ForegroundColor Red
-        if (Test-Path -LiteralPath $pipLog) {
-            Write-Host 'Recent pip diagnostics (look above the pyproject error for the failing package):' -ForegroundColor Yellow
-            Get-Content -LiteralPath $pipLog -Tail 75 | ForEach-Object { Write-Host $_ }
-        }
-        throw ('Voicebox dependency build failed; review the full pip log at ' + $pipLog)
+        throw 'Shared Windows dependency installation failed. See private diagnostics for the exact package.'
     }
     Invoke-Checked $venvPy @('-m','pip','install','--no-deps','chatterbox-tts')
     Invoke-Checked $venvPy @('-m','pip','install','--no-deps','hume-tada')
