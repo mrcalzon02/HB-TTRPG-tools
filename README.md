@@ -30,6 +30,10 @@ Install once from your checkout:
 
 See [cross-platform installation, shutdown behavior, limitations, and tests](tools/local-hub/README.md). Optional external integrations still require their corresponding service; no cloud upload is introduced by the local workbench.
 
+## AI Tools — Factorio Render Pipeline
+
+The [AI Tools page](ai-tools.html) contains the dedicated [Factorio Render Pipeline tab](ai-tools.html#factorio-render-pipeline). Its reusable [Blender/Codex production runbook](tools/factorio-render-pipeline/README.md), setup script, source-calibrated asset manifest template, validation code and durable Codex work order live under tools/factorio-render-pipeline/. The new module documents local workflows; it does not claim a completed render engine or verified Factorio 2.0.77 graphics load. The existing Machine / AI Access page remains a separate interface contract and discovery directory.
+
 ## Local AI voice production — Voicebox
 
 Voicebox is allocated as an **optional external, locally run** voice-cloning, narration, transcription, and AI-agent speech tool. Its download helper, developer-shell quickstart, upstream references, and integration boundary are documented at [`tools/voicebox/`](tools/voicebox/README.md). It is **not bundled with GitHub Pages**, not preinstalled, and has not yet been wired into the live Foundry runtime. Only use voices belonging to you or speakers who authorize their use; upstream Voicebox software is **MIT licensed, not CC0**, and voice-model licenses must be checked separately.
