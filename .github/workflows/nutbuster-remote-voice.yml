@@ -9,6 +9,7 @@ on:
       - tools/voicebox/remote_luxtts_nutbuster.py
       - tools/voicebox/tests/test_playback_boundaries.py
       - tools/voicebox/tests/test_missing_phonemes.py
+      - tools/voicebox/tests/test_spurious_prefix.py
   workflow_dispatch:
     inputs:
       scope:
@@ -83,6 +84,12 @@ jobs:
           PYTHONPATH: ${{ runner.temp }}/luxtts
         run: |
           python -m unittest discover -s tools/voicebox/tests -p 'test_missing_phonemes.py' -v
+      - name: Verify unwanted opening word correction
+        shell: bash
+        env:
+          PYTHONPATH: ${{ runner.temp }}/luxtts
+        run: |
+          python -m unittest discover -s tools/voicebox/tests -p 'test_spurious_prefix.py' -v
       - name: Generate rod-worn diagnostic take with content QA
         shell: bash
         env:
