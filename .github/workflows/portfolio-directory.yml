@@ -1,0 +1,31 @@
+name: Portfolio directory validation
+on:
+  push:
+    paths:
+      - "other-projects.html"
+      - "creative-portfolio.html"
+      - "site-map.html"
+      - "sitemap.xml"
+      - "index.html"
+      - "scripts/validate-portfolio-directory.mjs"
+      - ".github/workflows/portfolio-directory.yml"
+  pull_request:
+    paths:
+      - "other-projects.html"
+      - "creative-portfolio.html"
+      - "site-map.html"
+      - "sitemap.xml"
+      - "index.html"
+      - "scripts/validate-portfolio-directory.mjs"
+      - ".github/workflows/portfolio-directory.yml"
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate navigation, 19 projects, forks and scripts
+        run: node scripts/validate-portfolio-directory.mjs
