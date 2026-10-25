@@ -47,3 +47,19 @@ Run the offline tests from the repository root:
 Tests use fake WAVs and temporary directories, not real voice samples, and do not perform cloud or external-model inference. Passing them establishes routing and package logic, not successful real voice synthesis on your Windows hardware.
 
 **Known installation blocker:** The previous Windows Voicebox installer emitted a generic pip error about building requirements from `pyproject.toml`. The screenshot did not identify which dependency failed, so the exact wheel-build failure is not yet resolved. The local archive runs regardless; inspect the full pip build log to diagnose the package before further installer changes.
+
+## Per-user Windows installation
+
+To add a convenient **Start Menu shortcut** without installing a Windows service or altering the public website, run:
+
+    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\install-windows.ps1
+
+Launch **HB-TTRPG Local Workbench** from the Start Menu. It starts a console and browser; closing the console stops the local server. To remove only the shortcut (preserving your private audio, models and checkout):
+
+    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\install-windows.ps1 -Uninstall
+
+The shortcut points to the same local checkout from which it was installed. Moving that checkout requires running the installer again. No Windows service, scheduled task, cloud credential, or antivirus exception is created.
+
+## Recent local crash recovery
+
+The optional Voicebox backend can fail without taking down the archive. When Python inference dependencies are incomplete, the local site still opens and the Narration Studio explains the engine problem. Voicebox startup logs are local under the private workspace; the NUTBUSTER setup now preserves verbose pip dependency logs in the private diagnostics folder to identify the package responsible for the earlier pyproject wheel-build failure. Its exact upstream dependency is not yet verified.
