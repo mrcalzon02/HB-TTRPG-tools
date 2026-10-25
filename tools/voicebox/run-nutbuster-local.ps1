@@ -124,14 +124,14 @@ function Setup-Voicebox-PythonBackend([string]$root, [string]$python312) {
     } else { Stage 'Using standard PyTorch dependency (CPU/other GPU)' }
     $requirements = Join-Path $root 'backend\requirements.txt'
     if (-not (Test-Path -LiteralPath $requirements)) { throw ('Missing upstream requirements: ' + $requirements) }
-    Stage 'Installing upstream Voicebox dependencies using Windows wheel-backed Japanese G2P'
+    Stage 'Installing Voicebox with English-only pronunciation requirements'
     $wheelInstaller = Join-Path $PSScriptRoot 'install-windows-requirements.ps1'
     if (-not (Test-Path -LiteralPath $wheelInstaller -PathType Leaf)) {
         throw ('Missing shared dependency installer: ' + $wheelInstaller)
     }
     & $wheelInstaller -Python $venvPy -Requirements $requirements
     if ($LASTEXITCODE -ne 0) {
-        throw 'Shared Windows dependency installation failed. See private diagnostics for the exact package.'
+        throw 'Shared English-only Windows dependency installation failed. See private diagnostics for the exact package.'
     }
     Invoke-Checked $venvPy @('-m','pip','install','--no-deps','chatterbox-tts')
     Invoke-Checked $venvPy @('-m','pip','install','--no-deps','hume-tada')

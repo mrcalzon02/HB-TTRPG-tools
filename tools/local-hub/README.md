@@ -73,6 +73,8 @@ If the Narration Studio reports `uvicorn` missing, the archive is working but Vo
 
 The helper reuses the existing Python 3.12 venv, Torch installation and cached models. It installs missing HTTP dependencies, checks the **actual** Voicebox backend import, and resumes the upstream requirement installation only if necessary. Detailed pip build reports stay in `%LOCALAPPDATA%\HB-TTRPG-tools\voicebox-production\private\diagnostics\`. No audio, credentials or model files are uploaded. When repair succeeds, close and relaunch the workbench; `-DiagnoseOnly` checks without installing.
 
-### Japanese phonemizer native wheel fix
+### English-only Windows dependency profile
 
-The shared Windows Voicebox dependency installer now resolves the `misaki[ja]` → `pyopenjtalk` source-build failure using an actual CPython 3.12 Windows `pyopenjtalk-plus` wheel and `uv` override. It verifies Japanese phonemization and retains upstream functionality. Both the NUTBUSTER setup and in-place repair use this installer; users need not wipe PyTorch or their models. The local archive remains operational independently while the optional engine installs.
+The shared Voicebox installer now uses **Misaki English only** instead of installing Japanese or Chinese pronunciation modules. This removes the `pyopenjtalk` build requirement causing the recent Windows error. It uses a private generated requirements file and keeps the original Voicebox Git checkout, PyTorch, model cache and narration files unchanged. After pulling the latest commit, rerun `tools/voicebox/repair-local-backend.ps1` to resume without a full reinstall.
+
+The workbench remains usable if the optional speech engine has not yet passed backend import checks.
