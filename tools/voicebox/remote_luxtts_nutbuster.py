@@ -76,6 +76,56 @@ def score_transcript(expected, heard, speech_seconds):
     return good, round(score, 3)
 
 
+
+def strip_verified_extra_opening(audio, expected, recognition, sample_rate=48000,
+                                 leading_pad_seconds=0.220):
+    """Remove ONE proven extra opening word using ASR word timestamps.
+
+    No guessed fixed-duration cropping. Only attempt this if ASR hears an extra
+    standalone 'if' (or other clearly extraneous filler) before the expected
+    first word AND the entire remaining sentence, including its final word,
+    already matches. Original generation is never modified in place.
+    """
+    import numpy as np
+    if not isinstance(recognition, dict):
+        return None
+    actual = normalized_words(recognition.get("text", ""))
+    target = normalized_words(expected)
+    if len(actual) < len(target) + 1 or actual[0] not in ("if", "uh", "um"):
+        return None
+    matched, _ = score_transcript(expected, " ".join(actual[1:]),
+                                  len(audio) / sample_rate)
+    if not matched:
+        return None
+    chunks = recognition.get("chunks")
+    if not isinstance(chunks, list) or len(chunks) < 2:
+        return None
+    # Whisper may split contractions and punctuation differently. Find the
+    # first timestamped token corresponding to the target's initial word.
+    first_word_start = None
+    for word in chunks[1:5]:
+        words = normalized_words(word.get("text", ""))
+        ts = word.get("timestamp")
+        if not words or not isinstance(ts, (tuple, list)) or len(ts) < 1:
+            continue
+        if difflib.SequenceMatcher(None, target[0], words[0]).ratio() >= .75:
+            if isinstance(ts[0], (float, int)):
+                first_word_start = float(ts[0])
+                break
+    if first_word_start is None:
+        return None
+    # The ASR timestamps include the 220ms of leading WAV silence. Start
+    # 45ms before the recognized true first word to preserve its onset.
+    trim_seconds = max(0.0, first_word_start - leading_pad_seconds - .045)
+    frames = round(trim_seconds * sample_rate)
+    if frames < int(.045 * sample_rate) or frames > int(.85 * sample_rate):
+        return None
+    remaining = np.asarray(audio)[frames:]
+    if len(remaining) < sample_rate * .75:
+        return None
+    return remaining.copy(), round(frames / sample_rate, 4)
+
+
 def generate_verified_take(model, encoded, key, text, out):
     import numpy as np
     import soundfile as sf
@@ -99,8 +149,12 @@ def generate_verified_take(model, encoded, key, text, out):
         padded = playback_safe_waveform(audio, sample_rate=48000)
         sf.write(str(candidate), padded, 48000, subtype="PCM_16")
         heard = ""
+        removed_prefix_seconds = 0.0
         try:
-            result = model.transcriber(str(candidate))
+            try:
+                result = model.transcriber(str(candidate), return_timestamps="word")
+            except (TypeError, ValueError):
+                result = model.transcriber(str(candidate))
             heard = result.get("text", "") if isinstance(result, dict) else str(result)
         except Exception as error:
             diagnostics.append({"attempt": attempt, "asrError": str(error)[:200]})
@@ -108,9 +162,34 @@ def generate_verified_take(model, encoded, key, text, out):
             continue
         seconds = len(audio) / 48000
         passed, match = score_transcript(text, heard, seconds)
+        if not passed:
+            adjusted = strip_verified_extra_opening(audio, text, result)
+            if adjusted is not None:
+                corrected_audio, trimmed_seconds = adjusted
+                sf.write(str(candidate), playback_safe_waveform(corrected_audio),
+                         48000, subtype="PCM_16")
+                try:
+                    corrected_result = model.transcriber(str(candidate))
+                    corrected_heard = (corrected_result.get("text", "")
+                                       if isinstance(corrected_result, dict)
+                                       else str(corrected_result))
+                    corrected_duration = len(corrected_audio) / 48000
+                    corrected_passed, corrected_match = score_transcript(
+                        text, corrected_heard, corrected_duration)
+                    print("  Prefix correction for %s: removed %.3fs; heard %r; %s" %
+                          (key, trimmed_seconds, corrected_heard,
+                           "PASS" if corrected_passed else "RETRY"), flush=True)
+                    if corrected_passed:
+                        passed, match = corrected_passed, corrected_match
+                        heard, seconds = corrected_heard, corrected_duration
+                        removed_prefix_seconds = trimmed_seconds
+                except Exception as error:
+                    print("  Corrected ASR could not verify: %s" % str(error)[:150],
+                          flush=True)
         diagnostics.append({"attempt": attempt, "speed": speed, "numSteps": steps,
                             "speechSeconds": round(seconds, 3), "heard": heard,
-                            "matchScore": match, "accepted": passed})
+                            "matchScore": match, "accepted": passed,
+                            "removedExtraPrefixSeconds": removed_prefix_seconds})
         print("  QA %s attempt %d: heard %r; expected %r; duration %.2fs; match %.2f; %s" %
               (key, attempt, heard, text, seconds, match, "PASS" if passed else "RETRY"),
               flush=True)
