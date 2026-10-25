@@ -114,7 +114,7 @@ class ServerTests(unittest.TestCase):
 
     def test_archive_pages_and_local_ui(self):
         for route, phrase in [("/", b"Home content"), ("/tool.html", b"Tool content"),
-                              ("/__local/", b"Narration studio"), ("/__local/app.js", b"parseLines")]:
+                              ("/__local/", b"Narration studio"), ("/__local/app.js", b"renderPages")]:
             status, body = self.request(route)
             self.assertEqual(status, 200, route)
             self.assertIn(phrase, body, route)

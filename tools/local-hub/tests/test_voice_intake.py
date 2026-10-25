@@ -104,7 +104,7 @@ class HttpIntakeTests(unittest.TestCase):
         fields={"project":"campaign","profile_name":"My Voice","lines":"intro | Hi"}
         code,body=self.post(fields)
         self.assertEqual(code,400)
-        self.assertIn("permission",body["error"])
+        self.assertIn("authorized",body["error"])
         fields["consent"]="yes"
         code,body=self.post(fields)
         self.assertEqual(code,400)
