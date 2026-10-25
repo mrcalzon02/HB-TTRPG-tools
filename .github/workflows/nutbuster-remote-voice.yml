@@ -1,75 +1,56 @@
-name: NUTBUSTER Voice Production - GitHub Hosted
+name: NUTBUSTER Remote Voice Production
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/nutbuster-remote-voice.yml
+      - tools/voicebox/prepare_public_reference.py
   workflow_dispatch:
     inputs:
       scope:
-        description: Six preview lines or all 74 original announcer additions
+        description: Six preview lines or all 74 original-announcer additions
         type: choice
         required: true
-        default: preview
-        options: [preview, all]
+        default: all
+        options: [all, preview]
 
 permissions:
   contents: read
 
 concurrency:
-  group: nutbuster-github-hosted-voice
+  group: nutbuster-remote-owner-voice
   cancel-in-progress: false
 
 jobs:
-  produce:
-    # Ephemeral GitHub-hosted CPU runner. No user-PC installations.
+  generate:
     runs-on: ubuntu-24.04
     timeout-minutes: 300
-    env:
-      HF_HUB_DISABLE_TELEMETRY: "1"
-      PIP_DISABLE_PIP_VERSION_CHECK: "1"
     steps:
-      - name: Checkout generator
+      - name: Checkout HBTTRPG voice tools
         uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Checkout NUTBUSTER script
+      - name: Checkout existing public NUTBUSTER announcer recordings
         uses: actions/checkout@v4
         with:
           repository: mrcalzon02/NUTBUSTER-R
           ref: main
           path: input/nutbuster
           persist-credentials: false
-      - name: Secure input and encryption preflight
+      - name: Validate audio catalog and prepare voice reference
         shell: bash
-        env:
-          PRIVATE_REFERENCE_URL: ${{ secrets.VOICEBOX_REFERENCE_URL }}
-          EXPORT_PASSWORD: ${{ secrets.VOICEBOX_EXPORT_PASSPHRASE }}
         run: |
-          test -n "$PRIVATE_REFERENCE_URL" || { echo "::error::Missing VOICEBOX_REFERENCE_URL Actions secret"; exit 2; }
-          test -n "$EXPORT_PASSWORD" || { echo "::error::Missing VOICEBOX_EXPORT_PASSPHRASE Actions secret"; exit 2; }
-          test "$(printf '%s' "$EXPORT_PASSWORD" | wc -c)" -ge 24 || { echo "::error::Passphrase must be at least 24 characters"; exit 2; }
-          case "$PRIVATE_REFERENCE_URL" in https://*) ;; *) echo "::error::Reference must use HTTPS"; exit 2;; esac
-          python3 tools/voicebox/remote_luxtts_nutbuster.py --nutbuster input/nutbuster \
-            --reference /dev/null --out /tmp/unused --scope "${{ inputs.scope }}" --validate
-      - name: Fetch reference to disposable runner
-        shell: bash
-        env:
-          PRIVATE_REFERENCE_URL: ${{ secrets.VOICEBOX_REFERENCE_URL }}
-        run: |
-          mkdir -p "$RUNNER_TEMP/private-reference"
-          chmod 700 "$RUNNER_TEMP/private-reference"
-          curl --fail --silent --show-error --location --retry 2 --max-time 300 \
-            --max-filesize 48000000 "$PRIVATE_REFERENCE_URL" \
-            --output "$RUNNER_TEMP/private-reference/raw-audio"
-          ffmpeg -nostdin -hide_banner -loglevel error -y \
-            -i "$RUNNER_TEMP/private-reference/raw-audio" -t 20 \
-            -ac 1 -ar 24000 -c:a pcm_s16le \
-            "$RUNNER_TEMP/private-reference/reference.wav"
-          test -s "$RUNNER_TEMP/private-reference/reference.wav"
-          rm -f "$RUNNER_TEMP/private-reference/raw-audio"
-      - name: Install Python on GitHub-hosted runner only
+          python3 tools/voicebox/prepare_public_reference.py \
+            --nutbuster input/nutbuster --output "$RUNNER_TEMP/reference.wav"
+          python3 tools/voicebox/remote_luxtts_nutbuster.py \
+            --nutbuster input/nutbuster --reference "$RUNNER_TEMP/reference.wav" \
+            --out "$RUNNER_TEMP/unused" --scope all --validate
+      - name: Setup temporary GitHub-hosted Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install LuxTTS only (no Voicebox multi-engine suite)
+      - name: Install only LuxTTS on GitHub-hosted runner
         shell: bash
         run: |
           python -m pip install --upgrade pip
@@ -77,39 +58,26 @@ jobs:
           git clone --depth 1 https://github.com/ysharma3501/LuxTTS.git "$RUNNER_TEMP/luxtts"
           python -m pip install -r "$RUNNER_TEMP/luxtts/requirements.txt" soundfile
           PYTHONPATH="$RUNNER_TEMP/luxtts" python -c "from zipvoice.luxvoice import LuxTTS; print('LuxTTS import succeeded')"
-      - name: Generate the owner-voice takes
+      - name: Generate original-announcer voice lines
         shell: bash
         env:
           PYTHONPATH: ${{ runner.temp }}/luxtts
+          SCOPE: ${{ inputs.scope || 'all' }}
         run: |
           python tools/voicebox/remote_luxtts_nutbuster.py \
-            --nutbuster input/nutbuster \
-            --reference "$RUNNER_TEMP/private-reference/reference.wav" \
-            --out "$RUNNER_TEMP/rendered" --scope "${{ inputs.scope }}"
-      - name: Encrypt review ZIP before any upload
-        shell: bash
-        env:
-          EXPORT_PASSWORD: ${{ secrets.VOICEBOX_EXPORT_PASSPHRASE }}
-        run: |
+            --nutbuster input/nutbuster --reference "$RUNNER_TEMP/reference.wav" \
+            --out "$RUNNER_TEMP/rendered" --scope "$SCOPE"
           test -s "$RUNNER_TEMP/nutbuster-voice-review.zip"
-          printf '%s' "$EXPORT_PASSWORD" | gpg --batch --yes --pinentry-mode loopback \
-            --passphrase-fd 0 --symmetric --cipher-algo AES256 \
-            --output "$RUNNER_TEMP/nutbuster-voice-review.zip.gpg" \
-            "$RUNNER_TEMP/nutbuster-voice-review.zip"
-          test -s "$RUNNER_TEMP/nutbuster-voice-review.zip.gpg"
-          rm -rf "$RUNNER_TEMP/private-reference" "$RUNNER_TEMP/rendered" \
-            "$RUNNER_TEMP/nutbuster-voice-review.zip"
-      - name: Upload encrypted-only audio artifact
+      - name: Publish sound files as downloadable GitHub artifact
         uses: actions/upload-artifact@v4
         with:
-          name: NUTBUSTER-Voice-${{ inputs.scope }}-ENCRYPTED
-          path: ${{ runner.temp }}/nutbuster-voice-review.zip.gpg
+          name: NUTBUSTER-Voice-Sound-Files
+          path: ${{ runner.temp }}/nutbuster-voice-review.zip
           if-no-files-found: error
-          retention-days: 7
-      - name: Clear any remaining plaintext from temporary runner
+          retention-days: 30
+      - name: Clean up temporary audio
         if: always()
         shell: bash
         run: |
-          rm -rf "$RUNNER_TEMP/private-reference" "$RUNNER_TEMP/rendered" \
+          rm -rf "$RUNNER_TEMP/reference.wav" "$RUNNER_TEMP/rendered" \
             "$RUNNER_TEMP/nutbuster-voice-review.zip" "$RUNNER_TEMP/luxtts"
-          echo "Runner cleaned; no plaintext voice artifact uploaded."
