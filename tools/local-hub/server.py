@@ -59,6 +59,7 @@ class HubState:
         self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="narration-local")
         self.backend_process = None
         self.backend_log = None
+        self.backend_start_error = None
 
     def backend_ready(self):
         try:
@@ -68,28 +69,42 @@ class HubState:
             return False
 
     def start_backend_if_installed(self):
-        if self.backend_ready() or self.backend_process or not self.voicebox:
+        # A broken optional speech engine must not take down the archive host.
+        if self.backend_ready() or self.backend_process is not None or self.backend_start_error or not self.voicebox:
             return
         interpreter = self.voicebox / "backend" / "venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
         if not interpreter.is_file() or not (self.voicebox / "backend/main.py").is_file():
+            self.backend_start_error = "Voicebox is not installed; archive browsing remains available."
             return
-        self.backend_log = (self.private / "voicebox-backend.log").open("ab")
-        self.backend_process = subprocess.Popen(
-            [str(interpreter), "-m", "backend.main", "--host", "127.0.0.1", "--port", "17493"],
-            cwd=self.voicebox, stdout=self.backend_log, stderr=subprocess.STDOUT,
-        )
+        try:
+            self.backend_log = (self.private / "voicebox-backend.log").open("ab")
+            self.backend_process = subprocess.Popen(
+                [str(interpreter), "-m", "backend.main", "--host", "127.0.0.1", "--port", "17493"],
+                cwd=self.voicebox, stdout=self.backend_log, stderr=subprocess.STDOUT,
+            )
+        except (OSError, ValueError) as error:
+            self.backend_start_error = "Voicebox could not start: %s. Archive browsing remains available." % error
+            if self.backend_log is not None:
+                self.backend_log.close()
+                self.backend_log = None
 
     def profiles(self):
         self.start_backend_if_installed()
+        if self.backend_process is not None and self.backend_process.poll() is not None:
+            self.backend_start_error = "Voicebox exited with code %s; inspect %s" % (
+                self.backend_process.returncode, self.private / "voicebox-backend.log")
+            self.backend_process = None
+        if self.backend_start_error:
+            raise RuntimeError(self.backend_start_error)
         try:
             with urllib.request.urlopen("http://127.0.0.1:17493/profiles", timeout=3) as response:
                 profiles = json.load(response)
             if not isinstance(profiles, list):
-                raise ValueError("Voicebox returned an invalid response")
+                raise ValueError("Voicebox returned invalid profile data")
             return [{"id": str(p["id"]), "name": str(p.get("name", "Unnamed")),
                      "samples": int(p.get("sample_count", 0))} for p in profiles]
-        except (OSError, ValueError, urllib.error.URLError) as exc:
-            raise RuntimeError("Voicebox is not ready; finish local setup and create a voice profile") from exc
+        except (OSError, ValueError, urllib.error.URLError) as error:
+            raise RuntimeError("Voicebox is not ready; finish installing the speech engine locally.") from error
 
     def submit(self, source):
         data = validate_manifest(source)  # Caller cannot submit arbitrary filesystem paths.
@@ -124,8 +139,12 @@ class HubState:
 
     def close(self):
         self.executor.shutdown(wait=False, cancel_futures=True)
-        if self.backend_process is not None:
-            self.backend_process.terminate()
+        if self.backend_process is not None and self.backend_process.poll() is None:
+            try:
+                self.backend_process.terminate()
+                self.backend_process.wait(timeout=5)
+            except (OSError, subprocess.TimeoutExpired):
+                print("[local-hub] Optional Voicebox backend did not stop cleanly", file=sys.stderr)
         if self.backend_log is not None:
             self.backend_log.close()
 
@@ -246,16 +265,24 @@ def main():
     if not 1024 <= args.port <= 65535:
         raise ValueError("Choose a localhost port between 1024 and 65535")
     state = HubState(args.root, args.private, args.voicebox)
-    state.start_backend_if_installed()
-    with ThreadingHTTPServer(("127.0.0.1", args.port), handler_factory(state)) as server:
+    try:
+        server = ThreadingHTTPServer(("127.0.0.1", args.port), handler_factory(state))
+    except OSError as error:
+        state.close()
+        raise SystemExit("Cannot bind localhost port %s: %s. Try -Port 17862." %
+                         (args.port, error)) from error
+    try:
+        state.start_backend_if_installed()
         address = "http://127.0.0.1:%s/__local/" % args.port
         print("HB-TTRPG local archive: " + address, flush=True)
+        if state.backend_start_error:
+            print("Optional voice engine unavailable: " + state.backend_start_error, flush=True)
         if args.open_browser:
             webbrowser.open(address)
-        try:
-            server.serve_forever(poll_interval=.3)
-        finally:
-            state.close()
+        server.serve_forever(poll_interval=.3)
+    finally:
+        server.server_close()
+        state.close()
 
 if __name__ == "__main__":
     main()
