@@ -156,5 +156,25 @@ class ServerTests(unittest.TestCase):
                 self.assertIn("clips/a.wav", archive.namelist())
 
 
+    def test_optional_voicebox_launch_crash_does_not_kill_archive(self):
+        import os
+        root = Path(self.tmp.name) / "fake-voicebox"
+        exe = root / "backend" / "venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+        exe.parent.mkdir(parents=True)
+        exe.write_text("mock only")
+        (root / "backend" / "main.py").write_text("mock only")
+        self.state.voicebox = root
+        with mock.patch.object(self.state, "backend_ready", return_value=False):
+            with mock.patch.object(hub.subprocess, "Popen", side_effect=OSError("engine unavailable")):
+                self.state.start_backend_if_installed()
+        self.assertIn("engine unavailable", self.state.backend_start_error)
+        status, body = self.request("/__local/")
+        self.assertEqual(status, 200)
+        self.assertIn(b"Narration studio", body)
+        status, body = self.request("/__local/api/profiles")
+        self.assertEqual(status, 503)
+        self.assertIn(b"engine unavailable", body)
+
+
 if __name__ == "__main__":
     unittest.main()
