@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "asset_id": "hydrogen-thruster",
+  "source_repository": "mrcalzon02/Tech-Priests",
+  "source_commit": null,
+  "factorio_version": "2.0.77",
+  "calibration_status": "uncalibrated",
+  "prototype_name": null,
+  "prototype_type": null,
+  "prototype_evidence": null,
+  "footprint_tiles": null,
+  "mount_anchor_tiles": null,
+  "sprite_shift_tiles": null,
+  "attachment_edge": null,
+  "exhaust_direction": null,
+  "source_blend": null,
+  "render": {
+    "camera": "factorio_main",
+    "projection": "orthographic",
+    "transparent": true,
+    "frame_width_px": null,
+    "frame_height_px": null,
+    "pixels_per_tile": null
+  },
+  "states": [
+    {
+      "name": "idle",
+      "frame_count": null,
+      "fps": null
+    },
+    {
+      "name": "run",
+      "frame_count": null,
+      "fps": null
+    }
+  ],
+  "passes": [
+    "color",
+    "shadow",
+    "emission"
+  ],
+  "approval": {
+    "platform_mount_tested": false,
+    "factorio_2_0_77_loaded": false,
+    "visual_review_passed": false
+  }
+}
