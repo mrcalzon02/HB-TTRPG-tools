@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import socket
 import sys
 import threading
 from http.server import ThreadingHTTPServer
@@ -17,6 +18,19 @@ from pathlib import Path
 from server import HubState, handler_factory
 
 DEFAULT_PORT = 17861
+
+
+class SingleInstanceHTTPServer(ThreadingHTTPServer):
+    """Prevent Windows SO_REUSEADDR from admitting a second localhost owner."""
+
+    # Linux needs reuse to rebind immediately after a clean window close.
+    # On Windows, SO_REUSEADDR can allow competing processes on the same port.
+    allow_reuse_address = os.name != "nt"
+
+    def server_bind(self):
+        if os.name == "nt" and hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+        super().server_bind()
 
 
 def default_workspace() -> Path:
@@ -57,7 +71,7 @@ class DesktopRuntime:
             state = HubState(self.root, self.private, self.voicebox)
             try:
                 # Binding before opening the GUI is also the single-instance guard.
-                server = ThreadingHTTPServer(("127.0.0.1", self.port),
+                server = SingleInstanceHTTPServer(("127.0.0.1", self.port),
                                              handler_factory(state))
             except BaseException:
                 state.close()
