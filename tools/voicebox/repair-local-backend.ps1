@@ -45,7 +45,7 @@ try {
     $log = Join-Path $private ('voicebox-repair-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.log')
     Status ('Reusing existing environment: ' + $python)
     Run-Python -Arguments @('-m','pip','--version') -Step 'Confirm existing pip'
-    Run-Python -Arguments @('-c','import sys; assert sys.version_info[:2] == (3,12), "Voicebox requires Python 3.12"') -Step 'Validate Python version'
+    Run-Python -Arguments @('-c','import sys; assert sys.version_info[:2] == (3,12)') -Step 'Validate Python version'
 
     $core = @('uvicorn','fastapi','sqlalchemy')
     $probe = "import importlib.util,sys; names = ['uvicorn','fastapi','sqlalchemy']; missing = [x for x in names if importlib.util.find_spec(x) is None]; print('Missing HTTP dependencies:', ', '.join(missing) if missing else 'none'); sys.exit(bool(missing))"
@@ -55,7 +55,7 @@ try {
     if ($DiagnoseOnly) {
         Status 'DiagnoseOnly selected: no packages will be installed.'
         Push-Location $source
-        try { Run-Python -Arguments @('-c','from backend.main import app; print("Voicebox backend import succeeded")') -Step 'Full backend import check' }
+        try { Run-Python -Arguments @('-c','from backend.main import app') -Step 'Full backend import check' }
         finally { Pop-Location }
         exit 0
     }
@@ -71,7 +71,7 @@ try {
     Push-Location $source
     try {
         Status 'Checking the actual Voicebox backend import, not just module presence'
-        & $python -c 'from backend.main import app; print("Voicebox app import OK")'
+        & $python -c 'from backend.main import app'
         if ($LASTEXITCODE -ne 0) {
             Status 'Other backend imports are incomplete. Installing locally derived English-only dependencies.'
             $wheelInstaller = Join-Path $PSScriptRoot 'install-windows-requirements.ps1'
@@ -83,7 +83,7 @@ try {
                 throw 'English-only requirements installation failed. Review the private pip diagnostics.'
             }
         }
-        Run-Python -Arguments @('-c','from backend.main import app; print("Voicebox backend imported successfully")') -Step 'Verify full backend import'
+        Run-Python -Arguments @('-c','from backend.main import app') -Step 'Verify full backend import'
         Status 'Checking installed dependency metadata'
         & $python -m pip check
         if ($LASTEXITCODE -ne 0) {

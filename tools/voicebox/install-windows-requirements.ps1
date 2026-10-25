@@ -30,7 +30,7 @@ try {
     $label = Get-Date -Format 'yyyyMMdd-HHmmss-fffffff'
     $localRequirements = Join-Path $diag ('voicebox-english-' + $label + '.txt')
     $pipLog = Join-Path $diag ('voicebox-english-pip-' + $label + '.log')
-    & $Python -c 'import sys,platform; assert sys.version_info[:2] == (3,12); assert platform.system() == "Windows"'
+    & $Python -c "import sys,platform; assert sys.version_info[:2] == (3,12); assert platform.system() == 'Windows'"
     Require-Success 'Verify Python 3.12 on Windows'
 
     Write-Host '[Voicebox] Deriving English-only requirements without modifying upstream.' -ForegroundColor Cyan
@@ -48,9 +48,9 @@ try {
         }
         throw ('English-only Voicebox installation failed; see ' + $pipLog)
     }
-    & $Python -c 'from misaki import en; print("Misaki English G2P imported successfully")'
+    & $Python -c 'from misaki import en'
     Require-Success 'Verify English pronunciation dependencies'
-    & $Python -c 'import uvicorn,fastapi,sqlalchemy,torch,zipvoice; print("Voicebox core modules import successfully")'
+    & $Python -c 'import uvicorn,fastapi,sqlalchemy,torch,zipvoice'
     Require-Success 'Verify core Voicebox imports'
     Write-Host '[Voicebox] English-only dependencies installed. No audio or credentials uploaded.' -ForegroundColor Green
     exit 0

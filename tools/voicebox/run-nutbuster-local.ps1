@@ -78,7 +78,7 @@ function Get-Python312 {
     }
     $python = Find-Exe 'python'
     if ($python) {
-        $version = (& $python -c 'import sys; print(str(sys.version_info[0])+"."+str(sys.version_info[1]))' 2>$null)
+        $version = (& $python -c 'import sys; print(sys.version_info.major, sys.version_info.minor, sep=chr(46))' 2>$null)
         if ($LASTEXITCODE -eq 0 -and $version -eq '3.12') { return $python }
     }
     return $null
