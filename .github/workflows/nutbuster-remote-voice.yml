@@ -6,6 +6,8 @@ on:
     paths:
       - .github/workflows/nutbuster-remote-voice.yml
       - tools/voicebox/references/Sphinx-of-Black-Quartz-Judge-my-Vow.mp3
+      - tools/voicebox/remote_luxtts_nutbuster.py
+      - tools/voicebox/tests/test_playback_boundaries.py
   workflow_dispatch:
     inputs:
       scope:
@@ -68,6 +70,12 @@ jobs:
           git clone --depth 1 https://github.com/ysharma3501/LuxTTS.git "$RUNNER_TEMP/luxtts"
           python -m pip install -r "$RUNNER_TEMP/luxtts/requirements.txt" soundfile
           PYTHONPATH="$RUNNER_TEMP/luxtts" python -c "from zipvoice.luxvoice import LuxTTS; print('LuxTTS import succeeded')"
+      - name: Verify start and end audio margins before generating voice
+        shell: bash
+        env:
+          PYTHONPATH: ${{ runner.temp }}/luxtts
+        run: |
+          python -m unittest discover -s tools/voicebox/tests -p 'test_playback_boundaries.py' -v
       - name: Generate original-announcer voice lines
         shell: bash
         env:
