@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Tools — Factorio Render Pipeline | Calzon's TTRPG Foundry</title>
+<meta name="description" content="Local AI-assisted production tools, including a Blender-to-Factorio Codex render pipeline.">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-tools.html">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="workspace-landing.css">
+<style>
+.ai-shell{max-width:1100px;margin:0 auto;padding:24px 18px 72px}
+.ai-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.ai-tabs a{padding:10px 16px;border:1px solid #64748b;border-radius:9px;text-decoration:none;color:inherit;background:rgba(100,116,139,.14)}
+.ai-tabs a[aria-selected="true"],.ai-tabs a:hover,.ai-tabs a:focus-visible{border-color:#b4d5ff;background:rgba(95,150,212,.23)}
+.ai-panel[hidden]{display:none}.ai-panel{margin:20px 0}
+.ai-shell li{margin:9px 0}.ai-shell pre{white-space:pre-wrap;overflow-wrap:anywhere;background:rgba(15,23,42,.6);padding:16px;border-radius:8px}
+</style></head><body class="workspace-landing-body">
+<header class="site-header"><div><p class="eyebrow">Foundry / Tools / AI Tools</p><h1>AI Tools</h1><p class="subtitle">Local-first creative production and Codex workflows.</p></div>
+<nav class="top-nav" aria-label="AI Tools navigation"><a class="nav-button" href="index.html">Foundry Home</a><a class="nav-button active" href="ai-tools.html" aria-current="page">AI Tools</a><a class="nav-button" href="ai-access.html">Machine / AI Access</a><a class="nav-button" href="site-map.html">Site Map</a></nav></header>
+<main class="ai-shell"><section class="hero-card"><p class="eyebrow">Production Tools</p><h2>Durable procedures for local AI-assisted work</h2><p>This static site documents local capabilities. It does not install Blender, run Codex or render sprites remotely.</p></section>
+<nav class="ai-tabs" role="tablist" aria-label="AI Tools modules"><a id="tab-overview" href="#overview" role="tab" aria-controls="overview" aria-selected="true" tabindex="0">Overview</a><a id="tab-factorio-render-pipeline" href="#factorio-render-pipeline" role="tab" aria-controls="factorio-render-pipeline" aria-selected="false" tabindex="-1">Factorio Render Pipeline</a></nav>
+<section class="ai-panel menu-card" id="overview" role="tabpanel" aria-labelledby="tab-overview"><h2>AI Tools modules</h2><p>The Factorio Render Pipeline establishes reusable 3D-origin game art procedures, beginning with Tech Priests thrusters.</p><a class="link-button primary-action" href="#factorio-render-pipeline">Open Render Pipeline</a></section>
+<section class="ai-panel menu-card" id="factorio-render-pipeline" role="tabpanel" aria-labelledby="tab-factorio-render-pipeline" hidden><p class="eyebrow">AI Tools / Procedural Asset Production</p><h2>Factorio Render Pipeline</h2>
+<p><strong>First target:</strong> <a href="https://github.com/mrcalzon02/Tech-Priests">Tech Priests</a>. Replace rough hydrogen, thetazine, and void-fusion thruster art with calibrated Blender source, correct idle/run states, and actual space-platform attachment alignment.</p>
+<p><strong>Status:</strong> documented runbook and local setup workflow. Blender modeling, headless rendering, sheet packing, and Factorio 2.0.77 live acceptance are separate future execution gates.</p>
+<h3>Production sequence</h3><ol>
+<li>Inspect exact mod/engine prototype fields, entity footprint, sprite shift/scale, attachment edge, orientation and animation metadata. Do not guess a 3×3 footprint.</li>
+<li>Establish a calibrated Blender tile grid, platform-mount jig, fixed camera, lighting and sprite pivot.</li>
+<li>Generate editable parametric chamber, housing, nozzle, armor, mount, pipe, emission and exhaust meshes.</li>
+<li>Render fixed-canvas transparent idle/run frames, shadow and optional emissive passes; reject jitter.</li>
+<li>Pack frames and validate sprite metadata, layer alignment and alpha edges.</li>
+<li>Prove mounting, exhaust, animation and zoom in Factorio 2.0.77 before replacing production art.</li>
+</ol>
+<h3>Linux / Codex setup</h3><pre><code>git clone https://github.com/mrcalzon02/HB-TTRPG-tools.git
+cd HB-TTRPG-tools
+bash tools/factorio-render-pipeline/setup-codex-linux.sh --check
+bash tools/factorio-render-pipeline/setup-codex-linux.sh --setup</code></pre>
+<p>The local helper installs image dependencies to a per-user Python environment; Blender is a separately verified executable.</p>
+<div class="workspace-actions"><a class="link-button primary-action" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/tools/factorio-render-pipeline/README.md">Full runbook</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/tools/factorio-render-pipeline/CODEX_WORK_ORDER.md">Codex work order</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/tools/factorio-render-pipeline/setup-codex-linux.sh">Setup script</a></div>
+<p>The reusable procedures live here; each destination game's editable models, sprites and integration tests belong in its own repository.</p></section></main>
+<footer class="ai-shell"><p>Calzon's TTRPG Foundry · <a href="index.html">Back to Tools</a></p></footer>
+<script>
+(() => {
+"use strict";
+const tabs=[...document.querySelectorAll('.ai-tabs [role="tab"]')];
+const panels=tabs.map(t=>document.getElementById(t.getAttribute("aria-controls")));
+if(panels.some(p=>!p))return;
+function activate(){const wanted=decodeURIComponent(location.hash.slice(1));const ix=tabs.findIndex(t=>t.getAttribute("aria-controls")===wanted);const chosen=ix<0?0:ix;tabs.forEach((t,i)=>{const on=i===chosen;t.setAttribute("aria-selected",String(on));t.tabIndex=on?0:-1;if(on)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current");panels[i].hidden=!on;});}
+tabs.forEach((t,i)=>t.addEventListener("keydown",e=>{const next=e.key==="ArrowRight"?(i+1)%tabs.length:e.key==="ArrowLeft"?(i+tabs.length-1)%tabs.length:e.key==="Home"?0:e.key==="End"?tabs.length-1:-1;if(next<0)return;e.preventDefault();tabs[next].focus();tabs[next].click();}));
+window.addEventListener("hashchange",activate);activate();
+})();
+</script></body></html>
