@@ -1,52 +1,85 @@
 #requires -version 5.1
 <#
 .SYNOPSIS
-    Register the HB-TTRPG local workbench in the current Windows user's Start Menu.
+    Install the single-window local archive shortcut (current Windows user).
 .DESCRIPTION
-    Creates only one per-user shortcut. Does not start a background service,
-    install models, upload files, or modify security/antivirus configuration.
-.EXAMPLE
-    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\install-windows.ps1
-.EXAMPLE
-    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\install-windows.ps1 -Uninstall
+    Uses a private Python environment and opens the native WebView window.
+    It does not create a service, console window, or independent HTTP daemon.
 #>
 [CmdletBinding()]
 param([switch]$Uninstall)
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
-if (-not $env:APPDATA) { throw 'Windows APPDATA is required for a per-user Start Menu shortcut.' }
+if (-not $env:APPDATA -or -not $env:LOCALAPPDATA) { throw 'Windows per-user folders are unavailable.' }
+
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
-$launcher = Join-Path $PSScriptRoot 'start-local-hub.ps1'
+$gui = Join-Path $PSScriptRoot 'desktop.py'
 $programs = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs'
 $shortcut = Join-Path $programs 'HB-TTRPG Local Workbench.lnk'
+
 if ($Uninstall) {
     if (Test-Path -LiteralPath $shortcut) {
+        $shell = New-Object -ComObject WScript.Shell
+        $old = $shell.CreateShortcut($shortcut)
+        if ($old.Arguments -notlike '*desktop.py*' -and $old.Arguments -notlike '*start-local-hub.ps1*') {
+            throw 'The shortcut is not the HB-TTRPG workbench; refusing removal.'
+        }
         Remove-Item -LiteralPath $shortcut -Force
-        Write-Host "Removed only the local workbench Start Menu shortcut: $shortcut" -ForegroundColor Green
-    } else { Write-Host 'The workbench shortcut is not currently installed.' }
+        Write-Host "Removed local workbench shortcut: $shortcut"
+    }
     exit 0
 }
-if (-not (Test-Path -LiteralPath $launcher -PathType Leaf)) { throw 'Local workbench launcher is missing.' }
-New-Item -ItemType Directory -Path $programs -Force | Out-Null
-$powershell = Join-Path $PSHOME 'powershell.exe'
-if (-not (Test-Path -LiteralPath $powershell)) { throw 'The Windows PowerShell executable is missing.' }
-# Do not silently replace a shortcut owned by another application.
-if (Test-Path -LiteralPath $shortcut) {
-    $shell = New-Object -ComObject WScript.Shell
-    $existing = $shell.CreateShortcut($shortcut)
-    if ($existing.Arguments -notlike '*start-local-hub.ps1*') {
-        throw "Shortcut collision at $shortcut; refusing to overwrite an unrelated shortcut."
+if (-not (Test-Path -LiteralPath $gui -PathType Leaf)) { throw 'Local desktop.py is missing.' }
+
+$python = $null
+if (Get-Command py -ErrorAction SilentlyContinue) {
+    foreach ($version in @('-3.12','-3')) {
+        $candidate = & py $version -c 'import sys; print(sys.executable if sys.version_info >= (3,10) else "")' 2>$null
+        if ($LASTEXITCODE -eq 0 -and $candidate -and (Test-Path -LiteralPath $candidate)) {
+            $python = [string]$candidate
+            break
+        }
     }
 }
+if (-not $python) {
+    foreach ($name in @('python3','python')) {
+        $command = Get-Command $name -ErrorAction SilentlyContinue
+        if (-not $command) { continue }
+        $candidate = & $command.Source -c 'import sys; print(sys.executable if sys.version_info >= (3,10) else "")' 2>$null
+        if ($LASTEXITCODE -eq 0 -and $candidate -and (Test-Path -LiteralPath $candidate)) {
+            $python = [string]$candidate
+            break
+        }
+    }
+}
+if (-not $python) { throw 'Python 3.10+ is required. Install Python 3.12 and run this installer again.' }
+
+$venv = Join-Path $env:LOCALAPPDATA 'HB-TTRPG-tools\desktop-venv'
+$venvPy = Join-Path $venv 'Scripts\python.exe'
+$venvPyw = Join-Path $venv 'Scripts\pythonw.exe'
+if (-not (Test-Path -LiteralPath $venvPy)) {
+    & $python -m venv $venv
+    if ($LASTEXITCODE -ne 0) { throw 'Could not create the private desktop Python environment.' }
+}
+& $venvPy -m pip install 'pywebview>=5,<7'
+if ($LASTEXITCODE -ne 0) { throw 'Could not install the native window dependency pywebview.' }
+if (-not (Test-Path -LiteralPath $venvPyw)) { throw 'The Python GUI interpreter pythonw.exe was not found.' }
+
+New-Item -ItemType Directory -Path $programs -Force | Out-Null
 $shell = New-Object -ComObject WScript.Shell
+if (Test-Path -LiteralPath $shortcut) {
+    $old = $shell.CreateShortcut($shortcut)
+    if ($old.Arguments -notlike '*desktop.py*' -and $old.Arguments -notlike '*start-local-hub.ps1*') {
+        throw "Shortcut collision at $shortcut; refusing overwrite."
+    }
+}
 $link = $shell.CreateShortcut($shortcut)
-$link.TargetPath = $powershell
-$link.Arguments = '-NoProfile -STA -ExecutionPolicy Bypass -File "' + $launcher + '"'
+$link.TargetPath = $venvPyw
+$link.Arguments = '"' + $gui + '"'
 $link.WorkingDirectory = $repo
-$link.Description = 'Open the locally hosted HB-TTRPG archive and private narration studio'
-$link.IconLocation = $powershell + ',0'
+$link.Description = 'HB-TTRPG archive and private narration in one window'
+$link.IconLocation = (Join-Path $env:WINDIR 'System32\shell32.dll') + ',14'
 $link.Save()
-if (-not (Test-Path -LiteralPath $shortcut)) { throw 'Windows did not save the local workbench shortcut.' }
-Write-Host ('Installed the per-user Start Menu shortcut: ' + $shortcut) -ForegroundColor Green
-Write-Host 'Launch from Start > HB-TTRPG Local Workbench. Keep its PowerShell window open while browsing.'
-Write-Host 'No models or audio were uploaded, and no service was installed to run at startup.'
+if (-not (Test-Path -LiteralPath $shortcut)) { throw 'The shortcut was not saved.' }
+Write-Host "Installed HB-TTRPG Local Workbench: $shortcut" -ForegroundColor Green
+Write-Host 'Close its native window to stop its internal localhost server; no console to close.'

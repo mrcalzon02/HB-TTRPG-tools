@@ -1,18 +1,73 @@
 # HB–TTRPG local archive workbench
 
-This optional Windows-local web interface **serves the existing checkout**, including all its HTML pages and static assets, without replacing the GitHub Pages site. It adds a local narration studio backed by a previously installed Voicebox service. **No Google Drive access, OAuth flow, cloud upload or repository audio commit exists in this workbench.**
+This application hosts the **existing** local checkout without changing the GitHub Pages site. Its new default mode is a **single native desktop window**: one application owns its HTTP server in a background thread. Closing that window stops the loopback listener, releases port 17861, cancels queued jobs, and terminates an optional Voicebox backend started by this session. There is no independent server daemon, tray process, second browser, or console required for normal use.
 
-## One-command start
+## Windows 10/11
 
-From your checked-out HB-TTRPG-tools folder, run:
+Install Python 3.10+ (Python 3.12 recommended), then from the checkout run:
 
-    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\start-local-hub.ps1
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\install-windows.ps1
+```
 
-The console opens http://127.0.0.1:17861/__local/ and runs until you press Ctrl+C. Requires Python 3.10 or newer (prefer Python 3.12); does not need the Voicebox model merely to browse archived tools. To change the port use `-Port 17862`; to suppress opening a browser use `-NoBrowser`. Do not run this on a public-facing machine or forward the ports.
+The installer creates a private per-user virtual environment, installs `pywebview`, and adds **HB-TTRPG Local Workbench** to the Start Menu. That shortcut runs `pythonw.exe`, so only the archive window appears. WebView2 Runtime must be installed (usually already present on current Windows systems). To launch from PowerShell after installation:
 
-The archive explorer links to existing local pages and serves static files from this checkout. Individual external-service integrations and backends still require their own upstream dependencies; simply hosting the static archive does not emulate online APIs or make every service work offline.
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\start-local-hub.ps1
+```
+
+Remove the shortcut without deleting the checkout, Python environment, or private recordings:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\install-windows.ps1 -Uninstall
+```
+
+## Linux: Ubuntu / Debian / Mint and Fedora
+
+The Linux window uses GTK3 + WebKit2GTK 4.1 through pywebview. Supported installer paths are **Ubuntu 22.04/24.04 and derivatives (including Linux Mint), Debian 12+, and Fedora 43**. Desktop rendering still depends on the system WebKit/GTK stack and an active graphical desktop session; a successful headless test does not guarantee every graphics driver works.
+
+From the repository checkout, run one of these:
+
+```bash
+# Ubuntu / Debian / Mint: installs native distro GUI prerequisites with apt
+bash tools/local-hub/install-linux.sh --deps
+
+# Fedora: same command; auto-detects Fedora and uses dnf
+bash tools/local-hub/install-linux.sh --deps
+
+# If GTK/WebKit and python3-venv are already installed:
+bash tools/local-hub/install-linux.sh
+```
+
+The installer creates `~/.local/share/hb-ttrpg-tools/desktop-venv` (or `$XDG_DATA_HOME/hb-ttrpg-tools/desktop-venv`), uses the distro's PyGObject packages, installs the pywebview GTK integration, and adds a desktop-app menu entry. Start it from your application menu or:
+
+```bash
+bash tools/local-hub/start-local-hub.sh
+```
+
+Remove only the application menu entry with `bash tools/local-hub/install-linux.sh --uninstall`. The Linux private narration directory defaults to `~/.local/share/hb-ttrpg-tools/voicebox-production/private` or its `$XDG_DATA_HOME` equivalent.
+
+## Process ownership and crash behavior
+
+- One GUI window owns one in-process localhost HTTP server, bound to `127.0.0.1` only. No independent service is installed.
+- Port binding is a single-instance guard. A second launcher fails without terminating or attaching to another process. Change ports with `--port` in `desktop.py` or `start-local-hub.sh`, or `-Port` in the Windows launcher.
+- Normal window close triggers server shutdown, stops the HTTP thread, and cleans up this session's optional Voicebox subprocess. An already-running *external* Voicebox is not owned or terminated by the archive.
+- A crashed or forcibly killed GUI process cannot retain its internal HTTP thread; the OS releases its socket. A forced kill during *externally spawned voice inference* is less predictable, so do not equate this with a guarantee about unrelated external services.
+- If you close the GUI while a voice job is in flight, the session ends rather than waiting through an extended inference timeout. Incomplete jobs may need to be submitted again; previously generated private files are not deleted.
+- The original headless server is still available for diagnostics with Windows `start-local-hub.ps1 -NoBrowser`, or by running `server.py --private /safe/private/dir` with Python 3.10+.
+
+## Verification
+
+```bash
+python -m unittest discover -s tools/local-hub/tests -p "test_*.py" -v
+```
+
+CI checks the Python routes and fake-GUI lifecycle on Windows, Ubuntu 22.04, Ubuntu 24.04, and Fedora 43. It checks Linux shell syntax and parses Windows PowerShell launchers. These are **headless tests**; actual window rendering and speech synthesis still need hands-on host verification.
+
+**Scope:** Archive navigation, original pages, and Narration Studio are reused unchanged. Some externally hosted services and optional AI engines still require their own installations or online APIs. Private audio is kept outside the Git checkout and is never automatically uploaded.
 
 ## Private narration
+
 
 The Narration studio tab detects Voicebox at localhost:17493. When present, it can reuse the engine previously installed under `%LOCALAPPDATA%\HB-TTRPG-tools\voicebox-production\source\voicebox`. If you have not completed its installation or created a consented voice profile, the rest of the archive still works.
 
@@ -48,13 +103,13 @@ Tests use fake WAVs and temporary directories, not real voice samples, and do no
 
 **Known installation blocker:** The previous Windows Voicebox installer emitted a generic pip error about building requirements from `pyproject.toml`. The screenshot did not identify which dependency failed, so the exact wheel-build failure is not yet resolved. The local archive runs regardless; inspect the full pip build log to diagnose the package before further installer changes.
 
-## Per-user Windows installation
+## Legacy Windows installation notes (superseded by the single-window app)
 
 To add a convenient **Start Menu shortcut** without installing a Windows service or altering the public website, run:
 
     powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\install-windows.ps1
 
-Launch **HB-TTRPG Local Workbench** from the Start Menu. It starts a console and browser; closing the console stops the local server. To remove only the shortcut (preserving your private audio, models and checkout):
+Launch **HB-TTRPG Local Workbench** from the Start Menu. The current shortcut launches the native window with no separate console or browser. Closing the window stops the internal server. To remove only the shortcut (preserving your private audio, models and checkout):
 
     powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\install-windows.ps1 -Uninstall
 

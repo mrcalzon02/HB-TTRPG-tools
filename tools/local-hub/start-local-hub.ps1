@@ -1,50 +1,42 @@
 #requires -version 5.1
 <#
 .SYNOPSIS
-    Open the complete local HB-TTRPG archive, with optional private Voicebox narration.
+    Start one-window HB-TTRPG workbench or the optional legacy headless server.
 .EXAMPLE
     powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\start-local-hub.ps1
+.EXAMPLE
+    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\start-local-hub.ps1 -NoBrowser
 #>
 [CmdletBinding()]
 param([ValidateRange(1024,65535)][int]$Port=17861, [switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
-$server = Join-Path $PSScriptRoot 'server.py'
-if (-not $env:LOCALAPPDATA) { throw 'LOCALAPPDATA was not found; this launcher requires Windows.' }
+if (-not $env:LOCALAPPDATA) { throw 'LOCALAPPDATA is unavailable; use start-local-hub.sh on Linux.' }
 $workspace = Join-Path $env:LOCALAPPDATA 'HB-TTRPG-tools\voicebox-production'
 $private = Join-Path $workspace 'private'
 $voicebox = Join-Path $workspace 'source\voicebox'
-if ([IO.Path]::GetFullPath($private).TrimEnd('\').StartsWith(
-      [IO.Path]::GetFullPath($repo).TrimEnd('\') + '\',
-      [StringComparison]::OrdinalIgnoreCase)) {
-  throw 'Private output may not live inside the public Git checkout.'
+
+if (-not $NoBrowser) {
+    $gui = Join-Path $PSScriptRoot 'desktop.py'
+    $venvGui = Join-Path $env:LOCALAPPDATA 'HB-TTRPG-tools\desktop-venv\Scripts\pythonw.exe'
+    if (-not (Test-Path -LiteralPath $venvGui)) {
+        throw 'First run tools/local-hub/install-windows.ps1 to install the desktop UI.'
+    }
+    # pythonw owns the HTTP thread. PowerShell exits immediately; no server child
+    # is left behind when the window closes.
+    $arguments = ('"{0}" --port {1}' -f $gui, $Port)
+    Start-Process -FilePath $venvGui -ArgumentList $arguments -WorkingDirectory $repo
+    return
+}
+
+# Explicit headless compatibility mode for diagnostics/automation only.
+$python = Join-Path $env:LOCALAPPDATA 'HB-TTRPG-tools\desktop-venv\Scripts\python.exe'
+if (-not (Test-Path -LiteralPath $python)) {
+    $candidate = Get-Command python -ErrorAction SilentlyContinue
+    if (-not $candidate) { throw 'Python 3.10+ is required for headless mode.' }
+    $python = $candidate.Source
 }
 New-Item -ItemType Directory -Path $private -Force | Out-Null
-$python = $null
-$cmd = Get-Command py -ErrorAction SilentlyContinue
-if ($cmd) {
-  $candidate = & py -3.12 -c 'import sys; print(sys.executable)' 2>$null
-  if ($LASTEXITCODE -eq 0 -and $candidate -and (Test-Path -LiteralPath $candidate)) {
-    $python = [string]$candidate
-  }
-}
-if (-not $python) {
-  foreach ($name in @('python3','python')) {
-    $cmd = Get-Command $name -ErrorAction SilentlyContinue
-    if (-not $cmd) { continue }
-    $ok = & $cmd.Source -c 'import sys; print(sys.version_info >= (3,10))' 2>$null
-    if ($LASTEXITCODE -eq 0 -and $ok -eq 'True') { $python=$cmd.Source; break }
-  }
-}
-if (-not $python) {
-  throw 'Python 3.10+ is required for the local archive. The speech engine is optional. Install Python 3.12 from python.org or winget and rerun.'
-}
-$url = "http://127.0.0.1:$Port/__local/"
-Write-Host "HB-TTRPG local web archive: $url" -ForegroundColor Cyan
-Write-Host "Private generation directory: $private" -ForegroundColor Gray
-Write-Host 'Leave this window open while using the archive; Ctrl+C stops the server.' -ForegroundColor Yellow
-$argsForServer = @($server,'--root',$repo,'--private',$private,'--voicebox',$voicebox,'--port',[string]$Port)
-if (-not $NoBrowser) { $argsForServer += '--open-browser' }
-& $python @argsForServer
-if ($LASTEXITCODE -ne 0) { throw "HB-TTRPG local server exited with code $LASTEXITCODE" }
+& $python (Join-Path $PSScriptRoot 'server.py') --root $repo --private $private --voicebox $voicebox --port $Port
+if ($LASTEXITCODE -ne 0) { throw "Local server exited with code $LASTEXITCODE" }

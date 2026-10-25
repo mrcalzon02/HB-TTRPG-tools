@@ -1,0 +1,54 @@
+name: Local Workbench desktop compatibility
+
+on:
+  push:
+    paths:
+      - 'tools/local-hub/**'
+      - '.github/workflows/local-hub-desktop.yml'
+  pull_request:
+    paths:
+      - 'tools/local-hub/**'
+      - '.github/workflows/local-hub-desktop.yml'
+  workflow_dispatch:
+
+jobs:
+  archive-lifecycle:
+    name: Tests on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-22.04, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Server and desktop lifecycle (headless)
+        run: python -m unittest discover -s tools/local-hub/tests -p 'test_*.py' -v
+      - name: Check Linux launcher syntax
+        if: runner.os == 'Linux'
+        run: bash -n tools/local-hub/start-local-hub.sh tools/local-hub/install-linux.sh
+      - name: Parse Windows installer scripts
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          foreach ($script in @('tools/local-hub/start-local-hub.ps1','tools/local-hub/install-windows.ps1')) {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $script), [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count -gt 0) { throw ($errors | Out-String) }
+          }
+
+  fedora:
+    name: Fedora 43 headless lifecycle
+    runs-on: ubuntu-latest
+    container: fedora:43
+    steps:
+      - name: Install test runtime
+        run: dnf install -y python3 git tar gzip
+      - uses: actions/checkout@v4
+      - name: Verify server and desktop lifecycle
+        run: python3 -m unittest discover -s tools/local-hub/tests -p 'test_*.py' -v
+      - name: Check shell launcher syntax
+        run: bash -n tools/local-hub/start-local-hub.sh tools/local-hub/install-linux.sh

@@ -250,15 +250,25 @@ class HubState:
             return dict(record) if record else None
 
     def close(self):
+        # GUI shutdown must not leave this session's optional inference server
+        # resident after the workbench window disappears.
         self.executor.shutdown(wait=False, cancel_futures=True)
-        if self.backend_process is not None and self.backend_process.poll() is None:
+        process = self.backend_process
+        if process is not None and process.poll() is None:
             try:
-                self.backend_process.terminate()
-                self.backend_process.wait(timeout=5)
-            except (OSError, subprocess.TimeoutExpired):
-                print("[local-hub] Optional Voicebox backend did not stop cleanly", file=sys.stderr)
+                process.terminate()
+                try:
+                    process.wait(timeout=3)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait(timeout=3)
+            except (OSError, subprocess.TimeoutExpired) as error:
+                print("[local-hub] Optional Voicebox backend cleanup failed: %s" % error,
+                      file=sys.stderr)
         if self.backend_log is not None:
             self.backend_log.close()
+            self.backend_log = None
+        self.backend_process = None
 
 def handler_factory(state: HubState):
     ui = Path(__file__).parent

@@ -22,18 +22,13 @@ The profile and engram describe Charles's presentation and response logic. Speci
 The [Software section](software.html) groups [Simple Sound Manager](simple-sound-manager.html), [CubeChat](cubechat.html) and the new [Beckenburg planning page](beckenburg.html). The game's authoritative planning sources are under [docs/beckenburg](docs/beckenburg/README.md), with production stages, ghost/hunter systems, maps, Java/Swing/3D/LAN architecture and test gates. A Java 17 Swing/software-3D test-house prototype, an early-PlayStation-style [visual direction](software/beckenburg/art/VISUAL_DIRECTION.md), the [Cleric model sheet](software/beckenburg/art/profiles/cleric-01.svg), and the [first equipment study](software/beckenburg/art/profiles/equipment-01.svg) now exist as early development sources in [software/beckenburg](software/beckenburg/README.md). They do not constitute a playable game or finished S1 milestone.
 
 ## Installed local archive workbench
+The complete HTML archive runs inside an **optional single-window desktop app** for Windows and Linux. It reuses the existing original pages, archive search, and private narration studio without modifying GitHub Pages. A local HTTP server lives inside the GUI process; closing the window stops it, rather than leaving a console/server process in the background.
 
-The complete HTML archive can also run from an **optional installed, localhost-only browser interface**, without modifying the GitHub Pages site. It includes archive search, the original pages, and a private narration studio that reuses a working local Voicebox installation. No cloud accounts or automatic uploads are involved.
+Install once from your checkout:
+- **Windows:** `powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\install-windows.ps1`, then launch the Start Menu shortcut.
+- **Ubuntu / Debian / Linux Mint / Fedora:** `bash tools/local-hub/install-linux.sh --deps`, then launch the application from the desktop menu.
 
-From a Windows checkout:
-
-    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\start-local-hub.ps1
-
-To add the interface to the Start Menu for your current Windows user:
-
-    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\local-hub\install-windows.ps1
-
-See [local workbench setup, privacy policy, and tests](tools/local-hub/README.md). This runs the existing site locally, but pages requiring an external online backend still need their corresponding service.
+See [cross-platform installation, shutdown behavior, limitations, and tests](tools/local-hub/README.md). Optional external integrations still require their corresponding service; no cloud upload is introduced by the local workbench.
 
 ## Local AI voice production — Voicebox
 
