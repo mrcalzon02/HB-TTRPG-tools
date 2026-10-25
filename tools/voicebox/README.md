@@ -110,10 +110,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\voicebox\run-nutbust
 
 By default the launcher:
 
-1. Uses **winget** to install missing Git, FFmpeg/ffprobe, just, Python 3.12 and rclone, without replacing already installed tools.
+1. Uses **winget** to install missing Git, FFmpeg/ffprobe, Python 3.12 and rclone, without replacing already installed tools. The Just installer is no longer required: the launcher runs the upstream Windows Python setup steps directly instead.
 2. Prepares three 20-second private voice-reference segments from the owner's original 82-second WAV, or extracts the existing private sample ZIP.
 3. If necessary, initiates Google Drive OAuth login in a browser using rclone. It verifies access to the owner's established [NUTBUSTER folder](https://drive.google.com/drive/folders/1IwvPgWwzabBliPODifPDdT61WqJhfmxu) BEFORE expensive model installation or synthesis. Google's authorization step cannot legally be automated away; first-time rclone setup may require a Google OAuth client if its shared credentials no longer function.
-4. Clones Voicebox and NUTBUSTER-R into an external private LOCALAPPDATA workspace. Uses upstream **just setup-python** to build the Python 3.12 speech runtime; compiles Python modules with `compileall`. It **does not build the unnecessary Tauri desktop GUI or a standalone installer**.
+4. Clones Voicebox and NUTBUSTER-R into an external private LOCALAPPDATA workspace. Runs the upstream Windows Python 3.12 setup steps directly from `backend/requirements.txt`, with GPU-aware PyTorch installation and `compileall`. It does not need Just or compile an unnecessary Tauri desktop application. It **does not build the unnecessary Tauri desktop GUI or a standalone installer**.
 5. Creates/reuses the locally stored owner voice profile, automatically downloads speech/Whisper model weights when required, generates all **74** missing Original-announcer event lines, and composes normalised review clips and an `audition.mp3` reel with `composition.json` hashes.
 6. Uploads **only** the composed review pack (not the input WAV or voice profile) to `NUTBUSTER/Voicebox-Original/<timestamp>-all-luxtts/` in Google Drive using rclone, and verifies the resulting remote copy with `rclone check`. Distinct run folders are never overwritten. It does **not** add or replace live-game voice files.
 
@@ -122,3 +122,7 @@ The first run needs substantial downloads and depends on machine memory, disk ca
 Optional switches: `-Scope preview` generates six audition lines first instead of all 74; `-Engine qwen` selects a different cloned-voice model; `-SkipDriveUpload` creates only the local pack. By default it uses `-Scope all -Engine luxtts` and uploads to the already verified NUTBUSTER Drive folder.
 
 Generated voice outputs live under `%LOCALAPPDATA%\HB-TTRPG-tools\voicebox-production\private\generated\`. The upstream Voicebox and NUTBUSTER source trees are cached under `%LOCALAPPDATA%\HB-TTRPG-tools\voicebox-production\source\`. The public Foundry repository receives no audio files or private Google OAuth credentials.
+
+### Windows Just/antivirus installation note
+
+A user test found that WinGet returned 0x80070003 (path not found) while installing Casey.Just; AVG also raised an alert, although the available log does not establish a causal link. The repaired one-command launcher skips installing Just altogether and provisions Voicebox's Python backend directly. **Keep AVG protection enabled**. If antivirus quarantines a different dependency, review the actual detection and official publisher before proceeding; this workflow must never change antivirus exclusions or bypass security software. The script is committed but has **not** been run end-to-end on the user's Windows computer, so downloaded model compatibility and Drive OAuth still require real-world verification.
