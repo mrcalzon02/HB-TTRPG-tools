@@ -125,7 +125,21 @@ function Setup-Voicebox-PythonBackend([string]$root, [string]$python312) {
     $requirements = Join-Path $root 'backend\requirements.txt'
     if (-not (Test-Path -LiteralPath $requirements)) { throw ('Missing upstream requirements: ' + $requirements) }
     Stage 'Installing upstream Voicebox Python dependencies'
-    Invoke-Checked $venvPy @('-m','pip','install','-r',$requirements)
+    # Persist a full private pip log so wheel/pyproject build failures identify
+    # their source package instead of reporting only a generic subprocess error.
+    $diagDir = Join-Path $env:LOCALAPPDATA 'HB-TTRPG-tools\voicebox-production\private\diagnostics'
+    New-Item -ItemType Directory -Path $diagDir -Force | Out-Null
+    $pipLog = Join-Path $diagDir ('voicebox-pip-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.log')
+    Stage ('Verbose pip build report: ' + $pipLog)
+    & $venvPy -m pip --log $pipLog install --verbose -r $requirements
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host ('Build failure. Detailed private pip log: ' + $pipLog) -ForegroundColor Red
+        if (Test-Path -LiteralPath $pipLog) {
+            Write-Host 'Recent pip diagnostics (look above the pyproject error for the failing package):' -ForegroundColor Yellow
+            Get-Content -LiteralPath $pipLog -Tail 75 | ForEach-Object { Write-Host $_ }
+        }
+        throw ('Voicebox dependency build failed; review the full pip log at ' + $pipLog)
+    }
     Invoke-Checked $venvPy @('-m','pip','install','--no-deps','chatterbox-tts')
     Invoke-Checked $venvPy @('-m','pip','install','--no-deps','hume-tada')
     Invoke-Checked $venvPy @('-m','pip','install','--no-deps','omnivoice')
