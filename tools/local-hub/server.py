@@ -10,6 +10,7 @@ import secrets
 import subprocess
 import sys
 import threading
+import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -20,6 +21,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "voicebox"))
 from narration_batch import render, validate_manifest
+from voice_intake import multipart, document, lines as parse_voice_lines, convert_sample, profile as register_voice_profile
 
 BASE = "/__local"
 BLOCKED = {".git", ".github", ".venv", "venv", "node_modules", "__pycache__", "private",
@@ -130,6 +132,78 @@ class HubState:
         except (OSError, ValueError, urllib.error.URLError) as error:
             raise RuntimeError("Voicebox is not ready; finish installing the speech engine locally.") from error
 
+
+    def stored_references(self):
+        folder = self.private / "references"
+        return [p for p in sorted(folder.glob("owner-primary-*.wav"))
+                if p.is_file() and not p.is_symlink()][:3] if folder.is_dir() else []
+
+    def submit_intake(self, fields, files):
+        if fields.get("consent") != "yes":
+            raise ValueError("Confirm that you own or are authorized to use the voice recording")
+        script = fields.get("lines", "")
+        if "document" in files:
+            name, body = files["document"]
+            script = script + "\n" + document(name, body)
+        takes = parse_voice_lines(script)
+        existing_id = fields.get("voice", "").strip()
+        name = fields.get("profile_name", "My Voice").strip()
+        if not existing_id and (not name or len(name) > 100):
+            raise ValueError("Name your new voice profile")
+        source = fields.get("source", "")
+        if existing_id:
+            available = self.profiles()
+            if not any(p["id"] == existing_id and p["samples"] > 0 for p in available):
+                raise ValueError("Select a local profile that already has reference samples")
+        elif "audio" not in files and (source != "saved" or not self.stored_references()):
+            raise ValueError("Drop a voice sample, or choose your saved private references")
+        if "audio" in files and Path(files["audio"][0]).suffix.lower() not in {".wav", ".mp3", ".m4a", ".flac", ".ogg"}:
+            raise ValueError("Voice reference must be WAV, MP3, M4A, FLAC or OGG")
+        job_id = secrets.token_hex(10)
+        with self.lock:
+            self.jobs[job_id] = {"id": job_id, "status": "queued", "finished": 0,
+                "total": len(takes), "project": fields.get("project", "narration"),
+                "error": None}
+        request = {"voice": existing_id, "profile_name": name, "takes": takes,
+                   "source": source, "audio": files.get("audio"),
+                   "reference_text": fields.get("reference_text", ""),
+                   "project": fields.get("project", "narration")}
+        self.executor.submit(self._run_intake, job_id, request)
+        return {"id": job_id, "status": "queued"}
+
+    def _run_intake(self, job_id, request):
+        def update(**changes):
+            with self.lock:
+                self.jobs[job_id].update(changes)
+        def progress(done, total):
+            update(finished=done)
+        try:
+            update(status="preparing-reference")
+            with tempfile.TemporaryDirectory(prefix="local-voice-", dir=self.private) as tmp:
+                if request["voice"]:
+                    pid = request["voice"]
+                else:
+                    if request["audio"]:
+                        filename, audio = request["audio"]
+                        samples = [convert_sample(filename, audio, Path(tmp))]
+                    else:
+                        samples = self.stored_references()
+                        if not samples:
+                            raise ValueError("Previously saved private voice samples were not found")
+                    update(status="creating-profile")
+                    pid = register_voice_profile(request["profile_name"], samples,
+                                                 request["reference_text"])
+                update(status="generating", voice=pid)
+                manifest = render(
+                    {"project": request["project"], "voice": pid,
+                     "engine": "luxtts", "lines": request["takes"]},
+                    self.private / "generated" / job_id, progress=progress)
+                update(status="completed", output=str(self.private / "generated" / job_id),
+                    manifest={"lineCount": manifest["lineCount"], "engine": "luxtts"},
+                    download=BASE + "/outputs/" + job_id + "/review-pack.zip")
+        except Exception as error:
+            update(status="failed", error=str(error)[:500])
+
     def submit(self, source):
         data = validate_manifest(source)  # Caller cannot submit arbitrary filesystem paths.
         job_id = secrets.token_hex(10)
@@ -218,6 +292,8 @@ def handler_factory(state: HubState):
                 return self.send_file(ui / path.rsplit("/", 1)[-1])
             if path == BASE + "/api/catalog":
                 return self.send_json(200, {"pages": state.pages})
+            if path == BASE + "/api/reference-status":
+                return self.send_json(200, {"savedSamples": len(state.stored_references())})
             if path == BASE + "/api/profiles":
                 try:
                     return self.send_json(200, {"ready": True, "profiles": state.profiles()})
@@ -260,18 +336,26 @@ def handler_factory(state: HubState):
             port = self.server.server_port
             if self.headers.get("Origin") not in (f"http://localhost:{port}", f"http://127.0.0.1:{port}"):
                 return self.send_json(403, {"error": "Same-origin request required"})
-            if urllib.parse.urlsplit(self.path).path != BASE + "/api/jobs":
+            path = urllib.parse.urlsplit(self.path).path
+            if path not in (BASE + "/api/jobs", BASE + "/api/intake"):
                 return self.send_json(404, {"error": "Unknown endpoint"})
-            if self.headers.get("Content-Type", "").split(";", 1)[0] != "application/json":
-                return self.send_json(415, {"error": "JSON request required"})
             try:
                 size = int(self.headers.get("Content-Length", "0"))
-                if not 0 < size <= 150000:
-                    return self.send_json(413, {"error": "Request too large or empty"})
-                data = json.loads(self.rfile.read(size))
-                outcome = state.submit(data)
-            except (ValueError, KeyError, TypeError) as exc:
+                maximum = 52 * 1024 * 1024 if path == BASE + "/api/intake" else 150000
+                if not 0 < size <= maximum:
+                    return self.send_json(413, {"error": "Upload is empty or exceeds the local size limit"})
+                content_type = self.headers.get("Content-Type", "")
+                if path == BASE + "/api/intake":
+                    fields, files = multipart(content_type, self.rfile.read(size))
+                    outcome = state.submit_intake(fields, files)
+                else:
+                    if content_type.split(";", 1)[0] != "application/json":
+                        return self.send_json(415, {"error": "JSON request required"})
+                    outcome = state.submit(json.loads(self.rfile.read(size)))
+            except (ValueError, KeyError, TypeError, UnicodeError) as exc:
                 return self.send_json(400, {"error": str(exc)[:300]})
+            except RuntimeError as exc:
+                return self.send_json(503, {"error": str(exc)[:300]})
             return self.send_json(202, outcome)
 
         def log_message(self, fmt, *args):
