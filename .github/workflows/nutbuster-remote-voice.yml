@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - .github/workflows/nutbuster-remote-voice.yml
-      - tools/voicebox/prepare_public_reference.py
+      - tools/voicebox/references/Sphinx-of-Black-Quartz-Judge-my-Vow.mp3
   workflow_dispatch:
     inputs:
       scope:
@@ -31,18 +31,28 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Checkout existing public NUTBUSTER announcer recordings
+      - name: Checkout public NUTBUSTER narration scripts
         uses: actions/checkout@v4
         with:
           repository: mrcalzon02/NUTBUSTER-R
           ref: main
           path: input/nutbuster
           persist-credentials: false
-      - name: Validate audio catalog and prepare voice reference
+      - name: Install FFmpeg on temporary GitHub runner
         shell: bash
         run: |
-          python3 tools/voicebox/prepare_public_reference.py \
-            --nutbuster input/nutbuster --output "$RUNNER_TEMP/reference.wav"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          ffmpeg -version | head -n 1
+      - name: Prepare one spoken source recording (no game effects or grunts)
+        shell: bash
+        run: |
+          test -s tools/voicebox/references/Sphinx-of-Black-Quartz-Judge-my-Vow.mp3
+          echo "ce4c621e3587b9a7f6fd1b6237433f779fa4b8ffb1bae4154ae6739da0362cd2  tools/voicebox/references/Sphinx-of-Black-Quartz-Judge-my-Vow.mp3" | sha256sum -c -
+          ffmpeg -nostdin -hide_banner -loglevel error -y \
+            -i tools/voicebox/references/Sphinx-of-Black-Quartz-Judge-my-Vow.mp3 \
+            -ac 1 -ar 24000 -c:a pcm_s16le "$RUNNER_TEMP/reference.wav"
+          ffprobe -v error -show_entries format=duration -of default=nk=1:nw=1 "$RUNNER_TEMP/reference.wav"
           python3 tools/voicebox/remote_luxtts_nutbuster.py \
             --nutbuster input/nutbuster --reference "$RUNNER_TEMP/reference.wav" \
             --out "$RUNNER_TEMP/unused" --scope all --validate
