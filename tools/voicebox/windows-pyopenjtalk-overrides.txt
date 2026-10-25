@@ -1,0 +1,4 @@
+# Suppress only the original pyopenjtalk 0.4.1 source build on Windows.
+# pyopenjtalk-plus 0.4.1.post10 provides the same pyopenjtalk import with cp312-win_amd64 wheels.
+# Keep misaki[ja] installed and verify Japanese pronunciation at runtime.
+pyopenjtalk; sys_platform != "win32"
