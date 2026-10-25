@@ -11,6 +11,7 @@ on:
       - tools/voicebox/tests/test_missing_phonemes.py
       - tools/voicebox/tests/test_spurious_prefix.py
       - tools/voicebox/tests/test_spoken_numbers.py
+      - tools/voicebox/tests/test_partial_production.py
   workflow_dispatch:
     inputs:
       scope:
@@ -43,6 +44,10 @@ jobs:
           ref: main
           path: input/nutbuster
           persist-credentials: false
+      - name: Verify rejected cues cannot discard successful recordings
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tools/voicebox/tests -p 'test_partial_production.py' -v
       - name: Install FFmpeg on temporary GitHub runner
         shell: bash
         run: |
@@ -97,7 +102,7 @@ jobs:
           PYTHONPATH: ${{ runner.temp }}/luxtts
         run: |
           python -m unittest discover -s tools/voicebox/tests -p 'test_spoken_numbers.py' -v
-      - name: Generate all 74 verified narration takes
+      - name: Generate all narration takes while preserving verified audio and failed IDs
         shell: bash
         env:
           PYTHONPATH: ${{ runner.temp }}/luxtts
@@ -107,10 +112,29 @@ jobs:
             --nutbuster input/nutbuster --reference "$RUNNER_TEMP/reference.wav" \
             --out "$RUNNER_TEMP/rendered" --scope "$SCOPE"
           test -s "$RUNNER_TEMP/nutbuster-voice-review.zip"
+      - name: Summarize verified recordings and lines requiring retry
+        shell: bash
+        run: |
+          export REVIEW_DIR="$RUNNER_TEMP/rendered"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          data=json.loads((Path(os.environ["REVIEW_DIR"])/"manifest.json").read_text())
+          line=("Narration QA: %s/%s verified, %s rejected; status=%s" %
+                (data["verifiedCount"],data["requestedLineCount"],
+                 data["failedCount"],data["status"]))
+          print(line)
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
+              out.write("### "+line+"\n")
+              if data["failedCount"]:
+                  out.write("Rejected cues: "+", ".join(x["key"] for x in data["failedTakes"])+"\n")
+          if data["failedCount"]:
+              print("::warning::Some cues failed voice QA; verified recordings and a retry list have been preserved")
+          PY
       - name: Publish sound files as downloadable GitHub artifact
         uses: actions/upload-artifact@v4
         with:
-          name: NUTBUSTER-Verified-Narration-WAVs
+          name: NUTBUSTER-Narration-QA-Results
           path: ${{ runner.temp }}/nutbuster-voice-review.zip
           if-no-files-found: error
           retention-days: 30
