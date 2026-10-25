@@ -213,6 +213,7 @@ try {
     Stage 'Looking for your voice reference WAV or previously downloaded reference ZIP'
     $wav = Find-VoiceSource $ReferenceWav 'For those not yet born.wav'
     $zip = Find-VoiceSource $ReferenceZip 'owner-voicebox-reference-segments.zip'
+    if (-not $zip -and -not $ReferenceZip) { $zip = Find-VoiceSource '' 'NUTBUSTER_voice_reference_pack.zip' }
     $samples = @(Get-ChildItem -LiteralPath $references -Filter 'owner-primary-*.wav' -File -ErrorAction SilentlyContinue)
     if (-not $wav -and -not $zip -and $samples.Count -ne 3) {
         Stage 'No reference found automatically; opening the Windows file picker'
