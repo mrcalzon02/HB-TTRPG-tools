@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="description" content="Private local archive and voice production workbench">
+<title>HB-TTRPG Local Workbench</title>
+<link rel="stylesheet" href="/__local/app.css">
+<script defer src="/__local/app.js"></script>
+</head>
+<body>
+<header><div class="brand"><div class="logo">H</div><div><small>LOCAL WORKBENCH</small><h1>HB–TTRPG Archive</h1></div></div><span class="local"><span class="dot"></span> This computer only</span></header>
+<main>
+<section class="hero"><small>YOUR FILES · YOUR MACHINE</small><h2>One home for your archive and creative tools.</h2><p>Run the original site locally, browse its tools, and produce voiceovers with your own Voicebox profiles. This workbench never uploads your voice, models, or narration projects.</p><div class="actions"><a class="button primary" href="/index.html">Original homepage</a><a class="button" href="/audio-laboratory.html">Audio laboratory</a></div></section>
+<nav class="tabs" aria-label="Workbench sections">
+<button id="tab-library" class="tab active" aria-selected="true">Archive explorer</button>
+<button id="tab-voice" class="tab" aria-selected="false">Narration studio</button>
+<button id="tab-jobs" class="tab" aria-selected="false">Production history</button>
+</nav>
+<section class="panel" id="panel-library">
+<div class="heading"><div><h2>Archive explorer</h2><p>Existing tools are served unchanged from this Git checkout.</p></div><span id="page-count" class="badge">Loading archive…</span></div>
+<div class="fields"><label for="find-pages">Find a tool</label><input id="find-pages" type="search" placeholder="Find a generator, campaign, module, page…" autocomplete="off">
+<label class="check"><input id="only-root" type="checkbox" checked> Main archive pages only</label></div>
+<div class="cards" id="archive-results" aria-live="polite">Loading local pages…</div>
+</section>
+<section class="panel hidden" id="panel-voice">
+<div class="heading"><div><h2>Narration studio</h2><p>Produce reusable local dialogue, lore, instructions, and voiceovers.</p></div><span class="badge">NO CLOUD UPLOADS</span></div>
+<p class="note">Use an existing local Voicebox voice profile for recordings you own or are authorized to clone. Output stays outside the repository. You manually export finished review packages.</p>
+<div id="engine-status" class="status" aria-live="polite">Checking installed Voicebox…</div>
+<div class="two-col"><label>Project name<input id="project" value="narration" maxlength="64"></label><label>Speech engine<select id="engine"><option value="luxtts">LuxTTS — lightweight</option><option value="qwen">Qwen3-TTS</option><option value="chatterbox_turbo">Chatterbox Turbo</option><option value="chatterbox">Chatterbox Multilingual</option><option value="tada">TADA</option></select></label></div>
+<div class="fields"><label>Voice profile<select id="profile"><option value="">Waiting for Voicebox…</option></select></label><button class="small" id="refresh-profiles">Refresh voices</button></div>
+<div class="fields"><label for="lines">Lines — one take per line or use <code>event-key | words to speak</code></label><textarea id="lines" rows="9" placeholder="intro | Welcome aboard.&#10;mission | Your journey begins here.&#10;Unlabeled lines get a generated ID."></textarea><p class="hint">Maximum 300 takes per batch. Takes run sequentially to avoid competing for model memory.</p></div>
+<div class="actions"><button class="button primary" id="generate">Generate local review pack</button><span id="submit-status" aria-live="polite"></span></div>
+<p class="hint">Creates independent WAV clips, an audition WAV, SHA-256 manifest and review ZIP. No automatic publishing or game asset replacement.</p>
+</section>
+<section class="panel hidden" id="panel-jobs">
+<div class="heading"><div><h2>Production history</h2><p>Current-session jobs and private output paths.</p></div><button class="small" id="refresh-jobs">Refresh</button></div>
+<div id="job-list" aria-live="polite">No jobs created yet.</div>
+</section>
+</main>
+<footer>HB–TTRPG local workbench · loopback-only authoring · <a href="/index.html">Open archive</a></footer>
+</body></html>
