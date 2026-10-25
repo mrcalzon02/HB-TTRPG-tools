@@ -1,15 +1,14 @@
 #requires -version 5.1
 <#
 .SYNOPSIS
-  One-command local Voicebox/NUTBUSTER owner-voice production and Google Drive upload.
+  One-command PRIVATE local Voicebox/NUTBUSTER owner-voice production.
 .DESCRIPTION
   Run from any PowerShell shell:
     powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\voicebox\run-nutbuster-local.ps1
   Installs missing user tools with winget, clones trusted upstream into LOCALAPPDATA,
   provisions the Python 3.12 backend, prepares privately stored reference WAVs,
-  generates the authored 74 lines, composes a private review pack, and uploads
-  ONLY that composed pack into the owner's NUTBUSTER Drive folder using rclone.
-  First Google Drive authorization may open a browser. No public GitHub audio upload.
+  generates the authored 74 lines and composes a private review pack.
+  NOTHING is automatically uploaded anywhere. Export completed files manually.
 #>
 [CmdletBinding()]
 param(
@@ -17,9 +16,7 @@ param(
     [ValidateSet('luxtts','qwen','chatterbox_turbo')][string]$Engine = 'luxtts',
     [string]$ReferenceWav = '',
     [string]$ReferenceZip = '',
-    [string]$DriveRemote = 'nutbuster-drive',
-    [string]$DriveFolderId = '1IwvPgWwzabBliPODifPDdT61WqJhfmxu',
-    [switch]$SkipDriveUpload
+    [switch]$SkipDriveUpload  # Backwards-compatible no-op; uploads are always disabled.
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -232,7 +229,6 @@ try {
     $git = Ensure-Tool 'git' 'Git.Git'
     $ffmpeg = Ensure-Tool 'ffmpeg' 'Gyan.FFmpeg'
     $ffprobe = Ensure-Tool 'ffprobe' 'Gyan.FFmpeg'
-    if (-not $SkipDriveUpload) { $rclone = Ensure-Tool 'rclone' 'Rclone.Rclone' }
 
     $python312 = Get-Python312
     if (-not $python312) {
@@ -268,23 +264,6 @@ try {
 
     Stage 'Running deterministic audio-composition tests before model installation'
     Invoke-Checked $python312 @('-m','unittest','discover','-s',(Join-Path $repo 'tools\voicebox\tests'),'-p','test_*.py','-v')
-
-    if (-not $SkipDriveUpload) {
-        Stage 'Checking Google Drive OAuth access before expensive voice generation'
-        $remotes = @(& $rclone listremotes)
-        if ($LASTEXITCODE -ne 0) { throw 'rclone cannot read its configuration.' }
-        if ($remotes -notcontains ($DriveRemote + ':')) {
-            Stage ('First-run browser authorization for Google Drive remote ' + $DriveRemote)
-            Write-Host 'If prompted, sign into the Google account that owns the NUTBUSTER Drive folder.'
-            Invoke-Checked $rclone @('config','create',$DriveRemote,'drive','scope','drive','root_folder_id',$DriveFolderId)
-        }
-        & $rclone lsd ($DriveRemote + ':') --drive-root-folder-id $DriveFolderId
-        if ($LASTEXITCODE -ne 0) {
-            Stage 'The Google Drive remote is not yet authorized for this folder. Opening interactive rclone configuration for sign-in/repair.'
-            Invoke-Checked $rclone @('config')
-            Invoke-Checked $rclone @('lsd',($DriveRemote + ':'),'--drive-root-folder-id',$DriveFolderId)
-        }
-    }
 
     Stage 'Preparing Voicebox and NUTBUSTER source repositories outside the public checkout'
     if (-not (Test-Path (Join-Path $voicebox '.git'))) {
@@ -327,18 +306,8 @@ try {
         throw 'Composed output does not match the expected unapproved take count/status.'
     }
 
-    if (-not $SkipDriveUpload) {
-        $uploadSubdir = 'Voicebox-Original/' + $runId
-        $destination = $DriveRemote + ':' + $uploadSubdir
-        Stage ('Uploading ONLY composed audio, audition and manifest into NUTBUSTER Drive folder: ' + $uploadSubdir)
-        Invoke-Checked $rclone @('copy',$composed,$destination,'--drive-root-folder-id',$DriveFolderId,'--progress','--create-empty-src-dirs')
-        Stage 'Verifying uploaded files against the private local composition'
-        Invoke-Checked $rclone @('check',$composed,$destination,'--drive-root-folder-id',$DriveFolderId,'--one-way')
-        Write-Host ('Google Drive folder: https://drive.google.com/drive/folders/' + $DriveFolderId)
-        Write-Host ('Uploaded subfolder: ' + $uploadSubdir)
-    }
     Write-Host ('Composed ' + $expected + ' unapproved MP3s, audition reel and manifest: ' + $composed) -ForegroundColor Green
-    Write-Host 'Source recording and voice profile are NOT uploaded. Auditory/device review is still required.' -ForegroundColor Yellow
+    Write-Host 'LOCAL ONLY: no automatic uploads, no Google Drive access, no credentials. Review audio and export manually.' -ForegroundColor Yellow
     exit 0
 } catch {
     Write-Error ('Voicebox local production stopped at a verifiable gate: ' + $_.Exception.Message)

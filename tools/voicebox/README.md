@@ -98,30 +98,17 @@ The owner explicitly authorized voice cloning from their own 82-second WAV, augm
 
 The [composition program](compose_nutbuster.py) validates output manifests, normalizes event-key MP3s, creates an audition reel, and records a review-required composition receipt in private runner storage. [Its tests](tests/test_compose_nutbuster.py) use synthetic sounds rather than the owner's private speech. See the [NUTBUSTER workflow guide](NUTBUSTER-VOICE-PIPELINE.md).
 
-## One-command local Windows voice production and NUTBUSTER Drive upload
+## One-command local Windows voice production — manual export only
 
-From an up-to-date **local Windows PowerShell** checkout of `HB-TTRPG-tools`, run this one command:
+From a Windows PowerShell checkout, run:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\voicebox\run-nutbuster-local.ps1
+powershell -NoProfile -STA -ExecutionPolicy Bypass -File .\tools\voicebox\run-nutbuster-local.ps1
 ```
 
-**The input you must download first:** place the personally provided `For those not yet born.wav` in your Windows **Downloads** folder, or alternatively put `owner-voicebox-reference-segments.zip` (from the ChatGPT conversation) in Downloads. The local script searches Downloads, then Documents, and can also reuse three samples in its previously prepared private folder. **When automatic discovery fails it now opens a Windows file-picker**, so you can select the ZIP or WAV wherever it was downloaded, without moving or renaming it. If the dialog is unavailable, it asks for a local file path in the terminal. This still requires the file to have been downloaded from ChatGPT to your PC first: a Git checkout cannot read conversation attachments automatically. If the file is elsewhere, run the same command with `-ReferenceWav "C:\path\to\For those not yet born.wav"` or `-ReferenceZip "C:\path\to\owner-voicebox-reference-segments.zip"`. No user's voice recording is stored in the public repository. A local checkout cannot automatically see a ChatGPT conversation attachment.
+The existing launcher uses the private owner WAV/ZIP, locally installs required tools and the Python speech backend, generates the 74 NUTBUSTER original-announcer additions, validates/composes the output, and **saves it on disk only**. There are no automatic Google Drive uploads, OAuth steps, rclone dependencies, GitHub audio commits, or credential handling in this launcher. Existing `-SkipDriveUpload` is accepted as a backwards-compatible no-op.
 
-By default the launcher:
-
-1. Uses **winget** to install missing Git, FFmpeg/ffprobe, Python 3.12 and rclone, without replacing already installed tools. The Just installer is no longer required: the launcher runs the upstream Windows Python setup steps directly instead.
-2. Prepares three 20-second private voice-reference segments from the owner's original 82-second WAV, or extracts the existing private sample ZIP.
-3. If necessary, initiates Google Drive OAuth login in a browser using rclone. It verifies access to the owner's established [NUTBUSTER folder](https://drive.google.com/drive/folders/1IwvPgWwzabBliPODifPDdT61WqJhfmxu) BEFORE expensive model installation or synthesis. Google's authorization step cannot legally be automated away; first-time rclone setup may require a Google OAuth client if its shared credentials no longer function.
-4. Clones Voicebox and NUTBUSTER-R into an external private LOCALAPPDATA workspace. Runs the upstream Windows Python 3.12 setup steps directly from `backend/requirements.txt`, with GPU-aware PyTorch installation and `compileall`. It does not need Just or compile an unnecessary Tauri desktop application. It **does not build the unnecessary Tauri desktop GUI or a standalone installer**.
-5. Creates/reuses the locally stored owner voice profile, automatically downloads speech/Whisper model weights when required, generates all **74** missing Original-announcer event lines, and composes normalised review clips and an `audition.mp3` reel with `composition.json` hashes.
-6. Uploads **only** the composed review pack (not the input WAV or voice profile) to `NUTBUSTER/Voicebox-Original/<timestamp>-all-luxtts/` in Google Drive using rclone, and verifies the resulting remote copy with `rclone check`. Distinct run folders are never overwritten. It does **not** add or replace live-game voice files.
-
-The first run needs substantial downloads and depends on machine memory, disk capacity, compatible model dependencies, the Google sign-in, and a working Windows Python build toolchain. The script reports specific failures rather than claiming success. It has been **committed but not executed on your Windows machine**; the confirmed gates so far are GitHub file/commit readback and static script inspection. It is independent of the cancelled self-hosted Actions job.
-
-Optional switches: `-Scope preview` generates six audition lines first instead of all 74; `-Engine qwen` selects a different cloned-voice model; `-SkipDriveUpload` creates only the local pack. By default it uses `-Scope all -Engine luxtts` and uploads to the already verified NUTBUSTER Drive folder.
-
-Generated voice outputs live under `%LOCALAPPDATA%\HB-TTRPG-tools\voicebox-production\private\generated\`. The upstream Voicebox and NUTBUSTER source trees are cached under `%LOCALAPPDATA%\HB-TTRPG-tools\voicebox-production\source\`. The public Foundry repository receives no audio files or private Google OAuth credentials.
+Find generated clips, an audition reel, and the review manifest under `%LOCALAPPDATA%\HB-TTRPG-tools\voicebox-production\private\generated\`. Select the ZIP of your own voice samples using the Windows picker if auto-discovery fails. The local setup reuses installed Python/PyTorch where possible. Verify audio by ear before uploading to any external service manually.
 
 ### Windows Just/antivirus installation note
 
