@@ -42,53 +42,96 @@ fetch(BASE + "/api/catalog")
   .then(data => { pages = data.pages || []; renderPages(); })
   .catch(error => { el("archive-results").textContent = "Cannot load local archive: " + error.message; });
 
-async function loadProfiles() {
-  const select = el("profile");
-  try {
-    const reply = await fetch(BASE + "/api/profiles");
-    const data = await reply.json();
-    if (!reply.ok) throw Error(data.error || "Voicebox is unavailable");
-    select.replaceChildren();
-    for (const p of data.profiles)
-      select.add(new Option(p.name + " (" + p.samples + " samples)", p.id));
-    if (!data.profiles.length) select.add(new Option("No local voice profiles found", ""));
-    el("engine-status").textContent = data.profiles.length
-      ? "Connected to local Voicebox · " + data.profiles.length + " profiles"
-      : "Voicebox is running but has no profiles; create one in Voicebox first.";
-  } catch (error) {
-    select.replaceChildren(new Option("Local Voicebox engine unavailable", ""));
-    el("engine-status").textContent = error.message + ". Complete the local engine installation and refresh voices.";
+let selectedAudio = null, selectedDocument = null, savedCount = 0;
+function setupDropzone(zoneId, inputId, labelId, kind) {
+  const zone = el(zoneId), input = el(inputId), label = el(labelId);
+  function accept(file) {
+    if (!file) return;
+    if (kind === "audio") {
+      selectedAudio = file;
+      el("saved-voice").checked = false;
+    } else selectedDocument = file;
+    label.textContent = file.name + " (" + (file.size / (1024 * 1024)).toFixed(2) + " MB)";
+    zone.classList.add("loaded");
   }
+  input.addEventListener("change", () => accept(input.files[0]));
+  zone.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); input.click(); }
+  });
+  zone.addEventListener("dragover", event => { event.preventDefault(); zone.classList.add("dragover"); });
+  zone.addEventListener("dragleave", () => zone.classList.remove("dragover"));
+  zone.addEventListener("drop", event => {
+    event.preventDefault(); zone.classList.remove("dragover");
+    accept(event.dataTransfer?.files?.[0]);
+  });
+}
+setupDropzone("audio-zone", "audio-file", "audio-label", "audio");
+setupDropzone("script-zone", "script-file", "script-label", "document");
+el("saved-voice").addEventListener("change", () => {
+  if (el("saved-voice").checked) {
+    selectedAudio = null;
+    el("audio-file").value = "";
+    el("audio-label").textContent = "Using existing private reference recordings";
+    el("audio-zone").classList.remove("loaded");
+  }
+});
+async function loadSavedStatus() {
+  try {
+    const response = await fetch(BASE + "/api/reference-status");
+    const data = await response.json();
+    savedCount = data.savedSamples || 0;
+    el("saved-voice").disabled = savedCount === 0;
+    el("saved-reference-note").textContent = savedCount
+      ? savedCount + " saved reference recordings available on this PC"
+      : "No prepared private recordings detected. Drop a voice sample above.";
+  } catch { el("saved-reference-note").textContent = "Saved reference detection unavailable."; }
+}
+async function loadProfiles() {
+  const select = el("profile"), previous = select.value;
+  select.replaceChildren(new Option("Create new voice from sample", ""));
+  try {
+    const response = await fetch(BASE + "/api/profiles");
+    const data = await response.json();
+    if (!response.ok) throw Error(data.error || "Voicebox is unavailable");
+    for (const p of data.profiles)
+      if (p.samples > 0) select.add(new Option(p.name + " (" + p.samples + " samples)", p.id));
+    if ([...select.options].some(p => p.value === previous)) select.value = previous;
+    el("engine-status").textContent = data.profiles.length
+      ? "Voicebox is connected. Select an existing profile or create another from a sample."
+      : "Voicebox is connected. Drop your sample to create the first voice profile.";
+  } catch (error) {
+    el("engine-status").textContent = error.message + ". The archive remains available.";
+  }
+  void loadSavedStatus();
 }
 el("refresh-profiles").addEventListener("click", loadProfiles);
-
-function parseLines(input) {
-  const rows = input.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-  if (!rows.length || rows.length > 300) throw Error("Enter between 1 and 300 lines.");
-  const lines = rows.map((row, index) => {
-    const match = row.match(/^([A-Za-z0-9][A-Za-z0-9_-]{0,63})\s*\|\s*(.+)$/);
-    return { id: match ? match[1] : "line-" + String(index + 1).padStart(3, "0"),
-      text: match ? match[2] : row };
-  });
-  if (new Set(lines.map(item => item.id)).size !== lines.length)
-    throw Error("Line IDs must be unique.");
-  return lines;
-}
 el("generate").addEventListener("click", async () => {
-  const button = el("generate");
+  const button = el("generate"), status = el("submit-status");
   button.disabled = true;
   try {
-    const voice = el("profile").value;
-    if (!voice) throw Error("Select a local voice profile.");
-    const request = {project: el("project").value.trim(), engine: el("engine").value,
-      voice, lines: parseLines(el("lines").value)};
-    const response = await fetch(BASE + "/api/jobs",
-      {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(request)});
+    const profile = el("profile").value;
+    const saved = el("saved-voice").checked;
+    if (!el("voice-consent").checked) throw Error("Confirm you own or have permission to clone this voice.");
+    if (!selectedDocument && !el("lines").value.trim()) throw Error("Drop a document or paste the narration lines.");
+    if (!profile && !selectedAudio && !saved) throw Error("Drop a voice sample, choose saved references, or select an existing profile.");
+    if (saved && !savedCount) throw Error("No previously saved voice samples were found.");
+    const data = new FormData();
+    data.set("project", el("project").value.trim());
+    data.set("profile_name", el("profile-name").value.trim());
+    data.set("voice", profile);
+    data.set("lines", el("lines").value);
+    data.set("reference_text", el("reference-text").value.trim());
+    data.set("source", saved ? "saved" : "upload");
+    data.set("consent", "yes");
+    if (selectedDocument) data.set("document", selectedDocument, selectedDocument.name);
+    if (selectedAudio && !profile && !saved) data.set("audio", selectedAudio, selectedAudio.name);
+    status.textContent = "Preparing local voice job…";
+    const response = await fetch(BASE + "/api/intake", {method: "POST", body: data});
     const result = await response.json();
-    if (!response.ok) throw Error(result.error || "Generation request failed");
-    el("submit-status").textContent = "Queued " + request.lines.length + " local takes.";
+    if (!response.ok) throw Error(result.error || "Could not start local generation.");
+    status.textContent = "Queued local narration.";
     tab("jobs");
-  } catch (error) { el("submit-status").textContent = error.message; }
+  } catch (error) { status.textContent = error.message; }
   finally { button.disabled = false; }
 });
 async function loadJobs() {

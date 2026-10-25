@@ -25,13 +25,44 @@
 </section>
 <section class="panel hidden" id="panel-voice">
 <div class="heading"><div><h2>Narration studio</h2><p>Produce reusable local dialogue, lore, instructions, and voiceovers.</p></div><span class="badge">NO CLOUD UPLOADS</span></div>
-<p class="note">Use an existing local Voicebox voice profile for recordings you own or are authorized to clone. Output stays outside the repository. You manually export finished review packages.</p>
-<div id="engine-status" class="status" aria-live="polite">Checking installed Voicebox…</div>
-<div class="two-col"><label>Project name<input id="project" value="narration" maxlength="64"></label><label>Speech engine<select id="engine"><option value="luxtts">LuxTTS — lightweight</option><option value="qwen">Qwen3-TTS</option><option value="chatterbox_turbo">Chatterbox Turbo</option><option value="chatterbox">Chatterbox Multilingual</option><option value="tada">TADA</option></select></label></div>
-<div class="fields"><label>Voice profile<select id="profile"><option value="">Waiting for Voicebox…</option></select></label><button class="small" id="refresh-profiles">Refresh voices</button></div>
-<div class="fields"><label for="lines">Lines — one take per line or use <code>event-key | words to speak</code></label><textarea id="lines" rows="9" placeholder="intro | Welcome aboard.&#10;mission | Your journey begins here.&#10;Unlabeled lines get a generated ID."></textarea><p class="hint">Maximum 300 takes per batch. Takes run sequentially to avoid competing for model memory.</p></div>
-<div class="actions"><button class="button primary" id="generate">Generate local review pack</button><span id="submit-status" aria-live="polite"></span></div>
-<p class="hint">Creates independent WAV clips, an audition WAV, SHA-256 manifest and review ZIP. No automatic publishing or game asset replacement.</p>
+<p class="note">Drop in a voice sample and your lines. The recording and finished audio stay on this computer. LuxTTS is the only engine used here; no other speech engines are needed.</p>
+<div id="engine-status" class="status" aria-live="polite">Connecting to local Voicebox…</div>
+<div class="two-col">
+  <div>
+    <label for="audio-file" class="dropzone" id="audio-zone" tabindex="0" role="button">
+      <strong>1. Drop your voice sample here</strong>
+      <span id="audio-label">WAV, MP3, M4A, FLAC or OGG · click to browse</span>
+    </label>
+    <input id="audio-file" class="visually-hidden" type="file" accept=".wav,.mp3,.m4a,.flac,.ogg,audio/*">
+    <label class="check"><input id="saved-voice" type="checkbox"> Use previously saved private reference recordings</label>
+    <p class="hint" id="saved-reference-note"></p>
+  </div>
+  <div>
+    <label for="script-file" class="dropzone" id="script-zone" tabindex="0" role="button">
+      <strong>2. Drop your narration document here</strong>
+      <span id="script-label">TXT, Markdown, CSV or DOCX · click to browse</span>
+    </label>
+    <input id="script-file" class="visually-hidden" type="file" accept=".txt,.md,.csv,.docx">
+    <p class="hint">Or type/paste lines below; you can use both.</p>
+  </div>
+</div>
+<div class="fields">
+  <label for="lines">Narration lines (optional if you added a document)</label>
+  <textarea id="lines" rows="7" placeholder="intro | Welcome aboard.&#10;mission | Your journey begins here.&#10;Or paste plain lines without IDs."></textarea>
+  <p class="hint">One line per recording, or event-key | spoken text. Maximum 300 takes in a batch.</p>
+</div>
+<div class="two-col">
+  <label for="project">Project / output name<input id="project" value="narration" maxlength="64"></label>
+  <label for="profile">Voice profile<select id="profile"><option value="">Create new profile from sample</option></select></label>
+</div>
+<div class="two-col">
+  <label for="profile-name">New voice profile name<input id="profile-name" value="My Voice" maxlength="100"></label>
+  <label for="reference-text">Reference transcript (optional)<input id="reference-text" placeholder="Only if you know exactly what you said"></label>
+</div>
+<div class="actions"><button class="small" id="refresh-profiles">Refresh existing voices</button><span class="hint">Voice engine: LuxTTS (English)</span></div>
+<label class="check consent"><input type="checkbox" id="voice-consent"> I own this voice or have permission to use its recording for cloning.</label>
+<div class="actions"><button class="button primary" id="generate">Create voice and generate locally</button><span id="submit-status" aria-live="polite"></span></div>
+<p class="hint">Outputs: WAV clips, an audition WAV, a SHA-256 manifest and review ZIP. Uploaded files travel only to your localhost server. Nothing is sent to GitHub or Google Drive.</p>
 </section>
 <section class="panel hidden" id="panel-jobs">
 <div class="heading"><div><h2>Production history</h2><p>Current-session jobs and private output paths.</p></div><button class="small" id="refresh-jobs">Refresh</button></div>
