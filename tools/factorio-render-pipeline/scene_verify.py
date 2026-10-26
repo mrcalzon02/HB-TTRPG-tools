@@ -70,6 +70,14 @@ def test_one(path):
             raise RuntimeError("Body not embedded below platform top z=0")
         if len([ob for ob in scene.objects if ob.type=="CURVE"])<3:
             raise RuntimeError("Insufficient swept piping/geometry, legacy boxy scene suspected")
+        petal=[ob for ob in meshes if "_heat_shield_petal_" in ob.name]
+        if len(petal)<10:raise RuntimeError("R05 expects actual separate sculpted nozzle petals")
+        if not any("cast_pressure_panel_" in ob.name for ob in meshes) and not path.name.startswith("void-fusion"):
+            raise RuntimeError("R05 lacks curved conformal armored segments")
+        if not path.name.startswith("void-fusion"):
+            weathered=[m for m in bpy.data.materials if m.get("R05_metal_surface")]
+            if len(weathered)<4:raise RuntimeError("R05 procedural material surface stage missing")
+        print("R05_GEOMETRY_PASS",path.name,"separate_petals",len(petal),flush=True)
         print("RECESSED_MOUNT_PASS",path.name,"rear_y",round(nozzle_low,3),
               "platform_edge",required_y,"curved_meshes",len(curved_meshes),flush=True)
     print("SCENE_REOPEN_PASS",path.name,"mesh_parts",len(meshes),
