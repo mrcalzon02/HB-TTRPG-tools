@@ -109,6 +109,25 @@ def test_one(path):
                 raise RuntimeError("Separated flame meshes have no persisted animation")
             if float(scene.get("fsc_flame_factorio_anchor_map_y",0))!=5.5:
                 raise RuntimeError("Wrong official map-space flame anchor")
+            expected_port_map={"pipe-1":(1.5,-2.0),
+                               "pipe-2":(1.5,0.0),
+                               "pipe-3":(-1.5,0.0),
+                               "pipe-4":(-1.5,-2.0)}
+            if int(scene.get("fsc_pipe_overlay_count",0))!=4:
+                raise RuntimeError("All four official conditional ports are required")
+            for port,(factorio_x,factorio_y) in expected_port_map.items():
+                group=bpy.data.collections.get("CONDITIONAL_"+port)
+                if not group or len(group.objects)<3:
+                    raise RuntimeError("Missing conditional geometry for "+port)
+                if any(not ob.hide_render for ob in group.objects):
+                    raise RuntimeError("Pipe overlay is baked into primary body")
+                anchors=[ob for ob in group.objects if ob.name.startswith("ANCHOR_"+port+"_")]
+                if len(anchors)!=1:
+                    raise RuntimeError("Missing source-map anchor for "+port)
+                anchor=anchors[0]
+                if abs(anchor.location.x-factorio_x)>0.001 or abs(anchor.location.y+factorio_y)>0.001:
+                    raise RuntimeError("Incorrect map/Blender port mapping for "+port)
+            print("R07_CONDITIONAL_PIPES_PASS",path.name,"ports",len(expected_port_map),flush=True)
             print("R07_VANILLA_REFERENCE_PASS",path.name,
                   "mount_span",mount,"selection_span",directions[1],
                   "separate_effect_meshes",len(animated),flush=True)
