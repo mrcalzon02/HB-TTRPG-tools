@@ -20,11 +20,14 @@ def main():
     python=bootstrap.check_python_env()
     target=args.output.resolve()
     target.mkdir(parents=True,exist_ok=True)
-    subprocess.run([str(blender),"-b","--factory-startup","-t","2","--python",
+    subprocess.run([str(blender),"-b","--factory-startup","-t","2","--python-exit-code","4","--python",
                     str(root/"scene_capture_batch.py"),"--","--output",
                     str(target),"--group",args.group],check=True)
-    subprocess.run([str(blender),"-b","--factory-startup","-t","2","--python",
+    subprocess.run([str(blender),"-b","--factory-startup","-t","2","--python-exit-code","4","--python",
                     str(root/"scene_verify.py"),"--","--output",str(target)],check=True)
+    scene_evidence=target/"editable-scene-qa.json"
+    if not scene_evidence.is_file():
+        raise RuntimeError("Blender scene verifier returned but saved no evidence")
     subprocess.run([str(python),str(root/"capture_analysis.py"),"--root",str(target),
                     "--fail-on-edge"],check=True)
     print("Capture batch complete at",target,flush=True)
