@@ -23,22 +23,44 @@ def test_one(path):
     directions=json.loads(scene["fsc_footprint_tiles"])
     if len(directions)!=2 or min(directions)<=0:
         raise RuntimeError("Invalid footprint metadata")
-    # Blender discards unused shader datablocks when saving a .blend. The
-    # heavy/void models use violet while hydrogen models use blue.
-    mat=next((bpy.data.materials.get(key) for key in
-              ("07_ion_blue","08_void_violet","09_exhaust_amber")
-              if bpy.data.materials.get(key) is not None),None)
-    if mat is None or mat.node_tree is None:
-        raise RuntimeError("No used emissive material saved in Blender source")
-    if not mat.node_tree.animation_data or not mat.node_tree.animation_data.action:
-        raise RuntimeError("Saved Blender file has no authored emission Action")
-    socket=mat.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
-    scene.frame_set(1)
-    idle=float(socket.default_value)
-    scene.frame_set(2)
-    running=float(socket.default_value)
-    if abs(idle-running)<0.20:
-        raise RuntimeError("Saved idle/run keyframes did not produce different values")
+    # Choose EMISSION THAT ACTUALLY BELONGS TO RENDERED MODEL GEOMETRY.
+    # The R11 benchmark removes an informationally misleading blue coupler,
+    # leaving an unused blue material datablock that can survive file save.
+    # Testing that orphan shader gave a false animation failure. Orange
+    # reactor thermal windows are the physically used animated shader.
+    names=("07_ion_blue","08_void_violet","09_exhaust_amber")
+    used_material_names={
+        mat.name
+        for obj in scene.objects if obj.type in {"MESH","CURVE"}
+        for mat in obj.data.materials if mat is not None
+    }
+    diagnostics=[]
+    animated=None
+    for key in names:
+        mat=bpy.data.materials.get(key)
+        if mat is None or mat.name not in used_material_names or mat.node_tree is None:
+            continue
+        action=mat.node_tree.animation_data
+        if action is None or action.action is None:
+            diagnostics.append((key,"no keyed Action"));continue
+        node=mat.node_tree.nodes.get("Principled BSDF")
+        if node is None:
+            diagnostics.append((key,"no Principled shader"));continue
+        socket=node.inputs["Emission Strength"]
+        scene.frame_set(1)
+        candidate_idle=float(socket.default_value)
+        scene.frame_set(2)
+        candidate_run=float(socket.default_value)
+        diagnostics.append((key,round(candidate_idle,3),round(candidate_run,3)))
+        if abs(candidate_idle-candidate_run)>=.20:
+            animated=(mat,candidate_idle,candidate_run)
+            break
+    if animated is None:
+        raise RuntimeError("No actually used emissive model material has working "
+                           "saved idle/run keyframes: "+repr(diagnostics))
+    mat,idle,running=animated
+    print("REAL_MODEL_EMISSION_PASS",path.name,mat.name,
+          round(idle,3),round(running,3),flush=True)
     if not path.name.startswith("test-01-graybox"):
         if scene.get("fsc_mounting_doctrine")!="DECK_RECESSED_NO_BASE_PLATE":
             raise RuntimeError("R04 must declare recessed mount doctrine")
