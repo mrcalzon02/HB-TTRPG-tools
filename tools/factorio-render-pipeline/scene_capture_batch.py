@@ -176,14 +176,13 @@ def graybox():
     cube("orientation_mark_right",(1.05,1.03,1.22),(.35,.48,.14),"blue")
 
 def benchmark(name,w,h):
-    if name.endswith("graybox"):graybox()
-    elif name.endswith("vanilla-approx"):vanilla_approx()
-    elif name=="test-02-emission" or name=="test-03-animation-drift":chemical(4,4)
-    elif name.startswith("hydrogen"):chemical(w,h)
-    elif name.startswith("thetazine"):chemical(w,h,True)
-    elif name.startswith("void-fusion"):void_spine()
-    elif name.startswith("large-void"):heavy_void()
-    else:raise ValueError(name)
+    if name.endswith("graybox"):
+        graybox()
+    else:
+        # R04 uses genuine contoured/lofted meshes and a recessed C-channel
+        # mount rather than R03's freestanding plate plus boxes.
+        import sculpted_thruster_r04
+        sculpted_thruster_r04.build_thruster(name,w,h,ROOT,MATERIALS)
 
 def add_nonrender_jig(w,h):
     guides=bpy.data.collections.new("CALIBRATION_NOT_RENDERED")
@@ -248,7 +247,7 @@ def configure_scene(name,w,h,width,height,num_frames):
     scene["fsc_status"]="CALIBRATION_ONLY_NOT_FACTORIO_APPROVED"
     scene["fsc_axis"]="+X east +Y north +Z height; exhaust -Y"
     scene["fsc_footprint_tiles"]=json.dumps([w,h])
-    scene["fsc_model_revision"]="r03-camera-fix"
+    scene["fsc_model_revision"]="r04-sculpted-recessed-platform-mount"
     scene["fsc_capture_ortho_scale"]=cam.data.ortho_scale
     scene["fsc_capture_camera_position"]=json.dumps(list(cam.location))
     scene["fsc_capture_direction"]="prototype orientation south exhaust, no dynamic rotation for source"
