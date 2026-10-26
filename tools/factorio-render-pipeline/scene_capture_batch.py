@@ -22,10 +22,10 @@ SPECS = {
     "test-02-emission": (4, 4, 192, 256, 5, 1),
     "test-03-animation-drift": (4, 4, 192, 256, 12, 1),
     "test-04-vanilla-approx": (4, 8, 256, 512, 4, 1),
-    "hydrogen-thruster-r06": (4, 4, 192, 384, 7, 1),
-    "thetazine-thruster-r06": (5, 5, 192, 384, 2, 1),
-    "void-fusion-thruster-r06": (1, 9, 160, 512, 2, 1),
-    "large-void-fusion-thruster-r06": (4, 4, 256, 384, 1, 1),
+    "hydrogen-thruster-r09": (4, 4, 192, 384, 7, 1),
+    "thetazine-thruster-r09": (5, 5, 192, 384, 2, 1),
+    "void-fusion-thruster-r09": (1, 9, 160, 512, 2, 1),
+    "large-void-fusion-thruster-r09": (4, 4, 256, 384, 1, 1),
 }
 PROTOTYPE = {
     # Vanilla calibration geometry: the Space Age thruster is 4x8, not 4x4.
@@ -39,10 +39,10 @@ PROTOTYPE = {
        "shift":[0,3],"integration_patch_render_layer":"floor",
        "flame_effect_position_factorio":[0,5.5],"blender_to_factorio_y_sign":-1},
 
-    "hydrogen-thruster-r06": {"full_cell": [256,512], "speed": 0.18, "scale": 0.54, "shift": [0,1.25], "pipes":[[-1.8,-1.0],[1.8,-1.0]]},
-    "thetazine-thruster-r06": {"full_cell": [256,512], "speed": 0.12, "scale": 0.55, "shift": [0,1.65], "pipes":[[-2.1,-1.0],[2.1,-1.0]]},
-    "void-fusion-thruster-r06": {"full_cell": [192,576], "speed": 0.08, "scale": 0.50, "shift": [0,-0.10], "pipes":[]},
-    "large-void-fusion-thruster-r06": {"full_cell": [384,512], "speed": 0.08, "scale": 0.40, "shift": [0,1.25], "pipes":[]},
+    "hydrogen-thruster-r09": {"full_cell": [256,512], "speed": 0.18, "scale": 0.54, "shift": [0,1.25], "pipes":[[-1.8,-1.0],[1.8,-1.0]]},
+    "thetazine-thruster-r09": {"full_cell": [256,512], "speed": 0.12, "scale": 0.55, "shift": [0,1.65], "pipes":[[-2.1,-1.0],[2.1,-1.0]]},
+    "void-fusion-thruster-r09": {"full_cell": [192,576], "speed": 0.08, "scale": 0.50, "shift": [0,-0.10], "pipes":[]},
+    "large-void-fusion-thruster-r09": {"full_cell": [384,512], "speed": 0.08, "scale": 0.40, "shift": [0,1.25], "pipes":[]},
 }
 
 def mat(name, rgb, metallic=0.45, roughness=0.38, emit=False):
@@ -272,8 +272,8 @@ def configure_scene(name,w,h,width,height,num_frames):
     scene["fsc_axis"]="Blender +X=east,+Y=fore,-Y=aft,+Z=up; Factorio map +Y=aft"
     scene["fsc_map_to_blender"]="Factorio Y = -Blender Y; X unchanged"
     scene["fsc_footprint_tiles"]=json.dumps([w,h])
-    scene["fsc_model_revision"]=("r08-vanilla-reference-machining" if name.startswith("test-04")
-                                 else "r06-segmented-bells-and-paneling-recessed-platform-mount")
+    scene["fsc_model_revision"]=("r09-vanilla-nozzle-liners-r08-housing" if name.startswith("test-04")
+                                 else "r09-nozzle-interiors-r06-housing")
     scene["fsc_capture_ortho_scale"]=cam.data.ortho_scale
     scene["fsc_capture_camera_position"]=json.dumps(list(cam.location))
     scene["fsc_capture_direction"]="prototype orientation south exhaust, no dynamic rotation for source"
@@ -288,7 +288,7 @@ def capture_one(out_dir,name):
     bpy.ops.wm.save_as_mainfile(filepath=str((target/"scenes"/(name+".blend")).resolve()))
     manifest={"asset":name,"footprint_tiles":[w,h],"preview_cell":[width,height],"run_frames":frames,
               "directions":directions,"prototype_reference":PROTOTYPE.get(name),
-              "source_revision":"r08-vanilla-visual-reference" if name.startswith("test-04") else "r06",
+              "source_revision":"r09-vanilla-open-bell" if name.startswith("test-04") else "r09-nozzle-liner",
               "status":"candidate_environment_test_not_game_approved",
               "blender_version":bpy.app.version_string,"frame_files":[],
               "floor_integration_patch":None,"floor_layer_hint":"integration_patch_render_layer = floor",
