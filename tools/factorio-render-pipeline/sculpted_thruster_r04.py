@@ -126,8 +126,14 @@ def socket_structure(w,h,p,root):
 
 def smooth_housing(name,w,h,p,root,variant):
     """Multi-section elliptical loft, tapered fore-to-aft over suspended chassis."""
-    fore=min(h/2-.50,1.25)
-    aft=max(-h/2+.60,-1.60) if variant!="spine" else -h/2+1.0
+    if variant=="vanilla" and h>=8:
+        # The actual Space Age vanilla diagnostic occupies a 4x8 footprint.
+        # This is an approximation, not a photogrammetric reconstruction.
+        fore=h/2-.74
+        aft=-h/2+1.05
+    else:
+        fore=min(h/2-.50,1.25)
+        aft=max(-h/2+.60,-1.60) if variant!="spine" else -h/2+1.0
     barrel=max(.20,min(w*.34,1.11))
     z=-.31 # inset BELOW platform z=0 instead of perched at z=.75
     profile=[
