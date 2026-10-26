@@ -160,6 +160,55 @@ def test_one(path):
                 if len(matched)<count:
                     raise RuntimeError("Missing R08 machined components: "+prefix+
                                        " expected="+str(count)+" observed="+str(len(matched)))
+            # R11: a true open 2.28-tile nozzle, not a shallow black disc.
+            # Afterburner vanes hang over the bell FROM MACHINE BRACKETS
+            # outside its circumference. These are separate mesh objects.
+            depth=float(scene.get("fsc_throat_far_y",0))-float(scene.get("fsc_throat_near_y",0))
+            if depth<2.2:
+                raise RuntimeError("R11 combustion throat is not actually deep")
+            cavity=[ob for ob in meshes if ob.name.startswith("R11_OPEN_DEEP_REFRACTORY_THROAT")]
+            if len(cavity)!=1:
+                raise RuntimeError("Missing singular deep, hollow R11 throat")
+            throat=cavity[0]
+            if not throat.get("R11_open_no_endcaps"):
+                raise RuntimeError("Deep throat appears capped")
+            # Blender lathe must consist ONLY of quad strips. Triangulated
+            # or N-gon endcaps would fill the combustion opening.
+            if not throat.data.polygons or any(len(p.vertices)!=4 for p in throat.data.polygons):
+                raise RuntimeError("Nozzle liner has closing faces")
+            rings=len(throat.data.vertices)//40
+            if rings<10 or len(throat.data.polygons)!=(rings-1)*40:
+                raise RuntimeError("Nozzle throat mesh strip is incomplete")
+            group=bpy.data.collections.get("R11_OUTBOARD_SUSPENDED_AFTERBURNERS")
+            if group is None:
+                raise RuntimeError("Afterburners must have separate outboard collection")
+            vanes=[ob for ob in group.objects if ob.name.startswith("R11_SUSPENDED_AFTERBURNER_VANE_")]
+            arms=[ob for ob in group.objects if ob.name.startswith("R11_OUTBOARD_SUSPENSION_ARM_")]
+            feeds=[ob for ob in group.objects if ob.name.startswith("R11_AFTERBURNER_FUEL_CAPILLARY_")]
+            anchors=json.loads(scene.get("fsc_afterburner_anchors","[]"))
+            if len(vanes)!=8 or len(arms)!=8 or len(feeds)!=8 or len(anchors)!=8:
+                raise RuntimeError("Require 8 separate vanes AND 8 external machine arms/feedlines")
+            if any(not ob.get("R11_span_from_machinery") for ob in vanes):
+                raise RuntimeError("Suspended vanes lack mechanical support metadata")
+            if any(len(ob.data.vertices)<24 for ob in vanes):
+                raise RuntimeError("Afterburner vane is a placeholder polygon")
+            if any((entry["attachment_xyz"][0]**2+
+                    (entry["attachment_xyz"][2]+.43)**2)**.5<1.6
+                   or entry["attachment_xyz"][1]>=-1.0
+                   for entry in anchors):
+                raise RuntimeError("Afterburner support anchors are inside bell, not outboard machinery")
+            if any(min((ob.matrix_world@v.co).y for v in ob.data.vertices)>-3.25 for ob in vanes):
+                raise RuntimeError("Afterburner vane does not overhang nozzle rim")
+            labels=bpy.data.collections.get("R11_INFORMATION_OVERLAYS_NOT_3D")
+            if labels is None or any(ob.type in {"MESH","CURVE"} for ob in labels.objects):
+                raise RuntimeError("Fuel indicators and arrows must not be Blender model geometry")
+            if any(ob.name.startswith("R08_blue_energy_coupler") for ob in meshes):
+                raise RuntimeError("Fuel indicator artwork mistakenly modeled as physical machinery")
+            if scene.get("fsc_informational_overlay_policy")!="arrows and fuel icons are UI images, zero 3D meshes":
+                raise RuntimeError("Informational overlay exclusion policy missing")
+            print("R11_DEEP_NOZZLE_AFTERBURNERS_PASS",path.name,
+                  "depth_tiles",round(depth,3),"vanes",len(vanes),
+                  "cantilever_brackets",len(arms),flush=True)
             print("R08_VISUAL_SOURCE_PASS",path.name,
                   "paired_reactors",2,"ribbed_heat_shields",8,flush=True)
             print("R07_CONDITIONAL_PIPES_PASS",path.name,"ports",len(expected_port_map),flush=True)
