@@ -336,3 +336,40 @@ New saved-scene checks reject missing static hardware, missing outboard vanes,
 incorrect vane shader assignments, or unsupported source-motion keyframes.
 No live Tech Priests art/gameplay changes, and no user-owned vanilla source
 bitmaps added to GitHub. Candidate visuals require actual CI image inspection.
+
+### R14 / R15 confirmed workflow and visual review
+
+**R14 source tests:** https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40414990473
+PASSED. This validates synthetic 64-frame atlas interpretation and true cyclic
+pair metrics, not a new execution against the original inaccessible ZIP.
+
+**R15 real Blender capture:** https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40415501361
+PASSED in both calibration and custom model matrix jobs. Source procedures
+also passed in https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40415501329.
+The saved Blender scene reopened successfully, 13 vanilla body frames were
+rendered (1 idle + 12 run; all 13 distinct hashes), 12 independent flame
+frames and 4 pipe overlays retained their separate passes, and the real
+captured images passed clipping diagnostics. Four existing custom model
+regressions passed without code or artwork changes.
+
+Real PNG comparison from identical R13 and R15 camera position and cell size:
+- R13 body idle alpha bbox [55,185,262,511] on 320x640; visible W/H 207/326=0.6350.
+- R15 body idle alpha bbox [55,179,262,511]; visible W/H 207/332=0.6235.
+- R13 median approximate RGB luma (visible alpha>128): 0.2267 normalized.
+- R15 median approximate RGB luma (visible alpha>128): 0.2101 normalized.
+- Vanilla reference R12 bbox ratio from original artwork: 0.487. These
+  measures are NOT registered for camera/prototype zoom and are not a visual
+  acceptance score.
+
+Direct visual inspection: the additional black corrugated upper pieces and
+light center injector casing are visible and visually more mechanically
+distinct. The aft nozzle remains a comparatively bare metallic cone. Several
+pale pointed thermal parts remain easily mistaken for informational arrows;
+reassigning the R11 vane shader alone did NOT fix those visible shapes.
+Do not claim that defect resolved. The original has denser irregular
+surface machinery, more aged materials, and substantial afterburner hardware.
+
+**R15 visual status: meaningful but limited refinement, NOT vanilla-matched,
+NOT production-art-approved.** The animation remains mostly fixed mechanical
+geometry with separately changing emissions. Do not invent motion or assert
+the hidden rig until the complete source archive can be processed in R14.
