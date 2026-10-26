@@ -128,6 +128,27 @@ def analyze_asset(folder):
             result=psrc.convert("RGBA")
             result.alpha_composite(esrc.convert("RGBA"))
             result.save(folder/"integration-composite-preview.png")
+    pipe_metrics={}
+    overlays=manifest.get("pipe_overlay_files") or {}
+    if overlays:
+        if set(overlays)!={"pipe-1","pipe-2","pipe-3","pipe-4"}:
+            raise RuntimeError("Four conditional pipe overlays must exist, no substitutions")
+        sources=[folder/overlays[key] for key in sorted(overlays)]
+        if any(not p.is_file() for p in sources):
+            raise RuntimeError("Missing declared conditional pipe overlay")
+        for key,path in zip(sorted(overlays),sources):
+            pipe_metrics[key]=capture_metrics(path,cell)
+        montage(sources,sorted(overlays),
+                folder/"conditional-pipes-contact-sheet.png",cell,columns=4)
+        base=folder/manifest["floor_integration_patch"]
+        with Image.open(base) as floor:
+            preview=floor.convert("RGBA")
+        with Image.open(folder/"frames"/"direction-00"/"idle"/"001.png") as body:
+            preview.alpha_composite(body.convert("RGBA"))
+        for source in sources:
+            with Image.open(source) as layer:
+                preview.alpha_composite(layer.convert("RGBA"))
+        preview.save(folder/"all-pipes-connected-inspection.png")
     flame_metrics=[]
     flame_atlas=None
     if manifest.get("flame_frames"):
@@ -191,6 +212,10 @@ def analyze_asset(folder):
             "atlases":atlas_files,"contact_sheet":"contact-sheet.png",
             "integration_patch_metrics":integration,
             "integration_composite_preview":"integration-composite-preview.png" if integration else None,
+            "pipe_overlay_count":len(pipe_metrics),
+            "pipe_overlay_metrics":pipe_metrics,
+            "pipe_edge_clipping_suspected":any(p["touches_frame_edge"] for p in pipe_metrics.values()),
+            "all_pipes_inspection":"all-pipes-connected-inspection.png" if pipe_metrics else None,
             "flame_frame_count":len(flame_metrics),
             "flame_atlas":flame_atlas,
             "flame_metrics":flame_metrics,
@@ -214,8 +239,10 @@ def main():
     summary={"assets":len(reports),"rendered_frames":sum(x["frame_count"] for x in reports),
              "rendered_atlases":sum(len(x["atlases"]) for x in reports),
              "independent_flame_frames":sum(x["flame_frame_count"] for x in reports),
+             "conditional_pipe_layers":sum(x["pipe_overlay_count"] for x in reports),
              "edge_risk_assets":[x["asset"] for x in reports
-                                 if x["edge_clipping_suspected"] or x["flame_edge_clipping_suspected"]],
+                                 if x["edge_clipping_suspected"] or x["flame_edge_clipping_suspected"]
+                                    or x["pipe_edge_clipping_suspected"]],
              "drift_px_by_asset":{x["asset"]:x["bbox_center_spread_px"] for x in reports},
              "status":"CAPTURE_EXPORTED_ONLY_NOT_FACTORIO_VERIFIED"}
     (root/"batch-qa-summary.json").write_text(json.dumps(summary,indent=2)+"\n")
