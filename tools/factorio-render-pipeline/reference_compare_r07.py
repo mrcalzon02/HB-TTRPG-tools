@@ -94,7 +94,7 @@ def compare(root,reference=None):
         target=fit_center(img,checker=(i>=2))
         layout.paste(target,(x,38))
     labels=["OFFICIAL WIKI — FRAME 1","OFFICIAL WIKI — FRAME 2",
-            "BLENDER R07 — IDLE","BLENDER R07 — RUN + FLAME"]
+            "BLENDER CANDIDATE — IDLE","BLENDER CANDIDATE — RUN + FLAME"]
     draw=ImageDraw.Draw(layout)
     for i,label in enumerate(labels):
         draw.text((i*300+12,13),label,fill=(238,241,220))
