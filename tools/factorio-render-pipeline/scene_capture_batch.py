@@ -267,7 +267,25 @@ def capture_one(out_dir,name):
     manifest={"asset":name,"footprint_tiles":[w,h],"preview_cell":[width,height],"run_frames":frames,
               "directions":directions,"prototype_reference":PROTOTYPE.get(name),
               "source_revision":"r04","status":"candidate_environment_test_not_game_approved",
-              "blender_version":bpy.app.version_string,"frame_files":[]}
+              "blender_version":bpy.app.version_string,"frame_files":[],
+              "floor_integration_patch":None,"floor_layer_hint":"integration_patch_render_layer = floor"}
+    # Render the static under-deck integration patch separately from the
+    # engine animation, as in the original Space Age thruster graphics_set.
+    floor=bpy.data.collections.get("FLOOR_INTEGRATION_PATCH")
+    if floor and len(floor.objects):
+        floor_set=set(floor.objects)
+        renderable=[ob for ob in scene.objects if ob.type in {"MESH","CURVE","SURFACE"}]
+        previous={ob:ob.hide_render for ob in renderable}
+        for ob in renderable: ob.hide_render=(ob not in floor_set)
+        scene.frame_set(1)
+        patch=target/"integration_patch.png"
+        scene.render.filepath=str(patch.resolve())
+        try:
+            bpy.ops.render.render(write_still=True)
+        finally:
+            for ob,hidden in previous.items(): ob.hide_render=hidden
+        if not patch.is_file():raise RuntimeError("Missing floor integration patch image")
+        manifest["floor_integration_patch"]="integration_patch.png"
     for direction in range(directions):
         ROOT.rotation_euler[2]=math.radians(direction*360/directions)
         for state,count in (("idle",1),("run",frames)):
