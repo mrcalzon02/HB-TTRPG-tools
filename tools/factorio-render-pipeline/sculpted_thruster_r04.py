@@ -324,6 +324,14 @@ def build_thruster(name,w,h,root,p):
              "cast_panel":cast_panel,"ellipsoid":ellipsoid},
             bpy.context.scene
         )
+        # R11 only enhances the VANILLA diagnostic: deepen the open throat,
+        # hang real afterburner vanes from outboard machinery, and keep
+        # colored informational labels out of the geometry altogether.
+        import vanilla_afterburner_r11
+        vanilla_afterburner_r11.apply(
+            name,root,p,{"tube":tube,"lathe":lathe,"ring":ring,
+                         "ellipsoid":ellipsoid},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
