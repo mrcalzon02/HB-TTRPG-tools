@@ -1,0 +1,40 @@
+name: Blender art workstation deployment smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/bootstrap.py'
+      - 'tools/factorio-render-pipeline/blender_smoke.py'
+      - 'tools/factorio-render-pipeline/requirements.txt'
+      - '.github/workflows/factorio-render-environment.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  install-and-render:
+    name: Blender 4.5 LTS readiness (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install and verify complete art workstation in a single command
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir evidence
+      - name: Verify repeat execution against same environment
+        run: python tools/factorio-render-pipeline/bootstrap.py verify --evidence-dir evidence
+      - name: Publish readiness evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-art-readiness-${{ matrix.os }}
+          path: evidence/
+          if-no-files-found: warn
