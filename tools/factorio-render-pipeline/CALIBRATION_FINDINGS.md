@@ -242,3 +242,26 @@ R11.2 verified results: four calibration Blender scenes reopened successfully; 3
 The CI system now has a version-pinned Blender/Python per-user environment cache. It only accelerates package setup; complete Blender headless rendering and saved-scene validation still run on each revision. Reference arrows/fuel gauge UI remain excluded from actual 3D geometry.
 
 None of these changes replace live Tech Priests sprite assets, test real Factorio 2.0.77 placement, or constitute a Codex handoff.
+
+
+## R13 — vanilla-only joined upper machinery and rough refractory (2026-10-26)
+
+Source evidence: R11.2 actual Blender output from Actions run 40402575421,
+including aft-axis and three-quarter nozzle views, body sheet, and floor/body/
+flame composite. The inner cone remained conspicuously pale, and the top row
+still resembled uniform xylophone bars. R12's audit of real original thruster
+atlas images found about 93% of changed alpha silhouette pixels in rows
+410-541 of the 264x542 cell; the upper outline is nearly stationary.
+
+R13 replaces 8 repetitive R08 guards, 7 repeated heat windows, and 16 guard
+bolts with one joined axial pressure trunk, offset port accumulator, starboard
+oxidizer chamber, three different cast guards, four rooted pipe systems, valve
+fittings, and two thermal ports. R11's OPEN throat and R08's internal drum
+use a low-reflectance, rough refractory; the outer bell uses oxidized shell
+metal. The model remains editable in the existing .blend scene and obeys
+the no-3D-informational-overlay contract. No speculative mechanism animation,
+custom model alteration, Tech Priests gameplay or production art replacement.
+
+GitHub Actions will verify Blender scene reopen, geometry, masks/layers and
+actual PNG exports. Visual similarity is for art review, not a threshold gate.
+PENDING: inspect R13 rendered captures before claiming visual improvement.

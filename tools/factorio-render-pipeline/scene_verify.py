@@ -242,6 +242,35 @@ def test_one(path):
                 raise RuntimeError("Fuel indicator artwork mistakenly modeled as physical machinery")
             if scene.get("fsc_informational_overlay_policy")!="arrows and fuel icons are UI images, zero 3D meshes":
                 raise RuntimeError("Informational overlay exclusion policy missing")
+            # Functional saved-scene R13 structural gate (not a visual score).
+            if scene.get("fsc_r13_revision")!="R13_joined_pressure_trunk_refractory":
+                raise RuntimeError("R13 pressure/manifold correction missing")
+            if int(scene.get("fsc_r13_removed_false_bar_parts",0))!=31:
+                raise RuntimeError("R13 repetitive crown cleanup absent")
+            if any(ob.name.startswith(("R08_centerline_black_pressure_shield_",
+                                       "R08_reactor_thermal_window",
+                                       "R08_bolted_reactor_armor")) for ob in scene.objects):
+                raise RuntimeError("Legacy xylophone-like crown survived")
+            for label in ("R13_axial_pressure_trunk",
+                          "R13_port_pressure_accumulator",
+                          "R13_starboard_oxidizer_chamber",
+                          "R13_forward_chamber_guard",
+                          "R13_offset_pressure_shroud",
+                          "R13_aft_combustor_guard",
+                          "R13_chamber_crossfeed"):
+                if bpy.data.objects.get(label) is None:
+                    raise RuntimeError("Missing R13 joined machinery: "+label)
+            for label in ("R11_OPEN_DEEP_REFRACTORY_THROAT",
+                          "R08_aft_internal_reaction_drum"):
+                ob=bpy.data.objects.get(label)
+                if ob is None or not ob.data.materials or (
+                    ob.data.materials[0].name!="R13_scorched_nonreflective_refractory"):
+                    raise RuntimeError("R13 refractory is not assigned to "+label)
+            if int(scene.get("fsc_r13_irregular_guard_count",0))!=3:
+                raise RuntimeError("R13 requires three different casting covers")
+            if int(scene.get("fsc_r13_heat_port_count",0))!=2:
+                raise RuntimeError("R13 requires two physical heat ports")
+            print("R13_SAVED_SCENE_STRUCTURE_PASS",path.name,flush=True)
             print("R11_DEEP_NOZZLE_AFTERBURNERS_PASS",path.name,
                   "depth_tiles",round(depth,3),"vanes",len(vanes),
                   "cantilever_brackets",len(arms),flush=True)

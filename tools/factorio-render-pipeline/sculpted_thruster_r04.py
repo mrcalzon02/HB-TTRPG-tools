@@ -332,6 +332,13 @@ def build_thruster(name,w,h,root,p):
             name,root,p,{"tube":tube,"lathe":lathe,"ring":ring,
                          "ellipsoid":ellipsoid},bpy.context.scene
         )
+        # R13 runs AFTER R11; camera and custom thrusters remain unchanged.
+        import vanilla_mechanical_r13
+        vanilla_mechanical_r13.apply(
+            name,root,p,{"tube":tube,"lathe":lathe,"ring":ring,
+                         "cast_panel":cast_panel,"ellipsoid":ellipsoid},
+            bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
