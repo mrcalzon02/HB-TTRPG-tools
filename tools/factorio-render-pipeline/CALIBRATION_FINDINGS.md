@@ -228,3 +228,17 @@ Calibration exported four test .blend scenes, 36 source body PNG frames, 10 pack
 **Environment refinement:** .github/workflows/factorio-blender-capture-batch.yml now caches the pinned local Blender 4.5.15/Python 3.12 user environment between GitHub Actions runs; all model scenes and diagnostic PNGs remain freshly generated on each execution. The cache is an efficiency mechanism, not proof of rendering compatibility, so the Blender --version, real render and saved-scene validators still run.
 
 Next quality gaps: afterburner support read at actual game zoom, stronger reference-matched deep-heat materials, more irregular/supported central pressure systems and much more convincing separate luminous plume. The official reference itself is not redistributed as licensed source art; it is fetched only for comparison. No live Factorio 2.0.77 integration acceptance yet.
+
+### Verified R11.1 / R11.2 afterburner cleanup
+
+**R11.1 passing run:** https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40401520301. Eight cantilevers were narrowed/darkened, and eight genuine chassis-to-suspension links plus root sockets were added. Both model and calibration jobs passed; the saved .blend validated the 2.28-tile open throat, eight suspension arms and the independently animated exhaust. The nozzle macro views still showed a dominant pale arch.
+
+**R11.2 passing run:** https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40402575421. Image inspection traced the pale arc mainly to legacy R05 ceramic cone-attached heatshield petals, NOT the new machine-suspended afterburners. Only the vanilla benchmark removes those old petals and their floating rim rivets. The custom Tech Priests model family retains its own existing petals. Blender source QA explicitly requires ZERO cone-mounted mock afterburner petals in the vanilla benchmark, while still demanding eight separate outboard vanes, eight cantilever arms, eight feedlines, eight chassis attachment links and eight root sockets.
+
+R11.2 verified results: four calibration Blender scenes reopened successfully; 36 rendered body frames across calibration tests (including 13 for the vanilla case), 10 packed body atlases, 12 independent flame frames, four conditional pipe overlays, separate integration-patch renders and two high-resolution rear nozzle inspection views. All frame-edge, alpha, animation and structural geometry checks passed. The four custom model regressions independently passed.
+
+**Visual result:** compared at identical camera angle/resolution, the R11.2 afterburner tips now read more distinctly as externally suspended machinery rather than a continuous ceramic ring over the nozzle. The engine still requires detailed bracket joins and darker, textured heatshields. The throat remains pale on its inner wall and could use more photometric contrast, and the current flame remains an obviously procedural translucent geometry shape rather than the brilliant irregular vanilla jet. These remain user-review targets, not automatically acceptable art.
+
+The CI system now has a version-pinned Blender/Python per-user environment cache. It only accelerates package setup; complete Blender headless rendering and saved-scene validation still run on each revision. Reference arrows/fuel gauge UI remain excluded from actual 3D geometry.
+
+None of these changes replace live Tech Priests sprite assets, test real Factorio 2.0.77 placement, or constitute a Codex handoff.
