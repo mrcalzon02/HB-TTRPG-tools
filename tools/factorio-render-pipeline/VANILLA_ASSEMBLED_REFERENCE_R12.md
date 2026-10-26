@@ -77,6 +77,15 @@ actual mesh proportions must be aligned together before interpreting it as
 a required scale edit. The vanilla is longer/slimmer and much denser and
 darker than the clean R11 capsule.
 
+A supplementary unregistered raster-color comparison (RGB normalized 0..1,
+pixels with alpha >128) shows median sRGB-like luma about **0.106** on
+the original vanilla body versus **0.249** on the last verified R11 idle
+candidate; the rendered candidate is much brighter in typical visible areas.
+This statistic is affected by different color management, reference lighting
+and image coverage and is **not** a valid one-step material correction.
+The camera, AgX/color transform, key lighting, shadows, exposure, roughness
+and physically connected dark regions all need simultaneous calibration.
+
 The native integration patch is an **open, suspended socket structure**,
 not a full machine base plate; the pipe sprites are small connection patches
 positioned within large transparent cells. The RGB native light and flame
