@@ -77,7 +77,19 @@ def test_one(path):
         if not path.name.startswith("void-fusion"):
             weathered=[m for m in bpy.data.materials if m.get("R05_metal_surface")]
             if len(weathered)<4:raise RuntimeError("R05 procedural material surface stage missing")
-        print("R05_GEOMETRY_PASS",path.name,"separate_petals",len(petal),flush=True)
+        nozzle_specs=json.loads(scene.get("fsc_nozzle_profiles","[]"))
+        if not nozzle_specs:
+            raise RuntimeError("R06 missing authoritative nozzle geometry metadata")
+        if len(nozzle_specs)*10>len(petal):
+            raise RuntimeError("R06 lacks separate scalloped petals on nozzle bells")
+        if any(abs(float(p["x"]))+float(p["diameter_tiles"])*.57>directions[0]/2+.02
+               for p in nozzle_specs):
+            raise RuntimeError("R06 nozzles exceed actual platform footprint")
+        if not path.name.startswith("void-fusion"):
+            if not any("_dorsal_pressure_rib_" in o.name for o in meshes):
+                raise RuntimeError("R06 missing segmented dorsal armor")
+        print("R06_GEOMETRY_PASS",path.name,"petals",len(petal),
+              "nozzles",len(nozzle_specs),flush=True)
         print("RECESSED_MOUNT_PASS",path.name,"rear_y",round(nozzle_low,3),
               "platform_edge",required_y,"curved_meshes",len(curved_meshes),flush=True)
     print("SCENE_REOPEN_PASS",path.name,"mesh_parts",len(meshes),
