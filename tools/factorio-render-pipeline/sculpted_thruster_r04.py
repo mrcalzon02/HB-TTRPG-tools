@@ -215,7 +215,7 @@ def curved_armor(w,h,p,root,variant):
                       (.057,.052,.035),p["copper"],root)
 
 def routed_manifold(w,h,p,root,color="blue"):
-    fx=min(w/2-.38,1.65)
+    fx=min(w*.325,1.53)
     for side in (-1,1):
         # The ports are high/fore and pipes descend into the recessed case.
         tube("double_curved_propellant_supply_"+str(side),
