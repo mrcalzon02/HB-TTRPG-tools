@@ -36,8 +36,9 @@ def _ellipse_plate(name,root,material,profile,side,z_offset=-.31):
     profile = (y, rx, rz) stations. Side determines positive/negative X.
     Cross angles are chosen near the upper shoulders, keeping the reactor visible.
     """
-    if side==1:angles=[.17+i*(1.03-.17)/SAMPLES for i in range(SAMPLES+1)]
-    else:angles=[math.pi-1.03+i*(.86)/SAMPLES for i in range(SAMPLES+1)]
+    # Wide armored shoulder panels wrap the hull; the crown remains exposed.
+    if side==1:angles=[.09+i*(1.29-.09)/SAMPLES for i in range(SAMPLES+1)]
+    else:angles=[math.pi-1.29+i*(1.20)/SAMPLES for i in range(SAMPLES+1)]
     verts=[]
     for y,rx,rz in profile:
         for angle in angles:
@@ -84,7 +85,9 @@ def _pipe_saddle(name,root,p,x,y,z):
 
 def _pipe_bundle(name,root,p,side,w,h,api):
     tube=api["tube"];ring=api["ring"]
-    x=side*min(w/2-.34,1.72)
+    # Keep the pipe bundle anchored to the pressure vessel, not hanging outside
+    # the platform's full width like unsupported copper strings.
+    x=side*min(w*.325,1.53)
     lead_y=min(1.35,h/2-.52)
     for i,offset in enumerate((-.12,.12)):
         tube(name+"_feed_"+str(side)+"_"+str(i),
@@ -168,6 +171,34 @@ def _hull_panels(name,root,p,w,h):
             _ring_fastener(name+"_panel_pin",edge_x,a+.08,.24,p["brass"],root,.058)
         _ribbed_finbank(name+"_cooling_stack",root,p,side,fore-.52,span_x=min(w*.28,.9))
 
+def _dorsal_spine(name,root,p,w,h):
+    # Articulated crown assembly interrupts the previous 'smooth steel egg'.
+    fore=h/2-.86 if h>=8 else min(h/2-.63,1.09)
+    aft=-h/2+1.14 if h>=8 else max(-h/2+.74,-1.42)
+    for idx in range(6):
+        center=aft+(idx+.5)*(fore-aft)/6
+        arc=[(center-(fore-aft)*.050,.32,.55),
+             (center-(fore-aft)*.020,.39,.68),
+             (center+(fore-aft)*.022,.39,.68),
+             (center+(fore-aft)*.047,.32,.55)]
+        # Shallow conformal crown plate with beveled edges and exposed slots.
+        verts=[]
+        for yy,half_width,rise in arc:
+            for j in range(6):
+                x=-half_width+j*2*half_width/5
+                verts.append((x,yy,-.31+rise-.12*(x/max(.15,half_width))**2))
+        faces=[]
+        for j in range(3):
+            for k in range(5):
+                a=j*6+k
+                faces.append((a,a+1,a+7,a+6))
+        _mesh(name+"_dorsal_pressure_rib_%02d"%idx,verts,faces,
+              p["dark"] if idx%2 else p["copper"],root,.025)
+        for side in (-1,1):
+            _ring_fastener(name+"_dorsal_rivet",side*.30,center,.30,
+                           p["brass"],root,.043)
+
+
 def _thermal_coils(name,root,p,w,h,api):
     tube=api["tube"]
     if w<2: return
@@ -225,36 +256,35 @@ def _weather_material(material,intensity=.17):
     bump.inputs["Distance"].default_value=.015
     links.new(tex.outputs["Fac"],bump.inputs["Height"])
     links.new(bump.outputs["Normal"],bsdf.inputs["Normal"])
-    bsdf.inputs["Roughness"].default_value=.43
+    # Muted, oil-darkened machinery: less mirrorlike than the R04 capsule.
+    bsdf.inputs["Roughness"].default_value=.57
+    bsdf.inputs["Metallic"].default_value=.27 if "iron" in material.name else .42
 
 def apply_finishes(p):
     for key in ("steel","dark","iron","brass","copper","ceramic"):
         _weather_material(p.get(key),.13 if key=="ceramic" else .19)
 
 def add_details(name,w,h,root,p,api):
-    """Apply deliberate detail families only where physically meaningful."""
+    """R06 material/shape QA uses the same nozzle profiles as the base meshes."""
     if "graybox" in name:return
+    from thruster_profile_r06 import nozzle_profiles
     apply_finishes(p)
+    profiles=nozzle_profiles(name,w,h)
     if name.startswith("void-fusion"):
         _void_spine_details(name,root,p,h,api)
-        _nozzle_petals("spinal_void",0,-h/2-.16,-.34,.53,root,p,"void")
-        return
-    if name.startswith("large-void"):
+    elif name.startswith("large-void"):
         _hull_panels("heavy_drive",root,p,w,h)
+        _dorsal_spine("heavy_drive",root,p,w,h)
         _thermal_coils("heavy_drive",root,p,w,h,api)
-        for x in (-1.05,0,1.05):
-            _nozzle_petals("heavy_reactor_%s"%x,x,-h/2-.17,-.38,.84,root,p,"void")
-        return
-    if name.startswith("thetazine"):
+    elif name.startswith("thetazine"):
         _hull_panels("thetazine",root,p,w,h)
+        _dorsal_spine("thetazine",root,p,w,h)
         _thermal_coils("thetazine",root,p,w,h,api)
         for side in (-1,1):_pipe_bundle("thetazine",root,p,side,w,h,api)
-        for x in (-.86,.86):
-            _nozzle_petals("thetazine_dual_%s"%x,x,-h/2-.13,-.38,.91,root,p,"thetazine")
-        return
-    # Vanilla benchmark and hydrogen: one large engine bell with independent
-    # exposed propellant pipe train, fin stack and protective cast plates.
-    _hull_panels("single_reactor",root,p,w,h)
-    _thermal_coils("hydrogen",root,p,w,h,api)
-    for side in (-1,1):_pipe_bundle("hydrogen",root,p,side,w,h,api)
-    _nozzle_petals("hydrogen_large",0,-h/2-.16,-.38,1.29,root,p,"hydrogen")
+    else:
+        _hull_panels("single_reactor",root,p,w,h)
+        _dorsal_spine("single_reactor",root,p,w,h)
+        _thermal_coils("hydrogen",root,p,w,h,api)
+        for side in (-1,1):_pipe_bundle("hydrogen",root,p,side,w,h,api)
+    for label,x,y,z,diam,color in profiles:
+        _nozzle_petals(label,x,y,z,diam,root,p,color)
