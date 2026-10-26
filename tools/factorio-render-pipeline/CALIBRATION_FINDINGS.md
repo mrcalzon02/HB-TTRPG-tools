@@ -280,3 +280,37 @@ R13's own validator explicitly rejects surviving false bars and requires
 the joined replacement meshes, dark refractory material assignments and
 physical heat ports. This is not a reduction of the intended validation.
 Pending a complete rerun and visual review.
+
+## R14 — 64-frame BODY versus LIGHT motion isolation (2026-10-26)
+
+R13 corrective capture https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40413530088:
+both calibration and custom-model jobs passed, including full Blender scene
+reopen validation, frame exports, pipe layers and geometry checks.
+
+R12's original atlas audit measured 63 adjacent body transitions, with most
+changed alpha pixels in rows 410-541. The new R14 audit extends it to all
+**64 cyclic pairs**, explicitly measuring 63 -> 0, regional silhouette
+threshold crossings and opaque-body luminance separately. It independently
+measures the 64 light-layer transitions, provides 1/2/4/8/16/32-frame
+phase comparisons, and saves per-pixel alpha-change frequency + native frame
+contact sheets to a PRIVATE local evidence folder.
+
+This is NOT automated reconstruction of the engine's hidden 3D topology.
+Luminance differences can be emitted light/shader/shadow changes, so no
+unobserved animation is added to Blender based on RGB differences.
+
+The previous conversation's original ZIP remains indexed in the user's
+project Library, but raw-byte access to that existing Project file is not
+available in this session. We inspected the previously generated R12 source
+contact sheet, NOT a newly extracted 64-frame ZIP. R14 was exercised against
+generated non-copyrighted fixture atlases (4 independent functional tests);
+the actual original ZIP report is PENDING fresh execution with accessible
+local archive bytes. Its output must not be uploaded to this public repo.
+
+Local operator command (after providing their own installed-game ZIP):
+
+    python tools/factorio-render-pipeline/thruster_motion_audit_r14.py /path/to/thruster.zip --output /private/local/factorio-motion-r14
+
+Functional Python unit tests run automatically via the existing
+factorio-render-pipeline-validation.yml source workflow. No Tech Priests
+gameplay, custom thruster mesh or approved production sprite is modified.
