@@ -111,6 +111,7 @@ def analyze_asset(folder):
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--root",type=Path,required=True)
+    p.add_argument("--fail-on-edge",action="store_true",help="Treat alpha touching any frame boundary as a failed regression")
     args=p.parse_args()
     root=args.root.resolve()
     candidates=sorted(x for x in root.iterdir() if x.is_dir() and (x/"capture-manifest.json").is_file())
@@ -155,6 +156,8 @@ def main():
                "inspect edge risk, exhaust alignment, alpha, zoom-scale readability,",
                "and follow with Factorio 2.0.77 platform screenshots before integration.",""])
     (root/"CAPTURE_QA.md").write_text("\n".join(md))
+    if args.fail_on_edge and summary["edge_risk_assets"]:
+        raise RuntimeError("Frame clipping regression: "+", ".join(summary["edge_risk_assets"]))
     print("BATCH_QA_SUCCESS",json.dumps({k:v for k,v in summary.items() if k!="drift_px_by_asset"}),flush=True)
 
 if __name__=="__main__":main()
