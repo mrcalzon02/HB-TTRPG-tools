@@ -148,3 +148,28 @@ R04 now puts platform socket and cutout meshes in the saved Blender FLOOR_INTEGR
 Verified full-pass Actions run: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40293141184
 
 Remaining gaps: separate physically convincing nozzle flame/effects, connected pipe overlays, complex housing segmentation, edge matching to an actual game platform screenshot, source lighting calibration, and Factorio 2.0.77 runtime acceptance. No Tech Priests gameplay or production sprite changes were made. R04 is still visually simplified and NOT art-approved.
+
+## R05/R06 — reference-led geometry refinement and actual render checks (2026-10-26)
+
+**Visual issue being corrected:** R04 still looked like a smooth, freestanding engine capsule with thin unsupported pipe loops and small nozzle stubs, despite passing render and mounting tests. The official Space Age reference shows a layered industrial assembly with major side manifolds, armored pressure housings, a large bell/exhaust mouth, and a separately rendered platform-floor integration patch. This remains a candidate original interpretation, NOT pixel-accurate vanilla recreation.
+
+**R05 geometry implemented** in industrial_detail_r05.py: curved conformal segmented shoulders (following elliptical hull coordinates), discrete flared thermal/nozzle petals, port coupling and fastener meshes, supported paired supply lines, ribbed thermal fins, and restrained 3D metal surface variation. The source preserves previously passing separate floor integration and below-deck mount geometry. All R05 captures passed in GitHub run https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40295674064 after correcting a panel-fastener argument mismatch caught by the strict Blender process exit-code check.
+
+**R06 design changes**, based on inspection of the R05 contact sheets:
+- A single source-of-truth nozzle placement/diameter contract, thruster_profile_r06.py, replaces conflicting duplicated dimensions in geometry and detail code.
+- Hydrogen single bell expanded to 2.55 tile diameter; reference vanilla bell 3.06 within its 4-tile width; thetazine has twin 1.56-tile bells; large void has three 1.15-tile bells; narrow 1x9 spine retains a 0.74-tile bell.
+- Bell mouths retain real separate scalloped petals and internal turbine vanes.
+- Outer fuel piping moved inboard to hug the engine housing; new articulated dorsal armor interrupts the flat smooth capsule surface. Oil-darkened materials use restrained noise/bump and a rougher finish.
+- Scene source, QA manifests and CI names now identify R06, preserving R04/R05 workflow artifacts for comparison.
+- The first R06 calibration failed correctly because the enlarged 4x8 vanilla reference projected out the left frame boundary. A camera-azimuth correction for long 4x8 bodies fixed it without shrinking the larger nozzle or relaxing edge-boundary validation.
+
+**Final verified R06 workflow:** https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40297034853
+
+- Both independent jobs PASSED in Blender 4.5 LTS: four model scenes and four calibration scenes.
+- **44 real transparent captured PNG frames**, **18 packed directional/state atlases**, **eight reopened native .blend scenes** and separate static floor integration PNGs.
+- 0 reported alpha frame-edge clipping assets after the camera correction.
+- R06 physical exhaust/mesh proof passed: hydrogen 12 nozzle petals, thetazine 24 petals over 2 bells, heavy void 36 petals over 3 bells, narrow void 10 petals.
+- Calibration includes 4x8 vanilla-prototype approximation, its idle/run state keyframes, and no-clipping render proof. It is NOT faithful original-art reconstruction, full 64-frame vanilla recreation, or a Factorio in-game test.
+- Original Tech Priests runtime/entity graphics are untouched.
+
+**Observed remaining visual debt from actual R04 → R05 → R06 review:** Though the nozzles now occupy more convincing proportions and the metalwork is more detailed, the big central body still reads too much like a smooth capsule. Side pipework needs physically supported junctions and cast armor enclosing it. Missing: realistic multi-layer heat shielding and wear, full flame and separate emission capture passes, vanilla-matched lighting and attachment overlays, and real engine test at Factorio 2.0.77. The headless Blender source builder is tested; the separately installable Sprite Capture Studio add-on is **not** yet exercised by this workflow. These are explicit next development gates, not grounds to claim production-ready assets.
