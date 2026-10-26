@@ -139,10 +139,15 @@ def test_one(path):
                 raise RuntimeError("R09 vanilla idle nozzle must not have a bright cyan ignition disc")
             if any("_animated_ignition" in ob.name for ob in meshes):
                 raise RuntimeError("Idle cyan ignition disc was incorrectly baked into source")
-            if scene.get("fsc_camera_selection_evidence")!="R09 centered_high no-clipping three-angle sweep":
-                raise RuntimeError("Vanilla camera selection lacks three-angle reference proof")
-            if abs(scene.camera.location.x-.18)>.01 or abs(scene.camera.location.z-10.0)>.05:
-                raise RuntimeError("Vanilla camera drifted from selected higher centered view")
+            if scene.get("fsc_camera_selection_evidence")!="R09 centered_high translated 1 tile aft for R10 flame clearance":
+                raise RuntimeError("Vanilla camera selection lacks R09 angle and R10 exhaust framing evidence")
+            camera_target=json.loads(scene.get("fsc_camera_target","null"))
+            if camera_target is None or abs(camera_target[1]+1.0)>.01:
+                raise RuntimeError("Camera target did not move aft with extended exhaust")
+            if (abs(scene.camera.location.x-.18)>.01 or
+                abs(scene.camera.location.z-10.0)>.05 or
+                abs(scene.camera.location.y+7.8)>.05):
+                raise RuntimeError("Vanilla camera drifted from corrected centered-high aft composition")
             expected_parts=[
                 ("R08_parallel_pressure_bottle_side",2),
                 ("R08_centerline_black_pressure_shield_",8),
