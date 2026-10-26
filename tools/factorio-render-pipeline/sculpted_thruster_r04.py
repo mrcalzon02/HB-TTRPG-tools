@@ -181,7 +181,7 @@ def nozzle(name,x,y,z,diam,p,root,color="blue"):
     ring(name+"_rolled_lip",x,y-.41,z,r*.98,p["brass"],root,.045)
     lathe(name+"_dark_throat",[(y-.30,r*.41),(y-.20,r*.45),
                                (y+.06,r*.25),(y+.22,r*.12)],
-           x,z,p["dark"],root)
+           x,z,p["dark"],root,close_ends=False)
     ellipsoid(name+"_animated_ignition",(x,y-.11,z),
               (r*.24,.035,r*.24),p[color],root)
     # Symmetrical bell coolant and curved braces.
