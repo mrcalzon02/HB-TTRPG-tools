@@ -90,3 +90,49 @@ Verified final strict run: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/
 - R03 output remains lower-resolution visual QA; no live Tech Priests graphics were overwritten, and Factorio 2.0.77 runtime art load/placement is still untested.
 
 Artifacts of this run contain saved Blender scenes, captures, atlasses, QA JSON and contact sheets, available on the Actions run page. This is the current verified capture baseline.
+
+
+## R04 structural response: stop building deck-mounted box assemblies
+
+The R03 screenshot review found that successful camera/PNG QA was not sufficient: the
+models still looked like separate rectangular machines **resting on top of a
+platform plate**. In Blender, the previous \`central_support\`,
+\`platform_mating_flange\`, and \`longitudinal_frame_rail\` generated an
+incorrect deck-mounted silhouette. They are no longer used for the candidate
+thruster and vanilla-approx scenes.
+
+New \`sculpted_thruster_r04.py\` source creates:
+- Elliptically lofted reactor casings rather than cube-stack housings
+- Profile-lathed nozzle bells, rolled lips, recessed throat geometry, and field cores
+- Irregular beveled cast shoulder armor, turned exposed pressure bands, routed Bezier tubing
+- A C-channel **recessed socket with no solid base/floor plate**
+- Lowered reactor mass around Blender z=-0.31 with the platform reference deck at z=0
+- Exhaust bell meshes whose aft vertices extend past -Y platform boundary
+
+Authoritative first passing R04 GitHub run:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40291839289
+
+The first run reopened all four source models and proved the aft extensions:
+- hydrogen: bell aft Y=-2.295 vs platform Y=-2.0 (0.295 tiles)
+- thetazine: -2.775 vs -2.5 (0.275 tiles)
+- void spine: -4.875 vs -4.5 (0.375 tiles)
+- large void: -2.315 vs -2.0 (0.315 tiles)
+
+All four candidate models passed alpha-edge checks with no clipped frames.
+The geometry verifier now rejects legacy floor plates, absent rolled bells,
+a body that never sinks below deck, and insufficient true curved geometry.
+
+**Visual quality remains experimental.** Even the initial R04 close-ups still
+read as simplified industrial mockups. They are not a convincingly matched
+vanilla Factorio thruster and do not yet warrant replacing real mod art.
+Further work must improve body-to-socket composition, surface segmentation,
+engine detail, material definition, and reference matching.
+
+Follow-up R04.1 exposes pressure bands that had been buried in the lofted hull
+and increases nozzle overhang to read clearly beyond the platform edge.
+That follow-up must earn its own actual Blender workflow proof before the
+new geometry is accepted. The R03 artifact baseline is preserved for comparison.
+
+The tool still runs direct Blender Python instead of exercising the
+separately packaged user-facing Sprite Capture Studio extension, and
+Factorio 2.0.77 engine integration is not yet tested.
