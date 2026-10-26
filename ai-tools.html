@@ -30,10 +30,15 @@
 </ol>
 <h3>Linux / Codex setup</h3><pre><code>git clone https://github.com/mrcalzon02/HB-TTRPG-tools.git
 cd HB-TTRPG-tools
-bash tools/factorio-render-pipeline/setup-codex-linux.sh --check
-bash tools/factorio-render-pipeline/setup-codex-linux.sh --setup</code></pre>
-<p>The local helper installs image dependencies to a per-user Python environment; Blender is a separately verified executable.</p>
+python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir art-readiness
+python tools/factorio-render-pipeline/bootstrap.py verify --evidence-dir art-readiness</code></pre>
+<p>The single installer verifies an official Blender 4.5.15 LTS download against its SHA-256 manifest (or uses a compatible local Blender), installs image dependencies in a per-user environment, executes a real headless CPU smoke render, and writes a readiness report. It does not need a background server or elevated privileges. Actual Factorio asset rendering remains a separate future milestone.</p>
 <div class="workspace-actions"><a class="link-button primary-action" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/tools/factorio-render-pipeline/README.md">Full runbook</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/tools/factorio-render-pipeline/CODEX_WORK_ORDER.md">Codex work order</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/tools/factorio-render-pipeline/setup-codex-linux.sh">Setup script</a></div>
+<section aria-labelledby="reference-art-title"><h3 id="reference-art-title">Reference image — three-figure study</h3>
+<p>The supplied 375 × 200 image of three armored humanoid figures on a tan ground is a visual style and scale reference, <strong>not</strong> verified thruster geometry. The screenshot is currently available in the associated Tech Priests project Library, but its raw bytes have not been committed to the site. Select the original PNG below to display it locally within this module.</p>
+<label for="factorio-reference-upload">Choose the supplied reference image (local browser only)</label>
+<input id="factorio-reference-upload" type="file" accept="image/png,image/jpeg,image/webp">
+<figure><img id="factorio-reference-preview" alt="Locally selected three-figure Factorio-style model reference" style="max-width:100%;height:auto;display:none"><figcaption id="factorio-reference-caption">No image imported in this browser. No upload to the Foundry or GitHub occurs.</figcaption></figure></section>
 <p>The reusable procedures live here; each destination game's editable models, sprites and integration tests belong in its own repository.</p></section></main>
 <footer class="ai-shell"><p>Calzon's TTRPG Foundry · <a href="index.html">Back to Tools</a></p></footer>
 <script>
@@ -45,5 +50,15 @@ if(panels.some(p=>!p))return;
 function activate(){const wanted=decodeURIComponent(location.hash.slice(1));const ix=tabs.findIndex(t=>t.getAttribute("aria-controls")===wanted);const chosen=ix<0?0:ix;tabs.forEach((t,i)=>{const on=i===chosen;t.setAttribute("aria-selected",String(on));t.tabIndex=on?0:-1;if(on)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current");panels[i].hidden=!on;});}
 tabs.forEach((t,i)=>t.addEventListener("keydown",e=>{const next=e.key==="ArrowRight"?(i+1)%tabs.length:e.key==="ArrowLeft"?(i+tabs.length-1)%tabs.length:e.key==="Home"?0:e.key==="End"?tabs.length-1:-1;if(next<0)return;e.preventDefault();tabs[next].focus();tabs[next].click();}));
 window.addEventListener("hashchange",activate);activate();
+const picker=document.getElementById("factorio-reference-upload");
+const preview=document.getElementById("factorio-reference-preview");
+const caption=document.getElementById("factorio-reference-caption");
+const storageKey="hb-ttrpg-tools.factorio-reference.v1";
+function showReference(url){if(!url||!url.startsWith("data:image/"))return;preview.src=url;preview.style.display="block";caption.textContent="Local reference image preview. Stored only in this browser when storage is available."; }
+try{const saved=localStorage.getItem(storageKey);if(saved)showReference(saved);}catch(err){}
+if(picker)picker.addEventListener("change",()=>{const file=picker.files&&picker.files[0];if(!file)return;
+if(!["image/png","image/jpeg","image/webp"].includes(file.type)||file.size>2097152){caption.textContent="Choose a PNG, JPEG or WebP under 2 MiB.";return;}
+const reader=new FileReader();reader.onload=()=>{const value=String(reader.result||"");showReference(value);
+try{localStorage.setItem(storageKey,value);}catch(err){caption.textContent="Preview loaded for this session. Browser storage unavailable.";}};reader.readAsDataURL(file);});
 })();
 </script></body></html>
