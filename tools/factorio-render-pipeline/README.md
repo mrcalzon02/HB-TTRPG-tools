@@ -84,3 +84,26 @@ CI source checks run `python3 -m unittest discover -s tools/factorio-render-pipe
 ## Provided reference image
 
 A user-provided 375 × 200 image of **three armored humanoid figures on a sandy/tan top-down background** accompanies this work order and illustrates model silhouette, scale and legibility targets. The original image is in the user's Tech priests Library. It is a **style/visual reference**, not evidence for thruster mount geometry, actual Factorio prototype size, or a Blender render. The website's optional local reference selector can display that image without uploading it to GitHub Pages. Its original PNG file cannot be committed until authorized file bytes are available in the repository editing environment. No synthesized replacement is substituted.
+
+
+## R12 real installed-game vanilla atlas calibration
+
+The user supplied original assembled Space Age thruster sprite sheets,
+four conditional connections, smoke, flame, light and static platform
+integration layers. We have audited the actual 64-frame source animation,
+rather than the earlier small gameplay GIF. See
+[VANILLA_ASSEMBLED_REFERENCE_R12.md](VANILLA_ASSEMBLED_REFERENCE_R12.md)
+for the measured dimensions, animation regions and R11 silhouette mismatch.
+
+Run the reference analyzer **locally** (Pillow required):
+
+    python tools/factorio-render-pipeline/audit_vanilla_atlas.py /your/factorio/thruster.zip --output /local/private/factorio-reference
+
+This produces source cell metadata, motion evidence, and contact sheets.
+Its unit tests use synthetic fixture artwork, not proprietary images.
+Do not commit original or derived game art into this public repository.
+The official 2.0.77 entity Lua and locally owned source sprites remain
+authoritative calibration inputs, not authorization to ship a copy of
+Factorio art. The next Blender run must compare mechanical geometry against
+these reference frames, and must separately test the body, static socket,
+conditional fuel/oxidizer pipes, light and flame.
