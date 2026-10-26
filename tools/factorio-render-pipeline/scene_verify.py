@@ -127,6 +127,22 @@ def test_one(path):
                 anchor=anchors[0]
                 if abs(anchor.location.x-factorio_x)>0.001 or abs(anchor.location.y+factorio_y)>0.001:
                     raise RuntimeError("Incorrect map/Blender port mapping for "+port)
+            if scene.get("fsc_reference_visual_pass")!="R08_blackened_segmented_furnace_with_supported_side_machinery":
+                raise RuntimeError("Vanilla R08 reference-driven pressure reconstruction absent")
+            expected_parts=[
+                ("R08_parallel_pressure_bottle_side",2),
+                ("R08_centerline_black_pressure_shield_",8),
+                ("R08_rolled_nozzle_rivet",16),
+                ("R08_aft_shroud_wing",2),
+                ("R08_reactor_thermal_window",7),
+            ]
+            for prefix,count in expected_parts:
+                matched=[ob for ob in meshes if ob.name.startswith(prefix)]
+                if len(matched)<count:
+                    raise RuntimeError("Missing R08 machined components: "+prefix+
+                                       " expected="+str(count)+" observed="+str(len(matched)))
+            print("R08_VISUAL_SOURCE_PASS",path.name,
+                  "paired_reactors",2,"ribbed_heat_shields",8,flush=True)
             print("R07_CONDITIONAL_PIPES_PASS",path.name,"ports",len(expected_port_map),flush=True)
             print("R07_VANILLA_REFERENCE_PASS",path.name,
                   "mount_span",mount,"selection_span",directions[1],
