@@ -93,7 +93,16 @@ def test_one(path):
         if len([ob for ob in scene.objects if ob.type=="CURVE"])<3:
             raise RuntimeError("Insufficient swept piping/geometry, legacy boxy scene suspected")
         petal=[ob for ob in meshes if "_heat_shield_petal_" in ob.name]
-        if len(petal)<10:raise RuntimeError("R05 expects actual separate sculpted nozzle petals")
+        is_vanilla=path.name.startswith("test-04-vanilla-approx")
+        if is_vanilla:
+            # User-verified distinction: VANILLA afterburners are suspended
+            # OUTBOARD of the cone, not petals attached to its surface.
+            if petal:
+                raise RuntimeError("Legacy cone-attached light ceramic panels mask real afterburners")
+            if int(scene.get("fsc_removed_cone_attached_vane_panels",0))<10:
+                raise RuntimeError("R11.2 failed to remove inherited fake afterburner petals")
+        elif len(petal)<10:
+            raise RuntimeError("Custom R06 nozzle requires separate sculpted heatshield petals")
         false_fans=[ob.name for ob in meshes if "_inner_flow_vane_" in ob.name]
         if false_fans:
             raise RuntimeError("R09 forbids turbine propeller blades inside thruster nozzle")
@@ -108,8 +117,8 @@ def test_one(path):
         nozzle_specs=json.loads(scene.get("fsc_nozzle_profiles","[]"))
         if not nozzle_specs:
             raise RuntimeError("R06 missing authoritative nozzle geometry metadata")
-        if len(nozzle_specs)*10>len(petal):
-            raise RuntimeError("R06 lacks separate scalloped petals on nozzle bells")
+        if not is_vanilla and len(nozzle_specs)*10>len(petal):
+            raise RuntimeError("Custom R06 nozzle lacks expected separate scalloped petals")
         if any(abs(float(p["x"]))+float(p["diameter_tiles"])*.57>directions[0]/2+.02
                for p in nozzle_specs):
             raise RuntimeError("R06 nozzles exceed actual platform footprint")
