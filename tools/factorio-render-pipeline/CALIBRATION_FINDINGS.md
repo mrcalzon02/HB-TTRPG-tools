@@ -204,3 +204,13 @@ R09 PASS: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40388888408.
 R10 is experimental: a 12-running-frame vanilla benchmark at 320x640 with longer independent blue-white flame. Do not call it passed until its particular workflow run has passed. The R09 dark idle throat deliberately removes a permanent cyan ignition disk; keep moving light in the independent exhaust collection.
 
 These capture source revisions do not authorize replacement of any Tech Priests production art. More work remains on heavily integrated side machinery, nonuniform metal wear, deep nozzle darkness, white-blue plume, exact lighting, the user-facing Capture Studio add-on execution path, and an isolated real Factorio 2.0.77 runtime test.
+
+### R10 tested exhaust-frame correction
+
+GitHub Actions passing run: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40390817919
+
+The first 12-frame R10 experiment failed the deliberately strict clipping gate: the vanilla engine body and all four conditional pipes were fully within their canvases, but 8 of 12 long flame frames touched the bottom edge of a 320x640 cell. No geometry was accepted on that failure. The final fix translated the selected centered-high orthographic camera and aim by one Blender tile aft, retaining the same viewing direction and plume length. The saved Blender camera now has location approximately [0.18,-7.8,10.0] and aim [0,-1,0.56]. The verifier guards this setting.
+
+Final evidence: 13 body frames (1 idle + 12 running), 12 distinct independent exhaust frames, four optional conditional pipe overlays, one floor integration patch, and the real Blender scene. All engine, flame and pipe images passed frame-edge checks. First flame alpha bbox was [107,436,200,625] in the 320x640 canvas, leaving 15 pixels below its visible silhouette. Reference GIF comparison also loaded successfully. The four custom model regression captures passed, unchanged from their R09 silhouette family.
+
+Visual review still rejects production fidelity: the engine body is lighter and far less mechanically dense than Wube vanilla; the candidate exhaust is a narrow blue tapered translucent blade instead of a brilliant irregular blue-white plume; the current object requires better housing/side-machine topology, lighting and separate glow/heat treatment. Do not substitute this camera test for a Factorio engine acceptance or user-facing Blender add-on test.
