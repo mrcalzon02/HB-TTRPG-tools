@@ -16,12 +16,16 @@ Factorio 2.0 uses 2D sprites. The durable source should be actual editable Blend
 Python 3.10+, Bash, Git and a verified Blender binary (Blender 4.5 LTS recommended). Image helpers Pillow and PyYAML install to a private user Python venv by request. Do not silently install system packages or download unverified Blender binaries.
 
 ~~~sh
-bash tools/factorio-render-pipeline/setup-codex-linux.sh --check
-bash tools/factorio-render-pipeline/setup-codex-linux.sh --setup
-# Explicit Debian/Ubuntu-only fallback; distro Blender can be older:
-bash tools/factorio-render-pipeline/setup-codex-linux.sh --install-blender-apt
-bash tools/factorio-render-pipeline/setup-codex-linux.sh --check
+# ONE command, Windows PowerShell or Linux shell, in the Foundry checkout:
+python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir art-readiness
+
+# Later, verify the installed workstation without downloading:
+python tools/factorio-render-pipeline/bootstrap.py verify --evidence-dir art-readiness
 ~~~
+
+The installer is the **single deployment entrypoint** for Windows x64 and Linux x64 with Python 3.10+. It pins official Blender **4.5.15 LTS**, checks the downloadable archive against Blender's official SHA-256 manifest, unpacks into a per-user cache without administrator rights, installs local Python image tools, runs a **real Blender CPU headless 96×96 transparent PNG smoke render**, and emits `readiness.json` plus `smoke-frame.png`. A bad checksum, incomplete executable, missing Pillow/PyYAML, wrong Blender series or failed render **returns nonzero and records blocked**. `--no-download` can be used to require an already-installed Blender 4.5 LTS.
+
+The historical `setup-codex-linux.sh --setup` entrypoint now delegates to this canonical Python command. There is no second independent installer, no background service, and no app startup task. Run the same Python command later tonight on the desired Windows/Linux workstation after pulling the latest repository. This installs the local **art workstation**, not a finished 3D source generator or game sprite packer.
 
 Override BLENDER_BIN to point at an explicitly installed and verified executable. Record the actual Blender/Python versions, OS, SHA and evidence. A successful preflight does not prove headless rendering or Factorio load.
 
@@ -72,3 +76,11 @@ On an isolated game copy, validate graphics load, space-platform edge placement,
 ## Evidence states
 
 Documented → environment checked → editable mesh generated → images rendered → sheet/prototype validation → exact Factorio loaded → visually accepted in game. No state implies the next. Keep the user's art modernization workstream separate from unrelated runtime behavior; do not bypass game release gates.
+
+## Deployment verification and evidence
+
+CI source checks run `python3 -m unittest discover -s tools/factorio-render-pipeline -p 'test_*.py' -v` and lint the wrapper. The separate `.github/workflows/factorio-render-environment.yml` workflow executes the actual one-command install and repeat verify on Ubuntu 24.04 and Windows 2022 runners. It uploads machine-readable readiness JSON and the PNG proof when available. Only mark an OS **ready** after its particular job passes. A GitHub runner's success does not install Blender on an end-user's workstation.
+
+## Provided reference image
+
+A user-provided 375 × 200 image of **three armored humanoid figures on a sandy/tan top-down background** accompanies this work order and illustrates model silhouette, scale and legibility targets. The original image is in the user's Tech priests Library. It is a **style/visual reference**, not evidence for thruster mount geometry, actual Factorio prototype size, or a Blender render. The website's optional local reference selector can display that image without uploading it to GitHub Pages. Its original PNG file cannot be committed until authorized file bytes are available in the repository editing environment. No synthesized replacement is substituted.
