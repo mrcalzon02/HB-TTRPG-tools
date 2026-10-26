@@ -88,6 +88,30 @@ def test_one(path):
         if not path.name.startswith("void-fusion"):
             if not any("_dorsal_pressure_rib_" in o.name for o in meshes):
                 raise RuntimeError("R06 missing segmented dorsal armor")
+        if path.name.startswith("test-04-vanilla-approx"):
+            ref=json.loads(scene.get("fsc_vanilla_prototype_reference","null"))
+            if not ref or ref["selection_box_factorio"]!=[[-2,-2.5],[2,5.5]]:
+                raise RuntimeError("Vanilla 2.0.77 selection reference missing/wrong")
+            if ref["ground_buildability_box_factorio"]!=[[-1.8,-2.3],[1.8,2.3]]:
+                raise RuntimeError("Vanilla 2.0.77 mount reference missing/wrong")
+            mount=float(scene.get("fsc_mount_length_blender_tiles",0))
+            if not 4.5<=mount<=5.0:
+                raise RuntimeError("Vanilla body was stretched across its 8 tile selection region")
+            if scene.get("fsc_map_to_blender")!="Factorio Y = -Blender Y; X unchanged":
+                raise RuntimeError("No verified Factorio/Blender coordinate conversion")
+            effect=bpy.data.collections.get("EXHAUST_FLAME_SEPARATE_PASS")
+            if not effect or len(effect.objects)<3:
+                raise RuntimeError("R07 dedicated flame geometry missing")
+            if any(not ob.hide_render for ob in effect.objects):
+                raise RuntimeError("Flame is incorrectly baked into body atlas")
+            animated=[ob for ob in effect.objects if ob.animation_data and ob.animation_data.action]
+            if len(animated)<3:
+                raise RuntimeError("Separated flame meshes have no persisted animation")
+            if float(scene.get("fsc_flame_factorio_anchor_map_y",0))!=5.5:
+                raise RuntimeError("Wrong official map-space flame anchor")
+            print("R07_VANILLA_REFERENCE_PASS",path.name,
+                  "mount_span",mount,"selection_span",directions[1],
+                  "separate_effect_meshes",len(animated),flush=True)
         print("R06_GEOMETRY_PASS",path.name,"petals",len(petal),
               "nozzles",len(nozzle_specs),flush=True)
         print("RECESSED_MOUNT_PASS",path.name,"rear_y",round(nozzle_low,3),
