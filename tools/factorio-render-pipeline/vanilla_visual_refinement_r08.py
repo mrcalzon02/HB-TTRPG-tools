@@ -107,6 +107,23 @@ def apply(name,root,p,api,scene):
         ellipsoid("R08_reactor_thermal_window",(0,y,.46),
                   (.19,.062,.050),p["orange"],root)
 
+    # R09 NOZZLE DEPTH REPAIR: earlier prototype renders exposed a
+    # near-black shallow turbine *disc*, visually blocking the bell throat.
+    # Remove fan vanes on the benchmark ONLY, and replace with a real
+    # inward-tapering, shadowed refractory liner. Other game assets stay put.
+    for ob in list(bpy.context.scene.objects):
+        if "_inner_flow_vane_" in ob.name and ob.parent==root:
+            bpy.data.objects.remove(ob,do_unlink=True)
+    lathe("R09_deep_black_nozzle_cavity",
+          [(-3.18,1.38),(-3.08,1.28),
+           (-2.88,1.10),(-2.69,.89),
+           (-2.45,.62),(-2.14,.31),(-1.87,.12)],
+          0,-.43,dark,root,close_ends=False)
+    for depth,radius in ((-2.88,1.13),(-2.64,.83),(-2.38,.58)):
+        ring("R09_inner_refractory_stiffener",0,depth,-.43,
+             radius,aged,root,.036)
+    scene["fsc_nozzle_throat_revision"]="R09_deep_refractory_liner_without_front_turbine_disc"
+
     # High-value graphic: deep multi-section exhaust nozzle secured by
     # a dark, heavy cast ring and rows of rim fasteners.
     lathe("R08_aft_internal_reaction_drum",
