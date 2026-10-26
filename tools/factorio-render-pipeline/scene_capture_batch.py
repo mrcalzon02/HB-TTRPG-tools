@@ -21,7 +21,7 @@ SPECS = {
     "test-01-graybox": (4, 4, 192, 192, 1, 4),
     "test-02-emission": (4, 4, 192, 256, 5, 1),
     "test-03-animation-drift": (4, 4, 192, 256, 12, 1),
-    "test-04-vanilla-approx": (4, 8, 256, 512, 4, 1),
+    "test-04-vanilla-approx": (4, 8, 320, 640, 12, 1),
     "hydrogen-thruster-r09": (4, 4, 192, 384, 7, 1),
     "thetazine-thruster-r09": (5, 5, 192, 384, 2, 1),
     "void-fusion-thruster-r09": (1, 9, 160, 512, 2, 1),
@@ -246,7 +246,7 @@ def configure_scene(name,w,h,width,height,num_frames):
     cam=bpy.context.object
     cam.rotation_euler=(Vector((0,0,.56))-cam.location).to_track_quat("-Z","Y").to_euler()
     cam.data.type="ORTHO"
-    cam.data.ortho_scale=(max(h*1.20,w*1.25*height/width)
+    cam.data.ortho_scale=(max(h*1.40,w*1.35*height/width)
                           if name.startswith("test-04-vanilla-approx")
                           else max(h*1.55,w*1.75*height/width))
     bpy.ops.object.light_add(type="AREA",location=(-4,-5,8))
@@ -272,12 +272,24 @@ def configure_scene(name,w,h,width,height,num_frames):
         for k in range(num_frames):
             socket.default_value=max(.05,.9+.65*math.sin((k+1)*math.pi*2/max(1,num_frames)))
             socket.keyframe_insert(data_path="default_value",frame=k+2)
+    if name.startswith("test-04"):
+        ignitions=[ob for ob in bpy.context.scene.objects
+                   if ob.type=="MESH" and "_animated_ignition" in ob.name]
+        if len(ignitions)!=1:
+            raise RuntimeError("R10 expects one animated ignition in vanilla benchmark")
+        for ob in ignitions:
+            ob.scale=(.001,.001,.001)
+            ob.keyframe_insert(data_path="scale",frame=1)
+            for j in range(num_frames):
+                heat=.88+.11*math.sin((j+1)*math.tau/max(1,num_frames))
+                ob.scale=(heat,heat,heat)
+                ob.keyframe_insert(data_path="scale",frame=j+2)
     scene.frame_set(1)
     scene["fsc_status"]="CALIBRATION_ONLY_NOT_FACTORIO_APPROVED"
     scene["fsc_axis"]="Blender +X=east,+Y=fore,-Y=aft,+Z=up; Factorio map +Y=aft"
     scene["fsc_map_to_blender"]="Factorio Y = -Blender Y; X unchanged"
     scene["fsc_footprint_tiles"]=json.dumps([w,h])
-    scene["fsc_model_revision"]=("r09-vanilla-nozzle-liners-r08-housing" if name.startswith("test-04")
+    scene["fsc_model_revision"]=("r10-vanilla-twelve-frame-hot-jet" if name.startswith("test-04")
                                  else "r09-nozzle-interiors-r06-housing")
     scene["fsc_capture_ortho_scale"]=cam.data.ortho_scale
     scene["fsc_capture_camera_position"]=json.dumps(list(cam.location))
@@ -295,7 +307,7 @@ def capture_one(out_dir,name):
     bpy.ops.wm.save_as_mainfile(filepath=str((target/"scenes"/(name+".blend")).resolve()))
     manifest={"asset":name,"footprint_tiles":[w,h],"preview_cell":[width,height],"run_frames":frames,
               "directions":directions,"prototype_reference":PROTOTYPE.get(name),
-              "source_revision":"r09-vanilla-open-bell" if name.startswith("test-04") else "r09-nozzle-liner",
+              "source_revision":"r10-vanilla-long-jet" if name.startswith("test-04") else "r09-nozzle-liner",
               "status":"candidate_environment_test_not_game_approved",
               "blender_version":bpy.app.version_string,"frame_files":[],
               "floor_integration_patch":None,"floor_layer_hint":"integration_patch_render_layer = floor",
