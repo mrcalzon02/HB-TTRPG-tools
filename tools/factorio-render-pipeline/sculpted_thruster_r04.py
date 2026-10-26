@@ -182,8 +182,12 @@ def nozzle(name,x,y,z,diam,p,root,color="blue"):
     lathe(name+"_dark_throat",[(y-.30,r*.41),(y-.20,r*.45),
                                (y+.06,r*.25),(y+.22,r*.12)],
            x,z,p["dark"],root,close_ends=False)
-    ellipsoid(name+"_animated_ignition",(x,y-.11,z),
-              (r*.24,.035,r*.24),p[color],root)
+    # Vanilla reference: keep the combustion throat dark when off. The
+    # running illumination belongs to the independent flame/glow pass, not
+    # a permanently visible blue disk baked into the body geometry.
+    if not name.startswith("vanilla_reference_bell"):
+        ellipsoid(name+"_animated_ignition",(x,y-.11,z),
+                  (r*.24,.035,r*.24),p[color],root)
     # Symmetrical bell coolant and curved braces.
     for side in (-1,1):
         tube(name+"_canted_brace_"+str(side),
