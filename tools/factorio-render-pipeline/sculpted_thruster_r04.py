@@ -155,8 +155,10 @@ def smooth_housing(name,w,h,p,root,variant):
     # Conformal armored panel surfaces sit above curved casing.
     for t in (.23,.57,.83):
         yy=aft+(fore-aft)*t
-        rr=barrel*(.92 if t>.15 and t<.8 else .73)
-        ring("turned_chamber_join",0,yy,z,rr,p["brass"],root,.046,ellipse=(1,.57))
+        rr=barrel*(1.11 if t>.15 and t<.8 else .89)
+        # Expose and read as real rolled transverse heat bands; previous
+        # bands were submerged INSIDE the casing and invisible in previews.
+        ring("external_machined_pressure_band",0,yy,z,rr,p["brass"],root,.061,ellipse=(1,.83))
     return ob
 
 def nozzle(name,x,y,z,diam,p,root,color="blue"):
@@ -240,7 +242,7 @@ def spine(w,h,p,root):
         if i%2==0:
             ellipsoid("embedded_cell_window_"+str(i),
                       (0,yy,.05),(.17,.23,.065),p["violet"],root)
-    nozzle("spinal_void_bell",0,-h/2+.08,-.34,.53,p,root,"violet")
+    nozzle("spinal_void_bell",0,-h/2-.16,-.34,.53,p,root,"violet")
 
 def model(name,w,h,root,p):
     """Dispatch 4 bespoke industrial silhouettes plus vanilla diagnostic."""
@@ -252,7 +254,7 @@ def model(name,w,h,root,p):
         smooth_housing("HEAVY_dual_layer_pressure_hull",w,h,p,root,"heavy")
         curved_armor(w,h,p,root,"heavy")
         for x in (-1.05,0.,1.05):
-            nozzle("HEAVY_fusion_bell_"+str(x),x,-h/2+.14,-.38,.84,p,root,"violet")
+            nozzle("HEAVY_fusion_bell_"+str(x),x,-h/2-.17,-.38,.84,p,root,"violet")
         for x in (-.9,.9):
             tube("reactor_loop_"+str(x),
                 [(x,1.34,-.17),(x*.9,.56,.37),
@@ -264,13 +266,13 @@ def model(name,w,h,root,p):
         curved_armor(w,h,p,root,"thetazine")
         routed_manifold(w,h,p,root,"violet")
         for x in (-.86,.86):
-            nozzle("THETAZINE_multi_bell_"+str(x),x,-h/2+.18,-.38,.91,p,root,"violet")
+            nozzle("THETAZINE_multi_bell_"+str(x),x,-h/2-.13,-.38,.91,p,root,"violet")
         return
     # The close-to-vanilla model is a calibration silhouette, not a sprite copy.
     smooth_housing("HYDROGEN_curved_pressure_hull",w,h,p,root,"vanilla")
     curved_armor(w,h,p,root,"hydrogen")
     routed_manifold(w,h,p,root)
-    nozzle("HYDROGEN_single_rolled_bell",0,-h/2+.16,-.38,1.29,p,root,"blue")
+    nozzle("HYDROGEN_single_rolled_bell",0,-h/2-.16,-.38,1.29,p,root,"blue")
     if name.startswith("test-04"):
         for side in (-1,1):
             tube("vanilla_benchmark_overloop_"+str(side),
@@ -284,4 +286,4 @@ def build_thruster(name,w,h,root,p):
     bpy.context.scene["fsc_deck_z"]=0.0
     bpy.context.scene["fsc_exhaust_direction"]="-Y"
     bpy.context.scene["fsc_expected_rear_edge_y"]=-h/2
-    bpy.context.scene["fsc_mounting_revision"]="r04_rolled_hulls_and_deck_cutout"
+    bpy.context.scene["fsc_mounting_revision"]="r04_1_exposed_pressure_bands_and_longer_aft_bells"
