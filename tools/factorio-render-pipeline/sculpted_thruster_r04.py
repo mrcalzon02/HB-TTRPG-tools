@@ -339,6 +339,12 @@ def build_thruster(name,w,h,root,p):
                          "cast_panel":cast_panel,"ellipsoid":ellipsoid},
             bpy.context.scene
         )
+        # R15 restores source-visible STATIC upper assemblies.
+        import vanilla_static_mechanisms_r15
+        vanilla_static_mechanisms_r15.apply(
+            name,root,p,{"tube":tube,"lathe":lathe,"ring":ring,
+                         "ellipsoid":ellipsoid},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",

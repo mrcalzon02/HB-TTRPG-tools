@@ -314,3 +314,25 @@ Local operator command (after providing their own installed-game ZIP):
 Functional Python unit tests run automatically via the existing
 factorio-render-pipeline-validation.yml source workflow. No Tech Priests
 gameplay, custom thruster mesh or approved production sprite is modified.
+
+## R15 — source-visible industrial upper assembly (candidate; 2026-10-26)
+
+The R12 original source contact sheet shows two dark, corrugated upper end
+structures flanking a substantial pale/oxidized central casting, with visible
+pipework joining the outer and center systems. These are evidence of the
+rendered FORM, not a license to assert their hidden fluid/mechanical topology.
+The verified R13 body still lacked those distinctive forms.
+
+The R15 VANILLA BENCHMARK ONLY adds two truly modeled irregular corrugated
+upper feed bodies, matching end collars, physically routed tubes ending at
+pressure sockets, a broad centerline injector shell, three clamps, a continuous
+return line and a joined interface. All are editable Blender geometry with
+no speculative object animation. Eight existing outboard afterburners remain
+independent with their attachments intact; vane material becomes darker and
+rougher because the R13 bright-white tips resembled informational arrows.
+UI arrow/fuel graphics are still never part of the physical mesh.
+
+New saved-scene checks reject missing static hardware, missing outboard vanes,
+incorrect vane shader assignments, or unsupported source-motion keyframes.
+No live Tech Priests art/gameplay changes, and no user-owned vanilla source
+bitmaps added to GitHub. Candidate visuals require actual CI image inspection.

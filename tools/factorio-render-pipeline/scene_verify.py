@@ -271,6 +271,30 @@ def test_one(path):
                 raise RuntimeError("R13 requires three different casting covers")
             if int(scene.get("fsc_r13_heat_port_count",0))!=2:
                 raise RuntimeError("R13 requires two physical heat ports")
+            # R15: source-visible fittings, with no speculative upper motion.
+            if scene.get("fsc_r15_revision")!=(
+                    "R15_visible_upper_pressure_bellows_and_injector"):
+                raise RuntimeError("R15 upper industrial reconstruction missing")
+            if int(scene.get("fsc_r15_corrugated_forward_feed_count",0))!=2:
+                raise RuntimeError("R15 needs two distinctive forward corrugated feeds")
+            if int(scene.get("fsc_r15_dark_vane_count",0))!=8:
+                raise RuntimeError("R15 must retain eight supported vanes")
+            for component in ("R15_corrugated_forward_feed_port",
+                              "R15_corrugated_forward_feed_starboard",
+                              "R15_weathered_centerline_injector_shell",
+                              "R15_centerline_injector_return",
+                              "R15_joined_pressure_supply_port",
+                              "R15_joined_pressure_supply_starboard"):
+                obj=bpy.data.objects.get(component)
+                if obj is None:
+                    raise RuntimeError("R15 missing visible, joined static machinery: "+component)
+                if obj.animation_data:
+                    raise RuntimeError("R15 invented unsupported mechanical animation")
+            for vane in vanes:
+                if (not vane.data.materials or
+                    vane.data.materials[0].name!="R15_heat_oxidized_outboard_vanes"):
+                    raise RuntimeError("R15 unsafely reintroduced bright indicator-like vane")
+            print("R15_STATIC_MACHINE_ASSEMBLY_PASS",path.name,flush=True)
             print("R13_SAVED_SCENE_STRUCTURE_PASS",path.name,flush=True)
             print("R11_DEEP_NOZZLE_AFTERBURNERS_PASS",path.name,
                   "depth_tiles",round(depth,3),"vanes",len(vanes),
