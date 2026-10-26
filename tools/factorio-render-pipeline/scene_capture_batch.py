@@ -226,7 +226,9 @@ def configure_scene(name,w,h,width,height,num_frames):
     # Orthographic scale denotes VERTICAL span. Account for portrait aspect
     # when constraining model width; old 128x256 frames clipped most drives.
     # Keep the 1x9 void spine near front-on to avoid diagonal horizontal spill.
-    cam_x=(.65 if w==1 else min(4.,w*.80))
+    # Long 4x8 vanilla benchmark should have almost axial projection; the
+    # old 3.2-unit lateral offset pushed its large aft bell off the left edge.
+    cam_x=(.65 if w==1 else (w*.25 if h>=8 else min(4.,w*.80)))
     bpy.ops.object.camera_add(location=(cam_x,-max(6.,h*.85),max(5.,h*.86)))
     cam=bpy.context.object
     cam.rotation_euler=(Vector((0,0,.56))-cam.location).to_track_quat("-Z","Y").to_euler()
