@@ -23,7 +23,10 @@ def main():
     subprocess.run([str(blender),"-b","--factory-startup","-t","2","--python",
                     str(root/"scene_capture_batch.py"),"--","--output",
                     str(target),"--group",args.group],check=True)
-    subprocess.run([str(python),str(root/"capture_analysis.py"),"--root",str(target)],check=True)
+    subprocess.run([str(blender),"-b","--factory-startup","-t","2","--python",
+                    str(root/"scene_verify.py"),"--","--output",str(target)],check=True)
+    subprocess.run([str(python),str(root/"capture_analysis.py"),"--root",str(target),
+                    "--fail-on-edge"],check=True)
     print("Capture batch complete at",target,flush=True)
 
 if __name__=="__main__":main()
