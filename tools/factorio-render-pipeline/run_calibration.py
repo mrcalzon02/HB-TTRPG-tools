@@ -32,6 +32,11 @@ def main():
                     "--fail-on-edge"],check=True)
     benchmark=target/"test-04-vanilla-approx"
     if benchmark.is_dir():
+        subprocess.run([str(blender),"-b","--factory-startup","-t","2",
+                        "--python-exit-code","4","--python",
+                        str(root/"camera_sweep_r09.py"),"--","--output",str(target)],check=True)
+        subprocess.run([str(python),str(root/"camera_sweep_report_r09.py"),
+                        "--output",str(target)],check=True)
         # Optional, non-score visual comparison against the official wiki GIF.
         # Network/reference failure creates an unavailable status, not a false
         # pixel-similarity pass. No reference image is added to the repository.
