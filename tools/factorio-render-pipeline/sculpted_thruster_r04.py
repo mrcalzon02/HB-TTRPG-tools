@@ -298,10 +298,18 @@ def build_thruster(name,w,h,root,p):
     # Move only socket/deck-cutout graphics into a separate hidden collection.
     # The actual thruster body DOES NOT carry this as a floor plate.
     before=set(ob.name for ob in bpy.context.scene.objects)
-    model(name,w,h,root,p)
+    if name.startswith("test-04-vanilla-approx"):
+        from vanilla_benchmark_r07 import MOUNT_SPAN_TILES,benchmark_contract
+        # The 4x8 vanilla selection region includes exhaust clearance.
+        # Only the approx 4x4.75 source machinery is embedded in the deck.
+        physical_h=MOUNT_SPAN_TILES[1]
+        bpy.context.scene["fsc_vanilla_prototype_reference"]=__import__("json").dumps(benchmark_contract())
+    else:
+        physical_h=h
+    model(name,w,physical_h,root,p)
     import industrial_detail_r05
     industrial_detail_r05.add_details(
-        name,w,h,root,p,
+        name,w,physical_h,root,p,
         {"tube":tube,"ring":ring,"ellipsoid":ellipsoid}
     )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
@@ -322,9 +330,11 @@ def build_thruster(name,w,h,root,p):
     bpy.context.scene["fsc_mounting_doctrine"]="DECK_RECESSED_NO_BASE_PLATE"
     bpy.context.scene["fsc_deck_z"]=0.0
     bpy.context.scene["fsc_exhaust_direction"]="-Y"
-    bpy.context.scene["fsc_expected_rear_edge_y"]=-h/2
+    bpy.context.scene["fsc_expected_rear_edge_y"]=-physical_h/2
+    bpy.context.scene["fsc_selection_length_blender_tiles"]=h
+    bpy.context.scene["fsc_mount_length_blender_tiles"]=physical_h
     from thruster_profile_r06 import metadata
-    bpy.context.scene["fsc_nozzle_profiles"]=__import__("json").dumps(metadata(name,w,h))
+    bpy.context.scene["fsc_nozzle_profiles"]=__import__("json").dumps(metadata(name,w,physical_h))
     bpy.context.scene["fsc_mounting_revision"]="r06_broad_nozzles_structural_detail"
 
 # R05 geometry is composed in industrial_detail_r05 and intentionally does
