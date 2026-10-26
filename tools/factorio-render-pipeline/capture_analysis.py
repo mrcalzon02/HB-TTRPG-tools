@@ -82,7 +82,13 @@ def detail_montage(paths, labels, output, size=(224, 224)):
     draw=ImageDraw.Draw(sheet)
     for i,(im,label) in enumerate(zip(rendered,labels)):
         crop=im.crop(bbox)
-        crop.thumbnail((w-12,h-12),Image.Resampling.LANCZOS)
+        # Thumbnail() only DOWNscales, leaving 128-pixel QA captures tiny in a
+        # 224-pixel inspection canvas. This preview intentionally scales UP;
+        # source frames/packed Factorio sprite atlases remain unchanged.
+        factor=min((w-12)/crop.width,(h-12)/crop.height)
+        crop=crop.resize((max(1,round(crop.width*factor)),
+                          max(1,round(crop.height*factor))),
+                         Image.Resampling.LANCZOS)
         back=Image.new("RGBA",size,(34,39,45,255))
         back.alpha_composite(crop,((w-crop.width)//2,(h-crop.height)//2))
         sheet.paste(back.convert("RGB"),(i*w,0))
