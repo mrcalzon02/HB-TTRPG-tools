@@ -23,9 +23,13 @@ def test_one(path):
     directions=json.loads(scene["fsc_footprint_tiles"])
     if len(directions)!=2 or min(directions)<=0:
         raise RuntimeError("Invalid footprint metadata")
-    mat=bpy.data.materials.get("07_ion_blue")
+    # Blender discards unused shader datablocks when saving a .blend. The
+    # heavy/void models use violet while hydrogen models use blue.
+    mat=next((bpy.data.materials.get(key) for key in
+              ("07_ion_blue","08_void_violet","09_exhaust_amber")
+              if bpy.data.materials.get(key) is not None),None)
     if mat is None or mat.node_tree is None:
-        raise RuntimeError("Expected authored emission material missing")
+        raise RuntimeError("No used emissive material saved in Blender source")
     if not mat.node_tree.animation_data or not mat.node_tree.animation_data.action:
         raise RuntimeError("Saved Blender file has no authored emission Action")
     socket=mat.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
