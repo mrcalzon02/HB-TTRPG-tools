@@ -210,7 +210,7 @@ def verify_and_smoke(binary):
             "smoke_bytes": len(raw)}
 
 
-def write_report(status, details):
+def write_report(status, details, evidence_dir=None):
     STATE.mkdir(parents=True, exist_ok=True)
     report = {"schema_version": 1, "state": status,
               "generated_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -220,6 +220,13 @@ def write_report(status, details):
     report.update(details)
     path = STATE / "readiness.json"
     path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if evidence_dir is not None:
+        evidence_dir = evidence_dir.resolve()
+        evidence_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, evidence_dir / "readiness.json")
+        image = STATE / "smoke-frame.png"
+        if status == "ready" and image.is_file():
+            shutil.copy2(image, evidence_dir / "smoke-frame.png")
     print("Readiness report:", path)
     return path
 
@@ -227,6 +234,7 @@ def write_report(status, details):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("install", "verify"))
+    parser.add_argument("--evidence-dir", type=Path, help="Copy report and smoke PNG into this folder")
     parser.add_argument("--no-download", action="store_true",
                         help="Fail instead of downloading Blender when missing")
     args = parser.parse_args()
@@ -252,12 +260,12 @@ def main():
         else:
             binary = find_blender()
         info.update(verify_and_smoke(binary))
-        write_report("ready", info)
+        write_report("ready", info, args.evidence_dir)
         print("READY: unified local Blender art workstation and headless smoke render verified.")
         return 0
     except (OSError, RuntimeError, ValueError, subprocess.CalledProcessError) as exc:
         info["error"] = str(exc)
-        write_report("blocked", info)
+        write_report("blocked", info, args.evidence_dir)
         print("BLOCKED:", exc, file=sys.stderr)
         return 1
 
