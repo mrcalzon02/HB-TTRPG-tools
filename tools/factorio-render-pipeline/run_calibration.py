@@ -37,6 +37,11 @@ def main():
                         str(root/"camera_sweep_r09.py"),"--","--output",str(target)],check=True)
         subprocess.run([str(python),str(root/"camera_sweep_report_r09.py"),
                         "--output",str(target)],check=True)
+        # R11 independent close-up Blender renders validate actual depth and
+        # external cantilever support hardware, never the production atlas.
+        subprocess.run([str(blender),"-b","--factory-startup","-t","2",
+                        "--python-exit-code","4","--python",
+                        str(root/"nozzle_detail_capture_r11.py"),"--","--output",str(target)],check=True)
         # Optional, non-score visual comparison against the official wiki GIF.
         # Network/reference failure creates an unavailable status, not a false
         # pixel-similarity pass. No reference image is added to the repository.
