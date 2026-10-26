@@ -11,7 +11,7 @@ First passing run: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/402
 - Four calibration scenes: four-direction graybox, emission test, fixed-registration animation test, and approximated vanilla thruster.
 - Four revised Tech Priests scenes: hydrogen, thetazine, narrow void fusion and heavy void fusion.
 - Every scene exported an editable Blender scene (.blend), transparent RGBA frame PNGs, atlases, contact sheets and JSON reports.
-- Original custom model capture count: 16 frames, 8 atlases. First calibration group generated 29 frames.
+- Original custom model capture count: 16 frames, 8 atlases. First calibration group generated 28 frames (4 graybox, 6 emission, 13 drift, 5 vanilla approximation).
 - No Blender scene was placed inside the live Tech Priests mod graphics tree.
 
 ## Defect identified from actual PNG measurements
@@ -75,3 +75,18 @@ Those are observed source values, not a claim that Blender's camera is already v
 3. Compare the approximate vanilla thruster with a true vanilla screenshot under the same view/zoom; no pixel-perfect visual matching claim until then.
 4. Install and test the existing Factorio Sprite Capture Studio add-on itself, not just the direct bpy batch pipeline.
 5. Only after art validation, use full-resolution target cells and test a disposable mod copy on a Factorio 2.0.77 space platform. Never silently replace working production sprites or change game logic.
+
+## Strict verification run
+
+Verified final strict run: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40289338496
+
+- Calibration and model jobs both passed the **real Blender** roundtrip.
+- 8 separate saved .blend files reopened successfully; each contained editable meshes and an actual idle-to-run emission animation (visible material strengths differed on frames 1 and 2).
+- Calibration job: 4 scenes, 28 captured frames, 10 atlases, 0 edge-risk assets.
+- Model job: 4 scenes, 16 captured frames, 8 atlases, 0 edge-risk assets.
+- Every attempted captured PNG passed frame size and non-empty alpha analysis, all 44 frames had distinct frame hashes within their respective asset runs.
+- The first scene verifier iteration discovered Blender's default behavior of returning exit code 0 after a Python exception; **corrected** by invoking Blender with --python-exit-code 4 and requiring the saved scene QA JSON. An unused emissive material being purged on save is now handled by locating the model's actually used keyed material, not assuming blue is present in every mesh.
+- The capture workflow has branch-level concurrency cancellation to prevent running obsolete tests after new changes are pushed.
+- R03 output remains lower-resolution visual QA; no live Tech Priests graphics were overwritten, and Factorio 2.0.77 runtime art load/placement is still untested.
+
+Artifacts of this run contain saved Blender scenes, captures, atlasses, QA JSON and contact sheets, available on the Actions run page. This is the current verified capture baseline.
