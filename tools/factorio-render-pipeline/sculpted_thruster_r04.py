@@ -293,6 +293,11 @@ def build_thruster(name,w,h,root,p):
     # The actual thruster body DOES NOT carry this as a floor plate.
     before=set(ob.name for ob in bpy.context.scene.objects)
     model(name,w,h,root,p)
+    import industrial_detail_r05
+    industrial_detail_r05.add_details(
+        name,w,h,root,p,
+        {"tube":tube,"ring":ring,"ellipsoid":ellipsoid}
+    )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
@@ -312,4 +317,7 @@ def build_thruster(name,w,h,root,p):
     bpy.context.scene["fsc_deck_z"]=0.0
     bpy.context.scene["fsc_exhaust_direction"]="-Y"
     bpy.context.scene["fsc_expected_rear_edge_y"]=-h/2
-    bpy.context.scene["fsc_mounting_revision"]="r04_1_exposed_pressure_bands_and_longer_aft_bells"
+    bpy.context.scene["fsc_mounting_revision"]="r05_layered_engineering_recessed_mount"
+
+# R05 geometry is composed in industrial_detail_r05 and intentionally does
+# not alter Tech Priests Lua/entity prototypes or overwrite installed sprites.
