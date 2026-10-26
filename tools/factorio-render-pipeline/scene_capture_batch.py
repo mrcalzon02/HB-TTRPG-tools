@@ -225,7 +225,9 @@ def configure_scene(name,w,h,width,height,num_frames):
     add_nonrender_jig(w,h)
     if name.startswith("test-04-vanilla-approx"):
         from vanilla_benchmark_r07 import add_flame_collection
+        from vanilla_pipe_overlays_r07 import add_pipe_visuals
         add_flame_collection(bpy.context.scene,ROOT,num_frames)
+        add_pipe_visuals(bpy.context.scene,ROOT,MATERIALS)
     for ob in bpy.context.scene.objects:
         if ob.type=="MESH" and ob.parent==ROOT and len(ob.data.vertices):
             ob["source_family"]=name
@@ -289,7 +291,9 @@ def capture_one(out_dir,name):
               "status":"candidate_environment_test_not_game_approved",
               "blender_version":bpy.app.version_string,"frame_files":[],
               "floor_integration_patch":None,"floor_layer_hint":"integration_patch_render_layer = floor",
-              "flame_frames":[],"flame_effect_contract":"independent optional effect, not in engine atlas",
+              "flame_frames":[],"pipe_overlay_files":{},
+              "pipe_overlay_contract":"2.0.77 graphics_set conditional working visualisations",
+              "flame_effect_contract":"independent optional effect, not in engine atlas",
               "vanilla_prototype_geometry":json.loads(scene.get("fsc_vanilla_prototype_reference","null"))}
     # Render the static under-deck integration patch separately from the
     # engine animation, as in the original Space Age thruster graphics_set.
@@ -323,6 +327,24 @@ def capture_one(out_dir,name):
                 if not output.is_file():raise RuntimeError("Render missing "+str(output))
                 manifest["frame_files"].append(str(relative).replace("\\","/"))
     ROOT.rotation_euler[2]=0
+    if name.startswith("test-04-vanilla-approx"):
+        from vanilla_pipe_overlays_r07 import PORTS
+        preserve={ob:ob.hide_render for ob in scene.objects
+                  if ob.type in {"MESH","CURVE","SURFACE"}}
+        try:
+            scene.frame_set(1)
+            for identifier,kind,map_x,map_y in PORTS:
+                group=bpy.data.collections["CONDITIONAL_"+identifier]
+                active=set(group.objects)
+                for ob in preserve:ob.hide_render=ob not in active
+                relative=Path("pipe-overlays")/(identifier+".png")
+                output=target/relative;output.parent.mkdir(parents=True,exist_ok=True)
+                scene.render.filepath=str(output.resolve())
+                bpy.ops.render.render(write_still=True)
+                if not output.is_file():raise RuntimeError("Missing conditional overlay "+str(output))
+                manifest["pipe_overlay_files"][identifier]=str(relative).replace("\\","/")
+        finally:
+            for ob,hidden in preserve.items():ob.hide_render=hidden
     flame=bpy.data.collections.get("EXHAUST_FLAME_SEPARATE_PASS")
     if flame and flame.objects:
         # Separate exported effect: never bake the dynamic plume into the
