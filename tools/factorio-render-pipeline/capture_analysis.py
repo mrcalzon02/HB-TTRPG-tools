@@ -111,6 +111,17 @@ def analyze_asset(folder):
     if not files or any(not p.is_file() for p in files):
         raise RuntimeError("Missing render frame(s) for "+manifest["asset"])
     all_metrics=[capture_metrics(p,cell) for p in files]
+    integration=None
+    if manifest.get("floor_integration_patch"):
+        patch=folder/manifest["floor_integration_patch"]
+        if not patch.is_file():
+            raise RuntimeError("Manifest declares missing floor patch")
+        integration=capture_metrics(patch,cell)
+        # Composite patch below engine to inspect visual socket relationship.
+        with Image.open(patch) as psrc,Image.open(files[0]) as esrc:
+            result=psrc.convert("RGBA")
+            result.alpha_composite(esrc.convert("RGBA"))
+            result.save(folder/"integration-composite-preview.png")
     groups={}
     for p in files:
         key=(p.parts[-3],p.parts[-2]) # direction-00 / idle or run
@@ -147,6 +158,8 @@ def analyze_asset(folder):
             "edge_clipping_suspected":any(v["touches_frame_edge"] for v in all_metrics),
             "distinct_png_hashes":len(hashes),"frames":all_metrics,
             "atlases":atlas_files,"contact_sheet":"contact-sheet.png",
+            "integration_patch_metrics":integration,
+            "integration_composite_preview":"integration-composite-preview.png" if integration else None,
             "candidate_not_game_approved":True}
     (folder/"qa-report.json").write_text(json.dumps(result,indent=2)+"\n")
     print("CAPTURE_QA",result["asset"],"frames",len(files),"unique",len(hashes),
