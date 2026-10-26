@@ -72,6 +72,12 @@ def test_one(path):
             raise RuntimeError("Insufficient swept piping/geometry, legacy boxy scene suspected")
         petal=[ob for ob in meshes if "_heat_shield_petal_" in ob.name]
         if len(petal)<10:raise RuntimeError("R05 expects actual separate sculpted nozzle petals")
+        false_fans=[ob.name for ob in meshes if "_inner_flow_vane_" in ob.name]
+        if false_fans:
+            raise RuntimeError("R09 forbids turbine propeller blades inside thruster nozzle")
+        longitudinal=[ob for ob in meshes if "_longitudinal_inner_liner_" in ob.name]
+        if len(longitudinal)<24:
+            raise RuntimeError("R09 missing deep combustion-bell lengthwise ribs")
         if not any("cast_pressure_panel_" in ob.name for ob in meshes) and not path.name.startswith("void-fusion"):
             raise RuntimeError("R05 lacks curved conformal armored segments")
         if not path.name.startswith("void-fusion"):
