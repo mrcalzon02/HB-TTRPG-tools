@@ -240,11 +240,15 @@ def configure_scene(name,w,h,width,height,num_frames):
     # R09 camera sweep verified a more centered, higher view against the
     # vanilla reference. Do not alter custom thrusters' calibrated cameras.
     vanilla_camera=name.startswith("test-04-vanilla-approx")
-    camera_origin=((.18,-6.8,10.0) if vanilla_camera
+    # Keep R09's approved perspective, translate BOTH camera and target aft.
+    # R10's longer separate flame clips the bottom if centered on chassis.
+    # No geometry shrink or per-frame auto-crop is permitted.
+    camera_origin=((.18,-7.8,10.0) if vanilla_camera
                    else (cam_x,-max(6.,h*.85),max(5.,h*.86)))
+    camera_target=Vector((0,-1.0,.56) if vanilla_camera else (0,0,.56))
     bpy.ops.object.camera_add(location=camera_origin)
     cam=bpy.context.object
-    cam.rotation_euler=(Vector((0,0,.56))-cam.location).to_track_quat("-Z","Y").to_euler()
+    cam.rotation_euler=(camera_target-cam.location).to_track_quat("-Z","Y").to_euler()
     cam.data.type="ORTHO"
     cam.data.ortho_scale=(max(h*1.40,w*1.35*height/width)
                           if name.startswith("test-04-vanilla-approx")
@@ -287,8 +291,9 @@ def configure_scene(name,w,h,width,height,num_frames):
                                  else "r09-nozzle-interiors-r06-housing")
     scene["fsc_capture_ortho_scale"]=cam.data.ortho_scale
     scene["fsc_capture_camera_position"]=json.dumps(list(cam.location))
-    scene["fsc_camera_selection_evidence"]=("R09 centered_high no-clipping three-angle sweep"
+    scene["fsc_camera_selection_evidence"]=("R09 centered_high translated 1 tile aft for R10 flame clearance"
                                             if vanilla_camera else "R06 custom model camera")
+    scene["fsc_camera_target"]=json.dumps(list(camera_target))
     scene["fsc_capture_direction"]="prototype orientation south exhaust, no dynamic rotation for source"
     scene["fsc_full_prototype_metadata"]=json.dumps(PROTOTYPE.get(name,{}))
     return scene
