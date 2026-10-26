@@ -207,9 +207,14 @@ def test_one(path):
             vanes=[ob for ob in group.objects if ob.name.startswith("R11_SUSPENDED_AFTERBURNER_VANE_")]
             arms=[ob for ob in group.objects if ob.name.startswith("R11_OUTBOARD_SUSPENSION_ARM_")]
             feeds=[ob for ob in group.objects if ob.name.startswith("R11_AFTERBURNER_FUEL_CAPILLARY_")]
+            links=[ob for ob in group.objects if ob.name.startswith("R11_CASING_TO_OUTBOARD_ROOT_")]
+            sockets=[ob for ob in group.objects if ob.name.startswith("R11_CHASSIS_ATTACHMENT_SOCKET_")]
             anchors=json.loads(scene.get("fsc_afterburner_anchors","[]"))
-            if len(vanes)!=8 or len(arms)!=8 or len(feeds)!=8 or len(anchors)!=8:
-                raise RuntimeError("Require 8 separate vanes AND 8 external machine arms/feedlines")
+            if (len(vanes)!=8 or len(arms)!=8 or len(feeds)!=8
+                    or len(anchors)!=8 or len(links)!=8 or len(sockets)!=8):
+                raise RuntimeError("Each of 8 vanes needs a chassis bridge, socket, cantilever and feedline")
+            if scene.get("fsc_afterburner_chassis_links")!=8:
+                raise RuntimeError("Afterburner external chassis attachment count not retained")
             if any(not ob.get("R11_span_from_machinery") for ob in vanes):
                 raise RuntimeError("Suspended vanes lack mechanical support metadata")
             if any(len(ob.data.vertices)<24 for ob in vanes):
