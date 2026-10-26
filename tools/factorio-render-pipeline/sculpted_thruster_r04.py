@@ -345,6 +345,12 @@ def build_thruster(name,w,h,root,p):
             name,root,p,{"tube":tube,"lathe":lathe,"ring":ring,
                          "ellipsoid":ellipsoid},bpy.context.scene
         )
+        # R16 fin surface and casing-tether refinement (vanilla only).
+        import vanilla_vane_supports_r16
+        vanilla_vane_supports_r16.apply(
+            name,root,p,{"tube":tube,"ellipsoid":ellipsoid},
+            bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",

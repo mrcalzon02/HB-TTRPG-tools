@@ -290,10 +290,46 @@ def test_one(path):
                     raise RuntimeError("R15 missing visible, joined static machinery: "+component)
                 if obj.animation_data:
                     raise RuntimeError("R15 invented unsupported mechanical animation")
+            # R16 replaces the triangular needle taper with a broad,
+            # squared hot end, backed by an explicitly inspectable support
+            # graph for every physically separate engine-side thermal plate.
+            if scene.get("fsc_r16_revision")!=(
+                    "R16_broad_heat_plates_dual_braced_outboard_cradles"):
+                raise RuntimeError("Missing R16 revised thermal plate assembly")
+            if (int(scene.get("fsc_r16_rectangular_heat_plate_count",0))!=8
+                    or int(scene.get("fsc_r16_dual_load_brace_count",0))!=16
+                    or int(scene.get("fsc_r16_independent_crosshead_count",0))!=8):
+                raise RuntimeError("R16 complete outboard bracket topology missing")
+            if scene.get("fsc_r16_source_movement_policy")!=(
+                    "static pending direct original 64-frame mechanical tracking"):
+                raise RuntimeError("R16 unverified animation was allowed")
             for vane in vanes:
-                if (not vane.data.materials or
-                    vane.data.materials[0].name!="R15_heat_oxidized_outboard_vanes"):
-                    raise RuntimeError("R15 unsafely reintroduced bright indicator-like vane")
+                if not vane.get("R16_broad_squared_trailing_edge"):
+                    raise RuntimeError("R16 fin still resembles a tapered arrow")
+                if vane.get("R16_plate_aft_span",0)<vane.get("R16_plate_root_span",0):
+                    raise RuntimeError("R16 trailing heat shield narrowed into a spear")
+                if not vane.data.materials or len(vane.data.materials)!=4:
+                    raise RuntimeError("R16 fin lacks worn-to-scorched thermal material bands")
+                if vane.data.materials[3].name!=(
+                        "R16_thermal_plate_oxidized_blue_tip"):
+                    raise RuntimeError("R16 fin lacks refractory blue heat-scored edge")
+                if vane.animation_data:
+                    raise RuntimeError("R16 introduced speculative moving pivots")
+                graph=json.loads(vane.get("R16_support_graph","{}"))
+                for key in ("chassis_link","saddle","crosshead",
+                            "heat_feed_terminal","terminal_socket","outer_boss"):
+                    if not graph.get(key) or bpy.data.objects.get(graph[key]) is None:
+                        raise RuntimeError("R16 support graph detached: "+key)
+                for key in ("double_braces","clamp_ears"):
+                    if len(graph.get(key,[]))!=2 or any(
+                        bpy.data.objects.get(label) is None
+                        for label in graph[key]):
+                        raise RuntimeError("R16 missing twin mechanical mount: "+key)
+                if len(vane.data.vertices)<64 or len(vane.data.polygons)<60:
+                    raise RuntimeError("R16 thermal shield is a placeholder")
+            print("R16_OUTBOARD_FIN_SUPPORTS_PASS",path.name,
+                  "rectangular_shields",len(vanes),
+                  "dual_braces",scene["fsc_r16_dual_load_brace_count"],flush=True)
             print("R15_STATIC_MACHINE_ASSEMBLY_PASS",path.name,flush=True)
             print("R13_SAVED_SCENE_STRUCTURE_PASS",path.name,flush=True)
             print("R11_DEEP_NOZZLE_AFTERBURNERS_PASS",path.name,

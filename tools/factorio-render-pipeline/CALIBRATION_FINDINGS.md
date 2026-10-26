@@ -373,3 +373,38 @@ surface machinery, more aged materials, and substantial afterburner hardware.
 NOT production-art-approved.** The animation remains mostly fixed mechanical
 geometry with separately changing emissions. Do not invent motion or assert
 the hidden rig until the complete source archive can be processed in R14.
+
+## R16 — fin shape and outboard carrier assemblies (candidate)
+
+User directs special attention to the fin/afterburner assemblies in the
+original source material. Direct visual comparison of preserved vanilla
+64-frame contact sheet and verified R15 three-quarter nozzle shows a definite
+form-level error: the original visible thermal plates have broad, irregular,
+nearly square heat-stained free ends, while R11 through R15 used sharp
+arrowpoint strips terminating at half-angular-width 0.038 radian. R15's dark
+shader adjustment cannot correct the wrong fin geometry.
+
+R16 remeshes the same eight independently suspended R11 vanes from broad
+multisurface solid plate strips. The trailing angular half-span is now 0.121
+versus root 0.082 (wider, NOT tapered to a point), with 4 true thermal-material
+zones: aged root, worn center, purple oxidized lower zone, blue overheated lip.
+There are no false painted arrows or game-source pixels.
+
+Each plate is supported by an actual connected load graph:
+existing casing root -> explicit R16 outboard saddle -> two stiff
+shoulder braces and root clamp ears -> transverse load-bearing crosshead ->
+the heavy plate itself; existing capillary is terminated at a physical
+heat-feed socket. There are 8 saddles, 16 braces, 8 crossheads, and 8 plate
+termination fittings. The metal may be hot-scarred but the informational
+arrows/fuel indicators remain separate non-physical UI layers.
+
+**Mechanism limitation:** these are engineered supports consistent with
+visible silhouette, NOT a claimed reverse-engineering of the manufacturer's
+hidden hinge/actuator topology. The available contact sheet cannot establish
+how the mounts flex or rotate; all these parts remain stationary pending
+direct original 64-frame motion inspection. The original archive still needs
+reattachment as ZIP (do NOT need to unzip) for local data processing.
+
+No gameplay, Tech Priests production sprite, custom 3D model or sprite
+packaging changes. This candidate requires a full independent Blender capture
+and qualitative comparison with the original image.
