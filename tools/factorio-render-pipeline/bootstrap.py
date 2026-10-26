@@ -124,7 +124,7 @@ def install_blender():
         scratch = Path(scratch)
         manifest = scratch / "official.sha256"
         package = scratch / ARCHIVE
-        print("Fetching signed-origin Blender checksum manifest ...", flush=True)
+        print("Fetching official-origin Blender checksum manifest ...", flush=True)
         fetch_https(OFFICIAL + "blender-" + VERSION + ".sha256", manifest)
         expected = checksum_manifest(manifest.read_text(encoding="utf-8"))
         print("Downloading official Blender " + VERSION + " archive ...", flush=True)
@@ -237,9 +237,17 @@ def main():
         if args.action == "install":
             install_python_env()
             binary = find_blender()
+            if binary is not None:
+                try:
+                    print("Checking Blender version:", check_blender(binary), flush=True)
+                except (OSError, RuntimeError, subprocess.CalledProcessError):
+                    if os.environ.get("BLENDER_BIN"):
+                        raise
+                    print("System Blender is outside 4.5 LTS; installing pinned managed Blender", flush=True)
+                    binary = None
             if binary is None:
                 if args.no_download:
-                    raise FileNotFoundError("No Blender; --no-download prohibits bootstrap")
+                    raise FileNotFoundError("No verified Blender 4.5 LTS; --no-download prohibits bootstrap")
                 binary = install_blender()
         else:
             binary = find_blender()
