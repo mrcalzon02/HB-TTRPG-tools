@@ -42,6 +42,13 @@ def test_one(path):
     if not path.name.startswith("test-01-graybox"):
         if scene.get("fsc_mounting_doctrine")!="DECK_RECESSED_NO_BASE_PLATE":
             raise RuntimeError("R04 must declare recessed mount doctrine")
+        floor=bpy.data.collections.get("FLOOR_INTEGRATION_PATCH")
+        if floor is None or not floor.objects:
+            raise RuntimeError("Missing separate floor integration patch collection")
+        if any(not ob.hide_render for ob in floor.objects):
+            raise RuntimeError("Floor integration patch is baked into the body render")
+        if int(scene.get("fsc_floor_integration_patch_count",0))!=len(floor.objects):
+            raise RuntimeError("Mismatch between saved patch objects and scene metadata")
         forbidden=("central_support","platform_mating_flange","longitudinal_frame_rail")
         if any(any(ob.name.startswith(word) for word in forbidden) for ob in meshes):
             raise RuntimeError("Legacy floor-plate components remain in model")
