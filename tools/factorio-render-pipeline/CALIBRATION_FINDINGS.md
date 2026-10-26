@@ -265,3 +265,18 @@ custom model alteration, Tech Priests gameplay or production art replacement.
 GitHub Actions will verify Blender scene reopen, geometry, masks/layers and
 actual PNG exports. Visual similarity is for art review, not a threshold gate.
 PENDING: inspect R13 rendered captures before claiming visual improvement.
+
+
+### R13 initial CI repair — stale verifier requirement
+
+First R13 GitHub Actions: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40413184680.
+Blender completed generating the calibration source scene and frames, but the
+saved-scene QA stopped at a PRE-R13 assertion that demanded eight
+R08_centerline_black_pressure_shield_ meshes and seven old thermal slots.
+R13 intentionally removed them; Blender reported zero shields. The test itself
+conflicted with the approved structural replacement. Its obsolete R08 count
+requirements are removed; all other geometric/capture QA remains enabled.
+R13's own validator explicitly rejects surviving false bars and requires
+the joined replacement meshes, dark refractory material assignments and
+physical heat ports. This is not a reduction of the intended validation.
+Pending a complete rerun and visual review.

@@ -179,12 +179,13 @@ def test_one(path):
                 abs(scene.camera.location.z-10.0)>.05 or
                 abs(scene.camera.location.y+7.8)>.05):
                 raise RuntimeError("Vanilla camera drifted from corrected centered-high aft composition")
+            # Validate the remaining R08 industrial chassis ONLY; R13
+            # intentionally removes the old repeated shields and windows.
+            # Those ABSENCES and their replacements are tested below.
             expected_parts=[
                 ("R08_parallel_pressure_bottle_side",2),
-                ("R08_centerline_black_pressure_shield_",8),
                 ("R08_rolled_nozzle_rivet",16),
                 ("R08_aft_shroud_wing",2),
-                ("R08_reactor_thermal_window",7),
             ]
             for prefix,count in expected_parts:
                 matched=[ob for ob in meshes if ob.name.startswith(prefix)]
