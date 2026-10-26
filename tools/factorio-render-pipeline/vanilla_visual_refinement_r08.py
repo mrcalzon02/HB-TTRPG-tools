@@ -61,7 +61,7 @@ def apply(name,root,p,api,scene):
     # PAIRED OVERLAPPING PRESSURE MACHINERY, replacing the featureless capsule.
     # Each side has its own joined chamber, thermal ribs, injector and valve.
     for side in (-1,1):
-        x=side*.86
+        x=side*1.13
         lathe("R08_parallel_pressure_bottle_side_%s"%side,
               [(1.63,.22),(1.39,.37),(.95,.43),(.53,.39),
                (.15,.39),(-.41,.44),(-.72,.30),(-.91,.20)],
