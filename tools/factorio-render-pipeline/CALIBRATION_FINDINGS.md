@@ -136,3 +136,15 @@ new geometry is accepted. The R03 artifact baseline is preserved for comparison.
 The tool still runs direct Blender Python instead of exercising the
 separately packaged user-facing Sprite Capture Studio extension, and
 Factorio 2.0.77 engine integration is not yet tested.
+
+## R04 floor-integration architecture: verified against vanilla 2.0.77
+
+Official source: https://github.com/wube/factorio-data/blob/2.0.77/space-age/prototypes/entity/entities.lua
+
+Vanilla thruster graphics_set includes animation (64 frames), an independent integration_patch rendered on the floor layer, conditional pipe working_visualisations, glow and a distinct flame effect. The initial benchmark's assumed 4x4 footprint was incorrect; the corrected vanilla calibration scene is 4x8, with abbreviated preview frames and no claim of pixel-perfect reconstruction.
+
+R04 now puts platform socket and cutout meshes in the saved Blender FLOOR_INTEGRATION_PATCH collection, hidden during body animation rendering. A separate static integration_patch.png is rendered; analysis validates it and creates an integration-composite-preview.png as an inspection-only overlay. Body atlases are not contaminated with the floor patch. This matches the division of responsibilities in vanilla art without asserting game compatibility.
+
+Verified full-pass Actions run: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40293141184
+
+Remaining gaps: separate physically convincing nozzle flame/effects, connected pipe overlays, complex housing segmentation, edge matching to an actual game platform screenshot, source lighting calibration, and Factorio 2.0.77 runtime acceptance. No Tech Priests gameplay or production sprite changes were made. R04 is still visually simplified and NOT art-approved.
