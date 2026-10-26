@@ -14,6 +14,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: factorio-blender-capture-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   blender-capture:
     name: Headless Blender captures (${{ matrix.group }})
