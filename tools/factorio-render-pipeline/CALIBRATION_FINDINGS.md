@@ -191,3 +191,16 @@ The GIF comparison exposes large remaining differences: vanilla has dark irregul
 R08 source (`vanilla_visual_refinement_r08.py`) is a targeted follow-on containing an original dark multi-chamber pressure assembly, bolted sectional shields, thick external injector piping and shrouded bell. It is applied ONLY to the vanilla benchmark, not the production/custom mod models. Its code commit is NOT an acceptance result; read the dedicated next Blender workflow for proof before claiming the R08 render passes.
 
 Next specific R09 defect: the nozzle interior needs longitudinal bell liner ridges and a dark open chamber instead of hub-and-spoke propeller/fan triangles. Real prototype geometry and wiki reference stay the calibration authority; in-game load and 64-frame parity are still outstanding.
+
+## R07–R10 vanilla benchmark calibration (2026-10-26)
+
+Reference: official Factorio 2.0.77 space-age/prototypes/entity/entities.lua from wube/factorio-data, plus the vanilla thruster animation at https://wiki.factorio.com/File:Thruster_entity_anim.gif.
+
+Vanilla selection box is [[-2,-2.5],[2,5.5]], collision box [[-1.7,-2.2],[1.7,2.2]], and ground buildability [[-1.8,-2.3],[1.8,2.3]]. The former 4x8 solid-hull assumption was incorrect. Current benchmark deliberately models around 4x4.75 tiles of mounted machinery inside a larger selected visual/exhaust region. Factorio +Y is aft, Blender -Y is aft.
+
+R07b PASS: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40386604801. Captures independently validate floor integration, engine body, working flame, and four conditional pipe overlays with original prototype map coordinates.
+R08 PASS: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40387887945. Added genuinely modeled pressure hardware; visual comparison still showed unnaturally pale casing, strongly symmetric upper assemblies, a shallow fan-filled throat and a blue crystalline rather than continuous thermal plume.
+R09 PASS: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40388888408. Three native Blender camera views from a single saved benchmark: previous_shallow [1,-6.8,6.88], centered_high [.18,-6.8,10], steep_overhead [0,-4.8,11.5]. Their alpha bounds avoided edge clipping. Centered_high was chosen as the next default because it shows symmetrical body machinery without flattening the visible bell. The benchmark throat received a dark inner refractory liner in place of the shallow fan disc.
+R10 is experimental: a 12-running-frame vanilla benchmark at 320x640 with longer independent blue-white flame. Do not call it passed until its particular workflow run has passed. The R09 dark idle throat deliberately removes a permanent cyan ignition disk; keep moving light in the independent exhaust collection.
+
+These capture source revisions do not authorize replacement of any Tech Priests production art. More work remains on heavily integrated side machinery, nonuniform metal wear, deep nozzle darkness, white-blue plume, exact lighting, the user-facing Capture Studio add-on execution path, and an isolated real Factorio 2.0.77 runtime test.
