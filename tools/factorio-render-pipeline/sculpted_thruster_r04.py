@@ -312,6 +312,14 @@ def build_thruster(name,w,h,root,p):
         name,w,physical_h,root,p,
         {"tube":tube,"ring":ring,"ellipsoid":ellipsoid}
     )
+    if name.startswith("test-04-vanilla-approx"):
+        import vanilla_visual_refinement_r08
+        vanilla_visual_refinement_r08.apply(
+            name,root,p,
+            {"tube":tube,"lathe":lathe,"ring":ring,
+             "cast_panel":cast_panel,"ellipsoid":ellipsoid},
+            bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
