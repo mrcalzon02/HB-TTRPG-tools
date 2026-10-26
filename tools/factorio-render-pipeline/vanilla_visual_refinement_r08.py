@@ -112,8 +112,12 @@ def apply(name,root,p,api,scene):
     # Remove fan vanes on the benchmark ONLY, and replace with a real
     # inward-tapering, shadowed refractory liner. Other game assets stay put.
     for ob in list(bpy.context.scene.objects):
-        if "_inner_flow_vane_" in ob.name and ob.parent==root:
+        if ("_inner_flow_vane_" in ob.name or
+            "_animated_ignition" in ob.name) and ob.parent==root:
+            # Idle vanilla throat is visually dark; the separate Factorio
+            # flame_effect, not a permanent bright cyan disc, creates thrust.
             bpy.data.objects.remove(ob,do_unlink=True)
+    scene["fsc_idle_nozzle_contract"]="dark empty throat with no cyan face"
     lathe("R09_deep_black_nozzle_cavity",
           [(-3.18,1.38),(-3.08,1.28),
            (-2.88,1.10),(-2.69,.89),
