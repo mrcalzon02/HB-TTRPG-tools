@@ -48,7 +48,7 @@ def benchmark_contract():
         "not_a_visual_fidelity_claim":True
     }
 
-def _emissive_material(name,color,alpha):
+def _emissive_material(name,color,alpha,strength):
     material=bpy.data.materials.new(name)
     material.use_nodes=True
     nt=material.node_tree
@@ -56,7 +56,8 @@ def _emissive_material(name,color,alpha):
     out=nt.nodes.new("ShaderNodeOutputMaterial")
     emissive=nt.nodes.new("ShaderNodeEmission")
     emissive.inputs["Color"].default_value=(*color,1)
-    emissive.inputs["Strength"].default_value=5.0
+    # Avoid AgX clipping every material to pale white: hue matters here.
+    emissive.inputs["Strength"].default_value=float(strength)
     transparent=nt.nodes.new("ShaderNodeBsdfTransparent")
     blend=nt.nodes.new("ShaderNodeMixShader")
     blend.inputs[0].default_value=float(alpha)
@@ -74,8 +75,13 @@ def _plume_mesh(name,y0,length,max_radius,material,root,collection,phase):
         y=y0-length*t
         # Exhaust is narrow at the nozzle, broad in the shock diamond, and
         # fades to a trailing point; avoid a single cartoon cone.
-        radius=max_radius*(.25+.9*math.sin(math.pi*max(.02,t)**.78)**1.25)
-        radius*=max(.10,1-.72*t)
+        # Bell expansion into a broad, continuous blue plume: no truncated
+        # icy triangular spear or zero-radius end cap.
+        bell=math.sin(math.pi*max(.01,min(.99,t)))
+        radius=max_radius*(.36+.90*bell**.72)
+        radius*=max(.04,(1-t)**.48)
+        # Concentric streamwise turbulence changes little frame-to-frame;
+        # the art must remain registered to the unchanged engine body.
         for j in range(sides):
             a=2*math.pi*j/sides
             flutter=1+.045*math.cos(5*a+8*t+phase)
@@ -101,16 +107,16 @@ def add_flame_collection(scene,root,frame_count):
     effect=bpy.data.collections.new("EXHAUST_FLAME_SEPARATE_PASS")
     scene.collection.children.link(effect)
     mats=[
-        _emissive_material("flame_outer_cyan_r07",(.09,.50,1.0),.27),
-        _emissive_material("flame_inner_blue_r07",(.12,.85,1.0),.48),
-        _emissive_material("flame_hot_white_r07",(1.0,.95,.71),.70),
+        _emissive_material("flame_outer_cyan_r07",(.035,.23,1.0),.48,1.10),
+        _emissive_material("flame_inner_blue_r07",(.06,.83,1.0),.64,1.55),
+        _emissive_material("flame_hot_white_r07",(1.0,.74,.39),.79,2.10),
     ]
     # Factorio vanilla flame starts near map +5.5, i.e. Blender -5.5.
     # Generated geometry begins at nozzle exit then extends to -5.5:
     # explicit effect is independent of animation and integration patch.
-    y0=-2.91
-    lengths=(2.35,1.93,1.42)
-    radii=(.82,.55,.26)
+    y0=-2.98
+    lengths=(2.52,1.98,1.27)
+    radii=(.99,.64,.24)
     objects=[]
     for i,mat in enumerate(mats):
         ob=_plume_mesh("flame_layer_%02d"%i,y0,lengths[i],radii[i],
@@ -124,5 +130,6 @@ def add_flame_collection(scene,root,frame_count):
             ob.keyframe_insert(data_path="scale",frame=frame)
     scene["fsc_flame_effect_objects"]=len(objects)
     scene["fsc_flame_factorio_anchor_map_y"]=FLAME_POSITION[1]
-    scene["fsc_flame_source"]="procedural approximation, not vanilla bitmap"
+    scene["fsc_flame_source"]="R07b layered blue thermal field, not vanilla bitmap"
+    scene["fsc_flame_hue_validation"]="no-whiteout material strength plus independent alpha bounds"
     return effect
