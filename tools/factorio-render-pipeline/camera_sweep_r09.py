@@ -28,8 +28,11 @@ def main():
     scene=bpy.context.scene
     if scene.get("fsc_reference_visual_pass")!="R08_blackened_segmented_furnace_with_supported_side_machinery":
         raise RuntimeError("Camera sweep requires reconstructed R08 benchmark")
-    if scene.get("fsc_nozzle_throat_revision")!="R09_deep_refractory_liner_without_front_turbine_disc":
-        raise RuntimeError("Deep throat revision is absent from saved model")
+    if scene.get("fsc_nozzle_throat_revision") not in (
+        "R09_deep_refractory_liner_without_front_turbine_disc",
+        "R11_2.28_tile_open_deep_liner",
+    ):
+        raise RuntimeError("No verified open-throat benchmark geometry found")
 
     camera=scene.camera
     if camera is None or camera.data.type!="ORTHO":raise RuntimeError("Must use Blender orthographic camera")
