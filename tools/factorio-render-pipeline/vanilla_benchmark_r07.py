@@ -115,8 +115,10 @@ def add_flame_collection(scene,root,frame_count):
     # Generated geometry begins at nozzle exit then extends to -5.5:
     # explicit effect is independent of animation and integration patch.
     y0=-2.98
-    lengths=(2.52,1.98,1.27)
-    radii=(.99,.64,.24)
+    # R10 extends the real stream beyond the rocket body; the original
+    # R07 effect looked like a short cyan bubble at the nozzle mouth.
+    lengths=(3.48,2.91,2.04)
+    radii=(.79,.51,.21)
     objects=[]
     for i,mat in enumerate(mats):
         ob=_plume_mesh("flame_layer_%02d"%i,y0,lengths[i],radii[i],
@@ -130,6 +132,6 @@ def add_flame_collection(scene,root,frame_count):
             ob.keyframe_insert(data_path="scale",frame=frame)
     scene["fsc_flame_effect_objects"]=len(objects)
     scene["fsc_flame_factorio_anchor_map_y"]=FLAME_POSITION[1]
-    scene["fsc_flame_source"]="R07b layered blue thermal field, not vanilla bitmap"
+    scene["fsc_flame_source"]="R10 elongated blue jet with separate hot core, not vanilla bitmap"
     scene["fsc_flame_hue_validation"]="no-whiteout material strength plus independent alpha bounds"
     return effect
