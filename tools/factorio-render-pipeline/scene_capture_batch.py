@@ -212,11 +212,15 @@ def configure_scene(name,w,h,width,height,num_frames):
     for ob in bpy.context.scene.objects:
         if ob.type=="MESH" and ob.parent==ROOT and len(ob.data.vertices):
             ob["source_family"]=name
-    bpy.ops.object.camera_add(location=(max(4,w*.85),-max(6,h*.65),max(5,h*.83)))
+    # Orthographic scale denotes VERTICAL span. Account for portrait aspect
+    # when constraining model width; old 128x256 frames clipped most drives.
+    # Keep the 1x9 void spine near front-on to avoid diagonal horizontal spill.
+    cam_x=(.65 if w==1 else min(4.,w*.80))
+    bpy.ops.object.camera_add(location=(cam_x,-max(6.,h*.85),max(5.,h*.86)))
     cam=bpy.context.object
     cam.rotation_euler=(Vector((0,0,.56))-cam.location).to_track_quat("-Z","Y").to_euler()
     cam.data.type="ORTHO"
-    cam.data.ortho_scale=max(w*1.75,h*1.33)
+    cam.data.ortho_scale=max(h*1.55, w*1.75*height/width)
     bpy.ops.object.light_add(type="AREA",location=(-4,-5,8))
     light=bpy.context.object;light.data.energy=1100;light.data.size=6
     bpy.ops.object.light_add(type="AREA",location=(4,4,5))
@@ -231,10 +235,23 @@ def configure_scene(name,w,h,width,height,num_frames):
     scene.view_settings.view_transform="AgX"
     scene.render.film_transparent=True
     scene.frame_start=1;scene.frame_end=num_frames+1
+    # Saved .blend is itself an animated editable object. Keyframe the
+    # emissive intensity for idle and run, not merely transient render values.
+    for color in ("blue","violet","orange"):
+        socket=MATERIALS[color].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
+        socket.default_value=.08
+        socket.keyframe_insert(data_path="default_value",frame=1)
+        for k in range(num_frames):
+            socket.default_value=max(.05,.9+.65*math.sin((k+1)*math.pi*2/max(1,num_frames)))
+            socket.keyframe_insert(data_path="default_value",frame=k+2)
+    scene.frame_set(1)
     scene["fsc_status"]="CALIBRATION_ONLY_NOT_FACTORIO_APPROVED"
     scene["fsc_axis"]="+X east +Y north +Z height; exhaust -Y"
     scene["fsc_footprint_tiles"]=json.dumps([w,h])
-    scene["fsc_model_revision"]="r03-procedural"
+    scene["fsc_model_revision"]="r03-camera-fix"
+    scene["fsc_capture_ortho_scale"]=cam.data.ortho_scale
+    scene["fsc_capture_camera_position"]=json.dumps(list(cam.location))
+    scene["fsc_capture_direction"]="prototype orientation south exhaust, no dynamic rotation for source"
     scene["fsc_full_prototype_metadata"]=json.dumps(PROTOTYPE.get(name,{}))
     return scene
 
@@ -255,10 +272,6 @@ def capture_one(out_dir,name):
             if name=="test-01-graybox" and state=="run":continue
             for k in range(count):
                 scene.frame_set(1+k if state=="idle" else k+2)
-                strength=.08 if state=="idle" else .9+.65*math.sin((k+1)*math.pi*2/max(1,count))
-                for name_mat in ("blue","violet","orange"):
-                    bsdf=MATERIALS[name_mat].node_tree.nodes.get("Principled BSDF")
-                    if bsdf:bsdf.inputs["Emission Strength"].default_value=max(.05,strength)
                 relative=Path("frames")/("direction-%02d"%direction)/state/("%03d.png"%(k+1))
                 output=target/relative
                 output.parent.mkdir(parents=True,exist_ok=True)
