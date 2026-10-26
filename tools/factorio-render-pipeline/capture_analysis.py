@@ -128,6 +128,31 @@ def analyze_asset(folder):
             result=psrc.convert("RGBA")
             result.alpha_composite(esrc.convert("RGBA"))
             result.save(folder/"integration-composite-preview.png")
+    flame_metrics=[]
+    flame_atlas=None
+    if manifest.get("flame_frames"):
+        flame_files=[folder/path for path in manifest["flame_frames"]]
+        if len(flame_files)!=manifest["run_frames"]:
+            raise RuntimeError("Flame count does not match declared animation frames")
+        if any(not p.is_file() for p in flame_files):
+            raise RuntimeError("Missing declared flame frame")
+        flame_metrics=[capture_metrics(p,cell) for p in flame_files]
+        flame_atlas="packed/flame-effect.png"
+        pack_state(flame_files,folder/flame_atlas,cell)
+        # Inspection composite only; keep all export layers separate.
+        patch=(folder/manifest["floor_integration_patch"]
+               if manifest.get("floor_integration_patch") else None)
+        body=folder/"frames"/"direction-00"/"run"/"001.png"
+        with Image.open(body) as src:
+            preview=src.convert("RGBA")
+        if patch is not None:
+            with Image.open(patch) as floor:
+                bottom=floor.convert("RGBA")
+                bottom.alpha_composite(preview)
+                preview=bottom
+        with Image.open(flame_files[0]) as effect:
+            preview.alpha_composite(effect.convert("RGBA"))
+        preview.save(folder/"floor-body-flame-composite.png")
     groups={}
     for p in files:
         key=(p.parts[-3],p.parts[-2]) # direction-00 / idle or run
@@ -166,6 +191,11 @@ def analyze_asset(folder):
             "atlases":atlas_files,"contact_sheet":"contact-sheet.png",
             "integration_patch_metrics":integration,
             "integration_composite_preview":"integration-composite-preview.png" if integration else None,
+            "flame_frame_count":len(flame_metrics),
+            "flame_atlas":flame_atlas,
+            "flame_metrics":flame_metrics,
+            "flame_edge_clipping_suspected":any(x["touches_frame_edge"] for x in flame_metrics),
+            "composite_with_flame":"floor-body-flame-composite.png" if flame_metrics else None,
             "candidate_not_game_approved":True}
     (folder/"qa-report.json").write_text(json.dumps(result,indent=2)+"\n")
     print("CAPTURE_QA",result["asset"],"frames",len(files),"unique",len(hashes),
@@ -183,7 +213,9 @@ def main():
     reports=[analyze_asset(x) for x in candidates]
     summary={"assets":len(reports),"rendered_frames":sum(x["frame_count"] for x in reports),
              "rendered_atlases":sum(len(x["atlases"]) for x in reports),
-             "edge_risk_assets":[x["asset"] for x in reports if x["edge_clipping_suspected"]],
+             "independent_flame_frames":sum(x["flame_frame_count"] for x in reports),
+             "edge_risk_assets":[x["asset"] for x in reports
+                                 if x["edge_clipping_suspected"] or x["flame_edge_clipping_suspected"]],
              "drift_px_by_asset":{x["asset"]:x["bbox_center_spread_px"] for x in reports},
              "status":"CAPTURE_EXPORTED_ONLY_NOT_FACTORIO_VERIFIED"}
     (root/"batch-qa-summary.json").write_text(json.dumps(summary,indent=2)+"\n")
