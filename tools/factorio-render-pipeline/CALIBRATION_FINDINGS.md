@@ -408,3 +408,47 @@ reattachment as ZIP (do NOT need to unzip) for local data processing.
 No gameplay, Tech Priests production sprite, custom 3D model or sprite
 packaging changes. This candidate requires a full independent Blender capture
 and qualitative comparison with the original image.
+
+## R16–R17 verified post-capture assessment (2026-10-26)
+
+R16 real Blender captures passed BOTH jobs:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40417003783
+The candidate R16 calibration archive includes real idle / running body,
+aft-axis deep throat, three-quarter thermal plates, all conditional pipes,
+and independently exported effects. Custom-model regressions passed.
+
+Actual R15 and R16 PNG review at matched camera positions shows:
+- Broad squared-away R16 hot ends are more physically plausible than earlier
+  arrow-spear strips, and the new cradle/crosshead structures are visible.
+- Root attachments are now more explicit, including double braces.
+- HOWEVER, the eight supports are still overly identical and symmetrical
+  relative to the highly irregular, crowded original in-game engine.
+- The dark open nozzle remains but original source's layered circumferential
+  machinery and plate silhouettes are not yet faithfully reproduced.
+- Fin dynamics remain unknown: a successful Blender structural inspection
+  does NOT prove native mechanical articulation.
+
+R17 authoritative entity-layer definition:
+https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/tools/factorio-render-pipeline/THRUSTER_ENTITY_ASSEMBLY_R17.md
+
+Upstream 2.0.77 code confirms thruster-light-1 and thruster-light-2 are TWO
+PAGES of the SAME 64-frame synchronized, additive draw_as_glow animation
+with fadeout, not physical machinery. In particular their 384x832 cells
+cannot be naively aligned with the 264x542 body sprites without decoding
+the original sprite shifts and registered prototype frame positions.
+
+The four separate named pipe visualisations are conditionally enabled by
+fuel/oxidizer fluid-box connectors, with exact ports and pixel shifts
+recorded in the R17 contract. Do not combine them with permanent geometry
+or treat always_draw as an unconditional port display.
+
+Mechanical sound accents at 25 (stop) and 52 (move) are reference phase
+windows; highlight 24–26 and 51–53 of body and lighting separately rather
+than guessing a fin pivot. Original bytes still need to be directly available
+from a reattached, UNEXTRACTED thruster.zip for the next precise motion pass.
+
+R17 source CI functional verification:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40417786486
+PASSED. It checks the atlas page mapping, original named port contracts,
+mechanical cue metadata and private generation from synthetic fixture
+graphics. No actual source-game light pages were extracted in this session.
