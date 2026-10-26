@@ -30,6 +30,13 @@ def main():
         raise RuntimeError("Blender scene verifier returned but saved no evidence")
     subprocess.run([str(python),str(root/"capture_analysis.py"),"--root",str(target),
                     "--fail-on-edge"],check=True)
+    benchmark=target/"test-04-vanilla-approx"
+    if benchmark.is_dir():
+        # Optional, non-score visual comparison against the official wiki GIF.
+        # Network/reference failure creates an unavailable status, not a false
+        # pixel-similarity pass. No reference image is added to the repository.
+        subprocess.run([str(python),str(root/"reference_compare_r07.py"),
+                        "--candidate",str(benchmark)],check=True)
     print("Capture batch complete at",target,flush=True)
 
 if __name__=="__main__":main()
