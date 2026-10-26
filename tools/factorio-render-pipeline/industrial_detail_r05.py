@@ -140,14 +140,26 @@ def _nozzle_petals(label,x,y,z,diam,root,p,variant):
                        x+r*1.04*math.cos(theta),y-.40,
                        z+r*1.04*math.sin(theta),p["brass"],root,r*.068)
 
-    # Deep multi-stage turbine throat can be seen between outer bell petals.
-    for i in range(9):
-        a=i*math.tau/9
-        verts=[(x+.055*math.cos(a),y-.48,z+.055*math.sin(a)),
-               (x+r*.61*math.cos(a-.12),y-.46,z+r*.61*math.sin(a-.12)),
-               (x+r*.61*math.cos(a+.13),y-.46,z+r*.61*math.sin(a+.13))]
-        _mesh(label+"_inner_flow_vane_%02d"%i,verts,[(0,1,2)],
-              p["dark"],root)
+    # R09: the vanilla reference is a DEEP OPEN COMBUSTION BELL lined
+    # with 24 slim lengthwise flutes, not nine radial 'propeller blades'.
+    # The previous triangular fan filled the center and made the asset look
+    # like a ventilation turbine rather than a rocket.
+    for i in range(24):
+        theta=i*math.tau/24
+        width=.021
+        profile=[(y-.48,r*.79),(y-.36,r*.73),
+                 (y-.18,r*.56),(y+.01,r*.39),(y+.20,r*.27)]
+        verts=[]
+        for axial,radial in profile:
+            for delta in (-width,width):
+                a=theta+delta
+                verts.append((x+radial*math.cos(a),axial,
+                              z+radial*math.sin(a)))
+        quads=[(k*2,k*2+1,k*2+3,k*2+2) for k in range(len(profile)-1)]
+        _mesh(label+"_longitudinal_inner_liner_%02d"%i,verts,quads,
+              p["steel"] if i%3 else p["dark"],root)
+    # Keep the center cavity open. Retain thin radial cooling detail near
+    # the outside wall, but no solid fan or central hub.
 
 def _hull_panels(name,root,p,w,h):
     # Short segmented sections; do not bury panels inside the original hull.
