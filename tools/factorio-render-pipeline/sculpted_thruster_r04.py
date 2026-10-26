@@ -281,7 +281,27 @@ def model(name,w,h,root,p):
     # Parent object is centerline z=-0.31, shell is integrated into platform.
 
 def build_thruster(name,w,h,root,p):
+    # The Factorio 2.0.77 vanilla thruster uses a STATIC integration_patch
+    # on integration_patch_render_layer='floor' in addition to its animation.
+    # Move only socket/deck-cutout graphics into a separate hidden collection.
+    # The actual thruster body DOES NOT carry this as a floor plate.
+    before=set(ob.name for ob in bpy.context.scene.objects)
     model(name,w,h,root,p)
+    floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
+    bpy.context.scene.collection.children.link(floor)
+    prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
+              "front_platform_socket_bridge","north_deck_safety_lip",
+              "socket_lock_fastener")
+    for ob in list(bpy.context.scene.objects):
+        if ob.name in before or not ob.name.startswith(prefixes):
+            continue
+        for collection in list(ob.users_collection):
+            collection.objects.unlink(ob)
+        floor.objects.link(ob)
+        ob.hide_render=True
+    bpy.context.scene["fsc_floor_integration_patch_count"]=len(floor.objects)
+    if not floor.objects:
+        raise RuntimeError("Missing floor integration geometry")
     bpy.context.scene["fsc_mounting_doctrine"]="DECK_RECESSED_NO_BASE_PLATE"
     bpy.context.scene["fsc_deck_z"]=0.0
     bpy.context.scene["fsc_exhaust_direction"]="-Y"
