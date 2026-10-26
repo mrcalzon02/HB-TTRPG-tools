@@ -135,6 +135,14 @@ def test_one(path):
                     raise RuntimeError("Incorrect map/Blender port mapping for "+port)
             if scene.get("fsc_reference_visual_pass")!="R08_blackened_segmented_furnace_with_supported_side_machinery":
                 raise RuntimeError("Vanilla R08 reference-driven pressure reconstruction absent")
+            if scene.get("fsc_idle_nozzle_contract")!="dark empty throat with no cyan face":
+                raise RuntimeError("R09 vanilla idle nozzle must not have a bright cyan ignition disc")
+            if any("_animated_ignition" in ob.name for ob in meshes):
+                raise RuntimeError("Idle cyan ignition disc was incorrectly baked into source")
+            if scene.get("fsc_camera_selection_evidence")!="R09 centered_high no-clipping three-angle sweep":
+                raise RuntimeError("Vanilla camera selection lacks three-angle reference proof")
+            if abs(scene.camera.location.x-.18)>.01 or abs(scene.camera.location.z-10.0)>.05:
+                raise RuntimeError("Vanilla camera drifted from selected higher centered view")
             expected_parts=[
                 ("R08_parallel_pressure_bottle_side",2),
                 ("R08_centerline_black_pressure_shield_",8),
