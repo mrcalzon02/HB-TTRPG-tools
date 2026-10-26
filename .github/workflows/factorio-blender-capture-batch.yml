@@ -1,0 +1,48 @@
+name: Factorio Blender calibration capture batch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/scene_capture_batch.py'
+      - 'tools/factorio-render-pipeline/capture_analysis.py'
+      - 'tools/factorio-render-pipeline/run_calibration.py'
+      - '.github/workflows/factorio-blender-capture-batch.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  blender-capture:
+    name: Headless Blender captures (${{ matrix.group }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [calibration, models]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile orchestration and QA sources
+        run: python -m py_compile tools/factorio-render-pipeline/scene_capture_batch.py tools/factorio-render-pipeline/capture_analysis.py tools/factorio-render-pipeline/run_calibration.py
+      - name: Install or verify pinned Blender 4.5 LTS workstation
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir readiness
+      - name: Execute real Blender scene renders and source model revisions
+        run: python tools/factorio-render-pipeline/run_calibration.py --group ${{ matrix.group }} --output capture-output
+      - name: Publish batch report to GitHub job summary
+        if: success()
+        run: cat capture-output/CAPTURE_QA.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload candidate blend files and captured PNG evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-captures-${{ matrix.group }}
+          path: |
+            readiness/
+            capture-output/
+          if-no-files-found: warn
+          retention-days: 30
