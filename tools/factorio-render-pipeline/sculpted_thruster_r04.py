@@ -126,11 +126,11 @@ def socket_structure(w,h,p,root):
 
 def smooth_housing(name,w,h,p,root,variant):
     """Multi-section elliptical loft, tapered fore-to-aft over suspended chassis."""
-    if variant=="vanilla" and h>=8:
-        # The actual Space Age vanilla diagnostic occupies a 4x8 footprint.
-        # This is an approximation, not a photogrammetric reconstruction.
-        fore=h/2-.74
-        aft=-h/2+1.05
+    if variant=="vanilla" and h>=4.6:
+        # The selection area is 4x8 but the real mount/body spans ~4.6 tiles.
+        # Keep the pressure hull INSIDE its deck cavity, not inside the plume.
+        fore=h/2-.38
+        aft=-h/2+.53
     else:
         fore=min(h/2-.50,1.25)
         aft=max(-h/2+.60,-1.60) if variant!="spine" else -h/2+1.0
