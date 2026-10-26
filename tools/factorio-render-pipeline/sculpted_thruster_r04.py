@@ -248,7 +248,9 @@ def spine(w,h,p,root):
         if i%2==0:
             ellipsoid("embedded_cell_window_"+str(i),
                       (0,yy,.05),(.17,.23,.065),p["violet"],root)
-    nozzle("spinal_void_bell",0,-h/2-.16,-.34,.53,p,root,"violet")
+    from thruster_profile_r06 import nozzle_profiles
+    for label,x,y,z,diam,color in nozzle_profiles("void-fusion-thruster",w,h):
+        nozzle(label,x,y,z,diam,p,root,color)
 
 def model(name,w,h,root,p):
     """Dispatch 4 bespoke industrial silhouettes plus vanilla diagnostic."""
@@ -259,8 +261,9 @@ def model(name,w,h,root,p):
     if name.startswith("large-void"):
         smooth_housing("HEAVY_dual_layer_pressure_hull",w,h,p,root,"heavy")
         curved_armor(w,h,p,root,"heavy")
-        for x in (-1.05,0.,1.05):
-            nozzle("HEAVY_fusion_bell_"+str(x),x,-h/2-.17,-.38,.84,p,root,"violet")
+        from thruster_profile_r06 import nozzle_profiles
+        for label,x,y,z,diam,color in nozzle_profiles(name,w,h):
+            nozzle(label,x,y,z,diam,p,root,color)
         for x in (-.9,.9):
             tube("reactor_loop_"+str(x),
                 [(x,1.34,-.17),(x*.9,.56,.37),
@@ -271,14 +274,17 @@ def model(name,w,h,root,p):
         smooth_housing("THETAZINE_elliptical_pressure_hull",w,h,p,root,"thetazine")
         curved_armor(w,h,p,root,"thetazine")
         routed_manifold(w,h,p,root,"violet")
-        for x in (-.86,.86):
-            nozzle("THETAZINE_multi_bell_"+str(x),x,-h/2-.13,-.38,.91,p,root,"violet")
+        from thruster_profile_r06 import nozzle_profiles
+        for label,x,y,z,diam,color in nozzle_profiles(name,w,h):
+            nozzle(label,x,y,z,diam,p,root,color)
         return
     # The close-to-vanilla model is a calibration silhouette, not a sprite copy.
     smooth_housing("HYDROGEN_curved_pressure_hull",w,h,p,root,"vanilla")
     curved_armor(w,h,p,root,"hydrogen")
     routed_manifold(w,h,p,root)
-    nozzle("HYDROGEN_single_rolled_bell",0,-h/2-.16,-.38,1.29,p,root,"blue")
+    from thruster_profile_r06 import nozzle_profiles
+    for label,x,y,z,diam,color in nozzle_profiles(name,w,h):
+        nozzle(label,x,y,z,diam,p,root,color)
     if name.startswith("test-04"):
         for side in (-1,1):
             tube("vanilla_benchmark_overloop_"+str(side),
@@ -317,7 +323,9 @@ def build_thruster(name,w,h,root,p):
     bpy.context.scene["fsc_deck_z"]=0.0
     bpy.context.scene["fsc_exhaust_direction"]="-Y"
     bpy.context.scene["fsc_expected_rear_edge_y"]=-h/2
-    bpy.context.scene["fsc_mounting_revision"]="r05_layered_engineering_recessed_mount"
+    from thruster_profile_r06 import metadata
+    bpy.context.scene["fsc_nozzle_profiles"]=__import__("json").dumps(metadata(name,w,h))
+    bpy.context.scene["fsc_mounting_revision"]="r06_broad_nozzles_structural_detail"
 
 # R05 geometry is composed in industrial_detail_r05 and intentionally does
 # not alter Tech Priests Lua/entity prototypes or overwrite installed sprites.
