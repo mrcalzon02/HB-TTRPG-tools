@@ -10,6 +10,10 @@ import math
 import sys
 from pathlib import Path
 
+# Blender --python does not guarantee the calling script directory is importable.
+SOURCE_ROOT=str(Path(__file__).resolve().parent)
+if SOURCE_ROOT not in sys.path:sys.path.insert(0,SOURCE_ROOT)
+
 import bpy
 from mathutils import Vector
 
