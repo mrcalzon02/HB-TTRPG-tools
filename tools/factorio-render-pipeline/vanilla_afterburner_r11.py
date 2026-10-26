@@ -94,6 +94,12 @@ def apply(name,root,p,api,scene):
             or ob.name.startswith("R09_inner_refractory_stiffener")
             or ob.name.startswith("vanilla_reference_bell_dark_throat")
             or ob.name.startswith("R08_blue_energy_coupler")
+            # These OLD R05 petal panels were attached to the cone itself,
+            # visually producing the pale arch mistaken for afterburners.
+            # The benchmark now uses separate MACHINE-SUSPENDED R11 vanes.
+            or (ob.name.startswith("vanilla_reference_bell_") and (
+                "_heat_shield_petal_" in ob.name
+                or "_trailing_rivet_" in ob.name))
         ):
             removed.append(ob.name)
             bpy.data.objects.remove(ob,do_unlink=True)
@@ -182,6 +188,9 @@ def apply(name,root,p,api,scene):
         scene.collection.children.link(overlays)
     overlays.hide_render=True
     scene["fsc_informational_overlay_policy"]="arrows and fuel icons are UI images, zero 3D meshes"
+    scene["fsc_removed_cone_attached_vane_panels"]=sum(
+        "_heat_shield_petal_" in name for name in removed
+    )
     scene["fsc_afterburner_parent_collection"]=after.name
     scene["fsc_afterburner_vane_count"]=NUMBER_OF_VANES
     scene["fsc_afterburner_support_count"]=NUMBER_OF_VANES
@@ -191,4 +200,4 @@ def apply(name,root,p,api,scene):
     scene["fsc_throat_near_y"]=BELL_MOUTH_Y
     scene["fsc_throat_far_y"]=THROAT_END_Y
     scene["fsc_deleted_overlay_like_parts"]=json.dumps(removed)
-    scene["fsc_engineering_revision"]="R11_1_chassis_braced_dark_suspended_afterburners"
+    scene["fsc_engineering_revision"]="R11_2_no_cone_attached_petals_chassis_suspended_afterburners"
