@@ -32,9 +32,12 @@ PROTOTYPE = {
     # The official graphics_set uses a separate floor integration_patch,
     # 64-frame animation at speed .5, shift {0,3}, scale .5 in Factorio 2.0.77.
     # Preview cell 192x416 is NOT asserted to be vanilla production sprite size.
-    "test-04-vanilla-approx": {"footprint":[4,8],
+    "test-04-vanilla-approx": {"selection_box":[[-2,-2.5],[2,5.5]],
+       "ground_buildability_box":[[-1.8,-2.3],[1.8,2.3]],
+       "mount_span_tiles":[4,4.75],"preview_extent":[4,8],
        "vanilla_engine_animation_frames":64,"speed":0.5,"scale":0.5,
-       "shift":[0,3],"integration_patch_render_layer":"floor"},
+       "shift":[0,3],"integration_patch_render_layer":"floor",
+       "flame_effect_position_factorio":[0,5.5],"blender_to_factorio_y_sign":-1},
 
     "hydrogen-thruster-r06": {"full_cell": [256,512], "speed": 0.18, "scale": 0.54, "shift": [0,1.25], "pipes":[[-1.8,-1.0],[1.8,-1.0]]},
     "thetazine-thruster-r06": {"full_cell": [256,512], "speed": 0.12, "scale": 0.55, "shift": [0,1.65], "pipes":[[-2.1,-1.0],[2.1,-1.0]]},
@@ -220,6 +223,9 @@ def configure_scene(name,w,h,width,height,num_frames):
     MATERIALS=setup_palette()
     benchmark(name,w,h)
     add_nonrender_jig(w,h)
+    if name.startswith("test-04-vanilla-approx"):
+        from vanilla_benchmark_r07 import add_flame_collection
+        add_flame_collection(bpy.context.scene,ROOT,num_frames)
     for ob in bpy.context.scene.objects:
         if ob.type=="MESH" and ob.parent==ROOT and len(ob.data.vertices):
             ob["source_family"]=name
@@ -233,7 +239,9 @@ def configure_scene(name,w,h,width,height,num_frames):
     cam=bpy.context.object
     cam.rotation_euler=(Vector((0,0,.56))-cam.location).to_track_quat("-Z","Y").to_euler()
     cam.data.type="ORTHO"
-    cam.data.ortho_scale=max(h*1.55, w*1.75*height/width)
+    cam.data.ortho_scale=(max(h*1.20,w*1.25*height/width)
+                          if name.startswith("test-04-vanilla-approx")
+                          else max(h*1.55,w*1.75*height/width))
     bpy.ops.object.light_add(type="AREA",location=(-4,-5,8))
     light=bpy.context.object;light.data.energy=1100;light.data.size=6
     bpy.ops.object.light_add(type="AREA",location=(4,4,5))
@@ -259,7 +267,8 @@ def configure_scene(name,w,h,width,height,num_frames):
             socket.keyframe_insert(data_path="default_value",frame=k+2)
     scene.frame_set(1)
     scene["fsc_status"]="CALIBRATION_ONLY_NOT_FACTORIO_APPROVED"
-    scene["fsc_axis"]="+X east +Y north +Z height; exhaust -Y"
+    scene["fsc_axis"]="Blender +X=east,+Y=fore,-Y=aft,+Z=up; Factorio map +Y=aft"
+    scene["fsc_map_to_blender"]="Factorio Y = -Blender Y; X unchanged"
     scene["fsc_footprint_tiles"]=json.dumps([w,h])
     scene["fsc_model_revision"]="r06-segmented-bells-and-paneling-recessed-platform-mount"
     scene["fsc_capture_ortho_scale"]=cam.data.ortho_scale
@@ -276,9 +285,12 @@ def capture_one(out_dir,name):
     bpy.ops.wm.save_as_mainfile(filepath=str((target/"scenes"/(name+".blend")).resolve()))
     manifest={"asset":name,"footprint_tiles":[w,h],"preview_cell":[width,height],"run_frames":frames,
               "directions":directions,"prototype_reference":PROTOTYPE.get(name),
-              "source_revision":"r06","status":"candidate_environment_test_not_game_approved",
+              "source_revision":"r07-mount-flame-calibration" if name.startswith("test-04") else "r06",
+              "status":"candidate_environment_test_not_game_approved",
               "blender_version":bpy.app.version_string,"frame_files":[],
-              "floor_integration_patch":None,"floor_layer_hint":"integration_patch_render_layer = floor"}
+              "floor_integration_patch":None,"floor_layer_hint":"integration_patch_render_layer = floor",
+              "flame_frames":[],"flame_effect_contract":"independent optional effect, not in engine atlas",
+              "vanilla_prototype_geometry":json.loads(scene.get("fsc_vanilla_prototype_reference","null"))}
     # Render the static under-deck integration patch separately from the
     # engine animation, as in the original Space Age thruster graphics_set.
     floor=bpy.data.collections.get("FLOOR_INTEGRATION_PATCH")
@@ -311,6 +323,26 @@ def capture_one(out_dir,name):
                 if not output.is_file():raise RuntimeError("Render missing "+str(output))
                 manifest["frame_files"].append(str(relative).replace("\\","/"))
     ROOT.rotation_euler[2]=0
+    flame=bpy.data.collections.get("EXHAUST_FLAME_SEPARATE_PASS")
+    if flame and flame.objects:
+        # Separate exported effect: never bake the dynamic plume into the
+        # animated body or static floor patch (Factorio has flame_effect).
+        preserve={ob:ob.hide_render for ob in scene.objects
+                  if ob.type in {"MESH","CURVE","SURFACE"}}
+        effect=set(flame.objects)
+        try:
+            for ob in preserve:ob.hide_render=ob not in effect
+            for k in range(frames):
+                scene.frame_set(k+2)
+                relative=Path("effects")/"flame"/("%03d.png"%(k+1))
+                output=target/relative;output.parent.mkdir(parents=True,exist_ok=True)
+                scene.render.filepath=str(output.resolve())
+                bpy.ops.render.render(write_still=True)
+                if not output.is_file():raise RuntimeError("Missing separate flame pass "+str(output))
+                manifest["flame_frames"].append(str(relative).replace("\\","/"))
+        finally:
+            for ob,old in preserve.items():ob.hide_render=old
+            scene.frame_set(1)
     (target/"capture-manifest.json").write_text(json.dumps(manifest,indent=2)+"\n",encoding="utf-8")
     print("CAPTURE_SUCCESS",name,len(manifest["frame_files"]),flush=True)
 
