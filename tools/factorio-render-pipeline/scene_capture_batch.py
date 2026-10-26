@@ -22,16 +22,16 @@ SPECS = {
     "test-02-emission": (4, 4, 192, 256, 5, 1),
     "test-03-animation-drift": (4, 4, 192, 256, 12, 1),
     "test-04-vanilla-approx": (4, 4, 256, 384, 4, 1),
-    "hydrogen-thruster-r03": (4, 4, 128, 256, 7, 1),
-    "thetazine-thruster-r03": (5, 5, 128, 256, 2, 1),
-    "void-fusion-thruster-r03": (1, 9, 96, 288, 2, 1),
-    "large-void-fusion-thruster-r03": (4, 4, 192, 256, 1, 1),
+    "hydrogen-thruster-r04": (4, 4, 128, 256, 7, 1),
+    "thetazine-thruster-r04": (5, 5, 128, 256, 2, 1),
+    "void-fusion-thruster-r04": (1, 9, 96, 288, 2, 1),
+    "large-void-fusion-thruster-r04": (4, 4, 192, 256, 1, 1),
 }
 PROTOTYPE = {
-    "hydrogen-thruster-r03": {"full_cell": [256,512], "speed": 0.18, "scale": 0.54, "shift": [0,1.25], "pipes":[[-1.8,-1.0],[1.8,-1.0]]},
-    "thetazine-thruster-r03": {"full_cell": [256,512], "speed": 0.12, "scale": 0.55, "shift": [0,1.65], "pipes":[[-2.1,-1.0],[2.1,-1.0]]},
-    "void-fusion-thruster-r03": {"full_cell": [192,576], "speed": 0.08, "scale": 0.50, "shift": [0,-0.10], "pipes":[]},
-    "large-void-fusion-thruster-r03": {"full_cell": [384,512], "speed": 0.08, "scale": 0.40, "shift": [0,1.25], "pipes":[]},
+    "hydrogen-thruster-r04": {"full_cell": [256,512], "speed": 0.18, "scale": 0.54, "shift": [0,1.25], "pipes":[[-1.8,-1.0],[1.8,-1.0]]},
+    "thetazine-thruster-r04": {"full_cell": [256,512], "speed": 0.12, "scale": 0.55, "shift": [0,1.65], "pipes":[[-2.1,-1.0],[2.1,-1.0]]},
+    "void-fusion-thruster-r04": {"full_cell": [192,576], "speed": 0.08, "scale": 0.50, "shift": [0,-0.10], "pipes":[]},
+    "large-void-fusion-thruster-r04": {"full_cell": [384,512], "speed": 0.08, "scale": 0.40, "shift": [0,1.25], "pipes":[]},
 }
 
 def mat(name, rgb, metallic=0.45, roughness=0.38, emit=False):
@@ -266,7 +266,7 @@ def capture_one(out_dir,name):
     bpy.ops.wm.save_as_mainfile(filepath=str((target/"scenes"/(name+".blend")).resolve()))
     manifest={"asset":name,"footprint_tiles":[w,h],"preview_cell":[width,height],"run_frames":frames,
               "directions":directions,"prototype_reference":PROTOTYPE.get(name),
-              "source_revision":"r03","status":"candidate_environment_test_not_game_approved",
+              "source_revision":"r04","status":"candidate_environment_test_not_game_approved",
               "blender_version":bpy.app.version_string,"frame_files":[]}
     for direction in range(directions):
         ROOT.rotation_euler[2]=math.radians(direction*360/directions)
