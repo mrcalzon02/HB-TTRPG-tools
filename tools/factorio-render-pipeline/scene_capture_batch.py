@@ -272,7 +272,8 @@ def configure_scene(name,w,h,width,height,num_frames):
     scene["fsc_axis"]="Blender +X=east,+Y=fore,-Y=aft,+Z=up; Factorio map +Y=aft"
     scene["fsc_map_to_blender"]="Factorio Y = -Blender Y; X unchanged"
     scene["fsc_footprint_tiles"]=json.dumps([w,h])
-    scene["fsc_model_revision"]="r06-segmented-bells-and-paneling-recessed-platform-mount"
+    scene["fsc_model_revision"]=("r08-vanilla-reference-machining" if name.startswith("test-04")
+                                 else "r06-segmented-bells-and-paneling-recessed-platform-mount")
     scene["fsc_capture_ortho_scale"]=cam.data.ortho_scale
     scene["fsc_capture_camera_position"]=json.dumps(list(cam.location))
     scene["fsc_capture_direction"]="prototype orientation south exhaust, no dynamic rotation for source"
@@ -287,7 +288,7 @@ def capture_one(out_dir,name):
     bpy.ops.wm.save_as_mainfile(filepath=str((target/"scenes"/(name+".blend")).resolve()))
     manifest={"asset":name,"footprint_tiles":[w,h],"preview_cell":[width,height],"run_frames":frames,
               "directions":directions,"prototype_reference":PROTOTYPE.get(name),
-              "source_revision":"r07-mount-flame-calibration" if name.startswith("test-04") else "r06",
+              "source_revision":"r08-vanilla-visual-reference" if name.startswith("test-04") else "r06",
               "status":"candidate_environment_test_not_game_approved",
               "blender_version":bpy.app.version_string,"frame_files":[],
               "floor_integration_patch":None,"floor_layer_hint":"integration_patch_render_layer = floor",
