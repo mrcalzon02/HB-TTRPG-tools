@@ -273,17 +273,11 @@ def configure_scene(name,w,h,width,height,num_frames):
             socket.default_value=max(.05,.9+.65*math.sin((k+1)*math.pi*2/max(1,num_frames)))
             socket.keyframe_insert(data_path="default_value",frame=k+2)
     if name.startswith("test-04"):
-        ignitions=[ob for ob in bpy.context.scene.objects
-                   if ob.type=="MESH" and "_animated_ignition" in ob.name]
-        if len(ignitions)!=1:
-            raise RuntimeError("R10 expects one animated ignition in vanilla benchmark")
-        for ob in ignitions:
-            ob.scale=(.001,.001,.001)
-            ob.keyframe_insert(data_path="scale",frame=1)
-            for j in range(num_frames):
-                heat=.88+.11*math.sin((j+1)*math.tau/max(1,num_frames))
-                ob.scale=(heat,heat,heat)
-                ob.keyframe_insert(data_path="scale",frame=j+2)
+        # R09 dark idle throat intentionally has no fixed cyan ignition mesh.
+        # R10 running light is already authored in the independent Blender
+        # EXHAUST_FLAME_SEPARATE_PASS; do not reintroduce a glowing disc.
+        if any("_animated_ignition" in ob.name for ob in bpy.context.scene.objects):
+            raise RuntimeError("Vanilla benchmark unexpectedly reintroduced an ignition disc")
     scene.frame_set(1)
     scene["fsc_status"]="CALIBRATION_ONLY_NOT_FACTORIO_APPROVED"
     scene["fsc_axis"]="Blender +X=east,+Y=fore,-Y=aft,+Z=up; Factorio map +Y=aft"
