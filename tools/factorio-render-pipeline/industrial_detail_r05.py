@@ -165,7 +165,7 @@ def _hull_panels(name,root,p,w,h):
             _ellipse_plate(name+"_cast_pressure_panel_%s_%d"%(side,band),
                            root,p["steel"] if band%2 else p["ceramic"],stations,side)
             edge_x=side*scale*.78
-            _ring_fastener(name+"_panel_pin",(edge_x,a+.08,.24),p["brass"],root,.058)
+            _ring_fastener(name+"_panel_pin",edge_x,a+.08,.24,p["brass"],root,.058)
         _ribbed_finbank(name+"_cooling_stack",root,p,side,fore-.52,span_x=min(w*.28,.9))
 
 def _thermal_coils(name,root,p,w,h,api):
