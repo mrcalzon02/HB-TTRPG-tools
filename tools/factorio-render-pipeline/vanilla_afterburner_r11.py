@@ -25,11 +25,11 @@ def _solid_vane(name,theta,root,material,collection):
     surface and shrinking azimuth width keep each vane visible at tile scale.
     """
     rows=(
-        (-2.41,1.68,.133),
-        (-2.64,1.65,.151),
-        (-2.91,1.58,.132),
-        (-3.15,1.48,.108),
-        (-3.43,1.37,.059),
+        (-2.41,1.68,.106),
+        (-2.64,1.65,.123),
+        (-2.91,1.58,.099),
+        (-3.15,1.48,.070),
+        (-3.43,1.37,.038),
     )
     verts=[]
     # 5 x 3 points on each skin, closed along edges into a manifold.
@@ -136,6 +136,18 @@ def apply(name,root,p,api,scene):
         shoulder=(1.69*x,-2.46,BELL_CENTRE_Z+1.69*z)
         tip=(1.48*x,-3.15,BELL_CENTRE_Z+1.48*z)
 
+        # Structural root reaches INTO the outboard engine housing before the
+        # independent suspension arm extends over the rim. R11.0 could look
+        # like an arc hanging in midair because its hinge had no chassis link.
+        root_point=(1.19*x,-1.09,BELL_CENTRE_Z+1.19*z)
+        gusset=(1.44*x,-1.19,BELL_CENTRE_Z+1.44*z)
+        chassis_bridge=tube("R11_CASING_TO_OUTBOARD_ROOT_"+suffix,
+                            [root_point,gusset,anchor],.112,p["steel"],root)
+        _move_to_collection(chassis_bridge,after)
+        socket=ellipsoid("R11_CHASSIS_ATTACHMENT_SOCKET_"+suffix,
+                          root_point,(.14,.17,.14),p["dark"],root)
+        _move_to_collection(socket,after)
+
         bracket=tube("R11_OUTBOARD_SUSPENSION_ARM_"+suffix,
                      [anchor,elbow,shoulder,tip],.082,p["dark"],root)
         _move_to_collection(bracket,after)
@@ -151,8 +163,10 @@ def apply(name,root,p,api,scene):
         _move_to_collection(boss,after)
         # This is a suspended cantilevered afterburner, NOT a decoration on
         # the main nozzle shell and not one of the existing heat-shield petals.
+        # Narrow aged machined metal, never pale white ceramic strips that
+        # form a visually dominant arch across the mouth.
         plate=_solid_vane("R11_SUSPENDED_AFTERBURNER_VANE_"+suffix,
-                          theta,root,p["ceramic"] if n%3 else aged,after)
+                          theta,root,p["steel"] if n%3==0 else aged,after)
         plate["R11_support_anchor_xyz"]=json.dumps(anchor)
         plate["R11_span_from_machinery"]=True
         anchors.append({
@@ -171,9 +185,10 @@ def apply(name,root,p,api,scene):
     scene["fsc_afterburner_parent_collection"]=after.name
     scene["fsc_afterburner_vane_count"]=NUMBER_OF_VANES
     scene["fsc_afterburner_support_count"]=NUMBER_OF_VANES
+    scene["fsc_afterburner_chassis_links"]=NUMBER_OF_VANES
     scene["fsc_afterburner_anchors"]=json.dumps(anchors)
     scene["fsc_nozzle_throat_revision"]="R11_2.28_tile_open_deep_liner"
     scene["fsc_throat_near_y"]=BELL_MOUTH_Y
     scene["fsc_throat_far_y"]=THROAT_END_Y
     scene["fsc_deleted_overlay_like_parts"]=json.dumps(removed)
-    scene["fsc_engineering_revision"]="R11_true_outboard_suspended_afterburners"
+    scene["fsc_engineering_revision"]="R11_1_chassis_braced_dark_suspended_afterburners"
