@@ -56,6 +56,41 @@ def montage(images, labels, output, cell, columns=4):
     sheet.save(output)
     return output
 
+def detail_montage(paths, labels, output, size=(224, 224)):
+    """Review-only close-up: crop to the UNION of alpha bounds (not sprite output).
+
+    Never modify the fixed-canvas captures that feed Factorio sprite atlases.
+    """
+    union=None
+    rendered=[]
+    for path in paths:
+        with Image.open(path) as source:
+            im=source.convert("RGBA")
+        bbox=im.getchannel("A").getbbox()
+        if bbox is None:raise RuntimeError("Missing alpha in preview "+str(path))
+        if union is None:union=bbox
+        else:
+            union=(min(union[0],bbox[0]),min(union[1],bbox[1]),
+                   max(union[2],bbox[2]),max(union[3],bbox[3]))
+        rendered.append(im)
+    padding=max(4,int(max(union[2]-union[0],union[3]-union[1])*.06))
+    bbox=(max(0,union[0]-padding),max(0,union[1]-padding),
+          min(rendered[0].width,union[2]+padding),
+          min(rendered[0].height,union[3]+padding))
+    w,h=size
+    sheet=Image.new("RGB",(w*len(rendered),h+28),(26,32,40))
+    draw=ImageDraw.Draw(sheet)
+    for i,(im,label) in enumerate(zip(rendered,labels)):
+        crop=im.crop(bbox)
+        crop.thumbnail((w-12,h-12),Image.Resampling.LANCZOS)
+        back=Image.new("RGBA",size,(34,39,45,255))
+        back.alpha_composite(crop,((w-crop.width)//2,(h-crop.height)//2))
+        sheet.paste(back.convert("RGB"),(i*w,0))
+        draw.text((i*w+7,h+5),label[:36],fill=(225,228,214))
+    output.parent.mkdir(parents=True,exist_ok=True)
+    sheet.save(output)
+    return output
+
 def pack_state(paths, dest, cell):
     # Each direction/state atlas is one horizontal strip. Do not auto-crop.
     w,h=cell
@@ -89,6 +124,16 @@ def analyze_asset(folder):
     contact=folder/"contact-sheet.png"
     montage(files,[str(p.relative_to(folder/"frames")).replace("\\","/") for p in files],
             contact,cell,columns=4)
+    closeup_paths=[]
+    closeup_labels=[]
+    for state in ("idle","run"):
+        state_file=next((p for p in files if p.parts[-3]=="direction-00" and
+                         p.parts[-2]==state),None)
+        if state_file is not None:
+            closeup_paths.append(state_file);closeup_labels.append(state)
+    if closeup_paths:
+        detail_montage(closeup_paths,closeup_labels,
+                       folder/"detail-contact-sheet.png")
     # Stable registration: alpha bbox variation and source-frame corner coverage.
     box_centers=[((v["alpha_bbox"][0]+v["alpha_bbox"][2])/2,
                   (v["alpha_bbox"][1]+v["alpha_bbox"][3])/2) for v in all_metrics]
