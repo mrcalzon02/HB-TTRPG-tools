@@ -26,7 +26,7 @@ def main():
     if not source.is_file():raise RuntimeError("No Blender benchmark .blend found")
     bpy.ops.wm.open_mainfile(filepath=str(source))
     scene=bpy.context.scene
-    if scene.get("fsc_engineering_revision")!="R11_true_outboard_suspended_afterburners":
+    if scene.get("fsc_engineering_revision")!="R11_1_chassis_braced_dark_suspended_afterburners":
         raise RuntimeError("Cannot inspect missing R11 afterburner geometry")
     if float(scene.get("fsc_throat_far_y",0))-float(scene.get("fsc_throat_near_y",0))<2.2:
         raise RuntimeError("Cannot inspect shallow R11 throat")
