@@ -39,6 +39,32 @@ def test_one(path):
     running=float(socket.default_value)
     if abs(idle-running)<0.20:
         raise RuntimeError("Saved idle/run keyframes did not produce different values")
+    if not path.name.startswith("test-01-graybox"):
+        if scene.get("fsc_mounting_doctrine")!="DECK_RECESSED_NO_BASE_PLATE":
+            raise RuntimeError("R04 must declare recessed mount doctrine")
+        forbidden=("central_support","platform_mating_flange","longitudinal_frame_rail")
+        if any(any(ob.name.startswith(word) for word in forbidden) for ob in meshes):
+            raise RuntimeError("Legacy floor-plate components remain in model")
+        # The body must penetrate below the deck, while actual nozzle vertices
+        # extend BEYOND the southern platform boundary.
+        required_y=float(scene["fsc_expected_rear_edge_y"])
+        root=bpy.data.objects.get("CAPTURE_ROOT_UNROTATED_NORTH")
+        if root is None:raise RuntimeError("Missing fixed root/pivot")
+        nozzle_meshes=[ob for ob in meshes if "bell" in ob.name.lower()]
+        if not nozzle_meshes:raise RuntimeError("No sculpted bell mesh")
+        nozzle_low=min((ob.matrix_world@v.co).y for ob in nozzle_meshes for v in ob.data.vertices)
+        if nozzle_low>=required_y-.12:
+            raise RuntimeError("Exhaust bell does not project beyond platform edge")
+        curved_meshes=[ob for ob in meshes if len(ob.data.vertices)>=400]
+        if len(curved_meshes)<1:
+            raise RuntimeError("Expected high-resolution curved housing/bell mesh")
+        if not any(min((ob.matrix_world@v.co).z for v in ob.data.vertices)<-.20
+                   for ob in curved_meshes):
+            raise RuntimeError("Body not embedded below platform top z=0")
+        if len([ob for ob in scene.objects if ob.type=="CURVE"])<3:
+            raise RuntimeError("Insufficient swept piping/geometry, legacy boxy scene suspected")
+        print("RECESSED_MOUNT_PASS",path.name,"rear_y",round(nozzle_low,3),
+              "platform_edge",required_y,"curved_meshes",len(curved_meshes),flush=True)
     print("SCENE_REOPEN_PASS",path.name,"mesh_parts",len(meshes),
           "footprint",directions,"idle_strength",round(idle,4),
           "run_strength",round(running,4),flush=True)
