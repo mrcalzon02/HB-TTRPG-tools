@@ -173,3 +173,21 @@ Remaining gaps: separate physically convincing nozzle flame/effects, connected p
 - Original Tech Priests runtime/entity graphics are untouched.
 
 **Observed remaining visual debt from actual R04 → R05 → R06 review:** Though the nozzles now occupy more convincing proportions and the metalwork is more detailed, the big central body still reads too much like a smooth capsule. Side pipework needs physically supported junctions and cast armor enclosing it. Missing: realistic multi-layer heat shielding and wear, full flame and separate emission capture passes, vanilla-matched lighting and attachment overlays, and real engine test at Factorio 2.0.77. The headless Blender source builder is tested; the separately installable Sprite Capture Studio add-on is **not** yet exercised by this workflow. These are explicit next development gates, not grounds to claim production-ready assets.
+
+## R07 vanilla benchmark: select/mount geometry, dynamic flame, conditional connections
+
+Authoritative Factorio 2.0.77 source: https://github.com/wube/factorio-data/blob/2.0.77/space-age/prototypes/entity/entities.lua
+Official animated gameplay reference (retrieved during CI, not committed as source artwork): https://wiki.factorio.com/File:Thruster_entity_anim.gif
+
+Earlier calibration wrongly treated the vanilla 4x8 selection area as a solid 8-tile engine. Correct interpretation: collision [-1.7,-2.2]..[1.7,2.2]; buildability about [-1.8,-2.3]..[1.8,2.3]; selection [-2,-2.5]..[2,5.5]. The mount/pressure engine is near 4x4.75, and the selection includes the exhaust. The script explicitly translates Factorio's +Y aft to Blender's -Y aft.
+
+The vanilla source has 64 main-animation frames (speed 0.5), a separate static floor integration patch, 4 conditional named pipe overlays (pipe-1 through pipe-4), additive glow, and a separate flame effect positioned at Factorio {0,5.5}. New benchmark source separates these visual layers and preserves an editable scene containing 3 animated flame meshes. It renders independent effect PNGs and 4 conditional pipe PNGs, and validates source coordinate anchors and image bounds.
+
+Verified layered workflow: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40386604801
+Evidence from this run: calibration job 4 source scenes; 28 body PNG frames; 4 separate animated flame frames; 4 conditional pipe overlays; 10 state/orientation atlases plus a flame atlas; no detected edge clipping. Model regression job passed unchanged. Official wiki GIF reference was fetched successfully and compared visually in the uploaded `reference-comparison-preview.png`. This is an UNREGISTERED gameplay GIF comparison, not a pixel accuracy score, and the benchmark still renders only 4 running samples rather than 64 production frames.
+
+The GIF comparison exposes large remaining differences: vanilla has dark irregular pressure machinery, multiple complex subassemblies and valves, heavy heat shrouds, and a long bright blue-white plume. Our R07 benchmark still appears as a light capsule with a short translucent blue wedge and turbine-like fan blades inside the throat. It should not be called visually matched.
+
+R08 source (`vanilla_visual_refinement_r08.py`) is a targeted follow-on containing an original dark multi-chamber pressure assembly, bolted sectional shields, thick external injector piping and shrouded bell. It is applied ONLY to the vanilla benchmark, not the production/custom mod models. Its code commit is NOT an acceptance result; read the dedicated next Blender workflow for proof before claiming the R08 render passes.
+
+Next specific R09 defect: the nozzle interior needs longitudinal bell liner ridges and a dark open chamber instead of hub-and-spoke propeller/fan triangles. Real prototype geometry and wiki reference stay the calibration authority; in-game load and 64-frame parity are still outstanding.
