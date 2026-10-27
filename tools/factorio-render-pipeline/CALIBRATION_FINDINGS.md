@@ -700,3 +700,22 @@ nozzle render outputs. Count twelve is HYPOTHESIS, not source fact; exact
 hidden original population and support pivots remain unverified.
 All work remains in the VANILLA calibration benchmark, not the live
 Tech Priests game asset paths or Lua.
+
+### R22 actual visual review and R23 ten-fin count hypothesis
+
+R22 12-slot Blender captured with BOTH calibration and models jobs
+PASSING in https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40435360597.
+Compared actual same-camera R21 eight-fin and R22 twelve-fin captures.
+R22 indeed adds physical coverage but displays FOUR prominent upper
+fin brackets against the original vanilla image's THREE main upper hot tips.
+This source comparison does not prove the hidden total 3D fin count.
+
+R23 changes the one shared fin-count authority to TEN slots. Geometric
+spacing then gives three dominant upper-forward fins near 54,90,126 degrees.
+R18 original 64 source-derived lower lip curves remap to indices 6..9,
+while the other six fins, all hinge roots and inner machinery stay fixed.
+All R21 panels, punched side holes, thin thickness, folded ridge, heat
+tempering materials and R20 deep open refractory remain unchanged.
+R23 must pass source functional tests AND real Blender saved-scene QA
+and visual comparison before being accepted as the leading candidate.
+No Tech Priests production entity artwork or gameplay touched.

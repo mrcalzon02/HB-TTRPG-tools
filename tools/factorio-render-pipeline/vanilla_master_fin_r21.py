@@ -203,6 +203,6 @@ def apply(name,root,p,api,scene):
     scene["fsc_r21_stamped_center_ridge_count"]=VANE_COUNT
     scene["fsc_r21_clevis_pin_count"]=VANE_COUNT
     scene["fsc_r21_root_panel_count"]=VANE_COUNT
-    scene["fsc_r21_source_count_status"]="12-slot calibration candidate, original source total unknown"
+    scene["fsc_r21_source_count_status"]="10-slot calibration candidate, original source total unknown"
     scene["fsc_r22_population_candidate"]=VANE_COUNT
     scene["fsc_r21_source_reference"]=SOURCE_FRAME

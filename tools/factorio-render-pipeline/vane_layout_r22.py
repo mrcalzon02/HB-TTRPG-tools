@@ -1,12 +1,12 @@
-"""R22 calibration hypothesis: twelve evenly spaced physical outboard fins.
+"""R22 calibration hypothesis: ten evenly spaced physical outboard fins.
 
 The provided original baked sprite shows three distinct forward-facing
 heat-stained tabs plus additional outer/lower panels. This does NOT reveal
-all hidden fins in 3D. Twelve is a testable candidate count rather than
+all hidden fins in 3D. Ten is a testable candidate count rather than
 a recovered original rig. Shared by all vanilla R11/R15/R16/R18/R19/R21 stages.
 No custom Tech Priests models use this constant.
 """
-VANE_COUNT=12
+VANE_COUNT=10
 SOURCE_VISIBLE_UPPER_TAB_GROUPS=3
 SOURCE_HIDDEN_TOTAL_VERIFIED=False
 SOURCE_OBSERVATION="64-frame body atlas, original central upper hot-tab trio"

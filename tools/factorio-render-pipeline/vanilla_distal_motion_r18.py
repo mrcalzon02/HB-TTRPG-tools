@@ -31,9 +31,9 @@ SOURCE_RECTS={
 "starboard_inner":(165,475,215,542),
 }
 # Model lower-half angular order, not proven original rig correspondence.
-# Twelve evenly-spaced slots. Four observable lower fin ROIs only.
-ANGULAR_TO_OBSERVED={7:"port_outer",8:"port_inner",
-                     9:"starboard_inner",10:"starboard_outer"}
+# Ten evenly-spaced slots. Four observable lower fin ROIs only.
+ANGULAR_TO_OBSERVED={6:"port_outer",7:"port_inner",
+                     8:"starboard_inner",9:"starboard_outer"}
 
 def normalized_samples(values):
     if len(values)!=64:

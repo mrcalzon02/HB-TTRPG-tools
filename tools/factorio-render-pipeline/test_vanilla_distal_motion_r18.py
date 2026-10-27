@@ -35,9 +35,9 @@ class ActualSourceR18Tests(unittest.TestCase):
 
     def test_four_measured_lower_rois_on_twelve_slot_ring(self):
         mapping=self.constants["ANGULAR_TO_OBSERVED"]
-        self.assertEqual(set(mapping),{7,8,9,10})
+        self.assertEqual(set(mapping),{6,7,8,9})
         self.assertNotIn(0,mapping)
-        self.assertNotIn(6,mapping)
+        self.assertNotIn(5,mapping)
         self.assertNotIn(11,mapping)
         self.assertEqual(set(mapping.values()),set(self.constants["SAMPLES"]))
 
