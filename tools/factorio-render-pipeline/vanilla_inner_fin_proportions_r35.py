@@ -13,15 +13,21 @@ are the exact unseen original part count.
 """
 import math
 
-REVISION="R35_wider_longer_source_observed_inner_heat_fins"
+REVISION="R35_1_source_matched_upper_blue_fin_ratio"
 SOURCE_SHA256="0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791"
 ROOT_Y=-2.34
 BELL_CENTRE_Z=-.43
 BASE_TIP_Y=-3.47
 ROOT_WIDTH_GAIN=1.16
-TIP_WIDTH_GAIN=1.35
-AXIAL_LENGTH_GAIN=1.10
+TIP_WIDTH_GAIN=1.65
+AXIAL_LENGTH_GAIN_UPPER=.98
+AXIAL_LENGTH_GAIN_LOWER=1.10
 SOURCE_VISIBLE_UPPER_GROUP_COUNT=3
+
+def length_gain(theta):
+    # Source-facing upper fins became too LONG in R35 (blue-tip row400).
+    # Preserve lower source-observed moving fins' extra aft reach.
+    return AXIAL_LENGTH_GAIN_UPPER if math.sin(theta)>0 else AXIAL_LENGTH_GAIN_LOWER
 
 def resize_vertex(point, theta):
     x,y,z=point
@@ -34,7 +40,7 @@ def resize_vertex(point, theta):
     r=math.hypot(x,z-BELL_CENTRE_Z)
     angle=theta+delta*gain
     return (r*math.cos(angle),
-            ROOT_Y+(y-ROOT_Y)*AXIAL_LENGTH_GAIN,
+            ROOT_Y+(y-ROOT_Y)*length_gain(theta),
             BELL_CENTRE_Z+r*math.sin(angle))
 
 def apply(name,root,p,api,scene):
@@ -71,7 +77,7 @@ def apply(name,root,p,api,scene):
                  %(math.tau)-math.pi)/2
         if not abs(half-STATIONS[-1][2]*TIP_WIDTH_GAIN)<.002:
             raise RuntimeError("R35 actual source-facing tip span was not enlarged")
-        if not abs(a.y-(ROOT_Y+(BASE_TIP_Y-ROOT_Y)*AXIAL_LENGTH_GAIN))<.001:
+        if not abs(a.y-(ROOT_Y+(BASE_TIP_Y-ROOT_Y)*length_gain(theta)))<.001:
             raise RuntimeError("R35 actual distal sheet was not lengthened")
         if len(obj.data.vertices)!=signature[obj.name][0] or (
             len(obj.data.polygons)!=signature[obj.name][1] or
@@ -80,7 +86,8 @@ def apply(name,root,p,api,scene):
         obj["R35_planform_enlarged"]=True
         obj["R35_root_width_gain"]=ROOT_WIDTH_GAIN
         obj["R35_tip_width_gain"]=TIP_WIDTH_GAIN
-        obj["R35_length_gain"]=AXIAL_LENGTH_GAIN
+        obj["R35_length_gain"]=length_gain(theta)
+        obj["R35_upper_facing_fin"]=bool(math.sin(theta)>0)
         obj["R35_original_source_role"]="interior hanging heat shield"
         obj["R35_original_hidden_fin_population_unverified"]=True
     if before!={obj.name for obj in scene.objects}:
@@ -93,3 +100,5 @@ def apply(name,root,p,api,scene):
     scene["fsc_r35_64_key_animation_preserved_by_pre_r18_order"]=True
     scene["fsc_r35_original_upper_heat_tab_groups"]=SOURCE_VISIBLE_UPPER_GROUP_COUNT
     scene["fsc_r35_proportion_hypothesis_not_source_cad"]=True
+    scene["fsc_r35_upper_blue_tip_source_centroid_row"]=390.3
+    scene["fsc_r35_previous_blue_tip_centroid_row"]=400.1

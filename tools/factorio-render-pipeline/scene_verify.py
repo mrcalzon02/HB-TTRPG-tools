@@ -708,7 +708,8 @@ def test_one(path):
             from vanilla_inner_fin_proportions_r35 import (
                 REVISION as R35_REVISION,SOURCE_SHA256 as R35_SHA,
                 ROOT_WIDTH_GAIN as R35_ROOT_GAIN,TIP_WIDTH_GAIN as R35_TIP_GAIN,
-                AXIAL_LENGTH_GAIN as R35_LENGTH_GAIN)
+                AXIAL_LENGTH_GAIN_UPPER as R35_LENGTH_UPPER,
+                AXIAL_LENGTH_GAIN_LOWER as R35_LENGTH_LOWER)
             if (scene.get("fsc_r35_revision")!=R35_REVISION or
                 scene.get("fsc_r35_exact_source_sha256")!=R35_SHA or
                 not scene.get("fsc_r35_no_outer_cup_edits") or
@@ -721,19 +722,24 @@ def test_one(path):
                 ob=bpy.data.objects.get(f"R11_SUSPENDED_AFTERBURNER_VANE_{n:02d}")
                 if not ob or not ob.get("R35_planform_enlarged"):
                     raise RuntimeError("R35 inner heat fin scaling missing")
+                expected_gain=R35_LENGTH_UPPER if n<5 else R35_LENGTH_LOWER
                 if (abs(float(ob.get("R35_root_width_gain",0))-R35_ROOT_GAIN)>.001 or
                     abs(float(ob.get("R35_tip_width_gain",0))-R35_TIP_GAIN)>.001 or
-                    abs(float(ob.get("R35_length_gain",0))-R35_LENGTH_GAIN)>.001):
+                    abs(float(ob.get("R35_length_gain",0))-expected_gain)>.001):
                     raise RuntimeError("R35 saved mesh not source-proportion candidate")
                 tip=ob.data.vertices[(len(R21_STATIONS)-1)*11].co
-                if abs(tip.y-(-3.583))>.002:
-                    raise RuntimeError("R35 physical tip not lengthened in .blend")
+                expected_tip=-2.34+(-3.47+2.34)*expected_gain
+                if abs(tip.y-expected_tip)>.002:
+                    raise RuntimeError("R35.1 source-relative inner fin length mismatch")
                 if ob.data.shape_keys is None or not ob.get("R21_integral_centerline_ridge"):
                     # Only four lower tips get shape keys; all others remain static.
                     if n in (6,7,8,9):
                         raise RuntimeError("R35 broke lower animated fin meshes")
                 if ob.data.color_attributes.get("R21_heat_tint") is None:
                     raise RuntimeError("R35 erased heat colors on real inner sheet")
+            if not (389.<float(scene.get("fsc_r35_upper_blue_tip_source_centroid_row",0))<392.
+                and 399.<float(scene.get("fsc_r35_previous_blue_tip_centroid_row",0))<402.):
+                raise RuntimeError("R35.1 exact original RGBA blue-tip landmark metadata missing")
             print("R35_ORIGINAL_SOURCE_ENLARGED_INTERFINS_PASS",
                   path.name,flush=True)
             print("R21_THIN_SLOTTED_FIN_MASTER_PASS",path.name,flush=True)
