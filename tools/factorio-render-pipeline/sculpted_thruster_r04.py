@@ -357,6 +357,13 @@ def build_thruster(name,w,h,root,p):
         vanilla_master_fin_r21.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R35: original frame has bigger interior hanging heat-shield fins
+        # than R33.2. Widen and slightly lengthen SAME R21 sheet meshes,
+        # attached to unchanged roots before R18 creates 64 morph keys.
+        import vanilla_inner_fin_proportions_r35
+        vanilla_inner_fin_proportions_r35.apply(
+            name,root,p,{},bpy.context.scene
+        )
         # R18: only lower observable apron tips vary across 64 real frames.
         import vanilla_distal_motion_r18
         vanilla_distal_motion_r18.apply(

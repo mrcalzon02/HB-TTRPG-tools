@@ -703,6 +703,39 @@ def test_one(path):
                 # Master profile remains; fanciful repeated clevis pivot
                 # rods were removed because the original pixels do not
                 # resolve one at each fin root.
+            # R35 verifies the actual reopened animated .blend FIN MESH;
+            # changing the two beige external cupped guards is NOT allowed.
+            from vanilla_inner_fin_proportions_r35 import (
+                REVISION as R35_REVISION,SOURCE_SHA256 as R35_SHA,
+                ROOT_WIDTH_GAIN as R35_ROOT_GAIN,TIP_WIDTH_GAIN as R35_TIP_GAIN,
+                AXIAL_LENGTH_GAIN as R35_LENGTH_GAIN)
+            if (scene.get("fsc_r35_revision")!=R35_REVISION or
+                scene.get("fsc_r35_exact_source_sha256")!=R35_SHA or
+                not scene.get("fsc_r35_no_outer_cup_edits") or
+                not scene.get("fsc_r35_64_key_animation_preserved_by_pre_r18_order")):
+                raise RuntimeError("R35 original-source inner fin scaling not retained")
+            if int(scene.get("fsc_r35_inner_heat_fins_remeshed",0))!=VANE_COUNT:
+                raise RuntimeError("R35 incorrectly altered inner fin population")
+            from vanilla_master_fin_r21 import STATIONS as R21_STATIONS
+            for n in range(VANE_COUNT):
+                ob=bpy.data.objects.get(f"R11_SUSPENDED_AFTERBURNER_VANE_{n:02d}")
+                if not ob or not ob.get("R35_planform_enlarged"):
+                    raise RuntimeError("R35 inner heat fin scaling missing")
+                if (abs(float(ob.get("R35_root_width_gain",0))-R35_ROOT_GAIN)>.001 or
+                    abs(float(ob.get("R35_tip_width_gain",0))-R35_TIP_GAIN)>.001 or
+                    abs(float(ob.get("R35_length_gain",0))-R35_LENGTH_GAIN)>.001):
+                    raise RuntimeError("R35 saved mesh not source-proportion candidate")
+                tip=ob.data.vertices[(len(R21_STATIONS)-1)*11].co
+                if abs(tip.y-(-3.583))>.002:
+                    raise RuntimeError("R35 physical tip not lengthened in .blend")
+                if ob.data.shape_keys is None or not ob.get("R21_integral_centerline_ridge"):
+                    # Only four lower tips get shape keys; all others remain static.
+                    if n in (6,7,8,9):
+                        raise RuntimeError("R35 broke lower animated fin meshes")
+                if ob.data.color_attributes.get("R21_heat_tint") is None:
+                    raise RuntimeError("R35 erased heat colors on real inner sheet")
+            print("R35_ORIGINAL_SOURCE_ENLARGED_INTERFINS_PASS",
+                  path.name,flush=True)
             print("R21_THIN_SLOTTED_FIN_MASTER_PASS",path.name,flush=True)
             print("R18_ACTUAL_SOURCE_LOWER_LIP_MOTION_PASS",path.name,flush=True)
             print("R27_PANELS_WITHOUT_UNVERIFIED_SUPPORTS_PASS",path.name,

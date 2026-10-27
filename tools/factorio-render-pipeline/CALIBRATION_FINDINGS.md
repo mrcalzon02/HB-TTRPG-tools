@@ -1275,3 +1275,12 @@ R33.2 candidate keeps the correct physically cupped shell, narrows the returned 
 - Source images and 64-frame comparison GIFs remain private user-context evidence. Production `mrcalzon02/Tech-Priests` mod assets remain untouched.
 
 R33.2 is accepted as a VERIFIED progress step for physical cupped shroud geometry and trailing silhouette, not as final art or animation accuracy. A source-measured shape-key or equivalent outline-motion proxy may be evaluated next; do not add invented pistons or hidden hinges.
+
+
+## R35 — enlarging source-visible INNER heat fins (2026-10-27 candidate)
+
+The user correctly flagged that the interior fins are undersized relative to the original source. Recovered original `thruster.zip`, with verified SHA256 `0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791`, was compared against REAL R33.2 rendered 264x542 body frame0; original shows THREE prominent central hot tabs with broader squared tips and longer faces than the R33.2 thin pointed-looking Blender tabs. Source manual visually inspected enlarged crops, not pretending to know hidden fin geometry.
+
+**R35 candidate fix** is strictly the existing R21 stamped fin meshes, applied after R21 generates the 2 genuine through-slots and before R18 creates source-derived 64-frame morph keys. Root attachment position stays at axial Y=-2.34. Circumferential half-width multiplier increases linearly from 1.16 at attachment to 1.35 at the trailing edge. Axial length increases by 10% from the fixed root, moving tip axial Y from -3.47 to -3.583. No change in original ten-slot calibration hypothesis or fin population: the source's unseen complete 3D count remains unverified. All original material bands, color attributes, R21 source-inspired slot topology, and R18 shape keys are preserved. R27's 198 deleted unsupported structures remain absent; the two separate cupped beige guards remain untouched.
+
+This is a source-oriented inverse-projection RATIO hypothesis, not recovered CAD and not yet approved by real Blender. Pure-unit tests validate dimensional geometry with no Blender dependency, and saved-scene QA checks actual object mesh Y extents and the unchanged 64-frame lower animation. Subsequent exact-source R34 alpha-overlap and visual contact-sheet comparison should decide whether any dimensions require refinement, not merely the internal passes. Production Tech Priests game assets are unmodified.
