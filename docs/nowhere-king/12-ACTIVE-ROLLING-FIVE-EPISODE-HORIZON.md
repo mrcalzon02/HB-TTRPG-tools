@@ -2,16 +2,10 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after Season 3 Episode 09, *Passwords*.
-**Forward window:** Season 3 Episodes 10–14.
+**State:** Rolled forward after committed Season 3 Episode 10, *The Treasury Leak*.
+**Forward window:** Season 3 Episodes 11–15.
 
-**Continuity status:** S3E09 leaves the first candle dark and six lit, with the barred lower stair still uncertified. Royal working-gate challenges now require named living authority; private household tests remain fallible and separate. Dain's delay records, Bessa's corrected gate copy, the hauler's lost hour, stopped-worker wages, Fera's signed but unpaid sickroom voucher and worn linen all require follow-up. Existing foreign jurisdictions, debts, contracts, consent limits and relationships persist.
-
-## Season 3 Episode 10 — The Treasury Leak — DIRECTIONAL
-
-Damaris reconciles hall costs, deferred repairs, Jorvan's bounded gate claim, Hesta's preference and Orlen's delivered prices without inventing fraud, default or magical wealth.
-
-**Exit:** A consequential fiscal choice survives.
+**Continuity status:** S3E10 leaves the first candle dark and six lit, with the barred lower stair still uncertified. Luceran has canceled the next contemplated hall supper and continued deferring upper-gallery hangings, assigning uncommitted household hospitality funds to sickroom covers, witnessed wages and measured roof/drain work. Fera's extra sickroom voucher is **paid**, two covers supplied from stock, and the hauler's witnessed hour paid from the household-watch account **without** speculative freight profit. Remaining works wages and roof/gutter/drain are not finished; the third hearth remains cold. Hesta's first-refusal rights, Orlen's unaccepted quote, Jorvan's exact 24/27 east-gate pledge, all foreign jurisdictions, privacy limits and Jalen's letter remain intact. No new magical wealth, impostor proof or candle extinction.
 
 ## Season 3 Episode 11 — A Dangerous Attachment — EXPLORATORY
 
@@ -37,7 +31,17 @@ A useful court ally asks to convert recent hospitality, household access or a co
 
 **Exit:** A personal favor becomes a public political debt without erasing the original friendship.
 
+## Season 3 Episode 15 — King Beneath — EXPLORATORY / SCHEMATIC LOCK
+
+Recover the phrase “King Beneath” through **independently documented, restricted scholarship** after Episode 12's planned provenance-controlled comparison, without declaring it the name of the imprisoned entity, a proven castle interface or an explanation for the first candle. Multiple live interpretations—an ancestral title, an undercroft office, a ritual designation or a mistaken translation—must remain possible. Give a scholar credit for testable evidence while allowing other competent readers to disagree. Luceran's attachment to Edselsto may color his interpretation, not dictate what the witnesses recorded.
+
+**Exit:** A carefully attributed phrase enters restricted scholarship, and an unresolved dispute creates a bounded question for later work. The first candle remains dark, six lit; the separately scheduled second extinction is **not** moved into Episode 15.
+
 ## Active payoff debt (historical carry-forward)
+
+**S3E10:** The next contemplated hall supper is canceled; upper-gallery hangings remain deferred; two hearths and three guest rooms still function and the third hearth remains cold. The *uncommitted* household hospitality allowance is assigned to lawful wage arrears, sickroom covers and measured receiving-yard roof/drain work. **Fera's signed extra-hours voucher has been paid**; two sickroom covers supplied from existing stock, but the general linen reserve remains depleted. **The younger hauler received one witnessed customary working-hour payment from household watch funds** for improper detention; no freight profit or contract was awarded. Some stopped-worker wages are paid/in payment, others and the independent dry-night stair reading remain due. **Jorvan's 24/27 east-gate pledge** remains exactly bounded, and neither private challenges nor household-watch redress was charged to its net. **Hesta's one accepted / one failed / third untested block** and four-season track right persist; **Orlen's delivered quotation is unaccepted**. The winter roof, gutter, drain and northern supply are unfinished. The first candle stays dark and six lit; Miren/Luceran trust and intimacy remain unrepaired, and no new foreign or magical authority exists. Festival and ally hospitality in Episodes 13–14 must visibly carry the canceled supper's political cost.
+
+
 
 **S3E9:** Private identity challenges delayed servants and haulers without proving an impostor. Luceran sealed a narrow royal working-gate authority rule; private household questions remain fallible. Dain's watch delays and Bessa's original/corrected gate tallies survive. The younger hauler's lost earning hour has no adjudicated payer. Vess and the independent mason disagree about the barred lower stair; a further dry-night reading is due. Merel retains inconsistent assistant recollections, first wick dark and six lit. Fera has a signed sickroom overtime voucher due at the next pay chest, not yet cash; worn covers remain unprovided. Jalen's private childhood refusal and restricted medical record, Miren/Luceran estrangement, all Jorvan and Hesta terms, and distinct foreign receipts persist.
 
