@@ -37,7 +37,7 @@ This list preserves the attractive but off-brief retro-PSX images generated duri
 
 ## Art handling and source references
 
-- **Chat export/archive:** `Beckenburg_PSX_Concept_Batch_01.zip` was the original local chat archive name; reclassify its imagery as **PSX horror incubator** material, not Beckenburg production art.
+- **Curated chat archive:** `PSX_Horror_Concept_Incubator_Batch_01.zip` preserves the four source sheets, 16 scene crops, a contact sheet and the supplementary *Echo Point* sheet. The original archive had a Beckenburg-prefixed name, but these images are **PSX horror incubator** material, not Beckenburg production art.
 - **Original sheet files:** `source_sheets/01_interface_sampler.png`, `02_menu_and_atmosphere_sampler.png`, `03_interaction_sampler.png`, `04_hud_and_inventory_sampler.png`.
 - **Supplementary study:** `Echo Point` image, excluded from the original package due to unrelated platform branding; inspiration only.
 - The original image files remain in the originating chat's downloadable archive, **not** in this repository. This markdown file is the persistent *idea register*, not a claim that the images are committed or remotely archived.
