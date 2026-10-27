@@ -526,8 +526,16 @@ def test_one(path):
                 # in BOTH X and Z when tracing shell circumferentially.
                 a=cover.data.vertices[3*9+0].co
                 b=cover.data.vertices[3*9+8].co
-                if abs(a.x-b.x)<.6 or abs(a.z-b.z)<.6:
-                    raise RuntimeError("R29 shell is not tilted around lower engine")
+                # R31 deliberately returns the INNER lip upward. Therefore
+                # the old R29 end-to-end Z-delta is no longer an accurate
+                # curvature check: it penalizes the physical cupping.
+                # Keep circumferential X travel and test THREE points,
+                # requiring an actual recessed belly rather than a chord.
+                mid=cover.data.vertices[3*9+4].co
+                if abs(a.x-b.x)<.6 or abs(a.z-mid.z)<.5:
+                    raise RuntimeError("R31 shell lost radial and vertical wrap")
+                if mid.z>=min(a.z,b.z)-.10:
+                    raise RuntimeError("R31 shell is still flattened between rims")
                 if abs(a.y-b.y)>1e-5:
                     raise RuntimeError("R29 cross-section is not circumferential")
             print("R29_SOURCE_BEIGE_RADIAL_SKIDS_PASS",path.name,flush=True)
