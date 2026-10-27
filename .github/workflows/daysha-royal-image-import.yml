@@ -1,0 +1,69 @@
+name: Import Daysha half-scale wardrobe gallery (one-time)
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/daysha-royal-image-import.yml"
+      - "data/daysha-transfer/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daysha-royal-gallery-import
+  cancel-in-progress: false
+
+jobs:
+  import-gallery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout the authoritative main branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Verify ZIP parts, publish all 69 gallery images and update the ledger
+        run: python3 scripts/import-daysha-gallery.py
+
+      - name: Assert every gallery image resolves locally
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('data/daysha-royal-purchases.json').read_text())
+          assert len(d['sources']) == 178
+          assert d['verification']['publishedDerivativeCount'] == 178
+          assert d['verification']['unpublishedSourceFiles'] == 0
+          for source in d['sources']:
+              assert source['publicationStatus'] == 'hosted_verified'
+              assert Path(source['publishedImageUrl']).is_file(), source['fileName']
+          assert not list(Path('data/daysha-transfer').glob('*.zip'))
+          print('Verified 178 / 178 published images, original ledger preserved, no staging ZIPs.')
+          PY
+
+      - name: Commit verified gallery to main and remove temporary ZIPs
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A -- assets/daysha/royal-purchases data/daysha-royal-purchases.json data/daysha-transfer
+          if git diff --cached --quiet; then
+            echo 'Nothing to commit.'
+            exit 0
+          fi
+          git commit -m 'Publish all 178 Daysha illustrations as optimized gallery images'
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              echo 'Imported gallery committed and pushed to main.'
+              exit 0
+            fi
+            echo "Push attempt ${attempt} failed; retrying."
+            sleep 5
+          done
+          echo 'Unable to push gallery to main after retries.' >&2
+          exit 1
