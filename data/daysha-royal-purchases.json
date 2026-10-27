@@ -2349,12 +2349,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000002058.webp",
-      "publicationStatus": "hosted_verified",
+      "publishedImageUrl": null,
+      "publicationStatus": "not_hosted",
       "originalDriveUrl": "https://drive.google.com/file/d/1CV2koap8tiJJ_5kRC3OVGXKpQZQk5033/view?usp=drivesdk",
       "originalDriveVerified": true,
-      "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publishedFormat": null,
+      "publicationNote": "Distinct artwork shared a 12-hex-digit prefix with a different image; correcting source-ID collision, awaiting uniquely named rendition."
     },
     {
       "id": "file_000000009c288230a4af8ace0c776cea",
@@ -3217,9 +3217,9 @@
   ],
   "verification": {
     "inventoryFiles": 178,
-    "unpublishedSourceFiles": 80,
+    "unpublishedSourceFiles": 81,
     "missingPrimaryFiles": [],
-    "publishedDerivativeCount": 98,
+    "publishedDerivativeCount": 97,
     "verifiedOriginalsInDriveZip": 34,
     "driveOriginalsZipFileId": "1k3XLgJK3lpB0MIHiCQlHqE1XePl8w4yx",
     "driveOriginalZipIds": [
@@ -3233,6 +3233,7 @@
     "driveOriginalsArchiveZips": 3,
     "githubTreeVerified": true,
     "githubTreeAssetCount": 97,
-    "githubTreeUnlinkedAssetCount": 0
+    "githubTreeUnlinkedAssetCount": 0,
+    "galleryIdCollisionFixed": true
   }
 }
