@@ -673,3 +673,30 @@ colors and two real pierced slots apiece, 8 independently pinned clevis
 assemblies, independent 64-frame distal motion and R20 open nozzle.
 Compare user source crop to actual Blender fin closeup at same zoom.
 No Tech Priests production sprite/artwork or gameplay module touched.
+
+## R22 — twelve-position fin-spacing CALIBRATION candidate
+
+Actual user's original Factorio 64-frame body atlas, frame 00, shows
+three separate central top heat-stained tab ends (approximately x54-84,
+x110-147, x178-197 in 264x542 sprite, source rows 340–430). R21's verified
+eight-slot candidate only exposed two comparable central hot tips.
+
+R22 tests twelve evenly distributed circumferential slots, which makes
+three source-like forward-facing fin groups possible without making the
+source 2D art pretend to reveal an authoritative hidden 3D count.
+`vane_layout_r22.py` is the one-count authority for all 12 vanilla
+R11, R15, R16, R18, R19 and R21 fin/support stages.
+
+R18's exact four measured lower silhouette envelopes remain mapped to
+conservative LOWER slots 7,8,9,10. Eight other fins, and every rigid root,
+stay static. R19 adds 12 outer root stiffeners while retaining 40
+independent deep refractory ribs. R20's open legacy-drum fix remains
+unchanged. Saved Blender QA now checks 12 actual thin punched fin meshes,
+24 double braces, 12 pinned clevis mounts and 12 fin root ribs, with four
+true lower animation curves.
+
+Candidate evaluation must compare the actual camera-matched R21 and R22
+nozzle render outputs. Count twelve is HYPOTHESIS, not source fact; exact
+hidden original population and support pivots remain unverified.
+All work remains in the VANILLA calibration benchmark, not the live
+Tech Priests game asset paths or Lua.

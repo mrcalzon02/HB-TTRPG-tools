@@ -15,7 +15,8 @@ import bpy
 BELL_CENTRE_Z=-.43
 BELL_MOUTH_Y=-3.19
 THROAT_END_Y=-.91
-NUMBER_OF_VANES=8
+from vane_layout_r22 import VANE_COUNT
+NUMBER_OF_VANES=VANE_COUNT
 
 
 def _solid_vane(name,theta,root,material,collection):

@@ -6,6 +6,7 @@ geometry hypothesis, not the original Wube 3D rig. Lighting stays separate.
 """
 import bpy
 import math
+from vane_layout_r22 import VANE_COUNT
 REVISION="R19_deep_nozzle_scales_and_suspended_fin_roots"
 COUNT=40
 Z=-.43
@@ -93,7 +94,7 @@ def apply(name,root,p,api,scene):
         place(slot,liner)
     fins=bpy.data.collections.get("R11_OUTBOARD_SUSPENDED_AFTERBURNERS")
     if fins is None:raise RuntimeError("R19 needs R16 fin supports")
-    for i in range(8):
+    for i in range(VANE_COUNT):
         t=(i+.5)*math.tau/8
         fin=fins.objects.get("R11_SUSPENDED_AFTERBURNER_VANE_%02d"%i)
         if fin is None or not fin.get("R16_support_graph"):
@@ -116,6 +117,6 @@ def apply(name,root,p,api,scene):
     scene["fsc_r19_mid_tiles"]=COUNT
     scene["fsc_r19_deep_strakes"]=COUNT
     scene["fsc_r19_cooling_slots"]=COUNT
-    scene["fsc_r19_fin_root_ribs"]=8
+    scene["fsc_r19_fin_root_ribs"]=VANE_COUNT
     scene["fsc_r19_open_throat_polygons"]=polygons
     scene["fsc_r19_glow_layer_policy"]="not baked into physical cone geometry"

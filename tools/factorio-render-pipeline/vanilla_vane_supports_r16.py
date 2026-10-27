@@ -11,7 +11,8 @@ import math
 import bpy
 
 REVISION="R16_broad_heat_plates_dual_braced_outboard_cradles"
-PLATES=8
+from vane_layout_r22 import VANE_COUNT
+PLATES=VANE_COUNT
 BELL_CENTRE_Z=-.43
 
 def _surface(name,color,metallic=.3,roughness=.76):

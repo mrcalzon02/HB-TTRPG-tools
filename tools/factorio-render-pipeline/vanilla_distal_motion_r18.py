@@ -11,6 +11,7 @@ bytes are in the repository.
 """
 import bpy
 import json
+from vane_layout_r22 import VANE_COUNT
 
 REVISION="R18_source_measured_distal_lower_lip_envelopes"
 SOURCE_SHA256="0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791"
@@ -30,9 +31,9 @@ SOURCE_RECTS={
 "starboard_inner":(165,475,215,542),
 }
 # Model lower-half angular order, not proven original rig correspondence.
-# n=0..3 remain completely stationary; n=4..7 get independent curves.
-ANGULAR_TO_OBSERVED={4:"port_inner",5:"port_outer",
-                     6:"starboard_outer",7:"starboard_inner"}
+# Twelve evenly-spaced slots. Four observable lower fin ROIs only.
+ANGULAR_TO_OBSERVED={7:"port_outer",8:"port_inner",
+                     9:"starboard_inner",10:"starboard_outer"}
 
 def normalized_samples(values):
     if len(values)!=64:
@@ -50,11 +51,11 @@ def apply(name,root,p,api,scene):
     if collection is None:
         raise RuntimeError("R18 cannot find independently supported vanes")
     lower=[]
-    for index in range(8):
+    for index in range(VANE_COUNT):
         ob=collection.objects.get(f"R11_SUSPENDED_AFTERBURNER_VANE_{index:02d}")
         if ob is None or not ob.get("R16_broad_squared_trailing_edge"):
             raise RuntimeError("R18 requires completed R16 solid heat shields")
-        if index<4:
+        if index not in ANGULAR_TO_OBSERVED:
             if ob.data.shape_keys is not None:
                 raise RuntimeError("R18 forbids animation on upper source-stationary fin")
             continue
@@ -87,7 +88,7 @@ def apply(name,root,p,api,scene):
         raise RuntimeError("R18 lower-only mechanical isolation failed")
     scene["fsc_r18_revision"]=REVISION
     scene["fsc_r18_original_archive_sha256"]=SOURCE_SHA256
-    scene["fsc_r18_upper_static_vanes"]=4
+    scene["fsc_r18_upper_static_vanes"]=VANE_COUNT-len(lower)
     scene["fsc_r18_distal_animated_vanes"]=len(lower)
     scene["fsc_r18_source_frames"]=64
     scene["fsc_r18_animation_status"]="observable-2D-silhouette-fit_NOT_source-rig-recovered"

@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 import sys
 import bpy
+from vane_layout_r22 import VANE_COUNT
+from vanilla_distal_motion_r18 import ANGULAR_TO_OBSERVED
 
 def test_one(path):
     bpy.ops.wm.open_mainfile(filepath=str(path))
@@ -220,10 +222,10 @@ def test_one(path):
             links=[ob for ob in group.objects if ob.name.startswith("R11_CASING_TO_OUTBOARD_ROOT_")]
             sockets=[ob for ob in group.objects if ob.name.startswith("R11_CHASSIS_ATTACHMENT_SOCKET_")]
             anchors=json.loads(scene.get("fsc_afterburner_anchors","[]"))
-            if (len(vanes)!=8 or len(arms)!=8 or len(feeds)!=8
-                    or len(anchors)!=8 or len(links)!=8 or len(sockets)!=8):
+            if (len(vanes)!=VANE_COUNT or len(arms)!=VANE_COUNT or len(feeds)!=VANE_COUNT
+                    or len(anchors)!=VANE_COUNT or len(links)!=VANE_COUNT or len(sockets)!=VANE_COUNT):
                 raise RuntimeError("Each of 8 vanes needs a chassis bridge, socket, cantilever and feedline")
-            if scene.get("fsc_afterburner_chassis_links")!=8:
+            if scene.get("fsc_afterburner_chassis_links")!=VANE_COUNT:
                 raise RuntimeError("Afterburner external chassis attachment count not retained")
             if any(not ob.get("R11_span_from_machinery") for ob in vanes):
                 raise RuntimeError("Suspended vanes lack mechanical support metadata")
@@ -277,7 +279,7 @@ def test_one(path):
                 raise RuntimeError("R15 upper industrial reconstruction missing")
             if int(scene.get("fsc_r15_corrugated_forward_feed_count",0))!=2:
                 raise RuntimeError("R15 needs two distinctive forward corrugated feeds")
-            if int(scene.get("fsc_r15_dark_vane_count",0))!=8:
+            if int(scene.get("fsc_r15_dark_vane_count",0))!=VANE_COUNT:
                 raise RuntimeError("R15 must retain eight supported vanes")
             for component in ("R15_corrugated_forward_feed_port",
                               "R15_corrugated_forward_feed_starboard",
@@ -296,9 +298,9 @@ def test_one(path):
             if scene.get("fsc_r16_revision")!=(
                     "R16_broad_heat_plates_dual_braced_outboard_cradles"):
                 raise RuntimeError("Missing R16 revised thermal plate assembly")
-            if (int(scene.get("fsc_r16_rectangular_heat_plate_count",0))!=8
-                    or int(scene.get("fsc_r16_dual_load_brace_count",0))!=16
-                    or int(scene.get("fsc_r16_independent_crosshead_count",0))!=8):
+            if (int(scene.get("fsc_r16_rectangular_heat_plate_count",0))!=VANE_COUNT
+                    or int(scene.get("fsc_r16_dual_load_brace_count",0))!=2*VANE_COUNT
+                    or int(scene.get("fsc_r16_independent_crosshead_count",0))!=VANE_COUNT):
                 raise RuntimeError("R16 complete outboard bracket topology missing")
             if scene.get("fsc_r16_source_movement_policy")!=(
                     "static pending direct original 64-frame mechanical tracking"):
@@ -332,7 +334,7 @@ def test_one(path):
             if scene.get("fsc_r18_revision")!=(
                     "R18_source_measured_distal_lower_lip_envelopes"):
                 raise RuntimeError("R18 original-measured lower lip motion absent")
-            if (int(scene.get("fsc_r18_upper_static_vanes",0))!=4 or
+            if (int(scene.get("fsc_r18_upper_static_vanes",0))!=VANE_COUNT-4 or
                     int(scene.get("fsc_r18_distal_animated_vanes",0))!=4 or
                     int(scene.get("fsc_r18_source_frames",0))!=64):
                 raise RuntimeError("R18 changed source observed motion division")
@@ -340,9 +342,9 @@ def test_one(path):
                     "0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791"):
                 raise RuntimeError("R18 motion evidence differs from original source archive")
             any_animated=False
-            for index in range(8):
+            for index in range(VANE_COUNT):
                 fin=bpy.data.objects.get("R11_SUSPENDED_AFTERBURNER_VANE_%02d"%index)
-                if index<4:
+                if index not in ANGULAR_TO_OBSERVED:
                     if fin.data.shape_keys is not None:
                         raise RuntimeError("R18 mistakenly animates stationary upper fin")
                 else:
@@ -375,7 +377,7 @@ def test_one(path):
                                ("fsc_r19_mid_tiles",40),
                                ("fsc_r19_deep_strakes",40),
                                ("fsc_r19_cooling_slots",40),
-                               ("fsc_r19_fin_root_ribs",8)):
+                               ("fsc_r19_fin_root_ribs",VANE_COUNT)):
                 if int(scene.get(prop,0))!=count:
                     raise RuntimeError("R19 missing parts: "+prop)
             r19_throat=bpy.data.objects.get("R11_OPEN_DEEP_REFRACTORY_THROAT")
@@ -383,7 +385,7 @@ def test_one(path):
                 len(r19_throat.data.polygons)!=int(
                     scene.get("fsc_r19_open_throat_polygons",0))):
                 raise RuntimeError("R19 filled or replaced the open throat")
-            for index in range(8):
+            for index in range(VANE_COUNT):
                 plate=bpy.data.objects.get(
                     "R11_SUSPENDED_AFTERBURNER_VANE_%02d"%index)
                 support=plate.get("R19_joined_root_back_rib")
@@ -416,15 +418,17 @@ def test_one(path):
                     raise RuntimeError("R20 strake contrast not retained")
             print("R20_OPEN_DRUM_DEEP_VISUAL_PATH_PASS",path.name,flush=True)
             print("R19_CONE_INTERIOR_FIN_ASSEMBLY_PASS",path.name,flush=True)
+            if int(scene.get("fsc_r22_population_candidate",0))!=VANE_COUNT:
+                raise RuntimeError("R22 full-ring layout missing from editable scene")
             if scene.get("fsc_r21_revision")!=(
                     "R21_thin_formed_slotted_panel_and_pinned_clevis"):
                 raise RuntimeError("R21 fin master was not applied before R18")
             if (int(scene.get("fsc_r21_punched_slots_per_fin",0))!=2 or
-                    int(scene.get("fsc_r21_clevis_pin_count",0))!=8 or
-                    int(scene.get("fsc_r21_stamped_center_ridge_count",0))!=8 or
+                    int(scene.get("fsc_r21_clevis_pin_count",0))!=VANE_COUNT or
+                    int(scene.get("fsc_r21_stamped_center_ridge_count",0))!=VANE_COUNT or
                     float(scene.get("fsc_r21_master_sheet_thickness",1))>.03):
                 raise RuntimeError("R21 actual thin sheet/clevis structure missing")
-            for index in range(8):
+            for index in range(VANE_COUNT):
                 fin=bpy.data.objects.get(
                     "R11_SUSPENDED_AFTERBURNER_VANE_%02d"%index)
                 if fin is None:

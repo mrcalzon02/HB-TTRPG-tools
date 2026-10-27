@@ -5,6 +5,7 @@ here are editable original geometry, not recovered Wube 3D source meshes.
 Do not fabricate compressor cycles, injector pistons, or vane pivots.
 """
 import bpy
+from vane_layout_r22 import VANE_COUNT
 
 REVISION="R15_visible_upper_pressure_bellows_and_injector"
 
@@ -71,8 +72,8 @@ def apply(name,root,p,api,scene):
     # bright arrowhead-like metal appearance (UI arrows are never 3D geometry).
     vanes=[ob for ob in scene.objects
            if ob.name.startswith("R11_SUSPENDED_AFTERBURNER_VANE_")]
-    if len(vanes)!=8:
-        raise RuntimeError("R15 must preserve 8 suspended thermal vanes")
+    if len(vanes)!=VANE_COUNT:
+        raise RuntimeError("R15 must preserve shared R22 reference fin population")
     for ob in vanes:
         if not ob.data.materials:
             raise RuntimeError("Missing thermal vane material: "+ob.name)

@@ -33,10 +33,12 @@ class ActualSourceR18Tests(unittest.TestCase):
         self.assertEqual(max(v["port_outer"])-min(v["port_outer"]),3)
         self.assertEqual(max(v["starboard_outer"])-min(v["starboard_outer"]),6)
 
-    def test_static_upper_four_vanes_never_get_motion_curve(self):
+    def test_four_measured_lower_rois_on_twelve_slot_ring(self):
         mapping=self.constants["ANGULAR_TO_OBSERVED"]
-        self.assertEqual(set(mapping),{4,5,6,7})
+        self.assertEqual(set(mapping),{7,8,9,10})
         self.assertNotIn(0,mapping)
+        self.assertNotIn(6,mapping)
+        self.assertNotIn(11,mapping)
         self.assertEqual(set(mapping.values()),set(self.constants["SAMPLES"]))
 
     def test_measured_regions_are_in_lower_nozzle(self):

@@ -10,6 +10,7 @@ import math
 import json
 import bpy
 from mathutils import Vector
+from vane_layout_r22 import VANE_COUNT
 
 REVISION="R21_thin_formed_slotted_panel_and_pinned_clevis"
 SOURCE_FRAME="original thruster-1.png frame 00 at 264x542"
@@ -189,18 +190,19 @@ def apply(name,root,p,api,scene):
     coll=bpy.data.collections.get("R11_OUTBOARD_SUSPENDED_AFTERBURNERS")
     if coll is None:raise RuntimeError("R21 has no independent fin collection")
     sizes=[]
-    for n in range(8):
+    for n in range(VANE_COUNT):
         fin=coll.objects.get(f"R11_SUSPENDED_AFTERBURNER_VANE_{n:02d}")
         if fin is None or not fin.get("R16_support_graph"):
             raise RuntimeError("Missing R16 original physically supported fin")
-        theta=math.tau*(n+.5)/8
+        theta=math.tau*(n+.5)/VANE_COUNT
         sizes.append(_replace_fin(fin,theta))
         _clevis(theta,n,root,coll,p)
     scene["fsc_r21_revision"]=REVISION
     scene["fsc_r21_master_sheet_thickness"]=RADIAL_THICKNESS
     scene["fsc_r21_punched_slots_per_fin"]=2
-    scene["fsc_r21_stamped_center_ridge_count"]=8
-    scene["fsc_r21_clevis_pin_count"]=8
-    scene["fsc_r21_root_panel_count"]=8
-    scene["fsc_r21_source_count_status"]="eight modeled; total source population not visually proven"
+    scene["fsc_r21_stamped_center_ridge_count"]=VANE_COUNT
+    scene["fsc_r21_clevis_pin_count"]=VANE_COUNT
+    scene["fsc_r21_root_panel_count"]=VANE_COUNT
+    scene["fsc_r21_source_count_status"]="12-slot calibration candidate, original source total unknown"
+    scene["fsc_r22_population_candidate"]=VANE_COUNT
     scene["fsc_r21_source_reference"]=SOURCE_FRAME
