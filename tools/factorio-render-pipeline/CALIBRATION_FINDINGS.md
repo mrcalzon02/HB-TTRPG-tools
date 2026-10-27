@@ -822,3 +822,40 @@ and 64-frame R18 movement curves are NOT touched. Heat oxide materials
 are darkened and blue/purple transition moved along the distal underside;
 these remain nonemissive surface colors rather than physical thickness.
 Requires actual source-to-render comparison on the next CI capture.
+
+### R25.1 independent source and Blender verification: PASS, not yet matched
+
+R25.1 source-validation workflow:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40439336812
+PASS. Current complete real headless Blender calibration + custom-model
+regression:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40439336724
+BOTH jobs PASS after fixing the actual bpy_prop_collection membership API
+bug rather than disabling verification.
+
+Actual R23/R25/R25.1 idle PNGs were extracted from all three independent
+GitHub calibration archives and compared at identical 320x640 camera.
+Alpha bounds:
+- R23 without separate external skids: [51,179,266,519]
+- initial R25 too-wide side flaps:    [17,179,298,519]
+- corrected R25.1 narrower skids:   [24,179,289,519]
+
+This demonstrates the relative width reduction (from span 281 to 265)
+while retaining both newly visible independently supported exterior
+coverings. Color correction makes the LOWER ends blue-purple rather than
+assigning extra mesh volume. The full R25.1 calibration artifact includes
+new port and starboard exterior UNDERSIDE closeups, saved editable .blend,
+13 distinct body frames, all 4 independently captured named pipe effects,
+12 independent flame frames and zero alpha-edge clipping.
+
+Direct image inspection confirms R25.1 forms two wide support-shrouded
+exterior pieces and leaves inner repeated nozzle tabs unmodified. However
+the model is STILL TOO CLEAN and the exterior shapes/overall nozzle
+perspective are not yet pixel-registered to the original Factorio image.
+No claim that R25.1 faithfully reproduces the exact hidden geometry, that
+inner fins have been recounted, or that sprites are production-ready.
+
+Important user-corrected taxonomy: INNER fins (already modeled) are NOT
+the same objects as TWO LARGE LOWER LATERAL EXTERNAL SKID-COVER FIN UNDERSIDES.
+Keep separate collections, counts and support paths. Never count the large
+external skid shrouds as two new little hot tabs.
