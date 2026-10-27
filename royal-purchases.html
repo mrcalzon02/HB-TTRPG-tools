@@ -155,7 +155,7 @@
       const friendlyDate = stamp => stamp ? stamp.slice(0,10) : 'Undated source';
       const isPublicImage = s => s?.publicationStatus === 'hosted_verified' && /^(?:https:\/\/|\.\/|assets\/)/.test(s.publishedImageUrl||'');
       let manifest;
-      const sourceText = s => [s.fileName,s.sceneGroup,s.role,s.wardrobeId||''].join(' ').toLowerCase();
+      const sourceText = s => [s.fileName,s.sceneGroup,s.role,s.wardrobeId||'',s.appearanceAudit?.dayshaOutfitCluster||'',s.appearanceAudit?.estelleOutfitCluster||'',s.appearanceAudit?.summary||''].join(' ').toLowerCase();
 
       const renderGarments = () => {
         const query=$('dress-query').value.toLowerCase().trim();
@@ -185,7 +185,7 @@
           (status==='scene'&&s.role==='scene')||(status==='reference'&&/reference|composite/.test(s.role))||
           (status==='costume'&&s.role==='costume-or-adventure')));
         $('source-result-count').textContent=records.length+' of '+manifest.sources.length+' source records. '+records.filter(isPublicImage).length+' published images in this selection.';
-        $('source-list').innerHTML=records.length?records.map(s=>'<li><div class="wardrobe-source-thumb">'+(isPublicImage(s)?'<a href="'+escape(s.publishedImageUrl)+'" target="_blank" rel="noopener"><img loading="lazy" alt="'+escape(s.fileName)+'" src="'+escape(s.publishedImageUrl)+'"></a>':'Pending')+'</div><div class="wardrobe-source-meta"><strong>'+escape(s.fileName)+'</strong><small>'+friendlyDate(s.archivedAt)+' · '+escape(s.sceneGroup)+' · '+(s.wardrobeId?'Grouped: '+escape(s.wardrobeId):'Wardrobe match pending')+'</small>'+(isPublicImage(s)?'<a href="'+escape(s.publishedImageUrl)+'" target="_blank" rel="noopener">View gallery image</a>':'<small>Web image publication pending</small>')+(s.originalDriveVerified?'<a href="'+escape(s.originalDriveUrl)+'" target="_blank" rel="noopener">Original on Drive (restricted)</a>':'')+'</div></li>').join(''):'<li class="wardrobe-empty">No source images match these filters.</li>';
+        $('source-list').innerHTML=records.length?records.map(s=>'<li><div class="wardrobe-source-thumb">'+(isPublicImage(s)?'<a href="'+escape(s.publishedImageUrl)+'" target="_blank" rel="noopener"><img loading="lazy" alt="'+escape(s.fileName)+'" src="'+escape(s.publishedImageUrl)+'"></a>':'Pending')+'</div><div class="wardrobe-source-meta"><strong>'+escape(s.fileName)+'</strong><small>'+friendlyDate(s.archivedAt)+' · '+escape(s.sceneGroup)+' · '+(s.wardrobeId?'Grouped: '+escape(s.wardrobeId):'Wardrobe match pending')+'</small>'+(s.appearanceAudit?'<small>Appearance audit: '+escape(s.appearanceAudit.summary)+'</small>':'')+(isPublicImage(s)?'<a href="'+escape(s.publishedImageUrl)+'" target="_blank" rel="noopener">View gallery image</a>':'<small>Web image publication pending</small>')+(s.originalDriveVerified?'<a href="'+escape(s.originalDriveUrl)+'" target="_blank" rel="noopener">Original on Drive (restricted)</a>':'')+'</div></li>').join(''):'<li class="wardrobe-empty">No source images match these filters.</li>';
       };
       fetch('data/daysha-royal-purchases.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(data=>{
         if(!Array.isArray(data.garments)||!Array.isArray(data.sources))throw new Error('Invalid archive');
