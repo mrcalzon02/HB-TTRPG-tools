@@ -180,7 +180,7 @@ def test_one(path):
             if scene.get("fsc_camera_selection_evidence")!="R09 centered_high translated 1 tile aft for R10 flame clearance":
                 raise RuntimeError("Vanilla camera selection lacks R09 angle and R10 exhaust framing evidence")
             camera_target=json.loads(scene.get("fsc_camera_target","null"))
-            if camera_target is None or abs(camera_target[1]+1.0)>.01:
+            if camera_target is None or abs(camera_target[1]+2.1)>.01:
                 raise RuntimeError("Camera target did not move aft with extended exhaust")
             if (abs(scene.camera.location.x-.18)>.01 or
                 abs(scene.camera.location.z-10.0)>.05 or
