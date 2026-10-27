@@ -894,3 +894,57 @@ their independent role, source scale/camera metadata, and all old
 R16/R18/R19/R20/R21 fin details. Previous geometry pass or source unit
 success does NOT count as a full original-image match. Actual rendered
 PNG geometry and clipping MUST be measured and inspected afterwards.
+
+### R26 final VERIFIED capture — UNDERSIDE correction and portrait scale
+
+R26 implementation commit:
+https://github.com/mrcalzon02/HB-TTRPG-tools/commit/d25756787feb7844e2ce115eb097523c74c2be48
+Root-cause fixes for the additional pre-existing strict QA assumptions:
+- d4b1b4c: update obsolete camera-target coordinate assertion to
+  new actual R26 camera target; retain matching exact comparison.
+- b67300b: independent 12-frame exhaust pass must retain its own
+  wider orthographic camera (13.6) after the body calibration. The
+  original 11.2 field caused actual flame frames 1,2,7,8,9 to touch
+  the bottom edge. Fix repositions effect IN ITS CAPTURE, not by
+  disabling the existing capture clipping check.
+
+R26 source procedure validation PASSED:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40441106065
+R26 final REAL Blender calibration and four custom model regression PASSED:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40441105966
+
+Verified saved Blender .blend reopens with 438 mesh parts in vanilla
+reference. QA reports **zero clipping** for all 13 body frames,
+12 independent flame frames, 4 named conditional pipe layers and
+floor integration sprite. 13 body PNGs have distinct hashes.
+
+Source original idle alpha bbox [4,0,263,532] native 264x542 =>
+width/height 259/532=.48684.
+R25.1 original-camera body bbox [24,179,289,519] in 320x640 =>
+265/340=.77941, badly squat.
+R26 calibrated body bbox [16,35,297,614] in 320x640 =>
+281/579=.48532, i.e. only ~0.0015 ratio difference
+from the source projected silhouette. This verifies width/height
+PROPORTION, not native sprite registration or 3D mesh-detail fidelity.
+R26 still has 35px blank above visible geometry, and its 3D components
+are much too clean/sparse relative to the actual vanilla frame.
+
+Critically, R26's TWO large exterior covers are now below the bell,
+local MAX cover Z=-1.103 (rather than R25 lateral wing Z about -0.2)
+and MIN cover Z≈-1.92. They remain two distinct editable underside
+cover meshes in their own collection with hull supports; all internal
+R21 fins, R18 motion, R19/refractory, R20 open nozzle remain intact.
+
+Compare actual calibrated idle and 448x448 port/starboard underside
+camera images from GH capture. R26 is a substantial correct-direction
+change but the projected outer cover free ends still hang longer
+than the real source's more conformal lower-shell cover silhouette.
+The user specifically wants these covers UNDER the thruster, not
+separate side wings; deeper conformal contour and source-derived
+support geometry remain a future unapproved refinement.
+
+**Not production ready:** applies a 3D scale and camera transformation
+to the calibration scene ONLY, while leaving the 4x8 Factorio
+prototype metadata untouched. Do not copy such transforms as tested
+gameplay or runtime registration before native sprite/pivot validation.
+No Tech Priests production art or LUA was modified.
