@@ -386,7 +386,11 @@ def capture_one(out_dir,name):
         # Exhaust is a separate atlas in the original prototype; keep its
         # full extent rather than clipping to the newly calibrated BODY crop.
         if name.startswith("test-04-vanilla-approx"):
-            scene.camera.data.ortho_scale=11.2
+            # R26.1: the independent exhaust extends below the new
+            # tall body projection. Frame it in its OWN larger effect cell:
+            # previous 11.2 clips five of twelve real source flame runs.
+            scene.camera.data.ortho_scale=13.6
+            manifest["flame_capture_ortho_scale"]=13.6
         try:
             for ob in preserve:ob.hide_render=ob not in effect
             for k in range(frames):
