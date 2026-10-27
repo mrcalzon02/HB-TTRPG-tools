@@ -27,6 +27,27 @@
 
 **Fusion fidelity:** A and B must compute from the live input for each relevant request. Their learned fusion representations must reach C and influence its output; absence of contribution must be detectable by ablation. Scheduling model stages sequentially is allowed, whereas replacing the intended fused graph with mere prompt-chaining or static distillation silently is not.
 
+## 1b. Two three-model groups — memory feasibility proposition (2026-10-27)
+
+**User proposition:** Evaluate **two groups of three micro-Qwen model instances** (six logical model instances in total) running on `old-core30`. Prefer quantized models with individual model weights below 1 GB where suitable. The six-instance architecture is a target to test, **not a validated fit**. The initial single 2→1 cell remains the first proof point; only scale to a second cell after feasibility tests.
+
+**Memory pools:** 6 GB GPU VRAM is the accelerated workspace; 32 GB system RAM can hold model files/weights, token caches, intermediate representations, and inactive instances where runtime capabilities permit. CPU-only and hybrid CPU/GPU inference are legitimate slower execution modes. Having 32 GB of RAM does not make it GPU-speed memory; transferring tensors and loading models consumes bandwidth and time.
+
+**Why sub-1-GB models do not automatically fit six active contexts in 6 GB:** Model file size, CPU/RAM residency, and GPU memory requirement differ. VRAM also contains GPU runtime/allocator buffers, KV caches for each concurrently active generation, scratch workspaces, and temporary activations. Memory-mapped or shared identical weights may reduce duplication in some runtimes but must be observed, not assumed. Quantization reduces weights and can reduce some caches depending on implementation; it does not make inference buffers disappear.
+
+**Scheduling hypothesis:** Keep six *logical* instances addressable through the orchestrator, but give GPU residency to one or a bounded subset at a time. For each 2→1 cell, execute source A and B, retain their outputs or defined intermediate data, then run fusion C. The second cell may run after the first. If the implementation is inference-only orchestration, source outputs may be text/structured messages; true hidden-state fusion requires separately verified tensor-compatible interfaces and is not provided automatically by ordinary GGUF API servers. Logical continuous participation is distinct from simultaneous device residency.
+
+**Instrumentation / decision gates:**
+1. Benchmark one instance on `old-core30`: cold/warm load, resident RAM, peak VRAM, prefill/decode throughput, power if available, and quality on fixed prompts.
+2. Compare two then three instances with realistic contexts; log concurrent vs sequential residency and memory overhead. Use dedicated test runs for six instances.
+3. Exercise two complete 2→1 cells including context handoff, failure handling, checkpoints, and finished-result verification. Distinguish independently loaded instances from multiple references to the same shared weights.
+4. Do not declare the six-instance configuration feasible until both capacity **and successful end-to-end task completion** have been measured without out-of-memory failures, stalls, or unverifiable output.
+5. Record the actual quantization, context length, KV-cache representation, runtime version, model checkpoint revisions, and peak measured memory. A model-file-size calculation alone is insufficient.
+
+**Illustrative arithmetic only:** At 0.5–0.9 GB of model weights per quantized instance, six weight sets total 3.0–5.4 GB *before* runtime, KV caches, and scratch buffers. Thus simultaneous all-on-GPU residency is not yet justified by the 6 GB card. Sequential or CPU-offloaded operation is the baseline proposal.
+
+**User priority:** Slow is acceptable when it leads to genuinely more competent and thorough results. The orchestrator must produce a finished artifact or substantive verified partial result, not prolonged empty status messages.
+
 ## 2. First experiment: 2 → 1 fusion cell
 
 ### Intended information flow
@@ -194,10 +215,11 @@ For work requests, the resulting assistant must distinguish **thinking about wor
 | 2026-10-27 | Runtime priority | Prefer slower, more capable, more thorough performance; quality/completion ahead of latency | User-selected requirement |
 | 2026-10-27 | Long-task acceptance | An hour of work should yield finished or substantially verifiable partial work, never only an intention to think | User-selected requirement |
 | 2026-10-27 | Scheduling | Explore serial/offloaded live A/B/C processing on constrained GPU while keeping all three functionally in graph | Proposed, needs measured feasibility |
+| 2026-10-27 | Six-instance proposal | Test two groups of three quantized micro-Qwen instances; prefer sub-1-GB individual weight files, using both 6 GB VRAM and 32 GB RAM | User proposal; feasibility not yet benchmarked |
 
 ## 7. Next actionable work
 
-Specify initial checkpoint revisions and licenses, then profile tiny-model memory feasibility on `old-core30` (6 GB VRAM/32 GB RAM) before freezing an inference schedule. Design lightweight CPU tensor-interface tests, then implement a locally measured 2→1 proof of concept and its completion-first multi-step task acceptance test. Maintain and version this project record under `docs/ai-access/micro-qwen-fusion/` as decisions and experiments progress. No inference engine or training code has yet been implemented.
+Specify initial checkpoint revisions and licenses, then profile **one, three, and six logical instances** on `old-core30` (6 GB VRAM/32 GB RAM), measuring actual resident memory, KV caches and model swapping before freezing an inference schedule. Design lightweight CPU tensor-interface tests, then implement a locally measured 2→1 proof of concept and its completion-first multi-step task acceptance test. Maintain and version this project record under `docs/ai-access/micro-qwen-fusion/` as decisions and experiments progress. No inference engine or training code has yet been implemented.
 
 ---
-*Record version 0.2, target and completion requirements (2026-10-27). This document records the plan only; it is not evidence of implemented software, trained models, benchmark performance, or completed execution tests.*
+*Record version 0.3, two-cluster memory hypothesis (2026-10-27). This document records the plan only; it is not evidence of implemented software, trained models, benchmark performance, or completed execution tests.*
