@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3D Model Downloader — Private Deployment | Calzon’s TTRPG Foundry</title>
+<meta name="description" content="Private 3D Model Downloader utility, project status, manual deployment guidance and security boundaries.">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="workspace-landing.css">
+<style>main{max-width:900px;margin:0 auto;padding:24px 18px 70px}section{margin:18px 0;padding:18px;border:1px solid #66758b;border-radius:12px}li{margin:8px 0}code{overflow-wrap:anywhere}</style></head><body class="workspace-landing-body">
+<header class="site-header"><div><p class="eyebrow">Homebrew Tabletop RPG Tools / Software</p><h1>3D Model Downloader</h1><p class="subtitle">Private-deployment utility · installation reference</p></div><nav class="top-nav"><a class="nav-button" href="software.html#3d-model-downloader">Software</a><a class="nav-button" href="index.html">Foundry Home</a></nav></header>
+<main>
+<section><h2>Overview</h2><p>3D Model Downloader is cataloged as a <strong>privately deployed</strong> model-downloading tool. Its private distribution is separate from public Firefox add-ons and public software releases. No download, repository location, or supported file-format claims are made here until verified against the actual deployment package.</p></section>
+<section><h2>Availability</h2><p><strong>Private deployment only.</strong> The authoritative package and installation format have not yet been verified in this repository. This page deliberately provides no public download link or substitute application. Use only a copy obtained from the established private deployment channel.</p><p><a href="software/3d-model-downloader/README.md">Private deployment README and installation checklist</a></p></section>
+<section><h2>Manual deployment checklist</h2><ol>
+<li>Obtain the verified private build from its original deployment location.</li>
+<li>Check the package README or manifest to identify the actual runtime and required permissions; do not assume a ZIP is a Firefox extension.</li>
+<li>If the verified package is a Firefox WebExtension, extract it, open <code>about:debugging#/runtime/this-firefox</code>, select <strong>Load Temporary Add-on</strong>, and choose the extracted <code>manifest.json</code>. Otherwise follow the native application's verified launcher instructions.</li>
+<li>Keep private credentials and downloads outside this public repository. Review the application's site permissions and the rights to download each model.</li>
+<li>For a temporary Firefox add-on, reload it after browser restart. A permanently installed add-on requires normal Firefox signing.</li></ol><p>This checklist is conditional rather than a claim that the private package has been examined or installed.</p></section>
+<p><a href="software.html#3d-model-downloader">Return to Software</a></p></main></body></html>
