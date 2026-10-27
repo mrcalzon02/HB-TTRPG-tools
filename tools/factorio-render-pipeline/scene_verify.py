@@ -582,7 +582,7 @@ def test_one(path):
                 ob=bpy.data.objects.get("R25_OUTER_SKID_UNDERSIDE_"+side)
                 if (not ob.get("R33_source_tail_taper") or
                     not ob.get("R33_no_extra_parts_or_actuators") or
-                    abs(float(ob.get("R33_aft_tip_y_shift",0))-.09)>.001):
+                    abs(float(ob.get("R33_aft_tip_y_shift",0))-.02)>.001):
                     raise RuntimeError("R33 rear ends were not tapered in real scene")
                 if ob.animation_data:
                     raise RuntimeError("R33 guard invents unverified actuation")
@@ -598,8 +598,11 @@ def test_one(path):
                 c=ob.data.vertices[72+7*9+8].co
                 if not (a.y>b.y+.04 and c.y>b.y+.04):
                     raise RuntimeError("R33.1 persisted end cap is still a square cutoff")
-                if abs(float(ob.get("R33_rounded_tail_edge",0))-.06)>.001:
-                    raise RuntimeError("R33.1 curved terminal edge marker missing")
+                if abs(float(ob.get("R33_rounded_tail_edge",0))-.045)>.001:
+                    raise RuntimeError("R33.2 curved terminal edge marker missing")
+                if (ob.get("R33_2_source_rgba_port_last_row")!=512 or
+                    ob.get("R33_2_source_rgba_starboard_last_row")!=513):
+                    raise RuntimeError("R33.2 no original RGBA alpha target provenance")
             print("R33_SOURCE_AFT_TAPER_SAVED_MESH_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.

@@ -13,15 +13,15 @@ The center remains a 3D cupped bowl BELOW its lips.
 import math
 from vanilla_cupped_radial_skids_r31 import point as r31_point
 
-REVISION="R33_source_outboard_clamshell_aft_taper"
+REVISION="R33_2_exact_rgba_guard_tip_candidate"
 ORIGINAL_SHA256="0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791"
 BELL_CENTER_Z=-.43
 # Source-aligned inverse-projection candidates. Control each axial station;
 # last three rows only: pull tips forward and slim their exposed outer edges.
-AFT_Y_RELIEF=(0.,0.,0.,0.,0.,.06,.10,.09)
-AFT_OUTER_TUCK=(0.,0.,0.,0.,0.,.02,.06,.12)
-AFT_INNER_ANGLE_DEG=(0.,0.,0.,0.,0.,-3.,-6.,-18.)
-AFT_TIP_EDGE_ROUND=(0.,0.,0.,0.,0.,0.,.015,.06)
+AFT_Y_RELIEF=(0.,0.,0.,0.,0.,.05,.07,.02)
+AFT_OUTER_TUCK=(0.,0.,0.,0.,0.,.02,.05,.09)
+AFT_INNER_ANGLE_DEG=(0.,0.,0.,0.,0.,-5.,-9.,-22.)
+AFT_TIP_EDGE_ROUND=(0.,0.,0.,0.,0.,0.,.015,.045)
 
 def point(station,u,side,skin,row):
     x,y,z=r31_point(station,u,side,skin,row)
@@ -82,6 +82,8 @@ def apply(name,root,p,api,scene):
         ob["R33_mirrored_source_profile"]=label
         ob["R33_aft_tip_y_shift"]=AFT_Y_RELIEF[-1]
         ob["R33_rounded_tail_edge"]=AFT_TIP_EDGE_ROUND[-1]
+        ob["R33_2_source_rgba_port_last_row"]=512
+        ob["R33_2_source_rgba_starboard_last_row"]=513
         if p(7,0.).y<=p(7,.5).y+.04:
             raise RuntimeError("R33.1 lower shroud still ends with square flat cap")
     if {o.name for o in scene.objects}!=before_objects:

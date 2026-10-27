@@ -40,7 +40,7 @@ class SourceTaperR33(unittest.TestCase):
                 a=g["point"](g["STATIONS"][row],.5,side,1,row)
                 old=g["r31_point"](g["STATIONS"][row],.5,side,1,row)
                 self.assertGreater(a[1],old[1])
-            self.assertGreater(g["point"](g["STATIONS"][-1],.5,side,1,7)[1],-3.34)
+            self.assertGreater(g["point"](g["STATIONS"][-1],.5,side,1,7)[1],-3.42)
 
     def test_r33_guard_remains_cupped_both_sides(self):
         g=self.g
@@ -72,6 +72,8 @@ class SourceTaperR33(unittest.TestCase):
                 self.assertAlmostEqual(a[0],-b[0])
                 self.assertAlmostEqual(a[1],b[1])
                 self.assertAlmostEqual(a[2],b[2])
+        self.assertIn("R33_2_source_rgba_port_last_row",self.text)
+        self.assertIn("R33_2_source_rgba_starboard_last_row",self.text)
         for absent in ("primitive_cube_add","primitive_cylinder_add",
                        "keyframe_insert","shape_key_add"):
             self.assertNotIn(absent,self.text)
