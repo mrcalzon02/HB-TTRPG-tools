@@ -531,6 +531,35 @@ def test_one(path):
                 if abs(a.y-b.y)>1e-5:
                     raise RuntimeError("R29 cross-section is not circumferential")
             print("R29_SOURCE_BEIGE_RADIAL_SKIDS_PASS",path.name,flush=True)
+            # R31 tests actual SAVED mesh vertex geometry. A cylindrical
+            # 30-degree wrap with a nearly straight chord is insufficient:
+            # both rims must be above the belly for a cupped clamshell.
+            from vanilla_cupped_radial_skids_r31 import (
+                REVISION as R31_REVISION,SOURCE_ARCHIVE_SHA256 as R31_SOURCE)
+            if scene.get("fsc_r31_revision")!=R31_REVISION:
+                raise RuntimeError("R31 source cupped clamshell stage missing")
+            if scene.get("fsc_r31_original_source_archive_sha256")!=R31_SOURCE:
+                raise RuntimeError("R31 is not traceable to real source frames")
+            if not scene.get("fsc_r31_preserves_r18_64_frame_fin_motion"):
+                raise RuntimeError("R31 corrupted original fin animation mapping")
+            if not scene.get("fsc_r31_outer_shell_stationary_until_evidence"):
+                raise RuntimeError("R31 inferred unproved outer shell actuation")
+            for side in ("port","starboard"):
+                ob=bpy.data.objects.get("R25_OUTER_SKID_UNDERSIDE_"+side)
+                if not (ob.get("R31_cupped_bowl_not_global_plane") and
+                        ob.get("R31_returned_inner_lip") and
+                        ob.get("R31_no_extra_visible_parts")):
+                    raise RuntimeError("R31 clamshell profile was not built")
+                if ob.animation_data:
+                    raise RuntimeError("R31 shell has unsupported motion")
+                half=72
+                outer,belly,inside=[
+                    ob.data.vertices[half+3*9+j].co for j in (0,4,8)]
+                if belly.z>=min(outer.z,inside.z)-.10:
+                    raise RuntimeError("R31 saved mesh is visually flat across cup")
+                if abs(float(ob.get("R31_lower_belly_sag_tiles",0)))<.10:
+                    raise RuntimeError("R31 measured bowl sag was not saved")
+            print("R31_SOURCE_CUPPED_AFT_SKIDS_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)

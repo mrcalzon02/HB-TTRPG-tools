@@ -401,6 +401,12 @@ def build_thruster(name,w,h,root,p):
         vanilla_beige_radial_skids_r29.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R31: retained TWO R29 beige meshes, deeply cup their source-visible
+        # underside and curl the rear ends; internal 64-frame fins unchanged.
+        import vanilla_cupped_radial_skids_r31
+        vanilla_cupped_radial_skids_r31.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",

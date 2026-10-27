@@ -55,6 +55,14 @@ def main():
     light.name="R11_PREVIEW_ONLY_REVEAL_LIGHT"
     light.data.energy=375
     light.data.size=3.5
+    # Diagnosis ONLY: underside normal is not illuminated by the main
+    # studio light above the bell. Reveal the cup depth in evidence renders,
+    # NOT in the saved scene or vanilla sprite capture lighting.
+    bpy.ops.object.light_add(type="AREA",location=(0,-3.9,-4.5))
+    underside_fill=bpy.context.object
+    underside_fill.name="R31_PREVIEW_ONLY_UNDERSIDE_REVEAL_LIGHT"
+    underside_fill.data.energy=300
+    underside_fill.data.size=4.0
     scene.camera=inspection_camera
     scene.cycles.samples=12
     scene.render.resolution_x=448
@@ -90,6 +98,7 @@ def main():
         scene.render.resolution_y=source_ry
         scene.render.filepath=previous_filepath
         bpy.data.objects.remove(light,do_unlink=True)
+        bpy.data.objects.remove(underside_fill,do_unlink=True)
         bpy.data.objects.remove(inspection_camera,do_unlink=True)
     (directory/"inspection-manifest.json").write_text(json.dumps(record,indent=2)+"\n")
     print("R11_INSPECTION_SCENES_COMPLETE",len(record["views"]),flush=True)
