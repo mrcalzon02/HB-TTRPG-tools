@@ -1,0 +1,47 @@
+name: Software project showcase functional checks
+on:
+  push:
+    paths:
+      - "software.html"
+      - "software-catalog*.js"
+      - "software-catalog.css"
+      - "scripts/validate-software-catalog.mjs"
+      - "index.html"
+      - "other-projects.html"
+      - "creative-portfolio.html"
+      - "site-map.html"
+      - ".github/workflows/software-catalog.yml"
+  pull_request:
+    paths:
+      - "software.html"
+      - "software-catalog*.js"
+      - "software-catalog.css"
+      - "scripts/validate-software-catalog.mjs"
+      - "index.html"
+      - "other-projects.html"
+      - "creative-portfolio.html"
+      - "site-map.html"
+      - ".github/workflows/software-catalog.yml"
+  workflow_dispatch:
+jobs:
+  functional:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            software.html
+            software-catalog-data.js
+            software-catalog.js
+            software-catalog.css
+            index.html
+            other-projects.html
+            creative-portfolio.html
+            site-map.html
+            scripts/validate-software-catalog.mjs
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Parse runtime and validate navigation / release browser
+        run: node scripts/validate-software-catalog.mjs

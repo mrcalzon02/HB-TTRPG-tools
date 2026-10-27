@@ -18,15 +18,103 @@
 .software-shell li{margin:8px 0}
 .software-shell a:focus-visible{outline:2px solid #b4d5ff;outline-offset:3px}
 </style>
+<link rel="stylesheet" href="software-catalog.css">
+<script defer src="software-catalog-data.js"></script>
+<script defer src="software-catalog.js"></script>
 </head><body class="workspace-landing-body">
-<header class="site-header"><div><p class="eyebrow">Homebrew Tabletop RPG Tools / Software</p><h1>Software</h1><p class="subtitle">Our desktop programs, experimental network software and new game-development projects in one place.</p></div><nav class="top-nav" aria-label="Primary"><a class="nav-button" href="index.html">Foundry Home</a><a class="nav-button active" href="software.html" aria-current="page">Software</a><a class="nav-button" href="site-map.html">Site Map</a></nav></header>
+<header class="site-header"><div><p class="eyebrow">Homebrew Tabletop RPG Tools / Software</p><h1>Software</h1><p class="subtitle">Our desktop programs, experimental network software and new game-development projects in one place.</p></div><nav class="top-nav" aria-label="Primary"><a class="nav-button" href="index.html">Foundry Home</a><a class="nav-button active" href="software.html" aria-current="page">Software</a><a class="nav-button" href="other-projects.html">Other Projects</a><a class="nav-button" href="creative-portfolio.html">Portfolio</a><a class="nav-button" href="site-map.html">Site Map</a></nav></header>
 <main class="software-shell">
-<section class="hero-card software-intro"><p class="eyebrow">Project directory</p><h2>Programs &amp; games</h2><p>Choose a software sub-tab below. Existing program pages and downloads remain at their original addresses; Beckenburg game development has moved to its dedicated repository; old development pages here are archived.</p></section>
+<section class="hero-card software-intro"><p class="eyebrow">Desktop applications · games · mods</p><h2>Programs &amp; games</h2><p>Browse active development in the project showcase, inspect real GitHub release assets, or open the existing Sound Manager, CubeChat and Beckenburg workspaces below. Original software links remain at their established addresses.</p><div class="workspace-actions"><a class="link-button primary-action" href="#software-showcase">Explore development showcase</a><a class="link-button" href="other-projects.html">All other projects</a><a class="link-button" href="creative-portfolio.html">Creative portfolio</a></div></section>
+
+<section class="software-panel" id="software-showcase" aria-labelledby="sc-heading">
+  <div class="sc-head">
+    <div>
+      <p class="sc-eyebrow">Current development · source and releases</p>
+      <h2 id="sc-heading">Project showcase</h2>
+      <p>Explore ongoing games, mods, tools and native applications. Scroll through actual repository art, select a project, and open a verified GitHub release or its individual download files.</p>
+    </div>
+    <button type="button" id="sc-refresh">Refresh releases &amp; activity</button>
+  </div>
+  <div class="sc-controls">
+    <div class="sc-filter" role="group" aria-label="Project category">
+      <button type="button" data-sc-kind="all" aria-pressed="true">All projects</button>
+      <button type="button" data-sc-kind="game" aria-pressed="false">Games</button>
+      <button type="button" data-sc-kind="mobile" aria-pressed="false">Mobile / VR</button>
+      <button type="button" data-sc-kind="mod" aria-pressed="false">Mods</button>
+      <button type="button" data-sc-kind="tool" aria-pressed="false">Tools</button>
+    </div>
+    <div class="sc-nav" role="group" aria-label="Scroll projects">
+      <button type="button" id="sc-left" aria-label="Scroll projects left">← Previous</button>
+      <button type="button" id="sc-right" aria-label="Scroll projects right">Next →</button>
+    </div>
+  </div>
+  <p class="sc-muted" id="sc-network" role="status" aria-live="polite">Saved October 26, 2026 catalog. Checking live public GitHub metadata…</p>
+  <p class="sc-muted" id="sc-count">13 active and selected projects</p>
+  <div id="sc-rail" class="sc-rail" role="group" aria-label="Scrollable project carousel" tabindex="0">
+    <a class="link-button" href="other-projects.html">Browse all original GitHub projects</a>
+  </div>
+  <p class="sc-muted">Mouse: scroll wheel over the gallery to move left and right; click a project for downloads. Keyboard: focus the gallery, then use left/right arrows. Touch: swipe.</p>
+  <div class="sc-detail" id="sc-detail" role="region" aria-live="polite" aria-label="Selected project information">
+    <p>Loading project details…</p>
+  </div>
+  <p class="sc-sr-only" id="sc-current" role="status" aria-live="polite"></p>
+  <div class="sc-release-hub" id="sc-release-hub" aria-labelledby="sc-release-heading">
+    <h2 id="sc-release-heading">Releases &amp; live development</h2>
+    <p>All non-draft GitHub releases, including prereleases and development tests, are eligible. The release browser loads recent releases first; use <strong>Load older releases</strong> to continue through the project's published history. Downloads are links to GitHub release assets, never invented files.</p>
+    <div class="sc-feed-grid">
+      <section class="sc-pane" aria-labelledby="sc-all-heading">
+        <h3 id="sc-all-heading">Latest published release per project</h3>
+        <p class="sc-muted">Latest known release for each project that has one, sorted by published date. The live API replaces the dated snapshot when available.</p>
+        <div id="sc-latest" role="list"></div>
+      </section>
+      <section class="sc-pane" aria-labelledby="sc-feed-heading">
+        <div class="sc-line"><h3 id="sc-feed-heading">Live GitHub activity</h3><button type="button" class="sc-icon-button" id="sc-feed-refresh">Update feed</button></div>
+        <p class="sc-muted" id="sc-feed-status" role="status" aria-live="polite">Checking public GitHub events…</p>
+        <div id="sc-feed-items" role="feed" aria-label="Recent public GitHub events">
+          <p class="sc-muted">Recent repository activity appears here when GitHub responds.</p>
+        </div>
+        <a class="sc-activity" href="https://github.com/mrcalzon02" target="_blank" rel="noopener noreferrer">Open GitHub account and activity history</a>
+      </section>
+    </div>
+    <section class="sc-pane" aria-labelledby="sc-history-heading">
+      <h3 id="sc-history-heading">Complete published release history</h3>
+      <div class="sc-release-controls">
+        <label class="sc-sr-only" for="sc-release-project">Project</label>
+        <select id="sc-release-project" aria-label="Select a project for release history">
+          <option value="The-Beckenburg-Project">The Beckenburg Project</option>
+          <option value="Catastrophic-Diplomacy">Catastrophic Diplomacy</option>
+          <option value="The-Malefic-Veil">The Malefic Veil</option>
+          <option value="ReverieVR">ReverieVR</option>
+          <option value="NUTBUSTER-R">Nut Buster</option>
+          <option value="Rupee-rush">Rupee Rush</option>
+          <option value="TheMechanist">The Mechanist</option>
+          <option value="Tech-Priests">Tech-Priests</option>
+          <option value="Magenheim">Magenheim</option>
+          <option value="Continuity-Works">Continuity Works</option>
+          <option value="Alfheim-Reclaimed">Alfheim Reclaimed</option>
+          <option value="Infinite-Domain">Infinite Domain</option>
+          <option value="powerpong">PowerPong</option>
+        </select>
+        <label class="sc-sr-only" for="sc-platform">Download file platform</label>
+        <select id="sc-platform" aria-label="Filter downloadable assets by platform">
+          <option value="all">All download files</option>
+          <option value="Windows">Windows</option><option value="Linux">Linux</option>
+          <option value="Android">Android / Fire OS</option><option value="macOS">macOS</option>
+          <option value="Other">Other / cross-platform</option>
+        </select>
+      </div>
+      <p id="sc-release-progress" class="sc-muted" role="status" aria-live="polite">Loading release history…</p>
+      <div id="sc-release-list" aria-label="Published releases"></div>
+      <button type="button" id="sc-release-more" hidden>Load older releases</button>
+    </section>
+  </div>
+  <noscript><p>JavaScript is needed for the gallery and live release browser. The <a href="other-projects.html">original GitHub project directory</a> and <a href="https://github.com/mrcalzon02?tab=repositories">repository listing</a> provide ordinary links.</p></noscript>
+</section>
 <nav class="software-tabs" role="tablist" aria-label="Software projects">
 <a id="tab-sound-manager" role="tab" aria-selected="true" tabindex="0" aria-controls="sound-manager" href="#sound-manager" aria-current="page">Sound Manager</a><a id="tab-cubechat" role="tab" aria-selected="false" tabindex="-1" aria-controls="cubechat" href="#cubechat">CubeChat</a><a id="tab-beckenburg" role="tab" aria-selected="false" tabindex="-1" aria-controls="beckenburg" href="#beckenburg">The Beckenburg Project</a>
 </nav>
 <section class="software-panel menu-card" id="sound-manager" role="tabpanel" aria-labelledby="tab-sound-manager" data-old-labelledby="sound-title"><h2 id="sound-title">Simple Sound Manager</h2>
-<p>Local Windows audio manager with multiple outputs, microphone management, per-device EQ, timing/delay adjustment, live waveforms and profiles. Its existing application and releases are preserved.</p>
+<p>Local Windows audio manager with multiple outputs, microphone management, per-device EQ, timing/delay adjustment, live waveforms and profiles. Its original application and release downloads are preserved.</p>
 <span class="software-tag">Desktop program</span><span class="software-tag">Windows download</span>
 <div class="workspace-actions"><a class="link-button primary-action" href="simple-sound-manager.html">Open Sound Manager</a><a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/simple-sound-manager-v0.10.0">Release &amp; checksums</a></div></section>
 <section class="software-panel menu-card" id="cubechat" role="tabpanel" aria-labelledby="tab-cubechat" data-old-labelledby="cubechat-title"><h2 id="cubechat-title">CubeChat</h2>
@@ -36,7 +124,7 @@
 <aside role="status" style="padding:12px 16px;margin:12px auto;max-width:1280px;border:2px solid #d9b46f;background:#24211a;color:#fff;font:600 15px/1.5 system-ui,sans-serif">DEVELOPMENT MOVED — This Beckenburg page is an archived reference, not an active project workspace. Current game source, documentation, testing and new releases: <a style="color:#ffe0a0;text-decoration:underline" href="https://github.com/mrcalzon02/The-Beckenburg-Project">The-Beckenburg-Project on GitHub</a>.</aside>
 <section class="software-panel menu-card" id="beckenburg" role="tabpanel" aria-labelledby="tab-beckenburg" data-old-labelledby="beckenburg-title"><h2 id="beckenburg-title">The Beckenburg Project</h2>
 <p>An original Java 17, Windows-first, 3D first-person supernatural investigation game: three hunter specialists against one AI- or player-controlled ghost, with identical ghost mechanics, LAN hosting, escalating injury, evidentiary deduction, occult rites and territorial reclamation from a castle headquarters.</p>
-<span class="software-tag">Game project</span><span class="software-tag">Visual / 3D prototype</span><span class="software-tag">Not playable yet</span>
+<span class="software-tag">Game project</span><span class="software-tag">Visual / 3D prototype</span><span class="software-tag">Playable development builds</span>
 <div class="workspace-actions"><a class="link-button primary-action" href="https://github.com/mrcalzon02/The-Beckenburg-Project">Open Active Beckenburg Repository</a><a href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/beckenburg/README.md" target="_blank" rel="noopener">Master Game Design Document</a><a href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/docs/beckenburg/production-stages.md" target="_blank" rel="noopener">Production Stage Requirements</a></div>
 </section></main><footer class="software-shell"><p class="software-muted">This is a navigation and documentation portal. Program downloads and executable functionality are provided only where separately documented.</p></footer><script>
 (() => {
