@@ -327,6 +327,43 @@ def test_one(path):
                         raise RuntimeError("R16 missing twin mechanical mount: "+key)
                 if len(vane.data.vertices)<64 or len(vane.data.polygons)<60:
                     raise RuntimeError("R16 thermal shield is a placeholder")
+            # R18 only allows animation of the LOWER free ends, based on
+            # directly measured original Factorio alpha envelopes.
+            if scene.get("fsc_r18_revision")!=(
+                    "R18_source_measured_distal_lower_lip_envelopes"):
+                raise RuntimeError("R18 original-measured lower lip motion absent")
+            if (int(scene.get("fsc_r18_upper_static_vanes",0))!=4 or
+                    int(scene.get("fsc_r18_distal_animated_vanes",0))!=4 or
+                    int(scene.get("fsc_r18_source_frames",0))!=64):
+                raise RuntimeError("R18 changed source observed motion division")
+            if scene.get("fsc_r18_original_archive_sha256")!=(
+                    "0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791"):
+                raise RuntimeError("R18 motion evidence differs from original source archive")
+            any_animated=False
+            for index in range(8):
+                fin=bpy.data.objects.get("R11_SUSPENDED_AFTERBURNER_VANE_%02d"%index)
+                if index<4:
+                    if fin.data.shape_keys is not None:
+                        raise RuntimeError("R18 mistakenly animates stationary upper fin")
+                else:
+                    keys=fin.data.shape_keys
+                    if keys is None or keys.key_blocks.get(
+                            "R18_lower_only_mouth_apron_travel") is None:
+                        raise RuntimeError("R18 distal lower fin is not deformable")
+                    if keys.animation_data is None or keys.animation_data.action is None:
+                        raise RuntimeError("R18 lower fin source-driven action missing")
+                    if not fin.get("R18_fixed_chassis_root"):
+                        raise RuntimeError("R18 movable support root violates reference")
+                    key=keys.key_blocks["R18_lower_only_mouth_apron_travel"]
+                    scene.frame_set(1)
+                    start=float(key.value)
+                    scene.frame_set(8)
+                    later=float(key.value)
+                    any_animated |= abs(start-later)>.01
+            scene.frame_set(1)
+            if not any_animated:
+                raise RuntimeError("R18 lower lip animation does not evaluate in saved scene")
+            print("R18_ACTUAL_SOURCE_LOWER_LIP_MOTION_PASS",path.name,flush=True)
             print("R16_OUTBOARD_FIN_SUPPORTS_PASS",path.name,
                   "rectangular_shields",len(vanes),
                   "dual_braces",scene["fsc_r16_dual_load_brace_count"],flush=True)

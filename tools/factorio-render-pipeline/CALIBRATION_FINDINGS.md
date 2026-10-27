@@ -452,3 +452,44 @@ https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40417786486
 PASSED. It checks the atlas page mapping, original named port contracts,
 mechanical cue metadata and private generation from synthetic fixture
 graphics. No actual source-game light pages were extracted in this session.
+
+## R18 — USER-SUPPLIED ORIGINAL ZIP actually opened, reference motion measured
+
+The original supplied archive was opened and decoded in this session:
+- Original ZIP SHA256: 0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791
+- Original ZIP 29,770,808 bytes, containing 18 entries.
+- Body: 64 RGBA 264×542 frames, 2 pages of 8×4.
+- Glow: 64 RGB 384×832 frames, 2 pages of 8×4.
+- Original body descriptor shift (1.5,-39.0) px; light (0,0).
+- Pipe-1..4 RGBA native 384×832; source actual nontransparent bounds:
+  pipe1 [273,70,322,130], pipe2 [274,196,322,257],
+  pipe3 [63,196,107,257], pipe4 [63,70,110,133].
+- Measured 64 cyclic alpha transitions (>10 opacity):
+  TOTAL 78,614 changed alpha pixels;
+  rows 0–339: 28, rows 340–409: 5,435,
+  rows 410–469: 18,267, rows 470–541: 54,884.
+  Bottom 132 rows therefore account for 73,151/78,614 = 93.05%.
+- Centerline upper thermal shields source X100–163/Y340–424 have 0
+  changed alpha pixels across all transitions: these should stay static.
+- Outer-facing upper apron edges change; lower rim tips and outline move.
+- Deepest opaque pixel envelope across frames in source rows 475–541:
+  image-left inner X50–94: 522–539 (17 px);
+  image-right inner X165–214: 519–538 (19 px);
+  image-left outer X8–44: 511–514 (3 px);
+  image-right outer X220–255: 508–514 (6 px).
+
+Motion proxy: four LOWER circumferential R16 fin tips now use Blender
+shape-key deformation driven by 64 source-measured lower alpha envelopes,
+scaled conservatively; upper four and every load-bearing root are STATIC.
+These are observed 2D envelopes, NOT recovered Wube hinge rig, joint axes,
+or exact pixel registration. Original full-color light frames are NOT used as
+motion input. The additive RGB glow remains its own working visualisation.
+
+A complete private local analysis package was assembled containing 64-body/
+64-glow synchronized GIF, region-motion heatmap, cue-frame pairs, and numbers.
+DO NOT commit private original or derivative raster graphics to this public
+repo. Source-neutral measurements and Blender approximation only.
+
+No Tech Priests production assets, gameplay or Lua altered. R18 requires
+independent source QA, actual Blender saved-scene verification and side-by-side
+visual comparison before treating the model revision as accepted.

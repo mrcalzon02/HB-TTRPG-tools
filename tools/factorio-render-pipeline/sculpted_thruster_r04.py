@@ -351,6 +351,11 @@ def build_thruster(name,w,h,root,p):
             name,root,p,{"tube":tube,"ellipsoid":ellipsoid},
             bpy.context.scene
         )
+        # R18: only lower observable apron tips vary across 64 real frames.
+        import vanilla_distal_motion_r18
+        vanilla_distal_motion_r18.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
