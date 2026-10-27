@@ -685,7 +685,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/dr-08.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl",
+        "member": "originals/dr-08.png",
+        "sizeBytes": 3159767,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_00000000a32c81f899944374d359dc45",
@@ -701,7 +712,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1yTX1-K9zPuPliDEHoVYDnpNC1gflfow4/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1yTX1-K9zPuPliDEHoVYDnpNC1gflfow4",
+        "sizeBytes": 3019738,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000b0b48230936031eaca24cc80",
@@ -720,7 +737,13 @@
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
       "sceneSequenceIds": [
         "SC-06"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1YurWIe8xMOruPmsQLLFYPR32lTgtJmib",
+        "sizeBytes": 3002311,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000004cf8823092c15a21ede7e6d1",
@@ -739,7 +762,13 @@
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
       "sceneSequenceIds": [
         "SC-06"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "13Vh-MDgV-fycRnmSJPR671hkHhuTtDrJ",
+        "sizeBytes": 3023415,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000003e04820cb7b533dbc8ddfece",
@@ -758,7 +787,13 @@
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
       "sceneSequenceIds": [
         "SC-06"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1YDdefPALlpuXlos2PYeKr_JRFqNsLsBs",
+        "sizeBytes": 3060296,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000004334823088c31d202c9a6204",
@@ -777,7 +812,13 @@
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
       "sceneSequenceIds": [
         "SC-06"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1XZNBFV9qUgsRIIUoxsffdX-34A_IvzSD",
+        "sizeBytes": 3219456,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000001ddc81f5b5ff1682b1b7e362",
@@ -796,7 +837,13 @@
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
       "sceneSequenceIds": [
         "SC-06"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "12W3hi9EjtEV6kl5T4qQTxphpZGmiLoAa",
+        "sizeBytes": 3119626,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000f63081fdbe5d5362b3518c53",
@@ -813,7 +860,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
-      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1cy1Lsx-LtFUnzDbijbD2weVIPyh7SjPC",
+        "sizeBytes": 3027468,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000fa5881fda2ac62a50ed022a7",
@@ -830,7 +883,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
-      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "15ZDw-JAMEjTVXlH9n0UGn9v9Ev2hAPfb",
+        "sizeBytes": 3091340,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000391081fd837be87d87144657",
@@ -847,7 +906,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
-      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1QbcWUtrjMbCX61i-erIs0EXzusZlADxO",
+        "sizeBytes": 3095536,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000094b081fda362eb3ca216d237",
@@ -863,7 +928,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1MCRlEYujzqvC8jfag9HEvOVpNWhb0RZW/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1MCRlEYujzqvC8jfag9HEvOVpNWhb0RZW",
+        "sizeBytes": 77419,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000808881f5aca910a9d6bd920e",
@@ -882,7 +953,13 @@
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
       "sceneSequenceIds": [
         "SC-09"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1eje5m0tRiXpQ1KOb4bXtsYgNUefSzxt3",
+        "sizeBytes": 3040688,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000ec4481fda21df20443d38dd7",
@@ -898,7 +975,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1_0iYYz90E37OlBxayZY1URetO-_RFEgh/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1_0iYYz90E37OlBxayZY1URetO-_RFEgh",
+        "sizeBytes": 85604,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000e74481fd83224b9773f7e1e7",
@@ -914,7 +997,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1or9lPsFIj51SQT695fB8NyKF9ZYzn398/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1or9lPsFIj51SQT695fB8NyKF9ZYzn398",
+        "sizeBytes": 2848906,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000054bc81fd9da31ee52e74b59c",
@@ -930,7 +1019,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1j-sN3LzztyCtozgRf3VQ8Z_monmlTvXg/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1j-sN3LzztyCtozgRf3VQ8Z_monmlTvXg",
+        "sizeBytes": 53153,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000003da882308fc7a919ba556e0f",
@@ -946,7 +1041,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1gsl-FbRTsZOd9yPA0H_O48BrR6Npyi5i/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1gsl-FbRTsZOd9yPA0H_O48BrR6Npyi5i",
+        "sizeBytes": 2987146,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000ab9081fd8650e62529e206be",
@@ -962,7 +1063,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1rM3m3skawWAwaYN0JSKI6Rhtu4C15qBE/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1rM3m3skawWAwaYN0JSKI6Rhtu4C15qBE",
+        "sizeBytes": 70039,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000026e081fd9585736ecebd8b4d",
@@ -981,7 +1088,13 @@
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
       "sceneSequenceIds": [
         "SC-04"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1fHLvJu8gEgzKbjZfNkASwuRAbNd3mcTJ",
+        "sizeBytes": 2959378,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000906c81fd8cc3d00f798bdae8",
@@ -1000,7 +1113,13 @@
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
       "sceneSequenceIds": [
         "SC-04"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1dk-PhHBXO1NPFhSql14YrUtLVc8dSPhf",
+        "sizeBytes": 3099648,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000f92481fdbff0db5dccc49237",
@@ -1019,7 +1138,13 @@
       "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
       "sceneSequenceIds": [
         "SC-04"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1fAFl2L-Mj8nzPAfJad2t2JAeJT-JdW86",
+        "sizeBytes": 3055376,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000009b108230b3ea21e5bea018eb",
@@ -1035,7 +1160,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1J1155Pr7jbi-KCd_bwYm3zXeeyLAE7OR/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1J1155Pr7jbi-KCd_bwYm3zXeeyLAE7OR",
+        "sizeBytes": 79613,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000daa081fdb43359de7d008c02",
@@ -1051,7 +1182,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1lyfI-teVgxKm1fGYh5duxIfWOvMQSKZj/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1lyfI-teVgxKm1fGYh5duxIfWOvMQSKZj",
+        "sizeBytes": 3035308,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000f02c81f5bbd34113e635bf89",
@@ -1067,7 +1204,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1tNOJBsciCe9JelUJeVXcelNNks9pvTr5/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1tNOJBsciCe9JelUJeVXcelNNks9pvTr5",
+        "sizeBytes": 2855700,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000e8b081fd88721860e8ac8f39",
@@ -1083,7 +1226,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1VG89F8C5jZoRH9-f2OdldGYWAB5NwkwV/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1VG89F8C5jZoRH9-f2OdldGYWAB5NwkwV",
+        "sizeBytes": 17029,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000826c81f59e3ad3fe4ac88c67",
@@ -1099,7 +1248,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1ahF-vhxxGBAOqnBGTTwW55Exb1HieY1Y/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1ahF-vhxxGBAOqnBGTTwW55Exb1HieY1Y",
+        "sizeBytes": 3441184,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000507481fda32786b06984a15f",
@@ -1115,7 +1270,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/10vwTNJPmM9F4LDWuD5fJgzUhHNAePmEn/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "10vwTNJPmM9F4LDWuD5fJgzUhHNAePmEn",
+        "sizeBytes": 64798,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000497481fdb9c8deef47bbf8ba",
@@ -1134,7 +1295,13 @@
       "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
       "sceneSequenceIds": [
         "SC-05"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1KU5t2ACGAp0BCPwd4fXTBwzWIRY_l9tN",
+        "sizeBytes": 2778791,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000057848230b0a9adfb5de333e7",
@@ -1153,7 +1320,13 @@
       "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
       "sceneSequenceIds": [
         "SC-05"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1ad5xWSpq58EeLbVk4p6q-Xp7_F0BBIxs",
+        "sizeBytes": 2727219,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000b83c81fd8a62d4cd65ae01c4",
@@ -1169,7 +1342,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1JCAP9Dzh0U3sIYkihfF2wMWImGrLvYzJ/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1JCAP9Dzh0U3sIYkihfF2wMWImGrLvYzJ",
+        "sizeBytes": 46516,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000009d3082309be6a1ef11732490",
@@ -1188,7 +1367,13 @@
       "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
       "sceneSequenceIds": [
         "SC-07"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "17zv0EYwjR6T8zd6K5O7YAq4iYeeIoZHb",
+        "sizeBytes": 2873300,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000022cc81f5b4efcf09578ae080",
@@ -1207,7 +1392,13 @@
       "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
       "sceneSequenceIds": [
         "SC-07"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "13kxs-E5avUAfot1IGt6GQ50v5ywl3J1m",
+        "sizeBytes": 3089498,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000001adc81f5aa63a3afcfe57734",
@@ -1223,7 +1414,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1LkUJXCFS2tEFXnb0ho42eWnbZ4hcQy_q/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1LkUJXCFS2tEFXnb0ho42eWnbZ4hcQy_q",
+        "sizeBytes": 254991,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000a414820ca092df0b1b946a4e",
@@ -1239,7 +1436,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1o86exoqIS3jAFDqTbceIrcyL8Gfo980G/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1o86exoqIS3jAFDqTbceIrcyL8Gfo980G",
+        "sizeBytes": 25469,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000550881f694afd876953bb99e",
@@ -1258,7 +1461,13 @@
       "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
       "sceneSequenceIds": [
         "SC-06"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1JT9lQhFj_2_xCL1t3iOcJjvlYgMFtwtm",
+        "sizeBytes": 3044033,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000009fcc81fdacd11bea79083bb8",
@@ -1277,7 +1486,13 @@
       "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
       "sceneSequenceIds": [
         "SC-06"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1lPzFwkS93ELwmPwSNNrICdiYiHndxop6",
+        "sizeBytes": 3075127,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000007f6081f8bbb698ff0eefc1e3",
@@ -1296,7 +1511,13 @@
       "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
       "sceneSequenceIds": [
         "SC-06"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1XQNpp7rYIrGOvMaOE4wZKriLfF90tYJe",
+        "sizeBytes": 2831190,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000600c81fdb574034a08b92e15",
@@ -1312,7 +1533,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1Kz6BRcwpeYiEMlAgSmfMy82OnxoEPsn2/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1Kz6BRcwpeYiEMlAgSmfMy82OnxoEPsn2",
+        "sizeBytes": 131290,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000b1ac81fd937aec6d192f02eb",
@@ -1331,7 +1558,13 @@
       "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
       "sceneSequenceIds": [
         "SC-06"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1mt2pc-e4l4aZBbCZ1uNIe4yto4OceSS-",
+        "sizeBytes": 2532799,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000f71c81f5b2d0dc127fe4bbd2",
@@ -1347,7 +1580,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1bmnS7_S-cu3VuMuQCCRbGy_-WSjDWbP_/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1bmnS7_S-cu3VuMuQCCRbGy_-WSjDWbP_",
+        "sizeBytes": 25469,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000b488820cabd38989e4fedf43",
@@ -1366,7 +1605,13 @@
       "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
       "sceneSequenceIds": [
         "SC-09"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1l_g52kPPWTx52kyw9aGBI5nnW7Lk6zTT",
+        "sizeBytes": 2787873,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000c35881f5bf27b135fc516ded",
@@ -1382,7 +1627,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1Ft6gnGtKGiQ2Lo-fnoXMMfkzSzHXpw7L/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1Ft6gnGtKGiQ2Lo-fnoXMMfkzSzHXpw7L",
+        "sizeBytes": 65665,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000434082308ae9abaec2ddd4b1",
@@ -1398,7 +1649,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1vgSRfkvQkDSz6bxuxwUyeHXId2mGVIjy/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1vgSRfkvQkDSz6bxuxwUyeHXId2mGVIjy",
+        "sizeBytes": 2711219,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000447481fdb7ac796abc9a1e8c",
@@ -1414,7 +1671,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1KhrSVRO-enHGelFUHDLvT4LNlZMorcWd/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1KhrSVRO-enHGelFUHDLvT4LNlZMorcWd",
+        "sizeBytes": 32699,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000e0b48230a1d67bbd39e14de8",
@@ -1430,7 +1693,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1J2lGdDxiiojSdwJR3hBOfYvji3UXxx_e/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1J2lGdDxiiojSdwJR3hBOfYvji3UXxx_e",
+        "sizeBytes": 2757285,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000039888230816201255c5423db",
@@ -1446,7 +1715,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1V0ftGodg3fYDDWxlgfFnaiZc924yIn5f/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1V0ftGodg3fYDDWxlgfFnaiZc924yIn5f",
+        "sizeBytes": 235359,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000003c7c8230b5cf1c94efdae761",
@@ -1462,7 +1737,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1weMuBffLGr9SHnYnL80HA6lk-cpjGsL0/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1weMuBffLGr9SHnYnL80HA6lk-cpjGsL0",
+        "sizeBytes": 2849469,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000369c81f6b8e138db3790de9c",
@@ -1478,7 +1759,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1VdFGVKryLYYHW2DvTDFn5qWUvIjXqqTS/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1VdFGVKryLYYHW2DvTDFn5qWUvIjXqqTS",
+        "sizeBytes": 67015,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000eb348230b898fb5b59058ec8",
@@ -1494,7 +1781,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1nScw_LWR2SZAntWn8yuWbJLrlUoqZlHW/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive."
+      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1nScw_LWR2SZAntWn8yuWbJLrlUoqZlHW",
+        "sizeBytes": 2531834,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000fb4c81f89c70957a702944c3",
@@ -1510,7 +1803,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1Bmv1dO76gjUh0cQvEJA8D4bmbOMj1uz1/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive."
+      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1Bmv1dO76gjUh0cQvEJA8D4bmbOMj1uz1",
+        "sizeBytes": 276555,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000d16c81fd926590d82a4882b3",
@@ -1526,7 +1825,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1nEJjWzUpVx010-_3x0fszVfQQWhHje-u/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive."
+      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1nEJjWzUpVx010-_3x0fszVfQQWhHje-u",
+        "sizeBytes": 2801782,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000e60481fdb5c7789251b83b60",
@@ -1542,7 +1847,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1xIJSb2iWkGD24_HTdNpN-T7vJXkpYbHB/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive."
+      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1xIJSb2iWkGD24_HTdNpN-T7vJXkpYbHB",
+        "sizeBytes": 48308,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000165c81f598afdfa2c82302b4",
@@ -1561,7 +1872,13 @@
       "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
       "sceneSequenceIds": [
         "SC-09"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1KVmQagzVNV5hVLuLiuwLHOWWeqap97Ju",
+        "sizeBytes": 3118731,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000008fc081f8b5644ced02b98aa9",
@@ -1577,7 +1894,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/12n10MDLZ3KaAa4x-5OHH16qdEYNsRwjn/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive."
+      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "12n10MDLZ3KaAa4x-5OHH16qdEYNsRwjn",
+        "sizeBytes": 44062,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000011f48230affcb25a25e23bc1",
@@ -1594,7 +1917,18 @@
       "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
       "sceneSequenceIds": [
         "SC-09"
-      ]
+      ],
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl",
+        "member": "originals/dr-09.png",
+        "sizeBytes": 3044279,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_0000000088e081fdbb923c8ce5f54746",
@@ -1610,7 +1944,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1np_JoU-vcFlsozysPewvAPEtccg7Jynk/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive."
+      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1np_JoU-vcFlsozysPewvAPEtccg7Jynk",
+        "sizeBytes": 2645203,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000755481fd9c92852825ded1ac",
@@ -1626,7 +1966,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1XOQKL0qAoNp1MD6AkY3fVRwE8HnNh94a/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive."
+      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1XOQKL0qAoNp1MD6AkY3fVRwE8HnNh94a",
+        "sizeBytes": 113213,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000006e0881fd8b4c45394a9e0555",
@@ -1641,7 +1987,7 @@
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
       "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
-      "originalDriveUrl": "https://drive.google.com/file/d/18BuTlVfE1_j830dFBsKqYiJfubPKHcrj/view",
+      "originalDriveUrl": "https://drive.google.com/file/d/18BuTlVfE1_j830dFBsKqYiJfubPKHcrj/view?usp=drivesdk",
       "originalDriveVerified": true,
       "appearanceAudit": {
         "reviewedAt": "2026-10-27",
@@ -1653,7 +1999,13 @@
       },
       "sceneSequenceIds": [
         "SC-03"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "18BuTlVfE1_j830dFBsKqYiJfubPKHcrj",
+        "sizeBytes": 3227294,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000bc90820cb2e1bbfda264e7e1",
@@ -1668,7 +2020,7 @@
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
       "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
-      "originalDriveUrl": "https://drive.google.com/file/d/14Hv9H9XLo2OAuHDk-49CtlXnMWHvsqe3/view",
+      "originalDriveUrl": "https://drive.google.com/file/d/14Hv9H9XLo2OAuHDk-49CtlXnMWHvsqe3/view?usp=drivesdk",
       "originalDriveVerified": true,
       "appearanceAudit": {
         "reviewedAt": "2026-10-27",
@@ -1680,7 +2032,13 @@
       },
       "sceneSequenceIds": [
         "SC-02"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "14Hv9H9XLo2OAuHDk-49CtlXnMWHvsqe3",
+        "sizeBytes": 3175899,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000302481f5acaa82062258b625",
@@ -1695,7 +2053,7 @@
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
       "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
-      "originalDriveUrl": "https://drive.google.com/file/d/1MrwbmMbO_Kw5Xkw5hgSMK0E0jkaDITwf/view",
+      "originalDriveUrl": "https://drive.google.com/file/d/1MrwbmMbO_Kw5Xkw5hgSMK0E0jkaDITwf/view?usp=drivesdk",
       "originalDriveVerified": true,
       "appearanceAudit": {
         "reviewedAt": "2026-10-27",
@@ -1707,7 +2065,13 @@
       },
       "sceneSequenceIds": [
         "SC-02"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1MrwbmMbO_Kw5Xkw5hgSMK0E0jkaDITwf",
+        "sizeBytes": 3147137,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000183881f583907b387b53331a",
@@ -1722,7 +2086,7 @@
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
       "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
-      "originalDriveUrl": "https://drive.google.com/file/d/1yHQxQ0YrCLiHXe5vn5yQYcNWm-FFs3-B/view",
+      "originalDriveUrl": "https://drive.google.com/file/d/1yHQxQ0YrCLiHXe5vn5yQYcNWm-FFs3-B/view?usp=drivesdk",
       "originalDriveVerified": true,
       "appearanceAudit": {
         "reviewedAt": "2026-10-27",
@@ -1734,7 +2098,13 @@
       },
       "sceneSequenceIds": [
         "SC-02"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1yHQxQ0YrCLiHXe5vn5yQYcNWm-FFs3-B",
+        "sizeBytes": 3200751,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000a96481f58a0a2bdfa0777b9b",
@@ -1749,7 +2119,7 @@
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
       "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
-      "originalDriveUrl": "https://drive.google.com/file/d/1uHlq0n6cqcGm-X2pTdxA6mmiFEpt58Rb/view",
+      "originalDriveUrl": "https://drive.google.com/file/d/1uHlq0n6cqcGm-X2pTdxA6mmiFEpt58Rb/view?usp=drivesdk",
       "originalDriveVerified": true,
       "appearanceAudit": {
         "reviewedAt": "2026-10-27",
@@ -1761,7 +2131,13 @@
       },
       "sceneSequenceIds": [
         "SC-02"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1uHlq0n6cqcGm-X2pTdxA6mmiFEpt58Rb",
+        "sizeBytes": 2973646,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000a0748230b5d7d7b567c14e47",
@@ -1776,7 +2152,7 @@
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
       "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
-      "originalDriveUrl": "https://drive.google.com/file/d/1PJVPEeUkTOHLipmIA1x8zPpsRwriRgLK/view",
+      "originalDriveUrl": "https://drive.google.com/file/d/1PJVPEeUkTOHLipmIA1x8zPpsRwriRgLK/view?usp=drivesdk",
       "originalDriveVerified": true,
       "appearanceAudit": {
         "reviewedAt": "2026-10-27",
@@ -1788,7 +2164,13 @@
       },
       "sceneSequenceIds": [
         "SC-03"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1PJVPEeUkTOHLipmIA1x8zPpsRwriRgLK",
+        "sizeBytes": 3131620,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000000b78820c973f9fb6ac03bb98",
@@ -1803,7 +2185,7 @@
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
       "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
-      "originalDriveUrl": "https://drive.google.com/file/d/1g5uLXCSM8UIE57UzEE23T0hFkAFFdleh/view",
+      "originalDriveUrl": "https://drive.google.com/file/d/1g5uLXCSM8UIE57UzEE23T0hFkAFFdleh/view?usp=drivesdk",
       "originalDriveVerified": true,
       "appearanceAudit": {
         "reviewedAt": "2026-10-27",
@@ -1815,7 +2197,13 @@
       },
       "sceneSequenceIds": [
         "SC-03"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1g5uLXCSM8UIE57UzEE23T0hFkAFFdleh",
+        "sizeBytes": 2852103,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000008ce08230807c16765e2d3ff0",
@@ -1830,7 +2218,7 @@
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
       "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
-      "originalDriveUrl": "https://drive.google.com/file/d/10xYwpzGDz4IO86RnsY06zQTsYMP2L8tB/view",
+      "originalDriveUrl": "https://drive.google.com/file/d/10xYwpzGDz4IO86RnsY06zQTsYMP2L8tB/view?usp=drivesdk",
       "originalDriveVerified": true,
       "appearanceAudit": {
         "reviewedAt": "2026-10-27",
@@ -1842,7 +2230,13 @@
       },
       "sceneSequenceIds": [
         "SC-03"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "10xYwpzGDz4IO86RnsY06zQTsYMP2L8tB",
+        "sizeBytes": 3057203,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000121881f6a4d178d0aaa6be63",
@@ -1860,7 +2254,15 @@
       "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
       "sceneSequenceIds": [
         "SC-01"
-      ]
+      ],
+      "originalDriveUrl": "https://drive.google.com/file/d/14qvIITs-oQ4AzcmNnA14-Ybs9FVuYt_v/view?usp=drivesdk",
+      "originalDriveVerified": true,
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "14qvIITs-oQ4AzcmNnA14-Ybs9FVuYt_v",
+        "sizeBytes": 3556402,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000bb1081f48f89b269379dfd13",
@@ -1878,7 +2280,15 @@
       "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
       "sceneSequenceIds": [
         "SC-01"
-      ]
+      ],
+      "originalDriveUrl": "https://drive.google.com/file/d/1GoHCTTt2LXOsGlkgSyGv_kZnU3MDk6Ut/view?usp=drivesdk",
+      "originalDriveVerified": true,
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1GoHCTTt2LXOsGlkgSyGv_kZnU3MDk6Ut",
+        "sizeBytes": 3111813,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000004ba88230a0b2d8530752f76f",
@@ -1896,7 +2306,15 @@
       "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
       "sceneSequenceIds": [
         "SC-01"
-      ]
+      ],
+      "originalDriveUrl": "https://drive.google.com/file/d/1ZOvYjXV8kKawSXUr5QE3lk6ga4QYCtqJ/view?usp=drivesdk",
+      "originalDriveVerified": true,
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1ZOvYjXV8kKawSXUr5QE3lk6ga4QYCtqJ",
+        "sizeBytes": 2746323,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000127081f5be39d41502d07a1d",
@@ -1911,7 +2329,15 @@
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
       "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
-      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
+      "originalDriveUrl": "https://drive.google.com/file/d/1eQaIRasc36Q8Nnx55zu_esZeIJfllpG9/view?usp=drivesdk",
+      "originalDriveVerified": true,
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1eQaIRasc36Q8Nnx55zu_esZeIJfllpG9",
+        "sizeBytes": 3002096,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000057e8820c9d942e574d26c4d3",
@@ -1928,7 +2354,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
-      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1INuFFZnBT2nXDJwbiVWVP0YLr4uMe4n7",
+        "sizeBytes": 2910950,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000008a1481f4a68f34e77eb27034",
@@ -1945,7 +2377,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
-      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "10cqcBKtLLbN6pSd602_-nMiZiQ9vXxNd",
+        "sizeBytes": 3136170,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000bf3082308e0e09c462626c51",
@@ -1962,7 +2400,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
-      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1DpclJv_RkZx_AhqFgywUwy3iZMe6PXMo",
+        "sizeBytes": 3036096,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000cef8823091c9c51936b7510d",
@@ -1976,7 +2420,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/dr-07.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl",
+        "member": "originals/dr-07.png",
+        "sizeBytes": 3296309,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_00000000920082308a5aae6dbb2ecbf9",
@@ -1995,7 +2450,13 @@
       "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
       "sceneSequenceIds": [
         "SC-08"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1HTRuEk4HWZKGFqIE6AmKpOCQQthgEIep",
+        "sizeBytes": 3297259,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000859c8230bfd48232c0b67f35",
@@ -2014,7 +2475,13 @@
       "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
       "sceneSequenceIds": [
         "SC-08"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "18m_3jIIAVKvEnV263cOmik4j173soUIc",
+        "sizeBytes": 3359080,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000096dc8230b670c6d2a08c45e7",
@@ -2031,7 +2498,18 @@
       "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
       "sceneSequenceIds": [
         "SC-08"
-      ]
+      ],
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl",
+        "member": "originals/dr-06.png",
+        "sizeBytes": 3434973,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_000000006dc481fd89b6bd11148e68b0",
@@ -2048,7 +2526,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
-      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1noCDXBsc7z9OK_q8LkGDA093vkZQAKFZ",
+        "sizeBytes": 3228541,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000006c348230b240f095ef40ff46",
@@ -2065,7 +2549,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
-      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1VqNdgibAoxy9d7wKtQJpnbqJa880UAEh",
+        "sizeBytes": 3235962,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000036b881fdba24f621e3d45d45",
@@ -2082,7 +2572,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
-      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1t3J3Hrt76lDXc3Ie0NTGDRC-7damQf07",
+        "sizeBytes": 3330189,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000002a1082308447739e2edecf89",
@@ -2099,7 +2595,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
-      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1S2Moh1Ce3cf22Z_VUyvQiNlY2QR3cLyA",
+        "sizeBytes": 3366204,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000060c81fdb6225767ec61f92f",
@@ -2116,7 +2618,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
-      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1fXpn4yuVp9ugG2lF6QmzuwKHawjBDH7j",
+        "sizeBytes": 3576018,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000f34881fd8f80b0bb14e53372",
@@ -2132,7 +2640,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/13JVVgcL8MLbVVS2oSwD1t_IieIeGkPor/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "13JVVgcL8MLbVVS2oSwD1t_IieIeGkPor",
+        "sizeBytes": 3082632,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000f224823086dd0c37346f2957",
@@ -2148,7 +2662,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1NAz_JxBGMPLmFcEXsI07DeDRCX5LqDV8/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1NAz_JxBGMPLmFcEXsI07DeDRCX5LqDV8",
+        "sizeBytes": 100206,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000c7a48230a1d021db4dcb5e3c",
@@ -2164,7 +2684,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1OUqwMZZr7QBG3OFgp7Wc89AaQqUoi2ti/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1OUqwMZZr7QBG3OFgp7Wc89AaQqUoi2ti",
+        "sizeBytes": 2965614,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000193081fdb62a07cadafa2133",
@@ -2180,7 +2706,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/13MX19sSD-1eA4n4q7eYJ10ZUco_u6t3j/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "13MX19sSD-1eA4n4q7eYJ10ZUco_u6t3j",
+        "sizeBytes": 3021814,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000f21c82309eb36020da066ca1",
@@ -2196,7 +2728,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1T4Mcwt587bRugiMUnp1amX3LdajrZaOk/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1T4Mcwt587bRugiMUnp1amX3LdajrZaOk",
+        "sizeBytes": 2972428,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000b75881fdad6f79b8c1b643b2",
@@ -2212,7 +2750,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1926VEuRPPG7pwAAoMyHaqXqcLZxrBdlw/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1926VEuRPPG7pwAAoMyHaqXqcLZxrBdlw",
+        "sizeBytes": 2902317,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000f70c82308542f91625be2895",
@@ -2228,7 +2772,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1NDGyO7OXR772Rr6Fo2miZQ3oKW18ZC9h/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1NDGyO7OXR772Rr6Fo2miZQ3oKW18ZC9h",
+        "sizeBytes": 3725628,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000052d882309d4d91c076ac02b1",
@@ -2244,7 +2794,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1LGt2Z9ju_ACC_xKKtbMJJj85ih0do4mG/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1LGt2Z9ju_ACC_xKKtbMJJj85ih0do4mG",
+        "sizeBytes": 3725628,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000cfe4823095e5bd0f037bb605",
@@ -2260,7 +2816,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1gwjsj0yGdnsNSPLfd5QxIzNwG3pt9lxW/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1gwjsj0yGdnsNSPLfd5QxIzNwG3pt9lxW",
+        "sizeBytes": 3038117,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000031d881f78c1a1f8f26610e34",
@@ -2276,7 +2838,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/13SGbpiV6tO8xXqunYKLToeBjAacMLWWQ/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "13SGbpiV6tO8xXqunYKLToeBjAacMLWWQ",
+        "sizeBytes": 111154,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000739081fd840685f428e61441",
@@ -2292,7 +2860,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1iWmTQiaHe5KDFHdgOz5lqa1CotQdBhgk/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1iWmTQiaHe5KDFHdgOz5lqa1CotQdBhgk",
+        "sizeBytes": 3097937,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000016e88230887a225347f15d5d",
@@ -2308,7 +2882,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1pfG1eEVv70OYQvjKxpIrDNRaE2WKYDbX/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1pfG1eEVv70OYQvjKxpIrDNRaE2WKYDbX",
+        "sizeBytes": 2892258,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000007f481fdb6e6d513298da5c5",
@@ -2324,7 +2904,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1OYd7Ey3J1Xc_Z6gPSQW4IJ3ou0agg_9_/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1OYd7Ey3J1Xc_Z6gPSQW4IJ3ou0agg_9_",
+        "sizeBytes": 2909377,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000004b9481fdbf2d5961f1c58534",
@@ -2340,7 +2926,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1sKP3c2DRBaS_kQzpkEHyKhe5QKVckTzo/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1sKP3c2DRBaS_kQzpkEHyKhe5QKVckTzo",
+        "sizeBytes": 2975549,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000ac8482308dddec11f755199f",
@@ -2356,7 +2948,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1sXL7JGagKk81nU4mAqherZo_Nq7vz2Dl/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1sXL7JGagKk81nU4mAqherZo_Nq7vz2Dl",
+        "sizeBytes": 3060661,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000097d881fdbd0a3574453d8ef5",
@@ -2372,7 +2970,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1n3CnOuxAsYogU3Yd1IpzTxRNzmDSjdgV/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1n3CnOuxAsYogU3Yd1IpzTxRNzmDSjdgV",
+        "sizeBytes": 3034587,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000907082309419963f23537b77",
@@ -2388,7 +2992,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1VkPYJCNzWnatisT4eH-q8QijpSynuYgR/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1VkPYJCNzWnatisT4eH-q8QijpSynuYgR",
+        "sizeBytes": 3029069,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000000c2081fdb6ad754545ca46f1",
@@ -2404,7 +3014,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1U23CCROUm3M4IV_sf_NFJehUPORu7uvt/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1U23CCROUm3M4IV_sf_NFJehUPORu7uvt",
+        "sizeBytes": 2296345,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000003c80820ca16ead5e3987e0b0",
@@ -2420,7 +3036,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1U8BLORvX2gXndRMYaNXj8W71nvFuD78V/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1U8BLORvX2gXndRMYaNXj8W71nvFuD78V",
+        "sizeBytes": 2472139,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000cf5481fd852b2bd4e2f44a63",
@@ -2436,7 +3058,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1KIjM-CErGlrlng6jETPHDQNvejI574DX/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1KIjM-CErGlrlng6jETPHDQNvejI574DX",
+        "sizeBytes": 49830,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000a05081f89b7a7a30bd0e7ec0",
@@ -2452,7 +3080,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1RyTi8A30u4Eh3D8Fx06Wkn9MiGasoYtJ/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1RyTi8A30u4Eh3D8Fx06Wkn9MiGasoYtJ",
+        "sizeBytes": 2667162,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000369081fdba4592cfaba0e90b",
@@ -2468,7 +3102,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1IXLKZ9V9A_hayutdl8NJvKgbG1kQ4j2_/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1IXLKZ9V9A_hayutdl8NJvKgbG1kQ4j2_",
+        "sizeBytes": 2639359,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000004cb48230836dbc3fdc8712c4",
@@ -2484,7 +3124,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1WIvrdGXG-fVjCKQ5HdrI65OEndtKKrNc/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1WIvrdGXG-fVjCKQ5HdrI65OEndtKKrNc",
+        "sizeBytes": 39998,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000009fe081f8bd741d3ebf1efb5c",
@@ -2500,7 +3146,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1cAJIJ4Yj_U7OL-sLtLgAqEF4-irKlbD2/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1cAJIJ4Yj_U7OL-sLtLgAqEF4-irKlbD2",
+        "sizeBytes": 3078775,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000067e081f8b367d59c5543f410",
@@ -2516,7 +3168,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1SEaux0uGYUZUnMyqYaczMHZAJwsCH9yj/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1SEaux0uGYUZUnMyqYaczMHZAJwsCH9yj",
+        "sizeBytes": 64741,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000f86c81fd8df37a06f4267f56",
@@ -2532,7 +3190,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1k8OcwIgMwZPi5EChTUrZ3ZUD6MP1I4_G/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1k8OcwIgMwZPi5EChTUrZ3ZUD6MP1I4_G",
+        "sizeBytes": 3100565,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000001e2c81f5b859e4a640a4e225",
@@ -2548,7 +3212,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1CExhHWISdHQ3i3wICagN_cLazStPWQ2K/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1CExhHWISdHQ3i3wICagN_cLazStPWQ2K",
+        "sizeBytes": 56170,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000275081fdb212f1e492bd136b",
@@ -2564,7 +3234,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1zwJEzWP7ONCqUqpXZ5ZvqG7T08u8qzB0/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1zwJEzWP7ONCqUqpXZ5ZvqG7T08u8qzB0",
+        "sizeBytes": 3131707,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000001e4481fd8df8b378ba57fca2",
@@ -2580,7 +3256,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1wbX4Ngjzg3iYmeDArAHXjRMoJzpDklEN/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1wbX4Ngjzg3iYmeDArAHXjRMoJzpDklEN",
+        "sizeBytes": 64798,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000001b7081fdac7c0daaf0f39de4",
@@ -2596,7 +3278,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1pPQfl-ToD4SDXKTF3EBJDf1Yh5ac2OOs/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1pPQfl-ToD4SDXKTF3EBJDf1Yh5ac2OOs",
+        "sizeBytes": 2665784,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000ced081f5b71dacb3f2794b7f",
@@ -2612,7 +3300,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1PADY5ZJ0oTL2fZavwh1f_xEWzqMHr-kK/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1PADY5ZJ0oTL2fZavwh1f_xEWzqMHr-kK",
+        "sizeBytes": 2724469,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000095c81fd86d00bde586ab005",
@@ -2626,7 +3320,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/dr-05.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl",
+        "member": "originals/dr-05.png",
+        "sizeBytes": 3256793,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_000000003788820caf3a7345aa3b3c48",
@@ -2642,7 +3347,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/139m39JQAwqFdFuYpHsoG4dFGpuxzzvZ0/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "139m39JQAwqFdFuYpHsoG4dFGpuxzzvZ0",
+        "sizeBytes": 2749568,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000127081f5accf3a1f6101e9ff",
@@ -2658,7 +3369,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1pvBfkldeBe1FTdhIXMaK19Ej1RGk_NNl/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1pvBfkldeBe1FTdhIXMaK19Ej1RGk_NNl",
+        "sizeBytes": 3072679,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000528c81f5b4d1af4bc3f09691",
@@ -2674,7 +3391,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1w-bg6VMz5PFQM4wGN9pyDfda2dDosnL9/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1w-bg6VMz5PFQM4wGN9pyDfda2dDosnL9",
+        "sizeBytes": 91287,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000127481f5909c3e442d01c633",
@@ -2690,7 +3413,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1zIrcuMsgFKN6bslD8ldoChTkjfsPLetH/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1zIrcuMsgFKN6bslD8ldoChTkjfsPLetH",
+        "sizeBytes": 2992793,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000cf4881fd89bd85cf6dce108c",
@@ -2706,7 +3435,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1LXANbKNWc1_ZMrKhLw8qI6mizgD-aUkT/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1LXANbKNWc1_ZMrKhLw8qI6mizgD-aUkT",
+        "sizeBytes": 329587,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000de6481fd93612d46a906d4b5",
@@ -2722,7 +3457,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1Xy8joLrCkLaYtusP2Xf0eDK7ewT5lrxm/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1Xy8joLrCkLaYtusP2Xf0eDK7ewT5lrxm",
+        "sizeBytes": 3165333,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000205881f5bf708a3a916643c3",
@@ -2738,7 +3479,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1CV2koap8tiJJ_5kRC3OVGXKpQZQk5033/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1CV2koap8tiJJ_5kRC3OVGXKpQZQk5033",
+        "sizeBytes": 3160520,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000009c288230a4af8ace0c776cea",
@@ -2754,7 +3501,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1V9U0jO2NYNTKICi6BFMcrXvq6XxBdiF4/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1V9U0jO2NYNTKICi6BFMcrXvq6XxBdiF4",
+        "sizeBytes": 52371,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000290c81fdbb5520209946d77b",
@@ -2770,7 +3523,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1c_38a2DzyO-8BCQvHIbm8_9bVlvvXGDo/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1c_38a2DzyO-8BCQvHIbm8_9bVlvvXGDo",
+        "sizeBytes": 2692872,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000518081f59a63d1986ee32276",
@@ -2786,7 +3545,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/12sV7A8zgKmWhdWrbX9LG87jfXlp5V2tJ/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "12sV7A8zgKmWhdWrbX9LG87jfXlp5V2tJ",
+        "sizeBytes": 140946,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000eb8882308a086fd151380ef5",
@@ -2802,7 +3567,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1kszn3W-UqWPAsW8052qqu2X9zUwIG9CU/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1kszn3W-UqWPAsW8052qqu2X9zUwIG9CU",
+        "sizeBytes": 2751689,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000731481fda4f5e5f23231d0cb",
@@ -2818,7 +3589,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/175AQ4CrjliyL_F_jJK2F_ZSFgE2oliDK/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "175AQ4CrjliyL_F_jJK2F_ZSFgE2oliDK",
+        "sizeBytes": 58184,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000007ef481fda5efb3e5cffbeddb",
@@ -2834,7 +3611,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1ME5ulyATK0WymVXNcLrNI6T7jLFSEXe6/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1ME5ulyATK0WymVXNcLrNI6T7jLFSEXe6",
+        "sizeBytes": 2856653,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000b99881fda7c670a7d072dfd0",
@@ -2850,7 +3633,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/17Q4vKdnUt8hNdXjpqdvzVkGece_CmDnh/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "17Q4vKdnUt8hNdXjpqdvzVkGece_CmDnh",
+        "sizeBytes": 2665055,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000415081fdb592caa5de09776e",
@@ -2866,7 +3655,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/15tfRr8dqHlQjEPJ_MICr0xTY4f2XgCef/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "15tfRr8dqHlQjEPJ_MICr0xTY4f2XgCef",
+        "sizeBytes": 58240,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000229c8230b4e70f8351624cbf",
@@ -2882,7 +3677,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1kmK5jB-VrhpIwpGCEOc9wII-1PNPJZhV/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1kmK5jB-VrhpIwpGCEOc9wII-1PNPJZhV",
+        "sizeBytes": 2911207,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000000e0c8230aef901457a5151ed",
@@ -2898,7 +3699,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1MW5w432azN6oxxhDiT6RpXfWJWJ1vLS2/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1MW5w432azN6oxxhDiT6RpXfWJWJ1vLS2",
+        "sizeBytes": 67284,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000a11081fd8b0a20d80525db04",
@@ -2914,7 +3721,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1ND8CuRcIfCGch3HvvuPAZTu5GNXYpr-B/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1ND8CuRcIfCGch3HvvuPAZTu5GNXYpr-B",
+        "sizeBytes": 2794603,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000c35482308470f9645969e09a",
@@ -2930,7 +3743,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1p843hWYzQXqbS0llbD2Z5rpNlBEB1ixp/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1p843hWYzQXqbS0llbD2Z5rpNlBEB1ixp",
+        "sizeBytes": 583918,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000049081fdb607d805dc3c65fa",
@@ -2946,7 +3765,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1XpbLCM-LB5F8eXV3YuSrogJGohm-Vdg9/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1XpbLCM-LB5F8eXV3YuSrogJGohm-Vdg9",
+        "sizeBytes": 3199808,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000804c81fd88d8faec3ff2fd42",
@@ -2962,7 +3787,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1Z_RWEYl9aChEnA-d2mxopWhXcbnTP2KI/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1Z_RWEYl9aChEnA-d2mxopWhXcbnTP2KI",
+        "sizeBytes": 171710,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000031f48230b79cc5a1bdd4d436",
@@ -2978,7 +3809,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/14cg4m-SHTdlS6NKt0Avk2bvCXyUfQt8L/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "14cg4m-SHTdlS6NKt0Avk2bvCXyUfQt8L",
+        "sizeBytes": 3269858,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000009c18823080a47b6f88f263b4",
@@ -2994,7 +3831,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1kscqioSmxCvO3dR7euDwUMtk97b9RtNF/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1kscqioSmxCvO3dR7euDwUMtk97b9RtNF",
+        "sizeBytes": 2983457,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000005d5481fd86f8502118827a2e",
@@ -3010,7 +3853,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1gMCTuFCysQuNBTS-8rBvCtsZ43U6lUqb/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1gMCTuFCysQuNBTS-8rBvCtsZ43U6lUqb",
+        "sizeBytes": 3502587,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000056f08230bdbc24baa6e16357",
@@ -3026,7 +3875,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1j-UapKdKyvzZ2debMdyobuwFcwEMiJEv/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1j-UapKdKyvzZ2debMdyobuwFcwEMiJEv",
+        "sizeBytes": 2966958,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000054408230bbbea741c2939e8a",
@@ -3042,7 +3897,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1HIF6CiNEpnOJdndmjhCioMLD42qXT51Y/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1HIF6CiNEpnOJdndmjhCioMLD42qXT51Y",
+        "sizeBytes": 2735441,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000691c81fd8b3cdfd973cccb08",
@@ -3058,7 +3919,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1AoXrdnM57SS9djdq81Okexri3j5cfC06/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1AoXrdnM57SS9djdq81Okexri3j5cfC06",
+        "sizeBytes": 2723309,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000d9d881fda8fc40a3bf695352",
@@ -3074,7 +3941,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1XIJU3VNghxwR8XvjL1JtvuroJBbCyed0/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1XIJU3VNghxwR8XvjL1JtvuroJBbCyed0",
+        "sizeBytes": 2557180,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000000cf0823083434bc676c2d678",
@@ -3090,7 +3963,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1Jsq-QqgF-hQkBzHmd_tfVccE88ijqNff/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1Jsq-QqgF-hQkBzHmd_tfVccE88ijqNff",
+        "sizeBytes": 2814558,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000358c823094507b63d4c65b5a",
@@ -3106,7 +3985,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1G7vwNIC0woy4ZExMoo8Jvmqt7yzD3Vtu/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1G7vwNIC0woy4ZExMoo8Jvmqt7yzD3Vtu",
+        "sizeBytes": 2897464,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000547c81fd8f27d1a625e71ae1",
@@ -3122,7 +4007,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1ahI9_FajN2d7SkPPkTdn3ft1-OUWdQdb/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1ahI9_FajN2d7SkPPkTdn3ft1-OUWdQdb",
+        "sizeBytes": 2980594,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000e6dc81fd90991b33ddffb305",
@@ -3138,7 +4029,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1AydfZS6X2BGAd0TvetwfjnNZEM5lDx3f/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1AydfZS6X2BGAd0TvetwfjnNZEM5lDx3f",
+        "sizeBytes": 2675824,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000011148230af1767b724d07050",
@@ -3154,7 +4051,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1wLPRVQBl6_lLurcD5EwAMQGwGf6DawpP/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1wLPRVQBl6_lLurcD5EwAMQGwGf6DawpP",
+        "sizeBytes": 2785080,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000e3d88230831205905679df3a",
@@ -3168,7 +4071,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/dr-04.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl",
+        "member": "originals/dr-04.png",
+        "sizeBytes": 2757199,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_000000000980823094517fb44d8b9eb2",
@@ -3185,7 +4099,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
-      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1Xqq7eV5t6S801OnVfz0XjO9XZZaa2eH9",
+        "sizeBytes": 3065112,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000a14881fda7f850a3b1a81683",
@@ -3202,7 +4122,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
-      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1nK8TyD0LOn-p-UaPzYMfVAJ_SKACzI80",
+        "sizeBytes": 2759675,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000000cb881fd9ba603cbcb7691a1",
@@ -3218,7 +4144,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1DYZbMuYJ_lorc4ZPrEhkHcHgkB4TZtR-/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1DYZbMuYJ_lorc4ZPrEhkHcHgkB4TZtR-",
+        "sizeBytes": 2986100,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000008a9481fdbfcbd5bb7f0d4886",
@@ -3232,7 +4164,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/dr-03.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl",
+        "member": "originals/dr-03.png",
+        "sizeBytes": 2982312,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_00000000e52c81fd9a218b29d3602c74",
@@ -3246,7 +4189,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/dr-02.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl",
+        "member": "originals/dr-02.png",
+        "sizeBytes": 2870026,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_00000000b3d081fd8f588efb4baac3b5",
@@ -3260,7 +4214,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/dr-01.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl",
+        "member": "originals/dr-01.png",
+        "sizeBytes": 2914561,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_0000000008fc81fdb1cbdd91f452fd94",
@@ -3274,7 +4239,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/arcane-spellbound-cathedral.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/17xZLYYqotUUy16ELmaaYwGKazaEc7iNz/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz",
+        "member": "originals/arcane-spellbound-cathedral.png",
+        "sizeBytes": 3587522,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_00000000cc708230bb8c7149bef6dd9d",
@@ -3288,7 +4264,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/nature-enchanted-garden.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/17xZLYYqotUUy16ELmaaYwGKazaEc7iNz/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz",
+        "member": "originals/nature-enchanted-garden.png",
+        "sizeBytes": 3498021,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_000000002e3082309b9e01bd35c833e3",
@@ -3302,7 +4289,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/moonshadow-midnight-silver.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/17xZLYYqotUUy16ELmaaYwGKazaEc7iNz/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz",
+        "member": "originals/moonshadow-midnight-silver.png",
+        "sizeBytes": 3411882,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_0000000060e481fdb85adc3d2cf701f6",
@@ -3316,7 +4314,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/sunlight-golden-radiance.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/17xZLYYqotUUy16ELmaaYwGKazaEc7iNz/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz",
+        "member": "originals/sunlight-golden-radiance.png",
+        "sizeBytes": 3032138,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_0000000070748230a5ee8b4cc654d200",
@@ -3330,7 +4339,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/ice-crystal-court.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/17xZLYYqotUUy16ELmaaYwGKazaEc7iNz/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz",
+        "member": "originals/ice-crystal-court.png",
+        "sizeBytes": 3027725,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_000000008ee881fdbcae4080013cd839",
@@ -3344,7 +4364,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/lightning-palace-storm.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/17xZLYYqotUUy16ELmaaYwGKazaEc7iNz/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz",
+        "member": "originals/lightning-palace-storm.png",
+        "sizeBytes": 2998644,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_000000000f5481fd959085b4977728f4",
@@ -3358,7 +4389,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/air-sky-palace.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/17xZLYYqotUUy16ELmaaYwGKazaEc7iNz/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz",
+        "member": "originals/air-sky-palace.png",
+        "sizeBytes": 2763671,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_00000000015c81fd968c8893edcecd45",
@@ -3372,7 +4414,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/earth-verdant-stone.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/17xZLYYqotUUy16ELmaaYwGKazaEc7iNz/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz",
+        "member": "originals/earth-verdant-stone.png",
+        "sizeBytes": 2922782,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_00000000ab2081fdbf6ee094f95c29bd",
@@ -3386,7 +4439,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/water-azure-tide.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/17xZLYYqotUUy16ELmaaYwGKazaEc7iNz/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz",
+        "member": "originals/water-azure-tide.png",
+        "sizeBytes": 2905430,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_00000000238881fdb4e40212a7530598",
@@ -3400,7 +4464,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/fire-ruby-crown.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/17xZLYYqotUUy16ELmaaYwGKazaEc7iNz/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz",
+        "member": "originals/fire-ruby-crown.png",
+        "sizeBytes": 2666390,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_00000000205881fdab1714d353ab14c8",
@@ -3417,7 +4492,15 @@
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
       "sceneSequenceIds": [
         "SC-10"
-      ]
+      ],
+      "originalDriveUrl": "https://drive.google.com/file/d/1ImoIga6c2aLKmYH4rlh8PnLoCA72yUQQ/view?usp=drivesdk",
+      "originalDriveVerified": true,
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1ImoIga6c2aLKmYH4rlh8PnLoCA72yUQQ",
+        "sizeBytes": 3600833,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000008fa881fd86e39223aa6a14e5",
@@ -3434,7 +4517,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
-      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1hq4k1MAq5y-FxF1N90pcjNCWlS-ogfXf",
+        "sizeBytes": 2670304,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000c16882309db070701d92e090",
@@ -3453,7 +4542,13 @@
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
       "sceneSequenceIds": [
         "SC-10"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1_BlAu8l1NxUi232j9DV6edQiMi86veUf",
+        "sizeBytes": 3444907,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000646881fda4eaafa2bacc0f51",
@@ -3472,7 +4567,13 @@
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
       "sceneSequenceIds": [
         "SC-10"
-      ]
+      ],
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1plel9tDhuStgKHAW8fOCjm2sVMzW3jHK",
+        "sizeBytes": 3626695,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000005f94823082058f0d1c138dce",
@@ -3489,7 +4590,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
-      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1Z_zhAzijglwbmtGHRWI7CrdWlW_1ZR1e",
+        "sizeBytes": 2586916,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000003c8c823099821d1eeb132d76",
@@ -3505,7 +4612,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1hg2r8tyS7tY4fbSDImKZnCAiPjp3Nn7j/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1hg2r8tyS7tY4fbSDImKZnCAiPjp3Nn7j",
+        "sizeBytes": 2565327,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000cd90823087af8086426cf089",
@@ -3521,7 +4634,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/17ImjKnmE-TgNUk6AJxPTTgYpk7RmGgsr/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "17ImjKnmE-TgNUk6AJxPTTgYpk7RmGgsr",
+        "sizeBytes": 3400919,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000c56c823083612fee67f5d0e0",
@@ -3538,7 +4657,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
-      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1RPHWcRA7-WOjRER_cXMgJ4nl94BIlbv0",
+        "sizeBytes": 2731104,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_00000000915c81fd89a1b58b4a94fe7d",
@@ -3555,7 +4680,13 @@
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
       "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
-      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "10IRDg1q-JR-UR_Wi5ntNVPDF7hSMWvP2",
+        "sizeBytes": 2763973,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000010e08230bd486c0bdd8738e4",
@@ -3571,7 +4702,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1YQfK5mJqoqZJdkCXDN0cSBYyD4gzksDf/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1YQfK5mJqoqZJdkCXDN0cSBYyD4gzksDf",
+        "sizeBytes": 3665731,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000017548230af49901d2988267d",
@@ -3587,7 +4724,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1N0LAYzC82ZT_TES5NKdvxPL2Lqzs0Jy6/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1N0LAYzC82ZT_TES5NKdvxPL2Lqzs0Jy6",
+        "sizeBytes": 3891364,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_000000004df881f5bc1628c54ccc2dce",
@@ -3601,7 +4744,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/dr-10.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl",
+        "member": "originals/dr-10.png",
+        "sizeBytes": 3258518,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_0000000054e881fd81760573a3195dea",
@@ -3615,7 +4769,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/dr-12.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl",
+        "member": "originals/dr-12.png",
+        "sizeBytes": 3351928,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_000000009a048230885eea895b3eab97",
@@ -3629,7 +4794,18 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/dr-11.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
+      "originalDriveUrl": null,
+      "originalDriveVerified": false,
+      "originalArchiveVerified": true,
+      "originalArchiveZipUrl": "https://drive.google.com/file/d/1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl/view",
+      "originalStorage": {
+        "kind": "drive_zip",
+        "fileId": "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl",
+        "member": "originals/dr-11.png",
+        "sizeBytes": 3014948,
+        "verifiedBy": "ZIP member file, size and container CRC"
+      }
     },
     {
       "id": "file_00000000a3e081f5978eaa24a684ffdc",
@@ -3645,7 +4821,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1A0H5tJcvjcK4x3rfgxNBi7JjvQdcaDc9/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1A0H5tJcvjcK4x3rfgxNBi7JjvQdcaDc9",
+        "sizeBytes": 3262094,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     },
     {
       "id": "file_0000000071f081f6b915f9120c6b98ed",
@@ -3661,7 +4843,13 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1RlHkX7u8rTyyEjHp3Ac3teGyDuIT4NsM/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "originalStorage": {
+        "kind": "drive_individual",
+        "fileId": "1RlHkX7u8rTyyEjHp3Ac3teGyDuIT4NsM",
+        "sizeBytes": 3090485,
+        "verifiedBy": "exact source filename/identifier and byte size"
+      }
     }
   ],
   "verification": {
@@ -3673,12 +4861,13 @@
     "driveOriginalsZipFileId": "1k3XLgJK3lpB0MIHiCQlHqE1XePl8w4yx",
     "driveOriginalZipIds": [
       "1k3XLgJK3lpB0MIHiCQlHqE1XePl8w4yx",
-      "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz"
+      "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz",
+      "1oxo7I4V6boahHPer5-fCcA1VZkLZZZWl"
     ],
     "driveOriginalZipParts": 3,
     "provisionalGarmentCount": 25,
-    "originalsUploadedDrive": 177,
-    "originalsIndividualDriveFiles": 143,
+    "originalsUploadedDrive": 178,
+    "originalsIndividualDriveFiles": 156,
     "driveOriginalsArchiveZips": 3,
     "githubTreeVerified": true,
     "githubTreeAssetCount": 178,
@@ -3699,7 +4888,12 @@
       "githubBatchImported": 69
     },
     "sceneSequenceCount": 10,
-    "unmatchedDressImages": 141
+    "unmatchedDressImages": 141,
+    "originalsZipOnlyFiles": 22,
+    "originalsCoveredByVerifiedDriveZips": 34,
+    "originalsMissingDrive": 0,
+    "originalMasterReferenceCollisionsFixed": true,
+    "masterArchiveRule": "Every source has either its own exact-matched Google Drive original or an identified, CRC-checked ZIP member. Never map originals using a truncated source ID alone."
   },
   "sceneSequences": [
     {
