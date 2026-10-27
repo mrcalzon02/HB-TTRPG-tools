@@ -1076,3 +1076,55 @@ Blender saved-scene QA run passes AND a viewer compares original
 Source 264×542 against the rendered R28 idle frame/closeups.
 Do not touch the production Tech Priests mod or original proprietary
 images in the GitHub repository.
+
+### R28 REAL Blender result — geometry works; outer shell still needs projection registration
+
+Original source ZIP original RGB/A body frame 00: native 264x542
+alpha bbox [4,0,263,532], W/H 259/532≈0.48684.
+
+R27 source-camera Blender 320x640 body bbox [16,35,297,614],
+W/H 281/579≈0.48532. Two nearly flat, long rear hanging external
+strips looked too separate from the nozzle rim.
+
+R28 source-camera Blender 320x640 body bbox [22,35,292,581],
+W/H 270/546≈0.49451. The two revised physical shells now
+hug the lower bell more closely, end visibly HIGHER, curve inward
+and shelter lower fins as shallow underslung scoop/clamshell faces.
+Overall bounding width to height remains within ~1.6% of source.
+However BODY OCCUPANCY is only 546/640≈85.3%, compared with original
+532/542≈98.2%. This remains a MAJOR scale/framing registration
+deficit despite the similar silhouette aspect ratio; do not claim
+native pixel registration or finished source reconstruction.
+
+R28 final commit code repair:
+https://github.com/mrcalzon02/HB-TTRPG-tools/commit/6a4e9ac6898c86de1ed823a84349a2d9a36aa9fd
+Source procedures passed:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40473363304
+Headless Blender real saved-scene + custom models passed:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40473363154
+Saved scene read-back: R27_SOURCE_VISIBLE_ONLY_GATE_PASS
+(198 unsupported objects absent); R28_UNDERBODY_CLAMSHELL_SOURCE_PASS;
+ALL_EDITABLE_SCENES_PASS 4; 13 distinct body captures;
+CAPTURE_QA test-04 clip_risk=False.
+
+REAL diagnostics include separate port and starboard views from BELOW
+the nozzle. They verify physically curved metal UNDERFACES and visible
+thickness instead of fake painted curves. The original top/hidden side
+remains deliberately UNINFERRED. No new pistol rods, hinge assemblies,
+feedlines, struts or connection nubbins were added. Inner panels remain
+the current provisional 10-slot scene and their meshes/motion were
+unchanged; no source-count claim.
+
+Remaining source fidelity defects seen side-by-side:
+1. The source covers are closer fitting to the bell: R28 still appears
+   as broad, individually detached paddles at the two lower edges;
+   inward-protective silhouette needs further SOURCE-LANDMARK shaping.
+2. Original outer heat blue is a thin localized discoloration along
+   edges, while R28 gradient covers a relatively broad distal area.
+3. The whole rendered body has far more empty frame margin than source,
+   particularly above and below, even though aspect ratio is similar.
+4. Upper main-engine housings, pipe routing, casing textures and deep
+   nozzle surface are still substantially wrong (prior R27 finding).
+
+Acceptance: R28 is a verified PROGRESSIVE geometry pass, not a faithful
+completed 3D copy of original sprite or Factorio-production approved art.
