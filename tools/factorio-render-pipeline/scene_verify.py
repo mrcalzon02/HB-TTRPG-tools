@@ -441,7 +441,7 @@ def test_one(path):
             for direction in ("port","starboard"):
                 panel=bpy.data.objects.get(
                     "R25_OUTER_SKID_UNDERSIDE_"+direction)
-                if panel is None or panel not in outer.objects:
+                if panel is None or outer.objects.get(panel.name) is None:
                     raise RuntimeError("R25 missing independent exterior cover")
                 if (not panel.get("R25_only_underside_reconstructed") or
                     not panel.get("R25_not_an_inner_afterburner_fin") or
@@ -456,7 +456,7 @@ def test_one(path):
                             "R25_underside_reinforcement",
                             "R25_root_boss","R25_clamp_boss"):
                     name=panel.get(key)
-                    if not name or bpy.data.objects.get(name) not in outer.objects:
+                    if not name or outer.objects.get(name) is None:
                         raise RuntimeError("R25 external skid missing support: "+key)
                 if panel.animation_data:
                     raise RuntimeError("R25 inferred unverified outer skid motion")
