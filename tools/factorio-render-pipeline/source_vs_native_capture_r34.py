@@ -55,7 +55,12 @@ def alpha_masks(frames,bg=None):
         else:
             delta=ImageChops.difference(frame.convert("RGB"),
                   Image.new("RGB",SIZE,bg))
-            masks.append(threshold(delta.convert("L"),36))
+            # Use the strongest channel difference from the known
+            # dark matte, not average luminance: the source's blue
+            # ceramic/rim edges can be bright in only one channel.
+            red,green,blue=delta.split()
+            max_channel=ImageChops.lighter(ImageChops.lighter(red,green),blue)
+            masks.append(threshold(max_channel,37))
     return masks
 
 def candidate_frames(folder):
