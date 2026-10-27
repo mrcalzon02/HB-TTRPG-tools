@@ -375,6 +375,13 @@ def build_thruster(name,w,h,root,p):
         vanilla_open_drum_r20.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R25 separate LARGE EXTERIOR skid-fin undersides, unrelated to
+        # the already-authored internal hanging heat-tab fin population.
+        import vanilla_outer_skid_covers_r25
+        vanilla_outer_skid_covers_r25.apply(
+            name,root,p,{"tube":tube,"ellipsoid":ellipsoid},
+            bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",

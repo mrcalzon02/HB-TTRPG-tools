@@ -421,6 +421,47 @@ def test_one(path):
                 if rib.data.materials[0].name!=(
                         "R20_inner_oxidized_strake_contrast"):
                     raise RuntimeError("R20 strake contrast not retained")
+            # R25 user's critical distinction: TWO larger OUTER skid-cover
+            # undersides are NOT counted among the repeated internal vanes.
+            if scene.get("fsc_r25_revision")!=(
+                    "R25_two_large_external_underside_skid_covers"):
+                raise RuntimeError("R25 outer skid cover assembly absent")
+            if int(scene.get("fsc_r25_large_outer_skids",0))!=2:
+                raise RuntimeError("R25 must contain exactly two outer skid panels")
+            if not scene.get("fsc_r25_inner_afterburner_objects_unchanged"):
+                raise RuntimeError("R25 accidentally modified existing inner fins")
+            outer=bpy.data.collections.get(
+                    "R25_EXTERNAL_LARGE_SKID_COVERS_NOT_INNER_FINS")
+            if outer is None or len(outer.objects)!=10:
+                raise RuntimeError("R25 left/right underside/support graph incomplete")
+            inner=bpy.data.collections.get(
+                    "R11_OUTBOARD_SUSPENDED_AFTERBURNERS")
+            if any(o.name.startswith("R25_") for o in inner.objects):
+                raise RuntimeError("R25 outer covers wrongly counted as inner fins")
+            for direction in ("port","starboard"):
+                panel=bpy.data.objects.get(
+                    "R25_OUTER_SKID_UNDERSIDE_"+direction)
+                if panel is None or panel not in outer.objects:
+                    raise RuntimeError("R25 missing independent exterior cover")
+                if (not panel.get("R25_only_underside_reconstructed") or
+                    not panel.get("R25_not_an_inner_afterburner_fin") or
+                    not panel.get("R25_thermal_tint_not_geometric_depth")):
+                    raise RuntimeError("R25 exterior visual role violated")
+                if not panel.data.color_attributes.get(
+                        "R25_underside_thermal_patina"):
+                    raise RuntimeError("R25 outer skid underside heat tint missing")
+                if len(panel.data.vertices)<60 or len(panel.data.polygons)<60:
+                    raise RuntimeError("R25 exterior skid is a placeholder")
+                for key in ("R25_chassis_support",
+                            "R25_underside_reinforcement",
+                            "R25_root_boss","R25_clamp_boss"):
+                    name=panel.get(key)
+                    if not name or bpy.data.objects.get(name) not in outer.objects:
+                        raise RuntimeError("R25 external skid missing support: "+key)
+                if panel.animation_data:
+                    raise RuntimeError("R25 inferred unverified outer skid motion")
+            print("R25_TWO_LARGE_SEPARATE_OUTER_SKID_UNDERSIDES_PASS",
+                  path.name,flush=True)
             print("R20_OPEN_DRUM_DEEP_VISUAL_PATH_PASS",path.name,flush=True)
             print("R19_CONE_INTERIOR_FIN_ASSEMBLY_PASS",path.name,flush=True)
             if int(scene.get("fsc_r22_population_candidate",0))!=VANE_COUNT:

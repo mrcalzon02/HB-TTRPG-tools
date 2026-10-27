@@ -759,3 +759,43 @@ at actual sprite scale, and the whole benchmark model is too short/wide
 and too clean compared with the original art. Do not claim visually
 finished or Factorio runtime compatibility. No live Tech Priests
 graphics/prototypes/gameplay have been modified.
+
+## R25 — CORRECTION: TWO LARGE EXTERIOR SKID-COVER FINS, NOT INNER HEAT TABS
+
+User clarified what the original sprite shows: the INTERNAL hanging
+thermal-fin assembly is already satisfactory in shape and must be LEFT
+ALONE. At the lower LEFT and lower RIGHT are TWO MUCH LARGER EXTERNAL
+covering/skid-like fins. The game sprite is showing their UNDERSIDES,
+not two additional slender inner tabs. They must be reconstructed as
+separate physical model objects with separate hull attachment paths.
+
+Source original frame00 264x542: far port and starboard exterior
+covers run alongside mouth at approx x=8–50 and x=215–258,
+with dark underside and blue/purple tempered metal near aft ends.
+They are larger and deeper than the inner punched sheet fin panels.
+Source cannot reveal completely hidden topsides/hinge mechanisms.
+This is a morphological approximation from the original pixels, NOT
+new design work, a duplicate internal fin count, or proven articulation.
+
+R25 adds a new distinct editable Blender collection:
+R25_EXTERNAL_LARGE_SKID_COVERS_NOT_INNER_FINS. Exactly 2 broad
+finite-thickness curved underbody sheets (left/right) with heat
+discoloration encoded in the nonemissive CORNER color attribute,
+plus one continuous machine-casing support spine, one underside
+longitudinal channel stiffener, one root boss and one clamp boss
+PER SIDE. The full upper/topside remains deliberately unmodeled
+beyond a thickness skin, because not visible in the source.
+No independent animation is invented for these coverings.
+
+R25 runs AFTER the current inner fin generator and R18 lower-tip
+motion, and verifies the entire prior inner fin collection remains
+unchanged. It does not change inner fin count, geometry, R21 metal
+slots, lower motion curves, R19 liner, R20 open throat, or separate
+original additive light/pipe/flame layers. This is CRITICAL:
+NO reclassification of exterior skid covers as nine or ten inner fins.
+
+R25 added two opposite-side Blender diagnostic cameras, plus
+new saved-scene verification requiring both exterior panels,
+both independent source-to-chassis support graphs, tinted underside
+material and no new inner fin objects. The task remains awaiting
+real calibrated PNG comparison and workflow pass.
