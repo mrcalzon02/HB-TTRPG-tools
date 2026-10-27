@@ -47,6 +47,15 @@ def main():
         # pixel-similarity pass. No reference image is added to the repository.
         subprocess.run([str(python),str(root/"reference_compare_r07.py"),
                         "--candidate",str(benchmark)],check=True)
+        # Source-relative animation diagnostic: render original-indexed
+        # 0..63 body frames from the ACTUAL saved editable .blend.
+        # The full source atlas itself remains private.
+        subprocess.run([str(blender),"-b","--factory-startup","-t","2",
+                        "--python-exit-code","4","--python",
+                        str(root/"vanilla_animation_cycle_r32.py"),
+                        "--","--output",str(target)],check=True)
+        subprocess.run([str(python),str(root/"vanilla_animation_cycle_report_r32.py"),
+                        "--output",str(target)],check=True)
     print("Capture batch complete at",target,flush=True)
 
 if __name__=="__main__":main()
