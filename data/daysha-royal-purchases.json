@@ -605,8 +605,10 @@
       "role": "scene",
       "wardrobeId": "DR-08",
       "sceneGroup": "Atelier and shopping",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/dr-08.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
     },
     {
       "id": "file_00000000a32c81f899944374d359dc45",
@@ -1241,8 +1243,10 @@
       "role": "scene",
       "wardrobeId": "DR-09",
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/dr-09.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
     },
     {
       "id": "file_0000000088e081fdbb923c8ce5f54746",
@@ -1481,8 +1485,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "DR-07",
       "sceneGroup": "Atelier and shopping",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/dr-07.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
     },
     {
       "id": "file_00000000920082308a5aae6dbb2ecbf9",
@@ -1517,8 +1523,10 @@
       "role": "scene",
       "wardrobeId": "DR-06",
       "sceneGroup": "Royal ceremonies",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/dr-06.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
     },
     {
       "id": "file_000000006dc481fd89b6bd11148e68b0",
@@ -1961,8 +1969,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "DR-05",
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/dr-05.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
     },
     {
       "id": "file_000000003788820caf3a7345aa3b3c48",
@@ -2369,8 +2379,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "DR-04",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/dr-04.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
     },
     {
       "id": "file_000000000980823094517fb44d8b9eb2",
@@ -2417,8 +2429,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "DR-03",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/dr-03.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
     },
     {
       "id": "file_00000000e52c81fd9a218b29d3602c74",
@@ -2429,8 +2443,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "DR-02",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/dr-02.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
     },
     {
       "id": "file_00000000b3d081fd8f588efb4baac3b5",
@@ -2441,8 +2457,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "DR-01",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/dr-01.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
     },
     {
       "id": "file_0000000008fc81fdb1cbdd91f452fd94",
@@ -2725,8 +2743,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "DR-10",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/dr-10.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
     },
     {
       "id": "file_0000000054e881fd81760573a3195dea",
@@ -2737,8 +2757,10 @@
       "role": "composite-gown-reference",
       "wardrobeId": "DR-12",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/dr-12.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
     },
     {
       "id": "file_000000009a048230885eea895b3eab97",
@@ -2749,8 +2771,10 @@
       "role": "composite-gown-reference",
       "wardrobeId": "DR-11",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/dr-11.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
     },
     {
       "id": "file_00000000a3e081f5978eaa24a684ffdc",
@@ -2779,14 +2803,16 @@
   ],
   "verification": {
     "inventoryFiles": 178,
-    "unpublishedSourceFiles": 156,
+    "unpublishedSourceFiles": 144,
     "missingPrimaryFiles": [],
-    "publishedDerivativeCount": 22,
-    "verifiedOriginalsInDriveZip": 22,
+    "publishedDerivativeCount": 34,
+    "verifiedOriginalsInDriveZip": 34,
     "driveOriginalsZipFileId": "1k3XLgJK3lpB0MIHiCQlHqE1XePl8w4yx",
     "driveOriginalZipIds": [
       "1k3XLgJK3lpB0MIHiCQlHqE1XePl8w4yx",
       "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz"
-    ]
+    ],
+    "driveOriginalZipParts": 3,
+    "provisionalGarmentCount": 22
   }
 }
