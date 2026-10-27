@@ -116,7 +116,7 @@
     }
     for (const a of assets) {
       const row = make("div","sc-file");
-      row.append(href(a.name,a.browser_download_url));
+      row.append(href("Download " + a.name,a.browser_download_url));
       const meta = make("small",""+platformOf(a.name)+(a.size?" · "+bytes(a.size):""));
       row.append(meta);
       target.append(row);
@@ -231,11 +231,11 @@
     if (!r) return false;
     const urls=[API+"/repos/"+OWNER+"/"+encodeURIComponent(repo), API+"/repos/"+OWNER+"/"+encodeURIComponent(repo)+"/releases?per_page=30&page=1"];
     const answers=await Promise.allSettled(urls.map(json));
-    let success = false;
+    let sourceOk = false, releasesOk = false;
     if (answers[0].status==="fulfilled") {
       const data=answers[0].value;
       if (data && data.name===repo && data.owner?.login?.toLowerCase()===OWNER && !data.fork) {
-        r.pushed=data.pushed_at; success = true;
+        r.pushed=data.pushed_at; sourceOk = true;
       }
     }
     if (answers[1].status==="fulfilled" && Array.isArray(answers[1].value)) {
@@ -244,28 +244,30 @@
         .sort((a,b)=>Date.parse(b.published_at)-Date.parse(a.published_at));
       r.page=1;
       r.more=all.length===30;
-      success = true;
+      releasesOk = true;
     }
-    r.error=success?null:"GitHub temporarily unavailable";
-    return success;
+    r.error=sourceOk && releasesOk ? null : "GitHub metadata or release history temporarily unavailable";
+    return {sourceOk,releasesOk};
   }
   async function hydrateAll() {
     if (fetching) return;
     fetching = true;
     $("sc-refresh").disabled = true;
     note("sc-network","Checking GitHub repositories and releases…");
-    let next=0,success=0;
+    let next=0,sourceChecks=0,releaseChecks=0;
     await Promise.all(Array.from({length:3},async()=>{
       while(next<projects.length) {
         const p=projects[next++];
-        try{if(await hydrate(p.repo))success++;}catch {state.get(p.repo).error="GitHub unavailable";}
+        try{const result=await hydrate(p.repo);if(result.sourceOk)sourceChecks++;if(result.releasesOk)releaseChecks++;}catch {state.get(p.repo).error="GitHub unavailable";}
         renderCards();renderDetails();renderLatest();renderReleases();
       }
     }));
-    note("sc-network",success===projects.length ?
-      "Live GitHub source/release checks complete. Click Refresh to check again." :
-      success ? success+" / "+projects.length+" repositories checked; saved information remains where GitHub is unavailable." :
-      "Live GitHub checks unavailable (network or rate limit); showing "+CACHE_DATE+" release snapshot.",success!==projects.length);
+    note("sc-network",releaseChecks===projects.length && sourceChecks===projects.length ?
+      "Live GitHub source and release checks complete. Click Refresh to check again." :
+      releaseChecks || sourceChecks ?
+        "Live GitHub: "+sourceChecks+"/"+projects.length+" source checks; "+releaseChecks+"/"+projects.length+" release histories. Dated fallback retained for unavailable data." :
+        "Live GitHub checks unavailable (network or rate limit); showing "+CACHE_DATE+" release snapshot.",
+      releaseChecks!==projects.length || sourceChecks!==projects.length);
     fetching=false;
     $("sc-refresh").disabled=false;
   }
