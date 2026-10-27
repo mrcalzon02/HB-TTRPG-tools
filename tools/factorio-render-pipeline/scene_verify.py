@@ -568,6 +568,32 @@ def test_one(path):
                 if abs(float(ob.get("R31_lower_belly_sag_tiles",0)))<.10:
                     raise RuntimeError("R31 measured bowl sag was not saved")
             print("R31_SOURCE_CUPPED_AFT_SKIDS_PASS",path.name,flush=True)
+            # R33 source contour candidate: test the actual reopened
+            # saved meshes for tapered aft profile and preserved concavity.
+            from vanilla_source_tail_profile_r33 import (
+                REVISION as R33_REVISION,ORIGINAL_SHA256 as R33_SHA)
+            if (scene.get("fsc_r33_revision")!=R33_REVISION or
+                scene.get("fsc_r33_source_archive_sha256")!=R33_SHA):
+                raise RuntimeError("R33 original source taper not applied")
+            if not (scene.get("fsc_r33_no_outer_rig_inferred") and
+                    scene.get("fsc_r33_inner_64_frame_motion_preserved")):
+                raise RuntimeError("R33 lost noninvented motion provenance")
+            for side in ("port","starboard"):
+                ob=bpy.data.objects.get("R25_OUTER_SKID_UNDERSIDE_"+side)
+                if (not ob.get("R33_source_tail_taper") or
+                    not ob.get("R33_no_extra_parts_or_actuators") or
+                    abs(float(ob.get("R33_aft_tip_y_shift",0))-.18)>.001):
+                    raise RuntimeError("R33 rear ends were not tapered in real scene")
+                if ob.animation_data:
+                    raise RuntimeError("R33 guard invents unverified actuation")
+                for row in (5,6,7):
+                    outside,belly,inside=[
+                        ob.data.vertices[72+row*9+j].co for j in (0,4,8)]
+                    if belly.z>=min(outside.z,inside.z)-.10:
+                        raise RuntimeError("R33 aft taper flattened cupped shell")
+                    if abs(outside.x)-abs(inside.x)<.75:
+                        raise RuntimeError("R33 rear profile does not wrap nozzle")
+            print("R33_SOURCE_AFT_TAPER_SAVED_MESH_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)

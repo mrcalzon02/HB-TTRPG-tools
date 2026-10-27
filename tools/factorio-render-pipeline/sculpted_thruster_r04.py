@@ -407,6 +407,12 @@ def build_thruster(name,w,h,root,p):
         vanilla_cupped_radial_skids_r31.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R33: source GIF lower-silhouette comparison found the two
+        # lower exterior guards too long and broad at their rear ends.
+        import vanilla_source_tail_profile_r33
+        vanilla_source_tail_profile_r33.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
