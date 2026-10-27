@@ -24,6 +24,7 @@ VIEWS={
     "r28_port_inner_lip_from_below":((-3.0,-4.8,-3.6),(-1.55,-2.85,-1.55),3.45),
     "r28_starboard_inner_lip_from_below":((3.0,-4.8,-3.6),(1.55,-2.85,-1.55),3.45),
     "r28_source_projection_lower_cup_detail":((.18,-8.9,10.0),(0,-2.9,-1.4),3.7),
+    "r29_beige_shell_wrap_profile":((2.8,-5.6,-1.4),(0,-2.8,-1.55),3.4),
 }
 
 def main():

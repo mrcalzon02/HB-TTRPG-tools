@@ -394,6 +394,13 @@ def build_thruster(name,w,h,root,p):
         vanilla_underslung_clamshell_r28.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R29 source-correct orientation + color, not a new invented part:
+        # wrap SAME two protective skid sheets around outer bell radius,
+        # reuse warm BEIGE root casting material (NO blue/purple burn).
+        import vanilla_beige_radial_skids_r29
+        vanilla_beige_radial_skids_r29.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",

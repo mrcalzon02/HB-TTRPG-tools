@@ -1128,3 +1128,38 @@ Remaining source fidelity defects seen side-by-side:
 
 Acceptance: R28 is a verified PROGRESSIVE geometry pass, not a faithful
 completed 3D copy of original sprite or Factorio-production approved art.
+
+## R29 — critical source review: wrong GLOBAL-LEVEL SKIDS and heat colors
+
+User correctly identified TWO independent errors in actual R28 PNG:
+1. The covering shells were bent in an essentially globe-aligned/
+   planar direction, NOT TILTED AROUND THE NOZZLE CIRCUMFERENCE.
+   This is why they continued to look like separate horizontal paddles.
+2. Outer protective skid shells are the SAME BEIGE as the inner mechanical
+   attachment castings, NOT blue-purple thermally stressed. R28 had
+   incorrectly copied the HOT INNER FIN chroma to those unburnt shrouds.
+
+R29 reconstructs the SAME R25-named two source-visible exterior shells
+as a finite-thickness ARCUATE SEGMENT about the engine LOCAL Y axis.
+At each of eight axial stations the 9-section cross-section sweeps
+from ~27–32 degrees (outer flank) down around the lower circumference
+to ~61–64 degrees (inner sheltered lip). Thus BOTH X and Z visibly
+change >.6 tile from lateral lip to inner underbell edge; no global-level
+strips. Mirrored sides, no new fixtures or hinge rigs. The two samples'
+radial normals follow the curved shell, with 0.036 tile sheet thickness.
+This is an explicitly candidate inverse projection, not recovered CAD.
+
+R29 copies the EXISTING `R16_oxidized_load_bearing_clevis` material
+and all its PBR shader color/metallic/roughness inputs for both OUTER
+covering shells. Old R25 purple-blue heat gradient material and its
+vertex-color attribute are replaced; no emissive tip or blue/purple
+color survives. Inner R21 heat-stained fin meshes are unchanged.
+
+R29 verification reads the SAVED editable .blend and requires identical
+beige material Base Color between skid and R16 cast root, all 144 mesh
+vertices/142 faces and >0.6 tile simultaneous X and Z changes on actual
+cross-sections, no old oxide vertex color, no extra objects, and no
+changes to any inner fin meshes, source-driven animation or R27 pruned
+braces. Extra oblique inspection view provides actual tilted angle.
+Original Factorio frame 00 remains the only authority for acceptance;
+new geometric assumptions require visual verification with output PNGs.

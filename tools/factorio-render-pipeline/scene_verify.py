@@ -463,6 +463,61 @@ def test_one(path):
                 if min(v.co.z for v in coords)>-1.8:
                     raise RuntimeError("R28 clamshell does not cradle BELOW the lower nozzle")
             print("R28_UNDERBODY_CLAMSHELL_SOURCE_PASS",path.name,flush=True)
+            # R29 check ACTUAL 3D circumferential orientation and color,
+            # not just the old approximate R28 planar cup metadata.
+            if scene.get("fsc_r29_revision")!=(
+                    "R29_radially_wrapped_unburnt_beige_lower_shrouds"):
+                raise RuntimeError("R29 underside shells not radial/beige")
+            if (int(scene.get("fsc_r29_outer_shroud_count",0))!=2 or
+                not scene.get("fsc_r29_inner_fins_unchanged") or
+                not scene.get("fsc_r29_no_added_geometry")):
+                raise RuntimeError("R29 altered protected fin population/assembly")
+            if scene.get("fsc_r29_source_material")!=(
+                    "R16_oxidized_load_bearing_clevis"):
+                raise RuntimeError("R29 skid shells use wrong source attachment material")
+            if not scene.get("fsc_r29_all_covered_faces_follow_bell_circumference"):
+                raise RuntimeError("R29 outer shells remain globally level")
+            beige_reference=bpy.data.materials.get(
+                    "R16_oxidized_load_bearing_clevis")
+            if beige_reference is None:
+                raise RuntimeError("Missing original beige attachment material")
+            source_rgba=beige_reference.node_tree.nodes[
+                    "Principled BSDF"].inputs["Base Color"].default_value
+            for direction in ("port","starboard"):
+                cover=bpy.data.objects.get(
+                    "R25_OUTER_SKID_UNDERSIDE_"+direction)
+                if not cover or not all(cover.get(k) for k in (
+                        "R29_bell_radial_wrap","R29_no_outer_heat_damage",
+                        "R29_underside_only",
+                        "R29_cross_section_not_global_plane",
+                        "R29_no_added_piston_or_hinge")):
+                    raise RuntimeError("R29 radial clamshell still a colored horizontal wing")
+                if (len(cover.data.vertices)!=144 or
+                    len(cover.data.polygons)!=142):
+                    raise RuntimeError("R29 missing physically curved 8x9x2 sheet")
+                if (not cover.data.materials or
+                    cover.data.materials[0].name!=(
+                        "R29_large_underskid_beige_same_as_root_castings")):
+                    raise RuntimeError("R29 shell isn't using matching beige metal")
+                actual_color=cover.data.materials[0].node_tree.nodes[
+                        "Principled BSDF"].inputs["Base Color"].default_value
+                if max(abs(float(a)-float(b))
+                       for a,b in zip(source_rgba,actual_color))>1e-6:
+                    raise RuntimeError("R29 outer skid beige differs from fin attachment")
+                colors=cover.data.color_attributes
+                if colors.get("R29_beige_weathering_not_thermal_oxide") is None:
+                    raise RuntimeError("R29 natural beige physical shell metadata absent")
+                if colors.get("R25_underside_thermal_patina") is not None:
+                    raise RuntimeError("R29 preserved fictitious blue burnout on skid")
+                # On axial station 4, each side must rotate >0.6 tiles
+                # in BOTH X and Z when tracing shell circumferentially.
+                a=cover.data.vertices[3*9+0].co
+                b=cover.data.vertices[3*9+8].co
+                if abs(a.x-b.x)<.6 or abs(a.z-b.z)<.6:
+                    raise RuntimeError("R29 shell is not tilted around lower engine")
+                if abs(a.y-b.y)>1e-5:
+                    raise RuntimeError("R29 cross-section is not circumferential")
+            print("R29_SOURCE_BEIGE_RADIAL_SKIDS_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)
@@ -510,8 +565,8 @@ def test_one(path):
                     not panel.get("R25_thermal_tint_not_geometric_depth")):
                     raise RuntimeError("R25 exterior visual role violated")
                 if not panel.data.color_attributes.get(
-                        "R25_underside_thermal_patina"):
-                    raise RuntimeError("R25 outer skid underside heat tint missing")
+                        "R29_beige_weathering_not_thermal_oxide"):
+                    raise RuntimeError("R29 natural beige outer skid material missing")
                 if len(panel.data.vertices)<60 or len(panel.data.polygons)<60:
                     raise RuntimeError("R25 exterior skid is a placeholder")
                 for key in ("R25_chassis_support",
