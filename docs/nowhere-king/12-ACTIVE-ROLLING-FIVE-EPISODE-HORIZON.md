@@ -2,16 +2,10 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after committed Season 3 Episode 10, *The Treasury Leak*.
-**Forward window:** Season 3 Episodes 11–15.
+**State:** Rolled forward after committed Season 3 Episode 11, *A Dangerous Attachment*.
+**Forward window:** Season 3 Episodes 12–16.
 
-**Continuity status:** S3E10 leaves the first candle dark and six lit, with the barred lower stair still uncertified. Luceran has canceled the next contemplated hall supper and continued deferring upper-gallery hangings, assigning uncommitted household hospitality funds to sickroom covers, witnessed wages and measured roof/drain work. Fera's extra sickroom voucher is **paid**, two covers supplied from stock, and the hauler's witnessed hour paid from the household-watch account **without** speculative freight profit. Remaining works wages and roof/gutter/drain are not finished; the third hearth remains cold. Hesta's first-refusal rights, Orlen's unaccepted quote, Jorvan's exact 24/27 east-gate pledge, all foreign jurisdictions, privacy limits and Jalen's letter remain intact. No new magical wealth, impostor proof or candle extinction.
-
-## Season 3 Episode 11 — A Dangerous Attachment — EXPLORATORY
-
-Build an adult cross-faction attachment through repeated contact and conflicting obligations; no forced Luceran/Miren reunion or Miren/Yara romance.
-
-**Exit:** A relationship creates a durable obligation.
+**Continuity status:** S3E11 establishes a mutually acknowledged adult attachment between Kaelmont road clerk **Edda Kelm** and Crown-side independent supplier **Orlen Morcant**. Edda has sent a formal **conflict disclosure and independent-review request** through Kaelmont dispatch; **no answer or reassignment** has occurred. Orlen paid an empty-cart yard trial and shelter from his own purse, entered a **higher but still unaccepted** revised iron delivery quotation, and promised to share witnessed hauler charges with other bidders. Neither the relationship nor the trial grants Kaelmont road approval, Crown procurement preference, a safe loaded-cart route or a new contract. **Hesta's thirty-day/twelve-accepted-load first refusal** and separate four-season toll privilege remain; one block passed, second failed, third still uninspected. The canceled hall supper, unpaid remaining works, roof/gutter/drain, third cold hearth, Jorvan's exact 24/27 east-gate pledge, foreign jurisdiction and correspondence restrictions, Miren/Luceran estrangement and physically deaf room remain unchanged. **First candle dark, six lit; lower stair barred and uncertified.** No new supernatural power or foreign verdict.
 
 ## Season 3 Episode 12 — The Rune Upstairs — EXPLORATORY / SCHEMATIC LOCK
 
@@ -37,7 +31,17 @@ Recover the phrase “King Beneath” through **independently documented, restri
 
 **Exit:** A carefully attributed phrase enters restricted scholarship, and an unresolved dispute creates a bounded question for later work. The first candle remains dark, six lit; the separately scheduled second extinction is **not** moved into Episode 15.
 
+## Season 3 Episode 16 — Untitled (provisional) — EXPLORATORY
+
+Carry the **actual consequences** of the Kaelmont disclosure, competitive delivered-cost bids, Hesta's third-block inspection and Crown household austerity into a bounded public decision. A Kaelmont reply may arrive only through its own ordinary dispatch and must be read before any posting or conflict-review outcome is treated as fact. Orlen and Edda retain separate livelihoods, personal correspondence and the freedom to disagree. Do not let a personal attachment substitute for Kaelmont road approval, Crown procurement, Dols jurisdiction, or any foreign treaty. The first candle remains dark and six lit; the barred lower stair cannot be declared safe by narrative convenience. The title and final plot remain open until Episodes 12–15 create genuine evidence.
+
+**Exit:** At least one earlier personal or material promise faces a documented cost, without converting exploratory beats into prior canon.
+
 ## Active payoff debt (historical carry-forward)
+
+**S3E11:** Edda Kelm and Orlen Morcant acknowledge a mutual adult attachment through repeated ordinary Kaelmont/Crown-side price work, one deliberate kiss and conditional private correspondence; no diplomatic marriage or institutional alliance. Edda sends an official **conflict disclosure and recusal request** through Kaelmont post, **awaiting reply**. Orlen pays for a witnessed empty-cart route trial and shelter, enters a **higher, unaccepted** revised iron quote, and owes other bidders the promised written hauler charges. No road certification, loaded-cart safety, Crown award or Kaelmont recommendation. Hesta's first-refusal and toll rights survive; third block still untested. Yara witnesses sealing without reading the letter; Jalen's private medical/Leora correspondence remain protected. The canceled supper, unfinished roof, Jorvan 24/27 pledge, foreign boundaries, Miren/Luceran estrangement, **one dark/six lit candles** and barred lower stair remain. Episode 12 must not treat an office disclosure as already adjudicated.
+
+
 
 **S3E10:** The next contemplated hall supper is canceled; upper-gallery hangings remain deferred; two hearths and three guest rooms still function and the third hearth remains cold. The *uncommitted* household hospitality allowance is assigned to lawful wage arrears, sickroom covers and measured receiving-yard roof/drain work. **Fera's signed extra-hours voucher has been paid**; two sickroom covers supplied from existing stock, but the general linen reserve remains depleted. **The younger hauler received one witnessed customary working-hour payment from household watch funds** for improper detention; no freight profit or contract was awarded. Some stopped-worker wages are paid/in payment, others and the independent dry-night stair reading remain due. **Jorvan's 24/27 east-gate pledge** remains exactly bounded, and neither private challenges nor household-watch redress was charged to its net. **Hesta's one accepted / one failed / third untested block** and four-season track right persist; **Orlen's delivered quotation is unaccepted**. The winter roof, gutter, drain and northern supply are unfinished. The first candle stays dark and six lit; Miren/Luceran trust and intimacy remain unrepaired, and no new foreign or magical authority exists. Festival and ally hospitality in Episodes 13–14 must visibly carry the canceled supper's political cost.
 
