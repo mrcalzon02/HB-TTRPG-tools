@@ -719,3 +719,43 @@ tempering materials and R20 deep open refractory remain unchanged.
 R23 must pass source functional tests AND real Blender saved-scene QA
 and visual comparison before being accepted as the leading candidate.
 No Tech Priests production entity artwork or gameplay touched.
+
+### R23 ten-fin actual capture VERIFIED, comparative review
+
+R23 source validation PASSED:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40436233151
+R23 headless Blender calibration + other model regressions both PASSED:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40436232928
+Saved Blender evidence was downloaded and actual matched-camera rear-axis,
+three-quarter and fin-root attachment PNGs were visually compared with
+R21 eight-fin and R22 twelve-fin benchmarks.
+
+Physical arrangement result: R21 shows two strong upper central fins,
+R22 shows four, and R23 TEN-position trial shows THREE prominent upper
+fin attachments, matching the original source's visible central grouping.
+This is a qualitative arrangement improvement, not proof of the original
+hidden fin count, source CAD or any exact 3D joint reconstruction.
+
+All three variants retained 13 distinct body preview images, 12 flame
+frames, 4 named conditional pipe effects and zero alpha clipping risk.
+Source QA idle frame alpha bounding boxes in 320x640 cells:
+R21 8 fins: [54,179,263,515]; R22 12 fins: [50,179,267,518];
+R23 10 fins: [51,179,266,519]. Original 264x542 body source has
+bbox [4,0,263,532], but camera projection / cell registration are NOT
+equivalent and should not be used as an absolute accuracy percentage.
+
+Current leading candidate for the visible upper nozzle fin spacing is
+R23's ten-position shared layout. R21's stamped master fin geometry,
+two actual side through-slots, finite sheet thickness, integral formed
+ridge and metallic (non-emissive) blue-purple tempered edge remain
+the physical geometry for all ten R23 fins. Four measured source lower
+motion sectors, all attached load-bearing supports and R20 open deep
+nozzle are still validated by saved-scene QA.
+
+Outstanding defects: source-visible tabs remain darker and more heavily
+oxidized than our pale R23 tabs; rod-like supports still dominate over
+compact clevis/hinge profiles, side slot silhouettes remain subtle
+at actual sprite scale, and the whole benchmark model is too short/wide
+and too clean compared with the original art. Do not claim visually
+finished or Factorio runtime compatibility. No live Tech Priests
+graphics/prototypes/gameplay have been modified.
