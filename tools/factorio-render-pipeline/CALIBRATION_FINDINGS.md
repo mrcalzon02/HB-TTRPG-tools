@@ -991,3 +991,47 @@ machinery retained, and no new inferred hinges animated.
 Do NOT interpret this as proof the whole R08/R13 upper machine or
 R19 refractory topology has been fully audited. That requires the
 same object-by-object tracing before declaring global source fidelity.
+
+### R27 VERIFIED: REMOVE ONLY source-unverified repeated fin mechanisms
+
+R27 source-policy CI PASSED:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40469346475
+Real Blender calibration AND other model regressions PASSED:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40469346537
+
+Read-back from actual Blender 4.5.15 saved-scene verifier:
+`R27_SOURCE_VISIBLE_ONLY_GATE_PASS ... removed_unsupported 198`.
+All 20 precise repeated object-name families accounted for and
+deleted as real Blender objects rather than hidden from render.
+10 already-modeled inner sheet fin meshes and 2 large original
+underside sheet covering meshes were retained, including original
+R18 lower source-proxy keys, visible upper machine plumbing and
+all R20 deep open nozzle geometry. The **ten** modeled internal fins
+remain a prior hypothesis and DO NOT imply source count correctness.
+
+Original R26 saved-scene vanilla mesh count 438 versus R27 334
+(the difference in mesh counts is smaller than 198 because many
+removed supports were Blender CURVE objects).
+Actual 320x640 source-camera body idle alpha bounding box was
+unchanged: R26 [16,35,297,614], R27 [16,35,297,614].
+A genuine per-pixel comparison detects significant removal in
+Y≈295–509, i.e. around upper fin roots and nozzle. R27 did NOT
+fake a different scale or hide source-visible upper pipes.
+13 distinct body frames and independent flame/pipes/capture tests
+PASSED with zero clipping.
+
+Critical qualification after comparing original Factorio frame00
+against R26/R27 idle PNGs: the remaining reconstructed central
+chassis has too few authentic small irregular structures, large
+gray/bronze channels are still too geometric and symmetric, and
+the overall scene is visually far from the original source.
+Therefore R27 ACCEPTS THE REMOVAL OF UNVERIFIED GEOMETRY,
+not the overall 3D sprite match.
+
+Next source-first audit must map existing upper R05/R08/R13/R15
+copper/silver tube paths to specific original XY contours and
+remove/replace any unsupported large tube features. Record all
+mechanical endpoints in the original first; do NOT assert that a
+physical support or piston exists simply because it would look
+plausible. Original raw Wube PNGs remain solely in private
+user source workspace, not committed.
