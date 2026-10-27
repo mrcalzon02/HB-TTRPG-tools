@@ -493,3 +493,43 @@ repo. Source-neutral measurements and Blender approximation only.
 No Tech Priests production assets, gameplay or Lua altered. R18 requires
 independent source QA, actual Blender saved-scene verification and side-by-side
 visual comparison before treating the model revision as accepted.
+
+### R18 post-render acceptance and remaining gaps
+
+Original ZIP input was actually decoded and measured before this run.
+R18 source functional CI PASSED:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40425757370
+R18 full HEADLESS BLENDER capture PASSED, both calibration and models:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40425757419
+
+R18 actual capture archive retains editable .blend, 13 distinct body PNGs
+(1 idle + 12 preview run frames), 12 flame frames, 4 conditional pipe
+overlays, floor patch and nozzle/detail views. All saved-scene geometry
+and keyed-source-motion tests passed and the QA report recorded zero edge
+clipping. The full 64 distinct source motion keys are authored in the
+editable .blend: the 12 run PNGs are only calibration samples, NOT a full
+64-frame production game atlas.
+
+Independent image inspection on SAME camera and resolution:
+- R16 idle alpha bbox [54,179,263,515]; W/H ratio = .6220.
+- R18 idle alpha bbox [54,179,263,517]; W/H ratio = .6183.
+- Original body source alpha bbox [4,0,263,532]; W/H ratio = .4868.
+- Compared R16 vs R18 PNGs at source cell (320x640), visible differences
+  occurred almost solely within candidate Y458–516, especially the lower
+  fin tips at Y470–516. Upper rendering Y<400 had no changed pixels.
+  This confirms the intended **spatial localization** of the R18 edit.
+- Physical lower lip shifts are small but image-visible; 12 sampled
+  run frames are distinct. Comparison PNGs were actually inspected.
+
+Do NOT claim full visual match to vanilla, source-proven hinge position,
+registered output scale, or Factorio runtime integration. The candidate
+is still too wide/short and its perfect ring of mechanically identical
+outboard supports visibly differs from the irregular original. Preserve
+the original source ZIP and visual analysis privately; do not commit
+copyrighted original/derived spritesheets or contact art to public GitHub.
+
+Next dedicated milestone: original-style separate emissive working visualisation
+from Blender, timed as one 64-frame ADDITIVE glow atlas with the native 384x832
+cell/shift contract, conditional pipes, and a no-glow-embedded-in-body gate.
+Do not pretend that the current 12-frame flame export or R18 material keyframes
+already implement that full separate light pipeline.
