@@ -635,3 +635,41 @@ art, Lua or gameplay is touched.
 
 No claim of Factorio-runtime compatibility or finished vanilla-style
 visual fidelity is made; user can inspect the real R20 GitHub capture ZIP.
+
+## R21 — one MASTER source-referenced fin profile: thin sheet, ridge, holes, clevis
+
+Reference: original user-supplied installed Factorio `thruster.zip`,
+frame 00 body (not RGB glow), physical hot-tab region at source Y330–430.
+Source is a 2D raster and does NOT uniquely show occluded fins/hinge axes.
+Current R20 has eight visually thick, uniform slab-like fin ends. User
+identifies real source as thin shovel/spade-like stamped panels, not cubes;
+blue/pink heat tint is SURFACE OXIDATION, not extra distal thickness.
+The source seems to show greater visible fin density than the current set,
+but the exact hidden circumferential count is NOT verified.
+
+R21 *model-first* change: all existing eight R16 supported fin objects
+are replaced with exact copies of one geometric master profile, while
+retaining original names and R16 mount graphs. The face starts narrow at
+the root (half-span .062 rad), widens into a .150-radian shoulder midspan,
+then gently tapers to .121 at the free end. Fin metal thickness is just
+.024 Blender tiles throughout, instead of the R16 sheet's .084 radial
+thickness; a narrow central raised fold adds apparent depth without making
+the whole fin a solid bar. Mesh cells are physically omitted for two
+3-cell-long side slots, and each hole has real interior walls, maintaining
+the finite-thickness manifold. The hot lower end has a smoothly mixed
+burnt-purple/blue VERTEX COLOR gradient, not 3D added geometry.
+
+Two thin clevis ears and one transverse round pin are independent editable
+mounting objects per fin, placed at the supported R16 root crosshead.
+R18's existing real 64-key shape deformation is still applied AFTER the
+new fin mesh so animation remains correct. R19 exterior ribs and R20
+deep open interior are retained. The initial pass deliberately keeps 8
+fins to validate ONE hero shape before changing angular spacing/count.
+COUNT IS STILL UNCONFIRMED and 8 is not claimed to match original.
+
+Required QA: manifold through-slot geometry via fixture/unit tests,
+saved Blender scene reopens showing 8 panel meshes with R21 vertex
+colors and two real pierced slots apiece, 8 independently pinned clevis
+assemblies, independent 64-frame distal motion and R20 open nozzle.
+Compare user source crop to actual Blender fin closeup at same zoom.
+No Tech Priests production sprite/artwork or gameplay module touched.

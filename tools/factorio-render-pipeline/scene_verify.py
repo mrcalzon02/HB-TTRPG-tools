@@ -416,6 +416,33 @@ def test_one(path):
                     raise RuntimeError("R20 strake contrast not retained")
             print("R20_OPEN_DRUM_DEEP_VISUAL_PATH_PASS",path.name,flush=True)
             print("R19_CONE_INTERIOR_FIN_ASSEMBLY_PASS",path.name,flush=True)
+            if scene.get("fsc_r21_revision")!=(
+                    "R21_thin_formed_slotted_panel_and_pinned_clevis"):
+                raise RuntimeError("R21 fin master was not applied before R18")
+            if (int(scene.get("fsc_r21_punched_slots_per_fin",0))!=2 or
+                    int(scene.get("fsc_r21_clevis_pin_count",0))!=8 or
+                    int(scene.get("fsc_r21_stamped_center_ridge_count",0))!=8 or
+                    float(scene.get("fsc_r21_master_sheet_thickness",1))>.03):
+                raise RuntimeError("R21 actual thin sheet/clevis structure missing")
+            for index in range(8):
+                fin=bpy.data.objects.get(
+                    "R11_SUSPENDED_AFTERBURNER_VANE_%02d"%index)
+                if fin is None:
+                    raise RuntimeError("R21 missing reference fin")
+                if (not fin.get("R21_integral_centerline_ridge") or
+                    not fin.get("R21_material_tempering_only_at_free_end") or
+                    fin.get("R21_actual_punched_slot_pairs")!=2):
+                    raise RuntimeError("R21 fin shape/heat-color contract missing")
+                if len(fin.data.vertices)<180 or len(fin.data.polygons)<150:
+                    raise RuntimeError("R21 fin is not the actual slotted mesh")
+                if fin.data.color_attributes.get("R21_heat_tint") is None:
+                    raise RuntimeError("R21 shader gradients were not stored on fin")
+                for prefix in ("R21_CLEVIS_TRANSVERSE_PIN_",
+                               "R21_PINNED_CLEVIS_EAR_port_",
+                               "R21_PINNED_CLEVIS_EAR_starboard_"):
+                    if bpy.data.objects.get("%s%02d"%(prefix,index)) is None:
+                        raise RuntimeError("R21 fin no longer has its real clevis")
+            print("R21_THIN_SLOTTED_FIN_MASTER_PASS",path.name,flush=True)
             print("R18_ACTUAL_SOURCE_LOWER_LIP_MOTION_PASS",path.name,flush=True)
             print("R16_OUTBOARD_FIN_SUPPORTS_PASS",path.name,
                   "rectangular_shields",len(vanes),

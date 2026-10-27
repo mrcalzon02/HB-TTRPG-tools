@@ -351,6 +351,12 @@ def build_thruster(name,w,h,root,p):
             name,root,p,{"tube":tube,"ellipsoid":ellipsoid},
             bpy.context.scene
         )
+        # R21 replaces the R16 THICK blade mesh with a thin stamped panel
+        # BEFORE R18 authors its actual source-driven distal morph keys.
+        import vanilla_master_fin_r21
+        vanilla_master_fin_r21.apply(
+            name,root,p,{},bpy.context.scene
+        )
         # R18: only lower observable apron tips vary across 64 real frames.
         import vanilla_distal_motion_r18
         vanilla_distal_motion_r18.apply(
