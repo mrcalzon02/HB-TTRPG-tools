@@ -1291,3 +1291,22 @@ This is a source-oriented inverse-projection RATIO hypothesis, not recovered CAD
 [Real Blender workflow #40594874574](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40594874574) **passed** both calibration and custom models. R35 revised 64-frame native body alpha IoU improved slightly from 0.84253 (R33.2) to 0.84374, especially y445–541 (0.79828→0.80635). But EXACT private source sprite frame00 shows the central blue-tipped interior fin x109..148 y383..396 (blue area centroid y390.30, broad row392 width 38px), where R33.2 Blender is x116..138 y386..398 (centroid391.89, width22px) and R35 Blender is x112..142 y393..407 (centroid400.11, width30px). Thus R35 makes width more source-like but extends the VISIBLE upper fins ~10px too low. These are pixel measurements with the same blue-dominance threshold from original and actual rendered PNG, not art-CAD proof.
 
 R35.1 CANDIDATE retains source-closer lower 4 articulated R18 fin profiles with axial gain 1.10; changes the visible UPPER half of fin ring to 0.98 axial gain from the unchanged roots, to restore blue-tip height, and expands tips from 1.35 to 1.65 circumferential width gain (roots remain 1.16). Upper vs lower categories are based on the existing ten-slot R22 calibration, NOT a recovered source count. Original source atlas remains outside GitHub. No speculative attachment hardware or exterior clamshell geometry is introduced. Fresh real Blender capture + exact source-image inspection needed before approval.
+
+
+### R35.1 VERIFIED source registration — inner thermal tab width and vertical proportion
+
+Commit [7184387d661c](https://github.com/mrcalzon02/HB-TTRPG-tools/commit/7184387d661c86d9c7ba209eb45eea46c4d179fa), strict GitHub [Blender workflow #40596189780](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40596189780) **PASSED** both real Blender 4.5 calibration and custom-model jobs, along with source-validation run #40596189870. Headless saved editable .blend verifies the same ten candidate R21 inner sheet meshes retain 2 punched slots, original R18 shape keys, and all R27 deleted speculative structures remain absent. The two R33.2 exterior beige clamshells are untouched.
+
+The latest artifact's **64 native 264×542 Blender RGBA body PNGs** were downloaded and checked directly against all **64 exact RGBA original source frames** extracted privately from `thruster.zip` SHA256 `0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791`:
+
+| Measurement | Original | R33.2 | R35 | R35.1 |
+| --- | ---: | ---: | ---: | ---: |
+| Center blue heat tip max colored width (pixel threshold) | 38 | 23 | 31 | **37** |
+| Center blue tip Y centroid | 390.30 | 391.89 | 400.11 | **391.02** |
+| Mean 64-frame whole-body alpha IoU | 1.00000 | .84253 | .84374 | **.84551** |
+| Mean 64-frame lower-body alpha IoU y445–541 | 1.00000 | .79828 | .80635 | **.81816** |
+| Mean 64-frame mid-body alpha IoU y330–444 | 1.00000 | .93879 | .93958 | **.93972** |
+
+Blue-color metric uses consistent rule at full-resolution original and rendered PNG: blue channel > red+10 and green+5, blue >48, alpha >128, ROI x95..164 and y365..430. Color-based outline measures are only approximate physical width; Blender's shader/lighting differs markedly from original. R35.1 solves the excessive blue-tip displacement of R35 and improves source-visible fin breadth; it does **not** solve original upper machine design, exhaust throat color/material, hidden nine-versus-ten population count, or original motion amplitude. Original alpha motion remains much stronger than our four lower-tip proxy deformation keys. A 64-frame source/Blender comparison GIF was assembled privately for user inspection, not committed publicly.
+
+This is an accepted proportional **engineering improvement**, not completion of a true source-perfect 3D thruster or authoritative recovered Factorio lighting. No modifications made to the Tech-Priests gameplay repository.
