@@ -3338,6 +3338,19 @@
     "githubTreeVerified": true,
     "githubTreeAssetCount": 109,
     "githubTreeUnlinkedAssetCount": 0,
-    "galleryIdCollisionFixed": true
+    "galleryIdCollisionFixed": true,
+    "pendingHalfScaleWebP": {
+      "fileCount": 69,
+      "originalSizeBytes": null,
+      "webZipSizeBytes": 5189243,
+      "format": "image/webp",
+      "scale": 0.5,
+      "driveFileId": "1Vjal6VMxmkbyLZDTJsuqgQ6-zifpX2Hb",
+      "driveUrl": "https://drive.google.com/file/d/1Vjal6VMxmkbyLZDTJsuqgQ6-zifpX2Hb/view?usp=drivesdk",
+      "sha256": "8ee1a941b294b0edc3ec4c73782653d60699b50dac9ee37408fd55561b301ed8",
+      "githubCommitted": false,
+      "importState": "Drive-verified, GitHub transfer pending",
+      "note": "All 69 display files are ready; do not mark them hosted until verified in main branch."
+    }
   }
 }
