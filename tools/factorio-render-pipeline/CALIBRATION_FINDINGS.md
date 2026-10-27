@@ -533,3 +533,35 @@ from Blender, timed as one 64-frame ADDITIVE glow atlas with the native 384x832
 cell/shift contract, conditional pipes, and a no-glow-embedded-in-body gate.
 Do not pretend that the current 12-frame flame export or R18 material keyframes
 already implement that full separate light pipeline.
+
+## R19 — actual-source cone interior and thermal vane root construction
+
+Reinspected ORIGINAL user-supplied `thruster.zip` 64-body atlas, frame 00,
+native 264x542 crop at rows 330-541. The lower cone is NOT a smooth empty gray
+bowl: it has long, narrow, deep black refractory strakes, staggered
+overlapping dark metal heat shield/scales across the forward wide section,
+and a thin annular belt of recessed ventilation openings. The source also
+shows heavy mounting hardware and welded/segmented root faces on the 8
+visible external afterburner vanes. Original glow is a separate RGB additive
+atlas and does not belong to static physical geometry.
+
+R18 Blender reference close-up revealed a nearly featureless smooth gray
+interior and a ring of short near-throat rods. R19 corrects this by generating:
+- 40 near-mouth solid curved heat-shield sections,
+- 40 staggered middle-zone curved heat scales,
+- 40 longitudinal, depth-following radial strakes,
+- 40 individually modeled dark annular port recesses,
+- eight outer fin root back-face reinforcing ribs and eight root bolts,
+  ahead of R18's separately deforming lower free ends.
+
+All new interior parts follow the original R11 2.28-tile open cone's actual
+radial profile, positioned inboard from it rather than capping the cone.
+They remain EDITABLE individual Blender objects in a named collection.
+Structural verification checks 160 interior objects, retained R11 polygon
+count, 8 attached fin roots and separate emissive-layer policy. Added
+two real orthographic diagnostic closeups of inside wall and fin connections.
+
+This is a source-visible 3D approximation, not an unambiguous recovery of
+Wube's source 3D models. Source art is never committed or republished in
+this public repo. Full genuine Blender screenshots and CI outcomes must be
+reviewed BEFORE any claim of visual fidelity or game compatibility.

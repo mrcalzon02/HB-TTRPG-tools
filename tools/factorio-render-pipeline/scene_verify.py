@@ -363,6 +363,38 @@ def test_one(path):
             scene.frame_set(1)
             if not any_animated:
                 raise RuntimeError("R18 lower lip animation does not evaluate in saved scene")
+            # R19 must add independent, editable solid pieces INSIDE the
+            # original taper. No cap, no flattening, no copied glow sprites.
+            if scene.get("fsc_r19_revision")!=(
+                    "R19_deep_nozzle_scales_and_suspended_fin_roots"):
+                raise RuntimeError("R19 cone interior stage missing")
+            r19=bpy.data.collections.get("R19_EDITABLE_OPEN_CONE_INTERIOR")
+            if r19 is None or len(r19.objects)!=160:
+                raise RuntimeError("R19 open cone needs 160 separate details")
+            for prop,count in (("fsc_r19_near_tiles",40),
+                               ("fsc_r19_mid_tiles",40),
+                               ("fsc_r19_deep_strakes",40),
+                               ("fsc_r19_cooling_slots",40),
+                               ("fsc_r19_fin_root_ribs",8)):
+                if int(scene.get(prop,0))!=count:
+                    raise RuntimeError("R19 missing parts: "+prop)
+            r19_throat=bpy.data.objects.get("R11_OPEN_DEEP_REFRACTORY_THROAT")
+            if not r19_throat.get("R11_open_no_endcaps") or (
+                len(r19_throat.data.polygons)!=int(
+                    scene.get("fsc_r19_open_throat_polygons",0))):
+                raise RuntimeError("R19 filled or replaced the open throat")
+            for index in range(8):
+                plate=bpy.data.objects.get(
+                    "R11_SUSPENDED_AFTERBURNER_VANE_%02d"%index)
+                support=plate.get("R19_joined_root_back_rib")
+                if not support or bpy.data.objects.get(support) is None:
+                    raise RuntimeError("R19 fin root stiffener is detached")
+                if not plate.get("R19_r18_distal_shape_keys_untouched"):
+                    raise RuntimeError("R19 violated R18 fin motion")
+            if scene.get("fsc_r19_glow_layer_policy")!=(
+                    "not baked into physical cone geometry"):
+                raise RuntimeError("R19 fused source light into physical geometry")
+            print("R19_CONE_INTERIOR_FIN_ASSEMBLY_PASS",path.name,flush=True)
             print("R18_ACTUAL_SOURCE_LOWER_LIP_MOTION_PASS",path.name,flush=True)
             print("R16_OUTBOARD_FIN_SUPPORTS_PASS",path.name,
                   "rectangular_shields",len(vanes),

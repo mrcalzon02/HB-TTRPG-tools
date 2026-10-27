@@ -356,6 +356,13 @@ def build_thruster(name,w,h,root,p):
         vanilla_distal_motion_r18.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R19: source-guided physical RECESSED cone scales/strakes and
+        # fin-root welds, preserving R18 motion and separate light effects.
+        import vanilla_cone_interior_r19
+        vanilla_cone_interior_r19.apply(
+            name,root,p,{"tube":tube,"ellipsoid":ellipsoid},
+            bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",

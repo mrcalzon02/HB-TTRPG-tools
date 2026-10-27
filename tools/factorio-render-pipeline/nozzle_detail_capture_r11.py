@@ -15,6 +15,8 @@ from mathutils import Vector
 VIEWS={
     "aft_axis_deep_throat":((0,-7.5,.25),(0,-2.60,-.43),4.7),
     "aft_three_quarter_vanes":((2.9,-6.2,2.35),(0,-2.68,-.43),5.0),
+    "aft_inner_liner_closeup":((.65,-5.2,.55),(0,-2.48,-.43),3.5),
+    "fin_root_connection_closeup":((2.6,-4.9,1.6),(1.25,-2.42,-.43),3.25),
 }
 
 def main():
