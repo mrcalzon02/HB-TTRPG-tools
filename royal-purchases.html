@@ -63,6 +63,19 @@
     .wardrobe-empty { color:var(--muted); padding:16px; }
     .wardrobe-publication { font-size:.81rem; color:var(--muted); }
     .wardrobe-section h2 { margin-top:0; }
+    .wardrobe-sequence-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(285px,1fr)); gap:10px; }
+    .wardrobe-sequence-card { min-width:0; border:1px solid var(--wardrobe-line); border-radius:12px; padding:12px; background:rgba(8,12,24,.55); }
+    .wardrobe-sequence-card h3 { margin:3px 0 7px; font-size:1.03rem; line-height:1.3; }
+    .wardrobe-sequence-card p { color:var(--muted); font-size:.83rem; margin:4px 0 8px; }
+    .wardrobe-sequence-strip { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:4px; height:134px; margin-bottom:10px; }
+    .wardrobe-sequence-strip a { min-width:0; overflow:hidden; background:#292b39; border-radius:5px; display:block; }
+    .wardrobe-sequence-strip img { height:100%; width:100%; object-fit:cover; display:block; }
+    .wardrobe-sequence-card details { border-top:1px solid var(--line); padding-top:8px; margin-top:9px; }
+    .wardrobe-sequence-card summary { color:#f2d6a5; cursor:pointer; font-weight:700; font-size:.82rem; }
+    .wardrobe-sequence-card ul { list-style:none; margin:7px 0 0; padding:0; display:grid; gap:6px; font-size:.81rem; }
+    .wardrobe-sequence-card li { overflow-wrap:anywhere; }
+    .wardrobe-sequence-card li a { text-decoration:underline; }
+
     @media(max-width:700px){.wardrobe-ledger{grid-template-columns:1fr}.wardrobe-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.wardrobe-shell{gap:12px}.wardrobe-panel{padding:13px}.wardrobe-source-list{grid-template-columns:1fr}}
   </style>
 </head>
@@ -81,7 +94,7 @@
       <p class="eyebrow">The Royal Purchases of One Lady of the Elven Court</p>
       <h2>A kingdom of silk, starlight and very expensive gemstones.</h2>
       <p>Every distinct dress worn or considered by Lady Daysha belongs in one garment record. Subsequent fittings, banquets, garden walks, palace misadventures and appearances with King Rome belong beneath that same record—not a second invoice.</p>
-      <p>This is a <strong>source-image inventory, picture gallery and developing accounts ledger</strong>. The site displays verified WebP images where available; original PNG masters are archived separately on Google Drive. The remaining indexed images are labeled pending. Dress values remain provisional until a verified royal purchase is entered.</p>
+      <p>This is a <strong>source-image inventory, picture gallery and developing accounts ledger</strong>. All 178 indexed image files have verified GitHub-hosted WebP gallery copies. Original PNG, JPEG and WebP masters are kept separately on Google Drive. Dress values remain provisional until a verified royal purchase is entered.</p>
     </section>
     <div id="wardrobe-load-message" class="wardrobe-panel" role="status">Loading the royal archive…</div>
     <div id="wardrobe-content" hidden>
@@ -89,7 +102,7 @@
         <div class="wardrobe-stat"><strong id="stat-source">—</strong><span>Source images indexed</span></div>
         <div class="wardrobe-stat"><strong id="stat-dresses">—</strong><span>Design / garment records</span></div>
         <div class="wardrobe-stat"><strong id="stat-assigned">—</strong><span>Artwork references grouped to gowns</span></div>
-        <div class="wardrobe-stat"><strong id="stat-unmatched">—</strong><span>Images awaiting dress match</span></div>
+        <div class="wardrobe-stat"><strong id="stat-unmatched">—</strong><span>Scene, reference or awaiting garment match</span></div>
       </section>
       <section class="wardrobe-ledger wardrobe-section" aria-labelledby="ledger-heading">
         <div class="wardrobe-panel">
@@ -126,6 +139,19 @@
         <p id="garment-result-count" class="wardrobe-count" aria-live="polite"></p>
         <div id="garment-list" class="wardrobe-grid"></div>
       </section>
+      <section class="wardrobe-panel wardrobe-section" aria-labelledby="scenes-heading">
+        <p class="eyebrow">Royal court chronology · No duplicate charges</p>
+        <h2 id="scenes-heading">Scenes, family stories and atelier visits</h2>
+        <p class="wardrobe-muted">These are illustrated episodes, not additional gown purchases. Scenes that show a recognizably repeated dress can also appear under its one wardrobe record. A shared event alone does not prove that the same outfit was worn.</p>
+        <div class="wardrobe-controls">
+          <div class="wardrobe-field"><label for="scene-query">Find an episode</label><input id="scene-query" type="search" placeholder="Estelle, glitter prank, jewels, fittings, wedding" autocomplete="off"></div>
+          <div class="wardrobe-field"><label for="scene-category">Scene category</label>
+            <select id="scene-category"><option value="all">All scenes</option><option value="family">Family</option><option value="court">Court receptions</option><option value="court-adventures">Court adventures</option><option value="royal">Royal ceremonies</option><option value="atelier">Dress salons</option><option value="reference">Gown lookbooks</option></select>
+          </div>
+        </div>
+        <p id="scene-result-count" class="wardrobe-count" aria-live="polite"></p>
+        <div id="scene-sequence-list" class="wardrobe-sequence-grid"></div>
+      </section>
       <section class="wardrobe-panel wardrobe-section" aria-labelledby="source-heading">
         <p class="eyebrow">Archive provenance</p>
         <h2 id="source-heading">Every indexed artwork file</h2>
@@ -142,7 +168,7 @@
       <section class="wardrobe-panel wardrobe-section">
         <h2>Archive policy and corrections</h2>
         <p>Confirmed purchases require dated records and a price paid. Duplicate image exports or changed camera angles remain within their original outfit. Where filenames and conversation sequence are insufficient to prove a match, artwork stays unassigned instead of inflating the royal wardrobe. The archive data is versioned at <a href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/data/daysha-royal-purchases.json">data/daysha-royal-purchases.json</a>.</p>
-        <p class="wardrobe-publication">The uploaded WebP galleries preserve the original dimensions but use compressed presentation files. Original PNG masters are stored in two verified ZIP archives on Google Drive. Art still pending upload is explicitly marked; no image or reused costume is charged as a new gown.</p>
+        <p class="wardrobe-publication">Every indexed artwork source has a GitHub-hosted optimized gallery image; some are intentionally reduced to half-resolution for performance. Original source files are archived separately in Google Drive. Scenes, lookbooks, revisions and costume studies do not create dress invoices.</p>
       </section>
     </div>
   </main>
@@ -177,6 +203,22 @@
           return '<article class="wardrobe-card"><div class="wardrobe-art">'+artwork+'</div><div class="wardrobe-card-body"><span class="wardrobe-pill">'+escape(g.id)+'</span><span class="wardrobe-pill">'+escape(status)+'</span><h3>'+escape(g.title)+'</h3><p class="subline">'+escape(cost)+' · '+linked.length+' artwork record'+(linked.length===1?'':'s')+'</p>'+example+(g.notes?'<p class="wardrobe-muted">'+escape(g.notes)+'</p>':'')+'<details><summary>View appearances and source records ('+linked.length+')</summary>'+(fileList?'<ul>'+fileList+'</ul>':'<p class="wardrobe-muted">Identity and artwork await reconciliation.</p>')+'</details></div></article>';
         }).join('') : '<p class="wardrobe-empty">No gowns match these filters.</p>';
       };
+      const renderScenes = () => {
+        const query=$('scene-query').value.toLowerCase().trim();
+        const category=$('scene-category').value;
+        const seqs=(manifest.sceneSequences||[]).filter(sc=>{
+          if(category!=='all'&&sc.category!==category)return false;
+          const files=sc.sourceIds.map(id=>manifest.sources.find(s=>s.id===id)).filter(Boolean);
+          return !query||[sc.title,sc.description,sc.id,...files.map(s=>s.fileName)].join(' ').toLowerCase().includes(query);
+        });
+        $('scene-result-count').textContent=seqs.length+' illustrated episode groups (no new purchases).';
+        $('scene-sequence-list').innerHTML=seqs.length?seqs.map(sc=>{
+          const files=sc.sourceIds.map(id=>manifest.sources.find(s=>s.id===id)).filter(Boolean);
+          const strip=files.filter(isPublicImage).slice(0,3).map(s=>'<a href="'+escape(s.publishedImageUrl)+'" target="_blank" rel="noopener" aria-label="Open '+escape(s.fileName)+'"><img loading="lazy" src="'+escape(s.publishedImageUrl)+'" alt="'+escape(s.fileName)+'"></a>').join('');
+          const links=files.map(s=>'<li>'+(isPublicImage(s)?'<a href="'+escape(s.publishedImageUrl)+'" target="_blank" rel="noopener">'+escape(s.fileName)+'</a>':escape(s.fileName))+(s.wardrobeId?' · Dress '+escape(s.wardrobeId):' · Garment not assigned')+'</li>').join('');
+          return '<article class="wardrobe-sequence-card"><span class="wardrobe-pill">'+escape(sc.id)+'</span><h3>'+escape(sc.title)+'</h3>'+(strip?'<div class="wardrobe-sequence-strip">'+strip+'</div>':'')+'<p>'+escape(sc.description)+'</p><p>'+files.length+' artwork files · <strong>Scene-only, zero additional charges</strong></p><details><summary>Open all appearances</summary><ul>'+links+'</ul></details></article>';
+        }).join(''):'<p class="wardrobe-empty">No scenes match these filters.</p>';
+      };
       const renderSources = () => {
         const query=$('source-query').value.toLowerCase().trim();
         const status=$('source-status').value;
@@ -203,7 +245,8 @@
         $('annual-cost').textContent=Number(data.costBenchmarks.illustrativeAnnualSpendingGold).toLocaleString('en-US')+' gold';
         ['dress-query','dress-category'].forEach(id=>$(id).addEventListener(id.endsWith('query')?'input':'change',renderGarments));
         ['source-query','source-status'].forEach(id=>$(id).addEventListener(id.endsWith('query')?'input':'change',renderSources));
-        renderGarments();renderSources();
+        ['scene-query','scene-category'].forEach(id=>$(id).addEventListener(id.endsWith('query')?'input':'change',renderScenes));
+        renderGarments();renderScenes();renderSources();
         $('wardrobe-content').hidden=false;
         $('wardrobe-load-message').hidden=true;
       }).catch(error=>{
