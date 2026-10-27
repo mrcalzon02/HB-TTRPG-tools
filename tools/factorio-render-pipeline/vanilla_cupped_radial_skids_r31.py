@@ -11,6 +11,10 @@ unverified outer-shell keyframes. Control values are inverse-projection
 hypotheses requiring comparison with real saved Blender PNGs.
 """
 import math
+# Imported at module scope so the geometry sampler also works in AST-only
+# procedure tests without accidentally importing Blender at call time.
+from vanilla_beige_radial_skids_r29 import (
+    BELLCENTER_Z,SHEET_THICKNESS,OUTER_LIP_FLARE)
 
 REVISION="R31_cupped_radial_shell_with_returned_aft_lips"
 SOURCE_ARCHIVE_SHA256="0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791"
@@ -21,8 +25,6 @@ TAIL_FORWARD=(0.,0.,0.,0.,0.,.02,.08,.16)
 TAIL_ROLL=(0.,0.,0.,0.,0.,1.5,4.,7.)
 # The R29 8x9x2 topology and R16 physical beige material are retained.
 def point(station,u,side,skin,row):
-    from vanilla_beige_radial_skids_r29 import (
-        BELLCENTER_Z,SHEET_THICKNESS,OUTER_LIP_FLARE)
     y,r,outer,inner=station
     theta=math.radians(outer+(inner-outer)*u+TAIL_ROLL[row]*u)
     radius=(r+OUTER_LIP_FLARE*(1-u)**2
