@@ -72,8 +72,13 @@ def apply(name,root,p,api,scene):
                 raise RuntimeError("R33 flattened the source-visible cupped shell")
             if abs(outside.x)-abs(inside.x)<(.55 if row==7 else .75):
                 raise RuntimeError("R33 folded guard; only observed rear tip may taper narrow")
-        if p(7,.5).y <= p(6,.5).y-.11:
-            raise RuntimeError("R33 aft tip was not shortened from the R31 paddles")
+        # R33.2 recovered the EXACT original RGBA source: the rear guard
+        # reaches farther aft than the GIF-derived R33.1 guess. Instead
+        # of the now-obsolete .11 cap, require a smooth monotonic axial
+        # transition over the final 2 sculpt stations (no fold/collapse).
+        axial_gap=p(7,.5).y-p(6,.5).y
+        if not (-.20<axial_gap<-.08):
+            raise RuntimeError("R33.2 final cupped tail lacks smooth aft station spacing")
         if ob.data.materials[0] is not material:
             raise RuntimeError("R33 replaced original unburnt beige metal shader")
         ob["R33_source_tail_taper"]=True
