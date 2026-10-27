@@ -7,6 +7,11 @@ import json
 from pathlib import Path
 import sys
 import bpy
+# Blender --python runs an independent interpreter: it does NOT reliably
+# include this source folder in sys.path, unlike the scene builder.
+ROOT_SOURCE=str(Path(__file__).resolve().parent)
+if ROOT_SOURCE not in sys.path:
+    sys.path.insert(0,ROOT_SOURCE)
 from vane_layout_r22 import VANE_COUNT
 from vanilla_distal_motion_r18 import ANGULAR_TO_OBSERVED
 
