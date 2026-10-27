@@ -16,14 +16,14 @@ SIDES=("port","starboard")
 # (aft-axis Y, outward X radius, underside Z, halfwidth in lateral X)
 # Source-reference calibrated CONCEPT dimensions; refine from real PNG views.
 STATIONS=(
-    (-1.65,1.63,-.19,.16),
-    (-1.94,1.85,-.26,.25),
-    (-2.29,2.03,-.34,.33),
-    (-2.68,2.07,-.42,.37),
-    (-3.07,2.04,-.53,.39),
-    (-3.39,1.98,-.63,.39),
-    (-3.62,1.88,-.70,.33),
-    (-3.73,1.77,-.75,.29),
+    (-1.70,1.70,-.24,.11),
+    (-2.03,1.89,-.29,.15),
+    (-2.40,2.03,-.38,.20),
+    (-2.81,2.08,-.44,.22),
+    (-3.20,2.06,-.57,.23),
+    (-3.54,2.01,-.65,.23),
+    (-3.89,1.94,-.72,.20),
+    (-4.04,1.87,-.74,.16),
 )
 SHEET_THICKNESS=.050
 LATERAL=(-1.,-.5,0.,.5,1.)
@@ -43,12 +43,12 @@ def material(name):
 
 def patina(y,u,side):
     # Oxide is surface color; the plate remains one constant sheet thickness.
-    t=max(0.,min(1.,(-y-3.07)/.60))
-    base=(.100,.090,.078)
-    purple=(.137,.078,.113)
-    blue=(.050,.064,.133)
+    t=max(0.,min(1.,(-y-3.05)/.90))
+    base=(.067,.061,.056)
+    purple=(.150,.071,.119)
+    blue=(.032,.061,.197)
     a=max(0.,min(1.,(t-.08)/.53))
-    b=max(0.,min(1.,(t-.64)/.32))
+    b=max(0.,min(1.,(t-.58)/.30))
     a2=tuple(x*(1-a)+v*a for x,v in zip(base,purple))
     m=.92+.08*math.sin(y*29+u*18+side)
     return tuple((v*(1-b)+w*b)*m for v,w in zip(a2,blue))
@@ -100,7 +100,7 @@ def create_panel(label,sign,root,coll,mat):
         poly.use_smooth=False
         for loop_id in poly.loop_indices:
             v=mesh.vertices[mesh.loops[loop_id].vertex_index].co
-            u=(abs(v.x)-1.95)/.39
+            u=(abs(v.x)-1.95)/.23
             rgb=patina(v.y,u,sign)
             paint.data[loop_id].color=(*rgb,1.)
     ob=bpy.data.objects.new(f"R25_OUTER_SKID_UNDERSIDE_{label}",mesh)
