@@ -17,7 +17,7 @@ def mesh_sampler():
           "TAIL_FORWARD","TAIL_ROLL"},"point","r31_point"),
         ("vanilla_source_tail_profile_r33.py",
          {"AFT_Y_RELIEF","AFT_OUTER_TUCK","AFT_INNER_ANGLE_DEG",
-          "BELL_CENTER_Z"},"point","point")]:
+          "BELL_CENTER_Z","AFT_TIP_EDGE_ROUND"},"point","point")]:
         tree=ast.parse((ROOT/file).read_text(encoding="utf-8"))
         keep=[n for n in tree.body
               if (isinstance(n,ast.Assign) and any(
@@ -40,7 +40,7 @@ class SourceTaperR33(unittest.TestCase):
                 a=g["point"](g["STATIONS"][row],.5,side,1,row)
                 old=g["r31_point"](g["STATIONS"][row],.5,side,1,row)
                 self.assertGreater(a[1],old[1])
-            self.assertGreater(g["point"](g["STATIONS"][-1],.5,side,1,7)[1],-3.3)
+            self.assertGreater(g["point"](g["STATIONS"][-1],.5,side,1,7)[1],-3.34)
 
     def test_r33_guard_remains_cupped_both_sides(self):
         g=self.g
@@ -50,7 +50,18 @@ class SourceTaperR33(unittest.TestCase):
                 l,m,r=[g["point"](station,u,side,1,row)
                        for u in (0,.5,1.)]
                 self.assertLess(m[2],min(l[2],r[2])-.10)
-                self.assertGreater(abs(l[0])-abs(r[0]),.75)
+                self.assertGreater(abs(l[0])-abs(r[0]),.55 if row==7 else .75)
+
+    def test_curved_not_sliced_square_terminal_face(self):
+        g=self.g
+        for side in (-1,1):
+            st=g["STATIONS"][-1]
+            outer=g["point"](st,0.,side,1,7)
+            mid=g["point"](st,.5,side,1,7)
+            inside=g["point"](st,1.,side,1,7)
+            self.assertGreater(outer[1]-mid[1],.04)
+            self.assertGreater(inside[1]-mid[1],.04)
+            self.assertLess(mid[1],g["point"](g["STATIONS"][-2],.5,side,1,6)[1])
 
     def test_mirrored_and_source_cad_uncertain(self):
         g=self.g

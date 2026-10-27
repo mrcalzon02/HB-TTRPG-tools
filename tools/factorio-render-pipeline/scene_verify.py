@@ -582,7 +582,7 @@ def test_one(path):
                 ob=bpy.data.objects.get("R25_OUTER_SKID_UNDERSIDE_"+side)
                 if (not ob.get("R33_source_tail_taper") or
                     not ob.get("R33_no_extra_parts_or_actuators") or
-                    abs(float(ob.get("R33_aft_tip_y_shift",0))-.18)>.001):
+                    abs(float(ob.get("R33_aft_tip_y_shift",0))-.09)>.001):
                     raise RuntimeError("R33 rear ends were not tapered in real scene")
                 if ob.animation_data:
                     raise RuntimeError("R33 guard invents unverified actuation")
@@ -591,8 +591,15 @@ def test_one(path):
                         ob.data.vertices[72+row*9+j].co for j in (0,4,8)]
                     if belly.z>=min(outside.z,inside.z)-.10:
                         raise RuntimeError("R33 aft taper flattened cupped shell")
-                    if abs(outside.x)-abs(inside.x)<.75:
+                    if abs(outside.x)-abs(inside.x)<(.55 if row==7 else .75):
                         raise RuntimeError("R33 rear profile does not wrap nozzle")
+                a=ob.data.vertices[72+7*9+0].co
+                b=ob.data.vertices[72+7*9+4].co
+                c=ob.data.vertices[72+7*9+8].co
+                if not (a.y>b.y+.04 and c.y>b.y+.04):
+                    raise RuntimeError("R33.1 persisted end cap is still a square cutoff")
+                if abs(float(ob.get("R33_rounded_tail_edge",0))-.06)>.001:
+                    raise RuntimeError("R33.1 curved terminal edge marker missing")
             print("R33_SOURCE_AFT_TAPER_SAVED_MESH_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.

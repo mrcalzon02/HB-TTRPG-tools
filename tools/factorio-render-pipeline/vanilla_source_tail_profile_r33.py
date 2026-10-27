@@ -18,9 +18,10 @@ ORIGINAL_SHA256="0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d796779
 BELL_CENTER_Z=-.43
 # Source-aligned inverse-projection candidates. Control each axial station;
 # last three rows only: pull tips forward and slim their exposed outer edges.
-AFT_Y_RELIEF=(0.,0.,0.,0.,0.,.08,.12,.18)
+AFT_Y_RELIEF=(0.,0.,0.,0.,0.,.06,.10,.09)
 AFT_OUTER_TUCK=(0.,0.,0.,0.,0.,.02,.06,.12)
-AFT_INNER_ANGLE_DEG=(0.,0.,0.,0.,0.,-3.,-6.,-9.)
+AFT_INNER_ANGLE_DEG=(0.,0.,0.,0.,0.,-3.,-6.,-18.)
+AFT_TIP_EDGE_ROUND=(0.,0.,0.,0.,0.,0.,.015,.06)
 
 def point(station,u,side,skin,row):
     x,y,z=r31_point(station,u,side,skin,row)
@@ -31,7 +32,7 @@ def point(station,u,side,skin,row):
     theta+=math.radians(AFT_INNER_ANGLE_DEG[row]*u*u)
     radius=old_radial-AFT_OUTER_TUCK[row]*(1-u)*(1-u)
     return (side*radius*math.cos(theta),
-            y+AFT_Y_RELIEF[row],
+            y+AFT_Y_RELIEF[row]+AFT_TIP_EDGE_ROUND[row]*(2*u-1)**2,
             BELL_CENTER_Z-radius*math.sin(theta))
 
 def apply(name,root,p,api,scene):
@@ -69,8 +70,8 @@ def apply(name,root,p,api,scene):
             outside,belly,inside=[p(row,u) for u in (0.,.5,1.)]
             if belly.z>=min(outside.z,inside.z)-.10:
                 raise RuntimeError("R33 flattened the source-visible cupped shell")
-            if abs(outside.x)-abs(inside.x)<.75:
-                raise RuntimeError("R33 folded the guard into a narrow unsupported blade")
+            if abs(outside.x)-abs(inside.x)<(.55 if row==7 else .75):
+                raise RuntimeError("R33 folded guard; only observed rear tip may taper narrow")
         if p(7,.5).y <= p(6,.5).y-.11:
             raise RuntimeError("R33 aft tip was not shortened from the R31 paddles")
         if ob.data.materials[0] is not material:
@@ -80,6 +81,9 @@ def apply(name,root,p,api,scene):
         ob["R33_unheated_beige_preserved"]=material.name
         ob["R33_mirrored_source_profile"]=label
         ob["R33_aft_tip_y_shift"]=AFT_Y_RELIEF[-1]
+        ob["R33_rounded_tail_edge"]=AFT_TIP_EDGE_ROUND[-1]
+        if p(7,0.).y<=p(7,.5).y+.04:
+            raise RuntimeError("R33.1 lower shroud still ends with square flat cap")
     if {o.name for o in scene.objects}!=before_objects:
         raise RuntimeError("R33 created unobserved guard supports")
     if any((len(bpy.data.objects[n].data.vertices),
