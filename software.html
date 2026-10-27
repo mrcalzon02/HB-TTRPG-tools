@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Software — Programs and Game Projects | Calzon’s TTRPG Foundry</title><meta name="description" content="Software program hub with Simple Sound Manager, CubeChat, and The Beckenburg Project 3D asymmetric ghost investigation game planning.">
+<title>Software — Programs and Game Projects | Calzon’s TTRPG Foundry</title><meta name="description" content="Software program hub featuring LANBridge cross-platform LAN storage and backup management, Simple Sound Manager, CubeChat, and Beckenburg.">
 <meta name="robots" content="index,follow"><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/software.html">
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="workspace-landing.css">
 <style>
@@ -24,7 +24,7 @@
 </head><body class="workspace-landing-body">
 <header class="site-header"><div><p class="eyebrow">Homebrew Tabletop RPG Tools / Software</p><h1>Software</h1><p class="subtitle">Our desktop programs, experimental network software and new game-development projects in one place.</p></div><nav class="top-nav" aria-label="Primary"><a class="nav-button" href="index.html">Foundry Home</a><a class="nav-button active" href="software.html" aria-current="page">Software</a><a class="nav-button" href="other-projects.html">Other Projects</a><a class="nav-button" href="creative-portfolio.html">Portfolio</a><a class="nav-button" href="site-map.html">Site Map</a></nav></header>
 <main class="software-shell">
-<section class="hero-card software-intro"><p class="eyebrow">Desktop applications · games · mods</p><h2>Programs &amp; games</h2><p>Browse active development in the project showcase, inspect real GitHub release assets, or open the existing Sound Manager, CubeChat and Beckenburg workspaces below. Original software links remain at their established addresses.</p><div class="workspace-actions"><a class="link-button primary-action" href="#software-showcase">Explore development showcase</a><a class="link-button" href="other-projects.html">All other projects</a><a class="link-button" href="creative-portfolio.html">Creative portfolio</a></div></section>
+<section class="hero-card software-intro"><p class="eyebrow">Desktop applications · games · mods</p><h2>Programs &amp; games</h2><p>Browse active development and real GitHub releases, or download LANBridge for direct-IP Windows/Linux storage and protected backups. Sound Manager, CubeChat and Beckenburg remain at their established addresses.</p><div class="workspace-actions"><a class="link-button primary-action" href="#lanbridge">LANBridge storage utility</a><a class="link-button" href="#software-showcase">Explore development showcase</a><a class="link-button" href="other-projects.html">All other projects</a><a class="link-button" href="creative-portfolio.html">Creative portfolio</a></div></section>
 
 <section class="software-panel" id="software-showcase" aria-labelledby="sc-heading">
   <div class="sc-head">
@@ -111,8 +111,20 @@
   <noscript><p>JavaScript is needed for the gallery and live release browser. The <a href="other-projects.html">original GitHub project directory</a> and <a href="https://github.com/mrcalzon02?tab=repositories">repository listing</a> provide ordinary links.</p></noscript>
 </section>
 <nav class="software-tabs" role="tablist" aria-label="Software projects">
-<a id="tab-sound-manager" role="tab" aria-selected="true" tabindex="0" aria-controls="sound-manager" href="#sound-manager" aria-current="page">Sound Manager</a><a id="tab-cubechat" role="tab" aria-selected="false" tabindex="-1" aria-controls="cubechat" href="#cubechat">CubeChat</a><a id="tab-beckenburg" role="tab" aria-selected="false" tabindex="-1" aria-controls="beckenburg" href="#beckenburg">The Beckenburg Project</a>
+<a id="tab-lanbridge" role="tab" aria-selected="true" tabindex="0" aria-controls="lanbridge" href="#lanbridge" aria-current="page">LANBridge</a><a id="tab-sound-manager" role="tab" aria-selected="false" tabindex="-1" aria-controls="sound-manager" href="#sound-manager">Sound Manager</a><a id="tab-cubechat" role="tab" aria-selected="false" tabindex="-1" aria-controls="cubechat" href="#cubechat">CubeChat</a><a id="tab-beckenburg" role="tab" aria-selected="false" tabindex="-1" aria-controls="beckenburg" href="#beckenburg">The Beckenburg Project</a>
 </nav>
+<section class="software-panel menu-card" id="lanbridge" role="tabpanel" aria-labelledby="tab-lanbridge">
+<h2>LANBridge — local network storage &amp; backups</h2>
+<p>Lightweight cross-platform LAN file transfers and protected backup hosting. Connect directly by IP address so Windows 10, Windows 11 and Linux computers can exchange files without relying on Windows network discovery. Run a desktop interface, terminal-only commands, or a configured background host service.</p>
+<span class="software-tag">Windows 10 / 11</span><span class="software-tag">Linux</span><span class="software-tag">GUI + terminal</span><span class="software-tag">Local backup host</span>
+<div class="workspace-actions">
+<a class="link-button primary-action" href="software/lanbridge/LANBridge-v0.2-Windows-Linux.zip" download>Download LANBridge v0.2 (ZIP · 36 KB)</a>
+<a class="link-button" href="software/lanbridge/README.md">Setup &amp; security notes</a>
+<a class="link-button" href="software/lanbridge/LANBridge-v0.2-Windows-Linux.zip" download>Source &amp; tests</a>
+</div>
+<p class="software-muted">Development version. This ZIP contains Python source and launchers, not a prebuilt Windows EXE. Python 3.10+ and the listed dependency are required when running from source. Windows background service and SMB scripts require validation on real Windows systems. Actual mapped drive letters use native SMB; LANBridge's encrypted transfers operate independently. Keep hosting restricted to trusted LANs and do not forward its port to the public internet.</p>
+<p class="software-muted"><strong>Archive SHA-256:</strong> <code>af8d9c9eaf544532e78beddacbeb6b33877a7df3c2b7500de2798f3d2ec90f71</code></p>
+</section>
 <section class="software-panel menu-card" id="sound-manager" role="tabpanel" aria-labelledby="tab-sound-manager" data-old-labelledby="sound-title"><h2 id="sound-title">Simple Sound Manager</h2>
 <p>Local Windows audio manager with multiple outputs, microphone management, per-device EQ, timing/delay adjustment, live waveforms and profiles. Its original application and release downloads are preserved.</p>
 <span class="software-tag">Desktop program</span><span class="software-tag">Windows download</span>
