@@ -859,3 +859,38 @@ Important user-corrected taxonomy: INNER fins (already modeled) are NOT
 the same objects as TWO LARGE LOWER LATERAL EXTERNAL SKID-COVER FIN UNDERSIDES.
 Keep separate collections, counts and support paths. Never count the large
 external skid shrouds as two new little hot tabs.
+
+## R26 — CORRECT UNDER-SHELL SKID POSITION + SOURCE-PORTRAIT PROPORTIONS
+
+User correction: the two large COVERING fins are UNDER the thruster,
+not attached at the left/right SIDES. R25/R25.1 were geometrically
+wrong despite passing structural QA: their top shell surface sat near
+Z=-.2..-.7, essentially lateral wings above the nozzle lower half.
+The source shows only two dark/heat-aged UNDERSIDES below the lower cone.
+R26 places the entire upper edge of both sheets BELOW Z=-1.1 in
+unscaled Blender coordinates, trailing down to Z≈-1.92, with true casing
+support stanchions located below the engine and still separate from
+the R21 inner tab set. There is ZERO inner fin count/geometry edit.
+
+User also notes original camera SCALE mismatch is intolerable.
+Original source body RGBA idle bbox [4,0,263,532] in 264x542
+gives 259/532≈.487 portrait silhouette ratio. R25.1 captured body
+bbox [24,179,289,519] in 320x640 gives 265/340≈.779.
+It is much too squat/wide and leaves 179 pixels unused at top.
+
+R26 introduces an explicit, source-portrait CALIBRATION ONLY
+parent scale (.86,1.28,1.0), orthographic vertical span 8.5 rather
+than previous 11.2, and translates old R09 camera and target together
+1.1 Blender tiles aft without changing camera rotation. This keeps
+original editable fin mesh topology and all support connectivity intact,
+and moves the 3D silhouette toward source portrait proportions.
+The physical gameplay footprint remains 4x8 metadata; the
+calibration-parent transform is NOT Factorio-world/runtime approval.
+The independent flame pass keeps wider old 11.2 orthographic field
+so the nozzle-close crop cannot clip independent jet emissions.
+
+New scene QA checks upper envelope of both outer covers in local Z,
+their independent role, source scale/camera metadata, and all old
+R16/R18/R19/R20/R21 fin details. Previous geometry pass or source unit
+success does NOT count as a full original-image match. Actual rendered
+PNG geometry and clipping MUST be measured and inspected afterwards.

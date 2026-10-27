@@ -222,6 +222,12 @@ def configure_scene(name,w,h,width,height,num_frames):
     bpy.context.scene.collection.objects.link(ROOT)
     MATERIALS=setup_palette()
     benchmark(name,w,h)
+    if name.startswith("test-04-vanilla-approx"):
+        # R26: Source-portrait calibration of the ENTIRE original 3D model
+        # hierarchy (not individual fin mesh edits or private reference art).
+        # 4x8 physical prototype metadata remains authoritative; this is
+        # a VISUAL BENCHMARK scale, not an approved gameplay footprint.
+        ROOT.scale=(.86,1.28,1.0)
     add_nonrender_jig(w,h)
     if name.startswith("test-04-vanilla-approx"):
         from vanilla_benchmark_r07 import add_flame_collection
@@ -243,15 +249,14 @@ def configure_scene(name,w,h,width,height,num_frames):
     # Keep R09's approved perspective, translate BOTH camera and target aft.
     # R10's longer separate flame clips the bottom if centered on chassis.
     # No geometry shrink or per-frame auto-crop is permitted.
-    camera_origin=((.18,-7.8,10.0) if vanilla_camera
+    camera_origin=((.18,-8.9,10.0) if vanilla_camera
                    else (cam_x,-max(6.,h*.85),max(5.,h*.86)))
-    camera_target=Vector((0,-1.0,.56) if vanilla_camera else (0,0,.56))
+    camera_target=Vector((0,-2.1,.56) if vanilla_camera else (0,0,.56))
     bpy.ops.object.camera_add(location=camera_origin)
     cam=bpy.context.object
     cam.rotation_euler=(camera_target-cam.location).to_track_quat("-Z","Y").to_euler()
     cam.data.type="ORTHO"
-    cam.data.ortho_scale=(max(h*1.40,w*1.35*height/width)
-                          if name.startswith("test-04-vanilla-approx")
+    cam.data.ortho_scale=(8.5 if vanilla_camera
                           else max(h*1.55,w*1.75*height/width))
     bpy.ops.object.light_add(type="AREA",location=(-4,-5,8))
     light=bpy.context.object;light.data.energy=1100;light.data.size=6
@@ -290,6 +295,12 @@ def configure_scene(name,w,h,width,height,num_frames):
     scene["fsc_model_revision"]=("r10-vanilla-twelve-frame-hot-jet" if name.startswith("test-04")
                                  else "r09-nozzle-interiors-r06-housing")
     scene["fsc_capture_ortho_scale"]=cam.data.ortho_scale
+    if vanilla_camera:
+        scene["fsc_r26_reference_projection"]="source_portrait_0.487_ratio_calibration"
+        scene["fsc_r26_model_parent_scale"]=json.dumps(list(ROOT.scale))
+        scene["fsc_r26_source_sprite_bbox"]=json.dumps([4,0,263,532])
+        scene["fsc_r26_camera_preserves_no_frametime_autocrop"]=True
+        scene["fsc_r26_inner_fin_mesh_unmodified_by_skid_stage"]=True
     scene["fsc_capture_camera_position"]=json.dumps(list(cam.location))
     scene["fsc_camera_selection_evidence"]=("R09 centered_high translated 1 tile aft for R10 flame clearance"
                                             if vanilla_camera else "R06 custom model camera")
@@ -371,6 +382,11 @@ def capture_one(out_dir,name):
         preserve={ob:ob.hide_render for ob in scene.objects
                   if ob.type in {"MESH","CURVE","SURFACE"}}
         effect=set(flame.objects)
+        effect_camera_scale=scene.camera.data.ortho_scale
+        # Exhaust is a separate atlas in the original prototype; keep its
+        # full extent rather than clipping to the newly calibrated BODY crop.
+        if name.startswith("test-04-vanilla-approx"):
+            scene.camera.data.ortho_scale=11.2
         try:
             for ob in preserve:ob.hide_render=ob not in effect
             for k in range(frames):
@@ -383,6 +399,7 @@ def capture_one(out_dir,name):
                 manifest["flame_frames"].append(str(relative).replace("\\","/"))
         finally:
             for ob,old in preserve.items():ob.hide_render=old
+            scene.camera.data.ortho_scale=effect_camera_scale
             scene.frame_set(1)
     (target/"capture-manifest.json").write_text(json.dumps(manifest,indent=2)+"\n",encoding="utf-8")
     print("CAPTURE_SUCCESS",name,len(manifest["frame_files"]),flush=True)

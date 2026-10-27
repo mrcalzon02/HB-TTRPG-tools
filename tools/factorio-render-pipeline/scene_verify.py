@@ -184,7 +184,7 @@ def test_one(path):
                 raise RuntimeError("Camera target did not move aft with extended exhaust")
             if (abs(scene.camera.location.x-.18)>.01 or
                 abs(scene.camera.location.z-10.0)>.05 or
-                abs(scene.camera.location.y+7.8)>.05):
+                abs(scene.camera.location.y+8.9)>.05):
                 raise RuntimeError("Vanilla camera drifted from corrected centered-high aft composition")
             # Validate the remaining R08 industrial chassis ONLY; R13
             # intentionally removes the old repeated shields and windows.
@@ -421,6 +421,26 @@ def test_one(path):
                 if rib.data.materials[0].name!=(
                         "R20_inner_oxidized_strake_contrast"):
                     raise RuntimeError("R20 strake contrast not retained")
+            # R26 source portrait SCALE and physically under-bell placement
+            # are enforced without changing the inner fin topology.
+            expected_parent_scale=(.86,1.28,1.0)
+            if any(abs(a-b)>.001 for a,b in zip(
+                    bpy.data.objects["CAPTURE_ROOT_UNROTATED_NORTH"].scale,
+                    expected_parent_scale)):
+                raise RuntimeError("R26 global portrait proportion correction missing")
+            if abs(scene.camera.data.ortho_scale-8.5)>.01:
+                raise RuntimeError("R26 camera portrait scale not set")
+            if scene.get("fsc_r26_reference_projection")!=(
+                    "source_portrait_0.487_ratio_calibration"):
+                raise RuntimeError("R26 source aspect calibration marker missing")
+            if scene.get("fsc_r26_revision")!=(
+                    "R26_source_underneath_not_side_wings"):
+                raise RuntimeError("R26 exterior skids are still lateral wings")
+            if (float(scene.get("fsc_r26_under_nozzle_z_max",0))>=-1.10
+                    or float(scene.get("fsc_r26_under_nozzle_z_min",0))>=-1.8):
+                raise RuntimeError("R26 skid covering mesh is not BELOW the cone")
+            if not scene.get("fsc_r26_not_included_in_inner_fin_count"):
+                raise RuntimeError("R26 incorrectly reclassified exterior as inner")
             # R25 user's critical distinction: TWO larger OUTER skid-cover
             # undersides are NOT counted among the repeated internal vanes.
             if scene.get("fsc_r25_revision")!=(

@@ -15,15 +15,18 @@ REVISION="R25_two_large_external_underside_skid_covers"
 SIDES=("port","starboard")
 # (aft-axis Y, outward X radius, underside Z, halfwidth in lateral X)
 # Source-reference calibrated CONCEPT dimensions; refine from real PNG views.
+# Body centerline is z=-.43 and the actual nozzle LOWER shell reaches
+# roughly -1.8. These two covers belong UNDER that lower nozzle assembly,
+# not level with its lateral shoulders; only their under-faces are observed.
 STATIONS=(
-    (-1.70,1.70,-.24,.11),
-    (-2.03,1.89,-.29,.15),
-    (-2.40,2.03,-.38,.20),
-    (-2.81,2.08,-.44,.22),
-    (-3.20,2.06,-.57,.23),
-    (-3.54,2.01,-.65,.23),
-    (-3.89,1.94,-.72,.20),
-    (-4.04,1.87,-.74,.16),
+    (-1.65,1.33,-1.16,.10),
+    (-1.96,1.58,-1.28,.16),
+    (-2.32,1.78,-1.38,.20),
+    (-2.67,1.90,-1.50,.22),
+    (-3.06,1.93,-1.62,.23),
+    (-3.43,1.84,-1.73,.23),
+    (-3.78,1.74,-1.86,.21),
+    (-3.95,1.61,-1.92,.17),
 )
 SHEET_THICKNESS=.050
 LATERAL=(-1.,-.5,0.,.5,1.)
@@ -128,18 +131,18 @@ def apply(name,root,p,api,scene):
     for label,sign in (("port",-1),("starboard",1)):
         ob=create_panel(label,sign,root,coll,colored)
         # Connected to outer machine casing, NOT any nozzle petal.
-        inner_anchor=(sign*1.35,-1.27,-.21)
-        shoulder=(sign*1.74,-1.64,-.18)
-        frame=(sign*1.89,-2.11,-.33)
-        clamp=(sign*2.04,-2.44,-.36)
+        inner_anchor=(sign*1.13,-1.28,-1.04)
+        shoulder=(sign*1.34,-1.62,-1.15)
+        frame=(sign*1.67,-2.12,-1.34)
+        clamp=(sign*1.88,-2.70,-1.49)
         bracket=tube(f"R25_OUTER_SKID_CASING_SPINE_{label}",
                      [inner_anchor,shoulder,frame,clamp],
                      .094,outer_metal,root)
         move(bracket,coll)
         # Underbody folded rib, narrower than main underside sheet.
         rib=tube(f"R25_OUTER_SKID_UNDERBODY_CHANNEL_{label}",
-                 [(sign*1.85,-2.11,-.32),(sign*2.07,-2.64,-.47),
-                  (sign*1.99,-3.09,-.59),(sign*1.86,-3.46,-.71)],
+                 [(sign*1.65,-2.13,-1.37),(sign*1.88,-2.67,-1.53),
+                  (sign*1.89,-3.10,-1.67),(sign*1.70,-3.68,-1.89)],
                  .048,outer_metal,root)
         move(rib,coll)
         root_boss=ellipsoid(
@@ -160,6 +163,14 @@ def apply(name,root,p,api,scene):
     if inner_names!=after_names:
         raise RuntimeError("R25 touched inner fin collection unexpectedly")
     scene["fsc_r25_revision"]=REVISION
+    scene["fsc_r26_revision"]="R26_source_underneath_not_side_wings"
+    scene["fsc_r26_under_nozzle_z_max"]=max(
+        vertex.co.z for side in ("port","starboard")
+        for vertex in bpy.data.objects["R25_OUTER_SKID_UNDERSIDE_"+side].data.vertices)
+    scene["fsc_r26_under_nozzle_z_min"]=min(
+        vertex.co.z for side in ("port","starboard")
+        for vertex in bpy.data.objects["R25_OUTER_SKID_UNDERSIDE_"+side].data.vertices)
+    scene["fsc_r26_not_included_in_inner_fin_count"]=True
     scene["fsc_r25_large_outer_skids"]=2
     scene["fsc_r25_inner_afterburner_objects_unchanged"]=True
     scene["fsc_r25_outer_source_view"]="underside only, outer left and right"
