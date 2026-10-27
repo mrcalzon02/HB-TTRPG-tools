@@ -58,6 +58,22 @@ class R29RadialSkids(unittest.TestCase):
             self.assertEqual(set(counts.values()),{2})
             self.assertLess(max(x[2] for x in vertices),-1.1)
 
+    def test_outward_lighting_normals_on_both_beige_outer_skins(self):
+        # A mirror through X flips polygon winding. Verify actual 3D
+        # face normals for both skins before trusting visible beige hue.
+        for side in (-1,1):
+            xyz,polys=self.g["mesh_data"](side)
+            face=polys[1]  # first OUTER skin face
+            a,b,c=[xyz[i] for i in face[:3]]
+            ab=[b[i]-a[i] for i in range(3)]
+            ac=[c[i]-a[i] for i in range(3)]
+            n=[ab[1]*ac[2]-ab[2]*ac[1],
+               ab[2]*ac[0]-ab[0]*ac[2],
+               ab[0]*ac[1]-ab[1]*ac[0]]
+            radial=(a[0],0.,a[2]-self.g["BELLCENTER_Z"])
+            self.assertGreater(sum(x*y for x,y in zip(n,radial)),0,
+                "Outer beige shell normal points inward on mirrored side")
+
     def test_both_covers_beige_same_as_attachment_not_burnt(self):
         self.assertIn('SOURCE_MATERIAL_NAME="R16_oxidized_load_bearing_clevis"',self.text)
         self.assertIn("material=ref.copy()",self.text)

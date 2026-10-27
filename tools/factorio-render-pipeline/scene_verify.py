@@ -509,6 +509,16 @@ def test_one(path):
                     raise RuntimeError("R29 natural beige physical shell metadata absent")
                 if colors.get("R25_underside_thermal_patina") is not None:
                     raise RuntimeError("R29 preserved fictitious blue burnout on skid")
+                # MATERIAL IS BEIGE but only means anything if each
+                # mirrored OUTER shell surface normal points OUTWARD.
+                # The former starboard winding inverted its illumination.
+                shell_poly=cover.data.polygons[1]
+                surface=cover.data.vertices[
+                    cover.data.loops[shell_poly.loop_start].vertex_index].co
+                radial_dot=(shell_poly.normal.x*surface.x+
+                            shell_poly.normal.z*(surface.z+.43))
+                if radial_dot<=0:
+                    raise RuntimeError("R29 outer beige shell surface normal faces inward")
                 # On axial station 4, each side must rotate >0.6 tiles
                 # in BOTH X and Z when tracing shell circumferentially.
                 a=cover.data.vertices[3*9+0].co

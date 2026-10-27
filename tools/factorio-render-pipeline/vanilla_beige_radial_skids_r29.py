@@ -70,6 +70,13 @@ def mesh_data(side):
         for col in range(cols-1):
             q=row*cols+col
             polygons.append((q,q+1,half+q+1,half+q))
+    # Critical lighting correction: mirroring the original polygon
+    # vertex positions across local X reverses winding. Without a
+    # sign-dependent flip, the STARBOARD OUTER beige skin faces inward
+    # and catches the wrong lighting, even though color/RGB is identical.
+    # Keep INNER skin pointing inward and OUTER skin outward on BOTH sides.
+    if side>0:
+        polygons=[tuple(reversed(face)) for face in polygons]
     return vertices,polygons
 
 def _beige_attachment_material():
@@ -165,5 +172,6 @@ def apply(name,root,p,api,scene):
     scene["fsc_r29_all_covered_faces_follow_bell_circumference"]=True
     scene["fsc_r29_inner_fins_unchanged"]=True
     scene["fsc_r29_no_added_geometry"]=True
+    scene["fsc_r29_world_outward_normals_both_sides"]=True
     scene["fsc_r29_hidden_mechanisms_unknown"]=True
     scene["fsc_r25_heat_source"]="superseded by R29: beige unheated outer castings"
