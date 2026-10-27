@@ -1,0 +1,38 @@
+name: Validate Daysha Royal Purchases Gallery
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/daysha-royal-purchases.json'
+      - 'assets/daysha/royal-purchases/**'
+      - 'royal-purchases.html'
+      - 'stories.html'
+      - 'scripts/validate-daysha-royal-gallery.mjs'
+      - '.github/workflows/daysha-royal-gallery.yml'
+  pull_request:
+    paths:
+      - 'data/daysha-royal-purchases.json'
+      - 'assets/daysha/royal-purchases/**'
+      - 'royal-purchases.html'
+      - 'stories.html'
+      - 'scripts/validate-daysha-royal-gallery.mjs'
+      - '.github/workflows/daysha-royal-gallery.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-royal-gallery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check archive validation script syntax
+        run: node --check scripts/validate-daysha-royal-gallery.mjs
+      - name: Validate 178 gallery artworks, gown links, scenes and accounting
+        run: node scripts/validate-daysha-royal-gallery.mjs
