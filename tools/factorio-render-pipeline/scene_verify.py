@@ -475,6 +475,9 @@ def test_one(path):
             if scene.get("fsc_r29_source_material")!=(
                     "R16_oxidized_load_bearing_clevis"):
                 raise RuntimeError("R29 skid shells use wrong source attachment material")
+            if abs(float(scene.get(
+                    "fsc_r29_2_source_outline_outer_lip_flare",0))-.36)>.001:
+                raise RuntimeError("R29.2 source-matching outer beige lip width absent")
             if not scene.get("fsc_r29_all_covered_faces_follow_bell_circumference"):
                 raise RuntimeError("R29 outer shells remain globally level")
             beige_reference=bpy.data.materials.get(

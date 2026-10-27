@@ -13,7 +13,7 @@ def pure_mesh():
         if isinstance(n,ast.Assign) and any(
             isinstance(t,ast.Name) and t.id in (
                 "STATIONS","CIRCUMFERENCE_SAMPLES",
-                "SHEET_THICKNESS","BELLCENTER_Z")
+                "SHEET_THICKNESS","BELLCENTER_Z","OUTER_LIP_FLARE")
             for t in n.targets):
             keep.append(n)
         if isinstance(n,ast.FunctionDef) and n.name in ("point","mesh_data"):
@@ -41,8 +41,10 @@ class R29RadialSkids(unittest.TestCase):
             self.assertTrue(min(out[0],inside[0])<mid[0]<max(out[0],inside[0]))
             self.assertTrue(min(out[2],inside[2])<mid[2]<max(out[2],inside[2]))
             r=lambda q: math.hypot(q[0],q[2]-self.g["BELLCENTER_Z"])
-            self.assertAlmostEqual(r(out),r(mid),places=5)
-            self.assertAlmostEqual(r(mid),r(inside),places=5)
+            self.assertGreater(r(out),r(mid))
+            self.assertGreater(r(mid),r(inside))
+            self.assertGreater(abs(out[0]),1.90)
+            self.assertLess(abs(inside[0]),.90)
 
     def test_real_thin_closed_3d_mesh_both_sides(self):
         for side in (-1,1):

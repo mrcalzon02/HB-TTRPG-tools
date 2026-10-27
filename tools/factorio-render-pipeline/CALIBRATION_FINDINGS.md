@@ -1163,3 +1163,27 @@ changes to any inner fin meshes, source-driven animation or R27 pruned
 braces. Extra oblique inspection view provides actual tilted angle.
 Original Factorio frame 00 remains the only authority for acceptance;
 new geometric assumptions require visual verification with output PNGs.
+
+### R29.2 — correct source-projection width WITHOUT flattening the beige skids
+
+Side-by-side original/R28/R29/R29.1 real camera PNG review:
+- Original alpha bounds [4,0,263,532] native 264x542,
+  aspect 259/532=.48684.
+- R28 calibrated body [22,35,292,581] in 320x640,
+  aspect 270/546=.4945. BUT covers were horizontal purple paddles.
+- R29/R29.1 calibrated body [47,35,279,583] in 320x640,
+  aspect 232/548=.4234. Real angular wrap and beige were correct,
+  but outer shell contours recessed TOO FAR inward and narrowed the
+  source-facing silhouette. Normal correction R29.1 alone did not
+  fix geometric source registration.
+
+R29.2 preserves the exact existing 8×9×2 radial-wrap shell and
+warm beige R16 root-casting material, without any invented hardware.
+A smooth +0.36-tile OUTER-RIM radial projection increase, tapering
+quadratically to ZERO at the sheltered inner lip, restores the
+projected side profile WITHOUT reintroducing globally-level wings.
+No recoloring, no speculative skid heat damage, no fin edits.
+Scene QA asserts exactly the 0.36 source-derived provisional correction.
+The next REAL Blender source-frame capture must establish if it
+restores the source height-to-width ratio and whether side edges
+still need accurate pixel landmark geometry.

@@ -33,6 +33,10 @@ STATIONS=(
 CIRCUMFERENCE_SAMPLES=(0.,.125,.25,.375,.5,.625,.75,.875,1.)
 SHEET_THICKNESS=.036
 BELLCENTER_Z=-.43
+# R29.2 outer-lip correction from SOURCE silhouette: the original
+# bell's external beige skid edge projects farther OUT than R29 did.
+# Flare the OUTER rim only; the INNER sheltered lip stays where it is.
+OUTER_LIP_FLARE=.36
 SIDES=("port","starboard")
 COLOR_ATTR="R29_beige_weathering_not_thermal_oxide"
 SOURCE_MATERIAL_NAME="R16_oxidized_load_bearing_clevis"
@@ -44,7 +48,7 @@ def point(station,u,side,skin):
     # The plate is a true CYLINDRICAL/CONICAL ARCUATE segment around
     # engine local-Y. Its normal changes with θ; both underside faces
     # rotate rather than being a deformed globally level X/Z plane.
-    radius=r+skin*SHEET_THICKNESS/2
+    radius=r+OUTER_LIP_FLARE*(1-u)*(1-u)+skin*SHEET_THICKNESS/2
     return (side*radius*math.cos(theta),y,
             BELLCENTER_Z-radius*math.sin(theta))
 
@@ -172,6 +176,7 @@ def apply(name,root,p,api,scene):
     scene["fsc_r29_all_covered_faces_follow_bell_circumference"]=True
     scene["fsc_r29_inner_fins_unchanged"]=True
     scene["fsc_r29_no_added_geometry"]=True
+    scene["fsc_r29_2_source_outline_outer_lip_flare"]=OUTER_LIP_FLARE
     scene["fsc_r29_world_outward_normals_both_sides"]=True
     scene["fsc_r29_hidden_mechanisms_unknown"]=True
     scene["fsc_r25_heat_source"]="superseded by R29: beige unheated outer castings"
