@@ -318,7 +318,7 @@ Yara came to see whether the voucher had been honored.
 
 Fera smiled. It was not gratitude for a royal miracle. It was relief that two small promises had finally become objects she could use.
 
-At the works yard, Pell Falbrecht read the order aloud to the men held off the lower stair. Their waiting wages were entered as wages, not as a gift. The man with the bruised heel would return to suitable work only with the physician's approval. The independent mason's second reading still required a dry night and a checked reference point. The barred passage remained barred.
+At the works yard, Pell Falbrecht read the order aloud to the men held off the lower stair. Their waiting wages were entered as wages, not as a gift. Tomas counted the first two men their stopped-work pay from the works chest and marked the remaining authorized amounts for the next disbursement; he did not call a promise money already in a man's hand. The man with the bruised heel would return to suitable work only with the physician's approval. The independent mason's second reading still required a dry night and a checked reference point. The barred passage remained barred.
 
 One of the workers asked whether the king's refusal to give another supper meant there was money for a new stair.
 
