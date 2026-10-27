@@ -142,7 +142,7 @@ def apply(name,root,p,api,scene):
         xyz,faces=_swap_mesh(panel,sign)
         if xyz!=2*len(STATIONS)*len(CROSS_SECTION):
             raise RuntimeError("R28 failed full 3D section generation")
-        if len(faces)<100:
+        if faces<100:
             raise RuntimeError("R28 replaced scooped shell with a placeholder")
         bounds[side]={
             "source_roi":source_roi(side),
