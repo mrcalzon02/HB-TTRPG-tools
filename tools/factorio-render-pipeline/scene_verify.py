@@ -428,6 +428,41 @@ def test_one(path):
                 raise RuntimeError("R27 still animates unproven mounts")
             print("R27_SOURCE_VISIBLE_ONLY_GATE_PASS",path.name,
                   "removed_unsupported",sum(exclusions.values()),flush=True)
+            # R28: two broad, CURVED lower-underbelly cups around the
+            # existing inner hot-fins; NO added geometry or piston rig.
+            if scene.get("fsc_r28_revision")!=(
+                    "R28_source_conformal_underslung_shallow_clamshell"):
+                raise RuntimeError("R28 source-driven cups not rebuilt")
+            if (int(scene.get("fsc_r28_undercover_count",0))!=2 or
+                int(scene.get("fsc_r28_shelter_section_count",0))!=9 or
+                int(scene.get("fsc_r28_section_stations",0))!=8):
+                raise RuntimeError("R28 underside clamshell profile incomplete")
+            if (not scene.get("fsc_r28_no_new_objects") or
+                not scene.get("fsc_r28_inner_fin_signatures_preserved")):
+                raise RuntimeError("R28 altered inner hot fins or added speculative hardware")
+            if scene.get("fsc_r28_source_sha256")!=(
+                    "0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791"):
+                raise RuntimeError("R28 does not refer to original source archive")
+            r28outer=bpy.data.collections.get(
+                "R25_EXTERNAL_LARGE_SKID_COVERS_NOT_INNER_FINS")
+            if r28outer is None or len(r28outer.objects)!=2:
+                raise RuntimeError("R28 must only reshape two already visible covers")
+            for side in ("port","starboard"):
+                r28panel=r28outer.objects.get("R25_OUTER_SKID_UNDERSIDE_"+side)
+                if not r28panel or not r28panel.get("R28_cupped_section"):
+                    raise RuntimeError("R28 missing real 3D cup: "+side)
+                if (not r28panel.get("R28_source_visible_underface_only") or
+                    not r28panel.get("R28_no_invented_mounts_or_pistons")):
+                    raise RuntimeError("R28 invented hidden mechanism")
+                if len(r28panel.data.vertices)!=144:
+                    raise RuntimeError("R28 cupped underside not 8×9×2 physical mesh")
+                coords=r28panel.data.vertices
+                if (min(abs(v.co.x) for v in coords)>.99 or
+                    max(abs(v.co.x) for v in coords)>2.10):
+                    raise RuntimeError("R28 skirts do not curve INWARD under fins")
+                if min(v.co.z for v in coords)>-1.8:
+                    raise RuntimeError("R28 clamshell does not cradle BELOW the lower nozzle")
+            print("R28_UNDERBODY_CLAMSHELL_SOURCE_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)

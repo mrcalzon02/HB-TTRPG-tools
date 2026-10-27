@@ -1035,3 +1035,44 @@ mechanical endpoints in the original first; do NOT assert that a
 physical support or piston exists simply because it would look
 plausible. Original raw Wube PNGs remain solely in private
 user source workspace, not committed.
+
+## R28 — source-observed LARGE OUTER UNDERBODY CLAMSHELL CUPS
+
+Direct original source original-body crop Y290..541 (not additive glow)
+shows the left and right outer covers curling INWARDS toward the bell
+interior, with their inner lips partly shielding the lower heat-tinted
+inner fins. In the R27 calibrated Blender original-camera PNG these
+were two long, nearly FLAT, isolated strips; they were far too
+sideward/low, not a close-fitting two-sided protective enclosure.
+
+R28 does not add any unverified tubes, hinges, pistons, trim details,
+bolts, struts or hidden interior components. It REPLACES the actual
+MESH DATA of the two already source-established R25 underbody
+covers after R27 removes unsupported mechanisms. Nine transverse
+physical samples × eight axial stations × TWO constant-thickness
+surfaces per cup reconstruct a shallow, open-topped C-shaped
+profile with bowed outer rim, CONCAVE cross-section (center hangs
+below both inner+outer lips), inward curl reaching abs(X)=0.98
+rather than earlier minimum 1.16, and a shorter aft end
+Y=-3.63 rather than -3.95. Outboard edge stays within abs(X)=2.07.
+These are FIRST-PASS Blender coordinates derived from a visual
+source contour, NOT exact hidden Wube source 3D coordinates.
+The added narrow back skin is merely 0.036 tile solid-sheet thickness;
+no closed housing or unseen upper mechanical structure is invented.
+
+R28 real 3D saved-scene checks require:
+- exactly 2 individually editable undershell meshes, both cup-shaped;
+- no added Blender objects beyond the 2 existing R25 names;
+- 10 current candidate inner fins retain identical vertex/face/key counts,
+  original R18 source-proxy animation unchanged;
+- left/right cups extend INBOARD beneath them, remain under the bell,
+  no speculative mounts reintroduced after R27;
+- original ZIP SHA and source ROIs explicitly retained;
+- 3 new diagnostic cameras, including two BELOW the bell, validate
+  actual underside curvature rather than judging only above views.
+
+No claim of source fidelity is allowed until a real GitHub
+Blender saved-scene QA run passes AND a viewer compares original
+Source 264×542 against the rendered R28 idle frame/closeups.
+Do not touch the production Tech Priests mod or original proprietary
+images in the GitHub repository.

@@ -19,6 +19,11 @@ VIEWS={
     "fin_root_connection_closeup":((2.6,-4.9,1.6),(1.25,-2.42,-.43),3.25),
     "outer_port_skid_underside":((-4.0,-5.5,1.25),(-1.95,-2.88,-.52),3.65),
     "outer_starboard_skid_underside":((4.0,-5.5,1.25),(1.95,-2.88,-.52),3.65),
+    # Cameras deliberately BELOW the nozzle to reveal cup cross-sections,
+    # unlike R25's above-engine views which flatten curved undersides.
+    "r28_port_inner_lip_from_below":((-3.0,-4.8,-3.6),(-1.55,-2.85,-1.55),3.45),
+    "r28_starboard_inner_lip_from_below":((3.0,-4.8,-3.6),(1.55,-2.85,-1.55),3.45),
+    "r28_source_projection_lower_cup_detail":((.18,-8.9,10.0),(0,-2.9,-1.4),3.7),
 }
 
 def main():

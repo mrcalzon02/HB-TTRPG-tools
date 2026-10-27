@@ -388,6 +388,12 @@ def build_thruster(name,w,h,root,p):
         vanilla_evidence_prune_r27.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R28: source-observed curved lower underbody SHELL surfaces,
+        # ONLY the existing two R25 skids; do not reintroduce R27 rods.
+        import vanilla_underslung_clamshell_r28
+        vanilla_underslung_clamshell_r28.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
