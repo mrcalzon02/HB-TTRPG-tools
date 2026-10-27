@@ -948,3 +948,46 @@ to the calibration scene ONLY, while leaving the 4x8 Factorio
 prototype metadata untouched. Do not copy such transforms as tested
 gameplay or runtime registration before native sprite/pivot validation.
 No Tech Priests production art or LUA was modified.
+
+## R27 — SOURCE ONLY. RETIRE INVENTED PER-FIN PISTON & TUBING RIGS
+
+**Source authority:** user-reprovided original Factorio Space Age vanilla
+thruster.zip SHA256 0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791,
+two 8x4 sheets of 264x542 native RGBA body frames; source-visible screenshot
+and upper/lower crops inspected directly. Source is the ONLY reference for
+whether geometry exists; mechanical plausibility is not sufficient.
+
+**Visible in original:** dark ribbed main nozzle and hanging heat-stained
+thin metal tab faces, two large underside coverings, beige cast upper
+root housing, very prominent silver/blue/copper tube-like machinery and
+two corrugated coils in the TOP AND CENTRAL ENGINE CHASSIS. Fluid tubes
+can be observed in this upper-body zone. The BODY image does NOT show
+individual long tubular actuators or dual brace rods traversing each
+hanging hot tab, nor distinct hoses delivering fuel into every fin
+tip. These were speculative inventions in R11/R16/R19/R21 and R25,
+not source-backed reconstructions.
+
+**Corrective action:** a new stage after existing fin and outer-skid builds
+removes 20 unsupported object-name families, including all repeated
+R11 capillary/suspension-arm and R16 double-brace/ferrule/terminal
+artifacts, R19 duplicated root back ribs/bolts, R21 speculative full-ring
+clevis props and R25 per-cover fictitious underbody pneumatic/support
+channels. It does NOT mask/disable/hide the geometry: Blender objects
+are actually deleted from the editable source-calibration scene,
+with every family and object name recorded for audit/reversibility
+through Git history. It leaves identical visible metal fin panels,
+R18 shapes/animation, distinct two R25 underside sheets, main R13/R15
+upper pressure routing and all layer-specific effect objects intact.
+
+The absence of observed actuation does **not prove there is none**
+inside the real Wube engine. It establishes that the original SOURCE
+RECONSTRUCTION TEST MUST NOT MODEL UNVERIFIABLE COMPONENTS in public
+camera geometry. Observed short cast fin-root brackets still need
+a pixel-registered profile, not invention of new rod links.
+A strict, new source-evidence gate checks the exact original archive ID,
+each family removed, actual panel geometry conserved, original upper
+machinery retained, and no new inferred hinges animated.
+
+Do NOT interpret this as proof the whole R08/R13 upper machine or
+R19 refractory topology has been fully audited. That requires the
+same object-by-object tracing before declaring global source fidelity.

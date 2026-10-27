@@ -222,25 +222,15 @@ def test_one(path):
             if group is None:
                 raise RuntimeError("Afterburners must have separate outboard collection")
             vanes=[ob for ob in group.objects if ob.name.startswith("R11_SUSPENDED_AFTERBURNER_VANE_")]
-            arms=[ob for ob in group.objects if ob.name.startswith("R11_OUTBOARD_SUSPENSION_ARM_")]
-            feeds=[ob for ob in group.objects if ob.name.startswith("R11_AFTERBURNER_FUEL_CAPILLARY_")]
-            links=[ob for ob in group.objects if ob.name.startswith("R11_CASING_TO_OUTBOARD_ROOT_")]
-            sockets=[ob for ob in group.objects if ob.name.startswith("R11_CHASSIS_ATTACHMENT_SOCKET_")]
             anchors=json.loads(scene.get("fsc_afterburner_anchors","[]"))
-            if (len(vanes)!=VANE_COUNT or len(arms)!=VANE_COUNT or len(feeds)!=VANE_COUNT
-                    or len(anchors)!=VANE_COUNT or len(links)!=VANE_COUNT or len(sockets)!=VANE_COUNT):
-                raise RuntimeError("Each of 8 vanes needs a chassis bridge, socket, cantilever and feedline")
-            if scene.get("fsc_afterburner_chassis_links")!=VANE_COUNT:
-                raise RuntimeError("Afterburner external chassis attachment count not retained")
-            if any(not ob.get("R11_span_from_machinery") for ob in vanes):
-                raise RuntimeError("Suspended vanes lack mechanical support metadata")
+            if len(vanes)!=VANE_COUNT or len(anchors)!=VANE_COUNT:
+                raise RuntimeError("R27 changed fin meshes or calibration indices")
+            if int(scene.get("fsc_r27_fin_panels_retained",0))!=VANE_COUNT:
+                raise RuntimeError("R27 original hot-panel count not retained")
             if any(len(ob.data.vertices)<24 for ob in vanes):
                 raise RuntimeError("Afterburner vane is a placeholder polygon")
-            if any((entry["attachment_xyz"][0]**2+
-                    (entry["attachment_xyz"][2]+.43)**2)**.5<1.6
-                   or entry["attachment_xyz"][1]>=-1.0
-                   for entry in anchors):
-                raise RuntimeError("Afterburner support anchors are inside bell, not outboard machinery")
+            # Original sprite does not prove hidden 3D pivot coordinates.
+            # Historical R11 anchor triples remain calibration metadata only.
             if any(min((ob.matrix_world@v.co).y for v in ob.data.vertices)>-3.25 for ob in vanes):
                 raise RuntimeError("Afterburner vane does not overhang nozzle rim")
             labels=bpy.data.collections.get("R11_INFORMATION_OVERLAYS_NOT_3D")
@@ -303,10 +293,10 @@ def test_one(path):
             if scene.get("fsc_r16_revision")!=(
                     "R16_broad_heat_plates_dual_braced_outboard_cradles"):
                 raise RuntimeError("Missing R16 revised thermal plate assembly")
-            if (int(scene.get("fsc_r16_rectangular_heat_plate_count",0))!=VANE_COUNT
-                    or int(scene.get("fsc_r16_dual_load_brace_count",0))!=2*VANE_COUNT
-                    or int(scene.get("fsc_r16_independent_crosshead_count",0))!=VANE_COUNT):
-                raise RuntimeError("R16 complete outboard bracket topology missing")
+            if int(scene.get("fsc_r16_rectangular_heat_plate_count",0))!=VANE_COUNT:
+                raise RuntimeError("R27 fin surface geometry was not retained")
+            # Historical R16 braces and saddles are deleted by the R27
+            # source-only stage, not required as fabricated supports.
             if scene.get("fsc_r16_source_movement_policy")!=(
                     "static pending direct original 64-frame mechanical tracking"):
                 raise RuntimeError("R16 unverified animation was allowed")
@@ -322,16 +312,10 @@ def test_one(path):
                     raise RuntimeError("R16 fin lacks refractory blue heat-scored edge")
                 if vane.animation_data:
                     raise RuntimeError("R16 introduced speculative moving pivots")
-                graph=json.loads(vane.get("R16_support_graph","{}"))
-                for key in ("chassis_link","saddle","crosshead",
-                            "heat_feed_terminal","terminal_socket","outer_boss"):
-                    if not graph.get(key) or bpy.data.objects.get(graph[key]) is None:
-                        raise RuntimeError("R16 support graph detached: "+key)
-                for key in ("double_braces","clamp_ears"):
-                    if len(graph.get(key,[]))!=2 or any(
-                        bpy.data.objects.get(label) is None
-                        for label in graph[key]):
-                        raise RuntimeError("R16 missing twin mechanical mount: "+key)
+                if vane.get("R16_support_graph"):
+                    raise RuntimeError("R27 preserved unsupported R16 mounting graph")
+                if vane.get("R27_root_mechanism_evidence")!="unresolved_not_constructed":
+                    raise RuntimeError("R27 fin root is falsely marked source-proven")
                 if len(vane.data.vertices)<64 or len(vane.data.polygons)<60:
                     raise RuntimeError("R16 thermal shield is a placeholder")
             # R18 only allows animation of the LOWER free ends, based on
@@ -382,7 +366,7 @@ def test_one(path):
                                ("fsc_r19_mid_tiles",40),
                                ("fsc_r19_deep_strakes",40),
                                ("fsc_r19_cooling_slots",40),
-                               ("fsc_r19_fin_root_ribs",VANE_COUNT)):
+                               ("fsc_r19_deep_strakes",40)):
                 if int(scene.get(prop,0))!=count:
                     raise RuntimeError("R19 missing parts: "+prop)
             r19_throat=bpy.data.objects.get("R11_OPEN_DEEP_REFRACTORY_THROAT")
@@ -393,9 +377,8 @@ def test_one(path):
             for index in range(VANE_COUNT):
                 plate=bpy.data.objects.get(
                     "R11_SUSPENDED_AFTERBURNER_VANE_%02d"%index)
-                support=plate.get("R19_joined_root_back_rib")
-                if not support or bpy.data.objects.get(support) is None:
-                    raise RuntimeError("R19 fin root stiffener is detached")
+                if plate.get("R19_joined_root_back_rib"):
+                    raise RuntimeError("R27 retained unproven aft-fin root rib")
                 if not plate.get("R19_r18_distal_shape_keys_untouched"):
                     raise RuntimeError("R19 violated R18 fin motion")
             if scene.get("fsc_r19_glow_layer_policy")!=(
@@ -421,6 +404,30 @@ def test_one(path):
                 if rib.data.materials[0].name!=(
                         "R20_inner_oxidized_strake_contrast"):
                     raise RuntimeError("R20 strake contrast not retained")
+            # R27: keep only modelable source-visible components.
+            from vanilla_evidence_prune_r27 import (
+                UNSUPPORTED_PREFIXES,UPPER_MECHANISM_PRESERVE,
+                SOURCE_SHA256,REVISION as R27_REVISION)
+            if scene.get("fsc_r27_revision")!=R27_REVISION:
+                raise RuntimeError("R27 source-evidence audit not applied")
+            if scene.get("fsc_r27_original_archive_sha256")!=SOURCE_SHA256:
+                raise RuntimeError("R27 source archive SHA mismatch")
+            for family in UNSUPPORTED_PREFIXES:
+                if any(ob.name.startswith(family) for ob in scene.objects):
+                    raise RuntimeError("Unverified fin actuator geometry survived: "+family)
+            exclusions=json.loads(scene.get("fsc_r27_removed_by_family","{}"))
+            if set(exclusions)!=set(UNSUPPORTED_PREFIXES) or any(
+                    value<1 for value in exclusions.values()):
+                raise RuntimeError("R27 falsely claimed to remove unsupported geometry")
+            for observed_upper in UPPER_MECHANISM_PRESERVE:
+                if bpy.data.objects.get(observed_upper) is None:
+                    raise RuntimeError("R27 removed upper reference machinery")
+            if int(scene.get("fsc_r27_outer_underpanels_retained",0))!=2:
+                raise RuntimeError("R27 dropped outer source-observable underpanels")
+            if not scene.get("fsc_r27_no_unproven_hinge_animation"):
+                raise RuntimeError("R27 still animates unproven mounts")
+            print("R27_SOURCE_VISIBLE_ONLY_GATE_PASS",path.name,
+                  "removed_unsupported",sum(exclusions.values()),flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)
@@ -452,8 +459,8 @@ def test_one(path):
                 raise RuntimeError("R25 accidentally modified existing inner fins")
             outer=bpy.data.collections.get(
                     "R25_EXTERNAL_LARGE_SKID_COVERS_NOT_INNER_FINS")
-            if outer is None or len(outer.objects)!=10:
-                raise RuntimeError("R25 left/right underside/support graph incomplete")
+            if outer is None or len(outer.objects)!=2:
+                raise RuntimeError("R27 must retain two physical outer cover surfaces only")
             inner=bpy.data.collections.get(
                     "R11_OUTBOARD_SUSPENDED_AFTERBURNERS")
             if any(o.name.startswith("R25_") for o in inner.objects):
@@ -475,9 +482,10 @@ def test_one(path):
                 for key in ("R25_chassis_support",
                             "R25_underside_reinforcement",
                             "R25_root_boss","R25_clamp_boss"):
-                    name=panel.get(key)
-                    if not name or outer.objects.get(name) is None:
-                        raise RuntimeError("R25 external skid missing support: "+key)
+                    if panel.get(key):
+                        raise RuntimeError("R27 kept invented skid undercarriage: "+key)
+                if panel.get("R27_underside_support_evidence")!="unresolved_not_constructed":
+                    raise RuntimeError("R27 incorrectly assumes under-cover pivot evidence")
                 if panel.animation_data:
                     raise RuntimeError("R25 inferred unverified outer skid motion")
             print("R25_TWO_LARGE_SEPARATE_OUTER_SKID_UNDERSIDES_PASS",
@@ -490,7 +498,6 @@ def test_one(path):
                     "R21_thin_formed_slotted_panel_and_pinned_clevis"):
                 raise RuntimeError("R21 fin master was not applied before R18")
             if (int(scene.get("fsc_r21_punched_slots_per_fin",0))!=2 or
-                    int(scene.get("fsc_r21_clevis_pin_count",0))!=VANE_COUNT or
                     int(scene.get("fsc_r21_stamped_center_ridge_count",0))!=VANE_COUNT or
                     float(scene.get("fsc_r21_master_sheet_thickness",1))>.03):
                 raise RuntimeError("R21 actual thin sheet/clevis structure missing")
@@ -507,21 +514,18 @@ def test_one(path):
                     raise RuntimeError("R21 fin is not the actual slotted mesh")
                 if fin.data.color_attributes.get("R21_heat_tint") is None:
                     raise RuntimeError("R21 shader gradients were not stored on fin")
-                for prefix in ("R21_CLEVIS_TRANSVERSE_PIN_",
-                               "R21_PINNED_CLEVIS_EAR_port_",
-                               "R21_PINNED_CLEVIS_EAR_starboard_"):
-                    if bpy.data.objects.get("%s%02d"%(prefix,index)) is None:
-                        raise RuntimeError("R21 fin no longer has its real clevis")
+                # Master profile remains; fanciful repeated clevis pivot
+                # rods were removed because the original pixels do not
+                # resolve one at each fin root.
             print("R21_THIN_SLOTTED_FIN_MASTER_PASS",path.name,flush=True)
             print("R18_ACTUAL_SOURCE_LOWER_LIP_MOTION_PASS",path.name,flush=True)
-            print("R16_OUTBOARD_FIN_SUPPORTS_PASS",path.name,
-                  "rectangular_shields",len(vanes),
-                  "dual_braces",scene["fsc_r16_dual_load_brace_count"],flush=True)
+            print("R27_PANELS_WITHOUT_UNVERIFIED_SUPPORTS_PASS",path.name,
+                  "fin_panels",len(vanes),flush=True)
             print("R15_STATIC_MACHINE_ASSEMBLY_PASS",path.name,flush=True)
             print("R13_SAVED_SCENE_STRUCTURE_PASS",path.name,flush=True)
             print("R11_DEEP_NOZZLE_AFTERBURNERS_PASS",path.name,
                   "depth_tiles",round(depth,3),"vanes",len(vanes),
-                  "cantilever_brackets",len(arms),flush=True)
+                  "source_unverified_cantilevers",0,flush=True)
             print("R08_VISUAL_SOURCE_PASS",path.name,
                   "paired_reactors",2,"ribbed_heat_shields",8,flush=True)
             print("R07_CONDITIONAL_PIPES_PASS",path.name,"ports",len(expected_port_map),flush=True)

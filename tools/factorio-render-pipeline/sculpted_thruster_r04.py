@@ -382,6 +382,12 @@ def build_thruster(name,w,h,root,p):
             name,root,p,{"tube":tube,"ellipsoid":ellipsoid},
             bpy.context.scene
         )
+        # R27 SOURCE-ONLY cleanup: remove speculative tubes/pistons/braces
+        # repeated at EVERY fin. Keep original user-source panels/upper tubes.
+        import vanilla_evidence_prune_r27
+        vanilla_evidence_prune_r27.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
