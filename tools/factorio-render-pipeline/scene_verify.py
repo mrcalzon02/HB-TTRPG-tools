@@ -183,7 +183,7 @@ def test_one(path):
             if camera_target is None or abs(camera_target[1]+2.1)>.01:
                 raise RuntimeError("Camera target did not move aft with extended exhaust")
             if (abs(scene.camera.location.x-.18)>.01 or
-                abs(scene.camera.location.z-10.0)>.05 or
+                abs(scene.camera.location.z-10.15)>.05 or
                 abs(scene.camera.location.y+8.9)>.05):
                 raise RuntimeError("Vanilla camera drifted from corrected centered-high aft composition")
             # Validate the remaining R08 industrial chassis ONLY; R13
@@ -538,8 +538,18 @@ def test_one(path):
                     bpy.data.objects["CAPTURE_ROOT_UNROTATED_NORTH"].scale,
                     expected_parent_scale)):
                 raise RuntimeError("R26 global portrait proportion correction missing")
-            if abs(scene.camera.data.ortho_scale-8.5)>.01:
-                raise RuntimeError("R26 camera portrait scale not set")
+            if abs(scene.camera.data.ortho_scale-7.46)>.01:
+                raise RuntimeError("R30 source-occupancy camera zoom not set")
+            if scene.get("fsc_r30_fixed_registration_source_bbox")!=(
+                    "[4, 0, 263, 532]"):
+                raise RuntimeError("R30 source alpha bounds not recorded")
+            if scene.get("fsc_r30_source_frame_size")!=(
+                    "[264, 542]"):
+                raise RuntimeError("R30 source resolution not recorded")
+            if not scene.get("fsc_r30_source_zoom_not_mesh_edit"):
+                raise RuntimeError("R30 camera reframe cannot masquerade as a mesh edit")
+            if abs(json.loads(scene.get("fsc_camera_target","null"))[2]-.71)>.01:
+                raise RuntimeError("R30 preserved-angle camera target not applied")
             if scene.get("fsc_r26_reference_projection")!=(
                     "source_portrait_0.487_ratio_calibration"):
                 raise RuntimeError("R26 source aspect calibration marker missing")

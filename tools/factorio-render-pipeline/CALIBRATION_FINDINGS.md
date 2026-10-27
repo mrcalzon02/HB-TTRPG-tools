@@ -1187,3 +1187,12 @@ Scene QA asserts exactly the 0.36 source-derived provisional correction.
 The next REAL Blender source-frame capture must establish if it
 restores the source height-to-width ratio and whether side edges
 still need accurate pixel landmark geometry.
+
+
+## R30 candidate — fixed camera registration against source alpha envelope (2026-10-27)
+
+Review of ACTUAL R29.2 calibration artifact from [workflow #40479244434](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40479244434): calibration and custom model jobs both succeeded. The vanilla idle body alpha bounds are [26,35,288,583] in a 320x640 image, giving 262/548=0.4781 silhouette ratio, versus original [4,0,263,532] at 264x542 => 259/532=0.4868. The R29.2 model fills 548/640=85.6% of the frame height; the actual original fills 532/542=98.2%. Its two radial protective shells are now unheated gray/beige in shader input, not R28's visibly purple-tipped coverings, but their rendered faces still appear unusually dark compared with the upper beige castings. Material name matching is NOT enough to establish rendered color match. Source-raster physical landmarks cannot be verified without the original user-supplied archive in the current runtime.
+
+R30 therefore modifies **only the vanilla fixed body-preview orthographic camera**, keeping the R09 angle unchanged: scale 8.5 -> 7.46, camera Z 10.0 -> 10.15 and camera look-at target Z 0.56 -> 0.71. Both camera and target move together, not the model. All two outer skid meshes, all provisional inner fins, 198-object evidence pruning, and independent flame/pipe/floor layers remain unchanged. Camera magnification is a provisional source frame occupancy calibration; it does NOT correct upper machinery, underside face shading, or establish a registered original sprite likeness.
+
+The actual PNG analyzer now records the source-versus-candidate alpha-envelope fractions and requires the vanilla capture to visibly fill >=95% but <=99.5% of the preview height, hold source silhouette aspect within 0.025 absolute, and remain within 0.025 normalized vertical center. Existing strict edge and animation QA are retained. Do not accept this R30 candidate until the next REAL Blender workflow has completed and its PNGs and editable .blend have been inspected. Both original sprite pixels and game production art remain outside the public repository.

@@ -222,6 +222,41 @@ def analyze_asset(folder):
             "flame_edge_clipping_suspected":any(x["touches_frame_edge"] for x in flame_metrics),
             "composite_with_flame":"floor-body-flame-composite.png" if flame_metrics else None,
             "candidate_not_game_approved":True}
+    # R30 source metadata is NOT a sprite pixel-match score. It is
+    # a reproducible fixed-frame registration/occupancy check measured
+    # from the actual transparent Blender PNGs. Original Wube source
+    # artwork must remain outside the public repository.
+    if manifest["asset"]=="test-04-vanilla-approx":
+        source_bbox=(4,0,263,532)
+        source_size=(264,542)
+        source_height_fraction=(source_bbox[3]-source_bbox[1])/source_size[1]
+        source_ratio=(source_bbox[2]-source_bbox[0])/(source_bbox[3]-source_bbox[1])
+        occupancy=[(q["alpha_bbox"][3]-q["alpha_bbox"][1])/cell[1]
+                   for q in all_metrics]
+        ratios=[(q["alpha_bbox"][2]-q["alpha_bbox"][0])/
+                (q["alpha_bbox"][3]-q["alpha_bbox"][1])
+                for q in all_metrics]
+        y_centers=[(q["alpha_bbox"][1]+q["alpha_bbox"][3])/(2*cell[1])
+                   for q in all_metrics]
+        source_y_center=(source_bbox[1]+source_bbox[3])/(2*source_size[1])
+        result["source_portrait_proxy"]={
+            "source_bbox":list(source_bbox),"source_size":list(source_size),
+            "source_visible_height_fraction":round(source_height_fraction,5),
+            "candidate_visible_height_fraction_min":round(min(occupancy),5),
+            "candidate_visible_height_fraction_max":round(max(occupancy),5),
+            "source_silhouette_ratio":round(source_ratio,5),
+            "candidate_silhouette_ratio_range":[round(min(ratios),5),round(max(ratios),5)],
+            "source_vertical_center_fraction":round(source_y_center,5),
+            "candidate_vertical_center_range":[round(min(y_centers),5),round(max(y_centers),5)],
+            "limitations":"Alpha envelope only; no original pixel landmark/mesh fidelity score"}
+        if min(occupancy)<.95:
+            raise RuntimeError("R30 real vanilla PNG still severely underfills source vertical frame")
+        if max(occupancy)>.995:
+            raise RuntimeError("R30 real vanilla PNG risks touching vertical source frame")
+        if max(abs(r-source_ratio) for r in ratios)>.025:
+            raise RuntimeError("R30 camera frame distorted source silhouette aspect")
+        if max(abs(y-source_y_center) for y in y_centers)>.025:
+            raise RuntimeError("R30 camera framing misses original vertical center")
     (folder/"qa-report.json").write_text(json.dumps(result,indent=2)+"\n")
     print("CAPTURE_QA",result["asset"],"frames",len(files),"unique",len(hashes),
           "bbox_spread",result["bbox_center_spread_px"],"clip_risk",result["edge_clipping_suspected"],flush=True)

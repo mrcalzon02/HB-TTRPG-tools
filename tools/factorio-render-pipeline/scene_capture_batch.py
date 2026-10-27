@@ -249,14 +249,14 @@ def configure_scene(name,w,h,width,height,num_frames):
     # Keep R09's approved perspective, translate BOTH camera and target aft.
     # R10's longer separate flame clips the bottom if centered on chassis.
     # No geometry shrink or per-frame auto-crop is permitted.
-    camera_origin=((.18,-8.9,10.0) if vanilla_camera
+    camera_origin=((.18,-8.9,10.15) if vanilla_camera
                    else (cam_x,-max(6.,h*.85),max(5.,h*.86)))
-    camera_target=Vector((0,-2.1,.56) if vanilla_camera else (0,0,.56))
+    camera_target=Vector((0,-2.1,.71) if vanilla_camera else (0,0,.56))
     bpy.ops.object.camera_add(location=camera_origin)
     cam=bpy.context.object
     cam.rotation_euler=(camera_target-cam.location).to_track_quat("-Z","Y").to_euler()
     cam.data.type="ORTHO"
-    cam.data.ortho_scale=(8.5 if vanilla_camera
+    cam.data.ortho_scale=(7.46 if vanilla_camera
                           else max(h*1.55,w*1.75*height/width))
     bpy.ops.object.light_add(type="AREA",location=(-4,-5,8))
     light=bpy.context.object;light.data.energy=1100;light.data.size=6
@@ -296,6 +296,14 @@ def configure_scene(name,w,h,width,height,num_frames):
                                  else "r09-nozzle-interiors-r06-housing")
     scene["fsc_capture_ortho_scale"]=cam.data.ortho_scale
     if vanilla_camera:
+        # R30: source bbox [4,0,263,532] in 264x542 covers 98.2% of
+        # original height. R29.2 covered only 548/640=85.6%. Enlarge
+        # the fixed orthographic body view, translating camera AND target
+        # vertically together to preserve the approved R09 view angle.
+        # No frame-dependent cropping or geometry distortion is performed.
+        scene["fsc_r30_fixed_registration_source_bbox"]=json.dumps([4,0,263,532])
+        scene["fsc_r30_source_frame_size"]=json.dumps([264,542])
+        scene["fsc_r30_source_zoom_not_mesh_edit"]=True
         scene["fsc_r26_reference_projection"]="source_portrait_0.487_ratio_calibration"
         scene["fsc_r26_model_parent_scale"]=json.dumps(list(ROOT.scale))
         scene["fsc_r26_source_sprite_bbox"]=json.dumps([4,0,263,532])
