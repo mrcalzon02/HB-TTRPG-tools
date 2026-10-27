@@ -596,3 +596,42 @@ R16 chassis load graph, nor 8 root stiffeners are mutated. All 2 cap faces
 and 200 retained side quads are verified after saving and reopening .blend.
 The next actual CI captures must confirm visually that the originally masked
 strakes are now revealed. A successful structural check alone is NOT enough.
+
+### R20 VERIFIED — source vs actual Blender PNG side-by-side
+
+R20 source procedure tests: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40429888292
+SUCCESS; tested real source-module invariants. Blender headless batch:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40429888504
+SUCCESS in BOTH calibration and custom models jobs. The saved editable
+scene reopens with exactly the original 200 R08 side quads and NO closing
+endcaps. R19's 40 inner strakes and R18 original-measured lower fin keys
+survived. The calibration artifact also includes two additional targeted
+close-up PNG views of the cone lining and outboard fin root machinery.
+
+Independent comparison of actual camera-matched R19 vs R20 axial, oblique
+and fin-root closeups confirms:
+- R19's formerly invisible deep cone longitudinal strakes ARE NOW VISIBLE
+  as 40 radial ridges converging toward the dark central throat in R20.
+- The 40+40 near-mouth and mid-zone ceramic scale geometries remain
+  physically present. Deep liner is visibly *open*, not a flat disk.
+- No change to overall body idle alpha bounds: both R19 and R20
+  [54,179,263,517] on 320x640; source vanilla aspect still far slimmer.
+- 13 original pipeline body captures (one idle, twelve running) remain
+  hash-distinct. All frame and overlay clipping QA passed.
+- Source-original vs R20 side-by-side remains a QUALITATIVE visual comparison
+  with UNREGISTERED view projection; do not claim numeric pixel match.
+
+Important remaining limitation: although R20 fixes the obstructed throat,
+the visual surface is MUCH TOO SMOOTH/light with regular thin ridges and
+tile detail mostly confined to mouth rim. Original original ZIP frame 00
+shows a broader dark two-zone shingled refractory face, a denser annular
+band of low-contrast recessed openings, and prominent irregular heat-scarred
+external fin ends. Candidate support cradles are over-symmetric. The next
+revision should target dark, layered, physical ceramic scale geometry
+ACROSS the inner visible cone (not just its circular lip), while retaining
+the now-verified 2.28 tile open nozzle, connected fin root assemblies, and
+distinct conditional pipe / light effect layers. No Tech Priests production
+art, Lua or gameplay is touched.
+
+No claim of Factorio-runtime compatibility or finished vanilla-style
+visual fidelity is made; user can inspect the real R20 GitHub capture ZIP.
