@@ -799,3 +799,26 @@ new saved-scene verification requiring both exterior panels,
 both independent source-to-chassis support graphs, tinted underside
 material and no new inner fin objects. The task remains awaiting
 real calibrated PNG comparison and workflow pass.
+
+### R25.1 — source-image comparison corrected oversized side flaps
+
+The initial R25 real Blender output confirmed that TWO independent
+external covering/skid fins were present and the old inner fins untouched.
+But side-by-side source and real Blender camera images showed a major
+proportion mismatch: first R25 side covers were too WIDE and wing-like
+relative to the source narrower and longer exterior side skids.
+Idle alpha bbox changed from R23 [51,179,266,519] to initial R25
+[17,179,298,519] on the existing 320x640 camera. Not source matched.
+
+First Blender QA failed because our new verifier incorrectly queried
+membership of a Blender object in a bpy_prop_collection: API requires
+NAME strings. We repaired the test itself in commit dcccd601 without
+bypassing any structural or clipping gates.
+
+R25.1 alters ONLY the pair of exterior skid-cover underside meshes:
+maximum halfwidth reduced from .39 to .23 Blender tiles; aft extent
+lengthened from Y=-3.73 to -4.04. The actual inner fin population
+and 64-frame R18 movement curves are NOT touched. Heat oxide materials
+are darkened and blue/purple transition moved along the distal underside;
+these remain nonemissive surface colors rather than physical thickness.
+Requires actual source-to-render comparison on the next CI capture.
