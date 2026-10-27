@@ -565,3 +565,34 @@ This is a source-visible 3D approximation, not an unambiguous recovery of
 Wube's source 3D models. Source art is never committed or republished in
 this public repo. Full genuine Blender screenshots and CI outcomes must be
 reviewed BEFORE any claim of visual fidelity or game compatibility.
+
+### R20 — actual R19 closeup inspection revealed blocked deep throat
+
+R19 real GitHub render PASS:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40429034362
+R19 source CI PASS:
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40429034562
+
+Direct, identical-camera examination of R18 versus R19 axial and three-quarter
+PNG captures showed R19 near-mouth heat scales are visibly added to the rim,
+and eight outboard root welds can be seen. However the interior remained a
+much-too-smooth dark bowl with almost no visible *deep* strakes. This is a
+REAL visual defect despite R19 structural success. The alpha bbox did not
+change (R18/R19 both [54,179,263,517] on 320×640), as expected for geometry
+added within the original silhouette.
+
+Root cause in the existing model: R08's `aft_internal_reaction_drum` was
+constructed with generic lathe's DEFAULT `close_ends=True`, yielding 200
+quad wall polygons plus 2 solid N-gon endcaps. R11 later added a deep OPEN
+liner without removing those old blocked faces. The endcap physically masked
+deeper interior details, so adding still more strakes would be pointless.
+
+R20 targets the actual obsolete caps directly, REBUILDING THAT SAME EDITABLE
+R08 DRUM MESH using its 200 original side quads but WITHOUT either closed
+N-gon end disk; its established R13 dark refractory material is retained.
+40 existing internal R19 strakes receive a subdued physically metallic,
+nonemissive shader to help their depth read. Neither R18 vane motion keys,
+R16 chassis load graph, nor 8 root stiffeners are mutated. All 2 cap faces
+and 200 retained side quads are verified after saving and reopening .blend.
+The next actual CI captures must confirm visually that the originally masked
+strakes are now revealed. A successful structural check alone is NOT enough.

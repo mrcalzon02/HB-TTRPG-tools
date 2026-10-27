@@ -394,6 +394,27 @@ def test_one(path):
             if scene.get("fsc_r19_glow_layer_policy")!=(
                     "not baked into physical cone geometry"):
                 raise RuntimeError("R19 fused source light into physical geometry")
+            # A capped legacy drum would hide the newly authored deep
+            # physical refractory despite passing all R19 counts.
+            if scene.get("fsc_r20_revision")!=(
+                    "R20_open_old_reaction_drum_keep_depth"):
+                raise RuntimeError("R20 sealed reaction drum not corrected")
+            corrected=bpy.data.objects.get("R08_aft_internal_reaction_drum")
+            if corrected is None or (
+                len(corrected.data.polygons)!=200 or
+                any(len(face.vertices)!=4 for face in corrected.data.polygons)):
+                raise RuntimeError("R20 reaction drum still blocks the deep throat")
+            if not corrected.get("R20_no_obstruction_of_deep_R19_liner"):
+                raise RuntimeError("R20 old cap removal incomplete")
+            if (int(scene.get("fsc_r20_reaction_drum_removed_caps",0))!=2 or
+                int(scene.get("fsc_r20_revealed_inner_strakes",0))!=40):
+                raise RuntimeError("R20 did not unmask all R19 strakes")
+            for i in range(40):
+                rib=bpy.data.objects.get("R19_DEEP_COMBUSTOR_STRAKE_%02d"%i)
+                if rib.data.materials[0].name!=(
+                        "R20_inner_oxidized_strake_contrast"):
+                    raise RuntimeError("R20 strake contrast not retained")
+            print("R20_OPEN_DRUM_DEEP_VISUAL_PATH_PASS",path.name,flush=True)
             print("R19_CONE_INTERIOR_FIN_ASSEMBLY_PASS",path.name,flush=True)
             print("R18_ACTUAL_SOURCE_LOWER_LIP_MOTION_PASS",path.name,flush=True)
             print("R16_OUTBOARD_FIN_SUPPORTS_PASS",path.name,

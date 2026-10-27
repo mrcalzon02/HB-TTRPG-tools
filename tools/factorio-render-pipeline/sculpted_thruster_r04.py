@@ -363,6 +363,12 @@ def build_thruster(name,w,h,root,p):
             name,root,p,{"tube":tube,"ellipsoid":ellipsoid},
             bpy.context.scene
         )
+        # R20 root-cause fix: remove legacy endcaps from the R08
+        # reaction drum that hid the actual R19 deep inner strakes.
+        import vanilla_open_drum_r20
+        vanilla_open_drum_r20.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
