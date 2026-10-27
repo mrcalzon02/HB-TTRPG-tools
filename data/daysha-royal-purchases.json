@@ -2453,8 +2453,10 @@
       "role": "scene",
       "wardrobeId": "EL-10",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/arcane-spellbound-cathedral.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
     },
     {
       "id": "file_00000000cc708230bb8c7149bef6dd9d",
@@ -2465,8 +2467,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "EL-09",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/nature-enchanted-garden.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
     },
     {
       "id": "file_000000002e3082309b9e01bd35c833e3",
@@ -2477,8 +2481,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "EL-08",
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/moonshadow-midnight-silver.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
     },
     {
       "id": "file_0000000060e481fdb85adc3d2cf701f6",
@@ -2489,8 +2495,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "EL-07",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/sunlight-golden-radiance.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
     },
     {
       "id": "file_0000000070748230a5ee8b4cc654d200",
@@ -2501,8 +2509,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "EL-06",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/ice-crystal-court.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
     },
     {
       "id": "file_000000008ee881fdbcae4080013cd839",
@@ -2513,8 +2523,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "EL-05",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/lightning-palace-storm.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
     },
     {
       "id": "file_000000000f5481fd959085b4977728f4",
@@ -2525,8 +2537,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "EL-04",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/air-sky-palace.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
     },
     {
       "id": "file_00000000015c81fd968c8893edcecd45",
@@ -2537,8 +2551,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "EL-03",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/earth-verdant-stone.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
     },
     {
       "id": "file_00000000ab2081fdbf6ee094f95c29bd",
@@ -2549,8 +2565,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "EL-02",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/water-azure-tide.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
     },
     {
       "id": "file_00000000238881fdb4e40212a7530598",
@@ -2561,8 +2579,10 @@
       "role": "gown-or-portrait",
       "wardrobeId": "EL-01",
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted"
+      "publishedImageUrl": "assets/daysha/royal-purchases/fire-ruby-crown.webp",
+      "publicationStatus": "hosted_verified",
+      "publishedFormat": "image/webp",
+      "publicationNote": "Full resolution derivative; original PNG preserved in Drive part02 ZIP."
     },
     {
       "id": "file_00000000205881fdab1714d353ab14c8",
@@ -2759,10 +2779,14 @@
   ],
   "verification": {
     "inventoryFiles": 178,
-    "unpublishedSourceFiles": 166,
+    "unpublishedSourceFiles": 156,
     "missingPrimaryFiles": [],
-    "publishedDerivativeCount": 12,
-    "verifiedOriginalsInDriveZip": 12,
-    "driveOriginalsZipFileId": "1k3XLgJK3lpB0MIHiCQlHqE1XePl8w4yx"
+    "publishedDerivativeCount": 22,
+    "verifiedOriginalsInDriveZip": 22,
+    "driveOriginalsZipFileId": "1k3XLgJK3lpB0MIHiCQlHqE1XePl8w4yx",
+    "driveOriginalZipIds": [
+      "1k3XLgJK3lpB0MIHiCQlHqE1XePl8w4yx",
+      "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz"
+    ]
   }
 }
