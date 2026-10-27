@@ -1,17 +1,19 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3D Model Downloader — Private Deployment | Calzon’s TTRPG Foundry</title>
-<meta name="description" content="Private 3D Model Downloader utility, project status, manual deployment guidance and security boundaries.">
+<title>3D Capture v0.1.1 — Firefox 3D Model Downloader | Calzon’s TTRPG Foundry</title>
+<meta name="description" content="Download the recovered 3D Capture v0.1.1 Firefox extension and read local installation instructions.">
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="workspace-landing.css">
 <style>main{max-width:900px;margin:0 auto;padding:24px 18px 70px}section{margin:18px 0;padding:18px;border:1px solid #66758b;border-radius:12px}li{margin:8px 0}code{overflow-wrap:anywhere}</style></head><body class="workspace-landing-body">
-<header class="site-header"><div><p class="eyebrow">Homebrew Tabletop RPG Tools / Software</p><h1>3D Model Downloader</h1><p class="subtitle">Private-deployment utility · installation reference</p></div><nav class="top-nav"><a class="nav-button" href="software.html#3d-model-downloader">Software</a><a class="nav-button" href="index.html">Foundry Home</a></nav></header>
+<header class="site-header"><div><p class="eyebrow">Homebrew Tabletop RPG Tools / Software</p><h1>3D Capture</h1><p class="subtitle">3D Model Downloader · Firefox extension v0.1.1</p></div><nav class="top-nav"><a class="nav-button" href="software.html#3d-model-downloader">Software</a><a class="nav-button" href="index.html">Foundry Home</a></nav></header>
 <main>
-<section><h2>Overview</h2><p>3D Model Downloader is cataloged as a <strong>privately deployed</strong> model-downloading tool. Its private distribution is separate from public Firefox add-ons and public software releases. No download, repository location, or supported file-format claims are made here until verified against the actual deployment package.</p></section>
-<section><h2>Availability</h2><p><strong>Private deployment only.</strong> The authoritative package and installation format have not yet been verified in this repository. This page deliberately provides no public download link or substitute application. Use only a copy obtained from the established private deployment channel.</p><p><a href="software/3d-model-downloader/README.md">Private deployment README and installation checklist</a></p></section>
-<section><h2>Manual deployment checklist</h2><ol>
-<li>Obtain the verified private build from its original deployment location.</li>
-<li>Check the package README or manifest to identify the actual runtime and required permissions; do not assume a ZIP is a Firefox extension.</li>
-<li>If the verified package is a Firefox WebExtension, extract it, open <code>about:debugging#/runtime/this-firefox</code>, select <strong>Load Temporary Add-on</strong>, and choose the extracted <code>manifest.json</code>. Otherwise follow the native application's verified launcher instructions.</li>
-<li>Keep private credentials and downloads outside this public repository. Review the application's site permissions and the rights to download each model.</li>
-<li>For a temporary Firefox add-on, reload it after browser restart. A permanently installed add-on requires normal Firefox signing.</li></ol><p>This checklist is conditional rather than a claim that the private package has been examined or installed.</p></section>
+<section><h2>Download</h2><p><a href="software/3d-model-downloader/3d-capture-v0.1.1.zip" download>Download 3D Capture v0.1.1 (ZIP, 27.5 KB)</a></p><p>This is the owner-recovered browser extension archive, preserved byte-for-byte from the provided file. It contains a Firefox manifest, source files, and Mozilla signature metadata; it is not a new GitHub release or a claimed public Mozilla listing.</p><p>SHA-256: <code>7de9fddb9bda065ea0bea542fce402361c98d7358319d5c8681022d2229edce7</code></p></section>
+<section><h2>What it does</h2><p>Captures original 3D model and texture responses from a selected browser tab, with an additional limited WebGL geometry recording fallback. The manifest identifies it as <strong>3D Capture 0.1.1</strong>, with extension ID <code>3d-capture@local.tools</code> and a minimum Firefox version of 140.</p></section>
+<section><h2>Manual temporary installation</h2><ol>
+<li>Download and extract the ZIP.</li>
+<li>In desktop Firefox, open <code>about:debugging#/runtime/this-firefox</code>.</li>
+<li>Choose <strong>Load Temporary Add-on</strong> and select the extracted <code>manifest.json</code>.</li>
+<li>Open a model viewer, select the 3D Capture toolbar icon, then follow its capture instructions. Temporary installs are unloaded when Firefox closes.</li></ol>
+<p>The original ZIP contains <code>META-INF</code> signature files, but this repository has not independently verified permanent-install signing. Review the extension's broad website and network permissions before installation.</p>
+<p><a href="software/3d-model-downloader/README.md">README, security notes and details</a></p></section>
+<section><h2>Scope</h2><p>No private models, session cookies or downloaded user assets are included in this package. The extension is intended for content you are authorized to retrieve. Its captured exports may contain sensitive source URLs and should be reviewed before sharing.</p></section>
 <p><a href="software.html#3d-model-downloader">Return to Software</a></p></main></body></html>
