@@ -50,7 +50,13 @@
     .wardrobe-card li small { color:var(--muted); display:block; }
     .wardrobe-pill { display:inline-block; border:1px solid var(--wardrobe-line); border-radius:20px; padding:3px 7px; margin:0 5px 5px 0; font-size:.73rem; color:#e6d4b5; }
     .wardrobe-source-list { list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(295px,1fr)); gap:6px 12px; }
-    .wardrobe-source-list li { padding:7px 9px; border-bottom:1px solid var(--line); min-width:0; }
+    .wardrobe-source-list li { display:grid; grid-template-columns:76px minmax(0,1fr); gap:10px; align-items:center; padding:8px; border:1px solid var(--line); border-radius:8px; min-width:0; background:rgba(0,0,0,.11); }
+    .wardrobe-source-thumb { display:grid; place-items:center; width:76px; aspect-ratio:3/4; border-radius:6px; overflow:hidden; background:linear-gradient(140deg,#302b42,#241f30); color:#baa8bc; text-align:center; font-size:.72rem; }
+    .wardrobe-source-thumb img { display:block; width:100%; height:100%; object-fit:cover; }
+    .wardrobe-source-meta { min-width:0; overflow-wrap:anywhere; }
+    .wardrobe-source-meta a { display:inline-block; margin-right:9px; margin-top:5px; }
+    .wardrobe-card li.wardrobe-appearance-row { display:flex; gap:8px; align-items:center; }
+    .wardrobe-appearance-row img { width:55px; height:74px; border-radius:5px; object-fit:cover; display:block; }
     .wardrobe-source-list strong { display:block; font-size:.84rem; line-height:1.35; overflow-wrap:anywhere; }
     .wardrobe-source-list small { color:var(--muted); font-size:.76rem; }
     .wardrobe-source-list a { font-size:.8rem; }
@@ -127,7 +133,7 @@
         <div class="wardrobe-controls">
           <div class="wardrobe-field"><label for="source-query">Search image titles</label><input id="source-query" type="search" placeholder="Title, scene or garment ID" autocomplete="off"></div>
           <div class="wardrobe-field"><label for="source-status">Source coverage</label>
-            <select id="source-status"><option value="all">All source files</option><option value="matched">Grouped with a gown</option><option value="unmatched">Awaiting wardrobe match</option><option value="scene">Scene illustrations</option><option value="reference">Reference / composites</option><option value="costume">Adventuring / costume</option></select>
+            <select id="source-status"><option value="all">All source files</option><option value="matched">Grouped with a gown</option><option value="unmatched">Awaiting wardrobe match</option><option value="published">Published images</option><option value="pending">Unpublished images</option><option value="scene">Scene illustrations</option><option value="reference">Reference / composites</option><option value="costume">Adventuring / costume</option></select>
           </div>
         </div>
         <p id="source-result-count" class="wardrobe-count" aria-live="polite"></p>
@@ -160,14 +166,14 @@
         $('garment-list').innerHTML=records.length ? records.map(g => {
           const linked=manifest.sources.filter(s=>s.wardrobeId===g.id).sort((a,b)=>(a.archivedAt||'').localeCompare(b.archivedAt||''));
           const primary=linked.find(s=>s.id===g.primarySourceId)||linked[0];
-          const picture=linked.find(isPublicImage);
+          const picture=linked.find(s=>s.id===g.primarySourceId&&isPublicImage(s))||linked.find(isPublicImage);
           const artwork=picture ? '<img loading="lazy" alt="'+escape(g.title)+'" src="'+escape(picture.publishedImageUrl)+'">' :
             '<p>Artwork indexed<small>Original image publication pending</small></p>';
           const status=g.recordStatus==='display_only_unpaid'?'Display only · not bought':'Purchase unverified';
           const cost=g.cost?.paidGold!=null && g.recordStatus==='purchased_verified'?'Paid: '+money(g.cost.paidGold):'Paid price: not recorded';
           const example=g.benchmarkClass&&manifest.costBenchmarks.illustrativeRoyalPricesGold[g.benchmarkClass] != null
             ? '<p class="wardrobe-muted">Class benchmark: '+money(manifest.costBenchmarks.illustrativeRoyalPricesGold[g.benchmarkClass])+' (illustrative only)</p>':'';
-          const fileList=linked.map(s => '<li>'+escape(s.fileName)+'<small>'+escape(s.role)+' · '+friendlyDate(s.archivedAt)+(isPublicImage(s)?' · <a href="'+escape(s.publishedImageUrl)+'" target="_blank" rel="noopener">Open image</a>':' · not publicly hosted')+'</small></li>').join('');
+          const fileList=linked.map(s => '<li class="wardrobe-appearance-row">'+(isPublicImage(s)?'<a href="'+escape(s.publishedImageUrl)+'" target="_blank" rel="noopener" aria-label="Open '+escape(s.fileName)+'"><img loading="lazy" src="'+escape(s.publishedImageUrl)+'" alt="'+escape(s.fileName)+'"></a>':'')+'<span>'+escape(s.fileName)+'<small>'+escape(s.role)+' · '+friendlyDate(s.archivedAt)+(isPublicImage(s)?' · Gallery image available':' · not yet published')+'</small></span></li>').join('');
           return '<article class="wardrobe-card"><div class="wardrobe-art">'+artwork+'</div><div class="wardrobe-card-body"><span class="wardrobe-pill">'+escape(g.id)+'</span><span class="wardrobe-pill">'+escape(status)+'</span><h3>'+escape(g.title)+'</h3><p class="subline">'+escape(cost)+' · '+linked.length+' artwork record'+(linked.length===1?'':'s')+'</p>'+example+(g.notes?'<p class="wardrobe-muted">'+escape(g.notes)+'</p>':'')+'<details><summary>View appearances and source records ('+linked.length+')</summary>'+(fileList?'<ul>'+fileList+'</ul>':'<p class="wardrobe-muted">Identity and artwork await reconciliation.</p>')+'</details></div></article>';
         }).join('') : '<p class="wardrobe-empty">No gowns match these filters.</p>';
       };
@@ -175,11 +181,11 @@
         const query=$('source-query').value.toLowerCase().trim();
         const status=$('source-status').value;
         const records=manifest.sources.filter(s => (!query||sourceText(s).includes(query))&&(
-          status==='all'||(status==='matched'&&!!s.wardrobeId)||(status==='unmatched'&&!s.wardrobeId)||
+          status==='all'||(status==='matched'&&!!s.wardrobeId)||(status==='unmatched'&&!s.wardrobeId)||(status==='published'&&isPublicImage(s))||(status==='pending'&&!isPublicImage(s))||
           (status==='scene'&&s.role==='scene')||(status==='reference'&&/reference|composite/.test(s.role))||
           (status==='costume'&&s.role==='costume-or-adventure')));
         $('source-result-count').textContent=records.length+' of '+manifest.sources.length+' source records. '+records.filter(isPublicImage).length+' published images in this selection.';
-        $('source-list').innerHTML=records.length?records.map(s=>'<li><strong>'+escape(s.fileName)+'</strong><small>'+friendlyDate(s.archivedAt)+' · '+escape(s.sceneGroup)+' · '+(s.wardrobeId?'Grouped: '+escape(s.wardrobeId):'Wardrobe match pending')+'</small>'+(isPublicImage(s)?'<a href="'+escape(s.publishedImageUrl)+'" target="_blank" rel="noopener">View original artwork</a>':'<small>Image indexed; publication pending</small>')+'</li>').join(''):'<li class="wardrobe-empty">No source images match these filters.</li>';
+        $('source-list').innerHTML=records.length?records.map(s=>'<li><div class="wardrobe-source-thumb">'+(isPublicImage(s)?'<a href="'+escape(s.publishedImageUrl)+'" target="_blank" rel="noopener"><img loading="lazy" alt="'+escape(s.fileName)+'" src="'+escape(s.publishedImageUrl)+'"></a>':'Pending')+'</div><div class="wardrobe-source-meta"><strong>'+escape(s.fileName)+'</strong><small>'+friendlyDate(s.archivedAt)+' · '+escape(s.sceneGroup)+' · '+(s.wardrobeId?'Grouped: '+escape(s.wardrobeId):'Wardrobe match pending')+'</small>'+(isPublicImage(s)?'<a href="'+escape(s.publishedImageUrl)+'" target="_blank" rel="noopener">View gallery image</a>':'<small>Web image publication pending</small>')+(s.originalDriveVerified?'<a href="'+escape(s.originalDriveUrl)+'" target="_blank" rel="noopener">Original on Drive (restricted)</a>':'')+'</div></li>').join(''):'<li class="wardrobe-empty">No source images match these filters.</li>';
       };
       fetch('data/daysha-royal-purchases.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(data=>{
         if(!Array.isArray(data.garments)||!Array.isArray(data.sources))throw new Error('Invalid archive');
