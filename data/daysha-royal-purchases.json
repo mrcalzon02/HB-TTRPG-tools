@@ -8,12 +8,14 @@
   "generatedRecordDate": "2026-10-26",
   "lastInventory": "2026-10-26",
   "recordPolicy": {
-    "note": "Images are inventoried as source records. Public artwork hosting is not complete. An image/scene is not a purchase, and repeats do not create additional charges.",
+    "note": "All 178 identified artwork files are published as optimized GitHub gallery images. The image is not the invoice: scene appearances, references, alternate renders and unselected displays never generate charges on their own.",
     "sourceDatesAre": "Image file creation timestamps, never an in-world purchase date",
     "paidTotalRule": "Sum only non-null cost.paidGold for purchased garments with a verified receipt; no zero placeholders.",
     "displayOnlyRule": "Do not charge display-only or unselected gowns.",
     "matchingRule": "Only explicitly assigned appearance files are grouped; unmatched art remains in the searchable source register.",
-    "publicationRule": "Web presentation images are verified GitHub-hosted WebP derivatives; original PNG masters are preserved in a separate Google Drive ZIP. Never imply web derivatives are lossless originals."
+    "publicationRule": "Each source has a verified GitHub-hosted display image; higher-resolution masters are retained separately in Drive. WebP gallery derivatives need not be lossless copies.",
+    "sceneRule": "Scene sequences group narrative appearances independent of the wardrobe ledger; different clothing in the same story scene must not be merged as a physical garment.",
+    "gownRule": "One provisional distinct-design record per visually matching garment, but only a confirmed purchase with a verified paid price contributes to royal expenditure."
   },
   "costBenchmarks": {
     "sourceDriveUrl": "https://docs.google.com/document/d/1pPe7lUyvfWL0qOGqzVzO8s-USvelXHK9DA356jsP7tk/edit?usp=drivesdk",
@@ -593,6 +595,81 @@
       "primaryFile": null,
       "notes": "Unselected display design, identity/image match awaiting reconciliation; never included in royal expenditure.",
       "primarySourceId": null
+    },
+    {
+      "id": "DR-13",
+      "title": "Azure and Gold Terrace Court Gown",
+      "collection": "court",
+      "recordStatus": "depicted_purchase_unverified",
+      "purchaseDate": null,
+      "inWorldDate": null,
+      "designer": null,
+      "workshop": null,
+      "cost": {
+        "fabricGold": null,
+        "largeGemsGold": null,
+        "tinyGemsGold": null,
+        "preciousFindingsGold": null,
+        "enchantedTextilesGold": null,
+        "laborGold": null,
+        "marginGold": null,
+        "paidGold": null
+      },
+      "benchmarkClass": null,
+      "notes": "Provisional single-design group: matching azure-and-gold bodice, draped overskirt and leg-revealing terrace silhouette. Render variations do not constitute additional invoices.",
+      "primaryFile": "Azure Elf Princess on a Royal Balcony.png",
+      "primarySourceId": "file_000000005f94823082058f0d1c138dce",
+      "matchingConfidence": "visual motif match; provisional physical-garment identity"
+    },
+    {
+      "id": "DR-14",
+      "title": "Rose-Pink Gilded Fitting Gown",
+      "collection": "atelier",
+      "recordStatus": "depicted_purchase_unverified",
+      "purchaseDate": null,
+      "inWorldDate": null,
+      "designer": null,
+      "workshop": null,
+      "cost": {
+        "fabricGold": null,
+        "largeGemsGold": null,
+        "tinyGemsGold": null,
+        "preciousFindingsGold": null,
+        "enchantedTextilesGold": null,
+        "laborGold": null,
+        "marginGold": null,
+        "paidGold": null
+      },
+      "benchmarkClass": null,
+      "notes": "Provisional single-design group: matching pink/ivory embellished bodice and gold-trimmed full gown across the fitted dressing-room portraits. May be commissioned, but no proof of payment.",
+      "primaryFile": "Royal Gown Fitting in the Moonlit Chamber.png",
+      "primarySourceId": "file_00000000391081fd837be87d87144657",
+      "matchingConfidence": "visual motif match; provisional physical-garment identity"
+    },
+    {
+      "id": "DR-15",
+      "title": "White-and-Navy Heraldic Court Gown",
+      "collection": "design",
+      "recordStatus": "depicted_purchase_unverified",
+      "purchaseDate": null,
+      "inWorldDate": null,
+      "designer": null,
+      "workshop": null,
+      "cost": {
+        "fabricGold": null,
+        "largeGemsGold": null,
+        "tinyGemsGold": null,
+        "preciousFindingsGold": null,
+        "enchantedTextilesGold": null,
+        "laborGold": null,
+        "marginGold": null,
+        "paidGold": null
+      },
+      "benchmarkClass": null,
+      "notes": "Provisional historic outfit design. White/ivory and navy panels with gold heraldic embroidery across two render variants. No assumption about coronation date or purchase.",
+      "primaryFile": "Elven Queen of the Sunlit Kingdom.png",
+      "primarySourceId": "file_000000000980823094517fb44d8b9eb2",
+      "matchingConfidence": "visual motif match; provisional physical-garment identity"
     }
   ],
   "sources": [
@@ -640,7 +717,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1YurWIe8xMOruPmsQLLFYPR32lTgtJmib/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "sceneSequenceIds": [
+        "SC-06"
+      ]
     },
     {
       "id": "file_000000004cf8823092c15a21ede7e6d1",
@@ -656,7 +736,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/13Vh-MDgV-fycRnmSJPR671hkHhuTtDrJ/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "sceneSequenceIds": [
+        "SC-06"
+      ]
     },
     {
       "id": "file_000000003e04820cb7b533dbc8ddfece",
@@ -672,7 +755,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1YDdefPALlpuXlos2PYeKr_JRFqNsLsBs/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "sceneSequenceIds": [
+        "SC-06"
+      ]
     },
     {
       "id": "file_000000004334823088c31d202c9a6204",
@@ -688,7 +774,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1XZNBFV9qUgsRIIUoxsffdX-34A_IvzSD/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "sceneSequenceIds": [
+        "SC-06"
+      ]
     },
     {
       "id": "file_000000001ddc81f5b5ff1682b1b7e362",
@@ -704,7 +793,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/12W3hi9EjtEV6kl5T4qQTxphpZGmiLoAa/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "sceneSequenceIds": [
+        "SC-06"
+      ]
     },
     {
       "id": "file_00000000f63081fdbe5d5362b3518c53",
@@ -713,14 +805,15 @@
       "archivedAt": "2026-10-27T05:07:57.213674+00:00",
       "bytes": 3027468,
       "role": "scene",
-      "wardrobeId": null,
+      "wardrobeId": "DR-14",
       "sceneGroup": "Atelier and shopping",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000f630.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1cy1Lsx-LtFUnzDbijbD2weVIPyh7SjPC/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
     },
     {
       "id": "file_00000000fa5881fda2ac62a50ed022a7",
@@ -729,14 +822,15 @@
       "archivedAt": "2026-10-27T05:07:55.858063+00:00",
       "bytes": 3091340,
       "role": "scene",
-      "wardrobeId": null,
+      "wardrobeId": "DR-14",
       "sceneGroup": "Atelier and shopping",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000fa58.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/15ZDw-JAMEjTVXlH9n0UGn9v9Ev2hAPfb/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
     },
     {
       "id": "file_00000000391081fd837be87d87144657",
@@ -745,14 +839,15 @@
       "archivedAt": "2026-10-27T05:07:54.810780+00:00",
       "bytes": 3095536,
       "role": "scene",
-      "wardrobeId": null,
+      "wardrobeId": "DR-14",
       "sceneGroup": "Atelier and shopping",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-000000003910.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1QbcWUtrjMbCX61i-erIs0EXzusZlADxO/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
     },
     {
       "id": "file_0000000094b081fda362eb3ca216d237",
@@ -784,7 +879,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1eje5m0tRiXpQ1KOb4bXtsYgNUefSzxt3/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "sceneSequenceIds": [
+        "SC-09"
+      ]
     },
     {
       "id": "file_00000000ec4481fda21df20443d38dd7",
@@ -880,7 +978,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1fHLvJu8gEgzKbjZfNkASwuRAbNd3mcTJ/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "sceneSequenceIds": [
+        "SC-04"
+      ]
     },
     {
       "id": "file_00000000906c81fd8cc3d00f798bdae8",
@@ -896,7 +997,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1dk-PhHBXO1NPFhSql14YrUtLVc8dSPhf/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "sceneSequenceIds": [
+        "SC-04"
+      ]
     },
     {
       "id": "file_00000000f92481fdbff0db5dccc49237",
@@ -912,7 +1016,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1fAFl2L-Mj8nzPAfJad2t2JAeJT-JdW86/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "sceneSequenceIds": [
+        "SC-04"
+      ]
     },
     {
       "id": "file_000000009b108230b3ea21e5bea018eb",
@@ -1024,7 +1131,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1KU5t2ACGAp0BCPwd4fXTBwzWIRY_l9tN/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "sceneSequenceIds": [
+        "SC-05"
+      ]
     },
     {
       "id": "file_0000000057848230b0a9adfb5de333e7",
@@ -1040,7 +1150,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1ad5xWSpq58EeLbVk4p6q-Xp7_F0BBIxs/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "sceneSequenceIds": [
+        "SC-05"
+      ]
     },
     {
       "id": "file_00000000b83c81fd8a62d4cd65ae01c4",
@@ -1072,7 +1185,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/17zv0EYwjR6T8zd6K5O7YAq4iYeeIoZHb/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "sceneSequenceIds": [
+        "SC-07"
+      ]
     },
     {
       "id": "file_0000000022cc81f5b4efcf09578ae080",
@@ -1088,7 +1204,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/13kxs-E5avUAfot1IGt6GQ50v5ywl3J1m/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "sceneSequenceIds": [
+        "SC-07"
+      ]
     },
     {
       "id": "file_000000001adc81f5aa63a3afcfe57734",
@@ -1136,7 +1255,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1JT9lQhFj_2_xCL1t3iOcJjvlYgMFtwtm/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "sceneSequenceIds": [
+        "SC-06"
+      ]
     },
     {
       "id": "file_000000009fcc81fdacd11bea79083bb8",
@@ -1152,7 +1274,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1lPzFwkS93ELwmPwSNNrICdiYiHndxop6/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "sceneSequenceIds": [
+        "SC-06"
+      ]
     },
     {
       "id": "file_000000007f6081f8bbb698ff0eefc1e3",
@@ -1168,7 +1293,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1XQNpp7rYIrGOvMaOE4wZKriLfF90tYJe/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "sceneSequenceIds": [
+        "SC-06"
+      ]
     },
     {
       "id": "file_00000000600c81fdb574034a08b92e15",
@@ -1200,7 +1328,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1mt2pc-e4l4aZBbCZ1uNIe4yto4OceSS-/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "sceneSequenceIds": [
+        "SC-06"
+      ]
     },
     {
       "id": "file_00000000f71c81f5b2d0dc127fe4bbd2",
@@ -1232,7 +1363,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1l_g52kPPWTx52kyw9aGBI5nnW7Lk6zTT/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive."
+      "publicationNote": "Half-resolution WebP viewing copy verified in the GitHub tree. Source master preserved on Drive.",
+      "sceneSequenceIds": [
+        "SC-09"
+      ]
     },
     {
       "id": "file_00000000c35881f5bf27b135fc516ded",
@@ -1424,7 +1558,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1KVmQagzVNV5hVLuLiuwLHOWWeqap97Ju/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive."
+      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
+      "sceneSequenceIds": [
+        "SC-09"
+      ]
     },
     {
       "id": "file_000000008fc081f8b5644ced02b98aa9",
@@ -1454,7 +1591,10 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/dr-09.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
+      "sceneSequenceIds": [
+        "SC-09"
+      ]
     },
     {
       "id": "file_0000000088e081fdbb923c8ce5f54746",
@@ -1510,7 +1650,10 @@
         "wardrobeMatch": "unconfirmed",
         "summary": "Blue floral family ensemble; no verified match to a purchased gown.",
         "evidence": "Daysha wears a royal-blue floral-embroidered off-shoulder gown with white lace sleeves; Estelle wears a separate short blue floral dress; the family walks with two cats."
-      }
+      },
+      "sceneSequenceIds": [
+        "SC-03"
+      ]
     },
     {
       "id": "file_00000000bc90820cb2e1bbfda264e7e1",
@@ -1534,7 +1677,10 @@
         "wardrobeMatch": "unconfirmed",
         "summary": "Blue floral family ensemble; no verified match to a purchased gown.",
         "evidence": "Daysha's royal-blue bodice, white floral sleeves and headpiece match the family-ensemble motif; Estelle wears her short blue floral dress during the catroom magic scene."
-      }
+      },
+      "sceneSequenceIds": [
+        "SC-02"
+      ]
     },
     {
       "id": "file_00000000302481f5acaa82062258b625",
@@ -1558,7 +1704,10 @@
         "wardrobeMatch": "unconfirmed",
         "summary": "Blue floral family ensemble; no verified match to a purchased gown.",
         "evidence": "Daysha's blue floral bodice and translucent white sleeves remain visible beside glitter-covered Rome; Estelle's blue floral child dress is separate attire."
-      }
+      },
+      "sceneSequenceIds": [
+        "SC-02"
+      ]
     },
     {
       "id": "file_00000000183881f583907b387b53331a",
@@ -1582,7 +1731,10 @@
         "wardrobeMatch": "unconfirmed",
         "summary": "Blue floral family ensemble; no verified match to a purchased gown.",
         "evidence": "Daysha appears at the council table in a blue floral off-shoulder gown; Estelle is above the table in a short blue-and-white floral dress."
-      }
+      },
+      "sceneSequenceIds": [
+        "SC-02"
+      ]
     },
     {
       "id": "file_00000000a96481f58a0a2bdfa0777b9b",
@@ -1606,7 +1758,10 @@
         "wardrobeMatch": "unconfirmed",
         "summary": "Estelle's blue floral child dress; Daysha's gown not identifiable.",
         "evidence": "Estelle alone is prominent in the rafters wearing a short blue-and-white floral dress; Daysha's adult gown is not visible well enough to identify."
-      }
+      },
+      "sceneSequenceIds": [
+        "SC-02"
+      ]
     },
     {
       "id": "file_00000000a0748230b5d7d7b567c14e47",
@@ -1630,7 +1785,10 @@
         "wardrobeMatch": "unconfirmed",
         "summary": "Blue floral family ensemble; no verified match to a purchased gown.",
         "evidence": "Daysha wears the royal-blue floral bodice and white lace sleeves among the children; Estelle wears a distinct short blue floral dress."
-      }
+      },
+      "sceneSequenceIds": [
+        "SC-03"
+      ]
     },
     {
       "id": "file_000000000b78820c973f9fb6ac03bb98",
@@ -1654,7 +1812,10 @@
         "wardrobeMatch": "unconfirmed",
         "summary": "Blue floral family ensemble; no verified match to a purchased gown.",
         "evidence": "Daysha's royal-blue gown has white floral embroidery, an off-shoulder neckline and sheer lace sleeves; Estelle wears the short blue floral dress at tea."
-      }
+      },
+      "sceneSequenceIds": [
+        "SC-03"
+      ]
     },
     {
       "id": "file_000000008ce08230807c16765e2d3ff0",
@@ -1678,7 +1839,10 @@
         "wardrobeMatch": "unconfirmed",
         "summary": "Blue floral family ensemble; no verified match to a purchased gown.",
         "evidence": "Near-identical tea composition to Icy Blue-Haired Royal Garden Tea Party; Daysha's blue floral gown and Estelle's separate short blue floral dress recur."
-      }
+      },
+      "sceneSequenceIds": [
+        "SC-03"
+      ]
     },
     {
       "id": "file_00000000121881f6a4d178d0aaa6be63",
@@ -1687,12 +1851,16 @@
       "archivedAt": "2026-10-26T06:49:41.543767+00:00",
       "bytes": 3556402,
       "role": "scene",
-      "wardrobeId": "DR-05",
+      "wardrobeId": null,
       "sceneGroup": "Royal jewel chase",
       "publishedImageUrl": "assets/daysha/royal-purchases/elven-royal-jewel-chase.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP."
+      "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
+      "sceneSequenceIds": [
+        "SC-01"
+      ]
     },
     {
       "id": "file_00000000bb1081f48f89b269379dfd13",
@@ -1701,12 +1869,16 @@
       "archivedAt": "2026-10-26T06:48:19.967152+00:00",
       "bytes": 3111813,
       "role": "scene",
-      "wardrobeId": "DR-05",
+      "wardrobeId": null,
       "sceneGroup": "Royal jewel chase",
       "publishedImageUrl": "assets/daysha/royal-purchases/royal-garden-treasure-chase.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP."
+      "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
+      "sceneSequenceIds": [
+        "SC-01"
+      ]
     },
     {
       "id": "file_000000004ba88230a0b2d8530752f76f",
@@ -1715,12 +1887,16 @@
       "archivedAt": "2026-10-26T06:44:00.586718+00:00",
       "bytes": 2746323,
       "role": "scene",
-      "wardrobeId": "DR-05",
+      "wardrobeId": null,
       "sceneGroup": "Royal jewel chase",
       "publishedImageUrl": "assets/daysha/royal-purchases/elven-princess-s-royal-chase.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP."
+      "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment.",
+      "sceneSequenceIds": [
+        "SC-01"
+      ]
     },
     {
       "id": "file_00000000127081f5be39d41502d07a1d",
@@ -1729,12 +1905,13 @@
       "archivedAt": "2026-10-26T06:40:26.538366+00:00",
       "bytes": 3002096,
       "role": "gown-or-portrait",
-      "wardrobeId": "DR-05",
+      "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/celestial-elven-princess-in-bloom.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP."
+      "publicationNote": "Full-resolution WebP presentation derivative published to GitHub; original PNG preserved separately in verified Drive ZIP.",
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
     },
     {
       "id": "file_0000000057e8820c9d942e574d26c4d3",
@@ -1743,14 +1920,15 @@
       "archivedAt": "2026-10-26T06:36:21.880979+00:00",
       "bytes": 2910950,
       "role": "gown-or-portrait",
-      "wardrobeId": "DR-05",
+      "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-0000000057e8.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1INuFFZnBT2nXDJwbiVWVP0YLr4uMe4n7/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive."
+      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
     },
     {
       "id": "file_000000008a1481f4a68f34e77eb27034",
@@ -1759,14 +1937,15 @@
       "archivedAt": "2026-10-26T06:34:33.438668+00:00",
       "bytes": 3136170,
       "role": "gown-or-portrait",
-      "wardrobeId": "DR-05",
+      "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-000000008a14.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/10cqcBKtLLbN6pSd602_-nMiZiQ9vXxNd/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive."
+      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
     },
     {
       "id": "file_00000000bf3082308e0e09c462626c51",
@@ -1775,14 +1954,15 @@
       "archivedAt": "2026-10-26T06:32:22.830185+00:00",
       "bytes": 3036096,
       "role": "gown-or-portrait",
-      "wardrobeId": "DR-05",
+      "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000bf30.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1DpclJv_RkZx_AhqFgywUwy3iZMe6PXMo/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive."
+      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
     },
     {
       "id": "file_00000000cef8823091c9c51936b7510d",
@@ -1812,7 +1992,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1HTRuEk4HWZKGFqIE6AmKpOCQQthgEIep/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive."
+      "publicationNote": "Half-resolution web copy verified in GitHub; archival master retained on Google Drive.",
+      "sceneSequenceIds": [
+        "SC-08"
+      ]
     },
     {
       "id": "file_00000000859c8230bfd48232c0b67f35",
@@ -1828,7 +2011,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/18m_3jIIAVKvEnV263cOmik4j173soUIc/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "sceneSequenceIds": [
+        "SC-08"
+      ]
     },
     {
       "id": "file_0000000096dc8230b670c6d2a08c45e7",
@@ -1842,7 +2028,10 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/dr-06.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP."
+      "publicationNote": "Verified GitHub-hosted gallery rendition; full original in Drive transfer ZIP.",
+      "sceneSequenceIds": [
+        "SC-08"
+      ]
     },
     {
       "id": "file_000000006dc481fd89b6bd11148e68b0",
@@ -1851,14 +2040,15 @@
       "archivedAt": "2026-10-26T06:13:26.734332+00:00",
       "bytes": 3228541,
       "role": "gown-or-portrait",
-      "wardrobeId": "DR-05",
+      "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-000000006dc4.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1noCDXBsc7z9OK_q8LkGDA093vkZQAKFZ/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
     },
     {
       "id": "file_000000006c348230b240f095ef40ff46",
@@ -1867,14 +2057,15 @@
       "archivedAt": "2026-10-26T06:10:30.289721+00:00",
       "bytes": 3235962,
       "role": "gown-or-portrait",
-      "wardrobeId": "DR-05",
+      "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-000000006c34.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1VqNdgibAoxy9d7wKtQJpnbqJa880UAEh/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
     },
     {
       "id": "file_0000000036b881fdba24f621e3d45d45",
@@ -1883,14 +2074,15 @@
       "archivedAt": "2026-10-26T06:10:29.391799+00:00",
       "bytes": 3330189,
       "role": "gown-or-portrait",
-      "wardrobeId": "DR-05",
+      "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-0000000036b8.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1t3J3Hrt76lDXc3Ie0NTGDRC-7damQf07/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
     },
     {
       "id": "file_000000002a1082308447739e2edecf89",
@@ -1899,14 +2091,15 @@
       "archivedAt": "2026-10-26T06:08:17.736252+00:00",
       "bytes": 3366204,
       "role": "gown-or-portrait",
-      "wardrobeId": "DR-05",
+      "wardrobeId": null,
       "sceneGroup": "Court and romance",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-000000002a10.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1S2Moh1Ce3cf22Z_VUyvQiNlY2QR3cLyA/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
     },
     {
       "id": "file_00000000060c81fdb6225767ec61f92f",
@@ -1915,14 +2108,15 @@
       "archivedAt": "2026-10-26T06:07:20.522338+00:00",
       "bytes": 3576018,
       "role": "gown-or-portrait",
-      "wardrobeId": "DR-05",
+      "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000060c.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1fXpn4yuVp9ugG2lF6QmzuwKHawjBDH7j/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive.",
+      "matchingReview": "Removed unsupported cosmic-gown attribution; the shared character or episode alone does not establish the same garment."
     },
     {
       "id": "file_00000000f34881fd8f80b0bb14e53372",
@@ -2983,14 +3177,15 @@
       "archivedAt": "2026-10-25T05:26:13.141372+00:00",
       "bytes": 3065112,
       "role": "gown-or-portrait",
-      "wardrobeId": null,
+      "wardrobeId": "DR-15",
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-000000000980.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1Xqq7eV5t6S801OnVfz0XjO9XZZaa2eH9/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
     },
     {
       "id": "file_00000000a14881fda7f850a3b1a81683",
@@ -2999,14 +3194,15 @@
       "archivedAt": "2026-10-25T05:25:07.023736+00:00",
       "bytes": 2759675,
       "role": "gown-or-portrait",
-      "wardrobeId": null,
+      "wardrobeId": "DR-15",
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000a148.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1nK8TyD0LOn-p-UaPzYMfVAJ_SKACzI80/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
     },
     {
       "id": "file_000000000cb881fd9ba603cbcb7691a1",
@@ -3218,7 +3414,10 @@
       "publishedImageUrl": "assets/daysha/royal-purchases/src-000000002058.webp",
       "publicationStatus": "hosted_verified",
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "sceneSequenceIds": [
+        "SC-10"
+      ]
     },
     {
       "id": "file_000000008fa881fd86e39223aa6a14e5",
@@ -3227,14 +3426,15 @@
       "archivedAt": "2026-10-25T04:57:29.918894+00:00",
       "bytes": 2670304,
       "role": "gown-or-portrait",
-      "wardrobeId": null,
+      "wardrobeId": "DR-13",
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-000000008fa8.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1hq4k1MAq5y-FxF1N90pcjNCWlS-ogfXf/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
     },
     {
       "id": "file_00000000c16882309db070701d92e090",
@@ -3250,7 +3450,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1_BlAu8l1NxUi232j9DV6edQiMi86veUf/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "sceneSequenceIds": [
+        "SC-10"
+      ]
     },
     {
       "id": "file_00000000646881fda4eaafa2bacc0f51",
@@ -3266,7 +3469,10 @@
       "originalDriveUrl": "https://drive.google.com/file/d/1plel9tDhuStgKHAW8fOCjm2sVMzW3jHK/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "sceneSequenceIds": [
+        "SC-10"
+      ]
     },
     {
       "id": "file_000000005f94823082058f0d1c138dce",
@@ -3275,14 +3481,15 @@
       "archivedAt": "2026-10-25T04:53:38.346914+00:00",
       "bytes": 2586916,
       "role": "gown-or-portrait",
-      "wardrobeId": null,
+      "wardrobeId": "DR-13",
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-000000005f94.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1Z_zhAzijglwbmtGHRWI7CrdWlW_1ZR1e/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
     },
     {
       "id": "file_000000003c8c823099821d1eeb132d76",
@@ -3323,14 +3530,15 @@
       "archivedAt": "2026-10-25T04:49:18.217497+00:00",
       "bytes": 2731104,
       "role": "gown-or-portrait",
-      "wardrobeId": null,
+      "wardrobeId": "DR-13",
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000c56c.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1RPHWcRA7-WOjRER_cXMgJ4nl94BIlbv0/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
     },
     {
       "id": "file_00000000915c81fd89a1b58b4a94fe7d",
@@ -3339,14 +3547,15 @@
       "archivedAt": "2026-10-25T04:45:29.331629+00:00",
       "bytes": 2763973,
       "role": "gown-or-portrait",
-      "wardrobeId": null,
+      "wardrobeId": "DR-13",
       "sceneGroup": "Other portraits and references",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000915c.webp",
       "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/10IRDg1q-JR-UR_Wi5ntNVPDF7hSMWvP2/view?usp=drivesdk",
       "originalDriveVerified": true,
       "publishedFormat": "image/webp",
-      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified."
+      "publicationNote": "Optimized rendition for browsing. Original source image preserved on Drive with its initial file size verified.",
+      "matchingReview": "Visually similar gown design; physical-garment identity and actual sale remain provisional."
     },
     {
       "id": "file_0000000010e08230bd486c0bdd8738e4",
@@ -3467,7 +3676,7 @@
       "17xZLYYqotUUy16ELmaaYwGKazaEc7iNz"
     ],
     "driveOriginalZipParts": 3,
-    "provisionalGarmentCount": 22,
+    "provisionalGarmentCount": 25,
     "originalsUploadedDrive": 177,
     "originalsIndividualDriveFiles": 143,
     "driveOriginalsArchiveZips": 3,
@@ -3488,6 +3697,137 @@
       "importState": "Verified gallery images committed to main",
       "note": "All 69 display files are ready; do not mark them hosted until verified in main branch.",
       "githubBatchImported": 69
+    },
+    "sceneSequenceCount": 10,
+    "unmatchedDressImages": 141
+  },
+  "sceneSequences": [
+    {
+      "id": "SC-01",
+      "title": "Royal jewel delivery and courtyard chase",
+      "category": "court-adventures",
+      "description": "The Queen Mother's jewels, a mistaken pursuit and the palace courtyard; garment identity unverified",
+      "sourceIds": [
+        "file_00000000121881f6a4d178d0aaa6be63",
+        "file_00000000bb1081f48f89b269379dfd13",
+        "file_000000004ba88230a0b2d8530752f76f"
+      ],
+      "billingPolicy": "scene_only_no_new_purchase"
+    },
+    {
+      "id": "SC-02",
+      "title": "Estelle's glitter-balloon council prank",
+      "category": "family",
+      "description": "Council-chamber surprise, glitter aftermath and the family with its cats",
+      "sourceIds": [
+        "file_00000000a96481f58a0a2bdfa0777b9b",
+        "file_00000000183881f583907b387b53331a",
+        "file_00000000302481f5acaa82062258b625",
+        "file_00000000bc90820cb2e1bbfda264e7e1"
+      ],
+      "billingPolicy": "scene_only_no_new_purchase"
+    },
+    {
+      "id": "SC-03",
+      "title": "Royal garden family and tea",
+      "category": "family",
+      "description": "Everyday family outings, refreshments and palace gardens",
+      "sourceIds": [
+        "file_00000000a0748230b5d7d7b567c14e47",
+        "file_000000008ce08230807c16765e2d3ff0",
+        "file_000000000b78820c973f9fb6ac03bb98",
+        "file_000000006e0881fd8b4c45394a9e0555"
+      ],
+      "billingPolicy": "scene_only_no_new_purchase"
+    },
+    {
+      "id": "SC-04",
+      "title": "Royal tea and pastry receptions",
+      "category": "court",
+      "description": "Tea salons, pastries and social appearances; multiple gowns possible",
+      "sourceIds": [
+        "file_0000000026e081fd9585736ecebd8b4d",
+        "file_00000000906c81fd8cc3d00f798bdae8",
+        "file_00000000f92481fdbff0db5dccc49237"
+      ],
+      "billingPolicy": "scene_only_no_new_purchase"
+    },
+    {
+      "id": "SC-05",
+      "title": "Royal banquets and family festivities",
+      "category": "family",
+      "description": "Festive court meals with family",
+      "sourceIds": [
+        "file_00000000497481fdb9c8deef47bbf8ba",
+        "file_0000000057848230b0a9adfb5de333e7"
+      ],
+      "billingPolicy": "scene_only_no_new_purchase"
+    },
+    {
+      "id": "SC-06",
+      "title": "Royal dress salons and atelier browsing",
+      "category": "atelier",
+      "description": "Displaying or fitting numerous dresses is not proof of buying every dress pictured",
+      "sourceIds": [
+        "file_00000000b0b48230936031eaca24cc80",
+        "file_000000004cf8823092c15a21ede7e6d1",
+        "file_000000003e04820cb7b533dbc8ddfece",
+        "file_000000004334823088c31d202c9a6204",
+        "file_000000001ddc81f5b5ff1682b1b7e362",
+        "file_00000000550881f694afd876953bb99e",
+        "file_000000009fcc81fdacd11bea79083bb8",
+        "file_000000007f6081f8bbb698ff0eefc1e3",
+        "file_00000000b1ac81fd937aec6d192f02eb"
+      ],
+      "billingPolicy": "scene_only_no_new_purchase"
+    },
+    {
+      "id": "SC-07",
+      "title": "Royal carriage and formal departures",
+      "category": "court",
+      "description": "Related palace departures; do not infer the same worn gown",
+      "sourceIds": [
+        "file_000000009d3082309be6a1ef11732490",
+        "file_0000000022cc81f5b4efcf09578ae080"
+      ],
+      "billingPolicy": "scene_only_no_new_purchase"
+    },
+    {
+      "id": "SC-08",
+      "title": "Grand elven wedding ceremonies",
+      "category": "royal",
+      "description": "Ceremonial appearances; existing wedding-outfit record remains one entry",
+      "sourceIds": [
+        "file_0000000096dc8230b670c6d2a08c45e7",
+        "file_00000000920082308a5aae6dbb2ecbf9",
+        "file_00000000859c8230bfd48232c0b67f35"
+      ],
+      "billingPolicy": "scene_only_no_new_purchase"
+    },
+    {
+      "id": "SC-09",
+      "title": "Ballroom dances and court romance",
+      "category": "royal",
+      "description": "Romantic court scenes catalogued by occasion, not additional purchases",
+      "sourceIds": [
+        "file_0000000011f48230affcb25a25e23bc1",
+        "file_00000000165c81f598afdfa2c82302b4",
+        "file_00000000b488820cabd38989e4fedf43",
+        "file_00000000808881f5aca910a9d6bd920e"
+      ],
+      "billingPolicy": "scene_only_no_new_purchase"
+    },
+    {
+      "id": "SC-10",
+      "title": "The elemental gown lookbooks",
+      "category": "reference",
+      "description": "Multidress reference sheets. Each completed elemental gown already has its own independent ledger entry.",
+      "sourceIds": [
+        "file_00000000c16882309db070701d92e090",
+        "file_00000000646881fda4eaafa2bacc0f51",
+        "file_00000000205881fdab1714d353ab14c8"
+      ],
+      "billingPolicy": "scene_only_no_new_purchase"
     }
-  }
+  ]
 }
