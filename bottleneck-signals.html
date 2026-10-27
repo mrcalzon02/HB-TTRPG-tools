@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bottleneck Signals — Firefox conversation status indicators | Calzon’s TTRPG Foundry</title>
+<meta name="description" content="Bottleneck Signals is an independent experimental Firefox extension for passive ChatGPT status indicators, with best-effort Claude support. Includes manual installation instructions.">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="workspace-landing.css">
+<style>main{max-width:950px;margin:auto;padding:24px 18px 70px}section{margin:18px 0;padding:18px;border:1px solid #66758b;border-radius:12px}li{margin:8px 0}a{overflow-wrap:anywhere}code{overflow-wrap:anywhere}</style></head>
+<body class="workspace-landing-body">
+<header class="site-header"><div><p class="eyebrow">Software / Firefox add-on</p><h1>Bottleneck Signals</h1><p class="subtitle">Passive AI conversation attention indicators — independent experimental software</p></div>
+<nav class="top-nav"><a class="nav-button" href="index.html">Foundry home</a><a class="nav-button" href="software.html#bottleneck-signals">Software</a></nav></header>
+<main>
+<section><h2>About this extension</h2>
+<p>Bottleneck Signals v0.4.1 is an experimental Firefox add-on built primarily for ChatGPT conversations on chatgpt.com, with secondary best-effort support for Claude on claude.ai. It displays a compact G or C inside a tab favicon status circle: green while responding, flashing orange after completion, red for detected errors or connection interruptions, and gray when state cannot be classified. A quiet-generation timer can flag suspected stalls. Orange flashing is enabled by default and can be disabled in the extension popup.</p>
+<p>It is strictly passive: it does not send prompts, retry, stop, navigate, schedule, or trigger model requests. It does not intentionally collect or transmit conversation history.</p>
+<p><strong>Independence:</strong> This experimental application is independently developed and is not affiliated with, sponsored by, endorsed by, or officially supported by OpenAI or Anthropic. Brand names are used only to describe compatibility.</p>
+</section>
+<section><h2>Download and release status</h2>
+<p><strong>v0.4.1 — staged testing build.</strong> The initial v0.4.0 version was submitted to Mozilla Add-ons for review; the v0.4.1 correction is not yet an approved Mozilla-signed release.</p>
+<p><a href="software/bottleneck-signals/README.md">Read the downloadable package installation README and manual setup guide</a>.</p>
+<p><strong>Download hosting:</strong> The staged ZIP is not yet uploaded to this site. Do not mistake this page for a signed public release. Obtain the staged test ZIP from its original project distribution until a verified download link is added here.</p>
+</section>
+<section><h2>Manually install in Firefox — temporary testing build</h2>
+<ol>
+<li>Save the Bottleneck Signals ZIP from the project distribution and extract it to a normal folder.</li>
+<li>Open Firefox and enter <code>about:debugging#/runtime/this-firefox</code> in the address bar.</li>
+<li>Select <strong>Load Temporary Add-on</strong> and choose <code>manifest.json</code> from the extracted folder.</li>
+<li>Reload any open ChatGPT or Claude tabs so the extension can observe their visible interface controls.</li>
+<li>Open the Bottleneck Signals toolbar popup to inspect per-tab states, toggle orange flashing, and adjust the inactivity warning threshold.</li>
+</ol>
+<p><strong>Important:</strong> Temporary add-ons are unloaded when Firefox exits. Repeat these steps after each browser restart. Normal permanent installation requires Mozilla signing; do not bypass Firefox signing safeguards.</p>
+</section>
+<section><h2>Indicator key and troubleshooting</h2>
+<ul><li><strong>Green G/C:</strong> generation detected.</li><li><strong>Flashing orange G/C:</strong> completed and awaiting user input.</li><li><strong>Red G/C:</strong> detected error, restriction, or interruption. This is a warning; it never automatically retries.</li><li><strong>Gray G/C:</strong> unknown, unsupported, or unsettled page state.</li><li><strong>Suspected stall:</strong> active response with no observable content progress for the configured interval, not proof that backend work has stopped.</li></ul>
+<p>If a status stays gray, reload the tab and examine the extension popup. Browser UI changes may require updated detectors. Claude may override the favicon with its own; Claude support is experimental. The extension is designed to remain lightweight alongside conversation-truncation extensions.</p>
+</section>
+<p><a href="software.html#bottleneck-signals">Return to Software catalog</a></p>
+</main></body></html>
