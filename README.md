@@ -38,7 +38,7 @@ The [AI Tools page](ai-tools.html) contains the dedicated [Factorio Render Pipel
 
 Voicebox is allocated as an **optional external, locally run** voice-cloning, narration, transcription, and AI-agent speech tool. Its download helper, developer-shell quickstart, upstream references, and integration boundary are documented at [`tools/voicebox/`](tools/voicebox/README.md). It is **not bundled with GitHub Pages**, not preinstalled, and has not yet been wired into the live Foundry runtime. Only use voices belonging to you or speakers who authorize their use; upstream Voicebox software is **MIT licensed, not CC0**, and voice-model licenses must be checked separately.
 
-## Current structure
+## Home recipes\n\nThe [Home Recipes page](home-recipes.html) archives personal real-world cooking recipes separately from tabletop mechanics and game crafting. Recipe No. 001 is Pepper Jack Hellfire Potatoes; No. 002 is Smoky Chipotle Bacon-Wrapped Pork Mignon Pot Roast. The pork photo is a four-hour HIGH-setting progress shot, not a finished-dish photograph. Recipe photos are self-contained under `assets/home-recipes/`.\n\n## Current structure
 
 - `index.html` — main menu page, character sheet utility, Kaysender module dashboard, and script loading.
 - `styles.css` — shared visual system, responsive panel layouts, registry cards, and print/PDF styling.
