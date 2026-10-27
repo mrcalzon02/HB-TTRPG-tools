@@ -1823,10 +1823,12 @@
       "role": "scene",
       "wardrobeId": "DR-06",
       "sceneGroup": "Royal ceremonies",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000859c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/18m_3jIIAVKvEnV263cOmik4j173soUIc/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_0000000096dc8230b670c6d2a08c45e7",
@@ -1851,10 +1853,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": "DR-05",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000006dc4.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1noCDXBsc7z9OK_q8LkGDA093vkZQAKFZ/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000006c348230b240f095ef40ff46",
@@ -1865,10 +1869,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": "DR-05",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000006c34.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1VqNdgibAoxy9d7wKtQJpnbqJa880UAEh/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_0000000036b881fdba24f621e3d45d45",
@@ -1879,10 +1885,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": "DR-05",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-0000000036b8.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1t3J3Hrt76lDXc3Ie0NTGDRC-7damQf07/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000002a1082308447739e2edecf89",
@@ -1893,10 +1901,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": "DR-05",
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000002a10.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1S2Moh1Ce3cf22Z_VUyvQiNlY2QR3cLyA/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000060c81fdb6225767ec61f92f",
@@ -1907,10 +1917,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": "DR-05",
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000060c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1fXpn4yuVp9ugG2lF6QmzuwKHawjBDH7j/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000f34881fd8f80b0bb14e53372",
@@ -1921,10 +1933,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000f348.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/13JVVgcL8MLbVVS2oSwD1t_IieIeGkPor/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000f224823086dd0c37346f2957",
@@ -1935,10 +1949,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000f224.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1NAz_JxBGMPLmFcEXsI07DeDRCX5LqDV8/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000c7a48230a1d021db4dcb5e3c",
@@ -1949,10 +1965,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000c7a4.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1OUqwMZZr7QBG3OFgp7Wc89AaQqUoi2ti/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000193081fdb62a07cadafa2133",
@@ -1963,10 +1981,12 @@
       "role": "costume-or-adventure",
       "wardrobeId": null,
       "sceneGroup": "Adventuring and outfit studies",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000001930.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/13MX19sSD-1eA4n4q7eYJ10ZUco_u6t3j/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000f21c82309eb36020da066ca1",
@@ -1977,10 +1997,12 @@
       "role": "costume-or-adventure",
       "wardrobeId": null,
       "sceneGroup": "Adventuring and outfit studies",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000f21c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1T4Mcwt587bRugiMUnp1amX3LdajrZaOk/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000b75881fdad6f79b8c1b643b2",
@@ -1991,10 +2013,12 @@
       "role": "costume-or-adventure",
       "wardrobeId": null,
       "sceneGroup": "Adventuring and outfit studies",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000b758.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1926VEuRPPG7pwAAoMyHaqXqcLZxrBdlw/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000f70c82308542f91625be2895",
@@ -2005,10 +2029,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000f70c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1NDGyO7OXR772Rr6Fo2miZQ3oKW18ZC9h/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_0000000052d882309d4d91c076ac02b1",
@@ -2019,10 +2045,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-0000000052d8.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1LGt2Z9ju_ACC_xKKtbMJJj85ih0do4mG/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000cfe4823095e5bd0f037bb605",
@@ -2033,10 +2061,12 @@
       "role": "costume-or-adventure",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000cfe4.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1gwjsj0yGdnsNSPLfd5QxIzNwG3pt9lxW/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_0000000031d881f78c1a1f8f26610e34",
@@ -2047,10 +2077,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-0000000031d8.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/13SGbpiV6tO8xXqunYKLToeBjAacMLWWQ/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000739081fd840685f428e61441",
@@ -2061,10 +2093,12 @@
       "role": "costume-or-adventure",
       "wardrobeId": null,
       "sceneGroup": "Adventuring and outfit studies",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000007390.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1iWmTQiaHe5KDFHdgOz5lqa1CotQdBhgk/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_0000000016e88230887a225347f15d5d",
@@ -2075,10 +2109,12 @@
       "role": "costume-or-adventure",
       "wardrobeId": null,
       "sceneGroup": "Adventuring and outfit studies",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-0000000016e8.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1pfG1eEVv70OYQvjKxpIrDNRaE2WKYDbX/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_0000000007f481fdb6e6d513298da5c5",
@@ -2089,10 +2125,12 @@
       "role": "costume-or-adventure",
       "wardrobeId": null,
       "sceneGroup": "Adventuring and outfit studies",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-0000000007f4.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1OYd7Ey3J1Xc_Z6gPSQW4IJ3ou0agg_9_/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000004b9481fdbf2d5961f1c58534",
@@ -2103,10 +2141,12 @@
       "role": "costume-or-adventure",
       "wardrobeId": null,
       "sceneGroup": "Adventuring and outfit studies",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000004b94.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1sKP3c2DRBaS_kQzpkEHyKhe5QKVckTzo/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000ac8482308dddec11f755199f",
@@ -2117,10 +2157,12 @@
       "role": "costume-or-adventure",
       "wardrobeId": null,
       "sceneGroup": "Adventuring and outfit studies",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000ac84.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1sXL7JGagKk81nU4mAqherZo_Nq7vz2Dl/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_0000000097d881fdbd0a3574453d8ef5",
@@ -2131,10 +2173,12 @@
       "role": "costume-or-adventure",
       "wardrobeId": null,
       "sceneGroup": "Adventuring and outfit studies",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-0000000097d8.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1n3CnOuxAsYogU3Yd1IpzTxRNzmDSjdgV/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000907082309419963f23537b77",
@@ -2145,10 +2189,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000009070.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1VkPYJCNzWnatisT4eH-q8QijpSynuYgR/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000000c2081fdb6ad754545ca46f1",
@@ -2159,10 +2205,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000000c20.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1U23CCROUm3M4IV_sf_NFJehUPORu7uvt/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000003c80820ca16ead5e3987e0b0",
@@ -2173,10 +2221,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000003c80.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1U8BLORvX2gXndRMYaNXj8W71nvFuD78V/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000cf5481fd852b2bd4e2f44a63",
@@ -2187,10 +2237,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000cf54.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1KIjM-CErGlrlng6jETPHDQNvejI574DX/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000a05081f89b7a7a30bd0e7ec0",
@@ -2201,10 +2253,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000a050.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1RyTi8A30u4Eh3D8Fx06Wkn9MiGasoYtJ/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000369081fdba4592cfaba0e90b",
@@ -2215,10 +2269,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000003690.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1IXLKZ9V9A_hayutdl8NJvKgbG1kQ4j2_/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000004cb48230836dbc3fdc8712c4",
@@ -2229,10 +2285,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000004cb4.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1WIvrdGXG-fVjCKQ5HdrI65OEndtKKrNc/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000009fe081f8bd741d3ebf1efb5c",
@@ -2243,10 +2301,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000009fe0.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1cAJIJ4Yj_U7OL-sLtLgAqEF4-irKlbD2/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_0000000067e081f8b367d59c5543f410",
@@ -2257,10 +2317,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-0000000067e0.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1SEaux0uGYUZUnMyqYaczMHZAJwsCH9yj/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000f86c81fd8df37a06f4267f56",
@@ -2271,10 +2333,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000f86c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1k8OcwIgMwZPi5EChTUrZ3ZUD6MP1I4_G/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000001e2c81f5b859e4a640a4e225",
@@ -2285,10 +2349,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000001e2c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1CExhHWISdHQ3i3wICagN_cLazStPWQ2K/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000275081fdb212f1e492bd136b",
@@ -2299,10 +2365,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000002750.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1zwJEzWP7ONCqUqpXZ5ZvqG7T08u8qzB0/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000001e4481fd8df8b378ba57fca2",
@@ -2313,10 +2381,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000001e44.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1wbX4Ngjzg3iYmeDArAHXjRMoJzpDklEN/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000001b7081fdac7c0daaf0f39de4",
@@ -2327,10 +2397,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000001b70.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1pPQfl-ToD4SDXKTF3EBJDf1Yh5ac2OOs/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000ced081f5b71dacb3f2794b7f",
@@ -2341,10 +2413,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000ced0.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1PADY5ZJ0oTL2fZavwh1f_xEWzqMHr-kK/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000095c81fd86d00bde586ab005",
@@ -2369,10 +2443,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000003788.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/139m39JQAwqFdFuYpHsoG4dFGpuxzzvZ0/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000127081f5accf3a1f6101e9ff",
@@ -2383,10 +2459,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000001270.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1pvBfkldeBe1FTdhIXMaK19Ej1RGk_NNl/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000528c81f5b4d1af4bc3f09691",
@@ -2397,10 +2475,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000528c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1w-bg6VMz5PFQM4wGN9pyDfda2dDosnL9/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000127481f5909c3e442d01c633",
@@ -2411,10 +2491,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000001274.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1zIrcuMsgFKN6bslD8ldoChTkjfsPLetH/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000cf4881fd89bd85cf6dce108c",
@@ -2425,10 +2507,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000cf48.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1LXANbKNWc1_ZMrKhLw8qI6mizgD-aUkT/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000de6481fd93612d46a906d4b5",
@@ -2439,10 +2523,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000de64.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1Xy8joLrCkLaYtusP2Xf0eDK7ewT5lrxm/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000205881f5bf708a3a916643c3",
@@ -2453,12 +2539,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000002058-ethereal.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1CV2koap8tiJJ_5kRC3OVGXKpQZQk5033/view?usp=drivesdk",
       "originalDriveVerified": true,
-      "publishedFormat": null,
-      "publicationNote": "Distinct artwork shared a 12-hex-digit prefix with a different image; correcting source-ID collision, awaiting uniquely named rendition."
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000009c288230a4af8ace0c776cea",
@@ -2469,10 +2555,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000009c28.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1V9U0jO2NYNTKICi6BFMcrXvq6XxBdiF4/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000290c81fdbb5520209946d77b",
@@ -2483,10 +2571,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000290c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1c_38a2DzyO-8BCQvHIbm8_9bVlvvXGDo/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000518081f59a63d1986ee32276",
@@ -2497,10 +2587,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000005180.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/12sV7A8zgKmWhdWrbX9LG87jfXlp5V2tJ/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000eb8882308a086fd151380ef5",
@@ -2511,10 +2603,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000eb88.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1kszn3W-UqWPAsW8052qqu2X9zUwIG9CU/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000731481fda4f5e5f23231d0cb",
@@ -2525,10 +2619,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000007314.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/175AQ4CrjliyL_F_jJK2F_ZSFgE2oliDK/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000007ef481fda5efb3e5cffbeddb",
@@ -2539,10 +2635,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000007ef4.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1ME5ulyATK0WymVXNcLrNI6T7jLFSEXe6/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000b99881fda7c670a7d072dfd0",
@@ -2553,10 +2651,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000b998.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/17Q4vKdnUt8hNdXjpqdvzVkGece_CmDnh/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000415081fdb592caa5de09776e",
@@ -2567,10 +2667,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000004150.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/15tfRr8dqHlQjEPJ_MICr0xTY4f2XgCef/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000229c8230b4e70f8351624cbf",
@@ -2581,10 +2683,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000229c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1kmK5jB-VrhpIwpGCEOc9wII-1PNPJZhV/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000000e0c8230aef901457a5151ed",
@@ -2595,10 +2699,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000000e0c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1MW5w432azN6oxxhDiT6RpXfWJWJ1vLS2/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000a11081fd8b0a20d80525db04",
@@ -2609,10 +2715,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000a110.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1ND8CuRcIfCGch3HvvuPAZTu5GNXYpr-B/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000c35482308470f9645969e09a",
@@ -2623,10 +2731,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000c354.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1p843hWYzQXqbS0llbD2Z5rpNlBEB1ixp/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000049081fdb607d805dc3c65fa",
@@ -2637,10 +2747,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000000490.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1XpbLCM-LB5F8eXV3YuSrogJGohm-Vdg9/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000804c81fd88d8faec3ff2fd42",
@@ -2651,10 +2763,12 @@
       "role": "reference",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000804c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1Z_RWEYl9aChEnA-d2mxopWhXcbnTP2KI/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_0000000031f48230b79cc5a1bdd4d436",
@@ -2665,10 +2779,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-0000000031f4.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/14cg4m-SHTdlS6NKt0Avk2bvCXyUfQt8L/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000009c18823080a47b6f88f263b4",
@@ -2679,10 +2795,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000009c18.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1kscqioSmxCvO3dR7euDwUMtk97b9RtNF/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000005d5481fd86f8502118827a2e",
@@ -2693,10 +2811,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000005d54.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1gMCTuFCysQuNBTS-8rBvCtsZ43U6lUqb/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_0000000056f08230bdbc24baa6e16357",
@@ -2707,10 +2827,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-0000000056f0.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1j-UapKdKyvzZ2debMdyobuwFcwEMiJEv/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_0000000054408230bbbea741c2939e8a",
@@ -2721,10 +2843,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000005440.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1HIF6CiNEpnOJdndmjhCioMLD42qXT51Y/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000691c81fd8b3cdfd973cccb08",
@@ -2735,10 +2859,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000691c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1AoXrdnM57SS9djdq81Okexri3j5cfC06/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000d9d881fda8fc40a3bf695352",
@@ -2749,10 +2875,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000d9d8.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1XIJU3VNghxwR8XvjL1JtvuroJBbCyed0/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_000000000cf0823083434bc676c2d678",
@@ -2763,10 +2891,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-000000000cf0.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1Jsq-QqgF-hQkBzHmd_tfVccE88ijqNff/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000358c823094507b63d4c65b5a",
@@ -2777,10 +2907,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000358c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1G7vwNIC0woy4ZExMoo8Jvmqt7yzD3Vtu/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000547c81fd8f27d1a625e71ae1",
@@ -2791,10 +2923,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Court and romance",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000547c.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1ahI9_FajN2d7SkPPkTdn3ft1-OUWdQdb/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_00000000e6dc81fd90991b33ddffb305",
@@ -2805,10 +2939,12 @@
       "role": "gown-or-portrait",
       "wardrobeId": null,
       "sceneGroup": "Other portraits and references",
-      "publishedImageUrl": null,
-      "publicationStatus": "not_hosted",
+      "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000e6dc.webp",
+      "publicationStatus": "hosted_verified",
       "originalDriveUrl": "https://drive.google.com/file/d/1AydfZS6X2BGAd0TvetwfjnNZEM5lDx3f/view?usp=drivesdk",
-      "originalDriveVerified": true
+      "originalDriveVerified": true,
+      "publishedFormat": "image/webp",
+      "publicationNote": "Half-scale optimized WebP derivative; original-resolution image separately retained on Drive."
     },
     {
       "id": "file_0000000011148230af1767b724d07050",
@@ -3321,9 +3457,9 @@
   ],
   "verification": {
     "inventoryFiles": 178,
-    "unpublishedSourceFiles": 69,
+    "unpublishedSourceFiles": 0,
     "missingPrimaryFiles": [],
-    "publishedDerivativeCount": 109,
+    "publishedDerivativeCount": 178,
     "verifiedOriginalsInDriveZip": 34,
     "driveOriginalsZipFileId": "1k3XLgJK3lpB0MIHiCQlHqE1XePl8w4yx",
     "driveOriginalZipIds": [
@@ -3336,7 +3472,7 @@
     "originalsIndividualDriveFiles": 143,
     "driveOriginalsArchiveZips": 3,
     "githubTreeVerified": true,
-    "githubTreeAssetCount": 109,
+    "githubTreeAssetCount": 178,
     "githubTreeUnlinkedAssetCount": 0,
     "galleryIdCollisionFixed": true,
     "pendingHalfScaleWebP": {
@@ -3348,9 +3484,10 @@
       "driveFileId": "1Vjal6VMxmkbyLZDTJsuqgQ6-zifpX2Hb",
       "driveUrl": "https://drive.google.com/file/d/1Vjal6VMxmkbyLZDTJsuqgQ6-zifpX2Hb/view?usp=drivesdk",
       "sha256": "8ee1a941b294b0edc3ec4c73782653d60699b50dac9ee37408fd55561b301ed8",
-      "githubCommitted": false,
-      "importState": "Drive-verified, GitHub transfer pending",
-      "note": "All 69 display files are ready; do not mark them hosted until verified in main branch."
+      "githubCommitted": true,
+      "importState": "Verified gallery images committed to main",
+      "note": "All 69 display files are ready; do not mark them hosted until verified in main branch.",
+      "githubBatchImported": 69
     }
   }
 }
