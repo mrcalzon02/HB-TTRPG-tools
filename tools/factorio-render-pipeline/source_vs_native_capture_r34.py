@@ -83,6 +83,37 @@ def change_counts(masks):
     return [sum(1 for p in ImageChops.difference(masks[i],
              masks[(i+1)%FRAMES]).tobytes() if p) for i in range(FRAMES)]
 
+def motion_map(masks):
+    """Count, per native pixel, binary alpha edge changes over 64 transitions."""
+    counts=[0]*(SIZE[0]*SIZE[1])
+    for i in range(FRAMES):
+        delta=ImageChops.difference(masks[i],masks[(i+1)%FRAMES]).tobytes()
+        for pixel,value in enumerate(delta):
+            if value:counts[pixel]+=1
+    return counts
+
+def spatial_motion_activity(counts):
+    result={}
+    w=SIZE[0]
+    for label,start,stop in (("upper_machine",0,280),
+                              ("attachment_roots",280,375),
+                              ("bell_throat_and_side_guards",375,475),
+                              ("lower_lips_and_guard_tips",475,542)):
+        result[label]=sum(counts[start*w:stop*w])
+    return result
+
+def render_motion_overlay(frame,counts):
+    base=Image.new("RGBA",SIZE,(39,44,48,255))
+    base.alpha_composite(frame.convert("RGBA"))
+    r,g,b=base.convert("RGB").split()
+    peak=max(1,max(counts))
+    heat=Image.frombytes("L",SIZE,bytes(min(255,round(x*255/peak)) for x in counts))
+    red=ImageChops.lighter(r.point(lambda v:round(v*.45)),heat)
+    green=ImageChops.lighter(g.point(lambda v:round(v*.45)),
+                            heat.point(lambda v:round(v*.40)))
+    blue=b.point(lambda v:round(v*.45))
+    return Image.merge("RGB",(red,green,blue))
+
 def compare(source,candidate,source_kind,source_bg,out):
     if len(source)!=FRAMES or len(candidate)!=FRAMES:
         raise ValueError("All 64 indexed frames required")
@@ -107,6 +138,8 @@ def compare(source,candidate,source_kind,source_bg,out):
     meanscore=round(sum(
         q["silhouette_iou" if source_bg is None else "preview_only_iou"]
         for q in pairs)/64,5)
+    source_map=motion_map(source_masks) if source_bg is None else None
+    model_map=motion_map(model_masks)
     results={"status":"DIAGNOSTIC_ONLY_NO_3D_GEOMETRY_APPROVAL",
              "source_kind":source_kind,
              "source_registration":"original 264x542 cell and fixed Blender canvas; no translation optimization",
@@ -124,7 +157,9 @@ def compare(source,candidate,source_kind,source_bg,out):
              "model_frame_mask_changes":model_movement,
              "mean_unaligned_silhouette_iou":meanscore if source_bg is None else None,
              "preview_only_unreliable_iou":meanscore if source_bg is not None else None,
-             "source_images_in_repo":False}
+             "source_images_in_repo":False,
+             "source_motion_band_counts":spatial_motion_activity(source_map) if source_map else None,
+             "model_motion_band_counts":spatial_motion_activity(model_map)}
     selected=[0,8,16,24,32,40,48,56]
     w,h=SIZE
     contact=Image.new("RGB",(w*4,(h+20)*4),(24,29,34))
@@ -142,6 +177,15 @@ def compare(source,candidate,source_kind,source_bg,out):
         d.text((x+8,y+h+3),f"source {fid:02d}",fill="white")
         d.text((x+w+8,y+h+3),f"Blender {fid:02d}",fill="white")
     contact.save(out/"eight-frame-source-blender-pairs.png")
+    # A GIF preview has no trustworthy original RGBA alpha for motion.
+    if source_map is not None:
+        heat=Image.new("RGB",(SIZE[0]*2,SIZE[1]+22),(24,29,34))
+        heat.paste(render_motion_overlay(source[0],source_map),(0,0))
+        heat.paste(render_motion_overlay(candidate[0],model_map),(SIZE[0],0))
+        labels=ImageDraw.Draw(heat)
+        labels.text((5,SIZE[1]+4),"Original 64-frame alpha movement",fill="white")
+        labels.text((SIZE[0]+5,SIZE[1]+4),"Editable Blender alpha movement",fill="white")
+        heat.save(out/"source-vs-blender-alpha-motion-heatmap.png")
     (out/"source-vs-blender-motion.json").write_text(json.dumps(results,indent=2)+"\n")
     return results
 

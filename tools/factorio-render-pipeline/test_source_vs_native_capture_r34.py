@@ -26,6 +26,8 @@ class SourceNativeR34(unittest.TestCase):
             self.assertLess(data["mean_unaligned_silhouette_iou"],1)
             self.assertIsNotNone(data["mean_source_changed_mask_pixels"])
             self.assertTrue((Path(tmp)/"eight-frame-source-blender-pairs.png").is_file())
+            self.assertTrue((Path(tmp)/"source-vs-blender-alpha-motion-heatmap.png").is_file())
+            self.assertIn("lower_lips_and_guard_tips",data["source_motion_band_counts"])
 
     def test_lossy_gif_cannot_fake_source_motion_alpha(self):
         a,b=self.fake_frames()
@@ -41,6 +43,7 @@ class SourceNativeR34(unittest.TestCase):
             self.assertIsNone(data["mean_unaligned_silhouette_iou"])
             self.assertIsNotNone(data["preview_only_unreliable_iou"])
             self.assertIn("lossy",data["source_reference_caveat"].lower())
+            self.assertFalse((Path(tmp)/"source-vs-blender-alpha-motion-heatmap.png").exists())
 
     def test_partial_animation_rejected(self):
         a,b=self.fake_frames()
