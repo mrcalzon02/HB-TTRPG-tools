@@ -15,6 +15,26 @@
     "url": "index.html"
   },
   {
+    "id": "home-recipes",
+    "title": "Home Recipes — Personal Kitchen Recipe Cards",
+    "workspace": "Home Recipes",
+    "description": "Original real-world recipe cards with photographed first-bake Pepper Jack Hellfire Potatoes and a smoky chipotle bacon-wrapped pork mignon Crock-Pot roast photographed at four hours on high.",
+    "keywords": [
+      "home recipes",
+      "recipe card",
+      "hellfire potatoes",
+      "pepper jack",
+      "pork mignon",
+      "bacon wrapped pork",
+      "pot roast",
+      "crock pot",
+      "smoky chipotle",
+      "better than bouillon",
+      "personal cooking"
+    ],
+    "url": "home-recipes.html"
+  },
+  {
     "id": "software-directory",
     "title": "Software — Programs and Game Projects",
     "workspace": "Software",
