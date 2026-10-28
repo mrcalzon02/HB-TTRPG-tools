@@ -427,6 +427,13 @@ def build_thruster(name,w,h,root,p):
         vanilla_source_guard_motion_r36.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R37: source interior is layered refractory, not a near-black
+        # smooth flat wall; expose existing 80 physical R19 scales
+        # with real pressed normal facets and tuned NONemissive materials.
+        import vanilla_refractory_visibility_r37
+        vanilla_refractory_visibility_r37.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",

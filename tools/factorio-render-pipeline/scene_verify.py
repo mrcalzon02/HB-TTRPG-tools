@@ -654,6 +654,52 @@ def test_one(path):
                     raise RuntimeError("R36 64-source-frame trajectory metadata differs from original")
             scene.frame_set(1)
             print("R36_SOURCE_MEASURED_OUTER_EDGE_SHAPE_ANIMATION_PASS",path.name,flush=True)
+            # R37: the exact source's R19 refractory shell must be
+            # physically surfaced, not just colored/glowing 2D stickers.
+            from vanilla_refractory_visibility_r37 import (
+                REVISION as R37_REVISION,ORIGINAL_SHA256 as R37_SHA,
+                RIDGE_INWARD_TILES as R37_RIDGE,DARK_COLOR as R37_DARK,
+                AGED_COLOR as R37_AGED,STRAKE_COLOR as R37_STRAKE,
+                THROAT_COLOR as R37_THROAT,THROAT_MATERIAL_NAME as R37_THROAT_NAME)
+            if (scene.get("fsc_r37_revision")!=R37_REVISION or
+                scene.get("fsc_r37_exact_source_sha256")!=R37_SHA or
+                int(scene.get("fsc_r37_unmodified_tile_count",0))!=80):
+                raise RuntimeError("R37 source-visible refractory missing")
+            if not (scene.get("fsc_r37_open_bore_unsealed") and
+                    scene.get("fsc_r37_no_original_sprite_texture_or_glow") and
+                    scene.get("fsc_r37_no_added_objects")):
+                raise RuntimeError("R37 faked visual interior or reintroduced sealed bore")
+            if r19_throat.data.materials[0].name!=R37_THROAT_NAME:
+                raise RuntimeError("R37 throat contrast material not retained")
+            for name,color in (
+                ("R19_chipped_black_refractory",R37_DARK),
+                ("R19_inner_oxidized_shingles",R37_AGED),
+                ("R20_inner_oxidized_strake_contrast",R37_STRAKE),
+                (R37_THROAT_NAME,R37_THROAT)):
+                mat=bpy.data.materials.get(name)
+                if mat is None:
+                    raise RuntimeError("R37 historical material missing")
+                bs=mat.node_tree.nodes.get("Principled BSDF")
+                rgb=bs.inputs["Base Color"].default_value
+                if max(abs(float(a)-b) for a,b in zip(rgb,color))>.00001:
+                    raise RuntimeError("R37 source material was not saved")
+                if bs.inputs["Emission Strength"].default_value!=0:
+                    raise RuntimeError("R37 original refractory baked additive glow")
+            for kind in ("R19_NEAR_MOUTH_TILE_","R19_MID_STAGGERED_TILE_"):
+                for n in range(40):
+                    ob=bpy.data.objects.get(f"{kind}{n:02d}")
+                    if (ob is None or
+                        not ob.get("R37_source_refractory_center_corrugation") or
+                        abs(float(ob.get("R37_center_inset_tiles",0))-R37_RIDGE)>.00001):
+                        raise RuntimeError("R37 center corrugation not stored on source tile")
+                    outer=ob.data.vertices[3].co
+                    center=ob.data.vertices[4].co
+                    # At matching axial station 1, center rib is physically
+                    # pressed inward into bore (smaller axis radius).
+                    radius=lambda p:(p.x*p.x+(p.z+.43)*(p.z+.43))**.5
+                    if radius(center)>=radius(outer)-.012:
+                        raise RuntimeError("R37 physically unshaped source strake")
+            print("R37_SOURCE_REFRACTORY_PHYSICAL_FACETS_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)
