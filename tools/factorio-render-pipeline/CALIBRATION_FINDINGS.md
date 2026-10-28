@@ -1491,3 +1491,24 @@ Original R11 520-vertex open bore and R42 exterior 280 quads are untouched.
 64 native RGBA captures and exact private source comparison pass.** In
 particular, enlarged mount visuals must not be mistaken for reproduction
 of a hidden original CAD system.
+
+### R45.1 real Blender clipping root correction
+
+R45 exact source-procedure workflow #40626978450 PASSED. R45 actual
+Blender 4.5.15 job #40626978472 built and reopened the edited
+`.blend` and passed all saved-scene geometry R45 assertions, but
+**FAILED** strict existing `capture_analysis.py --fail-on-edge`
+because the vanilla preview bbox moved from R44 `[7,3,305,628]`
+to R45 `[7,0,305,628]`. This is genuine clipping introduced by
+too-large squared R15 upper flange corners, NOT a test failure to bypass.
+The exact original source may touch its atlas top edge but the Blender
+preview has strict built-in anti-clipping requirements.
+
+R45.1 reduces only the two existing top flange's radial flare 1.20
+→ 1.10, square-factor .74 → .58 and axial-scale 1.40 → 1.15.
+The original circular-to-square topology transformation and exactly
+two existing R15 mount material datablocks stay. R45 inner open-throat
+physical castellated baffle stays unchanged. Neither camera/framing,
+validation limits, materials, hidden mechanisms nor geometry population
+change. Actual QA + source comparison must establish whether corrected
+flanges are both unclipped and closer to the source.
