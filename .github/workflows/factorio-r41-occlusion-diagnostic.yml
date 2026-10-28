@@ -1,0 +1,51 @@
+name: Factorio R41 first-hit occlusion diagnosis
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/occlusion_first_hit_r41.py'
+      - 'tools/factorio-render-pipeline/run_occlusion_first_hit_r41.py'
+      - 'tools/factorio-render-pipeline/report_occlusion_first_hit_r41.py'
+      - '.github/workflows/factorio-r41-occlusion-diagnostic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  saved-scene-first-hit:
+    name: Same-camera first-hit ray and reversible A/B
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Read VERIFIED R40 Blender artifact (no source sprites)
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40618557151
+          name: factorio-captures-calibration
+          path: r40-baseline
+          github-token: ${{ github.token }}
+      - name: Install pinned Blender + native QA dependencies
+        run: |
+          python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir readiness
+          python -m pip install Pillow
+      - name: Diagnose actual saved camera first-hit occluder
+        run: |
+          python tools/factorio-render-pipeline/run_occlusion_first_hit_r41.py --artifact-root r40-baseline --output r41-diagnostic
+          python tools/factorio-render-pipeline/report_occlusion_first_hit_r41.py --output r41-diagnostic
+      - name: Archive verified first-hit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r41-original-camera-raycast
+          path: |
+            r41-diagnostic/
+            readiness/
+          retention-days: 30
