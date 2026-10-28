@@ -2,16 +2,10 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after committed Season 3 Episode 11, *A Dangerous Attachment*.
-**Forward window:** Season 3 Episodes 12–16.
+**State:** Rolled forward after committed Season 3 Episode 12, *The Rune Upstairs*.
+**Forward window:** Season 3 Episodes 13–17.
 
-**Continuity status:** S3E11 establishes a mutually acknowledged adult attachment between Kaelmont road clerk **Edda Kelm** and Crown-side independent supplier **Orlen Morcant**. Edda has sent a formal **conflict disclosure and independent-review request** through Kaelmont dispatch; **no answer or reassignment** has occurred. Orlen paid an empty-cart yard trial and shelter from his own purse, entered a **higher but still unaccepted** revised iron delivery quotation, and promised to share witnessed hauler charges with other bidders. Neither the relationship nor the trial grants Kaelmont road approval, Crown procurement preference, a safe loaded-cart route or a new contract. **Hesta's thirty-day/twelve-accepted-load first refusal** and separate four-season toll privilege remain; one block passed, second failed, third still uninspected. The canceled hall supper, unpaid remaining works, roof/gutter/drain, third cold hearth, Jorvan's exact 24/27 east-gate pledge, foreign jurisdiction and correspondence restrictions, Miren/Luceran estrangement and physically deaf room remain unchanged. **First candle dark, six lit; lower stair barred and uncertified.** No new supernatural power or foreign verdict.
-
-## Season 3 Episode 12 — The Rune Upstairs — EXPLORATORY / SCHEMATIC LOCK
-
-Establish independent provenance for copied new-room inscriptions and later undercroft comparison; no early prisoner/interface disclosure.
-
-**Exit:** Architecture becomes testable evidence.
+**Continuity status:** S3E12 establishes a guarded **upper-gallery recess newly discovered to the register, not proven newly formed**; the incised bent-line/three-stroke/hook mark has two witnessed direct impressions, a preserved reversed-copy error, independent measured elevation and reproducible wall reference points. Ysabet and the Copyists' Hall hold separately sealed copies; the old unsigned “lower return” sketch has **unverified provenance**, not an authenticated undercroft original. Neris Vell, Elen Quorin, Pell, Merel and Brother Odran maintain competing readings. No translation, “King Beneath” phrase, prison/interface truth, new listening, or candle causation is established. Rhyse guards the recess; **the lower stair remains separately barred and uncertified**. Damaris has approved only bounded ordinary works/copying costs, not new treasury wealth. **First candle dark, six lit.** Edda Kelm's Kaelmont disclosure still awaits reply; Orlen's revised quotation remains unaccepted and his bidder-charge obligation survives; Hesta's first refusal, four-season toll right and uninspected third block stand. The canceled hall supper, deferred hangings, roof/gutter/drain, third cold hearth, Jorvan 24/27 pledge, foreign jurisdiction and correspondence restrictions, and Miren/Luceran estrangement remain unchanged. Episodes 13–17 must carry these obligations without treating speculative evidence as royal certainty.
 
 ## Season 3 Episode 13 — Festival of Masks — EXPLORATORY
 
@@ -37,7 +31,17 @@ Carry the **actual consequences** of the Kaelmont disclosure, competitive delive
 
 **Exit:** At least one earlier personal or material promise faces a documented cost, without converting exploratory beats into prior canon.
 
+## Season 3 Episode 17 — The Hunt Beyond Hearing — EXPLORATORY
+
+A major hunt outside Edselsto's established listening ways becomes a credible setting for independent court, village and foreign interests. **Before any hunt occurs**, seed lawful permissions, terrain and weather knowledge, horse availability (including the eighteen withdrawn patrol mounts), forage, food, guards, attendants, wounded-care capacity and the real cost of diverting workers from unfinished roofs and roads. Rhyse must distinguish sport from patrol duties; Miren and other adults choose what to disclose away from the castle without making privacy a conspiracy. Former rivals may offer aid or decline it for reasons that remain intelligible. Do not invent a completed hunt, hidden army, magical animal, unearned rescue or new Edselsto hearing.
+
+**Exit:** A specific off-wall meeting or route decision creates a future obligation that the court cannot verify by questioning Edselsto; no new candle failure or premature undercroft revelation.
+
 ## Active payoff debt (historical carry-forward)
+
+**S3E12:** The upper-gallery linen cupboard hides an **unregistered recess** with an incised bent enclosing line, three strokes and a crooked hook. Pell and Vess do not certify entry or supernatural creation; Rhyse posts a watch and the **separate lower stair stays barred**. Neris Vell makes signed direct impressions under Ysabet's witnesses; a reversed transfer mistake is retained and labeled. Elen Quorin corrects the rain-distorted exterior survey and supplies an independent measured elevation; four physical reference points permit later checking. One sealed impression remains with Ysabet and one with the Copyists' Hall; the original remains in place. A fallen edge chip is separately secured. Brother Odran, Merel, Pell and Elen advance competing hypotheses without definitive reading. An old anonymous “lower return, uncertain place” sketch is **not** certified as an undercroft original. Damaris authorizes bounded works/watch/copying cost including one follow-up half-day, not unrestricted scholarship; Jorvan's pledge is untouched. Luceran refrains from demanding unverified castle knowledge; Miren remains affectionate but unreconciled. **First candle dark, six lit**. No prison, interface, translation, “King Beneath” phrase, new foreign authority, road contract, or second candle failure. The festival must pay for its own material and social consequences.
+
+
 
 **S3E11:** Edda Kelm and Orlen Morcant acknowledge a mutual adult attachment through repeated ordinary Kaelmont/Crown-side price work, one deliberate kiss and conditional private correspondence; no diplomatic marriage or institutional alliance. Edda sends an official **conflict disclosure and recusal request** through Kaelmont post, **awaiting reply**. Orlen pays for a witnessed empty-cart route trial and shelter, enters a **higher, unaccepted** revised iron quote, and owes other bidders the promised written hauler charges. No road certification, loaded-cart safety, Crown award or Kaelmont recommendation. Hesta's first-refusal and toll rights survive; third block still untested. Yara witnesses sealing without reading the letter; Jalen's private medical/Leora correspondence remain protected. The canceled supper, unfinished roof, Jorvan 24/27 pledge, foreign boundaries, Miren/Luceran estrangement, **one dark/six lit candles** and barred lower stair remain. Episode 12 must not treat an office disclosure as already adjudicated.
 
