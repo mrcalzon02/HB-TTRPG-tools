@@ -638,7 +638,10 @@ def test_one(path):
                 if abs(k.value-vals[0])>.005:
                     raise RuntimeError("R36 frame0 no longer matches unshifted R35 base")
                 scene.frame_set(8)
-                if abs(k.value-vals[7])>.005 or abs(k.value-vals[7])<.3:
+                # Require the stored source measurement AND nonzero
+                # motion. The previous second term incorrectly compared
+                # k.value to the target again, rejecting exact matches.
+                if abs(k.value-vals[7])>.005 or abs(k.value)<.3:
                     raise RuntimeError("R36 real original frame7 motion missing")
                 scene.frame_set(1)
                 base=kb.key_blocks["Basis"].data[72+5*9+4].co

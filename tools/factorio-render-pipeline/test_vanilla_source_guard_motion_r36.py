@@ -58,6 +58,16 @@ class TestOriginalBodyGuardMotion(unittest.TestCase):
                          "R36_original_64_edge_samples"):
             self.assertIn(required,self.source)
 
+    def test_saved_blender_gate_accepts_matching_nonzero_motion(self):
+        verifier=SOURCE.with_name("scene_verify.py").read_text(encoding="utf8")
+        self.assertNotIn("abs(k.value-vals[7])<.3",verifier)
+        self.assertIn("abs(k.value-vals[7])>.005 or abs(k.value)<.3",verifier)
+        # A perfect observed normalized displacement must not be rejected.
+        for side,values in self.d["SOURCE_EDGE_SAMPLES"].items():
+            expected=self.d["normalized_values"](values)[7]
+            self.assertFalse(abs(expected-expected)>.005 or abs(expected)<.3)
+            self.assertTrue(abs(0.-expected)>.005 or abs(0.)<.3)
+
     def test_source_64_frames_required(self):
         with self.assertRaisesRegex(ValueError,"64 original"):
             self.d["normalized_values"]((0,)*63)
