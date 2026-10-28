@@ -23,11 +23,18 @@ source_priority:
 
 **Owner-established: these are one fictional universe.** *Beneath Dappled Oaks*, the royal life of Queen Daysha and King Rome, and the fantasy-world fiction behind *Jewel Brook: Heroes of Embryon* all take place in **Elaranth**, formally the **Concord of Crown and Commonwealth** or **Sunder Concord**. *Beneath Dappled Oaks* names the romantic-intrigue novel, not a second country. *Jewel Brook* names the game, not a different planet. The game shares heroes, courts, mineral wealth, and physical world with the novel and royal chronicle. Actual implemented gameplay mechanics and campaign maps are not automatically historical occurrences.
 
-**Owner-established opening:** *Beneath Dappled Oaks* starts **halfway through King Rome's FIRST year as reigning king**. Rome and Daysha are already husband and wife; Daysha is queen. **Princess Estelle has not been born.** She is not a newborn, a student, a council visitor, or a hidden observer in that opening. Her future birth cannot be placed in the first regnal year. The family scenes with older Estelle, the garden chase, daycare, rafters prank, and cats are **later historical scenes**, at dates not yet established.
+**Owner-established opening:** *Beneath Dappled Oaks* starts **halfway through King Rome's FIRST year as reigning king**. Rome and Daysha are already husband and wife; Daysha is queen. **Princess Estelle has not been born.** She is not a newborn, a student, a council visitor, or a hidden observer in that opening. Her birth IS in Rome's first regnal year, AFTER the novel opens. Working birth: 15 Casktide, 282 S.M. (266 days after the proposed wedding/conception). The family scenes with older Estelle, the garden chase, daycare, rafters prank, and cats are **later historical scenes**, at dates not yet established.
 
 **Calendar alignment, working not confirmed:** The established Sunder Moon calendar has 13 months of 28 days (364 days). If Rome's accession is placed on 1 Thawcall 282 S.M., the civil midpoint is the turn between 14 and 15 Deepdelve 282 S.M. For indexing, use **14 Deepdelve, 282 S.M.** as the *working day-level representation* of the owner-established half-year opening; **the exact accession day and exact novel-opening day remain provisional until synchronized with the committed chapter prose**. Year 282 S.M. is the previously established BDO era. Do not claim the provisional day is directly user-selected, or retrofit season-dependent BDO scenes without review.
 
 **Other continuities remain independent unless subsequently joined by the owner.** The *Nowhere King* prose series (Luceran, Castle Edselsto, Embar-Zara) is **not** by default the Rome court or Elaranth; the *Magenheim* boss named Nowhere King is unrelated to that prose series. *Blacklight Continuum* is an independent far-future mirror-universe campaign. *Kaysender* and other original adventure settings have their own dates, rules and geography; shared names, dragons, elven ears and spells are not evidence of one timeline.
+
+
+### First-year birth correction and sixteen-year family chronology
+
+The owner's later timeline decision supersedes any earlier suggestion that Estelle is born only after Rome's first year. She is **unborn at the novel's midpoint opening** but **born later during Rome's first regnal year**. Under the working assumption of wedding/conception on **1 Thawcall, 282 S.M.** and a 266-day gestation measured from conception, the expected birth date is **15 Casktide, 282 S.M.** The novel's working opening is **14 Deepdelve, 282 S.M.**, 85 elapsed days earlier. The exact days are calculated planning dates, not witnessed medical records.
+
+The 1,000-day game/royal-history milestone is elapsed day 1,000 (**21 Casktide, 284 S.M.**), by which time Estelle is **two complete 364-day Elaranthi years and six days old**. Sixteen complete life-years following her projected birth end on **15 Casktide, 298 S.M.**—within **Rome's seventeenth regnal year**. The 16-row `data/royal-sixteen-year-timeline.csv` deliberately counts birth-to-birthday life-years, not reign-year chapters. The existing royal story retains 17 intersecting reign-year slots. Art without actual dated story evidence stays unassigned in `data/royal-artwork-placement.csv`, and cross-fiction events appear in `data/master-storybook-events.csv`.
 
 ### 2. The state the new monarch inherits
 
@@ -130,9 +137,9 @@ The Last Seven's Book One/Silver Night chronology, the Queen's boutique chronolo
 - 14 Deepdelve, 282 S.M.: **working exact-date normalization**, pending chapter-level verification.
 - 1 Thawcall, 282 S.M.: **proposed coronation alignment**, not separately witnessed as in-world fact.
 - Silver Night: **before** the Last Seven's opening, exact day still undetermined; 36 students and 6 servants die.
-- Estelle's birth: **after Rome's first regnal year**; specific year/day unassigned.
-- Estelle's daycare/jewel chase/council glitter/catroom: **after her birth**, exact years unknown.
-- Estelle's 16th birthday: **16 years after her eventual birth**; not automatically in reign year sixteen.
+- Estelle's birth: **during Rome's first regnal year**, AFTER the novel opens, with projected birthday **15 Casktide, 282 S.M.**
+- Estelle's daycare/jewel chase/council glitter/catroom: **after her first-year birth**, exact childhood years unknown.
+- Estelle's 16th birthday: **16 × 364 days after the projected birth, on 15 Casktide, 298 S.M.**, during Rome's SEVENTEENTH regnal year.
 
 **Unresolved locks:**
 1. Rome's exact Avariel relation, coronation ritual, and valid legal accession instrument.
@@ -140,7 +147,7 @@ The Last Seven's Book One/Silver Night chronology, the Queen's boutique chronolo
 3. Exact BDO Chapter One day and its existing seasonal cues; do not rewrite thirty committed chapters by assumption.
 4. Silver Night's calendar month and its causal relationship, if any, to changes in the Crown.
 5. Exact dates and stages of Daysha's first queenly commissions and her gift of Lexi.
-6. Estelle's eventual birth year, day and sixteen-year endpoint; no first-year birth.
+6. Final confirmation of the projected 15 Casktide 282 birth date; her birth occurs within the first regnal year, with her sixteenth birthday falling in regnal year seventeen.
 7. Aurelian Court and Embryon game's proposed map-site geographies and whether a mission is actual story canon.
 8. Names, governments and wartime incidents beyond established borders.
 9. Identity of the Queen Mother beyond her known relationship to Rome.
