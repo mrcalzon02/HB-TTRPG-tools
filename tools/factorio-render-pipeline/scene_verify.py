@@ -604,6 +604,53 @@ def test_one(path):
                     ob.get("R33_2_source_rgba_starboard_last_row")!=513):
                     raise RuntimeError("R33.2 no original RGBA alpha target provenance")
             print("R33_SOURCE_AFT_TAPER_SAVED_MESH_PASS",path.name,flush=True)
+            # R36 AFTER R33: source BODY atlas proved ~2–3 px 64-frame
+            # side-silhouette shifts. The physical mechanism isn't visible.
+            # Require genuine saved 64-key shape deformation on the SAME
+            # two external cups, not animated object pivots or new parts.
+            from vanilla_source_guard_motion_r36 import (
+                REVISION as R36_REVISION,ORIGINAL_SHA256 as R36_SHA,
+                SOURCE_EDGE_SAMPLES as R36_SAMPLES,
+                MODEL_LATERAL_TRAVEL_TILES as R36_MAX)
+            if (scene.get("fsc_r36_revision")!=R36_REVISION or
+                scene.get("fsc_r36_original_archive_sha256")!=R36_SHA or
+                int(scene.get("fsc_r36_real_rgba_frames",0))!=64):
+                raise RuntimeError("R36 exact original outer-edge animation not applied")
+            if not (scene.get("fsc_r36_no_new_parts") and
+                    scene.get("fsc_r36_no_pivot_or_actuator_inferred") and
+                    scene.get("fsc_r36_keeps_r35_1_inner_fin_proportions")):
+                raise RuntimeError("R36 introduced unproven mechanisms or altered inner fins")
+            from vanilla_source_guard_motion_r36 import normalized_values
+            for side in ("port","starboard"):
+                ob=bpy.data.objects.get("R25_OUTER_SKID_UNDERSIDE_"+side)
+                if ob.animation_data or not ob.get("R36_shape_key_not_object_animation"):
+                    raise RuntimeError("R36 shell has object-level instead of observed silhouette motion")
+                kb=ob.data.shape_keys
+                if not kb or not kb.animation_data or not kb.animation_data.action:
+                    raise RuntimeError("R36 64-frame shape-key animation absent from saved scene")
+                if len(kb.key_blocks)!=2:
+                    raise RuntimeError("R36 invented additional hidden shell articulations")
+                k=kb.key_blocks["R36_observed_2D_guard_edge_motion_NOT_verified_hinge"]
+                if k.slider_min>-.99 or k.slider_max<.99:
+                    raise RuntimeError("R36 cannot reproduce signed original alpha-outline travel")
+                vals=normalized_values(R36_SAMPLES[side])
+                scene.frame_set(1)
+                if abs(k.value-vals[0])>.005:
+                    raise RuntimeError("R36 frame0 no longer matches unshifted R35 base")
+                scene.frame_set(8)
+                if abs(k.value-vals[7])>.005 or abs(k.value-vals[7])<.3:
+                    raise RuntimeError("R36 real original frame7 motion missing")
+                scene.frame_set(1)
+                base=kb.key_blocks["Basis"].data[72+5*9+4].co
+                moved=k.data[72+5*9+4].co
+                if abs(moved.x-base.x-R36_MAX*.78)>.001:
+                    raise RuntimeError("R36 cupped guard mesh has no physical lateral motion")
+                if abs(moved.z-base.z)>.00001 or abs(moved.y-base.y)>.00001:
+                    raise RuntimeError("R36 changed source-controlled bowl curvature or aft tip")
+                if json.loads(ob.get("R36_original_64_edge_samples","[]"))!=list(R36_SAMPLES[side]):
+                    raise RuntimeError("R36 64-source-frame trajectory metadata differs from original")
+            scene.frame_set(1)
+            print("R36_SOURCE_MEASURED_OUTER_EDGE_SHAPE_ANIMATION_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)

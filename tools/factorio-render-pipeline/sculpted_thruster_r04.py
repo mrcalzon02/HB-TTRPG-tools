@@ -420,6 +420,13 @@ def build_thruster(name,w,h,root,p):
         vanilla_source_tail_profile_r33.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R36 original 64 RGBA frames show independent left/right OUTER
+        # outline motion. Deform SAME two existing cupped surfaces with
+        # source-measured shape-key curves; no unknown hinges/pistons.
+        import vanilla_source_guard_motion_r36
+        vanilla_source_guard_motion_r36.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
