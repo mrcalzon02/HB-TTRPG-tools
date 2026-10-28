@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "status": "not_published_staging",
+  "scope": "Current conversation original AI-generated image snapshots only; no user-supplied dress images",
+  "currentMainPublishedImageCountAtAudit": 13,
+  "images": [
+    {
+      "filename": "starlit_gown_in_the_atelier.png",
+      "sha256": "dac00f3d5753266f98c1ae54e6203741f2ebfec64249dcbbde3e574b826dbd80",
+      "description": "First Friday midnight-blue gown",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "fairy_princess_in_the_royal_atelier.png",
+      "sha256": "000e1633c67feeb1510e6ad92c944568d2c28e35900337a33411f4a6486c13c0",
+      "description": "First Friday pale icy-blue gown",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "a_richly_detailed_high_fantasy_anime_style_illust.png",
+      "sha256": "cf58cc6eeab1106105aba39f2ba8e815a5e5437e70d70fa8c81f6d5d33f8bad3",
+      "description": "Burgundy gown",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "a_richly_detailed_high_end_anime_fantasy_illustra.png",
+      "sha256": "dc378fc1e5c541f58236936107b604cfd5da746f5cb9cbbcb47076e0f00970a6",
+      "description": "Violet-and-white starry gown",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "a_highly_detailed_cinematic_fantasy_anime_illustr.png",
+      "sha256": "7b738da5771f4243c4569fbf99a2d371441c500b4694df22337c3010df0ce459",
+      "description": "Garrick Rome and boxed gowns at shop entrance",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "royal_atelier_proprietor_reference.png",
+      "sha256": "d005e74542145c4c5b81fce40e26e985fab01514759b023f2598de8034f69a14",
+      "description": "Generated-art crop identifying Garrick",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "a_richly_detailed_fantasy_anime_style_illustration.png",
+      "sha256": "dd6aea62672fa4566ea93ab2502ec581e6f4e8f8478fd009751f77001e348d67",
+      "description": "Corrected star-blue Lexi first appearance at birthday fitting",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "a_detailed_high_fantasy_anime_style_illustration.png",
+      "sha256": "6e163a5ee93903b52d9efc1625b4fdca28c9e0721d50c039d7731c2362bff39d",
+      "description": "Post-birthday powder-blue gown with elven Garrick",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "a_highly_detailed_anime_style_fantasy_illustratio.png",
+      "sha256": "5ad6e538d822e99ed6bd15f0a1eb02b56d18a0cbda4891ff53ba97b070ab555a",
+      "description": "Corrected pink-and-white unfinished gown with blue-haired Daysha",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "a_richly_detailed_high_resolution_fantasy_anime_s.png",
+      "sha256": "669b835fef7f0be0e67da9dc17b8ada786cb532daa3c9c4b886ca20e33f3e708",
+      "description": "Sunday royal-purse purchase",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "a_richly_detailed_high_fantasy_anime_illustration.png",
+      "sha256": "caab4bc4772af71186716e7255738ac0add008b316ba04c982966a9fde22cdb1",
+      "description": "Simple midnight-periwinkle enchanted gown",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "an_ornate_fantasy_anime_style_illustration_scene_i.png",
+      "sha256": "1cab1873cc386cf3e647c3858f16780c321d5290849fd1e903b93486b563468c",
+      "description": "Teal-blue filigree gown",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "queen_daysha_s_oceanic_couture_reveal.png",
+      "sha256": "8aca0390dfeee26596eb18f73ded77b58bcda4f25c3414efb27f5ea9ca43aef8",
+      "description": "Sea-themed gown with distinct Garrick and Rome",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "royal_atelier_of_the_blue_haired_queen.png",
+      "sha256": "726cd1b57d1dbe20ef47903db12bda8d7d54622405c3e32633571c51fba2f19c",
+      "description": "Teal-and-black gold-thread hem gown",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "QUEEN_MOTHER_FIRST_CANON_APPEARANCE.png",
+      "sha256": "ff97eb1c8294282ae429acd046ae1343060d54d9c34df3a4fb46c67336ec7c4a",
+      "description": "Queen Mother first canonical appearance with Daysha",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "a_richly_detailed_high_resolution_anime_illustrat.png",
+      "sha256": "614943d5548f3315ae62c8af2368406a53720dca568d11122e685a46350f8a22",
+      "description": "Queen Mother lavender ballgown gift",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "fantasy_anime_illustration_style_scene_in_an_ornat.png",
+      "sha256": "2f3260cadf159d2dda25ac42b1656376db65f488e264c09ee3cca386375eda69",
+      "description": "Matching blue-white and red-white gowns",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "a_highly_detailed_anime_style_fantasy_illustrati.png",
+      "sha256": "add084068aa7d27f2c2d2ba5d92c7e9233603953d4409580119d06f2aa603282",
+      "description": "Corrected medium-long elven ears scene",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    },
+    {
+      "filename": "royal_atelier_ball_gown_reveal.png",
+      "sha256": "a86a9dbd9960e70a9f2824459b4291f4d9ed2228b6d72c3e864dff1d45475f8b",
+      "description": "Queen Mother birthday gown",
+      "status": "pending_binary_upload",
+      "review": "candidate_generated_scene"
+    }
+  ],
+  "knownMissingOriginals": [
+    "Pearlescent scale-fabric illustration original local filename overwritten; do not claim uploaded"
+  ],
+  "exclusions": [
+    "Supplied third-party references",
+    "Red-annotated correction previews",
+    "Blonde-haired Daysha errors",
+    "Wrong Lexi fur",
+    "Rome/Garrick identity merges",
+    "Extreme or missing elf ears"
+  ],
+  "note": "These SHA-256 values describe verified local PNG snapshots, NOT GitHub blobs. The files are not linked in the live 13-image allowlist until uploaded and checked."
+}
