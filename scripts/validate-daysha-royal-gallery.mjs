@@ -1,18 +1,39 @@
 #!/usr/bin/env node
-/** Prevent unreviewed artwork from being restored to public GitHub Pages. */
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync,readdirSync} from 'node:fs';
-import {resolve,join,dirname} from 'node:path';
+import {resolve,join,dirname,basename} from 'node:path';
+import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const m=JSON.parse(readFileSync(join(root,'data/daysha-royal-purchases.json'),'utf8'));
-assert.equal(m.archiveStatus,'rights_review_hold','Must retain rights quarantine until explicit authorized review');
-assert.equal(m.verification.publishedDerivativeCount,0,'Unapproved gallery publication');
-assert.equal(m.sources.length,0,'No unreviewed image source URLs in public manifest');
+assert.equal(m.archiveStatus,'approved_generated_subset');
+assert.equal(m.rightsPolicy.legacySourceCount,178);
+assert.equal(m.sources.length,12);
+assert.equal(m.verification.publishedDerivativeCount,m.sources.length);
+assert.equal(m.rightsPolicy.legacyItemsStillWithheld,166);
 const dir=join(root,'assets/daysha/royal-purchases');
-if(existsSync(dir))assert.equal(readdirSync(dir).filter(n=>/\.(png|jpe?g|gif|webp|svg|avif)$/i.test(n)).length,0,'Unreviewed images restored');
+const allowed=new Set();
+const ids=new Set();
+for(const s of m.sources){
+  assert(!ids.has(s.id),'Duplicate source ID'); ids.add(s.id);
+  assert.equal(s.referenceMedia,false,'Reference image forbidden');
+  assert.equal(s.provenance.includes('conversation'),true,'Only provenance-marked originals allowed');
+  assert.match(s.image,/^assets\/daysha\/royal-purchases\/[a-z0-9-]+\.webp$/);
+  const name=basename(s.image); assert(!allowed.has(name),'Duplicated output'); allowed.add(name);
+  assert.match(s.gitBlobSha,/^[a-f0-9]{40}$/);
+  const p=join(root,s.image);
+  assert(existsSync(p),'Missing approved GitHub image: '+s.image);
+  const buffer=readFileSync(p);
+  assert.equal(buffer.subarray(0,4).toString('ascii'),'RIFF','Invalid WebP header: '+name);
+  assert.equal(buffer.subarray(8,12).toString('ascii'),'WEBP','Invalid WebP content: '+name);
+  const actual=createHash('sha1').update('blob '+buffer.length+'\0').update(buffer).digest('hex');
+  assert.equal(actual,s.gitBlobSha,'Unexpected, substituted or modified image: '+name);
+}
+assert.equal(allowed.size,12);
+assert.deepEqual(readdirSync(dir).filter(n=>/\.(png|jpe?g|gif|webp|svg|avif)$/i.test(n)).sort(),[...allowed].sort(),'Extra unreviewed image was added');
+for(const g of m.garments) assert(ids.has(g.primarySourceId),'Dangling garment image');
+for(const seq of m.sceneSequences) for(const id of seq.sourceIds) assert(ids.has(id),'Dangling episode image');
+assert.equal(m.accounting.verifiedReceiptCount,0,'Do not invent purchases');
 const html=readFileSync(join(root,'royal-purchases.html'),'utf8');
-assert(!/<img\b/i.test(html),'Gallery images may not be embedded during rights review');
-assert(!/assets\/daysha\/royal-purchases\//.test(html),'Unreviewed artwork asset link');
-assert(html.includes('rights review'),'Rights hold banner missing');
-console.log('PASS: Daysha artwork remains quarantined; no unverified public images or gallery links.');
+assert(html.includes('data/daysha-royal-purchases.json'),'Gallery must read curated manifest');
+console.log('PASS: 12 allowlisted original images, exact Git blob hashes, no third-party references, valid scenes and zero fabricated invoices.');
