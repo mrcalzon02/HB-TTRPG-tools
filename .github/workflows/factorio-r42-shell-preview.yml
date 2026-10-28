@@ -1,0 +1,49 @@
+name: Factorio R42 roll-return candidate camera comparison
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/vanilla_shell_short_return_r42.py'
+      - 'tools/factorio-render-pipeline/render_shell_short_return_r42.py'
+      - 'tools/factorio-render-pipeline/run_shell_short_return_r42.py'
+      - 'tools/factorio-render-pipeline/report_shell_short_return_r42.py'
+      - '.github/workflows/factorio-r42-shell-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  same-camera-candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 40618557151
+          name: factorio-captures-calibration
+          path: r40-baseline
+          github-token: ${{ github.token }}
+      - run: |
+          python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir readiness
+          python -m pip install Pillow
+      - name: Real Blender R42 no-hiding bell-fold trial
+        run: |
+          python tools/factorio-render-pipeline/run_shell_short_return_r42.py --artifact-root r40-baseline --output r42-preview
+          python tools/factorio-render-pipeline/report_shell_short_return_r42.py --artifact-root r40-baseline --output r42-preview
+      - name: Archive original-camera candidate with readback
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r42-source-constrained-rolled-shell-preview
+          path: |
+            r42-preview/
+            readiness/
+          retention-days: 30
