@@ -6,14 +6,32 @@ on:
       - 'data/daysha-royal-purchases.json'
       - 'assets/daysha/royal-purchases/**'
       - 'royal-purchases.html'
+      - 'royal-calendar-matching.html'
+      - 'elaranth-almanac.html'
+      - 'data/royal-wardrobe-*.csv'
+      - 'data/royal-artwork-placement.csv'
+      - 'data/royal-sixteen-year-timeline.csv'
+      - 'data/elaranth-calendar-events.csv'
+      - 'data/master-storybook.json'
+      - 'docs/characters/royal-wardrobe-calendar-policy.md'
       - 'scripts/validate-daysha-royal-gallery.mjs'
+      - 'scripts/validate-royal-calendar-matching.mjs'
       - '.github/workflows/daysha-royal-gallery.yml'
   pull_request:
     paths:
       - 'data/daysha-royal-purchases.json'
       - 'assets/daysha/royal-purchases/**'
       - 'royal-purchases.html'
+      - 'royal-calendar-matching.html'
+      - 'elaranth-almanac.html'
+      - 'data/royal-wardrobe-*.csv'
+      - 'data/royal-artwork-placement.csv'
+      - 'data/royal-sixteen-year-timeline.csv'
+      - 'data/elaranth-calendar-events.csv'
+      - 'data/master-storybook.json'
+      - 'docs/characters/royal-wardrobe-calendar-policy.md'
       - 'scripts/validate-daysha-royal-gallery.mjs'
+      - 'scripts/validate-royal-calendar-matching.mjs'
       - '.github/workflows/daysha-royal-gallery.yml'
   workflow_dispatch:
 permissions:
@@ -29,3 +47,5 @@ jobs:
           node-version: '20'
       - run: node --check scripts/validate-daysha-royal-gallery.mjs
       - run: node scripts/validate-daysha-royal-gallery.mjs
+      - run: node --check scripts/validate-royal-calendar-matching.mjs
+      - run: node scripts/validate-royal-calendar-matching.mjs
