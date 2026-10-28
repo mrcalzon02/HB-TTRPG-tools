@@ -4,7 +4,7 @@
   "sourceWorkbook": "Beneath_Dappled_Oaks_Character_Continuity_Catalog.xlsx",
   "sourceRole": "historical long-memory reference, not a current up-to-Chapter-30 synthesis",
   "scope": "Character continuity and theory-of-mind datasets separated from objective event canon",
-  "sourceDataHandling": "Only populated records retained; trailing empty/filler spreadsheet template rows omitted. Original workbook not modified.",
+  "sourceDataHandling": "Only rows with actual authored cell values are retained, including all substantive records; hundreds of empty formula-prefill rows (with zero in trailing calculation column) omitted. Original Drive workbook remains untouched.",
   "spoilerWarning": "Contains unpublished personal motives, hidden orders, attraction and secrets belonging to fictional characters.",
   "columnsAreSourceColumns": true,
   "sourceRelatedFiles": [
