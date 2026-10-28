@@ -81,7 +81,7 @@ def main():
             for name,original in originals.items():
                 bpy.data.objects[name].hide_render=(
                     original if allow is None else original or name not in allow)
-            scene.view_layers.update()
+            scene.view_layers[0].update()
             filename=stage+".png"
             path=dest/filename
             scene.render.filepath=str(path)
