@@ -42,6 +42,15 @@ def main():
         subprocess.run([str(blender),"-b","--factory-startup","-t","2",
                         "--python-exit-code","4","--python",
                         str(root/"nozzle_detail_capture_r11.py"),"--","--output",str(target)],check=True)
+        # R40: temporary VISIBILITY isolation of existing liner/R19/drum.
+        # Uses only the SAVED original camera/lights and restores hide_render
+        # on every physical object in memory (never writes .blend).
+        subprocess.run([str(blender),"-b","--factory-startup","-t","2",
+                        "--python-exit-code","4","--python",
+                        str(root/"nozzle_layer_isolation_r40.py"),
+                        "--","--output",str(target)],check=True)
+        subprocess.run([str(python),str(root/"nozzle_layer_report_r40.py"),
+                        "--output",str(target)],check=True)
         # Optional, non-score visual comparison against the official wiki GIF.
         # Network/reference failure creates an unavailable status, not a false
         # pixel-similarity pass. No reference image is added to the repository.
