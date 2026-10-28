@@ -786,6 +786,27 @@ def test_one(path):
             if sum(1 for f in wall.polygons if not f.use_smooth)<8*R39_SIDES:
                 raise RuntimeError("R39 upper wall surface has no physical normal facets")
             print("R39_ORIGINAL_OPEN_LINER_PHYSICAL_FLUTES_PASS",path.name,flush=True)
+            # R42 R41-proven occluder: physically trimmed inner return
+            # on original R04 bell; full exterior still present.
+            from vanilla_legacy_bell_trim_r42 import (
+                REVISION as R42_REVISION,SOURCE_SHA256 as R42_SHA,
+                EXTERIOR_RINGS as R42_RINGS,SEGMENTS as R42_SEGMENTS,
+                EXTERIOR_FACES as R42_FACES)
+            if (scene.get("fsc_r42_revision")!=R42_REVISION or
+                scene.get("fsc_r42_source_sha256")!=R42_SHA or
+                scene.get("fsc_r42_removed_duplicate_quads")!=160):
+                raise RuntimeError("R42 legacy inner return not repaired")
+            exterior=bpy.data.objects.get("vanilla_reference_bell_bronzed_rolled_bell")
+            if (not exterior or len(exterior.data.vertices)!=R42_RINGS*R42_SEGMENTS or
+                len(exterior.data.polygons)!=R42_FACES or exterior.hide_render or
+                exterior.data.materials[0].name!="R13_oxidized_rough_nozzle_shell" or
+                not exterior.get("R42_original_object_preserved") or
+                not exterior.get("R42_not_render_visibility_bypass") or
+                not scene.get("fsc_r42_genuine_open_nozzle_preserved")):
+                raise RuntimeError("R42 lost original physical exterior rolled bell")
+            if any(len(f.vertices)!=4 for f in exterior.data.polygons):
+                raise RuntimeError("R42 reintroduced forbidden hidden bell caps")
+            print("R42_SOURCE_LEGACY_DUPLICATE_RETURN_REMOVED_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)

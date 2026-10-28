@@ -447,6 +447,12 @@ def build_thruster(name,w,h,root,p):
         vanilla_open_liner_flutes_r39.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R42: remove only R04's four redundant INNER return rings
+        # obstructing R11/R19/R39 actual open refractory from camera.
+        import vanilla_legacy_bell_trim_r42
+        vanilla_legacy_bell_trim_r42.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
