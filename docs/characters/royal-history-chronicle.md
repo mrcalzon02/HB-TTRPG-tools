@@ -1,13 +1,13 @@
-# Royal history of Daysha, Rome and Estelle — sixteen-year chronicle
+# Royal history of Daysha, Rome and Estelle — sixteen years of Estelle's life
 
-**Authoritative project scope:** a historical and visual record spanning **the royal coronation through Princess Estelle's sixteenth birthday** (approximately sixteen years). This is **not** merely a collection of gowns. The Royal Dress Reservoir is one major thread inside the royal household chronicle.
+**Authoritative project scope:** the royal accession and wedding prologue, followed by **sixteen complete years of Estelle's life** until her sixteenth birthday (spanning parts of **seventeen** regnal years). This is **not** merely a collection of gowns. The Royal Dress Reservoir is one major thread inside the royal household chronicle.
 
 ## Beginning and endpoint
 
-- **Beginning:** Royal coronation. Exact in-world calendar date, the order of wedding and coronation, and Estelle's age at the event are **not fixed** by the source material available here.
+- **Beginning:** Rome's coronation and marriage to Daysha, working date **1 Thawcall 282 S.M.** Estelle is not born. Conception at the wedding is an assumption for the gestational date calculation.
 - **Endpoint:** The **sixteenth birthday of Princess Estelle**, daughter of Queen Daysha and King Rome.
-- **Duration:** Sixteen-year story scope, with **sixteen navigable reign-year chapter slots** as a planning framework. The chapter containing Estelle's sixteenth birthday is **unassigned** until birth and coronation dates are known. This avoids the false assumption that Estelle was born on coronation day.
-- Dates remain relative until the player-authored campaign canon sets them. Never present planning slots as evidence that 16 years of specific events have already been written.
+- **Duration:** The royal family chronicle tracks the pre-birth prologue and sixteen **birth-to-birthday** life-years, from the projected birth **15 Casktide 282 S.M.** to the projected sixteenth birthday **15 Casktide 298 S.M.** This covers portions of seventeen regnal years, not sixteen.
+- All exact dates are **working calendar projections**, not evidence of witnessed conception/birth or proof that sixteen years of specific scenes have already been written.
 
 ## The archive's concurrent storylines
 
@@ -23,7 +23,7 @@
 | Royal economics | Actual receipts if attested; provisional cost models clearly labeled *illustrative* |
 | Artwork provenance | The rights and visual-identity status of each specific original generation |
 
-## Sixteen chapter slots, not sixteen invented histories
+## Seventeen regnal-year slots, sixteen child-life years — not sixteen invented histories
 
 - **Chapter 01 — Reign year 1:** Awaiting dated/placed canonical events; no ages or purchases assumed.
 - **Chapter 02 — Reign year 2:** Awaiting dated/placed canonical events; no ages or purchases assumed.
@@ -41,8 +41,9 @@
 - **Chapter 14 — Reign year 14:** Awaiting dated/placed canonical events; no ages or purchases assumed.
 - **Chapter 15 — Reign year 15:** Awaiting dated/placed canonical events; no ages or purchases assumed.
 - **Chapter 16 — Reign year 16:** Awaiting dated/placed canonical events; no ages or purchases assumed.
+- **Chapter 17 — Reign year 17:** Estelle's projected sixteenth birthday occurs on 15 Casktide, 298 S.M.; other dates remain undetermined.
 
-An opening **Coronation** anchor precedes the chapters; an **Estelle Turns Sixteen** endpoint closes the series when its exact reign-year placement is known. This distinction matters because the girl's birthdate is not yet established.
+The wedding/coronation is the opening prologue; *Beneath Dappled Oaks* starts midway through regnal year one while Estelle remains unborn. She is born later that first year. Her projected sixteenth birthday falls in regnal year seventeen; its precise date remains a model until confirmed.
 
 ## Existing canonical events awaiting historical placement
 
@@ -88,3 +89,13 @@ These family episodes are already represented in the currently approved 13-image
 As verified immediately before the initial chronicle commit, the `main`-branch [Royal Purchases gallery](../../royal-purchases.html) contains **13 verified published generated images**; the existing manifest describes **178 historical illustrations** but withholds **166** on provenance grounds. A distinct [pending generated-artwork staging manifest](../../data/daysha-current-conversation-generated-pending.json) lists 19 further potential originals **not yet uploaded to the gallery**. The current live gallery is not evidence of a completed 16-year historical archive.
 
 Machine-readable chronicle: [`data/royal-history-chronicle.json`](../../data/royal-history-chronicle.json).
+
+## Calendar crosswalk and image placement
+
+- [Sixteen-year CSV (Estelle's life-years)](../../data/royal-sixteen-year-timeline.csv): one row per complete birth-to-birthday year; simultaneous regnal-year boundaries and planning events.
+- [Royal image-placement CSV](../../data/royal-artwork-placement.csv): 13 published original generated images plus 19 candidates awaiting binary verification; undated scenes remain unassigned.
+- [All-fiction historical events CSV](../../data/master-storybook-events.csv) and [Master Storybook](../../master-storybook.html): cross-realm timelines and source quality.
+
+Day count starts at the working wedding/conception date **1 Thawcall 282 S.M.** (day zero). The novel starts at day **181**; Estelle's projected birth is day **266**; the game horizon of **1,000 elapsed days** ends on **21 Casktide 284 S.M.**, when she is two Elaranthi years and six days old; her sixteenth birthday is projected at day **6,090**.
+
+The visual appearance of a child in an illustration does not establish a calendar date or authorize moving that image into an arbitrary year. The Gilded Spindle's named wardrobe sequence has a relative order; invoice and acquisition dates remain separate.
