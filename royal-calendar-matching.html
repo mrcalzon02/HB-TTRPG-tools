@@ -11,16 +11,17 @@
 <p id="validation" class="warning" role="status">Birthday-dependent entries remain undated until a birthday is provided.</p>
 <div class="links"><button id="export" type="button">Export the trial matching CSV</button><a href="data/royal-wardrobe-calendar-matches.csv" download>Baseline evidence matches CSV</a><a href="data/royal-wardrobe-weekly-schedule.csv" download>870-week slots CSV</a><a href="docs/characters/royal-wardrobe-calendar-policy.md">Chronology and accounting rules</a></div>
 </section>
-<section><h2>Twenty story wardrobe entries, two unplaced gown studies</h2><p id="counts" class="small"></p><div class="tablewrap"><table><thead><tr><th>Entry</th><th>Design or scene</th><th>Wearer / slot</th><th>Trial placement</th><th>Evidence and limitations</th></tr></thead><tbody id="matchTable"></tbody></table></div></section>
+<section><h2>Twenty story wardrobe entries, two unplaced gown studies</h2><p id="counts" class="small"></p><div class="tablewrap"><table><thead><tr><th>Entry</th><th>Design or scene</th><th>Wearer / slot</th><th>Trial placement</th><th>Seasonal / festival context</th><th>Evidence and limitations</th></tr></thead><tbody id="matchTable"></tbody></table></div></section>
 <section><h2>Scene images and childhood events</h2><p>Eleven approved generated illustrations are tied to four existing royal-history events. These sequences are all **after Estelle's birth**, but the princess's apparent age does not establish a year. The two published standalone dress studies have no confirmed invoice or calendar date. If you enable the trial queue, they will be placed as tentative future-Friday design review candidates, NOT asserted purchases and NOT equated to other pictured gowns.</p><div class="links"><a href="data/royal-artwork-placement.csv" download>Artwork-to-story mapping CSV</a><a href="royal-purchases.html">View verified illustrations</a><a href="data/royal-sixteen-year-timeline.csv" download>Sixteen life-year calendar CSV</a></div></section>
 </main><script>
 const months=["Thawcall","Seedwake","Leafrise","Bloomtide","Sunsreach","Haycrest","Deepdelve","Goldgrain","Amberfall","Casktide","Frostgate","Longnight","Hearthwane"];
 const E=id=>document.getElementById(id),T=(x,s)=>x.textContent=String(s??"");
-let baseline=[],derived=[];
+let baseline=[],derived=[],calendar=[];
 function parseCSV(raw){raw=raw.replace(/^\uFEFF/,"");const rows=[];let row=[],value="",q=false;for(let i=0;i<raw.length;i++){const c=raw[i];if(q){if(c==='"'&&raw[i+1]==='"'){value+='"';i++;}else if(c==='"')q=false;else value+=c;}else if(c==='"')q=true;else if(c===','){row.push(value);value='';}else if(c==='\n'){row.push(value.replace(/\r$/,''));rows.push(row);row=[];value='';}else value+=c;}if(value||row.length){row.push(value);rows.push(row);}const hdr=rows.shift()||[];return rows.filter(x=>x.some(Boolean)).map(x=>Object.fromEntries(hdr.map((k,j)=>[k,x[j]??''])));}
 function date(t){const y=282+Math.floor(t/364),d=t%364;return (d%28+1)+' '+months[Math.floor(d/28)]+', '+y+' S.M.';}
 function nextFri(b){let t=b+1;while(t%7!==4)t++;return t;}
-function makeCSV(rows){const cols=['entry','garment_or_scene','catalog_id','scenario_date','evidence_strength','rule','confirmed_historical_date','notes'];const q=s=>'"'+String(s??'').replaceAll('"','""')+'"';return '\uFEFF'+[cols,...rows.map(z=>cols.map(c=>z[c]??''))].map(z=>z.map(q).join(',')).join('\r\n')+'\r\n';}
+function worldContext(elapsed){if(elapsed===null||elapsed===undefined)return '';const d=elapsed%364,m=Math.floor(d/28)+1,day=d%28+1;const items=calendar.filter(x=>Number(x.month_index)===m&&Number(x.day_start)<=day&&Number(x.day_end)>=day);const weeks=items.filter(x=>x.event_type==='seasonal_political_week');const festivals=items.filter(x=>x.event_type==='annual_festival');const moons=items.filter(x=>x.event_type==='lunar_full_moon');return [...weeks.map(x=>x.event_name+' (seasonal week)'),...festivals.map(x=>x.event_name+' (festival WEEK only; exact day unconfirmed)'),...moons.map(x=>x.event_name+' (full moon)')].join(' · ');}
+function makeCSV(rows){const cols=['entry','garment_or_scene','catalog_id','scenario_date','evidence_strength','rule','confirmed_historical_date','calendar_context','notes'];const q=s=>'"'+String(s??'').replaceAll('"','""')+'"';return '\uFEFF'+[cols,...rows.map(z=>cols.map(c=>z[c]??''))].map(z=>z.map(q).join(',')).join('\r\n')+'\r\n';}
 function download(name,s){const blob=new Blob([s],{type:'text/csv;charset=utf-8'}),a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function draw(){
 const week=Number(E('firstWeek').value),tryBirthday=E('birthdayKnown').checked,mo=Number(E('birthdayMonth').value),bd=Number(E('birthdayDay').value);
@@ -33,25 +34,28 @@ T(E('validation'),!baseOk?'Select a first-visit week from 1 to 51.':!birthdayOk?
 E('export').disabled=!valid;
 E('matchTable').replaceChildren();if(!valid){derived=[];T(E('counts'),'Invalid provisional calendar inputs; no date assertions calculated.');return;}
 const f=tryBirthday?nextFri(b):null;const queueStudies=E('queueStudies').checked;let openFri=secondFriday+7;if(f!==null)while(openFri===f||openFri===f+7)openFri+=7;let matched=0;
-derived=baseline.map((r,i)=>{let ds='',strength='UNASSIGNED';if(i<=1){ds=date(firstFriday);strength='conditional_first_week';}
-else if(i===2){ds=date(firstFriday+2);strength='conditional_first_week';}
-else if(i<=4){ds=date(secondFriday);strength='conditional_first_week';}
+derived=baseline.map((r,i)=>{let ds='',strength='UNASSIGNED',trialDay=null;
+if(i<=1){trialDay=firstFriday;strength='conditional_first_week';}
+else if(i===2){trialDay=firstFriday+2;strength='conditional_first_week';}
+else if(i<=4){trialDay=secondFriday;strength='conditional_first_week';}
 else if(i===5&&tryBirthday){ds='Due BEFORE '+date(b);strength='birthday_commission_window_only';}
-else if(i===6||i===7){if(f!==null){ds=date(f);strength='conditional_daysha_birthday';}}
-else if(i===8){if(f!==null){ds=date(f+2);strength='conditional_daysha_birthday';}}
-else if(i===9||i===10){if(f!==null){ds=date(f+7);strength='conditional_daysha_birthday';}}
-else if((i===20||i===21)&&queueStudies){ds=date(openFri);strength='unverified_study_tentative_open_slot';}
+else if(i===6||i===7){if(f!==null){trialDay=f;strength='conditional_daysha_birthday';}}
+else if(i===8){if(f!==null){trialDay=f+2;strength='conditional_daysha_birthday';}}
+else if(i===9||i===10){if(f!==null){trialDay=f+7;strength='conditional_daysha_birthday';}}
+else if((i===20||i===21)&&queueStudies){trialDay=openFri;strength='unverified_study_tentative_open_slot';}
+if(trialDay!==null)ds=date(trialDay);
+const context=worldContext(trialDay);
 if(ds)matched++;
 const tr=document.createElement('tr'),c=(s,cls)=>{let x=document.createElement('td');T(x,s);if(cls)x.className=cls;tr.append(x);};
 c(r.match_id+' / '+r.catalog_entry_id);c(r.garment_or_scene);
-c(r.owner+'\n'+r.slot_rule);c(ds||'Undated — '+r.calendar_match_status);c((r.notes||'')+'\n'+r.wearer_and_acquisition_warning);
+c(r.owner+'\n'+r.slot_rule);c(ds||'Undated — '+r.calendar_match_status);c(context||'—');c((r.notes||'')+'\n'+r.wearer_and_acquisition_warning);
 E('matchTable').append(tr);
-return {entry:r.match_id,garment_or_scene:r.garment_or_scene,catalog_id:r.catalog_entry_id,scenario_date:ds,evidence_strength:strength,rule:r.date_dependency_expression,confirmed_historical_date:'',notes:'TRIAL ONLY; '+r.notes};
+return {entry:r.match_id,garment_or_scene:r.garment_or_scene,catalog_id:r.catalog_entry_id,scenario_date:ds,evidence_strength:strength,rule:r.date_dependency_expression,confirmed_historical_date:'',calendar_context:context,notes:'TRIAL ONLY; '+r.notes};
 });
 T(E('counts'),matched+' of '+baseline.length+' entries have a calculable trial date/window · 0 confirmed historical dates assigned.');
 T(E('summary'),'870 complete weeks · 1,740 planned Friday slots · 870 optional Sunday opportunities');
 }
-(async()=>{try{const r=await fetch('data/royal-wardrobe-calendar-matches.csv',{cache:'no-store'});if(!r.ok)throw Error('Matching CSV HTTP '+r.status);baseline=parseCSV(await r.text());if(baseline.length!==22)throw Error('Unexpected data count '+baseline.length);for(let i=0;i<13;i++){const option=document.createElement('option');option.value=i;T(option,months[i]);E('birthdayMonth').append(option);}for(let d=1;d<=28;d++){const option=document.createElement('option');option.value=d;T(option,d);E('birthdayDay').append(option);}E('birthdayMonth').value=6;E('birthdayDay').value=21;
+(async()=>{try{const [r,cr]=await Promise.all([fetch('data/royal-wardrobe-calendar-matches.csv',{cache:'no-store'}),fetch('data/elaranth-calendar-events.csv',{cache:'no-store'})]);if(!r.ok||!cr.ok)throw Error('Matching and world calendar CSV files unavailable');baseline=parseCSV(await r.text());calendar=parseCSV(await cr.text());if(baseline.length!==22||calendar.length!==83)throw Error('Unexpected matching or world-event record count');for(let i=0;i<13;i++){const option=document.createElement('option');option.value=i;T(option,months[i]);E('birthdayMonth').append(option);}for(let d=1;d<=28;d++){const option=document.createElement('option');option.value=d;T(option,d);E('birthdayDay').append(option);}E('birthdayMonth').value=6;E('birthdayDay').value=21;
 E('firstWeek').addEventListener('input',draw);E('queueStudies').addEventListener('change',draw);
 E('birthdayKnown').addEventListener('change',()=>{E('birthdayMonth').disabled=!E('birthdayKnown').checked;E('birthdayDay').disabled=!E('birthdayKnown').checked;draw();});
 E('birthdayMonth').addEventListener('change',draw);E('birthdayDay').addEventListener('change',draw);
