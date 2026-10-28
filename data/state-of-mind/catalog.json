@@ -193,12 +193,32 @@
       "lastSourceRevision": "Google Drive workbook current fetch",
       "knownConstraint": "Rewrite-era workbook requires Chapters 6–30 reconciliation; current source is not proof of more recent chapter state",
       "publicAudience": "contains story spoilers and deliberately character-private plot knowledge"
+    },
+    {
+      "id": "nowhere_king_directional",
+      "series": "Nowhere King",
+      "title": "Nowhere King — Directional Continuity and Belief States",
+      "path": "data/state-of-mind/nowhere-king/directional-state-records.csv",
+      "recordCount": 19,
+      "columns": 6,
+      "sourceType": "verbatim_grounded_excerpts_from_current_temporal_ledger",
+      "status": "source_excerpts_not_complete_structured_character_database",
+      "originalFile": "docs/nowhere-king/11-ACTIVE-CONTINUITY-STATE.md",
+      "knownConstraint": "Nineteen explicitly labeled directional passages from the current ledger. The complete prose ledger is a separate Markdown source.",
+      "publicAudience": "major plot spoilers and character-private knowledge"
     }
   ],
   "verification": {
     "sheetCount": 13,
     "populatedRecordRows": 171,
     "lastWorkbookStatus": "historical snapshot; character continuity not reconciled through current BDO Chapter 30",
-    "publicationStatus": "published on GitHub main; site index pending"
+    "publicationStatus": "published on GitHub main; site index pending",
+    "exportTotal": 190,
+    "seriesIncluded": [
+      "Beneath Dappled Oaks",
+      "Nowhere King"
+    ],
+    "publicBrowser": "state-of-mind.html",
+    "publicSourceReview": "The source workbook remains Drive-private; the author-approved CSV exports are public via GitHub Pages"
   }
 }
