@@ -19,6 +19,8 @@ new vm.Script(code, {filename:"software-catalog.js"});
 const projects = context.window.HBSoftwareProjects;
 assert.equal(projects.length,13,"Curated release catalog should include 13 original projects");
 assert.equal(new Set(projects.map(p=>p.repo)).size,projects.length);
+assert.doesNotMatch(dataCode + html,/Rupee-rush/,"Obsolete Jewel Brook release source");
+assert.ok(projects.some(p=>p.repo==="Jewel_Brook" && p.name==="Jewel Brook: Heroes of Embryon"));
 for(const p of projects) {
   assert.match(p.repo,/^[a-zA-Z0-9._-]+$/);
   assert.ok(p.name && p.about && p.kind && p.stage);
@@ -27,7 +29,7 @@ for(const p of projects) {
   if(p.preview)assert.ok(!p.preview.includes("..")&&!p.preview.startsWith("/"));
   if(p.seed)assert.ok(p.seed.tag && !Number.isNaN(Date.parse(p.seed.published)));
 }
-for(const repo of ["The-Beckenburg-Project","ReverieVR","NUTBUSTER-R","Rupee-rush","The-Malefic-Veil","Tech-Priests","Catastrophic-Diplomacy"])
+for(const repo of ["The-Beckenburg-Project","ReverieVR","NUTBUSTER-R","Jewel_Brook","The-Malefic-Veil","Tech-Priests","Catastrophic-Diplomacy"])
   assert.ok(projects.some(p=>p.repo===repo),repo+" missing");
 assert.ok(projects.some(p=>p.preview),"Repository asset previews must be wired");
 for(const id of ["sc-rail","sc-detail","sc-left","sc-right","sc-latest","sc-feed-items","sc-release-project","sc-platform","sc-release-list","sc-release-more","sc-refresh"])

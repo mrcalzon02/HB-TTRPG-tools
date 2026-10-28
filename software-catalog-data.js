@@ -82,19 +82,19 @@ window.HBSoftwareProjects = Object.freeze([
     }
   },
   {
-    "name": "Rupee Rush",
-    "repo": "Rupee-rush",
+    "name": "Jewel Brook: Heroes of Embryon",
+    "repo": "Jewel_Brook",
     "kind": "mobile",
-    "stage": "Native desktop and Android experiments",
+    "stage": "Android/Fire OS signed builds; native Windows/Linux previews",
     "about": "Standalone gemstone match-three game with excavation, trading, progression, boosters and a distinct fantasy art direction.",
-    "preview": "web/art/embryon/branding/rupee-rush-title.webp",
+    "preview": "web/art/embryon/branding/jewelbrook/banner-wide.webp",
     "art": "Approved game title artwork",
     "language": "JavaScript / native",
-    "platform": "Android / Windows / Linux",
+    "platform": "Android / Fire OS / Windows / Linux",
     "seed": {
-      "tag": "rupeerush-native-11-1",
-      "title": "Rupee Rush Native Desktop Foundation 11",
-      "published": "2026-10-27T00:26:13Z",
+      "tag": "rupeerush-phone-test-176-1",
+      "title": "Jewel Brook: Heroes of Embryon Android 500017601",
+      "published": "2026-10-28T07:19:42Z",
       "prerelease": true
     }
   },

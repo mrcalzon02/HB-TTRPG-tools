@@ -16,7 +16,9 @@ assert.match(portfolio,/26-page.*Christopher Vardeman Creative Portfolio 2026/);
 const list=[...directory.matchAll(/<article class="project" data-project="([^"]+)"/g)].map(m=>m[1]);
 assert.equal(list.length,19,"Expected 19 original-project cards in the saved public snapshot");
 assert.equal(new Set(list).size,list.length);
-for(const name of ["The-Beckenburg-Project","Catastrophic-Diplomacy","Rupee-rush","NUTBUSTER-R","The-Malefic-Veil","Tech-Priests","Continuity-Works"]){
+assert.doesNotMatch(directory + portfolio,/github\.com\/mrcalzon02\/Rupee-rush/,"Obsolete Jewel Brook repository link");
+assert.match(directory,/Jewel Brook: Heroes of Embryon/);
+for(const name of ["The-Beckenburg-Project","Catastrophic-Diplomacy","Jewel_Brook","NUTBUSTER-R","The-Malefic-Veil","Tech-Priests","Continuity-Works"]){
  assert.ok(list.includes(name),"Missing original project: "+name);
 }
 for(const name of ["HB-TTRPG-tools","sam-3d-objects-fork","ImperiumOfMan","open_llama","TerraGov-Marine-Corps","Tanks-for-bob-Fork"]){
