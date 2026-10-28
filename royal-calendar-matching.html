@@ -7,12 +7,12 @@
 <section><h2>The schedule is a possibility grid, not a fictional receipt book</h2><p><strong>Veilday (Friday): two regular dresses.</strong> <strong>Hearthday (Sunday): one optional extra dress.</strong> The first Friday's midnight-blue and ice-blue gowns, the next Sunday's light-pink gown and the second Friday's burgundy and violet-starfield gowns are a known story sequence. The week of the first visit is still undetermined.</p>
 <p class="small">Working wedding/accession = 1 Thawcall, 282 S.M. (elapsed day 0). The working conception-to-Estelle-birth interval is 266 days. An illustrative day in the interface never becomes a confirmed historical purchase date. A queenly birthday commission or a gift for the Queen Mother does not automatically take another Friday slot.</p><div id="summary" class="stat" role="status">Loading records…</div></section>
 <section><h2>Try a chronology — no automatic canon changes</h2>
-<div class="settings"><label>First boutique Friday: week since the wedding<input id="firstWeek" type="number" value="1" min="1" max="51" step="1"></label><label class="inline"><input id="birthdayKnown" type="checkbox"><span>Try a date for Daysha's first birthday as queen</span></label><label>Birthday month<select id="birthdayMonth" disabled></select></label><label>Birthday day<select id="birthdayDay" disabled></select></label></div>
+<div class="settings"><label>First boutique Friday: week since the wedding<input id="firstWeek" type="number" value="1" min="1" max="51" step="1"></label><label class="inline"><input id="birthdayKnown" type="checkbox"><span>Try a date for Daysha's first birthday as queen</span></label><label>Birthday month<select id="birthdayMonth" disabled></select></label><label>Birthday day<select id="birthdayDay" disabled></select></label><label class="inline"><input id="queueStudies" type="checkbox"><span>Trial-place the two undated gown studies into the next available Friday pair</span></label></div>
 <p id="validation" class="warning" role="status">Birthday-dependent entries remain undated until a birthday is provided.</p>
 <div class="links"><button id="export" type="button">Export the trial matching CSV</button><a href="data/royal-wardrobe-calendar-matches.csv" download>Baseline evidence matches CSV</a><a href="data/royal-wardrobe-weekly-schedule.csv" download>870-week slots CSV</a><a href="docs/characters/royal-wardrobe-calendar-policy.md">Chronology and accounting rules</a></div>
 </section>
 <section><h2>Twenty story wardrobe entries, two unplaced gown studies</h2><p id="counts" class="small"></p><div class="tablewrap"><table><thead><tr><th>Entry</th><th>Design or scene</th><th>Wearer / slot</th><th>Trial placement</th><th>Evidence and limitations</th></tr></thead><tbody id="matchTable"></tbody></table></div></section>
-<section><h2>Scene images and childhood events</h2><p>Eleven approved generated illustrations are tied to four existing royal-history events. These sequences are all **after Estelle's birth**, but the princess's apparent age does not establish a year. The two published standalone dress studies have no confirmed invoice or calendar date; the twenty canon garment descriptions are not arbitrarily equated to those visual studies.</p><div class="links"><a href="data/royal-artwork-placement.csv" download>Artwork-to-story mapping CSV</a><a href="royal-purchases.html">View verified illustrations</a><a href="data/royal-sixteen-year-timeline.csv" download>Sixteen life-year calendar CSV</a></div></section>
+<section><h2>Scene images and childhood events</h2><p>Eleven approved generated illustrations are tied to four existing royal-history events. These sequences are all **after Estelle's birth**, but the princess's apparent age does not establish a year. The two published standalone dress studies have no confirmed invoice or calendar date. If you enable the trial queue, they will be placed as tentative future-Friday design review candidates, NOT asserted purchases and NOT equated to other pictured gowns.</p><div class="links"><a href="data/royal-artwork-placement.csv" download>Artwork-to-story mapping CSV</a><a href="royal-purchases.html">View verified illustrations</a><a href="data/royal-sixteen-year-timeline.csv" download>Sixteen life-year calendar CSV</a></div></section>
 </main><script>
 const months=["Thawcall","Seedwake","Leafrise","Bloomtide","Sunsreach","Haycrest","Deepdelve","Goldgrain","Amberfall","Casktide","Frostgate","Longnight","Hearthwane"];
 const E=id=>document.getElementById(id),T=(x,s)=>x.textContent=String(s??"");
@@ -32,7 +32,7 @@ const valid=baseOk&&birthdayOk;
 T(E('validation'),!baseOk?'Select a first-visit week from 1 to 51.':!birthdayOk?'The birthday must occur AFTER the second boutique Friday in the first regnal year. Choose a later day or an earlier first boutique week.':!tryBirthday?'Birthday-dependent events remain undated; toggle the birthday date to explore possible placements.':'Trial chronology valid. The birthday and all calculated dates remain hypothetical until confirmed by story evidence.');
 E('export').disabled=!valid;
 E('matchTable').replaceChildren();if(!valid){derived=[];T(E('counts'),'Invalid provisional calendar inputs; no date assertions calculated.');return;}
-const f=tryBirthday?nextFri(b):null;let matched=0;
+const f=tryBirthday?nextFri(b):null;const queueStudies=E('queueStudies').checked;let openFri=secondFriday+7;if(f!==null)while(openFri===f||openFri===f+7)openFri+=7;let matched=0;
 derived=baseline.map((r,i)=>{let ds='',strength='UNASSIGNED';if(i<=1){ds=date(firstFriday);strength='conditional_first_week';}
 else if(i===2){ds=date(firstFriday+2);strength='conditional_first_week';}
 else if(i<=4){ds=date(secondFriday);strength='conditional_first_week';}
@@ -40,6 +40,7 @@ else if(i===5&&tryBirthday){ds='Due BEFORE '+date(b);strength='birthday_commissi
 else if(i===6||i===7){if(f!==null){ds=date(f);strength='conditional_daysha_birthday';}}
 else if(i===8){if(f!==null){ds=date(f+2);strength='conditional_daysha_birthday';}}
 else if(i===9||i===10){if(f!==null){ds=date(f+7);strength='conditional_daysha_birthday';}}
+else if((i===20||i===21)&&queueStudies){ds=date(openFri);strength='unverified_study_tentative_open_slot';}
 if(ds)matched++;
 const tr=document.createElement('tr'),c=(s,cls)=>{let x=document.createElement('td');T(x,s);if(cls)x.className=cls;tr.append(x);};
 c(r.match_id+' / '+r.catalog_entry_id);c(r.garment_or_scene);
@@ -51,7 +52,7 @@ T(E('counts'),matched+' of '+baseline.length+' entries have a calculable trial d
 T(E('summary'),'870 complete weeks · 1,740 planned Friday slots · 870 optional Sunday opportunities');
 }
 (async()=>{try{const r=await fetch('data/royal-wardrobe-calendar-matches.csv',{cache:'no-store'});if(!r.ok)throw Error('Matching CSV HTTP '+r.status);baseline=parseCSV(await r.text());if(baseline.length!==22)throw Error('Unexpected data count '+baseline.length);for(let i=0;i<13;i++){const option=document.createElement('option');option.value=i;T(option,months[i]);E('birthdayMonth').append(option);}for(let d=1;d<=28;d++){const option=document.createElement('option');option.value=d;T(option,d);E('birthdayDay').append(option);}E('birthdayMonth').value=6;E('birthdayDay').value=21;
-E('firstWeek').addEventListener('input',draw);
+E('firstWeek').addEventListener('input',draw);E('queueStudies').addEventListener('change',draw);
 E('birthdayKnown').addEventListener('change',()=>{E('birthdayMonth').disabled=!E('birthdayKnown').checked;E('birthdayDay').disabled=!E('birthdayKnown').checked;draw();});
 E('birthdayMonth').addEventListener('change',draw);E('birthdayDay').addEventListener('change',draw);
 E('export').addEventListener('click',()=>{if(derived.length===baseline.length)download('royal-wardrobe-trial-matches.csv',makeCSV(derived));});
