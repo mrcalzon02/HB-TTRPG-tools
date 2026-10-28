@@ -57,6 +57,6 @@ class R37RefractoryVisibility(unittest.TestCase):
         self.assertIn("fsc_r37_open_bore_unsealed",self.text)
         self.assertIn("fsc_r37_r13_shared_refractory_preserved",self.text)
         self.assertNotIn("original_material.copy()",self.text)
-        self.assertIn("drum.data.materials[0] is not original_material",self.text)
+        self.assertIn("drum.data.materials[0].as_pointer()!=original_material.as_pointer()",self.text)
 if __name__=="__main__":
     unittest.main()

@@ -78,7 +78,7 @@ def apply(name,root,p,api,scene):
     # break the actual R13 shared heat shielding architecture.
     drum=bpy.data.objects.get("R08_aft_internal_reaction_drum")
     if (drum is None or original_material.name!=THROAT_MATERIAL_NAME or
-        drum.data.materials[0] is not original_material):
+        drum.data.materials[0].as_pointer()!=original_material.as_pointer()):
         raise RuntimeError("R37 must keep original shared R13 refractory casting")
     throat_mat=original_material
     throat_mat.node_tree.nodes["Principled BSDF"].inputs[
