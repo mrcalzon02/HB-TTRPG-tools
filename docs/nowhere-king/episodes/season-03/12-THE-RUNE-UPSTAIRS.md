@@ -328,7 +328,7 @@ He let the words remain between them. She had not forgiven him for taking speech
 
 Damaris closed the account.
 
-“One paid day of copying and the necessary watch are allowed against the works inspection account. The second day's scholarly comparison must wait for an agreed limit. No charge goes against the east-gate net pledged to Jorvan. No hall hospitality money is restored. The roof and receiving-yard drain remain ahead of ornamental work.”
+“One paid day of copying and the necessary watch are allowed against the works inspection account. The short comparison of the signed measurements tomorrow may use one further half-day, entered against the same account; any wider scholarly catalog work must wait for a new limit. No charge goes against the east-gate net pledged to Jorvan. No hall hospitality money is restored. The roof and receiving-yard drain remain ahead of ornamental work.”
 
 “And the third hearth?” Luceran asked.
 
