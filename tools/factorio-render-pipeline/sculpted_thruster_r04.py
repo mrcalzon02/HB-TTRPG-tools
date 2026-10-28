@@ -464,6 +464,12 @@ def build_thruster(name,w,h,root,p):
         vanilla_axial_patina_r44.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R45: source-visible open-throat collar + existing squared feed mounts.
+        # Neither speculative new parts nor camera hacks are permitted.
+        import vanilla_throat_mounts_r45
+        vanilla_throat_mounts_r45.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",

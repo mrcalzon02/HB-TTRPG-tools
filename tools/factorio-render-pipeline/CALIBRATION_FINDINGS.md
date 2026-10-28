@@ -1464,3 +1464,30 @@ camera/light/overlays/animation elements. Saved-scene QA tests the actual
 node signal path and original geometry. Native original sprites remain
 private and are never committed to public GitHub. Candidate requires
 new Github Actions successful render AND ROI comparison for acceptance.
+
+
+### R45 source-specific throat aperture and mounting infrastructure candidate (2026-10-27)
+
+At the operator's explicit direction, **defer unrelated mid-body shoulder
+expansion** and concentrate on the ORIGINAL source's visible throat aperture
+and mounting infrastructure. Private original `thruster.zip` SHA256
+`0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791`
+shows at native frame0 a dark repeated, radial **segmented/castellated ring**
+at the throat transition, while the current R44 has only a smooth thin
+original R11 pressure baffle. At the engine's top, both real corrugated
+feed mouths have prominent roughly squared black mounting flanges, whereas
+R44's existing R15 ends are round thin rings.
+
+R45 candidate reshapes only the EXISTING R11 recessed inner pressure baffle
+`_01` (same 40x8 vertices/faces, R13 aged metal identity), introducing a
+physically formed alternating circumferential crest to express the repeated
+source-visible edge. It also squares and broadens the SAME original two R15
+uppermost bellows collars (same 320-vertex original meshes and existing
+material). No added gear, pistons, brackets, fake image overlays, caps,
+cameras, light manipulation, fin/guard changes, or source atlas in GitHub.
+Original R11 520-vertex open bore and R42 exterior 280 quads are untouched.
+
+**No fidelity claim until strict Blender 4.5 LTS, saved-scene QA, all
+64 native RGBA captures and exact private source comparison pass.** In
+particular, enlarged mount visuals must not be mistaken for reproduction
+of a hidden original CAD system.

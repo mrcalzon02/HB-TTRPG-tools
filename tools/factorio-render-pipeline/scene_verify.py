@@ -894,6 +894,50 @@ def test_one(path):
                     for e in links):
                     raise RuntimeError("R44 cannot use non-axial mesh coordinate")
             print("R44_SOURCE_AXIAL_PATINA_SAVED_SCENE_PASS",path.name,flush=True)
+            # R45: the real saved .blend must retain the same existing
+            # nozzle liner, exterior ring and upper two flange meshes.
+            from vanilla_throat_mounts_r45 import (
+                REVISION as R45_REV,SOURCE_SHA256 as R45_SHA,
+                THROAT_NAME as R45_THROAT,UPPER_NAMES as R45_MOUNTS,
+                SIDES as R45_SIDES,PROFILE_SAMPLES as R45_STEPS,
+                THROAT_RING_MAJOR_RADIUS as R45_RING_RADIUS,
+                THROAT_RING_CENTER as R45_RING_CENTER,
+                squared_radius_factor as R45_SQUARE)
+            if (scene.get("fsc_r45_revision")!=R45_REV or
+                scene.get("fsc_r45_source_sha256")!=R45_SHA or
+                int(scene.get("fsc_r45_source_visible_castellated_ring_count",0))!=1 or
+                int(scene.get("fsc_r45_existing_square_feed_mounts",0))!=2 or
+                not scene.get("fsc_r45_original_aperture_open_preserved") or
+                not scene.get("fsc_r45_original_mount_geometry_not_added") or
+                not scene.get("fsc_r45_original_cam_lights_fins_guards_untouched")):
+                raise RuntimeError("R45 original cast aperture/mount markers not saved")
+            collar=bpy.data.objects.get(R45_THROAT)
+            if (collar is None or
+                len(collar.data.vertices)!=R45_SIDES*R45_STEPS or
+                len(collar.data.polygons)!=R45_SIDES*R45_STEPS or
+                not collar.get("R45_existing_castellated_baffle")):
+                raise RuntimeError("R45 existing physical aperture baffle not retained")
+            def ring_r(ob,sector):
+                v=ob.data.vertices[sector*R45_STEPS].co
+                return (v.x*v.x+(v.z-R45_RING_CENTER[2])**2)**.5
+            if abs(ring_r(collar,0)-ring_r(collar,1))<.035:
+                raise RuntimeError("R45 original ring has no physical castellations")
+            for label in R45_MOUNTS:
+                flange=bpy.data.objects.get(label)
+                if (not flange or not flange.get("R45_existing_upper_square_feed_mount") or
+                    len(flange.data.vertices)!=R45_SIDES*R45_STEPS or
+                    len(flange.data.polygons)!=R45_SIDES*R45_STEPS):
+                    raise RuntimeError("R45 upper square mount missing: "+label)
+                def sector_r(i):
+                    a=flange.data.vertices[i*R45_STEPS].co
+                    c=flange.data.vertices[0].co
+                    # Mount is demonstrably larger at diagonal radial sector
+                    # after squaring the original toroidal flange.
+                    return a
+                xs=[v.co.x for v in flange.data.vertices]
+                if max(xs)-min(xs)<.5:
+                    raise RuntimeError("R45 original flange not source-sized")
+            print("R45_SOURCE_APERTURE_AND_MOUNT_SAVED_SCENE_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)
