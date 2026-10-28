@@ -807,6 +807,41 @@ def test_one(path):
             if any(len(f.vertices)!=4 for f in exterior.data.polygons):
                 raise RuntimeError("R42 reintroduced forbidden hidden bell caps")
             print("R42_SOURCE_LEGACY_DUPLICATE_RETURN_REMOVED_PASS",path.name,flush=True)
+            # R43 verify original material datablocks remain shared:
+            # near tiles alone use per-object physical patina, upper
+            # and mid R19 surfaces have their exact original coloration.
+            from vanilla_depth_patina_r43 import (
+                REVISION as R43_REVISION,SOURCE_SHA256 as R43_SHA,
+                TILE_COUNT as R43_COUNT,NEAR_OBJECT_TINT as R43_TINT,
+                MATERIAL_NAMES as R43_MATS,INFO_NODE as R43_INFO,
+                TINT_NODE as R43_NODE)
+            if (scene.get("fsc_r43_revision")!=R43_REVISION or
+                scene.get("fsc_r43_source_sha256")!=R43_SHA or
+                int(scene.get("fsc_r43_near_tile_count",0))!=R43_COUNT or
+                abs(float(scene.get("fsc_r43_near_patina_factor",0))-R43_TINT)>.001):
+                raise RuntimeError("R43 original lower physical patina missing")
+            for i in range(R43_COUNT):
+                tile=bpy.data.objects.get(f"R19_NEAR_MOUTH_TILE_{i:02d}")
+                mid=bpy.data.objects.get(f"R19_MID_STAGGERED_TILE_{i:02d}")
+                if (tile is None or mid is None or
+                    not tile.get("R43_darkened_original_near_tile") or
+                    any(abs(v-R43_TINT)>.001 for v in tile.color[:3]) or
+                    any(abs(v-1)>.001 for v in mid.color)):
+                    raise RuntimeError("R43 lower/upper source refractory split incorrect")
+            for material_name in R43_MATS:
+                mat=bpy.data.materials.get(material_name)
+                if (not mat or not mat.node_tree.nodes.get(R43_INFO) or
+                    not mat.node_tree.nodes.get(R43_NODE) or
+                    not mat.node_tree.nodes["Principled BSDF"].inputs["Base Color"].is_linked):
+                    raise RuntimeError("R43 physical material modulation not saved")
+                if mat.node_tree.nodes["Principled BSDF"].inputs[
+                    "Emission Strength"].default_value!=0:
+                    raise RuntimeError("R43 baked a forbidden fake flame")
+            if not (scene.get("fsc_r43_mid_and_upper_refractory_unchanged") and
+                    scene.get("fsc_r43_unmodified_R13_shared_shader") and
+                    scene.get("fsc_r43_no_extra_objects_materials_textures_or_glow")):
+                raise RuntimeError("R43 changed source geometry or shader ownership")
+            print("R43_SOURCE_DEPTH_PHYSICAL_PATINA_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)

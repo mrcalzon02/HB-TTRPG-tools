@@ -1417,3 +1417,18 @@ R40 adds a **diagnostic only** 4-way render of the ORIGINAL saved static view: (
 Independently [R41 raycast workflow #40619879162](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40619879162) passed: 191 of 234 sampled camera rays first hit **vanilla_reference_bell_bronzed_rolled_bell**; reversible hide-only diagnostic raised same upper ROI mean .031078 → .038184 and revealed ribs, but removing the whole bell is not an acceptable permanent source geometry solution.
 
 Original R04 `nozzle()` builds the legacy bell as **12 axial rings** x 40 sides = 480 vertices/440 quads. The first EIGHT rings are the real outer bell with original rolled exit. The last FOUR return back inward toward a narrow radius, physically duplicating the newer source-shaped R11/R39 liner and producing the observed deep opaque obstruction. R42 trims exactly those FOUR obsolete inward-return rings (160 side quads) from the SAME named R04 mesh, leaving original eight exterior rings (320 vertices,280 original side quads), R13 aged-metal shader, exact original exterior lip, and all independent R11/R19/R39 actual refractory. No render visibility/alpha trick, no invented hardware or change to fixed camera or lighting. This is a hypothesis grounded in observed per-ray mesh identity, pending full Blender render/saved scene verification and exact RGBA source comparison. All R27 198 deleted unsupported objects, R35.1 inner fins, R36 independently animated outer cups and original proprietary sprite privacy remain unchanged.
+
+
+### R42 VERIFIED render, source measurements, R43 candidate lower-only material response
+
+R42 permanent physical root correction [b9cfc09e5489](https://github.com/mrcalzon02/HB-TTRPG-tools/commit/b9cfc09e548947b30509c9a5002d55c2203c120c) passed source tests and BOTH real Blender 4.5 LTS jobs, including saved scene and all 64 distinct native 264×542 body frames, in [workflow #40620696202](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40620696202). The original R04 exterior bronzed rolled bell is still the SAME named object and original R13 oxidized-rough material: 8 real external rings, 320 vertices, 280 open quads. Its four older opaque inward-return rings, which hid R11/R19/R39 interior surfaces, were physically trimmed. R27 deleted supports, R35.1 fins, R36 animated cupped guards, independent flame/pass pipelines and the original private body sprite hash are unchanged.
+
+Native REAL R42 full-engine frame0 versus exact private original RGBA frame0 and R40 full engine (all 264×542, same gamma-encoded RGB brightness/gradient masks):
+| Region | Original mean/gradient | R40 mean/gradient | R42 mean/gradient |
+| -- | -- | -- | -- |
+| Upper x55..208 y410..455 | .06958/.01530 | .03108/.00386 | **.03810/.00767** |
+| Mid x70..192 y425..480 | .07100/.01358 | .06300/.00543 | .07866/.01146 |
+| Lower x65..202 y450..485 | .08203/.01353 | .09900/.01071 | **.11652/.01555** |
+| Center x95..170 y400..475 | .05511/.01361 | .03894/.00312 | **.05325/.00883** |
+
+R42 is an important *true physical visibility and center-bore improvement*, but still underexposes upper detail and overbrightens lower mouth. R43 candidate only shades the EXISTING 40 R19 near-mouth tiles with per-object physically meaningful patina factor .64; maintains all original R19 material DATABLOCK identities and their R37 base color values, and leaves 40 mid refractory tiles at white (=unmodified) object colors. Uses Blender shader Object Info Color × original physical Base Color (no texture, no emission, no altered camera), not an invented flat black occlusion plane. R43 must be judged by actual Blender and exact-original pixel comparisons; no unverified source fidelity claim. Original private thruster.zip is never published.

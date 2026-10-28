@@ -453,6 +453,12 @@ def build_thruster(name,w,h,root,p):
         vanilla_legacy_bell_trim_r42.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R43: after revealing R11/R39 refractory, source-aligned
+        # lower mouth tiles must darken independently of upper bore.
+        import vanilla_depth_patina_r43
+        vanilla_depth_patina_r43.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
