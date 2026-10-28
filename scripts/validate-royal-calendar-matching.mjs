@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import assert from 'node:assert/strict';
+import {Script} from 'node:vm';
 import {readFileSync, existsSync} from 'node:fs';
 import {resolve, join, dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -86,4 +87,9 @@ const expectedPages=['royal-calendar-matching.html','royal-purchases.html','elar
 for(const name of expectedPages) assert(existsSync(join(root,name)),'Missing public page '+name);
 assert(readFileSync(join(root,'royal-calendar-matching.html'),'utf8').includes('data/royal-wardrobe-calendar-matches.csv'));
 assert(readFileSync(join(root,'royal-purchases.html'),'utf8').includes('royal-calendar-matching.html'));
+for(const file of ['royal-calendar-matching.html','royal-purchases.html','elaranth-almanac.html','master-storybook.html','state-of-mind.html']){
+  const html=readFileSync(join(root,file),'utf8');
+  const inlineScripts=[...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/g)].map(x=>x[1]).filter(x=>x.trim());
+  for(const js of inlineScripts) new Script(js,{filename:file});
+}
 console.log('PASS: 870 weeks, 20 canon garments + 2 studies, 11 scene-event links, 83 seasonal calendar events, preserved birthday constraints, zero invented purchases.');
