@@ -706,6 +706,50 @@ def test_one(path):
                     if radius(center)>=radius(outer)-.012:
                         raise RuntimeError("R37 physically unshaped source strake")
             print("R37_SOURCE_REFRACTORY_PHYSICAL_FACETS_PASS",path.name,flush=True)
+            # R38 strict SAVED Blender topology audit: 40 original curves
+            # reach deeper into the source-visible open throat, and both
+            # original shingle layers are redistributed without duplication.
+            from vanilla_refractory_depth_r38 import (
+                REVISION as R38_REVISION,ORIGINAL_SHA256 as R38_SHA,
+                STRAKE_NEW_END_Y as R38_END,STRAKE_BEVEL as R38_BEVEL,
+                NEAR_AGED_INDICES as R38_NEAR,
+                MID_AGED_REMAINDERS as R38_MID)
+            if (scene.get("fsc_r38_revision")!=R38_REVISION or
+                scene.get("fsc_r38_original_sprite_sha256")!=R38_SHA or
+                int(scene.get("fsc_r38_reused_near_tiles",0))!=40 or
+                int(scene.get("fsc_r38_reused_mid_tiles",0))!=40 or
+                int(scene.get("fsc_r38_extended_original_strakes",0))!=40):
+                raise RuntimeError("R38 source refractory redistribution missing")
+            if not all(scene.get(p) for p in (
+                "fsc_r38_existing_dark_aged_materials_only",
+                "fsc_r38_no_original_pixels_stored",
+                "fsc_r38_original_open_bore_and_shared_material",
+                "fsc_r38_no_camera_or_light_changes")):
+                raise RuntimeError("R38 changed source art/lighting/bore contracts")
+            for index in range(40):
+                bar=bpy.data.objects.get(f"R19_DEEP_COMBUSTOR_STRAKE_{index:02d}")
+                if not bar or not bar.get("R38_original_curve_not_duplicate"):
+                    raise RuntimeError("R38 original curved refractory rib missing")
+                path=bar.data.splines
+                if (len(path)!=1 or path[0].type!="BEZIER" or
+                    len(path[0].bezier_points)!=4):
+                    raise RuntimeError("R38 changed original curve topology")
+                if (abs(path[0].bezier_points[-1].co.y-R38_END)>.001 or
+                    abs(bar.data.bevel_depth-R38_BEVEL)>.001):
+                    raise RuntimeError("R38 actual deep strake was not extended")
+                for kind,prefix in (("near","R19_NEAR_MOUTH_TILE_"),
+                                    ("mid","R19_MID_STAGGERED_TILE_")):
+                    tile=bpy.data.objects.get(f"{prefix}{index:02d}")
+                    if not tile or tile.get("R38_existing_axial_scale_rebalanced")!=kind:
+                        raise RuntimeError("R38 existing source tile was replaced")
+                    aged=(index in R38_NEAR if kind=="near"
+                          else index%5 in R38_MID)
+                    target=("R19_inner_oxidized_shingles" if aged else
+                            "R19_chipped_black_refractory")
+                    if tile.data.materials[0].name!=target:
+                        raise RuntimeError("R38 near/mid original shader allocation failed")
+            print("R38_SOURCE_OPEN_BORE_DEPTH_AND_LAYER_QA_PASS",
+                  path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)

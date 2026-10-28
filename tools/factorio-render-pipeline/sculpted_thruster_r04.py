@@ -434,6 +434,13 @@ def build_thruster(name,w,h,root,p):
         vanilla_refractory_visibility_r37.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R38: keep the R37 facet geometry but recover the native
+        # source's deeper visible longitudinal strakes and uneven near/mid
+        # actual physical shingle distribution without new objects.
+        import vanilla_refractory_depth_r38
+        vanilla_refractory_depth_r38.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
