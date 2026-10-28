@@ -90,6 +90,10 @@ As verified immediately before the initial chronicle commit, the `main`-branch [
 
 Machine-readable chronicle: [`data/royal-history-chronicle.json`](../../data/royal-history-chronicle.json).
 
+## Canonical weekly wardrobe acquisition pattern
+
+Two new garments per **Veilday** (Friday), with an optional additional garment per **Hearthday** (Sunday); these are opportunities, not audited payments. The [interactive date matching view](../../royal-calendar-matching.html) reconstructs the source-recorded first two Friday pairs and the intervening Sunday. It conditionally calculates later Friday dates if the Queen's first birthday is supplied. The [working date ledger](../../data/royal-wardrobe-calendar-matches.csv) includes twenty canon wardrobe descriptions and two separate original-generated dress design studies, and keeps confirmed historical dates blank. The full [weekly schedule](../../data/royal-wardrobe-weekly-schedule.csv) covers 870 complete weeks. Annual world events are separately indexed in [Elaranth's calendar CSV](../../data/elaranth-calendar-events.csv), with uncertain festival dates marked rather than guessed.
+
 ## Calendar crosswalk and image placement
 
 - [Sixteen-year CSV (Estelle's life-years)](../../data/royal-sixteen-year-timeline.csv): one row per complete birth-to-birthday year; simultaneous regnal-year boundaries and planning events.

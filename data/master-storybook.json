@@ -25,7 +25,9 @@
     "doNotAlterPublishedSourceFictionToFitIndex": true,
     "estelleBirthDateAuthority": "Working 266-day conception-to-birth estimate; owner established first-year birth, not a witnessed exact delivery day",
     "sixteenYearFormat": "16 complete Estelle life-years, birth through 16th birthday, spanning part of 17 Rome regnal years",
-    "estelleSixteenthBirthday": "15 Casktide, 298 S.M. working estimate, in Rome's 17th regnal year"
+    "estelleSixteenthBirthday": "15 Casktide, 298 S.M. working estimate, in Rome's 17th regnal year",
+    "wardrobePurchaseSlots": "2 regular gowns per Veilday (Friday), one optional Hearthday (Sunday) gown; capacity only, not purchases",
+    "calendarMatchingReliability": "First five canon garment descriptions have conditional Friday-Sunday-Friday placements; no exact shopping date is confirmed. Two approved generated standalone dress studies are unassigned unless user opts into a reversible trial slot."
   },
   "monthNames": [
     "Thawcall",
@@ -1284,6 +1286,11 @@
     "nowhereAuthority": "docs/nowhere-king/11-ACTIVE-CONTINUITY-STATE.md",
     "embryon": "https://github.com/mrcalzon02/Jewel_Brook",
     "royalSixteenLifeYears": "data/royal-sixteen-year-timeline.csv",
-    "royalArtworkPlacement": "data/royal-artwork-placement.csv"
+    "royalArtworkPlacement": "data/royal-artwork-placement.csv",
+    "royalWeeklySchedule": "data/royal-wardrobe-weekly-schedule.csv",
+    "royalGarmentMatching": "data/royal-wardrobe-canon-matching.csv",
+    "royalCalendarMatching": "data/royal-wardrobe-calendar-matches.csv",
+    "royalDateMatchingPage": "royal-calendar-matching.html",
+    "elaranthAnnualEvents": "data/elaranth-calendar-events.csv"
   }
 }
