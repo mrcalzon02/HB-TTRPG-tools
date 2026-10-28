@@ -53,7 +53,7 @@ class TestOriginalBodyGuardMotion(unittest.TestCase):
                             "primitive_uv_sphere_add","objects.new(",
                             "keyframe_insert(data_path=\"location\""):
             self.assertNotIn(unsupported,self.source)
-        for required in ("shape_key_add(","R36_no_pivot_or_actuator_inferred",
+        for required in ("shape_key_add(","fsc_r36_no_pivot_or_actuator_inferred",
                          "fsc_r36_keeps_r35_1_inner_fin_proportions",
                          "R36_original_64_edge_samples"):
             self.assertIn(required,self.source)

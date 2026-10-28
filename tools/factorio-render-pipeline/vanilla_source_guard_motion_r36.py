@@ -55,7 +55,8 @@ def apply(name,root,p,api,scene):
     before={o.name for o in scene.objects}
     fin_signatures={
         o.name:(len(o.data.vertices),len(o.data.polygons),
-                id(o.data.shape_keys),bool(o.animation_data))
+                (o.data.shape_keys.as_pointer() if o.data.shape_keys else 0),
+                bool(o.animation_data))
         for o in fins.objects
         if o.name.startswith("R11_SUSPENDED_AFTERBURNER_VANE_")}
     if len(fin_signatures)!=int(scene.get("fsc_r35_inner_heat_fins_remeshed",0)):
@@ -97,7 +98,8 @@ def apply(name,root,p,api,scene):
         raise RuntimeError("R36 added unsupported moving objects")
     if any((len(bpy.data.objects[n].data.vertices),
             len(bpy.data.objects[n].data.polygons),
-            id(bpy.data.objects[n].data.shape_keys),
+            (bpy.data.objects[n].data.shape_keys.as_pointer()
+             if bpy.data.objects[n].data.shape_keys else 0),
             bool(bpy.data.objects[n].animation_data))!=sig
            for n,sig in fin_signatures.items()):
         raise RuntimeError("R36 corrupted the independently animated R18 fin rig")
