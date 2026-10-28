@@ -1,20 +1,23 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "archiveTitle": "The Royal Purchases of One Lady of the Elven Court",
-  "archiveStatus": "rights_review_hold",
-  "notice": "Public images and source URLs withdrawn pending positive confirmation of original, user-authorized Daysha artwork. No ambiguous references or franchise art may be republished.",
+  "archiveStatus": "approved_generated_subset",
+  "notice": "Only specifically identified ChatGPT-generated original illustrations from the owner's Daysha family conversation are republished. All prior unreviewed/third-party reference imagery remains excluded.",
   "rightsPolicy": {
-    "publishOnly": "Original Daysha and Rome art generated for this project, subject to positive rights/provenance confirmation by artwork and creator; no external artist works, game screenshots, reference uploads, or Nintendo/Hyrule/Zelda-related imagery.",
-    "reviewBeforePublish": true,
-    "sourceInventory": "Withheld from public GitHub manifest; private working archive remains in connected Drive until reviewed.",
-    "noAutoImport": true
+    "approvedSource": "conversation-generated originals only",
+    "rejected": "third-party dress-reference images, marked-up input screenshots, franchise references, any unverified previous gallery assets",
+    "legacySourceCount": 178,
+    "approvedHistoricalItems": 12,
+    "legacyItemsStillWithheld": 166,
+    "scope": "Explicit SHA-verified Git history allowlist; do not bulk restore historical archive."
   },
   "subjects": [
     "Daysha",
-    "Rome",
-    "Estelle"
+    "King Rome",
+    "Princess Estelle",
+    "Queen Mother",
+    "Royal Maine Coon pair"
   ],
-  "sourceCountWithheld": 178,
   "costBenchmarks": {
     "sourceDriveUrl": "https://docs.google.com/document/d/1pPe7lUyvfWL0qOGqzVzO8s-USvelXHK9DA356jsP7tk/edit?usp=drivesdk",
     "fabricRollGold": 5,
@@ -35,16 +38,275 @@
     "weeklyShoppingModel": "2–3 Friday gowns, plus one every other Sunday",
     "benchmarksAreNotReceipts": true
   },
-  "garments": [],
-  "sources": [],
-  "sceneSequences": [],
+  "garments": [
+    {
+      "id": "G-001",
+      "title": "Blooming Meadow Sapphire-and-Gold Gown",
+      "primarySourceId": "file_0000000057e8820c9d942e574d26c4d3",
+      "type": "adult royal gown",
+      "notes": "Initial generated character reference in a flowing white, lavender, gold and sapphire floral gown.",
+      "verifiedPaidGold": null,
+      "actualPurchaseDate": null
+    },
+    {
+      "id": "G-002",
+      "title": "Ice-Blue Floral Court Gown",
+      "primarySourceId": "file_00000000127081f5be39d41502d07a1d",
+      "type": "adult royal gown",
+      "notes": "Distinct ice-blue floral, embroidered court gown. Later family scenes share a blue floral visual motif, but a physical garment match remains unverified.",
+      "verifiedPaidGold": null,
+      "actualPurchaseDate": null
+    }
+  ],
+  "sources": [
+    {
+      "id": "file_0000000057e8820c9d942e574d26c4d3",
+      "title": "Elven Princess in a Blooming Meadow",
+      "image": "assets/daysha/royal-purchases/src-0000000057e8.webp",
+      "gitBlobSha": "7da6eff8e529cd4fc8d3f9f913f5ee5616ea8da9",
+      "type": "gown-study",
+      "category": "dress-design",
+      "sceneGroup": "Other portraits and references",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, confirmed against prior archived source ID",
+      "referenceMedia": false,
+      "wardrobeId": "G-001",
+      "appearanceCluster": null,
+      "originalSizeBytes": 2910950
+    },
+    {
+      "id": "file_00000000127081f5be39d41502d07a1d",
+      "title": "Celestial Elven Princess in Bloom",
+      "image": "assets/daysha/royal-purchases/celestial-elven-princess-in-bloom.webp",
+      "gitBlobSha": "739b2e5eaa03edfd47d0ac3b9b5d0004b20fc8d1",
+      "type": "gown-study",
+      "category": "Other portraits and references",
+      "sceneGroup": "Other portraits and references",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, confirmed against prior archived source ID",
+      "referenceMedia": false,
+      "wardrobeId": "G-002",
+      "appearanceCluster": null,
+      "originalSizeBytes": 3002096
+    },
+    {
+      "id": "file_000000004ba88230a0b2d8530752f76f",
+      "title": "Elven Princess’s Royal Chase",
+      "image": "assets/daysha/royal-purchases/elven-princess-s-royal-chase.webp",
+      "gitBlobSha": "536e425d47c908d04dfc1b83130de7604e09aa2b",
+      "type": "scene",
+      "category": "Royal jewel chase",
+      "sceneGroup": "Royal jewel chase",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, confirmed against prior archived source ID",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
+      "originalSizeBytes": 2746323
+    },
+    {
+      "id": "file_00000000bb1081f48f89b269379dfd13",
+      "title": "Royal Garden Treasure Chase",
+      "image": "assets/daysha/royal-purchases/royal-garden-treasure-chase.webp",
+      "gitBlobSha": "508b649965914f17b8abac5a9df1b1397235c288",
+      "type": "scene",
+      "category": "Royal jewel chase",
+      "sceneGroup": "Royal jewel chase",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, confirmed against prior archived source ID",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
+      "originalSizeBytes": 3111813
+    },
+    {
+      "id": "file_00000000121881f6a4d178d0aaa6be63",
+      "title": "Elven Royal Jewel Chase",
+      "image": "assets/daysha/royal-purchases/elven-royal-jewel-chase.webp",
+      "gitBlobSha": "547ff5481efd899eeabc2adafe2ad1fadefdecd1",
+      "type": "scene",
+      "category": "Royal jewel chase",
+      "sceneGroup": "Royal jewel chase",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, confirmed against prior archived source ID",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
+      "originalSizeBytes": 3556402
+    },
+    {
+      "id": "file_000000008ce08230807c16765e2d3ff0",
+      "title": "Royal Elf Family Tea in the Palace Garden",
+      "image": "assets/daysha/royal-purchases/royal-elf-family-tea-in-the-palace-garden.webp",
+      "gitBlobSha": "a58e4892a532755f0260fe7d902952a16f15d45f",
+      "type": "scene",
+      "category": "Family life",
+      "sceneGroup": "Family life",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, confirmed against prior archived source ID",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
+      "originalSizeBytes": 3057203
+    },
+    {
+      "id": "file_000000000b78820c973f9fb6ac03bb98",
+      "title": "Icy Blue-Haired Royal Garden Tea Party",
+      "image": "assets/daysha/royal-purchases/icy-blue-haired-royal-garden-tea-party.webp",
+      "gitBlobSha": "7a525d0160eeed782c7ab3f6515e7f650a8d84db",
+      "type": "scene",
+      "category": "Tea, pastries and banquets",
+      "sceneGroup": "Tea, pastries and banquets",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, confirmed against prior archived source ID",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
+      "originalSizeBytes": 2852103
+    },
+    {
+      "id": "file_00000000a0748230b5d7d7b567c14e47",
+      "title": "Royal Elf Garden Playtime",
+      "image": "assets/daysha/royal-purchases/royal-elf-garden-playtime.webp",
+      "gitBlobSha": "1c539bffd2377448a32791ee73ce608351586dcc",
+      "type": "scene",
+      "category": "Family life",
+      "sceneGroup": "Family life",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, confirmed against prior archived source ID",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
+      "originalSizeBytes": 3131620
+    },
+    {
+      "id": "file_00000000a96481f58a0a2bdfa0777b9b",
+      "title": "Rafters Prank Over the Royal Council",
+      "image": "assets/daysha/royal-purchases/rafters-prank-over-the-royal-council.webp",
+      "gitBlobSha": "983d931afaea1385c2682132f410e72d0d4e4ff9",
+      "type": "scene",
+      "category": "Royal court and family",
+      "sceneGroup": "Royal court and family",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, confirmed against prior archived source ID",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
+      "originalSizeBytes": 2973646
+    },
+    {
+      "id": "file_00000000302481f5acaa82062258b625",
+      "title": "Glittery Royal Family Catroom Celebration",
+      "image": "assets/daysha/royal-purchases/glittery-royal-family-catroom-celebration.webp",
+      "gitBlobSha": "de64e80ec96f83e379e9497fd7f6393d0e0154b1",
+      "type": "scene",
+      "category": "Royal court and family",
+      "sceneGroup": "Royal court and family",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, confirmed against prior archived source ID",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
+      "originalSizeBytes": 3147137
+    },
+    {
+      "id": "file_00000000bc90820cb2e1bbfda264e7e1",
+      "title": "Magical Family Cat Atelier",
+      "image": "assets/daysha/royal-purchases/magical-family-cat-atelier.webp",
+      "gitBlobSha": "6030aa9b32ad172c2de59eaacd6fbaffb6d3ecfa",
+      "type": "gown-study",
+      "category": "Family life",
+      "sceneGroup": "Family life",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, confirmed against prior archived source ID",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
+      "originalSizeBytes": 3175899
+    },
+    {
+      "id": "file_000000006e0881fd8b4c45394a9e0555",
+      "title": "Royal Family’s Sunlit Castle Stroll",
+      "image": "assets/daysha/royal-purchases/royal-family-s-sunlit-castle-stroll.webp",
+      "gitBlobSha": "7f076bc345e8a8b239545c8390f6832d5680a11d",
+      "type": "scene",
+      "category": "Family life",
+      "sceneGroup": "Family life",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, confirmed against prior archived source ID",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
+      "originalSizeBytes": 3227294
+    }
+  ],
+  "sceneSequences": [
+    {
+      "id": "SC-01",
+      "title": "The jewel delivery misunderstanding",
+      "category": "Royal adventures",
+      "description": "Daysha pursues a palace servant carrying jewels, Estelle joins the chase, and the delivery is revealed to be for the Queen Mother.",
+      "sourceIds": [
+        "file_000000004ba88230a0b2d8530752f76f",
+        "file_00000000bb1081f48f89b269379dfd13",
+        "file_00000000121881f6a4d178d0aaa6be63"
+      ],
+      "newGownPurchases": 0
+    },
+    {
+      "id": "SC-02",
+      "title": "Pastries and the royal daycare",
+      "category": "Family",
+      "description": "The family shares tiny pastries in the courtyard; Estelle visits the noble children's royal daycare. Two separate images of the same tea occasion are not separate gown purchases.",
+      "sourceIds": [
+        "file_000000008ce08230807c16765e2d3ff0",
+        "file_000000000b78820c973f9fb6ac03bb98",
+        "file_00000000a0748230b5d7d7b567c14e47"
+      ],
+      "newGownPurchases": 0
+    },
+    {
+      "id": "SC-03",
+      "title": "Estelle's council-chamber ambush",
+      "category": "Family",
+      "description": "Estelle prepares her glitter-filled water balloon from the rafters. The incorrect illustration showing an intact balloon after impact is excluded; the corrected artwork is preserved off-site pending verified GitHub publication.",
+      "sourceIds": [
+        "file_00000000a96481f58a0a2bdfa0777b9b"
+      ],
+      "newGownPurchases": 0
+    },
+    {
+      "id": "SC-04",
+      "title": "Cats, magical cleanup and courtyard stroll",
+      "category": "Family",
+      "description": "Rome recovers from the glitter prank in the playroom with two Maine Coons; Daysha performs the cleaning spell, then the family walks towards the courtyard.",
+      "sourceIds": [
+        "file_00000000302481f5acaa82062258b625",
+        "file_00000000bc90820cb2e1bbfda264e7e1",
+        "file_000000006e0881fd8b4c45394a9e0555"
+      ],
+      "newGownPurchases": 0
+    }
+  ],
+  "excludedArtwork": [
+    {
+      "reason": "Third-party reference dress screenshot is not owned and is never published",
+      "sourceDescription": "Blue Disney-princess dress reference"
+    },
+    {
+      "reason": "User-provided red markup previews are annotations, not original clean gallery artwork",
+      "sourceDescription": "Two red-marked correction images"
+    },
+    {
+      "reason": "Known continuity error: intact water balloon after burst",
+      "sourceDescription": "Royal Council Glitter Prank (superseded)"
+    }
+  ],
+  "pendingCorrections": [
+    {
+      "title": "Estelle's glitter balloon, corrected burst",
+      "status": "original-preserved-not-yet-github-hosted",
+      "notes": "Clean original is preserved separately; do not link an unverified repo path or restore the superseded flawed version."
+    }
+  ],
+  "accounting": {
+    "verifiedPurchaseTotalGold": null,
+    "verifiedReceiptCount": 0,
+    "policy": "A dress design is one garment record; repeated scenes, color variants, revisions, and Estelle's child outfit do not automatically create extra charges. Prices are unconfirmed."
+  },
   "verification": {
-    "publishedDerivativeCount": 0,
-    "unpublishedSourceFiles": 178,
-    "githubTreeAssetCount": 0,
-    "githubTreeVerified": false,
-    "reason": "Quarantined by owner request pending full rights audit",
-    "historicalPublicImageRecords": 178,
-    "actualPaidAmountsVerified": 0
+    "publishedDerivativeCount": 12,
+    "publishedPathsExpected": 12,
+    "masterSourcesInThisConversation": 14,
+    "pendingCorrectedSourceCount": 1,
+    "historicalGalleryStillWithheld": true
   }
 }
