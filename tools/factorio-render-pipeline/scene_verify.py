@@ -730,11 +730,11 @@ def test_one(path):
                 bar=bpy.data.objects.get(f"R19_DEEP_COMBUSTOR_STRAKE_{index:02d}")
                 if not bar or not bar.get("R38_original_curve_not_duplicate"):
                     raise RuntimeError("R38 original curved refractory rib missing")
-                path=bar.data.splines
-                if (len(path)!=1 or path[0].type!="BEZIER" or
-                    len(path[0].bezier_points)!=4):
+                splines=bar.data.splines
+                if (len(splines)!=1 or splines[0].type!="BEZIER" or
+                    len(splines[0].bezier_points)!=4):
                     raise RuntimeError("R38 changed original curve topology")
-                if (abs(path[0].bezier_points[-1].co.y-R38_END)>.001 or
+                if (abs(splines[0].bezier_points[-1].co.y-R38_END)>.001 or
                     abs(bar.data.bevel_depth-R38_BEVEL)>.001):
                     raise RuntimeError("R38 actual deep strake was not extended")
                 for kind,prefix in (("near","R19_NEAR_MOUTH_TILE_"),
