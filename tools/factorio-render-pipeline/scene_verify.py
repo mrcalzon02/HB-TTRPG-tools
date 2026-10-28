@@ -842,6 +842,45 @@ def test_one(path):
                     scene.get("fsc_r43_no_extra_objects_materials_textures_or_glow")):
                 raise RuntimeError("R43 changed source geometry or shader ownership")
             print("R43_SOURCE_DEPTH_PHYSICAL_PATINA_PASS",path.name,flush=True)
+            # R44 requires a physical mesh-axial transition on existing
+            # R19 shader datablocks, never a camera-space brightness patch.
+            from vanilla_axial_patina_r44 import (
+                REVISION as R44_REV,SOURCE_SHA256 as R44_SHA,
+                TILE_COUNT as R44_COUNT,AXIAL_BLEND_START as R44_START,
+                AXIAL_BLEND_END as R44_END,COORD_NODE as R44_COORD,
+                AXIS_NODE as R44_AXIS,MAP_NODE as R44_MAP,MIX_NODE as R44_MIX)
+            if (scene.get("fsc_r44_revision")!=R44_REV or
+                scene.get("fsc_r44_source_sha256")!=R44_SHA or
+                int(scene.get("fsc_r44_near_tiles",0))!=R44_COUNT or
+                abs(float(scene.get("fsc_r44_blend_start",-1))-R44_START)>1e-6 or
+                abs(float(scene.get("fsc_r44_blend_end",-1))-R44_END)>1e-6 or
+                not scene.get("fsc_r44_same_R43_original_object_colors") or
+                not scene.get("fsc_r44_no_added_model_material_camera_lights_or_effect")):
+                raise RuntimeError("R44 saved Blender physical source contract missing")
+            for mat_name in R43_MATS:
+                mat=bpy.data.materials[mat_name]
+                nodes=mat.node_tree.nodes
+                links=mat.node_tree.links
+                coord=nodes.get(R44_COORD)
+                axis=nodes.get(R44_AXIS)
+                mapper=nodes.get(R44_MAP)
+                mix=nodes.get(R44_MIX)
+                info=nodes.get(R43_INFO)
+                patina=nodes.get(R43_NODE)
+                if (not coord or not axis or not mapper or not mix or
+                    not info or not patina or not mapper.clamp or
+                    abs(mapper.inputs["From Min"].default_value-R44_START)>1e-6 or
+                    abs(mapper.inputs["From Max"].default_value-R44_END)>1e-6):
+                    raise RuntimeError("R44 actual saved material transition absent")
+                for upstream,downstream in ((coord,axis),(axis,mapper),
+                                            (mapper,mix),(info,mix),(mix,patina)):
+                    if not any(e.from_node is upstream and e.to_node is downstream
+                               for e in links):
+                        raise RuntimeError("R44 material graph is not physically connected")
+                if not any(e.from_socket is axis.outputs["Y"] and
+                           e.to_socket is mapper.inputs["Value"] for e in links):
+                    raise RuntimeError("R44 cannot use non-axial mesh coordinate")
+            print("R44_SOURCE_AXIAL_PATINA_SAVED_SCENE_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)

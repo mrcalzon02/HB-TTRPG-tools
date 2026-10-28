@@ -459,6 +459,11 @@ def build_thruster(name,w,h,root,p):
         vanilla_depth_patina_r43.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R44: restore deep-end pigment only on existing R43 physical tiles.
+        import vanilla_axial_patina_r44
+        vanilla_axial_patina_r44.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",

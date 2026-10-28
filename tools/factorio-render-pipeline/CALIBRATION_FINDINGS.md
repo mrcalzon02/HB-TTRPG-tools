@@ -1432,3 +1432,35 @@ Native REAL R42 full-engine frame0 versus exact private original RGBA frame0 and
 | Center x95..170 y400..475 | .05511/.01361 | .03894/.00312 | **.05325/.00883** |
 
 R42 is an important *true physical visibility and center-bore improvement*, but still underexposes upper detail and overbrightens lower mouth. R43 candidate only shades the EXISTING 40 R19 near-mouth tiles with per-object physically meaningful patina factor .64; maintains all original R19 material DATABLOCK identities and their R37 base color values, and leaves 40 mid refractory tiles at white (=unmodified) object colors. Uses Blender shader Object Info Color × original physical Base Color (no texture, no emission, no altered camera), not an invented flat black occlusion plane. R43 must be judged by actual Blender and exact-original pixel comparisons; no unverified source fidelity claim. Original private thruster.zip is never published.
+
+ 
+### R43 exact original RGBA review, R44 axial candidate (2026-10-27)
+
+Original private `thruster.zip` verified SHA256
+`0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791`.
+Downloaded full R42 calibration artifact `12787457235` and R43 `12788166374`;
+both have editable saved scenes, QA, and 64 real native 264×542 body frames.
+Original `thruster-1.png` top-left atlas frame vs each actual
+`native-source-cycle-r32/body-00.png`, exact coordinate-aligned sRGB
+(.2126 R + .7152 G + .0722 B) means and horizontal absolute gradients:
+
+| ROI | Original mean/grad | R42 mean/grad | R43 mean/grad |
+| --- | --- | --- | --- |
+| Upper x55..208,y410..455 | .069579/.015298 | .038096/.007668 | .032716/.007636 |
+| Mid x70..192,y425..480 | .071002/.013581 | .078657/.011458 | .064545/.010898 |
+| Lower x65..202,y450..485 | .082032/.013526 | .116520/.015548 | .093591/.014244 |
+| Center x95..170,y400..475 | .055115/.013612 | .053251/.008834 | .045846/.009057 |
+
+R43 did improve lower brightness error from .034488 to .011559 (~66.5%),
+but worsened upper by .005380 and center by .007405. Shader's uniform
+near-mouth .64 factor also shades far axial ends of those same objects.
+**R44 candidate, NOT YET SOURCE-VERIFIED:** taper that already-existing
+R43 physical patina from .64 at local shingle axial fraction <=.50 to
+the original unaffected material pigment at >=.92. Keep same 40 near
+tiles and their R43 original Object Info .64 color, 40 white mid tiles,
+R19 material datablock identities, R13 shared original material, physical
+R11 open bore, R35.1 fins and R36 moving cups. No new model/material/
+camera/light/overlays/animation elements. Saved-scene QA tests the actual
+node signal path and original geometry. Native original sprites remain
+private and are never committed to public GitHub. Candidate requires
+new Github Actions successful render AND ROI comparison for acceptance.
