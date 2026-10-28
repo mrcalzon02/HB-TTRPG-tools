@@ -10,8 +10,18 @@
     "coronationDate": null,
     "estelleBirthDate": null,
     "estelleAgeAtCoronation": null,
-    "reignYearContainingEstelle16thBirthday": null,
-    "warning": "16-year narrative scope does NOT prove Estelle was born at coronation. Reign years and child ages are independent until dates are established."
+    "reignYearContainingEstelle16thBirthday": 17,
+    "warning": "Sixteen complete years from Estelle's projected birth end in Rome's SEVENTEENTH regnal year. Estelle is unborn at the midpoint opening of Beneath Dappled Oaks but is born later in the FIRST regnal year; proposed exact days are not independently witnessed.",
+    "workingCalendarModel": {
+      "reignOpening": "1 Thawcall, 282 S.M.",
+      "bdoOpening": "14 Deepdelve, 282 S.M.",
+      "estelleExpectedBirth": "15 Casktide, 282 S.M.",
+      "weddingConceptionElapsedDay": 0,
+      "gestationDaysFromConception": 266,
+      "day1000": "21 Casktide, 284 S.M.",
+      "estelleSixteenthBirthday": "15 Casktide, 298 S.M.",
+      "estelleBirthDayStillProvisional": true
+    }
   },
   "provenancePolicy": {
     "publishedArtwork": "Only image files individually confirmed generated/original and verified on main; no third-party dress reference images",
@@ -27,9 +37,11 @@
       "sequence": 1,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Unborn until projected 15 Casktide, then 0",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 282 S.M.",
+      "workingEndDate": "28 Hearthwane, 282 S.M."
     },
     {
       "id": "Y02",
@@ -37,9 +49,11 @@
       "sequence": 2,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 0 until 15 Casktide; then 1",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 283 S.M.",
+      "workingEndDate": "28 Hearthwane, 283 S.M."
     },
     {
       "id": "Y03",
@@ -47,9 +61,11 @@
       "sequence": 3,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 1 until 15 Casktide; then 2",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 284 S.M.",
+      "workingEndDate": "28 Hearthwane, 284 S.M."
     },
     {
       "id": "Y04",
@@ -57,9 +73,11 @@
       "sequence": 4,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 2 until 15 Casktide; then 3",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 285 S.M.",
+      "workingEndDate": "28 Hearthwane, 285 S.M."
     },
     {
       "id": "Y05",
@@ -67,9 +85,11 @@
       "sequence": 5,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 3 until 15 Casktide; then 4",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 286 S.M.",
+      "workingEndDate": "28 Hearthwane, 286 S.M."
     },
     {
       "id": "Y06",
@@ -77,9 +97,11 @@
       "sequence": 6,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 4 until 15 Casktide; then 5",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 287 S.M.",
+      "workingEndDate": "28 Hearthwane, 287 S.M."
     },
     {
       "id": "Y07",
@@ -87,9 +109,11 @@
       "sequence": 7,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 5 until 15 Casktide; then 6",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 288 S.M.",
+      "workingEndDate": "28 Hearthwane, 288 S.M."
     },
     {
       "id": "Y08",
@@ -97,9 +121,11 @@
       "sequence": 8,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 6 until 15 Casktide; then 7",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 289 S.M.",
+      "workingEndDate": "28 Hearthwane, 289 S.M."
     },
     {
       "id": "Y09",
@@ -107,9 +133,11 @@
       "sequence": 9,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 7 until 15 Casktide; then 8",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 290 S.M.",
+      "workingEndDate": "28 Hearthwane, 290 S.M."
     },
     {
       "id": "Y10",
@@ -117,9 +145,11 @@
       "sequence": 10,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 8 until 15 Casktide; then 9",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 291 S.M.",
+      "workingEndDate": "28 Hearthwane, 291 S.M."
     },
     {
       "id": "Y11",
@@ -127,9 +157,11 @@
       "sequence": 11,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 9 until 15 Casktide; then 10",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 292 S.M.",
+      "workingEndDate": "28 Hearthwane, 292 S.M."
     },
     {
       "id": "Y12",
@@ -137,9 +169,11 @@
       "sequence": 12,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 10 until 15 Casktide; then 11",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 293 S.M.",
+      "workingEndDate": "28 Hearthwane, 293 S.M."
     },
     {
       "id": "Y13",
@@ -147,9 +181,11 @@
       "sequence": 13,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 11 until 15 Casktide; then 12",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 294 S.M.",
+      "workingEndDate": "28 Hearthwane, 294 S.M."
     },
     {
       "id": "Y14",
@@ -157,9 +193,11 @@
       "sequence": 14,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 12 until 15 Casktide; then 13",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 295 S.M.",
+      "workingEndDate": "28 Hearthwane, 295 S.M."
     },
     {
       "id": "Y15",
@@ -167,9 +205,11 @@
       "sequence": 15,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 13 until 15 Casktide; then 14",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 296 S.M.",
+      "workingEndDate": "28 Hearthwane, 296 S.M."
     },
     {
       "id": "Y16",
@@ -177,9 +217,25 @@
       "sequence": 16,
       "startDate": null,
       "endDate": null,
-      "estelleAgeDuringYear": null,
+      "estelleAgeDuringYear": "Age 14 until 15 Casktide; then 15",
       "assignedEventIds": [],
-      "status": "awaiting_date_attribution"
+      "status": "awaiting_date_attribution",
+      "workingStartDate": "1 Thawcall, 297 S.M.",
+      "workingEndDate": "28 Hearthwane, 297 S.M."
+    },
+    {
+      "id": "Y17",
+      "label": "Reign year 17 (projected Estelle 16th birthday)",
+      "sequence": 17,
+      "startDate": null,
+      "endDate": null,
+      "workingStartDate": "1 Thawcall, 298 S.M.",
+      "workingEndDate": "28 Hearthwane, 298 S.M.",
+      "estelleAgeDuringYear": "Age 15 until projected 15 Casktide; then 16",
+      "assignedEventIds": [
+        "ESTELLE_16TH_BIRTHDAY"
+      ],
+      "status": "working_calendar_slot"
     }
   ],
   "anchors": [
@@ -188,7 +244,9 @@
       "title": "Coronation and the beginning of the documented royal era",
       "calendarDate": null,
       "chronology": "opening_anchor",
-      "status": "user_established_endpoint"
+      "status": "user_established_endpoint",
+      "workingCalendarDate": "1 Thawcall, 282 S.M.",
+      "note": "Royal wedding/conception at accession are a synchronizing assumption; exact record is provisional."
     },
     {
       "id": "ESTELLE_16TH_BIRTHDAY",
@@ -197,7 +255,33 @@
       "chronology": "closing_anchor",
       "childAge": 16,
       "status": "user_established_endpoint",
-      "note": "No birth date, exact reign year or intervening life events invented."
+      "note": "16 × 364-day years after working birth; regnal year 17; calendar date projected.",
+      "workingCalendarDate": "15 Casktide, 298 S.M.",
+      "reignYear": 17
+    },
+    {
+      "id": "BDO_OPENING",
+      "title": "Beneath Dappled Oaks opening",
+      "calendarDate": null,
+      "workingCalendarDate": "14 Deepdelve, 282 S.M.",
+      "note": "Estelle not yet born; occurs halfway through first regnal year.",
+      "status": "working_date_owner_timeline"
+    },
+    {
+      "id": "ESTELLE_BIRTH",
+      "title": "Estelle's expected birth in Rome's first year",
+      "calendarDate": null,
+      "workingCalendarDate": "15 Casktide, 282 S.M.",
+      "note": "266 days after working royal wedding/conception; not a witnessed exact birth date.",
+      "status": "working_date_owner_timeline"
+    },
+    {
+      "id": "DAY_1000",
+      "title": "1,000 elapsed days since wedding",
+      "calendarDate": null,
+      "workingCalendarDate": "21 Casktide, 284 S.M.",
+      "note": "Estelle is two 364-day years and six days old.",
+      "status": "working_date_owner_timeline"
     }
   ],
   "timelineTracks": [
@@ -678,6 +762,21 @@
       "Add an unfinished reference image to the published gallery",
       "Publish unreviewed generated variants",
       "Assume the Queen Mother and foreign seamstress are one person"
+    ]
+  },
+  "lifeYearCatalog": {
+    "periodCount": 16,
+    "rangeAges": "0 through 16",
+    "csv": "data/royal-sixteen-year-timeline.csv",
+    "imagePlacementCsv": "data/royal-artwork-placement.csv",
+    "masterEventsCsv": "data/master-storybook-events.csv",
+    "firstPeriod": [
+      "15 Casktide, 282 S.M.",
+      "15 Casktide, 283 S.M."
+    ],
+    "lastPeriod": [
+      "15 Casktide, 297 S.M.",
+      "15 Casktide, 298 S.M."
     ]
   }
 }
