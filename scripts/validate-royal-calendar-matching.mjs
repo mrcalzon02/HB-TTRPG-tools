@@ -73,10 +73,10 @@ const calendar=csv('data/elaranth-calendar-events.csv');
 assert.equal(calendar.length,83);
 assert.equal(calendar.filter(x=>x.event_type==='seasonal_political_week').length,52);
 assert.equal(calendar.filter(x=>x.event_type==='annual_festival').length,13);
-assert.equal(calendar.filter(x=>x.event_type==='monthly_full_moon').length,13);
+assert.equal(calendar.filter(x=>x.event_type==='lunar_full_moon').length,13);
 assert.equal(calendar.filter(x=>x.event_type==='royal_story_anchor').length,5);
 assert.equal(calendar.filter(x=>x.lunar_alignment_flag).length,9);
-for(const m of calendar.filter(x=>x.event_type==='monthly_full_moon'))assert.equal(Number(m.day_start),14);
+for(const m of calendar.filter(x=>x.event_type==='lunar_full_moon'))assert.equal(Number(m.day_start),14);
 
 const master=JSON.parse(readFileSync(join(root,'data/master-storybook.json'),'utf8'));
 assert.equal(master.events.find(x=>x.id==='EL-003')?.estelleState,'unborn');
