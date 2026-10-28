@@ -1361,3 +1361,25 @@ The source pixel-luminance numbers guide a *post-render visual comparison*, not 
 First R37 source procedure validation PASSED, and custom-model Blender regression PASSED, but [first real R37 vanilla calibration #40614083424](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40614083424) FAILED in the existing R13 saved-scene guard: the R37 candidate cloned a private R11 throat shader where R13's original source geometry architecture shares the `R13_scorched_nonreflective_refractory` material datablock between the open R11 liner and the R08 reaction drum. This is a real R13 material contract; weakening/removing R13 QA would conceal a regression.
 
 **R37.1 root-cause repair:** preserve the SAME R13 refractory material object and recolor that already-shared physical shader on both pieces. Do not create a second throat-specific material, bypass R13 QA, add caps, disable motion, or relax original-layer rules. Add saved-scene assertions that both objects reference the same material identity, and a source-test check forbidding `original_material.copy()`. All 80 unchanged 24-vertex original R19 scale tiles retain the R37 pressed central facets, and all other R36/R35.1 source geometry/motion remains intact. The R37.1 render still requires real Blender and exact-source pixel review before claiming an interior contrast improvement.
+
+
+### R37.1 VERIFIED real Blender and exact-source interior RGB comparison (2026-10-27)
+
+R37.1 implementation [f2131664d53d](https://github.com/mrcalzon02/HB-TTRPG-tools/commit/f2131664d53da8e62e9e2e28bad0443c820d753a) PASSED source-procedure [workflow #40614479167](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40614479167) and BOTH full Blender 4.5 LTS calibration and custom-model jobs in [workflow #40614479194](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40614479194), artifact `factorio-captures-calibration` ID **12784827953**. First R37 run #40614083424 had correctly failed inherited R13 QA because the test material was cloned away from the SHARED `R13_scorched_nonreflective_refractory` throat and drum; corrected root cause preserves the actual same Blender material datablock and the strict R13 verifier. No existing tests were bypassed.
+
+R37.1 saved scene has all **80 pressed center corrugations on the original 24-vertex refractory tiles**, all 160 R19 physical interior detail objects, unsealed R11/R20 axial bore, unchanged R35.1 fin profile and R36 source-measured guard shape-key motion, original separate effect/conditional pipe layers; the 64 generated native 264x542 body PNGs had distinct hashes, no alpha clipping. Actual 64-frame alpha overlap and animated-pixel variation remain exactly R36: IoU 0.8461442, 150.906 cyclic changed alpha pixels/frame, as EXPECTED from a physical inner-geometry/material-only revision with no external outline changes.
+
+Private exact original RGBA frame0 vs R36 and R37.1 real captures, fixed native ROIs; luminance numbers are 0–1 gamma-encoded RGB weighted sums (NOT true radiometric light measurements) and spatial variation is first-difference of that same intensity:
+
+| Pixel region | Original source mean | R36 mean | R37.1 mean | Original mean horizontal gradient | R36 gradient | R37.1 gradient |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Interior upper bore x55–208,y410–455 | .06958 | .02886 | **.03151** | .01530 | .00357 | **.00392** |
+| Mid-depth interior x70–192,y425–480 | .07100 | .05357 | **.06575** | .01358 | .00483 | **.00618** |
+| Lower interior x65–202,y450–485 | .08203 | .07431 | **.10265** | .01353 | .00876 | **.01211** |
+| Central bore x95–170,y400–475 | .05511 | .03656 | **.03937** | .01361 | .00305 | **.00324** |
+
+This IS a verified **physical tile relief and mid-depth contrast improvement**, but the lower interior is now too bright by ~.0206 while the upper bore is still too dark by ~.0381. Original upper 3D shingles have much greater high-frequency texture and staggered source pattern: merely raising all material RGBs further would not solve that mismatch. Do not assert vanilla-perfect rendering/light calibrations.
+
+**Next R38 candidate direction:** modify only the EXISTING 80 R19 shallow/deep shingle meshes to better distribute shaped 3D facets through the visually smooth upper-half cone; correct source-visible throat geometry and material variation by depth, not flat color brightening, fake plane textures, extra speculative mechanisms, or changing camera. Preserve the R13 shared material, physical open bore, R18/R35 and R36 64-frame independent motion, and all previous R27 removals.
+
+Source `thruster.zip` pixels, 64 rendered direct-comparison animation and inspection image are private user assets, NOT committed into the public repository.
