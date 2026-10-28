@@ -943,7 +943,7 @@
       "archivedAt": "2026-10-27T05:04:32.736126+00:00",
       "bytes": 3040688,
       "role": "scene",
-      "wardrobeId": "DR-09",
+      "wardrobeId": null,
       "sceneGroup": "Court and romance",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-000000008088.webp",
       "publicationStatus": "hosted_verified",
@@ -959,6 +959,16 @@
         "fileId": "1eje5m0tRiXpQ1KOb4bXtsYgNUefSzxt3",
         "sizeBytes": 3040688,
         "verifiedBy": "exact source filename/identifier and byte size"
+      },
+      "wardrobeReview": {
+        "reviewedAt": "2026-10-27",
+        "referenceGarmentId": "DR-09",
+        "referencePrimarySourceId": "file_0000000011f48230affcb25a25e23bc1",
+        "originalSha256": "54c6b17a9468f0fad02c4ba5b3a6a99652e23602e3b255b914051c360942e5e1",
+        "decision": "distinct_gown_not_identified",
+        "evidence": "Pink-and-ivory corseted gown with gold chainwork, pale-blue ruffled vertical skirt panels and gold central ribbon; pink puff/illusion sleeves. Neither blue vine corset nor broad blue-white lace skirt of the DR-09 primary appears.",
+        "provenance": "Visual comparison of original PNG bytes against the original dr-09.png ZIP member; scene remains in SC-09 and does not establish a separate paid purchase.",
+        "previousWardrobeId": "DR-09"
       }
     },
     {
@@ -1595,7 +1605,7 @@
       "archivedAt": "2026-10-27T04:15:10.458804+00:00",
       "bytes": 2787873,
       "role": "scene",
-      "wardrobeId": "DR-09",
+      "wardrobeId": null,
       "sceneGroup": "Court and romance",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000b488.webp",
       "publicationStatus": "hosted_verified",
@@ -1611,6 +1621,16 @@
         "fileId": "1l_g52kPPWTx52kyw9aGBI5nnW7Lk6zTT",
         "sizeBytes": 2787873,
         "verifiedBy": "exact source filename/identifier and byte size"
+      },
+      "wardrobeReview": {
+        "reviewedAt": "2026-10-27",
+        "referenceGarmentId": "DR-09",
+        "referencePrimarySourceId": "file_0000000011f48230affcb25a25e23bc1",
+        "originalSha256": "c4e884073807f3ff930d92eaa3d4eef291e1304d6614e19cdc898b20f0928eb1",
+        "decision": "distinct_gown_not_identified",
+        "evidence": "Pale lavender/silver gathered full skirt and silver ornamental bodice with pearl-like chain drapes; transparent off-shoulder puff sleeves. Different bodice architecture, ornament and skirt from DR-09's cobalt vine corset and blue-white lace overskirts.",
+        "provenance": "Visual comparison of original PNG bytes against the original dr-09.png ZIP member; scene remains in SC-09 and does not establish a separate paid purchase.",
+        "previousWardrobeId": "DR-09"
       }
     },
     {
@@ -1862,7 +1882,7 @@
       "archivedAt": "2026-10-27T04:01:03.658730+00:00",
       "bytes": 3118731,
       "role": "scene",
-      "wardrobeId": "DR-09",
+      "wardrobeId": null,
       "sceneGroup": "Court and romance",
       "publishedImageUrl": "assets/daysha/royal-purchases/src-00000000165c.webp",
       "publicationStatus": "hosted_verified",
@@ -1878,6 +1898,16 @@
         "fileId": "1KVmQagzVNV5hVLuLiuwLHOWWeqap97Ju",
         "sizeBytes": 3118731,
         "verifiedBy": "exact source filename/identifier and byte size"
+      },
+      "wardrobeReview": {
+        "reviewedAt": "2026-10-27",
+        "referenceGarmentId": "DR-09",
+        "referencePrimarySourceId": "file_0000000011f48230affcb25a25e23bc1",
+        "originalSha256": "86693badc9c76006bf3f3a531c9932a429e838d5a03f98b5831e32a81c0bddac",
+        "decision": "distinct_gown_not_identified",
+        "evidence": "Deep teal halter-style gathered bodice, jeweled silver waist cage, long opaque draped teal sleeves and deep-teal skirt with silver central embroidery. Distinct from DR-09's blue fitted vine corset and translucent white sleeves.",
+        "provenance": "Visual comparison of original PNG bytes against the original dr-09.png ZIP member; scene remains in SC-09 and does not establish a separate paid purchase.",
+        "previousWardrobeId": "DR-09"
       }
     },
     {
@@ -1928,6 +1958,15 @@
         "member": "originals/dr-09.png",
         "sizeBytes": 3044279,
         "verifiedBy": "ZIP member file, size and container CRC"
+      },
+      "wardrobeReview": {
+        "reviewedAt": "2026-10-27",
+        "referenceGarmentId": "DR-09",
+        "referencePrimarySourceId": "file_0000000011f48230affcb25a25e23bc1",
+        "originalSha256": "dcacc80a5d39905395c10546a74fbea7fe5faa025ef114deb707b5fc599e3f9d",
+        "decision": "primary_reference",
+        "evidence": "Royal-blue fitted strapless/off-shoulder sweetheart bodice with white curling vine embroidery; pale blue translucent flower-anchored sleeve drapes; crossed floral sash and a full pale-blue/royal-blue skirt under broad white lace overskirts. The sole verified primary DR-09 gown image.",
+        "provenance": "Visual comparison of original PNG bytes against the original dr-09.png ZIP member; scene remains in SC-09 and does not establish a separate paid purchase."
       }
     },
     {
