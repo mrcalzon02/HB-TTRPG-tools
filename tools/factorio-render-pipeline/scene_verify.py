@@ -876,7 +876,13 @@ def test_one(path):
                                             (mapper,mix),(info,mix),(mix,patina)):
                     if not any(e.from_node is upstream and e.to_node is downstream
                                for e in links):
-                        raise RuntimeError("R44 material graph is not physically connected")
+                        actual="; ".join(
+                            f"{e.from_node.name}.{e.from_socket.name} -> "
+                            f"{e.to_node.name}.{e.to_socket.name}" for e in links)
+                        raise RuntimeError(
+                            f"R44 material graph not connected on {mat_name}: "
+                            f"missing {upstream.name} -> {downstream.name}; "
+                            f"actual edges: {actual}")
                 if not any(e.from_socket is axis.outputs["Y"] and
                            e.to_socket is mapper.inputs["Value"] for e in links):
                     raise RuntimeError("R44 cannot use non-axial mesh coordinate")
