@@ -56,7 +56,7 @@ class R38OriginalInterior(unittest.TestCase):
         s=SOURCE.read_text(encoding="utf-8")
         for forbidden in ("primitive_cube_add","bpy.data.objects.new",
                           "bpy.data.materials.new","keyframe_insert",
-                          "shape_key_add","Emission Strength"].copy():
+                          "shape_key_add","Emission Strength"):
             self.assertNotIn(forbidden,s)
         for must in ("fsc_r38_no_camera_or_light_changes",
                      "fsc_r38_original_open_bore_and_shared_material",
