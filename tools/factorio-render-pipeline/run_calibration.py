@@ -37,6 +37,13 @@ def main():
                         str(root/"camera_sweep_r09.py"),"--","--output",str(target)],check=True)
         subprocess.run([str(python),str(root/"camera_sweep_report_r09.py"),
                         "--output",str(target)],check=True)
+        # R46: isolate the EXISTING original physical R11 segmented
+        # aperture baffle in the same saved-camera native viewport.
+        # Diagnostic toggles only temporary visibility; .blend untouched.
+        subprocess.run([str(blender),"-b","--factory-startup","-t","2",
+                        "--python-exit-code","4","--python",
+                        str(root/"aperture_isolation_r46.py"),
+                        "--","--output",str(target)],check=True)
         # R11 independent close-up Blender renders validate actual depth and
         # external cantilever support hardware, never the production atlas.
         subprocess.run([str(blender),"-b","--factory-startup","-t","2",

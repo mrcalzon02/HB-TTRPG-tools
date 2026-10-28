@@ -1512,3 +1512,39 @@ physical castellated baffle stays unchanged. Neither camera/framing,
 validation limits, materials, hidden mechanisms nor geometry population
 change. Actual QA + source comparison must establish whether corrected
 flanges are both unclipped and closer to the source.
+
+
+### R45.1 verified; R46 physical-aperture visibility isolation
+
+R45.1 commit `af359406988b4382e485b62dc5b0db5c3ee68b47`
+plus explicit Blender workflow trigger repair `73621714b5b24294d9cfebd539541d9376e7291e`
+passed both full Blender 4.5.15 calibration/model jobs in
+[run #40627505523](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40627505523).
+Artifact `factorio-captures-calibration` ID `12790386708` has the real
+editable .blend, 64 native 264×542 body captures and no render clipping.
+Preview R45.1 bbox `[7,2,305,628]` vs R45 clipped `[7,0,305,628]`.
+Original source remains private and SHA256 verified.
+
+Exact native original frame0 against R44 vs R45.1, ROI x45..215 y0..120:
+alpha IoU `.838490 -> .841016`, original-visible luma absolute
+error `.204479 -> .203607`. Upper squared feed mounts therefore produce
+small but measurable geometry/color gains.
+
+Physical source throat ROI x55..210 y375..455 had unchanged alpha IoU
+1.000 but source-visible luma error `.079377 -> .079416` (worse);
+mouth aperture ROI x42..224 y405..505 likewise alpha IoU `.965892`
+unchanged, luma error `.060618 -> .060641`. The R45 physical
+castellations pass mesh/saved QA but **DO NOT establish source-visible
+improvement**. The source reference shows a strong segmented dark metal
+junction higher inside the nozzle, whereas assembled Blender collar is
+still nearly invisible. Do not accept speculative ring enlargement.
+
+R46 is a strict *diagnostic only* run on the R45.1 saved scene: use same
+fixed Blender camera, lights, 264×542 source viewport; render fully
+assembled baseline, temporarily hide ONLY original R11
+`recessed_internal_pressure_baffle_01`, then render that baffle alone.
+Record its actual native alpha bounds and the assembled-image
+pixel difference caused by the toggle, restore ALL visibility flags,
+do not write a modified .blend and do not copy source pixels to GitHub.
+This will distinguish physical occlusion from insufficient exposed
+surface relief before another mesh edit.
