@@ -53,6 +53,9 @@ def main():
     if not source.is_file():raise RuntimeError("R46 actual saved R45 scene is missing")
     bpy.ops.wm.open_mainfile(filepath=str(source))
     scene=bpy.context.scene
+    # Blender --python need not place the script's directory on sys.path.
+    root_path=str(Path(__file__).resolve().parent)
+    if root_path not in sys.path:sys.path.insert(0,root_path)
     from vanilla_throat_mounts_r45 import REVISION as R45_REV
     if scene.get("fsc_r45_revision")!=R45_REV or scene.get("fsc_r45_source_sha256")!=SOURCE_SHA256:
         raise RuntimeError("R46 requires original geometry R45 edit")
