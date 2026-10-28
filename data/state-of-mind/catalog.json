@@ -4,7 +4,7 @@
   "sourceWorkbook": "Beneath_Dappled_Oaks_Character_Continuity_Catalog.xlsx",
   "sourceRole": "historical long-memory reference, not a current up-to-Chapter-30 synthesis",
   "scope": "Character continuity and theory-of-mind datasets separated from objective event canon",
-  "sourceDataHandling": "Only rows with actual authored cell values are retained, including all substantive records; hundreds of empty formula-prefill rows (with zero in trailing calculation column) omitted. Original Drive workbook remains untouched.",
+  "sourceDataHandling": "The thirteen source worksheets were exported without dropping authored records; only empty preformatted rows/formula padding were removed. Original Drive workbook remains unchanged.",
   "spoilerWarning": "Contains unpublished personal motives, hidden orders, attraction and secrets belonging to fictional characters.",
   "columnsAreSourceColumns": true,
   "sourceRelatedFiles": [
@@ -59,7 +59,7 @@
       "series": "Beneath Dappled Oaks",
       "title": "Memories & Important Events",
       "path": "data/state-of-mind/beneath-dappled-oaks/04-memories-events.csv",
-      "recordCount": 504,
+      "recordCount": 26,
       "columns": 20,
       "sourceType": "original_workbook_sheet_export",
       "status": "historical_snapshot_not_fully_reconciled",
@@ -87,7 +87,7 @@
       "series": "Beneath Dappled Oaks",
       "title": "Attraction & Intimacy Continuity",
       "path": "data/state-of-mind/beneath-dappled-oaks/06-attraction-intimacy.csv",
-      "recordCount": 496,
+      "recordCount": 6,
       "columns": 20,
       "sourceType": "original_workbook_sheet_export",
       "status": "historical_snapshot_not_fully_reconciled",
@@ -194,5 +194,11 @@
       "knownConstraint": "Rewrite-era workbook requires Chapters 6–30 reconciliation; current source is not proof of more recent chapter state",
       "publicAudience": "contains story spoilers and deliberately character-private plot knowledge"
     }
-  ]
+  ],
+  "verification": {
+    "sheetCount": 13,
+    "populatedRecordRows": 171,
+    "lastWorkbookStatus": "historical snapshot; character continuity not reconciled through current BDO Chapter 30",
+    "publicationStatus": "published on GitHub main; site index pending"
+  }
 }
