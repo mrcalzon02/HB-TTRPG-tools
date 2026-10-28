@@ -2,6 +2,8 @@
 import argparse,sys,json
 from pathlib import Path
 import bpy
+# Blender --python does not necessarily add the script directory to sys.path.
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 import vanilla_shell_short_return_r42 as candidate
 def main():
     p=argparse.ArgumentParser();p.add_argument("--source",type=Path,required=True)
