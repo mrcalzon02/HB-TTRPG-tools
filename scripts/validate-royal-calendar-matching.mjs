@@ -89,7 +89,7 @@ assert(readFileSync(join(root,'royal-calendar-matching.html'),'utf8').includes('
 assert(readFileSync(join(root,'royal-purchases.html'),'utf8').includes('royal-calendar-matching.html'));
 for(const file of ['royal-calendar-matching.html','royal-purchases.html','elaranth-almanac.html','master-storybook.html','state-of-mind.html']){
   const html=readFileSync(join(root,file),'utf8');
-  const inlineScripts=[...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/g)].map(x=>x[1]).filter(x=>x.trim());
+  const inlineScripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(x=>x[1]).filter(x=>x.trim());
   for(const js of inlineScripts) new Script(js,{filename:file});
 }
 console.log('PASS: 870 weeks, 20 canon garments + 2 studies, 11 scene-event links, 83 seasonal calendar events, preserved birthday constraints, zero invented purchases.');
