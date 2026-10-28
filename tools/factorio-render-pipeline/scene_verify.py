@@ -874,8 +874,13 @@ def test_one(path):
                     raise RuntimeError("R44 actual saved material transition absent")
                 for upstream,downstream in ((coord,axis),(axis,mapper),
                                             (mapper,mix),(info,mix),(mix,patina)):
-                    if not any(e.from_node is upstream and e.to_node is downstream
-                               for e in links):
+                    # Blender bpy_prop wrappers may differ in Python identity
+                    # after reopening a .blend; the RNA data pointers identify
+                    # the actual persistent node, without weakening link QA.
+                    if not any(
+                        e.from_node.as_pointer()==upstream.as_pointer() and
+                        e.to_node.as_pointer()==downstream.as_pointer()
+                        for e in links):
                         actual="; ".join(
                             f"{e.from_node.name}.{e.from_socket.name} -> "
                             f"{e.to_node.name}.{e.to_socket.name}" for e in links)
@@ -883,8 +888,10 @@ def test_one(path):
                             f"R44 material graph not connected on {mat_name}: "
                             f"missing {upstream.name} -> {downstream.name}; "
                             f"actual edges: {actual}")
-                if not any(e.from_socket is axis.outputs["Y"] and
-                           e.to_socket is mapper.inputs["Value"] for e in links):
+                if not any(
+                    e.from_socket.as_pointer()==axis.outputs["Y"].as_pointer() and
+                    e.to_socket.as_pointer()==mapper.inputs["Value"].as_pointer()
+                    for e in links):
                     raise RuntimeError("R44 cannot use non-axial mesh coordinate")
             print("R44_SOURCE_AXIAL_PATINA_SAVED_SCENE_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
