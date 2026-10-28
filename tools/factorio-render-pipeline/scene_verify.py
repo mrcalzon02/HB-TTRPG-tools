@@ -938,6 +938,52 @@ def test_one(path):
                 if max(xs)-min(xs)<.5:
                     raise RuntimeError("R45 original flange not source-sized")
             print("R45_SOURCE_APERTURE_AND_MOUNT_SAVED_SCENE_PASS",path.name,flush=True)
+            # R47: original object identities and topology remain in
+            # saved .blend, but outer lip and liner physically form a much
+            # deeper tapered aperture while the brass arc moves behind tabs.
+            from vanilla_deep_aperture_and_long_fins_r47 import (
+                REVISION as R47_REV,SOURCE_SHA256 as R47_SHA,
+                BEVELED_LINER_MOUTH_Y as R47_MOUTH,
+                BEVELED_LINER_SECOND_Y as R47_SECOND,
+                BEVELED_EXTERIOR_LAST_Y as R47_EXT,
+                ROLLED_LIP_NAME as R47_LIP,
+                ROLLED_LIP_MATERIAL as R47_METAL,
+                ROLLED_LIP_NEW_CENTER_Y as R47_LIP_Y,
+                BAFFLE_NEW_CENTER_Y as R47_BAFFLE_Y,
+                CASTELLATED_BAFFLE as R47_BAFFLE,
+                UPPER_LENGTH_MULTIPLIER as R47_FIN_GAIN,
+                UPPER_SHEETS as R47_UPPER_COUNT)
+            if (scene.get("fsc_r47_revision")!=R47_REV or
+                scene.get("fsc_r47_source_sha256")!=R47_SHA or
+                int(scene.get("fsc_r47_upper_long_sheets",0))!=R47_UPPER_COUNT or
+                abs(float(scene.get("fsc_r47_fin_axial_multiplier",0))-R47_FIN_GAIN)>.001 or
+                not scene.get("fsc_r47_no_lower_source_key_edits") or
+                not scene.get("fsc_r47_no_new_rings_meshes_cameras_lights_or_effects") or
+                not scene.get("fsc_r47_preserved_R18_lower_motion_and_R36_cups")):
+                raise RuntimeError("R47 saved-scene source fin/aperture invariants missing")
+            liner=bpy.data.objects["R11_OPEN_DEEP_REFRACTORY_THROAT"]
+            shell=bpy.data.objects["vanilla_reference_bell_bronzed_rolled_bell"]
+            lip=bpy.data.objects.get(R47_LIP)
+            segment_count=40
+            if (abs(liner.data.vertices[0].co.y-R47_MOUTH)>.001 or
+                abs(liner.data.vertices[segment_count].co.y-R47_SECOND)>.001 or
+                abs(shell.data.vertices[7*segment_count].co.y-R47_EXT)>.001 or
+                lip is None or not lip.get("R47_same_ring_recessed_behind_fin_faces") or
+                lip.data.materials[0].name!=R47_METAL or
+                abs(sum(v.co.y for v in lip.data.vertices)/len(lip.data.vertices)-R47_LIP_Y)>.002):
+                raise RuntimeError("R47 actual physical bevel or recessed rim not saved")
+            baffle=bpy.data.objects.get(R47_BAFFLE)
+            if (baffle is None or
+                not baffle.get("R47_existing_castellated_ring_moved_to_bevel") or
+                abs(sum(v.co.y for v in baffle.data.vertices)/len(baffle.data.vertices)-R47_BAFFLE_Y)>.002):
+                raise RuntimeError("R47 original castellated aperture band not moved")
+            for n in range(R47_UPPER_COUNT):
+                plate=bpy.data.objects[f"R11_SUSPENDED_AFTERBURNER_VANE_{n:02d}"]
+                if (not plate.get("R47_extended_original_upper_sheet") or
+                    abs(float(plate.get("R47_upper_fin_reach_multiplier",0))-R47_FIN_GAIN)>.001 or
+                    plate.data.shape_keys is not None):
+                    raise RuntimeError("R47 upper original fin failed twofold physical reach")
+            print("R47_DEEP_BEVEL_RECESSED_RIM_LONG_SOURCE_FINS_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)
@@ -1063,6 +1109,14 @@ def test_one(path):
                     raise RuntimeError("R35 saved mesh not source-proportion candidate")
                 tip=ob.data.vertices[(len(R21_STATIONS)-1)*11].co
                 expected_tip=-2.34+(-3.47+2.34)*expected_gain
+                if n<5:
+                    # R47 makes R35 a staging baseline only for upper fins;
+                    # the actual final mesh is almost twice as long and
+                    # saved before R18 lower shape keys are installed.
+                    from vanilla_deep_aperture_and_long_fins_r47 import (
+                        UPPER_LENGTH_MULTIPLIER as R47_FIN_GAIN,
+                        FIN_ROOT_Y as R47_FIN_ROOT)
+                    expected_tip=R47_FIN_ROOT+(expected_tip-R47_FIN_ROOT)*R47_FIN_GAIN
                 if abs(tip.y-expected_tip)>.002:
                     raise RuntimeError("R35.1 source-relative inner fin length mismatch")
                 if ob.data.shape_keys is None or not ob.get("R21_integral_centerline_ridge"):

@@ -364,6 +364,12 @@ def build_thruster(name,w,h,root,p):
         vanilla_inner_fin_proportions_r35.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R47 source correction: near-twofold reach for existing upper
+        # metal tabs BEFORE R18 creates its four lower 64-frame shape keys.
+        import vanilla_deep_aperture_and_long_fins_r47
+        vanilla_deep_aperture_and_long_fins_r47.extend_fins(
+            name,root,p,{},bpy.context.scene
+        )
         # R18: only lower observable apron tips vary across 64 real frames.
         import vanilla_distal_motion_r18
         vanilla_distal_motion_r18.apply(
@@ -468,6 +474,11 @@ def build_thruster(name,w,h,root,p):
         # Neither speculative new parts nor camera hacks are permitted.
         import vanilla_throat_mounts_r45
         vanilla_throat_mounts_r45.apply(
+            name,root,p,{},bpy.context.scene
+        )
+        # R47: relocate existing metal rim, expose the physical
+        # castellated band and extend R42/R11 geometry into deeper bevel.
+        vanilla_deep_aperture_and_long_fins_r47.bevel_aperture(
             name,root,p,{},bpy.context.scene
         )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")

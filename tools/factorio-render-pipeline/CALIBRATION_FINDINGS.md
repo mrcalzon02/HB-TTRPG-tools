@@ -1548,3 +1548,49 @@ pixel difference caused by the toggle, restore ALL visibility flags,
 do not write a modified .blend and do not copy source pixels to GitHub.
 This will distinguish physical occlusion from insufficient exposed
 surface relief before another mesh edit.
+
+
+### R46 physical first-hit diagnosis and R47 longer fin/deeper bevel candidate
+
+Authoritative private original archive remains SHA256
+`0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791`.
+R46 full GitHub Blender job [#40628567163](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40628567163) SUCCESS.
+The actual `aperture-isolation-r46/aperture-isolation.json` reports the
+original R45 castellated ring has 2,621 opaque pixels in isolation,
+native alpha bounds `[61,350,198,448]`, but only 633 pixels of the
+assembled RGB/alpha ROI x52..212,y360..495 change when this ring is
+temporarily hidden (mean max RGBA change only 0.000472). **Strong physical
+occlusion is verified**. Visibility/camera restored; scene unchanged.
+
+Operator specifically corrected source interpretation: metal inner tabs/fins
+should extend approximately TWO TIMES their visible current axial reach;
+side cuts at the previous visible lip location mark the edge of the
+STRUCTURE, not the final depth of the throat. The bright exposed ring
+crossing the three hanging heat-stained fins is placed incorrectly, though
+a ring is physically needed elsewhere in the mouth.
+
+R47 candidate source-directed *physical* change:
+* Keep same original ten R21 sheets and 2 punched slot openings each.
+  Double only the existing five upper sheets' distal axial reach by 1.90,
+  locking every root and BEFORE existing R18 animates the 4 lower sheets.
+  Keep the source-observed lower fins/64-frame motion and the two external
+  R36 cupped covers untouched.
+* Keep the 8-ring R42 exterior bell and all 280 original exterior faces.
+  Last ring extends from y=-3.025 to -3.47, so the unchanged prior outer
+  lip/side-cut crest leads into a genuinely LONGER MOUTH BEVEL.
+* Keep R11 original 13x40 open liner, no end caps; first two mouth rings
+  deepen from (-3.27,-3.19) to (-3.54,-3.34). Remaining flutes, original
+  R13 shared refractory shader and 40 original strakes untouched.
+* Physically move the SAME original R04 brass torus from y=-2.985 to
+  y=-3.47 at reduced 1.425 major radius, reusing existing oxidized R13
+  shell metal shader. It should no longer form a bright arc across the fins.
+* Move the SAME castellated R45 source collar from y=-2.70,r=1.02 to
+  y=-3.245,r=1.335 so that its dark radial segments become physically
+  apparent within the newly extended bevel.
+* No new rings, part population, shader, hidden rig, artificial overlays,
+  lighting or camera cheats. Original source sprites remain private.
+
+This R47 is a **candidate only** until full Blender 4.5.15 scene reopen,
+original capture no-clipping and exact 264x542 native RGBA comparisons.
+User's source observation supersedes the previous R35.1 upper-tip
+shortening hypothesis, but does NOT erase its historical baseline metadata.
