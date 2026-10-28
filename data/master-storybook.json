@@ -16,13 +16,16 @@
       "royal",
       "embryon"
     ],
-    "estelleFirstYearState": "unborn",
-    "estelleBirthRestriction": "regnal year >= 2, exact year unknown",
+    "estelleFirstYearState": "Unborn at the midpoint opening of Beneath Dappled Oaks; born later during Rome's first regnal year",
+    "estelleBirthRestriction": "Born in Rome's FIRST regnal year, 85 days after the working novel opening",
     "castleNameCollision": "Luceran's Nowhere King ≠ Magenheim boss",
     "productionDateIsNotInWorldDate": true,
     "gameMechanicIsNotStoryOccurrence": true,
     "relativeEventsNeverAssignedExactDaysAutomatically": true,
-    "doNotAlterPublishedSourceFictionToFitIndex": true
+    "doNotAlterPublishedSourceFictionToFitIndex": true,
+    "estelleBirthDateAuthority": "Working 266-day conception-to-birth estimate; owner established first-year birth, not a witnessed exact delivery day",
+    "sixteenYearFormat": "16 complete Estelle life-years, birth through 16th birthday, spanning part of 17 Rome regnal years",
+    "estelleSixteenthBirthday": "15 Casktide, 298 S.M. working estimate, in Rome's 17th regnal year"
   },
   "monthNames": [
     "Thawcall",
@@ -232,10 +235,10 @@
         "month": 1,
         "day": 1,
         "calendar": "S.M.",
-        "label": "First regnal year · exact accession day unconfirmed (working 1 Thawcall 282 S.M.)"
+        "label": "1 Thawcall, 282 S.M. — working accession, wedding, conception"
       },
       "status": "owner_relative_working_exact",
-      "summary": "Rome inherits the constitutional Moon-Crown system; the exact Avariel pedigree and legal accession route need reconciliation.",
+      "summary": "Rome's first regnal year begins. The wedding and conception are synchronized to this day for the royal-family planning model; his Avariel genealogy remains unresolved.",
       "sources": [
         "docs/shared-universe/ELARANTH-REGNAL-CHRONICLE.md",
         "docs/characters/royal-history-chronicle.md"
@@ -256,10 +259,10 @@
         "month": 7,
         "day": 14,
         "calendar": "S.M.",
-        "label": "Halfway through Rome's first regnal year · working 14 Deepdelve, 282 S.M."
+        "label": "14 Deepdelve, 282 S.M. — working midpoint of Rome's first regnal year"
       },
       "status": "owner_canon_relative_working_exact",
-      "summary": "Rome and Daysha are reigning spouses. Estelle has not been born. The Last Seven enter a court shadowed by Silver Night and institutional politics.",
+      "summary": "Beneath Dappled Oaks opens while Estelle remains unborn, 85 days before her projected birth; Rome and Daysha reign in Elaranth.",
       "sources": [
         "docs/shared-universe/ELARANTH-REGNAL-CHRONICLE.md",
         "docs/beneath-dappled-oaks/00-HEY-USE-ME-AUTOMATION-MASTER-SETTING-ARCHIVE.md"
@@ -360,22 +363,26 @@
       "id": "EL-009",
       "worldId": "elaranth",
       "workId": "royal",
-      "title": "Princess Estelle is born after the first regnal year",
+      "title": "The expected birth of Princess Estelle",
       "when": {
-        "kind": "bounded",
-        "label": "After Rome's first regnal year; birth date not established",
-        "notBeforeRegnalYear": 2,
+        "kind": "working_day",
+        "year": 282,
+        "month": 10,
+        "day": 15,
+        "calendar": "S.M.",
+        "label": "15 Casktide, 282 S.M. — projected Estelle birth",
+        "elapsedDay": 266,
         "after": [
           "EL-003"
         ]
       },
-      "status": "owner_canon_constraint",
-      "summary": "Estelle is unborn during all of Rome's first year. Her birth, later childhood and sixteenth birthday require their own independent child-age clock.",
+      "status": "first_regnal_year_birth_owner_canon_day_is_projected",
+      "summary": "Estelle is born later in Rome's FIRST regnal year, after the midpoint opening of Beneath Dappled Oaks. Exact working day assumes conception at the wedding plus 266 days.",
       "sources": [
         "docs/shared-universe/ELARANTH-REGNAL-CHRONICLE.md",
         "docs/characters/royal-history-chronicle.md"
       ],
-      "estelleState": "future_birth_undated"
+      "estelleState": "born_after_novel_opening"
     },
     {
       "id": "EL-010",
@@ -383,14 +390,19 @@
       "workId": "royal",
       "title": "Princess Estelle's sixteenth birthday",
       "when": {
-        "kind": "dependent",
-        "label": "Exactly sixteen years after her actual birth; civil/regnal year not set",
+        "kind": "working_day",
+        "year": 298,
+        "month": 10,
+        "day": 15,
+        "calendar": "S.M.",
+        "label": "15 Casktide, 298 S.M. — projected sixteenth birthday",
+        "elapsedDay": 6090,
         "after": [
           "EL-009"
         ]
       },
-      "status": "endpoint_canon_date_unknown",
-      "summary": "The royal-history long arc eventually reaches Estelle at sixteen; do not assume this happens during Rome's sixteenth regnal year.",
+      "status": "sixteenth_birthday_age_established_day_projected",
+      "summary": "Sixteen complete Elaranthi years after projected birth, during Rome's SEVENTEENTH regnal year; endpoint is in life-year row 16 of royal CSV.",
       "sources": [
         "docs/characters/royal-history-chronicle.md"
       ],
@@ -1092,13 +1104,13 @@
       "title": "The royal jewel delivery chase",
       "when": {
         "kind": "bounded",
-        "label": "Future of Rome's first regnal year, after Estelle's birth; exact year and age unknown",
+        "label": "After Estelle's first-year birth; later childhood date unknown",
         "after": [
           "EL-009"
         ],
         "relativeOrder": null
       },
-      "status": "established_scene_undated",
+      "status": "established_family_scene_undated",
       "summary": "Daysha and daughter Estelle chase a jewel delivery later revealed to be intended for the Queen Mother.",
       "sources": [
         "data/royal-history-chronicle.json",
@@ -1119,13 +1131,13 @@
       "title": "Palace garden tea and royal daycare",
       "when": {
         "kind": "bounded",
-        "label": "Future of Rome's first regnal year, after Estelle's birth; exact year and age unknown",
+        "label": "After Estelle's first-year birth; later childhood date unknown",
         "after": [
           "EL-009"
         ],
         "relativeOrder": null
       },
-      "status": "established_scene_undated",
+      "status": "established_family_scene_undated",
       "summary": "The family shares pastries; Estelle visits royal daycare.",
       "sources": [
         "data/royal-history-chronicle.json",
@@ -1146,13 +1158,13 @@
       "title": "Estelle's glitter balloon prank",
       "when": {
         "kind": "bounded",
-        "label": "Future of Rome's first regnal year, after Estelle's birth; exact year and age unknown",
+        "label": "After Estelle's first-year birth; later childhood date unknown",
         "after": [
           "EL-009"
         ],
         "relativeOrder": null
       },
-      "status": "established_scene_undated",
+      "status": "established_family_scene_undated",
       "summary": "Estelle pelts Rome with a glitter-filled water balloon while ministers laugh; a corrected bursting-balloon illustration is approved.",
       "sources": [
         "data/royal-history-chronicle.json",
@@ -1173,13 +1185,13 @@
       "title": "Family catroom and magical cleanup",
       "when": {
         "kind": "bounded",
-        "label": "Future of Rome's first regnal year, after Estelle's birth; exact year and age unknown",
+        "label": "After Estelle's first-year birth; later childhood date unknown",
         "after": [
           "EL-009"
         ],
         "relativeOrder": null
       },
-      "status": "established_scene_undated",
+      "status": "established_family_scene_undated",
       "summary": "Rome is glitter-covered with two Maine Coons; Daysha magically cleans him before the family walks toward the courtyard.",
       "sources": [
         "data/royal-history-chronicle.json",
@@ -1192,6 +1204,26 @@
       ],
       "dateLocked": false,
       "invoiceUnverified": true
+    },
+    {
+      "id": "EL-011",
+      "worldId": "elaranth",
+      "workId": "royal",
+      "title": "1,000 days elapsed since Rome and Daysha's wedding",
+      "when": {
+        "kind": "working_day",
+        "year": 284,
+        "month": 10,
+        "day": 21,
+        "calendar": "S.M.",
+        "label": "21 Casktide, 284 S.M. — day 1000",
+        "elapsedDay": 1000
+      },
+      "status": "project_planning_anchor_not_a_specific_mission",
+      "summary": "Estelle is two full Elaranthi years plus six days old. This indexes the user's 1,000-day game horizon without asserting a thousand specific historical royal adventures.",
+      "sources": [
+        "data/royal-sixteen-year-timeline.csv"
+      ]
     }
   ],
   "outstandingContinuity": [
@@ -1214,8 +1246,8 @@
     },
     {
       "worldId": "elaranth",
-      "title": "Estelle birth date and sixteenth-birthday regnal year",
-      "status": "not_yet_established",
+      "title": "Promote projected Estelle birth day after scene-level confirmation; map undated child-age illustrations",
+      "status": "first_year_birth_fixed_exact_day_projected",
       "sources": [
         "docs/characters/royal-history-chronicle.md"
       ]
@@ -1250,6 +1282,8 @@
     "elaranthCharter": "docs/shared-universe/ELARANTH-REGNAL-CHRONICLE.md",
     "bdoMaster": "docs/beneath-dappled-oaks/00-HEY-USE-ME-AUTOMATION-MASTER-SETTING-ARCHIVE.md",
     "nowhereAuthority": "docs/nowhere-king/11-ACTIVE-CONTINUITY-STATE.md",
-    "embryon": "https://github.com/mrcalzon02/Jewel_Brook"
+    "embryon": "https://github.com/mrcalzon02/Jewel_Brook",
+    "royalSixteenLifeYears": "data/royal-sixteen-year-timeline.csv",
+    "royalArtworkPlacement": "data/royal-artwork-placement.csv"
   }
 }
