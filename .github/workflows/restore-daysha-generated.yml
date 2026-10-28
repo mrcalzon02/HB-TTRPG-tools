@@ -8,7 +8,7 @@ permissions:
   contents: write
 concurrency:
   group: one-time-daysha-original-restore
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   restore-approved-only:
     runs-on: ubuntu-latest
@@ -16,12 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
+          filter: blob:none
           persist-credentials: true
       - name: Recover exactly twelve pre-audited generated WebP objects
         shell: bash
         run: |
           set -euo pipefail
+          git fetch --no-tags --filter=blob:none --depth=1 origin cc35afc4c04f179335e97b3aa866640c4b0c4ad3
           git restore --source=cc35afc4c04f179335e97b3aa866640c4b0c4ad3 -- \
             assets/daysha/royal-purchases/src-0000000057e8.webp \
             assets/daysha/royal-purchases/celestial-elven-princess-in-bloom.webp \
