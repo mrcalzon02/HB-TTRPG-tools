@@ -1,0 +1,166 @@
+{
+  "date": "2026-10-27",
+  "baseline": "eef747d0c3f46e4605cd768d196f497806d866b7",
+  "scope": "Original procedural IRON diffuse tile only; material IDs, UVs, atlas size, other15tiles and renderer/lighting/van classes preserved.",
+  "cause": "The original tile explicitly darkened every eighth X pixel by17 levels; repeated UVs stamped grooves across broad painted panels.",
+  "change": "Replace forced directional grooves with bounded periodic 2D wear, fine grain and sparse small pits. Geometry retains actual ribs and panel seams.",
+  "groove_phase_contrast_before": 16.651785714285708,
+  "groove_phase_contrast_after": 0.0569196428571388,
+  "other15tiles_sha256": "baa65d08a699588d61ff1d923c84a4400ebffdde37f4d78488c96d19bf094441",
+  "unchanged_classes": {
+    "org/beckenburg/SceneRenderer.class": "a43af66953f1aa0b778c8c792066a2a322d5544b80de75a3f4677aa63720303b",
+    "org/beckenburg/FixtureLighting.class": "b4ce041d7e6f060664785c786bae99525a8ab827191b28fd19fa99d71e7d3012",
+    "org/beckenburg/VanInteriorLayout.class": "8059efba0b2e7297ef5c0222e1549364a7095121294ce4cec5cd5f656675ebf9"
+  },
+  "capture_process_exit": {
+    "before": 0,
+    "after": 0
+  },
+  "captures": [
+    {
+      "map": "van-house",
+      "view": "workstation",
+      "frame": "2",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "69.5744",
+      "bright_pixels": "127597",
+      "sha256": "a755f7da40135d4531988457c304fba48609c35569d513d53125715832b56ecf",
+      "phase": "before",
+      "path": "development/levels/previews/metal-refinement/before/van-house-workstation.png"
+    },
+    {
+      "map": "van-house",
+      "view": "equipment",
+      "frame": "5",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "73.4799",
+      "bright_pixels": "135919",
+      "sha256": "f1e79b79cea7ef5ae7f12731495baf3bde23db45a9b1cb005e0bf7b75b063dc3",
+      "phase": "before",
+      "path": "development/levels/previews/metal-refinement/before/van-house-equipment.png"
+    },
+    {
+      "map": "van-house",
+      "view": "roof",
+      "frame": "8",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "45.0565",
+      "bright_pixels": "109311",
+      "sha256": "39a023dd909c7400da7b9418f7a480a7b4df7723ca385dae0ba58d40b7a60d01",
+      "phase": "before",
+      "path": "development/levels/previews/metal-refinement/before/van-house-roof.png"
+    },
+    {
+      "map": "van-hollow-creek",
+      "view": "workstation",
+      "frame": "11",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "67.0878",
+      "bright_pixels": "117333",
+      "sha256": "042cbae1677247a243960900bc76797fadcd283050ff60bb9840ee6611e3b4ab",
+      "phase": "before",
+      "path": "development/levels/previews/metal-refinement/before/van-hollow-creek-workstation.png"
+    },
+    {
+      "map": "van-hollow-creek",
+      "view": "equipment",
+      "frame": "14",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "67.9079",
+      "bright_pixels": "107878",
+      "sha256": "f37174aa9d14eac900753db526c187349ed91f5b2db2f943ed825b58f992a9a3",
+      "phase": "before",
+      "path": "development/levels/previews/metal-refinement/before/van-hollow-creek-equipment.png"
+    },
+    {
+      "map": "van-hollow-creek",
+      "view": "roof",
+      "frame": "17",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "41.8498",
+      "bright_pixels": "93582",
+      "sha256": "7c5c27338c13ac9f9a55118a78bbcb7f696134e9dc69b24736fb2fbf16447fc8",
+      "phase": "before",
+      "path": "development/levels/previews/metal-refinement/before/van-hollow-creek-roof.png"
+    },
+    {
+      "map": "van-house",
+      "view": "workstation",
+      "frame": "2",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "70.8990",
+      "bright_pixels": "127750",
+      "sha256": "b4cc0362688f8be2c6f2f1eefc161093da194a4b4f0f2353cc82bfb73dcb31c3",
+      "phase": "after",
+      "path": "development/levels/previews/metal-refinement/after/van-house-workstation.png"
+    },
+    {
+      "map": "van-house",
+      "view": "equipment",
+      "frame": "5",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "74.5040",
+      "bright_pixels": "136324",
+      "sha256": "c6d90928933e348b03aa4e64022c926f6b02ed13a3c9e35ccad93fa68bd99ff0",
+      "phase": "after",
+      "path": "development/levels/previews/metal-refinement/after/van-house-equipment.png"
+    },
+    {
+      "map": "van-house",
+      "view": "roof",
+      "frame": "8",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "45.4065",
+      "bright_pixels": "109550",
+      "sha256": "4d41f1533017e391da87a7d0026d6e179c65df488a2bfcca7f4e6463a10ac842",
+      "phase": "after",
+      "path": "development/levels/previews/metal-refinement/after/van-house-roof.png"
+    },
+    {
+      "map": "van-hollow-creek",
+      "view": "workstation",
+      "frame": "11",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "68.3741",
+      "bright_pixels": "117353",
+      "sha256": "8bbdb4773a55353300efebb77dcaabe9ac57fc306d016a65d95704436942653e",
+      "phase": "after",
+      "path": "development/levels/previews/metal-refinement/after/van-hollow-creek-workstation.png"
+    },
+    {
+      "map": "van-hollow-creek",
+      "view": "equipment",
+      "frame": "14",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "68.7355",
+      "bright_pixels": "107880",
+      "sha256": "bcf6a14e6f92a5c7e737cffffca40b9d69ebb60199dc1dbfeae1042e3b595205",
+      "phase": "after",
+      "path": "development/levels/previews/metal-refinement/after/van-hollow-creek-equipment.png"
+    },
+    {
+      "map": "van-hollow-creek",
+      "view": "roof",
+      "frame": "17",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "42.1167",
+      "bright_pixels": "93585",
+      "sha256": "4c4b79a05e57ebe351b01c12712b6a7e5598e62a540ccbc750c7735a1ed0b7f6",
+      "phase": "after",
+      "path": "development/levels/previews/metal-refinement/after/van-hollow-creek-roof.png"
+    }
+  ],
+  "acceptance": "Actual OpenGL static van captures and focused material tests. Human art acceptance, other-map full-room review, installed performance and the default-off renderer candidate remain separate."
+}

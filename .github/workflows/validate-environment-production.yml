@@ -1,0 +1,20 @@
+name: Validate portable environment production kit
+on:
+  push:
+    paths: ['skills/environment-production/**', '.github/workflows/validate-environment-production.yml']
+  pull_request:
+    paths: ['skills/environment-production/**', '.github/workflows/validate-environment-production.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  portable-kit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s skills/environment-production/tests -v
+      - run: python skills/environment-production/scripts/build_package.py --check
+      - run: python skills/environment-production/scripts/verify_distribution.py

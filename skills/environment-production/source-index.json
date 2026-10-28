@@ -1,0 +1,161 @@
+{
+  "source_repository": "mrcalzon02/The-Beckenburg-Project",
+  "input_revision": "db6c5b6a93d00426d8cc7b2c0f69515b824e0e75",
+  "snapshot_date": "2026-10-28",
+  "policy": "Pinned committed source only; concurrent uncommitted Castle work excluded. Reports are historical observations, not new executions. External game assets are not bundled.",
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "5ef0f6daaa5635eceea4d0f8671225df0bd0dededc942fe14d9f932cb5e35f75",
+      "bytes": 5008,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/AGENTS.md"
+    },
+    {
+      "path": "development/levels/PRODUCTION_WORKFLOW.md",
+      "sha256": "00208769c008f882df9945a21622ee95f8499ccecf106bf10790f729977bf8ec",
+      "bytes": 16821,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/PRODUCTION_WORKFLOW.md"
+    },
+    {
+      "path": "development/quality/MAP_FITNESS_CHECKLIST.md",
+      "sha256": "be671def22f004ea81e8d83fdf51caaa25d6fd0f46fc25cbcc5245d1ec0be978",
+      "bytes": 5140,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/quality/MAP_FITNESS_CHECKLIST.md"
+    },
+    {
+      "path": "development/quality/DESQUAREIFY_GATE.md",
+      "sha256": "372d23b75445aa5e29eb7ac73e01b1a910e659feae920795a9543316a385b603",
+      "bytes": 2761,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/quality/DESQUAREIFY_GATE.md"
+    },
+    {
+      "path": "development/quality/REMOTE_SITE_POWER.md",
+      "sha256": "88e1c9ddd820f043e935f6b390b20fd34506671f17eb1750a68fc874ff2895ec",
+      "bytes": 2070,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/quality/REMOTE_SITE_POWER.md"
+    },
+    {
+      "path": "development/quality/HIDING_SPOT_BUDGET.md",
+      "sha256": "b480acbd0cee3b5e46660a4e60c82d9ef8866146baa456b64c7ede6a27c2b147",
+      "bytes": 1751,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/quality/HIDING_SPOT_BUDGET.md"
+    },
+    {
+      "path": "development/levels/FINAL_STORY_AND_EASTER_EGGS.md",
+      "sha256": "b88916273268b345625d818c33e384d316d307f6d85bcd3a33954629887e520b",
+      "bytes": 3180,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/FINAL_STORY_AND_EASTER_EGGS.md"
+    },
+    {
+      "path": "development/levels/LOOSE_OBJECTS_WORKFLOW.md",
+      "sha256": "ce170a63b4f8aba0a8737a76e5d966b1cb166d0630481a1b4aaf98ead90649cf",
+      "bytes": 6961,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/LOOSE_OBJECTS_WORKFLOW.md"
+    },
+    {
+      "path": "development/levels/ENCLOSURES_AND_LIGHTING.md",
+      "sha256": "0917c8cb0c927cc7aa90af604305121feb8d12f1a7760cb7d928ee61e6732026",
+      "bytes": 6043,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/ENCLOSURES_AND_LIGHTING.md"
+    },
+    {
+      "path": "development/levels/VAN_REFIT_WORKFLOW.md",
+      "sha256": "348149f21b02972181c69ac6c91e574d73ea2fdfd66329d849b57ff251e7b1bd",
+      "bytes": 5693,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/VAN_REFIT_WORKFLOW.md"
+    },
+    {
+      "path": "development/levels/INTERACTION_UI_WORKFLOW.md",
+      "sha256": "38ccd40cc1d027b0f7b27fdabc4752e708069272d400abe07c8d4dd3a8f603a3",
+      "bytes": 7004,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/INTERACTION_UI_WORKFLOW.md"
+    },
+    {
+      "path": "development/levels/EVENT_FIXTURES_WORKFLOW.md",
+      "sha256": "5781cbec8aaf5c3aa0b807d664cd21bb5cf030417b812408919c0f59236835a9",
+      "bytes": 7413,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/EVENT_FIXTURES_WORKFLOW.md"
+    },
+    {
+      "path": "development/levels/hollow-creek/DETAIL_PASS.md",
+      "sha256": "f7a1f4338c7baa6124e4cd6819ca99078d25e6a1648568a5b3484b7d8fa1f0ca",
+      "bytes": 8878,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/hollow-creek/DETAIL_PASS.md"
+    },
+    {
+      "path": "development/levels/model-requirements/catalog.json",
+      "sha256": "09ddcd76a2b00293d99db89922b77b1b8a53951668cde2a9244bae6f7e2521e5",
+      "bytes": 4648,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/model-requirements/catalog.json"
+    },
+    {
+      "path": "development/levels/DEVELOPMENT_HANDOFF_2026-10-28_LIGHT_JOINS.md",
+      "sha256": "7f44b650e513ff26fd1c96ea0cd2b8624be092020588a2cc1aa958d0b834404b",
+      "bytes": 3179,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/DEVELOPMENT_HANDOFF_2026-10-28_LIGHT_JOINS.md"
+    },
+    {
+      "path": "development/levels/DEVELOPMENT_HANDOFF_2026-10-27_METAL_REFINEMENT.md",
+      "sha256": "475742604a9b788d91f940e88646759bbfc62fedaf903d07f2d4a3049e3f3c91",
+      "bytes": 2385,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/DEVELOPMENT_HANDOFF_2026-10-27_METAL_REFINEMENT.md"
+    },
+    {
+      "path": "tools/build_development_gallery.py",
+      "sha256": "6ef23862170d74ea8290c9c1aef5d7aec5147defcd5796f4db607d4aa15a6e6f",
+      "bytes": 3551,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/tools/build_development_gallery.py"
+    },
+    {
+      "path": "tools/verify_development_gallery.py",
+      "sha256": "6cf44aa250fe6bcc33c1455daccec61e0acadf290284e1ef5659f74e0eb53930",
+      "bytes": 4450,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/tools/verify_development_gallery.py"
+    },
+    {
+      "path": "tools/build_fixture_join_review.py",
+      "sha256": "2ce4d4ecfdd61751f178922a95006c7899d8cfd4fe887682b79543e3e426f0e4",
+      "bytes": 4804,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/tools/build_fixture_join_review.py"
+    },
+    {
+      "path": "tools/build_metal_review.py",
+      "sha256": "14300a05628d1ae68f023c2f748c170b4e5cc61d47e8c8530de31fd77428ebb8",
+      "bytes": 4195,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/tools/build_metal_review.py"
+    },
+    {
+      "path": "water-module/README.md",
+      "sha256": "a9f0917eb37b1c5602cf952ad055550e03c03464f7cab31c52abebf956726e74",
+      "bytes": 4727,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/water-module/README.md"
+    },
+    {
+      "path": "water-module/EDITOR.md",
+      "sha256": "7a03eb3068a667104412ec8156b9fecedfcc305361bf8437181f5b3fabf41777",
+      "bytes": 3143,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/water-module/EDITOR.md"
+    },
+    {
+      "path": "development/levels/verification/fixture-join-diagnostic-2026-10-28.json",
+      "sha256": "6dc3bc428bc2fc507fc729a40b501716263cf5433b659488df64a8fa894da674",
+      "bytes": 8846,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/verification/fixture-join-diagnostic-2026-10-28.json",
+      "bundled_copy": "references/evidence/fixture-join-diagnostic-2026-10-28.json"
+    },
+    {
+      "path": "development/levels/verification/metal-refinement-2026-10-27.json",
+      "sha256": "4a1cb96271e448ed168464cf3aac4cc4042e69dcc93ae7d3fe4c45d5bff42b46",
+      "bytes": 6188,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/verification/metal-refinement-2026-10-27.json",
+      "bundled_copy": "references/evidence/metal-refinement-2026-10-27.json"
+    },
+    {
+      "path": "development/levels/verification/map-compatibility-2026-10-26.json",
+      "sha256": "c3043e296c1c231cae2b02f05a103b8030022428869a4fbcd039ffe35a841505",
+      "bytes": 32793,
+      "url": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/db6c5b6a93d00426d8cc7b2c0f69515b824e0e75/development/levels/verification/map-compatibility-2026-10-26.json",
+      "bundled_copy": "references/evidence/map-compatibility-2026-10-26.json"
+    }
+  ]
+}

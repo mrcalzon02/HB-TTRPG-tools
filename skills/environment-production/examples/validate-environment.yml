@@ -1,0 +1,22 @@
+# Copy to the target project's .github/workflows and adjust package/packet paths.
+# This validates supplied records; add reviewed engine adapters separately.
+name: Validate environment evidence packet
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate declared complete milestone
+        run: python skills/environment-production/scripts/production.py report development/example-site/packet.json --require-complete --output environment-review.html
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: environment-evidence-review
+          path: environment-review.html

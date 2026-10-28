@@ -78,7 +78,8 @@
         "campaign-ledger-management",
         "random-table-and-oracle-resolution",
         "tabletop-check-resolution",
-        "tabletop-battlespace-visualization"
+        "tabletop-battlespace-visualization",
+        "environment-production"
       ],
       "useFor": [
         "Charles",
@@ -1249,6 +1250,38 @@
         "battlefield_tokens.csv",
         "battlefield_terrain.csv",
         "battlefield_effects.csv"
+      ]
+    },
+    {
+      "name": "environment-production",
+      "path": "skills/environment-production/SKILL.md",
+      "status": "onboardable",
+      "capabilityIds": [],
+      "resourceIds": [
+        "foundry.environment-production"
+      ],
+      "laboratoryIds": [],
+      "useFor": [
+        "iterative map development",
+        "terrain and desquareification",
+        "environment model refinement",
+        "visual verification",
+        "map quality gates",
+        "environment evidence packet",
+        "production handoff"
+      ],
+      "personalityPolicy": "inherit-default",
+      "personalityEngramIds": [
+        "blacklight.charles"
+      ],
+      "portablePackage": "skills/environment-production/manifest.json",
+      "helperPaths": [
+        "skills/environment-production/scripts/production.py"
+      ],
+      "executionRequirements": [
+        "python3.10+",
+        "writable-sandbox",
+        "project-specific-engine-adapters"
       ]
     }
   ]

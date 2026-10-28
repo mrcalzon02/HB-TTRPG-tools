@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Iterative environment production Agent Skill | Calzon’s TTRPG Foundry</title>
+<meta name="description" content="Develop and review authored 3D maps and their supporting models through terrain, architecture, functional integration, visual refinement, story dressing, and evidence-based acceptance. Use for iterative environment production or migration of its workflow between local, web, and CI hosts.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/environment-production.html">
+<link rel="alternate" type="text/markdown" href="../skills/environment-production/SKILL.md" title="Authoritative SKILL.md">
+<link rel="alternate" type="application/json" href="../skills/index.json" title="Authoritative Agent Skills Registry">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../workspace-landing.css">
+<style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style>
+</head>
+<body>
+<header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Iterative environment production</h1><p class="subtitle">Develop and review authored 3D maps and their supporting models through terrain, architecture, functional integration, visual refinement, story dressing, and evidence-based acceptance. Use for iterative environment production or migration of its workflow between local, web, and CI hosts.</p></div>
+<nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../ai-access.html">AI Access</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header>
+<main>
+<section class="hero-card">
+<p><strong>HTML compatibility projection.</strong> Authority remains <code>skills/environment-production/SKILL.md</code> and <code>skills/index.json</code>. This page mirrors instructions and discovery metadata only; it does not duplicate runtime logic or create an execution transport.</p>
+<p><a class="link-button primary-action" href="../skills/environment-production/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/skills/environment-production/SKILL.md">GitHub HTML source</a></p>
+</section>
+<section class="registry-section"><h2>Registered integration metadata</h2>
+<p><strong>Name:</strong> <code>environment-production</code> · <strong>Status:</strong> <code>onboardable</code> · <strong>Version:</strong> <code>1.0.0</code></p>
+<p><strong>Capability IDs:</strong> <span class="helper-note">None registered</span></p>
+<p><strong>Resource IDs:</strong> <code>foundry.environment-production</code></p>
+<p><strong>Laboratory IDs:</strong> <span class="helper-note">None registered</span></p>
+<p><strong>Compatibility:</strong> Documents are remotely readable; evidence tools require Python 3.10+ and writable storage. Rendering and gameplay checks require target-engine adapters.</p>
+<p>Exact operation signatures remain authoritative in <a href="../api/operation-contracts.json">operation-contracts.json</a> and runtime/status declarations in <a href="../api/foundry-capabilities.json">foundry-capabilities.json</a>.</p>
+</section>
+<section class="registry-section"><h2>Complete SKILL.md projection</h2>
+<p>The following is the complete current skill document escaped into ordinary HTML for restricted model browsers.</p>
+<pre class="module-card">---
+name: environment-production
+description: Develop and review authored 3D maps and their supporting models through terrain, architecture, functional integration, visual refinement, story dressing, and evidence-based acceptance. Use for iterative environment production or migration of its workflow between local, web, and CI hosts.
+compatibility: Documents are remotely readable; evidence tools require Python 3.10+ and writable storage. Rendering and gameplay checks require target-engine adapters.
+metadata:
+  version: 1.0.0
+---
+
+# Iterative environment production
+
+Use this workflow to advance an existing environment from its current verified stage. Preserve accepted work; do not regenerate a map merely because a new session starts. The portable package is an evidence and production protocol, not a replacement game engine or procedural map generator.
+
+1. Read the project&#x27;s instructions, latest handoff, current map packet and open defects. Inspect branch, HEAD and uncommitted work. Agree on one concrete milestone within the user&#x27;s scope; audit existing terrain before adding structures.
+2. Read [the production guide](references/WORKFLOW.md) for stage gates and [standards and mathematics](references/STANDARDS.md) for geometry, support, lighting and capture contracts. Use project-specific tolerances and gameplay rules rather than importing Beckenburg constants blindly.
+3. Build or refine the smallest useful batch. Follow dependency invalidation: terrain changes reopen support/routes; model bounds reopen collision and placement; lighting changes reopen material and blackout reviews. Record new defects immediately and identify older-map audit obligations.
+4. Verify actual exported geometry, runtime integration and appropriate gameplay paths. Capture overhead and human-height views, plus close-ups of the changed details. Include negative and positive controls where a fix could hide the entire effect. Tests and attractive stills have separate scopes.
+5. Read [host adapters and evidence format](references/PORTABILITY.md) to use `scripts/production.py`. Initialize a packet, attach real artifacts and reviews, and validate it. Never relabel native previews as runtime, offline rendering as measured FPS, or automated checks as human acceptance.
+6. Publish source, exports, captures, report and a resumable handoff together when authorized. Verify remote commit and deployed artifact hashes separately. Preserve unresolved gates explicitly.
+
+Read [worked examples](references/CASE_STUDIES.md) when diagnosing recurring errors or explaining why these standards exist. [Provenance](PROVENANCE.md) identifies the pinned source, original review reports and governing terms.
+
+## Host boundaries
+
+- Reading these documents requires ordinary file or HTTP access. Python 3.10+ with a writable sandbox runs the evidence helper without third-party dependencies.
+- Blender, renderer, physics, networking, audio and hardware tests remain project adapters. The helper checks the supplied evidence record; it cannot independently prove the recorded observation occurred.
+- Static GitHub Pages provides discovery and downloads. It does not execute Python, edit a repository or render a game for a remote model. Use an authorized sandbox, CI runner or local host for those operations.
+- In the Foundry inherit the registry&#x27;s `blacklight.charles` presentation policy. No personality or skill grants tools, credentials or publication permission. The standalone production method does not depend on that persona.
+
+&lt;!-- CALZON_FOUNDRY_PROVENANCE_NOTICE --&gt;
+
+## Provenance and use
+
+Origin: Calzon&#x27;s TTRPG Foundry, maintained by mrcalzon02; distilled from The Beckenburg Project under human creative direction with OpenAI ChatGPT-assisted implementation and review. Keep [PROVENANCE.md](PROVENANCE.md) and the bundled [terms](TERMS-OF-SERVICE.md) with redistributed packages. Existing Foundry terms apply; this package does not relicense the game, purchased models, external references or third-party modules.
+</pre>
+</section>
+</main>
+<footer class="site-footer"><p><a href="../agent-skills.html">Agent Skills directory</a> · <a href="../skills/index.json">Authoritative registry</a> · <a href="../.well-known/ai-capabilities.json">AI discovery</a></p></footer>
+</body>
+</html>

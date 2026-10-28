@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "1.0.0",
+  "packageType": "hb-agent-skill-companion",
+  "skill": {
+    "name": "environment-production",
+    "agentSkillPath": "skills/environment-production/SKILL.md",
+    "packageVersion": "1.0.0"
+  },
+  "status": "runtime-required",
+  "runtime": {
+    "family": "python",
+    "class": "host-sandbox",
+    "minimumVersion": "3.10",
+    "authoritativePath": "skills/environment-production/scripts/production.py",
+    "dependencies": []
+  },
+  "executionRequirements": [
+    "python3.10+",
+    "writable-sandbox",
+    "project-specific-engine-adapters-for-rendering-and-gameplay"
+  ],
+  "operations": {
+    "initialize": "python scripts/production.py init DIRECTORY --map-id ID",
+    "validate": "python scripts/production.py validate PACKET [--require-complete]",
+    "report": "python scripts/production.py report PACKET --output HTML [--require-complete]",
+    "hash": "python scripts/production.py hash FILE",
+    "selfTest": "python -m unittest discover -s tests -v"
+  },
+  "evidence_kinds": [
+    "planning",
+    "native-geometry",
+    "model-review",
+    "visual-review",
+    "test-report",
+    "runtime-render",
+    "gameplay",
+    "multiplayer",
+    "hardware-performance",
+    "human-review",
+    "publication"
+  ],
+  "gates": [
+    {
+      "id": "concept-plan",
+      "requires": [
+        "planning"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "terrain-desquareify",
+      "requires": [
+        "native-geometry",
+        "visual-review"
+      ],
+      "depends_on": [
+        "concept-plan"
+      ]
+    },
+    {
+      "id": "architecture",
+      "requires": [
+        "native-geometry",
+        "test-report"
+      ],
+      "depends_on": [
+        "terrain-desquareify"
+      ]
+    },
+    {
+      "id": "model-fitness",
+      "requires": [
+        "model-review",
+        "visual-review"
+      ],
+      "depends_on": [
+        "concept-plan"
+      ]
+    },
+    {
+      "id": "placement-routes",
+      "requires": [
+        "test-report",
+        "gameplay"
+      ],
+      "depends_on": [
+        "architecture",
+        "model-fitness"
+      ]
+    },
+    {
+      "id": "lighting-materials",
+      "requires": [
+        "runtime-render",
+        "test-report",
+        "visual-review"
+      ],
+      "depends_on": [
+        "placement-routes"
+      ]
+    },
+    {
+      "id": "runtime-integration",
+      "requires": [
+        "gameplay",
+        "runtime-render"
+      ],
+      "depends_on": [
+        "lighting-materials"
+      ]
+    },
+    {
+      "id": "story-detail",
+      "requires": [
+        "visual-review",
+        "gameplay"
+      ],
+      "depends_on": [
+        "runtime-integration"
+      ]
+    },
+    {
+      "id": "multiplayer",
+      "requires": [
+        "multiplayer"
+      ],
+      "depends_on": [
+        "runtime-integration"
+      ]
+    },
+    {
+      "id": "hardware-performance",
+      "requires": [
+        "hardware-performance"
+      ],
+      "depends_on": [
+        "runtime-integration"
+      ]
+    },
+    {
+      "id": "human-acceptance",
+      "requires": [
+        "human-review"
+      ],
+      "human_required": true,
+      "depends_on": [
+        "story-detail",
+        "multiplayer",
+        "hardware-performance"
+      ]
+    },
+    {
+      "id": "publication",
+      "requires": [
+        "publication"
+      ],
+      "depends_on": [
+        "human-acceptance"
+      ]
+    }
+  ],
+  "security": {
+    "credentialsRequired": false,
+    "destructiveOperations": false,
+    "externalNetworkRequiredAfterLoad": false
+  },
+  "boundary": "Validates supplied records and hashes. Does not independently render, simulate, authenticate reviewers, approve art, or prove gameplay. Full-completion profile; adapt manifest gates explicitly to the target project and retain the adapted version."
+}

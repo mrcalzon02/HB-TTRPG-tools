@@ -448,6 +448,26 @@
           "description": "Repository-root-relative Warhammer lore/archive paths."
         }
       ]
+    },
+    {
+      "id": "foundry.environment-production",
+      "title": "Iterative Environment Production Kit",
+      "workspace": "Foundry",
+      "kind": "workflow-package",
+      "format": "json",
+      "path": "skills/environment-production/manifest.json",
+      "tags": [
+        "map development",
+        "terrain",
+        "model authoring",
+        "visual review",
+        "quality gates",
+        "portable",
+        "CI"
+      ],
+      "supports": [
+        "getResource"
+      ]
     }
   ]
 }

@@ -1,0 +1,963 @@
+{
+  "date": "2026-10-26",
+  "engine_baseline": "5b4761a8f6d72f6fb824325bb33807b3cc7aff5a",
+  "scope": "64 scripted actual OpenGL static camera/light samples. Not whole-map, LAN, human or real-time performance acceptance.",
+  "captures": [
+    {
+      "map": "house",
+      "view": "opening",
+      "frame": "2",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "14.4671",
+      "bright_pixels": "1960",
+      "sha256": "7c4878222e4f4371210b45eca411bcabb8209cfe96242e0b7115df11dd658519",
+      "path": "development/levels/previews/lighting-camera-audit/house-opening.png"
+    },
+    {
+      "map": "house",
+      "view": "approach",
+      "frame": "4",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "18.5661",
+      "bright_pixels": "11939",
+      "sha256": "d1603bf64b31bd1833bb2ad862729b4688a18342077a0e8aa65e15935cbeb353",
+      "path": "development/levels/previews/lighting-camera-audit/house-approach.png"
+    },
+    {
+      "map": "house",
+      "view": "lit",
+      "frame": "6",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "34.6954",
+      "bright_pixels": "76799",
+      "sha256": "92fe8ad73055aaa7e1d846b74823e89df463086a70bd7660e8f060378364eb54",
+      "path": "development/levels/previews/lighting-camera-audit/house-lit.png"
+    },
+    {
+      "map": "house",
+      "view": "blackout",
+      "frame": "8",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "3.5459",
+      "bright_pixels": "60",
+      "sha256": "dcfbb3239c60a263dc396828f26b793d461dac772f1e4ecb56958eb8a8f5f76c",
+      "path": "development/levels/previews/lighting-camera-audit/house-blackout.png"
+    },
+    {
+      "map": "house",
+      "view": "torch",
+      "frame": "10",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "8.7737",
+      "bright_pixels": "8554",
+      "sha256": "583beeb30427fa4d7cbb8a00d71d259a6c3da44af5d83047a698f8c36e010561",
+      "path": "development/levels/previews/lighting-camera-audit/house-torch.png"
+    },
+    {
+      "map": "house",
+      "view": "pan",
+      "frame": "12",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "52.1171",
+      "bright_pixels": "113109",
+      "sha256": "913752b73f436e761b69b92ad4f2b1db244898ccea2a359eaf397be22d0c1aea",
+      "path": "development/levels/previews/lighting-camera-audit/house-pan.png"
+    },
+    {
+      "map": "farmhouse",
+      "view": "opening",
+      "frame": "15",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "16.5740",
+      "bright_pixels": "3753",
+      "sha256": "fc3591b7db1c912fa88f0e3d61011754446f66d0f0b6221258330af042092bc8",
+      "path": "development/levels/previews/lighting-camera-audit/farmhouse-opening.png"
+    },
+    {
+      "map": "farmhouse",
+      "view": "approach",
+      "frame": "17",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "19.5213",
+      "bright_pixels": "14735",
+      "sha256": "efb3f4bab533bf4e33c8bd2c15640d79bb6919f10853202f707457185eec5b1b",
+      "path": "development/levels/previews/lighting-camera-audit/farmhouse-approach.png"
+    },
+    {
+      "map": "farmhouse",
+      "view": "lit",
+      "frame": "19",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "25.4145",
+      "bright_pixels": "51276",
+      "sha256": "57b3f12d0aee21bd726ebd1755ad884b2f824bf6406185b63c67df559274bbed",
+      "path": "development/levels/previews/lighting-camera-audit/farmhouse-lit.png"
+    },
+    {
+      "map": "farmhouse",
+      "view": "blackout",
+      "frame": "21",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "3.2808",
+      "bright_pixels": "0",
+      "sha256": "52fc9967c392a9267a3a11fc80775b82d3d500bf206c3e219d850d0e51c43a56",
+      "path": "development/levels/previews/lighting-camera-audit/farmhouse-blackout.png"
+    },
+    {
+      "map": "farmhouse",
+      "view": "torch",
+      "frame": "23",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "8.7179",
+      "bright_pixels": "12654",
+      "sha256": "ff4692003a7ecaa6d4c762a1af0e1a74a8152d9f656e1918facfe524feef5bc7",
+      "path": "development/levels/previews/lighting-camera-audit/farmhouse-torch.png"
+    },
+    {
+      "map": "farmhouse",
+      "view": "pan",
+      "frame": "25",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "39.9058",
+      "bright_pixels": "99132",
+      "sha256": "397221f452db681dc3fedb1606e4cba82586c2b516cd0455d6995abfc70d860b",
+      "path": "development/levels/previews/lighting-camera-audit/farmhouse-pan.png"
+    },
+    {
+      "map": "school",
+      "view": "opening",
+      "frame": "28",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "15.3206",
+      "bright_pixels": "3380",
+      "sha256": "32e660b70a539c31ce7b574686707a94784d2b4cf847353a050f6dfefa39704e",
+      "path": "development/levels/previews/lighting-camera-audit/school-opening.png"
+    },
+    {
+      "map": "school",
+      "view": "approach",
+      "frame": "30",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "20.2478",
+      "bright_pixels": "12642",
+      "sha256": "e9ea0f453cf021b2432992bdb7b262d1644654704dd48c542d68c73a336a5f31",
+      "path": "development/levels/previews/lighting-camera-audit/school-approach.png"
+    },
+    {
+      "map": "school",
+      "view": "lit",
+      "frame": "32",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "18.7755",
+      "bright_pixels": "20079",
+      "sha256": "a8cfb75e1c1d274d87325cf1744ee8c6d720be7f85c6f6a54c7eaa2d95c35fbd",
+      "path": "development/levels/previews/lighting-camera-audit/school-lit.png"
+    },
+    {
+      "map": "school",
+      "view": "blackout",
+      "frame": "34",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "7.2270",
+      "bright_pixels": "1122",
+      "sha256": "575abe251c1227169c4111691164988163d3c0f66357dd636f96e31a3366125a",
+      "path": "development/levels/previews/lighting-camera-audit/school-blackout.png"
+    },
+    {
+      "map": "school",
+      "view": "torch",
+      "frame": "36",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "19.9402",
+      "bright_pixels": "25586",
+      "sha256": "1c37c6c86ebf0a60ccdc82cfcfb555bfbfdd8e80a356784f51f1867c89c2333a",
+      "path": "development/levels/previews/lighting-camera-audit/school-torch.png"
+    },
+    {
+      "map": "school",
+      "view": "pan",
+      "frame": "38",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "28.0920",
+      "bright_pixels": "31934",
+      "sha256": "da38b2fca28c369faa7f6226321f81004e1f4ca97c496c53ef44a82ed1444298",
+      "path": "development/levels/previews/lighting-camera-audit/school-pan.png"
+    },
+    {
+      "map": "mansion",
+      "view": "opening",
+      "frame": "2",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "15.7969",
+      "bright_pixels": "5168",
+      "sha256": "8bf432beda26f9f9a7188ba66aef1c82dea37b8af3ee1fb42dd2ee125743fd0a",
+      "path": "development/levels/previews/lighting-camera-audit/mansion-opening.png"
+    },
+    {
+      "map": "mansion",
+      "view": "approach",
+      "frame": "4",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "19.6327",
+      "bright_pixels": "12919",
+      "sha256": "70ffb31cb9f30517a3342cd03ad07b1e018f107730f230a50e120fe4cd06aca5",
+      "path": "development/levels/previews/lighting-camera-audit/mansion-approach.png"
+    },
+    {
+      "map": "mansion",
+      "view": "lit",
+      "frame": "6",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "22.0203",
+      "bright_pixels": "34252",
+      "sha256": "3c95c3ec7b4ddde962a355b8efe8d220b18d8f02599b99a1678a97df4a44d5fa",
+      "path": "development/levels/previews/lighting-camera-audit/mansion-lit.png"
+    },
+    {
+      "map": "mansion",
+      "view": "blackout",
+      "frame": "8",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "2.9306",
+      "bright_pixels": "0",
+      "sha256": "bba78d65f753f9f54d88ba3f45c2100366716a3073c1d627f3bc9a34233245c4",
+      "path": "development/levels/previews/lighting-camera-audit/mansion-blackout.png"
+    },
+    {
+      "map": "mansion",
+      "view": "torch",
+      "frame": "10",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "7.9061",
+      "bright_pixels": "9411",
+      "sha256": "4137e4cebbbb6db8eb12e306370e0c125bef744d832c9da6adc1f685a8461085",
+      "path": "development/levels/previews/lighting-camera-audit/mansion-torch.png"
+    },
+    {
+      "map": "mansion",
+      "view": "pan",
+      "frame": "12",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "40.1292",
+      "bright_pixels": "55347",
+      "sha256": "8e0ea899c9618c5a65449856c5342d8a884bc69c90feaa6a0e88be63a240e520",
+      "path": "development/levels/previews/lighting-camera-audit/mansion-pan.png"
+    },
+    {
+      "map": "prison",
+      "view": "opening",
+      "frame": "15",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "15.0923",
+      "bright_pixels": "5212",
+      "sha256": "6116b7497f70bf5cbed3bbad61c33044fd75b9a7c2bdfebf7aa3502e38cd2f5c",
+      "path": "development/levels/previews/lighting-camera-audit/prison-opening.png"
+    },
+    {
+      "map": "prison",
+      "view": "approach",
+      "frame": "17",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "19.8870",
+      "bright_pixels": "12880",
+      "sha256": "c49924fefdd5d82665705c170841f8151a4aaeef532fbd89cb66942d9bcc9d66",
+      "path": "development/levels/previews/lighting-camera-audit/prison-approach.png"
+    },
+    {
+      "map": "prison",
+      "view": "lit",
+      "frame": "19",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "15.1525",
+      "bright_pixels": "19128",
+      "sha256": "69b50e38a7c26cc4a44ddcf67ecc2c70cfe1a11f962e77168606ae2a5459398e",
+      "path": "development/levels/previews/lighting-camera-audit/prison-lit.png"
+    },
+    {
+      "map": "prison",
+      "view": "blackout",
+      "frame": "21",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "3.4106",
+      "bright_pixels": "0",
+      "sha256": "ac43f0d39d8441c05467ffcfb1d4de321c94616a264cd611e9879e05a2c1afda",
+      "path": "development/levels/previews/lighting-camera-audit/prison-blackout.png"
+    },
+    {
+      "map": "prison",
+      "view": "torch",
+      "frame": "23",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "8.7672",
+      "bright_pixels": "11430",
+      "sha256": "35f882cfd796d753a9859c171ea90b20cac98c3fda4385c76b3d80e0b71f28b6",
+      "path": "development/levels/previews/lighting-camera-audit/prison-torch.png"
+    },
+    {
+      "map": "prison",
+      "view": "pan",
+      "frame": "25",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "53.0249",
+      "bright_pixels": "80907",
+      "sha256": "d032ae9ac427977f97b6c324ca7786f1d57d5e03037e40b7c5097a7bb9897406",
+      "path": "development/levels/previews/lighting-camera-audit/prison-pan.png"
+    },
+    {
+      "map": "asylum",
+      "view": "opening",
+      "frame": "28",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "14.8218",
+      "bright_pixels": "3993",
+      "sha256": "18d88c38f7b3977be944306bde1f97be4848e3d8ca7c6750f8506d420c5acc1c",
+      "path": "development/levels/previews/lighting-camera-audit/asylum-opening.png"
+    },
+    {
+      "map": "asylum",
+      "view": "approach",
+      "frame": "30",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "19.8496",
+      "bright_pixels": "12953",
+      "sha256": "1b84b7ad813fd2a5185adab4dd5b0f395744c4ef8d79a1f43c889a7599347375",
+      "path": "development/levels/previews/lighting-camera-audit/asylum-approach.png"
+    },
+    {
+      "map": "asylum",
+      "view": "lit",
+      "frame": "32",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "13.1479",
+      "bright_pixels": "12025",
+      "sha256": "cdc3c900d90e7778e4061c5dbfd93d05cfc626f1a14f869a01d01718ebed27f4",
+      "path": "development/levels/previews/lighting-camera-audit/asylum-lit.png"
+    },
+    {
+      "map": "asylum",
+      "view": "blackout",
+      "frame": "34",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "3.0117",
+      "bright_pixels": "0",
+      "sha256": "ffe04f3f1008177710ddf9d3e2dd9a8c672217d20a1a48473ae4be4520a844ee",
+      "path": "development/levels/previews/lighting-camera-audit/asylum-blackout.png"
+    },
+    {
+      "map": "asylum",
+      "view": "torch",
+      "frame": "36",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "7.5940",
+      "bright_pixels": "5781",
+      "sha256": "d953c42043e23b672942cfbd50508a751ada0921cf43bc978f3284445268732a",
+      "path": "development/levels/previews/lighting-camera-audit/asylum-torch.png"
+    },
+    {
+      "map": "asylum",
+      "view": "pan",
+      "frame": "38",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "47.1524",
+      "bright_pixels": "70150",
+      "sha256": "eed0531912797c1ccbfcf2dde7ed4dbf4f27f005d13c7a230398f621150f3139",
+      "path": "development/levels/previews/lighting-camera-audit/asylum-pan.png"
+    },
+    {
+      "map": "academy",
+      "view": "opening",
+      "frame": "41",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "14.1269",
+      "bright_pixels": "4015",
+      "sha256": "2d382593ec73bea04f1b2917e12c8f772f04018c06b63360f38ce54c783e9aff",
+      "path": "development/levels/previews/lighting-camera-audit/academy-opening.png"
+    },
+    {
+      "map": "academy",
+      "view": "approach",
+      "frame": "43",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "19.7430",
+      "bright_pixels": "12819",
+      "sha256": "a76716d53c0cebe2d997498f544d0ac28a6b08dda3933277041410fe908db0d7",
+      "path": "development/levels/previews/lighting-camera-audit/academy-approach.png"
+    },
+    {
+      "map": "academy",
+      "view": "lit",
+      "frame": "45",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "12.5183",
+      "bright_pixels": "3441",
+      "sha256": "f72ee8d440fabf58427f34a21588c6d864b4466abd621854195ceaf04a7ef0ad",
+      "path": "development/levels/previews/lighting-camera-audit/academy-lit.png"
+    },
+    {
+      "map": "academy",
+      "view": "blackout",
+      "frame": "47",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "2.0114",
+      "bright_pixels": "0",
+      "sha256": "820b735c5ccdfbcbb1ff48586dee8477bbeeec41d1ebe5bc0e581c053c0c0c30",
+      "path": "development/levels/previews/lighting-camera-audit/academy-blackout.png"
+    },
+    {
+      "map": "academy",
+      "view": "torch",
+      "frame": "49",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "4.9021",
+      "bright_pixels": "589",
+      "sha256": "7e4aac842939f2835c65a5c785ff19c6b7ae0d8c5607d7cb36f01b214b114993",
+      "path": "development/levels/previews/lighting-camera-audit/academy-torch.png"
+    },
+    {
+      "map": "academy",
+      "view": "pan",
+      "frame": "51",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "30.9831",
+      "bright_pixels": "35020",
+      "sha256": "6679aae8573d0692826508737aa37a79e1f49b7c333b4491290e53dcfbd6c886",
+      "path": "development/levels/previews/lighting-camera-audit/academy-pan.png"
+    },
+    {
+      "map": "college",
+      "view": "opening",
+      "frame": "54",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "15.4653",
+      "bright_pixels": "5373",
+      "sha256": "5fe5e2252075caac1dd486278be7b2386ff9e7e0de1a15ad88a9782a3a7744f5",
+      "path": "development/levels/previews/lighting-camera-audit/college-opening.png"
+    },
+    {
+      "map": "college",
+      "view": "approach",
+      "frame": "56",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "21.5563",
+      "bright_pixels": "16637",
+      "sha256": "5f5d923d6e0bf013eabc5747694ffb1b03f1536311372d47c71fd27a468ee975",
+      "path": "development/levels/previews/lighting-camera-audit/college-approach.png"
+    },
+    {
+      "map": "college",
+      "view": "lit",
+      "frame": "58",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "17.5856",
+      "bright_pixels": "21748",
+      "sha256": "e7afb4b80134d314c8c08b14bfd39d716a15dd754385d6bd179d9b4136c9cdff",
+      "path": "development/levels/previews/lighting-camera-audit/college-lit.png"
+    },
+    {
+      "map": "college",
+      "view": "blackout",
+      "frame": "60",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "6.5589",
+      "bright_pixels": "0",
+      "sha256": "d1cf25414ef2d8276ee7591464d671309f139fd85a214077a3104109e9d1f3d1",
+      "path": "development/levels/previews/lighting-camera-audit/college-blackout.png"
+    },
+    {
+      "map": "college",
+      "view": "torch",
+      "frame": "62",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "21.6401",
+      "bright_pixels": "30272",
+      "sha256": "9f496aea134de0dddbeb5e6046e3eb5ad1f5ef296151edd505e6ad23b007e356",
+      "path": "development/levels/previews/lighting-camera-audit/college-torch.png"
+    },
+    {
+      "map": "college",
+      "view": "pan",
+      "frame": "64",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "42.2028",
+      "bright_pixels": "64366",
+      "sha256": "04951fe09a13614385a53ea91c71994b212e26ffb7ea1c25b052565ec2a1505b",
+      "path": "development/levels/previews/lighting-camera-audit/college-pan.png"
+    },
+    {
+      "map": "church",
+      "view": "opening",
+      "frame": "67",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "15.7824",
+      "bright_pixels": "4144",
+      "sha256": "54a3271492159a008c684c54b92350eb94514485311f1fde98d7a524a58a867d",
+      "path": "development/levels/previews/lighting-camera-audit/church-opening.png"
+    },
+    {
+      "map": "church",
+      "view": "approach",
+      "frame": "69",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "20.5741",
+      "bright_pixels": "13324",
+      "sha256": "60310f37aa04f5b4b418cc7b0dd5ba5ad2fcc9d749d7a623af190a8f6cd506d3",
+      "path": "development/levels/previews/lighting-camera-audit/church-approach.png"
+    },
+    {
+      "map": "church",
+      "view": "lit",
+      "frame": "71",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "21.2323",
+      "bright_pixels": "18902",
+      "sha256": "29b61e92744d70539b48ad78009070ff0166944ffde77c6061627aaaa2e797c1",
+      "path": "development/levels/previews/lighting-camera-audit/church-lit.png"
+    },
+    {
+      "map": "church",
+      "view": "blackout",
+      "frame": "73",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "1.7553",
+      "bright_pixels": "0",
+      "sha256": "38b0eb3b8ebf6604a4187be6a5c62447075ad4b541890f40a3f00ada98370293",
+      "path": "development/levels/previews/lighting-camera-audit/church-blackout.png"
+    },
+    {
+      "map": "church",
+      "view": "torch",
+      "frame": "75",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "4.5456",
+      "bright_pixels": "542",
+      "sha256": "7d8bedac3f2c2ff63f7331d9035f6811a5596006bcd0248d9d3cd0dd51b5e51f",
+      "path": "development/levels/previews/lighting-camera-audit/church-torch.png"
+    },
+    {
+      "map": "church",
+      "view": "pan",
+      "frame": "77",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "17.0018",
+      "bright_pixels": "16934",
+      "sha256": "32e3a8eac745c99a8bc33bed519ead45600db0eff86ea7f56f0c685bcbd59dfe",
+      "path": "development/levels/previews/lighting-camera-audit/church-pan.png"
+    },
+    {
+      "map": "hollow-creek",
+      "view": "opening",
+      "frame": "2",
+      "width": "320",
+      "height": "200",
+      "mean_luma": "24.7136",
+      "bright_pixels": "2123",
+      "sha256": "0806a7fa4d9347757cb0f566fb369f5dd145a2c15660ec7274e56cb6783ce207",
+      "path": "development/levels/previews/lighting-camera-audit/hollow-creek-opening.png"
+    },
+    {
+      "map": "hollow-creek",
+      "view": "approach",
+      "frame": "4",
+      "width": "320",
+      "height": "200",
+      "mean_luma": "17.1705",
+      "bright_pixels": "588",
+      "sha256": "dc2f66a46d03940de8cc0e103dd54004ef8bf33dcf6e0eb63296c494dbcb5bd0",
+      "path": "development/levels/previews/lighting-camera-audit/hollow-creek-approach.png"
+    },
+    {
+      "map": "hollow-creek",
+      "view": "lit",
+      "frame": "6",
+      "width": "320",
+      "height": "200",
+      "mean_luma": "16.3770",
+      "bright_pixels": "714",
+      "sha256": "989dce8fb5fbaf0c57893d9865f650c50cb8cd705a8964f3edca5086feb08ff6",
+      "path": "development/levels/previews/lighting-camera-audit/hollow-creek-lit.png"
+    },
+    {
+      "map": "hollow-creek",
+      "view": "blackout",
+      "frame": "8",
+      "width": "320",
+      "height": "200",
+      "mean_luma": "16.3770",
+      "bright_pixels": "714",
+      "sha256": "989dce8fb5fbaf0c57893d9865f650c50cb8cd705a8964f3edca5086feb08ff6",
+      "path": "development/levels/previews/lighting-camera-audit/hollow-creek-blackout.png"
+    },
+    {
+      "map": "hollow-creek",
+      "view": "torch",
+      "frame": "10",
+      "width": "320",
+      "height": "200",
+      "mean_luma": "19.2956",
+      "bright_pixels": "5889",
+      "sha256": "f79520ae4ce0053cb476f00c10b257dade79e5b0ef936ff2fec44fd5c727561f",
+      "path": "development/levels/previews/lighting-camera-audit/hollow-creek-torch.png"
+    },
+    {
+      "map": "hollow-creek",
+      "view": "pan",
+      "frame": "12",
+      "width": "320",
+      "height": "200",
+      "mean_luma": "19.5390",
+      "bright_pixels": "4543",
+      "sha256": "34aa490355601711e2e4f33f5456b1684d7b226a26c6f52c990d7e23a6613d55",
+      "path": "development/levels/previews/lighting-camera-audit/hollow-creek-pan.png"
+    },
+    {
+      "map": "castle",
+      "view": "lit",
+      "frame": "2",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "14.3651",
+      "bright_pixels": "6466",
+      "sha256": "17197f1a9863076c4e7c5bf44a831195493d7df3340713206da681a34785f57a",
+      "path": "development/levels/previews/lighting-camera-audit/castle-lit.png"
+    },
+    {
+      "map": "castle",
+      "view": "blackout",
+      "frame": "4",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "10.6259",
+      "bright_pixels": "164",
+      "sha256": "bbf40d1e6cb454b1053183a74143cce3f0792113a1a6a1f0cbf2243932078b54",
+      "path": "development/levels/previews/lighting-camera-audit/castle-blackout.png"
+    },
+    {
+      "map": "castle",
+      "view": "torch",
+      "frame": "6",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "16.0511",
+      "bright_pixels": "12438",
+      "sha256": "631c51231f36436f6b8d5892f802659c93f43894f02f8dcc3908ab43ccad2886",
+      "path": "development/levels/previews/lighting-camera-audit/castle-torch.png"
+    },
+    {
+      "map": "castle",
+      "view": "pan",
+      "frame": "8",
+      "width": "480",
+      "height": "300",
+      "mean_luma": "23.8825",
+      "bright_pixels": "37082",
+      "sha256": "1611ca927cc3feec3e55b68daf155c920d146a5e1f78fec49aa9b889ea669957",
+      "path": "development/levels/previews/lighting-camera-audit/castle-pan.png"
+    }
+  ],
+  "before_coverage": [
+    {
+      "map": "academy",
+      "view": "blackout",
+      "path": "development/levels/previews/lighting-camera-audit/before-coverage/academy-blackout.png",
+      "sha256": "820b735c5ccdfbcbb1ff48586dee8477bbeeec41d1ebe5bc0e581c053c0c0c30"
+    },
+    {
+      "map": "academy",
+      "view": "lit",
+      "path": "development/levels/previews/lighting-camera-audit/before-coverage/academy-lit.png",
+      "sha256": "820b735c5ccdfbcbb1ff48586dee8477bbeeec41d1ebe5bc0e581c053c0c0c30"
+    },
+    {
+      "map": "asylum",
+      "view": "blackout",
+      "path": "development/levels/previews/lighting-camera-audit/before-coverage/asylum-blackout.png",
+      "sha256": "ffe04f3f1008177710ddf9d3e2dd9a8c672217d20a1a48473ae4be4520a844ee"
+    },
+    {
+      "map": "asylum",
+      "view": "lit",
+      "path": "development/levels/previews/lighting-camera-audit/before-coverage/asylum-lit.png",
+      "sha256": "ffe04f3f1008177710ddf9d3e2dd9a8c672217d20a1a48473ae4be4520a844ee"
+    },
+    {
+      "map": "church",
+      "view": "blackout",
+      "path": "development/levels/previews/lighting-camera-audit/before-coverage/church-blackout.png",
+      "sha256": "38b0eb3b8ebf6604a4187be6a5c62447075ad4b541890f40a3f00ada98370293"
+    },
+    {
+      "map": "church",
+      "view": "lit",
+      "path": "development/levels/previews/lighting-camera-audit/before-coverage/church-lit.png",
+      "sha256": "65fea14cfdd633f7285c4217ddb50805f8492b4482625885d1c8bb8bf9cdc9ac"
+    },
+    {
+      "map": "college",
+      "view": "blackout",
+      "path": "development/levels/previews/lighting-camera-audit/before-coverage/college-blackout.png",
+      "sha256": "d1cf25414ef2d8276ee7591464d671309f139fd85a214077a3104109e9d1f3d1"
+    },
+    {
+      "map": "college",
+      "view": "lit",
+      "path": "development/levels/previews/lighting-camera-audit/before-coverage/college-lit.png",
+      "sha256": "d1cf25414ef2d8276ee7591464d671309f139fd85a214077a3104109e9d1f3d1"
+    },
+    {
+      "map": "mansion",
+      "view": "blackout",
+      "path": "development/levels/previews/lighting-camera-audit/before-coverage/mansion-blackout.png",
+      "sha256": "bba78d65f753f9f54d88ba3f45c2100366716a3073c1d627f3bc9a34233245c4"
+    },
+    {
+      "map": "mansion",
+      "view": "lit",
+      "path": "development/levels/previews/lighting-camera-audit/before-coverage/mansion-lit.png",
+      "sha256": "bba78d65f753f9f54d88ba3f45c2100366716a3073c1d627f3bc9a34233245c4"
+    },
+    {
+      "map": "prison",
+      "view": "blackout",
+      "path": "development/levels/previews/lighting-camera-audit/before-coverage/prison-blackout.png",
+      "sha256": "ac43f0d39d8441c05467ffcfb1d4de321c94616a264cd611e9879e05a2c1afda"
+    },
+    {
+      "map": "prison",
+      "view": "lit",
+      "path": "development/levels/previews/lighting-camera-audit/before-coverage/prison-lit.png",
+      "sha256": "ac43f0d39d8441c05467ffcfb1d4de321c94616a264cd611e9879e05a2c1afda"
+    }
+  ],
+  "planned_layouts": [
+    {
+      "id": "ACADEMY",
+      "title": "St. Alban Academy",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "ASYLUM",
+      "title": "St. Dymphna Hospital",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "CASTLE",
+      "title": "Castle Beckenburg",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "CHURCH",
+      "title": "St. Brigid Parish",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "COLLEGE",
+      "title": "Beckenburg College",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "FARMHOUSE",
+      "title": "Hollowmere Farm",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "HOUSE",
+      "title": "The Briar House",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "MANSION",
+      "title": "Blackthorn Manor",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "PRISON",
+      "title": "Beckenburg Penitentiary",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "SCHOOL",
+      "title": "Ravenshade School",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-01",
+      "title": "Blackpine Logging Camp",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-02",
+      "title": "Camp Hollow Creek",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-03",
+      "title": "Red Mesa Ancestral Caves",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-04",
+      "title": "Widow's Peak Fire Lookout",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-05",
+      "title": "Dead Man's Claim",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-06",
+      "title": "Drowned Fisherman's Wharf",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-07",
+      "title": "Saint Bartholomew's Forgotten Cemetery",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-08",
+      "title": "Northwatch Research Station",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-09",
+      "title": "Blackwater Hydroelectric Dam",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-10",
+      "title": "Monastery of Ashen Bells",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-11",
+      "title": "Mourning Marsh",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-12",
+      "title": "Gallows Pass Railway",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-13",
+      "title": "Greywater Cannery",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-14",
+      "title": "Morrow Point Lightstation",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-15",
+      "title": "MV Saint Elara",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-16",
+      "title": "Eight Pines Motor Lodge",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-17",
+      "title": "Battery Brackenhead",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    },
+    {
+      "id": "WLD-18",
+      "title": "Site Cinder-6",
+      "status": "rough-layout-only",
+      "next": "Match native geometry to current runtime/camera/lighting contracts before claiming compatibility"
+    }
+  ],
+  "remaining": [
+    "All-room and route camera pans, door/window open/closed and floor/wall/roof/corner light-leak inspection",
+    "Per-map texture/UV/normal and metal stripe audit in current renderer",
+    "Native aerial water CPU cost and fog composition; no real-time pass inferred",
+    "Hollow Creek full mission, ghost power, LAN and player acceptance",
+    "Sound-volume final editor/listening acceptance",
+    "Intermittent release LanSoundIntegrationTest; local rerun passed, CI failed244/245"
+  ]
+}
