@@ -2,14 +2,15 @@
   "schemaVersion": 4,
   "archiveTitle": "The Royal Purchases of One Lady of the Elven Court",
   "archiveStatus": "approved_generated_subset",
-  "notice": "Only specifically identified ChatGPT-generated original illustrations from the owner's Daysha family conversation are republished. All prior unreviewed/third-party reference imagery remains excluded.",
+  "notice": "Thirteen individually identified ChatGPT-generated original Daysha illustrations are published, including the corrected glitter prank; third-party references and the other historic unaudited artworks remain excluded.",
   "rightsPolicy": {
     "approvedSource": "conversation-generated originals only",
     "rejected": "third-party dress-reference images, marked-up input screenshots, franchise references, any unverified previous gallery assets",
     "legacySourceCount": 178,
     "approvedHistoricalItems": 12,
     "legacyItemsStillWithheld": 166,
-    "scope": "Explicit SHA-verified Git history allowlist; do not bulk restore historical archive."
+    "scope": "Explicit SHA-verified Git history allowlist; do not bulk restore historical archive.",
+    "approvedGeneratedItemCount": 13
   },
   "subjects": [
     "Daysha",
@@ -226,6 +227,23 @@
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
       "originalSizeBytes": 3227294
+    },
+    {
+      "id": "file_00000000f21081fd9d9365d1051d1685",
+      "title": "Royal Council Glitter Prank — Corrected Burst",
+      "image": "assets/daysha/royal-purchases/royal-council-glitter-prank-corrected.avif",
+      "gitBlobSha": "c66e9ca95cad6e5015fe99c13c1bdd28f512e95d",
+      "type": "scene",
+      "category": "Royal council and family",
+      "sceneGroup": "Royal court and family",
+      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, corrected balloon continuity",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
+      "originalSizeBytes": 3177248,
+      "originalMasterSha256": "25a3693063306577898cd3e3e0ecc3a24423181e6fa78ae04df50710a6df7bb6",
+      "originalMasterDriveFileId": "1T8_hHovGL6wmZEMdJTVQDOPBFhQ7ToYY",
+      "publishedDerivative": "Optimized 560-pixel AVIF; full-resolution original PNG preserved separately on Drive"
     }
   ],
   "sceneSequences": [
@@ -257,9 +275,10 @@
       "id": "SC-03",
       "title": "Estelle's council-chamber ambush",
       "category": "Family",
-      "description": "Estelle prepares her glitter-filled water balloon from the rafters. The incorrect illustration showing an intact balloon after impact is excluded; the corrected artwork is preserved off-site pending verified GitHub publication.",
+      "description": "Estelle crouches in the rafters and bursts a glitter-filled balloon against Rome's head as royal ministers laugh. The corrected version replaces the flawed intact-balloon illustration.",
       "sourceIds": [
-        "file_00000000a96481f58a0a2bdfa0777b9b"
+        "file_00000000a96481f58a0a2bdfa0777b9b",
+        "file_00000000f21081fd9d9365d1051d1685"
       ],
       "newGownPurchases": 0
     },
@@ -290,23 +309,25 @@
       "sourceDescription": "Royal Council Glitter Prank (superseded)"
     }
   ],
-  "pendingCorrections": [
-    {
-      "title": "Estelle's glitter balloon, corrected burst",
-      "status": "original-preserved-not-yet-github-hosted",
-      "notes": "Clean original is preserved separately; do not link an unverified repo path or restore the superseded flawed version."
-    }
-  ],
+  "pendingCorrections": [],
   "accounting": {
     "verifiedPurchaseTotalGold": null,
     "verifiedReceiptCount": 0,
     "policy": "A dress design is one garment record; repeated scenes, color variants, revisions, and Estelle's child outfit do not automatically create extra charges. Prices are unconfirmed."
   },
   "verification": {
-    "publishedDerivativeCount": 12,
-    "publishedPathsExpected": 12,
+    "publishedDerivativeCount": 13,
+    "publishedPathsExpected": 13,
     "masterSourcesInThisConversation": 14,
-    "pendingCorrectedSourceCount": 1,
+    "pendingCorrectedSourceCount": 0,
     "historicalGalleryStillWithheld": true
-  }
+  },
+  "resolvedCorrections": [
+    {
+      "title": "Estelle's glitter balloon, corrected burst",
+      "status": "hosted_verified",
+      "image": "assets/daysha/royal-purchases/royal-council-glitter-prank-corrected.avif",
+      "originalDriveFileId": "1T8_hHovGL6wmZEMdJTVQDOPBFhQ7ToYY"
+    }
+  ]
 }
