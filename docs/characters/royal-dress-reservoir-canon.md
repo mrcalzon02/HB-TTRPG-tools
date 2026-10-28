@@ -1,5 +1,7 @@
 # Daysha and Rome — Royal Dress Reservoir canon
 
+> **Project scope:** This dress collection is a thematic portion of the [sixteen-year royal history](royal-history-chronicle.md), running from coronation to Princess Estelle's sixteenth birthday. Most atelier scenes are relatively ordered but not yet assigned exact calendar years.
+
 **Status:** Character and story continuity record, established collaboratively with Lisa (Daysha's D&D player) and the royal wardrobe project. This document is a lore record; it does **not** assert that the related scene images have all been uploaded.
 
 ## Fixed identities
