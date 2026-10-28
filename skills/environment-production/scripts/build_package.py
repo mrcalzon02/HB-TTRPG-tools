@@ -87,6 +87,7 @@ def outputs():
     with zipfile.ZipFile(stream, 'w', zipfile.ZIP_STORED) as archive:
         for name, data in sorted(files.items()):
             entry = zipfile.ZipInfo('environment-production/' + name, date_time=(2026, 10, 28, 0, 0, 0))
+            entry.create_system = 3
             entry.compress_type = zipfile.ZIP_STORED
             entry.external_attr = 0o100644 << 16
             archive.writestr(entry, data)

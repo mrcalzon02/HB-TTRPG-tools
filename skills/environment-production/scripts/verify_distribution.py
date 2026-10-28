@@ -39,6 +39,7 @@ def main():
     assert hashlib.sha256(archive.read_bytes()).hexdigest() == expected
     with tempfile.TemporaryDirectory() as folder, zipfile.ZipFile(archive) as bundle:
         assert bundle.testzip() is None
+        assert all(entry.create_system == 3 for entry in bundle.infolist()), 'portable ZIP metadata'
         for name in bundle.namelist():
             assert name.startswith('environment-production/') and '..' not in Path(name).parts
         bundle.extractall(folder)
