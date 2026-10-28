@@ -1,0 +1,683 @@
+{
+  "schemaVersion": 1,
+  "title": "The Royal History of Queen Daysha, King Rome, and Princess Estelle",
+  "archivalGoal": "Document the approximately sixteen-year historical narrative from the royal coronation through the sixteenth birthday of their child Estelle.",
+  "scope": {
+    "startEvent": "CORONATION",
+    "endEvent": "ESTELLE_16TH_BIRTHDAY",
+    "narrativeSpanYears": 16,
+    "calendricalDatesEstablished": false,
+    "coronationDate": null,
+    "estelleBirthDate": null,
+    "estelleAgeAtCoronation": null,
+    "reignYearContainingEstelle16thBirthday": null,
+    "warning": "16-year narrative scope does NOT prove Estelle was born at coronation. Reign years and child ages are independent until dates are established."
+  },
+  "provenancePolicy": {
+    "publishedArtwork": "Only image files individually confirmed generated/original and verified on main; no third-party dress reference images",
+    "liveGalleryManifest": "data/daysha-royal-purchases.json",
+    "unpublishedGeneratedCandidates": "data/daysha-current-conversation-generated-pending.json",
+    "finance": "Price benchmarks are estimates, not receipts",
+    "imageState": "Do not mark artwork published on this history record until exact Git blob path and hash verified."
+  },
+  "chapterSlots": [
+    {
+      "id": "Y01",
+      "label": "Reign year 1",
+      "sequence": 1,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y02",
+      "label": "Reign year 2",
+      "sequence": 2,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y03",
+      "label": "Reign year 3",
+      "sequence": 3,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y04",
+      "label": "Reign year 4",
+      "sequence": 4,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y05",
+      "label": "Reign year 5",
+      "sequence": 5,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y06",
+      "label": "Reign year 6",
+      "sequence": 6,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y07",
+      "label": "Reign year 7",
+      "sequence": 7,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y08",
+      "label": "Reign year 8",
+      "sequence": 8,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y09",
+      "label": "Reign year 9",
+      "sequence": 9,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y10",
+      "label": "Reign year 10",
+      "sequence": 10,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y11",
+      "label": "Reign year 11",
+      "sequence": 11,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y12",
+      "label": "Reign year 12",
+      "sequence": 12,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y13",
+      "label": "Reign year 13",
+      "sequence": 13,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y14",
+      "label": "Reign year 14",
+      "sequence": 14,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y15",
+      "label": "Reign year 15",
+      "sequence": 15,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    },
+    {
+      "id": "Y16",
+      "label": "Reign year 16",
+      "sequence": 16,
+      "startDate": null,
+      "endDate": null,
+      "estelleAgeDuringYear": null,
+      "assignedEventIds": [],
+      "status": "awaiting_date_attribution"
+    }
+  ],
+  "anchors": [
+    {
+      "id": "CORONATION",
+      "title": "Coronation and the beginning of the documented royal era",
+      "calendarDate": null,
+      "chronology": "opening_anchor",
+      "status": "user_established_endpoint"
+    },
+    {
+      "id": "ESTELLE_16TH_BIRTHDAY",
+      "title": "Princess Estelle's sixteenth birthday",
+      "calendarDate": null,
+      "chronology": "closing_anchor",
+      "childAge": 16,
+      "status": "user_established_endpoint",
+      "note": "No birth date, exact reign year or intervening life events invented."
+    }
+  ],
+  "timelineTracks": [
+    "royal-court-and-politics",
+    "daysha-wardrobe-and-atelier",
+    "marriage-and-family",
+    "estelle-childhood-and-development",
+    "queen-mother",
+    "artisans-and-local-economy",
+    "animals-and-familiars",
+    "royal-household-and-ceremonies",
+    "financial-ledger-and-provenance"
+  ],
+  "events": [
+    {
+      "id": "RH-E01",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 1,
+      "title": "The first noble-district purchase",
+      "summary": "Daysha's first non-wedding boutique visit: midnight-blue gown, followed by icy-blue gown.",
+      "participants": [
+        "Daysha",
+        "Rome",
+        "Garrick",
+        "seamstresses"
+      ],
+      "mediaCandidateFilenames": [
+        "starlit_gown_in_the_atelier.png",
+        "fairy_princess_in_the_royal_atelier.png"
+      ],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E02",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 2,
+      "title": "Sunday: a pink gown",
+      "summary": "Daysha selects a much simpler light-pink gown. Rome realizes her affection for dresses will not be brief.",
+      "participants": [
+        "Daysha",
+        "Rome",
+        "artisans"
+      ],
+      "mediaCandidateFilenames": [],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E03",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 3,
+      "title": "Second Friday: two more gowns",
+      "summary": "Burgundy gown and black-bodice/violet-starfield/white-panel gown; Rome blushes; Garrick is amused.",
+      "participants": [
+        "Daysha",
+        "Rome",
+        "Garrick",
+        "seamstresses"
+      ],
+      "mediaCandidateFilenames": [],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E04",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 4,
+      "title": "The royal procession of dress boxes",
+      "summary": "The couple depart The Gilded Spindle, Garrick consults his ledger, and servants carry boxed gowns.",
+      "participants": [
+        "Daysha",
+        "Rome",
+        "Garrick",
+        "servants"
+      ],
+      "mediaCandidateFilenames": [
+        "royal_atelier_proprietor_reference.png"
+      ],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E05",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 5,
+      "title": "Daysha's first birthday as queen and Lexi's arrival",
+      "summary": "A royal-blue-and-gold birthday gown is made under a deadline; a servant presents Lexi, the first appearance of the star-furred celestial Maine Coon.",
+      "participants": [
+        "Daysha",
+        "Rome",
+        "Garrick",
+        "seamstresses",
+        "Lexi"
+      ],
+      "mediaCandidateFilenames": [],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E06",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 6,
+      "title": "The unfinished-gown double purchase",
+      "summary": "The Friday after the birthday, Daysha loves the unembellished powder-blue gown and insists on an adjacent unfinished white-and-pink dress.",
+      "participants": [
+        "Daysha",
+        "Rome",
+        "Garrick",
+        "seamstresses",
+        "Lexi"
+      ],
+      "mediaCandidateFilenames": [],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E07",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 7,
+      "title": "A self-funded Sunday purchase",
+      "summary": "Daysha returns without Rome or Lexi and buys the royal-blue-and-gold gown using the royal purse.",
+      "participants": [
+        "Daysha",
+        "Garrick",
+        "seamstresses"
+      ],
+      "mediaCandidateFilenames": [],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E08",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 8,
+      "title": "Fine cloth without gemstones",
+      "summary": "A pearlescent enchanted scale gown and teal filigree offering teach the artisans that Daysha loves immaculate craft even when the cloth carries no gems.",
+      "participants": [
+        "Daysha",
+        "Rome",
+        "Garrick",
+        "seamstresses",
+        "Lexi"
+      ],
+      "mediaCandidateFilenames": [],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E09",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 9,
+      "title": "The easy enchanted gown",
+      "summary": "A simpler midnight/periwinkle-blue gown with restrained filigree and long draped sleeves delights the queen and lightens the seamstresses' workload.",
+      "participants": [
+        "Daysha",
+        "Garrick",
+        "seamstresses"
+      ],
+      "mediaCandidateFilenames": [],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E10",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 10,
+      "title": "The visiting master seamstress",
+      "summary": "A seamstress from abroad prepares the spectacular ocean-themed gown; the atelier also offers black/teal gold-embroidered finery.",
+      "participants": [
+        "Daysha",
+        "Rome",
+        "Garrick",
+        "foreign master seamstress",
+        "seamstresses"
+      ],
+      "mediaCandidateFilenames": [
+        "queen_daysha_s_oceanic_couture_reveal.png",
+        "royal_atelier_of_the_blue_haired_queen.png"
+      ],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E11",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 11,
+      "title": "The Queen Mother's first appearance",
+      "summary": "Daysha and Rome's mother visit without Rome or Lexi. The Queen Mother insists on the suitability of a rich blue gemstone-adorned dress.",
+      "participants": [
+        "Daysha",
+        "Queen Mother",
+        "Garrick",
+        "seamstresses"
+      ],
+      "mediaCandidateFilenames": [
+        "QUEEN_MOTHER_FIRST_CANON_APPEARANCE.png"
+      ],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E12",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 12,
+      "title": "Daysha returns the gift",
+      "summary": "Daysha chooses a luxurious lavender and pink ballgown for her mother-in-law; uniquely, the supplied design is worn by the Queen Mother.",
+      "participants": [
+        "Daysha",
+        "Queen Mother",
+        "seamstresses"
+      ],
+      "mediaCandidateFilenames": [],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E13",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 13,
+      "title": "Matching gowns for two queens",
+      "summary": "The women shop without Rome or Lexi and wear the same design in blue-white for Daysha, brilliant red-white for the Queen Mother.",
+      "participants": [
+        "Daysha",
+        "Queen Mother",
+        "seamstresses"
+      ],
+      "mediaCandidateFilenames": [],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E14",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 14,
+      "title": "The star-lit gown and Rome's admiration",
+      "summary": "Later that weekend Daysha wears a starry deep-blue and icy-blue gown; Rome becomes adorably flustered.",
+      "participants": [
+        "Daysha",
+        "Rome"
+      ],
+      "mediaCandidateFilenames": [],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-E15",
+      "series": "early_royal_wardrobe",
+      "relativeOrder": 15,
+      "title": "The Queen Mother's birthday commission",
+      "summary": "Daysha commissions a light-blue royal event gown with a handful of special valuable stones, blending her love of fine simplicity and her mother-in-law's love of gems.",
+      "participants": [
+        "Daysha",
+        "Queen Mother",
+        "Garrick",
+        "seamstresses"
+      ],
+      "mediaCandidateFilenames": [
+        "royal_atelier_ball_gown_reveal.png"
+      ],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "daysha-wardrobe-and-atelier",
+        "artisans-and-local-economy"
+      ],
+      "storyCanonStatus": "established_from_current_conversation",
+      "imagePublicationStatus": "not_individually_verified_for_this_event",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-F01",
+      "series": "family_scenes_undated",
+      "relativeOrder": null,
+      "title": "The royal jewel delivery chase",
+      "summary": "Daysha and daughter Estelle chase a jewel delivery later revealed to be intended for the Queen Mother.",
+      "sourceSceneSequenceIds": [
+        "SC-01"
+      ],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "marriage-and-family",
+        "estelle-childhood-and-development"
+      ],
+      "storyCanonStatus": "established_in_existing_gallery",
+      "imagePublicationStatus": "existing_gallery_associations_only",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-F02",
+      "series": "family_scenes_undated",
+      "relativeOrder": null,
+      "title": "Palace garden tea and royal daycare",
+      "summary": "The family shares pastries; Estelle visits royal daycare.",
+      "sourceSceneSequenceIds": [
+        "SC-02"
+      ],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "marriage-and-family",
+        "estelle-childhood-and-development"
+      ],
+      "storyCanonStatus": "established_in_existing_gallery",
+      "imagePublicationStatus": "existing_gallery_associations_only",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-F03",
+      "series": "family_scenes_undated",
+      "relativeOrder": null,
+      "title": "Estelle's glitter balloon prank",
+      "summary": "Estelle pelts Rome with a glitter-filled water balloon while ministers laugh; a corrected bursting-balloon illustration is approved.",
+      "sourceSceneSequenceIds": [
+        "SC-03"
+      ],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "marriage-and-family",
+        "estelle-childhood-and-development"
+      ],
+      "storyCanonStatus": "established_in_existing_gallery",
+      "imagePublicationStatus": "existing_gallery_associations_only",
+      "receiptsVerified": false
+    },
+    {
+      "id": "RH-F04",
+      "series": "family_scenes_undated",
+      "relativeOrder": null,
+      "title": "Family catroom and magical cleanup",
+      "summary": "Rome is glitter-covered with two Maine Coons; Daysha magically cleans him before the family walks toward the courtyard.",
+      "sourceSceneSequenceIds": [
+        "SC-04"
+      ],
+      "yearSlot": null,
+      "calendarDate": null,
+      "estelleAge": null,
+      "tracks": [
+        "marriage-and-family",
+        "estelle-childhood-and-development"
+      ],
+      "storyCanonStatus": "established_in_existing_gallery",
+      "imagePublicationStatus": "existing_gallery_associations_only",
+      "receiptsVerified": false
+    }
+  ],
+  "workflow": {
+    "forEveryNewScene": [
+      "Capture canon visual and textual description",
+      "Locate event relative to existing story beats",
+      "Assign year only if supported by a source",
+      "Link only approved generated image with known Git path and hash",
+      "Record characters/ages and location only if established",
+      "Keep dress design identity separate from repeated appearances",
+      "Record verified receipts separately from estimated costs"
+    ],
+    "never": [
+      "Automatically equate scene count to number of bought dresses",
+      "Invent an age or year from art style",
+      "Add an unfinished reference image to the published gallery",
+      "Publish unreviewed generated variants",
+      "Assume the Queen Mother and foreign seamstress are one person"
+    ]
+  }
+}
