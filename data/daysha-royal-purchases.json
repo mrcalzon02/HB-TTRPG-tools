@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "archiveTitle": "The Royal Purchases of One Lady of the Elven Court",
   "subjects": [
     "Lady Daysha",
@@ -8,14 +8,15 @@
   "generatedRecordDate": "2026-10-26",
   "lastInventory": "2026-10-26",
   "recordPolicy": {
-    "note": "All 178 identified artwork files are published as optimized GitHub gallery images. The image is not the invoice: scene appearances, references, alternate renders and unselected displays never generate charges on their own.",
+    "note": "Canon: if Lady Daysha is pictured wearing a distinct gown, she purchased it and the cost is attributed to King Rome. Repeated scenes are not additional purchases. Display-only pieces remain unpurchased.",
     "sourceDatesAre": "Image file creation timestamps, never an in-world purchase date",
-    "paidTotalRule": "Sum only non-null cost.paidGold for purchased garments with a verified receipt; no zero placeholders.",
-    "displayOnlyRule": "Do not charge display-only or unselected gowns.",
+    "paidTotalRule": "Count pictured and visually identified distinct gowns as confirmed purchases even without price documentation; sum actual paid gold only where explicitly recorded. Null means amount unknown, not unpaid.",
+    "displayOnlyRule": "Display-only gowns are not purchased unless Daysha is shown wearing them.",
     "matchingRule": "Only explicitly assigned appearance files are grouped; unmatched art remains in the searchable source register.",
     "publicationRule": "Each source has a verified GitHub-hosted display image; higher-resolution masters are retained separately in Drive. WebP gallery derivatives need not be lossless copies.",
-    "sceneRule": "Scene sequences group narrative appearances independent of the wardrobe ledger; different clothing in the same story scene must not be merged as a physical garment.",
-    "gownRule": "One provisional distinct-design record per visually matching garment, but only a confirmed purchase with a verified paid price contributes to royal expenditure."
+    "sceneRule": "A scene cannot duplicate a purchase, but a new visually distinct gown Daysha wears in a scene is a purchased garment requiring one garment entry.",
+    "gownRule": "Daysha depicted wearing a distinct gown => one confirmed royal purchase. Similar scenes or repeated appearances in the same physical gown are grouped as one purchase.",
+    "purchaserRule": "Daysha's depicted gown purchases are attributed to husband King Rome's royal wardrobe accounts, per user canon."
   },
   "costBenchmarks": {
     "sourceDriveUrl": "https://docs.google.com/document/d/1pPe7lUyvfWL0qOGqzVzO8s-USvelXHK9DA356jsP7tk/edit?usp=drivesdk",
@@ -42,7 +43,7 @@
       "id": "EL-01",
       "title": "Fire — Ruby Crown",
       "collection": "elemental",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -60,13 +61,16 @@
       "benchmarkClass": "elemental",
       "notes": "Part of the ten completed full-length elemental gowns. Artwork date is not a purchase date.",
       "primaryFile": "Ruby-Crowned Elven Princess at Sunset.png",
-      "primarySourceId": "file_00000000238881fdb4e40212a7530598"
+      "primarySourceId": "file_00000000238881fdb4e40212a7530598",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "EL-02",
       "title": "Water — Azure Tide",
       "collection": "elemental",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -84,13 +88,16 @@
       "benchmarkClass": "elemental",
       "notes": "Part of the ten completed full-length elemental gowns. Artwork date is not a purchase date.",
       "primaryFile": "Water Elf Princess on a Sunlit Terrace.png",
-      "primarySourceId": "file_00000000ab2081fdbf6ee094f95c29bd"
+      "primarySourceId": "file_00000000ab2081fdbf6ee094f95c29bd",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "EL-03",
       "title": "Earth — Verdant Stone",
       "collection": "elemental",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -108,13 +115,16 @@
       "benchmarkClass": "elemental",
       "notes": "Part of the ten completed full-length elemental gowns. Artwork date is not a purchase date.",
       "primaryFile": "Sunlit Elf Maiden in a Garden Palace.png",
-      "primarySourceId": "file_00000000015c81fd968c8893edcecd45"
+      "primarySourceId": "file_00000000015c81fd968c8893edcecd45",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "EL-04",
       "title": "Air — Sky Palace",
       "collection": "elemental",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -132,13 +142,16 @@
       "benchmarkClass": "elemental",
       "notes": "Part of the ten completed full-length elemental gowns. Artwork date is not a purchase date.",
       "primaryFile": "Celestial Elf on a Sky Palace Terrace.png",
-      "primarySourceId": "file_000000000f5481fd959085b4977728f4"
+      "primarySourceId": "file_000000000f5481fd959085b4977728f4",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "EL-05",
       "title": "Lightning — Palace Storm",
       "collection": "elemental",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -156,13 +169,16 @@
       "benchmarkClass": "elemental",
       "notes": "Part of the ten completed full-length elemental gowns. Artwork date is not a purchase date.",
       "primaryFile": "Electrified Elven Princess in a Golden Palace.png",
-      "primarySourceId": "file_000000008ee881fdbcae4080013cd839"
+      "primarySourceId": "file_000000008ee881fdbcae4080013cd839",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "EL-06",
       "title": "Ice — Crystal Court",
       "collection": "elemental",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -180,13 +196,16 @@
       "benchmarkClass": "elemental",
       "notes": "Part of the ten completed full-length elemental gowns. Artwork date is not a purchase date.",
       "primaryFile": "Enchanting Ice Queen in a Crystal Palace.png",
-      "primarySourceId": "file_0000000070748230a5ee8b4cc654d200"
+      "primarySourceId": "file_0000000070748230a5ee8b4cc654d200",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "EL-07",
       "title": "Sunlight — Golden Radiance",
       "collection": "elemental",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -204,13 +223,16 @@
       "benchmarkClass": "elemental",
       "notes": "Part of the ten completed full-length elemental gowns. Artwork date is not a purchase date.",
       "primaryFile": "Sunlit Elven Princess on the Palace Terrace.png",
-      "primarySourceId": "file_0000000060e481fdb85adc3d2cf701f6"
+      "primarySourceId": "file_0000000060e481fdb85adc3d2cf701f6",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "EL-08",
       "title": "Moonshadow — Midnight Silver",
       "collection": "elemental",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -228,13 +250,16 @@
       "benchmarkClass": "elemental",
       "notes": "Part of the ten completed full-length elemental gowns. Artwork date is not a purchase date.",
       "primaryFile": "Moonlit Elven Ball Gown on a Castle Terrace.png",
-      "primarySourceId": "file_000000002e3082309b9e01bd35c833e3"
+      "primarySourceId": "file_000000002e3082309b9e01bd35c833e3",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "EL-09",
       "title": "Nature — Enchanted Garden",
       "collection": "elemental",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -252,13 +277,16 @@
       "benchmarkClass": "elemental",
       "notes": "Part of the ten completed full-length elemental gowns. Artwork date is not a purchase date.",
       "primaryFile": "Enchanted Elven Garden Princess.png",
-      "primarySourceId": "file_00000000cc708230bb8c7149bef6dd9d"
+      "primarySourceId": "file_00000000cc708230bb8c7149bef6dd9d",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "EL-10",
       "title": "Arcane — Spellbound Cathedral",
       "collection": "elemental",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -276,13 +304,16 @@
       "benchmarkClass": "elemental",
       "notes": "Part of the ten completed full-length elemental gowns. Artwork date is not a purchase date.",
       "primaryFile": "Celestial Elf in the Arcane Cathedral.png",
-      "primarySourceId": "file_0000000008fc81fdb1cbdd91f452fd94"
+      "primarySourceId": "file_0000000008fc81fdb1cbdd91f452fd94",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-01",
       "title": "Cherry Blossom Court Gown",
       "collection": "design",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -300,13 +331,16 @@
       "benchmarkClass": null,
       "notes": null,
       "primaryFile": "Cherry Blossom Elven Princess in a Palace Garden.png",
-      "primarySourceId": "file_00000000b3d081fd8f588efb4baac3b5"
+      "primarySourceId": "file_00000000b3d081fd8f588efb4baac3b5",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-02",
       "title": "Goddess-Inspired Ceremonial Gown",
       "collection": "design",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -324,13 +358,16 @@
       "benchmarkClass": null,
       "notes": null,
       "primaryFile": "Celestial Elven Goddess in the Sky Palace.png",
-      "primarySourceId": "file_00000000e52c81fd9a218b29d3602c74"
+      "primarySourceId": "file_00000000e52c81fd9a218b29d3602c74",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-03",
       "title": "Twilight Court Royal Gown",
       "collection": "design",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -348,13 +385,16 @@
       "benchmarkClass": null,
       "notes": null,
       "primaryFile": "Twilight Elf Princess on the Royal Terrace.png",
-      "primarySourceId": "file_000000008a9481fdbfcbd5bb7f0d4886"
+      "primarySourceId": "file_000000008a9481fdbfcbd5bb7f0d4886",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-04",
       "title": "Ocean Princess / Great Sea Study",
       "collection": "design",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -372,13 +412,16 @@
       "benchmarkClass": null,
       "notes": null,
       "primaryFile": "Lavender-Haired Princess Overlooking the Great Sea.png",
-      "primarySourceId": "file_00000000e3d88230831205905679df3a"
+      "primarySourceId": "file_00000000e3d88230831205905679df3a",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-05",
       "title": "Cosmic Star-Dust Gown",
       "collection": "design",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -396,13 +439,16 @@
       "benchmarkClass": null,
       "notes": null,
       "primaryFile": "Celestial Galaxy Gown on a Moonlit Terrace.png",
-      "primarySourceId": "file_00000000095c81fd86d00bde586ab005"
+      "primarySourceId": "file_00000000095c81fd86d00bde586ab005",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-06",
       "title": "White, Silver and Gold Royal Wedding Gown",
       "collection": "court",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -420,13 +466,16 @@
       "benchmarkClass": null,
       "notes": null,
       "primaryFile": "Celestial Royal Wedding in the Throne Hall.png",
-      "primarySourceId": "file_0000000096dc8230b670c6d2a08c45e7"
+      "primarySourceId": "file_0000000096dc8230b670c6d2a08c45e7",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-07",
       "title": "First Gown Fitting as Queen",
       "collection": "court",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -444,13 +493,16 @@
       "benchmarkClass": null,
       "notes": null,
       "primaryFile": "Sapphire Elf Queen in the Gilded Salon.png",
-      "primarySourceId": "file_00000000cef8823091c9c51936b7510d"
+      "primarySourceId": "file_00000000cef8823091c9c51936b7510d",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-08",
       "title": "Midnight Atelier Gown",
       "collection": "atelier",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -468,13 +520,16 @@
       "benchmarkClass": null,
       "notes": null,
       "primaryFile": "Royal Atelier: The Midnight Gown.png",
-      "primarySourceId": "file_00000000ea20823080b2680bad441676"
+      "primarySourceId": "file_00000000ea20823080b2680bad441676",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-09",
       "title": "Moonlit Ballroom Dress",
       "collection": "court",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -492,13 +547,16 @@
       "benchmarkClass": null,
       "notes": null,
       "primaryFile": "Moonlit Elven Ballroom Dance.png",
-      "primarySourceId": "file_0000000011f48230affcb25a25e23bc1"
+      "primarySourceId": "file_0000000011f48230affcb25a25e23bc1",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-10",
       "title": "Silver Moon Ceremonial Dress",
       "collection": "design",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -516,13 +574,16 @@
       "benchmarkClass": null,
       "notes": null,
       "primaryFile": "Daysha, Silver Moon Queen.png",
-      "primarySourceId": "file_000000004df881f5bc1628c54ccc2dce"
+      "primarySourceId": "file_000000004df881f5bc1628c54ccc2dce",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-11",
       "title": "Noble Evening Dress",
       "collection": "design",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -540,13 +601,16 @@
       "benchmarkClass": null,
       "notes": null,
       "primaryFile": "Daysha: Noble Elf Character Sheet.png",
-      "primarySourceId": "file_000000009a048230885eea895b3eab97"
+      "primarySourceId": "file_000000009a048230885eea895b3eab97",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-12",
       "title": "Violet Royal Ensemble",
       "collection": "design",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -564,7 +628,10 @@
       "benchmarkClass": null,
       "notes": null,
       "primaryFile": "Daysha: Violet Noble Elf Character Sheet.png",
-      "primarySourceId": "file_0000000054e881fd81760573a3195dea"
+      "primarySourceId": "file_0000000054e881fd81760573a3195dea",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DISPLAY-01",
@@ -600,7 +667,7 @@
       "id": "DR-13",
       "title": "Azure and Gold Terrace Court Gown",
       "collection": "court",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -619,13 +686,16 @@
       "notes": "Provisional single-design group: matching azure-and-gold bodice, draped overskirt and leg-revealing terrace silhouette. Render variations do not constitute additional invoices.",
       "primaryFile": "Azure Elf Princess on a Royal Balcony.png",
       "primarySourceId": "file_000000005f94823082058f0d1c138dce",
-      "matchingConfidence": "visual motif match; provisional physical-garment identity"
+      "matchingConfidence": "visual motif match; provisional physical-garment identity",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-14",
       "title": "Rose-Pink Gilded Fitting Gown",
       "collection": "atelier",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -644,13 +714,16 @@
       "notes": "Provisional single-design group: matching pink/ivory embellished bodice and gold-trimmed full gown across the fitted dressing-room portraits. May be commissioned, but no proof of payment.",
       "primaryFile": "Royal Gown Fitting in the Moonlit Chamber.png",
       "primarySourceId": "file_00000000391081fd837be87d87144657",
-      "matchingConfidence": "visual motif match; provisional physical-garment identity"
+      "matchingConfidence": "visual motif match; provisional physical-garment identity",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     },
     {
       "id": "DR-15",
       "title": "White-and-Navy Heraldic Court Gown",
       "collection": "design",
-      "recordStatus": "depicted_purchase_unverified",
+      "recordStatus": "purchased_by_depiction",
       "purchaseDate": null,
       "inWorldDate": null,
       "designer": null,
@@ -669,7 +742,10 @@
       "notes": "Provisional historic outfit design. White/ivory and navy panels with gold heraldic embroidery across two render variants. No assumption about coronation date or purchase.",
       "primaryFile": "Elven Queen of the Sunlit Kingdom.png",
       "primarySourceId": "file_000000000980823094517fb44d8b9eb2",
-      "matchingConfidence": "visual motif match; provisional physical-garment identity"
+      "matchingConfidence": "visual motif match; provisional physical-garment identity",
+      "purchaseConfirmedBy": "user_canon_wearing_implies_purchase",
+      "ownership": "Lady Daysha",
+      "purchaser": "King Rome"
     }
   ],
   "sources": [
@@ -4932,7 +5008,9 @@
     "originalsCoveredByVerifiedDriveZips": 34,
     "originalsMissingDrive": 0,
     "originalMasterReferenceCollisionsFixed": true,
-    "masterArchiveRule": "Every source has either its own exact-matched Google Drive original or an identified, CRC-checked ZIP member. Never map originals using a truncated source ID alone."
+    "masterArchiveRule": "Every source has either its own exact-matched Google Drive original or an identified, CRC-checked ZIP member. Never map originals using a truncated source ID alone.",
+    "confirmedCanonPurchases": 25,
+    "verifiedPaidAmounts": 0
   },
   "sceneSequences": [
     {
