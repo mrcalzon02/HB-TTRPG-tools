@@ -1,4 +1,4 @@
-name: Validate Daysha Royal Purchases Rights Quarantine
+name: Validate Approved Daysha Original Artwork
 on:
   push:
     branches: [main]
@@ -19,7 +19,7 @@ on:
 permissions:
   contents: read
 jobs:
-  no-unreviewed-art:
+  validate-approved-artwork:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
