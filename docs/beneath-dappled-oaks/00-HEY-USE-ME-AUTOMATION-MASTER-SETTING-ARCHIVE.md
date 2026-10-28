@@ -17,6 +17,12 @@ Stable repository path:
 
 **docs/beneath-dappled-oaks/00-HEY-USE-ME-AUTOMATION-MASTER-SETTING-ARCHIVE.md**
 
+## Cross-series royal date canon — owner decision, 2026-10-27
+
+*Beneath Dappled Oaks*, Rome and Daysha's court, and *Jewel Brook: Heroes of Embryon* occupy **the same Elaranthi nation**. The novel begins **midway through King Rome's first regnal year**, working **14 Deepdelve 282 S.M.**; Rome and Queen Daysha are married. Princess Estelle is **NOT BORN** at the novel opening but **IS BORN LATER IN THE FIRST REGNAL YEAR**. Under a working conception-at-marriage date of **1 Thawcall 282 S.M.** and 266-day conception-to-delivery interval, her expected birthday is **15 Casktide 282 S.M.** These exact days are derived planning anchors, not witnessed court records. Estelle reaches sixteen on the projected **15 Casktide 298 S.M.**, during Rome's seventeenth regnal year. Never place Estelle in the Last Seven's opening events, and never shift her birth to year two by default.
+
+The unified history registry is `data/master-storybook.json`; 16 birth-to-birthday life-years are in `data/royal-sixteen-year-timeline.csv`, scene-image assignments in `data/royal-artwork-placement.csv`, and the constitution and House bridge in `docs/shared-universe/ELARANTH-REGNAL-CHRONICLE.md`. Older committed BDO scenes keep their established causality; a proposed exact day must be checked against their seasonal setting before promotion into firm story canon. Other unrelated series are **not** silently merged.
+
 ## 0. Automation command contract
 
 When an hourly or scheduled story-continuation task runs:
