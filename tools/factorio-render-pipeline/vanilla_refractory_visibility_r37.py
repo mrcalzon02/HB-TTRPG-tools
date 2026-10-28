@@ -26,7 +26,7 @@ DARK_COLOR=(.110,.096,.078)
 AGED_COLOR=(.185,.154,.119)
 STRAKE_COLOR=(.154,.129,.099)
 THROAT_COLOR=(.115,.101,.086)
-THROAT_MATERIAL_NAME="R37_source_visible_deep_refractory_throat"
+THROAT_MATERIAL_NAME="R13_scorched_nonreflective_refractory"
 
 def corrugate(center,shift):
     x,y,z=center
@@ -72,15 +72,21 @@ def apply(name,root,p,api,scene):
         material.diffuse_color=(*color,1.)
         if bsdf.inputs["Emission Strength"].default_value!=0:
             raise RuntimeError("R37 cannot fuse additive glow into physical liner")
-    throat_mat=original_material.copy()
-    throat_mat.name=THROAT_MATERIAL_NAME
+    # R13 intentionally shares ONE scorched refractory material between
+    # the open R11 cone and its nested reaction drum. Preserve the single
+    # source-of-truth material datablock; changing only the throat would
+    # break the actual R13 shared heat shielding architecture.
+    drum=bpy.data.objects.get("R08_aft_internal_reaction_drum")
+    if (drum is None or original_material.name!=THROAT_MATERIAL_NAME or
+        drum.data.materials[0] is not original_material):
+        raise RuntimeError("R37 must keep original shared R13 refractory casting")
+    throat_mat=original_material
     throat_mat.node_tree.nodes["Principled BSDF"].inputs[
         "Base Color"].default_value=(*THROAT_COLOR,1.)
     throat_mat.diffuse_color=(*THROAT_COLOR,1.)
     if throat_mat.node_tree.nodes["Principled BSDF"].inputs[
         "Emission Strength"].default_value!=0:
-        raise RuntimeError("R37 throat cannot be made emissive")
-    throat.data.materials[0]=throat_mat
+        raise RuntimeError("R37 cannot add glow to the R13 shared refractory")
     sculpted=0
     for prefix in ("R19_NEAR_MOUTH_TILE_","R19_MID_STAGGERED_TILE_"):
         for n in range(40):
@@ -121,3 +127,4 @@ def apply(name,root,p,api,scene):
     scene["fsc_r37_open_bore_unsealed"]=True
     scene["fsc_r37_no_original_sprite_texture_or_glow"]=True
     scene["fsc_r37_no_added_objects"]=True
+    scene["fsc_r37_r13_shared_refractory_preserved"]=True

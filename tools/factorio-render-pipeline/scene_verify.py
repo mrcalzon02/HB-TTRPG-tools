@@ -685,6 +685,11 @@ def test_one(path):
                     raise RuntimeError("R37 source material was not saved")
                 if bs.inputs["Emission Strength"].default_value!=0:
                     raise RuntimeError("R37 original refractory baked additive glow")
+            if not scene.get("fsc_r37_r13_shared_refractory_preserved"):
+                raise RuntimeError("R37 broke R13 single shared refractory material")
+            drum=bpy.data.objects["R08_aft_internal_reaction_drum"]
+            if drum.data.materials[0] is not r19_throat.data.materials[0]:
+                raise RuntimeError("R37 split the R13 drum from the open throat")
             for kind in ("R19_NEAR_MOUTH_TILE_","R19_MID_STAGGERED_TILE_"):
                 for n in range(40):
                     ob=bpy.data.objects.get(f"{kind}{n:02d}")
