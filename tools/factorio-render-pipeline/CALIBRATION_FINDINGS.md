@@ -1319,3 +1319,29 @@ Previous R35.1 original-accurate top fin ratios and R33.2 physically 3D cupped O
 R36 is a *source-contour-driven 3D deformation hypothesis*. After R33, on the SAME two 8x9x2 thin cupped beige guard meshes, it adds just ONE signed 64-key shape deformation per guard, using per-frame original median edge deltas from true RGBA alpha and a very small maximum lateral travel .042 Blender tile. Mesh remains a real cupped clamshell; first two root axial rows are fixed and progressively higher weight is applied toward its free ends. Object-level transforms stay static, no concealed hinges or pistons invented, R21/R35.1 inner 10-fin meshes and R18 64-frame lower fin morphs completely independent, and original private sprite pixels never committed.
 
 R36 source validation requires 64 samples and bounded true-data range. Real Blender saved .blend validation checks each cup's original geometry, signed animated shape-key action, frame1 vs frame8 deformation, fixed curvature and independent inner-fin preservation. IMPORTANT: the source motion may be partly adjacent structures/occlusion; never claim the guards physically articulate until more evidence. Compare new 64-frame PNGs to the exact atlas with R34.1 before judging. Earlier R31 scene metadata `outer_shell_stationary_until_evidence` records the historical R31 stage and is not a claim about R36.
+
+
+### R36 verified real Blender + exact original alpha metrics (2026-10-27)
+
+Commit [779d60969693](https://github.com/mrcalzon02/HB-TTRPG-tools/commit/779d609696934d455b184a4a265f0b5628f2a7de) passed [source procedure validation #40612707972](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40612707972). The first source run failed only an assertion naming typo; the next Blender run failed a logically impossible saved-scene comparison (it demanded exact expected motion AND a nonzero difference to the same expected motion). Both root-cause validator bugs were corrected; checks retained nonzero evaluated 64-key motion and datablock identity using Blender's stable `as_pointer()`.
+
+**Strict real Blender calibration and custom-model regression PASSED** in [workflow #40613116187](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40613116187), artifact `factorio-captures-calibration` ID **12784096048**. Editable saved scene reopened; 64 actual native 264×542 body PNGs have 64 distinct hashes, 13 initial body renders distinct, no body/flame/conditional-pipe clipping and no loss of the preexisting mesh count/inner-fin geometry. No proprietary source images committed.
+
+Direct private exact RGBA atlas SHA256 `0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791` vs TRUE 64-frame Blender R35.1 baseline and R36 captures (binary alpha cutoff >=128, same 264×542 frame):
+
+| 64-frame metric | Original | R35.1 | R36 |
+| --- | ---: | ---: | ---: |
+| Mean whole-body alpha silhouette IoU | 1.00000 | 0.845510 | **0.846144** |
+| Mean alpha pixels changed between successive cyclic frames | 489.594 | 66.656 | **150.906** |
+| Pixels ever changed over 64 Blender frames | — | 911 | **1,532** |
+| Port outer edge alpha ROI x3:48,y375:475 IoU | 1.00000 | 0.907086 | **0.912527** |
+| Port outer edge ROI mean changed pixels per frame | 65.344 | 0 | **15.406** |
+| Starboard outer edge ROI x218:260,y375:475 IoU | 1.00000 | 0.903987 | **0.907387** |
+| Starboard outer edge ROI mean changed pixels per frame | 73.281 | 0 | **16.938** |
+| Lower-lip alpha ROI x48:215,y475:542 IoU | 1.00000 | **0.671030** | 0.670743 |
+
+R36 successfully produces separate moving outlines on both existing beige cup meshes, preserves original nested concavity, static unproven pivots and independent enlarged R35.1 inner-fin animation. It does **not** capture the source's full movement: original side ROI motion is still ~4x larger, and the lower-lip ROI slightly regressed (-0.000287 IoU), which must be retained as an unresolved quality concern. Source alpha motion is observational, not evidence of a unique hidden hinge assembly.
+
+**Next high-priority render deficiency observed in direct original-vs-R36 contact:** the source bell throat has visible longitudinal refractory scales and irregular oxidized surface bands; our R19/R20 cone reads as a near-black smooth, largely empty cavity at Factorio's fixed orthographic camera. Exact original source image y410–455, x55–208 has approximate linear-file RGB luma mean 0.0696, versus R35.1 0.0289 (opaque pixels only), so source interior is over 2x brighter in that fixed ROI. Use those measurements as a *material visibility baseline*, not a hard target that can be gamed by a flat bright surface. Fix must expose REAL existing R19 tiles/deep strakes with shaped normals/layering, preserving genuine R11 open throat and separate additive glow rather than painting a fake sprite or inventing end caps. User's lower fin ratios remain R35.1 verified.
+
+R36 accepted as a verified SOURCE-CONTOUR ANIMATION IMPROVEMENT, not vanilla-matched full motion and not final benchmark.
