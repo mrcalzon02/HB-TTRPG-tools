@@ -750,6 +750,42 @@ def test_one(path):
                         raise RuntimeError("R38 near/mid original shader allocation failed")
             print("R38_SOURCE_OPEN_BORE_DEPTH_AND_LAYER_QA_PASS",
                   path.name,flush=True)
+            # R39 SAVED mesh geometry rather than metadata alone:
+            # exactly twenty physical narrow radial channels in original
+            # R11 13x40 open wall, and unchanged source-shared R13 material.
+            from vanilla_open_liner_flutes_r39 import (
+                REVISION as R39_REVISION,ORIGINAL_SHA256 as R39_SHA,
+                RINGS as R39_RINGS,SIDES as R39_SIDES,
+                CHANNEL_DEPTH as R39_DEPTH,FLUTE_COUNT as R39_COUNT)
+            if (scene.get("fsc_r39_revision")!=R39_REVISION or
+                scene.get("fsc_r39_original_sha256")!=R39_SHA or
+                not scene.get("fsc_r39_ribbed_inner_open_liner") or
+                int(scene.get("fsc_r39_fluted_quads",0))!=8*R39_SIDES):
+                raise RuntimeError("R39 physical upper bell flutes not persisted")
+            if not all(scene.get(flag) for flag in (
+                "fsc_r39_reused_original_mesh_and_R13_shader",
+                "fsc_r39_source_pixels_not_committed",
+                "fsc_r39_no_new_geometry_or_glow")):
+                raise RuntimeError("R39 generated unsupported interior geometry")
+            original_liner=bpy.data.objects["R11_OPEN_DEEP_REFRACTORY_THROAT"]
+            wall=original_liner.data
+            if (len(wall.vertices)!=R39_RINGS*R39_SIDES or
+                len(wall.polygons)!=(R39_RINGS-1)*R39_SIDES or
+                not original_liner.get("R39_open_no_endcaps_preserved") or
+                int(original_liner.get("R39_actual_inner_flutes",0))!=R39_COUNT):
+                raise RuntimeError("R39 modified original R11 topology/endcaps")
+            for ring in (5,6):
+                p0=wall.vertices[ring*R39_SIDES].co
+                p1=wall.vertices[ring*R39_SIDES+1].co
+                radius=lambda v:(v.x*v.x+(v.z+.43)*(v.z+.43))**.5
+                if radius(p0)>=radius(p1)-R39_DEPTH*.6:
+                    raise RuntimeError("R39 saved wall is still smooth, no actual flute")
+            if (wall.materials[0].as_pointer()!=
+                bpy.data.objects["R08_aft_internal_reaction_drum"].data.materials[0].as_pointer()):
+                raise RuntimeError("R39 split original R13 refractory material")
+            if sum(1 for f in wall.polygons if not f.use_smooth)<8*R39_SIDES:
+                raise RuntimeError("R39 upper wall surface has no physical normal facets")
+            print("R39_ORIGINAL_OPEN_LINER_PHYSICAL_FLUTES_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)

@@ -441,6 +441,12 @@ def build_thruster(name,w,h,root,p):
         vanilla_refractory_depth_r38.apply(
             name,root,p,{},bpy.context.scene
         )
+        # R39: edit the original R11 circular liner itself into real
+        # tapered inner strakes; no new parts, shaders or axial caps.
+        import vanilla_open_liner_flutes_r39
+        vanilla_open_liner_flutes_r39.apply(
+            name,root,p,{},bpy.context.scene
+        )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")
     bpy.context.scene.collection.children.link(floor)
     prefixes=("RECESSED_socket_side_","deck_cutout_rim_",
