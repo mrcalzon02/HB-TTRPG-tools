@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "archiveTitle": "The Royal Purchases of One Lady of the Elven Court",
   "archiveStatus": "approved_generated_subset",
-  "notice": "19 individually identified original ChatGPT-generated Daysha illustrations are published; supplied third-party dress references, annotation previews, and failed prior revisions are excluded.",
+  "notice": "19 individually identified original generated Daysha illustrations are published. If Daysha wears a finished gown in approved story art, she has purchased it; only prices, dates, and possible matching of repeated gowns may remain open. Source references and rejected versions are excluded.",
   "rightsPolicy": {
     "approvedSource": "conversation-generated originals only",
     "rejected": "third-party dress-reference images, marked-up input screenshots, franchise references, any unverified previous gallery assets",
@@ -46,54 +46,78 @@
       "title": "Blooming Meadow Sapphire-and-Gold Gown",
       "primarySourceId": "file_0000000057e8820c9d942e574d26c4d3",
       "type": "adult royal gown",
-      "notes": "Initial generated character reference in a flowing white, lavender, gold and sapphire floral gown.",
+      "notes": "Original generated portrait of Daysha wearing a purchased gown in a flowing white, lavender, gold and sapphire floral gown.",
       "verifiedPaidGold": null,
-      "actualPurchaseDate": null
+      "actualPurchaseDate": null,
+      "acquisitionStatus": "canon_purchased_by_daysha",
+      "acquiredBy": "Queen Daysha",
+      "purchaseConfirmedInStory": true,
+      "invoiceStatus": "acquisition_confirmed_price_not_yet_valued"
     },
     {
       "id": "G-002",
       "title": "Ice-Blue Floral Court Gown",
       "primarySourceId": "file_00000000127081f5be39d41502d07a1d",
       "type": "adult royal gown",
-      "notes": "Distinct ice-blue floral, embroidered court gown. Later family scenes share a blue floral visual motif, but a physical garment match remains unverified.",
+      "notes": "Distinct ice-blue floral, embroidered court gown. Later family scenes share a blue floral visual motif, although matching them to the exact same physical gown remains to be reconciled.",
       "verifiedPaidGold": null,
-      "actualPurchaseDate": null
+      "actualPurchaseDate": null,
+      "acquisitionStatus": "canon_purchased_by_daysha",
+      "acquiredBy": "Queen Daysha",
+      "purchaseConfirmedInStory": true,
+      "invoiceStatus": "acquisition_confirmed_price_not_yet_valued"
     },
     {
       "id": "G-003",
       "title": "Roseblush Floral Ombré Gown",
       "primarySourceId": "file_0000000081c882308ad92998b5507022",
       "type": "adult royal gown",
-      "notes": "White pleated crossover bodice and straps, soft blush-to-coral layered tulle skirt, floral pink appliqués cascading from the waist. Seen on the mannequin during a chocolate delivery and then fitted on Daysha by the resident elven master seamstress. The two scenes depict one physical gown; purchase date and paid price are not verified.",
+      "notes": "White pleated crossover bodice and straps, soft blush-to-coral layered tulle skirt, floral pink appliqués cascading from the waist. Seen on the mannequin during a chocolate delivery and then fitted on Daysha by the resident elven master seamstress. The two scenes depict one physical gown; the acquisition is canon; exact date and price remain to be assigned.",
       "verifiedPaidGold": null,
-      "actualPurchaseDate": null
+      "actualPurchaseDate": null,
+      "acquisitionStatus": "canon_purchased_by_daysha",
+      "acquiredBy": "Queen Daysha",
+      "purchaseConfirmedInStory": true,
+      "invoiceStatus": "acquisition_confirmed_price_not_yet_valued"
     },
     {
       "id": "G-004",
       "title": "Pearlescent Manaweave Floral Gown",
       "primarySourceId": "file_00000000afc081fda6b2f464404ddc81",
       "type": "adult royal gown",
-      "notes": "Second distinct gown of the same atelier visit as the Roseblush gown. A new mana-infused pearlescent fabric, shimmering icy blue, lavender, silver and delicate iridescent white floral motifs; Daysha displays it with an ornate blue-violet crystal crown without dangling adornments. The shop master is delighted to introduce the fabric to the Queen. Exact date and price paid remain unverified.",
+      "notes": "Second distinct gown of the same atelier visit as the Roseblush gown. A new mana-infused pearlescent fabric, shimmering icy blue, lavender, silver and delicate iridescent white floral motifs; Daysha displays it with an ornate blue-violet crystal crown without dangling adornments. The shop master is delighted to introduce the fabric to the Queen. Purchase canon; exact date and gold value remain to be assigned.",
       "verifiedPaidGold": null,
-      "actualPurchaseDate": null
+      "actualPurchaseDate": null,
+      "acquisitionStatus": "canon_purchased_by_daysha",
+      "acquiredBy": "Queen Daysha",
+      "purchaseConfirmedInStory": true,
+      "invoiceStatus": "acquisition_confirmed_price_not_yet_valued"
     },
     {
       "id": "G-005",
       "title": "Midnight Sapphire Starfall Gown",
       "primarySourceId": "file_000000006bd48230bfc95aabfe91883e",
       "type": "adult royal gown",
-      "notes": "Queen Daysha tries on a midnight-sapphire, constellation-sparkling full-skirt gown with silver crystal strands, jeweled waist, transparent draped sleeves, and richly layered train. Accompanied by her blue-haired birth mother (distinct from King Rome's silver-haired mother-in-law) in the all-elven Gilded Spindle boutique. The silver-haired master seamstress, red-haired hem artisan, another elven worker, and Garrick Vellmont are present. A single distinctive garment; no verified purchase date or paid amount.",
+      "notes": "Queen Daysha tries on a midnight-sapphire, constellation-sparkling full-skirt gown with silver crystal strands, jeweled waist, transparent draped sleeves, and richly layered train. Accompanied by her blue-haired birth mother (distinct from King Rome's silver-haired mother-in-law) in the all-elven Gilded Spindle boutique. The silver-haired master seamstress, red-haired hem artisan, another elven worker, and Garrick Vellmont are present. One purchased garment; date and paid-gold valuation remain open.",
       "verifiedPaidGold": null,
-      "actualPurchaseDate": null
+      "actualPurchaseDate": null,
+      "acquisitionStatus": "canon_purchased_by_daysha",
+      "acquiredBy": "Queen Daysha",
+      "purchaseConfirmedInStory": true,
+      "invoiceStatus": "acquisition_confirmed_price_not_yet_valued"
     },
     {
       "id": "G-006",
       "title": "Icesilk and Midnight-Blue Mantle Court Gown",
       "primarySourceId": "file_00000000091882308fa2948727f9220a",
       "type": "adult royal gown",
-      "notes": "A distinct ice-blue fitted gown with sapphire-dark embroidered mantle, revealed at the Golden Spindle with Lady Liana. The same outing begins with Daysha wearing an earlier pale-blue gown; that arrival appearance alone is not a second purchased design. Exact date and payment unverified.",
+      "notes": "A distinct ice-blue fitted gown with sapphire-dark embroidered mantle, revealed at the Golden Spindle with Lady Liana. The same outing begins with Daysha wearing an earlier pale-blue gown; that arrival appearance alone is not a second purchased design. Purchase canon; date and paid-gold valuation remain open.",
       "verifiedPaidGold": null,
-      "actualPurchaseDate": null
+      "actualPurchaseDate": null,
+      "acquisitionStatus": "canon_purchased_by_daysha",
+      "acquiredBy": "Queen Daysha",
+      "purchaseConfirmedInStory": true,
+      "invoiceStatus": "acquisition_confirmed_price_not_yet_valued"
     }
   ],
   "sources": [
@@ -109,7 +133,9 @@
       "referenceMedia": false,
       "wardrobeId": "G-001",
       "appearanceCluster": null,
-      "originalSizeBytes": 2910950
+      "originalSizeBytes": 2910950,
+      "wornGarmentPurchase": "canon_purchased",
+      "acquisitionGownId": "G-001"
     },
     {
       "id": "file_00000000127081f5be39d41502d07a1d",
@@ -123,7 +149,9 @@
       "referenceMedia": false,
       "wardrobeId": "G-002",
       "appearanceCluster": null,
-      "originalSizeBytes": 3002096
+      "originalSizeBytes": 3002096,
+      "wornGarmentPurchase": "canon_purchased",
+      "acquisitionGownId": "G-002"
     },
     {
       "id": "file_000000004ba88230a0b2d8530752f76f",
@@ -137,7 +165,9 @@
       "referenceMedia": false,
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
-      "originalSizeBytes": 2746323
+      "originalSizeBytes": 2746323,
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_00000000bb1081f48f89b269379dfd13",
@@ -151,7 +181,9 @@
       "referenceMedia": false,
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
-      "originalSizeBytes": 3111813
+      "originalSizeBytes": 3111813,
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_00000000121881f6a4d178d0aaa6be63",
@@ -165,7 +197,9 @@
       "referenceMedia": false,
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
-      "originalSizeBytes": 3556402
+      "originalSizeBytes": 3556402,
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_000000008ce08230807c16765e2d3ff0",
@@ -179,7 +213,9 @@
       "referenceMedia": false,
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
-      "originalSizeBytes": 3057203
+      "originalSizeBytes": 3057203,
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_000000000b78820c973f9fb6ac03bb98",
@@ -193,7 +229,9 @@
       "referenceMedia": false,
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
-      "originalSizeBytes": 2852103
+      "originalSizeBytes": 2852103,
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_00000000a0748230b5d7d7b567c14e47",
@@ -207,7 +245,9 @@
       "referenceMedia": false,
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
-      "originalSizeBytes": 3131620
+      "originalSizeBytes": 3131620,
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_00000000a96481f58a0a2bdfa0777b9b",
@@ -221,7 +261,9 @@
       "referenceMedia": false,
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
-      "originalSizeBytes": 2973646
+      "originalSizeBytes": 2973646,
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_00000000302481f5acaa82062258b625",
@@ -235,7 +277,9 @@
       "referenceMedia": false,
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
-      "originalSizeBytes": 3147137
+      "originalSizeBytes": 3147137,
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_00000000bc90820cb2e1bbfda264e7e1",
@@ -249,7 +293,9 @@
       "referenceMedia": false,
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
-      "originalSizeBytes": 3175899
+      "originalSizeBytes": 3175899,
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_000000006e0881fd8b4c45394a9e0555",
@@ -263,7 +309,9 @@
       "referenceMedia": false,
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
-      "originalSizeBytes": 3227294
+      "originalSizeBytes": 3227294,
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_00000000682482309eb2ba225bc3173d",
@@ -281,7 +329,9 @@
       "originalMasterSha256": "9ec1f0e97b7399480cf7f18d9b075dbecb7d40e67e7441c51f2dea0c8769ee25",
       "originalMasterDriveFileId": "1HKZFvevp2YsvmjF0yMfl2lLFjchQA7HA",
       "publishedDerivative": "Optimized 560×512 AVIF; full-resolution 1312×1199 PNG preserved in Stories/Daysha Royal Purchases/originals on Drive",
-      "supersedesSourceId": "file_00000000f21081fd9d9365d1051d1685"
+      "supersedesSourceId": "file_00000000f21081fd9d9365d1051d1685",
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_000000009f308230885406b3bad69ba0",
@@ -296,7 +346,9 @@
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-ROSEBLUSH-BOUTIQUE",
       "originalSizeBytes": 2735738,
-      "originalMasterDriveFileId": "1lzTR4zGsCwFT2l1cFE82ePoD7HbpDaAy"
+      "originalMasterDriveFileId": "1lzTR4zGsCwFT2l1cFE82ePoD7HbpDaAy",
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_0000000081c882308ad92998b5507022",
@@ -311,7 +363,9 @@
       "wardrobeId": "G-003",
       "appearanceCluster": "DAYSHA-ROSEBLUSH-BOUTIQUE",
       "originalSizeBytes": 2696392,
-      "originalMasterDriveFileId": "1O12aWyJjFaFaCQ2VEsjZWJcdTm6OA5kl"
+      "originalMasterDriveFileId": "1O12aWyJjFaFaCQ2VEsjZWJcdTm6OA5kl",
+      "wornGarmentPurchase": "canon_purchased",
+      "acquisitionGownId": "G-003"
     },
     {
       "id": "file_00000000afc081fda6b2f464404ddc81",
@@ -327,7 +381,9 @@
       "appearanceCluster": "DAYSHA-PEARLESCENT-MANAWEAVE",
       "originalSizeBytes": 2847811,
       "originalMasterSha256": "0e2a41639bc662f90a353b3fe22336ea43c55244f39d748f5c22e7c8329815c2",
-      "originalMasterDriveFileId": "1NNILxkTKEcAk48-xoE2jL5-XXcHwG7iL"
+      "originalMasterDriveFileId": "1NNILxkTKEcAk48-xoE2jL5-XXcHwG7iL",
+      "wornGarmentPurchase": "canon_purchased",
+      "acquisitionGownId": "G-004"
     },
     {
       "id": "file_000000006bd48230bfc95aabfe91883e",
@@ -345,7 +401,9 @@
       "originalMasterSha256": "dca783d6e51f07b2444a93627e2d3efdc4cc7f94e7ca8923a9220ad8945f1cda",
       "originalMasterDriveFileId": "1Wh5xWtd8q7sjlNvB-nqZGk3LFUZkejWF",
       "identityNotes": "Daysha and her mother share iridescent blue hair, violet eyes and proportional high-elf ears. Daysha's own mother is a separate person from King Rome's silver-haired mother (previous Queen Mother canon).",
-      "supersedes": "Earlier same-scene versions with gray/lavender hair, blue eyes, generic boutique staff, or red correction markup"
+      "supersedes": "Earlier same-scene versions with gray/lavender hair, blue eyes, generic boutique staff, or red correction markup",
+      "wornGarmentPurchase": "canon_purchased",
+      "acquisitionGownId": "G-005"
     },
     {
       "id": "file_00000000493882309e70ae3fc3529e7d",
@@ -360,7 +418,9 @@
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-LIANA-GOLDEN-SPINDLE-OUTING",
       "originalSizeBytes": 3118599,
-      "originalMasterDriveFileId": "1KVk-90kX391sU_H48FuoOkb9Tms3C-lt"
+      "originalMasterDriveFileId": "1KVk-90kX391sU_H48FuoOkb9Tms3C-lt",
+      "wornGarmentPurchase": "canon_owned_outfit_shown_in_scene",
+      "purchaseCountingRule": "Previously purchased wardrobe appearance; no separate additional invoice without a distinct new gown."
     },
     {
       "id": "file_00000000091882308fa2948727f9220a",
@@ -375,7 +435,9 @@
       "wardrobeId": "G-006",
       "appearanceCluster": "DAYSHA-LIANA-GOLDEN-SPINDLE-OUTING",
       "originalSizeBytes": 2709911,
-      "originalMasterDriveFileId": "17MRgjfItenkI_MWhvftpfF6LNzl3RdZh"
+      "originalMasterDriveFileId": "17MRgjfItenkI_MWhvftpfF6LNzl3RdZh",
+      "wornGarmentPurchase": "canon_purchased",
+      "acquisitionGownId": "G-006"
     }
   ],
   "sceneSequences": [
@@ -389,7 +451,8 @@
         "file_00000000bb1081f48f89b269379dfd13",
         "file_00000000121881f6a4d178d0aaa6be63"
       ],
-      "newGownPurchases": 0
+      "newGownPurchases": 0,
+      "purchaseMeaning": "Daysha wears gowns she has purchased. Scene repeats do not charge her husband a second time."
     },
     {
       "id": "SC-02",
@@ -401,7 +464,8 @@
         "file_000000000b78820c973f9fb6ac03bb98",
         "file_00000000a0748230b5d7d7b567c14e47"
       ],
-      "newGownPurchases": 0
+      "newGownPurchases": 0,
+      "purchaseMeaning": "Daysha wears gowns she has purchased. Scene repeats do not charge her husband a second time."
     },
     {
       "id": "SC-03",
@@ -412,7 +476,8 @@
         "file_00000000a96481f58a0a2bdfa0777b9b",
         "file_00000000682482309eb2ba225bc3173d"
       ],
-      "newGownPurchases": 0
+      "newGownPurchases": 0,
+      "purchaseMeaning": "Daysha wears gowns she has purchased. Scene repeats do not charge her husband a second time."
     },
     {
       "id": "SC-04",
@@ -424,7 +489,8 @@
         "file_00000000bc90820cb2e1bbfda264e7e1",
         "file_000000006e0881fd8b4c45394a9e0555"
       ],
-      "newGownPurchases": 0
+      "newGownPurchases": 0,
+      "purchaseMeaning": "Daysha wears gowns she has purchased. Scene repeats do not charge her husband a second time."
     },
     {
       "id": "SC-05",
@@ -435,7 +501,8 @@
         "file_000000009f308230885406b3bad69ba0",
         "file_0000000081c882308ad92998b5507022"
       ],
-      "newGownPurchases": 0
+      "newGownPurchases": 0,
+      "purchaseMeaning": "Daysha wears gowns she has purchased. Scene repeats do not charge her husband a second time."
     },
     {
       "id": "SC-06",
@@ -445,28 +512,31 @@
       "sourceIds": [
         "file_00000000afc081fda6b2f464404ddc81"
       ],
-      "newGownPurchases": 0
+      "newGownPurchases": 0,
+      "purchaseMeaning": "Daysha wears gowns she has purchased. Scene repeats do not charge her husband a second time."
     },
     {
       "id": "SC-07",
       "title": "The Midnight Star fitting with Daysha's mother",
       "category": "Royal boutique",
-      "description": "At the Gilded Spindle, Queen Daysha tries on a midnight-sapphire gown cascading with crystal constellations. Her own blue-haired mother assists while Garrick Vellmont and the atelier's established elven seamstresses complete the fitting. This is the final corrected image; previous drafts are excluded. A fitting is not a verified purchase or invoice.",
+      "description": "At the Gilded Spindle, Queen Daysha tries on a midnight-sapphire gown cascading with crystal constellations. Her own blue-haired mother assists while Garrick Vellmont and the atelier's established elven seamstresses complete the fitting. This is the final corrected image; previous drafts are excluded. Daysha's finished gown is a canonical purchase; the precise gold amount and calendar day have not yet been assigned.",
       "sourceIds": [
         "file_000000006bd48230bfc95aabfe91883e"
       ],
-      "newGownPurchases": 0
+      "newGownPurchases": 0,
+      "purchaseMeaning": "Daysha wears gowns she has purchased. Scene repeats do not charge her husband a second time."
     },
     {
       "id": "SC-08",
       "title": "Lady Liana's first visit to the Golden Spindle",
       "category": "Royal boutique",
-      "description": "Queen Daysha meets Lady Liana, the golden-haired sister of Rome's mother, the Queen Dowager, while going to the Golden Spindle. Lady Liana joins her in midnight-blue finery and watches the workshop elves fit Daysha's new ice-blue court gown and sapphire-dark mantle. Two illustrations of one outing; only the fitting establishes a new gown design, and neither illustration verifies a paid receipt.",
+      "description": "Queen Daysha meets Lady Liana, the golden-haired sister of Rome's mother, the Queen Dowager, while going to the Golden Spindle. Lady Liana joins her in midnight-blue finery and watches the workshop elves fit Daysha's new ice-blue court gown and sapphire-dark mantle. Two illustrations of one outing; only the fitting establishes a new gown design, the new finished gown is canonically acquired by Daysha, with final pricing/date still to be assigned.",
       "sourceIds": [
         "file_00000000493882309e70ae3fc3529e7d",
         "file_00000000091882308fa2948727f9220a"
       ],
-      "newGownPurchases": 0
+      "newGownPurchases": 0,
+      "purchaseMeaning": "Daysha wears gowns she has purchased. Scene repeats do not charge her husband a second time."
     }
   ],
   "excludedArtwork": [
@@ -491,7 +561,15 @@
   "accounting": {
     "verifiedPurchaseTotalGold": null,
     "verifiedReceiptCount": 0,
-    "policy": "A dress design is one garment record; repeated scenes, color variants, revisions, and Estelle's child outfit do not automatically create extra charges. Prices are unconfirmed."
+    "policy": "Every finished gown worn by Daysha in approved story art is canonically purchased. One physical dress counts once; repeat scenes and correction images do not create another transaction. Unknown exact gold and calendar dates remain open accounting fields, not doubts about acquisition.",
+    "confirmedGarmentAcquisitionsInGallery": 6,
+    "outfitClustersPendingPhysicalGownReconciliation": [
+      "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
+      "DAYSHA-ROSEBLUSH-BOUTIQUE",
+      "DAYSHA-PEARLESCENT-MANAWEAVE",
+      "DAYSHA-MIDNIGHT-STAR-BIRTH-MOTHER",
+      "DAYSHA-LIANA-GOLDEN-SPINDLE-OUTING"
+    ]
   },
   "verification": {
     "publishedDerivativeCount": 19,
@@ -508,5 +586,14 @@
       "originalDriveFileId": "1HKZFvevp2YsvmjF0yMfl2lLFjchQA7HA",
       "supersedesImage": "assets/daysha/royal-purchases/royal-council-glitter-prank-corrected.avif"
     }
-  ]
+  ],
+  "purchaseCanon": {
+    "rule": "An approved original illustration showing Queen Daysha wearing a finished gown is canonical evidence that she has purchased/acquired that gown. This is a story fact, not a provisional inference dependent on a recovered cash receipt.",
+    "countRule": "Each distinct finished gown is acquired once; multiple scenes, corrections, visits, or family activities in the same gown are repeat appearances and not repeat purchases.",
+    "referenceExclusion": "Dress-design reference inputs, photos, superseded edits, montage-only studies not showing a worn outfit, and unapproved generated illustrations never independently create a Daysha purchase.",
+    "valuationRule": "Confirmed in-story acquisition is distinct from knowing the exact payment amount, payer, receipt identifier, or absolute calendar date. Unknown gold/date values never downgrade an acquired gown to an unverified purchase.",
+    "otherWearers": "Garments worn or gifted to the Queen Mother are separate garments belonging to her, not automatically Daysha purchases.",
+    "uncertainMatch": "If two illustrations show similar gowns, their acquired/owned status is canon, but matching them to one physical gown remains an identity-reconciliation task; do not invent an additional payment for an apparent repeat.",
+    "appliesTo": "Approved story illustrations and established narrative wardrobe purchases."
+  }
 }

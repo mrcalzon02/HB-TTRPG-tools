@@ -27,8 +27,9 @@
     "publishedArtwork": "Only image files individually confirmed generated/original and verified on main; no third-party dress reference images",
     "liveGalleryManifest": "data/daysha-royal-purchases.json",
     "unpublishedGeneratedCandidates": "data/daysha-current-conversation-generated-pending.json",
-    "finance": "Price benchmarks are estimates, not receipts",
-    "imageState": "Do not mark artwork published on this history record until exact Git blob path and hash verified."
+    "finance": "Acquisition is story canon; unknown itemized gold and receipts are separate accounting fields, not doubt about the purchase.",
+    "imageState": "Do not mark artwork published on this history record until exact Git blob path and hash verified.",
+    "purchaseCanon": "Any finished gown Daysha wears in approved story artwork is a canonical purchase, regardless of whether the exact price or calendar date has been entered. Repeat depictions of one gown do not create repeat acquisitions."
   },
   "chapterSlots": [
     {
