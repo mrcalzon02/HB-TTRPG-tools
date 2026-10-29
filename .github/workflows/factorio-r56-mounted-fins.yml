@@ -1,0 +1,55 @@
+name: Factorio mounted fin visibility R56
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/fin_exposure_r56.py'
+      - 'tools/factorio-render-pipeline/test_fin_exposure_r56.py'
+      - '.github/workflows/factorio-r56-mounted-fins.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-mounted-fin-sweep:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore separately saved R55 connected editable Blender scene
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40967115342
+          name: factorio-r51-r52-native-mount-calibration
+          github-token: ${{ github.token }}
+          path: capture-output/test-04-vanilla-approx/
+      - name: Reuse pinned headless Blender 4.5.15 LTS
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Source, schema and physical fin root preservation tests
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/fin_exposure_r56.py
+          python -m unittest discover -s tools/factorio-render-pipeline -p 'test_fin_exposure_r56.py' -v
+      - name: Bootstrap or verify Blender installation
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir readiness
+      - name: Render five real 3D source-oriented fin-lift candidates
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          test -f capture-output/test-04-vanilla-approx/mounted-fin-candidate-r55/three_mounts_connected_candidate.blend
+          "$BLENDER" -b --factory-startup -t 2 --python-exit-code 4 --python tools/factorio-render-pipeline/fin_exposure_r56.py -- --output capture-output
+      - name: Save test frames without committing original source images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r56-source-fin-visibility
+          path: capture-output/test-04-vanilla-approx/source-fin-visibility-r56/
+          if-no-files-found: warn
+          retention-days: 30
