@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "inventoryDate": "2026-10-29",
   "title": "DAYSHA image library originals versus references",
   "status": "inventory_only_not_new_publication",
@@ -19,7 +19,7 @@
   "currentApprovedArchiveRecordCount": 19,
   "pendingConversationGeneratedCount": 19,
   "referencePolicy": "Do not publish supplied dress reference images, screenshot corrections, franchise dress input, or unreviewed generations as approved Daysha original artwork.",
-  "accountingPolicy": "One physical gown can have multiple scenes; no paid gold or dates assigned on an image alone. Montages are not multiple purchases.",
+  "accountingPolicy": "Purchase confirmed by wearing in approved story art. One physical gown counted only once regardless of repeat illustrations, edits or later family scenes; reconcile same-gown identity before charging again. Unknown price/date never means not purchased.",
   "notes": [
     "This is a provenance and upload queue; it does not claim that unapproved pictures were transferred.",
     "Registered images preserve existing public entries without multiplying copies.",
@@ -44,7 +44,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/daysha-midnight-star-gown-birth-mother-gilded-spindle-final.png",
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "already_published_no_duplicate_purchase"
     },
     {
       "libraryFileId": "file_00000000bbf88230bff465f17fd9b928",
@@ -59,7 +60,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/daysha-midnight-star-gown-birth-mother-gilded-spindle-final.png",
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "already_published_no_duplicate_purchase"
     },
     {
       "libraryFileId": "file_00000000276881fd9df43f90bc4fd121",
@@ -74,7 +76,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/daysha-midnight-star-gown-birth-mother-gilded-spindle-final.png",
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "already_published_no_duplicate_purchase"
     },
     {
       "libraryFileId": "file_000000006bd48230bfc95aabfe91883e",
@@ -89,7 +92,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/daysha-midnight-star-gown-birth-mother-gilded-spindle-final.png",
       "wardrobeId": "G-005",
       "sceneGroup": "Midnight Star Fitting with Daysha's Mother",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_purchased_gown_G-005"
     },
     {
       "libraryFileId": "file_00000000091882308fa2948727f9220a",
@@ -104,7 +108,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/daysha-liana-golden-spindle-fitting-final-2026-10-28.png",
       "wardrobeId": "G-006",
       "sceneGroup": "Lady Liana's First Visit",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_purchased_gown_G-006"
     },
     {
       "libraryFileId": "file_000000004f608230bd637d82366f8449",
@@ -119,7 +124,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000b2bc81fdbf4f32e72e80b681",
@@ -134,7 +140,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000493882309e70ae3fc3529e7d",
@@ -149,7 +156,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/daysha-liana-first-appearance-golden-spindle-arrival-2026-10-28.png",
       "wardrobeId": null,
       "sceneGroup": "Lady Liana's First Visit",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_owned_gown_repeated_scene_match_to_be_reconciled"
     },
     {
       "libraryFileId": "file_000000005c948230b262983882876216",
@@ -164,7 +172,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/royal-council-glitter-prank-empty-hands-final.avif",
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "already_published_no_duplicate_purchase"
     },
     {
       "libraryFileId": "file_00000000afc081fda6b2f464404ddc81",
@@ -179,7 +188,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/daysha-pearlescent-mana-infused-fabric-crystal-crown.png",
       "wardrobeId": "G-004",
       "sceneGroup": "The Pearlescent Manaweave Reveal",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_purchased_gown_G-004"
     },
     {
       "libraryFileId": "file_00000000015c81fdb2144c509121dd80",
@@ -194,7 +204,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000f6988230930095bc69cb1118",
@@ -209,7 +220,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000816881fd94cc74a0b8d1ba86",
@@ -224,7 +236,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000005a1c81f896b568356b2587de",
@@ -239,7 +252,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000009f308230885406b3bad69ba0",
@@ -254,7 +268,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/daysha-atelier-chocolates-all-elven-staff.png",
       "wardrobeId": null,
       "sceneGroup": "The Roseblush Gown Fitting",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_owned_gown_repeated_scene_match_to_be_reconciled"
     },
     {
       "libraryFileId": "file_00000000e43882308cc6590d6378ff20",
@@ -269,7 +284,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000259481fdbbb038d1566faded",
@@ -284,7 +300,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000097cc820cbb97382cbe4f6e02",
@@ -299,7 +316,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000009c081fdab4bddc5635c92c5",
@@ -314,7 +332,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000fd7481fdae2d57d000ce61e3",
@@ -329,7 +348,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000002dd08230af8824f281ff64a2",
@@ -344,7 +364,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000006b04823080f90238445354b3",
@@ -359,7 +380,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000068208230b57fe0621d9d7d05",
@@ -374,7 +396,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000b8d0823094db11b540427ba6",
@@ -389,7 +412,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000007c3881f894d54c77ba60b7f7",
@@ -404,7 +428,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000560c81fdb59f594614ba8dd0",
@@ -419,7 +444,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000035c481fd8d3176239c8c995a",
@@ -434,7 +460,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000cfe881fda3e011d2d7fba399",
@@ -449,7 +476,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000000c9481fdb852af78f2e7ea08",
@@ -464,7 +492,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000d3c88230a64643db51b45606",
@@ -479,7 +508,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000002e7c8230b88f97533262a521",
@@ -494,7 +524,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000004884823081eb31c3382a1f43",
@@ -509,7 +540,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000069408230a83bcce25822cefe",
@@ -524,7 +556,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000d7cc81fd9df5bd2dc5ab07a6",
@@ -539,7 +572,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000fcbc823082f780ce6b4bb48e",
@@ -554,7 +588,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000005ad881fd84e8a5332c8c16da",
@@ -569,7 +604,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000cf0c81fd8a913c7c930f2625",
@@ -584,7 +620,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000a6208230b310c5b8621daf3d",
@@ -599,7 +636,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000aaf881fd98fdb03e936843f4",
@@ -614,7 +652,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000d9d082309f8c7f4a897e2c71",
@@ -629,7 +668,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000051f081f88166d923c20ab33b",
@@ -644,7 +684,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000002b348230a76a22d5b01dcdc4",
@@ -659,7 +700,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000e66c81f89d53fa14d2247969",
@@ -674,7 +716,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000095088230bf6c81fa62682fe3",
@@ -689,7 +732,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000d49c8230a13e65603a131bb6",
@@ -704,7 +748,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000002fc081f8b8c73ec70c5915e1",
@@ -719,7 +764,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000cb5c81fd902e256416f65c90",
@@ -734,7 +780,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000c6c48230b0f0d46e833a2012",
@@ -749,7 +796,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000a11c81fd9347487c19126bbf",
@@ -764,7 +812,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000008fcc81fd883b8355dbc900c8",
@@ -779,7 +828,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000fc3481f88eba60a86fad4615",
@@ -794,7 +844,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000093c08230a20f135e3891e786",
@@ -809,7 +860,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000117c81fdb55553c10c9dcfb7",
@@ -824,7 +876,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000ea20823080b2680bad441676",
@@ -839,7 +892,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000a32c81f899944374d359dc45",
@@ -854,7 +908,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000b0b48230936031eaca24cc80",
@@ -869,7 +924,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000004cf8823092c15a21ede7e6d1",
@@ -884,7 +940,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000003e04820cb7b533dbc8ddfece",
@@ -899,7 +956,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000004334823088c31d202c9a6204",
@@ -914,7 +972,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000001ddc81f5b5ff1682b1b7e362",
@@ -929,7 +988,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000f63081fdbe5d5362b3518c53",
@@ -944,7 +1004,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000fa5881fda2ac62a50ed022a7",
@@ -959,7 +1020,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000391081fd837be87d87144657",
@@ -974,7 +1036,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000808881f5aca910a9d6bd920e",
@@ -989,7 +1052,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000e74481fd83224b9773f7e1e7",
@@ -1004,7 +1068,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000003da882308fc7a919ba556e0f",
@@ -1019,7 +1084,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000026e081fd9585736ecebd8b4d",
@@ -1034,7 +1100,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000906c81fd8cc3d00f798bdae8",
@@ -1049,7 +1116,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000f92481fdbff0db5dccc49237",
@@ -1064,7 +1132,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000daa081fdb43359de7d008c02",
@@ -1079,7 +1148,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000f02c81f5bbd34113e635bf89",
@@ -1094,7 +1164,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000826c81f59e3ad3fe4ac88c67",
@@ -1109,7 +1180,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000497481fdb9c8deef47bbf8ba",
@@ -1124,7 +1196,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000057848230b0a9adfb5de333e7",
@@ -1139,7 +1212,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000009d3082309be6a1ef11732490",
@@ -1154,7 +1228,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000022cc81f5b4efcf09578ae080",
@@ -1169,7 +1244,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000550881f694afd876953bb99e",
@@ -1184,7 +1260,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000009fcc81fdacd11bea79083bb8",
@@ -1199,7 +1276,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000007f6081f8bbb698ff0eefc1e3",
@@ -1214,7 +1292,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000b1ac81fd937aec6d192f02eb",
@@ -1229,7 +1308,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000b488820cabd38989e4fedf43",
@@ -1244,7 +1324,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000434082308ae9abaec2ddd4b1",
@@ -1259,7 +1340,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000e0b48230a1d67bbd39e14de8",
@@ -1274,7 +1356,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000003c7c8230b5cf1c94efdae761",
@@ -1289,7 +1372,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000eb348230b898fb5b59058ec8",
@@ -1304,7 +1388,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000d16c81fd926590d82a4882b3",
@@ -1319,7 +1404,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000165c81f598afdfa2c82302b4",
@@ -1334,7 +1420,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000011f48230affcb25a25e23bc1",
@@ -1349,7 +1436,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000088e081fdbb923c8ce5f54746",
@@ -1364,7 +1452,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000006e0881fd8b4c45394a9e0555",
@@ -1379,7 +1468,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/royal-family-s-sunlit-castle-stroll.webp",
       "wardrobeId": null,
       "sceneGroup": "Family life",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_owned_gown_repeated_scene_match_to_be_reconciled"
     },
     {
       "libraryFileId": "file_00000000bc90820cb2e1bbfda264e7e1",
@@ -1394,7 +1484,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/magical-family-cat-atelier.webp",
       "wardrobeId": null,
       "sceneGroup": "Family life",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_owned_gown_repeated_scene_match_to_be_reconciled"
     },
     {
       "libraryFileId": "file_00000000302481f5acaa82062258b625",
@@ -1409,7 +1500,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/glittery-royal-family-catroom-celebration.webp",
       "wardrobeId": null,
       "sceneGroup": "Royal court and family",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_owned_gown_repeated_scene_match_to_be_reconciled"
     },
     {
       "libraryFileId": "file_00000000183881f583907b387b53331a",
@@ -1424,7 +1516,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000a96481f58a0a2bdfa0777b9b",
@@ -1439,7 +1532,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/rafters-prank-over-the-royal-council.webp",
       "wardrobeId": null,
       "sceneGroup": "Royal court and family",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_owned_gown_repeated_scene_match_to_be_reconciled"
     },
     {
       "libraryFileId": "file_00000000a0748230b5d7d7b567c14e47",
@@ -1454,7 +1548,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/royal-elf-garden-playtime.webp",
       "wardrobeId": null,
       "sceneGroup": "Family life",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_owned_gown_repeated_scene_match_to_be_reconciled"
     },
     {
       "libraryFileId": "file_000000000b78820c973f9fb6ac03bb98",
@@ -1469,7 +1564,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/icy-blue-haired-royal-garden-tea-party.webp",
       "wardrobeId": null,
       "sceneGroup": "Tea, pastries and banquets",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_owned_gown_repeated_scene_match_to_be_reconciled"
     },
     {
       "libraryFileId": "file_000000008ce08230807c16765e2d3ff0",
@@ -1484,7 +1580,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/royal-elf-family-tea-in-the-palace-garden.webp",
       "wardrobeId": null,
       "sceneGroup": "Family life",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_owned_gown_repeated_scene_match_to_be_reconciled"
     },
     {
       "libraryFileId": "file_00000000121881f6a4d178d0aaa6be63",
@@ -1499,7 +1596,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/elven-royal-jewel-chase.webp",
       "wardrobeId": null,
       "sceneGroup": "Royal jewel chase",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_owned_gown_repeated_scene_match_to_be_reconciled"
     },
     {
       "libraryFileId": "file_00000000bb1081f48f89b269379dfd13",
@@ -1514,7 +1612,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/royal-garden-treasure-chase.webp",
       "wardrobeId": null,
       "sceneGroup": "Royal jewel chase",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_owned_gown_repeated_scene_match_to_be_reconciled"
     },
     {
       "libraryFileId": "file_000000004ba88230a0b2d8530752f76f",
@@ -1529,7 +1628,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/elven-princess-s-royal-chase.webp",
       "wardrobeId": null,
       "sceneGroup": "Royal jewel chase",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_owned_gown_repeated_scene_match_to_be_reconciled"
     },
     {
       "libraryFileId": "file_00000000127081f5be39d41502d07a1d",
@@ -1544,7 +1644,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/celestial-elven-princess-in-bloom.webp",
       "wardrobeId": "G-002",
       "sceneGroup": "Other portraits and references",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_purchased_gown_G-002"
     },
     {
       "libraryFileId": "file_0000000057e8820c9d942e574d26c4d3",
@@ -1559,7 +1660,8 @@
       "registeredImagePath": "assets/daysha/royal-purchases/src-0000000057e8.webp",
       "wardrobeId": "G-001",
       "sceneGroup": "Other portraits and references",
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "canon_purchased_gown_G-001"
     },
     {
       "libraryFileId": "file_000000008a1481f4a68f34e77eb27034",
@@ -1574,7 +1676,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000bf3082308e0e09c462626c51",
@@ -1589,7 +1692,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000cef8823091c9c51936b7510d",
@@ -1604,7 +1708,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000920082308a5aae6dbb2ecbf9",
@@ -1619,7 +1724,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000006dc481fd89b6bd11148e68b0",
@@ -1634,7 +1740,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000006c348230b240f095ef40ff46",
@@ -1649,7 +1756,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000036b881fdba24f621e3d45d45",
@@ -1664,7 +1772,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000002a1082308447739e2edecf89",
@@ -1679,7 +1788,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000060c81fdb6225767ec61f92f",
@@ -1694,7 +1804,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000f34881fd8f80b0bb14e53372",
@@ -1709,7 +1820,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000f224823086dd0c37346f2957",
@@ -1724,7 +1836,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000c7a48230a1d021db4dcb5e3c",
@@ -1739,7 +1852,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000193081fdb62a07cadafa2133",
@@ -1754,7 +1868,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000f21c82309eb36020da066ca1",
@@ -1769,7 +1884,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000b75881fdad6f79b8c1b643b2",
@@ -1784,7 +1900,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000f70c82308542f91625be2895",
@@ -1799,7 +1916,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000052d882309d4d91c076ac02b1",
@@ -1814,7 +1932,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000cfe4823095e5bd0f037bb605",
@@ -1829,7 +1948,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000739081fd840685f428e61441",
@@ -1844,7 +1964,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000016e88230887a225347f15d5d",
@@ -1859,7 +1980,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000007f481fdb6e6d513298da5c5",
@@ -1874,7 +1996,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000004b9481fdbf2d5961f1c58534",
@@ -1889,7 +2012,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000ac8482308dddec11f755199f",
@@ -1904,7 +2028,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000097d881fdbd0a3574453d8ef5",
@@ -1919,7 +2044,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000907082309419963f23537b77",
@@ -1934,7 +2060,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000000c2081fdb6ad754545ca46f1",
@@ -1949,7 +2076,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000003c80820ca16ead5e3987e0b0",
@@ -1964,7 +2092,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000a05081f89b7a7a30bd0e7ec0",
@@ -1979,7 +2108,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000369081fdba4592cfaba0e90b",
@@ -1994,7 +2124,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000009fe081f8bd741d3ebf1efb5c",
@@ -2009,7 +2140,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000f86c81fd8df37a06f4267f56",
@@ -2024,7 +2156,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000275081fdb212f1e492bd136b",
@@ -2039,7 +2172,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000001b7081fdac7c0daaf0f39de4",
@@ -2054,7 +2188,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000ced081f5b71dacb3f2794b7f",
@@ -2069,7 +2204,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000095c81fd86d00bde586ab005",
@@ -2084,7 +2220,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000003788820caf3a7345aa3b3c48",
@@ -2099,7 +2236,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000127081f5accf3a1f6101e9ff",
@@ -2114,7 +2252,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000127481f5909c3e442d01c633",
@@ -2129,7 +2268,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000de6481fd93612d46a906d4b5",
@@ -2144,7 +2284,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000205881f5bf708a3a916643c3",
@@ -2159,7 +2300,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000290c81fdbb5520209946d77b",
@@ -2174,7 +2316,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000eb8882308a086fd151380ef5",
@@ -2189,7 +2332,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000007ef481fda5efb3e5cffbeddb",
@@ -2204,7 +2348,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000b99881fda7c670a7d072dfd0",
@@ -2219,7 +2364,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000229c8230b4e70f8351624cbf",
@@ -2234,7 +2380,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000a11081fd8b0a20d80525db04",
@@ -2249,7 +2396,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000049081fdb607d805dc3c65fa",
@@ -2264,7 +2412,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000804c81fd88d8faec3ff2fd42",
@@ -2279,7 +2428,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000031f48230b79cc5a1bdd4d436",
@@ -2294,7 +2444,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000009c18823080a47b6f88f263b4",
@@ -2309,7 +2460,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000005d5481fd86f8502118827a2e",
@@ -2324,7 +2476,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000056f08230bdbc24baa6e16357",
@@ -2339,7 +2492,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000054408230bbbea741c2939e8a",
@@ -2354,7 +2508,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000691c81fd8b3cdfd973cccb08",
@@ -2369,7 +2524,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000d9d881fda8fc40a3bf695352",
@@ -2384,7 +2540,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000000cf0823083434bc676c2d678",
@@ -2399,7 +2556,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000358c823094507b63d4c65b5a",
@@ -2414,7 +2572,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000547c81fd8f27d1a625e71ae1",
@@ -2429,7 +2588,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000e6dc81fd90991b33ddffb305",
@@ -2444,7 +2604,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000011148230af1767b724d07050",
@@ -2459,7 +2620,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000e3d88230831205905679df3a",
@@ -2474,7 +2636,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000009d5c8230acefdbd5fb355334",
@@ -2489,7 +2652,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000010c48230a0f7f9c4a213368c",
@@ -2504,7 +2668,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000000980823094517fb44d8b9eb2",
@@ -2519,7 +2684,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000a14881fda7f850a3b1a81683",
@@ -2534,7 +2700,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000000cb881fd9ba603cbcb7691a1",
@@ -2549,7 +2716,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000008a9481fdbfcbd5bb7f0d4886",
@@ -2564,7 +2732,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000e52c81fd9a218b29d3602c74",
@@ -2579,7 +2748,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000b3d081fd8f588efb4baac3b5",
@@ -2594,7 +2764,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000008fc81fdb1cbdd91f452fd94",
@@ -2609,7 +2780,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000cc708230bb8c7149bef6dd9d",
@@ -2624,7 +2796,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000002e3082309b9e01bd35c833e3",
@@ -2639,7 +2812,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000060e481fdb85adc3d2cf701f6",
@@ -2654,7 +2828,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000070748230a5ee8b4cc654d200",
@@ -2669,7 +2844,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000008ee881fdbcae4080013cd839",
@@ -2684,7 +2860,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000000f5481fd959085b4977728f4",
@@ -2699,7 +2876,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000015c81fd968c8893edcecd45",
@@ -2714,7 +2892,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000ab2081fdbf6ee094f95c29bd",
@@ -2729,7 +2908,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000238881fdb4e40212a7530598",
@@ -2744,7 +2924,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000205881fdab1714d353ab14c8",
@@ -2759,7 +2940,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000008fa881fd86e39223aa6a14e5",
@@ -2774,7 +2956,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000c16882309db070701d92e090",
@@ -2789,7 +2972,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000646881fda4eaafa2bacc0f51",
@@ -2804,7 +2988,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000005f94823082058f0d1c138dce",
@@ -2819,7 +3004,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000003c8c823099821d1eeb132d76",
@@ -2834,7 +3020,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000cd90823087af8086426cf089",
@@ -2849,7 +3036,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000c56c823083612fee67f5d0e0",
@@ -2864,7 +3052,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000915c81fd89a1b58b4a94fe7d",
@@ -2879,7 +3068,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000074c81fdb9d50af3c89415a2",
@@ -2894,7 +3084,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000079e881f88849ed5d1331c15b",
@@ -2909,7 +3100,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000ddd881fd85689a39e642facd",
@@ -2924,7 +3116,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000abcc81fd8096a7e8aba3b960",
@@ -2939,7 +3132,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000acd081fd878239bfacd4038c",
@@ -2954,7 +3148,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000c3908230bffe9a200587187d",
@@ -2969,7 +3164,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000b16c8230964caf1041861074",
@@ -2984,7 +3180,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000017548230af49901d2988267d",
@@ -2999,7 +3196,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000656c81f895b39afaebd33eaa",
@@ -3014,7 +3212,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_00000000b47881f8ab2304d5958019cd",
@@ -3029,7 +3228,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000004df881f5bc1628c54ccc2dce",
@@ -3044,7 +3244,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_0000000054e881fd81760573a3195dea",
@@ -3059,7 +3260,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     },
     {
       "libraryFileId": "file_000000009a048230885eea895b3eab97",
@@ -3074,7 +3276,8 @@
       "registeredImagePath": null,
       "wardrobeId": null,
       "sceneGroup": null,
-      "isNewPurchaseRecord": false
+      "isAdditionalPurchaseChargeFromThisImage": false,
+      "purchaseCanonStatus": "no_purchase_claim_until_approved_original"
     }
   ],
   "pendingOriginalCandidates": [
@@ -3327,5 +3530,6 @@
       "path": "assets/daysha/royal-purchases/daysha-liana-golden-spindle-fitting-final-2026-10-28.png",
       "wardrobeId": "G-006"
     }
-  ]
+  ],
+  "purchaseCanon": "A finished gown worn by Daysha in approved original illustrations is a canonical purchase. A source reference or rejected generation is not. Exact dates and gold paid remain separate fields."
 }
