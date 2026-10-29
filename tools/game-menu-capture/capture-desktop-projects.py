@@ -42,6 +42,11 @@ server=subprocess.Popen(["Xvfb",":98","-screen","0","1280x800x24","-ac"],
 time.sleep(2)
 if server.poll() is not None:
     raise SystemExit("Xvfb desktop unavailable")
+manager=subprocess.Popen(["openbox","--sm-disable"],env=env,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+time.sleep(2)
+if manager.poll() is not None:
+    server.terminate()
+    raise SystemExit("X11 window manager unavailable")
 summary={}
 
 def execute(command,cwd,log,timeout=750):
@@ -110,6 +115,8 @@ try:
                     try: os.killpg(proc.pid,signal.SIGKILL)
                     except Exception: pass
 finally:
+    manager.terminate()
+    manager.wait(timeout=8)
     server.terminate()
     server.wait(timeout=8)
 (OUT/"desktop-summary.json").write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
