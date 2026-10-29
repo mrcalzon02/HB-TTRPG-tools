@@ -2,7 +2,7 @@
   "schemaVersion": 4,
   "archiveTitle": "The Royal Purchases of One Lady of the Elven Court",
   "archiveStatus": "approved_generated_subset",
-  "notice": "17 individually identified original ChatGPT-generated Daysha illustrations are published; supplied third-party dress references, annotation previews, and failed prior revisions are excluded.",
+  "notice": "19 individually identified original ChatGPT-generated Daysha illustrations are published; supplied third-party dress references, annotation previews, and failed prior revisions are excluded.",
   "rightsPolicy": {
     "approvedSource": "conversation-generated originals only",
     "rejected": "third-party dress-reference images, marked-up input screenshots, franchise references, any unverified previous gallery assets",
@@ -10,7 +10,7 @@
     "approvedHistoricalItems": 12,
     "legacyItemsStillWithheld": 166,
     "scope": "Explicit SHA-verified Git history allowlist; do not bulk restore historical archive.",
-    "approvedGeneratedItemCount": 17
+    "approvedGeneratedItemCount": 19
   },
   "subjects": [
     "Daysha",
@@ -83,6 +83,15 @@
       "primarySourceId": "file_000000006bd48230bfc95aabfe91883e",
       "type": "adult royal gown",
       "notes": "Queen Daysha tries on a midnight-sapphire, constellation-sparkling full-skirt gown with silver crystal strands, jeweled waist, transparent draped sleeves, and richly layered train. Accompanied by her blue-haired birth mother (distinct from King Rome's silver-haired mother-in-law) in the all-elven Gilded Spindle boutique. The silver-haired master seamstress, red-haired hem artisan, another elven worker, and Garrick Vellmont are present. A single distinctive garment; no verified purchase date or paid amount.",
+      "verifiedPaidGold": null,
+      "actualPurchaseDate": null
+    },
+    {
+      "id": "G-006",
+      "title": "Icesilk and Midnight-Blue Mantle Court Gown",
+      "primarySourceId": "file_00000000091882308fa2948727f9220a",
+      "type": "adult royal gown",
+      "notes": "A distinct ice-blue fitted gown with sapphire-dark embroidered mantle, revealed at the Golden Spindle with Lady Liana. The same outing begins with Daysha wearing an earlier pale-blue gown; that arrival appearance alone is not a second purchased design. Exact date and payment unverified.",
       "verifiedPaidGold": null,
       "actualPurchaseDate": null
     }
@@ -337,6 +346,36 @@
       "originalMasterDriveFileId": "1Wh5xWtd8q7sjlNvB-nqZGk3LFUZkejWF",
       "identityNotes": "Daysha and her mother share iridescent blue hair, violet eyes and proportional high-elf ears. Daysha's own mother is a separate person from King Rome's silver-haired mother (previous Queen Mother canon).",
       "supersedes": "Earlier same-scene versions with gray/lavender hair, blue eyes, generic boutique staff, or red correction markup"
+    },
+    {
+      "id": "file_00000000493882309e70ae3fc3529e7d",
+      "title": "Daysha and Lady Liana Arrive at the Golden Spindle",
+      "image": "assets/daysha/royal-purchases/daysha-liana-first-appearance-golden-spindle-arrival-2026-10-28.png",
+      "gitBlobSha": "54fe60e68ad3f45d4c130f82e226245c1167233e",
+      "type": "scene",
+      "category": "Elven boutique",
+      "sceneGroup": "Lady Liana's First Visit",
+      "provenance": "Original ChatGPT-generated scene; Lady Liana is the golden-haired Queen Dowager's sister and Daysha's aunt-in-law; existing dress on arrival is not newly billed.",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-LIANA-GOLDEN-SPINDLE-OUTING",
+      "originalSizeBytes": 3118599,
+      "originalMasterDriveFileId": "1KVk-90kX391sU_H48FuoOkb9Tms3C-lt"
+    },
+    {
+      "id": "file_00000000091882308fa2948727f9220a",
+      "title": "Daysha's Icesilk Gown Fitting with Lady Liana",
+      "image": "assets/daysha/royal-purchases/daysha-liana-golden-spindle-fitting-final-2026-10-28.png",
+      "gitBlobSha": "1d84bc97c3b41fd53d702ecdaadf021ad47a0652",
+      "type": "gown-study",
+      "category": "Royal dress fitting",
+      "sceneGroup": "Lady Liana's First Visit",
+      "provenance": "User-approved final original ChatGPT-generated fitting; golden-haired Lady Liana and the elven seamstress attend Daysha in an ice-blue gown with midnight-blue mantle. Separate from user-supplied dress reference media.",
+      "referenceMedia": false,
+      "wardrobeId": "G-006",
+      "appearanceCluster": "DAYSHA-LIANA-GOLDEN-SPINDLE-OUTING",
+      "originalSizeBytes": 2709911,
+      "originalMasterDriveFileId": "17MRgjfItenkI_MWhvftpfF6LNzl3RdZh"
     }
   ],
   "sceneSequences": [
@@ -417,6 +456,17 @@
         "file_000000006bd48230bfc95aabfe91883e"
       ],
       "newGownPurchases": 0
+    },
+    {
+      "id": "SC-08",
+      "title": "Lady Liana's first visit to the Golden Spindle",
+      "category": "Royal boutique",
+      "description": "Queen Daysha meets Lady Liana, the golden-haired sister of Rome's mother, the Queen Dowager, while going to the Golden Spindle. Lady Liana joins her in midnight-blue finery and watches the workshop elves fit Daysha's new ice-blue court gown and sapphire-dark mantle. Two illustrations of one outing; only the fitting establishes a new gown design, and neither illustration verifies a paid receipt.",
+      "sourceIds": [
+        "file_00000000493882309e70ae3fc3529e7d",
+        "file_00000000091882308fa2948727f9220a"
+      ],
+      "newGownPurchases": 0
     }
   ],
   "excludedArtwork": [
@@ -444,9 +494,9 @@
     "policy": "A dress design is one garment record; repeated scenes, color variants, revisions, and Estelle's child outfit do not automatically create extra charges. Prices are unconfirmed."
   },
   "verification": {
-    "publishedDerivativeCount": 17,
-    "publishedPathsExpected": 17,
-    "masterSourcesInThisConversation": 15,
+    "publishedDerivativeCount": 19,
+    "publishedPathsExpected": 19,
+    "masterSourcesInThisConversation": 17,
     "pendingCorrectedSourceCount": 0,
     "historicalGalleryStillWithheld": true
   },
