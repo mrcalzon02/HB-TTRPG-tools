@@ -1,0 +1,3 @@
+# Daysha worn-gown archive rule
+
+An original illustration of Queen Daysha wearing a completed gown canonically establishes that she acquired that gown. It must be catalogued as a purchased garment, even if the exact gold paid and calendar day are unknown. Multiple scenes of the same garment share one wardrobe ID. Original generated illustrations are eligible for publication without another user approval. Exclude third-party dress reference images, exact duplicate renderings, and superseded corrections. The presence or absence of a technical image upload is separate from whether Daysha purchased the garment in-story.
