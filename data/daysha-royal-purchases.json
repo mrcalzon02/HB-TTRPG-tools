@@ -2,7 +2,7 @@
   "schemaVersion": 4,
   "archiveTitle": "The Royal Purchases of One Lady of the Elven Court",
   "archiveStatus": "approved_generated_subset",
-  "notice": "Thirteen individually identified ChatGPT-generated original Daysha illustrations are published, including the corrected glitter prank; third-party references and the other historic unaudited artworks remain excluded.",
+  "notice": "16 individually identified original ChatGPT-generated Daysha illustrations are published; supplied third-party dress references, annotation previews, earlier rejected crown revisions and other unaudited historic art remain excluded.",
   "rightsPolicy": {
     "approvedSource": "conversation-generated originals only",
     "rejected": "third-party dress-reference images, marked-up input screenshots, franchise references, any unverified previous gallery assets",
@@ -64,6 +64,15 @@
       "primarySourceId": "file_0000000081c882308ad92998b5507022",
       "type": "adult royal gown",
       "notes": "White pleated crossover bodice and straps, soft blush-to-coral layered tulle skirt, floral pink appliqués cascading from the waist. Seen on the mannequin during a chocolate delivery and then fitted on Daysha by the resident elven master seamstress. The two scenes depict one physical gown; purchase date and paid price are not verified.",
+      "verifiedPaidGold": null,
+      "actualPurchaseDate": null
+    },
+    {
+      "id": "G-004",
+      "title": "Pearlescent Manaweave Floral Gown",
+      "primarySourceId": "file_00000000afc081fda6b2f464404ddc81",
+      "type": "adult royal gown",
+      "notes": "Second distinct gown of the same atelier visit as the Roseblush gown. A new mana-infused pearlescent fabric, shimmering icy blue, lavender, silver and delicate iridescent white floral motifs; Daysha displays it with an ornate blue-violet crystal crown without dangling adornments. The shop master is delighted to introduce the fabric to the Queen. Exact date and price paid remain unverified.",
       "verifiedPaidGold": null,
       "actualPurchaseDate": null
     }
@@ -283,6 +292,22 @@
       "appearanceCluster": "DAYSHA-ROSEBLUSH-BOUTIQUE",
       "originalSizeBytes": 2696392,
       "originalMasterDriveFileId": "1O12aWyJjFaFaCQ2VEsjZWJcdTm6OA5kl"
+    },
+    {
+      "id": "file_00000000afc081fda6b2f464404ddc81",
+      "title": "Pearlescent Manaweave Gown — Crystal-Crowned Atelier Reveal",
+      "image": "assets/daysha/royal-purchases/daysha-pearlescent-mana-infused-fabric-crystal-crown.png",
+      "gitBlobSha": "26d683f88a92a1df0920649d216122ae039da9bb",
+      "type": "gown-study",
+      "category": "Royal dress fitting",
+      "sceneGroup": "The Pearlescent Manaweave Reveal",
+      "provenance": "Original ChatGPT-generated image of Queen Daysha trying the elven boutique's new pearlescent mana-infused fabric; final approved crown revision with uniformly violet-blue crystals and no dangling crown ornaments. Third-party fabric reference and annotated previews excluded.",
+      "referenceMedia": false,
+      "wardrobeId": "G-004",
+      "appearanceCluster": "DAYSHA-PEARLESCENT-MANAWEAVE",
+      "originalSizeBytes": 2847811,
+      "originalMasterSha256": "0e2a41639bc662f90a353b3fe22336ea43c55244f39d748f5c22e7c8329815c2",
+      "originalMasterDriveFileId": "1NNILxkTKEcAk48-xoE2jL5-XXcHwG7iL"
     }
   ],
   "sceneSequences": [
@@ -343,6 +368,16 @@
         "file_0000000081c882308ad92998b5507022"
       ],
       "newGownPurchases": 0
+    },
+    {
+      "id": "SC-06",
+      "title": "The new pearlescent manaweave — second gown of the boutique day",
+      "category": "Royal boutique",
+      "description": "After the chocolates and Roseblush fitting, Daysha tries the boutique's second gown of the day: a radiant, mana-infused pearlescent fabric newly introduced by the elven master seamstress. The shop master proudly presents her invention. Crown revisions are one finalized scene, not additional dress purchases.",
+      "sourceIds": [
+        "file_00000000afc081fda6b2f464404ddc81"
+      ],
+      "newGownPurchases": 0
     }
   ],
   "excludedArtwork": [
@@ -366,9 +401,9 @@
     "policy": "A dress design is one garment record; repeated scenes, color variants, revisions, and Estelle's child outfit do not automatically create extra charges. Prices are unconfirmed."
   },
   "verification": {
-    "publishedDerivativeCount": 15,
-    "publishedPathsExpected": 15,
-    "masterSourcesInThisConversation": 14,
+    "publishedDerivativeCount": 16,
+    "publishedPathsExpected": 16,
+    "masterSourcesInThisConversation": 15,
     "pendingCorrectedSourceCount": 0,
     "historicalGalleryStillWithheld": true
   },
