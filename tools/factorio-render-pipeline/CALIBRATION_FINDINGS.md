@@ -1668,3 +1668,46 @@ R36 lower clamshell rigs are untouched. R47 open throat, R45 upper feed
 mounts and R48 recessed existing ring remain. No proprietary sprite bytes
 on GitHub. This is a visual candidate pending full exact 64-frame evidence,
 strict no-clipping and Blender saved-scene checks. No source CAD claimed.
+
+
+### R49 saved-scene success, exact-source *visual regression*, R50 original-camera physical sweep
+
+R49 passed [run #40956378234](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40956378234)
+on actual Blender 4.5.15 LTS (calibration artifact `12934551526`).
+Its original 160 physical R19 refractory shingles, R47 open mouth,
+four R18 lower fin motion keys, two independent R36 outer guards,
+and three added evidence-supported DIFFERENT upper mounting shoes
+are saved and reload correctly. No clipping.
+
+But original-private 64-frame atlas RGB/alpha vs saved native body PNGs
+shows these exact mean errors (RGB MAE, normalized, composited on same
+transparent background; source pixels NOT committed):
+
+| Native ROI | R47 alpha IoU / RGB MAE | R49 alpha IoU / RGB MAE |
+| --- | --- | --- |
+| Mounts x35..228,y280..375 | .992855 / .180989 | .993510 / .168259 |
+| Upper fins x40..224,y330..430 | .999823 / .182411 | .999823 / .199124 |
+| Bell upper x35..228,y370..455 | .998914 / .201404 | .998914 / .234936 |
+| Whole aperture x40..224,y390..530 | .923909 / .151817 | .927752 / .183937 |
+
+**R49 physically fixes the wrong shared ring attachment, but its far-forward
+root and unchanged overlong R47/R48 aft tips create excessively tall
+ONSCREEN fin sheets and obscure too much original dark source shingled
+refractory. So R49 is NOT source-image fidelity accepted.** Do not
+falsely claim a generic structural QA pass establishes a visual match.
+Original source upper cream mounts appear near native rows ~320–350,
+while new R49 upper assemblies project considerably higher. The original
+main heated fin tips occur near rows 390–410, while new R49 fins still
+extend closer to 480. Both absolute mount placement and physical
+orientation of fins need joint calibration.
+
+R50 adds a NONDESTRUCTIVE candidate sweep on real saved R49 scene:
+six 264×542 frame01 views, each using same original camera/studio lamps,
+temporarily varying ONLY the five individually R49-rooted heat-tab
+meshes and 3 original R49 source-specific castings. Candidate controls
+adjust root Y aft, tip Y forward, and radial proximity as an integrated
+3D attachment correction rather than adding more nominal length.
+The source will be compared OFFLINE to determine which physical
+geometry relationship projects correctly. Verify full restore of all
+original vertices, camera, object counts, view and animation.
+Proprietary original source atlas never committed or fetched by CI.

@@ -44,6 +44,13 @@ def main():
                         "--python-exit-code","4","--python",
                         str(root/"aperture_isolation_r46.py"),
                         "--","--output",str(target)],check=True)
+        # R50: render six REAL upper fin/mount geometry hypotheses using
+        # same R49 saved scene, original 264x542 camera, and original lamps.
+        # No modified scene is saved; all mesh coordinates restored.
+        subprocess.run([str(blender),"-b","--factory-startup","-t","2",
+                        "--python-exit-code","4","--python",
+                        str(root/"fin_mount_geometry_sweep_r50.py"),
+                        "--","--output",str(target)],check=True)
         # R11 independent close-up Blender renders validate actual depth and
         # external cantilever support hardware, never the production atlas.
         subprocess.run([str(blender),"-b","--factory-startup","-t","2",
