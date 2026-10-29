@@ -1711,3 +1711,49 @@ The source will be compared OFFLINE to determine which physical
 geometry relationship projects correctly. Verify full restore of all
 original vertices, camera, object counts, view and animation.
 Proprietary original source atlas never committed or fetched by CI.
+
+
+### R50 completed native-camera candidate experiment: joint fins/mounts (2026-10-29)
+
+Actual saved Blender 4.5.15 LTS from
+[workflow #40958278388](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40958278388)
+**PASSED** source procedures, scene save/reopen, no clipping, custom
+model, 64-frame native motion capture, and six optional geometry
+candidate views. Calibration artifact `12934258953`, 35,123,064 bytes.
+The six original R49 upper sheets and source-visible three custom mounts
+were temporarily varied; source .blend and mesh vertices fully restored.
+
+Original 64-frame source atlas remains PRIVATE; compared its exact
+first 264×542 RGBA body frame with each genuine saved-camera Blender
+candidate using normalized mean absolute source-composited RGB errors.
+Reference ROIs do NOT alter captured game source in any manner:
+
+| Candidate | Mount region x45:223 y300:368 | Upper heat-tab x46:220 y340:422 | Throat x47:218 y398:485 | Combined x40:224 y296:505 |
+| --- | ---: | ---: | ---: | ---: |
+| R49 baseline | 0.161392 | 0.183593 | 0.239262 | 0.187842 |
+| A mild | 0.161007 | 0.188055 | 0.171310 | 0.161723 |
+| B intermediate | **0.156919** | 0.174023 | 0.128202 | 0.139180 |
+| C balanced | 0.158972 | 0.141713 | 0.086580 | 0.121640 |
+| D compact | 0.160160 | **0.139713** | 0.078405 | **0.118907** |
+| E further aft | 0.161291 | 0.142936 | **0.078025** | 0.119004 |
+
+The experimental D/E fin-root/tip candidates score much closer than
+R49 baseline in RGB, because they reveal more of the dark throat and
+reduce the excessively dominant visible fin blades. HOWEVER direct
+visual source comparison shows **a large, smooth grey physical surface**
+is exposed where the original image has detailed dark, staggered
+refractory scales. This is a substantive geometry/occlusion regression
+not captured by a single color MAE scalar. It may originate in an
+already-authored bell/chamber layer hidden until fins were shortened.
+Root cause must be established by first-hit physical object raycasts or
+actual Blender same-camera object isolation BEFORE changing it. Do not
+simply darken all grey metal or paste source artwork over the hole.
+
+**Decision:** R49 remains latest actual saved geometric candidate;
+R50 is a diagnostic only, with NO variant accepted/promoted. Retain the
+operator's structural constraint: three bespoke upper fin mounts ABOVE
+the real annular band, never a shared ring attachment or ten invented
+identical hidden actuators. Next physical correction must preserve
+independently cupped R36 exterior guards, original R18 lower motion,
+open R11/R39 physical refractory, real fin slots/material IDs, and
+verified separate effects/camera. No copyrighted original atlas committed.
