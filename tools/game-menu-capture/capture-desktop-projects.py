@@ -23,7 +23,7 @@ GAMES=[
     ("The-Malefic-Veil",["src","assets"],["bash","-lc",
      "mkdir -p out && javac --release 17 -encoding UTF-8 -d out src/main/java/hbnet/*.java src/main/java/veil/*.java src/main/java/dev/mrcalzon/water/*.java"],
      ["java","-Djava.awt.headless=false","-cp","out","veil.MaleficVeil"],"Malefic"),
-    ("The-Beckenburg-Project",["src","assets/runtime","art/menu-backgrounds","water-module"],
+    ("The-Beckenburg-Project",["src","assets/runtime","art/menu-backgrounds","water-module","development"],
      ["bash","build.sh"],["java","-Djava.awt.headless=false","-jar","build/beckenburg-game.jar"],"Beckenburg"),
     ("TheMechanist",["src","PACKAGE_client","PACKAGE_launcher","client","config"],
      ["mvn","-B","-DskipTests","package"],
