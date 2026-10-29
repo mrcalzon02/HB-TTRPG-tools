@@ -61,7 +61,7 @@ jobs:
       - name: Install Xvfb and native screenshot/window tools
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq xvfb scrot wmctrl xauth libgl1-mesa-dri libasound2t64
+          sudo apt-get install -y -qq xvfb openbox scrot wmctrl xauth libgl1-mesa-dri libasound2t64
       - name: Build and launch actual Java desktop game menus
         run: python3 tools/game-menu-capture/capture-desktop-projects.py
       - name: Preserve runnable-game screenshots and failure logs
