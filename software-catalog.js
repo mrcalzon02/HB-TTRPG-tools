@@ -20,8 +20,8 @@
   };
   const repoUrl = repo => "https://github.com/" + OWNER + "/" + encodeURIComponent(repo);
   const releaseUrl = (repo, tag) => repoUrl(repo) + "/releases/tag/" + encodeURIComponent(tag);
-  const artUrl = p => p.preview ? "https://raw.githubusercontent.com/" + OWNER + "/" +
-    encodeURIComponent(p.repo) + "/main/" + p.preview.split("/").map(encodeURIComponent).join("/") : null;
+  const artUrl = p => p.previewLocal || (p.preview ? "https://raw.githubusercontent.com/" + OWNER + "/" +
+    encodeURIComponent(p.repo) + "/main/" + p.preview.split("/").map(encodeURIComponent).join("/") : null);
   const href = (name, url, css) => {
     const a = make("a", css || "", name);
     a.href = url;
@@ -76,7 +76,7 @@
       card.setAttribute("aria-pressed", String(selected === p.repo));
       card.setAttribute("aria-label", "Inspect " + p.name + " releases and downloads");
       const art = make("div","sc-art");
-      if (p.preview) {
+      if (p.previewLocal || p.preview) {
         const im = make("img");
         im.loading = "lazy";
         im.alt = p.art || ("Source artwork for " + p.name);
