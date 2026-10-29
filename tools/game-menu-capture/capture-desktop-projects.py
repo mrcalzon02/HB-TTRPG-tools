@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import re
 import signal
+import shutil
 import subprocess
 import sys
 import time
@@ -20,9 +21,9 @@ WORK.mkdir(parents=True,exist_ok=True)
 GAMES=[
     ("powerpong",["src"],["mvn","-B","-q","-DskipTests","package"],
      ["java","-Djava.awt.headless=false","-jar","target/powerpong.jar"],"PowerPong"),
-    ("The-Malefic-Veil",["src","assets"],["bash","-lc",
-     "mkdir -p out && javac --release 17 -encoding UTF-8 -d out src/main/java/hbnet/*.java src/main/java/veil/*.java src/main/java/dev/mrcalzon/water/*.java"],
-     ["java","-Djava.awt.headless=false","-cp","out","veil.MaleficVeil"],"Malefic"),
+    ("The-Malefic-Veil",["src","assets","gpu-client","tools"],
+     ["bash","-lc","bash tools/install-editor-kit.sh && mvn -B -ntp -f gpu-client/pom.xml -DskipTests package"],
+     ["java","-Djava.awt.headless=false","-jar","gpu-client/target/MaleficVeil-GPU.jar","--smoke"],"Malefic"),
     ("The-Beckenburg-Project",["src","assets/runtime","art/menu-backgrounds","water-module","development"],
      ["bash","build.sh"],["java","-Djava.awt.headless=false","-jar","build/beckenburg-game.jar"],"Beckenburg"),
     ("TheMechanist",["src","PACKAGE_client","PACKAGE_launcher","client","config"],
@@ -71,6 +72,26 @@ try:
             execute(["git","sparse-checkout","set"]+paths,folder,repo+"-checkout.log",timeout=900)
             revision=subprocess.check_output(["git","rev-parse","HEAD"],cwd=folder,text=True).strip()
             execute(build,folder,repo+"-build.log",timeout=900)
+            if repo == "The-Malefic-Veil":
+                # The game itself exports the actual GPU/PSX menu framebuffer.
+                # The ordinary Java2D launcher is only 638x90 and is not a title menu.
+                execute(launch,folder,repo+"-runtime.log",timeout=180)
+                log_text=(OUT/(repo+"-runtime.log")).read_text(encoding="utf-8",errors="replace")
+                if "PASS PSX_HORROR_UI_MENU_RENDER" not in log_text or "PSX_HORROR_UI_READY" not in log_text:
+                    raise RuntimeError("GPU client did not attest rendering its real PSX menu")
+                captured=folder/"build/test-visuals/gpu-psx-menu.png"
+                data=captured.read_bytes()
+                if len(data)<12000 or not data.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+                    raise RuntimeError("Game did not export a valid real OpenGL title menu")
+                dest.mkdir(parents=True,exist_ok=True)
+                shutil.copy2(captured,dest/"title.png")
+                evidence={"repoSha":revision,"captureType":"gpu-smoke",
+                          "origin":"Original game PSX OpenGL screenshot directly from running --smoke GPU client",
+                          "capturedAt":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime()),
+                          "shots":[{"name":"title","file":"title.png","sha256":hashlib.sha256(data).hexdigest(),"bytes":len(data)}]}
+                (dest/"capture.json").write_text(json.dumps(evidence,indent=2)+"\\n",encoding="utf-8")
+                summary[repo]={"status":"captured","revision":revision}
+                continue
             known={w[0] for w in windows()}
             with (OUT/(repo+"-runtime.log")).open("w",encoding="utf-8") as log:
                 proc=subprocess.Popen(launch,cwd=folder,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
