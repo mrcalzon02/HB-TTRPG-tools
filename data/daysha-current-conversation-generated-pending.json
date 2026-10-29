@@ -8,15 +8,29 @@
       "filename": "starlit_gown_in_the_atelier.png",
       "sha256": "dac00f3d5753266f98c1ae54e6203741f2ebfec64249dcbbde3e574b826dbd80",
       "description": "First Friday midnight-blue gown",
-      "status": "pending_binary_upload",
-      "review": "candidate_generated_scene"
+      "status": "library_binary_sha256_verified_pending_archive_transfer",
+      "review": "candidate_generated_scene",
+      "binaryVerification": {
+        "libraryFileId": "file_00000000117c81fdb55553c10c9dcfb7",
+        "bytes": 3464212,
+        "sha256": "dac00f3d5753266f98c1ae54e6203741f2ebfec64249dcbbde3e574b826dbd80",
+        "method": "Local SHA-256 of raw Library file matched existing archival SHA-256. Original generated artwork, not supplied dress-reference input.",
+        "archiveTransferComplete": false
+      }
     },
     {
       "filename": "fairy_princess_in_the_royal_atelier.png",
       "sha256": "000e1633c67feeb1510e6ad92c944568d2c28e35900337a33411f4a6486c13c0",
       "description": "First Friday pale icy-blue gown",
-      "status": "pending_binary_upload",
-      "review": "candidate_generated_scene"
+      "status": "library_binary_sha256_verified_pending_archive_transfer",
+      "review": "candidate_generated_scene",
+      "binaryVerification": {
+        "libraryFileId": "file_0000000093c08230a20f135e3891e786",
+        "bytes": 3178760,
+        "sha256": "000e1633c67feeb1510e6ad92c944568d2c28e35900337a33411f4a6486c13c0",
+        "method": "Local SHA-256 of raw Library file matched existing archival SHA-256. Original generated artwork, not supplied dress-reference input.",
+        "archiveTransferComplete": false
+      }
     },
     {
       "filename": "a_richly_detailed_high_fantasy_anime_style_illust.png",
@@ -106,8 +120,15 @@
       "filename": "QUEEN_MOTHER_FIRST_CANON_APPEARANCE.png",
       "sha256": "ff97eb1c8294282ae429acd046ae1343060d54d9c34df3a4fb46c67336ec7c4a",
       "description": "Queen Mother first canonical appearance with Daysha",
-      "status": "pending_binary_upload",
-      "review": "candidate_generated_scene"
+      "status": "library_binary_sha256_verified_pending_archive_transfer",
+      "review": "candidate_generated_scene",
+      "binaryVerification": {
+        "libraryFileId": "file_000000007c3881f894d54c77ba60b7f7",
+        "bytes": 3056329,
+        "sha256": "ff97eb1c8294282ae429acd046ae1343060d54d9c34df3a4fb46c67336ec7c4a",
+        "method": "Local SHA-256 of raw Library file matched existing archival SHA-256. Original generated artwork, not supplied dress-reference input.",
+        "archiveTransferComplete": false
+      }
     },
     {
       "filename": "a_richly_detailed_high_resolution_anime_illustrat.png",
@@ -149,7 +170,7 @@
     "Rome/Garrick identity merges",
     "Extreme or missing elf ears"
   ],
-  "note": "Pending candidates are not published. The approved Daysha/birth-mother midnight-star fitting was transferred from the verified Library/Drive original to GitHub as the exact PNG, registered in the public gallery and moved to publishedFromStaging; previous rejected variants remain excluded.",
+  "note": "Pending candidates are not published. The approved Daysha/birth-mother midnight-star fitting was transferred from the verified Library/Drive original to GitHub as the exact PNG, registered in the public gallery and moved to publishedFromStaging; previous rejected variants remain excluded.\n2026-10-28 archive audit: three generated original binaries (midnight blue gown, pale ice-blue gown, Queen Mother first appearance) verified against retained SHA-256 and held pending transfer, without claiming publication. Do not substitute source dress references or superseded images.",
   "publishedFromStaging": [
     {
       "filename": "a_highly_detailed_vibrant_anime_fantasy_illustrat.png",
