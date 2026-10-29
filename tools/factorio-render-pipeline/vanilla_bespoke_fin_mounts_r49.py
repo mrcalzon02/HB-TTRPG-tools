@@ -143,7 +143,7 @@ def apply(name,root,p,api,scene):
         old_root=ob.data.vertices[0].co.y
         if abs(old_root-OLD_ROOT_Y)>.002:
             raise RuntimeError("R49 refuses moved original R48 fin roots")
-        if UPPER_FIN_PROFILES[i][0]-old_root<ROOT_MIN_EXTENSION:
+        if UPPER_FIN_PROFILES[i][0]-old_root<ROOT_MIN_EXTENSION-1e-5:
             raise RuntimeError("R49 source root not far enough forward of old ring")
         for v in ob.data.vertices:
             v.co=reposition_sheet_point(tuple(v.co),i,old_tip)
