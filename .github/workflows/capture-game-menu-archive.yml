@@ -1,0 +1,132 @@
+name: Capture authentic game menus for archive
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/capture-game-menu-archive.yml'
+      - 'tools/game-menu-capture/**'
+      - 'software-catalog.js'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: genuine-game-menu-capture-main
+  cancel-in-progress: false
+
+jobs:
+  browser-menus:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools/game-menu-capture
+            software-catalog-data.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install authentic Chromium screenshot renderer
+        run: |
+          npm install --prefix tools/game-menu-capture --no-audit --no-fund playwright@1.56.1
+          tools/game-menu-capture/node_modules/.bin/playwright install --with-deps chromium
+      - name: Open live game pages and capture real navigation screens
+        run: python3 tools/game-menu-capture/capture-browser-projects.py
+      - name: Preserve source revisions, screenshots and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-game-menu-captures
+          path: captures/
+          retention-days: 21
+          if-no-files-found: warn
+
+  desktop-menus:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools/game-menu-capture
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Install Xvfb and native screenshot/window tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb scrot wmctrl xauth libgl1-mesa-dri libasound2t64
+      - name: Build and launch actual Java desktop game menus
+        run: python3 tools/game-menu-capture/capture-desktop-projects.py
+      - name: Preserve runnable-game screenshots and failure logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-game-menu-captures
+          path: captures/
+          retention-days: 21
+          if-no-files-found: warn
+
+  publish:
+    needs: [browser-menus, desktop-menus]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          sparse-checkout: |
+            tools/game-menu-capture
+            software-catalog-data.js
+            assets/game-menu-captures
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: '*-game-menu-captures'
+          path: captures
+          merge-multiple: true
+      - name: Validate PNGs, provenance, and update matching archive cards
+        run: |
+          python3 -m pip install --quiet Pillow
+          python3 tools/game-menu-capture/publish.py
+      - name: Commit only verified runtime images to primary archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A -- assets/game-menu-captures software-catalog-data.js
+          if git diff --cached --quiet; then
+            echo 'No new menu screenshots need publication'
+            exit 0
+          fi
+          git commit -m 'Archive verified live game-menu screenshots with source evidence'
+          pushed=0
+          for attempt in 1 2 3 4; do
+            if git push origin HEAD:main; then
+              pushed=1
+              break
+            fi
+            echo "::warning::Menu archive push attempt $attempt failed; retrying without force"
+            git fetch origin main
+            git rebase origin/main
+            sleep "$((attempt * 3))"
+          done
+          if [[ $pushed -ne 1 ]]; then
+            echo '::error::Actual screenshots were captured but not committed to GitHub main'
+            exit 1
+          fi
+          git fetch origin main
+          git merge-base --is-ancestor HEAD origin/main || {
+            echo '::error::Published screenshot commit could not be verified on main'
+            exit 1
+          }
+          echo 'Verified published screenshot commit:' "$(git rev-parse HEAD)"
