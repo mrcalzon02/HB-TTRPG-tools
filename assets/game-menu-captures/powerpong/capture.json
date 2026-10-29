@@ -2,13 +2,13 @@
   "repoSha": "d99d8817866a210da7b99459b2fcc4d786b9139d",
   "origin": "Actual visible Java/desktop client window on Xvfb, captured with scrot",
   "windowTitle": "PowerPong",
-  "capturedAt": "2026-10-29T19:15:05Z",
+  "capturedAt": "2026-10-29T19:20:03Z",
   "shots": [
     {
       "name": "title",
       "file": "title.png",
-      "sha256": "805f80286e7202e730956636bce537e72a616ebc22ece1de015a03ca3f4c8941",
-      "bytes": 15536
+      "sha256": "54eb9c3c56d623800a7f03c1485992c14cfdb9d07fb4102b03128b57c72890c2",
+      "bytes": 15515
     }
   ]
 }
