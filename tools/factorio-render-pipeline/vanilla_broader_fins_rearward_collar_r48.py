@@ -78,7 +78,7 @@ def apply_fins(name,root,p,api,scene):
     modified=[]
     for i in range(VANE_COUNT):
         ob=col.objects.get(f"R11_SUSPENDED_AFTERBURNER_VANE_{i:02d}")
-        if (ob is None or not ob.get("R47_extended_original_upper_sheet")==(i<VISIBLE_FIN_COUNT)
+        if (ob is None or bool(ob.get("R47_extended_original_upper_sheet",False))!=(i<VISIBLE_FIN_COUNT)
             or len(ob.data.vertices)!=220 or ob.data.shape_keys is not None
             or ob.animation_data or
             ob.data.color_attributes.get("R21_heat_tint") is None
