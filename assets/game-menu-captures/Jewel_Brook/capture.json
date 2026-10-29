@@ -3,7 +3,7 @@
   "url": "http://127.0.0.1:8911/",
   "mode": "jewel",
   "origin": "Live browser rendering of checked-out game's actual interface",
-  "capturedAt": "2026-10-29T19:20:04.971Z",
+  "capturedAt": "2026-10-29T19:24:31.485Z",
   "loadedImages": 15,
   "brokenImages": 0,
   "shots": [
@@ -17,8 +17,8 @@
     {
       "name": "menu-campaign",
       "file": "menu-campaign.png",
-      "sha256": "9379efee396b9b7ec0e9091d4ea4eb00a46e3782c9240c643fe217ca9be534dd",
-      "bytes": 1545879,
+      "sha256": "7d5a3be78f3443b355794314a20d10d6b2c62eae774d3fc2fbe6ec307369bb05",
+      "bytes": 1545897,
       "visibleText": "JEWELBROOK\n250\n25\n0\nEmbryon Adventure\n\nFive underground chapters · 1,000 stages, each on one fixed campaign day.\n\n1\n2\n3\n4\n5\n1. Goblin Caves\nStages 1–200 · Enter\n2. Troll Caverns\nStages 201–400 · Preview — locked\n3. Sulfur Sumps\nStages 401–600 · Preview — locked\n4. Mushroom Mire\nStages 601–800 · Preview — locked\n5. Ghost Mines\nStages 801–1000 · Preview — locked\n\n1 of 5 chapters reached. You may preview later chapters; stages unlock sequentially.\n\nThe Royal Chronicle\n\nLive and work in Embryon as t"
     },
     {
