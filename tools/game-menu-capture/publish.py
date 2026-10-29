@@ -37,7 +37,7 @@ for folder in sorted(CAPTURES.iterdir() if CAPTURES.exists() else []):
         dest = ARCHIVE / folder.name
         for item in shots:
             name = item["file"]
-            if not re.fullmatch(r"(title|menu-[a-z0-9-]+)\\.png", name):
+            if not re.fullmatch(r"(title|menu-[a-z0-9-]+)\.png", name):
                 raise ValueError("Unexpected screenshot filename")
             picture = folder / name
             data = picture.read_bytes()
@@ -69,9 +69,9 @@ for folder in sorted(CAPTURES.iterdir() if CAPTURES.exists() else []):
         section_end = source.find('  },',section_start)
         section = source[section_start: section_end if section_end != -1 else len(source)]
         if '"previewLocal":' in section:
-            section = re.sub(r'\\n    "previewLocal": "[^"]*",', '', section)
-            section = re.sub(r'\\n    "captureEvidence": "[^"]*",', '', section)
-            source = source[:section_start] + section + source[section_start + len(source[section_start: section_end if section_end != -1 else len(source)]):]
+            section = re.sub(r'\n    "previewLocal": "[^"]*",', '', section)
+            section = re.sub(r'\n    "captureEvidence": "[^"]*",', '', section)
+            source = source[:section_start] + section + source[section_end if section_end != -1 else len(source):]
         source = source.replace(marker, marker + "\n    " + local_line + "\n    " + evidence_line, 1)
         updated.append({"repository":folder.name,"revision":revision,"screenshots":len(shots)})
     except Exception as exc:
