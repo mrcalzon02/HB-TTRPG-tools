@@ -183,6 +183,28 @@ window.HBSoftwareProjects = Object.freeze([
     "platform": "Minecraft modpack"
   },
   {
+    "name": "Fleet Designer — Orbital Works",
+    "repo": "Fleet-designer",
+    "kind": "game",
+    "stage": "Early runnable interface",
+    "about": "Orbital manufacturing, ship components, fleet industry and research in a real React/Vite desktop interface foundation.",
+    "preview": null,
+    "art": null,
+    "language": "React / Electron",
+    "platform": "Desktop / browser-based development interface"
+  },
+  {
+    "name": "Depth Detective",
+    "repo": "Depth-Detective",
+    "kind": "game",
+    "stage": "Historical Adventure Game Studio build; menu capture pending",
+    "about": "Underwater science-fiction detective game, preserved in its historical source archive; no new runtime screenshot has been certified.",
+    "preview": null,
+    "art": null,
+    "language": "Adventure Game Studio",
+    "platform": "Windows / historical"
+  },
+  {
     "name": "PowerPong",
     "repo": "powerpong",
     "kind": "game",
