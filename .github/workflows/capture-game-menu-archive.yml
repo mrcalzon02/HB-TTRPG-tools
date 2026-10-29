@@ -93,40 +93,41 @@ jobs:
           pattern: '*-game-menu-captures'
           path: captures
           merge-multiple: true
-      - name: Validate PNGs, provenance, and update matching archive cards
-        run: |
-          python3 -m pip install --quiet Pillow
-          python3 tools/game-menu-capture/publish.py
-      - name: Commit only verified runtime images to primary archive
+      - name: Install screenshot validation library
+        run: python3 -m pip install --quiet Pillow
+      - name: Validate screenshots and publish against newest remote main
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A -- assets/game-menu-captures software-catalog-data.js
-          if git diff --cached --quiet; then
-            echo 'No new menu screenshots need publication'
-            exit 0
-          fi
-          git commit -m 'Archive verified live game-menu screenshots with source evidence'
           pushed=0
           for attempt in 1 2 3 4; do
+            # Rebase-free reconstruction of generated binary outputs avoids
+            # irreconcilable PNG conflicts when other workflows push to main.
+            git fetch origin main
+            git reset --hard origin/main
+            python3 tools/game-menu-capture/publish.py
+            git add -A -- assets/game-menu-captures software-catalog-data.js
+            if git diff --cached --quiet; then
+              echo 'No new verified menu screenshots need publication'
+              exit 0
+            fi
+            git commit -m 'Archive verified live game-menu screenshots with source evidence'
             if git push origin HEAD:main; then
               pushed=1
               break
             fi
-            echo "::warning::Menu archive push attempt $attempt failed; retrying without force"
-            git fetch origin main
-            git rebase origin/main
+            echo "::warning::Menu archive push attempt $attempt lost a concurrent update; regenerating against the new remote tree"
             sleep "$((attempt * 3))"
           done
           if [[ $pushed -ne 1 ]]; then
-            echo '::error::Actual screenshots were captured but not committed to GitHub main'
+            echo '::error::Verified screenshot publication failed after non-destructive retries'
             exit 1
           fi
           git fetch origin main
           git merge-base --is-ancestor HEAD origin/main || {
-            echo '::error::Published screenshot commit could not be verified on main'
+            echo '::error::Screenshot commit could not be verified on remote main'
             exit 1
           }
           echo 'Verified published screenshot commit:' "$(git rev-parse HEAD)"
