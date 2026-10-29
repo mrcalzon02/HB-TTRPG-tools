@@ -79,14 +79,14 @@
       if (p.previewLocal || p.preview) {
         const im = make("img");
         im.loading = "lazy";
-        im.alt = p.art || ("Source artwork for " + p.name);
+        im.alt = p.previewLocal ? "Captured in-game menu for " + p.name : (p.art || ("Source artwork for " + p.name));
         im.src = artUrl(p);
         im.addEventListener("error", () => {
           im.remove();
           art.prepend(make("span","sc-fallback",p.name));
         },{once:true});
         art.append(im);
-        art.append(make("span","sc-art-label",p.art || "Repository artwork"));
+        art.append(make("span","sc-art-label",p.previewLocal ? "Actual running-game menu capture" : (p.art || "Repository artwork"));
       } else {
         art.append(make("span","sc-fallback",p.name));
         art.append(make("span","sc-art-label","No screenshot claimed"));
