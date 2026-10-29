@@ -34,6 +34,9 @@ for folder in sorted(CAPTURES.iterdir() if CAPTURES.exists() else []):
         files = [item["file"] for item in shots]
         if "title.png" not in files:
             raise ValueError("Primary screenshot lacks evidence entry")
+        marker = '"repo": "' + folder.name + '",'
+        if source.count(marker) != 1:
+            raise ValueError("Exactly one matching catalog repository is required before promoting any image")
         dest = ARCHIVE / folder.name
         for item in shots:
             name = item["file"]
