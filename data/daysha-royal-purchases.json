@@ -247,21 +247,22 @@
       "originalSizeBytes": 3227294
     },
     {
-      "id": "file_00000000f21081fd9d9365d1051d1685",
-      "title": "Royal Council Glitter Prank — Corrected Burst",
-      "image": "assets/daysha/royal-purchases/royal-council-glitter-prank-corrected.avif",
-      "gitBlobSha": "c66e9ca95cad6e5015fe99c13c1bdd28f512e95d",
+      "id": "file_00000000682482309eb2ba225bc3173d",
+      "title": "Royal Council Glitter Prank — Final Empty-Handed Throw",
+      "image": "assets/daysha/royal-purchases/royal-council-glitter-prank-empty-hands-final.avif",
+      "gitBlobSha": "892559efc2841e49b0f91f07317695812688e977",
       "type": "scene",
       "category": "Royal council and family",
       "sceneGroup": "Royal court and family",
-      "provenance": "ChatGPT-generated original artwork from the Daysha/Rome conversation, corrected balloon continuity",
+      "provenance": "Final original ChatGPT image edit: Princess Estelle's throwing hand is visibly empty after the balloon burst against King Rome's head. Supersedes previous corrected render and excludes annotated user preview.",
       "referenceMedia": false,
       "wardrobeId": null,
       "appearanceCluster": "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
-      "originalSizeBytes": 3177248,
-      "originalMasterSha256": "25a3693063306577898cd3e3e0ecc3a24423181e6fa78ae04df50710a6df7bb6",
-      "originalMasterDriveFileId": "1T8_hHovGL6wmZEMdJTVQDOPBFhQ7ToYY",
-      "publishedDerivative": "Optimized 560-pixel AVIF; full-resolution original PNG preserved separately on Drive"
+      "originalSizeBytes": 2884021,
+      "originalMasterSha256": "9ec1f0e97b7399480cf7f18d9b075dbecb7d40e67e7441c51f2dea0c8769ee25",
+      "originalMasterDriveFileId": "1HKZFvevp2YsvmjF0yMfl2lLFjchQA7HA",
+      "publishedDerivative": "Optimized 560×512 AVIF; full-resolution 1312×1199 PNG preserved in Stories/Daysha Royal Purchases/originals on Drive",
+      "supersedesSourceId": "file_00000000f21081fd9d9365d1051d1685"
     },
     {
       "id": "file_000000009f308230885406b3bad69ba0",
@@ -339,10 +340,10 @@
       "id": "SC-03",
       "title": "Estelle's council-chamber ambush",
       "category": "Family",
-      "description": "Estelle crouches in the rafters and bursts a glitter-filled balloon against Rome's head as royal ministers laugh. The corrected version replaces the flawed intact-balloon illustration.",
+      "description": "Princess Estelle throws a magical glitter-filled water balloon from the rafters at King Rome during a council gathering. The balloon has burst against his head; her throwing hand is empty as the court laughs. This final continuity-corrected illustration supersedes the earlier version with a balloon still in hand.",
       "sourceIds": [
         "file_00000000a96481f58a0a2bdfa0777b9b",
-        "file_00000000f21081fd9d9365d1051d1685"
+        "file_00000000682482309eb2ba225bc3173d"
       ],
       "newGownPurchases": 0
     },
@@ -392,6 +393,10 @@
     {
       "reason": "Known continuity error: intact water balloon after burst",
       "sourceDescription": "Royal Council Glitter Prank (superseded)"
+    },
+    {
+      "reason": "Continuity error: after throwing and bursting the glitter balloon, Estelle must not be depicted still holding an intact balloon",
+      "sourceDescription": "Earlier council glitter prank render with hand still holding a balloon (superseded)"
     }
   ],
   "pendingCorrections": [],
@@ -409,10 +414,11 @@
   },
   "resolvedCorrections": [
     {
-      "title": "Estelle's glitter balloon, corrected burst",
+      "title": "Estelle's glitter balloon — final empty-handed throw",
       "status": "hosted_verified",
-      "image": "assets/daysha/royal-purchases/royal-council-glitter-prank-corrected.avif",
-      "originalDriveFileId": "1T8_hHovGL6wmZEMdJTVQDOPBFhQ7ToYY"
+      "image": "assets/daysha/royal-purchases/royal-council-glitter-prank-empty-hands-final.avif",
+      "originalDriveFileId": "1HKZFvevp2YsvmjF0yMfl2lLFjchQA7HA",
+      "supersedesImage": "assets/daysha/royal-purchases/royal-council-glitter-prank-corrected.avif"
     }
   ]
 }
