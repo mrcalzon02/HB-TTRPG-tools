@@ -189,6 +189,8 @@ window.HBSoftwareProjects = Object.freeze([
   {
     "name": "Fleet Designer — Orbital Works",
     "repo": "Fleet-designer",
+    "previewLocal": "assets/game-menu-captures/Fleet-designer/title.png",
+    "captureEvidence": "assets/game-menu-captures/Fleet-designer/capture.json",
     "kind": "game",
     "stage": "Early runnable interface",
     "about": "Orbital manufacturing, ship components, fleet industry and research in a real React/Vite desktop interface foundation.",
