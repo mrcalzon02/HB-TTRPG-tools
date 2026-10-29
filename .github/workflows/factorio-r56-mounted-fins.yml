@@ -8,6 +8,8 @@ on:
       - 'tools/factorio-render-pipeline/test_fin_exposure_r56.py'
       - 'tools/factorio-render-pipeline/hanging_fin_profile_r57.py'
       - 'tools/factorio-render-pipeline/test_hanging_fin_profile_r57.py'
+      - 'tools/factorio-render-pipeline/hanging_fin_candidate_r58.py'
+      - 'tools/factorio-render-pipeline/test_hanging_fin_candidate_r58.py'
       - '.github/workflows/factorio-r56-mounted-fins.yml'
   workflow_dispatch:
 
@@ -52,13 +54,19 @@ jobs:
           BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
           python -m unittest discover -s tools/factorio-render-pipeline -p 'test_hanging_fin_profile_r57.py' -v
           "$BLENDER" -b --factory-startup -t 2 --python-exit-code 4 --python tools/factorio-render-pipeline/hanging_fin_profile_r57.py -- --output capture-output
+      - name: Persist and independently reopen best physically mounted hanging-fin Blender candidate
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          python -m unittest discover -s tools/factorio-render-pipeline -p 'test_hanging_fin_candidate_r58.py' -v
+          "$BLENDER" -b --factory-startup -t 2 --python-exit-code 4 --python tools/factorio-render-pipeline/hanging_fin_candidate_r58.py -- --output capture-output
       - name: Save test frames without committing original source images
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: factorio-r56-r57-fin-visibility
+          name: factorio-r56-r58-fin-visibility-and-editable-model
           path: |
             capture-output/test-04-vanilla-approx/source-fin-visibility-r56/
             capture-output/test-04-vanilla-approx/hanging-fin-profile-r57/
+            capture-output/test-04-vanilla-approx/physically-connected-fin-r58/
           if-no-files-found: warn
           retention-days: 30
