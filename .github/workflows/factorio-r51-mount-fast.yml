@@ -8,6 +8,8 @@ on:
       - 'tools/factorio-render-pipeline/test_mount_occlusion_diagnostic_r51.py'
       - 'tools/factorio-render-pipeline/mount_shape_fit_r52.py'
       - 'tools/factorio-render-pipeline/test_mount_shape_fit_r52.py'
+      - 'tools/factorio-render-pipeline/mount_radial_visibility_r53.py'
+      - 'tools/factorio-render-pipeline/test_mount_radial_visibility_r53.py'
       - 'tools/factorio-render-pipeline/run_calibration.py'
       - '.github/workflows/factorio-r51-mount-fast.yml'
   workflow_dispatch:
@@ -56,6 +58,11 @@ jobs:
           BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
           python -m unittest discover -s tools/factorio-render-pipeline -p 'test_mount_shape_fit_r52.py' -v
           "$BLENDER" -b --factory-startup -t 2 --python-exit-code 4 --python tools/factorio-render-pipeline/mount_shape_fit_r52.py -- --output capture-output
+      - name: Radial physical casting visibility and contact analysis
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          python -m unittest discover -s tools/factorio-render-pipeline -p 'test_mount_radial_visibility_r53.py' -v
+          "$BLENDER" -b --factory-startup -t 2 --python-exit-code 4 --python tools/factorio-render-pipeline/mount_radial_visibility_r53.py -- --output capture-output
       - name: Upload only native geometry projections and diagnostic PNGs
         if: always()
         uses: actions/upload-artifact@v4
@@ -64,5 +71,6 @@ jobs:
           path: |
             capture-output/test-04-vanilla-approx/mount-and-occlusion-r51/
             capture-output/test-04-vanilla-approx/mount-shape-calibration-r52/
+            capture-output/test-04-vanilla-approx/mount-radial-visibility-r53/
           if-no-files-found: warn
           retention-days: 30
