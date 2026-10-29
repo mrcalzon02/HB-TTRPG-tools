@@ -57,6 +57,15 @@
       "notes": "Distinct ice-blue floral, embroidered court gown. Later family scenes share a blue floral visual motif, but a physical garment match remains unverified.",
       "verifiedPaidGold": null,
       "actualPurchaseDate": null
+    },
+    {
+      "id": "G-003",
+      "title": "Roseblush Floral Ombré Gown",
+      "primarySourceId": "file_0000000081c882308ad92998b5507022",
+      "type": "adult royal gown",
+      "notes": "White pleated crossover bodice and straps, soft blush-to-coral layered tulle skirt, floral pink appliqués cascading from the waist. Seen on the mannequin during a chocolate delivery and then fitted on Daysha by the resident elven master seamstress. The two scenes depict one physical gown; purchase date and paid price are not verified.",
+      "verifiedPaidGold": null,
+      "actualPurchaseDate": null
     }
   ],
   "sources": [
@@ -244,6 +253,36 @@
       "originalMasterSha256": "25a3693063306577898cd3e3e0ecc3a24423181e6fa78ae04df50710a6df7bb6",
       "originalMasterDriveFileId": "1T8_hHovGL6wmZEMdJTVQDOPBFhQ7ToYY",
       "publishedDerivative": "Optimized 560-pixel AVIF; full-resolution original PNG preserved separately on Drive"
+    },
+    {
+      "id": "file_000000009f308230885406b3bad69ba0",
+      "title": "Daysha Brings Chocolates to the All-Elven Atelier",
+      "image": "assets/daysha/royal-purchases/daysha-atelier-chocolates-all-elven-staff.png",
+      "gitBlobSha": "94c3451ce880299289d53ae7e0b61b55ab19aa1c",
+      "type": "scene",
+      "category": "Elven boutique",
+      "sceneGroup": "The Roseblush Gown Fitting",
+      "provenance": "Original ChatGPT-generated scene, corrected to give all boutique employees pointed elf ears and Daysha exactly two arms",
+      "referenceMedia": false,
+      "wardrobeId": null,
+      "appearanceCluster": "DAYSHA-ROSEBLUSH-BOUTIQUE",
+      "originalSizeBytes": 2735738,
+      "originalMasterDriveFileId": "1lzTR4zGsCwFT2l1cFE82ePoD7HbpDaAy"
+    },
+    {
+      "id": "file_0000000081c882308ad92998b5507022",
+      "title": "Roseblush Gown — Master Seamstress Adjusts Daysha’s Waist",
+      "image": "assets/daysha/royal-purchases/daysha-pink-ombre-gown-master-seamstress-waist-fitting.png",
+      "gitBlobSha": "69c43347e6e0847619de00ea25f8c134810e2c82",
+      "type": "gown-study",
+      "category": "Royal dress fitting",
+      "sceneGroup": "The Roseblush Gown Fitting",
+      "provenance": "Original ChatGPT-generated fitting scene showing Queen Daysha in the rose ombré gown as the silver-haired resident master seamstress adjusts the waist. All depicted staff are elves.",
+      "referenceMedia": false,
+      "wardrobeId": "G-003",
+      "appearanceCluster": "DAYSHA-ROSEBLUSH-BOUTIQUE",
+      "originalSizeBytes": 2696392,
+      "originalMasterDriveFileId": "1O12aWyJjFaFaCQ2VEsjZWJcdTm6OA5kl"
     }
   ],
   "sceneSequences": [
@@ -293,6 +332,17 @@
         "file_000000006e0881fd8b4c45394a9e0555"
       ],
       "newGownPurchases": 0
+    },
+    {
+      "id": "SC-05",
+      "title": "Chocolates for the seamstresses and the Roseblush fitting",
+      "category": "Royal boutique",
+      "description": "Daysha arrives at the all-elven royal boutique bearing chocolates for the hardworking staff. She discovers a newly completed white-to-pink floral gown on the mannequin, eagerly tries it on, and the newly resident silver-haired master seamstress adjusts its waist while the other elves watch. These are consecutive scenes of the same gown, not separate gown purchases.",
+      "sourceIds": [
+        "file_000000009f308230885406b3bad69ba0",
+        "file_0000000081c882308ad92998b5507022"
+      ],
+      "newGownPurchases": 0
     }
   ],
   "excludedArtwork": [
@@ -316,8 +366,8 @@
     "policy": "A dress design is one garment record; repeated scenes, color variants, revisions, and Estelle's child outfit do not automatically create extra charges. Prices are unconfirmed."
   },
   "verification": {
-    "publishedDerivativeCount": 13,
-    "publishedPathsExpected": 13,
+    "publishedDerivativeCount": 15,
+    "publishedPathsExpected": 15,
     "masterSourcesInThisConversation": 14,
     "pendingCorrectedSourceCount": 0,
     "historicalGalleryStillWithheld": true
