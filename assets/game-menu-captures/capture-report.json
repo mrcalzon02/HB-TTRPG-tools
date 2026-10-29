@@ -2,6 +2,16 @@
   "policy": "Verified captures only; existing concept art retained for fallback",
   "updated": [
     {
+      "repository": "Catastrophic-Diplomacy",
+      "revision": "66579b81b3ac784f8accd970f40b6bcf3b6f463b",
+      "screenshots": 1
+    },
+    {
+      "repository": "Fleet-designer",
+      "revision": "1486b7c5e05275b30ae7b6b5fb7678b978bb59cf",
+      "screenshots": 1
+    },
+    {
       "repository": "Jewel_Brook",
       "revision": "850c47c1dcfe27232124c513852d34fed02e0b0a",
       "screenshots": 7
@@ -10,9 +20,17 @@
       "repository": "NUTBUSTER-R",
       "revision": "dbefa8d11fa8c4f684ad38f14806bb5f9afb248c",
       "screenshots": 6
+    },
+    {
+      "repository": "TheMechanist",
+      "revision": "ce9caaa5fca526a0a26ca3532b361b18677f971a",
+      "screenshots": 1
+    },
+    {
+      "repository": "powerpong",
+      "revision": "d99d8817866a210da7b99459b2fcc4d786b9139d",
+      "screenshots": 1
     }
   ],
-  "rejected": {
-    "Fleet-designer": "Repository is not present in software catalog"
-  }
+  "rejected": {}
 }

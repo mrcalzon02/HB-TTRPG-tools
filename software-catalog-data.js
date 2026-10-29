@@ -22,6 +22,8 @@ window.HBSoftwareProjects = Object.freeze([
   {
     "name": "Catastrophic Diplomacy",
     "repo": "Catastrophic-Diplomacy",
+    "previewLocal": "assets/game-menu-captures/Catastrophic-Diplomacy/title.png",
+    "captureEvidence": "assets/game-menu-captures/Catastrophic-Diplomacy/capture.json",
     "kind": "game",
     "stage": "Active simulation prototype",
     "about": "A six-civilization space warfare simulator with shared shipyard, fleet orders, heat and power budgets, defensive systems and weapon simulation.",
@@ -105,6 +107,8 @@ window.HBSoftwareProjects = Object.freeze([
   {
     "name": "The Mechanist",
     "repo": "TheMechanist",
+    "previewLocal": "assets/game-menu-captures/TheMechanist/title.png",
+    "captureEvidence": "assets/game-menu-captures/TheMechanist/capture.json",
     "kind": "game",
     "stage": "Alpha development",
     "about": "Industrial-civic simulation with persistent systems, a packaged Java client, machine and population simulation and world systems.",
@@ -213,6 +217,8 @@ window.HBSoftwareProjects = Object.freeze([
   {
     "name": "PowerPong",
     "repo": "powerpong",
+    "previewLocal": "assets/game-menu-captures/powerpong/title.png",
+    "captureEvidence": "assets/game-menu-captures/powerpong/capture.json",
     "kind": "game",
     "stage": "Packaged desktop release",
     "about": "Java arcade Pong with escalating ball speeds, locally playable opponents, powerups and packaged desktop builds.",

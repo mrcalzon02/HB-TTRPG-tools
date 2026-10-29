@@ -1,0 +1,14 @@
+{
+  "repoSha": "66579b81b3ac784f8accd970f40b6bcf3b6f463b",
+  "origin": "Actual visible Java/desktop client window on Xvfb, captured with scrot",
+  "windowTitle": "Diplomacy",
+  "capturedAt": "2026-10-29T19:18:27Z",
+  "shots": [
+    {
+      "name": "title",
+      "file": "title.png",
+      "sha256": "9b89bd89157fdcb0d9ec570809f8f55651ffdf388328254b2c875656ab66da22",
+      "bytes": 804289
+    }
+  ]
+}
