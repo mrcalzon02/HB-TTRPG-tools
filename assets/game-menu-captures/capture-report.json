@@ -1,0 +1,18 @@
+{
+  "policy": "Verified captures only; existing concept art retained for fallback",
+  "updated": [
+    {
+      "repository": "Jewel_Brook",
+      "revision": "850c47c1dcfe27232124c513852d34fed02e0b0a",
+      "screenshots": 7
+    },
+    {
+      "repository": "NUTBUSTER-R",
+      "revision": "dbefa8d11fa8c4f684ad38f14806bb5f9afb248c",
+      "screenshots": 6
+    }
+  ],
+  "rejected": {
+    "Fleet-designer": "Repository is not present in software catalog"
+  }
+}

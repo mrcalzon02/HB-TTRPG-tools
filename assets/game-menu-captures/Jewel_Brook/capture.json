@@ -1,0 +1,61 @@
+{
+  "repoSha": "850c47c1dcfe27232124c513852d34fed02e0b0a",
+  "url": "http://127.0.0.1:8911/",
+  "mode": "jewel",
+  "origin": "Live browser rendering of checked-out game's actual interface",
+  "capturedAt": "2026-10-29T19:10:09.135Z",
+  "loadedImages": 15,
+  "brokenImages": 0,
+  "shots": [
+    {
+      "name": "title",
+      "file": "title.png",
+      "sha256": "318332caabc83338a16d7706b9bbbe4215244832b08aeb4942d2ac76ebdf7a27",
+      "bytes": 946173,
+      "visibleText": "JEWELBROOK\n250\n25\n0\n\nGather gemstones, uncover lost treasures, and match your way through a thousand stages.\n\nAdventure Menu\nPLAY LEVEL 1\nLEVEL MAP\nENTER THE MINES\nGARDEN & FARM\nRESIDENCE\nCRYSTAL MARKET\nROYAL CHRONICLE\nWORLD GUIDE\nDAILY REWARDS\nCurrent expedition\n\nCampaign Day 1 · Ledgerday, 2 Thawcall, 282 S.M.\n\nStage 1 · The First Crack\n\n0 stages cleared\n\nCHOOSE A LEVEL\nPrism Vale Mines\n\n12 daily starter strikes, expandable equipment, refinery, and resource exchanges.\n\nMINE FOR SUPPLIES\nGarden"
+    },
+    {
+      "name": "menu-campaign",
+      "file": "menu-campaign.png",
+      "sha256": "dc7a4d8c1217c696c930f5b9abca1486722dd01a7bba549bcfeecd17ccc0ce9d",
+      "bytes": 1545893,
+      "visibleText": "JEWELBROOK\n250\n25\n0\nEmbryon Adventure\n\nFive underground chapters · 1,000 stages, each on one fixed campaign day.\n\n1\n2\n3\n4\n5\n1. Goblin Caves\nStages 1–200 · Enter\n2. Troll Caverns\nStages 201–400 · Preview — locked\n3. Sulfur Sumps\nStages 401–600 · Preview — locked\n4. Mushroom Mire\nStages 601–800 · Preview — locked\n5. Ghost Mines\nStages 801–1000 · Preview — locked\n\n1 of 5 chapters reached. You may preview later chapters; stages unlock sequentially.\n\nThe Royal Chronicle\n\nLive and work in Embryon as t"
+    },
+    {
+      "name": "menu-mine",
+      "file": "menu-mine.png",
+      "sha256": "5ff3602b640d4cfe77a83a6fe3bcaec3a83622204e7824e1b9dfe21757beb0df",
+      "bytes": 721987,
+      "visibleText": "JEWELBROOK\n250\n25\n0\nPrism Vale Mines\n\nAvailable from the start. Mine crystal ore, refine it, and turn the proceeds into match-3 supplies.\n\n0\nMining Credits\nDIG\nEQUIPMENT\nREFINERY\nEXCHANGE\nPOWERUPS\n12/12 strikes +0 bonus\n0/0 surveys +0 bonus\n0/10 cart\n0 ore\nEXCAVATE\nSURVEY\nTARGET ROCK\nUNLOAD CART\nROCK\nROCK\nROCK\nROCK\nROCK\nROCK\nROCK\nROCK\nROCK\nROCK\nROCK\nROCK\nROCK\nROCK\nROCK\nROCK\n\nSite 1 · 4×4 tiles. Barren rocks are genuine empty results; completed sites regenerate only after all uncovered ore is col"
+    },
+    {
+      "name": "menu-farm",
+      "file": "menu-farm.png",
+      "sha256": "89731745488346d30982ba87d28ac4e7a6c5e2c5421046d2daa6a96e6fa2b955",
+      "bytes": 538995,
+      "visibleText": "JEWELBROOK\n250\n25\n0\nEmbryon Garden\n\nGrow supplies, expand your homestead, and activate farm-specific power-ups.\n\n250\nRupees\n25\nStar Gems\n0\nStyle Shards\n5/5\nLives\n36\nMoves today\nYOUR EMBRYON HOMESTEAD\nHawseed Hovel\n\nHawseed Homestead\n\nResidence level 1/40 · 1 functional growing plot.\n\nIllustrated house preview; final painted sprites are pending.ENTER RESIDENCE\nHawseed Homestead · House 1/40\n\n1 growing plots available. House upgrades unlock more crops, fertilizers, and plots.\n\nUPGRADE HOUSE · 68 R"
+    },
+    {
+      "name": "menu-shop",
+      "file": "menu-shop.png",
+      "sha256": "16b173496ddbfbe424ef5a23eb571ca5d5536eb1e6466615f3ab266ed8eb0b7e",
+      "bytes": 757081,
+      "visibleText": "JEWELBROOK\n250\n25\n0\nCrystal Market\n\nLoot chests, character discoveries, wardrobe looks, equipment skins and practical supplies.\n\n250\nRupees\n25\nStar Gems\n0\nStyle Shards\n5/5\nLives\n36\nMoves today\n\nStyle Shards are cosmetics-only. Rupees and Star Gems remain gameplay currencies.\n\nLOOT CHESTS\nGAME POWER-UPS\nSUPPLIES\nCHARACTER CARDS\nOUTFITS\nPICK SKINS\nGLOVE SKINS\nFRAMES\n\nEvery chest contains actual randomized rewards. Listed percentages are per independent roll; duplicates convert to Style Shards. All"
+    },
+    {
+      "name": "menu-rewards",
+      "file": "menu-rewards.png",
+      "sha256": "f6c0edd3bb454b9b532300077579ae054e558261e39b0ffe54d9201b15273bc0",
+      "bytes": 545204,
+      "visibleText": "JEWELBROOK\n250\n25\n0\nDaily Rewards\n\nFree daily treasure with currency variety, cosmetics, boosters and possible free upgrades. Existing 12-hour refills stay available.\n\n250\nRupees\n25\nStar Gems\n0\nStyle Shards\n5/5\nLives\n36\nMoves today\nDaily Mystery Chest\n\nOne weighted draw daily. Possible outcomes: Rupees, Star Gems, Style Shards, Mining Credits, boosters, cosmetics, characters and permanent mining upgrades.\n\ncoins 24% · gems 10% · styleShards 18% · credits 12% · booster 11% · modePower 5% · cosmet"
+    },
+    {
+      "name": "menu-settings",
+      "file": "menu-settings.png",
+      "sha256": "a8a04cda9e29caf944960d40bae9a3a932229f604317ae802078e849d1086658",
+      "bytes": 558290,
+      "visibleText": "JEWELBROOK\n250\n25\n0\nSettings\n\nIndependent local game data. No Nut Buster saves or accounts are accessed.\n\nEmbryon sound\nSOUND EFFECTS: ONMUSIC: ONEMBRYON ANNOUNCER: OFF\n\nFrozen Glow 2 plays as looping, offline background music independently of original crystal sound effects and optional device narration.\n\nAndroid updates\n\nSigned Android builds check GitHub test releases automatically. Both downloading and installation require your approval; installing over this app preserves saved progress.\n\nCHE"
+    }
+  ],
+  "errors": []
+}

@@ -67,6 +67,8 @@ window.HBSoftwareProjects = Object.freeze([
   {
     "name": "Nut Buster",
     "repo": "NUTBUSTER-R",
+    "previewLocal": "assets/game-menu-captures/NUTBUSTER-R/title.png",
+    "captureEvidence": "assets/game-menu-captures/NUTBUSTER-R/capture.json",
     "kind": "mobile",
     "stage": "Android / Fire OS test builds",
     "about": "Satirical match-three adventure with large campaigns, boosters, mining, wardrobes and a mock premium shop that never charges money.",
@@ -84,6 +86,8 @@ window.HBSoftwareProjects = Object.freeze([
   {
     "name": "Jewel Brook: Heroes of Embryon",
     "repo": "Jewel_Brook",
+    "previewLocal": "assets/game-menu-captures/Jewel_Brook/title.png",
+    "captureEvidence": "assets/game-menu-captures/Jewel_Brook/capture.json",
     "kind": "mobile",
     "stage": "Android/Fire OS signed builds; native Windows/Linux previews",
     "about": "Standalone gemstone match-three game with excavation, trading, progression, boosters and a distinct fantasy art direction.",

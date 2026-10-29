@@ -1,0 +1,54 @@
+{
+  "repoSha": "dbefa8d11fa8c4f684ad38f14806bb5f9afb248c",
+  "url": "http://127.0.0.1:8910/",
+  "mode": "nut",
+  "origin": "Live browser rendering of checked-out game's actual interface",
+  "capturedAt": "2026-10-29T19:09:49.918Z",
+  "loadedImages": 26,
+  "brokenImages": 0,
+  "shots": [
+    {
+      "name": "title",
+      "file": "title.png",
+      "sha256": "339a9311d973dface3aa934fc951cc4e6c206338b115af36b06aba34bba13f20",
+      "bytes": 1061889,
+      "visibleText": "NUTBUSTER\n250\n25\n\nThe match-three game with every premium feature ever invented. An offer this irresistible can only end one way.\n\nLATEST GAME NEWS\nRelease notes are included with published builds\n\nDAILY MOVES 36 / 36\n\nPLAY NOW\nLEVEL MAP\nNUTVALE HOMESTEAD\nWOODLAND COMPANIONS\nNUTVALE MINES\nNUTVALE WHARF\nNUT INDEX\nINVITE FRIENDS\nSHOP\nSETTINGS\nVoice On\nMusic On\nEffects On\nYour entirely unnecessary privileges\n5/5 Lives\nHEARTS FULL\nREDEEM +5 MOVES\nVIP STATUS\n+5 daily moves · 4 daily boosters · +250 n"
+    },
+    {
+      "name": "menu-campaign",
+      "file": "menu-campaign.png",
+      "sha256": "d2f4f2a7fba7f5215be497242f3be1a08bd8ac45aa80bf09e4f53f4cd82a6dc3",
+      "bytes": 1170311,
+      "visibleText": "NUTBUSTER\n250\n25\nTHE GREAT NUT ODYSSEY · 1000 LEVELS\n⌂\nORIGINAL · 1–500\nNUTRAVAGANZA · 501–1000\n1. Nutwood Meadows\nLevels 1–100 · 0/100\n2. Peanut Butter Factory\nLevels 101–200 · 0/100\n3. Squirrel Hoard Highlands\nLevels 201–300 · 0/100\n4. Autumn Windmill Vale\nLevels 301–400 · 0/100\n5. Moonlit Golden Palace\nLevels 401–500 · 0/100\n\nChoose a region. Ten regions. One extremely ambitious loyalty program.\n\nHome\nLevels\nShop\nRewards\nEstate\nWharf"
+    },
+    {
+      "name": "menu-shop",
+      "file": "menu-shop.png",
+      "sha256": "38ffc3a66140f3628a9589531d760a63ecdb8cefa9e44407fdd907595edce1e7",
+      "bytes": 445363,
+      "visibleText": "NUTBUSTER\n250\n25\nTHE PREMIER NUT EMPORIUM\nOPTIONAL BUNDLES\nREDEEM PROMO CODE!\nOne Extra Life\n+0 LIVES · MAX 5 LIVES\n950 GOLDEN NUTS · BUY\nFull Life Refill\nREFILL TO FIVE · 0 LIVES · MAX 5 LIVES\n12 GEMS · BUY\nTwo Extra Moves\n+2 MOVES · TO DAILY MOVE WALLET\n1,200 GOLDEN NUTS · BUY\nTwelve Extra Moves\n+12 MOVES · TO DAILY MOVE WALLET\n12 GEMS · BUY\nGRAVITY HOLD POWER-UPS\nGems 25\nPeanut Butter\n1 gravity drop · held-nut matches ×3 · Owned 0\n15\nBUY\nJam\n2 gravity drops · held-nut matches ×3 · Owned 0\n30\n"
+    },
+    {
+      "name": "menu-rewards",
+      "file": "menu-rewards.png",
+      "sha256": "b4dd4a92d6478766e7f3b88cb7ef5f99fcb535b742bcf185dc5687e90470df93",
+      "bytes": 451287,
+      "visibleText": "NUTBUSTER\n250\n25\nREWARDS, REWARDS, REWARDS\nFREE CLAIMS · 12-HOUR INDEPENDENT COOLDOWNS\n\nRedeem manually when ready. Unlike the automatic 24-hour move refill, these do not stockpile.\n\nHEARTS FULL REDEEM +5 MOVES\n REDEEM A PROMO CODE\nBOOSTER VAULT\n\nHammer ×3\n\nNext power: +5 Moves · clear level 5\n\nELEMENTAL TRIAL REWARDS\n\n0/150 trials · 0/15 relics · 36 daily moves left\n\nCHALLENGE REWARD TRACK\n\n0/25 challenge milestones cleared\n\n1 ★\n5× Hammer\nLOCKED\n2 ★\n6× Hammer\nLOCKED\n3 ★\n5× Hammer\nLOCKED\n4 ★\n5× "
+    },
+    {
+      "name": "menu-homestead",
+      "file": "menu-homestead.png",
+      "sha256": "20239cb7b6beb2041f2c09f58c282b7a7caa7513bf6ac5b456a8b52406da242f",
+      "bytes": 573928,
+      "visibleText": "NUTBUSTER\n250\n25\n🏡 NUTVALE HOMESTEAD\nNew Property Owner · 👩🏻‍🦰 Outfit Tier 1 · Nutvale Squire\n⛏️ NUTVALE MINES\n🎣 FISHING WHARF\n🐠 AQUARIUM\n🏆 FISH RECORDS\n↗ PRESTIGE PLATE\n↗ INVITE\nLEVELS →\n🏆 0/1000 cleared\n⭐ 0 stars\n🎖 0/19 awards\n🧩 0/5 sets\n📈 0 best\n🛠 0/1000 renovated\n👗 1/60 outfits\n🏠 Cottage Green\n12 plots\n🌳 Whispering Orchard\nLV 25\n🏛️ Manor Terrace\nLV 100\n🌙 Moonnut Lake\nLV 250\n👑 Crown Gardens\nLV 400\n🏠 Cottage Green\n✎ EDIT BACKYARD\n🏠\nThe original backyard\nTHE ACORN HOVEL\nHOUS"
+    },
+    {
+      "name": "menu-wharf",
+      "file": "menu-wharf.png",
+      "sha256": "4540a805429e5e53ef7d9ee78d5e23c6177c4a68e378b8a2c6ceb684f36f2f16",
+      "bytes": 1209232,
+      "visibleText": "NUTBUSTER\n250\n25\n🎣 NUTVALE VALLEY WHARF\nN$ 0\nAQUARIUM 0/4\n← ESTATE\n🎣 GO FISHING\n🪱 BAIT SHOP\nWHARF TIER 0/5 · 🪱 6 worms · 🎣 Woodland Twig · 260/260 durability\nVIEW AQUARIUM →\nHome\nLevels\nShop\nRewards\nEstate\nWharf"
+    }
+  ],
+  "errors": []
+}

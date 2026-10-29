@@ -1,0 +1,19 @@
+{
+  "repoSha": "1486b7c5e05275b30ae7b6b5fb7678b978bb59cf",
+  "url": "http://127.0.0.1:8912/",
+  "mode": "fleet",
+  "origin": "Live browser rendering of checked-out game's actual interface",
+  "capturedAt": "2026-10-29T19:10:40.352Z",
+  "loadedImages": 0,
+  "brokenImages": 0,
+  "shots": [
+    {
+      "name": "title",
+      "file": "title.png",
+      "sha256": "d7fe10459ffb2f4d43b6ac3e171bd2482d0608b4f1c7a536f16cad7e4271bd3c",
+      "bytes": 220240,
+      "visibleText": "PHASE 1 PLAYABLE MANAGEMENT LOOP\n\nFLEET DESIGNER\n\nFactory management now spends finite capacity across the queue by priority. Engineering coverage now matters: too many active production lines with too few free engineers will slow throughput and drive defect risk upward.\n\nAdvance Cycle\nOPERATING\nCompany: Orbital Works\nCash: CR 12,400,000\nReputation: 42\nCycle: 7\nDifficulty: Normal\nOperating Burn: CR 481,833 / cycle\nFactory: 0 work units queued\nEngineering Coverage: not calculated yet\nWarehouse: 0"
+    }
+  ],
+  "errors": []
+}
