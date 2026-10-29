@@ -81,7 +81,7 @@ try:
                     raise RuntimeError("GPU client did not attest rendering its real PSX menu")
                 captured=folder/"build/test-visuals/gpu-psx-menu.png"
                 data=captured.read_bytes()
-                if len(data)<12000 or not data.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+                if len(data)<12000 or not data.startswith(b"\x89PNG\r\n\x1a\n"):
                     raise RuntimeError("Game did not export a valid real OpenGL title menu")
                 dest.mkdir(parents=True,exist_ok=True)
                 shutil.copy2(captured,dest/"title.png")
@@ -89,7 +89,7 @@ try:
                           "origin":"Original game PSX OpenGL screenshot directly from running --smoke GPU client",
                           "capturedAt":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime()),
                           "shots":[{"name":"title","file":"title.png","sha256":hashlib.sha256(data).hexdigest(),"bytes":len(data)}]}
-                (dest/"capture.json").write_text(json.dumps(evidence,indent=2)+"\\n",encoding="utf-8")
+                (dest/"capture.json").write_text(json.dumps(evidence,indent=2)+"\n",encoding="utf-8")
                 summary[repo]={"status":"captured","revision":revision}
                 continue
             known={w[0] for w in windows()}
