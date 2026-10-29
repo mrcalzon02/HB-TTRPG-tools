@@ -90,7 +90,7 @@ try:
                 screenshot=dest/"title.png"
                 subprocess.run(["scrot","-u","-o",str(screenshot)],env=env,check=True,timeout=20)
                 data=screenshot.read_bytes()
-                if len(data)<12000 or not data.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+                if len(data)<12000 or not data.startswith(b"\x89PNG\r\n\x1a\n"):
                     raise RuntimeError("Not a valid game framebuffer screenshot")
                 sha=hashlib.sha256(data).hexdigest()
                 evidence={"repoSha":revision,"origin":"Actual visible Java/desktop client window on Xvfb, captured with scrot",
