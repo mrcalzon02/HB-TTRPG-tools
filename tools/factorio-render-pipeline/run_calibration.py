@@ -51,7 +51,7 @@ def main():
                         "--python-exit-code","4","--python",
                         str(root/"fin_mount_geometry_sweep_r50.py"),
                         "--","--output",str(target)],check=True)
-        # R11 independent close-up Blender renders validate actual depth and
+        # R51: source-frame projections of the three bespoke mountings,\n        # R49 vs R50-D actual first-hit raycast and reversible occluder A/B.\n        subprocess.run([str(blender),"-b","--factory-startup","-t","2",\n                        "--python-exit-code","4","--python",\n                        str(root/"mount_occlusion_diagnostic_r51.py"),\n                        "--","--output",str(target)],check=True)\n        # R11 independent close-up Blender renders validate actual depth and
         # external cantilever support hardware, never the production atlas.
         subprocess.run([str(blender),"-b","--factory-startup","-t","2",
                         "--python-exit-code","4","--python",
