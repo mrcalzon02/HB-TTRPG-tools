@@ -16,6 +16,12 @@ import math
 from pathlib import Path
 import sys
 
+# Blender --python does not guarantee the project script folder is on sys.path.
+# Import the already-validated R50 deformation without relying on CWD.
+ROOT_SOURCE=str(Path(__file__).resolve().parent)
+if ROOT_SOURCE not in sys.path:
+    sys.path.insert(0,ROOT_SOURCE)
+
 import bpy
 from bpy_extras.object_utils import world_to_camera_view
 from mathutils import Vector
