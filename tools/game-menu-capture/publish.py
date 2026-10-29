@@ -49,7 +49,9 @@ for folder in sorted(CAPTURES.iterdir() if CAPTURES.exists() else []):
             with Image.open(picture) as im:
                 im.verify()
             with Image.open(picture) as im:
-                if im.width < 460 or im.height < 300:
+                # PSX renderer intentionally exports its authentic 320x200 framebuffer.
+                psx = folder.name == "The-Malefic-Veil" and evidence.get("captureType") == "gpu-smoke"
+                if im.width < (320 if psx else 460) or im.height < (200 if psx else 300):
                     raise ValueError("Unexpected screenshot dimensions")
                 thumb = im.convert("RGB").resize((80,50))
                 contrast = max(ImageStat.Stat(thumb).stddev)
