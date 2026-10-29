@@ -2,7 +2,7 @@
   "schemaVersion": 4,
   "archiveTitle": "The Royal Purchases of One Lady of the Elven Court",
   "archiveStatus": "approved_generated_subset",
-  "notice": "16 individually identified original ChatGPT-generated Daysha illustrations are published; supplied third-party dress references, annotation previews, earlier rejected crown revisions and other unaudited historic art remain excluded.",
+  "notice": "17 individually identified original ChatGPT-generated Daysha illustrations are published; supplied third-party dress references, annotation previews, and failed prior revisions are excluded.",
   "rightsPolicy": {
     "approvedSource": "conversation-generated originals only",
     "rejected": "third-party dress-reference images, marked-up input screenshots, franchise references, any unverified previous gallery assets",
@@ -10,14 +10,15 @@
     "approvedHistoricalItems": 12,
     "legacyItemsStillWithheld": 166,
     "scope": "Explicit SHA-verified Git history allowlist; do not bulk restore historical archive.",
-    "approvedGeneratedItemCount": 13
+    "approvedGeneratedItemCount": 17
   },
   "subjects": [
     "Daysha",
     "King Rome",
     "Princess Estelle",
     "Queen Mother",
-    "Royal Maine Coon pair"
+    "Royal Maine Coon pair",
+    "Daysha's mother (blue-haired birth mother; separate from Rome's mother)"
   ],
   "costBenchmarks": {
     "sourceDriveUrl": "https://docs.google.com/document/d/1pPe7lUyvfWL0qOGqzVzO8s-USvelXHK9DA356jsP7tk/edit?usp=drivesdk",
@@ -73,6 +74,15 @@
       "primarySourceId": "file_00000000afc081fda6b2f464404ddc81",
       "type": "adult royal gown",
       "notes": "Second distinct gown of the same atelier visit as the Roseblush gown. A new mana-infused pearlescent fabric, shimmering icy blue, lavender, silver and delicate iridescent white floral motifs; Daysha displays it with an ornate blue-violet crystal crown without dangling adornments. The shop master is delighted to introduce the fabric to the Queen. Exact date and price paid remain unverified.",
+      "verifiedPaidGold": null,
+      "actualPurchaseDate": null
+    },
+    {
+      "id": "G-005",
+      "title": "Midnight Sapphire Starfall Gown",
+      "primarySourceId": "file_000000006bd48230bfc95aabfe91883e",
+      "type": "adult royal gown",
+      "notes": "Queen Daysha tries on a midnight-sapphire, constellation-sparkling full-skirt gown with silver crystal strands, jeweled waist, transparent draped sleeves, and richly layered train. Accompanied by her blue-haired birth mother (distinct from King Rome's silver-haired mother-in-law) in the all-elven Gilded Spindle boutique. The silver-haired master seamstress, red-haired hem artisan, another elven worker, and Garrick Vellmont are present. A single distinctive garment; no verified purchase date or paid amount.",
       "verifiedPaidGold": null,
       "actualPurchaseDate": null
     }
@@ -309,6 +319,24 @@
       "originalSizeBytes": 2847811,
       "originalMasterSha256": "0e2a41639bc662f90a353b3fe22336ea43c55244f39d748f5c22e7c8329815c2",
       "originalMasterDriveFileId": "1NNILxkTKEcAk48-xoE2jL5-XXcHwG7iL"
+    },
+    {
+      "id": "file_000000006bd48230bfc95aabfe91883e",
+      "title": "The Midnight Star Fitting — Daysha and Her Mother at the Gilded Spindle",
+      "image": "assets/daysha/royal-purchases/daysha-midnight-star-gown-birth-mother-gilded-spindle-final.png",
+      "gitBlobSha": "af8a2d8ac72da382f25b25f5ae6589842f6976c7",
+      "type": "gown-study",
+      "category": "Royal dress fitting",
+      "sceneGroup": "Midnight Star Fitting with Daysha's Mother",
+      "provenance": "User-approved final ChatGPT conversation-generated original after iterative corrections to iridescent blue hair, violet eyes, anime style and canonical all-elven Gilded Spindle staff; no user-supplied dress-reference imagery or red annotation included.",
+      "referenceMedia": false,
+      "wardrobeId": "G-005",
+      "appearanceCluster": "DAYSHA-MIDNIGHT-STAR-BIRTH-MOTHER",
+      "originalSizeBytes": 2954603,
+      "originalMasterSha256": "dca783d6e51f07b2444a93627e2d3efdc4cc7f94e7ca8923a9220ad8945f1cda",
+      "originalMasterDriveFileId": "1Wh5xWtd8q7sjlNvB-nqZGk3LFUZkejWF",
+      "identityNotes": "Daysha and her mother share iridescent blue hair, violet eyes and proportional high-elf ears. Daysha's own mother is a separate person from King Rome's silver-haired mother (previous Queen Mother canon).",
+      "supersedes": "Earlier same-scene versions with gray/lavender hair, blue eyes, generic boutique staff, or red correction markup"
     }
   ],
   "sceneSequences": [
@@ -379,6 +407,16 @@
         "file_00000000afc081fda6b2f464404ddc81"
       ],
       "newGownPurchases": 0
+    },
+    {
+      "id": "SC-07",
+      "title": "The Midnight Star fitting with Daysha's mother",
+      "category": "Royal boutique",
+      "description": "At the Gilded Spindle, Queen Daysha tries on a midnight-sapphire gown cascading with crystal constellations. Her own blue-haired mother assists while Garrick Vellmont and the atelier's established elven seamstresses complete the fitting. This is the final corrected image; previous drafts are excluded. A fitting is not a verified purchase or invoice.",
+      "sourceIds": [
+        "file_000000006bd48230bfc95aabfe91883e"
+      ],
+      "newGownPurchases": 0
     }
   ],
   "excludedArtwork": [
@@ -406,8 +444,8 @@
     "policy": "A dress design is one garment record; repeated scenes, color variants, revisions, and Estelle's child outfit do not automatically create extra charges. Prices are unconfirmed."
   },
   "verification": {
-    "publishedDerivativeCount": 16,
-    "publishedPathsExpected": 16,
+    "publishedDerivativeCount": 17,
+    "publishedPathsExpected": 17,
     "masterSourcesInThisConversation": 15,
     "pendingCorrectedSourceCount": 0,
     "historicalGalleryStillWithheld": true

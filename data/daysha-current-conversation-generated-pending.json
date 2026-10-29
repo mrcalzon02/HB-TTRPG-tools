@@ -136,26 +136,6 @@
       "description": "Queen Mother birthday gown",
       "status": "pending_binary_upload",
       "review": "candidate_generated_scene"
-    },
-    {
-      "filename": "a_highly_detailed_vibrant_anime_fantasy_illustrat.png",
-      "sha256": "dca783d6e51f07b2444a93627e2d3efdc4cc7f94e7ca8923a9220ad8945f1cda",
-      "originalSizeBytes": 2954603,
-      "width": 1098,
-      "height": 1433,
-      "description": "Approved final scene: Queen Daysha tries on the midnight-sapphire star-beaded gown at the Gilded Spindle, accompanied by her own blue-haired mother; the resident silver-haired master seamstress, red-haired attendant, brown-haired background staff, and elven proprietor Garrick Vellmont appear.",
-      "status": "approved_original_archived_in_library_pending_github_binary_upload",
-      "review": "Explicit final-art approval, 2026-10-28; all earlier failed hair/staff variants excluded",
-      "libraryFileId": "libfile_2c23600fc9cc81918e6c5b1952ffdf4e",
-      "libraryPath": "/DAYSHA/Daysha - Midnight Star Gown - Mother and Gilded Spindle Staff - APPROVED.png",
-      "storyCharacters": [
-        "Queen Daysha",
-        "Daysha's mother (not King Rome's mother)",
-        "Garrick Vellmont",
-        "Gilded Spindle elven seamstresses"
-      ],
-      "garment": "Midnight Star Sapphire Gown; distinct fitting scene, physical match to earlier wardrobe records unverified",
-      "invoiceStatus": "No verified price or purchase date; do not add a second receipt or count as published"
     }
   ],
   "knownMissingOriginals": [
@@ -169,5 +149,30 @@
     "Rome/Garrick identity merges",
     "Extreme or missing elf ears"
   ],
-  "note": "SHA-256 values here identify generated local originals, not repository blobs. The approved Daysha-and-her-mother fitting was preserved in the persistent DAYSHA Library with a verified SHA-256, but its image bytes are NOT yet on GitHub; do not count it among published gallery sources."
+  "note": "Pending candidates are not published. The approved Daysha/birth-mother midnight-star fitting was transferred from the verified Library/Drive original to GitHub as the exact PNG, registered in the public gallery and moved to publishedFromStaging; previous rejected variants remain excluded.",
+  "publishedFromStaging": [
+    {
+      "filename": "a_highly_detailed_vibrant_anime_fantasy_illustrat.png",
+      "sha256": "dca783d6e51f07b2444a93627e2d3efdc4cc7f94e7ca8923a9220ad8945f1cda",
+      "originalSizeBytes": 2954603,
+      "width": 1098,
+      "height": 1433,
+      "description": "Approved final scene: Queen Daysha tries on the midnight-sapphire star-beaded gown at the Gilded Spindle, accompanied by her own blue-haired mother; the resident silver-haired master seamstress, red-haired attendant, brown-haired background staff, and elven proprietor Garrick Vellmont appear.",
+      "status": "published_verified_github_main",
+      "review": "Explicit final-art approval, 2026-10-28; all earlier failed hair/staff variants excluded",
+      "libraryFileId": "libfile_2c23600fc9cc81918e6c5b1952ffdf4e",
+      "libraryPath": "/DAYSHA/Daysha - Midnight Star Gown - Mother and Gilded Spindle Staff - APPROVED.png",
+      "storyCharacters": [
+        "Queen Daysha",
+        "Daysha's mother (not King Rome's mother)",
+        "Garrick Vellmont",
+        "Gilded Spindle elven seamstresses"
+      ],
+      "garment": "Midnight Star Sapphire Gown; distinct fitting scene, physical match to earlier wardrobe records unverified",
+      "invoiceStatus": "No verified price or purchase date; do not add a second receipt or count as published",
+      "gitPath": "assets/daysha/royal-purchases/daysha-midnight-star-gown-birth-mother-gilded-spindle-final.png",
+      "gitBlobSha": "af8a2d8ac72da382f25b25f5ae6589842f6976c7",
+      "manifestSourceId": "file_000000006bd48230bfc95aabfe91883e"
+    }
+  ]
 }
