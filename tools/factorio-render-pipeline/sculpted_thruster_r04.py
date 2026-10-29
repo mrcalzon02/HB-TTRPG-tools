@@ -370,6 +370,12 @@ def build_thruster(name,w,h,root,p):
         vanilla_deep_aperture_and_long_fins_r47.extend_fins(
             name,root,p,{},bpy.context.scene
         )
+        # R48: broaden the actual R21 formed-metal faces AFTER R47 axial
+        # extension and BEFORE R18 source-driven lower fin shape keys.
+        import vanilla_broader_fins_rearward_collar_r48
+        vanilla_broader_fins_rearward_collar_r48.apply_fins(
+            name,root,p,{},bpy.context.scene
+        )
         # R18: only lower observable apron tips vary across 64 real frames.
         import vanilla_distal_motion_r18
         vanilla_distal_motion_r18.apply(
@@ -479,6 +485,11 @@ def build_thruster(name,w,h,root,p):
         # R47: relocate existing metal rim, expose the physical
         # castellated band and extend R42/R11 geometry into deeper bevel.
         vanilla_deep_aperture_and_long_fins_r47.bevel_aperture(
+            name,root,p,{},bpy.context.scene
+        )
+        # R48: recess the remaining original forward baffle ring,
+        # no new hardware, effect, rim or camera changes.
+        vanilla_broader_fins_rearward_collar_r48.apply_collar(
             name,root,p,{},bpy.context.scene
         )
     floor=bpy.data.collections.new("FLOOR_INTEGRATION_PATCH")

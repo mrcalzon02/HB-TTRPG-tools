@@ -42,6 +42,8 @@ on:
       - 'tools/factorio-render-pipeline/test_vanilla_throat_mounts_r45.py'
       - 'tools/factorio-render-pipeline/vanilla_deep_aperture_and_long_fins_r47.py'
       - 'tools/factorio-render-pipeline/test_vanilla_deep_aperture_and_long_fins_r47.py'
+      - 'tools/factorio-render-pipeline/vanilla_broader_fins_rearward_collar_r48.py'
+      - 'tools/factorio-render-pipeline/test_vanilla_broader_fins_rearward_collar_r48.py'
       - 'tools/factorio-render-pipeline/aperture_isolation_r46.py'
       - 'tools/factorio-render-pipeline/test_aperture_isolation_r46.py'
       - 'tools/factorio-render-pipeline/test_vanilla_legacy_bell_trim_r42.py'

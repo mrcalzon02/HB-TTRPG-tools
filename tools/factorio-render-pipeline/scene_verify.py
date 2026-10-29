@@ -984,6 +984,37 @@ def test_one(path):
                     plate.data.shape_keys is not None):
                     raise RuntimeError("R47 upper original fin failed twofold physical reach")
             print("R47_DEEP_BEVEL_RECESSED_RIM_LONG_SOURCE_FINS_PASS",path.name,flush=True)
+            from vanilla_broader_fins_rearward_collar_r48 import (
+                REVISION as R48_REV,SOURCE_SHA256 as R48_SHA,
+                VISIBLE_FIN_COUNT as R48_VISIBLE,
+                MAIN_FIN_TIP_WIDTH_MULTIPLIER as R48_MAIN,
+                PERIPHERAL_FIN_TIP_WIDTH_MULTIPLIER as R48_OUTER,
+                COLLAR_NEW_Y as R48_COL_Y,
+                COLLAR_NEW_MATERIAL as R48_COL_MAT,
+                FORWARD_COLLAR as R48_COL_NAME)
+            if (scene.get("fsc_r48_revision")!=R48_REV or
+                scene.get("fsc_r48_source_sha256")!=R48_SHA or
+                scene.get("fsc_r48_fins_widened")!=R48_VISIBLE or
+                abs(float(scene.get("fsc_r48_visible_main_fin_tip_width_gain",0))-R48_MAIN)>.001 or
+                abs(float(scene.get("fsc_r48_visible_peripheral_fin_tip_width_gain",0))-R48_OUTER)>.001 or
+                not scene.get("fsc_r48_preserves_upper_fin_length") or
+                not scene.get("fsc_r48_preserves_lower_original_motion") or
+                not scene.get("fsc_r48_no_added_models_materials_cameras_lights_or_effects") or
+                not scene.get("fsc_r48_original_64_frame_cycle_retained")):
+                raise RuntimeError("R48 saved scene wider source-fin contract absent")
+            for i in range(R48_VISIBLE):
+                fin=bpy.data.objects[f"R11_SUSPENDED_AFTERBURNER_VANE_{i:02d}"]
+                if (not fin.get("R48_existing_formed_metal_face_widened") or
+                    not fin.get("R48_axial_root_and_tip_unchanged") or
+                    fin.data.color_attributes.get("R21_heat_tint") is None):
+                    raise RuntimeError("R48 actual source-facing fin widening missing")
+            collar=bpy.data.objects.get(R48_COL_NAME)
+            if (collar is None or not collar.get("R48_original_baffle_00_not_extra_ring") or
+                not collar.get("R48_original_collaring_recessed_behind_source_side_cuts") or
+                collar.data.materials[0].name!=R48_COL_MAT or
+                abs(sum(v.co.y for v in collar.data.vertices)/len(collar.data.vertices)-R48_COL_Y)>.002):
+                raise RuntimeError("R48 rearward original throat collar not saved")
+            print("R48_WIDE_HEAT_FINS_REARWARD_ORIGINAL_RING_PASS",path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)

@@ -1594,3 +1594,40 @@ This R47 is a **candidate only** until full Blender 4.5.15 scene reopen,
 original capture no-clipping and exact 264x542 native RGBA comparisons.
 User's source observation supersedes the previous R35.1 upper-tip
 shortening hypothesis, but does NOT erase its historical baseline metadata.
+
+
+### R47 actual image readback; R48 source-directed physical fin breadth and collar
+
+GitHub Actions R47 Blender calibration run
+[#40629746936](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40629746936)
+SUCCEEDED and supplied 64 native RGBA frames and the editable saved scene
+(artifact `12791217631`). Source atlas from the operator remains private
+and SHA-256 verified. Direct side-by-side native frame0 comparison shows
+R47 **substantially increased axial length**, but the three forward
+heat-stained panels remained visually narrow, with insufficient visible
+metal surface. Simply extending them farther aft would exceed the already
+well-developed lower body contour; solve source-visible width instead.
+Original source broad tabs and panel faces dominate the transition.
+
+R47 moved the exposed R04 rolled exit lip and R45 castellated _01 baffle,
+but a visually forward circular edge remained from the *original*
+R11 `recessed_internal_pressure_baffle_00` (former y=-2.99, radius1.25).
+Operator reports ring still too far forward. R48 therefore moves that
+EXISTING R11 collar to y=-3.61, radius 1.385 and uses the existing
+non-emissive R13 oxidized nozzle metal material; no added ring or hiding
+geometry. This identification is a testable modeling hypothesis, not
+proof that this was the sole visible arc.
+
+R48 broadens the SAME five upper R21 sheet meshes rather than replacing
+them: three central visibly dominant tabs enlarge tip angular width
+1.47x and outer adjacent panels 1.22x, with smooth progression from
+their *unchanged* R21 roots. Max tip half-angle remains under the
+original ten-fin half-pitch .314rad, preserving independent blades and
+the two actual punched slot pairs per sheet. R47's 1.90x previous axial
+reach is preserved. Four R18 distal lower original atlas-driven animated
+panels, both R36 exterior moving clamshells, open R39 liner, R42 bell,
+R47 moved lip and R45 existing square upper mounts stay unchanged.
+
+R48 is NOT a visual acceptance claim until saved-scene Blender 4.5 LTS
+checks, no-clipping native 64-frame capture and exact source comparison.
+Neither original bitmap nor proprietary artwork is included in GitHub.
