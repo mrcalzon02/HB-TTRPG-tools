@@ -1631,3 +1631,40 @@ R47 moved lip and R45 existing square upper mounts stay unchanged.
 R48 is NOT a visual acceptance claim until saved-scene Blender 4.5 LTS
 checks, no-clipping native 64-frame capture and exact source comparison.
 Neither original bitmap nor proprietary artwork is included in GitHub.
+
+
+### R49 — original upstream mounting correction, distinct physical upper-fin assemblies
+
+**Critical user correction (2026-10-29):** The earlier R47/R48 solution
+incorrectly treats the nozzle circular pressure band as the fin mounting
+station. On the actual private 264x542 source atlas, the ring lies BELOW
+three top-mounted CAST ASSEMBLIES which support the large individual
+heat-stained sheets. Those mounts are **not ten equivalent radial fittings**.
+
+Source details in native x15..250,y285..470 cropped, original SHA256
+`0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791`:
+left tab attaches beneath a canted cream casting; middle tab beneath
+a broad bridge with paired short prongs; right tab beneath an offset
+casting with nearby red wiring. Those are physically distinct shapes.
+The visible fins originate ABOVE the annular throat structure. The old
+shared Y=-2.34 fin root is a model hypothesis demonstrated false by source
+hierarchy. Simply doubling their free-end distance from that ring creates
+implausibly long lower blades disconnected from their real top fittings.
+
+R49 corrects root cause instead: five upper R21 SHEET meshes keep their
+heat-tint attributes, slots, and original distal source-space Y bounds,
+but their proximal roots are INDIVIDUALLY moved upstream from y=-2.34
+to -1.96,-1.62,-1.44,-1.73,-1.87 respectively, with nonidentical
+longitudinal bow, radial camber and twist. Their physical root-to-tip
+span therefore lengthens between ~0.38 and 0.90 tiles rather than merely
+lengthening the blade below the rim. Three unique physical 3D cast
+mounting shoe meshes represent ONLY the individually source-visible upper
+assemblies, with distinct axial station counts, widths and offsets.
+They reach the actual forward engine and overlap their corresponding fin
+roots. No invented matching supports, pivots or actuators for hidden fins.
+
+R18's four original measured lower-source fin morph sequences and the two
+R36 lower clamshell rigs are untouched. R47 open throat, R45 upper feed
+mounts and R48 recessed existing ring remain. No proprietary sprite bytes
+on GitHub. This is a visual candidate pending full exact 64-frame evidence,
+strict no-clipping and Blender saved-scene checks. No source CAD claimed.

@@ -1015,6 +1015,40 @@ def test_one(path):
                 abs(sum(v.co.y for v in collar.data.vertices)/len(collar.data.vertices)-R48_COL_Y)>.002):
                 raise RuntimeError("R48 rearward original throat collar not saved")
             print("R48_WIDE_HEAT_FINS_REARWARD_ORIGINAL_RING_PASS",path.name,flush=True)
+            from vanilla_bespoke_fin_mounts_r49 import (
+                REVISION as R49_REV,SOURCE_SHA256 as R49_SHA,
+                UPPER_FIN_PROFILES as R49_PROFILES,
+                MOUNT_STATIONS as R49_STATIONS,
+                CAST_COLLECTION as R49_COL,
+                OBSERVED_MOUNTS as R49_OBSERVED,
+                OLD_ROOT_Y as R49_OLD_ROOT,
+                CAST_MATERIAL_NAME as R49_MAT)
+            if (scene.get("fsc_r49_revision")!=R49_REV or
+                scene.get("fsc_r49_source_sha256")!=R49_SHA or
+                scene.get("fsc_r49_distinct_source_mount_count")!=3 or
+                scene.get("fsc_r49_five_original_upper_sheets_reanchored")!=5 or
+                not scene.get("fsc_r49_ignores_unverified_hidden_circumferential_mounts") or
+                not scene.get("fsc_r49_materials_preserved_not_new") or
+                not scene.get("fsc_r49_art_source_is_inverse_projection_not_recovered_cad")):
+                raise RuntimeError("R49 source-visible bespoke upper mounting hierarchy missing")
+            group=bpy.data.collections.get(R49_COL)
+            if group is None or len(group.objects)!=3:
+                raise RuntimeError("R49 failed to save only three source-observable castings")
+            for index,profile in R49_PROFILES.items():
+                fin=bpy.data.objects[f"R11_SUSPENDED_AFTERBURNER_VANE_{index:02d}"]
+                if (abs(fin.data.vertices[0].co.y-profile[0])>.002 or
+                    not fin.get("R49_longer_actually_attached_span") or
+                    abs(float(fin.get("R49_old_ring_root_y_superseded",0))-R49_OLD_ROOT)>.002):
+                    raise RuntimeError("R49 original fin still anchored to wrong ring")
+            for index in R49_OBSERVED:
+                m=group.objects.get(f"R49_BESPOKE_CAST_MOUNT_{index:02d}")
+                if (m is None or m.data.materials[0].name!=R49_MAT or
+                    not m.get("R49_source_visible_not_hidden_actuator") or
+                    not m.get("R49_no_animating_unverified_hinge") or
+                    len(m.data.vertices)!=len(R49_STATIONS[index])*10):
+                    raise RuntimeError("R49 source-specific physical upper mount incomplete")
+            print("R49_REAL_UPSTREAM_FIN_ROOTS_AND_BESPOKE_THREE_MOUNTS_PASS",
+                  path.name,flush=True)
             # R26 source portrait SCALE and physically under-bell placement
             # are enforced without changing the inner fin topology.
             expected_parent_scale=(.86,1.28,1.0)

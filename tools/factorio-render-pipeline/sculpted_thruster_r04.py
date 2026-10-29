@@ -376,6 +376,13 @@ def build_thruster(name,w,h,root,p):
         vanilla_broader_fins_rearward_collar_r48.apply_fins(
             name,root,p,{},bpy.context.scene
         )
+        # R49: source-observed three DIFFERENT cast mounts above the
+        # nozzle annulus; advance each original fin root onto the chassis
+        # BEFORE lower R18 shape keys. Do not replicate hidden actuators.
+        import vanilla_bespoke_fin_mounts_r49
+        vanilla_bespoke_fin_mounts_r49.apply(
+            name,root,p,{},bpy.context.scene
+        )
         # R18: only lower observable apron tips vary across 64 real frames.
         import vanilla_distal_motion_r18
         vanilla_distal_motion_r18.apply(
