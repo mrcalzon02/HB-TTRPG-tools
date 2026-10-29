@@ -18,17 +18,17 @@ WORK.mkdir(parents=True,exist_ok=True)
 
 # All commands run in a real Xvfb desktop; never use synthetic/offscreen preview art.
 GAMES=[
-    ("powerpong",["src","pom.xml"],["mvn","-B","-q","-DskipTests","package"],
+    ("powerpong",["src"],["mvn","-B","-q","-DskipTests","package"],
      ["java","-Djava.awt.headless=false","-jar","target/powerpong.jar"],"PowerPong"),
     ("The-Malefic-Veil",["src","assets"],["bash","-lc",
      "mkdir -p out && javac --release 17 -encoding UTF-8 -d out src/main/java/hbnet/*.java src/main/java/veil/*.java src/main/java/dev/mrcalzon/water/*.java"],
      ["java","-Djava.awt.headless=false","-cp","out","veil.MaleficVeil"],"Malefic"),
-    ("The-Beckenburg-Project",["src","assets/runtime","art/menu-backgrounds","water-module","build.sh"],
+    ("The-Beckenburg-Project",["src","assets/runtime","art/menu-backgrounds","water-module"],
      ["bash","build.sh"],["java","-Djava.awt.headless=false","-jar","build/beckenburg-game.jar"],"Beckenburg"),
-    ("TheMechanist",["src","PACKAGE_client","PACKAGE_launcher","client","config","pom.xml"],
+    ("TheMechanist",["src","PACKAGE_client","PACKAGE_launcher","client","config"],
      ["mvn","-B","-DskipTests","package"],
      ["java","-Djava.awt.headless=false","-jar","target/TheMechanist-all.jar"],"Mechanist"),
-    ("Catastrophic-Diplomacy",["core","game","desktop","assets","asset_packs","build.gradle","settings.gradle"],
+    ("Catastrophic-Diplomacy",["core","game","desktop","assets","asset_packs"],
      ["gradle","--no-daemon",":desktop:classes"],
      ["gradle","--no-daemon",":desktop:run"],"Diplomacy"),
 ]
