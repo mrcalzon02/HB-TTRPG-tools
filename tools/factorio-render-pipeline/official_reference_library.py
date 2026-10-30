@@ -127,6 +127,16 @@ def link_camera_and_lights(source, target, bpy):
             replica.constraints.remove(constraint)
         replica.animation_data_clear()
         target.collection.objects.link(replica)
+        # An object linked only to an inactive scene may not have a
+        # computed world matrix when the source scene is saved. Write the
+        # decomposed transform into persistent LOCAL channels too (no parent).
+        # This fixes the observed reopened clone [0,0,0] vs original
+        # [0.18,-8.9,10.15] without changing the source camera.
+        loc, rot, scale = matrix.decompose()
+        replica.location = loc
+        replica.rotation_mode = "QUATERNION"
+        replica.rotation_quaternion = rot
+        replica.scale = scale
         replica.matrix_world = matrix
         if obj == source.camera:
             target.camera = replica
