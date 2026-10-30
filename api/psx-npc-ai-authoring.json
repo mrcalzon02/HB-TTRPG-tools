@@ -89,6 +89,15 @@
         "bounded deterministic replay"
       ],
       "maxReplayObservations": 512
+    },
+    {
+      "type": "NpcRuleExport",
+      "features": [
+        "sorted canonical species snapshot",
+        "escaped deterministic JSON",
+        "atomic source-only file export",
+        "diagnostics as data"
+      ]
     }
   ],
   "uiCapabilities": [
@@ -96,7 +105,8 @@
     "actual live-source trait reading",
     "isolated GhostDomain sandbox at 10Hz",
     "coarse legal-action and energy inspection",
-    "action reasoning without dispatch"
+    "action reasoning without dispatch",
+    "Audit roster and export machine-readable live-source behavior rules"
   ],
   "authoritativeBoundaries": [
     "Only GhostDomain.dispatch may change energy, cooldowns, fear, harm or manifestation",
@@ -110,7 +120,13 @@
   "tests": [
     {
       "path": "src/test/java/org/beckenburg/editor/ai/NpcRuleWorkbenchTest.java",
-      "workflow": ".github/workflows/standalone-editor-kit.yml"
+      "workflow": ".github/workflows/standalone-editor-kit.yml",
+      "checks": [
+        "rulebook",
+        "decision workbench",
+        "bounded replay",
+        "JSON rulebook export"
+      ]
     },
     {
       "path": "src/test/java/org/beckenburg/GhostAiRuleAdapterTest.java",
