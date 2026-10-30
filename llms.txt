@@ -48,3 +48,5 @@ For restricted browsers that cannot retrieve raw JSON or Markdown, use the regis
 - PSX arrow sound-design guidance: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-arrow-audio-design.md
 - Menu, campaign, billboard/editor contract: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-editor-manipulation-contract.json
 - Human menu/campaign/billboard guide: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-editor-menu-campaign-billboards.md
+
+## Beckenburg NPC/AI automation\n- Canonical NPC/AI developer guide: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-npc-ai-authoring.md\n- AI-readable NPC module contract: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-npc-ai-authoring.json\n- Source runtime authority: https://github.com/mrcalzon02/The-Beckenburg-Project/tree/main/src/main/java/org/beckenburg\n
