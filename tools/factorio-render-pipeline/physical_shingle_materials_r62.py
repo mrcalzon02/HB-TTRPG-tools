@@ -33,7 +33,7 @@ from mounted_fin_candidate_r55 import MAX_ROOT_CONNECTION
 from fin_mount_geometry_sweep_r50 import MAIN,FIN_PREFIX,MOUNT_PREFIX
 from mount_shape_fit_r52 import joint_gap_world
 
-REVISION="R62_original_refractory_material_contrast_on_real_shingles"
+REVISION="R62_original_refractory_real_R43_live_patina_contrast"
 SOURCE_SHA256="0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791"
 MATERIALS=("R19_chipped_black_refractory","R19_inner_oxidized_shingles")
 MULTIPLIERS=(1.0,1.5,2.1,2.9)
@@ -48,7 +48,16 @@ def get_materials():
         shader=mat.node_tree.nodes.get("Principled BSDF")
         if shader is None or float(shader.inputs["Emission Strength"].default_value)!=0.:
             raise RuntimeError("R62 original refractory material was emissive")
-        rgba=tuple(shader.inputs["Base Color"].default_value)
+        # R43/R44 link a live MULTIPLY patina node into the BSDF Base Color.
+        # The Principled socket default is DORMANT while linked; changing it
+        # renders pixel-identical PNGs (caught by private R62 analysis).
+        # Calibrate the actual source-used shingle pigment input instead.
+        if not shader.inputs["Base Color"].is_linked:
+            raise RuntimeError("R62 requires R43/R44 linked original physical shader")
+        live=mat.node_tree.nodes.get("R43_physical_base_color_times_patina")
+        if live is None or live.type!="MIX_RGB":
+            raise RuntimeError("R62 source R43 active pigment node missing")
+        rgba=tuple(live.inputs["Color1"].default_value)
         result[name]=(mat,rgba,tuple(mat.diffuse_color),
                       float(shader.inputs["Metallic"].default_value),
                       float(shader.inputs["Roughness"].default_value))
@@ -58,7 +67,11 @@ def shade_shingles(original,multiplier):
     for name,(mat,rgba,diffuse,metallic,roughness) in original.items():
         shader=mat.node_tree.nodes["Principled BSDF"]
         new=tuple(min(.80,rgba[i]*multiplier) for i in range(3))+(rgba[3],)
-        shader.inputs["Base Color"].default_value=new
+        # The LIVE Color1 node feeds the R44 blended object patina path.
+        # Never manipulate the dormant linked Principled input.
+        mat.node_tree.nodes["R43_physical_base_color_times_patina"].inputs[
+            "Color1"].default_value=new
+        mat.node_tree.update_tag()
         mat.diffuse_color=new
         if (float(shader.inputs["Emission Strength"].default_value)!=0. or
             float(shader.inputs["Metallic"].default_value)!=metallic or
@@ -93,7 +106,8 @@ def run(out):
             "source_reference_sha256":SOURCE_SHA256,
             "source_rgba_pixel_files_exported":False,
             "source_materials_reused_no_baked_texture":True,
-            "original_shader_base_colors":{k:list(v[1]) for k,v in original_shader.items()},
+            "actually_modified_R43_live_connected_patina_Color1":True,
+            "original_live_R43_patina_pigments":{k:list(v[1]) for k,v in original_shader.items()},
             "original_metal_roughness_preserved":True,
             "variants":[]}
     try:
@@ -123,7 +137,9 @@ def run(out):
     finally:
         for name,(mat,rgba,diffuse,metallic,roughness) in original_shader.items():
             shader=mat.node_tree.nodes["Principled BSDF"]
-            shader.inputs["Base Color"].default_value=rgba
+            mat.node_tree.nodes["R43_physical_base_color_times_patina"].inputs[
+                "Color1"].default_value=rgba
+            mat.node_tree.update_tag()
             mat.diffuse_color=diffuse
         for name,(obj,kind,pts) in tiles.items():
             for v,p in zip(obj.data.vertices,pts):v.co=p
@@ -136,7 +152,7 @@ def run(out):
         scene.frame_set(frame)
         scene.view_layers[0].update()
     record["verified_all_original_properties_restored"]=(
-        all(tuple(mat.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value)==rgba
+        all(tuple(mat.node_tree.nodes["R43_physical_base_color_times_patina"].inputs["Color1"].default_value)==rgba
             and tuple(mat.diffuse_color)==diff
             for name,(mat,rgba,diff,metallic,roughness) in original_shader.items())
         and all(all(max(abs(a-b) for a,b in zip(v.co,pt))<1e-6
