@@ -12,7 +12,7 @@ The Beckenburg Project is an original asymmetric supernatural investigation game
 | --- | --- |
 | [PSX editor & runtime engineering](psx-editor-engineering-guide.md) | Curated engineering guidance: level construction, lighting, AI/navigation, UI, portable editor and machine-readable rules |
 | [PSX asset import and over-regression](psx-asset-import-and-regression.md) | OBJ/STL/GLB import, named-part collapse warnings, editable sources, local GLB runtime integration and supported format limits |
-| [PSX animation authoring](psx-animation-authoring.md) | Rigid segmented animation tracks, timeline, root motion, key pruning and live-integration boundaries |
+| [NPC/AI canonical ghost rules](psx-npc-ai-authoring.md) | Portable NPC rule-reader, real ghost source adapter, lawful scenario inspector, diagnostics and JSON export |\n| [PSX animation authoring](psx-animation-authoring.md) | Rigid segmented animation tracks, timeline, root motion, key pruning and live-integration boundaries |
 | [PSX-era campaign/editor tools](psx-era-editor-campaign-tools.md) | Campaign flags and transitions, spawn budgets, triggers, collision, audio and production workflow |
 | [PSX arrow sound design](psx-arrow-audio-design.md) | Retro sound production, mono sample size profiles, spatial audio ownership and optional compression |
 | [Menu, campaign and billboard manipulation](psx-editor-menu-campaign-billboards.md) | Menu/save graph, idempotent script lifecycle and non-destructive environment previews |
