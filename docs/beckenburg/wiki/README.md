@@ -10,7 +10,7 @@ The Beckenburg Project is an original asymmetric supernatural investigation game
 
 | Page | What's covered |
 | --- | --- |
-| [How to play and rules](rules.md) | Mission sequence, 1–6 hunters, human/AI ghost, victory conditions, rites, difficulty, practical controls |
+| [PSX editor & runtime engineering](psx-editor-engineering-guide.md) | Curated engineering guidance: level construction, lighting, AI/navigation, UI, portable editor and machine-readable rules |\n| [How to play and rules](rules.md) | Mission sequence, 1–6 hunters, human/AI ghost, victory conditions, rites, difficulty, practical controls |
 | [Evidence and the journal](evidence.md) | Measurements, thresholds, manual ticks, exclusions, actual ghost compatibility and incomplete detectors |
 | [Ghost field guide](ghosts.md) | All 13 species, signature behaviors, movement, sightings, evidence possibilities and required rituals |
 | [Equipment and items](equipment.md) | Six present loadout items, counters, van systems, all 42 registered catalog entries and scope |
