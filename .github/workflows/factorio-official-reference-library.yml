@@ -1,0 +1,90 @@
+name: Factorio official-reference Blender library isolation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/official_reference_library.py'
+      - 'tools/factorio-render-pipeline/test_official_reference_library.py'
+      - '.github/workflows/factorio-official-reference-library.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  verify-isolated-import-with-real-saved-thruster:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check official catalogue parser and input rejection
+        run: python -m unittest discover -s tools/factorio-render-pipeline -p 'test_official_reference_library.py' -v
+      - name: Recover existing verified source Blender scene (no source bitmap)
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40968758379
+          name: factorio-r56-r58-fin-visibility-and-editable-model
+          github-token: ${{ github.token }}
+          path: private-ci/saved-model/
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Verify actual Blender 4.5 LTS engine
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Create only self-authored miniature test STLs, one per official set
+        run: |
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, "tools/factorio-render-pipeline")
+          from official_reference_library import CATALOG
+          for group in CATALOG:
+              target=Path("private-ci/fixture-only")/group/"test-triangle.stl"
+              target.parent.mkdir(parents=True,exist_ok=True)
+              target.write_text(
+                  "solid self_authored\nfacet normal 0 0 1\nouter loop\n"
+                  "vertex 0 0 0\nvertex 1 0 0\nvertex 0 1 0\n"
+                  "endloop\nendfacet\nendsolid self_authored\n")
+          print("TEST_FIXTURES_OUR_OWN_NOT_WUBE", len(CATALOG))
+          PY
+      - name: Import 15 distinct fixture collections into saved real thruster file
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          test -s private-ci/saved-model/physically-connected-fin-r58/source_connected_hanging_fins_r58.blend
+          "$BLENDER" -b --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/official_reference_library.py -- \
+            --source-blend private-ci/saved-model/physically-connected-fin-r58/source_connected_hanging_fins_r58.blend \
+            --stl-root private-ci/fixture-only \
+            --require-all-15 \
+            --out-blend private-ci/output/isolated-fixture-reference.blend \
+            --report private-ci/output/reference-library.json
+      - name: Reopen actual generated Blender scene and inspect physical mesh/camera isolation
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b private-ci/output/isolated-fixture-reference.blend -t 2 --python-exit-code 4 \
+            --python-expr "import bpy; s=bpy.data.scenes['WUBE_OFFICIAL_UNASSEMBLED_STL']; groups=[c for c in bpy.data.collections if c.name.startswith('WUBE_SET_')]; meshes=[o for o in s.objects if o.type=='MESH']; assert len(groups)==15,len(groups); assert len(meshes)==15,len(meshes); assert all(o.get('unassembled_print_part') for o in meshes); assert s.camera is not None and s.camera.type=='CAMERA'; assert bpy.context.scene.get('fsc_status')=='CALIBRATION_ONLY_NOT_FACTORIO_APPROVED'; assert bpy.context.scene.camera is not s.camera; print('ACTUAL_BLEND_REOPEN_15_EDITABLE_MESHES_SOURCE_RIG_ISOLATED')"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path("private-ci/output/reference-library.json").read_text())
+          assert data["stl_count"]==15
+          assert len(data["present_sets"])==15
+          assert data["reconstruction_scene_preserved"] is True
+          assert data["status"]=="UNASSEMBLED_PRIVATE_REFERENCE_ONLY"
+          assert all(e["imported_blender_objects"]>=1 for e in data["entries"])
+          print("REAL_SCENE_AND_REPORT_VALIDATED")
+          PY
+      - name: Publish metadata only, NEVER reference meshes or .blend files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-private-reference-import-smoke-metadata-only
+          path: |
+            private-ci/output/reference-library.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
