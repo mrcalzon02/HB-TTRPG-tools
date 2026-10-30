@@ -1,0 +1,68 @@
+name: Factorio R63 original thruster mount-to-chassis geometry audit
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/mount_loadpath_audit_r63.py'
+      - '.github/workflows/factorio-thruster-mount-loadpath-r63.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  analyze-physical-mounting-not-images:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover actually saved original R58 geometry (no proprietary source art)
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40968758379
+          name: factorio-r56-r58-fin-visibility-and-editable-model
+          github-token: ${{ github.token }}
+          path: private-ci/geometry/
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Verify headless Blender environment
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Run true mesh-surface BVH mounting audit
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          test -s private-ci/geometry/physically-connected-fin-r58/source_connected_hanging_fins_r58.blend
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/mount_loadpath_audit_r63.py -- \
+            --source-blend private-ci/geometry/physically-connected-fin-r58/source_connected_hanging_fins_r58.blend \
+            --report private-ci/output/r63-real-mount-to-chassis-surfaces.json
+      - name: Confirm full surface-distance evidence and no fabricated attachments
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("private-ci/output/r63-real-mount-to-chassis-surfaces.json").read_text())
+          assert r["total_mesh_candidate_surfaces"]>=10
+          assert len(r["mounts"])==3
+          assert all(e["fin_root_vertex_to_cast_gap_tiles"]<=.003
+                     and e["actual_closest_any_mesh"]
+                     and e["nearest_real_meshes"] and e["no_automatic_mount_extension_authorized"]
+                     for e in r["mounts"].values())
+          print("R63_REAL_3D_CHASSIS_GAP_MEASUREMENTS",
+                {k:(v["actual_closest_non_ring_mesh"] or {}).get("gap_tiles")
+                 for k,v in r["mounts"].items()})
+          print("R63_NOT_AN_UNVERIFIED_SPRITE_ACCEPTANCE")
+          PY
+      - name: Upload numeric diagnostic only; no game art or .blend
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r63-real-mount-chassis-nearest-surfaces
+          path: |
+            private-ci/output/r63-real-mount-to-chassis-surfaces.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
