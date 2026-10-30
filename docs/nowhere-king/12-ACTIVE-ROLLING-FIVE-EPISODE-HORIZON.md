@@ -2,42 +2,44 @@
 
 **Role:** Single authoritative live N through N+4 planning window. Built using document 09's method.
 
-**State:** Rolled forward after committed Season 3 Episode 17, *The Hunt Beyond Hearing*.
-**Forward window:** Season 3 Episodes **18–22**. Episodes 19, 20, 21 and 22 remain **unassigned scope locks**, not invitations to invent premises.
+**State:** Rolled forward after committed Season 3 Episode 18, *Default Intelligence*.
+**Forward window:** Season 3 Episodes **19–23**. All five cards remain **unassigned scope locks**, not new commissions. The earlier S3E18 exploratory direction has been fulfilled by finished committed prose; no future episode premise is inferred merely from the season schematic.
 
-**Continuity status:** S3E17 *The Hunt Beyond Hearing* establishes a **conditional nonexclusive daylight village passage**, not a completed hunt or ride. Luceran has no authorized horse, named hired escort or right to take game; **eighteen patrol mounts remain withdrawn**. The village reeve and guide **Maera** permit only the cart turn to the fallen beech and back, subject to woodcutters' priority, weather and the guide's authority to turn back. Damaris reserves a guide wage and weather-cancellation portion from the king's limited **uncommitted household allowance**, not works money or Jorvan's pledged east-gate net. Rhyse retains all standing watches. Miren has **not** consented to accompany him, forgiven the private-listening violation, restored intimacy or agreed to marriage. Edselsto has not heard, surveyed or certified the off-wall path. S3E16's inspected third stone remains **unsold**, the **two-market-day** Hesta hold remains live, wages/gutter/roof remain due, Sera's rope settlement remains partial, Orlen's higher quote remains unaccepted, Edda has no Kaelmont reply, and the upper recess/lower stair remain guarded/barred. *King Beneath* is still contested restricted scholarship; **first candle dark, six lit**. S3E18 must explore only the existing, surveyed castle listening ways without expanding powers or erasing living evidence.
-
-## Season 3 Episode 18 — Default Intelligence — EXPLORATORY
-
-Explore how Luceran might begin asking Edselsto **routine questions only from established, surveyed listening ways** before receiving ordinary living reports. Make the usefulness genuine but bounded by the castle's proven reach, memory and error; a question about an old repair is not current inspection, private thought, legal proof or identity certification. Let a human adviser, guard, clerk or lover observe the changing habit and decide what it means. No expansion into Miren's physically disconnected room, Kaelmont dispatch, the guarded recess or the barred lower stair without separately earned source evidence and lawful authority. Protect the political and personal debts inherited from Episodes 13–17.
-
-**Exit:** A modest, observable shift toward convenient castle consultation, with a human objection or alternative still available; no prison/interface truth or new candle extinction.
+**Continuity status:** S3E18 makes Edselsto's already-surveyed listening-way recollection genuinely useful: Pell's misplaced wooden drain gauge is recovered and checked by living workers, saving at most a measuring hour. Its undated recollection cannot replace current masonry inspection. A harmless saw causes a lawful blade alarm; the living watch releases the carpenter, and Edselsto cannot count current guards from three voices. It supplies a **true but wrong-account** grain recollection when asked about Bessa's off-wall gate tally; Bessa's witnessed signed original governs. Luceran begins to ask the castle before people, recognizes the danger, and writes both a castle-first question and a human verification reminder. Miren remains independent in the physically deaf room, unreconciled and uncommitted to the village walk. Hesta's **two-market-day hold** continues with her lower-course block **unsold**; roof wages, gutter, Sera's partial rope claim, Orlen's unaccepted quote, Edda's unanswered Kaelmont recusal request, Jorvan's **24/27** pledged net and Bessa's tally custody remain unresolved. Maera's conditional nonexclusive daylight village path and reserved guide/cancellation wage remain, but no hunt, horse, escort or actual journey occurs; **eighteen patrol mounts remain withdrawn**. The upper recess and lower stair stay guarded/barred, *King Beneath* stays disputed restricted scholarship, and **first candle remains dark, six lit**. No new castle ability, foreign verdict, privacy breach or reader publication is established.
 
 ## Season 3 Episode 19 — Unassigned — SCOPE LOCK
 
-**Status:** No independent Episode 19 premise has been approved. Preserve an N-through-N+4 planning window without fabricating a new plot: after Episodes 15–18 develop, assign Episode 19 only from the resulting committed continuity, active relationship debts and user-established long-future constraints. Do not accelerate the second candle failure, undercroft/prison/interface explanation, foreign verdict, marriage absolution or unearned Edselsto capabilities.
+**Status:** No independent Episode 19 premise is approved. The broader season schematic suggests a future privacy-pressure theme, but this is **not** a commission to write a new intrusion or to undo the physically disconnected south-gallery room. Any future card must arise from finished S3E18 continuity and a separately approved, causally bounded direction. Preserve Miren's refusal, ordinary source custody, human verification and Edselsto's proven reach.
 
-**Exit:** A later planning pass supplies a canon-backed episode direction; this card is not a commission to write Episode 19 now.
+**Exit:** Await author-approved, canon-backed assignment. No Episode 19 manuscript is commissioned by this horizon.
 
 ## Season 3 Episode 20 — Unassigned — SCOPE LOCK
 
-**Status:** No Episode 20 premise is approved or implied by the S3E15 scholarship. Keep the fifth slot in the rolling horizon explicit and **uncommissioned** until subsequent finished prose and author direction establish a legitimate cause. Do not turn the phrase *King Beneath* into a proven name, prison, interface, route or second candle failure merely to fill this card. Preserve living work, foreign jurisdictions, debt, testimony and the consequences of Luceran's earlier choices.
+**Status:** No independent Episode 20 premise is approved. The season-scale spectral etiquette direction is not a license to invent shades, service contracts, new castle powers, dead labor, identity proof or a social revolution before causal setup. Maintain voluntary finite dead service and living household authority.
 
-**Exit:** Later planning may assign a bounded premise after the required continuity is actually written; no episode is drafted from this placeholder.
+**Exit:** Await author-approved, canon-backed assignment. No Episode 20 manuscript is commissioned.
 
 ## Season 3 Episode 21 — Unassigned — SCOPE LOCK
 
-**Status:** No Episode 21 premise has been authorized. Preserve exactly five live cards after the S3E16 commit. Do not infer a new threat, verdict, candle extinction, prison/interface reveal or foreign agreement merely because the planning window moved. Assign only after finished prose and author direction establish a causally warranted next step.
+**Status:** No independent Episode 21 premise is approved. Do not treat the provisional restricted *King Beneath* scholarship as a certified name, route, age, prison or interface. Preserve the separate signed and unsigned source chains and the living watch around the barred stair and guarded recess.
 
-**Exit:** Later planning may replace this scope lock with a properly authorized episode card. No Episode 21 manuscript is commissioned.
+**Exit:** Await author-approved, canon-backed assignment. No Episode 21 manuscript is commissioned.
 
 ## Season 3 Episode 22 — Unassigned — SCOPE LOCK
 
-**Status:** No Episode 22 premise has been authorized. This fifth card exists solely to preserve the live N-through-N+4 window after S3E17. Do not infer a new supernatural capacity, second candle failure, authenticated *King Beneath* identity, prison/interface disclosure, foreign verdict, or romantic reconciliation. Assign a specific premise only after committed prose and author direction justify it.
+**Status:** No independent Episode 22 premise is approved. Do not manufacture a deeper expedition, casualties, new surveying power, free wages, foreign permissions or an early candle failure to fill a slot. The receiving-yard, household, gate, village and foreign obligations remain actual costs.
 
-**Exit:** Later planning may replace this lock with a canon-backed episode card; no Episode 22 manuscript is commissioned.
+**Exit:** Await author-approved, canon-backed assignment. No Episode 22 manuscript is commissioned.
+
+## Season 3 Episode 23 — Unassigned — SCOPE LOCK
+
+**Status:** This fifth card exists to maintain the exact 19–23 window, not to accelerate marriage, intimacy, political settlement or revelation. No Episode 23 premise has been authorized; the season schematic's future marriage-terms direction does not override Miren's present consent or the unresolved earlier privacy injury.
+
+**Exit:** Await author-approved, canon-backed assignment. No Episode 23 manuscript is commissioned.
 
 ## Active payoff debt (historical carry-forward)
+
+**S3E18:** *Default Intelligence* recovers Pell's wooden drain gauge using a **fallible** Edselsto recollection from an already connected measuring passage, with human identification and physical fit verification; only a small measuring hour may be saved. The castle's harmless saw alarm and incorrect three-voice watch inference require living inspection and a named watch roll. Its irrelevant six-sack grain recollection does not replace Bessa's witnessed off-wall east-gate tally. Luceran develops a visible castle-first question habit but writes a human verification reminder; Miren remains unreconciled in the physically disconnected room. Sera's hall dates remain unbooked, Hesta's lower-course third block unsold with the two-market-day hold running, and the Maera path permission remains unused. First candle dark, six lit. No new supernatural reach, foreign verdict, purchased stone, paid arrears or publication.
 
 **S3E17:** *The Hunt Beyond Hearing* changes a proposed royal hunt into a **conditional village footpath permission**, with no hunt or completed ride. The village reeve and paid guide Maera permit a single nonexclusive daylight passage from the cart turn to the fallen beech, subject to woodcutters' mule, weather, no hunting/fire/cutting and no beyond-boundary right. The king's **uncommitted household allowance** reserves a guide wage and weather-cancellation portion; works arrears and Jorvan's 24/27 pledged net remain separate. Rhyse refuses to strip watches or use fatigued guards, **eighteen patrol mounts remain withdrawn**, and no suitable hired escort/horse/medical transport has yet been approved. Miren does not agree to join, forgive the prior intrusion, restore intimacy or marry; no private talk is owed merely because Edselsto cannot hear the path. The castle gains no off-wall hearing. Hesta's **two-market-day** unsold third-block offer, unpaid wages and unfinished gutter, Sera's partial rope payment, Edda's unanswered Kaelmont disclosure, Orlen's unaccepted iron quote, guarded recess, barred lower stair, disputed *King Beneath* and **first candle dark/six lit** all persist. S3E18 must show only bounded default consultation within existing surveyed ways and allow human challenge.
 
