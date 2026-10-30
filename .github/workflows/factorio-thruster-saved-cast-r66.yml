@@ -1,0 +1,68 @@
+name: Factorio R66 saved source-casting repair and physical upper hull connections
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/save_connected_cast_candidate_r66.py'
+      - '.github/workflows/factorio-thruster-saved-cast-r66.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  build-and-reopen-original-three-cast-candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Get actual previous saved R64 editable reconstruction
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40994130427
+          name: factorio-r64-editable-upper-hull-cast-stays-candidate-and-render-comparisons
+          github-token: ${{ github.token }}
+          path: private-ci/source/
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Verify actual Blender
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Build, render, save and reopen new distinct source-casting candidate R66
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/save_connected_cast_candidate_r66.py -- \
+            --source-blend private-ci/source/output/r64/upper_hull_loadpaths_candidate_r64.blend \
+            --out private-ci/output/r66/
+      - name: Verify new Blender file, source-region visibility and preserved animation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("private-ci/output/r66/r66-connected-casting-report.json").read_text())
+          assert r["saved_reopened_editable_candidate_passed"]
+          assert r["original_64_frame_fin_motion_geometry_unchanged"]
+          assert r["three_cast_to_pressure_hull_real_contacts_preserved"]
+          assert r["three_cast_to_fin_contact_preserved"]
+          assert r["visual_source_approval"] is False
+          assert r["first_hit_R66_candidate"]["2"]>r["first_hit_R64_original"]["2"]
+          assert len(r["altered_original_cast_meshes"])==3
+          print("R66_REAL_SAVED_CAST_SOURCE_PROJECTED_EXPOSURE",
+                r["first_hit_R64_original"],r["first_hit_R66_candidate"])
+          PY
+      - name: Publish editable original 3D model, real frame renders, diagnostic metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r66-source-visible-cream-castings-editable-blend-and-native-frames
+          path: |
+            private-ci/output/r66/saved_three_source_cast_face_stays_r66.blend
+            private-ci/output/r66/R66_native_*.png
+            private-ci/output/r66/r66-connected-casting-report.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
