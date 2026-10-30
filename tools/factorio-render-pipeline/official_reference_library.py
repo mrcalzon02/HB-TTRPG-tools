@@ -119,7 +119,7 @@ def link_camera_and_lights(source, target, bpy):
         # *different scene* and silently move the copied reference camera.
         # Snapshot the source's evaluated world transform and make the copy
         # strictly standalone. The source object is never touched.
-        matrix = obj.evaluated_get(bpy.context.evaluated_depsgraph_get()).matrix_world.copy()
+        matrix = obj.matrix_world.copy()
         replica = obj.copy()
         replica.data = obj.data.copy()
         replica.parent = None
