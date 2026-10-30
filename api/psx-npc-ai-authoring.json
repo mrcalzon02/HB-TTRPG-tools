@@ -132,17 +132,31 @@
       "path": "src/test/java/org/beckenburg/GhostAiRuleAdapterTest.java",
       "workflow": ".github/workflows/focused-castle-repairs.yml",
       "gate": "diagnostic, continue-on-error"
+    },
+    {
+      "path": "src/test/java/org/beckenburg/editor/ai/NpcAiTelemetryTest.java",
+      "workflow": ".github/workflows/standalone-editor-kit.yml"
+    },
+    {
+      "path": "src/test/java/org/beckenburg/GhostAiNavigationAuditTest.java",
+      "workflow": ".github/workflows/focused-castle-repairs.yml",
+      "gate": "nonblocking diagnostic"
+    },
+    {
+      "path": "src/test/java/org/beckenburg/GhostAiScenarioRunnerTest.java",
+      "workflow": ".github/workflows/focused-castle-repairs.yml",
+      "gate": "nonblocking diagnostic"
     }
   ],
   "implemented": "source, game adapter, UI, standalone and integration tests; success subject to observed CI",
   "notYetImplemented": [
-    "live host AI telemetry and latency histograms",
     "editable behaviors writing back to game rules",
     "actual FPS and route profiling",
-    "npc nav graph authoring and door topology revisions",
     "NPC pursuit animation integration",
     "other hunter/ally NPC controller adapters",
-    "playtest host-backed scenario runner"
+    "playtest host-backed scenario runner",
+    "host-performance CSV exists; live editor attachment to a running host remains future work",
+    "portal and acoustic map auditing exists; 3D navigation gizmos and collision path visualization remain future work"
   ],
   "future": [
     {
@@ -166,5 +180,95 @@
       "acceptance": "hunter allies/other NPC use their own canonical behavior sources"
     }
   ],
-  "releasePolicy": "Diagnostic AI style/performance findings never release-block; only objective broken build/launch/core gameplay and required multiplayer matter"
+  "releasePolicy": "Diagnostic AI style/performance findings never release-block; only objective broken build/launch/core gameplay and required multiplayer matter",
+  "implementationCheckpoint": "2026-10-30 NPC/AI telemetry, navigation diagnostics and scenario replay, pending new CI completion",
+  "telemetry": {
+    "portableType": "org.beckenburg.editor.ai.NpcAiTelemetry",
+    "reportType": "org.beckenburg.editor.ai.NpcAiTelemetryReport",
+    "owner": "per-LanHost instance; shared with LanGhostPursuit",
+    "optIn": "-Dbeckenburg.ai.profile=true on local JVM or trusted LanHost.enableAiDiagnostics(true)",
+    "defaultEnabled": false,
+    "rollingSamples": 256,
+    "metrics": [
+      "HOST_TICK",
+      "PERCEPTION",
+      "DECISION",
+      "APPROACH",
+      "HEARING",
+      "ROUTE"
+    ],
+    "fields": [
+      "calls",
+      "minNs",
+      "p50Ns",
+      "p95Ns",
+      "p99Ns",
+      "maxNs",
+      "meanNs"
+    ],
+    "privacy": "never records actor coordinates, hunter identity/health, equipment, journal, or any network packet",
+    "read": [
+      "LanHost.aiDiagnosticsSnapshot()",
+      "LanHost.aiDiagnosticsCsv()"
+    ],
+    "export": "NpcAiTelemetryReport.save(path, snapshot)",
+    "productionMeasurement": true,
+    "notes": [
+      "Actual Java wall-clock function timing, not GPU or full-cycle profiling.",
+      "Aggregate CSV printed only to local stderr on profiled host close."
+    ]
+  },
+  "navigation": {
+    "gameAdapter": "org.beckenburg.GhostAiNavigationAudit",
+    "inputSources": [
+      "HouseMap.ghostExits",
+      "LanAcoustics.cost"
+    ],
+    "uiAction": "NPC / AI -> AUDIT NAV",
+    "sandbox": "fresh authored-site map, no active mission state access",
+    "checks": [
+      "directed portal links",
+      "unreachable ghost rooms",
+      "nonreciprocal exits",
+      "acoustic edge losses",
+      "no extraction route"
+    ],
+    "resultStatus": "diagnostic",
+    "notYet": [
+      "live editor viewport route overlay",
+      "door crossing physics test",
+      "multi-floor coverage beyond existing HouseMap rules"
+    ]
+  },
+  "scenarios": {
+    "gameAdapter": "org.beckenburg.GhostAiScenarioRunner",
+    "uiAction": "NPC / AI -> PROFILE RULES",
+    "maxTicks": 1800,
+    "maxTraceEvents": 128,
+    "seeded": true,
+    "sources": [
+      "GhostDomain",
+      "GhostActionCadence",
+      "LanGhostPursuit",
+      "HouseMap",
+      "LanAcoustics"
+    ],
+    "preconditions": [
+      "synthetic sound at authored room 4 every 40 ticks (when enabled)",
+      "never supplies physical strike victim"
+    ],
+    "notCovered": [
+      "live LAN actor movement and pose",
+      "frenzy",
+      "wards",
+      "physics collision",
+      "real hunters",
+      "client packet synchronization"
+    ],
+    "status": "code present, awaiting latest CI execution"
+  },
+  "humanGuides": [
+    "docs/wiki/psx-npc-ai-authoring.md",
+    "docs/wiki/psx-npc-ai-telemetry-navigation.md"
+  ]
 }
