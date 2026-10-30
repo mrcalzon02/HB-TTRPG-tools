@@ -28,3 +28,9 @@
 
 ## Prioritized expansion
 First wire campaign map graph and typed flag registry to the existing mission scene data; expose trigger visualizations and actual door/stair/nav paths in the editor. Next add scene persistence and invalid-reference repair, authored entry/exit preview and 100% actual-game playtest. Then add edit/preview for sound zones, spawn orientation, and collision proxy gizmos. Keep sandboxed user-level scripting constrained to vetted actions and explicit permissions; do not deserialize arbitrary executable Java code from map content.
+
+## 2026-10-30 authoring module checkpoint
+
+**CAMPAIGN** on the game editor opens `EditorCampaignLab`. Its portable `EditorCampaignFlow` accepts only bounded typed lifecycle commands (START/PAUSE/RESUME/COMPLETE/STOP/RESET), preserves named simulation flags across STOP, detects duplicate commands, maintains reference→asset dependencies, and writes diff-friendly authoring state. **It does not start or stop any live game session.** `EditorCampaignFlowTest` checks idempotence, invalid transitions, reference guards and save/load.
+
+**BILLBOARDS** opens `EditorBillboardLab`, backed by `EditorBillboardProfile` for source-preserving PNG/JPEG → separate PNG derivatives. The current 2D source/processed comparison, 256/512 canvas options, aspect-preserving nearest-neighbor fit, RGB555/332 quantization, optional ordered dither and estimated decoded RGBA bytes are actual editor controls. A **game-renderer 3D mapped preview, scene placement adapter, skybox/atmosphere commit and per-scene VRAM counters remain outstanding**, and the UI labels the current preview as 2D authoring-only.
