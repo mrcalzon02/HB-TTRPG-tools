@@ -110,38 +110,43 @@ def native_scene_state(scene):
 
 
 def link_camera_and_lights(source, target, bpy):
-    """Copy the real rig into a distinct scene. Never point the original at STLs."""
+    """Copy static source rig using STORED local transforms, never stale depsgraph matrices.
+
+    In headless Blender 4.5, matrix_world can be the identity for objects in
+    the scene opened through bpy.ops.wm.open_mainfile until an explicit
+    depsgraph update; it then evaluates only after the saved file is reopened.
+    Comparing its value to the source's persistent object.location reveals
+    this hazard. Camera and reference lamps in the R58 rig are standalone,
+    so direct stored local channels are the unambiguous authoritative pose.
+    """
     for obj in source.objects:
         if obj.type not in {"CAMERA", "LIGHT"}:
             continue
-        # A copied Blender object retains its original parenting, constraints,
-        # drivers and actions by default. Those can reevaluate on reopening a
-        # *different scene* and silently move the copied reference camera.
-        # Snapshot the source's evaluated world transform and make the copy
-        # strictly standalone. The source object is never touched.
-        matrix = obj.matrix_world.copy()
+        if obj.parent is not None or len(obj.constraints):
+            raise RuntimeError(
+                "Nontrivial reference camera/light parenting requires an explicit "
+                "evaluated rig export: " + obj.name)
+        # This source scene has a static camera/light calibration. Do not
+        # inherit actions that could alter a copy in an unrelated scene.
+        source_location = tuple(float(v) for v in obj.location)
+        source_rotation_mode = obj.rotation_mode
+        source_rotation_euler = tuple(float(v) for v in obj.rotation_euler)
+        source_rotation_quaternion = tuple(float(v) for v in obj.rotation_quaternion)
+        source_rotation_axis_angle = tuple(float(v) for v in obj.rotation_axis_angle)
+        source_scale = tuple(float(v) for v in obj.scale)
         replica = obj.copy()
         replica.data = obj.data.copy()
         replica.parent = None
-        for constraint in list(replica.constraints):
-            replica.constraints.remove(constraint)
         replica.animation_data_clear()
         target.collection.objects.link(replica)
-        # An object linked only to an inactive scene may not have a
-        # computed world matrix when the source scene is saved. Write the
-        # decomposed transform into persistent LOCAL channels too (no parent).
-        # This fixes the observed reopened clone [0,0,0] vs original
-        # [0.18,-8.9,10.15] without changing the source camera.
-        loc, rot, scale = matrix.decompose()
-        replica.location = loc
-        replica.rotation_mode = "QUATERNION"
-        replica.rotation_quaternion = rot
-        replica.scale = scale
-        # Never set matrix_world on this inactive scene: Blender can reduce
-        # the copied object's local channels to [0,0,0] on reevaluation.
-        if tuple(round(v, 5) for v in replica.location) != tuple(
-                round(v, 5) for v in matrix.translation):
-            raise RuntimeError("Reference camera/light local transform was not persisted")
+        replica.location = source_location
+        replica.rotation_mode = source_rotation_mode
+        replica.rotation_euler = source_rotation_euler
+        replica.rotation_quaternion = source_rotation_quaternion
+        replica.rotation_axis_angle = source_rotation_axis_angle
+        replica.scale = source_scale
+        if max(abs(float(a)-float(b)) for a,b in zip(replica.location,source_location))>1e-6:
+            raise RuntimeError("Reference camera/light local pose not persisted: "+obj.name)
         if obj == source.camera:
             target.camera = replica
     target.world = source.world.copy() if source.world else None
