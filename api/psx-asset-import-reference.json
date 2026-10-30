@@ -1,0 +1,193 @@
+{
+  "schema": "beckenburg.asset-import-reference/v1",
+  "authority": {
+    "title": "Developing assets for the PlayStation 1 (PSX) architecture.pdf",
+    "pages": 13,
+    "kind": "owner supplied PSX architecture reference",
+    "interpretation": "PSX visual style with modern game runtime correctness; source does not prescribe arbitrary native file reader list"
+  },
+  "implementation": {
+    "language": "Java 17",
+    "imported": [
+      ".obj",
+      ".stl",
+      ".glb"
+    ],
+    "unsupportedNative": [
+      ".gltf",
+      ".fbx",
+      ".dae",
+      ".ply",
+      ".usd",
+      ".usdz",
+      ".blend"
+    ],
+    "outputs": [
+      ".glb"
+    ],
+    "entrypoints": [
+      "DeveloperLevelEditor.IMPORT_MODEL",
+      "DeveloperLevelEditor.Assets.IMPORT_MODEL"
+    ],
+    "portable": [
+      "org.beckenburg.editor.EditorMeshPipeline",
+      "org.beckenburg.editor.EditorGlbWriter"
+    ],
+    "game": [
+      "org.beckenburg.AssetImportDialog",
+      "org.beckenburg.ImportedAssetLibrary",
+      "org.beckenburg.GlbProps"
+    ],
+    "tests": [
+      "org.beckenburg.editor.EditorMeshPipelineTest",
+      "org.beckenburg.AssetImportRuntimeTest"
+    ],
+    "limitations": [
+      "Vertex clustering is not quadric-error decimation",
+      "OBJ material textures are not imported",
+      "Reduced GLB loses original textures and named mesh nodes; UI warns explicitly",
+      "PLY, text glTF, FBX, DAE, USD are not implemented"
+    ],
+    "storage": "~/.beckenburg/editor/imports",
+    "preserveOriginal": true
+  },
+  "budgets": {
+    "maxSourceBytes": 33554432,
+    "maxTrianglesRead": 120000,
+    "maxTrianglesExport": 16000,
+    "maxGlbBytes": 4000000,
+    "maxLevel": 12,
+    "stylePresets": [
+      {
+        "name": "PSX prop",
+        "triangles": 100
+      },
+      {
+        "name": "PSX character",
+        "triangles": 800
+      },
+      {
+        "name": "PSX close-up",
+        "triangles": 1200
+      },
+      {
+        "name": "PSX world kit",
+        "triangles": 4000
+      },
+      {
+        "name": "Modern",
+        "triangles": null
+      }
+    ],
+    "styleLimitsBlockRelease": false
+  },
+  "rules": [
+    {
+      "id": "IMP-01",
+      "sourcePages": [
+        1,
+        2
+      ],
+      "adoption": "adapt",
+      "target": "small textures and estimates; do not impose literal PS1 hardware defects",
+      "verification": "model and texture warnings shown"
+    },
+    {
+      "id": "IMP-02",
+      "sourcePages": [
+        2,
+        3
+      ],
+      "adoption": "adapt",
+      "target": "preserve puppet part identifiers and joint topologies",
+      "verification": "OBJ group-specific stats and collapse warning"
+    },
+    {
+      "id": "IMP-03",
+      "sourcePages": [
+        4,
+        9
+      ],
+      "adoption": "adapt",
+      "target": "preserve vehicle silhouette and independent wheels",
+      "verification": "vehicle parts show independent loss stats"
+    },
+    {
+      "id": "IMP-04",
+      "sourcePages": [
+        6,
+        7,
+        10,
+        11
+      ],
+      "adoption": "adapt",
+      "target": "near/far LOD variants with visual acceptance",
+      "verification": "planned; not claimed"
+    },
+    {
+      "id": "IMP-05",
+      "sourcePages": [
+        7,
+        10
+      ],
+      "adoption": "adapt",
+      "target": "protect weapon silhouette and attach points",
+      "verification": "planned; not claimed"
+    },
+    {
+      "id": "IMP-06",
+      "sourcePages": [
+        11,
+        12
+      ],
+      "adoption": "optional",
+      "target": "palette, nearest neighbor, baking preserve unified lighting authority",
+      "verification": "fallback atlas only in initial implementation"
+    },
+    {
+      "id": "IMP-07",
+      "sourcePages": [
+        13
+      ],
+      "adoption": "adapt",
+      "target": "room-based visibility and modular construction",
+      "verification": "future runtime adapter work"
+    },
+    {
+      "id": "IMP-08",
+      "sourcePages": [
+        1,
+        13
+      ],
+      "adoption": "reject",
+      "target": "no mandatory omission of Z-buffer, arbitrary lighting removal or fog regression",
+      "verification": "use existing modern game rasterizer and weather"
+    }
+  ],
+  "regression": {
+    "method": "deterministic spatial vertex clustering",
+    "levels": [
+      0,
+      12
+    ],
+    "metrics": [
+      "source and result triangles by part",
+      "unique positions by part",
+      "CPU triangle-memory estimate",
+      "GLB source bytes",
+      "decoded texture-memory estimate"
+    ],
+    "warningCode": "OVER-REGRESSION",
+    "condition": "part entirely collapses or loses >92% triangles with sufficient source faces, or falls to <=2 vertices",
+    "response": "warn and require explicit confirmation for remaining partially collapsed geometry, disable publish when all faces vanish",
+    "nonDestructive": true
+  },
+  "validation": {
+    "beforePublish": [
+      "real GlbProps.decode(output)",
+      "max current decoder bytes",
+      "preserve source original"
+    ],
+    "ciPolicy": "only product functionality blocks release; other checks advisory"
+  }
+}
