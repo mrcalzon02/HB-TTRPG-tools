@@ -1,3 +1,7 @@
+## PSX editor and runtime reference (2026-10-30)
+
+[Human authoring guide](wiki/psx-editor-engineering-guide.md) · [Machine adoption manifest](../../api/psx-editor-reference.json) · [Hosted reference](../../psx-editor-reference.html). The five supplied PDFs are selectively adapted for the active Beckenburg Java 17 renderer/editor suite. These links separate mandatory editor parity from optional PSX visuals and rejected hardware constraints; they are not proof that proposed editor tools are complete. The active implementation is in [The-Beckenburg-Project](https://github.com/mrcalzon02/The-Beckenburg-Project).
+
 > **DEVELOPMENT MOVED — ARCHIVED DOCUMENTATION.** This copy in HB-TTRPG-tools is frozen. All Beckenburg game source, documentation, development and releases now belong to [The-Beckenburg-Project](https://github.com/mrcalzon02/The-Beckenburg-Project). Historical links are retained for provenance.
 
 # The Beckenburg Project — Master Game Design Document
