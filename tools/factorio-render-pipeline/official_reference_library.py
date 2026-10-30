@@ -76,7 +76,9 @@ def inventory(root, require_all=False):
         raise ValueError("Incomplete 15-set catalogue: " + ", ".join(missing))
     return {
         "status": "UNASSEMBLED_PRIVATE_REFERENCE_ONLY",
-        "author": "Wube Software; verify each model's individual Printables license",
+        "catalogue_publisher": "Wube Software",
+        "input_provenance_verified": False,
+        "input_provenance_note": "Folder names are user declarations; file SHA256 is not an authenticated Wube checksum. Verify each original download and license.",
         "source": "https://www.printables.com/@WubeSoftware/models",
         "catalogue_sets": list(CATALOG),
         "present_sets": sorted(present),
@@ -199,7 +201,8 @@ def build(source, root, output, report, community=None, require_all=False):
                 obj.name = "OFFICIAL_STL_%04d_%s" % (index + 1, safe_slug(path.stem)[:32])
                 obj["source_relative_path"] = entry["relative_path"]
                 obj["source_sha256"] = entry["sha256"]
-                obj["official_set"] = entry["set"]
+                obj["catalogue_set_claim"] = entry["set"]
+                obj["source_authenticity_verified"] = False
                 obj["print_unit_to_tile_scale"] = "UNKNOWN"
                 obj["unassembled_print_part"] = True
             entry["imported_blender_objects"] = len(imported)
