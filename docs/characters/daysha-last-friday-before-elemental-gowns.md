@@ -21,7 +21,7 @@ The approved montage shows the waiting, workshop activity, fitting, and complete
 - Queen Daysha: high elf, **deep iridescent blue hair**, violet eyes, elegant proportionate pointed ears.
 - All atelier workers: elves.
 
-**Binary upload state:** pending transfer. This record does **not** attest that the final montage binary has been committed to the public site or uploaded to Google Drive. It must not be presented as a live gallery image until the exact binary has been independently verified at both destinations.
+**Google Drive artwork:** The exact user-approved final montage is embedded in the [archival Google Doc](https://docs.google.com/document/d/15gKB0NzdIx9awXAgsxinjbRnUQPzgTAYzY7NfZE22GU/edit), filed inside the Daysha Royal Purchases folder. The Docs inline-image insertion was accepted and the file metadata confirms a 3.24 MB document.\n\n**Public GitHub image binary:** not yet uploaded to the website gallery. This catalog entry is live on main, but do not show a broken gallery image or claim the PNG binary is in the repository.
 
 ## Accounting
 One new gown, canonically acquired. Place in the last Friday slot prior to the first elemental acquisitions. Avoid double counting intermediate/final panels or reference photograph.
