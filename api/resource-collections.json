@@ -517,6 +517,45 @@
         "getResource"
       ],
       "notes": "Real import support is format-specific; JSON explicitly distinguishes implemented and planned readers."
+    },
+    {
+      "id": "beckenburg.psx-reference-batch-2026-10-30",
+      "title": "PSX design sources: nine-file intake and adoption ledger",
+      "workspace": "Beckenburg",
+      "kind": "engineering-reference",
+      "format": "json",
+      "path": "api/psx-reference-ingestion-2026-10-30.json",
+      "tags": [
+        "psx",
+        "animation",
+        "campaign",
+        "sfx",
+        "provenance"
+      ],
+      "supports": [
+        "getResource"
+      ],
+      "notes": "Six duplicate and three new PDF references; source PDFs not mirrored as binary files."
+    },
+    {
+      "id": "beckenburg.psx-menu-campaign-billboards",
+      "title": "Menu, Campaign and Billboard Editor Manipulation Contract",
+      "workspace": "Beckenburg",
+      "kind": "engineering-reference",
+      "format": "json",
+      "path": "api/psx-editor-manipulation-contract.json",
+      "tags": [
+        "psx",
+        "menu",
+        "campaign",
+        "scripting",
+        "billboard",
+        "save"
+      ],
+      "supports": [
+        "getResource"
+      ],
+      "notes": "Owner-authored inline design brief, adapt modern Java runtime separately from PS1 hardware."
     }
   ]
 }
