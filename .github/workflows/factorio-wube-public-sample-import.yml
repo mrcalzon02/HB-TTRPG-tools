@@ -45,13 +45,13 @@ jobs:
             --stl-root private-ci/official-geometry-private \
             --out-blend private-ci/output/real-wube-15-set-reference.blend \
             --report private-ci/output/real-15-set-import-report.json
-          "$BLENDER" -b --disable-autoexec private-ci/output/real-wube-belt-reference.blend \
-            -t 2 --python-exit-code 4 --python-expr "import bpy; s=bpy.data.scenes['WUBE_OFFICIAL_UNASSEMBLED_STL']; m=[o for o in s.objects if o.type=='MESH']; assert m and all(len(o.data.vertices)>=3 for o in m); assert bpy.context.scene.camera is not s.camera; print('OFFICIAL_STL_ACTUAL_EDITABLE_3D_MESH_ISOLATED')"
+          "$BLENDER" -b --disable-autoexec private-ci/output/real-wube-15-set-reference.blend \
+            -t 2 --python-exit-code 4 --python-expr "import bpy; s=bpy.data.scenes['WUBE_OFFICIAL_UNASSEMBLED_STL']; m=[o for o in s.objects if o.type=='MESH']; assert len(m)==15 and all(len(o.data.vertices)>=3 for o in m); assert bpy.context.scene.camera is not s.camera; print('OFFICIAL_STL_ACTUAL_EDITABLE_3D_MESH_ISOLATED')"
           python - <<'PY'
           import json
           from pathlib import Path
           a=json.loads(Path("private-ci/official-acquisition.json").read_text())
-          b=json.loads(Path("private-ci/output/real-belt-import-report.json").read_text())
+          b=json.loads(Path("private-ci/output/real-15-set-import-report.json").read_text())
           assert a["catalogue_sample_count"]==15 and a["all_fifteen_sets_sampled"]
           assert len(b["present_sets"])==15
           assert b["reconstruction_scene_preserved"]
@@ -65,6 +65,6 @@ jobs:
           name: factorio-real-Wube-reference-metadata-no-meshes
           path: |
             private-ci/official-acquisition.json
-            private-ci/output/real-belt-import-report.json
+            private-ci/output/real-15-set-import-report.json
           retention-days: 14
           if-no-files-found: warn
