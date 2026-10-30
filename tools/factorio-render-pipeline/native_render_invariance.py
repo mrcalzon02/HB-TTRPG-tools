@@ -125,7 +125,7 @@ def main():
     p.add_argument("--baseline",type=Path)
     p.add_argument("--candidate",type=Path)
     p.add_argument("--out",type=Path,required=True)
-    args=p.parse_args(sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else [])
+    args=p.parse_args(sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else sys.argv[1:])
     if args.capture_blend is not None:
         if args.baseline or args.candidate:
             p.error("Capture and comparison modes cannot be combined")
