@@ -19,6 +19,9 @@ from pathlib import Path
 import sys
 
 import bpy
+ROOT=str(Path(__file__).resolve().parent)
+if ROOT not in sys.path:
+    sys.path.insert(0,ROOT)
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
