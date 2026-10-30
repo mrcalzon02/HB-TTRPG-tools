@@ -1,0 +1,287 @@
+{
+  "schema": "beckenburg.psx-editor-reference/v1",
+  "title": "Selective PSX authoring and editor adoption",
+  "date": "2026-10-30",
+  "kind": "design-guidance-not-implementation-proof",
+  "canonicalProject": "mrcalzon02/The-Beckenburg-Project",
+  "documentation": {
+    "human": "docs/beckenburg/wiki/psx-editor-engineering-guide.md",
+    "editorAudit": "docs/development/LEVEL_EDITOR_OVERHAUL_AUDIT.md",
+    "lighting": "docs/lighting/LIGHTING_MODULE.md",
+    "ai": "docs/ai/PSX_NPC_AI_ADOPTION.md",
+    "machine": "api/psx-editor-reference.json",
+    "gameSource": "https://github.com/mrcalzon02/The-Beckenburg-Project"
+  },
+  "sourceDocuments": [
+    {
+      "id": "gold-standards",
+      "name": "Level Editor gold standards(1).pdf",
+      "pages": 5
+    },
+    {
+      "id": "psx-level-building",
+      "name": "PSX level building.pdf",
+      "pages": 18
+    },
+    {
+      "id": "psx-lighting",
+      "name": "PSX lighting engine(1).pdf",
+      "pages": 6
+    },
+    {
+      "id": "psx-npc-ai",
+      "name": "PSX NPC-AI-1(1).pdf",
+      "pages": 17
+    },
+    {
+      "id": "psx-ui",
+      "name": "PSX ui guide and user.pdf",
+      "pages": 20
+    }
+  ],
+  "policy": {
+    "runtimeFirst": true,
+    "previewIsSameWorld": true,
+    "releaseBlockers": "objective build/launch/core game/multiplayer only",
+    "cosmeticDiagnosticsBlockRelease": false,
+    "simulationAuthority": "host",
+    "weatherOwnsFog": true,
+    "vanPrefabShared": true,
+    "blenderRuntimeRequired": false
+  },
+  "adoptionLabels": {
+    "adopt": "normative requirement",
+    "adapt": "adopt principle conditioned on game architecture",
+    "optional": "opt-in artistic profile",
+    "reject": "do not implement literally",
+    "adopt-existing": "keep existing authority",
+    "not-specified": "do not attribute to source"
+  },
+  "rules": [
+    {
+      "id": "ed.wysiwyg",
+      "source": "gold-standards",
+      "pages": "pp1-2",
+      "disposition": "adopt",
+      "owner": "runtime-scene",
+      "requirement": "Same runtime scene, renderer, collision, lighting, assets and edited state in preview and play",
+      "verification": "edit-playtest-save roundtrip"
+    },
+    {
+      "id": "ed.gizmos",
+      "source": "gold-standards",
+      "pages": "pp1,3-4",
+      "disposition": "adopt",
+      "owner": "editor-shell",
+      "requirement": "XYZ transform, snapping, inspectable hierarchy, undo transactions",
+      "verification": "real transform in runtime scene"
+    },
+    {
+      "id": "ed.prefab",
+      "source": "gold-standards",
+      "pages": "pp3-4",
+      "disposition": "adopt",
+      "owner": "editor-shell",
+      "requirement": "Reusable named stable prefab including canonical van; replace without losing transforms",
+      "verification": "castle and field van same asset ID"
+    },
+    {
+      "id": "ed.diagnostics",
+      "source": "gold-standards",
+      "pages": "pp2-3",
+      "disposition": "adopt",
+      "owner": "diagnostics",
+      "requirement": "On-demand FPS, stage timings, triangle, AI, lighting, memory/GC, warnings",
+      "verification": "representative house and castle capture"
+    },
+    {
+      "id": "ed.serialization",
+      "source": "gold-standards",
+      "pages": "p2",
+      "disposition": "adopt",
+      "owner": "runtime-scene",
+      "requirement": "Versioned atomic save and recoverable snapshots",
+      "verification": "crash and playtest restore"
+    },
+    {
+      "id": "world.nearest",
+      "source": "psx-level-building",
+      "pages": "pp1,9",
+      "disposition": "adapt",
+      "owner": "renderer",
+      "requirement": "Pixel sampling and low-res profiles are configurable presentation options",
+      "verification": "toggle affects pixels only"
+    },
+    {
+      "id": "world.portal",
+      "source": "psx-level-building",
+      "pages": "pp2,7,14-15",
+      "disposition": "adapt",
+      "owner": "world-authoring",
+      "requirement": "Room-sector boundaries and doors can support conservative visibility precomputation",
+      "verification": "door open/close visibility with valid collision"
+    },
+    {
+      "id": "world.affine",
+      "source": "psx-level-building",
+      "pages": "pp2,9-12",
+      "disposition": "optional",
+      "owner": "renderer",
+      "requirement": "Bounded affine/vertex jitter never impacts UI or simulation coordinates",
+      "verification": "world-only shader screenshot"
+    },
+    {
+      "id": "world.lowpoly",
+      "source": "psx-level-building",
+      "pages": "pp1-4",
+      "disposition": "adapt",
+      "owner": "art-pipeline",
+      "requirement": "Low-poly authoring budget diagnostics, not literal console cap",
+      "verification": "performance and legibility review"
+    },
+    {
+      "id": "world.fog",
+      "source": "psx-level-building",
+      "pages": "p3",
+      "disposition": "adapt",
+      "owner": "weather-module",
+      "requirement": "Weather-owned fog and distance atmosphere, no separate fixed condition selector",
+      "verification": "weather scene integration"
+    },
+    {
+      "id": "world.freeze",
+      "source": "psx-level-building",
+      "pages": "p6",
+      "disposition": "reject",
+      "owner": "runtime-simulation",
+      "requirement": "Do not freeze simulation when walking through doors to mimic data loading",
+      "verification": "continuous input and host tick"
+    },
+    {
+      "id": "world.defects",
+      "source": "psx-level-building",
+      "pages": "pp11-13",
+      "disposition": "reject",
+      "owner": "runtime-physics",
+      "requirement": "Never intentionally leave real geometry holes, clipping or unresponsive input",
+      "verification": "collision and viewport smoke"
+    },
+    {
+      "id": "light.vertex",
+      "source": "psx-lighting",
+      "pages": "pp1-3",
+      "disposition": "adapt",
+      "owner": "lighting-module",
+      "requirement": "Use existing vertex lighting/quantization/dither; no duplicative global light pass",
+      "verification": "compare CPU and GPU paths"
+    },
+    {
+      "id": "light.diffusion",
+      "source": "psx-lighting",
+      "pages": "pp1-4",
+      "disposition": "adopt-existing",
+      "owner": "lighting-module",
+      "requirement": "Preserve explicit reach vs diffusion and hard occlusion",
+      "verification": "door-wall probe profile"
+    },
+    {
+      "id": "light.batch",
+      "source": "psx-lighting",
+      "pages": "pp4-6",
+      "disposition": "adopt",
+      "owner": "diagnostics",
+      "requirement": "Dirty source cells, bounded probes and frame-stage profiling",
+      "verification": "p95/p99 and invalidation counts"
+    },
+    {
+      "id": "light.layer-priority",
+      "source": "psx-lighting",
+      "pages": "pp1-6",
+      "disposition": "not-specified",
+      "owner": "lighting-module",
+      "requirement": "Document does not define priority rule; preserve physical host lighting contributions",
+      "verification": "no priority override invented"
+    },
+    {
+      "id": "ai.prebake",
+      "source": "psx-npc-ai",
+      "pages": "pp6-8,14-17",
+      "disposition": "adapt",
+      "owner": "ai-authoring",
+      "requirement": "Portal adjacency and optional waypoint/tactical tags built from real geometry",
+      "verification": "doors stairs and collision reachable"
+    },
+    {
+      "id": "ai.ticks",
+      "source": "psx-npc-ai",
+      "pages": "pp2,7,10",
+      "disposition": "adapt",
+      "owner": "host-simulation",
+      "requirement": "Optimize noncritical decisions, keep 100ms authoritative simulation and immediate events",
+      "verification": "solo+LAN event tests"
+    },
+    {
+      "id": "ai.hearing",
+      "source": "psx-npc-ai",
+      "pages": "pp2-3,10-14",
+      "disposition": "reject-literal",
+      "owner": "host-simulation",
+      "requirement": "Never replace door/material/weather sound path with flat radius or vision cheats",
+      "verification": "occluded hearing and hidden hunter privacy"
+    },
+    {
+      "id": "ai.assembly",
+      "source": "psx-npc-ai",
+      "pages": "pp4-10",
+      "disposition": "reject",
+      "owner": "runtime-simulation",
+      "requirement": "PS1 MIPS/GTE/2MB restrictions and fixed slots are not Java requirements",
+      "verification": "JVM profile only"
+    },
+    {
+      "id": "ai.teleport",
+      "source": "psx-npc-ai",
+      "pages": "pp10,17",
+      "disposition": "reject",
+      "owner": "runtime-physics",
+      "requirement": "No through-wall teleport-on-stuck or collision disable as generic recovery",
+      "verification": "physical legal reroute"
+    },
+    {
+      "id": "ui.navigation",
+      "source": "psx-ui",
+      "pages": "pp1,4-6",
+      "disposition": "adopt",
+      "owner": "ui-input",
+      "requirement": "Remappable unified controls, D-pad, mouse and keyboard, accessible text, back navigation",
+      "verification": "three-device controls smoke"
+    },
+    {
+      "id": "ui.legibility",
+      "source": "psx-ui",
+      "pages": "pp1,3,5-6",
+      "disposition": "adopt",
+      "owner": "ui-shell",
+      "requirement": "Pixel-art styling may be toggled; scalable modern fonts and high contrast remain",
+      "verification": "320x240 aesthetic and large display tests"
+    },
+    {
+      "id": "ui.delay",
+      "source": "psx-ui",
+      "pages": "pp4,7-9",
+      "disposition": "reject",
+      "owner": "ui-shell",
+      "requirement": "Never deliberately freeze or delay interface for nostalgia",
+      "verification": "immediate functional state transitions"
+    },
+    {
+      "id": "ui.save",
+      "source": "psx-ui",
+      "pages": "pp1,8-9",
+      "disposition": "adapt",
+      "owner": "persistence",
+      "requirement": "Reliable local saves and status indications; do not require memory-card hardware fiction",
+      "verification": "atomic save/recover"
+    }
+  ]
+}
