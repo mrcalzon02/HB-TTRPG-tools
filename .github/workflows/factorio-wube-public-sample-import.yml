@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'tools/factorio-render-pipeline/private_wube_acquire.py'
+      - 'tools/factorio-render-pipeline/verify_official_geometry_integrity.py'
       - '.github/workflows/factorio-wube-public-sample-import.yml'
   workflow_dispatch:
 permissions:
@@ -58,6 +59,27 @@ jobs:
           assert {e["sha256"] for e in b["entries"]}=={f["sha256"] for f in a["files"]}
           print("REAL_WUBE_ALL_15_STL_SHA_CHAINS_VERIFIED")
           PY
+      - name: Independently reopen both scenes and verify every native STL dimension plus 64 source frames
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/verify_official_geometry_integrity.py -- \
+            --baseline private-ci/model/physically-connected-fin-r58/source_connected_hanging_fins_r58.blend \
+            --merged private-ci/output/real-wube-15-set-reference.blend \
+            --inventory private-ci/output/real-15-set-import-report.json \
+            --provenance private-ci/official-acquisition.json \
+            --report private-ci/output/native-bounds-and-source-integrity.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path("private-ci/output/native-bounds-and-source-integrity.json").read_text())
+          assert report["result"]=="PASS_NATIVE_STL_GEOMETRY_AND_64_FRAME_SOURCE_INTEGRITY"
+          assert report["imported_set_count"]==15
+          assert report["original_64_frame_motion_preserved"]
+          assert report["all_imported_native_bounds_preserved"]
+          assert all(s["original_stl_bounds_match_import"] for s in report["samples"])
+          print("ACTUAL_FIFTEEN_OFFICIAL_MESHES_64_FRAME_INTEGRITY_CONFIRMED")
+          PY
       - name: Upload only private research metadata (never models or Blender scenes)
         if: always()
         uses: actions/upload-artifact@v4
@@ -66,5 +88,6 @@ jobs:
           path: |
             private-ci/official-acquisition.json
             private-ci/output/real-15-set-import-report.json
+            private-ci/output/native-bounds-and-source-integrity.json
           retention-days: 14
           if-no-files-found: warn
