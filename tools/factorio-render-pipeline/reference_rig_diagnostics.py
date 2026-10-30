@@ -20,15 +20,26 @@ def triplet(vec):
     return [round(float(x), 6) for x in vec]
 
 
+def measured_matrix(obj):
+    # R58 round-trip proved the saved reference camera had correct local
+    # channels and matrix_basis, while its inactive-scene matrix_world was
+    # misleadingly an identity. On a standalone unparented/unconstrained
+    # rig object the stored matrix_basis IS its physical world transform.
+    if obj.parent is None and len(obj.constraints) == 0:
+        return obj.matrix_basis.copy()
+    return obj.matrix_world.copy()
+
+
 def camera_data(obj):
-    rotation = obj.matrix_world.to_quaternion()
+    matrix = measured_matrix(obj)
+    rotation = matrix.to_quaternion()
     direction = rotation @ Vector((0, 0, -1))
     elev = math.degrees(math.asin(max(-1, min(1, float(direction.z)))))
     azimuth = math.degrees(math.atan2(float(direction.y), float(direction.x)))
     return {
         "name": obj.name,
         "type": obj.data.type,
-        "location": triplet(obj.matrix_world.translation),
+        "location": triplet(matrix.translation),
         "view_vector": triplet(direction),
         "azimuth_degrees": round(azimuth, 4),
         "elevation_degrees": round(elev, 4),
@@ -39,10 +50,11 @@ def camera_data(obj):
 
 
 def lamp_data(obj):
+    matrix = measured_matrix(obj)
     return {
         "name": obj.name,
         "type": obj.data.type,
-        "location": triplet(obj.matrix_world.translation),
+        "location": triplet(matrix.translation),
         "color": triplet(obj.data.color),
         "energy": round(float(obj.data.energy), 5),
         "size": (float(obj.data.size)
