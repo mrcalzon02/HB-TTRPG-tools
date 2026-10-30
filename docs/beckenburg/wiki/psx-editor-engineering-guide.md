@@ -67,3 +67,7 @@ Use compact rectangular panels, sharp optional pixel fonts, bounded dithered bac
 - The standalone Java 17 editor kit includes a concise offline guide viewer. The wiki and manifest are versioned sources; the viewer is an orientation aid, not the implementation authority.
 - For the two sites, publish the same policy with site-relative links. Original PDFs remain owner-supplied source material; these pages are an **adapted synthesis** rather than a verbatim republication.
 - Actual installed Windows playtest, network/camera and hardware GPU profiling remain separate verifications. Do not equate a successful documentation commit with those tests.
+
+## Active Beckenburg source checkpoint (2026-10-30)
+
+The [Beckenburg editor](https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/src/main/java/org/beckenburg/DeveloperLevelEditor.java) now includes **PSX GUIDE** (offline reference) and **SCENE AUDIT** (manual, non-blocking actual Castle wall collision / duplicate-ID / spawn warnings with jump-to-object). The [audit implementation](https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/src/main/java/org/beckenburg/CastleEditorAudit.java) is Castle-specific and does not establish universal editor runtime parity. Its [focused test](https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/src/test/java/org/beckenburg/CastleEditorAuditTest.java) and Windows installer must be checked separately for execution results.
