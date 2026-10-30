@@ -1,0 +1,49 @@
+name: Factorio R59 saved outer-bell visibility
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/bell_quad_visibility_r59.py'
+      - 'tools/factorio-render-pipeline/test_bell_quad_visibility_r59.py'
+      - '.github/workflows/factorio-r59-bell-visibility.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  saved-r58-first-hits:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore actual verified editable R58 Blender geometry
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40968758379
+          name: factorio-r56-r58-fin-visibility-and-editable-model
+          github-token: ${{ github.token }}
+          path: capture-output/test-04-vanilla-approx/
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Verify R59 Blender source and original environment
+        run: |
+          python -m unittest discover -s tools/factorio-render-pipeline -p 'test_bell_quad_visibility_r59.py' -v
+          python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir readiness
+      - name: Raycast original exterior shell bands and reversible physical profile
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          test -f capture-output/test-04-vanilla-approx/physically-connected-fin-r58/source_connected_hanging_fins_r58.blend
+          "$BLENDER" -b --factory-startup -t 2 --python-exit-code 4 --python tools/factorio-render-pipeline/bell_quad_visibility_r59.py -- --output capture-output
+      - name: Upload R59 actual native Blender visibility captures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r59-original-shell-first-hits
+          path: capture-output/test-04-vanilla-approx/original-geometry-ray-test-r59/
+          if-no-files-found: warn
+          retention-days: 30
