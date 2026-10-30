@@ -468,6 +468,29 @@
       "supports": [
         "getResource"
       ]
+    },
+    {
+      "id": "beckenburg.psx-editor-engineering",
+      "title": "Beckenburg PSX Editor: Selective Engineering Rules",
+      "workspace": "Beckenburg",
+      "kind": "engineering-reference",
+      "format": "json",
+      "path": "api/psx-editor-reference.json",
+      "tags": [
+        "psx",
+        "editor",
+        "runtime",
+        "lighting",
+        "navigation",
+        "level building",
+        "accessible UI",
+        "rule provenance",
+        "implementation criteria"
+      ],
+      "supports": [
+        "getResource"
+      ],
+      "notes": "Static design guidance, not an executable game/editor API nor implementation confirmation."
     }
   ]
 }
