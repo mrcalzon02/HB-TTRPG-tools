@@ -1,0 +1,362 @@
+{
+  "schema": "beckenburg.psx-reference-ingestion/v1",
+  "batchDate": "2026-10-30",
+  "target": "mrcalzon02/The-Beckenburg-Project main; mirrored discoverability under mrcalzon02/HB-TTRPG-tools",
+  "engine": "Java 17 Swing/software PSX-styled runtime, not physical PlayStation hardware",
+  "source": {
+    "ownerSupplied": true,
+    "rawPdfFilesCommitted": false,
+    "note": "SHA-256 metadata and distilled rule pages are published. Source PDFs remain uploaded conversation assets, not pushed binary GitHub blobs."
+  },
+  "files": [
+    {
+      "filename": "Developing assets for the PlayStation 1 (PSX) architecture(1).pdf",
+      "sha256": "e4295217c48556ba8ca6a98d5ffc1a7bfe7dddae164bc302de14b8d2030e28a6",
+      "pages": 13,
+      "status": "duplicate",
+      "humanGuide": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/docs/wiki/psx-asset-import-and-regression.md"
+    },
+    {
+      "filename": "Level Editor gold standards(2).pdf",
+      "sha256": "ea093401390be6fe445c6e989ac21fa31abfcdc4877faa6fd3a92dffa8737935",
+      "pages": 5,
+      "status": "duplicate",
+      "humanGuide": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/docs/wiki/psx-editor-engineering-guide.md"
+    },
+    {
+      "filename": "PSX animations gold-1.pdf",
+      "sha256": "e23ca682ac405dec241b256aabf484ce541554aac56065f733749e7895a549e7",
+      "pages": 8,
+      "status": "new",
+      "humanGuide": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/docs/wiki/psx-animation-authoring.md"
+    },
+    {
+      "filename": "PSX level building(1).pdf",
+      "sha256": "c5d97af0c4b8b106d79ad47b1fe51f28d83c14ae99d5c8a2453b2759e8c6fa02",
+      "pages": 18,
+      "status": "duplicate",
+      "humanGuide": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/docs/wiki/psx-editor-engineering-guide.md"
+    },
+    {
+      "filename": "PSX lighting engine(2).pdf",
+      "sha256": "18c5f04dc4abf0a56666b159c4d74fb57af2cea4292854ba8bb4fc5153bbea65",
+      "pages": 6,
+      "status": "duplicate",
+      "humanGuide": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/docs/wiki/psx-editor-engineering-guide.md"
+    },
+    {
+      "filename": "PSX NPC-AI-1(2).pdf",
+      "sha256": "da7a8176011c1875529f198c0507a08e05a372493728a888d74c3699fd6305d5",
+      "pages": 17,
+      "status": "duplicate",
+      "humanGuide": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/docs/wiki/psx-editor-engineering-guide.md"
+    },
+    {
+      "filename": "PSX ui guide and user(1).pdf",
+      "sha256": "ac5352ad586c593ca685e11aadf7e9d4c79ef0b72db5397c996fd772b69926e4",
+      "pages": 20,
+      "status": "duplicate",
+      "humanGuide": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/docs/wiki/psx-editor-engineering-guide.md"
+    },
+    {
+      "filename": "PSX-era level editor.pdf",
+      "sha256": "dc3bbd98dd74f573aeaf3b63578ebdb52def99f00adf50f37a2c835687a950a3",
+      "pages": 9,
+      "status": "new",
+      "humanGuide": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/docs/wiki/psx-era-editor-campaign-tools.md"
+    },
+    {
+      "filename": "🏹 Sound Design_ The PSX _Arrow_ Aesthetic.pdf",
+      "sha256": "a3bc12a57828c9ceecf4728f3adc8ba2b0c52051c41f92b298fc90acf24d55a0",
+      "pages": 9,
+      "status": "new",
+      "humanGuide": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/docs/wiki/psx-arrow-audio-design.md"
+    }
+  ],
+  "summary": {
+    "received": 9,
+    "exactDuplicates": 6,
+    "newSources": 3,
+    "existingReferencesReused": 6
+  },
+  "rules": [
+    {
+      "id": "ANI-01",
+      "source": "animations",
+      "pages": [
+        1,
+        2
+      ],
+      "adoption": "adopt-partial",
+      "target": "independent named rigid parts, 15/30 fps editing, atomic source clips",
+      "owner": "EditorAnimationClip, EditorAnimationLab",
+      "verification": "standalone compilation + clip tests; live actors not yet adapted"
+    },
+    {
+      "id": "ANI-02",
+      "source": "animations",
+      "pages": [
+        1,
+        2
+      ],
+      "adoption": "adopt-partial",
+      "target": "authoring stepped/linear sampling, bounded keys, redundant-key pruning",
+      "owner": "EditorAnimationClip.compact",
+      "verification": "first/last key preservation and round-trip tests"
+    },
+    {
+      "id": "ANI-03",
+      "source": "animations",
+      "pages": [
+        2,
+        3
+      ],
+      "adoption": "adopt-partial",
+      "target": "separate root movement from pose playback",
+      "owner": "EditorAnimationClip.Root",
+      "verification": "root remains detached from gameplay collision"
+    },
+    {
+      "id": "ANI-04",
+      "source": "animations",
+      "pages": [
+        2,
+        4
+      ],
+      "adoption": "planned",
+      "target": "rig parenting, animation-pivot validation, bone/socket protection",
+      "owner": "runtime animation adapter",
+      "verification": "verify joint structural safety and save/load"
+    },
+    {
+      "id": "ANI-05",
+      "source": "animations",
+      "pages": [
+        3,
+        6
+      ],
+      "adoption": "optional",
+      "target": "visual vertex jitter, pose exaggeration, 15-bit/CLUT texture cues",
+      "owner": "render profile only",
+      "verification": "no broken physics, unreadable UI or forced fixed-point math"
+    },
+    {
+      "id": "ANI-06",
+      "source": "animations",
+      "pages": [
+        6,
+        8
+      ],
+      "adoption": "planned",
+      "target": "dialogue gestures, 1-frame hit markers, authored camera tracks",
+      "owner": "animation and event editor adapters",
+      "verification": "do not override host strike or hidden-ghost visibility authority"
+    },
+    {
+      "id": "ANI-07",
+      "source": "animations",
+      "pages": [
+        4,
+        7
+      ],
+      "adoption": "reject",
+      "target": "intentional limb gaps, forced clipping, 320x240 UI as required features",
+      "owner": "gameplay and accessibility",
+      "verification": "no defects added for retro fidelity"
+    },
+    {
+      "id": "CAM-01",
+      "source": "level editor",
+      "pages": [
+        1,
+        2
+      ],
+      "adoption": "planned",
+      "target": "typed campaign flags, stage transition graph, explicit entry/spawn IDs",
+      "owner": "RuntimeScene/mission adapter",
+      "verification": "no false scene transitions or orphan entries"
+    },
+    {
+      "id": "CAM-02",
+      "source": "level editor",
+      "pages": [
+        2,
+        3
+      ],
+      "adoption": "planned",
+      "target": "AABB trigger connections, typed vetted actions, script event debugger",
+      "owner": "event/ritual/door adapters",
+      "verification": "no executable scripts in imported level files"
+    },
+    {
+      "id": "CAM-03",
+      "source": "level editor",
+      "pages": [
+        1,
+        4
+      ],
+      "adoption": "adapt-existing",
+      "target": "spawn orientation, collider/doorway checks, authoring snapshot/undo",
+      "owner": "DeveloperLevelEditor, CastleLevelEdits",
+      "verification": "existing scene checks remain authoritative"
+    },
+    {
+      "id": "CAM-04",
+      "source": "level editor",
+      "pages": [
+        2,
+        3
+      ],
+      "adoption": "adopt-existing",
+      "target": "atomic/versioned saves and corruption warnings",
+      "owner": "CastleLevelEdits.save",
+      "verification": "no physical PS1 memory-card dependency"
+    },
+    {
+      "id": "CAM-05",
+      "source": "level editor",
+      "pages": [
+        4,
+        5
+      ],
+      "adoption": "adopt-existing",
+      "target": "audio volumes, falloff and preview",
+      "owner": "SoundVolumeEditor, SoundVolumeAudio",
+      "verification": "must reuse game audio engine, not compete with it"
+    },
+    {
+      "id": "CAM-06",
+      "source": "level editor",
+      "pages": [
+        5,
+        6
+      ],
+      "adoption": "planned",
+      "target": "collision proxy brush, sound-material painting, detached visual LOD",
+      "owner": "RuntimePhysics",
+      "verification": "no basement void/collision clipping accepted"
+    },
+    {
+      "id": "CAM-07",
+      "source": "level editor",
+      "pages": [
+        6
+      ],
+      "adoption": "adopt-partial",
+      "target": "rigid animation and key pruning",
+      "owner": "EditorAnimationClip",
+      "verification": "no live actor binding yet"
+    },
+    {
+      "id": "CAM-08",
+      "source": "level editor",
+      "pages": [
+        6,
+        9
+      ],
+      "adoption": "reject",
+      "target": "PS1 ISO/BIN/CUE/TIM/TMD/VAG/XA native outputs as mandatory",
+      "owner": "Windows Java release",
+      "verification": "retro-looking game is not a PS1 disc executable"
+    },
+    {
+      "id": "CAM-09",
+      "source": "level editor",
+      "pages": [
+        1,
+        9
+      ],
+      "adoption": "adapt",
+      "target": "diagnostics for model/spawn/audio memory and active entities, not hard historic quotas",
+      "owner": "EditorMeshPipeline and runtime diagnostics",
+      "verification": "release-blocking only for objective gameplay failures"
+    },
+    {
+      "id": "SND-01",
+      "source": "arrow sound",
+      "pages": [
+        1,
+        2
+      ],
+      "adoption": "optional",
+      "target": "short dry impact and filtered whoosh source design for relevant projectile sounds",
+      "owner": "future asset authoring profile",
+      "verification": "do not invent a bow or arrow feature in Beckenburg"
+    },
+    {
+      "id": "SND-02",
+      "source": "arrow sound",
+      "pages": [
+        1,
+        4
+      ],
+      "adoption": "adapt-existing",
+      "target": "spatial gain/pitch/falloff audition and scoped reverb",
+      "owner": "SoundVolumeEditor",
+      "verification": "preserve exact sound-origin and weather/material attenuation"
+    },
+    {
+      "id": "SND-03",
+      "source": "arrow sound",
+      "pages": [
+        4,
+        6
+      ],
+      "adoption": "planned",
+      "target": "category-aware voice-priority diagnostics and sample memory estimates",
+      "owner": "audio profiler",
+      "verification": "no 24-voice or 512KB forced PS1 limit"
+    },
+    {
+      "id": "SND-04",
+      "source": "arrow sound",
+      "pages": [
+        6,
+        9
+      ],
+      "adoption": "optional",
+      "target": "sample-rate/bit-depth derivative export, simple pitch envelopes and shared reverb send",
+      "owner": "future authoring importer",
+      "verification": "keep original source and licenses; preserve legibility"
+    },
+    {
+      "id": "SND-05",
+      "source": "arrow sound",
+      "pages": [
+        5,
+        9
+      ],
+      "adoption": "reject",
+      "target": "unnecessary hard cuts, click artifacts, simulated disc freezing, forced VAG/XA, 3D hearing removal",
+      "owner": "player-facing audio",
+      "verification": "must keep essential evidence spatial cues and accessibility"
+    },
+    {
+      "id": "DUP-01",
+      "source": "existing standards",
+      "pages": [
+        1
+      ],
+      "adoption": "already-ingested",
+      "target": "6 byte-identical duplicate PDFs",
+      "owner": "docs/wiki/psx-editor-engineering-guide.md and docs/wiki/psx-asset-import-and-regression.md",
+      "verification": "reuse existing rules without duplicative modules"
+    }
+  ],
+  "sourceGovernance": [
+    "Existing game runtime retains authority for AI, collision, lighting, audio, multiplayer and visual source IDs.",
+    "Historical PS1 resource limits are opt-in retro profiles / diagnostic budgets; no mandatory PS1 binary toolchain.",
+    "Only objective broken build, launch, essential game function or required multiplayer blocks release."
+  ],
+  "humanGuides": [
+    "docs/wiki/psx-animation-authoring.md",
+    "docs/wiki/psx-era-editor-campaign-tools.md",
+    "docs/wiki/psx-arrow-audio-design.md"
+  ],
+  "implementationClasses": [
+    "org.beckenburg.editor.EditorAnimationClip",
+    "org.beckenburg.editor.EditorAnimationLab"
+  ],
+  "runtimeBindingStatus": "animation lab is standalone authoring-only; no game actor adaptation",
+  "nativeGithubWikiStatus": "versioned repository docs/wiki files; separate GitHub Wiki-tab git repository not modified"
+}
