@@ -118,6 +118,19 @@
       "acquiredBy": "Queen Daysha",
       "purchaseConfirmedInStory": true,
       "invoiceStatus": "acquisition_confirmed_price_not_yet_valued"
+    },
+    {
+      "id": "G-007",
+      "title": "Royal Sapphire Starfire Halter Gown",
+      "primarySourceId": "file_0000000065b881fd8249400d61b3270c",
+      "type": "adult royal gown",
+      "notes": "Royal-blue fitted gown with jeweled silver halter neckline, crystal-star detailing and sweeping train. Daysha has purchased it at the Golden Spindle before a masked ambush at her carriage. Flaming sword pierces a foe made of smoke. One purchased garment; the source mannequin photograph is excluded.",
+      "verifiedPaidGold": null,
+      "actualPurchaseDate": null,
+      "acquisitionStatus": "canon_purchased_by_daysha",
+      "acquiredBy": "Queen Daysha",
+      "purchaseConfirmedInStory": true,
+      "invoiceStatus": "acquisition_confirmed_price_not_yet_valued"
     }
   ],
   "sources": [
@@ -438,6 +451,23 @@
       "originalMasterDriveFileId": "17MRgjfItenkI_MWhvftpfF6LNzl3RdZh",
       "wornGarmentPurchase": "canon_purchased",
       "acquisitionGownId": "G-006"
+    },
+    {
+      "id": "file_0000000065b881fd8249400d61b3270c",
+      "title": "Queen Daysha's Smoke-Assailant Ambush at the Golden Spindle",
+      "image": "assets/daysha/royal-purchases/daysha-golden-spindle-smoke-ambush-approved.png",
+      "gitBlobSha": "b495faeee29c6cb52aaae321fbe94e380a6f3adc",
+      "type": "scene",
+      "category": "Royal carriage ambush",
+      "sceneGroup": "Golden Spindle Smoke-Assailant Ambush",
+      "provenance": "User-approved original ChatGPT-generated scene; direct PNG transferred via Google Drive and committed as binary to GitHub. Source dress mannequin photo excluded.",
+      "referenceMedia": false,
+      "wardrobeId": "G-007",
+      "appearanceCluster": "DAYSHA-SAPPHIRE-STARFIRE-SMOKE-AMBUSH",
+      "originalSizeBytes": 2943684,
+      "originalMasterDriveFileId": "15h1snq4-4cwmbCgm_6FSi7Ri-jtCHHOX",
+      "wornGarmentPurchase": "canon_purchased",
+      "acquisitionGownId": "G-007"
     }
   ],
   "sceneSequences": [
@@ -537,6 +567,17 @@
       ],
       "newGownPurchases": 0,
       "purchaseMeaning": "Daysha wears gowns she has purchased. Scene repeats do not charge her husband a second time."
+    },
+    {
+      "id": "SC-09",
+      "title": "Smoke in the carriage courtyard",
+      "category": "Royal combat",
+      "description": "After buying the royal-blue starfire gown, Queen Daysha and her guards are attacked by masked assailants at the carriage outside the Golden Spindle. The Queen wields her flaming blade using her long adventuring experience, but her first target turns out to be made of smoke. A separate purchased gown from the preceding Saturday fitting; the mannequin reference is excluded.",
+      "sourceIds": [
+        "file_0000000065b881fd8249400d61b3270c"
+      ],
+      "newGownPurchases": 1,
+      "purchaseMeaning": "One canon purchased royal-blue gown. Assault scene is part of the same acquisition, not another purchase."
     }
   ],
   "excludedArtwork": [
@@ -562,7 +603,7 @@
     "verifiedPurchaseTotalGold": null,
     "verifiedReceiptCount": 0,
     "policy": "Every finished gown worn by Daysha in approved story art is canonically purchased. One physical dress counts once; repeat scenes and correction images do not create another transaction. Unknown exact gold and calendar dates remain open accounting fields, not doubts about acquisition.",
-    "confirmedGarmentAcquisitionsInGallery": 6,
+    "confirmedGarmentAcquisitionsInGallery": 7,
     "outfitClustersPendingPhysicalGownReconciliation": [
       "DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE",
       "DAYSHA-ROSEBLUSH-BOUTIQUE",
@@ -572,8 +613,8 @@
     ]
   },
   "verification": {
-    "publishedDerivativeCount": 19,
-    "publishedPathsExpected": 19,
+    "publishedDerivativeCount": 20,
+    "publishedPathsExpected": 20,
     "masterSourcesInThisConversation": 17,
     "pendingCorrectedSourceCount": 0,
     "historicalGalleryStillWithheld": true
