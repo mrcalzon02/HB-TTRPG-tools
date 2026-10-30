@@ -6,7 +6,7 @@
 
 The editor's **NPC / AI** button opens `GhostAiRuleLab`. It uses the dedicated portable package `org.beckenburg.editor.ai`:
 
-- `NpcRuleBook`: typed, immutable species definitions; stable IDs and base/variant relationships; labels for locomotion, traversal, visibility, energy charging, preferred action, frenzy thresholds, and candidate evidence. It rejects duplicate/invalid rule IDs, explains rules in readable terms, and emits advisory structural findings.
+- `NpcRuleBook`: typed, immutable species definitions; stable IDs and base/variant relationships; labels for locomotion, traversal, visibility, energy charging, preferred action, frenzy thresholds, and candidate evidence. It rejects duplicate/invalid rule IDs, explains rules in readable terms, and emits advisory structural findings. An on-demand **AUDIT ROSTER** command lists these findings; **EXPORT RULES JSON** atomically writes a deterministic source-derived species catalog (\`NpcRuleExport\`) to the chosen file. Neither touches live NPCs.
 - `NpcDecisionWorkbench`: read-only legality explanations, safe candidate proposals, explicitly **host-verified spatial-victim** guard for physical strikes, portal-exit validity, and bounded 512-observation deterministic replay. It only uses already-filtered coarse observations. **It never dispatches actions.**
 
 The **game adapter**, `GhostAiRuleAdapter`, reads all `GhostIdentity.Type.values()` from **actual runtime source**, including Ancient and Elder variants:
