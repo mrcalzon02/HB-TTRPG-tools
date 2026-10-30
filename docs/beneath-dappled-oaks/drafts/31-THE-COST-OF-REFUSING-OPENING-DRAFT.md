@@ -299,6 +299,318 @@ He folded the receipt into the account book.
 
 ---
 
+Elsewhere in Aurelith, another office had discovered that a correction made on paper did not recover the days somebody had already spent trusting the first version.
+
+The Green Covenant's city garden was full of people who had come to be told good news.
+
+Someone had hung green ribbons between the columns of the outer court. There were new clay cups on the refreshment table, a little tower of honey biscuits, and a painted board announcing **TWO NEW PLACES FOR THE BLOOMTIDE INTAKE**. Mireth read the words while a gardener tried to persuade a vine to grow around the board rather than through it.
+
+She had come to help arrange the infirmary's teaching schedule. The board was news to her.
+
+Inside, the senior healer had spread six duty rosters across a table. Her sleeves were tied above her elbows, and there was a smear of yellow salve at the base of one thumb. Mireth had learned to distrust anyone who arrived for infirmary work with clean hands and a speech prepared.
+
+"Two?" she asked.
+
+"Two stipends," the healer said.
+
+"The board says places."
+
+"The patronage office made the board."
+
+"Did they ask you?"
+
+"They asked how many students we could take with additional money. I told them how many we could feed and house. I also told them we had one qualified tutor available for the new field rotation."
+
+Mireth picked up the schedule. Three senior practitioners already divided their days between patients, teaching and the preparation room. The fourth was recovering from an illness and had not yet resumed visits. The empty spaces in the rota were not decorative; they represented dressings that still had to be changed and people who would arrive in pain whether or not the Covenant held a celebration.
+
+"Could the herbary take one?"
+
+"For sorting, perhaps. Not for the supervised rounds the intake promises."
+
+"Then there is one place."
+
+"At present."
+
+The healer rubbed the yellow salve from her thumb with a scrap of linen. "You may tell the patrons that. They will be cross."
+
+"Will you tell them?"
+
+"I shall sign what you write. I have patients."
+
+Mireth sat down.
+
+At the far end of the room a young woman waited with a travelling bag beneath her chair. She was an adult, plainly exhausted from the road, and had spent enough care on her best coat that the worn cuffs had been turned neatly inward. Her acceptance letter was folded into quarters. The line about the stipend was underlined. The line about placement being subject to the Covenant's training capacity was not.
+
+"Have you come far?" Mireth asked.
+
+"Three days. I took the carrier from the western road after the bridge was opened to foot traffic." She glanced toward the garden. "Is there a problem?"
+
+"The teaching place hasn't been confirmed."
+
+The woman looked at the letter.
+
+"They told me to present myself before the first bell tomorrow."
+
+"Who did?"
+
+"The patronage office. It says so there."
+
+It did. The letter had been issued after the healer's capacity warning. Mireth could imagine how it happened: a clerk given a list of names, a sponsor eager to announce generosity, nobody deliberately lying, nobody checking the line that mattered. The young woman had paid for three days of travel all the same.
+
+"What's your name?" Mireth asked.
+
+"Evin."
+
+"I'm Mireth. I can take this to the healer now. I can't promise you the place."
+
+"Can you promise me somewhere to sleep tonight?"
+
+That was a question Mireth could answer. The guest beds had been entered on the intake list, and Evin's name was there. She showed her the line.
+
+"Tonight and tomorrow are covered. After that, we need to tell you what we're actually offering."
+
+Evin studied her for a moment. "I gave up a week's paid work to come."
+
+"I'll put that in the report."
+
+"I'd rather you put it in my purse."
+
+Mireth nearly smiled. Evin did not.
+
+She returned to the duty table and began again.
+
+The Covenant could take one additional apprentice into supervised rounds immediately. The other stipend could be held, but no second teaching placement existed until a qualified practitioner could be assigned without leaving existing patients uncovered. The garden's herbary had temporary sorting work in its budget, though Mireth would not write Evin into it until the herbary keeper agreed.
+
+She took the draft to the senior healer.
+
+"You're asking us to announce one place," the healer said.
+
+"One place and one funded place awaiting a tutor."
+
+"The patrons won't like that distinction."
+
+"Evin paid to come because nobody made it."
+
+The healer read the line about lost wages. She was quiet for a while.
+
+"Send for the herbary keeper. If the temporary hours are still available, I will authorize the work. No training credit unless the proper supervision is provided."
+
+Mireth sent for him. Then she went outside and took down the board.
+
+The gardener, who had nearly persuaded the vine to obey him, looked offended.
+
+"That was straight when I hung it."
+
+"It was very straight."
+
+"What's wrong with it?"
+
+"The number."
+
+"That's not a hanging problem."
+
+"No."
+
+He helped her carry it inside anyway.
+
+Caelen found Mireth an hour later with a streak of green paint on her wrist.
+
+He had come from drill, his practice coat dark at the collar, a fresh scrape showing above the old scar at his jaw. She liked him most dangerously when he had just finished doing something difficult and was trying not to look pleased with himself. Today he looked at the paint before he looked at her face.
+
+"Have you joined the gardeners?"
+
+"I have improved their signage."
+
+"That sounds grave."
+
+"It was."
+
+He leaned toward her. She let him kiss her, briefly, before pulling him into the covered walk where the patients could pass without negotiating around a royal soldier embracing someone beside the door.
+
+"Your mother sent a note," he said.
+
+Mireth groaned. "To you?"
+
+"To mine. She hoped we might both attend the intake announcement. Apparently it would be agreeable for the families."
+
+"Of course it would."
+
+"She may not know there's a problem."
+
+"Neither did I until this morning."
+
+He glanced toward the empty hooks where the board had hung. "Do you want me to speak to my mother?"
+
+"No."
+
+"I haven't offered to order anyone about."
+
+"You were about to offer to ask her to help."
+
+"I was going to ask what you wanted."
+
+Mireth opened her mouth and found that he was right. It annoyed her. It also made her want to kiss him again, which was still more annoying.
+
+"I want the office to stop announcing places that don't exist," she said. "I want the young woman who travelled here to be paid for something useful if we can't teach her yet. And I want my mother to hear it from me, not from a Crown officer's mother."
+
+"Then tell her."
+
+"I shall."
+
+Caelen rested his hand against the stone beside her. The scraped knuckles were close enough that she could see the pale new skin at the edges. She touched them with one finger.
+
+"Did you win?"
+
+"Not the last bout."
+
+"Good."
+
+"That's a remarkably poor welcome."
+
+"You look insufferable when you win."
+
+"I was hoping you liked that."
+
+"I do. It's a failing."
+
+He smiled, and she drew him down to kiss him properly. For a moment the garden, the board and the waiting letter fell away. She felt the warmth of him through the practice coat, the familiar hesitation before he let his arms close around her in a place where someone might see. He had been learning when to ask. She had been learning that she sometimes wanted him to stop asking after she had answered.
+
+A door opened behind them. The senior healer came out carrying a folded schedule.
+
+"I wondered where my drafter had gone," she said.
+
+Mireth stepped back. Caelen straightened with the guilty dignity of a man caught committing an entirely lawful act.
+
+"Good afternoon," he said.
+
+"Captain Edras still lets you out after drill, I see."
+
+"Usually."
+
+"Then perhaps you can help carry the new board when the paint dries. In your own clothes, if you please. I don't require the Crown to endorse our arithmetic."
+
+Caelen's ears reddened. Mireth loved her for that sentence.
+
+The healer handed over the signed schedule. The herbary keeper had accepted Evin for two weeks of paid sorting and preparation work, beginning tomorrow, with no claim that it counted toward her supervised training. The second stipend would remain reserved pending an actual tutor assignment. The patronage office had been asked to correct its announcement and acknowledge the change before inviting anyone else to travel.
+
+"Will the family withdraw the money?" Mireth asked.
+
+"They may," the healer said. "They may also prefer to fund a tutor. We have given them something they can decide."
+
+Mireth looked at the signature. Her draft had survived almost intact. That pleased her more than it should have.
+
+"I'll take Evin the terms myself."
+
+"Do. And eat a biscuit before you become a public danger."
+
+When the healer had gone, Caelen reached for her hand.
+
+"Would you still want me at the announcement?"
+
+"If there is one."
+
+"As me, I mean. Not as anyone's convenient uniform."
+
+She considered him. She wanted him there. She also wanted the choice to remain hers when her mother asked, and his when the captain's duty roster arrived.
+
+"If you have leave," she said. "And if I ask you."
+
+"That seems fair."
+
+"It is also what I want."
+
+He kissed the paint on her wrist. It tasted, he reported, terrible.
+
+Mireth laughed, took the signed paper and went to find Evin. Behind her, Caelen stayed to help the gardener with a board that would now require a longer sentence and smaller letters.
+
+The new wording would not make the second tutor appear. Tomorrow Evin could begin paid work if she chose to accept the written terms, and one apprentice would begin the supervised rounds. Mireth would have to explain the difference to her family before the garden filled with patrons.
+
+For tonight, she had a letter to write in her own hand.
+
+Evin had taken her travelling bag to the guest room but had not unpacked it. When Mireth found her, the bag lay open on the narrow bed, with a spare shirt folded over the handle and a pair of boots set carefully beside it. On the sill stood the little clay cup from the garden. Evin had not drunk from it.
+
+"I was told someone would come," she said.
+
+"I said I would." Mireth held out the signed schedule. "I brought the terms in writing."
+
+Evin did not reach for it immediately.
+
+"Are they the terms I travelled here for?"
+
+"No."
+
+That answer earned Mireth a look which was not grateful, but which at least allowed her to sit.
+
+"There's one supervised place," Mireth said. "The Covenant can pay two stipends. It cannot train two additional people with one available tutor. The second stipend stays reserved until the Covenant can provide proper supervision. I won't put your name against training hours that nobody is qualified to oversee."
+
+"Then why did the letter tell me to come?"
+
+"The patronage office issued it after the healer warned them about capacity. We have asked the office to correct the announcement. I don't yet know why it sent the letter anyway."
+
+"You don't know whether they ignored her."
+
+"No."
+
+"That's a very small comfort."
+
+"I know."
+
+Evin finally took the paper. She read the first page standing, then sat on the edge of the bed to examine the second. Mireth waited while she found the line that mattered.
+
+"Two weeks," Evin said.
+
+"Paid herbary sorting and preparation. The keeper has agreed to the hours, and the healer has signed. You can begin tomorrow if you accept. The work is real. It does not count as supervised apprenticeship."
+
+"And after two weeks?"
+
+"The paid work ends unless someone makes a separate arrangement. The training place is not promised to you by then. I won't pretend otherwise."
+
+Evin set the schedule on her knee. "I left a week's wages behind. Three days on the road. I bought a better coat because they said I'd be meeting the senior healers."
+
+Mireth looked at the neatly turned cuffs. She had noticed them in the intake room without understanding what they had cost.
+
+"I put the lost wages and the journey in my report," she said.
+
+"Will that put them back in my purse?"
+
+"No."
+
+"Then I hope the report is very handsome."
+
+It was a sharp answer. Mireth could not object to it. The signed schedule contained the wages for the herbary work, the hours, the two nights of lodging already covered, and a request for the guest steward to explain any further lodging charge before Evin was asked to incur it. It did not contain reimbursement for the journey. It did not contain a training appointment. Mireth had wanted to write both in, but wanting was not authority.
+
+"Do you have to decide tonight?" Evin asked.
+
+"No. You may take the night to read it. The keeper needs an answer before the morning shift if you want to start then. If you don't, nobody will record you as having refused an apprenticeship. There isn't a second apprenticeship to refuse."
+
+Evin looked up. "Will they tell the patrons I was ungrateful?"
+
+"They will not have that from my report."
+
+"That's not quite what I asked."
+
+"No," Mireth said. "It isn't. I can tell you what I will write and what I will challenge. I cannot promise what a patron will say."
+
+The answer seemed to disappoint Evin less than the first letter had. Perhaps because this time she knew exactly how much the answer was worth.
+
+"Leave me a copy," Evin said. "I want to look at the hours and the lodging again."
+
+Mireth set the second signed sheet beside the cup.
+
+"Have you accepted?" she asked, because she did not want a clerk tomorrow to mistake silence for consent.
+
+"Not yet."
+
+"Then I will mark it pending."
+
+Evin nodded. After a moment she took off the better coat and hung it on the bedpost, careful not to crush the cuffs.
+
+Outside, the garden's new board was drying against the wall. The paint still needed another coat. Mireth stopped beside it on her way back to the infirmary and read the longer wording aloud. It was clumsy and accurate. She thought of her mother's invitation, of Caelen asking to come only if she wanted him, and of Evin's hands holding a promise that had changed between the road and the door.
+
+She would write to her mother tonight in her own hand. She would not ask Caelen to carry the explanation, and she would not use the family's name to turn a reserved stipend into a tutor. The healer had signed a correction. Evin had not signed an acceptance. Neither fact could do the other's work.
+
+---
+
 In the west, Thessa stood beneath a bridge and listened to a carpenter explain why the river had no respect for appropriation schedules.
 
 The bridge was narrow, stone at either end and timber over the deepest channel. Spring water ran brown and quick below it. The road surface had been patched twice since the thaw, and a wagon loaded with grain had to wait while another crossed from the opposite bank.
