@@ -3,6 +3,16 @@
 **Status (2026-10-29):** actual Blender 4.5.15 saved-scene reconstruction/camera calibration, R58 connected bespoke fin mounts and R59-R62 physical refractory diagnostics have been run in GitHub Actions. The source animation is 64 frames. The latest work is a *candidate*, not accepted Factorio artwork; strict private original-sprite fidelity remains unverified. The private STL reference importer and 15-set Blender work are documented in [PRIVATE_REFERENCE_LIBRARY.md](PRIVATE_REFERENCE_LIBRARY.md). Genuine Wube-published sample STL geometry from all 15 official sets was acquired, loaded into the saved reconstruction scene, and reopened successfully in isolated CI [run #40983585774](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40983585774); only metadata was retained. This verifies one sample per set, NOT every 65 model/247 STL variant, production assembly, source camera comparison acceptance, or sprite fidelity.
 Home: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-tools.html#factorio-render-pipeline
 
+## Mandatory visual reference: original sprite, never an internet stand-in
+
+For the Factorio 2.0.77 thruster benchmark, the **only authoritative visual reference** is the user's original supplied `thruster-1.png` / `thruster-2.png` sprite atlas (`thruster.zip`), comprising 64 body frames of 264×542 pixels, with known original-source SHA256 `0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791`. The original frame(s) and exact original animation, **not** unrelated online examples, generated pictures, arbitrary engine imagery, official 3D printable variants, or our previous Blender renders, are the sole acceptance reference for **appearance, silhouette, dimensions, material placement, shading and motion**.
+
+- Always pair rendered candidates with the corresponding **actual original sprite frame** in any source-fidelity comparison. Source pixels stay private; do not push them to GitHub or publish in CI artifacts.
+- If original sprite bytes are unavailable in the current execution, explicitly report **visual comparison unavailable**, recover the actual original file before claiming fidelity, and limit work to objectively verifiable geometry/runtime diagnostics. Never fill the gap with web image searches or lookalike pictures.
+- Wube's released printable STL set and a community Blender camera are independently useful **technical/mechanical/environment context only**, never a substitute visual source or justification to override the original sprite.
+- Screenshots of our reconstructed R58/R64/R66 models may document how the model changed, but **do not qualify as comparison against the original sprite**. Even green import/render/mesh tests cannot approve visual fidelity.
+- Do not include generic internet-searched images when showing progress on this benchmark. Show the user's actual original sprite where authorized and available, or show our own render **clearly labeled as a candidate only**.
+
 ## Scope
 
 Foundry → Tools → AI Tools → Factorio Render Pipeline. This is local-first and reusable across game projects. The static website cannot install Blender, run Codex, render 3D models or access user files. The Machine / AI Access directory remains a separate capability discovery and integration authority.
