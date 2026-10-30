@@ -1,0 +1,68 @@
+name: Factorio R65 original cast cheek projection and first-hit sweep
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/cast_surface_exposure_r65.py'
+      - '.github/workflows/factorio-thruster-cast-exposure-r65.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  four-source-native-projection-variants:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover actual saved R64 Blender model with hull stays
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40994130427
+          name: factorio-r64-editable-upper-hull-cast-stays-candidate-and-render-comparisons
+          github-token: ${{ github.token }}
+          path: private-ci/source/
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Bootstrap headless Blender
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Real 3D front casting relief sweep with structural joints frozen
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/cast_surface_exposure_r65.py -- \
+            --source-blend private-ci/source/output/r64/upper_hull_loadpaths_candidate_r64.blend \
+            --out private-ci/output/r65
+      - name: Verify all four measured variants and print source-projection progress
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('private-ci/output/r65/r65-measured-cast-cheeks.json').read_text())
+          assert len(r['variants'])==4
+          assert r['original_R64_scene_restored_in_memory']
+          assert r['original_R64_saved_file_unchanged']
+          for variant in r['variants']:
+              assert variant['upper_hull_anchor_untouched']
+              assert len(variant['first_hits'])==3
+              print('R65_MEASURED_REAL_FIRST_HITS',variant['original_outer_skin_camber_tiles'],
+                    {k: (v['first_hits_cast'],v['native_sample_count'])
+                     for k,v in variant['first_hits'].items()})
+          print('R65_NO_CANDIDATE_AUTOPROMOTION_OR_GAME_RELEASE_BLOCK')
+          PY
+      - name: Publish original-source-coordinate renders, not original-source art
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r65-bespoke-cast-cheek-native-firsthit-sweep
+          path: |
+            private-ci/output/r65/*.png
+            private-ci/output/r65/r65-measured-cast-cheeks.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
