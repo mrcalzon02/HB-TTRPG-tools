@@ -66,13 +66,33 @@ jobs:
                   a=a.convert("RGBA");b=b.convert("RGBA")
                   assert a.size==b.size==(264,542)
                   d=ImageChops.difference(a,b)
-                  nonzero=sum(any(px) for px in d.getdata())
+                  altered=[(idx%264,idx//264) for idx,px in enumerate(d.getdata()) if any(px)]
+                  nonzero=len(altered)
+                  # Approximate original-frame bracket envelopes from R52.
+                  # This is diagnostics only: upstream structural supports
+                  # may correctly project above the brackets. Not acceptance.
+                  bracket_boxes=((166,313,220,356),(95,311,163,339),(27,314,90,358))
+                  inside=sum(any(x0-12<=x<=x1+12 and y0-12<=y<=y1+12
+                                 for x0,y0,x1,y1 in bracket_boxes) for x,y in altered)
+                  above=sum(y<300 for x,y in altered)
+                  lower=sum(y>=360 for x,y in altered)
+                  boundary=[min((x for x,y in altered),default=None),
+                            min((y for x,y in altered),default=None),
+                            max((x for x,y in altered),default=None),
+                            max((y for x,y in altered),default=None)]
                   canvas=Image.new("RGBA",(264*2,542),(0,0,0,0))
                   canvas.paste(a,(0,0));canvas.paste(b,(264,0))
                   canvas.save(r64/f"R58_vs_R64_frame_{frame:02d}.png")
-                  changes.append({"frame":frame,"different_rgba_pixels":nonzero})
+                  changes.append({"frame":frame,"different_rgba_pixels":nonzero,
+                                  "within_bracket_envelopes_12px":inside,
+                                  "upstream_y_lt_300":above,
+                                  "below_mounts_y_ge_360":lower,
+                                  "changed_pixel_bbox_xyxy":boundary})
                   print("R64_ACTUAL_NATIVE_SOURCE_CAMERA_BEFORE_AFTER",
-                        frame,"changed_pixels",nonzero)
+                        frame,"changed_pixels",nonzero,
+                        "within_mount_boxes",inside,
+                        "upstream",above,"below_mounts",lower,
+                        "diff_bbox",boundary)
           data["render_difference_samples"]=changes
           data["no_pixel_accuracy_claim_without_source_sprite"]=True
           (r64/"r64-native-compare.json").write_text(json.dumps(data,indent=2)+"\n")
