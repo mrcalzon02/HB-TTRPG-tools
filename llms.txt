@@ -36,3 +36,7 @@ GitHub Pages is a static origin. Static resources may be retrieved with GET when
 Never claim execution, persistence, randomness, rendering, deployment, readiness, or tool access without observed host evidence. Context loading is not runtime readiness.
 
 For restricted browsers that cannot retrieve raw JSON or Markdown, use the registered HTML compatibility projections for discovery only; they do not replace the canonical registries, SKILL.md files, helpers, source code, or Charles engram.
+
+## Beckenburg PSX asset-import guidance
+- Human importer and over-regression guide: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-asset-import-and-regression.md
+- Machine reader/formats/budgets: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-asset-import-reference.json
