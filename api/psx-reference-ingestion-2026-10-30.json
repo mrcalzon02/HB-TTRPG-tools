@@ -357,6 +357,43 @@
     "org.beckenburg.editor.EditorAnimationClip",
     "org.beckenburg.editor.EditorAnimationLab"
   ],
-  "runtimeBindingStatus": "animation lab is standalone authoring-only; no game actor adaptation",
-  "nativeGithubWikiStatus": "versioned repository docs/wiki files; separate GitHub Wiki-tab git repository not modified"
+  "runtimeBindingStatus": "Animation, sound, campaign and billboard UI source code exists as offline editor authoring modules; live game integrations not claimed",
+  "nativeGithubWikiStatus": "versioned repository docs/wiki files; separate GitHub Wiki-tab git repository not modified",
+  "supplementalOwnerBrief": {
+    "kind": "inline design brief",
+    "date": "2026-10-30",
+    "title": "Menu and Save Management, Campaign Scripting, Billboards and 3D Environments",
+    "humanGuide": "docs/wiki/psx-editor-menu-campaign-billboards.md",
+    "machineGuide": "docs/development/psx-editor-manipulation-contract.json",
+    "rules": 14,
+    "notCountedAsPdf": true
+  },
+  "implementationCheckpoint": {
+    "animation": [
+      "EditorAnimationClip",
+      "EditorAnimationLab",
+      "EditorAnimationClipTest"
+    ],
+    "sound": [
+      "EditorSoundProfile",
+      "EditorSoundLab",
+      "EditorSoundProfileTest"
+    ],
+    "campaign": [
+      "EditorCampaignFlow",
+      "EditorCampaignLab",
+      "EditorCampaignFlowTest"
+    ],
+    "billboard": [
+      "EditorBillboardProfile",
+      "EditorBillboardLab",
+      "EditorBillboardProfileTest"
+    ],
+    "limitations": [
+      "Rigid part authoring not bound to host-controlled ghost animation",
+      "WAV export not registered with gameplay SFX and mixer",
+      "Campaign state graph is not the authoritative mission state",
+      "Billboard preview is 2D authoring conversion, not live 3D scene placement/rendering"
+    ]
+  }
 }
