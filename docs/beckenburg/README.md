@@ -1,3 +1,7 @@
+## PSX editor expansion — 30 October 2026
+
+Owner-supplied [animation authoring](wiki/psx-animation-authoring.md), [campaign level-editor controls](wiki/psx-era-editor-campaign-tools.md), [PSX-style arrow audio](wiki/psx-arrow-audio-design.md), and [menu/save, campaign lifecycle and billboard manipulation](wiki/psx-editor-menu-campaign-billboards.md) references have been curated alongside earlier level/lighting/AI/UI/model guides. [Nine-PDF SHA-256 intake and adoption rules](../../api/psx-reference-ingestion-2026-10-30.json) and [inline-manipulation machine contract](../../api/psx-editor-manipulation-contract.json) distinguish implemented portable editor modules from live-game integrations still needed.
+
 ## PSX asset import / over-regression reference (2026-10-30)
 
 [Human asset-import guide](wiki/psx-asset-import-and-regression.md) · [Machine reference](../../api/psx-asset-import-reference.json). The active Beckenburg Java 17 editor can import supported OBJ/STL/GLB models with manual geometry reduction, part-loss warnings and local preserved sources; other model formats remain planned. The original PlayStation 1 asset limits are optional visual targets, not hardware requirements for this game.
