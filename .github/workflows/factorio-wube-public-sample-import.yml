@@ -5,6 +5,7 @@ on:
     paths:
       - 'tools/factorio-render-pipeline/private_wube_acquire.py'
       - 'tools/factorio-render-pipeline/verify_official_geometry_integrity.py'
+      - 'tools/factorio-render-pipeline/native_render_invariance.py'
       - '.github/workflows/factorio-wube-public-sample-import.yml'
   workflow_dispatch:
 permissions:
@@ -80,6 +81,34 @@ jobs:
           assert all(s["original_stl_bounds_match_import"] for s in report["samples"])
           print("ACTUAL_FIFTEEN_OFFICIAL_MESHES_64_FRAME_INTEGRITY_CONFIRMED")
           PY
+      - name: Render native reconstructed R58 frames before and after import with identical fixed camera
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/native_render_invariance.py -- \
+            --capture-blend private-ci/model/physically-connected-fin-r58/source_connected_hanging_fins_r58.blend \
+            --out private-ci/native-original
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/native_render_invariance.py -- \
+            --capture-blend private-ci/output/real-wube-15-set-reference.blend \
+            --out private-ci/native-merged
+          PYTHON="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.check_python_env())")"
+          "$PYTHON" tools/factorio-render-pipeline/native_render_invariance.py \
+            --baseline private-ci/native-original --candidate private-ci/native-merged \
+            --out private-ci/output/native-render-invariance.json
+      - name: Validate render evidence is from our reconstruction only
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('private-ci/output/native-render-invariance.json').read_text())
+          assert data["result"]=="PASS_EXACT_NATIVE_FRAME_PIXEL_INVARIANCE"
+          assert len(data["frames"])==4
+          assert all(f["changed_rgba_channels"]==0 for f in data["frames"])
+          assert data["official_stl_mesh_rendered"] is False
+          assert data["original_game_sprite_fidelity_tested"] is False
+          print("FOUR_NATIVE_264x542_FRAMES_EXACTLY_IDENTICAL")
+          PY
       - name: Upload only private research metadata (never models or Blender scenes)
         if: always()
         uses: actions/upload-artifact@v4
@@ -89,5 +118,9 @@ jobs:
             private-ci/official-acquisition.json
             private-ci/output/real-15-set-import-report.json
             private-ci/output/native-bounds-and-source-integrity.json
+            private-ci/output/native-render-invariance.json
+            private-ci/native-original/render-manifest.json
+            private-ci/native-merged/render-manifest.json
+            private-ci/native-original/*.png
           retention-days: 14
           if-no-files-found: warn
