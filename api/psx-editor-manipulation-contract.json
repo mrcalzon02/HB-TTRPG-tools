@@ -1,0 +1,136 @@
+{
+  "schema": "beckenburg.psx-editor-manipulation/v1",
+  "source": {
+    "kind": "inline owner-authored brief",
+    "date": "2026-10-30",
+    "title": "Editor-based Menu, Campaign Scripting and Billboard Manipulation",
+    "human": "docs/wiki/psx-editor-menu-campaign-billboards.md"
+  },
+  "engine": "Java 17 modern PSX-style title; physical PS1 limitations only optional emulation profiles",
+  "modules": [
+    {
+      "id": "menus",
+      "owners": [
+        "Existing game menu/saving UI",
+        "future editor menu graph adapter"
+      ],
+      "requirements": [
+        {
+          "id": "MENU-01",
+          "disposition": "adopt",
+          "text": "Shallow navigable menu graph with focus, action, back-route and dependency validation"
+        },
+        {
+          "id": "MENU-02",
+          "disposition": "optional",
+          "text": "15-block virtual memory card, save-slot icon/title manager and cancelable boot animation"
+        },
+        {
+          "id": "MENU-03",
+          "disposition": "adapt",
+          "text": "Instant controller/dpad selection, legible pixel-style and monospace text, inclusive mouse/keyboard navigation"
+        },
+        {
+          "id": "MENU-04",
+          "disposition": "reject-hard-rule",
+          "text": "No mandatory 15-block saves, intentional format delays, fixed 3-menu depth or disabling smooth scrolling/accessibility"
+        }
+      ],
+      "status": "design-only"
+    },
+    {
+      "id": "campaign",
+      "owners": [
+        "Existing mission/host state",
+        "org.beckenburg.editor.EditorCampaignFlow (authoring simulation only)"
+      ],
+      "states": [
+        "PENDING",
+        "ACTIVE",
+        "PAUSED",
+        "COMPLETE"
+      ],
+      "actions": [
+        "START",
+        "PAUSE",
+        "RESUME",
+        "COMPLETE",
+        "STOP",
+        "RESET"
+      ],
+      "requirements": [
+        {
+          "id": "CMP-01",
+          "disposition": "adopt",
+          "text": "Idempotent lifecycle commands and typed state transitions, disallow duplicate START"
+        },
+        {
+          "id": "CMP-02",
+          "disposition": "adopt",
+          "text": "On actual STOP release session-owned resources without erasing persisted player progress"
+        },
+        {
+          "id": "CMP-03",
+          "disposition": "adopt",
+          "text": "Bounded event/trigger execution; no untrusted Java, busy loops, unsafe recursion"
+        },
+        {
+          "id": "CMP-04",
+          "disposition": "adopt",
+          "text": "Explicit dependency registry and warning on referenced asset/menu/script deletion"
+        },
+        {
+          "id": "CMP-05",
+          "disposition": "adapt",
+          "text": "Visual graph with separate mock authoring state from authoritative host gameplay"
+        }
+      ],
+      "status": "portable authoring controller planned; live game binding not yet implemented"
+    },
+    {
+      "id": "billboards",
+      "owners": [
+        "Existing game SceneRenderer, asset pipeline and lighting module",
+        "future editor billboard adapter"
+      ],
+      "requirements": [
+        {
+          "id": "BBD-01",
+          "disposition": "adopt",
+          "text": "Original vs mapped 3D preview using actual game renderer, not mock-only preview"
+        },
+        {
+          "id": "BBD-02",
+          "disposition": "adapt",
+          "text": "Aspect preset 256x256 / 512x256 without destructive original resize, optional CLUT/palette/dither profile"
+        },
+        {
+          "id": "BBD-03",
+          "disposition": "adopt",
+          "text": "Debounced lightweight preview with explicit commit/bake, undo and atomic rollback"
+        },
+        {
+          "id": "BBD-04",
+          "disposition": "adopt",
+          "text": "Per-layer texture byte/VRAM estimate and measured memory separated"
+        },
+        {
+          "id": "BBD-05",
+          "disposition": "reject-hard-rule",
+          "text": "Modern renderer not bound by exact PS1 VRAM, uncompressed texture prohibition or mandatory bilinear shutoff"
+        }
+      ],
+      "status": "design-only"
+    }
+  ],
+  "tests": [
+    "Start twice has exactly one transition",
+    "Stop twice does not repeat cleanup",
+    "Invalid state change leaves authored data intact",
+    "Delete referenced asset reports concrete dependents",
+    "Source billboard hash remains unchanged after preview/bake",
+    "Failed bake does not replace last known good output",
+    "UI back/escape reachable via keyboard/controller/mouse"
+  ],
+  "releasePolicy": "Only objective broken launch/build/essential gameplay/network should block release; visuals and historic budget warnings are diagnostic"
+}
