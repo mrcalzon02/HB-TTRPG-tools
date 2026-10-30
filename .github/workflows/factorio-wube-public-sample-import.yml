@@ -1,0 +1,70 @@
+name: Factorio private official Wube STL acquisition probe
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/private_wube_acquire.py'
+      - '.github/workflows/factorio-wube-public-sample-import.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  verify-real-official-belt-geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore R58 source calibration, excluding private original sprites
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40968758379
+          name: factorio-r56-r58-fin-visibility-and-editable-model
+          github-token: ${{ github.token }}
+          path: private-ci/model
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Verify Blender engine
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Request one genuine official Wube belt STL in temporary isolated storage
+        run: |
+          python tools/factorio-render-pipeline/private_wube_acquire.py \
+            --root private-ci/official-geometry-private --only-set transport-belts \
+            --report private-ci/official-acquisition.json
+      - name: Import verified private official STL into real recovered Blender model
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/official_reference_library.py -- \
+            --source-blend private-ci/model/physically-connected-fin-r58/source_connected_hanging_fins_r58.blend \
+            --stl-root private-ci/official-geometry-private \
+            --out-blend private-ci/output/real-wube-belt-reference.blend \
+            --report private-ci/output/real-belt-import-report.json
+          "$BLENDER" -b --disable-autoexec private-ci/output/real-wube-belt-reference.blend \
+            -t 2 --python-exit-code 4 --python-expr "import bpy; s=bpy.data.scenes['WUBE_OFFICIAL_UNASSEMBLED_STL']; m=[o for o in s.objects if o.type=='MESH']; assert m and all(len(o.data.vertices)>=3 for o in m); assert bpy.context.scene.camera is not s.camera; print('OFFICIAL_STL_ACTUAL_EDITABLE_3D_MESH_ISOLATED')"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path("private-ci/official-acquisition.json").read_text())
+          b=json.loads(Path("private-ci/output/real-belt-import-report.json").read_text())
+          assert a["catalogue_sample_count"]==1 and not a["all_fifteen_sets_sampled"]
+          assert b["present_sets"]==["transport-belts"]
+          assert b["reconstruction_scene_preserved"]
+          assert b["entries"][0]["sha256"]==a["files"][0]["sha256"]
+          print("REAL_WUBE_STL_SHA_CHAIN_VERIFIED")
+          PY
+      - name: Upload only private research metadata (never models or Blender scenes)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-real-Wube-reference-metadata-no-meshes
+          path: |
+            private-ci/official-acquisition.json
+            private-ci/output/real-belt-import-report.json
+          retention-days: 14
+          if-no-files-found: warn
