@@ -34,7 +34,7 @@ REVISION="R65_original_cast_3d_visible_cheek_surface_sweep"
 SURFACE_DELTA=(0.,.08,.16,.24)
 INDIVIDUAL_RELIEF={1:.85,2:1.,3:.9}
 
-def move_front_cheek(mount,points,index,amplitude):
+def move_front_cheek(mount,points,index,amplitude,locked):
     n=len(points)
     if n not in (50,60) or len(mount.data.vertices)!=n:
         raise RuntimeError("R65 must use original finite-volume R49 5/6-row casts")
@@ -47,7 +47,7 @@ def move_front_cheek(mount,points,index,amplitude):
         if vi<half: continue    # Inner cast skin unchanged.
         row=(vi-half)//5
         col=(vi-half)%5
-        if row==0 or row==rows-1 or col in (0,4):
+        if vi in locked or row==0 or row==rows-1 or col in (0,4):
             continue          # Lock real support anchors and rim walls.
         weight=math.sin(math.pi*row/(rows-1))*math.sin(math.pi*col/4)
         distance=amplitude*INDIVIDUAL_RELIEF[index]*weight
@@ -81,11 +81,29 @@ def run(source,out):
     scene.frame_set(1)
     original_digest=untouched_digest(scene)
     verify_candidate(scene,original_digest)
-    before={};objects={}
+    before={};objects={};locked={}
     for i in MAIN:
         ob=bpy.data.objects[f"{MOUNT_PREFIX}{i:02d}"]
         objects[i]=ob
         before[i]=tuple(tuple(v.co) for v in ob.data.vertices)
+        fin=bpy.data.objects[f"{FIN_PREFIX}{i:02d}"]
+        roots=list(fin.data.vertices[:11])+list(fin.data.vertices[110:121])
+        gaps=[]
+        for mv in ob.data.vertices:
+            distance=min((ob.matrix_world@mv.co-fin.matrix_world@fv.co).length
+                         for fv in roots)
+            gaps.append((distance,mv.index))
+        nearest=min(gaps)
+        if nearest[0]>MAX_ROOT_CONNECTION:
+            raise RuntimeError("R65 R55 source root was disconnected before sweep")
+        # Protect EXACT welded-geometry contact indices, never only the
+        # geometric row we'd guessed to be distal in R49.
+        locked[i]={idx for dist,idx in gaps if dist<=MAX_ROOT_CONNECTION+1.e-5}
+        stay=next(o for o in bpy.data.collections[COLLECTION].objects
+                  if o.get("anchored_to_exact_existing_cast")==ob.name)
+        locked[i].add(int(stay["R64_real_cast_vertex_index"]))
+        print("R65_SOURCE_MECHANICAL_ANCHOR_VERTICES_LOCKED",i,
+              sorted(locked[i]),flush=True)
     report={"revision":REVISION,"input_r64_sha256":initial_sha,
             "source_native_cell":[264,542],
             "source_cast_manual_roi_targets":{str(i):list(MOUNT_TARGETS[i]) for i in MAIN},
@@ -115,7 +133,7 @@ def run(source,out):
                 # including the 0.0 baseline.
                 for v,p in zip(ob.data.vertices,before[i]):v.co=p
                 ob.data.update()
-                move_front_cheek(ob,before[i],i,delta)
+                move_front_cheek(ob,before[i],i,delta,locked[i])
             bpy.context.view_layer.update()
             gaps={str(i):joint_gap_world(
                 objects[i],bpy.data.objects[f"{FIN_PREFIX}{i:02d}"])
