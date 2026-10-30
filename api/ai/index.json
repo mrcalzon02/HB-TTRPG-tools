@@ -34,7 +34,9 @@
     "human": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html",
     "skillContextLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-context-loader.js",
     "psxEditorReference": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-editor-reference.json",
-    "psxAssetImportReference": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-asset-import-reference.json"
+    "psxAssetImportReference": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-asset-import-reference.json",
+    "psxReferenceBatch": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-reference-ingestion-2026-10-30.json",
+    "psxManipulationContract": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-editor-manipulation-contract.json"
   },
   "bootstrapRule": "api/ai/bootstrap.txt is the canonical compact routing contract. Start there, load only the authorities required by the selected task, and reuse unchanged authorities already loaded in the current orchestration context. Current referenced machine authorities govern capability facts, statuses, contracts, resources, and skill definitions when they change.",
   "canonicalRule": "Do not duplicate generator, calculator, laboratory, campaign, encryption, personality, randomness, tabletop-state, or battlespace logic in AI adapters. Discover and invoke or load the authoritative implementation/resource/helper.",
