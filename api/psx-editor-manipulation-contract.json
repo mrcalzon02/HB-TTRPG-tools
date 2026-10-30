@@ -42,7 +42,8 @@
       "id": "campaign",
       "owners": [
         "Existing mission/host state",
-        "org.beckenburg.editor.EditorCampaignFlow (authoring simulation only)"
+        "EditorCampaignFlow (separate authoring simulation)",
+        "EditorCampaignLab (visual authoring graph)"
       ],
       "states": [
         "PENDING",
@@ -85,13 +86,14 @@
           "text": "Visual graph with separate mock authoring state from authoritative host gameplay"
         }
       ],
-      "status": "portable authoring controller planned; live game binding not yet implemented"
+      "status": "Implemented source-only editor state graph with bounded transitions and dependency guard; runtime mission integration not yet implemented"
     },
     {
       "id": "billboards",
       "owners": [
         "Existing game SceneRenderer, asset pipeline and lighting module",
-        "future editor billboard adapter"
+        "future editor billboard adapter",
+        "EditorBillboardProfile and EditorBillboardLab (2D derivative only)"
       ],
       "requirements": [
         {
@@ -120,7 +122,7 @@
           "text": "Modern renderer not bound by exact PS1 VRAM, uncompressed texture prohibition or mandatory bilinear shutoff"
         }
       ],
-      "status": "design-only"
+      "status": "Implemented non-destructive PNG/JPEG import, palette/size presets and explicit 2D bake; actual 3D billboard renderer/scene adapter remains planned"
     }
   ],
   "tests": [
@@ -132,5 +134,9 @@
     "Failed bake does not replace last known good output",
     "UI back/escape reachable via keyboard/controller/mouse"
   ],
-  "releasePolicy": "Only objective broken launch/build/essential gameplay/network should block release; visuals and historic budget warnings are diagnostic"
+  "releasePolicy": "Only objective broken launch/build/essential gameplay/network should block release; visuals and historic budget warnings are diagnostic",
+  "testImplementations": {
+    "campaign": "src/test/java/org/beckenburg/editor/EditorCampaignFlowTest.java",
+    "billboard": "src/test/java/org/beckenburg/editor/EditorBillboardProfileTest.java"
+  }
 }
