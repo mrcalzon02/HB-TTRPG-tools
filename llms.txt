@@ -40,3 +40,11 @@ For restricted browsers that cannot retrieve raw JSON or Markdown, use the regis
 ## Beckenburg PSX asset-import guidance
 - Human importer and over-regression guide: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-asset-import-and-regression.md
 - Machine reader/formats/budgets: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-asset-import-reference.json
+
+## Additional PSX reference batch (2026-10-30)
+- 9-PDF intake/deduplication and provenance: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-reference-ingestion-2026-10-30.json
+- PSX animation authoring: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-animation-authoring.md
+- PSX-era campaign/editor reference: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-era-editor-campaign-tools.md
+- PSX arrow sound-design guidance: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-arrow-audio-design.md
+- Menu, campaign, billboard/editor contract: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-editor-manipulation-contract.json
+- Human menu/campaign/billboard guide: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-editor-menu-campaign-billboards.md
