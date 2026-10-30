@@ -92,7 +92,7 @@ jobs:
             --python tools/factorio-render-pipeline/native_render_invariance.py -- \
             --capture-blend private-ci/output/real-wube-15-set-reference.blend \
             --out private-ci/native-merged
-          PYTHON="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.check_python_env())")"
+          PYTHON="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.check_python_env())" | tail -n 1)"
           "$PYTHON" tools/factorio-render-pipeline/native_render_invariance.py \
             --baseline private-ci/native-original --candidate private-ci/native-merged \
             --out private-ci/output/native-render-invariance.json
