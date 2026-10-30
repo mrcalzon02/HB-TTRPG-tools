@@ -97,7 +97,19 @@ def analyze(reconstruction, official, community):
     # and world-space transforms must be strictly identical.
     for key in ("type", "location", "view_vector", "ortho_scale", "lens_mm"):
         if orig_c[key] != copy_c[key]:
-            raise RuntimeError("Reconstruction camera drifted during STL import: " + key + " source=" + repr(orig_c[key]) + " reference=" + repr(copy_c[key]) + " source_parent=" + repr(original.camera.parent.name if original.camera.parent else None) + " reference_parent=" + repr(reference.camera.parent.name if reference.camera.parent else None))
+            raise RuntimeError("Reconstruction camera drifted during STL import: " + key
+                               + " source=" + repr(orig_c[key])
+                               + " reference=" + repr(copy_c[key])
+                               + " source_local=" + repr(list(original.camera.location))
+                               + " copy_local=" + repr(list(reference.camera.location))
+                               + " source_delta=" + repr(list(original.camera.delta_location))
+                               + " copy_delta=" + repr(list(reference.camera.delta_location))
+                               + " source_basis=" + repr(list(original.camera.matrix_basis.translation))
+                               + " copy_basis=" + repr(list(reference.camera.matrix_basis.translation))
+                               + " source_constraints=" + repr(len(original.camera.constraints))
+                               + " copy_constraints=" + repr(len(reference.camera.constraints))
+                               + " source_parent=" + repr(original.camera.parent.name if original.camera.parent else None)
+                               + " reference_parent=" + repr(reference.camera.parent.name if reference.camera.parent else None))
     if len(src_lamps) != len(ref_lamps):
         raise RuntimeError("Lighting count drifted during STL import")
     for a, b in zip(src_lamps, ref_lamps):
