@@ -32,7 +32,8 @@
     "portableSkillLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-loader.js",
     "llms": "https://mrcalzon02.github.io/HB-TTRPG-tools/llms.txt",
     "human": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html",
-    "skillContextLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-context-loader.js"
+    "skillContextLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-context-loader.js",
+    "psxEditorReference": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-editor-reference.json"
   },
   "bootstrapRule": "api/ai/bootstrap.txt is the canonical compact routing contract. Start there, load only the authorities required by the selected task, and reuse unchanged authorities already loaded in the current orchestration context. Current referenced machine authorities govern capability facts, statuses, contracts, resources, and skill definitions when they change.",
   "canonicalRule": "Do not duplicate generator, calculator, laboratory, campaign, encryption, personality, randomness, tabletop-state, or battlespace logic in AI adapters. Discover and invoke or load the authoritative implementation/resource/helper.",
@@ -86,12 +87,43 @@
     }
   },
   "quickStart": [
-    {"step":1,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json","purpose":"Confirm machine-discovery entrypoints and transport status."},
-    {"step":2,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/bootstrap.txt","purpose":"Load the canonical minimum-authority routing contract before selecting or executing capabilities."},
-    {"step":3,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json","fallback":"https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html","purpose":"Select the minimum-capability skill set required for the task."},
-    {"step":4,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json","purpose":"Load blacklight.charles once for the orchestration context before selected task skills."},
-    {"step":5,"action":"GET","target":"skills/{selected-skill}/SKILL.md","purpose":"Load only the selected skill workflow and follow its explicit capability, operation, resource, helper, and executionRequirements references."},
-    {"step":6,"action":"FOLLOW_BOOTSTRAP_ON_DEMAND","target":"selected skill references","purpose":"Load status vocabulary, capability registry, operation contracts, resource collections, runtime requirements, and self-tests only when the selected task actually requires them; reuse unchanged authorities already loaded in this orchestration context."}
+    {
+      "step": 1,
+      "action": "GET",
+      "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json",
+      "purpose": "Confirm machine-discovery entrypoints and transport status."
+    },
+    {
+      "step": 2,
+      "action": "GET",
+      "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/bootstrap.txt",
+      "purpose": "Load the canonical minimum-authority routing contract before selecting or executing capabilities."
+    },
+    {
+      "step": 3,
+      "action": "GET",
+      "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json",
+      "fallback": "https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html",
+      "purpose": "Select the minimum-capability skill set required for the task."
+    },
+    {
+      "step": 4,
+      "action": "GET",
+      "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json",
+      "purpose": "Load blacklight.charles once for the orchestration context before selected task skills."
+    },
+    {
+      "step": 5,
+      "action": "GET",
+      "target": "skills/{selected-skill}/SKILL.md",
+      "purpose": "Load only the selected skill workflow and follow its explicit capability, operation, resource, helper, and executionRequirements references."
+    },
+    {
+      "step": 6,
+      "action": "FOLLOW_BOOTSTRAP_ON_DEMAND",
+      "target": "selected skill references",
+      "purpose": "Load status vocabulary, capability registry, operation contracts, resource collections, runtime requirements, and self-tests only when the selected task actually requires them; reuse unchanged authorities already loaded in this orchestration context."
+    }
   ],
   "portableSkillProof": {
     "loader": "../../ai-skill-loader.js",
@@ -108,7 +140,9 @@
         "capabilityId": "shadowrun.binary-cube",
         "manifest": "../../skills/binary-cube-laboratory/manifest.json",
         "selfTest": "../../skills/binary-cube-laboratory/self-test.json",
-        "runtimeScripts": ["../../shadowrun-binary-cube-engine.js"],
+        "runtimeScripts": [
+          "../../shadowrun-binary-cube-engine.js"
+        ],
         "runtimeShape": "single-script-global-dispatch",
         "status": "runtime-required"
       },
@@ -132,7 +166,10 @@
     "skillCount": 11,
     "diceSkill": "tabletop-dice-rolling",
     "dicePortableRange": "1-10 dice, d2-d100, optional integer modifier",
-    "diceModes": ["cumulative","individual total"],
+    "diceModes": [
+      "cumulative",
+      "individual total"
+    ],
     "randomnessRule": "Use host cryptographic randomness such as Python secrets or Web Crypto rejection sampling; do not claim physical true randomness without an independently attested physical entropy source.",
     "sandboxStateSkill": "tabletop-sandbox-data-management",
     "defaultChatGptSandboxPath": "/mnt/data/ttrpg_state/",
@@ -140,7 +177,12 @@
     "battlespaceSkill": "tabletop-battlespace-visualization",
     "battlespacePackage": "../../skills/tabletop-battlespace-visualization/manifest.json",
     "battlespaceHelper": "../../skills/tabletop-battlespace-visualization/scripts/battlespace.py",
-    "battlespaceTables": ["battlefield_maps.csv","battlefield_tokens.csv","battlefield_terrain.csv","battlefield_effects.csv"],
+    "battlespaceTables": [
+      "battlefield_maps.csv",
+      "battlefield_tokens.csv",
+      "battlefield_terrain.csv",
+      "battlefield_effects.csv"
+    ],
     "battlespaceRenderMinimum": "1 pixel = 1 grid cell",
     "battlespaceRenderScaling": "nearest-neighbor",
     "battlespaceAuthority": "CSV coordinates are authoritative; PNG previews are diagnostic projections."
