@@ -1,0 +1,94 @@
+name: Factorio R64 actual castings-to-upper-hull Blender candidate
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/upper_hull_loadpath_candidate_r64.py'
+      - '.github/workflows/factorio-thruster-upper-hull-r64.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  generate-real-source-connected-3d-mounting-candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover real saved R58 thruster candidate without source sprites
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40968758379
+          name: factorio-r56-r58-fin-visibility-and-editable-model
+          github-token: ${{ github.token }}
+          path: private-ci/model/
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Verify Blender and Pillow
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Save and reopen actual new three-bespoke-hull-connection scene
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/upper_hull_loadpath_candidate_r64.py -- \
+            --source-blend private-ci/model/physically-connected-fin-r58/source_connected_hanging_fins_r58.blend \
+            --out private-ci/output/r64/
+      - name: Render R58 baseline same camera and original source-native resolution
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/native_render_invariance.py -- \
+            --capture-blend private-ci/model/physically-connected-fin-r58/source_connected_hanging_fins_r58.blend \
+            --out private-ci/output/r58-native/
+      - name: Measure real native RGBA differences and assemble actual side-by-side renders
+        run: |
+          PYTHON="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.check_python_env())" | tail -n 1)"
+          "$PYTHON" - <<'PY'
+          import json
+          from pathlib import Path
+          from PIL import Image,ImageChops
+          root=Path("private-ci/output")
+          r64=root/"r64"
+          data=json.loads((r64/"r64-load-path-report.json").read_text())
+          assert data["saved_reopened_64frame_source_and_chassis_contacts_verified"]
+          assert data["source_original_64_frame_motion_unchanged"]
+          assert data["old_r58_saved_blend_untouched"]
+          assert len({e["profile"] for e in data["three_mounts"]})==3
+          changes=[]
+          for frame in (1,17,33,49):
+              with Image.open(root/"r58-native"/f"{frame:03d}.png") as a,\
+                   Image.open(r64/f"R64_body_{frame:02d}.png") as b:
+                  a=a.convert("RGBA");b=b.convert("RGBA")
+                  assert a.size==b.size==(264,542)
+                  d=ImageChops.difference(a,b)
+                  nonzero=sum(any(px) for px in d.getdata())
+                  canvas=Image.new("RGBA",(264*2,542),(0,0,0,0))
+                  canvas.paste(a,(0,0));canvas.paste(b,(264,0))
+                  canvas.save(r64/f"R58_vs_R64_frame_{frame:02d}.png")
+                  changes.append({"frame":frame,"different_rgba_pixels":nonzero})
+                  print("R64_ACTUAL_NATIVE_SOURCE_CAMERA_BEFORE_AFTER",
+                        frame,"changed_pixels",nonzero)
+          data["render_difference_samples"]=changes
+          data["no_pixel_accuracy_claim_without_source_sprite"]=True
+          (r64/"r64-native-compare.json").write_text(json.dumps(data,indent=2)+"\n")
+          print("R64_REAL_4_NATIVE_SIDE_BY_SIDE_COMPARISONS_GENERATED")
+          PY
+      - name: Keep editable candidate, proofs and diagnostic separate from release
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: factorio-r64-editable-upper-hull-cast-stays-candidate-and-render-comparisons
+          path: |
+            private-ci/output/r64/upper_hull_loadpaths_candidate_r64.blend
+            private-ci/output/r64/R64_body_*.png
+            private-ci/output/r64/R58_vs_R64_frame_*.png
+            private-ci/output/r64/r64-load-path-report.json
+            private-ci/output/r64/r64-native-compare.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
