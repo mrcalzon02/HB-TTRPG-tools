@@ -1,6 +1,6 @@
 # Factorio Render Pipeline — durable Blender/Codex production procedure
 
-**Status (2026-10-25):** documented production plan and setup entrypoint. No Blender render, sprite pack or Factorio runtime acceptance is claimed.
+**Status (2026-10-29):** actual Blender 4.5.15 saved-scene reconstruction/camera calibration, R58 connected bespoke fin mounts and R59-R62 physical refractory diagnostics have been run in GitHub Actions. The source animation is 64 frames. The latest work is a *candidate*, not accepted Factorio artwork; strict private original-sprite fidelity remains unverified. New isolated STL reference library importer and synthetic 15-set Blender verification are documented in [PRIVATE_REFERENCE_LIBRARY.md](PRIVATE_REFERENCE_LIBRARY.md); the 15 original official sets have not yet been privately loaded or compared.
 Home: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-tools.html#factorio-render-pipeline
 
 ## Scope
