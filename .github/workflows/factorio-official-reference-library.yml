@@ -51,6 +51,21 @@ jobs:
                   "endloop\nendfacet\nendsolid self_authored\n")
           print("TEST_FIXTURES_OUR_OWN_NOT_WUBE", len(CATALOG))
           PY
+      - name: Acquire pinned community scene for private inspection only
+        run: |
+          mkdir -p private-ci/community
+          curl --fail --location --retry 3 \
+            https://raw.githubusercontent.com/lawlessc/factorio_base_model/d686ee753a6c7178282487d5ac43f142301725bb/factorio_basic.blend \
+            -o private-ci/community/factorio_basic.blend
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          payload=Path("private-ci/community/factorio_basic.blend").read_bytes()
+          assert payload.startswith(b"BLENDER") and len(payload)==940920
+          blob=b"blob "+str(len(payload)).encode()+b"\0"+payload
+          assert hashlib.sha1(blob).hexdigest()=="5c95d70ef562104a4fa2ac03ea3370087cd037ec"
+          print("COMMUNITY_BASE_PINNED_BYTES_VERIFIED_INSPECTION_ONLY")
+          PY
       - name: Import 15 distinct fixture collections into saved real thruster file
         run: |
           BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
@@ -58,6 +73,7 @@ jobs:
           "$BLENDER" -b --factory-startup -t 2 --python-exit-code 4 \
             --python tools/factorio-render-pipeline/official_reference_library.py -- \
             --source-blend private-ci/saved-model/physically-connected-fin-r58/source_connected_hanging_fins_r58.blend \
+            --community-blend private-ci/community/factorio_basic.blend \
             --stl-root private-ci/fixture-only \
             --require-all-15 \
             --out-blend private-ci/output/isolated-fixture-reference.blend \
@@ -66,7 +82,7 @@ jobs:
         run: |
           BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
           "$BLENDER" -b private-ci/output/isolated-fixture-reference.blend -t 2 --python-exit-code 4 \
-            --python-expr "import bpy; s=bpy.data.scenes['WUBE_OFFICIAL_UNASSEMBLED_STL']; groups=[c for c in bpy.data.collections if c.name.startswith('WUBE_SET_')]; meshes=[o for o in s.objects if o.type=='MESH']; assert len(groups)==15,len(groups); assert len(meshes)==15,len(meshes); assert all(o.get('unassembled_print_part') for o in meshes); assert s.camera is not None and s.camera.type=='CAMERA'; assert bpy.context.scene.get('fsc_status')=='CALIBRATION_ONLY_NOT_FACTORIO_APPROVED'; assert bpy.context.scene.camera is not s.camera; print('ACTUAL_BLEND_REOPEN_15_EDITABLE_MESHES_SOURCE_RIG_ISOLATED')"
+            --python-expr "import bpy; s=bpy.data.scenes['WUBE_OFFICIAL_UNASSEMBLED_STL']; groups=[c for c in bpy.data.collections if c.name.startswith('WUBE_SET_')]; meshes=[o for o in s.objects if o.type=='MESH']; assert len(groups)==15,len(groups); assert len(meshes)==15,len(meshes); assert all(o.get('unassembled_print_part') for o in meshes); assert s.camera is not None and s.camera.type=='CAMERA'; assert bpy.context.scene.get('fsc_status')=='CALIBRATION_ONLY_NOT_FACTORIO_APPROVED'; assert bpy.context.scene.camera is not s.camera; assert len(bpy.data.scenes['COMMUNITY_BASE_UNVERIFIED'].objects)>0; print('ACTUAL_BLEND_REOPEN_15_EDITABLE_MESHES_SOURCE_RIG_ISOLATED')"
           python - <<'PY'
           import json
           from pathlib import Path
@@ -74,6 +90,7 @@ jobs:
           assert data["stl_count"]==15
           assert len(data["present_sets"])==15
           assert data["reconstruction_scene_preserved"] is True
+          assert data["community_reference_object_count"]>0
           assert data["status"]=="UNASSEMBLED_PRIVATE_REFERENCE_ONLY"
           assert all(e["imported_blender_objects"]>=1 for e in data["entries"])
           print("REAL_SCENE_AND_REPORT_VALIDATED")
