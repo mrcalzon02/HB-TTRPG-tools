@@ -122,3 +122,54 @@ without the actual Wube catalogue. Actual official-geometry imports,
 15-set asset completeness, community .blend inspection, per-machine
 assembly, dimensional registration and production-source visual fidelity
 remain **UNVERIFIED** until their real inputs and renders are inspected.
+
+
+## Real public Wube samples: verified execution 2026-10-29
+
+The new optional private acquisition tool **private_wube_acquire.py** obtains
+one documented, original public STL per official set. It searches the
+publisher's public Printables listing, requires an exact WubeSoftware owner
+and model-title match, checks each model's reported license and published
+file size, requests the public STL download link (no login bypass), and
+records original model/file IDs, sample count, hashes, and STL geometry
+statistics. It refuses unknown download hosts, large inputs and errors.
+
+Use on a **private, non-redistributing workstation**:
+
+    python tools/factorio-render-pipeline/private_wube_acquire.py \
+      --root /private/wube-reference-stls \
+      --report /private/wube-original-sample-provenance.json
+
+Then pass that STL root to official_reference_library.py and your own saved
+R58 reconstruction .blend as described above. Its output is a **separate
+private working .blend**, never a redistributed package. This script's
+15 genuine samples cover all 15 official *sets* but are **NOT** the 65
+individual models or 247 STL variants. Those remain for per-model
+download/assembly and stage-by-stage calibration if needed.
+
+**Real validation:** GitHub Actions
+https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40983585774
+(success) downloaded 15 original Wube-published STL samples in a temporary
+runner, verified their file contents/geometry, imported all fifteen into
+the authentic saved R58 thruster reconstruction using Blender 4.5.15 LTS,
+saved a private reference .blend, reopened it, verified 15 real editable
+STL mesh objects and independent source camera, and compared the imported
+file hashes to the download manifest. Only the metadata JSON was uploaded
+as a CI artifact; STL bytes and the merged .blend remain private/ephemeral
+and are not available to the public via this workflow.
+
+**Sampling caveat:** Each downloaded STL is the largest individually
+eligible print variant (max 48 MiB) from its corresponding official set.
+It may depict a particular component, pose or print part rather than
+the ideal source-frame assembly for the machine. Sampled meshes do not
+prove printable-to-original sprite ratio, production camera, lighting,
+animation or industrial design correctness. The community base and Wube
+models are independent comparator evidence, not replacements for source
+images. Continue the R58–R62 source-directed geometry calibration.
+
+**Render environment diagnostics:** reference_rig_diagnostics.py compares
+the actual imported community camera/light objects with the unchanged
+reconstructed camera and lamp rig, publishing metadata differences only.
+It MUST NOT retune production parameters just because the community example
+differs. Use source sprite evidence for any subsequent physical geometry or
+lighting changes.
