@@ -195,3 +195,44 @@ stored matrix_basis for unparented, unconstrained rig objects. This is a
 measurement fix; no source camera or render illumination was intentionally
 retuned. Never adjust production calibration to conform to the unrelated
 community scene without matching original game sprite evidence.
+
+
+## Subsequent real native geometry and rendering tests (2026-10-29)
+
+[Geometry + entire original 64-frame integrity test #40989012664](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40989012664)
+passed with all 15 authentic public Wube model-set STL samples loaded into
+Blender 4.5.15 LTS. The new verifier
+[verify_official_geometry_integrity.py](verify_official_geometry_integrity.py)
+independently loads both the saved baseline R58 .blend and imported combined
+.blend, hashes the native source meshes and assigned materials, and samples
+the original scene's keyframe inputs at all 64 animation frames. All source
+static and 64-frame hashes match. For every individual imported sample,
+Blender's saved native-coordinate mesh bounds agree with the underlying
+downloaded STL's original bounds, with reported maximum coordinate error
+0.0 native STL units across all 15. The imported parts remain in original
+unscaled print coordinates, **not** claimed Factorio game tile units.
+
+[Actual native four-frame RGBA render regression #40989846582](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40989846582)
+independently rendered source-indexed frames 1, 17, 33, 49 from the
+unchanged R58 .blend and from the reconstructed scene inside the combined
+private reference library. Both use the same original saved source
+orthographic camera, unchanged material/scene geometry, 264x542 transparent
+canvas, and fixed Blender Cycles CPU sampling. After decoding the PNG
+images, **all four frames have exactly 0 changed RGBA channels** across
+the before/after renders. The PNG compressed byte counts differed but the
+decoded image pixels did not. This experiment proves that the imported
+official model references are isolated from the reconstructed thruster's
+rendering. It **does not** prove that the reverse-reconstructed thruster
+matches the private Factorio 2.0.77 source sprite atlas.
+
+The run artifact includes metadata JSON and **four render previews of our
+own R58 reconstruction only**. It does not include Wube's official
+downloaded STL bytes, original licensed source sprites, or combined .blend.
+
+Next evidence gates are (a) complete native source-sprite comparison for
+the fin/mount/nozzle shape and all 64 source frames, (b) authenticated
+per-part assembly of the relevant official Wube print variants, and (c)
+source-sprite camera/tile-space registration for belt, inserter, assembler
+and drill. The camera of the community base is a comparator, not a
+replacement. None of these remaining tasks should silently change
+Tech Priests gameplay or block a game release for subjective art checks.
