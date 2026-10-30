@@ -18,6 +18,11 @@ import re
 import sys
 from pathlib import Path
 
+# Blender --python does not guarantee the script folder is on sys.path.
+SCRIPT_DIRECTORY = str(Path(__file__).resolve().parent)
+if SCRIPT_DIRECTORY not in sys.path:
+    sys.path.insert(0, SCRIPT_DIRECTORY)
+
 from audit_official_stl_references import inspect_stl
 
 CATALOG = (
