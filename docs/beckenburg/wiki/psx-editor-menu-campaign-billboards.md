@@ -52,3 +52,9 @@
 5. Performance: expensive textures, scripts and light changes are scheduled/committed, not re-run per keystroke; counters distinguish estimated bytes from measured heap/GPU usage.
 
 The PSX reference documents are engineering *guidance*, not executable specifications that override host-authoritative ghost fairness, collision, weather, lighting, audio or release policy. Aesthetic warnings remain diagnostic; only genuinely broken functionality belongs in a release gate.
+
+## Implemented authoring slice (2026-10-30)
+
+The game editor now exposes **CAMPAIGN** and **BILLBOARDS** on its toolbar. Campaign is a *non-executing typed state-graph simulation* with idempotent transition commands, flags and declared asset dependency warnings. Billboards is a *2D asset preparation tool* with source-vs-retro derivative, aspect-safe presets, optional palette reduction/dithering, decoded RGBA memory estimates and explicit PNG baking without source overwrite. Java source: `editor/EditorCampaignFlow`, `editor/EditorCampaignLab`, `editor/EditorBillboardProfile`, `editor/EditorBillboardLab`. Separate portable tests exercise transition and file safety. No campaign action presently alters the actual game's mission state; no billboard is yet drawn using the live 3D game rasterizer.
+
+This first slice is deliberately more limited than the full blueprint. The next source integration must use the authoritative runtime mission/cutscene/trigger APIs and actual scene billboard materials, rather than creating editor-only impostors that never appear in gameplay.
