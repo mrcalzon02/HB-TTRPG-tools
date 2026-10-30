@@ -219,9 +219,9 @@
         },
         {
           "key": "sourceDocuments",
-          "base": "data/kaysender/wiki/",
+          "base": "",
           "kind": "source-reference",
-          "description": "Source-document entries are relative to the Kaysender wiki directory."
+          "description": "Each source-document entry is already a repository-root-relative source-page-references path; do not prepend the Kaysender directory."
         }
       ]
     },
