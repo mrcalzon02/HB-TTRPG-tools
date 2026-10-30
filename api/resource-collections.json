@@ -491,6 +491,32 @@
         "getResource"
       ],
       "notes": "Static design guidance, not an executable game/editor API nor implementation confirmation."
+    },
+    {
+      "id": "beckenburg.psx-asset-import",
+      "title": "Beckenburg PSX Asset Import and Over-Regression Contract",
+      "workspace": "Beckenburg",
+      "kind": "engineering-reference",
+      "format": "json",
+      "path": "api/psx-asset-import-reference.json",
+      "tags": [
+        "psx",
+        "3D asset",
+        "import",
+        "OBJ",
+        "STL",
+        "GLB",
+        "mesh",
+        "LOD",
+        "over regression",
+        "memory",
+        "warning",
+        "original preservation"
+      ],
+      "supports": [
+        "getResource"
+      ],
+      "notes": "Real import support is format-specific; JSON explicitly distinguishes implemented and planned readers."
     }
   ]
 }
