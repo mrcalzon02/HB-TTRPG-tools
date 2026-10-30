@@ -45,13 +45,15 @@ The preview is deliberately not a production ghost AI. It does **not** reproduce
 
 **Implemented source:** `src/main/java/org/beckenburg/editor/ai/NpcRuleBook.java`, `NpcDecisionWorkbench.java`, `src/main/java/org/beckenburg/GhostAiRuleAdapter.java`, `GhostAiRuleLab.java`, developer-editor button, explicit package compilation in Windows game and standalone editor kit. Tests: `NpcRuleWorkbenchTest` and `GhostAiRuleAdapterTest` (test results must be read from GitHub Actions).
 
+**Implemented second module layer:** [Host telemetry, navigation, and deterministic scenario documentation](psx-npc-ai-telemetry-navigation.md). The source now includes `NpcAiTelemetry` and `NpcAiTelemetryReport` (per-host rolling duration samples and aggregate CSV), `GhostAiNavigationAudit` (actual portal/acoustic checks) and `GhostAiScenarioRunner` (bounded real-domain/cadence decision replay). The **NPC / AI** dialog exposes **AUDIT NAV** and **PROFILE RULES**. Host recording is off by default, explicitly enabled locally, and never shared with multiplayer clients. New CI tests are submitted; passing earlier tests must not be interpreted as proof of the latest commits.
+
 **Next priorities:**
 
-1. **Host telemetry adapter**: count and time actual AI decisions, hearing, route lookups, collision, game tick and garbage collection without disclosing private hunter data to the ghost; snapshots read-only and exportable. p50/p95/p99 and bounded history.
-2. **Nav/trigger automation**: author/visualize room, stair/portal and door links from real game maps; warn on unreachable patrol anchors, invalid pursuit routes, extraction-van violations and impossible species traversal.
-3. **Scenario test runner**: configurable seeded simulations of legal action/deadline/frenzy changes, shelter/door state, hearing expiry and multiple actors. Assert *actual* host and AI/human parity; tests report observable rule failures, not quality judgments.
-4. **Behavior editing with safety**: editable proposed parameters in a sandbox with diff/review; **never mutate canonical rules** without an explicit approved patch. Limit output to schema-validated suggestions; do not execute arbitrary AI-generated scripts.
-5. **Other NPC adapters**: connect the existing hunter/ally/companion controllers via filtered observations and their *own* factual rule domains. Retain original pathing and simulation rather than flattening every actor into ghost behavior.
-6. **Live-playtest debug**: attach to a developer-owned live scene to visualize authorized state transitions and profiler counters, with strict client/host access controls and no position leaks.
+1. **Attach permissioned live-host profiler readout** to developer UI (current UI displays isolated scenario timings; actual per-host metrics are accessible from trusted JVM code/local stderr).
+2. **Collision and acoustic invalidation coverage**: verify dynamic door crossings, stair connectivity, swept movement and weather/material sound-path changes; record route topology revisions without bypassing the existing HouseMap and LanAcoustics.
+3. **Expand scenario fidelity**: cover frenzy warning/recovery, wards, ritual interruption, human-to-AI takeover and actual LAN host parity without inventing ghost perception.
+4. **Behavior editing with safety**: editable proposed parameters in a sandbox with diff/review; never mutate canonical rules without an explicit approved patch or run arbitrary user scripts.
+5. **Other NPC adapters**: connect existing hunter, ally and Twin companions through their own canonical behavior systems rather than pretending all NPCs are ghosts.
+6. **End-to-end real-world profiles**: pair existing door-opening CPU/GPU diagnostics with host timing histograms, allocation/GC statistics and real playtesting before any scheduler or AI cadence changes.
 
 This is a true first step toward an NPC/AI tool suite, **not a declaration that all NPC behavior authoring or automated AI gameplay has been implemented**.
