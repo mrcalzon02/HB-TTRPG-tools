@@ -137,7 +137,11 @@ def link_camera_and_lights(source, target, bpy):
         replica.rotation_mode = "QUATERNION"
         replica.rotation_quaternion = rot
         replica.scale = scale
-        replica.matrix_world = matrix
+        # Never set matrix_world on this inactive scene: Blender can reduce
+        # the copied object's local channels to [0,0,0] on reevaluation.
+        if tuple(round(v, 5) for v in replica.location) != tuple(
+                round(v, 5) for v in matrix.translation):
+            raise RuntimeError("Reference camera/light local transform was not persisted")
         if obj == source.camera:
             target.camera = replica
     target.world = source.world.copy() if source.world else None
