@@ -5,6 +5,7 @@ on:
     paths:
       - 'tools/factorio-render-pipeline/official_reference_library.py'
       - 'tools/factorio-render-pipeline/test_official_reference_library.py'
+      - 'tools/factorio-render-pipeline/reference_rig_diagnostics.py'
       - '.github/workflows/factorio-official-reference-library.yml'
   workflow_dispatch:
 permissions:
@@ -95,6 +96,23 @@ jobs:
           assert all(e["imported_blender_objects"]>=1 for e in data["entries"])
           print("REAL_SCENE_AND_REPORT_VALIDATED")
           PY
+      - name: Measure real community versus Factorio source calibration rigs
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec private-ci/output/isolated-fixture-reference.blend \
+            -t 2 --python-exit-code 4 --python tools/factorio-render-pipeline/reference_rig_diagnostics.py -- \
+            --out private-ci/output/reference-rig-comparison.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path("private-ci/output/reference-rig-comparison.json").read_text())
+          assert data["status"]=="MEASURED_ONLY_SOURCE_CAMERA_UNCHANGED"
+          assert data["camera_or_lighting_adjustment_applied"] is False
+          assert data["community_base"]["model_count"]>=0
+          assert data["official_reference"]["mesh_count"]==15
+          assert data["community_base"]["cameras"], "Missing imported community Blender camera"
+          print("REAL_COMMUNITY_FACTORIO_CAMERA_LAMP_METADATA_VERIFIED")
+          PY
       - name: Publish metadata only, NEVER reference meshes or .blend files
         if: always()
         uses: actions/upload-artifact@v4
@@ -102,6 +120,7 @@ jobs:
           name: factorio-private-reference-import-smoke-metadata-only
           path: |
             private-ci/output/reference-library.json
+            private-ci/output/reference-rig-comparison.json
             private-ci/readiness/readiness.json
           if-no-files-found: warn
           retention-days: 14
