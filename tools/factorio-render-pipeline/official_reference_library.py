@@ -114,10 +114,20 @@ def link_camera_and_lights(source, target, bpy):
     for obj in source.objects:
         if obj.type not in {"CAMERA", "LIGHT"}:
             continue
+        # A copied Blender object retains its original parenting, constraints,
+        # drivers and actions by default. Those can reevaluate on reopening a
+        # *different scene* and silently move the copied reference camera.
+        # Snapshot the source's evaluated world transform and make the copy
+        # strictly standalone. The source object is never touched.
+        matrix = obj.evaluated_get(bpy.context.evaluated_depsgraph_get()).matrix_world.copy()
         replica = obj.copy()
         replica.data = obj.data.copy()
+        replica.parent = None
+        for constraint in list(replica.constraints):
+            replica.constraints.remove(constraint)
+        replica.animation_data_clear()
         target.collection.objects.link(replica)
-        replica.matrix_world = obj.matrix_world.copy()
+        replica.matrix_world = matrix
         if obj == source.camera:
             target.camera = replica
     target.world = source.world.copy() if source.world else None
