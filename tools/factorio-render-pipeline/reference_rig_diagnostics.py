@@ -65,7 +65,7 @@ def analyze(reconstruction, official, community):
     # and world-space transforms must be strictly identical.
     for key in ("type", "location", "view_vector", "ortho_scale", "lens_mm"):
         if orig_c[key] != copy_c[key]:
-            raise RuntimeError("Reconstruction camera drifted during STL import: " + key)
+            raise RuntimeError("Reconstruction camera drifted during STL import: " + key + " source=" + repr(orig_c[key]) + " reference=" + repr(copy_c[key]) + " source_parent=" + repr(original.camera.parent.name if original.camera.parent else None) + " reference_parent=" + repr(reference.camera.parent.name if reference.camera.parent else None))
     src_lamps = sorted([lamp_data(o) for o in original.objects if o.type == "LIGHT"],
                        key=lambda x: (x["type"], x["location"], x["energy"]))
     ref_lamps = sorted([lamp_data(o) for o in reference.objects if o.type == "LIGHT"],
