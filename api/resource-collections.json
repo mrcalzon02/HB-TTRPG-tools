@@ -556,6 +556,30 @@
         "getResource"
       ],
       "notes": "Owner-authored inline design brief, adapt modern Java runtime separately from PS1 hardware."
+    },
+    {
+      "id": "beckenburg.npc-ai-ghost-rules",
+      "title": "Canonical Beckenburg NPC/AI ghost rule authoring contract",
+      "workspace": "Beckenburg",
+      "kind": "engineering-reference",
+      "format": "json",
+      "path": "api/psx-npc-ai-authoring.json",
+      "tags": [
+        "npc",
+        "ai",
+        "ghost",
+        "authoring",
+        "rules",
+        "behavior",
+        "visibility",
+        "frenzy",
+        "host",
+        "editor"
+      ],
+      "supports": [
+        "getResource"
+      ],
+      "notes": "Static tool contract; real species rules are read from live Java source by GhostAiRuleAdapter, not maintained as an independent truth copy."
     }
   ]
 }
