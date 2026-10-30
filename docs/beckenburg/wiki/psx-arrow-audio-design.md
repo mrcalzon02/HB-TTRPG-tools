@@ -28,3 +28,7 @@ A reusable audio-asset pipeline may support original WAV import, mono/downsample
 
 ## Acceptance
 An authored asset must be playable in the same audio routing as the game before it is marked integrated. Test at least three listening conditions: close/front, behind walls/door, and from the van; use existing simulation/event sound semantics and don't render remote camera/audio streams when no listener is consuming them. Profile concurrent sound load. Audio style/quality diagnostics are advisory; build/launch and genuine missing **essential** audio behavior may block a release when functionality truly fails.
+
+## Current authoring implementation (2026-10-30)
+
+The editor's **SFX ASSETS** action opens `EditorSoundLab`, backed by portable `EditorSoundProfile`. It inspects bounded PCM WAV source length, channel count, sample rate, file bytes and decoded PCM bytes; it can export a **separate** mono 11,025 Hz or 22,050 Hz 8-/16-bit WAV derivative while preserving the original. `EditorSoundProfileTest` exercises stereo-to-mono conversion, valid WAV re-decode, source preservation and format rejection. This is an **audio-source preparation tool**, not a connected gameplay event, projectile weapon, new mixer or SPU emulator. Those distinctions are intentional.
