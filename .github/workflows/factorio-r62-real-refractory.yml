@@ -1,0 +1,48 @@
+name: Factorio R62 physical nonemissive refractory shading
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/physical_shingle_materials_r62.py'
+      - 'tools/factorio-render-pipeline/test_physical_shingle_materials_r62.py'
+      - '.github/workflows/factorio-r62-real-refractory.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-materials-on-saved-r58:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore previously saved connected editable Blender scene
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40968758379
+          name: factorio-r56-r58-fin-visibility-and-editable-model
+          github-token: ${{ github.token }}
+          path: capture-output/test-04-vanilla-approx/
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Verify original material-only shader tests and Blender
+        run: |
+          python -m unittest discover -s tools/factorio-render-pipeline -p 'test_physical_shingle_materials_r62.py' -v
+          python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir readiness
+      - name: Render nonemissive original R19 physical shingle contrast sweep
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --factory-startup -t 2 --python-exit-code 4 --python tools/factorio-render-pipeline/physical_shingle_materials_r62.py -- --output capture-output
+      - name: Upload native Blender frames and restored source model record
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r62-physical-shingle-materials
+          path: capture-output/test-04-vanilla-approx/physical-shingle-materials-r62/
+          if-no-files-found: warn
+          retention-days: 30
