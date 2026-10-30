@@ -1,0 +1,49 @@
+name: Factorio R60 refractory scale depth
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/refractory_shingle_depth_r60.py'
+      - 'tools/factorio-render-pipeline/test_refractory_shingle_depth_r60.py'
+      - '.github/workflows/factorio-r60-refractory.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-r58-editable-shingles:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore verified saved R58 .blend
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40968758379
+          name: factorio-r56-r58-fin-visibility-and-editable-model
+          github-token: ${{ github.token }}
+          path: capture-output/test-04-vanilla-approx/
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Check physical shingle procedure and ensure correct Blender
+        run: |
+          python -m unittest discover -s tools/factorio-render-pipeline -p 'test_refractory_shingle_depth_r60.py' -v
+          python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir readiness
+      - name: Render eight source-relative actual 3D refractory scale depth variants
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          test -f capture-output/test-04-vanilla-approx/physically-connected-fin-r58/source_connected_hanging_fins_r58.blend
+          "$BLENDER" -b --factory-startup -t 2 --python-exit-code 4 --python tools/factorio-render-pipeline/refractory_shingle_depth_r60.py -- --output capture-output
+      - name: Upload scale visibility and original mesh restoration data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r60-physical-refractory-depth
+          path: capture-output/test-04-vanilla-approx/original-refractory-shingles-r60/
+          if-no-files-found: warn
+          retention-days: 30
