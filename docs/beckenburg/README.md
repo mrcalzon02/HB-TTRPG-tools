@@ -1,3 +1,7 @@
+## PSX asset import / over-regression reference (2026-10-30)
+
+[Human asset-import guide](wiki/psx-asset-import-and-regression.md) · [Machine reference](../../api/psx-asset-import-reference.json). The active Beckenburg Java 17 editor can import supported OBJ/STL/GLB models with manual geometry reduction, part-loss warnings and local preserved sources; other model formats remain planned. The original PlayStation 1 asset limits are optional visual targets, not hardware requirements for this game.
+
 ## PSX editor and runtime reference (2026-10-30)
 
 [Human authoring guide](wiki/psx-editor-engineering-guide.md) · [Machine adoption manifest](../../api/psx-editor-reference.json) · [Hosted reference](../../psx-editor-reference.html). The five supplied PDFs are selectively adapted for the active Beckenburg Java 17 renderer/editor suite. These links separate mandatory editor parity from optional PSX visuals and rejected hardware constraints; they are not proof that proposed editor tools are complete. The active implementation is in [The-Beckenburg-Project](https://github.com/mrcalzon02/The-Beckenburg-Project).
