@@ -173,3 +173,25 @@ reconstructed camera and lamp rig, publishing metadata differences only.
 It MUST NOT retune production parameters just because the community example
 differs. Use source sprite evidence for any subsequent physical geometry or
 lighting changes.
+
+
+### Verified camera and lighting isolation against the community scene
+
+[Real Blender 4.5.15 test #40985016585](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/40985016585)
+passed all gates: reopened R58 thruster scene; appended the authentic pinned
+factorio_basic.blend from the community author; verified 15 fixture collection
+slots; independently captured original and copied camera/light metadata;
+confirmed exact unchanged camera projection, stored position, view direction,
+light positions/energies; and measured the *community* camera and lighting
+as a separate, non-authoritative comparator. The run reports one real
+community camera and publishes JSON metadata only.
+
+Root cause of earlier red tests was a **Blender headless stale world-matrix
+cache**, not verified source camera movement. The copied camera's saved
+location and matrix_basis matched the original exactly, including calibrated
+location [0.18,-8.9,10.15]; matrix_world from the inactive reference scene
+reported the identity origin. The diagnostic now evaluates scenes and reads
+stored matrix_basis for unparented, unconstrained rig objects. This is a
+measurement fix; no source camera or render illumination was intentionally
+retuned. Never adjust production calibration to conform to the unrelated
+community scene without matching original game sprite evidence.
