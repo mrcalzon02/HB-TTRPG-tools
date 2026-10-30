@@ -59,17 +59,45 @@ def analyze(reconstruction, official, community):
         raise RuntimeError("Original calibrated Factorio camera was lost")
     if reference.camera is original.camera:
         raise RuntimeError("Reference camera must be a distinct copied object")
-    orig_c = camera_data(original.camera)
-    copy_c = camera_data(reference.camera)
+    # Blender returns an IDENTITY/stale matrix_world for objects in an
+    # inactive scene until that scene's depsgraph has been evaluated. This
+    # happened in the real CI run: reference camera read as [0,0,0] despite
+    # its stored local location. Activate each scene before measuring.
+    if bpy.context.window is None:
+        raise RuntimeError("Cannot evaluate per-scene camera without Blender window context")
+    previous_scene = bpy.context.window.scene
+
+    def read_rig(scene):
+        bpy.context.window.scene = scene
+        bpy.context.view_layer.update()
+        cameras = [camera_data(o) for o in scene.objects if o.type == "CAMERA"]
+        lamps = sorted(
+            [lamp_data(o) for o in scene.objects if o.type == "LIGHT"],
+            key=lambda x: (x["type"], x["location"], x["energy"]))
+        return cameras, lamps
+
+    try:
+        src_cameras, src_lamps = read_rig(original)
+        ref_cameras, ref_lamps = read_rig(reference)
+        if len(src_cameras) < 1 or len(ref_cameras) < 1:
+            raise RuntimeError("Reference or source camera unavailable after scene evaluation")
+        orig_c = next(c for c in src_cameras if c["name"] == original.camera.name)
+        copy_c = next(c for c in ref_cameras if c["name"] == reference.camera.name)
+        if community:
+            community_scene = bpy.data.scenes.get(community)
+            if community_scene is None:
+                raise RuntimeError("Expected community scene missing")
+            community_cameras, community_lamps = read_rig(community_scene)
+        else:
+            community_cameras, community_lamps = [], []
+    finally:
+        bpy.context.window.scene = previous_scene
+        bpy.context.view_layer.update()
     # Names change when Blender duplicates objects, but intrinsic projection
     # and world-space transforms must be strictly identical.
     for key in ("type", "location", "view_vector", "ortho_scale", "lens_mm"):
         if orig_c[key] != copy_c[key]:
             raise RuntimeError("Reconstruction camera drifted during STL import: " + key + " source=" + repr(orig_c[key]) + " reference=" + repr(copy_c[key]) + " source_parent=" + repr(original.camera.parent.name if original.camera.parent else None) + " reference_parent=" + repr(reference.camera.parent.name if reference.camera.parent else None))
-    src_lamps = sorted([lamp_data(o) for o in original.objects if o.type == "LIGHT"],
-                       key=lambda x: (x["type"], x["location"], x["energy"]))
-    ref_lamps = sorted([lamp_data(o) for o in reference.objects if o.type == "LIGHT"],
-                       key=lambda x: (x["type"], x["location"], x["energy"]))
     if len(src_lamps) != len(ref_lamps):
         raise RuntimeError("Lighting count drifted during STL import")
     for a, b in zip(src_lamps, ref_lamps):
@@ -103,8 +131,8 @@ def analyze(reconstruction, official, community):
         scene = bpy.data.scenes.get(community)
         if scene is None:
             raise RuntimeError("Expected real community base scene was not appended")
-        cameras = [camera_data(o) for o in scene.objects if o.type == "CAMERA"]
-        lamps = [lamp_data(o) for o in scene.objects if o.type == "LIGHT"]
+        cameras = community_cameras
+        lamps = community_lamps
         report["community_base"] = {
             "scene": community,
             "cameras": cameras,
