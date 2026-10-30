@@ -1,0 +1,154 @@
+{
+  "schema": "beckenburg.npc-ai-authoring/v1",
+  "updated": "2026-10-30",
+  "title": "Modular NPC/AI automation and canonical ghost behavior introspection",
+  "target": {
+    "runtime": "Java 17 modern PSX-styled Beckenburg",
+    "portablePackage": "org.beckenburg.editor.ai",
+    "gameAdapter": "org.beckenburg.GhostAiRuleAdapter",
+    "ui": "org.beckenburg.GhostAiRuleLab",
+    "editorCommand": "NPC / AI",
+    "mode": "read-only developer inspection; not live ghost control"
+  },
+  "sources": [
+    {
+      "path": "src/main/java/org/beckenburg/GhostIdentity.java",
+      "read": [
+        "roster",
+        "variant inheritance",
+        "rite",
+        "behavior"
+      ]
+    },
+    {
+      "path": "src/main/java/org/beckenburg/GhostTraits.java",
+      "read": [
+        "locomotion",
+        "passage",
+        "sight",
+        "charge",
+        "speed",
+        "UV",
+        "solitary"
+      ]
+    },
+    {
+      "path": "src/main/java/org/beckenburg/GhostBehavior.java",
+      "read": [
+        "favored action",
+        "AI period",
+        "tells"
+      ]
+    },
+    {
+      "path": "src/main/java/org/beckenburg/GhostFrenzy.java",
+      "read": [
+        "cost",
+        "earliest tick",
+        "physical vs dread attacks"
+      ]
+    },
+    {
+      "path": "src/main/java/org/beckenburg/GhostEvidenceMatrix.java",
+      "read": [
+        "possible evidence, not confirmed evidence"
+      ]
+    },
+    {
+      "path": "src/main/java/org/beckenburg/GhostDomain.java",
+      "read": [
+        "legal actions",
+        "exits",
+        "coarse host observation"
+      ]
+    },
+    {
+      "path": "docs/ai/PSX_NPC_AI_ADOPTION.md",
+      "read": [
+        "performance-safe adaptation and host fairness"
+      ]
+    }
+  ],
+  "portable": [
+    {
+      "type": "NpcRuleBook",
+      "features": [
+        "immutable typed contracts",
+        "duplicate rejection",
+        "base variant validation",
+        "readable explanations",
+        "non-blocking findings"
+      ]
+    },
+    {
+      "type": "NpcDecisionWorkbench",
+      "features": [
+        "read-only legal action check",
+        "real exit validation",
+        "spatial victim guard",
+        "bounded deterministic replay"
+      ],
+      "maxReplayObservations": 512
+    }
+  ],
+  "uiCapabilities": [
+    "all registered base/Ancient/Elder ghost types",
+    "actual live-source trait reading",
+    "isolated GhostDomain sandbox at 10Hz",
+    "coarse legal-action and energy inspection",
+    "action reasoning without dispatch"
+  ],
+  "authoritativeBoundaries": [
+    "Only GhostDomain.dispatch may change energy, cooldowns, fear, harm or manifestation",
+    "Only host simulation owns ghost world position and hearing events",
+    "Actual pursuit and acoustics are not bypassed",
+    "Host-strike spatial contact cannot be inferred from hearing alone",
+    "Camera-only visibility and door/wall restrictions are enforced by game, not redefined in tool",
+    "No player coordinates, private evidence, gear, health, or van secrets in portable observation",
+    "No arbitrary imported script execution"
+  ],
+  "tests": [
+    {
+      "path": "src/test/java/org/beckenburg/editor/ai/NpcRuleWorkbenchTest.java",
+      "workflow": ".github/workflows/standalone-editor-kit.yml"
+    },
+    {
+      "path": "src/test/java/org/beckenburg/GhostAiRuleAdapterTest.java",
+      "workflow": ".github/workflows/focused-castle-repairs.yml",
+      "gate": "diagnostic, continue-on-error"
+    }
+  ],
+  "implemented": "source, game adapter, UI, standalone and integration tests; success subject to observed CI",
+  "notYetImplemented": [
+    "live host AI telemetry and latency histograms",
+    "editable behaviors writing back to game rules",
+    "actual FPS and route profiling",
+    "npc nav graph authoring and door topology revisions",
+    "NPC pursuit animation integration",
+    "other hunter/ally NPC controller adapters",
+    "playtest host-backed scenario runner"
+  ],
+  "future": [
+    {
+      "id": "AI-1",
+      "action": "readOnlyHostTelemetry",
+      "acceptance": "measure p50/p95/p99, bounded counters, no private hunter data"
+    },
+    {
+      "id": "AI-2",
+      "action": "navigationGraphValidation",
+      "acceptance": "door/stair/portal reachable with actual collision and no teleport"
+    },
+    {
+      "id": "AI-3",
+      "action": "seededHostScenarioRunner",
+      "acceptance": "verify real energy/cadence/frenzy and AI/human parity"
+    },
+    {
+      "id": "AI-4",
+      "action": "separateNpcArchetypeAdapters",
+      "acceptance": "hunter allies/other NPC use their own canonical behavior sources"
+    }
+  ],
+  "releasePolicy": "Diagnostic AI style/performance findings never release-block; only objective broken build/launch/core gameplay and required multiplayer matter"
+}
