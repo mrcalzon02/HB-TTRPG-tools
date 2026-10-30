@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
-const readJson = file => JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
+const readJson = file => JSON.parse(fs.readFileSync(path.join(root, file), 'utf8').replace(/^\uFEFF/, ''));
 const exists = file => fs.existsSync(path.join(root, file));
 const fail = message => { throw new Error(`[foundry-api] ${message}`); };
 
