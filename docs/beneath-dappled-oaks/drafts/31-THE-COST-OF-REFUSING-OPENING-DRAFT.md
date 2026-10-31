@@ -11,7 +11,7 @@ release_gate: "Reconcile the original Drive character-continuity workbook throug
 
 # Chapter Thirty-One — The Cost of Refusing
 
-*Working chapter with integrated procedural follow-up, western clearing-book accounting, and domestic aftermath. All developments remain provisional until continuity reconciliation and canonical review. Do not include this draft in the public numbered-chapter reader.*
+*Working chapter with integrated procedural follow-up, western clearing-book accounting, domestic aftermath, and the provisional Salver personnel/retention-rule inquiry. All developments remain provisional until original-workbook reconciliation and canonical review. Do not include this draft in the public numbered-chapter reader.*
 
 The refusal had a price.
 
@@ -2588,3 +2588,329 @@ When she washed the ink from her hands, the water turned the color of weak tea. 
 It still mattered.
 
 It simply had not settled this one.
+
+---
+
+The answer came on a day when Ilyan had nearly stopped expecting it.
+
+Neral found him in the Hall's smaller library, seated at the end of a table crowded with papers he had no intention of putting away. The windows had been opened against the warmth of Bloomtide. Somewhere below, two apprentices were arguing over a ladder.
+
+"Personnel office."
+
+"Salver?"
+
+"The office has answered the question we sent. Whether that answers yours is another matter."
+
+The packet carried the ordinary service seal, not the red wax of protected review. Its return slip showed the date of receipt, the copying fee, and the clerk who had prepared the extract.
+
+The first sheet was an appointment order, issued two years after Silver Night. Edrin Salver had been transferred from the Dmitrigical Review liaison office to the Tribunal Contingency Secretariat, assistant to the clerk of returns. He would reconcile incoming notices, outgoing acknowledgments, and the yearly schedule of papers due for retention or transfer.
+
+It was the sort of job that required someone to know where things had gone.
+
+"That sounds close," Ilyan said.
+
+"To what?"
+
+"To the receiving commission. To the review."
+
+Neral took the chair opposite him. "Does it?"
+
+The duties were set out plainly. Salver could certify that a cover had arrived and that its number appeared in the proper book. He could request a missing acknowledgment. He could correct an index error when the responsible officer signed the correction. He could not open a sealed enclosure by virtue of his appointment, issue a receiving-side instruction, or alter a protected determination.
+
+"Close to the paper," Ilyan said.
+
+"Perhaps."
+
+"Not necessarily to what was inside."
+
+"That is what the order says."
+
+The second sheet was the original desk allocation for the quarter in which Salver arrived. His name stood beside the returns desk for the first two weeks, then beside the archive schedule for the remainder.
+
+Ilyan thought of his uncle's satisfaction when speaking of necessity. There were days when every ordinary act of administration looked like a possible route by which the massacre had been made to happen. He knew what that feeling did to his judgment. Knowing did not stop it.
+
+"Salver handled the lawful timing material," he said.
+
+"His earlier office logged it."
+
+"And the interference memorandum."
+
+"His earlier office logged that too."
+
+"And then he came here."
+
+"Two years later."
+
+Ilyan pushed the papers away. "You could sound less pleased about that."
+
+"I'm not pleased. I've spent most of the morning correcting a copyist's error in a land appeal. I sound tired."
+
+That was true. There was ink on Neral's cuff and a headache between his eyebrows.
+
+"Sorry."
+
+Neral accepted the apology and examined the fee. The personnel keeper had consulted an older volume moved during a room repair. It cost more than the estimate.
+
+"Do we challenge it?" Ilyan asked.
+
+"Only if we think the work wasn't done."
+
+They did not. Neral entered the charge against the Hall's inquiry budget.
+
+---
+
+Judge Vaun had two petitioners waiting. One was a dyer whose neighbor had diverted a stream through the edge of her yard. The other had brought a wicker cage containing a furious goose.
+
+Ilyan stood in the passage listening to the bird strike the bars.
+
+The dyer left first. The goose stayed.
+
+When Vaun admitted him, the bird had been moved to the courtyard and its owner had gone to find a witness. Vaun's sleeves were rolled above her wrists. A loose strand of hair clung to her cheek.
+
+"Tell me the personnel office sent something worth the copying fee."
+
+He handed her the appointment order and allocation.
+
+"Did Salver have access?" he asked.
+
+"To the returns desk, according to this."
+
+"To the sealed review?"
+
+"Not by this order."
+
+"Could he have known about a dispute?"
+
+"From a cover, perhaps, if one came to his desk while he served there."
+
+He had expected her answer and resented it anyway.
+
+"Then what have we bought?"
+
+"A date. A duty. Two weeks at one desk. An office series we can examine if it becomes relevant."
+
+"Not much."
+
+"More than we had."
+
+She laid the sheets together. "The post-Silver-Night scope reservation was disposed of before his transfer. He cannot have been the original clerk receiving that notice at this desk two years later."
+
+"He could have handled a copy."
+
+"He could have handled a thousand. We need to know whether the Secretariat kept one and whether it came within his work."
+
+Vaun pulled a blank sheet toward her.
+
+"What series keeps the cover acknowledgments?" she asked.
+
+"The returns book," Neral said. "Possibly not the sealed-review series."
+
+"Ask for the retention rule first."
+
+"Not the book?" Ilyan asked.
+
+"If the covers went to another custodian, we'll waste another search fee. If they stayed here, we'll know who can answer. And if only a sealed index survives, we'll decide whether we have grounds to ask."
+
+He was tired of waiting. He was also beginning to see how a badly framed question could cause the one person who knew the answer to put down a perfectly lawful refusal.
+
+Vaun wrote for the historical retention rule, the custodian of unsealed scope-reservation cover acknowledgments, and any dates when custody of that series changed. She sought no protected name or contents.
+
+"Should we include Salver?" Ilyan asked.
+
+"Not when we're asking where a series lived. The answer is the same whether he was diligent, negligent, or never touched the book."
+
+Neral took the signed request.
+
+"Ordinary dispatch?"
+
+"Ordinary dispatch."
+
+"Another week, perhaps."
+
+"Then another week."
+
+From the courtyard came a shriek and the goose's triumphant honking.
+
+"I should have stayed in the library," Ilyan said.
+
+"You should have brought the bird," Vaun said. "It has been more decisive than either of us."
+
+---
+
+The afternoon brought no answer from the civic custodian.
+
+Neral checked the sealed-inquiry receipt and found the enclosure had reached the correct office. There was nothing else to record. He returned the receipt to its sleeve without asking Ilyan whether he wished to send another messenger.
+
+Ilyan went to the kitchen. A young cook was cutting bruised portions from a basket of early pears, saving the good pieces for a tart. He bought two slices of yesterday's baking. She warmed them without being asked.
+
+He took one upstairs for Neral and ate the other by the library window. The apprentices had finally moved the ladder. Now they were arguing over who had been right about its length.
+
+He had not found Salver's guilt. He had found a way to test whether Salver had ever touched the later paper at all.
+
+The door opened.
+
+Neral stopped at the sight of the tart.
+
+"Is that mine?"
+
+"Unless the judge gets here first."
+
+"You are learning."
+
+They ate without discussing the case. Neral complained about a carpenter who had charged for replacing a window latch without specifying which window. Ilyan listened. There were ordinary disputes in which the identity of a latch mattered a great deal and the fate of the Realm did not.
+
+Afterward he opened a letter he had begun to Thessa, then closed it again. His earlier packet was still on the western road, so far as he knew. Hers might already be traveling east. He would not write another merely to fill the silence with questions.
+
+The next thing he needed from the Secretariat was a rule about where an old cover should have been kept. The next thing he wanted was much larger. For once, he could leave the larger thing alone until there was somewhere honest to put it.
+
+
+---
+
+Neral arrived with a packet that had been folded too many times for the amount of paper inside it.
+
+He set it beside Ilyan's breakfast and remained standing.
+
+"Is it another fee?" Ilyan asked.
+
+"It is a fee and an answer. You may decide which to read first."
+
+The Hall's dining room was nearly empty. Two junior advocates occupied the far table, whispering over an examination problem and neglecting a bowl of stewed pears. A mild Bloomtide wind moved the curtains. In the courtyard, a mason was removing a cracked coping stone, his chisel tapping at irregular intervals.
+
+Ilyan broke the thread. There were three sheets: a covering letter, a certified extract from an old office rule, and a receipt. The receipt was the smallest of them, which did not prevent it from being the most personally offensive.
+
+"How much?"
+
+"Read the rule."
+
+"I am reading the rule."
+
+"You're looking at the fee."
+
+The rule was older than Salver's transfer. When a scope reservation was served on a receiving office, its ordinary acknowledgment cover recorded the issuing and receiving offices, the administrative series, the dates of dispatch and receipt, and the authorized acknowledging hand. The grounds for the reservation did not appear on that cover. Nor did the identity of anyone protected by the underlying instrument.
+
+A returns clerk entered the cover in a bound register. At the scheduled transfer, the register went to historical custody with an inventory of volumes and date ranges. Sealed enclosures followed their separate instructions.
+
+"Then there should be a book," Ilyan said.
+
+"There may be a book. The rule says what they were meant to keep, not what survived."
+
+"The office would have known about the disagreement."
+
+"The office, yes."
+
+"Not everyone in it."
+
+Neral sat down. "Not everyone in it."
+
+Ilyan knew Salver's later appointment order almost by heart: two weeks at the returns desk, then the archive schedule, beginning two years after Silver Night. The earlier reservation had already been disposed of. An old register might have stood on a shelf near him, or might have been elsewhere. His title proved neither that he opened it nor that he had reason to.
+
+"Vaun?" Ilyan asked.
+
+"Reading the dyer's water papers again. The goose has been removed from the case."
+
+"That sounds like progress."
+
+"Only for the goose."
+
+---
+
+Judge Vaun read the extract standing beside the window. The mason below had discovered a second damaged stone and was discussing it with his foreman. Neither looked pleased.
+
+"The reply names the historical custodian," she said.
+
+Ilyan found the line at the bottom of the covering letter. He had missed it while reading the rule.
+
+"Can we inspect the acknowledgment?"
+
+"First we find out whether the register exists."
+
+Neral opened his notebook. "The annual transfer inventory should identify the series and date range. It won't tell us what's inside the covers."
+
+"Or who read them," Ilyan said.
+
+"No."
+
+He wanted to ask for Salver by name. Vaun was already drafting a request for the historical inventory, later custody changes, and the office authorized to certify an unsealed acknowledgment extract. She left Salver out.
+
+"Wouldn't naming him help?"
+
+"If his name is on an inventory, we can examine the evidence for that. We should first establish which books the office held."
+
+Neral took the signed request. "Ordinary dispatch?"
+
+"Ordinary dispatch. And retain the receipt."
+
+"I always do."
+
+"I know. I say it for Ilyan's benefit."
+
+Ilyan watched her return to an enchantment complaint waiting beside the inkstand. He had once imagined that a judge investigating Silver Night must spend every waking hour upon it. The petitioners outside had cured him of that idea.
+
+"I could pay the copying charges myself," he said.
+
+"The Hall has an allowance," Vaun replied.
+
+"I can afford them."
+
+"That is not the same question."
+
+She gave Neral the request and turned to the next file. Ilyan understood that an inquiry conducted under the Hall's authority needed its own accounts. A Valeric quietly paying for documents could become a story in someone else's hands, whatever his intentions.
+
+---
+
+The civic records depot stood behind an older hall, its public entrance facing a narrow square crowded with garland sellers. Inside, the air smelled of paste, old linen and the dry dust that rose when a window was opened after winter.
+
+The clerk at the counter read Vaun's request twice.
+
+"You've named a series, a date range and a receiving office," she said.
+
+"Is that enough?" Neral asked.
+
+"Enough to start. It isn't a promise of a result."
+
+Ilyan considered telling her how thoroughly he wanted one. He kept quiet.
+
+She checked the series against a printed public list. The Secretariat's historical returns inventories were catalogued, but individual volumes were recorded in annual transfer books held in storage. Staff would have to retrieve the relevant book before anyone could examine or certify an entry.
+
+"May I inspect the public list?"
+
+"Of course. The transfer book, when it's produced and cleared for the reading room. You may not enter storage."
+
+"I wasn't proposing to."
+
+"Most people say that afterward."
+
+She pushed the list toward him. He read the dates and the shelf code. Nothing named Salver. Nothing identified the reservation. The book described books, and his disappointment felt unreasonable even to him.
+
+"How long?" Neral asked.
+
+"Several working days. Longer if the volume is being repaired or has moved again."
+
+She showed them the posted fees. Neral checked the search charge against the Hall's allowance and signed the ledger. The clerk stamped their receipt, then pointed to its number.
+
+"Use that when you inquire. Otherwise somebody will start the search again."
+
+In the square, two Academy students passed in ceremonial coats, laughing over a parcel that had split and scattered sugared seeds across the stones. One bent to gather them. The other tried to help and made the scattering worse.
+
+Ilyan stopped. He had known that laughter beneath the Academy's trees, the impatience of waiting for a friend to stop making a mess so they could both go somewhere more interesting. For a moment the square seemed crowded with people who were not there.
+
+Neral waited without looking at him.
+
+"Do you ever wish the books would give us one answer we could use?" Ilyan asked.
+
+"Often."
+
+"And then?"
+
+"Then I remember how many wrong answers I've seen entered very neatly."
+
+They returned toward the Hall. Neral had petitions to process; Ilyan had promised to review a witness statement. The depot would search without his standing at its counter. No new letter from Thessa had reached him. The post from the western roads came when it came.
+
+At a baker's stall he bought two honey cakes. He considered a third, then remembered Thessa would not be there to steal it.
+
+He bought it anyway.
+
+He gave the third cake to a child who had been arguing for a wreath much too large for him. The child accepted it with grave delight.
+
+Ilyan returned with the stamped receipt in his pocket. The search had not yielded the name he wanted. It had reached the office that could tell him whether the relevant book survived.
+
