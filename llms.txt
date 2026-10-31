@@ -51,3 +51,6 @@ For restricted browsers that cannot retrieve raw JSON or Markdown, use the regis
 
 ## Beckenburg NPC/AI automation\n- Canonical NPC/AI developer guide: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-npc-ai-authoring.md\n- AI-readable NPC module contract: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-npc-ai-authoring.json\n- Source runtime authority: https://github.com/mrcalzon02/The-Beckenburg-Project/tree/main/src/main/java/org/beckenburg\n
 - NPC/AI host telemetry/navigation/scenario guide: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-npc-ai-telemetry-navigation.md
+
+- Beckenburg dev admin observer and full seven-client AI match plan: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/development/DEV_MATCH_ADMIN_OBSERVER_AND_AI_LOBBY_PLAN_2026-10-30.md
+- Machine acceptance contract: https://mrcalzon02.github.io/HB-TTRPG-tools/api/dev-match-admin-observer-contract.json
