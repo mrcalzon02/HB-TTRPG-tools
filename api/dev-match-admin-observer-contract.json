@@ -1,0 +1,161 @@
+{
+  "schema": "beckenburg.dev-ai-match-plan/v1",
+  "date": "2026-10-30",
+  "status": "PLANNED_NOT_IMPLEMENTED",
+  "purpose": "Invisible host-local developer observer watches six real-client AI hunters and one real-client ghost in a normal authoritative multiplayer match",
+  "visibility": "Developer-only launcher; never exposed in normal public game menu",
+  "participantModel": {
+    "ordinaryHunterSlots": [
+      "H1",
+      "H2",
+      "H3",
+      "H4",
+      "H5",
+      "H6"
+    ],
+    "ordinaryGhostSlot": "GHOST",
+    "gameplayClients": 7,
+    "admin": {
+      "id": "ADMIN",
+      "hostLocalInitially": true,
+      "playerSeat": false,
+      "normalLobbyVisible": false,
+      "mayMoveWorldBody": false,
+      "mayReceiveDamage": false,
+      "mayCollectEvidence": false
+    },
+    "distinction": "8 conceptual roles, 7 actual network gameplay peers initially; admin may become a separate development-only socket later"
+  },
+  "scopeExclusions": [
+    "Public spectator matchmaking",
+    "New account/identity system",
+    "Broad packet-security rewrite",
+    "Normal menu admin toggle",
+    "Alternative world simulation",
+    "Hardcoded PS1 limitations"
+  ],
+  "modules": [
+    {
+      "name": "DevMatchSession",
+      "authority": "Developer harness",
+      "responsibility": "Start host, join/ready 7 real LanClient peers, own teardown and reproducible scenario"
+    },
+    {
+      "name": "DevHunterClientAi",
+      "instances": 6,
+      "authority": "Per-client received frames and normal LanClient commands",
+      "responsibility": "Independent investigative goals; actual gear, scans, evidence, ritual, and movement"
+    },
+    {
+      "name": "DevGhostClientAi",
+      "instances": 1,
+      "authority": "Filtered ghost-seat frames and normal LanClient commands",
+      "responsibility": "Real ghost occupancy and human-equivalent control via ghost, movement and frenzy commands"
+    },
+    {
+      "name": "DevAdminSnapshot",
+      "authority": "Read-only LanHost state on authoritative tick",
+      "responsibility": "All bodies/ghosts/collision/evidence/true rules/equipment/AI intents; immutable 2–5Hz observer feed"
+    },
+    {
+      "name": "DevAdminPanel",
+      "authority": "DevAdminSnapshot + actual SceneRenderer",
+      "responsibility": "Free-fly, x-ray hitboxes, top-down, follow, floor slices, mission and evidence inspector"
+    },
+    {
+      "name": "DevMatchController",
+      "authority": "Developer host operation",
+      "responsibility": "Start/stop/clean restart, pause/resume/single-step, test-only controls auditable and clearly labeled"
+    },
+    {
+      "name": "DevMatchRecorder",
+      "authority": "Authoritative tick, bot command acknowledgements and game renderer",
+      "responsibility": "Time-stamped JSONL/CSV/PNG; match outcome/timeout/exceptions; bounded artifact output"
+    }
+  ],
+  "sourceOfTruth": {
+    "host": "LanHost",
+    "hunterClient": "LanClient",
+    "ghostClient": "LanClient",
+    "hunterGameState": "LanWorld",
+    "ghostGameState": "LanGhostSpatial",
+    "ghostActions": "GhostDomain",
+    "hitDetection": "LanSpatialCombat",
+    "physics": "HouseMap",
+    "renderer": "SceneRenderer",
+    "evidence": [
+      "LanCase",
+      "LanEvidenceJournal",
+      "FieldJournal",
+      "HardEvidenceQuota"
+    ],
+    "baseline": "BeckenburgFullRoundE2ETest",
+    "existingPartialAi": [
+      "CampaignGuestBot",
+      "GhostPracticeHunterAi",
+      "LanGhostPursuit"
+    ]
+  },
+  "phases": [
+    {
+      "id": 0,
+      "name": "Harness and seat correctness",
+      "acceptance": "H1–H6 and GHOST connect via real LanClient; ADMIN does not affect player count or round outcome"
+    },
+    {
+      "id": 1,
+      "name": "Observer/overlay truth",
+      "acceptance": "All poses/hitboxes/evidence read from host on one tick; x-ray and free-fly do not affect world or normal client projections"
+    },
+    {
+      "id": 2,
+      "name": "Six autonomous investigators",
+      "acceptance": "Independent real player actions: travel, tools, notes, identify, ward, ritual, extraction; no direct server/world mutations"
+    },
+    {
+      "id": 3,
+      "name": "Ghost in real player seat",
+      "acceptance": "GHOST bot sends actual player commands; absent-ghost AI does not concurrently control ghost; original host legality wins"
+    },
+    {
+      "id": 4,
+      "name": "Developer controls and instrumentation",
+      "acceptance": "Host pause/resume/step coherent across simulation; action traces distinguish game actions from admin injections"
+    },
+    {
+      "id": 5,
+      "name": "Windows workflow",
+      "acceptance": "Real local TCP match, 7 actual bot peers and admin observer, bounded transcript, screenshot, profiler and outcome artifacts"
+    }
+  ],
+  "acceptance": [
+    "Each bot has independently assigned real normal-player seat",
+    "Real host movement/collision/energy/evidence/ritual gates retained",
+    "Admin excluded from lobby/party/combat/evidence/sanity/outcome",
+    "Admin can see behind geometry and free-fly without simulating a ghost/hunter avatar",
+    "No ghost truth leaks into normal hunter/ghost bot decision inputs",
+    "Ghost bot occupies GHOST seat and submits commands, not relying silently on empty-seat AI",
+    "Scenarios differentiate completed round, timeout, refusal, crash, and startup failure",
+    "Capture actual renderer screenshots and authoritative diagnostic trace",
+    "Cosmetic and balance diagnostics are not release blockers"
+  ],
+  "initialWorkflow": {
+    "file": ".github/workflows/beckenburg-dev-ai-match.yml",
+    "status": "PLANNED",
+    "mode": "manual_or_opt_in",
+    "platform": "windows-latest",
+    "java": "17",
+    "artifacts": [
+      "match-manifest.json",
+      "timeline.jsonl",
+      "host-profiling.csv",
+      "admin-captures/*.png",
+      "host.log",
+      "bot-intents.jsonl",
+      "result.txt"
+    ],
+    "dependencies": "Game runtime and actual assets; no Blender or Chocolatey required to play"
+  },
+  "doc": "docs/beckenburg/development/DEV_MATCH_ADMIN_OBSERVER_AND_AI_LOBBY_PLAN_2026-10-30.md",
+  "sourceDoc": "https://github.com/mrcalzon02/The-Beckenburg-Project/blob/main/docs/development/DEV_MATCH_ADMIN_OBSERVER_AND_AI_LOBBY_PLAN_2026-10-30.md"
+}
