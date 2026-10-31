@@ -580,6 +580,29 @@
         "getResource"
       ],
       "notes": "Static tool contract; real species rules are read from live Java source by GhostAiRuleAdapter, not maintained as an independent truth copy."
+    },
+    {
+      "id": "beckenburg.dev-admin-ai-full-lobby",
+      "title": "Beckenburg private developer full-lobby AI match and omniscient admin observer",
+      "workspace": "Beckenburg",
+      "kind": "engineering-reference",
+      "format": "json",
+      "path": "api/dev-match-admin-observer-contract.json",
+      "tags": [
+        "beckenburg",
+        "admin",
+        "developer",
+        "multiplayer",
+        "ai",
+        "ghost",
+        "hunter",
+        "observer",
+        "testing"
+      ],
+      "supports": [
+        "getResource"
+      ],
+      "notes": "PLANNED ONLY. Seven ordinary multiplayer bot clients, one separate host-local dev admin observer, optional Windows CI match evidence."
     }
   ]
 }
