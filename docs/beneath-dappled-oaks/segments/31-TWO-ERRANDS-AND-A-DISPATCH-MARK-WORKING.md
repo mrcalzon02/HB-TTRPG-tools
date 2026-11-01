@@ -76,7 +76,7 @@ The cooper's face tightened. "A man cannot pay his rent with 'for now.'"
 
 Ilyan had no answer that would improve the rent. He asked whether the boy wanted to speak, and whether the physician had forbidden it. The cooper shook his head at the second question and stepped aside for the first.
 
-The boy's name was on the docket, but Ilyan did not repeat it aloud until the boy offered it himself. He sat on a stool rather than standing over the bed.
+The boy's name was on the docket, but Ilyan did not speak it aloud. He sat on a stool rather than standing over the bed.
 
 "Your uncle says a stack fell."
 
