@@ -74,7 +74,11 @@ def shape_original_real_fin(fin,original,shoulder,free):
         elif row==STATIONS-1:
             wanted.append(width_free)
         else:
-            wanted.append(width_shoulder*ROW_RATIO[row])
+            # One continuous strictly decreasing curve; never rebound at free edge.
+            # Smoothstep preserves a broader formed shoulder than a linear wedge.
+            t=(row-2)/7.
+            eased=t*t*(3.-2.*t)
+            wanted.append(width_shoulder+(width_free-width_shoulder)*eased)
     if not all(wanted[row]>wanted[row+1] for row in range(2,9)):
         raise RuntimeError("R80 refused incorrect widening towards free end")
     for skin in range(2):
