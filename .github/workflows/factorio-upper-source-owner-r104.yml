@@ -1,0 +1,70 @@
+name: Factorio R104 original sprite upper machinery actual 3D object ownership and isolation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/upper_real_mesh_ownership_r104.py'
+      - '.github/workflows/factorio-upper-source-owner-r104.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-original-source-upper-3d-ownership:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover exact R103 source-comparison-selected real Blender 3D cast and baffle scene
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41515498651
+          name: factorio-r103-source-true-3d-forging-and-nozzle-baffle-editable-composites
+          github-token: ${{ github.token }}
+          path: private-ci/r103
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install pinned Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Cast actual original-camera 3D ownership rays and reversible first-hit 3D mesh isolations
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/upper_real_mesh_ownership_r104.py -- \
+            --source-blend private-ci/r103/output/r103/right_chamfer_plus_left_heel__recess_y_015.blend \
+            --out private-ci/output/r104
+      - name: Verify 6 source regions and 8 actual-source mesh-only ablations returned all original geometry
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r104')
+          r=json.loads((p/'r104_original_source_upper_machine_actual_mesh_owners.json').read_text())
+          assert r['original_3d_geometry_modified']==False
+          assert not r['copyright_original_source_pixels_in_artifacts']
+          assert not r['original_sprite_source_fidelity_approved']
+          assert len(r['real_native_3d_first_hit_by_source_region'])==6
+          assert len(r['source_upper_3d_objects_selected_for_causal_isolation'])==8
+          assert len(r['isolations'])==9
+          for case in r['isolations']:
+              assert (p/case['native_source_camera_frame1']).stat().st_size>5000
+              assert (p/case['native_source_camera_frame33']).stat().st_size>5000
+              assert case['actual_original_3d_scene_restored']
+          print('R104_ORIGINAL_CAMERA_REAL_UPPER_MACHINE_MESH_IDS_AND_NATIVE_RENDERS_VERIFIED')
+          PY
+      - name: Upload only actual real Blender original-camera ownership diagnostics, no original Wube source artwork
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r104-source-upper-body-real-3d-object-ownership-native-candidates
+          path: |
+            private-ci/output/r104/*.png
+            private-ci/output/r104/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
