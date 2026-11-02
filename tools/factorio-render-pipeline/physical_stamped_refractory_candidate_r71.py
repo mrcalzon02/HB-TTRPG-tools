@@ -22,6 +22,7 @@ import sys
 ROOT=str(Path(__file__).resolve().parent)
 if ROOT not in sys.path:sys.path.insert(0,ROOT)
 import bpy
+from mathutils import Vector
 from fin_mount_geometry_sweep_r50 import MAIN,FIN_PREFIX,MOUNT_PREFIX
 from mount_shape_fit_r52 import joint_gap_world
 from mounted_fin_candidate_r55 import MAX_ROOT_CONNECTION
@@ -90,10 +91,10 @@ def form_existing_plate(ob,original,profile_amplitude,kind):
             raise RuntimeError("R71 physically inverted original refractory plate thickness")
     return {
         "front_3d_vertices_changed":sum(
-            (ob.data.vertices[i].co-bpy.mathutils.Vector(original[i])).length>1e-5
+            (ob.data.vertices[i].co-Vector(original[i])).length>1e-5
             for i in range(12)),
         "original_back_surface_12_vertices_preserved":all(
-             (ob.data.vertices[i].co-bpy.mathutils.Vector(original[i])).length<1e-6
+             (ob.data.vertices[i].co-Vector(original[i])).length<1e-6
              for i in range(12,24)),
         "minimum_crown_to_back_real_thickness":min(
             math.hypot(ob.data.vertices[j+12].co.x,ob.data.vertices[j+12].co.z-AXIS_Z)-
@@ -122,7 +123,7 @@ def verify_unmodified_protected(scene,cam_key,motion_digest,mat_digest,original_
             ob=bpy.data.objects[name]
             if len(ob.data.vertices)!=len(indices_and_coords):
                 raise RuntimeError("R71 damaged protected shell, cup or hull topology")
-            if any((v.co-bpy.mathutils.Vector(x)).length>1.e-6
+            if any((v.co-Vector(x)).length>1.e-6
                    for v,x in zip(ob.data.vertices,indices_and_coords)):
                 raise RuntimeError("R71 altered unrelated real 3D mesh: "+name)
     return True
@@ -204,7 +205,7 @@ def run(source,out):
             verify_unmodified_protected(scene,camera,motion,mat_digest,old_names,protected)
             for part,(o,kind,points) in tiles.items():
                 live=bpy.data.objects[part]
-                if min((live.data.vertices[i].co-bpy.mathutils.Vector(points[i])).length
+                if min((live.data.vertices[i].co-Vector(points[i])).length
                        for i in range(12))<1e-6:
                     raise RuntimeError("R71 did not save physically sculpted original plate: "+part)
         report["candidate_profiles"].append({
