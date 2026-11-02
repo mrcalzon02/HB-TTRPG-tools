@@ -12,6 +12,10 @@ from test_r67_full_native_cycle import TestR67NativeCycle
 class Original8x4PageFormat(unittest.TestCase):
     def prepare(self,root):
         TestR67NativeCycle().create(root)
+        manifest_path=root/"capture-manifest.json"
+        manifest=json.loads(manifest_path.read_text())
+        manifest["original_private_sprite_sha256_reference_only"]=r68.SOURCE_REFERENCE_SHA
+        manifest_path.write_text(json.dumps(manifest),encoding="utf-8")
         r67.assemble(root)
 
     def test_two_pages_exact_rgba_cell_order_no_resampling(self):
