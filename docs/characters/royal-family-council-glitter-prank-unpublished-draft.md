@@ -130,21 +130,73 @@ Estelle's eyes moved toward the council table. “Could you come now?”
 
 “Not quite yet. The people whose work was interrupted deserve to finish it.”
 
-There was a pause. Estelle could hear cloth rubbing against stone. She had thought glitter would vanish with the water. Instead it was clinging to the grooves between the floor tiles, catching under chair legs and refusing to leave Rome's hair. She had made something that would outlast the moment in which it had been funny.
+Estelle heard the scrape of a chair being lifted rather than pushed. The servant who had warned the minister was kneeling at the edge of the wet patch, one hand holding a cloth in place. The clerk had rescued the writing, but he could not put it away until he knew which sheets were damp. A runner stood in the doorway waiting for a clear route through the chairs. Estelle had imagined the glitter would vanish when the water dried. Instead it had settled into the grooves between the floor tiles, where every footstep threatened to carry it farther.
 
 “Can I help?” she asked.
 
-The servant with the cloth hesitated. Daysha asked whether there was work a child could do without making the floor more dangerous. The servant thought about it and brought a shallow basin and a clean rag. Estelle was given a dry section of the lower chair rail to wipe, away from the wet patch where the adults were working. She was also asked to pick up the folded cloth that had wrapped the balloon and carry the empty basket back to the household passage. The attendant stayed with her. Nobody pretended that this small contribution was equal to the work of cleaning an entire council chamber.
+The servant looked up. She had been about to answer when the attendant from the gallery spoke first. “I should have looked in the basket.”
 
-Estelle wiped the rail with considerable seriousness. The first pass merely spread the glitter. The second made a faint silver smear. By the third she understood why the servant had fetched more than one cloth.
+Estelle felt the remark like a hand closing around her wrist. The attendant had asked. Estelle remembered the question, and remembered enjoying the cleverness of an answer that was true without being useful.
 
-“Does it always do that?” she asked.
+“You did look,” Estelle said. “At me. I told you it was for Father.”
 
-“Glitter?” the servant said. “It always finds somewhere to stay.”
+“I should have asked to see it.”
 
-Estelle looked at her father's hair. “Oh.”
+“I knew you might say no.” She glanced toward Rome. “That was why I didn't show you.”
 
-When the rail was clean enough to stop sparkling, Estelle went to the clerk and apologized for the papers. He showed her the drying sheets and explained that even a little water could make an old page difficult to read. She apologized to the servant for the floor, and to the attendant for hiding the balloon. The attendant accepted the apology but told her plainly that a child allowed into the gallery must not carry things to throw into the chamber. The guard agreed. None of them made a spectacle of forgiving her, and none pretended the matter had been harmless simply because the king had not been injured.
+For the first time since the balloon burst, Estelle saw the attendant's face without the gallery's shadow across it. She looked neither angry nor forgiving. She looked worried. Estelle had thought the danger of her prank ended when her father proved unhurt. She had not considered that the person entrusted with bringing her safely to the gallery would have to explain how a hidden balloon had reached the council chamber.
+
+Rome did not offer a quick absolution to either of them. “I will hear what happened,” he said. “I won't decide it from a room full of laughter.”
+
+“The gallery was open for visitors,” the attendant said. “I stayed beside her. When I saw the balloon, I spoke, but she was already standing.”
+
+“And you did ask about the basket,” Estelle put in. “I didn't lie exactly. I made you think it was the boat.”
+
+Daysha tilted her head. Her long blue-violet hair shifted over her shoulder, and her violet eyes remained on Estelle. “You used the answer you knew would let you pass,” she said. “Call it what it was, darling.”
+
+Estelle stared at the empty basket. “I tricked her.”
+
+“That is a better beginning,” Daysha said. She held Estelle's hand just as firmly as before.
+
+The servant had moved the basin away from the nearest chair. She stood, wiping her hands on a cloth that had acquired more glitter than water. “There is a dry rail the princess could wipe,” she said, “but not this floor. I need people to stop walking through it, and I need the second basin before we can finish.” She glanced at the runner. “Someone must bring it from the passage.”
+
+The runner went, taking care not to step through the damp patch. Estelle noticed that while he fetched a basin, he was not carrying messages. The servant was not doing whatever she had been doing before the balloon struck. The attendant was standing in a council chamber answering questions instead of taking Estelle home. Each consequence had a person attached to it.
+
+“May I do the rail?” Estelle asked.
+
+“If you follow her instructions,” Rome said, indicating the servant. “This is her work. She knows what is safe.”
+
+The servant gave Estelle a clean rag and showed her a dry section of the lower chair rail. The attendant stayed beside her; neither was sent into the wet area. Estelle wiped once. The glitter spread into a bright, stubborn smear. She looked at the rag, then at the rail, and tried again with less water.
+
+“Does it always do that?”
+
+“Find somewhere to stay?” the servant asked. “Always.”
+
+Estelle looked at her father's shining hair. Rome gave her a rueful little nod. It was almost enough to make her smile, but she was beginning to understand that making a joke last longer did not necessarily make it better.
+
+The second basin arrived. The servant set it down and asked the runner to carry the first away. Estelle offered to take it, then stopped when she saw the water sloshing close to the rim. She waited to be given something she could actually manage. She collected the folded cloth that had concealed the balloon, returned it to the empty basket, and finished the rail under the servant's eye. The small task did not shorten the adults' work by much.
+
+When the clerk had secured the drying sheets, Estelle went to him. “I am sorry I splashed your papers.”
+
+He showed her the two damp corners. “These can be saved. Some older pages would not have been so fortunate. Please don't make me find out which.”
+
+She promised she would not. To the servant she said, “I'm sorry you had to stop your work to clean mine.” The servant accepted that, then returned to the floor without pretending the apology had dried it.
+
+Estelle turned to the attendant. This was harder. “I am sorry I made you carry the basket without knowing what was in it. If Father asks again, please tell him I hid it from you.”
+
+“I will tell him what happened,” the attendant replied. “And I will ask to see your basket next time.”
+
+“I'll show you,” Estelle said. “Even when I don't want to.”
+
+The guard at the gallery stair had come down to keep the passage clear. Estelle apologized to him as well for throwing something from a place he had allowed her to visit. He answered that the gallery was for watching, not throwing, and she could hardly disagree.
+
+Rome had listened without interrupting. “You may be sorry and still be responsible,” he told her. “And the people who helped you today may need to explain their part. You cannot spare them that by speaking for them, but you can tell the truth about yours.”
+
+Estelle nodded. Nobody could undo the balloon, and nobody had to pretend that being the king's daughter made her explanation the only one worth hearing.
+
+Daysha brushed a stray silver fleck from Estelle's sleeve. “You wanted your father to notice you,” she said quietly. “He does. Now notice the people who made it possible for you to stand up there at all.”
+
+Estelle looked toward the narrow service door above the stair, then back at the servant wringing another cloth. She had known that door existed. She had never thought much about where its people went when a princess turned their afternoon upside down.
 
 One of the ministers, a broad-shouldered man who had laughed so hard he had lost his place in the accounts, approached Rome with an expression of solemn concern.
 
