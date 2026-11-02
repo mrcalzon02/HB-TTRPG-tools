@@ -24,6 +24,9 @@ FAMILIES={
  "R49_casts":lambda n:n.startswith("R49_BESPOKE_CAST_MOUNT_"),
  "R64_hull_stays":lambda n:n.startswith("R64_"),
  "R21_clevis_hardware":lambda n:n.startswith(("R21_CLEVIS_TRANSVERSE_PIN_","R21_PINNED_CLEVIS_EAR_")),
+ "R08_knee_guards":lambda n:n.startswith("R08_knee_guard"),
+ "R08_aft_shroud_wings":lambda n:n.startswith("R08_aft_shroud_wing"),
+ "R08_knees_and_shrouds":lambda n:n.startswith(("R08_knee_guard","R08_aft_shroud_wing")),
 }
 def family(name):
     for group,match in FAMILIES.items():
