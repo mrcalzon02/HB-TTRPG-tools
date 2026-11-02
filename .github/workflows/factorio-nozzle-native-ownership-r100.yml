@@ -1,0 +1,69 @@
+name: Factorio R100 native original-source R11/R19 physical nozzle surface ownership
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/native_3d_nozzle_part_isolation_r100.py'
+      - '.github/workflows/factorio-nozzle-native-ownership-r100.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authentic-3d-source-nozzle-ownership:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore actual R94 editable 3D source-camera Blender scene without original proprietary art
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41494055204
+          name: factorio-r94-source-first-sewn-planar-bell-metal-shell-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r94
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install pinned original-camera Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Individually isolate true R11/R19 physical liner baffle and refractory geometry, restore all after native renders
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/native_3d_nozzle_part_isolation_r100.py -- \
+            --source-blend private-ci/r94/output/r94/panel_trim_025_rear_018.blend \
+            --out private-ci/output/r100
+      - name: Verify all 14 causal isolations, genuine renders, no source artwork and actual restored geometry
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('private-ci/output/r100')
+          r=json.loads((root/'r100_original_3d_nozzle_surface_ownership.json').read_text())
+          assert len(r['cases'])==14
+          assert not r['private_sprite_pixels_in_public_artifact']
+          assert not r['source_pixel_comparison_performed_in_public_ci']
+          assert not r['source_fidelity_approved']
+          for case in r['cases']:
+              assert (root/case['native_frame1']).stat().st_size>5000
+              assert (root/case['native_frame33']).stat().st_size>5000
+              assert case['original_solid_geometry_reinstated']
+              assert not case['source_fidelity_approved']
+          print('R100_ACTUAL_R11_R19_PHYSICAL_NOZZLE_3D_SOURCE_NATIVE_CAUSAL_ISOLATIONS_VERIFIED')
+          PY
+      - name: Upload diagnostic original-camera actual Blender renders only, never original Wube art
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r100-original-3d-liner-refractory-causal-isolation-diagnostics
+          path: |
+            private-ci/output/r100/*.png
+            private-ci/output/r100/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
