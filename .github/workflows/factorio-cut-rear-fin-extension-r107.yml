@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Recover exact verified R103 editable Blender models, never private Wube original sprite
+      - name: Recover exact verified R104 editable Blender models, never private Wube original sprite
         uses: actions/download-artifact@v4
         with:
           run-id: 41516311501
@@ -36,7 +36,7 @@ jobs:
           BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
           "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
             --python tools/factorio-render-pipeline/physical_cut_separate_source_fins_r107.py -- \
-            --r104-dir private-ci/r104/output/r103 \
+            --r104-dir private-ci/r104/output/r104 \
             --out private-ci/output/r107
       - name: Confirm actual 3D end-capped fin cuts, preserved source holes/heat tint/lower animation and real re-opened candidate meshes
         run: |
