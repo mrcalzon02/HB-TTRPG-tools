@@ -3257,3 +3257,185 @@ The dispatch mark stayed in Neral's ledger. The physician's report had not arriv
 It had given Ilyan two errands he could do honestly.
 
 He took his coat and went out before he could turn them into a theory.
+
+---
+
+The next time Thessa rode the bridge road, the carpenter was standing outside his shed with a folded account in his hand and the expression of a man who had already explained it twice.
+
+Captain Sorn reined in beside her.
+
+"That looks like a man with a petition."
+
+"That looks like a man who remembers my questions."
+
+"Much the same thing."
+
+The carpenter did not bow. He waited until Thessa had dismounted and then held out the paper.
+
+"The works office wants me to sign for the whole bridge appropriation," he said. "I've already signed for what they paid me. If I sign this as written, it will look as though they handed me the whole sum at once."
+
+Thessa unfolded the form. It had been prepared for the closure of a district claim. The amount at the top was the full certified cost of the repair. Beneath it was a single blank for the contractor's acknowledgment. There was no space to distinguish the intermediary's emergency advance from the later balance.
+
+"Who brought this?"
+
+"A runner from the works office. He said the auditor needed the account closed."
+
+"Did he say the auditor sent him?"
+
+"No. He said she was asking questions."
+
+That was not the same thing. Thessa looked at the runner's delivery mark, then at the carpenter.
+
+"Did you refuse to sign?"
+
+"I told him I would sign the truth. He said the form was the truth."
+
+"Did he take it back?"
+
+"I kept it. That is why you're looking at it."
+
+Sorn leaned down from her saddle. "A useful habit."
+
+The carpenter did not smile. He had paid his crew before the final district payment arrived. The delay had cost him the use of money he needed for his next job.
+
+Thessa asked for his own book. He brought it from the shed wrapped in the same oiled cloth she remembered, and spread it across a sawhorse where the light was better.
+
+There were three entries for the bridge claim: the amount certified for beams, ironwork and labor; the first money received through the emergency intermediary; and the balance paid later by the district works office. Beneath the last entry the carpenter had written a short acknowledgment in his uneven hand. The two receipts added to the certified claim, once the handling charge shown separately on the intermediary's copy was kept out of the carpenter's earnings.
+
+"Who made the first payment?" Thessa asked.
+
+"The intermediary's clerk. He gave me a receipt for my part and paid the timber yard directly for theirs. I never had that money in my hand."
+
+"And the final payment?"
+
+"The district cashier. That one came to me."
+
+"Did you receive another payment against this bridge claim?"
+
+"No."
+
+"Did you see the treasury's books?"
+
+He gave her a look. "Do I look as though the treasury invites me in for supper?"
+
+"Then I will not ask you to swear what its books contain."
+
+She copied the dates and the carpenter's two acknowledgments. He checked her figures himself, running a blunt forefinger down the column. When he was satisfied, he signed the copy and wrote beside his name that it recorded only the sums paid to him or directly to his named suppliers on this job. He would not sign the district's undivided receipt.
+
+Thessa could now say more than she had said above the grain warehouse. The bridge had been repaired; the carpenter's own record supported the advance-and-balance explanation; and he acknowledged no third payment. That narrowed the possibility that his labor and timber had been paid twice. It did not show how the road-stone account had been restored, or whether it had been restored at all.
+
+The carpenter watched her write.
+
+"Will that let them pay the next crew?"
+
+"I haven't ordered anyone to stop payment."
+
+"Somebody will. They hear the word audit and start holding their purses shut."
+
+"I can state that this inquiry is not an instruction to withhold ordinary wages. I cannot command the cashier to make a payment outside the cashier's authority."
+
+"That's a lot of words for no."
+
+"It is a smaller no than the one you were given when your balance was late."
+
+He considered her. "Fair enough."
+
+Sorn had been walking the bridge approach while they talked. She returned with mud on one boot.
+
+"The road crew has renewed the warning posts on the north approach," she said. "They haven't lifted the heavy-load restriction. The driver at the toll shelter says nobody has certified the verge."
+
+"Good. The restriction stays until an inspection supports changing it."
+
+The carpenter looked toward the water. "I can mend timber. I cannot make a road hold if the ground under it is gone."
+
+Thessa thought of the replacement-stone warrant. Its description named stone for district stores, not this bridge and not the north-road verge. She had once wanted the missing delivery acknowledgment and the washed-out road to be two ends of the same string. There was still no document tying them together.
+
+"Did your crew receive stone under the emergency road warrant?" she asked.
+
+"We used timber and iron here. The abutments held. I can't tell you what another crew ordered."
+
+"Did anyone ask you to certify a stone delivery?"
+
+"No."
+
+She wrote that down as his answer, not as proof that stone had never been delivered anywhere.
+
+By noon they reached the Warden station, where a district accounts messenger was waiting beneath the eaves. He had brought a copy of the auditor's request for the works-office authority book and the treasury transfer entries. Both requests carried ordinary receipt marks. Neither had an answer attached.
+
+"She asked me to give you these," the messenger said. "And to say the quarry dispatch inquiry has gone separately."
+
+"Was it answered?"
+
+"Not when I left."
+
+"Then I won't write that it was."
+
+He shifted his weight. "The works office says the bridge account can be closed. They want your signature to show there is no further question."
+
+Thessa set the carpenter's signed copy beside the blank closure form.
+
+"There are two questions," she said. "Whether the bridge contractor received the certified amount more than once, and what became of the road-stone money used for his advance. The first has better evidence now. The second is still open."
+
+"The office says they are one account."
+
+"The entries say they touched the same intermediary. That is not the same as being one charge."
+
+The messenger looked at Sorn, perhaps hoping the captain would simplify the conversation. Sorn examined a damp strap on her glove.
+
+"Which signature did they ask for?" Thessa said.
+
+"Yours, Warden."
+
+"On a declaration that everything is reconciled?"
+
+"Yes."
+
+"Then take back a narrower statement."
+
+She used the station's copy book. The first paragraph identified the bridge repair, the carpenter's independently checked receipts, and the supported division between emergency advance and appropriation balance. It did not certify the intermediary's entire cash flow or the treasury's final accounting. The second paragraph listed what remained missing: the authority entry for the works-office instruction, the transfer or restoration record for the road-stone advance, and the quarry dispatch and delivery acknowledgment, if any. The auditor had requested all three. None had been received.
+
+She added a final line: no Warden order had been issued to suspend lawful wages or ordinary works payments on the strength of this inquiry.
+
+Sorn read the statement over her shoulder.
+
+"You haven't called it a double payment."
+
+"The contractor's evidence weighs against that for his own claim."
+
+"You haven't called it an innocent transfer either."
+
+"We don't have the restoration entry."
+
+"And you haven't called it theft."
+
+Thessa put down her pen. "Would you like to write the next report?"
+
+"Not while you still have ink."
+
+The messenger read the two paragraphs with growing care. "They may be angry."
+
+"Then they can send a correction supported by a book."
+
+"Would you accept it?"
+
+"Of course. That is why I asked for the books."
+
+He looked surprised by the answer. Thessa realized that he had expected the inquiry to be a contest between offices, in which changing one's mind meant losing. She had expected that herself, when she first rode out to inspect a bridge and found an accounting problem under it.
+
+She signed and gave him one copy. Another went into the Warden station record, and a third into the packet for the district auditor. The carpenter's signed account remained attached as a copy; his original stayed in his possession. Thessa recorded where each paper had come from and what it could actually establish.
+
+When the messenger left, Sorn took the road sheet from its peg.
+
+"We still have a verge to inspect."
+
+"We have a verge to keep closed to heavy loads until it can be inspected properly."
+
+"Better. You are learning."
+
+Thessa fastened her coat. In the saddlebag lay the rough copy of her last letter to Ilyan. She had no reply, and she had not expected one yet. Somewhere east of the hills he would be trying to make a receipt answer a question it had not been written to answer. She wished she could tell him that the habit was not confined to judges and archives.
+
+She did not write another letter. The road was wet, the daylight finite, and the warning posts needed checking before the next loaded wagon arrived.
+
+At the station door she looked once more at the two paragraphs she had signed. The bridge carpenter's account was closer to settled. The stone warrant was not. Keeping those sentences separate was the only useful progress she could honestly claim.
+
+Sorn called for her from the yard, and Thessa went to work.
