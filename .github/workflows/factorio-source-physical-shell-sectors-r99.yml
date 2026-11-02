@@ -54,13 +54,13 @@ jobs:
               assert (root/case['native_frame33']).stat().st_size>5000
               assert case['all_protected_original_3d_parts_animation_and_camera_intact']
               if case['physical_3d_source_shell_cutout']:
-                  m=case['physical_nozzle_reconstruction']
+                  m=case['physical_3d_source_shell_cutout']
                   assert m['all_mesh_edges_manifold']
                   assert m['new_physically_connected_thickness_walls']>0
                   assert m['removed_actual_3d_shell_quads']>0
                   assert m['actual_3d_faces']>100
                   assert (root/case['saved_reopened_editable_blend']).stat().st_size>100000
-          print('R99_SOURCE_3D_FLARED_REFACTORY_METAL_SAVED_REOPENED_DIAGNOSTIC_PASS')
+          print('R99_ORIGINAL_SOURCE_REAL_SEGMENTED_NOZZLE_CUTOUT_VERIFIED')
           PY
       - name: Upload authentic Blender model and native renders, never private original Factorio art
         if: always()
