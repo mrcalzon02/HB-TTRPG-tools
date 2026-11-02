@@ -1,0 +1,70 @@
+name: Factorio R91 original-source-traced hinge profiles and separate old knee volumes
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/source_combined_hinge_knees_r91.py'
+      - '.github/workflows/factorio-real-source-hinge-knee-combinations-r91.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-original-source-hinge-combined-3d-models:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Load actual editable source-traced R89 .blend candidates, original Wube sprite stays private
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41476391826
+          name: factorio-r89-source-first-3d-bespoke-left-right-hinge-remesh
+          github-token: ${{ github.token }}
+          path: private-ci/r89
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Pin actual Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Render true original-camera 3D combinations and save/reopen all edited Blender meshes
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/source_combined_hinge_knees_r91.py -- \
+            --source-dir private-ci/r89/output/r89 \
+            --out private-ci/output/r91
+      - name: Verify eight source-camera real 3D variants, six editable Blender candidates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('private-ci/output/r91')
+          j=json.loads((root/'r91_source_first_combined_hinge_knee_experiments.json').read_text())
+          assert not j['original_source_images_in_artifact']
+          assert not j['original_source_fidelity_approved']
+          assert len(j['experiments'])==8
+          for x in j['experiments']:
+              assert (root/x['native_frame1']).stat().st_size>5000
+              assert (root/x['native_frame33']).stat().st_size>5000
+              assert x['original_r89_true_source_hinge_mesh_protected']
+              if not x['name'].endswith('_original'):
+                  assert (root/x['saved_reopened_editable_blend']).stat().st_size>100000
+          print('R91_SOURCE_FIRST_3D_HINGE_SHAPE_COMBINATION_SAVED_REOPENED_PASS')
+          PY
+      - name: Upload only native model renders, editable true Blender .blend and source-free numeric diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r91-source-first-real-3d-hinge-knee-combination-candidates
+          path: |
+            private-ci/output/r91/*.blend
+            private-ci/output/r91/*.png
+            private-ci/output/r91/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
