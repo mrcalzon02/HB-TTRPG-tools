@@ -1,0 +1,78 @@
+name: Factorio R67 complete native R66 64-frame Blender sprite cycle
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/r67_full_native_cycle.py'
+      - 'tools/factorio-render-pipeline/test_r67_full_native_cycle.py'
+      - '.github/workflows/factorio-thruster-full-cycle-r67.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  render-original-indexed-reconstruction-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run complete 64-frame packer rejection tests using self-authored synthetic art
+        run: |
+          python -m pip install "Pillow>=10,<13"
+          python -m unittest discover -s tools/factorio-render-pipeline -p 'test_r67_full_native_cycle.py' -v
+      - name: Fetch actual independently saved R66 Blender 3D candidate
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40995175908
+          name: factorio-r66-source-visible-cream-castings-editable-blend-and-native-frames
+          github-token: ${{ github.token }}
+          path: private-ci/r66-input/
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Verify real Blender 4.5 LTS executable
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Render EVERY actual R66 mesh frame at the native original sprite cell size
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          test -s private-ci/r66-input/output/r66/saved_three_source_cast_face_stays_r66.blend
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/r67_full_native_cycle.py -- \
+            --source-blend private-ci/r66-input/output/r66/saved_three_source_cast_face_stays_r66.blend \
+            --out private-ci/output/r67/
+      - name: Assemble and independently pixel-verify exact full native RGBA sheet
+        run: |
+          python tools/factorio-render-pipeline/r67_full_native_cycle.py \
+            --assemble --out private-ci/output/r67/
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("private-ci/output/r67/r67-native-cycle-report.json").read_text())
+          assert r["frame_count_verified"]==64
+          assert r["native_cell"]==[264,542]
+          assert r["atlas_dimensions"]==[2112,4336]
+          assert r["unique_rgba_frames"]>=2
+          assert r["all_64_atlas_cells_verified_bit_identical_to_real_blender_frames"]
+          assert not r["source_sprite_visual_fidelity_approved"]
+          assert not r["source_sprite_private_bytes_in_artifacts"]
+          assert not r["external_web_images_used"]
+          print("R67_ACTUAL_COMPLETE_64_FRAME_SOURCE_INDEXED_CYCLE_PASS",
+                r["unique_rgba_frames"],r["atlas_sha256"])
+          PY
+      - name: Upload actual candidate 64-frame source-native captures and exact sheet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r67-r66-real-native-64frame-candidate-and-sheet
+          path: |
+            private-ci/output/r67/body-*.png
+            private-ci/output/r67/r67-reconstruction-candidate-8x8-64.png
+            private-ci/output/r67/capture-manifest.json
+            private-ci/output/r67/r67-native-cycle-report.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
