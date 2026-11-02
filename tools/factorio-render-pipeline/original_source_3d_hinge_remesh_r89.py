@@ -210,6 +210,11 @@ def run(source,out):
        "original_source_sprite_included":False,"source_pixel_approval":False,
        "actual_blender_baseline_SHA256":R85_SHA,"experiments":[]}
     for label,profile in PROFILES:
+        # bpy.ops.wm.open_mainfile below invalidates ALL previously cached
+        # Blender Object RNA handles. Rebind them for each new candidate.
+        # Original locked vertex indices remain stable across identical scene reloads.
+        for idx in (PORT_INDEX,STARBOARD_INDEX):
+            objects[idx]=bpy.data.objects[MOUNT_PREFIX+f"{idx:02d}"]
         new_parts={};geometry={}
         if profile is not None:
             for idx in (PORT_INDEX,STARBOARD_INDEX):
