@@ -69,6 +69,8 @@ def rank(source_zip,render_dir,out):
     r84=directory/"r84_real_cast_parameter_sweep.json"
     r85=directory/"r85_combined_source_cast_hypotheses.json"
     r89=directory/"r89_true_source_volume_contour_candidates.json"
+    r90=directory/"r90_true_source_3d_knee_guard_size_sweep.json"
+    r91=directory/"r91_source_first_combined_hinge_knee_experiments.json"
     if r84.exists():
         report=json.loads(r84.read_text())
         entries=[{"name":x["name"],"mount":x["single_original_mount_index"],
@@ -89,14 +91,30 @@ def rank(source_zip,render_dir,out):
                   "render_33":x["native_frame33"],
                   "parameters":x["parameter"]}
                  for x in report["experiments"]]
+    elif r90.exists():
+        report=json.loads(r90.read_text())
+        entries=[{"name":x["name"],"mount":None,
+                  "render_1":x["native_frame1"],"render_33":x["native_frame33"],
+                  "parameters":[x["actual_original_knee_geometry"][n]["geometric_scale"]
+                      for n in ("R08_knee_guard","R08_knee_guard.001")]}
+                 for x in report["hypotheses"]]
+    elif r91.exists():
+        report=json.loads(r91.read_text())
+        entries=[{"name":x["name"],"mount":None,
+                  "render_1":x["native_frame1"],"render_33":x["native_frame33"],
+                  "parameters":{"cast":x["source_traced_cast_profile"],
+                     "left_knee":x["port_knee_real_3d_scale"],
+                     "right_knee":x["starboard_knee_real_3d_scale"]}}
+                 for x in report["experiments"]]
     else:
-        raise RuntimeError("Need R84, R85 or R89 real Blender numeric manifest")
-    if (report.get("original_sprite_images_uploaded",False) or
-        report.get("proprietary_original_rgba_uploaded",False) or
-        report.get("original_source_sprite_included",False)):
+        raise RuntimeError("Need R84, R85, R89, R90 or R91 real Blender numeric manifest")
+    if any(report.get(k,False) for k in
+        ("original_sprite_images_uploaded","proprietary_original_rgba_uploaded",
+         "original_source_sprite_included","original_sprite_in_public_artifacts",
+         "original_source_images_in_artifact")):
         raise RuntimeError("Original private image appears in public artifact")
-    if not any(e["name"]=="baseline" for e in entries):
-        raise RuntimeError("Must compare unmodified same-camera baseline")
+    if not any(e["name"]=="baseline" or e["name"].endswith("_original") for e in entries):
+        raise RuntimeError("Must compare a valid unmodified same-camera baseline")
     with zipfile.ZipFile(path) as z:
         originals={frame:premul(source_atlas_cell(z,frame)) for frame in (1,33)}
     result={"verified_source_archive_SHA256":digest,
@@ -122,7 +140,8 @@ def rank(source_zip,render_dir,out):
                           for frame in (1,33))/2,6)}
                  for roi in ROIS}
         result["candidate_scores"].append({**e,"two_frame_scores":score,"averages":average})
-    baseline=next(x for x in result["candidate_scores"] if x["name"]=="baseline")
+    baseline=next(x for x in result["candidate_scores"]
+                  if x["name"]=="baseline" or x["name"].endswith("_original"))
     for e in result["candidate_scores"]:
         e["deltas_RGB_mae_vs_baseline"]={
             roi:round(e["averages"][roi]["mean_RGB_MAE"]-baseline["averages"][roi]["mean_RGB_MAE"],7)
