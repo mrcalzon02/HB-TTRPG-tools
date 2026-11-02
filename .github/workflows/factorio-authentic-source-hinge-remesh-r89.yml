@@ -54,7 +54,7 @@ jobs:
               if c['name']!='baseline':
                   assert (p/c['real_saved_reopened_scene']).stat().st_size>100000
                   assert len(c['actual_metal_topologies'])==2
-                  assert all(v['actual_3d_mesh_faces']>35 for v in c['actual_metal_topologies'].values())
+                  assert all(v['actual_3d_faces']>35 for v in c['actual_metal_topologies'].values())
           print('R89_REAL_3D_NONUNIFORM_BESPOKE_ORIGINAL_SOURCE_SHAPES_SAVED_REOPENED')
           PY
       - name: Upload only source-free Blender test models and renders, never original Wube source
