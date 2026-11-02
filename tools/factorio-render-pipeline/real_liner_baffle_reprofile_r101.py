@@ -77,9 +77,10 @@ def physical_reprofile_liner(obj,original,amplitude,flute):
   delta=amplitude*BAND[row] - (flute*BAND[row] if col%2==0 else 0.)
   rr=r+delta
   if rr<.11:raise RuntimeError("R101 collapsed through real open throat")
-  fac=rr/r;v.co=(x*fac,y,AXIS_Z+(z-AXIS_Z)*fac)
+  if abs(delta)>1e-8:
+   fac=rr/r;v.co=(x*fac,y,AXIS_Z+(z-AXIS_Z)*fac)
+   moved+=1
   minrad=min(minrad,rr)
-  if abs(delta)>1e-8:moved+=1
  obj.data.update()
  if any(p.area<1e-10 for p in obj.data.polygons):
   raise RuntimeError("R101 real R11 liner folded or collapsed")
