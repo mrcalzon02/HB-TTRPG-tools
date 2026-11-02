@@ -3439,3 +3439,153 @@ She did not write another letter. The road was wet, the daylight finite, and the
 At the station door she looked once more at the two paragraphs she had signed. The bridge carpenter's account was closer to settled. The stone warrant was not. Keeping those sentences separate was the only useful progress she could honestly claim.
 
 Sorn called for her from the yard, and Thessa went to work.
+
+---
+
+By the time Thessa and Sorn reached the north-road toll shelter, a loaded wagon had drawn up across the approach and its driver was arguing with a warning post.
+
+The post was winning.
+
+The driver had tied his reins to the rail and planted one boot beside the painted restriction as though proximity might make the words less troublesome. Behind him, a hired hand was pulling the wagon cover tight against the drizzle. Sacks rose almost to the driver's shoulder.
+
+"How long has he been here?" Sorn asked the shelter keeper.
+
+"Long enough to read it three times. Not long enough to believe it."
+
+The driver turned. "The market clerk said the north road was open."
+
+"For what traffic?" Thessa asked.
+
+"For traffic." He pulled a folded journey slip from his coat. "I paid the carriage duty. I have a delivery date. That's seed barley, and the farmers beyond the mill cannot put a date in the ground instead."
+
+The slip recorded the consignment and its intended destination on the previous morning. It was not a road-clearance certificate.
+
+"This shows when you entered the journey," she said. "It doesn't certify the verge."
+
+"The clerk ought to have told me."
+
+"Did you ask whether a heavy-load warning was in force?"
+
+"I asked whether the road was open. He said it was."
+
+"Both statements can be true," Sorn said. "The inner line remains open to light traffic, one at a time. This wagon isn't light."
+
+The hired hand stopped working on the cover. He was perhaps sixteen, with red fingers and the attentive stillness of someone whose pay depended on not interrupting.
+
+"Can you move the posts while I go through?" the driver asked. "I can keep the wheels away from the edge."
+
+"No," Thessa said.
+
+"I've brought wagons through worse."
+
+"I believe you. The ground doesn't know your experience."
+
+She walked him to the marked section without letting him lead the horses after them. Water ran along the shallow cut beneath the gravel. The hollow they had measured earlier was still there. The renewed posts had not made it smaller.
+
+Sorn showed him where the outer edge had dropped since the first inspection. She did not test it by standing on the loose lip.
+
+"We have observations," she said. "We don't have a competent clearance for heavy loads. A road crew has been notified. They have not certified a repair."
+
+"Then why let anyone through?"
+
+"Because a man on foot is not a loaded wagon. The notice says what we can support, not what would make business easiest."
+
+The driver studied the broken gravel. His anger did not vanish; it changed its direction.
+
+"I can take half the sacks off."
+
+"Where will you put them?" Sorn asked.
+
+"At the shelter."
+
+"And how will you carry the other half?"
+
+He glanced at the hired hand. "We could borrow a cart."
+
+"From whom?" Thessa asked. "What load would it bear? Who would judge it safe? I'm not turning a restriction into permission for an unexamined procession because the sacks have been counted differently."
+
+He folded his journey slip until its edges matched.
+
+"There's the east track."
+
+"Have you had a reliable report on its ford since the rain?"
+
+"No."
+
+"Neither have we. I won't send you there on an assurance I cannot give."
+
+The shelter keeper came out with a ledger. "He can wait in the yard. There's a covered bay, if he pays for it. I can send a message north with the next permitted traveler. I cannot promise when one will pass."
+
+The driver looked from the bay to his sacks. "That costs money. Waiting costs money. The delivery agreement charges me for being late."
+
+"May I see it?" Thessa asked.
+
+A premium depended on arrival before the next market bell. The agreement said nothing about a Warden order transferring the loss to the driver, the farmers, or his hired hand.
+
+"The delay is real," she said. "I can certify when you reached the restriction and what the notice required. I cannot decide your private contract here."
+
+"The buyer will say I should have taken another road."
+
+"Then you can show him the public warning and your arrival time. He may still dispute what the agreement means."
+
+"That's not much help."
+
+"No," she said. "It isn't enough help."
+
+The hired hand moved closer. "If we wait, do I still get the day's pay?"
+
+The driver gave him a sharp look. "We'll settle that when we're delivered."
+
+"You said on the road that I'd be paid at the shelter."
+
+"I thought we'd be past the shelter."
+
+The boy lowered his eyes. Thessa recognized the trap: a road failure had become an excuse to make the person with the least authority finance the delay.
+
+"I cannot rule on his wages without knowing the terms of his hire," she said. "But I can record what each of you says was agreed. The district counter can tell you where to bring a dispute."
+
+The driver stared at the wet wheel rim. "I hired him by the day. He has done the day's work."
+
+"Then you know what you owe him for today," Sorn said.
+
+For a moment it seemed the man would argue simply because he had been contradicted in front of the boy. Instead he counted coins into the hired hand's palm. He counted them twice.
+
+"Today's wage," he said. "Tomorrow, if we're still here, we speak before you begin."
+
+The boy closed his fingers around the money. He did not thank Thessa, which she considered a mercy. The wages had not been hers to grant.
+
+At the shelter table the keeper opened his ledger. The driver chose the covered bay for one night, though its fee took most of the coins he had kept for the road. He chose to send a written notice to the buyer with the next lawful traveler, and to remain with the wagon rather than risk the ford or turn back through the rain. The choice was his. It was not a promise that the road would open tomorrow.
+
+"Write that I arrived before noon," he told the keeper.
+
+"I can write the time I saw you arrive. I can't write when you left the market."
+
+"That's fair."
+
+Thessa made a separate entry on her road sheet: wagon held at the north approach; heavy-load notice visible and renewed; no passage attempted; driver informed of the public restriction and available shelter. She added the time witnessed by the keeper. She did not copy the driver's agreement into a Warden record or describe his decision as consent to lose his premium.
+
+Sorn checked the far warning post while the keeper took the boy's message to the writing board. The driver began moving sacks beneath the covered bay, and his hired hand helped him without being asked. It was work they could do without putting a wheel over the hollow.
+
+"Will they repair it?" the driver asked when Thessa brought him his copy.
+
+"The road office has the report. I don't know when the crew will arrive or what they'll find. We will not lift the warning on the strength of a message that somebody means to come."
+
+He held the paper by its dry corner. "And if they never come?"
+
+"Then the restriction stays, and the office must answer for the road it has not made safe."
+
+She wished that answer could buy him his lost premium. It could not. She watched him tuck the receipt beside the contract, two pieces of paper that would have to travel farther than his wagon had managed.
+
+Sorn joined her by the horses.
+
+"One load kept off the verge," she said.
+
+"One driver out a shelter fee. One boy paid, at least for today."
+
+"And a message that may reach the buyer."
+
+"May."
+
+They rode back to the station before the light failed. The damaged verge had not been repaired. The heavy-load warning remained in force. No one had established where the replacement stone went, and no reply had come from the quarry, the treasury, or the works-office authority book.
+
+The carrier's wagon was still under the shelter roof when they looked back. Thessa could not call that a successful journey. She could call it a decision made without hiding who would bear its cost.
