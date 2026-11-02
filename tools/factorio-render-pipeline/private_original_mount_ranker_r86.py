@@ -68,6 +68,7 @@ def rank(source_zip,render_dir,out):
     directory=Path(render_dir)
     r84=directory/"r84_real_cast_parameter_sweep.json"
     r85=directory/"r85_combined_source_cast_hypotheses.json"
+    r89=directory/"r89_true_source_volume_contour_candidates.json"
     if r84.exists():
         report=json.loads(r84.read_text())
         entries=[{"name":x["name"],"mount":x["single_original_mount_index"],
@@ -81,9 +82,18 @@ def rank(source_zip,render_dir,out):
                   "render_1":x["native_frame1"],"render_33":x["native_frame33"],
                   "parameters":x["center_cast_camera_space_proposal"]}
                  for x in report["saved_editable_true_3d_candidates"]]
+    elif r89.exists():
+        report=json.loads(r89.read_text())
+        entries=[{"name":x["name"],"mount":None,
+                  "render_1":x["native_frame1"],
+                  "render_33":x["native_frame33"],
+                  "parameters":x["parameter"]}
+                 for x in report["experiments"]]
     else:
-        raise RuntimeError("Need R84 or R85 real Blender numeric manifest")
-    if report.get("original_sprite_images_uploaded",False) or report.get("proprietary_original_rgba_uploaded",False):
+        raise RuntimeError("Need R84, R85 or R89 real Blender numeric manifest")
+    if (report.get("original_sprite_images_uploaded",False) or
+        report.get("proprietary_original_rgba_uploaded",False) or
+        report.get("original_source_sprite_included",False)):
         raise RuntimeError("Original private image appears in public artifact")
     if not any(e["name"]=="baseline" for e in entries):
         raise RuntimeError("Must compare unmodified same-camera baseline")
