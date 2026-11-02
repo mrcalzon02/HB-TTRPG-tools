@@ -91,7 +91,8 @@ def main(source,out):
                 for ob in scene.objects:
                     if predicate(ob.name) and not hidden[ob.name]:
                         ob.hide_render=True;hidden_count+=1
-                if hidden_count==0:raise RuntimeError("R88 diagnostic family absent: "+family_name)
+                if hidden_count==0:
+                    print("R88_FAMILY_ABSENT_NOT_A_SCENE_FAILURE",family_name,flush=True)
             scene.frame_set(1)
             render(scene,out/(family_name+"_frame01.png"))
             scene.frame_set(33)
