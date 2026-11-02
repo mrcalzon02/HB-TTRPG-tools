@@ -13,6 +13,22 @@ For the Factorio 2.0.77 thruster benchmark, the **only authoritative visual refe
 - Screenshots of our reconstructed R58/R64/R66 models may document how the model changed, but **do not qualify as comparison against the original sprite**. Even green import/render/mesh tests cannot approve visual fidelity.
 - Do not include generic internet-searched images when showing progress on this benchmark. Show the user's actual original sprite where authorized and available, or show our own render **clearly labeled as a candidate only**.
 
+## PRIMARY OBJECTIVE: recreate the real 3D object shapes depicted in the original sprite
+
+The original sprite is an image of **physical mechanical parts**, not merely a motion mask. Our target is editable, plausible, genuinely three-dimensional geometry whose **visible 3D faces, silhouettes, thickness, profiles, curvature, recesses, overlaps, junctions, mount locations, and material surfaces** match the user's actual original sprite when lit and viewed with the fixed Factorio camera. A motion footprint, silhouette IoU, raycast first-hit count, atlas correctness, or green CI build cannot substitute for this.
+
+**Order of engineering operations:**
+
+1. **Observe the original part first.** In actual original 64-frame source pixels, identify the part's visible outline, interior edges, adjacent overlaps, apparent thickness, light-facing surfaces, distinctive color and precise placement. Do not invent hidden surfaces/actuators from an unrelated picture.
+2. **Compare the existing real Blender mesh**, in its actual saved scene, with the same original frame/region. Record what is geometrically wrong: too broad/narrow, too long/short, flat instead of curved, wrong taper/angle, wrong attachment, buried detail, smooth shell instead of layered refractory.
+3. **Edit the corresponding physical 3D topology** (proper faces, curvature, cup, mount, bore depth, real joints) in a separate candidate .blend. Do NOT patch a screenshot, fabricate a colored overlay, change the reference, resize the camera to conceal an incorrect model, clone ten unsupported mechanisms, or adjust animation to fool a pixel-change metric.
+4. **Render with unchanged original camera and lighting** and inspect actual ORIGINAL sprite versus newly rendered model at native 264x542, including closeups of the exact mismatched part. Reject a candidate when the shape is wrong even if its motion, 2D bbox, ray visibility or color score improves.
+5. Only after physical shape and occlusion are substantially correct, refine *actual material* and oxide color, then verify observed animation in all 64 original frames. Recheck geometric contact, 3D depth and cupped guards after every edit.
+
+**Specific source-grounded shape targets:** three separately designed cream cast fin mountings above the dark ring (left sloped hood, broad center bridge/two short descending ears, right offset cover), actual long distinctly formed heat-stained hanging metal fins attached to those castings, open deep fluted/nozzle refractory with overlapping physical shingles, and two deep **cupped underbody guard surfaces**, not flattened wings. The original red/blue fuel overlays are not meshes. R66/R67 are provisional reconstruction candidates, never accepted source art.
+
+The dedicated PRIVATE original-vs-real-3D shape comparison implementation is `source_3d_shape_correspondence_r70.py`. It compares **shape dimensions, boundaries, placement and real surface colors** of the true original source and Blender candidate across all 64 frames and ten source-observed regions. The source atlas is mandatory and is never supplied by searching the Internet. Metrics are *diagnostic evidence for manual geometric inspection*, never a numeric surrogate for a physically correct model. Historical R69 motion-gap numbers are secondary and must not dictate unverified 3D edits.
+
 ## Scope
 
 Foundry → Tools → AI Tools → Factorio Render Pipeline. This is local-first and reusable across game projects. The static website cannot install Blender, run Codex, render 3D models or access user files. The Machine / AI Access directory remains a separate capability discovery and integration authority.
