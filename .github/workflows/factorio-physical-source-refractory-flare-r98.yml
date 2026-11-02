@@ -1,0 +1,76 @@
+name: Factorio R98 real 3D original-sprite sectional flared refractory candidates
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/physical_original_refractory_flare_r98.py'
+      - '.github/workflows/factorio-physical-source-refractory-flare-r98.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-refractory-formed-metal-sections:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore exact R94 source-calibrated original camera Blender scene, excluding Wube original sprite pixels
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41494055204
+          name: factorio-r94-source-first-sewn-planar-bell-metal-shell-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r94
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install pinned Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Generate source-directed large physical refractory bell flares and real joined 3D shingle sections
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/physical_original_refractory_flare_r98.py -- \
+            --source-blend private-ci/r94/output/r94/panel_trim_025_rear_018.blend \
+            --out private-ci/output/r98
+      - name: Check real connected metal volume, edited Blender scene readback and original motion preservation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('private-ci/output/r98')
+          r=json.loads((root/'r98_physical_original_source_flared_refractory_candidates.json').read_text())
+          assert len(r['experiments'])==10
+          assert not r['original_wube_source_art_in_artifact']
+          assert not r['original_source_pixels_compared_inside_public_ci']
+          assert not r['original_source_geometry_approved']
+          for case in r['experiments']:
+              assert (root/case['native_original_camera_frame1']).stat().st_size>5000
+              assert (root/case['native_original_camera_frame33']).stat().st_size>5000
+              assert case['all_non_nozzle_source_geometry_camera_material_animation_unchanged']
+              if case['physical_nozzle_reconstruction']:
+                  m=case['physical_nozzle_reconstruction']
+                  assert m['physical_axial_mouth_open']
+                  assert m['all_edges_contiguous_3d_manifold']
+                  assert m['stitched_actual_3d_ring_count'] in (8,15)
+                  assert m['physical_3d_quad_faces']>600
+                  assert (root/case['real_editable_blend']).stat().st_size>100000
+          print('R98_SOURCE_3D_FLARED_REFACTORY_METAL_SAVED_REOPENED_DIAGNOSTIC_PASS')
+          PY
+      - name: Upload authentic Blender model and native renders, never private original Factorio art
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r98-actual-original-source-shaped-flared-3d-refractory-blender-candidates
+          path: |
+            private-ci/output/r98/*.blend
+            private-ci/output/r98/*.png
+            private-ci/output/r98/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
