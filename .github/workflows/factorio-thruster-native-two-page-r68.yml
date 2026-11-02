@@ -33,7 +33,7 @@ jobs:
       - name: Pack exact two ORIGINAL-layout 2112x2168 RGBA candidate sprite pages
         run: |
           python tools/factorio-render-pipeline/r68_original_atlas_page_layout.py \
-            --source-r67 private-ci/r67-candidate/private-ci/output/r67 \
+            --source-r67 private-ci/r67-candidate/output/r67 \
             --out private-ci/output/r68
           python - <<'PY'
           import json
