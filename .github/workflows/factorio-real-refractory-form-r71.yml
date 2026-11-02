@@ -1,0 +1,75 @@
+name: Factorio R71 actual stamped 3D refractory surface geometry
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/physical_stamped_refractory_candidate_r71.py'
+      - '.github/workflows/factorio-real-refractory-form-r71.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  sculpt-actual-80-physical-r19-plates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover actual previous editable R66 3D reconstruction, never original sprite
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40995175908
+          name: factorio-r66-source-visible-cream-castings-editable-blend-and-native-frames
+          github-token: ${{ github.token }}
+          path: private-ci/r66/
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Bootstrap real headless Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Build real shaped stamped R19 refractory and reopen both candidate scenes
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          test -s private-ci/r66/output/r66/saved_three_source_cast_face_stays_r66.blend
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/physical_stamped_refractory_candidate_r71.py -- \
+            --source-blend private-ci/r66/output/r66/saved_three_source_cast_face_stays_r66.blend \
+            --out private-ci/output/r71/
+      - name: Verify actual edited mesh surface candidates, original 3D support and exact baseline
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("private-ci/output/r71")
+          p=json.loads((root/"r71-physical-stamped-refractory-report.json").read_text())
+          assert p["original_R66_unchanged"]
+          assert not p["original_user_sprite_reloaded"]
+          assert not p["visual_source_approval"]
+          assert len(p["candidate_profiles"])==3
+          assert p["candidate_profiles"][0]["real_vertices_moved"]==0
+          for v in p["candidate_profiles"][1:]:
+            assert v["actual_original_80_plate_surfaces_modified"]==80
+            assert v["real_vertices_moved"]>=80*6
+            assert v["least_3d_plate_radial_thickness"]>=.014
+            assert v["saved_reopened_editable_candidate"]
+            assert (root/v["saved_reopened_editable_candidate"]).stat().st_size>100000
+            assert v["camera_3_mounts_lower_animation_and_guards_verified"]
+          print("R71_ACTUAL_STAMPED_80_R19_PHYSICAL_MESH_SURFACES_SAVED_REOPENED")
+          print("R71_SOURCE_SPRITE_SHAPE_ACCEPTANCE_STILL_REQUIRED")
+          PY
+      - name: Upload only new editable reconstruction meshes and own candidate renders, not source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r71-3d-physically-formed-refractory-80-plates-editable-candidates
+          path: |
+            private-ci/output/r71/*.blend
+            private-ci/output/r71/*.png
+            private-ci/output/r71/r71-physical-stamped-refractory-report.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
