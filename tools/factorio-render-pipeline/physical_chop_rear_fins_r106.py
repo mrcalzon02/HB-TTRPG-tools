@@ -185,14 +185,43 @@ def cut_actual_fin(fin,alpha):
     "all_row2_to_row9_fin_geometry_unchanged":True,
     "source_fidelity_unapproved":True}
 
+def scene_used_material_signature(scene):
+ """Stable round-trip audit of ACTUALLY USED material slots and shader graphs.
+
+ Blender drops orphan/unreferenced material datablocks on .blend save/reopen.
+ Enumerating bpy.data.materials previously made real saved/reopened geometry
+ falsely fail despite identical active shader assignments. Do NOT weaken
+ detection of changes to actual material assignments or shader wiring.
+ """
+ slots=tuple(sorted((ob.name,tuple(mat.name if mat else None
+                 for mat in ob.data.materials))
+                 for ob in scene.objects if ob.type=="MESH"))
+ used={mat.name:mat for ob in scene.objects if ob.type=="MESH"
+       for mat in ob.data.materials if mat}
+ materials=[]
+ for name,mat in sorted(used.items()):
+  nodes=tuple(sorted((node.name,node.bl_idname)
+          for node in mat.node_tree.nodes)) if mat.use_nodes else ()
+  links=tuple(sorted((link.from_node.name,link.from_socket.name,
+                      link.to_node.name,link.to_socket.name)
+          for link in mat.node_tree.links)) if mat.use_nodes else ()
+  materials.append((name,tuple(round(float(x),6) for x in mat.diffuse_color),
+                    bool(mat.use_nodes),nodes,links))
+ return (slots,tuple(materials))
+
 def verify(scene,baseline_objs,cam,mats,other,lower_motion,upper0,edited):
  if {o.name for o in scene.objects}!=baseline_objs:
   raise RuntimeError("R106 deleted/added unrelated chassis pieces")
  if tuple(float(v) for row in scene.camera.matrix_world for v in row)!=cam:
   raise RuntimeError("R106 changed source camera")
- if {m.name:(tuple(m.diffuse_color),len(m.node_tree.nodes) if m.use_nodes else -1)
-      for m in bpy.data.materials}!=mats:
-  raise RuntimeError("R106 changed materials instead of cutting actual fin geometry")
+ if scene_used_material_signature(scene)!=mats:
+  current=scene_used_material_signature(scene)
+  original_slots,original_shaders=mats
+  current_slots,current_shaders=current
+  raise RuntimeError("R106 used-scene material slots or shader graph changed "
+                     "after real 3D fin edit/save/reopen: "+
+                     repr({"slot_lists_same":original_slots==current_slots,
+                           "shader_graph_same":original_shaders==current_shaders}))
  if other_mesh_fingerprint(scene)!=other:
   raise RuntimeError("R106 changed nozzle, baffle, mounting casts or original lower fins")
  if lower_animated_fin_digest(scene)!=lower_motion:
@@ -222,8 +251,7 @@ def run(srcdir,out):
     raise RuntimeError("R106 requires actual source-calibrated R103 scene")
    objs={o.name for o in scene.objects}
    cam=tuple(float(v) for row in scene.camera.matrix_world for v in row)
-   mats={m.name:(tuple(m.diffuse_color),len(m.node_tree.nodes) if m.use_nodes else -1)
-     for m in bpy.data.materials}
+   mats=scene_used_material_signature(scene)
    other=other_mesh_fingerprint(scene)
    lower_motion=lower_animated_fin_digest(scene)
    upper0={i:[tuple(v.co) for v in bpy.data.objects[FIN_PREFIX+f"{i:02d}"].data.vertices]
