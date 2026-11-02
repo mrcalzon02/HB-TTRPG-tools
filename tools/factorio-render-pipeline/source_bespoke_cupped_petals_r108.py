@@ -183,24 +183,34 @@ def run(srcdir,out):
             if (out/name).stat().st_size<5000:
                 raise RuntimeError("R108 native real Blender render missing")
             frames[str(frame)]=name
-        # Geometry inspection: one REAL orbiting 3D camera view per candidate.
-        # This is NOT an original-source match view, only visible proof that
-        # the sidewalls/curled edges are real volumes rather than painted pixels.
-        # Restore the original camera exactly before saving the editable scene.
+        # Angle-inspection uses a disposable camera OBJECT, not the source camera.
+        # Changing and restoring the original matrix caused Blender floating-
+        # point roundtrip differences at the saved/reopened camera integrity gate.
+        # The authoritative original-camera transform is NEVER modified.
         from mathutils import Matrix
-        source_camera_world=scene.camera.matrix_world.copy()
+        authoritative_camera=scene.camera
+        inspection_data=authoritative_camera.data.copy()
+        inspection_camera=bpy.data.objects.new("R108_TEMPORARY_GEOMETRY_INSPECTION_CAMERA",
+                                              inspection_data)
+        scene.collection.objects.link(inspection_camera)
         oblique=tag+"_actual_3d_oblique35.png"
         try:
-            scene.frame_set(1)
-            scene.camera.matrix_world=(Matrix.Rotation(math.radians(35),4,"Y")
-                                       @ source_camera_world)
+            inspection_camera.matrix_world=(Matrix.Rotation(math.radians(35),4,"Y")
+                                            @ authoritative_camera.matrix_world)
+            scene.camera=inspection_camera
             bpy.context.view_layer.update()
             base.render(scene,out/oblique)
         finally:
-            scene.camera.matrix_world=source_camera_world
+            scene.camera=authoritative_camera
+            bpy.data.objects.remove(inspection_camera,do_unlink=True)
+            bpy.data.cameras.remove(inspection_data)
             bpy.context.view_layer.update()
         if (out/oblique).stat().st_size<5000:
-            raise RuntimeError("R108 actual 3D oblique profile inspection render missing")
+            raise RuntimeError("R108 actual 3D oblique inspection render missing")
+        if tuple(float(v) for row in authoritative_camera.matrix_world for v in row)!=cam:
+            raise RuntimeError("R108 altered original camera while inspecting 3D profile")
+        if {o.name for o in scene.objects}!=objs:
+            raise RuntimeError("R108 temporary inspection camera polluted saved original model")
         scene.frame_set(1)
         scene["fsc_r108_actual_3d_profile_revision"]=REV
         scene["fsc_r108_source_shape_approved"]=False
