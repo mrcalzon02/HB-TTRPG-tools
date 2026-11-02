@@ -1,0 +1,71 @@
+name: Factorio R92 real source-observed individual left and right 3D casting profile mix
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/original_independent_side_casts_r92.py'
+      - '.github/workflows/factorio-original-left-right-cast-mix-r92.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-source-3d-side-cast-mix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Load both exact R91 3D saved source-verified candidate meshes without proprietary sprite
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41477873481
+          name: factorio-r91-source-first-real-3d-hinge-knee-combination-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r91
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Bootstrap pinned actual Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Physically combine nonmirrored original-source port and starboard finite-volume cast contours
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/original_independent_side_casts_r92.py -- \
+            --source-dir private-ci/r91/output/r91 \
+            --out private-ci/output/r92
+      - name: Check original real 3D anchor preservation and native Blender frames
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('private-ci/output/r92')
+          j=json.loads((root/'r92_original_source_independent_cast_contours.json').read_text())
+          assert not j['original_source_images_in_artifact']
+          assert not j['source_visual_fidelity_approved']
+          assert len(j['combinations'])==4
+          for x in j['combinations']:
+              assert (root/x['native_frame01']).stat().st_size>5000
+              assert (root/x['native_frame33']).stat().st_size>5000
+              assert len(x['actual_separate_nonidentical_3d_cast_meshes'])==2
+              assert x['original_fin_contacts_and_64_frame_motion_retained']
+              if x['port_original_source_profile']!=x['starboard_original_source_profile']:
+                  assert (root/x['saved_reopened_editable_blend']).stat().st_size>100000
+          print('R92_TRUE_SOURCE_LEFT_RIGHT_CAST_PROFILE_MIX_PASSED')
+          PY
+      - name: Upload actual 3D original camera captures and edited Blender models only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r92-distinct-source-left-and-right-hinge-blender-candidates
+          path: |
+            private-ci/output/r92/*.blend
+            private-ci/output/r92/*.png
+            private-ci/output/r92/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
