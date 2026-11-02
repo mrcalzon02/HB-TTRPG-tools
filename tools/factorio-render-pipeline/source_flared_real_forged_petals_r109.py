@@ -50,6 +50,18 @@ NCOL=11
 NSKIN=NROW*NCOL
 ORIGINAL_FRAMES=(1,33)
 
+def original_body_digest(scene):
+ """Exclude explicitly authored NEW R109 lip meshes from unchanged-body audit.
+
+ The original source chassis, mountings and animated lower fins are still
+ strictly byte-fingerprinted; new lip geometry is independently verified
+ as closed, parented and persistent by the later explicit checks.
+ """
+ from types import SimpleNamespace
+ original=SimpleNamespace(objects=[ob for ob in scene.objects
+                  if not ob.name.startswith("R109_TRUE_ROLLED_FREE_EDGE_")])
+ return prior.other_mesh_fingerprint(original)
+
 def section_measure(mesh):
  measures=[]
  for row in (0,1,2,4,6,8):
@@ -82,7 +94,6 @@ def reshape_real_shell(fin,index,intensity):
     r=math.hypot(x,z+.43)
     # Flaring is strongest near free edge and not identical by fin or side.
     # Angular sideways movement is real width, not 2D scaling of a bitmap.
-    a=angle+(angle-math.tau*round(angle/math.tau)) * 0.0
     # Rotate about individual petal center azimuth, not world center.
     center=math.tau*(index+.5)/10
     local=math.atan2(math.sin(angle-center),math.cos(angle-center))
@@ -224,7 +235,7 @@ def run(root,out):
     raise RuntimeError("R109 source original rig or cupped Blender revision absent")
    original_objects={o.name for o in scene.objects}
    original_cam=tuple(float(x) for row in scene.camera.matrix_world for x in row)
-   other=prior.other_mesh_fingerprint(scene)
+   other=original_body_digest(scene)
    motion=prior.lower_animated_fin_digest(scene)
    measures={};lips={}
    for index in selected:
@@ -232,7 +243,7 @@ def run(root,out):
     measures[str(index)]=reshape_real_shell(fin,index,strength)
     if roll:lips[str(index)]=real_rolled_free_lip(fin,index,strength)
    bpy.context.view_layer.update()
-   if prior.other_mesh_fingerprint(scene)!=other or prior.lower_animated_fin_digest(scene)!=motion:
+   if original_body_digest(scene)!=other or prior.lower_animated_fin_digest(scene)!=motion:
     raise RuntimeError("R109 changed original body or animated lower fin objects")
    expected=set(original_objects)|{data["name"] for data in lips.values()}
    if {o.name for o in scene.objects}!=expected:
@@ -268,7 +279,7 @@ def run(root,out):
    bpy.ops.wm.open_mainfile(filepath=str(saved));scene=bpy.context.scene
    if tuple(float(x) for row in scene.camera.matrix_world for x in row)!=original_cam:
     raise RuntimeError("R109 saved/reopened source camera changed")
-   if prior.other_mesh_fingerprint(scene)!=other or prior.lower_animated_fin_digest(scene)!=motion:
+   if original_body_digest(scene)!=other or prior.lower_animated_fin_digest(scene)!=motion:
     raise RuntimeError("R109 saved/reopened body/animated lower fins changed")
    if {o.name for o in scene.objects}!=expected:
     raise RuntimeError("R109 saved/reopened unique petal and separate-lip geometry not preserved")
