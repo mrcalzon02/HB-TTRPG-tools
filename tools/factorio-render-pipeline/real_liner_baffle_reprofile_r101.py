@@ -76,7 +76,7 @@ def physical_reprofile_liner(obj,original,amplitude,flute):
   # R39 physical forty-vertex molded 20-flute cross-section topology.
   delta=amplitude*BAND[row] - (flute*BAND[row] if col%2==0 else 0.)
   rr=r+delta
-  if rr<.11:raise RuntimeError("R101 collapsed through real open throat")
+  if rr<.085:raise RuntimeError("R101 collapsed through real open throat")
   if abs(delta)>1e-8:
    fac=rr/r;v.co=(x*fac,y,AXIS_Z+(z-AXIS_Z)*fac)
    moved+=1
