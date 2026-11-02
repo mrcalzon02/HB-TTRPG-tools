@@ -1,0 +1,70 @@
+name: Factorio R90 authentic hinge rebuild vs obsolete knee guard geometry
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/source_knee_guard_size_sweep_r90.py'
+      - '.github/workflows/factorio-real-source-knee-guard-sweep-r90.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  actual-blender-source-knee-geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore verified first R89 real 3D saved editable source-traced model, no original Wube images
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41413185294
+          name: factorio-r89-source-first-3d-bespoke-left-right-hinge-remesh
+          github-token: ${{ github.token }}
+          path: private-ci/r89
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Bootstrap pinned Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Test source-observed R89 hinged castings with original true R08 knee guard sizes
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/source_knee_guard_size_sweep_r90.py -- \
+            --source-blend private-ci/r89/output/r89/source_trace.blend \
+            --out private-ci/output/r90
+      - name: Verify real saved/reopened .blend true 3D knee hypotheses
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r90')
+          j=json.loads((p/'r90_true_source_3d_knee_guard_size_sweep.json').read_text())
+          assert not j['original_sprite_in_public_artifacts']
+          assert not j['source_visual_fidelity_approved']
+          assert len(j['hypotheses'])==8
+          for x in j['hypotheses']:
+              assert (p/x['native_frame1']).stat().st_size>5000
+              assert (p/x['native_frame33']).stat().st_size>5000
+              if x['name']!='baseline':
+                  assert (p/x['saved_reopened_editable_blend']).stat().st_size>100000
+                  assert x['all_original_3d_fins_mounted_liner_shrouds_camera_materials_motion_unchanged']
+          print('R90_REAL_3D_ORIGINAL_HINGE_KNEE_ALTERNATIVES_SAVED_REOPENED')
+          PY
+      - name: Upload only original-art-free native renders, editable Blender candidates and numerical diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r90-original-source-hinge-old-knee-size-experiments
+          path: |
+            private-ci/output/r90/*.blend
+            private-ci/output/r90/*.png
+            private-ci/output/r90/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
