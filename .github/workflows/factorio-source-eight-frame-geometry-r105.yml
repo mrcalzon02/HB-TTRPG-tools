@@ -1,0 +1,71 @@
+name: Factorio R105 eight original animation frames of physically merged source-verified 3D models
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/eight_frame_original_3d_verification_r105.py'
+      - '.github/workflows/factorio-source-eight-frame-geometry-r105.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  eight-frame-real-blender-source-geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore real source-fitted R103 Blender model artifact, not private original Wube art
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41515498651
+          name: factorio-r103-source-true-3d-forging-and-nozzle-baffle-editable-composites
+          github-token: ${{ github.token }}
+          path: private-ci/r103
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install pinned authentic Blender 4.5 LTS runtime
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Render actual original source calibrated eight animation frames from two genuine real 3D model candidates
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/eight_frame_original_3d_verification_r105.py -- \
+            --r103-dir private-ci/r103/output/r103 \
+            --out private-ci/output/r105
+      - name: Verify sixteen true native frames, geometry and motion invariance, no source art
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('private-ci/output/r105')
+          x=json.loads((root/'r105_original_eight_frame_3d_source_audit.json').read_text())
+          assert x['native_shape']==[264,542]
+          assert x['original_frame_indices']==[1,9,17,25,33,41,49,57]
+          assert len(x['scenes'])==2
+          assert not x['source_pixels_in_public_artifact']
+          assert not x['source_fidelity_approved']
+          for scene in x['scenes']:
+              assert scene['true_rig_animation_intact']
+              assert scene['unaltered_original_camera_shaders_and_3d_geometry']
+              assert len(scene['frames'])==8
+              for frame in scene['frames']:
+                  assert (root/frame['real_native_blender_render']).stat().st_size>5000
+          print('R105_ORIGINAL_SOURCE_EIGHT_FRAME_TRUE_BLENDER_GEOMETRY_AUDIT_PASS')
+          PY
+      - name: Upload only genuine 3D renders and diagnostic JSON; never private original artwork
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r105-original-source-eight-frame-3d-geometry-comparison-candidates
+          path: |
+            private-ci/output/r105/*.png
+            private-ci/output/r105/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
