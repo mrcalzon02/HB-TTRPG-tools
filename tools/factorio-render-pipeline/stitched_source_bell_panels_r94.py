@@ -40,9 +40,9 @@ PROFILES=(
   ("isolate_shell",None,None,None,None),
   ("panel_trim_012",.12,0.,0.,0.),
   ("panel_trim_025",.25,0.,0.,0.),
-  ("panel_trim_038",.38,0.,0.,0.),
+  ("panel_trim_018_rear_034",.18,-.34,0.,0.),
   ("panel_trim_025_rear_018",.25,-.18,0.,0.),
-  ("panel_trim_038_rear_028",.38,-.28,0.,0.),
+  ("panel_trim_020_rear_050",.20,-.50,0.,0.),
   ("panel_visor_relief",.22,-.09,-.12,0.),
   ("panel_mouth_recede",.21,-.12,0.,-.12),
 )
