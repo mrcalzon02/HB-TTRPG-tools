@@ -1,0 +1,74 @@
+name: Factorio R101 source-first physical R11 baffle 3D profile reconstruction
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/source_baffle_physical_registration_r101.py'
+      - '.github/workflows/factorio-baffle-source-profile-r101.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  actual-original-r11-baffle-3d-mounting:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download unchanged SHA-verified original-camera R94 real Blender scene
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41494055204
+          name: factorio-r94-source-first-sewn-planar-bell-metal-shell-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r94
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install verified Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Test 13 true 3D source-directed original annular baffle profile registrations
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/source_baffle_physical_registration_r101.py -- \
+            --source-blend private-ci/r94/output/r94/panel_trim_025_rear_018.blend \
+            --out private-ci/output/r101
+      - name: Verify saved/reopened editable Blender original baffle geometry, no proprietary source artwork
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path('private-ci/output/r101')
+          r=json.loads((p/'r101_original_source_r11_real_baffle_geometry_candidates.json').read_text())
+          assert len(r['candidates'])==13
+          assert not r['original_source_art_uploaded_to_ci']
+          assert not r['actual_source_visual_approved']
+          for case in r['candidates']:
+              assert (p/case['original_camera_frame1']).stat().st_size>5000
+              assert (p/case['original_camera_frame33']).stat().st_size>5000
+              assert case['all_original_source_parts_except_real_baffle_untouched']
+              if case['real_3d_baffle_section']:
+                  m=case['real_3d_baffle_section']
+                  assert m['unchanged_actual_toroidal_topology_vertices']==320
+                  assert m['unchanged_actual_toroidal_topology_faces']==320
+                  assert not m['original_art_fidelity_approved']
+                  assert (p/case['real_saved_reopened_blend']).stat().st_size>100000
+          print('R101_SOURCE_NATIVECAMERA_REAL_R11_BAFFLE_3D_SCENE_SAVED_REOPENED_DIAGNOSTICS_PASS')
+          PY
+      - name: Publish only Blender candidates and native 3D renders, never original Factorio source art
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r101-real-3d-source-r11-annular-baffle-profile-reconstruction
+          path: |
+            private-ci/output/r101/*.blend
+            private-ci/output/r101/*.png
+            private-ci/output/r101/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
