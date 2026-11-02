@@ -1,0 +1,70 @@
+name: Factorio R80 real fin taper broad shoulder narrow free end
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/real_source_correct_fin_taper_r80.py'
+      - '.github/workflows/factorio-real-source-fin-taper-r80.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-existing-mesh-fin-taper-candidates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover exactly verified R79 .blend with improved physical hinge mount
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41401424515
+          name: factorio-r79-independent-center-hinges-editable-four-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r79
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Restore pinned Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Correct physical fin shoulder-to-tip taper preserving real cast contact
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/real_source_correct_fin_taper_r80.py -- \
+            --source-blend private-ci/r79/output/r79/left_036_right_036.blend \
+            --out private-ci/output/r80
+      - name: Verify physical editable scenes and native pixels exist
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r80')
+          j=json.loads((p/'r80_physically_correct_fin_taper.json').read_text())
+          assert j['original_source_sprite_included'] is False
+          assert j['visually_approved'] is False
+          assert len(j['candidates'])==4
+          for c in j['candidates']:
+              assert (p/c['file']).stat().st_size>100000
+              assert (p/c['real_native_frame_01']).stat().st_size>5000
+              assert (p/c['real_native_frame_33']).stat().st_size>5000
+              assert c['true_slot_topology_and_heat_tint_materials_retained']
+              assert c['all_three_3d_mounting_roots_unchanged']
+          print('R80_TRUE_3D_MOUNTED_FIN_SHOULDER_TO_TIP_TAPER_VERIFIED')
+          PY
+      - name: Save Blender 3D candidates and real original-camera renders (no original sprites)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r80-real-mesh-correct-direction-fin-taper-candidates
+          path: |
+            private-ci/output/r80/*.blend
+            private-ci/output/r80/*.png
+            private-ci/output/r80/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
