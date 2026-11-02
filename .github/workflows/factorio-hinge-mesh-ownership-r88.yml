@@ -47,7 +47,7 @@ jobs:
           j=json.loads((p/'r88_actual_3d_hinge_mesh_ownership.json').read_text())
           assert j['original_user_source_included'] is False
           assert j['all_original_render_flags_camera_motion_and_saved_model_restored']
-          assert len(j['isolations'])==4
+          assert len(j['isolations'])==7
           for region in j['native_hinge_occlusion'].values():
               assert region['sample_count']>1000
           for row in j['isolations']:
