@@ -191,3 +191,101 @@ Luceran watched the ink dry.
 In the nave beyond the connected passage, the first ancestral wick remained dark and the other six candles burned. No one had asked the castle to explain them. Here, at least, the smaller mystery had an author who could sign his own mistake.
 
 **Audition boundary:** The correction is illustrative, not a historical canon entry. No wage deduction or payment, stone purchase, delivery, hold extension, Jorvan-net diversion, new Edselsto perception, Miren reconciliation, candle change, or Episode 19 commission occurs by adding this sample.
+
+---
+
+## Candidate B audition prose — UNAPPROVED / NONCANONICAL (2026-11-02)
+
+**Illustrative alternative audition only. This is NOT Season 3 Episode 19, an approved commission, an event in established continuity, or permission to publish.** It is mutually exclusive with Candidate A's sample as a possible direction. Any incidental musician or courtier details here are provisional, not new canon.
+
+### The People Not on the List — sample scene
+
+By the time Sera Sorelle reached the hall notice board, her musicians had already begun arguing over a performance that did not exist.
+
+The board had always been plain about its uncertainty. Three winter evenings were marked *possible*, with no room reserved, no company engaged and no preference given to any sponsor. Beneath it hung a second paper, written in a different hand. This one carried a column headed *Likely attendance* and another headed *Performers expected*.
+
+Sera found her own name in the second column.
+
+She read it twice, then looked at the fiddler beside her. The girl had her instrument case under one arm and a baker's note in the other.
+
+"I told the baker I might be occupied," the fiddler said. "He wanted music for his daughter's supper. I said I would answer after the court decided."
+
+"And has the court decided?"
+
+The girl looked at the paper. "I thought it had."
+
+It had not. The second sheet bore neither a date of issue nor a paying officer's signature. A courtier in a velvet collar admitted he had assembled it from remarks heard in the galleries. Several people had admired Sera's musicians after the festival. Others had said the hall would be warmer with songs in it. The courtier had wanted to show the king that the court was ready.
+
+"Ready to do what?" Sera asked.
+
+"To gather. To restore some cheer."
+
+"Then gather people who have agreed to come. My players cannot spend a compliment on supper."
+
+The courtier indicated the names. "There is good reason to believe these people would attend. The castle itself might remember who spoke of it."
+
+Sera held up the fiddler's baker's note. "And if she refuses that job to wait for yours, who pays her for the evening you have not booked?"
+
+He had no answer that included money.
+
+Senn Daro came out of the public copying room carrying a stack of blank forms. He recognized the sheet immediately, although he had not made it. Once he had tried to sell a preliminary treasury inventory as if an unfinished list were worth more than its authority. The punishment had left him with public copying and no access to sealed accounts. He knew the difference between a neat page and a lawful one.
+
+"Who authorized the headings?" he asked.
+
+"I wrote them," the courtier said. "No harm was intended."
+
+Senn set his forms on the sill. "The headings are the harm. 'Likely' will be copied as 'invited.' 'Expected' will be copied as 'engaged.' By tomorrow a man may come to collect a wage for an evening that was never ordered, and a musician may have lost work she could actually have taken."
+
+"You are hardly in a position to lecture me on lists."
+
+"No," Senn said. "I am in a position to know how much a list can cost."
+
+Ysabet arrived when the voices drew the watch clerk from his table. She examined the original board, the added sheet and the fiddler's note. She asked the courtier to say, before the people named, whether he had received any acceptances. He had received none. He had sent no invitations. No household officer had approved a hall date.
+
+"Then this is not a guest list," Ysabet said.
+
+"It is a forecast."
+
+"Then it should not have been posted beneath a public notice without its source and limitations."
+
+The courtier reached to remove it. Ysabet stopped him, not to punish him before the crowd but because the fiddler had already relied upon what she saw. A correction made privately would leave her with no public evidence to show the baker.
+
+Sera asked for one more thing. "Let her speak before you write the correction."
+
+The fiddler's cheeks burned. "I was pleased to be named. I thought I had been chosen. I have not agreed to play, and no one has offered my fee. I would like to know whether I can still take the other work."
+
+"Ask the baker," Sera said. "He is a living man who can give you an answer."
+
+Senn ruled a new sheet with five narrow headings: *heard, proposed, invited, accepted, paid*. He left every name column empty. He wrote beneath them that the added paper was an unauthorized expression of interest, not a hall booking or attendance roll; no musician, guest or sponsor was bound by it. The courtier signed acknowledgment of having made the first sheet. Ysabet witnessed the correction. Sera and the fiddler could read both without being asked to endorse either.
+
+Luceran arrived as Senn pinned the correction beside the original.
+
+"Could Edselsto settle which people expressed interest?" he asked, and heard how easily the question came.
+
+Ysabet answered carefully. "In the marked connected galleries, it may remember some words spoken where its listening ways actually reach. It cannot certify who intended to accept an invitation that was never sent. It cannot turn praise into consent."
+
+The courtier looked relieved at the prospect of another source. "Lady Miren praised the songs, I am told."
+
+Luceran's gaze went toward the south-gallery turn.
+
+There the withdrawing room remained physically deaf. Its silver junction had been cut and the removed piece melted into stock. The room was not a loophole in an otherwise complete guest register. Miren had gone there because she was entitled to speak, or not speak, without a king retrieving her words afterward.
+
+A page had already carried the ordinary hall notice to her door. He had knocked, offered the paper, and departed without asking for a decision. She had not returned an answer. The page could testify to delivering a notice; he could not testify to an intention she had not expressed.
+
+"She has said nothing to me about attending," Luceran said.
+
+"Then her name does not belong on that paper," Sera replied. "Neither does mine."
+
+Luceran did not call on Edselsto. He did not ask a page to seek a private answer from Miren. He told the courtier to leave the correction visible and directed the proper household officers to determine whether a real, funded proposal could be made at all. That was an instruction to examine costs, not an authorization to reserve the hall.
+
+The fiddler folded the baker's note and put it in her case. She would ask him whether the supper work remained open. Sera would not promise that it did. She would not ask the girl to keep a winter evening empty on the strength of an unsigned column.
+
+Senn stood back from the board. Two papers remained: one mistaken, one corrected. The empty columns on the new sheet were more useful than the full ones on the old.
+
+"Will the hall be quiet, then?" Luceran asked.
+
+"Until someone offers a date, a fee and a choice," Sera said. "Yes."
+
+He looked once toward the south gallery and did not send for Miren. The silence there was not evidence against her, nor a promise waiting to be collected.
+
+**Audition boundary:** This sample creates no canonical booking, attendance certification, invitation acceptance, purchased precedence, musician payment, new Miren consent, reconciliation, castle hearing beyond connected galleries, reconnection of the physically deaf room, village journey, patrol restoration, candle change or Episode 19 commission. Candidate A remains a separate unapproved alternative.
