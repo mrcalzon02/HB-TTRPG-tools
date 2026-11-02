@@ -145,9 +145,9 @@ def capture(source,out):
             verify_unmodified_protected(scene,camera,animation,materials,names,protected)
             for name,(ob,kind,pts) in tiles.items():
                 actual=bpy.data.objects[name]
-                if min((actual.data.vertices[i].co-Vector(pts[i])).length
-                       for i in (18,19,20) if kind=="near"
-                       )<1e-5 and kind=="near":
+                if kind=="near" and min(
+                       (actual.data.vertices[i].co-Vector(pts[i])).length
+                       for i in (21,22,23))<1e-5:
                     raise RuntimeError("R74 original near-mouth lap did not persist")
         report["candidate_steps"].append({
             "physical_lap_strength":level,
