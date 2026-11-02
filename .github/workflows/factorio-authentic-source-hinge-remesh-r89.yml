@@ -1,0 +1,71 @@
+name: Factorio R89 source-first actual bespoke 3D hinge contour reconstruction
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/original_source_3d_hinge_remesh_r89.py'
+      - '.github/workflows/factorio-authentic-source-hinge-remesh-r89.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  true-source-inverse-model-side-mounts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore exact source-camera Blender R85 3D geometry without proprietary source images
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41407934115
+          name: factorio-r85-source-ranked-actual-hinge-cast-combinations
+          github-token: ${{ github.token }}
+          path: private-ci/r85
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Verify Blender 4.5 LTS actual mesh engine
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Source trace to genuinely volumetric layered forged left and offset right mounting forms
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/original_source_3d_hinge_remesh_r89.py -- \
+            --source-blend private-ci/r85/output/r85/center_short.blend \
+            --out private-ci/output/r89
+      - name: Check native frames and real 3D saved/reopened candidate meshes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r89')
+          j=json.loads((p/'r89_true_source_volume_contour_candidates.json').read_text())
+          assert not j['original_source_sprite_included']
+          assert not j['source_pixel_approval']
+          assert len(j['experiments'])==6
+          for c in j['experiments']:
+              assert (p/c['native_frame1']).stat().st_size>5000
+              assert (p/c['native_frame33']).stat().st_size>5000
+              if c['name']!='baseline':
+                  assert (p/c['real_saved_reopened_scene']).stat().st_size>100000
+                  assert len(c['actual_metal_topologies'])==2
+                  assert all(v['actual_3d_mesh_faces']>35 for v in c['actual_metal_topologies'].values())
+          print('R89_REAL_3D_NONUNIFORM_BESPOKE_ORIGINAL_SOURCE_SHAPES_SAVED_REOPENED')
+          PY
+      - name: Upload only source-free Blender test models and renders, never original Wube source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r89-source-first-3d-bespoke-left-right-hinge-remesh
+          path: |
+            private-ci/output/r89/*.blend
+            private-ci/output/r89/*.png
+            private-ci/output/r89/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
