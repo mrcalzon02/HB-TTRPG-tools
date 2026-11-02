@@ -61,6 +61,68 @@ def boundary(mask):
     eroded=mask.filter(ImageFilter.MinFilter(3))
     return ImageChops.difference(dilated,eroded)
 
+# R72 compares actual image-space INTERNAL contours, not just outside alpha.
+# Contrasting panel seams, mouths, stamped relief and shingle boundaries can
+# disagree even when every pixel of the overall silhouette matches.
+# Purely visual evidence: pigment, highlights and texture also create edges.
+INTERNAL_RGB_EDGE_CONTRAST=32
+
+def internal_surface_edges(image, alpha_mask):
+    """Color-change edges fully inside solid geometry, in native pixels.
+
+    Do not count alpha silhouettes or cropped ROI borders as internal shape.
+    Compare max per-channel contrast across opposite neighbouring pixels;
+    this retains seams with hue changes but similar luminance. No recentering,
+    rescaling, internet imagery or automatic 3D approval.
+    """
+    if image.size!=alpha_mask.size:
+        raise ValueError("Internal-surface mask dimensions must match image")
+    w,h=image.size
+    if w<5 or h<5:
+        return Image.new("L",image.size,0)
+    inside=alpha_mask.filter(ImageFilter.MinFilter(5)).tobytes()
+    rgb=image.convert("RGB").tobytes()
+    edges=bytearray(w*h)
+    for y in range(2,h-2):
+        for x in range(2,w-2):
+            idx=y*w+x
+            if not inside[idx]:
+                continue
+            west=(idx-1)*3
+            east=(idx+1)*3
+            north=(idx-w)*3
+            south=(idx+w)*3
+            across=max(abs(rgb[east+k]-rgb[west+k]) for k in range(3))
+            along=max(abs(rgb[south+k]-rgb[north+k]) for k in range(3))
+            if max(across,along)>=INTERNAL_RGB_EDGE_CONTRAST:
+                edges[idx]=255
+    return Image.frombytes("L",(w,h),bytes(edges))
+
+def internal_boundary_stats(source_image,model_image,source_alpha,model_alpha):
+    src=internal_surface_edges(source_image,source_alpha)
+    mod=internal_surface_edges(model_image,model_alpha)
+    ns=foreground_set(src)
+    nm=foreground_set(mod)
+    near_mod=mod.filter(ImageFilter.MaxFilter(EDGE_TOLERANCE_PIXELS*2+1))
+    near_src=src.filter(ImageFilter.MaxFilter(EDGE_TOLERANCE_PIXELS*2+1))
+    w,h=src.size
+    src_rows=src.tobytes()
+    mod_rows=mod.tobytes()
+    return {
+        "source_internal_surface_edge_pixels":ns,
+        "candidate_internal_surface_edge_pixels":nm,
+        "source_internal_edge_recall_within_2px":(
+            round(intersection(src,near_mod)/ns,5) if ns else None),
+        "candidate_internal_edge_precision_within_2px":(
+            round(intersection(mod,near_src)/nm,5) if nm else None),
+        "internal_edge_pixels_by_native_8px_row":[{
+            "y_local":y,
+            "source":sum(v!=0 for v in src_rows[y*w:min(y+8,h)*w]),
+            "candidate":sum(v!=0 for v in mod_rows[y*w:min(y+8,h)*w])
+        } for y in range(0,h,8)],
+        "not_a_unique_3d_geometry_or_material_identification":True,
+    }
+
 def intersection(a,b):
     return foreground_set(ImageChops.multiply(a,b))
 
@@ -107,6 +169,7 @@ def region_shape_stats(original,candidate,rect):
     allowed_s=se.filter(ImageFilter.MaxFilter(EDGE_TOLERANCE_PIXELS*2+1))
     edge_recall=intersection(se,allowed_c)/s_edge if s_edge else None
     edge_precision=intersection(ce,allowed_s)/c_edge if c_edge else None
+    internal=internal_boundary_stats(sr,cr,s,c)
     source_profile=centroid_and_profile(s)
     model_profile=centroid_and_profile(c)
     # True RGB disagreement for both-opaque native pixels only. This is
@@ -135,6 +198,7 @@ def region_shape_stats(original,candidate,rect):
         "source_boundary_coverage_within_2px":round(edge_recall,5) if edge_recall is not None else None,
         "candidate_boundary_precision_within_2px":round(edge_precision,5) if edge_precision is not None else None,
         "mean_absolute_rgb_error_on_mutual_foreground":color_error,
+        **internal,
         "source_shape":source_profile,
         "candidate_shape":model_profile,
         "silhouette_width_by_original_native_y":widths,
@@ -199,6 +263,10 @@ def compare(source_pages,cycle,out,source_zip=None):
             "mean_original_silhouette_iou":measured_mean(stats,"silhouette_overlap_iou"),
             "mean_source_shape_recall":measured_mean(stats,"source_shape_recall"),
             "mean_boundary_coverage_2px":measured_mean(stats,"source_boundary_coverage_within_2px"),
+            "mean_internal_boundary_recall_2px":measured_mean(
+                stats,"source_internal_edge_recall_within_2px"),
+            "mean_internal_boundary_precision_2px":measured_mean(
+                stats,"candidate_internal_edge_precision_within_2px"),
             "mean_rgb_difference_shared_material_pixels":(
                 round(mean(s["mean_absolute_rgb_error_on_mutual_foreground"]
                            for s in stats
@@ -213,6 +281,8 @@ def compare(source_pages,cycle,out,source_zip=None):
         "only_original_user_supplied_sprite_used":True,
         "external_internet_reference_images_used":False,
         "three_dimensional_mesh_geometry_automatically_approved":False,
+        "internal_edges_detect_surface_boundaries_not_proven_topology":True,
+        "internal_edges_exclude_alpha_silhouette_and_roi_border":True,
         "candidate_frame_count":64,
         "source_original_frame_dimensions":list(SIZE),
         "no_auto_camera_cropping_scaling_or_translation":True,

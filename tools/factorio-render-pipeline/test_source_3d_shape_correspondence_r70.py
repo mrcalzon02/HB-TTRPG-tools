@@ -43,6 +43,35 @@ class TestActualOriginal3DAppearanceContract(unittest.TestCase):
         self.assertEqual(s["silhouette_overlap_iou"],1)
         self.assertGreater(s["mean_absolute_rgb_error_on_mutual_foreground"],80)
 
+    def test_internal_surface_relief_edges_detect_wrong_3d_panel_position(self):
+        # Equal overall alpha silhouettes, but a stamped panel/edge appears
+        # at a different native location. Geometry shape cannot be accepted.
+        region=FEATURES["independent_hanging_heat_stained_fins"]
+        original=self.make_rectangle((40,341,175,434),(80,80,80,255))
+        candidate=original.copy()
+        ImageDraw.Draw(original).rectangle(
+            (85,349,91,423),fill=(230,195,144,255))
+        ImageDraw.Draw(candidate).rectangle(
+            (109,349,115,423),fill=(230,195,144,255))
+        wrong=region_shape_stats(original,candidate,region)
+        correct=region_shape_stats(original,original,region)
+        self.assertEqual(wrong["silhouette_overlap_iou"],1)
+        self.assertGreater(wrong["source_internal_surface_edge_pixels"],0)
+        self.assertGreater(wrong["candidate_internal_surface_edge_pixels"],0)
+        self.assertEqual(correct["source_internal_edge_recall_within_2px"],1)
+        self.assertLess(wrong["source_internal_edge_recall_within_2px"],.1)
+        self.assertLess(wrong["candidate_internal_edge_precision_within_2px"],.1)
+        self.assertTrue(wrong["not_a_unique_3d_geometry_or_material_identification"])
+
+    def test_flat_opaque_surface_has_no_internal_edge_equivalence_claim(self):
+        image=self.make_rectangle((43,349,169,420),(82,82,82,255))
+        s=region_shape_stats(image,image,
+            FEATURES["independent_hanging_heat_stained_fins"])
+        self.assertEqual(s["silhouette_overlap_iou"],1)
+        self.assertEqual(s["source_internal_surface_edge_pixels"],0)
+        self.assertIsNone(s["source_internal_edge_recall_within_2px"])
+        self.assertIsNone(s["candidate_internal_edge_precision_within_2px"])
+
     def test_source_missing_rejected_no_internet_substitute(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d)
