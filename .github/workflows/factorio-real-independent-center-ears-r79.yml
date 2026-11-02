@@ -1,0 +1,69 @@
+name: Factorio R79 original asymmetrical center fin hinge ear geometry
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/real_independent_center_ear_r79.py'
+      - '.github/workflows/factorio-real-independent-center-ears-r79.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-bespoke-independent-root-geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore original saved editable model; no Wube original source artwork
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41378123612
+          name: factorio-r71-3d-physically-formed-refractory-80-plates-editable-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r71
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install pinned Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Build, render and reopen four different original physical center hinge variants
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/real_independent_center_ear_r79.py -- \
+            --source-blend private-ci/r71/output/r71/source_refractory_form_075.blend \
+            --out private-ci/output/r79
+      - name: Verify source-free native render and four real Blender scenes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r79')
+          j=json.loads((p/'r79_independent_center_ear_geometry.json').read_text())
+          assert not j['private_original_sprite_embedded']
+          assert not j['source_visual_fidelity_approved']
+          assert len(j['candidates'])==4
+          for item in j['candidates']:
+              assert (p/item['saved_reopened_editable_blend']).stat().st_size>100000
+              assert (p/item['native_frame_1']).stat().st_size>5000
+              assert (p/item['native_frame_33']).stat().st_size>5000
+              assert item['original_64_frame_motion_and_three_mount_contacts_preserved']
+          print('R79_ORIGINAL_SOURCE_FIN_ROOTS_REAL_3D_REOPEN_PASS')
+          PY
+      - name: Upload original-art-free Blender model candidates and native renders
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r79-independent-center-hinges-editable-four-candidates
+          path: |
+            private-ci/output/r79/*.blend
+            private-ci/output/r79/*.png
+            private-ci/output/r79/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
