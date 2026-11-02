@@ -190,18 +190,15 @@ def compare(source_pages,cycle,out,source_zip=None):
             make_private_contact_page(original[frame],candidate[frame],
                                       FEATURES,frame,out/("PRIVATE_original_3D_shapes_%02d.png"%frame))
     overview={}
+    def measured_mean(rows,key):
+        values=[s[key] for s in rows if s[key] is not None]
+        return round(mean(values),5) if values else None
     for name,stats in totals.items():
         overview[name]={
             "source_measured_region":list(FEATURES[name]),
-            "mean_original_silhouette_iou":round(mean(
-                s["silhouette_overlap_iou"] for s in stats
-                if s["silhouette_overlap_iou"] is not None),5),
-            "mean_source_shape_recall":round(mean(
-                s["source_shape_recall"] for s in stats
-                if s["source_shape_recall"] is not None),5),
-            "mean_boundary_coverage_2px":round(mean(
-                s["source_boundary_coverage_within_2px"] for s in stats
-                if s["source_boundary_coverage_within_2px"] is not None),5),
+            "mean_original_silhouette_iou":measured_mean(stats,"silhouette_overlap_iou"),
+            "mean_source_shape_recall":measured_mean(stats,"source_shape_recall"),
+            "mean_boundary_coverage_2px":measured_mean(stats,"source_boundary_coverage_within_2px"),
             "mean_rgb_difference_shared_material_pixels":(
                 round(mean(s["mean_absolute_rgb_error_on_mutual_foreground"]
                            for s in stats
