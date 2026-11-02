@@ -1,0 +1,68 @@
+name: Factorio R88 real source-camera hinge mesh ownership and isolation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/hinge_mesh_ownership_r88.py'
+      - '.github/workflows/factorio-hinge-mesh-ownership-r88.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-hinge-physical-mesh-ownership:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover verified real R85 editable 3D model only
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41407934115
+          name: factorio-r85-source-ranked-actual-hinge-cast-combinations
+          github-token: ${{ github.token }}
+          path: private-ci/r85
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Bootstrap Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Ray-cast real first-hit mesh owners and reversibly isolate original hinge groups
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/hinge_mesh_ownership_r88.py -- \
+            --source-blend private-ci/r85/output/r85/center_short.blend \
+            --out private-ci/output/r88
+      - name: Verify original 3D visual isolation diagnostics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r88')
+          j=json.loads((p/'r88_actual_3d_hinge_mesh_ownership.json').read_text())
+          assert j['original_user_source_included'] is False
+          assert j['all_original_render_flags_camera_motion_and_saved_model_restored']
+          assert len(j['isolations'])==4
+          for region in j['native_hinge_occlusion'].values():
+              assert region['sample_count']>1000
+          for row in j['isolations']:
+              assert (p/row['actual_frame1']).stat().st_size>5000
+              assert (p/row['actual_frame33']).stat().st_size>5000
+          print('R88_REAL_MESH_OWNERSHIP_AND_RESTORED_BASELINE_PASS')
+          PY
+      - name: Upload only diagnostic render PNG and numeric real object IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r88-source-hinge-first-hit-real-mesh-ownership
+          path: |
+            private-ci/output/r88/*.png
+            private-ci/output/r88/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
