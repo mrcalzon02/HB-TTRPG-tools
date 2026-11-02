@@ -40,6 +40,12 @@ alpha-change activity. The reconstructed bell/guard band is at 22.9%
 of the authentic original and the lower lips/guard tips band at 25.0%.
 The authentic original has 4,496 independently changing pixels; R66 has 1,133.
 
+## PRIORITY CORRECTION — physical shape, not movement statistics
+
+**R69 is a secondary motion observation, not the primary modeling objective or a geometry target.** The goal is to reproduce the actual visible 3D object forms in the original sprite: each unique cream casting, long differently formed hanging sheet, cupped lower guard, recessed dark nozzle liner and overlapping refractory shingle. A mesh could match the source alpha movement perfectly while still being a visibly incorrect or physically flat object, and such a candidate MUST be rejected. Conversely, a physically accurate static form should not be distorted to increase a movement ratio.
+
+The next engineering pass must **load the original private RGBA atlas** and run `source_3d_shape_correspondence_r70.py` for actual source-to-3D per-part shape, edge, proportions, placement and surface-color comparisons, then change the mismatched **3D vertices/faces** and rerender. No motion-area target can approve or justify invented actuators. Do not use online images.
+
 ## What this proves and what it does NOT prove
 
 - This is a real frame-by-frame measurement of R66's generated animation,
