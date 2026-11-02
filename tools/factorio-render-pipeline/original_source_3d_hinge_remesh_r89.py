@@ -249,9 +249,10 @@ def run(source,out):
             saved=out/(label+".blend")
             bpy.ops.wm.save_as_mainfile(filepath=str(saved))
             if saved.stat().st_size<100000:raise RuntimeError("R89 did not save Blender source mesh")
+            expected_new_objects=tuple(part.name for part in new_parts.values())
             bpy.ops.wm.open_mainfile(filepath=str(saved))
             scene=bpy.context.scene
-            if not all(bpy.data.objects.get(part.name) for part in new_parts.values()):
+            if not all(bpy.data.objects.get(name) for name in expected_new_objects):
                 raise RuntimeError("R89 lost actual new source 3D mesh after reload")
             if fin_digest_all_frames(scene)!=motion:raise RuntimeError("R89 saved Blender changed motion")
         report["experiments"].append({
