@@ -97,7 +97,7 @@ def run(r97dir,r101dir,out):
   motion=fin_digest_all_frames(scene)
   joints={str(i):joint_gap_world(bpy.data.objects[MOUNT_PREFIX+f"{i:02d}"],
             bpy.data.objects[FIN_PREFIX+f"{i:02d}"]) for i in MAIN}
-  target=bpy.data.objects[RING];old_mat=target.data.materials[0]
+  target=bpy.data.objects[RING];old_mat=target.data.materials[0];old_mat_name=str(old_mat.name)
   original_coords=tuple(tuple(v.co) for v in target.data.vertices)
   stats={"selected_original_source_cast":side,"selected_real_source_baffle":part}
   if part!="baseline":
@@ -121,7 +121,7 @@ def run(r97dir,r101dir,out):
    target["R103_original_source_baffle_combined"]=part
    stats["material_preserved"]=target.data.materials[0].name
   bpy.context.view_layer.update()
-  verify(scene,names,others,cam,mats,motion,joints,old_mat.name)
+  verify(scene,names,others,cam,mats,motion,joints,old_mat_name)
   scene.render.resolution_x,scene.render.resolution_y=NATIVE
   scene.render.resolution_percentage=100
   scene.render.image_settings.file_format="PNG"
@@ -140,7 +140,7 @@ def run(r97dir,r101dir,out):
    bpy.ops.wm.save_as_mainfile(filepath=str(saved))
    if saved.stat().st_size<100000:raise RuntimeError("R103 failed saving real multi-source 3D model")
    bpy.ops.wm.open_mainfile(filepath=str(saved));scene=bpy.context.scene
-   verify(scene,names,others,cam,mats,motion,joints,old_mat.name)
+   verify(scene,names,others,cam,mats,motion,joints,old_mat_name)
    if bpy.data.objects[RING].get("R103_original_source_baffle_combined")!=part:
     raise RuntimeError("R103 actually combined R101 shape lost after reopen")
   report["candidates"].append({"tag":tag,"source_3d_subcomponents":stats,
