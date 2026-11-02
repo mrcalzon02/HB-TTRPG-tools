@@ -1,0 +1,80 @@
+name: Factorio R101 genuine Blender R11 physical refractory wall and first annular baffle remesh
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/real_liner_baffle_reprofile_r101.py'
+      - '.github/workflows/factorio-original-r11-source-geometry-r101.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  r11-refractory-source-geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retrieve exact saved R94 calibrated Blender model, never original private Wube art
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41494055204
+          name: factorio-r94-source-first-sewn-planar-bell-metal-shell-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r94
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install verified Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Form actual existing source-specified R11 fluted refractory and annular baffle 3D metal
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/real_liner_baffle_reprofile_r101.py -- \
+            --source-blend private-ci/r94/output/r94/panel_trim_025_rear_018.blend \
+            --out private-ci/output/r101
+      - name: Validate real source-scaled metal mesh, original animation/fin contacts, edit persistence, and source privacy
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('private-ci/output/r101')
+          r=json.loads((root/'r101_reprofiled_real_3d_liner_baffle.json').read_text())
+          assert len(r['candidates'])==14
+          assert not r['source_art_in_public_outputs']
+          assert not r['source_fidelity_accepted']
+          assert r['original_source_not_available_inside_public_ci']
+          for case in r['candidates']:
+              assert (root/case['frame01']).stat().st_size>5000
+              assert (root/case['frame33']).stat().st_size>5000
+              assert case['original_3d_R19_refractory_plates_cups_fins_camera_shaders_and_motion_unchanged']
+              if case['true_original_metal_mesh_changes']:
+                  assert (root/case['editable_blend']).stat().st_size>100000
+              p=case['true_original_metal_mesh_changes']
+              if 'R11_true_inner_wall' in p:
+                  a=p['R11_true_inner_wall']
+                  assert a['open_throat_not_capped']
+                  assert a['real_inner_wall_vertices_physically_reprofiled']>0
+              if 'R11_first_annular_baffle' in p:
+                  a=p['R11_first_annular_baffle']
+                  assert a['existing_original_annular_baffle_retained']
+                  assert a['actual_3d_baffle_vertices']==320
+          print('R101_REAL_3D_SOURCE_LINER_BAFFLE_EDITABLE_MODELS_VERIFIED')
+          PY
+      - name: Upload only genuine Blender meshes and renders; original Wube art stays private
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r101-source-traced-r11-refractory-metal-model-candidates
+          path: |
+            private-ci/output/r101/*.blend
+            private-ci/output/r101/*.png
+            private-ci/output/r101/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
