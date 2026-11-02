@@ -5,14 +5,28 @@ on:
     branches: [main]
     paths:
       - 'ai-tools.html'
-      - 'tools/factorio-render-pipeline/**'
+      # Run on real executable/spec/test changes, not every research note.
+      - 'tools/factorio-render-pipeline/**/*.py'
+      - 'tools/factorio-render-pipeline/**/*.sh'
+      - 'tools/factorio-render-pipeline/**/*.json'
+      - 'tools/factorio-render-pipeline/**/requirements*.txt'
       - '.github/workflows/factorio-render-pipeline-validation.yml'
   pull_request:
     paths:
       - 'ai-tools.html'
-      - 'tools/factorio-render-pipeline/**'
+      # Run on real executable/spec/test changes, not every research note.
+      - 'tools/factorio-render-pipeline/**/*.py'
+      - 'tools/factorio-render-pipeline/**/*.sh'
+      - 'tools/factorio-render-pipeline/**/*.json'
+      - 'tools/factorio-render-pipeline/**/requirements*.txt'
       - '.github/workflows/factorio-render-pipeline-validation.yml'
   workflow_dispatch:
+
+# Newer pushes supersede queued/outdated procedure-only checks.
+# Do not apply cancellation to native Blender geometry artifact workflows.
+concurrency:
+  group: factorio-procedure-validation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate-source-procedures:
