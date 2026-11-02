@@ -178,7 +178,16 @@ def run(source,out):
             if not data["original_outer_surface_12_vertices_preserved"]:
                 raise RuntimeError("R71 damaged physical backface of stamped plate")
         verify_unmodified_protected(scene,camera,motion,mat_digest,old_names,protected)
+        # Same *real original indexed 0* body frame for every raycast:
+        # the previous candidate just rendered frame 33, during which
+        # a separate flame-layer mesh may animate into the ray origins.
+        # Never use mixed-frame first-hit numbers to rank 3D forms.
+        scene.frame_set(1)
+        bpy.context.view_layer.update()
         first=actual_first_hits(scene)
+        if any(key.startswith("flame_layer_") and value
+               for key,value in first["mesh_hit_histogram"].items()):
+            raise RuntimeError("R71 source BODY geometry raycast contaminated by flame layer")
         name="source_refractory_form_%03d"%(round(amplitude*1000))
         scene.render.resolution_x,scene.render.resolution_y=NATIVE
         scene.render.resolution_percentage=100
