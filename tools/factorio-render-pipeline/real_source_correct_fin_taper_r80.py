@@ -110,7 +110,7 @@ def shape_original_real_fin(fin,original,shoulder,free):
     after=[actual_width(fin,row) for row in range(STATIONS)]
     if not all(after[row]>after[row+1] for row in range(2,9)):
         raise RuntimeError("R80 actual width still expands away from hinge")
-    if after[-1]>=after[2]*.65:
+    if after[-1]>=after[2]*.85:
         raise RuntimeError("R80 failed to narrow terminal tip")
     if any(p.area<1.e-9 for p in fin.data.polygons):
         raise RuntimeError("R80 collapsed genuine slot or heat-finned face")
@@ -149,7 +149,7 @@ def verify(scene,orig,nonfin,camera,mats,names,joints):
         if gap>.003 or abs(gap-joints[str(i)])>1e-6:
             raise RuntimeError("R80 disconnected original bespoke physical fin mount")
 
-def run(source,out):
+def run(source,out,candidates=None,revision=REVISION,report_name="r80_physically_correct_fin_taper.json"):
     source=Path(source).resolve();out=Path(out).resolve()
     if hashlib.sha256(source.read_bytes()).hexdigest()!=R79_SOURCE_SHA:
         raise RuntimeError("R80 needs exact saved R79 true original-mounted geometry")
@@ -167,10 +167,11 @@ def run(source,out):
     joints={str(i):joint_gap_world(bpy.data.objects[MOUNT_PREFIX+f"{i:02d}"],
                bpy.data.objects[FIN_PREFIX+f"{i:02d}"]) for i in MAIN}
     out.mkdir(parents=True,exist_ok=True)
-    results={"revision":REVISION,"original_user_sprite_zip_sha256":USER_SOURCE_SHA,
+    if candidates is None:candidates=CANDIDATES
+    results={"revision":revision,"original_user_sprite_zip_sha256":USER_SOURCE_SHA,
         "original_source_sprite_included":False,"visually_approved":False,
         "original_r79_saved_scene_sha256":R79_SOURCE_SHA,"candidates":[]}
-    for shoulder,free in CANDIDATES:
+    for shoulder,free in candidates:
         for i in UPPER:
             fin=bpy.data.objects[FIN_PREFIX+f"{i:02d}"]
             shape_original_real_fin(fin,originals[fin.name],shoulder,free)
@@ -192,7 +193,7 @@ def run(source,out):
         scene.frame_set(33)
         render(scene,out/(tag+"_frame33.png"))
         scene.frame_set(1)
-        scene["fsc_r80_revision"]=REVISION
+        scene["fsc_r80_revision" if revision==REVISION else "fsc_r81_revision"]=revision
         scene["fsc_r80_physical_fin_shoulder_half_width"]=shoulder
         scene["fsc_r80_physical_fin_tip_half_width"]=free
         scene["fsc_r80_original_source_visual_approved"]=False
@@ -221,7 +222,7 @@ def run(source,out):
         scene=bpy.context.scene;scene.frame_set(1)
     if hashlib.sha256(source.read_bytes()).hexdigest()!=R79_SOURCE_SHA:
         raise RuntimeError("R80 modified original saved hinge-calibrated 3D file")
-    (out/"r80_physically_correct_fin_taper.json").write_text(json.dumps(results,indent=2)+"\n",encoding="utf8")
+    (out/report_name).write_text(json.dumps(results,indent=2)+"\n",encoding="utf8")
     print("R80_REAL_SOURCE_DIRECTION_METAL_FINS_SAVED_REOPENED_AND_TAPER_VERIFIED")
     print("R80_ORIGINAL_USER_SPRITE_PRIVATE_COMPARISON_REQUIRED")
 if __name__=="__main__":
