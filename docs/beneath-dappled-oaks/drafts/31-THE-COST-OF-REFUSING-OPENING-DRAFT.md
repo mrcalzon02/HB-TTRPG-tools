@@ -3589,3 +3589,135 @@ Sorn joined her by the horses.
 They rode back to the station before the light failed. The damaged verge had not been repaired. The heavy-load warning remained in force. No one had established where the replacement stone went, and no reply had come from the quarry, the treasury, or the works-office authority book.
 
 The carrier's wagon was still under the shelter roof when they looked back. Thessa could not call that a successful journey. She could call it a decision made without hiding who would bear its cost.
+
+---
+
+The message reached the mill after the next market bell.
+
+It came in the coat of a traveler who had been permitted along the inner road on foot. He had walked the last stretch with his boots in his hands because the mud had begun to pull them off. At the mill door he asked for the buyer of the seed barley, and a clerk brought him to the counting room without promising that anyone would pay for his trouble.
+
+The buyer unfolded the paper on a dry board. The hand was young and uncertain. The carrier had signed beneath it in a heavier script.
+
+*Held at the north-road toll shelter. Heavy wagon prohibited at the damaged verge. Covered storage paid for one night. Notice sent by lawful traveler. No delivery made.*
+
+There was a time written beside the shelter keeper's name, but no official seal. The buyer read the note twice and then looked at the traveler.
+
+"Did you see the wagon?"
+
+"I saw the sacks under the shelter roof when I left. I didn't count them."
+
+"Did you see the warning?"
+
+"Yes. I went past it on foot. The keeper told me the inner way was open to people like me."
+
+"Did you see anyone inspect the road?"
+
+"No."
+
+"Then I won't ask you to swear that it was inspected."
+
+The traveler rubbed his palms together for warmth. "Will you send an answer? I might go back that way. I might not."
+
+"I'll write one. You needn't promise to carry it."
+
+The clerk was already reaching for the arrivals book. The buyer stopped him.
+
+"Not the delivery column."
+
+"It is the carrier's notice."
+
+"Then put it under notices. We haven't received barley."
+
+The clerk drew a fresh line and entered the date on which the paper had actually reached them. He left the delivery weight blank. The buyer kept the traveler's account separate from the carrier's words. The traveler could attest to seeing the wagon and the post; he could not certify the load, the terms of the carriage, or the condition of the road after he had passed.
+
+Outside, two farmers were waiting with baskets on their arms. They had come for seed they expected to take home before the ground dried enough to work. One had paid a deposit. The other had promised to pay when the sacks were weighed.
+
+"Are we loading today?" the first asked when the buyer came out.
+
+"No."
+
+"Tomorrow?"
+
+"I don't know."
+
+The second farmer set down his basket. "You told us the wagon was due before the bell."
+
+"It was. The carrier says he was held at the north-road warning. His wagon hasn't arrived."
+
+"Then fetch the seed from another merchant."
+
+"If I knew one who could supply this quantity at once, I would ask. I won't sell you a promise and call it seed."
+
+The first farmer's mouth tightened. "My hired people are ready. I paid them to clear the beds yesterday."
+
+The buyer had no answer that would restore the day. He took them inside and laid the notice where both could see it. Neither farmer could read every word, so the clerk read it aloud, including the line that said no delivery had been made.
+
+"Is that a Warden order?" the second asked.
+
+"No. It is the carrier's account of a public restriction. I can ask the Warden station to confirm the notice and its time. I haven't had an answer."
+
+"Will you charge us for keeping our order open?"
+
+"Not for a delay I cannot yet explain to you. That is my choice about your orders, not a ruling on the carrier's agreement."
+
+He fetched the customer book. The first farmer had paid enough to buy seed elsewhere if she could find it, but not enough to pay twice. He offered to return the deposit in full and cancel her order, or keep it against a later delivery without a new holding charge. He could not offer a date.
+
+She looked at the money he had counted out.
+
+"If I take it, you may sell the seed to someone else."
+
+"If it arrives, yes."
+
+"And if I leave it, the weather may go past me."
+
+"Yes."
+
+She took the coins. Her hand shook a little as she tied the purse. The buyer wrote *deposit returned by customer's choice* beside the original entry and asked her to check the amount. He did not write *satisfied*.
+
+The second farmer kept his order open. He wanted a written acknowledgment that no barley had been delivered and that he could reconsider when there was actual news. The clerk wrote it in plain words. The farmer pressed a thumb against the paper as though he might force a date out of it.
+
+"Someone has to pay for this," he said.
+
+"Someone already is," the buyer replied. "That doesn't tell us who owes whom under the carriage terms."
+
+When they had gone, the clerk brought out the carrier's agreement. A line concerning arrival before the market bell governed the premium; a separate clause described charges for late performance. The buyer had been angry enough to mark both against the carrier the moment the bell rang. He could still make that claim. He could not honestly say that the carrier had arrived late with a load and been refused, or that the buyer had accepted a delivery which had never reached him.
+
+"Shall I enter the charge?" the clerk asked.
+
+"Enter that the deadline passed and performance is disputed. Hold the amount open."
+
+"That's not the same as waiving it."
+
+"No. And don't tell the carrier that it is."
+
+He opened a new sheet. On one side he listed what he could establish: the promised date, the missed bell, the notice's actual receipt, the traveler's limited observations, the returned deposit, and the order still open. On the other he listed what he needed before taking a final position: the carrier's original journey slip, the shelter keeper's witnessed arrival entry, any copy of the Warden road sheet the carrier held, and the actual date of any eventual delivery or return.
+
+"Why ask for the journey slip?" the clerk said.
+
+"To know when he set out. It won't prove he could pass the verge."
+
+"And the Warden copy?"
+
+"To establish what restriction was recorded. It won't settle our contract."
+
+The clerk looked at the two columns. "We have a great many things that don't settle the contract."
+
+"We have a great many people who would like us to pretend they do."
+
+The buyer wrote a reply to the carrier. He acknowledged receipt of the delayed notice, confirmed that no seed had been received, and stated that the missed deadline and premium remained unresolved. He asked for the supporting papers when they could be sent by an ordinary lawful route. He offered no permission to cross the restricted verge, no substitute road, and no promise that the contract charge would disappear. He did say that he would not treat silence caused by the closed heavy route as proof the carrier had abandoned the load.
+
+A second note went to the Warden station, asking only whether a heavy-load warning was recorded at the north approach at the stated time and where an ordinary confirmation could be requested. The buyer did not ask the Wardens to decide who owed the premium.
+
+The clerk sanded both pages.
+
+"Who carries them?"
+
+"The next person who is actually going that way. We can pay the ordinary message fee. We cannot buy a road open."
+
+The traveler by the stove had finished warming his hands. He said he was going south, not back to the shelter. The buyer thanked him for bringing the first note and let him leave without pressing the papers into his coat.
+
+By evening the mill's delivery space was still empty. The first farmer had her deposit back but no seed. The second had a receipt for an unfilled order. The carrier had not received the buyer's reply; the Warden station had not answered the inquiry. Somewhere beyond the damaged verge, the barley might still be dry beneath the shelter roof, but the buyer had no witness to its condition now.
+
+He shut the customer book on the two different choices and left the delivery column blank.
+
+There was a cost to refusing to write down what had not happened. He had paid part of it in returned money and another part in work that could not begin. It was less than the cost of telling two farmers their seed was on its way when nobody could yet say that it was.
