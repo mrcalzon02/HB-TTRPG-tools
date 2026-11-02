@@ -55,7 +55,7 @@ jobs:
           # Exact pixel equality is a functional render-restoration contract.
           # If nondeterminism occurs, diagnose separately rather than silently
           # permitting a geometry edit disguised as a visibility-only audit.
-          assert ImageChops.difference(original,after).getbbox() is None
+          assert original.tobytes()==after.tobytes(), 'Native RGBA render was not restored byte-for-byte'
           roi=(48,395,218,512)
           a=original.crop(roi).convert('RGB')
           for group in p['groups']:
