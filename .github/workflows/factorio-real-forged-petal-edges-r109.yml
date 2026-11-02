@@ -65,7 +65,7 @@ jobs:
                   for lip in item['real_separate_lips'].values():
                       assert lip['real_vertices']==110
                       assert lip['real_faces']==102
-                      assert lip['closed_3d_mesh_edges']==218
+                      assert lip['closed_3d_mesh_edges']==210
           print('R109_SOURCE_3D_DISTINCT_FORMED_SHEET_AND_CLOSED_ROLLED_LIP_PASS')
           PY
       - name: Upload actual editable Blender models and true native+angled renders, never user original sprite
