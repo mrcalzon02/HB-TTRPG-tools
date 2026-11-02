@@ -53,6 +53,7 @@ jobs:
               assert case['original_lower_fin_animation_preserved']
               assert case['camera_and_unmodified_casts_preserved']
               assert len(case['native_frames'])==2
+              assert (p/case['actual_3d_oblique_inspection']).stat().st_size>5000
               for name in case['native_frames'].values():
                   assert (p/name).stat().st_size>5000
               for fin in case['per_petal_real_3d_shape_sections'].values():
