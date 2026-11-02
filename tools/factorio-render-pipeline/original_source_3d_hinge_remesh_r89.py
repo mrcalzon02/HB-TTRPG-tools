@@ -188,7 +188,13 @@ def run(source,out):
     mats={m.name:(tuple(m.diffuse_color),len(m.node_tree.nodes) if m.use_nodes else -1)
           for m in bpy.data.materials}
     motion=fin_digest_all_frames(scene)
-    other=fingerprint_other(scene)
+    # Fingerprint ONLY old genuine model parts. Newly reconstructed source
+    # outer shells must not be mistaken for changes to their protected rig.
+    preserved={
+      ob.name:tuple(tuple(v.co) for v in ob.data.vertices)
+      for ob in scene.objects
+      if ob.type=="MESH" and not ob.name.startswith(MOUNT_PREFIX)
+    }
     webs=bpy.data.collections.get(WEB_COLLECTION)
     if webs is None:raise RuntimeError("R89 missing original physically connected R64 hull stays")
     objects={};locks={};joints={}
@@ -216,7 +222,8 @@ def run(source,out):
             raise RuntimeError("R89 changed source camera")
         if fin_digest_all_frames(scene)!=motion:
             raise RuntimeError("R89 altered original 64 frame animation")
-        if fingerprint_other(scene)!=other:
+        if any(tuple(tuple(v.co) for v in bpy.data.objects[name].data.vertices)!=co
+               for name,co in preserved.items()):
             raise RuntimeError("R89 changed existing finite-volume fins/hull")
         # Same original real casting-to-fin load paths; new visual casing
         # physically attaches to originals via an exact locked vertex.
