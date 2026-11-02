@@ -1,0 +1,70 @@
+name: Factorio R82 actual straight 3D fin spines keep hinge contacts
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/straight_existing_fin_spines_r82.py'
+      - '.github/workflows/factorio-straight-real-fin-spines-r82.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-source-straight-fin-mesh-candidates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Load exact verified R81 physical fin/taper candidate, not original Wube art
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41403904522
+          name: factorio-r81-real-blunt-source-fin-taper-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r81
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install pinned Blender 4.5
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Truly straighten mounted 3D fin centerlines; save and reopen separately
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/straight_existing_fin_spines_r82.py -- \
+            --source-blend private-ci/r81/output/r81/shoulder_22_tip_15.blend \
+            --out private-ci/output/r82
+      - name: Verify actual Blender models and source-native real 3D captures
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r82')
+          j=json.loads((p/'r82_real_3d_spine_straightening.json').read_text())
+          assert j['original_sprite_pixels_or_atlases_in_artifact'] is False
+          assert j['visual_source_approval'] is False
+          assert len(j['candidates'])==3
+          for x in j['candidates']:
+              assert (p/x['native_frame01']).stat().st_size>5000
+              assert (p/x['native_frame33']).stat().st_size>5000
+              if x['strength']:
+                  assert (p/x['saved_reopened_actual_blend']).stat().st_size>100000
+                  assert x['same_original_3d_hinge_contacts_fin_taper_and_lower_animation']
+          print('R82_ACTUAL_STRAIGHT_3D_FIN_RIG_MESH_PRESERVATION_VERIFIED')
+          PY
+      - name: Upload editable Blender models and original-camera renders; no private original sprites
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r82-straight-original-mounted-fin-real-3d-candidates
+          path: |
+            private-ci/output/r82/*.blend
+            private-ci/output/r82/*.png
+            private-ci/output/r82/*.json
+            private-ci/readiness/readiness.json
+          retention-days: 14
+          if-no-files-found: warn
