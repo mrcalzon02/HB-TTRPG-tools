@@ -6,7 +6,7 @@ internet illustration or generated render, describes overlapping stepped,
 longitudinally shaped refractory. R60-62 established a uniform radial offset
 fails to reproduce that shape. So the upper surface is genuinely formed
 into a crosswise crown and rounded staggered leading lip in REAL 3D, while
-the rear skin, material, axes, open throat, fins, cups, mounts and rig are
+the outer skin, material, axes, open throat, fins, cups, mounts and rig are
 unchanged. This must be reviewed privately against the ORIGINAL sprite
 before any production acceptance.
 
@@ -41,9 +41,10 @@ ROI=[48,395,218,512]
 # physical units, not any claim to have solved the source hidden geometry.
 CANDIDATES=(0.,.042,.075)
 THICKNESS_MIN=.014
-# Keep the original back skin immobile. Front surface is "inward" into the
-# open bore; the original near tile front radius is slightly smaller than back
-# and therefore stays physically separated from the fixed back surface.
+# Keep ORIGINAL OUTER skin vertices 0..11 unchanged. The inner bore-facing
+# skin is vertices 12..23 (it is 0.021 radius inside the outer original).
+# Only move the inner-facing skin further toward the open bore; this
+# increases actual finite 3D sheet thickness rather than inverting it.
 def form_existing_plate(ob,original,profile_amplitude,kind):
     if ob.type!="MESH" or len(ob.data.vertices)!=24 or len(ob.data.polygons)<12:
         raise RuntimeError("R71 requires 24-vertex true original R19 plate mesh")
@@ -56,7 +57,7 @@ def form_existing_plate(ob,original,profile_amplitude,kind):
         x,y,z=old
         r=math.hypot(x,z-AXIS_Z)
         if r<=.2:raise RuntimeError("R71 invalid original R19 refractory radial vertex")
-        if idx>=12:  # preserve real rear skin exact
+        if idx<12:  # preserve real outer skin exact
             ob.data.vertices[idx].co=old
             continue
         row=(idx%12)//3
@@ -84,21 +85,21 @@ def form_existing_plate(ob,original,profile_amplitude,kind):
         previous.append((r,target))
     ob.data.update()
     for j in range(12):
-        front=ob.data.vertices[j].co
-        back=ob.data.vertices[j+12].co
-        radial_diff=math.hypot(back.x,back.z-AXIS_Z)-math.hypot(front.x,front.z-AXIS_Z)
+        outer=ob.data.vertices[j].co
+        inner=ob.data.vertices[j+12].co
+        radial_diff=math.hypot(outer.x,outer.z-AXIS_Z)-math.hypot(inner.x,inner.z-AXIS_Z)
         if radial_diff<THICKNESS_MIN:
             raise RuntimeError("R71 physically inverted original refractory plate thickness")
     return {
-        "front_3d_vertices_changed":sum(
+        "inner_bore_3d_vertices_changed":sum(
             (ob.data.vertices[i].co-Vector(original[i])).length>1e-5
-            for i in range(12)),
-        "original_back_surface_12_vertices_preserved":all(
+            for i in range(12,24)),
+        "original_outer_surface_12_vertices_preserved":all(
              (ob.data.vertices[i].co-Vector(original[i])).length<1e-6
-             for i in range(12,24)),
+             for i in range(12)),
         "minimum_crown_to_back_real_thickness":min(
-            math.hypot(ob.data.vertices[j+12].co.x,ob.data.vertices[j+12].co.z-AXIS_Z)-
-            math.hypot(ob.data.vertices[j].co.x,ob.data.vertices[j].co.z-AXIS_Z)
+            math.hypot(ob.data.vertices[j].co.x,ob.data.vertices[j].co.z-AXIS_Z)-
+            math.hypot(ob.data.vertices[j+12].co.x,ob.data.vertices[j+12].co.z-AXIS_Z)
             for j in range(12))}
 def verify_unmodified_protected(scene,cam_key,motion_digest,mat_digest,original_names,other_meshes):
     if scene.get("fsc_r66_revision")!=R66_REV or scene.get("fsc_r58_revision")!=R58_REV:
@@ -172,9 +173,9 @@ def run(source,out):
         for name,(ob,kind,points) in tiles.items():
             data=form_existing_plate(ob,points,amplitude,kind)
             changed[name]=data
-            total+=int(data["front_3d_vertices_changed"])
+            total+=int(data["inner_bore_3d_vertices_changed"])
             min_gaps.append(data["minimum_crown_to_back_real_thickness"])
-            if not data["original_back_surface_12_vertices_preserved"]:
+            if not data["original_outer_surface_12_vertices_preserved"]:
                 raise RuntimeError("R71 damaged physical backface of stamped plate")
         verify_unmodified_protected(scene,camera,motion,mat_digest,old_names,protected)
         first=actual_first_hits(scene)
@@ -206,7 +207,7 @@ def run(source,out):
             for part,(o,kind,points) in tiles.items():
                 live=bpy.data.objects[part]
                 if min((live.data.vertices[i].co-Vector(points[i])).length
-                       for i in range(12))<1e-6:
+                       for i in range(12,24))<1e-6:
                     raise RuntimeError("R71 did not save physically sculpted original plate: "+part)
         report["candidate_profiles"].append({
             "original_plate_r19_physical_front_crown_amplitude":amplitude,
@@ -215,11 +216,11 @@ def run(source,out):
             "saved_reopened_editable_candidate":saved_blend.name if saved_blend else None,
             "saved_candidate_sha256":sha256(saved_blend.read_bytes()).hexdigest() if saved_blend else None,
             "actual_original_80_plate_surfaces_modified":sum(
-                  1 for x in changed.values() if x["front_3d_vertices_changed"]>0),
+                  1 for x in changed.values() if x["inner_bore_3d_vertices_changed"]>0),
             "real_vertices_moved":total,
             "least_3d_plate_radial_thickness":min(min_gaps),
             "actual_source_camera_ray_hit_geometry":first,
-            "original_back_skin_preserved":True,
+            "original_outer_skin_preserved":True,
             "camera_3_mounts_lower_animation_and_guards_verified":True})
         print("R71_REAL_PHYSICAL_REFRACTORY_CROWNS",amplitude,
               "moved",total,"R19_firsthits",
