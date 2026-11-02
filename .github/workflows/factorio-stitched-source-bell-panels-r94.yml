@@ -1,0 +1,74 @@
+name: Factorio R94 physical stitched planar surfaces source-directed bell profiles
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/stitched_source_bell_panels_r94.py'
+      - '.github/workflows/factorio-stitched-source-bell-panels-r94.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-stitch-original-bell-crosssections:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore best actual source-verified R92 native scene, no proprietary Factorio art
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41478931628
+          name: factorio-r92-distinct-source-left-and-right-hinge-blender-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r92
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install pinned actual Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Build genuine 3D quad planes, share panel edges, sew finite metal wall and preserve original bell mouth
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/stitched_source_bell_panels_r94.py -- \
+            --source-blend private-ci/r92/output/r92/port_raised_starboard_tight.blend \
+            --out private-ci/output/r94
+      - name: Verify eight real original-camera views x two frames and actual saved reopened Blender meshes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('private-ci/output/r94')
+          data=json.loads((root/'r94_stitched_bell_original_source_hypotheses.json').read_text())
+          assert not data['original_user_sprite_pixels_in_artifact']
+          assert not data['original_visual_fidelity_approved']
+          assert len(data['candidates'])==9
+          for case in data['candidates']:
+              assert (root/case['true_native_frame1']).stat().st_size>5000
+              assert (root/case['true_native_frame33']).stat().st_size>5000
+              if case['real_stitched_connected_surface'] is not None:
+                  s=case['real_stitched_connected_surface']
+                  assert s['actual_quad_panels']==640
+                  assert s['all_edges_stitched_manifold']
+                  assert s['open_axial_mouth_no_polygon_end_cap']
+                  assert (root/case['saved_reopened_editable_blend']).stat().st_size>100000
+                  assert case['all_original_source_cast_fin_and_animation_intact']
+          print('R94_ACTUAL_BLENDER_PANEL_STITCHED_SOURCE_BELL_GEOMETRY_VERIFIED')
+          PY
+      - name: Upload only real 3D candidate models and original-camera captures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r94-source-first-sewn-planar-bell-metal-shell-candidates
+          path: |
+            private-ci/output/r94/*.blend
+            private-ci/output/r94/*.png
+            private-ci/output/r94/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
