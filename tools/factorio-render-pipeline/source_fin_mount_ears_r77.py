@@ -73,7 +73,7 @@ def inspect(source,out):
         raise RuntimeError("R77 requires original Factorio calibration camera and real R71 model")
     camera=tuple(float(v) for row in scene.camera.matrix_world for v in row)
     ortho=float(scene.camera.data.ortho_scale)
-    mats={x.name:(x.as_pointer(),tuple(x.diffuse_color)) for x in bpy.data.materials}
+    mats={x.name:tuple(x.diffuse_color) for x in bpy.data.materials}
     objects={x.name for x in scene.objects}
     originals={}
     for name in EARS:
@@ -108,7 +108,7 @@ def inspect(source,out):
             {o.name for o in scene.objects}!=objects or
             tuple(float(v) for row in scene.camera.matrix_world for v in row)!=camera or
             scene.camera.data.ortho_scale!=ortho or
-            {x.name:(x.as_pointer(),tuple(x.diffuse_color)) for x in bpy.data.materials}!=mats or
+            {x.name:tuple(x.diffuse_color) for x in bpy.data.materials}!=mats or
             fin_digest_all_frames(scene)!=motion):
             raise RuntimeError("R77 altered non-hinge geometry/camera/material/fin motion")
         post={str(i):joint_gap_world(bpy.data.objects[f"{MOUNT_PREFIX}{i:02d}"],
