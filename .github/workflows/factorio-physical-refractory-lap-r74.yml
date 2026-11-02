@@ -1,0 +1,73 @@
+name: Factorio R74 physical staggered lapped refractory geometry
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/physical_staggered_refractory_lap_r74.py'
+      - '.github/workflows/factorio-physical-refractory-lap-r74.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  sculpt-native-existing-r19-lapped-surfaces:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover real saved and reopened R71 +.075 geometry
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41378123612
+          name: factorio-r71-3d-physically-formed-refractory-80-plates-editable-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r71
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Bootstrap Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Sculpt existing real R19 3D plate lap faces, render and reopen candidates
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/physical_staggered_refractory_lap_r74.py -- \
+            --source-blend private-ci/r71/output/r71/source_refractory_form_075.blend \
+            --out private-ci/output/r74
+      - name: Verify actual saved Blender scenes, mesh topology and no source sprite substitution
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("private-ci/output/r74")
+          report=json.loads((p/"r74_existing_refractory_lapped_form.json").read_text())
+          assert not report["actual_original_user_sprite_available"]
+          assert not report["original_sprite_geometry_approved"]
+          assert len(report["candidate_steps"])==3
+          assert report["candidate_steps"][0]["inner_3d_vertices_moved"]==0
+          for step in report["candidate_steps"][1:]:
+              assert step["inner_3d_vertices_moved"]>=400
+              assert step["minimum_original_sheet_radial_thickness"]>=.014
+              assert step["saved_reopened_candidate_blend"]
+              assert (p/step["saved_reopened_candidate_blend"]).stat().st_size>100000
+              assert step["source_meshes_and_animation_verified"]
+              assert (p/step["source_camera_native_frame01"]).stat().st_size>1000
+          print("R74_REAL_PHYSICAL_3D_LAP_SCENES_REOPENED_PASS")
+          print("R74_STILL_NOT_AUTHENTICATED_ORIGINAL_SPRITE_VISUAL_MATCH")
+          PY
+      - name: Upload only existing reconstruction edits and native candidate renders
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r74-real-staggered-refractory-lap-editable-candidates
+          path: |
+            private-ci/output/r74/*.blend
+            private-ci/output/r74/*.png
+            private-ci/output/r74/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
