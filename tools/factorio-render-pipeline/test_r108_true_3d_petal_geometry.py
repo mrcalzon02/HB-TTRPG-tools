@@ -22,8 +22,28 @@ STATIONS=(
 )
 LATERAL=(-1.,-.83,-.61,-.38,-.16,0.,.16,.38,.61,.83,1.)
 
+class Vec3(tuple):
+    """Minimal Blender mathutils.Vector-compatible XYZ sequence test double.
+
+    Real Blender vertex.co supports both indexing/iteration AND .x/.y/.z.
+    Returning plain tuples produced a test-only AttributeError unrelated to
+    the production three-dimensional petal geometry.
+    """
+    def __new__(cls,xyz):
+        return super().__new__(cls,tuple(float(n) for n in xyz))
+    @property
+    def x(self):return self[0]
+    @property
+    def y(self):return self[1]
+    @property
+    def z(self):return self[2]
+
 class Point:
-    def __init__(self,xyz):self.co=tuple(xyz)
+    def __init__(self,xyz):self._co=Vec3(xyz)
+    @property
+    def co(self):return self._co
+    @co.setter
+    def co(self,xyz):self._co=Vec3(xyz)
 class Mesh:
     def __init__(self,theta):
         self.vertices=[]
