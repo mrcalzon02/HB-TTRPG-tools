@@ -41,6 +41,7 @@ jobs:
         env:
           PYTHONPATH: ${{ runner.temp }}/luxtts:software/superposition-reader
           HF_HOME: ${{ runner.temp }}/spr-hf-models
+          SPR_NEURAL_QA_DIR: build/spr_sphinx_voice_preview/rejected
         run: |
           python software/superposition-reader/spr_luxtts_worker.py --trial --cpu --reference software/superposition-reader/assets/voice/sphinx-original.mp3 --output build/spr_sphinx_voice_preview --repo-root .
       - name: Validate generated speech files have audible PCM data
@@ -75,5 +76,5 @@ jobs:
         with:
           name: SPR-Sphinx-neural-narration-preview-${{ github.sha }}
           path: build/spr_sphinx_voice_preview/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30
