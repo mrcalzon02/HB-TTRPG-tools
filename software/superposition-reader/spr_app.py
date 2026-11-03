@@ -15,17 +15,21 @@ import os
 import threading
 from urllib.parse import urlsplit
 import webbrowser
+import zipfile
+
+from spr_voices import VoiceLibrary
 
 from spr_core import Archive, MAX_DOCUMENT_BYTES, WindowsSapiEngine
 
 ROOT = Path(__file__).resolve().parent
-MAX_JSON_BYTES = (MAX_DOCUMENT_BYTES * 4 // 3) + 8192
+MAX_JSON_BYTES = (100 * 1024 * 1024 * 4 // 3) + 8192
 
 
 class ReaderState:
     def __init__(self, archive: Archive, engine=None):
         self.archive = archive
         self.engine = engine
+        self.voices = VoiceLibrary(archive.root / "voices")
         self.lock = threading.Lock()
         self.cancel = threading.Event()
         self.job = {"active": False, "done": 0, "total": 0, "error": "", "cancelled": False}
@@ -114,6 +118,8 @@ def make_handler(state: ReaderState):
                     return self._file(ROOT / "reader.html", "text/html; charset=utf-8")
                 if segments == ["api", "library"]:
                     return self._json(state.archive.library())
+                if segments == ["api", "voice-profiles"]:
+                    return self._json(state.voices.list())
                 if segments == ["api", "voices"]:
                     return self._json({"voices": state.engine.voices() if state.engine else [],
                                        "engine": state.engine.engine_id if state.engine else "unavailable"})
@@ -141,6 +147,17 @@ def make_handler(state: ReaderState):
                     raise ValueError("Only JSON requests are supported")
                 request = json.loads(self.rfile.read(size))
                 path = urlsplit(self.path).path
+                if path == "/api/voice-profile":
+                    info = state.voices.create(request["name"], request.get("style", "natural"))
+                    return self._json({"id": info["id"], "name": info["name"], "status": info["status"]}, 201)
+                if path == "/api/voice-sample":
+                    data = base64.b64decode(request["base64"], validate=True)
+                    profile_id = request["profile_id"]
+                    filename = str(request["name"])
+                    if filename.lower().endswith(".zip"):
+                        return self._json(state.voices.import_zip(profile_id, data), 201)
+                    entry = state.voices.add_sample(profile_id, filename, data, request.get("transcript", ""))
+                    return self._json({"name": entry["name"], "bytes": entry["bytes"]}, 201)
                 if path == "/api/import":
                     data = base64.b64decode(request["base64"], validate=True)
                     record = state.archive.import_document(request["name"], data)
@@ -160,7 +177,7 @@ def make_handler(state: ReaderState):
                     return self._json({"cancel_requested": True})
                 return self._json({"error": "Not found"}, 404)
             except (ValueError, TypeError, KeyError, IndexError, OSError, binascii.Error,
-                    RuntimeError, json.JSONDecodeError) as exc:
+                    RuntimeError, json.JSONDecodeError, zipfile.BadZipFile) as exc:
                 self._json({"error": str(exc)}, 400)
 
     return Handler
