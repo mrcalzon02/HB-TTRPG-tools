@@ -100,8 +100,12 @@ class LuxEngine:
                     candidate = folder / f"candidate-{attempt}.wav"
                     sf.write(str(candidate), padded, 48000, subtype="PCM_16")
                     with contextlib.redirect_stdout(sys.stderr):
+                        # Supply the in-memory PCM waveform directly. Passing a
+                        # filename invokes the Whisper pipeline's FFmpeg decoder,
+                        # which may be missing on clean Windows installations.
                         recognition = self.model.transcriber(
-                            str(candidate), return_timestamps="word")
+                            {"raw": padded, "sampling_rate": 48000},
+                            return_timestamps="word")
                     if not isinstance(recognition, dict):
                         raise ValueError("Independent speech recognition returned no word-aligned result")
                     trimmed, boundary = trim_guarded_audio(
@@ -112,7 +116,8 @@ class LuxEngine:
                     corrected = folder / f"corrected-{attempt}.wav"
                     sf.write(str(corrected), trimmed, 48000, subtype="PCM_16")
                     with contextlib.redirect_stdout(sys.stderr):
-                        verified = self.model.transcriber(str(corrected))
+                        verified = self.model.transcriber(
+                            {"raw": trimmed, "sampling_rate": 48000})
                     final_heard = (verified.get("text", "") if isinstance(verified, dict)
                                    else str(verified))
                     passed, match = is_complete(text, final_heard, guarded=False)
