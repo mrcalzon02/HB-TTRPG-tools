@@ -1,0 +1,85 @@
+name: Factorio R126 square edged real 3D central fin — eliminate false sideways curl
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/straight_square_edge_master_fin_r126.py'
+      - '.github/workflows/factorio-square-edge-real-master-r126.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  restore-original-squarish-fin-silhouette:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover verified actual R125 round master Blender model, not the original private sprite
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41577618203
+          name: factorio-r125-single-source-round-fin-short-ridge-and-blue-toe-models
+          github-token: ${{ github.token }}
+          path: private-ci/r125
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install pinned actual Blender workstation
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Correct sideways-hooked fin outline in real 3D without flattening true metal cross-section
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/straight_square_edge_master_fin_r126.py
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/straight_square_edge_master_fin_r126.py -- \
+            --r125-dir private-ci/r125 --out private-ci/output/r126
+      - name: Verify original-like parallel edges, near square end, closed 3D fin, original camera, all other fins bell and lower 64 frame motion
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path('private-ci/output/r126')
+          r=json.loads((p/'r126_source_square_plate_fin_real_3d.json').read_text())
+          assert not r['private_original_sprite_uploaded']
+          assert r['original_source_visual_approval_pending']
+          assert len(r['cases'])==4
+          for i,c in enumerate(r['cases']):
+              assert c['original_lower_motion_and_bell_preserved']
+              assert c['visual_approval_pending']
+              assert set(c['original_camera_native_frames'])=={'1','33'}
+              assert set(c['isolated_real_3d_views'])=={'0','35','65'}
+              assert all((p/f).stat().st_size>4000
+                  for f in list(c['original_camera_native_frames'].values())
+                        +list(c['isolated_real_3d_views'].values()))
+              assert (p/c['blender_editable_scene']).stat().st_size>100000
+              stats=c['physical_squarish_shape']
+              if i==0:
+                  assert stats is None
+              else:
+                  assert stats['original_two_skin_closed_manifold']
+                  assert stats['cross_section_camera_depth_untouched']
+                  assert stats['actual_fin_vertices']==306
+                  assert stats['actual_fin_faces']>200
+                  assert abs(stats['left_root_to_toe_delta_px'])<=3
+                  assert abs(stats['right_root_to_toe_delta_px'])<=3
+                  assert stats['end_edge_levelness_delta_px']<=2
+                  assert stats['max_physically_moved_vertex_m']>.05
+                  assert not stats['original_source_approved']
+          print('R126_ACTUAL_SQUARE_METAL_PLATE_REAL_3D_SOURCE_SHAPE_QA_PASS_VISUAL_APPROVAL_PENDING')
+          PY
+      - name: Upload actual editable Blender corrected fin shape candidates, source camera frame 1 and 33 and 0/35/65 degree physical views
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r126-source-square-edge-one-round-fin-real-3d-candidates
+          path: |
+            private-ci/output/r126/*.blend
+            private-ci/output/r126/*.png
+            private-ci/output/r126/*.json
+          if-no-files-found: warn
+          retention-days: 14
