@@ -15,6 +15,13 @@ MODELS = {"luxtts", "qwen", "chatterbox", "chatterbox_turbo", "tada"}
 MAX_WAV_BYTES = 100 * 1024 * 1024
 
 
+def _local_request(request, timeout):
+    # Never use an environment-configured HTTP proxy for private narration.
+    # Requests to the local Voicebox service must stay on loopback.
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    return opener.open(request, timeout=timeout)
+
+
 class VoiceboxEngine:
     def __init__(self, model: str = "qwen"):
         if model not in MODELS:
@@ -25,7 +32,7 @@ class VoiceboxEngine:
     def profiles(self) -> list[dict]:
         req = urllib.request.Request(API + "/profiles", headers={"Accept": "application/json"})
         try:
-            with urllib.request.urlopen(req, timeout=2) as response:
+            with _local_request(req, timeout=2) as response:
                 result = json.loads(response.read(1024 * 1024))
         except (OSError, ValueError, json.JSONDecodeError) as exc:
             raise RuntimeError("Local Voicebox is not responding on 127.0.0.1:17493") from exc
@@ -56,7 +63,7 @@ class VoiceboxEngine:
             API + "/v1/audio/speech", data=payload,
             headers={"Content-Type": "application/json", "Accept": "audio/wav"}, method="POST")
         try:
-            with urllib.request.urlopen(req, timeout=900) as response:
+            with _local_request(req, timeout=900) as response:
                 if "audio/" not in response.headers.get("Content-Type", "").lower():
                     raise RuntimeError("Voicebox returned a non-audio response")
                 output = response.read(MAX_WAV_BYTES + 1)
