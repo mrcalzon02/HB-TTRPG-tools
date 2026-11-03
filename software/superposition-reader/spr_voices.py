@@ -126,10 +126,28 @@ class VoiceLibrary:
             selected = prepared if prepared else candidates
             if not selected:
                 raise ValueError("ZIP contains no supported voice recordings")
+            # Prepared reference packs can include accurate per-clip transcripts.
+            # Read manifest/transcript bytes in memory only; never extract ZIP paths to disk.
+            transcripts = {}
+            if "manifest.json" in names:
+                manifest_info = bundle.getinfo("manifest.json")
+                if manifest_info.file_size > 1024 * 1024:
+                    raise ValueError("Voice pack manifest exceeds 1 MiB")
+                manifest = json.loads(bundle.read("manifest.json"))
+                for sample in manifest.get("samples", []):
+                    if not isinstance(sample, dict):
+                        continue
+                    source_name = sample.get("file")
+                    transcript_file = sample.get("transcript_file")
+                    if isinstance(source_name, str) and isinstance(transcript_file, str) and transcript_file in names:
+                        transcript_info = bundle.getinfo(transcript_file)
+                        if transcript_info.file_size > 128 * 1024:
+                            raise ValueError("Voice transcript is too large")
+                        transcripts[source_name] = bundle.read(transcript_file).decode("utf-8-sig")[:10000]
             added = 0
             for name in selected:
                 previous = len(self.get(profile_id)["samples"])
-                self.add_sample(profile_id, name, bundle.read(name))
+                self.add_sample(profile_id, name, bundle.read(name), transcripts.get(name, ""))
                 if len(self.get(profile_id)["samples"]) > previous:
                     added += 1
         return {"added": added, "considered": len(selected), "profile_id": profile_id}
