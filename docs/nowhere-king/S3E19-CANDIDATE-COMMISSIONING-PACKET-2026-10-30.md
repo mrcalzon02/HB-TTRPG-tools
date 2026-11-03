@@ -80,11 +80,13 @@ Preserve **first ancestral candle dark, six lit**; the guarded upper recess and 
 
 ### The Hour That Wasn't Saved — sample scene
 
-The word *saved* had traveled farther through Edselsto than the wooden gauge.
+The word *saved* had traveled farther through the court's desks than the wooden gauge had through the measuring room.
 
-By morning it stood in three different hands on three different papers. Tomas's receiving-yard estimate said *one measuring hour possibly spared, subject to checking*. On a clean summary beside the wage chest, the junior copyist Oris had written *one hour saved*. A third sheet, prepared for Damaris's review, had acquired the words *one paid hour saved*.
+Tomas had entered the modest saving in the receiving-yard work book after Pell checked the recovered pattern against the old turn. His entry named the work: a measuring hour spared by finding and verifying the old angle. It did not describe an hour removed from anyone's completed shift. The new lower-course stone still needed measuring, buying and setting.
 
-No one had signed the third sheet. It had nevertheless been pinned where the roof men could read it.
+Oris, the junior copyist, had carried that entry into a clean works summary. In his hand, *measuring hour spared at the old turn* became *one hour saved*. The first shortening seemed harmless. Then he prepared a third sheet for Damaris's review beside the wage chest, where works estimates and unpaid roof claims waited in separate bundles. He wrote *one paid hour saved* beneath the wages heading, reasoning that a saved hour must be an hour the Crown need not pay for.
+
+He had copied the words himself and pinned the unsigned review sheet where the roof men could see it. He had not entered a deduction in the signed wage roll, drawn a voucher, or been told to do either. But a sheet displayed beside the pay chest did not announce its lack of authority nearly as loudly as its heading announced a saving.
 
 Rell, who had held the lower ladder while rain ran through the gutter joint, stood before it with his cap in his hands. His thumb was bound in a strip of clean cloth.
 
@@ -92,53 +94,55 @@ Rell, who had held the lower ladder while rain ran through the gutter joint, sto
 
 Oris looked up from his ruled paper. "Is what yours?"
 
-"The hour you have saved. I worked the full shift. If the king has found a way to take an hour out of it, I would like to know before the chest opens."
+"The paid hour. I worked the full shift. Some of that shift is still owed to me. Is the Crown saying it need not pay for one of those hours?"
 
-Oris turned red. "No one has taken anything."
+"No one has taken anything," Oris said.
 
-"Then why is it under wages?"
+"Then show me the roll. If the roll says I worked it and this says you saved paying it, which paper will the chest obey?"
 
-It was a reasonable question. Oris had put the line there because the wage roll and the estimate lay together on his desk. He had not wanted to lose the pleasing little saving that everyone at court was discussing. Now the two headings made a claim neither paper could support.
+Oris reached toward the pin. He had meant to make the summary easier to read, not to decide a roofer's wages. But the error was no longer confined to his desk. Someone who had no authority to change a debt had made it appear changeable.
 
-Ysabet arrived before he could take the sheet down. She read it, then read Tomas's original.
+Ysabet arrived before he could take the sheet down. She read the posted words, then asked Oris to bring both the receiving-yard entry and his intermediate works copy. He produced them without being sent away. Each shortening was visible beside the next.
 
-"Leave it where it is for a moment," she said.
+"Leave the notice where Rell found it until the challenge is recorded," she said. "Mark it disputed, not settled. We shall correct the public copy where the men can see the reason."
 
-Rell's expression hardened. "So everyone may see it?"
+"So everyone may see the mistake?" Rell asked.
 
-"So you may see exactly what we correct. If I remove it first, you have only my word for what it said."
+"So no one can tell you afterward that it was never there."
 
-She asked whether he wanted a reader or witness present. Rell nodded toward the doorway, where another roofer had been waiting to learn whether his own arrears would be entered. The man came inside, wiped his hands and stood beside him. Neither was required to agree with the clerk.
+Rell asked for a witness of his own, not merely a court reader. Another roofer had been waiting in the doorway to learn whether his arrears were entered. He came inside, wiped his hands, and stood beside Rell. Ysabet told both men they could challenge the comparison without signing away any claim. Oris fetched the three papers while Damaris was sent for the actual signed wage roll.
 
-Pell Falbrecht entered carrying the curved gauge, the old knife nick still visible near its thin end. He set it on the table without allowing it to touch the wage roll.
+Pell Falbrecht entered carrying the curved gauge, the old knife nick still visible near its thin end. He placed it by Tomas's entry, well away from the wage papers.
 
-"This is what was found," he said. "It saved me from taking the first angle again. It did not straighten the lower course, and it certainly did not work Rell's shift."
+"This is what was found," he said. "I checked it at the old receiving-yard turn. It spared a fresh measurement there. It did not fit a new lower stone, finish the joint or work a man's shift."
 
-"How much time did it save?" Oris asked.
+Oris looked from the gauge to the first book. "Tomas wrote an hour."
 
-"Less than I hoped, after I checked it against the stone. I cannot make a paid hour out of that, either way. The new joint still needs measuring when the lower block is here."
+"Of measuring," Pell answered. "Not an hour of Rell's labor that may be struck off. If the timber moves or the new block arrives, we measure what is there then. A pattern remembers an angle; it cannot certify the next stone."
 
-Rell examined the little piece of wood. "Then the roof still leaks."
+Rell touched the bandage on his thumb. "Then the roof still leaks."
 
 "Yes."
 
-"And my hours?"
+"And the work I did?"
 
-Damaris, arriving with the signed roll, laid it open before him. She showed the dates of work, the partial payment already made, and the remaining amount owed. There was no deduction against Rell's line. There was also no money in her hand to settle the balance now.
+Damaris arrived with the signed wage roll under her own custody. She opened it to Rell's name, set his dates and hours beside the earlier partial disbursement, and showed the unpaid balance without letting Oris's sheet lie across either column. Rell's witness followed the lines with a blunt fingernail.
 
-"This is your claim," she said. "The estimate is a separate record of possible labor saved on work not yet finished. Neither record may silently alter the other."
+"Read the entry back to me," Rell said. "The whole of it. I want to hear whether any hour has been crossed out."
 
-Rell read slowly. His witness followed each line with a blunt fingernail.
+Damaris read the worked hours, the amount already paid and the amount still due. No hour had been deducted. She turned the roll toward him again so that his witness could compare it with what she had said.
 
-"I will accept that these are the hours written," Rell said. "I have not accepted that they are paid."
+"That is the signed claim controlling this chest," she said. "The receiving-yard entry records work avoided on a different task. Oris's posted review sheet is neither a signed alteration to this roll nor an authorized payment voucher. Even if someone had signed his summary, a signature would not turn measuring time into wages already discharged."
 
-"Nor have I written that they are," Damaris answered.
+Rell did not thank her for a debt still unpaid. "Then I challenge the notice, not the hours in this roll. And I want it written that I have not accepted payment."
+
+"That is exactly what will be written," Damaris said.
 
 Oris looked miserable. "I thought I was making the summary clearer."
 
 "You made it shorter," Ysabet said. "Those are not always the same thing."
 
-She had him write a correction beneath the offending entry, giving its source, the exact mistaken phrase, and the signed wage roll that controlled the claim. The original words remained legible. Rell's witness marked that he had heard the correction read aloud, not that the Crown's debt was discharged. Oris signed his own name as the maker of the mistaken copy.
+Ysabet dictated the correction in Oris's presence, and made him write it in his own hand. It named Tomas's checked measuring entry as the source, identified Oris's first shortening and the later *paid hour* addition as his copies, and stated that neither changed the signed wage roll. The original posted words remained legible beneath the correction. Oris dated and signed his admission as the copyist responsible. Rell's chosen witness marked that he had heard the comparison and correction read aloud; the mark was explicitly **not** a receipt for wages or consent to a deduction. Damaris kept custody of the signed roll, while the disputed sheet and correction were entered together for review.
 
 Luceran came in as Oris finished.
 
@@ -150,7 +154,7 @@ He listened while Rell described the sheet. Luceran remembered the pleasure of h
 
 "Edselsto may recall who spoke of an hour," he said.
 
-Ysabet did not look toward the ceiling. "We have Tomas's estimate, Oris's copy and a witness to the posted sheet. The copying desk is not a place where the castle has been certified to hear every word, much less see a pen move. What would its answer prove?"
+Ysabet did not look toward the ceiling. "We have Tomas's checked work entry, Oris's two copies and a witness to the posted sheet. The copying desk is not a place where the castle has been certified to hear every word, much less see a pen move. What would its answer prove?"
 
 Luceran looked at Oris. The young man had admitted his error before being accused of theft or deceit. The papers told the story without a supernatural witness.
 
@@ -184,9 +188,9 @@ Luceran gave no purchasing order. Hesta received no extension. Rell received no 
 
 When the men left, Pell's apprentice came for the gauge. He did not ask Edselsto where it belonged. He showed Oris the nick in its end and the hook he had labeled in the measuring room, so the next worker would know which pattern had actually been checked.
 
-Oris took down the corrected summary only after making the required copy for the review book. The words *paid hour saved* remained visible there, crossed through but not erased.
+Oris took down the corrected summary only after the disputed words, the correction and Rell's witness mark had been copied together into the review book. He left a legible correction beside the wage chest, where the first sheet had done its harm. The words *paid hour saved* remained visible, crossed through rather than erased; anyone reading them could now see who had written them and why they carried no authority over the roll.
 
-Luceran watched the ink dry.
+Luceran watched the ink dry. A clerk's signature had made the error traceable, not the wages payable. The roof still needed work, and Rell still had a claim that could be counted without being paid.
 
 In the nave beyond the connected passage, the first ancestral wick remained dark and the other six candles burned. No one had asked the castle to explain them. Here, at least, the smaller mystery had an author who could sign his own mistake.
 
