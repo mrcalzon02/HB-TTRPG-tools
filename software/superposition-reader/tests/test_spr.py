@@ -146,9 +146,16 @@ class VoiceLibraryTests(unittest.TestCase):
         with zipfile.ZipFile(buffer, "w") as archive:
             archive.writestr("personal_voice_01.wav", data)
             archive.writestr("original/long-source.wav", data)
+            archive.writestr("transcripts/personal_voice_01.txt", "Sphinx of black quartz, judge my vow.")
+            archive.writestr("manifest.json", json.dumps({"samples": [
+                {"file": "personal_voice_01.wav",
+                 "transcript_file": "transcripts/personal_voice_01.txt"}
+            ]}))
         result = self.voices.import_zip(self.profile["id"], buffer.getvalue())
         self.assertEqual(result["considered"], 1)
         self.assertEqual(result["added"], 1)
+        imported = self.voices.get(self.profile["id"])["samples"][0]
+        self.assertEqual(imported["transcript"], "Sphinx of black quartz, judge my vow.")
         invalid = io.BytesIO()
         with zipfile.ZipFile(invalid, "w") as archive:
             archive.writestr("../outside.wav", data)
