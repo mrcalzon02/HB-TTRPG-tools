@@ -3,7 +3,11 @@ param([switch]$CpuOnly, [switch]$SkipPreview)
 
 $ErrorActionPreference = 'Stop'
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$RepoRoot = (Resolve-Path (Join-Path $Here '..\..')).Path
+$RepoRoot = if (Test-Path -LiteralPath (Join-Path $Here 'spr_examples\bdo-current.epub')) {
+    $Here
+} else {
+    (Resolve-Path (Join-Path $Here '..\..')).Path
+}
 $Private = Join-Path $env:LOCALAPPDATA 'SuperPositionReader\neural'
 $Venv = Join-Path $Private '.venv'
 $Python = Join-Path $Venv 'Scripts\python.exe'
