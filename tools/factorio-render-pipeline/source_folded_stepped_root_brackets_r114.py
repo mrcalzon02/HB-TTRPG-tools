@@ -87,6 +87,15 @@ def preserved_digest(scene):
           if ob.name.startswith((OLD_PREFIX,NEW_PREFIX))}
     return r110.mesh_digest(scene, omit)
 
+def preserved_material_signature(scene):
+    # Object names of the six REPLACED brackets change deliberately.
+    # Preserve exact material slots of every preexisting engine mesh and
+    # every original shader graph while excluding only bracket names.
+    slots,shaders=core.scene_used_material_signature(scene)
+    return (tuple((name,mats) for name,mats in slots
+                  if not name.startswith((OLD_PREFIX,NEW_PREFIX))),
+            shaders)
+
 def old_tabs(scene):
     return {ob.name for ob in scene.objects if ob.name.startswith(OLD_PREFIX)}
 
@@ -181,7 +190,7 @@ def orbit(scene,out):
 def verify(scene,original,oldnames,camera,materials,untouched,motion,created,case):
     if tuple(float(v) for row in scene.camera.matrix_world for v in row)!=camera:
         raise RuntimeError("R114 moved original sprite-calibrated camera")
-    if core.scene_used_material_signature(scene)!=materials:
+    if preserved_material_signature(scene)!=materials:
         raise RuntimeError("R114 altered original shader slots/materials")
     if preserved_digest(scene)!=untouched:
         raise RuntimeError("R114 changed original fins, hinges, nozzle, or chassis")
@@ -225,7 +234,7 @@ def run(r113dir,outdir):
         if len(oldnames)!=6:
             raise RuntimeError("R114 does not have six separate real R113 root pips")
         camera=tuple(float(v) for row in scene.camera.matrix_world for v in row)
-        mats=core.scene_used_material_signature(scene)
+        mats=preserved_material_signature(scene)
         other=preserved_digest(scene)
         motion=core.lower_animated_fin_digest(scene)
         created=[]
