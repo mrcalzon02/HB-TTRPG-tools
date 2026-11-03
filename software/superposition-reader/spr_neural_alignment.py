@@ -25,16 +25,30 @@ def recognition_words(recognition: dict) -> list[str]:
     return words(str(recognition.get("text", "")))
 
 
-def is_complete(expected: str, heard: str, guarded: bool = False) -> tuple[bool, float]:
+def _guard_end_index(actual: list[str], target: list[str], guard_phrase: str | None):
+    """Return the LAST guard word index followed by the intended opening."""
+    n = min(FRONT_WORDS_TO_VERIFY, len(target))
+    if guard_phrase:
+        anchor = words(guard_phrase)[-1]
+        return next((i for i, token in enumerate(actual[:20])
+                     if token == anchor and actual[i + 1:i + 1 + n] == target[:n]), None)
+    count = 0
+    while count < len(actual) and count < 3 and actual[count] in GUARD_WORDS:
+        count += 1
+    if count and actual[count:count + n] == target[:n]:
+        return count - 1
+    return None
+
+
+def is_complete(expected: str, heard: str, guarded: bool = False,
+                guard_phrase: str | None = None) -> tuple[bool, float]:
     target = words(expected)
     actual = words(heard)
     if guarded:
-        prefix = 0
-        while prefix < len(actual) and prefix < 3 and actual[prefix] in GUARD_WORDS:
-            prefix += 1
-        if prefix == 0:
+        anchor = _guard_end_index(actual, target, guard_phrase)
+        if anchor is None:
             return False, 0.0
-        actual = actual[prefix:]
+        actual = actual[anchor + 1:]
     if not target or not actual:
         return False, 0.0
     # Missing, merged or invented FIRST words is a functional defect.
@@ -66,7 +80,8 @@ def timed_words(recognition: dict) -> list[tuple[str, float | None, float | None
     return result
 
 
-def trim_guarded_audio(audio, sample_rate: int, expected: str, recognition: dict):
+def trim_guarded_audio(audio, sample_rate: int, expected: str, recognition: dict,
+                       guard_phrase: str | None = None):
     """Strip a sacrificed intro only when an ASR-confirmed first word follows it.
 
     Audio and word timestamps are in the same timebase, including any leading
@@ -76,20 +91,17 @@ def trim_guarded_audio(audio, sample_rate: int, expected: str, recognition: dict
     from math import isfinite
     target = words(expected)
     heard = recognition_words(recognition)
-    passed, score = is_complete(expected, str(recognition.get("text", "")), guarded=True)
+    passed, score = is_complete(expected, str(recognition.get("text", "")),
+                                guarded=True, guard_phrase=guard_phrase)
     if not passed:
         raise ValueError("Speech recognition could not verify the full guarded narration")
     alignment = timed_words(recognition)
     n = min(FRONT_WORDS_TO_VERIFY, len(target))
-    count = 0
-    while count < len(alignment) and count < 3 and alignment[count][0] in GUARD_WORDS:
-        count += 1
-    if count == 0 or len(alignment) < count + n:
+    anchor = _guard_end_index([w for w, _, _ in alignment], target, guard_phrase)
+    if anchor is None or len(alignment) < anchor + n + 2:
         raise ValueError("No word-timed guard and target opening available")
-    if [token for token, _, _ in alignment[count:count + n]] != target[:n]:
-        raise ValueError("Recognized opening words cannot be aligned to audio")
-    guard_end = alignment[count - 1][2]
-    actual_start = alignment[count][1]
+    guard_end = alignment[anchor][2]
+    actual_start = alignment[anchor + 1][1]
     if (guard_end is None or actual_start is None or
             not isfinite(guard_end) or not isfinite(actual_start)):
         raise ValueError("Missing finite timestamps for opening speech")
@@ -108,7 +120,7 @@ def trim_guarded_audio(audio, sample_rate: int, expected: str, recognition: dict
     if fade_frames:
         for i in range(fade_frames):
             tail[i] *= i / max(1, fade_frames - 1)
-    return tail, {"guard_word": alignment[count - 1][0], "guard_count": count,
+    return tail, {"guard_word": alignment[anchor][0], "guard_count": anchor + 1,
                   "removed_seconds": round(cut_seconds, 3),
                   "first_word_pre_roll_ms": round((actual_start - cut_seconds) * 1000),
                   "guarded_asr_match": score,
