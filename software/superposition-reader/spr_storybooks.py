@@ -149,7 +149,7 @@ def build_book(book_id: str, dest: Path, root: Path = ROOT, snapshot: str = "loc
         text = manuscript_text(source, nowhere=book_id.startswith("nowhere"))
         records.append({"ordinal": chapter_number, "path": path.relative_to(root).as_posix(),
                         "title": _chapter_title(path, text), "html": markdown_html(text),
-                        "sha256": hashlib.sha256(source.encode("utf-8")).hexdigest(),
+                        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
                         "chars": len(text)})
     document_title = title + " — " + subtitle
     dest.parent.mkdir(parents=True, exist_ok=True)
