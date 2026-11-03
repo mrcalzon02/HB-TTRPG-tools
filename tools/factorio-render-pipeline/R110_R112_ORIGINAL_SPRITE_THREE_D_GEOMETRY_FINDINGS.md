@@ -1,0 +1,32 @@
+# Factorio original-sprite 3D geometry — R110/R111/R112 structural findings (2026-11-02)
+
+**Sole authoritative visual reference:** user's genuine `thruster.zip`, SHA256 `0670bc10c11800e89beb4d39dd692dc32a4d3ea4b967b742559b54a8d7967791`. This proprietary original is NOT published, embedded, or uploaded to public CI. All work is real source-calibrated Blender model geometry, not image generation, fake mockups or pixel-MAE optimization.
+
+**The task is to reconstruct the 3D forms visible in that source sprite, not merely lower rendered pixel error.** No model is visually/source-fidelity approved yet.
+
+## Verified physically edited geometry and successful workflows
+
+* R109 genuine differently cupped/flared/rolled fin metals: [run 41546823776](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/41546823776) SUCCESS; complete editable Blender models and side-angle native 3D renders preserved.
+* R110 reprofile EXISTING physical left/right `R89_SOURCE_FITTED_PORT_CAST` / `R89_SOURCE_FITTED_STARBOARD_CAST` individually plus separate real `R49_BESPOKE_CAST_MOUNT_02` center saddle: [run 41556822732](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/41556822732) SUCCESS; artifact ID `13194982863`, model `staggered_lower_heel.blend` SHA `0360eefc7cbe3ae970f320edbee8143858d03b7bfa0c4a0483f0fea07c7e8607`. All original lower 64-frame fin animation, source camera, existing 3D metal fin meshes, nozzle/body meshes and used shaders preserved.
+* R111 continuous physically forged distinct port/starboard shoulders: [run 41557746960](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/41557746960) SUCCESS; artifact ID `13194964391`, candidate `broad_stepped_forged_shoulders.blend` SHA `43a6cb8b7327c96fa1c94ea725b2f09b10f1868812ac617768d6736227dd5bff`. The wider source-side physical castings are more substantial, but their broad smooth slab faces and connections are still too uniform relative to the ORIGINAL.
+* R111 ownership experiment on the R110 actual 3D object inventory: [run 41557819290](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/41557819290) SUCCESS; artifact ID `13194414794`. Every candidate saved/reopened exact editable scene and rendered original camera + oblique. Hiding the four `R08_black_exhaust_pressure_roll` meshes removes the big smooth black arch from the modeled fin-root area. Isolating `R08_subchamber_cast_band` or `external_machined_pressure_band` alters DISTINCT upper machinery, not the main offending black arch. **Important: source study R93, run 41479481784, had already established that hiding all four pressure rolls is a source-fidelity regression. Do NOT delete all four or claim that an empty hole replaces the correct 3D shapes.** See `R93_ORIGINAL_SPRITE_HINGE_OCCLUDER_FINDINGS.md`.
+* R112 non-symmetric physical reshaping of the two aft R08 roll mesh objects `.002/.003`, with two forward roll meshes unchanged: [run 41558775372](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/41558775372) SUCCESS; artifact ID `13196595601`; 5 editable true 3D source-camera/angled form candidates. **Close inspection:** the smooth large arch is STILL visible in the deeply recessed and staggered rear-roll experiments. These changes verify executable geometry, but do NOT reconstruct the original source arch/hinge connection.
+* Independent R112 physically thinner pressed/stepped side shoulder cast experiments: [run 41558681286](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/41558681286) SUCCESS; artifact ID `13195234769`. Thin plates reduce the exaggerated mass but still look too much like broad smooth slabs.
+
+## Qualitative shape evidence — exact user source vs actual R109–R112 Blender
+
+In original frame 1, the three center-lower heat-oxidized petals are separate metal sheet forms. Above them are unlike ivory cast **L-shaped shoulders**, dark gaps/inner supports, and two short beige downward central mounting lugs, carrying structural junctions. The source does NOT display a giant single uniform black bridge arch above all five fins. It also does not show smooth monolithic putty-like side blocks.
+
+Current R112:
+1. Main metal fins now genuinely have cup curvature, side lips, physical thickness and varied widths, but remain too symmetric in the visible front-facing shape and material surface.
+2. Side castings are true 3D and separately modeled, but their exterior surface/shoulder transitions are still overbroad and smooth. Real source has distinct notched steps, offset return edges and physically separate little bridge sections.
+3. Center R49 saddle remains a too-simple pale horizontal strip with two big DARK slots. The source instead shows short beige physical downward tabs and a dark separated central tongue/recess.
+4. The smooth black arcuate rim above the fins is real R08 pressure-roll geometry; identifying its object ownership does not authorize deleting all R08 pressure rolls. Its ring profile and the inner/outer source-visible supporting structures need selective geometric reconstruction.
+
+## Recommended NEXT structural 3D modification, not further pixel-score fitting
+
+Work on a successful **source-cast R111/R112 editable Blender scene**. Give the existing center mounting casting **two SHORT, real, irregular ivory lugs** from the original visible sprite coordinates and real 3D thickness, with finite and verifiable mechanical overlap/contact to the current center casting. Reshape left/right source shoulder edges into independently formed L-shaped folded metal returns with real thickness, instead of adding another broad flat cap. For the dark arch, isolate **INDIVIDUAL** R08 pressure roll components and their overlapping generic bell (source findings R93/R94) before editing their precise section geometry: retain needed source-visible arcs, replace wrong rounded bridge segments, and do not erase the nozzle or thicken it into another ring.
+
+Preserve the genuine private source as the only visual target. Preserve existing 64-frame lower fin motion, source camera, nozzle/refractory open throat, shape-key data, heat colors and actual source input SHA guards. Save/reopen real Blender scenes, inspect 264x542 original-camera and independent 35° camera views. **Shape fidelity is a diagnostic, not a game release blocker.**
+
+This note documents verified executed workflows and visible 3D deficits only, not completion of the final Factorio source-derived 3D model.
