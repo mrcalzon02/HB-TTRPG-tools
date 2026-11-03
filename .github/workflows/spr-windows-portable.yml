@@ -35,13 +35,13 @@ jobs:
       - name: Assemble Windows portable program
         shell: pwsh
         run: |
-          python -m PyInstaller --noconfirm --clean --onedir --console --name "SuperPositionReader" --paths software/superposition-reader --hidden-import fitz --hidden-import docx --hidden-import webview.platforms.winforms --add-data "software/superposition-reader/reader.html;." --add-data "software/superposition-reader/sapi_synthesize.ps1;." --add-data "build/spr_examples;spr_examples" software/superposition-reader/spr_app.py
+          python -m PyInstaller --noconfirm --clean --onedir --console --name "SuperPositionReader" --paths software/superposition-reader --hidden-import fitz --hidden-import docx --hidden-import webview.platforms.winforms --add-data "software/superposition-reader/reader.html;." --add-data "software/superposition-reader/sapi_synthesize.ps1;." --add-data "software/superposition-reader/spr_luxtts_worker.py;." --add-data "build/spr_examples;spr_examples" software/superposition-reader/spr_app.py
           if ($LASTEXITCODE -ne 0) { throw "PyInstaller failed" }
       - name: Verify bundled executable with built-in smoke test
         shell: pwsh
         run: |
           $report = Join-Path $env:RUNNER_TEMP 'spr-bundled-smoke.json'
-          & .\dist\SuperPositionReader\SuperPositionReader.exe --self-check --report $report
+          & .\dist\SuperPositionReader\SuperPositionReader.exe --self-check --require-examples --report $report
           $exit = $LASTEXITCODE
           if (Test-Path $report) { Get-Content $report }
           else { Write-Warning "Executable did not create a self-check report" }
