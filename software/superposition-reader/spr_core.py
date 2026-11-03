@@ -81,6 +81,31 @@ def sentence_chunks(text: str, max_chars: int = 360) -> list[str]:
     return chunks
 
 
+def passage_chunks(text: str, max_chars: int = 420) -> list[str]:
+    """Group adjacent sentences for book-length TTS without sacrificing text.
+
+    Each group is limited in length and respects paragraph breaks. Detailed
+    per-sentence timing within these passages will require forced alignment.
+    """
+    if max_chars < 80:
+        raise ValueError("Passage size must be at least 80 characters")
+    groups = []
+    paragraphs = re.split(r"\n\s*\n", text.strip())
+    for paragraph in paragraphs:
+        sentences = sentence_chunks(paragraph, max_chars=max_chars)
+        bucket = ""
+        for sentence in sentences:
+            if bucket and len(bucket) + 1 + len(sentence) > max_chars:
+                groups.append(bucket)
+                bucket = ""
+            bucket = bucket + " " + sentence if bucket else sentence
+        if bucket:
+            groups.append(bucket)
+    if not groups:
+        raise ValueError("No readable passages in imported document")
+    return groups
+
+
 def _write_json_atomic(path: Path, payload: dict) -> None:
     tmp = path.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -107,7 +132,10 @@ class Archive:
         if manifest_path.is_file():
             return self.load(book_id)
         text = extract_text(safe_name, data)
-        chunks = sentence_chunks(text)
+        # Books use passage-sized synthesis jobs; short documents retain
+        # sentence-level highlighting for finer playback navigation.
+        mode = "passage" if len(text) > 18000 else "sentence"
+        chunks = passage_chunks(text) if mode == "passage" else sentence_chunks(text)
         folder.mkdir(parents=True, exist_ok=True)
         (folder / "audio").mkdir(exist_ok=True)
         (folder / ("source" + Path(safe_name).suffix.lower())).write_bytes(data)
@@ -115,6 +143,7 @@ class Archive:
             "id": book_id, "title": safe_name, "schema": 1,
             "source_sha256": hashlib.sha256(data).hexdigest(),
             "chunks": [{"index": i, "text": chunk} for i, chunk in enumerate(chunks)],
+            "segment_mode": mode,
             "audio": {}
         }
         _write_json_atomic(manifest_path, manifest)
