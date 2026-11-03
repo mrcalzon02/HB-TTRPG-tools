@@ -125,6 +125,49 @@ class ArchiveTests(unittest.TestCase):
             self.archive.import_document("empty.txt", b" \n ")
 
 
+class EpubImportTests(unittest.TestCase):
+    @staticmethod
+    def sample_epub(encrypted=False):
+        output = io.BytesIO()
+        with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as book:
+            book.writestr("mimetype", "application/epub+zip")
+            book.writestr("META-INF/container.xml",
+                '<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles>'
+                '<rootfile full-path="OPS/package.opf"/></rootfiles></container>')
+            book.writestr("OPS/package.opf",
+                '<package xmlns="http://www.idpf.org/2007/opf"><manifest>'
+                '<item id="first" href="first.xhtml" media-type="application/xhtml+xml"/>'
+                '<item id="second" href="second.xhtml" media-type="application/xhtml+xml"/>'
+                '</manifest><spine><itemref idref="second"/>'
+                '<itemref idref="first"/></spine></package>')
+            book.writestr("OPS/first.xhtml",
+                '<html><head><title>Invisible header</title></head>'
+                '<body><p>First chapter appears later.</p></body></html>')
+            book.writestr("OPS/second.xhtml",
+                '<html><body><h1>Second chapter goes first.</h1>'
+                '<p>Two &amp; three.</p><script>Never narrate this.</script></body></html>')
+            if encrypted:
+                book.writestr("META-INF/encryption.xml", "<encryption/>")
+        return output.getvalue()
+
+    def test_epub_spine_order_and_readable_text(self):
+        document = extract_text("novel.epub", self.sample_epub())
+        self.assertLess(document.index("Second chapter"), document.index("First chapter"))
+        self.assertIn("Two & three.", document)
+        self.assertNotIn("Invisible header", document)
+        self.assertNotIn("Never narrate this.", document)
+        with tempfile.TemporaryDirectory() as folder:
+            archive = Archive(pathlib.Path(folder))
+            book = archive.import_document("novel.epub", self.sample_epub())
+            self.assertGreater(len(book["chunks"]), 1)
+
+    def test_epub_rejects_drm_and_invalid_zip(self):
+        with self.assertRaisesRegex(ValueError, "Encrypted"):
+            extract_text("protected.epub", self.sample_epub(encrypted=True))
+        with self.assertRaisesRegex(ValueError, "EPUB ZIP"):
+            extract_text("broken.epub", b"not an archive")
+
+
 class VoiceLibraryTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
