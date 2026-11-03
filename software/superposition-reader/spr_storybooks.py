@@ -12,6 +12,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import zipfile
 from xml.etree import ElementTree as ET
 
@@ -224,6 +225,25 @@ def build_book(book_id: str, dest: Path, root: Path = ROOT, snapshot: str = "loc
 def build_all(output: Path, root: Path = ROOT, snapshot: str = "local") -> dict:
     books = [build_book(book_id, output / (book_id + ".epub"), root, snapshot) for book_id in NAMES]
     overview = {"schema": 1, "snapshot_commit": snapshot, "books": books}
+    voice_source = root / "software/superposition-reader/assets/voice/sphinx-original.mp3"
+    if not voice_source.is_file():
+        raise FileNotFoundError("Missing user-authorized Sphinx source recording")
+    voice_hash = hashlib.sha256(voice_source.read_bytes()).hexdigest()
+    known_hash = "ce4c621e3587b9a7f6fd1b6237433f779fa4b8ffb1bae4154ae6739da0362cd2"
+    if voice_hash != known_hash:
+        raise ValueError("Sphinx source recording differs from the verified user upload")
+    shutil.copyfile(voice_source, output / "sphinx-original.mp3")
+    overview.update({
+        "voice_file": "sphinx-original.mp3",
+        "voice_sha256": voice_hash,
+        "voice_status": "reference-only; not a generated neural model",
+        "voice_transcript": (
+            "Sphinx of black quartz, judge my vow. "
+            "Through fire and shadow I have carried my secrets across forgotten kingdoms. "
+            "I have witnessed empires crumble, kings fall, and gods abandon their thrones. "
+            "Now beneath your ancient gaze, let truth decide my fate."
+        ),
+    })
     (output / "manifest.json").write_text(json.dumps(overview, indent=2), encoding="utf-8")
     return overview
 
