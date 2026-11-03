@@ -74,7 +74,7 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
       <input id="voiceboxProfileId" type="text" maxlength="128" placeholder="Existing local Voicebox profile ID" hidden style="width:100%;padding:8px;background:#111620;color:#eef1f8;border:1px solid #45536a;border-radius:8px">
       <label for="sapiRate">Voice generation rate</label>
       <select id="sapiRate"><option value="0">Normal</option><option value="-2">Slightly slower</option><option value="2">Slightly faster</option></select>
-      <p class="small">Windows voices work independently. Voicebox engines are optional and require an already-running local Voicebox backend and an existing authorized profile. Cached narration still plays when Voicebox is closed. The integrated neural backend remains under development.</p>
+      <p class="small">SPR Neural uses a separate optional offline LuxTTS installation and your archived voice sample. Once its model has been downloaded locally, it can narrate without Voicebox or internet. Voicebox remains an alternative integration; cached narration remains playable regardless.</p>
       <button class="fill primary" id="generate" disabled>Generate entire document</button>
       <button class="fill danger" id="cancel" style="margin-top:8px" disabled>Cancel after current chunk</button>
       <progress id="progress" value="0" max="100"></progress>
@@ -120,9 +120,10 @@ function applyEngine(key, voice=""){
   const engine=engineOptions.find(item=>item.key===key);
   if(!engine)return;
   engineKey=engine.key;engineId=engine.engine_id;
-  const neural=key.startsWith("voicebox-");
-  $("voiceboxProfileId").hidden=!neural;
-  $("voiceboxIdLabel").hidden=!neural;
+  const neural=key.startsWith("voicebox-")||key==="spr-lux";
+  const external=key.startsWith("voicebox-");
+  $("voiceboxProfileId").hidden=!external;
+  $("voiceboxIdLabel").hidden=!external;
   $("voiceboxProfileId").value="";
   $("sapiRate").disabled=neural||workBusy;
   $("voice").replaceChildren();
@@ -139,6 +140,7 @@ function applyEngine(key, voice=""){
     $("voice").append(cached);
   }
   if(voice)$("voice").value=voice;
+  else if(key==="spr-lux"&&engine.default_voice)$("voice").value=engine.default_voice;
   updateButtons();
 }
 async function refreshEngineOptions(){
@@ -150,8 +152,10 @@ async function refreshEngineOptions(){
     option.textContent=e.label+(e.online===false?" (service offline)":"");
     $("engineSelect").append(option);
   }
-  const key=engineOptions.some(e=>e.key===previousKey)?previousKey:
-    (engineOptions.find(e=>e.key==="sapi")||engineOptions[0])?.key;
+  const key=engineOptions.some(e=>e.key===previousKey)&&previousKey!=="sapi"?previousKey:
+    (engineOptions.find(e=>e.key==="spr-lux")||
+     engineOptions.find(e=>e.key===previousKey)||
+     engineOptions.find(e=>e.key==="sapi")||engineOptions[0])?.key;
   if(!key){engineId="unavailable";return;}
   $("engineSelect").value=key;
   applyEngine(key,key===previousKey?previousVoice:"");
