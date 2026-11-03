@@ -88,7 +88,7 @@ def generate_cylindrical_master(scene,radius):
         front=source_camera.projected_pixel(
            scene,master.matrix_world@old.vertices[row*11+5].co)[2]
         back=source_camera.projected_pixel(
-           scene,master.matrix_world@old.vertices[N+row*11+5].co)[2]
+           scene,master.matrix_world@old.vertices[99+row*11+5].co)[2]
         skin_rows.append((max(front,back),min(front,back)))
     thickness=[max(.022,high-low) for high,low in skin_rows]
     if min(thickness)<=0:raise RuntimeError("no metal volume")
