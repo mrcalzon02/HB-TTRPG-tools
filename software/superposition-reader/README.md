@@ -4,12 +4,12 @@
 
 ## Goal
 
-An independent, fully local reader: import PDF/TXT/Markdown/DOCX, maintain a private document library, synthesize document narration with owned/authorized voice profiles, track spoken text in the document, and produce complete reusable audiobooks. EPUB, original PDF page-layer highlighting, neural voice cloning, word-level alignment, chapter audio, M4B, and production packaging are subsequent milestones.
+An independent, fully local reader: import PDF/TXT/Markdown/DOCX/DRM-free EPUB, maintain a private document library, synthesize document narration with owned/authorized voice profiles, track spoken text in the document, and produce complete reusable audiobooks. EPUB, original PDF page-layer highlighting, neural voice cloning, word-level alignment, chapter audio, M4B, and production packaging are subsequent milestones.
 
 ## What v0.1 actually implements
 
 - A private document archive under %LOCALAPPDATA%\SuperPositionReader\books and voice-reference profiles under %LOCALAPPDATA%\SuperPositionReader\voices (Linux test/dev uses XDG_DATA_HOME).
-- TXT, Markdown, text-layer PDF via PyMuPDF, and DOCX import via python-docx; chunks extracted text into sentences.
+- TXT, Markdown, text-layer PDF via PyMuPDF, DOCX import via python-docx, and DRM-free EPUB2/3 extraction in spine order using the Python standard library; chunks extracted text into sentences.
 - Native Windows single-window app using pywebview and a loopback-only Python HTTP service.
 - Existing Windows SAPI 5 voices generate offline PCM WAV files. One reusable WAV per sentence, keyed by voice/rate/text/engine.
 - Reading via HTML audio controls with playback speed, volume, sentence skipping, scroll-to-current-sentence and automatic sentence progression.
@@ -19,7 +19,7 @@ An independent, fully local reader: import PDF/TXT/Markdown/DOCX, maintain a pri
 - Optional local Voicebox adapter: when a previously installed Voicebox server is available at 127.0.0.1:17493, SPR can select an existing authorized Voicebox profile and generate narration using Qwen, LuxTTS, or Chatterbox through its documented localhost /v1/audio/speech endpoint. This is an interim option, not an independent bundled model or an automatic SPR voice-profile conversion. No remote/cloud service is contacted. Cached audio can be replayed with Voicebox stopped.
 - Standard-library headless tests for core and voice-archive paths using **synthetic silent WAV**; no user voice or model is required.
 
-**Present limitations:** PDF display is **reflowed extracted text**, not the original PDF page image; paragraph layout and exact original text positions are not retained. Sentence-level, not word-level, highlighting. No scanner/OCR or EPUB yet. Voice archives are references-only, not synthesized custom voices. This implementation uses Windows SAPI **not neural cloned voice**; do not mistake a stored voice reference sample for a ready-to-run synthesizer. Launch and audio playback on the owner's real Windows PC have not yet been demonstrated. Windows SAPI starts PowerShell once per generated sentence, which is not yet optimized for large books. Changing the voice/rate requires regeneration to avoid mixed settings. The exporter is standard WAV and intentionally refuses incomplete books or audio >3.8 GB.
+**Present limitations:** EPUB display is reflowed text extracted from the book spine, not the original illustrated/paginated ebook view. Encrypted EPUBs are rejected. PDF display is **reflowed extracted text**, not the original PDF page image; paragraph layout and exact original text positions are not retained. Sentence-level, not word-level, highlighting. No scanner/OCR yet. Voice archives are references-only, not synthesized custom voices. This implementation uses Windows SAPI **not neural cloned voice**; do not mistake a stored voice reference sample for a ready-to-run synthesizer. Launch and audio playback on the owner's real Windows PC have not yet been demonstrated. Windows SAPI starts PowerShell once per generated sentence, which is not yet optimized for large books. Changing the voice/rate requires regeneration to avoid mixed settings. The exporter is standard WAV and intentionally refuses incomplete books or audio >3.8 GB.
 
 ## Portable Windows executable preview (GitHub Actions)
 
@@ -79,7 +79,7 @@ The host binds only 127.0.0.1 at an ephemeral port and requires matching Host/Or
 ## Milestones and objective acceptance
 
 1. **v0.1 foundation (source staged):** Import a TXT document, synthesize with SAPI, highlight sentence during playback, save audio, close and reopen without regenerating completed clips. Verify on actual Windows hardware before promoting.
-2. **Document fidelity:** PDF.js page rendering, mapping between text, audio and page coordinates, EPUB/DOCX improvements and scanned-PDF OCR.
+2. **Document fidelity:** PDF.js page rendering, mapping between text, audio and page coordinates, EPUB visual rendering, DOCX improvements and scanned-PDF OCR.
 3. **Own voice:** Reuse supplied personal voice references privately; test Qwen3-TTS/Chatterbox cloning with consent, benchmarks on RTX 5070 12GB, persistent versioned voice profiles and distinct natural/dramatic styles.
 4. **Production pipeline:** prebuffer, persistent generation queue, sentence/word timestamps, quality checks, correction/regeneration, FLAC/chapter WAV and M4B.
 5. **Distribution:** standalone Windows binary installer, private voice pack import/export, durable recovery, regression tests for large books and interrupted jobs.
