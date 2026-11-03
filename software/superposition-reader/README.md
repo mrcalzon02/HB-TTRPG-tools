@@ -13,11 +13,19 @@ An independent, fully local reader: import PDF/TXT/Markdown/DOCX, maintain a pri
 - Native Windows single-window app using pywebview and a loopback-only Python HTTP service.
 - Existing Windows SAPI 5 voices generate offline PCM WAV files. One reusable WAV per sentence, keyed by voice/rate/text/engine.
 - Reading via HTML audio controls with playback speed, volume, sentence skipping, scroll-to-current-sentence and automatic sentence progression.
-- Generate whole book, cancel after current sentence, preserve completed clips for retry/restart, and export a combined WAV when all chunks are ready.
-- Private voice-reference profile creation and local WAV/MP3/FLAC/OGG/M4A or prepared-ZIP import. Compatible prepared reference ZIPs are archived without extracting into the checkout; these profiles do not yet drive synthesis.
+- Generate whole book with a single sequential speech worker. Clicking an uncached sentence moves its job ahead of queued chapters; playback can begin before the rest finishes.
+- Cancel after the current sentence, preserve completed clips for retry/restart, save reading position in a separate file, and export a combined WAV only when every sentence has matching voice/engine/rate metadata. Mixed-voice exports are rejected.
+- Private voice-reference profile creation and local WAV/MP3/FLAC/OGG/M4A or prepared-ZIP import. Compatible prepared reference ZIPs are archived without extracting into the checkout; **archived profiles are not neural models**.
+- Optional local Voicebox adapter: when a previously installed Voicebox server is available at 127.0.0.1:17493, SPR can select an existing authorized Voicebox profile and generate narration using Qwen, LuxTTS, or Chatterbox through its documented localhost /v1/audio/speech endpoint. This is an interim option, not an independent bundled model or an automatic SPR voice-profile conversion. No remote/cloud service is contacted. Cached audio can be replayed with Voicebox stopped.
 - Standard-library headless tests for core and voice-archive paths using **synthetic silent WAV**; no user voice or model is required.
 
 **Present limitations:** PDF display is **reflowed extracted text**, not the original PDF page image; paragraph layout and exact original text positions are not retained. Sentence-level, not word-level, highlighting. No scanner/OCR or EPUB yet. Voice archives are references-only, not synthesized custom voices. This implementation uses Windows SAPI **not neural cloned voice**; do not mistake a stored voice reference sample for a ready-to-run synthesizer. Launch and audio playback on the owner's real Windows PC have not yet been demonstrated. Windows SAPI starts PowerShell once per generated sentence, which is not yet optimized for large books. Changing the voice/rate requires regeneration to avoid mixed settings. The exporter is standard WAV and intentionally refuses incomplete books or audio >3.8 GB.
+
+## Portable Windows executable preview (GitHub Actions)
+
+A separate [Windows portable preview workflow](../../.github/workflows/spr-windows-portable.yml) attempts to build a bundled application without a separate Python installation. It runs the headless regression tests, PyInstaller, and a packaged executable self-check before uploading a **SPR-Windows-portable-preview** build artifact to [GitHub Actions](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/workflows/spr-windows-portable.yml). Download and extract the ZIP from a successful workflow run, then launch SuperPositionReader.exe. It is **not** an MSI or a verified Windows release; WebView2 and available installed SAPI voices are still host requirements. Avoid claiming a downloadable artifact until its workflow run is confirmed successful.
+
+The local Windows setup helper below remains available if no portable build exists.
 
 ## Install (Windows 11; Python 3.10+)
 
@@ -62,11 +70,11 @@ The host binds only 127.0.0.1 at an ephemeral port and requires matching Host/Or
 - Windows native window: pywebview (BSD) with the system's WebView2 runtime.
 - Document extraction: PyMuPDF (AGPL/commercial), python-docx (MIT).
 - Voice-reference archive: standard-library local storage, file-header validation, hashes, and ZIP size/path checks; import does not train a model.
-- Current synthesizer: installed Microsoft SAPI 5 voices, using System.Speech from Windows.
+- Current default synthesizer: installed Microsoft SAPI 5 voices, using System.Speech from Windows. Optional already-running Voicebox is supported as a separate localhost source.
 - Audio: local WAV cache with HTML audio playback, no cloud.
-- Proposed neural backend: Qwen3-TTS Base (evaluate model weights and exact redistribution license) with optional Chatterbox, via a strictly local adapter. Existing tools/voicebox is a separate optional reference/temporary development backend, not a required runtime.
+- Proposed independently bundled neural backend: Qwen3-TTS Base (evaluate model weights and exact redistribution license) with optional Chatterbox, as a strictly local SPR-managed adapter. The current Voicebox integration is an optional temporary localhost backend, not a required runtime.
 - Proposed display evolution: PDF.js original page view + word-level alignment; EPUB via Epub.js; OCR via Tesseract.
-- Installer evolution: test on Windows host, then package all application dependencies into a native EXE/MSI to remove Python setup requirements.
+- Installer evolution: a portable Windows ZIP build workflow exists but is not independently verified; next validate the CI-produced EXE on Windows and then provide a signed or identifiable installable MSI/EXE.
 
 ## Milestones and objective acceptance
 
