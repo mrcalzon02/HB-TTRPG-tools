@@ -3442,6 +3442,86 @@ Sorn called for her from the yard, and Thessa went to work.
 
 ---
 
+The messenger had not reached the district auditor before a second question caught up with Thessa.
+
+At the station gate, the intermediary's junior cashier waited beside a borrowed pony. He had ridden out with a narrow packet wrapped against the rain and a face so anxious that Sorn first asked whether someone had been hurt.
+
+"No, Captain. They told me the Warden was asking about the bridge advance."
+
+"I asked for the authority and transfer books," Thessa said. "Those are not yours to certify."
+
+"I know. But the carpenter said the balance was paid, and the office has been saying the account is finished. I counted the coins that left our counter for the advance. I thought somebody ought to know which part I actually saw."
+
+He offered the packet. Thessa did not take it immediately.
+
+"Who sent you?"
+
+"The chief clerk let me copy my counterfoil. He didn't send me to speak for the works office. He said I could give the auditor a copy if I wanted my name on it."
+
+"Then your name stays on your own statement," Thessa said. "Not on a conclusion somebody else would prefer."
+
+The cashier's counterfoil showed one cash issue against the road-stone warrant, divided into the timber yard's share and the foreman's crew share. The figures matched the clearing-book advance Thessa had examined above the grain warehouse. Beneath them were two receipt references, each copied from the vouchers held in the intermediary's file. Nothing on the page named a quarry, a stone wagon, or a transfer back into the road-stone account.
+
+"I saw the timber-yard man collect his part," the cashier said. "The foreman's share was taken by his authorized runner. I checked the runner's written authority against the office copy."
+
+"Did you see the men receive their wages?"
+
+"No. I saw the runner receive the money. That's why I wrote it that way."
+
+"Did you see who ordered the money to come from this warrant?"
+
+"The stamped instruction was on the desk when I opened the cash box. I never saw it signed."
+
+Thessa set the copy on the station table, away from the wet road sheets. "And the later appropriation balance?"
+
+"That passed through the district payment desk. I didn't issue it."
+
+"Then your counterfoil cannot establish that balance."
+
+"No." He swallowed. "But if they call the advance a second payment, they might ask me why I paid it."
+
+"They may ask. You can tell them what you witnessed. We have the carpenter's own account of what he received, and the auditor has the clearing entries. Those are separate witnesses to separate parts of the transaction."
+
+Sorn brought a dry board for the cashier to sign against. The young man wrote his name, his office, and the date on the copy. Thessa asked him to add that the receipt references were transcribed from the intermediary's retained vouchers, not originals he had carried with him. He did so, then hesitated over a blank line.
+
+"Should I say there was no restoration?"
+
+"Did you examine the treasury transfer book?"
+
+"No."
+
+"Then say that your counterfoil records no restoration at your counter. It cannot say what the treasury did elsewhere."
+
+He crossed out the stronger sentence he had begun. It was a small correction. Thessa had learned how much damage a small correction could prevent.
+
+She entered the packet in the station receipt register as a voluntarily supplied cashier copy, recording its source and the time she received it. She made one copy for the auditor's pending file and kept the signed original statement in the station packet until a proper handoff could be acknowledged. She did not append it to the road-inspection report. The damaged verge did not become evidence of a diverted stone shipment merely because both matters had reached her desk on the same afternoon.
+
+"Will this clear my name?" the cashier asked.
+
+"There is no finding against you in the papers I have seen. Your statement can establish the cash issue you handled. It cannot decide whether the works office had authority to use the stone warrant, or whether the treasury later restored it."
+
+"That sounds as though nothing is finished."
+
+"The carpenter's receipt question is narrower now. Your counterfoil makes the advance easier to check. The quarry dispatch, the works-office authority entry, and the treasury transfer are still missing. We need the custodians of those records to answer, not another person to guess."
+
+The cashier looked relieved and disappointed together. He had come expecting either an accusation or an acquittal, and Thessa had given him a register number.
+
+Sorn escorted him back to his pony. When she returned, she found Thessa writing a covering note to the auditor, identifying the cashier's limited firsthand observations and the vouchers he had only copied.
+
+"Another paper that doesn't finish anything," Sorn said.
+
+"It gives the auditor a person to ask about the advance without pretending he witnessed the treasury."
+
+"And the road?"
+
+"Still restricted."
+
+Outside, the northward clouds had thickened. Thessa sanded the note, placed it with the other accounts papers, and took up the road sheet. The messenger carrying the auditor's requests was already gone; this new copy would wait for a separate lawful dispatch. She would not date its arrival at an office that had not received it.
+
+A wagon might be waiting at the toll shelter by the time they reached it. The road could not wait for the books, and the books would not be made truer by the urgency of the road.
+
+---
+
 By the time Thessa and Sorn reached the north-road toll shelter, a loaded wagon had drawn up across the approach and its driver was arguing with a warning post.
 
 The post was winning.
