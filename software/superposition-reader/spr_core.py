@@ -149,6 +149,11 @@ class Archive:
         target = folder / "audio" / f"{index:06d}-{key[:16]}.wav"
         old = manifest["audio"].get(str(index))
         if old and old.get("key") == key and target.is_file() and target.stat().st_size > 44:
+            # The existing cache hash already commits to engine, voice and rate.
+            # Give earlier valid entries render metadata without regenerating audio.
+            if "render" not in old:
+                old["render"] = {"engine": engine.engine_id, "voice": voice, "rate": rate}
+                _write_json_atomic(folder / "manifest.json", manifest)
             return False  # Already generated; resumable without recomputation
         temp = target.with_suffix(".partial.wav")
         try:
@@ -160,7 +165,10 @@ class Archive:
             os.replace(temp, target)
         finally:
             temp.unlink(missing_ok=True)
-        manifest["audio"][str(index)] = {"key": key, "file": target.name, "seconds": duration}
+        manifest["audio"][str(index)] = {
+            "key": key, "file": target.name, "seconds": duration,
+            "render": {"engine": engine.engine_id, "voice": voice, "rate": rate},
+        }
         _write_json_atomic(folder / "manifest.json", manifest)
         return True
 
@@ -169,15 +177,52 @@ class Archive:
         entry = manifest["audio"].get(str(index))
         if entry is None:
             raise FileNotFoundError("Audio has not been generated")
-        path = self.folder(book_id) / "audio" / entry["file"]
+        filename = entry["file"]
+        if Path(filename).name != filename or not filename.endswith(".wav"):
+            raise ValueError("Unsafe cached audio file reference")
+        path = self.folder(book_id) / "audio" / filename
         if not path.is_file():
             raise FileNotFoundError("Cached WAV is missing")
         return path
+
+    def read_position(self, book_id: str) -> dict:
+        path = self.folder(book_id) / "reading-position.json"
+        if not path.exists():
+            return {"index": 0, "fraction": 0.0}
+        try:
+            position = json.loads(path.read_text(encoding="utf-8"))
+            index = int(position["index"])
+            fraction = float(position["fraction"])
+            count = len(self.load(book_id)["chunks"])
+            if 0 <= index < count and 0.0 <= fraction <= 1.0:
+                return {"index": index, "fraction": fraction}
+        except (ValueError, TypeError, KeyError, OSError):
+            pass
+        return {"index": 0, "fraction": 0.0}
+
+    def save_position(self, book_id: str, index: int, fraction: float = 0.0) -> dict:
+        count = len(self.load(book_id)["chunks"])
+        if not 0 <= index < count or not 0.0 <= fraction <= 1.0:
+            raise ValueError("Reading position outside document")
+        position = {"index": index, "fraction": fraction}
+        _write_json_atomic(self.folder(book_id) / "reading-position.json", position)
+        return position
 
     def export_wav(self, book_id: str) -> Path:
         manifest = self.load(book_id)
         if len(manifest["audio"]) != len(manifest["chunks"]):
             raise ValueError("Finish generating all narration before exporting")
+        render_set = set()
+        for index in range(len(manifest["chunks"])):
+            entry = manifest["audio"].get(str(index))
+            if entry is None:
+                raise ValueError("Missing audio for sentence " + str(index + 1))
+            render = entry.get("render")
+            if not render:
+                raise ValueError("Legacy audio is missing voice metadata; regenerate those sentences")
+            render_set.add((render["engine"], render["voice"], render["rate"]))
+        if len(render_set) != 1:
+            raise ValueError("Book contains different voices or rates; regenerate to one setting before exporting")
         output = self.folder(book_id) / "narration.wav"
         temp = output.with_suffix(".partial.wav")
         params = None
