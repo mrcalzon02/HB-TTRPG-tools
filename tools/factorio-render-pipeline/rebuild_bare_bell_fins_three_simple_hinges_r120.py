@@ -175,7 +175,12 @@ def source_axle(scene,pad,material):
     x0,y0=start;x1,y1=end
     z0=pad["pivot_axis_front_depth"]-.025
     z1=pad["pivot_axis_back_depth"]+.025
-    center_z=(z0+z1)/2
+    # The R120 first pin test was *completely invisible*: it sat behind
+    # the pad's front plane. Project the one physical shaft just ahead of
+    # that plane so we can SEE the actual axle on the source camera.
+    # This is still exactly at the authentic fin ROOT, not a new guessed
+    # upper chassis hinge location.
+    center_z=pad["pivot_axis_front_depth"]+.035
     pxunit=(r116.source_pixel_world(scene,x0+1,y0,center_z)-
             r116.source_pixel_world(scene,x0,y0,center_z)).length
     radius_px=2.2
@@ -205,7 +210,12 @@ def source_axle(scene,pad,material):
     ob["R120_fin_index"]=i
     if not core.manifold_edges(mesh)[0] or any(p.area<1e-11 for p in mesh.polygons):
         raise RuntimeError("R120 single plain axle mesh isn't a real closed physical object")
+    pin_front=max(r116.projected_pixel(scene,ob.matrix_world@v.co)[2]
+                  for v in ob.data.vertices)
     return {"name":ob.name,"fin_index":i,"real_vertices":len(mesh.vertices),
+            "frontmost_actual_3d_depth":round(pin_front,6),
+            "pad_frontmost_3d_depth":round(pad["pivot_axis_front_depth"],6),
+            "pin_protrudes_forward_from_pad":pin_front>pad["pivot_axis_front_depth"],
             "source_approved":False}
 
 def material():
@@ -218,6 +228,18 @@ def material():
     shader.inputs["Metallic"].default_value=.52
     shader.inputs["Roughness"].default_value=.67
     mat.diffuse_color=(.36,.36,.34,1.)
+    return mat
+
+def pin_material():
+    mat=bpy.data.materials.get("R120_SINGLE_EXPOSED_PIN_DARK_STEEL")
+    if mat:return mat
+    mat=bpy.data.materials.new("R120_SINGLE_EXPOSED_PIN_DARK_STEEL")
+    mat.use_nodes=True
+    shader=mat.node_tree.nodes.get("Principled BSDF")
+    shader.inputs["Base Color"].default_value=(.095,.10,.105,1.)
+    shader.inputs["Metallic"].default_value=.64
+    shader.inputs["Roughness"].default_value=.56
+    mat.diffuse_color=(.095,.10,.105,1.)
     return mat
 
 def oblique(scene,path):
@@ -276,7 +298,8 @@ def run(source_dir,outdir):
             for i in MAIN:
                 edits.append(source_pad(scene,i,mat))
             if add_axles:
-                for item in edits:axles.append(source_axle(scene,item,mat))
+                dark_pin=pin_material()
+                for item in edits:axles.append(source_axle(scene,item,dark_pin))
         bpy.context.view_layer.update()
         original_count=len(keep)
         expected=keep|{p["part_name"] for p in edits}|{a["name"] for a in axles}
