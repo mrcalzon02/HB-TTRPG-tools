@@ -76,10 +76,12 @@ class LuxEngine:
         # old implementation just padded a clipped waveform with silence.
         # Never publish an attempt unless independent ASR verifies the exact
         # first three words AND the expected ending after removal of pre-roll.
+        # Two repeated "Okay" tokens caused catastrophic self-repetition in
+        # the real CI audition. Use different, grammatical pre-roll sentences.
         variants = [
-            ("Okay. Okay. " + text, 0.82, 8),
-            ("Okay. Okay. " + text, 0.73, 10),
-            ("Well. Okay. " + text, 0.92, 10),
+            ("The story begins.", 0.76, 6),
+            ("Listen carefully.", 0.92, 8),
+            ("Let us begin.", 0.73, 10),
         ]
         diagnostics = []
         accepted = None
@@ -88,7 +90,8 @@ class LuxEngine:
             Path(diagnostic_root).mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(prefix="spr-lux-onset-") as temporary:
             folder = Path(temporary)
-            for attempt, (spoken_prompt, speed, steps) in enumerate(variants, 1):
+            for attempt, (guard_phrase, speed, steps) in enumerate(variants, 1):
+                spoken_prompt = guard_phrase + " " + text
                 recognition = {}
                 try:
                     with contextlib.redirect_stdout(sys.stderr):
@@ -117,7 +120,8 @@ class LuxEngine:
                     if not isinstance(recognition, dict):
                         raise ValueError("Independent speech recognition returned no word-aligned result")
                     trimmed, boundary = trim_guarded_audio(
-                        padded.copy(), 48000, text, recognition)
+                        padded.copy(), 48000, text, recognition,
+                        guard_phrase=guard_phrase)
                     # Add genuine silence only AFTER the first word's onset is
                     # protected by the guarded generation and measured trim.
                     trimmed = np.pad(trimmed, (int(.15 * 48000), 0))
@@ -130,7 +134,7 @@ class LuxEngine:
                                    else str(verified))
                     passed, match = is_complete(text, final_heard, guarded=False)
                     diagnostics.append({
-                        "attempt": attempt, "guard_prompt": spoken_prompt[:32],
+                        "attempt": attempt, "guard_prompt": guard_phrase,
                         "guard_transcript": recognition.get("text", "")[:220],
                         "post_trim_transcript": final_heard[:220],
                         "first_words_preserved": passed, "match": match,
