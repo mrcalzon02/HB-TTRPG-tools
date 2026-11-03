@@ -1,0 +1,4 @@
+# SPR v0.1. Download once during setup, then run locally without internet.
+PyMuPDF>=1.24,<2
+python-docx>=1.1,<2
+pywebview>=5,<7
