@@ -55,6 +55,15 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
       <p class="small">Files and generated audio remain in your private local SPR folder. Scanned PDFs and EPUB are not yet supported.</p>
       <div id="library" aria-label="Imported books"></div>
     </section>
+    <section><h2>Private voice references</h2>
+      <label for="profileName">Create a voice profile</label>
+      <input id="profileName" type="text" maxlength="100" placeholder="Example: My Dramatic Narrator" style="width:100%;padding:8px;background:#111620;color:#eef1f8;border:1px solid #45536a;border-radius:8px">
+      <button id="createProfile" class="fill" style="margin-top:8px">Create reference profile</button>
+      <label for="profileList">Saved profiles</label><select id="profileList"><option value="">Select a profile</option></select>
+      <label for="voiceSample">Add WAV, MP3, FLAC, OGG, M4A or reference ZIP</label>
+      <input id="voiceSample" type="file" accept=".wav,.mp3,.flac,.ogg,.m4a,.zip">
+      <p id="voiceArchiveStatus" class="small">Reference recordings remain private and are not cloned until a neural backend is installed.</p>
+    </section>
     <section><h2>Generation</h2>
       <label for="voice">Installed Windows voice</label>
       <select id="voice"><option value="">System default</option></select>
@@ -281,6 +290,49 @@ async function poll(){
     updateButtons();
   }catch(error){status("Local server unavailable: "+error.message);}
 }
+async function refreshVoiceProfiles(selectId){
+  const profiles=await request("/api/voice-profiles");
+  const selected=selectId||$("profileList").value;
+  $("profileList").replaceChildren();
+  const empty=document.createElement("option");
+  empty.value="";empty.textContent="Select a profile";$("profileList").append(empty);
+  for(const p of profiles){
+    const item=document.createElement("option");
+    item.value=p.id;item.textContent=p.name+" ("+p.samples+" samples)";
+    $("profileList").append(item);
+  }
+  if(profiles.some(p=>p.id===selected))$("profileList").value=selected;
+}
+$("createProfile").addEventListener("click",async()=>{
+  const name=$("profileName").value.trim();
+  if(!name){$("voiceArchiveStatus").textContent="Enter a name for the profile.";return;}
+  try{
+    const created=await post("/api/voice-profile",{name,style:"user-reference"});
+    await refreshVoiceProfiles(created.id);
+    $("profileName").value="";
+    $("voiceArchiveStatus").textContent="Reference profile created; no neural model has been trained.";
+  }catch(error){$("voiceArchiveStatus").textContent=error.message;}
+});
+$("voiceSample").addEventListener("change",async event=>{
+  const file=event.target.files?.[0];
+  const profileId=$("profileList").value;
+  if(!file)return;
+  if(!profileId){$("voiceArchiveStatus").textContent="Create or select a profile before importing audio.";event.target.value="";return;}
+  if(file.size>100*1024*1024){$("voiceArchiveStatus").textContent="Voice archive is larger than 100 MiB.";event.target.value="";return;}
+  $("voiceArchiveStatus").textContent="Importing reference recording locally...";
+  try{
+    const encoded=await new Promise((resolve,reject)=>{
+      const reader=new FileReader();
+      reader.onload=()=>resolve(String(reader.result).split(",")[1]);
+      reader.onerror=()=>reject(Error("Failed to read voice sample"));
+      reader.readAsDataURL(file);
+    });
+    const result=await post("/api/voice-sample",{profile_id:profileId,name:file.name,base64:encoded});
+    await refreshVoiceProfiles(profileId);
+    $("voiceArchiveStatus").textContent="Archived "+(result.added!==undefined?result.added+" clips":file.name)+" locally. Voice synthesis is not yet linked to this profile.";
+  }catch(error){$("voiceArchiveStatus").textContent="Import failed: "+error.message;}
+  event.target.value="";
+});
 async function initialize(){
   try{
     const voices=await request("/api/voices");
@@ -288,6 +340,7 @@ async function initialize(){
       const option=document.createElement("option");option.value=name;option.textContent=name;$("voice").append(option);
     }
     if(!voices.voices.length)status("Windows SAPI voice engine unavailable on this system.");
+    await refreshVoiceProfiles();
     await refreshLibrary();
     const items=await request("/api/library");
     if(items.length)await openBook(items[0].id);
