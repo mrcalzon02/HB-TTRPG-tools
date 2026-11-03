@@ -1,0 +1,49 @@
+name: SPR storybook snapshots and reader integration
+
+on:
+  push:
+    paths:
+      - "docs/beneath-dappled-oaks/chapters/**"
+      - "docs/nowhere-king/episodes/**"
+      - "software/superposition-reader/**"
+      - ".github/workflows/spr-story-snapshot.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  canonical-ebooks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run SPR regression suite
+        run: python -m unittest discover -s software/superposition-reader/tests -p "test_*.py" -v
+      - name: Compile authoritative story chapters into EPUBs and test import/cache
+        run: python software/superposition-reader/spr_verify_storybooks.py --output build/spr_examples --snapshot "${{ github.sha }}"
+      - name: Inspect source provenance and chapter-count ledger
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("build/spr_examples")
+          data=json.loads((root/"manifest.json").read_text(encoding="utf-8"))
+          expected={"bdo-current":30,"nowhere-s1":32,"nowhere-s2":32,"nowhere-s3":18}
+          actual={b["id"]:b["chapters"] for b in data["books"]}
+          assert actual==expected,(actual,expected)
+          for b in data["books"]:
+              assert (root/b["file"]).stat().st_size>10000,b["file"]
+          assert json.loads((root/"integration-receipt.json").read_text())["status"]=="passed"
+          print("Verified canonical snapshot:",actual)
+          PY
+      - name: Upload EPUB examples and integrity reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: SPR-canonical-books-${{ github.sha }}
+          path: build/spr_examples/
+          if-no-files-found: error
+          retention-days: 30
