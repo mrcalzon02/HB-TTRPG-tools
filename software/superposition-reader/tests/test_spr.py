@@ -3,6 +3,8 @@
 No network services, Microsoft voices or personal recordings are required.
 """
 import base64
+import io
+import zipfile
 import http.client
 import json
 import pathlib
@@ -15,6 +17,7 @@ import wave
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from spr_core import Archive, sentence_chunks, extract_text
 from spr_app import ReaderState, make_handler
+from spr_voices import VoiceLibrary
 from http.server import ThreadingHTTPServer
 
 
@@ -91,6 +94,51 @@ class ArchiveTests(unittest.TestCase):
             self.archive.import_document("empty.txt", b" \n ")
 
 
+class VoiceLibraryTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.voices = VoiceLibrary(pathlib.Path(self.tmp.name) / "private-voices")
+        self.profile = self.voices.create("My dramatic narrator")
+
+    def sample(self):
+        memory = io.BytesIO()
+        with wave.open(memory, "wb") as audio:
+            audio.setnchannels(1)
+            audio.setsampwidth(2)
+            audio.setframerate(8000)
+            audio.writeframes(b"\0\0" * 240)
+        return memory.getvalue()
+
+    def test_voice_samples_private_and_duplicate_safe(self):
+        data = self.sample()
+        result = self.voices.add_sample(self.profile["id"], "Sphinx.wav", data)
+        self.assertEqual(result["name"], "Sphinx.wav")
+        self.assertEqual(self.voices.add_sample(self.profile["id"], "Sphinx.wav", data)["sha256"], result["sha256"])
+        self.assertEqual(len(self.voices.get(self.profile["id"])["samples"]), 1)
+        self.assertTrue((self.voices.folder(self.profile["id"]) / "samples" / result["file"]).is_file())
+        self.assertEqual(self.voices.list()[0]["status"], "references-only")
+
+    def test_voice_zip_prefers_prepared_clips_and_blocks_traversal(self):
+        data = self.sample()
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, "w") as archive:
+            archive.writestr("personal_voice_01.wav", data)
+            archive.writestr("original/long-source.wav", data)
+        result = self.voices.import_zip(self.profile["id"], buffer.getvalue())
+        self.assertEqual(result["considered"], 1)
+        self.assertEqual(result["added"], 1)
+        invalid = io.BytesIO()
+        with zipfile.ZipFile(invalid, "w") as archive:
+            archive.writestr("../outside.wav", data)
+        with self.assertRaisesRegex(ValueError, "Unsafe path"):
+            self.voices.import_zip(self.profile["id"], invalid.getvalue())
+
+    def test_rejects_fake_audio_header(self):
+        with self.assertRaisesRegex(ValueError, "does not match"):
+            self.voices.add_sample(self.profile["id"], "fake.wav", b"definitely not a recording")
+
+
 class ApiTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -134,6 +182,25 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(job["error"], "")
         self.assertEqual(self.req("GET", "/api/audio/" + book_id + "/0")[0], 200)
         self.assertEqual(self.req("GET", "/api/export/" + book_id)[0], 200)
+
+    def test_voice_profile_api_archives_audio(self):
+        code, profile = self.req("POST", "/api/voice-profile", {"name": "Local narrator"})
+        self.assertEqual(code, 201)
+        data = io.BytesIO()
+        with wave.open(data, "wb") as wav:
+            wav.setnchannels(1)
+            wav.setsampwidth(2)
+            wav.setframerate(8000)
+            wav.writeframes(b"\0\0" * 80)
+        code, entry = self.req("POST", "/api/voice-sample", {
+            "profile_id": profile["id"], "name": "mine.wav",
+            "base64": base64.b64encode(data.getvalue()).decode()
+        })
+        self.assertEqual(code, 201)
+        self.assertEqual(entry["name"], "mine.wav")
+        code, profiles = self.req("GET", "/api/voice-profiles")
+        self.assertEqual(code, 200)
+        self.assertEqual(profiles[0]["samples"], 1)
 
     def test_rejects_foreign_origin_and_host(self):
         self.assertEqual(self.req("GET", "/api/library", headers={"Host": "evil.example"})[0], 403)
