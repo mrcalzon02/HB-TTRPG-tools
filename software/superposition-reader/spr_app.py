@@ -1,0 +1,203 @@
+"""SuperPosition Reader prototype desktop host and loopback-only narration API.
+
+Windows voice output uses SAPI; custom neural profiles will be plugged in later.
+"""
+from __future__ import annotations
+
+import argparse
+import base64
+import binascii
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import json
+import mimetypes
+from pathlib import Path
+import os
+import threading
+from urllib.parse import urlsplit
+import webbrowser
+
+from spr_core import Archive, MAX_DOCUMENT_BYTES, WindowsSapiEngine
+
+ROOT = Path(__file__).resolve().parent
+MAX_JSON_BYTES = (MAX_DOCUMENT_BYTES * 4 // 3) + 8192
+
+
+class ReaderState:
+    def __init__(self, archive: Archive, engine=None):
+        self.archive = archive
+        self.engine = engine
+        self.lock = threading.Lock()
+        self.cancel = threading.Event()
+        self.job = {"active": False, "done": 0, "total": 0, "error": "", "cancelled": False}
+
+    def start_generation(self, book_id: str, indices: list[int], voice: str, rate: int) -> dict:
+        if self.engine is None:
+            raise RuntimeError("No installed offline voice engine is available")
+        with self.lock:
+            if self.job["active"]:
+                raise RuntimeError("Narration generation is already running")
+            manifest = self.archive.load(book_id)
+            if any(i < 0 or i >= len(manifest["chunks"]) for i in indices):
+                raise ValueError("Invalid chunk index")
+            self.cancel.clear()
+            self.job = {"active": True, "done": 0, "total": len(indices), "error": "",
+                        "cancelled": False, "book_id": book_id}
+        def worker():
+            try:
+                for i in indices:
+                    if self.cancel.is_set():
+                        break
+                    self.archive.generate_chunk(book_id, i, self.engine, voice=voice, rate=rate)
+                    with self.lock:
+                        self.job["done"] += 1
+            except Exception as exc:
+                with self.lock:
+                    self.job["error"] = str(exc)
+            finally:
+                with self.lock:
+                    self.job["cancelled"] = self.cancel.is_set()
+                    self.job["active"] = False
+        threading.Thread(target=worker, name="SPR-Narration", daemon=True).start()
+        return self.status()
+
+    def status(self) -> dict:
+        with self.lock:
+            return self.job.copy()
+
+
+def make_handler(state: ReaderState):
+    class Handler(BaseHTTPRequestHandler):
+        server_version = "SPR/0.1"
+
+        def log_message(self, format, *args):
+            # Avoid leaking local private document titles or text to server logs.
+            return
+
+        def _json(self, payload, status=200):
+            content = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(content)))
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+            self.wfile.write(content)
+
+        def _file(self, path: Path, content_type="application/octet-stream", filename=None):
+            if not path.is_file():
+                self._json({"error": "Not found"}, 404)
+                return
+            self.send_response(200)
+            self.send_header("Content-Type", content_type)
+            self.send_header("Content-Length", str(path.stat().st_size))
+            self.send_header("Cache-Control", "no-store")
+            if filename:
+                self.send_header("Content-Disposition", "attachment; filename=" + filename)
+            self.end_headers()
+            with path.open("rb") as f:
+                while data := f.read(65536):
+                    self.wfile.write(data)
+
+        def _safe_origin(self):
+            host = self.headers.get("Host", "")
+            if host != f"127.0.0.1:{self.server.server_port}":
+                return False
+            origin = self.headers.get("Origin")
+            return origin is None or origin == f"http://127.0.0.1:{self.server.server_port}"
+
+        def do_GET(self):
+            if not self._safe_origin():
+                self._json({"error": "Only the local SPR window may access this server"}, 403)
+                return
+            segments = urlsplit(self.path).path.strip("/").split("/")
+            try:
+                if segments == [""] or segments == ["index.html"]:
+                    return self._file(ROOT / "reader.html", "text/html; charset=utf-8")
+                if segments == ["api", "library"]:
+                    return self._json(state.archive.library())
+                if segments == ["api", "voices"]:
+                    return self._json({"voices": state.engine.voices() if state.engine else [],
+                                       "engine": state.engine.engine_id if state.engine else "unavailable"})
+                if segments == ["api", "job"]:
+                    return self._json(state.status())
+                if len(segments) == 3 and segments[:2] == ["api", "book"]:
+                    return self._json(state.archive.load(segments[2]))
+                if len(segments) == 4 and segments[:2] == ["api", "audio"]:
+                    return self._file(state.archive.audio_file(segments[2], int(segments[3])), "audio/wav")
+                if len(segments) == 3 and segments[:2] == ["api", "export"]:
+                    return self._file(state.archive.export_wav(segments[2]), "audio/wav", "superposition-narration.wav")
+                self._json({"error": "Not found"}, 404)
+            except (ValueError, IndexError, FileNotFoundError, OSError, json.JSONDecodeError) as exc:
+                self._json({"error": str(exc)}, 400)
+
+        def do_POST(self):
+            if not self._safe_origin():
+                self._json({"error": "Invalid Host or Origin"}, 403)
+                return
+            try:
+                size = int(self.headers.get("Content-Length", "0"))
+                if not 1 <= size <= MAX_JSON_BYTES:
+                    raise ValueError("Invalid request size")
+                if "application/json" not in self.headers.get("Content-Type", ""):
+                    raise ValueError("Only JSON requests are supported")
+                request = json.loads(self.rfile.read(size))
+                path = urlsplit(self.path).path
+                if path == "/api/import":
+                    data = base64.b64decode(request["base64"], validate=True)
+                    record = state.archive.import_document(request["name"], data)
+                    return self._json({"id": record["id"], "chunks": len(record["chunks"])}, 201)
+                if path == "/api/generate":
+                    book_id = request["book_id"]
+                    manifest = state.archive.load(book_id)
+                    indices = (list(range(len(manifest["chunks"]))) if request.get("index") is None
+                               else [int(request["index"])])
+                    voice = str(request.get("voice", ""))[:180]
+                    rate = int(request.get("rate", 0))
+                    if not -10 <= rate <= 10:
+                        raise ValueError("SAPI rate must be -10..10")
+                    return self._json(state.start_generation(book_id, indices, voice, rate), 202)
+                if path == "/api/cancel":
+                    state.cancel.set()
+                    return self._json({"cancel_requested": True})
+                return self._json({"error": "Not found"}, 404)
+            except (ValueError, TypeError, KeyError, IndexError, OSError, binascii.Error,
+                    RuntimeError, json.JSONDecodeError) as exc:
+                self._json({"error": str(exc)}, 400)
+
+    return Handler
+
+
+def launch():
+    parser = argparse.ArgumentParser(description="SuperPosition Reader offline desktop prototype")
+    parser.add_argument("--browser", action="store_true", help="Use system browser instead of native window")
+    parser.add_argument("--port", type=int, default=0, help="Loopback port (0 chooses an available port)")
+    args = parser.parse_args()
+    archive = Archive()
+    try:
+        engine = WindowsSapiEngine() if os.name == "nt" else None
+    except RuntimeError:
+        engine = None
+    state = ReaderState(archive, engine)
+    server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(state))
+    server.daemon_threads = True
+    url = f"http://127.0.0.1:{server.server_port}/"
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        if args.browser:
+            webbrowser.open(url)
+            input("SPR is running locally. Press Enter to shut it down.\n")
+        else:
+            try:
+                import webview
+            except ImportError as exc:
+                raise SystemExit("Native window requires pywebview; run install-windows.ps1") from exc
+            webview.create_window("SuperPosition Reader — SPR", url, width=1180, height=820, min_size=(780, 580))
+            webview.start()
+    finally:
+        state.cancel.set()
+        server.shutdown()
+        server.server_close()
+
+
+if __name__ == "__main__":
+    launch()
