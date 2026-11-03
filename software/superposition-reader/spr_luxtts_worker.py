@@ -83,9 +83,13 @@ class LuxEngine:
         ]
         diagnostics = []
         accepted = None
+        diagnostic_root = os.environ.get("SPR_NEURAL_QA_DIR")
+        if diagnostic_root:
+            Path(diagnostic_root).mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(prefix="spr-lux-onset-") as temporary:
             folder = Path(temporary)
             for attempt, (spoken_prompt, speed, steps) in enumerate(variants, 1):
+                recognition = {}
                 try:
                     with contextlib.redirect_stdout(sys.stderr):
                         result = self.model.generate_speech(
@@ -99,6 +103,10 @@ class LuxEngine:
                     padded = np.pad(raw, (int(.22 * 48000), int(.38 * 48000)))
                     candidate = folder / f"candidate-{attempt}.wav"
                     sf.write(str(candidate), padded, 48000, subtype="PCM_16")
+                    if diagnostic_root:
+                        import shutil
+                        shutil.copyfile(candidate, Path(diagnostic_root) / (
+                            output.stem + f"-REJECTED-CANDIDATE-{attempt}.wav"))
                     with contextlib.redirect_stdout(sys.stderr):
                         # Supply the in-memory PCM waveform directly. Passing a
                         # filename invokes the Whisper pipeline's FFmpeg decoder,
@@ -134,13 +142,24 @@ class LuxEngine:
                                 "qa": diagnostics[-1]}
                     break
                 except (ValueError, OSError, RuntimeError, TypeError, KeyError) as error:
-                    diagnostics.append({"attempt": attempt, "reason": str(error)[:260]})
+                    diagnostics.append({
+                        "attempt": attempt, "reason": str(error)[:260],
+                        "expected": text[:260],
+                        "recognized": (recognition.get("text", "")[:420]
+                                       if isinstance(recognition, dict) else str(recognition)[:420]),
+                        "word_timestamps": (recognition.get("chunks", [])[:12]
+                                            if isinstance(recognition, dict) else [])
+                    })
         if accepted is None:
+            if diagnostic_root:
+                (Path(diagnostic_root) / (output.stem + "-rejected.json")).write_text(
+                    json.dumps({"expected": text, "attempts": diagnostics}, indent=2,
+                               ensure_ascii=False), encoding="utf-8")
             # A missing or mangled opening is not merely a subjective voice
             # quality complaint; it is objectively incomplete book text.
             raise RuntimeError("Neural opening verification failed after "
                                + str(len(variants)) + " attempts: "
-                               + json.dumps(diagnostics, ensure_ascii=False)[:1800])
+                               + json.dumps(diagnostics, ensure_ascii=False)[:3600])
         output.parent.mkdir(parents=True, exist_ok=True)
         sf.write(str(output), accepted["array"], 48000, subtype="PCM_16")
         with wave.open(str(output), "rb") as wav:
