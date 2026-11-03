@@ -13,12 +13,14 @@ import tempfile
 import threading
 import time
 import unittest
+from unittest.mock import patch
 import wave
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from spr_core import Archive, sentence_chunks, extract_text
 from spr_app import ReaderState, make_handler
 from spr_voices import VoiceLibrary
+from spr_voicebox import VoiceboxEngine
 from http.server import ThreadingHTTPServer
 
 
@@ -156,6 +158,66 @@ class VoiceLibraryTests(unittest.TestCase):
     def test_rejects_fake_audio_header(self):
         with self.assertRaisesRegex(ValueError, "does not match"):
             self.voices.add_sample(self.profile["id"], "fake.wav", b"definitely not a recording")
+
+
+class VoiceboxAdapterTests(unittest.TestCase):
+    def wav_bytes(self):
+        buf = io.BytesIO()
+        with wave.open(buf, "wb") as audio:
+            audio.setnchannels(1)
+            audio.setsampwidth(2)
+            audio.setframerate(8000)
+            audio.writeframes(b"\0\0" * 200)
+        return buf.getvalue()
+
+    def test_local_voicebox_profiles_and_wav_synthesis(self):
+        import urllib.request
+
+        class Response:
+            def __init__(self, body, content_type):
+                self.body = body
+                self.headers = {"Content-Type": content_type}
+            def __enter__(self):
+                return self
+            def __exit__(self, *_):
+                return False
+            def read(self, length=0):
+                return self.body[:length] if length else self.body
+
+        calls = []
+        def local_api(request, timeout=0):
+            url = request.full_url
+            calls.append(url)
+            self.assertTrue(url.startswith("http://127.0.0.1:17493/"))
+            if url.endswith("/profiles"):
+                return Response(json.dumps({"profiles": [{"id": "local-owner", "name": "Owner"}]}).encode(), "application/json")
+            if url.endswith("/v1/audio/speech"):
+                payload = json.loads(request.data)
+                self.assertEqual(payload["model"], "qwen")
+                self.assertEqual(payload["voice"], "local-owner")
+                self.assertEqual(payload["input"], "This is a reading test.")
+                return Response(self.wav_bytes(), "audio/wav")
+            raise AssertionError("Unexpected local endpoint")
+
+        engine = VoiceboxEngine("qwen")
+        with tempfile.TemporaryDirectory() as directory:
+            target = pathlib.Path(directory) / "test.wav"
+            with patch.object(urllib.request, "urlopen", side_effect=local_api):
+                self.assertEqual(engine.profiles(), [{"id": "local-owner", "name": "Owner"}])
+                engine.synthesize("This is a reading test.", target, voice="local-owner")
+            with wave.open(str(target), "rb") as audio:
+                self.assertEqual(audio.getnframes(), 200)
+        self.assertEqual(len(calls), 2)
+
+    def test_voicebox_rejects_invalid_configuration(self):
+        with self.assertRaises(ValueError):
+            VoiceboxEngine("unknown-model")
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "test.wav"
+            with self.assertRaisesRegex(ValueError, "Select an existing"):
+                VoiceboxEngine("qwen").synthesize("Test", path, voice="")
+            with self.assertRaisesRegex(ValueError, "rate must be zero"):
+                VoiceboxEngine("qwen").synthesize("Test", path, voice="authorized", rate=1)
 
 
 class ApiTests(unittest.TestCase):
