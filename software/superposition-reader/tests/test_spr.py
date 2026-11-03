@@ -21,6 +21,7 @@ from spr_core import Archive, sentence_chunks, passage_chunks, extract_text
 from spr_app import ReaderState, make_handler
 from spr_voices import VoiceLibrary
 from spr_voicebox import VoiceboxEngine
+from spr_neural_alignment import is_complete, trim_guarded_audio
 from http.server import ThreadingHTTPServer
 
 
@@ -234,6 +235,48 @@ class VoiceLibraryTests(unittest.TestCase):
     def test_rejects_fake_audio_header(self):
         with self.assertRaisesRegex(ValueError, "does not match"):
             self.voices.add_sample(self.profile["id"], "fake.wav", b"definitely not a recording")
+
+
+class NeuralOpeningTests(unittest.TestCase):
+    def test_exact_first_words_required_even_when_rest_matches(self):
+        expected = "There should have been forty-three of them."
+        self.assertTrue(is_complete(expected, expected)[0])
+        self.assertFalse(is_complete(expected, "Should have been forty-three of them.")[0])
+        self.assertFalse(is_complete(expected, "Okay. Okay. Should have been forty-three of them.",
+                                     guarded=True)[0])
+        self.assertTrue(is_complete(expected, "Okay. Okay. " + expected, guarded=True)[0])
+
+    def test_measured_guard_trim_preserves_onset_and_no_hardcoded_crop(self):
+        expected = "There should have been forty-three of them."
+        chunk_words = ["Okay.", "Okay.", "There", "should", "have", "been", "forty-three", "of", "them."]
+        times = [(0.30, 0.52), (0.60, 0.96), (1.15, 1.40), (1.42, 1.63),
+                 (1.65, 1.85), (1.9, 2.12), (2.15, 2.5), (2.53, 2.7), (2.75, 2.9)]
+        recognition = {"text": "Okay. Okay. " + expected,
+                       "chunks": [{"text": w, "timestamp": [a, b]}
+                                  for w, (a, b) in zip(chunk_words, times)]}
+        # A synthetic array is sufficient to validate exact boundary logic;
+        # it is NOT evidence that the model pronounced the words.
+        sample_rate = 1000
+        audio = [0.02] * (4000)
+        out, info = trim_guarded_audio(audio, sample_rate, expected, recognition)
+        self.assertEqual(info["guard_count"], 2)
+        self.assertEqual(info["first_words_verified"], ["there", "should", "have"])
+        self.assertAlmostEqual(info["removed_seconds"], 0.98)
+        self.assertGreaterEqual(info["first_word_pre_roll_ms"], 100)
+        self.assertEqual(len(out), 3020)
+
+    def test_without_word_boundary_never_guesses_trim(self):
+        expected = "There should have been forty-three of them."
+        with self.assertRaisesRegex(ValueError, "word-timed"):
+            trim_guarded_audio([0.0] * 4000, 1000, expected,
+                               {"text": "Okay. Okay. " + expected, "chunks": []})
+        bad = {"text": "Okay. Okay. " + expected,
+               "chunks": [{"text": w, "timestamp": t}
+                          for w, t in [("Okay", [.3, .6]), ("Okay", [.7, 1.01]),
+                                       ("There", [1.045, 1.2]), ("should", [1.3, 1.4]),
+                                       ("have", [1.5, 1.6])]]}
+        with self.assertRaisesRegex(ValueError, "too close"):
+            trim_guarded_audio([0.0] * 4000, 1000, expected, bad)
 
 
 class VoiceboxAdapterTests(unittest.TestCase):
