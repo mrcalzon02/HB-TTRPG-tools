@@ -70,24 +70,80 @@ class LuxEngine:
                 prepared = prepare_reference(reference, Path(tmp))
                 with contextlib.redirect_stdout(sys.stderr):
                     self.prompt_cache[key] = self.model.encode_prompt(str(prepared), rms=0.01)
+        from spr_neural_alignment import is_complete, trim_guarded_audio
         start = time.monotonic()
-        with contextlib.redirect_stdout(sys.stderr):
-            result = self.model.generate_speech(text, self.prompt_cache[key],
-                                                 num_steps=6, speed=0.82)
-        arr = result.detach().cpu().numpy() if hasattr(result, "detach") else np.asarray(result)
-        arr = np.asarray(arr, dtype="float32").squeeze()
-        if arr.ndim != 1 or not len(arr) or not np.isfinite(arr).all():
-            raise ValueError("LuxTTS returned no usable audio")
-        # Audible output is 48 kHz with small silent margins to protect first/last words.
-        arr = np.pad(arr, (int(.22 * 48000), int(.38 * 48000)))
+        # A sacrificial spoken pre-roll protects the wanted first phoneme. The
+        # old implementation just padded a clipped waveform with silence.
+        # Never publish an attempt unless independent ASR verifies the exact
+        # first three words AND the expected ending after removal of pre-roll.
+        variants = [
+            ("Okay. Okay. " + text, 0.82, 8),
+            ("Okay. Okay. " + text, 0.73, 10),
+            ("Well. Okay. " + text, 0.92, 10),
+        ]
+        diagnostics = []
+        accepted = None
+        with tempfile.TemporaryDirectory(prefix="spr-lux-onset-") as temporary:
+            folder = Path(temporary)
+            for attempt, (spoken_prompt, speed, steps) in enumerate(variants, 1):
+                try:
+                    with contextlib.redirect_stdout(sys.stderr):
+                        result = self.model.generate_speech(
+                            spoken_prompt, self.prompt_cache[key],
+                            num_steps=steps, speed=speed)
+                    raw = (result.detach().cpu().numpy()
+                           if hasattr(result, "detach") else np.asarray(result))
+                    raw = np.asarray(raw, dtype="float32").squeeze()
+                    if raw.ndim != 1 or not len(raw) or not np.isfinite(raw).all():
+                        raise ValueError("LuxTTS produced no finite mono audio")
+                    padded = np.pad(raw, (int(.22 * 48000), int(.38 * 48000)))
+                    candidate = folder / f"candidate-{attempt}.wav"
+                    sf.write(str(candidate), padded, 48000, subtype="PCM_16")
+                    with contextlib.redirect_stdout(sys.stderr):
+                        recognition = self.model.transcriber(
+                            str(candidate), return_timestamps="word")
+                    if not isinstance(recognition, dict):
+                        raise ValueError("Independent speech recognition returned no word-aligned result")
+                    trimmed, boundary = trim_guarded_audio(
+                        padded.copy(), 48000, text, recognition)
+                    # Add genuine silence only AFTER the first word's onset is
+                    # protected by the guarded generation and measured trim.
+                    trimmed = np.pad(trimmed, (int(.15 * 48000), 0))
+                    corrected = folder / f"corrected-{attempt}.wav"
+                    sf.write(str(corrected), trimmed, 48000, subtype="PCM_16")
+                    with contextlib.redirect_stdout(sys.stderr):
+                        verified = self.model.transcriber(str(corrected))
+                    final_heard = (verified.get("text", "") if isinstance(verified, dict)
+                                   else str(verified))
+                    passed, match = is_complete(text, final_heard, guarded=False)
+                    diagnostics.append({
+                        "attempt": attempt, "guard_prompt": spoken_prompt[:32],
+                        "guard_transcript": recognition.get("text", "")[:220],
+                        "post_trim_transcript": final_heard[:220],
+                        "first_words_preserved": passed, "match": match,
+                        "boundary": boundary,
+                    })
+                    if not passed:
+                        continue
+                    accepted = {"frames": len(trimmed), "array": trimmed,
+                                "qa": diagnostics[-1]}
+                    break
+                except (ValueError, OSError, RuntimeError, TypeError, KeyError) as error:
+                    diagnostics.append({"attempt": attempt, "reason": str(error)[:260]})
+        if accepted is None:
+            # A missing or mangled opening is not merely a subjective voice
+            # quality complaint; it is objectively incomplete book text.
+            raise RuntimeError("Neural opening verification failed after "
+                               + str(len(variants)) + " attempts: "
+                               + json.dumps(diagnostics, ensure_ascii=False)[:1800])
         output.parent.mkdir(parents=True, exist_ok=True)
-        sf.write(str(output), arr, 48000, subtype="PCM_16")
+        sf.write(str(output), accepted["array"], 48000, subtype="PCM_16")
         with wave.open(str(output), "rb") as wav:
             duration = wav.getnframes() / wav.getframerate()
         return {"status": "generated", "seconds": round(duration, 3),
                 "elapsed_seconds": round(time.monotonic() - start, 2),
                 "device": self.device, "model": self.model_name,
-                "reference_sha256": key,
+                "reference_sha256": key, "qa": accepted["qa"],
                 "audio_sha256": hashlib.sha256(output.read_bytes()).hexdigest()}
 
 
