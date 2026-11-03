@@ -13,6 +13,7 @@ import mimetypes
 from pathlib import Path
 import os
 import threading
+import tempfile
 from urllib.parse import urlsplit
 import webbrowser
 import zipfile
@@ -224,11 +225,41 @@ def make_handler(state: ReaderState):
     return Handler
 
 
+def self_check(report_path: str = "") -> int:
+    """Source/portable-package smoke test; does not assert audible Windows playback."""
+    checks = {"reader_html": (ROOT / "reader.html").is_file(),
+              "sapi_script": (ROOT / "sapi_synthesize.ps1").is_file()}
+    error = ""
+    try:
+        import fitz  # noqa: F401 - verifies bundled optional PDF parser
+        import docx  # noqa: F401 - verifies bundled optional DOCX parser
+        import webview  # noqa: F401 - verifies bundled desktop UI package
+        with tempfile.TemporaryDirectory() as folder:
+            archive = Archive(Path(folder))
+            record = archive.import_document("smoke.txt", b"Hello from the SuperPosition Reader.")
+            checks["private_archive"] = len(archive.load(record["id"])["chunks"]) == 1
+            archive.save_position(record["id"], 0, 0.5)
+            checks["position_roundtrip"] = archive.read_position(record["id"])["fraction"] == 0.5
+    except Exception as exc:
+        error = str(exc)
+    result = {"ok": all(checks.values()) and not error, "checks": checks, "error": error,
+              "windows_sapi_voices": WindowsSapiEngine().voices() if os.name == "nt" else []}
+    if report_path:
+        Path(report_path).write_text(json.dumps(result, indent=2), encoding="utf-8")
+    else:
+        print(json.dumps(result, indent=2))
+    return 0 if result["ok"] else 1
+
+
 def launch():
     parser = argparse.ArgumentParser(description="SuperPosition Reader offline desktop prototype")
     parser.add_argument("--browser", action="store_true", help="Use system browser instead of native window")
     parser.add_argument("--port", type=int, default=0, help="Loopback port (0 chooses an available port)")
+    parser.add_argument("--self-check", action="store_true", help="Verify bundled parser, UI, SAPI script and archive")
+    parser.add_argument("--report", type=str, default="", help="Write --self-check results as JSON to this path")
     args = parser.parse_args()
+    if args.self_check:
+        raise SystemExit(self_check(args.report))
     archive = Archive()
     try:
         engine = WindowsSapiEngine() if os.name == "nt" else None
