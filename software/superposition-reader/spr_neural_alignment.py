@@ -98,7 +98,7 @@ def trim_guarded_audio(audio, sample_rate: int, expected: str, recognition: dict
     alignment = timed_words(recognition)
     n = min(FRONT_WORDS_TO_VERIFY, len(target))
     anchor = _guard_end_index([w for w, _, _ in alignment], target, guard_phrase)
-    if anchor is None or len(alignment) < anchor + n + 2:
+    if anchor is None or len(alignment) < anchor + n + 1:
         raise ValueError("No word-timed guard and target opening available")
     guard_end = alignment[anchor][2]
     actual_start = alignment[anchor + 1][1]
