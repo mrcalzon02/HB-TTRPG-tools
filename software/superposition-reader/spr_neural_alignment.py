@@ -10,7 +10,7 @@ from __future__ import annotations
 from difflib import SequenceMatcher
 import re
 
-GUARD_WORDS = {"okay", "well"}
+GUARD_WORDS = {"okay", "ok", "well"}
 FRONT_WORDS_TO_VERIFY = 3
 
 
@@ -29,9 +29,12 @@ def is_complete(expected: str, heard: str, guarded: bool = False) -> tuple[bool,
     target = words(expected)
     actual = words(heard)
     if guarded:
-        if not actual or actual[0] not in GUARD_WORDS:
+        prefix = 0
+        while prefix < len(actual) and prefix < 3 and actual[prefix] in GUARD_WORDS:
+            prefix += 1
+        if prefix == 0:
             return False, 0.0
-        actual = actual[1:]
+        actual = actual[prefix:]
     if not target or not actual:
         return False, 0.0
     # Missing, merged or invented FIRST words is a functional defect.
@@ -78,12 +81,15 @@ def trim_guarded_audio(audio, sample_rate: int, expected: str, recognition: dict
         raise ValueError("Speech recognition could not verify the full guarded narration")
     alignment = timed_words(recognition)
     n = min(FRONT_WORDS_TO_VERIFY, len(target))
-    if len(alignment) < n + 1 or alignment[0][0] not in GUARD_WORDS:
+    count = 0
+    while count < len(alignment) and count < 3 and alignment[count][0] in GUARD_WORDS:
+        count += 1
+    if count == 0 or len(alignment) < count + n:
         raise ValueError("No word-timed guard and target opening available")
-    if [token for token, _, _ in alignment[1:n + 1]] != target[:n]:
+    if [token for token, _, _ in alignment[count:count + n]] != target[:n]:
         raise ValueError("Recognized opening words cannot be aligned to audio")
-    guard_end = alignment[0][2]
-    actual_start = alignment[1][1]
+    guard_end = alignment[count - 1][2]
+    actual_start = alignment[count][1]
     if (guard_end is None or actual_start is None or
             not isfinite(guard_end) or not isfinite(actual_start)):
         raise ValueError("Missing finite timestamps for opening speech")
@@ -102,7 +108,7 @@ def trim_guarded_audio(audio, sample_rate: int, expected: str, recognition: dict
     if fade_frames:
         import numpy as np
         tail[:fade_frames] *= np.linspace(0.0, 1.0, fade_frames, endpoint=True)
-    return tail, {"guard_word": alignment[0][0],
+    return tail, {"guard_word": alignment[count - 1][0], "guard_count": count,
                   "removed_seconds": round(cut_seconds, 3),
                   "first_word_pre_roll_ms": round((actual_start - cut_seconds) * 1000),
                   "guarded_asr_match": score,
