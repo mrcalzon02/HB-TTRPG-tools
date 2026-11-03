@@ -107,8 +107,11 @@ class SprLuxEngine:
         env["PYTHONNOUSERSITE"] = "1"
         flags = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
         self._responses = queue.Queue()
+        command = [str(self.python), "-u", str(self.script), "--serve"]
+        if (self.app_dir / "neural" / "force-cpu.txt").is_file():
+            command.append("--cpu")
         self._process = subprocess.Popen(
-            [str(self.python), "-u", str(self.script), "--serve"],
+            command,
             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self._log,
             cwd=str(self.app_dir), env=env, text=True, encoding="utf-8",
             bufsize=1, creationflags=flags)
