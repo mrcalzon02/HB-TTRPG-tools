@@ -1,0 +1,80 @@
+name: Factorio R112 actually reshape mispositioned rear dark collar metal, preserve needed forward rolls
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/source_rear_pressure_roll_forging_r112.py'
+      - '.github/workflows/factorio-source-rear-roll-forging-r112.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-rear-roll-3d-forging:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover actual verified R111 source-contoured cast model and retain original proprietary sprite privacy
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41557746960
+          name: factorio-r111-continuous-original-source-asymmetric-forged-hinge-volumes
+          github-token: ${{ github.token }}
+          path: private-ci/r111
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Recover pinned Blender native 3D modelling environment
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Real 3D reprofile only mislocated rear pressure roll metal, preserve needed source forward rolls and hinges
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/source_rear_pressure_roll_forging_r112.py -- \
+            --r111-dir private-ci/r111/output/r111 --out private-ci/output/r112
+      - name: Verify all physical 3D forging edits, preserved forward rings and unmodified source animated fins
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          out=Path('private-ci/output/r112')
+          r=json.loads((out/'r112_physical_asymmetric_rear_roll_mesh_cases.json').read_text())
+          assert r['R93_all_four_pressure_roll_deletion_rejected']
+          assert not r['private_original_artwork_exported']
+          assert not r['source_shape_approval']
+          assert len(r['cases'])==5
+          for case in r['cases']:
+              assert case['forward_source_consistent_roll_meshes_unchanged']
+              assert case['original_r111_source_casts_and_refractory_and_fins_unchanged']
+              assert case['source_shape_not_approved']
+              assert (out/case['editable_3d_blend']).stat().st_size>100000
+              assert (out/case['angled_3d_inspection']).stat().st_size>5000
+              assert len(case['source_camera_frames'])==2
+              for frame in case['source_camera_frames'].values():
+                  assert (out/frame).stat().st_size>5000
+              for spec in case['genuine_3d_reshaped_rolls'].values():
+                  assert spec['max_real_vertex_displacement_m']>.035
+                  assert spec['before']['real_vertices']==spec['after']['real_vertices']
+                  assert spec['before']['real_polygons']==spec['after']['real_polygons']
+                  assert spec['no_original_source_bitmap_in_geometry']
+          assert not r['cases'][0]['genuine_3d_reshaped_rolls']
+          assert all(c['genuine_3d_reshaped_rolls'] for c in r['cases'][1:])
+          print('R112_REAL_3D_FORGED_REAR_PRESSURE_ROLL_AND_ANIMATION_INVARIANTS_PASS')
+          PY
+      - name: Upload only actual editable Blender 3D models, native renders and geometry inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r112-source-authentic-rear-pressure-roll-true-asymmetric-metal
+          path: |
+            private-ci/output/r112/*.blend
+            private-ci/output/r112/*.png
+            private-ci/output/r112/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
