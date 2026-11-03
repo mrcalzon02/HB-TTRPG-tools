@@ -137,7 +137,7 @@ class Archive:
         results = []
         for path in parent.glob("*/manifest.json"):
             try:
-                record = json.loads(path.read_text(encoding="utf-8"))
+                record = self.load(path.parent.name)
                 results.append({"id": record["id"], "title": record["title"],
                                 "chunks": len(record["chunks"]), "ready": len(record["audio"])})
             except (OSError, ValueError, KeyError):
