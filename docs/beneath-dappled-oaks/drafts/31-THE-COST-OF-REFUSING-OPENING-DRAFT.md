@@ -3662,7 +3662,9 @@ The second farmer set down his basket. "You told us the wagon was due before the
 
 The first farmer's mouth tightened. "My hired people are ready. I paid them to clear the beds yesterday."
 
-The buyer had no answer that would restore the day. He took them inside and laid the notice where both could see it. Neither farmer could read every word, so the clerk read it aloud, including the line that said no delivery had been made.
+The buyer had been counting on the seed to arrive as surely as she had. He could neither put the cleared beds back under yesterday's weather nor make her hired people unwork a day. If he kept her deposit while waiting for the carrier, she would be financing a journey whose end he could not name. If he returned it, she might buy elsewhere and leave him with seed he had already agreed to purchase but could not yet receive. Both were real costs; neither was hers to carry merely because he preferred the second.
+
+He took them inside and laid the notice where both could see it. Neither farmer could read every word, so the clerk read it aloud, including the line that said no delivery had been made. The buyer asked him to read the date of receipt as well. The shelter time on the paper had not been witnessed at the mill, and the two times must not become one simply because they fitted in the same column.
 
 "Is that a Warden order?" the second asked.
 
@@ -3672,35 +3674,51 @@ The buyer had no answer that would restore the day. He took them inside and laid
 
 "Not for a delay I cannot yet explain to you. That is my choice about your orders, not a ruling on the carrier's agreement."
 
-He fetched the customer book. The first farmer had paid enough to buy seed elsewhere if she could find it, but not enough to pay twice. He offered to return the deposit in full and cancel her order, or keep it against a later delivery without a new holding charge. He could not offer a date.
+He fetched the customer book. The first farmer had paid enough to buy seed elsewhere if she could find it, but not enough to pay twice. He laid her original deposit entry beside the cash he could actually return. There was no deduction for notice, handling, or the buyer's trouble; those were not charges she had agreed to pay. He offered to return the deposit in full and cancel her unfilled order, or keep it against a later delivery without a new holding charge. He could not offer a date.
 
 She looked at the money he had counted out.
 
 "If I take it, you may sell the seed to someone else."
 
-"If it arrives, yes."
+"If it arrives, yes. Not before."
 
 "And if I leave it, the weather may go past me."
 
 "Yes."
 
-She took the coins. Her hand shook a little as she tied the purse. The buyer wrote *deposit returned by customer's choice* beside the original entry and asked her to check the amount. He did not write *satisfied*.
+She took the coins. Her hand shook a little as she tied the purse. The buyer wrote *deposit returned by customer's choice* beside the original entry, counted the sum back to her, and asked her to check it. He did not write *satisfied*, because she had not received seed or satisfaction, only her own money.
 
-The second farmer kept his order open. He wanted a written acknowledgment that no barley had been delivered and that he could reconsider when there was actual news. The clerk wrote it in plain words. The farmer pressed a thumb against the paper as though he might force a date out of it.
+The second farmer kept his order open. He wanted a written acknowledgment that no barley had been delivered and that he could reconsider when there was actual news. The clerk wrote it in plain words, with no new delivery date. The farmer pressed a thumb against the paper as though he might force a date out of it.
+
+"Can his order take the sacks she no longer wants?" the clerk asked when the man had gone.
+
+"We may have a different customer for them if they arrive," the buyer said. "We do not have a second wagon or an extra sack. Leave his quantity as agreed, and don't turn her cancellation into an arrival in the stock book."
+
+The clerk left the stock column untouched. The buyer had lost one secured sale and retained one obligation to a customer who could still withdraw. The absence of seed did not become inventory because the customer book now looked tidier.
 
 "Someone has to pay for this," he said.
 
 "Someone already is," the buyer replied. "That doesn't tell us who owes whom under the carriage terms."
 
-When they had gone, the clerk brought out the carrier's agreement. A line concerning arrival before the market bell governed the premium; a separate clause described charges for late performance. The buyer had been angry enough to mark both against the carrier the moment the bell rang. He could still make that claim. He could not honestly say that the carrier had arrived late with a load and been refused, or that the buyer had accepted a delivery which had never reached him.
+When they had gone, the clerk brought out the carrier's agreement. A line concerning arrival before the market bell governed the premium; a separate clause described charges for late performance. The buyer had been angry enough to mark both against the carrier the moment the bell rang. He could still assert a claim under those words. He could not honestly say that the carrier had arrived late with a load and been refused, that the buyer had accepted delivery, or that the carrier had been free to disregard a public heavy-load restriction.
 
 "Shall I enter the charge?" the clerk asked.
 
 "Enter that the deadline passed and performance is disputed. Hold the amount open."
 
+"In the carrier's debt column?"
+
+"Not as money he has admitted owing. Keep a separate disputed-claim memorandum. We know the bell rang. We do not yet know which costs the agreement will finally put on him."
+
 "That's not the same as waiving it."
 
 "No. And don't tell the carrier that it is."
+
+The clerk hesitated over the returned deposit. "Can we set her refund against the late charge?"
+
+"Not as though the carrier has paid it. The coins left our box today. They haven't come back from him, and a claim isn't cash."
+
+The buyer could feel the loss more clearly now that he had refused to disguise it as a receivable. The refunded farmer might find seed elsewhere; the other might still need his order when the wagon finally came. If the buyer asserted every possible charge before checking the road notice, he might protect a figure on paper and make a settlement harder. If he abandoned the claim without examining the agreement, he would be choosing a loss he had no reason yet to concede. He chose neither fiction.
 
 He opened a new sheet. On one side he listed what he could establish: the promised date, the missed bell, the notice's actual receipt, the traveler's limited observations, the returned deposit, and the order still open. On the other he listed what he needed before taking a final position: the carrier's original journey slip, the shelter keeper's witnessed arrival entry, any copy of the Warden road sheet the carrier held, and the actual date of any eventual delivery or return.
 
@@ -3712,13 +3730,19 @@ He opened a new sheet. On one side he listed what he could establish: the promis
 
 "To establish what restriction was recorded. It won't settle our contract."
 
+"And if the driver couldn't choose another road?"
+
+"That matters to what we ask of him. It doesn't tell us what every clause means. We must hear what he could actually do before we claim what he should have done."
+
 The clerk looked at the two columns. "We have a great many things that don't settle the contract."
 
 "We have a great many people who would like us to pretend they do."
 
-The buyer wrote a reply to the carrier. He acknowledged receipt of the delayed notice, confirmed that no seed had been received, and stated that the missed deadline and premium remained unresolved. He asked for the supporting papers when they could be sent by an ordinary lawful route. He offered no permission to cross the restricted verge, no substitute road, and no promise that the contract charge would disappear. He did say that he would not treat silence caused by the closed heavy route as proof the carrier had abandoned the load.
+The buyer wrote a reply to the carrier. He acknowledged receipt of the delayed notice, confirmed that no seed had been received, and stated that the missed deadline, premium, and any late charge remained unresolved. He asked for the original journey slip, the keeper's witnessed arrival entry, and the Warden road-sheet copy, if the carrier possessed one, when those papers could be sent by an ordinary lawful route. He also asked for a firsthand account of whether the wagon remained at the shelter or had since been lawfully moved; the traveler's glimpse of covered sacks was not an answer about their present condition.
 
-A second note went to the Warden station, asking only whether a heavy-load warning was recorded at the north approach at the stated time and where an ordinary confirmation could be requested. The buyer did not ask the Wardens to decide who owed the premium.
+He read the reply again and struck out a sentence instructing the carrier to wait until the buyer could decide what to do. The buyer could decide whether to accept a later delivery and what claim to pursue. He could not order another man to keep paying for shelter, or command a heavy wagon through ground the Wardens had not cleared. The letter offered no permission to cross the restricted verge, no substitute road, no promise to reimburse waiting costs, and no promise that the contract charge would disappear. It did say that he would not treat silence caused by the restricted heavy route as proof the carrier had abandoned the load.
+
+A second note was prepared for the Warden station, asking only whether a heavy-load warning was recorded at the north approach at the stated time and where an ordinary confirmation could be requested. The buyer did not ask the Wardens to decide who owed the premium. He left space to record when each outgoing paper was actually collected, rather than dating a journey that had not begun.
 
 The clerk sanded both pages.
 
