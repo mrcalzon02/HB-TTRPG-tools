@@ -8,15 +8,16 @@ An independent, fully local reader: import PDF/TXT/Markdown/DOCX, maintain a pri
 
 ## What v0.1 actually implements
 
-- A private document archive under %LOCALAPPDATA%\SuperPositionReader\books (Linux test/dev uses XDG_DATA_HOME).
+- A private document archive under %LOCALAPPDATA%\SuperPositionReader\books and voice-reference profiles under %LOCALAPPDATA%\SuperPositionReader\voices (Linux test/dev uses XDG_DATA_HOME).
 - TXT, Markdown, text-layer PDF via PyMuPDF, and DOCX import via python-docx; chunks extracted text into sentences.
 - Native Windows single-window app using pywebview and a loopback-only Python HTTP service.
 - Existing Windows SAPI 5 voices generate offline PCM WAV files. One reusable WAV per sentence, keyed by voice/rate/text/engine.
 - Reading via HTML audio controls with playback speed, volume, sentence skipping, scroll-to-current-sentence and automatic sentence progression.
 - Generate whole book, cancel after current sentence, preserve completed clips for retry/restart, and export a combined WAV when all chunks are ready.
-- Standard-library headless tests for all core paths using **synthetic silent WAV**; no user voice or model is required.
+- Private voice-reference profile creation and local WAV/MP3/FLAC/OGG/M4A or prepared-ZIP import. Compatible prepared reference ZIPs are archived without extracting into the checkout; these profiles do not yet drive synthesis.
+- Standard-library headless tests for core and voice-archive paths using **synthetic silent WAV**; no user voice or model is required.
 
-**Present limitations:** PDF display is **reflowed extracted text**, not the original PDF page image; paragraph layout and exact original text positions are not retained. Sentence-level, not word-level, highlighting. No scanner/OCR or EPUB yet. This implementation uses Windows SAPI **not neural cloned voice**; do not mistake a stored voice reference sample for a ready-to-run synthesizer. Launch and audio playback on the owner's real Windows PC have not yet been demonstrated. Windows SAPI starts PowerShell once per generated sentence, which is not yet optimized for large books. Changing the voice/rate requires regeneration to avoid mixed settings. The exporter is standard WAV and intentionally refuses incomplete books or audio >3.8 GB.
+**Present limitations:** PDF display is **reflowed extracted text**, not the original PDF page image; paragraph layout and exact original text positions are not retained. Sentence-level, not word-level, highlighting. No scanner/OCR or EPUB yet. Voice archives are references-only, not synthesized custom voices. This implementation uses Windows SAPI **not neural cloned voice**; do not mistake a stored voice reference sample for a ready-to-run synthesizer. Launch and audio playback on the owner's real Windows PC have not yet been demonstrated. Windows SAPI starts PowerShell once per generated sentence, which is not yet optimized for large books. Changing the voice/rate requires regeneration to avoid mixed settings. The exporter is standard WAV and intentionally refuses incomplete books or audio >3.8 GB.
 
 ## Install (Windows 11; Python 3.10+)
 
@@ -60,6 +61,7 @@ The host binds only 127.0.0.1 at an ephemeral port and requires matching Host/Or
 
 - Windows native window: pywebview (BSD) with the system's WebView2 runtime.
 - Document extraction: PyMuPDF (AGPL/commercial), python-docx (MIT).
+- Voice-reference archive: standard-library local storage, file-header validation, hashes, and ZIP size/path checks; import does not train a model.
 - Current synthesizer: installed Microsoft SAPI 5 voices, using System.Speech from Windows.
 - Audio: local WAV cache with HTML audio playback, no cloud.
 - Proposed neural backend: Qwen3-TTS Base (evaluate model weights and exact redistribution license) with optional Chatterbox, via a strictly local adapter. Existing tools/voicebox is a separate optional reference/temporary development backend, not a required runtime.
