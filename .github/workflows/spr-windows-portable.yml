@@ -27,17 +27,25 @@ jobs:
       - name: Verify offline archive, queue, audio and API functionality
         shell: pwsh
         run: python -m unittest discover -s software/superposition-reader/tests -p "test_*.py" -v
+      - name: Build four canonical story EPUBs and validate narration archive
+        shell: pwsh
+        run: |
+          python software/superposition-reader/spr_verify_storybooks.py --output build/spr_examples --snapshot $env:GITHUB_SHA
+          if ($LASTEXITCODE -ne 0) { throw "Canonical EPUB integration failed" }
       - name: Assemble Windows portable program
         shell: pwsh
         run: |
-          python -m PyInstaller --noconfirm --clean --onedir --windowed --name "SuperPositionReader" --paths software/superposition-reader --hidden-import fitz --hidden-import docx --hidden-import webview.platforms.winforms --add-data "software/superposition-reader/reader.html;." --add-data "software/superposition-reader/sapi_synthesize.ps1;." software/superposition-reader/spr_app.py
+          python -m PyInstaller --noconfirm --clean --onedir --console --name "SuperPositionReader" --paths software/superposition-reader --hidden-import fitz --hidden-import docx --hidden-import webview.platforms.winforms --add-data "software/superposition-reader/reader.html;." --add-data "software/superposition-reader/sapi_synthesize.ps1;." --add-data "build/spr_examples;spr_examples" software/superposition-reader/spr_app.py
           if ($LASTEXITCODE -ne 0) { throw "PyInstaller failed" }
       - name: Verify bundled executable with built-in smoke test
         shell: pwsh
         run: |
           $report = Join-Path $env:RUNNER_TEMP 'spr-bundled-smoke.json'
           & .\dist\SuperPositionReader\SuperPositionReader.exe --self-check --report $report
-          if ($LASTEXITCODE -ne 0) { throw "Bundled executable self-check failed" }
+          $exit = $LASTEXITCODE
+          if (Test-Path $report) { Get-Content $report }
+          else { Write-Warning "Executable did not create a self-check report" }
+          if ($exit -ne 0) { throw "Bundled executable self-check failed ($exit)" }
           $check = Get-Content $report -Raw | ConvertFrom-Json
           if (-not $check.ok) { throw "SPR self-check failed: $(Get-Content $report -Raw)" }
           Get-Content $report
