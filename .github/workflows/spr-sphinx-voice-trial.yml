@@ -61,9 +61,16 @@ jobs:
                   audio=array.array('h',w.readframes(w.getnframes()))
                   assert max(abs(x) for x in audio)>200,'Silent voice generation'
               assert hashlib.sha256(path.read_bytes()).hexdigest()==item['audio_sha256']
+              qa=item.get('qa')
+              assert qa and qa.get('first_words_preserved') is True, 'Unverified opening phonemes: '+item['id']
+              assert qa['boundary']['first_word_pre_roll_ms']>=60, 'Unsafe first-word trim'
+              assert qa['match']>=.76, 'Narration transcript diverged from source'
               print(item['id'],item['seconds'],'seconds',len(item['text']),'source characters')
+              print('First words verified:',qa['boundary']['first_words_verified'])
+              print('ASR after trimming:',qa['post_trim_transcript'])
           PY
       - name: Upload original-voice narration preview for auditory review
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: SPR-Sphinx-neural-narration-preview-${{ github.sha }}
