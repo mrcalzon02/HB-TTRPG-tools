@@ -19,7 +19,7 @@ from spr_bootstrap import VOICE_NAME
 
 
 class SprLuxEngine:
-    engine_id = "spr-luxtts-yatharths-base-v1"
+    engine_id = "spr-luxtts-yatharths-base-v2-verified-onset"
 
     def __init__(self, app_dir: Path | None = None, python_executable: Path | None = None,
                  worker_script: Path | None = None):
