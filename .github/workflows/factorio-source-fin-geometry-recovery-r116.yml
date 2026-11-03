@@ -1,0 +1,88 @@
+name: Factorio R116 recover source-matched actual 3D fin geometry after rejecting deformed hinge/fin models
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/source_original_straight_fin_recovery_r116.py'
+      - '.github/workflows/factorio-source-fin-geometry-recovery-r116.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  physical-original-fin-correction:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover exact pre-deformation R108 editable Blender cut-only source candidate, never the private original bitmap
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41544091187
+          name: factorio-r108-true-individual-curved-cupped-3d-metal-petal-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r108
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Recover vetted original Blender 4.5 workstation
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: R116 cut source-real front and rear fin skins to three distinct sharp original sprite outlines without R114/R115 hinges
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/source_original_straight_fin_recovery_r116.py
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/source_original_straight_fin_recovery_r116.py -- \
+            --r108-dir private-ci/r108/output/r108 --out private-ci/output/r116
+      - name: Audit correct base scene used, only three actual finite 3D source-shape fins changed and original full model/animation preserved
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r116')
+          r=json.loads((p/'r116_source_real_3d_straight_blunt_fin_candidates.json').read_text())
+          assert not r['original_bitmap_uploaded_to_public_CI']
+          assert not r['visual_source_approved']
+          assert r['restored_model_input'].startswith('R108 cut_only_three')
+          assert 'R115' in r['rejected_successors']
+          assert [c['variant'] for c in r['cases']]==[
+             'r108_cut_only_source_control',
+             'original_straight_sharp_fin_main_three',
+             'original_lateral_heel_and_blunt_tip']
+          for c in r['cases']:
+             assert c['original_camera_and_moving_lower_fins_unchanged']
+             assert not c['original_fin_shape_visual_approved']
+             assert (p/c['editable_blend']).stat().st_size>100000
+             assert (p/c['real_oblique_3d_view']).stat().st_size>5000
+             assert set(c['native_original_camera_frames'])=={'1','33'}
+             assert all((p/f).stat().st_size>5000 for f in c['native_original_camera_frames'].values())
+             d=c['genuine_3d_source_profile_changes']
+             if c['variant']=='r108_cut_only_source_control':
+                assert not d
+             else:
+                assert set(d)=={'1','2','3'}
+                for fin in d.values():
+                   assert fin['closed_manifold']
+                   assert fin['real_vertices']==198
+                   assert fin['physical_manifold_edges']>200
+                   assert fin['max_real_vertex_displacement']>.04
+                   assert fin['real_front_back_separation']>0
+                   assert not fin['source_approved']
+          print('R116_TRUE_FIN_PHYSICAL_GEOMETRY_PASSES__SOURCE_IMAGE_FIDELITY_REQUIRES_PRIVATE_SIDE_BY_SIDE')
+          PY
+      - name: Preserve original-camera screenshots, oblique true 3D views and editable source scenes for actual local source sprite comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r116-original-blunt-straight-fin-physical-3d-candidates
+          path: |
+            private-ci/output/r116/*.blend
+            private-ci/output/r116/*.png
+            private-ci/output/r116/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
