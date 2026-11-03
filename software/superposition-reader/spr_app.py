@@ -169,13 +169,15 @@ def make_handler(state: ReaderState):
                     if voicebox:
                         try:
                             profiles = voicebox.profiles()
+                            online = True
                         except RuntimeError:
-                            profiles = None
-                        if profiles is not None:
-                            for key, instance in state.engines.items():
-                                if key.startswith("voicebox-"):
-                                    local.append({"key": key, "label": "Voicebox — " + instance.model,
-                                                  "engine_id": instance.engine_id, "profiles": profiles})
+                            profiles = []
+                            online = False
+                        for key, instance in state.engines.items():
+                            if key.startswith("voicebox-"):
+                                local.append({"key": key, "label": "Voicebox — " + instance.model,
+                                              "engine_id": instance.engine_id, "profiles": profiles,
+                                              "online": online})
                     return self._json(local)
                 if segments == ["api", "job"]:
                     return self._json(state.status())
