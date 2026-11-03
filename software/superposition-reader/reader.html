@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SuperPosition Reader — SPR</title>
+<style>
+:root{font-family:Segoe UI,system-ui,sans-serif;color-scheme:dark;background:#111620;color:#eef1f8}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh}
+button,select,input{font:inherit}
+button,select{border:1px solid #45536a;background:#283449;color:#f1f5ff;border-radius:8px;padding:9px 12px;cursor:pointer}
+button:hover{background:#364663}button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #81b6ff}
+button:disabled{opacity:.45;cursor:not-allowed}
+input[type=range]{accent-color:#9fc7ff;cursor:pointer}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:1px solid #303d50;padding:12px 20px;background:#171f2d}
+header h1{font-size:19px;margin:0}header .minor{font-size:12px;color:#a7b6ce}
+h2{font-size:15px;margin:0 0 12px}
+.layout{display:grid;grid-template-columns:minmax(240px,275px) minmax(350px,1fr) minmax(230px,260px);height:calc(100vh - 62px)}
+aside,.right{padding:18px 14px;overflow:auto;background:#171f2c}
+aside{border-right:1px solid #303d50}.right{border-left:1px solid #303d50}
+section{margin-bottom:24px}label{display:block;color:#b6c4d9;font-size:12px;margin:9px 0 6px}
+select,input[type=file]{max-width:100%;width:100%}
+input[type=file]{color:#bfcee2;font-size:12px}
+.fill{width:100%}.row{display:flex;gap:8px;align-items:center}.row>*{min-width:0}
+.small{font-size:12px;color:#a8b6ca;line-height:1.5}
+button.primary{background:#315f9b;border-color:#648bba}button.danger{background:#56343f;border-color:#815060}
+.item{width:100%;text-align:left;display:block;margin:6px 0;overflow-wrap:anywhere}
+.item.active{border-color:#94c7ff;background:#253c5a}
+#documentArea{overflow:auto;scroll-behavior:smooth;padding:0 22px 35px;background:#111620}
+#documentHeader{position:sticky;top:0;background:#111620ee;border-bottom:1px solid #2d3d52;padding:17px 5px 12px;z-index:2}
+#documentTitle{font-size:17px;font-weight:600;margin:0}
+#documentText{max-width:760px;margin:20px auto;font-family:Georgia,serif;font-size:19px;line-height:1.9;white-space:normal}
+.segment{font:inherit;line-height:inherit;color:inherit;border:0;background:transparent;padding:1px 2px;text-align:left;border-radius:3px;display:inline;cursor:pointer}
+.segment:hover{background:#2b394c}.segment.active{background:#66501e;color:#fff2c5;outline:1px solid #c69a47}
+.segment.ready:not(.active){text-decoration:underline dotted #4c627b;text-underline-offset:4px}
+fieldset{border:1px solid #394963;border-radius:9px;padding:10px;margin:0}
+legend{font-size:13px;color:#c4d7ef}
+#status{font-size:12px;line-height:1.5;color:#b8c8df;min-height:35px;overflow-wrap:anywhere}
+#progress{width:100%}
+#playbackSeek{width:100%}
+.stat{display:flex;justify-content:space-between;font-size:12px;color:#b2c3dc;margin:7px 0}
+footer{font-size:11px;color:#8293ac;line-height:1.4}
+@media(max-width:950px){.layout{grid-template-columns:minmax(190px,220px) minmax(300px,1fr);height:auto;min-height:calc(100vh - 62px)}.right{grid-column:1/-1;border-left:0;border-top:1px solid #303d50;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}.right section{margin:0}#documentArea{min-height:65vh}}
+@media(max-width:640px){.layout{display:block}aside,.right{border:0;border-bottom:1px solid #303d50}#documentArea{height:60vh;padding:0 12px 25px}#documentText{font-size:17px}.right{display:block}.right section{margin-bottom:17px}}
+</style>
+</head>
+<body>
+<header><h1>SuperPosition Reader <span style="color:#9fc7ff">SPR</span></h1><span class="minor">Offline desktop reader · early prototype v0.1</span></header>
+<div class="layout">
+  <aside>
+    <section><h2>Your library</h2>
+      <label for="upload">Import document (TXT, Markdown, PDF, DOCX)</label>
+      <input id="upload" type="file" accept=".txt,.md,.markdown,.pdf,.docx">
+      <p class="small">Files and generated audio remain in your private local SPR folder. Scanned PDFs and EPUB are not yet supported.</p>
+      <div id="library" aria-label="Imported books"></div>
+    </section>
+    <section><h2>Generation</h2>
+      <label for="voice">Installed Windows voice</label>
+      <select id="voice"><option value="">System default</option></select>
+      <label for="sapiRate">Voice generation rate</label>
+      <select id="sapiRate"><option value="0">Normal</option><option value="-2">Slightly slower</option><option value="2">Slightly faster</option></select>
+      <p class="small">Changing the generation voice or rate requires rebuilding the book audio. Neural voice cloning is planned but not connected in this build.</p>
+      <button class="fill primary" id="generate" disabled>Generate entire document</button>
+      <button class="fill danger" id="cancel" style="margin-top:8px" disabled>Cancel after current chunk</button>
+      <progress id="progress" value="0" max="100"></progress>
+      <div id="generationStatus" class="small" role="status"></div>
+    </section>
+  </aside>
+  <main id="documentArea">
+    <div id="documentHeader"><p id="documentTitle">Import or select a document</p><div class="small" id="documentMeta">Narration will highlight the currently spoken sentence.</div></div>
+    <div id="documentText"><p class="small">Choose a document on the left. Click a sentence to start reading from it.</p></div>
+  </main>
+  <div class="right">
+    <section><h2>Playback</h2>
+      <div class="row"><button id="previous" title="Previous sentence" disabled>⏮</button><button id="play" class="primary fill" disabled>▶ Play</button><button id="next" title="Next sentence" disabled>⏭</button></div>
+      <label for="playbackSeek">Position within current sentence</label>
+      <input type="range" id="playbackSeek" min="0" max="100" value="0" step="1">
+      <div class="stat"><span id="time">0:00 / 0:00</span><span id="position">—</span></div>
+      <label for="speed">Playback speed <span id="speedValue">1.00×</span></label>
+      <input type="range" id="speed" min="0.5" max="2" value="1" step="0.05">
+      <label for="volume">Volume <span id="volumeValue">80%</span></label>
+      <input type="range" id="volume" min="0" max="1" value="0.8" step="0.05">
+    </section>
+    <section><h2>Audio archive</h2>
+      <div class="small" id="archiveStatus">No book selected</div>
+      <button id="export" class="fill" disabled>Export complete WAV</button>
+      <p class="small">Completed audio is reused across launches. Book-length chapter export, FLAC and M4B are planned.</p>
+    </section>
+    <section><h2>Reader status</h2><div id="status" role="status">Ready to import a document.</div></section>
+    <footer>SPR keeps document sources and narration in private application data. This version uses reflowed extracted text; original PDF page rendering, word alignment, and custom voice models are later milestones.</footer>
+  </div>
+</div>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const audio = new Audio();
+let book = null, active = 0, waiting = null, playing = false, workBusy = false;
+audio.volume = 0.8;
+function status(message){ $("status").textContent = message; }
+async function request(url, options){
+  const response = await fetch(url, options);
+  if(!response.ok){
+    const data = await response.json().catch(()=>({error:"Request failed"}));
+    throw Error(data.error || ("HTTP " + response.status));
+  }
+  if(response.headers.get("Content-Type")?.includes("application/json")) return response.json();
+  return response;
+}
+async function post(url, payload){return request(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});}
+function formatTime(seconds){if(!Number.isFinite(seconds))return "0:00"; const sec=Math.floor(seconds);return Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0");}
+async function refreshLibrary(){
+  const items=await request("/api/library");
+  $("library").replaceChildren();
+  for(const item of items){
+    const button=document.createElement("button");
+    button.className="item"+(book?.id===item.id?" active":"");
+    button.textContent=item.title+" ("+item.ready+"/"+item.chunks+")";
+    button.addEventListener("click",()=>openBook(item.id));
+    $("library").append(button);
+  }
+}
+function updateButtons(){
+  const has=!!book;
+  $("play").disabled=!has;
+  $("previous").disabled=!has||active===0;
+  $("next").disabled=!has||active>=book.chunks.length-1;
+  $("generate").disabled=!has||workBusy;
+  $("cancel").disabled=!workBusy;
+  $("export").disabled=!has||Object.keys(book.audio).length!==book.chunks.length;
+}
+function updateArchive(){
+  if(!book)return;
+  const ready=Object.keys(book.audio).length;
+  $("archiveStatus").textContent=ready+" of "+book.chunks.length+" sentence clips generated.";
+  $("documentMeta").textContent=book.chunks.length+" sentences · "+ready+" cached";
+  $("position").textContent=(active+1)+" / "+book.chunks.length;
+  updateButtons();
+}
+function selectSentence(index, scroll=true){
+  if(!book)return;
+  active=Math.max(0,Math.min(index,book.chunks.length-1));
+  document.querySelectorAll(".segment.active").forEach(el=>el.classList.remove("active"));
+  const element=document.getElementById("segment-"+active);
+  if(element){
+    element.classList.add("active");
+    if(scroll)element.scrollIntoView({behavior:"smooth",block:"center"});
+  }
+  updateArchive();
+}
+async function openBook(id){
+  stop();
+  waiting=null;
+  book=await request("/api/book/"+id);
+  $("documentTitle").textContent=book.title;
+  const host=$("documentText");
+  host.replaceChildren();
+  book.chunks.forEach((chunk,i)=>{
+    const button=document.createElement("button");
+    button.className="segment"+(book.audio[String(i)]?" ready":"");
+    button.id="segment-"+i;
+    button.type="button";
+    button.textContent=chunk.text+" ";
+    button.title="Play sentence "+(i+1);
+    button.addEventListener("click",()=>{playing=true;loadAndPlay(i);});
+    host.append(button);
+    if((i+1)%9===0)host.append(document.createElement("p"));
+  });
+  selectSentence(0,false);
+  await refreshLibrary();
+  status("Document loaded locally. Click Play or any sentence.");
+}
+async function fetchBook(){
+  if(!book)return;
+  const id=book.id;
+  const current=await request("/api/book/"+id);
+  if(book?.id!==id)return;
+  book=current;
+  document.querySelectorAll(".segment").forEach((node,i)=>{
+    node.classList.toggle("ready",!!book.audio[String(i)]);
+  });
+  updateArchive();
+}
+async function queueOne(index){
+  if(workBusy)return;
+  try{
+    workBusy=true;
+    await post("/api/generate",{book_id:book.id,index,voice:$("voice").value,rate:Number($("sapiRate").value)});
+    status("Synthesizing sentence "+(index+1)+" locally...");
+  }catch(error){workBusy=false;status(error.message);}
+  updateButtons();
+}
+async function loadAndPlay(index){
+  if(!book)return;
+  selectSentence(index);
+  audio.pause();
+  audio.removeAttribute("src");
+  audio.load();
+  if(!book.audio[String(index)]){
+    waiting=index;
+    await queueOne(index);
+    return;
+  }
+  waiting=null;
+  audio.src="/api/audio/"+book.id+"/"+index;
+  audio.playbackRate=Number($("speed").value);
+  audio.volume=Number($("volume").value);
+  if(playing){
+    try{await audio.play();$("play").textContent="⏸ Pause";status("Playing locally cached narration.");}
+    catch(error){status("Audio playback failed: "+error.message);playing=false;}
+  }
+}
+function stop(){
+  playing=false;waiting=null;audio.pause();audio.removeAttribute("src");audio.load();
+  $("play").textContent="▶ Play";
+}
+$("upload").addEventListener("change",async event=>{
+  const file=event.target.files?.[0];
+  if(!file)return;
+  if(file.size>64*1024*1024){status("File is larger than the 64 MiB current limit.");return;}
+  status("Importing "+file.name+" into your private library...");
+  try{
+    const encoded=await new Promise((resolve,reject)=>{
+      const reader=new FileReader();
+      reader.onload=()=>resolve(String(reader.result).split(",")[1]);
+      reader.onerror=()=>reject(Error("Cannot read selected file"));
+      reader.readAsDataURL(file);
+    });
+    const result=await post("/api/import",{name:file.name,base64:encoded});
+    await openBook(result.id);
+  }catch(error){status("Import failed: "+error.message);}
+  event.target.value="";
+});
+$("play").addEventListener("click",async()=>{
+  if(!book)return;
+  if(playing){playing=false;audio.pause();$("play").textContent="▶ Resume";return;}
+  playing=true;
+  if(audio.src&&!audio.ended&&waiting===null){
+    try{await audio.play();$("play").textContent="⏸ Pause";}catch(error){status(error.message);}
+  }else await loadAndPlay(active);
+});
+$("previous").addEventListener("click",()=>{if(book){playing=true;loadAndPlay(Math.max(0,active-1));}});
+$("next").addEventListener("click",()=>{if(book){playing=true;loadAndPlay(Math.min(book.chunks.length-1,active+1));}});
+audio.addEventListener("ended",async()=>{if(playing&&book){if(active+1<book.chunks.length)await loadAndPlay(active+1);else{stop();status("Reached the end of the document.");}}});
+audio.addEventListener("timeupdate",()=>{
+  $("playbackSeek").value=audio.duration?Math.round(100*audio.currentTime/audio.duration):0;
+  $("time").textContent=formatTime(audio.currentTime)+" / "+formatTime(audio.duration);
+});
+$("playbackSeek").addEventListener("input",event=>{if(audio.duration)audio.currentTime=audio.duration*Number(event.target.value)/100;});
+$("speed").addEventListener("input",event=>{audio.playbackRate=Number(event.target.value);$("speedValue").textContent=Number(event.target.value).toFixed(2)+"×";});
+$("volume").addEventListener("input",event=>{audio.volume=Number(event.target.value);$("volumeValue").textContent=Math.round(100*event.target.value)+"%";});
+$("generate").addEventListener("click",async()=>{
+  if(!book)return;
+  try{
+    const result=await post("/api/generate",{book_id:book.id,voice:$("voice").value,rate:Number($("sapiRate").value)});
+    workBusy=result.active;
+    status("Generating the complete document using local Windows voices.");
+    updateButtons();
+  }catch(error){status(error.message);}
+});
+$("cancel").addEventListener("click",async()=>{try{await post("/api/cancel",{});status("Cancellation requested; current sentence may finish.");}catch(error){status(error.message);}});
+$("export").addEventListener("click",()=>{
+  if(book&&Object.keys(book.audio).length===book.chunks.length){
+    window.location.href="/api/export/"+book.id;
+  }
+});
+async function poll(){
+  try{
+    const job=await request("/api/job");
+    workBusy=job.active;
+    $("progress").value=job.total?100*job.done/job.total:0;
+    $("generationStatus").textContent=job.total?job.done+" / "+job.total+" processed"+(job.active?" · running":""):"No active job";
+    if(book&&((job.book_id===book.id)||(waiting!==null)))await fetchBook();
+    if(job.error)status("Narration failed: "+job.error);
+    if(job.cancelled)status("Narration cancelled. Finished clips remain cached.");
+    if(waiting!==null&&book?.audio[String(waiting)]){
+      const i=waiting; waiting=null; await loadAndPlay(i);
+    }else if(waiting!==null&&!workBusy&&book&&!job.error){
+      await queueOne(waiting);
+    }
+    updateButtons();
+  }catch(error){status("Local server unavailable: "+error.message);}
+}
+async function initialize(){
+  try{
+    const voices=await request("/api/voices");
+    for(const name of voices.voices){
+      const option=document.createElement("option");option.value=name;option.textContent=name;$("voice").append(option);
+    }
+    if(!voices.voices.length)status("Windows SAPI voice engine unavailable on this system.");
+    await refreshLibrary();
+    const items=await request("/api/library");
+    if(items.length)await openBook(items[0].id);
+  }catch(error){status("Initialization failed: "+error.message);}
+}
+initialize();
+setInterval(poll,900);
+</script>
+</body>
+</html>
