@@ -65,11 +65,16 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
       <p id="voiceArchiveStatus" class="small">Reference recordings remain private and are not cloned until a neural backend is installed.</p>
     </section>
     <section><h2>Generation</h2>
-      <label for="voice">Installed Windows voice</label>
+      <label for="engineSelect">Narration engine</label>
+      <select id="engineSelect"></select>
+      <button id="refreshEngines" class="fill" style="margin-top:8px">Refresh local engines</button>
+      <label for="voice">Voice / cloned profile</label>
       <select id="voice"><option value="">System default</option></select>
+      <label for="voiceboxProfileId" id="voiceboxIdLabel" hidden>Voicebox profile ID (if not listed)</label>
+      <input id="voiceboxProfileId" type="text" maxlength="128" placeholder="Existing local Voicebox profile ID" hidden style="width:100%;padding:8px;background:#111620;color:#eef1f8;border:1px solid #45536a;border-radius:8px">
       <label for="sapiRate">Voice generation rate</label>
       <select id="sapiRate"><option value="0">Normal</option><option value="-2">Slightly slower</option><option value="2">Slightly faster</option></select>
-      <p class="small">Changing the generation voice or rate requires rebuilding the book audio. Neural voice cloning is planned but not connected in this build.</p>
+      <p class="small">Windows voices work independently. Voicebox engines are optional and require an already-running local Voicebox backend and an existing authorized profile. Cached narration still plays when Voicebox is closed. The integrated neural backend remains under development.</p>
       <button class="fill primary" id="generate" disabled>Generate entire document</button>
       <button class="fill danger" id="cancel" style="margin-top:8px" disabled>Cancel after current chunk</button>
       <progress id="progress" value="0" max="100"></progress>
@@ -105,13 +110,57 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
 const $ = id => document.getElementById(id);
 const audio = new Audio();
 let book = null, active = 0, waiting = null, playing = false, workBusy = false;
-let engineId = "unavailable", resumeFraction = 0, positionTimer = null, lastPositionTime = 0;
+let engineId = "unavailable", engineKey = "sapi", engineOptions = [], windowsVoices = [];
+let resumeFraction = 0, positionTimer = null, lastPositionTime = 0;
 audio.volume = 0.8;
+function selectedVoice(){return engineKey.startsWith("voicebox-")
+  ?($("voiceboxProfileId").value.trim()||$("voice").value):$("voice").value;}
+function effectiveRate(){return engineKey==="sapi"?Number($("sapiRate").value):0;}
+function applyEngine(key, voice=""){
+  const engine=engineOptions.find(item=>item.key===key);
+  if(!engine)return;
+  engineKey=engine.key;engineId=engine.engine_id;
+  const neural=key.startsWith("voicebox-");
+  $("voiceboxProfileId").hidden=!neural;
+  $("voiceboxIdLabel").hidden=!neural;
+  $("voiceboxProfileId").value="";
+  $("sapiRate").disabled=neural||workBusy;
+  $("voice").replaceChildren();
+  const voices=neural?(engine.profiles||[]):windowsVoices.map(name=>({id:name,name}));
+  if(!neural){voices.unshift({id:"",name:"System default"});}
+  else{voices.unshift({id:"",name:"Select an existing profile"});}
+  for(const item of voices){
+    const option=document.createElement("option");option.value=item.id;option.textContent=item.name;
+    $("voice").append(option);
+  }
+  if(voice&&!voices.some(v=>v.id===voice)){
+    const cached=document.createElement("option");
+    cached.value=voice;cached.textContent="Cached profile: "+voice;
+    $("voice").append(cached);
+  }
+  if(voice)$("voice").value=voice;
+  updateButtons();
+}
+async function refreshEngineOptions(){
+  const previousKey=engineKey, previousVoice=selectedVoice();
+  engineOptions=await request("/api/voice-engines");
+  $("engineSelect").replaceChildren();
+  for(const e of engineOptions){
+    const option=document.createElement("option");option.value=e.key;
+    option.textContent=e.label+(e.online===false?" (service offline)":"");
+    $("engineSelect").append(option);
+  }
+  const key=engineOptions.some(e=>e.key===previousKey)?previousKey:
+    (engineOptions.find(e=>e.key==="sapi")||engineOptions[0])?.key;
+  if(!key){engineId="unavailable";return;}
+  $("engineSelect").value=key;
+  applyEngine(key,key===previousKey?previousVoice:"");
+}
 function renderMatches(index){
   const item=book?.audio?.[String(index)];
   return !!item?.render && item.render.engine===engineId &&
-         item.render.voice===$("voice").value &&
-         Number(item.render.rate)===Number($("sapiRate").value);
+         item.render.voice===selectedVoice() &&
+         Number(item.render.rate)===effectiveRate();
 }
 function savePositionSoon(delay=250){
   if(!book)return;
@@ -153,7 +202,10 @@ function updateButtons(){
   $("generate").disabled=!has||workBusy||engineId==="unavailable";
   $("cancel").disabled=!workBusy;
   $("voice").disabled=workBusy;
-  $("sapiRate").disabled=workBusy;
+  $("engineSelect").disabled=workBusy;
+  $("refreshEngines").disabled=workBusy;
+  $("voiceboxProfileId").disabled=workBusy;
+  $("sapiRate").disabled=workBusy||engineKey!=="sapi";
   $("export").disabled=!has||book.chunks.some((_,i)=>!renderMatches(i));
 }
 function updateArchive(){
@@ -179,6 +231,17 @@ async function openBook(id){
   stop();
   waiting=null;
   book=await request("/api/book/"+id);
+  const cached=Object.values(book.audio||{}).find(entry=>entry.render)?.render;
+  if(cached){
+    const match=engineOptions.find(item=>item.engine_id===cached.engine);
+    if(match){
+      $("engineSelect").value=match.key;
+      applyEngine(match.key,cached.voice);
+      if(match.key==="sapi"&&[-2,0,2].includes(Number(cached.rate))){
+        $("sapiRate").value=String(cached.rate);
+      }
+    }
+  }
   $("documentTitle").textContent=book.title;
   const host=$("documentText");
   host.replaceChildren();
@@ -213,7 +276,7 @@ async function queueOne(index){
   try{
     const queued=await post("/api/generate",{
       book_id:book.id,index,priority:true,
-      voice:$("voice").value,rate:Number($("sapiRate").value)
+      engine_key:engineKey,voice:selectedVoice(),rate:effectiveRate()
     });
     workBusy=queued.active;
     status("Prioritized sentence "+(index+1)+" in the local narration queue.");
@@ -298,7 +361,7 @@ $("volume").addEventListener("input",event=>{audio.volume=Number(event.target.va
 $("generate").addEventListener("click",async()=>{
   if(!book)return;
   try{
-    const result=await post("/api/generate",{book_id:book.id,voice:$("voice").value,rate:Number($("sapiRate").value)});
+    const result=await post("/api/generate",{book_id:book.id,engine_key:engineKey,voice:selectedVoice(),rate:effectiveRate()});
     workBusy=result.active;
     status("Generating the complete document using local Windows voices.");
     updateButtons();
@@ -373,18 +436,25 @@ $("voiceSample").addEventListener("change",async event=>{
 async function initialize(){
   try{
     const voices=await request("/api/voices");
-    engineId=voices.engine;
-    for(const name of voices.voices){
-      const option=document.createElement("option");option.value=name;option.textContent=name;$("voice").append(option);
-    }
-    if(!voices.voices.length)status("Windows SAPI voice engine unavailable on this system.");
+    windowsVoices=voices.voices;
+    await refreshEngineOptions();
+    if(!windowsVoices.length)status("No Windows SAPI voices detected; select an available local engine.");
     await refreshVoiceProfiles();
     await refreshLibrary();
     const items=await request("/api/library");
     if(items.length)await openBook(items[0].id);
   }catch(error){status("Initialization failed: "+error.message);}
 }
+$("engineSelect").addEventListener("change",()=>{
+  stop();applyEngine($("engineSelect").value);
+  if(book)fetchBook().catch(error=>status(error.message));
+});
+$("refreshEngines").addEventListener("click",async()=>{
+  try{await refreshEngineOptions();if(book)await fetchBook();status("Local voice engine list updated.");}
+  catch(error){status("Engine refresh failed: "+error.message);}
+});
 $("voice").addEventListener("change",()=>{stop();if(book)fetchBook().catch(error=>status(error.message));});
+$("voiceboxProfileId").addEventListener("change",()=>{stop();if(book)fetchBook().catch(error=>status(error.message));});
 $("sapiRate").addEventListener("change",()=>{stop();if(book)fetchBook().catch(error=>status(error.message));});
 window.addEventListener("pagehide",()=>{if(book)savePositionSoon(0);});
 initialize();
