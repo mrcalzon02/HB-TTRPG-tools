@@ -118,7 +118,17 @@ class Archive:
         return manifest
 
     def load(self, book_id: str) -> dict:
-        return json.loads((self.folder(book_id) / "manifest.json").read_text(encoding="utf-8"))
+        folder = self.folder(book_id)
+        record = json.loads((folder / "manifest.json").read_text(encoding="utf-8"))
+        # Cached WAV files can disappear after disk cleanup, interrupted copies or
+        # migration. Do not advertise deleted clips as playable or complete.
+        for index, entry in list(record.get("audio", {}).items()):
+            filename = entry.get("file") if isinstance(entry, dict) else None
+            if (not isinstance(filename, str) or Path(filename).name != filename
+                    or not filename.endswith(".wav") or
+                    not (folder / "audio" / filename).is_file()):
+                del record["audio"][index]
+        return record
 
     def library(self) -> list[dict]:
         parent = self.root / "books"
