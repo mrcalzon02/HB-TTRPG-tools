@@ -3554,17 +3554,21 @@ For a moment it seemed the man would argue simply because he had been contradict
 
 The boy closed his fingers around the money. He did not thank Thessa, which she considered a mercy. The wages had not been hers to grant.
 
-At the shelter table the keeper opened his ledger. The driver chose the covered bay for one night, though its fee took most of the coins he had kept for the road. He chose to send a written notice to the buyer with the next lawful traveler, and to remain with the wagon rather than risk the ford or turn back through the rain. The choice was his. It was not a promise that the road would open tomorrow.
+At the shelter table the keeper opened his ledger. The driver paid for one night in the covered bay, spending most of the coins he had kept for the road. He would wait with the wagon rather than test the ford or turn back through the rain. That choice bought a roof, not a promise that the road would open tomorrow.
 
 "Write that I arrived before noon," he told the keeper.
 
-"I can write the time I saw you arrive. I can't write when you left the market."
+"I'll enter the time I saw you at my gate. I didn't see you leave the market."
 
-"That's fair."
+The driver looked at the wet page, then nodded. The keeper entered the arrival time in his own book. The hired hand, whose first day's wage was already in his pocket, offered to write the buyer's notice while the driver moved the sacks. The driver dictated only what he knew: the wagon was held at the posted heavy-load restriction; one night's shelter had been paid for; no barley had reached the mill. The boy copied the keeper's witnessed arrival time onto the sheet and left space for the driver's signature.
 
-Thessa made a separate entry on her road sheet: wagon held at the north approach; heavy-load notice visible and renewed; no passage attempted; driver informed of the public restriction and available shelter. She added the time witnessed by the keeper. She did not copy the driver's agreement into a Warden record or describe his decision as consent to lose his premium.
+"Don't put my name there as if I'd inspected the load," the keeper said, tapping the space. "I saw a wagon arrive. I haven't weighed a sack or ruled on anybody's bargain."
 
-Sorn checked the far warning post while the keeper took the boy's message to the writing board. The driver began moving sacks beneath the covered bay, and his hired hand helped him without being asked. It was work they could do without putting a wheel over the hollow.
+The driver signed the notice himself. The keeper offered a dry shelf where it could wait for someone lawfully traveling toward the mill. He would ask the next suitable traveler, but would not enter the notice as dispatched until someone actually took it.
+
+Thessa made a separate entry on her road sheet: wagon held at the north approach; heavy-load notice visible and renewed; no passage attempted; driver informed of the public restriction and available shelter. She included the keeper's witnessed arrival time, not the driver's claimed market departure. She did not copy the private agreement into a Warden record or describe his shelter payment as consent to lose his premium.
+
+Sorn checked the far warning post while the driver began moving sacks beneath the covered bay. His hired hand helped without being asked. It was work they could do without putting a wheel over the hollow.
 
 "Will they repair it?" the driver asked when Thessa brought him his copy.
 
@@ -3592,45 +3596,53 @@ The carrier's wagon was still under the shelter roof when they looked back. Thes
 
 ---
 
-The message reached the mill after the next market bell.
+The message reached the mill after the next market bell. The carrier's delivery deadline had passed before the buyer saw a word of explanation.
 
-It came in the coat of a traveler who had been permitted along the inner road on foot. He had walked the last stretch with his boots in his hands because the mud had begun to pull them off. At the mill door he asked for the buyer of the seed barley, and a clerk brought him to the counting room without promising that anyone would pay for his trouble.
+A traveler brought the folded notice in his coat. The shelter keeper had given it to him from the dry shelf when he set out along the inner road on foot; no one had promised the carrier which traveler would take it, or when. The man had walked the last stretch with his boots in his hands because the mud had begun to pull them off. At the mill door he asked for the seed-barley buyer, and a clerk brought him to the counting room without promising payment for his trouble.
 
-The buyer unfolded the paper on a dry board. The hand was young and uncertain. The carrier had signed beneath it in a heavier script.
+The buyer spread the paper on a dry board. Its uncertain letters looked like a younger hand than the heavier signature beneath them.
 
-*Held at the north-road toll shelter. Heavy wagon prohibited at the damaged verge. Covered storage paid for one night. Notice sent by lawful traveler. No delivery made.*
+*Held at the north-road toll shelter. Heavy wagon prohibited at the damaged verge. Covered storage paid for one night. Notice left for the next lawful traveler. No delivery made.*
 
-There was a time written beside the shelter keeper's name, but no official seal. The buyer read the note twice and then looked at the traveler.
+A time was copied beside the shelter keeper's name, but there was no seal or certified extract of his ledger.
+
+"Who gave you this?"
+
+"The keeper. He took it from a shelf by his book."
+
+"Did you see the carrier sign it?"
+
+"No. The keeper said it was the driver's notice. I didn't see it written."
 
 "Did you see the wagon?"
 
-"I saw the sacks under the shelter roof when I left. I didn't count them."
+"I saw sacks under the shelter roof when I left. I didn't count them, and I couldn't tell what was in them."
 
 "Did you see the warning?"
 
-"Yes. I went past it on foot. The keeper told me the inner way was open to people like me."
+"Yes. I passed the posts on foot. The keeper said people could use the inner way. Not a wagon like that one."
 
-"Did you see anyone inspect the road?"
+"Did anyone examine the broken ground while you watched?"
 
-"No."
+"Not while I was there."
 
-"Then I won't ask you to swear that it was inspected."
+The buyer nodded. A messenger who had seen a warning and a sheltered wagon was useful. He was not a witness to the carrier's signature, the sacks' contents, or an official inspection. The written time was a claim copied from the keeper's book, not the book itself. He could request the original entry later without pretending he possessed it now.
 
-The traveler rubbed his palms together for warmth. "Will you send an answer? I might go back that way. I might not."
+"Will you send an answer?" the traveler asked, warming his hands. "I might go back that way. I might not."
 
-"I'll write one. You needn't promise to carry it."
+"I'll prepare one. You needn't promise to carry it."
 
-The clerk was already reaching for the arrivals book. The buyer stopped him.
+The clerk reached for the arrivals book. The buyer stopped his pen before it touched the ruled delivery column.
 
-"Not the delivery column."
+"Not there."
 
-"It is the carrier's notice."
+"It's from the carrier."
 
-"Then put it under notices. We haven't received barley."
+"It's a notice said to be from him. The barley hasn't come."
 
-The clerk drew a fresh line and entered the date on which the paper had actually reached them. He left the delivery weight blank. The buyer kept the traveler's account separate from the carrier's words. The traveler could attest to seeing the wagon and the post; he could not certify the load, the terms of the carriage, or the condition of the road after he had passed.
+The clerk opened the notice section and entered the date the paper actually arrived, leaving the delivery weight empty. In the margin he identified the traveler as the person who had brought it, without entering the shelter time as a certified arrival or the messenger's observations as proof of the load. The buyer set the paper aside for comparison with the carrier's journey slip and the keeper's own record, if either could later be obtained.
 
-Outside, two farmers were waiting with baskets on their arms. They had come for seed they expected to take home before the ground dried enough to work. One had paid a deposit. The other had promised to pay when the sacks were weighed.
+Outside, two farmers waited with baskets on their arms. They had expected seed before the ground dried enough to work. One had paid a deposit. The other had agreed to pay when the sacks were weighed. Neither had received a grain.
 
 "Are we loading today?" the first asked when the buyer came out.
 
