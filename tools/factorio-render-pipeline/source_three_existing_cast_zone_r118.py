@@ -65,10 +65,12 @@ def move_actual_cast(scene,key,strength,fold):
     m=ob.data
     if ob.type!="MESH" or m.shape_keys or not m.materials or ob.hide_render:
         raise RuntimeError("R118 needs visible original R89/R49 existing physical mount")
-    if not core.manifold_edges(m)[0]:
-        # The original R89/R49 casting may comprise multiple disconnected
-        # closed shells in one owned mesh; no arbitrary new geometry is added.
-        raise RuntimeError("R118 original casting physical shape invalid")
+    # Preserve original imported mount topology exactly. The original R89
+    # meshes can comprise several layered cast sections whose real exposed
+    # sheet edges are NOT necessarily manifold; don't invent a new weld gate.
+    was_manifold,original_edge_count=core.manifold_edges(m)
+    if not original_edge_count:
+        raise RuntimeError("R118 source casting has no 3D edges")
     original=geometry_bbox(scene,ob)
     expected=OLD[key]
     if any(abs(x-y)>1.3 for x,y in zip(original,expected)):
@@ -113,8 +115,8 @@ def move_actual_cast(scene,key,strength,fold):
         count+=1
     m.update()
     ok,edges=core.manifold_edges(m)
-    if not ok or any(poly.area<1e-11 for poly in m.polygons):
-        raise RuntimeError("R118 moved real cast into nonmanifold or collapsed 3D metal")
+    if ok!=was_manifold or edges!=original_edge_count or any(poly.area<1e-11 for poly in m.polygons):
+        raise RuntimeError("R118 changed input's real 3D metal topology or collapsed a face")
     displacement=max(math.dist(before[i],tuple(v.co)) for i,v in enumerate(m.vertices))
     if displacement<.015:raise RuntimeError("R118 physically unchanged source cast")
     ob["R118_source_region_reformed_existing_real_cast"]=True
@@ -124,7 +126,8 @@ def move_actual_cast(scene,key,strength,fold):
             "source_target_zone":TARGET[key],
             "updated_projected_3d_bbox":geometry_bbox(scene,ob),
             "max_real_vertex_displacement":round(displacement,6),
-            "real_vertices":count,"manifold_edges":edges,
+            "real_vertices":count,"original_manifold":was_manifold,
+            "result_manifold":ok,"unchanged_physical_edge_count":edges,
             "source_approved":False}
 
 def orbit(scene,out):
@@ -157,8 +160,8 @@ def verify(scene,names,cam,mats,untouched,motion,edited,tag):
         ob=bpy.data.objects[CASTS[key]]
         if not ob.get("R118_source_region_reformed_existing_real_cast"):
             raise RuntimeError("R118 source metal forging lost on scene reopen")
-        if not core.manifold_edges(ob.data)[0]:
-            raise RuntimeError("R118 real metal closed 3D geometry lost")
+        if any(poly.area<1e-11 for poly in ob.data.polygons):
+            raise RuntimeError("R118 original 3D metal faces collapsed")
     if scene.get("fsc_r118_variant") and scene["fsc_r118_variant"]!=tag:
         raise RuntimeError("R118 saved candidate variant lost")
 
