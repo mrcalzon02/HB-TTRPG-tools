@@ -38,7 +38,7 @@ jobs:
           "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
             --python tools/factorio-render-pipeline/central_true_curved_master_fin_r121.py -- \
             --r120-dir private-ci/r120 --out private-ci/output/r121
-      - name: Audit R121: physical arced mesh no fictitious holes, shared geometry copies, actual 3D profiles and original unaffected bell / animated fins
+      - name: "Audit R121 physical arced mesh, linked instance data, depth and animation preservation"
         run: |
           python - <<'PY'
           from pathlib import Path
