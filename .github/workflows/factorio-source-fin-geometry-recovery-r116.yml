@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'tools/factorio-render-pipeline/source_original_straight_fin_recovery_r116.py'
+      - 'tools/factorio-render-pipeline/audit_original_hinge_owners_r117.py'
       - '.github/workflows/factorio-source-fin-geometry-recovery-r116.yml'
   workflow_dispatch:
 permissions:
@@ -84,5 +85,49 @@ jobs:
             private-ci/output/r116/*.png
             private-ci/output/r116/*.json
             private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: R117 audit original source-camera owner positions of three ACTUAL cast mount meshes and four dark bridge components without changing any fin or creating new hinges
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/audit_original_hinge_owners_r117.py
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/audit_original_hinge_owners_r117.py -- \
+            --r116-dir private-ci/output/r116 --out private-ci/output/r117
+      - name: Verify every source-camera physical hinge owner is measured, isolated and restored before source-based 3D placement revision
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('private-ci/output/r117')
+          r=json.loads((root/'r117_actual_mount_owner_source_camera_bounds.json').read_text())
+          assert not r['source_bitmap_exported']
+          assert not r['visual_acceptance']
+          assert r['original_engine_geometry_unchanged']
+          assert r['recovered_previous_good_fin_mesh']
+          assert len(r['real_3d_owner_isolation_cases'])==7
+          assert set(r['source_regions_camera_264x542'])=={
+            'port_source_mount','center_source_mount','starboard_source_mount'}
+          assert all((root/r[f]).stat().st_size>5000
+                     for f in ('full_model_frame01','full_model_frame33'))
+          for o in r['real_3d_owner_isolation_cases']:
+             v=o['projected_3d_geometry']
+             assert v['visible_to_renderer']
+             assert v['actual_vertices']>=10
+             assert v['actual_faces']>=5
+             x0,y0,x1,y1=v['source_camera_native_bbox_px']
+             assert x0<x1 and y0<y1
+             assert (root/o['single_owner_hidden_frame01']).stat().st_size>5000
+          print('R117_ACTUAL_VISIBLE_3D_OWNER_POSITION_BOUNDS_AND_ISOLATED_BLENDER_MOUNTS_PASS')
+          PY
+      - name: Preserve actual original-camera model-only mount owner isolation renders and native-pixel 3D bounds
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r117-original-source-camera-mount-owner-isolation
+          path: |
+            private-ci/output/r117/*.png
+            private-ci/output/r117/*.json
           if-no-files-found: warn
           retention-days: 14
