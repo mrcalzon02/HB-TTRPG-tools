@@ -20,6 +20,7 @@ import zipfile
 
 from spr_voices import VoiceLibrary
 from spr_voicebox import VoiceboxEngine
+from spr_bootstrap import seed_examples
 
 from spr_core import Archive, MAX_DOCUMENT_BYTES, WindowsSapiEngine
 
@@ -28,8 +29,11 @@ MAX_JSON_BYTES = (100 * 1024 * 1024 * 4 // 3) + 8192
 
 
 class ReaderState:
-    def __init__(self, archive: Archive, engine=None, additional_engines=None):
+    def __init__(self, archive: Archive, engine=None, additional_engines=None,
+                 bootstrap=None):
         self.archive = archive
+        self.bootstrap = bootstrap or {"books_imported": [], "books_skipped": [],
+                                       "warnings": [], "voice_profile_id": None}
         self.engine = engine
         self.engines = {"sapi": engine} if engine is not None else {}
         if additional_engines:
@@ -158,6 +162,8 @@ def make_handler(state: ReaderState):
                     return self._file(ROOT / "reader.html", "text/html; charset=utf-8")
                 if segments == ["api", "library"]:
                     return self._json(state.archive.library())
+                if segments == ["api", "bootstrap"]:
+                    return self._json(state.bootstrap)
                 if segments == ["api", "voice-profiles"]:
                     return self._json(state.voices.list())
                 if segments == ["api", "voices"]:
@@ -284,12 +290,18 @@ def launch():
         raise SystemExit(self_check(args.report))
     archive = Archive()
     try:
+        bootstrap = seed_examples(archive, ROOT)
+    except (ValueError, OSError, KeyError, RuntimeError) as error:
+        bootstrap = {"books_imported": [], "books_skipped": [],
+                     "warnings": [str(error)], "voice_profile_id": None}
+    try:
         engine = WindowsSapiEngine() if os.name == "nt" else None
     except RuntimeError:
         engine = None
     voicebox = {("voicebox-" + model): VoiceboxEngine(model)
                 for model in ("qwen", "luxtts", "chatterbox")}
-    state = ReaderState(archive, engine, additional_engines=voicebox)
+    state = ReaderState(archive, engine, additional_engines=voicebox,
+                        bootstrap=bootstrap)
     server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(state))
     server.daemon_threads = True
     url = f"http://127.0.0.1:{server.server_port}/"
