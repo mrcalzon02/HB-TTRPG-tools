@@ -1,0 +1,85 @@
+name: Factorio R121 true round central master and shared circumferential fin matrices
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/central_true_curved_master_fin_r121.py'
+      - '.github/workflows/factorio-central-curved-master-r121.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-sprite-curved-master-fin:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download successful R120 original bell+bare fins editable Blender without sharing original private Wube sprites
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41571289287
+          name: factorio-r120-truly-clean-bell-fins-three-original-root-simple-hinges
+          github-token: ${{ github.token }}
+          path: private-ci/r120
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Recover actual pinned Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Remake one master central fin as a TRUE rounded cylindrical metal plate with finite skins, continuous face and rolled toe then instance by real circular matrices
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/central_true_curved_master_fin_r121.py
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/central_true_curved_master_fin_r121.py -- \
+            --r120-dir private-ci/r120 --out private-ci/output/r121
+      - name: Audit R121: physical arced mesh no fictitious holes, shared geometry copies, actual 3D profiles and original unaffected bell / animated fins
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path('private-ci/output/r121')
+          r=json.loads((p/'r121_cylindrical_canonical_master_and_rotated_copies.json').read_text())
+          assert r['source_art_published_to_CI'] is False
+          assert r['not_source_approved_yet'] is True
+          assert len(r['scenes'])==4
+          for i,c in enumerate(r['scenes']):
+             assert c['source_visual_match_pending']
+             assert c['all_original_bell_and_lower_animation_preserved']
+             assert (p/c['editable_blend']).stat().st_size>100000
+             assert (p/c['oblique_view']).stat().st_size>4000
+             assert set(c['native_frames'])=={'1','33'}
+             assert all((p/n).stat().st_size>4000 for n in c['native_frames'].values())
+             if i==0:
+                assert c['actual_cylindrical_master'] is None
+             else:
+                master=c['actual_cylindrical_master']
+                assert master['vertices']==306
+                assert master['physical_sagitta_px']>1.0
+                assert master['real_world_sagitta_m']>0.01
+                assert master['continuous_no_slot_surfaces']
+                if i==3:
+                   assert len(c['shared_real_circumference_instances'])==2
+                   assert all(n['same_mesh_data_as_central']
+                             for n in c['shared_real_circumference_instances'])
+                   assert {n['rotation_deg'] for n in c['shared_real_circumference_instances']}=={-36.0,36.0}
+                else:
+                   assert not c['shared_real_circumference_instances']
+          print('R121_REAL_BENT_CYLINDRICAL_SOURCE_FIN_MASTER_AND_SHARED_CIRCULAR_MATRICES_PASS')
+          PY
+      - name: Publish 3D Blender edits with authentic same-camera native renders and oblique physical inspection views, never the private source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r121-one-source-rounded-master-fin-three-real-rotated-instances
+          path: |
+            private-ci/output/r121/*.blend
+            private-ci/output/r121/*.png
+            private-ci/output/r121/*.json
+          if-no-files-found: warn
+          retention-days: 14
