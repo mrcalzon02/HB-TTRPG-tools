@@ -1,0 +1,85 @@
+name: Factorio R110 reconstruct three distinct source-traced 3D upper fin hinge castings
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/source_individual_hinge_casts_r110.py'
+      - '.github/workflows/factorio-original-bespoke-hinge-casts-r110.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  reconstruct-original-three-mounts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover verified R109 real 3D fin assemblies, never publicize original Wube sprites
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41546823776
+          name: factorio-r109-genuine-flared-individual-fin-shells-and-rolled-metal-tip-models
+          github-token: ${{ github.token }}
+          path: private-ci/r109
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Restore pinned official Blender 4.5 LTS environment
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Reconstruct actual port, center and starboard mounted cast forms; save and reopen scenes
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/source_individual_hinge_casts_r110.py -- \
+            --r109-dir private-ci/r109/output/r109 --out private-ci/output/r110
+      - name: Verify separate real hinge bodies, unchanged nozzle/fins/motion and original source-camera
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path('private-ci/output/r110')
+          report=json.loads((p/'r110_real_asymmetric_hinge_cast_meshes.json').read_text())
+          assert report['private_source_art_exported'] is False
+          assert report['source_visual_fidelity_approved'] is False
+          assert len(report['candidates'])==4
+          assert {x['variant'] for x in report['candidates']}=={
+              'baseline_mounts','source_shoulder_steps','offset_cast_ears','staggered_lower_heel'}
+          for case in report['candidates']:
+              assert case['surrounding_engine_fins_and_animation_unchanged']
+              assert case['source_visual_match_not_approved']
+              assert (p/case['editable_blend']).stat().st_size>100000
+              assert (p/case['angled_3d_occupancy_view']).stat().st_size>5000
+              assert len(case['native_original_camera_frames'])==2
+              for image in case['native_original_camera_frames'].values():
+                  assert (p/image).stat().st_size>5000
+              if case['variant']=='baseline_mounts':
+                  assert case['actual_3d_rebuilt_existing_mounts']=={}
+              else:
+                  changed=case['actual_3d_rebuilt_existing_mounts']
+                  assert set(changed)=={'1','2','3'}
+                  assert changed['1']['casting']!=changed['3']['casting']
+                  assert changed['1']['3d_vertices']>50
+                  assert changed['3']['3d_vertices']>50
+                  assert changed['1']['max_local_vertex_displacement']>.012
+                  assert changed['3']['max_local_vertex_displacement']>.012
+                  assert changed['2']['physical_contact_station_rows_unchanged']==[0,5]
+                  assert changed['2']['left_and_right_cast_are_not_copied']
+          print('R110_INDEPENDENT_THREE_SOURCE_CAST_3D_GEOMETRIES_AND_SAVED_SCENES_VERIFIED')
+          PY
+      - name: Archive actual editable 3D Blender models, 35-degree geometry views and original-camera renders
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r110-distinct-real-3d-source-hinge-cast-meshes
+          path: |
+            private-ci/output/r110/*.blend
+            private-ci/output/r110/*.png
+            private-ci/output/r110/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
