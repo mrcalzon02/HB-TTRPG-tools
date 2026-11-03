@@ -1,0 +1,72 @@
+name: Factorio R111 isolate original-source hinge collar mesh ownership
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/isolate_original_source_collars_r111.py'
+      - '.github/workflows/factorio-isolate-source-hinge-collars-r111.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  physically-isolate-real-3d-collar-geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover successful R110 original-source 3D hinge cast scenes
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41556822732
+          name: factorio-r110-real-original-source-bespoke-hinge-cast-3d-models
+          github-token: ${{ github.token }}
+          path: private-ci/r110
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install pinned Blender 4.5 native editable scene renderer
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Isolate which ACTUAL 3D existing collar objects cause the wrongly regular mounting arch
+        run: |
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/isolate_original_source_collars_r111.py -- \
+            --r110-dir private-ci/r110/output/r110 --out private-ci/output/r111
+      - name: Verify all actual Blender mesh-ownership candidates kept real geometry and original animation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          out=Path('private-ci/output/r111')
+          j=json.loads((out/'r111_real_ring_collar_mesh_owner_diagnostics.json').read_text())
+          assert not j['original_sprite_exported']
+          assert j['only_hide_existing_object_for_owner_diagnostics']
+          assert len(j['candidates'])==6
+          for case in j['candidates']:
+              assert not case['source_fidelity_approved']
+              assert case['all_actual_meshes_and_original_camera_unmodified']
+              assert (out/case['editable_3d_scene']).stat().st_size>100000
+              assert (out/case['real_geometry_oblique_view']).stat().st_size>5000
+              for file in case['real_native_frame_1_and_33'].values():
+                  assert (out/file).stat().st_size>5000
+          assert not j['candidates'][0]['hidden_3d_owner_objects']
+          assert all(c['hidden_3d_owner_objects'] for c in j['candidates'][1:])
+          print('R111_TRUE_3D_COLLAR_MESH_OWNER_DIAGNOSTIC_ALL_CASES_PASS')
+          PY
+      - name: Upload true Blender real-geometry isolated-owner images and editable models only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r111-real-original-source-3d-hinge-collar-owners
+          path: |
+            private-ci/output/r111/*.blend
+            private-ci/output/r111/*.png
+            private-ci/output/r111/*.json
+            private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
