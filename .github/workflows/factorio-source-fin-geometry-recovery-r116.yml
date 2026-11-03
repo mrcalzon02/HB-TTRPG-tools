@@ -5,6 +5,7 @@ on:
     paths:
       - 'tools/factorio-render-pipeline/source_original_straight_fin_recovery_r116.py'
       - 'tools/factorio-render-pipeline/audit_original_hinge_owners_r117.py'
+      - 'tools/factorio-render-pipeline/source_three_existing_cast_zone_r118.py'
       - '.github/workflows/factorio-source-fin-geometry-recovery-r116.yml'
   workflow_dispatch:
 permissions:
@@ -129,5 +130,56 @@ jobs:
           path: |
             private-ci/output/r117/*.png
             private-ci/output/r117/*.json
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: R118 source-zone 3D re-form THREE existing unlike cast mounting bodies directly, not R114/R115 invented pips or boulder plates
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/source_three_existing_cast_zone_r118.py
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/source_three_existing_cast_zone_r118.py -- \
+            --r116-dir private-ci/output/r116 --out private-ci/output/r118
+      - name: Validate R118 actual original 3D cast mesh edits, unchanged corrected fin geometry/animation/material/camera and source inspectability
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r118')
+          r=json.loads((p/'r118_source_actual_existing_mounts.json').read_text())
+          assert not r['source_art_published'] and not r['visually_approved']
+          assert r['R114_R115_boulder_castings_rejected']
+          assert len(r['cases'])==3
+          assert [c['variant'] for c in r['cases']]==[
+             'r116_original_mount_geometry_control',
+             'three_existing_castings_source_zone_registered',
+             'three_asymmetric_reformed_L_cast_supports']
+          for c in r['cases']:
+             assert c['source_fidelity_unapproved']
+             assert c['original_fin_3d_geometry_unchanged']
+             assert (p/c['editable_blend']).stat().st_size>100000
+             assert (p/c['actual_angled_mesh_view']).stat().st_size>5000
+             assert set(c['native_camera_frames'])=={'1','33'}
+             assert all((p/x).stat().st_size>5000 for x in c['native_camera_frames'].values())
+             changes=c['physically_rebuilt_existing_original_mounts']
+             assert set(changes)==(set() if c['variant']=='r116_original_mount_geometry_control'
+                                  else {'port','center','starboard'})
+             for metal in changes.values():
+                 assert metal['real_vertices']>=60
+                 assert metal['max_real_vertex_displacement']>.015
+                 assert metal['unchanged_physical_edge_count']>100
+                 assert metal['original_manifold']==metal['result_manifold']
+                 assert not metal['source_approved']
+          print('R118_REAL_3D_SOURCE_CASTS_SAVED_REOPENED__STILL_REQUIRES_PRIVATE_ORIGINAL_VISUAL_REVIEW')
+          PY
+      - name: Preserve all three editable true 3D cast variants and original-camera/oblique renders for private original sprite inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r118-three-original-casting-source-zone-3d-candidates
+          path: |
+            private-ci/output/r118/*.blend
+            private-ci/output/r118/*.png
+            private-ci/output/r118/*.json
           if-no-files-found: warn
           retention-days: 14
