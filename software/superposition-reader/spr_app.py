@@ -16,6 +16,7 @@ import threading
 import tempfile
 from urllib.parse import urlsplit
 import webbrowser
+import wave
 import zipfile
 
 from spr_voices import VoiceLibrary
@@ -286,6 +287,11 @@ def self_check(report_path: str = "", require_examples: bool = False) -> int:
                 bootstrap = seed_examples(archive, ROOT)
                 checks["bundled_books"] = len(bootstrap["books_imported"]) == 4
                 checks["sphinx_sample"] = bootstrap["voice_samples"] >= 1
+                for sample in ("sphinx-bdo-opening.wav", "sphinx-nowhere-opening.wav"):
+                    audio = ROOT / "assets" / "voice" / sample
+                    with wave.open(str(audio), "rb") as wav:
+                        checks[sample] = (wav.getframerate() == 48000 and wav.getnchannels() == 1
+                                          and wav.getsampwidth() == 2 and wav.getnframes() > 48000)
                 if bootstrap["warnings"]:
                     raise RuntimeError("Bundled examples: " + "; ".join(bootstrap["warnings"]))
     except Exception as exc:
