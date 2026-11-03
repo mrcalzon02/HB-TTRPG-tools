@@ -19,6 +19,7 @@ import webbrowser
 import zipfile
 
 from spr_voices import VoiceLibrary
+from spr_voicebox import VoiceboxEngine
 
 from spr_core import Archive, MAX_DOCUMENT_BYTES, WindowsSapiEngine
 
@@ -27,9 +28,12 @@ MAX_JSON_BYTES = (100 * 1024 * 1024 * 4 // 3) + 8192
 
 
 class ReaderState:
-    def __init__(self, archive: Archive, engine=None):
+    def __init__(self, archive: Archive, engine=None, additional_engines=None):
         self.archive = archive
         self.engine = engine
+        self.engines = {"sapi": engine} if engine is not None else {}
+        if additional_engines:
+            self.engines.update(additional_engines)
         self.voices = VoiceLibrary(archive.root / "voices")
         self.lock = threading.Lock()
         self.cancel = threading.Event()
@@ -38,16 +42,17 @@ class ReaderState:
         self.working_index = None
 
     def start_generation(self, book_id: str, indices: list[int], voice: str, rate: int,
-                         priority: bool = False) -> dict:
+                         priority: bool = False, engine_key: str = "sapi") -> dict:
         """Queue book chunks; allow read-ahead clicks to interrupt queue ORDER, not synthesis."""
-        if self.engine is None:
-            raise RuntimeError("No installed offline voice engine is available")
+        engine = self.engines.get(engine_key)
+        if engine is None:
+            raise RuntimeError("Selected offline voice engine is not available")
         manifest = self.archive.load(book_id)
         if not indices or any(i < 0 or i >= len(manifest["chunks"]) for i in indices):
             raise ValueError("Invalid narration chunk selection")
         indices = list(dict.fromkeys(indices))
         settings = {"book_id": book_id, "voice": voice, "rate": rate,
-                    "engine": self.engine.engine_id}
+                    "engine": engine.engine_id}
         with self.lock:
             if self.job["active"]:
                 if any(self.job.get(k) != v for k, v in settings.items()):
@@ -81,7 +86,7 @@ class ReaderState:
                             break
                         current = self.pending.pop(0)
                         self.working_index = current
-                    self.archive.generate_chunk(book_id, current, self.engine, voice=voice, rate=rate)
+                    self.archive.generate_chunk(book_id, current, engine, voice=voice, rate=rate)
                     with self.lock:
                         self.job["done"] += 1
                         self.working_index = None
@@ -158,6 +163,20 @@ def make_handler(state: ReaderState):
                 if segments == ["api", "voices"]:
                     return self._json({"voices": state.engine.voices() if state.engine else [],
                                        "engine": state.engine.engine_id if state.engine else "unavailable"})
+                if segments == ["api", "voice-engines"]:
+                    local = [{"key": "sapi", "label": "Windows SAPI 5", "engine_id": state.engine.engine_id}] if state.engine else []
+                    voicebox = state.engines.get("voicebox-qwen")
+                    if voicebox:
+                        try:
+                            profiles = voicebox.profiles()
+                        except RuntimeError:
+                            profiles = None
+                        if profiles is not None:
+                            for key, instance in state.engines.items():
+                                if key.startswith("voicebox-"):
+                                    local.append({"key": key, "label": "Voicebox — " + instance.model,
+                                                  "engine_id": instance.engine_id, "profiles": profiles})
+                    return self._json(local)
                 if segments == ["api", "job"]:
                     return self._json(state.status())
                 if len(segments) == 3 and segments[:2] == ["api", "book"]:
@@ -213,7 +232,8 @@ def make_handler(state: ReaderState):
                     if not -10 <= rate <= 10:
                         raise ValueError("SAPI rate must be -10..10")
                     return self._json(state.start_generation(
-                        book_id, indices, voice, rate, priority=bool(request.get("priority", False))), 202)
+                        book_id, indices, voice, rate, priority=bool(request.get("priority", False)),
+                        engine_key=str(request.get("engine_key", "sapi"))), 202)
                 if path == "/api/cancel":
                     state.cancel.set()
                     return self._json({"cancel_requested": True})
@@ -265,7 +285,9 @@ def launch():
         engine = WindowsSapiEngine() if os.name == "nt" else None
     except RuntimeError:
         engine = None
-    state = ReaderState(archive, engine)
+    voicebox = {("voicebox-" + model): VoiceboxEngine(model)
+                for model in ("qwen", "luxtts", "chatterbox")}
+    state = ReaderState(archive, engine, additional_engines=voicebox)
     server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(state))
     server.daemon_threads = True
     url = f"http://127.0.0.1:{server.server_port}/"
