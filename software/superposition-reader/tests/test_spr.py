@@ -82,6 +82,16 @@ class ArchiveTests(unittest.TestCase):
             self.assertEqual(wav.getframerate(), 8000)
             self.assertEqual(wav.getnframes(), 2400)
 
+    def test_deleted_cached_audio_is_detected_and_regenerated(self):
+        book = self.archive.import_document("lost.txt", b"One. Two.")
+        self.archive.generate_chunk(book["id"], 0, self.engine, "A")
+        audio_path = self.archive.audio_file(book["id"], 0)
+        audio_path.unlink()
+        self.assertNotIn("0", self.archive.load(book["id"])["audio"])
+        self.assertEqual(self.archive.library()[0]["ready"], 0)
+        self.assertTrue(self.archive.generate_chunk(book["id"], 0, self.engine, "A"))
+        self.assertEqual(len(self.engine.calls), 2)
+
     def test_export_rejects_mixed_voice_profiles(self):
         book = self.archive.import_document("two.txt", b"One. Two.")
         book_id = book["id"]
