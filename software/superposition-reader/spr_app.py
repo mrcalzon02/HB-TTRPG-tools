@@ -259,7 +259,7 @@ def make_handler(state: ReaderState):
     return Handler
 
 
-def self_check(report_path: str = "") -> int:
+def self_check(report_path: str = "", require_examples: bool = False) -> int:
     """Source/portable-package smoke test; does not assert audible Windows playback."""
     checks = {"reader_html": (ROOT / "reader.html").is_file(),
               "sapi_script": (ROOT / "sapi_synthesize.ps1").is_file()}
@@ -274,6 +274,12 @@ def self_check(report_path: str = "") -> int:
             checks["private_archive"] = len(archive.load(record["id"])["chunks"]) == 1
             archive.save_position(record["id"], 0, 0.5)
             checks["position_roundtrip"] = archive.read_position(record["id"])["fraction"] == 0.5
+            if require_examples:
+                bootstrap = seed_examples(archive, ROOT)
+                checks["bundled_books"] = len(bootstrap["books_imported"]) == 4
+                checks["sphinx_sample"] = bootstrap["voice_samples"] >= 1
+                if bootstrap["warnings"]:
+                    raise RuntimeError("Bundled examples: " + "; ".join(bootstrap["warnings"]))
     except Exception as exc:
         error = str(exc)
     result = {"ok": all(checks.values()) and not error, "checks": checks, "error": error,
@@ -291,9 +297,10 @@ def launch():
     parser.add_argument("--port", type=int, default=0, help="Loopback port (0 chooses an available port)")
     parser.add_argument("--self-check", action="store_true", help="Verify bundled parser, UI, SAPI script and archive")
     parser.add_argument("--report", type=str, default="", help="Write --self-check results as JSON to this path")
+    parser.add_argument("--require-examples", action="store_true", help="Require all default books and Sphinx recording")
     args = parser.parse_args()
     if args.self_check:
-        raise SystemExit(self_check(args.report))
+        raise SystemExit(self_check(args.report, require_examples=args.require_examples))
     archive = Archive()
     try:
         bootstrap = seed_examples(archive, ROOT)
