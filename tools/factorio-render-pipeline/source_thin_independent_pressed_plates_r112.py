@@ -1,12 +1,11 @@
-"""R112 original-sprite source geometry: continuous TWO independent cast shoulders.
+"""R112 correct R111's overthick mount shoulders with shallow folded metal geometry.
 
-R110 proved separate port/starboard/crown R89 castings are real editable mesh,
-but the original camera shows a cluster of disconnected slate-like facets
-instead of the broad weathered folded structural shoulders visible in the
-user's ONLY authoritative original Factorio thruster.png frames.
+R111 unified broad independent shoulder casts but its retained old multi-part
+camera-depth span (~1.3 units) produced gross stone-like volumes. The genuine
+source has shallow folded forged steel, not enormous rocky shoulder pillows.
 
 R112 replaces each R89 side casting's ACTUAL mesh with a single physically
-closed, thick, multi-bevel forged shell. The two outlines are different:
+closed, deliberately THIN, multi-bevel sheet-metal forging. The two outlines are different:
 they were estimated from the ORIGINAL sprite visual parts, not mirrored and
 not copied from unrelated mechanical art. The original 3D center saddle,
 lower animations, nozzle, ribs and R109/R110 fin meshes are not changed.
@@ -232,7 +231,7 @@ def run(srcdir,out):
     for name,params in CASES:
         bpy.ops.wm.open_mainfile(filepath=str(src))
         scene=bpy.context.scene;scene.frame_set(1)
-        if not scene.get("fsc_r110_revision") or scene.camera.data.type!="ORTHO":
+        if not scene.get("fsc_r111_revision") or scene.camera.data.type!="ORTHO":
             raise RuntimeError("R112 requires actual source-calibrated R111 model and camera")
         names={o.name for o in scene.objects}
         camera=tuple(float(v) for row in scene.camera.matrix_world for v in row)
@@ -286,7 +285,7 @@ def run(srcdir,out):
 
 if __name__=="__main__":
     p=argparse.ArgumentParser()
-    p.add_argument("--r110-dir",type=Path,required=True)
+    p.add_argument("--r111-dir",type=Path,required=True)
     p.add_argument("--out",type=Path,required=True)
     a=p.parse_args(sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else sys.argv[1:])
-    run(a.r110_dir,a.out)
+    run(a.r111_dir,a.out)
