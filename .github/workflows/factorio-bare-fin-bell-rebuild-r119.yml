@@ -1,0 +1,71 @@
+name: Factorio R119 original bare fins and bell rebuild inventory
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/strip_to_bell_fin_inventory_r119.py'
+      - '.github/workflows/factorio-bare-fin-bell-rebuild-r119.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-physical-bell-fin-inventory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover verified R116 pre-clutter source-corrected actual Blender 3D fins
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41567961312
+          name: factorio-r116-original-blunt-straight-fin-physical-3d-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r116
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install pinned Blender workstation
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Render inventory controls, stripped actual fins plus original bell and candidate lower bell support geometry
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/strip_to_bell_fin_inventory_r119.py
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/strip_to_bell_fin_inventory_r119.py -- \
+            --r116-dir private-ci/r116/output/r116 --out private-ci/output/r119
+      - name: Verify reference resolution, exact ten real original fins, named genuine bell and owner cut previews
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r119')
+          j=json.loads((p/'r119_exact_owner_inventory_and_cut_candidate.json').read_text())
+          assert j['source_sprite_never_exported']
+          assert j['preserved_original_moving_fins']==10
+          assert j['native_source_camera_resolution']==[264,542]
+          assert not j['replacement_hinge_geometry_created']
+          assert set(j['candidates'])=={
+             'full_original_model_control','only_genuine_fins_and_named_bell',
+             'fins_bell_and_spatial_lower_3d_parts'}
+          for tag,names in j['candidates'].items():
+             assert names
+             assert (p/(tag+'_source_camera_frame01.png')).stat().st_size>5000
+             assert (p/(tag+'_source_camera_frame33.png')).stat().st_size>5000
+          assert len(j['candidates']['only_genuine_fins_and_named_bell'])<len(j['candidates']['full_original_model_control'])
+          print('R119_3D_FIN_BELL_SCRAP_WORKSPACE_OWNER_AUDIT_PASSED')
+          PY
+      - name: Preserve real original Blender source-camera render screenshots and actual owner classification JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r119-source-authentic-fins-and-bell-cut-3d-inventory
+          path: |
+            private-ci/output/r119/*.png
+            private-ci/output/r119/*.json
+          if-no-files-found: warn
+          retention-days: 14
