@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'tools/factorio-render-pipeline/strip_to_bell_fin_inventory_r119.py'
+      - 'tools/factorio-render-pipeline/rebuild_bare_bell_fins_three_simple_hinges_r120.py'
       - '.github/workflows/factorio-bare-fin-bell-rebuild-r119.yml'
   workflow_dispatch:
 permissions:
@@ -67,5 +68,67 @@ jobs:
           path: |
             private-ci/output/r119/*.png
             private-ci/output/r119/*.json
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: R120 physically scrap prior upper chassis hinges pipes and rings and build only three plain hinge primitives on the actual 3D metal fin roots
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/rebuild_bare_bell_fins_three_simple_hinges_r120.py
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/rebuild_bare_bell_fins_three_simple_hinges_r120.py -- \
+            --r116-dir private-ci/r116/output/r116 --out private-ci/output/r120
+      - name: Audit R120 only preserves genuine original finite 3D bell fins and 64-frame motion with new individual basic hinge axes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r120')
+          r=json.loads((p/'r120_clean_bell_fins_and_three_basic_hinge_candidates.json').read_text())
+          assert r['original_full_blender_scene_untouched']
+          assert not r['original_Wube_sprite_in_public_artifact']
+          assert r['scrap_rejected_all_R114_R115_hinge_geometry']
+          assert r['no_extraneous_above_bell_housing_or_invented_upper_pipes']
+          assert not r['visual_source_approved']
+          assert [c['variant'] for c in r['candidates']]==[
+            'bare_original_bell_and_ten_metal_fins',
+            'three_simple_forged_root_pads',
+            'three_basic_pads_and_plain_pivot_axles']
+          for i,c in enumerate(r['candidates']):
+            assert c['original_source_sprite_visual_match_unapproved']
+            assert c['preserved_ten_real_fins_and_lower_64_frame_motion']
+            assert c['original_bell_meshes_preserved']
+            assert c['removed_old_obsolete_mesh_and_curve_objects']>=170
+            assert c['retained_original_fin_and_bell_count']>=180
+            assert len(c['new_actual_root_hinge_pads'])==(0 if i==0 else 3)
+            assert len(c['new_plain_individual_axles'])==(3 if i==2 else 0)
+            assert c['actual_visible_model_object_count'] == (
+                 c['retained_original_fin_and_bell_count']
+                 +len(c['new_actual_root_hinge_pads'])
+                 +len(c['new_plain_individual_axles']))
+            assert (p/c['editable_blend']).stat().st_size>100000
+            assert (p/c['oblique_real_3d_preview']).stat().st_size>4000
+            assert set(c['original_source_camera_renders'])=={'1','33'}
+            assert all((p/n).stat().st_size>4000
+                for n in c['original_source_camera_renders'].values())
+            for h in c['new_actual_root_hinge_pads']:
+                assert h['pad_3d_vertices']==8
+                assert not h['source_approved']
+                x0,y0,x1,y1=h['pad_projected_bbox']
+                assert 0<x0<x1<264 and 0<y0<y1<542
+            for a in c['new_plain_individual_axles']:
+                assert a['real_vertices']==24
+                assert not a['source_approved']
+          print('R120_RIGID_CLEAN_BELL_AND_SOURCE_ROOTED_SINGLE_PLAIN_HINGES_PASSED__VISUAL_QA_ONLY')
+          PY
+      - name: Upload actual stripped clean Blender scenes, three original-root hinge shape candidates and native source-camera screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r120-truly-clean-bell-fins-three-original-root-simple-hinges
+          path: |
+            private-ci/output/r120/*.blend
+            private-ci/output/r120/*.png
+            private-ci/output/r120/*.json
           if-no-files-found: warn
           retention-days: 14
