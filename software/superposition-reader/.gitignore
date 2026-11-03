@@ -1,0 +1,23 @@
+# Never commit a person's voice recordings, book files, model weights or outputs.
+*.wav
+*.mp3
+*.flac
+*.m4a
+*.pdf
+*.docx
+*.epub
+*.onnx
+*.safetensors
+*.pt
+*.pth
+*.gguf
+*.zip
+*.log
+books/
+voices/
+models/
+generated/
+private/
+.venv/
+__pycache__/
+*.pyc
