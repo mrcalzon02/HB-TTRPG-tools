@@ -15,7 +15,7 @@ import subprocess
 import sys
 import wave
 
-SUPPORTED = {".txt", ".md", ".markdown", ".pdf", ".docx"}
+SUPPORTED = {".txt", ".md", ".markdown", ".pdf", ".docx", ".epub"}
 MAX_DOCUMENT_BYTES = 64 * 1024 * 1024
 ID_PATTERN = re.compile(r"^[0-9a-f]{16}$")
 
@@ -34,6 +34,9 @@ def extract_text(filename: str, data: bytes) -> str:
         raise ValueError("Document must be between 1 byte and 64 MiB")
     if suffix in {".txt", ".md", ".markdown"}:
         text = data.decode("utf-8-sig", errors="replace")
+    elif suffix == ".epub":
+        from spr_epub import extract_epub
+        text = extract_epub(data)
     elif suffix == ".pdf":
         try:
             import fitz
