@@ -13,7 +13,7 @@ from spr_core import Archive
 from spr_voices import VoiceLibrary
 
 BUNDLED_DIR = "spr_examples"
-VOICE_FILE = "sphinx-reference.ogg"
+VOICE_FILE = "sphinx-original.mp3"
 VOICE_NAME = "Sphinx — Personal Narrator"
 
 
