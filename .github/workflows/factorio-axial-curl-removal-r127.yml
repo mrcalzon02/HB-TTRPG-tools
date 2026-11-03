@@ -1,0 +1,89 @@
+name: Factorio R127 remove axial 3D curl from single source-squared round master fin
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/remove_axial_curl_real_3d_square_master_r127.py'
+      - '.github/workflows/factorio-axial-curl-removal-r127.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  genuinely-remove-old-depth-curl:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover verified R126 one-master truly square 3D metal fin Blender scenes only, never user private original sprite
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41595863349
+          name: factorio-r126-source-square-edge-one-round-fin-real-3d-candidates
+          github-token: ${{ github.token }}
+          path: private-ci/r126
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install actual pinned Blender engine
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Replace old R121 inherited bent axial 3D depth centerline, preserve real rounded transverse cross-section and source-camera square outline
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/remove_axial_curl_real_3d_square_master_r127.py
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/remove_axial_curl_real_3d_square_master_r127.py -- \
+            --r126-dir private-ci/r126 --out private-ci/output/r127
+      - name: Verify actual real 3D longitudinal fin profile straight, shallow or half-raked, source silhouette intact and bell lower animation protected
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r127')
+          j=json.loads((p/'r127_squarish_fin_true_3d_axial_curl_repair.json').read_text())
+          assert not j['private_original_bitmap_uploaded_to_GitHub']
+          assert j['original_sprite_approval_pending']
+          assert len(j['cases'])==4
+          assert [c['name'] for c in j['cases']]==[
+           'r126_source_square_profile_inherited_axial_curl_control',
+           'r127_square_plate_no_axial_curl',
+           'r127_square_plate_mild_original_root_rake_025',
+           'r127_square_plate_half_old_root_rake_050']
+          for n,c in enumerate(j['cases']):
+             assert c['all_other_fins_bell_and_motion_intact']
+             assert c['visual_original_approval_pending']
+             assert set(c['original_camera_renders'])=={'1','33'}
+             assert set(c['isolated_3d_render_angles'])=={'0','35','65'}
+             assert all((p/f).stat().st_size>4000
+                for f in list(c['original_camera_renders'].values())+
+                         list(c['isolated_3d_render_angles'].values()))
+             assert (p/c['editable_blend']).stat().st_size>100000
+             m=c['real_axial_bend_correction']
+             if not n:
+                assert m is None
+             else:
+                assert m['actual_two_skin_3d_mesh_vertices']==306
+                assert m['original_round_front_and_back_cross_section_preserved']
+                assert m['square_end_and_nearly_parallel_outline_preserved']
+                assert m['real_max_physical_3d_displacement_m']>.005
+                assert m['remaining_non_linear_axial_depth_error_m']<.0001
+                assert m['native_source_camera_silhouette_max_shift_px']<.001
+                if n==1:
+                    assert abs(m['new_root_to_toe_rake_depth_m'])<.001
+          print('R127_GENUINE_3D_AXIAL_BEND_CORRECTED_SQUARE_MASTER_FIN_VERIFIED_NO_VISUAL_APPROVAL_PRETENDED')
+          PY
+      - name: Retain editable 3D Blender fin scenes and actual 0/35/65 degree physical inspection screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r127-source-square-fin-no-longitudinal-3d-curl-candidates
+          path: |
+            private-ci/output/r127/*.blend
+            private-ci/output/r127/*.png
+            private-ci/output/r127/*.json
+          if-no-files-found: warn
+          retention-days: 14
