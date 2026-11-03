@@ -262,7 +262,7 @@ class VoiceboxAdapterTests(unittest.TestCase):
         engine = VoiceboxEngine("qwen")
         with tempfile.TemporaryDirectory() as directory:
             target = pathlib.Path(directory) / "test.wav"
-            with patch.object(urllib.request, "urlopen", side_effect=local_api):
+            with patch("spr_voicebox._local_request", side_effect=local_api):
                 self.assertEqual(engine.profiles(), [{"id": "local-owner", "name": "Owner"}])
                 engine.synthesize("This is a reading test.", target, voice="local-owner")
             with wave.open(str(target), "rb") as audio:
