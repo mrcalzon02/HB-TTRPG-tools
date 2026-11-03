@@ -33,40 +33,74 @@ class ReaderState:
         self.lock = threading.Lock()
         self.cancel = threading.Event()
         self.job = {"active": False, "done": 0, "total": 0, "error": "", "cancelled": False}
+        self.pending = []
+        self.working_index = None
 
-    def start_generation(self, book_id: str, indices: list[int], voice: str, rate: int) -> dict:
+    def start_generation(self, book_id: str, indices: list[int], voice: str, rate: int,
+                         priority: bool = False) -> dict:
+        """Queue book chunks; allow read-ahead clicks to interrupt queue ORDER, not synthesis."""
         if self.engine is None:
             raise RuntimeError("No installed offline voice engine is available")
+        manifest = self.archive.load(book_id)
+        if not indices or any(i < 0 or i >= len(manifest["chunks"]) for i in indices):
+            raise ValueError("Invalid narration chunk selection")
+        indices = list(dict.fromkeys(indices))
+        settings = {"book_id": book_id, "voice": voice, "rate": rate,
+                    "engine": self.engine.engine_id}
         with self.lock:
             if self.job["active"]:
-                raise RuntimeError("Narration generation is already running")
-            manifest = self.archive.load(book_id)
-            if any(i < 0 or i >= len(manifest["chunks"]) for i in indices):
-                raise ValueError("Invalid chunk index")
+                if any(self.job.get(k) != v for k, v in settings.items()):
+                    raise RuntimeError("Finish or cancel the current book/voice before changing settings")
+                for i in reversed(indices) if priority else indices:
+                    if i == self.working_index:
+                        continue
+                    if i in self.pending:
+                        if priority:
+                            self.pending.remove(i)
+                            self.pending.insert(0, i)
+                    elif priority:
+                        self.pending.insert(0, i)
+                    else:
+                        self.pending.append(i)
+                self.job["total"] = max(self.job["total"],
+                                        self.job["done"] + len(self.pending) +
+                                        int(self.working_index is not None))
+                return self.job.copy()
             self.cancel.clear()
-            self.job = {"active": True, "done": 0, "total": len(indices), "error": "",
-                        "cancelled": False, "book_id": book_id}
+            self.pending = indices[:]
+            self.working_index = None
+            self.job = {"active": True, "done": 0, "total": len(self.pending),
+                        "error": "", "cancelled": False, **settings}
+
         def worker():
             try:
-                for i in indices:
-                    if self.cancel.is_set():
-                        break
-                    self.archive.generate_chunk(book_id, i, self.engine, voice=voice, rate=rate)
+                while True:
+                    with self.lock:
+                        if self.cancel.is_set() or not self.pending:
+                            break
+                        current = self.pending.pop(0)
+                        self.working_index = current
+                    self.archive.generate_chunk(book_id, current, self.engine, voice=voice, rate=rate)
                     with self.lock:
                         self.job["done"] += 1
+                        self.working_index = None
             except Exception as exc:
                 with self.lock:
                     self.job["error"] = str(exc)
             finally:
                 with self.lock:
+                    self.working_index = None
+                    self.pending.clear()
                     self.job["cancelled"] = self.cancel.is_set()
                     self.job["active"] = False
+
         threading.Thread(target=worker, name="SPR-Narration", daemon=True).start()
         return self.status()
 
     def status(self) -> dict:
         with self.lock:
-            return self.job.copy()
+            return {**self.job, "queued": len(self.pending),
+                    "working_index": self.working_index}
 
 
 def make_handler(state: ReaderState):
@@ -126,7 +160,9 @@ def make_handler(state: ReaderState):
                 if segments == ["api", "job"]:
                     return self._json(state.status())
                 if len(segments) == 3 and segments[:2] == ["api", "book"]:
-                    return self._json(state.archive.load(segments[2]))
+                    record = state.archive.load(segments[2])
+                    record["position"] = state.archive.read_position(segments[2])
+                    return self._json(record)
                 if len(segments) == 4 and segments[:2] == ["api", "audio"]:
                     return self._file(state.archive.audio_file(segments[2], int(segments[3])), "audio/wav")
                 if len(segments) == 3 and segments[:2] == ["api", "export"]:
@@ -158,6 +194,10 @@ def make_handler(state: ReaderState):
                         return self._json(state.voices.import_zip(profile_id, data), 201)
                     entry = state.voices.add_sample(profile_id, filename, data, request.get("transcript", ""))
                     return self._json({"name": entry["name"], "bytes": entry["bytes"]}, 201)
+                if path == "/api/position":
+                    return self._json(state.archive.save_position(
+                        request["book_id"], int(request["index"]),
+                        float(request.get("fraction", 0.0))))
                 if path == "/api/import":
                     data = base64.b64decode(request["base64"], validate=True)
                     record = state.archive.import_document(request["name"], data)
@@ -171,7 +211,8 @@ def make_handler(state: ReaderState):
                     rate = int(request.get("rate", 0))
                     if not -10 <= rate <= 10:
                         raise ValueError("SAPI rate must be -10..10")
-                    return self._json(state.start_generation(book_id, indices, voice, rate), 202)
+                    return self._json(state.start_generation(
+                        book_id, indices, voice, rate, priority=bool(request.get("priority", False))), 202)
                 if path == "/api/cancel":
                     state.cancel.set()
                     return self._json({"cancel_requested": True})
