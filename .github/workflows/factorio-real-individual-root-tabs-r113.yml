@@ -5,6 +5,7 @@ on:
     paths:
       - 'tools/factorio-render-pipeline/source_individual_forged_root_tabs_r113.py'
       - '.github/workflows/factorio-real-individual-root-tabs-r113.yml'
+      - 'tools/factorio-render-pipeline/source_folded_stepped_root_brackets_r114.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -81,5 +82,55 @@ jobs:
             private-ci/output/r113/*.png
             private-ci/output/r113/*.json
             private-ci/readiness/readiness.json
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: R114 geometry revision - physically replace incorrect R113 rectangular tabs with unique notched, raised, folded metal in the actual Blender model
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/source_folded_stepped_root_brackets_r114.py
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/source_folded_stepped_root_brackets_r114.py -- \
+            --r113-dir private-ci/output/r113 --out private-ci/output/r114
+      - name: Audit R114 actual physical source-shape variants, fin motion and exact editable Blender saved/reopened scenes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("private-ci/output/r114")
+          r=json.loads((p/"r114_physically_notched_bracket_candidates.json").read_text())
+          assert not r["source_bitmap_exported"] and not r["visual_match_approved"]
+          assert len(r["cases"])==3
+          assert [c["variant"] for c in r["cases"]]==[
+             "r113_rectangular_pip_control","independent_forged_lips",
+             "stepped_offset_return_brackets"]
+          for c in r["cases"]:
+              assert c["existing_original_machine_geometry_unchanged"]
+              assert c["source_shape_fidelity_unapproved"]
+              assert (p/c["editable_blend"]).stat().st_size>100000
+              assert (p/c["actual_3d_oblique_render"]).stat().st_size>5000
+              assert set(c["native_source_camera_frames"])=={"1","33"}
+              assert all((p/x).stat().st_size>5000 for x in c["native_source_camera_frames"].values())
+              parts=c["genuine_notched_solid_brackets"]
+              assert len(parts)==(0 if c["variant"]=="r113_rectangular_pip_control" else 6)
+              assert c["replaced_prior_incorrect_pips"]==(len(parts)==6)
+              for part in parts:
+                  assert part["notched_source_footprint_points"]>=9
+                  assert part["real_vertices"]==3*part["notched_source_footprint_points"]
+                  assert part["real_faces"]==2*part["notched_source_footprint_points"]+2
+                  assert part["physical_manifold_edges"]>=20
+                  assert part["finite_crown_depth"]>.1
+                  assert not part["source_visually_approved"]
+          print("R114_NOTCHED_PHYSICAL_3D_BLENDER_FORGED_SOURCE_BRACKETS_PASS__VISUAL_APPROVAL_NOT_ASSERTED")
+          PY
+      - name: Preserve editable R114 genuine model variants and actual native/oblique renders without the proprietary original sprite
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r114-notched-folded-source-bracket-3d-candidates
+          path: |
+            private-ci/output/r114/*.blend
+            private-ci/output/r114/*.png
+            private-ci/output/r114/*.json
           if-no-files-found: warn
           retention-days: 14
