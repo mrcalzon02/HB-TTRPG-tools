@@ -165,6 +165,14 @@ def make_handler(state: ReaderState):
                     return self._json(state.archive.library())
                 if segments == ["api", "bootstrap"]:
                     return self._json(state.bootstrap)
+                if len(segments) == 3 and segments[:2] == ["api", "voice-preview"]:
+                    name = {
+                        "bdo": "sphinx-bdo-opening.wav",
+                        "nowhere": "sphinx-nowhere-opening.wav"
+                    }.get(segments[2])
+                    if name is None:
+                        return self._json({"error": "Unknown preview"}, 404)
+                    return self._file(ROOT / "assets" / "voice" / name, "audio/wav")
                 if segments == ["api", "voice-profiles"]:
                     return self._json(state.voices.list())
                 if segments == ["api", "voices"]:
