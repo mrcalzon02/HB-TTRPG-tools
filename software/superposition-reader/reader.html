@@ -52,7 +52,7 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
     <section><h2>Your library</h2>
       <label for="upload">Import document (TXT, Markdown, PDF, DOCX, EPUB)</label>
       <input id="upload" type="file" accept=".txt,.md,.markdown,.pdf,.docx,.epub">
-      <p class="small">Files and generated audio remain in your private local SPR folder. Scanned PDFs and encrypted EPUB books are not supported in this version.</p>
+      <p class="small">Files and generated audio remain in your local SPR library. Scanned PDFs and encrypted EPUB books are not supported in this version.</p>
       <div id="library" aria-label="Imported books"></div>
     </section>
     <section><h2>Private voice references</h2>
@@ -62,7 +62,10 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
       <label for="profileList">Saved profiles</label><select id="profileList"><option value="">Select a profile</option></select>
       <label for="voiceSample">Add WAV, MP3, FLAC, OGG, M4A or reference ZIP</label>
       <input id="voiceSample" type="file" accept=".wav,.mp3,.flac,.ogg,.m4a,.zip">
-      <p id="voiceArchiveStatus" class="small">Reference recordings remain private and are not cloned until a neural backend is installed.</p>
+      <p id="voiceArchiveStatus" class="small">Reference profiles are archived locally. Sphinx voice synthesis requires the optional neural runtime.</p>
+      <label>Sphinx — verified neural voice previews</label>
+      <div class="row"><button id="hearBdo" title="Audition cloned Sphinx narrating Beneath Dappled Oaks">▶ Oaks</button><button id="hearNowhere" title="Audition cloned Sphinx narrating The Nowhere King">▶ Nowhere King</button></div>
+      <p class="small">These two WAV recordings were generated from your Sphinx sample by the offline LuxTTS model. Review the voice by ear; the rest of each book is not yet narrated.</p>
     </section>
     <section><h2>Generation</h2>
       <label for="engineSelect">Narration engine</label>
@@ -82,7 +85,7 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
     </section>
   </aside>
   <main id="documentArea">
-    <div id="documentHeader"><p id="documentTitle">Import or select a document</p><div class="small" id="documentMeta">Narration will highlight the currently spoken sentence.</div></div>
+    <div id="documentHeader"><p id="documentTitle">Import or select a document</p><div class="small" id="documentMeta">Narration highlights the spoken text segment; full books currently use passages until word alignment is implemented.</div></div>
     <div id="documentText"><p class="small">Choose a document on the left. Click a sentence to start reading from it.</p></div>
   </main>
   <div class="right">
@@ -109,6 +112,7 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
 "use strict";
 const $ = id => document.getElementById(id);
 const audio = new Audio();
+const previewAudio = new Audio();
 let book = null, active = 0, waiting = null, playing = false, workBusy = false;
 let engineId = "unavailable", engineKey = "sapi", engineOptions = [], windowsVoices = [];
 let resumeFraction = 0, positionTimer = null, lastPositionTime = 0;
@@ -215,8 +219,8 @@ function updateButtons(){
 function updateArchive(){
   if(!book)return;
   const ready=book.chunks.filter((_,i)=>renderMatches(i)).length;
-  $("archiveStatus").textContent=ready+" of "+book.chunks.length+" sentence clips ready for the selected voice and rate.";
-  $("documentMeta").textContent=book.chunks.length+" sentences · "+ready+" cached";
+  $("archiveStatus").textContent=ready+" of "+book.chunks.length+" audio segments ready for the selected voice and rate.";
+  $("documentMeta").textContent=book.chunks.length+" "+(book.segment_mode==="passage"?"passages":"sentences")+" · "+ready+" cached";
   $("position").textContent=(active+1)+" / "+book.chunks.length;
   updateButtons();
 }
@@ -255,7 +259,7 @@ async function openBook(id){
     button.id="segment-"+i;
     button.type="button";
     button.textContent=chunk.text+" ";
-    button.title="Play sentence "+(i+1);
+    button.title="Play "+(book.segment_mode==="passage"?"passage":"sentence")+" "+(i+1);
     button.addEventListener("click",()=>{playing=true;loadAndPlay(i);});
     host.append(button);
     if((i+1)%9===0)host.append(document.createElement("p"));
@@ -407,6 +411,15 @@ async function refreshVoiceProfiles(selectId){
   }
   if(profiles.some(p=>p.id===selected))$("profileList").value=selected;
 }
+async function playVoicePreview(name){
+  previewAudio.pause();
+  previewAudio.src="/api/voice-preview/"+name;
+  previewAudio.volume=Number($("volume").value);
+  try{await previewAudio.play();status("Auditioning the generated Sphinx narration ("+name+").");}
+  catch(error){status("Sphinx preview playback failed: "+error.message);}
+}
+$("hearBdo").addEventListener("click",()=>playVoicePreview("bdo"));
+$("hearNowhere").addEventListener("click",()=>playVoicePreview("nowhere"));
 $("createProfile").addEventListener("click",async()=>{
   const name=$("profileName").value.trim();
   if(!name){$("voiceArchiveStatus").textContent="Enter a name for the profile.";return;}
@@ -444,6 +457,8 @@ async function initialize(){
     await refreshEngineOptions();
     if(!windowsVoices.length)status("No Windows SAPI voices detected; select an available local engine.");
     await refreshVoiceProfiles();
+    const bootstrap=await request("/api/bootstrap");
+    if(bootstrap.voice_profile_id)$("profileList").value=bootstrap.voice_profile_id;
     await refreshLibrary();
     const items=await request("/api/library");
     if(items.length)await openBook(items[0].id);
