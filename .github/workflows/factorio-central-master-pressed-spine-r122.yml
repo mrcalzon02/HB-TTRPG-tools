@@ -1,0 +1,78 @@
+name: Factorio R122 one curved central metal master pressed ridge, original source comparisons
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/central_round_master_pressed_spine_r122.py'
+      - '.github/workflows/factorio-central-master-pressed-spine-r122.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-first-single-round-pressed-master:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download exact verified R121 one true 3D round master from successful GitHub run
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41573644701
+          name: factorio-r121-one-source-rounded-master-fin-three-real-rotated-instances
+          github-token: ${{ github.token }}
+          path: private-ci/r121
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Recover genuine Blender 4.5 LTS
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: Sculpt actual R121 master fin rounded central ridge without adding artificial holes, extra meshes or per-fin shape variants
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/central_round_master_pressed_spine_r122.py
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/central_round_master_pressed_spine_r122.py -- \
+            --r121-dir private-ci/r121 --out private-ci/output/r122
+      - name: Verify all four saved actual physical 3D rounded source spine models and authentic 64-frame motion
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path('private-ci/output/r122')
+          r=json.loads((p/'r122_real_master_source_cylinder_spine_cases.json').read_text())
+          assert not r['source_sprite_in_public_CI']
+          assert r['visual_original_source_approval_pending']
+          assert len(r['cases'])==4
+          assert [c['variant'] for c in r['cases']]==[
+            'round_master_no_pressed_spine_control',
+            'round_master_narrow_pressed_spine_025m',
+            'round_master_narrow_pressed_spine_055m',
+            'round_master_pressed_spine_035m_darker_metal']
+          for index,c in enumerate(r['cases']):
+             assert c['source_shape_visually_approved'] is False
+             g=c['master_true_3d_formed_spine']
+             assert g['actual_vertices']==306 and g['real_closed_thickness']
+             assert g['same_original_source_cylinder_radius_px']==40.0
+             assert (g['true_physical_emboss_displacement_m']>(.005 if index else -.001))
+             assert set(c['original_camera_renders'])=={'1','33'}
+             assert all((p/n).stat().st_size>4000 for n in c['original_camera_renders'].values())
+             assert (p/c['angled_physical_view']).stat().st_size>4000
+             assert (p/c['editable_blend']).stat().st_size>100000
+          print('R122_REAL_SINGLE_CYLINDER_SPINE_METAL_SAVED_REOPENED_PASS_PRIVATE_SOURCE_VISUAL_REVIEW_PENDING')
+          PY
+      - name: Upload actual editable one-fin Blender geometry and native plus angled physical screenshots only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r122-one-rounded-source-fin-pressed-3d-spine-variants
+          path: |
+            private-ci/output/r122/*.blend
+            private-ci/output/r122/*.png
+            private-ci/output/r122/*.json
+          if-no-files-found: warn
+          retention-days: 14
