@@ -11,6 +11,7 @@ import pathlib
 import sys
 import tempfile
 import threading
+import time
 import unittest
 import wave
 
@@ -78,6 +79,24 @@ class ArchiveTests(unittest.TestCase):
         with wave.open(str(output), "rb") as wav:
             self.assertEqual(wav.getframerate(), 8000)
             self.assertEqual(wav.getnframes(), 2400)
+
+    def test_export_rejects_mixed_voice_profiles(self):
+        book = self.archive.import_document("two.txt", b"One. Two.")
+        book_id = book["id"]
+        self.archive.generate_chunk(book_id, 0, self.engine, "Voice A")
+        self.archive.generate_chunk(book_id, 1, self.engine, "Voice B")
+        with self.assertRaisesRegex(ValueError, "different voices or rates"):
+            self.archive.export_wav(book_id)
+        self.archive.generate_chunk(book_id, 1, self.engine, "Voice A")
+        self.assertTrue(self.archive.export_wav(book_id).is_file())
+
+    def test_position_survives_restart_and_rejects_invalid(self):
+        book = self.archive.import_document("three.txt", b"One. Two. Three.")
+        self.archive.save_position(book["id"], 1, 0.35)
+        reopened = Archive(self.archive.root)
+        self.assertEqual(reopened.read_position(book["id"]), {"index": 1, "fraction": 0.35})
+        with self.assertRaisesRegex(ValueError, "outside document"):
+            reopened.save_position(book["id"], 90, 0.0)
 
     def test_export_refuses_incomplete_narration(self):
         book = self.archive.import_document("story.txt", b"One. Two.")
@@ -201,6 +220,48 @@ class ApiTests(unittest.TestCase):
         code, profiles = self.req("GET", "/api/voice-profiles")
         self.assertEqual(code, 200)
         self.assertEqual(profiles[0]["samples"], 1)
+
+    def test_position_http_api(self):
+        code, book = self.req("POST", "/api/import",
+            {"name": "progress.txt", "base64": base64.b64encode(b"First. Second.").decode()})
+        self.assertEqual(code, 201)
+        code, saved = self.req("POST", "/api/position",
+            {"book_id": book["id"], "index": 1, "fraction": 0.42})
+        self.assertEqual(code, 200)
+        code, manifest = self.req("GET", "/api/book/" + book["id"])
+        self.assertEqual(code, 200)
+        self.assertEqual(manifest["position"], {"index": 1, "fraction": 0.42})
+
+    def test_generation_priority_does_not_start_parallel_engine(self):
+        class GateEngine(FakeEngine):
+            def __init__(self):
+                super().__init__()
+                self.started = threading.Event()
+                self.release = threading.Event()
+            def synthesize(self, text, target, voice="", rate=0):
+                if not self.calls:
+                    self.started.set()
+                    self.release.wait(3)
+                super().synthesize(text, target, voice, rate)
+        engine = GateEngine()
+        state = ReaderState(Archive(pathlib.Path(self.tmp.name) / "queue"), engine)
+        book = state.archive.import_document("queue.txt", b"First. Second. Third. Fourth.")
+        book_id = book["id"]
+        state.start_generation(book_id, list(range(4)), "A", 0)
+        self.assertTrue(engine.started.wait(2), "First synthesis did not start")
+        try:
+            state.start_generation(book_id, [3], "A", 0, priority=True)
+            with self.assertRaisesRegex(RuntimeError, "Finish or cancel"):
+                state.start_generation(book_id, [1], "B", 0, priority=True)
+        finally:
+            engine.release.set()
+        for _ in range(200):
+            if not state.status()["active"]:
+                break
+            time.sleep(0.01)
+        self.assertFalse(state.status()["active"], "Narration did not finish")
+        self.assertEqual(state.status()["error"], "")
+        self.assertEqual([call[0] for call in engine.calls], ["First.", "Fourth.", "Second.", "Third."])
 
     def test_rejects_foreign_origin_and_host(self):
         self.assertEqual(self.req("GET", "/api/library", headers={"Host": "evil.example"})[0], 403)
