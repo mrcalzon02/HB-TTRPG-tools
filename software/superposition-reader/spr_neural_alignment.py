@@ -106,8 +106,8 @@ def trim_guarded_audio(audio, sample_rate: int, expected: str, recognition: dict
     # Small attack fade prevents a digital pop without masking a consonant.
     fade_frames = min(int(.003 * sample_rate), len(tail) // 10)
     if fade_frames:
-        import numpy as np
-        tail[:fade_frames] *= np.linspace(0.0, 1.0, fade_frames, endpoint=True)
+        for i in range(fade_frames):
+            tail[i] *= i / max(1, fade_frames - 1)
     return tail, {"guard_word": alignment[count - 1][0], "guard_count": count,
                   "removed_seconds": round(cut_seconds, 3),
                   "first_word_pre_roll_ms": round((actual_start - cut_seconds) * 1000),
