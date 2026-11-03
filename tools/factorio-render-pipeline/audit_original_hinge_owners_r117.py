@@ -68,8 +68,18 @@ def source_camera_render(scene,path,frame):
 
 def run(r116_dir,out_dir):
     src=Path(r116_dir).resolve()/BASE
-    if hashlib.sha256(src.read_bytes()).hexdigest()!=BASE_SHA:
-        raise RuntimeError("R117 needs exact R116 repaired main fin scene")
+    # Blender .blend binary SHA can legitimately vary across independent renders,
+    # so verify against the actual SAME-RUN R116 manifest, not an older job.
+    upstream=Path(r116_dir).resolve()/"r116_source_real_3d_straight_blunt_fin_candidates.json"
+    upstream_report=json.loads(upstream.read_text(encoding="utf8"))
+    candidates=[case for case in upstream_report["cases"]
+                if case["variant"]=="original_straight_sharp_fin_main_three"
+                and case["editable_blend"]==BASE]
+    if len(candidates)!=1:
+        raise RuntimeError("R117 has no exact upstream R116 source scene entry")
+    expected_sha=candidates[0]["sha256"]
+    if hashlib.sha256(src.read_bytes()).hexdigest()!=expected_sha:
+        raise RuntimeError("R117 R116 scene differs from same-run verified manifest")
     out=Path(out_dir).resolve()
     out.mkdir(parents=True,exist_ok=True)
     bpy.ops.wm.open_mainfile(filepath=str(src))
