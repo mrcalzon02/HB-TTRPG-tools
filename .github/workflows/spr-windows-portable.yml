@@ -49,6 +49,23 @@ jobs:
           $check = Get-Content $report -Raw | ConvertFrom-Json
           if (-not $check.ok) { throw "SPR self-check failed: $(Get-Content $report -Raw)" }
           Get-Content $report
+      - name: Assemble console-free Windows GUI and verify its bundled files
+        shell: pwsh
+        run: |
+          python -m PyInstaller --noconfirm --clean --onedir --windowed --name "SuperPositionReader" --paths software/superposition-reader --hidden-import fitz --hidden-import docx --hidden-import webview.platforms.winforms --add-data "software/superposition-reader/reader.html;." --add-data "software/superposition-reader/sapi_synthesize.ps1;." --add-data "software/superposition-reader/spr_luxtts_worker.py;." --add-data "software/superposition-reader/spr_epub.py;." --add-data "software/superposition-reader/spr_storybooks.py;." --add-data "software/superposition-reader/assets/voice;assets/voice" --add-data "software/superposition-reader/install-neural-windows.ps1;." --add-data "build/spr_examples;spr_examples" software/superposition-reader/spr_app.py
+          if ($LASTEXITCODE -ne 0) { throw "GUI PyInstaller build failed" }
+          $guiReport = Join-Path $env:RUNNER_TEMP 'spr-gui-smoke.json'
+          $binary = (Resolve-Path '.\dist\SuperPositionReader\SuperPositionReader.exe').Path
+          $process = Start-Process -FilePath $binary -ArgumentList @('--self-check','--require-examples','--report', $guiReport) -PassThru -Wait
+          if ($process.ExitCode -ne 0 -or -not (Test-Path $guiReport)) {
+            throw "GUI executable smoke failed: exit=$($process.ExitCode); reportExists=$(Test-Path $guiReport)"
+          }
+          $result = Get-Content $guiReport -Raw | ConvertFrom-Json
+          if (-not $result.ok) { throw "GUI bundle reports missing files: $(Get-Content $guiReport -Raw)" }
+          Copy-Item software/superposition-reader/Setup-Sphinx-Neural-Voice.cmd .\dist\SuperPositionReader\
+          if (-not (Test-Path .\dist\SuperPositionReader\Setup-Sphinx-Neural-Voice.cmd)) {
+            throw "Neural setup launcher missing from distribution"
+          }
       - name: Create zipped portable preview
         shell: pwsh
         run: |
