@@ -19,6 +19,20 @@ AUDIO_EXTS = {".wav", ".mp3", ".flac", ".ogg", ".m4a"}
 MAX_SAMPLE = 45 * 1024 * 1024
 MAX_BUNDLE = 100 * 1024 * 1024
 MAX_ITEMS = 200
+
+
+def _looks_like_audio(suffix: str, data: bytes) -> bool:
+    if suffix == ".wav":
+        return len(data) >= 12 and data[:4] in {b"RIFF", b"RF64"} and data[8:12] == b"WAVE"
+    if suffix == ".mp3":
+        return data.startswith(b"ID3") or (len(data) >= 2 and data[0] == 0xFF and (data[1] & 0xE0) == 0xE0)
+    if suffix == ".flac":
+        return data.startswith(b"fLaC")
+    if suffix == ".ogg":
+        return data.startswith(b"OggS")
+    if suffix == ".m4a":
+        return len(data) >= 12 and data[4:8] == b"ftyp"
+    return False
 ID_PATTERN = re.compile(r"^[a-f0-9]{32}$")
 
 
@@ -65,6 +79,8 @@ class VoiceLibrary:
             raise ValueError("Only WAV, MP3, FLAC, OGG and M4A samples are accepted")
         if not 1 <= len(data) <= MAX_SAMPLE:
             raise ValueError("Voice sample must be between 1 byte and 45 MiB")
+        if not _looks_like_audio(suffix, data):
+            raise ValueError("Recording does not match the declared audio format")
         profile = self.get(profile_id)
         fingerprint = hashlib.sha256(data).hexdigest()
         duplicate = next((s for s in profile["samples"] if s["sha256"] == fingerprint), None)
