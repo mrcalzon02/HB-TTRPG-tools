@@ -111,18 +111,31 @@ def serve(prefer_cpu: bool = False) -> None:
 
 
 def trial(reference: Path, output: Path, repo_root: Path, prefer_cpu: bool = True):
-    from spr_storybooks import manuscript_text
     sources = [
-        ("bdo-opening", repo_root / "docs/beneath-dappled-oaks/chapters/01-THE-LAST-SEVEN.md"),
-        ("nowhere-king-opening", repo_root / "docs/nowhere-king/episodes/season-01/01-CROWN-WITHOUT-COURT.md"),
+        ("bdo-opening", "docs/beneath-dappled-oaks/chapters/01-THE-LAST-SEVEN.md", "bdo-current.epub"),
+        ("nowhere-king-opening", "docs/nowhere-king/episodes/season-01/01-CROWN-WITHOUT-COURT.md", "nowhere-s1.epub"),
     ]
     engine = LuxEngine(prefer_cpu=prefer_cpu)
     output.mkdir(parents=True, exist_ok=True)
     results = []
-    for key, source in sources:
-        raw = manuscript_text(source.read_text(encoding="utf-8"), nowhere=key.startswith("nowhere"))
-        paragraphs = [p.strip() for p in raw.split("\n\n") if p.strip() and not p.lstrip().startswith("#")]
-        spoken = next((p for p in paragraphs if len(p) >= 38), None)
+    for key, source_name, epub_name in sources:
+        source = repo_root / source_name
+        if source.is_file():
+            from spr_storybooks import manuscript_text
+            raw = manuscript_text(source.read_text(encoding="utf-8"), nowhere=key.startswith("nowhere"))
+            origin = source_name
+        else:
+            # Portable Windows builds ship validated EPUBs instead of the Git checkout.
+            from spr_epub import extract_epub
+            book = repo_root / "spr_examples" / epub_name
+            if not book.is_file():
+                raise FileNotFoundError("Missing bundled example book: " + str(book))
+            raw = extract_epub(book.read_bytes())
+            origin = "spr_examples/" + epub_name
+        paragraphs = [p.strip() for p in raw.split("\n\n")
+                      if p.strip() and not p.lstrip().startswith("#")]
+        spoken = next((p for p in paragraphs if len(p) >= 38 and
+                       not p.lower().startswith(("chapter one", "nowhere king", "season one"))), None)
         if not spoken:
             raise ValueError("Cannot find source prose paragraph")
         import re
@@ -131,7 +144,7 @@ def trial(reference: Path, output: Path, repo_root: Path, prefer_cpu: bool = Tru
             spoken = spoken[:240].rsplit(" ", 1)[0] + "."
         name = key + ".wav"
         report = engine.synthesize(spoken, reference, output / name)
-        results.append({"id": key, "source": source.relative_to(repo_root).as_posix(),
+        results.append({"id": key, "source": origin,
                         "text": spoken, "file": name, **report})
         print(key, report, flush=True)
     summary = {"status": "generated-not-auditor-approved", "engine": engine.model_name,
