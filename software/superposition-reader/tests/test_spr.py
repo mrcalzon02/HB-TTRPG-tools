@@ -17,7 +17,7 @@ from unittest.mock import patch
 import wave
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
-from spr_core import Archive, sentence_chunks, extract_text
+from spr_core import Archive, sentence_chunks, passage_chunks, extract_text
 from spr_app import ReaderState, make_handler
 from spr_voices import VoiceLibrary
 from spr_voicebox import VoiceboxEngine
@@ -62,6 +62,22 @@ class ArchiveTests(unittest.TestCase):
         self.assertGreater(len(parts), 2)
         self.assertTrue(all(len(piece) <= 110 for piece in parts))
         self.assertEqual(" ".join(parts), ("word " * 150).strip())
+
+    def test_long_book_passages_preserve_all_spoken_words(self):
+        source = ("The old castle was quiet. The wind moved along the stone. " * 500
+                  + "\n\n"
+                  + "A new chapter begins. No voice should skip a word. " * 300)
+        expected = " ".join(source.split())
+        passages = passage_chunks(source, max_chars=420)
+        self.assertGreater(len(passages), 20)
+        self.assertTrue(all(0 < len(part) <= 420 for part in passages))
+        self.assertEqual(" ".join(passages), expected)
+        with tempfile.TemporaryDirectory() as folder:
+            archive = Archive(pathlib.Path(folder))
+            doc = archive.import_document("long-novel.txt", source.encode())
+            self.assertEqual(doc["segment_mode"], "passage")
+            self.assertLess(len(doc["chunks"]), 300)
+            self.assertGreater(len(doc["chunks"]), 20)
 
     def test_audio_cache_resume_and_voice_change(self):
         book = self.archive.import_document("test.txt", b"One. Two.")
@@ -323,6 +339,15 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(job["error"], "")
         self.assertEqual(self.req("GET", "/api/audio/" + book_id + "/0")[0], 200)
         self.assertEqual(self.req("GET", "/api/export/" + book_id)[0], 200)
+
+    def test_committed_sphinx_audition_routes(self):
+        for name in ("bdo", "nowhere"):
+            code, raw = self.req("GET", "/api/voice-preview/" + name)
+            self.assertEqual(code, 200)
+            self.assertEqual(raw[:4], b"RIFF")
+            self.assertEqual(raw[8:12], b"WAVE")
+            self.assertGreater(len(raw), 10000)
+        self.assertEqual(self.req("GET", "/api/voice-preview/../secrets")[0], 404)
 
     def test_voice_profile_api_archives_audio(self):
         code, profile = self.req("POST", "/api/voice-profile", {"name": "Local narrator"})
