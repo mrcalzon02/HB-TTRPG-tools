@@ -41,6 +41,7 @@ class FakeObject(dict):
     def __init__(self,positions,faces):
         super().__init__()
         self.type="MESH"
+        self.name="R49_BESPOKE_CAST_MOUNT_02"
         self.data=Mesh(positions,faces)
         self.data.shape_keys=None
 
