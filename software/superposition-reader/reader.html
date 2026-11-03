@@ -105,7 +105,23 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
 const $ = id => document.getElementById(id);
 const audio = new Audio();
 let book = null, active = 0, waiting = null, playing = false, workBusy = false;
+let engineId = "unavailable", resumeFraction = 0, positionTimer = null, lastPositionTime = 0;
 audio.volume = 0.8;
+function renderMatches(index){
+  const item=book?.audio?.[String(index)];
+  return !!item?.render && item.render.engine===engineId &&
+         item.render.voice===$("voice").value &&
+         Number(item.render.rate)===Number($("sapiRate").value);
+}
+function savePositionSoon(delay=250){
+  if(!book)return;
+  clearTimeout(positionTimer);
+  const bookId=book.id, index=active;
+  const fraction=(audio.duration&&Number.isFinite(audio.duration)&&audio.src)
+    ?Math.max(0,Math.min(1,audio.currentTime/audio.duration)):0;
+  positionTimer=setTimeout(()=>{post("/api/position",{book_id:bookId,index,fraction})
+    .catch(error=>status("Reading progress save failed: "+error.message));},delay);
+}
 function status(message){ $("status").textContent = message; }
 async function request(url, options){
   const response = await fetch(url, options);
@@ -134,14 +150,16 @@ function updateButtons(){
   $("play").disabled=!has;
   $("previous").disabled=!has||active===0;
   $("next").disabled=!has||active>=book.chunks.length-1;
-  $("generate").disabled=!has||workBusy;
+  $("generate").disabled=!has||workBusy||engineId==="unavailable";
   $("cancel").disabled=!workBusy;
-  $("export").disabled=!has||Object.keys(book.audio).length!==book.chunks.length;
+  $("voice").disabled=workBusy;
+  $("sapiRate").disabled=workBusy;
+  $("export").disabled=!has||book.chunks.some((_,i)=>!renderMatches(i));
 }
 function updateArchive(){
   if(!book)return;
-  const ready=Object.keys(book.audio).length;
-  $("archiveStatus").textContent=ready+" of "+book.chunks.length+" sentence clips generated.";
+  const ready=book.chunks.filter((_,i)=>renderMatches(i)).length;
+  $("archiveStatus").textContent=ready+" of "+book.chunks.length+" sentence clips ready for the selected voice and rate.";
   $("documentMeta").textContent=book.chunks.length+" sentences · "+ready+" cached";
   $("position").textContent=(active+1)+" / "+book.chunks.length;
   updateButtons();
@@ -166,7 +184,7 @@ async function openBook(id){
   host.replaceChildren();
   book.chunks.forEach((chunk,i)=>{
     const button=document.createElement("button");
-    button.className="segment"+(book.audio[String(i)]?" ready":"");
+    button.className="segment"+(renderMatches(i)?" ready":"");
     button.id="segment-"+i;
     button.type="button";
     button.textContent=chunk.text+" ";
@@ -175,7 +193,8 @@ async function openBook(id){
     host.append(button);
     if((i+1)%9===0)host.append(document.createElement("p"));
   });
-  selectSentence(0,false);
+  resumeFraction=Math.max(0,Math.min(1,Number(book.position?.fraction||0)));
+  selectSentence(Math.min(book.chunks.length-1,Number(book.position?.index||0)),false);
   await refreshLibrary();
   status("Document loaded locally. Click Play or any sentence.");
 }
@@ -186,26 +205,33 @@ async function fetchBook(){
   if(book?.id!==id)return;
   book=current;
   document.querySelectorAll(".segment").forEach((node,i)=>{
-    node.classList.toggle("ready",!!book.audio[String(i)]);
+    node.classList.toggle("ready",renderMatches(i));
   });
   updateArchive();
 }
 async function queueOne(index){
-  if(workBusy)return;
   try{
-    workBusy=true;
-    await post("/api/generate",{book_id:book.id,index,voice:$("voice").value,rate:Number($("sapiRate").value)});
-    status("Synthesizing sentence "+(index+1)+" locally...");
-  }catch(error){workBusy=false;status(error.message);}
+    const queued=await post("/api/generate",{
+      book_id:book.id,index,priority:true,
+      voice:$("voice").value,rate:Number($("sapiRate").value)
+    });
+    workBusy=queued.active;
+    status("Prioritized sentence "+(index+1)+" in the local narration queue.");
+  }catch(error){
+    waiting=null;
+    status("Cannot queue sentence: "+error.message);
+  }
   updateButtons();
 }
 async function loadAndPlay(index){
   if(!book)return;
+  if(index!==active)resumeFraction=0;
+  if(audio.src)savePositionSoon(0);
   selectSentence(index);
   audio.pause();
   audio.removeAttribute("src");
   audio.load();
-  if(!book.audio[String(index)]){
+  if(!renderMatches(index)){
     waiting=index;
     await queueOne(index);
     return;
@@ -220,6 +246,7 @@ async function loadAndPlay(index){
   }
 }
 function stop(){
+  if(book&&audio.src)savePositionSoon(0);
   playing=false;waiting=null;audio.pause();audio.removeAttribute("src");audio.load();
   $("play").textContent="▶ Play";
 }
@@ -242,7 +269,7 @@ $("upload").addEventListener("change",async event=>{
 });
 $("play").addEventListener("click",async()=>{
   if(!book)return;
-  if(playing){playing=false;audio.pause();$("play").textContent="▶ Resume";return;}
+  if(playing){playing=false;audio.pause();savePositionSoon(0);$("play").textContent="▶ Resume";return;}
   playing=true;
   if(audio.src&&!audio.ended&&waiting===null){
     try{await audio.play();$("play").textContent="⏸ Pause";}catch(error){status(error.message);}
@@ -251,11 +278,21 @@ $("play").addEventListener("click",async()=>{
 $("previous").addEventListener("click",()=>{if(book){playing=true;loadAndPlay(Math.max(0,active-1));}});
 $("next").addEventListener("click",()=>{if(book){playing=true;loadAndPlay(Math.min(book.chunks.length-1,active+1));}});
 audio.addEventListener("ended",async()=>{if(playing&&book){if(active+1<book.chunks.length)await loadAndPlay(active+1);else{stop();status("Reached the end of the document.");}}});
+audio.addEventListener("loadedmetadata",()=>{
+  if(resumeFraction&&Number.isFinite(audio.duration)&&audio.duration>0){
+    audio.currentTime=Math.min(audio.duration*resumeFraction,audio.duration);
+    resumeFraction=0;
+  }
+});
 audio.addEventListener("timeupdate",()=>{
   $("playbackSeek").value=audio.duration?Math.round(100*audio.currentTime/audio.duration):0;
   $("time").textContent=formatTime(audio.currentTime)+" / "+formatTime(audio.duration);
+  if(book && Date.now()-lastPositionTime>3000){
+    lastPositionTime=Date.now();
+    savePositionSoon(0);
+  }
 });
-$("playbackSeek").addEventListener("input",event=>{if(audio.duration)audio.currentTime=audio.duration*Number(event.target.value)/100;});
+$("playbackSeek").addEventListener("input",event=>{if(audio.duration){audio.currentTime=audio.duration*Number(event.target.value)/100;savePositionSoon();}});
 $("speed").addEventListener("input",event=>{audio.playbackRate=Number(event.target.value);$("speedValue").textContent=Number(event.target.value).toFixed(2)+"×";});
 $("volume").addEventListener("input",event=>{audio.volume=Number(event.target.value);$("volumeValue").textContent=Math.round(100*event.target.value)+"%";});
 $("generate").addEventListener("click",async()=>{
@@ -282,7 +319,7 @@ async function poll(){
     if(book&&((job.book_id===book.id)||(waiting!==null)))await fetchBook();
     if(job.error)status("Narration failed: "+job.error);
     if(job.cancelled)status("Narration cancelled. Finished clips remain cached.");
-    if(waiting!==null&&book?.audio[String(waiting)]){
+    if(waiting!==null&&renderMatches(waiting)){
       const i=waiting; waiting=null; await loadAndPlay(i);
     }else if(waiting!==null&&!workBusy&&book&&!job.error){
       await queueOne(waiting);
@@ -336,6 +373,7 @@ $("voiceSample").addEventListener("change",async event=>{
 async function initialize(){
   try{
     const voices=await request("/api/voices");
+    engineId=voices.engine;
     for(const name of voices.voices){
       const option=document.createElement("option");option.value=name;option.textContent=name;$("voice").append(option);
     }
@@ -346,6 +384,9 @@ async function initialize(){
     if(items.length)await openBook(items[0].id);
   }catch(error){status("Initialization failed: "+error.message);}
 }
+$("voice").addEventListener("change",()=>{stop();if(book)fetchBook().catch(error=>status(error.message));});
+$("sapiRate").addEventListener("change",()=>{stop();if(book)fetchBook().catch(error=>status(error.message));});
+window.addEventListener("pagehide",()=>{if(book)savePositionSoon(0);});
 initialize();
 setInterval(poll,900);
 </script>
