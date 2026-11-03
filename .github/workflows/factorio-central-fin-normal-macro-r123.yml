@@ -1,0 +1,77 @@
+name: Factorio R123 inspect one real cylindrical central fin, inherited normals and true 3D macro views
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factorio-render-pipeline/inspect_real_round_center_normals_r123.py'
+      - '.github/workflows/factorio-central-fin-normal-macro-r123.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  central-one-master-normal-diagnosis:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download exact source R122 3D fin spine scenes, never proprietary original
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41574133364
+          name: factorio-r122-one-rounded-source-fin-pressed-3d-spine-variants
+          github-token: ${{ github.token }}
+          path: private-ci/r122
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hb-ttrpg-tools/factorio-render-pipeline
+          key: factorio-art-env-ubuntu24-blender4.5.15-python3.12-v1
+      - name: Install vetted Blender source camera workstation
+        run: python tools/factorio-render-pipeline/bootstrap.py install --evidence-dir private-ci/readiness
+      - name: R123 inspect independent close macro render of real single curved source fin from front and 35/65 degrees; remove invalid flat-sheet weighted normal
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/inspect_real_round_center_normals_r123.py
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/inspect_real_round_center_normals_r123.py -- \
+            --r122-dir private-ci/r122 --out private-ci/output/r123
+      - name: Validate real original-source fin geometry was never changed by diagnosing inherited normal modifier and full 64 frame motion
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('private-ci/output/r123')
+          r=json.loads((p/'r123_actual_round_master_normals_and_isolated_3d.json').read_text())
+          assert not r['source_sprite_published']
+          assert not r['source_visual_approval']
+          assert len(r['scenes'])==3
+          for i,c in enumerate(r['scenes']):
+             assert c['real_3d_geometry_unchanged']
+             assert c['source_match_not_yet_approved']
+             assert set(c['native_camera_frames'])=={'1','33'}
+             assert set(c['isolated_3d_fin_inspection_views'])=={'0','35','65'}
+             assert all((p/f).stat().st_size>4000
+               for f in list(c['native_camera_frames'].values())+
+                       list(c['isolated_3d_fin_inspection_views'].values()))
+             assert (p/c['editable_blend']).stat().st_size>100000
+             stats=c['normal_profile']
+             assert stats['closed_volume_after']
+             if i>0:
+                assert stats['real_curved_front_back_quads_smoothed']==256
+                assert 'WEIGHTED_NORMAL' not in stats['remaining_modifier_types']
+          print('R123_ACTUAL_ISOLATED_3D_CURVED_FIN_MACRO_NORMAL_QA_PASS__SOURCE_APPROVAL_NOT_PRETENDED')
+          PY
+      - name: Preserve isolated actual Blender rounded fin 0/35/65 degree renders and original-camera screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r123-one-rounded-central-fin-real-blender-3d-macro-and-normal-candidates
+          path: |
+            private-ci/output/r123/*.blend
+            private-ci/output/r123/*.png
+            private-ci/output/r123/*.json
+          if-no-files-found: warn
+          retention-days: 14
