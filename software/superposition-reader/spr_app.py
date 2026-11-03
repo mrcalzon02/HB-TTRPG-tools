@@ -21,6 +21,7 @@ import zipfile
 from spr_voices import VoiceLibrary
 from spr_voicebox import VoiceboxEngine
 from spr_bootstrap import seed_examples
+from spr_luxtts_engine import SprLuxEngine
 
 from spr_core import Archive, MAX_DOCUMENT_BYTES, WindowsSapiEngine
 
@@ -171,6 +172,11 @@ def make_handler(state: ReaderState):
                                        "engine": state.engine.engine_id if state.engine else "unavailable"})
                 if segments == ["api", "voice-engines"]:
                     local = [{"key": "sapi", "label": "Windows SAPI 5", "engine_id": state.engine.engine_id}] if state.engine else []
+                    own = state.engines.get("spr-lux")
+                    if own:
+                        local.insert(0, {"key": "spr-lux", "label": "SPR Neural — LuxTTS (offline)",
+                                         "engine_id": own.engine_id, "profiles": own.profiles(),
+                                         "default_voice": own.default_voice(), "online": True})
                     voicebox = state.engines.get("voicebox-qwen")
                     if voicebox:
                         try:
@@ -300,6 +306,9 @@ def launch():
         engine = None
     voicebox = {("voicebox-" + model): VoiceboxEngine(model)
                 for model in ("qwen", "luxtts", "chatterbox")}
+    own_lux = SprLuxEngine(archive.root)
+    if own_lux.available():
+        voicebox["spr-lux"] = own_lux
     state = ReaderState(archive, engine, additional_engines=voicebox,
                         bootstrap=bootstrap)
     server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(state))
@@ -322,6 +331,8 @@ def launch():
         state.cancel.set()
         server.shutdown()
         server.server_close()
+        if own_lux.available():
+            own_lux.close()
 
 
 if __name__ == "__main__":
