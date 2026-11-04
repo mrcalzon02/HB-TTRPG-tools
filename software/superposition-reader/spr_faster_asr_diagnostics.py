@@ -20,6 +20,7 @@ TARGETS = {
     "sphinx-original": SOURCE,
     "bdo-opening": "There should have been forty-three of them.",
     "nowhere-king-opening": "The first report of the morning concerned what the king had eaten.",
+    "sphinx-nowhere-opening": "The first report of the morning concerned what the king had eaten.",
 }
 
 
