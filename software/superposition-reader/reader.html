@@ -77,6 +77,16 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
       <button class="fill" id="neuralInstall" style="margin-top:8px">Install / repair local neural engine</button>
       <p class="small" id="neuralSetupStatus" role="status">Checking local neural installation...</p>
     </section>
+    <section><h2>British local voice library</h2>
+      <p class="small">Install Kokoro's eight British voices or individual Piper voices once. Models stay in your private Windows user folder and narrate offline.</p>
+      <label for="localVoiceChoice">Downloadable voice pack</label>
+      <select id="localVoiceChoice"></select>
+      <div class="row" style="margin-top:8px">
+        <button id="localVoiceInstall" class="fill">Install selected</button>
+        <button id="localVoiceAudition" class="fill" title="Preview the voice selected in Generation">▶ Test current voice</button>
+      </div>
+      <p id="localVoiceStatus" class="small" role="status">Checking installed British voices...</p>
+    </section>
     <section><h2>Generation</h2>
       <label for="engineSelect">Narration engine</label>
       <select id="engineSelect"></select>
@@ -133,6 +143,7 @@ let engineId = "unavailable", engineKey = "sapi", engineOptions = [], windowsVoi
 let resumeFraction = 0, positionTimer = null, lastPositionTime = 0;
 let lastJobBook = null, lastJobDone = -1, lastJobActive = false;
 let neuralSetupStage = "", neuralSetupBusy = false;
+let localVoiceSetupStage = "", localVoiceSetupBusy = false, localVoiceOptions = [];
 audio.volume = 0.8;
 function selectedVoice(){return engineKey.startsWith("voicebox-")
   ?($("voiceboxProfileId").value.trim()||$("voice").value):$("voice").value;}
@@ -141,7 +152,7 @@ function applyEngine(key, voice=""){
   const engine=engineOptions.find(item=>item.key===key);
   if(!engine)return;
   engineKey=engine.key;engineId=engine.engine_id;
-  const neural=key.startsWith("voicebox-")||key==="spr-lux";
+  const neural=key.startsWith("voicebox-")||key==="spr-lux"||key==="kokoro"||key==="piper";
   const external=key.startsWith("voicebox-");
   $("voiceboxProfileId").hidden=!external;
   $("voiceboxIdLabel").hidden=!external;
@@ -162,6 +173,7 @@ function applyEngine(key, voice=""){
   }
   if(voice)$("voice").value=voice;
   else if(key==="spr-lux"&&engine.default_voice)$("voice").value=engine.default_voice;
+  else if((key==="kokoro"||key==="piper")&&engine.profiles?.length)$("voice").value=engine.profiles[0].id;
   updateButtons();
 }
 async function refreshEngineOptions(){
@@ -285,7 +297,7 @@ function updateButtons(){
   $("play").disabled=!has;
   $("previous").disabled=!has||active===0;
   $("next").disabled=!has||active>=book.chunks.length-1;
-  $("generate").disabled=!has||workBusy||neuralSetupBusy||engineId==="unavailable";
+  $("generate").disabled=!has||workBusy||neuralSetupBusy||localVoiceSetupBusy||engineId==="unavailable";
   $("chapterFrom").disabled=!has||workBusy;
   $("chapterThrough").disabled=!has||workBusy;
   $("cancel").disabled=!workBusy;
@@ -488,6 +500,73 @@ $("exportChapters").addEventListener("click",()=>{
     window.location.href="/api/export-chapters/"+book.id;
   }
 });
+async function refreshLocalVoiceCatalog(){
+  const previous=$("localVoiceChoice").value;
+  localVoiceOptions=await request("/api/local-voices");
+  $("localVoiceChoice").replaceChildren();
+  for(const item of localVoiceOptions){
+    const option=document.createElement("option");
+    option.value=item.id;
+    option.textContent=item.name+(item.installed?" · installed":" · download");
+    $("localVoiceChoice").append(option);
+  }
+  if(localVoiceOptions.some(item=>item.id===previous))$("localVoiceChoice").value=previous;
+}
+async function pollLocalVoiceSetup(){
+  const info=await request("/api/local-voice-setup");
+  const previouslyInstalling=localVoiceSetupStage==="installing";
+  localVoiceSetupStage=info.stage;
+  localVoiceSetupBusy=!!info.active;
+  const choice=localVoiceOptions.find(v=>v.id===$("localVoiceChoice").value);
+  $("localVoiceInstall").disabled=!info.supported||info.active||workBusy||neuralSetupBusy;
+  $("localVoiceChoice").disabled=info.active;
+  $("localVoiceInstall").textContent=choice?.installed?"Repair selected voice":"Install selected";
+  $("localVoiceAudition").disabled=info.active||workBusy||neuralSetupBusy;
+  $("localVoiceStatus").textContent=!info.supported
+    ?"In-app voice installation requires Windows. Existing local models can still be used."
+    :info.active
+      ?"Installing "+info.selection+". "+(info.last_activity||"Downloading into your private local folder.")
+      :info.error
+        ?"Voice installation failed: "+info.error+" Log: "+info.log_path
+        :choice?.installed
+          ?"Installed and ready. Choose Kokoro or Piper under Generation, select a voice, then test it."
+          :"Voice models are optional; nothing is downloaded until you select Install.";
+  if(previouslyInstalling&&info.stage==="ready"){
+    await refreshLocalVoiceCatalog();
+    await refreshEngineOptions();
+    if(book)await fetchBook();
+    status("Local British voice installed and available for offline narration.");
+  }
+}
+$("localVoiceChoice").addEventListener("change",()=>pollLocalVoiceSetup().catch(error=>status(error.message)));
+$("localVoiceInstall").addEventListener("click",async()=>{
+  const selected=$("localVoiceChoice").value;
+  if(!selected)return;
+  if(!window.confirm("Install "+selected+" into SPR's private offline voice library? Initial setup downloads a Python engine and model weights."))return;
+  try{
+    const result=await post("/api/local-voice-setup",{selection:selected});
+    localVoiceSetupStage=result.stage;
+    localVoiceSetupBusy=!!result.active;
+    await pollLocalVoiceSetup();
+  }catch(error){status("Voice installation failed to start: "+error.message);}
+});
+$("localVoiceAudition").addEventListener("click",async()=>{
+  if(engineKey!=="kokoro"&&engineKey!=="piper"){
+    status("Choose Kokoro or Piper in Generation before testing a voice.");return;
+  }
+  const voice=selectedVoice();
+  if(!voice){status("Select an installed British voice first.");return;}
+  $("localVoiceAudition").disabled=true;
+  status("Synthesizing a local audition using "+voice+"...");
+  try{
+    const response=await post("/api/local-voice-audition",{engine_key:engineKey,voice});
+    previewAudio.pause();previewAudio.src=response.url;
+    previewAudio.volume=Number($("volume").value);
+    await previewAudio.play();
+    status("Playing "+voice+" through the local "+engineKey+" engine.");
+  }catch(error){status("Voice audition failed: "+error.message);}
+  finally{$("localVoiceAudition").disabled=false;}
+});
 async function pollNeuralSetup(){
   const info=await request("/api/neural-setup");
   const previouslyInstalling=neuralSetupStage==="installing";
@@ -546,6 +625,7 @@ async function poll(){
     }
     updateButtons();
     await pollNeuralSetup();
+    await pollLocalVoiceSetup();
   }catch(error){status("Local server unavailable: "+error.message);}
 }
 async function refreshVoiceProfiles(selectId){
@@ -608,6 +688,8 @@ async function initialize(){
     const voices=await request("/api/voices");
     windowsVoices=voices.voices;
     await refreshEngineOptions();
+    await refreshLocalVoiceCatalog();
+    await pollLocalVoiceSetup();
     await pollNeuralSetup();
     if(!windowsVoices.length)status("No Windows SAPI voices detected; select an available local engine.");
     await refreshVoiceProfiles();

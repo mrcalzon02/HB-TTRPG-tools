@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import base64
 import binascii
+import hashlib
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import mimetypes
@@ -23,6 +24,7 @@ from spr_voices import VoiceLibrary
 from spr_voicebox import VoiceboxEngine
 from spr_bootstrap import seed_examples
 from spr_luxtts_engine import SprLuxEngine
+from spr_local_voices import LocalVoiceEngine, LocalVoiceSetup, catalog as local_voice_catalog
 from spr_neural_setup import NeuralSetup
 from spr_narrate import chapter_plan
 from spr_voice_assets import verify_previews
@@ -50,12 +52,16 @@ class ReaderState:
         self.pending = []
         self.working_index = None
         self.neural_setup = None
+        self.local_voice_setup = None
+        self._audition_lock = threading.Lock()
 
     def start_generation(self, book_id: str, indices: list[int], voice: str, rate: int,
                          priority: bool = False, engine_key: str = "sapi") -> dict:
         """Queue book chunks; allow read-ahead clicks to interrupt queue ORDER, not synthesis."""
         if self.neural_setup and self.neural_setup.status()["active"]:
             raise RuntimeError("Neural setup is running; finish installation before narration")
+        if self.local_voice_setup and self.local_voice_setup.status()["active"]:
+            raise RuntimeError("Local voice installation is running; finish installation before narration")
         engine = self.engines.get(engine_key)
         if engine is None:
             raise RuntimeError("Selected offline voice engine is not available")
@@ -187,6 +193,26 @@ def make_handler(state: ReaderState):
                 if segments == ["api", "voices"]:
                     return self._json({"voices": state.engine.voices() if state.engine else [],
                                        "engine": state.engine.engine_id if state.engine else "unavailable"})
+                if segments == ["api", "local-voices"]:
+                    options = []
+                    for item in local_voice_catalog():
+                        engine = state.local_voice_setup.engines.get(item["engine"]) if state.local_voice_setup else None
+                        installed = bool(engine and engine.available() and (
+                            item["engine"] == "kokoro" or any(
+                                profile["id"].split("#")[0] == item["id"]
+                                for profile in engine.profiles())))
+                        options.append({**item, "installed": installed})
+                    return self._json(options)
+                if segments == ["api", "local-voice-setup"]:
+                    return self._json(state.local_voice_setup.status() if state.local_voice_setup
+                                      else {"active": False, "supported": False,
+                                            "stage": "unavailable", "error": ""})
+                if len(segments) == 3 and segments[:2] == ["api", "local-voice-preview"]:
+                    digest = segments[2]
+                    if len(digest) != 24 or any(c not in "0123456789abcdef" for c in digest):
+                        raise ValueError("Invalid voice audition identifier")
+                    return self._file(state.archive.root / "local-voices" / "previews" /
+                                      (digest + ".wav"), "audio/wav")
                 if segments == ["api", "voice-engines"]:
                     local = [{"key": "sapi", "label": "Windows SAPI 5", "engine_id": state.engine.engine_id}] if state.engine else []
                     own = state.engines.get("spr-lux")
@@ -194,6 +220,12 @@ def make_handler(state: ReaderState):
                         local.insert(0, {"key": "spr-lux", "label": "SPR Neural — LuxTTS (offline)",
                                          "engine_id": own.engine_id, "profiles": own.profiles(),
                                          "default_voice": own.default_voice(), "online": True})
+                    for family, label in (("kokoro", "Kokoro 82M"), ("piper", "Piper")):
+                        instance = state.engines.get(family)
+                        if instance:
+                            local.append({"key": family, "label": label + " — British voices (offline)",
+                                          "engine_id": instance.engine_id,
+                                          "profiles": instance.profiles(), "online": True})
                     voicebox = state.engines.get("voicebox-qwen")
                     if voicebox:
                         try:
@@ -279,6 +311,39 @@ def make_handler(state: ReaderState):
                     return self._json(state.start_generation(
                         book_id, indices, voice, rate, priority=bool(request.get("priority", False)),
                         engine_key=str(request.get("engine_key", "sapi"))), 202)
+                if path == "/api/local-voice-setup":
+                    if state.local_voice_setup is None:
+                        raise RuntimeError("Local voice installer is unavailable")
+                    if state.status()["active"] or (state.neural_setup and state.neural_setup.status()["active"]):
+                        raise RuntimeError("Finish narration or neural setup before installing voices")
+                    return self._json(state.local_voice_setup.start(str(request["selection"])), 202)
+                if path == "/api/local-voice-audition":
+                    family = str(request.get("engine_key", ""))
+                    voice = str(request.get("voice", ""))
+                    if family not in ("kokoro", "piper"):
+                        raise ValueError("Auditions are supported for Kokoro and Piper")
+                    engine = state.engines.get(family)
+                    if not engine or voice not in {p["id"] for p in engine.profiles()}:
+                        raise ValueError("Select an installed voice before auditioning")
+                    if state.status()["active"]:
+                        raise RuntimeError("Finish narration before auditioning another voice")
+                    digest = hashlib.sha256((engine.engine_id + ":" + voice).encode()).hexdigest()[:24]
+                    target = state.archive.root / "local-voices" / "previews" / (digest + ".wav")
+                    with state._audition_lock:
+                        if not target.is_file():
+                            target.parent.mkdir(parents=True, exist_ok=True)
+                            temp = target.with_suffix(".partial.wav")
+                            try:
+                                engine.synthesize("The evening light settled over the quiet countryside. "
+                                                  "Beyond the distant hills, a new adventure was beginning.",
+                                                  temp, voice=voice)
+                                with wave.open(str(temp), "rb") as wav:
+                                    if wav.getnframes() <= 0:
+                                        raise ValueError("Voice generated empty audition audio")
+                                os.replace(temp, target)
+                            finally:
+                                temp.unlink(missing_ok=True)
+                    return self._json({"url": "/api/local-voice-preview/" + digest})
                 if path == "/api/neural-setup":
                     if state.neural_setup is None:
                         raise RuntimeError("Neural setup is unavailable in this host")
@@ -304,6 +369,10 @@ def self_check(report_path: str = "", require_examples: bool = False) -> int:
     checks = {"reader_html": reader_path.is_file(),
               "sapi_script": (ROOT / "sapi_synthesize.ps1").is_file(),
               "integrated_neural_setup": (ROOT / "install-neural-windows.ps1").is_file(),
+              "local_voice_worker": (ROOT / "spr_local_voice_worker.py").is_file(),
+              "local_voice_installer": (ROOT / "install-local-voices-windows.ps1").is_file(),
+              "local_voice_controls": all('id="' + name + '"' in html for name in
+                                          ("localVoiceChoice", "localVoiceInstall", "localVoiceAudition")),
               "unified_gui_controls": all(
                   'id="' + name + '"' in html for name in
                   ("neuralInstall", "neuralInstallMode", "chapterFrom",
@@ -365,8 +434,15 @@ def launch():
     own_lux = SprLuxEngine(archive.root)
     if own_lux.available():
         voicebox["spr-lux"] = own_lux
+    local_engines = {family: LocalVoiceEngine(archive.root, family)
+                     for family in ("kokoro", "piper")}
+    voicebox.update({family: candidate for family, candidate in local_engines.items()
+                     if candidate.available()})
     state = ReaderState(archive, engine, additional_engines=voicebox,
                         bootstrap=bootstrap)
+    state.local_voice_setup = LocalVoiceSetup(
+        archive.root, ROOT / "install-local-voices-windows.ps1", local_engines,
+        on_ready=lambda family: state.engines.__setitem__(family, local_engines[family]))
     state.neural_setup = NeuralSetup(
         archive.root, ROOT / "install-neural-windows.ps1", own_lux,
         on_ready=lambda: state.engines.__setitem__("spr-lux", own_lux))
@@ -392,6 +468,8 @@ def launch():
         server.server_close()
         if own_lux.available():
             own_lux.close()
+        for candidate in local_engines.values():
+            candidate.close()
 
 
 if __name__ == "__main__":

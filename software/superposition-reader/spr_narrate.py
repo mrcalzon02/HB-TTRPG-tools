@@ -10,6 +10,7 @@ from pathlib import Path
 
 from spr_core import Archive, WindowsSapiEngine
 from spr_luxtts_engine import SprLuxEngine
+from spr_local_voices import LocalVoiceEngine
 from spr_voices import VoiceLibrary
 
 
@@ -71,7 +72,7 @@ def main(argv: list[str] | None = None) -> int:
     action.add_argument("--book-id", help="Previously imported book ID")
     action.add_argument("--import-file", type=Path, help="Import a local EPUB/TXT/PDF/DOCX/MD")
     parser.add_argument("--data-dir", type=Path, help="Private SPR archive folder")
-    parser.add_argument("--engine", choices=("spr-lux", "sapi"), default="spr-lux")
+    parser.add_argument("--engine", choices=("spr-lux", "sapi", "kokoro", "piper"), default="spr-lux")
     parser.add_argument("--voice-id", default="", help="Existing authorized voice profile ID")
     parser.add_argument("--rate", type=int, default=0, help="Windows SAPI speech rate")
     parser.add_argument("--chapter-from", type=int, default=1)
@@ -82,7 +83,9 @@ def main(argv: list[str] | None = None) -> int:
     archive = Archive(args.data_dir)
     if args.list:
         print(json.dumps({"books": archive.library(),
-                          "voices": VoiceLibrary(archive.root / "voices").list()},
+                          "voices": VoiceLibrary(archive.root / "voices").list(),
+                          "local_voices": {family: LocalVoiceEngine(archive.root, family).profiles()
+                                           for family in ("kokoro", "piper")}},
                          ensure_ascii=False, indent=2))
         return 0
     if args.import_file:
@@ -97,6 +100,15 @@ def main(argv: list[str] | None = None) -> int:
     if args.engine == "sapi":
         engine = WindowsSapiEngine()
         voice = args.voice_id
+    elif args.engine in ("kokoro", "piper"):
+        engine = LocalVoiceEngine(archive.root, args.engine)
+        if not engine.available():
+            raise RuntimeError("Install the offline " + args.engine + " engine and voices first")
+        voice = args.voice_id or engine.profiles()[0]["id"]
+        if voice not in {entry["id"] for entry in engine.profiles()}:
+            raise ValueError("Selected local voice has not been installed")
+        if args.rate:
+            raise ValueError("Neural voice generation rate must be zero; adjust playback speed")
     else:
         engine = SprLuxEngine(archive.root)
         if not engine.available():

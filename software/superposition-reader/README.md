@@ -69,6 +69,19 @@ Run the optional neural installer in the source checkout with:
 
 For CPU-only model setup, append -CpuOnly. Running this script is explicit and is not necessary to read the example ebooks or audition the bundled completed WAVs.
 
+## Optional British voices on Windows — Kokoro and Piper
+
+SPR now has two additional **offline narration engine integrations** alongside Windows SAPI, independent LuxTTS and optional Voicebox. Open the **British local voice library** panel to install them deliberately. Neither package nor any model weights are included in the repository or portable ZIP; a first-time user-initiated install downloads dependencies into `%LOCALAPPDATA%\SuperPositionReader\local-voices` with its own Python venv (Windows Python 3.11/3.12 recommended). After setup, voice generation uses local stdio worker processes and does not call any cloud TTS API.
+
+- **Kokoro 82M**: a single optional ONNX quantized model and embeddings supplies eight British voices: `bm_george`, `bm_fable`, `bm_lewis`, `bm_daniel`, `bf_emma`, `bf_isabella`, `bf_alice`, `bf_lily`. Kokoro weights: Apache-2.0; kokoro-onnx runtime: MIT.
+- **Piper**: separately install `en_GB-alan-low`, `en_GB-alan-medium`, `en_GB-northern_english_male-medium`, `en_GB-alba-medium`, `en_GB-cori-medium`, `en_GB-cori-high`, `en_GB-jenny_dioco-medium`, `en_GB-southern_english_female-low`, `en_GB-aru-medium`, `en_GB-semaine-medium`, or `en_GB-vctk-medium`. Multi-speaker model configurations are read locally and exposed as individual `#speaker` voice choices. Piper runtime: GPLv3; each Piper model has its **own license**, provided in upstream `MODEL_CARD` where available. Check before redistribution.
+- Select **Kokoro** or **Piper** in Generation, select an installed voice, then press **Test current voice** to produce a private, cached local audio audition. Chapter rendering, position handling, cache keys, cancellation and chapter WAV ZIP exports use SPR's existing narration pipeline; no output is generated with unavailable voices.
+- CLI: `python software/superposition-reader/spr_narrate.py --list` lists locally installed voices. To render: `--book-id BOOK_ID --engine kokoro --voice-id bm_george` or `--engine piper --voice-id en_GB-alan-medium` (optionally select chapter ranges and `--export-chapters`). Voice generation rate remains fixed; the reader's playback speed slider works independently.
+- Setup and worker logs stay under `local-voices/logs/`. Installing another voice does not delete the existing audiobook archive. No Google Android RJS model or proprietary voice assets are copied.
+- Windows GUI packaging includes the launcher, Python worker script and installer as separate resources, **not** model weights. A successful packaged smoke test proves wiring only; actual model downloads, audio quality and Windows hardware performance require separate validation.
+
+Original upstream sources: [Kokoro ONNX](https://github.com/thewh1teagle/kokoro-onnx), [Kokoro model](https://huggingface.co/hexgrad/Kokoro-82M), [Piper runtime](https://github.com/OHF-Voice/piper1-gpl), [Piper voices](https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_GB).
+
 ## Android APK — native voice support
 
 The same project now contains a separate native, phone-responsive **Android APK**
@@ -129,7 +142,7 @@ The host binds only 127.0.0.1 at an ephemeral port and requires matching Host/Or
 - Windows native window: pywebview (BSD) with the system's WebView2 runtime.
 - Document extraction: PyMuPDF (AGPL/commercial), python-docx (MIT).
 - Voice-reference archive: standard-library local storage, file-header validation, hashes, and ZIP size/path checks; import does not train a model.
-- Synthesizers: Windows SAPI5; independent optional SPR LuxTTS with local stored Sphinx voice profile; optional separate Voicebox localhost adapter. When SPR's neural environment is installed, SPR selects it and the Sphinx profile by default.
+- Synthesizers: Windows SAPI5; independent optional SPR LuxTTS with local stored Sphinx voice profile; optional offline Kokoro ONNX and Piper voice runtimes; optional separate Voicebox localhost adapter. When SPR's neural environment is installed, SPR selects it and the Sphinx profile by default.
 - Audio: local WAV cache with HTML audio playback, no cloud.
 - Independent neural synthesis: LuxTTS, optional user-installed isolated Python model runtime, persistent child process. Qwen3-TTS and Chatterbox are future alternative engines; Voicebox is optional, not required.
 - Proposed display evolution: PDF.js original page view + optional forced alignment beyond independent ASR-matched neural words; EPUB via Epub.js; OCR via Tesseract.
