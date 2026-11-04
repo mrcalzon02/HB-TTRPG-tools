@@ -1,0 +1,104 @@
+name: SPR Windows menu screenshots and site evidence
+
+on:
+  push:
+    paths:
+      - "software/superposition-reader/reader.html"
+      - "software/superposition-reader/spr_app.py"
+      - "software/superposition-reader/spr_capture_menus.py"
+      - ".github/workflows/spr-menu-screenshots.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: spr-menu-screenshots-main
+  cancel-in-progress: true
+
+jobs:
+  verified-menu-capture:
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify core reader and API behavior before capture
+        shell: pwsh
+        run: |
+          python -m unittest discover -s software/superposition-reader/tests -p "test_*.py" -v
+          if ($LASTEXITCODE -ne 0) { throw "SPR core tests failed" }
+      - name: Install Windows Chromium screenshot driver
+        shell: pwsh
+        run: |
+          python -m pip install --disable-pip-version-check "playwright>=1.54,<2"
+          if ($LASTEXITCODE -ne 0) { throw "Playwright installer failed" }
+          python -m playwright install chromium
+          if ($LASTEXITCODE -ne 0) { throw "Chromium installation failed" }
+      - name: Install real Kokoro and Piper voice models
+        shell: pwsh
+        run: |
+          $dir = Join-Path $env:RUNNER_TEMP 'spr-menu-capture-data'
+          & ./software/superposition-reader/install-local-voices-windows.ps1 -DataDir $dir -Engine kokoro -Voice kokoro-british
+          if ($LASTEXITCODE -ne 0) { throw "Kokoro installer failed" }
+          & ./software/superposition-reader/install-local-voices-windows.ps1 -DataDir $dir -Engine piper -Voice en_GB-alan-medium
+          if ($LASTEXITCODE -ne 0) { throw "Piper installer failed" }
+      - name: Capture actual running SPR menu surfaces
+        shell: pwsh
+        run: |
+          $dir = Join-Path $env:RUNNER_TEMP 'spr-menu-capture-data'
+          python software/superposition-reader/spr_capture_menus.py --data-dir $dir --output build/spr-menu-captures
+          if ($LASTEXITCODE -ne 0) { throw "SPR visual capture failed" }
+          foreach ($name in @('reader-overview.png','voice-library-kokoro.png','voice-library-piper.png','capture.json')) {
+            if (-not (Test-Path (Join-Path 'build/spr-menu-captures' $name))) {
+              throw "Missing verified screenshot evidence: $name"
+            }
+          }
+      - name: Preserve screenshot verification artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SPR-Windows-verified-menu-screenshots
+          path: build/spr-menu-captures/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish exact verified PNGs and receipt to public software site
+        if: github.ref == 'refs/heads/main'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $dest = 'assets/software/spr'
+          New-Item -ItemType Directory -Path $dest -Force | Out-Null
+          foreach ($name in @('reader-overview.png','voice-library-kokoro.png','voice-library-piper.png','capture.json')) {
+            Copy-Item (Join-Path 'build/spr-menu-captures' $name) (Join-Path $dest $name) -Force
+          }
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- "$dest/reader-overview.png" "$dest/voice-library-kokoro.png" "$dest/voice-library-piper.png" "$dest/capture.json"
+          git diff --cached --quiet
+          if ($LASTEXITCODE -eq 0) {
+            Write-Output 'Screenshots already match the public site; no commit required.'
+            exit 0
+          }
+          git commit -m 'SPR: publish verified Windows menu screenshots'
+          if ($LASTEXITCODE -ne 0) { throw 'Screenshot commit failed' }
+          $pushed = $false
+          foreach ($attempt in 1..4) {
+            git fetch origin main
+            if ($LASTEXITCODE -ne 0) { throw 'Could not fetch main for safe screenshot publication' }
+            git rebase origin/main
+            if ($LASTEXITCODE -ne 0) { throw 'Rebase conflict: screenshots not published; no force-push attempted' }
+            git push origin HEAD:main
+            if ($LASTEXITCODE -eq 0) { $pushed = $true; break }
+            Start-Sleep -Seconds (2 * $attempt)
+          }
+          if (-not $pushed) { throw 'Could not publish screenshots to main without force-push' }
+          $expected = (git rev-parse HEAD).Trim()
+          $remoteHead = ((git ls-remote origin refs/heads/main) -split '\s+')[0]
+          if ($remoteHead -ne $expected) {
+            throw "Remote readback mismatch: expected $expected but found $remoteHead"
+          }
+          Write-Output "Verified screenshots published at $expected"
