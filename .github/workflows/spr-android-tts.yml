@@ -1,0 +1,79 @@
+name: SuperPosition Reader Android system TTS APK
+
+on:
+  push:
+    paths:
+      - "software/superposition-reader/android/**"
+      - "software/superposition-reader/books/snapshot-2026-11-03/**"
+      - ".github/workflows/spr-android-tts.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android-apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install compatible Android platform
+        run: sdkmanager --install "platforms;android-35" "build-tools;35.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Include original four story EPUBs without voice-model redistribution
+        shell: bash
+        run: |
+          set -euo pipefail
+          source_dir=software/superposition-reader/books/snapshot-2026-11-03
+          assets=software/superposition-reader/android/app/src/main/assets/books
+          mkdir -p "$assets"
+          for name in bdo-current.epub nowhere-s1.epub nowhere-s2.epub nowhere-s3.epub; do
+            test -s "$source_dir/$name"
+            cp "$source_dir/$name" "$assets/$name"
+            cmp "$source_dir/$name" "$assets/$name"
+          done
+      - name: Check Android app does not request Internet or broad storage permissions
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          manifest=Path("software/superposition-reader/android/app/src/main/AndroidManifest.xml").read_text()
+          assert "android.intent.action.TTS_SERVICE" in manifest
+          for token in ("android.permission.INTERNET", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.MANAGE_EXTERNAL_STORAGE"):
+              assert token not in manifest,token
+          print("TTS discovery and private file-picker storage model verified.")
+          PY
+      - name: Run functional Android JVM regressions
+        working-directory: software/superposition-reader/android
+        run: gradle --no-daemon testDebugUnitTest
+      - name: Assemble installable Android APK
+        working-directory: software/superposition-reader/android
+        run: gradle --no-daemon assembleDebug
+      - name: Verify built APK contents and record checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk=software/superposition-reader/android/app/build/outputs/apk/debug/app-debug.apk
+          test -s "$apk"
+          unzip -t "$apk" >/dev/null
+          for name in bdo-current.epub nowhere-s1.epub nowhere-s2.epub nowhere-s3.epub; do
+            unzip -l "$apk" | grep -F "assets/books/$name"
+          done
+          sha256sum "$apk" > software/superposition-reader/android/apk-sha256.txt
+          cat software/superposition-reader/android/apk-sha256.txt
+      - name: Upload native Android preview APK and checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: SPR-Android-TTS-debug-APK
+          path: |
+            software/superposition-reader/android/app/build/outputs/apk/debug/app-debug.apk
+            software/superposition-reader/android/apk-sha256.txt
+          if-no-files-found: error
+          retention-days: 14

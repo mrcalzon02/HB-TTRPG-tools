@@ -69,6 +69,29 @@ Run the optional neural installer in the source checkout with:
 
 For CPU-only model setup, append -CpuOnly. Running this script is explicit and is not necessary to read the example ebooks or audition the bundled completed WAVs.
 
+## Android APK — native voice support
+
+The same project now contains a separate native, phone-responsive **Android APK**
+target under [android](android/). It uses Android's installed `TextToSpeech`
+engines directly, including the British English voices users identify as RJS,
+GBA, GBB, GBC, GBD, and GBG **when those voices are actually available**.
+It uses `TextToSpeech.getVoices()`/`setVoice()`, not Windows SAPI or Speech
+Central, and does not extract or redistribute proprietary Google TTS voice files.
+
+Android reads local EPUB, TXT, Markdown, HTML, and DOCX through the Android
+document picker. It provides chapter navigation, passage-level reading,
+engine-reported read-along range highlighting, and private progress storage.
+The Android build carries the same four canonical story EPUBs as the Windows
+reader, with matching source-based book IDs. PDF text extraction, Windows
+neural model support on Android, and Android audiobook batch export are not
+yet implemented. The native UI and engine setup are separate from Windows
+rather than scaled-down desktop controls.
+
+The [Android TTS APK workflow](../../.github/workflows/spr-android-tts.yml)
+builds a sideloadable debug APK with JDK 17, Android SDK 35 and Gradle 8.9.
+This is a **preview** and needs real-phone checks before release approval.
+Neither the APK nor the Windows program contains Google's voice binaries.
+
 ## Headless long-book narration (source Python installation)
 
 The same private audio cache is available without opening the reader GUI.
