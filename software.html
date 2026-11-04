@@ -17,6 +17,11 @@
 .software-muted{opacity:.8}
 .software-shell li{margin:8px 0}
 .software-shell a:focus-visible{outline:2px solid #b4d5ff;outline-offset:3px}
+.spr-capture-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:14px;margin:18px 0}
+.spr-capture-gallery figure{margin:0;min-width:0;padding:10px;border:1px solid #566a88;border-radius:12px;background:rgba(20,33,50,.35)}
+.spr-capture-gallery img{display:block;width:100%;height:auto;aspect-ratio:8/5;object-fit:cover;object-position:center top;border-radius:7px;border:1px solid #405572;background:#101620}
+.spr-capture-gallery figcaption{padding:9px 3px 2px;font-size:.88em;line-height:1.45;color:inherit}
+.spr-capture-gallery a{display:block}
 </style>
 <link rel="stylesheet" href="software-catalog.css">
 <script defer src="software-catalog-data.js"></script>
@@ -118,10 +123,18 @@
 </nav>
 <section class="software-panel menu-card" id="superposition-reader" role="tabpanel" aria-labelledby="tab-superposition-reader">
 <h2>SuperPosition Reader (SPR) — Offline Book Reader &amp; Narration Studio</h2>
-<p>New independent Windows desktop application in active development. Import TXT, Markdown, text-layer PDFs or DOCX; generate speech through installed Windows SAPI voices, highlight the current sentence while reading, keep a private resumable audio archive, and export completed narration as WAV. Owner-authorized neural voice cloning, original PDF-page highlighting, EPUB, and audiobook export are planned but not yet implemented.</p>
-<span class="software-tag">Windows · experimental v0.1</span><span class="software-tag">Offline SAPI narration</span><span class="software-tag">Private local archive</span>
-<div class="workspace-actions"><a class="link-button primary-action" href="superposition-reader.html">Project &amp; installation</a><a class="link-button" href="software/superposition-reader/README.md">Source documentation</a><a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/tree/main/software/superposition-reader">Open source files</a></div>
-<p class="software-muted">Source-stage prototype; not yet validated on the owner's Windows hardware. No finished EXE/MSI or neural voice pack is claimed. Voice recordings and imported books are private and must not be committed to this public website.</p>
+<p>Independent Windows desktop reader and experimental audiobook studio. Import PDF (selectable text), TXT, Markdown, DOCX and DRM-free EPUB; navigate chapters, follow highlighted spoken passages, cache narration privately and export complete WAV or ordered chapter-WAV ZIP recordings. Select Windows SAPI, independent Sphinx/LuxTTS, or separately installed offline British Kokoro and Piper voices.</p>
+<span class="software-tag">Windows · portable preview</span><span class="software-tag">Offline narration</span><span class="software-tag">Kokoro &amp; Piper British voices</span><span class="software-tag">Local audiobook archive</span>
+<div class="workspace-actions"><a class="link-button primary-action" href="superposition-reader.html">Project &amp; installation</a><a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/actions/workflows/spr-windows-portable.yml">Windows portable builds</a><a class="link-button" href="software/superposition-reader/README.md">Source documentation</a><a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/tree/main/software/superposition-reader">Open source files</a></div>
+<h3>Verified application menu screenshots</h3>
+<p>Captures taken from the real SPR interface connected to its local Windows test server, using installed Kokoro and Piper models. Click any screenshot to inspect the full-size image.</p>
+<div class="spr-capture-gallery">
+<figure><a href="assets/software/spr/reader-overview.png" target="_blank" rel="noopener"><img src="assets/software/spr/reader-overview.png" alt="Actual SPR reader interface on Windows: document library, book text and playback controls" width="1440" height="900" loading="lazy" decoding="async"></a><figcaption><strong>Reader &amp; playback</strong> — document library, highlighted reading area and audio controls.</figcaption></figure>
+<figure><a href="assets/software/spr/voice-library-kokoro.png" target="_blank" rel="noopener"><img src="assets/software/spr/voice-library-kokoro.png" alt="Actual SPR British voice library and narration settings with Kokoro George selected" width="1440" height="900" loading="lazy" decoding="async"></a><figcaption><strong>Kokoro voice menu</strong> — British voice installation and George selected as narrator.</figcaption></figure>
+<figure><a href="assets/software/spr/voice-library-piper.png" target="_blank" rel="noopener"><img src="assets/software/spr/voice-library-piper.png" alt="Actual SPR British voice library and narration settings with Piper Alan selected" width="1440" height="900" loading="lazy" decoding="async"></a><figcaption><strong>Piper voice menu</strong> — offline British voice pack and Alan selected as narrator.</figcaption></figure>
+</div>
+<p class="software-muted">Screenshot provenance: Windows GitHub Actions, Playwright Chromium rendering SPR's real loopback UI; these are browser-verified application menus, not direct native WebView2 window captures. The book shown is a synthetic demonstration, and model weights and user files are not included. <a href="assets/software/spr/capture.json">Screenshot checksums and test-run receipt</a> · <a href="https://github.com/mrcalzon02/HB-TTRPG-tools/actions/workflows/spr-menu-screenshots.yml">Visual verification workflow</a>.</p>
+<p class="software-muted">Experimental software: Windows portable packaging and real Kokoro/Piper audio trials have passed automated checks. Voice fidelity, listening experience and hardware compatibility still require real-device review; signed installation and original PDF-page rendering are future work.</p>
 </section>
 <section class="software-panel menu-card" id="3d-model-downloader" role="tabpanel" aria-labelledby="tab-3d-model-downloader">
 <h2>3D Capture v0.1.1 — 3D Model Downloader</h2>

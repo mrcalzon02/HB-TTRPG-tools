@@ -14,6 +14,10 @@
 .spr-shell a{overflow-wrap:anywhere}
 .spr-shell code{overflow-wrap:anywhere}
 .spr-shell pre{white-space:pre-wrap;border:1px solid #637e9d;border-radius:10px;padding:15px}
+.spr-menu-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:15px;margin:16px 0}
+.spr-menu-gallery figure{margin:0;border:1px solid #637e9d;border-radius:10px;padding:10px}
+.spr-menu-gallery img{width:100%;height:auto;display:block;aspect-ratio:8/5;object-fit:cover;object-position:top;border-radius:6px}
+.spr-menu-gallery figcaption{font-size:.88em;line-height:1.5;padding-top:8px}
 </style>
 </head>
 <body class="workspace-landing-body">
@@ -24,8 +28,8 @@
 <main class="spr-shell">
 <section class="hero-card"><p class="eyebrow">Experimental prototype v0.1 — Windows</p>
 <h2>Import. Narrate. Follow the words. Keep the recording.</h2>
-<p>SPR is being built as a standalone Windows desktop reader, stored as its own source module inside HB-TTRPG-tools. The Windows reader imports selectable-text PDFs, TXT, Markdown, DOCX and DRM-free EPUBs; synthesizes WAV narration using Windows SAPI or optional independent offline LuxTTS, highlights spoken passages and keeps a resumable audio archive. Its first-run library contains the current Beneath Dappled Oaks volume and three Nowhere King season EPUBs.</p>
-<p><strong>Not yet complete:</strong> the fully automated first-run neural model download, original PDF page view, EPUB visual rendering, OCR, word-level synchronization, chapter exports and a signed MSI. A separate first-run neural installer and verified Windows portable ZIP exist. These are tracked development milestones, not released features.</p>
+<p>SPR is being built as a standalone Windows desktop reader, stored as its own source module inside HB-TTRPG-tools. The Windows reader imports selectable-text PDFs, TXT, Markdown, DOCX and DRM-free EPUBs; synthesizes WAV narration using Windows SAPI, optional independent offline LuxTTS, and downloadable British Kokoro or Piper voices; highlights spoken passages and keeps a resumable audio archive. Its first-run library contains the current Beneath Dappled Oaks volume and three Nowhere King season EPUBs. Chapter-range narration and chapter-WAV ZIP exports work with its existing narration cache.</p>
+<p><strong>Still in development:</strong> native original-PDF page rendering, visual EPUB layout, scanned-document OCR, universal word alignment, chapter FLAC/M4B, a signed MSI and device-specific listening approval. Optional local neural models are downloaded only when requested; a verified Windows portable preview is available from GitHub Actions.</p>
 <div><span class="spr-tag">Offline after initial setup</span><span class="spr-tag">Private local documents</span><span class="spr-tag">Open-source application code</span></div>
 <div class="workspace-actions"><a class="link-button primary-action" href="https://github.com/mrcalzon02/HB-TTRPG-tools/tree/main/software/superposition-reader">Browse project source</a><a class="link-button" href="software/superposition-reader/README.md">Read installation &amp; roadmap</a></div>
 </section>
@@ -34,16 +38,26 @@
 <p>Download a successful SPR-Windows-portable-preview workflow artifact, extract the ZIP and run SuperPositionReader.exe. Python is not required for the reader itself; the optional Sphinx neural model installer requires Python 3.11, Git and an initial internet connection.</p>
 <div class="workspace-actions"><a class="link-button primary-action" href="https://github.com/mrcalzon02/HB-TTRPG-tools/actions/workflows/spr-windows-portable.yml">Windows GUI builds</a><a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/tree/main/software/superposition-reader/books/snapshot-2026-11-03">Download EPUB snapshots</a></div>
 <pre><code>powershell -NoProfile -ExecutionPolicy Bypass -File .\software\superposition-reader\install-windows.ps1 -RunAfterInstall</code></pre>
-<p>The script installs only Python dependencies into a private application environment and creates a Start Menu shortcut. It does not silently install AI models.</p></section>
+<p>The source installer installs only Python dependencies into a private application environment and creates a Start Menu shortcut. It does not silently install AI models. The GUI's British voice library can install Kokoro or individual Piper voices into private application data.</p></section>
 <section class="spr-box"><h2>Voice profiles and personal recordings</h2>
 <p>Your authorized Sphinx of Black Quartz source recording is already committed and preloaded into the default SPR narrator profile. Real CPU LuxTTS workflows have generated four verified WAV samples from canonical story text: two corrected short openings plus two 30–36-second passages. All four are bundled and playable from the reader's Voice Studio, with independent first-word and transcript checks. Listening approval for voice fidelity remains separate. The independent neural engine can also synthesize new passages when its optional local model runtime is installed, without Voicebox.</p>
 <p>The Sphinx source and generated preview WAVs, plus the four canonical original-story EPUB snapshots, are intentionally public with owner authorization. Other imported files and model caches remain local unless separately authorized.</p></section>
 <section class="spr-box"><h2>Audiobook workflow</h2>
-<p>Text is divided into manageable sentence chunks, which are synthesized and cached on disk. Generated chunks are reused when reopening a document. Users can play, pause, skip, change playback speed and volume, or export a single WAV when all chunks exist.</p>
+<p>Text is divided into sentence or natural passage chunks, synthesized and cached on disk. Generated chunks are reused when reopening a document. Users can play, pause, skip, change speed and volume, or export a complete WAV and original-EPUB-spine chapter-WAV ZIP when all chunks exist.</p>
 <p>Short documents highlight sentences; full books highlight larger natural-language passages. Word timestamps and exact PDF/EPUB coordinates remain in development.</p></section>
 </div>
+<section class="spr-box" style="margin-top:18px">
+<h2>Verified Windows reader menus</h2>
+<p>These are real interface screenshots generated by an automated Windows verification workflow against SPR's local application server. The browser renderer is Chromium, not a native WebView2 window capture; the sample document is synthetic.</p>
+<div class="spr-menu-gallery">
+<figure><a href="assets/software/spr/reader-overview.png"><img src="assets/software/spr/reader-overview.png" alt="SuperPosition Reader document library, text reader and playback controls" width="1440" height="900" loading="lazy"></a><figcaption>Reader, library and playback controls</figcaption></figure>
+<figure><a href="assets/software/spr/voice-library-kokoro.png"><img src="assets/software/spr/voice-library-kokoro.png" alt="Kokoro British voice menu with George selected in SPR" width="1440" height="900" loading="lazy"></a><figcaption>Installed British Kokoro voice menu</figcaption></figure>
+<figure><a href="assets/software/spr/voice-library-piper.png"><img src="assets/software/spr/voice-library-piper.png" alt="Piper British voice menu with Alan selected in SPR" width="1440" height="900" loading="lazy"></a><figcaption>Installed British Piper voice menu</figcaption></figure>
+</div>
+<p><a href="assets/software/spr/capture.json">Capture checksums and workflow receipt</a> · <a href="https://github.com/mrcalzon02/HB-TTRPG-tools/actions/workflows/spr-menu-screenshots.yml">Visual verification workflow</a></p>
+</section>
 <section class="spr-box" style="margin-top:18px"><h2>Engineering milestones</h2>
-<ol><li>Verify Windows installation, narration, cache recovery and reflowed highlighting on actual hardware.</li><li>Implement original PDF page rendering, EPUB visual rendering and scanned-PDF OCR.</li><li>Benchmark and harden the existing independent LuxTTS Sphinx voice on Windows RTX 5070; evaluate Qwen3-TTS and Chatterbox as additional engines.</li><li>Improve speech prebuffering, timestamp alignment, re-generation and quality controls.</li><li>Export chapter audio, FLAC/M4B and deliver a self-contained Windows installer.</li></ol>
+<ol><li>Verify Windows installation, narration, cache recovery and reflowed highlighting on actual hardware.</li><li>Implement original PDF page rendering, EPUB visual rendering and scanned-PDF OCR.</li><li>Benchmark and harden the existing independent LuxTTS Sphinx voice on Windows RTX 5070; evaluate Qwen3-TTS and Chatterbox as additional engines.</li><li>Improve speech prebuffering, timestamp alignment, re-generation and quality controls.</li><li>Expand existing chapter-WAV export to FLAC/M4B and deliver a signed Windows installer.</li></ol>
 <p><a href="https://github.com/mrcalzon02/HB-TTRPG-tools/actions/workflows/spr-tests.yml">Source regression results</a> · <a href="https://github.com/mrcalzon02/HB-TTRPG-tools/tree/main/software/superposition-reader/tests">Test sources</a></p></section>
 </main>
 </body></html>
