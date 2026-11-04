@@ -26,9 +26,21 @@ class NeuralSetup:
     def status(self) -> dict:
         with self._lock:
             snapshot = dict(self._state)
+        activity = ""
+        if snapshot["active"]:
+            try:
+                with self.log_path.open("rb") as log:
+                    log.seek(0, os.SEEK_END)
+                    log.seek(max(0, log.tell() - 4096))
+                    lines = [line.strip() for line in log.read().decode(
+                        "utf-8", errors="replace").splitlines() if line.strip()]
+                    if lines:
+                        activity = lines[-1][:180]
+            except OSError:
+                pass
         return {**snapshot, "supported": self.platform == "nt",
                 "installed": bool(self.engine.available()),
-                "log_path": str(self.log_path)}
+                "log_path": str(self.log_path), "last_activity": activity}
 
     def start(self, cpu_only: bool = False) -> dict:
         if type(cpu_only) is not bool:
@@ -69,7 +81,9 @@ class NeuralSetup:
                 error = "Neural setup finished without an installed Python runtime"
             elif self.on_ready:
                 self.on_ready()
-        except (OSError, RuntimeError, ValueError) as exc:
+        except Exception as exc:
+            # Never leave the setup gate permanently "active" if an
+            # unexpected subprocess/activation error occurs.
             error = str(exc)
         with self._lock:
             self._state = {"active": False, "stage": "failed" if error else "ready",
