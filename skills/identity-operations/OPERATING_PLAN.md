@@ -1,6 +1,6 @@
 # Digital Identity Stewardship — Durable Progressive Service Plan
 
-**Owner:** Home Brew Tabletop / mrcalzon02. **Revision:** DIS-2026-11-04-R1. **Status:** DOCUMENTED, not yet run against a subject. **Scope:** one authorized subject first; a reusable multi-client service only after verified consent, security and operational controls.
+**Owner:** Home Brew Tabletop / mrcalzon02. **Revision:** DIS-2026-11-04-R1. **Status:** PHASE 0 OWNER-ONLY GOOGLE DRIVE WORKFLOW ACTIVE (registers created and six already-public professional assets inventoried); private case intake, opt-out submissions and external publication remain unstarted. Client-side evidence encryption is not yet configured. **Scope:** one authorized subject first; a reusable multi-client service only after verified consent, security and operational controls.
 
 ## Mission
 
@@ -9,6 +9,8 @@ Job P protects private life: discover, confirm, triage and suppress unwanted per
 Job B promotes an approved professional creator identity and portfolio: website, code projects, original games, software, writing, releases and owned social/professional channels.
 
 **Conflict rule:** Never feed private identity selectors or case evidence into promotional copy or SEO metadata. Never remove a legitimate owned professional page solely because it shares a name with a broker record. A page combining private and public content is **MIXED**, requiring a field-level redaction plan and owner review.
+
+For the verified native Google Sheets storage layout and security caveats, see [Google Drive Storage Adapter](GOOGLE_DRIVE_OPERATIONS.md). **Google Drive's standard owner-only access is not independently controlled client-side encryption.**
 
 ## Non-negotiable safeguards
 
