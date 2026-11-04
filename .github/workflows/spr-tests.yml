@@ -34,7 +34,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          foreach ($path in @("software/superposition-reader/install-windows.ps1", "software/superposition-reader/sapi_synthesize.ps1")) {
+          foreach ($path in @("software/superposition-reader/install-windows.ps1", "software/superposition-reader/install-neural-windows.ps1", "software/superposition-reader/sapi_synthesize.ps1")) {
             $tokens = $null
             $errors = $null
             [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $path), [ref]$tokens, [ref]$errors) | Out-Null
