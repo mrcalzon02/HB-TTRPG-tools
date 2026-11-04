@@ -4,7 +4,7 @@
 
 ## Goal
 
-An independent local reader for PDF/TXT/Markdown/DOCX/DRM-free EPUB, with highlighted passages, cached audiobook WAVs, SAPI narration and an independent LuxTTS neural narrator based on the owner's Sphinx voice. Original PDF page rendering, word-level alignment, chapter FLAC/M4B and a signed installer are future milestones.
+An independent local reader for PDF/TXT/Markdown/DOCX/DRM-free EPUB, with highlighted passages, cached audiobook WAVs, SAPI narration and an independent LuxTTS neural narrator based on the owner's Sphinx voice. Original PDF page rendering, universal word-level alignment, chapter FLAC/M4B and a signed installer are future milestones.
 
 ## What v0.1 actually implements
 
@@ -14,12 +14,12 @@ An independent local reader for PDF/TXT/Markdown/DOCX/DRM-free EPUB, with highli
 - Existing Windows SAPI 5 voices and optional locally installed SPR LuxTTS neural engine generate cached PCM WAV per passage, keyed by voice/rate/text/engine. The native neural model stays loaded in a persistent owned child process.
 - Playback speed, volume, passage skipping, automatic scrolling, saved reading position and consecutive audio playback. Newly generated SPR LuxTTS clips can store independently measured, exact-word ASR timestamps for word highlighting; unmatched words and existing SAPI/Voicebox clips retain honest passage-level highlighting.
 - Generate whole book with a single sequential speech worker. Clicking an uncached sentence moves its job ahead of queued chapters; playback can begin before the rest finishes.
-- Cancel after the current sentence, preserve completed clips for retry/restart, save reading position in a separate file, and export a combined WAV only when every sentence has matching voice/engine/rate metadata. Mixed-voice exports are rejected.
+- Cancel after the current sentence, preserve completed clips for retry/restart, save reading position in a separate file, and export a combined WAV or ordered chapter-WAV ZIP only when every sentence has matching voice/engine/rate metadata. Mixed-voice exports are rejected.
 - Private voice-reference profile creation and local WAV/MP3/FLAC/OGG/M4A or prepared-ZIP import. Compatible prepared reference ZIPs are archived without extracting into the checkout; **archived profiles are not neural models**.
 - Optional local Voicebox adapter: when a previously installed Voicebox server is available at 127.0.0.1:17493, SPR can select an existing authorized Voicebox profile and generate narration using Qwen, LuxTTS, or Chatterbox through its documented localhost /v1/audio/speech endpoint. This is an interim option, not an independent bundled model or an automatic SPR voice-profile conversion. No remote/cloud service is contacted. Cached audio can be replayed with Voicebox stopped.
 - Windows/Linux regression tests for import/cache/routes with synthetic WAV, real full-story EPUB integration tests, and a separate real CPU LuxTTS neural generation workflow that created two non-silent story narration WAVs.
 
-**Present limitations:** PDF and EPUB display is reflowed text rather than original page rendering. Encrypted EPUBs and scanned-PDF OCR are unsupported. Book highlighting defaults to passages; verified word cues appear only on newly generated neural clips, and are not inferred for mismatched ASR words. Two genuinely synthesized Sphinx story clips exist and passed non-silent WAV checks, but voice quality and real playback on the owner's Windows RTX 5070 are not yet audited. The independent LuxTTS model requires an optional user-initiated first-time download and setup. WAV export deliberately refuses incomplete or mixed-voice books and output larger than 3.8 GB.
+**Present limitations:** PDF and EPUB display is reflowed text rather than original page rendering. Encrypted EPUBs and scanned-PDF OCR are unsupported. Book highlighting defaults to passages; verified word cues appear only on newly generated neural clips, and are not inferred for mismatched ASR words. Two genuinely synthesized Sphinx story clips exist and passed non-silent WAV checks, but voice quality and real playback on the owner's Windows RTX 5070 are not yet audited. The independent LuxTTS model requires an optional user-initiated first-time download and setup. Single-WAV export deliberately refuses incomplete or mixed-voice books and output larger than 3.8 GB; chapter WAV ZIP export uses real EPUB spine boundaries, keeps each WAV under that limit and supports ZIP64.
 
 ## Portable Windows executable preview (GitHub Actions)
 
@@ -99,7 +99,7 @@ The host binds only 127.0.0.1 at an ephemeral port and requires matching Host/Or
 1. **v0.1 foundation (source staged):** Import a TXT document, synthesize with SAPI, highlight sentence during playback, save audio, close and reopen without regenerating completed clips. Verify on actual Windows hardware before promoting.
 2. **Document fidelity:** PDF.js page rendering, mapping between text, audio and page coordinates, EPUB visual rendering, DOCX improvements and scanned-PDF OCR.
 3. **Own voice:** First CPU LuxTTS Sphinx clone from the committed source has succeeded on GitHub Actions; two sample WAVs are archived and playable. Next benchmark local CUDA on RTX 5070 12GB, voice quality, and entire chapter generation.
-4. **Production pipeline:** prebuffer, persistent generation queue, expanded coverage for measured word cues, quality checks, correction/regeneration, FLAC/chapter WAV and M4B.
+4. **Production pipeline:** prebuffer, persistent generation queue, expanded coverage for measured word cues, quality checks, correction/regeneration, chapter FLAC and M4B. Chapter WAV ZIP export is implemented.
 5. **Distribution:** standalone Windows binary installer, private voice pack import/export, durable recovery, regression tests for large books and interrupted jobs.
 
 Only objective failures in loading, running, narration output, progress recovery, document mapping or exports should block functional releases. Cosmetic/style and voice-quality assessments are diagnostic, not standalone build blockers.

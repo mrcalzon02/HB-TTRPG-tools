@@ -66,8 +66,8 @@ def _xml_bytes(archive: zipfile.ZipFile, name: str) -> bytes:
         raise ValueError("Missing EPUB metadata: " + name) from exc
 
 
-def extract_epub(data: bytes) -> str:
-    """Read unencrypted EPUB package metadata and XHTML spine documents."""
+def extract_epub_sections(data: bytes) -> list[str]:
+    """Read unencrypted EPUB spine documents as distinct narration chapters."""
     try:
         archive = zipfile.ZipFile(io.BytesIO(data), "r")
     except (zipfile.BadZipFile, OSError) as exc:
@@ -110,4 +110,9 @@ def extract_epub(data: bytes) -> str:
                 chapters.append(text)
         if not chapters:
             raise ValueError("EPUB has no readable chapters in its spine")
-        return "\n\n".join(chapters)
+        return chapters
+
+
+def extract_epub(data: bytes) -> str:
+    """Preserve the original plain-text API and spine-order document contents."""
+    return "\n\n".join(extract_epub_sections(data))

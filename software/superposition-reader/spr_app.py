@@ -213,6 +213,8 @@ def make_handler(state: ReaderState):
                     return self._file(state.archive.audio_file(segments[2], int(segments[3])), "audio/wav")
                 if len(segments) == 3 and segments[:2] == ["api", "export"]:
                     return self._file(state.archive.export_wav(segments[2]), "audio/wav", "superposition-narration.wav")
+                if len(segments) == 3 and segments[:2] == ["api", "export-chapters"]:
+                    return self._file(state.archive.export_chapters_zip(segments[2]), "application/zip", "superposition-chapters.zip")
                 self._json({"error": "Not found"}, 404)
             except (ValueError, IndexError, FileNotFoundError, OSError, json.JSONDecodeError) as exc:
                 self._json({"error": str(exc)}, 400)

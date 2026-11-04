@@ -232,6 +232,43 @@ class EpubImportTests(unittest.TestCase):
             book = archive.import_document("novel.epub", self.sample_epub())
             self.assertGreater(len(book["chunks"]), 1)
 
+    def test_real_spine_chapter_wav_zip_and_existing_archive_migration(self):
+        from spr_epub import extract_epub_sections
+        source = self.sample_epub()
+        sections = extract_epub_sections(source)
+        self.assertEqual(len(sections), 2)
+        self.assertTrue(sections[0].startswith("Second chapter"))
+        with tempfile.TemporaryDirectory() as folder:
+            archive = Archive(pathlib.Path(folder))
+            book = archive.import_document("novel.epub", source)
+            self.assertEqual(len(book["chapters"]), 2)
+            self.assertEqual(book["chapters"][0]["start"], 0)
+            self.assertEqual(book["chapters"][-1]["end"], len(book["chunks"]))
+            engine = FakeEngine()
+            with self.assertRaisesRegex(ValueError, "Finish generating"):
+                archive.export_chapters_zip(book["id"])
+            for chunk in range(len(book["chunks"])):
+                archive.generate_chunk(book["id"], chunk, engine, voice="Sphinx")
+            manifest_path = archive.folder(book["id"]) / "manifest.json"
+            legacy = json.loads(manifest_path.read_text(encoding="utf-8"))
+            legacy.pop("chapters", None)
+            manifest_path.write_text(json.dumps(legacy), encoding="utf-8")
+            self.assertEqual(len(Archive(archive.root).load(book["id"])["chapters"]), 2)
+            exported = archive.export_chapters_zip(book["id"])
+            with zipfile.ZipFile(exported) as result:
+                self.assertEqual(result.namelist(),
+                                 ["chapter-001.wav", "chapter-002.wav", "chapters.json"])
+                listing = json.loads(result.read("chapters.json"))
+                self.assertEqual(listing["render"]["voice"], "Sphinx")
+                self.assertEqual(listing["chapters"][0]["start"], 0)
+                self.assertEqual(listing["chapters"][-1]["end"], len(book["chunks"]))
+                for chapter in listing["chapters"]:
+                    with wave.open(io.BytesIO(result.read(chapter["file"])), "rb") as audio:
+                        self.assertEqual(audio.getnframes(),
+                                         800 * (chapter["end"] - chapter["start"]))
+                        self.assertEqual(audio.getframerate(), 8000)
+                self.assertEqual(len(engine.calls), len(book["chunks"]))
+
     def test_epub_rejects_drm_and_invalid_zip(self):
         with self.assertRaisesRegex(ValueError, "Encrypted"):
             extract_text("protected.epub", self.sample_epub(encrypted=True))
@@ -539,6 +576,11 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(job["error"], "")
         self.assertEqual(self.req("GET", "/api/audio/" + book_id + "/0")[0], 200)
         self.assertEqual(self.req("GET", "/api/export/" + book_id)[0], 200)
+        code, bundled = self.req("GET", "/api/export-chapters/" + book_id)
+        self.assertEqual(code, 200)
+        with zipfile.ZipFile(io.BytesIO(bundled)) as chapters:
+            self.assertEqual(chapters.namelist(),
+                             ["chapter-001.wav", "chapters.json"])
 
     def test_verified_sphinx_previews_have_exact_real_neural_artifact_hashes(self):
         # This is a reproducibility/integrity check, not a listener's quality score.

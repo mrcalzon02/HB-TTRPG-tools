@@ -105,7 +105,8 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
     <section><h2>Audio archive</h2>
       <div class="small" id="archiveStatus">No book selected</div>
       <button id="export" class="fill" disabled>Export complete WAV</button>
-      <p class="small">Completed audio is reused across launches. Book-length chapter export, FLAC and M4B are planned.</p>
+      <button id="exportChapters" class="fill" style="margin-top:8px" disabled>Export chapter WAVs (ZIP)</button>
+      <p class="small">Complete EPUBs export in original chapter order with a chapter index. FLAC and M4B are future formats. Cached narration survives restarts.</p>
     </section>
     <section><h2>Reader status</h2><div id="status" role="status">Ready to import a document.</div></section>
     <footer>SPR keeps document sources and narration in private application data. This version uses reflowed text; original PDF pages and forced alignment for other voice engines remain later milestones.</footer>
@@ -175,6 +176,8 @@ function renderMatches(index){
 }
 let currentWord = null;
 function renderChunk(button, chunk, index){
+  const audioKey=book?.audio?.[String(index)]?.key||"";
+  button.dataset.audioKey=audioKey;
   button.replaceChildren();
   button.classList.remove("has-word-cues");
   const cues=book?.audio?.[String(index)]?.word_cues;
@@ -256,13 +259,17 @@ function updateButtons(){
   $("refreshEngines").disabled=workBusy;
   $("voiceboxProfileId").disabled=workBusy;
   $("sapiRate").disabled=workBusy||engineKey!=="sapi";
-  $("export").disabled=!has||book.chunks.some((_,i)=>!renderMatches(i));
+  const incomplete=!has||book.chunks.some((_,i)=>!renderMatches(i));
+  $("export").disabled=incomplete;
+  $("exportChapters").disabled=incomplete;
 }
 function updateArchive(){
   if(!book)return;
   const ready=book.chunks.filter((_,i)=>renderMatches(i)).length;
   $("archiveStatus").textContent=ready+" of "+book.chunks.length+" audio segments ready for the selected voice and rate.";
-  $("documentMeta").textContent=book.chunks.length+" "+(book.segment_mode==="passage"?"passages":"sentences")+" · "+ready+" cached";
+  const chapter=(book.chapters||[]).find(item=>item.start<=active&&active<item.end);
+  $("documentMeta").textContent=book.chunks.length+" "+(book.segment_mode==="passage"?"passages":"sentences")+" · "+ready+" cached"+
+    (chapter?" · "+chapter.title:"");
   $("position").textContent=(active+1)+" / "+book.chunks.length;
   updateButtons();
 }
@@ -320,7 +327,9 @@ async function fetchBook(){
   book=current;
   document.querySelectorAll(".segment").forEach((node,i)=>{
     node.classList.toggle("ready",renderMatches(i));
-    renderChunk(node,book.chunks[i],i);
+    if(node.dataset.audioKey!==(book.audio?.[String(i)]?.key||"")){
+      renderChunk(node,book.chunks[i],i);
+    }
   });
   updateArchive();
   syncWordHighlight();
@@ -426,8 +435,13 @@ $("generate").addEventListener("click",async()=>{
 });
 $("cancel").addEventListener("click",async()=>{try{await post("/api/cancel",{});status("Cancellation requested; current sentence may finish.");}catch(error){status(error.message);}});
 $("export").addEventListener("click",()=>{
-  if(book&&Object.keys(book.audio).length===book.chunks.length){
+  if(book&&book.chunks.every((_,i)=>renderMatches(i))){
     window.location.href="/api/export/"+book.id;
+  }
+});
+$("exportChapters").addEventListener("click",()=>{
+  if(book&&book.chunks.every((_,i)=>renderMatches(i))){
+    window.location.href="/api/export-chapters/"+book.id;
   }
 });
 async function poll(){

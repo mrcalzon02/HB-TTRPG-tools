@@ -15,6 +15,7 @@ import re
 import subprocess
 import sys
 import wave
+import zipfile
 
 SUPPORTED = {".txt", ".md", ".markdown", ".pdf", ".docx", ".epub"}
 MAX_DOCUMENT_BYTES = 64 * 1024 * 1024
@@ -143,6 +144,31 @@ def _checked_word_cues(text: str, cues, duration: float) -> list[dict]:
     return checked
 
 
+def _epub_chapter_ranges(source: bytes, chunks: list[dict], mode: str) -> list[dict]:
+    """Map original EPUB spine sections to exact cached passage boundaries.
+
+    Never guess chapter boundaries when the section chunks don't match the
+    already-imported text. A mismatch yields an ordinary whole-book export.
+    """
+    from spr_epub import extract_epub_sections
+    chapters = []
+    expected = []
+    offset = 0
+    for number, section in enumerate(extract_epub_sections(source), 1):
+        pieces = passage_chunks(section) if mode == "passage" else sentence_chunks(section)
+        heading = " ".join(section.split("\n\n", 1)[0].split())
+        title = (heading if heading and len(heading) <= 90
+                 and not heading.endswith((".", "!", "?"))
+                 else f"Chapter {number}")
+        chapters.append({"title": title, "start": offset,
+                         "end": offset + len(pieces)})
+        expected.extend(pieces)
+        offset += len(pieces)
+    if expected != [item["text"] for item in chunks]:
+        return []
+    return chapters
+
+
 class Archive:
     def __init__(self, root: Path | None = None):
         self.root = Path(root) if root is not None else default_data_dir()
@@ -177,12 +203,24 @@ class Archive:
             "segment_mode": mode,
             "audio": {}
         }
+        if Path(safe_name).suffix.lower() == ".epub":
+            manifest["chapters"] = _epub_chapter_ranges(data, manifest["chunks"], mode)
         _write_json_atomic(manifest_path, manifest)
         return manifest
 
     def load(self, book_id: str) -> dict:
         folder = self.folder(book_id)
         record = json.loads((folder / "manifest.json").read_text(encoding="utf-8"))
+        # Migrate existing EPUB archives without reimporting private source
+        # files or regenerating any audio. Preserve the recorded chunk layout.
+        if "chapters" not in record and (folder / "source.epub").is_file():
+            try:
+                record["chapters"] = _epub_chapter_ranges(
+                    (folder / "source.epub").read_bytes(), record["chunks"],
+                    record.get("segment_mode", "sentence"))
+            except (OSError, ValueError, KeyError, zipfile.BadZipFile):
+                record["chapters"] = []
+            _write_json_atomic(folder / "manifest.json", record)
         # Cached WAV files can disappear after disk cleanup, interrupted copies or
         # migration. Do not advertise deleted clips as playable or complete.
         for index, entry in list(record.get("audio", {}).items()):
@@ -287,8 +325,8 @@ class Archive:
         _write_json_atomic(self.folder(book_id) / "reading-position.json", position)
         return position
 
-    def export_wav(self, book_id: str) -> Path:
-        manifest = self.load(book_id)
+    @staticmethod
+    def _export_settings(manifest: dict) -> dict:
         if len(manifest["audio"]) != len(manifest["chunks"]):
             raise ValueError("Finish generating all narration before exporting")
         render_set = set()
@@ -302,6 +340,12 @@ class Archive:
             render_set.add((render["engine"], render["voice"], render["rate"]))
         if len(render_set) != 1:
             raise ValueError("Book contains different voices or rates; regenerate to one setting before exporting")
+        engine, voice, rate = next(iter(render_set))
+        return {"engine": engine, "voice": voice, "rate": rate}
+
+    def export_wav(self, book_id: str) -> Path:
+        manifest = self.load(book_id)
+        self._export_settings(manifest)
         output = self.folder(book_id) / "narration.wav"
         temp = output.with_suffix(".partial.wav")
         params = None
@@ -322,6 +366,74 @@ class Archive:
                         if total_bytes > 3_800_000_000:
                             raise ValueError("Audio exceeds standard WAV limit; chapter export is needed")
                         target.writeframesraw(data)
+            os.replace(temp, output)
+        finally:
+            temp.unlink(missing_ok=True)
+        return output
+
+    def export_chapters_zip(self, book_id: str) -> Path:
+        """Export complete narration as EPUB-spine chapter WAVs in a ZIP64 archive.
+
+        Only a single chapter WAV is spooled at a time, so a long book does not
+        require an enormous temporary combined WAV. Chapters are ordered and
+        checked against the original passage index, never estimated by time.
+        """
+        manifest = self.load(book_id)
+        render = self._export_settings(manifest)
+        chapters = manifest.get("chapters") or [{
+            "title": "Complete document", "start": 0, "end": len(manifest["chunks"])}]
+        cursor = 0
+        for chapter in chapters:
+            if (type(chapter.get("start")) is not int
+                    or type(chapter.get("end")) is not int
+                    or chapter["start"] != cursor
+                    or not cursor < chapter["end"] <= len(manifest["chunks"])):
+                raise ValueError("Chapter boundaries do not match the imported document")
+            cursor = chapter["end"]
+        if cursor != len(manifest["chunks"]):
+            raise ValueError("Chapter export would omit narration segments")
+        folder = self.folder(book_id)
+        output = folder / "narration-chapters.zip"
+        temp = folder / "narration-chapters.partial.zip"
+        index = []
+        try:
+            with zipfile.ZipFile(temp, "w", compression=zipfile.ZIP_DEFLATED,
+                                 compresslevel=3, allowZip64=True) as bundle:
+                for number, chapter in enumerate(chapters, 1):
+                    filename = f"chapter-{number:03d}.wav"
+                    spool = folder / f".export-chapter-{number:03d}.partial.wav"
+                    params = None
+                    bytes_written = 0
+                    duration = 0.0
+                    try:
+                        with wave.open(str(spool), "wb") as target:
+                            for chunk in range(chapter["start"], chapter["end"]):
+                                with wave.open(str(self.audio_file(book_id, chunk)), "rb") as source:
+                                    p = source.getparams()
+                                    signature = (p.nchannels, p.sampwidth, p.framerate, p.comptype)
+                                    if params is None:
+                                        params = signature
+                                        target.setparams((p.nchannels, p.sampwidth, p.framerate,
+                                                          0, p.comptype, p.compname))
+                                    elif signature != params:
+                                        raise ValueError("Chapter contains incompatible audio formats")
+                                    duration += p.nframes / p.framerate
+                                    while block := source.readframes(65536):
+                                        bytes_written += len(block)
+                                        if bytes_written > 3_800_000_000:
+                                            raise ValueError("One chapter exceeds the standard WAV limit")
+                                        target.writeframesraw(block)
+                        bundle.write(spool, filename)
+                    finally:
+                        spool.unlink(missing_ok=True)
+                    index.append({"title": chapter["title"], "file": filename,
+                                  "start": chapter["start"], "end": chapter["end"],
+                                  "seconds": round(duration, 3)})
+                bundle.writestr("chapters.json", json.dumps({
+                    "source_sha256": manifest["source_sha256"],
+                    "book_title": manifest["title"], "render": render,
+                    "chapters": index
+                }, indent=2, ensure_ascii=False))
             os.replace(temp, output)
         finally:
             temp.unlink(missing_ok=True)
