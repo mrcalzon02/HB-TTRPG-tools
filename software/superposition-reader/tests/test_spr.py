@@ -27,6 +27,7 @@ from spr_voicebox import VoiceboxEngine
 from spr_neural_alignment import is_complete, trim_guarded_audio, verified_word_cues
 from spr_voice_assets import VERIFIED_PREVIEWS, verify_previews
 from spr_narrate import chapter_plan, render_selection, main as narrate_main
+from spr_neural_setup import NeuralSetup
 from http.server import ThreadingHTTPServer
 
 
@@ -572,6 +573,16 @@ class VoiceboxAdapterTests(unittest.TestCase):
 
 
 class ReaderJavascriptTests(unittest.TestCase):
+    def test_unified_gui_exposes_required_in_app_controls(self):
+        source = (pathlib.Path(__file__).resolve().parents[1] / "reader.html").read_text(
+            encoding="utf-8")
+        for name in ("neuralInstall", "neuralInstallMode", "neuralSetupStatus",
+                     "chapterFrom", "chapterThrough", "generate",
+                     "export", "exportChapters"):
+            self.assertIn('id="' + name + '"', source)
+        self.assertIn('post("/api/neural-setup"', source)
+        self.assertIn('chapter_from:Number($("chapterFrom").value)', source)
+
     def test_reader_script_is_syntactically_valid(self):
         # A malformed inline script can prevent the entire Windows reader
         # window from loading even when Python's API regressions pass.
@@ -590,6 +601,37 @@ class ReaderJavascriptTests(unittest.TestCase):
                                     capture_output=True, text=True, timeout=15)
         self.assertEqual(result.returncode, 0,
                          result.stderr or result.stdout)
+
+
+class NeuralSetupTests(unittest.TestCase):
+    def test_setup_requires_explicit_click_and_windows(self):
+        with tempfile.TemporaryDirectory() as root:
+            class MissingEngine:
+                def available(self):
+                    return False
+            setup = NeuralSetup(pathlib.Path(root),
+                                pathlib.Path(root) / "install-neural-windows.ps1",
+                                MissingEngine(), platform="posix")
+            info = setup.status()
+            self.assertFalse(info["active"])
+            self.assertFalse(info["installed"])
+            self.assertFalse(info["supported"])
+            self.assertFalse((pathlib.Path(root) / "neural").exists())
+            with self.assertRaisesRegex(RuntimeError, "requires Windows"):
+                setup.start(cpu_only=True)
+            with self.assertRaisesRegex(ValueError, "boolean"):
+                setup.start(cpu_only="false")
+
+    def test_setup_cannot_run_missing_bundled_script(self):
+        with tempfile.TemporaryDirectory() as root:
+            class MissingEngine:
+                def available(self):
+                    return False
+            setup = NeuralSetup(pathlib.Path(root),
+                                pathlib.Path(root) / "missing.ps1",
+                                MissingEngine(), platform="nt")
+            with self.assertRaisesRegex(RuntimeError, "missing"):
+                setup.start(cpu_only=False)
 
 
 class ApiTests(unittest.TestCase):
@@ -677,6 +719,45 @@ class ApiTests(unittest.TestCase):
         code, profiles = self.req("GET", "/api/voice-profiles")
         self.assertEqual(code, 200)
         self.assertEqual(profiles[0]["samples"], 1)
+
+    def test_integrated_chapter_range_api(self):
+        source = EpubImportTests.sample_epub()
+        code, created = self.req("POST", "/api/import", {
+            "name": "chaptered.epub", "base64": base64.b64encode(source).decode()})
+        self.assertEqual(code, 201)
+        book_id = created["id"]
+        manifest = self.req("GET", "/api/book/" + book_id)[1]
+        self.assertEqual(len(manifest["chapters"]), 2)
+        code, invalid = self.req("POST", "/api/generate", {
+            "book_id": book_id, "chapter_from": 3})
+        self.assertEqual(code, 400)
+        self.assertIn("Chapter selection", invalid["error"])
+        code, invalid = self.req("POST", "/api/generate", {
+            "book_id": book_id, "index": 0, "chapter_from": 1})
+        self.assertEqual(code, 400)
+        self.assertIn("passage or a chapter range", invalid["error"])
+        code, started = self.req("POST", "/api/generate", {
+            "book_id": book_id, "chapter_from": 2, "chapter_through": 2})
+        self.assertEqual(code, 202)
+        for _ in range(100):
+            _, job = self.req("GET", "/api/job")
+            if not job["active"]:
+                break
+            time.sleep(.02)
+        self.assertFalse(job["active"])
+        self.assertFalse(job["error"])
+        record = self.req("GET", "/api/book/" + book_id)[1]
+        chapter = manifest["chapters"][1]
+        self.assertEqual(set(record["audio"]),
+                         {str(i) for i in range(chapter["start"], chapter["end"])})
+
+    def test_neural_setup_get_is_safe_when_not_configured(self):
+        code, details = self.req("GET", "/api/neural-setup")
+        self.assertEqual(code, 200)
+        self.assertFalse(details["active"])
+        code, details = self.req("POST", "/api/neural-setup", {"cpu_only": False})
+        self.assertEqual(code, 400)
+        self.assertIn("unavailable", details["error"])
 
     def test_position_http_api(self):
         code, book = self.req("POST", "/api/import",
