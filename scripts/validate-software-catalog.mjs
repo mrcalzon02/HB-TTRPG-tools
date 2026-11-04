@@ -17,7 +17,7 @@ const context = {window:{}};
 new vm.Script(dataCode, {filename:"software-catalog-data.js"}).runInNewContext(context);
 new vm.Script(code, {filename:"software-catalog.js"});
 const projects = context.window.HBSoftwareProjects;
-assert.equal(projects.length,13,"Curated release catalog should include 13 original projects");
+assert.equal(projects.length,15,"Curated release catalog should include 15 original projects");
 assert.equal(new Set(projects.map(p=>p.repo)).size,projects.length);
 assert.doesNotMatch(dataCode + html,/Rupee-rush/,"Obsolete Jewel Brook release source");
 assert.ok(projects.some(p=>p.repo==="Jewel_Brook" && p.name==="Jewel Brook: Heroes of Embryon"));
