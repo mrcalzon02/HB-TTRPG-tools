@@ -1,0 +1,21 @@
+{
+  "template": "sanitized-status-public",
+  "version": "0.1.0",
+  "warning": "Aggregate counts only; never include case URLs, names or sensitive records.",
+  "reporting_period": null,
+  "privacy": {
+    "candidate": 0,
+    "verified": 0,
+    "submitted": 0,
+    "source_removed_verified": 0,
+    "pending": 0,
+    "reappeared": 0
+  },
+  "professional": {
+    "audited": 0,
+    "approved": 0,
+    "live_verified": 0,
+    "indexed_confirmed": 0
+  },
+  "sanitization_reviewed": false
+}

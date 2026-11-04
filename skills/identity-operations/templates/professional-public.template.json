@@ -1,0 +1,19 @@
+{
+  "template": "professional-public",
+  "version": "0.1.0",
+  "warning": "BLANK public asset template. Only fill with explicitly approved PUBLIC creator data.",
+  "asset_id": null,
+  "approved_creator_name": null,
+  "brand_name": null,
+  "canonical_public_url": null,
+  "owned_verified": false,
+  "asset_kind": null,
+  "project_name": null,
+  "description_approved": null,
+  "privacy_review": "not-reviewed",
+  "state": "inventoried",
+  "publish_approval_reference": null,
+  "published_at": null,
+  "live_verified_at": null,
+  "index_status": null
+}

@@ -22,3 +22,8 @@ desktop/barotrauma-world-sim/tmp/
 # Operating-system files
 .DS_Store
 Thumbs.db
+
+# Defense in depth ONLY; this is not encryption
+identity-private/
+**/identity-private/
+**/.identity-private/

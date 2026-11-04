@@ -1,0 +1,22 @@
+{
+  "template": "subject-private",
+  "version": "0.1.0",
+  "warning": "BLANK TEMPLATE. NEVER fill/commit to public GitHub; copy to encrypted private vault outside repo.",
+  "subject_id": null,
+  "authorization_reference_private": null,
+  "allowed_operations": [],
+  "subject_approved": false,
+  "jurisdiction": null,
+  "selectors_private": {
+    "names": [],
+    "aliases": [],
+    "emails": [],
+    "phones": [],
+    "addresses": [],
+    "other": []
+  },
+  "approved_professional_public_identifiers": [],
+  "professional_preserve_urls_private": [],
+  "retention_policy": null,
+  "reviewed_at": null
+}

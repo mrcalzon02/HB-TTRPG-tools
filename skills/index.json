@@ -79,7 +79,9 @@
         "random-table-and-oracle-resolution",
         "tabletop-check-resolution",
         "tabletop-battlespace-visualization",
-        "environment-production"
+        "environment-production",
+        "privacy-exposure-remediation",
+        "professional-presence-development"
       ],
       "useFor": [
         "Charles",
@@ -1282,6 +1284,42 @@
         "python3.10+",
         "writable-sandbox",
         "project-specific-engine-adapters"
+      ]
+    },
+    {
+      "name": "privacy-exposure-remediation",
+      "path": "skills/privacy-exposure-remediation/SKILL.md",
+      "status": "onboardable",
+      "capabilityIds": [],
+      "resourceIds": [],
+      "laboratoryIds": [],
+      "useFor": [
+        "data broker opt out",
+        "private information removal",
+        "people search exposure",
+        "digital footprint privacy"
+      ],
+      "personalityPolicy": "inherit-default",
+      "personalityEngramIds": [
+        "blacklight.charles"
+      ]
+    },
+    {
+      "name": "professional-presence-development",
+      "path": "skills/professional-presence-development/SKILL.md",
+      "status": "onboardable",
+      "capabilityIds": [],
+      "resourceIds": [],
+      "laboratoryIds": [],
+      "useFor": [
+        "professional identity visibility",
+        "creator portfolio",
+        "public project indexing",
+        "release publicity"
+      ],
+      "personalityPolicy": "inherit-default",
+      "personalityEngramIds": [
+        "blacklight.charles"
       ]
     }
   ]
