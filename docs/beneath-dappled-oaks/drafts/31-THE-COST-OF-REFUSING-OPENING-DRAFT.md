@@ -3927,3 +3927,88 @@ Sorn took up the patrol slate. "I suppose I should be grateful you haven't found
 "They share a district," Thessa said. "That is not enough."
 
 It was not a satisfying ending. It was the only one the records had earned.
+
+
+---
+
+The farmer who had taken back her deposit did not go straight home.
+
+She stopped at the seed stalls first, carrying the returned coins in the same purse she had brought to the mill. There were two merchants with barley on their boards. The first had grain fit for feeding hens, not a lot he would warrant for sowing. The second had a small quantity of seed, but it had already been promised to another holding. He offered to put her name down if the purchaser failed to collect it.
+
+“When would you know?”
+
+“After the next market.”
+
+She looked at the purse. The money was hers again, and still it would not buy what she had come for.
+
+At home, her sister was waiting beside the cleared beds. They had worked together the previous afternoon, lifting the winter cover and breaking the surface where the soil had begun to dry. The hired workers had finished before dusk. They had been paid for that day. The farmer could not ask them to give the hours back because a wagon had not come.
+
+“Did you bring it?” her sister asked.
+
+“No.”
+
+“The miller kept the money?”
+
+“He gave it back.”
+
+“That is something.”
+
+“It is. It isn't barley.”
+
+Her sister put down the rake. Along the nearest bed the earth had formed a thin crust, pale at the edges. Another day of wind might make it harder to work; another night of rain might make it impossible to enter without leaving deep tracks. Neither woman knew which weather would come.
+
+“Could we sow the other field first?”
+
+“We have seed for the other field.”
+
+“Then we could move the hands there tomorrow.”
+
+“They're promised to the orchard tomorrow. We agreed last week.”
+
+Her sister looked toward the trees, where the first blossom was opening. “Ask them to change?”
+
+“We can ask. We can't call their promise ours.”
+
+Inside the kitchen, the farmer opened the household book. She wrote the returned deposit against the original entry, leaving the purchase marked unfilled. Below it she recorded the paid clearing labor. She had been tempted to put the wages under *loss caused by carrier*. The carrier had not hired her workers, and she had no ruling that made him answerable for them. She wrote *preparation paid; seed not received* instead.
+
+Her sister watched from the doorway.
+
+“Will that get us anything?”
+
+“It will tell us what we spent.”
+
+“We already know.”
+
+“Today we do.”
+
+There was a second question, harder than the account. If the beds remained empty, they might miss the better part of the planting interval. If they sowed inferior grain simply to make use of the work already done, they might spend the rest of the season regretting it. The first merchant had been careful not to call his feed barley seed. She would not make the claim for him.
+
+They went outside with the book and measured the prepared beds. The farmer calculated how much of the remaining household seed could be spared without taking it from the other field. It was less than half of what she had ordered. She did not count a possible market purchase as grain already in the bin.
+
+“We could begin with these two rows,” her sister said.
+
+“And leave the rest ready?”
+
+“For now.”
+
+“Then we do that. If we get the balance, we can finish. If we don't, we will know which rows we actually sowed.”
+
+Her sister took the rake again. The farmer fetched the seed measure, checked it against the amount in the sack, and marked the two rows with short sticks. She did not call it a recovered planting. It was a smaller planting than she had planned, using grain she already possessed.
+
+Before supper she wrote a note to the mill buyer. It acknowledged the returned deposit and asked whether he would send word if seed became physically available for sale. She did not reinstate her cancelled order or promise to purchase a load she had not seen. The note also asked where the road office's public restriction could be read, because the next carrier might be held in the same place. Her sister offered to take it to the market on her ordinary journey the next morning.
+
+“Don't write that he ruined the crop,” her sister said, reading over her shoulder.
+
+“I haven't.”
+
+“You were thinking it.”
+
+“I was thinking we might lose the planting.”
+
+“That hasn't happened yet.”
+
+The farmer looked at the two marked rows beyond the window. She had been angry with the mill buyer, the carrier, the road and the weather in turn. None of them could give her the missing hours. She crossed out *ruined* where it had appeared in the rough of her letter and wrote *delayed*.
+
+The note stayed on the kitchen shelf overnight. No messenger had collected it. The mill had no new order from her, the north-road warning had not been lifted, and the household had no answer about the rest of its seed. In the morning there would be two rows to sow and a market to ask again.
+
+She closed the book with the returned coins beside it. The refund had prevented one debt. It had not restored a day.
