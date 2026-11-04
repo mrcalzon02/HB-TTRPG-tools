@@ -1,0 +1,48 @@
+name: SPR independent faster-whisper Sphinx control
+
+on:
+  push:
+    paths:
+      - "software/superposition-reader/spr_faster_asr_diagnostics.py"
+      - ".github/workflows/spr-faster-asr-diagnostics.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-audio-control:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install independent CPU ASR runtime
+        run: python -m pip install faster-whisper soundfile scipy
+      - name: Retrieve exact original rejected takes
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41743639943
+          github-token: ${{ github.token }}
+          name: SPR-Sphinx-neural-narration-preview-7429c915fae1bdc10a120d21b089f78acacea5df
+          path: build/qa-rejected
+      - name: Transcribe human source first, then generated speech
+        env:
+          PYTHONPATH: software/superposition-reader
+          HF_HOME: ${{ runner.temp }}/sphinx-faster-asr
+        run: |
+          python software/superposition-reader/spr_faster_asr_diagnostics.py \
+            --input software/superposition-reader/assets/voice \
+            --input build/qa-rejected \
+            --output build/asr/fast-recognition.json
+      - name: Upload control and generated word-alignment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: SPR-Sphinx-faster-whisper-control
+          path: build/asr/
+          if-no-files-found: warn
+          retention-days: 30
