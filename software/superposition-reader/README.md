@@ -56,8 +56,10 @@ In --browser mode the terminal controls the server lifetime; do not expose its l
 - Permanent story EPUB archive: https://github.com/mrcalzon02/HB-TTRPG-tools/tree/main/software/superposition-reader/books/snapshot-2026-11-03
 - Four current books: Beneath Dappled Oaks Chapters 1-30, and Nowhere King Season 1 (32 episodes), Season 2 (32), Season 3 current through Episode 18.
 - Exact public original Sphinx MP3: assets/voice/sphinx-original.mp3 (SHA-256 ce4c621e3587b9a7f6fd1b6237433f779fa4b8ffb1bae4154ae6739da0362cd2).
-- Actual cloned-voice recordings: assets/voice/sphinx-bdo-opening.wav and assets/voice/sphinx-nowhere-opening.wav. These two clips passed real LuxTTS generation and waveform checks but are awaiting auditory review.
-- Successful neural workflow: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/41734439169
+- Actual corrected Sphinx narration previews: `assets/voice/sphinx-bdo-opening.wav` and `assets/voice/sphinx-nowhere-opening.wav`. The earlier preview files were replaced after the owner identified a preemptive opening cutoff. A first-word-safe LuxTTS process now generates a disposable natural-language lead-in, validates the *requested* first three words with independent English faster-whisper ASR, trims only at an observed boundary while keeping 600 ms of pre-onset audio, and verifies again after trimming.
+- Successful corrected real-neural trial: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/41745821792. Its QA transcription found `There should have been 43 of them.` (80% literal token similarity because the recognizer normalizes the number) and `The first report of the morning concerned what the king had eaten.` (100% match), with no unwanted opening word. This verifies content, **not** perfect timbre or the owner's subjective listening experience.
+- Exact reviewed-output file hashes are locked in `spr_voice_assets.py`; both source regression tests and the packaged executable smoke check reject old or substituted WAVs. The prior 2026-11-03 audio version must not be redistributed as repaired.
+- Previous uncorrected trial (historical only): https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/41734439169
 - Successful story ebook workflow: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/workflows/spr-story-snapshot.yml
 - Windows portable build: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/workflows/spr-windows-portable.yml
 
