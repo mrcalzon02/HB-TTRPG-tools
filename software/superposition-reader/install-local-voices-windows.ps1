@@ -48,9 +48,13 @@ if (-not (Test-Path $python)) {
         }
     }
 }
-$dependencies = if ($Engine -eq "kokoro") { @("kokoro-onnx>=0.4,<1", "soundfile>=0.12,<1") } else { @("piper-tts>=1.3,<2") }
-Write-Output "Installing local synthesis packages: $($dependencies -join ', ')"
-& $python -m pip install --disable-pip-version-check @dependencies
+if ($Engine -eq "kokoro") {
+    Write-Output "Installing Kokoro ONNX and soundfile into the private runtime"
+    & $python -m pip install --disable-pip-version-check "kokoro-onnx>=0.4,<1" "soundfile>=0.12,<1"
+} else {
+    Write-Output "Installing Piper TTS into the private runtime"
+    & $python -m pip install --disable-pip-version-check "piper-tts>=1.3,<2"
+}
 if ($LASTEXITCODE -ne 0) { throw "Local voice engine package installation failed" }
 
 function Download-Model([string]$Url, [string]$Destination, [long]$MinimumBytes = 1000) {
