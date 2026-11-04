@@ -5,6 +5,7 @@ on:
     paths:
       - "software/superposition-reader/assets/voice/sphinx-original.mp3"
       - "software/superposition-reader/spr_luxtts_worker.py"
+      - "software/superposition-reader/spr_neural_alignment.py"
       - ".github/workflows/spr-sphinx-voice-trial.yml"
   workflow_dispatch:
 
