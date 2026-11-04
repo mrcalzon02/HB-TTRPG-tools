@@ -496,7 +496,7 @@ class ApiTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256(raw).hexdigest(), record["sha256"])
 
     def test_committed_sphinx_audition_routes(self):
-        for name in ("bdo", "nowhere"):
+        for name in ("bdo", "nowhere", "bdo-long", "nowhere-long"):
             code, raw = self.req("GET", "/api/voice-preview/" + name)
             self.assertEqual(code, 200)
             self.assertEqual(raw[:4], b"RIFF")

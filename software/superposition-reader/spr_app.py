@@ -170,7 +170,9 @@ def make_handler(state: ReaderState):
                 if len(segments) == 3 and segments[:2] == ["api", "voice-preview"]:
                     name = {
                         "bdo": "sphinx-bdo-opening.wav",
-                        "nowhere": "sphinx-nowhere-opening.wav"
+                        "nowhere": "sphinx-nowhere-opening.wav",
+                        "bdo-long": "sphinx-bdo-full-passage.wav",
+                        "nowhere-long": "sphinx-nowhere-full-passage.wav"
                     }.get(segments[2])
                     if name is None:
                         return self._json({"error": "Unknown preview"}, 404)

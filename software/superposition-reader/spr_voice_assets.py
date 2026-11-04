@@ -1,8 +1,8 @@
-"""Release gate for the specific two real Sphinx narration demonstration WAVs.
+"""Release gate for four real Sphinx narration demonstrations.
 
-SHA-256 values were read from the passing independent faster-whisper English
-word-boundary QA trial (GitHub Actions 41745821792) and verified against the
-downloaded WAV bytes. Any changes to these files require a NEW real neural trial
+SHA-256 values are from passing independent English word-boundary neural QA
+trials (GitHub Actions 41745821792 and 41747503023). Both source-stored and
+portable-built bytes must match. Changes require a NEW real neural trial
 and an explicit update of these expected hashes; synthetic WAV tests alone do
 not authorize new preview recordings.
 """
@@ -12,7 +12,7 @@ import hashlib
 from pathlib import Path
 import wave
 
-VERIFIED_CI_RUN = "41745821792"
+VERIFIED_CI_RUNS = ("41745821792", "41747503023")
 VERIFIED_PREVIEWS = {
     "sphinx-bdo-opening.wav": {
         "sha256": "cb48505adbbd2694dd7f3b0bbaa46a3f14d1df914c88a105e3fee93d8a2bb8d8",
@@ -23,6 +23,16 @@ VERIFIED_PREVIEWS = {
         "sha256": "158b61e78f39f01a4cc1648820fbb21ac5b9f56e19fa798cbb53073d2e9bfea2",
         "first_words": "The first report",
         "duration_seconds": 6.981,
+    },
+    "sphinx-bdo-full-passage.wav": {
+        "sha256": "ff1cdca99f913dc7183605d27b94cda3334028062c81bcf62d616dac13ccf039",
+        "first_words": "The arch had",
+        "duration_seconds": 30.333,
+    },
+    "sphinx-nowhere-full-passage.wav": {
+        "sha256": "e72d1fbfb968d0f13ab701514416a6ac79560f94420b99667d5c68307fdb833f",
+        "first_words": "He had broken",
+        "duration_seconds": 36.199,
     },
 }
 

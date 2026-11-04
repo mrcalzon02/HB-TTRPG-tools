@@ -64,8 +64,9 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
       <input id="voiceSample" type="file" accept=".wav,.mp3,.flac,.ogg,.m4a,.zip">
       <p id="voiceArchiveStatus" class="small">Reference profiles are archived locally. Sphinx voice synthesis requires the optional neural runtime.</p>
       <label>Sphinx — verified neural voice previews</label>
-      <div class="row"><button id="hearBdo" title="Audition cloned Sphinx narrating Beneath Dappled Oaks">▶ Oaks</button><button id="hearNowhere" title="Audition cloned Sphinx narrating The Nowhere King">▶ Nowhere King</button></div>
-      <p class="small">These two WAV recordings were generated from your Sphinx sample by the offline LuxTTS model. Review the voice by ear; the rest of each book is not yet narrated.</p>
+      <div class="row"><button id="hearBdo" title="Audition corrected Sphinx opening for Beneath Dappled Oaks">▶ Oaks · short</button><button id="hearNowhere" title="Audition corrected Sphinx opening for The Nowhere King">▶ Nowhere · short</button></div>
+      <div class="row"><button id="hearBdoLong" title="Listen to verified 30-second Beneath Dappled Oaks narration">▶ Oaks · 30s</button><button id="hearNowhereLong" title="Listen to verified 36-second Nowhere King narration">▶ Nowhere · 36s</button></div>
+      <p class="small">These four local WAVs were generated using your Sphinx reference with independent speech-content verification. Opening words are intact; voice similarity still requires listening review. The full books have not yet been narrated.</p>
     </section>
     <section><h2>Generation</h2>
       <label for="engineSelect">Narration engine</label>
@@ -420,6 +421,8 @@ async function playVoicePreview(name){
 }
 $("hearBdo").addEventListener("click",()=>playVoicePreview("bdo"));
 $("hearNowhere").addEventListener("click",()=>playVoicePreview("nowhere"));
+$("hearBdoLong").addEventListener("click",()=>playVoicePreview("bdo-long"));
+$("hearNowhereLong").addEventListener("click",()=>playVoicePreview("nowhere-long"));
 $("createProfile").addEventListener("click",async()=>{
   const name=$("profileName").value.trim();
   if(!name){$("voiceArchiveStatus").textContent="Enter a name for the profile.";return;}
