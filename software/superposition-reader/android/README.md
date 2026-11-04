@@ -16,9 +16,17 @@ and not bundled copies of Google's proprietary voice data.
 - Android TTS range callbacks enable approximate word highlighting **only** if
   the engine provides timing; passage highlighting remains the fallback.
 - Source EPUB/TXT/MD/HTML/DOCX are imported using Android's document picker;
-  sources and reading progress are kept inside private app storage. No storage
-  permissions or INTERNET permission are requested. Text-layer PDF extraction,
-  M4B and Windows LuxTTS voice cloning are not yet ported.
+  extracted text and reading progress are kept inside private app storage.
+  No broad storage or INTERNET permission is requested.
+- A selected Android voice can generate a chapter using
+  TextToSpeech.synthesizeToFile(). Each successfully generated passage is
+  preserved in a private per-engine/voice/rate cache, so interrupted chapters
+  can resume without regenerating complete passages. Export uses Android's
+  system document picker and combines verified compatible PCM16 WAV segments
+  into one playable chapter WAV. Unsupported engine-specific formats report
+  an error rather than silently producing invalid audio.
+- Text-layer PDF extraction, M4B and Windows LuxTTS voice cloning are not yet
+  ported.
 - APK and Windows builds remain separate native targets under the same project.
   Imported EPUBs can be moved between platforms; installed Android voice
   models cannot be copied into the Windows application.

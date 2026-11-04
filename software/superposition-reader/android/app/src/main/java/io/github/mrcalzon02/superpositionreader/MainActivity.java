@@ -688,7 +688,7 @@ public final class MainActivity extends Activity {
             return;
         }
         File target=NarrationCache.segment(renderFolder,renderIndex);
-        File temporary=new File(renderFolder,target.getName()+".partial");
+        File temporary=new File(renderFolder,target.getName()+".partial.wav");
         if(temporary.exists())temporary.delete();
         activeRenderId="spr-render-"+System.nanoTime();
         int result=tts.synthesizeToFile(renderBook.passages.get(renderIndex),
@@ -703,9 +703,13 @@ public final class MainActivity extends Activity {
     }
     private void completedRenderSegment(){
         File target=NarrationCache.segment(renderFolder,renderIndex);
-        File temporary=new File(renderFolder,target.getName()+".partial");
+        File temporary=new File(renderFolder,target.getName()+".partial.wav");
         if(!WavAssembler.isValid(temporary)){
             cancelRender("Engine did not produce valid PCM16 WAV audio for passage "+(renderIndex+1));
+            return;
+        }
+        if(target.exists()&&!target.delete()){
+            cancelRender("Cannot replace corrupted cached narration.");
             return;
         }
         if(!temporary.renameTo(target)){

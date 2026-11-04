@@ -78,13 +78,13 @@ GBA, GBB, GBC, GBD, and GBG **when those voices are actually available**.
 It uses `TextToSpeech.getVoices()`/`setVoice()`, not Windows SAPI or Speech
 Central, and does not extract or redistribute proprietary Google TTS voice files.
 
-Android reads local EPUB, TXT, Markdown, HTML, and DOCX through the Android
-document picker. It provides chapter navigation, passage-level reading,
-engine-reported read-along range highlighting, and private progress storage.
+Android reads local EPUB, TXT, Markdown, HTML and DOCX through the Android
+document picker. It provides chapter navigation, engine-reported read-along
+range highlighting, private progress storage, cached per-passage Android TTS
+generation, resumable chapter rendering and continuous chapter WAV export.
 The Android build carries the same four canonical story EPUBs as the Windows
-reader, with matching source-based book IDs. PDF text extraction, Windows
-neural model support on Android, and Android audiobook batch export are not
-yet implemented. The native UI and engine setup are separate from Windows
+reader, with matching source-based book IDs. PDF text extraction, M4B and
+Windows-specific LuxTTS voice cloning are not yet ported. The native UI and engine setup are separate from Windows
 rather than scaled-down desktop controls.
 
 The [Android TTS APK workflow](../../.github/workflows/spr-android-tts.yml)
