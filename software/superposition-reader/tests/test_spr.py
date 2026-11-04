@@ -818,6 +818,18 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(set(record["audio"]),
                          {str(i) for i in range(chapter["start"], chapter["end"])})
 
+    def test_audio_generation_refuses_to_run_during_neural_install(self):
+        state = ReaderState(Archive(pathlib.Path(self.tmp.name) / "setup-queue"),
+                            FakeEngine())
+        class RunningSetup:
+            def status(self):
+                return {"active": True}
+        state.neural_setup = RunningSetup()
+        record = state.archive.import_document("sample.txt", b"Never run during setup.")
+        with self.assertRaisesRegex(RuntimeError, "setup is running"):
+            state.start_generation(record["id"], [0], "", 0)
+        self.assertFalse(state.status()["active"])
+
     def test_neural_setup_get_is_safe_when_not_configured(self):
         code, details = self.req("GET", "/api/neural-setup")
         self.assertEqual(code, 200)

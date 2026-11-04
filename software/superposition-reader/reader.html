@@ -285,7 +285,7 @@ function updateButtons(){
   $("play").disabled=!has;
   $("previous").disabled=!has||active===0;
   $("next").disabled=!has||active>=book.chunks.length-1;
-  $("generate").disabled=!has||workBusy||engineId==="unavailable";
+  $("generate").disabled=!has||workBusy||neuralSetupBusy||engineId==="unavailable";
   $("chapterFrom").disabled=!has||workBusy;
   $("chapterThrough").disabled=!has||workBusy;
   $("cancel").disabled=!workBusy;
@@ -493,6 +493,7 @@ async function pollNeuralSetup(){
   const previouslyInstalling=neuralSetupStage==="installing";
   neuralSetupStage=info.stage;
   neuralSetupBusy=!!info.active;
+  updateButtons();
   $("neuralInstall").disabled=!info.supported||info.active||workBusy;
   $("neuralInstallMode").disabled=!info.supported||info.active;
   $("neuralSetupStatus").textContent=!info.supported

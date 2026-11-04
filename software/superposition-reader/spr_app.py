@@ -54,6 +54,8 @@ class ReaderState:
     def start_generation(self, book_id: str, indices: list[int], voice: str, rate: int,
                          priority: bool = False, engine_key: str = "sapi") -> dict:
         """Queue book chunks; allow read-ahead clicks to interrupt queue ORDER, not synthesis."""
+        if self.neural_setup and self.neural_setup.status()["active"]:
+            raise RuntimeError("Neural setup is running; finish installation before narration")
         engine = self.engines.get(engine_key)
         if engine is None:
             raise RuntimeError("Selected offline voice engine is not available")
@@ -280,6 +282,8 @@ def make_handler(state: ReaderState):
                 if path == "/api/neural-setup":
                     if state.neural_setup is None:
                         raise RuntimeError("Neural setup is unavailable in this host")
+                    if state.status()["active"]:
+                        raise RuntimeError("Finish or cancel narration before installing neural dependencies")
                     return self._json(state.neural_setup.start(
                         cpu_only=request.get("cpu_only", False)), 202)
                 if path == "/api/cancel":
