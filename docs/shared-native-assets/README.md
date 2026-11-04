@@ -1,8 +1,8 @@
 # Reusable native-game texture and model sources
 
-**Repository-wide discovery, source-stage implemented 2026-11-04.** This index links nine curated files in [ReverieVR](https://github.com/mrcalzon02/ReverieVR) without copying binaries into the Home Brew Table Top website repository. Current shared source commit: `c27c7337a05db83fa296e9a19617fa95f2fc8a3e` (immutable). The source registry is `shared-assets/catalog-v1.json` at that commit; the HB index is `data/shared-native-assets/reverievr-v1.json`.
+**Repository-wide discovery, source-stage implemented 2026-11-04.** This index links nineteen curated files in [ReverieVR](https://github.com/mrcalzon02/ReverieVR) without copying binaries into the Home Brew Table Top website repository. Current shared source commit: `ecd63ee28da0d03b6cc77758451c92544248e1c7` (immutable). The source registry is `shared-assets/catalog-v1.json` at that commit; the HB index is `data/shared-native-assets/reverievr-v1.json`.
 
-ReverieVR's single APK includes one instance of six small coastal-defense PNG material textures and three compact BWM1 prop models in `native/shared/v1/`. Breakwater uses all nine; Omega Front now references the same concrete and steel material bytes. The shared-source Git tree removed old duplicate source files, with **14,834 bytes uncompressed** eliminated from two obsolete Omega PNGs. Actual compressed APK size and Galaxy S9 performance remain unverified.
+ReverieVR's single APK includes one instance of sixteen compact coastal-defense PNG material textures and three compact BWM1 prop models in `native/shared/v1/`. Breakwater uses all nineteen; Omega Front now references the same concrete and steel material bytes. The shared-source Git tree removed old duplicate source files, with **14,834 bytes uncompressed** eliminated from two obsolete Omega PNGs. Actual compressed APK size and Galaxy S9 performance remain unverified.
 
 ## Import into another internal game project
 
@@ -23,4 +23,10 @@ This is **build-time selective sourcing**, not a CDN, in-game asset store, share
 
 ## Licensing and upgrade rules
 
-Owner-directed generated textures are available for the user's own native projects. Purchased Beckenburg/PSX Mega Pack derivatives retain the applicable original pack's restrictions; do **not** assume CC0 or publish the raw model library as freely reusable. Record the originating asset ID and immutable commit in each consuming project. Upgrade to v2 by adding new paths/IDs, not mutating the pinned v1 binary payload. Run a genuine target build after staging, and never delete a locally modified asset automatically.
+Owner-directed generated textures are available for the user's own native projects. Purchased Beckenburg/PSX Mega Pack derivatives retain the applicable original pack's restrictions; do **not** assume CC0 or publish the raw model library as freely reusable. Record the originating asset ID and immutable commit in each consuming project. Keep existing v1 binary blobs immutable and append reviewed IDs with a new pinned commit; use a v2 path only when file formats or meanings change. Run a genuine target build after staging, and never delete a locally modified asset automatically.
+
+## Breakwater generated material expansion (2026-11-04)
+
+Ten additional 64×64, 64-color indexed PNGs are now discoverable: `coastal.dock_planks`, `coastal.mossy_seawall`, `coastal.corrugated_roof`, `coastal.camo_netting`, `coastal.diamond_plate`, `coastal.trench_soil`, `coastal.reinforced_concrete`, `coastal.crate_planks`, `coastal.riveted_bulkhead`, `coastal.pebble_ground`. Their 33,396 source bytes are committed as ten independently verified Git blobs in ReverieVR, while the six previous tiles are untouched. The active Breakwater native atlas packs all 16 into 128×768 RGBA8 after bounded one-time decode; its bunker and 3D coast place each new tile where it belongs. Three BWM1 prop files are separately cataloged and retain owner-rights review.
+
+High-resolution generated reference images and game-ready sources are preserved outside the APK in [Breakwater Shared Material Sources](https://drive.google.com/drive/folders/1Z_vqO-jRM6KVkEXkqpEAlnmPRhwi51fO). These 19 entries remain *source-stage available* to other games; the importer does not prove 3D rendering or runtime byte deduplication across independent installed APKs. The built Android game and S9 visual/performance acceptance are tracked separately in ReverieVR.

@@ -3,9 +3,9 @@
   "updated": "2026-11-04",
   "source": {
     "repository": "mrcalzon02/ReverieVR",
-    "commit": "c27c7337a05db83fa296e9a19617fa95f2fc8a3e",
+    "commit": "ecd63ee28da0d03b6cc77758451c92544248e1c7",
     "manifest_path": "shared-assets/catalog-v1.json",
-    "manifest_git_blob_sha1": "2f15dc53807069608b46777f21c6c83e9f432748",
+    "manifest_git_blob_sha1": "dd6e9aa61f9f2fbe2872c637bac338acb929cf6f",
     "policy": "linked source only; no binary asset copy in HB-TTRPG-tools"
   },
   "delivery": {
@@ -159,6 +159,256 @@
       "active_reverievr_consumers": [
         "breakwater-battery"
       ]
+    },
+    {
+      "id": "coastal.dock_planks",
+      "kind": "image/png",
+      "source_path": "app/src/main/assets/native/shared/v1/materials/coastal/dock_planks.png",
+      "runtime_path": "native/shared/v1/materials/coastal/dock_planks.png",
+      "git_blob_sha1": "00571c519d5ece872da7a342d775b6e975e88181",
+      "sha256": "a44c5fd4a431557fb63cad819d2ac3cf224566c35fa9e2c0c6876e1b62b9331a",
+      "size_bytes": 3299,
+      "dimensions": [
+        64,
+        64
+      ],
+      "rights": "owner-directed generated artwork; approved for reuse in owner's internal games",
+      "license_gate": "owner_generated",
+      "allowable_consumers": [
+        "breakwater-battery",
+        "omega-front",
+        "between-deliveries-red-ledger",
+        "procedural-test-chamber"
+      ],
+      "active_reverievr_consumers": [
+        "breakwater-battery"
+      ],
+      "generated_image_source": "weathered_pixel_art_dock_planks.png"
+    },
+    {
+      "id": "coastal.mossy_seawall",
+      "kind": "image/png",
+      "source_path": "app/src/main/assets/native/shared/v1/materials/coastal/mossy_seawall.png",
+      "runtime_path": "native/shared/v1/materials/coastal/mossy_seawall.png",
+      "git_blob_sha1": "e3abcdeb3be11ae7f82a6e4fba9b68010815693e",
+      "sha256": "522acf9e38c4faf8196e24cebabf151b6984518a5cb26858c04d728fc0877a73",
+      "size_bytes": 3325,
+      "dimensions": [
+        64,
+        64
+      ],
+      "rights": "owner-directed generated artwork; approved for reuse in owner's internal games",
+      "license_gate": "owner_generated",
+      "allowable_consumers": [
+        "breakwater-battery",
+        "omega-front",
+        "between-deliveries-red-ledger",
+        "procedural-test-chamber"
+      ],
+      "active_reverievr_consumers": [
+        "breakwater-battery"
+      ],
+      "generated_image_source": "mossy_pixel_art_seawall_texture.png"
+    },
+    {
+      "id": "coastal.corrugated_roof",
+      "kind": "image/png",
+      "source_path": "app/src/main/assets/native/shared/v1/materials/coastal/corrugated_roof.png",
+      "runtime_path": "native/shared/v1/materials/coastal/corrugated_roof.png",
+      "git_blob_sha1": "1a01c30b7b1e68d1f5c2a27d5aed8b244055a446",
+      "sha256": "19b08cdac1940e2381cdc38a3a063ed4ad8b816c9756630c1d76c4f753aafc0c",
+      "size_bytes": 3307,
+      "dimensions": [
+        64,
+        64
+      ],
+      "rights": "owner-directed generated artwork; approved for reuse in owner's internal games",
+      "license_gate": "owner_generated",
+      "allowable_consumers": [
+        "breakwater-battery",
+        "omega-front",
+        "between-deliveries-red-ledger",
+        "procedural-test-chamber"
+      ],
+      "active_reverievr_consumers": [
+        "breakwater-battery"
+      ],
+      "generated_image_source": "seamless_rusty_bunker_roof_metal.png"
+    },
+    {
+      "id": "coastal.camo_netting",
+      "kind": "image/png",
+      "source_path": "app/src/main/assets/native/shared/v1/materials/coastal/camo_netting.png",
+      "runtime_path": "native/shared/v1/materials/coastal/camo_netting.png",
+      "git_blob_sha1": "9360dc3a7cd0630150386eac94cb1190559f1f87",
+      "sha256": "7d8abaad801915a0dc6c328d17290e1aab9c38aa62cd7381b5e86e9eecd95706",
+      "size_bytes": 3403,
+      "dimensions": [
+        64,
+        64
+      ],
+      "rights": "owner-directed generated artwork; approved for reuse in owner's internal games",
+      "license_gate": "owner_generated",
+      "allowable_consumers": [
+        "breakwater-battery",
+        "omega-front",
+        "between-deliveries-red-ledger",
+        "procedural-test-chamber"
+      ],
+      "active_reverievr_consumers": [
+        "breakwater-battery"
+      ],
+      "generated_image_source": "pixel_art_olive_drab_camo_netting.png"
+    },
+    {
+      "id": "coastal.diamond_plate",
+      "kind": "image/png",
+      "source_path": "app/src/main/assets/native/shared/v1/materials/coastal/diamond_plate.png",
+      "runtime_path": "native/shared/v1/materials/coastal/diamond_plate.png",
+      "git_blob_sha1": "d500c6ebdb5fa2051648af17f8a07b8110b4a67a",
+      "sha256": "39f209f4d73018aad877b41303a636019d9107c472f0281bed3cf186744d1ba2",
+      "size_bytes": 3386,
+      "dimensions": [
+        64,
+        64
+      ],
+      "rights": "owner-directed generated artwork; approved for reuse in owner's internal games",
+      "license_gate": "owner_generated",
+      "allowable_consumers": [
+        "breakwater-battery",
+        "omega-front",
+        "between-deliveries-red-ledger",
+        "procedural-test-chamber"
+      ],
+      "active_reverievr_consumers": [
+        "breakwater-battery"
+      ],
+      "generated_image_source": "worn_rusted_steel_diamond_plate.png"
+    },
+    {
+      "id": "coastal.trench_soil",
+      "kind": "image/png",
+      "source_path": "app/src/main/assets/native/shared/v1/materials/coastal/trench_soil.png",
+      "runtime_path": "native/shared/v1/materials/coastal/trench_soil.png",
+      "git_blob_sha1": "b2cd0a4421215ac38fba8748e3539c25780c7e2f",
+      "sha256": "70813361a0bec73353710b452737974175326be80e62234db0dd359613f3efd6",
+      "size_bytes": 3322,
+      "dimensions": [
+        64,
+        64
+      ],
+      "rights": "owner-directed generated artwork; approved for reuse in owner's internal games",
+      "license_gate": "owner_generated",
+      "allowable_consumers": [
+        "breakwater-battery",
+        "omega-front",
+        "between-deliveries-red-ledger",
+        "procedural-test-chamber"
+      ],
+      "active_reverievr_consumers": [
+        "breakwater-battery"
+      ],
+      "generated_image_source": "damp_trench_soil_texture_tile.png"
+    },
+    {
+      "id": "coastal.reinforced_concrete",
+      "kind": "image/png",
+      "source_path": "app/src/main/assets/native/shared/v1/materials/coastal/reinforced_concrete.png",
+      "runtime_path": "native/shared/v1/materials/coastal/reinforced_concrete.png",
+      "git_blob_sha1": "2da58a515b2c5adfe7e01dd07cfd4f076c771632",
+      "sha256": "085921570803decdee0e9884705284985ca4465485c72081eb89ce15a81377f9",
+      "size_bytes": 3355,
+      "dimensions": [
+        64,
+        64
+      ],
+      "rights": "owner-directed generated artwork; approved for reuse in owner's internal games",
+      "license_gate": "owner_generated",
+      "allowable_consumers": [
+        "breakwater-battery",
+        "omega-front",
+        "between-deliveries-red-ledger",
+        "procedural-test-chamber"
+      ],
+      "active_reverievr_consumers": [
+        "breakwater-battery"
+      ],
+      "generated_image_source": "weathered_bunker_concrete_texture.png"
+    },
+    {
+      "id": "coastal.crate_planks",
+      "kind": "image/png",
+      "source_path": "app/src/main/assets/native/shared/v1/materials/coastal/crate_planks.png",
+      "runtime_path": "native/shared/v1/materials/coastal/crate_planks.png",
+      "git_blob_sha1": "1704d6e300f943bd167370f9778737f1af1f7e44",
+      "sha256": "1d7c7f8a2584a8b773492703209d8979f2774d757036220facb08bc035fa5f07",
+      "size_bytes": 3306,
+      "dimensions": [
+        64,
+        64
+      ],
+      "rights": "owner-directed generated artwork; approved for reuse in owner's internal games",
+      "license_gate": "owner_generated",
+      "allowable_consumers": [
+        "breakwater-battery",
+        "omega-front",
+        "between-deliveries-red-ledger",
+        "procedural-test-chamber"
+      ],
+      "active_reverievr_consumers": [
+        "breakwater-battery"
+      ],
+      "generated_image_source": "weathered_coastal_crate_planks.png"
+    },
+    {
+      "id": "coastal.riveted_bulkhead",
+      "kind": "image/png",
+      "source_path": "app/src/main/assets/native/shared/v1/materials/coastal/riveted_bulkhead.png",
+      "runtime_path": "native/shared/v1/materials/coastal/riveted_bulkhead.png",
+      "git_blob_sha1": "7213c7bc1c0808915d631ce6f6efe9067e421063",
+      "sha256": "6d8a0278f5ec18cffdf2bd7901b6d8579b86fd6a507f08ea09610e6cde82a6e0",
+      "size_bytes": 3291,
+      "dimensions": [
+        64,
+        64
+      ],
+      "rights": "owner-directed generated artwork; approved for reuse in owner's internal games",
+      "license_gate": "owner_generated",
+      "allowable_consumers": [
+        "breakwater-battery",
+        "omega-front",
+        "between-deliveries-red-ledger",
+        "procedural-test-chamber"
+      ],
+      "active_reverievr_consumers": [
+        "breakwater-battery"
+      ],
+      "generated_image_source": "riveted_rusted_bunker_bulkhead_texture.png"
+    },
+    {
+      "id": "coastal.pebble_ground",
+      "kind": "image/png",
+      "source_path": "app/src/main/assets/native/shared/v1/materials/coastal/pebble_ground.png",
+      "runtime_path": "native/shared/v1/materials/coastal/pebble_ground.png",
+      "git_blob_sha1": "02296ec2868b2aa757f7bb3149d5b38dbcc9dd89",
+      "sha256": "95f2d4bf502d1635f3f2aae0c4199de86cdeda2435cadab9a214f361ed050d04",
+      "size_bytes": 3402,
+      "dimensions": [
+        64,
+        64
+      ],
+      "rights": "owner-directed generated artwork; approved for reuse in owner's internal games",
+      "license_gate": "owner_generated",
+      "allowable_consumers": [
+        "breakwater-battery",
+        "omega-front",
+        "between-deliveries-red-ledger",
+        "procedural-test-chamber"
+      ],
+      "active_reverievr_consumers": [
+        "breakwater-battery"
+      ],
+      "generated_image_source": "seamless_gritty_coastal_pebble_ground.png"
     },
     {
       "id": "psx.concrete_block_1",
