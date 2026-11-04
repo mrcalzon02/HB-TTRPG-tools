@@ -91,6 +91,13 @@ def trim_guarded_audio(audio, sample_rate: int, expected: str, recognition: dict
     from math import isfinite
     target = words(expected)
     heard = recognition_words(recognition)
+    duration = len(audio) / sample_rate
+    if len(heard) > max(18, int(duration * 6)):
+        raise ValueError("ASR hallucinated more words than the audio duration permits")
+    for _, start, end in timed_words(recognition):
+        if (start is not None and start > duration + 0.35 or
+                end is not None and end > duration + 0.35):
+            raise ValueError("ASR word timestamps exceed the actual WAV duration")
     passed, score = is_complete(expected, str(recognition.get("text", "")),
                                 guarded=True, guard_phrase=guard_phrase)
     if not passed:
