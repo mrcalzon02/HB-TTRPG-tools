@@ -34,7 +34,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu
           git clone --depth 1 https://github.com/ysharma3501/LuxTTS.git "$RUNNER_TEMP/luxtts"
-          python -m pip install -r "$RUNNER_TEMP/luxtts/requirements.txt" soundfile
+          python -m pip install -r "$RUNNER_TEMP/luxtts/requirements.txt" soundfile faster-whisper scipy
           PYTHONPATH="$RUNNER_TEMP/luxtts:software/superposition-reader" python -c "from zipvoice.luxvoice import LuxTTS; print('LuxTTS import passed')"
       - name: Clone Sphinx voice and narrate real approved story sentences
         shell: bash
