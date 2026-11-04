@@ -86,7 +86,7 @@
           art.prepend(make("span","sc-fallback",p.name));
         },{once:true});
         art.append(im);
-        art.append(make("span","sc-art-label",p.previewLocal ? "Actual running-game menu capture" : (p.art || "Repository artwork"));
+        art.append(make("span","sc-art-label",p.previewLocal ? "Actual running-game menu capture" : (p.art || "Repository artwork")));
       } else {
         art.append(make("span","sc-fallback",p.name));
         art.append(make("span","sc-art-label","No screenshot claimed"));
