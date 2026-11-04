@@ -23,6 +23,8 @@ from spr_voices import VoiceLibrary
 from spr_voicebox import VoiceboxEngine
 from spr_bootstrap import seed_examples
 from spr_luxtts_engine import SprLuxEngine
+from spr_neural_setup import NeuralSetup
+from spr_narrate import chapter_plan
 from spr_voice_assets import verify_previews
 
 from spr_core import Archive, MAX_DOCUMENT_BYTES, WindowsSapiEngine
@@ -47,6 +49,7 @@ class ReaderState:
         self.job = {"active": False, "done": 0, "total": 0, "error": "", "cancelled": False}
         self.pending = []
         self.working_index = None
+        self.neural_setup = None
 
     def start_generation(self, book_id: str, indices: list[int], voice: str, rate: int,
                          priority: bool = False, engine_key: str = "sapi") -> dict:
@@ -205,6 +208,10 @@ def make_handler(state: ReaderState):
                     return self._json(local)
                 if segments == ["api", "job"]:
                     return self._json(state.status())
+                if segments == ["api", "neural-setup"]:
+                    return self._json(state.neural_setup.status() if state.neural_setup
+                                      else {"active": False, "supported": False,
+                                            "installed": False, "stage": "unavailable", "error": ""})
                 if len(segments) == 3 and segments[:2] == ["api", "book"]:
                     record = state.archive.load(segments[2])
                     record["position"] = state.archive.read_position(segments[2])
@@ -252,9 +259,17 @@ def make_handler(state: ReaderState):
                     return self._json({"id": record["id"], "chunks": len(record["chunks"])}, 201)
                 if path == "/api/generate":
                     book_id = request["book_id"]
-                    manifest = state.archive.load(book_id)
-                    indices = (list(range(len(manifest["chunks"]))) if request.get("index") is None
-                               else [int(request["index"])])
+                    if request.get("index") is not None:
+                        if "chapter_from" in request or "chapter_through" in request:
+                            raise ValueError("Choose one passage or a chapter range, not both")
+                        indices = [int(request["index"])]
+                    else:
+                        plan = chapter_plan(
+                            state.archive, book_id,
+                            first=int(request.get("chapter_from", 1)),
+                            last=(int(request["chapter_through"])
+                                  if request.get("chapter_through") is not None else None))
+                        indices = list(range(plan["chunk_from"], plan["chunk_through"]))
                     voice = str(request.get("voice", ""))[:180]
                     rate = int(request.get("rate", 0))
                     if not -10 <= rate <= 10:
@@ -262,6 +277,11 @@ def make_handler(state: ReaderState):
                     return self._json(state.start_generation(
                         book_id, indices, voice, rate, priority=bool(request.get("priority", False)),
                         engine_key=str(request.get("engine_key", "sapi"))), 202)
+                if path == "/api/neural-setup":
+                    if state.neural_setup is None:
+                        raise RuntimeError("Neural setup is unavailable in this host")
+                    return self._json(state.neural_setup.start(
+                        cpu_only=request.get("cpu_only", False)), 202)
                 if path == "/api/cancel":
                     state.cancel.set()
                     return self._json({"cancel_requested": True})
@@ -334,6 +354,9 @@ def launch():
         voicebox["spr-lux"] = own_lux
     state = ReaderState(archive, engine, additional_engines=voicebox,
                         bootstrap=bootstrap)
+    state.neural_setup = NeuralSetup(
+        archive.root, ROOT / "install-neural-windows.ps1", own_lux,
+        on_ready=lambda: state.engines.__setitem__("spr-lux", own_lux))
     server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(state))
     server.daemon_threads = True
     url = f"http://127.0.0.1:{server.server_port}/"
