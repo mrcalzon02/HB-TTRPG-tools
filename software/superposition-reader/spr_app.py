@@ -23,6 +23,7 @@ from spr_voices import VoiceLibrary
 from spr_voicebox import VoiceboxEngine
 from spr_bootstrap import seed_examples
 from spr_luxtts_engine import SprLuxEngine
+from spr_voice_assets import verify_previews
 
 from spr_core import Archive, MAX_DOCUMENT_BYTES, WindowsSapiEngine
 
@@ -287,11 +288,8 @@ def self_check(report_path: str = "", require_examples: bool = False) -> int:
                 bootstrap = seed_examples(archive, ROOT)
                 checks["bundled_books"] = len(bootstrap["books_imported"]) == 4
                 checks["sphinx_sample"] = bootstrap["voice_samples"] >= 1
-                for sample in ("sphinx-bdo-opening.wav", "sphinx-nowhere-opening.wav"):
-                    audio = ROOT / "assets" / "voice" / sample
-                    with wave.open(str(audio), "rb") as wav:
-                        checks[sample] = (wav.getframerate() == 48000 and wav.getnchannels() == 1
-                                          and wav.getsampwidth() == 2 and wav.getnframes() > 48000)
+                checks.update({"verified_" + name: valid
+                               for name, valid in verify_previews(ROOT).items()})
                 if bootstrap["warnings"]:
                     raise RuntimeError("Bundled examples: " + "; ".join(bootstrap["warnings"]))
     except Exception as exc:
