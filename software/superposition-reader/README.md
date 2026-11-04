@@ -69,6 +69,24 @@ Run the optional neural installer in the source checkout with:
 
 For CPU-only model setup, append -CpuOnly. Running this script is explicit and is not necessary to read the example ebooks or audition the bundled completed WAVs.
 
+## Headless long-book narration (source Python installation)
+
+The same private audio cache is available without opening the reader GUI.
+Narration processes passages sequentially and reuses successfully completed
+segments after a restart, provided the chosen voice/engine/rate match. The
+independent Sphinx LuxTTS runtime still must be explicitly installed locally.
+
+    python software/superposition-reader/spr_narrate.py --list
+    python software/superposition-reader/spr_narrate.py --import-file path/to/book.epub --dry-run
+    python software/superposition-reader/spr_narrate.py --book-id BOOK_ID --engine spr-lux --chapter-from 1 --chapter-through 3
+    python software/superposition-reader/spr_narrate.py --book-id BOOK_ID --engine spr-lux --export-chapters
+
+Chapter numbers correspond to actual EPUB spine sections, or one whole-document
+chapter for other formats. `--voice-id` overrides the archived default Sphinx
+profile. `--export-chapters` only succeeds after **every** passage in the
+book is cached for the same voice, engine and rate. This source-Python CLI is
+not yet a separate tool in the portable GUI ZIP. It makes no cloud speech calls.
+
 ## Tests
 
 From the repository root:
