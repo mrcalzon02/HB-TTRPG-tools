@@ -159,7 +159,7 @@ function applyEngine(key, voice=""){
   $("voiceboxProfileId").value="";
   $("sapiRate").disabled=neural||workBusy;
   $("voice").replaceChildren();
-  const voices=neural?(engine.profiles||[]):windowsVoices.map(name=>({id:name,name}));
+  const voices=neural?[...(engine.profiles||[])]:windowsVoices.map(name=>({id:name,name}));
   if(!neural){voices.unshift({id:"",name:"System default"});}
   else{voices.unshift({id:"",name:"Select an existing profile"});}
   for(const item of voices){
