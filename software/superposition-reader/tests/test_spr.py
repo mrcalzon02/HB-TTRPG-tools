@@ -92,6 +92,35 @@ class ArchiveTests(unittest.TestCase):
         self.assertEqual(len(self.engine.calls), 2)
         self.assertTrue(self.archive.audio_file(book_id, 0).is_file())
 
+    def test_entire_long_document_wav_export_survives_interrupted_generation(self):
+        # A complete 20k+ character book-style document follows the passage
+        # pipeline, instead of the tiny two-sentence unit-test route.
+        paragraphs = [
+            ("Chapter segment " + str(i) + ". "
+             + ("The quiet woods held an entire remembered history of travelers and voices. " * 5))
+            for i in range(58)
+        ]
+        story = "\n\n".join(paragraphs)
+        self.assertGreater(len(story), 18000)
+        book = self.archive.import_document("whole-novel.txt", story.encode())
+        self.assertEqual(book["segment_mode"], "passage")
+        self.assertGreaterEqual(len(book["chunks"]), 58)
+        middle = len(book["chunks"]) // 2
+        for i in range(middle):
+            self.assertTrue(self.archive.generate_chunk(book["id"], i, self.engine, voice="Narrator A"))
+        with self.assertRaisesRegex(ValueError, "Finish generating"):
+            self.archive.export_wav(book["id"])
+        reopened = Archive(self.archive.root)
+        self.assertEqual(len(reopened.load(book["id"])["audio"]), middle)
+        for i in range(len(book["chunks"])):
+            generated = reopened.generate_chunk(book["id"], i, self.engine, voice="Narrator A")
+            self.assertEqual(generated, i >= middle)
+        self.assertEqual(len(self.engine.calls), len(book["chunks"]))
+        wav_file = reopened.export_wav(book["id"])
+        with wave.open(str(wav_file), "rb") as output:
+            self.assertEqual(output.getframerate(), 8000)
+            self.assertEqual(output.getnframes(), 800 * len(book["chunks"]))
+
     def test_complete_book_wav_assembly(self):
         book = self.archive.import_document("story.txt", b"One. Two. Three.")
         for i in range(3):
