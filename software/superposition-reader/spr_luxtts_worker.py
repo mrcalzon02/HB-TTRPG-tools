@@ -96,7 +96,7 @@ class LuxEngine:
                 prepared = prepare_reference(reference, Path(tmp))
                 with contextlib.redirect_stdout(sys.stderr):
                     self.prompt_cache[key] = self.model.encode_prompt(str(prepared), rms=0.01)
-        from spr_neural_alignment import is_complete, trim_guarded_audio
+        from spr_neural_alignment import is_complete, trim_guarded_audio, verified_word_cues
         start = time.monotonic()
         # A sacrificial spoken pre-roll protects the wanted first phoneme. The
         # old implementation just padded a clipped waveform with silence.
@@ -164,7 +164,9 @@ class LuxEngine:
                     if not passed:
                         continue
                     accepted = {"frames": len(trimmed), "array": trimmed,
-                                "qa": diagnostics[-1]}
+                                "qa": diagnostics[-1],
+                                "word_cues": verified_word_cues(
+                                    text, verified, len(trimmed) / 48000)}
                     break
                 except (ValueError, OSError, RuntimeError, TypeError, KeyError) as error:
                     diagnostics.append({
@@ -193,6 +195,7 @@ class LuxEngine:
                 "elapsed_seconds": round(time.monotonic() - start, 2),
                 "device": self.device, "model": self.model_name,
                 "reference_sha256": key, "qa": accepted["qa"],
+                "word_cues": accepted["word_cues"],
                 "audio_sha256": hashlib.sha256(output.read_bytes()).hexdigest()}
 
 

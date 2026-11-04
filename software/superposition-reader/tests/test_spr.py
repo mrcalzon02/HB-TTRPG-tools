@@ -22,7 +22,7 @@ from spr_core import Archive, sentence_chunks, passage_chunks, extract_text
 from spr_app import ReaderState, make_handler
 from spr_voices import VoiceLibrary
 from spr_voicebox import VoiceboxEngine
-from spr_neural_alignment import is_complete, trim_guarded_audio
+from spr_neural_alignment import is_complete, trim_guarded_audio, verified_word_cues
 from spr_voice_assets import VERIFIED_PREVIEWS, verify_previews
 from http.server import ThreadingHTTPServer
 
@@ -120,6 +120,29 @@ class ArchiveTests(unittest.TestCase):
         with wave.open(str(wav_file), "rb") as output:
             self.assertEqual(output.getframerate(), 8000)
             self.assertEqual(output.getnframes(), 800 * len(book["chunks"]))
+
+    def test_verified_word_cues_persist_and_reject_invalid_timings(self):
+        class TimedEngine(FakeEngine):
+            def synthesize(self, text, target, voice="", rate=0):
+                super().synthesize(text, target, voice=voice, rate=rate)
+                if voice == "valid":
+                    return {"word_cues": [
+                        {"char_start": 0, "char_end": 5, "start": .01, "end": .04},
+                        {"char_start": 6, "char_end": 11, "start": .045, "end": .08}]}
+                return {"word_cues": [
+                    {"char_start": 0, "char_end": 5, "start": .01, "end": 99.0}]}
+
+        book = self.archive.import_document("cues.txt", b"Hello world.")
+        engine = TimedEngine()
+        self.assertTrue(self.archive.generate_chunk(book["id"], 0, engine, "valid"))
+        cues = Archive(self.archive.root).load(book["id"])["audio"]["0"]["word_cues"]
+        self.assertEqual([(c["char_start"], c["char_end"]) for c in cues],
+                         [(0, 5), (6, 11)])
+        self.assertFalse(self.archive.generate_chunk(book["id"], 0, engine, "valid"))
+        self.assertEqual(len(engine.calls), 1)
+        self.assertTrue(self.archive.generate_chunk(book["id"], 0, engine, "invalid"))
+        self.assertNotIn("word_cues", self.archive.load(book["id"])["audio"]["0"])
+        self.assertTrue(self.archive.export_wav(book["id"]).is_file())
 
     def test_complete_book_wav_assembly(self):
         book = self.archive.import_document("story.txt", b"One. Two. Three.")
@@ -380,6 +403,37 @@ class NeuralOpeningTests(unittest.TestCase):
                                        ("have", [1.5, 1.6])]]}
         with self.assertRaisesRegex(ValueError, "too close"):
             trim_guarded_audio([0.0] * 4000, 1000, expected, bad)
+
+
+class WordCueTests(unittest.TestCase):
+    def test_neural_asr_word_offsets_preserve_original_text_and_times(self):
+        text = "The king's crown returns."
+        recognized = {"text": "The kings crown returns",
+                      "chunks": [
+                          {"text": "The", "timestamp": [0.06, 0.24]},
+                          {"text": "kings", "timestamp": [0.25, 0.51]},
+                          {"text": "crown", "timestamp": [0.55, 0.83]},
+                          {"text": "returns", "timestamp": [0.88, 1.27]}]}
+        cues = verified_word_cues(text, recognized, 1.5)
+        self.assertEqual([text[c["char_start"]:c["char_end"]] for c in cues],
+                         ["The", "king's", "crown", "returns"])
+        self.assertEqual(cues[0]["start"], .06)
+        self.assertEqual(cues[-1]["end"], 1.27)
+
+    def test_unmatched_or_badly_timed_words_are_not_invented(self):
+        text = "The first report arrived"
+        recognized = {"text": "The furst report arrived",
+                      "chunks": [
+                          {"text": "The", "timestamp": [.01, .18]},
+                          {"text": "furst", "timestamp": [.2, .39]},
+                          {"text": "report", "timestamp": [.4, .70]},
+                          {"text": "arrived", "timestamp": [.72, 1.02]}]}
+        cues = verified_word_cues(text, recognized, 1.2)
+        self.assertEqual([text[c["char_start"]:c["char_end"]] for c in cues],
+                         ["The", "report", "arrived"])
+        recognized["chunks"][2]["timestamp"] = [50, 51]
+        cues = verified_word_cues(text, recognized, 1.2)
+        self.assertNotIn("report", [text[c["char_start"]:c["char_end"]] for c in cues])
 
 
 class VoiceboxAdapterTests(unittest.TestCase):

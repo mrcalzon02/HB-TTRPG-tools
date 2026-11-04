@@ -80,6 +80,39 @@ def timed_words(recognition: dict) -> list[tuple[str, float | None, float | None
     return result
 
 
+def verified_word_cues(expected: str, recognition: dict, duration: float) -> list[dict]:
+    """Return exact-text word timings from independent ASR, with no guessed offsets.
+
+    Unrecognized words are intentionally left unmarked. Character spans are
+    offsets into the original passage, preserving punctuation and spacing.
+    This is observed word alignment, not phoneme-accurate forced alignment.
+    """
+    from math import isfinite
+    if not isinstance(recognition, dict) or not isfinite(duration) or duration <= 0:
+        return []
+    spans = list(re.finditer(r"[A-Za-z0-9]+(?:['’][A-Za-z0-9]+)*", expected))
+    actual = timed_words(recognition)
+    if not spans or not actual:
+        return []
+    wanted = [words(match.group(0))[0] for match in spans]
+    heard = [word for word, _, _ in actual]
+    cues = []
+    last_end = 0.0
+    for match in SequenceMatcher(None, wanted, heard, autojunk=False).get_matching_blocks():
+        for offset in range(match.size):
+            word_index, heard_index = match.a + offset, match.b + offset
+            _, start, end = actual[heard_index]
+            if (start is None or end is None or not isfinite(start) or not isfinite(end)
+                    or start < 0 or end <= start or end > duration + 0.05
+                    or start < last_end - 0.005):
+                continue
+            span = spans[word_index]
+            cues.append({"char_start": span.start(), "char_end": span.end(),
+                         "start": round(start, 3), "end": round(end, 3)})
+            last_end = end
+    return cues
+
+
 def trim_guarded_audio(audio, sample_rate: int, expected: str, recognition: dict,
                        guard_phrase: str | None = None):
     """Strip a sacrificed intro only when an ASR-confirmed first word follows it.

@@ -145,3 +145,4 @@ class SprLuxEngine:
                 raise RuntimeError("Neural synthesis failed: " + result.get("error", "unknown error"))
             if not target.is_file() or target.stat().st_size < 44:
                 raise RuntimeError("Neural worker returned no WAV recording")
+            return result

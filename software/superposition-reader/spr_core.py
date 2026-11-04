@@ -8,6 +8,7 @@ from __future__ import annotations
 import hashlib
 import io
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -112,6 +113,36 @@ def _write_json_atomic(path: Path, payload: dict) -> None:
     os.replace(tmp, path)
 
 
+def _checked_word_cues(text: str, cues, duration: float) -> list[dict]:
+    """Only persist bounded, measured, monotonic word offsets from an engine."""
+    if not isinstance(cues, list) or len(cues) > len(text):
+        return []
+    checked = []
+    last_char = 0
+    last_time = 0.0
+    for cue in cues:
+        if not isinstance(cue, dict):
+            return []
+        start_char, end_char = cue.get("char_start"), cue.get("char_end")
+        start, end = cue.get("start"), cue.get("end")
+        if (type(start_char) is not int or type(end_char) is not int
+                or not isinstance(start, (int, float))
+                or not isinstance(end, (int, float))
+                or isinstance(start, bool) or isinstance(end, bool)):
+            return []
+        if (not math.isfinite(start) or not math.isfinite(end)
+                or not last_char <= start_char < end_char <= len(text)
+                or not 0 <= start < end <= duration + 0.05
+                or start < last_time - 0.005
+                or not text[start_char:end_char].strip()):
+            return []
+        checked.append({"char_start": start_char, "char_end": end_char,
+                        "start": float(start), "end": float(end)})
+        last_char = end_char
+        last_time = end
+    return checked
+
+
 class Archive:
     def __init__(self, root: Path | None = None):
         self.root = Path(root) if root is not None else default_data_dir()
@@ -199,7 +230,7 @@ class Archive:
             return False  # Already generated; resumable without recomputation
         temp = target.with_suffix(".partial.wav")
         try:
-            engine.synthesize(chunk["text"], temp, voice=voice, rate=rate)
+            metadata = engine.synthesize(chunk["text"], temp, voice=voice, rate=rate)
             with wave.open(str(temp), "rb") as wav:
                 duration = wav.getnframes() / wav.getframerate()
                 if duration <= 0:
@@ -207,10 +238,16 @@ class Archive:
             os.replace(temp, target)
         finally:
             temp.unlink(missing_ok=True)
-        manifest["audio"][str(index)] = {
+        entry = {
             "key": key, "file": target.name, "seconds": duration,
             "render": {"engine": engine.engine_id, "voice": voice, "rate": rate},
         }
+        cues = _checked_word_cues(chunk["text"],
+                                  metadata.get("word_cues") if isinstance(metadata, dict) else None,
+                                  duration)
+        if cues:
+            entry["word_cues"] = cues
+        manifest["audio"][str(index)] = entry
         _write_json_atomic(folder / "manifest.json", manifest)
         return True
 

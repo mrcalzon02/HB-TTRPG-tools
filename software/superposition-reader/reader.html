@@ -34,6 +34,8 @@ button.primary{background:#315f9b;border-color:#648bba}button.danger{background:
 .segment{font:inherit;line-height:inherit;color:inherit;border:0;background:transparent;padding:1px 2px;text-align:left;border-radius:3px;display:inline;cursor:pointer}
 .segment:hover{background:#2b394c}.segment.active{background:#66501e;color:#fff2c5;outline:1px solid #c69a47}
 .segment.ready:not(.active){text-decoration:underline dotted #4c627b;text-underline-offset:4px}
+.segment.active.has-word-cues{background:transparent;outline:none;color:inherit}
+.spoken-word.current-word{background:#ffcf76;color:#171c27;border-radius:3px;box-shadow:0 0 0 2px #ffcf76}
 fieldset{border:1px solid #394963;border-radius:9px;padding:10px;margin:0}
 legend{font-size:13px;color:#c4d7ef}
 #status{font-size:12px;line-height:1.5;color:#b8c8df;min-height:35px;overflow-wrap:anywhere}
@@ -86,7 +88,7 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
     </section>
   </aside>
   <main id="documentArea">
-    <div id="documentHeader"><p id="documentTitle">Import or select a document</p><div class="small" id="documentMeta">Narration highlights the spoken text segment; full books currently use passages until word alignment is implemented.</div></div>
+    <div id="documentHeader"><p id="documentTitle">Import or select a document</p><div class="small" id="documentMeta">Narration highlights the passage; verified neural recordings can additionally highlight independently timed words.</div></div>
     <div id="documentText"><p class="small">Choose a document on the left. Click a sentence to start reading from it.</p></div>
   </main>
   <div class="right">
@@ -106,7 +108,7 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
       <p class="small">Completed audio is reused across launches. Book-length chapter export, FLAC and M4B are planned.</p>
     </section>
     <section><h2>Reader status</h2><div id="status" role="status">Ready to import a document.</div></section>
-    <footer>SPR keeps document sources and narration in private application data. This version uses reflowed extracted text; original PDF page rendering, word alignment, and custom voice models are later milestones.</footer>
+    <footer>SPR keeps document sources and narration in private application data. This version uses reflowed text; original PDF pages and forced alignment for other voice engines remain later milestones.</footer>
   </div>
 </div>
 <script>
@@ -170,6 +172,45 @@ function renderMatches(index){
   return !!item?.render && item.render.engine===engineId &&
          item.render.voice===selectedVoice() &&
          Number(item.render.rate)===effectiveRate();
+}
+let currentWord = null;
+function renderChunk(button, chunk, index){
+  button.replaceChildren();
+  button.classList.remove("has-word-cues");
+  const cues=book?.audio?.[String(index)]?.word_cues;
+  if(!Array.isArray(cues)||!cues.length){button.textContent=chunk.text+" ";return;}
+  let cursor=0;
+  for(const cue of cues){
+    if(!Number.isInteger(cue.char_start)||!Number.isInteger(cue.char_end)||
+       cue.char_start<cursor||cue.char_end>chunk.text.length||cue.char_end<=cue.char_start||
+       !Number.isFinite(cue.start)||!Number.isFinite(cue.end)||cue.start<0||cue.end<=cue.start){
+      button.textContent=chunk.text+" ";return;
+    }
+    button.append(document.createTextNode(chunk.text.slice(cursor,cue.char_start)));
+    const span=document.createElement("span");
+    span.className="spoken-word";
+    span.textContent=chunk.text.slice(cue.char_start,cue.char_end);
+    span.dataset.start=String(cue.start);
+    span.dataset.end=String(cue.end);
+    button.append(span);
+    cursor=cue.char_end;
+  }
+  button.append(document.createTextNode(chunk.text.slice(cursor)+" "));
+  button.classList.add("has-word-cues");
+}
+function syncWordHighlight(){
+  if(currentWord){currentWord.classList.remove("current-word");currentWord=null;}
+  if(!book||!audio.src)return;
+  const segment=document.getElementById("segment-"+active);
+  if(!segment?.classList.contains("has-word-cues"))return;
+  const t=audio.currentTime;
+  for(const word of segment.querySelectorAll(".spoken-word")){
+    if(t>=Number(word.dataset.start)&&t<Number(word.dataset.end)){
+      word.classList.add("current-word");
+      currentWord=word;
+      break;
+    }
+  }
 }
 function savePositionSoon(delay=250){
   if(!book)return;
@@ -235,6 +276,7 @@ function selectSentence(index, scroll=true){
     if(scroll)element.scrollIntoView({behavior:"smooth",block:"center"});
   }
   updateArchive();
+  syncWordHighlight();
 }
 async function openBook(id){
   stop();
@@ -259,7 +301,7 @@ async function openBook(id){
     button.className="segment"+(renderMatches(i)?" ready":"");
     button.id="segment-"+i;
     button.type="button";
-    button.textContent=chunk.text+" ";
+    renderChunk(button,chunk,i);
     button.title="Play "+(book.segment_mode==="passage"?"passage":"sentence")+" "+(i+1);
     button.addEventListener("click",()=>{playing=true;loadAndPlay(i);});
     host.append(button);
@@ -278,8 +320,10 @@ async function fetchBook(){
   book=current;
   document.querySelectorAll(".segment").forEach((node,i)=>{
     node.classList.toggle("ready",renderMatches(i));
+    renderChunk(node,book.chunks[i],i);
   });
   updateArchive();
+  syncWordHighlight();
 }
 async function queueOne(index){
   try{
@@ -321,6 +365,7 @@ function stop(){
   if(book&&audio.src)savePositionSoon(0);
   playing=false;waiting=null;audio.pause();audio.removeAttribute("src");audio.load();
   $("play").textContent="▶ Play";
+  syncWordHighlight();
 }
 $("upload").addEventListener("change",async event=>{
   const file=event.target.files?.[0];
@@ -350,13 +395,16 @@ $("play").addEventListener("click",async()=>{
 $("previous").addEventListener("click",()=>{if(book){playing=true;loadAndPlay(Math.max(0,active-1));}});
 $("next").addEventListener("click",()=>{if(book){playing=true;loadAndPlay(Math.min(book.chunks.length-1,active+1));}});
 audio.addEventListener("ended",async()=>{if(playing&&book){if(active+1<book.chunks.length)await loadAndPlay(active+1);else{stop();status("Reached the end of the document.");}}});
+audio.addEventListener("seeked",syncWordHighlight);
 audio.addEventListener("loadedmetadata",()=>{
   if(resumeFraction&&Number.isFinite(audio.duration)&&audio.duration>0){
     audio.currentTime=Math.min(audio.duration*resumeFraction,audio.duration);
     resumeFraction=0;
   }
+  syncWordHighlight();
 });
 audio.addEventListener("timeupdate",()=>{
+  syncWordHighlight();
   $("playbackSeek").value=audio.duration?Math.round(100*audio.currentTime/audio.duration):0;
   $("time").textContent=formatTime(audio.currentTime)+" / "+formatTime(audio.duration);
   if(book && Date.now()-lastPositionTime>3000){
@@ -364,7 +412,7 @@ audio.addEventListener("timeupdate",()=>{
     savePositionSoon(0);
   }
 });
-$("playbackSeek").addEventListener("input",event=>{if(audio.duration){audio.currentTime=audio.duration*Number(event.target.value)/100;savePositionSoon();}});
+$("playbackSeek").addEventListener("input",event=>{if(audio.duration){audio.currentTime=audio.duration*Number(event.target.value)/100;syncWordHighlight();savePositionSoon();}});
 $("speed").addEventListener("input",event=>{audio.playbackRate=Number(event.target.value);$("speedValue").textContent=Number(event.target.value).toFixed(2)+"×";});
 $("volume").addEventListener("input",event=>{audio.volume=Number(event.target.value);$("volumeValue").textContent=Math.round(100*event.target.value)+"%";});
 $("generate").addEventListener("click",async()=>{
