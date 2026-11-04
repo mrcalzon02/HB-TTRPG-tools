@@ -622,6 +622,73 @@ class NeuralSetupTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "boolean"):
                 setup.start(cpu_only="false")
 
+    def test_install_is_single_flight_and_activates_engine_without_restart(self):
+        with tempfile.TemporaryDirectory() as root:
+            home = pathlib.Path(root)
+            installer = home / "install-neural-windows.ps1"
+            installer.write_text("# test fixture", encoding="utf-8")
+            release = threading.Event()
+            activated = []
+
+            class Engine:
+                installed = False
+                def available(self):
+                    return self.installed
+
+            engine = Engine()
+            setup = NeuralSetup(home, installer, engine,
+                                on_ready=lambda: activated.append(True), platform="nt")
+
+            class Process:
+                def wait(self):
+                    if not release.wait(5):
+                        raise RuntimeError("Mock installer timed out")
+                    engine.installed = True
+                    return 0
+
+            with patch("spr_neural_setup.subprocess.Popen", return_value=Process()) as launch:
+                state = setup.start(cpu_only=True)
+                self.assertTrue(state["active"])
+                with self.assertRaisesRegex(RuntimeError, "already running"):
+                    setup.start(cpu_only=False)
+                release.set()
+                for _ in range(200):
+                    if not setup.status()["active"]:
+                        break
+                    time.sleep(.01)
+            final = setup.status()
+            self.assertEqual(final["stage"], "ready")
+            self.assertTrue(final["installed"])
+            self.assertEqual(activated, [True])
+            command = launch.call_args.args[0]
+            self.assertEqual(command[0], "powershell.exe")
+            self.assertIn(str(installer), command)
+            self.assertIn("-SkipPreview", command)
+            self.assertIn("-CpuOnly", command)
+            self.assertTrue(setup.log_path.is_file())
+
+    def test_installer_failure_is_reported_and_does_not_leave_gate_busy(self):
+        with tempfile.TemporaryDirectory() as root:
+            home = pathlib.Path(root)
+            installer = home / "install-neural-windows.ps1"
+            installer.write_text("# test fixture", encoding="utf-8")
+            class Engine:
+                def available(self):
+                    return False
+            class FailedProcess:
+                def wait(self):
+                    return 7
+            setup = NeuralSetup(home, installer, Engine(), platform="nt")
+            with patch("spr_neural_setup.subprocess.Popen", return_value=FailedProcess()):
+                setup.start()
+                for _ in range(200):
+                    if not setup.status()["active"]:
+                        break
+                    time.sleep(.01)
+            self.assertEqual(setup.status()["stage"], "failed")
+            self.assertIn("exit 7", setup.status()["error"])
+            self.assertFalse(setup.status()["active"])
+
     def test_setup_cannot_run_missing_bundled_script(self):
         with tempfile.TemporaryDirectory() as root:
             class MissingEngine:
