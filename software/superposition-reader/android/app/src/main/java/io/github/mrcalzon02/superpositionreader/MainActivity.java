@@ -28,7 +28,9 @@ import android.widget.TextView;
 import android.widget.AdapterView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -44,6 +46,7 @@ import java.util.concurrent.Executors;
  */
 public final class MainActivity extends Activity {
     private static final int PICK_BOOK = 70;
+    private static final int EXPORT_CHAPTER_WAV = 71;
     private static final int BACK = 0xff121923;
     private static final int PANEL = 0xff1d2b3d;
     private static final int ACCENT = 0xff8bbdff;
@@ -51,6 +54,7 @@ public final class MainActivity extends Activity {
     private final ExecutorService io = Executors.newSingleThreadExecutor();
 
     private BookStore store;
+    private NarrationCache narrationCache;
     private BookDocument currentBook;
     private ArrayList<BookDocument> library = new ArrayList<>();
     private TextToSpeech tts;
@@ -64,14 +68,22 @@ public final class MainActivity extends Activity {
 
     private Spinner bookPicker, enginePicker, voicePicker, chapterPicker;
     private TextView title, text, status, voiceInfo, rateInfo;
-    private Button playButton, voiceToggle;
+    private Button playButton, voiceToggle, renderButton, exportButton;
     private LinearLayout voicePanel;
     private ScrollView readingScroll;
     private SeekBar rateBar;
+    private boolean rendering = false;
+    private int renderIndex, renderEnd, renderDone, renderCreated, renderChapter;
+    private File renderFolder;
+    private BookDocument renderBook;
+    private String activeRenderId = "";
+    private String renderEngine = "", renderVoice = "";
+    private float renderRate;
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
         store = new BookStore(this);
+        narrationCache = new NarrationCache(getFilesDir());
         buildUi();
         loadLibraryAsync(true);
         initializeEngine(store.engine());
@@ -194,7 +206,12 @@ public final class MainActivity extends Activity {
             @Override public void onProgressChanged(SeekBar bar,int progress,boolean fromUser){
                 float rate=progress/100f;
                 rateInfo.setText(String.format(Locale.ROOT,"Speech rate: %.2f×",rate));
-                if(fromUser){store.setRate(rate);if(ttsReady)tts.setSpeechRate(rate);}
+                if(fromUser){
+                    cancelRender("Changing speech rate stopped chapter rendering; completed clips are retained.");
+                    store.setRate(rate);
+                    if(ttsReady)tts.setSpeechRate(rate);
+                    updateAudioButtons();
+                }
             }
             @Override public void onStartTrackingTouch(SeekBar bar){}
             @Override public void onStopTrackingTouch(SeekBar bar){}
@@ -224,6 +241,17 @@ public final class MainActivity extends Activity {
         });
         chapterPicker=spinner(root);
         chapterPicker.setContentDescription("Chapter selection");
+        LinearLayout renderControls=row();
+        renderButton=button("Render chapter");
+        exportButton=button("Export WAV");
+        addButton(renderControls,renderButton);
+        addButton(renderControls,exportButton);
+        root.addView(renderControls);
+        renderButton.setOnClickListener(v->{
+            if(rendering)cancelRender("Chapter generation stopped. Finished clips remain cached.");
+            else startRenderChapter();
+        });
+        exportButton.setOnClickListener(v->exportChapterWav());
         status=label("Choose a book to begin.",12);
         status.setTextColor(ACCENT);
         root.addView(status);
@@ -242,10 +270,12 @@ public final class MainActivity extends Activity {
         }));
         chapterPicker.setOnItemSelectedListener(selection((index)->{
             if(!suppressSelection&&currentBook!=null&&index<currentBook.chapters.size()){
+                cancelRender(null);
                 stopNarration(null);
                 passage=currentBook.chapters.get(index).start;
                 store.setPosition(currentBook,passage);
                 showCurrent(0,0);
+                updateAudioButtons();
             }
         }));
         voicePicker.setOnItemSelectedListener(selection(index->{
@@ -285,8 +315,9 @@ public final class MainActivity extends Activity {
     }
     @Override protected void onActivityResult(int code,int result,Intent data){
         super.onActivityResult(code,result,data);
-        if(code==PICK_BOOK&&result==RESULT_OK&&data!=null&&data.getData()!=null)
-            importUri(data.getData());
+        if(result!=RESULT_OK||data==null||data.getData()==null)return;
+        if(code==PICK_BOOK)importUri(data.getData());
+        if(code==EXPORT_CHAPTER_WAV)writeChapterWav(data.getData());
     }
     private void importUri(Uri uri){
         setStatus("Importing document privately…");
@@ -354,6 +385,7 @@ public final class MainActivity extends Activity {
         });
     }
     private void openBook(BookDocument book){
+        cancelRender(null);
         stopNarration(null);
         currentBook=book;
         store.setSelected(book.id);
@@ -369,6 +401,7 @@ public final class MainActivity extends Activity {
         title.setText("SuperPosition Reader");
         showCurrent(0,0);
         setStatus(book.title+" · "+book.chapters.size()+" chapters · "+book.passages.size()+" passages");
+        updateAudioButtons();
     }
     private void showCurrent(int rangeStart,int rangeEnd){
         if(currentBook==null)return;
@@ -384,7 +417,8 @@ public final class MainActivity extends Activity {
         SpannableStringBuilder markup=new SpannableStringBuilder(chapterText);
         int offset=currentBook.offsetInChapter(chapter,passage);
         int start=Math.min(markup.length(),offset+Math.max(0,rangeStart));
-        int end=Math.min(markup.length(),offset+Math.max(rangeEnd,1));
+        int spokenEnd=rangeEnd>rangeStart ? rangeEnd : currentBook.passages.get(passage).length();
+        int end=Math.min(markup.length(),offset+spokenEnd);
         if(end>start)markup.setSpan(new BackgroundColorSpan(0xff66501e),
                 start,end,android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         text.setText(markup);
@@ -401,6 +435,7 @@ public final class MainActivity extends Activity {
     }
     private void move(int delta){
         if(currentBook==null)return;
+        cancelRender(null);
         stopNarration(null);
         passage=Math.max(0,Math.min(currentBook.passages.size()-1,passage+delta));
         store.setPosition(currentBook,passage);
@@ -409,6 +444,7 @@ public final class MainActivity extends Activity {
     }
 
     private void initializeEngine(String packageName){
+        cancelRender(null);
         stopNarration(null);
         int token=++engineSession;
         ttsReady=false;
@@ -501,6 +537,7 @@ public final class MainActivity extends Activity {
     }
     private void applyVoice(Voice voice,boolean userChoice){
         if(tts==null||!ttsReady)return;
+        cancelRender(null);
         stopNarration(null);
         boolean download=voice.getFeatures()!=null &&
                 voice.getFeatures().contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED);
@@ -510,6 +547,7 @@ public final class MainActivity extends Activity {
         }
         lastSelectedVoice=voice.getName();
         if(userChoice)store.setVoice(activeEngine,voice.getName());
+        updateAudioButtons();
         if(download)setStatus("Voice needs downloading: "+voice.getName()+". Open Android voice settings.");
         else if(voice.isNetworkConnectionRequired())
             setStatus("Network-required Android voice selected: "+voice.getName());
@@ -529,6 +567,10 @@ public final class MainActivity extends Activity {
         return new UtteranceProgressListener(){
             @Override public void onStart(String id){}
             @Override public void onDone(String id){ui.post(()->{
+                if(rendering&&id.equals(activeRenderId)){
+                    completedRenderSegment();
+                    return;
+                }
                 if(!id.equals(activeUtterance)||!isPlaying||currentBook==null)return;
                 if(passage+1>=currentBook.passages.size()){
                     stopNarration("Reached the end of the document.");
@@ -539,10 +581,16 @@ public final class MainActivity extends Activity {
                 }
             });}
             @Override public void onError(String id){ui.post(()->{
-                if(id.equals(activeUtterance))stopNarration("Android TTS could not speak this passage.");
+                if(rendering&&id.equals(activeRenderId))
+                    cancelRender("The Android TTS engine failed to render passage "+(renderIndex+1));
+                else if(id.equals(activeUtterance))
+                    stopNarration("Android TTS could not speak this passage.");
             });}
             @Override public void onError(String id,int error){ui.post(()->{
-                if(id.equals(activeUtterance))
+                if(rendering&&id.equals(activeRenderId))
+                    cancelRender("TTS render error "+error+" at passage "+(renderIndex+1)+
+                            ". Previously rendered audio is retained.");
+                else if(id.equals(activeUtterance))
                     stopNarration("Android TTS error "+error+
                         ". Check voice installation or choose another installed voice.");
             });}
@@ -556,10 +604,11 @@ public final class MainActivity extends Activity {
         };
     }
     private void startPassage(){
+        if(rendering){setStatus("Finish or cancel chapter rendering before reading.");return;}
         if(!ttsReady||tts==null){setStatus("No working Android speech engine is selected.");return;}
         if(currentBook==null){setStatus("Import or choose a book first.");return;}
         isPlaying=true;
-        playButton.setText("■ Pause");
+        playButton.setText("■ Stop");
         speakCurrent();
     }
     private void speakCurrent(){
@@ -573,11 +622,149 @@ public final class MainActivity extends Activity {
                 " / "+currentBook.passages.size()+" · "+lastSelectedVoice);
     }
     private void stopNarration(String message){
+        boolean wasReading=isPlaying;
         isPlaying=false;
         activeUtterance="";
-        if(tts!=null)tts.stop();
+        if(tts!=null&&wasReading)tts.stop();
         if(playButton!=null)playButton.setText("▶ Read");
         if(message!=null)setStatus(message);
+    }
+    private void updateAudioButtons(){
+        if(renderButton==null||exportButton==null)return;
+        renderButton.setEnabled(ttsReady&&currentBook!=null);
+        renderButton.setText(rendering?"■ Cancel render":"Render chapter");
+        boolean ready=false;
+        if(!rendering&&currentBook!=null&&ttsReady){
+            try {
+                File folder=narrationCache.folder(currentBook,activeEngine,lastSelectedVoice,
+                                                  store.rate());
+                int ch=Math.max(0,chapterPicker.getSelectedItemPosition());
+                ready=ch<currentBook.chapters.size()&&NarrationCache.completed(
+                        folder,currentBook.chapters.get(ch));
+            }catch(Exception ignored){}
+        }
+        exportButton.setEnabled(ready);
+    }
+
+    private void startRenderChapter(){
+        if(!ttsReady||tts==null||currentBook==null){
+            setStatus("Select a book and a working Android voice first.");return;
+        }
+        stopNarration(null);
+        renderBook=currentBook;
+        renderChapter=Math.max(0,chapterPicker.getSelectedItemPosition());
+        if(renderChapter>=currentBook.chapters.size())return;
+        BookDocument.Chapter chapter=currentBook.chapters.get(renderChapter);
+        renderIndex=chapter.start;
+        renderEnd=chapter.end;
+        renderDone=renderCreated=0;
+        renderEngine=activeEngine;
+        renderVoice=lastSelectedVoice;
+        renderRate=store.rate();
+        try{
+            renderFolder=narrationCache.folder(renderBook,renderEngine,renderVoice,renderRate);
+            rendering=true;
+            getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            updateAudioButtons();
+            nextRenderSegment();
+        }catch(Exception error){
+            cancelRender("Cannot start chapter rendering: "+error.getMessage());
+        }
+    }
+    private void nextRenderSegment(){
+        if(!rendering)return;
+        while(renderIndex<renderEnd && WavAssembler.isValid(
+                NarrationCache.segment(renderFolder,renderIndex))){
+            renderDone++;
+            renderIndex++;
+        }
+        if(renderIndex>=renderEnd){
+            rendering=false;
+            activeRenderId="";
+            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            updateAudioButtons();
+            setStatus("Chapter rendered: "+renderDone+" passages ("+renderCreated+
+                    " newly generated). Export WAV is ready.");
+            return;
+        }
+        File target=NarrationCache.segment(renderFolder,renderIndex);
+        File temporary=new File(renderFolder,target.getName()+".partial");
+        if(temporary.exists())temporary.delete();
+        activeRenderId="spr-render-"+System.nanoTime();
+        int result=tts.synthesizeToFile(renderBook.passages.get(renderIndex),
+                new Bundle(),temporary,activeRenderId);
+        if(result!=TextToSpeech.SUCCESS){
+            cancelRender("Android engine refused to render passage "+(renderIndex+1));
+            return;
+        }
+        setStatus("Rendering chapter "+(renderChapter+1)+
+                " · "+renderDone+"/"+(renderEnd-renderBook.chapters.get(renderChapter).start)+
+                " complete · "+renderVoice);
+    }
+    private void completedRenderSegment(){
+        File target=NarrationCache.segment(renderFolder,renderIndex);
+        File temporary=new File(renderFolder,target.getName()+".partial");
+        if(!WavAssembler.isValid(temporary)){
+            cancelRender("Engine did not produce valid PCM16 WAV audio for passage "+(renderIndex+1));
+            return;
+        }
+        if(!temporary.renameTo(target)){
+            cancelRender("Unable to preserve rendered audio in the private cache.");
+            return;
+        }
+        renderDone++;
+        renderCreated++;
+        renderIndex++;
+        nextRenderSegment();
+    }
+    private void cancelRender(String message){
+        if(rendering){
+            rendering=false;
+            activeRenderId="";
+            if(tts!=null)tts.stop();
+            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+        updateAudioButtons();
+        if(message!=null)setStatus(message);
+    }
+    private void exportChapterWav(){
+        if(currentBook==null||rendering)return;
+        try{
+            File folder=narrationCache.folder(currentBook,activeEngine,lastSelectedVoice,store.rate());
+            int chapter=Math.max(0,chapterPicker.getSelectedItemPosition());
+            if(chapter>=currentBook.chapters.size()||
+                    !NarrationCache.completed(folder,currentBook.chapters.get(chapter))){
+                setStatus("Render every passage in the selected chapter before export.");
+                return;
+            }
+            Intent choose=new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            choose.addCategory(Intent.CATEGORY_OPENABLE);
+            choose.setType("audio/wav");
+            choose.putExtra(Intent.EXTRA_TITLE,currentBook.id+"-chapter-"+
+                    String.format(Locale.ROOT,"%03d",chapter+1)+".wav");
+            startActivityForResult(choose,EXPORT_CHAPTER_WAV);
+        }catch(Exception error){setStatus("Cannot prepare chapter export: "+error.getMessage());}
+    }
+    private void writeChapterWav(Uri uri){
+        if(currentBook==null)return;
+        BookDocument book=currentBook;
+        int chapter=Math.max(0,chapterPicker.getSelectedItemPosition());
+        String engine=activeEngine, voice=lastSelectedVoice;
+        float rate=store.rate();
+        setStatus("Writing full chapter WAV to selected document…");
+        io.execute(()->{
+            try{
+                File folder=narrationCache.folder(book,engine,voice,rate);
+                List<File> sources=NarrationCache.chapterFiles(folder,book.chapters.get(chapter));
+                try(OutputStream out=getContentResolver().openOutputStream(uri,"w")){
+                    if(out==null)throw new IllegalStateException("Cannot write chosen document");
+                    WavAssembler.combine(sources,out);
+                }
+                ui.post(()->setStatus("Chapter WAV exported to the selected Android document."));
+            }catch(Exception error){
+                ui.post(()->setStatus("Chapter export failed: "+error.getMessage()));
+            }
+        });
     }
     private void setStatus(String message){if(status!=null)status.setText(message);}
 
@@ -587,6 +774,7 @@ public final class MainActivity extends Activity {
     }
     @Override public void onDestroy(){
         ++engineSession;
+        cancelRender(null);
         stopNarration(null);
         if(tts!=null){tts.shutdown();tts=null;}
         io.shutdownNow();
