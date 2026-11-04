@@ -84,15 +84,33 @@ def capture(out_dir: Path, data_dir: Path):
                                     device_scale_factor=1,
                                     reduced_motion="reduce")
             page.on("pageerror", lambda err: errors.append(str(err)))
+            page.on("console", lambda msg: print("Browser console:", msg.type, msg.text)
+                    if msg.type in ("error", "warning") else None)
+            def ui_state():
+                return page.evaluate("""() => ({
+                    title: document.querySelector('#documentTitle')?.textContent,
+                    status: document.querySelector('#status')?.textContent,
+                    engines: Array.from(document.querySelector('#engineSelect')?.options || []).map(o=>o.value),
+                    choices: document.querySelector('#localVoiceChoice')?.options.length,
+                    libraryButtons: document.querySelectorAll('#library button').length,
+                    passageButtons: document.querySelectorAll('#documentText .segment').length
+                })""")
             try:
                 page.goto(f"http://127.0.0.1:{server.server_port}/",
                           wait_until="domcontentloaded", timeout=30000)
-                page.wait_for_function(
-                    "() => document.querySelector('#documentTitle')?.textContent"
-                    ".includes('SPR Showroom') && "
-                    "document.querySelector('#engineSelect')?.options.length >= 3 && "
-                    "document.querySelector('#localVoiceChoice')?.options.length >= 12",
-                    timeout=30000)
+                try:
+                    page.wait_for_function(
+                        "() => document.querySelector('#documentTitle')?.textContent"
+                        ".includes('SPR Showroom') && "
+                        "document.querySelector('#engineSelect')?.options.length >= 3 && "
+                        "document.querySelector('#localVoiceChoice')?.options.length >= 12",
+                        timeout=30000)
+                except Exception:
+                    print("SPR readiness failure, real browser state:",
+                          json.dumps(ui_state(), indent=2), flush=True)
+                    print("Browser script errors:", errors, flush=True)
+                    raise
+                print("SPR ready:", json.dumps(ui_state()), flush=True)
                 page.locator("#documentText .segment").first.wait_for(timeout=15000)
                 page.evaluate("document.fonts.ready")
                 if errors:
