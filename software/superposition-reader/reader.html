@@ -498,7 +498,8 @@ async function pollNeuralSetup(){
   $("neuralSetupStatus").textContent=!info.supported
     ?"Integrated installer is supported on Windows only."
     :info.active
-      ?"Installing local neural dependencies. Keep SPR open; details are saved in your private setup.log."
+      ?"Installing local neural dependencies. Keep SPR open. "+
+        (info.last_activity?"Latest: "+info.last_activity:"Logs are saved in your private setup.log.")
       :info.error
         ?"Neural setup error: "+info.error+" Log: "+info.log_path
         :info.installed
