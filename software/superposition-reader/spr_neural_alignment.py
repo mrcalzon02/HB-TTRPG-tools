@@ -115,7 +115,10 @@ def trim_guarded_audio(audio, sample_rate: int, expected: str, recognition: dict
     if actual_start - guard_end < .09:
         raise ValueError("Guard and wanted opening are too close to trim safely")
     # Trim just after the guard, leaving ample natural pre-onset audio.
-    cut_seconds = guard_end + .020
+    # Long quiet gaps (observed up to 1.5 seconds between natural guard
+    # and first story word) are shortened, but retain 600 ms for audio device
+    # wake-up and enough phonetic lead-in to prevent a clipped onset.
+    cut_seconds = max(guard_end + .020, actual_start - .600)
     if actual_start - cut_seconds < .06:
         raise ValueError("Unsafe word boundary: would cut the wanted opening")
     frames = round(cut_seconds * sample_rate)
