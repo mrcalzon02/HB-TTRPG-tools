@@ -2,7 +2,7 @@
 ### A royal-family vignette — UNPUBLISHED NARRATIVE DRAFT
 
 > **Story event:** RH-F04, “Family catroom and magical cleanup”; source sequence SC-04, “Cats, magical cleanup and courtyard stroll.”
-> **Chronology:** After Princess Estelle's birth. The family is dealing with glitter from a prank, but the exact interval since RH-F03, Estelle's age, date, regnal year, and ordering among RH-F01–RH-F04 remain **unassigned**. This is not a required immediate sequel to the separate RH-F03 council-chamber draft.
+> **Chronology:** After Princess Estelle's birth. The family is dealing with glitter from a prank; whether this is the same prank as RH-F03 is **unassigned**, as are Estelle's age, the date, regnal year, and ordering among RH-F01–RH-F04. This is not a required immediate sequel to the separate RH-F03 council-chamber draft.
 > **Existing visual associations:** PUB-010 (“Glittery Royal Family Catroom Celebration”), PUB-011 (“Magical Family Cat Atelier”), and PUB-012 (“Royal Family's Sunlit Castle Stroll”), already assigned to SC-04 and the existing DAYSHA-BLUE-FLORAL-FAMILY-ENSEMBLE appearance cluster. No new image, gown purchase, or art approval is implied.
 > **Editorial status:** Unpublished fictional dramatization for author review. Dialogue, cleaning methods, incidental palace arrangements, and the catroom's layout are staging, not newly attested court procedure or historical dates.
 
@@ -22,7 +22,7 @@ Rome paused with his hand on the latch. “Found what?”
 
 “The evidence!”
 
-He considered turning around. The last time his daughter had spoken about evidence, a council clerk had spent an inconvenient portion of his day rescuing documents from water. But the door opened before he could retreat, and Estelle appeared beneath it with a smile that made retreat impossible.
+He considered turning around. When his daughter called something evidence, the discovery was seldom as reassuring as she expected. But the door opened before he could retreat, and Estelle appeared beneath it with a smile that made retreat impossible.
 
 She was carrying a wooden brush in one hand and a folded cloth in the other. Behind her, the room looked as though a small, determined storm had passed through it. Cushions lay in a heap by the low hearth. A woven ball had been deposited in the drinking bowl. One cat occupied the window seat; the other sat beside a basket, examining a bright thread with grave suspicion.
 
@@ -354,7 +354,7 @@ Estelle considered this, then took the brush back. She swept carefully along the
 
 “No,” Rome said. “But I have been walking around the palace wearing it.”
 
-Estelle thought about the glitter in the council chamber and the glitter on her father's shoulders. “I suppose that makes some of it yours.”
+Estelle thought about the glitter on her father's shoulders and the grains that had wandered into the catroom. “I suppose that makes some of it yours.”
 
 “I suppose it does.”
 
@@ -366,11 +366,11 @@ Estelle looked at the box with renewed interest.
 
 “Can we keep it?”
 
-“For a craft table, perhaps, if someone supervises it,” Daysha said. “Not for another surprise over a council meeting.”
+“For a craft table, perhaps, if someone supervises it,” Daysha said. “Not for another surprise thrown at somebody who hasn't agreed to play.”
 
 Rome raised an eyebrow. “A condition I endorse.”
 
-“I wasn't going to do that again,” Estelle protested.
+“I wasn't going to throw it,” Estelle protested.
 
 “I am glad,” said Rome.
 
@@ -464,7 +464,7 @@ They moved into the afternoon without hurry. Rome's hair no longer glittered. Th
 
 ## RH-F04 / SC-04 continuity and provenance ledger
 
-- **Established story kernel preserved:** King Rome is covered in prank glitter in the family catroom with **two distinct Maine Coons**; Queen Daysha **magically cleans him**; the family moves toward the courtyard. The scene is RH-F04 / SC-04. The draft treats the glitter as residue of a prank without asserting that this chapter begins directly after the separately drafted RH-F03 council scene.
+- **Established story kernel preserved:** King Rome is covered in prank glitter in the family catroom with **two distinct Maine Coons**; Queen Daysha **magically cleans him**; the family moves toward the courtyard. The scene is RH-F04 / SC-04. The draft treats the glitter as residue of a prank without identifying it as the RH-F03 council balloon or asserting that RH-F03 precedes RH-F04.
 - **Cat identity:** **Lexi** is the established celestial Maine Coon with dark-blue, star-flecked fur, introduced at Daysha's first birthday-as-queen fitting. The **second Maine Coon is distinct** and receives no invented personal name, celestial identity, or fixed coat-color canon. Daysha's magic removes only loose ordinary glitter; Lexi's innate constellations remain.
 - **Existing approved artwork only:** PUB-010 `assets/daysha/royal-purchases/glittery-royal-family-catroom-celebration.webp`; PUB-011 `assets/daysha/royal-purchases/magical-family-cat-atelier.webp`; PUB-012 `assets/daysha/royal-purchases/royal-family-s-sunlit-castle-stroll.webp`. These are already recorded in `data/royal-artwork-placement.csv` and `data/daysha-royal-purchases.json` as SC-04. No new binary, upload, approval, or publication is claimed.
 - **Visual continuity:** Daysha is an adult high elf with very long iridescent blue-violet hair, violet eyes, and proportionate pointed ears; Rome has long silver-white hair, blue eyes, and proportionate pointed ears; Estelle is their daughter. The familiar blue-floral family ensemble is reused, not purchased again.
