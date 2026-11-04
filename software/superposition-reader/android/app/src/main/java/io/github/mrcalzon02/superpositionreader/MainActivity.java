@@ -14,6 +14,7 @@ import android.provider.OpenableColumns;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.speech.tts.Voice;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.BackgroundColorSpan;
 import android.view.Gravity;
@@ -60,7 +61,8 @@ public final class MainActivity extends Activity {
     private TextToSpeech tts;
     private boolean ttsReady = false, isPlaying = false;
     private boolean suppressSelection = false;
-    private int engineSession = 0, passage = 0, shownChapter = -1;
+    private int engineSession = 0, passage = 0, shownChapter = -1, renderedChapter = -1;
+    private BackgroundColorSpan currentHighlight;
     private String activeUtterance = "", activeEngine = "";
     private String lastSelectedVoice = "";
     private ArrayList<Voice> voices = new ArrayList<>();
@@ -194,6 +196,9 @@ public final class MainActivity extends Activity {
             else initializeEngine(activeEngine);
         });
         manage.setOnClickListener(v->openVoiceSettings());
+        Button shareVoices=button("Share exact voice inventory");
+        voicePanel.addView(shareVoices,new LinearLayout.LayoutParams(-1,dp(50)));
+        shareVoices.setOnClickListener(v->shareVoiceInventory());
         rateInfo=label("Speech rate",12);
         voicePanel.addView(rateInfo);
         rateBar=new SeekBar(this);
@@ -396,6 +401,8 @@ public final class MainActivity extends Activity {
         suppressSelection=true;
         chapterPicker.setAdapter(adapter(labels));
         shownChapter=-1;
+        renderedChapter=-1;
+        currentHighlight=null;
         chapterPicker.setSelection(book.chapterFor(passage));
         suppressSelection=false;
         title.setText("SuperPosition Reader");
@@ -412,16 +419,22 @@ public final class MainActivity extends Activity {
             chapterPicker.setSelection(chapter);
             suppressSelection=false;
         }
-        BookDocument.Chapter ch=currentBook.chapters.get(chapter);
-        String chapterText=currentBook.chapterText(chapter);
-        SpannableStringBuilder markup=new SpannableStringBuilder(chapterText);
+        if(chapter!=renderedChapter){
+            renderedChapter=chapter;
+            currentHighlight=null;
+            text.setText(new SpannableStringBuilder(currentBook.chapterText(chapter)),
+                    TextView.BufferType.SPANNABLE);
+        }
+        Spannable markup=(Spannable)text.getText();
+        if(currentHighlight!=null)markup.removeSpan(currentHighlight);
         int offset=currentBook.offsetInChapter(chapter,passage);
         int start=Math.min(markup.length(),offset+Math.max(0,rangeStart));
         int spokenEnd=rangeEnd>rangeStart ? rangeEnd : currentBook.passages.get(passage).length();
         int end=Math.min(markup.length(),offset+spokenEnd);
-        if(end>start)markup.setSpan(new BackgroundColorSpan(0xff66501e),
-                start,end,android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setText(markup);
+        if(end>start){
+            currentHighlight=new BackgroundColorSpan(0xff66501e);
+            markup.setSpan(currentHighlight,start,end,android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
         if(rangeEnd==0){
             readingScroll.post(()->{
                 if(text.getLayout()!=null){
@@ -552,6 +565,26 @@ public final class MainActivity extends Activity {
         else if(voice.isNetworkConnectionRequired())
             setStatus("Network-required Android voice selected: "+voice.getName());
         else setStatus("On-device Android voice selected: "+voice.getName());
+    }
+    private void shareVoiceInventory(){
+        if(!ttsReady){
+            setStatus("The Android voice engine is not initialized.");return;
+        }
+        StringBuilder report=new StringBuilder();
+        report.append("SuperPosition Reader — Android TTS inventory\n")
+              .append("Engine: ").append(activeEngine).append("\n");
+        for(Voice voice:voices){
+            boolean missing=voice.getFeatures()!=null &&
+                voice.getFeatures().contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED);
+            report.append(voice.getName()).append(" | ")
+                  .append(voice.getLocale().toLanguageTag()).append(" | ")
+                  .append(missing?"download required":voice.isNetworkConnectionRequired()
+                          ?"network required":"on-device").append("\n");
+        }
+        Intent send=new Intent(Intent.ACTION_SEND);
+        send.setType("text/plain");
+        send.putExtra(Intent.EXTRA_TEXT,report.toString());
+        startActivity(Intent.createChooser(send,"Share Android TTS voice inventory"));
     }
     private void openVoiceSettings(){
         try{
