@@ -120,6 +120,7 @@ const previewAudio = new Audio();
 let book = null, active = 0, waiting = null, playing = false, workBusy = false;
 let engineId = "unavailable", engineKey = "sapi", engineOptions = [], windowsVoices = [];
 let resumeFraction = 0, positionTimer = null, lastPositionTime = 0;
+let lastJobBook = null, lastJobDone = -1, lastJobActive = false;
 audio.volume = 0.8;
 function selectedVoice(){return engineKey.startsWith("voicebox-")
   ?($("voiceboxProfileId").value.trim()||$("voice").value):$("voice").value;}
@@ -289,6 +290,7 @@ async function openBook(id){
   stop();
   waiting=null;
   book=await request("/api/book/"+id);
+  lastJobBook=null;lastJobDone=-1;lastJobActive=false;
   const cached=Object.values(book.audio||{}).find(entry=>entry.render)?.render;
   if(cached){
     const match=engineOptions.find(item=>item.engine_id===cached.engine);
@@ -450,7 +452,14 @@ async function poll(){
     workBusy=job.active;
     $("progress").value=job.total?100*job.done/job.total:0;
     $("generationStatus").textContent=job.total?job.done+" / "+job.total+" processed"+(job.active?" · running":""):"No active job";
-    if(book&&((job.book_id===book.id)||(waiting!==null)))await fetchBook();
+    // Long novels can contain thousands of cached word cues. Avoid reloading
+    // the full manifest 60+ times per minute while one neural clip is rendering.
+    const jobChanged=job.book_id!==lastJobBook||job.done!==lastJobDone||
+                     job.active!==lastJobActive;
+    if(book&&job.book_id===book.id&&jobChanged)await fetchBook();
+    lastJobBook=job.book_id||null;
+    lastJobDone=job.done;
+    lastJobActive=job.active;
     if(job.error)status("Narration failed: "+job.error);
     if(job.cancelled)status("Narration cancelled. Finished clips remain cached.");
     if(waiting!==null&&renderMatches(waiting)){

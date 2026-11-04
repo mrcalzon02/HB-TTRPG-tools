@@ -9,6 +9,8 @@ import http.client
 import hashlib
 import json
 import pathlib
+import shutil
+import subprocess
 import sys
 import tempfile
 import threading
@@ -531,6 +533,27 @@ class VoiceboxAdapterTests(unittest.TestCase):
                 VoiceboxEngine("qwen").synthesize("Test", path, voice="")
             with self.assertRaisesRegex(ValueError, "rate must be zero"):
                 VoiceboxEngine("qwen").synthesize("Test", path, voice="authorized", rate=1)
+
+
+class ReaderJavascriptTests(unittest.TestCase):
+    def test_reader_script_is_syntactically_valid(self):
+        # A malformed inline script can prevent the entire Windows reader
+        # window from loading even when Python's API regressions pass.
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("Node is not installed; JavaScript syntax smoke skipped")
+        source = (pathlib.Path(__file__).resolve().parents[1] / "reader.html").read_text(
+            encoding="utf-8")
+        self.assertEqual(source.count("<script>"), 1)
+        self.assertEqual(source.count("</script>"), 1)
+        script = source.split("<script>", 1)[1].split("</script>", 1)[0]
+        with tempfile.TemporaryDirectory() as folder:
+            path = pathlib.Path(folder) / "reader.js"
+            path.write_text(script, encoding="utf-8")
+            result = subprocess.run([node, "--check", str(path)],
+                                    capture_output=True, text=True, timeout=15)
+        self.assertEqual(result.returncode, 0,
+                         result.stderr or result.stdout)
 
 
 class ApiTests(unittest.TestCase):
