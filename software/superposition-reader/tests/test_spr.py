@@ -292,6 +292,27 @@ class NeuralOpeningTests(unittest.TestCase):
         self.assertEqual(len(audio), 2680)
 
 
+    def test_impossible_asr_speech_length_and_timing_is_rejected(self):
+        expected = "There should have been forty-three of them."
+        looping = "The story begins. " + ("that's it " * 75)
+        with self.assertRaisesRegex(ValueError, "more words"):
+            trim_guarded_audio([0.0] * 4000, 1000, expected,
+                               {"text": looping, "chunks": []},
+                               guard_phrase="The story begins.")
+        trace = {"text": "The story begins. " + expected,
+                 "chunks": [
+                     {"text": "The", "timestamp": [0.2, 0.3]},
+                     {"text": "story", "timestamp": [0.31, 0.5]},
+                     {"text": "begins", "timestamp": [0.55, 1.0]},
+                     {"text": "There", "timestamp": [1.2, 1.4]},
+                     {"text": "should", "timestamp": [1.5, 1.7]},
+                     {"text": "have", "timestamp": [1.8, 2.0]},
+                     {"text": "them", "timestamp": [9.5, 10.0]}]}
+        with self.assertRaisesRegex(ValueError, "timestamps exceed"):
+            trim_guarded_audio([0.0] * 4000, 1000, expected, trace,
+                               guard_phrase="The story begins.")
+
+
     def test_without_word_boundary_never_guesses_trim(self):
         expected = "There should have been forty-three of them."
         with self.assertRaisesRegex(ValueError, "word-timed"):
