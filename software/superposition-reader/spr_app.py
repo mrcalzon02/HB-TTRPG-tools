@@ -295,8 +295,15 @@ def make_handler(state: ReaderState):
 
 def self_check(report_path: str = "", require_examples: bool = False) -> int:
     """Source/portable-package smoke test; does not assert audible Windows playback."""
-    checks = {"reader_html": (ROOT / "reader.html").is_file(),
-              "sapi_script": (ROOT / "sapi_synthesize.ps1").is_file()}
+    reader_path = ROOT / "reader.html"
+    html = reader_path.read_text(encoding="utf-8") if reader_path.is_file() else ""
+    checks = {"reader_html": reader_path.is_file(),
+              "sapi_script": (ROOT / "sapi_synthesize.ps1").is_file(),
+              "integrated_neural_setup": (ROOT / "install-neural-windows.ps1").is_file(),
+              "unified_gui_controls": all(
+                  'id="' + name + '"' in html for name in
+                  ("neuralInstall", "neuralInstallMode", "chapterFrom",
+                   "chapterThrough", "generate", "exportChapters"))}
     error = ""
     try:
         import fitz  # noqa: F401 - verifies bundled optional PDF parser
@@ -306,6 +313,8 @@ def self_check(report_path: str = "", require_examples: bool = False) -> int:
             archive = Archive(Path(folder))
             record = archive.import_document("smoke.txt", b"Hello from the SuperPosition Reader.")
             checks["private_archive"] = len(archive.load(record["id"])["chunks"]) == 1
+            plan = chapter_plan(archive, record["id"])
+            checks["unified_chapter_planner"] = plan["chunk_from"] == 0 and plan["chunk_through"] == 1
             archive.save_position(record["id"], 0, 0.5)
             checks["position_roundtrip"] = archive.read_position(record["id"])["fraction"] == 0.5
             if require_examples:

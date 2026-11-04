@@ -62,9 +62,8 @@ jobs:
           }
           $result = Get-Content $guiReport -Raw | ConvertFrom-Json
           if (-not $result.ok) { throw "GUI bundle reports missing files: $(Get-Content $guiReport -Raw)" }
-          Copy-Item software/superposition-reader/Setup-Sphinx-Neural-Voice.cmd .\dist\SuperPositionReader\
-          if (-not (Test-Path .\dist\SuperPositionReader\Setup-Sphinx-Neural-Voice.cmd)) {
-            throw "Neural setup launcher missing from distribution"
+          if (-not $result.checks.integrated_neural_setup -or -not $result.checks.unified_gui_controls -or -not $result.checks.unified_chapter_planner) {
+            throw "Single-program integration failed packaged smoke: $(Get-Content $guiReport -Raw)"
           }
       - name: Create zipped portable preview
         shell: pwsh
