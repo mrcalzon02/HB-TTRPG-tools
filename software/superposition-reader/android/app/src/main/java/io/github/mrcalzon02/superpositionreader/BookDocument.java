@@ -125,7 +125,7 @@ public final class BookDocument {
     public static BookDocument fromJson(JSONObject json) throws Exception {
         String id=json.getString("id");
         if (!id.matches("[a-f0-9]{16}")) throw new IllegalArgumentException("Invalid book ID");
-        ArrayList<String> chunks=new ArrayList<>(), titles=new ArrayList<>();
+        ArrayList<String> chunks=new ArrayList<>();
         JSONArray raw=json.getJSONArray("passages"), groups=json.getJSONArray("chapters");
         for(int i=0;i<raw.length();i++) chunks.add(raw.getString(i));
         ArrayList<Chapter> chapters=new ArrayList<>();
@@ -184,7 +184,7 @@ public final class BookDocument {
             byte[] content=files.get(path);
             if(content==null)throw new IllegalArgumentException("EPUB spine file missing: "+path);
             String text=html(new String(content,StandardCharsets.UTF_8));
-            if(text.isBlank())continue;
+            if(text.trim().isEmpty())continue;
             String first=text.split("\\n",2)[0].trim();
             String title=first.length()>0 && first.length()<=95 && !first.matches(".*[.!?]$")
                     ? first : "Chapter "+(sections.size()+1);
