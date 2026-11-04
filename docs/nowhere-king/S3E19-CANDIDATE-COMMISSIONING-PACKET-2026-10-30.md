@@ -258,7 +258,7 @@ Mara read it while the ink was wet.
 
 "He may," Sera said. "He may already have another fiddler. You are entitled to ask him, and to be angry with us if he has."
 
-Ysabet had both papers left visible until the people who relied on the first could see the second. She did not promise compensation or order a performance to make the embarrassment disappear.
+Ysabet would not leave the named sheet on public display. The watch clerk copied its heading, maker's signature, and the fact that names had been entered without consent into the incident record; he counted the named entries in Sera's presence without reading them aloud. Ysabet and Sera witnessed the original being folded and sealed with the clerk's account, available for a particular affected person to challenge through the officers rather than for any passerby to inspect. The courtier was not permitted to take it away or quietly destroy it. In its place Senn pinned the public correction, which identified the unauthorized headings and the time the sheet had stood but repeated no person's name. Mara could point to the correction when she asked the baker about her lost opportunity; if she needed proof that her own name had appeared, Ysabet would arrange a witnessed inspection of that entry without exposing anyone else's. The people who had relied on the first sheet could see why it was withdrawn, without the false guest list acquiring a second audience. Ysabet did not promise compensation or order a performance to make the embarrassment disappear.
 
 Luceran came through the connected gallery after the watch clerk had finished his account. He read the mistaken headings, then the correction. The courtier tried to explain that Edselsto could remember the people who had praised the music.
 
