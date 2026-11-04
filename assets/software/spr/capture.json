@@ -1,0 +1,36 @@
+{
+  "capture": "real SPR loopback application UI; browser screenshot, not a WebView2 screenshot",
+  "platform": "Windows GitHub Actions",
+  "renderer": "Playwright Chromium",
+  "document": "SPR Showroom - Demo Passage.txt (synthetic non-private sample)",
+  "installed_engines": [
+    "kokoro",
+    "piper"
+  ],
+  "source_commit": "8bff661b05642f363368369ad4f6a0fdaa8dca32",
+  "workflow_run": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/41774050889",
+  "captured_utc": "2026-11-04T04:37:09.595124+00:00",
+  "images": [
+    {
+      "file": "reader-overview.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 144417,
+      "sha256": "67f9765399f36a624eb9f308f9071200f933efeada109262f8444edb7db08972"
+    },
+    {
+      "file": "voice-library-kokoro.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 140802,
+      "sha256": "3863f6f98b17258073deaa1a68c52647e5e218f5bd2325464c9fb53520408e8e"
+    },
+    {
+      "file": "voice-library-piper.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 140438,
+      "sha256": "6214ef33eaa7d5c268f68dcbbf84c2b06b8b3167a146351631965d646275e339"
+    }
+  ]
+}
