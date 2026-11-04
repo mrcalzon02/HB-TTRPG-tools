@@ -6,6 +6,7 @@ import base64
 import io
 import zipfile
 import http.client
+import hashlib
 import json
 import pathlib
 import sys
@@ -22,6 +23,7 @@ from spr_app import ReaderState, make_handler
 from spr_voices import VoiceLibrary
 from spr_voicebox import VoiceboxEngine
 from spr_neural_alignment import is_complete, trim_guarded_audio
+from spr_voice_assets import VERIFIED_PREVIEWS, verify_previews
 from http.server import ThreadingHTTPServer
 
 
@@ -454,6 +456,15 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(job["error"], "")
         self.assertEqual(self.req("GET", "/api/audio/" + book_id + "/0")[0], 200)
         self.assertEqual(self.req("GET", "/api/export/" + book_id)[0], 200)
+
+    def test_verified_sphinx_previews_have_exact_real_neural_artifact_hashes(self):
+        # This is a reproducibility/integrity check, not a listener's quality score.
+        root = pathlib.Path(__file__).resolve().parents[1]
+        self.assertEqual(verify_previews(root),
+                         {name: True for name in VERIFIED_PREVIEWS})
+        for name, record in VERIFIED_PREVIEWS.items():
+            raw = (root / "assets" / "voice" / name).read_bytes()
+            self.assertEqual(hashlib.sha256(raw).hexdigest(), record["sha256"])
 
     def test_committed_sphinx_audition_routes(self):
         for name in ("bdo", "nowhere"):
