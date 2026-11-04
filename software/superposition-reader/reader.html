@@ -70,6 +70,13 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
       <div class="row"><button id="hearBdoLong" title="Listen to verified 30-second Beneath Dappled Oaks narration">▶ Oaks · 30s</button><button id="hearNowhereLong" title="Listen to verified 36-second Nowhere King narration">▶ Nowhere · 36s</button></div>
       <p class="small">These four local WAVs were generated using your Sphinx reference with independent speech-content verification. Opening words are intact; voice similarity still requires listening review. The full books have not yet been narrated.</p>
     </section>
+    <section><h2>Neural voice setup</h2>
+      <p class="small">Set up Sphinx narration here without leaving the reader. The first installation needs Python 3.11, Git, internet, and several gigabytes of private local storage. After the model downloads, narration runs offline.</p>
+      <label for="neuralInstallMode">Device for neural generation</label>
+      <select id="neuralInstallMode"><option value="gpu">NVIDIA GPU (CUDA 12.8)</option><option value="cpu">CPU only</option></select>
+      <button class="fill" id="neuralInstall" style="margin-top:8px">Install / repair local neural engine</button>
+      <p class="small" id="neuralSetupStatus" role="status">Checking local neural installation...</p>
+    </section>
     <section><h2>Generation</h2>
       <label for="engineSelect">Narration engine</label>
       <select id="engineSelect"></select>
@@ -80,8 +87,12 @@ footer{font-size:11px;color:#8293ac;line-height:1.4}
       <input id="voiceboxProfileId" type="text" maxlength="128" placeholder="Existing local Voicebox profile ID" hidden style="width:100%;padding:8px;background:#111620;color:#eef1f8;border:1px solid #45536a;border-radius:8px">
       <label for="sapiRate">Voice generation rate</label>
       <select id="sapiRate"><option value="0">Normal</option><option value="-2">Slightly slower</option><option value="2">Slightly faster</option></select>
-      <p class="small">SPR Neural uses a separate optional offline LuxTTS installation and your archived voice sample. Once its model has been downloaded locally, it can narrate without Voicebox or internet. Voicebox remains an alternative integration; cached narration remains playable regardless.</p>
-      <button class="fill primary" id="generate" disabled>Generate entire document</button>
+      <p class="small">Choose the voice and a chapter range. Existing matching clips are reused automatically if you resume after cancellation or restart.</p>
+      <div class="row">
+        <div style="flex:1"><label for="chapterFrom">First chapter</label><select id="chapterFrom" disabled></select></div>
+        <div style="flex:1"><label for="chapterThrough">Last chapter</label><select id="chapterThrough" disabled></select></div>
+      </div>
+      <button class="fill primary" id="generate" disabled>Generate selected chapters</button>
       <button class="fill danger" id="cancel" style="margin-top:8px" disabled>Cancel after current chunk</button>
       <progress id="progress" value="0" max="100"></progress>
       <div id="generationStatus" class="small" role="status"></div>
@@ -121,6 +132,7 @@ let book = null, active = 0, waiting = null, playing = false, workBusy = false;
 let engineId = "unavailable", engineKey = "sapi", engineOptions = [], windowsVoices = [];
 let resumeFraction = 0, positionTimer = null, lastPositionTime = 0;
 let lastJobBook = null, lastJobDone = -1, lastJobActive = false;
+let neuralSetupStage = "", neuralSetupBusy = false;
 audio.volume = 0.8;
 function selectedVoice(){return engineKey.startsWith("voicebox-")
   ?($("voiceboxProfileId").value.trim()||$("voice").value):$("voice").value;}
@@ -168,6 +180,26 @@ async function refreshEngineOptions(){
   if(!key){engineId="unavailable";return;}
   $("engineSelect").value=key;
   applyEngine(key,key===previousKey?previousVoice:"");
+}
+function populateChapters(){
+  const chapters=book?.chapters?.length?book.chapters:[{title:"Complete document"}];
+  for(const id of ["chapterFrom","chapterThrough"]){
+    const node=$(id);node.replaceChildren();
+    chapters.forEach((chapter,index)=>{
+      const option=document.createElement("option");
+      option.value=String(index+1);
+      option.textContent=String(index+1)+" · "+chapter.title;
+      node.append(option);
+    });
+    node.disabled=!book;
+  }
+  $("chapterFrom").value="1";
+  $("chapterThrough").value=String(chapters.length);
+}
+function correctChapterRange(changed){
+  const first=Number($("chapterFrom").value), last=Number($("chapterThrough").value);
+  if(first>last)$(changed==="chapterFrom"?"chapterThrough":"chapterFrom").value=
+    $(changed).value;
 }
 function renderMatches(index){
   const item=book?.audio?.[String(index)];
@@ -254,6 +286,8 @@ function updateButtons(){
   $("previous").disabled=!has||active===0;
   $("next").disabled=!has||active>=book.chunks.length-1;
   $("generate").disabled=!has||workBusy||engineId==="unavailable";
+  $("chapterFrom").disabled=!has||workBusy;
+  $("chapterThrough").disabled=!has||workBusy;
   $("cancel").disabled=!workBusy;
   $("voice").disabled=workBusy;
   $("engineSelect").disabled=workBusy;
@@ -303,6 +337,7 @@ async function openBook(id){
     }
   }
   $("documentTitle").textContent=book.title;
+  populateChapters();
   const host=$("documentText");
   host.replaceChildren();
   book.chunks.forEach((chunk,i)=>{
@@ -429,12 +464,19 @@ $("volume").addEventListener("input",event=>{audio.volume=Number(event.target.va
 $("generate").addEventListener("click",async()=>{
   if(!book)return;
   try{
-    const result=await post("/api/generate",{book_id:book.id,engine_key:engineKey,voice:selectedVoice(),rate:effectiveRate()});
+    const result=await post("/api/generate",{
+      book_id:book.id,engine_key:engineKey,voice:selectedVoice(),rate:effectiveRate(),
+      chapter_from:Number($("chapterFrom").value),
+      chapter_through:Number($("chapterThrough").value)
+    });
     workBusy=result.active;
-    status("Generating the complete document using local Windows voices.");
+    status("Generating selected chapters with "+$("engineSelect").selectedOptions[0].textContent+
+           ". Matching cached passages will be reused.");
     updateButtons();
   }catch(error){status(error.message);}
 });
+$("chapterFrom").addEventListener("change",()=>correctChapterRange("chapterFrom"));
+$("chapterThrough").addEventListener("change",()=>correctChapterRange("chapterThrough"));
 $("cancel").addEventListener("click",async()=>{try{await post("/api/cancel",{});status("Cancellation requested; current sentence may finish.");}catch(error){status(error.message);}});
 $("export").addEventListener("click",()=>{
   if(book&&book.chunks.every((_,i)=>renderMatches(i))){
@@ -445,6 +487,39 @@ $("exportChapters").addEventListener("click",()=>{
   if(book&&book.chunks.every((_,i)=>renderMatches(i))){
     window.location.href="/api/export-chapters/"+book.id;
   }
+});
+async function pollNeuralSetup(){
+  const info=await request("/api/neural-setup");
+  const previouslyInstalling=neuralSetupStage==="installing";
+  neuralSetupStage=info.stage;
+  neuralSetupBusy=!!info.active;
+  $("neuralInstall").disabled=!info.supported||info.active||workBusy;
+  $("neuralInstallMode").disabled=!info.supported||info.active;
+  $("neuralSetupStatus").textContent=!info.supported
+    ?"Integrated installer is supported on Windows only."
+    :info.active
+      ?"Installing local neural dependencies. Keep SPR open; details are saved in your private setup.log."
+      :info.error
+        ?"Neural setup error: "+info.error+" Log: "+info.log_path
+        :info.installed
+          ?"Neural runtime is installed. Choose SPR Neural in Generation."
+          :"Optional neural runtime is not installed. Windows SAPI remains available.";
+  if(previouslyInstalling&&info.stage==="ready"){
+    await refreshEngineOptions();
+    if(book)await fetchBook();
+    status("SPR Neural installed and available in this reader.");
+  }
+}
+$("neuralInstall").addEventListener("click",async()=>{
+  if(!window.confirm("Install SPR's optional local LuxTTS neural runtime? This downloads several gigabytes into your Windows user profile and requires Python 3.11 and Git."))return;
+  try{
+    const result=await post("/api/neural-setup",{
+      cpu_only:$("neuralInstallMode").value==="cpu"
+    });
+    neuralSetupStage=result.stage;
+    neuralSetupBusy=!!result.active;
+    await pollNeuralSetup();
+  }catch(error){status("Neural setup failed to start: "+error.message);}
 });
 async function poll(){
   try{
@@ -468,6 +543,7 @@ async function poll(){
       await queueOne(waiting);
     }
     updateButtons();
+    await pollNeuralSetup();
   }catch(error){status("Local server unavailable: "+error.message);}
 }
 async function refreshVoiceProfiles(selectId){
@@ -529,6 +605,7 @@ async function initialize(){
     const voices=await request("/api/voices");
     windowsVoices=voices.voices;
     await refreshEngineOptions();
+    await pollNeuralSetup();
     if(!windowsVoices.length)status("No Windows SAPI voices detected; select an available local engine.");
     await refreshVoiceProfiles();
     const bootstrap=await request("/api/bootstrap");
