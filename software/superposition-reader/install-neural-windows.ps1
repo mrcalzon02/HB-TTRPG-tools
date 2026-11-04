@@ -52,13 +52,13 @@ if ($CpuOnly) {
     if ($LASTEXITCODE -ne 0) { throw 'CUDA 12.8 PyTorch installation failed. Rerun with -CpuOnly for fallback.' }
     if (Test-Path -LiteralPath $CpuFlag) { Remove-Item -LiteralPath $CpuFlag -Force }
 }
-& $Python -m pip install -r (Join-Path $Upstream 'requirements.txt') soundfile librosa
+& $Python -m pip install -r (Join-Path $Upstream 'requirements.txt') soundfile librosa faster-whisper scipy
 if ($LASTEXITCODE -ne 0) { throw 'LuxTTS dependency installation failed. Existing cache is retained.' }
 & $Python -m pip install --no-deps -e $Upstream
 if ($LASTEXITCODE -ne 0) { throw 'LuxTTS package registration failed.' }
 
 $env:HF_HOME = $Models
-& $Python -c "from zipvoice.luxvoice import LuxTTS; import torch, soundfile; print('SPR neural Python imports ready; GPU:', torch.cuda.is_available())"
+& $Python -c "from zipvoice.luxvoice import LuxTTS; from faster_whisper import WhisperModel; import torch, soundfile; print('SPR neural and English speech QA imports ready; GPU:', torch.cuda.is_available())"
 if ($LASTEXITCODE -ne 0) { throw 'Neural package import check failed.' }
 
 if (-not $SkipPreview) {
