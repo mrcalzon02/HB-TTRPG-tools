@@ -292,6 +292,30 @@ class NeuralOpeningTests(unittest.TestCase):
         self.assertEqual(len(audio), 2680)
 
 
+    def test_real_sphinx_unwanted_if_guard_is_removed_without_clipping_the_story(self):
+        expected = "There should have been forty-three of them."
+        heard = "If the story begins. There should have been 43 of them."
+        self.assertTrue(is_complete(expected, heard, guarded=True,
+                                    guard_phrase="The story begins.")[0])
+        timed = [
+            ("If", 0.0, 0.3), ("the", 0.3, 0.42),
+            ("story", 0.42, 0.74), ("begins", 0.74, 1.28),
+            ("There", 2.84, 3.56), ("should", 3.56, 3.92),
+            ("have", 3.92, 4.1), ("been", 4.11, 4.35),
+            ("43", 4.36, 5.2), ("of", 5.21, 5.4),
+            ("them", 5.41, 5.73)]
+        recognition = {"text": heard, "chunks": [
+            {"text": word, "timestamp": [start, end]}
+            for word, start, end in timed]}
+        audio, info = trim_guarded_audio([0.01] * 6211, 1000, expected,
+                                        recognition, guard_phrase="The story begins.")
+        self.assertEqual(info["guard_word"], "begins")
+        self.assertEqual(info["first_words_verified"], ["there", "should", "have"])
+        self.assertAlmostEqual(info["removed_seconds"], 2.24, places=2)
+        self.assertEqual(info["first_word_pre_roll_ms"], 600)
+        self.assertEqual(len(audio), 6211 - 2240)
+
+
     def test_impossible_asr_speech_length_and_timing_is_rejected(self):
         expected = "There should have been forty-three of them."
         looping = "The story begins. " + ("that's it " * 75)
