@@ -317,6 +317,7 @@ public final class MainActivity extends Activity {
     }
     private void loadLibraryAsync(boolean seed){
         io.execute(()->{
+            String previousSelection=store.selected();
             if(seed){
                 for(String file:new String[]{"bdo-current.epub","nowhere-s1.epub",
                         "nowhere-s2.epub","nowhere-s3.epub"}){
@@ -329,6 +330,7 @@ public final class MainActivity extends Activity {
                         // Source builds without generated book assets still import user books.
                     }
                 }
+                if(!previousSelection.isEmpty())store.setSelected(previousSelection);
             }
             ArrayList<BookDocument> available=store.library();
             String selected=store.selected();
@@ -386,9 +388,15 @@ public final class MainActivity extends Activity {
         if(end>start)markup.setSpan(new BackgroundColorSpan(0xff66501e),
                 start,end,android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         text.setText(markup);
-        if(rangeEnd==0 || chapter!=shownChapter){
-            int line=text.getLayout()==null?0:text.getLayout().getLineForOffset(start);
-            readingScroll.post(()->readingScroll.scrollTo(0,Math.max(0,line*dp(26)-dp(40))));
+        if(rangeEnd==0){
+            readingScroll.post(()->{
+                if(text.getLayout()!=null){
+                    int line=text.getLayout().getLineForOffset(
+                            Math.min(start,text.length()));
+                    int top=text.getLayout().getLineTop(line);
+                    readingScroll.smoothScrollTo(0,Math.max(0,top-dp(40)));
+                }
+            });
         }
     }
     private void move(int delta){

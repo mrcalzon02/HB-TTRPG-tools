@@ -24,9 +24,14 @@ public final class BookStore {
         prefs=context.getSharedPreferences("spr-reader",Context.MODE_PRIVATE);
     }
     public BookDocument save(String name,byte[] data) throws Exception {
-        BookDocument book=BookDocument.fromBytes(name,data);
-        File target=new File(folder,book.id+".json");
-        if(!target.exists()){
+        String id=sourceId(data);
+        File target=new File(folder,id+".json");
+        BookDocument book;
+        if(target.isFile()){
+            book=BookDocument.fromJson(new JSONObject(new String(
+                    Files.readAllBytes(target.toPath()),StandardCharsets.UTF_8)));
+        }else{
+            book=BookDocument.fromBytes(name,data);
             File temp=new File(folder,book.id+".partial");
             try(FileOutputStream stream=new FileOutputStream(temp)){
                 stream.write(book.toJson().toString().getBytes(StandardCharsets.UTF_8));
@@ -36,6 +41,12 @@ public final class BookStore {
         }
         setSelected(book.id);
         return book;
+    }
+    private static String sourceId(byte[] data) throws Exception {
+        byte[] hash=java.security.MessageDigest.getInstance("SHA-256").digest(data);
+        StringBuilder id=new StringBuilder();
+        for(int i=0;i<8;i++)id.append(String.format(java.util.Locale.ROOT,"%02x",hash[i]&0xff));
+        return id.toString();
     }
     public ArrayList<BookDocument> library(){
         ArrayList<BookDocument> books=new ArrayList<>();
