@@ -274,7 +274,8 @@ public final class MainActivity extends Activity {
             if(!suppressSelection&&index>=0&&index<library.size())openBook(library.get(index));
         }));
         chapterPicker.setOnItemSelectedListener(selection((index)->{
-            if(!suppressSelection&&currentBook!=null&&index<currentBook.chapters.size()){
+            if(!suppressSelection&&currentBook!=null&&index<currentBook.chapters.size()
+                    &&index!=currentBook.chapterFor(passage)){
                 cancelRender(null);
                 stopNarration(null);
                 passage=currentBook.chapters.get(index).start;
