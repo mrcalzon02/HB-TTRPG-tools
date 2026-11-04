@@ -26,6 +26,7 @@ from spr_voices import VoiceLibrary
 from spr_voicebox import VoiceboxEngine
 from spr_neural_alignment import is_complete, trim_guarded_audio, verified_word_cues
 from spr_voice_assets import VERIFIED_PREVIEWS, verify_previews
+from spr_narrate import chapter_plan, render_selection, main as narrate_main
 from http.server import ThreadingHTTPServer
 
 
@@ -196,6 +197,41 @@ class ArchiveTests(unittest.TestCase):
             self.archive.import_document("../book.exe", b"malware")
         with self.assertRaises(ValueError):
             self.archive.import_document("empty.txt", b" \n ")
+
+
+class HeadlessNarrationTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.archive = Archive(pathlib.Path(self.tmp.name))
+
+    def test_resume_reuses_verified_cache_and_exports_complete_zip(self):
+        book = self.archive.import_document("book.txt", b"One. Two. Three.")
+        self.assertEqual(chapter_plan(self.archive, book["id"])["chunk_through"], 3)
+        with self.assertRaisesRegex(ValueError, "Chapter selection"):
+            chapter_plan(self.archive, book["id"], first=2)
+        engine = FakeEngine()
+        self.archive.generate_chunk(book["id"], 0, engine, voice="Narrator")
+        result = render_selection(self.archive, book["id"], engine, voice="Narrator")
+        self.assertEqual((result["generated"], result["reused"]), (2, 1))
+        self.assertTrue(result["whole_book_ready_for_selected_voice"])
+        repeated = render_selection(self.archive, book["id"], engine, voice="Narrator")
+        self.assertEqual((repeated["generated"], repeated["reused"]), (0, 3))
+        self.assertEqual(len(engine.calls), 3)
+        self.assertTrue(self.archive.export_chapters_zip(book["id"]).is_file())
+
+    def test_dry_run_imports_locally_without_neural_dependency(self):
+        import contextlib
+        source = pathlib.Path(self.tmp.name) / "story.txt"
+        source.write_text("First. Second.", encoding="utf-8")
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            result = narrate_main(["--data-dir", self.tmp.name,
+                                   "--import-file", str(source), "--dry-run"])
+        self.assertEqual(result, 0)
+        plan = json.loads(output.getvalue())
+        self.assertEqual(plan["status"], "planned_only")
+        self.assertEqual(plan["chunk_through"] - plan["chunk_from"], 2)
 
 
 class EpubImportTests(unittest.TestCase):
