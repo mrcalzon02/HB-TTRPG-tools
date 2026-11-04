@@ -75,7 +75,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add software/superposition-reader/assets/voice/sphinx-bdo-full-passage.wav software/superposition-reader/assets/voice/sphinx-nowhere-full-passage.wav
+          git add -f -- software/superposition-reader/assets/voice/sphinx-bdo-full-passage.wav software/superposition-reader/assets/voice/sphinx-nowhere-full-passage.wav
           if git diff --cached --quiet; then
             echo "Long passage files already match the validated recordings."
           else
