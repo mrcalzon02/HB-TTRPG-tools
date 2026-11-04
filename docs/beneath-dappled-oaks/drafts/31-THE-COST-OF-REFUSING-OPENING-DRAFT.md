@@ -3837,3 +3837,93 @@ By evening the mill's delivery space was still empty. The first farmer had her d
 He shut the customer book on the two different choices and left the delivery column blank.
 
 There was a cost to refusing to write down what had not happened. He had paid part of it in returned money and another part in work that could not begin. It was less than the cost of telling two farmers their seed was on its way when nobody could yet say that it was.
+
+---
+
+At the Warden station the following morning, the works-office instruction lay beneath a square of glass, its single initial visible through a pale scratch in the surface. Thessa had borrowed the glass from the map cabinet to keep the damp copy flat. It made the paper easier to read and no more authoritative.
+
+Sorn came in carrying the road watch's overnight entries. The north-road heavy-load warning had been checked at dusk and again at first light. Neither patrol had reported a repair inspection. Thessa signed the continuation of the restriction and returned the sheet to its own folder.
+
+"You're going to wear a hole through that initial," Sorn said.
+
+"I'd prefer to find out what it stands for."
+
+"That isn't the same as finding out who wrote it."
+
+"No. Which is why I haven't filled in the name."
+
+The district auditor's request for the works-office authority book had a receipt mark, but still no answer. The intermediary cashier's signed account waited for a separate courier, and Thessa had not entered it as delivered. She could have written a second urgent letter demanding the person behind the initial. She had begun one the night before, then stopped at the word *person*. An office might authorize an instruction through a recorded delegation without the person who copied the initial ever seeing the delegating officer.
+
+She asked the station's records keeper to bring the ordinary outgoing-request rules.
+
+He was a thin man with ink on his sleeve and a dislike of requests that made him decide matters he had not witnessed. He placed the rules beside the glass.
+
+"The auditor has asked for the authority book," he said.
+
+"Yes. I don't intend to ask you to produce her answer."
+
+"Then what do you intend?"
+
+"To ask how the works office distinguishes an instruction entered under delegated authority from one merely carried out under its stamp. I need the right record class, not a name you might guess."
+
+He found the provision governing authority extracts. A works-office instruction could be copied to a paying intermediary with the office stamp and an abbreviated signatory mark. The abbreviation on a copy was not itself the delegation entry. For a contested charge, the custodian could be asked to certify the register reference, the authority in force on the instruction date, and whether the instruction had been entered in the appropriate series. If the underlying entry contained protected personnel information, a bounded certificate could describe the authority class without disclosing irrelevant names.
+
+"Does this mean the instruction was valid?" Sorn asked.
+
+"It means there is a way to ask," the keeper said. "It does not mean the book contains the answer you want. Or that this copy was made from an entered instruction."
+
+Thessa drew three columns on a fresh sheet: what the intermediary had received, what the works office had recorded, and what the treasury had actually transferred. Under the first she could place the stamped copy and the cashier's witnessed issue. The second and third remained blank.
+
+The keeper pointed to her heading.
+
+"Don't call the second column *authorization* yet. Call it *authority record requested*. Otherwise someone will read your neat handwriting as a finding."
+
+She changed it.
+
+A junior road clerk arrived with a bundle of toll notices and paused at the sight of the glass. "They told us the bridge bill was settled," he said.
+
+"The carpenter's claim has supporting receipts for its advance and balance," Thessa replied. "That is not the same as restoring the road-stone warrant."
+
+"But if the works office told the intermediary to pay, doesn't that settle whose decision it was?"
+
+"It establishes what the intermediary was told, if this is an accurate copy. It doesn't establish that the instruction was entered under the authority it claimed. And it doesn't tell us whether the stone account was made whole."
+
+The clerk looked disappointed. He had been sent to collect the road watch's public warning, not to learn why one initial could hold up an account.
+
+Thessa gave him the warning sheet and nothing from the financial packet. "This is what travelers need. The verge has not been certified for heavy wagons."
+
+When he had gone, Sorn examined the three columns.
+
+"Could you ask the cashier who brought him the instruction?"
+
+"I could. He already said it was on his desk when he opened the cash box. Asking him to remember a face he never saw would only give us a story about a corridor."
+
+"Then the works-office register."
+
+"And the receipt that connects that register to the copy. If there is one."
+
+Thessa prepared a supplemental question for the district auditor, not a competing demand to the works office. It asked whether the pending authority-book request could include the relevant instruction-series reference, the class of delegated signing authority in force on that date, and the means by which the stamped copy had been issued to the intermediary. It expressly did not presume a particular officer signed, a delegation existed, or a reply had already been made. The auditor could narrow or refuse the question if her inquiry already covered it.
+
+She dated the sheet as prepared. The dispatch line remained empty.
+
+"More waiting," Sorn said.
+
+"More knowing what we're waiting for."
+
+"And the quarry?"
+
+"Still a separate dispatch and delivery question. A properly signed order to pay the bridge would not prove a cart of stone reached the district stores."
+
+"And the treasury?"
+
+"Still the missing restoration or transfer entry. Even a perfectly lawful emergency advance leaves an account to be reconciled."
+
+Outside, the stable hands were leading out the morning patrol. One horse shied at a bucket and then, reassured, walked past it. Thessa watched the small correction with envy. Paper was slower. It did not learn from being shown the same obstruction twice.
+
+She put the supplemental question beside the unsigned dispatch register, where the next authorized messenger could collect it and leave a mark. Until then it was only a prepared question. The cashier's earlier packet remained separately logged; the auditor's unanswered requests remained unanswered. The road warning remained in force.
+
+Sorn took up the patrol slate. "I suppose I should be grateful you haven't found a way to make the bridge and the road into the same account."
+
+"They share a district," Thessa said. "That is not enough."
+
+It was not a satisfying ending. It was the only one the records had earned.
