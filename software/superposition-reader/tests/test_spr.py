@@ -265,6 +265,33 @@ class NeuralOpeningTests(unittest.TestCase):
         self.assertGreaterEqual(info["first_word_pre_roll_ms"], 100)
         self.assertEqual(len(out), 3020)
 
+    def test_distinct_natural_guard_after_repetition_failure(self):
+        expected = "There should have been forty-three of them."
+        preamble = "The story begins."
+        self.assertTrue(is_complete(expected, preamble + " " + expected,
+                                    guarded=True, guard_phrase=preamble)[0])
+        self.assertFalse(is_complete(expected, "That's it, that's it, that's it.",
+                                     guarded=True, guard_phrase=preamble)[0])
+        recognition = {"text": preamble + " " + expected,
+                       "chunks": [
+                           {"text": "The", "timestamp": [0.28, 0.49]},
+                           {"text": "story", "timestamp": [0.51, 0.74]},
+                           {"text": "begins", "timestamp": [0.76, 1.1]},
+                           {"text": "There", "timestamp": [1.27, 1.58]},
+                           {"text": "should", "timestamp": [1.61, 1.79]},
+                           {"text": "have", "timestamp": [1.82, 2.0]},
+                           {"text": "been", "timestamp": [2.04, 2.17]},
+                           {"text": "forty-three", "timestamp": [2.2, 2.45]},
+                           {"text": "of", "timestamp": [2.48, 2.55]},
+                           {"text": "them", "timestamp": [2.58, 2.83]}]}
+        audio, summary = trim_guarded_audio(
+            [0.01] * 3800, 1000, expected, recognition, guard_phrase=preamble)
+        self.assertEqual(summary["guard_word"], "begins")
+        self.assertAlmostEqual(summary["removed_seconds"], 1.12)
+        self.assertGreaterEqual(summary["first_word_pre_roll_ms"], 100)
+        self.assertEqual(len(audio), 2680)
+
+
     def test_without_word_boundary_never_guesses_trim(self):
         expected = "There should have been forty-three of them."
         with self.assertRaisesRegex(ValueError, "word-timed"):
