@@ -59,6 +59,20 @@ def verify(directory: Path, repo_root: Path = ROOT, snapshot: str = "local") -> 
             imported = archive.import_document(entry["title"] + ".epub", data)
             if len(imported["chunks"]) < entry["chapters"] * 5:
                 raise AssertionError("Narration chunk count implausibly low")
+            # Chapter WAV ZIP must preserve every original EPUB spine section,
+            # not silently collapse to an arbitrary single-document fallback.
+            mapped = imported.get("chapters") or []
+            if len(mapped) != entry["chapters"]:
+                raise AssertionError(
+                    f"EPUB chapter mapping failed for {entry['id']}: "
+                    f"{len(mapped)} mapped, {entry['chapters']} expected")
+            boundary = 0
+            for chapter in mapped:
+                if chapter["start"] != boundary or chapter["end"] <= boundary:
+                    raise AssertionError("Chapter offsets are not contiguous for " + entry["id"])
+                boundary = chapter["end"]
+            if boundary != len(imported["chunks"]):
+                raise AssertionError("Chapter mapping omitted narration for " + entry["id"])
             # Test beginning/end of every volume and resumable actual document archive.
             indices = sorted(set([0, len(imported["chunks"]) // 2, len(imported["chunks"]) - 1]))
             engine = TestVoice()
@@ -75,7 +89,8 @@ def verify(directory: Path, repo_root: Path = ROOT, snapshot: str = "local") -> 
                              "narration_chunks": len(imported["chunks"]),
                              "characters": len(contents), "epub_bytes": len(data),
                              "epub_sha256": entry["epub_sha256"],
-                             "sampled_audio_indices": indices})
+                             "sampled_audio_indices": indices,
+                             "chapter_boundaries_verified": True})
     (directory / "integration-receipt.json").write_text(json.dumps(
         {"status": "passed", "snapshot": snapshot, "books": receipts,
          "neural_voice_test": "not_run", "real_sapi_test": "not_run"},
