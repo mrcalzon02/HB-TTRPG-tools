@@ -258,6 +258,81 @@ He did not ask Daysha to remove it. Not yet. Whatever might eventually become of
 
 Across the table, the broad-shouldered minister began to smile. Rome raised one glittering eyebrow, and the minister straightened immediately. For the rest of the sitting, no one could accuse the council of having forgotten that the king was also a father.
 
+
+### The little boat
+
+The boat was still on the nursery table when Estelle returned. Its blue sail had folded against the crooked mast, and the basin in which she had tested it had been put away. She set the empty basket beside the table and reached for the boat, but the attendant remained in the doorway rather than following her inside.
+
+“Will you be asked about the gallery?” Estelle said.
+
+“I expect so, Your Highness.”
+
+“Will you tell them I tricked you?”
+
+“I will tell them what I saw and what you told me. That is different from asking you to tell my story for me.”
+
+Estelle turned the little boat in her hands. “I thought if I said it first, nobody would blame you.”
+
+“That was kind to think of afterward. It would have been kinder to let me know what was in the basket beforehand.”
+
+The attendant spoke without sharpness, which made the answer harder to escape. Estelle had imagined that a princess could fix the trouble by saying the right thing loudly enough. The attendant had her own account to give, and the people responsible for hearing it would have to listen.
+
+“May I bring the boat?” Estelle asked.
+
+“Yes. That is what the basket was meant for.”
+
+This time Estelle lifted the cloth so the attendant could see exactly what she was carrying. The attendant looked at the crooked sail and smiled a little.
+
+“I hope it floats.”
+
+“It does,” Estelle said. “It only has difficulty deciding where to go.”
+
+They went to the small family sitting room near the council passage. Estelle wanted to set a basin on the table and fill it at once, but the attendant pointed out that the table held books and letters. They chose a low stand near the window instead, with a cloth beneath the basin. Estelle fetched the water herself in two small trips, carrying no more than she could manage without spilling it. It was much less exciting than preparing a balloon. It was also rather satisfying to arrive with the water still inside the jug.
+
+Rome did not appear at the first sound of footsteps in the corridor. Estelle counted the windowpanes, then the blue stitches along the edge of the cloth. She wondered whether the council had found a third route for the carts or another reason to argue about the first two. She was beginning to understand that the people who used those routes had not yet been heard. Even if her father came to see the boat, the passage would still need a decision made with their knowledge.
+
+A messenger arrived before Rome did.
+
+“His Majesty says the present item is taking longer than expected,” he told her. “He has sent word as he promised. He will come at the next break he can keep.”
+
+Estelle was disappointed. She was also surprised to discover that the message made waiting easier. Her father had not forgotten her, and he had not pretended the council was finished. She thanked the messenger and left the boat dry on the cloth.
+
+When Rome finally entered, he still carried a few glittering flecks in his silver hair. He had changed neither his coat nor his expression of tired amusement.
+
+“Have I missed the voyage?” he asked.
+
+“No. I waited.”
+
+“Then I owe you a demonstration.”
+
+“You owe me a look,” Estelle corrected him. “The demonstration is mine.”
+
+She set the boat in the basin. It drifted forward, turned with great dignity, and made for the side as though the window were a harbor. Rome crouched beside her and watched it strike the basin with a quiet tap.
+
+“A determined captain,” he said.
+
+“A crooked mast,” Estelle replied. “I can straighten it, but I wanted you to see what I made before I changed it.”
+
+Rome looked at the sail, the little hull, and finally at her. “I am glad you did.”
+
+She considered the boat for a moment. “I could have brought this to the gallery.”
+
+“You could have asked.”
+
+“You might have said no.”
+
+“I might. But then we would have known what we were deciding.”
+
+Estelle touched the edge of the basin and watched the ripples turn her boat toward open water again. Her father had kept his promise, though later than either of them had wanted. The attendant had not been required to accept Estelle's account in place of her own. And somewhere beyond the sitting-room door, the people who carried the palace's food and supplies still had a passage to explain to the council. None of those things had been settled by the glitter.
+
+“Tomorrow,” she said, “I shall make a straighter mast.”
+
+Rome smiled. “And if the boat still sails sideways?”
+
+“Then I shall ask someone who knows boats.”
+
+“That,” said the king, “sounds like a very good beginning.”
+
 ---
 
 ## RH-F03 / SC-03 continuity and provenance ledger
