@@ -578,7 +578,7 @@ $("createProfile").addEventListener("click",async()=>{
     const created=await post("/api/voice-profile",{name,style:"user-reference"});
     await refreshVoiceProfiles(created.id);
     $("profileName").value="";
-    $("voiceArchiveStatus").textContent="Reference profile created; no neural model has been trained.";
+    $("voiceArchiveStatus").textContent="Reference profile created. Add an authorized voice recording to make it selectable in SPR Neural.";
   }catch(error){$("voiceArchiveStatus").textContent=error.message;}
 });
 $("voiceSample").addEventListener("change",async event=>{
@@ -597,7 +597,8 @@ $("voiceSample").addEventListener("change",async event=>{
     });
     const result=await post("/api/voice-sample",{profile_id:profileId,name:file.name,base64:encoded});
     await refreshVoiceProfiles(profileId);
-    $("voiceArchiveStatus").textContent="Archived "+(result.added!==undefined?result.added+" clips":file.name)+" locally. Voice synthesis is not yet linked to this profile.";
+    await refreshEngineOptions();
+    $("voiceArchiveStatus").textContent="Archived "+(result.added!==undefined?result.added+" clips":file.name)+" locally. This profile is available to SPR Neural after local engine setup.";
   }catch(error){$("voiceArchiveStatus").textContent="Import failed: "+error.message;}
   event.target.value="";
 });
