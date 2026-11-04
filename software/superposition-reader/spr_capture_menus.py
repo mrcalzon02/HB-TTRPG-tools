@@ -124,8 +124,18 @@ def capture(out_dir: Path, data_dir: Path):
                 # The real installed local voice appears in the actual app
                 # engine and voice selector, not a test-supplied fake response.
                 page.locator("#engineSelect").select_option("kokoro")
-                page.wait_for_function(
-                    "() => document.querySelector('#voice')?.value === 'bm_george'")
+                print("Kokoro engine and voice selector:",
+                      json.dumps(page.evaluate("""() => ({
+                          engine: document.querySelector('#engineSelect')?.value,
+                          voice: document.querySelector('#voice')?.value,
+                          choices: Array.from(document.querySelector('#voice')?.options || []).map(o=>o.value),
+                          errors: document.querySelector('#status')?.textContent
+                      })""")), flush=True)
+                if page.locator("#voice option[value='bm_george']").count() != 1:
+                    raise RuntimeError("Live SPR Kokoro voice list did not expose bm_george")
+                page.locator("#voice").select_option("bm_george")
+                if page.locator("#voice").input_value() != "bm_george":
+                    raise RuntimeError("SPR did not retain the explicitly chosen Kokoro voice")
                 page.locator("#localVoiceChoice").select_option("kokoro-british")
                 page.wait_for_function(
                     "() => document.querySelector('#localVoiceStatus')?.textContent"
