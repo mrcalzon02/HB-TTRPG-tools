@@ -371,3 +371,76 @@ Sera looked at the folded correction. "I won't."
 Mara was grateful for the promise, but she did not mistake it for a contract. She stayed by the bakery wall to ask her own question when the baker was free. The ovens continued their work. No castle voice could reach into that room and turn the answer into one she had already received.
 
 **Editorial consequence and verification boundary:** Mara, not the Crown, controls whether to pursue the baker's original offer and whether to reserve future time. The audition ends **before** the baker answers: no replacement musician, fee, lost-income amount, contract, compensation, court booking, or recovery is established. If Candidate B is ever commissioned, the author must decide whether the baker's actual answer warrants a further scene and whether Mara accepts or declines any real offer. The public correction remains evidence of an unauthorized posting, not proof of the baker's decision. Sera's rope obligations, Senn's limited public-copy role, Miren's privacy boundary, Edselsto's connected-gallery limits, and all S3E18 material and candle constraints remain unchanged.
+
+
+---
+
+## Candidate A — The claim that remained (additional audition, 2026-11-05)
+
+**UNAPPROVED / NONCANONICAL.** This is a mutually exclusive Candidate A audition, not an addition to Candidate B, an Episode 19 commission, or a canonical payment decision. It follows the hypothetical public correction of Oris's sheet. No wage is paid, payment date authorized, or new fund discovered.
+
+Rell had watched Oris pin the correction beside the wage chest. By the next morning the paper was curling at one corner, but the wrong words beneath it were still readable. That was what Ysabet had promised: nobody could pretend the mistake had never been there.
+
+His own name remained on the signed roll. So did the unpaid amount.
+
+He had spent the walk from the roof trying to decide which fact to be grateful for. The first meant the court had not erased an hour of his work. The second meant his household still could not spend it.
+
+The roofer who had witnessed the challenge walked beside him. Neither man had come to demand that the clerk be punished again.
+
+Damaris received them at the side desk, not at the pay chest. She brought the signed roll herself and left it closed until Rell said what he wanted.
+
+"A copy I can take home," he said. "Not the whole book. My hours, what has been paid, what remains. The date you wrote it. And where the claim stands when money for the roof comes in."
+
+"I can certify what the roll records today," Damaris said. "I cannot certify the day on which the balance will be paid."
+
+"Then don't write one."
+
+She looked at him a moment. "That is a more careful instruction than I usually receive."
+
+"I have a wife who will ask me whether the paper buys flour. I need to be able to tell her what it does."
+
+Damaris called for a clerk to prepare an extract under her eye. Rell stopped him before he wrote *payment expected* in the margin.
+
+"Expected by whom?"
+
+The clerk scratched the heading out without argument. He wrote *balance outstanding on the date of this extract* instead. Damaris checked it against the signed roll and the earlier partial disbursement. She would not put a number beside the next payment in the order until the controlling accounts could support it. She did, however, allow Rell's request for his place in that order to be entered and receipted, with his witness named. A receipt for asking was not a receipt for being paid.
+
+Luceran appeared at the door while the clerk sanded the ink. Rell had expected a king to want the matter finished now that the false notice was corrected.
+
+"Was the hour restored?" Luceran asked.
+
+"It was never taken from the signed roll," Damaris answered.
+
+"Then that is good."
+
+"It is good," Rell said. "But it is not the thing I came back for."
+
+The king looked at the paper in his hand. The first line said what Rell had worked. The second said what had already been paid. The third remained a debt.
+
+Luceran reached toward the open inquiry book, where someone had copied Pell's measuring-hour saving. Rell saw the movement and spoke before the king could begin.
+
+"Your Grace, please don't ask the house how much work I did. The roll says it, and the man beside me saw it. Ask your officers what order my claim is in. Then let me see their answer."
+
+Luceran lowered his hand. He had wanted to find a number that would make the conversation easier. A number was already there, and it had not made the workman's household any warmer.
+
+"Damaris," he said, "can that question be answered from the existing payment records?"
+
+"The position can be checked and recorded," she said. "It cannot be turned into a promise of money. The east-gate net pledged to Jorvan does not become roof money because we wish it did."
+
+"Then give him the checked answer when it is ready. Not an estimate from a listening wall."
+
+Rell waited while the clerk finished the dated extract and stamped the separate acknowledgment of his request. He took both papers. The second did not yet tell him his place; it told him who must answer and that he had asked. He folded them carefully enough that the ink would not rub against his thumb.
+
+"Will that satisfy you?" Luceran asked.
+
+"No," Rell said. "It will let me explain why I am not satisfied."
+
+The king did not correct him.
+
+Outside, Rell's witness asked whether they should return tomorrow.
+
+"When they have the checked order," Rell said. "If they don't send it, we come back and show them what they received today."
+
+They walked toward the unfinished roof, carrying proof of an unpaid debt and a question the court had not yet answered. Behind them the corrected notice stayed on the board. Its honesty was necessary. It was not bread.
+
+**Editorial boundary:** The dated extract reflects only the existing signed roll and prior partial payment. The acknowledgment records Rell's request; **no priority position is invented or certified yet**, no payment is made or scheduled, and Luceran issues no appropriation. The Jorvan 24-mark advance/27-mark cap remains pledged; Hesta's quarry block remains unsold under its existing limited hold. Rell directly refuses the king's impulse to use Edselsto as a shortcut, a different character consequence from Candidate B's Mara waiting for an outside employer. This audition remains an alternative and does not modify the unassigned S3E19–23 horizon.
