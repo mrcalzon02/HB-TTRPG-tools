@@ -4012,3 +4012,84 @@ The farmer looked at the two marked rows beyond the window. She had been angry w
 The note stayed on the kitchen shelf overnight. No messenger had collected it. The mill had no new order from her, the north-road warning had not been lifted, and the household had no answer about the rest of its seed. In the morning there would be two rows to sow and a market to ask again.
 
 She closed the book with the returned coins beside it. The refund had prevented one debt. It had not restored a day.
+
+
+---
+
+In the morning the farmer's sister took the note from the kitchen shelf and laid it beside the seed measure.
+
+“You said I could carry this to market.”
+
+“I did.”
+
+“Are you coming?”
+
+The farmer looked through the window at the two rows they had marked. She had spent the night rehearsing what she would say to the buyer if she saw him, and not one version had put a grain in the ground.
+
+“No. I'll sow what we measured. Take the note on your ordinary errand, if the stall is open. Don't pay a special messenger.”
+
+Her sister folded it into her basket. “And if he offers to put us back on his list?”
+
+“Tell him to write to me with the quantity and price when he has seed to sell. Don't promise him my coins.”
+
+“Those are instructions I can manage.”
+
+“Then you're better at this than I was yesterday.”
+
+They carried the household sack into the yard together. The farmer set it on a dry board, loosened the cord and poured the agreed portion into the measure. She closed the sack before she went to the first row. The grain left inside belonged to the other field's plan; the fact that she could see it did not make it surplus.
+
+Her sister watched her count the measure twice.
+
+“Afraid you'll forget?”
+
+“Afraid I'll remember a different amount when I see how little ground it covers.”
+
+“It's two rows.”
+
+“It's two rows if we have enough for two.”
+
+The farmer took the first measured handful to the far end of the bed. She had learned to cast seed beside her father when she was small, and her hands still wanted to move at the pace of a full field. Today she slowed them. The first furrow received its portion. She covered it with the back of the rake, keeping her steps off the loosened earth. When she reached the second, she stopped and checked the measure against the remaining grain.
+
+Her sister came down the path. “Is it short?”
+
+“Not yet.”
+
+“Then why have you stopped?”
+
+“Because I was throwing it as though I had a third row to spare.”
+
+They finished the second row together. The sister held the measure; the farmer sowed; neither reached for the closed sack. When the last furrow was covered, they put the unused portion of the measured grain back into its marked household container. There was no third row. The rest of the prepared beds remained bare.
+
+The farmer knelt at the first stick and pressed it deeper. The ground was workable beneath her palm. That was all she could say of it. No rain had fallen while they worked, and the sky's pale brightness promised nothing about the afternoon.
+
+“Now can you write *planted*?” her sister asked.
+
+“For these two.”
+
+“And the others?”
+
+“Prepared. Not sown.”
+
+Her sister rubbed her hands on her apron. “You make it sound like a clerk's office.”
+
+“A clerk can tell the difference between a sack ordered and a sack delivered. I ought to manage the difference between a row marked and a row planted.”
+
+The sister smiled, but only briefly. “If the other seed doesn't come?”
+
+“Then we'll decide what to do with the beds when we know. We may have to change what grows there. We haven't decided that today.”
+
+At the gate she lifted the basket. The note was still folded inside, addressed to the mill buyer but not yet handed to him. The farmer checked that the returned coins remained in the household purse. Her sister was going to market for other necessities; she had not been sent to buy unwarranted barley at any price.
+
+“Will you tell them we sowed?” her sister asked.
+
+“Tell them we sowed two rows from our own seed. If anyone asks whether the mill supplied it, say no.”
+
+“And if the buyer has news?”
+
+“Bring me what he actually says.”
+
+The sister went down the lane. The farmer watched until the basket disappeared behind the hedge, then returned to the kitchen book. Against the two marked rows she entered the measured seed used that morning and the date of sowing. Against the remaining beds she entered nothing in the seed column. The paid preparation labor stayed where it was, neither refunded nor charged to a carrier who had not agreed to bear it.
+
+Outside, the new furrows looked scarcely different from the old ones. She could not see whether the grain would take. She could see where she had put it.
+
+That was a small result. It was also the first result she could write without waiting for someone else to send an answer.
