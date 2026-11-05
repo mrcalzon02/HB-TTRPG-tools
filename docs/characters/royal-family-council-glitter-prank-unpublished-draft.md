@@ -343,3 +343,82 @@ Rome smiled. “And if the boat still sails sideways?”
 - **Chronology intentionally open:** After Estelle's birth only. Estelle's exact age, the date, regnal year and ordering relative to RH-F01, RH-F02 and RH-F04 are unknown. The projected royal calendar does not turn this into a dated eyewitness event. The catroom and Daysha's magical cleanup in SC-04 remain a **separate established scene**, not a mandatory immediate sequel; this story does not complete that cleanup or assign its timing.
 - **Proposed staging, not independent historical evidence:** The crooked toy boat, gallery access, attendant and guard procedures, festival-decoration jar and supervision rule, palace service-route debate, minister's joke, cleanup duties, record checks and dialogue are newly invented incidental dramatization. They are not a permanent court protocol, a verified budget, a new palace employee canon, a policy decree or a fixed future event.
 - **Publication/accounting boundary:** This is **UNPUBLISHED** prose for author review. The existing approved thirteen-image family gallery and its already recorded asset associations remain unchanged. SC-03 records **zero new gown purchases**. No royal wardrobe invoice, royal purse charge, release, reader deployment, or successful artwork validation is asserted.
+
+
+---
+
+## Unpublished RH-F03 audition — The question at the next sitting
+
+> **Status:** Optional, noncanonical continuation of the boat coda within RH-F03 only. This does not assign a date, a new royal policy, a council vote, or any chronological relationship to RH-F04/SC-04.
+
+At the next sitting for which Estelle was permitted to wait outside the council chamber, the little boat was not in her basket. She had left it on the sitting-room stand, where its crooked sail could dry without anyone trying to improve it. She had brought a folded sheet instead.
+
+Rome noticed the basket first. His eyes went to it, then to the gallery attendant beside his daughter.
+
+“Am I to inspect the cargo?” he asked.
+
+“You may,” Estelle said, and lifted the lid before he could reach for it.
+
+Inside lay a drawing of the boat, with an arrow showing the direction it ought to travel and another showing where it actually went. Below the drawing she had written a question in large, uncertain letters: *Who decides which way is safe?*
+
+Rome read it twice. The chamber beyond the doors was already filling with the sound of chairs and papers. He had time for one answer, perhaps two, before somebody would ask for him.
+
+“Did you mean the boat?” he asked.
+
+“I did when I wrote it.”
+
+“And now?”
+
+Estelle glanced at the attendant. “I heard the people with the baskets had to tell the council about the passage. I thought you decided where they should go.”
+
+“I must decide what the palace can require,” Rome said. “That is not the same as knowing where a loaded cart can turn.”
+
+“But you are king.”
+
+“Which makes it more important that I ask before I order.”
+
+The attendant's expression did not change, but Estelle saw her fingers ease on the basket handle. Estelle had expected her father to say the workers had already come and everything was settled. Instead he told her the council still needed their account. Nobody had agreed to close the passage or send the loads elsewhere merely because the question had appeared on the table.
+
+“Then can I ask them?” Estelle said.
+
+“You can ask a question. You cannot require someone who is working to stop and answer it for your amusement.”
+
+“That is a difficult difference.”
+
+“It was difficult for me to learn too.”
+
+A clerk appeared at the chamber door with a stack of papers. Rome asked whether the people who used the service route had been given a chance to speak. The clerk said their account had been requested, but no conclusion was ready to enter. Rome thanked him and did not ask for a conclusion to be made ready simply because Estelle was waiting.
+
+Estelle unfolded her paper again. “I was going to draw the passage and put an arrow on it.”
+
+“Without seeing it?”
+
+“I have seen the door.”
+
+“Not the loads passing through it.”
+
+She looked down at the boat. She had made its mast crooked herself and could see what was wrong without asking anyone. The passage was different. A line on her paper might be neat and still send a worker into a wall.
+
+“May I keep the question, then?”
+
+“Yes. And when someone who knows the passage has time to answer, you may listen. They may also tell you they have no time today.”
+
+“That sounds like waiting.”
+
+“It is,” Rome said. “But it is a kind of waiting that leaves the answer with the person who knows it.”
+
+The council bell sounded once. Rome did not make another promise about when he would emerge. He asked the clerk to send word if the sitting ran beyond the interval he had named, and the clerk repeated the arrangement so that Estelle could hear it. She was beginning to trust a message that admitted a delay more than a cheerful promise made without looking at the clock.
+
+She closed the basket. “Father?”
+
+“Yes?”
+
+“I am glad the boat went sideways.”
+
+“An unusual sentiment for a shipbuilder.”
+
+“If it had gone straight, I might have thought I knew everything about boats.”
+
+Rome smiled, then went through the great carved doors. Estelle remained with the attendant beside the smaller one. Her drawing still held two arrows, neither erased. For once she did not mind leaving a question unfinished.
+
+**Editorial boundary:** The passage workers have not yet supplied an answer in this audition; no council determination, appointment, punishment, royal decree, or repaired route is established. Estelle's learning is a proposed private consequence, not a new public policy. RH-F04 and the separate magical-cleanup scene remain chronologically unplaced.
