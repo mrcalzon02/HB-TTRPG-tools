@@ -397,7 +397,7 @@ Estelle unfolded her paper again. “I was going to draw the passage and put an 
 
 “Not the loads passing through it.”
 
-She looked down at the boat. She had made its mast crooked herself and could see what was wrong without asking anyone. The passage was different. A line on her paper might be neat and still send a worker into a wall.
+She looked down at the two arrows on her drawing. She had made the boat's mast crooked herself and had watched it turn in the basin; she knew what she had built and what it had done, even if she had not yet worked out how to make it sail straight. The passage was different. A line on her paper might be neat and still send a worker into a wall.
 
 “May I keep the question, then?”
 
