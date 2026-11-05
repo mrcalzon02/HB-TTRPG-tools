@@ -1,0 +1,170 @@
+{
+  "pack_id": "psx_realworld_terrain_autotile_references_v1",
+  "created": "2026-11-04",
+  "canonical_drive_folder": "https://drive.google.com/drive/folders/1woJ7SFTwFOnbJ7QgpNUy1hN4rnSc06nC",
+  "repository": "mrcalzon02/HB-TTRPG-tools",
+  "assets": [
+    {
+      "id": "B1",
+      "kind": "blob47",
+      "name": "Urban asphalt / concrete sidewalks",
+      "filename": "B1_urban_asphalt_sidewalk_blob47_source.png",
+      "sha256": "59040806d6705079d50cc373bc313938296edc92fbe9f4a82ccc832acf54890c",
+      "drive_file_id": "11XOu6MjsxMXmukNkrV4upBmTkTVNckvk",
+      "drive_url": "https://drive.google.com/file/d/11XOu6MjsxMXmukNkrV4upBmTkTVNckvk/view",
+      "size_bytes": 2851165,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "encoding": "PNG RGB",
+      "asset_state": "SOURCE_REFERENCE_ONLY"
+    },
+    {
+      "id": "B2",
+      "kind": "blob47",
+      "name": "Harbor quay / concrete seawall",
+      "filename": "B2_harbor_quay_seawall_blob47_source.png",
+      "sha256": "f30a3a16ed9d85b137c81b3a4afba148f7e0b54272b18b8b97d62e1875aa3674",
+      "drive_file_id": "16EixH7zvOZHv9uryUB0pL7rdoCj_iLLX",
+      "drive_url": "https://drive.google.com/file/d/16EixH7zvOZHv9uryUB0pL7rdoCj_iLLX/view",
+      "size_bytes": 2860486,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "encoding": "PNG RGB",
+      "asset_state": "SOURCE_REFERENCE_ONLY"
+    },
+    {
+      "id": "B3",
+      "kind": "blob47",
+      "name": "Roadside rock cut and shoulder",
+      "filename": "B3_roadside_rock_cut_blob47_source.png",
+      "sha256": "63da21139bbd538f6dcfe5fea5ed0dd5997c130cffb95dcef9c960c5e0898a2e",
+      "drive_file_id": "1luU77cwB9hK4R_8IpgFTioKChUOddgbl",
+      "drive_url": "https://drive.google.com/file/d/1luU77cwB9hK4R_8IpgFTioKChUOddgbl/view",
+      "size_bytes": 3201175,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "encoding": "PNG RGB",
+      "asset_state": "SOURCE_REFERENCE_ONLY"
+    },
+    {
+      "id": "B4",
+      "kind": "blob47",
+      "name": "Urban service alley",
+      "filename": "B4_urban_service_alley_blob47_source.png",
+      "sha256": "05ff26c59944a9bfc5dbff131cba6df01fa531ee69dd68b3d923c308cd75a26d",
+      "drive_file_id": "1y_XhwZB7XRhndOxo_RjPQ-2uQO4vYtTw",
+      "drive_url": "https://drive.google.com/file/d/1y_XhwZB7XRhndOxo_RjPQ-2uQO4vYtTw/view",
+      "size_bytes": 3144640,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "encoding": "PNG RGB",
+      "asset_state": "SOURCE_REFERENCE_ONLY"
+    },
+    {
+      "id": "B5",
+      "kind": "blob47",
+      "name": "Industrial metal dock platform",
+      "filename": "B5_industrial_dock_platform_blob47_source.png",
+      "sha256": "aa35b3bb71fb6b8903b30b9bef807c0afc30d319b912cbf5bbd152cca0614fd3",
+      "drive_file_id": "1Lzm7AzYLEeOqIMXMruFTWYkXlbQvY8Cg",
+      "drive_url": "https://drive.google.com/file/d/1Lzm7AzYLEeOqIMXMruFTWYkXlbQvY8Cg/view",
+      "size_bytes": 2901718,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "encoding": "PNG RGB",
+      "asset_state": "SOURCE_REFERENCE_ONLY"
+    },
+    {
+      "id": "W1",
+      "kind": "wang16",
+      "name": "Grass to dirt",
+      "filename": "W1_grass_dirt_wang16_source.png",
+      "sha256": "26978cd5cfa462848d0eacd767c6bed98824c32cc1b4cc5374fe5f0972bc7e6c",
+      "drive_file_id": "1ybMm58VqScOUxOgIcvQpag7foIQG5S3P",
+      "drive_url": "https://drive.google.com/file/d/1ybMm58VqScOUxOgIcvQpag7foIQG5S3P/view",
+      "size_bytes": 3082849,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "encoding": "PNG RGB",
+      "asset_state": "SOURCE_REFERENCE_ONLY"
+    },
+    {
+      "id": "W2",
+      "kind": "wang16",
+      "name": "Grass to gravel",
+      "filename": "W2_grass_gravel_wang16_source.png",
+      "sha256": "6cc3b3cd68bdfc6c8816ff308db257582abd277800c12e2e792bcadd1cfd996a",
+      "drive_file_id": "1dm7dRQXx2Pn4LSh1XGns5yRcTS6MQFtx",
+      "drive_url": "https://drive.google.com/file/d/1dm7dRQXx2Pn4LSh1XGns5yRcTS6MQFtx/view",
+      "size_bytes": 3207842,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "encoding": "PNG RGB",
+      "asset_state": "SOURCE_REFERENCE_ONLY"
+    },
+    {
+      "id": "W3",
+      "kind": "wang16",
+      "name": "Coastal sand to scrub grass",
+      "filename": "W3_coastal_sand_grass_wang16_source.png",
+      "sha256": "5d20b3fe646b1b727a5d11abf3c7d9373101b2f29ba401c295fb450f1e4dbafd",
+      "drive_file_id": "1KQs1-18Qm-OLoZRAERyzcVwBo0YEqPv9",
+      "drive_url": "https://drive.google.com/file/d/1KQs1-18Qm-OLoZRAERyzcVwBo0YEqPv9/view",
+      "size_bytes": 2959254,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "encoding": "PNG RGB",
+      "asset_state": "SOURCE_REFERENCE_ONLY"
+    },
+    {
+      "id": "W4",
+      "kind": "wang16",
+      "name": "Shallow shoreline water to mud",
+      "filename": "W4_mud_shoreline_water_wang16_source.png",
+      "sha256": "b1ef189f0c5268c14b481e245fe6f6793c01414c080f7770e82e7e1845da8202",
+      "drive_file_id": "1Y1GqGc-VdrCI5gw8dkGnrIoikZiewslY",
+      "drive_url": "https://drive.google.com/file/d/1Y1GqGc-VdrCI5gw8dkGnrIoikZiewslY/view",
+      "size_bytes": 2440497,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "encoding": "PNG RGB",
+      "asset_state": "SOURCE_REFERENCE_ONLY"
+    },
+    {
+      "id": "W5",
+      "kind": "wang16",
+      "name": "Cracked concrete to moss",
+      "filename": "W5_concrete_moss_overgrowth_wang16_source.png",
+      "sha256": "71d869ca456a898b7363f7eab12ba62a4de2bde04867dc292c357c9f90f991f6",
+      "drive_file_id": "1Xry2b92JDGbQfIZFopXUGgTgQKt_xSw5",
+      "drive_url": "https://drive.google.com/file/d/1Xry2b92JDGbQfIZFopXUGgTgQKt_xSw5/view",
+      "size_bytes": 2971183,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "encoding": "PNG RGB",
+      "asset_state": "SOURCE_REFERENCE_ONLY"
+    }
+  ],
+  "source_state": "Ten unmodified source reference sheets verified in Drive. Binary PNGs are not included in this GitHub catalog commit; fetch with Google Drive authorization using fetch_sources.py.",
+  "runtime_compatibility": "Artwork references only. AI-generated numbered presentation sheets have label/gutter/demo regions; original Blob-47 and Wang-16 edge adjacency, seamless cropping and 4/8-neighbor mapping have not been validated."
+}
