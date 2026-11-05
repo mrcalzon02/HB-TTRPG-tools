@@ -4093,3 +4093,120 @@ The sister went down the lane. The farmer watched until the basket disappeared b
 Outside, the new furrows looked scarcely different from the old ones. She could not see whether the grain would take. She could see where she had put it.
 
 That was a small result. It was also the first result she could write without waiting for someone else to send an answer.
+
+
+---
+
+The market had no reason to make room for the farmer's sister.
+
+She arrived while the awnings were still being tied against the wind. A cooper was arguing over a barrel hoop; two women stood waiting for flour to be weighed; a boy with a basket of eggs had taken the shortest path through everyone's feet. She bought the salt the household needed before going near the mill. It was an ordinary errand, and she meant to keep it one.
+
+The buyer was at the counter with his clerk. The space where the barley should have been stacked remained clear, though the sister could not tell whether it had been empty all morning. She did not ask the clerk to prove a negative.
+
+"My sister sent this," she said, offering the folded note. "She's the farmer whose deposit you returned."
+
+The clerk recognized the entry in his customer book and reached for a pen. "Is she ordering again?"
+
+"No. Read the letter before you put her name in another column."
+
+He unfolded it and passed it to the buyer. The buyer read without interrupting, then read the line about the public road notice a second time.
+
+"She wants word if seed becomes available," he said.
+
+"Seed you have, not seed you expect."
+
+"That's what she wrote."
+
+"And she wants to know where the warning can be read."
+
+"I can tell her where the station posts its public notices. I cannot tell her the heavy road is open. The last warning we received was still in force."
+
+"Then write where to ask. Don't write that the road is safe."
+
+The clerk drew a clean sheet toward him. He began with the date and the name of the station, then paused over the blank space where a new order number would ordinarily go.
+
+"No order number," the sister said.
+
+"I know."
+
+"Your hand went there."
+
+"My hand goes there most days."
+
+He turned the sheet sideways and wrote an acknowledgment of the inquiry instead. It said the buyer had received her sister's note, held no new purchase or deposit from her, and would send an ordinary notice if sowing barley was physically available with a stated quantity and price. It did not promise when that might happen. The station address was copied beneath, identified as the place to request the current public warning, not a certificate that any particular road could bear a wagon.
+
+The sister watched the buyer sign.
+
+"Will you send this today?"
+
+"You can carry the acknowledgment yourself. As for any later notice, I cannot date it before there's something to report."
+
+She folded the page and put it in the basket beside the salt. That was one answer: not seed, not a sale, but an answer she could show her sister without having to remember every word.
+
+At the door she stopped. "Do you know whether the carrier still has the sacks?"
+
+The buyer looked toward the empty delivery space.
+
+"We have a traveler's report from an earlier day. We've asked for a firsthand account and the journey papers. I have no reply to those questions."
+
+"Then I won't tell her they're safe."
+
+"Nor spoiled," he said.
+
+"No."
+
+Outside, the boy with the eggs had finally escaped the crowd. The sister stood beneath the awning and considered whether to ask the two barley merchants again. She had already seen the first merchant's feed grain refused as sowing seed, and the second merchant's promised stock belonged to another purchaser unless that promise failed. There was nothing wrong with asking whether the facts had changed. There was something wrong with carrying a rumor home as if it were a sack.
+
+She went to the stalls. Neither merchant offered her a new quantity that could be bought and taken away. One invited her to return another market day. She thanked him without leaving money or her sister's name on a waiting list.
+
+The journey home felt longer with so little to carry. Her basket was not empty; the salt was needed, and the signed acknowledgment had taken time to obtain. But the weight of the missing barley seemed to pull at the other handle.
+
+Her sister met her at the yard gate with soil still beneath her nails.
+
+"Well?"
+
+"I gave him your note. He gave me this."
+
+The farmer unfolded the acknowledgment and read it standing up. Her eyes paused at *no new purchase or deposit*. She read the station address, then looked back at the empty part of the page where a delivery date might have been.
+
+"So we have no seed."
+
+"Not from him. And neither stall had any they would sell for sowing today."
+
+"Did you ask about the wagon?"
+
+"He has asked the carrier. No answer yet."
+
+The farmer took a breath as if to say something sharp. Instead she went inside and placed the paper beside the household book. She entered the inquiry as received and answered, without making an entry in the seed column. The returned coins stayed in the purse. The two sown rows stayed two.
+
+Her sister set the salt on the shelf.
+
+"Was the errand wasted?"
+
+"No," the farmer said after a moment. "You brought me the difference between waiting for a reply and waiting for seed."
+
+"That's a thin difference."
+
+"It's one I can use. I won't send you back tomorrow to ask the same question."
+
+They walked out to the prepared beds. The unsown earth lay beside the two covered rows, neither improved nor destroyed by what the market had said. The farmer had hoped to make a decision about the rest before her sister came home. She had instead learned which decision was not hers to make yet.
+
+"Shall we cover the bare beds again?" her sister asked.
+
+"Only the ones we can cover without disturbing what we planted. We'll keep them ready as long as the ground allows. After that we'll decide with what we actually have."
+
+The sister fetched the folded cover. They worked along the edges, leaving the two seeded rows undisturbed. No one called the covering a harvest saved or a crop lost.
+
+By supper the book held a returned deposit, paid labor, two rows sown from household seed, and an inquiry answered without a sale. It did not hold a new delivery, a judgment against the carrier, or a promise from the weather.
+
+The farmer put the acknowledgment beneath the book's cover so it would not blow away.
+
+"At least he answered," her sister said.
+
+"Yes."
+
+"Is that enough?"
+
+"For today, it's what he can answer."
+
+She closed the book. Tomorrow would not be made easier by entering barley that had never crossed the threshold.
