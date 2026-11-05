@@ -4210,3 +4210,110 @@ The farmer put the acknowledgment beneath the book's cover so it would not blow 
 "For today, it's what he can answer."
 
 She closed the book. Tomorrow would not be made easier by entering barley that had never crossed the threshold.
+
+
+---
+
+The following morning the farmer found a third name in the household book.
+
+It was the name of a laborer who had offered to return and finish preparing the last bed if the missing barley arrived. She had written his offer in the margin before the deposit was returned. There was no agreement beside it, no wage and no date. Yet the mark had acquired the look of an appointment simply because it had sat on the page overnight.
+
+Her sister found her with the book open.
+
+"Are you sending for him?"
+
+"No."
+
+"Then why are you looking at his name?"
+
+"Because I nearly did."
+
+The sister drew up a chair. Beyond the window, the two sown rows were still covered with earth. The remaining beds lay under the cover they had spread after market. Nothing had changed there since supper, but the book could change the way they spent tomorrow.
+
+"He said he'd come if we needed him," the sister said.
+
+"And I thought that meant I ought to call him before somebody else did."
+
+"Doesn't it?"
+
+"It means he gave us a choice. Not that we have work ready for him."
+
+They had paid for clearing once already. The farmer turned back to that entry and ran her finger along the amount. She could pay for more preparation. She could also spend the returned deposit on labor and discover afterward that she still had nothing warranted to sow. She had been measuring the cost of waiting as though every hour of an idle bed were a debt she could settle by buying another hour of somebody else's work.
+
+"Could he tend the orchard instead?" her sister asked.
+
+"The orchard hands have their own arrangement. We aren't short of work there today."
+
+"Then tell him the offer isn't a promise."
+
+"I'll tell him before he holds a day open for us."
+
+Her sister studied the two entries: wages already paid, and a name without a wage. "You keep saying we mustn't spend money on what hasn't arrived. But there's work we could do ourselves."
+
+"Some."
+
+"How much?"
+
+The farmer looked out at the covered beds. She had no wish to pull the cover away simply to prove that she was still trying. They could check the edges where the wind had lifted them, keep water from collecting in the folds, and leave the planted rows alone. None of that required hiring a man or pretending the missing seed had been replaced.
+
+"We can look after what's here," she said. "We cannot prepare our way into a delivery."
+
+They went out after breakfast. Her sister brought pegs and a short length of cord. The farmer carried no seed measure. She checked the two planted rows from the path, without stepping into the furrows or scraping the soil to see whether anything had happened beneath it. Then they walked the edge of the bare beds, lifting a fold of the cover where it pressed against the ground and fastening it so that the wind would not carry it over the sown rows.
+
+At the far corner, the sister stopped.
+
+"If the seed comes late, will we use all these beds?"
+
+"I don't know."
+
+"We could put something else in them."
+
+"We could, if we have something else to plant and decide it belongs here."
+
+"You're going to write that down, aren't you?"
+
+"Not as a crop. As a question."
+
+The sister leaned on the peg she had not yet driven. "You can make an empty field sound very busy."
+
+The farmer laughed, to her own surprise.
+
+"Only on paper."
+
+They finished the edge and returned the unused cord to the shed. Nothing had been sown that morning. The cover held. The two rows remained undisturbed. Their work was small enough to describe without borrowing an outcome from the future.
+
+Later, on her ordinary walk past the laborer's cottage, the farmer stopped at his gate. He came out carrying a bundle of split kindling.
+
+"I thought you might want another day," he said.
+
+"I thought so too. We haven't received the seed. I won't ask you to keep a day for us."
+
+He shifted the kindling against his arm. "If it arrives?"
+
+"I'll ask again. You may be busy by then."
+
+"I might."
+
+"I understand."
+
+He nodded and went back inside. There was no quarrel and no compensation to settle. The farmer walked home with the uncomfortable knowledge that she had given up the convenience of having him ready. She had also given up the right to imagine his time was waiting in her household book for nothing.
+
+At the table she crossed no name out. She added a date and the words *offer not engaged; no day reserved*. Beside the returned deposit she made no new expense. Beside the seed account she made no new receipt. The two rows sown yesterday remained the only rows entered as sown.
+
+Her sister watched her put the pen down.
+
+"Will you send another letter to the mill?"
+
+"Not until there's something new to ask or answer. He has acknowledged the inquiry. He hasn't offered seed."
+
+"So we wait."
+
+"We tend what we planted. We keep the other field's seed where it belongs. And we don't spend the refund twice in our heads."
+
+The sister took the book from her and closed it.
+
+"Then come help me with dinner. That part, at least, has arrived."
+
+The farmer followed her to the hearth. The unsown beds were still a problem. They would be a problem tomorrow if no grain came. But she had not turned uncertainty into another person's unpaid obligation, or into another line of costs she could not recover.
+
+For one day, refusing to act had been work of its own.
