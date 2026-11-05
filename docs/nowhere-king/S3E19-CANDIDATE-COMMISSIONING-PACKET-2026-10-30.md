@@ -320,3 +320,54 @@ The auditions show a challenge and a correction, but **neither correction establ
 **B — Mara's lost opportunity requires an outside answer.** The corrected hall notice and sealed, challengeable original can establish that her name was wrongly displayed and that she deferred the baker's offer. They cannot establish whether the baker engaged another player, whether he would still hire Mara, the fee, or a compensable loss. Only an ordinary answer from the baker and Mara's own account could advance those facts; Edselsto cannot hear his house or certify a counterfactual engagement. If B is commissioned, the author must decide whether to show Mara asking the baker and receiving an answer, or to leave the question deliberately unresolved while she seeks other work. Either choice must preserve her ability to decline the Crown's future offer and must not quietly turn the unauthorized list into a contract or award her money from Sera's unsettled rope account.
 
 **Decision hinge:** A's immediate harm is a documented **threat to an existing enforceable claim**, while B's is a documented **interference with a possible engagement whose monetary outcome remains unknown**. A can prove the debt without paying it; B can prove the misleading notice without proving the lost fee. Neither is cured by Ysabet's correction alone. This distinction should govern which injured person's next action earns a scene, rather than adding another council speech about Edselsto's limits. **No candidate is selected or commissioned by this checkpoint.**
+
+
+---
+
+## Candidate B — Mara's choice after the notice (additional audition, 2026-11-04)
+
+**UNAPPROVED / NONCANONICAL.** This is an optional continuation of Candidate B's audition, not an Episode 19 commission, a completed baker's inquiry, or a claim about an actual lost fee. Candidate A remains an independent alternative. The baker's answer is deliberately **not** supplied.
+
+Mara had walked all the way to the baker's door before she noticed that she had brought the wrong piece of paper.
+
+She had the public correction, neatly copied. It explained who had posted the court's list, why the list was unauthorized, and where an affected person might inspect the sealed original. It did not say whether the baker still needed a fiddler for his daughter's supper.
+
+She could not ask the paper that question.
+
+A boy carrying a tray of empty bread boards came through the side entrance. Mara recognized him as the messenger who had brought the first invitation, but she did not stop him to demand an answer. The boy had been told to carry words, not to bargain for his employer.
+
+"Is your master within?" she asked.
+
+"He's at the ovens. I can fetch him when the batch comes out."
+
+"Don't spoil the bread on my account."
+
+She stood aside while a customer passed with a warm loaf wrapped in cloth. The correction made a stiff rectangle in her hand. At court, everyone had been very careful to tell her what had not happened: no engagement, no booked hall, no authorized list. She had begun to hear the negatives as though they were a refund. They were not.
+
+She had told the baker to find another player because she believed the Crown expected her. That decision had been hers, made from words someone else had put above her name. If the baker had hired another fiddler, she would have to hear it from him. If he had not, she would still have to ask whether his offer stood. She could not carry either answer back to Sera until somebody gave it.
+
+The boy returned and said the baker could speak when the trays were cleared. Mara thanked him and sat on the low wall outside, where the oven's heat escaped through a high vent.
+
+She unfolded her own small work book. Beside the daughter's supper she had written *perhaps*, then crossed it out after seeing the hall notice. On the next line she had left the court's winter dates blank. There was no payer's name beside any of them.
+
+She drew a narrow rule beneath the crossed-out word and wrote: *Ask baker directly. No answer yet.*
+
+The distinction was almost laughably small. It was also the first line on the page she could defend.
+
+When Sera found her there, she did not ask Mara to return for an unpaid rehearsal. She asked whether the baker had answered.
+
+"Not yet," Mara said.
+
+"I can wait with you."
+
+"You have other players to tell."
+
+"I do."
+
+"Then tell them they need not hold an evening for a court that has not hired them. And don't put my name on another list to make the hall look full."
+
+Sera looked at the folded correction. "I won't."
+
+Mara was grateful for the promise, but she did not mistake it for a contract. She stayed by the bakery wall to ask her own question when the baker was free. The ovens continued their work. No castle voice could reach into that room and turn the answer into one she had already received.
+
+**Editorial consequence and verification boundary:** Mara, not the Crown, controls whether to pursue the baker's original offer and whether to reserve future time. The audition ends **before** the baker answers: no replacement musician, fee, lost-income amount, contract, compensation, court booking, or recovery is established. If Candidate B is ever commissioned, the author must decide whether the baker's actual answer warrants a further scene and whether Mara accepts or declines any real offer. The public correction remains evidence of an unauthorized posting, not proof of the baker's decision. Sera's rope obligations, Senn's limited public-copy role, Miren's privacy boundary, Edselsto's connected-gallery limits, and all S3E18 material and candle constraints remain unchanged.
