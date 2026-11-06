@@ -4,6 +4,10 @@ A lightweight, browser-based toolkit for homebrew tabletop RPG tools, utilities,
 
 The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It can run directly from GitHub Pages without an application build step.
 
+## Generated visual development galleries
+
+The [portable visual-gallery-publication Agent Skill](skills/visual-gallery-publication/SKILL.md) establishes the cross-project standard: when producing project art, publish the actual image/GIF files to the project's GitHub gallery with source, hash, visible links, tests and verified commit, and archive large master files separately. The [ReverieVR Sitka vessel-turntable gallery](https://github.com/mrcalzon02/ReverieVR/tree/main/docs/gallery/sitka/boats/2026-11-05) is the first demonstrated implementation.
+
 ## Shared native-game art sources
 
 The [shared native asset index](docs/shared-native-assets/README.md) pins reusable Breakwater/ReverieVR textures and compact Beckenburg models for other authorized internal games. Source blobs live in ReverieVR, not duplicated in this website; the offline import helper verifies their exact bytes.

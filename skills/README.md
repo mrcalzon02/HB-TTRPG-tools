@@ -49,6 +49,11 @@ The generic system-neutral design family currently includes:
 
 These complement existing general skills such as `foundry-discovery`, `campaign-lore-retrieval`, `adventure-module-operations`, `module-map-generation`, and `spell-creation`, plus the Blacklight, Kaysender, Barotrauma, vessel-generation, and Scientific Tools specialist skills.
 
+## Cross-project generated image publishing standard
+
+- [`visual-gallery-publication`](visual-gallery-publication/SKILL.md) — publish each new approved development image, 3D turntable or model sheet to its owning GitHub gallery with the real binary files, original-source provenance, hash/animation verification, links and an exact commit readback. Large full-resolution masters may also live in Drive, **not instead of** a visible GitHub review gallery.
+- This policy is **publication workflow only**; it does not grant file-system or GitHub credentials, permission to publish private images, or authority to mark concept art as playable screenshots. The [Sitka 18-boat implementation](https://github.com/mrcalzon02/ReverieVR/tree/main/docs/gallery/sitka/boats/2026-11-05) is a concrete example.
+
 ## Common tabletop operations family
 
 The system-neutral live-play and state-management family includes:

@@ -81,7 +81,8 @@
         "tabletop-battlespace-visualization",
         "environment-production",
         "privacy-exposure-remediation",
-        "professional-presence-development"
+        "professional-presence-development",
+        "visual-gallery-publication"
       ],
       "useFor": [
         "Charles",
@@ -1320,6 +1321,31 @@
       "personalityPolicy": "inherit-default",
       "personalityEngramIds": [
         "blacklight.charles"
+      ]
+    },
+    {
+      "name": "visual-gallery-publication",
+      "path": "skills/visual-gallery-publication/SKILL.md",
+      "status": "onboardable",
+      "capabilityIds": [],
+      "resourceIds": [],
+      "laboratoryIds": [],
+      "useFor": [
+        "publish generated images to GitHub galleries",
+        "commit game model render turntables",
+        "archive original image generation assets",
+        "synchronize visual gallery source and GitHub revisions",
+        "validate image gallery GIF frames, hashes, and visible links",
+        "record visual development activity and honest preview provenance"
+      ],
+      "personalityPolicy": "inherit-default",
+      "personalityEngramIds": [
+        "blacklight.charles"
+      ],
+      "executionRequirements": [
+        "authorized GitHub repository write connection",
+        "readable generated visual assets",
+        "gallery verifier or equivalent image-hash checks"
       ]
     }
   ]
