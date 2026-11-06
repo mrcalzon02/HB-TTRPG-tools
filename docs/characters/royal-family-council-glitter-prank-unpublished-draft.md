@@ -407,7 +407,7 @@ She looked down at the two arrows on her drawing. She had made the boat's mast c
 
 “It is,” Rome said. “But it is a kind of waiting that leaves the answer with the person who knows it.”
 
-The council bell sounded once. Rome did not make another promise about when he would emerge. He asked the clerk to send word if the sitting ran beyond the interval he had named, and the clerk repeated the arrangement so that Estelle could hear it. She was beginning to trust a message that admitted a delay more than a cheerful promise made without looking at the clock.
+The council bell sounded once. Rome did not make another promise about when he would emerge. Instead he asked the clerk to send word if the sitting kept him longer than expected. The clerk repeated the request where Estelle could hear it, without pretending to know when the doors would open again. Estelle could wait with her attendant or return to the sitting room; neither choice required the council to hurry an answer from the workers. She was beginning to trust a message that admitted a delay more than a cheerful promise made without looking at the clock.
 
 She closed the basket. “Father?”
 
