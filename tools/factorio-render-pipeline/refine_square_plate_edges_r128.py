@@ -68,6 +68,11 @@ def refine_one_real_fin(scene, fin, corner_extra_px, bevel_fraction):
         t = row / (ROWS - 1)
         axial_gate = smoothstep((t - 0.125) / 0.375)
         distal_gate = smoothstep((t - 0.75) / 0.25)
+        # Do not round-trip stationary root and next-row mesh vertices
+        # through camera coordinates: tiny float error would move the
+        # genuine metal attachment despite zero intended displacement.
+        if row < 2:
+            continue
         for col in range(COLS):
             u = 2 * col / (COLS - 1) - 1.0
             lateral_edge = abs(u) ** 12
