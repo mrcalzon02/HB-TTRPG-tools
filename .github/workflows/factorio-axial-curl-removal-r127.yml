@@ -5,6 +5,8 @@ on:
     paths:
       - 'tools/factorio-render-pipeline/remove_axial_curl_real_3d_square_master_r127.py'
       - 'tools/factorio-render-pipeline/refine_square_plate_edges_r128.py'
+      - 'tools/factorio-render-pipeline/bootstrap.py'
+      - 'tools/factorio-render-pipeline/test_bootstrap.py'
       - '.github/workflows/factorio-axial-curl-removal-r127.yml'
   workflow_dispatch:
 permissions:
