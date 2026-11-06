@@ -49,6 +49,27 @@ class BootstrapTests(unittest.TestCase):
         self.assertIn("blender-4.5.15", str(bootstrap.managed_blender()))
         self.assertTrue(bootstrap.managed_blender().name in {"blender", "blender.exe"})
 
+    def test_stale_managed_venv_is_recreated_before_pip(self):
+        with tempfile.TemporaryDirectory() as temp:
+            with mock.patch.object(bootstrap, "STATE", Path(temp)):
+                env_dir = Path(temp) / "python-venv"
+                bin_dir = env_dir / ("Scripts" if bootstrap.os.name == "nt" else "bin")
+                bin_dir.mkdir(parents=True)
+                stale = env_dir / "stale-cache-marker.txt"
+                stale.write_text("stale")
+                # A broken interpreter symlink mimics a cache restored on a
+                # different GitHub runner whose hosted Python path vanished.
+                if bootstrap.os.name != "nt":
+                    (bin_dir / "python").symlink_to("/missing/python-runner")
+                with mock.patch.object(bootstrap, "command") as execute:
+                    bootstrap.install_python_env()
+                self.assertFalse(stale.exists())
+                self.assertEqual(execute.call_count, 2)
+                self.assertEqual(execute.call_args_list[0].args[0][1:3],
+                                 ["-m", "venv"])
+                self.assertEqual(execute.call_args_list[1].args[0][1:3],
+                                 ["-m", "pip"])
+
     def test_blender_version_rejects_non_45(self):
         with tempfile.TemporaryDirectory() as temp:
             executable = Path(temp) / "fake-blender"

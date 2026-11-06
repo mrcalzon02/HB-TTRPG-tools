@@ -177,9 +177,27 @@ def python_env():
 
 def install_python_env():
     python = python_env()
+    env_dir = python.parent.parent
+    packages = [python, "-m", "pip", "--disable-pip-version-check",
+                "install", "-r", ROOT / "requirements.txt"]
+
+    def recreate_managed_env():
+        # Cached GitHub runner venvs can contain broken interpreter symlinks
+        # after the hosted Python path changes. A second venv invocation
+        # preserves the broken symlink, so recreate ONLY our managed folder.
+        if env_dir.exists():
+            shutil.rmtree(env_dir)
+        command([sys.executable, "-m", "venv", str(env_dir)])
+
     if not python.is_file():
-        command([sys.executable, "-m", "venv", str(python.parent.parent)])
-    command([python, "-m", "pip", "--disable-pip-version-check", "install", "-r", ROOT / "requirements.txt"])
+        recreate_managed_env()
+    try:
+        command(packages)
+    except OSError:
+        # A cached executable can exist but point at a deleted interpreter.
+        # Do not delete unrelated user environments or retry pip failures.
+        recreate_managed_env()
+        command(packages)
     return python
 
 
