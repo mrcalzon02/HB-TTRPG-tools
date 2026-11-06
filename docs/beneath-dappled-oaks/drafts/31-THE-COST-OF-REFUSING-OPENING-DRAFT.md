@@ -4366,3 +4366,68 @@ Her sister wrote *corner secured; check after wind* in the margin, away from the
 It was a small distinction, but this time the sister had made it herself.
 
 They carried the book indoors before the light changed. No carrier had arrived, and neither of them went to the gate to look for one.
+
+
+---
+
+By the second evening, the sister had begun to distrust the word *free*.
+
+She found the farmer in the shed, turning over the wooden pegs they had used to secure the cover. Two had split at the head. They had come from an old bundle left by their father, and neither woman could remember when the bundle had last been counted.
+
+"Those didn't cost us anything," the sister said.
+
+"They didn't cost us anything today."
+
+"That's different?"
+
+The farmer held up one of the broken pegs. "We can use the sound ones again. These two won't hold in another wind."
+
+"Then we've spent something after all."
+
+"We've worn something out. We haven't paid anyone for it."
+
+Her sister fetched the household book, though the farmer had not asked her to. She opened it on the workbench, beside the little purse containing the returned barley deposit. The farmer moved the purse away from the damp boards before the leather could stain.
+
+"Where do I put the broken ones?" the sister asked.
+
+"Not under seed."
+
+"I know that."
+
+"Nor under wages."
+
+"I know that too."
+
+The farmer heard the impatience in her voice and set the pegs down. They had been making the same distinction for days, but she had explained it as a prohibition: don't enter what wasn't delivered; don't promise what wasn't agreed; don't spend the same money twice. Her sister was trying to learn what could be entered instead.
+
+"Make a maintenance note," she said. "Two pegs worn beyond use. We still have sound ones. No purchase."
+
+"Do we need to count them?"
+
+"We need to know whether we can mend the cover after the next wind without going to market. Count what you can actually use."
+
+They sorted the bundle on the dry shelf. Some pegs were sound; others had softened at the ends and would not hold firm soil. The sister counted only the sound ones, then made a separate mark for those needing replacement. She did not put a price beside either number.
+
+"Suppose I carve two more from the offcuts," she said.
+
+"Then note the work when it's done, if keeping the record helps us. Don't write two new pegs before you've made them."
+
+"You're very strict about tomorrow."
+
+"Tomorrow has been expensive enough without our charging it in advance."
+
+The sister laughed. She took the offcuts to the bench and examined their grain. One was too thin to bear a blow; the other might yield a pair of short pegs if she cut carefully. She left the knife where it was. Supper needed tending, and the cover was holding for now.
+
+Before closing the book, she drew a line between the maintenance note and the money columns. The deposit remained returned and unspent. The preparation wages remained paid. The two sown rows were still two, and no barley had arrived from the mill.
+
+"Does this make the field any better?" she asked.
+
+"It tells us what we have to keep it as it is."
+
+"That isn't the same as better."
+
+"No."
+
+They put the sound pegs back on the shelf, where they could find them without buying replacements they might not need. Outside, the bare beds remained covered and the planted rows remained undisturbed. The sister had recorded a loss of useful material without turning it into a debt, and a possible repair without turning it into a promise.
+
+She shut the book herself.
