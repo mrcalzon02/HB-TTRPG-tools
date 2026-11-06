@@ -4317,3 +4317,52 @@ The sister took the book from her and closed it.
 The farmer followed her to the hearth. The unsown beds were still a problem. They would be a problem tomorrow if no grain came. But she had not turned uncertainty into another person's unpaid obligation, or into another line of costs she could not recover.
 
 For one day, refusing to act had been work of its own.
+
+
+---
+
+The next morning the sister brought the household book out to the yard because she wanted to see whether the figures looked different in daylight.
+
+They did not.
+
+The returned deposit was still in the purse. The two rows were still the only rows sown. At the bottom of the seed column the farmer had left enough blank space for a delivery, which made the page look hopeful until the sister remembered that blank space was not a receipt.
+
+"Can we buy something with the money?" she asked.
+
+"Yes."
+
+"Then why do you keep saying we can't spend it?"
+
+"I keep saying we can't spend it twice."
+
+The sister placed the purse on the closed book. "Suppose the barley comes tomorrow. Would we owe the man for the beds?"
+
+"We'd have to ask whether he was free, and agree what we'd pay. We haven't done either."
+
+"And if it doesn't?"
+
+"Then the money stays ours until we decide what we can actually use it for."
+
+She did not say *until the next market*, because the market had already taught them that another visit could return nothing but another invitation to wait.
+
+At the fence the cover had worked loose where they had fastened it yesterday. The sister saw it first. She set down the book and went for the pegs, but the farmer stopped her before she pulled the whole length free.
+
+"Just that corner," she said. "The rows don't need uncovering."
+
+They worked without speaking. When the loose fold was secured, the sister brushed dirt from her hands and looked at the book again.
+
+"Should we enter the pegs?"
+
+"They came from the shed. We haven't bought any."
+
+"But we used them."
+
+The farmer considered this. The book had been useful when it separated an offer from an agreement and a returned payment from a purchase. It would be less useful if she made every ordinary act look like a new expense.
+
+"We can note that the cover needs checking," she said. "Not pretend the pegs cost us twice."
+
+Her sister wrote *corner secured; check after wind* in the margin, away from the seed receipts. The farmer watched her leave the crop column untouched.
+
+It was a small distinction, but this time the sister had made it herself.
+
+They carried the book indoors before the light changed. No carrier had arrived, and neither of them went to the gate to look for one.
