@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'tools/factorio-render-pipeline/remove_axial_curl_real_3d_square_master_r127.py'
+      - 'tools/factorio-render-pipeline/refine_square_plate_edges_r128.py'
       - '.github/workflows/factorio-axial-curl-removal-r127.yml'
   workflow_dispatch:
 permissions:
@@ -85,5 +86,63 @@ jobs:
             private-ci/output/r127/*.blend
             private-ci/output/r127/*.png
             private-ci/output/r127/*.json
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Forge source-constrained corner and physical two-skin bevel candidates from R127
+        run: |
+          python -m py_compile tools/factorio-render-pipeline/refine_square_plate_edges_r128.py
+          BLENDER="$(python -c "import sys;sys.path.insert(0,'tools/factorio-render-pipeline');import bootstrap;print(bootstrap.find_blender())")"
+          "$BLENDER" -b --disable-autoexec --factory-startup -t 2 --python-exit-code 4 \
+            --python tools/factorio-render-pipeline/refine_square_plate_edges_r128.py -- \
+            --r127-dir private-ci/output/r127 --out private-ci/output/r128
+      - name: Verify R128 physical 3D edge alternatives, source camera and original engine invariant
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('private-ci/output/r128')
+          j=json.loads((p/'r128_actual_forged_master_edges.json').read_text())
+          assert j['revision']=='R128'
+          assert j['original_sprite_comparison_pending']
+          assert not j['private_original_bitmap_published']
+          assert j['only_existing_central_master_fin_modified']
+          assert [c['name'] for c in j['cases']]==[
+            'r127_square_plate_no_axial_curl_control',
+            'r128_small_corner_and_forged_edge',
+            'r128_rounder_corner_and_forged_edge']
+          for index,c in enumerate(j['cases']):
+            assert c['bell_other_fins_original_camera_and_motion_preserved']
+            assert c['visual_acceptance_pending']
+            assert set(c['source_camera_frames'])=={'1','33'}
+            assert set(c['true_3d_edge_inspection_angles'])=={'0','35','65'}
+            assert all((p/f).stat().st_size>4000
+              for f in list(c['source_camera_frames'].values())+
+              list(c['true_3d_edge_inspection_angles'].values()))
+            mesh=p/c['editable_blender_scene']
+            assert mesh.stat().st_size>100000
+            assert hashlib.sha256(mesh.read_bytes()).hexdigest()==c['sha256']
+            s=c['actual_refined_mesh']
+            if not index:
+              assert s is None
+            else:
+              assert s['vertices']==306
+              assert s['true_two_skin_edge_bevel']
+              assert s['root_unchanged']
+              assert s['axial_depth_centerline_unchanged']
+              assert not s['private_original_sprite_visually_approved']
+              assert s['metal_min_remaining_thickness_fraction']>=.70
+              assert s['largest_source_camera_silhouette_shift_px']<=.801
+          print('R128_ACTUAL_SAVED_BEVELED_MASTER_MESHES_CHECKED__PRIVATE_SOURCE_APPROVAL_PENDING')
+          PY
+      - name: Retain R128 editable beveled fin models and real Blender inspection renders
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factorio-r128-real-rounded-metal-fin-edge-candidates
+          path: |
+            private-ci/output/r128/*.blend
+            private-ci/output/r128/*.png
+            private-ci/output/r128/*.json
           if-no-files-found: warn
           retention-days: 14
