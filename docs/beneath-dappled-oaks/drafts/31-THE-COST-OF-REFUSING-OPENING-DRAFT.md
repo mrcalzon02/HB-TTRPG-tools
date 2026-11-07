@@ -4431,3 +4431,91 @@ Before closing the book, she drew a line between the maintenance note and the mo
 They put the sound pegs back on the shelf, where they could find them without buying replacements they might not need. Outside, the bare beds remained covered and the planted rows remained undisturbed. The sister had recorded a loss of useful material without turning it into a debt, and a possible repair without turning it into a promise.
 
 She shut the book herself.
+
+---
+
+The first refusal Ilyan heard that afternoon had nothing to do with the protected commission.
+
+"No," said the woman at the timber yard gate. "You may not put my name on that."
+
+She had opened the gate only as far as its chain. Beyond her, men shifted timber beneath a patched awning. A boy carrying a bucket stopped to look at Ilyan's good coat, then went on.
+
+"I haven't asked you to sign a statement about the accident," Ilyan said.
+
+"You've brought a paper. Papers become statements."
+
+Neral held the sheet where she could see its heading. It was an ordinary request to preserve whatever work tallies, wage entries, or loading notes the yard already kept for the day the cooper's nephew had been hurt. It did not assert that such papers existed. It did not identify a cause for the falling stack. The foreman's account was still missing, as was the physician's written finding.
+
+"We're asking that any existing records be kept while the proper inquiry is considered," Neral said. "We're not serving a judgment."
+
+"Then why have you brought him?"
+
+Her eyes went to Ilyan.
+
+"Because I wanted to know whether the request could be delivered without trouble," he said.
+
+"You've brought a Valeric to a timber yard and expected no trouble?"
+
+The chain complained as she tightened her grip.
+
+Ilyan could have told her that the coat was his and the family name had nothing to do with it. Neither answer would make the name disappear. He remembered the injured young man propped against his pillows, trying to explain that he had seen a stack move but not what had caused it. The boy needed the wages he could not presently earn. He also needed an account that would survive somebody's wish for a quick explanation.
+
+"Where does the foreman receive ordinary correspondence?" Ilyan asked.
+
+"Here, when he's here."
+
+"Is he here?"
+
+"No."
+
+"May we leave the request?"
+
+"I won't take responsibility for it."
+
+She was watching the workers now. The boy with the bucket had returned and was pretending to examine a wheel. Ilyan saw what she saw: a paper taken from a magistrate's clerk, in front of men who could not know whether it was an accusation, a threat, or merely a question. Her refusal was not proof of wrongdoing. It was also not proof that the foreman would see the paper.
+
+Neral lowered his hand. "Then we cannot mark it received."
+
+"Write that I refused," she said sharply. "You'll do it anyway."
+
+"We can write that no authorized recipient accepted delivery," Ilyan said. "We can't say you refused to give evidence. No evidence has been demanded."
+
+For the first time she looked at him rather than his coat.
+
+"Is there a difference?"
+
+"There had better be."
+
+A carpenter called for another pair of hands. The woman glanced back, and Ilyan thought she might take the sheet simply to get rid of them. Instead she stepped away.
+
+"Come back when you've found the proper way to ask," she said, and shut the gate.
+
+Ilyan stood looking at the timber stacked beneath the awning. A gust lifted the edge of a canvas cover. He wanted to call after her that the boy was frightened about rent, that somebody must remember the day correctly even if no one was at fault. None of those things gave him authority to turn a voluntary request into an order.
+
+"We've wasted the walk," he said.
+
+"We've learned that an informal handoff won't serve," Neral replied.
+
+"That sounds like something you'd say about a filing fee."
+
+"It's still true."
+
+They returned toward the Hall. At a crossroads, a pair of dray horses negotiated a narrow turn. Their driver waited for a vegetable seller to pull her cart clear rather than forcing the passage. It cost him time. No one applauded.
+
+"Could Vaun direct the yard to keep the records?" Ilyan asked.
+
+"She can decide whether an application has grounds. You and I cannot decide it for her."
+
+"And the boy's need?"
+
+"That goes to the relief counter on its own facts. The wage question goes to the proper office. Neither depends upon proving that the timber fell because somebody was careless."
+
+Ilyan took the undelivered sheet from Neral. "Then I'll carry the preservation question to Vaun. You take the relief referral. The boy shouldn't have to wait for us to settle who receives a letter before someone explains what assistance he can ask for."
+
+"Explains," Neral said.
+
+"Not promises."
+
+Back at the Hall, Ilyan recorded what had happened at the gate: no foreman present; no delivery accepted; no record examined; no conclusion about fault. He placed the undelivered request beneath the note and went to find Vaun, without adding the Valeric seal that could have made a second visit much quicker.
+
+The refusal had cost an afternoon. It had not answered the boy's question. But Ilyan had made a choice that did not require another person to mistake his urgency for lawful authority.
