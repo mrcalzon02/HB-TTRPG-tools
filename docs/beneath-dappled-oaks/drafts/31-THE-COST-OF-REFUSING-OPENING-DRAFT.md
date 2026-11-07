@@ -4519,3 +4519,91 @@ Ilyan took the undelivered sheet from Neral. "Then I'll carry the preservation q
 Back at the Hall, Ilyan recorded what had happened at the gate: no foreman present; no delivery accepted; no record examined; no conclusion about fault. He placed the undelivered request beneath the note and went to find Vaun, without adding the Valeric seal that could have made a second visit much quicker.
 
 The refusal had cost an afternoon. It had not answered the boy's question. But Ilyan had made a choice that did not require another person to mistake his urgency for lawful authority.
+
+---
+
+The next morning, Neral found the cooper planing a barrel stave that did not need planing. Each pass of the tool took another fine shaving from the wood. The cooper stopped when he saw the folded paper in Neral's hand.
+
+"Did they take the request?"
+
+"No one at the yard accepted it. Ilyan has taken the preservation question to Judge Vaun for review. She hasn't decided."
+
+"Then you've come with nothing."
+
+"I've brought the public instructions for asking about temporary relief. The wage question is separate."
+
+From the back room came a voice. "Bring him in, Uncle."
+
+The injured young man was sitting up with his leg still supported by blankets. His breakfast plate had been pushed to one side. On the bed beside him lay a small stack of rent coins, divided into two uneven piles.
+
+"Don't count those," the cooper told Neral.
+
+"I didn't intend to."
+
+"They're all I've got," the young man said. "He keeps trying to tell me there's no hurry."
+
+"I said we'd manage," his uncle replied.
+
+"That's different from knowing how."
+
+Neral drew the stool closer, but left the paper folded. "Your uncle asked where you might apply for help while you cannot work. These are the hours and the questions the counter asks. I can't say what they will grant. I don't know what the yard owes you either."
+
+The young man looked at the coins. "If I ask, will they tell the yard I said it was their fault?"
+
+"A request for relief doesn't have to accuse anyone. We can keep your account of the accident with the inquiry where it belongs."
+
+"Then let me read it."
+
+Neral handed him the instructions. The young man read slowly, pausing at a word and sounding it under his breath before continuing. His uncle reached as if to help turn the page, then withdrew his hand.
+
+"There's a place for what I can pay myself," the young man said.
+
+"Yes."
+
+"And a place for who can speak for me."
+
+"If you need someone to carry your application. You decide whether to name your uncle."
+
+"I can speak," he said, with enough heat to make both older men look away.
+
+"I know," Neral answered. "But speaking from this bed won't carry a paper across town. You needn't decide that part now."
+
+The cooper set his hands on his knees. They were powdered with wood dust. "The landlord will come for the rent before either office has finished asking its questions."
+
+"Then we should ask him for time," the young man said.
+
+His uncle looked startled. "You want me to go to him?"
+
+"I want you to take a note. Mine, not one written as though you were making excuses for a child."
+
+The cooper's mouth tightened. He had been ready to defend his nephew against the yard, the landlord and any official who might ask the wrong question. He seemed less prepared to let the nephew choose the words of his own defense.
+
+Neral gave him a blank sheet.
+
+"I don't want the Hall's heading on it," the young man said.
+
+"Nor should it have one."
+
+He wrote with the paper braced on a board across his lap. The first sentence took two attempts. He did not blame the yard for the falling stack or promise money he did not possess. He wrote that he could not presently take his shifts, that rent was due, and that he wished to ask for a few days before the landlord decided what arrangements were possible. He asked for a reply, not an assurance.
+
+When he finished, he read it aloud to his uncle.
+
+"Could I add that you've always paid before?" the cooper asked.
+
+"You can tell him that if it's true. Don't add it to my letter."
+
+The cooper looked down at the page for a long moment. Then he nodded.
+
+"I'll take it today."
+
+"Ask him to answer me," his nephew said. "Not the Valeric."
+
+Neral rose. "Ilyan isn't named on it."
+
+"Good."
+
+At the door, the cooper stopped him. "And the counter?"
+
+"The instructions stay here. If your nephew chooses to apply, we can explain how to submit it. Nothing has been filed on his behalf today."
+
+The cooper glanced back toward the room. The young man had drawn the two piles of coins together and was counting them again, slowly enough to be certain. The rent had not been extended. The relief counter had made no decision. But the letter was in its author's own hand, and for once his uncle carried it without speaking for him.
