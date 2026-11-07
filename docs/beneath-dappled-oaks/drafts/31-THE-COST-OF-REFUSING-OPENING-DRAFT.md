@@ -4607,3 +4607,86 @@ At the door, the cooper stopped him. "And the counter?"
 "The instructions stay here. If your nephew chooses to apply, we can explain how to submit it. Nothing has been filed on his behalf today."
 
 The cooper glanced back toward the room. The young man had drawn the two piles of coins together and was counting them again, slowly enough to be certain. The rent had not been extended. The relief counter had made no decision. But the letter was in its author's own hand, and for once his uncle carried it without speaking for him.
+
+
+---
+
+The cooper had meant to take the rent letter directly to the landlord. He had his coat on and the paper safely inside it when his nephew called from the back room.
+
+"Uncle. The stave you were planing."
+
+"It can wait."
+
+"Bring it here first."
+
+The cooper stood in the doorway, one hand inside his coat to make certain the letter was still there. His nephew was sitting where Neral had left him, the injured leg supported, the blankets rumpled where he had tried to shift his weight.
+
+"You need rest," the cooper said.
+
+"I haven't asked to stand."
+
+The stave was narrow and pale, with a knot near one end. The cooper brought it in reluctantly and held it across the bed, keeping the sharp edge away from the blankets.
+
+"Turn it," the young man said.
+
+He studied the grain. Years ago his uncle had taught him how to tell a sound length of wood from one that would fight the cooper's iron. At the timber yard, men were paid to move timber, not to explain its character. He had begun to forget that he knew something about it.
+
+"That end will open when you bend it," he said.
+
+"The knot is sound."
+
+"Not the knot. Beside it. There's a line running out to the edge."
+
+The cooper brought the stave nearer the window. In the brighter light a narrow check showed where the grain bent away. He pressed it gently with his thumbs. The line opened.
+
+"I'd have seen it before setting the hoop," he said.
+
+"Perhaps."
+
+"And if I hadn't?"
+
+"Then you'd have had a very handsome barrel that leaked."
+
+The cooper made a noise that might have been annoyance or the beginning of a laugh. He set the stave beside the door, apart from the good pieces.
+
+"You could have told me without making me fetch it."
+
+"You were going to plane it again."
+
+His uncle looked toward the workshop. Fresh shavings lay thick on the bench. He had been taking wood off the same piece since morning, making it thinner without deciding what it was for.
+
+"I've been busy," he said.
+
+"I know."
+
+The young man drew his fingers over the unbroken length of the stave. "I don't want you to start calling this a shift. The yard hasn't offered me anything, and I can't go back. I only wanted to look at it."
+
+"I wasn't going to put you to work."
+
+"You were going to stop asking me about wood because you think I'll hear it as a promise."
+
+That was close enough to the truth that the cooper could not immediately answer. He had been treating every subject connected to a day's labor as though speaking of it might oblige the young man to rise from the bed.
+
+"I don't know when you'll be fit to work," he said.
+
+"Neither do I. That's not the same as forgetting how."
+
+The cooper set the good pieces beyond the foot of the bed. "When I get back, I can bring two more for you to look at. Only if you wish."
+
+"I wish."
+
+"And I won't call it wages."
+
+"Don't call it charity either."
+
+His uncle nodded. He took the damaged stave away, then returned once more to the doorway. The folded rent letter was still in his coat, unaltered. He had not obtained an answer by carrying it across the workshop, and no amount of useful advice had made the young man's leg sound.
+
+"Shall I speak for you if the landlord has questions?" he asked.
+
+"Read him what I wrote. If he wants another answer, bring the question home."
+
+The cooper put his hand over the pocket where the letter lay.
+
+"All right."
+
+He left the sound staves where his nephew could see them and went out with the note. On the workbench the plane waited beside a pile of shavings. For the first time that morning he knew which piece he would not plane again.
