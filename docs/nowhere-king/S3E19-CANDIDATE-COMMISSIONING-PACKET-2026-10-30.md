@@ -490,3 +490,41 @@ The courtier took back his list. Luceran, listening at the doorway, seemed ready
 Mara lifted the case by its worn handle. She still had no word from the baker, no promised court wage, and no evening taken from her by this new sheet. Unlike the old correction, this choice concerned time she had not yet lost.
 
 **Editorial boundary:** No estimate is an approved budget, no roster or invitation issued, no date booked, no musician engaged or paid, and no baker's answer or compensation invented. No restoration of Senn's sealed access, consent from Miren, or new off-wall Edselsto hearing. Sera's rope obligations and the first-dark/six-lit candles remain unchanged. Candidate A and S3E19–23 scope locks remain independent.
+
+---
+
+## Candidate A — The summary that still traveled (additional audition, 2026-11-07)
+
+**UNAPPROVED / NONCANONICAL.** This is an optional Candidate A audition after the hypothetical wage-chest correction, not an additional canonical event, a new wage judgment, or an Episode 19 commission. It examines the *other* misleading document Oris wrote. Candidate B remains a separate alternative.
+
+Oris had left the works summary on his desk with a weight across its corner. The longer notice by the wage chest had been corrected in public, with the wrong wording still visible and the challenge recorded. This shorter sheet had not gone away. In its neat middle column, beside the receiving-yard turn, stood the words *one hour saved*.
+
+Pell's apprentice came to fetch a length of string for the model and saw the heading.
+
+“Is that an hour you needn't allow when we measure the new stone?” he asked.
+
+“No,” Oris said. “It was at the old turn.”
+
+“Then why doesn't the sheet say so? Someone may carry that number into the next estimate. We haven't got the stone yet, and we don't know how long it will take.”
+
+Oris took up his pen, meaning to expand the line. His nib hovered over the words he had written. He remembered Ysabet's instruction at the wage chest: leave the disputed notice legible, and put the correction beside it.
+
+“If I change this now,” he said, “how will anyone know what I sent for review?”
+
+The apprentice was not impressed by his care. “I'm asking how anyone will know what work is left.”
+
+They went to Tomas with the summary and the checked receiving-yard book. Tomas read his own entry aloud: a measuring hour spared by checking the recovered gauge against the existing turn. It was a statement about a completed comparison, not an estimate of the lower stone's fitting, or any man's unpaid roof shift.
+
+“Will you sign my summary?” Oris asked.
+
+“I'll stand by what I entered,” Tomas said. “I won't put my name under words you shortened. Put my book beside yours and let people see the difference.”
+
+Ysabet allowed the intermediate summary to remain in the works file, but not to travel as an unexplained saving. Oris wrote an attached correction in his own hand, naming Tomas's dated source, the specific old-turn measurement, and his own omission. Ysabet witnessed its filing. Neither the summary nor the attachment was an instruction to reduce a wage claim, price an unbought block, or shorten future work. Anyone relying on the figure would have to inspect the checked entry and the actual work still required.
+
+“Shall I mark the whole hour as disallowed?” Oris asked, looking for one final column that would settle the matter.
+
+“No,” Ysabet said. “You shall mark your inference as unsupported. The measurement happened. The wages are a different account.”
+
+The apprentice took his string and returned to Pell's wet model. He still had no stone to fit and no promise of when he would. Oris remained with the two papers, fastening the correction where a hurried reader would have to move it before seeing his old number. For once he had made the record harder to skim and safer to use.
+
+**Editorial boundary:** The original checked entry, Oris's intermediate summary and the publicly challenged unsigned wage-chest notice stay distinguishable. This scene grants no wage deduction, payment, priority ruling, funded new work, stone purchase, extension of Hesta's two-market-day hold, or access to Jorvan's pledged 24/27 east-gate net. It does not improve Edselsto's hearing, alter the first-dark/six-lit candles, settle Miren's privacy injury, select a candidate, or commission S3E19.
