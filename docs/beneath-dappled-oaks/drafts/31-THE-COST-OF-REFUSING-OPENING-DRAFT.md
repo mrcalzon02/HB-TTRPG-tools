@@ -3832,7 +3832,15 @@ The clerk hesitated over the returned deposit. "Can we set her refund against th
 
 "Not as though the carrier has paid it. The coins left our box today. They haven't come back from him, and a claim isn't cash."
 
-The buyer could feel the loss more clearly now that he had refused to disguise it as a receivable. The refunded farmer might find seed elsewhere; the other might still need his order when the wagon finally came. If the buyer asserted every possible charge before checking the road notice, he might protect a figure on paper and make a settlement harder. If he abandoned the claim without examining the agreement, he would be choosing a loss he had no reason yet to concede. He chose neither fiction.
+The buyer closed the cash drawer where the first farmer's returned deposit had left a conspicuous space. The second farmer's order remained in the book, but an order was neither seed nor money received. He had expected to balance the day's loss by placing a charge against the carrier, and he disliked the way the clerk's pen waited for him to say the word.
+
+"Leave his debt column alone," he said. "Put the missed deadline where a dispute can be checked."
+
+"And the loss?"
+
+"It stays in our books until we know what someone else actually owes."
+
+The clerk moved his pen to the disputed-claim sheet. The buyer would have to look at the missing sale again when he closed the accounts that evening. He could not collect coin by writing another man's name beside a sum.
 
 He opened a new sheet. On one side he listed what he could establish: the promised date, the missed bell, the notice's actual receipt, the traveler's limited observations, the returned deposit, and the order still open. On the other he listed what he needed before taking a final position: the carrier's original journey slip, the shelter keeper's witnessed arrival entry, any copy of the Warden road sheet the carrier held, and the actual date of any eventual delivery or return.
 
