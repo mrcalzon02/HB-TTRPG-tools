@@ -379,7 +379,9 @@ try {
     await page.waitForFunction(() => document.querySelector("#plannerEntryCount").textContent === "2 entries");
     const manual = (await database()).settings.find(item => item.key === "plannerEntries").entries.find(item => item.source === "manual");
     assert.equal(manual.date, date); assert.equal(manual.startMinutes, 540); assert.equal(manual.endMinutes, 1020); assert.equal(manual.breakMinutes, 30);
-    assert.match(await page.locator("#plannerSummary").textContent(), /7\.5\s*h/);
+    const scheduledHours = (await page.locator("#plannerSummary").textContent()).match(/Scheduled\s*([\d.]+)\s*h/);
+    assert.ok(scheduledHours, "Scheduled-hour total is visible");
+    assert.equal(Number(scheduledHours[1]), 7.5, "Eight hours less a 30-minute unpaid break");
     assert.equal(await page.evaluate(() => window.__shiftXss), undefined);
     await page.locator("#closePlanner").click();
     await page.reload(); await ready();
