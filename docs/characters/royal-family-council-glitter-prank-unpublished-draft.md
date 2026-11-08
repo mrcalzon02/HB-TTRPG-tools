@@ -395,7 +395,7 @@ Estelle touched the water, making a little wave that rocked the hull without mov
 
 Rome rose when footsteps sounded beyond the sitting room. Estelle did not ask him to stay until she fixed the mast. He had come to see the boat and watched her discover another part of the problem. She lifted the vessel from the basin and laid it on the cloth to dry.
 
-“I am leaving it crooked,” she announced.
+“I said I would make a straighter mast tomorrow,” she announced. “That was before I tried the sail. I am leaving this one crooked for now.”
 
 “For how long?” Daysha asked.
 
