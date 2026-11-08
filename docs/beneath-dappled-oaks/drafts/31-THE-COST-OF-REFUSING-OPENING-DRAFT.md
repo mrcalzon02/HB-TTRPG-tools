@@ -3676,6 +3676,40 @@ The carrier's wagon was still under the shelter roof when they looked back. Thes
 
 ---
 
+The shelter roof was dripping when the hired hand found the driver beside the wagon the next morning. Water had run down the outside of the canvas, but no one had opened the sacks. The horses stood in the covered yard. Nothing had crossed the warning posts.
+
+“You said we would speak before I began,” the young man said.
+
+The driver had a length of rope in his hands. He looked as though he would rather wrestle the knot than answer.
+
+“I did.”
+
+“I can walk back toward the market by the inner path. They sometimes need men to unload there. I might earn something.”
+
+“They might send a road crew today.”
+
+“They might not.”
+
+The driver glanced at the sacks. He had wanted someone beside him if the restriction was lifted; he had almost convinced himself that wanting help meant the young man had promised to wait. Yesterday's pay had bought yesterday's work. It had not bought a second day.
+
+“I can offer the morning,” he said. “Help me tighten the cover and water the team. I'll pay the agreed daily rate for the hours we actually work. After that, if the road's still closed, you're free to go.”
+
+“And if they open it an hour later?”
+
+“I'll have to find someone else.”
+
+The hired hand considered the canvas. “No holding my wages against the late delivery?”
+
+“No. That quarrel is mine and the buyer's, if it becomes one.”
+
+They worked while the keeper swept out the shelter. One rope had rubbed nearly through against the wagon rail. The lad found the fray before it parted and showed the driver, who cut a sound length from his spare coil. They tied it together. The cover held, though neither could know whether the barley beneath it would still be fit for sowing when someone finally inspected the load.
+
+At the end of the morning the driver paid for the hours worked. The young man checked the coins, returned the coil, and took the permitted inner footpath back toward the market with no sack on his back and no promise of a job there. The driver remained beside his wagon. The shelter fee for another night was still his to consider.
+
+The folded notice for the buyer remained on the keeper's dry shelf. Neither man described it as delivered.
+
+---
+
 The message reached the mill after the next market bell. The carrier's delivery deadline had passed before the buyer saw a word of explanation.
 
 A traveler brought the folded notice in his coat. The shelter keeper had given it to him from the dry shelf when he set out along the inner road on foot; no one had promised the carrier which traveler would take it, or when. The man had walked the last stretch with his boots in his hands because the mud had begun to pull them off. At the mill door he asked for the seed-barley buyer, and a clerk brought him to the counting room without promising payment for his trouble.
