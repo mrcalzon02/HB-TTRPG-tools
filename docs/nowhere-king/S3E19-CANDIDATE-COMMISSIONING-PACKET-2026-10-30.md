@@ -444,3 +444,49 @@ Outside, Rell's witness asked whether they should return tomorrow.
 They walked toward the unfinished roof, carrying proof of an unpaid debt and a question the court had not yet answered. Behind them the corrected notice stayed on the board. Its honesty was necessary. It was not bread.
 
 **Editorial boundary:** The dated extract reflects only the existing signed roll and prior partial payment. The acknowledgment records Rell's request; **no priority position is invented or certified yet**, no payment is made or scheduled, and Luceran issues no appropriation. The Jorvan 24-mark advance/27-mark cap remains pledged; Hesta's quarry block remains unsold under its existing limited hold. Rell directly refuses the king's impulse to use Edselsto as a shortcut, a different character consequence from Candidate B's Mara waiting for an outside employer. This audition remains an alternative and does not modify the unassigned S3E19–23 horizon.
+
+---
+
+## Candidate B — The cost of an unnamed evening (additional audition, 2026-11-07)
+
+**UNAPPROVED / NONCANONICAL.** A Candidate B-only audition about prospective consent and musicians' time. It does not commission Episode 19 or determine the baker's answer to Mara.
+
+Damaris had asked Sera for the cost of a winter hall evening, not for a company. Yet the courtier who brought Sera to the works desk carried a ruled sheet with room for twelve names.
+
+"If we knew who might play," he said, "we could begin to prepare."
+
+Sera pushed the sheet back. "You knew who might play last time. One turned down other work because you wrote *expected* above her name."
+
+"The old list was withdrawn."
+
+"Her afternoon was not returned."
+
+Mara stood beside Sera with her fiddle case fastened. She had not received the baker's answer. Waiting at his door had been her decision; it had not made a court booking real.
+
+Damaris put a blank costing page between them. "I need to know what a performance would require before I can advise whether it can be offered. Heating, guards, cleaning, musicians. I cannot enter a charge against names no one has agreed to use."
+
+"Then do not ask for their names," Mara said.
+
+"How do I price their work?"
+
+"Ask what the work is. How many hours? Is rehearsal paid? Who provides strings if a crowded room breaks them? How much warning before you cancel? You may put figures beside those questions. You may not put *Mara* beside a night I cannot sell to anyone else."
+
+The courtier frowned. "You cannot expect the Crown to pay you for a night it has not chosen."
+
+"I do not," Mara replied. "That is why I will not promise to keep it free."
+
+Sera laid down her account of what a company would need. It showed kinds of expense, not a roster. She offered to seek voluntary quotations once the household could state a possible duration, payment source and cancellation terms. Any musician could refuse the inquiry, and a quotation would not reserve an hour. She would not gather private preferences to make the hall look full.
+
+Damaris drew a rule beneath the headings. "I can examine a range of costs. I cannot authorize an engagement or charge the rope assessment with wages it does not cover."
+
+Sera nodded. The sponsor balance and the workers' separate claim would not shrink because the court wanted music.
+
+The courtier took back his list. Luceran, listening at the doorway, seemed ready to ask Edselsto who had sung in the connected hall last winter. Instead he looked at the empty space where the names might have been.
+
+"How shall we know when to invite them?" he asked.
+
+"When there is something they can accept," Sera said. "Not when you are tired of waiting."
+
+Mara lifted the case by its worn handle. She still had no word from the baker, no promised court wage, and no evening taken from her by this new sheet. Unlike the old correction, this choice concerned time she had not yet lost.
+
+**Editorial boundary:** No estimate is an approved budget, no roster or invitation issued, no date booked, no musician engaged or paid, and no baker's answer or compensation invented. No restoration of Senn's sealed access, consent from Miren, or new off-wall Edselsto hearing. Sera's rope obligations and the first-dark/six-lit candles remain unchanged. Candidate A and S3E19–23 scope locks remain independent.
