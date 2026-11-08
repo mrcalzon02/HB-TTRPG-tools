@@ -405,4 +405,43 @@ Rome considered the lopsided sail. “I should be pleased to see both.”
 
 “You may,” Estelle said, “when they are ready. And if you are busy, I will keep them safe until you can.”
 
+
+### A proper comparison
+
+When Estelle next had two boats ready, she did not go looking for the council gallery. She sent her father a note with three sentences: *I have made the other boat. The first one is still crooked. Please tell me when you can look at them.* Then she set both boats on the dry cloth beside the basin and waited for an answer that named a time rather than an indefinite after.
+
+Rome's reply did. He arrived when he said he would, with Daysha beside him and no council papers in his hands.
+
+“You kept the first mast,” he said.
+
+“I wanted to know if the bend was really the trouble.” Estelle picked up the original boat. Its blue ribbon still tugged sideways against the crooked wood. Beside it stood a second, rougher hull with a mast that was almost perfectly straight. “This one is my comparison. I made the mast myself. I only needed someone to hold the wood while I tied it.”
+
+“Would you like me to hold it now?”
+
+“Not that one. The new one.”
+
+Rome took the second hull between his fingers, careful not to cover the narrow notch where the sail cord passed. Estelle tightened the knot, then asked him to set it down. Daysha steadied the basin while Estelle placed the two boats at the same starting mark, one after the other, and blew across each sail as evenly as she could manage.
+
+The crooked boat crossed a little water and turned toward the rim. The straight-masted boat traveled farther, then swung broadside and stuck there.
+
+“Well,” Rome said. “You have proved that straight is not the same as obedient.”
+
+“I have proved that I ought to try the sail again.” Estelle frowned at the second boat. “And that my breath was probably different both times.”
+
+Daysha smiled. “What would make it a fairer test?”
+
+“The same wind. The same sail. One change at a time.” Estelle lifted the second boat and loosened the cord instead of demanding that Rome fix it for her. “Will you hold it while I try?”
+
+He did. Neither parent told her where to tie the knot. When the little craft touched the water again, it sailed only a hand's breadth farther, but Estelle knew which alteration she had made.
+
+She looked up at Rome. “You came before I had finished.”
+
+“You asked me to see what you were doing, not only the finished thing.”
+
+“I was afraid you'd say after again.”
+
+“I might have needed to,” he said. “But I could tell you when, and I could keep that answer.”
+
+Estelle considered both boats, one crooked and one not yet right. She left the blue ribbon exactly where it was. The second sail could be adjusted another time. For now, she asked her father to hold the basin steady while she showed him the difference once more.
+
 **Editorial boundary:** This proposed private experiment and choice are not verified new family history or formal punishment. The passage workers' account remains unheard; no council finding, route decision, appointment or royal decree is made. The glitter is not magically cleaned here, and RH-F04/SC-04 remains separate and chronologically unplaced.
