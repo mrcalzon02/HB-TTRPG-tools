@@ -347,78 +347,62 @@ Rome smiled. “And if the boat still sails sideways?”
 
 ---
 
-## Unpublished RH-F03 audition — The question at the next sitting
+## Unpublished RH-F03 audition — The boat that was not finished
 
-> **Status:** Optional, noncanonical continuation of the boat coda within RH-F03 only. This does not assign a date, a new royal policy, a council vote, or any chronological relationship to RH-F04/SC-04.
+> **Status:** Optional, noncanonical private RH-F03 coda after the basin voyage. It neither fixes the service passage nor establishes any relationship to RH-F04/SC-04.
 
-At the next sitting for which Estelle was permitted to wait outside the council chamber, the little boat was not in her basket. She had left it on the sitting-room stand, where its crooked sail could dry without anyone trying to improve it. She had brought a folded sheet instead.
+When the boat nudged the basin wall again, Estelle reached for its mast. She could make it straight with one impatient twist. Rome, kneeling beside her, did not stop her. That was almost more annoying than if he had.
 
-Rome noticed the basket first. His eyes went to it, then to the gallery attendant beside his daughter.
+“You said you would ask someone who knows boats,” he reminded her.
 
-“Am I to inspect the cargo?” he asked.
+“Do you?”
 
-“You may,” Estelle said, and lifted the lid before he could reach for it.
+“Enough to know this one belongs to you.”
 
-Inside lay a drawing of the boat, with an arrow showing the direction it ought to travel and another showing where it actually went. Below the drawing she had written a question in large, uncertain letters: *Who decides which way is safe?*
+Daysha appeared in the doorway carrying a dry cloth. She watched Estelle turn the little craft over, looking for the place where the mast had gone crooked. A spot of silver glitter caught the light in Rome's white hair. Daysha noticed it, and the corner of her mouth rose, but she made no move to remove it.
 
-Rome read it twice. The chamber beyond the doors was already filling with the sound of chairs and papers. He had time for one answer, perhaps two, before somebody would ask for him.
+“I can hold the hull while you adjust the mast,” Daysha offered.
 
-“Did you mean the boat?” he asked.
+“Then it will be a boat we made together.”
 
-“I did when I wrote it.”
+“Would that be such a dreadful thing?”
 
-“And now?”
+“No,” Estelle admitted. “Only I wanted Father to see the one I made myself.”
 
-Estelle glanced at the attendant. “I heard the people with the baskets had to tell the council about the passage. I thought you decided where they should go.”
+“He has,” Daysha said. “It hasn't vanished because someone offers to help with the next part.”
 
-“I must decide what the palace can require,” Rome said. “That is not the same as knowing where a loaded cart can turn.”
+Estelle inspected the little blue sail. She had tied it so tightly that the damp cloth pulled against the mast. The mast was crooked, but it might not be the only reason the boat turned. She had been ready to blame the first thing she could see.
 
-“But you are king.”
+“May I try the sail before we straighten anything?”
 
-“Which makes it more important that I ask before I order.”
+Rome shifted aside to give her room. Daysha steadied the basin while Estelle loosened the fastening and set it back more gently. The next voyage was scarcely longer. The hull turned, touched the rim, and stopped with its bow pointed toward the window.
 
-The attendant's expression did not change, but Estelle saw her fingers ease on the basket handle. Estelle had expected her father to say the workers had already come and everything was settled. Instead he told her the council still needed their account. Nobody had agreed to close the passage or send the loads elsewhere merely because the question had appeared on the table.
+“A very short improvement,” Rome observed.
 
-“Then can I ask them?” Estelle said.
+“An improvement I can measure,” Estelle replied.
 
-“You can ask a question. You cannot require someone who is working to stop and answer it for your amusement.”
+Daysha laughed. It was a warmer sound than the council's startled roar. Estelle looked from her mother to her father.
 
-“That is a difficult difference.”
+“Did you laugh before, too?” she asked Daysha.
 
-“It was difficult for me to learn too.”
+“I did. I also saw the clerk pulling his papers out of the water.”
 
-A clerk appeared at the chamber door with a stack of papers. Rome asked whether the people who used the service route had been given a chance to speak. The clerk said their account had been requested, but no conclusion was ready to enter. Rome thanked him and did not ask for a conclusion to be made ready simply because Estelle was waiting.
+“Both at once?”
 
-Estelle unfolded her paper again. “I was going to draw the passage and put an arrow on it.”
+“Both at once.”
 
-“Without seeing it?”
+Estelle touched the water, making a little wave that rocked the hull without moving it from the rim. She had apologized for the balloon. The people who cleaned up would still remember the trouble. No number of successful voyages could turn the prank into a favor.
 
-“I have seen the door.”
+Rome rose when footsteps sounded beyond the sitting room. Estelle did not ask him to stay until she fixed the mast. He had come to see the boat and watched her discover another part of the problem. She lifted the vessel from the basin and laid it on the cloth to dry.
 
-“Not the loads passing through it.”
+“I am leaving it crooked,” she announced.
 
-She looked down at the two arrows on her drawing. She had made the boat's mast crooked herself and had watched it turn in the basin; she knew what she had built and what it had done, even if she had not yet worked out how to make it sail straight. The passage was different. A line on her paper might be neat and still send a worker into a wall.
+“For how long?” Daysha asked.
 
-“May I keep the question, then?”
+“Until I know which part needs changing. Perhaps I'll make another boat to compare it with.”
 
-“Yes. And when someone who knows the passage has time to answer, you may listen. They may also tell you they have no time today.”
+Rome considered the lopsided sail. “I should be pleased to see both.”
 
-“That sounds like waiting.”
+“You may,” Estelle said, “when they are ready. And if you are busy, I will keep them safe until you can.”
 
-“It is,” Rome said. “But it is a kind of waiting that leaves the answer with the person who knows it.”
-
-The council bell sounded once. Rome did not make another promise about when he would emerge. Instead he asked the clerk to send word if the sitting kept him longer than expected. The clerk repeated the request where Estelle could hear it, without pretending to know when the doors would open again. Estelle could wait with her attendant or return to the sitting room; neither choice required the council to hurry an answer from the workers. She was beginning to trust a message that admitted a delay more than a cheerful promise made without looking at the clock.
-
-She closed the basket. “Father?”
-
-“Yes?”
-
-“I am glad the boat went sideways.”
-
-“An unusual sentiment for a shipbuilder.”
-
-“If it had gone straight, I might have thought I knew everything about boats.”
-
-Rome smiled, then went through the great carved doors. Estelle remained with the attendant beside the smaller one. Her drawing still held two arrows, neither erased. For once she did not mind leaving a question unfinished.
-
-**Editorial boundary:** The passage workers have not yet supplied an answer in this audition; no council determination, appointment, punishment, royal decree, or repaired route is established. Estelle's learning is a proposed private consequence, not a new public policy. RH-F04 and the separate magical-cleanup scene remain chronologically unplaced.
+**Editorial boundary:** This proposed private experiment and choice are not verified new family history or formal punishment. The passage workers' account remains unheard; no council finding, route decision, appointment or royal decree is made. The glitter is not magically cleaned here, and RH-F04/SC-04 remains separate and chronologically unplaced.
