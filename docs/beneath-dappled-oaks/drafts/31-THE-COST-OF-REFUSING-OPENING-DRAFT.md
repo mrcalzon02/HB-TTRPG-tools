@@ -4606,7 +4606,7 @@ At the door, the cooper stopped him. "And the counter?"
 
 "The instructions stay here. If your nephew chooses to apply, we can explain how to submit it. Nothing has been filed on his behalf today."
 
-The cooper glanced back toward the room. The young man had drawn the two piles of coins together and was counting them again, slowly enough to be certain. The rent had not been extended. The relief counter had made no decision. But the letter was in its author's own hand, and for once his uncle carried it without speaking for him.
+The cooper glanced back toward the room. The young man had drawn the two piles of coins together and was counting them again, slowly enough to be certain. The rent had not been extended. The relief counter had made no decision. But the letter was in its author's own hand, and his uncle had agreed to carry it without speaking for him.
 
 
 ---
@@ -4625,7 +4625,7 @@ The cooper stood in the doorway, one hand inside his coat to make certain the le
 
 "I haven't asked to stand."
 
-The stave was narrow and pale, with a knot near one end. The cooper brought it in reluctantly and held it across the bed, keeping the sharp edge away from the blankets.
+The stave was narrow and pale, with a knot near one end. The cooper brought it in reluctantly, along with two sound lengths from his bench. He set the spare lengths by the door and held the suspect stave across the bed, keeping its sharp edge away from the blankets.
 
 "Turn it," the young man said.
 
@@ -4647,7 +4647,7 @@ The cooper brought the stave nearer the window. In the brighter light a narrow c
 
 "Then you'd have had a very handsome barrel that leaked."
 
-The cooper made a noise that might have been annoyance or the beginning of a laugh. He set the stave beside the door, apart from the good pieces.
+The cooper made a noise that might have been annoyance or the beginning of a laugh. He kept the checked stave across the bed; his nephew had not finished examining it.
 
 "You could have told me without making me fetch it."
 
