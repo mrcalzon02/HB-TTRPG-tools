@@ -1,0 +1,17 @@
+{
+  "format": "work-shift-guide.position",
+  "schemaVersion": 1,
+  "position": {
+    "jobTitle": "",
+    "department": "",
+    "guideName": "",
+    "site": "",
+    "timeZone": "",
+    "siteRequirements": "",
+    "shelterPlan": ""
+  },
+  "route": [],
+  "references": [],
+  "knowledgeCheck": [],
+  "intakeNotes": ""
+}

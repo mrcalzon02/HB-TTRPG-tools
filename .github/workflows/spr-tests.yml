@@ -5,14 +5,10 @@ on:
     paths:
       - "software/superposition-reader/**"
       - "superposition-reader.html"
-      - "software.html"
-      - ".github/workflows/spr-tests.yml"
   pull_request:
     paths:
       - "software/superposition-reader/**"
       - "superposition-reader.html"
-      - "software.html"
-      - ".github/workflows/spr-tests.yml"
   workflow_dispatch:
 
 jobs:

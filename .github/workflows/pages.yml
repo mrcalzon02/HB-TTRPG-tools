@@ -1,4 +1,4 @@
-name: Deploy Blacklight EXO and Barotrauma site
+name: Deploy Homebrew tools site
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
       - "*.css"
       - "*.js"
       - "*.json"
+      - "software/work-shift-guide/**"
       - "data/**"
       - "scripts/**"
       - "artifacts/**"
@@ -33,121 +34,217 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate:
+  deploy:
+    environment:
+      name: github-pages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
-      - name: Set up Node
+      - name: Select validation for changed files
+        id: scope
+        env:
+          SITE_EVENT: ${{ github.event_name }}
+          SITE_BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          python3 - <<'PYTHON'
+          import os, subprocess
+          from pathlib import Path
+          full = True
+          before = os.environ.get("SITE_BEFORE", "")
+          if os.environ["SITE_EVENT"] == "push" and before and set(before) != {"0"}:
+              if subprocess.run(["git", "cat-file", "-e", before], capture_output=True).returncode:
+                  subprocess.run(["git", "fetch", "--depth=1", "origin", before], check=True)
+              changed = subprocess.check_output(["git", "diff", "--name-only", before, "HEAD"], text=True).splitlines()
+              app_paths = {"software.html", ".github/workflows/pages.yml", ".github/workflows/spr-tests.yml",
+                           "scripts/build-work-shift-guide.py", "scripts/validate-work-shift-guide.mjs"}
+              full = not changed or not all(path in app_paths or path.startswith("software/work-shift-guide/") for path in changed)
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write(f"full_validation={str(full).lower()}\n")
+          print("Full existing EXO/Barotrauma checks" if full else "Work Shift Guide and Software catalog checks")
+          PYTHON
+
+      - name: Set up Node for site checks
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
+
+      - name: Check Work Shift Guide and Software catalog
+        if: steps.scope.outputs.full_validation == 'false'
+        run: |
+          node --check software/work-shift-guide/app.js
+          node --check software/work-shift-guide/position.js
+          node --check software/work-shift-guide/service-worker.js
+          node scripts/validate-software-catalog.mjs
+          python3 scripts/build-work-shift-guide.py --check
+
+      - name: Prepare Work Shift Guide browser checks
+        if: steps.scope.outputs.full_validation == 'false'
+        shell: bash
+        run: |
+          npm install --prefix "$RUNNER_TEMP/work-shift-guide-browser" --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          if ! command -v chromium >/dev/null && ! command -v google-chrome >/dev/null; then
+            node "$RUNNER_TEMP/work-shift-guide-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          fi
+
+      - name: Exercise blank guide, intake, shifts and offline use
+        if: steps.scope.outputs.full_validation == 'false'
+        shell: bash
+        run: |
+          export NODE_PATH="$RUNNER_TEMP/work-shift-guide-browser/node_modules"
+          export WORK_SHIFT_GUIDE_TEST_OUTPUT="$RUNNER_TEMP/work-shift-guide-validation"
+          node scripts/validate-work-shift-guide.mjs
+
+      - name: Upload Work Shift Guide validation evidence
+        if: always() && steps.scope.outputs.full_validation == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: work-shift-guide-validation
+          path: ${{ runner.temp }}/work-shift-guide-validation
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Check Blacklight EXO JavaScript
+        if: steps.scope.outputs.full_validation == 'true'
         shell: bash
         run: |
           find . -maxdepth 1 -name 'blacklight-exo-*.js' -print0 | xargs -0 -r -n1 node --check
           find scripts -maxdepth 1 -name 'validate-exo-*.mjs' -print0 | xargs -0 -r -n1 node --check
 
       - name: Validate EXO stellar sector and incremental system loading
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-stellar-sector.mjs
 
       - name: Validate EXO stellar sector strategic atlas
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-stellar-sector-strategic-atlas.mjs
 
       - name: Validate EXO stellar sector strategic map
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-stellar-sector-strategic-map.mjs
 
       - name: Validate EXO durable sector archives
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-sector-archives.mjs
 
       - name: Smoke-test EXO browser runtimes
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-browser-runtime.mjs
 
       - name: Validate EXO cluster jump calculator
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-jump-calculator.mjs
 
       - name: Validate EXO FTL Path 5 speed balance
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-ftl-path5-balance.mjs
 
       - name: Validate EXO vessel engineering and design philosophy
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-generator-v2.mjs
 
       - name: Validate EXO vessel canonical contracts
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-contracts.mjs
 
       - name: Validate EXO species-specific manufacturers
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-manufacturers.mjs
 
       - name: Validate EXO vessel expanded engineering ledger
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-engineering.mjs
 
       - name: Validate EXO vessel inertial-reference control
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-inertial-control.mjs
 
       - name: Validate EXO vessel semantic module graph
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-modules.mjs
 
       - name: Validate EXO alien operative technology bases
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-technology-basis.mjs
 
       - name: Validate EXO vessel crude voxel assembler
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-voxels.mjs
 
       - name: Validate EXO vessel condition, history, salvage, and destruction
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-condition.mjs
 
       - name: Validate EXO vessel sensor tracks and combat geometry
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-tracks.mjs
 
       - name: Validate EXO vessel weapon-family engagement envelopes
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-weapons.mjs
 
       - name: Validate EXO vessel local combat resolution
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-damage.mjs
 
       - name: Validate EXO vessel RPG statistics and action economy
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-gameplay.mjs
 
       - name: Validate canonical VESSEL-09 weapon authority
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-gameplay-weapon-authority.mjs
 
       - name: Validate VESSEL-10 vessel campaign persistence
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-campaign-store.mjs
 
       - name: Validate VESSEL-10 diegetic controls
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-diegetic-controls.mjs
 
       - name: Validate VESSEL-10 reversible damage editor
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-campaign-damage-editor.mjs
 
       - name: Validate VESSEL-10 campaign voxel viewer
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-campaign-voxel-viewer.mjs
 
       - name: Validate interactive vessel campaign 3D viewer
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-campaign-3d-viewer.mjs
 
       - name: Validate canonical VESSEL-10 loader integration
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-v10-loader.mjs
 
       - name: Validate phased EXO vessel base roadmap
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-roadmap-v2.mjs
 
       - name: Validate effective EXO vessel roadmap through VESSEL-10
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-roadmap-v3.mjs
 
       - name: Validate VESSEL-11 matrix and simulation contracts
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-validation-matrix.mjs
 
       - name: Validate scoped canonical weapon-family override
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-weapon-priority-override.mjs
 
       - name: Run VESSEL-11 cross-product balance matrix
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/run-exo-vessel-balance-matrix.mjs artifacts/exo-vessel-balance-matrix.json
 
       - name: Upload VESSEL-11 balance report
-        if: always()
+        if: always() && steps.scope.outputs.full_validation == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: exo-vessel-balance-matrix
@@ -156,10 +253,11 @@ jobs:
           retention-days: 30
 
       - name: Run VESSEL-11 engagement Monte Carlo
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/run-exo-vessel-engagement-monte-carlo.mjs artifacts/exo-vessel-balance-matrix.json artifacts/exo-vessel-engagement-simulation.json
 
       - name: Upload VESSEL-11 engagement report
-        if: always()
+        if: always() && steps.scope.outputs.full_validation == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: exo-vessel-engagement-simulation
@@ -168,27 +266,22 @@ jobs:
           retention-days: 30
 
       - name: Validate completed EXO vessel roadmap
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/validate-exo-vessel-roadmap-v4.mjs
 
       - name: Check Barotrauma JavaScript
+        if: steps.scope.outputs.full_validation == 'true'
         shell: bash
         run: |
           find . -maxdepth 1 -name 'barotrauma*.js' -print0 | xargs -0 -r -n1 node --check
           find scripts -maxdepth 1 \( -name '*barotrauma*.js' -o -name '*barotrauma*.mjs' \) -print0 | xargs -0 -r -n1 node --check
 
       - name: Verify Barotrauma crew-primer entries
+        if: steps.scope.outputs.full_validation == 'true'
         run: node scripts/run-barotrauma-primer-browser-verification.mjs artifacts/barotrauma-primer-browser-verification.json
 
-  deploy:
-    needs: validate
-    environment:
-      name: github-pages
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Write deployment health manifest
+        if: steps.scope.outputs.full_validation == 'true'
         shell: bash
         run: |
           mkdir -p artifacts
@@ -207,13 +300,18 @@ jobs:
           }
           EOF
 
+      # The repository's configured branch publisher already publishes app-only
+      # commits. Avoid uploading the whole site again for this small package.
       - name: Setup Pages
+        if: steps.scope.outputs.full_validation == 'true'
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
+        if: steps.scope.outputs.full_validation == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: "."
 
       - name: Deploy
+        if: steps.scope.outputs.full_validation == 'true'
         uses: actions/deploy-pages@v4

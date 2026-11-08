@@ -1,0 +1,2991 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f1216">
+<meta name="description" content="A blank, local-first Work Shift Guide. Configure a new position, import duties and reference notes, plan shifts and save work records.">
+<title>Work Shift Guide</title>
+
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJXb3JrIFNoaWZ0IEd1aWRlIGJsYW5rIGNsaXBib2FyZCI+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMDgiIGZpbGw9IiMwZjEyMTYiLz4KICA8cmVjdCB4PSIxMzIiIHk9IjExNiIgd2lkdGg9IjI0OCIgaGVpZ2h0PSIzMDQiIHJ4PSIyNiIgZmlsbD0iI2VkZjNmNSIvPgogIDxyZWN0IHg9IjE5MCIgeT0iOTIiIHdpZHRoPSIxMzIiIGhlaWdodD0iNTgiIHJ4PSIyMCIgZmlsbD0iIzcyZDRjNCIgc3Ryb2tlPSIjMGYxMjE2IiBzdHJva2Utd2lkdGg9IjE0Ii8+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDA1ODZhIiBzdHJva2Utd2lkdGg9IjEyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgogICAgPHJlY3QgeD0iMTcyIiB5PSIyMDEiIHdpZHRoPSIyNyIgaGVpZ2h0PSIyNyIgcng9IjUiLz4KICAgIDxwYXRoIGQ9Ik0yMjggMjE0LjVoMTAzIi8+CiAgICA8cmVjdCB4PSIxNzIiIHk9IjI3MSIgd2lkdGg9IjI3IiBoZWlnaHQ9IjI3IiByeD0iNSIvPgogICAgPHBhdGggZD0iTTIyOCAyODQuNWgxMDMiLz4KICAgIDxyZWN0IHg9IjE3MiIgeT0iMzQxIiB3aWR0aD0iMjciIGhlaWdodD0iMjciIHJ4PSI1Ii8+CiAgICA8cGF0aCBkPSJNMjI4IDM1NC41aDc3Ii8+CiAgPC9nPgo8L3N2Zz4K" type="image/svg+xml">
+<style>
+:root{
+  --bg:#0f1216;
+  --panel:#171c22;
+  --panel2:#1e252d;
+  --text:#f4f7fa;
+  --muted:#a9b3be;
+  --line:#2d3742;
+  --accent:#8ec5ff;
+  --accent2:#b8dbff;
+  --warn:#ffd17a;
+  --danger:#ff9b9b;
+  --ok:#9ee6ad;
+  --shadow:0 12px 32px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{background:var(--bg);color-scheme:dark}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:linear-gradient(180deg,#0d1014 0%,#12171d 100%);
+  color:var(--text);
+  min-height:100vh;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{
+  width:min(980px,100%);
+  margin:0 auto;
+  padding:18px 14px 96px;
+}
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:20;
+  margin:-18px -14px 18px;
+  padding:14px;
+  background:rgba(15,18,22,.92);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.brandrow{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  width:min(980px,100%);margin:0 auto;
+}
+h1{font-size:1.3rem;margin:0 0 3px}
+.subtle{color:var(--muted);font-size:.9rem}
+.status{
+  padding:6px 10px;border-radius:999px;border:1px solid var(--line);
+  color:var(--muted);font-size:.82rem;white-space:nowrap
+}
+.status.active{color:var(--ok);border-color:#31513a;background:#14251a}
+.panel{
+  background:rgba(23,28,34,.96);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  padding:16px;
+  margin-bottom:14px;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+.shift-time{font-size:2rem;font-weight:800;letter-spacing:-.02em}
+.action-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btn{
+  border:1px solid var(--line);
+  background:var(--panel2);
+  color:var(--text);
+  border-radius:12px;
+  padding:12px 14px;
+  font-weight:700;
+  min-height:46px;
+}
+.btn:hover{border-color:#52606f}
+.btn.primary{background:#dceeff;color:#08111b;border-color:#dceeff}
+.btn.warn{background:#3b2d12;color:#ffe7b0;border-color:#674f20}
+.btn.danger{background:#401f22;color:#ffd5d8;border-color:#6c3338}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.section-title{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin:4px 0 10px
+}
+.section-title h2{font-size:1.05rem;margin:0}
+.route-card{
+  border:1px solid var(--line);
+  border-radius:14px;
+  margin:10px 0;
+  overflow:hidden;
+  background:#141a20;
+}
+.route-card summary{
+  list-style:none;
+  padding:15px 16px;
+  font-weight:800;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.route-card summary::-webkit-details-marker{display:none}
+.route-card summary::after{content:"＋";color:var(--muted);font-size:1.25rem}
+.route-card[open] summary::after{content:"−"}
+.route-body{padding:0 16px 16px}
+.route-body ul{padding-left:20px;margin:0}
+.route-body li{margin:8px 0;line-height:1.38}
+.route-notes{
+  margin-top:14px;padding:12px;border-left:3px solid var(--accent);
+  background:#11171d;color:var(--accent2);border-radius:0 8px 8px 0;
+}
+.route-notes p{margin:6px 0}
+.issue{
+  border:1px solid #664c1e;
+  background:#211b10;
+  padding:12px;
+  border-radius:12px;
+  margin:8px 0;
+}
+.issue-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.issue strong{color:var(--warn)}
+.issue small{color:var(--muted)}
+.issue-actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.empty{color:var(--muted);padding:12px 0}
+.footer-actions{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  z-index:30;
+  background:rgba(12,15,18,.94);
+  backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  padding:10px 12px;
+}
+.footer-actions .inner{
+  width:min(980px,100%);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+dialog{
+  width:min(620px,calc(100% - 24px));
+  border:none;
+  border-radius:16px;
+  background:var(--panel);
+  color:var(--text);
+  box-shadow:0 28px 80px rgba(0,0,0,.55);
+  padding:0;
+}
+dialog::backdrop{background:rgba(0,0,0,.7)}
+.dialog-body{padding:18px}
+.dialog-body h2{margin:0 0 14px}
+.form-grid{display:grid;grid-template-columns:1fr;gap:12px}
+label{display:block;font-weight:700;font-size:.9rem}
+input,select,textarea{
+  width:100%;margin-top:6px;
+  color:var(--text);background:#11171d;
+  border:1px solid var(--line);border-radius:10px;
+  padding:11px 12px;
+}
+textarea{min-height:110px;resize:vertical}
+.checkline{display:flex;align-items:center;gap:9px;font-weight:600}
+.checkline input{width:auto;margin:0}
+.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;flex-wrap:wrap}
+.review{
+  background:#11171d;border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;
+}
+.review pre{
+  white-space:pre-wrap;
+  word-break:break-word;
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  font-size:.82rem;color:#dfe7ee;
+}
+.history-item{
+  border-top:1px solid var(--line);
+  padding:12px 0;
+}
+.history-item:first-child{border-top:none}
+.history-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.badge{
+  display:inline-block;padding:4px 8px;border-radius:999px;
+  border:1px solid var(--line);color:var(--muted);font-size:.78rem;margin-right:6px
+}
+@media (min-width:720px){
+  .hero-grid{grid-template-columns:1.2fr .8fr}
+  .footer-actions .inner{grid-template-columns:1fr 1fr 1fr 1fr}
+  .form-grid.two{grid-template-columns:1fr 1fr}
+}
+@media print{
+  .topbar,.footer-actions,.action-row,.issue-actions{display:none!important}
+  body{background:white;color:black}
+  .panel,.route-card{box-shadow:none;border-color:#bbb;background:white}
+  .subtle,.empty{color:#555}
+}
+
+
+.safety-panel,.rights-panel,.responsibilities-panel,.legal-nav{border-color:#4d5966}
+.safety-alert,.rights-callout{
+  border:1px solid #725822;
+  background:#231c10;
+  color:#ffe6ad;
+  border-radius:12px;
+  padding:13px 14px;
+  line-height:1.45;
+  margin-bottom:12px;
+}
+.rights-callout{
+  border-color:#31506a;
+  background:#111e29;
+  color:#d6ecff;
+}
+.ref-nav-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  margin-top:12px;
+}
+.reference-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:9px;
+  margin-top:12px;
+}
+.reference-link{
+  display:block;
+  text-decoration:none;
+  color:var(--text);
+  border:1px solid var(--line);
+  background:#11171d;
+  border-radius:12px;
+  padding:12px 13px;
+}
+.reference-link:hover{border-color:#6a7a8b;background:#151d25}
+.reference-link strong{display:block;color:var(--accent2);margin-bottom:3px}
+.reference-link span{display:block;color:var(--muted);font-size:.86rem;line-height:1.35}
+.single-reference{margin:10px 0 16px}
+.plain-list,.ranked-list{padding-left:22px}
+.plain-list li,.ranked-list li{margin:7px 0;line-height:1.42}
+.plain-list.compact li{margin:5px 0}
+.two-column-guidance{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+  margin:12px 0 18px;
+}
+.guidance-card{
+  border:1px solid var(--line);
+  background:#11171d;
+  border-radius:12px;
+  padding:14px;
+}
+.guidance-card h3,.rights-panel h3,.responsibilities-panel h3{margin:10px 0 7px}
+.guidance-card h3{margin-top:0}
+@media (min-width:720px){
+  .reference-grid{grid-template-columns:1fr 1fr}
+  .ref-nav-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .two-column-guidance{grid-template-columns:1fr 1fr}
+}
+
+.records-panel{border-color:#4d5966}
+
+
+.recording-panel{border-color:#4d5966}
+.table-scroll{
+  width:100%;
+  overflow-x:auto;
+  margin:10px 0 18px;
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+.law-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:850px;
+  background:#11171d;
+}
+.law-table th,.law-table td{
+  text-align:left;
+  vertical-align:top;
+  padding:10px 11px;
+  border-bottom:1px solid var(--line);
+  line-height:1.36;
+  font-size:.88rem;
+}
+.law-table th{
+  position:sticky;
+  top:0;
+  background:#1a222a;
+  color:var(--accent2);
+  z-index:1;
+}
+.law-table tr:last-child td{border-bottom:none}
+.law-table a{color:var(--accent)}
+.consent-badge{
+  display:inline-block;
+  border-radius:999px;
+  padding:4px 8px;
+  white-space:nowrap;
+  font-weight:800;
+  font-size:.76rem;
+  border:1px solid var(--line);
+}
+.consent-one{color:#baf2c6;background:#102319;border-color:#31543b}
+.consent-all{color:#ffd2d2;background:#2c1518;border-color:#6c3439}
+.consent-mixed{color:#ffe2a6;background:#2a2110;border-color:#665225}
+
+
+.visual-badge{
+  display:inline-block;
+  border-radius:10px;
+  padding:4px 7px;
+  font-weight:800;
+  font-size:.72rem;
+  border:1px solid var(--line);
+  max-width:220px;
+}
+.visual-broad{color:#ffd9a8;background:#2b1e10;border-color:#69491f}
+.visual-limited{color:#d7e9ff;background:#111f2e;border-color:#31516f}
+.visual-mixed{color:#d9dfE8;background:#1b2027;border-color:#4b5664}
+
+.worker-protection-panel{border-color:#4d5966}
+
+.personal-safety-panel{border-color:#4d5966}
+
+.sharps-panel{border-color:#4d5966}
+
+.electrical-cleaning-panel{border-color:#4d5966}
+
+.chemical-safety-panel{border-color:#4d5966}
+
+
+.reference-page[hidden]{display:none!important}
+.reference-tab{
+  text-align:left;
+  justify-content:flex-start;
+}
+.reference-tab.active{
+  background:#dceeff;
+  color:#08111b;
+  border-color:#dceeff;
+}
+.wide-dialog{width:min(900px,calc(100% - 24px))}
+.work-editor-list{display:grid;gap:12px;margin-top:14px}
+.work-editor-card{
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#11171d;
+  padding:14px;
+}
+.work-editor-card h3{margin:0}
+.work-editor-head{
+  display:flex;
+  gap:10px;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+.work-editor-controls{display:flex;gap:7px;flex-wrap:wrap}
+.work-editor-card textarea{min-height:120px}
+.work-editor-card .notes-box{min-height:90px}
+.compact-btn{min-height:36px;padding:7px 10px;font-size:.84rem}
+@media (max-width:719px){
+  .ref-nav-grid{grid-template-columns:1fr!important}
+}
+
+
+.standards-panel{border-color:#4d5966}
+button.reference-link{
+  width:100%;
+  text-align:left;
+  font:inherit;
+  cursor:pointer;
+}
+button.reference-link:hover{border-color:#6a7a8b}
+
+
+.authority-legend{
+  display:grid;
+  grid-template-columns:max-content 1fr;
+  gap:7px 10px;
+  align-items:center;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px;
+  margin:10px 0;
+  background:#11171d;
+}
+.authority-badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  font-size:.72rem;
+  font-weight:850;
+  letter-spacing:.02em;
+}
+.authority-law{background:#112117;color:#bdeec6;border-color:#35583d}
+.authority-policy{background:#171f2c;color:#c9e0ff;border-color:#3d5574}
+.authority-practice{background:#2a2110;color:#ffe2a6;border-color:#665225}
+.rule-label{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 10px}
+.source-review{color:var(--muted);font-size:.84rem;margin:8px 0 14px}
+
+
+.edge-case-card{margin:10px 0}
+.edge-case-card .detail-body{padding:0 14px 14px}
+.edge-case-card .detail-body p:first-child{margin-top:4px}
+.edge-case-card ol.plain-list{padding-left:28px}
+
+
+.customer-client-panel{border-color:#4d5966}
+.scenario-card{
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#11171d;
+  padding:14px;
+  margin:10px 0 16px;
+}
+.scenario-card h4{margin-top:0}
+.scenario-card p:last-child{margin-bottom:0}
+
+.property-crime-panel{border-color:#4d5966}
+
+.management-guide-panel{border-color:#4d5966}
+
+.mandatory-reporting-panel{border-color:#4d5966}
+
+.press-investigators-panel{border-color:#4d5966}
+
+.apparent-death-panel{border-color:#594d4d}
+
+
+.reading-knowledge-panel{border-color:#4d5966}
+.reading-time-table td:nth-child(2),
+.reading-time-table td:nth-child(3){white-space:nowrap}
+.text-link{
+  border:0;
+  padding:0;
+  background:transparent;
+  color:var(--accent);
+  text-align:left;
+  font:inherit;
+  font-weight:750;
+  cursor:pointer;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.knowledge-check-form{display:grid;gap:12px}
+.quiz-question{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  margin:0;
+  background:#11171d;
+}
+.quiz-question legend{
+  width:100%;
+  padding:0 0 8px;
+  font-weight:750;
+  line-height:1.4;
+}
+.quiz-number{
+  display:inline-grid;
+  place-items:center;
+  min-width:28px;
+  height:28px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  margin-right:6px;
+}
+.quiz-category{
+  font-size:.75rem;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  color:var(--muted);
+}
+.quiz-option{
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+  padding:9px 10px;
+  margin:6px 0;
+  border-radius:10px;
+  border:1px solid transparent;
+  cursor:pointer;
+}
+.quiz-option:hover{background:#161e26}
+.quiz-option input{margin-top:4px;flex:0 0 auto}
+.quiz-explanation{
+  margin-top:10px;
+  padding:10px 12px;
+  border-left:3px solid var(--line);
+  background:#0d1318;
+  border-radius:8px;
+}
+.quiz-correct{border-color:#35583d}
+.quiz-incorrect{border-color:#744646}
+.quiz-unanswered{border-color:#665225}
+.quiz-answer-key{
+  border-color:#35583d;
+  background:#112117;
+}
+.quiz-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.quiz-result{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px;
+  background:#11171d;
+}
+.quiz-pass{border-color:#35583d;background:#112117}
+.quiz-review{border-color:#665225;background:#2a2110}
+
+
+.route-technique-link{width:100%;margin:8px 0 14px;text-align:left}
+
+
+.surface-types-panel{border-color:#4d5f69}
+.surface-search-label{display:block;font-weight:800;margin:8px 0 6px}
+.surface-search-input{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#0d1318;
+  color:var(--text);
+  font:inherit;
+}
+.surface-guide-grid{display:grid;gap:8px;margin:10px 0 18px}
+.surface-card{
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#11171d;
+  overflow:hidden;
+}
+.surface-card summary{
+  cursor:pointer;
+  padding:11px 13px;
+  font-weight:800;
+}
+.surface-card-body{padding:0 13px 12px}
+.surface-card-body p{margin:7px 0}
+
+.carpet-exterior-panel{border-color:#53614a}
+
+.ppe-proportional-panel{border-color:#4e596b}
+
+.dangerous-materials-panel{border-color:#695246}
+
+.situational-awareness-panel{border-color:#4e6257}
+
+.dermal-exposure-panel{border-color:#684e55}
+
+
+.onboarding-skill-panel{border-color:#4d5f72}
+.milestone-track{
+  display:grid;
+  grid-template-columns:1fr auto 1fr auto 1fr;
+  align-items:center;
+  gap:8px;
+  margin:14px 0 18px;
+}
+.milestone-track>div:not(.track-arrow){
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px 8px;
+  text-align:center;
+  background:#11171d;
+}
+.milestone-track strong{display:block;font-size:1.05rem}
+.milestone-track span{display:block;color:var(--muted);font-size:.8rem;margin-top:3px}
+.track-arrow{font-size:1.4rem;color:var(--muted);text-align:center}
+@media(max-width:700px){
+  .milestone-track{grid-template-columns:1fr;gap:5px}
+  .track-arrow{transform:rotate(90deg)}
+}
+
+
+.planner-dialog{
+  width:min(1120px,calc(100% - 18px));
+  max-height:94vh;
+}
+.planner-body{
+  max-height:94vh;
+  overflow:auto;
+}
+.planner-title-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+.planner-title-row h2{margin:0 0 4px}
+.compact-btn{min-height:36px;padding:7px 10px}
+.planner-toolbar{
+  display:grid;
+  grid-template-columns:minmax(180px,.7fr) minmax(240px,1fr);
+  gap:10px;
+  align-items:end;
+}
+.planner-toolbar-actions{
+  grid-column:1/-1;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.planner-summary{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin:14px 0;
+}
+.planner-summary>div{
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#11171d;
+  padding:10px 12px;
+}
+.planner-summary span{display:block;color:var(--muted);font-size:.78rem}
+.planner-summary strong{display:block;margin-top:3px;font-size:1.05rem}
+.planner-calendar-shell{
+  overflow-x:auto;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#0f1419;
+}
+.planner-weekdays,.planner-calendar{
+  min-width:760px;
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+}
+.planner-weekdays{
+  border-bottom:1px solid var(--line);
+  background:#11171d;
+}
+.planner-weekdays span{
+  padding:8px;
+  text-align:center;
+  color:var(--muted);
+  font-size:.8rem;
+  font-weight:800;
+}
+.planner-day{
+  min-height:118px;
+  padding:6px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:#131920;
+}
+.planner-day:nth-child(7n){border-right:none}
+.planner-day.other-month{opacity:.48;background:#0d1216}
+.planner-day.today{box-shadow:inset 0 0 0 2px #6a879e}
+.planner-day-number{
+  width:30px;height:30px;
+  border:0;border-radius:8px;
+  background:transparent;color:var(--text);
+  font-weight:800;cursor:pointer;
+}
+.planner-day-number:hover{background:#202a33}
+.planner-calendar-entry{
+  display:block;
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:5px 6px;
+  margin-top:4px;
+  text-align:left;
+  background:#182028;
+  color:var(--text);
+  cursor:pointer;
+}
+.planner-calendar-entry span,.planner-calendar-entry small{display:block}
+.planner-calendar-entry span{font-size:.73rem;font-weight:800}
+.planner-calendar-entry small{font-size:.66rem;color:var(--muted);margin-top:1px}
+.planner-status-worked{border-color:#3f6b56;background:#132219}
+.planner-status-training{border-color:#5f587a;background:#1c1927}
+.planner-status-leave{border-color:#6b5b3c;background:#241e13}
+.planner-entry-editor{
+  border:1px solid var(--line);
+  border-radius:14px;
+  margin:16px 0;
+  background:#11171d;
+}
+.planner-entry-editor>summary{
+  cursor:pointer;
+  padding:12px 14px;
+  font-weight:800;
+}
+.planner-entry-editor form{padding:0 14px 14px}
+.planner-time-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:12px 0;
+}
+.planner-time-fieldset{
+  border:1px solid var(--line);
+  border-radius:12px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr 1fr;
+  gap:6px;
+  align-items:center;
+  padding:8px 10px 10px;
+}
+.planner-time-fieldset legend{font-weight:800;padding:0 5px}
+.planner-time-fieldset select{margin:0;padding:9px 8px}
+.planner-duration-preview{
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#0e1419;
+  min-height:68px;
+  padding:10px 12px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.planner-duration-preview strong{font-size:1.15rem;margin-top:3px}
+.planner-log-section{margin-top:14px}
+.planner-log-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:flex-start;
+  border-top:1px solid var(--line);
+  padding:10px 0;
+}
+.planner-log-row:first-child{border-top:none}
+.planner-log-actions{display:flex;gap:6px;flex-wrap:wrap}
+.planner-note{margin-top:14px}
+@media(max-width:760px){
+  .planner-toolbar,.planner-time-row,.planner-summary{grid-template-columns:1fr}
+  .planner-toolbar-actions{grid-column:auto}
+  .planner-log-row{display:block}
+  .planner-log-actions{margin-top:8px}
+}
+
+
+.role-profiles-panel{border-color:#596171}
+.role-profile-selector{
+  border:1px solid var(--line);
+  background:#10171d;
+  border-radius:14px;
+  padding:14px;
+  margin:12px 0 16px;
+}
+.role-profile-selector .section-title{margin-top:0}
+.role-all-toggle{
+  display:flex;
+  gap:9px;
+  align-items:center;
+  border:1px solid #51616d;
+  border-radius:12px;
+  padding:11px 12px;
+  background:#15202a;
+  margin:10px 0;
+}
+.role-all-toggle input,.role-profile-card input{width:auto;margin:0}
+.role-all-toggle .subtle{margin-left:auto}
+.role-profile-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+.role-profile-card{
+  display:block;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#12191f;
+  padding:10px 11px;
+  cursor:pointer;
+}
+.role-profile-card:has(input:checked){
+  border-color:#63819a;
+  background:#152430;
+}
+.role-profile-title{
+  display:flex;
+  gap:7px;
+  align-items:center;
+  margin-bottom:4px;
+}
+.role-profile-card .subtle{display:block;font-weight:400;font-size:.78rem;line-height:1.32}
+.role-count{
+  display:block;
+  font-size:.75rem;
+  color:var(--accent2);
+  margin-top:6px;
+}
+.role-test-summary{
+  margin-top:10px;
+  padding:9px 10px;
+  border-radius:10px;
+  background:#0c1217;
+  border:1px solid var(--line);
+}
+.quiz-question[hidden]{display:none!important}
+@media(max-width:720px){
+  .role-profile-grid{grid-template-columns:1fr}
+  .role-all-toggle{align-items:flex-start;flex-wrap:wrap}
+  .role-all-toggle .subtle{margin-left:0;width:100%}
+}
+
+.role-safety-modules-panel{border-color:#665d4f}
+#siteRequirementSummary ul{margin-bottom:0}
+
+.cross-role-modules-panel{border-color:#52646c}
+.duty-module-selector{margin:12px 0;border:1px solid var(--line);border-radius:12px;background:#0f151a}
+.duty-module-selector>summary{cursor:pointer;padding:11px 12px;font-weight:800}
+.duty-module-selector>p{padding:0 12px}
+.duty-module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 12px 12px}
+.duty-module-card{display:block;border:1px solid var(--line);border-radius:11px;padding:9px 10px;background:#12191f;cursor:pointer}
+.duty-module-card:has(input:checked){border-color:#7a6d50;background:#211d15}
+.duty-module-card .subtle{display:block;font-size:.76rem;line-height:1.3}
+@media(max-width:720px){.duty-module-grid{grid-template-columns:1fr}}
+
+.uniform-checkin-panel{border-color:#586b63}
+
+.stop-matrix td{vertical-align:top;min-width:200px}
+.stop-matrix td:nth-child(1){background:#122018}
+.stop-matrix td:nth-child(2){background:#211d12}
+.stop-matrix td:nth-child(3){background:#281617}
+
+.shelter-protective-panel{border-color:#596a75}
+#siteShelterPlanSummary ul{margin-bottom:0}
+
+
+/* Independent project information, citations, free-reference license and notice. */
+.about-guide{margin:22px 0 110px;border-color:#4d5966}
+.about-guide summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0}
+.about-guide summary::-webkit-details-marker{display:none}
+.about-guide summary::after{content:"＋";font-size:1.35rem;font-weight:500;color:var(--accent2)}
+.about-guide[open] summary::after{content:"−"}
+.about-guide .about-summary-copy{display:flex;flex-direction:column;gap:4px}
+.about-guide .about-summary-copy strong{font-size:1.07rem}
+.about-guide .about-body{padding-top:14px;line-height:1.55}
+.about-guide .about-body h3{margin:24px 0 8px;font-size:1.02rem}
+.about-guide .about-body p{margin:10px 0}
+.about-guide .about-credit{border-left:3px solid var(--accent);padding:10px 12px;background:#11171d;border-radius:0 10px 10px 0}
+.about-guide .about-links{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.about-guide .about-links a{display:inline-flex;align-items:center;min-height:44px;padding:9px 12px;border:1px solid #445569;border-radius:10px;background:#182430;color:var(--accent2);text-decoration:none;font-weight:700}
+.about-guide a:focus-visible,.about-guide summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.about-guide .about-notice{border-left:3px solid var(--warn);background:#211b10;padding:12px;border-radius:0 10px 10px 0}
+.about-guide .about-small{font-size:.85rem;color:var(--muted)}
+.about-guide .about-meta{border-top:1px solid var(--line);margin-top:22px;padding-top:12px}
+@media print{.about-guide{margin-bottom:12px}.about-guide .about-body{display:block!important}}
+
+/* Blank edition setup and imported text. Keep long documents inside their panels. */
+html { overflow-x: hidden; }
+.topbar { margin: 0; }
+a { color: var(--accent); overflow-wrap: anywhere; }
+[hidden] { display: none !important; }
+.position-summary p { margin: 8px 0; }
+.position-summary .section-title { flex-wrap: wrap; }
+.position-summary h2 { font-size: 1.15rem; }
+.plain-text { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; font: inherit; }
+#positionDialog { max-height: 92dvh; }
+#positionDialog details, .intake-notes { margin: 14px 0; border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; }
+.position-editor-card { border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin: 12px 0; }
+.position-import { background: #121a23; border: 1px solid var(--line); padding: 14px; border-radius: 12px; }
+.import-preview { max-height: 260px; overflow: auto; background: #0d1218; border-radius: 8px; padding: 12px; font-size: .9rem; }
+.large-text { min-height: 150px; }
+.position-quiz-question { margin: 12px 0; border: 1px solid var(--line); border-radius: 10px; }
+.position-quiz-question label { padding: 7px 0; }
+.error-message { color: var(--danger); border-color: var(--danger); }
+input[type=file] { max-width: 100%; }
+.panel, .hero-grid > div, .form-grid > *, .planner-toolbar > * { min-width: 0; }
+label { overflow-wrap: anywhere; }
+button { touch-action: manipulation; }
+@media(max-width:600px) {
+  .app { padding: 12px 10px 145px; }
+  .brandrow { flex-wrap: wrap; }
+  .topbar { padding: 12px 10px; }
+  dialog { width: calc(100% - 16px); max-width: calc(100% - 16px); }
+  .dialog-body { padding: 14px; }
+  .section-title { flex-wrap: wrap; }
+  .planner-time-row { grid-template-columns: 1fr; }
+  .position-import { padding: 10px; }
+}
+
+</style>
+
+
+</head>
+<body>
+<div class="topbar">
+<div class="brandrow">
+<div>
+<h1 id="guideTitle">Work Shift Guide</h1>
+<div class="subtle" id="today"></div>
+</div>
+<div class="status" id="shiftStatus">No active shift</div>
+</div>
+</div>
+<main class="app">
+<div id="appMessage" class="panel" role="status" hidden></div>
+<section class="panel position-summary" aria-labelledby="positionHeading">
+<div class="section-title"><h2 id="positionHeading">Ready for a new position</h2><span class="badge" id="positionState">Blank edition</span></div>
+<p class="subtle" id="positionIdentity">Add a job title and your own work instructions to begin.</p>
+<div class="subtle" id="positionCounts">0 areas · 0 tasks · 0 references</div>
+</section>
+<section class="panel hero-grid">
+<div>
+<div class="subtle">Elapsed work time</div>
+<div class="shift-time" id="shiftTime">00:00</div>
+<div class="subtle" id="startedAt">Configure your position, then start when work begins.</div>
+<div class="action-row">
+<button class="btn primary" id="startBtn" disabled>Start Work</button>
+<button class="btn ghost" id="editWorkBtn">Edit Work</button>
+<button class="btn ghost" id="positionSetupBtn">Position Setup</button>
+<button class="btn ghost" id="settingsBtn">Settings</button>
+<button class="btn ghost" id="plannerBtn" type="button">Shift Planner</button><button class="btn ghost" id="historyBtn">History</button>
+</div>
+</div>
+<div>
+<div class="subtle">Daily workflow</div>
+<p><strong>Work from the procedure below. Review your configured duties before starting.</strong></p>
+<p class="subtle">Only record exceptions, blocked work, damage, shortages, hazards, or other irregular conditions. Sign off once at the end.</p>
+</div>
+</section>
+<section class="panel">
+<div class="section-title">
+<h2>Daily Route &amp; Procedure</h2>
+<span class="badge">Reference list</span>
+</div>
+<div id="routeList"></div>
+</section>
+<section class="panel">
+<div class="section-title">
+<h2>Exceptions This Shift</h2>
+<span class="badge">Only record what went wrong</span>
+</div>
+<div id="issuesList"></div>
+</section>
+<section class="panel" aria-labelledby="referenceHeading">
+<div class="section-title"><h2 id="referenceHeading">Position References</h2><span class="badge">Your material</span></div>
+<p class="subtle" id="readingEstimate">No reading assigned</p>
+<div id="positionReferences"></div>
+<details><summary>Configured requirements &amp; site notes</summary><h3>Requirements</h3><div id="siteRequirementSummary"></div><h3>Protective-action notes</h3><div id="siteShelterPlanSummary"></div></details>
+<details class="intake-notes"><summary>Source notes awaiting review</summary><p class="subtle">Imported plain text is kept here until you turn it into duties or reference material in Position Setup / Edit Work.</p><div class="plain-text" id="intakeNotesView">No source notes loaded.</div></details>
+</section>
+<details class="panel"><summary><strong>Knowledge Check</strong></summary><p class="subtle">Questions come from the position material you enter or import.</p><div id="positionQuiz"></div><button class="btn ghost" id="checkAnswers" disabled type="button">Check Answers</button><pre class="plain-text" id="quizResult">No knowledge check loaded.</pre></details>
+<details class="panel"><summary><strong>Position files &amp; backups</strong></summary>
+<p class="subtle">Position files include your saved configuration, duties and references. Full backups also contain names, work history and planner entries.</p>
+<div class="action-row"><button class="btn ghost" id="exportBlankTemplate" type="button">Download Blank Template</button><button class="btn ghost" id="exportPosition" type="button">Export Position</button><button class="btn ghost" id="exportBackup" type="button">Export Backup</button></div>
+<label>Restore a full backup<input id="restoreBackupFile" type="file" accept=".json,application/json"></label><pre class="plain-text" id="backupPreview">No backup selected.</pre><button class="btn warn" id="applyBackup" disabled type="button">Restore Reviewed Backup</button>
+</details>
+<details class="panel about-guide" id="workShiftGuideAbout"><summary><strong>About this guide · License · Local data</strong></summary><div class="about-body">
+<h3>Work Shift Guide — Blank Edition 1.0.0</h3><p>Created by Christopher Vardeman. This edition provides the original work-route editor, shift timer, exception log, sign-off records, history and planner with an empty position and reference library. Configure it with material appropriate to your new job.</p>
+<p><a href="https://www.linkedin.com/in/christopher-vardeman-907a4085/" target="_blank" rel="noopener noreferrer">Creator on LinkedIn</a> · <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/software.html#work-shift-guide">Software catalog</a></p>
+<h3>Free reference-use license</h3>
+    <p>© 2026 Christopher Vardeman. Permission is granted, without charge, to use this guide for personal learning, education and internal workplace reference. You may share an unmodified copy for these purposes if you preserve creator attribution, source citations, this license and the disclaimer. Selling, rebranding, or redistributing modified versions requires prior permission from the creator. All rights not expressly granted are reserved. Third-party materials, trademarks, official publications and linked content retain their respective ownership and terms.</p>
+    <p class="about-small">This is a limited free-use permission for this guide, not a government certification, an employer policy, or a license to practice a regulated profession.</p>
+
+    <h3>Local data</h3><p>Settings, position materials and work records are stored on this device in this browser. Imports are read locally; exports are downloaded locally. Browser resets and clearing site data can erase records. Use Export Backup before changing devices. Backup files contain your entered information; the distributed blank package contains none.</p>
+<h3>Notice</h3><p>The application is provided AS IS and AS AVAILABLE, without warranty of accuracy, completeness or fitness for a particular purpose, to the extent permitted by law. User-supplied material does not replace approved workplace procedures or required training. This is an independent project and does not certify a job, employer or user.</p>
+</div></details>
+</main>
+<div class="footer-actions">
+<div class="inner">
+<button class="btn warn" disabled="" id="addIssueBtn">+ Issue / Exception</button>
+<button class="btn primary" disabled="" id="finishBtn">Finish &amp; Sign Off</button>
+<button class="btn ghost" onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button>
+<button class="btn ghost" onclick="document.querySelector('#routeList').scrollIntoView({behavior:'smooth'})">Route</button>
+</div>
+</div>
+<dialog class="planner-dialog" id="plannerDialog">
+<div class="dialog-body planner-body">
+<div class="planner-title-row">
+<div>
+<h2>Shift Planner / Work Log</h2>
+<p class="subtle">Plan shifts, record worked hours, and display them across a monthly calendar.</p>
+</div>
+<button class="btn ghost compact-btn" id="closePlanner" type="button">Close</button>
+</div>
+<div class="planner-toolbar">
+<label>
+        Calendar month
+        <input id="plannerMonth" type="month"/>
+</label>
+<label>
+        Time zone
+        <select id="plannerTimeZone"></select>
+</label>
+<div class="planner-toolbar-actions">
+<button class="btn ghost" id="plannerPrevMonth" type="button">← Previous</button>
+<button class="btn ghost" id="plannerThisMonth" type="button">This Month</button>
+<button class="btn ghost" id="plannerNextMonth" type="button">Next →</button>
+</div>
+</div>
+<div class="planner-summary" id="plannerSummary"></div>
+<div class="planner-calendar-shell">
+<div aria-hidden="true" class="planner-weekdays">
+<span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+</div>
+<div aria-label="Monthly shift calendar" class="planner-calendar" id="plannerCalendar"></div>
+</div>
+<details class="planner-entry-editor" open="">
+<summary>Add / edit shift entry</summary>
+<form id="plannerEntryForm">
+<input id="plannerEntryId" type="hidden"/>
+<div class="form-grid two planner-entry-grid">
+<label>
+            Day
+            <input id="plannerDate" required="" type="date"/>
+</label>
+<label>
+            Entry type
+            <select id="plannerStatus">
+<option value="scheduled">Scheduled</option>
+<option value="worked">Worked</option>
+<option value="training">Training</option>
+<option value="leave">Leave / Other</option>
+</select>
+</label>
+</div>
+<div class="planner-time-row">
+<fieldset class="planner-time-fieldset">
+<legend>Start time</legend>
+<select aria-label="Start hour" id="plannerStartHour"></select>
+<span>:</span>
+<select aria-label="Start minute" id="plannerStartMinute"></select>
+<select aria-label="Start AM or PM" id="plannerStartAmPm">
+<option>AM</option><option>PM</option>
+</select>
+</fieldset>
+<fieldset class="planner-time-fieldset">
+<legend>End time</legend>
+<select aria-label="End hour" id="plannerEndHour"></select>
+<span>:</span>
+<select aria-label="End minute" id="plannerEndMinute"></select>
+<select aria-label="End AM or PM" id="plannerEndAmPm">
+<option>AM</option><option>PM</option>
+</select>
+</fieldset>
+</div>
+<div class="form-grid two">
+<label>
+            Unpaid break (minutes)
+            <input id="plannerBreakMinutes" max="720" min="0" step="1" type="number" value="0"/>
+</label>
+<div class="planner-duration-preview">
+<span class="subtle">Calculated duration</span>
+<strong id="plannerDurationPreview">Choose start and end times</strong>
+</div>
+</div>
+<label>
+          Notes
+          <textarea id="plannerNotes" placeholder="Optional — assignment, location, training, coverage, exception, etc."></textarea>
+</label>
+<div class="dialog-actions planner-entry-actions">
+<button class="btn ghost" id="plannerClearEntry" type="button">Clear</button>
+<button class="btn danger" hidden="" id="plannerDeleteEntry" type="button">Delete</button>
+<button class="btn primary" type="submit">Save Shift</button>
+</div>
+</form>
+</details>
+<div class="planner-log-section">
+<div class="section-title">
+<h3>Selected month entries</h3>
+<span class="badge" id="plannerEntryCount">0 entries</span>
+</div>
+<div id="plannerEntryList"></div>
+</div>
+<div class="guidance-card planner-note">
+<p><strong>Time-zone behavior:</strong> the selected zone is the schedule's operating zone and is used when live completed shifts are recorded automatically. Manual calendar entries are wall-clock entries and remain at the entered day/time if the schedule zone is later changed.</p>
+</div>
+</div>
+</dialog><dialog id="issueDialog">
+<form class="dialog-body" id="issueForm">
+<h2>Record Issue / Exception</h2>
+<div class="form-grid two">
+<label>Area
+          <select id="issueArea" required=""></select>
+</label>
+<label>Issue type
+          <select id="issueType" required="">
+<option>Damage</option>
+<option>Supply shortage</option>
+<option>Blocked work</option>
+<option>Hazard</option>
+<option>Equipment</option>
+<option>Access</option>
+<option>Other</option>
+</select>
+</label>
+</div>
+<label>What did you observe?
+        <textarea id="issueNote" placeholder="Describe the exception or blocked work." required=""></textarea>
+</label>
+<label>Immediate action taken
+        <textarea id="issueImmediateAction" placeholder="Optional action or follow-up."></textarea>
+</label>
+<div class="form-grid two">
+<label class="checkline"><input id="issueContact" type="checkbox"/> Contact / team notified</label>
+<label class="checkline"><input id="issueManagement" type="checkbox"/> Management notified</label>
+</div>
+<div class="dialog-actions">
+<button class="btn ghost" id="closeIssue" type="button">Cancel</button>
+<button class="btn primary" type="submit">Save Exception</button>
+</div>
+</form>
+</dialog>
+<dialog id="reviewDialog">
+<div class="dialog-body">
+<h2>Review &amp; Sign Off</h2>
+<div class="form-grid two">
+<label>Completed by
+          <input autocomplete="name" id="signoffName" placeholder="Your name"/>
+</label>
+<label>Site / building name (optional)
+          <input id="siteName" placeholder="Optional"/>
+</label>
+</div>
+<div class="review">
+<pre id="reviewText"></pre>
+</div>
+<div class="dialog-actions">
+<button class="btn ghost" id="closeReview" type="button">Back</button>
+<button class="btn primary" id="completeShift" type="button">Sign Off &amp; Save TXT</button>
+</div>
+</div>
+</dialog>
+<dialog class="wide-dialog" id="workEditorDialog">
+<div class="dialog-body">
+<div class="section-title">
+<h2>Edit Daily Work Route</h2>
+<span class="badge">Saved locally</span>
+</div>
+<p class="subtle">Edit the work procedure without changing application code. Put one task or note on each line. Route edits are disabled while a shift is active so a signed shift keeps a stable scope.</p>
+<div class="work-editor-list" id="workEditorList"></div>
+<div class="action-row">
+<button class="btn ghost" id="addWorkArea" type="button">+ Add Area</button>
+<button class="btn ghost" id="resetWorkRoute" type="button">Clear Route</button>
+</div>
+<div class="dialog-actions">
+<button class="btn ghost" id="closeWorkEditor" type="button">Cancel</button>
+<button class="btn primary" id="saveWorkRoute" type="button">Save Work Route</button>
+</div>
+</div>
+</dialog>
+<dialog id="historyDialog">
+<div class="dialog-body">
+<h2>Completed Shift History</h2>
+<div id="historyList"></div>
+<div class="dialog-actions">
+<button class="btn primary" id="closeHistory" type="button">Close</button>
+</div>
+</div>
+</dialog>
+<dialog id="settingsDialog">
+<form class="dialog-body" id="settingsForm">
+<h2>Settings</h2><label>
+  Guide / form name
+  <input id="settingsGuideName" maxlength="80" placeholder="Work Shift Guide"/>
+<span class="subtle">Changes the visible guide title and future signed work-record names.</span>
+</label>
+<label>Default sign-off name
+        <input autocomplete="name" id="settingsName" placeholder="Your name"/>
+</label>
+<label>Site / building name
+        <input id="settingsSite" placeholder="Optional"/>
+</label><label>
+  Schedule time zone
+  <select id="settingsTimeZone"></select>
+<span class="subtle">Used by the shift planner and when completed live shifts are recorded to the calendar.</span>
+</label><label>
+  Site-required credentials / signoffs
+  <textarea id="settingsSiteRequirements" placeholder="Enter the new position’s requirements, one per line."></textarea>
+<span class="subtle">Organizational reminder only. One requirement per line; use your employer's authoritative system for actual certification records.</span>
+</label><label>Site shelter-in-place / protective-action notes<textarea id="settingsShelterPlan" placeholder="Add the new site’s approved emergency and protective-action notes."></textarea><span class="subtle">Site-specific reminder only. The facility emergency action plan and official emergency instructions control.</span></label>
+<div class="dialog-actions">
+<button class="btn ghost" id="closeSettings" type="button">Cancel</button>
+<button class="btn primary" type="submit">Save Settings</button>
+</div>
+</form>
+</dialog>
+<dialog class="wide-dialog" id="positionDialog"><div class="dialog-body">
+<div class="section-title"><h2>Position Setup</h2><button class="btn ghost" id="closePosition" type="button">Close</button></div>
+<p class="subtle">Start with a job title, add reference material, then use Edit Work for duties. All fields start empty.</p>
+<div class="form-grid two"><label>Job title<input id="positionJobTitle" maxlength="200" autocomplete="off"></label><label>Department / team<input id="positionDepartment" maxlength="200" autocomplete="off"></label></div>
+<div class="form-grid two"><label>Guide name (optional)<input id="positionGuideName" maxlength="80" placeholder="Work Shift Guide" autocomplete="off"></label><label>Site / workplace (optional)<input id="positionSite" maxlength="200" autocomplete="off"></label></div>
+<label>Time zone (optional)<input id="positionTimeZone" maxlength="200" placeholder="Use this device’s time zone" autocomplete="off"></label>
+<details><summary>Position requirements &amp; emergency notes</summary><label>Required training, credentials or signoffs<textarea id="positionRequirements" placeholder="One requirement per line"></textarea></label><label>Approved site emergency / protective-action notes<textarea id="positionShelterPlan"></textarea></label></details>
+<details><summary>Reference material</summary><div id="referenceEditor"></div><button class="btn ghost" id="addReference" type="button">+ Add Reference</button></details>
+<details><summary>Knowledge check</summary><div id="questionEditor"></div><button class="btn ghost" id="addQuestion" type="button">+ Add Question</button></details>
+<details><summary>Source notes for infill</summary><label>Collected job description, procedure notes or other source text<textarea class="large-text" id="positionIntakeNotes"></textarea></label></details>
+<div class="dialog-actions"><button class="btn primary" id="savePosition" type="button">Save Position</button></div>
+<details class="position-import" open><summary><strong>Import / Ingest</strong></summary>
+<p class="subtle">Choose a position JSON package or paste a job description. TXT and Markdown are stored as source notes for review. PDF, Word and images must first be converted to text.</p>
+<label>Choose file<input id="importFile" type="file" accept=".json,.txt,.md,application/json,text/plain,text/markdown"></label>
+<label>Or paste position JSON / source text<textarea class="large-text" id="importText" spellcheck="false"></textarea></label>
+<button class="btn ghost" id="previewImport" type="button">Preview Import</button>
+<pre class="import-preview plain-text" id="importPreview" aria-live="polite">No import staged.</pre>
+<p class="subtle">Apply replaces the saved position, duties and references with the preview. Existing shift history and planner entries stay saved. Save or export any current setup edits before importing.</p>
+<button class="btn primary" id="applyImport" disabled type="button">Apply Reviewed Import</button>
+</details>
+</div></dialog>
+<script>window.WORK_SHIFT_GUIDE_STANDALONE = true;</script>
+<script>
+const DEFAULT_GUIDE_NAME = "Work Shift Guide";
+const DEFAULT_ROUTE = [];
+const ROUTE_SCHEMA_VERSION = 1;
+
+let routeData = structuredClone(DEFAULT_ROUTE);
+
+const DB_NAME = "WorkShiftGuideBlank-v1";
+const DB_VERSION = 1;
+const STORE_SHIFTS = "shifts";
+const STORE_SETTINGS = "settings";
+
+const els = {};
+let currentShift = null;
+let timerHandle = null;
+
+document.addEventListener("DOMContentLoaded", async () => {
+  Object.assign(els, {
+    today: document.querySelector("#today"),
+    guideTitle: document.querySelector("#guideTitle"),
+    status: document.querySelector("#shiftStatus"),
+    shiftTime: document.querySelector("#shiftTime"),
+    startedAt: document.querySelector("#startedAt"),
+    startBtn: document.querySelector("#startBtn"),
+    editWorkBtn: document.querySelector("#editWorkBtn"),
+    addIssueBtn: document.querySelector("#addIssueBtn"),
+    finishBtn: document.querySelector("#finishBtn"),
+    routeList: document.querySelector("#routeList"),
+    issuesList: document.querySelector("#issuesList"),
+    issueDialog: document.querySelector("#issueDialog"),
+    issueForm: document.querySelector("#issueForm"),
+    issueArea: document.querySelector("#issueArea"),
+    issueType: document.querySelector("#issueType"),
+    issueNote: document.querySelector("#issueNote"),
+    issueContact: document.querySelector("#issueContact"),
+    issueManagement: document.querySelector("#issueManagement"),
+    issueImmediateAction: document.querySelector("#issueImmediateAction"),
+    closeIssue: document.querySelector("#closeIssue"),
+    reviewDialog: document.querySelector("#reviewDialog"),
+    reviewText: document.querySelector("#reviewText"),
+    signoffName: document.querySelector("#signoffName"),
+    siteName: document.querySelector("#siteName"),
+    closeReview: document.querySelector("#closeReview"),
+    completeShift: document.querySelector("#completeShift"),
+    historyBtn: document.querySelector("#historyBtn"),
+    plannerBtn: document.querySelector("#plannerBtn"),
+    plannerDialog: document.querySelector("#plannerDialog"),
+    closePlanner: document.querySelector("#closePlanner"),
+    plannerMonth: document.querySelector("#plannerMonth"),
+    plannerTimeZone: document.querySelector("#plannerTimeZone"),
+    plannerPrevMonth: document.querySelector("#plannerPrevMonth"),
+    plannerThisMonth: document.querySelector("#plannerThisMonth"),
+    plannerNextMonth: document.querySelector("#plannerNextMonth"),
+    plannerSummary: document.querySelector("#plannerSummary"),
+    plannerCalendar: document.querySelector("#plannerCalendar"),
+    plannerEntryForm: document.querySelector("#plannerEntryForm"),
+    plannerEntryId: document.querySelector("#plannerEntryId"),
+    plannerDate: document.querySelector("#plannerDate"),
+    plannerStatus: document.querySelector("#plannerStatus"),
+    plannerStartHour: document.querySelector("#plannerStartHour"),
+    plannerStartMinute: document.querySelector("#plannerStartMinute"),
+    plannerStartAmPm: document.querySelector("#plannerStartAmPm"),
+    plannerEndHour: document.querySelector("#plannerEndHour"),
+    plannerEndMinute: document.querySelector("#plannerEndMinute"),
+    plannerEndAmPm: document.querySelector("#plannerEndAmPm"),
+    plannerBreakMinutes: document.querySelector("#plannerBreakMinutes"),
+    plannerNotes: document.querySelector("#plannerNotes"),
+    plannerDurationPreview: document.querySelector("#plannerDurationPreview"),
+    plannerClearEntry: document.querySelector("#plannerClearEntry"),
+    plannerDeleteEntry: document.querySelector("#plannerDeleteEntry"),
+    plannerEntryList: document.querySelector("#plannerEntryList"),
+    plannerEntryCount: document.querySelector("#plannerEntryCount"),
+    historyDialog: document.querySelector("#historyDialog"),
+    historyList: document.querySelector("#historyList"),
+    closeHistory: document.querySelector("#closeHistory"),
+    settingsBtn: document.querySelector("#settingsBtn"),
+    settingsDialog: document.querySelector("#settingsDialog"),
+    settingsForm: document.querySelector("#settingsForm"),
+    settingsGuideName: document.querySelector("#settingsGuideName"),
+    settingsName: document.querySelector("#settingsName"),
+    settingsSite: document.querySelector("#settingsSite"),
+    settingsTimeZone: document.querySelector("#settingsTimeZone"),
+    settingsSiteRequirements: document.querySelector("#settingsSiteRequirements"),
+    settingsShelterPlan: document.querySelector("#settingsShelterPlan"),
+    closeSettings: document.querySelector("#closeSettings"),
+    workEditorDialog: document.querySelector("#workEditorDialog"),
+    workEditorList: document.querySelector("#workEditorList"),
+    addWorkArea: document.querySelector("#addWorkArea"),
+    resetWorkRoute: document.querySelector("#resetWorkRoute"),
+    closeWorkEditor: document.querySelector("#closeWorkEditor"),
+    saveWorkRoute: document.querySelector("#saveWorkRoute")
+  });
+
+  els.today.textContent = formatFullDate(new Date());
+
+  const savedRouteConfig = await getRouteConfig();
+  if (Array.isArray(savedRouteConfig?.route)) {
+    routeData = normalizeRoute(savedRouteConfig.route);
+  }
+  renderRoute();
+  populateAreaOptions();
+  setupShiftPlannerUI();
+
+  const saved = await loadActiveShift();
+  if (saved) currentShift = saved;
+
+  const settings = await getSettings();
+  const guideName = applyGuideName(settings.guideName);
+  if (els.settingsGuideName) els.settingsGuideName.value = guideName;
+  if (settings.name) {
+    els.signoffName.value = settings.name;
+    els.settingsName.value = settings.name;
+  }
+  if (settings.site) {
+    els.siteName.value = settings.site;
+    els.settingsSite.value = settings.site;
+  }
+  const timeZone = normalizeTimeZone(settings.timeZone);
+  setPlannerTimeZone(timeZone);
+  if (els.settingsTimeZone) els.settingsTimeZone.value = timeZone;
+  if (els.settingsSiteRequirements) els.settingsSiteRequirements.value = settings.siteRequirements || "";
+  renderSiteRequirements(settings.siteRequirements);
+  if (els.settingsShelterPlan) els.settingsShelterPlan.value = settings.shelterPlan || "";
+  renderShelterPlan(settings.shelterPlan);
+
+  wireEvents();
+  await setupPosition();
+  refreshUI();
+  document.documentElement.dataset.ready = "true";
+
+  if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+    if (!document.documentElement.dataset.standalone && !window.WORK_SHIFT_GUIDE_STANDALONE) navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+  }
+});
+
+
+function normalizeGuideName(value){
+  const name = String(value || "").trim();
+  return name || DEFAULT_GUIDE_NAME;
+}
+
+function applyGuideName(value){
+  const name = normalizeGuideName(value);
+  if (els.guideTitle) els.guideTitle.textContent = name;
+  document.title = name;
+  return name;
+}
+
+function currentGuideName(){
+  return normalizeGuideName(els.guideTitle?.textContent || document.title);
+}
+
+function safeFilenamePart(value){
+  return normalizeGuideName(value)
+    .replace(/[<>:"/\\|?*\x00-\x1F]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^\.+|\.+$/g, "")
+    .slice(0, 60) || "Work-Shift-Guide";
+}
+
+
+function renderSiteRequirements(value){
+  const target=document.getElementById("siteRequirementSummary");
+  if (!target) return;
+  const items=String(value||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  if (!items.length){
+    target.innerHTML='<span class="subtle">No site-specific requirements configured yet.</span>';
+    return;
+  }
+  const ul=document.createElement("ul");
+  ul.className="plain-list compact";
+  items.forEach(item=>{
+    const li=document.createElement("li");
+    li.textContent=item;
+    ul.appendChild(li);
+  });
+  target.innerHTML="";
+  target.appendChild(ul);
+}
+
+function renderShelterPlan(value){
+  const target=document.getElementById("siteShelterPlanSummary");
+  if (!target) return;
+  const lines=String(value||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  if (!lines.length){target.innerHTML='<span class="subtle">No site-specific shelter/protective-action notes configured yet.</span>';return;}
+  const ul=document.createElement("ul");ul.className="plain-list compact";
+  lines.forEach(line=>{const li=document.createElement("li");li.textContent=line;ul.appendChild(li);});
+  target.innerHTML="";target.appendChild(ul);
+}
+
+function wireEvents(){
+  els.startBtn.addEventListener("click", startShift);
+  els.addIssueBtn.addEventListener("click", () => {
+    if (!currentShift) return;
+    els.issueForm.reset();
+    els.issueDialog.showModal();
+  });
+  els.closeIssue.addEventListener("click", () => els.issueDialog.close());
+  els.issueForm.addEventListener("submit", saveIssue);
+  els.finishBtn.addEventListener("click", openReview);
+  els.closeReview.addEventListener("click", () => els.reviewDialog.close());
+  els.completeShift.addEventListener("click", completeShift);
+  els.historyBtn.addEventListener("click", openHistory);
+  els.plannerBtn.addEventListener("click", openPlanner);
+  els.closePlanner.addEventListener("click", () => els.plannerDialog.close());
+  els.plannerMonth.addEventListener("change", () => renderPlanner());
+  els.plannerTimeZone.addEventListener("change", savePlannerTimeZone);
+  els.plannerPrevMonth.addEventListener("click", () => shiftPlannerMonth(-1));
+  els.plannerThisMonth.addEventListener("click", () => setPlannerMonthToToday());
+  els.plannerNextMonth.addEventListener("click", () => shiftPlannerMonth(1));
+  els.plannerEntryForm.addEventListener("submit", savePlannerEntry);
+  els.plannerClearEntry.addEventListener("click", () => resetPlannerEntryForm());
+  els.plannerDeleteEntry.addEventListener("click", deletePlannerEntryFromForm);
+  [
+    els.plannerStartHour, els.plannerStartMinute, els.plannerStartAmPm,
+    els.plannerEndHour, els.plannerEndMinute, els.plannerEndAmPm,
+    els.plannerBreakMinutes
+  ].forEach(el => el.addEventListener("change", updatePlannerDurationPreview));
+  els.closeHistory.addEventListener("click", () => els.historyDialog.close());
+  els.settingsBtn.addEventListener("click", openSettings);
+  els.closeSettings.addEventListener("click", () => els.settingsDialog.close());
+  els.settingsForm.addEventListener("submit", saveSettings);
+
+  els.editWorkBtn.addEventListener("click", openWorkEditor);
+  els.closeWorkEditor.addEventListener("click", () => els.workEditorDialog.close());
+  els.addWorkArea.addEventListener("click", addWorkEditorArea);
+  els.resetWorkRoute.addEventListener("click", resetWorkEditor);
+  els.saveWorkRoute.addEventListener("click", saveWorkEditor);
+}
+
+
+function normalizeRoute(route){
+  return route.map((area, index) => ({
+    id: String(area.id || slugify(area.name || `area-${index+1}`)),
+    name: String(area.name || `Area ${index+1}`).trim() || `Area ${index+1}`,
+    summary: Array.isArray(area.summary) ? area.summary.map(String).map(x => x.trim()).filter(Boolean) : [],
+    details: Array.isArray(area.details) ? area.details.map(String).map(x => x.trim()).filter(Boolean) : []
+  }));
+}
+
+function slugify(value){
+  return String(value || "area")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || `area-${Date.now()}`;
+}
+
+function openWorkEditor(){
+  if (currentShift && currentShift.status === "active") {
+    alert("Finish the active shift before editing the work route. The current shift keeps a stable work scope.");
+    return;
+  }
+  renderWorkEditor(structuredClone(routeData));
+  els.workEditorDialog.showModal();
+}
+
+function renderWorkEditor(data){
+  els.workEditorList.innerHTML = "";
+  data.forEach((area, index) => {
+    const card = document.createElement("div");
+    card.className = "work-editor-card";
+    card.dataset.areaId = area.id || "";
+
+    const head = document.createElement("div");
+    head.className = "work-editor-head";
+
+    const title = document.createElement("h3");
+    title.textContent = `Area ${index + 1}`;
+
+    const controls = document.createElement("div");
+    controls.className = "work-editor-controls";
+
+    const up = document.createElement("button");
+    up.type = "button";
+    up.className = "btn ghost compact-btn";
+    up.textContent = "↑";
+    up.title = "Move up";
+    up.disabled = index === 0;
+    up.addEventListener("click", () => moveEditorCard(card, -1));
+
+    const down = document.createElement("button");
+    down.type = "button";
+    down.className = "btn ghost compact-btn";
+    down.textContent = "↓";
+    down.title = "Move down";
+    down.disabled = index === data.length - 1;
+    down.addEventListener("click", () => moveEditorCard(card, 1));
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "btn danger compact-btn";
+    remove.textContent = "Delete";
+    remove.addEventListener("click", () => {
+      card.remove();
+      relabelEditorCards();
+    });
+
+    controls.append(up, down, remove);
+    head.append(title, controls);
+
+    const nameLabel = document.createElement("label");
+    nameLabel.textContent = "Area / section name";
+    const name = document.createElement("input");
+    name.className = "editor-area-name";
+    name.value = area.name || "";
+    nameLabel.appendChild(name);
+
+    const tasksLabel = document.createElement("label");
+    tasksLabel.textContent = "Routine tasks — one per line";
+    const tasks = document.createElement("textarea");
+    tasks.className = "editor-area-tasks";
+    tasks.value = (area.summary || []).join("\n");
+    tasksLabel.appendChild(tasks);
+
+    const notesLabel = document.createElement("label");
+    notesLabel.textContent = "Guidance / notes — one per line";
+    const notes = document.createElement("textarea");
+    notes.className = "editor-area-notes notes-box";
+    notes.value = (area.details || []).join("\n");
+    notesLabel.appendChild(notes);
+
+    card.append(head, nameLabel, tasksLabel, notesLabel);
+    els.workEditorList.appendChild(card);
+  });
+  relabelEditorCards();
+}
+
+function moveEditorCard(card, direction){
+  if (direction < 0 && card.previousElementSibling) {
+    els.workEditorList.insertBefore(card, card.previousElementSibling);
+  } else if (direction > 0 && card.nextElementSibling) {
+    els.workEditorList.insertBefore(card.nextElementSibling, card);
+  }
+  relabelEditorCards();
+}
+
+function relabelEditorCards(){
+  const cards = [...els.workEditorList.querySelectorAll(".work-editor-card")];
+  cards.forEach((card, index) => {
+    card.querySelector("h3").textContent = `Area ${index + 1}`;
+    const buttons = card.querySelectorAll(".work-editor-controls button");
+    if (buttons[0]) buttons[0].disabled = index === 0;
+    if (buttons[1]) buttons[1].disabled = index === cards.length - 1;
+  });
+}
+
+function addWorkEditorArea(){
+  const current = collectEditorRoute(false);
+  current.push({
+    id: `custom-${Date.now()}`,
+    name: "",
+    summary: [],
+    details: []
+  });
+  renderWorkEditor(current);
+  const cards = els.workEditorList.querySelectorAll(".work-editor-card");
+  cards[cards.length - 1]?.scrollIntoView({behavior:"smooth", block:"center"});
+}
+
+function collectEditorRoute(validate=true){
+  const cards = [...els.workEditorList.querySelectorAll(".work-editor-card")];
+  const result = cards.map((card, index) => {
+    const name = card.querySelector(".editor-area-name").value.trim();
+    const summary = card.querySelector(".editor-area-tasks").value
+      .split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+    const details = card.querySelector(".editor-area-notes").value
+      .split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+
+    if (validate && !name) throw new Error(`Area ${index+1} needs a name.`);
+    if (validate && !summary.length) throw new Error(`${name || `Area ${index+1}`} needs at least one routine task.`);
+
+    return {
+      id: card.dataset.areaId || slugify(name || `area-${index+1}`),
+      name: name || `Area ${index+1}`,
+      summary,
+      details
+    };
+  });
+
+  return normalizeRoute(result);
+}
+
+async function saveWorkEditor(){
+  try {
+    const nextRoute = collectEditorRoute(true);
+    routeData = nextRoute;
+    await setRouteConfig(routeData);
+    refreshPositionSummary();
+    refreshUI();
+    renderRoute();
+    populateAreaOptions();
+    els.workEditorDialog.close();
+  } catch (err) {
+    alert(err.message || String(err));
+  }
+}
+
+function resetWorkEditor(){
+  if (!confirm("Clear all areas and tasks in this editor? Save Work Route to apply the change.")) return;
+  renderWorkEditor(structuredClone(DEFAULT_ROUTE));
+}
+
+function renderRoute(){
+  els.routeList.innerHTML = "";
+  if (!routeData.length) els.routeList.innerHTML = '<div class="empty">No tasks configured. Use Position Setup to import duties or Edit Work to add your own.</div>';
+  for (const area of routeData){
+    const details = document.createElement("details");
+    details.className = "route-card";
+    const summary = document.createElement("summary");
+    summary.textContent = area.name;
+    const body = document.createElement("div");
+    body.className = "route-body";
+    const ul = document.createElement("ul");
+    for (const task of area.summary){
+      const li = document.createElement("li");
+      li.textContent = task;
+      ul.appendChild(li);
+    }
+    body.appendChild(ul);
+    if (area.details?.length){
+      const notes = document.createElement("div");
+      notes.className = "route-notes";
+      for (const note of area.details){
+        const p = document.createElement("p");
+        p.textContent = note;
+        notes.appendChild(p);
+      }
+      body.appendChild(notes);
+    }
+    details.append(summary, body);
+    els.routeList.appendChild(details);
+  }
+}
+
+function populateAreaOptions(){
+  els.issueArea.innerHTML = `<option value="">Choose area…</option>`;
+  for (const area of routeData){
+    const option = document.createElement("option");
+    option.value = area.name;
+    option.textContent = area.name;
+    els.issueArea.appendChild(option);
+  }
+  const other = document.createElement("option");
+  other.value = "Other / Unlisted";
+  other.textContent = "Other / Unlisted";
+  els.issueArea.appendChild(other);
+}
+
+async function startShift(){
+  if (currentShift) return;
+  if (!routeData.some(area => area.summary.length)) {
+    alert("Add or import the position’s duties before starting work.");
+    openWorkEditor();
+    return;
+  }
+  const positionSettings = await getSettings();
+  currentShift = {
+    jobTitle: positionSettings.jobTitle || "",
+    department: positionSettings.department || "",
+    guideName: currentGuideName(),
+    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    status: "active",
+    startedAt: new Date().toISOString(),
+    finishedAt: null,
+    issues: [],
+    routeSnapshot: structuredClone(routeData),
+    recordText: null,
+    completedBy: ""
+  };
+  await putShift(currentShift);
+  refreshUI();
+}
+
+function refreshUI(){
+  const active = !!currentShift && currentShift.status === "active";
+  els.startBtn.disabled = active || !routeData.some(area => area.summary.length);
+  const setupButton = document.getElementById("positionSetupBtn");
+  if (setupButton) setupButton.disabled = active;
+  els.editWorkBtn.disabled = active;
+  els.addIssueBtn.disabled = !active;
+  els.finishBtn.disabled = !active;
+  els.status.textContent = active ? "Shift active" : "No active shift";
+  els.status.classList.toggle("active", active);
+
+  if (active){
+    els.startedAt.textContent = `Started ${formatTime(new Date(currentShift.startedAt))}`;
+    startTimer();
+  } else {
+    els.startedAt.textContent = "Start when you begin the route.";
+    stopTimer();
+    els.shiftTime.textContent = "00:00";
+  }
+  renderIssues();
+}
+
+function startTimer(){
+  stopTimer();
+  const update = () => {
+    if (!currentShift) return;
+    const ms = Date.now() - new Date(currentShift.startedAt).getTime();
+    els.shiftTime.textContent = formatDuration(ms);
+  };
+  update();
+  timerHandle = setInterval(update, 30000);
+}
+
+function stopTimer(){
+  if (timerHandle) clearInterval(timerHandle);
+  timerHandle = null;
+}
+
+async function saveIssue(event){
+  event.preventDefault();
+  if (!currentShift) return;
+
+  const issue = {
+    id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
+    createdAt: new Date().toISOString(),
+    area: els.issueArea.value || "Unspecified",
+    type: els.issueType.value,
+    note: els.issueNote.value.trim(),
+    immediateAction: els.issueImmediateAction.value.trim(),
+    contactNotified: els.issueContact.checked,
+    managementNotified: els.issueManagement.checked
+  };
+
+  if (!issue.note){
+    alert("Add a short description of the issue.");
+    return;
+  }
+
+  currentShift.issues.push(issue);
+  await putShift(currentShift);
+  els.issueDialog.close();
+  renderIssues();
+}
+
+function renderIssues(){
+  els.issuesList.innerHTML = "";
+  if (!currentShift || !currentShift.issues?.length){
+    els.issuesList.innerHTML = `<div class="empty">No exceptions recorded for the active shift.</div>`;
+    return;
+  }
+
+  for (const issue of currentShift.issues){
+    const card = document.createElement("div");
+    card.className = "issue";
+
+    const head = document.createElement("div");
+    head.className = "issue-head";
+    const main = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = `${issue.area} — ${issue.type}`;
+    const note = document.createElement("div");
+    note.textContent = issue.note;
+    const time = document.createElement("small");
+    time.textContent = formatTime(new Date(issue.createdAt));
+    main.append(title, note, time);
+    head.appendChild(main);
+
+    const actions = document.createElement("div");
+    actions.className = "issue-actions";
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "btn ghost";
+    remove.textContent = "Remove";
+    remove.addEventListener("click", () => removeIssue(issue.id));
+    actions.appendChild(remove);
+
+    card.append(head, actions);
+    els.issuesList.appendChild(card);
+  }
+}
+
+async function removeIssue(id){
+  if (!currentShift) return;
+  currentShift.issues = currentShift.issues.filter(x => x.id !== id);
+  await putShift(currentShift);
+  renderIssues();
+}
+
+function openReview(){
+  if (!currentShift) return;
+  const settingsName = els.settingsName.value.trim();
+  const settingsSite = els.settingsSite.value.trim();
+  if (!els.signoffName.value.trim() && settingsName) els.signoffName.value = settingsName;
+  if (!els.siteName.value.trim() && settingsSite) els.siteName.value = settingsSite;
+  els.reviewText.textContent = buildRecordText({
+    finishedAt: new Date().toISOString(),
+    completedBy: els.signoffName.value.trim() || "(enter name before sign-off)",
+    site: els.siteName.value.trim()
+  });
+  els.reviewDialog.showModal();
+}
+
+async function completeShift(){
+  if (!currentShift) return;
+  const name = els.signoffName.value.trim();
+  if (!name){
+    alert("Enter the name used for the sign-off record.");
+    els.signoffName.focus();
+    return;
+  }
+
+  const site = els.siteName.value.trim();
+  const finishedAt = new Date().toISOString();
+  const recordText = buildRecordText({
+    finishedAt,
+    completedBy: name,
+    site
+  });
+
+  currentShift.status = "complete";
+  currentShift.finishedAt = finishedAt;
+  currentShift.completedBy = name;
+  currentShift.site = site;
+  currentShift.guideName = normalizeGuideName(currentShift.guideName || currentGuideName());
+  currentShift.recordText = recordText;
+  await putShift(currentShift);
+
+  await setSettings({name, site});
+  await recordCompletedShiftInPlanner(currentShift);
+  downloadText(recordText, filenameForShift(new Date(finishedAt), currentShift.guideName));
+
+  currentShift = null;
+  els.reviewDialog.close();
+  refreshUI();
+}
+
+function buildRecordText({finishedAt, completedBy, site}){
+  const started = new Date(currentShift.startedAt);
+  const finished = new Date(finishedAt);
+  const duration = formatDurationWords(finished - started);
+
+  let out = [];
+  const recordGuideName = normalizeGuideName(currentShift.guideName || currentGuideName());
+  out.push(`${recordGuideName.toUpperCase()} — DAILY WORK RECORD`);
+  out.push("=".repeat(Math.max(20, recordGuideName.length + 20)));
+  out.push("");
+  out.push(`Date: ${formatFullDate(started)}`);
+  if (currentShift.jobTitle) out.push(`Position: ${currentShift.jobTitle}`);
+  if (currentShift.department) out.push(`Department: ${currentShift.department}`);
+  if (site) out.push(`Site: ${site}`);
+  out.push(`Started: ${formatTime(started)}`);
+  out.push(`Signed off: ${formatTime(finished)}`);
+  out.push(`Elapsed: ${duration}`);
+  out.push(`Completed by: ${completedBy}`);
+  out.push("");
+  out.push("CERTIFICATION");
+  out.push("Routine work described in the procedure below was completed except for the exceptions specifically recorded in this document.");
+  out.push("");
+
+  out.push("ROUTINE WORK SCOPE");
+  out.push("------------------");
+  const signedRoute = currentShift.routeSnapshot || routeData;
+  for (const area of signedRoute){
+    out.push("");
+    out.push(area.name.toUpperCase());
+    for (const task of area.summary){
+      out.push(`- ${task}`);
+    }
+  }
+
+  out.push("");
+  out.push("EXCEPTIONS / IRREGULARITIES");
+  out.push("---------------------------");
+  if (!currentShift.issues?.length){
+    out.push("None recorded.");
+  } else {
+    currentShift.issues.forEach((issue, i) => {
+      out.push("");
+      out.push(`${i + 1}. ${issue.area} — ${issue.type}`);
+      out.push(`   Time: ${formatTime(new Date(issue.createdAt))}`);
+      out.push(`   Observation: ${issue.note}`);
+      if (issue.immediateAction) out.push(`   Immediate action: ${issue.immediateAction}`);
+      out.push(`   Contact / team notified: ${issue.contactNotified ? "Yes" : "No"}`);
+      out.push(`   Management notified: ${issue.managementNotified ? "Yes" : "No"}`);
+    });
+  }
+
+  out.push("");
+  out.push("SAFETY / REPORTING NOTE");
+  out.push("-----------------------");
+  out.push("Emergency conditions take priority over routine work. Do not enter or remain in a scene that cannot be approached safely. Document non-emergency irregularities and notify the appropriate site contacts according to workplace procedure.");
+  out.push("");
+  out.push(`Record generated: ${formatDateTime(finished)}`);
+  return out.join("\n");
+}
+
+async function openHistory(){
+  const rows = await getCompletedShifts();
+  els.historyList.innerHTML = "";
+  if (!rows.length){
+    els.historyList.innerHTML = `<div class="empty">No completed shift records yet.</div>`;
+  } else {
+    rows.forEach(row => {
+      const item = document.createElement("div");
+      item.className = "history-item";
+      const title = document.createElement("strong");
+      title.textContent = formatFullDate(new Date(row.startedAt));
+      const meta = document.createElement("div");
+      meta.className = "subtle";
+      meta.textContent = `${formatTime(new Date(row.startedAt))} – ${formatTime(new Date(row.finishedAt))} · ${row.issues?.length || 0} exception(s)`;
+
+      const actions = document.createElement("div");
+      actions.className = "history-actions";
+      const download = document.createElement("button");
+      download.type = "button";
+      download.className = "btn ghost";
+      download.textContent = "Download TXT";
+      download.addEventListener("click", () => downloadText(row.recordText || "", filenameForShift(new Date(row.finishedAt), row.guideName)));
+      actions.appendChild(download);
+
+      item.append(title, meta, actions);
+      els.historyList.appendChild(item);
+    });
+  }
+  els.historyDialog.showModal();
+}
+
+async function openSettings(){
+  const settings = await getSettings();
+  els.settingsGuideName.value = normalizeGuideName(settings.guideName || currentGuideName());
+  els.settingsName.value = settings.name || "";
+  els.settingsSite.value = settings.site || "";
+  els.settingsTimeZone.value = normalizeTimeZone(settings.timeZone);
+  els.settingsSiteRequirements.value = settings.siteRequirements || "";
+  els.settingsShelterPlan.value = settings.shelterPlan || "";
+  els.settingsDialog.showModal();
+}
+
+async function saveSettings(event){
+  event.preventDefault();
+  const settings = {
+    guideName: normalizeGuideName(els.settingsGuideName.value),
+    name: els.settingsName.value.trim(),
+    site: els.settingsSite.value.trim(),
+    timeZone: normalizeTimeZone(els.settingsTimeZone.value),
+    siteRequirements: els.settingsSiteRequirements.value.trim(),
+    shelterPlan: els.settingsShelterPlan.value.trim()
+  };
+  await setSettings(settings);
+  applyGuideName(settings.guideName);
+  refreshPositionSummary();
+  els.settingsGuideName.value = settings.guideName;
+  els.signoffName.value = settings.name;
+  els.siteName.value = settings.site;
+  setPlannerTimeZone(settings.timeZone);
+  renderSiteRequirements(settings.siteRequirements);
+  renderShelterPlan(settings.shelterPlan);
+  els.settingsDialog.close();
+}
+
+function filenameForShift(date, guideName = currentGuideName()){
+  const y = date.getFullYear();
+  const m = String(date.getMonth()+1).padStart(2,"0");
+  const d = String(date.getDate()).padStart(2,"0");
+  return `${safeFilenamePart(guideName)}-${y}-${m}-${d}.txt`;
+}
+
+function downloadText(text, filename){
+  const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function formatFullDate(date){
+  return new Intl.DateTimeFormat(undefined, {weekday:"long", year:"numeric", month:"long", day:"numeric"}).format(date);
+}
+function formatTime(date){
+  return new Intl.DateTimeFormat(undefined, {hour:"numeric", minute:"2-digit"}).format(date);
+}
+function formatDateTime(date){
+  return new Intl.DateTimeFormat(undefined, {
+    year:"numeric",month:"2-digit",day:"2-digit",hour:"numeric",minute:"2-digit",second:"2-digit"
+  }).format(date);
+}
+function formatDuration(ms){
+  const mins = Math.max(0, Math.floor(ms/60000));
+  const h = String(Math.floor(mins/60)).padStart(2,"0");
+  const m = String(mins%60).padStart(2,"0");
+  return `${h}:${m}`;
+}
+function formatDurationWords(ms){
+  const mins = Math.max(0, Math.floor(ms/60000));
+  const h = Math.floor(mins/60);
+  const m = mins%60;
+  return `${h}h ${m}m`;
+}
+
+
+let plannerEntriesCache = [];
+
+function browserTimeZone(){
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  } catch {
+    return "UTC";
+  }
+}
+
+function normalizeTimeZone(value){
+  const candidate = String(value || "").trim() || browserTimeZone();
+  try {
+    new Intl.DateTimeFormat("en-US", {timeZone:candidate}).format(new Date());
+    return candidate;
+  } catch {
+    return "UTC";
+  }
+}
+
+function availableTimeZones(){
+  let zones = [];
+  try {
+    if (typeof Intl.supportedValuesOf === "function") {
+      zones = Intl.supportedValuesOf("timeZone");
+    }
+  } catch {}
+  const essentials = ["UTC", browserTimeZone()];
+  return [...new Set([...essentials, ...zones])].sort((a,b)=>a.localeCompare(b));
+}
+
+function populateTimeZoneSelect(select){
+  if (!select || select.options.length) return;
+  const zones = availableTimeZones();
+  zones.forEach(zone => {
+    const opt = document.createElement("option");
+    opt.value = zone;
+    opt.textContent = zone.replaceAll("_"," ");
+    select.appendChild(opt);
+  });
+}
+
+function populateClockSelects(){
+  [els.plannerStartHour, els.plannerEndHour].forEach(select => {
+    if (!select || select.options.length) return;
+    for (let h=1; h<=12; h++){
+      const opt=document.createElement("option");
+      opt.value=String(h);
+      opt.textContent=String(h);
+      select.appendChild(opt);
+    }
+  });
+  [els.plannerStartMinute, els.plannerEndMinute].forEach(select => {
+    if (!select || select.options.length) return;
+    for (let m=0; m<60; m+=5){
+      const opt=document.createElement("option");
+      opt.value=String(m);
+      opt.textContent=String(m).padStart(2,"0");
+      select.appendChild(opt);
+    }
+  });
+}
+
+function setupShiftPlannerUI(){
+  populateTimeZoneSelect(els.plannerTimeZone);
+  populateTimeZoneSelect(els.settingsTimeZone);
+  populateClockSelects();
+  const tz = browserTimeZone();
+  setPlannerTimeZone(tz);
+  setPlannerMonthToToday();
+  resetPlannerEntryForm();
+}
+
+function setPlannerTimeZone(value){
+  const tz=normalizeTimeZone(value);
+  if (els.plannerTimeZone) {
+    if (![...els.plannerTimeZone.options].some(o=>o.value===tz)){
+      const opt=document.createElement("option");
+      opt.value=tz; opt.textContent=tz.replaceAll("_"," ");
+      els.plannerTimeZone.appendChild(opt);
+    }
+    els.plannerTimeZone.value=tz;
+  }
+  if (els.settingsTimeZone) {
+    if (![...els.settingsTimeZone.options].some(o=>o.value===tz)){
+      const opt=document.createElement("option");
+      opt.value=tz; opt.textContent=tz.replaceAll("_"," ");
+      els.settingsTimeZone.appendChild(opt);
+    }
+    els.settingsTimeZone.value=tz;
+  }
+}
+
+function datePartsInTimeZone(date, timeZone){
+  const parts=new Intl.DateTimeFormat("en-US",{
+    timeZone:normalizeTimeZone(timeZone),
+    year:"numeric",month:"2-digit",day:"2-digit",
+    hour:"2-digit",minute:"2-digit",hourCycle:"h23"
+  }).formatToParts(date);
+  const obj={};
+  parts.forEach(p=>{ if (p.type!=="literal") obj[p.type]=p.value; });
+  return {
+    date:`${obj.year}-${obj.month}-${obj.day}`,
+    hour:Number(obj.hour),
+    minute:Number(obj.minute)
+  };
+}
+
+function currentDateInPlannerZone(){
+  return datePartsInTimeZone(new Date(), els.plannerTimeZone?.value || browserTimeZone()).date;
+}
+
+function setPlannerMonthToToday(){
+  if (!els.plannerMonth) return;
+  els.plannerMonth.value=currentDateInPlannerZone().slice(0,7);
+  renderPlanner();
+}
+
+function shiftPlannerMonth(delta){
+  const value=els.plannerMonth.value || currentDateInPlannerZone().slice(0,7);
+  const [y,m]=value.split("-").map(Number);
+  const date=new Date(Date.UTC(y,m-1+delta,1));
+  els.plannerMonth.value=`${date.getUTCFullYear()}-${String(date.getUTCMonth()+1).padStart(2,"0")}`;
+  renderPlanner();
+}
+
+async function savePlannerTimeZone(){
+  const tz=normalizeTimeZone(els.plannerTimeZone.value);
+  setPlannerTimeZone(tz);
+  await setSettings({timeZone:tz});
+  renderPlanner();
+}
+
+function setClockControls(prefix, totalMinutes){
+  let mins=((Number(totalMinutes)||0)%1440+1440)%1440;
+  let hour24=Math.floor(mins/60);
+  let minute=mins%60;
+  const ampm=hour24>=12?"PM":"AM";
+  let hour12=hour24%12; if (!hour12) hour12=12;
+  els[`planner${prefix}Hour`].value=String(hour12);
+  // snap non-5-min times to exact option when live shift completion isn't on a 5-minute mark
+  const minuteSelect=els[`planner${prefix}Minute`];
+  if (![...minuteSelect.options].some(o=>Number(o.value)===minute)){
+    const opt=document.createElement("option");
+    opt.value=String(minute);
+    opt.textContent=String(minute).padStart(2,"0");
+    minuteSelect.appendChild(opt);
+  }
+  minuteSelect.value=String(minute);
+  els[`planner${prefix}AmPm`].value=ampm;
+}
+
+function clockControlsToMinutes(prefix){
+  if (!["Hour","Minute","AmPm"].every(part => els[`planner${prefix}${part}`].value !== "")) return NaN;
+  const hour12=Number(els[`planner${prefix}Hour`].value)||12;
+  const minute=Number(els[`planner${prefix}Minute`].value)||0;
+  const ampm=els[`planner${prefix}AmPm`].value;
+  let hour24=hour12%12;
+  if (ampm==="PM") hour24+=12;
+  return hour24*60+minute;
+}
+
+function plannerDurationMinutes(entry){
+  if (Number.isFinite(entry.durationMinutesOverride)) return Math.max(0, entry.durationMinutesOverride);
+  const start=Number(entry.startMinutes)||0;
+  const end=Number(entry.endMinutes)||0;
+  let span=end-start;
+  if (span<=0) span+=1440;
+  return Math.max(0,span-(Number(entry.breakMinutes)||0));
+}
+
+function durationLabel(minutes){
+  const total=Math.max(0,Math.round(Number(minutes)||0));
+  return `${Math.floor(total/60)}h ${total%60}m`;
+}
+
+function decimalHours(minutes){
+  return (Math.max(0,Number(minutes)||0)/60).toFixed(2).replace(/\.00$/,"");
+}
+
+function minutesTo12Hour(totalMinutes){
+  const mins=((Number(totalMinutes)||0)%1440+1440)%1440;
+  const h24=Math.floor(mins/60);
+  const minute=mins%60;
+  const ampm=h24>=12?"PM":"AM";
+  const h12=(h24%12)||12;
+  return `${h12}:${String(minute).padStart(2,"0")} ${ampm}`;
+}
+
+function updatePlannerDurationPreview(){
+  const entry={
+    startMinutes:clockControlsToMinutes("Start"),
+    endMinutes:clockControlsToMinutes("End"),
+    breakMinutes:Number(els.plannerBreakMinutes.value)||0
+  };
+  els.plannerDurationPreview.textContent = Number.isFinite(entry.startMinutes) && Number.isFinite(entry.endMinutes)
+    ? durationLabel(plannerDurationMinutes(entry)) : "Choose start and end times";
+}
+
+function resetPlannerEntryForm(dateValue){
+  if (!els.plannerEntryForm) return;
+  els.plannerEntryId.value="";
+  els.plannerDate.value=dateValue || currentDateInPlannerZone();
+  els.plannerStatus.value="scheduled";
+  clearClockControls("Start");
+  clearClockControls("End");
+  els.plannerBreakMinutes.value="0";
+  els.plannerNotes.value="";
+  els.plannerDeleteEntry.hidden=true;
+  updatePlannerDurationPreview();
+}
+
+function plannerEntryDisplayDate(entry){
+  return entry.date;
+}
+
+function plannerEntryLabel(entry){
+  return `${minutesTo12Hour(entry.startMinutes)}–${minutesTo12Hour(entry.endMinutes)}`;
+}
+
+function statusLabel(status){
+  return ({scheduled:"Scheduled",worked:"Worked",training:"Training",leave:"Leave / Other"})[status] || status;
+}
+
+function statusClass(status){
+  return `planner-status-${status || "scheduled"}`;
+}
+
+async function openPlanner(){
+  const settings=await getSettings();
+  setPlannerTimeZone(settings.timeZone || browserTimeZone());
+  plannerEntriesCache=await getPlannerEntries();
+  if (!els.plannerMonth.value) setPlannerMonthToToday();
+  else renderPlanner();
+  resetPlannerEntryForm(currentDateInPlannerZone());
+  els.plannerDialog.showModal();
+}
+
+async function savePlannerEntry(event){
+  event.preventDefault();
+  if (!Number.isFinite(clockControlsToMinutes("Start")) || !Number.isFinite(clockControlsToMinutes("End"))) { alert("Choose both start and end times."); return; }
+  const id=els.plannerEntryId.value || (crypto.randomUUID ? crypto.randomUUID() : `plan-${Date.now()}`);
+  const existing=plannerEntriesCache.find(x=>x.id===id);
+  const entry={
+    ...(existing||{}),
+    id,
+    date:els.plannerDate.value,
+    startMinutes:clockControlsToMinutes("Start"),
+    endMinutes:clockControlsToMinutes("End"),
+    breakMinutes:Math.max(0,Number(els.plannerBreakMinutes.value)||0),
+    status:els.plannerStatus.value,
+    notes:els.plannerNotes.value.trim(),
+    source: existing?.source || "manual",
+    updatedAt:new Date().toISOString()
+  };
+  delete entry.durationMinutesOverride;
+  const index=plannerEntriesCache.findIndex(x=>x.id===id);
+  if (index>=0) plannerEntriesCache[index]=entry;
+  else plannerEntriesCache.push(entry);
+  await setPlannerEntries(plannerEntriesCache);
+  if (entry.date) els.plannerMonth.value=entry.date.slice(0,7);
+  resetPlannerEntryForm(entry.date);
+  renderPlanner();
+}
+
+function editPlannerEntry(id){
+  const entry=plannerEntriesCache.find(x=>x.id===id);
+  if (!entry) return;
+  els.plannerEntryId.value=entry.id;
+  els.plannerDate.value=entry.date;
+  els.plannerStatus.value=entry.status || "scheduled";
+  setClockControls("Start",entry.startMinutes);
+  setClockControls("End",entry.endMinutes);
+  els.plannerBreakMinutes.value=String(entry.breakMinutes||0);
+  els.plannerNotes.value=entry.notes||"";
+  els.plannerDeleteEntry.hidden=false;
+  updatePlannerDurationPreview();
+  els.plannerEntryForm.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+async function deletePlannerEntryFromForm(){
+  const id=els.plannerEntryId.value;
+  if (!id) return;
+  plannerEntriesCache=plannerEntriesCache.filter(x=>x.id!==id);
+  await setPlannerEntries(plannerEntriesCache);
+  resetPlannerEntryForm();
+  renderPlanner();
+}
+
+async function deletePlannerEntry(id){
+  plannerEntriesCache=plannerEntriesCache.filter(x=>x.id!==id);
+  await setPlannerEntries(plannerEntriesCache);
+  renderPlanner();
+}
+
+function renderPlanner(){
+  if (!els.plannerCalendar || !els.plannerMonth) return;
+  const monthValue=els.plannerMonth.value || currentDateInPlannerZone().slice(0,7);
+  const [year,month]=monthValue.split("-").map(Number);
+  if (!year || !month) return;
+
+  const monthEntries=plannerEntriesCache
+    .filter(entry=>plannerEntryDisplayDate(entry)?.startsWith(monthValue))
+    .sort((a,b)=>(a.date||"").localeCompare(b.date||"") || (a.startMinutes||0)-(b.startMinutes||0));
+
+  const totals={scheduled:0,worked:0,training:0,leave:0};
+  monthEntries.forEach(entry=>{
+    totals[entry.status||"scheduled"]=(totals[entry.status||"scheduled"]||0)+plannerDurationMinutes(entry);
+  });
+  els.plannerSummary.innerHTML=`
+    <div><span>Scheduled</span><strong>${decimalHours(totals.scheduled)} h</strong></div>
+    <div><span>Worked</span><strong>${decimalHours(totals.worked)} h</strong></div>
+    <div><span>Training</span><strong>${decimalHours(totals.training)} h</strong></div>
+    <div><span>Leave / Other</span><strong>${decimalHours(totals.leave)} h</strong></div>
+  `;
+
+  els.plannerCalendar.innerHTML="";
+  const first=new Date(Date.UTC(year,month-1,1));
+  const firstDow=first.getUTCDay();
+  const daysInMonth=new Date(Date.UTC(year,month,0)).getUTCDate();
+  const prevDays=new Date(Date.UTC(year,month-1,0)).getUTCDate();
+  const today=currentDateInPlannerZone();
+
+  for (let cellIndex=0; cellIndex<42; cellIndex++){
+    let cellYear=year,cellMonth=month,dayNum,other=false;
+    if (cellIndex<firstDow){
+      dayNum=prevDays-firstDow+cellIndex+1;
+      other=true;
+      cellMonth=month-1;
+      if (cellMonth===0){cellMonth=12;cellYear--;}
+    } else if (cellIndex>=firstDow+daysInMonth){
+      dayNum=cellIndex-(firstDow+daysInMonth)+1;
+      other=true;
+      cellMonth=month+1;
+      if (cellMonth===13){cellMonth=1;cellYear++;}
+    } else {
+      dayNum=cellIndex-firstDow+1;
+    }
+    const dateStr=`${cellYear}-${String(cellMonth).padStart(2,"0")}-${String(dayNum).padStart(2,"0")}`;
+    const cell=document.createElement("div");
+    cell.className=`planner-day${other?" other-month":""}${dateStr===today?" today":""}`;
+    cell.dataset.date=dateStr;
+
+    const dayButton=document.createElement("button");
+    dayButton.type="button";
+    dayButton.className="planner-day-number";
+    dayButton.textContent=String(dayNum);
+    dayButton.title=`Add shift on ${dateStr}`;
+    dayButton.addEventListener("click",()=>{
+      if (other) els.plannerMonth.value=dateStr.slice(0,7);
+      resetPlannerEntryForm(dateStr);
+      renderPlanner();
+    });
+    cell.appendChild(dayButton);
+
+    plannerEntriesCache
+      .filter(entry=>plannerEntryDisplayDate(entry)===dateStr)
+      .sort((a,b)=>(a.startMinutes||0)-(b.startMinutes||0))
+      .forEach(entry=>{
+        const item=document.createElement("button");
+        item.type="button";
+        item.className=`planner-calendar-entry ${statusClass(entry.status)}`;
+        item.innerHTML=`<span>${plannerEntryLabel(entry)}</span><small>${statusLabel(entry.status)} · ${durationLabel(plannerDurationMinutes(entry))}</small>`;
+        item.addEventListener("click",()=>editPlannerEntry(entry.id));
+        cell.appendChild(item);
+      });
+
+    els.plannerCalendar.appendChild(cell);
+  }
+
+  els.plannerEntryList.innerHTML="";
+  els.plannerEntryCount.textContent=`${monthEntries.length} ${monthEntries.length===1?"entry":"entries"}`;
+  if (!monthEntries.length){
+    els.plannerEntryList.innerHTML='<div class="empty">No scheduled or worked shifts recorded for this month.</div>';
+  } else {
+    monthEntries.forEach(entry=>{
+      const row=document.createElement("div");
+      row.className="planner-log-row";
+      const main=document.createElement("div");
+      main.innerHTML=`
+        <strong>${entry.date} · ${plannerEntryLabel(entry)}</strong>
+        <div class="subtle">${statusLabel(entry.status)} · ${durationLabel(plannerDurationMinutes(entry))}${entry.breakMinutes?` · ${entry.breakMinutes}m unpaid break`:""}${entry.notes?` · ${escapePlannerHtml(entry.notes)}`:""}</div>
+      `;
+      const actions=document.createElement("div");
+      actions.className="planner-log-actions";
+      const edit=document.createElement("button");
+      edit.type="button"; edit.className="btn ghost compact-btn"; edit.textContent="Edit";
+      edit.addEventListener("click",()=>editPlannerEntry(entry.id));
+      const del=document.createElement("button");
+      del.type="button"; del.className="btn ghost compact-btn"; del.textContent="Delete";
+      del.addEventListener("click",()=>deletePlannerEntry(entry.id));
+      actions.append(edit,del);
+      row.append(main,actions);
+      els.plannerEntryList.appendChild(row);
+    });
+  }
+}
+
+function escapePlannerHtml(value){
+  return String(value||"")
+    .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+
+async function recordCompletedShiftInPlanner(shift){
+  if (!shift?.startedAt || !shift?.finishedAt) return;
+  const settings=await getSettings();
+  const timeZone=normalizeTimeZone(settings.timeZone);
+  const start=datePartsInTimeZone(new Date(shift.startedAt),timeZone);
+  const end=datePartsInTimeZone(new Date(shift.finishedAt),timeZone);
+  const entries=await getPlannerEntries();
+  if (entries.some(entry=>entry.sourceShiftId===shift.id)) return;
+
+  const startMinutes=start.hour*60+start.minute;
+  const endMinutes=end.hour*60+end.minute;
+  const elapsedMinutes=Math.max(0,Math.round((new Date(shift.finishedAt)-new Date(shift.startedAt))/60000));
+  entries.push({
+    id:crypto.randomUUID ? crypto.randomUUID() : `worked-${Date.now()}`,
+    date:start.date,
+    startMinutes,
+    endMinutes,
+    breakMinutes:0,
+    durationMinutesOverride:elapsedMinutes,
+    status:"worked",
+    notes:shift.site ? `Live shift sign-off · ${shift.site}` : "Live shift sign-off",
+    source:"live-shift",
+    sourceShiftId:shift.id,
+    timeZone,
+    createdAt:new Date().toISOString(),
+    updatedAt:new Date().toISOString()
+  });
+  await setPlannerEntries(entries);
+  plannerEntriesCache=entries;
+}
+
+async function getPlannerEntries(){
+  const db=await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(STORE_SETTINGS,"readonly");
+    const req=tx.objectStore(STORE_SETTINGS).get("plannerEntries");
+    req.onsuccess=()=>resolve(Array.isArray(req.result?.entries)?req.result.entries:[]);
+    req.onerror=()=>reject(req.error);
+  });
+}
+
+async function setPlannerEntries(entries){
+  const db=await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(STORE_SETTINGS,"readwrite");
+    tx.objectStore(STORE_SETTINGS).put({key:"plannerEntries",entries:structuredClone(entries)});
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+
+// IndexedDB
+function openDB(){
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(STORE_SHIFTS)){
+        const s = db.createObjectStore(STORE_SHIFTS, {keyPath:"id"});
+        s.createIndex("status","status",{unique:false});
+        s.createIndex("startedAt","startedAt",{unique:false});
+      }
+      if (!db.objectStoreNames.contains(STORE_SETTINGS)){
+        db.createObjectStore(STORE_SETTINGS, {keyPath:"key"});
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function putShift(shift){
+  const db = await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(STORE_SHIFTS,"readwrite");
+    tx.objectStore(STORE_SHIFTS).put(structuredClone(shift));
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+async function loadActiveShift(){
+  const db = await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(STORE_SHIFTS,"readonly");
+    const idx = tx.objectStore(STORE_SHIFTS).index("status");
+    const req = idx.getAll("active");
+    req.onsuccess=()=>{
+      const rows=req.result||[];
+      rows.sort((a,b)=>new Date(b.startedAt)-new Date(a.startedAt));
+      resolve(rows[0]||null);
+    };
+    req.onerror=()=>reject(req.error);
+  });
+}
+async function getCompletedShifts(){
+  const db = await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(STORE_SHIFTS,"readonly");
+    const idx = tx.objectStore(STORE_SHIFTS).index("status");
+    const req = idx.getAll("complete");
+    req.onsuccess=()=>{
+      const rows=req.result||[];
+      rows.sort((a,b)=>new Date(b.startedAt)-new Date(a.startedAt));
+      resolve(rows);
+    };
+    req.onerror=()=>reject(req.error);
+  });
+}
+
+async function setRouteConfig(route){
+  const db = await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(STORE_SETTINGS,"readwrite");
+    tx.objectStore(STORE_SETTINGS).put({key:"route", version: ROUTE_SCHEMA_VERSION, route: structuredClone(route)});
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+
+async function getRouteConfig(){
+  const db=await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(STORE_SETTINGS,"readonly");
+    const req=tx.objectStore(STORE_SETTINGS).get("route");
+    req.onsuccess=()=>resolve(req.result || null);
+    req.onerror=()=>reject(req.error);
+  });
+}
+
+async function setSettings(settings){
+  const db = await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(STORE_SETTINGS,"readwrite");
+    const store=tx.objectStore(STORE_SETTINGS);
+    const req=store.get("profile");
+    req.onsuccess=()=>{
+      const existing=req.result||{key:"profile"};
+      store.put({...existing,key:"profile",...settings});
+    };
+    req.onerror=()=>reject(req.error);
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+async function getSettings(){
+  const db=await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(STORE_SETTINGS,"readonly");
+    const req=tx.objectStore(STORE_SETTINGS).get("profile");
+    req.onsuccess=()=>resolve(req.result||{});
+    req.onerror=()=>reject(req.error);
+  });
+}
+
+</script>
+<script>
+/* Work Shift Guide — blank position setup, reviewed intake and local backups. */
+const POSITION_FORMAT = "work-shift-guide.position";
+const BACKUP_FORMAT = "work-shift-guide.backup";
+const POSITION_FIELDS = ["jobTitle", "department", "guideName", "site", "timeZone", "siteRequirements", "shelterPlan"];
+let positionMaterial = {references: [], knowledgeCheck: [], intakeNotes: ""};
+let pendingPositionImport = null;
+let pendingBackup = null;
+const byId = id => document.getElementById(id);
+
+function blankPositionPackage(){
+  return {format: POSITION_FORMAT, schemaVersion: 1,
+    position: Object.fromEntries(POSITION_FIELDS.map(key => [key, ""])),
+    route: [], references: [], knowledgeCheck: [], intakeNotes: ""};
+}
+
+function objectValue(value, label){
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error(`${label} must be an object.`);
+  return value;
+}
+function textValue(value, label, limit = 100000){
+  if (value === undefined) return "";
+  if (typeof value !== "string") throw new Error(`${label} must be text.`);
+  if (value.length > limit) throw new Error(`${label} is too long (maximum ${limit} characters).`);
+  return value.trim();
+}
+function arrayValue(value, label, limit = 500){
+  if (!Array.isArray(value)) throw new Error(`${label} must be a list.`);
+  if (value.length > limit) throw new Error(`${label} has too many entries (maximum ${limit}).`);
+  return value;
+}
+function textList(value, label){
+  return arrayValue(value, label).map((item, i) => textValue(item, `${label} ${i+1}`)).filter(Boolean);
+}
+
+function validatePositionPackage(input){
+  const data = objectValue(input, "Position package");
+  if (data.format !== POSITION_FORMAT || data.schemaVersion !== 1) {
+    throw new Error("Choose a Work Shift Guide position package with schemaVersion 1. Use Restore Backup for a full backup.");
+  }
+  const allowed = new Set(["format", "schemaVersion", "position", "route", "references", "knowledgeCheck", "intakeNotes"]);
+  for (const key of Object.keys(data)) if (!allowed.has(key)) throw new Error(`Unsupported position field: ${key}.`);
+  const source = objectValue(data.position, "Position");
+  for (const key of Object.keys(source)) if (!POSITION_FIELDS.includes(key)) throw new Error(`Unsupported position setting: ${key}.`);
+  const position = Object.fromEntries(POSITION_FIELDS.map(key => [key, textValue(source[key], key, key === "siteRequirements" || key === "shelterPlan" ? 100000 : 200)]));
+  if (position.timeZone) {
+    try { new Intl.DateTimeFormat("en", {timeZone: position.timeZone}).format(); }
+    catch { throw new Error("Enter a valid time zone, or leave it blank to use this device’s time zone."); }
+  }
+  const ids = new Set();
+  const route = arrayValue(data.route, "Route").map((item, i) => {
+    const area = objectValue(item, `Area ${i+1}`);
+    const name = textValue(area.name, `Area ${i+1} name`, 200);
+    const summary = textList(area.summary, `Area ${i+1} tasks`);
+    if (!name || !summary.length) throw new Error(`Area ${i+1} needs a name and at least one task. An empty route is allowed.`);
+    let id = textValue(area.id, `Area ${i+1} ID`, 200) || `area-${i+1}`;
+    if (ids.has(id)) throw new Error(`Duplicate area ID: ${id}.`);
+    ids.add(id);
+    return {id, name, summary, details: textList(area.details || [], `Area ${i+1} notes`)};
+  });
+  const references = arrayValue(data.references || [], "References").map((item, i) => {
+    const reference = objectValue(item, `Reference ${i+1}`);
+    const title = textValue(reference.title, `Reference ${i+1} title`, 300);
+    const body = textValue(reference.body, `Reference ${i+1} content`);
+    if (!title || !body) throw new Error(`Reference ${i+1} needs a title and content.`);
+    return {title, body, source: textValue(reference.source, `Reference ${i+1} source`, 2000)};
+  });
+  const knowledgeCheck = arrayValue(data.knowledgeCheck || [], "Knowledge check").map((item, i) => {
+    const question = objectValue(item, `Question ${i+1}`);
+    const prompt = textValue(question.question, `Question ${i+1}`, 5000);
+    const options = textList(question.options, `Question ${i+1} answers`);
+    if (!prompt || options.length < 2 || options.length > 8) throw new Error(`Question ${i+1} needs a prompt and 2–8 answers.`);
+    if (!Number.isInteger(question.answer) || question.answer < 0 || question.answer >= options.length) throw new Error(`Question ${i+1} has an invalid correct-answer index.`);
+    return {question: prompt, options, answer: question.answer, explanation: textValue(question.explanation, `Question ${i+1} explanation`, 10000)};
+  });
+  return {format: POSITION_FORMAT, schemaVersion: 1, position, route, references, knowledgeCheck,
+    intakeNotes: textValue(data.intakeNotes, "Intake notes", 1000000)};
+}
+
+async function getPositionMaterial(){
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_SETTINGS, "readonly");
+    const req = tx.objectStore(STORE_SETTINGS).get("positionMaterial");
+    req.onsuccess = () => resolve(req.result || {references: [], knowledgeCheck: [], intakeNotes: ""});
+    req.onerror = () => reject(req.error);
+    tx.oncomplete = () => db.close();
+  });
+}
+
+async function currentPositionPackage(){
+  const settings = await getSettings();
+  return {format: POSITION_FORMAT, schemaVersion: 1,
+    position: Object.fromEntries(POSITION_FIELDS.map(key => [key, settings[key] || ""])),
+    route: structuredClone(routeData), references: structuredClone(positionMaterial.references || []),
+    knowledgeCheck: structuredClone(positionMaterial.knowledgeCheck || []), intakeNotes: positionMaterial.intakeNotes || ""};
+}
+
+async function applyPositionPackage(input){
+  if (currentShift) throw new Error("Finish the active shift before changing the position.");
+  const data = validatePositionPackage(input);
+  const settings = await getSettings();
+  const db = await openDB();
+  await new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_SETTINGS, "readwrite");
+    const store = tx.objectStore(STORE_SETTINGS);
+    store.put({...settings, ...data.position, key: "profile"});
+    store.put({key: "route", version: ROUTE_SCHEMA_VERSION, route: data.route});
+    store.put({key: "positionMaterial", references: data.references, knowledgeCheck: data.knowledgeCheck, intakeNotes: data.intakeNotes});
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onabort = tx.onerror = () => { db.close(); reject(tx.error || new Error("Position could not be saved.")); };
+  });
+  routeData = data.route;
+  positionMaterial = {references: data.references, knowledgeCheck: data.knowledgeCheck, intakeNotes: data.intakeNotes};
+  applyGuideName(data.position.guideName);
+  els.settingsGuideName.value = normalizeGuideName(data.position.guideName);
+  els.settingsSite.value = els.siteName.value = data.position.site;
+  els.settingsSiteRequirements.value = data.position.siteRequirements;
+  els.settingsShelterPlan.value = data.position.shelterPlan;
+  setPlannerTimeZone(data.position.timeZone);
+  renderSiteRequirements(data.position.siteRequirements);
+  renderShelterPlan(data.position.shelterPlan);
+  renderRoute(); populateAreaOptions(); renderPositionReferences(); refreshUI();
+  await refreshPositionSummary();
+  return data;
+}
+
+function showAppMessage(message, error = false){
+  const node = byId("appMessage");
+  node.hidden = false;
+  node.textContent = message;
+  node.classList.toggle("error-message", error);
+}
+
+async function refreshPositionSummary(){
+  const settings = await getSettings();
+  const tasks = routeData.reduce((total, area) => total + area.summary.length, 0);
+  byId("positionHeading").textContent = settings.jobTitle || "Ready for a new position";
+  byId("positionIdentity").textContent = [settings.department, settings.site].filter(Boolean).join(" · ") || "Add a job title and your own work instructions to begin.";
+  byId("positionCounts").textContent = `${routeData.length} areas · ${tasks} tasks · ${(positionMaterial.references || []).length} references`;
+  byId("positionState").textContent = tasks ? "Position configured" : "Blank edition";
+}
+
+const positionFieldIds = {jobTitle: "positionJobTitle", department: "positionDepartment", guideName: "positionGuideName",
+  site: "positionSite", timeZone: "positionTimeZone", siteRequirements: "positionRequirements", shelterPlan: "positionShelterPlan"};
+
+function editorField(label, className, value, multiline = false){
+  const wrapper = document.createElement("label");
+  wrapper.append(document.createTextNode(label));
+  const field = document.createElement(multiline ? "textarea" : "input");
+  field.className = className;
+  field.value = value || "";
+  wrapper.append(field);
+  return wrapper;
+}
+
+function addReferenceEditor(value = {}){
+  const card = document.createElement("div"); card.className = "position-editor-card reference-editor-card";
+  card.append(editorField("Title", "reference-title", value.title), editorField("Reference / procedure text", "reference-body", value.body, true), editorField("Source or web address (optional)", "reference-source", value.source));
+  const remove = document.createElement("button"); remove.type = "button"; remove.className = "btn ghost"; remove.textContent = "Remove Reference";
+  remove.addEventListener("click", () => card.remove()); card.append(remove); byId("referenceEditor").append(card);
+}
+
+function addQuestionEditor(value = {}){
+  const card = document.createElement("div"); card.className = "position-editor-card question-editor-card";
+  card.append(editorField("Question", "question-prompt", value.question), editorField("Answers — one per line", "question-options", (value.options || []).join("\n"), true));
+  const answer = editorField("Correct answer number (starting at 1)", "question-answer", value.answer === undefined ? "" : String(value.answer + 1));
+  const input = answer.querySelector("input"); input.type = "number"; input.min = "1"; input.max = "8";
+  card.append(answer, editorField("Explanation (optional)", "question-explanation", value.explanation, true));
+  const remove = document.createElement("button"); remove.type = "button"; remove.className = "btn ghost"; remove.textContent = "Remove Question";
+  remove.addEventListener("click", () => card.remove()); card.append(remove); byId("questionEditor").append(card);
+}
+
+function fillPositionForm(data){
+  for (const [key, id] of Object.entries(positionFieldIds)) byId(id).value = data.position[key] || "";
+  byId("positionIntakeNotes").value = data.intakeNotes || "";
+  byId("referenceEditor").replaceChildren(); data.references.forEach(addReferenceEditor);
+  byId("questionEditor").replaceChildren(); data.knowledgeCheck.forEach(addQuestionEditor);
+}
+
+async function openPositionSetup(){
+  if (currentShift) { alert("Finish the active shift before changing the position."); return; }
+  fillPositionForm(await currentPositionPackage());
+  pendingPositionImport = null; byId("applyImport").disabled = true;
+  byId("importPreview").textContent = "No import staged.";
+  byId("importText").value = ""; byId("importFile").value = "";
+  byId("positionDialog").showModal();
+}
+
+async function savePositionForm(){
+  const data = await currentPositionPackage();
+  data.position = Object.fromEntries(Object.entries(positionFieldIds).map(([key, id]) => [key, byId(id).value]));
+  data.intakeNotes = byId("positionIntakeNotes").value;
+  data.references = [...byId("referenceEditor").children].map(card => ({title: card.querySelector(".reference-title").value,
+    body: card.querySelector(".reference-body").value, source: card.querySelector(".reference-source").value}));
+  data.knowledgeCheck = [...byId("questionEditor").children].map(card => ({question: card.querySelector(".question-prompt").value,
+    options: card.querySelector(".question-options").value.split(/\r?\n/).map(text => text.trim()).filter(Boolean),
+    answer: Number(card.querySelector(".question-answer").value) - 1, explanation: card.querySelector(".question-explanation").value}));
+  await applyPositionPackage(data); byId("positionDialog").close(); showAppMessage("Position saved on this device. Use Edit Work to add or change duties.");
+}
+
+async function previewPositionImport(){
+  pendingPositionImport = null; byId("applyImport").disabled = true;
+  const raw = byId("importText").value.trim();
+  if (!raw) throw new Error("Choose a position JSON file or paste text to preview.");
+  if (raw.length > 2000000) throw new Error("Position imports are limited to 2 MB.");
+  const fileName = byId("importFile").files[0]?.name || "";
+  let data;
+  if (/^[{\[]/.test(raw) || /\.json$/i.test(fileName)) {
+    try { data = JSON.parse(raw); } catch { throw new Error("The JSON is incomplete or invalid. Nothing was changed."); }
+    data = validatePositionPackage(data);
+  } else {
+    data = await currentPositionPackage();
+    data.intakeNotes = [data.intakeNotes, raw].filter(Boolean).join("\n\n");
+    data = validatePositionPackage(data);
+  }
+  pendingPositionImport = data;
+  const count = data.route.reduce((total, area) => total + area.summary.length, 0);
+  byId("importPreview").textContent = `${data.position.jobTitle || "Untitled position"}\n${data.route.length} areas · ${count} tasks · ${data.references.length} references · ${data.knowledgeCheck.length} questions\n\n${JSON.stringify(data, null, 2)}`;
+  byId("applyImport").disabled = false;
+}
+
+async function applyReviewedImport(){
+  if (!pendingPositionImport) throw new Error("Preview and review the import first.");
+  const data = await applyPositionPackage(pendingPositionImport);
+  fillPositionForm(data); pendingPositionImport = null; byId("applyImport").disabled = true;
+  byId("importPreview").textContent = "Import applied and saved on this device.";
+  showAppMessage("Reviewed position import saved. Existing work records remain in History.");
+}
+
+function renderPositionReferences(){
+  const container = byId("positionReferences"); container.replaceChildren();
+  for (const reference of positionMaterial.references || []) {
+    const card = document.createElement("details"); card.className = "route-card";
+    const heading = document.createElement("summary"); heading.textContent = reference.title;
+    const body = document.createElement("div"); body.className = "route-body";
+    const text = document.createElement("div"); text.className = "plain-text"; text.textContent = reference.body; body.append(text);
+    if (reference.source) {
+      const source = document.createElement("p"); source.className = "subtle";
+      let url; try { url = new URL(reference.source); } catch {}
+      if (url && ["https:", "http:"].includes(url.protocol)) {
+        const link = document.createElement("a"); link.textContent = reference.source; link.href = url.href;
+        link.target = "_blank"; link.rel = "noopener noreferrer"; source.append(link);
+      } else source.textContent = reference.source;
+      body.append(source);
+    }
+    card.append(heading, body); container.append(card);
+  }
+  if (!container.children.length) { const empty = document.createElement("div"); empty.className = "empty"; empty.textContent = "No reference material loaded. Add approved notes or procedures in Position Setup."; container.append(empty); }
+  const notes = byId("intakeNotesView"); notes.textContent = positionMaterial.intakeNotes || "No source notes loaded.";
+  const words = (positionMaterial.references || []).map(item => item.body).join(" ").trim().split(/\s+/).filter(Boolean).length;
+  byId("readingEstimate").textContent = words ? `${words.toLocaleString()} words · approximately ${Math.ceil(words / 175)} minutes to read` : "No reading assigned";
+  const quiz = byId("positionQuiz"); quiz.replaceChildren();
+  (positionMaterial.knowledgeCheck || []).forEach((question, i) => {
+    const fieldset = document.createElement("fieldset"); fieldset.className = "position-quiz-question";
+    const legend = document.createElement("legend"); legend.textContent = `${i+1}. ${question.question}`; fieldset.append(legend);
+    question.options.forEach((option, j) => {
+      const label = document.createElement("label"); label.className = "checkline";
+      const radio = document.createElement("input"); radio.type = "radio"; radio.name = `position-question-${i}`; radio.value = String(j);
+      label.append(radio, document.createTextNode(option)); fieldset.append(label);
+    });
+    quiz.append(fieldset);
+  });
+  byId("checkAnswers").disabled = !quiz.children.length;
+  byId("quizResult").textContent = quiz.children.length ? "Answer all questions, then check your answers." : "No knowledge check loaded.";
+}
+
+function checkPositionAnswers(){
+  const questions = positionMaterial.knowledgeCheck || []; let score = 0;
+  const result = [];
+  questions.forEach((question, i) => {
+    const selected = document.querySelector(`input[name="position-question-${i}"]:checked`);
+    const correct = !!selected && Number(selected.value) === question.answer; if (correct) score++;
+    result.push(`${i+1}. ${correct ? "Correct" : selected ? "Review" : "Not answered"}${correct ? "" : ` — ${question.options[question.answer]}`}${question.explanation ? `\n${question.explanation}` : ""}`);
+  });
+  byId("quizResult").textContent = `${score}/${questions.length} correct\n\n${result.join("\n\n")}`;
+}
+
+function downloadJSON(data, filename){
+  const blob = new Blob([JSON.stringify(data, null, 2) + "\n"], {type: "application/json"});
+  const url = URL.createObjectURL(blob); const link = document.createElement("a");
+  link.href = url; link.download = filename; document.body.append(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+async function readBackup(){
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction([STORE_SETTINGS, STORE_SHIFTS], "readonly");
+    const settings = tx.objectStore(STORE_SETTINGS).getAll();
+    const shifts = tx.objectStore(STORE_SHIFTS).getAll();
+    tx.oncomplete = () => { db.close(); resolve({format: BACKUP_FORMAT, schemaVersion: 1, exportedAt: new Date().toISOString(), settings: settings.result, shifts: shifts.result}); };
+    tx.onerror = () => { db.close(); reject(tx.error); };
+  });
+}
+
+function validateBackup(input){
+  const data = objectValue(input, "Backup");
+  if (data.format !== BACKUP_FORMAT || data.schemaVersion !== 1) throw new Error("Choose a Work Shift Guide backup, not a position template.");
+  const rows = arrayValue(data.settings, "Backup settings", 4); const keys = new Set();
+  for (const row of rows) {
+    objectValue(row, "Backup setting");
+    if (!["profile", "route", "positionMaterial", "plannerEntries"].includes(row.key) || keys.has(row.key)) throw new Error("Backup has an unknown or duplicate settings record.");
+    keys.add(row.key);
+  }
+  const profile = rows.find(row => row.key === "profile") || {};
+  const material = rows.find(row => row.key === "positionMaterial") || {};
+  validatePositionPackage({format: POSITION_FORMAT, schemaVersion: 1,
+    position: Object.fromEntries(POSITION_FIELDS.map(key => [key, profile[key] || ""])),
+    route: rows.find(row => row.key === "route")?.route || [], references: material.references || [], knowledgeCheck: material.knowledgeCheck || [], intakeNotes: material.intakeNotes || ""});
+  textValue(profile.name, "Sign-off name", 300);
+  const shifts = arrayValue(data.shifts, "Shift records", 20000); const ids = new Set(); let activeCount = 0;
+  for (const shift of shifts) {
+    objectValue(shift, "Shift record");
+    if (typeof shift.id !== "string" || !shift.id || ids.has(shift.id)) throw new Error("Backup has a missing or duplicate shift ID.");
+    ids.add(shift.id);
+    if (!["active", "complete"].includes(shift.status) || !Number.isFinite(Date.parse(shift.startedAt))) throw new Error("Backup has an invalid shift status or date.");
+    if (shift.status === "active") activeCount++;
+    if (shift.status === "complete" && (!Number.isFinite(Date.parse(shift.finishedAt)) || Date.parse(shift.finishedAt) < Date.parse(shift.startedAt))) throw new Error("Backup has an invalid completed-shift date.");
+    for (const field of ["guideName", "jobTitle", "department", "completedBy", "site", "recordText"]) if (shift[field] !== null) textValue(shift[field], `Shift ${field}`, 1000000);
+    for (const issue of arrayValue(shift.issues, "Shift exceptions")) {
+      objectValue(issue, "Exception");
+      for (const field of ["id", "area", "type", "note", "immediateAction"]) textValue(issue[field], `Exception ${field}`);
+      if (!Number.isFinite(Date.parse(issue.createdAt))) throw new Error("Backup has an invalid exception date.");
+    }
+    validatePositionPackage({...blankPositionPackage(), route: shift.routeSnapshot});
+  }
+  if (activeCount > 1) throw new Error("Backup contains more than one active shift.");
+  const planner = rows.find(row => row.key === "plannerEntries")?.entries || [];
+  const plannerIds = new Set();
+  for (const entry of arrayValue(planner, "Planner entries", 20000)) {
+    objectValue(entry, "Planner entry");
+    if (typeof entry.id !== "string" || !entry.id || plannerIds.has(entry.id)) throw new Error("Backup has a missing or duplicate planner ID.");
+    plannerIds.add(entry.id);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(entry.date) || !Number.isFinite(Date.parse(entry.date)) || new Date(entry.date).toISOString().slice(0,10) !== entry.date) throw new Error("Backup has an invalid planner date.");
+    if (![entry.startMinutes, entry.endMinutes].every(value => Number.isInteger(value) && value >= 0 && value < 1440)) throw new Error("Backup has an invalid planner time.");
+    if (!["scheduled", "worked", "training", "leave"].includes(entry.status)) throw new Error("Backup has an invalid planner status.");
+    if (!Number.isFinite(entry.breakMinutes) || entry.breakMinutes < 0 || entry.breakMinutes > 1440) throw new Error("Backup has an invalid break duration.");
+    if (entry.durationMinutesOverride !== undefined && (!Number.isFinite(entry.durationMinutesOverride) || entry.durationMinutesOverride < 0)) throw new Error("Backup has an invalid duration.");
+    textValue(entry.notes, "Planner notes");
+  }
+  return structuredClone(data);
+}
+
+async function previewBackupFile(){
+  pendingBackup = null; byId("applyBackup").disabled = true;
+  const file = byId("restoreBackupFile").files[0]; if (!file) return;
+  if (file.size > 10000000) throw new Error("Backup imports are limited to 10 MB.");
+  let data; try { data = JSON.parse(await file.text()); } catch { throw new Error("The backup is not valid JSON."); }
+  pendingBackup = validateBackup(data);
+  const profile = data.settings.find(row => row.key === "profile") || {};
+  byId("backupPreview").textContent = `${profile.jobTitle || "Untitled position"}\n${data.shifts.length} shift records · ${data.settings.find(row => row.key === "plannerEntries")?.entries?.length || 0} planner entries\nRestoring replaces this edition’s saved configuration, records and planner. Export your current backup first.`;
+  byId("applyBackup").disabled = !!currentShift;
+}
+
+async function applyBackup(){
+  if (currentShift) throw new Error("Finish the active shift before restoring a backup.");
+  if (!pendingBackup) throw new Error("Choose and review a valid backup first.");
+  if (!confirm("Replace this edition’s local position, shifts and planner with the reviewed backup? Export the current backup first if you need to keep it.")) return;
+  const data = validateBackup(pendingBackup); const db = await openDB();
+  await new Promise((resolve, reject) => {
+    const tx = db.transaction([STORE_SETTINGS, STORE_SHIFTS], "readwrite");
+    const settings = tx.objectStore(STORE_SETTINGS); const shifts = tx.objectStore(STORE_SHIFTS);
+    settings.clear(); shifts.clear(); data.settings.forEach(row => settings.put(row)); data.shifts.forEach(row => shifts.put(row));
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onabort = tx.onerror = () => { db.close(); reject(tx.error || new Error("Backup could not be restored.")); };
+  });
+  location.reload();
+}
+
+function clearClockControls(prefix){
+  for (const part of ["Hour", "Minute", "AmPm"]) {
+    const select = els[`planner${prefix}${part}`];
+    if (![...select.options].some(option => option.value === "")) {
+      const option = document.createElement("option"); option.value = ""; option.textContent = "—"; select.prepend(option);
+    }
+    select.value = ""; select.required = true;
+  }
+}
+
+function bindAsync(id, callback, event = "click"){
+  byId(id).addEventListener(event, async () => {
+    try { await callback(); }
+    catch (error) {
+      if (["previewImport", "importFile", "applyImport"].includes(id)) byId("importPreview").textContent = error.message;
+      if (["restoreBackupFile", "applyBackup"].includes(id)) byId("backupPreview").textContent = error.message;
+      showAppMessage(error.message || String(error), true);
+      if (id === "savePosition") alert(error.message || String(error));
+    }
+  });
+}
+
+async function setupPosition(){
+  positionMaterial = await getPositionMaterial();
+  bindAsync("positionSetupBtn", openPositionSetup);
+  byId("closePosition").addEventListener("click", () => byId("positionDialog").close());
+  bindAsync("savePosition", savePositionForm);
+  byId("addReference").addEventListener("click", () => addReferenceEditor());
+  byId("addQuestion").addEventListener("click", () => addQuestionEditor());
+  bindAsync("previewImport", previewPositionImport);
+  bindAsync("applyImport", applyReviewedImport);
+  byId("importText").addEventListener("input", () => { byId("importFile").value = ""; pendingPositionImport = null; byId("applyImport").disabled = true; byId("importPreview").textContent = "Input changed. Preview again before applying."; });
+  bindAsync("importFile", async () => {
+    pendingPositionImport = null; byId("applyImport").disabled = true;
+    const file = byId("importFile").files[0]; if (!file) return;
+    if (!/\.(json|txt|md)$/i.test(file.name)) throw new Error("Choose a JSON, TXT or Markdown file.");
+    if (file.size > 2000000) throw new Error("Position imports are limited to 2 MB.");
+    byId("importText").value = await file.text(); byId("importPreview").textContent = "File loaded. Preview and review before applying.";
+  }, "change");
+  bindAsync("exportPosition", async () => downloadJSON(await currentPositionPackage(), "Work-Shift-Guide-Position.json"));
+  bindAsync("exportBlankTemplate", () => downloadJSON(blankPositionPackage(), "position-template.json"));
+  bindAsync("exportBackup", async () => downloadJSON(await readBackup(), "Work-Shift-Guide-Backup.json"));
+  bindAsync("restoreBackupFile", previewBackupFile, "change");
+  bindAsync("applyBackup", applyBackup);
+  byId("checkAnswers").addEventListener("click", checkPositionAnswers);
+  renderPositionReferences(); await refreshPositionSummary();
+}
+
+window.addEventListener("unhandledrejection", event => showAppMessage(`Could not save or load local data: ${event.reason?.message || event.reason}. Keep this page open and export a backup if available.`, true));
+
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Work Shift Guide blank clipboard">
+  <rect width="512" height="512" rx="108" fill="#0f1216"/>
+  <rect x="132" y="116" width="248" height="304" rx="26" fill="#edf3f5"/>
+  <rect x="190" y="92" width="132" height="58" rx="20" fill="#72d4c4" stroke="#0f1216" stroke-width="14"/>
+  <g fill="none" stroke="#40586a" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="172" y="201" width="27" height="27" rx="5"/>
+    <path d="M228 214.5h103"/>
+    <rect x="172" y="271" width="27" height="27" rx="5"/>
+    <path d="M228 284.5h103"/>
+    <rect x="172" y="341" width="27" height="27" rx="5"/>
+    <path d="M228 354.5h77"/>
+  </g>
+</svg>

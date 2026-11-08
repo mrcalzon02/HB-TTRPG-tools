@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f1216">
+<meta name="description" content="A blank, local-first Work Shift Guide. Configure a new position, import duties and reference notes, plan shifts and save work records.">
+<title>Work Shift Guide</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<script defer src="app.js"></script>
+<script defer src="position.js"></script>
+</head>
+<body>
+<div class="topbar">
+<div class="brandrow">
+<div>
+<h1 id="guideTitle">Work Shift Guide</h1>
+<div class="subtle" id="today"></div>
+</div>
+<div class="status" id="shiftStatus">No active shift</div>
+</div>
+</div>
+<main class="app">
+<div id="appMessage" class="panel" role="status" hidden></div>
+<section class="panel position-summary" aria-labelledby="positionHeading">
+<div class="section-title"><h2 id="positionHeading">Ready for a new position</h2><span class="badge" id="positionState">Blank edition</span></div>
+<p class="subtle" id="positionIdentity">Add a job title and your own work instructions to begin.</p>
+<div class="subtle" id="positionCounts">0 areas · 0 tasks · 0 references</div>
+</section>
+<section class="panel hero-grid">
+<div>
+<div class="subtle">Elapsed work time</div>
+<div class="shift-time" id="shiftTime">00:00</div>
+<div class="subtle" id="startedAt">Configure your position, then start when work begins.</div>
+<div class="action-row">
+<button class="btn primary" id="startBtn" disabled>Start Work</button>
+<button class="btn ghost" id="editWorkBtn">Edit Work</button>
+<button class="btn ghost" id="positionSetupBtn">Position Setup</button>
+<button class="btn ghost" id="settingsBtn">Settings</button>
+<button class="btn ghost" id="plannerBtn" type="button">Shift Planner</button><button class="btn ghost" id="historyBtn">History</button>
+</div>
+</div>
+<div>
+<div class="subtle">Daily workflow</div>
+<p><strong>Work from the procedure below. Review your configured duties before starting.</strong></p>
+<p class="subtle">Only record exceptions, blocked work, damage, shortages, hazards, or other irregular conditions. Sign off once at the end.</p>
+</div>
+</section>
+<section class="panel">
+<div class="section-title">
+<h2>Daily Route &amp; Procedure</h2>
+<span class="badge">Reference list</span>
+</div>
+<div id="routeList"></div>
+</section>
+<section class="panel">
+<div class="section-title">
+<h2>Exceptions This Shift</h2>
+<span class="badge">Only record what went wrong</span>
+</div>
+<div id="issuesList"></div>
+</section>
+<section class="panel" aria-labelledby="referenceHeading">
+<div class="section-title"><h2 id="referenceHeading">Position References</h2><span class="badge">Your material</span></div>
+<p class="subtle" id="readingEstimate">No reading assigned</p>
+<div id="positionReferences"></div>
+<details><summary>Configured requirements &amp; site notes</summary><h3>Requirements</h3><div id="siteRequirementSummary"></div><h3>Protective-action notes</h3><div id="siteShelterPlanSummary"></div></details>
+<details class="intake-notes"><summary>Source notes awaiting review</summary><p class="subtle">Imported plain text is kept here until you turn it into duties or reference material in Position Setup / Edit Work.</p><div class="plain-text" id="intakeNotesView">No source notes loaded.</div></details>
+</section>
+<details class="panel"><summary><strong>Knowledge Check</strong></summary><p class="subtle">Questions come from the position material you enter or import.</p><div id="positionQuiz"></div><button class="btn ghost" id="checkAnswers" disabled type="button">Check Answers</button><pre class="plain-text" id="quizResult">No knowledge check loaded.</pre></details>
+<details class="panel"><summary><strong>Position files &amp; backups</strong></summary>
+<p class="subtle">Position files include your saved configuration, duties and references. Full backups also contain names, work history and planner entries.</p>
+<div class="action-row"><button class="btn ghost" id="exportBlankTemplate" type="button">Download Blank Template</button><button class="btn ghost" id="exportPosition" type="button">Export Position</button><button class="btn ghost" id="exportBackup" type="button">Export Backup</button></div>
+<label>Restore a full backup<input id="restoreBackupFile" type="file" accept=".json,application/json"></label><pre class="plain-text" id="backupPreview">No backup selected.</pre><button class="btn warn" id="applyBackup" disabled type="button">Restore Reviewed Backup</button>
+</details>
+<details class="panel about-guide" id="workShiftGuideAbout"><summary><strong>About this guide · License · Local data</strong></summary><div class="about-body">
+<h3>Work Shift Guide — Blank Edition 1.0.0</h3><p>Created by Christopher Vardeman. This edition provides the original work-route editor, shift timer, exception log, sign-off records, history and planner with an empty position and reference library. Configure it with material appropriate to your new job.</p>
+<p><a href="https://www.linkedin.com/in/christopher-vardeman-907a4085/" target="_blank" rel="noopener noreferrer">Creator on LinkedIn</a> · <a href="../../software.html#work-shift-guide">Software catalog</a></p>
+<h3>Free reference-use license</h3>
+    <p>© 2026 Christopher Vardeman. Permission is granted, without charge, to use this guide for personal learning, education and internal workplace reference. You may share an unmodified copy for these purposes if you preserve creator attribution, source citations, this license and the disclaimer. Selling, rebranding, or redistributing modified versions requires prior permission from the creator. All rights not expressly granted are reserved. Third-party materials, trademarks, official publications and linked content retain their respective ownership and terms.</p>
+    <p class="about-small">This is a limited free-use permission for this guide, not a government certification, an employer policy, or a license to practice a regulated profession.</p>
+
+    <h3>Local data</h3><p>Settings, position materials and work records are stored on this device in this browser. Imports are read locally; exports are downloaded locally. Browser resets and clearing site data can erase records. Use Export Backup before changing devices. Backup files contain your entered information; the distributed blank package contains none.</p>
+<h3>Notice</h3><p>The application is provided AS IS and AS AVAILABLE, without warranty of accuracy, completeness or fitness for a particular purpose, to the extent permitted by law. User-supplied material does not replace approved workplace procedures or required training. This is an independent project and does not certify a job, employer or user.</p>
+</div></details>
+</main>
+<div class="footer-actions">
+<div class="inner">
+<button class="btn warn" disabled="" id="addIssueBtn">+ Issue / Exception</button>
+<button class="btn primary" disabled="" id="finishBtn">Finish &amp; Sign Off</button>
+<button class="btn ghost" onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button>
+<button class="btn ghost" onclick="document.querySelector('#routeList').scrollIntoView({behavior:'smooth'})">Route</button>
+</div>
+</div>
+<dialog class="planner-dialog" id="plannerDialog">
+<div class="dialog-body planner-body">
+<div class="planner-title-row">
+<div>
+<h2>Shift Planner / Work Log</h2>
+<p class="subtle">Plan shifts, record worked hours, and display them across a monthly calendar.</p>
+</div>
+<button class="btn ghost compact-btn" id="closePlanner" type="button">Close</button>
+</div>
+<div class="planner-toolbar">
+<label>
+        Calendar month
+        <input id="plannerMonth" type="month"/>
+</label>
+<label>
+        Time zone
+        <select id="plannerTimeZone"></select>
+</label>
+<div class="planner-toolbar-actions">
+<button class="btn ghost" id="plannerPrevMonth" type="button">← Previous</button>
+<button class="btn ghost" id="plannerThisMonth" type="button">This Month</button>
+<button class="btn ghost" id="plannerNextMonth" type="button">Next →</button>
+</div>
+</div>
+<div class="planner-summary" id="plannerSummary"></div>
+<div class="planner-calendar-shell">
+<div aria-hidden="true" class="planner-weekdays">
+<span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+</div>
+<div aria-label="Monthly shift calendar" class="planner-calendar" id="plannerCalendar"></div>
+</div>
+<details class="planner-entry-editor" open="">
+<summary>Add / edit shift entry</summary>
+<form id="plannerEntryForm">
+<input id="plannerEntryId" type="hidden"/>
+<div class="form-grid two planner-entry-grid">
+<label>
+            Day
+            <input id="plannerDate" required="" type="date"/>
+</label>
+<label>
+            Entry type
+            <select id="plannerStatus">
+<option value="scheduled">Scheduled</option>
+<option value="worked">Worked</option>
+<option value="training">Training</option>
+<option value="leave">Leave / Other</option>
+</select>
+</label>
+</div>
+<div class="planner-time-row">
+<fieldset class="planner-time-fieldset">
+<legend>Start time</legend>
+<select aria-label="Start hour" id="plannerStartHour"></select>
+<span>:</span>
+<select aria-label="Start minute" id="plannerStartMinute"></select>
+<select aria-label="Start AM or PM" id="plannerStartAmPm">
+<option>AM</option><option>PM</option>
+</select>
+</fieldset>
+<fieldset class="planner-time-fieldset">
+<legend>End time</legend>
+<select aria-label="End hour" id="plannerEndHour"></select>
+<span>:</span>
+<select aria-label="End minute" id="plannerEndMinute"></select>
+<select aria-label="End AM or PM" id="plannerEndAmPm">
+<option>AM</option><option>PM</option>
+</select>
+</fieldset>
+</div>
+<div class="form-grid two">
+<label>
+            Unpaid break (minutes)
+            <input id="plannerBreakMinutes" max="720" min="0" step="1" type="number" value="0"/>
+</label>
+<div class="planner-duration-preview">
+<span class="subtle">Calculated duration</span>
+<strong id="plannerDurationPreview">Choose start and end times</strong>
+</div>
+</div>
+<label>
+          Notes
+          <textarea id="plannerNotes" placeholder="Optional — assignment, location, training, coverage, exception, etc."></textarea>
+</label>
+<div class="dialog-actions planner-entry-actions">
+<button class="btn ghost" id="plannerClearEntry" type="button">Clear</button>
+<button class="btn danger" hidden="" id="plannerDeleteEntry" type="button">Delete</button>
+<button class="btn primary" type="submit">Save Shift</button>
+</div>
+</form>
+</details>
+<div class="planner-log-section">
+<div class="section-title">
+<h3>Selected month entries</h3>
+<span class="badge" id="plannerEntryCount">0 entries</span>
+</div>
+<div id="plannerEntryList"></div>
+</div>
+<div class="guidance-card planner-note">
+<p><strong>Time-zone behavior:</strong> the selected zone is the schedule's operating zone and is used when live completed shifts are recorded automatically. Manual calendar entries are wall-clock entries and remain at the entered day/time if the schedule zone is later changed.</p>
+</div>
+</div>
+</dialog><dialog id="issueDialog">
+<form class="dialog-body" id="issueForm">
+<h2>Record Issue / Exception</h2>
+<div class="form-grid two">
+<label>Area
+          <select id="issueArea" required=""></select>
+</label>
+<label>Issue type
+          <select id="issueType" required="">
+<option>Damage</option>
+<option>Supply shortage</option>
+<option>Blocked work</option>
+<option>Hazard</option>
+<option>Equipment</option>
+<option>Access</option>
+<option>Other</option>
+</select>
+</label>
+</div>
+<label>What did you observe?
+        <textarea id="issueNote" placeholder="Describe the exception or blocked work." required=""></textarea>
+</label>
+<label>Immediate action taken
+        <textarea id="issueImmediateAction" placeholder="Optional action or follow-up."></textarea>
+</label>
+<div class="form-grid two">
+<label class="checkline"><input id="issueContact" type="checkbox"/> Contact / team notified</label>
+<label class="checkline"><input id="issueManagement" type="checkbox"/> Management notified</label>
+</div>
+<div class="dialog-actions">
+<button class="btn ghost" id="closeIssue" type="button">Cancel</button>
+<button class="btn primary" type="submit">Save Exception</button>
+</div>
+</form>
+</dialog>
+<dialog id="reviewDialog">
+<div class="dialog-body">
+<h2>Review &amp; Sign Off</h2>
+<div class="form-grid two">
+<label>Completed by
+          <input autocomplete="name" id="signoffName" placeholder="Your name"/>
+</label>
+<label>Site / building name (optional)
+          <input id="siteName" placeholder="Optional"/>
+</label>
+</div>
+<div class="review">
+<pre id="reviewText"></pre>
+</div>
+<div class="dialog-actions">
+<button class="btn ghost" id="closeReview" type="button">Back</button>
+<button class="btn primary" id="completeShift" type="button">Sign Off &amp; Save TXT</button>
+</div>
+</div>
+</dialog>
+<dialog class="wide-dialog" id="workEditorDialog">
+<div class="dialog-body">
+<div class="section-title">
+<h2>Edit Daily Work Route</h2>
+<span class="badge">Saved locally</span>
+</div>
+<p class="subtle">Edit the work procedure without changing application code. Put one task or note on each line. Route edits are disabled while a shift is active so a signed shift keeps a stable scope.</p>
+<div class="work-editor-list" id="workEditorList"></div>
+<div class="action-row">
+<button class="btn ghost" id="addWorkArea" type="button">+ Add Area</button>
+<button class="btn ghost" id="resetWorkRoute" type="button">Clear Route</button>
+</div>
+<div class="dialog-actions">
+<button class="btn ghost" id="closeWorkEditor" type="button">Cancel</button>
+<button class="btn primary" id="saveWorkRoute" type="button">Save Work Route</button>
+</div>
+</div>
+</dialog>
+<dialog id="historyDialog">
+<div class="dialog-body">
+<h2>Completed Shift History</h2>
+<div id="historyList"></div>
+<div class="dialog-actions">
+<button class="btn primary" id="closeHistory" type="button">Close</button>
+</div>
+</div>
+</dialog>
+<dialog id="settingsDialog">
+<form class="dialog-body" id="settingsForm">
+<h2>Settings</h2><label>
+  Guide / form name
+  <input id="settingsGuideName" maxlength="80" placeholder="Work Shift Guide"/>
+<span class="subtle">Changes the visible guide title and future signed work-record names.</span>
+</label>
+<label>Default sign-off name
+        <input autocomplete="name" id="settingsName" placeholder="Your name"/>
+</label>
+<label>Site / building name
+        <input id="settingsSite" placeholder="Optional"/>
+</label><label>
+  Schedule time zone
+  <select id="settingsTimeZone"></select>
+<span class="subtle">Used by the shift planner and when completed live shifts are recorded to the calendar.</span>
+</label><label>
+  Site-required credentials / signoffs
+  <textarea id="settingsSiteRequirements" placeholder="Enter the new position’s requirements, one per line."></textarea>
+<span class="subtle">Organizational reminder only. One requirement per line; use your employer's authoritative system for actual certification records.</span>
+</label><label>Site shelter-in-place / protective-action notes<textarea id="settingsShelterPlan" placeholder="Add the new site’s approved emergency and protective-action notes."></textarea><span class="subtle">Site-specific reminder only. The facility emergency action plan and official emergency instructions control.</span></label>
+<div class="dialog-actions">
+<button class="btn ghost" id="closeSettings" type="button">Cancel</button>
+<button class="btn primary" type="submit">Save Settings</button>
+</div>
+</form>
+</dialog>
+<dialog class="wide-dialog" id="positionDialog"><div class="dialog-body">
+<div class="section-title"><h2>Position Setup</h2><button class="btn ghost" id="closePosition" type="button">Close</button></div>
+<p class="subtle">Start with a job title, add reference material, then use Edit Work for duties. All fields start empty.</p>
+<div class="form-grid two"><label>Job title<input id="positionJobTitle" maxlength="200" autocomplete="off"></label><label>Department / team<input id="positionDepartment" maxlength="200" autocomplete="off"></label></div>
+<div class="form-grid two"><label>Guide name (optional)<input id="positionGuideName" maxlength="80" placeholder="Work Shift Guide" autocomplete="off"></label><label>Site / workplace (optional)<input id="positionSite" maxlength="200" autocomplete="off"></label></div>
+<label>Time zone (optional)<input id="positionTimeZone" maxlength="200" placeholder="Use this device’s time zone" autocomplete="off"></label>
+<details><summary>Position requirements &amp; emergency notes</summary><label>Required training, credentials or signoffs<textarea id="positionRequirements" placeholder="One requirement per line"></textarea></label><label>Approved site emergency / protective-action notes<textarea id="positionShelterPlan"></textarea></label></details>
+<details><summary>Reference material</summary><div id="referenceEditor"></div><button class="btn ghost" id="addReference" type="button">+ Add Reference</button></details>
+<details><summary>Knowledge check</summary><div id="questionEditor"></div><button class="btn ghost" id="addQuestion" type="button">+ Add Question</button></details>
+<details><summary>Source notes for infill</summary><label>Collected job description, procedure notes or other source text<textarea class="large-text" id="positionIntakeNotes"></textarea></label></details>
+<div class="dialog-actions"><button class="btn primary" id="savePosition" type="button">Save Position</button></div>
+<details class="position-import" open><summary><strong>Import / Ingest</strong></summary>
+<p class="subtle">Choose a position JSON package or paste a job description. TXT and Markdown are stored as source notes for review. PDF, Word and images must first be converted to text.</p>
+<label>Choose file<input id="importFile" type="file" accept=".json,.txt,.md,application/json,text/plain,text/markdown"></label>
+<label>Or paste position JSON / source text<textarea class="large-text" id="importText" spellcheck="false"></textarea></label>
+<button class="btn ghost" id="previewImport" type="button">Preview Import</button>
+<pre class="import-preview plain-text" id="importPreview" aria-live="polite">No import staged.</pre>
+<p class="subtle">Apply replaces the saved position, duties and references with the preview. Existing shift history and planner entries stay saved. Save or export any current setup edits before importing.</p>
+<button class="btn primary" id="applyImport" disabled type="button">Apply Reviewed Import</button>
+</details>
+</div></dialog>
+</body>
+</html>
