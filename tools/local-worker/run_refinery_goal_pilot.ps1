@@ -74,7 +74,7 @@ try {
   } catch {throw ('Qwen smoke test failed; no Blender edits: '+$_.Exception.Message)}
   Checkpoint 'fetch-trusted-pilot-sources'
   [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12
-  foreach($name in @('goal_water_purifier.py','refine_existing_purifier.py','verify_machine.py')) {
+  foreach($name in @('goal_water_purifier.py','refine_existing_purifier.py','verify_machine.py','inspect_baseline.py')) {
     $uri="https://raw.githubusercontent.com/$env:GITHUB_REPOSITORY/$env:GITHUB_SHA/tools/refinery-agent/$name"
     $dest=Join-Path $toolsDir $name
     $found=$false

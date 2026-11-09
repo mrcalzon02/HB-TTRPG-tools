@@ -16,6 +16,7 @@ import shutil
 import subprocess
 import sys
 import time
+import traceback
 import urllib.request
 
 GOALS = (
@@ -93,12 +94,12 @@ def safe_actions(data, goal, limit=8):
         else:
             start, end = proposed.get("start"), proposed.get("end")
             radius=proposed.get("radius", .08)
-            if not position(start) or not position(end) or not number(radius, .025, .24):
+            if not position(start) or not position(end) or not number(radius, .025, .34 if kind == "tube" else .24):
                 continue
             distance=math.dist(start,end)
             if not .10 <= distance <= 1.6:
                 continue
-            if kind == "tube" and not (.12 <= radius <= .30):
+            if kind == "tube" and not (.12 <= radius <= .32):
                 continue
             p.update(start=start, end=end, radius=radius)
         result.append(p)
@@ -155,16 +156,28 @@ def validate_plan(doc):
 
 
 def action_prompt(task, stage, previous, audit):
+    anchors = {
+        "load_path": ("vessel", "pillar", "frame", "support", "roof"),
+        "filter_pump_path": ("filter", "cartridge", "pump", "motor", "vessel"),
+        "pipe_interfaces": ("water", "inlet", "outlet", "mouth", "neck", "receiver", "pipe"),
+        "controls_service": ("control", "crt", "cable", "screen", "button", "service"),
+    }.get(stage["id"], ())
+    component_hints = [
+        {"name": x["name"], "center": x["center_xyz"], "bounds": x["bounds_xyz"]}
+        for x in audit.get("components", [])
+        if any(k in x["name"].lower() for k in anchors)
+    ][:14]
     return ("You are refining a PRE-EXISTING editable 3x3-tile Factorio Water Purifier Blender machine. "
             "The original model already has vessel, filters, motor, pipe mouths and green CRT. "
             "Do not delete or replace any original part. Preserve the camera and the mouth planes "
             "raw_water_input at X=-1.5 Y=-.78 Z=.36; purified_water_output at X=+1.5 Y=-.62 Z=.36. "
             "Native Factorio prototype connection coordinates remain unknown: NEVER INVENT them. "
-            "Choose 2 to 6 justified, physically joined additional geometry components for ONE subgoal. "
+            "Choose 3 to 6 justified, physically joined functional geometry components for ONE subgoal. "
             "No labels, signs, etched text, spare floating rings, arbitrary bolts or unsupported piping. "
             "Do not change outer footprint. Current machine anchor Z=0. The primary vessel is centered near X=0 Y=.1. "
             f"Goal ID {stage['id']}: {task}\nSpecific plan: {stage['intent']}. Acceptance: {stage['acceptance_check']}. "
-            f"Prior additions count {len(previous)}. Most recent verified Blender measurement summary: {json.dumps(audit, separators=(',',':'))[:800]}. "
+            f"Prior additions count {len(previous)}. Exact measured source object coordinates for this goal: {json.dumps(component_hints, separators=(',',':'))[:1500]}. "
+            f"Most recent verified Blender summary: {json.dumps({k:v for k,v in audit.items() if k!='components'}, separators=(',',':'))[:500]}. "
             "Only offer operations box(position[x,y,z],size[dx,dy,dz]), "
             "cylinder(position,radius,depth,axis X/Y/Z), beam(start,end,radius), "
             "tube(start,end,radius) where tube is a real hollow straight section, "
@@ -215,21 +228,90 @@ def main(argv=None):
     state={"schema":1,"source_sha":a.source_sha,"baseline_sha256":original_sha,
            "machine":"water-purifier","model":a.model,"stage":"planning","completed_goals":[],
            "state":"running","human_visual_review":"pending","native_factorio_ports_verified":False}
+    accumulated=[]
+    # Never rebuild or overwrite verified earlier stages. The OLD-CORE30 runner
+    # preserves these original per-goal Blender sources between workflow attempts.
+    if checkpoint.exists():
+        old=json.loads(checkpoint.read_text(encoding="utf-8"))
+        if old.get("source_sha")!=a.source_sha or old.get("baseline_sha256")!=original_sha:
+            raise RuntimeError("Existing saved goal checkpoint is from different authoritative source; refusing overwrite")
+        completed=old.get("completed_goals",[])
+        if completed != [code for code,_ in GOALS][:len(completed)]:
+            raise RuntimeError("Prior completed-goal order is not a known verified prefix")
+        for idx,code in enumerate(completed,1):
+            slug=f"goal-{idx:02d}-{code}"
+            dest=out/slug
+            candidate=dest/"water-purifier-pilot.blend"
+            glb=dest/"water-purifier-pilot.glb"
+            view=dest/"inspection_3quarter.png"
+            audit=json.loads((dest/"geometry_audit.json").read_text(encoding="utf-8"))
+            verification=json.loads((dest/"verify.json").read_text(encoding="utf-8"))
+            geometry=json.loads((dest/"geometry.json").read_text(encoding="utf-8"))
+            if not (audit.get("pass") and verification.get("pass") and
+                    audit.get("baseline_sha256")==original_sha and
+                    audit.get("blend_sha256")==digest(candidate) and
+                    audit.get("glb_sha256")==digest(glb) and
+                    audit.get("preview_sha256")==digest(view) and
+                    verification.get("blend_sha256")==digest(candidate) and
+                    verification.get("glb_sha256")==digest(glb) and
+                    geometry.get("baseline_sha256")==original_sha and
+                    audit.get("inferred_part_count")==len(geometry.get("additions",[]))):
+                raise RuntimeError("Prior stage checkpoint no longer matches native saved Blender/GLB/render: "+slug)
+            accumulated=geometry["additions"]
+            visible=report/"water-purifier-goal-pilot"/slug
+            visible.mkdir(parents=True,exist_ok=True)
+            for filename in ("water-purifier-pilot.blend","water-purifier-pilot.glb",
+                             "inspection_3quarter.png","geometry_audit.json","verify.json",
+                             "inference.json","geometry.json","blender-build.log"):
+                f=dest/filename
+                if f.exists():shutil.copy2(f,visible/f.name)
+            print("MH7_GOAL_RESUMED "+slug+" native artifacts rechecked",flush=True)
+        state.update({k:v for k,v in old.items() if k.startswith("last_")})
+        state["completed_goals"]=list(completed)
     atomic(checkpoint,state)
     atomic(report/"pilot-progress.json",state)
-    plan_receipt=out/"plan-inference.json"
-    plan=validate_plan(qwen(a.endpoint,a.model,planning_prompt(),plan_receipt,1100))
-    atomic(out/"GOAL_PLAN.json",{"goals":plan,"source":"local-qwen","required_goal_count":4})
-    accumulated=[];metrics={"baseline_verified":True,"prototype_ports_verified":False,"visual_review":"pending"}
+    plan_path=out/"GOAL_PLAN.json"
+    if plan_path.exists() and state["completed_goals"]:
+        saved_plan=json.loads(plan_path.read_text(encoding="utf-8"))
+        plan=validate_plan({"subgoals": saved_plan["goals"]})
+        print("MH7_GOAL_PLAN_REUSED source=local-qwen previous_verified="+str(len(state["completed_goals"])),flush=True)
+    else:
+        plan=validate_plan(qwen(a.endpoint,a.model,planning_prompt(),out/"plan-inference.json",1100))
+        atomic(plan_path,{"goals":plan,"source":"local-qwen","required_goal_count":4})
+    inspection_path=out/"baseline-inspection.json"
+    if not inspection_path.exists() or not state["completed_goals"]:
+        execute([a.blender,"--background","--threads","4","--python-exit-code","1",
+                 "--python",root/"inspect_baseline.py","--","--blend",base,
+                 "--out",inspection_path],out/"baseline-inspection.log",300)
+    measured=json.loads(inspection_path.read_text(encoding="utf-8"))
+    if measured.get("baseline_sha256") != original_sha or len(measured.get("components",[]))<20:
+        raise RuntimeError("Independent baseline inspection failed; component anchors unavailable")
+    metrics={"baseline_verified":True,"prototype_ports_verified":False,"visual_review":"pending",
+             "components":measured["components"]}
+    if state["completed_goals"]:
+        last=out/("goal-%02d-%s" % (len(state["completed_goals"]),state["completed_goals"][-1]))/"verify.json"
+        verified=json.loads(last.read_text(encoding="utf-8"))
+        metrics.update(object_count=verified["source_meshes"],bbox=verified["source_world_bounds"],
+                       new_parts=len(accumulated),native_pipe_alignment_verified=False)
     for i,(code,description) in enumerate(GOALS,1):
         goal=plan[i-1];slug=f"goal-{i:02d}-{code}"
+        if code in state["completed_goals"]:
+            continue
         dest=out/slug;dest.mkdir(parents=True,exist_ok=True)
         state.update(stage=slug,active_goal=code)
         atomic(checkpoint,state);atomic(report/"pilot-progress.json",state)
-        reply=qwen(a.endpoint,a.model,action_prompt(description,goal,accumulated,metrics),dest/"inference.json",1450)
-        actions=safe_actions(reply,code)
-        if len(actions)<1:
-            state.update(state="blocked",blocker=f"Qwen supplied no valid geometry for {code}")
+        actions=[]
+        for generation_attempt in (1,2):
+            extra=("" if generation_attempt==1 else " The previous candidate failed the safe geometry schema; use centers inside +/-1.2, legal radii, no unsupported projections.")
+            reply=qwen(a.endpoint,a.model,
+                       action_prompt(description,goal,accumulated,metrics)+extra,
+                       dest/("inference-attempt-%d.json" % generation_attempt),1450)
+            actions=safe_actions(reply,code)
+            if len(actions)>=2:
+                shutil.copy2(dest/("inference-attempt-%d.json" % generation_attempt),dest/"inference.json")
+                break
+        if len(actions)<2:
+            state.update(state="blocked",blocker=f"Qwen supplied fewer than 2 valid geometry operations for {code}; see recorded attempts")
             atomic(checkpoint,state);atomic(report/"pilot-progress.json",state)
             raise RuntimeError(state["blocker"])
         accumulated+=actions
@@ -248,7 +330,8 @@ def main(argv=None):
             raise RuntimeError(f"Geometric readback failed for {code}")
         metrics={"object_count":verify["source_meshes"], "new_parts":actual["inferred_part_count"],
                  "bbox":verify["source_world_bounds"],"frozen_base_sha":original_sha,
-                 "native_pipe_alignment_verified":False,"human_visual_review":"pending"}
+                 "native_pipe_alignment_verified":False,"human_visual_review":"pending",
+                 "components":measured["components"]}
         state["completed_goals"].append(code)
         state["last_saved_blend_sha256"]=digest(candidate)
         state["last_render_sha256"]=digest(dest/"inspection_3quarter.png")
@@ -277,4 +360,17 @@ def main(argv=None):
     print("MH7_GOAL_PILOT_CANDIDATE_SAVED",flush=True)
 
 if __name__=="__main__":
-    main()
+    try:
+        main()
+    except Exception as exc:
+        details=traceback.format_exc()
+        print("MH7_GOAL_PILOT_FATAL "+str(exc),flush=True)
+        print(details,flush=True)  # stdout: Windows PowerShell must not truncate stderr ErrorRecord
+        try:
+            args=sys.argv
+            report_dir=Path(args[args.index("--report")+1])
+            atomic(report_dir/"pilot-error.json",{"error":str(exc),"traceback":details,
+                   "phase":"failed","last_progress_file":"pilot-progress.json"})
+        except Exception:
+            pass
+        raise SystemExit(1)
