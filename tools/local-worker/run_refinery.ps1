@@ -74,17 +74,16 @@ try {
     Write-Host "MH7 Python executable discovered: $python"
     Exec $python @('--version')
   }
-  foreach ($item in @(@('git',$git),@('python',$python),@('blender',$blender),@('ollama',$ollama))) { if (-not $item[1]) { throw "Missing existing $($item[0]) executable; do not install automatically." } }
+  foreach ($item in @(@('git',$git),@('python',$python),@('blender',$blender))) { if (-not $item[1]) { throw "Missing existing $($item[0]) executable; do not install automatically." } }
   if (@(Get-Process -Name blender -ErrorAction SilentlyContinue).Count -gt 0) {throw 'Existing Blender process on runner; refusing duplicate renderer.'}
   $os=Get-CimInstance Win32_OperatingSystem
   if ($os.FreePhysicalMemory -lt (6 * 1024 * 1024)) { throw 'Runner has less than six GiB free physical RAM.' }
   $disk=(Get-PSDrive -Name D -ErrorAction Stop)
   if ($disk.Free -lt 4GB) {throw 'Runner D: free disk below four GiB; no construction attempted.'}
+  # A busy desktop Ollama is protected, but does not block independent Blender study.
   $desktop=$null
   try {$desktop=Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/ps' -TimeoutSec 5} catch {}
-  if ($desktop -and @($desktop.models).Count -gt 0) {throw 'Desktop Ollama already has a model loaded; do not compete for its GPU.'}
-  $listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,11435)
-  try {$listener.Start()} catch {throw 'Independent Ollama port 11435 already owned; refusing to hijack it.'} finally {$listener.Stop()}
+  $desktopBusy=($desktop -and @($desktop.models).Count -gt 0)
   $reportState['tools']=@{git=$git;python=$python;blender=$blender;ollama=$ollama}
   $reportState.phase='download-pinned-helpers'
   $helpers=@('drive_refinery.py','build_machine.py','verify_machine.py','extract_parts.py','verify_part.py')
@@ -109,34 +108,52 @@ try {
   if ($actual -ne $pin) {throw 'Pinned Tech-Priests source did not check out.'}
   $reportState.source_sha=$actual
   Exec $python @((Join-Path $source 'docs\art\metallic-hydrogen-chain\validate_packet.py'))
+  # Discover an existing Qwen endpoint without installing a model/runtime.
+  # When missing, continue a provenance-labelled deterministic Blender pilot.
   $modelStore='D:\AI-Relocation\Ollama\models'
-  if (-not (Test-Path -LiteralPath $modelStore)) {throw 'Relocated local model store missing; no new downloads authorized.'}
-  $env:OLLAMA_MODELS=$modelStore
-  $env:OLLAMA_HOST='127.0.0.1:11435'
-  $env:OLLAMA_NO_CLOUD='1';$env:OLLAMA_MAX_LOADED_MODELS='1'
-  $env:OLLAMA_NUM_PARALLEL='1';$env:OLLAMA_CONTEXT_LENGTH='4096'
-  $env:OLLAMA_KEEP_ALIVE='30s';$env:OLLAMA_NO_PRUNE='1'
-  $reportState.phase='local-inference-preflight'
-  $ownedOllama=Start-Process -FilePath $ollama -ArgumentList 'serve' -WorkingDirectory $scriptDir -PassThru -WindowStyle Hidden -RedirectStandardOutput (Join-Path $report 'ollama.stdout.txt') -RedirectStandardError (Join-Path $report 'ollama.stderr.txt')
+  $selected=[pscustomobject]@{name='none-scripted-baseline';size=0}
+  $endpoint='none'
   $tags=$null
-  foreach ($delay in @(1,2,4,8,8,10)) {
-    Start-Sleep -Seconds $delay
-    $ownedOllama.Refresh()
-    if ($ownedOllama.HasExited) {throw 'Job-owned Ollama exited; inspect local stderr.'}
-    try { $tags=Invoke-RestMethod -Uri 'http://127.0.0.1:11435/api/tags' -TimeoutSec 6;break} catch {}
+  if (-not $desktopBusy) {
+    try { $tags=Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/tags' -TimeoutSec 6; $endpoint='http://127.0.0.1:11434' } catch {}
   }
-  if (-not $tags) {throw 'Job-owned Ollama did not start.'}
-  $candidates=@($tags.models | Where-Object {$_.size -gt 0 -and $_.name -match '(?i)qwen.*coder'} | Sort-Object size -Descending)
-  if ($candidates.Count -eq 0) { $candidates=@($tags.models | Where-Object {$_.size -gt 0 -and $_.name -match '(?i)qwen'} | Sort-Object size -Descending) }
-  if ($candidates.Count -eq 0) {throw 'No installed local Qwen model found; no download or fake inference.'}
-  $selected=$candidates[0]
+  if (-not $tags -and $ollama -and (Test-Path -LiteralPath $modelStore)) {
+    $listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,11435)
+    $portReady=$false
+    try {$listener.Start();$portReady=$true} catch {Write-Warning 'Model worker port busy; will not take control of it.'} finally {$listener.Stop()}
+    if ($portReady) {
+      $env:OLLAMA_MODELS=$modelStore
+      $env:OLLAMA_HOST='127.0.0.1:11435'
+      $env:OLLAMA_NO_CLOUD='1';$env:OLLAMA_MAX_LOADED_MODELS='1'
+      $env:OLLAMA_NUM_PARALLEL='1';$env:OLLAMA_CONTEXT_LENGTH='4096'
+      $env:OLLAMA_KEEP_ALIVE='30s';$env:OLLAMA_NO_PRUNE='1'
+      $reportState.phase='local-inference-preflight'
+      $ownedOllama=Start-Process -FilePath $ollama -ArgumentList 'serve' -WorkingDirectory $scriptDir -PassThru -WindowStyle Hidden -RedirectStandardOutput (Join-Path $report 'ollama.stdout.txt') -RedirectStandardError (Join-Path $report 'ollama.stderr.txt')
+      foreach ($delay in @(1,2,4,8,8,10)) {
+        Start-Sleep -Seconds $delay
+        $ownedOllama.Refresh()
+        if ($ownedOllama.HasExited) { break }
+        try { $tags=Invoke-RestMethod -Uri 'http://127.0.0.1:11435/api/tags' -TimeoutSec 6; $endpoint='http://127.0.0.1:11435';break } catch {}
+      }
+    }
+  }
+  if ($tags) {
+    $candidates=@($tags.models | Where-Object {$_.size -gt 0 -and $_.name -match '(?i)qwen.*coder'} | Sort-Object size -Descending)
+    if ($candidates.Count -eq 0) { $candidates=@($tags.models | Where-Object {$_.size -gt 0 -and $_.name -match '(?i)qwen'} | Sort-Object size -Descending) }
+    if ($candidates.Count -gt 0) {$selected=$candidates[0]}
+  }
+  if ($selected.name -eq 'none-scripted-baseline') {
+    $endpoint='none'
+    $reportState['inference_warning']='No accessible idle local Qwen service or existing Ollama executable. Scripted geometry only; Qwen revision pending.'
+    Write-Warning $reportState['inference_warning']
+  }
   $reportState.model=$selected.name
   $reportState['model_size_bytes']=$selected.size
   $reportState.phase='construction'
   $reportState | ConvertTo-Json -Depth 7 | Set-Content -LiteralPath (Join-Path $report 'refinery-preflight.json') -Encoding utf8
-  Publish 'refinery-agent-starting' @{stage='Qwen+Blender';model=$selected.name;complete=0;total=7}
+  Publish 'refinery-agent-starting' @{stage='Blender-construction';model=$selected.name;complete=0;total=7}
   $args=@((Join-Path $scriptDir 'drive_refinery.py'),'--repo',$source,'--out',$results,'--report',$report,
-      '--blender',$blender,'--endpoint','http://127.0.0.1:11435','--model',$selected.name,
+      '--blender',$blender,'--endpoint',$endpoint,'--model',$selected.name,
       '--source-sha',$pin,'--max-machines','7')
   $stdout=Join-Path $report 'refinery.stdout.log';$stderr=Join-Path $report 'refinery.stderr.log'
   $quoted=($args | ForEach-Object { '"'+($_ -replace '"','')+'"' }) -join ' '

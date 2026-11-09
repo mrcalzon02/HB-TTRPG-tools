@@ -76,6 +76,9 @@ def bounded_additions(data,footprint):
     return safe
 
 def qwen_refine(endpoint,model,task,registry,inventory,output):
+    if endpoint == 'none' or model.startswith('none-'):
+        put(Path(output)/'inference_receipt.json',{'state':'unavailable','model':model,'reason':'No accessible Qwen inference runtime on self-hosted Windows runner; scripted Blender geometry only.'})
+        return [],'unavailable'
     controls='small physically recessed green monochrome CRT and real buttons, no signs or writing'
     usr=(f"You are an industrial machinery designer augmenting an EXISTING editable Blender model.\n"
          f"Machine: {task['name']}, id={task['id']}, size={task['planned_footprint_tiles']} Factorio tiles.\n"
