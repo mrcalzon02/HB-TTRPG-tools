@@ -180,11 +180,11 @@ try{
       $verifiedProcess.new_process_meshes -lt 45 -or $verifiedProcess.glass_transmission -lt .7){
     throw 'Process construction and glass/animation PBR readback failed'
   }
-  Checkpoint 'four-direction-sprite-export'
+  Checkpoint 'single-canonical-factorio-sprite-export'
   $profile=Join-Path $out 'sprite-profile.json'
   $p=[ordered]@{schema=1;asset='fmpl-water-purifier';source='water-purifier-fmpl-process.blend';adapter=$null;
     source_size=256;sizes=@(64,128,256);samples=12;seed=4362;columns=4;fps=8;
-    directions=@(0,90,180,270);pivot=@(0,0,0);exclude_rotation=@();hide_render=@();animated_lights=@();
+    directions=@(0);pivot=@(0,0,0);exclude_rotation=@();hide_render=@();animated_lights=@();
     states=@{idle=@(1)}}
   $p | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $profile -Encoding ascii
   $sprites=Join-Path $out 'sprites'
@@ -198,8 +198,8 @@ try{
       '--','--out',$sprites) (Join-Path $out 'sprite-native-atlas.log')
   $qa=Get-Content -LiteralPath (Join-Path $sprites 'qa.json') -Raw | ConvertFrom-Json
   $reopen=Get-Content -LiteralPath (Join-Path $sprites 'reopen-qa.json') -Raw | ConvertFrom-Json
-  if($qa.passed -ne $true -or $qa.capture_count -ne 4 -or $qa.atlas_count -ne 3 -or $reopen.passed -ne $true){
-    throw 'Four direction frames / alpha / atlas / master readback failed'
+  if($qa.passed -ne $true -or $qa.capture_count -ne 1 -or $qa.atlas_count -ne 3 -or $qa.direction_count -ne 1 -or $reopen.passed -ne $true){
+    throw 'Single fixed Factorio 45-degree frame / alpha / atlas / master readback failed'
   }
   Checkpoint 'final-receipt'
   $b=Get-Content -LiteralPath $receipt -Raw | ConvertFrom-Json
@@ -209,6 +209,9 @@ try{
     refined_blend_sha256=$refined.derived_blend_sha256;
     refined_glb_sha256=$refined.glb_sha256;pbr_presets=$b.pbr_presets_imported;
     process_pbr_materials=$refined.materials_from_fmpl;
+    centered_pipe_fit_receipts=$refined.canonical_pipe_interfaces;
+    canonical_pipe_bore_diameter=.49;canonical_collar_diameter=.68;
+    native_pipe_cells_declared=$false;
     source_meshes_preserved=$verifiedProcess.preserved_original_meshes;
     process_meshes=$verifiedProcess.new_process_meshes;
     actual_glb_meshes=$verifiedProcess.reimported_glb_meshes;
@@ -216,7 +219,7 @@ try{
     agitator_keyframed=$true;steam_keyframed=$true;
     original_idle_render_sha256=$refined.idle_render_sha256;
     working_agitator_render_sha256=$refined.active_render_sha256;
-    four_direction_frames=4;atlases=3;sizes=@(64,128,256);
+    fixed_camera_angles=1;production_direction='north';camera_elevation_deg=45;camera_azimuth_deg=0;atlases=3;sizes=@(64,128,256);
     native_blend_reopened=$true;glb_reimported=$true;pipe_reference_count=2;
     external_greebles=$state.private_greebles;owner_approved=$false;native_ports_verified=$false;game_integrated=$false}
   $result | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $report 'FMPL_PRODUCTION_RESULTS.json') -Encoding utf8
@@ -228,10 +231,10 @@ try{
   if($env:HB_STATUS_SCRIPT -and (Test-Path -LiteralPath $env:HB_STATUS_SCRIPT -PathType Leaf)){
     try{
       . $env:HB_STATUS_SCRIPT
-      Set-HBStatus -Directory $report -Stage 'fmpl-candidate-produced-and-audited' -WorkResult 'passed' -Progress @{stage='candidate-produced-and-audited';four_directions=4;atlases=3} -Progressed
+      Set-HBStatus -Directory $report -Stage 'fmpl-candidate-produced-and-audited' -WorkResult 'passed' -Progress @{stage='candidate-produced-and-audited';one_direction=1;atlases=3} -Progressed
     }catch{Write-Warning 'FMPL live success telemetry delayed; GitHub job and artifact remain authoritative'}
   }
-  Write-Host 'FMPL_PRODUCTION_PASS: concrete PBR, glass-top keyed agitator, pump/filter flow, steam, real GLB, 4 static directions, 3 atlases'
+  Write-Host 'FMPL_PRODUCTION_PASS: corrected boiler camera and full-bore centered joint fittings; 1 angle, 3 RGBA sizes; Blender and GLB readback'
   exit 0
 }catch{
   $state.status='blocked';$state.error=$_.Exception.Message
