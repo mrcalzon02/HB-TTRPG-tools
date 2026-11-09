@@ -4,16 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Workbench export, Blender readiness, or full local-worker audit
+        description: Workbench export, Blender readiness, full audit, or a short live-status check
         type: choice
-        options: [blender, full, workbench]
+        options: [blender, full, workbench, status]
         default: blender
   push:
     branches: [main]
-    paths: ['.github/workflows/homebrew-local-worker.yml']
+    paths: ['.github/workflows/homebrew-local-worker.yml', 'tools/local-worker/**']
 
 permissions:
   contents: read
+  checks: write
 
 concurrency:
   group: old-core30-local-worker
@@ -35,12 +36,52 @@ jobs:
       run:
         shell: powershell -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
     steps:
-      - name: Test selected local-worker capabilities
+      - name: Start live worker status
+        id: status-start
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HB_STATUS_ONLY: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[worker-status-check]') }}
         run: |
           $ErrorActionPreference = 'Stop'
           $ProgressPreference = 'SilentlyContinue'
           if ($env:RUNNER_NAME -ne 'OLD-CORE30-homebrew') { throw 'Wrong runner; no changes made.' }
-          if ($env:HB_MODE -notin @('blender','full','workbench')) { throw 'Invalid diagnostic mode.' }
+          if ($env:HB_STATUS_ONLY -eq 'true') {
+            $env:HB_MODE='status'
+            'HB_MODE=status' | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          }
+          $root='D:\Runner\actions-runner'
+          if (-not (Test-Path -LiteralPath "$root\.runner")) { throw 'Expected runner configuration is missing.' }
+          $out=Join-Path $root ("_homebrew\reports\{0}-{1}" -f $env:GITHUB_RUN_ID,$env:GITHUB_RUN_ATTEMPT)
+          $support=Join-Path $out '_status-support'
+          New-Item -ItemType Directory -Force -Path $support | Out-Null
+          "HB_REPORT_DIR=$out" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          $statusScript=Join-Path $support 'worker_status.ps1'
+          "HB_STATUS_SCRIPT=$statusScript" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12
+          foreach ($name in @('worker_status.ps1','publish_status.ps1','test_worker_status.ps1')) {
+            $downloaded=$false
+            foreach ($delay in @(0,2,5)) {
+              if ($delay -gt 0) { Start-Sleep -Seconds $delay }
+              try {
+                $uri="https://raw.githubusercontent.com/$env:GITHUB_REPOSITORY/$env:GITHUB_SHA/tools/local-worker/$name"
+                Invoke-WebRequest -UseBasicParsing -Uri $uri -OutFile (Join-Path $support $name) -TimeoutSec 20
+                $downloaded=$true; break
+              } catch { Write-Warning "Status support download delayed: $name" }
+            }
+            if (-not $downloaded) { throw "Status support unavailable: $name. Task execution remains independent." }
+          }
+          . $statusScript
+          Initialize-HBStatus -Directory $out -Mode $env:HB_MODE
+          Start-HBStatusPublisher -Directory $out
+
+      - name: Test selected local-worker capabilities
+        id: work
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $ProgressPreference = 'SilentlyContinue'
+          if ($env:RUNNER_NAME -ne 'OLD-CORE30-homebrew') { throw 'Wrong runner; no changes made.' }
+          if ($env:HB_MODE -notin @('blender','full','workbench','status')) { throw 'Invalid diagnostic mode.' }
           $root = 'D:\Runner\actions-runner'
           if (-not (Test-Path -LiteralPath "$root\.runner")) { throw 'Expected D: runner configuration is missing.' }
           $work = Join-Path $root '_homebrew'
@@ -49,6 +90,18 @@ jobs:
           "HB_REPORT_DIR=$out" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
           $report = [ordered]@{schema_version=3;runner=$env:RUNNER_NAME;commit=$env:GITHUB_SHA;mode=$env:HB_MODE;started_utc=[DateTime]::UtcNow.ToString('o');stage='preflight';stages=[ordered]@{};tools=[ordered]@{};processes=[ordered]@{};changes=@();errors=@();installs=@();model_downloads=@()}
           $ownedServer = $null
+          $statusAvailable=$false
+          if ($env:HB_STATUS_SCRIPT -and (Test-Path -LiteralPath $env:HB_STATUS_SCRIPT)) {
+            try {
+              . $env:HB_STATUS_SCRIPT
+              $statusAvailable=Test-Path -LiteralPath (Join-Path $out 'worker-status.json')
+            } catch { Write-Warning 'Live status support is unavailable; retaining normal task checkpoints.' }
+          }
+          function Update-Status([hashtable]$Fields) {
+            if (-not $statusAvailable) { return }
+            try { Set-HBStatus -Directory $out @Fields }
+            catch { Write-Warning 'Status checkpoint write failed; task execution continues.' }
+          }
           function Save-Checkpoint {
             $tmp = Join-Path $out 'repair.json.tmp'
             $report | ConvertTo-Json -Depth 15 | Set-Content -LiteralPath $tmp -Encoding utf8
@@ -56,16 +109,20 @@ jobs:
           }
           function Log([string]$Text) { Write-Host ("[{0}] {1}" -f [DateTime]::UtcNow.ToString('HH:mm:ssZ'),$Text) }
           function Stage([string]$Name,[scriptblock]$Body) {
-            if (($env:HB_MODE -eq 'blender' -and $Name -notin @('resolve-tools','blender-save-reopen-render')) -or
+            if (($env:HB_MODE -eq 'status' -and $Name -ne 'worker-status-smoke') -or
+                  ($Name -eq 'worker-status-smoke' -and $env:HB_MODE -ne 'status') -or
+                  ($env:HB_MODE -eq 'blender' -and $Name -notin @('resolve-tools','blender-save-reopen-render')) -or
                   ($env:HB_MODE -eq 'workbench' -and $Name -notin @('resolve-tools','workbench-render')) -or
                   ($Name -eq 'workbench-render' -and $env:HB_MODE -ne 'workbench')) {
               $report.stages[$Name]=[ordered]@{status='not-requested'}; Save-Checkpoint; return
             }
             $report.stage=$Name; $report.stages[$Name]=[ordered]@{status='running'}; Save-Checkpoint
+            Update-Status @{Stage=$Name;Progress=@{};Progressed=$true}
             Log "START $Name"
             try { & $Body; $report.stages[$Name].status='passed'; Log "PASS $Name" }
             catch { $message=$_.Exception.Message; $report.stages[$Name].status='blocked'; $report.stages[$Name].error=$message; $report.errors+= "$Name : $message"; Log "BLOCKED $Name : $message" }
             Save-Checkpoint
+            Update-Status @{Stage=$Name;Errors=@($report.errors);Progressed=$true}
           }
           function Find-Tool([string]$Name,[string[]]$Patterns) {
             $candidates=@(Get-Command $Name -CommandType Application -ErrorAction SilentlyContinue | Where-Object {$_.Source -notlike '*\WindowsApps\*'} | ForEach-Object {$_.Source})
@@ -79,8 +136,6 @@ jobs:
             if (-not $Exe) { throw "$Name executable is not accessible to the runner service." }
             Log "RUN $Name"
             $stdout=Join-Path $out "$Name.stdout.txt"; $stderr=Join-Path $out "$Name.stderr.txt"
-            # Own the process handle from creation; do not lose the native exit code
-            # through Start-Process/Refresh on Windows PowerShell 5.1.
             $process=New-Object System.Diagnostics.Process
             $process.StartInfo.FileName=$Exe
             $process.StartInfo.Arguments=$Arguments
@@ -89,33 +144,82 @@ jobs:
             $process.StartInfo.CreateNoWindow=$true
             $process.StartInfo.RedirectStandardOutput=$true
             $process.StartInfo.RedirectStandardError=$true
+            $stdoutFile=$null; $stderrFile=$null; $started=$false
             try {
+              # Keep the native handle/exit code, and stream logs to disk rather than
+              # buffering the complete output in memory until the process exits.
+              $stdoutFile=New-Object System.IO.FileStream($stdout,[IO.FileMode]::Create,[IO.FileAccess]::Write,[IO.FileShare]::ReadWrite,1,[IO.FileOptions]::Asynchronous)
+              $stderrFile=New-Object System.IO.FileStream($stderr,[IO.FileMode]::Create,[IO.FileAccess]::Write,[IO.FileShare]::ReadWrite,1,[IO.FileOptions]::Asynchronous)
               if (-not $process.Start()) { throw "$Name did not start." }
-              $stdoutTask=$process.StandardOutput.ReadToEndAsync()
-              $stderrTask=$process.StandardError.ReadToEndAsync()
-              $watch=[Diagnostics.Stopwatch]::StartNew(); $heartbeat=15
+              $started=$true
+              $stdoutTask=$process.StandardOutput.BaseStream.CopyToAsync($stdoutFile)
+              $stderrTask=$process.StandardError.BaseStream.CopyToAsync($stderrFile)
+              $watch=[Diagnostics.Stopwatch]::StartNew(); $heartbeat=0
+              $lastBytes=-1L; $lastFiles=-1
               while (-not $process.WaitForExit(1000)) {
                 if ($watch.Elapsed.TotalSeconds -ge $Timeout) {
                   & taskkill.exe /PID $process.Id /T /F | Out-Null
                   [void]$process.WaitForExit(10000)
-                  if ($stdoutTask.Wait(5000)) { $stdoutTask.Result | Set-Content -LiteralPath $stdout -Encoding utf8 }
-                  if ($stderrTask.Wait(5000)) { $stderrTask.Result | Set-Content -LiteralPath $stderr -Encoding utf8 }
+                  [void]$stdoutTask.Wait(5000); [void]$stderrTask.Wait(5000)
                   $report.processes[$Name]=[ordered]@{timed_out=$true;elapsed_seconds=[Math]::Round($watch.Elapsed.TotalSeconds,2)}
-                  throw "$Name exceeded its ${Timeout}s timeout; job-owned process stopped."
+                  Update-Status @{Progress=@{process_alive=$false;elapsed_seconds=[Math]::Round($watch.Elapsed.TotalSeconds,2)};Progressed=$true}
+                  throw "$Name exceeded its existing ${Timeout}s task timeout; job-owned process stopped."
                 }
-                if ($watch.Elapsed.TotalSeconds -ge $heartbeat) { Log "$Name still running ($([int]$watch.Elapsed.TotalSeconds)s)"; $heartbeat+=15 }
+                if ($watch.Elapsed.TotalSeconds -ge $heartbeat) {
+                  try {
+                    $process.Refresh()
+                    $stdoutBytes=(Get-Item -LiteralPath $stdout).Length
+                    $stderrBytes=(Get-Item -LiteralPath $stderr).Length
+                    $files=@(Get-ChildItem -LiteralPath $out -File -Recurse | Where-Object {$_.Extension -in @('.png','.blend','.gif','.mp4','.webp')}).Count
+                    $advanced=(($stdoutBytes+$stderrBytes) -gt $lastBytes -or $files -gt $lastFiles)
+                    $progress=@{process_alive=(-not $process.HasExited);elapsed_seconds=[Math]::Round($watch.Elapsed.TotalSeconds,2);stdout_bytes=$stdoutBytes;stderr_bytes=$stderrBytes;output_files=$files}
+                    # A process may exit between sampling and reading its OS counters.
+                    try {
+                      $progress.cpu_seconds=[Math]::Round($process.TotalProcessorTime.TotalSeconds,2)
+                      $progress.working_set_bytes=$process.WorkingSet64
+                    } catch { }
+                    Update-Status @{Progress=$progress;Progressed=$advanced}
+                    $lastBytes=$stdoutBytes+$stderrBytes; $lastFiles=$files
+                    Log "$Name observed ($([int]$watch.Elapsed.TotalSeconds)s); log bytes $lastBytes; output files $files"
+                  } catch { Write-Warning 'Optional process metrics unavailable; task execution continues.' }
+                  $heartbeat+=15
+                }
               }
               $code=$process.ExitCode
               if (-not $stdoutTask.Wait(10000) -or -not $stderrTask.Wait(10000)) { throw "$Name log collection timed out." }
-              $stdoutTask.Result | Set-Content -LiteralPath $stdout -Encoding utf8
-              $stderrTask.Result | Set-Content -LiteralPath $stderr -Encoding utf8
+              $stdoutFile.Flush(); $stderrFile.Flush()
               $report.processes[$Name]=[ordered]@{exit_code=$code;elapsed_seconds=[Math]::Round($watch.Elapsed.TotalSeconds,2)}
+              try {
+                Update-Status @{Progress=@{process_alive=$false;elapsed_seconds=[Math]::Round($watch.Elapsed.TotalSeconds,2);stdout_bytes=(Get-Item -LiteralPath $stdout).Length;stderr_bytes=(Get-Item -LiteralPath $stderr).Length};Progressed=$true}
+              } catch { Write-Warning 'Final process metrics unavailable; retaining the actual process exit code.' }
               Log "$Name exited $code"
               if ($code -ne 0) { throw "$Name exited $code; see its stdout/stderr artifact." }
-            } finally { $process.Dispose() }
+            } finally {
+              if ($started -and -not $process.HasExited) { & taskkill.exe /PID $process.Id /T /F | Out-Null; [void]$process.WaitForExit(10000) }
+              if ($null -ne $stdoutFile) { $stdoutFile.Dispose() }
+              if ($null -ne $stderrFile) { $stderrFile.Dispose() }
+              $process.Dispose()
+            }
           }
           Save-Checkpoint
           try {
+            Stage 'worker-status-smoke' {
+              if (-not $statusAvailable) { throw 'Live-status integration did not initialize.' }
+              $support=Split-Path -Parent $env:HB_STATUS_SCRIPT
+              & (Join-Path $support 'test_worker_status.ps1') -Directory (Join-Path $out 'status-tests')
+              $probe=@'
+          1..4 | ForEach-Object {
+            Write-Output ("STATUS_PROBE_PROGRESS {0}/4" -f $_)
+            Start-Sleep -Seconds 10
+          }
+          Write-Output 'HB_STATUS_PROBE_OK'
+          '@
+              $probePath=Join-Path $out 'worker-status-probe.ps1'
+              $probe | Set-Content -LiteralPath $probePath -Encoding utf8
+              $powershell=(Get-Process -Id $PID).Path
+              Run-Tool 'status-probe' $powershell ('-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "{0}"' -f $probePath) 90
+              if ((Get-Content (Join-Path $out 'status-probe.stdout.txt') -Raw) -notmatch 'HB_STATUS_PROBE_OK') { throw 'Status probe completion marker missing.' }
+            }
             Stage 'resolve-tools' {
               $report.tools.blender=Find-Tool 'blender' @('C:\Program Files\Blender Foundation\Blender*\blender.exe')
               if ($env:HB_MODE -eq 'full') {
@@ -310,6 +414,8 @@ jobs:
             }
             $report.stage=if ($report.errors.Count -eq 0) {'selected-tests-passed'} else {'selected-tests-blocked'}
             $report.completed_utc=[DateTime]::UtcNow.ToString('o'); Save-Checkpoint
+            $workResult=if ($report.errors.Count -eq 0) {'passed'} else {'blocked'}
+            Update-Status @{Stage='work-finished';WorkResult=$workResult;Progress=@{};Errors=@($report.errors);Progressed=$true}
             $summary=@('# OLD-CORE30 local worker tests',"Mode: **$env:HB_MODE**", "Result: **$($report.stage)**",'',"Commit: $env:GITHUB_SHA",'', 'No applications or inference models installed; workbench mode downloads only its pinned project source.','', '| Test | Result |','|---|---|')
             foreach ($name in $report.stages.Keys) { $summary+="| $name | $($report.stages[$name].status) |" }
             $summary+=''; foreach ($errorMessage in $report.errors) {$summary+="- Blocker: $errorMessage"}
@@ -319,7 +425,17 @@ jobs:
           }
           if ($report.errors.Count -gt 0) { exit 1 }
 
+      - name: Mark artifact transfer in progress
+        if: always() && env.HB_REPORT_DIR != ''
+        continue-on-error: true
+        run: |
+          if ($env:HB_STATUS_SCRIPT -and (Test-Path -LiteralPath $env:HB_STATUS_SCRIPT)) {
+            . $env:HB_STATUS_SCRIPT
+            Set-HBStatus -Directory $env:HB_REPORT_DIR -Stage 'artifact-upload' -Delivery @{state='uploading';artifact_id=$null;url=$null;digest=$null} -Progress @{} -Progressed
+          }
+
       - name: Publish checkpoints and test evidence even on failure
+        id: evidence
         if: always() && env.HB_REPORT_DIR != ''
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
@@ -331,6 +447,7 @@ jobs:
             ${{ env.HB_REPORT_DIR }}/**/*.png
             ${{ env.HB_REPORT_DIR }}/*.blend
             ${{ env.HB_REPORT_DIR }}/**/*.py
+            ${{ env.HB_REPORT_DIR }}/**/*.ps1
             ${{ env.HB_REPORT_DIR }}/*.java
             ${{ env.HB_REPORT_DIR }}/*.zip
             ${{ env.HB_REPORT_DIR }}/**/*.gif
@@ -339,4 +456,23 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-
+      - name: Finalize worker receipt and live status
+        if: always() && env.HB_REPORT_DIR != ''
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HB_WORK_OUTCOME: ${{ steps.work.outcome }}
+          HB_UPLOAD_OUTCOME: ${{ steps.evidence.outcome }}
+          HB_ARTIFACT_ID: ${{ steps.evidence.outputs.artifact-id }}
+          HB_ARTIFACT_URL: ${{ steps.evidence.outputs.artifact-url }}
+          HB_ARTIFACT_DIGEST: ${{ steps.evidence.outputs.artifact-digest }}
+          HB_CANCELLED: ${{ cancelled() }}
+        run: |
+          $ErrorActionPreference='Stop'
+          if (-not $env:HB_STATUS_SCRIPT -or -not (Test-Path -LiteralPath $env:HB_STATUS_SCRIPT)) {
+            'Live-status finalization unavailable. Use the Actions job outcome and artifact receipt.' | Out-File $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+            exit 0
+          }
+          . $env:HB_STATUS_SCRIPT
+          if ($env:HB_CANCELLED -eq 'true') { $env:HB_WORK_OUTCOME='cancelled' }
+          Complete-HBStatus -Directory $env:HB_REPORT_DIR -WorkOutcome $env:HB_WORK_OUTCOME -UploadOutcome $env:HB_UPLOAD_OUTCOME -ArtifactId $env:HB_ARTIFACT_ID -ArtifactUrl $env:HB_ARTIFACT_URL -ArtifactDigest $env:HB_ARTIFACT_DIGEST
