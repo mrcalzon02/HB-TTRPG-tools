@@ -1,5 +1,6 @@
 # FMPL v0.2.0 source/consumer gate passed; sprite-stage diagnostic retry.
 # FMPL production smoke: reuse one OLD-CORE30 job. Never modify source scenes or game.
+# 2026-11-09 retry: safe source-intake gate; preserve previous concrete/agitator model and actual alpha proof.
 # V03 physically-readable water treatment build; verified pinned fixture correction.
 # V03 bounds readback corrected; preserve original model and material library.
 # V03 alpha background excluded; serviceable filter sight bank moved into camera view.
