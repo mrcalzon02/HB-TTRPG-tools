@@ -3710,6 +3710,42 @@ The folded notice for the buyer remained on the keeper's dry shelf. Neither man 
 
 ---
 
+The hired hand reached the market late in the afternoon, after the hiring corner had lost its morning crowd. He could still feel the wagon rope in his palm. He had the coins for his first full day and the hours he had worked that morning, and no reason to expect a third payment from the driver.
+
+At the freight shed, men waited for carts that had not appeared. A woman in a salt merchant's apron was trying to move six sacks away from a leak at the edge of an awning. The first two were already damp at the bottom.
+
+"Can you carry them inside?" she asked.
+
+"For what pay?"
+
+She named a sum. He looked at the sacks, then at the clear space beside the storeroom door.
+
+"For those six, to there?"
+
+"Yes."
+
+"Then I'll do it."
+
+He took the first on his shoulder. The sack smelled of brine and coarse cloth. Halfway across the yard he felt grains slipping against his neck and stopped. A seam near the bottom had opened enough to dust his collar white.
+
+"The stitch has gone," he called.
+
+"It held when they loaded it."
+
+"It may have. It doesn't now."
+
+She brought a basin and a needle. He held the cloth while she drew the seam together. Neither knew how much salt had escaped before he noticed the tear, but they could keep the rest off the wet stones.
+
+The other five went inside before the rain reached the awning. The woman counted the sacks and paid him what they had agreed. She asked whether he could return for a full day tomorrow.
+
+"If there's work, ask me when I come," he said. "I haven't promised tomorrow to anyone."
+
+She looked about to argue, then shrugged. "Come early if you want the choice."
+
+He bought a warm heel of bread and ate it beneath the freight shed eaves. Somewhere up the north road, a wagon full of seed barley might still be under shelter. He had no report of it after leaving. He did not need to pretend otherwise to decide where he would work next.
+
+---
+
 The message reached the mill after the next market bell. The carrier's delivery deadline had passed before the buyer saw a word of explanation.
 
 A traveler brought the folded notice in his coat. The shelter keeper had given it to him from the dry shelf when he set out along the inner road on foot; no one had promised the carrier which traveler would take it, or when. The man had walked the last stretch with his boots in his hands because the mud had begun to pull them off. At the mill door he asked for the seed-barley buyer, and a clerk brought him to the counting room without promising payment for his trouble.
