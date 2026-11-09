@@ -2,6 +2,12 @@ name: Homebrew local worker
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: Blender readiness or full local-worker audit
+        type: choice
+        options: [blender, full]
+        default: blender
   push:
     branches: [main]
     paths: ['.github/workflows/homebrew-local-worker.yml']
@@ -18,22 +24,25 @@ jobs:
     if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main' && github.actor == 'mrcalzon02'
     runs-on: [self-hosted, Windows, X64]
     timeout-minutes: 12
+    env:
+      HB_MODE: ${{ inputs.mode || 'blender' }}
     defaults:
       run:
         shell: powershell -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
     steps:
-      - name: Repair worker paths and test existing local tools and models
+      - name: Test selected local-worker capabilities
         run: |
           $ErrorActionPreference = 'Stop'
           $ProgressPreference = 'SilentlyContinue'
           if ($env:RUNNER_NAME -ne 'OLD-CORE30-homebrew') { throw 'Wrong runner; no changes made.' }
+          if ($env:HB_MODE -notin @('blender','full')) { throw 'Invalid diagnostic mode.' }
           $root = 'D:\Runner\actions-runner'
           if (-not (Test-Path -LiteralPath "$root\.runner")) { throw 'Expected D: runner configuration is missing.' }
           $work = Join-Path $root '_homebrew'
           $out = Join-Path $work ("reports\{0}-{1}" -f $env:GITHUB_RUN_ID,$env:GITHUB_RUN_ATTEMPT)
           New-Item -ItemType Directory -Force -Path $out | Out-Null
           "HB_REPORT_DIR=$out" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
-          $report = [ordered]@{schema_version=2;runner=$env:RUNNER_NAME;commit=$env:GITHUB_SHA;started_utc=[DateTime]::UtcNow.ToString('o');stage='preflight';stages=[ordered]@{};tools=[ordered]@{};changes=@();errors=@();installs=@();model_downloads=@()}
+          $report = [ordered]@{schema_version=3;runner=$env:RUNNER_NAME;commit=$env:GITHUB_SHA;mode=$env:HB_MODE;started_utc=[DateTime]::UtcNow.ToString('o');stage='preflight';stages=[ordered]@{};tools=[ordered]@{};processes=[ordered]@{};changes=@();errors=@();installs=@();model_downloads=@()}
           $ownedServer = $null
           function Save-Checkpoint {
             $tmp = Join-Path $out 'repair.json.tmp'
@@ -42,6 +51,9 @@ jobs:
           }
           function Log([string]$Text) { Write-Host ("[{0}] {1}" -f [DateTime]::UtcNow.ToString('HH:mm:ssZ'),$Text) }
           function Stage([string]$Name,[scriptblock]$Body) {
+            if ($env:HB_MODE -eq 'blender' -and $Name -notin @('resolve-tools','blender-save-reopen-render')) {
+              $report.stages[$Name]=[ordered]@{status='not-requested'}; Save-Checkpoint; return
+            }
             $report.stage=$Name; $report.stages[$Name]=[ordered]@{status='running'}; Save-Checkpoint
             Log "START $Name"
             try { & $Body; $report.stages[$Name].status='passed'; Log "PASS $Name" }
@@ -60,35 +72,54 @@ jobs:
             if (-not $Exe) { throw "$Name executable is not accessible to the runner service." }
             Log "RUN $Name"
             $stdout=Join-Path $out "$Name.stdout.txt"; $stderr=Join-Path $out "$Name.stderr.txt"
-            $process=Start-Process -FilePath $Exe -ArgumentList $Arguments -WorkingDirectory $out -RedirectStandardOutput $stdout -RedirectStandardError $stderr -NoNewWindow -PassThru
-            $watch=[Diagnostics.Stopwatch]::StartNew(); $heartbeat=15
-            while (-not $process.WaitForExit(1000)) {
-              if ($watch.Elapsed.TotalSeconds -ge $Timeout) {
-                # Only terminate this process tree, which this job just created.
-                & taskkill.exe /PID $process.Id /T /F | Out-Null
-                throw "$Name exceeded its ${Timeout}s timeout; job-owned process stopped."
+            # Own the process handle from creation; do not lose the native exit code
+            # through Start-Process/Refresh on Windows PowerShell 5.1.
+            $process=New-Object System.Diagnostics.Process
+            $process.StartInfo.FileName=$Exe
+            $process.StartInfo.Arguments=$Arguments
+            $process.StartInfo.WorkingDirectory=$out
+            $process.StartInfo.UseShellExecute=$false
+            $process.StartInfo.CreateNoWindow=$true
+            $process.StartInfo.RedirectStandardOutput=$true
+            $process.StartInfo.RedirectStandardError=$true
+            try {
+              if (-not $process.Start()) { throw "$Name did not start." }
+              $stdoutTask=$process.StandardOutput.ReadToEndAsync()
+              $stderrTask=$process.StandardError.ReadToEndAsync()
+              $watch=[Diagnostics.Stopwatch]::StartNew(); $heartbeat=15
+              while (-not $process.WaitForExit(1000)) {
+                if ($watch.Elapsed.TotalSeconds -ge $Timeout) {
+                  & taskkill.exe /PID $process.Id /T /F | Out-Null
+                  throw "$Name exceeded its ${Timeout}s timeout; job-owned process stopped."
+                }
+                if ($watch.Elapsed.TotalSeconds -ge $heartbeat) { Log "$Name still running ($([int]$watch.Elapsed.TotalSeconds)s)"; $heartbeat+=15 }
               }
-              if ($watch.Elapsed.TotalSeconds -ge $heartbeat) { Log "$Name still running ($([int]$watch.Elapsed.TotalSeconds)s)"; $heartbeat+=15 }
-            }
-            $process.WaitForExit(); $process.Refresh()
-            if ($process.ExitCode -ne 0) { throw "$Name exited $($process.ExitCode); see its stdout/stderr artifact." }
+              $code=$process.ExitCode
+              if (-not $stdoutTask.Wait(10000) -or -not $stderrTask.Wait(10000)) { throw "$Name log collection timed out." }
+              $stdoutTask.Result | Set-Content -LiteralPath $stdout -Encoding utf8
+              $stderrTask.Result | Set-Content -LiteralPath $stderr -Encoding utf8
+              $report.processes[$Name]=[ordered]@{exit_code=$code;elapsed_seconds=[Math]::Round($watch.Elapsed.TotalSeconds,2)}
+              Log "$Name exited $code"
+              if ($code -ne 0) { throw "$Name exited $code; see its stdout/stderr artifact." }
+            } finally { $process.Dispose() }
           }
           Save-Checkpoint
           try {
             Stage 'resolve-tools' {
-              $report.tools.git=Find-Tool 'git' @('C:\Program Files\Git\cmd\git.exe')
-              $report.tools.java=Find-Tool 'java' @('C:\Program Files\Java\jdk*\bin\java.exe','C:\Program Files\Eclipse Adoptium\jdk*\bin\java.exe')
-              $report.tools.javac=Find-Tool 'javac' @('C:\Program Files\Java\jdk*\bin\javac.exe','C:\Program Files\Eclipse Adoptium\jdk*\bin\javac.exe')
-              # Only known application installation directories, never personal documents.
-              $report.tools.python=Find-Tool 'python' @('D:\Runner\actions-runner\_homebrew\tools\python*\python.exe','C:\Program Files\Python*\python.exe','C:\Users\*\AppData\Local\Programs\Python\Python3*\python.exe')
               $report.tools.blender=Find-Tool 'blender' @('C:\Program Files\Blender Foundation\Blender*\blender.exe')
-              $report.tools.ollama=Find-Tool 'ollama' @('C:\Program Files\Ollama\ollama.exe','C:\Users\*\AppData\Local\Programs\Ollama\ollama.exe','D:\AI-Relocation\Ollama\ollama.exe')
-              $report.tools.nvidia_smi=Find-Tool 'nvidia-smi' @('C:\Windows\System32\nvidia-smi.exe')
+              if ($env:HB_MODE -eq 'full') {
+                $report.tools.git=Find-Tool 'git' @('C:\Program Files\Git\cmd\git.exe')
+                $report.tools.java=Find-Tool 'java' @('C:\Program Files\Java\jdk*\bin\java.exe','C:\Program Files\Eclipse Adoptium\jdk*\bin\java.exe')
+                $report.tools.javac=Find-Tool 'javac' @('C:\Program Files\Java\jdk*\bin\javac.exe','C:\Program Files\Eclipse Adoptium\jdk*\bin\javac.exe')
+                $report.tools.python=Find-Tool 'python' @('D:\Runner\actions-runner\_homebrew\tools\python*\python.exe','C:\Program Files\Python*\python.exe','C:\Users\*\AppData\Local\Programs\Python\Python3*\python.exe')
+                $report.tools.ollama=Find-Tool 'ollama' @('C:\Program Files\Ollama\ollama.exe','C:\Users\*\AppData\Local\Programs\Ollama\ollama.exe','D:\AI-Relocation\Ollama\ollama.exe')
+                $report.tools.nvidia_smi=Find-Tool 'nvidia-smi' @('C:\Windows\System32\nvidia-smi.exe')
+              }
               $paths=@($report.tools.Values | Where-Object {$_} | ForEach-Object {Split-Path -Parent $_} | Select-Object -Unique)
               $env:PATH=($paths -join ';')+';'+$env:PATH
               $paths | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
               $report.changes+='Resolved existing tool paths for this job; no machine or desktop-user PATH changes.'
-              $config=[ordered]@{schema_version=1;runner=$env:RUNNER_NAME;tools=$report.tools;model_root='D:\AI-Relocation\Ollama\models';worker_host='127.0.0.1:11435';num_parallel=1;num_threads=8;context=2048;recorded_utc=[DateTime]::UtcNow.ToString('o')}
+              $config=[ordered]@{schema_version=1;runner=$env:RUNNER_NAME;mode=$env:HB_MODE;tools=$report.tools;model_root='D:\AI-Relocation\Ollama\models';worker_host='127.0.0.1:11435';num_parallel=1;num_threads=8;context=2048;recorded_utc=[DateTime]::UtcNow.ToString('o')}
               $config | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $out 'worker-environment.json') -Encoding utf8
               foreach ($key in $report.tools.Keys) { Log "$key = $($report.tools[$key])" }
             }
@@ -116,7 +147,7 @@ jobs:
             }
             Stage 'blender-save-reopen-render' {
               $blenderSource=@'
-          import bpy, pathlib
+          import bpy, json, pathlib, sys
           out = pathlib.Path.cwd()
           bpy.ops.wm.read_factory_settings(use_empty=False)
           scene = bpy.context.scene
@@ -134,12 +165,18 @@ jobs:
           bpy.ops.wm.save_as_mainfile(filepath=str(out / 'worker-smoke.blend'))
           bpy.ops.wm.open_mainfile(filepath=str(out / 'worker-smoke.blend'))
           bpy.ops.render.render(write_still=True)
-          assert (out / 'blender-proof.png').stat().st_size > 1000
+          png = out / 'blender-proof.png'
+          assert png.stat().st_size > 1000
+          assert png.read_bytes()[:8] == b'\x89PNG\r\n\x1a\n'
+          proof = {'blender': bpy.app.version_string, 'python': sys.version, 'saved_reopened': True, 'rendered': True, 'png_bytes': png.stat().st_size}
+          (out / 'blender-result.json').write_text(json.dumps(proof, indent=2), encoding='utf-8')
           print('BLENDER_WORKER_OK')
           '@
               $blenderSource | Set-Content -LiteralPath (Join-Path $out 'blender-smoke.py') -Encoding utf8
               Run-Tool 'blender' $report.tools.blender '--background --factory-startup --python-exit-code 1 --python blender-smoke.py' 120
               if (-not (Test-Path -LiteralPath (Join-Path $out 'blender-proof.png'))) { throw 'Blender render missing.' }
+              if ((Get-Content (Join-Path $out 'blender.stdout.txt') -Raw) -notmatch 'BLENDER_WORKER_OK') { throw 'Blender success marker missing.' }
+              $report.blender=Get-Content -LiteralPath (Join-Path $out 'blender-result.json') -Raw | ConvertFrom-Json
             }
             Stage 'model-store-validation' {
               $modelRoot='D:\AI-Relocation\Ollama\models'
@@ -172,7 +209,6 @@ jobs:
               if (-not $report.tools.ollama) { throw 'Ollama executable not accessible to runner service.' }
               $os=Get-CimInstance Win32_OperatingSystem
               if ($os.FreePhysicalMemory -lt 8MB) { throw 'Less than 8 GiB free RAM; no inference started.' }
-              # Do not interrupt or evict a desktop model; check it before using shared hardware.
               $desktop=$null
               try { $desktop=Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/ps' -TimeoutSec 5 } catch { Log 'Desktop API not reachable; dedicated worker will be checked independently.' }
               if ($null -ne $desktop -and @($desktop.models).Count -gt 0) { throw 'Desktop Ollama has a loaded model; preserving desktop work, not competing for GPU.' }
@@ -215,9 +251,9 @@ jobs:
               $ownedServer.Refresh()
               if (-not $ownedServer.HasExited) { Log 'Stopping only the Ollama process tree created by this job.'; & taskkill.exe /PID $ownedServer.Id /T /F | Out-Null }
             }
-            $report.stage=if ($report.errors.Count -eq 0) {'repair-tests-passed'} else {'repair-tests-blocked'}
+            $report.stage=if ($report.errors.Count -eq 0) {'selected-tests-passed'} else {'selected-tests-blocked'}
             $report.completed_utc=[DateTime]::UtcNow.ToString('o'); Save-Checkpoint
-            $summary=@('# OLD-CORE30 repair and tests',"Result: **$($report.stage)**",'',"Commit: $env:GITHUB_SHA",'', 'No packages/models downloaded; no files deleted; no desktop process, service, firewall, or machine-wide environment changed.','', '| Test | Result |','|---|---|')
+            $summary=@('# OLD-CORE30 local worker tests',"Mode: **$env:HB_MODE**", "Result: **$($report.stage)**",'',"Commit: $env:GITHUB_SHA",'', 'No packages/models downloaded; no desktop process, service, firewall, or machine-wide environment changed.','', '| Test | Result |','|---|---|')
             foreach ($name in $report.stages.Keys) { $summary+="| $name | $($report.stages[$name].status) |" }
             $summary+=''; foreach ($errorMessage in $report.errors) {$summary+="- Blocker: $errorMessage"}
             $summary | Set-Content -LiteralPath (Join-Path $out 'SUMMARY.md') -Encoding utf8
