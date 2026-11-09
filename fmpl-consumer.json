@@ -1,0 +1,23 @@
+{
+  "schema": "fmpl.consumer.v1",
+  "consumer_repo": "mrcalzon02/HB-TTRPG-tools",
+  "module_repo": "mrcalzon02/Tech-Priests",
+  "module_version": "0.1.0",
+  "module_commit": "7516790e6d2795cf376172ef1abc7a34592d5d76",
+  "uses": [
+    "water-purifier-mh7",
+    "hb-local-runner",
+    "hb-qwen-pilot",
+    "local-inference-refinement",
+    "hb-factorio-render"
+  ],
+  "usage": {
+    "read_only": true,
+    "standalone_reference_repo": true,
+    "code_execution": "Existing local Python/Blender only",
+    "workflow_creation": false,
+    "model_downloads": false
+  },
+  "validation_command": "python fmpl-source/tools/fmpl/fmpl_consumer.py --config fmpl-consumer.json --library-root fmpl-source",
+  "source_doc": "https://github.com/mrcalzon02/Tech-Priests/blob/7516790e6d2795cf376172ef1abc7a34592d5d76/tools/fmpl/README.md"
+}
