@@ -38,6 +38,10 @@ Install once from your checkout:
 
 See [cross-platform installation, shutdown behavior, limitations, and tests](tools/local-hub/README.md). Optional external integrations still require their corresponding service; no cloud upload is introduced by the local workbench.
 
+## AI Tools — Shared FMPL Asset Library
+
+The [FMPL tab](ai-tools.html#fmpl-library) now provides a searchable, pinned [machine-readable registry](api/ai/fmpl-library.json) of complete model sources, production scripts, material families, geometry candidates and export pipelines from Tech-Priests. The [FMPL Agent Skill](skills/fmpl-asset-production/SKILL.md), [consumer pin](fmpl-consumer.json), and AI Access discovery manifest allow all authorized projects to resolve the same library. No large or private Blender binaries are copied; actual work uses local Blender/Python or the existing runner.
+
 ## AI Tools — Factorio Render Pipeline
 
 The [AI Tools page](ai-tools.html) contains the dedicated [Factorio Render Pipeline tab](ai-tools.html#factorio-render-pipeline). Its reusable [Blender/Codex production runbook](tools/factorio-render-pipeline/README.md), setup script, source-calibrated asset manifest template, validation code and durable Codex work order live under tools/factorio-render-pipeline/. The new module documents local workflows; it does not claim a completed render engine or verified Factorio 2.0.77 graphics load. The existing Machine / AI Access page remains a separate interface contract and discovery directory.

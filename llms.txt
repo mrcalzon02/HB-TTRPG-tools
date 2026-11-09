@@ -8,6 +8,9 @@ Capability manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-cap
 Operation contracts: https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json
 PSX editor engineering rules: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-editor-reference.json
 Human PSX editor guide: https://mrcalzon02.github.io/HB-TTRPG-tools/psx-editor-reference.html
+FMPL shared library: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/fmpl-library.json
+FMPL browsing: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-tools.html#fmpl-library
+FMPL AI skill: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/fmpl-asset-production/SKILL.md
 Agent Skills registry: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json
 HTML skill directory: https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html
 Human AI access: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html
