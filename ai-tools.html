@@ -11,12 +11,12 @@
 .ai-tabs a[aria-selected="true"],.ai-tabs a:hover,.ai-tabs a:focus-visible{border-color:#b4d5ff;background:rgba(95,150,212,.23)}
 .ai-panel[hidden]{display:none}.ai-panel{margin:20px 0}
 .ai-shell li{margin:9px 0}.ai-shell pre{white-space:pre-wrap;overflow-wrap:anywhere;background:rgba(15,23,42,.6);padding:16px;border-radius:8px}
-</style></head><body class="workspace-landing-body">
+.fmpl-filters{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}.fmpl-filters label{display:flex;flex-direction:column;gap:6px}.fmpl-filters input,.fmpl-filters select{min-height:44px;padding:8px 12px;border:1px solid #64748b;border-radius:8px;background:#142037;color:#fff}.fmpl-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px}.fmpl-card{min-width:0;border:1px solid #607187;border-radius:10px;padding:12px;overflow-wrap:anywhere;background:rgba(15,23,42,.35)}.fmpl-card h3{font-size:1rem;margin:0 0 8px}.fmpl-note{font-size:.9rem;color:#cbd5e1}</style></head><body class="workspace-landing-body">
 <header class="site-header"><div><p class="eyebrow">Foundry / Tools / AI Tools</p><h1>AI Tools</h1><p class="subtitle">Local-first creative production and Codex workflows.</p></div>
 <nav class="top-nav" aria-label="AI Tools navigation"><a class="nav-button" href="index.html">Foundry Home</a><a class="nav-button active" href="ai-tools.html" aria-current="page">AI Tools</a><a class="nav-button" href="ai-access.html">Machine / AI Access</a><a class="nav-button" href="site-map.html">Site Map</a></nav></header>
 <main class="ai-shell"><section class="hero-card"><p class="eyebrow">Production Tools</p><h2>Durable procedures for local AI-assisted work</h2><p>This static site documents local capabilities. It does not install Blender, run Codex or render sprites remotely.</p></section>
-<nav class="ai-tabs" role="tablist" aria-label="AI Tools modules"><a id="tab-overview" href="#overview" role="tab" aria-controls="overview" aria-selected="true" tabindex="0">Overview</a><a id="tab-factorio-render-pipeline" href="#factorio-render-pipeline" role="tab" aria-controls="factorio-render-pipeline" aria-selected="false" tabindex="-1">Factorio Render Pipeline</a></nav>
-<section class="ai-panel menu-card" id="overview" role="tabpanel" aria-labelledby="tab-overview"><h2>AI Tools modules</h2><p>The Factorio Render Pipeline establishes reusable 3D-origin game art procedures, beginning with Tech Priests thrusters.</p><a class="link-button primary-action" href="#factorio-render-pipeline">Open Render Pipeline</a></section>
+<nav class="ai-tabs" role="tablist" aria-label="AI Tools modules"><a id="tab-overview" href="#overview" role="tab" aria-controls="overview" aria-selected="true" tabindex="0">Overview</a><a id="tab-factorio-render-pipeline" href="#factorio-render-pipeline" role="tab" aria-controls="factorio-render-pipeline" aria-selected="false" tabindex="-1">Factorio Render Pipeline</a><a id="tab-fmpl-library" href="#fmpl-library" role="tab" aria-controls="fmpl-library" aria-selected="false" tabindex="-1">FMPL Library</a></nav>
+<section class="ai-panel menu-card" id="overview" role="tabpanel" aria-labelledby="tab-overview"><h2>AI Tools modules</h2><p>The Factorio Render Pipeline establishes reusable 3D-origin game art procedures, beginning with Tech Priests thrusters.</p><div class="workspace-actions"><a class="link-button primary-action" href="#fmpl-library">Browse FMPL</a><a class="link-button" href="#factorio-render-pipeline">Open Render Pipeline</a></div></section>
 <section class="ai-panel menu-card" id="factorio-render-pipeline" role="tabpanel" aria-labelledby="tab-factorio-render-pipeline" hidden><p class="eyebrow">AI Tools / Procedural Asset Production</p><h2>Factorio Render Pipeline</h2>
 <p><strong>First target:</strong> <a href="https://github.com/mrcalzon02/Tech-Priests">Tech Priests</a>. Replace rough hydrogen, thetazine, and void-fusion thruster art with calibrated Blender source, correct idle/run states, and actual space-platform attachment alignment.</p>
 <p><strong>Status:</strong> documented runbook and local setup workflow. Blender modeling, headless rendering, sheet packing, and Factorio 2.0.77 live acceptance are separate future execution gates.</p>
@@ -39,7 +39,23 @@ python tools/factorio-render-pipeline/bootstrap.py verify --evidence-dir art-rea
 <label for="factorio-reference-upload">Choose the supplied reference image (local browser only)</label>
 <input id="factorio-reference-upload" type="file" accept="image/png,image/jpeg,image/webp">
 <figure><img id="factorio-reference-preview" alt="Locally selected three-figure Factorio-style model reference" style="max-width:100%;height:auto;display:none"><figcaption id="factorio-reference-caption">No image imported in this browser. No upload to the Foundry or GitHub occurs.</figcaption></figure></section>
-<p>The reusable procedures live here; each destination game's editable models, sprites and integration tests belong in its own repository.</p></section></main>
+<p>The reusable procedures live here; each destination game's editable models, sprites and integration tests belong in its own repository.</p></section>
+<section class="ai-panel menu-card" id="fmpl-library" role="tabpanel" aria-labelledby="tab-fmpl-library" hidden>
+<p class="eyebrow">AI Tools / Shared production geometry</p><h2>FMPL — Factorio Modeling Production Library</h2>
+<p>A version-pinned, searchable index of reusable Blender models, procedural programs, candidate geometry, PBR presets and Blender → sprite → Factorio pipelines. All projects can discover the same source modules; <strong>Tech-Priests remains canonical</strong>. This static site does not run Blender or dispatch jobs.</p>
+<p id="fmpl-summary" class="fmpl-note">Loading canonical FMPL snapshot…</p>
+<div class="workspace-actions"><a class="link-button primary-action" href="https://github.com/mrcalzon02/Tech-Priests/blob/7577ac00128d76ad12cc7b143fc1553ef463498c/tools/fmpl/README.md">Canonical source</a><a class="link-button" href="api/ai/fmpl-library.json">Machine catalog</a><a class="link-button" href="fmpl-consumer.json">Consumer pin</a><a class="link-button" href="https://github.com/mrcalzon02/Tech-Priests/blob/7577ac00128d76ad12cc7b143fc1553ef463498c/tools/fmpl/greebles/README.md">Greebles</a><a class="link-button" href="skills/fmpl-asset-production/SKILL.md">Agent Skill</a></div>
+<div class="fmpl-filters"><label for="fmpl-search">Find an asset<input type="search" id="fmpl-search" placeholder="Pipe, workbench, render, greebles…"></label><label for="fmpl-kind">Category<select id="fmpl-kind"><option value="all">All records</option><option value="model">Models</option><option value="program">Programs</option><option value="pipeline">Pipelines</option><option value="library">External libraries</option></select></label></div>
+<p id="fmpl-count" aria-live="polite">Loading…</p><div id="fmpl-results" class="fmpl-results" aria-label="FMPL catalog"></div>
+<h3>Reusable across repositories</h3><p>Keep a project-local <code>fmpl-consumer.json</code> pin, acquire the canonical source using a partial checkout, validate it and run the existing local Python/Blender tooling.</p>
+<pre><code>git clone --filter=blob:none --no-checkout https://github.com/mrcalzon02/Tech-Priests.git fmpl-source
+cd fmpl-source
+git sparse-checkout init --cone
+git sparse-checkout set tools/fmpl art/source-to-3d/shared-parts
+git checkout 7577ac00128d76ad12cc7b143fc1553ef463498c
+python tools/fmpl/fmpl.py summary</code></pre>
+<p class="fmpl-note">Private Blender donors remain private. The 320 de-atlased Greebles meshes are candidates, not certified mechanical fittings; their original materials are placeholders. Verified parts, port positions, licensing, native Blender and Factorio runtime acceptance require separate evidence. No new GitHub workflows or bulk binary mirrors.</p>
+</section></main>
 <footer class="ai-shell"><p>Calzon's TTRPG Foundry · <a href="index.html">Back to Tools</a></p></footer>
 <script>
 (() => {
@@ -61,4 +77,4 @@ if(!["image/png","image/jpeg","image/webp"].includes(file.type)||file.size>20971
 const reader=new FileReader();reader.onload=()=>{const value=String(reader.result||"");showReference(value);
 try{localStorage.setItem(storageKey,value);}catch(err){caption.textContent="Preview loaded for this session. Browser storage unavailable.";}};reader.readAsDataURL(file);});
 })();
-</script></body></html>
+</script><script src="fmpl-catalog.js" defer></script></body></html>

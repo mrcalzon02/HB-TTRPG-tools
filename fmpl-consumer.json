@@ -9,7 +9,8 @@
     "hb-local-runner",
     "hb-qwen-pilot",
     "local-inference-refinement",
-    "hb-factorio-render"
+    "hb-factorio-render",
+    "greebles-drive-2026-10"
   ],
   "usage": {
     "read_only": true,
@@ -19,5 +20,11 @@
     "model_downloads": false
   },
   "validation_command": "python fmpl-source/tools/fmpl/fmpl_consumer.py --config fmpl-consumer.json --library-root fmpl-source",
-  "source_doc": "https://github.com/mrcalzon02/Tech-Priests/blob/7577ac00128d76ad12cc7b143fc1553ef463498c/tools/fmpl/PROCESS_MACHINERY_STANDARD.md"
+  "source_doc": "https://github.com/mrcalzon02/Tech-Priests/blob/7577ac00128d76ad12cc7b143fc1553ef463498c/tools/fmpl/PROCESS_MACHINERY_STANDARD.md",
+  "discovery": {
+    "ui": "ai-tools.html#fmpl-library",
+    "catalog": "api/ai/fmpl-library.json",
+    "agent_skill": "skills/fmpl-asset-production/SKILL.md",
+    "pin_policy": "explicit SHA, never auto-update"
+  }
 }

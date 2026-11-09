@@ -1,0 +1,268 @@
+{
+  "schema": "hb-fmpl-directory.v1",
+  "id": "fmpl.asset-production-library",
+  "name": "Factorio Modeling Production Library",
+  "canonical": {
+    "repo": "mrcalzon02/Tech-Priests",
+    "commit": "7577ac00128d76ad12cc7b143fc1553ef463498c",
+    "version": "0.3.0",
+    "manifest": "https://raw.githubusercontent.com/mrcalzon02/Tech-Priests/7577ac00128d76ad12cc7b143fc1553ef463498c/tools/fmpl/FMPL.json",
+    "readme": "https://github.com/mrcalzon02/Tech-Priests/blob/7577ac00128d76ad12cc7b143fc1553ef463498c/tools/fmpl/README.md",
+    "materials": "https://github.com/mrcalzon02/Tech-Priests/blob/7577ac00128d76ad12cc7b143fc1553ef463498c/art/source-to-3d/shared-parts/industrial-asset-library/catalog.json",
+    "parts": "https://github.com/mrcalzon02/Tech-Priests/blob/7577ac00128d76ad12cc7b143fc1553ef463498c/art/source-to-3d/shared-parts/metallic-hydrogen/registry.json"
+  },
+  "inventory": {
+    "models": 9,
+    "programs": 19,
+    "pipelines": 5,
+    "materials": 23,
+    "pbr_maps": 69,
+    "component_candidates": 39,
+    "verified_parts": 0,
+    "greebles_candidates": 320
+  },
+  "records": [
+    {
+      "id": "martian-heavy-bunker-v10",
+      "kind": "model",
+      "status": "editable-reference-bound-candidate",
+      "summary": "texture and physical fittings donor; no blanket approval for all machines",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/art/source-to-3d/martian-bunker/src/v10/martian_heavy_weapon_bunker_v10_textured.blend"
+    },
+    {
+      "id": "emergency-boiler-v08",
+      "kind": "model",
+      "status": "game-sprites-installed-with-specific-native-checks",
+      "summary": "circular pipe mouth, steam nozzle, containment hardware, support cage and canister fixtures; visual placement must use actual registration",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/art/source-to-3d/boiler-v08/production-source.blend"
+    },
+    {
+      "id": "emergency-condenser-v21",
+      "kind": "model",
+      "status": "model-source-external-and-builder-committed",
+      "summary": "hollow cast pipe neck and exact fitting reference at (1,-.5,.36); native entity grid still requires independent mapping",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/art/source-to-3d/condenser-v21/build_condenser_v21.py"
+    },
+    {
+      "id": "emergency-miner-v16",
+      "kind": "model",
+      "status": "generator-work-in-progress",
+      "summary": "source-visible cast housing, wiring and connector fixture donor; no hidden internals",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/art/source-to-3d/emergency-miner/build_model.py"
+    },
+    {
+      "id": "emergency-assembler",
+      "kind": "model",
+      "status": "sprite-only-no-verified-native-model",
+      "summary": "artwork reference only; do not substitute workbench",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/tech-priests_src/graphics/entity/martian-micro/tech-priests-emergency-assembler.png"
+    },
+    {
+      "id": "timber-workbench-v05",
+      "kind": "model",
+      "status": "editable-animation-source",
+      "summary": "hammer animation and small rough assembly donor; separate from emergency assembler",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/art/source-to-3d/workbench-v5-animation/Workbench_V5_Animated_Source.zip"
+    },
+    {
+      "id": "tanks-campfire-v11",
+      "kind": "model",
+      "status": "four-direction-sprite-export-candidate",
+      "summary": "fully reconstructed animated construction and static/working sprite process; game integration separately checked",
+      "href": "https://github.com/mrcalzon02/Tanks-for-bob-Fork/blob/3f38f801631a88460bca5599616edb0173f4a970/models/island-survival/blender/build_campfire_scene.py"
+    },
+    {
+      "id": "tanks-fluid-connector-jig",
+      "kind": "model",
+      "status": "committed-editable-reference",
+      "summary": "calibrated port cap, collar and tube mating reference; native prototype port requires independent measurement",
+      "href": "https://github.com/mrcalzon02/Tanks-for-bob-Fork/blob/3f38f801631a88460bca5599616edb0173f4a970/models/reference/factorio-fluid-interface/factorio-fluid-interface-reference.blend"
+    },
+    {
+      "id": "water-purifier-mh7",
+      "kind": "model",
+      "status": "four-goal-runner-candidate-unapproved",
+      "summary": "Four-goal Qwen-guided Water Purifier candidate saved and independently GLB reimported; visual mechanical/PBR detail and native Factorio port mating still open",
+      "href": "https://github.com/mrcalzon02/HB-TTRPG-tools/blob/a953f083412c9e67481d31ebc8b5fb242cf0cf69/tools/refinery-agent/goal_water_purifier.py"
+    },
+    {
+      "id": "pbr-texture-generator",
+      "kind": "program",
+      "status": "materials",
+      "summary": "original deterministic weathered albedo/ORM/normal triplets",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/art/source-to-3d/martian-bunker/src/v10/make_textures.py"
+    },
+    {
+      "id": "pbr-blender-material-nodes",
+      "kind": "program",
+      "status": "materials",
+      "summary": "packed Blender PBR materials and UV",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/art/source-to-3d/martian-bunker/src/v10/setup_blender.py"
+    },
+    {
+      "id": "fmpl-material-importer",
+      "kind": "program",
+      "status": "materials",
+      "summary": "reuse existing source PBR material triplets without regenerating",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/art/source-to-3d/shared-parts/industrial-asset-library/import_materials.py"
+    },
+    {
+      "id": "emergency-miner-generator",
+      "kind": "program",
+      "status": "geometry",
+      "summary": "source-bound castings, grooves, fasteners, cable glands and hoses",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/art/source-to-3d/emergency-miner/build_model.py"
+    },
+    {
+      "id": "boiler-v08-animation",
+      "kind": "program",
+      "status": "animation",
+      "summary": "canisters, steam and status lighting",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/art/source-to-3d/boiler-v08/animate_boiler_v08.py"
+    },
+    {
+      "id": "condenser-v21-builder",
+      "kind": "program",
+      "status": "geometry",
+      "summary": "boolean-manifold-to-body and 2x2 socket calibration",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/art/source-to-3d/condenser-v21/build_condenser_v21.py"
+    },
+    {
+      "id": "tp-production-pipeline",
+      "kind": "program",
+      "status": "export",
+      "summary": "checked build, capture and package with checkpointing",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/tools/art/produce_factorio_asset.py"
+    },
+    {
+      "id": "tp-sprite-export",
+      "kind": "program",
+      "status": "sprite",
+      "summary": "four direction capture and atlas packaging",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/tools/art/export_sprites.py"
+    },
+    {
+      "id": "tp-model-prototype-attach",
+      "kind": "program",
+      "status": "integration",
+      "summary": "attach generated exact-prototype assets without replacing unrelated fields",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/tools/art/attach_factorio_prototype.py"
+    },
+    {
+      "id": "tp-graphics-validation",
+      "kind": "program",
+      "status": "verification",
+      "summary": "readback graphics inventory and sprite format",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/tools/art/verify_installed_model_sprites.py"
+    },
+    {
+      "id": "tanks-sprite-export",
+      "kind": "program",
+      "status": "sprite",
+      "summary": "animated/static four view fixed camera Blender capture",
+      "href": "https://github.com/mrcalzon02/Tanks-for-bob-Fork/blob/3f38f801631a88460bca5599616edb0173f4a970/tools/art/export_sprites.py"
+    },
+    {
+      "id": "tanks-production-pipeline",
+      "kind": "program",
+      "status": "export",
+      "summary": "reproducible sprites and source artifacts",
+      "href": "https://github.com/mrcalzon02/Tanks-for-bob-Fork/blob/3f38f801631a88460bca5599616edb0173f4a970/tools/art/produce_factorio_asset.py"
+    },
+    {
+      "id": "tanks-prototype-attach",
+      "kind": "program",
+      "status": "integration",
+      "summary": "Factorio entity graphics attachment",
+      "href": "https://github.com/mrcalzon02/Tanks-for-bob-Fork/blob/3f38f801631a88460bca5599616edb0173f4a970/tools/art/attach_factorio_prototype.py"
+    },
+    {
+      "id": "tanks-pipe-jig",
+      "kind": "program",
+      "status": "calibration",
+      "summary": "append reference pipe and collar to editable Blender model",
+      "href": "https://github.com/mrcalzon02/Tanks-for-bob-Fork/blob/3f38f801631a88460bca5599616edb0173f4a970/models/reference/factorio-fluid-interface/append_reference.py"
+    },
+    {
+      "id": "hb-factorio-render",
+      "kind": "program",
+      "status": "render",
+      "summary": "camera/registration and engine-shaped reconstruction workbench",
+      "href": "https://github.com/mrcalzon02/HB-TTRPG-tools/blob/5942590d944cd5aef03a973fdd941e03fd10d833/tools/factorio-render-pipeline/README.md"
+    },
+    {
+      "id": "hb-local-runner",
+      "kind": "program",
+      "status": "orchestration",
+      "summary": "one self-hosted job with bounded log and evidence upload",
+      "href": "https://github.com/mrcalzon02/HB-TTRPG-tools/blob/5942590d944cd5aef03a973fdd941e03fd10d833/.github/workflows/homebrew-local-worker.yml"
+    },
+    {
+      "id": "hb-qwen-pilot",
+      "kind": "program",
+      "status": "inference",
+      "summary": "schema-validated local Qwen geometry with Blender ownership",
+      "href": "https://github.com/mrcalzon02/HB-TTRPG-tools/blob/a953f083412c9e67481d31ebc8b5fb242cf0cf69/tools/refinery-agent/goal_water_purifier.py"
+    },
+    {
+      "id": "fmpl-visible-process-refinement",
+      "kind": "program",
+      "status": "geometry-animation",
+      "summary": "Open glass treatment vessel, keyed shaft/impeller/steam, physically connected filter/pump paths, reused concrete PBR base",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/c0be708eec7a3a798b1945017eae58c2147e407a/tools/fmpl/production_smoke/refine_process.py"
+    },
+    {
+      "id": "fmpl-process-independent-verification",
+      "kind": "program",
+      "status": "verification",
+      "summary": "Independent native Blender and GLB checks for process, animation, transmitted glass and packed concrete materials",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/c0be708eec7a3a798b1945017eae58c2147e407a/tools/fmpl/production_smoke/verify_process.py"
+    },
+    {
+      "id": "model-editable-source",
+      "kind": "pipeline",
+      "status": "implemented-in-existing-art-tools",
+      "summary": "model source evidence only, not automatic game acceptance",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/tools/art/produce_factorio_asset.py"
+    },
+    {
+      "id": "sprites-four-orientations",
+      "kind": "pipeline",
+      "status": "implemented-campfire-workflow",
+      "summary": "native sprite placement and owner visual review separate",
+      "href": "https://github.com/mrcalzon02/Tanks-for-bob-Fork/blob/3f38f801631a88460bca5599616edb0173f4a970/tools/art/export_sprites.py"
+    },
+    {
+      "id": "factorio-prototype-integration",
+      "kind": "pipeline",
+      "status": "requires-exact-prototype-and-native-check",
+      "summary": "do not claim native pipe correctness from Blender alone",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/b16f98c6e62d0a82697fd01eaa3fc6953c35ccde/tools/art/attach_factorio_prototype.py"
+    },
+    {
+      "id": "local-inference-refinement",
+      "kind": "pipeline",
+      "status": "four-goal-water-purifier-construction-candidate-not-visually-approved",
+      "summary": "inference suggestions are untrusted, independent human visual approval required",
+      "href": "https://github.com/mrcalzon02/HB-TTRPG-tools/blob/5942590d944cd5aef03a973fdd941e03fd10d833/tools/refinery-agent/goal_water_purifier.py"
+    },
+    {
+      "id": "process-readable-machine-rebuild",
+      "kind": "pipeline",
+      "status": "source-committed-remote-runner-proof-pending",
+      "summary": "Native Factorio pipe cells and user visual approval remain unverified after Blender export",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/c0be708eec7a3a798b1945017eae58c2147e407a/tools/fmpl/production_smoke/refine_process.py"
+    },
+    {
+      "id": "greebles-drive-2026-10",
+      "kind": "library",
+      "status": "source-verified-geometry-unclassified",
+      "summary": "Editable greeble donor for design language, not verified pipe or mechanical connections (private Blender donor; metadata only)",
+      "href": "https://github.com/mrcalzon02/Tech-Priests/blob/7577ac00128d76ad12cc7b143fc1553ef463498c/tools/fmpl/greebles/README.md"
+    }
+  ],
+  "consumer": "fmpl-consumer.json",
+  "skill": "skills/fmpl-asset-production/SKILL.md",
+  "status": "read-only pinned snapshot; no remote execution",
+  "notes": "Canonical source lives in Tech-Priests. Large binaries and private Greebles.blend are not copied. Geometry candidates are not verified interchangeable parts. Use local Python/Blender and source-specific licensing and native Factorio port validation."
+}
