@@ -195,7 +195,8 @@ def execute(cmd, log, timeout):
         r=subprocess.run([str(x) for x in cmd],stdout=f,stderr=subprocess.STDOUT,timeout=timeout,check=False)
         f.write(f"\nReturn code {r.returncode}\n")
     if r.returncode:
-        raise RuntimeError(f"Blender step returned {r.returncode}: {log}")
+        excerpt=log.read_text(encoding="utf-8",errors="replace")[-6500:]
+        raise RuntimeError(f"Blender step returned {r.returncode}: {log}\\n{excerpt}")
 
 
 def main(argv=None):

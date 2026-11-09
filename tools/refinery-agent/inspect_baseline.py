@@ -2,6 +2,7 @@
 import argparse,hashlib,json,sys
 from pathlib import Path
 import bpy
+from mathutils import Vector
 
 
 def main():
@@ -17,7 +18,7 @@ def main():
     for o in sorted(bpy.context.scene.objects,key=lambda x:x.name):
         if o.type!='MESH' or not o.name.startswith('MH7_') or o.name.startswith('MH7_QWEN_'):
             continue
-        coords=[o.matrix_world @ v for v in o.bound_box]
+        coords=[o.matrix_world @ Vector(v) for v in o.bound_box]
         if not coords:continue
         low=[round(min(v[k] for v in coords),3) for k in range(3)]
         high=[round(max(v[k] for v in coords),3) for k in range(3)]
