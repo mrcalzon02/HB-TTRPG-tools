@@ -2,8 +2,8 @@
   "schema": "fmpl.consumer.v1",
   "consumer_repo": "mrcalzon02/HB-TTRPG-tools",
   "module_repo": "mrcalzon02/Tech-Priests",
-  "module_version": "0.3.1",
-  "module_commit": "381958aea15b737aa38d3a4fecb3c7dce6fb408e",
+  "module_version": "0.4.0",
+  "module_commit": "1eb21675fcb4c083703db5cbfaf473e20e2dcd74",
   "uses": [
     "water-purifier-mh7",
     "hb-local-runner",
@@ -17,10 +17,11 @@
     "standalone_reference_repo": true,
     "code_execution": "Existing local Python/Blender only",
     "workflow_creation": false,
-    "model_downloads": false
+    "model_downloads": false,
+    "camera_policy": "fmpl.factorio45.v1"
   },
   "validation_command": "python fmpl-source/tools/fmpl/fmpl_consumer.py --config fmpl-consumer.json --library-root fmpl-source",
-  "source_doc": "https://github.com/mrcalzon02/Tech-Priests/blob/381958aea15b737aa38d3a4fecb3c7dce6fb408e/tools/fmpl/PROCESS_MACHINERY_STANDARD.md",
+  "source_doc": "https://github.com/mrcalzon02/Tech-Priests/blob/1eb21675fcb4c083703db5cbfaf473e20e2dcd74/tools/fmpl/CAMERA_CAPTURE_STANDARD.md",
   "discovery": {
     "ui": "ai-tools.html#fmpl-library",
     "catalog": "api/ai/fmpl-library.json",

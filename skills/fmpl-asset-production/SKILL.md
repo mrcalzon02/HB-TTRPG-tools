@@ -28,3 +28,7 @@ metadata:
 ## Rights and status discipline
 
 FMPL is reusable tooling, **not** blanket rights to Wube or third-party models, screenshots, textures or derivative assets. Official graphics and external sources may be valid reference material without being freely redistributable. The status of the canonical source governs promotions: a catalog listing, candidate GLB or exported image does not establish an owner-approved part or game-installed asset.
+
+## Mandatory 45-degree camera capture contract (FMPL 0.4.0)
+
+Before ANY production rendering, acquire the consumer-pinned FMPL and run the canonical capture_policy.py validator. Only one orthographic grid-aligned camera at elevation 45 degrees / zero azimuth may be persisted. Entity animations may use ONLY four 90-degree object rotations; an item icon gets ONLY one 45-degree view. The Blender camera guard removes all unapproved or temporary cameras from the in-memory derived master, records their names, and blocks source scenes where camera parenting would damage model geometry. Do not export arbitrary inspection stills or accept an unknown camera rig; the source .blend on disk is preserved.

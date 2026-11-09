@@ -4,12 +4,13 @@
   "name": "Factorio Modeling Production Library",
   "canonical": {
     "repo": "mrcalzon02/Tech-Priests",
-    "commit": "7577ac00128d76ad12cc7b143fc1553ef463498c",
-    "version": "0.3.0",
-    "manifest": "https://raw.githubusercontent.com/mrcalzon02/Tech-Priests/7577ac00128d76ad12cc7b143fc1553ef463498c/tools/fmpl/FMPL.json",
-    "readme": "https://github.com/mrcalzon02/Tech-Priests/blob/7577ac00128d76ad12cc7b143fc1553ef463498c/tools/fmpl/README.md",
+    "commit": "1eb21675fcb4c083703db5cbfaf473e20e2dcd74",
+    "version": "0.4.0",
+    "manifest": "https://raw.githubusercontent.com/mrcalzon02/Tech-Priests/1eb21675fcb4c083703db5cbfaf473e20e2dcd74/tools/fmpl/FMPL.json",
+    "readme": "https://github.com/mrcalzon02/Tech-Priests/blob/1eb21675fcb4c083703db5cbfaf473e20e2dcd74/tools/fmpl/README.md",
     "materials": "https://github.com/mrcalzon02/Tech-Priests/blob/7577ac00128d76ad12cc7b143fc1553ef463498c/art/source-to-3d/shared-parts/industrial-asset-library/catalog.json",
-    "parts": "https://github.com/mrcalzon02/Tech-Priests/blob/7577ac00128d76ad12cc7b143fc1553ef463498c/art/source-to-3d/shared-parts/metallic-hydrogen/registry.json"
+    "parts": "https://github.com/mrcalzon02/Tech-Priests/blob/7577ac00128d76ad12cc7b143fc1553ef463498c/art/source-to-3d/shared-parts/metallic-hydrogen/registry.json",
+    "camera_standard": "https://github.com/mrcalzon02/Tech-Priests/blob/1eb21675fcb4c083703db5cbfaf473e20e2dcd74/tools/fmpl/CAMERA_CAPTURE_STANDARD.md"
   },
   "inventory": {
     "models": 9,
@@ -264,5 +265,28 @@
   "consumer": "fmpl-consumer.json",
   "skill": "skills/fmpl-asset-production/SKILL.md",
   "status": "read-only pinned snapshot; no remote execution",
-  "notes": "Canonical source lives in Tech-Priests. Large binaries and private Greebles.blend are not copied. Geometry candidates are not verified interchangeable parts. Use local Python/Blender and source-specific licensing and native Factorio port validation."
+  "notes": "All FMPL production output is restricted to one fixed 45deg orthographic camera: entity [0,90,180,270], item [0] single icon frame. No extra camera objects in exported .blend; original source untouched. Native Blender/Factorio execution is separate.",
+  "capture_contract": {
+    "id": "fmpl.factorio45.v1",
+    "policy_file": "tools/fmpl/CAMERA_CAPTURE_STANDARD.md",
+    "validator": "tools/fmpl/capture_policy.py",
+    "camera_guard": "tools/fmpl/blender_camera_guard.py",
+    "cleanup_script": "tools/fmpl/camera_cleanup_scene.py",
+    "camera": "FMPL_CAPTURE_CAMERA",
+    "pitch_deg": 45,
+    "grid_azimuth_deg": 0,
+    "projection": "ORTHO",
+    "entity_angles": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "item_angles": [
+      0
+    ],
+    "item_frame_count": 1,
+    "persistent_cameras": 1,
+    "temporary_camera_policy": "remove in finally, never save"
+  }
 }
