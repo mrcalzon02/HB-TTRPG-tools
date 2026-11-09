@@ -1,5 +1,37 @@
 # HB-TTRPG-tools workflow purge — 2026-11-02
 
+## Follow-up cleanup — 2026-11-08
+
+The repository had grown to **65 workflow definitions**. This cleanup removes
+**28 obsolete definitions**, leaving **37**, with no new workflow added:
+
+- Retire the 27 historical numbered Factorio R94–R126 declarations. Keep the
+  existing R127 workflow, which also executes R128, plus the four shared render
+  and reference pipelines. Factorio definitions decrease from 32 to 5.
+- Retire `spr-promote-neural-passages.yml`: its two exact destination WAVs are
+  already committed, so its fixed artifact-import operation is complete.
+- Keep `homebrew-local-worker.yml` as the existing single-job runner. Status
+  reporting and its diagnostic mode remain inside that workflow.
+- Preserve current product builds, releases, scoped validators, source scripts,
+  saved models, run history, and artifacts. No scheduled workflows are present.
+
+The retired render declarations do not call one another. They import fixed
+historical run IDs and artifact names. In particular, retained R127/R128 uses
+run `41595863349` and artifact
+`factorio-r126-source-square-edge-one-round-fin-real-3d-candidates`; that artifact
+was verified available during cleanup and is not deleted. Artifact retention
+and eventual expiration remain separate from workflow-definition cleanup.
+
+The complete pre-cleanup definitions are recoverable from commit
+`f1c886f9caf120135e69e56b020b034c8cef66e6`. Reuse maintained workflows for further
+iterations; do not add a new executable workflow for each render revision or
+completed one-off import. Preserve required outputs when consolidating jobs.
+
+The November 2 counts and retained list below describe that earlier cleanup,
+not the current inventory.
+
+## Original cleanup record — 2026-11-02
+
 **Purpose:** Execute the user's explicit instruction to **purge inactive GitHub Actions workflows** while preserving workflows that serve current, user-authorized original creative and game tasks, source-fidelity Blender development, and working site/release delivery.
 
 **Repository:** `mrcalzon02/HB-TTRPG-tools`, `main`. Prior to 2026-11-02 cleanup there were 121 executable workflow files; first conservative pass reduced to 84. This purge removes **49 more** active workflow declarations, leaving **35**. Total reduction from original 121 is **86 workflows (71.1%)**.
