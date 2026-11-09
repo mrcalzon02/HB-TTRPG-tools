@@ -223,6 +223,14 @@ try{
   $result | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $out 'FMPL_PRODUCTION_RESULTS.json') -Encoding utf8
   $state.status='passed'
   Checkpoint 'candidate-produced-and-audited'
+  # Completion arbitration uses the status file's work_result, not just the
+  # GitHub step exit code. Publish the independently verified pass receipt.
+  if($env:HB_STATUS_SCRIPT -and (Test-Path -LiteralPath $env:HB_STATUS_SCRIPT -PathType Leaf)){
+    try{
+      . $env:HB_STATUS_SCRIPT
+      Set-HBStatus -Directory $report -Stage 'fmpl-candidate-produced-and-audited' -WorkResult 'passed' -Progress @{stage='candidate-produced-and-audited';four_directions=4;atlases=3} -Progressed
+    }catch{Write-Warning 'FMPL live success telemetry delayed; GitHub job and artifact remain authoritative'}
+  }
   Write-Host 'FMPL_PRODUCTION_PASS: concrete PBR, glass-top keyed agitator, pump/filter flow, steam, real GLB, 4 static directions, 3 atlases'
   exit 0
 }catch{
