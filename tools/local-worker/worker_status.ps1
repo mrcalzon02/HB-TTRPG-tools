@@ -110,9 +110,10 @@ function Start-HBStatusPublisher {
     $powershell = Join-Path $PSHOME 'powershell.exe'
     if (-not (Test-Path -LiteralPath $powershell)) { $powershell = (Get-Process -Id $PID).Path }
     $arguments = '-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "{0}" -Directory "{1}"' -f $scriptPath,$Directory
-    $process = Start-Process -FilePath $powershell -ArgumentList $arguments -WorkingDirectory $Directory -PassThru `
-        -RedirectStandardOutput (Join-Path $Directory 'publisher.stdout.txt') `
-        -RedirectStandardError (Join-Path $Directory 'publisher.stderr.txt')
+    # Use Windows ShellExecute and a separate hidden console. Redirected launch
+    # can inherit the Actions step's pipe handles and be killed when it exits.
+    # The publisher writes its own bounded diagnostic file directly.
+    $process = Start-Process -FilePath $powershell -ArgumentList $arguments -WorkingDirectory $Directory -WindowStyle Hidden -PassThru
     try {
         Write-HBAtomicJson (Join-Path $Directory 'publisher-process.json') ([ordered]@{
             pid=$process.Id; started_ticks=$process.StartTime.ToUniversalTime().Ticks.ToString()

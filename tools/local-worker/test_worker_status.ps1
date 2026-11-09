@@ -64,11 +64,11 @@ function Get-Process {
 }
 function Start-Process {
     [CmdletBinding()]
-    param([string]$FilePath,[string]$ArgumentList,[string]$WorkingDirectory,[switch]$PassThru,
+    param([string]$FilePath,[string]$ArgumentList,[string]$WorkingDirectory,[string]$WindowStyle,[switch]$PassThru,
         [string]$RedirectStandardOutput,[string]$RedirectStandardError)
     if ($null -eq $script:HBMockProcess) { throw 'Starting a real process is prohibited in these offline tests.' }
     $script:HBStartedArguments = @{
-        file=$FilePath;arguments=$ArgumentList;directory=$WorkingDirectory
+        file=$FilePath;arguments=$ArgumentList;directory=$WorkingDirectory;window_style=$WindowStyle
         stdout=$RedirectStandardOutput;stderr=$RedirectStandardError
     }
     return $script:HBMockProcess
@@ -424,6 +424,8 @@ try {
         Assert-HBEqual $receipt.Count 3 'Process receipt contains data beyond identity and creation time.'
         Assert-HBTest (-not $script:HBStartedArguments.arguments.Contains($env:GH_TOKEN)) 'Token was placed on the publisher command line.'
         Assert-HBEqual $script:HBStartedArguments.directory $path 'Publisher did not use its scoped report directory.'
+        Assert-HBEqual $script:HBStartedArguments.window_style 'Hidden' 'Publisher did not request its own hidden console.'
+        Assert-HBTest (-not $script:HBStartedArguments.stdout -and -not $script:HBStartedArguments.stderr) 'Publisher inherited the step redirection path.'
         Assert-HBEqual $script:HBMockProcess.Disposed 1 'Startup process handle was not released.'
     }
     Invoke-HBTest 'Failed ownership persistence cannot leave an untracked publisher running' {

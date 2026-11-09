@@ -10,6 +10,10 @@ It uses that job's temporary GitHub token with `contents: read` and
 `checks: write`. It adds no separate workflow, persistent credential, listening
 service, or automatic task restart.
 
+The Windows publisher starts in a separate hidden console so it can survive
+the startup step's exit. It writes fixed diagnostic events directly to a
+bounded `publisher-events.txt` file and retains normal Actions job cleanup.
+
 ## Read the status
 
 Open the workflow run in GitHub for its steps, logs, artifact link, and final
