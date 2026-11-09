@@ -2,6 +2,7 @@
 # FMPL production smoke: reuse one OLD-CORE30 job. Never modify source scenes or game.
 # V03 physically-readable water treatment build; verified pinned fixture correction.
 # V03 bounds readback corrected; preserve original model and material library.
+# V03 alpha background excluded; serviceable filter sight bank moved into camera view.
 $ErrorActionPreference='Stop'
 $ProgressPreference='SilentlyContinue'
 if($env:RUNNER_NAME -ne 'OLD-CORE30-homebrew' -or $env:HB_MODE -ne 'fmpl-production'){throw 'Wrong FMPL worker or mode'}
