@@ -14,158 +14,230 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  readiness:
-    if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main'
+  repair-and-test:
+    if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main' && github.actor == 'mrcalzon02'
     runs-on: [self-hosted, Windows, X64]
-    timeout-minutes: 10
+    timeout-minutes: 12
     defaults:
       run:
-        # Process-only policy; do not change LocalMachine or CurrentUser settings.
         shell: powershell -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
     steps:
-      # No checkout needed: this first job must work even before Git is provisioned.
-      - name: Verify runner and inventory existing local environment
+      - name: Repair worker paths and test existing local tools and models
         run: |
           $ErrorActionPreference = 'Stop'
           $ProgressPreference = 'SilentlyContinue'
-          if ($env:RUNNER_NAME -ne 'OLD-CORE30-homebrew') {
-            throw 'Wrong runner: refusing to inspect or modify another machine.'
-          }
+          if ($env:RUNNER_NAME -ne 'OLD-CORE30-homebrew') { throw 'Wrong runner; no changes made.' }
           $root = 'D:\Runner\actions-runner'
-          if (-not (Test-Path (Join-Path $root '.runner'))) {
-            throw 'Expected runner configuration is absent on D:. No installation changes made.'
-          }
-          $reportDir = Join-Path $root ("_homebrew\reports\{0}-{1}" -f $env:GITHUB_RUN_ID,$env:GITHUB_RUN_ATTEMPT)
-          New-Item -ItemType Directory -Force -Path $reportDir | Out-Null
-          "HB_REPORT_DIR=$reportDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          $report = [ordered]@{
-            schema_version = 1
-            recorded_utc = [DateTime]::UtcNow.ToString('o')
-            runner = $env:RUNNER_NAME
-            stage = 'started'
-            installs_performed = @()
-            model_downloads_performed = @()
-            errors = @()
-          }
+          if (-not (Test-Path -LiteralPath "$root\.runner")) { throw 'Expected D: runner configuration is missing.' }
+          $work = Join-Path $root '_homebrew'
+          $out = Join-Path $work ("reports\{0}-{1}" -f $env:GITHUB_RUN_ID,$env:GITHUB_RUN_ATTEMPT)
+          New-Item -ItemType Directory -Force -Path $out | Out-Null
+          "HB_REPORT_DIR=$out" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          $report = [ordered]@{schema_version=2;runner=$env:RUNNER_NAME;commit=$env:GITHUB_SHA;started_utc=[DateTime]::UtcNow.ToString('o');stage='preflight';stages=[ordered]@{};tools=[ordered]@{};changes=@();errors=@();installs=@();model_downloads=@()}
+          $ownedServer = $null
           function Save-Checkpoint {
-            $temporary = Join-Path $reportDir 'readiness.json.tmp'
-            $report | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $temporary -Encoding utf8
-            Move-Item -LiteralPath $temporary -Destination (Join-Path $reportDir 'readiness.json') -Force
+            $tmp = Join-Path $out 'repair.json.tmp'
+            $report | ConvertTo-Json -Depth 15 | Set-Content -LiteralPath $tmp -Encoding utf8
+            Move-Item -LiteralPath $tmp -Destination (Join-Path $out 'repair.json') -Force
+          }
+          function Log([string]$Text) { Write-Host ("[{0}] {1}" -f [DateTime]::UtcNow.ToString('HH:mm:ssZ'),$Text) }
+          function Stage([string]$Name,[scriptblock]$Body) {
+            $report.stage=$Name; $report.stages[$Name]=[ordered]@{status='running'}; Save-Checkpoint
+            Log "START $Name"
+            try { & $Body; $report.stages[$Name].status='passed'; Log "PASS $Name" }
+            catch { $message=$_.Exception.Message; $report.stages[$Name].status='blocked'; $report.stages[$Name].error=$message; $report.errors+= "$Name : $message"; Log "BLOCKED $Name : $message" }
+            Save-Checkpoint
+          }
+          function Find-Tool([string]$Name,[string[]]$Patterns) {
+            $candidates=@(Get-Command $Name -CommandType Application -ErrorAction SilentlyContinue | Where-Object {$_.Source -notlike '*\WindowsApps\*'} | ForEach-Object {$_.Source})
+            foreach ($pattern in $Patterns) { $candidates+=@(Get-ChildItem -Path $pattern -File -ErrorAction SilentlyContinue | ForEach-Object {$_.FullName}) }
+            foreach ($candidate in ($candidates | Select-Object -Unique)) {
+              if (Test-Path -LiteralPath $candidate -PathType Leaf) { return $candidate }
+            }
+            return $null
+          }
+          function Run-Tool([string]$Name,[string]$Exe,[string]$Arguments,[int]$Timeout=90) {
+            if (-not $Exe) { throw "$Name executable is not accessible to the runner service." }
+            Log "RUN $Name"
+            $stdout=Join-Path $out "$Name.stdout.txt"; $stderr=Join-Path $out "$Name.stderr.txt"
+            $process=Start-Process -FilePath $Exe -ArgumentList $Arguments -WorkingDirectory $out -RedirectStandardOutput $stdout -RedirectStandardError $stderr -NoNewWindow -PassThru
+            $watch=[Diagnostics.Stopwatch]::StartNew(); $heartbeat=15
+            while (-not $process.WaitForExit(1000)) {
+              if ($watch.Elapsed.TotalSeconds -ge $Timeout) {
+                # Only terminate this process tree, which this job just created.
+                & taskkill.exe /PID $process.Id /T /F | Out-Null
+                throw "$Name exceeded its ${Timeout}s timeout; job-owned process stopped."
+              }
+              if ($watch.Elapsed.TotalSeconds -ge $heartbeat) { Log "$Name still running ($([int]$watch.Elapsed.TotalSeconds)s)"; $heartbeat+=15 }
+            }
+            $process.WaitForExit(); $process.Refresh()
+            if ($process.ExitCode -ne 0) { throw "$Name exited $($process.ExitCode); see its stdout/stderr artifact." }
           }
           Save-Checkpoint
           try {
-            $os = Get-CimInstance Win32_OperatingSystem
-            $report.windows = [ordered]@{
-              caption = $os.Caption
-              version = $os.Version
-              architecture = $os.OSArchitecture
-              total_ram_gib = [Math]::Round($os.TotalVisibleMemorySize / 1MB, 2)
-              free_ram_gib = [Math]::Round($os.FreePhysicalMemory / 1MB, 2)
+            Stage 'resolve-tools' {
+              $report.tools.git=Find-Tool 'git' @('C:\Program Files\Git\cmd\git.exe')
+              $report.tools.java=Find-Tool 'java' @('C:\Program Files\Java\jdk*\bin\java.exe','C:\Program Files\Eclipse Adoptium\jdk*\bin\java.exe')
+              $report.tools.javac=Find-Tool 'javac' @('C:\Program Files\Java\jdk*\bin\javac.exe','C:\Program Files\Eclipse Adoptium\jdk*\bin\javac.exe')
+              # Only known application installation directories, never personal documents.
+              $report.tools.python=Find-Tool 'python' @('D:\Runner\actions-runner\_homebrew\tools\python*\python.exe','C:\Program Files\Python*\python.exe','C:\Users\*\AppData\Local\Programs\Python\Python3*\python.exe')
+              $report.tools.blender=Find-Tool 'blender' @('C:\Program Files\Blender Foundation\Blender*\blender.exe')
+              $report.tools.ollama=Find-Tool 'ollama' @('C:\Program Files\Ollama\ollama.exe','C:\Users\*\AppData\Local\Programs\Ollama\ollama.exe','D:\AI-Relocation\Ollama\ollama.exe')
+              $report.tools.nvidia_smi=Find-Tool 'nvidia-smi' @('C:\Windows\System32\nvidia-smi.exe')
+              $paths=@($report.tools.Values | Where-Object {$_} | ForEach-Object {Split-Path -Parent $_} | Select-Object -Unique)
+              $env:PATH=($paths -join ';')+';'+$env:PATH
+              $paths | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+              $report.changes+='Resolved existing tool paths for this job; no machine or desktop-user PATH changes.'
+              $config=[ordered]@{schema_version=1;runner=$env:RUNNER_NAME;tools=$report.tools;model_root='D:\AI-Relocation\Ollama\models';worker_host='127.0.0.1:11435';num_parallel=1;num_threads=8;context=2048;recorded_utc=[DateTime]::UtcNow.ToString('o')}
+              $config | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $out 'worker-environment.json') -Encoding utf8
+              foreach ($key in $report.tools.Keys) { Log "$key = $($report.tools[$key])" }
             }
-            $report.cpu = @(Get-CimInstance Win32_Processor | Select-Object Name,NumberOfCores,NumberOfLogicalProcessors)
-            $report.gpu = @(Get-CimInstance Win32_VideoController | Select-Object Name,DriverVersion)
-            $report.disks = @(Get-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' | ForEach-Object {
-              [ordered]@{drive=$_.DeviceID; total_gib=[Math]::Round($_.Size/1GB,2); free_gib=[Math]::Round($_.FreeSpace/1GB,2)}
-            })
-            $report.runner_service = @(Get-CimInstance Win32_Service -Filter "Name LIKE 'actions.runner.%'" | Select-Object Name,State,StartMode)
-            $report.tools_visible_to_service = [ordered]@{}
-            foreach ($tool in @('git','python','py','uv','java','javac','blender','ollama','pwsh','node','npm','nvidia-smi')) {
-              $commands = @(Get-Command $tool -CommandType Application -ErrorAction SilentlyContinue | Where-Object { $_.Source -notlike '*\WindowsApps\*' })
-              $report.tools_visible_to_service[$tool] = ($commands.Count -gt 0)
+            Stage 'git-test' { Run-Tool 'git-version' $report.tools.git '--version' }
+            Stage 'java-compile-run' {
+              'public class WorkerSmoke { public static void main(String[] args) { if (6*7 != 42) throw new AssertionError(); System.out.println("JAVA_WORKER_OK"); } }' | Set-Content -LiteralPath (Join-Path $out 'WorkerSmoke.java') -Encoding ascii
+              Run-Tool 'javac' $report.tools.javac 'WorkerSmoke.java'
+              Run-Tool 'java' $report.tools.java '-cp . WorkerSmoke'
+              if ((Get-Content (Join-Path $out 'java.stdout.txt') -Raw) -notmatch 'JAVA_WORKER_OK') { throw 'Java success marker missing.' }
             }
-            # Check fixed installation locations without crawling personal files.
-            $report.known_installations = [ordered]@{
-              git = (Test-Path 'C:\Program Files\Git\cmd\git.exe')
-              blender = (@(Get-ChildItem 'C:\Program Files\Blender Foundation\Blender*\blender.exe' -File -ErrorAction SilentlyContinue).Count -gt 0)
-              java = (@(Get-ChildItem 'C:\Program Files\Eclipse Adoptium\jdk*\bin\javac.exe' -File -ErrorAction SilentlyContinue).Count -gt 0)
+            Stage 'python-runtime-venv' {
+              $pythonSource=@'
+          import json, pathlib, subprocess, sys, venv
+          assert sum(range(10)) == 45
+          pathlib.Path('python-roundtrip.json').write_text(json.dumps({'answer': 42}), encoding='utf-8')
+          assert json.loads(pathlib.Path('python-roundtrip.json').read_text(encoding='utf-8'))['answer'] == 42
+          venv.EnvBuilder(with_pip=False).create('python-venv')
+          subprocess.run([str(pathlib.Path('python-venv/Scripts/python.exe').resolve()), '-I', '-c', 'print("VENV_WORKER_OK")'], check=True, timeout=20)
+          print(json.dumps({'python': sys.version, 'executable': sys.executable, 'venv': 'passed', 'file_roundtrip': 'passed'}))
+          print('PYTHON_WORKER_OK')
+          '@
+              $pythonSource | Set-Content -LiteralPath (Join-Path $out 'python-smoke.py') -Encoding utf8
+              Run-Tool 'python' $report.tools.python '-I python-smoke.py'
+              if ((Get-Content (Join-Path $out 'python.stdout.txt') -Raw) -notmatch 'PYTHON_WORKER_OK') { throw 'Python success marker missing.' }
             }
-            $modelRoot = 'D:\AI-Relocation\Ollama\models'
-            $report.model_store = [ordered]@{
-              expected_path = $modelRoot
-              visible_to_service = (Test-Path -LiteralPath $modelRoot)
-              manifests_visible = (Test-Path -LiteralPath (Join-Path $modelRoot 'manifests'))
+            Stage 'blender-save-reopen-render' {
+              $blenderSource=@'
+          import bpy, pathlib
+          out = pathlib.Path.cwd()
+          bpy.ops.wm.read_factory_settings(use_empty=False)
+          scene = bpy.context.scene
+          scene.render.engine = 'CYCLES'
+          scene.cycles.device = 'CPU'
+          scene.cycles.samples = 4
+          scene.cycles.use_denoising = False
+          scene.render.threads_mode = 'FIXED'
+          scene.render.threads = 4
+          scene.render.resolution_x = 256
+          scene.render.resolution_y = 256
+          scene.render.resolution_percentage = 100
+          scene.render.image_settings.file_format = 'PNG'
+          scene.render.filepath = str(out / 'blender-proof.png')
+          bpy.ops.wm.save_as_mainfile(filepath=str(out / 'worker-smoke.blend'))
+          bpy.ops.wm.open_mainfile(filepath=str(out / 'worker-smoke.blend'))
+          bpy.ops.render.render(write_still=True)
+          assert (out / 'blender-proof.png').stat().st_size > 1000
+          print('BLENDER_WORKER_OK')
+          '@
+              $blenderSource | Set-Content -LiteralPath (Join-Path $out 'blender-smoke.py') -Encoding utf8
+              Run-Tool 'blender' $report.tools.blender '--background --factory-startup --python-exit-code 1 --python blender-smoke.py' 120
+              if (-not (Test-Path -LiteralPath (Join-Path $out 'blender-proof.png'))) { throw 'Blender render missing.' }
             }
-            $report.stage = 'hardware-checkpoint'
-            Save-Checkpoint
-
-            # An existing localhost API is usable across Windows accounts; a new
-            # Ollama service is NOT a prerequisite when that API already responds.
-            $endpoint = 'http://127.0.0.1:11434'
-            try {
-              $version = Invoke-RestMethod -Uri "$endpoint/api/version" -TimeoutSec 10
-              $tags = Invoke-RestMethod -Uri "$endpoint/api/tags" -TimeoutSec 10
-            } catch {
-              throw 'Ollama API is unavailable to the runner at localhost:11434. Inventory saved; no models or services changed.'
+            Stage 'model-store-validation' {
+              $modelRoot='D:\AI-Relocation\Ollama\models'
+              $manifestRoot=Join-Path $modelRoot 'manifests'
+              $files=@(Get-ChildItem -LiteralPath $manifestRoot -File -Recurse -ErrorAction Stop)
+              $report.model_store=[ordered]@{path=$modelRoot;manifest_count=$files.Count;manifests=@()}
+              foreach ($file in $files) {
+                $entry=[ordered]@{path=$file.FullName.Substring($manifestRoot.Length+1);valid=$false;missing_blobs=@()}
+                try {
+                  $manifest=Get-Content -LiteralPath $file.FullName -Raw | ConvertFrom-Json
+                  $descriptors=@($manifest.config)+@($manifest.layers)
+                  if ($descriptors.Count -lt 2) { throw 'No model layers present.' }
+                  foreach ($descriptor in $descriptors) {
+                    if ($descriptor.digest -notmatch '^sha256:[0-9a-f]{64}$') { throw 'Invalid blob digest.' }
+                    $blob=Join-Path (Join-Path $modelRoot 'blobs') ($descriptor.digest.Replace(':','-'))
+                    if (-not (Test-Path -LiteralPath $blob -PathType Leaf)) { $entry.missing_blobs+=$descriptor.digest; continue }
+                    $info=Get-Item -LiteralPath $blob
+                    if ($info.Length -ne [long]$descriptor.size) { throw 'Blob size does not match manifest.' }
+                    $stream=[IO.File]::OpenRead($blob); try { [void]$stream.ReadByte() } finally { $stream.Dispose() }
+                  }
+                  $entry.valid=($entry.missing_blobs.Count -eq 0)
+                } catch { $entry.error=$_.Exception.Message }
+                $report.model_store.manifests+=$entry
+              }
+              Log "Found $($files.Count) model manifests on D:."
+              if (@($report.model_store.manifests | Where-Object {$_.valid}).Count -eq 0) { throw 'No complete readable models found in relocated store; no changes or downloads attempted.' }
             }
-            $report.ollama = [ordered]@{
-              api_reachable = $true
-              version = $version.version
-              models = @($tags.models | Select-Object name,size)
-              inference = 'not-run'
+            Stage 'local-inference' {
+              if ($report.stages['model-store-validation'].status -ne 'passed') { throw 'Model-store validation must pass first.' }
+              if (-not $report.tools.ollama) { throw 'Ollama executable not accessible to runner service.' }
+              $os=Get-CimInstance Win32_OperatingSystem
+              if ($os.FreePhysicalMemory -lt 8MB) { throw 'Less than 8 GiB free RAM; no inference started.' }
+              # Do not interrupt or evict a desktop model; check it before using shared hardware.
+              $desktop=$null
+              try { $desktop=Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/ps' -TimeoutSec 5 } catch { Log 'Desktop API not reachable; dedicated worker will be checked independently.' }
+              if ($null -ne $desktop -and @($desktop.models).Count -gt 0) { throw 'Desktop Ollama has a loaded model; preserving desktop work, not competing for GPU.' }
+              $listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,11435)
+              try { $listener.Start() } catch { throw 'Worker port 11435 already in use; refusing to stop or reuse an unknown server.' } finally { $listener.Stop() }
+              $env:OLLAMA_MODELS='D:\AI-Relocation\Ollama\models'
+              $env:OLLAMA_HOST='127.0.0.1:11435'
+              $env:OLLAMA_NO_CLOUD='1'; $env:OLLAMA_NO_PRUNE='1'
+              $env:OLLAMA_MAX_LOADED_MODELS='1'; $env:OLLAMA_NUM_PARALLEL='1'; $env:OLLAMA_CONTEXT_LENGTH='2048'; $env:OLLAMA_KEEP_ALIVE='30s'
+              Log 'Starting job-owned Ollama on 127.0.0.1:11435 with explicit D: model store.'
+              $script:ownedServer=Start-Process -FilePath $report.tools.ollama -ArgumentList 'serve' -WorkingDirectory $out -NoNewWindow -PassThru -RedirectStandardOutput (Join-Path $out 'ollama-server.stdout.txt') -RedirectStandardError (Join-Path $out 'ollama-server.stderr.txt')
+              $endpoint='http://127.0.0.1:11435'; $tags=$null
+              foreach ($delay in @(1,2,4,8,8)) {
+                Start-Sleep -Seconds $delay
+                $ownedServer.Refresh(); if ($ownedServer.HasExited) { throw 'Job-owned Ollama exited; inspect server logs.' }
+                try { $tags=Invoke-RestMethod -Uri "$endpoint/api/tags" -TimeoutSec 5; break } catch { Log 'Worker API starting; bounded retry.' }
+              }
+              if ($null -eq $tags) { throw 'Worker API failed to start within bounded retries.' }
+              $report.ollama=[ordered]@{endpoint=$endpoint;models=@($tags.models | Select-Object name,size);inference='not-run'}
+              Save-Checkpoint
+              $model=$tags.models | Where-Object {$_.size -gt 0 -and $_.size -le 5GB -and ($_.name -like 'llama3.2:3b*' -or $_.name -like 'qwen2.5:3b*' -or $_.name -eq 'qwen2.5:7b-instruct-q3_K_L')} | Sort-Object size | Select-Object -First 1
+              if (-not $model) { throw 'Worker sees no approved small model; preserved store without downloading.' }
+              Log "Running local structured-response test with $($model.name)."
+              $request=@{model=$model.name;prompt='Return only this JSON object: {"ready":true,"answer":42}';format='json';stream=$false;keep_alive='30s';options=@{temperature=0;num_ctx=2048;num_predict=64;num_thread=8}} | ConvertTo-Json -Depth 6
+              $timer=[Diagnostics.Stopwatch]::StartNew()
+              $answer=Invoke-RestMethod -Uri "$endpoint/api/generate" -Method Post -ContentType 'application/json' -Body $request -TimeoutSec 180
+              $timer.Stop()
+              $answer | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $out 'inference-response.json') -Encoding utf8
+              $decoded=$answer.response | ConvertFrom-Json
+              if ($answer.done -ne $true -or $decoded.ready -ne $true -or $decoded.answer -ne 42) { throw 'Model did not pass exact structured-response test.' }
+              $report.ollama.model=$model.name; $report.ollama.inference='passed'; $report.ollama.elapsed_seconds=[Math]::Round($timer.Elapsed.TotalSeconds,2)
+              $report.ollama.eval_count=$answer.eval_count; $report.ollama.eval_duration_ns=$answer.eval_duration
+              if ($answer.eval_duration -gt 0) { $report.ollama.tokens_per_second=[Math]::Round($answer.eval_count / ($answer.eval_duration/1e9),2) }
+              $report.ollama.loaded_models=(Invoke-RestMethod -Uri "$endpoint/api/ps" -TimeoutSec 10).models
+              $report.changes+='Explicit job-scoped model-store configuration; desktop Ollama left untouched.'
+              Log "Inference passed in $($report.ollama.elapsed_seconds)s."
             }
-            $report.stage = 'ollama-checkpoint'
-            Save-Checkpoint
-            if ($os.FreePhysicalMemory -lt 8MB) {
-              throw 'Less than 8 GiB available RAM. Skipping inference rather than adding memory pressure.'
-            }
-            # Select an already-installed, bounded model; never pull or mutate models.
-            $candidate = $tags.models | Where-Object {
-              $_.size -gt 0 -and $_.size -le 5GB -and
-              ($_.name -like 'llama3.2:3b*' -or $_.name -like 'qwen2.5:3b*' -or $_.name -eq 'qwen2.5:7b-instruct-q3_K_L')
-            } | Sort-Object size | Select-Object -First 1
-            if (-not $candidate) {
-              throw 'No approved small installed model found. No model download attempted.'
-            }
-            $loaded = Invoke-RestMethod -Uri "$endpoint/api/ps" -TimeoutSec 10
-            if (@($loaded.models | Where-Object { $_.name -ne $candidate.name }).Count -gt 0) {
-              throw 'Another model is already loaded. Skipping inference to avoid evicting desktop work or competing for GPU memory.'
-            }
-            $body = @{
-              model = $candidate.name
-              prompt = 'Return only this JSON object: {"ready":true,"answer":42}'
-              stream = $false
-              format = 'json'
-              keep_alive = '30s'
-              options = @{temperature=0; num_ctx=2048; num_predict=64; num_thread=8}
-            } | ConvertTo-Json -Depth 5
-            $timer = [Diagnostics.Stopwatch]::StartNew()
-            $answer = Invoke-RestMethod -Method Post -Uri "$endpoint/api/generate" -ContentType 'application/json' -Body $body -TimeoutSec 180
-            $timer.Stop()
-            $decoded = $answer.response | ConvertFrom-Json
-            $report.ollama.model_tested = $candidate.name
-            $report.ollama.elapsed_seconds = [Math]::Round($timer.Elapsed.TotalSeconds,2)
-            $report.ollama.eval_count = $answer.eval_count
-            $report.ollama.eval_duration_ns = $answer.eval_duration
-            if ($answer.done -ne $true -or $decoded.ready -ne $true -or $decoded.answer -ne 42) {
-              throw 'Local model responded but did not pass the structured-response smoke test.'
-            }
-            $report.ollama.inference = 'passed'
-            $report.stage = 'readiness-passed'
-          } catch {
-            $report.errors += $_.Exception.Message
-            $report.stage = 'readiness-blocked'
           } finally {
-            Save-Checkpoint
-            $summary = @(
-              '# OLD-CORE30 local worker readiness',
-              "Stage: **$($report.stage)**",
-              '',
-              'This is an inventory and local-inference smoke test, not a completed provisioning run.',
-              'No packages installed, no models downloaded/deleted, no services changed.',
-              'Detailed hardware/tool results are in the readiness artifact and the D: checkpoint.',
-              ''
-            )
-            foreach ($problem in $report.errors) { $summary += "- Blocker: $problem" }
-            $summary | Set-Content -LiteralPath (Join-Path $reportDir 'SUMMARY.md') -Encoding utf8
-            $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+            if ($null -ne $ownedServer) {
+              $ownedServer.Refresh()
+              if (-not $ownedServer.HasExited) { Log 'Stopping only the Ollama process tree created by this job.'; & taskkill.exe /PID $ownedServer.Id /T /F | Out-Null }
+            }
+            $report.stage=if ($report.errors.Count -eq 0) {'repair-tests-passed'} else {'repair-tests-blocked'}
+            $report.completed_utc=[DateTime]::UtcNow.ToString('o'); Save-Checkpoint
+            $summary=@('# OLD-CORE30 repair and tests',"Result: **$($report.stage)**",'',"Commit: $env:GITHUB_SHA",'', 'No packages/models downloaded; no files deleted; no desktop process, service, firewall, or machine-wide environment changed.','', '| Test | Result |','|---|---|')
+            foreach ($name in $report.stages.Keys) { $summary+="| $name | $($report.stages[$name].status) |" }
+            $summary+=''; foreach ($errorMessage in $report.errors) {$summary+="- Blocker: $errorMessage"}
+            $summary | Set-Content -LiteralPath (Join-Path $out 'SUMMARY.md') -Encoding utf8
+            $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+            Log "FINAL $($report.stage)"
           }
-          if ($report.stage -ne 'readiness-passed') { exit 1 }
+          if ($report.errors.Count -gt 0) { exit 1 }
 
-      - name: Publish readiness evidence even on failure
+      - name: Publish checkpoints and test evidence even on failure
         if: always() && env.HB_REPORT_DIR != ''
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: old-core30-readiness-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ env.HB_REPORT_DIR }}
+          name: old-core30-repair-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ env.HB_REPORT_DIR }}/*.json
+            ${{ env.HB_REPORT_DIR }}/*.md
+            ${{ env.HB_REPORT_DIR }}/*.txt
+            ${{ env.HB_REPORT_DIR }}/*.png
+            ${{ env.HB_REPORT_DIR }}/*.blend
+            ${{ env.HB_REPORT_DIR }}/*.py
+            ${{ env.HB_REPORT_DIR }}/*.java
           if-no-files-found: error
           retention-days: 14
