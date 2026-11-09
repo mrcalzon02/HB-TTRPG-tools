@@ -1,4 +1,4 @@
-# FMPL v0.2.0 pin/consumer gate passed; Blender-native atlas production smoke.
+# FMPL v0.2.0 source/consumer gate passed; sprite-stage diagnostic retry.
 # FMPL production smoke: reuse one OLD-CORE30 job. Never modify source scenes or game.
 $ErrorActionPreference='Stop'
 $ProgressPreference='SilentlyContinue'
