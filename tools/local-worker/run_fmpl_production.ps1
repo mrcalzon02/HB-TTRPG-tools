@@ -86,7 +86,7 @@ try{
   Native $python @((Join-Path $fmpl 'tools\fmpl\fmpl.py'),'validate','--root',$fmpl)
   Native $python @('-m','unittest','discover','-s',(Join-Path $fmpl 'tools\fmpl'),'-p','test_*.py')
   Native $python @((Join-Path $fmpl 'tools\fmpl\fmpl_consumer.py'),'--config',$consumer,'--library-root',$fmpl)
-  Native $python @('-c','from PIL import Image; print("PILLOW_READY",Image.__version__)')
+  # Blender-native sprite packing uses no Pillow or newly installed packages.
   $ledger=Get-Content -LiteralPath (Join-Path $fmpl 'tools\fmpl\checkpoints.json') -Raw | ConvertFrom-Json
   $event=@($ledger.events | Where-Object {$_.event_id -eq 'hb-mh7-water-purifier-42698350899-1'})
   if($event.Count -ne 1){throw 'Pinned Water Purifier source receipt absent'}
@@ -105,7 +105,7 @@ try{
   $jigHelper=Join-Path $support 'append_reference.py'
   GetPinned $tanks $tanksPin 'models/reference/factorio-fluid-interface/append_reference.py' $jigHelper
   $export=Join-Path $support 'sprite-tools'
-  foreach($name in @('export_sprites.py','render_sprite_frames.py','verify_sprite_master.py')){
+  foreach($name in @('render_sprite_frames.py','verify_sprite_master.py')){
     GetPinned $tanks $tanksPin ("tools/art/"+$name) (Join-Path $export $name)
   }
   if($env:FMPL_GREEBLES_BLEND -and (Test-Path -LiteralPath $env:FMPL_GREEBLES_BLEND -PathType Leaf)){
@@ -138,7 +138,14 @@ try{
     states=@{idle=@(1)}}
   $p | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $profile -Encoding utf8
   $sprites=Join-Path $out 'sprites'
-  Logged $python @((Join-Path $export 'export_sprites.py'),'--config',$profile,'--out',$sprites,'--blender',$blender) (Join-Path $out 'sprite-export.log')
+  Logged $blender @('--background','--threads','4',$scene,'--python-exit-code','1','--python',
+      (Join-Path $export 'render_sprite_frames.py'),'--','--config',$profile,'--out',$sprites) (Join-Path $out 'sprite-render.log')
+  Logged $blender @('--background','--threads','4',(Join-Path $sprites 'master.blend'),
+      '--python-exit-code','1','--python',(Join-Path $export 'verify_sprite_master.py'),
+      '--',$sprites) (Join-Path $out 'sprite-master-verify.log')
+  Logged $blender @('--background','--threads','4','--python-exit-code','1','--python',
+      (Join-Path $fmpl 'tools\fmpl\production_smoke\pack_blender_atlases.py'),
+      '--','--out',$sprites) (Join-Path $out 'sprite-native-atlas.log')
   $qa=Get-Content -LiteralPath (Join-Path $sprites 'qa.json') -Raw | ConvertFrom-Json
   $reopen=Get-Content -LiteralPath (Join-Path $sprites 'reopen-qa.json') -Raw | ConvertFrom-Json
   if($qa.passed -ne $true -or $qa.capture_count -ne 4 -or $qa.atlas_count -ne 3 -or $reopen.passed -ne $true){
