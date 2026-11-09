@@ -603,6 +603,28 @@
         "getResource"
       ],
       "notes": "PLANNED ONLY. Seven ordinary multiplayer bot clients, one separate host-local dev admin observer, optional Windows CI match evidence."
+    },
+    {
+      "id": "fmpl.asset-production-library",
+      "title": "Factorio Modeling Production Library",
+      "workspace": "AI Tools",
+      "kind": "asset-registry",
+      "format": "json",
+      "path": "api/ai/fmpl-library.json",
+      "tags": [
+        "fmpl",
+        "factorio",
+        "blender",
+        "geometry",
+        "pbr",
+        "greebles",
+        "models",
+        "cross-project"
+      ],
+      "supports": [
+        "getResource"
+      ],
+      "notes": "Source-pinned, read-only discovery; no private binaries, Blender remote execution, or runtime integration claim."
     }
   ]
 }

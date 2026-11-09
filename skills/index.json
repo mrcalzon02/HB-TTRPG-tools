@@ -1347,6 +1347,34 @@
         "readable generated visual assets",
         "gallery verifier or equivalent image-hash checks"
       ]
+    },
+    {
+      "name": "fmpl-asset-production",
+      "path": "skills/fmpl-asset-production/SKILL.md",
+      "status": "onboardable",
+      "capabilityIds": [],
+      "resourceIds": [
+        "fmpl.asset-production-library"
+      ],
+      "laboratoryIds": [],
+      "useFor": [
+        "Find existing FMPL Blender model parts",
+        "Reuse Factorio PBR and machine geometry",
+        "Classify greeble modules",
+        "Build and refine process machinery",
+        "Produce Factorio 45-degree sprite atlases",
+        "Verify native fluid ports and geometry",
+        "Pin shared FMPL assets across repositories"
+      ],
+      "personalityPolicy": "inherit-default",
+      "personalityEngramIds": [
+        "blacklight.charles"
+      ],
+      "executionRequirements": [
+        "Access to a consumer-pinned canonical FMPL checkout",
+        "Authorized local Python and Blender or existing self-hosted runner for execution",
+        "Actual source rights, measurements and validation evidence"
+      ]
     }
   ]
 }

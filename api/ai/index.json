@@ -9,7 +9,8 @@
     "resources": "../resource-collections.json",
     "skills": "../../skills/index.json",
     "statusVocabulary": "status-vocabulary.json",
-    "defaultPersonality": "../../docs/blacklight/charles-personality-engram.json"
+    "defaultPersonality": "../../docs/blacklight/charles-personality-engram.json",
+    "fmplLibrary": "fmpl-library.json"
   },
   "absoluteAuthorities": {
     "capabilities": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json",
@@ -17,7 +18,8 @@
     "resources": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json",
     "skills": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json",
     "statusVocabulary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
-    "defaultPersonality": "https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json"
+    "defaultPersonality": "https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json",
+    "fmplLibrary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/fmpl-library.json"
   },
   "discovery": {
     "wellKnown": "https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json",
@@ -38,7 +40,8 @@
     "psxReferenceBatch": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-reference-ingestion-2026-10-30.json",
     "psxManipulationContract": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-editor-manipulation-contract.json",
     "psxNpcAiAuthoringReference": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-npc-ai-authoring.json",
-    "devAiMatchAdminObserverPlan": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/dev-match-admin-observer-contract.json"
+    "devAiMatchAdminObserverPlan": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/dev-match-admin-observer-contract.json",
+    "fmplLibrary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/fmpl-library.json"
   },
   "bootstrapRule": "api/ai/bootstrap.txt is the canonical compact routing contract. Start there, load only the authorities required by the selected task, and reuse unchanged authorities already loaded in the current orchestration context. Current referenced machine authorities govern capability facts, statuses, contracts, resources, and skill definitions when they change.",
   "canonicalRule": "Do not duplicate generator, calculator, laboratory, campaign, encryption, personality, randomness, tabletop-state, or battlespace logic in AI adapters. Discover and invoke or load the authoritative implementation/resource/helper.",

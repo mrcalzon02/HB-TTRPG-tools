@@ -26,7 +26,8 @@
     "llms": "https://mrcalzon02.github.io/HB-TTRPG-tools/llms.txt",
     "browserFacade": "https://mrcalzon02.github.io/HB-TTRPG-tools/foundry-api.js",
     "humanAccessPage": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html",
-    "skillContextLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-context-loader.js"
+    "skillContextLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-context-loader.js",
+    "fmplLibrary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/fmpl-library.json"
   },
   "executionModel": {
     "origin": "github-pages-static",
@@ -53,7 +54,11 @@
       "id": "browser-js",
       "kind": "runtime",
       "status": "runtime-required",
-      "hostPromotionSequence": ["runtime-compatible", "self-test-passed", "ready"],
+      "hostPromotionSequence": [
+        "runtime-compatible",
+        "self-test-passed",
+        "ready"
+      ],
       "proofHarness": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-test.html",
       "useFor": "canonical JavaScript generators and laboratory engines"
     },

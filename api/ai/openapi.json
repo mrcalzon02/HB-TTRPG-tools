@@ -219,6 +219,24 @@
           }
         }
       }
+    },
+    "/api/ai/fmpl-library.json": {
+      "get": {
+        "operationId": "getFmplAssetCatalog",
+        "summary": "Retrieve the source-pinned FMPL cross-project asset registry (static discovery only)",
+        "responses": {
+          "200": {
+            "description": "FMPL catalog JSON; not a remote Blender or runner API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
