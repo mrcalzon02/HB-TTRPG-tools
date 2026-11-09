@@ -2,7 +2,7 @@
   "schema": "fmpl.consumer.v1",
   "consumer_repo": "mrcalzon02/HB-TTRPG-tools",
   "module_repo": "mrcalzon02/Tech-Priests",
-  "module_version": "0.1.0",
+  "module_version": "0.2.0",
   "module_commit": "5a8fe97ceed4905ab04dfa4d29e93c684bd0e361",
   "uses": [
     "water-purifier-mh7",
