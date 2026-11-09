@@ -148,7 +148,7 @@ try {
   }
   if ($tags) {
     # Reserve 6GiB for the OS/Blender, and avoid memory-exhausting 20GiB variants on this 32GiB host.
-    $budget=[Math]::Min([double](14GB),([Math]::Max(0,[double]$os.FreePhysicalMemory*1024 - 6GB)))
+    $budget=[Math]::Min([double](14GB),[Math]::Max([double]0,([double]$os.FreePhysicalMemory * [double]1024 - [double](6GB))))
     $reportState['inference_discovery'].available_model_names=@($tags.models | Select-Object -ExpandProperty name)
     $reportState['inference_discovery'].budget_bytes=[long]$budget
     $candidates=@($tags.models | Where-Object {$_.size -gt 0 -and $_.size -le $budget -and $_.name -match '(?i)qwen.*coder'} | Sort-Object size -Descending)
@@ -191,7 +191,26 @@ try {
     }
     Publish 'refinery-running' $stageInfo
   }
-  $agent.Refresh();$exitCode=$agent.ExitCode
+  # Start-Process on some Windows PowerShell/runner hosts returns no ExitCode
+  # after the native process exits. Validate the durable written completion
+  # receipt and every reported candidate before interpreting an absent code.
+  $agent.WaitForExit();$agent.Refresh()
+  $exitCode=$agent.ExitCode
+  if ($null -eq $exitCode) {
+    $receiptPath=Join-Path $report 'RESULTS.json'
+    if (-not (Test-Path -LiteralPath $receiptPath)) { throw 'Agent exit code missing and RESULTS.json missing; no success claim.' }
+    $receipt=Get-Content -LiteralPath $receiptPath -Raw | ConvertFrom-Json
+    if (@($receipt.blocked).Count -gt 0 -or @($receipt.completed).Count -eq 0) { throw 'Agent exit code missing; outcome blocked or no completed candidates.' }
+    foreach ($machine in @($receipt.completed)) {
+      $candidateDir=Join-Path $report ("machines\{0}" -f $machine)
+      foreach ($asset in @('CHECKPOINT.json','verified_model.json','inspection_3quarter.png',"$machine.glb", "$machine.blend")) {
+        if (-not (Test-Path -LiteralPath (Join-Path $candidateDir $asset))) { throw "Agent exit code missing; candidate evidence absent for $machine : $asset" }
+      }
+    }
+    Write-Warning 'Native process ExitCode unavailable, but RESULTS.json and each reported model read back; treating as verified candidate only.'
+    $exitCode=0
+    $reportState['exit_verification']='receipt_and_machine_files_verified_not_native_exit_code'
+  }
   $reportState.phase='completed';$reportState['agent_exit']=$exitCode
   if ($exitCode -ne 0) {throw "Refinery agent returned $exitCode, preserve completed outputs and report blockers."}
   Publish 'refinery-finished' @{stage='candidate-models-produced';process_alive=$false;total=[int]$maxMachines;inference_model=$selected.name}

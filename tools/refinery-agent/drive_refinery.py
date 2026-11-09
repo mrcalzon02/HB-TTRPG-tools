@@ -148,6 +148,14 @@ def main():
         if previous.get('state')=='model_verified' and compatible_inference and all((stage/name).exists() for name in (ident+'.blend',ident+'.glb','inspection_3quarter.png','verified_model.json')):
             try:
                 if sha(stage/'inspection_3quarter.png')==previous['preview_sha256']:
+                    # The previous model exists on persistent D: but not necessarily
+                    # in this new run's artifact folder. Copy its saved evidence
+                    # instead of rerendering or dropping its files on resume.
+                    for old_file in (ident+'.blend',ident+'.glb','inspection_3quarter.png',
+                                     'build_receipt.json','verified_model.json','CHECKPOINT.json',
+                                     'inference_receipt.json','parts_extracted.json'):
+                        src=stage/old_file
+                        if src.is_file():shutil.copy2(src,dest/src.name)
                     completed.append(ident);inference_outcomes[ident]=previous.get('inference_state');print('MH7_RESUME_SKIP '+ident,flush=True)
                     put(progress_path,{'machine':ident,'index':i,'total':7,'state':'resume_skip','completed':completed,'blocked':blocked})
                     continue
