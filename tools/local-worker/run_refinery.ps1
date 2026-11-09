@@ -59,7 +59,7 @@ try {
   $git=Find-Executable 'git' @('C:\Program Files\Git\cmd\git.exe')
   $python=Find-Executable 'python' @('D:\Runner\actions-runner\_homebrew\tools\python*\python.exe','C:\Program Files\Python*\python.exe','C:\Python*\python.exe','D:\Python*\python.exe','D:\Runner\Python*\python.exe','C:\Users\*\AppData\Local\Programs\Python\Python*\python.exe')
   $blender=Find-Executable 'blender' @('C:\Program Files\Blender Foundation\Blender*\blender.exe')
-  $ollama=Find-Executable 'ollama' @('C:\Program Files\Ollama\ollama.exe','C:\Users\*\AppData\Local\Programs\Ollama\ollama.exe','D:\AI-Relocation\Ollama\ollama.exe')
+  $ollama=Find-Executable 'ollama' @('C:\Program Files\Ollama\ollama.exe','C:\Program Files (x86)\Ollama\ollama.exe','C:\Users\*\AppData\Local\Programs\Ollama\ollama.exe','C:\Users\*\AppData\Local\Ollama\ollama.exe','D:\AI-Relocation\Ollama\ollama.exe','D:\Ollama\ollama.exe')
   if (-not $python) {
     # Service accounts often lack the interactive user's Python PATH.
     # Prefer existing Windows launcher before touching the machine.
@@ -82,10 +82,12 @@ try {
   if ($os.FreePhysicalMemory -lt (6 * 1024 * 1024)) { throw 'Runner has less than six GiB free physical RAM.' }
   $disk=(Get-PSDrive -Name D -ErrorAction Stop)
   if ($disk.Free -lt 4GB) {throw 'Runner D: free disk below four GiB; no construction attempted.'}
-  # A busy desktop Ollama is protected, but does not block independent Blender study.
+  # Prefer an existing idle local Ollama API even when the service-account PATH lacks ollama.exe.
+  # Never preempt an active model owned by the desktop user.
   $desktop=$null
   try {$desktop=Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/ps' -TimeoutSec 5} catch {}
-  $desktopBusy=($desktop -and @($desktop.models).Count -gt 0)
+  $desktopBusy=($null -ne $desktop -and @($desktop.models).Count -gt 0)
+  $reportState['inference_discovery']=@{desktop_busy=$desktopBusy;ollama_executable_found=($null -ne $ollama);reused_desktop_service=$false}
   $reportState['tools']=@{git=$git;python=$python;blender=$blender;ollama=$ollama}
   $reportState.phase='download-pinned-helpers'
   $helpers=@('drive_refinery.py','build_machine.py','verify_machine.py','extract_parts.py','verify_part.py')
@@ -117,9 +119,14 @@ try {
   $endpoint='none'
   $tags=$null
   if (-not $desktopBusy) {
-    try { $tags=Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/tags' -TimeoutSec 6; $endpoint='http://127.0.0.1:11434' } catch {}
+    try {
+      $tags=Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/tags' -TimeoutSec 6
+      $endpoint='http://127.0.0.1:11434'
+      $reportState['inference_discovery'].reused_desktop_service=$true
+      Write-Host 'MH7 Existing idle Ollama API found on 11434; executable not required.'
+    } catch { Write-Host 'MH7 No existing reachable desktop Ollama API.' }
   }
-  if (-not $tags -and $ollama -and (Test-Path -LiteralPath $modelStore)) {
+  if (-not $tags -and -not $desktopBusy -and $ollama -and (Test-Path -LiteralPath $modelStore -PathType Container)) {
     $listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,11435)
     $portReady=$false
     try {$listener.Start();$portReady=$true} catch {Write-Warning 'Model worker port busy; will not take control of it.'} finally {$listener.Stop()}
@@ -140,23 +147,28 @@ try {
     }
   }
   if ($tags) {
-    $candidates=@($tags.models | Where-Object {$_.size -gt 0 -and $_.name -match '(?i)qwen.*coder'} | Sort-Object size -Descending)
-    if ($candidates.Count -eq 0) { $candidates=@($tags.models | Where-Object {$_.size -gt 0 -and $_.name -match '(?i)qwen'} | Sort-Object size -Descending) }
-    if ($candidates.Count -gt 0) {$selected=$candidates[0]}
+    # Reserve 6GiB for the OS/Blender, and avoid memory-exhausting 20GiB variants on this 32GiB host.
+    $budget=[Math]::Min([double](14GB),([Math]::Max(0,[double]$os.FreePhysicalMemory*1024 - 6GB)))
+    $reportState['inference_discovery'].available_model_names=@($tags.models | Select-Object -ExpandProperty name)
+    $reportState['inference_discovery'].budget_bytes=[long]$budget
+    $candidates=@($tags.models | Where-Object {$_.size -gt 0 -and $_.size -le $budget -and $_.name -match '(?i)qwen.*coder'} | Sort-Object size -Descending)
+    if ($candidates.Count -eq 0) { $candidates=@($tags.models | Where-Object {$_.size -gt 0 -and $_.size -le $budget -and $_.name -match '(?i)qwen'} | Sort-Object size -Descending) }
+    if ($candidates.Count -gt 0) { $selected=$candidates[0] }
   }
   if ($selected.name -eq 'none-scripted-baseline') {
     $endpoint='none'
-    $reportState['inference_warning']='No accessible idle local Qwen service or existing Ollama executable. Scripted geometry only; Qwen revision pending.'
+    $reportState['inference_warning']='No idle Qwen service/model fits memory, or the existing Ollama executable is inaccessible. ONE scripted Water Purifier pilot only; Qwen construction remains unverified.'
     Write-Warning $reportState['inference_warning']
   }
   $reportState.model=$selected.name
   $reportState['model_size_bytes']=$selected.size
   $reportState.phase='construction'
   $reportState | ConvertTo-Json -Depth 7 | Set-Content -LiteralPath (Join-Path $report 'refinery-preflight.json') -Encoding utf8
-  Publish 'refinery-agent-starting' @{stage='Blender-construction';model=$selected.name;complete=0;total=7}
+  $maxMachines=if ($selected.name -eq 'none-scripted-baseline') {'1'} else {'7'}
+  Publish 'refinery-agent-starting' @{stage='Blender-construction';model=$selected.name;complete=0;total=[int]$maxMachines}
   $args=@((Join-Path $scriptDir 'drive_refinery.py'),'--repo',$source,'--out',$results,'--report',$report,
       '--blender',$blender,'--endpoint',$endpoint,'--model',$selected.name,
-      '--source-sha',$pin,'--max-machines','7')
+      '--source-sha',$pin,'--max-machines',$maxMachines)
   $stdout=Join-Path $report 'refinery.stdout.log';$stderr=Join-Path $report 'refinery.stderr.log'
   $quoted=($args | ForEach-Object { '"'+($_ -replace '"','')+'"' }) -join ' '
   $agent=Start-Process -FilePath $python -ArgumentList $quoted -WorkingDirectory $scriptDir -PassThru -WindowStyle Hidden -RedirectStandardOutput $stdout -RedirectStandardError $stderr
@@ -182,7 +194,7 @@ try {
   $agent.Refresh();$exitCode=$agent.ExitCode
   $reportState.phase='completed';$reportState['agent_exit']=$exitCode
   if ($exitCode -ne 0) {throw "Refinery agent returned $exitCode, preserve completed outputs and report blockers."}
-  Publish 'refinery-finished' @{stage='model-verified';process_alive=$false;total=7}
+  Publish 'refinery-finished' @{stage='candidate-models-produced';process_alive=$false;total=[int]$maxMachines;inference_model=$selected.name}
 } catch {
   $reportState.phase='blocked';$reportState.failure=$_.Exception.Message
   Write-Host ('MH7 BLOCKED: '+$reportState.failure)

@@ -125,7 +125,7 @@ jobs:
             ${{ env.HB_REPORT_DIR }}/**/*.png
             ${{ env.HB_REPORT_DIR }}/**/*.glb
             ${{ env.HB_REPORT_DIR }}/**/*.log
-            ${{ env.HB_REPORT_DIR }}/*.blend
+            ${{ env.HB_REPORT_DIR }}/**/*.blend
             ${{ env.HB_REPORT_DIR }}/**/*.py
             ${{ env.HB_REPORT_DIR }}/**/*.ps1
             ${{ env.HB_REPORT_DIR }}/*.java

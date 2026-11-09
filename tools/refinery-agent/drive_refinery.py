@@ -136,16 +136,19 @@ def main():
         if base.exists(): inventory.extend(str(p.relative_to(repo)) for p in base.rglob('*.blend'))
     put(report/'source_census.json',{'repo_head':a.source_sha,'found_blender_files':inventory[:60],
        'legacy_upstream_native_status':'unlocated_unless_independently_recovered','board_sha256':sha(board)})
-    progress_path=report/'progress.json';completed=[];blocked=[]
+    progress_path=report/'progress.json';completed=[];blocked=[];inference_outcomes={}
     for i,task in enumerate(spec['tasks'][:min(7,a.max_machines)],1):
         ident=task['id'];stage=out/'machines'/ident;stage.mkdir(parents=True,exist_ok=True)
         dest=report/'machines'/ident;dest.mkdir(parents=True,exist_ok=True)
         checkpoint=stage/'CHECKPOINT.json'
         previous=json.loads(checkpoint.read_text(encoding='utf-8')) if checkpoint.exists() else {}
-        if previous.get('state')=='model_verified' and all((stage/name).exists() for name in (ident+'.blend',ident+'.glb','inspection_3quarter.png','verified_model.json')):
+        # A Qwen run must not silently accept a previously saved scripted-only pilot.
+        compatible_inference=(previous.get('inference_state')=='success' if not a.model.startswith('none-')
+                              else previous.get('inference_state')=='unavailable')
+        if previous.get('state')=='model_verified' and compatible_inference and all((stage/name).exists() for name in (ident+'.blend',ident+'.glb','inspection_3quarter.png','verified_model.json')):
             try:
                 if sha(stage/'inspection_3quarter.png')==previous['preview_sha256']:
-                    completed.append(ident);print('MH7_RESUME_SKIP '+ident,flush=True)
+                    completed.append(ident);inference_outcomes[ident]=previous.get('inference_state');print('MH7_RESUME_SKIP '+ident,flush=True)
                     put(progress_path,{'machine':ident,'index':i,'total':7,'state':'resume_skip','completed':completed,'blocked':blocked})
                     continue
             except KeyError:pass
@@ -154,6 +157,7 @@ def main():
         put(checkpoint,{'machine':ident,'state':'inference_pending','source_sha':a.source_sha,'registry_sha256':sha(registry_path)})
         try:
             additions,infer_status=qwen_refine(a.endpoint,a.model,task,registry,inventory,stage)
+            inference_outcomes[ident]=infer_status
             if infer_status!='success':
                 print('MH7_WARNING inference failed for '+ident+'; deterministic physical seed only',flush=True)
             mods={'registry':registry,'additions':additions,'inference_state':infer_status}
@@ -206,8 +210,12 @@ def main():
         if p.is_file() and p.suffix in ('.glb','.json'):
             dest=shared/'components'/p.relative_to(out/'shared-parts/metallic-hydrogen/components')
             dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,dest)
+    all_qwen=(len(completed)==7 and all(inference_outcomes.get(x)=='success' for x in completed))
     final={'order':'TP-MH7-2026-11-09','model':a.model,'completed':completed,'blocked':blocked,
-           'parts_library_sha256':sha(registry_path),'source_sha':a.source_sha,'full_completion':len(completed)==7 and not blocked,
+           'inference_outcomes':inference_outcomes,
+           'parts_library_sha256':sha(registry_path),'source_sha':a.source_sha,
+           'models_built':len(completed),'full_completion':len(completed)==7 and not blocked and all_qwen,
+           'scripted_baseline_only':a.model.startswith('none-'),
            'game_integrated':False,'human_art_approved':False}
     put(report/'RESULTS.json',final)
     (report/'RESULTS.md').write_text('# MH7 real Blender execution result\n\nCompleted: '+', '.join(completed)+'\n\nBlocked: '+json.dumps(blocked)+'\n\nOnly candidate visuals, not native Factorio integrated.\n',encoding='utf-8')
