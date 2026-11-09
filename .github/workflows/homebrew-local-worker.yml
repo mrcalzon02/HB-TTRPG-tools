@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Workbench export, Blender readiness, full audit, or a short live-status check
+        description: Workbench, Blender, full audit, live status, or a pinned MH7 Qwen/Blender refinery run
         type: choice
-        options: [blender, full, workbench, status]
+        options: [blender, full, workbench, status, refinery]
         default: blender
   push:
     branches: [main]
@@ -24,9 +24,9 @@ jobs:
   repair-and-test:
     if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main' && github.actor == 'mrcalzon02'
     runs-on: [self-hosted, Windows, X64]
-    timeout-minutes: 30
+    timeout-minutes: 360 # Existing stages retain their own short process limits; refinery caps itself at 325 min.
     env:
-      HB_MODE: ${{ inputs.mode || 'workbench' }}
+      HB_MODE: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[refinery-run]') && 'refinery') || inputs.mode || 'workbench' }}
       # Pinned source request; update this SHA when intentionally requesting a new export.
       HB_WORKBENCH_COMMIT: 'ce3ef9720298807e3036962bde094341643c237f'
       HB_WORKBENCH_SCRIPT: 'models/island-survival/blender/workbench-v7/workbench_v7.py'
@@ -87,13 +87,14 @@ jobs:
           $support=Join-Path $out '_status-support'
           New-Item -ItemType Directory -Force -Path $support | Out-Null
           "HB_REPORT_DIR=$out" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
-          $workerScript=Join-Path $support 'run_worker.ps1'
+          $workerName=if ($env:HB_MODE -eq 'refinery') { 'run_refinery.ps1' } else { 'run_worker.ps1' }
+          $workerScript=Join-Path $support $workerName
           [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12
           $downloaded=$false
           foreach ($delay in @(0,2,5)) {
             if ($delay -gt 0) { Start-Sleep -Seconds $delay }
             try {
-              $uri="https://raw.githubusercontent.com/$env:GITHUB_REPOSITORY/$env:GITHUB_SHA/tools/local-worker/run_worker.ps1"
+              $uri="https://raw.githubusercontent.com/$env:GITHUB_REPOSITORY/$env:GITHUB_SHA/tools/local-worker/$workerName"
               Invoke-WebRequest -UseBasicParsing -Uri $uri -OutFile $workerScript -TimeoutSec 20
               $downloaded=$true; break
             } catch { Write-Warning 'Pinned worker script download delayed.' }
@@ -122,6 +123,8 @@ jobs:
             ${{ env.HB_REPORT_DIR }}/*.md
             ${{ env.HB_REPORT_DIR }}/*.txt
             ${{ env.HB_REPORT_DIR }}/**/*.png
+            ${{ env.HB_REPORT_DIR }}/**/*.glb
+            ${{ env.HB_REPORT_DIR }}/**/*.log
             ${{ env.HB_REPORT_DIR }}/*.blend
             ${{ env.HB_REPORT_DIR }}/**/*.py
             ${{ env.HB_REPORT_DIR }}/**/*.ps1
