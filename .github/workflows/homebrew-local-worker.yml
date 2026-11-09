@@ -100,6 +100,7 @@ jobs:
           }
           if (-not $downloaded) { throw 'Pinned worker script could not be downloaded.' }
           & $workerScript
+          exit $LASTEXITCODE
 
       - name: Mark artifact transfer in progress
         if: always() && env.HB_REPORT_DIR != ''
