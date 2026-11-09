@@ -3,7 +3,7 @@
   "consumer_repo": "mrcalzon02/HB-TTRPG-tools",
   "module_repo": "mrcalzon02/Tech-Priests",
   "module_version": "0.3.0",
-  "module_commit": "4ed89c512d6fbcf69d6eeadd841291dbd7d162c5",
+  "module_commit": "f1ec280c0bd45e9494ce5bb25a2658707a2cfd57",
   "uses": [
     "water-purifier-mh7",
     "hb-local-runner",
@@ -19,5 +19,5 @@
     "model_downloads": false
   },
   "validation_command": "python fmpl-source/tools/fmpl/fmpl_consumer.py --config fmpl-consumer.json --library-root fmpl-source",
-  "source_doc": "https://github.com/mrcalzon02/Tech-Priests/blob/4ed89c512d6fbcf69d6eeadd841291dbd7d162c5/tools/fmpl/PROCESS_MACHINERY_STANDARD.md"
+  "source_doc": "https://github.com/mrcalzon02/Tech-Priests/blob/f1ec280c0bd45e9494ce5bb25a2658707a2cfd57/tools/fmpl/PROCESS_MACHINERY_STANDARD.md"
 }
