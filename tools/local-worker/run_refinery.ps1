@@ -61,6 +61,21 @@ try {
   $blender=Find-Executable 'blender' @('C:\Program Files\Blender Foundation\Blender*\blender.exe')
   $ollama=Find-Executable 'ollama' @('C:\Program Files\Ollama\ollama.exe','C:\Program Files (x86)\Ollama\ollama.exe','C:\Users\*\AppData\Local\Programs\Ollama\ollama.exe','C:\Users\*\AppData\Local\Ollama\ollama.exe','D:\AI-Relocation\Ollama\ollama.exe','D:\Ollama\ollama.exe')
   if (-not $ollama) {
+    # Exact installation layout supplied by owner: OlIama lives in the
+    # standard per-user Programs directory. AppData is hidden, and globbing
+    # through C:\Users\* can miss it. Enumerate ONLY one profile level and
+    # test each derived literal path. Do not inspect Cline credentials.
+    $profileDirs=@(Get-ChildItem -LiteralPath 'C:\Users' -Directory -Force -ErrorAction SilentlyContinue)
+    foreach ($profileDir in $profileDirs) {
+      $candidate=Join-Path $profileDir.FullName 'AppData\Local\Programs\Ollama\ollama.exe'
+      if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+        $ollama=$candidate
+        Write-Host 'MH7 Discovered Ollama in the existing Windows user Programs directory.'
+        break
+      }
+    }
+  }
+  if (-not $ollama) {
     # Existing process ownership/discovery only. No process is killed, restarted or reconfigured.
     try {
       $running=@(Get-CimInstance Win32_Process -Filter "Name='ollama.exe'" -ErrorAction SilentlyContinue |
@@ -174,10 +189,32 @@ try {
     if ($candidates.Count -eq 0) { $candidates=@($tags.models | Where-Object {$_.size -gt 0 -and $_.size -le $budget -and $_.name -match '(?i)qwen'} | Sort-Object size -Descending) }
     if ($candidates.Count -gt 0) { $selected=$candidates[0] }
   }
+  # Do not run the deterministic baseline again: the seven native source candidates
+  # already exist. This execution is allowed to modify a model ONLY after Qwen
+  # is actually loaded and returns a valid structured reply.
   if ($selected.name -eq 'none-scripted-baseline') {
-    $endpoint='none'
-    $reportState['inference_warning']='No idle Qwen service/model fits memory, or the existing Ollama executable is inaccessible. ONE scripted Water Purifier pilot only; Qwen construction remains unverified.'
-    Write-Warning $reportState['inference_warning']
+    $reportState['inference_warning']='No usable Qwen model is visible at the isolated/local Ollama API; original seven Blender baselines stay untouched.'
+    throw $reportState['inference_warning']
+  }
+  $reportState.phase='qwen-smoke'
+  $smokeBody=@{
+    model=$selected.name
+    prompt='Reply with only a JSON object containing exactly ready true and answer 42.'
+    format='json'
+    stream=$false
+    keep_alive='30s'
+    options=@{temperature=0;num_ctx=2048;num_predict=96;num_thread=8}
+  } | ConvertTo-Json -Depth 8
+  try {
+    $smoke=Invoke-RestMethod -Method Post -Uri ($endpoint.TrimEnd('/')+'/api/generate') -ContentType 'application/json' -Body $smokeBody -TimeoutSec 300
+    if ($smoke.done -ne $true) { throw 'No completion marker from Qwen.' }
+    $smokeJson=$smoke.response | ConvertFrom-Json -ErrorAction Stop
+    if ($smokeJson.ready -ne $true -or [int]$smokeJson.answer -ne 42) { throw 'Qwen returned the wrong structured result.' }
+    $reportState['qwen_smoke']=@{success=$true;model=$selected.name;endpoint=$endpoint;eval_count=$smoke.eval_count;completed=$smoke.done}
+    Write-Host ('MH7_QWEN_SMOKE_PASSED '+$selected.name)
+  } catch {
+    $reportState['qwen_smoke']=@{success=$false;model=$selected.name;message=$_.Exception.Message}
+    throw ('Qwen inference preflight failed without touching Blender: '+$_.Exception.Message)
   }
   $reportState.model=$selected.name
   $reportState['model_size_bytes']=$selected.size
@@ -252,6 +289,8 @@ try {
     if (-not (Test-Path -LiteralPath $receiptPath)) { throw 'Agent exit code missing and RESULTS.json missing; no success claim.' }
     $receipt=Get-Content -LiteralPath $receiptPath -Raw | ConvertFrom-Json
     if (@($receipt.blocked).Count -gt 0 -or @($receipt.completed).Count -eq 0) { throw 'Agent exit code missing; outcome blocked or no completed candidates.' }
+    if ($receipt.scripted_baseline_only -or $receipt.full_completion -ne $true) { throw 'Agent exit code missing; Qwen-complete seven-model receipt not verified.' }
+    if (@($receipt.completed).Count -ne 7) { throw 'Agent exit code missing; not all seven candidates verified.' }
     foreach ($machine in @($receipt.completed)) {
       $candidateDir=Join-Path $report ("machines\{0}" -f $machine)
       foreach ($asset in @('CHECKPOINT.json','verified_model.json','inspection_3quarter.png',"$machine.glb", "$machine.blend")) {

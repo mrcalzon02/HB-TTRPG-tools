@@ -166,8 +166,9 @@ def main():
         try:
             additions,infer_status=qwen_refine(a.endpoint,a.model,task,registry,inventory,stage)
             inference_outcomes[ident]=infer_status
-            if infer_status!='success':
-                print('MH7_WARNING inference failed for '+ident+'; deterministic physical seed only',flush=True)
+            if infer_status!='success' or len(additions)<1:
+                raise RuntimeError('Qwen did not produce any accepted construction geometry for '+ident+
+                                   '; no Blender replacement or scripted fallback allowed')
             mods={'registry':registry,'additions':additions,'inference_state':infer_status}
             put(stage/'inference_design.json',mods)
             put(checkpoint,{'machine':ident,'state':'inference_recorded','inference_state':infer_status,'accepted_additions':len(additions),'source_sha':a.source_sha})
