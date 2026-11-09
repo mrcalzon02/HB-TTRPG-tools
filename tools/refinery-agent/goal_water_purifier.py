@@ -102,6 +102,27 @@ def safe_actions(data, goal, limit=8):
             if kind == "tube" and not (.12 <= radius <= .32):
                 continue
             p.update(start=start, end=end, radius=radius)
+        if kind in ("beam","tube"):
+            v=[end[j]-start[j] for j in range(3)]
+            length=math.sqrt(sum(q*q for q in v))
+            spread=[radius*math.sqrt(max(0.,1-(v[j]/length)**2)) for j in range(3)]
+            lo=[min(start[j],end[j])-spread[j] for j in range(3)]
+            hi=[max(start[j],end[j])+spread[j] for j in range(3)]
+        elif kind=="box":
+            lo=[at[j]-size[j]/2 for j in range(3)]
+            hi=[at[j]+size[j]/2 for j in range(3)]
+        elif kind=="cylinder":
+            half=[radius]*3;half[{"X":0,"Y":1,"Z":2}[axis]]=depth/2
+            lo=[at[j]-half[j] for j in range(3)]
+            hi=[at[j]+half[j] for j in range(3)]
+        else:
+            half=[radius+thickness]*3
+            half[{"X":0,"Y":1,"Z":2}[axis]]=thickness
+            lo=[at[j]-half[j] for j in range(3)]
+            hi=[at[j]+half[j] for j in range(3)]
+        if (min(lo[:2]) < -1.505 or max(hi[:2]) > 1.505 or
+                lo[2] < .085 or hi[2] > 4.595):
+            continue
         result.append(p)
     return result
 
