@@ -13,3 +13,5 @@ This fails closed if the checkout SHA differs or the declared components are abs
 Browse the canonical [FMPL asset tabulation](https://github.com/mrcalzon02/Tech-Priests/blob/a7d1491acf8648fd4adedd6357af6f2a2d79a43f/tools/fmpl/ASSET_CATALOG.md) for all registered models, PBR materials, candidate components and production programs.
 
 The current FMPL also requires visible input-treatment-output machinery, glass-topped agitator process animation, and a first-built ferrocrete structural construction pad. Actual pilot results remain separately gated.
+
+Fixed machinery uses the single boiler-calibrated production camera. Full-bore pipe connectors are centered on the 3x3 model edge with actual collar/throat meshes; Factorio fluidbox linkage remains separately gated.
