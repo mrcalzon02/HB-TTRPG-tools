@@ -99,7 +99,7 @@ try{
   $tanks='mrcalzon02/Tanks-for-bob-Fork'
   $module=Get-Content -LiteralPath (Join-Path $fmpl 'tools\fmpl\FMPL.json') -Raw | ConvertFrom-Json
   $tanksPin=[string]$module.external_refs.'Tanks-for-bob-Fork'
-  if($tanksPin -notmatch '^[0-9a-f]{40}
+  if([string]::IsNullOrWhiteSpace($tanksPin) -or $tanksPin.Length -ne 40){throw 'FMPL reference revision is invalid'}
   $jig=Join-Path $support 'factorio-fluid-interface-reference.blend'
   GetPinned $tanks $tanksPin 'models/reference/factorio-fluid-interface/factorio-fluid-interface-reference.blend' $jig 'af6d1d74f0439b327b0b4e496386aa35fdac0859c177b55707dbfb5243e691ca'
   $jigHelper=Join-Path $support 'append_reference.py'
