@@ -60,6 +60,14 @@ try {
   $python=Find-Executable 'python' @('D:\Runner\actions-runner\_homebrew\tools\python*\python.exe','C:\Program Files\Python*\python.exe','C:\Python*\python.exe','D:\Python*\python.exe','D:\Runner\Python*\python.exe','C:\Users\*\AppData\Local\Programs\Python\Python*\python.exe')
   $blender=Find-Executable 'blender' @('C:\Program Files\Blender Foundation\Blender*\blender.exe')
   $ollama=Find-Executable 'ollama' @('C:\Program Files\Ollama\ollama.exe','C:\Program Files (x86)\Ollama\ollama.exe','C:\Users\*\AppData\Local\Programs\Ollama\ollama.exe','C:\Users\*\AppData\Local\Ollama\ollama.exe','D:\AI-Relocation\Ollama\ollama.exe','D:\Ollama\ollama.exe')
+  if (-not $ollama) {
+    # Existing process ownership/discovery only. No process is killed, restarted or reconfigured.
+    try {
+      $running=@(Get-CimInstance Win32_Process -Filter "Name='ollama.exe'" -ErrorAction SilentlyContinue |
+        Where-Object {$_.ExecutablePath -and (Test-Path -LiteralPath $_.ExecutablePath -PathType Leaf)})
+      if ($running.Count -gt 0) { $ollama=$running[0].ExecutablePath; Write-Host "MH7 Resolved installed Ollama from running process: $ollama" }
+    } catch { Write-Warning 'Ollama process image path unavailable to service account.' }
+  }
   if (-not $python) {
     # Service accounts often lack the interactive user's Python PATH.
     # Prefer existing Windows launcher before touching the machine.
@@ -115,6 +123,17 @@ try {
   # Discover an existing Qwen endpoint without installing a model/runtime.
   # When missing, continue a provenance-labelled deterministic Blender pilot.
   $modelStore='D:\AI-Relocation\Ollama\models'
+  # Inspect only the known relocated model store, not arbitrary user drives.
+  $foundManifests=@()
+  $manifestRoot=Join-Path $modelStore 'manifests'
+  if (Test-Path -LiteralPath $manifestRoot -PathType Container) {
+    $foundManifests=@(Get-ChildItem -LiteralPath $manifestRoot -Recurse -File -ErrorAction SilentlyContinue |
+      Select-Object -First 30 | ForEach-Object {$_.FullName.Substring($manifestRoot.Length).TrimStart('\')})
+  }
+  $reportState['inference_discovery'].relocated_model_store_present=(Test-Path -LiteralPath $modelStore -PathType Container)
+  $reportState['inference_discovery'].model_manifest_hints=$foundManifests
+  $reportState['inference_discovery'].ollama_executable_found=($null -ne $ollama)
+  $reportState['inference_discovery'].ollama_executable_source=if ($ollama) {'discovered_installed_path'} else {'missing'}
   $selected=[pscustomobject]@{name='none-scripted-baseline';size=0}
   $endpoint='none'
   $tags=$null
@@ -126,7 +145,7 @@ try {
       Write-Host 'MH7 Existing idle Ollama API found on 11434; executable not required.'
     } catch { Write-Host 'MH7 No existing reachable desktop Ollama API.' }
   }
-  if (-not $tags -and -not $desktopBusy -and $ollama -and (Test-Path -LiteralPath $modelStore -PathType Container)) {
+  if ((-not $tags -or @($tags.models).Count -eq 0) -and -not $desktopBusy -and $ollama -and (Test-Path -LiteralPath $modelStore -PathType Container)) {
     $listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,11435)
     $portReady=$false
     try {$listener.Start();$portReady=$true} catch {Write-Warning 'Model worker port busy; will not take control of it.'} finally {$listener.Stop()}
@@ -164,6 +183,38 @@ try {
   $reportState['model_size_bytes']=$selected.size
   $reportState.phase='construction'
   $reportState | ConvertTo-Json -Depth 7 | Set-Content -LiteralPath (Join-Path $report 'refinery-preflight.json') -Encoding utf8
+  # Preserve the actual seven previously constructed native scenes in this new
+  # artifact without rerendering or mutating their source checkpoints.
+  if ($selected.name -eq 'none-scripted-baseline') {
+    $rescue=[ordered]@{machine_ids=@();missing=@();copied_files=0;status='baseline_recovery'}
+    foreach ($machine in @('water-purifier','electrolyzer','hydrogen-compressor','metallization-crucible','pelletization-forge','pressure-vessel-fabricator','canister-assembler')) {
+      $from=Join-Path $results ('machines\'+$machine)
+      $cpPath=Join-Path $from 'CHECKPOINT.json'
+      if (-not (Test-Path -LiteralPath $cpPath)) { $rescue.missing+=($machine+':checkpoint');continue }
+      try {
+        $cp=Get-Content -LiteralPath $cpPath -Raw | ConvertFrom-Json
+        $glb=Join-Path $from ($machine+'.glb')
+        $blend=Join-Path $from ($machine+'.blend')
+        $preview=Join-Path $from 'inspection_3quarter.png'
+        if ($cp.state -ne 'model_verified' -or
+            -not (Test-Path $glb) -or -not (Test-Path $blend) -or -not (Test-Path $preview) -or
+            (Get-FileHash -LiteralPath $glb -Algorithm SHA256).Hash.ToLowerInvariant() -ne $cp.glb_sha256 -or
+            (Get-FileHash -LiteralPath $blend -Algorithm SHA256).Hash.ToLowerInvariant() -ne $cp.blend_sha256 -or
+            (Get-FileHash -LiteralPath $preview -Algorithm SHA256).Hash.ToLowerInvariant() -ne $cp.preview_sha256) {
+          $rescue.missing+=($machine+':hash_or_model_invalid');continue
+        }
+        $to=Join-Path $report ('machines\'+$machine)
+        New-Item -ItemType Directory -Force -Path $to | Out-Null
+        foreach ($f in @($machine+'.glb',$machine+'.blend','inspection_3quarter.png','CHECKPOINT.json','verified_model.json','build_receipt.json','inference_receipt.json','parts_extracted.json')) {
+          $src=Join-Path $from $f
+          if (Test-Path -LiteralPath $src) {Copy-Item -LiteralPath $src -Destination (Join-Path $to $f) -Force;$rescue.copied_files++}
+        }
+        $rescue.machine_ids+= $machine
+      } catch { $rescue.missing+=($machine+':verification_error') }
+    }
+    $rescue | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $report 'baseline-recovery.json') -Encoding utf8
+    Write-Host ('MH7 PRESERVED PREEXISTING BLENDS '+@($rescue.machine_ids).Count+'/7; no render duplication')
+  }
   $maxMachines=if ($selected.name -eq 'none-scripted-baseline') {'1'} else {'7'}
   Publish 'refinery-agent-starting' @{stage='Blender-construction';model=$selected.name;complete=0;total=[int]$maxMachines}
   $args=@((Join-Path $scriptDir 'drive_refinery.py'),'--repo',$source,'--out',$results,'--report',$report,
