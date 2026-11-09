@@ -24,7 +24,7 @@ jobs:
   repair-and-test:
     if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main' && github.actor == 'mrcalzon02'
     runs-on: [self-hosted, Windows, X64]
-    timeout-minutes: ${{ ((github.event_name == 'push' && contains(github.event.head_commit.message, '[dir-map-run]')) || inputs.mode == 'map') && 8 || 360 }} # Short diagnostic map; existing refinery retains prior budget.
+    timeout-minutes: 360 # One job; the read-only map stage is itself bounded and refinery has its own 325-minute cap.
     env:
       HB_MODE: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[dir-map-run]') && 'map') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[refinery-run]') && 'refinery') || inputs.mode || 'workbench' }}
       # Pinned source request; update this SHA when intentionally requesting a new export.
