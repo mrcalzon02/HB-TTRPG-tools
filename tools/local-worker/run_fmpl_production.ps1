@@ -33,11 +33,32 @@ function Native([string]$exe,[string[]]$commands){
   if($LASTEXITCODE -ne 0){throw "Native step failed $LASTEXITCODE : $exe"}
 }
 function Logged([string]$exe,[string[]]$commands,[string]$log){
-  & $exe @commands *>&1 | Tee-Object -FilePath $log
-  $code=$LASTEXITCODE
-  if($code -ne 0){
-    $tail=@(Get-Content -LiteralPath $log -Tail 28 -ErrorAction SilentlyContinue) -join [Environment]::NewLine
-    throw ("FMPL native step exited "+$code+" in "+$log+[Environment]::NewLine+$tail)
+  # PowerShell 5.1 promotes redirected native stderr into terminating ErrorRecords
+  # when ErrorActionPreference=Stop. Preserve complete Blender/Python diagnostics
+  # instead of losing everything after the first traceback line.
+  $stdout=$log+'.stdout.txt'
+  $stderr=$log+'.stderr.txt'
+  $savedPreference=$ErrorActionPreference
+  $exitCode=-1
+  try{
+    $ErrorActionPreference='Continue'
+    & $exe @commands 1> $stdout 2> $stderr
+    $exitCode=$LASTEXITCODE
+  } finally{
+    $ErrorActionPreference=$savedPreference
+  }
+  if(Test-Path -LiteralPath $stdout){
+    Get-Content -LiteralPath $stdout | Out-File -LiteralPath $log -Encoding utf8
+  }
+  if(Test-Path -LiteralPath $stderr){
+    Get-Content -LiteralPath $stderr | Out-File -LiteralPath $log -Encoding utf8 -Append
+  }
+  if(Test-Path -LiteralPath $log){
+    @(Get-Content -LiteralPath $log -Tail 65 -ErrorAction SilentlyContinue) | ForEach-Object {Write-Host $_}
+  }
+  if($exitCode -ne 0){
+    $tail=@(Get-Content -LiteralPath $log -Tail 50 -ErrorAction SilentlyContinue) -join [Environment]::NewLine
+    throw ("FMPL native step exited "+$exitCode+" in "+$log+[Environment]::NewLine+$tail)
   }
 }
 function GetPinned([string]$repository,[string]$pin,[string]$relative,[string]$dest,[string]$hash=''){
