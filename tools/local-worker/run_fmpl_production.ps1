@@ -152,15 +152,37 @@ try{
      '--','--blend',$scene,'--glb',$glb,'--build-report',$receipt,'--out',$proof) (Join-Path $out 'roundtrip.log')
   $roundtrip=Get-Content -LiteralPath $proof -Raw | ConvertFrom-Json
   if($roundtrip.passed -ne $true){throw 'Independent GLB readback failed'}
+  Checkpoint 'glass-agitator-pumps-filters-concrete'
+  $refiner=Join-Path $fmpl 'tools\fmpl\production_smoke\refine_process.py'
+  $refinerVerify=Join-Path $fmpl 'tools\fmpl\production_smoke\verify_process.py'
+  $processScene=Join-Path $out 'water-purifier-fmpl-process.blend'
+  $processGlb=Join-Path $out 'water-purifier-fmpl-process.glb'
+  $processReceipt=Join-Path $out 'process-construction-receipt.json'
+  $processProof=Join-Path $out 'process-independent-readback.json'
+  $processIdle=Join-Path $out 'process-idle.png'
+  $processActive=Join-Path $out 'process-agitating.png'
+  Logged $blender @('--background','--threads','6','--python-exit-code','1','--python',$refiner,
+    '--','--input',$scene,'--fmpl-root',$fmpl,'--out',$processScene,'--glb',$processGlb,
+    '--report',$processReceipt,'--idle-preview',$processIdle,'--active-preview',$processActive) (Join-Path $out 'process-refinement.log')
+  if(-not (Test-Path -LiteralPath $processReceipt)){throw 'Glass-topped process candidate has no build receipt'}
+  Checkpoint 'independent-process-rig-reopen'
+  Logged $blender @('--background','--threads','4','--python-exit-code','1','--python',$refinerVerify,
+    '--','--blend',$processScene,'--glb',$processGlb,'--build-report',$processReceipt,
+    '--out',$processProof) (Join-Path $out 'process-independent-verify.log')
+  $verifiedProcess=Get-Content -LiteralPath $processProof -Raw | ConvertFrom-Json
+  if($verifiedProcess.passed -ne $true -or $verifiedProcess.preserved_original_meshes -ne 50 -or
+      $verifiedProcess.new_process_meshes -lt 45 -or $verifiedProcess.glass_transmission -lt .7){
+    throw 'Process construction and glass/animation PBR readback failed'
+  }
   Checkpoint 'four-direction-sprite-export'
   $profile=Join-Path $out 'sprite-profile.json'
-  $p=[ordered]@{schema=1;asset='fmpl-water-purifier';source='water-purifier-fmpl-test.blend';adapter=$null;
+  $p=[ordered]@{schema=1;asset='fmpl-water-purifier';source='water-purifier-fmpl-process.blend';adapter=$null;
     source_size=256;sizes=@(64,128,256);samples=12;seed=4362;columns=4;fps=8;
     directions=@(0,90,180,270);pivot=@(0,0,0);exclude_rotation=@();hide_render=@();animated_lights=@();
     states=@{idle=@(1)}}
-  $p | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $profile -Encoding utf8
+  $p | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $profile -Encoding ascii
   $sprites=Join-Path $out 'sprites'
-  Logged $blender @('--background','--threads','4',$scene,'--python-exit-code','1','--python',
+  Logged $blender @('--background','--threads','4',$processScene,'--python-exit-code','1','--python',
       (Join-Path $export 'render_sprite_frames.py'),'--','--config',$profile,'--out',$sprites) (Join-Path $out 'sprite-render.log')
   Logged $blender @('--background','--threads','4',(Join-Path $sprites 'master.blend'),
       '--python-exit-code','1','--python',(Join-Path $export 'verify_sprite_master.py'),
@@ -175,9 +197,19 @@ try{
   }
   Checkpoint 'final-receipt'
   $b=Get-Content -LiteralPath $receipt -Raw | ConvertFrom-Json
-  $result=[ordered]@{schema='fmpl.production-test.v1';status='candidate-production-proof';
-    fmpl_commit=$pin;candidate_sha256=$hash;derived_blend_sha256=$b.derivative_blend_sha256;
-    glb_sha256=$b.exported_glb_sha256;pbr_presets=$b.pbr_presets_imported;
+  $refined=Get-Content -LiteralPath $processReceipt -Raw | ConvertFrom-Json
+  $result=[ordered]@{schema='fmpl.production-test.v2';status='candidate-process-visibility-and-PBR';
+    fmpl_commit=$pin;candidate_sha256=$hash;source_PBR_blend_sha256=$b.derivative_blend_sha256;
+    refined_blend_sha256=$refined.derived_blend_sha256;
+    refined_glb_sha256=$refined.glb_sha256;pbr_presets=$b.pbr_presets_imported;
+    process_pbr_materials=$refined.materials_from_fmpl;
+    source_meshes_preserved=$verifiedProcess.preserved_original_meshes;
+    process_meshes=$verifiedProcess.new_process_meshes;
+    actual_glb_meshes=$verifiedProcess.reimported_glb_meshes;
+    glass_transmission=$verifiedProcess.glass_transmission;
+    agitator_keyframed=$true;steam_keyframed=$true;
+    original_idle_render_sha256=$refined.idle_render_sha256;
+    working_agitator_render_sha256=$refined.active_render_sha256;
     four_direction_frames=4;atlases=3;sizes=@(64,128,256);
     native_blend_reopened=$true;glb_reimported=$true;pipe_reference_count=2;
     external_greebles=$state.private_greebles;owner_approved=$false;native_ports_verified=$false;game_integrated=$false}
@@ -185,7 +217,7 @@ try{
   $result | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $out 'FMPL_PRODUCTION_RESULTS.json') -Encoding utf8
   $state.status='passed'
   Checkpoint 'candidate-produced-and-audited'
-  Write-Host 'FMPL_PRODUCTION_PASS: real Blender source, 7 PBR materials, 2 pipe jigs, GLB, four directions, 3 atlases'
+  Write-Host 'FMPL_PRODUCTION_PASS: concrete PBR, glass-top keyed agitator, pump/filter flow, steam, real GLB, 4 static directions, 3 atlases'
   exit 0
 }catch{
   $state.status='blocked';$state.error=$_.Exception.Message
