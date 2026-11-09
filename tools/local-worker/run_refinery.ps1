@@ -61,18 +61,26 @@ try {
   $blender=Find-Executable 'blender' @('C:\Program Files\Blender Foundation\Blender*\blender.exe')
   $ollama=Find-Executable 'ollama' @('C:\Program Files\Ollama\ollama.exe','C:\Program Files (x86)\Ollama\ollama.exe','C:\Users\*\AppData\Local\Programs\Ollama\ollama.exe','C:\Users\*\AppData\Local\Ollama\ollama.exe','D:\AI-Relocation\Ollama\ollama.exe','D:\Ollama\ollama.exe')
   if (-not $ollama) {
-    # Exact installation layout supplied by owner: OlIama lives in the
-    # standard per-user Programs directory. AppData is hidden, and globbing
-    # through C:\Users\* can miss it. Enumerate ONLY one profile level and
-    # test each derived literal path. Do not inspect Cline credentials.
-    $profileDirs=@(Get-ChildItem -LiteralPath 'C:\Users' -Directory -Force -ErrorAction SilentlyContinue)
-    foreach ($profileDir in $profileDirs) {
-      $candidate=Join-Path $profileDir.FullName 'AppData\Local\Programs\Ollama\ollama.exe'
-      if (Test-Path -LiteralPath $candidate -PathType Leaf) {
-        $ollama=$candidate
-        Write-Host 'MH7 Discovered Ollama in the existing Windows user Programs directory.'
-        break
+    # Ollama is known to be installed in a user's per-profile Programs directory.
+    # Enumerating C:\Users or hidden AppData can fail for a service account.
+    # Read only registered local profile paths from WMI, never profile contents,
+    # settings, passwords, tokens or the owner's Cline configuration.
+    try {
+      $profiles=@(Get-CimInstance -ClassName Win32_UserProfile -ErrorAction Stop |
+        Where-Object {$_.LocalPath -like 'C:\Users\*' -and -not $_.Special})
+      Write-Host ("MH7 Registered user profiles examined: {0}" -f $profiles.Count)
+      foreach ($profile in $profiles) {
+        $candidate=Join-Path -Path $profile.LocalPath -ChildPath 'AppData\Local\Programs\Ollama\ollama.exe'
+        # File.Exists returns false on access denial rather than throwing;
+        # do not try to grant ourselves access or enumerate a private directory.
+        if ([System.IO.File]::Exists($candidate)) {
+          $ollama=$candidate
+          Write-Host 'MH7 Discovered executable at a registered user Ollama installation.'
+          break
+        }
       }
+    } catch {
+      Write-Warning 'MH7 Service account cannot query Windows user-profile records; falling back to process-image discovery.'
     }
   }
   if (-not $ollama) {
