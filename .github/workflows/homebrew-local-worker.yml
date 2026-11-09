@@ -20,7 +20,8 @@ jobs:
     timeout-minutes: 10
     defaults:
       run:
-        shell: powershell
+        # Process-only policy; do not change LocalMachine or CurrentUser settings.
+        shell: powershell -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
     steps:
       # No checkout needed: this first job must work even before Git is provisioned.
       - name: Verify runner and inventory existing local environment
