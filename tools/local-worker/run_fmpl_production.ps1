@@ -1,6 +1,6 @@
 # FMPL v0.2.0 source/consumer gate passed; sprite-stage diagnostic retry.
 # FMPL production smoke: reuse one OLD-CORE30 job. Never modify source scenes or game.
-# FMPL v0.3.1: boiler-fixed 45deg camera, one direction, full-size centered two-pipe mating pilot.
+# FMPL v0.4.0: boiler 45deg single-view model QA, full-bore centered dual-pipe joints.
 # Stable nominal grid joint and label regression retry; verified native source is immutable.
 # Repeat verified FMPL v0.3 user-source quarantine gate; do not alter originals.
 # 2026-11-09 retry: safe source-intake gate; preserve previous concrete/agitator model and actual alpha proof.
