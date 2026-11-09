@@ -3,6 +3,7 @@
 # V03 physically-readable water treatment build; verified pinned fixture correction.
 # V03 bounds readback corrected; preserve original model and material library.
 # V03 alpha background excluded; serviceable filter sight bank moved into camera view.
+# V03 native readback now gates actual PNG alpha values and preserves full error logs.
 $ErrorActionPreference='Stop'
 $ProgressPreference='SilentlyContinue'
 if($env:RUNNER_NAME -ne 'OLD-CORE30-homebrew' -or $env:HB_MODE -ne 'fmpl-production'){throw 'Wrong FMPL worker or mode'}
@@ -171,7 +172,7 @@ try{
   Checkpoint 'independent-process-rig-reopen'
   Logged $blender @('--background','--threads','4','--python-exit-code','1','--python',$refinerVerify,
     '--','--blend',$processScene,'--glb',$processGlb,'--build-report',$processReceipt,
-    '--out',$processProof) (Join-Path $out 'process-independent-verify.log')
+    '--idle-preview',$processIdle,'--active-preview',$processActive,'--out',$processProof) (Join-Path $out 'process-independent-verify.log')
   $verifiedProcess=Get-Content -LiteralPath $processProof -Raw | ConvertFrom-Json
   if($verifiedProcess.passed -ne $true -or $verifiedProcess.preserved_original_meshes -ne 50 -or
       $verifiedProcess.new_process_meshes -lt 45 -or $verifiedProcess.glass_transmission -lt .7){
