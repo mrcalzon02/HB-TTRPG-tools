@@ -20,6 +20,12 @@ function Checkpoint([string]$phase){
   $state | ConvertTo-Json -Depth 9 | Set-Content -LiteralPath $p -Encoding utf8
   Move-Item -LiteralPath $p -Destination (Join-Path $report 'fmpl-worker-status.json') -Force
   Write-Host ('FMPL_PHASE '+$phase)
+  if($env:HB_STATUS_SCRIPT -and (Test-Path -LiteralPath $env:HB_STATUS_SCRIPT -PathType Leaf)){
+    try{
+      . $env:HB_STATUS_SCRIPT
+      Set-HBStatus -Directory $report -Stage ("fmpl-"+$phase) -Progress @{phase=$phase} -Progressed
+    }catch{Write-Warning 'Live FMPL status publication delayed; stage receipt remains local'}
+  }
 }
 function Native([string]$exe,[string[]]$commands){
   & $exe @commands
@@ -68,10 +74,12 @@ try{
     Native $git @('-C',$fmpl,'init')
     Native $git @('-C',$fmpl,'remote','add','origin','https://github.com/mrcalzon02/Tech-Priests.git')
     Native $git @('-C',$fmpl,'sparse-checkout','init','--no-cone')
-    Native $git @('-C',$fmpl,'sparse-checkout','set','/tools/fmpl/','/art/source-to-3d/shared-parts/','/art/source-to-3d/martian-bunker/src/v10/textures/')
-    Native $git @('-C',$fmpl,'fetch','--depth','1','origin',$pin)
-    Native $git @('-C',$fmpl,'checkout','--detach',$pin)
   }
+  # Sparse checkout by itself does not reduce transferred blobs.
+  # Partial-clone filter is mandatory for the large Tech-Priests source tree.
+  Native $git @('-C',$fmpl,'sparse-checkout','set','/tools/fmpl/','/art/source-to-3d/shared-parts/','/art/source-to-3d/martian-bunker/src/v10/textures/')
+  Native $git @('-C',$fmpl,'fetch','--filter=blob:none','--no-tags','--depth','1','origin',$pin)
+  Native $git @('-C',$fmpl,'checkout','--detach',$pin)
   $head=(& $git -C $fmpl rev-parse HEAD).Trim()
   if($LASTEXITCODE -ne 0 -or $head -ne $pin){throw 'FMPL checkout does not match exact consumer revision'}
   Checkpoint 'registry-and-tests'
