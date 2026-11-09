@@ -1,4 +1,5 @@
 # TP-MH7 Water Purifier: one bounded inference-guided construction pilot.
+# Resumable measured native-source inspection; retain all existing verified goals and evidence.
 # This is a tool-owning GitHub Actions runner under the existing single concurrency group.
 # No installs, no changed user ACLs, no model downloads and no desktop Ollama takeover.
 $ErrorActionPreference='Stop'
