@@ -160,7 +160,24 @@ try {
   $selected=[pscustomobject]@{name='none-scripted-baseline';size=0}
   $endpoint='none'
   $tags=$null
+  # A separately started local 11435 server can run under the desktop owner's
+  # account with OLLAMA_MODELS pointing to D:\AI-Relocation\Ollama\models.
+  # Never claim ownership of, kill, or restart that externally owned process.
   if (-not $desktopBusy) {
+    try {
+      $isolatedTags=Invoke-RestMethod -Uri 'http://127.0.0.1:11435/api/tags' -TimeoutSec 5
+      $isolatedPs=Invoke-RestMethod -Uri 'http://127.0.0.1:11435/api/ps' -TimeoutSec 5
+      if (@($isolatedPs.models).Count -gt 0) {
+        Write-Warning 'MH7 Existing model on 11435 is busy; refusing to share or interrupt it.'
+      } elseif (@($isolatedTags.models).Count -gt 0) {
+        $tags=$isolatedTags
+        $endpoint='http://127.0.0.1:11435'
+        $reportState['inference_discovery'].external_isolated_service_reused=$true
+        Write-Host ('MH7 Found isolated owner-started Ollama API with {0} model tags.' -f @($tags.models).Count)
+      }
+    } catch { Write-Host 'MH7 Isolated owner-started API on 11435 not yet available.' }
+  }
+  if (-not $tags -and -not $desktopBusy) {
     try {
       $tags=Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/tags' -TimeoutSec 6
       $endpoint='http://127.0.0.1:11434'
