@@ -3,7 +3,7 @@
   "consumer_repo": "mrcalzon02/HB-TTRPG-tools",
   "module_repo": "mrcalzon02/Tech-Priests",
   "module_version": "0.4.0",
-  "module_commit": "1eb21675fcb4c083703db5cbfaf473e20e2dcd74",
+  "module_commit": "4c5e340e960ef84f7757cf62453de8d64ffdf70d",
   "uses": [
     "water-purifier-mh7",
     "hb-local-runner",
@@ -21,7 +21,7 @@
     "camera_policy": "fmpl.factorio45.v1"
   },
   "validation_command": "python fmpl-source/tools/fmpl/fmpl_consumer.py --config fmpl-consumer.json --library-root fmpl-source",
-  "source_doc": "https://github.com/mrcalzon02/Tech-Priests/blob/1eb21675fcb4c083703db5cbfaf473e20e2dcd74/tools/fmpl/CAMERA_CAPTURE_STANDARD.md",
+  "source_doc": "https://github.com/mrcalzon02/Tech-Priests/blob/4c5e340e960ef84f7757cf62453de8d64ffdf70d/tools/fmpl/CAMERA_CAPTURE_STANDARD.md",
   "discovery": {
     "ui": "ai-tools.html#fmpl-library",
     "catalog": "api/ai/fmpl-library.json",
