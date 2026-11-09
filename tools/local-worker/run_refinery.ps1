@@ -20,8 +20,10 @@ if ($env:HB_STATUS_SCRIPT -and (Test-Path -LiteralPath $env:HB_STATUS_SCRIPT)) {
 function Publish([string]$stage,[hashtable]$progress) {
   if ($status) {try { Set-HBStatus -Directory $report -Stage $stage -Progress $progress -Progressed } catch { Write-Warning 'Status delivery failed; continuing safely.' }}
 }
-function Exec([string]$exe,[string[]]$args) {
-  & $exe @args
+function Exec([string]$exe,[string[]]$commandArgs) {
+  if (-not $exe -or -not $commandArgs -or $commandArgs.Count -eq 0) { throw 'Missing command executable or arguments.' }
+  Write-Host ("MH7 EXEC {0} {1}" -f (Split-Path -Leaf $exe), ($commandArgs -join ' '))
+  & $exe @commandArgs
   if ($LASTEXITCODE -ne 0) { throw "Command $exe failed with code $LASTEXITCODE" }
 }
 function Find-Executable([string]$name,[string[]]$paths) {
