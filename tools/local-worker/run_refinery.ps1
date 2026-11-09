@@ -55,9 +55,25 @@ $reportState=[ordered]@{job='TP-MH7';runner=$env:RUNNER_NAME;workflow_sha=$env:G
 try {
   Publish 'refinery-preflight' @{stage='preflight';files=0}
   $git=Find-Executable 'git' @('C:\Program Files\Git\cmd\git.exe')
-  $python=Find-Executable 'python' @('D:\Runner\actions-runner\_homebrew\tools\python*\python.exe','C:\Program Files\Python*\python.exe','C:\Users\*\AppData\Local\Programs\Python\Python3*\python.exe')
+  $python=Find-Executable 'python' @('D:\Runner\actions-runner\_homebrew\tools\python*\python.exe','C:\Program Files\Python*\python.exe','C:\Python*\python.exe','D:\Python*\python.exe','D:\Runner\Python*\python.exe','C:\Users\*\AppData\Local\Programs\Python\Python*\python.exe')
   $blender=Find-Executable 'blender' @('C:\Program Files\Blender Foundation\Blender*\blender.exe')
   $ollama=Find-Executable 'ollama' @('C:\Program Files\Ollama\ollama.exe','C:\Users\*\AppData\Local\Programs\Ollama\ollama.exe','D:\AI-Relocation\Ollama\ollama.exe')
+  if (-not $python) {
+    # Service accounts often lack the interactive user's Python PATH.
+    # Prefer existing Windows launcher before touching the machine.
+    $python=Find-Executable 'py' @('C:\Windows\py.exe','C:\Windows\System32\py.exe')
+  }
+  if (-not $python -and $blender) {
+    # Blender ships a full stdlib-capable Python. Use its verified bundled binary
+    # to orchestrate Blender; no global runtime installation or PATH mutation.
+    $blenderRoot=Split-Path -Parent $blender
+    $embedded=@(Get-ChildItem -LiteralPath $blenderRoot -Recurse -Filter 'python.exe' -File -ErrorAction SilentlyContinue | Select-Object -First 1)
+    if ($embedded.Count -gt 0) { $python=$embedded[0].FullName }
+  }
+  if ($python) {
+    Write-Host "MH7 Python executable discovered: $python"
+    Exec $python @('--version')
+  }
   foreach ($item in @(@('git',$git),@('python',$python),@('blender',$blender),@('ollama',$ollama))) { if (-not $item[1]) { throw "Missing existing $($item[0]) executable; do not install automatically." } }
   if (@(Get-Process -Name blender -ErrorAction SilentlyContinue).Count -gt 0) {throw 'Existing Blender process on runner; refusing duplicate renderer.'}
   $os=Get-CimInstance Win32_OperatingSystem
