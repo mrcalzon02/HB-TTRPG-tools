@@ -121,9 +121,17 @@ try{
   }
   $state.master_verified=$true
   Checkpoint 'pack-only-single-angle'
-  & $blender '--background' '--threads' '4' '--python-exit-code' '1' '--python' $packer '--' '--out' $sprites 2>&1 |
-    Out-File -LiteralPath (Join-Path $out 'atlas-only-run.log') -Encoding utf8
-  if($LASTEXITCODE -ne 0){
+  $native_log=Join-Path $out 'atlas-only-run.log'
+  $savedPreference=$ErrorActionPreference
+  try{
+    $ErrorActionPreference='Continue'
+    & $blender '--background' '--threads' '4' '--python-exit-code' '1' '--python' $packer '--' '--out' $sprites 2>&1 |
+      Out-File -LiteralPath $native_log -Encoding utf8
+    $exitCode=$LASTEXITCODE
+  }finally{
+    $ErrorActionPreference=$savedPreference
+  }
+  if($exitCode -ne 0){
     $tail=@(Get-Content -LiteralPath (Join-Path $out 'atlas-only-run.log') -Tail 35) -join [Environment]::NewLine
     throw ("Blender native atlas pack failed: "+$tail)
   }
