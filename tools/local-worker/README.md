@@ -131,6 +131,9 @@ and artifact receipt.
 
 ## Files
 
+- `run_worker.ps1`: the existing task stages and streamed native process runner,
+  downloaded at the workflow's exact commit to keep inline steps within GitHub's
+  script-size limit.
 - `worker_status.ps1`: atomic snapshot helpers, sanitized check payloads,
   publication, publisher ownership, and final receipt handling.
 - `publish_status.ps1`: background observation and bounded publication retry.
