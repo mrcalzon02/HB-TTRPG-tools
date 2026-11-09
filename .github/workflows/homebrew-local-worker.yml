@@ -1,0 +1,170 @@
+name: Homebrew local worker
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/homebrew-local-worker.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: old-core30-local-worker
+  cancel-in-progress: false
+
+jobs:
+  readiness:
+    if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, Windows, X64]
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: powershell
+    steps:
+      # No checkout needed: this first job must work even before Git is provisioned.
+      - name: Verify runner and inventory existing local environment
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $ProgressPreference = 'SilentlyContinue'
+          if ($env:RUNNER_NAME -ne 'OLD-CORE30-homebrew') {
+            throw 'Wrong runner: refusing to inspect or modify another machine.'
+          }
+          $root = 'D:\Runner\actions-runner'
+          if (-not (Test-Path (Join-Path $root '.runner'))) {
+            throw 'Expected runner configuration is absent on D:. No installation changes made.'
+          }
+          $reportDir = Join-Path $root ("_homebrew\reports\{0}-{1}" -f $env:GITHUB_RUN_ID,$env:GITHUB_RUN_ATTEMPT)
+          New-Item -ItemType Directory -Force -Path $reportDir | Out-Null
+          "HB_REPORT_DIR=$reportDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          $report = [ordered]@{
+            schema_version = 1
+            recorded_utc = [DateTime]::UtcNow.ToString('o')
+            runner = $env:RUNNER_NAME
+            stage = 'started'
+            installs_performed = @()
+            model_downloads_performed = @()
+            errors = @()
+          }
+          function Save-Checkpoint {
+            $temporary = Join-Path $reportDir 'readiness.json.tmp'
+            $report | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $temporary -Encoding utf8
+            Move-Item -LiteralPath $temporary -Destination (Join-Path $reportDir 'readiness.json') -Force
+          }
+          Save-Checkpoint
+          try {
+            $os = Get-CimInstance Win32_OperatingSystem
+            $report.windows = [ordered]@{
+              caption = $os.Caption
+              version = $os.Version
+              architecture = $os.OSArchitecture
+              total_ram_gib = [Math]::Round($os.TotalVisibleMemorySize / 1MB, 2)
+              free_ram_gib = [Math]::Round($os.FreePhysicalMemory / 1MB, 2)
+            }
+            $report.cpu = @(Get-CimInstance Win32_Processor | Select-Object Name,NumberOfCores,NumberOfLogicalProcessors)
+            $report.gpu = @(Get-CimInstance Win32_VideoController | Select-Object Name,DriverVersion)
+            $report.disks = @(Get-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' | ForEach-Object {
+              [ordered]@{drive=$_.DeviceID; total_gib=[Math]::Round($_.Size/1GB,2); free_gib=[Math]::Round($_.FreeSpace/1GB,2)}
+            })
+            $report.runner_service = @(Get-CimInstance Win32_Service -Filter "Name LIKE 'actions.runner.%'" | Select-Object Name,State,StartMode)
+            $report.tools_visible_to_service = [ordered]@{}
+            foreach ($tool in @('git','python','py','uv','java','javac','blender','ollama','pwsh','node','npm','nvidia-smi')) {
+              $commands = @(Get-Command $tool -CommandType Application -ErrorAction SilentlyContinue | Where-Object { $_.Source -notlike '*\WindowsApps\*' })
+              $report.tools_visible_to_service[$tool] = ($commands.Count -gt 0)
+            }
+            # Check fixed installation locations without crawling personal files.
+            $report.known_installations = [ordered]@{
+              git = (Test-Path 'C:\Program Files\Git\cmd\git.exe')
+              blender = (@(Get-ChildItem 'C:\Program Files\Blender Foundation\Blender*\blender.exe' -File -ErrorAction SilentlyContinue).Count -gt 0)
+              java = (@(Get-ChildItem 'C:\Program Files\Eclipse Adoptium\jdk*\bin\javac.exe' -File -ErrorAction SilentlyContinue).Count -gt 0)
+            }
+            $modelRoot = 'D:\AI-Relocation\Ollama\models'
+            $report.model_store = [ordered]@{
+              expected_path = $modelRoot
+              visible_to_service = (Test-Path -LiteralPath $modelRoot)
+              manifests_visible = (Test-Path -LiteralPath (Join-Path $modelRoot 'manifests'))
+            }
+            $report.stage = 'hardware-checkpoint'
+            Save-Checkpoint
+
+            # An existing localhost API is usable across Windows accounts; a new
+            # Ollama service is NOT a prerequisite when that API already responds.
+            $endpoint = 'http://127.0.0.1:11434'
+            try {
+              $version = Invoke-RestMethod -Uri "$endpoint/api/version" -TimeoutSec 10
+              $tags = Invoke-RestMethod -Uri "$endpoint/api/tags" -TimeoutSec 10
+            } catch {
+              throw 'Ollama API is unavailable to the runner at localhost:11434. Inventory saved; no models or services changed.'
+            }
+            $report.ollama = [ordered]@{
+              api_reachable = $true
+              version = $version.version
+              models = @($tags.models | Select-Object name,size)
+              inference = 'not-run'
+            }
+            $report.stage = 'ollama-checkpoint'
+            Save-Checkpoint
+            if ($os.FreePhysicalMemory -lt 8MB) {
+              throw 'Less than 8 GiB available RAM. Skipping inference rather than adding memory pressure.'
+            }
+            # Select an already-installed, bounded model; never pull or mutate models.
+            $candidate = $tags.models | Where-Object {
+              $_.size -gt 0 -and $_.size -le 5GB -and
+              ($_.name -like 'llama3.2:3b*' -or $_.name -like 'qwen2.5:3b*' -or $_.name -eq 'qwen2.5:7b-instruct-q3_K_L')
+            } | Sort-Object size | Select-Object -First 1
+            if (-not $candidate) {
+              throw 'No approved small installed model found. No model download attempted.'
+            }
+            $loaded = Invoke-RestMethod -Uri "$endpoint/api/ps" -TimeoutSec 10
+            if (@($loaded.models | Where-Object { $_.name -ne $candidate.name }).Count -gt 0) {
+              throw 'Another model is already loaded. Skipping inference to avoid evicting desktop work or competing for GPU memory.'
+            }
+            $body = @{
+              model = $candidate.name
+              prompt = 'Return only this JSON object: {"ready":true,"answer":42}'
+              stream = $false
+              format = 'json'
+              keep_alive = '30s'
+              options = @{temperature=0; num_ctx=2048; num_predict=64; num_thread=8}
+            } | ConvertTo-Json -Depth 5
+            $timer = [Diagnostics.Stopwatch]::StartNew()
+            $answer = Invoke-RestMethod -Method Post -Uri "$endpoint/api/generate" -ContentType 'application/json' -Body $body -TimeoutSec 180
+            $timer.Stop()
+            $decoded = $answer.response | ConvertFrom-Json
+            $report.ollama.model_tested = $candidate.name
+            $report.ollama.elapsed_seconds = [Math]::Round($timer.Elapsed.TotalSeconds,2)
+            $report.ollama.eval_count = $answer.eval_count
+            $report.ollama.eval_duration_ns = $answer.eval_duration
+            if ($answer.done -ne $true -or $decoded.ready -ne $true -or $decoded.answer -ne 42) {
+              throw 'Local model responded but did not pass the structured-response smoke test.'
+            }
+            $report.ollama.inference = 'passed'
+            $report.stage = 'readiness-passed'
+          } catch {
+            $report.errors += $_.Exception.Message
+            $report.stage = 'readiness-blocked'
+          } finally {
+            Save-Checkpoint
+            $summary = @(
+              '# OLD-CORE30 local worker readiness',
+              "Stage: **$($report.stage)**",
+              '',
+              'This is an inventory and local-inference smoke test, not a completed provisioning run.',
+              'No packages installed, no models downloaded/deleted, no services changed.',
+              'Detailed hardware/tool results are in the readiness artifact and the D: checkpoint.',
+              ''
+            )
+            foreach ($problem in $report.errors) { $summary += "- Blocker: $problem" }
+            $summary | Set-Content -LiteralPath (Join-Path $reportDir 'SUMMARY.md') -Encoding utf8
+            $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          }
+          if ($report.stage -ne 'readiness-passed') { exit 1 }
+
+      - name: Publish readiness evidence even on failure
+        if: always() && env.HB_REPORT_DIR != ''
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: old-core30-readiness-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.HB_REPORT_DIR }}
+          if-no-files-found: error
+          retention-days: 14
