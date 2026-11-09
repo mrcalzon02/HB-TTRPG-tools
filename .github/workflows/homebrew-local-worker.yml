@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Workbench, Blender, full audit, live status, or a pinned MH7 Qwen/Blender refinery run
+        description: Workbench, Blender, status, read-only directory map, or MH7 refinery
         type: choice
-        options: [blender, full, workbench, status, refinery]
+        options: [blender, full, workbench, status, map, refinery]
         default: blender
   push:
     branches: [main]
@@ -24,9 +24,9 @@ jobs:
   repair-and-test:
     if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main' && github.actor == 'mrcalzon02'
     runs-on: [self-hosted, Windows, X64]
-    timeout-minutes: 360 # Existing stages retain their own short process limits; refinery caps itself at 325 min.
+    timeout-minutes: ${{ ((github.event_name == 'push' && contains(github.event.head_commit.message, '[dir-map-run]')) || inputs.mode == 'map') && 8 || 360 }} # Short diagnostic map; existing refinery retains prior budget.
     env:
-      HB_MODE: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[refinery-run]') && 'refinery') || inputs.mode || 'workbench' }}
+      HB_MODE: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[dir-map-run]') && 'map') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[refinery-run]') && 'refinery') || inputs.mode || 'workbench' }}
       # Pinned source request; update this SHA when intentionally requesting a new export.
       HB_WORKBENCH_COMMIT: 'ce3ef9720298807e3036962bde094341643c237f'
       HB_WORKBENCH_SCRIPT: 'models/island-survival/blender/workbench-v7/workbench_v7.py'
@@ -87,7 +87,7 @@ jobs:
           $support=Join-Path $out '_status-support'
           New-Item -ItemType Directory -Force -Path $support | Out-Null
           "HB_REPORT_DIR=$out" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
-          $workerName=if ($env:HB_MODE -eq 'refinery') { 'run_refinery.ps1' } else { 'run_worker.ps1' }
+          $workerName=if ($env:HB_MODE -eq 'map') { 'run_dir_map.ps1' } elseif ($env:HB_MODE -eq 'refinery') { 'run_refinery.ps1' } else { 'run_worker.ps1' }
           $workerScript=Join-Path $support $workerName
           [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12
           $downloaded=$false
