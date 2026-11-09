@@ -1,5 +1,6 @@
 # FMPL v0.2.0 source/consumer gate passed; sprite-stage diagnostic retry.
 # FMPL production smoke: reuse one OLD-CORE30 job. Never modify source scenes or game.
+# V03 physically-readable water treatment build; verified pinned fixture correction.
 $ErrorActionPreference='Stop'
 $ProgressPreference='SilentlyContinue'
 if($env:RUNNER_NAME -ne 'OLD-CORE30-homebrew' -or $env:HB_MODE -ne 'fmpl-production'){throw 'Wrong FMPL worker or mode'}
