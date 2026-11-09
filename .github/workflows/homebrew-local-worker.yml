@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Blender readiness or full local-worker audit
+        description: Workbench export, Blender readiness, or full local-worker audit
         type: choice
-        options: [blender, full]
+        options: [blender, full, workbench]
         default: blender
   push:
     branches: [main]
@@ -23,9 +23,14 @@ jobs:
   repair-and-test:
     if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main' && github.actor == 'mrcalzon02'
     runs-on: [self-hosted, Windows, X64]
-    timeout-minutes: 12
+    timeout-minutes: 30
     env:
-      HB_MODE: ${{ inputs.mode || 'blender' }}
+      HB_MODE: ${{ inputs.mode || 'workbench' }}
+      # Pinned source request; update this SHA when intentionally requesting a new export.
+      HB_WORKBENCH_COMMIT: 'ce3ef9720298807e3036962bde094341643c237f'
+      HB_WORKBENCH_SCRIPT: 'models/island-survival/blender/workbench-v7/workbench_v7.py'
+      HB_WORKBENCH_SOURCE_ZIP: 'models/island-survival/blender/workbench-v7/source.zip'
+      HB_WORKBENCH_SOURCE_SHA256: '26f1402a2aa1920cdaaa8e8e15399250a86e6a6aa9bb9a00c832a76068d6c2cb'
     defaults:
       run:
         shell: powershell -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
@@ -35,7 +40,7 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $ProgressPreference = 'SilentlyContinue'
           if ($env:RUNNER_NAME -ne 'OLD-CORE30-homebrew') { throw 'Wrong runner; no changes made.' }
-          if ($env:HB_MODE -notin @('blender','full')) { throw 'Invalid diagnostic mode.' }
+          if ($env:HB_MODE -notin @('blender','full','workbench')) { throw 'Invalid diagnostic mode.' }
           $root = 'D:\Runner\actions-runner'
           if (-not (Test-Path -LiteralPath "$root\.runner")) { throw 'Expected D: runner configuration is missing.' }
           $work = Join-Path $root '_homebrew'
@@ -51,7 +56,9 @@ jobs:
           }
           function Log([string]$Text) { Write-Host ("[{0}] {1}" -f [DateTime]::UtcNow.ToString('HH:mm:ssZ'),$Text) }
           function Stage([string]$Name,[scriptblock]$Body) {
-            if ($env:HB_MODE -eq 'blender' -and $Name -notin @('resolve-tools','blender-save-reopen-render')) {
+            if (($env:HB_MODE -eq 'blender' -and $Name -notin @('resolve-tools','blender-save-reopen-render')) -or
+                  ($env:HB_MODE -eq 'workbench' -and $Name -notin @('resolve-tools','workbench-render')) -or
+                  ($Name -eq 'workbench-render' -and $env:HB_MODE -ne 'workbench')) {
               $report.stages[$Name]=[ordered]@{status='not-requested'}; Save-Checkpoint; return
             }
             $report.stage=$Name; $report.stages[$Name]=[ordered]@{status='running'}; Save-Checkpoint
@@ -90,6 +97,10 @@ jobs:
               while (-not $process.WaitForExit(1000)) {
                 if ($watch.Elapsed.TotalSeconds -ge $Timeout) {
                   & taskkill.exe /PID $process.Id /T /F | Out-Null
+                  [void]$process.WaitForExit(10000)
+                  if ($stdoutTask.Wait(5000)) { $stdoutTask.Result | Set-Content -LiteralPath $stdout -Encoding utf8 }
+                  if ($stderrTask.Wait(5000)) { $stderrTask.Result | Set-Content -LiteralPath $stderr -Encoding utf8 }
+                  $report.processes[$Name]=[ordered]@{timed_out=$true;elapsed_seconds=[Math]::Round($watch.Elapsed.TotalSeconds,2)}
                   throw "$Name exceeded its ${Timeout}s timeout; job-owned process stopped."
                 }
                 if ($watch.Elapsed.TotalSeconds -ge $heartbeat) { Log "$Name still running ($([int]$watch.Elapsed.TotalSeconds)s)"; $heartbeat+=15 }
@@ -122,6 +133,52 @@ jobs:
               $config=[ordered]@{schema_version=1;runner=$env:RUNNER_NAME;mode=$env:HB_MODE;tools=$report.tools;model_root='D:\AI-Relocation\Ollama\models';worker_host='127.0.0.1:11435';num_parallel=1;num_threads=8;context=2048;recorded_utc=[DateTime]::UtcNow.ToString('o')}
               $config | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $out 'worker-environment.json') -Encoding utf8
               foreach ($key in $report.tools.Keys) { Log "$key = $($report.tools[$key])" }
+            }
+            Stage 'workbench-render' {
+              if ($report.stages['resolve-tools'].status -ne 'passed') { throw 'Tool resolution must pass first.' }
+              if ($env:HB_WORKBENCH_COMMIT -notmatch '^[0-9a-f]{40}$') { throw 'Workbench source must be pinned to a full Git commit SHA.' }
+              if ($env:HB_WORKBENCH_SOURCE_SHA256 -notmatch '^[0-9a-f]{64}$') { throw 'Workbench source ZIP hash must be pinned.' }
+              foreach ($relativePath in @($env:HB_WORKBENCH_SCRIPT,$env:HB_WORKBENCH_SOURCE_ZIP)) {
+                if ($relativePath -notmatch '^models/island-survival/blender/workbench-v7/[A-Za-z0-9_.-]+$') { throw 'Unexpected workbench source path.' }
+              }
+              $assetBase="https://raw.githubusercontent.com/mrcalzon02/Tanks-for-bob-Fork/$env:HB_WORKBENCH_COMMIT"
+              $downloads=@(
+                @{path=$env:HB_WORKBENCH_SCRIPT;destination=(Join-Path $out 'workbench_v7.py')},
+                @{path=$env:HB_WORKBENCH_SOURCE_ZIP;destination=(Join-Path $out 'source.zip')}
+              )
+              [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12
+              foreach ($download in $downloads) {
+                $downloaded=$false
+                foreach ($delay in @(0,2,5)) {
+                  if ($delay -gt 0) { Start-Sleep -Seconds $delay }
+                  try {
+                    Invoke-WebRequest -UseBasicParsing -Uri "$assetBase/$($download.path)" -OutFile $download.destination -TimeoutSec 30
+                    if ((Get-Item -LiteralPath $download.destination).Length -le 0) { throw 'Empty source download.' }
+                    $downloaded=$true; break
+                  } catch { Log "Source download attempt failed: $($_.Exception.Message)" }
+                }
+                if (-not $downloaded) { throw "Pinned source download failed: $($download.path)" }
+              }
+              $sourceZip=Join-Path $out 'source.zip'
+              $zipHash=(Get-FileHash -LiteralPath $sourceZip -Algorithm SHA256).Hash.ToLowerInvariant()
+              if ($zipHash -ne $env:HB_WORKBENCH_SOURCE_SHA256) { throw 'Workbench source ZIP hash mismatch.' }
+              $sourceDir=Join-Path $out 'source'
+              Expand-Archive -LiteralPath $sourceZip -DestinationPath $sourceDir -Force
+              $sourceBlend=Join-Path $sourceDir 'rough_timber_workbench_v4.blend'
+              if (-not (Test-Path -LiteralPath $sourceBlend -PathType Leaf)) { throw 'Expected V4 editable workbench source is missing.' }
+              $report.workbench=[ordered]@{
+                source_repository='mrcalzon02/Tanks-for-bob-Fork';source_commit=$env:HB_WORKBENCH_COMMIT;
+                script=$env:HB_WORKBENCH_SCRIPT;script_sha256=(Get-FileHash -LiteralPath (Join-Path $out 'workbench_v7.py') -Algorithm SHA256).Hash.ToLowerInvariant();
+                source_zip=$env:HB_WORKBENCH_SOURCE_ZIP;source_zip_sha256=$zipHash;render='running'
+              }
+              Save-Checkpoint
+              Log "Rendering workbench from pinned source $env:HB_WORKBENCH_COMMIT"
+              Run-Tool 'workbench' $report.tools.blender '--background --factory-startup --python-exit-code 1 --python workbench_v7.py -- --source-blend source/rough_timber_workbench_v4.blend --output-dir . --render all' 1440
+              if ((Get-Content (Join-Path $out 'workbench.stdout.txt') -Raw) -notmatch 'WORKBENCH_V7_OK') { throw 'Workbench export completion marker is missing.' }
+              if (@(Get-ChildItem -LiteralPath $out -Filter '*.blend' -File).Count -eq 0) { throw 'Editable workbench output is missing.' }
+              if (@(Get-ChildItem -LiteralPath $out -Filter '*.png' -File -Recurse).Count -eq 0) { throw 'Rendered workbench proof is missing.' }
+              $report.workbench.render='passed'
+              $report.changes+='Rendered pinned Tanks-for-Bob workbench source into this job-owned D: report directory.'
             }
             Stage 'git-test' { Run-Tool 'git-version' $report.tools.git '--version' }
             Stage 'java-compile-run' {
@@ -253,7 +310,7 @@ jobs:
             }
             $report.stage=if ($report.errors.Count -eq 0) {'selected-tests-passed'} else {'selected-tests-blocked'}
             $report.completed_utc=[DateTime]::UtcNow.ToString('o'); Save-Checkpoint
-            $summary=@('# OLD-CORE30 local worker tests',"Mode: **$env:HB_MODE**", "Result: **$($report.stage)**",'',"Commit: $env:GITHUB_SHA",'', 'No packages/models downloaded; no desktop process, service, firewall, or machine-wide environment changed.','', '| Test | Result |','|---|---|')
+            $summary=@('# OLD-CORE30 local worker tests',"Mode: **$env:HB_MODE**", "Result: **$($report.stage)**",'',"Commit: $env:GITHUB_SHA",'', 'No applications or inference models installed; workbench mode downloads only its pinned project source.','', '| Test | Result |','|---|---|')
             foreach ($name in $report.stages.Keys) { $summary+="| $name | $($report.stages[$name].status) |" }
             $summary+=''; foreach ($errorMessage in $report.errors) {$summary+="- Blocker: $errorMessage"}
             $summary | Set-Content -LiteralPath (Join-Path $out 'SUMMARY.md') -Encoding utf8
@@ -268,12 +325,18 @@ jobs:
         with:
           name: old-core30-repair-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
-            ${{ env.HB_REPORT_DIR }}/*.json
+            ${{ env.HB_REPORT_DIR }}/**/*.json
             ${{ env.HB_REPORT_DIR }}/*.md
             ${{ env.HB_REPORT_DIR }}/*.txt
-            ${{ env.HB_REPORT_DIR }}/*.png
+            ${{ env.HB_REPORT_DIR }}/**/*.png
             ${{ env.HB_REPORT_DIR }}/*.blend
-            ${{ env.HB_REPORT_DIR }}/*.py
+            ${{ env.HB_REPORT_DIR }}/**/*.py
             ${{ env.HB_REPORT_DIR }}/*.java
+            ${{ env.HB_REPORT_DIR }}/*.zip
+            ${{ env.HB_REPORT_DIR }}/**/*.gif
+            ${{ env.HB_REPORT_DIR }}/**/*.mp4
+            ${{ env.HB_REPORT_DIR }}/**/*.webp
           if-no-files-found: error
           retention-days: 14
+
+
