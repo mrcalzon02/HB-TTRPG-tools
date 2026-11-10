@@ -43,18 +43,18 @@ function Checkpoint([string]$stage){
     }catch{Write-Warning 'Live FMPL telemetry delayed; checkpoint remains local'}
   }
 }
-function Native([string]$exe,[string[]]$args){
-  & $exe @args
+function Native([string]$exe,[string[]]$commands){
+  & $exe @commands
   if($LASTEXITCODE -ne 0){throw "FMPL preflight command failed code $LASTEXITCODE"}
 }
-function Logged([string]$exe,[string[]]$args,[string]$log){
+function Logged([string]$exe,[string[]]$commands,[string]$log){
   $stdout=$log+'.stdout.txt'
   $stderr=$log+'.stderr.txt'
   $previous=$ErrorActionPreference
   $exitCode=-1
   try{
     $ErrorActionPreference='Continue'
-    & $exe @args 1> $stdout 2> $stderr
+    & $exe @commands 1> $stdout 2> $stderr
     $exitCode=$LASTEXITCODE
   }finally{
     $ErrorActionPreference=$previous
