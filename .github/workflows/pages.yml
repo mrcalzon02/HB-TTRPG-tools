@@ -1,27 +1,6 @@
 name: Deploy Homebrew tools site
 
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - ".github/workflows/pages.yml"
-      - "*.html"
-      - "*.css"
-      - "*.js"
-      - "*.json"
-      - "software/work-shift-guide/**"
-      - "data/**"
-      - "scripts/**"
-      - "artifacts/**"
-      - "assets/**"
-      - "images/**"
-      - "docs/**"
-      - "package.json"
-      - "package-lock.json"
-      - "sitemap.xml"
-      - "robots.txt"
-      - ".nojekyll"
-      - "CNAME"
   workflow_dispatch:
 
 permissions:
