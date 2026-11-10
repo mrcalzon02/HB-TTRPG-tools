@@ -4768,3 +4768,41 @@ The cooper put his hand over the pocket where the letter lay.
 "All right."
 
 He left the sound staves where his nephew could see them and went out with the note. On the workbench the plane waited beside a pile of shavings. For the first time that morning he knew which piece he would not plane again.
+
+---
+
+The landlord kept the rent book in a room behind the baker's shop. The room was warm, though the ledger lay beneath a stone weight to keep its pages from curling.
+
+The cooper handed over the letter without adding a word of his own. The landlord read it once, then again more slowly.
+
+"He wrote this?"
+
+"He did. His leg won't let him come here."
+
+"It says nothing about who was at fault."
+
+"He didn't ask me to speak about that."
+
+The landlord turned to the tenant's account. The rent was due the following morning; she had already marked the date in the margin. The cooper could see the unpaid figure, but not what payments the other tenants had made. She kept a hand over the facing page.
+
+"I can give him four days," she said. "The amount won't change. After that I shall need an answer, even if the answer is that he still cannot pay."
+
+The cooper had prepared himself to argue for longer. He could feel the arguments lining up in his throat: the injury, the yard, the wages lost, the boy's good character. None belonged to the letter's author unless the author chose to use them.
+
+"Will you write it to him?" he asked.
+
+The landlord took a clean slip, wrote the new due date and the unchanged amount, and signed beneath them. She made the same amendment in her own book. The two entries did not make the rent disappear.
+
+"Tell him I've answered the question he sent. If he needs to ask another, he may write again."
+
+Back at the workshop, the cooper offered the reply before taking off his coat. His nephew read it with the rent coins still beside his bed.
+
+"Four days," he said.
+
+"I could go back and ask for more."
+
+"Not yet. She answered me."
+
+He put the landlord's slip beneath his own copy of the letter, leaving the coins where they were. The relief instructions remained unfolded beside them; he had not chosen whether to apply. The timber yard had still made no finding, and his leg was no better.
+
+But the next question, like the first, would be his to ask.
