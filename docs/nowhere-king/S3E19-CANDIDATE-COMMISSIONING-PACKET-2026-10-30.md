@@ -188,7 +188,7 @@ Luceran gave no purchasing order. Hesta received no extension. Rell received no 
 
 When the men left, Pell's apprentice came for the gauge. He did not ask Edselsto where it belonged. He showed Oris the nick in its end and the hook he had labeled in the measuring room, so the next worker would know which pattern had actually been checked.
 
-Oris took down the corrected summary only after the disputed words, the correction and Rell's witness mark had been copied together into the review book. He left a legible correction beside the wage chest, where the first sheet had done its harm. The words *paid hour saved* remained visible, crossed through rather than erased; anyone reading them could now see who had written them and why they carried no authority over the roll.
+Oris unpinned the disputed wage-chest review sheet only after its words, Ysabet's correction and the mark of Rell's chosen witness had been copied together into the review book. He kept that original with the challenge record and pinned a legible corrected copy beside the wage chest, its *paid hour saved* line still readable beneath the strike-through. The intermediate works summary was a different sheet; it went back to his desk with *one hour saved* still unexplained, awaiting its own correction against Tomas's checked entry.
 
 Luceran watched the ink dry. A clerk's signature had made the error traceable, not the wages payable. The roof still needed work, and Rell still had a claim that could be counted without being paid.
 
