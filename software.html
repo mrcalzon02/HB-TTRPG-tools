@@ -121,6 +121,7 @@
 <a id="tab-superposition-reader" role="tab" aria-selected="false" tabindex="-1" aria-controls="superposition-reader" href="#superposition-reader">SuperPosition Reader</a>
 <a id="tab-3d-model-downloader" role="tab" aria-selected="false" tabindex="-1" aria-controls="3d-model-downloader" href="#3d-model-downloader">3D Model Downloader</a>
 <a id="tab-bottleneck-signals" role="tab" aria-selected="false" tabindex="-1" aria-controls="bottleneck-signals" href="#bottleneck-signals">Bottleneck Signals</a>
+<a id="tab-github-image-gallery" role="tab" aria-selected="false" tabindex="-1" aria-controls="github-image-gallery" href="#github-image-gallery">GitHub Image Gallery</a>
 </nav>
 <section class="software-panel menu-card" id="work-shift-guide" role="tabpanel" aria-labelledby="tab-work-shift-guide">
 <h2>Work Shift Guide — Blank Edition</h2>
@@ -156,6 +157,19 @@
 <span class="software-tag">Firefox 140+</span><span class="software-tag">3D capture</span><span class="software-tag">ZIP archive</span>
 <div class="workspace-actions"><a class="link-button primary-action" href="software/3d-model-downloader/3d-capture-v0.1.1.zip" download>Download 3D Capture v0.1.1 ZIP</a><a class="link-button" href="3d-model-downloader.html">Description &amp; installation</a><a class="link-button" href="software/3d-model-downloader/README.md">README</a></div>
 <p class="software-muted">Recovered package preserved byte-for-byte; 27,537 bytes. Temporary Firefox installation is documented. Source archive contains Mozilla signature metadata, but persistent-install status has not been independently validated.</p>
+</section>
+<section class="software-panel menu-card" id="github-image-gallery" role="tabpanel" aria-labelledby="tab-github-image-gallery">
+<img src="tools/github-image-gallery/icons/gallery-128.png" alt="" width="72" height="72" loading="lazy" decoding="async" style="float:right;margin:0 0 12px 18px;border-radius:12px">
+<h2>GitHub Image Gallery v0.1.0 — Automatic repository image thumbnails</h2>
+<p>See the actual images in GitHub folders instead of clicking each filename and waiting for a separate preview page. Open any repository directory containing PNG, JPG, WebP, GIF, SVG or other common image formats and the extension automatically displays a responsive thumbnail gallery above GitHub's original file list. Thumbnail sizes are adjustable; normal GitHub links and navigation still work.</p>
+<span class="software-tag">Firefox / Chrome / Edge</span><span class="software-tag">Browser extension</span><span class="software-tag">Automatic inline gallery</span><span class="software-tag">v0.1.0 · user-tested</span>
+<div class="workspace-actions">
+<a class="link-button primary-action" href="software/github-image-gallery/GitHub-Image-Gallery-v0.1.0.zip" download>Download Image Gallery v0.1.0 (ZIP)</a>
+<a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/tree/main/tools/github-image-gallery">Source code</a>
+<a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/tools/github-image-gallery/README.md">Installation &amp; test instructions</a>
+</div>
+<p class="software-muted"><strong>Firefox:</strong> Extract the ZIP, open <code>about:debugging#/runtime/this-firefox</code>, choose <strong>Load Temporary Add-on</strong> and select <code>manifest.json</code>. <strong>Chrome / Edge:</strong> Extract the ZIP, enable Developer mode on the browser's extensions page and select <strong>Load unpacked</strong>. This is a manual-install package, not a signed Mozilla or browser-store release; Firefox temporary add-ons are removed on restart.</p>
+<p class="software-muted">No GitHub token, API requests, telemetry or background service. The extension reads the visible GitHub file listing and loads raw image URLs on demand. Version 0.1.0 passed an offline Chromium gallery test and a user-reported Firefox test. No browser-store distribution is claimed.</p>
 </section>
 <section class="software-panel menu-card" id="bottleneck-signals" role="tabpanel" aria-labelledby="tab-bottleneck-signals">
 <h2>Bottleneck Signals — Firefox AI conversation status indicators</h2>
