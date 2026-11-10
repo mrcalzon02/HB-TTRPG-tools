@@ -360,7 +360,7 @@ Estelle thought about the glitter on her father's shoulders and the grains that 
 
 Daysha checked the cushions and the cloth basket, lifting a few stray motes with the smallest possible movement of her fingers. When Estelle finished her section, Daysha examined it and thanked her. Rome gathered the last sweepings from beside the chair.
 
-Only then did Daysha close the porcelain basin and fasten its lid. She transferred the glitter into the small lidded box, which she sealed with a quiet touch. The magic was not a punishment for the glitter; it was simply a way of keeping the fine particles from scattering through the room again.
+Only then did Daysha tip the still-open porcelain basin toward the small box. Rome held the box steady, and Estelle watched its rim for escaping grains as Daysha guided the silver drift inside—the glitter from his hair, the two cats, and the floor they had swept together. Daysha sealed the box with a quiet touch, then covered the empty basin, leaving nothing loose for Lexi or the other Maine Coon to scatter. The magic was not a punishment for the glitter; it was simply a way of keeping the fine particles from scattering through the room again.
 
 Estelle looked at the box with renewed interest.
 
