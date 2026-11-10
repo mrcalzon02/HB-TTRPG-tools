@@ -97,6 +97,18 @@ jobs:
             } catch { Write-Warning 'Pinned worker script download delayed.' }
           }
           if (-not $downloaded) { throw 'Pinned worker script could not be downloaded.' }
+          # PowerShell 5.1 built-in parser: fail with real line/column receipts
+          # before doing any local work if a checked-in worker script is malformed.
+          $parseTokens=$null
+          $parseErrors=$null
+          [System.Management.Automation.Language.Parser]::ParseFile($workerScript,[ref]$parseTokens,[ref]$parseErrors) | Out-Null
+          if (@($parseErrors).Count -gt 0) {
+            foreach ($parseError in @($parseErrors)) {
+              Write-Host ('WORKER_SCRIPT_PARSE_ERROR line={0} column={1}: {2}' -f $parseError.Extent.StartLineNumber,$parseError.Extent.StartColumnNumber,$parseError.Message)
+            }
+            throw 'Pinned worker PowerShell syntax check failed; no local model work attempted.'
+          }
+          Write-Host 'WORKER_SCRIPT_PARSE_PASS'
           & $workerScript
           exit $LASTEXITCODE
 
