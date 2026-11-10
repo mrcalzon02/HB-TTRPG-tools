@@ -8,9 +8,6 @@ on:
         type: choice
         options: [blender, full, workbench, status, map, refinery, workbench-size, refinery-pilot, fmpl-production, fmpl-atlas-resume]
         default: blender
-  push:
-    branches: [main]
-    paths: ['.github/workflows/homebrew-local-worker.yml', 'tools/local-worker/**']
 
 permissions:
   contents: read
