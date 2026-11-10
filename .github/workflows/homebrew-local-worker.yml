@@ -102,7 +102,7 @@ jobs:
           $parseTokens=$null
           $parseErrors=$null
           [System.Management.Automation.Language.Parser]::ParseFile($workerScript,[ref]$parseTokens,[ref]$parseErrors) | Out-Null
-          if (@($parseErrors).Count -gt 0) {
+          if ($null -ne $parseErrors -and $parseErrors.Count -gt 0) {
             foreach ($parseError in @($parseErrors)) {
               Write-Host ('WORKER_SCRIPT_PARSE_ERROR line={0} column={1}: {2}' -f $parseError.Extent.StartLineNumber,$parseError.Extent.StartColumnNumber,$parseError.Message)
             }
