@@ -1,0 +1,115 @@
+/* GitHub Image Gallery - deliberately scoped to the extension's own DOM. */
+#gh-image-gallery {
+  box-sizing: border-box;
+  color: var(--fgColor-default, var(--color-fg-default, #c9d1d9));
+  background: var(--bgColor-default, var(--color-canvas-default, #0d1117));
+  border: 1px solid var(--borderColor-default, var(--color-border-default, #30363d));
+  border-radius: 8px;
+  margin: 12px 0 16px;
+  padding: 12px;
+  min-width: 0;
+}
+#gh-image-gallery *, #gh-image-gallery *::before, #gh-image-gallery *::after { box-sizing: border-box; }
+#gh-image-gallery .ghig-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+#gh-image-gallery .ghig-heading { font-size: 14px; font-weight: 650; }
+#gh-image-gallery .ghig-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+#gh-image-gallery .ghig-control-label {
+  font-size: 12px;
+  color: var(--fgColor-muted, var(--color-fg-muted, #8b949e));
+  padding-right: 5px;
+}
+#gh-image-gallery .ghig-button {
+  appearance: none;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: inherit;
+  background: var(--button-default-bgColor-rest, var(--color-btn-bg, #21262d));
+  border: 1px solid var(--button-default-borderColor-rest, var(--color-btn-border, #30363d));
+  border-radius: 6px;
+  padding: 5px 9px;
+  line-height: 18px;
+  cursor: pointer;
+}
+#gh-image-gallery .ghig-button:hover { filter: brightness(1.18); }
+#gh-image-gallery .ghig-button[aria-pressed="true"] {
+  background: var(--bgColor-accent-muted, var(--color-accent-subtle, #1f3b58));
+  border-color: var(--borderColor-accent-emphasis, var(--color-accent-emphasis, #388bfd));
+}
+#gh-image-gallery .ghig-collapse { margin-left: 8px; }
+#gh-image-gallery .ghig-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--ghig-width)), 1fr));
+  gap: 12px;
+}
+#gh-image-gallery[data-size="small"]  { --ghig-width: 112px; --ghig-height: 94px; }
+#gh-image-gallery[data-size="medium"] { --ghig-width: 166px; --ghig-height: 150px; }
+#gh-image-gallery[data-size="large"]  { --ghig-width: 246px; --ghig-height: 234px; }
+#gh-image-gallery .ghig-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  border: 1px solid var(--borderColor-muted, var(--color-border-muted, #30363d));
+  border-radius: 8px;
+  background: var(--bgColor-muted, var(--color-canvas-subtle, #161b22));
+  color: inherit;
+  overflow: hidden;
+  transition: border-color 120ms ease;
+}
+#gh-image-gallery .ghig-card:hover,
+#gh-image-gallery .ghig-card:focus-visible {
+  border-color: var(--borderColor-accent-emphasis, var(--color-accent-emphasis, #388bfd));
+  text-decoration: none;
+  outline-offset: 2px;
+}
+#gh-image-gallery .ghig-image-frame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: var(--ghig-height);
+  height: var(--ghig-height);
+  width: 100%;
+  background-color: var(--bgColor-default, var(--color-canvas-default, #0d1117));
+  background-image: linear-gradient(45deg, rgba(128,128,128,.085) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(128,128,128,.085) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(128,128,128,.085) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(128,128,128,.085) 75%);
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+  background-size: 20px 20px;
+  overflow: hidden;
+}
+#gh-image-gallery .ghig-image-frame img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  image-rendering: auto;
+}
+#gh-image-gallery .ghig-filename {
+  display: block;
+  padding: 7px 9px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+#gh-image-gallery .ghig-load-error {
+  font-size: 12px;
+  padding: 12px;
+  text-align: center;
+  color: var(--fgColor-muted, var(--color-fg-muted, #8b949e));
+}
+#gh-image-gallery.ghig-collapsed .ghig-grid { display: none; }
+#gh-image-gallery.ghig-collapsed .ghig-toolbar { margin-bottom: 0; }
+@media (prefers-reduced-motion: reduce) {
+  #gh-image-gallery .ghig-card { transition: none; }
+}

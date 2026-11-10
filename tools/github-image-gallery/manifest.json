@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub Image Gallery",
+  "short_name": "GH Image Gallery",
+  "description": "Automatically displays image thumbnails on GitHub repository folder pages, without opening files individually.",
+  "version": "0.1.0",
+  "icons": {
+    "48": "icons/gallery-48.png",
+    "128": "icons/gallery-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "github-image-gallery@mrcalzon02.github.io",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  }
+}
