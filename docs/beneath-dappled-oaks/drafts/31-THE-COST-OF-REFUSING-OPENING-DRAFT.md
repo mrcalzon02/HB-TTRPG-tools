@@ -4783,15 +4783,15 @@ The cooper handed over the letter without adding a word of his own. The landlord
 
 "He didn't ask me to speak about that."
 
-The landlord turned to the tenant's account. The rent was due the following morning; she had already marked the date in the margin. The cooper could see the unpaid figure, but not what payments the other tenants had made. She kept a hand over the facing page.
+The landlord turned to the tenant's account. The rent was due the following morning; he had already marked the date in the margin. The cooper could see the unpaid figure, but not what payments the other tenants had made. He kept a hand over the facing page.
 
-"I can give him four days," she said. "The amount won't change. After that I shall need an answer, even if the answer is that he still cannot pay."
+"I can give him four days," he said. "The amount won't change. After that I shall need an answer, even if the answer is that he still cannot pay."
 
 The cooper had prepared himself to argue for longer. He could feel the arguments lining up in his throat: the injury, the yard, the wages lost, the boy's good character. None belonged to the letter's author unless the author chose to use them.
 
 "Will you write it to him?" he asked.
 
-The landlord took a clean slip, wrote the new due date and the unchanged amount, and signed beneath them. She made the same amendment in her own book. The two entries did not make the rent disappear.
+The landlord took a clean slip, wrote the new due date and the unchanged amount, and signed beneath them. He made the same amendment in his own book. The two entries did not make the rent disappear.
 
 "Tell him I've answered the question he sent. If he needs to ask another, he may write again."
 
@@ -4801,7 +4801,7 @@ Back at the workshop, the cooper offered the reply before taking off his coat. H
 
 "I could go back and ask for more."
 
-"Not yet. She answered me."
+"Not yet. He answered me."
 
 He put the landlord's slip beneath his own copy of the letter, leaving the coins where they were. The relief instructions remained unfolded beside them; he had not chosen whether to apply. The timber yard had still made no finding, and his leg was no better.
 
