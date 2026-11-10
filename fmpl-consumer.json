@@ -3,7 +3,7 @@
   "consumer_repo": "mrcalzon02/HB-TTRPG-tools",
   "module_repo": "mrcalzon02/Tech-Priests",
   "module_version": "0.4.1",
-  "module_commit": "d93172bb64eb1c7c24182aeb565bc1accbf128b0",
+  "module_commit": "4783bc94b2ed36c380413e34808695287e33ecc4",
   "uses": [
     "water-purifier-mh7",
     "hb-local-runner",
@@ -21,7 +21,7 @@
     "camera_policy": "fmpl.factorio45.v1"
   },
   "validation_command": "python fmpl-source/tools/fmpl/fmpl_consumer.py --config fmpl-consumer.json --library-root fmpl-source",
-  "source_doc": "https://github.com/mrcalzon02/Tech-Priests/blob/d93172bb64eb1c7c24182aeb565bc1accbf128b0/tools/fmpl/SUPER_GREEBLE_STANDARD.md",
+  "source_doc": "https://github.com/mrcalzon02/Tech-Priests/blob/4783bc94b2ed36c380413e34808695287e33ecc4/tools/fmpl/SUPER_GREEBLE_STANDARD.md",
   "discovery": {
     "ui": "ai-tools.html#fmpl-library",
     "catalog": "api/ai/fmpl-library.json",
