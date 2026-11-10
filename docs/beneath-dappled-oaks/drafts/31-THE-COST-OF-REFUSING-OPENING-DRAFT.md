@@ -4496,7 +4496,7 @@ They sorted the bundle on the dry shelf. Some pegs were sound; others had soften
 
 The sister laughed. She took the offcuts to the bench and examined their grain. One was too thin to bear a blow; the other might yield a pair of short pegs if she cut carefully. She left the knife where it was. Supper needed tending, and the cover was holding for now.
 
-Before closing the book, she drew a line between the maintenance note and the money columns. The deposit remained returned and unspent. The preparation wages remained paid. The two sown rows were still two, and no barley had arrived from the mill.
+Before closing the book, she drew a line between the maintenance note and the money columns. On one side was the unspent seed money; on the other, two broken pegs they had not yet replaced. Neither entry could be made good by rewriting the other.
 
 "Does this make the field any better?" she asked.
 
