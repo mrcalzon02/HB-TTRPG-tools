@@ -158,7 +158,7 @@ Rome gave her a sideways look.
 
 “I could do it,” she added. “But I am told I am dangerously generous with the hot water.”
 
-A footman laughed before he could stop himself. The steward looked scandalized for a heartbeat, then relented enough to arrange a rotation with the attendants. The first footman took his break; another replaced him; the trays began to empty for the people they had been intended to feed.
+A footman laughed before he could stop himself. The steward looked scandalized for a heartbeat, then called back the young kitchen runner. They counted out a share of the plain pastries for the visiting attendants on the eastern terrace and set the rest where the courtyard servants could reach it on their breaks. One footman took his turn while another poured the tea; when he returned, the second went to eat. The runner waited to carry the tray back until the last attendant had been served.
 
 Across the lawn, Estelle was learning that a royal title did not make a watering can any easier to share.
 
