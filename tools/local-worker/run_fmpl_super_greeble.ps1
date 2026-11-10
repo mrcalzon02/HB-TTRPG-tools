@@ -108,8 +108,9 @@ try{
   $contract=Join-Path $support 'fmpl-consumer.json'
   DownloadPinned $env:GITHUB_REPOSITORY $env:GITHUB_SHA 'fmpl-consumer.json' $contract
   $cfg=Get-Content -LiteralPath $contract -Raw | ConvertFrom-Json
-  if($cfg.schema -ne 'fmpl.consumer.v1' -or $cfg.module_repo -ne 'mrcalzon02/Tech-Priests'
-       -or $cfg.module_version -ne '0.4.1'){
+  if(($cfg.schema -ne 'fmpl.consumer.v1') -or
+     ($cfg.module_repo -ne 'mrcalzon02/Tech-Priests') -or
+     ($cfg.module_version -ne '0.4.1')){
     throw 'Super Greeble requires pinned FMPL v0.4.1'
   }
   $pin=[string]$cfg.module_commit
