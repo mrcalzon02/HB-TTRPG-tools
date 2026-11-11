@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'tools/sound-manager/RELEASE_NOTES.md'
+      - '.github/workflows/simple-sound-manager-release.yml'
   workflow_dispatch:
 
 permissions:
@@ -46,6 +47,9 @@ jobs:
           }
           "version=$version" >> $env:GITHUB_OUTPUT
           "tag=$tag" >> $env:GITHUB_OUTPUT
+          # gh release/API return 404 for an unpublished version: that is expected.
+          # Do not pass their nonzero exit code back to the workflow runner.
+          exit 0
 
       - name: Ensure Inno Setup 6 is installed
         if: steps.version.outputs.publish == 'true'
