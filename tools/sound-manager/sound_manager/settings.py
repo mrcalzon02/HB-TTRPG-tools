@@ -14,7 +14,7 @@ def data_dir():
 class Settings:
     def __init__(self, path=None):
         self.path = Path(path) if path else data_dir()/"settings.json"
-        self.data = {"outputs": {}, "inputs": {}, "restore": None, "auto_start": True, "profiles": {}}
+        self.data = {"outputs": {}, "inputs": {}, "restore": None, "auto_start": True, "profiles": {}, "waveform_opt_in_v1": True}
         self.warning = ""
         if self.path.exists():
             try:
@@ -26,6 +26,15 @@ class Settings:
                     self.data.setdefault(name, {})
                     if not isinstance(self.data[name], dict):
                         self.data[name] = {}
+                # Old versions saved every device's Waveform as enabled.
+                # Clear those implicit opt-ins once; later choices persist.
+                if parsed.get('waveform_opt_in_v1') is not True:
+                    for kind in ('outputs', 'inputs'):
+                        for config in self.data[kind].values():
+                            if isinstance(config, dict):
+                                config['waveform'] = False
+                    self.data['waveform_opt_in_v1'] = True
+                    self.save()
             except (ValueError, OSError) as exc:
                 self.warning = f"Could not read saved settings: {exc}"
 
@@ -34,7 +43,7 @@ class Settings:
         if not isinstance(item, dict):
             item = self.data["outputs"][identifier] = {}
         item.setdefault("selected", selected)
-        item.setdefault('waveform', True)
+        item.setdefault('waveform', False)
         item.setdefault("eq", True)
         gains = item.get("gains", [0]*10)
         if not isinstance(gains, list) or len(gains) != 10:
@@ -56,7 +65,7 @@ class Settings:
         if not isinstance(item, dict):
             item = self.data['inputs'][identifier] = {}
         item.setdefault('monitor', False)
-        item.setdefault('waveform', True)
+        item.setdefault('waveform', False)
         item.setdefault('delay_ms', 0)
         item.setdefault('meter', False)
         defaults = dict(eq=True, gains=[0]*10, classic_gains=[0]*15, tones=[0, 0, 0], preamp=0, balance=0, protect=True, filters=[])
