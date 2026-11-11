@@ -64,10 +64,10 @@ class WaveformWidget(QWidget):
         super().__init__()
         self.window, self.device = window, device
         self.setMinimumHeight(65)
-        self.setToolTip('Processed audio, peak hold, and RMS level. Visual scaling does not change volume. Double-click to reset peak/clip hold.')
+        self.setToolTip('Opt-in processed waveform, peak hold and RMS. Disabling Waveform stops sampling this history. Double-click to reset peak/clip hold.')
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update)
-        if not window.settings.device(device).get('waveform', True):
+        if not window.settings.device(device).get('waveform', False):
             self.hide()
 
     def set_display_enabled(self, enabled):
