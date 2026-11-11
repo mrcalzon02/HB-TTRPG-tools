@@ -4,7 +4,9 @@ A local desktop app for Windows 10/11 and Linux. No subscription, account, brows
 
 ## Controls
 
-## Version 0.10.1 — Windows launcher and installer (pending validation)
+**Waveform capture is off by default on every input and output.** Enable an individual **Waveform** checkbox to calculate/display its three-second trace; disable it to discard history and stop its processing/rendering overhead. Audio routing, EQ and microphone Listen/Meter remain independent. An upgrade resets previously auto-enabled Waveform preferences once; subsequent manual opt-ins persist. Microphone waveforms additionally require enabling Meter or Listen. See [HELP.md](HELP.md).
+
+## Version 0.10.1 — Opt-in waveform capture and Windows installer (pending validation)
 
 An Avast scan quarantined the `SimpleSoundManagerLauncher.exe` bundled with PyInstaller `--onefile` as `Win64:MalwareX-gen [Trj]`. This was the packaged **launcher**, not evidence that the Python updater ran or that the file was confirmed malicious. Because one-file Python packaging can trigger heuristic detections, the Windows launcher now builds as a conventional C#/.NET Framework executable and Windows releases gain a normal Inno Setup installer/uninstaller. The existing checksum-verified update mechanism remains, with new releases preferring Setup.exe and older ZIP releases remaining compatible. **Windows builds, install/update tests and Avast re-scanning of the new package remain outstanding.** See [0.10.1 update notes](RELEASE_NOTES.md).
 
