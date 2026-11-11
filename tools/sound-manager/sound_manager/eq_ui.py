@@ -110,8 +110,8 @@ class EqDialog(QDialog):
         self.display_mode.setToolTip('Switch the advanced EQ controls to a larger live waveform for this device.')
         editing.addWidget(self.display_mode)
         self.waveform_switch = QCheckBox('Waveform')
-        self.waveform_switch.setChecked(self.config.get('waveform', True))
-        self.waveform_switch.setToolTip('Saved for this device, including its main-window card. Does not enable microphone capture.')
+        self.waveform_switch.setChecked(self.config.get('waveform', False))
+        self.waveform_switch.setToolTip('Opt in to waveform sampling and display for this device. Does not open a microphone or change audio routing.')
         editing.addWidget(self.waveform_switch)
         self.freeze_switch = QCheckBox('Freeze')
         self.freeze_switch.setChecked(device.id in window.waveform_freezes)
@@ -129,7 +129,7 @@ class EqDialog(QDialog):
         if device.kind == 'input':
             meter = QCheckBox('Live input meter')
             meter.setChecked(self.config['meter'])
-            meter.setToolTip('Capture this microphone for its waveform. Bluetooth microphones may switch the headset into call mode.')
+            meter.setToolTip('Capture this microphone for metering. Enable Waveform separately for its trace. Bluetooth headsets may switch into call mode.')
             meter.toggled.connect(lambda checked: window.meter_input(device.id, checked))
             layout.addWidget(meter)
         controls = QHBoxLayout()
@@ -307,10 +307,10 @@ class EqDialog(QDialog):
 
     def select_display(self, index, save=True):
         self.display_stack.setCurrentIndex(index)
-        self.compact_waveform.set_display_enabled(index == 0 and self.config.get('waveform', True))
+        self.compact_waveform.set_display_enabled(index == 0 and self.config.get('waveform', False))
         self.curve.setVisible(index == 0)
         self.headroom.setVisible(index == 0)
-        self.waveform_hidden_note.setVisible(not self.config.get('waveform', True))
+        self.waveform_hidden_note.setVisible(not self.config.get('waveform', False))
         if save:
             self.config['eq_view'] = self.display_mode.currentText()
             self.window.settings.save()
