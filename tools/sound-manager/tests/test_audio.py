@@ -111,6 +111,32 @@ class RoutingTests(unittest.TestCase):
             self.assertEqual(card.opens['b'],1)
         finally:
             engine.stop()
+    def test_waveform_history_is_opt_in_without_restarting_routing_or_input_capture(self):
+        card = FakeCard()
+        engine = Engine(card)
+        engine.start('bus', {'a': dict(config(), waveform=False)})
+        try:
+            engine.configure_inputs({'mic': {'monitor': False, 'meter': True, 'waveform': False}})
+            time.sleep(.08)
+            self.assertIsNone(engine.history('a'))
+            self.assertIsNone(engine.history('mic'))
+            self.assertTrue(card.played['a'])
+            self.assertTrue(engine.inputs['mic'].is_alive())
+            engine.set_waveform('a', True)
+            engine.set_waveform('mic', True)
+            time.sleep(.12)
+            self.assertTrue(engine.history('a').snapshot())
+            self.assertTrue(engine.history('mic').snapshot())
+            self.assertEqual(card.opens['a'], 1)
+            engine.set_waveform('a', False)
+            engine.set_waveform('mic', False)
+            self.assertIsNone(engine.history('a'))
+            self.assertIsNone(engine.history('mic'))
+            self.assertTrue(engine.inputs['mic'].is_alive())
+            self.assertEqual(card.opens['a'], 1)
+        finally:
+            engine.stop()
+
     def test_failed_primary_starts_unselected_backup_without_second_primary_open(self):
         card = FakeCard()
         engine = Engine(card)
