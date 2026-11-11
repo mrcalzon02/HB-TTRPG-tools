@@ -4806,3 +4806,63 @@ Back at the workshop, the cooper offered the reply before taking off his coat. H
 He put the landlord's slip beneath his own copy of the letter, leaving the coins where they were. The relief instructions remained unfolded beside them; he had not chosen whether to apply. The timber yard had still made no finding, and his leg was no better.
 
 But the next question, like the first, would be his to ask.
+
+---
+
+### OPTIONAL UNPUBLISHED FOLLOW-ON — The price of appearing
+
+*Provisional Chapter Thirty-One continuation. Not canon; no relief award, wage finding, or tenancy settlement is established.*
+
+The morning after the landlord's reply, the cooper's nephew asked his uncle to bring the rent coins to the bed again.
+
+"I know where they are," his uncle said.
+
+"I want to see how much will be left."
+
+He made three piles this time. The largest was rent. The smallest would pay for a cart to the relief counter and back. The third was what remained for bread and the clean linen his leg required.
+
+His uncle watched the little pile for the cart.
+
+"I can take the application."
+
+"You can carry a letter," the young man said. "You can't tell them what I can still do, or how long I can sit without the leg swelling."
+
+"They might only take the paper."
+
+"Then I'll know because they told me."
+
+The physician had forbidden lifting, not answering questions. They found a driver willing to take the slower street and let him ride with his leg propped on a folded sack. The fare came from the rent coins. His uncle counted out the change, but the young man paid it himself.
+
+At the public counter there were three people ahead of them. One woman had brought a baby who slept through the quarrel over whose turn it was. The young man kept his hands on the seat of the borrowed chair, not because he feared falling but because being carried through a doorway had already cost him enough dignity for one morning.
+
+When his turn came, the clerk asked what work he had been doing before the injury.
+
+"Moving timber."
+
+"And what work can you do now?"
+
+"I can read a measure, judge a stave, keep a tally. I can't carry a load. I don't know when I can again."
+
+The clerk wrote down his answer. At the question about income, his uncle began to speak; the young man touched his sleeve.
+
+"I'll answer that."
+
+He gave the amount he had last received and the shifts he had missed, separating wages actually paid from work he might have been offered. At the question about the accident, he said only what he knew: a stack moved, and he had not seen why. The clerk did not ask him to name a culprit.
+
+"Will this go to the yard?" he asked.
+
+"I can tell you what you've submitted here," she said, turning the page so he could read it. "I cannot tell you what another office may require later. There is no decision today."
+
+He read the page twice. His uncle waited. The young man signed his own request and asked for a note of its receipt. The clerk made one, with the day's date, but no sum promised beneath it.
+
+On the way home the cart jolted in a rut. He bit back a cry and asked the driver to slow rather than pretend he was well. At the workshop he laid the receipt between the landlord's four-day extension and the unspent coins.
+
+"Was it worth the fare?" his uncle asked.
+
+"I don't know yet."
+
+The rent was still owed. No answer had come from the yard; the physician had not cleared him for work. And there were fewer coins than there had been at dawn.
+
+But the request now existed in his name, with his own account of what he could and could not do. He had spent something he could count to make a choice no one else could make for him.
+
+*Editorial boundary: application received, not approved. The four-day rent extension, unresolved wage inquiry, accident causation, OBL-001/REL-012 and Chapter Thirty-One publication gate remain open.*
