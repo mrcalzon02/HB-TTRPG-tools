@@ -1,3 +1,7 @@
+# Waveform opt-in revision — November 10, 2026
+
+Regression coverage added for default-off settings on new inputs/outputs, one-time reset of old auto-enabled waveform preferences, preservation of unrelated settings and later opt-ins, and worker-level on/off waveform history without restarting routing or microphone Meter. Windows UI tests now explicitly enable waveform capture before checking a live trace. A Windows build/release workflow gates publication on the automated tests and verifiable installer/source/ZIP hashes. Installed-system performance, long-duration audio, installer handoff and antivirus results remain unverified until checked on hardware.
+
 # Packaging revision — October 23, 2026 (Windows verification pending)
 
 New source replaces the PyInstaller `--onefile` launcher with a .NET Framework C# launcher, adds a versioned Inno Setup installer, and stages/installs verified Setup.exe for Windows updates while retaining legacy ZIP fallback. Test coverage now includes setup selection, checksum failures and a Windows-only compiled-launcher subprocess smoke test. A real Windows compile, Inno install/uninstall, updater round trip and AV retest have not run here; no new release is verified or published by this source change. Older 0.10.0 validation below does not certify this revision.
