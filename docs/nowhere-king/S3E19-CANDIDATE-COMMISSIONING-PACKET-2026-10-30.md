@@ -248,7 +248,7 @@ Mara asked whether her name could be struck out first. Sera asked that the whole
 
 Senn drew a line down a clean page and wrote five words at its top: *heard; proposed; invited; accepted; paid*. Under each he left a blank space. The courtier protested that the first column ought to contain the names he remembered.
 
-"No," Ysabet said. "We can say you heard expressions of interest in the connected galleries. We cannot certify every speaker, and we will not publish their names to repair an error made by publishing names."
+"No," Ysabet said. "We can record that you report hearing expressions of interest in the connected galleries. No one has verified those words, and even an accurate recollection would not be a guest's consent to attend. We will not publish their names again to repair an error made by publishing names."
 
 Senn wrote the correction beneath the empty headings. The added sheet had been prepared without booking, invitation, acceptance, or authority to engage performers. Its names were not a guest roll. Its appearance had caused at least one musician to defer another offer; the amount of any lost work remained unverified. The original notice of possible dates still governed. The courtier signed as maker of the mistaken sheet, and Ysabet witnessed the correction, not the truth of his guesses. Senn signed only for the public copy he had made.
 
