@@ -100,8 +100,8 @@ class DeviceCard(QFrame):
         self.options_button.setMenu(options)
         self.options_button.setProperty('compact',True)
         self.waveform_toggle = QCheckBox('Waveform')
-        self.waveform_toggle.setChecked(window.settings.device(device).get('waveform', True))
-        self.waveform_toggle.setToolTip('Show or hide this device’s waveform. Audio and Meter/Listen are unchanged.')
+        self.waveform_toggle.setChecked(window.settings.device(device).get('waveform', False))
+        self.waveform_toggle.setToolTip('Opt in to waveform sampling and display. Off stops history collection and drawing; routing and Meter/Listen are unchanged.')
         self.waveform_toggle.toggled.connect(lambda enabled: window.set_waveform(device, enabled))
         top.addWidget(self.waveform_toggle)
         self.freeze_toggle = QCheckBox('Freeze')
@@ -156,7 +156,7 @@ class DeviceCard(QFrame):
             controls.addWidget(self.listen)
             self.meter = QCheckBox('Meter')
             self.meter.setChecked(window.settings.input(device.id)['meter'])
-            self.meter.setToolTip('Capture this input for its waveform without playing it. Bluetooth microphones may switch into call mode.')
+            self.meter.setToolTip('Capture this input for metering without playing it. Waveform history requires Waveform on. Bluetooth microphones may switch into call mode.')
             self.meter.toggled.connect(lambda checked: window.meter_input(device.id, checked))
             controls.addWidget(self.meter)
         delay_label = QLabel('Output delay' if device.kind == 'output' else 'Monitor delay')
@@ -233,13 +233,13 @@ class DeviceCard(QFrame):
             self.selected.blockSignals(False)
         config = self.window.settings.output(device.id) if device.kind == 'output' else self.window.settings.input(device.id)
         self.waveform_toggle.blockSignals(True)
-        self.waveform_toggle.setChecked(config.get('waveform', True))
+        self.waveform_toggle.setChecked(config.get('waveform', False))
         self.waveform_toggle.blockSignals(False)
         self.freeze_toggle.blockSignals(True)
         self.freeze_toggle.setChecked(device.id in self.window.waveform_freezes)
-        self.freeze_toggle.setEnabled(config.get('waveform', True))
+        self.freeze_toggle.setEnabled(config.get('waveform', False))
         self.freeze_toggle.blockSignals(False)
-        self.waveform.set_display_enabled(config.get('waveform', True))
+        self.waveform.set_display_enabled(config.get('waveform', False))
         if not self.delay.isSliderDown() and not self.delay_value.hasFocus():
             self.delay.setValue(round(config['delay_ms']))
         if hasattr(self, 'listen'):
@@ -583,7 +583,12 @@ class Window(QMainWindow):
         QTimer.singleShot(10050, lambda:self.test_click_button.setText('Test sync clicks') if time.monotonic()>=self.engine.test_click_end else None)
 
     def set_waveform(self, device, enabled):
+        enabled = bool(enabled)
         self.settings.device(device)['waveform'] = enabled
+        # Stop or resume active waveform history without restarting the stream.
+        self.engine.set_waveform(device.id, enabled)
+        if not enabled:
+            self.waveform_freezes.pop(device.id, None)
         self.settings.save()
         for widget in self.findChildren(WaveformWidget):
             if widget.device.id == device.id:
@@ -594,12 +599,20 @@ class Window(QMainWindow):
             card.waveform_toggle.setChecked(enabled)
             card.waveform_toggle.blockSignals(False)
             card.freeze_toggle.setEnabled(enabled)
+            if not enabled:
+                card.freeze_toggle.blockSignals(True)
+                card.freeze_toggle.setChecked(False)
+                card.freeze_toggle.blockSignals(False)
         for dialog in self.findChildren(EqDialog):
             if dialog.device.id == device.id:
                 dialog.waveform_switch.blockSignals(True)
                 dialog.waveform_switch.setChecked(enabled)
                 dialog.waveform_switch.blockSignals(False)
                 dialog.freeze_switch.setEnabled(enabled)
+                if not enabled:
+                    dialog.freeze_switch.blockSignals(True)
+                    dialog.freeze_switch.setChecked(False)
+                    dialog.freeze_switch.blockSignals(False)
                 dialog.select_display(dialog.display_mode.currentIndex(), save=False)
 
     def set_waveform_frozen(self, device, enabled):
