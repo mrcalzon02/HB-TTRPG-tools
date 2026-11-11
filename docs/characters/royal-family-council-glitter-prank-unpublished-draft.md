@@ -445,3 +445,49 @@ She looked up at Rome. “You came before I had finished.”
 Estelle considered both boats, one crooked and one not yet right. She left the blue ribbon exactly where it was. The second sail could be adjusted another time. For now, she asked her father to hold the basin steady while she showed him the difference once more.
 
 **Editorial boundary:** This proposed private experiment and choice are not verified new family history or formal punishment. The passage workers' account remains unheard; no council finding, route decision, appointment or royal decree is made. The glitter is not magically cleaned here, and RH-F04/SC-04 remains separate and chronologically unplaced.
+
+---
+
+## Unpublished RH-F03 audition — The weight of an open passage
+
+> **Status:** Optional, noncanonical worker-perspective interlude during the council cleanup, before the later boat experiments. Private invented staging, not verified testimony, an official account, or a council decision.
+
+The woman who had warned a minister away from the wet stone gathered the used cloths by their clean corners. Silver flecks kept slipping through her fingers. They were beautiful in the light, less beautiful in a floor seam, where a shoe could carry them onto the stair.
+
+She had shown the princess a safe section of rail to wipe. Now she folded Estelle's rag glitter-side inward. That was one job finished, not the interruption itself. Someone still had to get the damp cloths downstairs without meeting a delivery of hot food on the blind turn.
+
+At the service landing a porter waited with two covered baskets. Another had set down empty trays to let the runner fetch the second basin. Both were watching the door as though it might tell them when their afternoon could begin again.
+
+“Can we get through?” the first porter asked.
+
+“Not with those and this.” She held up the bundle. “Give me a moment.”
+
+“The kitchen is waiting.”
+
+“So is someone coming the other way. If we meet on the turn, which one of us lets go?”
+
+He looked at the baskets. Neither answer pleased him.
+
+She had heard scraps of the council's argument through the door: close the service passage, use the outside route, let someone else carry the delay. From the council table, a detour was a line on a map. Here it was two loaded shoulders meeting at a corner where neither bearer could see ahead. She could explain that difference. Nobody had asked her yet.
+
+The runner came for the bundle, reaching before he recovered his breath. She kept hold of one end.
+
+“Can you keep a hand free for the railing?”
+
+He looked at his fingers. “I can.”
+
+“Then take the light end. I'll carry the wet weight. We wait until the baskets clear.”
+
+Together they moved the cloths aside without touching the clean trays. Only then did she let the porter pass, one basket at a time. It was no rule for the palace. It was the safest crossing she could arrange with the people standing before her.
+
+“What if they ask why the delivery was late?” he asked.
+
+“Say you waited for us to clear the turn. Don't say you were careless, and don't say I ordered the whole passage closed. Neither is true.”
+
+The second porter lifted the trays. “And when they close it for repairs?”
+
+“Ask the people who must carry everything around it. I don't know that route well enough to promise it will work.”
+
+Behind the door the laughter had faded into talk of repairs. She could have pretended the princess's apology had returned her lost time. Instead she checked the landing for stray grains, gave the runner his free hand back, and went to finish the work that had waited. She knew what had happened on this side of the door. Whether the council would want to hear it remained an open question.
+
+**Editorial boundary:** The worker makes a practical choice about her own tasks. No permanent employee identity, official finding, binding route policy, royal decree, dated event, or established council consultation is added. The boat coda remains untouched; RH-F04/SC-04 and its magical cleanup remain separate and chronologically unplaced.
