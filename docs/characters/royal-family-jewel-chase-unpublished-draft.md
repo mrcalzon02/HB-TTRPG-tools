@@ -276,7 +276,7 @@ Estelle was given the important duty of choosing which small pastry each person 
 
 “There should be one for him.”
 
-The Queen Mother signaled the attendant to bring another plate. The young elf accepted it with a blush and a bow, and was finally dismissed with the thanks he should have received at the beginning.
+The Queen Mother signaled the attendant to bring another plate. Before the young elf could ask whether his errand was complete, she confirmed that she had accepted the case for inspection and would keep it in her private receiving room until the fastening could be checked. Rome repeated that he—not the courier—would explain the delay to the steward. Only then did the young elf take the pastry with a blush and a bow, and was finally dismissed with the thanks he should have received at the beginning.
 
 Rome watched the door close.
 
