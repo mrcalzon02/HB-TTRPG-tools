@@ -144,7 +144,11 @@ class WindowTests(unittest.TestCase):
         from sound_manager.ui import EqDialog
         microphone = next(d for d in self.window.devices if d.kind == 'input')
         other = next(d for d in self.window.devices if d.kind == 'output')
+        self.assertFalse(self.window.settings.input(microphone.id)['waveform'])
+        self.assertFalse(self.window.settings.output(other.id)['waveform'])
         with patch.object(self.window.engine, 'configure_inputs') as capture:
+            self.window.cards[microphone.id].waveform_toggle.setChecked(True)
+            self.assertTrue(self.window.settings.input(microphone.id)['waveform'])
             self.window.cards[microphone.id].waveform_toggle.setChecked(False)
             capture.assert_not_called()
         card = self.window.cards[microphone.id]
@@ -152,7 +156,7 @@ class WindowTests(unittest.TestCase):
         self.assertFalse(card.waveform.timer.isActive())
         self.assertFalse(self.window.settings.input(microphone.id)['meter'])
         self.assertFalse(self.window.settings.input(microphone.id)['monitor'])
-        self.assertTrue(self.window.settings.output(other.id)['waveform'])
+        self.assertFalse(self.window.settings.output(other.id)['waveform'])
         self.assertFalse(Settings(Path(self.folder.name)/'settings.json').input(microphone.id)['waveform'])
         dialog = EqDialog(self.window, microphone)
         from sound_manager.waveform import WaveformWidget
@@ -196,7 +200,7 @@ class WindowTests(unittest.TestCase):
         config = self.window.settings.input(device.id)
         config['tones'] = [2, -1, 3]
         dialog = EqDialog(self.window, device)
-        self.assertFalse(dialog.compact_waveform.isHidden())
+        self.assertTrue(dialog.compact_waveform.isHidden())
         with patch.object(self.window.engine, 'configure_inputs') as capture:
             dialog.display_mode.setCurrentIndex(1)
             self.assertEqual(dialog.display_stack.currentIndex(), 1)
@@ -224,6 +228,8 @@ class WindowTests(unittest.TestCase):
         dialog.display_mode.setCurrentIndex(0)
         dialog.show()
         self.app.processEvents()
+        self.assertTrue(dialog.compact_waveform.isHidden())
+        dialog.waveform_switch.setChecked(True)
         self.assertTrue(dialog.compact_waveform.isVisible())
         self.assertTrue(dialog.compact_waveform.timer.isActive())
         dialog.waveform_switch.setChecked(False)
@@ -242,6 +248,7 @@ class WindowTests(unittest.TestCase):
         from sound_manager.waveform import WaveHistory
         from sound_manager.ui import EqDialog
         device = next(d for d in self.window.devices if d.kind == 'output')
+        self.window.set_waveform(device, True)
         history = WaveHistory()
         history.append(np.full((960, 2), .1, dtype=np.float32), clipped=3)
         with patch.object(self.window.engine, 'history', return_value=history), patch.object(self.window.engine, 'configure') as configure:
