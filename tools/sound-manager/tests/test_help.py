@@ -11,10 +11,11 @@ class HelpTests(unittest.TestCase):
 
     def test_current_help_is_searchable_and_wraps_without_loading_network(self):
         from sound_manager.help_ui import HelpDialog
+        from sound_manager import __version__
         from PySide6.QtGui import QTextCursor
         dialog=HelpDialog(None)
         try:
-            self.assertIn('0.10.0',dialog.body.toPlainText())
+            self.assertIn(__version__,dialog.body.toPlainText())
             cursor=dialog.body.textCursor()
             cursor.movePosition(QTextCursor.MoveOperation.End)
             dialog.body.setTextCursor(cursor)
