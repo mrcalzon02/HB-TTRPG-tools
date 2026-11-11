@@ -23,6 +23,9 @@ jobs:
         working-directory: tools/sound-manager
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Build only this independent tool, not the rest of the large repo.
+          sparse-checkout: tools/sound-manager
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
