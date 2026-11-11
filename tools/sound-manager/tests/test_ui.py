@@ -24,6 +24,15 @@ class WindowTests(unittest.TestCase):
         from sound_manager.ui import Window
         self.window = Window(screenshot=True)
         self.window.timer.stop()
+        if not any(device.kind == 'output' for device in self.window.devices) or not any(device.kind == 'input' for device in self.window.devices):
+            # Hosted Windows runners have no sound devices. Release-safe engine
+            # tests use fake devices; these UI integration checks need hardware.
+            self.window.close()
+            self.window.deleteLater()
+            self.app.processEvents()
+            self.env.stop()
+            self.folder.cleanup()
+            self.skipTest('UI device inventory checks require both a Windows output and input')
 
     def tearDown(self):
         self.window.close()
