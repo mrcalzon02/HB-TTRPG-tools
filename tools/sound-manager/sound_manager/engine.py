@@ -39,12 +39,18 @@ class OutputWorker(threading.Thread):
         self.process_ms = 0
         self.device_name = identifier
         self.latency_ms = None
-        self.wave = WaveHistory()
+        self.wave = WaveHistory() if config.get('waveform', False) else None
         self.lock = threading.Lock()
 
     def configure(self, config):
         with self.lock:
             self.config = copy.deepcopy(config)
+            self.wave = (self.wave or WaveHistory()) if config.get('waveform', False) else None
+
+    def set_waveform(self, enabled):
+        with self.lock:
+            self.config['waveform'] = bool(enabled)
+            self.wave = (self.wave or WaveHistory()) if enabled else None
 
     def push(self, data):
         if self.queue.full():
@@ -103,7 +109,9 @@ class OutputWorker(threading.Thread):
                         processed *= 0
                     self.process_ms = (time.perf_counter()-processing_started)*1000
                     player.play(processed)
-                    self.wave.append(processed, clipped=eq.clipped_samples)
+                    with self.lock:
+                        if self.wave is not None:
+                            self.wave.append(processed, clipped=eq.clipped_samples)
                     try:
                         self.latency_ms = player.latency*1000
                     except (AttributeError, RuntimeError):
@@ -236,7 +244,7 @@ class Engine:
                     self.inputs[identifier] = worker
                     worker.start()
                 elif worker:
-                    worker.config = copy.deepcopy(config)
+                    worker.configure(config)
                     if not enabled:
                         worker.stop_event.set()
                         if not worker.is_alive():
@@ -253,6 +261,13 @@ class Engine:
         with self.lock:
             worker = self.workers.get(identifier) or self.inputs.get(identifier)
             return worker.wave if worker else None
+
+    def set_waveform(self, identifier, enabled):
+        # A waveform toggle must not open, close or restart an audio stream.
+        with self.lock:
+            worker = self.workers.get(identifier) or self.inputs.get(identifier)
+        if worker:
+            worker.set_waveform(enabled)
 
     def _capture(self, source):
         try:
@@ -332,10 +347,21 @@ class InputWorker(threading.Thread):
         self.queue = queue.Queue(maxsize=8)
         self.pending = np.zeros((0, 2), dtype=np.float32)
         self.latency_ms = None
-        self.wave = WaveHistory()
+        self.wave = WaveHistory() if config.get('waveform', False) else None
+        self.lock = threading.Lock()
         self.error = None
         self.drops = 0
         self.process_ms = 0
+
+    def configure(self, config):
+        with self.lock:
+            self.config = copy.deepcopy(config)
+            self.wave = (self.wave or WaveHistory()) if config.get('waveform', False) else None
+
+    def set_waveform(self, enabled):
+        with self.lock:
+            self.config['waveform'] = bool(enabled)
+            self.wave = (self.wave or WaveHistory()) if enabled else None
 
     def run(self):
         try:
@@ -362,7 +388,9 @@ class InputWorker(threading.Thread):
                                            balance=config.get('balance', 0), protect=config.get('protect', True),
                                            classic_gains=config.get('classic_gains'), tones=config.get('tones'))
                         self.process_ms = (time.perf_counter()-processing_started)*1000
-                        self.wave.append(block, clipped=eq.clipped_samples)
+                        with self.lock:
+                            if self.wave is not None:
+                                self.wave.append(block, clipped=eq.clipped_samples)
                         if self.queue.full():
                             try:
                                 self.queue.get_nowait()
