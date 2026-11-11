@@ -1,6 +1,14 @@
-# Simple Sound Manager 0.10.1 — Windows packaging and installer update
+# Simple Sound Manager 0.10.1 — Opt-in waveform sampling and Windows installer
 
-**Status: source changes committed; Windows installer build, installation test, and antivirus re-scan still pending.**
+**Status: automated tests and artifact checks are required before publishing. Manual Windows installation, extended hardware load testing, and antivirus re-scanning remain unverified.**
+
+## Waveform sampling off by default
+
+- All **input and output waveforms are off by default**. This prevents unnecessary waveform history creation and per-block sampling, not merely the rendering of a hidden graph.
+- On first launch after upgrading, devices that had Waveform automatically enabled by old defaults are reset to off once. Afterwards, users can enable selected Waveforms and those explicit preferences are retained.
+- Toggling Waveform on creates a fresh three-second, memory-only history; toggling it off discards that history and any frozen snapshot immediately. No playback stream is restarted, and output routing, EQ, microphone Listen and Meter remain independent.
+- Microphones still require a separate explicit Listen or Meter action to open their capture stream. Simply enabling Waveform does not open microphones.
+- Regression tests cover new defaults, legacy preference migration and real worker-level sampling toggles for both kinds of device. System-specific performance improvements remain to be measured.
 
 ## Antivirus detection and what changed
 
