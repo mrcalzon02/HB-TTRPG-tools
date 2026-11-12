@@ -17,7 +17,7 @@ concurrency:
 jobs:
   in-game-visual-proof:
     name: Native Factorio GUI screenshot comparison — OLD-CORE30
-    runs-on: [self-hosted, Windows, X64, OLD-CORE30-homebrew]
+    runs-on: [self-hosted, Windows, X64]
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
