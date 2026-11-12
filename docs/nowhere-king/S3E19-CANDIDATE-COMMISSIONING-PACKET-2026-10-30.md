@@ -528,3 +528,45 @@ Ysabet allowed the intermediate summary to remain in the works file, but not to 
 The apprentice took his string and returned to Pell's wet model. He still had no stone to fit and no promise of when he would. Oris remained with the two papers, fastening the correction where a hurried reader would have to move it before seeing his old number. For once he had made the record harder to skim and safer to use.
 
 **Editorial boundary:** The original checked entry, Oris's intermediate summary and the publicly challenged unsigned wage-chest notice stay distinguishable. This scene grants no wage deduction, payment, priority ruling, funded new work, stone purchase, extension of Hesta's two-market-day hold, or access to Jorvan's pledged 24/27 east-gate net. It does not improve Edselsto's hearing, alter the first-dark/six-lit candles, settle Miren's privacy injury, select a candidate, or commission S3E19.
+
+---
+
+## Candidate B — The lesson that could not be kept waiting (additional audition, 2026-11-11)
+
+**UNAPPROVED / NONCANONICAL.** A separate optional Candidate B audition, not Episode 19, a resolution of Mara's baker inquiry, or a commissioned court performance. Kell and his ordinary pupils are provisional.
+
+Kell had taught the cooper's daughter to hold a reed without biting it every third afternoon since the first cold rains. The lesson was hardly courtly work. Its coin bought his own reeds, and the girl had begun, at last, to make the low note without startling herself.
+
+Today he was late. The unauthorized hall sheet had carried his name beneath *performers expected*, and he had spent the best part of his daylight at the board waiting to hear whether anyone meant to pay him. The public correction was now pinned in its place. Nobody had hired him. The cooper's daughter would still be waiting.
+
+A courtier caught Kell at the gallery stair.
+
+“The steward may pass through before supper,” he said. “If you play here, he might remember you when we settle the winter dates.”
+
+Kell looked down at his reed case. It was a chance he wanted. A steward who remembered his playing might one day ask for a proper performance, while a cooper's household could never furnish that kind of patronage.
+
+“Will the steward be coming to hear me?” he asked.
+
+“I cannot promise where he will walk.”
+
+“Then I would be playing to a passage.”
+
+“Surely you can spare one tune.”
+
+Kell had already spared an hour to a sheet that had no right to his name. He was afraid to refuse the courtier, and more afraid of becoming the sort of musician who called uncertainty a living.
+
+Sera came up the stair as he fastened the case.
+
+“You could stay,” she said quietly. “I cannot tell you it would do no good.”
+
+“And I could lose the lesson entirely.”
+
+“Yes.”
+
+“Then let him remember that I went to work.”
+
+He went down to the village without waiting for the steward. At the cooper's yard the daughter had put away her instrument. Her father had arranged a full paid hour, and there was less than half of one left before she was needed with the hoop wood. Kell opened his case anyway. They worked until she managed the low note twice.
+
+He accepted payment only for the time taught. The missing part could not be restored by a corrected notice, and the courtier's possible hearing of him was gone with the daylight. He wrote the shortened lesson in his own work book, not on a new court list.
+
+**Audition boundary:** No Crown date, audition, invitation, fee, preference or contract is authorized; the steward neither hears Kell nor promises anything. The cooper's ordinary lesson and its reduced payment exist only within this hypothetical audition. Mara still has no answer from the baker. Sera's unsettled rope and worker claims, Senn's restricted access, Miren's silence, Edselsto's connected-hearing limit, first candle dark/six lit, Candidate A's independence, and the unassigned S3E19–23 horizon remain unchanged.
