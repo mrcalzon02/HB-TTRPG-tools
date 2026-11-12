@@ -3260,6 +3260,47 @@ He took his coat and went out before he could turn them into a theory.
 
 ---
 
+While Ilyan was at the cooper's workshop, Neral learned why a document could be ready and still fail to leave a desk.
+
+The afternoon courier stood at the Hall's dispatch counter with Vaun's narrow requisition in his gloved hand. The signed sheet was intact. Its outer sleeve, however, bore a cross-reference to the separate sealed-custodian correspondence. Entered on an ordinary waybill beside the public office reference, the two numbers could join matters that the filing rules kept apart.
+
+"I cannot send that label," Neral said.
+
+"Then I cannot receipt it," the courier replied, laying the packet down. "There's still room in today's bag. There won't be when I come back."
+
+The junior copyist reached for a clean sleeve. Her inkwell was capped. She had already arranged the notices for the millrace dispute and the cooper's wage inquiry, and she was due at the petition window before the closing bell.
+
+"Not yours," Neral said.
+
+"I wrote the first."
+
+"I approved it. You have your own queue."
+
+He removed the outer sleeve without disturbing Vaun's signed inquiry. On fresh paper he wrote only the Hall's neutral outward reference and the destination permitted for the limited procedural question. There was no commission number, no protected name, and no mention of Salver. Those belonged to other inquiries, with other rules.
+
+The courier compared the sleeve with his route book. "Will they know what to do with it?"
+
+"They will know which office sent it and which class of answer we are permitted to request. Whether they can answer is theirs to decide."
+
+"Does the first copy go on the bill?" the copyist asked.
+
+"The paper does. The time does. Not a second search fee."
+
+Neral marked the spoiled sleeve as discarded Hall material, then entered the recopying against the Hall's ordinary work, not the civic custodian's account. He had already counted the day's copying time. Making the correction meant reopening the ledger after the others had gone home.
+
+Ilyan had offered private coins for official copying before. His money could not make this an expense incurred by the receiving office, and charging the young copyist an extra half-hour would merely hide the cost on a person who could not decline the work as easily as he could.
+
+The courier signed the dispatch book. He took the new sleeve and the unchanged signed request, then went out into the street.
+
+"Collected," Neral said, drawing a line beneath the mark.
+
+"Delivered?" the copyist asked.
+
+"No. Please don't put that in the ledger until somebody can prove it."
+
+She went to the petition window. Neral returned to the ordinary accounts. The inquiry had left the Hall without acquiring an answer. If he finished the entries tonight, the petitioners at tomorrow's counter would not inherit the delay. He sharpened the pen and began with the millrace.
+---
+
 The next time Thessa rode the bridge road, the carpenter was standing outside his shed with a folded account in his hand and the expression of a man who had already explained it twice.
 
 Captain Sorn reined in beside her.
