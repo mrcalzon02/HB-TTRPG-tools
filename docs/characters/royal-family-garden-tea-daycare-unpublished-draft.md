@@ -390,37 +390,47 @@ Rome nodded. “Then we shall leave it to your care.”
 
 The gardener returned to his work. Daysha watched him press the soil gently around the roots.
 
-“That,” she said, “may be the finest lesson of the afternoon.”
+“Should we bring another plant?” Rome asked.
 
-Rome sat beside her. “The watering can?”
+“Only if this one fails, Your Majesty.”
 
-“The plant. You can make a mistake without being forbidden to try again. But you must return and see what your mistake cost.”
+“And if it does?”
 
-He looked toward the daycare gate. “I hope she will remember.”
+“Then the princess ought to see that, too. She helped put it back.” The gardener lifted his hand from the earth. “I would not call the lesson finished while there is still a chance for it to grow.”
 
-“She may remember the dragon instead.”
+Rome considered the small, battered leaves. He could have called for a dozen replacements. Instead, he picked up the cloth the gardener had put beside the bed and offered it back, careful not to touch the roots.
 
-“That would be like her.”
+“You will know when she may come and look?”
 
-Daysha leaned against his shoulder. The blue floral folds of her dress settled over the edge of the bench. She had not acquired a new gown, or a jewel, or anything that would require Garrick's ledger. Rome had not won a debate by speaking more loudly than the council. Estelle had not been crowned queen of the nursery, and the nursery had been better for it.
+“The attendant will know when the children's hour allows it,” the gardener said. “I can tell her what I've found.”
 
-The kitchen staff had eaten their lunch. The visitors had found another terrace. The market streets remained open while the merchants were consulted. A caretaker had kept the authority to care for the children in her charge.
+“Then we'll ask her,” Daysha said.
 
-From inside the daycare came the faint sound of several voices arguing over what a dragon might eat.
+The gardener nodded and returned to the bed.
 
-Rome reached for the last pastry and discovered that Daysha had already divided it in two.
+Rome watched a moment longer. “That was nearly a royal order for replacement seedlings.”
 
-“For you,” she said.
+“You still have time to issue one,” Daysha teased.
 
-“And the other half?”
+“I think I shall endure the uncertainty.”
 
-“For me. I am learning to share.”
+“Heroic.”
 
-He accepted his portion with great ceremony. “A lesson from the royal daycare?”
+A footman arrived for the tea service, only to pause at the last pastry on their plate. Daysha broke it in half before he could ask whether they had finished, giving one piece to Rome. Rome placed the empty plate on the offered tray and moved his chair out of the footman's path. There was no reason to make him carry it around the king.
 
-“A lesson from everyone who kept this afternoon running while we were busy enjoying it.”
+Inside the daycare, voices rose in renewed argument about what the fox and dragon might eat. Estelle's voice rose among them, then stopped; another child answered. No one at the royal table needed to settle the question.
 
-They ate beneath the roses as the pear tree cast its shade across an empty patch of grass. Tomorrow, or on some other undetermined day, there would be more letters, more errands, more occasions when a king or queen could mistake the needs of the household for an inconvenience. For the moment, the garden belonged to the people who cared for it, and the family had been welcome there because they had learned to ask.
+“Do you think she has learned to share?” Rome asked.
+
+“She shared a watering can,” Daysha said. “Another day, she may have to learn it again.”
+
+“And the plant?”
+
+Daysha looked toward the gardener, who was still tending the little patch of earth.
+
+“We'll know when she comes back to ask.”
+
+They left by the path around the nursery fence rather than through its gate. Rome offered Daysha his hand, and she took it. Behind them the gardener went on working, with no royal instruction about what his seedling must do next.
 
 ---
 
