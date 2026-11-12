@@ -3299,6 +3299,7 @@ The courier signed the dispatch book. He took the new sleeve and the unchanged s
 "No. Please don't put that in the ledger until somebody can prove it."
 
 She went to the petition window. Neral returned to the ordinary accounts. The inquiry had left the Hall without acquiring an answer. If he finished the entries tonight, the petitioners at tomorrow's counter would not inherit the delay. He sharpened the pen and began with the millrace.
+
 ---
 
 The next time Thessa rode the bridge road, the carpenter was standing outside his shed with a folded account in his hand and the expression of a man who had already explained it twice.
