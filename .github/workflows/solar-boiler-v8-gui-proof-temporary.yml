@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: solar-boiler-v8-gui-on-old-core30
+  group: solar-boiler-v8-gui-default-labels-recovery
   cancel-in-progress: false
 
 jobs:
