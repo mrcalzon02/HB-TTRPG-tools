@@ -1,0 +1,89 @@
+name: Solar Boiler V8 — real Factorio GUI screenshot proof (temporary)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/solar-boiler-v8-gui-proof-temporary.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: solar-boiler-v8-gui-on-old-core30
+  cancel-in-progress: false
+
+jobs:
+  in-game-visual-proof:
+    name: Native Factorio GUI screenshot comparison — OLD-CORE30
+    runs-on: [self-hosted, Windows, X64, OLD-CORE30-homebrew]
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Read exact approved Tanks for Bob graphics source
+        uses: actions/checkout@v4
+        with:
+          repository: mrcalzon02/Tanks-for-bob-Fork
+          ref: d41cb01e1be3f6f5be127506e397271411c5eb3a
+          path: tanks
+          persist-credentials: false
+      - name: Capture actual Factorio 2.1 GUI pixels for all pipe mounts
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Write-Host "RUNNER=$env:RUNNER_NAME OS=$env:RUNNER_OS SESSION=$env:SESSIONNAME"
+          if (Get-Command python -ErrorAction SilentlyContinue) {
+            python tanks/ci/solar_boiler_v8/visual_capture.py --output tanks/models/island-survival/solar-boiler/generated-v8/visual-client --working "$env:RUNNER_TEMP/solar-boiler-v8-gui"
+          } elseif (Get-Command py -ErrorAction SilentlyContinue) {
+            py -3 tanks/ci/solar_boiler_v8/visual_capture.py --output tanks/models/island-survival/solar-boiler/generated-v8/visual-client --working "$env:RUNNER_TEMP/solar-boiler-v8-gui"
+          } else {
+            throw "Python 3 is unavailable on the expected Windows GUI runner"
+          }
+          if ($LASTEXITCODE -ne 0) { throw "Native Factorio screenshot capture failed" }
+      - name: Publish genuine game screenshots in runner's repository
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $src = 'tanks/models/island-survival/solar-boiler/generated-v8/visual-client'
+          $dest = 'artifacts/solar-boiler-v8-real-factorio-client'
+          if (-not (Test-Path "$src/client-capture-qa.json")) { throw "No verified game screenshot QA" }
+          $data = Get-Content "$src/client-capture-qa.json" -Raw | ConvertFrom-Json
+          if (-not $data.passed -or $data.screen_capture_count -ne 16 -or -not $data.factorio_full_client) {
+            throw "Actual engine screenshot proof incomplete"
+          }
+          New-Item -ItemType Directory -Force -Path $dest | Out-Null
+          Copy-Item "$src/*" $dest -Recurse -Force
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- $dest
+          git diff --cached --check
+          if ($LASTEXITCODE -ne 0) { throw "Git diff check failed" }
+          git commit -m 'proof(solar-boiler): real Factorio V8 client screenshots [skip ci]'
+          if ($LASTEXITCODE -ne 0) { throw "Unable to commit real screenshots" }
+          for ($i=1; $i -le 3; $i++) {
+            git fetch origin main
+            if ($LASTEXITCODE -ne 0) { throw "Origin fetch failed" }
+            git rebase origin/main
+            if ($LASTEXITCODE -ne 0) { throw "Non-destructive rebase failed" }
+            git push origin HEAD:main
+            if ($LASTEXITCODE -eq 0) {
+              $local = (git rev-parse HEAD).Trim()
+              $remote = ((git ls-remote origin refs/heads/main) -split "\s+")[0]
+              if ($local -ne $remote) { throw "Commit SHA readback mismatch" }
+              Write-Host "REAL_FACTORIO_V8_SCREENSHOTS_COMMITTED=$local"
+              exit 0
+            }
+          }
+          throw "Screenshot commit did not reach main after bounded retries"
+      - name: Retain real screenshot or graphical-client failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: solar-boiler-v8-actual-factorio-gui
+          path: |
+            tanks/models/island-survival/solar-boiler/generated-v8/visual-client/
+            ${{ runner.temp }}/solar-boiler-v8-gui/
+          if-no-files-found: warn
