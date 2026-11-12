@@ -565,8 +565,22 @@ Sera came up the stair as he fastened the case.
 
 “Then let him remember that I went to work.”
 
-He went down to the village without waiting for the steward. At the cooper's yard the daughter had put away her instrument. Her father had arranged a full paid hour, and there was less than half of one left before she was needed with the hoop wood. Kell opened his case anyway. They worked until she managed the low note twice.
+Kell took the village road without waiting for the steward. At the cooper's yard the daughter was stacking hoops with her reed instrument shut in its case. Her father had set aside a full paid hour, but fewer than thirty minutes remained before she was needed at the bench.
 
-He accepted payment only for the time taught. The missing part could not be restored by a corrected notice, and the courtier's possible hearing of him was gone with the daylight. He wrote the shortened lesson in his own work book, not on a new court list.
+"You went to the castle," she said.
+
+"I did. I ought to have sent word when I knew I was late."
+
+"Father said we could still pay for the hour."
+
+"You will not." Kell rested his case on the step. "I can teach what time remains, if you want it. Or I can leave you to the hoops. The choice is yours."
+
+She looked toward the workshop. "The low note," she said. "Not the tune you keep promising me afterward. I need to know why it breaks."
+
+He had brought the courtier's possible favor home in his thoughts all the way from the hill. Now he put it aside and watched her hands. She had tightened the reed to force the note; he showed her how to ease it. Twice it sounded without a squeal. A third attempt failed. She wanted to try again, but her father called from the bench and she closed the case herself.
+
+The cooper offered him the full coin he had laid aside. Kell counted out only the portion earned and left the balance where the man could see it. In his work book he marked the lesson short and the unpaid remainder unclaimed. He would not promise another free hour as though his time were the only time wasted. There was still a missing part of the girl's lesson, and no steward had heard his playing.
+
+He carried away less pay and no court promise. At least he knew who had chosen how to spend the minutes that remained.
 
 **Audition boundary:** No Crown date, audition, invitation, fee, preference or contract is authorized; the steward neither hears Kell nor promises anything. The cooper's ordinary lesson and its reduced payment exist only within this hypothetical audition. Mara still has no answer from the baker. Sera's unsettled rope and worker claims, Senn's restricted access, Miren's silence, Edselsto's connected-hearing limit, first candle dark/six lit, Candidate A's independence, and the unassigned S3E19–23 horizon remain unchanged.
