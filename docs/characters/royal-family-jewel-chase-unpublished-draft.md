@@ -272,11 +272,33 @@ Rome considered this with a seriousness that made the women laugh.
 
 The Queen Mother kept the family for tea.
 
-Estelle was given the important duty of choosing which small pastry each person should receive. She distributed them with elaborate fairness: one for Grandmother, one for Mother, one for Father, and one for herself. Then she noticed the servant, who had remained to confirm the delivery had been accepted.
+Estelle was given the important duty of choosing which small pastry each person should receive. She arranged four on the plates: one for Grandmother, one for Mother, one for Father, and one for herself. Then she noticed the young elf still waiting beside the door.
 
-“There should be one for him.”
+“And one for you,” she said, lifting a fifth pastry.
 
-The Queen Mother signaled the attendant to bring another plate. Before the young elf could ask whether his errand was complete, she confirmed that she had accepted the case for inspection and would keep it in her private receiving room until the fastening could be checked. Rome repeated that he—not the courier—would explain the delay to the steward. Only then did the young elf take the pastry with a blush and a bow, and was finally dismissed with the thanks he should have received at the beginning.
+He bowed, but did not reach for it. “Thank you, Your Highness. May I first ask whether Her Majesty has accepted the delivery?”
+
+Estelle looked at the pastry in her hand. She had thought the chase was over because everyone had stopped running. The person they had chased was still standing at attention.
+
+The Queen Mother set down her cup. “I have accepted the case for inspection. It will remain here until the fastening can be examined. You need not wait for that work.”
+
+“And the delay to my round?” he asked. He spoke carefully, but he asked the question himself.
+
+“That belongs to me,” Rome said. “I shall explain to your steward that we interrupted you. You may say so yourself as well.”
+
+The young elf gave a relieved nod. He did not move until the Queen Mother said, “Your errand is complete. Thank you for bringing it safely.”
+
+Estelle glanced at the pastry again. “Would you like this, or would you rather go?”
+
+“Both, if I may,” he answered, with the smallest hint of a smile. “There are other doors to reach.”
+
+She asked the attendant for a napkin instead of setting another place. The attendant wrapped the pastry without delaying him, and Estelle held it out only when his hands were free to take it. He thanked her, then went on with his morning's work.
+
+Estelle watched him leave. “I thought giving him something meant he could stay.”
+
+“An invitation is not an order,” Daysha said.
+
+“And an apology,” Rome added, “ought not to make someone late a second time.”
 
 Rome watched the door close.
 
