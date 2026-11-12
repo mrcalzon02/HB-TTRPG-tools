@@ -4009,6 +4009,50 @@ It was not a satisfying ending. It was the only one the records had earned.
 
 ---
 
+The painted arrow at the north-road warning pointed toward the wrong side of the posts.
+
+Thessa saw it because a woman carrying two bundles had stopped between the markers and was looking from the sign to the narrow inner passage. The woman had not crossed. She had the good sense to distrust a direction that led straight into the ruts left by heavy wagons.
+
+"Which way is meant for people?" she asked.
+
+Thessa looked at the station copy of the road sheet, then at the arrow again. The authorized light-traffic passage ran inside the warning line, one traveler at a time. The arrow now indicated the outside edge, where the soaked verge was still barred to heavy loads and had not been competently cleared.
+
+"Stay here a moment," Thessa said. "Neither arrow nor officer's coat makes that ground sound."
+
+Sorn examined the post. Its footing had loosened; the board could turn on its nail. There was no evidence anyone had done it deliberately.
+
+"We can turn it back," he said.
+
+"And it will turn again."
+
+He sent the road watcher for cord and a second stake. Thessa had intended to use the morning copying the questions for the district auditor, whose works-office and treasury inquiries still lacked answers. Sorn could have left the watcher to fix the sign while they rode on.
+
+Instead Thessa took the folded road sheet to the nearer approach and stood where arriving travelers could see her.
+
+"You're going to spend the morning explaining an arrow?" Sorn asked.
+
+"Someone has to know when the explanation stops being true."
+
+The first man to approach was leading a pack animal. He heard *light passage* and smiled as if he had been given permission to take the animal through. Thessa asked him to stop before the marker. The standing instruction described foot traffic, not an animal with two laden panniers. She would not convert its silence into authorization. He could leave the animal in a suitable place and ask the watcher's guidance for himself, or wait for a competent route decision. He chose to wait. Thessa entered no refusal of lawful passage against his name.
+
+The woman with the bundles went first, under the watcher's direction, keeping to the inner line already marked on the station sheet. Sorn held the others back until she reached the far post. Nobody announced the road repaired when she reached it.
+
+The new stake took longer than the watcher expected. The hole was full of water; the first cord slipped when pulled taut. They shifted the fastening to sounder ground beside the existing post, not farther out onto the damaged verge. Sorn checked the direction from both approaches and had the watcher demonstrate where a newcomer would pause before following the instruction.
+
+By the time the arrow held, Thessa had lost the clean hours she had meant for the accounts. She was angry about that, and angrier that she had briefly wanted to ride away and let a loose sign become somebody else's responsibility.
+
+Back at the station she entered what they had actually done: misleading sign found, existing warning line restored and attended, light-foot passage guided under its prior restriction. She left the inspection and heavy-load clearance boxes blank. The treasury restoration, quarry dispatch, and works-office authority replies remained outstanding; her supplemental question still had no dispatch mark.
+
+Sorn looked over the entry.
+
+"All that for one arrow."
+
+"For everyone who comes after the first person who knows it's wrong."
+
+Outside, the road watcher took his place by the post. The sign now said where the existing rule said to go. It did not say the road was healed.
+
+---
+
 The farmer who had taken back her deposit did not go straight home.
 
 She stopped at the seed stalls first, carrying the returned coins in the same purse she had brought to the mill. There were two merchants with barley on their boards. The first had grain fit for feeding hens, not a lot he would warrant for sowing. The second had a small quantity of seed, but it had already been promised to another holding. He offered to put her name down if the purchaser failed to collect it.
