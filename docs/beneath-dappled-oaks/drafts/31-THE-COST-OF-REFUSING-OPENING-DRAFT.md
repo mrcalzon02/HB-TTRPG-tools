@@ -4919,8 +4919,28 @@ On the way home the cart jolted in a rut. He bit back a cry and asked the driver
 
 "I don't know yet."
 
-The rent was still owed. No answer had come from the yard; the physician had not cleared him for work. And there were fewer coins than there had been at dawn.
+His uncle picked up the receipt. "Shall I take this to the landlord? He might give us longer if he sees you've applied."
 
-But the request now existed in his name, with his own account of what he could and could not do. He had spent something he could count to make a choice no one else could make for him.
+The young man held out his hand. His uncle returned it.
+
+"He gave me four days to answer about the rent," the young man said. "This says somebody received a request. It doesn't say they'll pay me."
+
+"I know that."
+
+"Would he?"
+
+His uncle looked again at the date on the receipt. He had wanted a piece of good news to carry, and the young man could see that wanting it did not make him a liar.
+
+"I'd have explained," the cooper said.
+
+"Then explain when there's something to explain. Before the fourth day is over, I'll tell him what I can pay. If it's not enough, I'll ask what happens next."
+
+"Shall I write that for you?"
+
+"You can carry it. I'll write it."
+
+The cooper did not argue. He moved the coins within reach and helped settle the blankets beneath the injured leg, which had begun to swell from the journey.
+
+The young man put the receipt beside the signed four-day extension, not on top of it. The yard had made no finding, the relief clerk had promised no award, and the physician had cleared him for no shift. His fare was gone. But neither his unanswered application nor his uncle's hope would be offered to the landlord as money already in hand.
 
 *Editorial boundary: application received, not approved. The four-day rent extension, unresolved wage inquiry, accident causation, OBL-001/REL-012 and Chapter Thirty-One publication gate remain open.*
