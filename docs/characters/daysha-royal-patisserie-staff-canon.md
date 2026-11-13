@@ -42,9 +42,49 @@ Queen Daysha retains long **iridescent sapphire/cobalt BLUE hair** (not purple),
 
 ## The baking scene — who receives the pastries?
 
-**Canonical primary recipient: King Rome.** This is a **personal, affectionate surprise from Queen Daysha to her husband**, not a state banquet or pastry service for an invited delegation. Daysha is delighted to learn and personally pipe the final cream decorations on the little fruit tarts; the team assists with technique and timing.
+**Creator-confirmed character intent (2026-11-12):** The Queen is **making individual sweets for a succession of people she cares about**, not principally baking one gift platter for Rome. The character's creator confirmed the mischievous expression in the corrected illustration is Daysha's private delight as she allocates her lovingly made pastries:
 
-Rome's established tastes guide the private platter: **honeyed custard with nutmeg**, freshly baked bread served warm with **salted butter and dark berry preserves**, plus carefully chosen fruit tarts and other confections. His preferred drink is **strong spiced black tea with a little cream**. The Queen plans to take the finest hand-decorated assortment to Rome during an afternoon of exhausting royal paperwork. Remaining pastries are shared with the kitchen workers and household; their presence in the illustration does **not** imply a public banquet or diplomatic guest event.
+> “This one is for him. And this one is for Mom, that one for Dad, and this one is for that person...”
+
+Finally she reaches the **last pastry**, the one **for herself**. With a devilish grin and a positively childlike giggle, she decides that *her* pastry deserves **another generous layer of whipped cream/frosting** — a second helping above what she gave the others.
+
+> “...and this one is for **me**.”
+
+**That small, gleefully self-indulgent decision is the canonical reason for her devious expression** as she pipes the cream. Her joy comes from making gifts for others *and* treating herself. Do not flatten this moment into a formal banquet, a Rome-only surprise, or a generic image of a queen supervising pastry preparation. The visual beat is specific: she enjoys being a hands-on baker and is delightedly, knowingly cheating the frosting portions on **her own** sweet.
+
+**Recipients / relationship continuity:**
+- **“Him”** is consistent with King Rome, her husband, and he receives some of the lovingly prepared treats. Rome particularly enjoys honeyed custard with nutmeg, fresh warm bread with salted butter and dark berry preserves, and spiced black tea with a little cream; those established tastes remain available for other scenes.
+- **“Mom,” “Dad,” and “that person”** are spoken allocations supplied by the creator. Do not invent full names, parentage, or exact relationships for these recipients until separately established. They are not evidence for foreign guests or a public reception.
+- **“Me”** is unmistakably Queen Daysha. The last pastry is **hers** and gets the **second layer of whipped cream**.
+- There are plenty of baked goods for the kitchen staff and other household members, and the named staff are still engaged in the joyful baking scene.
+
+**Authority / supersession:** This explicit statement from the character's creator **supersedes the earlier assistant inference** that the primary purpose was making treats for Rome during an afternoon of paperwork. Nothing in the corrected illustration establishes an exclusive destination or occasion; the creators' private family-and-friends distribution is controlling canon.
+
+### Little scene — the last pastry
+
+Mirelle carried away another finished tart while Daysha tilted her head over the next.
+
+“This one is for him,” the queen murmured, making a careful swirl of cream. “And that one is for Mom. This one for Dad... oh, and this one is for—”
+
+Another tart joined the tray. Then another. She worked through the recipients with loving concentration, making sure each little pastry was just so.
+
+At last, only one remained.
+
+Daysha glanced to either side. The corner of her mouth curled upward.
+
+“And **this** one,” she whispered, “is for **me**.”
+
+She applied a perfectly respectable crown of whipped cream.
+
+Paused.
+
+Considered it.
+
+Then, with an utterly devilish grin and a small, delighted giggle, she wound **a second generous layer** over the first.
+
+Tavren stopped whisking. Mirelle tried not to laugh. Master Caelion, wisely, said absolutely nothing.
+
+The Queen looked profoundly pleased with her work.
 
 ## Narrative boundaries
 
