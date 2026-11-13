@@ -74,6 +74,16 @@ The following are **story facts**, but most have **relative ordering only**. See
 
 These family episodes are already represented in the currently approved 13-image gallery as scene sequences; they must not be forcibly assigned to a particular child age or history year from their visual appearance alone.
 
+## Unpublished story-source handoff — provenance only
+
+The following **existing authored prose drafts** are now linked here for discovery and author review. **All three remain UNPUBLISHED and NONCANONICAL.** Their sources must not be treated as witnessed history, an approved royal purchase, a paid receipt, a gallery-ready illustration, or evidence of Estelle's age, a regnal year or a calendar day. These are source references, not additions to the numbered canonical events above.
+
+- **[The Unfinished Column — Rome's birthday-budget aftermath](daysha-rome-birthday-budget-session-unpublished-draft.md):** the morning *after* the private birthday-present opening, but its absolute date and place in the royal chronicle remain unassigned. The minister's revised comparison, roof safety inquiry and lantern proposal are **provisional dramatic staging**, not appropriations, work orders, permanent policy or paid expenses.
+- **[The Hundredth Bend — elemental seamstress's sample](daysha-gilded-spindle-elemental-seamstress-unpublished-draft.md):** an **undated** Gilded Spindle experiment in stitch durability, with no completed gown, purchase or commission. The unnamed elemental craftswoman is **not identified** as the earlier foreign visiting master seamstress.
+- **[The Weight of a Flower — midnight-garden second fitting](daysha-gilded-spindle-midnight-garden-second-fitting-unpublished-draft.md):** the *next day* after its preceding fitting conversation **within that scene's own unplaced thread**, not a dated event or proof that it follows *The Hundredth Bend*. The gown's adjustment remains unfinished; no new sale, garment ID, finalized enchantment or artwork-publication approval is established.
+
+**Ordering boundary:** Only the relative before/after relationships explicitly described in those source drafts are retained. No ordering **between** the birthday-budget story and either atelier draft, or **between** the two atelier drafts, is established here. The canonical wardrobe acquisition sequence, economics and existing publication decisions remain unchanged.
+
 ## Canon registry rules
 
 1. **Two independent clocks:** time since the coronation and Estelle's age. Store both fields; neither can be inferred solely from the other without a confirmed birth date and coronation date.
