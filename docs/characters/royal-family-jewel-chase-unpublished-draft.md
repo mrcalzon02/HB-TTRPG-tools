@@ -236,19 +236,25 @@ His mother looked between them. “I see the dressmaker's accounts are still a t
 
 “Only when your son starts the conversation,” Daysha said.
 
-Estelle had been listening intently, piecing together the parts of the incident that adults had considered self-evident. She came to the Queen Mother's chair and rested a hand on the arm.
+Estelle had been listening intently, fitting the morning's pieces together. In the gallery her mother had called it a *possible* jewel case. Her father had asked them to leave the household alone. No one had said the case was for Daysha; Estelle had only decided that a chase must mean a secret meant for her mother. She came to her grandmother's chair and rested a hand on the arm.
 
-“Grandmother, if the jewels are yours, why did we think they were Mother's?”
+“Grandmother, how did we know the jewels were for Mother?”
 
-The Queen Mother looked to Daysha rather than answering for her.
+“We did not,” the Queen Mother said. “Did someone tell you otherwise?”
 
-Daysha knelt so their eyes were level. “Because I wanted to know what was in the box, and I decided I already knew. I was wrong.”
+Estelle glanced at Daysha. “I thought that was why we ran.”
 
-Estelle thought about that.
+Daysha knelt so their eyes were level. “I didn't know who was meant to receive it. I wanted to see inside the box, and I let that curiosity become more important than the servant's instructions. That was unfair to him.”
 
-“Then we should ask first.”
+“But you asked about his delivery,” Estelle said.
 
-“Yes.”
+“After we had chased him through two corridors. He could not know whether stopping for me or obeying his steward would get him into trouble.”
+
+Estelle looked at the young elf near the door. He had done exactly as he was told; they had made it difficult anyway.
+
+“Then we should ask first,” she said. “And let them tell us if they can stop.”
+
+“Yes,” Daysha said.
 
 “And run only if someone says it's a race.”
 
