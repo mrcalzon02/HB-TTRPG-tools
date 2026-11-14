@@ -2820,23 +2820,21 @@ Judge Vaun read the extract standing beside the window. The mason below had disc
 
 Ilyan found the line at the bottom of the covering letter. He had missed it while reading the rule.
 
-"Can we inspect the acknowledgment?"
+He wrote *Salver* on the request, then struck the name out himself.
 
-"First we find out whether the register exists."
+"The inventory first," he said.
 
-Neral opened his notebook. "The annual transfer inventory should identify the series and date range. It won't tell us what's inside the covers."
+Vaun turned the sheet toward him. "What precisely?"
 
-"Or who read them," Ilyan said.
+"The series and date range. Where the volume went. Who keeps it now."
 
-"No."
+"And your other question?"
 
-He wanted to ask for Salver by name. Vaun was already drafting a request for the historical inventory, later custody changes, and the office authorized to certify an unsealed acknowledgment extract. She left Salver out.
+He glanced at the crossed-out name. "After we know whether there's a book to ask about."
 
-"Wouldn't naming him help?"
+He passed her the request. Vaun signed without changing a word.
 
-"If his name is on an inventory, we can examine the evidence for that. We should first establish which books the office held."
-
-Neral took the signed request. "Ordinary dispatch?"
+"Ordinary dispatch?" Neral asked.
 
 "Ordinary dispatch. And retain the receipt."
 
