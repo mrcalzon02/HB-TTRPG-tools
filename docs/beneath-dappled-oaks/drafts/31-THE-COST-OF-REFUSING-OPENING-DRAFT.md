@@ -4883,9 +4883,9 @@ The morning after the landlord's reply, the cooper's nephew asked his uncle to b
 
 "I want to see how much will be left."
 
-He made three piles this time. The largest was rent. The smallest would pay for a cart to the relief counter and back. The third was what remained for bread and the clean linen his leg required.
+He had meant to make two piles: one toward the rent, the other for bread and the clean linen his leg required. He counted them twice. Then he took the cart fare from the rent pile and set it between the two. The third pile would buy him the chance to answer for himself; it would also leave fewer coins for the landlord when the four days were over.
 
-His uncle watched the little pile for the cart.
+His uncle watched the new pile, then the gap it had made in the rent money.
 
 "I can take the application."
 
@@ -4895,7 +4895,7 @@ His uncle watched the little pile for the cart.
 
 "Then I'll know because they told me."
 
-The physician had forbidden lifting, not answering questions. They found a driver willing to take the slower street and let him ride with his leg propped on a folded sack. The fare came from the rent coins. His uncle counted out the change, but the young man paid it himself.
+The physician had forbidden lifting, not answering questions. They found a driver willing to take the slower street and let him ride with his leg propped on a folded sack. When the driver named the fare, his uncle counted the coins he had moved out of the rent pile. The young man took them back and paid the driver himself.
 
 At the public counter there were three people ahead of them. One woman had brought a baby who slept through the quarrel over whose turn it was. The young man kept his hands on the seat of the borrowed chair, not because he feared falling but because being carried through a doorway had already cost him enough dignity for one morning.
 
