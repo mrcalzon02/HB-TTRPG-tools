@@ -2499,9 +2499,9 @@ At the River Ledger, the harbor account lay where she had left it. Beside it wer
 
 The figures were still her work. The judgment would not be.
 
-On a clean covering sheet she set out the dated quotations, the terms she could verify, and the estimates that remained uncertain. She noted her declared interest and omitted a recommendation on whether the family should extend the new credit. Meris had asked her to send the figures to the committee secretary, not to find a quieter way of casting her vote.
+She checked the public rates again, adding a note where a quotation was dated and circling the estimates that still rested on assumptions. She could leave work the other reviewers could audit, even if she would not be in the room to defend it. Meris had asked for the figures, not a quieter way to cast her vote.
 
-Damaris sealed the packet for the secretary and handed it to the Ledger's ordinary messenger. She watched him enter the destination before he took it away. The committee could disregard her analysis, or misuse it, and she would not be present to correct them. She disliked that much more than she had expected.
+Damaris set the pages in her outbox without a recommendation. Somebody else might disregard the numbers or mistake caution for disapproval, and she would not be there to correct them. She disliked that more than she had expected.
 
 Then she returned to the harbor account. A wharf charge still disagreed with its receipt. Unlike the family vote, that was hers to put right.
 
