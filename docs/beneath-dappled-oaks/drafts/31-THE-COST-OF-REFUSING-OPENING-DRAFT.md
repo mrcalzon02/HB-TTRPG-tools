@@ -2493,9 +2493,17 @@ Ilyan leaned against the stone. A few weeks earlier he might have asked which co
 
 "I know."
 
-Damaris took his arm for the length of the passage. They parted where the afternoon petitioners were entering. Ilyan returned to his unanswered inquiries. Damaris returned to the River Ledger and opened the harbor account she had promised to finish.
+Damaris took his arm for the length of the passage. They parted where the afternoon petitioners were entering. Ilyan returned to his unanswered inquiries.
 
-The committee would meet without her. She still had figures that needed to be right.
+At the River Ledger, the harbor account lay where she had left it. Beside it were the market figures she had prepared for the Caladren exposure review. She had spent two evenings fitting the numbers into a recommendation for an advance she would no longer be allowed to discuss. She read the final paragraph and drew one line through it.
+
+The figures were still her work. The judgment would not be.
+
+On a clean covering sheet she set out the dated quotations, the terms she could verify, and the estimates that remained uncertain. She noted her declared interest and omitted a recommendation on whether the family should extend the new credit. Meris had asked her to send the figures to the committee secretary, not to find a quieter way of casting her vote.
+
+Damaris sealed the packet for the secretary and handed it to the Ledger's ordinary messenger. She watched him enter the destination before he took it away. The committee could disregard her analysis, or misuse it, and she would not be present to correct them. She disliked that much more than she had expected.
+
+Then she returned to the harbor account. A wharf charge still disagreed with its receipt. Unlike the family vote, that was hers to put right.
 
 ---
 
