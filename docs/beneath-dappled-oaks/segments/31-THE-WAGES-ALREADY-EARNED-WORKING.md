@@ -9,7 +9,7 @@ release_gate: "Original Drive workbook reconciliation through Chapter Thirty"
 
 # The Wages Already Earned
 
-The cooper's nephew arrived before the Hall opened. His injured arm hung in a blue sling. His uncle tried to straighten his collar, and he turned away.
+The cooper's nephew arrived before the Hall opened. His injured leg rested on a second chair, his boot unlaced to ease the swelling. His uncle tried to straighten his collar, and he turned away.
 
 “I can do that.”
 
@@ -19,7 +19,7 @@ The cooper's nephew arrived before the Hall opened. His injured arm hung in a bl
 
 Neral moved a chair out of the doorway. Beyond the arcade, Bloomtide rain had left the courtyard shining. The master cooper waited with a wage ledger and a leather purse. He had old resin in the seams of his nails and the tired look of someone who had worked late to finish an order, only to discover that finishing it was the beginning of another problem.
 
-The foreman came in smelling of wet timber. He glanced at the sling.
+The foreman came in smelling of wet timber. He glanced at the raised leg.
 
 “Are you fit to stand?”
 
@@ -67,9 +67,9 @@ The boy looked up sharply. “I haven't said I'm leaving.”
 
 “You haven't said you're coming back.”
 
-“The physician told me not to lift. I can still sharpen and mark staves.”
+“The physician told me to stay off this leg. I can still measure and mark staves sitting down.”
 
-“Some of that takes two hands.”
+“Some of that takes standing at the bench.”
 
 “Some doesn't.”
 

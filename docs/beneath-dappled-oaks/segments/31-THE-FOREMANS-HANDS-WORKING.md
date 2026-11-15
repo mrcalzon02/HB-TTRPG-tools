@@ -9,9 +9,9 @@ release_gate: "Original Drive workbook reconciliation through Chapter Thirty"
 
 # The Foreman's Hands
 
-The cooper's nephew had been examined by a physician, bandaged, and forbidden to lift anything heavier than a water jug for a fortnight. His employer had also stopped his wages until someone decided who was responsible for the falling timber.
+The cooper's nephew had been examined by a physician, his injured leg bandaged, and told to keep his weight off it until the physician could examine him again. His employer had also stopped his wages until someone decided who was responsible for the falling timber.
 
-He sat beside the Hall window with his injured arm in a blue sling. His uncle broke pieces from a loaf neither of them seemed hungry enough to eat. The foreman stood behind them, holding a narrow leather book against his coat.
+He sat beside the Hall window with his injured leg supported on a second chair. His uncle broke pieces from a loaf neither of them seemed hungry enough to eat. The foreman stood behind them, holding a narrow leather book against his coat.
 
 Ilyan recognized the cooper from the morning he had been sent away to find a physician. The man recognized Ilyan too, and looked at him without pleasure.
 
@@ -25,7 +25,7 @@ Neral brought them into the smaller workroom, where a pot of mint drooped over t
 
 "Then he stays."
 
-The nephew had been carrying seasoned staves from the drying rack when the upper bundle slipped. He tried to catch it. The weight drove him into the lower rail. He had not seen the binding fail, if it had failed at all.
+The nephew had been carrying seasoned staves from the drying rack when the upper bundle slipped. He tried to catch it. The falling staves caught his lower leg against the rail before he could get clear. He had not seen the binding fail, if it had failed at all.
 
 "I heard the fall," the foreman said. "I didn't see it."
 
@@ -117,7 +117,7 @@ Vaun read the draft.
 
 "Leave it with me until the afternoon docket is finished."
 
-The nephew's physician's certificate lay beside her hand. His hearing had a date now, and his shoulder would still be injured when it arrived.
+The nephew's physician's certificate lay beside her hand. His hearing had a date now; a date had not made his injured leg fit for work.
 
 "All right," Ilyan said.
 
