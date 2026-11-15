@@ -4950,3 +4950,49 @@ The cooper did not argue. He moved the coins within reach and helped settle the 
 The young man put the receipt beside the signed four-day extension, not on top of it. The yard had made no finding, the relief clerk had promised no award, and the physician had cleared him for no shift. His fare was gone. But neither his unanswered application nor his uncle's hope would be offered to the landlord as money already in hand.
 
 *Editorial boundary: application received, not approved. The four-day rent extension, unresolved wage inquiry, accident causation, OBL-001/REL-012 and Chapter Thirty-One publication gate remain open.*
+
+---
+
+### OPTIONAL UNPUBLISHED FOLLOW-ON — A sum he could answer
+
+*Provisional Chapter Thirty-One continuation, after the relief-counter visit. Not canon; the four-day rent extension is not a settlement.*
+
+By the third evening, the swelling in the young man's leg had eased enough for him to sit with the writing board across his knees. His uncle brought the landlord's signed slip, the receipt from the relief counter, and the remaining rent coins.
+
+"Shall I put the receipt with the letter?" the cooper asked.
+
+"No. Put it back where it was."
+
+His uncle set the receipt aside. The young man counted the coins twice. The cart journey had taken its fare from the rent pile, and he would not borrow the money needed for bread and clean linen merely to make the figures look kinder. He wrote the amount due from the landlord's slip, then the smaller amount he could actually offer. Beneath them he left a space.
+
+"What's that for?"
+
+"What I haven't got."
+
+"You don't have to write that."
+
+"The landlord has his own book. He'll know."
+
+He tried the first sentence, crossed it out, and began again. He was not asking for another four days. He wrote that he could offer the counted coins on the agreed day, if the landlord would accept a payment against the debt without treating it as payment in full. He asked how the remaining amount would be recorded, and what answer the landlord required if part-payment was refused.
+
+His uncle read over his shoulder.
+
+"He might say no to all of it."
+
+"Then I need him to say it to me."
+
+"He already gave you time."
+
+"I know. I'm answering within it."
+
+The cooper touched the blank space beneath the two figures. "You could say the relief office has your application."
+
+"I can say I applied. That's all. No one has given me money, and the yard hasn't admitted owing me wages."
+
+His uncle withdrew his hand. After a moment he asked whether the letter should go that night.
+
+"Tomorrow morning," the young man said. "Before the fourth day ends. Let him read it while there is still time to answer. Bring back his words, even if they're no."
+
+He folded the letter around neither coins nor receipt. His signature stood beneath a shortfall he had chosen to state plainly. The cooper could carry that account across town; he could not make its figures kinder by speaking for its author.
+
+*Editorial boundary: no landlord acceptance, tenancy disposition, relief award, wage finding, injury recovery or Chapter Thirty-One canon approval is implied.*
