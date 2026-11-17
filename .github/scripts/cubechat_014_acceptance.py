@@ -295,10 +295,19 @@ def drill():
     phones.select(HOST); screenshot("reset")
     ui.report("The stopped-recipient drill used "+route+".")
 
-    # A cold offline installation with no peer also completes a real Android data clear.
-    phones.select(HOST);enroll();phones.stop();ui.shell("svc","wifi","disable")
-    open_app();match("Unlock");sign(DURESS);expect_system_clear()
-    ui.report("A cold, offline activation with no live conversation also returned to first launch.")
+    # Block only this disposable sender's reset marker. A file cannot replace a directory
+    # by rename or be written at that pathname. The rest of the filesystem stays writable.
+    phones.select(HOST); enroll(); phones.stop(); ui.shell("svc","wifi","disable")
+    marker_base = "/data/user/0/" + ui.APP + "/no_backup/cubechat-direct.db.purge-"
+    ui.shell("test", "-f", marker_base + "ready", label="Confirm the enrolled standby reset file")
+    ui.shell("mkdir", marker_base + "pending", label="Obstruct only the disposable reset marker")
+    open_app(); ready_unlock(); sign("WrongValue5342"); match("Incorrect username or password.")
+    ready_unlock(); sign(NORMAL); security()
+    match("Local profile · " + USER); match("PURGE password · Enabled")
+    phones.stop(); open_app(); ready_unlock()
+    ui.shell("test", "-d", marker_base + "pending", label="Confirm reset marker cannot be persisted")
+    sign(DURESS); expect_system_clear()
+    ui.report("With only the marker pathname blocked by a directory, a wrong password left the enrolled profile intact and normal offline sign-in still worked. After another cold start, the correct PURGE password cleared the offline sender and Android returned it to first launch.")
 
     # Reproduce the published upgrade on clean synthetic test installations, separately.
     public=str(Path(os.environ["RUNNER_TEMP"])/"CubeChat-previous.apk")

@@ -29,7 +29,7 @@ jobs:
             cp .github/cubechat-files-candidate/CubeChat.apk "$RUNNER_TEMP/CubeChat-previous.apk"
           fi
           echo "57133e5fdf63c5c6191d8c51d33306cf68ec4e17664f4a95819bea7da1e47486  $RUNNER_TEMP/CubeChat-previous.apk" | sha256sum -c -
-          echo "3692159ad51fdcdc82b978724482e0a62ac33ac180fe11060312e0080e6ac878  .github/cubechat-security-candidate/CubeChat.apk" | sha256sum -c -
+          echo "36a314b444d30fe07a2408696b48dbd54b386c476e157107d00bfe73fca75b4d  .github/cubechat-security-candidate/CubeChat.apk" | sha256sum -c -
           curl --fail --silent --show-error --location --retry 2 \
             https://repo.maven.apache.org/maven2/com/google/zxing/core/3.5.3/core-3.5.3.jar \
             --output "$RUNNER_TEMP/zxing-core.jar"
@@ -115,7 +115,7 @@ jobs:
             "${adbserial[@]}" install -r "$RUNNER_TEMP/CubeChat-previous.apk"
           done
           test_apk=.github/cubechat-security-candidate/ContactStorageChecks.apk
-          echo "884e1328634d9f5446403513bc2184df4f989e3195ac336b19d3eb8feab6ccaf  $test_apk" | sha256sum -c -
+          echo "fd53bf7caa5b4eba53f958fb81ffe948d6228371f0cb311f9f1e08cda92dca2d  $test_apk" | sha256sum -c -
           # Check the real Android Keystore and migration first on the new, disposable HOST AVD.
           adb -s emulator-5554 install -r .github/cubechat-security-candidate/CubeChat.apk
           adb -s emulator-5554 install -r "$test_apk"
