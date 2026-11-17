@@ -32,7 +32,7 @@ jobs:
           java-version: '17'
 
       - name: Android SDK
-        uses: android-actions/setup-android@079c0d074a47bf7f69d0b47656cb82f83df3fbc4
+        uses: android-actions/setup-android@v4.0.4
         with:
           packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
 
