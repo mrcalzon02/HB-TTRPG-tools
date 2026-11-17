@@ -22,7 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** The system picker supplies the input and the user chooses the destination of a verified export. */
 final class AttachmentsUi {
@@ -41,6 +43,9 @@ final class AttachmentsUi {
     private String restoreDetail;
     private String selectedId, exportId, actionState;
     private Uri pendingUri;
+    private final Map<String, String> observedFileStates = new HashMap<>();
+    private long observedContact;
+    private boolean observedInitialFiles;
 
     AttachmentsUi(Activity screen, PeerLink link, Button notice, Bundle state) {
         this.screen = screen;
@@ -65,6 +70,22 @@ final class AttachmentsUi {
     }
 
     void changed(PeerLink.Snapshot state) {
+        if (observedContact != state.activeId) {
+            observedContact = state.activeId;
+            observedFileStates.clear();
+            observedInitialFiles = false;
+        }
+        if (state.loaded) {
+            for (AttachmentStore.Transfer f : state.files) {
+                String prior = observedFileStates.put(f.id, f.status);
+                if (observedInitialFiles && f.outgoing && prior != null
+                        && !"DECLINED".equals(prior) && "DECLINED".equals(f.status)
+                        && AttachmentStore.STORAGE_REASON.equals(f.reason)) {
+                    note("File rejected: not enough storage on recipient");
+                }
+            }
+            observedInitialFiles = true;
+        }
         if (dialogContact != 0 && dialogContact != state.activeId) closeDialogs();
         if (state.loaded && restoreContact != 0) {
             if (restoreContact == state.activeId) {
