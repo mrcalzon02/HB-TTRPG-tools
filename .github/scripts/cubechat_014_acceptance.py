@@ -3,6 +3,7 @@ import os
 import io
 import struct
 import subprocess
+import traceback
 import re
 from pathlib import Path
 import sys
@@ -41,7 +42,9 @@ def launcher_anr(nodes):
     # These fresh installations have no conversation or key card. Read only the ANR
     # process and reason from the last incident, never the complete device dump.
     last = ui.shell("dumpsys", "activity", "lastanr", required=False)
-    process = re.search(r"\bANR in ([\w.:/-]+)", last)
+    process = re.search(r"\bANR in ([\w.:-]+)", last)
+    if not process:
+        process = re.search(r"Application at fault:\s*ProcessRecord\{[^}\n]*?\d+:([\w.:-]+)(?:/|\})", last)
     reason = re.search(r"^\s*Reason:\s*([^\r\n]+)", last, re.MULTILINE)
     events = ui.shell("logcat", "-b", "events", "-d", "-t", "800", "-s", "am_anr:I", required=False)
     records = re.findall(r"am_anr\s*:\s*\[\d+,\d+,([^,]+),\d+,([^\n]+)\]", events)
@@ -284,7 +287,11 @@ def rendered_card(allow_legacy_text=False):
     raise ui.CheckFailed('No scannable CubeChat QR appeared in the invite after five displayed framebuffer captures')
 
 def pairing(route, allow_legacy_text=False):
-    phones.select(HOST); tap("Show my invite"); match("Pairing invite")
+    phones.select(HOST)
+    if allow_legacy_text:
+        open_empty_legacy_invite()
+    else:
+        tap("Show my invite"); match("Pairing invite")
     card=rendered_card(allow_legacy_text); tap("Close")
     phones.select(GUEST)
     # The repository's public 0.1.3 handles initial app links most reliably on a cold launch.
@@ -305,6 +312,49 @@ def pairing(route, allow_legacy_text=False):
             return route
         inspect_carrier()
     raise ui.CheckFailed("CubeChat could not open an authenticated socket after two restarts on "+route)
+
+def open_empty_legacy_invite():
+    # The earlier release sometimes reached first launch before Android finished boot
+    # broadcasts. Wait once on the disposable host, without restarting its OS or app.
+    ui.report('Waiting for the empty signed 0.1.3 host to settle before asking for an invitation.')
+    try:
+        idle = subprocess.run(['adb','shell','am','wait-for-broadcast-idle'], capture_output=True,timeout=20)
+        ui.report('Android broadcast idle check finished with status ' + str(idle.returncode) + '.')
+    except subprocess.TimeoutExpired:
+        ui.report('Android broadcast idle wait reached 20 seconds; checking the rendered host UI directly.')
+    deadline = time.monotonic() + 50
+    stable_since = None
+    tapped = False
+    app_anrs = 0
+    while time.monotonic() < deadline:
+        nodes = ui.tree()
+        wait = next((n for n in nodes if n.get('package') == 'android' and
+                     (n.get('resource-id') == 'android:id/aerr_wait' or n.get('text') == 'Wait')), None)
+        if wait is not None:
+            if launcher_anr(nodes):
+                app_anrs += 1
+                if app_anrs > 1:
+                    raise ui.CheckFailed('Persistent 0.1.3 app ANR while the empty host prepared its first invite')
+            ui.tap(wait)
+            stable_since = None
+            time.sleep(.8)
+            continue
+        ours = [n for n in nodes if n.get('package') == ui.APP]
+        if tapped and any(n.get('text') == 'Pairing invite' for n in ours):
+            return
+        button = next((n for n in ours if n.get('text','').casefold() == 'show my invite'
+                       and n.get('enabled') == 'true' and n.get('clickable') == 'true'), None)
+        empty = any(n.get('text') == 'Pair two phones' for n in ours)
+        if not tapped and empty and button is not None:
+            if stable_since is None: stable_since = time.monotonic()
+            elif time.monotonic() - stable_since >= 1:
+                ui.tap(button)
+                tapped = True
+        else:
+            stable_since = None
+        time.sleep(.3)
+    where = 'rendering the requested invite' if tapped else 'waiting for an enabled Show my invite button'
+    raise ui.CheckFailed('Signed 0.1.3 host timed out ' + where)
 
 def screenshot(label):
     nodes=ui.tree()
@@ -478,5 +528,7 @@ if __name__=="__main__":
     except ui.CheckFailed as error:
         try: diagnose_screen()
         except Exception: pass
+        frames = [f'{f.name}:{f.lineno}' for f in traceback.extract_tb(error.__traceback__) if f.name != '<module>']
+        print('Android QA call sites: ' + ' > '.join(frames),file=sys.stderr)
         print("Android security acceptance failed: "+str(error),file=sys.stderr)
         sys.exit(1)
