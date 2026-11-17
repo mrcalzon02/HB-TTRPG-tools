@@ -1277,19 +1277,18 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             quoted.append(character);
             sourceBytes += bytes;
             offset += Character.charCount(cp);
-            atLineStart = cp == '\\n';
+            atLineStart = cp == '\n';
         }
         String original = draft.getText().toString();
-        String separator = original.isEmpty() ? "" : (original.endsWith("\\n") ? "\\n" : "\\n\\n");
-        String addition = separator + quoted + "\\n";
+        String separator = original.isEmpty() ? "" : (original.endsWith("\n") ? "\n" : "\n\n");
+        String addition = separator + quoted + "\n";
         if ((original + addition).getBytes(StandardCharsets.UTF_8).length > 4096) {
             Toast.makeText(this, "Draft is too long to add this quote", Toast.LENGTH_LONG).show();
             return;
         }
-        int cursor = draft.getSelectionStart();
-        if (cursor < 0 || cursor > original.length()) cursor = original.length();
-        draft.getText().insert(cursor, addition);
-        draft.setSelection(cursor + addition.length());
+        // Append below the existing draft so a quote never splits text at an old cursor.
+        draft.append(addition);
+        draft.setSelection(draft.length());
         draft.requestFocus();
     }
 
