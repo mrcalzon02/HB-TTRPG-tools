@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - qa/cubechat-android-0.1.0
+    paths:
+      - .github/workflows/cubechat-android-acceptance.yml
+      - .github/scripts/cubechat_android_qa.py
+      - .github/scripts/CubeChatQrReader.java
+      - cubechat-android/downloads/CubeChat.apk
 permissions:
   contents: read
 jobs:
