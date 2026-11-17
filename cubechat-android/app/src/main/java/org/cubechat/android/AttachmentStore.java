@@ -67,7 +67,7 @@ final class AttachmentStore {
     private static String[] args(long cid, String id) {
         return new String[]{Long.toString(cid), id};
     }
-    private static String aad(long cid, String id, boolean outgoing, String field) {
+    static String aad(long cid, String id, boolean outgoing, String field) {
         return "attachment/v1/" + cid + "/" + id + "/" + (outgoing ? "out/" : "in/") + field;
     }
     private Transfer decode(long cid, Cursor c) throws Exception {
@@ -179,6 +179,7 @@ final class AttachmentStore {
     }
 
     Transfer importFile(long cid, String rawName, String rawMime, InputStream input) throws Exception {
+        boolean protectedAtStart = store.protectedPayloads();
         String id = UUID.randomUUID().toString();
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         List<byte[]> encrypted = new ArrayList<>();
@@ -211,6 +212,8 @@ final class AttachmentStore {
         SQLiteDatabase db = store.getWritableDatabase();
         db.beginTransaction();
         try {
+            if (protectedAtStart != store.protectedPayloads())
+                throw new IOException("Vault protection changed. Choose the file again.");
             checkNew(cid); reserve(size);
             insert(cid, id, true, safeName(rawName), safeMime(rawMime), size, hash);
             long offset = 0;

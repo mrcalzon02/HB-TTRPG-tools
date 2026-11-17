@@ -1,6 +1,6 @@
 # CubeChat for Android
 
-Open the [Android installation page](https://cubechat-android.lankytangerine2.chatgpt.site/) on your phone or [download CubeChat 0.1.3 from GitHub Releases](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/cubechat-android-v0.1.3/CubeChat.apk). Open **CubeChat.apk** from your browser’s Downloads, then choose **Install** or **Update** in Android. The app supports Android 8.0 and newer and keeps multiple paired conversations on each phone.
+Open the [Android installation page](https://cubechat-android.lankytangerine2.chatgpt.site/) on your phone or [download CubeChat 0.1.4 from GitHub Releases](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/cubechat-android-v0.1.4/CubeChat.apk). Open **CubeChat.apk** from your browser’s Downloads, then choose **Install** or **Update** in Android. The app supports Android 8.0 and newer and keeps multiple paired conversations on each phone.
 
 The [Android development ledger](DEVELOPMENT_LEDGER.md) tracks planned features, their dependencies and the tests for each milestone.
 
@@ -13,6 +13,20 @@ Each chat keeps its own keys, history, preferred connection and encrypted draft.
 To check a contact, open their conversation and tap **Ping**. A fresh reply shows the route, round-trip time and when the check ran. Both phones need 0.1.2 or later to answer pings. “No reply” can mean the other phone is out of reach, has a different chat open or is running an older version.
 
 Use Android’s **Share → CubeChat** for plain text or links. Pick a contact and review the draft before tapping **Send**. If you already have a draft, choose **Keep draft**, **Replace**, or **Append** when there is room. **Pairing → Find in conversation** searches the most recent 200 loaded messages on the phone. **Pairing → Screen privacy** hides chat and key-card windows from Android screen captures and recent-app previews while enabled. The physical QR remains visible to someone in front of the display.
+
+## Local profile, lock and PURGE
+
+Choose **Create local profile** at first launch or **Pairing → Security → Set up local profile** in an existing installation. Create a local username and password. Setup migrates the existing mailbox. You can sign in, change the password and configure lock timing offline. The normal password and an Android Keystore key protect the vault key. The local username, timestamps, counters and transfer sizes or states remain ordinary app-private database fields. Keep the normal password somewhere recoverable. CubeChat has no password recovery service.
+
+**Lock now** immediately hides the mailbox. The default foreground idle timeout is five minutes. Choose 1, 5, 15 or 30 minutes, or manual-only while open. Leaving CubeChat locks it immediately by default. **Lock timing** also offers a background grace period of 30 seconds, 1 minute, 5 minutes or 15 minutes. A cold start always requires the password. Turn off username autofill in **Security** if you prefer to type it every time. Android share and invite intents pass through the same sign-in screen. Secure screens conceal credential entry from screenshots and recent-app previews.
+
+**PURGE password** is optional and starts disabled. To enroll, enter the current normal password, enter a different PURGE password twice, and acknowledge the local reset. Use the standard sign-in screen to activate it. There is no second confirmation. Changing or disabling the PURGE password requires the normal password.
+
+Activation first sends **“PURGE protocol activated by this user.”** to each currently connected conversation. The usual phone interface keeps the selected conversation connected. CubeChat attempts one write to each live connection in parallel and immediately requests the local reset when those writes finish. A blocked local radio write has a shared 150 ms limit across the entire announcement. A recipient never has to read or acknowledge the notice. An offline phone, broken link or stalled radio can miss the announcement. With no connected peer, the reset starts immediately.
+
+Android then clears CubeChat’s local app data and closes the app. The next launch opens the initial pairing screen. This clears profiles, pairing keys, messages, encrypted attachment copies, settings and queued work across all local conversations. Each other phone keeps its history. Files already saved in Downloads or another destination remain with their owner.
+
+**Pairing → Chat preferences** offers four text sizes, optional Enter-to-send and a keyboard privacy preference. Standard text size and multiline composition are the defaults. The app also asks compatible keyboards to skip personalized learning by default. **Use defaults** restores just these chat preferences.
 
 ## Send or receive a file
 
@@ -56,4 +70,4 @@ Use JDK 17 and Android SDK 35. Run `./gradlew assembleDebug` from this directory
 
 To publish a signed build, put it at `cubechat-android/downloads/CubeChat.apk` and run `python3 scripts/release_manifest.py --write` from this directory with `ANDROID_HOME` set. Commit the APK, generated `release.json`, and matching Android version changes together. The CubeChat release workflow on `main` verifies the package, version and signer, then publishes the verified files on the versioned GitHub release. Update `RELEASE_NOTES.md` with the version, build number and user-facing changes before publishing. Increment `versionCode` for every update, including prereleases, and give each build a new version tag.
 
-The 0.1.3 release includes `CubeChat.apk`, `release.json`, `RELEASE_NOTES.md`, `SHA256SUMS.txt`, and `CubeChat-Android-0.1.3-Source.zip`. The source archive contains the Android build and the canonical Cube engine it imports. To verify downloaded files from the release, run `sha256sum -c SHA256SUMS.txt` in their directory.
+The 0.1.4 release includes `CubeChat.apk`, `release.json`, `RELEASE_NOTES.md`, `SHA256SUMS.txt`, and `CubeChat-Android-0.1.4-Source.zip`. The source archive contains the Android build and the canonical Cube engine it imports. To verify downloaded files from the release, run `sha256sum -c SHA256SUMS.txt` in their directory.

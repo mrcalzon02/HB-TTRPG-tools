@@ -38,6 +38,9 @@ final class DirectProtocol implements Closeable {
     static final int MAX_FILE_FRAME = 72 * 1024;
     // Reserved odd heartbeat understood only by attachment-capable endpoints. A legacy ping never solicits it.
     static final long FILE_HELLO = 0x434346494c453031L;
+    // Odd controls are ignored by older clients. Each is authenticated by the live record layer.
+    static final long PURGE_HELLO = 0x4343505247000001L;
+    static final long PURGE_NOTICE = 0x4343505247000003L;
     static final int MAGIC = 0x43554232; // CUB2
     private static final SecureRandom RANDOM = new SecureRandom();
     // SO_TIMEOUT covers only reads. A stalled socket write must also release the mailbox worker.
@@ -66,7 +69,8 @@ final class DirectProtocol implements Closeable {
     // Zero stays the keepalive. An even nonzero challenge requests its adjacent odd response.
     static long pingChallenge() {
         long value;
-        do { value = RANDOM.nextLong() & 0x7ffffffffffffffeL; } while (value == 0 || value == FILE_HELLO - 1);
+        do { value = RANDOM.nextLong() & 0x7ffffffffffffffeL; } while (value == 0 || value == FILE_HELLO - 1 || value == PURGE_HELLO - 1
+                || value == PURGE_NOTICE - 1);
         return value;
     }
 

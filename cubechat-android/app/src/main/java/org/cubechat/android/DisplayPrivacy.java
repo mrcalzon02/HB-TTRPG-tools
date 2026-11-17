@@ -16,9 +16,11 @@ final class DisplayPrivacy {
 
     static void apply(Activity screen) {
         boolean enabled = preferences(screen).getBoolean(KEY, false);
+        MainActivity main = screen instanceof MainActivity ? (MainActivity)screen : null;
+        if (main != null && main.privacyShield()) enabled = true;
         if (enabled) screen.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         else screen.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-        if (Build.VERSION.SDK_INT >= 33) screen.setRecentsScreenshotEnabled(!enabled);
+        if (Build.VERSION.SDK_INT >= 33) screen.setRecentsScreenshotEnabled(!enabled && (main == null || !main.protectedProfile()));
     }
 
     // A dialog has its own window. Apply the same setting before it becomes visible.
@@ -26,7 +28,9 @@ final class DisplayPrivacy {
         return new AlertDialog.Builder(context) {
             @Override public AlertDialog create() {
                 AlertDialog dialog = super.create();
-                if (preferences(context).getBoolean(KEY, false))
+                MainActivity main = context instanceof MainActivity ? (MainActivity)context : null;
+                if (main != null) main.trackDialog(dialog);
+                if (preferences(context).getBoolean(KEY, false) || (main != null && main.privacyShield()))
                     dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 return dialog;
             }

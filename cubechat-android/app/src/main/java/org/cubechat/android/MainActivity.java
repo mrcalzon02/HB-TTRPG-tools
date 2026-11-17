@@ -73,6 +73,17 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     private static final int WRAP = ViewGroup.LayoutParams.WRAP_CONTENT;
 
     private PeerLink link;
+    private ProfileSecurityUi security;
+    private ChatPreferences chatPrefs;
+    private final List<java.lang.ref.WeakReference<AlertDialog>> chatDialogs = new ArrayList<>();
+    private PopupMenu activeMenu;
+    private Button createProfile;
+    private Intent deferredIntent, resultData;
+    private int resultRequest = -1, resultCode;
+    private Bundle fileState;
+    private long pendingQrContact;
+    private boolean inEnrollment, resumed, privacyPaused;
+
     private UpdateCheck updates;
     private Button updateBanner, fileNotice;
     private AttachmentsUi files;
@@ -107,9 +118,13 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
-        DisplayPrivacy.apply(this);
-        buildScreen();
-        updates = new UpdateCheck(this, updateBanner);
+        security = new ProfileSecurityUi(this);
+        Intent launch = getIntent();
+        if (launch != null && (Intent.ACTION_VIEW.equals(launch.getAction()) || Intent.ACTION_SEND.equals(launch.getAction())))
+            deferredIntent = new Intent(launch);
+        setIntent(new Intent(this, MainActivity.class));
+        if (security.startLocked()) return;
+        fileState = state;
         if (getLastNonConfigurationInstance() instanceof Retained) {
             retained = (Retained) getLastNonConfigurationInstance();
             exportCode = retained.exportCode;
@@ -117,24 +132,146 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             shareTarget = retained.shareTarget;
             sharedText = retained.sharedText;
         }
+        openChat();
+    }
+
+    void openChat() {
+        if (closing || security.sealed()) return;
+        DisplayPrivacy.apply(this);
+        buildScreen();
+        securityChanged();
+        updates = new UpdateCheck(this, updateBanner);
         try {
-            profile = new CubeProfile(this);
-            link = new PeerLink(this, profile, this);
-            files = new AttachmentsUi(this, link, fileNotice, state);
-            link.start();
-            direct = new WifiDirectController(this, link, this::radioMessage);
-            bluetooth = new BluetoothRadio(this, link);
+            if (link == null) {
+                profile = new CubeProfile(this);
+                link = new PeerLink(this, profile, this);
+                direct = new WifiDirectController(this, link, this::radioMessage);
+                bluetooth = new BluetoothRadio(this, link);
+                link.start();
+            } else link.unlockVault();
+            files = new AttachmentsUi(this, link, fileNotice, fileState);
+            fileState = null;
             bluetooth.resume();
             changed();
-            if (state == null && retained == null) openExternalInvite(getIntent());
+            if (resumed) updates.check(false);
         } catch (Exception e) {
             problem("Could not open CubeChat: " + e.getMessage());
         }
     }
 
+    void securityChanged() {
+        if (createProfile != null) createProfile.setVisibility(security.configured() ? View.GONE : View.VISIBLE);
+        DisplayPrivacy.apply(this);
+    }
+
+    boolean protectedProfile() { return security != null && security.configured(); }
+    boolean privacyShield() { return privacyPaused || (security != null && security.sealed()); }
+    private boolean chatOpen() { return !closing && security != null && !security.sealed() && !inEnrollment; }
+
+    void trackDialog(AlertDialog dialog) {
+        chatDialogs.removeIf(ref -> ref.get() == null);
+        chatDialogs.add(new java.lang.ref.WeakReference<>(dialog));
+        dialog.setOnShowListener(d -> {
+            if (closing || (security != null && security.sealed())) dialog.dismiss();
+        });
+    }
+
+    void prepareEnrollment(Runnable action) {
+        flushDraft();
+        inEnrollment = true;
+        if (link == null) action.run();
+        else link.pauseForEnrollment(action);
+    }
+    void finishEnrollment() {
+        inEnrollment = false;
+        if (link != null && chatOpen()) link.unlockVault();
+    }
+
+    void parkChat(Runnable parked) {
+        flushDraft();
+        if (activeMenu != null) activeMenu.dismiss();
+        wantsInvite = false;
+        clearShare();
+        if (updates != null) { updates.close(); updates = null; }
+        if (files != null) {
+            fileState = new Bundle();
+            files.saveState(fileState);
+            files.closeDialogs();
+            files = null;
+        }
+        for (java.lang.ref.WeakReference<AlertDialog> ref : new ArrayList<>(chatDialogs)) {
+            AlertDialog dialog = ref.get();
+            if (dialog != null) dialog.dismiss();
+        }
+        chatDialogs.clear();
+        inviteDialog = null;
+        exportCode = null;
+        retained = null;
+        renderedId = 0;
+        submitted = null;
+        loadingDraft = true;
+        if (draft != null) draft.setText("");
+        loadingDraft = false;
+        draftDirty = false;
+        if (adapter != null) { adapter.items = Collections.emptyList(); adapter.notifyDataSetChanged(); }
+        if (subtitle != null) subtitle.setText("");
+        if (contactName != null) contactName.setText("");
+        if (pingResult != null) pingResult.setText("");
+        lastProblem = "";
+        // Let Android release the detached chat tree, including recycled message rows.
+        if (history != null) history.setAdapter(null);
+        history = null; adapter = null; draft = null;
+        updateBanner = fileNotice = send = options = inviteButton = scanButton = pasteButton = ping = createProfile = null;
+        subtitle = status = radioStatus = relayStatus = contactName = pingResult = pairTitle = pairHint = null;
+        startPanel = composerRow = contactBar = null;
+        if (link == null) parked.run(); else link.lockVault(parked);
+    }
+
+    void discardIncoming() {
+        deferredIntent = null;
+        resultRequest = -1;
+        resultData = null;
+        fileState = null;
+        pendingQrContact = 0;
+        setIntent(new Intent(this, MainActivity.class));
+    }
+    void announcePurge(Runnable cleared) {
+        clearOwnInviteClipboard();
+        PeerLink.announcePurgeToAll(cleared);
+    }
+    private void clearOwnInviteClipboard() {
+        try {
+            ClipboardManager clipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+            android.content.ClipDescription info = clipboard.getPrimaryClipDescription();
+            if (info == null || info.getExtras() == null || !info.getExtras().getBoolean("org.cubechat.android.key-card", false)) return;
+            if (android.os.Build.VERSION.SDK_INT >= 28) clipboard.clearPrimaryClip();
+            else clipboard.setPrimaryClip(ClipData.newPlainText("", ""));
+        } catch (RuntimeException ignored) { /* Android can restrict clipboard access in the background. */ }
+    }
+
     @Override protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        openExternalInvite(intent);
+        if (intent != null && (Intent.ACTION_VIEW.equals(intent.getAction()) || Intent.ACTION_SEND.equals(intent.getAction()))) {
+            deferredIntent = new Intent(intent);
+            setIntent(new Intent(this, MainActivity.class));
+            if (chatOpen() && link != null && link.snapshot().loaded) deliverPending();
+        }
+    }
+
+    private void deliverPending() {
+        if (!chatOpen()) return;
+        if (resultRequest != -1) {
+            int request = resultRequest, result = resultCode;
+            Intent data = resultData;
+            resultRequest = -1;
+            resultData = null;
+            handleResult(request, result, data);
+        }
+        if (deferredIntent != null) {
+            Intent intent = deferredIntent;
+            deferredIntent = null;
+            openExternalInvite(intent);
+        }
     }
 
     private void openExternalInvite(Intent intent) {
@@ -160,7 +297,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     private void importCard(String value) {
-        if (value == null || link == null) return;
+        if (!chatOpen() || value == null || link == null) return;
         if (value.length() > 2500 || value.trim().isEmpty()) {
             problem("Invalid CubeChat key card.");
             return;
@@ -172,6 +309,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     @Override public Object onRetainNonConfigurationInstance() {
+        if (!chatOpen() || protectedProfile() || draft == null) return null;
         Retained r = new Retained();
         r.id = renderedId;
         String editing = draft.getText().toString();
@@ -184,19 +322,45 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     @Override protected void onPause() {
-        flushDraft();
+        resumed = false;
+        if (chatOpen()) flushDraft();
+        if (protectedProfile()) {
+            privacyPaused = true;
+            DisplayPrivacy.apply(this);
+            for (java.lang.ref.WeakReference<AlertDialog> ref : chatDialogs) {
+                AlertDialog dialog = ref.get();
+                if (dialog != null && dialog.getWindow() != null)
+                    dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            }
+        }
         super.onPause();
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
-        if (files != null) files.saveState(state);
+        if (files != null && !protectedProfile()) files.saveState(state);
     }
 
     @Override protected void onResume() {
         super.onResume();
-        if (updates != null) updates.check(false);
-        if (bluetooth != null) bluetooth.resume();
+        resumed = true;
+        privacyPaused = false;
+        security.resumed();
+        DisplayPrivacy.apply(this);
+        if (chatOpen()) {
+            if (updates != null) updates.check(false);
+            if (bluetooth != null) bluetooth.resume();
+        }
+    }
+
+    @Override public void onUserInteraction() {
+        super.onUserInteraction();
+        if (security != null) security.interacted();
+    }
+
+    @Override protected void onStop() {
+        super.onStop();
+        if (!isChangingConfigurations()) security.stopped();
     }
 
     private void leaveRadio() {
@@ -207,6 +371,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     @Override protected void onDestroy() {
         closing = true;
+        if (security != null) security.close();
         if (updates != null) updates.close();
         if (files != null) files.closeDialogs();
         if (inviteDialog != null) inviteDialog.dismiss();
@@ -219,8 +384,8 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         super.onDestroy();
     }
 
-    private int dp(float value) { return Math.round(value * getResources().getDisplayMetrics().density); }
-    private LinearLayout column() {
+    int dp(float value) { return Math.round(value * getResources().getDisplayMetrics().density); }
+    LinearLayout column() {
         LinearLayout l = new LinearLayout(this);
         l.setOrientation(LinearLayout.VERTICAL);
         return l;
@@ -233,8 +398,8 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     private LinearLayout.LayoutParams weight(int height) {
         return new LinearLayout.LayoutParams(0, height, 1);
     }
-    private void pad(View v, int h, int t, int b) { v.setPadding(dp(h), dp(t), dp(h), dp(b)); }
-    private TextView label(String value, int size, int color, boolean bold) {
+    void pad(View v, int h, int t, int b) { v.setPadding(dp(h), dp(t), dp(h), dp(b)); }
+    TextView label(String value, int size, int color, boolean bold) {
         TextView t = new TextView(this);
         t.setText(value);
         t.setTextSize(size);
@@ -249,7 +414,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         if (outline) d.setStroke(dp(1), LINE);
         return d;
     }
-    private Button button(String title, boolean primary, View.OnClickListener action) {
+    Button button(String title, boolean primary, View.OnClickListener action) {
         Button b = new Button(this);
         b.setText(title);
         b.setTextSize(15);
@@ -267,6 +432,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     private void buildScreen() {
+        if (chatPrefs == null) chatPrefs = new ChatPreferences(this);
         LinearLayout root = column();
         root.setFitsSystemWindows(true);
         root.setBackgroundColor(PAPER);
@@ -352,6 +518,8 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         startPanel.addView(inviteButton);
         startPanel.addView(scanButton);
         startPanel.addView(pasteButton);
+        createProfile = button("Create local profile", false, v -> security.enroll());
+        startPanel.addView(createProfile);
         body.addView(instructions);
 
         composerRow = row();
@@ -360,7 +528,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         composerRow.addView(button("Files", false, v -> {
             if (files != null) files.showFiles();
         }));
-        draft = new EditText(this);
+        draft = new ChatPreferences.Composer(this);
         draft.setSaveEnabled(false);
         draft.setTextSize(17);
         draft.setTextColor(INK);
@@ -373,6 +541,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         draft.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE
                 | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         draft.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        chatPrefs.apply(draft, this::send);
         composerRow.addView(draft, weight(WRAP));
         send = button("Send", true, v -> send());
         send.setEnabled(false);
@@ -397,7 +566,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     @Override public void changed() {
-        if (closing || link == null) return;
+        if (!chatOpen() || link == null) return;
         PeerLink.Snapshot next = link.snapshot();
         if (files != null) files.changed(next);
         boolean paired = !next.role.isEmpty();
@@ -447,11 +616,11 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             wantsInvite = false;
             showInvite(next.invite);
         }
-        if (next.loaded) advanceShare(next);
+        if (next.loaded) { deliverPending(); advanceShare(next); }
     }
 
     @Override public void queued(long id, String text) {
-        if (closing || renderedId != id || !text.equals(submitted)) return;
+        if (!chatOpen() || renderedId != id || !text.equals(submitted)) return;
         if (text.contentEquals(draft.getText())) {
             draft.setText("");
             flushDraft();
@@ -461,11 +630,11 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     @Override public void fileSaved(long contactId, String fileId) {
-        if (!closing && files != null) files.saved(contactId);
+        if (chatOpen() && files != null) files.saved(contactId);
     }
 
     @Override public void problem(String message) {
-        if (closing) return;
+        if (!chatOpen()) return;
         if (files != null) files.problem(message);
         wantsInvite = false;
         if (shareSelecting && renderedId != shareTarget) clearShare();
@@ -503,7 +672,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     private void advanceShare(PeerLink.Snapshot snapshot) {
-        if (shareDialog != null || closing) return;
+        if (shareDialog != null || !chatOpen()) return;
         AlertDialog dialog;
         if (share != null) {
             dialog = share.choose(this, snapshot.contacts, (id, text) -> {
@@ -551,7 +720,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     private void radioMessage(String message) {
-        if (closing) return;
+        if (!chatOpen() || radioStatus == null) return;
         radioStatus.setText(message);
         radioStatus.setVisibility(message.isEmpty() ? View.GONE : View.VISIBLE);
     }
@@ -752,7 +921,18 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     private void menu() {
+        if (!chatOpen()) return;
         PopupMenu popup = new PopupMenu(this, options);
+        activeMenu = popup;
+        popup.setOnDismissListener(done -> { if (activeMenu == done) activeMenu = null; });
+        popup.getMenu().add("Chat preferences").setOnMenuItemClickListener(i -> {
+            chatPrefs.show(this, () -> {
+                if (chatOpen()) { chatPrefs.apply(draft, this::send); adapter.notifyDataSetChanged(); }
+            });
+            return true;
+        });
+        popup.getMenu().add("Security").setOnMenuItemClickListener(i -> { security.settings(); return true; });
+        if (security.configured()) popup.getMenu().add("Lock now").setOnMenuItemClickListener(i -> { security.lock(); return true; });
         popup.getMenu().add("Screen privacy").setOnMenuItemClickListener(i -> { DisplayPrivacy.choose(this); return true; });
         popup.getMenu().add("Check for updates").setOnMenuItemClickListener(i -> { updates.check(true); return true; });
         if (link == null) { popup.show(); return; }
@@ -801,7 +981,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     private void requestInvite(String bundle) {
-        if (link == null) return;
+        if (!chatOpen() || link == null) return;
         beginAction();
         wantsInvite = true;
         inviteFrom = bundle == null ? -1 : renderedId;
@@ -810,7 +990,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     private void showInvite(String raw) {
-        if (closing || inviteDialog != null) return;
+        if (!chatOpen() || inviteDialog != null) return;
         String code = Pairing.HTTPS_PREFIX + raw;
         LinearLayout content = column();
         pad(content, 20, 8, 8);
@@ -829,6 +1009,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         }
         content.addView(button("Save QR image", true, v -> {
             exportCode = code;
+            pendingQrContact = renderedId;
             Intent create = new Intent(Intent.ACTION_CREATE_DOCUMENT);
             create.addCategory(Intent.CATEGORY_OPENABLE);
             create.setType("image/png");
@@ -857,6 +1038,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             ClipData clip = ClipData.newPlainText("CubeChat invite", code);
             PersistableBundle extras = new PersistableBundle();
             extras.putBoolean("android.content.extra.IS_SENSITIVE", true);
+            extras.putBoolean("org.cubechat.android.key-card", true);
             clip.getDescription().setExtras(extras);
             ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(clip);
             Toast.makeText(this, "Invite copied", Toast.LENGTH_SHORT).show();
@@ -884,7 +1066,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
                 return;
             } finally { if (bitmap != null) bitmap.recycle(); }
             runOnUiThread(() -> {
-                if (!closing) Toast.makeText(this, "Key card saved", Toast.LENGTH_SHORT).show();
+                if (chatOpen()) Toast.makeText(this, "Key card saved", Toast.LENGTH_SHORT).show();
             });
         }, "cubechat-qr-export").start();
     }
@@ -898,6 +1080,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     @Override public void onRequestPermissionsResult(int request, String[] permissions, int[] results) {
         super.onRequestPermissionsResult(request, permissions, results);
+        if (!chatOpen()) return;
         if (request == WifiDirectController.PERMISSION && direct != null) {
             direct.permissionResult(results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED);
             return;
@@ -972,6 +1155,17 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     @Override public void onActivityResult(int request, int result, Intent data) {
         super.onActivityResult(request, result, data);
+        if (!chatOpen() || (link != null && !link.snapshot().loaded && protectedProfile())) {
+            resultRequest = request;
+            resultCode = result;
+            resultData = data;
+            return;
+        }
+        handleResult(request, result, data);
+    }
+
+    private void handleResult(int request, int result, Intent data) {
+        if (!chatOpen()) return;
         if (files != null && files.result(request, result, data)) return;
         if ((request == 732 || request == 733) && bluetooth != null) {
             bluetooth.onActivityResult(request, result);
@@ -979,7 +1173,10 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         }
         if (request == SAVE_QR) {
             String code = exportCode;
+            if (code == null && link != null && pendingQrContact != 0 && link.snapshot().activeId == pendingQrContact
+                    && !link.snapshot().invite.isEmpty()) code = Pairing.HTTPS_PREFIX + link.snapshot().invite;
             exportCode = null;
+            pendingQrContact = 0;
             if (result == RESULT_OK && data != null && data.getData() != null) {
                 if (code == null) problem("Open the key card again to save its image.");
                 else saveQr(data.getData(), code);
@@ -1033,6 +1230,8 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             line.setPaddingRelative(msg.outgoing ? dp(36) : 0, dp(3), msg.outgoing ? 0 : dp(36), dp(3));
             LinearLayout bubble = (LinearLayout) line.getChildAt(0);
             bubble.setBackground(shape(msg.outgoing ? PALE : Color.WHITE, 12, !msg.outgoing));
+            ((TextView) bubble.getChildAt(0)).setTextSize(chatPrefs.textSize());
+            ((TextView) bubble.getChildAt(1)).setTextSize(chatPrefs.captionSize());
             ((TextView) bubble.getChildAt(0)).setText(msg.text);
             String source = msg.outgoing ? "You" : "Peer";
             String receipt = msg.outgoing ? (msg.delivered ? " · Delivered" : " · Queued") : "";

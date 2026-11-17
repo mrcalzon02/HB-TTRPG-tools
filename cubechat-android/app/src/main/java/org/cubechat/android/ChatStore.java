@@ -5,24 +5,21 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyProperties;
 import org.json.JSONObject;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 
 /** The mailbox lane serializes commands. A message row and its sequence counter commit together. */
 final class ChatStore extends SQLiteOpenHelper {
-    private static final String ALIAS = "cubechat.direct.store.1";
-    private SecretKey key;
+    static final String MAIN_DB = "cubechat-direct.db";
+    private final String namespace;
+    private SecretKey legacyKey;
     // A second Activity can open the mailbox before the previous transport finishes closing.
     // The persistent selection is a startup preference. Each transport owns its selected contact.
     private long selected = -1;
@@ -36,12 +33,36 @@ final class ChatStore extends SQLiteOpenHelper {
         }
     }
 
-    ChatStore(Context context) { this(context, "cubechat-direct.db"); }
-    ChatStore(Context context, String name) { super(context, name, null, 3); }
+    ChatStore(Context context) { this(context, MAIN_DB); }
+    ChatStore(Context context, String name) {
+        super(context, name, null, 4);
+        namespace = name;
+    }
+
+    SQLiteDatabase vaultDatabase() { return super.getWritableDatabase(); }
+
+    @Override public SQLiteDatabase getReadableDatabase() {
+        return checked(super.getReadableDatabase());
+    }
+    @Override public SQLiteDatabase getWritableDatabase() {
+        return checked(super.getWritableDatabase());
+    }
+    private SQLiteDatabase checked(SQLiteDatabase db) {
+        if (LocalVault.enrolled(db)) LocalVault.activeKey(namespace);
+        return db;
+    }
 
     @Override public void onCreate(SQLiteDatabase db) {
         createMailbox(db);
         AttachmentStore.createTables(db);
+        addVaultTables(db);
+    }
+
+    private static void addVaultTables(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE peer_notice_templates(contact INTEGER PRIMARY KEY, body BLOB NOT NULL)");
+        db.execSQL("CREATE TRIGGER forget_peer_notice AFTER DELETE ON contacts BEGIN "
+                + "DELETE FROM peer_notice_templates WHERE contact=OLD.id; END");
+        LocalVault.createTable(db);
     }
 
     private static void createMailbox(SQLiteDatabase db) {
@@ -57,9 +78,10 @@ final class ChatStore extends SQLiteOpenHelper {
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int old, int next) {
-        if ((old != 1 && old != 2) || next != 3) throw new IllegalStateException("Unsupported message database version");
+        if (old < 1 || old > 3 || next != 4) throw new IllegalStateException("Unsupported message database version");
         if (old == 1) migrateSingleContact(db);
-        AttachmentStore.createTables(db);
+        if (old < 3) AttachmentStore.createTables(db);
+        addVaultTables(db);
     }
 
     private static void migrateSingleContact(SQLiteDatabase db) {
@@ -78,34 +100,28 @@ final class ChatStore extends SQLiteOpenHelper {
 
     // Contact 1 owns the original v1 AAD so migration can copy encrypted blobs without reading plaintext.
     // AUTOINCREMENT prevents reuse of a forgotten contact's number.
-    private static String scope(long id, String field) {
+    static String scope(long id, String field) {
         return id == 1 ? field : "contact:" + id + ":" + field;
     }
     private static String[] idArg(long id) { return new String[]{Long.toString(id)}; }
 
     private SecretKey key() throws Exception {
-        if (key != null) return key;
-        synchronized (ChatStore.class) {
-            KeyStore store = KeyStore.getInstance("AndroidKeyStore");
-            store.load(null);
-            if (!store.containsAlias(ALIAS)) {
-                KeyGenerator gen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
-                gen.init(new KeyGenParameterSpec.Builder(ALIAS, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
-                        .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).build());
-                gen.generateKey();
-            }
-            key = (SecretKey) store.getKey(ALIAS, null);
-        }
-        return key;
+        if (LocalVault.enrolled(super.getReadableDatabase())) return LocalVault.activeKey(namespace);
+        if (legacyKey == null) legacyKey = LocalVault.deviceKey(LocalVault.legacyAlias(namespace), true);
+        return legacyKey;
     }
+
+    boolean protectedPayloads() { return LocalVault.enrolled(getReadableDatabase()); }
 
     private byte[] seal(String text, String aad) throws Exception {
         return sealBytes(text.getBytes(StandardCharsets.UTF_8), aad);
     }
     byte[] sealBytes(byte[] clear, String aad) throws Exception {
+        return encrypt(key(), clear, aad);
+    }
+    static byte[] encrypt(SecretKey key, byte[] clear, String aad) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-        cipher.init(Cipher.ENCRYPT_MODE, key());
+        cipher.init(Cipher.ENCRYPT_MODE, key);
         cipher.updateAAD(aad.getBytes(StandardCharsets.UTF_8));
         byte[] iv = cipher.getIV(), encrypted = cipher.doFinal(clear);
         return ByteBuffer.allocate(iv.length + encrypted.length).put(iv).put(encrypted).array();
@@ -114,9 +130,12 @@ final class ChatStore extends SQLiteOpenHelper {
         return new String(openBytes(sealed, aad), StandardCharsets.UTF_8);
     }
     byte[] openBytes(byte[] sealed, String aad) throws Exception {
+        return decrypt(key(), sealed, aad);
+    }
+    static byte[] decrypt(SecretKey key, byte[] sealed, String aad) throws Exception {
         if (sealed == null || sealed.length < 28) throw new IllegalArgumentException("Damaged encrypted record");
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-        cipher.init(Cipher.DECRYPT_MODE, key(), new GCMParameterSpec(128, sealed, 0, 12));
+        cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(128, sealed, 0, 12));
         cipher.updateAAD(aad.getBytes(StandardCharsets.UTF_8));
         return cipher.doFinal(sealed, 12, sealed.length - 12);
     }
@@ -236,11 +255,16 @@ final class ChatStore extends SQLiteOpenHelper {
         String label = name == null ? "" : name.trim();
         if (label.codePointCount(0, label.length()) > 64)
             throw new IllegalArgumentException("Use up to 64 characters for a conversation name");
-        ContentValues row = new ContentValues();
-        if (label.isEmpty()) row.putNull("alias");
-        else row.put("alias", seal(label, scope(id, "alias")));
-        if (getWritableDatabase().update("contacts", row, "id=?", idArg(id)) != 1)
-            throw new IllegalArgumentException("Conversation no longer exists");
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues row = new ContentValues();
+            if (label.isEmpty()) row.putNull("alias");
+            else row.put("alias", seal(label, scope(id, "alias")));
+            if (db.update("contacts", row, "id=?", idArg(id)) != 1)
+                throw new IllegalArgumentException("Conversation no longer exists");
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
     }
 
     String[] route(long id) throws Exception {
@@ -255,9 +279,14 @@ final class ChatStore extends SQLiteOpenHelper {
     void saveRoute(String name, String endpoint) throws Exception {
         long id = activeId();
         if (id == 0) return;
-        ContentValues row = new ContentValues();
-        row.put("route", seal(new JSONObject().put("name", name).put("endpoint", endpoint).toString(), scope(id, "route")));
-        getWritableDatabase().update("contacts", row, "id=?", idArg(id));
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues row = new ContentValues();
+            row.put("route", seal(new JSONObject().put("name", name).put("endpoint", endpoint).toString(), scope(id, "route")));
+            db.update("contacts", row, "id=?", idArg(id));
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
     }
 
     String draft(long id) throws Exception {
@@ -269,11 +298,16 @@ final class ChatStore extends SQLiteOpenHelper {
 
     void saveDraft(long id, String text) throws Exception {
         if (id == 0) return;
-        ContentValues row = new ContentValues();
-        if (text == null || text.isEmpty()) row.putNull("draft");
-        else row.put("draft", seal(text, scope(id, "draft")));
-        // A delayed editor callback for a forgotten contact cannot create or change another contact.
-        getWritableDatabase().update("contacts", row, "id=?", idArg(id));
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues row = new ContentValues();
+            if (text == null || text.isEmpty()) row.putNull("draft");
+            else row.put("draft", seal(text, scope(id, "draft")));
+            // A delayed editor callback for a forgotten contact cannot create or change another contact.
+            db.update("contacts", row, "id=?", idArg(id));
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
     }
 
     void resetPair() {
@@ -352,6 +386,38 @@ final class ChatStore extends SQLiteOpenHelper {
                 new String[]{Long.toString(activeId()), Long.toString(seq)});
     }
 
+    // Pre-seal the one fixed notification while the contact is unlocked. A locked connection
+    // can persist this specific event without holding a key or gaining arbitrary mailbox access.
+    void preparePeerPurgeNotice(long contactId) throws Exception {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            try (Cursor c = db.rawQuery("SELECT id FROM contacts WHERE id=?", idArg(contactId))) {
+                if (!c.moveToFirst()) throw new IllegalStateException("Conversation no longer exists");
+            }
+            ContentValues row = new ContentValues();
+            row.put("contact", contactId);
+            row.put("body", seal(PeerLink.PURGE_NOTICE, scope(contactId, "peer-purge-notice")));
+            db.insertWithOnConflict("peer_notice_templates",null,row,SQLiteDatabase.CONFLICT_REPLACE);
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
+    }
+
+    void recordPeerPurgeNotice(long contactId) {
+        SQLiteDatabase db = vaultDatabase();
+        db.beginTransaction();
+        try (android.database.sqlite.SQLiteStatement insert = db.compileStatement(
+                "INSERT INTO messages(contact_id,outgoing,seq,ts,delivered,body) SELECT contact,2,"
+                + "(SELECT COALESCE(MAX(seq),-1)+1 FROM messages WHERE contact_id=? AND outgoing=2),"
+                + "?,1,body FROM peer_notice_templates WHERE contact=?")) {
+            insert.bindLong(1, contactId);
+            insert.bindLong(2, System.currentTimeMillis());
+            insert.bindLong(3, contactId);
+            if (insert.executeInsert() < 0) throw new IllegalStateException("No prepared peer notification");
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
+    }
+
     List<PeerLink.Message> history() throws Exception {
         long id = activeId();
         ArrayList<PeerLink.Message> rows = new ArrayList<>();
@@ -359,7 +425,8 @@ final class ChatStore extends SQLiteOpenHelper {
                 + "WHERE contact_id=? ORDER BY id DESC LIMIT 200", idArg(id))) {
             while (c.moveToNext()) {
                 boolean outgoing = c.getInt(0) == 1;
-                String body = open(c.getBlob(4), scope(id, "body:" + outgoing + ":" + c.getLong(1)));
+                String field = c.getInt(0) == 2 ? "peer-purge-notice" : "body:" + outgoing + ":" + c.getLong(1);
+                String body = open(c.getBlob(4), scope(id, field));
                 rows.add(new PeerLink.Message(body, outgoing, c.getInt(3) == 1, c.getLong(2)));
             }
         }

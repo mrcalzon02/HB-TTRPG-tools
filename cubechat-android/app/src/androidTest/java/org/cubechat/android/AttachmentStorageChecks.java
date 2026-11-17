@@ -31,6 +31,9 @@ final class AttachmentStorageChecks {
                 store.save(true,0,"original queued text","original queued packet");
                 // Reproduce the released v2 schema including its actual encrypted contact and queue.
                 SQLiteDatabase db = store.getWritableDatabase();
+                db.execSQL("DROP TABLE vault_profile");
+                db.execSQL("DROP TRIGGER forget_peer_notice");
+                db.execSQL("DROP TABLE peer_notice_templates");
                 db.execSQL("DROP TRIGGER forget_attachments");
                 db.execSQL("DROP TRIGGER erase_attachment_chunks");
                 db.execSQL("DROP TABLE attachments");

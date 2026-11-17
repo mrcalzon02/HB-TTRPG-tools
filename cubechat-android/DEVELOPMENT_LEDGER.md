@@ -2,6 +2,14 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## Android 0.1.4, build 5
+
+The [0.1.4 release](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.4) adds an optional local profile, password-protected message and attachment keys, configurable lock timing, and an optional duress password that announces PURGE to connected conversations before clearing this phone. Chat preferences include text size, Enter-to-send and keyboard learning. The current release supports one local profile and one live conversation at a time.
+
+To repeat the PURGE drill on hardware, use disposable local profiles on two phones. Pair, exchange a distinct message and file, and enable a separate PURGE password on the sender. Lock the sender while connected and enter its PURGE password. Confirm the recipient sees the notice and retains the earlier message. Reopen the sender and verify the fresh pairing screen. Repeat with the receiver locked, then with the sender offline. Record Android versions, route, arrival on the peer and observed local reset. Suspend the recipient process and verify the sender clears while the recipient cannot reply.
+
+[Signed APK Android security acceptance](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/44015028956) · [Scoped vault and migration regression](app/src/androidTest/java/org/cubechat/android/VaultStorageChecks.java)
+
 ## Android 0.1.3, build 4
 
 The [0.1.3 release](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.3) adds attachments to direct conversations. The sender picks a file through Android. The recipient sees its name and size and must accept before any file contents are sent. Both phones can pause, resume or cancel. The receiver verifies the result before offering export to a user-selected destination.
@@ -14,7 +22,7 @@ The [0.1.2 release](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cu
 
 [Two-device upgrade, messaging and privacy acceptance](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/44006544741) · [Android storage migration regression](app/src/androidTest/java/org/cubechat/android/ContactStorageChecks.java)
 
-**Next work** covers the local credential-protected vault (CC-03), per-send route selection (CC-05) and cellular delivery (CC-06). With multiple contacts and independent sequence counters in place, expiration still needs an authenticated way to skip unsent messages and a defined clock policy.
+**Next work** covers per-send route selection (CC-05), cellular delivery (CC-06) and broader protection of conversation metadata (CC-03). With multiple contacts and independent sequence counters in place, expiration still needs an authenticated way to skip unsent messages and a defined clock policy.
 
 ## Starting behavior in 0.1.1
 
@@ -38,8 +46,8 @@ The [0.1.2 release](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cu
 | --- | --- | --- |
 | CC-01 | **Direct contacts and conversations · Shipped in 0.1.2.** Each paired contact has separate keys, history, outbox, route preference and encrypted draft. Local aliases are independent of the peer fingerprint. Group membership and retention controls remain with CC-09–14. | Upgrade a populated 0.1.1 install, scan a second contact and switch between both. Deliver and reply on each, including after restart. The first contact's keys, queue and history survive. A duplicate scan opens the existing conversation. |
 | CC-02 | **Replay protection through deletion · Extend.** 0.1.2 migrates the send and receive counters for each pairing out of the visible message rows and advances them atomically. Define how abandoned or expired queued messages are skipped without blocking later messages. | Expire the newest received message and an unsent message between two queued sends. Reconnect, retry a previously received envelope, then send another message. The expired items stay gone and the next message arrives exactly once. A restarted volatile session uses fresh session keys. |
-| CC-03 | **Local username, password and encrypted vault · Extend.** Support creating a local profile, signing in offline, changing the password, locking manually and locking after inactivity. The password gates access to the vault keys. Protect contact and thread metadata, attachments and pending work along with message bodies. Preserve physical QR pairing independently of online accounts. | Create two local profiles. A wrong password, notification or incoming intent cannot reveal either profile's data. Unlock the intended vault after a reboot in airplane mode. Change its password, test the old and new credentials, and interrupt a 0.1.1 migration to verify safe recovery. |
-| CC-04 | **Duress password · Planned.** The proposed default is a second password that opens a separate decoy vault from the ordinary sign-in screen. Enrollment is optional. The primary vault stays sealed. Enabling this feature does not silently enroll the user in erasure or alerting. | Configure normal and duress credentials. Try both, a wrong password, then the duress credential again after restart. Each correct credential opens only its own history, keys, badges and settings. A real incoming message, Recents or a notification must not expose the primary profile while the decoy is open. |
+| CC-03 | **Local username, password and encrypted vault · One local profile shipped in 0.1.4.** Optional offline enrollment, lock, unlock, password changes and separate idle/background timing. Existing pairing keys, message bodies, drafts and attachment contents migrate under the protected key. IDs, counters, sizes and transfer state are SQLite metadata. Additional profiles and metadata encryption are open. | Upgrade a populated 0.1.3 installation, enroll, force-stop, try a wrong password and unlock offline. Test legacy encrypted content and an interrupted migration. Check that external intents require unlock. |
+| CC-04 | **Duress password and PURGE · Shipped in 0.1.4.** The user explicitly enables a distinct password with the normal credential. At sign-in it sends a readable PURGE notice to connected peers and clears all private CubeChat data on this device. Send the notice once on each live link and start local reset immediately after the local send attempt. No recipient acknowledgement, reconnection or delivery retry is required. | Verify notice and retained peer history on a separate phone, local first launch afterward, and preservation of an external file. Also activate offline after process death. Wrong credentials must never trigger reset. |
 
 ### Sending, reachability and files
 
@@ -69,6 +77,26 @@ The proposed RAM-only guarantee covers every CubeChat-controlled write of sessio
 | CC-14 | **Physical organization QR renewal (QRL) · Planned.** From the organization forum, an authorized administrator can generate, display or print the new key card for posting at a controlled physical location. The organization board can pin a renewal notice with generation, effective time and collection location. The posted physical QR carries the actual new key. A member scans once, offline, and the app imports it into the existing organization. | With the network off, two members scan the replacement card and one member keeps only the old card. Scanning twice changes nothing. Reject a rolled-back or unauthorized replacement of an established organization key. The two updated members exchange new-generation posts. The old-key phone cannot decrypt or submit accepted new posts until it receives the new card. |
 
 Possession is the membership mechanism for the physical card. Anyone who obtains a copy obtains the keys it carries, including a former member who can still reach the posting location. A forum renewal notice can be readable under the old key. It must carry no new key or scannable copy. Rotation protects future traffic. Previously delivered history follows its original retention policy.
+
+## Defaults and next user controls
+
+| Setting | Android 0.1.4 default | Available choices |
+| --- | --- | --- |
+| Route for a new conversation | Local Wi-Fi / hotspot. Text and files use the selected conversation’s route. | Change the contact’s route in **Connection**. **Ping** requests a fresh reply on that route. |
+| File receipt and storage | Each incoming offer requires acceptance. The limit is 8 MiB per file with 64 MiB available for staged, accepted and completed content across conversations. | Accept, decline, pause, resume or cancel. After verification, **Save file** opens Android’s destination picker. |
+| Local sign-in and lock | Profile enrollment is optional. After enrollment the app remembers the username, locks after five idle minutes and locks immediately on leaving. The PURGE password starts disabled. | Turn off username autofill, choose separate idle and background timers, or use **Lock now**. Enroll, change or disable PURGE with the normal password. |
+| Display and typing | Standard text is 17 sp. Enter inserts a newline. The composer asks the keyboard to skip personalized learning. The ordinary chat screenshot setting starts off. | Pick one of four sizes, enable Enter-to-send, change the keyboard request or enable screen privacy. **Use defaults** restores the three composer settings. |
+
+[Chat preferences](app/src/main/java/org/cubechat/android/ChatPreferences.java) · [Lock settings](app/src/main/java/org/cubechat/android/ProfileSecurityUi.java) · [Screen privacy](app/src/main/java/org/cubechat/android/DisplayPrivacy.java) · [File limits](app/src/main/java/org/cubechat/android/AttachmentStore.java) · [Stored route](app/src/main/java/org/cubechat/android/ChatStore.java)
+
+The following controls are proposed, in build order.
+
+| Priority | Proposed control and default | Dependency and acceptance |
+| --- | --- | --- |
+| 1. Delivery and queue | Default each send to the conversation route. Let the sender pin an individual item and see why it is waiting, the route used and the receipt. Start with files. A pinned item waits for its route unless the sender chooses another. | CC-05 and CC-08. Switch away mid-transfer and restart. The file should resume on the chosen route. For text, CC-02 must support delivering a later eligible item while the first waits. Cellular selection depends on CC-06. |
+| 2. File space | Show reserved and available vault space before accepting a file. If space is short, open a list of completed local copies with their sizes for the recipient to review. Keep removal manual. | CC-08 already tracks reservations. Test with two conversations competing for the last free space. Removing a completed vault copy should free its reservation and preserve the exported file. |
+| 3. Local privacy | Surface the effective lock timers, username autofill and screen privacy together in **Security**. Keep credentials and PURGE enrollment under their existing, separate controls. | CC-03 and CC-04. Change one display or lock preference, restart offline and check the summary against actual behavior. Restoring preference defaults must preserve credentials and enrollment. |
+| 4. Forum key renewal | Pin the collection location, effective time and key generation to the organization board. Show each member whether a scan is due. Confirm the organization and installed generation after an offline scan. | CC-13 authorizes the administrator and CC-14 verifies the card. With two members, scan one card twice on the first phone and leave the second on the old generation. Verify that each sees its own status and the board notice contains only collection instructions and identifying details. |
 
 ## Build sequence and verification
 

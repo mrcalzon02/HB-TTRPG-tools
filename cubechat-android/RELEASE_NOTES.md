@@ -1,11 +1,10 @@
-# CubeChat Android 0.1.3
+# CubeChat Android 0.1.4
 
-Android version code: 4
+Android version code: 5
 
-- Send encrypted attachments up to 8 MiB over the selected CubeChat connection. Choose **Files → Attach file** and pick a file through Android.
-- Review the proposed filename and size before accepting or declining. Pause, resume or cancel from the file details. Interrupted transfers can resume after reconnecting or reopening the app.
-- The recipient verifies the complete size and SHA-256 before **Save file** opens the Android document picker. Received content stays in CubeChat’s encrypted storage until you explicitly export it.
-- Both peers need 0.1.3 for attachments. Existing text conversations, contact names, local drafts and queued messages carry forward. Older peers continue exchanging text.
-- 0.1.2 features are included: multiple one-scan QR conversations, contact search and renaming, authenticated ping, per-contact encrypted drafts, Android text sharing, recent message search and optional screenshot protection.
+- Protect your existing mailbox with a local username and password. Choose **Pairing → Security** to enroll. Change credentials, lock manually, or choose foreground and background lock timing. Sign-in works offline.
+- Optionally enroll a separate **PURGE password**. Entering it at sign-in immediately starts the protocol. CubeChat attempts one announcement on each live conversation and immediately asks Android to clear this installation. It never waits for a recipient to acknowledge. Reopen the app for a fresh pairing screen. Disconnected peers may receive no notice. The recipient’s history and files already exported to other apps stay where they are.
+- Choose **Pairing → Chat preferences** for four text sizes, Enter-to-send, and keyboard learning preferences. Use **Use defaults** to restore standard composition settings.
+- Earlier features include multiple QR conversations, delivery receipts, local Wi-Fi, Wi-Fi Direct and Bluetooth, encrypted resumable files, shared text and links, and user-confirmed updates.
 
-Download **CubeChat.apk** on the phone, open it from Downloads, and tap **Update** to upgrade an existing installation. Android 8.0 or newer is required.
+Open **CubeChat.apk** from Downloads and choose **Update** to keep existing data. Android 8.0 or newer is required.

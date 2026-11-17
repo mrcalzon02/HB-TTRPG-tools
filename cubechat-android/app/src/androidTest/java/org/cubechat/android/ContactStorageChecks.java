@@ -32,7 +32,8 @@ public final class ContactStorageChecks extends Instrumentation {
         try {
             checkUpgradeAndIsolation(context, name);
             AttachmentStorageChecks.run(context);
-            result.putString("stream", "PASS: SQLite upgrade, contact isolation, drafts, counters and attachment vault.\n");
+            VaultStorageChecks.run(context);
+            result.putString("stream", "PASS: SQLite upgrade, contact isolation, drafts, counters and attachment vault.\nPASS: password-gated migration, credential changes, locked PURGE notices and durable reset marker.\n");
         } catch (Throwable failure) {
             code = Activity.RESULT_CANCELED;
             result.putString("stream", Log.getStackTraceString(failure));
@@ -61,7 +62,7 @@ public final class ContactStorageChecks extends Instrumentation {
         check(context.deleteDatabase(name), "Could not prepare isolated fixture");
         KeyStore keys = KeyStore.getInstance("AndroidKeyStore");
         keys.load(null);
-        SecretKey key = (SecretKey) keys.getKey("cubechat.direct.store.1", null);
+        SecretKey key = (SecretKey) keys.getKey(LocalVault.legacyAlias(name), null);
         try (SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(context.getDatabasePath(name), null)) {
             db.execSQL("CREATE TABLE pairing(id INTEGER PRIMARY KEY CHECK(id=1), body BLOB NOT NULL)");
             db.execSQL("CREATE TABLE messages(id INTEGER PRIMARY KEY, outgoing INTEGER NOT NULL, seq INTEGER NOT NULL, "

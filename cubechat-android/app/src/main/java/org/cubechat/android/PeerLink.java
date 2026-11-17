@@ -13,19 +13,39 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /** Stores independent conversations and services the selected conversation on its chosen route. */
 public final class PeerLink {
+    public static final String PURGE_NOTICE = "PURGE protocol activated by this user.";
+    // Total allowance for the local socket write. Successful writes release reset immediately.
+    private static final long PURGE_WRITE_MILLIS = 150;
+    private static final ScheduledThreadPoolExecutor PURGE_TIMER = new ScheduledThreadPoolExecutor(1, work -> {
+        Thread thread = new Thread(work, "CubeChat purge timeout");
+        thread.setDaemon(true);
+        return thread;
+    });
+    static { PURGE_TIMER.setRemoveOnCancelPolicy(true); }
+    private static final Set<PeerLink> mailboxes = Collections.newSetFromMap(new WeakHashMap<>());
+    private static final List<Runnable> purgeWaiters = new ArrayList<>();
+
     public interface Codec {
         JSONObject seal(String keyHex, String channel, long sequence, String text) throws Exception;
         String open(String keyHex, String channel, JSONObject envelope) throws Exception;
@@ -106,7 +126,20 @@ public final class PeerLink {
     private String status = "", invitation = "";
     private List<Message> history = Collections.emptyList();
     private Pairing pair;
-    private DirectProtocol session;
+    private volatile DirectProtocol session;
+    private volatile boolean concealed, purging;
+    private long visibilityRevision;
+    private boolean parked, recordedPurge, parkedFileSupport;
+    private volatile DirectProtocol purgeCapableSession;
+    private long nextWireSequence, legacyNoticeSeq = -1;
+    private String legacyNotice;
+    private final ArrayDeque<DirectProtocol.Record> parkedRecords = new ArrayDeque<>();
+    private int parkedBytes;
+    private final AtomicBoolean purgeFinished = new AtomicBoolean();
+    private ScheduledFuture<?> purgeTimeout;
+    private volatile Runnable purgeCallback;
+    private static final Snapshot LOCKED = new Snapshot("Locked", "", "", "", Collections.emptyList(),
+            false, "", 0, Collections.emptyList(), "", "", 0, false, "", false, Collections.emptyList(), false);
     private ServerSocket server;
 
     public PeerLink(Context context, Codec codec, Listener listener) {
@@ -114,26 +147,29 @@ public final class PeerLink {
         wifi = (android.net.wifi.WifiManager)app.getSystemService(Context.WIFI_SERVICE);
         store = new ChatStore(app); attachments = new AttachmentStore(app, store);
         this.codec = codec; this.listener = listener;
+        synchronized (mailboxes) { mailboxes.add(this); }
     }
     public Snapshot snapshot() { return snapshot; }
     private static String detail(Exception error) {
         return error.getMessage() == null ? error.getClass().getSimpleName() : error.getMessage();
     }
     private synchronized void command(Task task) {
-        if (closed) return;
+        if (closed || concealed) return;
         lane.execute(() -> {
             try { task.run(); } catch (Exception e) { report(detail(e)); }
         });
     }
-    private void report(String message) { main.post(() -> { if (!closed) listener.problem(message); }); }
+    private void report(String message) { main.post(() -> { if (!closed && !concealed) listener.problem(message); }); }
     private void publish() {
+        if (concealed) { snapshot = LOCKED; return; }
         String peer = "";
         if (pair != null && pair.remote != null) {
             try { peer = DirectProtocol.fingerprint(pair.remote); } catch (Exception e) { report(detail(e)); }
         }
-        snapshot = new Snapshot(status, pair == null ? "" : pair.host ? "host" : "guest", peer, invitation, history, session != null,
+        Snapshot updated = new Snapshot(status, pair == null ? "" : pair.host ? "host" : "guest", peer, invitation, history, session != null,
                 relayStatus, activeId, contacts, route.label, ping, pingTime, challenge != 0, draft, loaded, files, exchange != null);
-        main.post(() -> { if (!closed) listener.changed(); });
+        synchronized (this) { snapshot = concealed ? LOCKED : updated; }
+        main.post(() -> { if (!closed && !concealed) listener.changed(); });
     }
 
     public void start() {
@@ -142,8 +178,12 @@ public final class PeerLink {
             loadSelection();
             loaded = true; started = true;
             lane.scheduleWithFixedDelay(() -> {
-                if (closed) return;
+                if (closed || purging) return;
                 try {
+                    if (parked) {
+                        if (session != null) session.write(DirectProtocol.HEARTBEAT, 0, "");
+                        return;
+                    }
                     long revision = completedImports.get();
                     if (revision != seenImports && activeId != 0) { filesChanged(null); seenImports = revision; }
                     if (session != null) {
@@ -162,10 +202,13 @@ public final class PeerLink {
         });
     }
 
-    private void loadSelection() throws Exception {
-        shutdownNetwork();
+    private void loadSelection() throws Exception { loadSelection(false); }
+    private void loadSelection(boolean retainTransport) throws Exception {
+        if (!retainTransport) shutdownNetwork();
         pair = null; activeId = 0; invitation = ""; draft = ""; history = Collections.emptyList();
-        contacts = Collections.emptyList(); files = Collections.emptyList(); route = Route.LAN; wifiEndpoint = ""; status = "Ready to pair";
+        contacts = Collections.emptyList(); files = Collections.emptyList(); route = Route.LAN;
+        if (!retainTransport) wifiEndpoint = "";
+        status = "Ready to pair";
         ping = ""; pingTime = 0;
         try {
             contacts = store.contacts();
@@ -310,10 +353,10 @@ public final class PeerLink {
     }
 
     /** Take ownership of an RFCOMM connection from the platform Bluetooth adapter. */
-    public void attachBluetooth(InputStream in, OutputStream out, Closeable transport, String label) {
-        if (closed) { close(transport); return; }
+    public synchronized void attachBluetooth(InputStream in, OutputStream out, Closeable transport, String label) {
+        if (closed || concealed) { close(transport); return; }
         command(() -> {
-            if (route != Route.BLUETOOTH || pair == null || session != null || bluetoothCandidate != null) {
+            if (concealed || route != Route.BLUETOOTH || pair == null || session != null || bluetoothCandidate != null) {
                 close(transport); return;
             }
             final long epoch = generation;
@@ -358,6 +401,7 @@ public final class PeerLink {
         command(() -> {
             ready(); requireContact(target);
             fileIo.execute(() -> {
+                if (closed || concealed) return;
                 try (ChatStore worker = new ChatStore(app)) {
                     new AttachmentStore(app, worker).importFile(target, source);
                     completedImports.incrementAndGet();
@@ -370,9 +414,10 @@ public final class PeerLink {
         command(() -> {
             ready(); requireContact(target);
             fileIo.execute(() -> {
+                if (closed || concealed) return;
                 try (ChatStore worker = new ChatStore(app)) {
                     new AttachmentStore(app, worker).exportFile(target, id, destination);
-                    main.post(() -> { if (!closed) listener.fileSaved(target, id); });
+                    main.post(() -> { if (!closed && !concealed) listener.fileSaved(target, id); });
                 } catch (Exception e) { report("Could not save file: " + detail(e)); }
             });
         });
@@ -447,14 +492,14 @@ public final class PeerLink {
             store.save(true, seq, text, encoded);
             if (draft.equals(text)) draft = "";
             history = store.history(); contacts = store.contacts(); publish();
-            main.post(() -> { if (!closed) listener.queued(target, text); });
+            main.post(() -> { if (!closed && !concealed) listener.queued(target, text); });
             try { pump(); } catch (Exception e) { disconnect(session); }
         });
     }
     private void ready() throws IOException { if (!loaded) throw new IOException("Mailbox could not be opened"); }
 
     private void reconnect() throws Exception {
-        if (!started || closed || pair == null || session != null || route == Route.BLUETOOTH) return;
+        if (!started || closed || concealed || pair == null || session != null || route == Route.BLUETOOTH) return;
         if (route == Route.WIFI_DIRECT && wifiEndpoint.isEmpty()) return;
         if (pair.host) {
             if (server == null) {
@@ -558,13 +603,18 @@ public final class PeerLink {
         catch (InterruptedException e) { result.cancel(false); Thread.currentThread().interrupt(); throw e; }
     }
     private void generation(long epoch) throws IOException {
-        if (closed || epoch != generation) throw new IOException("Pairing changed");
+        if (closed || concealed || epoch != generation) throw new IOException("Pairing changed");
     }
 
     private void open(DirectProtocol link) throws Exception {
+        long pending = store.pending();
+        long expected = pending >= 0 ? pending : store.next(true);
+        store.preparePeerPurgeNotice(activeId);
         close(session); session = link; exchange = null; sentSeq = -1; connecting = false;
+        nextWireSequence = expected;
+        purgeCapableSession = null; recordedPurge = false;
         lastReceived = System.nanoTime();
-        status = route == Route.BLUETOOTH ? "Connected over Bluetooth" : route == Route.WIFI_DIRECT ? "Connected over Wi-Fi Direct" : route == Route.RELAY ? "Connected through relay" : "Connected";
+        status = connectedStatus();
         publish();
         io.execute(() -> {
             try {
@@ -572,27 +622,44 @@ public final class PeerLink {
                     DirectProtocol.Record record = link.readRecord();
                     await(() -> { if (session != link) throw new IOException("Session replaced"); receive(link, record); return null; });
                 }
-            } catch (Exception e) { if (!closed) command(() -> disconnect(link)); }
+            } catch (Exception e) { socketLost(link); }
         });
-        try { link.write(DirectProtocol.HEARTBEAT, DirectProtocol.FILE_HELLO, ""); sendPing(); pump(); }
+        try { link.write(DirectProtocol.HEARTBEAT, DirectProtocol.PURGE_HELLO, "");
+            link.write(DirectProtocol.HEARTBEAT, DirectProtocol.FILE_HELLO, ""); sendPing(); pump(); }
         catch (Exception e) { disconnect(link); throw e; }
     }
     private void receive(DirectProtocol link, DirectProtocol.Record record) throws Exception {
         lastReceived = System.nanoTime();
+        if (record.type == DirectProtocol.HEARTBEAT && record.sequence == DirectProtocol.PURGE_HELLO) {
+            purgeCapableSession = link;
+            return;
+        }
+        if (purging) return;
+        if (record.type == DirectProtocol.HEARTBEAT && record.sequence == DirectProtocol.PURGE_NOTICE) {
+            if (purgeCapableSession != link) throw new IOException("Unexpected PURGE announcement");
+            if (!recordedPurge) {
+                store.recordPeerPurgeNotice(activeId);
+                recordedPurge = true;
+            }
+            if (!parked) { history = store.history(); publish(); }
+            return;
+        }
+        if (parked) {
+            if (record.type == DirectProtocol.HEARTBEAT) {
+                if (record.sequence == DirectProtocol.FILE_HELLO) parkedFileSupport = true;
+            } else {
+                // The Cube envelope and file manifest/chunk stay encrypted until normal unlock.
+                if (parkedRecords.size() >= 96 || record.body.length() > 4 * 1024 * 1024 - parkedBytes)
+                    throw new IOException("Locked mailbox will resume after unlock");
+                parkedRecords.add(record); parkedBytes += record.body.length();
+            }
+            return;
+        }
         if (record.type == DirectProtocol.FILE) {
             if (exchange == null) throw new IOException("File support was not negotiated");
             refreshFiles(exchange.receive(record.body));
         } else if (record.type == DirectProtocol.MESSAGE) {
-            long expected = store.next(false);
-            if (record.sequence > expected) throw new IOException("Unexpected message sequence");
-            if (record.sequence == expected) {
-                JSONObject envelope = new JSONObject(record.body);
-                if (envelope.getLong("sequence") != expected) throw new IOException("Envelope sequence mismatch");
-                String text;
-                try { text = codec.open(pair.host ? pair.ba : pair.ab, pair.host ? "BA" : "AB", envelope); }
-                catch (Exception e) { report("Message could not be decrypted: " + detail(e)); throw e; }
-                store.save(false, expected, text, null); history = store.history(); publish();
-            }
+            commitIncoming(record);
             // A replica of a committed record, e.g. after a lost receipt, receives the same acknowledgement.
             link.write(DirectProtocol.RECEIPT, record.sequence, "");
         } else if (record.type == DirectProtocol.RECEIPT && sentSeq >= 0 && sentSeq == record.sequence) {
@@ -614,32 +681,219 @@ public final class PeerLink {
             }
         }
     }
+    private void commitIncoming(DirectProtocol.Record record) throws Exception {
+        long expected = store.next(false);
+        if (record.sequence > expected) throw new IOException("Unexpected message sequence");
+        if (record.sequence == expected) {
+            JSONObject envelope = new JSONObject(record.body);
+            if (envelope.getLong("sequence") != expected) throw new IOException("Envelope sequence mismatch");
+            String text;
+            try { text = codec.open(pair.host ? pair.ba : pair.ab, pair.host ? "BA" : "AB", envelope); }
+            catch (Exception e) { report("Message could not be decrypted: " + detail(e)); throw e; }
+            store.save(false, expected, text, null); history = store.history(); publish();
+        }
+    }
     private void pump() throws Exception {
-        if (session == null || sentSeq >= 0) return;
+        if (concealed || session == null || sentSeq >= 0) return;
         long seq = store.pending();
         if (seq >= 0) {
             session.write(DirectProtocol.MESSAGE, seq, store.packet(seq));
-            sentSeq = seq; sentAt = System.nanoTime();
+            sentSeq = seq; nextWireSequence = seq + 1; sentAt = System.nanoTime();
         }
+    }
+    private synchronized void socketLost(DirectProtocol link) {
+        if (!closed) lane.execute(() -> disconnect(link));
     }
     private void disconnect(DirectProtocol link) {
         if (link == null || session != link) return;
-        close(link); session = null; exchange = null; sentSeq = -1;
+        close(link); session = null; purgeCapableSession = null; exchange = null; sentSeq = -1;
+        if (purging) { finishPurge(); return; }
+        if (parked || pair == null) return;
         if (challenge != 0 && pingSentAt != 0) noPingReply();
         status = route == Route.BLUETOOTH ? "Waiting for Bluetooth reconnection" : pair.host ? "Waiting for paired phone" : "Disconnected. Retrying…"; publish();
     }
     private static void close(java.io.Closeable object) { if (object != null) try { object.close(); } catch (IOException ignored) {} }
     private void shutdownNetwork() {
-        generation++; exchange = null;
+        closeListeners();
+        exchange = null; purgeCapableSession = null; legacyNotice = null; legacyNoticeSeq = -1;
+        close(session); session = null; sentSeq = -1;
+    }
+    private void closeListeners() {
+        generation++;
         if (challenge != 0) { challenge = 0; pingSentAt = 0; ping = ""; pingTime = 0; }
         close(bluetoothCandidate); bluetoothCandidate = null;
         close(advertiser); advertiser = null;
         if (multicast != null) { if (multicast.isHeld()) multicast.release(); multicast = null; }
-        close(server); server = null; close(session); session = null; connecting = false; needsDiscovery = false; sentSeq = -1;
+        close(server); server = null; connecting = false; needsDiscovery = false;
+    }
+    /** Immediately conceal the snapshot, then shed vault-backed state on its owning worker. */
+    public void lockVault(Runnable onParked) { parkVault(onParked, true); }
+    public void pauseForEnrollment(Runnable onParked) { parkVault(onParked, false); }
+
+    private synchronized void parkVault(Runnable onParked, boolean bounded) {
+        concealed = true;
+        visibilityRevision++;
+        snapshot = LOCKED;
+        if (closed) { main.post(onParked); return; }
+        // A pending file/transport operation must not keep the password gate disabled.
+        AtomicBoolean signaled = new AtomicBoolean();
+        Runnable notifyParked = () -> {
+            if (signaled.compareAndSet(false, true)) main.post(onParked);
+        };
+        ScheduledFuture<?> gateTimeout = bounded ? PURGE_TIMER.schedule(notifyParked, 1500, TimeUnit.MILLISECONDS) : null;
+        lane.execute(() -> {
+            try {
+                if (parked) return;
+                closeListeners();
+                if (session != null && purgeCapableSession != session) prepareLegacyNotice();
+            } catch (Exception ignored) {
+                // A failing legacy codec cannot prevent local lock or reset.
+            } finally {
+                parked = true;
+                parkedFileSupport |= exchange != null;
+                exchange = null; pair = null; invitation = ""; draft = ""; history = Collections.emptyList();
+                files = Collections.emptyList(); contacts = Collections.emptyList();
+                status = ""; ping = ""; pingTime = 0; loaded = false;
+                if (gateTimeout != null) gateTimeout.cancel(false);
+                notifyParked.run();
+            }
+        });
+    }
+
+    /** Called only after the normal password has opened the local vault. */
+    public synchronized void unlockVault() {
+        if (closed || purging) return;
+        long revision = ++visibilityRevision;
+        lane.execute(() -> {
+            try {
+                loadSelection(true);
+                parked = false;
+                DirectProtocol live = session;
+                if (live != null && parkedFileSupport) {
+                    exchange = new AttachmentExchange(attachments, codec, activeId, pair, live);
+                    exchange.sync();
+                }
+                while (!parkedRecords.isEmpty()) {
+                    DirectProtocol.Record record = parkedRecords.remove();
+                    if (live != null) receive(live, record);
+                    else if (record.type == DirectProtocol.MESSAGE) commitIncoming(record);
+                }
+                if (live != null) status = connectedStatus();
+                loaded = true;
+            } catch (Exception e) {
+                if (session != null) disconnect(session);
+                status = "Could not resume conversation: " + detail(e);
+            } finally {
+                parkedRecords.clear(); parkedBytes = 0; parkedFileSupport = false;
+                legacyNotice = null; legacyNoticeSeq = -1;
+                synchronized (this) {
+                    if (revision == visibilityRevision && !purging && !closed) concealed = false;
+                }
+                publish();
+            }
+            if (!concealed) {
+                try { if (session != null) pump(); else reconnect(); }
+                catch (Exception e) { report(detail(e)); }
+            }
+        });
+    }
+
+    private void prepareLegacyNotice() throws Exception {
+        if (pair == null || session == null || legacyNotice != null) return;
+        legacyNoticeSeq = nextWireSequence;
+        legacyNotice = codec.seal(pair.host ? pair.ab : pair.ba, pair.host ? "AB" : "BA",
+                legacyNoticeSeq, PURGE_NOTICE).toString();
+    }
+
+    /** A recovered activation can join a broadcast already running in another Activity. */
+    public static void announcePurgeToAll(Runnable onFinished) {
+        List<PeerLink> connected;
+        synchronized (mailboxes) {
+            purgeWaiters.add(onFinished);
+            if (purgeWaiters.size() > 1) return;
+            connected = new ArrayList<>();
+            for (PeerLink box : mailboxes) {
+                if (!box.closed && !box.purging && box.session != null) connected.add(box);
+            }
+        }
+        Handler main = new Handler(Looper.getMainLooper());
+        AtomicBoolean finished = new AtomicBoolean();
+        Runnable finish = () -> {
+            if (!finished.compareAndSet(false, true)) return;
+            main.post(() -> {
+                List<Runnable> callbacks;
+                synchronized (mailboxes) {
+                    callbacks = new ArrayList<>(purgeWaiters);
+                    purgeWaiters.clear();
+                }
+                for (Runnable callback : callbacks) callback.run();
+            });
+        };
+        if (connected.isEmpty()) { finish.run(); return; }
+        AtomicInteger remaining = new AtomicInteger(connected.size());
+        ScheduledFuture<?> hardDeadline = PURGE_TIMER.schedule(finish, PURGE_WRITE_MILLIS, TimeUnit.MILLISECONDS);
+        Runnable peerDone = () -> {
+            if (remaining.decrementAndGet() == 0) {
+                hardDeadline.cancel(false);
+                finish.run();
+            }
+        };
+        for (PeerLink box : connected) box.announcePurge(peerDone);
+    }
+
+    /** Announce within this mailbox's one already authenticated conversation, without reconnecting. */
+    synchronized void announcePurge(Runnable onFinished) {
+        if (purging) return;
+        purging = true; concealed = true; snapshot = LOCKED;
+        purgeCallback = onFinished;
+        if (closed || session == null) { finishPurge(); return; }
+        // Cut off a blocked local writer even when its mailbox lane is already occupied.
+        purgeTimeout = PURGE_TIMER.schedule(this::finishPurge, PURGE_WRITE_MILLIS, TimeUnit.MILLISECONDS);
+        DirectProtocol target = session;
+        if (target == null) { finishPurge(); return; }
+        if (purgeCapableSession == target) {
+            io.execute(() -> {
+                if (purgeFinished.get()) return;
+                try { target.write(DirectProtocol.HEARTBEAT, DirectProtocol.PURGE_NOTICE, ""); }
+                catch (Exception closedTransport) { /* Best-effort on live links. */ }
+                finally { finishPurge(); }
+            });
+        } else {
+            lane.execute(() -> {
+                try {
+                    if (purgeFinished.get()) return;
+                    prepareLegacyNotice();
+                    if (legacyNotice != null && session == target && !purgeFinished.get())
+                        target.write(DirectProtocol.MESSAGE, legacyNoticeSeq, legacyNotice);
+                } catch (Exception failed) { /* A legacy peer may already be gone. */ }
+                finally { finishPurge(); }
+            });
+        }
+    }
+
+    private void finishPurge() {
+        if (!purgeFinished.compareAndSet(false, true)) return;
+        ScheduledFuture<?> deadline = purgeTimeout;
+        if (deadline != null) deadline.cancel(false);
+        Runnable done = purgeCallback;
+        if (done != null) main.post(done);
+        DirectProtocol link = session;
+        if (link != null) {
+            Thread closer = new Thread(() -> close(link), "CubeChat closing purge session");
+            closer.setDaemon(true);
+            closer.start();
+        }
+    }
+
+    private String connectedStatus() {
+        return route == Route.BLUETOOTH ? "Connected over Bluetooth" : route == Route.WIFI_DIRECT
+                ? "Connected over Wi-Fi Direct" : route == Route.RELAY ? "Connected through relay" : "Connected";
     }
     public synchronized void stop() {
         if (closed) return;
         closed = true;
+        synchronized (mailboxes) { mailboxes.remove(this); }
+        if (purging) finishPurge();
         lane.execute(() -> { shutdownNetwork(); close(forwarder); forwarder = null; store.close(); fileIo.shutdown(); io.shutdownNow(); lane.shutdownNow(); });
     }
 }
