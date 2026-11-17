@@ -2,6 +2,8 @@
 
 Open the [Android installation page](https://cubechat-android.lankytangerine2.chatgpt.site/) on your phone or [download CubeChat 0.1.1 from GitHub Releases](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/cubechat-android-v0.1.1/CubeChat.apk). Open **CubeChat.apk** from your browser’s Downloads, then choose **Install** or **Update** in Android. The app supports Android 8.0 and newer and keeps one paired conversation on each phone.
 
+The [Android development ledger](DEVELOPMENT_LEDGER.md) tracks planned features, their dependencies and the tests for each milestone.
+
 ## Updates
 
 When CubeChat opens with internet access, it checks GitHub Releases for a higher Android build number. Published prereleases are eligible. Drafts are excluded. An available update appears above the conversation. Open the notice to see the installed and available versions, then choose **Open download** or **Not now**. An APK downloads only when you open the download, and Android asks before installing it. You can also choose **Pairing → Check for updates**. Offline pairing and chats work independently of the update check.
