@@ -109,7 +109,7 @@ jobs:
           test_apk=.github/cubechat-candidate/ContactStorageChecks.apk
           echo "7e3034b7a37bfb504e53f43829c77070fe7d11b32752a36c61464a3658eb7e9f  $test_apk" | sha256sum -c -
           adb -s emulator-5554 install -r "$test_apk"
-          adb -s emulator-5554 shell am instrument -w org.cubechat.android.test/org.cubechat.android.ContactStorageChecks | tee "$RUNNER_TEMP/store-check.log"
+          adb -s emulator-5554 shell am instrument -w -r org.cubechat.android.test/org.cubechat.android.ContactStorageChecks | tee "$RUNNER_TEMP/store-check.log"
           grep -F "PASS: SQLite upgrade" "$RUNNER_TEMP/store-check.log"
           grep -F "INSTRUMENTATION_CODE: -1" "$RUNNER_TEMP/store-check.log"
       - name: Save the key-free conversation screenshot
