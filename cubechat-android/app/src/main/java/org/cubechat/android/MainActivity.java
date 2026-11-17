@@ -85,12 +85,12 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     private boolean inEnrollment, resumed, privacyPaused;
 
     private UpdateCheck updates;
-    private Button updateBanner, fileNotice;
+    private Button updateBanner, fileNotice, jumpLatest;
     private AttachmentsUi files;
     private CubeProfile profile;
     private WifiDirectController direct;
     private BluetoothRadio bluetooth;
-    private TextView subtitle, status, radioStatus, relayStatus, contactName, pingResult;
+    private TextView subtitle, status, radioStatus, relayStatus, contactName, pingResult, draftLength;
     private LinearLayout startPanel, composerRow, contactBar;
     private ListView history;
     private EditText draft;
@@ -221,7 +221,8 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         // Let Android release the detached chat tree, including recycled message rows.
         if (history != null) history.setAdapter(null);
         history = null; adapter = null; draft = null;
-        updateBanner = fileNotice = send = options = inviteButton = scanButton = pasteButton = ping = createProfile = null;
+        updateBanner = fileNotice = jumpLatest = send = options = inviteButton = scanButton = pasteButton = ping = createProfile = null;
+        draftLength = null;
         subtitle = status = radioStatus = relayStatus = contactName = pingResult = pairTitle = pairHint = null;
         startPanel = composerRow = contactBar = null;
         if (link == null) parked.run(); else link.lockVault(parked);
@@ -501,6 +502,22 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         adapter = new Messages();
         history.setAdapter(adapter);
         body.addView(history);
+        jumpLatest = button("Latest messages ↓", false, v -> {
+            if (history != null && adapter != null && adapter.getCount() > 0)
+                history.setSelection(adapter.getCount() - 1);
+        });
+        FrameLayout.LayoutParams jumpParams = new FrameLayout.LayoutParams(WRAP, WRAP, Gravity.END | Gravity.BOTTOM);
+        jumpParams.setMargins(dp(8), dp(8), dp(12), dp(10));
+        body.addView(jumpLatest, jumpParams);
+        jumpLatest.setVisibility(View.GONE);
+        history.setOnScrollListener(new AbsListView.OnScrollListener() {
+            public void onScrollStateChanged(AbsListView view, int scrollState) {}
+            public void onScroll(AbsListView view, int first, int visible, int total) {
+                if (jumpLatest != null)
+                    jumpLatest.setVisibility(total > 0 && first + visible < total - 2
+                            ? View.VISIBLE : View.GONE);
+            }
+        });
         ScrollView instructions = new ScrollView(this);
         instructions.setFillViewport(true);
         startPanel = column();
@@ -561,6 +578,11 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             }
         });
         root.addView(composerRow);
+        draftLength = label("", 12, MUTED, false);
+        draftLength.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+        pad(draftLength, 12, 0, 10);
+        draftLength.setVisibility(View.GONE);
+        root.addView(draftLength);
         composerRow.setVisibility(View.GONE);
         setContentView(root);
     }
@@ -602,6 +624,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         pairHint.setText("Show a key card on one phone and scan it on the other. Queue messages offline. Use local Wi-Fi, Wi-Fi Direct or Bluetooth to deliver them.");
         history.setVisibility(paired ? View.VISIBLE : View.GONE);
         composerRow.setVisibility(paired ? View.VISIBLE : View.GONE);
+        if (jumpLatest != null && !paired) jumpLatest.setVisibility(View.GONE);
         if (next.connected) radioMessage("");
         relayStatus.setText(next.relay);
         relayStatus.setVisibility(next.forwarding && !next.relay.isEmpty() ? View.VISIBLE : View.GONE);
@@ -793,7 +816,15 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     private void refreshSend() {
         if (send == null || draft == null) return;
-        send.setEnabled(link != null && renderedId != 0 && submitted == null && draft.getText().toString().trim().length() > 0);
+        String text = draft.getText().toString();
+        int bytes = text.getBytes(StandardCharsets.UTF_8).length;
+        boolean over = bytes > 4096;
+        send.setEnabled(link != null && renderedId != 0 && submitted == null && !over && !text.trim().isEmpty());
+        if (draftLength != null) {
+            draftLength.setVisibility(renderedId != 0 && (bytes >= 3072 || over) ? View.VISIBLE : View.GONE);
+            draftLength.setText(bytes + " / 4096 bytes" + (over ? " · Message too long" : ""));
+            draftLength.setTextColor(over ? 0xff8c351c : MUTED);
+        }
     }
 
     private void send() {
