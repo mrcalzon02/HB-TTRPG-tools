@@ -270,7 +270,7 @@ final class AttachmentsUi {
             entry.setMinHeight(dp(48));
             entry.setAllCaps(false);
             entry.setText(item.file.name + " · " + size(item.file.size)
-                    + "\\n" + name + " · " + stateLabel(item.file));
+                    + "\\n" + name + " · " + overviewStateLabel(item.file));
             entry.setOnClickListener(v -> {
                 if (overviewDialog != null) overviewDialog.dismiss();
                 if (listDialog != null) listDialog.dismiss();
@@ -285,6 +285,20 @@ final class AttachmentsUi {
                 }
             });
             overviewRows.addView(entry);
+        }
+    }
+
+    private String overviewStateLabel(AttachmentStore.Transfer file) {
+        if (AttachmentStore.STORAGE_REASON.equals(file.reason) && "DECLINED".equals(file.status))
+            return file.outgoing ? "Recipient has insufficient storage" : "Insufficient storage";
+        switch (file.status) {
+            case "OFFERED": return file.outgoing ? "Awaiting recipient" : "Awaiting your decision";
+            case "ACCEPTED": return (file.outgoing ? "Sending" : "Receiving")
+                    + (file.size > 0 ? " · " + (100L * file.progress / file.size) + "%" : "");
+            case "COMPLETE": return "Complete";
+            case "DECLINED": return "Declined";
+            case "CANCELED": return "Canceled";
+            default: return "Unknown";
         }
     }
 
