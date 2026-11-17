@@ -85,24 +85,21 @@ def screenshot(name):
 
 def screen_blanked():
     # Compare the actual PNG's central content area, excluding the system bars.
-    path=Path(os.environ["RUNNER_TEMP"],"CubeChatBlackFrame.java")
-    if not path.is_file():
-        path.write_text("""import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-class CubeChatBlackFrame {
-    public static void main(String[] args) throws Exception {
-        BufferedImage image=ImageIO.read(System.in);
-        for(int y=image.getHeight()/8;y<image.getHeight()*7/8;y+=2)
-            for(int x=image.getWidth()/10;x<image.getWidth()*9/10;x+=2){
-                int c=image.getRGB(x,y);
-                if(((c>>16)&255)>=20 || ((c>>8)&255)>=20 || (c&255)>=20){System.out.print("visible");return;}
-            }
-        System.out.print("hidden");
-    }
-}
-""")
-    png=ui.run(["adb","exec-out","screencap","-p"],"Check protected screen")
-    return ui.run(["java","-Djava.awt.headless=true",str(path)],"Inspect rendered capture",data=png)==b"hidden"
+    import subprocess
+    png=ui.run(["adb","exec-out","screencap","-p"],"Capture Android window")
+    # Android can deny secure display capture by returning no pixels instead of
+    # a composited black image. Visible controls are verified before AND after.
+    if not png or (not png.startswith(b"\x89PNG") and any(t in png.lower() for t in (b"permission denied", b"failed to take screenshot", b"secure window"))):
+        return True
+    if not png.startswith(b"\x89PNG"):
+        raise ui.CheckFailed("Android returned an unrecognized capture format ("+str(len(png))+" bytes)")
+    reader=subprocess.run(["java","-Xmx64m","-XX:ActiveProcessorCount=1","-Djava.awt.headless=true",
+                           "-cp",os.environ["RUNNER_TEMP"],"CubeChatBlackFrame"],
+                          input=png,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=20)
+    if reader.returncode:
+        raise ui.CheckFailed("PNG decoder exit "+str(reader.returncode)+" for "+str(len(png))+
+                             " bytes: "+reader.stderr.decode(errors="replace")[:300])
+    return reader.stdout==b"hidden"
 
 def proof():
     for phone in (HOST,GUEST):
@@ -157,6 +154,7 @@ def proof():
     ui.wait_for(lambda n:n.get("text","").startswith("1 match in the latest"),"Local search found one matching message")
     result=ui.wait_for(lambda n:PREVIOUS in n.get("text","") and " · " in n.get("text",""),"Specific search result")
     ui.tap(result); ui.named(PREVIOUS)
+    if screen_blanked(): raise ui.CheckFailed("Unprotected screen produced no usable pixels")
     click("Pairing"); click("Screen privacy"); click("Turn on"); time.sleep(.8)
     if not screen_blanked(): raise ui.CheckFailed("Screen privacy failed to hide conversation")
     click("Pairing"); click("Show my invite")

@@ -31,7 +31,7 @@ jobs:
             https://repo.maven.apache.org/maven2/com/google/zxing/core/3.5.3/core-3.5.3.jar \
             --output "$RUNNER_TEMP/zxing-core.jar"
           echo "8d8064c1636fdaef7189dd9055c7d59950a8940a12f2293956446ec3c109fd82  $RUNNER_TEMP/zxing-core.jar" | sha256sum -c -
-          javac -cp "$RUNNER_TEMP/zxing-core.jar" -d "$RUNNER_TEMP" .github/scripts/CubeChatQrReader.java
+          javac -cp "$RUNNER_TEMP/zxing-core.jar" -d "$RUNNER_TEMP" .github/scripts/CubeChatQrReader.java .github/scripts/CubeChatBlackFrame.java
       - name: Boot two Android guests and verify the conversation
         shell: bash
         run: |
