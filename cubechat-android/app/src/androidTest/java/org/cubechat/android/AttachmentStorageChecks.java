@@ -108,6 +108,14 @@ final class AttachmentStorageChecks {
         files.append(receiver,id,AttachmentStore.CHUNK,second);
         AttachmentStore.Transfer done = files.append(receiver,id,2L*AttachmentStore.CHUNK,files.readChunk(sender,id,2L*AttachmentStore.CHUNK));
         check(done.status.equals(AttachmentStore.COMPLETE) && done.progress==bytes.length,"Incomplete file received");
+        // The overview includes both ends of a transfer, and never reports
+        // a completed transfer while the receiver is still awaiting chunks.
+        java.util.List<AttachmentStore.Completed> beforeFinish = files.allTransfers();
+        boolean foundReceiving = false;
+        for (AttachmentStore.Completed item : beforeFinish)
+            if (item.contactId == receiver && id.equals(item.file.id)
+                    && AttachmentStore.COMPLETE.equals(item.file.status)) foundReceiving = true;
+        check(foundReceiving, "Transfer overview omitted verified receiving copy");
         files.finishOutgoing(sender,id);
         // Storage manager must list only finished local copies across contacts.
         java.util.List<AttachmentStore.Completed> complete = files.completed();
@@ -146,6 +154,16 @@ final class AttachmentStorageChecks {
         check(count(chats, "SELECT COUNT(*) FROM attachment_chunks WHERE id=?", rejectedId) == 0,
                 "Rejected attachment retained chunk payload");
 
+        boolean sawDecline = false, sawCanceled = false;
+        for (AttachmentStore.Completed item : files.allTransfers()) {
+            if (item.contactId == receiver && rejectedId.equals(item.file.id)
+                    && AttachmentStore.DECLINED.equals(item.file.status)) sawDecline = true;
+            if (item.contactId == receiver && bad.equals(item.file.id)
+                    && AttachmentStore.CANCELED.equals(item.file.status)) sawCanceled = true;
+            check(!AttachmentStore.REMOVED.equals(item.file.status),
+                    "Transfer overview includes removed attachments");
+        }
+        check(sawDecline && sawCanceled, "Transfer overview omitted stopped transfers");
         files.removeCompleted(receiver,id);
         check(files.get(receiver,id).status.equals(AttachmentStore.REMOVED),"Lost replay decision for removed file");
         for (AttachmentStore.Completed item : files.completed())
