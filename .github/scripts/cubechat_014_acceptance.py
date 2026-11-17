@@ -1,5 +1,6 @@
 """Exercise the signed Android build through its real lock, pairing and system data-clear flows."""
 import os
+import re
 from pathlib import Path
 import sys
 import time
@@ -139,13 +140,14 @@ def screenshot(label):
 def path_exists(path):
     return ui.shell("sh","-c","'if [ -e "+path+" ]; then echo present; fi'")=="present"
 
-def expect_system_clear():
+def expect_system_clear(submitted_at=None):
     # No pm clear, uninstall, test recovery or test-only API is used on the sender.
     end=time.monotonic()+22
     while time.monotonic()<end:
         if not ui.shell("pidof",ui.APP,required=False):break
         time.sleep(.2)
     else:raise ui.CheckFailed("Android did not stop the package after duress")
+    exit_seconds = time.monotonic() - submitted_at if submitted_at is not None else None
     protected="/data/user/0/"+ui.APP
     old=("databases/cubechat-direct.db","databases/cubechat-direct.db-wal","shared_prefs","no_backup/cubechat-direct.db.purge-pending")
     while any(path_exists(protected+"/"+child) for child in old):
@@ -154,6 +156,46 @@ def expect_system_clear():
     open_app();match("Pair two phones");match("Create local profile")
     if visible("Unlock") or visible(SEED):
         raise ui.CheckFailed("Previously protected state reappeared after relaunch")
+    return exit_seconds
+
+def ready_unlock():
+    return ui.wait_for(lambda n:n.get("package")==ui.APP and n.get("text","").casefold()=="unlock"
+                       and n.get("enabled")=="true","Unlock after the vault is sealed",30)
+
+def require_stopped_process(pid):
+    deadline=time.monotonic()+5
+    while time.monotonic()<deadline:
+        state=ui.shell("cat","/proc/"+pid+"/status",required=False)
+        if re.search(r"^State:\s+T\s+\(stopped\)",state,re.MULTILINE): return
+        time.sleep(.05)
+    raise ui.CheckFailed("The receiving Android process did not remain stopped")
+
+def purge_while_peer_stopped():
+    # Prepare both secure lock forms before suspending the recipient. All application
+    # threads in that PID then stop. Its already-established TCP connection stays open.
+    phones.select(GUEST); ready_unlock()
+    pid=ui.shell("pidof",ui.APP).strip()
+    if not pid.isdigit(): raise ui.CheckFailed("Expected exactly one receiving CubeChat process")
+    phones.select(HOST); files.connected(); lock(); ready_unlock()
+    field("Password",DURESS); submit=ready_unlock()
+    phones.select(GUEST)
+    try:
+        ui.shell("kill","-STOP",pid,label="Stop synthetic recipient before sender activation")
+        require_stopped_process(pid)
+        phones.select(HOST)
+        submitted=time.monotonic()
+        ui.tap(submit)
+        exit_seconds=expect_system_clear(submitted)
+        phones.select(GUEST)
+        require_stopped_process(pid)
+        ui.report(f"During the entire sender reset, recipient /proc/{pid}/status reported T (stopped) "
+                  f"before the password tap and again after the sender returned to first launch. "
+                  f"Observed sender process exit {exit_seconds:.2f} seconds after tap, including verification of the password and Android cleanup.")
+    finally:
+        phones.select(GUEST)
+        ui.shell("kill","-CONT",pid,required=False,label="Resume the synthetic recipient")
+    match("Unlock"); sign(NORMAL); notice(); match("ProtectedPeerRetainsHistory"); screenshot("locked-peer")
+    ui.report("After SIGCONT and normal unlock, the receiver showed the queued PURGE announcement and preceding history. Its own profile survived.")
 
 def notice():
     return ui.wait_for(lambda n:"purge protocol" in n.get("text","").lower() and
@@ -204,9 +246,7 @@ def drill():
     phones.select(HOST);files.connected();enroll()
     phones.select(GUEST);files.connected();enroll();files.connected()
     phones.send("ProtectedPeerRetainsHistory");phones.receipt("ProtectedPeerRetainsHistory","Delivered");lock()
-    phones.select(HOST);files.connected();lock();sign(DURESS);expect_system_clear()
-    phones.select(GUEST);match("Unlock");sign(NORMAL);notice();match("ProtectedPeerRetainsHistory");screenshot("locked-peer")
-    ui.report("A locked build-5 receiving phone committed the announcement while its vault was sealed and displayed it after normal sign-in. It retained its own profile.")
+    purge_while_peer_stopped()
     # A cold offline installation with no peer also completes a real Android data clear.
     phones.select(HOST);enroll();phones.stop();ui.shell("svc","wifi","disable")
     open_app();match("Unlock");sign(DURESS);expect_system_clear()
