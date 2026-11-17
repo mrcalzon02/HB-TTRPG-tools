@@ -31,11 +31,17 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          trap 'echo "Bluetooth emulator setup failed at shell line $LINENO (exit $?)"' ERR
           test -c /dev/kvm
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-cubechat-kvm.rules > /dev/null
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          sudo udevadm settle
           sudo setfacl -m "u:$(id -un):rw" /dev/kvm
+          test -w /dev/kvm
           export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
           sdkmanager --install "emulator" "platform-tools" "system-images;android-35;google_apis;x86_64" > "$RUNNER_TEMP/radio-sdk-install.log"
-          version=$(emulator -version 2>&1 | sed -nE 's/.*Android emulator version ([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' | head -1)
+          version=$(sed -nE 's/^Pkg.Revision=([0-9.]+).*/\1/p' "$ANDROID_HOME/emulator/source.properties")
           test -n "$version"
           dpkg --compare-versions "$version" ge "36.5"
           echo "Android Emulator $version, two Android 35 google_apis x86_64 images."
