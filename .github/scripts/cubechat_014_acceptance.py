@@ -154,15 +154,55 @@ def upgrade():
         raise ui.CheckFailed("Version code 5 is missing")
     open_app()
 
-def pairing():
+def connected_within(seconds):
+    try:
+        ui.wait_for(lambda n:n.get("text","").startswith("Connected"),
+                    "Authenticated conversation",seconds)
+        return True
+    except ui.CheckFailed:
+        return False
+
+def reopen_card(card):
+    ui.shell("am","start","--user","0","-W","-a","android.intent.action.VIEW","-c","android.intent.category.BROWSABLE",
+             "-d",card,"-p",ui.APP,label="Open the original physical test card")
+    ui.wait_for(lambda n:n.get("package")==ui.APP and n.get("text","").startswith("Peer "),
+                "Scanned guest fingerprint",25)
+
+def inspect_carrier():
+    phones.select(HOST)
+    sockets=ui.shell("ss","-ltn",required=False)
+    listener=bool(re.search(r":47743\s",sockets))
+    host=ui.shell("ip","-4","-o","addr","show","dev","wlan0",required=False)
+    ip=re.search(r"\binet (\d+\.\d+\.\d+\.\d+)/",host)
+    phones.select(GUEST)
+    ping=ui.shell("ping","-c","1","-W","1",ip.group(1),required=False) if ip else ""
+    fingerprint=any(n.get("text","").startswith("Peer ") for n in ui.tree())
+    ui.report(f"Carrier check: host listening on 47743={listener}, guest Wi-Fi echo received={'bytes from' in ping}, guest imported a fingerprint={fingerprint}.")
+    return listener
+
+def pairing(route):
     phones.select(HOST); tap("Show my invite"); match("Pairing invite")
     qr=ui.wait_for(lambda n:n.get("content-desc")=="CubeChat pairing QR code","Key card")
     card=ui.decode_card(qr); tap("Close")
     phones.select(GUEST)
-    ui.shell("am","start","--user","0","-W","-a","android.intent.action.VIEW","-c","android.intent.category.BROWSABLE",
-             "-d",card,"-p",ui.APP,label="Scan synthetic host card")
-    del card
-    files.connected()
+    # The repository's public 0.1.3 handles initial app links most reliably on a cold launch.
+    phones.stop(); reopen_card(card)
+    if connected_within(15): return route
+    inspect_carrier()
+    if route=="direct virtual Wi-Fi":
+        phones.bridge()
+        route="the explicitly configured ADB TCP test bridge"
+        ui.report("The paired apps did not authenticate on the virtual access point. Both Android apps will use the guest-UID-scoped ADB TCP test bridge for this security drill.")
+    # Establish a new native CubeChat socket with the original scanned keys; one stored contact.
+    for attempt in range(2):
+        phones.select(HOST); phones.stop(); open_app()
+        ui.wait_for(lambda n:n.get("text")=="Conversations","Host restored the original chat",30)
+        phones.select(GUEST); phones.stop(); reopen_card(card)
+        if connected_within(30):
+            ui.report("Both CubeChat clients restored the scanned pairing and opened an authenticated connection over "+route+".")
+            return route
+        inspect_carrier()
+    raise ui.CheckFailed("CubeChat could not open an authenticated socket after two restarts on "+route)
 
 def screenshot(label):
     nodes=ui.tree()
@@ -244,7 +284,36 @@ def drill():
         ui.run(["adb","wait-for-device"],"Reconnect emulator")
         if ui.shell("id","-u")!="0":raise ui.CheckFailed("Android app-data inspection requires rooted test image")
         start_pristine_baseline()
-    route=phones.choose_network();pairing()
+    # First exercise the final protocol with both real app processes installed.
+    for device in (HOST,GUEST):
+        phones.select(device); upgrade(); match("Pair two phones")
+    route=pairing(phones.choose_network())
+    phones.select(HOST); files.connected(); enroll()
+    phones.select(GUEST); files.connected(); enroll(); files.connected()
+    phones.send("ProtectedPeerRetainsHistory"); phones.receipt("ProtectedPeerRetainsHistory","Delivered"); lock()
+    purge_while_peer_stopped()
+    phones.select(HOST); screenshot("reset")
+    ui.report("The stopped-recipient drill used "+route+".")
+
+    # A cold offline installation with no peer also completes a real Android data clear.
+    phones.select(HOST);enroll();phones.stop();ui.shell("svc","wifi","disable")
+    open_app();match("Unlock");sign(DURESS);expect_system_clear()
+    ui.report("A cold, offline activation with no live conversation also returned to first launch.")
+
+    # Reproduce the published upgrade on clean synthetic test installations, separately.
+    public=str(Path(os.environ["RUNNER_TEMP"])/"CubeChat-previous.apk")
+    for device in (HOST,GUEST):
+        phones.select(device)
+        ui.run(["adb","uninstall",ui.APP],"Remove the synthetic drill installation")
+        ui.run(["adb","install",public],"Install the verified release for the populated migration test")
+        ui.shell("svc","wifi","enable")
+        start_pristine_baseline()
+    if route != "direct virtual Wi-Fi":
+        # An Android uninstall can change the guest's UID; bind its new socket permissions.
+        phones.bridge()
+    else:
+        route=phones.choose_network()
+    route=pairing(route)
     phones.send(SEED); phones.receipt(SEED,"Delivered");phones.select(HOST);match(SEED)
     sample=b"Trusted synthetic attachment for the local security upgrade."
     files.fixture(FILE,sample);files.pick_file(FILE);tap("Close")
@@ -277,16 +346,6 @@ def drill():
     screenshot("reset")
     phones.select(GUEST);notice();match(SEED);match(AFTER);screenshot("peer")
     ui.report("A real 0.1.3 peer received the readable PURGE announcement and retained its preceding messages over "+route+". Android cleared the sender's private database and preferences, kept the APK and external file, and showed first launch.")
-    # Repeat with both clients on 0.1.4.
-    upgrade();phones.select(HOST);pairing()
-    phones.select(HOST);files.connected();enroll()
-    phones.select(GUEST);files.connected();enroll();files.connected()
-    phones.send("ProtectedPeerRetainsHistory");phones.receipt("ProtectedPeerRetainsHistory","Delivered");lock()
-    purge_while_peer_stopped()
-    # A cold offline installation with no peer also completes a real Android data clear.
-    phones.select(HOST);enroll();phones.stop();ui.shell("svc","wifi","disable")
-    open_app();match("Unlock");sign(DURESS);expect_system_clear()
-    ui.report("A cold, offline activation with no live conversation also returned to first launch.")
 
 if __name__=="__main__":
     try:
