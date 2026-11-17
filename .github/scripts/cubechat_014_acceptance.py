@@ -114,6 +114,19 @@ def tap(label):
 def visible(label):
     return any(n.get("text","").casefold()==label.casefold() for n in ui.tree())
 
+def keyboard_visible():
+    # Android can decline a diagnostic dump while switching focused editors.
+    # Field entry and the next visible form control establish the actual test outcome.
+    try:
+        state = ui.shell("dumpsys", "-t", "2", "input_method", required=False, timeout=5)
+    except ui.CheckFailed:
+        state = ""
+    if "mInputShown=true" in state or "isInputViewShown=true" in state:
+        return True
+    if not state or "DUMP TIMEOUT" in state:
+        return any(".inputmethod." in node.get("package", "") for node in ui.tree())
+    return False
+
 def field(label, value):
     def locate(n):
         return (n.get("class")=="android.widget.EditText" and
@@ -122,8 +135,7 @@ def field(label, value):
     e=find_visible(locate,"Input field "+label,35)
     ui.tap(e)
     ui.shell("input","text",value,label="Enter synthetic data")
-    ime=ui.shell("dumpsys","input_method")
-    if "mInputShown=true" in ime or "isInputViewShown=true" in ime:
+    if keyboard_visible():
         ui.shell("input","keyevent","KEYCODE_BACK")
 
 def security():
@@ -142,8 +154,7 @@ def chat_preferences():
     draft=ui.wait_for(lambda n:n.get("class")=="android.widget.EditText","Chat composer")
     ui.tap(draft);ui.shell("input","text","EnterKeyDelivery");ui.shell("input","keyevent","KEYCODE_ENTER")
     phones.receipt("EnterKeyDelivery","Delivered")
-    ime=ui.shell("dumpsys","input_method")
-    if "mInputShown=true" in ime or "isInputViewShown=true" in ime: ui.shell("input","keyevent","KEYCODE_BACK")
+    if keyboard_visible(): ui.shell("input","keyevent","KEYCODE_BACK")
     tap("Pairing");tap("Chat preferences")
     for name in ("Large","Enter sends a message","Ask keyboard not to learn chat text"):
         if match(name).get("checked")!="true":
