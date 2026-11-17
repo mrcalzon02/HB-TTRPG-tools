@@ -1,0 +1,103 @@
+name: CubeChat simulated Bluetooth Classic
+on:
+  push:
+    branches:
+      - qa/cubechat-android-0.1.0
+    paths:
+      - '.github/workflows/cubechat-bluetooth-qa.yml'
+      - '.github/scripts/cubechat_bluetooth_qa.py'
+permissions:
+  contents: read
+jobs:
+  bluetooth:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            .github/scripts
+            cubechat-android/downloads
+      - name: Verify release APK and QR decoder
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '51b845ddf7564dd1887dc7ab9bf51eddb7a8e0c93a6365314c7ddd4865514d69  cubechat-android/downloads/CubeChat.apk' | sha256sum -c -
+          curl --fail --silent --show-error --location --retry 2 https://repo.maven.apache.org/maven2/com/google/zxing/core/3.5.3/core-3.5.3.jar -o "$RUNNER_TEMP/zxing-core.jar"
+          echo "8d8064c1636fdaef7189dd9055c7d59950a8940a12f2293956446ec3c109fd82  $RUNNER_TEMP/zxing-core.jar" | sha256sum -c -
+          javac -cp "$RUNNER_TEMP/zxing-core.jar" -d "$RUNNER_TEMP" .github/scripts/CubeChatQrReader.java
+      - name: Boot two API 35 phones and exchange messages through RFCOMM
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -c /dev/kvm
+          sudo setfacl -m "u:$(id -un):rw" /dev/kvm
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+          sdkmanager --install "emulator" "platform-tools" "system-images;android-35;google_apis;x86_64" > "$RUNNER_TEMP/radio-sdk-install.log"
+          version=$(emulator -version 2>&1 | sed -nE 's/.*Android emulator version ([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' | head -1)
+          test -n "$version"
+          dpkg --compare-versions "$version" ge "36.5"
+          echo "Android Emulator $version, two Android 35 google_apis x86_64 images."
+          export ANDROID_USER_HOME="$RUNNER_TEMP/cubechat-bt-android"
+          export ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"
+          test -f "$ANDROID_HOME/system-images/android-35/google_apis/x86_64/system.img"
+          adb start-server
+          pids=()
+          trap 'for p in "${pids[@]}"; do kill "$p" 2>/dev/null || true; done' EXIT
+          for port in 5554 5556; do
+            name="cubechat-bt-$port"
+            dir="$ANDROID_AVD_HOME/$name.avd"
+            mkdir -p "$dir"
+            printf '%s\n' 'avd.ini.encoding=UTF-8' "path=$dir" 'target=android-35' > "$ANDROID_AVD_HOME/$name.ini"
+            cat > "$dir/config.ini" <<AVD
+          AvdId=$name
+          avd.ini.displayname=$name
+          abi.type=x86_64
+          hw.cpu.arch=x86_64
+          image.sysdir.1=system-images/android-35/google_apis/x86_64/
+          tag.id=google_apis
+          tag.display=Google APIs
+          hw.lcd.width=720
+          hw.lcd.height=1280
+          hw.lcd.density=240
+          hw.ramSize=2048
+          vm.heapSize=256
+          disk.dataPartition.size=2G
+          hw.keyboard=yes
+          hw.gpu.enabled=yes
+          hw.audioInput=no
+          hw.audioOutput=no
+          fastboot.forceColdBoot=yes
+          AVD
+            emulator -avd "$name" -port "$port" -cores 2 -accel on -memory 2048 \
+              -no-window -no-snapshot -no-boot-anim -no-audio -no-metrics \
+              -gpu swiftshader_indirect -feature -Vulkan > "$RUNNER_TEMP/bt-$port.log" 2>&1 &
+            pids+=("$!")
+            # Start the second instance after the first process has initialized the shared netsimd.
+            if [[ "$port" == 5554 ]]; then
+              timeout 120 adb -s emulator-5554 wait-for-device
+            fi
+          done
+          deadline=$((SECONDS + 440))
+          for port in 5554 5556; do
+            adbserial=(adb -s "emulator-$port")
+            while [[ "$(timeout 4 "${adbserial[@]}" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r' || true)" != 1 ]]; do
+              if (( SECONDS >= deadline )); then tail -30 "$RUNNER_TEMP/bt-$port.log"; exit 1; fi
+              sleep 2
+            done
+            "${adbserial[@]}" shell wm dismiss-keyguard
+            "${adbserial[@]}" shell input keyevent 82
+            "${adbserial[@]}" shell wm size 720x1280
+            "${adbserial[@]}" shell wm density 240
+            "${adbserial[@]}" shell settings put global window_animation_scale 0
+            "${adbserial[@]}" shell settings put global transition_animation_scale 0
+            "${adbserial[@]}" shell settings put global animator_duration_scale 0
+            "${adbserial[@]}" shell settings put system screen_off_timeout 1800000
+            "${adbserial[@]}" shell pm list features | tr -d '\r' | grep -Fx 'feature:android.hardware.bluetooth'
+            "${adbserial[@]}" shell service check bluetooth_manager
+            "${adbserial[@]}" shell svc wifi disable
+            "${adbserial[@]}" shell svc data disable
+            "${adbserial[@]}" install -r cubechat-android/downloads/CubeChat.apk
+          done
+          python3 .github/scripts/cubechat_bluetooth_qa.py
