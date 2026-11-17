@@ -109,6 +109,16 @@ final class AttachmentStorageChecks {
         AttachmentStore.Transfer done = files.append(receiver,id,2L*AttachmentStore.CHUNK,files.readChunk(sender,id,2L*AttachmentStore.CHUNK));
         check(done.status.equals(AttachmentStore.COMPLETE) && done.progress==bytes.length,"Incomplete file received");
         files.finishOutgoing(sender,id);
+        // Storage manager must list only finished local copies across contacts.
+        java.util.List<AttachmentStore.Completed> complete = files.completed();
+        check(complete.size() >= 2, "Completed file index omitted a contact");
+        boolean senderFound = false, receiverFound = false;
+        for (AttachmentStore.Completed item : complete) {
+            if (item.contactId == sender && id.equals(item.file.id)) senderFound = true;
+            if (item.contactId == receiver && id.equals(item.file.id)) receiverFound = true;
+            check(AttachmentStore.COMPLETE.equals(item.file.status), "Cleanup offered an active transfer");
+        }
+        check(senderFound && receiverFound, "Cleanup did not include both conversation copies");
         files.exportFile(receiver,id,dest);
         check(Arrays.equals(bytes,dest.toByteArray()),"Export changed the file");
         check(files.list(unrelated).isEmpty(),"Transfer appeared on unrelated contact");
@@ -138,6 +148,10 @@ final class AttachmentStorageChecks {
 
         files.removeCompleted(receiver,id);
         check(files.get(receiver,id).status.equals(AttachmentStore.REMOVED),"Lost replay decision for removed file");
+        for (AttachmentStore.Completed item : files.completed())
+            check(!(item.contactId == receiver && id.equals(item.file.id)), "Cleanup still lists deleted vault copy");
+        check(files.get(sender,id).status.equals(AttachmentStore.COMPLETE),
+                "Cross-conversation cleanup affected the sending copy");
         refused(() -> files.exportFile(receiver,id,dest));
         String emptyHash = DirectProtocol.hex(MessageDigest.getInstance("SHA-256").digest(new byte[0]));
         String empty = UUID.randomUUID().toString();
