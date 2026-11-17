@@ -158,6 +158,7 @@ final class AttachmentsUi {
     void showFiles() {
         PeerLink.Snapshot state = link.snapshot();
         if (state.activeId == 0 || listDialog != null) return;
+        link.refreshAttachmentSpace();
         dialogContact = state.activeId;
         LinearLayout content = panel();
         connection = text(14);
