@@ -23,6 +23,16 @@ final class AttachmentStorageChecks {
         try (Cursor c = db.getReadableDatabase().rawQuery(sql,args)) { c.moveToFirst(); return c.getLong(0); }
     }
     static void run(Context context) throws Exception {
+        // Capacity checks run without filling the device. They cover headroom,
+        // simultaneous accepted transfers and exact-fit boundary conditions.
+        long mb = 1024L * 1024;
+        check(!AttachmentStore.hasIncomingCapacity(4 * mb, 0, 1), "No safety margin");
+        check(!AttachmentStore.hasIncomingCapacity(3 * mb, 0, 0), "Unreliable low-space reading");
+        check(AttachmentStore.hasIncomingCapacity(20 * mb, 0, 8 * mb), "Valid eight MiB file refused");
+        check(AttachmentStore.hasIncomingCapacity(20 * mb, 4 * mb, 4 * mb), "Valid shared capacity refused");
+        check(!AttachmentStore.hasIncomingCapacity(20 * mb, 4 * mb, 5 * mb), "Overcommitted concurrent files");
+        check(!AttachmentStore.hasIncomingCapacity(20 * mb, 9 * mb, 0), "Existing transfers exceed budget");
+        check(!AttachmentStore.hasIncomingCapacity(Long.MAX_VALUE, 0, -1), "Negative offer accepted");
         String name = "cubechat-files-test-" + UUID.randomUUID() + ".db";
         try {
             Pairing original = Pairing.host(null);
