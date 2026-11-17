@@ -59,6 +59,22 @@ final class AttachmentStore {
         }
     }
 
+    List<Completed> allTransfers() throws Exception {
+        ArrayList<Completed> result = new ArrayList<>();
+        try (Cursor c = store.getReadableDatabase().rawQuery(
+                "SELECT " + COLUMNS + ",contact FROM attachments "
+                + "WHERE status IN ('OFFERED','ACCEPTED','COMPLETE','DECLINED','CANCELED') "
+                + "ORDER BY CASE status WHEN 'OFFERED' THEN 0 WHEN 'ACCEPTED' THEN 1 "
+                + "WHEN 'DECLINED' THEN 2 WHEN 'CANCELED' THEN 3 ELSE 4 END, rowid DESC",
+                null)) {
+            while (c.moveToNext()) {
+                long contactId = c.getLong(FIELDS.length);
+                result.add(new Completed(contactId, decode(contactId, c)));
+            }
+        }
+        return Collections.unmodifiableList(result);
+    }
+
     List<Completed> completed() throws Exception {
         ArrayList<Completed> result = new ArrayList<>();
         try (Cursor c = store.getReadableDatabase().rawQuery(
