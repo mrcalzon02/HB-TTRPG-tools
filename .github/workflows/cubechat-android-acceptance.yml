@@ -36,16 +36,52 @@ jobs:
           sudo setfacl -m "u:$(id -un):rw" /dev/kvm
           export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
           sdkmanager --install "emulator" "platform-tools" "system-images;android-30;default;x86_64" > "$RUNNER_TEMP/sdk-install.log"
-          printf 'no\n' | avdmanager create avd --name cubechat-qa --package "system-images;android-30;default;x86_64"
+          export ANDROID_USER_HOME="$RUNNER_TEMP/cubechat-android"
+          export ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"
+          avd_dir="$ANDROID_AVD_HOME/cubechat-qa.avd"
+          mkdir -p "$avd_dir"
+          printf '%s\n' 'avd.ini.encoding=UTF-8' "path=$avd_dir" 'target=android-30' > "$ANDROID_AVD_HOME/cubechat-qa.ini"
+          cat > "$avd_dir/config.ini" <<'AVD'
+          AvdId=cubechat-qa
+          avd.ini.displayname=CubeChat QA
+          abi.type=x86_64
+          hw.cpu.arch=x86_64
+          image.sysdir.1=system-images/android-30/default/x86_64/
+          tag.id=default
+          tag.display=Default
+          hw.lcd.width=720
+          hw.lcd.height=1280
+          hw.lcd.density=240
+          hw.ramSize=2048
+          vm.heapSize=256
+          disk.dataPartition.size=2G
+          hw.keyboard=yes
+          hw.gpu.enabled=yes
+          hw.audioInput=no
+          hw.audioOutput=no
+          fastboot.forceColdBoot=yes
+          AVD
+          test -f "$ANDROID_HOME/system-images/android-30/default/x86_64/system.img"
+          emulator -list-avds | grep -Fx cubechat-qa
           emulator -avd cubechat-qa -port 5554 -accel on -cores 2 -memory 2048 \
             -no-window -no-snapshot -no-boot-anim -no-audio -no-metrics \
             -gpu swiftshader_indirect -feature -Vulkan > "$RUNNER_TEMP/emulator.log" 2>&1 &
           emulator_pid=$!
           trap 'kill "$emulator_pid" 2>/dev/null || true' EXIT
           adb start-server
-          if ! timeout 300 bash -c 'until [[ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r")" == 1 ]]; do sleep 3; done'; then
-            echo 'Android failed to finish booting within five minutes.'
-            tail -25 "$RUNNER_TEMP/emulator.log"
+          booted=''
+          for attempt in {1..100}; do
+            if ! kill -0 "$emulator_pid" 2>/dev/null; then
+              tail -40 "$RUNNER_TEMP/emulator.log"
+              exit 1
+            fi
+            booted=$(timeout 4 adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r' || true)
+            if [[ "$booted" == 1 ]]; then break; fi
+            sleep 3
+          done
+          if [[ "$booted" != 1 ]]; then
+            echo 'Android boot timed out.'
+            tail -40 "$RUNNER_TEMP/emulator.log"
             exit 1
           fi
           adb shell input keyevent 82
