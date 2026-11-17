@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -241,14 +242,43 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         setIntent(new Intent(this, MainActivity.class));
     }
     void announcePurge(Runnable cleared) {
-        clearOwnInviteClipboard();
+        clearOwnClipboard();
         PeerLink.announcePurgeToAll(cleared);
     }
-    private void clearOwnInviteClipboard() {
+    private static final String CLIP_MARKER = "org.cubechat.android.private-clip";
+    private static final String LEGACY_INVITE_MARKER = "org.cubechat.android.key-card";
+
+    static ClipData privateClip(String label, String text) {
+        ClipData clip = ClipData.newPlainText(label, text);
+        PersistableBundle extras = new PersistableBundle();
+        extras.putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true);
+        extras.putBoolean(CLIP_MARKER, true);
+        clip.getDescription().setExtras(extras);
+        return clip;
+    }
+
+    static boolean isCubeChatClip(ClipDescription info) {
+        if (info == null || info.getExtras() == null) return false;
+        PersistableBundle extras = info.getExtras();
+        return extras.getBoolean(CLIP_MARKER, false) || extras.getBoolean(LEGACY_INVITE_MARKER, false);
+    }
+
+    private void copyPrivateText(String label, String text, String confirmation) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        if (clipboard != null) {
+            try {
+                clipboard.setPrimaryClip(privateClip(label, text));
+                Toast.makeText(this, confirmation, Toast.LENGTH_SHORT).show();
+                return;
+            } catch (RuntimeException ignored) { /* Clipboard access can be restricted. */ }
+        }
+        Toast.makeText(this, "Clipboard unavailable", Toast.LENGTH_SHORT).show();
+    }
+
+    private void clearOwnClipboard() {
         try {
             ClipboardManager clipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
-            android.content.ClipDescription info = clipboard.getPrimaryClipDescription();
-            if (info == null || info.getExtras() == null || !info.getExtras().getBoolean("org.cubechat.android.key-card", false)) return;
+            if (clipboard == null || !isCubeChatClip(clipboard.getPrimaryClipDescription())) return;
             if (android.os.Build.VERSION.SDK_INT >= 28) clipboard.clearPrimaryClip();
             else clipboard.setPrimaryClip(ClipData.newPlainText("", ""));
         } catch (RuntimeException ignored) { /* Android can restrict clipboard access in the background. */ }
@@ -847,22 +877,15 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     private void showDraftActions(View anchor) {
         if (!chatOpen() || renderedId == 0 || draft == null || submitted != null) return;
+        long contactId = renderedId;
         PopupMenu menu = new PopupMenu(this, anchor);
         menu.getMenu().add("Copy draft").setEnabled(draft.length() > 0);
         menu.getMenu().add("Clear draft").setEnabled(draft.length() > 0);
         menu.setOnMenuItemClickListener(item -> {
-            if (!chatOpen() || draft == null || renderedId == 0 || submitted != null) return true;
+            if (!chatOpen() || draft == null || renderedId != contactId || submitted != null) return true;
             String contents = draft.getText().toString();
             if ("Copy draft".contentEquals(item.getTitle())) {
-                try {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    if (clipboard != null) {
-                        clipboard.setPrimaryClip(ClipData.newPlainText("CubeChat draft", contents));
-                        Toast.makeText(this, "Draft copied", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (RuntimeException ignored) {
-                    Toast.makeText(this, "Clipboard unavailable", Toast.LENGTH_SHORT).show();
-                }
+                copyPrivateText("CubeChat draft", contents, "Draft copied");
             } else if ("Clear draft".contentEquals(item.getTitle()) && !contents.isEmpty()) {
                 forgetClearedDraft();
                 clearedDraft = contents;
@@ -1159,13 +1182,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         dialog.setOnDismissListener(d -> inviteDialog = null);
         dialog.show();
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(v -> {
-            ClipData clip = ClipData.newPlainText("CubeChat invite", code);
-            PersistableBundle extras = new PersistableBundle();
-            extras.putBoolean("android.content.extra.IS_SENSITIVE", true);
-            extras.putBoolean("org.cubechat.android.key-card", true);
-            clip.getDescription().setExtras(extras);
-            ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(clip);
-            Toast.makeText(this, "Invite copied", Toast.LENGTH_SHORT).show();
+            copyPrivateText("CubeChat invite", code, "Invite copied");
         });
     }
 
@@ -1333,15 +1350,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         PopupMenu menu = new PopupMenu(this, anchor);
         menu.getMenu().add("Copy message").setOnMenuItemClickListener(item -> {
             if (!chatOpen() || renderedId != contactId) return true;
-            try {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                if (clipboard != null) {
-                    clipboard.setPrimaryClip(ClipData.newPlainText("CubeChat message", message.text));
-                    Toast.makeText(this, "Message copied", Toast.LENGTH_SHORT).show();
-                }
-            } catch (RuntimeException ignored) {
-                Toast.makeText(this, "Clipboard unavailable", Toast.LENGTH_SHORT).show();
-            }
+            copyPrivateText("CubeChat message", message.text, "Message copied");
             return true;
         });
         menu.getMenu().add("Quote in reply").setOnMenuItemClickListener(item -> {

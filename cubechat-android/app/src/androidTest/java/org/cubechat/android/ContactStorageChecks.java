@@ -2,11 +2,14 @@ package org.cubechat.android;
 
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 
 import java.nio.ByteBuffer;
@@ -30,9 +33,11 @@ public final class ContactStorageChecks extends Instrumentation {
         Bundle result = new Bundle();
         int code = Activity.RESULT_OK;
         try {
+            checkClipboardMetadata();
             checkUpgradeAndIsolation(context, name);
             AttachmentStorageChecks.run(context);
             VaultStorageChecks.run(context);
+            result.putString("cubechat_checks", "passed");
             result.putString("stream", "PASS: SQLite upgrade, contact isolation, drafts, counters and attachment vault.\nPASS: password-gated migration, credential changes, locked PURGE notices and durable reset marker.\n");
         } catch (Throwable failure) {
             code = Activity.RESULT_CANCELED;
@@ -45,6 +50,24 @@ public final class ContactStorageChecks extends Instrumentation {
 
     private static void check(boolean condition, String detail) {
         if (!condition) throw new AssertionError(detail);
+    }
+
+    private static void checkClipboardMetadata() {
+        ClipData chat = MainActivity.privateClip("CubeChat draft", "sample draft");
+        check("sample draft".contentEquals(chat.getItemAt(0).getText()), "Copy changed selected text");
+        check(chat.getDescription().getExtras().getBoolean(ClipDescription.EXTRA_IS_SENSITIVE),
+                "Private clip missing preview protection");
+        check(MainActivity.isCubeChatClip(chat.getDescription()), "PURGE missed CubeChat copy");
+
+        ClipDescription other = ClipData.newPlainText("CubeChat draft", "other").getDescription();
+        check(!MainActivity.isCubeChatClip(other), "Clip label treated as ownership");
+        PersistableBundle extras = new PersistableBundle();
+        extras.putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true);
+        other.setExtras(extras);
+        check(!MainActivity.isCubeChatClip(other), "Unrelated sensitive clip selected for removal");
+        extras.putBoolean("org.cubechat.android.key-card", true);
+        other.setExtras(extras);
+        check(MainActivity.isCubeChatClip(other), "Existing release's invite marker lost");
     }
 
     private static byte[] v1Blob(SecretKey key, String aad, String text) throws Exception {
