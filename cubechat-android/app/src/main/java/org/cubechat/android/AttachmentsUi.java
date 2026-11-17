@@ -33,8 +33,10 @@ final class AttachmentsUi {
     private final PeerLink link;
     private final Button notice;
     private final FileRows rows = new FileRows();
-    private AlertDialog listDialog, detailDialog, removeDialog, cleanupDialog;
-    private LinearLayout cleanupRows;
+    private AlertDialog listDialog, detailDialog, removeDialog, cleanupDialog, overviewDialog;
+    private LinearLayout cleanupRows, overviewRows;
+    private long openTransferContact;
+    private String openTransferId;
     private TextView connection, storageSummary, detailStatus, detailBytes;
     private ProgressBar progress;
     private LinearLayout actions;
@@ -117,6 +119,15 @@ final class AttachmentsUi {
             else renderDetail(selected);
         }
         if (cleanupDialog != null) renderCleanup(state);
+        if (overviewDialog != null) renderOverview(state);
+        if (openTransferContact != 0 && state.loaded && state.activeId == openTransferContact) {
+            String id = openTransferId;
+            openTransferContact = 0;
+            openTransferId = null;
+            showFiles();
+            AttachmentStore.Transfer chosen = find(state.files, id);
+            if (chosen != null) showDetail(state, chosen);
+        }
         if (state.loaded && pendingUri != null) finishPicker(state);
     }
 
@@ -169,6 +180,12 @@ final class AttachmentsUi {
         storageSummary = text(13);
         storageSummary.setText(spaceText(state));
         content.addView(storageSummary);
+        Button overview = new Button(screen);
+        overview.setAllCaps(false);
+        overview.setText("All conversations · Transfer status");
+        overview.setMinHeight(dp(48));
+        overview.setOnClickListener(v -> showOverview());
+        content.addView(overview);
         FrameLayout box = new FrameLayout(screen);
         content.addView(box);
         ListView list = new ListView(screen);
@@ -198,6 +215,77 @@ final class AttachmentsUi {
             }
         });
         opened.show();
+    }
+
+    private void showOverview() {
+        if (overviewDialog != null) return;
+        link.refreshTransferOverview();
+        LinearLayout content = panel();
+        TextView intro = text(14);
+        intro.setText("Transfer status across conversations. Open a file to switch to its conversation for details and actions.");
+        content.addView(intro);
+        overviewRows = new LinearLayout(screen);
+        overviewRows.setOrientation(LinearLayout.VERTICAL);
+        content.addView(overviewRows);
+        ScrollView scroll = new ScrollView(screen);
+        scroll.addView(content);
+        AlertDialog opened = DisplayPrivacy.dialog(screen).setTitle("All file transfers")
+                .setView(scroll).setNegativeButton("Close", null).create();
+        overviewDialog = opened;
+        opened.setOnDismissListener(d -> {
+            if (overviewDialog == opened) { overviewDialog = null; overviewRows = null; }
+        });
+        renderOverview(link.snapshot());
+        opened.show();
+    }
+
+    private void renderOverview(PeerLink.Snapshot state) {
+        if (overviewRows == null) return;
+        overviewRows.removeAllViews();
+        int offers = 0, active = 0, failed = 0, complete = 0;
+        for (AttachmentStore.Completed item : state.transferOverview) {
+            switch (item.file.status) {
+                case "OFFERED": offers++; break;
+                case "ACCEPTED": active++; break;
+                case "COMPLETE": complete++; break;
+                case "DECLINED":
+                case "CANCELED": failed++; break;
+                default: break;
+            }
+        }
+        TextView summary = text(15);
+        summary.setText(offers + " offers · " + active + " active · "
+                + failed + " stopped · " + complete + " completed");
+        overviewRows.addView(summary);
+        if (state.transferOverview.isEmpty()) {
+            TextView empty = text(14);
+            empty.setText("No file transfers recorded.");
+            overviewRows.addView(empty);
+        }
+        for (AttachmentStore.Completed item : state.transferOverview) {
+            String name = "Conversation " + item.contactId;
+            for (ChatStore.Contact contact : state.contacts)
+                if (contact.id == item.contactId) { name = contact.name; break; }
+            Button entry = new Button(screen);
+            entry.setMinHeight(dp(48));
+            entry.setAllCaps(false);
+            entry.setText(item.file.name + " · " + size(item.file.size)
+                    + "\\n" + name + " · " + stateLabel(item.file));
+            entry.setOnClickListener(v -> {
+                if (overviewDialog != null) overviewDialog.dismiss();
+                if (listDialog != null) listDialog.dismiss();
+                if (item.contactId == link.snapshot().activeId) {
+                    showFiles();
+                    AttachmentStore.Transfer selected = find(link.snapshot().files, item.file.id);
+                    if (selected != null) showDetail(link.snapshot(), selected);
+                } else {
+                    openTransferContact = item.contactId;
+                    openTransferId = item.file.id;
+                    link.selectContact(item.contactId);
+                }
+            });
+            overviewRows.addView(entry);
+        }
     }
 
     private void showCleanup() {
@@ -492,6 +580,7 @@ final class AttachmentsUi {
         if (detailDialog != null) detailDialog.dismiss();
         if (listDialog != null) listDialog.dismiss();
         if (cleanupDialog != null) cleanupDialog.dismiss();
+        if (overviewDialog != null) overviewDialog.dismiss();
         dialogContact = 0;
     }
 }
