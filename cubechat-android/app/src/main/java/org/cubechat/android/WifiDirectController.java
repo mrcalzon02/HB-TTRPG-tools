@@ -66,6 +66,7 @@ final class WifiDirectController {
         String permission = Build.VERSION.SDK_INT >= 33
                 ? Manifest.permission.NEARBY_WIFI_DEVICES : Manifest.permission.ACCESS_FINE_LOCATION;
         if (screen.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+            permissionContact = link.snapshot().activeId;
             String[] requested = Build.VERSION.SDK_INT == 31 || Build.VERSION.SDK_INT == 32
                     ? new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}
                     : new String[]{permission};
@@ -74,7 +75,7 @@ final class WifiDirectController {
         }
         if (Build.VERSION.SDK_INT < 33 && Settings.Secure.getInt(screen.getContentResolver(),
                 Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF) == Settings.Secure.LOCATION_MODE_OFF) {
-            new AlertDialog.Builder(screen).setTitle("Enable device location")
+            DisplayPrivacy.dialog(screen).setTitle("Enable device location")
                     .setMessage("This Android version requires Location to discover nearby Wi-Fi Direct peers.")
                     .setNegativeButton("Cancel", null).setPositiveButton("Settings", (d,w) ->
                         screen.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))).show();
@@ -97,7 +98,7 @@ final class WifiDirectController {
             if (!active || channel == null) return;
             boolean host = "host".equals(link.snapshot().role);
             if (group != null && group.isGroupOwner() != host) {
-                new AlertDialog.Builder(screen).setTitle("Leave the current Wi-Fi Direct group?")
+                DisplayPrivacy.dialog(screen).setTitle("Leave the current Wi-Fi Direct group?")
                         .setMessage("CubeChat needs this phone to " + (host ? "host its own group." : "join the card holder’s group."))
                         .setNegativeButton("Cancel", null).setPositiveButton("Leave group", (d,w) ->
                                 manager.removeGroup(channel, action(() -> openRole(host), "Leave group"))).show();
@@ -106,7 +107,11 @@ final class WifiDirectController {
         });
     }
 
+    private long permissionContact;
+
     void permissionResult(boolean granted) {
+        if (permissionContact == 0 || permissionContact != link.snapshot().activeId) return;
+        permissionContact = 0;
         if (granted) begin();
         else feedback.accept("Wi-Fi Direct needs Nearby devices or Location permission. Other connections remain available.");
     }
@@ -153,7 +158,7 @@ final class WifiDirectController {
                 if (devices != null) devices.dismiss();
             }, "Connect to device"));
         });
-        AlertDialog dialog = new AlertDialog.Builder(screen).setTitle("Nearby Wi-Fi Direct devices")
+        AlertDialog dialog = DisplayPrivacy.dialog(screen).setTitle("Nearby Wi-Fi Direct devices")
                 .setView(list).setNegativeButton("Close", null).setNeutralButton("Refresh", null).create();
         devices = dialog;
         dialog.setOnDismissListener(d -> {
@@ -188,8 +193,9 @@ final class WifiDirectController {
         if (!info.groupFormed || info.groupOwnerAddress == null) { appliedEndpoint = ""; return; }
         connecting = false;
         if ("host".equals(link.snapshot().role)) {
-            if (info.isGroupOwner && appliedEndpoint.isEmpty()) {
-                appliedEndpoint = "host"; link.useWifiEndpoint(null);
+            String address = info.groupOwnerAddress.getHostAddress();
+            if (info.isGroupOwner && !address.equals(appliedEndpoint)) {
+                appliedEndpoint = address; link.useWifiEndpoint(address);
                 manager.requestGroupInfo(channel, group -> {
                     if (!active || group == null) return;
                     String device = group.getOwner() == null ? Build.MODEL : name(group.getOwner());
@@ -209,6 +215,7 @@ final class WifiDirectController {
     }
 
     void stop(boolean leaveOwnedGroup) {
+        permissionContact = 0;
         active = false;
         if (devices != null) devices.dismiss();
         if (channel != null) {

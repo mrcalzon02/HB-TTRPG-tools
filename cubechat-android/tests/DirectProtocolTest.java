@@ -23,6 +23,10 @@ public final class DirectProtocolTest {
                 Future<?> served = io.submit(() -> {
                     try (Socket s = listener.accept(); DirectProtocol a = DirectProtocol.handshake(s, true, host, pinned, token,
                             peer -> assertTrue(Arrays.equals(peer, guestPublic)))) {
+                        DirectProtocol.Record idle = a.readRecord(), probe = a.readRecord();
+                        assertTrue(idle.type == DirectProtocol.HEARTBEAT && !DirectProtocol.pingRequest(idle.sequence));
+                        assertTrue(probe.type == DirectProtocol.HEARTBEAT && DirectProtocol.pingRequest(probe.sequence));
+                        a.write(DirectProtocol.HEARTBEAT, probe.sequence + 1, "");
                         DirectProtocol.Record inbound = a.readRecord();
                         assertTrue(inbound.type == DirectProtocol.MESSAGE && inbound.sequence == 1 && inbound.body.equals("North pier / 21:00 🌊"));
                         a.write(DirectProtocol.RECEIPT, inbound.sequence, "");
@@ -34,6 +38,11 @@ public final class DirectProtocolTest {
                 });
                 try (Socket s = new Socket(listener.getInetAddress(), listener.getLocalPort());
                      DirectProtocol b = DirectProtocol.handshake(s, false, guest, hostPublic, token, null)) {
+                    long challenge = DirectProtocol.pingChallenge();
+                    b.write(DirectProtocol.HEARTBEAT, 0, "");
+                    b.write(DirectProtocol.HEARTBEAT, challenge, "");
+                    DirectProtocol.Record pong = b.readRecord();
+                    assertTrue(pong.type == DirectProtocol.HEARTBEAT && pong.sequence == challenge + 1 && !DirectProtocol.pingRequest(pong.sequence));
                     b.write(DirectProtocol.MESSAGE, 1, "North pier / 21:00 🌊");
                     DirectProtocol.Record receipt = b.readRecord(), reply = b.readRecord();
                     assertTrue(receipt.type == DirectProtocol.RECEIPT && receipt.sequence == 1);
@@ -55,7 +64,7 @@ public final class DirectProtocolTest {
                 } catch (java.io.IOException expected) { /* Server closed this unpaired connection. */ }
             }
             assertTrue(refused.get(10, TimeUnit.SECONDS));
-            System.out.println("PASS fresh pairing, duplex messages, authenticated receipts, reconnect, and pinned identity enforcement");
+            System.out.println("PASS fresh pairing, duplex messages, authenticated receipts and correlated ping replies, reconnect, and pinned identity enforcement");
         } finally { io.shutdownNow(); }
     }
 }

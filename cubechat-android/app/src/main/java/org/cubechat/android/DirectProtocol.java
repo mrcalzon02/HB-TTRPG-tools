@@ -59,6 +59,16 @@ final class DirectProtocol implements Closeable {
         return value;
     }
 
+    // Legacy clients accept all nonnegative heartbeat sequences and silently ignore them.
+    // Zero stays the keepalive. An even nonzero challenge requests its adjacent odd response.
+    static long pingChallenge() {
+        long value;
+        do { value = RANDOM.nextLong() & 0x7ffffffffffffffeL; } while (value == 0);
+        return value;
+    }
+
+    static boolean pingRequest(long sequence) { return sequence > 0 && (sequence & 1) == 0; }
+
     static String hex(byte[] input) {
         char[] alphabet = "0123456789abcdef".toCharArray(), out = new char[input.length * 2];
         for (int i = 0; i < input.length; i++) {

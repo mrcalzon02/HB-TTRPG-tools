@@ -96,7 +96,7 @@ final class UpdateCheck {
                     if (show) {
                         String detail = problem instanceof java.net.UnknownHostException
                                 ? "GitHub could not be reached." : problem.getMessage();
-                        new AlertDialog.Builder(activity).setTitle("Couldn’t check for updates")
+                        DisplayPrivacy.dialog(activity).setTitle("Couldn’t check for updates")
                                 .setMessage("Installed CubeChat " + installed + ".\n\n" + (detail == null ? "" : detail + " ")
                                         + "Check your internet connection and try again.")
                                 .setNegativeButton("Close", null)
@@ -115,7 +115,7 @@ final class UpdateCheck {
     private void review() {
         CubeChatReleases.Offer update = offer;
         if (update == null) {
-            new AlertDialog.Builder(activity).setTitle("CubeChat is up to date")
+            DisplayPrivacy.dialog(activity).setTitle("CubeChat is up to date")
                     .setMessage("Installed CubeChat " + installed + " (build " + installedCode + ").")
                     .setPositiveButton("Close", null).show();
             return;
@@ -124,7 +124,7 @@ final class UpdateCheck {
                 + " (build " + update.code + ").\n\nOpen the signed APK in your browser, then choose Update in the Android installer.";
         if (update.incomplete) message += "\n\nThis update was verified. Some release information was unavailable, so a newer update may exist.";
         if (!update.notes.isEmpty()) message += "\n\n" + update.notes;
-        new AlertDialog.Builder(activity).setTitle("CubeChat update available").setMessage(message)
+        DisplayPrivacy.dialog(activity).setTitle("CubeChat update available").setMessage(message)
                 .setNegativeButton("Not now", null).setPositiveButton("Open download", (d, w) -> open(update.url)).show();
     }
 
@@ -142,7 +142,7 @@ final class UpdateCheck {
             try {
                 activity.startActivity(view.setPackage(null));
             } catch (ActivityNotFoundException missing) {
-                new AlertDialog.Builder(activity).setTitle("Browser unavailable")
+                DisplayPrivacy.dialog(activity).setTitle("Browser unavailable")
                         .setMessage("Enable a web browser on this phone, then choose Open download again.")
                         .setPositiveButton("Close", null).show();
             }

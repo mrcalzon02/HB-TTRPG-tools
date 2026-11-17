@@ -22,7 +22,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-/** One paired conversation. The host listens; the guest reconnects. Both directions share that socket. */
+/** Stores independent conversations and services the selected conversation on its chosen route. */
 public final class PeerLink {
     public interface Codec {
         JSONObject seal(String keyHex, String channel, long sequence, String text) throws Exception;
@@ -31,6 +31,7 @@ public final class PeerLink {
     public interface Listener {
         void changed();
         void problem(String problem);
+        default void queued(long contactId, String text) { }
         default void replaceRequested(String card) { problem("Forget the current key before importing this one"); }
     }
     public static final class Message {
@@ -42,13 +43,18 @@ public final class PeerLink {
         }
     }
     public static final class Snapshot {
-        public final String status, role, peer, invite;
+        public final String status, role, peer, invite, relay, route, ping, draft;
         public final List<Message> messages;
-        public final boolean connected, forwarding;
-        public final String relay;
-        Snapshot(String status, String role, String peer, String invite, List<Message> messages, boolean connected, String relay) {
+        public final List<ChatStore.Contact> contacts;
+        public final long activeId, pingTime;
+        public final boolean connected, forwarding, pinging, loaded;
+        Snapshot(String status, String role, String peer, String invite, List<Message> messages, boolean connected,
+                 String relay, long activeId, List<ChatStore.Contact> contacts, String route,
+                 String ping, long pingTime, boolean pinging, String draft, boolean loaded) {
             this.status = status; this.role = role; this.peer = peer; this.invite = invite;
             this.messages = messages; this.connected = connected; this.relay = relay; this.forwarding = !relay.isEmpty();
+            this.activeId = activeId; this.contacts = contacts; this.route = route;
+            this.ping = ping; this.pingTime = pingTime; this.pinging = pinging; this.draft = draft; this.loaded = loaded;
         }
     }
 
@@ -60,7 +66,11 @@ public final class PeerLink {
     private final android.net.wifi.WifiManager wifi;
     private android.net.wifi.WifiManager.MulticastLock multicast;
     private LanDiscovery.Host advertiser;
-    private enum Route { LAN, WIFI_DIRECT, BLUETOOTH, RELAY }
+    private enum Route {
+        LAN("Local Wi-Fi / hotspot"), WIFI_DIRECT("Wi-Fi Direct"), BLUETOOTH("Bluetooth"), RELAY("Local relay");
+        final String label;
+        Route(String label) { this.label = label; }
+    }
     private RelayForwarder forwarder;
     private String relayStatus = "";
     private Route route = Route.LAN;
@@ -71,7 +81,12 @@ public final class PeerLink {
     private final Listener listener;
     private final ChatStore store;
     private final Codec codec;
-    private volatile Snapshot snapshot = new Snapshot("Opening mailbox…", "", "", "", Collections.emptyList(), false, "");
+    private volatile Snapshot snapshot = new Snapshot("Opening mailbox…", "", "", "", Collections.emptyList(),
+            false, "", 0, Collections.emptyList(), Route.LAN.label, "", 0, false, "", false);
+    private long activeId, challenge, pingDeadline, pingSentAt, pingTime;
+    private String ping = "", draft = "";
+    private List<ChatStore.Contact> contacts = Collections.emptyList();
+    private static final long PING_WINDOW = TimeUnit.SECONDS.toNanos(10);
     private volatile boolean closed;
     private boolean started, loaded, connecting;
     private long generation, sentSeq = -1, sentAt;
@@ -89,10 +104,9 @@ public final class PeerLink {
     private static String detail(Exception error) {
         return error.getMessage() == null ? error.getClass().getSimpleName() : error.getMessage();
     }
-    private void command(Task task) {
+    private synchronized void command(Task task) {
         if (closed) return;
         lane.execute(() -> {
-            if (closed) return;
             try { task.run(); } catch (Exception e) { report(detail(e)); }
         });
     }
@@ -102,17 +116,16 @@ public final class PeerLink {
         if (pair != null && pair.remote != null) {
             try { peer = DirectProtocol.fingerprint(pair.remote); } catch (Exception e) { report(detail(e)); }
         }
-        snapshot = new Snapshot(status, pair == null ? "" : pair.host ? "host" : "guest", peer, invitation, history, session != null, relayStatus);
+        snapshot = new Snapshot(status, pair == null ? "" : pair.host ? "host" : "guest", peer, invitation, history, session != null,
+                relayStatus, activeId, contacts, route.label, ping, pingTime, challenge != 0, draft, loaded);
         main.post(() -> { if (!closed) listener.changed(); });
     }
 
     public void start() {
         command(() -> {
             if (started) return;
-            JSONObject saved = store.pairing();
-            pair = saved == null ? null : Pairing.restore(saved);
-            history = store.history(); loaded = true; started = true;
-            status = "Ready to pair";
+            loadSelection();
+            loaded = true; started = true;
             lane.scheduleWithFixedDelay(() -> {
                 if (closed) return;
                 try {
@@ -132,50 +145,98 @@ public final class PeerLink {
         });
     }
 
-    public void createInvite() { createInvite(null); }
-    public void createInvite(String bundleJson) {
+    private void loadSelection() throws Exception {
+        shutdownNetwork();
+        pair = null; activeId = 0; invitation = ""; draft = ""; history = Collections.emptyList();
+        contacts = Collections.emptyList(); route = Route.LAN; wifiEndpoint = ""; status = "Ready to pair";
+        ping = ""; pingTime = 0;
+        try {
+            contacts = store.contacts();
+            long selected = store.activeId();
+            if (selected == 0) return;
+            Pairing saved = Pairing.restore(store.pairing(selected));
+            String[] preference = store.route(selected);
+            List<Message> savedHistory = store.history();
+            String savedDraft = store.draft(selected);
+            route = Route.valueOf(preference[0]);
+            // A Wi-Fi Direct group address is valid only after Android confirms the live group.
+            if (route == Route.RELAY) wifiEndpoint = preference[1];
+            pair = saved; activeId = selected; history = savedHistory; draft = savedDraft;
+            status = route == Route.BLUETOOTH ? "Open Connection to reconnect Bluetooth" :
+                    route == Route.WIFI_DIRECT ? "Open Connection to reconnect Wi-Fi Direct" : "Waiting for paired phone";
+        } finally { publish(); }
+    }
+    public void selectContact(long id) {
         command(() -> {
             ready();
-            if (pair != null && (!pair.host || bundleJson != null)) throw new IOException("Forget the current pairing before creating a different one");
+            if (activeId == id) return;
+            store.select(id); loadSelection(); reconnect();
+        });
+    }
+    public void renameContact(long id, String name) {
+        command(() -> { ready(); store.rename(id, name); contacts = store.contacts(); publish(); });
+    }
+    public void saveDraft(long id, String text) {
+        command(() -> {
+            ready();
+            if (id == 0) return;
+            store.saveDraft(id, text);
+            if (id == activeId) draft = text;
+        });
+    }
+    public void createInvite() { requestInvite(null, false); }
+    public void createInvite(String bundleJson) { requestInvite(bundleJson, bundleJson != null); }
+    public void createNewInvite() { requestInvite(null, true); }
+    private void requestInvite(String bundleJson, boolean fresh) {
+        command(() -> {
+            ready();
+            if (!fresh && pair != null && !pair.host) throw new IOException("Choose New conversation to make another invite");
             String address;
             try { address = Pairing.lanAddress(); } catch (java.net.SocketException ignored) { address = "0.0.0.0"; }
-            Pairing next = pair == null ? Pairing.host(bundleJson) : pair;
+            Pairing next = fresh || pair == null ? Pairing.host(bundleJson) : pair;
             String code = next.invite(address);
             next.address = address;
-            store.savePair(next.json()); pair = next; invitation = code;
+            if (fresh || pair == null) {
+                store.createPair(next.json()); loadSelection();
+            } else store.savePair(next.json());
+            invitation = code;
             try { reconnect(); } finally { publish(); }
         });
     }
-    public void join(String raw) { join(raw, false); }
-    public void join(String raw, boolean replace) {
+    public void join(String raw) {
         command(() -> {
             ready();
-            Pairing next = Pairing.join(raw);
-            boolean changingKey = pair != null && !pair.matchesCard(next);
-            if (changingKey) {
-                if (!replace) { main.post(() -> { if (!closed) listener.replaceRequested(raw); }); return; }
-                store.replacePair(next.json()); history = Collections.emptyList();
+            Pairing scanned = Pairing.join(raw);
+            long id = store.findCard(scanned);
+            if (id == 0) {
+                store.createPair(scanned.json()); loadSelection();
             } else {
-                if (pair != null) {
-                    if (pair.host) throw new IOException("This phone already hosts this key");
-                    next = Pairing.restore(pair.json().put("address", next.address).put("port", next.port));
+                if (activeId != id) { store.select(id); loadSelection(); }
+                if (!pair.host && (!pair.address.equals(scanned.address) || pair.port != scanned.port)) {
+                    store.savePair(pair.json().put("address", scanned.address).put("port", scanned.port));
+                    pair.address = scanned.address; pair.port = scanned.port;
+                    if (session == null) shutdownNetwork();
                 }
-                store.savePair(next.json());
             }
-            shutdownNetwork(); pair = next; invitation = "";
             reconnect(); publish();
         });
     }
-    public void reset() {
+    // Older callers can still pass the replacement flag. Importing a different key creates a contact.
+    public void join(String raw, boolean replace) { join(raw); }
+    public void reset() { reset(snapshot.activeId); }
+    public void reset(long target) {
         command(() -> {
-            ready();
-            store.resetPair(); shutdownNetwork(); pair = null; invitation = ""; history = Collections.emptyList();
-            status = "Ready to pair"; publish();
+            ready(); requireContact(target);
+            store.resetPair(); loadSelection(); reconnect();
         });
     }
+    private void requireContact(long id) throws IOException {
+        if (pair == null || id == 0 || activeId != id) throw new IOException("Conversation changed. Open the contact and try again.");
+    }
     public void useRelay(String firstHop) {
+        final long target = snapshot.activeId;
         command(() -> {
-            ready();
+            ready(); requireContact(target);
             if (pair == null || pair.host) throw new IOException("Select Via relay on the phone that received the key card");
             String localHop = RelayForwarder.localIpv4(firstHop).getHostAddress();
             switchRouteNow(Route.RELAY, localHop);
@@ -206,13 +267,16 @@ public final class PeerLink {
     public void useBluetooth() { switchRoute(Route.BLUETOOTH, ""); }
     public void useWifiEndpoint(String hostAddress) { switchRoute(Route.WIFI_DIRECT, hostAddress == null ? "" : hostAddress); }
     private void switchRoute(Route requested, String endpoint) {
-        command(() -> { ready(); switchRouteNow(requested, endpoint); });
+        final long target = snapshot.activeId;
+        command(() -> { ready(); requireContact(target); switchRouteNow(requested, endpoint); });
     }
     private void switchRouteNow(Route requested, String endpoint) throws Exception {
             if (!endpoint.isEmpty() && !(endpoint.matches("[0-9]{1,3}(\\.[0-9]{1,3}){3}") && java.net.InetAddress.getByName(endpoint) instanceof java.net.Inet4Address))
                 throw new IOException("Invalid Wi-Fi Direct address");
             if (route == requested && wifiEndpoint.equals(endpoint)) return;
+            store.saveRoute(requested.name(), requested == Route.RELAY ? endpoint : "");
             shutdownNetwork(); route = requested; wifiEndpoint = endpoint;
+            ping = ""; pingTime = 0;
             status = requested == Route.BLUETOOTH ? "Waiting for Bluetooth connection" :
                     requested == Route.WIFI_DIRECT ? "Waiting for Wi-Fi Direct" :
                     requested == Route.RELAY ? "Waiting for relay" : "Waiting for local Wi-Fi";
@@ -258,6 +322,33 @@ public final class PeerLink {
             });
         });
     }
+    public void ping() {
+        final long target = snapshot.activeId;
+        command(() -> {
+            ready(); requireContact(target);
+            final long request = DirectProtocol.pingChallenge();
+            challenge = request;
+            pingSentAt = 0; pingDeadline = System.nanoTime() + PING_WINDOW;
+            pingTime = System.currentTimeMillis(); ping = "Checking " + route.label + "…"; publish();
+            lane.schedule(() -> {
+                if (!closed && challenge == request) noPingReply();
+            }, PING_WINDOW, TimeUnit.NANOSECONDS);
+            if (session == null) reconnect();
+            else sendPing();
+        });
+    }
+    private void sendPing() throws Exception {
+        if (challenge == 0 || pingSentAt != 0) return;
+        pingSentAt = System.nanoTime();
+        if (pingSentAt - pingDeadline >= 0) { noPingReply(); return; }
+        try { session.write(DirectProtocol.HEARTBEAT, challenge, ""); }
+        catch (Exception e) { disconnect(session); throw e; }
+    }
+    private void noPingReply() {
+        challenge = 0; pingSentAt = 0; pingTime = System.currentTimeMillis();
+        ping = "No reply on " + route.label; publish();
+    }
+
     public void retry() {
         command(() -> {
             ready();
@@ -266,17 +357,20 @@ public final class PeerLink {
             shutdownNetwork(); reconnect(); publish();
         });
     }
-    public void send(String text) {
+    public void send(String text) { send(snapshot.activeId, text); }
+    public void send(long target, String text) {
         command(() -> {
-            ready();
-            if (pair == null) throw new IOException("Import or create a key card first");
+            ready(); requireContact(target);
             if (text == null || text.trim().isEmpty()) throw new IOException("Enter a message");
             if (text.getBytes(StandardCharsets.UTF_8).length > 4096) throw new IOException("Messages are limited to 4096 UTF-8 bytes");
             long seq = store.next(true);
             JSONObject envelope = codec.seal(pair.host ? pair.ab : pair.ba, pair.host ? "AB" : "BA", seq, text);
             String encoded = envelope.toString();
             if (encoded.getBytes(StandardCharsets.UTF_8).length > DirectProtocol.MAX_BODY) throw new IOException("Encrypted message exceeds transport limit");
-            store.save(true, seq, text, encoded); history = store.history(); publish();
+            store.save(true, seq, text, encoded);
+            if (draft.equals(text)) draft = "";
+            history = store.history(); contacts = store.contacts(); publish();
+            main.post(() -> { if (!closed) listener.queued(target, text); });
             try { pump(); } catch (Exception e) { disconnect(session); }
         });
     }
@@ -284,11 +378,13 @@ public final class PeerLink {
 
     private void reconnect() throws Exception {
         if (!started || closed || pair == null || session != null || route == Route.BLUETOOTH) return;
+        if (route == Route.WIFI_DIRECT && wifiEndpoint.isEmpty()) return;
         if (pair.host) {
             if (server == null) {
                 ServerSocket listening = new ServerSocket();
                 try {
-                    listening.setReuseAddress(true); listening.bind(new InetSocketAddress(pair.port));
+                    listening.setReuseAddress(true);
+                    listening.bind(route == Route.WIFI_DIRECT ? new InetSocketAddress(wifiEndpoint, pair.port) : new InetSocketAddress(pair.port));
                 } catch (Exception e) { listening.close(); throw e; }
                 server = listening;
                 final long epoch = generation;
@@ -401,7 +497,7 @@ public final class PeerLink {
                 }
             } catch (Exception e) { if (!closed) command(() -> disconnect(link)); }
         });
-        try { pump(); } catch (Exception e) { disconnect(link); throw e; }
+        try { sendPing(); pump(); } catch (Exception e) { disconnect(link); throw e; }
     }
     private void receive(DirectProtocol link, DirectProtocol.Record record) throws Exception {
         lastReceived = System.nanoTime();
@@ -419,7 +515,17 @@ public final class PeerLink {
             // A replica of a committed record, e.g. after a lost receipt, receives the same acknowledgement.
             link.write(DirectProtocol.RECEIPT, record.sequence, "");
         } else if (record.type == DirectProtocol.RECEIPT && sentSeq >= 0 && sentSeq == record.sequence) {
-            store.delivered(sentSeq); sentSeq = -1; history = store.history(); publish(); pump();
+            store.delivered(sentSeq); sentSeq = -1; history = store.history(); contacts = store.contacts(); publish(); pump();
+        } else if (record.type == DirectProtocol.HEARTBEAT) {
+            if (DirectProtocol.pingRequest(record.sequence)) {
+                link.write(DirectProtocol.HEARTBEAT, record.sequence + 1, "");
+            } else if (challenge != 0 && pingSentAt != 0 && record.sequence == challenge + 1) {
+                long now = System.nanoTime();
+                if (now - pingDeadline >= 0) { noPingReply(); return; }
+                long millis = Math.max(1, TimeUnit.NANOSECONDS.toMillis(now - pingSentAt));
+                challenge = 0; pingSentAt = 0; pingTime = System.currentTimeMillis();
+                ping = "Peer replied over " + route.label + " · " + millis + " ms"; publish();
+            }
         }
     }
     private void pump() throws Exception {
@@ -433,17 +539,19 @@ public final class PeerLink {
     private void disconnect(DirectProtocol link) {
         if (link == null || session != link) return;
         close(link); session = null; sentSeq = -1;
+        if (challenge != 0 && pingSentAt != 0) noPingReply();
         status = route == Route.BLUETOOTH ? "Waiting for Bluetooth reconnection" : pair.host ? "Waiting for paired phone" : "Disconnected. Retrying…"; publish();
     }
     private static void close(java.io.Closeable object) { if (object != null) try { object.close(); } catch (IOException ignored) {} }
     private void shutdownNetwork() {
         generation++;
+        if (challenge != 0) { challenge = 0; pingSentAt = 0; ping = ""; pingTime = 0; }
         close(bluetoothCandidate); bluetoothCandidate = null;
         close(advertiser); advertiser = null;
         if (multicast != null) { if (multicast.isHeld()) multicast.release(); multicast = null; }
         close(server); server = null; close(session); session = null; connecting = false; needsDiscovery = false; sentSeq = -1;
     }
-    public void stop() {
+    public synchronized void stop() {
         if (closed) return;
         closed = true;
         lane.execute(() -> { shutdownNetwork(); close(forwarder); forwarder = null; store.close(); io.shutdownNow(); lane.shutdownNow(); });

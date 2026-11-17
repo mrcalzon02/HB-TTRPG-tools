@@ -30,12 +30,16 @@ tag_commit=$(git rev-parse 'FETCH_HEAD^{commit}')
 # Package only the public build inputs, tests and documentation from the exact tag.
 # Uncompressed ZIP entries and UTC commit timestamps make the archive repeatable.
 source_zip="$upload/CubeChat-Android-$version-Source.zip"
+extra_docs=()
+if git cat-file -e "$tag_commit:cubechat-android/DEVELOPMENT_LEDGER.md" 2>/dev/null; then
+  extra_docs+=(cubechat-android/DEVELOPMENT_LEDGER.md)
+fi
 TZ=UTC git archive --format=zip -0 --prefix="CubeChat-Android-$version/" \
   --output="$source_zip" "$tag_commit" shadowrun-binary-cube-engine.js \
   cubechat-android/app/build.gradle cubechat-android/app/src cubechat-android/build.gradle \
   cubechat-android/settings.gradle cubechat-android/gradle cubechat-android/gradlew \
   cubechat-android/gradlew.bat cubechat-android/tests cubechat-android/scripts \
-  cubechat-android/README.md cubechat-android/RELEASE_NOTES.md cubechat-android/release.json
+  cubechat-android/README.md cubechat-android/RELEASE_NOTES.md cubechat-android/release.json "${extra_docs[@]}"
 git show "$tag_commit:cubechat-android/RELEASE_NOTES.md" > "$upload/RELEASE_NOTES.md"
 grep -Fxq "# CubeChat Android $version" "$upload/RELEASE_NOTES.md"
 grep -Fxq "Android version code: $code" "$upload/RELEASE_NOTES.md"

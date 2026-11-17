@@ -14,9 +14,13 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.PersistableBundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
@@ -24,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public final class MainActivity extends Activity implements PeerLink.Listener {
     private static final int SCAN = 1, CAMERA = 2, BUNDLE = 3, QR_IMAGE = 4, SAVE_QR = 5;
@@ -72,29 +78,43 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     private CubeProfile profile;
     private WifiDirectController direct;
     private BluetoothRadio bluetooth;
-    private TextView subtitle, status, radioStatus, relayStatus;
-    private LinearLayout startPanel, composerRow;
+    private TextView subtitle, status, radioStatus, relayStatus, contactName, pingResult;
+    private LinearLayout startPanel, composerRow, contactBar;
     private ListView history;
     private EditText draft;
-    private Button send, options, inviteButton, scanButton, pasteButton;
+    private Button send, options, inviteButton, scanButton, pasteButton, ping;
     private TextView pairTitle, pairHint;
     private boolean wasConnected;
     private Messages adapter;
-    private AlertDialog inviteDialog, joiningDialog;
+    private AlertDialog inviteDialog, shareDialog;
     private boolean wantsInvite, closing;
     private String lastProblem = "", submitted, exportCode;
-    private long priorOutgoingTime;
-    private int priorOutgoingCount;
+    private long renderedId, inviteFrom = -1;
+    private boolean draftDirty, loadingDraft, shareSelecting;
+    private final Handler ui = new Handler(Looper.getMainLooper());
+    private final Runnable writeDraft = this::flushDraft;
+    private Retained retained;
+    private ShareText share;
+    private long shareTarget;
+    private String sharedText;
+
+    private static final class Retained {
+        long id, shareTarget;
+        String draft, exportCode, sharedText;
+        ShareText share;
+    }
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
+        DisplayPrivacy.apply(this);
         buildScreen();
         updates = new UpdateCheck(this, updateBanner);
-        Object retained = getLastNonConfigurationInstance();
-        if (retained instanceof String[]) {
-            String[] previous = (String[]) retained;
-            draft.setText(previous[0]);
-            exportCode = previous[1];
+        if (getLastNonConfigurationInstance() instanceof Retained) {
+            retained = (Retained) getLastNonConfigurationInstance();
+            exportCode = retained.exportCode;
+            share = retained.share;
+            shareTarget = retained.shareTarget;
+            sharedText = retained.sharedText;
         }
         try {
             profile = new CubeProfile(this);
@@ -104,7 +124,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             bluetooth = new BluetoothRadio(this, link);
             bluetooth.resume();
             changed();
-            openExternalInvite(getIntent());
+            if (state == null && retained == null) openExternalInvite(getIntent());
         } catch (Exception e) {
             problem("Could not open CubeChat: " + e.getMessage());
         }
@@ -116,6 +136,16 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     private void openExternalInvite(Intent intent) {
+        ShareText incoming = ShareText.fromIntent(intent);
+        if (incoming != null) {
+            setIntent(new Intent(this, MainActivity.class));
+            clearShare();
+            if (inviteDialog != null) inviteDialog.dismiss();
+            wantsInvite = false;
+            share = incoming;
+            if (link != null && link.snapshot().loaded) advanceShare(link.snapshot());
+            return;
+        }
         if (intent == null || !Intent.ACTION_VIEW.equals(intent.getAction())) return;
         String value = intent.getDataString();
         setIntent(new Intent(this, MainActivity.class));
@@ -123,6 +153,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             problem("This link is not a CubeChat pairing invite.");
             return;
         }
+        clearShare();
         importCard(value);
     }
 
@@ -134,25 +165,25 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         }
         // Validate and durably import the complete key card on the protocol lane.
         beginAction();
+        flushDraft();
         link.join(value.trim());
     }
 
-    @Override public void replaceRequested(String card) {
-        if (closing) return;
-        if (joiningDialog != null) joiningDialog.dismiss();
-        joiningDialog = new AlertDialog.Builder(this).setTitle("Replace your current chat?")
-                .setMessage("This key card belongs to another chat. Replacing this pairing removes your current chat’s keys and local message history.")
-                .setNegativeButton("Keep current chat", null)
-                .setPositiveButton("Replace chat", (d, w) -> {
-                    beginAction(); leaveRadio(); draft.setText(""); link.join(card, true);
-                }).create();
-        joiningDialog.setOnDismissListener(d -> joiningDialog = null);
-        joiningDialog.show();
+    @Override public Object onRetainNonConfigurationInstance() {
+        Retained r = new Retained();
+        r.id = renderedId;
+        String editing = draft.getText().toString();
+        r.draft = editing.equals(submitted) ? null : editing;
+        r.exportCode = exportCode;
+        r.share = share;
+        r.shareTarget = shareTarget;
+        r.sharedText = sharedText;
+        return r;
     }
 
-    @Override public Object onRetainNonConfigurationInstance() {
-        // Preserve edits across rotation in memory without persisting plaintext in the OS instance state.
-        return new String[] {draft.getText().toString(), exportCode};
+    @Override protected void onPause() {
+        flushDraft();
+        super.onPause();
     }
 
     @Override protected void onResume() {
@@ -171,7 +202,8 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         closing = true;
         if (updates != null) updates.close();
         if (inviteDialog != null) inviteDialog.dismiss();
-        if (joiningDialog != null) joiningDialog.dismiss();
+        if (shareDialog != null) shareDialog.dismiss();
+        ui.removeCallbacks(writeDraft);
         if (bluetooth != null) bluetooth.stop();
         if (direct != null) direct.stop(isFinishing());
         if (link != null) link.stop();
@@ -245,6 +277,19 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         options = button("Pairing", false, v -> menu());
         header.addView(options);
         root.addView(header);
+        contactBar = row();
+        pad(contactBar, 12, 0, 0);
+        contactBar.addView(button("Conversations", false, v -> conversations()));
+        contactName = label("", 15, INK, true);
+        contactName.setSingleLine();
+        contactName.setEllipsize(TextUtils.TruncateAt.END);
+        pad(contactName, 8, 0, 0);
+        contactBar.addView(contactName, weight(WRAP));
+        ping = button("Ping", false, v -> { beginAction(); link.ping(); });
+        ping.setContentDescription("Ping contact");
+        contactBar.addView(ping);
+        contactBar.setVisibility(View.GONE);
+        root.addView(contactBar);
         updateBanner = button("Update available", false, null);
         updateBanner.setVisibility(View.GONE);
         root.addView(updateBanner);
@@ -253,6 +298,11 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         pad(status, 18, 7, 8);
         status.setBackgroundColor(0xffe7eee5);
         root.addView(status);
+        pingResult = label("", 14, GREEN, false);
+        pingResult.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
+        pad(pingResult, 18, 4, 6);
+        pingResult.setVisibility(View.GONE);
+        root.addView(pingResult);
         radioStatus = label("", 14, MUTED, false);
         radioStatus.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
         pad(radioStatus, 18, 4, 6);
@@ -318,7 +368,14 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         draft.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void afterTextChanged(Editable e) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) { refreshSend(); }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                refreshSend();
+                if (!loadingDraft && renderedId != 0) {
+                    draftDirty = true;
+                    ui.removeCallbacks(writeDraft);
+                    ui.postDelayed(writeDraft, 350);
+                }
+            }
         });
         root.addView(composerRow);
         composerRow.setVisibility(View.GONE);
@@ -329,6 +386,31 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         if (closing || link == null) return;
         PeerLink.Snapshot next = link.snapshot();
         boolean paired = !next.role.isEmpty();
+        boolean switched = next.activeId != renderedId;
+        if (switched) {
+            flushDraft();
+            if (renderedId != 0) leaveRadio();
+            renderedId = next.activeId;
+            submitted = null;
+            lastProblem = "";
+            wasConnected = false;
+            if (inviteDialog != null) inviteDialog.dismiss();
+            loadingDraft = true;
+            String saved = retained != null && retained.id == renderedId && retained.draft != null
+                    ? retained.draft : next.draft;
+            draft.setText(saved);
+            draft.setSelection(draft.length());
+            loadingDraft = false;
+            if (!TextUtils.equals(saved, next.draft)) { draftDirty = true; flushDraft(); }
+            retained = null;
+        }
+        for (ChatStore.Contact c : next.contacts) if (c.id == renderedId) { contactName.setText(c.name); break; }
+        contactBar.setVisibility(paired ? View.VISIBLE : View.GONE);
+        ping.setEnabled(paired && !next.pinging);
+        String checked = next.pingTime == 0 || next.pinging ? "" : " · " +
+                android.text.format.DateFormat.getTimeFormat(this).format(new Date(next.pingTime));
+        pingResult.setText(next.ping + checked);
+        pingResult.setVisibility(paired && !next.ping.isEmpty() ? View.VISIBLE : View.GONE);
         subtitle.setText(!next.peer.isEmpty() ? "Peer " + next.peer : paired ? "Key ready · Hosting" : "Direct messages");
         status.setText(lastProblem.isEmpty() ? next.status : lastProblem);
         status.setTextColor(lastProblem.isEmpty() ? MUTED : 0xff8c351c);
@@ -339,35 +421,34 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         if (next.connected) radioMessage("");
         relayStatus.setText(next.relay);
         relayStatus.setVisibility(next.forwarding && !next.relay.isEmpty() ? View.VISIBLE : View.GONE);
-        boolean atEnd = adapter.getCount() == 0 || history.getLastVisiblePosition() >= adapter.getCount() - 2;
+        boolean atEnd = switched || adapter.getCount() == 0 || history.getLastVisiblePosition() >= adapter.getCount() - 2;
         adapter.items = next.messages;
         adapter.notifyDataSetChanged();
         if (atEnd && !next.messages.isEmpty()) history.setSelection(next.messages.size() - 1);
-        if (submitted != null) {
-            int count = 0;
-            long newest = 0;
-            PeerLink.Message latest = null;
-            for (PeerLink.Message m : next.messages) {
-                if (m.outgoing) { count++; newest = m.time; latest = m; }
-            }
-            if (latest != null && (count > priorOutgoingCount || newest > priorOutgoingTime)
-                    && submitted.equals(latest.text)) {
-                if (submitted.contentEquals(draft.getText())) draft.setText("");
-                submitted = null;
-            }
-        }
         refreshSend();
         if (next.connected && !wasConnected && inviteDialog != null) inviteDialog.dismiss();
         wasConnected = next.connected;
-        if (wantsInvite && !next.invite.isEmpty()) {
+        if (wantsInvite && !next.invite.isEmpty() && next.activeId != inviteFrom) {
             wantsInvite = false;
             showInvite(next.invite);
         }
+        if (next.loaded) advanceShare(next);
+    }
+
+    @Override public void queued(long id, String text) {
+        if (closing || renderedId != id || !text.equals(submitted)) return;
+        if (text.contentEquals(draft.getText())) {
+            draft.setText("");
+            flushDraft();
+        }
+        submitted = null;
+        refreshSend();
     }
 
     @Override public void problem(String message) {
         if (closing) return;
         wantsInvite = false;
+        if (shareSelecting && renderedId != shareTarget) clearShare();
         submitted = null;
         lastProblem = message;
         status.setText(message);
@@ -376,6 +457,78 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     private void beginAction() { lastProblem = ""; }
+
+    private void flushDraft() {
+        ui.removeCallbacks(writeDraft);
+        if (!draftDirty || renderedId == 0 || link == null) return;
+        link.saveDraft(renderedId, draft.getText().toString());
+        draftDirty = false;
+    }
+
+    private void selectContact(long id) {
+        if (id == renderedId || link == null) return;
+        beginAction();
+        flushDraft();
+        link.selectContact(id);
+    }
+
+    private void clearShare() {
+        share = null;
+        sharedText = null;
+        shareTarget = 0;
+        shareSelecting = false;
+        AlertDialog previous = shareDialog;
+        shareDialog = null;
+        if (previous != null) previous.dismiss();
+    }
+
+    private void advanceShare(PeerLink.Snapshot snapshot) {
+        if (shareDialog != null || closing) return;
+        AlertDialog dialog;
+        if (share != null) {
+            dialog = share.choose(this, snapshot.contacts, (id, text) -> {
+                share = null;
+                shareTarget = id;
+                sharedText = text;
+            });
+        } else if (sharedText != null && shareTarget == renderedId && renderedId != 0) {
+            shareSelecting = false;
+            long target = shareTarget;
+            dialog = ShareText.apply(this, draft.getText().toString(), sharedText, text -> {
+                if (target == renderedId && link.snapshot().activeId == target) {
+                    draft.setText(text);
+                    draft.setSelection(draft.length());
+                    flushDraft();
+                    draft.requestFocus();
+                }
+            });
+            if (dialog == null) {
+                sharedText = null;
+                shareTarget = 0;
+                return;
+            }
+        } else {
+            if (sharedText != null && !shareSelecting) {
+                for (ChatStore.Contact contact : snapshot.contacts) if (contact.id == shareTarget) {
+                    shareSelecting = true;
+                    selectContact(shareTarget);
+                    return;
+                }
+                clearShare();
+                problem("That conversation is no longer available.");
+            }
+            return;
+        }
+        boolean choosing = share != null;
+        shareDialog = dialog;
+        dialog.setOnDismissListener(d -> {
+            if (shareDialog != dialog || closing) return;
+            shareDialog = null;
+            if (choosing) share = null;
+            else { sharedText = null; shareTarget = 0; }
+            if (!isChangingConfigurations() && !isFinishing() && link != null) advanceShare(link.snapshot());
+        });
+    }
 
     private void radioMessage(String message) {
         if (closing) return;
@@ -394,7 +547,10 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         }
         modes.add(forward);
         if (state.forwarding) modes.add(stop);
-        new AlertDialog.Builder(this).setTitle("Connection").setItems(modes.toArray(new String[0]), (d, which) -> {
+        int selectedRoute = state.role.isEmpty() ? -1 : modes.indexOf("Local relay".equals(state.route) ? via : state.route);
+        DisplayPrivacy.dialog(this).setTitle("Connection").setSingleChoiceItems(modes.toArray(new String[0]), selectedRoute, (d, which) -> {
+            d.dismiss();
+            if (link.snapshot().activeId != state.activeId) return;
             beginAction();
             String selected = modes.get(which);
             if (selected.equals(lan)) {
@@ -432,7 +588,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             host.setChecked(true);
             content.addView(nextType);
         }
-        AlertDialog dialog = new AlertDialog.Builder(this)
+        AlertDialog dialog = DisplayPrivacy.dialog(this)
                 .setTitle(forwarding ? "Forward for other phones" : "Send via relay")
                 .setView(content).setNegativeButton("Cancel", null)
                 .setPositiveButton(forwarding ? "Start forwarding" : "Connect", null).create();
@@ -448,7 +604,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     private void refreshSend() {
         if (send == null || draft == null) return;
-        send.setEnabled(link != null && submitted == null && draft.getText().toString().trim().length() > 0);
+        send.setEnabled(link != null && renderedId != 0 && submitted == null && draft.getText().toString().trim().length() > 0);
     }
 
     private void send() {
@@ -460,17 +616,124 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             return;
         }
         beginAction();
-        priorOutgoingTime = 0; priorOutgoingCount = 0;
-        for (PeerLink.Message m : link.snapshot().messages) {
-            if (m.outgoing) { priorOutgoingCount++; priorOutgoingTime = m.time; }
-        }
+        flushDraft();
         submitted = text;
         refreshSend();
-        link.send(text);
+        link.send(renderedId, text);
+    }
+
+    private void conversations() {
+        PeerLink.Snapshot current = link.snapshot();
+        LinearLayout content = column();
+        pad(content, 16, 0, 0);
+        content.setFocusableInTouchMode(true);
+        EditText search = new EditText(this);
+        search.setHint("Search contacts");
+        search.setSingleLine();
+        search.setSaveEnabled(false);
+        content.addView(search);
+        FrameLayout results = new FrameLayout(this);
+        content.addView(results, new LinearLayout.LayoutParams(MATCH, WRAP));
+        ListView choices = new ListView(this);
+        TextView empty = label("No matching contacts", 15, MUTED, false);
+        pad(empty, 12, 16, 12);
+        results.addView(choices);
+        results.addView(empty);
+        choices.setEmptyView(empty);
+        ArrayAdapter<ChatStore.Contact> rows = new ArrayAdapter<ChatStore.Contact>(this,
+                android.R.layout.simple_list_item_2, android.R.id.text1) {
+            @Override public View getView(int position, View recycled, ViewGroup parent) {
+                View view = super.getView(position, recycled, parent);
+                ChatStore.Contact contact = getItem(position);
+                TextView name = view.findViewById(android.R.id.text1);
+                name.setText(contact.name);
+                String detail = contact.id == current.activeId ? "Current conversation" : "Conversation " + contact.id;
+                if (contact.pending > 0) detail += " · " + contact.pending + " queued";
+                ((TextView) view.findViewById(android.R.id.text2)).setText(detail);
+                return view;
+            }
+        };
+        choices.setAdapter(rows);
+        rows.addAll(current.contacts);
+        search.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void afterTextChanged(Editable e) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String query = s.toString().trim().toLowerCase(Locale.ROOT);
+                rows.setNotifyOnChange(false);
+                rows.clear();
+                for (ChatStore.Contact contact : current.contacts) {
+                    if (contact.name.toLowerCase(Locale.ROOT).contains(query)) rows.add(contact);
+                }
+                rows.notifyDataSetChanged();
+            }
+        });
+        AlertDialog.Builder builder = DisplayPrivacy.dialog(this).setTitle("Conversations").setView(content)
+                .setNegativeButton("Close", null)
+                .setPositiveButton("Add contact", (d, w) -> addContact());
+        for (ChatStore.Contact contact : current.contacts) if (contact.id == current.activeId) {
+            builder.setNeutralButton("Rename contact", (d, w) -> renameContact(contact));
+            break;
+        }
+        AlertDialog dialog = builder.create();
+        choices.setOnItemClickListener((parent, view, position, id) -> {
+            ChatStore.Contact selected = rows.getItem(position);
+            dialog.dismiss();
+            if (selected != null) selectContact(selected.id);
+        });
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+                | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.show();
+    }
+
+    private void renameContact(ChatStore.Contact contact) {
+        LinearLayout content = column();
+        pad(content, 20, 8, 4);
+        EditText input = new EditText(this);
+        input.setHint("Contact name");
+        input.setSingleLine();
+        input.setSaveEnabled(false);
+        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(64)});
+        input.setText(contact.name);
+        input.selectAll();
+        content.addView(input);
+        AlertDialog dialog = DisplayPrivacy.dialog(this).setTitle("Rename contact").setView(content)
+                .setNegativeButton("Cancel", null).setPositiveButton("Save", null).create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String name = input.getText().toString().trim();
+            if (name.isEmpty()) {
+                input.setError("Enter a name");
+                return;
+            }
+            beginAction();
+            link.renameContact(contact.id, name);
+            dialog.dismiss();
+        });
+    }
+
+    private void addContact() {
+        String[] actions = {"Create new invite", "Scan an invite", "Open QR image", "Paste an invite", "Use existing key bundle"};
+        DisplayPrivacy.dialog(this).setTitle("Add contact").setItems(actions, (dialog, which) -> {
+            switch (which) {
+                case 0:
+                    beginAction();
+                    flushDraft();
+                    wantsInvite = true;
+                    inviteFrom = renderedId;
+                    link.createNewInvite();
+                    break;
+                case 1: scan(); break;
+                case 2: chooseImage(); break;
+                case 3: paste(); break;
+                case 4: chooseBundle(); break;
+            }
+        }).setNegativeButton("Cancel", null).show();
     }
 
     private void menu() {
         PopupMenu popup = new PopupMenu(this, options);
+        popup.getMenu().add("Screen privacy").setOnMenuItemClickListener(i -> { DisplayPrivacy.choose(this); return true; });
         popup.getMenu().add("Check for updates").setOnMenuItemClickListener(i -> { updates.check(true); return true; });
         if (link == null) { popup.show(); return; }
         PeerLink.Snapshot state = link.snapshot();
@@ -486,14 +749,30 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         if (state.role.isEmpty()) {
             popup.getMenu().add("Use existing key bundle").setOnMenuItemClickListener(i -> { chooseBundle(); return true; });
         } else {
+            popup.getMenu().add("Find in conversation").setOnMenuItemClickListener(i -> {
+                List<PeerLink.Message> items = state.messages;
+                FindMessages.show(this, items, index -> {
+                    if (renderedId == state.activeId && index >= 0 && index < items.size()) {
+                        PeerLink.Message match = items.get(index);
+                        for (int pos = 0; pos < adapter.getCount(); pos++) {
+                            PeerLink.Message visible = adapter.getItem(pos);
+                            if (visible.time == match.time && visible.outgoing == match.outgoing && visible.text.equals(match.text)) {
+                                history.setSelection(pos); break;
+                            }
+                        }
+                    }
+                });
+                return true;
+            });
             popup.getMenu().add("Reconnect / retry delivery").setOnMenuItemClickListener(i -> {
                 beginAction(); link.retry(); return true;
             });
             popup.getMenu().add("Forget pairing").setOnMenuItemClickListener(i -> {
-                new AlertDialog.Builder(this).setTitle("Forget this pairing?")
+                DisplayPrivacy.dialog(this).setTitle("Forget this pairing?")
                     .setMessage("This removes this pairing’s keys and local conversation. To talk again, pair both phones with a new invite.")
                     .setNegativeButton("Cancel", null).setPositiveButton("Forget", (d, w) -> {
-                        beginAction(); leaveRadio(); submitted = null; draft.setText(""); link.reset();
+                        if (renderedId != state.activeId) return;
+                        beginAction(); flushDraft(); leaveRadio(); submitted = null; link.reset(state.activeId);
                     }).show();
                 return true;
             });
@@ -505,6 +784,8 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         if (link == null) return;
         beginAction();
         wantsInvite = true;
+        inviteFrom = bundle == null ? -1 : renderedId;
+        flushDraft();
         if (bundle == null) link.createInvite(); else link.createInvite(bundle);
     }
 
@@ -546,7 +827,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         content.addView(privateCode);
         ScrollView scroll = new ScrollView(this);
         scroll.addView(content);
-        AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Pairing invite")
+        AlertDialog dialog = DisplayPrivacy.dialog(this).setTitle("Pairing invite")
                 .setView(scroll).setNegativeButton("Close", null)
                 .setNeutralButton("Copy code", null).create();
         inviteDialog = dialog;
@@ -617,7 +898,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         LinearLayout content = column();
         pad(content, 20, 8, 8);
         content.addView(input);
-        AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Join a phone")
+        AlertDialog dialog = DisplayPrivacy.dialog(this).setTitle("Join a phone")
                 .setMessage("Use the private invite from the phone you want to pair with.")
                 .setView(content).setNegativeButton("Cancel", null)
                 .setPositiveButton("Import", (d, w) -> importCard(input.getText().toString())).create();

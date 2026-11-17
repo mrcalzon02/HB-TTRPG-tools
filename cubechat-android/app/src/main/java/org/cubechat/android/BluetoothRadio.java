@@ -49,6 +49,7 @@ final class BluetoothRadio {
     private volatile int generation;
     private volatile boolean closed;
     private boolean active, inFlight, receiverRegistered;
+    private long choosingContact;
     private AlertDialog chooser;
     private final Map<String, BluetoothDevice> nearby = new LinkedHashMap<>();
     private ArrayAdapter<String> rows;
@@ -85,6 +86,7 @@ final class BluetoothRadio {
         if (closed) return;
         if (radio == null) { notice("This phone has no Bluetooth Classic adapter."); return; }
         if (link.snapshot().role.isEmpty()) { notice("Create or scan a key card first."); return; }
+        choosingContact = link.snapshot().activeId;
         List<String> missing = missing();
         if (!missing.isEmpty()) { activity.requestPermissions(missing.toArray(new String[0]), PERMISSIONS); return; }
         try {
@@ -104,12 +106,13 @@ final class BluetoothRadio {
     }
 
     void onPermissionsResult(int request) {
-        if (request != PERMISSIONS) return;
+        if (request != PERMISSIONS || choosingContact == 0 || choosingContact != link.snapshot().activeId) return;
         if (missing().isEmpty()) choose();
         else notice("Bluetooth permission is needed to use this radio. Your chat key is already stored.");
     }
 
     void onActivityResult(int request, int result) {
+        if (choosingContact == 0 || choosingContact != link.snapshot().activeId) return;
         if (request == ENABLE && result == Activity.RESULT_OK) choose();
         else if (request == ENABLE) notice("Bluetooth is off.");
         else if (request == DISCOVERABLE && result == Activity.RESULT_CANCELED) {
@@ -124,6 +127,11 @@ final class BluetoothRadio {
             if (link.snapshot().status.startsWith("Opening")) ui.postDelayed(this::resume, 400);
             return;
         }
+        PeerLink.Snapshot state = link.snapshot();
+        long owner = saved.getLong("contact", 0);
+        // Older releases had one pairing and no owner field. It migrates to contact 1.
+        if (owner == 0 ? state.activeId != 1 || state.contacts.size() != 1 :
+                owner != state.activeId || !"Bluetooth".equals(state.route)) return;
         if (!missing().isEmpty()) return;
         try { if (radio.isEnabled()) activate(saved.getString("address", "")); }
         catch (RuntimeException e) { notice("Bluetooth unavailable: " + detail(e)); }
@@ -132,7 +140,8 @@ final class BluetoothRadio {
     private void activate(String address) {
         deactivate();
         active = true;
-        saved.edit().putBoolean("enabled", true).putString("address", address).apply();
+        saved.edit().putBoolean("enabled", true).putString("address", address)
+                .putLong("contact", link.snapshot().activeId).apply();
         link.useBluetooth();
         tick();
     }
@@ -210,9 +219,10 @@ final class BluetoothRadio {
         for (BluetoothDevice device : radio.getBondedDevices()) nearby.put(device.getAddress(), device);
         rows = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1);
         renderDevices();
-        chooser = new AlertDialog.Builder(activity).setTitle("Choose the other phone")
+        chooser = DisplayPrivacy.dialog(activity).setTitle("Choose the other phone")
                 .setAdapter(rows, (dialog, index) -> {
-                    if (index >= 0 && index < choices.size()) activate(choices.get(index).getAddress());
+                    if (choosingContact == link.snapshot().activeId && index >= 0 && index < choices.size())
+                        activate(choices.get(index).getAddress());
                 }).setNegativeButton("Cancel", null).setNeutralButton("Search again", null).create();
         chooser.setOnDismissListener(dialog -> {
             endDiscovery();
@@ -255,6 +265,8 @@ final class BluetoothRadio {
     }
 
     void leave() {
+        choosingContact = 0;
+        if (chooser != null) chooser.dismiss();
         saved.edit().clear().apply();
         deactivate();
     }

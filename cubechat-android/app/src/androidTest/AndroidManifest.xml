@@ -1,0 +1,3 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <instrumentation android:name="org.cubechat.android.ContactStorageChecks" android:targetPackage="org.cubechat.android" />
+</manifest>
