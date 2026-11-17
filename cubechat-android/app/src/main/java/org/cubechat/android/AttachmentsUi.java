@@ -33,7 +33,8 @@ final class AttachmentsUi {
     private final PeerLink link;
     private final Button notice;
     private final FileRows rows = new FileRows();
-    private AlertDialog listDialog, detailDialog, removeDialog;
+    private AlertDialog listDialog, detailDialog, removeDialog, cleanupDialog;
+    private LinearLayout cleanupRows;
     private TextView connection, storageSummary, detailStatus, detailBytes;
     private ProgressBar progress;
     private LinearLayout actions;
@@ -115,6 +116,7 @@ final class AttachmentsUi {
             if (selected == null) detailDialog.dismiss();
             else renderDetail(selected);
         }
+        if (cleanupDialog != null) renderCleanup(state);
         if (state.loaded && pendingUri != null) finishPicker(state);
     }
 
@@ -184,6 +186,7 @@ final class AttachmentsUi {
         });
         AlertDialog opened = DisplayPrivacy.dialog(screen).setTitle("Files").setView(content)
                 .setNegativeButton("Close", null)
+                .setNeutralButton("Manage storage", (d,w) -> showCleanup())
                 .setPositiveButton("Attach file", (d,w) -> chooseInput(state.activeId)).create();
         listDialog = opened;
         opened.setOnDismissListener(d -> {
@@ -195,6 +198,70 @@ final class AttachmentsUi {
             }
         });
         opened.show();
+    }
+
+    private void showCleanup() {
+        if (cleanupDialog != null) return;
+        link.refreshCompletedFiles();
+        LinearLayout content = panel();
+        TextView explanation = text(14);
+        explanation.setText("Completed local file copies across all conversations. Tap a file to remove only its CubeChat vault copy. Files saved elsewhere remain untouched.");
+        content.addView(explanation);
+        cleanupRows = new LinearLayout(screen);
+        cleanupRows.setOrientation(LinearLayout.VERTICAL);
+        content.addView(cleanupRows);
+        ScrollView scroll = new ScrollView(screen);
+        scroll.addView(content);
+        AlertDialog opened = DisplayPrivacy.dialog(screen).setTitle("Manage attachment storage")
+                .setView(scroll).setNegativeButton("Close", null).create();
+        cleanupDialog = opened;
+        opened.setOnDismissListener(d -> {
+            if (cleanupDialog == opened) {
+                cleanupDialog = null;
+                cleanupRows = null;
+            }
+        });
+        renderCleanup(link.snapshot());
+        opened.show();
+    }
+
+    private void renderCleanup(PeerLink.Snapshot state) {
+        if (cleanupRows == null) return;
+        cleanupRows.removeAllViews();
+        long recoverable = 0;
+        for (AttachmentStore.Completed item : state.completedFiles) recoverable += item.file.size;
+        TextView heading = text(15);
+        heading.setText(state.completedFiles.size() + " completed local files · "
+                + size(recoverable) + " of attachment data");
+        cleanupRows.addView(heading);
+        if (state.completedFiles.isEmpty()) {
+            TextView empty = text(14);
+            empty.setText("No completed local attachments found.");
+            cleanupRows.addView(empty);
+            return;
+        }
+        for (AttachmentStore.Completed item : state.completedFiles) {
+            String contactName = "Conversation " + item.contactId;
+            for (ChatStore.Contact contact : state.contacts)
+                if (contact.id == item.contactId) { contactName = contact.name; break; }
+            Button file = new Button(screen);
+            file.setAllCaps(false);
+            file.setMinHeight(dp(48));
+            file.setText(item.file.name + " · " + size(item.file.size) + "\\n" + contactName);
+            file.setOnClickListener(v -> confirmCleanup(item.contactId, item.file.id, item.file.name, item.file.size));
+            cleanupRows.addView(file);
+        }
+    }
+
+    private void confirmCleanup(long contactId, String id, String filename, long bytes) {
+        if (removeDialog != null) return;
+        removeDialog = DisplayPrivacy.dialog(screen).setTitle("Remove local attachment?")
+                .setMessage(filename + " (" + size(bytes) + ") will be removed from CubeChat's encrypted vault. "
+                        + "Any separately exported copies remain untouched. Active transfers are not eligible.")
+                .setNegativeButton("Keep", null)
+                .setPositiveButton("Remove", (d,w) -> link.removeCompletedFromContact(contactId,id)).create();
+        removeDialog.setOnDismissListener(d -> removeDialog = null);
+        removeDialog.show();
     }
 
     private void chooseInput(long contactId) {
@@ -424,6 +491,7 @@ final class AttachmentsUi {
         if (removeDialog != null) removeDialog.dismiss();
         if (detailDialog != null) detailDialog.dismiss();
         if (listDialog != null) listDialog.dismiss();
+        if (cleanupDialog != null) cleanupDialog.dismiss();
         dialogContact = 0;
     }
 }
