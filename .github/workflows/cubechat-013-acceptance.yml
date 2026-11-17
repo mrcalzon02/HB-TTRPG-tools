@@ -1,0 +1,131 @@
+name: CubeChat 0.1.3 encrypted attachments
+on:
+  push:
+    branches:
+      - qa/cubechat-android-0.1.0
+    paths:
+      - '.github/workflows/cubechat-013-acceptance.yml'
+      - '.github/scripts/cubechat_013_acceptance.py'
+      - '.github/cubechat-files-candidate/CubeChat.apk'
+permissions:
+  contents: read
+jobs:
+  two-emulators:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            .github/scripts
+            .github/cubechat-files-candidate
+            .github/cubechat-candidate
+      - name: Check the published binary and decoder
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! curl -fsSL --max-time 30 https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/cubechat-android-v0.1.2/CubeChat.apk -o "$RUNNER_TEMP/CubeChat-previous.apk"; then
+            cp .github/cubechat-candidate/CubeChat.apk "$RUNNER_TEMP/CubeChat-previous.apk"
+          fi
+          echo "8269f921284f0bd3180e786d3ddf9358364a677e08cd948dec032262b3d5cc7c  $RUNNER_TEMP/CubeChat-previous.apk" | sha256sum -c -
+          echo "57133e5fdf63c5c6191d8c51d33306cf68ec4e17664f4a95819bea7da1e47486  .github/cubechat-files-candidate/CubeChat.apk" | sha256sum -c -
+          curl --fail --silent --show-error --location --retry 2 \
+            https://repo.maven.apache.org/maven2/com/google/zxing/core/3.5.3/core-3.5.3.jar \
+            --output "$RUNNER_TEMP/zxing-core.jar"
+          echo "8d8064c1636fdaef7189dd9055c7d59950a8940a12f2293956446ec3c109fd82  $RUNNER_TEMP/zxing-core.jar" | sha256sum -c -
+          javac -cp "$RUNNER_TEMP/zxing-core.jar" -d "$RUNNER_TEMP" .github/scripts/CubeChatQrReader.java
+      - name: Verify file consent, export, Wi-Fi Direct and Bluetooth on two API 35 phones
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap 'echo "Bluetooth emulator setup failed at shell line $LINENO (exit $?)"' ERR
+          test -c /dev/kvm
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-cubechat-kvm.rules > /dev/null
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          sudo udevadm settle
+          sudo setfacl -m "u:$(id -un):rw" /dev/kvm
+          test -w /dev/kvm
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+          sdkmanager --install "emulator" "platform-tools" "system-images;android-35;google_apis;x86_64" > "$RUNNER_TEMP/radio-sdk-install.log"
+          version=$(sed -nE 's/^Pkg.Revision=([0-9.]+).*/\1/p' "$ANDROID_HOME/emulator/source.properties")
+          test -n "$version"
+          dpkg --compare-versions "$version" ge "36.5"
+          echo "Android Emulator $version, two Android 35 google_apis x86_64 images."
+          export ANDROID_USER_HOME="$RUNNER_TEMP/cubechat-bt-android"
+          export ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"
+          test -f "$ANDROID_HOME/system-images/android-35/google_apis/x86_64/system.img"
+          adb start-server
+          pids=()
+          trap 'for p in "${pids[@]}"; do kill "$p" 2>/dev/null || true; done' EXIT
+          for port in 5554 5556; do
+            name="cubechat-bt-$port"
+            dir="$ANDROID_AVD_HOME/$name.avd"
+            mkdir -p "$dir"
+            printf '%s\n' 'avd.ini.encoding=UTF-8' "path=$dir" 'target=android-35' > "$ANDROID_AVD_HOME/$name.ini"
+            cat > "$dir/config.ini" <<AVD
+          AvdId=$name
+          avd.ini.displayname=$name
+          abi.type=x86_64
+          hw.cpu.arch=x86_64
+          image.sysdir.1=system-images/android-35/google_apis/x86_64/
+          tag.id=google_apis
+          tag.display=Google APIs
+          hw.lcd.width=720
+          hw.lcd.height=1280
+          hw.lcd.density=240
+          hw.ramSize=2048
+          vm.heapSize=256
+          disk.dataPartition.size=2G
+          hw.keyboard=yes
+          hw.gpu.enabled=yes
+          hw.audioInput=no
+          hw.audioOutput=no
+          fastboot.forceColdBoot=yes
+          AVD
+            emulator -avd "$name" -port "$port" -cores 2 -accel on -memory 2048 \
+              -no-window -no-snapshot -no-boot-anim -no-audio -no-metrics \
+              -gpu swiftshader_indirect -feature -Vulkan > "$RUNNER_TEMP/bt-$port.log" 2>&1 &
+            pids+=("$!")
+            # Start the second instance after the first process has initialized the shared netsimd.
+            if [[ "$port" == 5554 ]]; then
+              timeout 120 adb -s emulator-5554 wait-for-device
+            fi
+          done
+          deadline=$((SECONDS + 440))
+          for port in 5554 5556; do
+            adbserial=(adb -s "emulator-$port")
+            while [[ "$(timeout 4 "${adbserial[@]}" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r' || true)" != 1 ]]; do
+              if (( SECONDS >= deadline )); then tail -30 "$RUNNER_TEMP/bt-$port.log"; exit 1; fi
+              sleep 2
+            done
+            "${adbserial[@]}" shell wm dismiss-keyguard
+            "${adbserial[@]}" shell input keyevent 82
+            "${adbserial[@]}" shell wm size 720x1280
+            "${adbserial[@]}" shell wm density 240
+            "${adbserial[@]}" shell settings put global window_animation_scale 0
+            "${adbserial[@]}" shell settings put global transition_animation_scale 0
+            "${adbserial[@]}" shell settings put global animator_duration_scale 0
+            "${adbserial[@]}" shell settings put system screen_off_timeout 1800000
+            "${adbserial[@]}" shell pm list features | tr -d '\r' | grep -Fx 'feature:android.hardware.bluetooth'
+            "${adbserial[@]}" shell service check bluetooth_manager
+            "${adbserial[@]}" shell svc wifi enable
+            "${adbserial[@]}" shell svc data disable
+            "${adbserial[@]}" install -r "$RUNNER_TEMP/CubeChat-previous.apk"
+          done
+          test_apk=.github/cubechat-files-candidate/ContactStorageChecks.apk
+          echo "0fff16e49bf11790b3f2d1e17851d7153fc5e4b405a76e9a3d2f13655d9bf108  $test_apk" | sha256sum -c -
+          python3 .github/scripts/cubechat_013_acceptance.py
+          adb -s emulator-5554 install -r "$test_apk"
+          adb -s emulator-5554 shell am instrument -w -r org.cubechat.android.test/org.cubechat.android.ContactStorageChecks | tee "$RUNNER_TEMP/store-check.log"
+          grep -F "PASS: SQLite upgrade, contact isolation, drafts, counters and attachment vault." "$RUNNER_TEMP/store-check.log"
+          grep -F "INSTRUMENTATION_CODE: -1" "$RUNNER_TEMP/store-check.log"
+
+      - name: Save the key-free conversation screenshot
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: CubeChat-Android-013-files
+          path: ${{ runner.temp }}/CubeChat-013-*.png
+          if-no-files-found: error
+          retention-days: 7
