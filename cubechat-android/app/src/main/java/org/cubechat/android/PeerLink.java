@@ -1,6 +1,7 @@
 package org.cubechat.android;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import org.json.JSONObject;
@@ -21,6 +22,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 /** Stores independent conversations and services the selected conversation on its chosen route. */
 public final class PeerLink {
@@ -32,6 +34,7 @@ public final class PeerLink {
         void changed();
         void problem(String problem);
         default void queued(long contactId, String text) { }
+        default void fileSaved(long contactId, String transferId) { }
         default void replaceRequested(String card) { problem("Forget the current key before importing this one"); }
     }
     public static final class Message {
@@ -45,16 +48,19 @@ public final class PeerLink {
     public static final class Snapshot {
         public final String status, role, peer, invite, relay, route, ping, draft;
         public final List<Message> messages;
+        public final List<AttachmentStore.Transfer> files;
+        public final boolean fileCapable;
         public final List<ChatStore.Contact> contacts;
         public final long activeId, pingTime;
         public final boolean connected, forwarding, pinging, loaded;
         Snapshot(String status, String role, String peer, String invite, List<Message> messages, boolean connected,
                  String relay, long activeId, List<ChatStore.Contact> contacts, String route,
-                 String ping, long pingTime, boolean pinging, String draft, boolean loaded) {
+                 String ping, long pingTime, boolean pinging, String draft, boolean loaded,
+                 List<AttachmentStore.Transfer> files, boolean fileCapable) {
             this.status = status; this.role = role; this.peer = peer; this.invite = invite;
             this.messages = messages; this.connected = connected; this.relay = relay; this.forwarding = !relay.isEmpty();
             this.activeId = activeId; this.contacts = contacts; this.route = route;
-            this.ping = ping; this.pingTime = pingTime; this.pinging = pinging; this.draft = draft; this.loaded = loaded;
+            this.ping = ping; this.pingTime = pingTime; this.pinging = pinging; this.draft = draft; this.loaded = loaded; this.files = files; this.fileCapable = fileCapable;
         }
     }
 
@@ -79,10 +85,17 @@ public final class PeerLink {
     private boolean needsDiscovery;
     private long lastReceived;
     private final Listener listener;
+    private final Context app;
     private final ChatStore store;
+    private final AttachmentStore attachments;
+    private final ExecutorService fileIo = Executors.newSingleThreadExecutor();
+    private List<AttachmentStore.Transfer> files = Collections.emptyList();
+    private AttachmentExchange exchange;
+    private long lastFileUpdate, seenImports;
+    private static final AtomicLong completedImports = new AtomicLong();
     private final Codec codec;
     private volatile Snapshot snapshot = new Snapshot("Opening mailbox…", "", "", "", Collections.emptyList(),
-            false, "", 0, Collections.emptyList(), Route.LAN.label, "", 0, false, "", false);
+            false, "", 0, Collections.emptyList(), Route.LAN.label, "", 0, false, "", false, Collections.emptyList(), false);
     private long activeId, challenge, pingDeadline, pingSentAt, pingTime;
     private String ping = "", draft = "";
     private List<ChatStore.Contact> contacts = Collections.emptyList();
@@ -97,8 +110,10 @@ public final class PeerLink {
     private ServerSocket server;
 
     public PeerLink(Context context, Codec codec, Listener listener) {
-        wifi = (android.net.wifi.WifiManager)context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        store = new ChatStore(context.getApplicationContext()); this.codec = codec; this.listener = listener;
+        app = context.getApplicationContext();
+        wifi = (android.net.wifi.WifiManager)app.getSystemService(Context.WIFI_SERVICE);
+        store = new ChatStore(app); attachments = new AttachmentStore(app, store);
+        this.codec = codec; this.listener = listener;
     }
     public Snapshot snapshot() { return snapshot; }
     private static String detail(Exception error) {
@@ -117,7 +132,7 @@ public final class PeerLink {
             try { peer = DirectProtocol.fingerprint(pair.remote); } catch (Exception e) { report(detail(e)); }
         }
         snapshot = new Snapshot(status, pair == null ? "" : pair.host ? "host" : "guest", peer, invitation, history, session != null,
-                relayStatus, activeId, contacts, route.label, ping, pingTime, challenge != 0, draft, loaded);
+                relayStatus, activeId, contacts, route.label, ping, pingTime, challenge != 0, draft, loaded, files, exchange != null);
         main.post(() -> { if (!closed) listener.changed(); });
     }
 
@@ -129,6 +144,8 @@ public final class PeerLink {
             lane.scheduleWithFixedDelay(() -> {
                 if (closed) return;
                 try {
+                    long revision = completedImports.get();
+                    if (revision != seenImports && activeId != 0) { filesChanged(null); seenImports = revision; }
                     if (session != null) {
                         if (System.nanoTime() - lastReceived > TimeUnit.SECONDS.toNanos(45)
                                 || (sentSeq >= 0 && System.nanoTime() - sentAt > TimeUnit.SECONDS.toNanos(60))) {
@@ -148,7 +165,7 @@ public final class PeerLink {
     private void loadSelection() throws Exception {
         shutdownNetwork();
         pair = null; activeId = 0; invitation = ""; draft = ""; history = Collections.emptyList();
-        contacts = Collections.emptyList(); route = Route.LAN; wifiEndpoint = ""; status = "Ready to pair";
+        contacts = Collections.emptyList(); files = Collections.emptyList(); route = Route.LAN; wifiEndpoint = ""; status = "Ready to pair";
         ping = ""; pingTime = 0;
         try {
             contacts = store.contacts();
@@ -158,6 +175,7 @@ public final class PeerLink {
             String[] preference = store.route(selected);
             List<Message> savedHistory = store.history();
             String savedDraft = store.draft(selected);
+            files = attachments.list(selected);
             route = Route.valueOf(preference[0]);
             // A Wi-Fi Direct group address is valid only after Android confirms the live group.
             if (route == Route.RELAY) wifiEndpoint = preference[1];
@@ -320,6 +338,65 @@ public final class PeerLink {
                     });
                 }
             });
+        });
+    }
+    private void refreshFiles(boolean now) throws Exception {
+        long tick = System.nanoTime();
+        if (!now && tick - lastFileUpdate < TimeUnit.MILLISECONDS.toNanos(200)) return;
+        lastFileUpdate = tick;
+        files = attachments.list(activeId);
+        publish();
+    }
+    private void filesChanged(String id) throws Exception {
+        refreshFiles(true);
+        if (exchange != null) {
+            try { if (id == null) exchange.sync(); else exchange.localChange(id); }
+            catch (Exception e) { disconnect(session); throw e; }
+        }
+    }
+    public void offerFile(long target, Uri source) {
+        command(() -> {
+            ready(); requireContact(target);
+            fileIo.execute(() -> {
+                try (ChatStore worker = new ChatStore(app)) {
+                    new AttachmentStore(app, worker).importFile(target, source);
+                    completedImports.incrementAndGet();
+                    command(() -> { if (target == activeId) filesChanged(null); });
+                } catch (Exception e) { report("Could not attach file: " + detail(e)); }
+            });
+        });
+    }
+    public void exportFile(long target, String id, Uri destination) {
+        command(() -> {
+            ready(); requireContact(target);
+            fileIo.execute(() -> {
+                try (ChatStore worker = new ChatStore(app)) {
+                    new AttachmentStore(app, worker).exportFile(target, id, destination);
+                    main.post(() -> { if (!closed) listener.fileSaved(target, id); });
+                } catch (Exception e) { report("Could not save file: " + detail(e)); }
+            });
+        });
+    }
+    public void acceptFile(long target, String id) {
+        command(() -> { ready(); requireContact(target); attachments.accept(target, id); filesChanged(id); });
+    }
+    public void declineFile(long target, String id) { stopFile(target, id, AttachmentStore.DECLINED); }
+    public void cancelFile(long target, String id) { stopFile(target, id, AttachmentStore.CANCELED); }
+    private void stopFile(long target, String id, String result) {
+        command(() -> { ready(); requireContact(target); attachments.terminate(target, id, result, true); filesChanged(id); });
+    }
+    public void deleteAttachment(long target, String id) {
+        command(() -> { ready(); requireContact(target); attachments.removeCompleted(target, id); refreshFiles(true); });
+    }
+    public void pauseFile(long target, String id) { setFilePaused(target, id, true); }
+    public void resumeFile(long target, String id) { setFilePaused(target, id, false); }
+    private void setFilePaused(long target, String id, boolean pause) {
+        command(() -> { ready(); requireContact(target); attachments.pause(target, id, pause); filesChanged(id); });
+    }
+    public void retryFile(long target, String id) {
+        command(() -> {
+            ready(); requireContact(target); filesChanged(id);
+            if (session == null) reconnect();
         });
     }
     public void ping() {
@@ -485,7 +562,7 @@ public final class PeerLink {
     }
 
     private void open(DirectProtocol link) throws Exception {
-        close(session); session = link; sentSeq = -1; connecting = false;
+        close(session); session = link; exchange = null; sentSeq = -1; connecting = false;
         lastReceived = System.nanoTime();
         status = route == Route.BLUETOOTH ? "Connected over Bluetooth" : route == Route.WIFI_DIRECT ? "Connected over Wi-Fi Direct" : route == Route.RELAY ? "Connected through relay" : "Connected";
         publish();
@@ -497,11 +574,15 @@ public final class PeerLink {
                 }
             } catch (Exception e) { if (!closed) command(() -> disconnect(link)); }
         });
-        try { sendPing(); pump(); } catch (Exception e) { disconnect(link); throw e; }
+        try { link.write(DirectProtocol.HEARTBEAT, DirectProtocol.FILE_HELLO, ""); sendPing(); pump(); }
+        catch (Exception e) { disconnect(link); throw e; }
     }
     private void receive(DirectProtocol link, DirectProtocol.Record record) throws Exception {
         lastReceived = System.nanoTime();
-        if (record.type == DirectProtocol.MESSAGE) {
+        if (record.type == DirectProtocol.FILE) {
+            if (exchange == null) throw new IOException("File support was not negotiated");
+            refreshFiles(exchange.receive(record.body));
+        } else if (record.type == DirectProtocol.MESSAGE) {
             long expected = store.next(false);
             if (record.sequence > expected) throw new IOException("Unexpected message sequence");
             if (record.sequence == expected) {
@@ -517,7 +598,12 @@ public final class PeerLink {
         } else if (record.type == DirectProtocol.RECEIPT && sentSeq >= 0 && sentSeq == record.sequence) {
             store.delivered(sentSeq); sentSeq = -1; history = store.history(); contacts = store.contacts(); publish(); pump();
         } else if (record.type == DirectProtocol.HEARTBEAT) {
-            if (DirectProtocol.pingRequest(record.sequence)) {
+            if (record.sequence == DirectProtocol.FILE_HELLO) {
+                if (exchange == null) {
+                    exchange = new AttachmentExchange(attachments, codec, activeId, pair, link);
+                    refreshFiles(true); exchange.sync();
+                }
+            } else if (DirectProtocol.pingRequest(record.sequence)) {
                 link.write(DirectProtocol.HEARTBEAT, record.sequence + 1, "");
             } else if (challenge != 0 && pingSentAt != 0 && record.sequence == challenge + 1) {
                 long now = System.nanoTime();
@@ -538,13 +624,13 @@ public final class PeerLink {
     }
     private void disconnect(DirectProtocol link) {
         if (link == null || session != link) return;
-        close(link); session = null; sentSeq = -1;
+        close(link); session = null; exchange = null; sentSeq = -1;
         if (challenge != 0 && pingSentAt != 0) noPingReply();
         status = route == Route.BLUETOOTH ? "Waiting for Bluetooth reconnection" : pair.host ? "Waiting for paired phone" : "Disconnected. Retrying…"; publish();
     }
     private static void close(java.io.Closeable object) { if (object != null) try { object.close(); } catch (IOException ignored) {} }
     private void shutdownNetwork() {
-        generation++;
+        generation++; exchange = null;
         if (challenge != 0) { challenge = 0; pingSentAt = 0; ping = ""; pingTime = 0; }
         close(bluetoothCandidate); bluetoothCandidate = null;
         close(advertiser); advertiser = null;
@@ -554,6 +640,6 @@ public final class PeerLink {
     public synchronized void stop() {
         if (closed) return;
         closed = true;
-        lane.execute(() -> { shutdownNetwork(); close(forwarder); forwarder = null; store.close(); io.shutdownNow(); lane.shutdownNow(); });
+        lane.execute(() -> { shutdownNetwork(); close(forwarder); forwarder = null; store.close(); fileIo.shutdown(); io.shutdownNow(); lane.shutdownNow(); });
     }
 }

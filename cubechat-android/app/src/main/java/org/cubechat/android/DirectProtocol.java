@@ -34,7 +34,10 @@ import javax.crypto.spec.SecretKeySpec;
 final class DirectProtocol implements Closeable {
     static final int PORT = 47743;
     static final int MAX_BODY = 2 * 1024 * 1024;
-    static final int MESSAGE = 1, RECEIPT = 2, HEARTBEAT = 3;
+    static final int MESSAGE = 1, RECEIPT = 2, HEARTBEAT = 3, FILE = 4;
+    static final int MAX_FILE_FRAME = 72 * 1024;
+    // Reserved odd heartbeat understood only by attachment-capable endpoints. A legacy ping never solicits it.
+    static final long FILE_HELLO = 0x434346494c453031L;
     static final int MAGIC = 0x43554232; // CUB2
     private static final SecureRandom RANDOM = new SecureRandom();
     // SO_TIMEOUT covers only reads. A stalled socket write must also release the mailbox worker.
@@ -63,7 +66,7 @@ final class DirectProtocol implements Closeable {
     // Zero stays the keepalive. An even nonzero challenge requests its adjacent odd response.
     static long pingChallenge() {
         long value;
-        do { value = RANDOM.nextLong() & 0x7ffffffffffffffeL; } while (value == 0);
+        do { value = RANDOM.nextLong() & 0x7ffffffffffffffeL; } while (value == 0 || value == FILE_HELLO - 1);
         return value;
     }
 
@@ -218,7 +221,7 @@ final class DirectProtocol implements Closeable {
 
     synchronized void write(int type, long sequence, String body) throws Exception {
         byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
-        if (bytes.length > MAX_BODY) throw new IOException("Message envelope is too large");
+        if (bytes.length > MAX_BODY || (type == FILE && (sequence != 0 || bytes.length > MAX_FILE_FRAME))) throw new IOException("Message envelope is too large");
         byte[] record = ByteBuffer.allocate(bytes.length + 9).put((byte)type).putLong(sequence).put(bytes).array();
         byte[] ciphertext = crypt(Cipher.ENCRYPT_MODE, outboundKey, sent++, record);
         ScheduledFuture<?> deadline = closeAfter(transport, 15);
@@ -237,7 +240,8 @@ final class DirectProtocol implements Closeable {
         ByteBuffer plain = ByteBuffer.wrap(crypt(Cipher.DECRYPT_MODE, inboundKey, received++, read(in, size)));
         int type = plain.get() & 255;
         long seq = plain.getLong();
-        if (seq < 0 || type < MESSAGE || type > HEARTBEAT || (type != MESSAGE && plain.remaining() != 0)) throw new IOException("Invalid record");
+        if (seq < 0 || type < MESSAGE || type > FILE || (type == FILE && (seq != 0 || plain.remaining() > MAX_FILE_FRAME))
+                || ((type == HEARTBEAT || type == RECEIPT) && plain.remaining() != 0)) throw new IOException("Invalid record");
         return new Record(type, seq, new String(plain.array(), plain.position(), plain.remaining(), StandardCharsets.UTF_8));
     }
 

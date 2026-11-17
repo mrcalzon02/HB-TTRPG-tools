@@ -1,0 +1,122 @@
+package org.cubechat.android;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.UUID;
+
+/** Runs inside ContactStorageChecks against disposable databases on the device. */
+final class AttachmentStorageChecks {
+    private interface Operation { void run() throws Exception; }
+    private static void check(boolean ok, String message) { if (!ok) throw new AssertionError(message); }
+    private static void refused(Operation op) throws Exception {
+        try { op.run(); } catch (IOException expected) { return; }
+        throw new AssertionError("Invalid attachment operation was accepted");
+    }
+    private static long count(ChatStore db, String sql, String... args) {
+        try (Cursor c = db.getReadableDatabase().rawQuery(sql,args)) { c.moveToFirst(); return c.getLong(0); }
+    }
+    static void run(Context context) throws Exception {
+        String name = "cubechat-files-test-" + UUID.randomUUID() + ".db";
+        try {
+            Pairing original = Pairing.host(null);
+            try (ChatStore store = new ChatStore(context,name)) {
+                store.createPair(original.json());
+                store.save(true,0,"original queued text","original queued packet");
+                // Reproduce the released v2 schema including its actual encrypted contact and queue.
+                SQLiteDatabase db = store.getWritableDatabase();
+                db.execSQL("DROP TRIGGER forget_attachments");
+                db.execSQL("DROP TRIGGER erase_attachment_chunks");
+                db.execSQL("DROP TABLE attachments");
+                db.execSQL("DROP TABLE attachment_chunks");
+                db.setVersion(2);
+            }
+            try (ChatStore store = new ChatStore(context,name)) {
+                check(store.pairing().getString("private").equals(original.json().getString("private")), "Migration lost pairing");
+                check(store.packet(0).equals("original queued packet") && store.pending() == 0, "Migration lost text queue");
+                exercise(context,store);
+            }
+        } finally { context.deleteDatabase(name); }
+    }
+
+    static void exercise(Context context, ChatStore chats) throws Exception {
+        long sender = chats.activeId();
+        long receiver = chats.createPair(Pairing.host(null).json());
+        long unrelated = chats.createPair(Pairing.host(null).json());
+        AttachmentStore files = new AttachmentStore(context,chats);
+        byte[] bytes = new byte[AttachmentStore.CHUNK * 2 + 17];
+        new Random(4).nextBytes(bytes);
+        String expected = DirectProtocol.hex(MessageDigest.getInstance("SHA-256").digest(bytes));
+        AttachmentStore.Transfer out = files.importFile(sender,"../Private-name-183.txt","TEXT/PLAIN",new ByteArrayInputStream(bytes));
+        String id = out.id;
+        check(out.name.equals("Private-name-183.txt") && out.mime.equals("text/plain") && out.sha256.equals(expected), "Incorrect imported manifest");
+        check(files.list(unrelated).isEmpty(), "Imported attachment crossed into another chat");
+        check(count(chats,"SELECT COUNT(*) FROM attachments WHERE instr(manifest, CAST(? AS BLOB))>0",out.name)==0,"Filename leaked to disk");
+        check(count(chats,"SELECT COUNT(*) FROM attachments WHERE instr(manifest, CAST(? AS BLOB))>0",expected)==0,"Hash leaked to disk");
+        check(count(chats,"SELECT COUNT(*) FROM attachment_chunks WHERE body=X'" + DirectProtocol.hex(Arrays.copyOf(bytes, AttachmentStore.CHUNK)) + "'")==0,"Plaintext chunk on disk");
+
+        files.offer(receiver,id,out.name,out.mime,out.size,out.sha256);
+        files.offer(receiver,id,out.name,out.mime,out.size,out.sha256);
+        check(files.list(receiver).size()==1 && !files.get(receiver,id).outgoing, "Duplicate offer created a new item");
+        refused(() -> files.offer(receiver,id,"other.txt",out.mime,out.size,out.sha256));
+        refused(() -> files.offer(sender,id,out.name,out.mime,out.size,out.sha256));
+        refused(() -> files.append(receiver,id,0,Arrays.copyOf(bytes,AttachmentStore.CHUNK)));
+        ByteArrayOutputStream dest = new ByteArrayOutputStream();
+        refused(() -> files.exportFile(receiver,id,dest));
+        check(dest.size()==0,"Unaccepted file wrote to destination");
+        files.accept(receiver,id);
+        files.acknowledged(sender,id,0);
+        byte[] first = files.readChunk(sender,id,0);
+        files.append(receiver,id,0,first);
+        check(files.append(receiver,id,0,first).progress==AttachmentStore.CHUNK,"Duplicate chunk advanced twice");
+        files.pause(receiver,id,true);
+        byte[] second = files.readChunk(sender,id,AttachmentStore.CHUNK);
+        check(files.append(receiver,id,AttachmentStore.CHUNK,second).progress==AttachmentStore.CHUNK,"Paused transfer advanced");
+        files.peerPause(sender,id,true);
+        refused(() -> files.readChunk(sender,id,AttachmentStore.CHUNK));
+        files.pause(receiver,id,false);
+        files.peerPause(sender,id,false);
+        files.acknowledged(sender,id,AttachmentStore.CHUNK);
+        files.append(receiver,id,AttachmentStore.CHUNK,second);
+        AttachmentStore.Transfer done = files.append(receiver,id,2L*AttachmentStore.CHUNK,files.readChunk(sender,id,2L*AttachmentStore.CHUNK));
+        check(done.status.equals(AttachmentStore.COMPLETE) && done.progress==bytes.length,"Incomplete file received");
+        files.finishOutgoing(sender,id);
+        files.exportFile(receiver,id,dest);
+        check(Arrays.equals(bytes,dest.toByteArray()),"Export changed the file");
+        check(files.list(unrelated).isEmpty(),"Transfer appeared on unrelated contact");
+
+        String bad = UUID.randomUUID().toString();
+        files.offer(receiver,bad,"bad.bin",out.mime,bytes.length,out.sha256);
+        files.accept(receiver,bad);
+        first[0]^=1;
+        files.append(receiver,bad,0,first);
+        files.append(receiver,bad,AttachmentStore.CHUNK,second);
+        AttachmentStore.Transfer damaged = files.append(receiver,bad,2L*AttachmentStore.CHUNK,
+                Arrays.copyOfRange(bytes,2*AttachmentStore.CHUNK,bytes.length));
+        check(damaged.status.equals(AttachmentStore.CANCELED) && damaged.notifyPeer, "Tampered file marked complete");
+        check(count(chats,"SELECT COUNT(*) FROM attachment_chunks WHERE id=?",bad)==0,"Failed integrity check retained partial chunks");
+        refused(() -> files.exportFile(receiver,bad,dest));
+
+        files.removeCompleted(receiver,id);
+        check(files.get(receiver,id).status.equals(AttachmentStore.REMOVED),"Lost replay decision for removed file");
+        refused(() -> files.exportFile(receiver,id,dest));
+        String emptyHash = DirectProtocol.hex(MessageDigest.getInstance("SHA-256").digest(new byte[0]));
+        String empty = UUID.randomUUID().toString();
+        files.offer(unrelated,empty,"empty","application/octet-stream",0,emptyHash);
+        check(files.accept(unrelated,empty).status.equals(AttachmentStore.COMPLETE),"Empty file did not complete on acceptance");
+        refused(() -> files.offer(unrelated,UUID.randomUUID().toString(),"large",out.mime,AttachmentStore.MAX_BYTES+1L,emptyHash));
+        for (int index=0; index<16; index++)
+            files.offer(unrelated,UUID.randomUUID().toString(),"pending",out.mime,100,expected);
+        refused(() -> files.offer(unrelated,UUID.randomUUID().toString(),"over limit",out.mime,100,expected));
+
+        chats.select(sender); chats.resetPair();
+        check(count(chats,"SELECT COUNT(*) FROM attachment_chunks WHERE contact=?",Long.toString(sender))==0,"Forgotten contact left encrypted payloads");
+        check(files.list(sender).isEmpty() && !files.list(unrelated).isEmpty(),"Forgetting one contact removed another contact's files");
+    }
+}

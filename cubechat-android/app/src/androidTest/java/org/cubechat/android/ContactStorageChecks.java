@@ -31,7 +31,8 @@ public final class ContactStorageChecks extends Instrumentation {
         int code = Activity.RESULT_OK;
         try {
             checkUpgradeAndIsolation(context, name);
-            result.putString("stream", "PASS: SQLite upgrade, contact isolation, drafts and counters.\n");
+            AttachmentStorageChecks.run(context);
+            result.putString("stream", "PASS: SQLite upgrade, contact isolation, drafts, counters and attachment vault.\n");
         } catch (Throwable failure) {
             code = Activity.RESULT_CANCELED;
             result.putString("stream", Log.getStackTraceString(failure));

@@ -2,13 +2,19 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## Android 0.1.3, build 4
+
+The [0.1.3 release](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.3) adds attachments to direct conversations. The sender picks a file through Android. The recipient sees its name and size and must accept before any file contents are sent. Both phones can pause, resume or cancel. The receiver verifies the result before offering export to a user-selected destination.
+
+[Two-device file transfer and offline radio acceptance](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/44008199653) · [Attachment vault regression](app/src/androidTest/java/org/cubechat/android/AttachmentStorageChecks.java)
+
 ## Android 0.1.2, build 3
 
 The [0.1.2 release](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.2) adds direct contacts, local nicknames, searchable conversations, queued counts, per-contact encrypted drafts, Android text sharing, search within the newest 200 messages, a live end-client ping, and optional screenshot and Recents protection. Migration keeps the original paired identity, keys, messages and outbox. The active conversation owns the network connection. Both phones open the matching conversation for delivery.
 
 [Two-device upgrade, messaging and privacy acceptance](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/44006544741) · [Android storage migration regression](app/src/androidTest/java/org/cubechat/android/ContactStorageChecks.java)
 
-**Next work** covers the local credential-protected vault (CC-03), per-send route selection (CC-05) and encrypted attachments (CC-08). With multiple contacts and independent sequence counters in place, expiration still needs an authenticated way to skip unsent messages and a defined clock policy.
+**Next work** covers the local credential-protected vault (CC-03), per-send route selection (CC-05) and cellular delivery (CC-06). With multiple contacts and independent sequence counters in place, expiration still needs an authenticated way to skip unsent messages and a defined clock policy.
 
 ## Starting behavior in 0.1.1
 
@@ -42,7 +48,7 @@ The [0.1.2 release](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cu
 | CC-05 | **Choose a route per send · Extend.** 0.1.2 remembers the route for each contact. Add the individual message or attachment override. Offer local Wi-Fi/hotspot, Wi-Fi Direct, Bluetooth, local relay and, when available, cellular data. Show the selected route, the route actually used and why a send is waiting. Only a user-selected fallback may change a pinned route. Coordinate queue scheduling with CC-02 so an unavailable route cannot stall a different one. | Queue one Bluetooth-only message and one Wi-Fi-only message to the same contact. With only Wi-Fi available, deliver the Wi-Fi item. Restore Bluetooth and deliver the waiting item once over Bluetooth. Repeat across restart and verify that an available cellular connection carries neither item. |
 | CC-06 | **Cellular delivery · Planned.** Add a reachable internet rendezvous or encrypted forwarding service and explicit mobile-data selection. Keep the CubeChat encryption profile end to end. Show data use before large metered transfers. The service operator, endpoint configuration and offline queue lifetime are open design decisions. | Exchange messages in both directions between phones on independent cellular networks with Wi-Fi and Bluetooth off. Verify the mobile interface used, that the forwarder lacks conversation keys and that a dropped connection retries once connectivity returns. Disabling cellular for the conversation prevents chat traffic on it. |
 | CC-07 | **Ping a contact · Shipped in 0.1.2.** A user-triggered check asks the paired client for a fresh reply on the selected route. Older clients continue to exchange text and cannot answer this probe. Show route, round-trip time and when the check ran. A timeout means “no reply on this route.” Keep receivability, message delivery and optional read receipts distinct. | Ping a reachable peer, a disconnected peer and a live relay with its far-end client offline. Only a fresh matching reply from the paired client shows reachability. A stale reply, an old heartbeat or a relay acknowledgement cannot turn the contact online. |
-| CC-08 | **Encrypted file attachments · Planned.** Attach a file through Android's picker. Offer the recipient a filename and size, accept/decline, transfer progress, cancel, retry and an explicit save/export action. Authenticate file metadata and chunks, verify the completed file, and apply the conversation's route, size limit and storage policy to partial files too. | Transfer a photo and a multi-chunk binary over Wi-Fi and Bluetooth, then cellular when CC-06 ships. Interrupt and resume, verify byte-for-byte equality and a single received item. Decline, cancel, tamper with a chunk and exhaust storage. No rejected or incomplete file appears as received. |
+| CC-08 | **Encrypted file attachments · Shipped for local routes in 0.1.3.** The Android picker, 8 MiB file limit, pending offer, accept/decline, progress, pause/resume, cancel, verified completion and explicit export use the active conversation and encrypted vault. Cellular and future volatile-mode support depend on CC-06 and CC-11. | Transfer a photo and a multi-chunk binary over Wi-Fi and Bluetooth, then cellular when CC-06 ships. Interrupt and resume, verify byte-for-byte equality and a single received item. Decline, cancel, tamper with a chunk and exhaust storage. No rejected or incomplete file appears as received. |
 
 ### Conversation security
 

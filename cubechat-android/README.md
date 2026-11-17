@@ -1,6 +1,6 @@
 # CubeChat for Android
 
-Open the [Android installation page](https://cubechat-android.lankytangerine2.chatgpt.site/) on your phone or [download CubeChat 0.1.2 from GitHub Releases](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/cubechat-android-v0.1.2/CubeChat.apk). Open **CubeChat.apk** from your browser’s Downloads, then choose **Install** or **Update** in Android. The app supports Android 8.0 and newer and keeps multiple paired conversations on each phone.
+Open the [Android installation page](https://cubechat-android.lankytangerine2.chatgpt.site/) on your phone or [download CubeChat 0.1.3 from GitHub Releases](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/cubechat-android-v0.1.3/CubeChat.apk). Open **CubeChat.apk** from your browser’s Downloads, then choose **Install** or **Update** in Android. The app supports Android 8.0 and newer and keeps multiple paired conversations on each phone.
 
 The [Android development ledger](DEVELOPMENT_LEDGER.md) tracks planned features, their dependencies and the tests for each milestone.
 
@@ -13,6 +13,16 @@ Each chat keeps its own keys, history, preferred connection and encrypted draft.
 To check a contact, open their conversation and tap **Ping**. A fresh reply shows the route, round-trip time and when the check ran. Both phones need 0.1.2 or later to answer pings. “No reply” can mean the other phone is out of reach, has a different chat open or is running an older version.
 
 Use Android’s **Share → CubeChat** for plain text or links. Pick a contact and review the draft before tapping **Send**. If you already have a draft, choose **Keep draft**, **Replace**, or **Append** when there is room. **Pairing → Find in conversation** searches the most recent 200 loaded messages on the phone. **Pairing → Screen privacy** hides chat and key-card windows from Android screen captures and recent-app previews while enabled. The physical QR remains visible to someone in front of the display.
+
+## Send or receive a file
+
+Open a conversation, tap **Files → Attach file**, and choose a document, photo or other file in Android’s picker. Both clients need CubeChat 0.1.3 or later to exchange files. Text and live ping still work with 0.1.2. Attachments use the conversation’s current connection and support files up to 8 MiB each.
+
+The recipient sees the proposed filename and size. **Accept file** starts the transfer. **Decline** discards the offer. Either person can pause, resume or cancel. If the connection drops or the app restarts, reopen the matching conversation on both phones. The sender resumes from the recipient’s last confirmed chunk.
+
+After CubeChat verifies the complete file, choose **Save file** and select a destination in Android’s document picker. Until you save it, the contents stay inside the encrypted app vault. The app never automatically opens the received file. An exported copy belongs to the destination you selected. The vault allows 64 MiB of accepted or locally staged file content. Remove completed local copies from **Files** to free space.
+
+File manifests use the existing Cube profile. Binary contents use per-file, per-direction AES-GCM encryption, with the file identity, total size, offset and expected SHA-256 authenticated with each chunk. The receiving app verifies the complete length and digest before offering **Save file**. Filenames, MIME types, hashes and file contents are encrypted in the app vault. Size, progress and transfer state are stored as ordinary database fields.
 
 ## Updates
 
@@ -46,4 +56,4 @@ Use JDK 17 and Android SDK 35. Run `./gradlew assembleDebug` from this directory
 
 To publish a signed build, put it at `cubechat-android/downloads/CubeChat.apk` and run `python3 scripts/release_manifest.py --write` from this directory with `ANDROID_HOME` set. Commit the APK, generated `release.json`, and matching Android version changes together. The CubeChat release workflow on `main` verifies the package, version and signer, then publishes the verified files on the versioned GitHub release. Update `RELEASE_NOTES.md` with the version, build number and user-facing changes before publishing. Increment `versionCode` for every update, including prereleases, and give each build a new version tag.
 
-The 0.1.2 release includes `CubeChat.apk`, `release.json`, `RELEASE_NOTES.md`, `SHA256SUMS.txt`, and `CubeChat-Android-0.1.2-Source.zip`. The source archive contains the Android build and the canonical Cube engine it imports. To verify downloaded files from the release, run `sha256sum -c SHA256SUMS.txt` in their directory.
+The 0.1.3 release includes `CubeChat.apk`, `release.json`, `RELEASE_NOTES.md`, `SHA256SUMS.txt`, and `CubeChat-Android-0.1.3-Source.zip`. The source archive contains the Android build and the canonical Cube engine it imports. To verify downloaded files from the release, run `sha256sum -c SHA256SUMS.txt` in their directory.

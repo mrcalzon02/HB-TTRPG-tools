@@ -37,9 +37,14 @@ final class ChatStore extends SQLiteOpenHelper {
     }
 
     ChatStore(Context context) { this(context, "cubechat-direct.db"); }
-    ChatStore(Context context, String name) { super(context, name, null, 2); }
+    ChatStore(Context context, String name) { super(context, name, null, 3); }
 
     @Override public void onCreate(SQLiteDatabase db) {
+        createMailbox(db);
+        AttachmentStore.createTables(db);
+    }
+
+    private static void createMailbox(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE contacts(id INTEGER PRIMARY KEY AUTOINCREMENT, body BLOB NOT NULL, alias BLOB, "
                 + "route BLOB, draft BLOB, next_out INTEGER NOT NULL DEFAULT 0, next_in INTEGER NOT NULL DEFAULT 0)");
         db.execSQL("CREATE TABLE mailbox(id INTEGER PRIMARY KEY CHECK(id=1), active INTEGER NOT NULL)");
@@ -52,10 +57,15 @@ final class ChatStore extends SQLiteOpenHelper {
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int old, int next) {
-        if (old != 1 || next != 2) throw new IllegalStateException("Unsupported message database version");
+        if ((old != 1 && old != 2) || next != 3) throw new IllegalStateException("Unsupported message database version");
+        if (old == 1) migrateSingleContact(db);
+        AttachmentStore.createTables(db);
+    }
+
+    private static void migrateSingleContact(SQLiteDatabase db) {
         // SQLiteOpenHelper wraps the upgrade, including its user_version change, in a transaction.
         db.execSQL("ALTER TABLE messages RENAME TO legacy_messages");
-        onCreate(db);
+        createMailbox(db);
         db.execSQL("INSERT INTO contacts(id,body,next_out,next_in) SELECT id,body, "
                 + "(SELECT COALESCE(MAX(seq),-1)+1 FROM legacy_messages WHERE outgoing=1), "
                 + "(SELECT COALESCE(MAX(seq),-1)+1 FROM legacy_messages WHERE outgoing=0) FROM pairing");
@@ -91,17 +101,24 @@ final class ChatStore extends SQLiteOpenHelper {
     }
 
     private byte[] seal(String text, String aad) throws Exception {
+        return sealBytes(text.getBytes(StandardCharsets.UTF_8), aad);
+    }
+    byte[] sealBytes(byte[] clear, String aad) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
         cipher.init(Cipher.ENCRYPT_MODE, key());
         cipher.updateAAD(aad.getBytes(StandardCharsets.UTF_8));
-        byte[] iv = cipher.getIV(), encrypted = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
+        byte[] iv = cipher.getIV(), encrypted = cipher.doFinal(clear);
         return ByteBuffer.allocate(iv.length + encrypted.length).put(iv).put(encrypted).array();
     }
     private String open(byte[] sealed, String aad) throws Exception {
+        return new String(openBytes(sealed, aad), StandardCharsets.UTF_8);
+    }
+    byte[] openBytes(byte[] sealed, String aad) throws Exception {
+        if (sealed == null || sealed.length < 28) throw new IllegalArgumentException("Damaged encrypted record");
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
         cipher.init(Cipher.DECRYPT_MODE, key(), new GCMParameterSpec(128, sealed, 0, 12));
         cipher.updateAAD(aad.getBytes(StandardCharsets.UTF_8));
-        return new String(cipher.doFinal(sealed, 12, sealed.length - 12), StandardCharsets.UTF_8);
+        return cipher.doFinal(sealed, 12, sealed.length - 12);
     }
 
     long activeId() {

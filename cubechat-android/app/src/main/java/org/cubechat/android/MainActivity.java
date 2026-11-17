@@ -74,7 +74,8 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     private PeerLink link;
     private UpdateCheck updates;
-    private Button updateBanner;
+    private Button updateBanner, fileNotice;
+    private AttachmentsUi files;
     private CubeProfile profile;
     private WifiDirectController direct;
     private BluetoothRadio bluetooth;
@@ -119,6 +120,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         try {
             profile = new CubeProfile(this);
             link = new PeerLink(this, profile, this);
+            files = new AttachmentsUi(this, link, fileNotice, state);
             link.start();
             direct = new WifiDirectController(this, link, this::radioMessage);
             bluetooth = new BluetoothRadio(this, link);
@@ -186,6 +188,11 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         super.onPause();
     }
 
+    @Override protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        if (files != null) files.saveState(state);
+    }
+
     @Override protected void onResume() {
         super.onResume();
         if (updates != null) updates.check(false);
@@ -201,6 +208,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     @Override protected void onDestroy() {
         closing = true;
         if (updates != null) updates.close();
+        if (files != null) files.closeDialogs();
         if (inviteDialog != null) inviteDialog.dismiss();
         if (shareDialog != null) shareDialog.dismiss();
         ui.removeCallbacks(writeDraft);
@@ -298,6 +306,9 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         pad(status, 18, 7, 8);
         status.setBackgroundColor(0xffe7eee5);
         root.addView(status);
+        fileNotice = button("Review file offer", false, null);
+        fileNotice.setVisibility(View.GONE);
+        root.addView(fileNotice);
         pingResult = label("", 14, GREEN, false);
         pingResult.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
         pad(pingResult, 18, 4, 6);
@@ -346,6 +357,9 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         composerRow = row();
         composerRow.setGravity(Gravity.BOTTOM);
         pad(composerRow, 12, 8, 10);
+        composerRow.addView(button("Files", false, v -> {
+            if (files != null) files.showFiles();
+        }));
         draft = new EditText(this);
         draft.setSaveEnabled(false);
         draft.setTextSize(17);
@@ -385,6 +399,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     @Override public void changed() {
         if (closing || link == null) return;
         PeerLink.Snapshot next = link.snapshot();
+        if (files != null) files.changed(next);
         boolean paired = !next.role.isEmpty();
         boolean switched = next.activeId != renderedId;
         if (switched) {
@@ -445,8 +460,13 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         refreshSend();
     }
 
+    @Override public void fileSaved(long contactId, String fileId) {
+        if (!closing && files != null) files.saved(contactId);
+    }
+
     @Override public void problem(String message) {
         if (closing) return;
+        if (files != null) files.problem(message);
         wantsInvite = false;
         if (shareSelecting && renderedId != shareTarget) clearShare();
         submitted = null;
@@ -952,6 +972,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     @Override public void onActivityResult(int request, int result, Intent data) {
         super.onActivityResult(request, result, data);
+        if (files != null && files.result(request, result, data)) return;
         if ((request == 732 || request == 733) && bluetooth != null) {
             bluetooth.onActivityResult(request, result);
             return;
