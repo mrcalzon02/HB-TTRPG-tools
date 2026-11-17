@@ -34,28 +34,50 @@ def diagnose_screen():
     current=current.group(1) if current else "(no activity)"
     ui.report(f"Android UI on {os.environ.get('ANDROID_SERIAL','device')}: focused {current}; packages {packages}; known controls {controls}; CubeChat running={bool(ui.shell('pidof',ui.APP,required=False))}.")
 
-def start_pristine_baseline():
-    # adbd restarts after root, independently of launcher's wake/unlock state.
-    # Retry the public baseline only, before any pairing or data has been created.
-    for attempt in range(1,4):
+def launcher_anr(nodes):
+    # These fresh installations have no conversation or key card. Read only the ANR
+    # process and reason from the last incident, never the complete device dump.
+    last = ui.shell("dumpsys", "activity", "lastanr", required=False)
+    process = re.search(r"\bANR in ([\w.:/-]+)", last)
+    reason = re.search(r"^\s*Reason:\s*([^\r\n]+)", last, re.MULTILINE)
+    events = ui.shell("logcat", "-b", "events", "-d", "-t", "800", "-s", "am_anr:I", required=False)
+    records = re.findall(r"am_anr\s*:\s*\[\d+,\d+,([^,]+),\d+,([^\n]+)\]", events)
+    package = process.group(1) if process else records[-1][0] if records else "unknown"
+    cause = reason.group(1) if reason else records[-1][1] if records else "unavailable"
+    cause = re.sub(r"\b\w+://\S+", "[URI]", cause)[:300]
+    current = any("cubechat" in n.get("text", "").casefold() and "respond" in n.get("text", "").casefold() for n in nodes)
+    ui.report(f"Startup ANR on {os.environ.get('ANDROID_SERIAL','device')}: last process={package}, reason={cause}.")
+    return current or package == ui.APP or package.startswith(ui.APP + ":")
+
+def start_empty_install(version):
+    # This recovery is restricted to empty installations before pairing or enrollment.
+    # Data-bearing upgrades, credential entry and the system clear still run once.
+    app_warnings = 0
+    for attempt in range(2):
         ui.shell("input","keyevent","KEYCODE_WAKEUP")
         ui.shell("wm","dismiss-keyguard",required=False)
         ui.shell("cmd","statusbar","collapse",required=False)
         ui.shell("input","keyevent","82")
-        open_app()
-        deadline=time.monotonic()+30
+        # Do not let am -W hide an ANR from the UI polling loop.
+        ui.shell("am", "start", "--user", "0", "-n", ui.MAIN, label="Start the empty CubeChat installation")
+        deadline=time.monotonic()+35
         while time.monotonic()<deadline:
             nodes=ui.tree()
-            if any(n.get("package")==ui.APP and n.get("text")=="Pair two phones" for n in nodes):
-                ui.report("Fresh signed public baseline ready on "+os.environ.get("ANDROID_SERIAL","device")+".")
-                return
             wait=next((n for n in nodes if n.get("package")=="android" and
-                       n.get("resource-id")=="android:id/aerr_wait"),None)
-            if wait is not None: ui.tap(wait)
+                       (n.get("resource-id")=="android:id/aerr_wait" or n.get("text")=="Wait")),None)
+            if wait is not None:
+                if launcher_anr(nodes):
+                    app_warnings += 1
+                    if app_warnings > 1:
+                        raise ui.CheckFailed(f"Persistent CubeChat startup ANR on signed {version}")
+                ui.tap(wait)
+            elif any(n.get("package")==ui.APP and n.get("text")=="Pair two phones" for n in nodes):
+                ui.report(f"Fresh signed {version} ready on {os.environ.get('ANDROID_SERIAL','device')}.")
+                return
             time.sleep(.3)
         diagnose_screen()
-        if attempt<3: phones.stop()
-    raise ui.CheckFailed("The fresh public 0.1.3 launch did not reach its pairing screen after bounded wake/relaunch")
+        if attempt == 0: phones.stop()
+    raise ui.CheckFailed(f"The fresh signed {version} launch did not reach its pairing screen after bounded wake/relaunch")
 
 def find_visible(predicate, label, timeout=30):
     end=time.monotonic()+timeout
@@ -147,12 +169,13 @@ def settle_form(button):
         if not visible(button): return
     raise ui.CheckFailed("Credential form did not complete")
 
-def upgrade():
+def upgrade(empty=False):
     if b"Success" not in ui.run(["adb","install","-r",APK],"In-place upgrade to signed build 5"):
         raise ui.CheckFailed("Signed APK could not upgrade in place")
     if "versionCode=5" not in ui.shell("dumpsys","package",ui.APP):
         raise ui.CheckFailed("Version code 5 is missing")
-    open_app()
+    if empty: start_empty_install("0.1.4")
+    else: open_app()
 
 def connected_within(seconds):
     try:
@@ -283,10 +306,10 @@ def drill():
         ui.run(["adb","root"],"Inspect ephemeral emulator private storage")
         ui.run(["adb","wait-for-device"],"Reconnect emulator")
         if ui.shell("id","-u")!="0":raise ui.CheckFailed("Android app-data inspection requires rooted test image")
-        start_pristine_baseline()
+        start_empty_install("0.1.3")
     # First exercise the final protocol with both real app processes installed.
     for device in (HOST,GUEST):
-        phones.select(device); upgrade(); match("Pair two phones")
+        phones.select(device); upgrade(empty=True)
     route=pairing(phones.choose_network())
     phones.select(HOST); files.connected(); enroll()
     phones.select(GUEST); files.connected(); enroll(); files.connected()
@@ -316,7 +339,7 @@ def drill():
         ui.run(["adb","uninstall",ui.APP],"Remove the synthetic drill installation")
         ui.run(["adb","install",public],"Install the verified release for the populated migration test")
         ui.shell("svc","wifi","enable")
-        start_pristine_baseline()
+        start_empty_install("0.1.3")
     if route != "direct virtual Wi-Fi":
         # An Android uninstall can change the guest's UID; bind its new socket permissions.
         phones.bridge()
