@@ -568,9 +568,6 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         draftMenu.setContentDescription("Draft actions: copy or clear");
         draftMenu.setOnClickListener(v -> showDraftActions(v));
         composerRow.addView(draftMenu);
-        undoDraft = button("Undo clear", false, v -> restoreClearedDraft());
-        undoDraft.setVisibility(View.GONE);
-        composerRow.addView(undoDraft);
         send = button("Send", true, v -> send());
         send.setEnabled(false);
         LinearLayout.LayoutParams sendParams = new LinearLayout.LayoutParams(WRAP, dp(52));
@@ -589,6 +586,9 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             }
         });
         root.addView(composerRow);
+        undoDraft = button("Undo clear", false, v -> restoreClearedDraft());
+        undoDraft.setVisibility(View.GONE);
+        root.addView(undoDraft);
         draftLength = label("", 12, MUTED, false);
         draftLength.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
         pad(draftLength, 12, 0, 10);
