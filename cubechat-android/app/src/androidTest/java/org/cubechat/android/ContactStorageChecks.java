@@ -34,6 +34,7 @@ public final class ContactStorageChecks extends Instrumentation {
         int code = Activity.RESULT_OK;
         try {
             checkClipboardMetadata();
+            TransferOverviewChecks.run(context);
             checkUpgradeAndIsolation(context, name);
             AttachmentStorageChecks.run(context);
             VaultStorageChecks.run(context);

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -34,7 +35,11 @@ final class AttachmentsUi {
     private final Button notice;
     private final FileRows rows = new FileRows();
     private AlertDialog listDialog, detailDialog, removeDialog, cleanupDialog, overviewDialog;
-    private LinearLayout cleanupRows, overviewRows;
+    private LinearLayout cleanupRows;
+    private TransferOverview overviewRows;
+    private CheckBox reviewOnly;
+    private TextView overviewSummary, overviewEmpty;
+    private boolean rowsConnected, rowsFileCapable;
     private long openTransferContact;
     private String openTransferId;
     private TextView connection, storageSummary, detailStatus, detailBytes;
@@ -123,7 +128,9 @@ final class AttachmentsUi {
         if (listDialog != null) {
             connection.setText(connectionText(state));
             storageSummary.setText(spaceText(state));
-            if (rows.items != state.files) {
+            if (rows.items != state.files || rowsConnected != state.connected || rowsFileCapable != state.fileCapable) {
+                rowsConnected = state.connected;
+                rowsFileCapable = state.fileCapable;
                 rows.items = state.files;
                 rows.notifyDataSetChanged();
             }
@@ -160,12 +167,12 @@ final class AttachmentsUi {
                 + " · Device free: " + size(capacity.deviceFree);
         String active = capacity.incomingRemaining > 0
                 ? " · " + size(capacity.incomingRemaining) + " already committed to receiving" : "";
-        return room + active + "\\n" + usage
-                + "\\nRemove completed local attachments to recover CubeChat allowance. Files exported elsewhere are unaffected.";
+        return room + active + "\n" + usage
+                + "\nRemove completed local attachments to recover CubeChat allowance. Files exported elsewhere are unaffected.";
     }
 
     private boolean needsConsent(AttachmentStore.Transfer f) {
-        return !f.outgoing && "OFFERED".equals(f.status);
+        return TransferOverview.needsDecision(f);
     }
 
     private AttachmentStore.Transfer find(List<AttachmentStore.Transfer> files, String id) {
@@ -225,6 +232,8 @@ final class AttachmentsUi {
         box.addView(empty);
         list.setEmptyView(empty);
         rows.items = state.files;
+        rowsConnected = state.connected;
+        rowsFileCapable = state.fileCapable;
         list.setAdapter(rows);
         list.setOnItemClickListener((a,v,pos,id) -> {
             AttachmentStore.Transfer f = rows.getItem(pos);
@@ -250,84 +259,56 @@ final class AttachmentsUi {
         if (overviewDialog != null) return;
         link.refreshTransferOverview();
         LinearLayout content = panel();
-        TextView intro = text(14);
-        intro.setText("Transfer status across conversations. Open a file to switch to its conversation for details and actions.");
-        content.addView(intro);
-        overviewRows = new LinearLayout(screen);
-        overviewRows.setOrientation(LinearLayout.VERTICAL);
-        content.addView(overviewRows);
-        ScrollView scroll = new ScrollView(screen);
-        scroll.addView(content);
+        overviewSummary = text(14);
+        content.addView(overviewSummary);
+        reviewOnly = new CheckBox(screen);
+        reviewOnly.setText("Needs my review");
+        content.addView(reviewOnly);
+        FrameLayout box = new FrameLayout(screen);
+        content.addView(box);
+        ListView list = new ListView(screen);
+        box.addView(list);
+        overviewEmpty = text(15);
+        box.addView(overviewEmpty);
+        list.setEmptyView(overviewEmpty);
+        overviewRows = new TransferOverview(screen);
+        list.setAdapter(overviewRows);
+        list.setOnItemClickListener((parent, view, position, id) -> openOverviewItem(overviewRows.getItem(position)));
+        reviewOnly.setOnCheckedChangeListener((button, checked) -> renderOverview(link.snapshot()));
         AlertDialog opened = DisplayPrivacy.dialog(screen).setTitle("All file transfers")
-                .setView(scroll).setNegativeButton("Close", null).create();
+                .setView(content).setNegativeButton("Close", null)
+                .setNeutralButton("Refresh", null).create();
         overviewDialog = opened;
         opened.setOnDismissListener(d -> {
-            if (overviewDialog == opened) { overviewDialog = null; overviewRows = null; }
+            if (overviewDialog == opened) {
+                overviewDialog = null;
+                overviewRows = null;
+                overviewSummary = overviewEmpty = null;
+                reviewOnly = null;
+            }
         });
         renderOverview(link.snapshot());
         opened.show();
+        opened.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(v -> link.refreshTransferOverview());
     }
 
     private void renderOverview(PeerLink.Snapshot state) {
-        if (overviewRows == null) return;
-        overviewRows.removeAllViews();
-        int offers = 0, active = 0, failed = 0, complete = 0;
-        for (AttachmentStore.Completed item : state.transferOverview) {
-            switch (item.file.status) {
-                case "OFFERED": offers++; break;
-                case "ACCEPTED": active++; break;
-                case "COMPLETE": complete++; break;
-                case "DECLINED":
-                case "CANCELED": failed++; break;
-                default: break;
-            }
-        }
-        TextView summary = text(15);
-        summary.setText(offers + " offers · " + active + " active · "
-                + failed + " stopped · " + complete + " completed");
-        overviewRows.addView(summary);
-        if (state.transferOverview.isEmpty()) {
-            TextView empty = text(14);
-            empty.setText("No file transfers recorded.");
-            overviewRows.addView(empty);
-        }
-        for (AttachmentStore.Completed item : state.transferOverview) {
-            String name = "Conversation " + item.contactId;
-            for (ChatStore.Contact contact : state.contacts)
-                if (contact.id == item.contactId) { name = contact.name; break; }
-            Button entry = new Button(screen);
-            entry.setMinHeight(dp(48));
-            entry.setAllCaps(false);
-            entry.setText(item.file.name + " · " + size(item.file.size)
-                    + "\\n" + name + " · " + overviewStateLabel(item.file));
-            entry.setOnClickListener(v -> {
-                if (overviewDialog != null) overviewDialog.dismiss();
-                if (listDialog != null) listDialog.dismiss();
-                if (item.contactId == link.snapshot().activeId) {
-                    showFiles();
-                    AttachmentStore.Transfer selected = find(link.snapshot().files, item.file.id);
-                    if (selected != null) showDetail(link.snapshot(), selected);
-                } else {
-                    openTransferContact = item.contactId;
-                    openTransferId = item.file.id;
-                    link.selectContact(item.contactId);
-                }
-            });
-            overviewRows.addView(entry);
-        }
+        boolean filtered = reviewOnly.isChecked();
+        overviewSummary.setText(overviewRows.update(state, filtered));
+        overviewEmpty.setText(filtered ? "No incoming offers need a decision." : "No file transfers recorded.");
     }
 
-    private String overviewStateLabel(AttachmentStore.Transfer file) {
-        if (AttachmentStore.STORAGE_REASON.equals(file.reason) && "DECLINED".equals(file.status))
-            return file.outgoing ? "Recipient has insufficient storage" : "Insufficient storage";
-        switch (file.status) {
-            case "OFFERED": return file.outgoing ? "Awaiting recipient" : "Awaiting your decision";
-            case "ACCEPTED": return (file.outgoing ? "Sending" : "Receiving")
-                    + (file.size > 0 ? " · " + (100L * file.progress / file.size) + "%" : "");
-            case "COMPLETE": return "Complete";
-            case "DECLINED": return "Declined";
-            case "CANCELED": return "Canceled";
-            default: return "Unknown";
+    private void openOverviewItem(AttachmentStore.Completed item) {
+        PeerLink.Snapshot state = link.snapshot();
+        overviewDialog.dismiss();
+        if (item.contactId == state.activeId) {
+            AttachmentStore.Transfer selected = find(state.files, item.file.id);
+            if (selected != null) showDetail(state, selected);
+        } else {
+            listDialog.dismiss();
+            openTransferContact = item.contactId;
+            openTransferId = item.file.id;
+            link.selectContact(item.contactId);
         }
     }
 
@@ -378,7 +359,7 @@ final class AttachmentsUi {
             Button file = new Button(screen);
             file.setAllCaps(false);
             file.setMinHeight(dp(48));
-            file.setText(item.file.name + " · " + size(item.file.size) + "\\n" + contactName);
+            file.setText(item.file.name + " · " + size(item.file.size) + "\n" + contactName);
             file.setOnClickListener(v -> confirmCleanup(item.contactId, item.file.id, item.file.name, item.file.size));
             cleanupRows.addView(file);
         }
@@ -482,25 +463,8 @@ final class AttachmentsUi {
     private String size(long bytes) { return Formatter.formatFileSize(screen, bytes); }
 
     private String stateLabel(AttachmentStore.Transfer f) {
-        if (AttachmentStore.STORAGE_REASON.equals(f.reason) && "DECLINED".equals(f.status))
-            return f.outgoing ? "Rejected: not enough storage on recipient" : "Rejected: not enough storage";
-        if (f.outgoing && "OFFERED".equals(f.status) && f.paused) return "Paused before transfer";
-        if ("ACCEPTED".equals(f.status)) {
-            if (f.paused) return "Paused";
-            if (f.peerPaused) return "Paused by contact";
-            if (!link.snapshot().connected) return "Waiting for connection";
-            if (!link.snapshot().fileCapable) return "Waiting for file support";
-        }
-        switch (f.status) {
-            case "OFFERED": return !f.outgoing ? "Awaiting your decision" :
-                    link.snapshot().connected ? "Awaiting acceptance" : "Queued offer";
-            case "ACCEPTED": return f.outgoing ? "Sending" : "Receiving";
-            case "COMPLETE": return f.outgoing ? "Delivered" : "Verified";
-            case "DECLINED": return "Declined";
-            case "CANCELED": return "Canceled";
-            case "REMOVED": return "Removed from this phone";
-            default: return "Waiting";
-        }
+        PeerLink.Snapshot state = link.snapshot();
+        return TransferOverview.status(f, true, state.connected, state.fileCapable);
     }
 
     private final class FileRows extends BaseAdapter {
