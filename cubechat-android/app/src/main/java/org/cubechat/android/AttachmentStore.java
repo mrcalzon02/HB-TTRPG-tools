@@ -24,6 +24,9 @@ import java.util.UUID;
 final class AttachmentStore {
     static final int CHUNK = 32 * 1024, MAX_BYTES = 8 * 1024 * 1024;
     private static final long VAULT_BYTES = 64L * 1024 * 1024;
+    // Keep working room for SQLite WAL, encrypted chunks and other application writes.
+    private static final long FREE_SPACE_MARGIN = 4L * 1024 * 1024;
+    static final String STORAGE_REASON = "not_enough_storage";
     private static final int CONTACT_PENDING = 16, GLOBAL_PENDING = 64, RECORD_LIMIT = 4096;
     static final String OFFERED = "OFFERED", ACCEPTED = "ACCEPTED", COMPLETE = "COMPLETE",
             DECLINED = "DECLINED", CANCELED = "CANCELED", REMOVED = "REMOVED";
@@ -34,7 +37,7 @@ final class AttachmentStore {
     private final ChatStore store;
 
     static final class Transfer {
-        final String id, name, mime, sha256, status;
+        final String id, name, mime, sha256, status, reason;
         final long size, progress;
         final boolean outgoing, notifyPeer, paused, peerPaused;
         Transfer(Cursor row, JSONObject manifest) throws Exception {
@@ -43,6 +46,7 @@ final class AttachmentStore {
             paused = row.getInt(6) != 0; peerPaused = row.getInt(7) != 0;
             if (size != manifest.getLong("size")) throw new IOException("Damaged attachment size");
             name = manifest.getString("name"); mime = manifest.getString("mime"); sha256 = manifest.getString("sha256");
+            reason = manifest.optString("reason", "");
         }
     }
 
@@ -118,6 +122,27 @@ final class AttachmentStore {
                 + "OR (status='OFFERED' AND outgoing=1)");
         if (size > VAULT_BYTES - reserved) throw new IOException("Attachment storage is full. Remove a completed file or cancel a transfer.");
     }
+    private void checkIncomingSpace(long size) throws IOException {
+        reserve(size);
+        long pending = count("SELECT COALESCE(SUM(size-progress),0) FROM attachments WHERE outgoing=0 AND status='ACCEPTED'");
+        long free = context.getFilesDir().getUsableSpace();
+        // A zero result is not a reliable capacity reading: reject conservatively.
+        if (free <= FREE_SPACE_MARGIN || size > (free - FREE_SPACE_MARGIN) / 2 - Math.min(pending, (free - FREE_SPACE_MARGIN) / 2))
+            throw new IOException("Not enough storage");
+    }
+
+    void reason(long cid, String id, String reason) throws Exception {
+        if (!STORAGE_REASON.equals(reason)) return;
+        Transfer t = require(cid, id);
+        if (STORAGE_REASON.equals(t.reason)) return;
+        JSONObject manifest = new JSONObject().put("name", t.name).put("mime", t.mime)
+                .put("size", t.size).put("sha256", t.sha256).put("reason", reason);
+        ContentValues values = new ContentValues();
+        values.put("manifest", store.sealBytes(manifest.toString().getBytes(StandardCharsets.UTF_8),
+                aad(cid, id, t.outgoing, "manifest")));
+        update(cid, id, values);
+    }
+
     private static String safeName(String raw) {
         if (raw == null) return "attachment";
         int slash = Math.max(raw.lastIndexOf('/'), raw.lastIndexOf('\\'));
@@ -238,7 +263,16 @@ final class AttachmentStore {
             Transfer entry = get(cid, id);
             if (entry == null) {
                 checkNew(cid);
+                // Preflight before asking the person to accept; do not stage file bytes
+                // when the device cannot accommodate this offer alongside active transfers.
+                boolean enoughSpace;
+                try { checkIncomingSpace(size); enoughSpace = true; }
+                catch (IOException full) { enoughSpace = false; }
                 insert(cid, id, false, name, mime, size, hash);
+                if (!enoughSpace) {
+                    reason(cid, id, STORAGE_REASON);
+                    purge(cid, id, DECLINED, true);
+                }
                 entry = require(cid, id);
             } else if (entry.outgoing || entry.size != size || !entry.name.equals(name)
                     || !entry.mime.equals(mime) || !entry.sha256.equals(hash)) {
@@ -259,11 +293,18 @@ final class AttachmentStore {
             Transfer t = require(cid, id);
             if (t.outgoing) throw new IOException("Only incoming files can be accepted");
             if (OFFERED.equals(t.status)) {
-                reserve(t.size);
-                ContentValues changes = new ContentValues();
-                changes.put("status", ACCEPTED);
-                update(cid, id, changes);
-                if (t.size == 0) verifyIncoming(cid, t);
+                boolean enoughSpace;
+                try { checkIncomingSpace(t.size); enoughSpace = true; }
+                catch (IOException full) { enoughSpace = false; }
+                if (!enoughSpace) {
+                    reason(cid, id, STORAGE_REASON);
+                    purge(cid, id, DECLINED, true);
+                } else {
+                    ContentValues changes = new ContentValues();
+                    changes.put("status", ACCEPTED);
+                    update(cid, id, changes);
+                    if (t.size == 0) verifyIncoming(cid, t);
+                }
             }
             Transfer result = require(cid, id); db.setTransactionSuccessful(); return result;
         } finally { db.endTransaction(); }
