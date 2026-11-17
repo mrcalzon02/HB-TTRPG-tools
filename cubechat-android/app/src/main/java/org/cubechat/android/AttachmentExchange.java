@@ -37,7 +37,8 @@ final class AttachmentExchange {
     void sync() throws Exception {
         for (AttachmentStore.Transfer file : store.list(contact)) {
             if (file.notifyPeer && stopped(file.status)) {
-                if (notified.add(file.id)) write(frame("stop", file.id).put("status", file.status));
+                if (notified.add(file.id)) write(frame("stop", file.id).put("status", file.status)
+                        .put("reason", file.reason));
             } else if (file.outgoing && !finished(file.status) && !stopped(file.status)) {
                 if (offered.add(file.id)) {
                     JSONObject info = new JSONObject().put("id", file.id).put("name", file.name).put("mime", file.mime)
@@ -63,7 +64,8 @@ final class AttachmentExchange {
 
     private void reply(AttachmentStore.Transfer file) throws Exception {
         String state = finished(file.status) ? AttachmentStore.COMPLETE : file.status;
-        write(frame("state", file.id).put("status", state).put("at", finished(file.status) ? file.size : file.progress).put("paused", file.paused));
+        write(frame("state", file.id).put("status", state).put("at", finished(file.status) ? file.size : file.progress)
+                .put("paused", file.paused).put("reason", file.reason));
     }
 
     void localChange(String id) throws Exception {
@@ -108,6 +110,8 @@ final class AttachmentExchange {
                 if (!file.outgoing) reply(file);
             } else if (file != null && !stopped(file.status)) {
                 if (AttachmentStore.DECLINED.equals(status) && !file.outgoing) throw new IOException("Invalid transfer direction");
+                if (file.outgoing && AttachmentStore.STORAGE_REASON.equals(msg.optString("reason")))
+                    store.reason(contact, id, AttachmentStore.STORAGE_REASON);
                 store.terminate(contact, id, status, false);
             }
             release(id); write(frame("stopAck", id)); return true;
@@ -131,6 +135,8 @@ final class AttachmentExchange {
                 store.finishOutgoing(contact, id); release(id); return true;
             }
             if (stopped(status)) {
+                if (AttachmentStore.STORAGE_REASON.equals(msg.optString("reason")))
+                    store.reason(contact, id, AttachmentStore.STORAGE_REASON);
                 store.terminate(contact, id, status, false); write(frame("stopAck", id)); release(id); return true;
             }
             if (AttachmentStore.OFFERED.equals(status)) { ready.remove(id); return true; }
