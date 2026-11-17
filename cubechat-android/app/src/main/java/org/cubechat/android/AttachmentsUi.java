@@ -49,12 +49,13 @@ final class AttachmentsUi {
     private final Map<String, String> observedFileStates = new HashMap<>();
     private long observedContact;
     private boolean observedInitialFiles;
+    private String latestFileEventId, latestFileEventText;
 
     AttachmentsUi(Activity screen, PeerLink link, Button notice, Bundle state) {
         this.screen = screen;
         this.link = link;
         this.notice = notice;
-        notice.setOnClickListener(v -> reviewOffers());
+        notice.setOnClickListener(v -> openFileNotice());
         if (state != null) {
             pickerContact = state.getLong("filePickerContact");
             exportId = state.getString("fileExportId");
@@ -77,14 +78,22 @@ final class AttachmentsUi {
             observedContact = state.activeId;
             observedFileStates.clear();
             observedInitialFiles = false;
+            latestFileEventId = null;
+            latestFileEventText = null;
         }
         if (state.loaded) {
             for (AttachmentStore.Transfer f : state.files) {
                 String prior = observedFileStates.put(f.id, f.status);
-                if (observedInitialFiles && f.outgoing && prior != null
-                        && !"DECLINED".equals(prior) && "DECLINED".equals(f.status)
-                        && AttachmentStore.STORAGE_REASON.equals(f.reason)) {
-                    note("File rejected: not enough storage on recipient");
+                if (observedInitialFiles && prior != null && !prior.equals(f.status)) {
+                    if ("COMPLETE".equals(f.status)) {
+                        latestFileEventId = f.id;
+                        latestFileEventText = f.outgoing ? "File delivered: " + f.name : "File received: " + f.name;
+                    } else if ("DECLINED".equals(f.status) || "CANCELED".equals(f.status)) {
+                        latestFileEventId = f.id;
+                        if (AttachmentStore.STORAGE_REASON.equals(f.reason))
+                            latestFileEventText = "File rejected: not enough storage on recipient";
+                        else latestFileEventText = ("DECLINED".equals(f.status) ? "File declined: " : "Transfer canceled: ") + f.name;
+                    }
                 }
             }
             observedInitialFiles = true;
@@ -103,8 +112,14 @@ final class AttachmentsUi {
         for (AttachmentStore.Transfer file : state.files) {
             if (needsConsent(file)) count++;
         }
-        notice.setVisibility(count == 0 ? View.GONE : View.VISIBLE);
+        if (latestFileEventId != null && find(state.files, latestFileEventId) == null) {
+            latestFileEventId = null;
+            latestFileEventText = null;
+        }
+        boolean event = latestFileEventId != null;
+        notice.setVisibility(count > 0 || event ? View.VISIBLE : View.GONE);
         if (count > 0) notice.setText(count == 1 ? "Review file offer" : "Review " + count + " file offers");
+        else if (event) notice.setText(latestFileEventText);
         if (listDialog != null) {
             connection.setText(connectionText(state));
             storageSummary.setText(spaceText(state));
@@ -156,6 +171,20 @@ final class AttachmentsUi {
     private AttachmentStore.Transfer find(List<AttachmentStore.Transfer> files, String id) {
         for (AttachmentStore.Transfer file : files) if (file.id.equals(id)) return file;
         return null;
+    }
+
+    private void openFileNotice() {
+        PeerLink.Snapshot state = link.snapshot();
+        for (AttachmentStore.Transfer file : state.files)
+            if (needsConsent(file)) { reviewOffers(); return; }
+        String id = latestFileEventId;
+        latestFileEventId = null;
+        latestFileEventText = null;
+        if (id != null) {
+            notice.setVisibility(View.GONE);
+            AttachmentStore.Transfer file = find(state.files, id);
+            if (file != null) showDetail(state, file);
+        }
     }
 
     private void reviewOffers() {
