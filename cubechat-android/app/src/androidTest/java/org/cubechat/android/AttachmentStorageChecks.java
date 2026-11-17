@@ -116,6 +116,17 @@ final class AttachmentStorageChecks {
         check(count(chats,"SELECT COUNT(*) FROM attachment_chunks WHERE id=?",bad)==0,"Failed integrity check retained partial chunks");
         refused(() -> files.exportFile(receiver,bad,dest));
 
+        String rejectedId = UUID.randomUUID().toString();
+        files.offer(receiver, rejectedId, "too-large-for-free-space.bin", "application/octet-stream", 128, expected);
+        files.reason(receiver, rejectedId, AttachmentStore.STORAGE_REASON);
+        files.terminate(receiver, rejectedId, AttachmentStore.DECLINED, true);
+        AttachmentStore.Transfer rejected = files.get(receiver, rejectedId);
+        check(rejected.status.equals(AttachmentStore.DECLINED)
+                && rejected.notifyPeer && AttachmentStore.STORAGE_REASON.equals(rejected.reason),
+                "Not-enough-storage rejection was not persisted for the sender");
+        check(count(chats, "SELECT COUNT(*) FROM attachment_chunks WHERE id=?", rejectedId) == 0,
+                "Rejected attachment retained chunk payload");
+
         files.removeCompleted(receiver,id);
         check(files.get(receiver,id).status.equals(AttachmentStore.REMOVED),"Lost replay decision for removed file");
         refused(() -> files.exportFile(receiver,id,dest));
