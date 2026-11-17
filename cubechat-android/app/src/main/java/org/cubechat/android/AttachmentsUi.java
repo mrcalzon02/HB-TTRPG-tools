@@ -47,7 +47,7 @@ final class AttachmentsUi {
     private LinearLayout actions;
     private long dialogContact, pickerContact;
     private long restoreContact;
-    private boolean restoreList;
+    private boolean restoreList, restoreOverview, restoreReviewOnly;
     private String restoreDetail;
     private String selectedId, exportId, actionState;
     private Uri pendingUri;
@@ -66,6 +66,8 @@ final class AttachmentsUi {
             exportId = state.getString("fileExportId");
             restoreContact = state.getLong("fileDialogContact");
             restoreList = state.getBoolean("fileListOpen");
+            restoreOverview = state.getBoolean("fileOverviewOpen");
+            restoreReviewOnly = state.getBoolean("fileReviewOnly");
             restoreDetail = state.getString("fileDetailId");
         }
     }
@@ -73,9 +75,12 @@ final class AttachmentsUi {
     void saveState(Bundle state) {
         state.putLong("filePickerContact", pickerContact);
         state.putString("fileExportId", exportId);
-        state.putLong("fileDialogContact", dialogContact);
-        state.putBoolean("fileListOpen", listDialog != null);
-        state.putString("fileDetailId", selectedId);
+        boolean pending = restoreContact != 0;
+        state.putLong("fileDialogContact", pending ? restoreContact : dialogContact);
+        state.putBoolean("fileListOpen", pending ? restoreList : listDialog != null);
+        state.putBoolean("fileOverviewOpen", pending ? restoreOverview : overviewDialog != null);
+        state.putBoolean("fileReviewOnly", pending ? restoreReviewOnly : reviewOnly != null && reviewOnly.isChecked());
+        state.putString("fileDetailId", pending ? restoreDetail : selectedId);
     }
 
     void changed(PeerLink.Snapshot state) {
@@ -107,6 +112,7 @@ final class AttachmentsUi {
         if (state.loaded && restoreContact != 0) {
             if (restoreContact == state.activeId) {
                 if (restoreList) showFiles();
+                if (restoreOverview && listDialog != null) showOverview(restoreReviewOnly);
                 AttachmentStore.Transfer file = find(state.files, restoreDetail);
                 if (file != null) showDetail(state, file);
             }
@@ -220,7 +226,7 @@ final class AttachmentsUi {
         overview.setAllCaps(false);
         overview.setText("All conversations · Transfer status");
         overview.setMinHeight(dp(48));
-        overview.setOnClickListener(v -> showOverview());
+        overview.setOnClickListener(v -> showOverview(false));
         content.addView(overview);
         FrameLayout box = new FrameLayout(screen);
         content.addView(box);
@@ -255,7 +261,7 @@ final class AttachmentsUi {
         opened.show();
     }
 
-    private void showOverview() {
+    private void showOverview(boolean onlyOffers) {
         if (overviewDialog != null) return;
         link.refreshTransferOverview();
         LinearLayout content = panel();
@@ -263,6 +269,7 @@ final class AttachmentsUi {
         content.addView(overviewSummary);
         reviewOnly = new CheckBox(screen);
         reviewOnly.setText("Needs my review");
+        reviewOnly.setChecked(onlyOffers);
         content.addView(reviewOnly);
         FrameLayout box = new FrameLayout(screen);
         content.addView(box);

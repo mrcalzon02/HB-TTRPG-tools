@@ -2,6 +2,16 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## November 17, 2026 · Transfer overview and incoming offers
+
+**Files → All conversations · Transfer status** puts incoming decisions first. **Needs my review** filters to incoming offers. The currently selected mailbox supplies live progress, pause, connection and completion states. **Refresh** rereads the saved states of other conversations. An accepted transfer in an inactive conversation shows how to resume it. The file list now uses recycled Android rows. The overview and filter restore with the same conversation when screen-state saving is enabled.
+
+- Starting application revision `73f952deefd76bc453dae7fc7ca27fd87494b642`. [Overview and contact-scoped filter](https://github.com/mrcalzon02/HB-TTRPG-tools/commit/b8c27bd5304315aef20fbdb8df7d5ee6821f2bbe).
+- Before the change, disconnecting left the overview showing a transfer in progress. Recreating the attachment UI also lost its filter. Regression fixtures reproduced both behaviors.
+- The clean Java 17 / Android SDK 35 build executed all 61 tasks. Both debug APKs passed v2 signing verification. App SHA-256 `ba64380ba4444a0e80dc479e59ed769a6dbb8f8d50690ba735e6b4dd8e563785`. Instrumentation SHA-256 `389a5cc507e5a7332b3917c770d143e7505dee4330782b551b825af8bb27db8b`.
+- All six Java host regressions passed. Android framework simulations on APIs 26 and 35 exercised disconnect and completion, the review filter, contact-specific navigation with a shared file ID, and saved filter restoration. The device instrumentation entry point now includes the overview adapter and status checks.
+- Public release remains 0.1.4 build 5. Physical-device interaction and the interrupted two-device exchange remain open. Next device check: accept a file, interrupt the route mid-transfer, then verify that the resumed receive matches the original digest and that both screens show the final state.
+
 ## November 17, 2026 · Post-0.1.4 build and privacy verification
 
 Starting main was `a1cd723b78c9011c3314fc0b024ecedbc47c1f88`. Java compilation reproduced a missing pair of attachment lists in the locked mailbox snapshot. [The mailbox fix](https://github.com/mrcalzon02/HB-TTRPG-tools/commit/f3b45c077e02ffc27956e0e302cabf2224cd6071) restores compilation and drops the cached attachment lists and storage summary on lock and selection reload. [The tested application and workflow](https://github.com/mrcalzon02/HB-TTRPG-tools/commit/95e5acb188003f8bc5424d164f60a765e0e66f64) mark explicit chat copies sensitive, recognize old invite markers on PURGE, and target a unique disposable emulator in the manual Android regression.
