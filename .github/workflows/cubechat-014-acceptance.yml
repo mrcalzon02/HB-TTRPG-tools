@@ -127,7 +127,7 @@ jobs:
           adb -s emulator-5554 uninstall org.cubechat.android.test
           adb -s emulator-5554 uninstall org.cubechat.android
           adb -s emulator-5554 install .github/cubechat-security-candidate/CubeChat.apk
-          CUBECHAT_SECURITY_FOCUS=1 python3 .github/scripts/cubechat_014_acceptance.py
+          python3 .github/scripts/cubechat_014_acceptance.py
 
       - name: Save synthetic conversation and reset screenshots
         if: always()

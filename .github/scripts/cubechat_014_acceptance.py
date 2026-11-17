@@ -1,5 +1,8 @@
 """Exercise the signed Android build through its real lock, pairing and system data-clear flows."""
 import os
+import io
+import struct
+import subprocess
 import re
 from pathlib import Path
 import sys
@@ -169,13 +172,12 @@ def settle_form(button):
         if not visible(button): return
     raise ui.CheckFailed("Credential form did not complete")
 
-def upgrade(empty=False):
+def upgrade():
     if b"Success" not in ui.run(["adb","install","-r",APK],"In-place upgrade to signed build 5"):
         raise ui.CheckFailed("Signed APK could not upgrade in place")
     if "versionCode=5" not in ui.shell("dumpsys","package",ui.APP):
         raise ui.CheckFailed("Version code 5 is missing")
-    if empty: start_empty_install("0.1.4")
-    else: open_app()
+    open_app()
 
 def connected_within(seconds):
     try:
@@ -204,20 +206,78 @@ def inspect_carrier():
     return listener
 
 def rendered_card():
-    for attempt in range(3):
-        qr=ui.wait_for(lambda n:n.get("content-desc")=="CubeChat pairing QR code","Key card",20)
+    # Both the raw capture and any enlarged crop must decode as a real CubeChat HTTPS QR.
+    observations = []
+    tmp = Path(os.environ['RUNNER_TEMP'])
+    for delay in (0, .7, 1.5, 3, 4):
+        time.sleep(delay)
+        nodes = ui.tree()
+        qr = next((n for n in nodes if n.get('package') == ui.APP and
+                   n.get('content-desc') == 'CubeChat pairing QR code'), None)
+        if qr is None:
+            title = any(n.get('text') == 'Pairing invite' for n in nodes)
+            observations.append(f'invite title={title}, QR view absent')
+            continue
+        box = ui.bounds(qr)
+        png = ui.run(['adb','exec-out','screencap','-p'], 'Capture displayed synthetic QR')
+        if not png.startswith(b'\x89PNG\r\n\x1a\n') or len(png) < 24:
+            observations.append('invalid framebuffer PNG')
+            continue
+        width, height = struct.unpack('>II', png[16:24])
+        left, top, right, bottom = box
+        state = f'frame {width}x{height}, view {box}'
+        if not (0 <= left < right <= width and 0 <= top < bottom <= height):
+            observations.append(state + ', bounds outside framebuffer')
+            continue
+        attempts = [(png,box)]
         try:
-            return ui.decode_card(qr)
-        except ui.CheckFailed:
-            time.sleep(.6*(attempt+1))
-    # It is the same real, on-screen card. The app also lets the user reveal its
-    # exact URI when Android cannot capture the rendered image. Do not log or save it.
-    tap("Show invite text")
-    node=ui.wait_for(lambda n:n.get("package")==ui.APP and n.get("text","").startswith(ui.PREFIX)
-                     and bool(re.fullmatch(r"[A-Za-z0-9_-]+", n.get("text","")[len(ui.PREFIX):])),
-                     "Exact text of the original native key card",20)
-    ui.report("Used the original key card’s native Show invite text control after framebuffer retries.")
-    return node.get("text")
+            from PIL import Image, ImageOps
+        except ImportError:
+            state += ', contrast unavailable'
+        else:
+            crop = Image.open(io.BytesIO(png)).convert('L').crop(box)
+            lo, hi = crop.getextrema()
+            state += f', luminance range {lo}..{hi}'
+            if hi-lo >= 80:
+                threshold = (lo+hi)//2
+                ink = crop.point(lambda x: 255 if x <= threshold else 0).getbbox()
+                if ink:
+                    binary = crop.crop(ink).point(lambda x: 255 if x > threshold else 0)
+                    enlarged = binary.resize((binary.width*2,binary.height*2),Image.Resampling.NEAREST)
+                    framed = ImageOps.expand(enlarged,border=max(32,enlarged.width//12),fill=255)
+                    out = io.BytesIO(); framed.save(out,format='PNG')
+                    attempts.append((out.getvalue(),[0,0,framed.width,framed.height]))
+        for frame, bounds in attempts:
+            cmd = ['java','-Djava.awt.headless=true','-cp',f'{tmp}:{tmp / "zxing-core.jar"}',
+                   'CubeChatQrReader',*map(str,bounds)]
+            result = subprocess.run(cmd,input=frame,capture_output=True,timeout=12,check=False)
+            if result.returncode:
+                # Never print the screen, signed invite, full device dumps or decoder output.
+                kind = re.search(rb'\b(NotFoundException|ChecksumException|FormatException|RasterFormatException)\b',result.stderr)
+                state += ', ' + (kind[1].decode() if kind else 'decoder failure')
+                continue
+            card = result.stdout.decode('ascii',errors='replace')
+            if card.startswith(ui.PREFIX) and re.fullmatch(r'[A-Za-z0-9_-]+',card[len(ui.PREFIX):]):
+                return card
+            raise ui.CheckFailed('A QR code was read from the screen but it did not contain a CubeChat invite')
+        observations.append(state)
+    ui.report('QR framebuffer observations: ' + '; '.join(observations))
+    windows = ui.shell('dumpsys','window','windows',required=False)
+    ours = [w for w in re.split(r'(?m)^\s*Window #\d+ ',windows) if ui.APP in w.split('\n',1)[0]]
+    secure = any(re.search(r'\bSECURE\b',window[:2400]) for window in ours)
+    ui.report(f'CubeChat windows listed={len(ours)}, SECURE flag found={secure}.')
+    launcher_anr(ui.tree())
+    crashes = ui.shell('logcat','-b','events','-d','-t','600','-s','am_crash:I',required=False)
+    classes = re.findall(r'am_crash\s*:\s*\[\d+,\d+,([\w.:]+),\d+,([\w.$]+),',crashes)
+    ui.report('Recent Android crash process/class records: ' + repr(classes[-3:]))
+    if os.environ.get('CUBECHAT_SECURITY_FOCUS') == '1':
+        tap('Show invite text')
+        node = ui.wait_for(lambda n:n.get('package') == ui.APP and n.get('text','').startswith(ui.PREFIX)
+                           and bool(re.fullmatch(r'[A-Za-z0-9_-]+',n.get('text','')[len(ui.PREFIX):])),
+                           'Exact native invitation for the focused security drill',20)
+        ui.report('Focused security drill continued with the native text invitation after the QR decoder failed.')
+        return node.get('text')
+    raise ui.CheckFailed('No scannable CubeChat QR appeared in the invite after five displayed framebuffer captures')
 
 def pairing(route):
     phones.select(HOST); tap("Show my invite"); match("Pairing invite")
@@ -321,17 +381,9 @@ def drill():
         ui.run(["adb","root"],"Inspect ephemeral emulator private storage")
         ui.run(["adb","wait-for-device"],"Reconnect emulator")
         if ui.shell("id","-u")!="0":raise ui.CheckFailed("Android app-data inspection requires rooted test image")
-        if "versionCode=5" not in ui.shell("dumpsys","package",ui.APP):
-            raise ui.CheckFailed("The signed release build must be installed before this focused drill")
-        start_empty_install("0.1.4")
-    route=pairing(phones.choose_network())
-    phones.select(HOST); files.connected(); enroll()
-    phones.select(GUEST); files.connected(); enroll(); files.connected()
-    phones.send("ProtectedPeerRetainsHistory"); phones.receipt("ProtectedPeerRetainsHistory","Delivered"); lock()
-    purge_while_peer_stopped()
-    phones.select(HOST); screenshot("reset")
-    ui.report("The stopped-recipient drill used "+route+".")
-
+        if 'versionCode=5' not in ui.shell('dumpsys','package',ui.APP):
+            raise ui.CheckFailed('Signed build 5 must be installed on both devices before the security drill')
+        start_empty_install('0.1.4')
     # Block only this disposable sender's reset marker. A file cannot replace a directory
     # by rename or be written at that pathname. The rest of the filesystem stays writable.
     phones.select(HOST); enroll(); phones.stop(); ui.shell("svc","wifi","disable")
@@ -346,8 +398,17 @@ def drill():
     sign(DURESS); expect_system_clear()
     ui.report("With only the marker pathname blocked by a directory, a wrong password left the enrolled profile intact and normal offline sign-in still worked. After another cold start, the correct PURGE password cleared the offline sender and Android returned it to first launch.")
 
-    if os.environ.get("CUBECHAT_SECURITY_FOCUS")=="1":
-        ui.report("Exact 0.1.4 release acceptance completed for the suspended recipient and the obstructed reset marker.")
+    ui.shell("svc","wifi","enable")
+    route=pairing(phones.choose_network())
+    phones.select(HOST); files.connected(); enroll()
+    phones.select(GUEST); files.connected(); enroll(); files.connected()
+    phones.send("ProtectedPeerRetainsHistory"); phones.receipt("ProtectedPeerRetainsHistory","Delivered"); lock()
+    purge_while_peer_stopped()
+    phones.select(HOST); screenshot("reset")
+    ui.report("The stopped-recipient drill used "+route+".")
+
+    if os.environ.get('CUBECHAT_SECURITY_FOCUS') == '1':
+        ui.report('Focused 0.1.4 security acceptance completed for the suspended recipient and obstructed reset marker.')
         return
 
     # Reproduce the published upgrade on clean synthetic test installations, separately.
