@@ -2,6 +2,16 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## November 17, 2026 · Preserve the next draft during an offline send
+
+The composer shows **Saving…** until its own outbox write finishes. A file or connection error can no longer re-enable a pending send. Typing after the tap creates a new draft, even when the text is identical. A failed local write keeps the current draft editable for retry. Once SQLite commits the message, a subsequent contact-list refresh error cannot prompt a duplicate submission.
+
+- Started at `76be1c1fdca52a61b5fbb8dad6913bfe1a0bf347`. [Tested application, permanent composer regressions and manual workflow](https://github.com/mrcalzon02/HB-TTRPG-tools/commit/5648bb2f5768621e35acc190e89bd6723754d6d7).
+- On the starting revision, four assertions failed across API 26 and 35. Both versions reproduced the duplicate-tap window and the loss of an identical follow-up draft.
+- The clean Java 17 / SDK 35 build executed 67 tasks. Both debug APKs passed v2 signature verification. App SHA-256 `2a1adea3556f91d2af4f967d654f5efc6aa5eb0aeb049c245f9ae6f09e6ca33c`. Instrumentation SHA-256 `389a5cc507e5a7332b3917c770d143e7505dee4330782b551b825af8bb27db8b`.
+- All 32 Android framework simulations and six Java host regressions passed. Ten permanent tests exercise the Android composer, mailbox worker and SQLite commit or rollback on API 26 and 35. They use a process-local test key and a fixture envelope codec. The manual regression workflow includes these tests. Its device-selection shell also passed four simulated adb outcomes.
+- Public Android release is 0.1.4 build 5. No Android device was attached. The next device check is to queue a message offline, type the same words as a new draft, reconnect two phones, and verify a single delivery receipt while the second draft remains editable.
+
 ## November 17, 2026 · Transfer overview and incoming offers
 
 **Files → All conversations · Transfer status** puts incoming decisions first. **Needs my review** filters to incoming offers. The currently selected mailbox supplies live progress, pause, connection and completion states. **Refresh** rereads the saved states of other conversations. An accepted transfer in an inactive conversation shows how to resume it. The file list now uses recycled Android rows. The overview and filter restore with the same conversation when screen-state saving is enabled.
