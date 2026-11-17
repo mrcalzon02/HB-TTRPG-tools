@@ -1235,6 +1235,64 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         }
     }
 
+    private void messageActions(View anchor, PeerLink.Message message, long contactId) {
+        if (!chatOpen() || link == null || renderedId != contactId) return;
+        PopupMenu menu = new PopupMenu(this, anchor);
+        menu.getMenu().add("Copy message").setOnMenuItemClickListener(item -> {
+            if (!chatOpen() || renderedId != contactId) return true;
+            try {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                if (clipboard != null) {
+                    clipboard.setPrimaryClip(ClipData.newPlainText("CubeChat message", message.text));
+                    Toast.makeText(this, "Message copied", Toast.LENGTH_SHORT).show();
+                }
+            } catch (RuntimeException ignored) {
+                Toast.makeText(this, "Clipboard unavailable", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        });
+        menu.getMenu().add("Quote in reply").setOnMenuItemClickListener(item -> {
+            quoteInDraft(contactId, message.text);
+            return true;
+        });
+        menu.show();
+    }
+
+    private void quoteInDraft(long contactId, String source) {
+        if (!chatOpen() || draft == null || link == null || renderedId != contactId) return;
+        // Quotes are plain text. Never silently send, overwrite an existing draft, or
+        // cross conversation boundaries. Keep the inserted quote short enough to edit.
+        StringBuilder quoted = new StringBuilder();
+        int sourceBytes = 0;
+        boolean atLineStart = true;
+        for (int offset = 0; offset < source.length();) {
+            int cp = source.codePointAt(offset);
+            String character = new String(Character.toChars(cp));
+            int bytes = character.getBytes(StandardCharsets.UTF_8).length;
+            if (sourceBytes + bytes > 1024) {
+                quoted.append("…");
+                break;
+            }
+            if (atLineStart) quoted.append("> ");
+            quoted.append(character);
+            sourceBytes += bytes;
+            offset += Character.charCount(cp);
+            atLineStart = cp == '\\n';
+        }
+        String original = draft.getText().toString();
+        String separator = original.isEmpty() ? "" : (original.endsWith("\\n") ? "\\n" : "\\n\\n");
+        String addition = separator + quoted + "\\n";
+        if ((original + addition).getBytes(StandardCharsets.UTF_8).length > 4096) {
+            Toast.makeText(this, "Draft is too long to add this quote", Toast.LENGTH_LONG).show();
+            return;
+        }
+        int cursor = draft.getSelectionStart();
+        if (cursor < 0 || cursor > original.length()) cursor = original.length();
+        draft.getText().insert(cursor, addition);
+        draft.setSelection(cursor + addition.length());
+        draft.requestFocus();
+    }
+
     private final class Messages extends BaseAdapter {
         List<PeerLink.Message> items = Collections.emptyList();
         final DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(MainActivity.this);
@@ -1264,6 +1322,14 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             ((TextView) bubble.getChildAt(0)).setTextSize(chatPrefs.textSize());
             ((TextView) bubble.getChildAt(1)).setTextSize(chatPrefs.captionSize());
             ((TextView) bubble.getChildAt(0)).setText(msg.text);
+            final long messageContact = renderedId;
+            bubble.setContentDescription((msg.outgoing ? "Your message. " : "Received message. ")
+                    + "Tap for Copy or Quote. " + msg.text);
+            bubble.setOnClickListener(v -> messageActions(v, msg, messageContact));
+            bubble.setOnLongClickListener(v -> {
+                messageActions(v, msg, messageContact);
+                return true;
+            });
             String source = msg.outgoing ? "You" : "Peer";
             String receipt = msg.outgoing ? (msg.delivered ? " · Delivered" : " · Queued") : "";
             ((TextView) bubble.getChildAt(1)).setText(source + " · " + timeFormat.format(new Date(msg.time)) + receipt);
