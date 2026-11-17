@@ -2,6 +2,12 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## Post-0.1.4 QoL regression checkpoint
+
+The post-release branch on `main` includes message-copy and quoting actions, draft undo, clearer conversation queues and routes, attachment storage preflight, transfer notifications, cross-contact cleanup and file-status views. These changes are **source-committed, not released or Android-device-validated**. The published 0.1.4 build-5 APK remains the last verified release baseline.
+
+The manual [CubeChat Android QoL regression workflow](../.github/workflows/cubechat-qol-regression.yml) builds the latest `main` source and its Android instrumentation APK using a self-hosted Linux runner. Choose **Actions → CubeChat Android QoL regression → Run workflow**. Leave **run_instrumentation** disabled for compilation-only checks, or enable it on a Linux runner with working `/dev/kvm` to run the isolated contact/attachment/vault tests on an Android 35 emulator. The workflow never publishes a release and does not auto-trigger. Review the actual job result and debug APK artifact before deciding whether to tag anything. UI interaction acceptance and two-phone messaging remain separate checks; passing instrumentation does not prove them.
+
 ## Android 0.1.4, build 5
 
 The [0.1.4 release](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.4) adds an optional local profile, password-protected message and attachment keys, configurable lock timing, and an optional duress password that announces PURGE to connected conversations before clearing this phone. Chat preferences include text size, Enter-to-send and keyboard learning. The current release supports one local profile and one live conversation at a time.
