@@ -34,7 +34,7 @@ final class AttachmentsUi {
     private final Button notice;
     private final FileRows rows = new FileRows();
     private AlertDialog listDialog, detailDialog, removeDialog;
-    private TextView connection, detailStatus, detailBytes;
+    private TextView connection, storageSummary, detailStatus, detailBytes;
     private ProgressBar progress;
     private LinearLayout actions;
     private long dialogContact, pickerContact;
@@ -104,6 +104,7 @@ final class AttachmentsUi {
         if (count > 0) notice.setText(count == 1 ? "Review file offer" : "Review " + count + " file offers");
         if (listDialog != null) {
             connection.setText(connectionText(state));
+            storageSummary.setText(spaceText(state));
             if (rows.items != state.files) {
                 rows.items = state.files;
                 rows.notifyDataSetChanged();
@@ -121,6 +122,18 @@ final class AttachmentsUi {
         if (!state.connected) return "Offline · Offers and accepted transfers wait for a connection.";
         if (!state.fileCapable) return "Waiting for peer file support. Both phones need a version with attachments.";
         return "Files use " + state.route + " · Up to 8 MiB per file";
+    }
+
+    private String spaceText(PeerLink.Snapshot state) {
+        AttachmentStore.Space capacity = state.space;
+        if (capacity == null) return "Checking available storage…";
+        String usage = size(capacity.quotaUsed) + " / " + size(capacity.quotaLimit) + " CubeChat attachment allowance used";
+        String room = "Space for new incoming files: " + size(capacity.acceptableBytes)
+                + " · Device free: " + size(capacity.deviceFree);
+        String active = capacity.incomingRemaining > 0
+                ? " · " + size(capacity.incomingRemaining) + " already committed to receiving" : "";
+        return room + active + "\\n" + usage
+                + "\\nRemove completed local attachments to recover CubeChat allowance. Files exported elsewhere are unaffected.";
     }
 
     private boolean needsConsent(AttachmentStore.Transfer f) {
@@ -150,6 +163,9 @@ final class AttachmentsUi {
         connection = text(14);
         connection.setText(connectionText(state));
         content.addView(connection);
+        storageSummary = text(13);
+        storageSummary.setText(spaceText(state));
+        content.addView(storageSummary);
         FrameLayout box = new FrameLayout(screen);
         content.addView(box);
         ListView list = new ListView(screen);
@@ -173,6 +189,7 @@ final class AttachmentsUi {
             if (listDialog == opened) {
                 listDialog = null;
                 rows.items = Collections.emptyList();
+                storageSummary = null;
                 if (detailDialog == null) dialogContact = 0;
             }
         });
