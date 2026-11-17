@@ -1,0 +1,78 @@
+name: CubeChat Android QoL regression
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_instrumentation:
+        description: "Run Android 35 emulator storage/vault regressions (requires /dev/kvm)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cubechat-qol-regression
+  cancel-in-progress: false
+
+jobs:
+  android:
+    # Manual only. Keep GitHub-hosted minutes unused; do not trigger on PRs or forks.
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Java 17
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Android SDK
+        uses: android-actions/setup-android@079c0d074a47bf7f69d0b47656cb82f83df3fbc4
+        with:
+          packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
+
+      - name: Compile current main and instrumentation APK
+        working-directory: cubechat-android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew --no-daemon --stacktrace :app:assembleDebug :app:assembleDebugAndroidTest
+
+      - name: Run isolated Android vault and attachment regressions
+        if: ${{ inputs.run_instrumentation }}
+        shell: bash
+        working-directory: cubechat-android
+        run: |
+          set -euo pipefail
+          test -r /dev/kvm && test -w /dev/kvm || { echo "Emulator requires writable /dev/kvm on this runner"; exit 1; }
+          sdkmanager --install 'emulator' 'system-images;android-35;google_apis;x86_64'
+          printf 'no\n' | avdmanager create avd --force -n cubechat-qol-regression -k 'system-images;android-35;google_apis;x86_64'
+          emulator -avd cubechat-qol-regression -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect > "$RUNNER_TEMP/cubechat-emulator.log" 2>&1 &
+          emulator_pid=$!
+          trap 'kill "$emulator_pid" 2>/dev/null || true' EXIT
+          adb wait-for-device
+          deadline=$((SECONDS + 360))
+          until [[ "$(adb shell getprop sys.boot_completed | tr -d '\r')" == 1 ]]; do
+            if ((SECONDS >= deadline)); then tail -100 "$RUNNER_TEMP/cubechat-emulator.log"; exit 1; fi
+            sleep 3
+          done
+          adb install -r app/build/outputs/apk/debug/app-debug.apk
+          adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+          adb shell am instrument -w org.cubechat.android.test/org.cubechat.android.ContactStorageChecks | tee "$RUNNER_TEMP/cubechat-instrumentation.txt"
+          grep -q 'OK (1 test)' "$RUNNER_TEMP/cubechat-instrumentation.txt" || grep -q 'INSTRUMENTATION_CODE: -1' "$RUNNER_TEMP/cubechat-instrumentation.txt"
+          ! grep -q 'FAILURES\|INSTRUMENTATION_CODE: 0' "$RUNNER_TEMP/cubechat-instrumentation.txt"
+
+      - name: Preserve debug APKs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cubechat-qol-regression-${{ github.sha }}
+          path: |
+            cubechat-android/app/build/outputs/apk/debug/*.apk
+            cubechat-android/app/build/outputs/apk/androidTest/debug/*.apk
+          if-no-files-found: warn
+          retention-days: 14
