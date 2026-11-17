@@ -24,7 +24,11 @@ jobs:
         run: |
           set -euo pipefail
           echo '51b845ddf7564dd1887dc7ab9bf51eddb7a8e0c93a6365314c7ddd4865514d69  cubechat-android/downloads/CubeChat.apk' | sha256sum -c -
-          curl --fail --silent --show-error --location --retry 2 https://repo.maven.apache.org/maven2/com/google/zxing/core/3.5.3/core-3.5.3.jar -o "$RUNNER_TEMP/zxing-core.jar"
+          jar_path='com/google/zxing/core/3.5.3/core-3.5.3.jar'
+          for base in https://repo.maven.apache.org/maven2 https://maven-central.storage-download.googleapis.com/maven2 https://repo1.maven.org/maven2; do
+            if curl --fail --silent --show-error --location --retry 2 --max-time 30 "$base/$jar_path" -o "$RUNNER_TEMP/zxing-core.jar" &&
+               echo "8d8064c1636fdaef7189dd9055c7d59950a8940a12f2293956446ec3c109fd82  $RUNNER_TEMP/zxing-core.jar" | sha256sum -c -; then break; fi
+          done
           echo "8d8064c1636fdaef7189dd9055c7d59950a8940a12f2293956446ec3c109fd82  $RUNNER_TEMP/zxing-core.jar" | sha256sum -c -
           javac -cp "$RUNNER_TEMP/zxing-core.jar" -d "$RUNNER_TEMP" .github/scripts/CubeChatQrReader.java
       - name: Boot two API 35 phones and exchange messages through RFCOMM
