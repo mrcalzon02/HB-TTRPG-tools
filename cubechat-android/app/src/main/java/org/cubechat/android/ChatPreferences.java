@@ -15,8 +15,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 final class ChatPreferences {
-    private static final int[] SIZES = {15, 17, 20, 24};
-    private static final String[] NAMES = {"Compact", "Standard", "Large", "Extra large"};
+    private static final int[] SIZES = {15, 17, 20, 24, 28};
+    private static final String[] NAMES = {"Compact", "Standard", "Large", "Extra large", "Accessibility"};
     private static final int STANDARD = 1;
     private final SharedPreferences prefs;
     private int size;
@@ -85,7 +85,21 @@ final class ChatPreferences {
             sizes.addView(item);
         }
         sizes.check(choices[size].getId());
+        TextView preview = new TextView(screen);
+        preview.setText("Preview: The quick brown fox jumps over the lazy dog. 1234567890");
+        preview.setTextSize(SIZES[size]);
+        preview.setPadding(0, pad / 2, 0, pad / 2);
+        preview.setContentDescription("Message text size preview");
+        sizes.setOnCheckedChangeListener((group, checkedId) -> {
+            for (int i = 0; i < choices.length; i++) {
+                if (choices[i].getId() == checkedId) {
+                    preview.setTextSize(SIZES[i]);
+                    break;
+                }
+            }
+        });
         content.addView(sizes);
+        content.addView(preview);
         CheckBox enter = new CheckBox(screen);
         enter.setText("Enter sends a message");
         enter.setChecked(enterSends);
