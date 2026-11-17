@@ -46,7 +46,7 @@ class Phone:
         raise CheckFailed(label + " did not appear on " + self.serial)
 
     def named(self, label):
-        return self.find(lambda n: text(n) == label, label)
+        return self.find(lambda n: text(n).casefold() == label.casefold(), label)
 
     def choose_bluetooth(self):
         for label in ("Pairing", "Connection…", "Bluetooth"):
@@ -166,6 +166,7 @@ def check():
     os.environ["ANDROID_SERIAL"] = host.serial  # decoder only, no disk image
     card = decode_card(qr)
     host.tap(host.named("Close"))
+    report("Host key card rendered and decoded. Its private contents remain in memory.")
     host.choose_bluetooth()
     wait_host_ready(host)
     report("Phone A opened the signed APK, created a key card, and entered the Bluetooth host route.")
@@ -176,6 +177,7 @@ def check():
     guest.find(lambda n: text(n).startswith("Peer "), "Imported peer")
     guest.choose_bluetooth()
     select_discovered_peer(guest, host)
+    report("The guest selected the other virtual phone in CubeChat’s Bluetooth discovery dialog.")
     bond(host, guest)
     report("Two independent virtual phones discovered and authenticated each other through the Android Bluetooth Classic/RFCOMM stack.")
 
