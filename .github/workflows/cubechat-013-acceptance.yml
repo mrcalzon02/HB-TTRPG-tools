@@ -122,10 +122,11 @@ jobs:
           grep -F "PASS: SQLite upgrade, contact isolation, drafts, counters and attachment vault." "$RUNNER_TEMP/store-check.log"
           grep -F "INSTRUMENTATION_CODE: -1" "$RUNNER_TEMP/store-check.log"
 
-      - name: Save the key-free conversation screenshot
+      - name: Save key-free attachment screenshots
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: CubeChat-Android-013-files
           path: ${{ runner.temp }}/CubeChat-013-*.png
-          if-no-files-found: error
+          if-no-files-found: ${{ success() && 'error' || 'warn' }}
           retention-days: 7

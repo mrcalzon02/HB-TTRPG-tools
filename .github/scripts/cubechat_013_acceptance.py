@@ -201,6 +201,50 @@ def radio_file(sender,receiver,name,data,expected_route):
     click("Files"); click(name); ui.named("Delivered")
     ui.report(expected_route+" transferred "+str(len(data))+" bytes between separate Android radios. Both clients showed the selected route, the sender received a delivery receipt, and the explicit Android export matched SHA-256 "+digest+".")
 
+def bluetooth_status(phone):
+    nodes=phone.tree()
+    packages=sorted({n.get("package","") for n in nodes if n.get("package","")})
+    display=[n.get("text","") for n in nodes if n.get("text","").lower().startswith(
+        ("waiting for bluetooth","bluetooth waiting","bluetooth peer authentication","connected over bluetooth",
+         "open connection to reconnect bluetooth","pairing request","pair with"))]
+    # Only log known state strings. Never log QR data, names, addresses or PINs.
+    states=[re.sub(r"(?:[\da-f]{2}:){5}[\da-f]{2}|\b\d{4,}\b","[redacted]",s,flags=re.I)[:110] for s in display]
+    diag=phone.shell("dumpsys","bluetooth_manager")
+    bonds=re.findall(r"(?im)^.*(?:bond.state.(?:change|transition)|bond_state_changed_callback)[^\n]*$",diag)
+    events=phone.shell("logcat","-d","-t","1400",required=False).splitlines()
+    categories=("BOND_BONDING","BOND_BONDED","BOND_NONE","bondStateChange","SMP_PAIR","authentication failed",
+                "SDP_DISC_CMPL","RFCOMM_Open","read failed, socket might closed")
+    tally={s:sum(s.casefold() in row.casefold() for row in events) for s in categories}
+    ui.report(phone.serial+" Bluetooth state: windows="+",".join(packages)+" status="+str(states)+
+              " bond state events="+str(len(bonds))+" stack event counts="+str(tally))
+
+def connect_bluetooth(host,guest,bt):
+    host.choose_bluetooth(); bt.wait_host_ready(host)
+    ui.report("The card holder opened its Bluetooth listening service.")
+    guest.choose_bluetooth(); bt.select_discovered_peer(guest,host)
+    ui.report("The recipient chose the discoverable host in CubeChat.")
+    try:
+        bt.bond(host,guest)
+    except ui.CheckFailed:
+        for phone in (host,guest): bluetooth_status(phone)
+        ui.report("The initial RFCOMM attempt timed out. Restarting the two virtual Bluetooth controllers and reopening the same chat.")
+        for phone in (guest,host):
+            phone.shell("am","force-stop",ui.APP)
+            phone.shell("svc","bluetooth","disable")
+        time.sleep(3)
+        for phone in (host,guest): phone.shell("svc","bluetooth","enable")
+        time.sleep(4)
+        host.shell("am","start","-W","-n",ui.MAIN)
+        host.choose_bluetooth(); bt.wait_host_ready(host)
+        # The guest retained its chosen host. Resume the same route without
+        # canceling an in-flight system bond by opening a second chooser.
+        guest.shell("am","start","-W","-n",ui.MAIN)
+        try:
+            bt.bond(host,guest)
+        except ui.CheckFailed:
+            for phone in (host,guest): bluetooth_status(phone)
+            raise
+
 def radio_proof(baseline_route):
     import cubechat_wifidirect_qa as wifi
     import cubechat_bluetooth_qa as bt
@@ -217,8 +261,7 @@ def radio_proof(baseline_route):
         ui.shell("svc","bluetooth","enable")
     restart_pair()
     host,guest=bt.Phone(HOST),bt.Phone(GUEST)
-    host.choose_bluetooth(); bt.wait_host_ready(host)
-    guest.choose_bluetooth(); bt.select_discovered_peer(guest,host); bt.bond(host,guest)
+    connect_bluetooth(host,guest,bt)
     for phone in (host,guest):
         # Multi-SIM builds namespace their mobile-data setting by subscription.
         # Check the actual IP routes after disabling both services.
