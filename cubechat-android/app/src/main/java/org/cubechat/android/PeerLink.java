@@ -393,6 +393,14 @@ public final class PeerLink {
         attachmentSpace = attachments.space();
         publish();
     }
+    public void refreshAttachmentSpace() {
+        command(() -> {
+            ready();
+            attachmentSpace = attachments.space();
+            publish();
+        });
+    }
+
     private void filesChanged(String id) throws Exception {
         refreshFiles(true);
         if (exchange != null) {
