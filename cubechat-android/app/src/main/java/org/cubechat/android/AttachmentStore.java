@@ -117,6 +117,26 @@ final class AttachmentStore {
                 throw new IOException("The attachment history is full. Remove completed files to make room.");
         }
     }
+    static final class Space {
+        final long deviceFree, quotaUsed, quotaLimit, incomingRemaining, acceptableBytes;
+        Space(long free, long used, long pending) {
+            deviceFree = free;
+            quotaUsed = used;
+            quotaLimit = VAULT_BYTES;
+            incomingRemaining = pending;
+            long headroom = free > FREE_SPACE_MARGIN ? (free - FREE_SPACE_MARGIN) / 2 : 0;
+            long diskBudget = Math.max(0, headroom - pending);
+            acceptableBytes = Math.max(0, Math.min(VAULT_BYTES - used, diskBudget));
+        }
+    }
+
+    Space space() {
+        long reserved = count("SELECT COALESCE(SUM(size),0) FROM attachments WHERE status IN ('ACCEPTED','COMPLETE') "
+                + "OR (status='OFFERED' AND outgoing=1)");
+        long pending = count("SELECT COALESCE(SUM(size-progress),0) FROM attachments WHERE outgoing=0 AND status='ACCEPTED'");
+        return new Space(context.getFilesDir().getUsableSpace(), reserved, pending);
+    }
+
     private void reserve(long size) throws IOException {
         long reserved = count("SELECT COALESCE(SUM(size),0) FROM attachments WHERE status IN ('ACCEPTED','COMPLETE') "
                 + "OR (status='OFFERED' AND outgoing=1)");
