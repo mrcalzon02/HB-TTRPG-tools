@@ -33,6 +33,15 @@ final class AttachmentStorageChecks {
         check(!AttachmentStore.hasIncomingCapacity(20 * mb, 4 * mb, 5 * mb), "Overcommitted concurrent files");
         check(!AttachmentStore.hasIncomingCapacity(20 * mb, 9 * mb, 0), "Existing transfers exceed budget");
         check(!AttachmentStore.hasIncomingCapacity(Long.MAX_VALUE, 0, -1), "Negative offer accepted");
+        AttachmentStore.Space initial = new AttachmentStore.Space(20 * mb, 4 * mb, 2 * mb);
+        check(initial.deviceFree == 20 * mb && initial.quotaUsed == 4 * mb,
+                "Storage summary changed device or quota counters");
+        check(initial.acceptableBytes == 6 * mb, "Storage summary and admission check disagree");
+        AttachmentStore.Space limited = new AttachmentStore.Space(100 * mb, 63 * mb, 0);
+        check(limited.acceptableBytes == mb, "Storage summary ignored vault quota");
+        AttachmentStore.Space exhausted = new AttachmentStore.Space(2 * mb, 0, 0);
+        check(exhausted.acceptableBytes == 0, "Storage summary promised room without disk margin");
+
         String name = "cubechat-files-test-" + UUID.randomUUID() + ".db";
         try {
             Pairing original = Pairing.host(null);
