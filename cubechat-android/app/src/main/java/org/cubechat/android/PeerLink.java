@@ -70,17 +70,18 @@ public final class PeerLink {
         public final List<Message> messages;
         public final List<AttachmentStore.Transfer> files;
         public final boolean fileCapable;
+        public final AttachmentStore.Space space;
         public final List<ChatStore.Contact> contacts;
         public final long activeId, pingTime;
         public final boolean connected, forwarding, pinging, loaded;
         Snapshot(String status, String role, String peer, String invite, List<Message> messages, boolean connected,
                  String relay, long activeId, List<ChatStore.Contact> contacts, String route,
                  String ping, long pingTime, boolean pinging, String draft, boolean loaded,
-                 List<AttachmentStore.Transfer> files, boolean fileCapable) {
+                 List<AttachmentStore.Transfer> files, boolean fileCapable, AttachmentStore.Space space) {
             this.status = status; this.role = role; this.peer = peer; this.invite = invite;
             this.messages = messages; this.connected = connected; this.relay = relay; this.forwarding = !relay.isEmpty();
             this.activeId = activeId; this.contacts = contacts; this.route = route;
-            this.ping = ping; this.pingTime = pingTime; this.pinging = pinging; this.draft = draft; this.loaded = loaded; this.files = files; this.fileCapable = fileCapable;
+            this.ping = ping; this.pingTime = pingTime; this.pinging = pinging; this.draft = draft; this.loaded = loaded; this.files = files; this.fileCapable = fileCapable; this.space = space;
         }
     }
 
@@ -110,12 +111,13 @@ public final class PeerLink {
     private final AttachmentStore attachments;
     private final ExecutorService fileIo = Executors.newSingleThreadExecutor();
     private List<AttachmentStore.Transfer> files = Collections.emptyList();
+    private AttachmentStore.Space attachmentSpace;
     private AttachmentExchange exchange;
     private long lastFileUpdate, seenImports;
     private static final AtomicLong completedImports = new AtomicLong();
     private final Codec codec;
     private volatile Snapshot snapshot = new Snapshot("Opening mailbox…", "", "", "", Collections.emptyList(),
-            false, "", 0, Collections.emptyList(), Route.LAN.label, "", 0, false, "", false, Collections.emptyList(), false);
+            false, "", 0, Collections.emptyList(), Route.LAN.label, "", 0, false, "", false, Collections.emptyList(), false, null);
     private long activeId, challenge, pingDeadline, pingSentAt, pingTime;
     private String ping = "", draft = "";
     private List<ChatStore.Contact> contacts = Collections.emptyList();
@@ -139,7 +141,7 @@ public final class PeerLink {
     private ScheduledFuture<?> purgeTimeout;
     private volatile Runnable purgeCallback;
     private static final Snapshot LOCKED = new Snapshot("Locked", "", "", "", Collections.emptyList(),
-            false, "", 0, Collections.emptyList(), "", "", 0, false, "", false, Collections.emptyList(), false);
+            false, "", 0, Collections.emptyList(), "", "", 0, false, "", false, Collections.emptyList(), false, null);
     private ServerSocket server;
 
     public PeerLink(Context context, Codec codec, Listener listener) {
@@ -167,7 +169,7 @@ public final class PeerLink {
             try { peer = DirectProtocol.fingerprint(pair.remote); } catch (Exception e) { report(detail(e)); }
         }
         Snapshot updated = new Snapshot(status, pair == null ? "" : pair.host ? "host" : "guest", peer, invitation, history, session != null,
-                relayStatus, activeId, contacts, route.label, ping, pingTime, challenge != 0, draft, loaded, files, exchange != null);
+                relayStatus, activeId, contacts, route.label, ping, pingTime, challenge != 0, draft, loaded, files, exchange != null, attachmentSpace);
         synchronized (this) { snapshot = concealed ? LOCKED : updated; }
         main.post(() -> { if (!closed && !concealed) listener.changed(); });
     }
@@ -388,6 +390,7 @@ public final class PeerLink {
         if (!now && tick - lastFileUpdate < TimeUnit.MILLISECONDS.toNanos(200)) return;
         lastFileUpdate = tick;
         files = attachments.list(activeId);
+        attachmentSpace = attachments.space();
         publish();
     }
     private void filesChanged(String id) throws Exception {
