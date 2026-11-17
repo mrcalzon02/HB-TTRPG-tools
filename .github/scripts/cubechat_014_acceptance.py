@@ -205,7 +205,7 @@ def inspect_carrier():
     ui.report(f"Carrier check: host listening on 47743={listener}, guest Wi-Fi echo received={'bytes from' in ping}, guest imported a fingerprint={fingerprint}.")
     return listener
 
-def rendered_card():
+def rendered_card(allow_legacy_text=False):
     # Both the raw capture and any enlarged crop must decode as a real CubeChat HTTPS QR.
     observations = []
     tmp = Path(os.environ['RUNNER_TEMP'])
@@ -255,9 +255,12 @@ def rendered_card():
                 # Never print the screen, signed invite, full device dumps or decoder output.
                 kind = re.search(rb'\b(NotFoundException|ChecksumException|FormatException|RasterFormatException)\b',result.stderr)
                 state += ', ' + (kind[1].decode() if kind else 'decoder failure')
+                sample = re.search(rb'QR_STATS min=\d+ max=\d+ dark=\d+ total=\d+',result.stderr)
+                if sample: state += ', ' + sample[0].decode()
                 continue
             card = result.stdout.decode('ascii',errors='replace')
             if card.startswith(ui.PREFIX) and re.fullmatch(r'[A-Za-z0-9_-]+',card[len(ui.PREFIX):]):
+                ui.report('The independent ZXing reader decoded the invitation from the native on-screen QR.')
                 return card
             raise ui.CheckFailed('A QR code was read from the screen but it did not contain a CubeChat invite')
         observations.append(state)
@@ -270,18 +273,19 @@ def rendered_card():
     crashes = ui.shell('logcat','-b','events','-d','-t','600','-s','am_crash:I',required=False)
     classes = re.findall(r'am_crash\s*:\s*\[\d+,\d+,([\w.:]+),\d+,([\w.$]+),',crashes)
     ui.report('Recent Android crash process/class records: ' + repr(classes[-3:]))
-    if os.environ.get('CUBECHAT_SECURITY_FOCUS') == '1':
+    if allow_legacy_text or os.environ.get('CUBECHAT_SECURITY_FOCUS') == '1':
         tap('Show invite text')
         node = ui.wait_for(lambda n:n.get('package') == ui.APP and n.get('text','').startswith(ui.PREFIX)
                            and bool(re.fullmatch(r'[A-Za-z0-9_-]+',n.get('text','')[len(ui.PREFIX):])),
                            'Exact native invitation for the focused security drill',20)
-        ui.report('Focused security drill continued with the native text invitation after the QR decoder failed.')
+        case = 'Legacy 0.1.3 upgrade fixture' if allow_legacy_text else 'Focused security drill'
+        ui.report(case + ' paired using the native Show invite text control after the displayed QR did not decode.')
         return node.get('text')
     raise ui.CheckFailed('No scannable CubeChat QR appeared in the invite after five displayed framebuffer captures')
 
-def pairing(route):
+def pairing(route, allow_legacy_text=False):
     phones.select(HOST); tap("Show my invite"); match("Pairing invite")
-    card=rendered_card(); tap("Close")
+    card=rendered_card(allow_legacy_text); tap("Close")
     phones.select(GUEST)
     # The repository's public 0.1.3 handles initial app links most reliably on a cold launch.
     phones.stop(); reopen_card(card)
@@ -376,14 +380,19 @@ def notice():
                        n.get("package")==ui.APP,"Peer's readable PURGE notice",40)
 
 def drill():
+    legacy_only = os.environ.get('CUBECHAT_LEGACY_UPGRADE') == '1'
     for device in (HOST,GUEST):
         phones.select(device)
         ui.run(["adb","root"],"Inspect ephemeral emulator private storage")
         ui.run(["adb","wait-for-device"],"Reconnect emulator")
         if ui.shell("id","-u")!="0":raise ui.CheckFailed("Android app-data inspection requires rooted test image")
+        if legacy_only: continue
         if 'versionCode=5' not in ui.shell('dumpsys','package',ui.APP):
             raise ui.CheckFailed('Signed build 5 must be installed on both devices before the security drill')
         start_empty_install('0.1.4')
+    if legacy_only:
+        legacy_upgrade(allow_legacy_text=True)
+        return
     # Block only this disposable sender's reset marker. A file cannot replace a directory
     # by rename or be written at that pathname. The rest of the filesystem stays writable.
     phones.select(HOST); enroll(); phones.stop(); ui.shell("svc","wifi","disable")
@@ -411,20 +420,25 @@ def drill():
         ui.report('Focused 0.1.4 security acceptance completed for the suspended recipient and obstructed reset marker.')
         return
 
+    legacy_upgrade(route)
+
+def legacy_upgrade(route=None, allow_legacy_text=False):
     # Reproduce the published upgrade on clean synthetic test installations, separately.
     public=str(Path(os.environ["RUNNER_TEMP"])/"CubeChat-previous.apk")
     for device in (HOST,GUEST):
         phones.select(device)
         ui.run(["adb","uninstall",ui.APP],"Remove the synthetic drill installation")
         ui.run(["adb","install",public],"Install the verified release for the populated migration test")
+        if 'versionCode=4' not in ui.shell('dumpsys','package',ui.APP):
+            raise ui.CheckFailed('The signed 0.1.3 fixture must have Android build number 4')
         ui.shell("svc","wifi","enable")
         start_empty_install("0.1.3")
-    if route != "direct virtual Wi-Fi":
+    if route is not None and route != "direct virtual Wi-Fi":
         # An Android uninstall can change the guest's UID; bind its new socket permissions.
         phones.bridge()
     else:
         route=phones.choose_network()
-    route=pairing(route)
+    route=pairing(route, allow_legacy_text)
     phones.send(SEED); phones.receipt(SEED,"Delivered");phones.select(HOST);match(SEED)
     sample=b"Trusted synthetic attachment for the local security upgrade."
     files.fixture(FILE,sample);files.pick_file(FILE);tap("Close")

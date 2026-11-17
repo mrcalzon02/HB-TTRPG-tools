@@ -127,7 +127,12 @@ jobs:
           adb -s emulator-5554 uninstall org.cubechat.android.test
           adb -s emulator-5554 uninstall org.cubechat.android
           adb -s emulator-5554 install .github/cubechat-security-candidate/CubeChat.apk
+          if [[ "$CUBECHAT_RUN_LEGACY" == "true" ]]; then
+            export CUBECHAT_LEGACY_UPGRADE=1
+          fi
           python3 .github/scripts/cubechat_014_acceptance.py
+        env:
+          CUBECHAT_RUN_LEGACY: ${{ contains(github.event.head_commit.message, '[legacy-upgrade]') }}
 
       - name: Save synthetic conversation and reset screenshots
         if: always()
