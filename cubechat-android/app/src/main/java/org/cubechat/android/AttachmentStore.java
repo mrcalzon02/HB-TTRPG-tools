@@ -62,16 +62,11 @@ final class AttachmentStore {
     List<Completed> completed() throws Exception {
         ArrayList<Completed> result = new ArrayList<>();
         try (Cursor c = store.getReadableDatabase().rawQuery(
-                "SELECT contact," + COLUMNS + " FROM attachments WHERE status='COMPLETE' ORDER BY size DESC, rowid DESC",
+                "SELECT " + COLUMNS + ",contact FROM attachments WHERE status='COMPLETE' ORDER BY size DESC, rowid DESC",
                 null)) {
             while (c.moveToNext()) {
-                long contactId = c.getLong(0);
-                // The standard transfer decoder expects the id at index zero.
-                try (Cursor row = store.getReadableDatabase().rawQuery(
-                        "SELECT " + COLUMNS + " FROM attachments WHERE contact=? AND id=?",
-                        args(contactId, c.getString(1)))) {
-                    if (row.moveToFirst()) result.add(new Completed(contactId, decode(contactId, row)));
-                }
+                long contactId = c.getLong(FIELDS.length);
+                result.add(new Completed(contactId, decode(contactId, c)));
             }
         }
         return Collections.unmodifiableList(result);
