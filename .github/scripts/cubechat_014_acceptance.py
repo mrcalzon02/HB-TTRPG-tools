@@ -21,6 +21,42 @@ FILE = "cubechat-security-drill.bin"
 def open_app():
     ui.shell("am","start","--user","0","-W","-n",ui.MAIN,label="Open CubeChat")
 
+def diagnose_screen():
+    # Report packages and known public UI controls only. Never print user text or a key-card URI.
+    nodes=ui.tree()
+    packages=sorted({n.get("package","") for n in nodes if n.get("package")})
+    labels={"Pair two phones","Show my invite","Unlock","Security","Wait","Close app",
+            "System UI isn't responding","CubeChat isn't responding","Pairing","Create profile",
+            "Accept file","Not now","Retry","Close","Incorrect username or password."}
+    controls=sorted({n.get("text","") for n in nodes if n.get("text","") in labels})
+    focus=ui.shell("dumpsys","window","windows",required=False)
+    current=re.search(r"mCurrentFocus=Window\{[^}]*? u\d+ ([A-Za-z0-9._/$]+)",focus)
+    current=current.group(1) if current else "(no activity)"
+    ui.report(f"Android UI on {os.environ.get('ANDROID_SERIAL','device')}: focused {current}; packages {packages}; known controls {controls}; CubeChat running={bool(ui.shell('pidof',ui.APP,required=False))}.")
+
+def start_pristine_baseline():
+    # adbd restarts after root, independently of launcher's wake/unlock state.
+    # Retry the public baseline only, before any pairing or data has been created.
+    for attempt in range(1,4):
+        ui.shell("input","keyevent","KEYCODE_WAKEUP")
+        ui.shell("wm","dismiss-keyguard",required=False)
+        ui.shell("cmd","statusbar","collapse",required=False)
+        ui.shell("input","keyevent","82")
+        open_app()
+        deadline=time.monotonic()+30
+        while time.monotonic()<deadline:
+            nodes=ui.tree()
+            if any(n.get("package")==ui.APP and n.get("text")=="Pair two phones" for n in nodes):
+                ui.report("Fresh signed public baseline ready on "+os.environ.get("ANDROID_SERIAL","device")+".")
+                return
+            wait=next((n for n in nodes if n.get("package")=="android" and
+                       n.get("resource-id")=="android:id/aerr_wait"),None)
+            if wait is not None: ui.tap(wait)
+            time.sleep(.3)
+        diagnose_screen()
+        if attempt<3: phones.stop()
+    raise ui.CheckFailed("The fresh public 0.1.3 launch did not reach its pairing screen after bounded wake/relaunch")
+
 def find_visible(predicate, label, timeout=30):
     end=time.monotonic()+timeout
     tries=0
@@ -207,7 +243,7 @@ def drill():
         ui.run(["adb","root"],"Inspect ephemeral emulator private storage")
         ui.run(["adb","wait-for-device"],"Reconnect emulator")
         if ui.shell("id","-u")!="0":raise ui.CheckFailed("Android app-data inspection requires rooted test image")
-        open_app();match("Pair two phones")
+        start_pristine_baseline()
     route=phones.choose_network();pairing()
     phones.send(SEED); phones.receipt(SEED,"Delivered");phones.select(HOST);match(SEED)
     sample=b"Trusted synthetic attachment for the local security upgrade."
@@ -256,5 +292,7 @@ if __name__=="__main__":
     try:
         drill()
     except ui.CheckFailed as error:
+        try: diagnose_screen()
+        except Exception: pass
         print("Android security acceptance failed: "+str(error),file=sys.stderr)
         sys.exit(1)

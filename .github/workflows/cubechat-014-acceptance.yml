@@ -116,12 +116,18 @@ jobs:
           done
           test_apk=.github/cubechat-security-candidate/ContactStorageChecks.apk
           echo "884e1328634d9f5446403513bc2184df4f989e3195ac336b19d3eb8feab6ccaf  $test_apk" | sha256sum -c -
-          python3 .github/scripts/cubechat_014_acceptance.py
+          # Check the real Android Keystore and migration first on the new, disposable HOST AVD.
+          adb -s emulator-5554 install -r .github/cubechat-security-candidate/CubeChat.apk
           adb -s emulator-5554 install -r "$test_apk"
           adb -s emulator-5554 shell am instrument -w -r org.cubechat.android.test/org.cubechat.android.ContactStorageChecks | tee "$RUNNER_TEMP/store-check.log"
           grep -F "PASS: SQLite upgrade, contact isolation, drafts, counters and attachment vault." "$RUNNER_TEMP/store-check.log"
           grep -F "PASS: password-gated migration, credential changes, locked PURGE notices and durable reset marker." "$RUNNER_TEMP/store-check.log"
           grep -F "INSTRUMENTATION_CODE: -1" "$RUNNER_TEMP/store-check.log"
+          # Freshen that AVD to the verified public release before creating either synthetic conversation.
+          adb -s emulator-5554 uninstall org.cubechat.android.test
+          adb -s emulator-5554 uninstall org.cubechat.android
+          adb -s emulator-5554 install "$RUNNER_TEMP/CubeChat-previous.apk"
+          python3 .github/scripts/cubechat_014_acceptance.py
 
       - name: Save synthetic conversation and reset screenshots
         if: always()
