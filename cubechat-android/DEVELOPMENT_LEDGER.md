@@ -2,6 +2,21 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## November 17, 2026 · Post-0.1.4 build and privacy verification
+
+Starting main was `a1cd723b78c9011c3314fc0b024ecedbc47c1f88`. Java compilation reproduced a missing pair of attachment lists in the locked mailbox snapshot. [The mailbox fix](https://github.com/mrcalzon02/HB-TTRPG-tools/commit/f3b45c077e02ffc27956e0e302cabf2224cd6071) restores compilation and drops the cached attachment lists and storage summary on lock and selection reload. [The tested application and workflow](https://github.com/mrcalzon02/HB-TTRPG-tools/commit/95e5acb188003f8bc5424d164f60a765e0e66f64) mark explicit chat copies sensitive, recognize old invite markers on PURGE, and target a unique disposable emulator in the manual Android regression.
+
+| Verification | November 17 result |
+| --- | --- |
+| Clean Android build on Linux x86-64 | JDK 17, Gradle 8.9, AGP 8.7.3, SDK 35 and Build Tools 35.0.0. Both debug APKs built with all 61 tasks executed. APK Signature Scheme v2 verified for both. |
+| APK SHA-256 | App `b0954d97af7d927569078da5979d0ef2110a29e901a9dff93f12340360847a26`. Instrumentation `ff2695c109d444cf2f1350fb517a3bad6007c33591bf5dc3fca90d945fdeced4`. Debug signing differs from the public release. |
+| Host regressions | All six Java entry points under `tests/` passed, covering attachment wire integrity, direct transport and receipts, offline key cards, relay forwarding, one-card transport and update selection. |
+| Android framework simulation | Robolectric 4.15.1 passed the instrumentation suite's clipboard metadata assertions at API 26 and 35. A native SQLite fixture at API 35 migrated the v1 mailbox to v4 and reopened it with the pending sequence, contact, counters and opaque message and packet bytes intact. |
+| Workflow validation | Parsed the manual-only workflow and syntax-checked its shell. Four simulated adb runs exercised the success path and rejection of a missing suite marker, cancelled result and truncated result. Each install targeted the intended emulator alongside an unrelated phone and emulator. |
+| Runtime and CI | No attached Android device. The local API 35 x86-64 emulator stopped before boot because KVM was unavailable. GitHub showed no runners configured for HB-TTRPG-tools. Dens-Mortis showed two repository-scoped Windows x64 runners and no Linux runner. No regression job was queued. |
+
+The public release remains **0.1.4 build 5**. The next gate is to run `ContactStorageChecks` on an eligible Android runtime, then exercise an interrupted text and attachment exchange on two devices and check acknowledgments and file digests after reconnect. A release-signed test candidate is needed for an in-place upgrade over the public APK. Device-level vault and PURGE behavior, OS clipboard rendering and mixed-version messaging on this revision remain open.
+
 ## Post-0.1.4 QoL regression checkpoint
 
 The post-release branch on `main` includes message-copy and quoting actions, draft undo, clearer conversation queues and routes, attachment storage preflight, transfer notifications, cross-contact cleanup and file-status views. These changes are **source-committed, not released or Android-device-validated**. The published 0.1.4 build-5 APK remains the last verified release baseline.
