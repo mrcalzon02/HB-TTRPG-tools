@@ -37,11 +37,11 @@ jobs:
         with:
           packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
 
-      - name: Compile current main and instrumentation APK
+      - name: Build debug APKs and test the offline composer
         working-directory: cubechat-android
         run: |
           chmod +x ./gradlew
-          ./gradlew --no-daemon --stacktrace :app:assembleDebug :app:assembleDebugAndroidTest
+          ./gradlew --no-daemon --stacktrace :app:assembleDebug :app:assembleDebugAndroidTest :app:testDebugUnitTest
 
       - name: Run isolated Android vault and attachment regressions
         if: ${{ inputs.run_instrumentation }}

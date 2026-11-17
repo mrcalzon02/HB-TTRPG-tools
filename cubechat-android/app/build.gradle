@@ -43,6 +43,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+    testOptions.unitTests.includeAndroidResources = true
     sourceSets.main.assets.srcDirs(generatedCubeAssets, legacyCubeDirectory)
 }
 
@@ -53,4 +54,6 @@ tasks.named('preBuild') {
 dependencies {
     cubeJsCompiler 'com.google.javascript:closure-compiler:v20240317@jar'
     implementation 'com.google.zxing:core:3.5.3'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.15.1'
 }

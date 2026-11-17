@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.function.Consumer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -537,21 +538,40 @@ public final class PeerLink {
     }
     public void send(String text) { send(snapshot.activeId, text); }
     public void send(long target, String text) {
+        send(target, text, error -> {
+            if (error == null) listener.queued(target, text);
+            else listener.problem(error);
+        });
+    }
+
+    // Complete this request on the UI thread at the local SQLite commit boundary.
+    // A later refresh or transport error cannot turn a committed message into a failed send.
+    void send(long target, String text, Consumer<String> result) {
         command(() -> {
-            ready(); requireContact(target);
-            if (text == null || text.trim().isEmpty()) throw new IOException("Enter a message");
-            if (text.getBytes(StandardCharsets.UTF_8).length > 4096) throw new IOException("Messages are limited to 4096 UTF-8 bytes");
-            long seq = store.next(true);
-            JSONObject envelope = codec.seal(pair.host ? pair.ab : pair.ba, pair.host ? "AB" : "BA", seq, text);
-            String encoded = envelope.toString();
-            if (encoded.getBytes(StandardCharsets.UTF_8).length > DirectProtocol.MAX_BODY) throw new IOException("Encrypted message exceeds transport limit");
-            store.save(true, seq, text, encoded);
+            try {
+                ready(); requireContact(target);
+                if (text == null || text.trim().isEmpty()) throw new IOException("Enter a message");
+                if (text.getBytes(StandardCharsets.UTF_8).length > 4096) throw new IOException("Messages are limited to 4096 UTF-8 bytes");
+                long seq = store.next(true);
+                JSONObject envelope = codec.seal(pair.host ? pair.ab : pair.ba, pair.host ? "AB" : "BA", seq, text);
+                String encoded = envelope.toString();
+                if (encoded.getBytes(StandardCharsets.UTF_8).length > DirectProtocol.MAX_BODY) throw new IOException("Encrypted message exceeds transport limit");
+                store.save(true, seq, text, encoded);
+            } catch (Exception e) {
+                finishSend(result, detail(e));
+                return;
+            }
+            finishSend(result, null);
             if (draft.equals(text)) draft = "";
             history = store.history(); contacts = store.contacts(); publish();
-            main.post(() -> { if (!closed && !concealed) listener.queued(target, text); });
             try { pump(); } catch (Exception e) { disconnect(session); }
         });
     }
+
+    private void finishSend(Consumer<String> result, String error) {
+        main.post(() -> { if (!closed && !concealed) result.accept(error); });
+    }
+
     private void ready() throws IOException { if (!loaded) throw new IOException("Mailbox could not be opened"); }
 
     private void reconnect() throws Exception {

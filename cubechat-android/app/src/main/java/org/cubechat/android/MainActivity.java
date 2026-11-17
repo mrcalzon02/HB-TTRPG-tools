@@ -64,6 +64,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 public final class MainActivity extends Activity implements PeerLink.Listener {
     private static final int SCAN = 1, CAMERA = 2, BUNDLE = 3, QR_IMAGE = 4, SAVE_QR = 5;
@@ -101,7 +102,8 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     private Messages adapter;
     private AlertDialog inviteDialog, shareDialog;
     private boolean wantsInvite, closing;
-    private String lastProblem = "", submitted, exportCode;
+    private String lastProblem = "", exportCode;
+    private PendingSend submitted;
     private String clearedDraft;
     private long clearedDraftContact;
     private long renderedId, inviteFrom = -1;
@@ -348,7 +350,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         Retained r = new Retained();
         r.id = renderedId;
         String editing = draft.getText().toString();
-        r.draft = editing.equals(submitted) ? null : editing;
+        r.draft = submitted != null && submitted.ownsDraft(editing) ? null : editing;
         r.exportCode = exportCode;
         r.share = share;
         r.shareTarget = shareTarget;
@@ -614,6 +616,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 refreshSend();
                 if (!loadingDraft && renderedId != 0) {
+                    if (submitted != null) submitted.edited = true;
                     draftDirty = true;
                     ui.removeCallbacks(writeDraft);
                     ui.postDelayed(writeDraft, 350);
@@ -702,15 +705,36 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         if (next.loaded) { deliverPending(); advanceShare(next); }
     }
 
-    @Override public void queued(long id, String text) {
-        if (!chatOpen() || renderedId != id || !text.equals(submitted)) return;
-        if (text.contentEquals(draft.getText())) {
-            draft.setText("");
-            flushDraft();
+    private final class PendingSend implements Consumer<String> {
+        final long contact;
+        final String text;
+        boolean edited;
+
+        PendingSend(long contact, String text) {
+            this.contact = contact;
+            this.text = text;
         }
-        submitted = null;
-        forgetClearedDraft();
-        refreshSend();
+
+        boolean ownsDraft(CharSequence current) {
+            return !edited && text.contentEquals(current);
+        }
+
+        @Override public void accept(String error) {
+            if (!chatOpen() || renderedId != contact || submitted != this) return;
+            submitted = null;
+            if (error != null) {
+                problem(error);
+                return;
+            }
+            if (ownsDraft(draft.getText())) {
+                // ChatStore already cleared the matching draft in the outbox transaction.
+                loadingDraft = true;
+                draft.setText("");
+                loadingDraft = false;
+            }
+            forgetClearedDraft();
+            refreshSend();
+        }
     }
 
     @Override public void fileSaved(long contactId, String fileId) {
@@ -722,7 +746,6 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         if (files != null) files.problem(message);
         wantsInvite = false;
         if (shareSelecting && renderedId != shareTarget) clearShare();
-        submitted = null;
         lastProblem = message;
         status.setText(message);
         status.setTextColor(0xff8c351c);
@@ -930,6 +953,8 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         String text = draft.getText().toString();
         int bytes = text.getBytes(StandardCharsets.UTF_8).length;
         boolean over = bytes > 4096;
+        String action = submitted == null ? "Send" : "Saving…";
+        if (!action.contentEquals(send.getText())) send.setText(action);
         send.setEnabled(link != null && renderedId != 0 && submitted == null && !over && !text.trim().isEmpty());
         if (draftLength != null) {
             draftLength.setVisibility(renderedId != 0 && (bytes >= 3072 || over) ? View.VISIBLE : View.GONE);
@@ -948,9 +973,9 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         }
         beginAction();
         flushDraft();
-        submitted = text;
+        submitted = new PendingSend(renderedId, text);
         refreshSend();
-        link.send(renderedId, text);
+        link.send(renderedId, text, submitted);
     }
 
     private void conversations() {
