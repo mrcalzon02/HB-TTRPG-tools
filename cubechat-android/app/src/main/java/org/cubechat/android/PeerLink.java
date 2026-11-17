@@ -76,6 +76,11 @@ public final class PeerLink {
         public final List<ChatStore.Contact> contacts;
         public final long activeId, pingTime;
         public final boolean connected, forwarding, pinging, loaded;
+        private static Snapshot empty(String status, String route) {
+            return new Snapshot(status, "", "", "", Collections.emptyList(), false, "", 0,
+                    Collections.emptyList(), route, "", 0, false, "", false,
+                    Collections.emptyList(), false, null, Collections.emptyList(), Collections.emptyList());
+        }
         Snapshot(String status, String role, String peer, String invite, List<Message> messages, boolean connected,
                  String relay, long activeId, List<ChatStore.Contact> contacts, String route,
                  String ping, long pingTime, boolean pinging, String draft, boolean loaded,
@@ -122,8 +127,7 @@ public final class PeerLink {
     private long lastFileUpdate, seenImports;
     private static final AtomicLong completedImports = new AtomicLong();
     private final Codec codec;
-    private volatile Snapshot snapshot = new Snapshot("Opening mailbox…", "", "", "", Collections.emptyList(),
-            false, "", 0, Collections.emptyList(), Route.LAN.label, "", 0, false, "", false, Collections.emptyList(), false, null, Collections.emptyList(), Collections.emptyList());
+    private volatile Snapshot snapshot = Snapshot.empty("Opening mailbox…", Route.LAN.label);
     private long activeId, challenge, pingDeadline, pingSentAt, pingTime;
     private String ping = "", draft = "";
     private List<ChatStore.Contact> contacts = Collections.emptyList();
@@ -146,8 +150,7 @@ public final class PeerLink {
     private final AtomicBoolean purgeFinished = new AtomicBoolean();
     private ScheduledFuture<?> purgeTimeout;
     private volatile Runnable purgeCallback;
-    private static final Snapshot LOCKED = new Snapshot("Locked", "", "", "", Collections.emptyList(),
-            false, "", 0, Collections.emptyList(), "", "", 0, false, "", false, Collections.emptyList(), false, null);
+    private static final Snapshot LOCKED = Snapshot.empty("Locked", "");
     private ServerSocket server;
 
     public PeerLink(Context context, Codec codec, Listener listener) {
@@ -210,11 +213,18 @@ public final class PeerLink {
         });
     }
 
+    private void clearAttachmentViews() {
+        files = Collections.emptyList();
+        completedFiles = Collections.emptyList();
+        transferOverview = Collections.emptyList();
+        attachmentSpace = null;
+    }
+
     private void loadSelection() throws Exception { loadSelection(false); }
     private void loadSelection(boolean retainTransport) throws Exception {
         if (!retainTransport) shutdownNetwork();
         pair = null; activeId = 0; invitation = ""; draft = ""; history = Collections.emptyList();
-        contacts = Collections.emptyList(); files = Collections.emptyList(); route = Route.LAN;
+        contacts = Collections.emptyList(); clearAttachmentViews(); route = Route.LAN;
         if (!retainTransport) wifiEndpoint = "";
         status = "Ready to pair";
         ping = ""; pingTime = 0;
@@ -798,7 +808,7 @@ public final class PeerLink {
                 parked = true;
                 parkedFileSupport |= exchange != null;
                 exchange = null; pair = null; invitation = ""; draft = ""; history = Collections.emptyList();
-                files = Collections.emptyList(); contacts = Collections.emptyList();
+                clearAttachmentViews(); contacts = Collections.emptyList();
                 status = ""; ping = ""; pingTime = 0; loaded = false;
                 if (gateTimeout != null) gateTimeout.cancel(false);
                 notifyParked.run();
