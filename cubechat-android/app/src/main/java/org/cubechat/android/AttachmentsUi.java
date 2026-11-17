@@ -245,6 +245,8 @@ final class AttachmentsUi {
     private String size(long bytes) { return Formatter.formatFileSize(screen, bytes); }
 
     private String stateLabel(AttachmentStore.Transfer f) {
+        if (AttachmentStore.STORAGE_REASON.equals(f.reason) && "DECLINED".equals(f.status))
+            return f.outgoing ? "Rejected: not enough storage on recipient" : "Rejected: not enough storage";
         if (f.outgoing && "OFFERED".equals(f.status) && f.paused) return "Paused before transfer";
         if ("ACCEPTED".equals(f.status)) {
             if (f.paused) return "Paused";
