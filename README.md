@@ -12,7 +12,9 @@ The [portable visual-gallery-publication Agent Skill](skills/visual-gallery-publ
 
 The [shared native asset index](docs/shared-native-assets/README.md) pins reusable Breakwater/ReverieVR textures and compact Beckenburg models for other authorized internal games. Source blobs live in ReverieVR, not duplicated in this website; the offline import helper verifies their exact bytes.
 
-## CubeChat saved transit packages
+## CubeChat
+
+[Install CubeChat for Android](https://cubechat-android.lankytangerine2.chatgpt.site/) to use QR communication keys, Wi-Fi Direct, Bluetooth, local Wi-Fi and local relays. See the [Android pairing, networking and build guide](cubechat-android/README.md).
 
 The [**CubeChat transit test package archive**](tests/fixtures/cubechat-transit-only/README.md) contains five verified experimental ciphertext-only media packages (JPEG, GIF, WebP, PDF, ZIP), with immutable revision links, sizes, Git blob hashes, and an explicit list of uncommitted or untested variants. These are public deterministic Binary Cube laboratory fixtures, **not secure encrypted attachments**.
 

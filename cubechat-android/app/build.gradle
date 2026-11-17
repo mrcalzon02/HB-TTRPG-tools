@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.application'
+}
+
+def generatedCubeAssets = layout.buildDirectory.dir('generated/assets/binaryCube')
+def syncCubeEngine = tasks.register('syncCubeEngine', Sync) {
+    from(rootProject.file('../shadowrun-binary-cube-engine.js'))
+    into(generatedCubeAssets)
+}
+
+configurations {
+    cubeJsCompiler
+}
+def legacyCubeDirectory = layout.buildDirectory.dir('generated/assets/legacyCube')
+def canonicalCube = rootProject.file('../shadowrun-binary-cube-engine.js')
+def legacyCube = legacyCubeDirectory.map { it.file('cube-engine-es2017.js') }
+def compileLegacyCube = tasks.register('compileLegacyCube', JavaExec) {
+    inputs.file(canonicalCube)
+    outputs.file(legacyCube)
+    classpath = configurations.cubeJsCompiler
+    mainClass = 'com.google.javascript.jscomp.CommandLineRunner'
+    maxHeapSize = '192m'
+    args '--compilation_level', 'WHITESPACE_ONLY', '--language_in', 'ECMASCRIPT_2020',
+         '--language_out', 'ECMASCRIPT_2017', '--rewrite_polyfills', 'false',
+         '--js', canonicalCube.absolutePath, '--js_output_file', legacyCube.get().asFile.absolutePath
+    doFirst { legacyCubeDirectory.get().asFile.mkdirs() }
+}
+
+android {
+    namespace 'org.cubechat.android'
+    compileSdk 35
+    buildToolsVersion '35.0.0'
+
+    defaultConfig {
+        applicationId 'org.cubechat.android'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '0.1.0'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets.main.assets.srcDirs(generatedCubeAssets, legacyCubeDirectory)
+}
+
+tasks.named('preBuild') {
+    dependsOn(syncCubeEngine, compileLegacyCube)
+}
+
+dependencies {
+    cubeJsCompiler 'com.google.javascript:closure-compiler:v20240317@jar'
+    implementation 'com.google.zxing:core:3.5.3'
+}

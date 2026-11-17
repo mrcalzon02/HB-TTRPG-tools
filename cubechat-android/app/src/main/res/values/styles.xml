@@ -1,0 +1,11 @@
+<resources>
+    <style name="CubeTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#176348</item>
+        <item name="android:statusBarColor">#F5F7F1</item>
+        <item name="android:navigationBarColor">#101F19</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">#F5F7F1</item>
+        <item name="android:windowActionModeOverlay">true</item>
+    </style>
+</resources>
