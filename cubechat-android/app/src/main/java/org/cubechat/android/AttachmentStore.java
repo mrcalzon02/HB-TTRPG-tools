@@ -126,9 +126,16 @@ final class AttachmentStore {
         reserve(size);
         long pending = count("SELECT COALESCE(SUM(size-progress),0) FROM attachments WHERE outgoing=0 AND status='ACCEPTED'");
         long free = context.getFilesDir().getUsableSpace();
-        // A zero result is not a reliable capacity reading: reject conservatively.
-        if (free <= FREE_SPACE_MARGIN || size > (free - FREE_SPACE_MARGIN) / 2 - Math.min(pending, (free - FREE_SPACE_MARGIN) / 2))
+        if (!hasIncomingCapacity(free, pending, size))
             throw new IOException("Not enough storage");
+    }
+
+    // The caller checks the physical filesystem hosting CubeChat's encrypted vault.
+    // Reserve headroom for SQLite journal/WAL growth and per-chunk encryption overhead.
+    static boolean hasIncomingCapacity(long free, long pending, long bytes) {
+        if (free <= FREE_SPACE_MARGIN || pending < 0 || bytes < 0) return false;
+        long budget = (free - FREE_SPACE_MARGIN) / 2;
+        return pending <= budget && bytes <= budget - pending;
     }
 
     void reason(long cid, String id, String reason) throws Exception {
