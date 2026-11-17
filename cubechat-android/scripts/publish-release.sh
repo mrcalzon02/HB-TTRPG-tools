@@ -47,9 +47,29 @@ cp "$apk" "$manifest" "$upload"
 assets=("$upload/CubeChat.apk" "$upload/release.json" "$source_zip" "$upload/RELEASE_NOTES.md" "$upload/SHA256SUMS.txt")
 
 # The authenticated Releases list includes drafts so reruns resume interrupted uploads.
+release_id=
 get_release() {
-  gh api --paginate "repos/$repo/releases?per_page=100" --jq ".[] | select(.tag_name == \"$tag\")" |
+  if [[ -n "$release_id" ]]; then
+    gh api "repos/$repo/releases/$release_id?read_at=$(date +%s%N)"
+    return
+  fi
+  gh api --paginate "repos/$repo/releases?per_page=100&read_at=$(date +%s%N)" --jq ".[] | select(.tag_name == \"$tag\")" |
     jq -sc 'if length > 1 then error("Multiple releases share this tag") else .[0] end'
+}
+
+# GitHub may acknowledge a draft, upload or publish request before GET reflects it.
+wait_for_release() {
+  local condition=$1 name=${2:-} state delay
+  for delay in 0 1 2 4 8 16; do
+    if (( delay )); then sleep "$delay"; fi
+    state=$(get_release) || return 1
+    if jq -e --arg name "$name" "$condition" <<< "$state" > /dev/null; then
+      printf '%s\n' "$state"
+      return
+    fi
+  done
+  echo "GitHub did not report the expected state for $tag ${name:-release}: $condition" >&2
+  return 1
 }
 
 release=$(get_release)
@@ -59,8 +79,9 @@ if [[ "$release" == null ]]; then
   flags=(--draft --latest=false --verify-tag)
   if [[ "$prerelease" == true ]]; then flags+=(--prerelease); fi
   gh release create "$tag" --repo "$repo" --target "$commit" --title "CubeChat Android $version" --notes-file "$upload/RELEASE_NOTES.md" "${flags[@]}"
-  release=$(get_release)
+  release=$(wait_for_release '.id != null')
 fi
+release_id=$(jq -er .id <<< "$release")
 
 jq -e --arg code "$code" --argjson pre "$prerelease" '
   .id and .prerelease == $pre and (.body | split("\n") | map(rtrimstr("\r")) | index("Android version code: " + $code) != null)
@@ -78,7 +99,7 @@ for path in "${assets[@]}"; do
   if [[ -z "$asset" ]]; then
     if [[ "$draft" != true ]]; then echo "Published release is missing $name" >&2; exit 1; fi
     gh release upload "$tag" "$path" --repo "$repo"
-    release=$(get_release)
+    release=$(wait_for_release 'any(.assets[]?; .name == $name and .state == "uploaded")' "$name")
     asset=$(jq -ce --arg name "$name" '.assets[] | select(.name == $name)' <<< "$release")
   fi
   digest="sha256:$(sha256sum "$path" | cut -d ' ' -f1)"
@@ -93,4 +114,4 @@ done
 if [[ "$draft" == true ]]; then
   gh release edit "$tag" --repo "$repo" --draft=false --latest=false
 fi
-get_release | jq -e 'select(.draft == false) | .html_url'
+wait_for_release '.draft == false' | jq -er .html_url

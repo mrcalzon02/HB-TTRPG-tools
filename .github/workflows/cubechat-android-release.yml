@@ -5,6 +5,9 @@ on:
     paths:
       - 'cubechat-android/downloads/CubeChat.apk'
       - 'cubechat-android/release.json'
+      - 'cubechat-android/RELEASE_NOTES.md'
+      - 'cubechat-android/scripts/publish-release.sh'
+      - 'cubechat-android/scripts/release_manifest.py'
       - '.github/workflows/cubechat-android-release.yml'
   workflow_dispatch:
 
