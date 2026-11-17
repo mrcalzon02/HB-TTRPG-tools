@@ -26,13 +26,13 @@ Activation first sends **“PURGE protocol activated by this user.”** to each 
 
 Android then clears CubeChat’s local app data and closes the app. The next launch opens the initial pairing screen. This clears profiles, pairing keys, messages, encrypted attachment copies, settings and queued work across all local conversations. Each other phone keeps its history. Files already saved in Downloads or another destination remain with their owner.
 
-**Pairing → Chat preferences** offers four text sizes, optional Enter-to-send and a keyboard privacy preference. Standard text size and multiline composition are the defaults. The app also asks compatible keyboards to skip personalized learning by default. **Use defaults** restores just these chat preferences.
+**Pairing → Chat preferences** offers five text sizes (including 28 sp Accessibility) with a live preview, optional Enter-to-send and a keyboard privacy preference. Standard text size and multiline composition are the defaults. The app also asks compatible keyboards to skip personalized learning by default. **Use defaults** restores just these chat preferences.
 
 ## Send or receive a file
 
 Open a conversation, tap **Files → Attach file**, and choose a document, photo or other file in Android’s picker. Both clients need CubeChat 0.1.3 or later to exchange files. Text and live ping still work with 0.1.2. Attachments use the conversation’s current connection and support files up to 8 MiB each.
 
-The recipient sees the proposed filename and size. **Accept file** starts the transfer. **Decline** discards the offer. Either person can pause, resume or cancel. If the connection drops or the app restarts, reopen the matching conversation on both phones. The sender resumes from the recipient’s last confirmed chunk.
+The recipient sees the proposed filename and size. Before showing a new offer, CubeChat checks the phone's available storage and its attachment vault allowance, accounting for other accepted incoming transfers and leaving room for SQLite/encryption overhead. When capacity is insufficient, the offer is declined automatically and the sender's file details show **Rejected: not enough storage on recipient** on updated clients. The receiver checks capacity again when **Accept file** is tapped, since free space may have changed. This is a conservative preflight, not a filesystem allocation guarantee; a different app can still consume storage mid-transfer. **Accept file** starts the transfer. **Decline** discards the offer. Either person can pause, resume or cancel. If the connection drops or the app restarts, reopen the matching conversation on both phones. The sender resumes from the recipient’s last confirmed chunk.
 
 After CubeChat verifies the complete file, choose **Save file** and select a destination in Android’s document picker. Until you save it, the contents stay inside the encrypted app vault. The app never automatically opens the received file. An exported copy belongs to the destination you selected. The vault allows 64 MiB of accepted or locally staged file content. Remove completed local copies from **Files** to free space.
 
