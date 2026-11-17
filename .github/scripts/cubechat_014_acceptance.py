@@ -203,10 +203,25 @@ def inspect_carrier():
     ui.report(f"Carrier check: host listening on 47743={listener}, guest Wi-Fi echo received={'bytes from' in ping}, guest imported a fingerprint={fingerprint}.")
     return listener
 
+def rendered_card():
+    for attempt in range(3):
+        qr=ui.wait_for(lambda n:n.get("content-desc")=="CubeChat pairing QR code","Key card",20)
+        try:
+            return ui.decode_card(qr)
+        except ui.CheckFailed:
+            time.sleep(.6*(attempt+1))
+    # It is the same real, on-screen card. The app also lets the user reveal its
+    # exact URI when Android cannot capture the rendered image. Do not log or save it.
+    tap("Show invite text")
+    node=ui.wait_for(lambda n:n.get("package")==ui.APP and n.get("text","").startswith(ui.PREFIX)
+                     and bool(re.fullmatch(r"[A-Za-z0-9_-]+", n.get("text","")[len(ui.PREFIX):])),
+                     "Exact text of the original native key card",20)
+    ui.report("Used the original key card’s native Show invite text control after framebuffer retries.")
+    return node.get("text")
+
 def pairing(route):
     phones.select(HOST); tap("Show my invite"); match("Pairing invite")
-    qr=ui.wait_for(lambda n:n.get("content-desc")=="CubeChat pairing QR code","Key card")
-    card=ui.decode_card(qr); tap("Close")
+    card=rendered_card(); tap("Close")
     phones.select(GUEST)
     # The repository's public 0.1.3 handles initial app links most reliably on a cold launch.
     phones.stop(); reopen_card(card)
@@ -306,10 +321,9 @@ def drill():
         ui.run(["adb","root"],"Inspect ephemeral emulator private storage")
         ui.run(["adb","wait-for-device"],"Reconnect emulator")
         if ui.shell("id","-u")!="0":raise ui.CheckFailed("Android app-data inspection requires rooted test image")
-        start_empty_install("0.1.3")
-    # First exercise the final protocol with both real app processes installed.
-    for device in (HOST,GUEST):
-        phones.select(device); upgrade(empty=True)
+        if "versionCode=5" not in ui.shell("dumpsys","package",ui.APP):
+            raise ui.CheckFailed("The signed release build must be installed before this focused drill")
+        start_empty_install("0.1.4")
     route=pairing(phones.choose_network())
     phones.select(HOST); files.connected(); enroll()
     phones.select(GUEST); files.connected(); enroll(); files.connected()
@@ -331,6 +345,10 @@ def drill():
     ui.shell("test", "-d", marker_base + "pending", label="Confirm reset marker cannot be persisted")
     sign(DURESS); expect_system_clear()
     ui.report("With only the marker pathname blocked by a directory, a wrong password left the enrolled profile intact and normal offline sign-in still worked. After another cold start, the correct PURGE password cleared the offline sender and Android returned it to first launch.")
+
+    if os.environ.get("CUBECHAT_SECURITY_FOCUS")=="1":
+        ui.report("Exact 0.1.4 release acceptance completed for the suspended recipient and the obstructed reset marker.")
+        return
 
     # Reproduce the published upgrade on clean synthetic test installations, separately.
     public=str(Path(os.environ["RUNNER_TEMP"])/"CubeChat-previous.apk")

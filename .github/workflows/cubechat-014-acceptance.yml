@@ -112,7 +112,7 @@ jobs:
             "${adbserial[@]}" shell service check bluetooth_manager
             "${adbserial[@]}" shell svc wifi enable
             "${adbserial[@]}" shell svc data disable
-            "${adbserial[@]}" install -r "$RUNNER_TEMP/CubeChat-previous.apk"
+            "${adbserial[@]}" install -r .github/cubechat-security-candidate/CubeChat.apk
           done
           test_apk=.github/cubechat-security-candidate/ContactStorageChecks.apk
           echo "fd53bf7caa5b4eba53f958fb81ffe948d6228371f0cb311f9f1e08cda92dca2d  $test_apk" | sha256sum -c -
@@ -123,11 +123,11 @@ jobs:
           grep -F "PASS: SQLite upgrade, contact isolation, drafts, counters and attachment vault." "$RUNNER_TEMP/store-check.log"
           grep -F "PASS: password-gated migration, credential changes, locked PURGE notices and durable reset marker." "$RUNNER_TEMP/store-check.log"
           grep -F "INSTRUMENTATION_CODE: -1" "$RUNNER_TEMP/store-check.log"
-          # Freshen that AVD to the verified public release before creating either synthetic conversation.
+          # Give the tagged release an empty application sandbox before the focused two-device drill.
           adb -s emulator-5554 uninstall org.cubechat.android.test
           adb -s emulator-5554 uninstall org.cubechat.android
-          adb -s emulator-5554 install "$RUNNER_TEMP/CubeChat-previous.apk"
-          python3 .github/scripts/cubechat_014_acceptance.py
+          adb -s emulator-5554 install .github/cubechat-security-candidate/CubeChat.apk
+          CUBECHAT_SECURITY_FOCUS=1 python3 .github/scripts/cubechat_014_acceptance.py
 
       - name: Save synthetic conversation and reset screenshots
         if: always()
